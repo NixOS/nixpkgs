@@ -6747,12 +6747,6 @@ let
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gettextWithExpat = if stdenv.isDarwin
-    then gettext.overrideDerivation (drv: {
-      configureFlags = drv.configureFlags ++ [ "--with-libexpat-prefix=${expat}" ];
-    })
-    else callPackage ../development/libraries/gettext/expat.nix { };
-
   gd = callPackage ../development/libraries/gd { };
 
   gdal = callPackage ../development/libraries/gdal { };
@@ -6777,22 +6771,18 @@ let
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
   glibc = callPackage ../development/libraries/glibc {
-    kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
-    machHeaders = null;
-    hurdHeaders = null;
     gccCross = null;
   };
 
   glibc_memusage = callPackage ../development/libraries/glibc {
-    kernelHeaders = linuxHeaders;
     installLocales = false;
     withGd = true;
   };
 
   glibcCross = forceNativeDrv (glibc.override {
     gccCross = gccCrossStageStatic;
-    kernelHeaders = linuxHeadersCross;
+    linuxHeaders = linuxHeadersCross;
   });
 
   # We can choose:
@@ -6987,9 +6977,7 @@ let
     cupsSupport = config.gtk2.cups or stdenv.isLinux;
   };
 
-  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix {
-    gettext = gettextWithExpat;
-  };
+  gtk3 = callPackage ../development/libraries/gtk+/3.x.nix { };
 
   gtk = pkgs.gtk2;
 
@@ -10125,8 +10113,8 @@ let
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (utillinux // {
-      crossDrv = lib.overrideDerivation utillinux.crossDrv (args: {
+    then (utillinuxMinimal // {
+      crossDrv = lib.overrideDerivation utillinuxMinimal.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
@@ -10139,7 +10127,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then utillinux
+    then utillinuxMinimal
     else null;
 
   light = callPackage ../os-specific/linux/light { };
@@ -10913,13 +10901,12 @@ let
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
-  utillinux = callPackage ../os-specific/linux/util-linux {
+  utillinux = callPackage ../os-specific/linux/util-linux { };
+
+  utillinuxMinimal = appendToName "minimal" (utillinux.override {
     ncurses = null;
     perl = null;
-  };
-
-  utillinuxCurses = appendToName "curses" (utillinux.override {
-    inherit ncurses perl;
+    systemd = null;
   });
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {
@@ -16204,6 +16191,7 @@ aliases = with pkgs; {
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
   fuse_exfat = exfat;                   # 2015-09-11
+  gettextWithExpat = gettext; # 2016-02-19
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   htmlTidy = html-tidy;  # added 2014-12-06

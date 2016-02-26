@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   inherit glibc;
-  kernelHeaders = glibc.kernelHeaders;
+  kernelHeaders = glibc.linuxHeaders;
 
   patches = [
 

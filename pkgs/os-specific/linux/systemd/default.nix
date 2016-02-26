@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinux
+, xz, pam, acl, cryptsetup, libuuid, m4, utillinuxMinimal
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
@@ -75,13 +75,13 @@ stdenv.mkDerivation rec {
         test -e $i
         substituteInPlace $i \
           --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
-          --replace /bin/mount ${utillinux}/bin/mount \
-          --replace /bin/umount ${utillinux}/bin/umount \
-          --replace /sbin/swapon ${utillinux}/sbin/swapon \
-          --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
+          --replace /bin/mount ${utillinuxMinimal}/bin/mount \
+          --replace /bin/umount ${utillinuxMinimal}/bin/umount \
+          --replace /sbin/swapon ${utillinuxMinimal}/sbin/swapon \
+          --replace /sbin/swapoff ${utillinuxMinimal}/sbin/swapoff \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinux}/sbin/sulogin \
+          --replace /sbin/sulogin ${utillinuxMinimal}/sbin/sulogin \
           --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
       done
 

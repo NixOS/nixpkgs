@@ -78,7 +78,7 @@ rec {
             dontPatchShebangs=1
             ${commonPreHook}
           '';
-        shell = "${bootstrapTools}/bin/sh";
+        shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;

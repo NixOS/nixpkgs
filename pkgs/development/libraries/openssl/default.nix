@@ -21,7 +21,9 @@ let
     patches =
       [ ./use-etc-ssl-certs.patch ]
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-      ++ optional (stdenv.lib.versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem"))) ./darwin-arch.patch;
+      ++ optional
+           (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
+           ./darwin-arch.patch;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -102,9 +104,9 @@ in {
     sha256 = "0iik7a3b0mrfrxzngdf7ywfscg9inbw77y0jp2ccw0gdap9xhjvq";
   };
 
-  openssl_1_0_2 = common {
+  openssl_1_0_2 = lowPrio (common {
     version = "1.0.2f";
     sha256 = "932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c";
-  };
+  });
 
 }
