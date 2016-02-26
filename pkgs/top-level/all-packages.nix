@@ -2458,7 +2458,7 @@ let
     inherit (perlPackages) IOTty;
   };
 
-  motuclient = python27Packages.motuclient;
+  motuclient = callPackage ../applications/science/misc/motu-client { };
 
   mpage = callPackage ../tools/text/mpage { };
 
