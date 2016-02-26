@@ -62,6 +62,8 @@ rec {
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-stree = callPackage ./git-stree { };
+
   git2cl = import ./git2cl {
     inherit fetchgit stdenv perl;
   };
