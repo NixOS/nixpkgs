@@ -12,6 +12,9 @@ let
 
   gemHome = "${pkgs.gitlab.env}/${ruby.gemPath}";
 
+  gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
+  pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
+
   databaseYml = ''
     production:
       adapter: postgresql
@@ -24,7 +27,7 @@ let
 
   gitlabShellYml = ''
     user: ${cfg.user}
-    gitlab_url: "http://localhost:8080/"
+    gitlab_url: "http+unix://${pathUrlQuote gitlabSocket}"
     http_settings:
       self_signed_cert: false
     repos_path: "${cfg.statePath}/repositories"
@@ -335,7 +338,7 @@ in {
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
-          + "-authSocket ${cfg.statePath}/tmp/sockets/gitlab.socket "
+          + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${pkgs.gitlab}/share/gitlab/public";
       };
     };
