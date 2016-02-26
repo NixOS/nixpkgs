@@ -84,10 +84,10 @@ rec {
   };
 
 
-  isDarwin = matchAttrs { kernel = kernels.darwin; };
-  isLinux = matchAttrs { kernel = kernels.linux; };
-  isi686 = matchAttrs { cpu = cpuTypes.i686; };
   is64Bit = matchAttrs { cpu = { bits = 64; }; };
+  isDarwin = matchAttrs { kernel = kernels.darwin; };
+  isi686 = matchAttrs { cpu = cpuTypes.i686; };
+  isLinux = matchAttrs { kernel = kernels.linux; };
 
 
   # This should revert the job done by config.guess from the gcc compiler.
