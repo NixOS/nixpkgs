@@ -1,12 +1,11 @@
-/* -*- coding: utf-8; -*- */
+/* List of NixOS maintainers. The format is:
 
+    handle = "Real Name <address@example.org>";
+
+  where <handle> is preferred to be your GitHub username (so it's easy
+  to ping a package @<handle>), and <Real Name> is your real name, not
+  a pseudonym. Please keep the list alphabetically sorted. */
 {
-  /* Add your name and email address here.
-     Keep the list alphabetically sorted.
-     Prefer the same attrname as your github username, please,
-     so it's easy to ping a package @maintainer.
-  */
-
   a1russell = "Adam Russell <adamlr6+pub@gmail.com>";
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
