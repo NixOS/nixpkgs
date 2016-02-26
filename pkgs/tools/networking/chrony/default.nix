@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline texinfo nss nspr ] ++ stdenv.lib.optional stdenv.isLinux libcap;
   nativeBuildInputs = [ pkgconfig ];
 
+  hardening_pie = true;
+
   configureFlags = [
     "--chronyvardir=$(out)/var/lib/chrony"
   ];
