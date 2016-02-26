@@ -12390,6 +12390,10 @@ let
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome.GConf; };
 
+  google-chrome-beta = google-chrome.override { channel = "beta"; };
+
+  google-chrome-dev = google-chrome.override { channel = "dev"; };
+
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
