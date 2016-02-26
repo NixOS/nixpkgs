@@ -147,7 +147,20 @@ let
 in
 {
 
+  options = {
+
+    flyingcircus.network.policy_routing = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Enable policy routing?";
+      };
+    };
+
+  };
+
   config = {
+
 
     services.udev.extraRules =
       if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
@@ -191,11 +204,8 @@ in
 
     networking.localCommands =
       if
-        lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc &&
-        # In Vagrant the policy routing doesn't work. The outgoing traffic
-        # needs to go via the NATted device in any case.
-        lib.hasAttrByPath ["parameters" "location"] cfg.enc &&
-        cfg.enc.parameters.location != "vagrant"
+        cfg.network.policy_routing.enable &&
+        lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then
         ''
           mkdir -p /etc/iproute2
