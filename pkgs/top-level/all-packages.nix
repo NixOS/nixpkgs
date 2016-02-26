@@ -364,7 +364,8 @@ let
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
-    inherit curl stdenv;
+    inherit stdenv;
+    curl = curlMinimal;
   };
 
   # fetchurlBoot is used for curl and its dependencies in order to
@@ -1285,18 +1286,20 @@ let
 
   cudatoolkit = cudatoolkit7;
 
-  curlFull = curl.override {
-    idnSupport = true;
-    ldapSupport = true;
-    gssSupport = true;
+  # Used for bootstrap
+  curlMinimal = callPackage ../tools/networking/curl rec {
+    fetchurl = fetchurlBoot;
+    sslSupport = true;
+    zlibSupport = true;
   };
 
-  curl = callPackage ../tools/networking/curl rec {
-    fetchurl = fetchurlBoot;
+  curl = curlMinimal.override rec {
+    c-aresSupport = true;
+    gssSupport = true;
     http2Support = !stdenv.isDarwin;
-    zlibSupport = true;
-    sslSupport = zlibSupport;
-    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+    idnSupport = true;
+    ldapSupport = true;
+    scpSupport = !stdenv.isSunOS && !stdenv.isCygwin;
   };
 
   curl3 = callPackage ../tools/networking/curl/7.15.nix rec {
@@ -8244,7 +8247,6 @@ let
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
   libnghttp2 = nghttp2.override {
     prefix = "lib";
-    fetchurl = fetchurlBoot;
   };
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
@@ -16416,6 +16418,7 @@ aliases = with self; rec {
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
+  curlFull = curl; # added 2016-03-11
   cv = progress; # added 2015-09-06
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwbWrapper = dwb; # added 2015-01
