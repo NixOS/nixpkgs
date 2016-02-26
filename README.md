@@ -17,3 +17,8 @@ and performance configs can be declared in seperate modules.
 
 Because modules can only be tested with the appropriate hardware,
 quality assurance is up to **you**.
+
+## Simple tips and tricks
+
+### Disable PC speaker
+```boot.blacklistedKernelModules = [ "pcspkr" ];```
