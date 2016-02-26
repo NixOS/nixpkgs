@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp jack_capture $out/bin/
   '';
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "A program for recording soundfiles with jack";

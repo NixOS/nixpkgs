@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk poppler ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [ (fetchpatch {
                 name = "epdfview-0.1.8-glib2-headers.patch";

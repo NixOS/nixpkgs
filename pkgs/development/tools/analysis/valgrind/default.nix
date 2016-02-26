@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.

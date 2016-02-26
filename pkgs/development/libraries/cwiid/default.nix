@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     rev = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = "--without-python";
 

@@ -41,11 +41,9 @@ self: super: {
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  c2hs = pkgs.lib.overrideDerivation (dontCheck super.c2hs) (drv: {
-    hardening_format = false;
-  });
-  epanet-haskell = pkgs.lib.overrideDerivation super.epanet-haskell (drv: {
-    hardening_format = false;
+  c2hs = dontCheck super.c2hs;
+  epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
+    hardeningDisable = [ "format" ];
   });
 
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
@@ -244,9 +242,7 @@ self: super: {
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
-     hardening_fortify = false;
-  });
+  glib = addPkgconfigDepend super.glib pkgs.glib;
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addPkgconfigDepend super.gtk pkgs.gtk;
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };

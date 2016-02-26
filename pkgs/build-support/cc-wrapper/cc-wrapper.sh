@@ -56,7 +56,6 @@ if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
 
-
 # Optionally filter out paths not refering to the store.
 params=("$@")
 if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
@@ -90,16 +89,17 @@ if [[ "@prog@" = *++ ]]; then
     fi
 fi
 
-# Add the flags for the C compiler proper.
-extraAfter=($NIX_CFLAGS_COMPILE)
-extraBefore=()
+source @out@/nix-support/add-hardening.sh
 
+# Add the flags for the C compiler proper.
+extraAfter=($NIX_CFLAGS_COMPILE ${hardeningCFlags[@]})
+extraBefore=()
 
 if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_CFLAGS_LINK)
+    extraAfter+=($NIX_CFLAGS_LINK ${hardeningLDFlags[@]})
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_LDFLAGS again).

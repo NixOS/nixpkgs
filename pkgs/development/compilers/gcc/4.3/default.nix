@@ -95,8 +95,7 @@ stdenv.mkDerivation ({
     ++ (optionals langVhdl [gnat])
     ;
 
-  hardening_format = false;
-  hardening_stackprotector = false;
+  hardeningDisable = [ "format" "stackprotector" ];
 
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}

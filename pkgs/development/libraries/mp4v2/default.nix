@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # `faac' expects `mp4.h'.
   postInstall = "ln -s mp4v2/mp4v2.h $out/include/mp4.h";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://code.google.com/p/mp4v2;

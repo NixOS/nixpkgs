@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "17l5czpvv5ilmg17frg0w4qwf89jzh2aglm9fgx0l0aakn6j7al1";
   };
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   patches =
     [ ./0001-vimdot-lookup-vim-in-PATH.patch

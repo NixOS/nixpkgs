@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     (cd tools/xmlrpc && make && make install)
   '';
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "A lightweight RPC library based on XML and HTTP";

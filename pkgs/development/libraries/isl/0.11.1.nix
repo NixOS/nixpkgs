@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;

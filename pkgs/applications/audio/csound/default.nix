@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   src = fetchurl {
     url = mirror://sourceforge/csound/Csound6.04.tar.gz;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a8xdaxzz2wc0n1fjcav65093gixzyac3948l8cxx1mk884yhc71";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [ ./glib.patch ./cups_1.6.patch ];
 

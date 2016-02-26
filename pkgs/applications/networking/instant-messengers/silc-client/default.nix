@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = "--with-ncurses=${ncurses}";
 

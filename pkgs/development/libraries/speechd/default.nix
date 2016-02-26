@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dotconf glib pkgconfig ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Common interface to speech synthesis";

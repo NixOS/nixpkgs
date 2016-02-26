@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ iasl python ];
 
-  hardening_pic = false;
-  hardening_stackprotector = false;
+  hardeningDisable = [ "pic" "stackprotector" ];
 
   configurePhase = ''
     # build SeaBIOS for CSM

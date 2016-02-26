@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     ncurses tcl openssl pam kerberos openldap
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--with-ssl-include-dir=${openssl}/include/openssl"

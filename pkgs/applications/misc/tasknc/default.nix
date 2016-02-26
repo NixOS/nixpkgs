@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0max5schga9hmf3vfqk2ic91dr6raxglyyjcqchzla280kxn5c28";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   #
   # I know this is ugly, but the Makefile does strange things in this package,

@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardening_bindnow = false;
-  hardening_relro = false;
+  hardeningDisable = [ "bindnow" "relro" ];
 
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit (s) rev url sha256;
   };
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   installPhase = ''
     mkdir -p "$out"/{bin,share/doc/qrcode}

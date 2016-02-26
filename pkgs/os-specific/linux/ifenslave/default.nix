@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp -a ifenslave $out/bin
   '';
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Utility for enslaving networking interfaces under a bond";

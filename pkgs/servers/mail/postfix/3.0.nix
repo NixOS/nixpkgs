@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     ./relative-symlinks.patch
   ];
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   preBuild = ''
     sed -e '/^PATH=/d' -i postfix-install

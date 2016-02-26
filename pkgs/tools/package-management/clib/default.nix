@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hbi5hf4w0iim96h89j7krxv61x92ffxjbldxp3zk92m5sgpldnm";
   };
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   makeFlags = "PREFIX=$(out)";
 

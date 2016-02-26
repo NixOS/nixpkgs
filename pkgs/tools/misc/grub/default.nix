@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   # autoreconfHook required for the splashimage patch.
   buildInputs = [ autoreconfHook texinfo ];
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   prePatch = ''
     unpackFile $gentooPatches

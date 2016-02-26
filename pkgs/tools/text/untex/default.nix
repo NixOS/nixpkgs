@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "07p836jydd5yjy905m5ylnnac1h4cc4jsr41panqb808mlsiwmmy";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   unpackPhase = "tar xf $src";
   installTargets = "install install.man";

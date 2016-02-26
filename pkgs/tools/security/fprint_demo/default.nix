@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libfprint gtk2 ];
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.freedesktop.org/wiki/Software/fprint/fprint_demo/";

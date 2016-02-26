@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/share/doc";
 
   # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   meta = with stdenv.lib; {
     homepage = http://tukaani.org/xz/;

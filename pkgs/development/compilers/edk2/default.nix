@@ -22,8 +22,7 @@ edk2 = stdenv.mkDerivation {
 
   makeFlags = "-C BaseTools";
 
-  hardening_fortify = false;
-  hardening_format = false;
+  hardeningDisable = [ "format" "fortify" ];
 
   installPhase = ''
     mkdir -vp $out

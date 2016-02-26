@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ gmp ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "GMP_CFLAGS=-I${gmp}/include"

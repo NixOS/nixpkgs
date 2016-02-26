@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig libdaemon bison flex check ];
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.litech.org/radvd/;

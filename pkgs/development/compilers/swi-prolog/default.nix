@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama
     libXft libXpm libSM libXt zlib freetype pkgconfig fontconfig ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = "--with-world --enable-gmp --enable-shared";
 

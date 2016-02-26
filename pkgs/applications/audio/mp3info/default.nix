@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses pkgconfig gtk ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configurePhase =
     '' sed -i Makefile \

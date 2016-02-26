@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libtiff ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Library implementing attempt to create a tiff based interchange format for georeferenced raster imagery";

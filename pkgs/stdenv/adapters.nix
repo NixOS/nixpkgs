@@ -236,26 +236,6 @@ rec {
       });
     };
 
-  useHardenFlags = stdenv: stdenv //
-    { mkDerivation = args: stdenv.mkDerivation (args // {
-        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "")
-          + stdenv.lib.optionalString (args.hardening_all or true) (
-            stdenv.lib.optionalString (args.hardening_fortify or true) " -O2 -D_FORTIFY_SOURCE=2"
-            + stdenv.lib.optionalString (args.hardening_stackprotector or true) " -fstack-protector-strong"
-            + stdenv.lib.optionalString (args.hardening_pie or false) " -fPIE -pie"
-            + stdenv.lib.optionalString (args.hardening_pic or true) " -fPIC"
-            + stdenv.lib.optionalString (args.hardening_strictoverflow or true) " -fno-strict-overflow"
-            + stdenv.lib.optionalString (args.hardening_format or true) " -Wformat -Wformat-security -Werror=format-security"
-          );
-        NIX_LDFLAGS = toString (args.NIX_LDFLAGS or "")
-          + stdenv.lib.optionalString (args.hardening_all or true) (
-              stdenv.lib.optionalString (args.hardening_relro or true) " -z relro"
-            + stdenv.lib.optionalString (args.hardening_bindnow or true) " -z now"
-          );
-
-      });
-    };
-
   dropCxx = drv: drv.override {
     stdenv = if pkgs.stdenv.isDarwin
       then pkgs.allStdenvs.stdenvDarwinNaked

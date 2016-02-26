@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "qmake INSTALL_PREFIX=$out -recursive vacuum.pro";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [
     qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz

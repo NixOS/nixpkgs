@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     inherit (s) url sha256;
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   inherit buildInputs;
 

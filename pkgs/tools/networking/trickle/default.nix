@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-libevent";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Lightweight userspace bandwidth shaper";

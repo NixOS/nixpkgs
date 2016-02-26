@@ -33,7 +33,7 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   installPhase = ''
     mkdir -p $out/bin

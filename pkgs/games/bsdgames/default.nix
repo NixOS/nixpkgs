@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     cat > config.params << EOF

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl makeWrapper ];
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preConfigure = ''
     configureFlagsArray=(

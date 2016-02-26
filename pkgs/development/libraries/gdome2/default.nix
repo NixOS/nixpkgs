@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0hyms5s3hziajp3qbwdwqjc2xcyhb783damqg8wxjpwfxyi81fzl";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [pkgconfig glib libxml2 gtkdoc];
   propagatedBuildInputs = [glib libxml2];

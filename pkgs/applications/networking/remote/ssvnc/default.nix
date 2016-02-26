@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "makeFlags=PREFIX=$out";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postInstall = ''
     sed -i -e 's|exec wish|exec ${tk}/bin/wish|' $out/lib/ssvnc/util/ssvnc.tcl

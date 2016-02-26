@@ -17,9 +17,7 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   # TODO: properly include openssl for secureBoot
   buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
 
-  hardening_stackprotector = false;
-  hardening_pic = false;
-  hardening_fortify = false;
+  hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
   unpackPhase = ''
     for file in \

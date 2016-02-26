@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "03y6z8akj72swa6f42h2dhq3p09xasbi6xia70h2vc27fwikmny6";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://gondor.apana.org.au/~herbert/dash/;

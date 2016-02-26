@@ -220,9 +220,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
-  hardening_format = false;
+  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "format" "stackprotector" ];
 
   postPatch =
     if (stdenv.isGNU

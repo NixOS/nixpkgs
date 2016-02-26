@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
   };
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   # QGtkStyle unavailable
   patchPhase = ''

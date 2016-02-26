@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dmafm3w0lm5w211nwkfzaid1rvvmgskz7k4500pjhgdczi5sd78";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   # Perl is only for the documentation
   nativeBuildInputs = [ perl ];

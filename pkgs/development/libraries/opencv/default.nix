@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardening_bindnow = false;
-  hardening_relro = false;
+  hardeningDisable = [ "bindnow" "relro" ];
 
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";

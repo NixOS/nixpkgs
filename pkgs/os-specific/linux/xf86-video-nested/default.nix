@@ -16,7 +16,7 @@ stdenv.mkDerivation {
       pkgconfig renderproto utilmacros xorgserver
     ];
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   CFLAGS = "-I${pixman}/include/pixman-1";
 

@@ -1,0 +1,41 @@
+hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
+hardeningFlags+=("${hardeningEnable[@]}")
+hardeningCFlags=()
+hardeningLDFlags=()
+
+if [[ ! $hardeningDisable == "all" ]]; then
+  for flag in "${hardeningFlags[@]}"
+  do
+    if [[ ! "$hardeningDisable" =~ "$flag" ]]; then
+      case $flag in
+        fortify)
+          hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
+          ;;
+        stackprotector)
+          hardeningCFlags+=('-fstack-protector-strong')
+          ;;
+        pie)
+          hardeningCFlags+=('-fPIE' '-pie')
+          ;;
+        pic)
+          hardeningCFlags+=('-fPIC')
+          ;;
+        strictoverflow)
+          hardeningCFlags+=('-fno-strict-overflow')
+          ;;
+        format)
+          hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+          ;;
+        relro)
+          hardeningLDFlags+=('-z relro')
+          ;;
+        bindnow)
+          hardeningLDFlags+=('-z now')
+          ;;
+        *)
+          echo "Hardening flag unknown: $flag"
+          ;;
+      esac
+    fi
+  done
+fi

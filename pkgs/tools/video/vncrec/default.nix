@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yp6r55fqpdhc8cgrgh9i0mzxmkls16pgf8vfcpng1axr7cigyhc";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [
     libX11 xproto imake gccmakedep libXt libXmu libXaw

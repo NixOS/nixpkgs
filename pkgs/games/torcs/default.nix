@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   installTargets = "install datainstall";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Car racing game";

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zg1hpaml34ny74fif97j7ngrshlkl3wk3nja3gmlzl17i1bga6b";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = http://fribidi.org/;

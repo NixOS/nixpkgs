@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bindir=\${out}/bin" ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postConfigure = ''
     substituteInPlace config.h \

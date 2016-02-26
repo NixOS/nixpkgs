@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ zlib bzip2 ];
 

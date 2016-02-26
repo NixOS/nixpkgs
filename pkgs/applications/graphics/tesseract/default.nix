@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake libtool leptonica libpng libtiff ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
       ./autogen.sh

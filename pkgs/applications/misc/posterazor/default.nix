@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dqpdk8zl0smdg4fganp3hxb943q40619qmxjlga9jhjc01s7fq5";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ cmake unzip pkgconfig libXpm fltk13 freeimage ];
 

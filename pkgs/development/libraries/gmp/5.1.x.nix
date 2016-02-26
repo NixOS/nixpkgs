@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ];
 
   # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   patches = if stdenv.isDarwin then [ ./need-size-t.patch ] else null;
 

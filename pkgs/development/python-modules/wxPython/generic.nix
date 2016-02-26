@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "wxPython-src-${version}/wxPython";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";

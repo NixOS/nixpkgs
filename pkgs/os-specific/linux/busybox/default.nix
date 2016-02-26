@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "16ii9sqracvh2r1gfzhmlypl269nnbkpvrwa7270k35d3bigk9h5";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [ ./busybox-in-store.patch ];
 

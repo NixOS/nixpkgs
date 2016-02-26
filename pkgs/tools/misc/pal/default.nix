@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gettext readline pkgconfig ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://palcal.sourceforge.net/;

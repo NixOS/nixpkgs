@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
   '';
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
     + optionalString graphicsSupport " --enable-image=${optionalString x11Support "x11,"}fb";

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "07hl432vsscqg01b6wr99qmsj4gbx0i02x4k565432y6zpfmaxm0";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configurePhase = ''
     cd mp4v2

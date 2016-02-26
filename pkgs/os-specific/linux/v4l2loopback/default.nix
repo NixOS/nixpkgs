@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1crkhxlnskqrfj3f7jmiiyi5m75zmj7n0s26xz07wcwdzdf2p568";
   };
 
-  hardening_pic = false;
-  hardening_format = false;
+  hardeningDisable = [ "format" "pic" ];
 
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"

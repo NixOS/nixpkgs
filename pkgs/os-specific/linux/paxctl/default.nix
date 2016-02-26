@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   setupHook = ./setup-hook.sh;
 

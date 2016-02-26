@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-appdefaultdir=$(out)/share/X11/app-defaults/editres";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = "http://cgit.freedesktop.org/xorg/app/editres/";

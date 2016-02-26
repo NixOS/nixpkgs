@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./drop-comments.patch ]; # we would get into a cycle when using fetchpatch on this one
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "Tools to manipulate patch files";

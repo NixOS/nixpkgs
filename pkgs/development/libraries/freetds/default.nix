@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = stdenv.lib.optional odbcSupport [ unixODBC ];
 

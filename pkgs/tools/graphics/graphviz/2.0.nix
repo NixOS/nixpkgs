@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig xlibsWrapper libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
 
-  hardening_format = false;
-  hardening_fortify = false;
+  hardeningDisable = [ "format" "fortify" ];
 
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"

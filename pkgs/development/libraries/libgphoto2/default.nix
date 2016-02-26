@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://www.gphoto.org/proj/libgphoto2/;

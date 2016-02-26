@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnu-efi pkgconfig libxslt utillinux ];
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   # Sigh, gummiboot should be able to find this in buildInputs
   configureFlags = [

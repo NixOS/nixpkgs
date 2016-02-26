@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n9dlmiddcfl7i0f1lwfhqiwyvf26493fxfcmn8jm30nbqciwfwj";
   };
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
     homepage = http://kr.github.io/beanstalkd/;

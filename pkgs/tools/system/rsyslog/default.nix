@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     rabbitmq-c hiredis
   ] ++ stdenv.lib.optional stdenv.isLinux systemd;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--sysconfdir=/etc"

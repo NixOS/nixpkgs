@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   patches = [./pdf2xml.patch];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preBuild = ''
     cp Makefile.linux Makefile

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake libpng ilmbase libtiff zlib libjpeg mesa libX11 ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     # Fix build due to missing dependnecies.

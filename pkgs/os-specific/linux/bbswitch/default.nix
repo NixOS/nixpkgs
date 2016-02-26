@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "1lbr6pyyby4k9rn2ry5qc38kc738d0442jhhq57vmdjb6hxjya7m";
   }) ];
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preBuild = ''
     substituteInPlace Makefile \

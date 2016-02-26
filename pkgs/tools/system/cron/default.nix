@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   unpackCmd = "(mkdir cron && cd cron && sh $curSrc)";
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   preBuild = ''
     substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755

@@ -103,7 +103,7 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda;
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches =
     [ ./pass-cxxcpp.patch

@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "4-beta";
   buildInputs = [unzip gcc48];
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
     url = "http://www.sas.upenn.edu/~vnanda/source/perseus_4_beta.zip";

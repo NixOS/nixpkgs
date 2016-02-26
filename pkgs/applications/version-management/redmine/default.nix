@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0x0zwxyj4dwbk7l64s3lgny10mjf0ba8jwrbafsm4d72sncmacv0";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   # taken from redmine (2.5.1-2~bpo70+3) in debian wheezy-backports
   # needed to separate run-time and build-time directories

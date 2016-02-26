@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A reverse proxy and lightweight webserver";
