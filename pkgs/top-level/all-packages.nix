@@ -12035,6 +12035,8 @@ let
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
+  kedpm = callPackage ../applications/misc/kedpm { };
+
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
 
