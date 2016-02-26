@@ -7,10 +7,10 @@ with lib;
 let
   cfg = config.services.gitlab;
 
-  ruby = pkgs.gitlab.ruby;
+  ruby = cfg.packages.gitlab.ruby;
   bundler = pkgs.bundler;
 
-  gemHome = "${pkgs.gitlab.env}/${ruby.gemPath}";
+  gemHome = "${cfg.packages.gitlab.env}/${ruby.gemPath}";
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
@@ -91,7 +91,7 @@ let
         path = "${cfg.backupPath}";
       };
       gitlab_shell = {
-        path = "${pkgs.gitlab-shell}";
+        path = "${cfg.packages.gitlab-shell}";
         repos_path = "${cfg.statePath}/repositories";
         hooks_path = "${cfg.statePath}/shell/hooks";
         secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
@@ -110,13 +110,13 @@ let
   gitlabEnv = {
     HOME = "${cfg.statePath}/home";
     GEM_HOME = gemHome;
-    BUNDLE_GEMFILE = "${pkgs.gitlab}/share/gitlab/Gemfile";
+    BUNDLE_GEMFILE = "${cfg.packages.gitlab}/share/gitlab/Gemfile";
     UNICORN_PATH = "${cfg.statePath}/";
-    GITLAB_PATH = "${pkgs.gitlab}/share/gitlab/";
+    GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
     GITLAB_STATE_PATH = "${cfg.statePath}";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_SHELL_PATH = "${pkgs.gitlab-shell}";
+    GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
     GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
     GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
     GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
@@ -127,7 +127,7 @@ let
 
   gitlab-runner = pkgs.stdenv.mkDerivation rec {
     name = "gitlab-runner";
-    buildInputs = with pkgs; [ gitlab bundler makeWrapper ];
+    buildInputs = [ cfg.packages.gitlab bundler pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
     buildPhase = "";
     installPhase = ''
@@ -136,7 +136,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '\"${value}\"' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '"${cfg.statePath}/config"' \
           --set PATH '"${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH"' \
-          --set RAKEOPT '"-f ${pkgs.gitlab}/share/gitlab/Rakefile"'
+          --set RAKEOPT '"-f ${cfg.packages.gitlab}/share/gitlab/Rakefile"'
     '';
   };
 
@@ -150,6 +150,24 @@ in {
         description = ''
           Enable the gitlab service.
         '';
+      };
+
+      packages.gitlab = mkOption {
+        type = types.package;
+        default = pkgs.gitlab;
+        description = "Reference to the gitlab package";
+      };
+
+      packages.gitlab-shell = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-shell;
+        description = "Reference to the gitlab-shell package";
+      };
+
+      packages.gitlab-workhorse = mkOption {
+        type = types.package;
+        default = pkgs.gitlab-workhorse;
+        description = "Reference to the gitlab-workhorse package";
       };
 
       statePath = mkOption {
@@ -263,7 +281,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-runner pkgs.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-runner cfg.packages.gitlab-shell ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
@@ -309,7 +327,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
-        WorkingDirectory = "${pkgs.gitlab}/share/gitlab";
+        WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart="${bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
@@ -334,12 +352,12 @@ in {
         Group = cfg.group;
         TimeoutSec = "300";
         ExecStart =
-          "${pkgs.gitlab-workhorse}/bin/gitlab-workhorse "
+          "${cfg.packages.gitlab-workhorse}/bin/gitlab-workhorse "
           + "-listenUmask 0 "
           + "-listenNetwork unix "
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
-          + "-documentRoot ${pkgs.gitlab}/share/gitlab/public";
+          + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public";
       };
     };
 
@@ -384,9 +402,9 @@ in {
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}/
 
-        cp -rf ${pkgs.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ln -sf ${cfg.statePath}/config /run/gitlab/config
-        cp ${pkgs.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
         # JSON is a subset of YAML
         ln -fs ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml
@@ -398,8 +416,8 @@ in {
 
         # Install the shell required to push repositories
         ln -fs ${pkgs.writeText "config.yml" gitlabShellYml} "$GITLAB_SHELL_CONFIG_PATH"
-        ln -fs ${pkgs.gitlab-shell}/hooks "$GITLAB_SHELL_HOOKS_PATH"
-        ${pkgs.gitlab-shell}/bin/install
+        ln -fs ${cfg.packages.gitlab-shell}/hooks "$GITLAB_SHELL_HOOKS_PATH"
+        ${cfg.packages.gitlab-shell}/bin/install
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
@@ -429,7 +447,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
-        WorkingDirectory = "${pkgs.gitlab}/share/gitlab";
+        WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart="${bundler}/bin/bundle exec \"unicorn -c ${cfg.statePath}/config/unicorn.rb -E production\"";
       };
 
