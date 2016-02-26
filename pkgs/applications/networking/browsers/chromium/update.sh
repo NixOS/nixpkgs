@@ -77,9 +77,10 @@ get_channel_exprs()
         echo "  $channel = {";
         echo "    version = \"$version\";";
         echo "    sha256 = \"$main\";";
-        if [ "x${deb#*[a-z0-9].[a-z0-9]}" != "x$deb" ];
-        then
+        if [ "x${deb#[a-z0-9]}" != "x$deb" ]; then
             echo "    sha256bin32 = \"$deb32\";";
+        fi;
+        if [ "x${deb#*.[a-z0-9]}" != "x$deb" ]; then
             echo "    sha256bin64 = \"$deb64\";";
         fi;
         echo "  };";

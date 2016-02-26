@@ -62,14 +62,18 @@ in rec {
       pname = if channel == "dev"
               then "google-chrome-unstable"
               else "google-chrome-${channel}";
-      arch = if stdenv.is64bit then "amd64" else "i386";
-      relpath = "${pname}/${pname}_${chanAttrs.version}-1_${arch}.deb";
-    in lib.optionalAttrs (chanAttrs ? sha256bin64) {
-      urls = map (url: "${url}/${relpath}") ([ debURL ] ++ debMirrors);
-      sha256 = if stdenv.is64bit
-               then chanAttrs.sha256bin64
-               else chanAttrs.sha256bin32;
-    };
+
+      mkUrls = arch: let
+        relpath = "${pname}/${pname}_${chanAttrs.version}-1_${arch}.deb";
+      in map (url: "${url}/${relpath}") ([ debURL ] ++ debMirrors);
+
+    in if stdenv.is64bit && chanAttrs ? sha256bin64 then {
+      urls = mkUrls "amd64";
+      sha256 = chanAttrs.sha256bin64;
+    } else if stdenv.is32bit && chanAttrs ? sha256bin32 then {
+      urls = mkUrls "i386";
+      sha256 = chanAttrs.sha256bin64;
+    } else throw "No Chrome plugins are available for your architecture.";
   };
 
   updateHelpers = writeText "update-helpers.sh" ''
@@ -91,11 +95,15 @@ in rec {
 
       deb_pre="${debURL}/$pname/$pname";
 
-      deb32=$(nix-prefetch-url "''${deb_pre}_$version-1_i386.deb");
-      deb64=$(nix-prefetch-url "''${deb_pre}_$version-1_amd64.deb");
+      deb32="$(nix-prefetch-url "''${deb_pre}_$version-1_i386.deb")" || :
+      deb64="$(nix-prefetch-url "''${deb_pre}_$version-1_amd64.deb")" || :
 
-      echo "$deb32.$deb64";
-      return 0;
+      if [ -n "$deb32" -o -n "$deb64" ]; then
+        echo "$deb32.$deb64";
+        return 0
+      else
+        return 1
+      fi
     }
 
     prefetch_sha()
