@@ -233,6 +233,8 @@ rec {
 
     srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
 
+    propagatedBuildInputs = [ zest ];
+
     phases = [ "installPhase" ];
 
     installPhase = ''
