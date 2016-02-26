@@ -1173,7 +1173,9 @@ let
 
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
-    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul {
+      inherit (python3Packages) pygobject3;
+    };
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 

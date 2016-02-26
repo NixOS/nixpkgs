@@ -1,24 +1,20 @@
-{ stdenv, gnome, fetchFromGitHub, ibus, libhangul, autoconf, automake, gettext, libtool, librsvg,
-  intltool, pkgconfig, pythonPackages, makeWrapper, gtk3, python }:
+{ stdenv, fetchurl, makeWrapper
+, intltool, pkgconfig
+, gtk3, ibus, libhangul, librsvg, python3, pygobject3
+}:
 
 stdenv.mkDerivation rec {
   name = "ibus-hangul-${version}";
   version = "1.5.0";
 
-  src = fetchFromGitHub {
-    owner  = "choehwanjin";
-    repo   = "ibus-hangul";
-    rev    = version;
-    sha256 = "12l2spr32biqdbz01bzkamgq5gskbi6cd7ai343wqyy1ibjlkmp8";
+  src = fetchurl {
+    url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${name}.tar.gz";
+    sha256 = null;
   };
 
-  buildInputs = [ ibus libhangul autoconf gettext automake libtool
-    intltool pkgconfig python pythonPackages.pygobject3 gtk3 makeWrapper ];
+  buildInputs = [ gtk3 ibus libhangul python3 pygobject3 ];
 
-  preConfigure = ''
-    autoreconf --verbose --force --install
-    intltoolize --automake --force --copy
-  '';
+  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
 
   postInstall = ''
     wrapProgram $out/bin/ibus-setup-hangul \
