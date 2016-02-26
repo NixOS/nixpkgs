@@ -61,6 +61,7 @@ rec {
 
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
+    http://cdn.kernel.org/pub/
     http://www.all.kernel.org/pub/
     http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
     http://linux-kernel.uio.no/pub/
