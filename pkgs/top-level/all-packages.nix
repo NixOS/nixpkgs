@@ -13288,6 +13288,8 @@ let
 
   qmmp = callPackage ../applications/audio/qmmp { };
 
+  qnotero = callPackage ../applications/office/qnotero { };
+
   qrcode = callPackage ../tools/graphics/qrcode {};
 
   qsampler = callPackage ../applications/audio/qsampler { };
