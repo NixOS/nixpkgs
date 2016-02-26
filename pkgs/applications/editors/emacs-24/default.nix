@@ -86,9 +86,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny jwiegley ];
     platforms   = platforms.all;
 
-    # So that Exuberant ctags is preferred
-    priority = 1;
-
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its
       core is an interpreter for Emacs Lisp, a dialect of the Lisp
