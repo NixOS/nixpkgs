@@ -43,18 +43,20 @@ with lib;
 
             mkdir -m 0755 -p /etc/ssh
 
-            key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' $userData)"
-            key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' $userData)"
-            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
-                (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
-                echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
-            fi
+            if [ -s "$userData" ]; then
+              key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' $userData)"
+              key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' $userData)"
+              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
+                  (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
+                  echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
+              fi
 
-            key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' $userData)"
-            key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' $userData)"
-            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
-                (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
-                echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
+              key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' $userData)"
+              key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' $userData)"
+              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
+                  (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
+                  echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
+              fi
             fi
           '';
 
