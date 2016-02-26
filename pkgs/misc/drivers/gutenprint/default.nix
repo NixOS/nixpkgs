@@ -1,7 +1,7 @@
 # this package was called gimp-print in the past
 { stdenv, lib, fetchurl, pkgconfig
 , ijs, makeWrapper
-, gimp2Support ? true, gimp
+, gimp2Support ? false, gimp
 , cupsSupport ? true, cups, libusb, perl
 }:
 
@@ -23,14 +23,24 @@ stdenv.mkDerivation rec {
     "--disable-static-genppd" # should be harmless on NixOS
   ];
 
+  # FIXME: hacky because we modify generated configure, but I haven't found a better way.
+  # makeFlags doesn't change this everywhere (e.g. in cups-genppdupdate).
+  preConfigure = lib.optionalString cupsSupport ''
+    sed -i \
+      -e "s,cups_conf_datadir=.*,cups_conf_datadir=\"$out/share/cups\",g" \
+      -e "s,cups_conf_serverbin=.*,cups_conf_serverbin=\"$out/lib/cups\",g" \
+      -e "s,cups_conf_serverroot=.*,cups_conf_serverroot=\"$out/etc/cups\",g" \
+      configure
+  '' + lib.optionalString gimp2Support ''
+    sed -i \
+      -e "s,gimp2_plug_indir=.*,gimp2_plug_indir=\"$out/lib/gimp/${gimp.majorVersion}\",g" \
+      configure
+  '';
+
   enableParallelBuilding = true;
 
   # Testing is very, very long.
   # doCheck = true;
-
-  installFlags =
-    lib.optionals cupsSupport [ "cups_conf_datadir=$(out)/share/cups" "cups_conf_serverbin=$(out)/lib/cups" "cups_conf_serverroot=$(out)/etc/cups" ]
-    ++ lib.optionals gimp2Support [ "gimp2_plug_indir=$(out)/${gimp.name}-plugins" ];
 
   meta = with stdenv.lib; {
     description = "Ghostscript and cups printer drivers";
