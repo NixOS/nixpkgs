@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, stdenv, xorg, gcc44, makeWrapper, ncurses, cmake }:
+{ fetchurl, fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
 
 stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   # gcc 4.6 and above causes crashes on Self startup but gcc 4.4 works.
-  buildInputs = [ gcc44 ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
+  buildInputs = [ ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
 
   selfWrapper = ./self;
 
