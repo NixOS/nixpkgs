@@ -3,14 +3,28 @@
 let
   cfg = config.flyingcircus;
 
+  # This looks clunky.
+  version =
+      if cfg.roles.postgresql94.enable
+      then "9.4"
+      else if cfg.roles.postgresql93.enable
+      then "9.3"
+      else null;
+
+
+  # Is *any* postgres role enabled?
+  postgres_enabled = version != null;
+
+  package = {
+    "9.3" = pkgs.postgresql93;
+    "9.4" = pkgs.postgresql94;
+  };
+
   min = list:
     builtins.head (builtins.sort builtins.lessThan list);
   max = list:
     lib.last (builtins.sort builtins.lessThan list);
 
-
-  # return the "current" system memory in MiB. We currently use the value from
-  # the ENC but should use the actual system memory.
   current_memory =
     let
       enc_memory =
@@ -63,25 +77,33 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Flying Circus PostgreSQL server role.";
+        description = "Enable the Flying Circus PostgreSQL 9.3 server role.";
+      };
+    };
+
+    flyingcircus.roles.postgresql94 = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the Flying Circus PostgreSQL 9.4 server role.";
       };
     };
 
   };
 
-  config = mkIf config.flyingcircus.roles.postgresql93.enable {
+  config = mkIf postgres_enabled {
 
     services.postgresql.enable = true;
-    services.postgresql.package = pkgs.postgresql93;
+    services.postgresql.package = builtins.getAttr version package;
 
     services.postgresql.initialScript = ./postgresql-init.sql;
-    services.postgresql.dataDir = "/srv/postgresql/9.3";
+    services.postgresql.dataDir = "/srv/postgresql/${version}";
 
     users.users.postgres = {
       shell = "/run/current-system/sw/bin/bash";
       home = "/srv/postgresql";
     };
-    system.activationScripts.flyingcircus_postgresql93 = ''
+    system.activationScripts.flyingcircus_postgresql = ''
       if ! test -e /srv/postgresql; then
         mkdir -p /srv/postgresql
       fi

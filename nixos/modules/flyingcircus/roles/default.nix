@@ -21,7 +21,7 @@ in
      ./haproxy.nix
      ./mysql.nix
      ./nginx.nix
-     ./postgresql93.nix
+     ./postgresql.nix
      ./sensuserver.nix
      ./servicecheck.nix
      ./varnish.nix
