@@ -28,6 +28,9 @@ with lib;
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ])
+
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
     (mkRenamedOptionModule [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ])

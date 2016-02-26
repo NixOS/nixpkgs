@@ -1,0 +1,13 @@
+diff --git a/lib/gitlab_projects.rb b/lib/gitlab_projects.rb
+index c1d175a..7f7fd2f 100644
+--- a/lib/gitlab_projects.rb
++++ b/lib/gitlab_projects.rb
+@@ -5,7 +5,7 @@ require_relative 'gitlab_config'
+ require_relative 'gitlab_logger'
+ 
+ class GitlabProjects
+-  GLOBAL_HOOKS_DIRECTORY = File.join(ROOT_PATH, 'hooks')
++  GLOBAL_HOOKS_DIRECTORY = ENV['GITLAB_SHELL_HOOKS_PATH'] || File.join(ROOT_PATH, 'hooks')
+ 
+   # Project name is a directory name for repository with .git at the end
+   # It may be namespaced or not. Like repo.git or gitlab/repo.git

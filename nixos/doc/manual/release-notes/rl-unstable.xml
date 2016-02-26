@@ -231,6 +231,14 @@ programs.ibus.plugins = with pkgs; [ ibus-anthy mozc ];
     overriden by anything else.</para>
   </listitem>
 
+  <listitem>
+    <para>Large parts of the <literal>services.gitlab</literal> module has been
+    been rewritten. There are new configuration options available. The
+    <literal>stateDir</literal> option was renamned to
+    <literal>statePath</literal> and the <literal>satellitesDir</literal> option
+    was removed. Please review the currently available options.</para>
+  </listitem>
+
 </itemizedlist>
 
 
