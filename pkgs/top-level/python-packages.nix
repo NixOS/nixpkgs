@@ -1189,6 +1189,36 @@ in modules // {
     };
   };
 
+  aws_shell = buildPythonPackage rec {
+    name = "aws-shell-${version}";
+    version = "0.1.0";
+    src = pkgs.fetchurl {
+        sha256 = "05isyrqbk16dg1bc3mnc4ynxr3nchslvia5wr1sdmxvc3v2y729d";
+        url = "https://pypi.python.org/packages/source/a/aws-shell/aws-shell-0.1.0.tar.gz";
+      };
+    propagatedBuildInputs = with self; [
+      configobj prompt_toolkit_52 awscli boto3 pygments sqlite3 mock pytest
+      pytestcov unittest2 tox
+    ];
+
+    #Checks are failing due to missing TTY, which won't exist.
+    doCheck = false;
+    preCheck = ''
+      mkdir -p check-phase
+      export HOME=$(pwd)/check-phase
+    '';
+
+    disabled = isPy35;
+
+
+    meta = {
+      homepage = https://github.com/awslabs/aws-shell;
+      description = "An integrated shell for working with the AWS CLI.";
+      license = licenses.asl20;
+      maintainers = [ ];
+    };
+  };
+
   azure = buildPythonPackage rec {
     version = "0.11.0";
     name = "azure-${version}";
@@ -15553,6 +15583,18 @@ in modules // {
       maintainers = with maintainers; [ nckx ];
     };
   };
+  prompt_toolkit_52 = self.prompt_toolkit.override(self: rec {
+    name = "prompt_toolkit-${version}";
+    version = "0.52";
+    src = pkgs.fetchurl {
+      sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
+      url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
+    };
+
+    #Only <3.4 expressly supported.
+    disabled = isPy35;
+
+  });
 
   protobuf = self.protobuf2_6;
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
