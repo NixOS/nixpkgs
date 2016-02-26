@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libcap openssl ];
 
+  hardening_pie = true;
+
   postInstall = ''
     rm -rf $out/share/doc
   '';
