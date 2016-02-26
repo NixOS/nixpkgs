@@ -228,6 +228,11 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+    }
+    {
+      # to enable link-local connections
+      name = "avahi-autoipd";
+      uid = config.ids.uids.avahi-autoipd;
     }];
 
     systemd.packages = cfg.packages;
