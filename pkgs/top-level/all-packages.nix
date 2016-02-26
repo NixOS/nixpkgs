@@ -1181,7 +1181,10 @@ let
       inherit (pythonPackages) gyp;
     };
 
-    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
+    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
+      inherit (python3Packages) pygobject3;
+      inherit (gnome3) dconf;
+    };
 
     table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
       ibus-table = ibus-engines.table;
