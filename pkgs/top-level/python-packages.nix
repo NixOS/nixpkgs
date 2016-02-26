@@ -23970,19 +23970,30 @@ in modules // {
   };
 
   udiskie = buildPythonPackage rec {
-    version = "1.1.2";
+    version = "1.4.8";
     name = "udiskie-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/coldfix/udiskie/archive/${version}.tar.gz";
-      sha256 = "07fyvwp4rga47ayfsmb79p2784sqrih0sglwnd9c4x6g63xgljvb";
+      sha256 = "0fj1kh6pmwyyy54ybc5fa625lhrxzhzmfx1nwz2lym5cpm4b21fl";
     };
 
     preConfigure = ''
       export XDG_RUNTIME_DIR=/tmp
     '';
 
+    buildInputs = [
+      pkgs.asciidoc-full        # For building man page.
+    ];
+
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
+
+    postBuild = "make -C doc";
+
+    postInstall = ''
+      mkdir -p $out/share/man/man8
+      cp -v doc/udiskie.8 $out/share/man/man8/
+    '';
 
     preFixup = ''
         wrapProgram "$out/bin/"* \
