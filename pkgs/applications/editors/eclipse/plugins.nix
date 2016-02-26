@@ -233,6 +233,8 @@ rec {
 
     srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
 
+    propagatedBuildInputs = [ zest ];
+
     phases = [ "installPhase" ];
 
     installPhase = ''
@@ -240,7 +242,8 @@ rec {
       mkdir -p $dropinDir/features
       unzip ${srcFeature} -d $dropinDir/features/
       mkdir -p $dropinDir/plugins
-      cp -v ${srcPlugin1} ${srcPlugin2} $dropinDir/plugins/
+      cp -v ${srcPlugin1} $dropinDir/plugins/''${srcPlugin1#*-}
+      cp -v ${srcPlugin2} $dropinDir/plugins/''${srcPlugin2#*-}
     '';
 
     meta = with stdenv.lib; {
@@ -392,6 +395,23 @@ rec {
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  zest = buildEclipseUpdateSite rec {
+    name = "zest-${version}";
+    version = "3.9.101";
+
+    src = fetchurl {
+      url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${name}.zip";
+      sha256 = "01scn7cmcrjcp387spjm8ifgwrwwi77ypildandbisfvhj3qqs7m";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.eclipse.org/gef/zest/;
+      description = "The Eclipse Visualization Toolkit";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
     };
   };
 
