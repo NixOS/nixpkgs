@@ -10,12 +10,7 @@ in {
 
     services.xserver.libinput = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        example = true;
-        description = "Whether to enable libinput support.";
-      };
+      enable = mkEnableOption "libinput";
 
       dev = mkOption {
         type = types.nullOr types.str;
