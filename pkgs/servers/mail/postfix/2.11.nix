@@ -36,9 +36,8 @@ stdenv.mkDerivation rec {
     export sendmail_path=$out/bin/sendmail
 
     make makefiles \
-      CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl \
-              -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2' \
-      AUXLIBS='-ldb -lnsl -lresolv -lsasl2 -lcrypto -lssl -pie -Wl,-z,relro,-z,now'
+      CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl' \
+      AUXLIBS='-ldb -lnsl -lresolv -lsasl2 -lcrypto -lssl'
   '';
 
   installTargets = [ "non-interactive-package" ];

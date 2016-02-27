@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [db openssl cyrus_sasl bison perl];
 
   hardening_format = false;
+  hardening_pie = true;
 
   patches = [
     ./postfix-2.2.9-db.patch
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
     export sample_directory=$out/share/postfix/doc/samples
     export readme_directory=$out/share/postfix/doc
 
-    make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl -fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb -lnsl -pie -Wl,-z,relro,-z,now'
+    make makefiles CCARGS='-DUSE_TLS -DUSE_SASL_AUTH -DUSE_CYRUS_SASL -I${cyrus_sasl}/include/sasl' AUXLIBS='-lssl -lcrypto -lsasl2 -ldb -lnsl'
   '';
 
   installPhase = ''
