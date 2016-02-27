@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.8";
+  name = "patchelf-0.9";
 
   src = fetchurl {
-    url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "c99f84d124347340c36707089ec8f70530abd56e7827c54d506eb4cc097a17e7";
+    #url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    url = http://hydra.nixos.org/build/32429884/download/2/patchelf-0.9pre265_498aa37.tar.bz2;
+    sha256 = "f762813ad493ad73afb7846a530fe2f5e40a5d89b7dba228ce0c62651e9c851e";
   };
 
   setupHook = [ ./setup-hook.sh ];
