@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -e "s|expr|${coreutils}/bin/expr|" \
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
         -e "s|if which unicode_start|if true|" \
         -e "s|unicode_start|${kbd}/bin/unicode_start|" \
+  '' + ''
         -i "$out/etc/fish/config.fish"
     sed -e "s|bc|${bc}/bin/bc|" \
         -e "s|/usr/bin/seq|${coreutils}/bin/seq|" \
