@@ -1160,15 +1160,22 @@ let
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
-  ibus = callPackage ../tools/inputmethods/ibus { };
+  ibus = callPackage ../tools/inputmethods/ibus {
+    inherit (python3Packages) pygobject3;
+    inherit (gnome3) dconf glib;
+  };
 
   ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
 
   ibus-engines = {
 
-    anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
+    anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy {
+      inherit (python3Packages) pygobject3;
+    };
 
-    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
+    hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul {
+      inherit (python3Packages) pygobject3;
+    };
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
@@ -1176,7 +1183,10 @@ let
       inherit (pythonPackages) gyp;
     };
 
-    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
+    table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
+      inherit (python3Packages) pygobject3;
+      inherit (gnome3) dconf;
+    };
 
     table-others = callPackage ../tools/inputmethods/ibus-engines/ibus-table-others {
       ibus-table = ibus-engines.table;
@@ -12973,7 +12983,9 @@ let
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
-  msmtp = callPackage ../applications/networking/msmtp { };
+  msmtp = callPackage ../applications/networking/msmtp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
     lua = lua5;
