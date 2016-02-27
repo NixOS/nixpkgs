@@ -260,6 +260,9 @@ in
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               extraFlags+=" --network-veth"
+              if [ -n "$HOST_BRIDGE" ]; then
+                extraFlags+=" --network-bridge=$HOST_BRIDGE"
+              fi
             fi
 
             for iface in $INTERFACES; do
@@ -303,11 +306,9 @@ in
         postStart =
           ''
             if [ "$PRIVATE_NETWORK" = 1 ]; then
-              ifaceHost=ve-$INSTANCE
-              ip link set dev $ifaceHost up
-              if [ -n "$HOST_BRIDGE" ]; then
-                ip link set dev $ifaceHost master $HOST_BRIDGE
-              else
+              if [ -z "$HOST_BRIDGE" ]; then
+                ifaceHost=ve-$INSTANCE
+                ip link set dev $ifaceHost up
                 if [ -n "$HOST_ADDRESS" ]; then
                   ip addr add $HOST_ADDRESS dev $ifaceHost
                 fi
