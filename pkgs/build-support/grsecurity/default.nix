@@ -25,7 +25,7 @@ let
     mkKernel = patch:
         {
           inherit patch;
-          inherit (patch) kernel grversion revision;
+          inherit (patch) kernel patches grversion revision;
         };
 
     test-patch = with pkgs.kernelPatches; grsecurity_testing;
@@ -136,7 +136,7 @@ let
 
     mkGrsecKern = grkern:
       lowPrio (overrideDerivation (grkern.kernel.override (args: {
-        kernelPatches = args.kernelPatches ++ [ grkern.patch pkgs.kernelPatches.grsec_fix_path ];
+        kernelPatches = args.kernelPatches ++ [ grkern.patch  ] ++ grkern.patches;
         argsOverride = {
           modDirVersion = "${grkern.kernel.modDirVersion}${localver grkern}";
         };

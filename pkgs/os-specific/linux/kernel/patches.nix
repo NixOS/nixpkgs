@@ -18,10 +18,10 @@ let
       };
     };
 
-  grsecPatch = { grversion ? "3.1", kernel, kversion, revision, branch, sha256 }:
+  grsecPatch = { grversion ? "3.1", kernel, patches, kversion, revision, branch, sha256 }:
     assert kversion == kernel.version;
     { name = "grsecurity-${grversion}-${kversion}";
-      inherit grversion kernel kversion revision;
+      inherit grversion kernel patches kversion revision;
       patch = fetchurl {
         url = if branch == "stable"
               then "https://github.com/kdave/grsecurity-patches/blob/master/grsecurity_patches/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true"
@@ -84,6 +84,7 @@ rec {
 
   grsecurity_stable = grsecPatch
     { kernel    = pkgs.linux_grsecurity_3_14;
+      patches   = [ grsecurity_fix_path_3_14 ];
       kversion  = "3.14.51";
       revision  = "201508181951";
       branch    = "stable";
@@ -92,15 +93,21 @@ rec {
 
   grsecurity_testing = grsecPatch
     { kernel    = pkgs.linux_grsecurity_4_4;
+      patches   = [ grsecurity_fix_path_4_4 ];
       kversion  = "4.4.2";
       revision  = "201602182048";
       branch    = "test";
       sha256    = "0dm0nzzja6ynzdz2k5h0ckys7flw307i3w0k1lwjxfj80civ73wr";
     };
 
-  grsec_fix_path =
-    { name = "grsec-fix-path";
-      patch = ./grsec-path.patch;
+  grsecurity_fix_path_3_14 =
+    { name = "grsecurity-fix-path-3.14";
+      patch = ./grsecurity-path-3.14.patch;
+    };
+
+  grsecurity_fix_path_4_4 =
+    { name = "grsecurity-fix-path-4.4";
+      patch = ./grsecurity-path-4.4.patch;
     };
 
   crc_regression =
