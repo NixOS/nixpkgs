@@ -14529,6 +14529,8 @@ let
 
   mnemosyne = callPackage ../games/mnemosyne { };
 
+  mrrescue = callPackage ../games/mrrescue { };
+
   mudlet = qt5.callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
