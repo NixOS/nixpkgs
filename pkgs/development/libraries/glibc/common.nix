@@ -165,7 +165,8 @@ stdenv.mkDerivation ({
 
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
 
-  hardening_stackprotector = name != "glibc-locales";
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardening_stackprotector = false;
 
   meta = {
     homepage = http://www.gnu.org/software/libc/;
