@@ -14396,6 +14396,8 @@ let
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
+  duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
+
   dwarf-fortress-packages = callPackage ../games/dwarf-fortress { };
 
   dwarf-fortress = dwarf-fortress-packages.dwarf-fortress.override { };
