@@ -80,9 +80,9 @@ rec {
           '';
         shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
-        fetchurlBoot = import ../../build-support/fetchurl {
-          stdenv = stage0.stdenv;
-          curl = bootstrapTools;
+
+        fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
+          inherit system;
         };
 
         cc = if isNull gccPlain
@@ -333,7 +333,6 @@ rec {
       awk --version
       grep --version
       gcc --version
-      curl --version
 
       ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"

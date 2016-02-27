@@ -10,13 +10,6 @@ rec {
     aclSupport = false;
   });
 
-  curlMinimal = curl.override {
-    http2Support = false;
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  };
-
   busyboxMinimal = busybox.override {
     useMusl = true;
     enableStatic = true;
@@ -84,8 +77,6 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
 
