@@ -9,6 +9,17 @@ let
     name  = "ibus-engine";
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isIbusEngine"] false x);
   };
+
+  ibusAutostart = pkgs.writeTextFile {
+    name = "autostart-ibus-daemon";
+    destination = "/etc/xdg/autostart/ibus-daemon.desktop";
+    text = ''
+      [Desktop Entry]
+      Name=IBus
+      Type=Application
+      Exec=${ibusPackage}/bin/ibus-daemon -dx
+    '';
+  };
 in
 {
   options = {
@@ -27,17 +38,14 @@ in
 
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
     # Without dconf enabled it is impossible to use IBus
-    environment.systemPackages = [ ibusPackage pkgs.gnome3.dconf ];
-
-    gtkPlugins = [ pkgs.ibus ];
-    qtPlugins  = [ pkgs.ibus-qt ];
+    environment.systemPackages = with pkgs; [
+      ibusPackage ibus-qt gnome3.dconf ibusAutostart
+    ];
 
     environment.variables = {
       GTK_IM_MODULE = "ibus";
       QT_IM_MODULE = "ibus";
       XMODIFIERS = "@im=ibus";
     };
-
-    services.xserver.displayManager.sessionCommands = "${ibusPackage}/bin/ibus-daemon --daemonize --xim --cache=none";
   };
 }
