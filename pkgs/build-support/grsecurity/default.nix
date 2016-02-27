@@ -22,18 +22,18 @@ let
 
   vals = rec {
 
-    mkKernel = kernel: patch:
-      assert patch.kversion == kernel.version;
-        { inherit kernel patch;
-          inherit (patch) grversion revision;
+    mkKernel = patch:
+        {
+          inherit patch;
+          inherit (patch) kernel grversion revision;
         };
 
-    test-patch = with pkgs.kernelPatches; grsecurity_unstable;
+    test-patch = with pkgs.kernelPatches; grsecurity_testing;
     stable-patch = with pkgs.kernelPatches; grsecurity_stable;
 
     grKernel = if cfg.stable
-               then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_4_4 test-patch;
+               then mkKernel stable-patch
+               else mkKernel test-patch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
