@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ibus, anthy, intltool, pkgconfig, glib, gobjectIntrospection,
-  python, pythonPackages, gtk3, libtool, automake, autoconf }:
+{ stdenv, fetchFromGitHub, makeWrapper, ibus, anthy, intltool
+, pkgconfig, glib, gobjectIntrospection
+, python3, pygobject3, gtk3, libtool, automake, autoconf
+}:
 
 stdenv.mkDerivation rec {
   name = "ibus-anthy-${version}";
@@ -18,12 +20,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t";
 
-  buildInputs = [ makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection
-    python pythonPackages.pygobject3 gtk3 libtool automake autoconf ];
+  buildInputs = [
+    makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection
+    python3 pygobject3 gtk3 libtool automake autoconf
+  ];
 
   postFixup = ''
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
-    for file in "$out"/libexec/*; do
+    for file in "$out"/libexec/*; do # */
       wrapProgram "$file" \
         --prefix PYTHONPATH : $PYTHONPATH \
         --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH:$out/lib/girepository-1.0
