@@ -6764,10 +6764,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   LogAny = buildPerlPackage rec {
-    name = "Log-Any-1.038";
+    name = "Log-Any-1.040";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
-      sha256 = "0872jkdbaymyq4sx3i2smv7j57yihxia4bkf14aa3vwpnylpv809";
+      sha256 = "9759211bfc28055e4617894cf96c3b419e0c3c6afb4bdbfe2382f247193b3864";
     };
     meta = {
       homepage = https://github.com/dagolden/Log-Any;
