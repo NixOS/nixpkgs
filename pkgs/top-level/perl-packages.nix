@@ -6900,13 +6900,12 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LWP = buildPerlPackage rec {
-    name = "libwww-perl-6.13";
+  "LWP" = buildPerlPackage rec {
+    name = "libwww-perl-6.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "1cpqjl59viw50bnbdyn8xzrwzg7g54b2rszw0fifacqrppp17gaz";
+      sha256 = "6f349d45c21b1ec0501c4437dfcb70570940e6c3d5bff783bd91d4cddead8322";
     };
-    patches = [ ../development/perl-modules/lwp-test-with-localhost.patch ];
     propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP URI WWWRobotRules ];
     meta = with stdenv.lib; {
       description = "The World-Wide Web library for Perl";
