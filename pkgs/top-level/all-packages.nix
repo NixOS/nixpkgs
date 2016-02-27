@@ -15903,6 +15903,8 @@ let
     retroarch = retroarchBare;
   });
 
+  retrofe = callPackage ../misc/emulators/retrofe { };
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
