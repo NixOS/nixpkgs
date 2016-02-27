@@ -8,7 +8,7 @@ let
 in
 
 import ./make-test.nix ({ pkgs, ...} : {
-  name = "containers";
+  name = "containers-bridge";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco chaoflow ];
   };
