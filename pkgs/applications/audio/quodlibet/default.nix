@@ -1,5 +1,4 @@
 { stdenv, fetchurl, python, buildPythonApplication, mutagen, pygtk, pygobject, intltool
-{ stdenv, fetchurl, python, buildPythonPackage, mutagen, pygtk, pygobject, intltool
 , pythonDBus, gst_python, wrapGAppsHook
 , withGstPlugins ? true, gst_plugins_base ? null, gst_plugins_good ? null
 , gst_plugins_ugly ? null, gst_plugins_bad ? null }:
