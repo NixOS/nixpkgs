@@ -18,6 +18,7 @@ fi
 # use a copy of patchelf.
 LD_LIBRARY_PATH=$out/lib $LD_BINARY $out/bin/cp $out/bin/patchelf .
 
+# Patch elf executables.
 for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     if [ -L "$i" ]; then continue; fi
     if [ -z "${i##*/liblto*}" ]; then continue; fi
@@ -26,13 +27,20 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
         $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
-for i in $out/lib/librt-*.so $out/lib/libpcre*; do
+# Patch elf shared libraries.
+for i in $out/lib/librt-*.so $out/lib/libpcre* $out/lib/libcurl.so* $out/lib/libwolfssl.so*; do
+    # the next line ensures that the file $i actually exists
+    # so the script keeps working on both old and new packages
+    # in case the new package adds new libraries
+    # (the old bootstrap is used to create the new bootstrap!)
+    if [ ! -f "$i" ]; then continue; fi
+    # skip symbolic links
     if [ -L "$i" ]; then continue; fi
     echo patching "$i"
     $out/bin/patchelf --set-rpath $out/lib --force-rpath "$i"
 done
 
-# Fix the libc linker script.
+# Fix linker scripts.
 export PATH=$out/bin
 cat $out/lib/libc.so | sed "s|/nix/store/e*-[^/]*/|$out/|g" > $out/lib/libc.so.tmp
 mv $out/lib/libc.so.tmp $out/lib/libc.so
