@@ -388,7 +388,7 @@ let
 	      "4dacd60356177ec8cf93dbff399de17435b613f3318202614d3d5acbccee1474";
 	      
 	    meta = {
-	      description = "Support library for manipulating Web protocols.";
+	      description = "Support library for manipulating Web protocols";
 	      license = stdenv.lib.licenses.isc;
 	      homepage = "https://github.com/ninenines/cowlib";
 	    };
@@ -405,7 +405,7 @@ let
 	      "db622da03aa039e6366ab953e31186cc8190d32905e33788a1acb22744e6abd2";
 	      
 	    meta = {
-	      description = "Support library for manipulating Web protocols.";
+	      description = "Support library for manipulating Web protocols";
 	      license = stdenv.lib.licenses.isc;
 	      homepage = "https://github.com/ninenines/cowlib";
 	    };
@@ -422,7 +422,7 @@ let
 	      "2b1ac020ec92e7a59cb7322779870c2d3adc7c904ecb3b9fa406f04dc9816b73";
 	      
 	    meta = {
-	      description = "Support library for manipulating Web protocols.";
+	      description = "Support library for manipulating Web protocols";
 	      license = stdenv.lib.licenses.isc;
 	      homepage = "https://github.com/ninenines/cowlib";
 	    };
@@ -599,7 +599,7 @@ let
 	      "6d7365a7854cd724e8d1fd005f5faa4444eae6a87eb6df9b789b6e7f6f09110a";
 	      
 	    meta = {
-	      description = "Markdown generated from Edoc.";
+	      description = "Markdown generated from Edoc";
 	      license = stdenv.lib.licenses.free;
 	      homepage = "https://github.com/uwiger/edown";
 	    };
@@ -1500,7 +1500,7 @@ let
 	    compilePorts = true;
 	     
 	    meta = {
-	      description = "JSON Decoder/Encoder.";
+	      description = "JSON Decoder/Encoder";
 	      license = with stdenv.lib.licenses; [ mit bsd3 ];
 	      homepage = "https://github.com/davisp/jiffy";
 	    };
@@ -1792,7 +1792,7 @@ let
 	      "53e70ea9031f7583331a9f9bdbb29da933e591e5c4cce521b4bf85c68e7f3385";
 	      
 	    meta = {
-	      description = "Lasse: Server-Sent Event handler for Cowboy.";
+	      description = "Lasse: Server-Sent Event handler for Cowboy";
 	      license = stdenv.lib.licenses.asl20;
 	      homepage = "https://github.com/inaka/lasse";
 	    };
@@ -2196,7 +2196,7 @@ let
 	    erlangDeps  = [ getopt_0_8_2 ];
 	    
 	    meta = {
-	      description = "Providers provider.";
+	      description = "Providers provider";
 	      license = stdenv.lib.licenses.mit;
 	      homepage = "https://github.com/tsloughter/providers";
 	    };
@@ -2296,7 +2296,7 @@ let
 	      "98ade939e63e6567da5dec5bc5bd93cbdc53d53f8b1aa998adec60dc4057f048";
 	      
 	    meta = {
-	      description = "Socket acceptor pool for TCP protocols.";
+	      description = "Socket acceptor pool for TCP protocols";
 	      license = stdenv.lib.licenses.isc;
 	      homepage = "https://github.com/ninenines/ranch";
 	    };
@@ -2313,7 +2313,7 @@ let
 	      "82bbb48cdad151000f7ad600d7a29afd972df409fde600bbc9b1ed4fdc08c399";
 	      
 	    meta = {
-	      description = "Socket acceptor pool for TCP protocols.";
+	      description = "Socket acceptor pool for TCP protocols";
 	      license = stdenv.lib.licenses.isc;
 	      homepage = "https://github.com/ninenines/ranch";
 	    };
@@ -2933,7 +2933,7 @@ let
 	      "742c45b3c99e207dd0aeccb818edd2ace4af10699c96fbcee0ce2f692dc5fe12";
 	      
 	    meta = {
-	      description = "weber - is Elixir MVC web framework.";
+	      description = "weber - is Elixir MVC web framework";
 	      license = stdenv.lib.licenses.mit;
 	      homepage = "https://github.com/elixir-web/weber";
 	    };

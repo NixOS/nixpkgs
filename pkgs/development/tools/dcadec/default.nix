@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installPhase = "make PREFIX=/ DESTDIR=$out install";
 
   meta = with stdenv.lib; {
-    description = "DTS Coherent Acoustics decoder with support for HD extensions.";
+    description = "DTS Coherent Acoustics decoder with support for HD extensions";
     maintainers = with maintainers; [ edwtjo ];
     homepage = http://github.com/foo86/dcadec;
     license = licenses.lgpl21;

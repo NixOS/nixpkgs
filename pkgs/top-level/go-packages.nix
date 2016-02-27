@@ -818,7 +818,7 @@ let
 
     meta = with stdenv.lib; {
       homepage    = "https://github.com/martingallagher/gawp";
-      description = "A simple, configurable, file watching, job execution tool implemented in Go.";
+      description = "A simple, configurable, file watching, job execution tool implemented in Go";
       maintainers = with maintainers; [ kamilchm ];
       license     = licenses.asl20 ;
       platforms   = platforms.all;

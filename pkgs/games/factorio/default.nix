@@ -79,7 +79,7 @@ EOF
   '';
 
   meta = {
-    description = "A game in which you build and maintain factories.";
+    description = "A game in which you build and maintain factories";
     longDescription = ''
       Factorio is a game in which you build and maintain factories.
 
