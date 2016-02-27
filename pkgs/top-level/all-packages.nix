@@ -1198,6 +1198,7 @@ let
   };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
+    inherit (gnome3) dconf;
     plugins = [ ];
   };
 
