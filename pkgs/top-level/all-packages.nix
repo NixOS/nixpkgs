@@ -5404,15 +5404,7 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl520 = callPackage ../development/interpreters/perl/5.20 {
-    fetchurl = fetchurlBoot;
-  };
-
-  perl522 = callPackage ../development/interpreters/perl/5.22 {
-    fetchurl = fetchurlBoot;
-  };
-
-  perl = perl520;
+  inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
   php = php56;
 
