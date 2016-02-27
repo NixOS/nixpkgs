@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ iyzsong koral ];
   };
 
