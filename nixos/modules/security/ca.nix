@@ -35,14 +35,17 @@ in
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = singleton ''
-        NixOS.org
-        =========
-        -----BEGIN CERTIFICATE-----
-        MIIGUDCCBTigAwIBAgIDD8KWMA0GCSqGSIb3DQEBBQUAMIGMMQswCQYDVQQGEwJJ
-        TDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjErMCkGA1UECxMiU2VjdXJlIERpZ2l0
-        ...
-        -----END CERTIFICATE-----
+      example = literalExample ''
+        [ '''
+            NixOS.org
+            =========
+            -----BEGIN CERTIFICATE-----
+            MIIGUDCCBTigAwIBAgIDD8KWMA0GCSqGSIb3DQEBBQUAMIGMMQswCQYDVQQGEwJJ
+            TDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjErMCkGA1UECxMiU2VjdXJlIERpZ2l0
+            ...
+            -----END CERTIFICATE-----
+          '''
+        ]
       '';
       description = ''
         A list of trusted root certificates in PEM format.
