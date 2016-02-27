@@ -11220,6 +11220,8 @@ let
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  montserrat = callPackage ../data/fonts/montserrat { };
+
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
   mplus-outline-fonts = callPackage ../data/fonts/mplus-outline-fonts { };
