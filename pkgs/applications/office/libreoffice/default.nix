@@ -106,6 +106,9 @@ in stdenv.mkDerivation rec {
     patchShebangs .
     # It is used only as an indicator of the proper current directory
     touch solenv/inc/target.mk
+
+    # BLFS patch for Glibc 2.23 renaming isnan
+    sed -ire "s@isnan@std::&@g" xmloff/source/draw/ximp3dscene.cxx
   '';
 
   # fetch_Download_item tries to interpret the name as a variable name
