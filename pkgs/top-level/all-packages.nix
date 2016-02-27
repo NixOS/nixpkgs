@@ -9819,7 +9819,6 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    kerberos = null;  # Bundle kerberos because samba uses internal, non-stable functions
     # enableLDAP
   };
 
