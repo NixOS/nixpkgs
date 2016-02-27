@@ -33,6 +33,6 @@ mkDerivation {
   ];
   jailbreak = true;
   homepage = "http://elm-lang.org";
-  description = "Values to help with elm-package, elm-make, and elm-lang.org.";
+  description = "Values to help with elm-package, elm-make, and elm-lang.org";
   license = stdenv.lib.licenses.bsd3;
 }

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Devilspie2 is a window matching utility.";
+    description = "Devilspie2 is a window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to
       perform scripted actions on windows as they are created. For

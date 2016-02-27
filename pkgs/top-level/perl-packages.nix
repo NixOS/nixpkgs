@@ -6900,7 +6900,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ IOLockedFile ];
     meta = {
-      description = "Helps us create simple logs for our application.";
+      description = "Helps us create simple logs for our application";
       license = "perl";
     };
   };

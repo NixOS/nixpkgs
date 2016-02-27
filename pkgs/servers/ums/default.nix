@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-      description = "Universal Media Server: a DLNA-compliant UPnP Media Server.";
+      description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
       license = stdenv.lib.licenses.gpl2;
       platforms = stdenv.lib.platforms.linux;
       maintainers = [ stdenv.lib.maintainers.thall ];
