@@ -10407,6 +10407,24 @@ let
      to EC2, where Xen is the Hypervisor.
   */
 
+  linux_grsecurity_3_14 = callPackage ../os-specific/linux/kernel/linux-grsecurity-3.14.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
+  linux_grsecurity_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   grFlavors = import ../build-support/grsecurity/flavors.nix;
 
   mkGrsecurity = opts:

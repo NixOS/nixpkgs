@@ -23,7 +23,9 @@ let
     { name = "grsecurity-${grversion}-${kversion}";
       inherit grversion kernel kversion revision;
       patch = fetchurl {
-        url = "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
+        url = if branch == "stable"
+              then "https://github.com/kdave/grsecurity-patches/blob/master/grsecurity_patches/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true"
+              else "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
         inherit sha256;
       };
       features.grsecurity = true;
@@ -81,7 +83,7 @@ rec {
   };
 
   grsecurity_stable = grsecPatch
-    { kernel    = pkgs.linux_3_14;
+    { kernel    = pkgs.linux_grsecurity_3_14;
       kversion  = "3.14.51";
       revision  = "201508181951";
       branch    = "stable";
@@ -89,7 +91,7 @@ rec {
     };
 
   grsecurity_testing = grsecPatch
-    { kernel    = pkgs.linux_4_4;
+    { kernel    = pkgs.linux_grsecurity_4_4;
       kversion  = "4.4.2";
       revision  = "201602182048";
       branch    = "test";
