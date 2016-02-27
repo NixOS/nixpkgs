@@ -17,7 +17,7 @@ let
       [Desktop Entry]
       Name=IBus
       Type=Application
-      Exec=${ibusPackage}/bin/ibus-daemon -dx
+      Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim --cache=refresh
     '';
   };
 in
@@ -28,10 +28,14 @@ in
         type    = with types; listOf ibusEngine;
         default = [];
         example = literalExample "with pkgs.ibus-engines; [ mozc hangul ]";
-        description = ''
-          Enabled IBus engines.
-          Available engines can be found by running `nix-env "&lt;nixpkgs&gt;" . -qaP -A ibus-engines`.
-        '';
+        description =
+          let
+            engines =
+              lib.concatStringsSep ", "
+              (map (name: "<literal>${name}</literal>")
+               (lib.attrNames pkgs.ibus-engines));
+          in
+            "Enabled IBus engines. Available engines are: ${engines}.";
       };
     };
   };
