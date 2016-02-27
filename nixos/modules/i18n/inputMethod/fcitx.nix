@@ -29,8 +29,6 @@ in
 
   config = mkIf (config.i18n.inputMethod.enabled == "fcitx") {
     environment.systemPackages = [ fcitxPackage ];
-    gtkPlugins = [ fcitxPackage ];
-    qtPlugins  = [ fcitxPackage ];
 
     environment.variables = {
       GTK_IM_MODULE = "fcitx";
