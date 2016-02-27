@@ -1138,6 +1138,7 @@ let
 
   collectd = callPackage ../tools/system/collectd {
     rabbitmq-c = rabbitmq-c_0_4;
+    libmysql = mysql.lib;
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
