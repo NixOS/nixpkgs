@@ -14,7 +14,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   #### NixOS support
 
-  inherit (pkgs) gvfs;
+  gvfs = pkgs.gvfs.override { samba = null; }; # samba is a rather heavy dependency
   xinitrc = "${xfce4session}/etc/xdg/xfce4/xinitrc";
 
   #### CORE                 from "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2"
