@@ -198,14 +198,14 @@ let
   };
 
   # We use pkgs_ because accessing pkgs would lead to an infinite recursion in stdenvOverrides
-  defaultStdenv = stdenvAdapters.useHardenFlags (
+  defaultStdenv = (import ../stdenv/adapters.nix pkgs_).useHardenFlags (
     pkgs_.allStdenvs.stdenv // { inherit platform; }
   );
 
   stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
 
   stdenv =
-    if bootStdenv != null then (stdenvAdapters.useHardenFlags bootStdenv // {inherit platform;}) else
+    if bootStdenv != null then ((import ../stdenv/adapters.nix pkgs_).useHardenFlags bootStdenv // {inherit platform;}) else
       if crossSystem != null then
         stdenvCross
       else
