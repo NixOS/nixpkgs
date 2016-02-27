@@ -28,7 +28,7 @@ fetchGithubName () {
     )"
     userid="$(
         curl https://github.com/NixOS/nixpkgs/commit/"$commitid" 2>/dev/null |
-        grep authored -B10 | grep 'href="/' |
+        grep committed -B10 | grep 'href="/' |
         sed -re 's@.* href="/@@; s@".*@@' |
 	grep -v "/commit/"
     )";

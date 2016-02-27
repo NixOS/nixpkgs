@@ -18,11 +18,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.47.0";
+  name = "curl-7.47.1";
 
   src = fetchurl {
     url = "http://ngcobalt13.uxnr.de/mirror/curl/${name}.tar.bz2";
-    sha256 = "0riz70pjg82gbcfi2ndvsksb2dv55g31ir8piph2p6zvhy9ny29b";
+    sha256 = "13z9gba3q2ybp50z0gdkzhwcx9m0i7qkvm278yz4pql2jfml7inx";
   };
 
   nativeBuildInputs = [ pkgconfig perl ];

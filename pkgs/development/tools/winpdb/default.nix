@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, wxPython, makeDesktopItem }:
+{ stdenv, fetchurl, buildPythonApplication, wxPython, makeDesktopItem }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "winpdb-1.4.8";
   namePrefix = "";
 

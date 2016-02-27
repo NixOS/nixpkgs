@@ -32,5 +32,8 @@ buildPerlPackage rec {
     homepage = https://sourceforge.net/p/ddclient/wiki/Home/;
     description = "Client for updating dynamic DNS service entries";
     license = licenses.gpl2Plus;
+
+    # Mostly since `iproute` is Linux only.
+    platforms = platforms.linux;
   };
 }

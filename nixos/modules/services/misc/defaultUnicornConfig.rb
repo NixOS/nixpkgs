@@ -187,7 +187,6 @@ working_directory ENV["GITLAB_PATH"]
 pid ENV["UNICORN_PATH"] + "/tmp/pids/unicorn.pid"
 
 listen ENV["UNICORN_PATH"] + "/tmp/sockets/gitlab.socket", :backlog => 1024
-listen "127.0.0.1:8080", :tcp_nopush => true
 
 timeout 60
 

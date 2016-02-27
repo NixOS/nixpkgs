@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, pythonPackages, gtk3, gobjectIntrospection, libnotify
 , gst_all_1, wrapGAppsHook }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   pname = "pithos";
   version = "1.1.2";
   name = "${pname}-${version}";

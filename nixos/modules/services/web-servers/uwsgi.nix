@@ -5,43 +5,85 @@ with lib;
 let
   cfg = config.services.uwsgi;
 
-  python2Pkgs = pkgs.python2Packages.override {
-    python = pkgs.uwsgi.python2;
-    self = python2Pkgs;
-  };
-
-  python3Pkgs = pkgs.python3Packages.override {
-    python = pkgs.uwsgi.python3;
-    self = python3Pkgs;
-  };
-
-  buildCfg = c: if builtins.typeOf c != "set" then builtins.readFile c else builtins.toJSON {
-    uwsgi =
-      if c.type == "normal"
-        then {
-          pythonpath =
-               (if c ? python2Packages
-                then builtins.map (x: "${x}/${pkgs.uwsgi.python2.sitePackages}") (c.python2Packages python2Pkgs)
-                else [])
-            ++ (if c ? python3Packages
-                then builtins.map (x: "${x}/${pkgs.uwsgi.python3.sitePackages}") (c.python3Packages python3Pkgs)
-                else []);
-          plugins = cfg.plugins;
-        } // removeAttrs c [ "type" "python2Packages" "python3Packages" ]
-      else if c.type == "emperor"
-        then {
-          emperor = if builtins.typeOf c.vassals != "set" then c.vassals
-                    else pkgs.buildEnv {
-                      name = "vassals";
-                      paths = mapAttrsToList (n: c: pkgs.writeTextDir "${n}.json" (buildCfg c)) c.vassals;
-                    };
-        } // removeAttrs c [ "type" "vassals" ]
-      else abort "type should be either 'normal' or 'emperor'";
-  };
-
   uwsgi = pkgs.uwsgi.override {
     plugins = cfg.plugins;
   };
+
+  buildCfg = name: c:
+    let
+      plugins =
+        if any (n: !any (m: m == n) cfg.plugins) (c.plugins or [])
+        then throw "`plugins` attribute in UWSGI configuration contains plugins not in config.services.uwsgi.plugins"
+        else c.plugins or cfg.plugins;
+
+      hasPython = v: filter (n: n == "python${v}") plugins != [];
+      hasPython2 = hasPython "2";
+      hasPython3 = hasPython "3";
+
+      python =
+        if hasPython2 && hasPython3 then
+          throw "`plugins` attribute in UWSGI configuration shouldn't contain both python2 and python3"
+        else if hasPython2 then uwsgi.python2
+        else if hasPython3 then uwsgi.python3
+        else null;
+
+      pythonPackages = pkgs.pythonPackages.override {
+        inherit python;
+        self = pythonPackages;
+      };
+
+      json = builtins.toJSON {
+        uwsgi =
+          if c.type == "normal"
+            then {
+              inherit plugins;
+            } // removeAttrs c [ "type" "pythonPackages" ]
+              // optionalAttrs (python != null) {
+                pythonpath = "@PYTHONPATH@";
+                env = (c.env or {}) // {
+                  PATH = optionalString (c ? env.PATH) "${c.env.PATH}:" + "@PATH@";
+                };
+              }
+          else if c.type == "emperor"
+            then {
+              emperor = if builtins.typeOf c.vassals != "set" then c.vassals
+                        else pkgs.buildEnv {
+                          name = "vassals";
+                          paths = mapAttrsToList buildCfg c.vassals;
+                        };
+            } // removeAttrs c [ "type" "vassals" ]
+          else throw "`type` attribute in UWSGI configuration should be either 'normal' or 'emperor'";
+      };
+
+    in
+      if python == null || c.type != "normal"
+      then pkgs.writeTextDir "${name}.json" json
+      else pkgs.stdenv.mkDerivation {
+        name = "uwsgi-config";
+        inherit json;
+        passAsFile = [ "json" ];
+        nativeBuildInputs = [ pythonPackages.wrapPython ];
+        pythonInputs = (c.pythonPackages or (self: [])) pythonPackages;
+
+        buildCommand = ''
+          mkdir $out
+          declare -A pythonPathsSeen=()
+          program_PYTHONPATH=
+          program_PATH=
+          if [ -n "$pythonInputs" ]; then
+            for i in $pythonInputs; do
+              _addToPythonPath $i
+            done
+          fi
+          # A hack to replace "@PYTHONPATH@" with a JSON list
+          if [ -n "$program_PYTHONPATH" ]; then
+            program_PYTHONPATH="\"''${program_PYTHONPATH//:/\",\"}\""
+          fi
+          substitute $jsonPath $out/${name}.json \
+            --replace '"@PYTHONPATH@"' "[$program_PYTHONPATH]" \
+            --subst-var-by PATH "$program_PATH"
+        '';
+      };
 
 in {
 
@@ -71,21 +113,24 @@ in {
             vassals = {
               moin = {
                 type = "normal";
-                python2Packages = self: with self; [ moinmoin ];
+                pythonPackages = self: with self; [ moinmoin ];
                 socket = "${config.services.uwsgi.runDir}/uwsgi.sock";
               };
             };
           }
         '';
         description = ''
-          uWSGI configuration. This awaits either a path to file or a set which will be made into one.
-          If given a set, it awaits an attribute <literal>type</literal> which can be either <literal>normal</literal>
-          or <literal>emperor</literal>.
+          uWSGI configuration. It awaits an attribute <literal>type</literal> inside which can be either
+          <literal>normal</literal> or <literal>emperor</literal>.
 
-          For <literal>normal</literal> mode you can specify <literal>python2Packages</literal> and
-          <literal>python3Packages</literal> as functions from libraries set into lists of libraries.
+          For <literal>normal</literal> mode you can specify <literal>pythonPackages</literal> as a function
+          from libraries set into a list of libraries. <literal>pythonpath</literal> will be set accordingly.
+
           For <literal>emperor</literal> mode, you should use <literal>vassals</literal> attribute
           which should be either a set of names and configurations or a path to a directory.
+
+          Other attributes will be used in configuration file as-is. Notice that you can redefine
+          <literal>plugins</literal> setting here.
         '';
       };
 
@@ -118,7 +163,7 @@ in {
       '';
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${uwsgi}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${pkgs.writeText "uwsgi.json" (buildCfg cfg.instance)}";
+        ExecStart = "${uwsgi}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${buildCfg "server" cfg.instance}/server.json";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         NotifyAccess = "main";

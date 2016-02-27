@@ -1,14 +1,15 @@
-{ stdenv, fetchgit, xorg, freetype, alsaLib, libjack2
-, lv2, pkgconfig, mesa }:
+  { stdenv, fetchurl, xorg, freetype, alsaLib, libjack2
+  , lv2, pkgconfig, mesa }:
 
-stdenv.mkDerivation rec {
-  name = "helm-git-2015-09-11";
+  stdenv.mkDerivation rec {
+  version = "0.6.1";
+  name = "helm-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/mtytel/helm.git";
-    rev = "ad798d4a0a2e7db52e1a7451176ff198a393cdb4";
-    sha256 = "0ic4xjikq7s2p53507ykv89844j6sqcd9mh3y59a6wnslr5wq1cw";
-  };
+  src = fetchurl {
+    url = "https://github.com/mtytel/helm/archive/v${version}.tar.gz";
+    sha256 = "18d7zx6r7har47zj6x1f2z91x796mxnix7w3x1yilmqnyqc56r3w";
+    };
+
 
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext

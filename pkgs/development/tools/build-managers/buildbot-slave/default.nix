@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchurl, coreutils, twisted }:
+{ stdenv, buildPythonApplication, fetchurl, coreutils, twisted }:
 
-buildPythonPackage (rec {
+buildPythonApplication (rec {
   name = "buildbot-slave-0.8.10";
   namePrefix = "";
 

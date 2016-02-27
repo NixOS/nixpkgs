@@ -2,7 +2,7 @@
 
 let version = "0.9.3"; in
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonApplication {
   name = "fail2ban-${version}";
   namePrefix = "";
 

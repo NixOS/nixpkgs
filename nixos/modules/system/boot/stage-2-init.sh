@@ -155,6 +155,21 @@ mkdir -m 0755 -p /var/setuid-wrappers
 mount -t tmpfs -o "mode=0755" tmpfs /var/setuid-wrappers
 
 
+# Log the script output to /dev/kmsg or /run/log/stage-2-init.log.
+# Only at this point are all the necessary prerequisites ready for these commands.
+exec {logOutFd}>&1 {logErrFd}>&2
+if test -w /dev/kmsg; then
+    exec > >(tee -i /proc/self/fd/"$logOutFd" | while read -r line; do
+        if test -n "$line"; then
+            echo "<7>stage-2-init: $line" > /dev/kmsg
+        fi
+    done) 2>&1
+else
+    mkdir -p /run/log
+    exec > >(tee -i /run/log/stage-2-init.log) 2>&1
+fi
+
+
 # Run the script that performs all configuration activation that does
 # not have to be done at boot time.
 echo "running activation script..."
@@ -180,6 +195,11 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 
 # Run any user-specified commands.
 @shell@ @postBootCommands@
+
+
+# Reset the logging file descriptors.
+exec 1>&$logOutFd 2>&$logErrFd
+exec {logOutFd}>&- {logErrFd}>&-
 
 
 # Start systemd.

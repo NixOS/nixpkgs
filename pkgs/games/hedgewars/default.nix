@@ -5,23 +5,21 @@
 
 let
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          network vector utf8-string bytestring-show random hslogger dataenc SHA entropy zlib
+          network vector utf8-string bytestring-show random hslogger dataenc SHA entropy zlib_0_5_4_2
         ]);
 in
 stdenv.mkDerivation rec {
-  version = "0.9.21";
+  version = "0.9.22";
   name = "hedgewars-${version}";
   src = fetchurl {
     url = "http://download.gna.org/hedgewars/hedgewars-src-${version}.tar.bz2";
-    sha256 = "0abnzpyq6sxlfcz5b0kh6r7n1692dwrgsdsr4s216xhh9n19xm0w";
+    sha256 = "14i1wvqbqib9h9092z10g4g0y14r5sp2fdaksvnw687l3ybwi6dn";
   };
 
   buildInputs = [
     SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
     qt4 ghc ffmpeg freeglut makeWrapper physfs
   ];
-
-  patches = [ ./21eb5b79072b147d0a9b7fafca98501e7056c834.patch ];
 
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL_image}/lib

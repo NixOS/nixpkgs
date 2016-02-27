@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "taskwarrior-${version}";
-  version = "2.5.0";
+  version = "2.5.1";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "http://www.taskwarrior.org/download/task-${version}.tar.gz";
-    sha256 = "0dj66c4pwdmfnzdlm1r23gqim6banycyzvmq266114v9b90ng3jd";
+    sha256 = "059a9yc58wcicc6xxsjh1ph7k2yrag0spsahp1wqmsq6h7jwwyyq";
   };
 
   nativeBuildInputs = [ cmake libuuid gnutls ];

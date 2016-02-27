@@ -1,7 +1,7 @@
 # How to contribute
 
 Note: contributing implies licensing those contributions
-under the terms of [COPYING](./COPYING), which is an MIT-like license.
+under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
 ## Opening issues
 

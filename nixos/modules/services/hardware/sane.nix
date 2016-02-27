@@ -21,7 +21,13 @@ in
     hardware.sane.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable support for SANE scanners.";
+      description = ''
+        Enable support for SANE scanners.
+
+        <note><para>
+          Users in the "scanner" group will gain access to the scanner.
+        </para></note>
+      '';
     };
 
     hardware.sane.snapshot = mkOption {
@@ -33,7 +39,14 @@ in
     hardware.sane.extraBackends = mkOption {
       type = types.listOf types.path;
       default = [];
-      description = "Packages providing extra SANE backends to enable.";
+      description = ''
+        Packages providing extra SANE backends to enable.
+
+        <note><para>
+          The example contains the package for HP scanners.
+        </para></note>
+      '';
+      example = literalExample "[ pkgs.hplipWithPlugin ]";
     };
 
     hardware.sane.configDir = mkOption {

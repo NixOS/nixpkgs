@@ -11,7 +11,8 @@
 , fontsConf, pkgconfig, libzip, bluez5, libtool, maven
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
-, gdb, commonsLogging, librdf_rasqal
+, gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
+, defaultIconTheme, glib
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
 }:
@@ -141,8 +142,14 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/bin $out/share/desktop
 
+    mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
+
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
+      wrapProgram "$out/bin/$a" \
+         --prefix XDG_DATA_DIRS : \
+         "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+         ;
     done
 
     ln -s $out/bin/soffice $out/bin/libreoffice
@@ -224,13 +231,13 @@ in stdenv.mkDerivation rec {
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
+      gst_all_1.gst-plugins-base gsettings_desktop_schemas glib
       neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
       python3 sablotron sane-backends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
-      libodfgen CoinMP librdf_rasqal
+      libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
     ];
 
   meta = with stdenv.lib; {

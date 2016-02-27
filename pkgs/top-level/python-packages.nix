@@ -1189,6 +1189,36 @@ in modules // {
     };
   };
 
+  aws_shell = buildPythonPackage rec {
+    name = "aws-shell-${version}";
+    version = "0.1.0";
+    src = pkgs.fetchurl {
+        sha256 = "05isyrqbk16dg1bc3mnc4ynxr3nchslvia5wr1sdmxvc3v2y729d";
+        url = "https://pypi.python.org/packages/source/a/aws-shell/aws-shell-0.1.0.tar.gz";
+      };
+    propagatedBuildInputs = with self; [
+      configobj prompt_toolkit_52 awscli boto3 pygments sqlite3 mock pytest
+      pytestcov unittest2 tox
+    ];
+
+    #Checks are failing due to missing TTY, which won't exist.
+    doCheck = false;
+    preCheck = ''
+      mkdir -p check-phase
+      export HOME=$(pwd)/check-phase
+    '';
+
+    disabled = isPy35;
+
+
+    meta = {
+      homepage = https://github.com/awslabs/aws-shell;
+      description = "An integrated shell for working with the AWS CLI.";
+      license = licenses.asl20;
+      maintainers = [ ];
+    };
+  };
+
   azure = buildPythonPackage rec {
     version = "0.11.0";
     name = "azure-${version}";
@@ -2737,6 +2767,26 @@ in modules // {
     };
   };
 
+  github-cli = buildPythonPackage rec {
+    version = "1.0.0";
+    name = "github-cli-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "jsmits";
+      repo = "github-cli";
+      rev = version;
+      sha256 = "16bwn42wqd76zs97v8p6mqk79p5i2mb06ljk67lf8gy6kvqc1x8y";
+    };
+
+    buildInputs = with self; [ nose pkgs.git ];
+    propagatedBuildInputs = with self; [ simplejson ];
+
+    # skipping test_issues_cli.py since it requires access to the github.com
+    patchPhase = "rm tests/test_issues_cli.py";
+    checkPhase = "nosetests tests/";
+
+    meta.maintainers = with maintainers; [ garbas ];
+  };
+
   cassandra-driver = buildPythonPackage rec {
     name = "cassandra-driver-2.6.0c2";
 
@@ -2936,11 +2986,11 @@ in modules // {
   };
 
   click = buildPythonPackage rec {
-    name = "click-6.2";
+    name = "click-6.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "10kavbisnk9m93jl2wi34pw7ryr2qbxshh2cysxwxd7bymqgz87v";
+      sha256 = "076cr1xbhfyfrzkvflz1i0950jgjn2161hp3f5xji4z1mgxdj85p";
     };
 
     buildInputs = with self; [ pytest ];
@@ -5828,11 +5878,11 @@ in modules // {
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "hovercraft-${version}";
-    version = "2.0b1";
+    version = "2.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/h/hovercraft/${name}.zip";
-      sha256 = "1l88xp563miwwkahil1sxn4kz9khjcx6z85j8d6mq8gjc8rxz3j6";
+      url = "https://pypi.python.org/packages/source/h/hovercraft/${name}.tar.gz";
+      sha256 = "0lqxr816lymgnywln8bbv9nrmkyahjjcjkm9kjyny9bflayz4f1g";
     };
 
     propagatedBuildInputs = with self; [ docutils lxml manuel pygments svg-path watchdog ];
@@ -6098,8 +6148,9 @@ in modules // {
       sha256 = "f19fa66e656309825887171d84a462e64676b1cc36b62e4dd8679ff63926a469";
     };
 
+    propagatedBuildInputs = with self; [ ofxclient ];
+
     buildInputs = with self; [
-      ofxclient
       mock
       nose
       # Used at runtime to translate ofx entries to the ledger
@@ -6581,6 +6632,26 @@ in modules // {
     };
   };
 
+  pdfminer = buildPythonPackage rec {
+    version = "20140328";
+    name = "pdfminer-${version}";
+
+    disabled = ! isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pdfminer/pdfminer-${version}.tar.gz";
+      sha256 = "0qpjv4b776dwvpf5a7v19g41qsz97bv0qqsyvm7a31k50n9pn65s";
+    };
+
+    propagatedBuildInputs = with self; [  ];
+
+    meta = {
+      description = "Tool for extracting information from PDF documents";
+      homepage = http://euske.github.io/pdfminer/index.html;
+      license = licenses.mit;
+      maintainers = with maintainers; [ DamienCassou ];
+    };
+  };
 
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.5";
@@ -8761,6 +8832,31 @@ in modules // {
     };
   };
 
+  flask_migrate = buildPythonPackage rec {
+    name = "Flask-Migrate-${version}";
+    version = "1.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-Migrate/Flask-Migrate-1.7.0.tar.gz";
+      sha256 = "16d7vnaj9xmxvb3qbcmhahm3ldfdhzzi6y221h62x4v1v1jayx7v";
+    };
+
+    # When tests run with python3*, tests should run commands as "python3 <args>",
+    # not "python <args>"
+    patchPhase = ''
+      substituteInPlace tests/test_migrate.py --replace "python" "${python.executable}"
+      substituteInPlace tests/test_multidb_migrate.py --replace "python" "${python.executable}"
+    '';
+
+    propagatedBuildInputs = with self ; [ flask flask_sqlalchemy flask_script alembic ];
+
+    meta = {
+      description = "SQLAlchemy database migrations for Flask applications using Alembic";
+      license = licenses.mit;
+      homepage = https://github.com/miguelgrinberg/Flask-Migrate;
+    };
+  };
+
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
     version = "0.4.0";
@@ -8817,6 +8913,24 @@ in modules // {
       license = licenses.bsd3;
       platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
+    };
+  };
+
+  flask_sqlalchemy = buildPythonPackage rec {
+    name = "Flask-SQLAlchemy-${version}";
+    version = "2.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/F/Flask-SQLAlchemy/${name}.tar.gz";
+      sha256 = "1i9ps5d5snih9xlqhrvmi3qfiygkmqzxh92n25kj4pf89kj4s965";
+    };
+
+    propagatedBuildInputs = with self ; [ flask sqlalchemy_1_0 ];
+
+    meta = {
+      description = "SQLAlchemy extension for Flask";
+      homepage = http://flask-sqlalchemy.pocoo.org/;
+      license = licenses.bsd3;
     };
   };
 
@@ -10170,12 +10284,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.2.2";
+    version = "4.3.0";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipykernel/${name}.tar.gz";
-      sha256 = "a876da43e01acec2c305abdd8e6aa55f052bab1196171ccf1cb9a6aa230298b0";
+      sha256 = "1av769gbzfm1zy9p94wicwwwxmyc7s7zk1ginq16x0wc69hwc57j";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
@@ -10184,6 +10298,7 @@ in modules // {
       jupyter_client
       pexpect
       traitlets
+      tornado
     ];
 
     # Tests require backends.
@@ -15468,6 +15583,18 @@ in modules // {
       maintainers = with maintainers; [ nckx ];
     };
   };
+  prompt_toolkit_52 = self.prompt_toolkit.override(self: rec {
+    name = "prompt_toolkit-${version}";
+    version = "0.52";
+    src = pkgs.fetchurl {
+      sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
+      url = "https://pypi.python.org/packages/source/p/prompt_toolkit/${name}.tar.gz";
+    };
+
+    #Only <3.4 expressly supported.
+    disabled = isPy35;
+
+  });
 
   protobuf = self.protobuf2_6;
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
@@ -16182,6 +16309,32 @@ in modules // {
     };
   });
 
+  pyelftools = buildPythonPackage rec {
+    pname = "pyelftools";
+    version = "0.23";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/${pname}/${name}.tar.gz";
+      sha256 = "1pi1mdzfffgl5qcz0prsa7hlbriycy7mgagi0fdrp3vf17fslmzw";
+    };
+
+    checkPhase = ''
+      ${python.interpreter} test/all_tests.py
+    '';
+    # Tests cannot pass against system-wide readelf
+    # https://github.com/eliben/pyelftools/issues/65
+    doCheck = false;
+
+    meta = {
+      description = "A library for analyzing ELF files and DWARF debugging information";
+      homepage = https://github.com/eliben/pyelftools;
+      license = licenses.publicDomain;
+      platforms = platforms.all;
+      maintainers = [ maintainers.igsha ];
+    };
+  };
+
   pyenchant = buildPythonPackage rec {
     name = "pyenchant-1.6.6";
 
@@ -16881,6 +17034,28 @@ in modules // {
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ bjornfor ];
+    };
+  });
+
+  pyrsistent = buildPythonPackage (rec {
+    name = "pyrsistent-0.11.12";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyrsistent/${name}.tar.gz";
+      sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
+    };
+
+    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      homepage = http://github.com/tobgu/pyrsistent/;
+      description = "Persistent/Functional/Immutable data structures";
+      license = licenses.mit;
+      maintainers = with maintainers; [ desiderius ];
     };
   });
 
@@ -17863,11 +18038,11 @@ in modules // {
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.8.1";
+    version = "2.9.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      sha256 = "0ny2nr1sqr4hcn3903ghmh7w2yni8shlfv240a8c9p6wyidqvzl4";
+      sha256 = "0zsqrzlybf25xscgi7ja4s48y2abf9wvjkn47wh984qgs1fq2xy5";
     };
 
     buildInputs = [ self.pytest ];
@@ -23795,19 +23970,30 @@ in modules // {
   };
 
   udiskie = buildPythonPackage rec {
-    version = "1.1.2";
+    version = "1.4.8";
     name = "udiskie-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/coldfix/udiskie/archive/${version}.tar.gz";
-      sha256 = "07fyvwp4rga47ayfsmb79p2784sqrih0sglwnd9c4x6g63xgljvb";
+      sha256 = "0fj1kh6pmwyyy54ybc5fa625lhrxzhzmfx1nwz2lym5cpm4b21fl";
     };
 
     preConfigure = ''
       export XDG_RUNTIME_DIR=/tmp
     '';
 
+    buildInputs = [
+      pkgs.asciidoc-full        # For building man page.
+    ];
+
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
+
+    postBuild = "make -C doc";
+
+    postInstall = ''
+      mkdir -p $out/share/man/man8
+      cp -v doc/udiskie.8 $out/share/man/man8/
+    '';
 
     preFixup = ''
         wrapProgram "$out/bin/"* \
@@ -23825,17 +24011,23 @@ in modules // {
     };
   };
 
-  pythonefl_1_15 = buildPythonPackage rec {
+  pythonefl_1_16 = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.15.0";
+    version = "1.16.0";
     src = pkgs.fetchurl {
-      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.gz";
-      sha256 = "1k3vb7pb70l2v1s2mzg91wvmncq93vb04vn60pzdlrnbcns0grhi";
+      url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
+      sha256 = "142ffki41xj0z2dnf011g8j4b35waviprk4x1dhvy1wgqdywl61l";
     };
+
     preConfigure = ''
       export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${self.dbus}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
     '';
+    preBuild = "${python}/bin/${python.executable} setup.py build_ext";
+    installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
+
     buildInputs = with self; [ pkgs.pkgconfig pkgs.e19.efl pkgs.e19.elementary ];
+    doCheck = false;
+
     meta = {
       description = "Python bindings for EFL and Elementary";
       homepage = http://enlightenment.org/;
@@ -24346,17 +24538,17 @@ in modules // {
   };
 
   weboob = buildPythonPackage rec {
-    name = "weboob-1.0";
+    name = "weboob-1.1";
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
-      url = "https://symlink.me/attachments/download/289/${name}.tar.gz";
-      md5 = "38f832f1b8654441adafe8558faa7109";
+      url = "https://symlink.me/attachments/download/324/${name}.tar.gz";
+      sha256 = "0736c5wsck2abxlwvx8i4496kafk9xchkkzhg4dcfbj0isldih6b";
     };
 
     setupPyBuildFlags = ["--qt" "--xdg"];
 
-    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures ];
+    propagatedBuildInputs = with self; [ pillow prettytable pyyaml dateutil gdata requests2 mechanize feedparser lxml pkgs.gnupg pyqt4 pkgs.libyaml simplejson cssselect futures pdfminer termcolor ];
 
     meta = {
       homepage = http://weboob.org;

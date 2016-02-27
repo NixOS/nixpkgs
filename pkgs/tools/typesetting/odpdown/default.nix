@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, buildPythonPackage, libreoffice, lpod, lxml, mistune, pillow
+{ stdenv, fetchurl, buildPythonApplication, libreoffice, lpod, lxml, mistune, pillow
 , pygments
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
 
   name = "odpdown-${version}";
   version = "0.4.1";

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, slowaes }:
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages, slowaes }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "electrum-${version}";
   version = "2.5.4";
 

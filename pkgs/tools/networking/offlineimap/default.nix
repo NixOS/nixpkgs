@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, sqlite3 }:
+{ stdenv, fetchFromGitHub, buildPythonApplication, sqlite3 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   version = "6.6.1";
   name = "offlineimap-${version}";
   namePrefix = "";

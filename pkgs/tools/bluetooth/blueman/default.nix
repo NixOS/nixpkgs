@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
-, obex_data_server, xdg_utils, libnotify, dconf
+, obex_data_server, xdg_utils, libnotify, dconf, gsettings_desktop_schemas, dnsmasq, dhcp
 , withPulseAudio ? true, libpulseaudio }:
 
 let
-  binPath = lib.makeBinPath [ xdg_utils ];
+  binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
 
 in stdenv.mkDerivation rec {
   name = "blueman-${version}";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf ]
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf gsettings_desktop_schemas ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   pythonPath = with pythonPackages; [ dbus pygobject3 ];
 
-  propagatedUserEnvPkgs = [ obex_data_server ];
+  propagatedUserEnvPkgs = [ obex_data_server dconf ];
 
   configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
 

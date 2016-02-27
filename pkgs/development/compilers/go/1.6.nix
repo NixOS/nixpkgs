@@ -92,7 +92,6 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    ./cacert-1.5.patch
     ./remove-tools-1.5.patch
   ]
   # -ldflags=-s is required to compile on Darwin, see

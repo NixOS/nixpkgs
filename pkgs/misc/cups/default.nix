@@ -5,7 +5,7 @@
 
 ### IMPORTANT: before updating cups, make sure the nixos/tests/printing.nix test
 ### works at least for your platform.
-let version = "2.0.4"; in
+let version = "2.1.3"; in
 
 with stdenv.lib;
 stdenv.mkDerivation {
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.cups.org/software/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1gaakz24k6x5nc09rmpiq0xq20j1qdjc3szag8qwmyi4ky6ydmg1";
+    sha256 = "1lyl3z01xhg9xb9c8m42398c6h9kw8qr6jwiv8bjdsjab11hv9rn";
   };
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
@@ -53,7 +53,6 @@ stdenv.mkDerivation {
       # Idem for /etc.
       "PAMDIR=$(out)/etc/pam.d"
       "DBUSDIR=$(out)/etc/dbus-1"
-      "INITDIR=$(out)/etc/rc.d"
       "XINETD=$(out)/etc/xinetd.d"
       "SERVERROOT=$(out)/etc/cups"
       # Idem for /usr.
@@ -62,6 +61,8 @@ stdenv.mkDerivation {
       # Work around a Makefile bug.
       "CUPS_PRIMARY_SYSTEM_GROUP=root"
     ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
       # Delete obsolete stuff that conflicts with cups-filters.

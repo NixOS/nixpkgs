@@ -43,12 +43,12 @@ let baseAttrs = rec {
 in stdenv.mkDerivation ( baseAttrs
   // stdenv.lib.optionalAttrs selectTextPatch rec {
       name = "vte-ng-${version}";
-      version = "0.42.1.a";
+      version = "0.42.4.a";
       src = fetchFromGitHub {
         owner = "thestinger";
         repo = "vte-ng";
         rev = version;
-        sha256 = "1296rvngixi6l31mhhaks6vr1xyqw8h6n5hwknadrlk95nknrpxm";
+        sha256 = "1w91lz30j5lrskp9ds5j3nn27m5mpdpn7nlcvf5y1w63mpmjg8k1";
       };
       # slightly hacky; I couldn't make it work with autoreconfHook
       configureScript = "./autogen.sh";

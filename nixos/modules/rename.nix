@@ -28,6 +28,9 @@ with lib;
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ])
+
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
     (mkRenamedOptionModule [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ])
@@ -58,6 +61,9 @@ with lib;
 
     # Tarsnap
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
+
+    # ibus
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
 
     # proxy
     (mkRenamedOptionModule [ "nix" "proxy" ] [ "networking" "proxy" "default" ])

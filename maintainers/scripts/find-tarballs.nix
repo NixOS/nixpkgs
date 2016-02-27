@@ -18,7 +18,8 @@ let
 
   fetchurlDependencies =
     filter
-      (drv: drv.outputHash or "" != "" && drv.outputHashMode == "flat" && drv.postFetch or "" == "" && drv ? urls)
+      (drv: drv.outputHash or "" != "" && drv.outputHashMode or "flat" == "flat"
+          && drv.postFetch or "" == "" && drv ? urls)
       dependencies;
 
   dependencies = map (x: x.value) (genericClosure {

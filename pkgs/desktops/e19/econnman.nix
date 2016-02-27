@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper pkgconfig e19.efl python27 dbus ];
-  propagatedBuildInputs = [ python27Packages.pythonefl_1_15 python27Packages.dbus e19.elementary ];
+  propagatedBuildInputs = [ python27Packages.pythonefl_1_16 python27Packages.dbus e19.elementary ];
   postInstall = ''
-    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl_1_15}/lib/python2.7/site-packages
+    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl_1_16}/lib/python2.7/site-packages
   '';
 
   meta = {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pythonPackages, pycrypto, attr }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "obnam-${version}";
   version = "1.19.1";
 

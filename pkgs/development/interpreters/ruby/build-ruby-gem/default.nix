@@ -32,7 +32,9 @@ lib.makeOverridable (
 , platform ? "ruby"
 , ruby ? defs.ruby
 , stdenv ? ruby.stdenv
-, namePrefix ? "${ruby.name}" + "-"
+, namePrefix ? (let
+    rubyName = builtins.parseDrvName ruby.name;
+  in "${rubyName.name}${rubyName.version}-")
 , buildInputs ? []
 , doCheck ? false
 , meta ? {}
@@ -89,7 +91,7 @@ stdenv.mkDerivation (attrs // {
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
-  name = attrs.name or (namePrefix + gemName);
+  name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
 

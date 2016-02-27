@@ -1,18 +1,21 @@
-{ stdenv, ruby, bundler, fetchgit }:
+{ stdenv, ruby, bundler, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.6.10";
   name = "gitlab-shell-${version}";
 
-  srcs = fetchgit {
-    url = "https://gitlab.com/gitlab-org/gitlab-shell.git";
-    rev = "ebbb9d80811c23d49a7d1b75d7a7d2b8ffe7437b";
-    sha256 = "fe69ab85d75a3871b4afa11ebc17f43008d135bbdbd6c581f6bebee2a4a3c75d";
+  srcs = fetchFromGitLab {
+    owner = "gitlab-org";
+    repo = "gitlab-shell";
+    rev = "v${version}";
+    sha256 = "1f1ma49xpkan2iksnw9amzjdw6i0bxnzdbsk0329m7if4987vcqd";
   };
 
   buildInputs = [
     ruby bundler
   ];
+
+  patches = [ ./remove-hardcoded-locations.patch ];
 
   installPhase = ''
     mkdir -p $out/

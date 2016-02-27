@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgs, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "0.8.1";
   name = "khard-${version}";
   namePrefix = "";

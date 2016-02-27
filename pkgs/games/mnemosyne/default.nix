@@ -1,12 +1,12 @@
 { stdenv
 , fetchurl
-, buildPythonPackage
+, buildPythonApplication
 , pyqt4
 , pythonPackages
 }:
 let
   version = "2.3.2";
-in buildPythonPackage rec {
+in buildPythonApplication rec {
   name = "mnemosyne-${version}";
   src = fetchurl {
     url    = "http://sourceforge.net/projects/mnemosyne-proj/files/mnemosyne/${name}/Mnemosyne-${version}.tar.gz";

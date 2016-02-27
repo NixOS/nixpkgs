@@ -1,0 +1,103 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-gitlab">
+
+<title>Gitlab</title>
+
+<para>Gitlab is a feature-rich git hosting service.</para>
+
+<section><title>Prerequisites</title>
+
+<para>The gitlab service exposes only an Unix socket at
+<literal>/run/gitlab/gitlab-workhorse.socket</literal>. You need to configure a
+webserver to proxy HTTP requests to the socket.</para>
+
+<para>For instance, this could be used for Nginx:
+
+<programlisting>
+services.nginx.httpConfig = ''
+  server {
+    server_name git.example.com;
+    listen 443 ssl spdy;
+    listen [::]:443 ssl spdy;
+
+    ssl_certificate /var/lib/acme/git.example.com/fullchain.pem;
+    ssl_certificate_key /var/lib/acme/git.example.com/key.pem;
+
+    location / {
+      proxy_http_version 1.1;
+      proxy_set_header    Host                $http_host;
+      proxy_set_header    X-Real-IP           $remote_addr;
+      proxy_set_header    X-Forwarded-Ssl     on;
+      proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+      proxy_set_header    X-Forwarded-Proto   $scheme;
+
+      proxy_pass http://unix:/run/gitlab/gitlab-workhorse.socket;
+    }
+  }
+'';
+</programlisting>
+</para>
+
+</section>
+
+<section><title>Configuring</title>
+
+<para>Gitlab depends on both PostgreSQL and Redis and will automatically enable
+both services. In the case of PostgreSQL, a database and a role will be created.
+</para>
+
+<para>The default state dir is /var/gitlab/state. This is where all data like
+the repositories and uploads will be stored.</para>
+
+<para>A basic configuration could look like this:
+
+<programlisting>
+services.gitlab = {
+  enable = true;
+  databasePassword = "eXaMpl3";
+  initialRootPassword = "UseNixOS!";
+  https = true;
+  host = "git.example.com";
+  port = 443;
+  user = "git";
+  group = "git";
+  extraConfig = {
+    gitlab = {
+      default_projects_features = { builds = false; };
+    };
+  };
+};
+</programlisting>
+</para>
+
+<para>Refer to <xref linkend="ch-options" /> for all available configuration
+options for the <literal>services.gitlab</literal> module.</para>
+
+</section>
+
+<section><title>Maintenance</title>
+
+<para>You can run all Gitlab related commands like rake tasks with
+<literal>gitlab-runner</literal> which will be available on the system
+when gitlab is enabled. You will have to run the commands as the user that
+you configured to run gitlab.</para>
+
+<para>For instance, to backup a Gitlab instance:
+
+<programlisting>
+$ sudo -u git -H gitlab-runner exec rake gitlab:backup:create
+</programlisting>
+
+A list of all availabe rake tasks can be obtained by running:
+
+<programlisting>
+$ sudo -u git -H gitlab-runner exec rake -T
+</programlisting>
+</para>
+
+</section>
+
+</chapter>
