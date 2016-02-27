@@ -5,6 +5,9 @@ rec {
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
+  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
+  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
+
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
 
