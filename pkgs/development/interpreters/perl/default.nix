@@ -113,7 +113,7 @@ let
 
 in rec {
 
-  perl = perl520;
+  perl = perl522;
 
   perl520 = common {
     version = "5.20.3";
