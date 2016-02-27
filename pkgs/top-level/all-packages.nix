@@ -8826,8 +8826,6 @@ let
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
-    # The build succeeds using gcc5 but it fails to build pkgs.consul-ui
-    stdenv = overrideCC stdenv gcc48;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
