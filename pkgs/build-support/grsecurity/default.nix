@@ -4,8 +4,7 @@ with lib;
 
 let
   cfg = {
-    stable  = grsecOptions.stable  or false;
-    testing = grsecOptions.testing or false;
+    kernelPatch = grsecOptions.kernelPatch;
     config = {
       mode = "auto";
       sysctl = false;
@@ -28,12 +27,7 @@ let
           inherit (patch) kernel patches grversion revision;
         };
 
-    test-patch = with pkgs.kernelPatches; grsecurity_testing;
-    stable-patch = with pkgs.kernelPatches; grsecurity_stable;
-
-    grKernel = if cfg.stable
-               then mkKernel stable-patch
-               else mkKernel test-patch;
+    grKernel = mkKernel cfg.kernelPatch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
@@ -90,8 +84,8 @@ let
 
           # Disable restricting links under the testing kernel, as something
           # has changed causing it to fail miserably during boot.
-          restrictLinks = optionalString cfg.testing
-            "GRKERNSEC_LINK n";
+          #restrictLinks = optionalString cfg.testing
+          #  "GRKERNSEC_LINK n";
       in ''
         GRKERNSEC y
         ${grsecMainConfig}
@@ -109,7 +103,6 @@ let
         GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
         GRKERNSEC_DENYUSB ${boolToKernOpt cfg.config.denyUSB}
         GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
-        ${restrictLinks}
 
         ${cfg.config.kernelExtraConfig}
       '';

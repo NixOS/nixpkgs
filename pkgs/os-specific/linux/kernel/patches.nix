@@ -18,7 +18,7 @@ let
       };
     };
 
-  grsecPatch = { grversion ? "3.1", kernel, patches, kversion, revision, branch, sha256 }:
+  grsecPatch = { grversion ? "3.1", kernel, patches, kversion, revision, branch ? "test", sha256 }:
     assert kversion == kernel.version;
     { name = "grsecurity-${grversion}-${kversion}";
       inherit grversion kernel patches kversion revision;
@@ -82,8 +82,8 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_stable = grsecPatch
-    { kernel    = pkgs.linux_grsecurity_3_14;
+  grsecurity_3_14 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_3_14;
       patches   = [ grsecurity_fix_path_3_14 ];
       kversion  = "3.14.51";
       revision  = "201508181951";
@@ -91,14 +91,15 @@ rec {
       sha256    = "1sp1gwa7ahzflq7ayb51bg52abrn5zx1hb3pff3axpjqq7vfai6f";
     };
 
-  grsecurity_testing = grsecPatch
-    { kernel    = pkgs.linux_grsecurity_4_4;
+  grsecurity_4_4 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_4_4;
       patches   = [ grsecurity_fix_path_4_4 ];
       kversion  = "4.4.2";
       revision  = "201602182048";
-      branch    = "test";
       sha256    = "0dm0nzzja6ynzdz2k5h0ckys7flw307i3w0k1lwjxfj80civ73wr";
     };
+
+  grsecurity_latest = grsecurity_4_4;
 
   grsecurity_fix_path_3_14 =
     { name = "grsecurity-fix-path-3.14";

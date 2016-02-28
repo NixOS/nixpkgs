@@ -10407,7 +10407,9 @@ let
      to EC2, where Xen is the Hypervisor.
   */
 
-  linux_grsecurity_3_14 = callPackage ../os-specific/linux/kernel/linux-grsecurity-3.14.nix {
+  # Base kernels to apply the grsecurity patch onto
+
+  grsecurity_base_linux_3_14 = callPackage ../os-specific/linux/kernel/linux-grsecurity-3.14.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -10416,7 +10418,7 @@ let
       ];
   };
 
-  linux_grsecurity_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
+  grsecurity_base_linux_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -10427,28 +10429,37 @@ let
 
   grFlavors = import ../build-support/grsecurity/flavors.nix;
 
-  mkGrsecurity = opts:
+  mkGrsecurity = patch: opts:
     (callPackage ../build-support/grsecurity {
-      grsecOptions = opts;
+      grsecOptions = { kernelPatch = patch; } // opts;
     });
 
-  grKernel  = opts: (mkGrsecurity opts).grsecKernel;
-  grPackage = opts: recurseIntoAttrs (mkGrsecurity opts).grsecPackage;
+  grKernel  = patch: opts: (mkGrsecurity patch opts).grsecKernel;
+  grPackage = patch: opts: recurseIntoAttrs (mkGrsecurity patch opts).grsecPackage;
 
-  # Stable kernels
-  # This is no longer supported. Please see the official announcement on the
-  # grsecurity page. https://grsecurity.net/announce.php
-  linux_grsec_stable_desktop    = throw "No longer supported due to https://grsecurity.net/announce.php. "
-    + "Please use linux_grsec_testing_desktop.";
-  linux_grsec_stable_server     = throw "No longer supported due to https://grsecurity.net/announce.php. "
-    + "Please use linux_grsec_testing_server.";
-  linux_grsec_stable_server_xen = throw "No longer supporteddue to https://grsecurity.net/announce.php. "
-    + "Please use linux_grsec_testing_server_xen.";
+  # grsecurity kernels (see also linuxPackages_grsec_*)
 
-  # Testing kernels
-  linux_grsec_testing_desktop = grKernel grFlavors.linux_grsec_testing_desktop;
-  linux_grsec_testing_server  = grKernel grFlavors.linux_grsec_testing_server;
-  linux_grsec_testing_server_xen = grKernel grFlavors.linux_grsec_testing_server_xen;
+  linux_grsec_desktop_3_14    = grKernel kernelPatches.grsecurity_3_14 grFlavors.desktop;
+  linux_grsec_server_3_14     = grKernel kernelPatches.grsecurity_3_14 grFlavors.server;
+  linux_grsec_server_xen_3_14 = grKernel kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+
+  linux_grsec_desktop_4_4    = grKernel kernelPatches.grsecurity_4_4 grFlavors.desktop;
+  linux_grsec_server_4_4     = grKernel kernelPatches.grsecurity_4_4 grFlavors.server;
+  linux_grsec_server_xen_4_4 = grKernel kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+
+  linux_grsec_desktop_latest    = grKernel kernelPatches.grsecurity_latest grFlavors.desktop;
+  linux_grsec_server_latest     = grKernel kernelPatches.grsecurity_latest grFlavors.server;
+  linux_grsec_server_xen_latest = grKernel kernelPatches.grsecurity_latest grFlavors.server_xen;
+
+  # grsecurity: old names
+
+  linux_grsec_testing_desktop    = linux_grsec_desktop_latest;
+  linux_grsec_testing_server     = linux_grsec_server_latest;
+  linux_grsec_testing_server_xen = linux_grsec_server_xen_latest;
+
+  linux_grsec_stable_desktop    = linux_grsec_desktop_3_14;
+  linux_grsec_stable_server     = linux_grsec_server_3_14;
+  linux_grsec_stable_server_xen = linux_grsec_server_xen_3_14;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -10589,16 +10600,29 @@ let
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
 
-  # grsecurity flavors
-  # Stable kernels
-  linuxPackages_grsec_stable_desktop    = grPackage grFlavors.linux_grsec_stable_desktop;
-  linuxPackages_grsec_stable_server     = grPackage grFlavors.linux_grsec_stable_server;
-  linuxPackages_grsec_stable_server_xen = grPackage grFlavors.linux_grsec_stable_server_xen;
+  # grsecurity packages
 
-  # Testing kernels
-  linuxPackages_grsec_testing_desktop = grPackage grFlavors.linux_grsec_testing_desktop;
-  linuxPackages_grsec_testing_server  = grPackage grFlavors.linux_grsec_testing_server;
-  linuxPackages_grsec_testing_server_xen = grPackage grFlavors.linux_grsec_testing_server_xen;
+  linuxPackages_grsec_desktop_3_14    = grPackage kernelPatches.grsecurity_3_14 grFlavors.desktop;
+  linuxPackages_grsec_server_3_14     = grPackage kernelPatches.grsecurity_3_14 grFlavors.server;
+  linuxPackages_grsec_server_xen_3_14 = grPackage kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+
+  linuxPackages_grsec_desktop_4_4    = grPackage kernelPatches.grsecurity_4_4 grFlavors.desktop;
+  linuxPackages_grsec_server_4_4     = grPackage kernelPatches.grsecurity_4_4 grFlavors.server;
+  linuxPackages_grsec_server_xen_4_4 = grPackage kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+
+  linuxPackages_grsec_desktop_latest    = grPackage kernelPatches.grsecurity_latest grFlavors.desktop;
+  linuxPackages_grsec_server_latest     = grPackage kernelPatches.grsecurity_latest grFlavors.server;
+  linuxPackages_grsec_server_xen_latest = grPackage kernelPatches.grsecurity_latest grFlavors.server_xen;
+
+  # grsecurity: old names
+
+  linuxPackages_grsec_testing_desktop    = linuxPackages_grsec_desktop_latest;
+  linuxPackages_grsec_testing_server     = linuxPackages_grsec_server_latest;
+  linuxPackages_grsec_testing_server_xen = linuxPackages_grsec_server_xen_latest;
+
+  linuxPackages_grsec_stable_desktop    = linuxPackages_grsec_desktop_3_14;
+  linuxPackages_grsec_stable_server     = linuxPackages_grsec_server_3_14;
+  linuxPackages_grsec_stable_server_xen = linuxPackages_grsec_server_xen_3_14;
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
