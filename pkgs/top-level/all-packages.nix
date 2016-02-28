@@ -9848,7 +9848,6 @@ let
   });
 
   samba4Full = lowPrio (samba4.override {
-    enableKerberos  = true;
     enableInfiniband = true;
     enableLDAP = true;
     enablePrinting = true;
