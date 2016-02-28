@@ -203,7 +203,8 @@ in
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              initdb -U root
+              initdb -U postgres
+
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"
             fi
@@ -239,6 +240,20 @@ in
                 if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
+
+            ensure_superuser() {
+              local user=$1
+              psql -d postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='$user'" \
+                | grep -q 1 || createuser -s "$user"
+            }
+
+            # upgrade existing systems with the new user
+            ensure_superuser postgres -s
+          '' + optionalString (versionOlder config.system.stateVersion "16.03")
+          ''
+            # deprecated 2016-08-31
+            ensure_superuser root -s
+          '' + ''
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
