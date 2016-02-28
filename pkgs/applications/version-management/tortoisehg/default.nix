@@ -19,7 +19,7 @@ pkgs.buildPythonApplication rec {
 
     postUnpack = ''
      substituteInPlace $sourceRoot/setup.py \
-       --replace "/usr/share/" "$out/share/"
+       --replace "sharedir = os.path.join(installcmd.install_data[rootlen:], 'share')" "sharedir = '$out/share/'"
     '';
 
     postInstall = ''
