@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       substituteInPlace ./make-linux.mk \
           --replace 'CXX=$(shell which clang++ g++ c++ 2>/dev/null | head -n 1)' "CC=${gcc}/bin/g++";
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
-          --replace '/sbin/ip' "${iproute}/bin/ip"
+          --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
   '';
 
   buildInputs = [ openssl lzo zlib gcc iproute ];
