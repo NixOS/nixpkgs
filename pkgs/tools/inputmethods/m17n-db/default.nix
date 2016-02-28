@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext}:
+{ stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   name = "m17n-db-1.7.0";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext ];
 
   configureFlags = stdenv.lib.optional (stdenv ? glibc)
-    "--with-charmaps=${stdenv.glibc}/share/i18n/charmaps"
+    "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"
   ;
 
   meta = {
