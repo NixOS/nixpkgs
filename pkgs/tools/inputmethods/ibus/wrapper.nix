@@ -1,5 +1,5 @@
 { stdenv, runCommand, makeWrapper, lndir
-, dconf, hicolor_icon_theme, ibus, plugins
+, dconf, hicolor_icon_theme, ibus, librsvg, plugins
 }:
 
 let
@@ -23,6 +23,7 @@ let
 
     for prog in ibus ibus-daemon ibus-setup; do
         wrapProgram "$out/bin/$prog" \
+          --prefix GDK_PIXBUF_MODULE_FILE : ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \

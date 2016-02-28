@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
-, intltool, pkgconfig
+{ stdenv, fetchurl, intltool, pkgconfig
 , gtk3, ibus, libhangul, librsvg, python3, pygobject3
 }:
 
@@ -9,20 +8,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${name}.tar.gz";
-    sha256 = null;
+    sha256 = "120p9w7za6hi521hz8q235fkl4i3p1qqr8nqm4a3kxr0pcq40bd2";
   };
 
   buildInputs = [ gtk3 ibus libhangul python3 pygobject3 ];
 
-  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
-
-  postInstall = ''
-    wrapProgram $out/bin/ibus-setup-hangul \
-      --prefix PYTHONPATH : $PYTHONPATH \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix GDK_PIXBUF_MODULE_FILE : ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
-      --prefix LD_LIBRARY_PATH : ${libhangul}/lib
-  '';
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

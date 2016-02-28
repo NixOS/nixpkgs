@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ibus, anthy, intltool
-, pkgconfig, glib, gobjectIntrospection
-, python3, pygobject3, gtk3, libtool, automake, autoconf
+{ stdenv, fetchurl, intltool, pkgconfig
+, anthy, ibus, glib, gobjectIntrospection, gtk3, python3, pygobject3
 }:
 
 stdenv.mkDerivation rec {
@@ -16,28 +15,20 @@ stdenv.mkDerivation rec {
     maintainers  = with maintainers; [ gebner ericsagnes ];
   };
 
-  preConfigure = "./autogen.sh --prefix=$out";
-
   configureFlags = "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t";
 
   buildInputs = [
-    makeWrapper ibus anthy intltool pkgconfig glib gobjectIntrospection
-    python3 pygobject3 gtk3 libtool automake autoconf
+    anthy glib gobjectIntrospection gtk3 ibus python3 pygobject3
   ];
+
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   postFixup = ''
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
-    for file in "$out"/libexec/*; do # */
-      wrapProgram "$file" \
-        --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH:$out/lib/girepository-1.0
-    done
   '';
 
-  src = fetchFromGitHub {
-    owner  = "ibus";
-    repo   = "ibus-anthy";
-    rev    = version;
-    sha256 = "1laxwpnhgihv4dz5cgcz6d0a0880r93n7039ciz1m53hdzapwi4a";
+  src = fetchurl {
+    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
+    sha256 = "1aj7vnfky7izl23xyjky78z3qas3q72l3kr8dnql2lnivsrb8q1y";
   };
 }
