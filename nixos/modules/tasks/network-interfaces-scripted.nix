@@ -335,7 +335,13 @@ in
           ({
             description = "Veth Pair ${n}";
             wantedBy = [ "network.target" (subsystemDevice n) ];
-            after = [ "network-pre.target" ];
+            after = [ "network-pre.target" ] ++ mapAttrsToList (name: container:
+              "container@${name}.service"
+            ) (
+              filterAttrs (name: container:
+                any (i: i == n) container.interfaces
+              ) config.containers
+            );
             before = [ "network-interfaces.target" (subsystemDevice n) ];
             serviceConfig.type = "oneshot";
             serviceConfig.RemainAfterExit = true;
