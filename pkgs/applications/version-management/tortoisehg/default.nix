@@ -2,12 +2,12 @@
 
 pkgs.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "3.6";
+    version = "3.7.1";
     namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "ec43d13f029bb23a12129d2a2c3b3b4daf3d8121cbb5c9c23e4872f7b0b75ad8";
+      sha256 = "1ycf8knwk1rs99s5caq611sk4c4nzwyzq8g35hw5kwj15b6dl4k6";
     };
 
     pythonPath = [ pkgs.pyqt4 mercurial ]
