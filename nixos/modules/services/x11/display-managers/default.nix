@@ -286,13 +286,11 @@ in
   };
 
   config = {
-
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
-
-    imports = [
-     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
-    ];
-
   };
+
+  imports = [
+   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+  ];
 
 }
