@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ncurses, nettools, python, which, groff, gettext, man_db,
-  bc, libiconv, coreutils, gnused, kbd }:
+  bc, libiconv, coreutils, gnused, kbd, utillinux, glibc }:
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
@@ -45,6 +45,13 @@ stdenv.mkDerivation rec {
            "$out/share/fish/functions/prompt_pwd.fish"
     substituteInPlace "$out/share/fish/functions/fish_default_key_bindings.fish" \
       --replace "clear;" "${ncurses}/bin/clear;"
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
+    substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
+      --replace "| ul" "| ${utillinux}/bin/ul" 
+
+    for cur in $out/share/fish/functions/*.fish; do
+      substituteInPlace "$cur" --replace "/usr/bin/getent" "${glibc}/bin/getent" 
+    done
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
     sed -i "s|Popen(\['manpath'|Popen(\['${man_db}/bin/manpath'|" "$out/share/fish/tools/create_manpage_completions.py"
