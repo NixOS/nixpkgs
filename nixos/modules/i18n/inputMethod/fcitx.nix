@@ -18,10 +18,14 @@ in
         type    = with types; listOf fcitxEngine;
         default = [];
         example = literalExample "with pkgs.fcitx-engines; [ mozc hangul ]";
-        description = ''
-          Enabled Fcitx engines.
-          Available engines can be found by running `nix-env "&lt;nixpkgs&gt;" . -qaP -A fcitx-engines`.
-        '';
+        description =
+          let
+            engines =
+              lib.concatStringsSep ", "
+              (map (name: "<literal>${name}</literal>")
+               (lib.attrNames pkgs.fcitx-engines));
+          in
+            "Enabled Fcitx engines. Available engines are: ${engines}.";
       };
     };
 
@@ -29,8 +33,6 @@ in
 
   config = mkIf (config.i18n.inputMethod.enabled == "fcitx") {
     environment.systemPackages = [ fcitxPackage ];
-    gtkPlugins = [ fcitxPackage ];
-    qtPlugins  = [ fcitxPackage ];
 
     environment.variables = {
       GTK_IM_MODULE = "fcitx";

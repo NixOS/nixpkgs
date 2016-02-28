@@ -1180,7 +1180,9 @@ let
       inherit (python3Packages) pygobject3;
     };
 
-    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
+    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n {
+      inherit (python3Packages) pygobject3;
+    };
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       inherit (pythonPackages) gyp;
@@ -1198,6 +1200,7 @@ let
   };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
+    inherit (gnome3) dconf;
     plugins = [ ];
   };
 

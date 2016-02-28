@@ -23,8 +23,6 @@ in
 
   config = mkIf (config.i18n.inputMethod.enabled == "uim") {
     environment.systemPackages = [ pkgs.uim ];
-    gtkPlugins = [ pkgs.uim ];
-    qtPlugins  = [ pkgs.uim ];
 
     environment.variables = {
       GTK_IM_MODULE = "uim";
