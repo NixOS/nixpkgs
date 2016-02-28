@@ -2,11 +2,11 @@
 let
   s = # Generated upstream information
   rec {
-    baseName="apache-jena";
-    version = "3.0.1";
+    baseName="apache-jena-fuseki";
+    version = "2.3.1";
     name="${baseName}-${version}";
-    url="http://archive.apache.org/dist/jena/binaries/apache-jena-${version}.tar.gz";
-    sha256 = "0qim7jnq9gzwpfw6a41s3ngz2sjmxzlaiqjf0lrzycxy9mig2xc1";
+    url="http://archive.apache.org/dist/jena/binaries/apache-jena-fuseki-${version}.tar.gz";
+    sha256 = "1c5330kwnby1vqcia1vm6z17j8hzyyajvvv46rf478l7wkzmyvlp";
   };
   buildInputs = [
     makeWrapper
@@ -20,19 +20,22 @@ stdenv.mkDerivation {
   };
   installPhase = ''
     cp -r . "$out"
+    ln -s "$out"/{fuseki-server,fuseki} "$out/bin"
     for i in "$out"/bin/*; do
-      wrapProgram "$i" --prefix "PATH" : "${java}/bin/"
+      wrapProgram "$i" \
+        --prefix "PATH" : "${java}/bin/" \
+        --set "FUSEKI_HOME" '"''${FUSEKI_HOME:-'"$out"'}"' \
+        ;
     done
   '';
   meta = {
     inherit (s) version;
-    description = ''RDF database'';
+    description = ''SPARQL server'';
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = "http://jena.apache.org";
     downloadPage = "http://archive.apache.org/dist/jena/binaries/";
-    updateWalker = true;
-    downloadURLRegexp = "apache-jena-.*[.]tar[.]gz\$";
+    downloadURLRegexp = "apache-jena-fuseki-.*[.]tar[.]gz\$";
   };
 }

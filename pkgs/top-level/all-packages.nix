@@ -9426,6 +9426,12 @@ let
     java = jdk;
   };
 
+  apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
+    java = jdk;
+  };
+
+  fuseki = apache-jena-fuseki;
+
   apcupsd = callPackage ../servers/apcupsd { };
 
   asterisk = callPackage ../servers/asterisk { };
@@ -9543,8 +9549,6 @@ let
   jetty61 = callPackage ../servers/http/jetty/6.1 { };
 
   jetty92 = callPackage ../servers/http/jetty/9.2.nix { };
-
-  joseki = callPackage ../servers/http/joseki {};
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -16215,6 +16219,7 @@ aliases = with pkgs; {
   htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
+  joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libtidy = html-tidy;  # added 2014-12-21
