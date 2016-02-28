@@ -214,14 +214,9 @@ rec {
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      isl_0_11 = pkgs.isl_0_11.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      cloog_0_18_0 = pkgs.cloog_0_18_0.override {
-        stdenv = pkgs.makeStaticLibraries pkgs.stdenv;
-        isl = isl_0_11;
-      };
+      isl_0_14 = pkgs.isl_0_14.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       gccPlain = pkgs.gcc.cc.override {
-        isl = isl_0_11;
-        cloog = cloog_0_18_0;
+        isl = isl_0_14;
       };
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
