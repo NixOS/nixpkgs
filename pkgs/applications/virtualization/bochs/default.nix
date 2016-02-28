@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2.6.8";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${version}/${name}.tar.gz";
     sha256 = "1kl5cmbz6qgg33j5vv9898nzdppp1rqgy24r5pv762aaj7q0ww3r";
   };
 

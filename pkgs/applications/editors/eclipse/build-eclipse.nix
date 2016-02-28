@@ -1,4 +1,4 @@
-{ stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender, zlib, jre, glib, gtk, libXtst, webkitgtk2, makeWrapper, ... }:
+{ stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender, zlib, jdk, glib, gtk, libXtst, webkitgtk2, makeWrapper, ... }:
 
 { name, src ? builtins.getAttr stdenv.system sources, sources ? null, description }:
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
-      --prefix PATH : ${jre}/bin \
+      --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${glib}/lib:${gtk}/lib:${libXtst}/lib${stdenv.lib.optionalString (webkitgtk2 != null) ":${webkitgtk2}/lib"} \
       --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 

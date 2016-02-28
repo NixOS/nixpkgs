@@ -34,7 +34,12 @@ in stdenv.mkDerivation rec {
                 ++ lib.optional withMySQL libmysql
                 ++ lib.optional withSQLite sqlite;
 
-  patches = [ ./postfix-script-shell.patch ./postfix-3.0-no-warnings.patch ./post-install-script.patch ];
+  patches = [
+    ./postfix-script-shell.patch
+    ./postfix-3.0-no-warnings.patch
+    ./post-install-script.patch
+    ./relative-symlinks.patch
+  ];
 
   hardening_pie = true;
 

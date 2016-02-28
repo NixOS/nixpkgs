@@ -54,6 +54,7 @@ in rec {
   inherit buildUBoot;
 
   ubootTools = buildUBoot rec {
+    defconfig = "allnoconfig";
     installDir = "$out/bin";
     buildFlags = "tools NO_SDL=1";
     dontStrip = false;

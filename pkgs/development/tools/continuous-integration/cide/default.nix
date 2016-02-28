@@ -1,8 +1,8 @@
-{ stdenv, lib, bundlerEnv, makeWrapper, docker, git }:
+{ stdenv, lib, bundlerEnv, makeWrapper, docker, git, gnutar, gzip }:
 
 stdenv.mkDerivation rec {
   name = "cide-${version}";
-  version = "0.8.1";
+  version = "0.9.0";
 
   env = bundlerEnv {
     name = "${name}-gems";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/cide $out/bin/cide \
-      --set PATH ${docker}/bin:${git}/bin
+      --set PATH ${docker}/bin:${git}/bin:${gnutar}/bin:${gzip}/bin
   '';
 
   meta = with lib; {

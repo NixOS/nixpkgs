@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "btfs-${version}";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner = "johang";
     repo = "btfs";
-    rev = "e816b4718bd5c9d88a99805d19d2ad91971b2338";
-    sha256 = "1mac2dwg0pzpmg0x503a8d8gx3ridi4m1qx4jk6ssvl4g9v6p7fl";
+    rev = "0567010e553b290eaa50b1afaa717dd7656c82de";
+    sha256 = "1x3x1v7fhcfcpffprf63sb720nxci2ap2cq92jy1xd68kmshdmwd";
   };
   
   buildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     autoreconf -i
     substituteInPlace scripts/btplay \
-      --replace /usr/bin/python ${python}/bin/python
+      --replace "/usr/bin/env python" "${python}/bin/python"
   '';
 
   meta = with stdenv.lib; {

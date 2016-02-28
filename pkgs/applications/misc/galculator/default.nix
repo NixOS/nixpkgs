@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "2.1.3";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/galculator/${name}.tar.gz";
+    url = "mirror://sourceforge/galculator/${name}.tar.gz";
     sha256 = "12m7dldjk10lpkdxk7zpk98n32ci65zmxidghihb7n1m3rhp3q17";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Command-line tool for accessing the Backblaze B2 storage service.";
+    description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage    = https://github.com/Backblaze/B2_Command_Line_Tool;
     license     = licenses.mit;
     maintainers = with maintainers; [ kevincox ];

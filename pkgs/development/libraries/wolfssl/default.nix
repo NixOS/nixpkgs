@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A small, fast, portable implementation of TLS/SSL for embedded devices.";
+    description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage    = "https://www.wolfssl.com/";
     platforms   = platforms.all;
     maintainers = with maintainers; [ mcmtroffaes ];

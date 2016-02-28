@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "quicksynergy-${version}";
   version = "0.9.0";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/quicksynergy/Linux/${version}/quicksynergy-${version}.tar.gz";
+    url = "mirror://sourceforge/project/quicksynergy/Linux/${version}/quicksynergy-${version}.tar.gz";
     sha256 = "1pi8503bg8q1psw50y6d780i33nnvfjqiy9vnr3v52pdcfip8pix";
   };
   buildInputs = [

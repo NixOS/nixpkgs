@@ -1136,6 +1136,7 @@ let
 
   collectd = callPackage ../tools/system/collectd {
     rabbitmq-c = rabbitmq-c_0_4;
+    libmysql = mysql.lib;
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
@@ -1177,7 +1178,9 @@ let
       inherit (python3Packages) pygobject3;
     };
 
-    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
+    m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n {
+      inherit (python3Packages) pygobject3;
+    };
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       inherit (pythonPackages) gyp;
@@ -1195,6 +1198,7 @@ let
   };
 
   ibus-with-plugins = callPackage ../tools/inputmethods/ibus/wrapper.nix {
+    inherit (gnome3) dconf;
     plugins = [ ];
   };
 
@@ -1723,6 +1727,8 @@ let
   };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+
+  gitstats = callPackage ../applications/version-management/gitstats { };
 
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
@@ -3002,6 +3008,8 @@ let
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
+  quicktun = callPackage ../tools/networking/quicktun { };
+
   quilt = callPackage ../development/tools/quilt { };
 
   radamsa = callPackage ../tools/security/radamsa { };
@@ -3922,6 +3930,8 @@ let
   fish-foreign-env = callPackage ../shells/fish-foreign-env { };
 
   mksh = callPackage ../shells/mksh { };
+
+  oh = goPackages.oh.bin // { outputs = [ "bin" ]; };
 
   pash = callPackage ../shells/pash { };
 
@@ -5287,7 +5297,8 @@ let
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
-  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { };
+  love_0_7 = callPackage ../development/interpreters/love/0.7.nix { lua=lua5_1; };
+  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { lua=lua5_1; };
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
   love = love_0_10;
@@ -5373,15 +5384,7 @@ let
 
   ocropus = callPackage ../applications/misc/ocropus { };
 
-  perl520 = callPackage ../development/interpreters/perl/5.20 {
-    fetchurl = fetchurlBoot;
-  };
-
-  perl522 = callPackage ../development/interpreters/perl/5.22 {
-    fetchurl = fetchurlBoot;
-  };
-
-  perl = perl520;
+  inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
   php = php56;
 
@@ -9396,6 +9399,12 @@ let
     java = jdk;
   };
 
+  apache-jena-fuseki = callPackage ../servers/nosql/apache-jena/fuseki-binary.nix {
+    java = jdk;
+  };
+
+  fuseki = apache-jena-fuseki;
+
   apcupsd = callPackage ../servers/apcupsd { };
 
   asterisk = callPackage ../servers/asterisk { };
@@ -9513,8 +9522,6 @@ let
   jetty61 = callPackage ../servers/http/jetty/6.1 { };
 
   jetty92 = callPackage ../servers/http/jetty/9.2.nix { };
-
-  joseki = callPackage ../servers/http/joseki {};
 
   rdkafka = callPackage ../development/libraries/rdkafka { };
 
@@ -10831,6 +10838,7 @@ let
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
     buildUBoot
+    ubootTools
     ubootBananaPi
     ubootJetsonTK1
     ubootPcduino3Nano
@@ -14270,6 +14278,8 @@ let
 
   "2048-in-terminal" = callPackage ../games/2048-in-terminal { };
 
+  "90secondportraits" = callPackage ../games/90secondportraits { love = love_0_10; };
+
   adom = callPackage ../games/adom { };
 
   airstrike = callPackage ../games/airstrike { };
@@ -14358,6 +14368,8 @@ let
   dhewm3 = callPackage ../games/dhewm3 {};
 
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
+
+  duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
 
   dwarf-fortress-packages = callPackage ../games/dwarf-fortress { };
 
@@ -14492,6 +14504,8 @@ let
 
   mnemosyne = callPackage ../games/mnemosyne { };
 
+  mrrescue = callPackage ../games/mrrescue { };
+
   mudlet = qt5.callPackage ../games/mudlet {
     inherit (lua51Packages) luafilesystem lrexlib luazip luasqlite3;
   };
@@ -14595,6 +14609,8 @@ let
   sdlmame = callPackage ../games/sdlmame { };
 
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
+
+  sienna = callPackage ../games/sienna { love = love_0_10; };
 
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
@@ -15860,6 +15876,8 @@ let
     retroarch = retroarchBare;
   });
 
+  retrofe = callPackage ../misc/emulators/retrofe { };
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
@@ -16170,6 +16188,7 @@ aliases = with pkgs; {
   htmlTidy = html-tidy;  # added 2014-12-06
   inherit (haskell.compiler) jhc uhc;   # 2015-05-15
   inotifyTools = inotify-tools;
+  joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libtidy = html-tidy;  # added 2014-12-21

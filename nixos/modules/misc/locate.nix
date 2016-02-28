@@ -67,7 +67,9 @@ in {
   };
 
   config = {
-    warnings = let opt = options.services.locate.period; in optional opt.isDefined "The `period` definition in ${showFiles opt.files} has been removed; please replace it with `interval`, using the new systemd.time interval specifier.";
+    warnings =
+      let opt = options.services.locate.period; in
+      optional opt.isDefined "The ‘services.locate.period’ option in ${showFiles opt.files} has been removed; please replace it with ‘services.locate.interval’, using the systemd.time(7) calendar event format.";
 
     systemd.services.update-locatedb =
       { description = "Update Locate Database";

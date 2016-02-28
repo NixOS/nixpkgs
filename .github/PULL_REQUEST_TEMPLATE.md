@@ -1,15 +1,18 @@
 ###### Things done:
-- [ ] Tested via `nix.useChroot`.
-- [ ] Built on platform(s): .
-- [ ] Tested compilation of all pkgs that depend on this change.
-- [ ] Tested execution of binary products.
+
+- [ ] Tested using sandboxing (`nix-build --option build-use-chroot true` or [nix.useChroot](http://nixos.org/nixos/manual/options.html#opt-nix.useChroot) on NixOS)
+- [ ] Built on platform(s): NixOS / OSX / Linux
+- [ ] Tested compilation of all pkgs that depend on this change using `nix-shell -p nox --run "nox-review wip"`
+- [ ] Tested execution of all binary files (usually in `./result/bin/`)
 - [ ] Fits [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
 
-###### Extra
-Fixes # .
+###### More
 
-cc @ .
+Fixes issue #<insert id>
+
+cc @<maintainer>
+
 
 ---
 
-_Please note, that points are not mandatory._
+_Please note, that points are not mandatory, but rather desired._

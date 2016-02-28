@@ -818,7 +818,7 @@ let
 
     meta = with stdenv.lib; {
       homepage    = "https://github.com/martingallagher/gawp";
-      description = "A simple, configurable, file watching, job execution tool implemented in Go.";
+      description = "A simple, configurable, file watching, job execution tool implemented in Go";
       maintainers = with maintainers; [ kamilchm ];
       license     = licenses.asl20 ;
       platforms   = platforms.all;
@@ -2052,10 +2052,10 @@ let
   };
 
   liner = buildFromGitHub {
-    rev    = "1bb0d1c1a25ed393d8feb09bab039b2b1b1fbced";
+    rev    = "ad1edfd30321d8f006ccf05f1e0524adeb943060";
     owner  = "peterh";
     repo   = "liner";
-    sha256 = "05ihxpmp6x3hw71xzvjdgxnyvyx2s4lf23xqnfjj16s4j4qidc48";
+    sha256 = "0c24d9j1gnq7r982h1l2isp3d37379qw155hr8ihx9i2mhpfz317";
   };
 
   odeke-em.log = buildFromGitHub {
@@ -2458,11 +2458,11 @@ let
   };
 
   oh = buildFromGitHub {
-    rev = "a99b5f1128247014fb2a83a775fa1813be14b67d";
-    date = "2015-11-21";
+    rev = "f3e482f664e76dcf98d5f94dd93c216da300b78e";
+    date = "2016-02-23";
     owner = "michaelmacinnis";
     repo = "oh";
-    sha256 = "1srl3d1flqlh2k9q9pjss72rxw82msys108x22milfylmr75v03m";
+    sha256 = "1j5g37jjl1kxri44ihb1bsrzx4al07dvl4s5dglb2m7bjia6iqs2";
     goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
     buildInputs = [ adapted liner ];
     disabled = isGo14;

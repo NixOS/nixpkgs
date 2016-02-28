@@ -12,19 +12,6 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>You can now pin a specific version of NixOS in your <filename>configuration.nix</filename>
-    by setting:
-
-<programlisting>
-nixos.path = ./nixpkgs-unstable-2015-12-06/nixos;
-</programlisting>
-
-    This will make NixOS re-evaluate your configuration with the modules of
-    the specified NixOS version at the given path.  For more details, see
-    <xref linkend="module-misc-nixos" /></para>
-  </listitem>
-
-  <listitem>
     <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
     The package and attribute names are plain <literal>firefox</literal>
     or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
@@ -237,6 +224,27 @@ programs.ibus.plugins = with pkgs; [ ibus-anthy mozc ];
     <literal>stateDir</literal> option was renamned to
     <literal>statePath</literal> and the <literal>satellitesDir</literal> option
     was removed. Please review the currently available options.</para>
+  </listitem>
+
+  <listitem>
+    <para>
+    The option <option>services.nsd.zones.&lt;name&gt;.data</option> no
+    longer interpret the dollar sign ($) as a shell variable, as such it
+    should not be escaped anymore.  Thus the following zone data:
+    </para>
+    <programlisting>
+\$ORIGIN example.com.
+\$TTL 1800
+@       IN      SOA     ns1.vpn.nbp.name.      admin.example.com. (
+    </programlisting>
+    <para>
+    Should modified to look like the actual file expected by nsd:
+    </para>
+    <programlisting>
+$ORIGIN example.com.
+$TTL 1800
+@       IN      SOA     ns1.vpn.nbp.name.      admin.example.com. (
+    </programlisting>
   </listitem>
 
 </itemizedlist>

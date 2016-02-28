@@ -1213,7 +1213,7 @@ in modules // {
 
     meta = {
       homepage = https://github.com/awslabs/aws-shell;
-      description = "An integrated shell for working with the AWS CLI.";
+      description = "An integrated shell for working with the AWS CLI";
       license = licenses.asl20;
       maintainers = [ ];
     };
@@ -3838,7 +3838,7 @@ in modules // {
     meta = {
       homepage = https://pypi.python.org/pypi/pkginfo;
       license = licenses.mit;
-      description = "Query metadatdata from sdists / bdists / installed packages.";
+      description = "Query metadatdata from sdists / bdists / installed packages";
 
       longDescription = ''
         This package provides an API for querying the distutils metadata
@@ -3970,7 +3970,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pyparsing decorator six ];
 
     meta = {
-      description = "Allows to declare constraints on function parameters and return values.";
+      description = "Allows to declare constraints on function parameters and return values";
       homepage = https://pypi.python.org/pypi/PyContracts;
       license = licenses.lgpl2;
     };
@@ -5520,7 +5520,7 @@ in modules // {
     '';
 
     meta = {
-      description = "Command-line tool for interacting with Google Compute Engine.";
+      description = "Command-line tool for interacting with Google Compute Engine";
       homepage = "https://cloud.google.com/compute/docs/gcutil/";
       license = licenses.asl20;
       maintainers = with maintainers; [ phreedom ];
@@ -5784,7 +5784,7 @@ in modules // {
     ];
 
     meta = {
-      description = "A python client library for Google Play Services OAuth.";
+      description = "A python client library for Google Play Services OAuth";
       homepage = "https://github.com/simon-weber/gpsoauth";
       license = licenses.mit;
       maintainers = with maintainers; [ jgillich ];
@@ -6891,7 +6891,7 @@ in modules // {
 
     meta = {
       homepage = https://launchpad.net/pypolicyd-spf/;
-      description = "Postfix policy engine for Sender Policy Framework (SPF) checking.";
+      description = "Postfix policy engine for Sender Policy Framework (SPF) checking";
       maintainers = with maintainers; [ abbradar ];
       license = licenses.asl20;
       platform = platforms.all;
@@ -8241,7 +8241,7 @@ in modules // {
     propagatedBuildInputs = with self; [ django_1_6 futures ];
 
     meta = with stdenv.lib; {
-      description = "Pipeline is an asset packaging library for Django.";
+      description = "Pipeline is an asset packaging library for Django";
       homepage = https://github.com/cyberdelia/django-pipeline;
       license = stdenv.lib.licenses.mit;
     };
@@ -8305,7 +8305,7 @@ in modules // {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive.";
+      description = "An HTTP handler for `urllib2` that supports HTTP 1.1 and keepalive";
       homepage = "https://github.com/wikier/keepalive";
     };
   };
@@ -8330,7 +8330,7 @@ in modules // {
     ];
 
     meta = with stdenv.lib; {
-      description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format.";
+      description = "This is a wrapper around a SPARQL service. It helps in creating the query URI and, possibly, convert the result into a more manageable format";
       homepage = "http://rdflib.github.io/sparqlwrapper";
     };
   };
@@ -10223,7 +10223,7 @@ in modules // {
     };
 
     meta = {
-      description = "An intelligent grader that allows secured and automated testing of code made by students.";
+      description = "An intelligent grader that allows secured and automated testing of code made by students";
       homepage = "https://github.com/UCL-INGI/INGInious";
       license = licenses.agpl3;
       maintainers = with maintainers; [ layus ];
@@ -13241,7 +13241,7 @@ in modules // {
     };
 
     meta = {
-      description = "A drop-in substitute for Py2.7's new collections.OrderedDict that works in Python 2.4-2.6.";
+      description = "A drop-in substitute for Py2.7's new collections.OrderedDict that works in Python 2.4-2.6";
       license = licenses.bsd3;
       maintainers = with maintainers; [ garbas ];
     };
@@ -13715,7 +13715,7 @@ in modules // {
     ];
 
     meta = with stdenv.lib; {
-      description = "Enhancements for standard library's cmd module.";
+      description = "Enhancements for standard library's cmd module";
       homepage = "http://packages.python.org/cmd2/";
     };
   };
@@ -14211,7 +14211,7 @@ in modules // {
     '';
 
     meta = with stdenv.lib; {
-      description = "FormEncode validates and converts nested structures.";
+      description = "FormEncode validates and converts nested structures";
       homepage = "http://formencode.org";
     };
   };
@@ -16303,7 +16303,7 @@ in modules // {
     buildInputs = with self; [ nose mock ];
 
     meta = {
-      description = "A clean, future-proof, high-scale API to elasticsearch.";
+      description = "A clean, future-proof, high-scale API to elasticsearch";
       homepage = https://pyelasticsearch.readthedocs.org;
       license = licenses.bsd3;
     };
@@ -17268,7 +17268,7 @@ in modules // {
       sha256 = "1r50lm6n59jzdwpp53n0c0hp3aj1jxn304bk5gh830226gsaf2hn";
     };
     meta = {
-      description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports.";
+      description = "Test classes and test cases using decorators, execute test cases by command line, and get clear reports";
       homepage = https://pypi.python.org/pypi/ptest;
       license = licenses.asl20;
     };
@@ -19257,7 +19257,7 @@ in modules // {
     buildInputs = with self; [pep8];
 
     meta = {
-      description = "A generator library for concise, unambiguous and URL-safe UUIDs.";
+      description = "A generator library for concise, unambiguous and URL-safe UUIDs";
       homepage = https://github.com/stochastic-technologies/shortuuid/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ zagy ];
@@ -20527,7 +20527,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pyparsing ];
 
     meta = {
-      description = "A Python library to create SVG drawings.";
+      description = "A Python library to create SVG drawings";
       homepage = http://bitbucket.org/mozman/svgwrite;
       license = licenses.mit;
     };
@@ -21511,7 +21511,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "A backport of traceback to older supported Pythons.";
+      description = "A backport of traceback to older supported Pythons";
       homepage = https://pypi.python.org/pypi/traceback2/;
     };
   };
@@ -21530,7 +21530,7 @@ in modules // {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      description = "A backport of linecache to older supported Pythons.";
+      description = "A backport of linecache to older supported Pythons";
       homepage = "https://github.com/testing-cabal/linecache2";
     };
   };
@@ -25006,7 +25006,7 @@ in modules // {
     LC_ALL="en_US.UTF-8";
 
     meta = {
-      description = "Copy your docs directly to the gh-pages branch.";
+      description = "Copy your docs directly to the gh-pages branch";
       homepage = "http://github.com/davisp/ghp-import";
       license = "Tumbolia Public License";
       maintainers = with maintainers; [ garbas ];
@@ -25096,7 +25096,7 @@ in modules // {
     ];
 
     meta = {
-      description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git.";
+      description = "Jenkins Job Builder is a system for configuring Jenkins jobs using simple YAML files stored in Git";
       homepage = "http://docs.openstack.org/infra/system-config/jjb.html";
       license = licenses.asl20;
       maintainers = with maintainers; [ garbas ];

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
-    description = "Whisker Menu is an alternate application launcher for Xfce.";
+    description = "Whisker Menu is an alternate application launcher for Xfce";
     platforms = platforms.linux;
     maintainers = [ maintainers.pjbarnoy ];
   };
