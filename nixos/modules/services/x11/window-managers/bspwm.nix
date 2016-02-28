@@ -15,7 +15,7 @@ in
     services.xserver.windowManager.session = singleton {
       name = "bspwm";
       start = "
-        ${pkgs.sxhkd}/bin/sxhkd &
+        SXHKD_SHELL=/bin/sh ${pkgs.sxhkd}/bin/sxhkd -f 100 &
         ${pkgs.bspwm}/bin/bspwm
       ";
     };
