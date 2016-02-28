@@ -14629,6 +14629,8 @@ let
 
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
+  sienna = callPackage ../games/sienna { love = love_0_10; };
+
   simutrans = callPackage ../games/simutrans { };
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
