@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   name = "instead-" + version;
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/instead/instead/${version}/instead_${version}.tar.gz";
+    url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
     sha256 = "1ldisjkmmcpnmv4vsd25dc1sfiwbr9fcn3hxhl78i4jwlyqgrms8";
   };
 

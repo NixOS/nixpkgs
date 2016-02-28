@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
   name = "roxterm-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/roxterm/${name}.tar.bz2";
+    url = "mirror://sourceforge/roxterm/${name}.tar.bz2";
     sha256 = "0djfiwfmnqqp6930kswzr2rss0mh40vglcdybwpxrijcw4n8j21x";
   };
 

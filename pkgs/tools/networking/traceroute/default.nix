@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.0.21";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/traceroute/${name}.tar.gz";
+    url = "mirror://sourceforge/traceroute/${name}.tar.gz";
     sha256 = "1q4n9s42nfcc4fmnwmrsiabvqrcaagiagmmqj9r5hfmi63pr7b7p";
   };
 
