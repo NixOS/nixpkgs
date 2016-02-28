@@ -29,6 +29,7 @@ in
       kernelPatch = mkOption {
         type = types.attrs;
         default = pkgs.kernelPatches.grsecurity_latest;
+        example = pkgs.kernelPatches.grsecurity_4_1;
         description = ''
           Grsecurity patch to use.
         '';

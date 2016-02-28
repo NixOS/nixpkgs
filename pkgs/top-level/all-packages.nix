@@ -10418,6 +10418,15 @@ let
       ];
   };
 
+  grsecurity_base_linux_4_1 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.1.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   grsecurity_base_linux_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10442,6 +10451,10 @@ let
   linux_grsec_desktop_3_14    = grKernel kernelPatches.grsecurity_3_14 grFlavors.desktop;
   linux_grsec_server_3_14     = grKernel kernelPatches.grsecurity_3_14 grFlavors.server;
   linux_grsec_server_xen_3_14 = grKernel kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+
+  linux_grsec_desktop_4_1    = grKernel kernelPatches.grsecurity_4_1 grFlavors.desktop;
+  linux_grsec_server_4_1     = grKernel kernelPatches.grsecurity_4_1 grFlavors.server;
+  linux_grsec_server_xen_4_1 = grKernel kernelPatches.grsecurity_4_1 grFlavors.server_xen;
 
   linux_grsec_desktop_4_4    = grKernel kernelPatches.grsecurity_4_4 grFlavors.desktop;
   linux_grsec_server_4_4     = grKernel kernelPatches.grsecurity_4_4 grFlavors.server;
@@ -10605,6 +10618,10 @@ let
   linuxPackages_grsec_desktop_3_14    = grPackage kernelPatches.grsecurity_3_14 grFlavors.desktop;
   linuxPackages_grsec_server_3_14     = grPackage kernelPatches.grsecurity_3_14 grFlavors.server;
   linuxPackages_grsec_server_xen_3_14 = grPackage kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+
+  linuxPackages_grsec_desktop_4_1    = grPackage kernelPatches.grsecurity_4_1 grFlavors.desktop;
+  linuxPackages_grsec_server_4_1     = grPackage kernelPatches.grsecurity_4_1 grFlavors.server;
+  linuxPackages_grsec_server_xen_4_1 = grPackage kernelPatches.grsecurity_4_1 grFlavors.server_xen;
 
   linuxPackages_grsec_desktop_4_4    = grPackage kernelPatches.grsecurity_4_4 grFlavors.desktop;
   linuxPackages_grsec_server_4_4     = grPackage kernelPatches.grsecurity_4_4 grFlavors.server;
