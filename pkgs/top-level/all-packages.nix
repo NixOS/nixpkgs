@@ -5319,7 +5319,8 @@ let
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 
-  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { };
+  love_0_7 = callPackage ../development/interpreters/love/0.7.nix { lua=lua5_1; };
+  love_0_8 = callPackage ../development/interpreters/love/0.8.nix { lua=lua5_1; };
   love_0_9 = callPackage ../development/interpreters/love/0.9.nix { };
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
   love = love_0_10;
