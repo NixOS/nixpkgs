@@ -3774,6 +3774,8 @@ let
 
   wml = callPackage ../development/web/wml { };
 
+  wring = callPackage ../tools/text/wring { };
+
   wrk = callPackage ../tools/networking/wrk { };
 
   wv = callPackage ../tools/misc/wv { };
