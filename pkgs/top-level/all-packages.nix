@@ -14616,6 +14616,8 @@ let
 
   rili = callPackage ../games/rili { };
 
+  rimshot = callPackage ../games/rimshot { love = love_0_7; };
+
   rogue = callPackage ../games/rogue { };
 
   saga = callPackage ../applications/gis/saga { };
