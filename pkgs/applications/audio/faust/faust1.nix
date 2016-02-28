@@ -12,7 +12,7 @@ let
   version = "0.9.73";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/faudiostream/faust-${version}.tgz";
+    url = "mirror://sourceforge/project/faudiostream/faust-${version}.tgz";
     sha256 = "0x2scxkwvvjx7b7smj5xb8kr269qakf49z3fxpasd9g7025q44k5";
   };
 

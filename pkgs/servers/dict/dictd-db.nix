@@ -39,23 +39,23 @@ rec {
 		sha256 = "1vhw81pphb64fzsjvpzsnnyr34ka2fxizfwilnxyjcmpn9360h07";
 	}) "nld-eng" "nl_NL";
 	eng2nld =  makeDictdDBFreedict (fetchurl {
-		url = http://downloads.sourceforge.net/freedict/eng-nld.tar.gz;
+		url = mirror://sourceforge/freedict/eng-nld.tar.gz;
 		sha256 = "0rcg28ldykv0w2mpxc6g4rqmfs33q7pbvf68ssy1q9gpf6mz7vcl";
 	}) "eng-nld" "en_UK";
 	eng2rus = makeDictdDBFreedict (fetchurl {
-		url = http://downloads.sourceforge.net/freedict/eng-rus.tar.gz;
+		url = mirror://sourceforge/freedict/eng-rus.tar.gz;
 		sha256 = "15409ivhww1wsfjr05083pv6mg10bak8v5pg1wkiqybk7ck61rry";
 	}) "eng-rus" "en_UK";
 	fra2eng = makeDictdDBFreedict (fetchurl {
-		url = http://downloads.sourceforge.net/freedict/fra-eng.tar.gz;
+		url = mirror://sourceforge/freedict/fra-eng.tar.gz;
 		sha256 = "0sdd88s2zs5whiwdf3hd0s4pzzv75sdsccsrm1wxc87l3hjm85z3";
 	}) "fra-eng" "fr_FR";
 	eng2fra = makeDictdDBFreedict (fetchurl {
-		url = http://downloads.sourceforge.net/freedict/eng-fra.tar.gz;
+		url = mirror://sourceforge/freedict/eng-fra.tar.gz;
 		sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
 	}) "eng-fra" "en_UK";
 	mueller_eng2rus_pkg = makeDictdDB (fetchurl {
-		url = http://downloads.sourceforge.net/mueller-dict/mueller-dict-3.1.tar.gz;
+		url = mirror://sourceforge/mueller-dict/mueller-dict-3.1.tar.gz;
 		sha256 = "04r5xxznvmcb8hkxqbjgfh2gxvbdd87jnhqn5gmgvxxw53zpwfmq";
 	}) "mueller-eng-rus" "mueller-dict-*/dict" "en_UK";
 	mueller_enru_abbr = {

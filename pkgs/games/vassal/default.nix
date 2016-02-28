@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "VASSAL-3.2.15";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/vassalengine/${name}-linux.tar.bz2";
+    url = "mirror://sourceforge/vassalengine/${name}-linux.tar.bz2";
     sha256 = "10ng571nxr5zc2nlviyrk5bci8my67kq3qvhfn9bifzkxmjlqmk9";
   };
 
