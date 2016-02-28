@@ -289,6 +289,10 @@ in
 
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
 
+    imports = [
+     (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+    ];
+
   };
 
 }
