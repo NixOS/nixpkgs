@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 with stdenv.lib;
 
 let
-  version = "15.7";
+  version = "15.12";
 in
 
 # This derivation requires a maximum of gcc49, Linux kernel 4.1 and xorg.xserver 1.17
@@ -59,13 +59,13 @@ stdenv.mkDerivation {
   libfontconfig = fontconfig;
 
   src = fetchurl {
-    url = "http://www2.ati.com/drivers/linux/amd-driver-installer-15.20.1046-x86.x86_64.zip";
-    sha256 = "ffde64203f49d9288eaa25f4d744187b6f4f14a87a444bab6a001d822b327a9d";
+    url = "http://www2.ati.com/drivers/linux/radeon-crimson-${version}-15.302-151217a-297685e.zip";
+    sha256 = "0n0ynqmjkjp5dl5q07as7ps3rlyyn63hq4mlwgd7c7v82ky2skvh";
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
   };
 
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
-  patchPhase1 = "patch -p1 < ${./kernel-api-fixes.patch}";
+  patchPhase1 = "patch -p1 < ${./kernel44.patch}; patch -p1 < ${./kernel43.patch}";
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
