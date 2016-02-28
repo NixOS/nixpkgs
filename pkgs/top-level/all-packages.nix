@@ -1650,6 +1650,8 @@ let
     ruby = ruby_2_1_3;
   };
 
+  gitstats = callPackage ../applications/version-management/gitstats { };
+
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glmark2 = callPackage ../tools/graphics/glmark2 { };
