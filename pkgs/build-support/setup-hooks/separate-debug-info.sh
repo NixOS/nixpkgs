@@ -1,4 +1,5 @@
-export NIX_LDFLAGS+=" --build-id --compress-debug-sections"
+export NIX_SET_BUILD_ID=1
+export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
 export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
 dontStrip=1
 
