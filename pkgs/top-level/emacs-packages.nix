@@ -1072,6 +1072,17 @@ let
     };
   };
 
+  keyfreq = trivialBuild rec {
+    pname = "keyfreq";
+    version = "1.8";
+    src = fetchFromGitHub {
+      owner = "dacap";
+      repo = "keyfreq";
+      rev = "1.8";
+      sha256 = "0ways4ksb9pk2kkpgclsxgc0ycfwcr8vghlbv5ic4y0c4ycmlb2d";
+    };
+  };
+
   lcs = melpaBuild rec {
     pname   = "lcs";
     version = circe.version;
