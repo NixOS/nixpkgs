@@ -46,16 +46,16 @@ let
     '';
   # Unpack Moodle and put the config file in its root directory.
   moodleRoot = pkgs.stdenv.mkDerivation rec {
-    name= "moodle-2.8.5";
+    name= "moodle-2.8.10";
 
     src = pkgs.fetchurl {
       url = "https://download.moodle.org/stable28/${name}.tgz";
-      sha256 = "1a159a193010cddedce10ee009184502e6f732e4d7c85167d8597fe5dff9e190";
+      sha256 = "0c3r5081ipcwc9s6shakllnrkd589y2ln5z5m1q09l4h6a7cy4z2";
     };
 
     buildPhase =
       ''
-      ''; 
+      '';
 
     installPhase =
       ''
@@ -132,7 +132,7 @@ in
         cleartext in the Nix store!
       '';
     };
-    
+
     dbPrefix = mkOption {
       default = "mdl_";
       example = "my_other_mdl_";
@@ -158,7 +158,7 @@ in
       type = types.path;
       };
 
-    
+
     extraConfig = mkOption {
       default = "";
       example =

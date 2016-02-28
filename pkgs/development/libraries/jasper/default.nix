@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./jasper-CVE-2016-1867.diff
     ./jasper-CVE-2014-8137-variant2.diff
     ./jasper-CVE-2014-8137-noabort.diff
     ./jasper-CVE-2014-8138.diff
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";
-  
+
   meta = {
     homepage = https://www.ece.uvic.ca/~frodo/jasper/;
     description = "JPEG2000 Library";
