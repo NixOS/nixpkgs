@@ -1730,6 +1730,8 @@ let
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
 
+  gitstats = callPackage ../applications/version-management/gitstats { };
+
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
