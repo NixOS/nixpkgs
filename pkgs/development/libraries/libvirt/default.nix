@@ -4,7 +4,8 @@
 , iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen
+, curl, libiconv, gmp
+, withXen ? false, xen ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,9 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux udev libcap_ng
-    libnl numad numactl xen
+    libnl numad numactl
+  ] ++ stdenv.lib.optionals (stdenv.isLinux && withXen) [
+    xen
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
