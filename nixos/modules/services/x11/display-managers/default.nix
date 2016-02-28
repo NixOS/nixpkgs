@@ -49,18 +49,6 @@ let
         fi
       ''}
 
-      ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
-        # Stop systemd from handling the power button and lid switch,
-        # since presumably the desktop environment will handle these.
-        if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
-          export _INHIBITION_LOCK_TAKEN=1
-          if ! ${config.systemd.package}/bin/loginctl show-session $XDG_SESSION_ID | grep -q '^RemoteHost='; then
-            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key --why="Desktop environment handles power events" "$0" "$sessionType"
-          fi
-        fi
-
-      ''}
-
       ${optionalString cfg.startGnuPGAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the GnuPG agent.
@@ -216,17 +204,6 @@ in
         default = [ "nobody" ];
         description = ''
           A list of users which will not be shown in the display manager.
-        '';
-      };
-
-      desktopManagerHandlesLidAndPower = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether the display manager should prevent systemd from handling
-          lid and power events. This is normally handled by the desktop
-          environment's power manager. Turn this off when using a minimal
-          X11 setup without a full power manager.
         '';
       };
 
