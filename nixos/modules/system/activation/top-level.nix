@@ -176,9 +176,10 @@ in
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
-        <literal>$NIXOS_CONFIG</literal> (usually
-        <filename>/etc/nixos/configuration.nix</filename>)
-        to the system store path.
+        (usually <filename>/etc/nixos/configuration.nix</filename>)
+        and links it from the resulting system
+        (getting to <filename>/run/current-system/configuration.nix</filename>).
+        Note that only this single file is copied, even if it imports others.
       '';
     };
 
@@ -236,7 +237,9 @@ in
     system.extraSystemBuilderCmds =
       optionalString
         config.system.copySystemConfiguration
-        "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+            "$out/configuration.nix"
+        '';
 
     system.build.toplevel = system;
 
