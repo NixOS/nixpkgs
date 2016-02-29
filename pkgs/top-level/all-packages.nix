@@ -11549,6 +11549,10 @@ let
 
   cava = callPackage ../applications/audio/cava { };
 
+  cb2bib = callPackage ../applications/office/cb2bib {
+    inherit (xorg) libX11;
+  };
+
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
   cbc = callPackage ../applications/science/math/cbc { };
