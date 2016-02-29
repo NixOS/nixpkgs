@@ -1,0 +1,16 @@
+--- 15.9/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-09-09 00:57:14.000000000 +0200
++++ 15.9b/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-11-02 21:02:06.124639919 +0100
+@@ -623,8 +623,13 @@
+ 
+     len = snprintf(buf, request, "%d\n", major);
+ #else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
++    seq_printf(m, "%d\n", major);
++    len = 0;
++#else
+     len = seq_printf(m, "%d\n", major);
+ #endif
++#endif
+ 
+     KCL_DEBUG1(FN_FIREGL_PROC, "return len=%i\n",len);
+ 

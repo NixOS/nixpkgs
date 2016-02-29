@@ -6,11 +6,8 @@ set -x
 
 die(){ echo $@; exit 1; }
 
-mkdir fglrx # custom unpack:
-cd fglrx
 unzip $src
-cd ..
-run_file=$(echo fglrx/amd-driver-installer-*)
+run_file=$(echo fglrx*/amd-driver-installer-*)
 sh $run_file --extract .
 
 eval "$patchPhase1"
