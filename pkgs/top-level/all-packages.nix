@@ -10456,6 +10456,10 @@ let
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
+    amd-non-free-libs = callPackage ../os-specific/linux/amd-non-free/amd-non-free-libs.nix { };
+
+    amd-non-free = callPackage ../os-specific/linux/amd-non-free { developer = config.amd-non-free.developer or false; };
+
     blcr = callPackage ../os-specific/linux/blcr { };
 
     cryptodev = callPackage ../os-specific/linux/cryptodev { };
