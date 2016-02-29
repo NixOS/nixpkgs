@@ -4,9 +4,8 @@ stdenv.mkDerivation rec {
   name = "patchelf-0.9";
 
   src = fetchurl {
-    #url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    url = http://hydra.nixos.org/build/32429884/download/2/patchelf-0.9pre265_498aa37.tar.bz2;
-    sha256 = "f762813ad493ad73afb7846a530fe2f5e40a5d89b7dba228ce0c62651e9c851e";
+    url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
+    sha256 = "a0f65c1ba148890e9f2f7823f4bedf7ecad5417772f64f994004f59a39014f83";
   };
 
   setupHook = [ ./setup-hook.sh ];
