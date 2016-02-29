@@ -115,7 +115,7 @@ in rec {
   });
 
   iso_graphical = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
   });
