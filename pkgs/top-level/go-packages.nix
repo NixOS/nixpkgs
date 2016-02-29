@@ -3774,4 +3774,22 @@ let
     preBuild = ''go generate ./...'';
   };
 
+  godotenv = buildFromGitHub rec {
+    rev    = "4ed13390c0acd2ff4e371e64d8b97c8954138243";
+    date   = "2015-09-07";
+    owner  = "joho";
+    repo   = "godotenv";
+    sha256 = "1wzgws4dnlavi14aw3jzdl3mdr348skgqaq8xx4j8l68irfqyh0p";
+    buildInputs = [ go-colortext yaml-v2 ];
+  };
+
+  goreman = buildFromGitHub rec {
+    version = "0.0.8-rc0";
+    rev    = "d3e62509ccf23e47a390447886c51b1d89d0934b";
+    date   = "2016-01-30";
+    owner  = "mattn";
+    repo   = "goreman";
+    sha256 = "153hf4dq4jh1yv35pv30idmxhc917qzl590qy5394l48d4rapgb5";
+    buildInputs = [ go-colortext yaml-v2 godotenv ];
+  };
 }; in self
