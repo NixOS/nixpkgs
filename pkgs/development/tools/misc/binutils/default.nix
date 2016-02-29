@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
     ./pt-pax-flags.patch
+
+    # Bug fix backported from binutils master.
+    ./fix-bsymbolic.patch
   ];
 
   outputs = [ "out" "info" ];
