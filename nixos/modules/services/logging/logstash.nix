@@ -85,7 +85,7 @@ in
         type = types.lines;
         default = ''stdin { type => "example" }'';
         description = "Logstash input configuration.";
-        example = literalExample ''
+        example = ''
           # Read from journal
           pipe {
             command => "''${pkgs.systemd}/bin/journalctl -f -o json"
@@ -98,7 +98,7 @@ in
         type = types.lines;
         default = ''noop {}'';
         description = "logstash filter configuration.";
-        example = literalExample ''
+        example = ''
           if [type] == "syslog" {
             # Keep only relevant systemd fields
             # http://www.freedesktop.org/software/systemd/man/systemd.journal-fields.html
@@ -114,7 +114,7 @@ in
 
       outputConfig = mkOption {
         type = types.lines;
-        default = literalExample ''stdout { debug => true debug_format => "json"}'';
+        default = ''stdout { debug => true debug_format => "json"}'';
         description = "Logstash output configuration.";
         example = ''
           redis { host => "localhost" data_type => "list" key => "logstash" codec => json }
