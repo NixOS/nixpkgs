@@ -2871,49 +2871,46 @@ let
     };
   };
 
-  prometheus.prometheus = buildGoPackage rec {
-    name = "prometheus-${version}";
-    version = "0.15.1";
-    goPackagePath = "github.com/prometheus/prometheus";
-    rev = "64349aade284846cb194be184b1b180fca629a7c";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "prometheus";
-      repo = "prometheus";
-      sha256 = "0gljpwnlip1fnmhbc96hji2rc56xncy97qccm7v1z5j1nhc5fam2";
-    };
+  prometheus.prometheus = buildFromGitHub rec {
+    rev = "0.17.0";
+    owner = "prometheus";
+    repo = "prometheus";
+    sha256 = "176198krna2i37dfhwsqi7m36sqn175yiny6n52vj27mc9s8ggzx";
 
     buildInputs = [
-      consul
-      dns
-      fsnotify.v1
-      go-zookeeper
-      goleveldb
-      httprouter
-      logrus
-      net
-      prometheus.client_golang
-      prometheus.log
-      yaml-v2
+      # consul
+      # dns
+      # fsnotify.v1
+      # go-zookeeper
+      # goleveldb
+      # httprouter
+      # logrus
+      # net
+      # prometheus.client_golang
+      # prometheus.log
+      # yaml-v2
     ];
+
+    docheck = true;
+
+    preBuild = ''
+      export GO15VENDOREXPERIMENT=1
+    '';
+
+    buildFlagsArray = let t = "github.com/${owner}/${repo}/version"; in ''
+      -ldflags=
+         -X ${t}.Version=${rev}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+    '';
 
     preInstall = ''
       mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
       cp -a $src/documentation/* $bin/share/doc/prometheus
       cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
-    '';
-
-    # Metadata that gets embedded into the binary
-    buildFlagsArray = let t = "${goPackagePath}/version"; in
-    ''
-      -ldflags=
-          -X ${t}.Version=${version}
-          -X ${t}.Revision=${builtins.substring 0 6 rev}
-          -X ${t}.Branch=master
-          -X ${t}.BuildUser=nix@nixpkgs
-          -X ${t}.BuildDate=20150101-00:00:00
-          -X ${t}.GoVersion=${stdenv.lib.getVersion go}
     '';
 
     meta = with stdenv.lib; {
