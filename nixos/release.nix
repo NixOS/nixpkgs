@@ -299,7 +299,12 @@ in rec {
   tests.simple = callTest tests/simple.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
-  tests.virtualbox = hydraJob (import tests/virtualbox.nix { system = "x86_64-linux"; });
+  tests.virtualbox = let
+    testsOnly = filterAttrs (const (t: t ? test));
+    vboxTests = testsOnly (import tests/virtualbox.nix {
+      system = "x86_64-linux";
+    });
+  in mapAttrs (const (t: hydraJob t.test)) vboxTests;
   tests.xfce = callTest tests/xfce.nix {};
   tests.bootBiosCdrom = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosCdrom);
   tests.bootBiosUsb = forAllSystems (system: hydraJob (import tests/boot.nix { inherit system; }).bootBiosUsb);
