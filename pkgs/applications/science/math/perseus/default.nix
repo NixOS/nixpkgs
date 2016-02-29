@@ -5,6 +5,8 @@ stdenv.mkDerivation {
   version = "4-beta";
   buildInputs = [unzip gcc48];
 
+  hardening_stackprotector = false;
+
   src = fetchurl {
     url = "http://www.sas.upenn.edu/~vnanda/source/perseus_4_beta.zip";
     sha256 = "09brijnqabhgfjlj5wny0bqm5dwqcfkp1x5wif6yzdmqh080jybj";
@@ -30,7 +32,7 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = "www.sas.upenn.edu/~vnanda/perseus/index.html";
+    homepage = "http://www.sas.upenn.edu/~vnanda/perseus/index.html";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [erikryb];
     platforms = stdenv.lib.platforms.linux;
