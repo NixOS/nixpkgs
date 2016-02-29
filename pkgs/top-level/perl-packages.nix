@@ -6764,6 +6764,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LocaleMsgfmt = buildPerlPackage {
+    name = "Locale-Msgfmt-0.15";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AZ/AZAWAWI/Locale-Msgfmt-0.15.tar.gz;
+      sha256 = "c3276831cbeecf58be02081bcc180bd348daa35da21a7737b7b038a59f643ab4";
+    };
+    meta = {
+      description = "Compile .po files to .mo files";
+      license = "perl";
+    };
+  };
+
   LocalePO = buildPerlPackage {
     name = "Locale-PO-0.23";
     src = fetchurl {
