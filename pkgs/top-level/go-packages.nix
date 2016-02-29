@@ -2821,10 +2821,10 @@ let
   };
 
   prometheus.node-exporter = buildFromGitHub {
-    rev = "0.10.0";
+    rev = "0.11.0";
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "0dmczav52v9vi0kxl8gd2s7x7c94g0vzazhyvlq1h3729is2nf0p";
+    sha256 = "149fs9yxnbiyd4ww7bxsv730mcskblpzb3cs4v12jnq2v84a4kk4";
 
     buildInputs = [
       go-runit
@@ -2834,6 +2834,8 @@ let
       prometheus.log
       protobuf
     ];
+
+    doCheck = true;
 
     meta = with stdenv.lib; {
       description = "Prometheus exporter for machine metrics";
