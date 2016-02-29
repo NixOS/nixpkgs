@@ -9,12 +9,12 @@ assert alsaSupport -> alsaLib != null;
 assert pulseSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
-  version = "1.16.0";
+  version = "1.17.2";
   name = "openal-soft-${version}";
 
   src = fetchurl {
     url = "http://kcat.strangesoft.net/openal-releases/${name}.tar.bz2";
-    sha256 = "0pqdykdclycfnk66v166srjrry936y39d1dz9wl92qz27wqwsg9g";
+    sha256 = "051k5fy8pk4fd9ha3qaqcv08xwbks09xl5qs4ijqq2qz5xaghhd3";
   };
 
   buildInputs = [ cmake ]
