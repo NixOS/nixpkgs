@@ -2651,33 +2651,35 @@ let
     propagatedBuildInputs = [ kr.text ];
   };
 
-  prometheus.alertmanager = buildGoPackage rec {
-    name = "prometheus-alertmanager-${rev}";
-    rev = "0.0.4";
-    goPackagePath = "github.com/prometheus/alertmanager";
-
-    src = fetchFromGitHub {
-      owner = "prometheus";
-      repo = "alertmanager";
-      inherit rev;
-      sha256 = "0g656rzal7m284mihqdrw23vhs7yr65ax19nvi70jl51wdallv15";
-    };
+  prometheus.alertmanager = buildFromGitHub rec {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "alertmanager";
+    sha256 = "1ya465bns6cj2lqbipmfm13wz8kxii5h9mm7lc0ba1xv26xx5zs7";
 
     buildInputs = [
-      fsnotify.v0
-      httprouter
-      prometheus.client_golang
-      prometheus.log
-      pushover
+      # fsnotify.v0
+      # httprouter
+      # prometheus.client_golang
+      # prometheus.log
+      # pushover
     ];
 
-    buildFlagsArray = ''
+    # Tests exist, but seem to clash with the firewall.
+    doCheck = false;
+
+    preBuild = ''
+      export GO15VENDOREXPERIMENT=1
+    '';
+
+    buildFlagsArray = let t = "github.com/${owner}/${repo}/version"; in ''
       -ldflags=
-          -X main.buildVersion=${rev}
-          -X main.buildBranch=master
-          -X main.buildUser=nix@nixpkgs
-          -X main.buildDate=20150101-00:00:00
-          -X main.goVersion=${stdenv.lib.getVersion go}
+         -X ${t}.Version=${rev}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
     '';
 
     meta = with stdenv.lib; {
