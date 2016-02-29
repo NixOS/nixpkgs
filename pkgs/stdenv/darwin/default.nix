@@ -25,7 +25,7 @@ in rec {
   allPackages = import ../../top-level/all-packages.nix;
 
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY=1
+    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
     export NIX_IGNORE_LD_THROUGH_GCC=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
     export MACOSX_DEPLOYMENT_TARGET=10.7
