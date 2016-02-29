@@ -9,6 +9,7 @@
 , genericName
 , mimeType ? ""
 , categories ? "Application;Other;"
+, extraEntries ? ""
 }:
 
 stdenv.mkDerivation {
@@ -26,6 +27,7 @@ stdenv.mkDerivation {
     GenericName=${genericName}
     MimeType=${mimeType}
     Categories=${categories}
+    ${extraEntries}
     EOF
   '';
 }

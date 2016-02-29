@@ -57,6 +57,9 @@ let
       "x-scheme-handler/unknown"
     ];
     categories = "Network;WebBrowser";
+    extraEntries = ''
+      StartupWMClass=chromium-browser
+    '';
   };
 
   suffix = if channel != "stable" then "-" + channel else "";
