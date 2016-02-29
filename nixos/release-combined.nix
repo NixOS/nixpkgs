@@ -48,7 +48,7 @@ in rec {
         (all nixos.ova)
 
         #(all nixos.tests.containers)
-        (all nixos.tests.chromium)
+        (all nixos.tests.chromium.stable)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux

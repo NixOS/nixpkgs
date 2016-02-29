@@ -235,7 +235,7 @@ in rec {
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
-  tests.chromium = callTest tests/chromium.nix {};
+  tests.chromium = callSubTests tests/chromium.nix {};
   tests.cjdns = callTest tests/cjdns.nix {};
   tests.containers = callTest tests/containers.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
