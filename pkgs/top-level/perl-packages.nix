@@ -370,6 +370,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ArchiveTar = buildPerlPackage {
+    name = "Archive-Tar-2.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Archive-Tar-2.04.tar.gz;
+      sha256 = "c3741bba06a468a5a4db6a79d772c55cf2f6673cf33241a6e6a758707a71d293";
+    };
+    meta = {
+      description = "Manipulates TAR archives";
+      license = "perl";
+    };
+  };
+
   ArchiveZip = buildPerlPackage {
     name = "Archive-Zip-1.16";
     src = fetchurl {
