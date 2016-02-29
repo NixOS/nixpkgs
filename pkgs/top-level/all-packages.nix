@@ -1865,6 +1865,8 @@ in
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
+  gogs = callPackage ../applications/version-management/gogs { };
+
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
