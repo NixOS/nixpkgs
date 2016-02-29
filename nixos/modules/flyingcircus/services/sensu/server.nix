@@ -10,6 +10,10 @@ let
     then config.flyingcircus.enc_service_clients.sensuserver
     else [];
 
+  server_password = (lib.findSingle
+    (x: x.node == "${config.networking.hostName}.gocept.net")
+    "" "" enc_clients).password;
+
   directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
 
   sensu_server_json = pkgs.writeText "sensu-server.json"
@@ -25,7 +29,7 @@ let
       "rabbitmq": {
         "host": "${config.networking.hostName}.gocept.net",
         "user": "sensu-server",
-        "password": "asdf1",
+        "password": "${server_password}",
         "vhost": "/sensu"
       },
       "handlers": {
@@ -132,8 +136,8 @@ in {
         rabbitmqctl delete_user guest || true
         rabbitmqctl add_vhost /sensu || true
 
-        rabbitmqctl add_user sensu-server asdf1 || true
-        rabbitmqctl change_password sensu-server asdf1
+        rabbitmqctl add_user sensu-server ${server_password} || true
+        rabbitmqctl change_password sensu-server ${server_password}
         rabbitmqctl set_permissions -p /sensu sensu-server ".*" ".*" ".*"
 
         ${clients}

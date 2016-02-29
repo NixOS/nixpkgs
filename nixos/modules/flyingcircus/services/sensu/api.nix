@@ -8,6 +8,26 @@ let
 
   cfg = config.flyingcircus.services.sensu-api;
 
+  # Duplicated from server.nix.
+  enc_clients = if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
+    then config.flyingcircus.enc_service_clients.sensuserver
+    else [];
+
+  server_password = (lib.findSingle
+    (x: x.node == "${config.networking.hostName}.gocept.net")
+    "" "" enc_clients).password;
+
+  sensu_api_json = pkgs.writeText "sensu-server.json"
+    ''
+    {
+      "rabbitmq": {
+        "host": "${config.networking.hostName}.gocept.net",
+        "user": "sensu-server",
+        "password": "${server_password}",
+        "vhost": "/sensu"
+      }
+    }
+    '';
 in  {
 
   options = {
@@ -18,19 +38,6 @@ in  {
         default = false;
         description = ''
           Enable the Sensu monitoring API daemon.
-        '';
-      };
-      config = mkOption {
-        type = types.lines;
-        description = ''
-          Contents of the sensu API configuration file.
-        '';
-      };
-      extraOpts = mkOption {
-        type = with types; listOf str;
-        default = [];
-        description = ''
-          Extra options used when launching sensu API.
         '';
       };
     };
@@ -54,7 +61,7 @@ in  {
       path = [ sensu ];
       serviceConfig = {
         User = "sensuapi";
-        ExecStart = "${sensu}/bin/sensu-api";
+        ExecStart = "${sensu}/bin/sensu-api -v -c ${sensu_api_json}";
         Restart = "always";
         RestartSec = "5s";
       };
