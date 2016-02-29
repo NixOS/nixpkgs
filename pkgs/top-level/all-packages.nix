@@ -13329,7 +13329,10 @@ let
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
 
-  qemu = callPackage ../applications/virtualization/qemu { };
+  qemu = callPackage ../applications/virtualization/qemu {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
+    inherit (darwin.stubs) rez setfile;
+  };
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
