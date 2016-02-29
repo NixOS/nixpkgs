@@ -1,0 +1,22 @@
+2,3c2
+< #with import <nixpkgs> {};
+< { stdenv, lib, go, goPackages, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+---
+> { stdenv, lib, makeWrapper, go, goPackages, git, fetchgit, sqliteSupport ? true }:
+12,15c11,12
+<   buildInputs = [ go ];
+<   
+<   buildFlags = "--tags sqlite";
+<   
+---
+>   buildInputs = [ makeWrapper go ];
+>   buildFlags = lib.optional (sqliteSupport) "-tags sqlite";
+17a15,22
+>   postInstall = ''
+>     wrapProgram $bin/bin/gogs \
+>       --prefix PATH : ${git}/bin \
+>       --run 'export GOGS_WORK_DIR=''${GOGS_WORK_DIR:-$PWD}' \
+>       --run 'cd "$GOGS_WORK_DIR"' \
+>       --run "ln -fs $out/share/go/src/${goPackagePath}/{public,templates} ."
+>   '';
+> 
