@@ -364,5 +364,5 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
 
-  deepSeqAttrs = x: y: deepSeqList (attrValues x) y;
+  deepSeqAttrs = throw "removed 2016-02-29 because unused and broken";
 }

@@ -246,9 +246,6 @@ rec {
   init = list: assert list != []; take (length list - 1) list;
 
 
-  deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
-
-
   crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [f];
 
 
@@ -269,5 +266,8 @@ rec {
 
   # Subtracts list 'e' from another list. O(nm) complexity.
   subtractLists = e: filter (x: !(elem x e));
+
+  deepSeqList = throw "removed 2016-02-29 because unused and broken";
+
 
 }
