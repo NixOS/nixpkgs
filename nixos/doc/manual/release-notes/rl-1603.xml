@@ -2,9 +2,9 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          version="5.0"
-         xml:id="sec-release-unstable">
+         xml:id="sec-release-16.03">
 
-<title>Unstable</title>
+<title>Release 16.03 (“Emu”, 2016/03/??)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights:</para>
