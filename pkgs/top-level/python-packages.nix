@@ -300,43 +300,6 @@ in modules // {
     };
   };
 
-  acme-tiny = buildPythonPackage rec {
-    name = "acme-tiny-${version}";
-    version = "20151229";
-    rev = "f61f72c212cea27f388eb4a26ede0d65035bdb53";
-
-    src = pkgs.fetchgit {
-      inherit rev;
-      url = "https://github.com/diafygi/acme-tiny.git";
-      sha256 = "dde59354e483bdff3dfd06717c094889ae673efb568e40b150b4695b0c539649";
-    };
-
-    # source doesn't have any python "packaging" as such
-    configurePhase = " ";
-    buildPhase = " ";
-    # the tests are... complex
-    doCheck = false;
-
-    patchPhase = ''
-      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl}/bin/openssl"
-    '';
-
-    installPhase = ''
-      mkdir -p $out/${python.sitePackages}/
-      cp acme_tiny.py $out/${python.sitePackages}/
-      mkdir -p $out/bin
-      ln -s $out/${python.sitePackages}/acme_tiny.py $out/bin/acme_tiny
-      chmod +x $out/bin/acme_tiny
-    '';
-
-    meta = {
-      description = "A tiny script to issue and renew TLS certs from Let's Encrypt";
-      homepage = https://github.com/diafygi/acme-tiny;
-      license = licenses.mit;
-    };
-  };
-
-
   actdiag = buildPythonPackage rec {
     name = "actdiag-0.5.3";
 
