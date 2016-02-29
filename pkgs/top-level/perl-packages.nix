@@ -4694,6 +4694,18 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ];
   };
 
+  FCGIProcManager = buildPerlPackage {
+    name = "FCGI-ProcManager-0.25";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AR/ARODLAND/FCGI-ProcManager-0.25.tar.gz;
+      sha256 = "b9ae1146e2638f3aa477c9ab3ceb728f92c5e36e4cce8f0b5847efad601d024d";
+    };
+    meta = {
+      description = "A perl-based FastCGI process manager";
+      license = "unknown";
+    };
+  };
+
   FennecLite = buildPerlModule {
     name = "Fennec-Lite-0.004";
     src = fetchurl {
