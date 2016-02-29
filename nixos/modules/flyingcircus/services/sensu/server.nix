@@ -6,7 +6,8 @@ let
 
   cfg = config.flyingcircus.services.sensu-server;
 
-  enc_clients = if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
+  enc_clients =
+    if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
     then config.flyingcircus.enc_service_clients.sensuserver
     else [];
 
@@ -89,7 +90,7 @@ in {
 
     services.rabbitmq.enable = true;
     services.rabbitmq.listenAddress = "::";
-    services.rabbitmq.plugins = [ "rabbitmq_management" ];
+    #services.rabbitmq.plugins = [ "rabbitmq_management" ];
     services.redis.enable = true;
     services.postfix.enable = true;
 
@@ -124,15 +125,27 @@ in {
         User = "rabbitmq";
       };
       script = let
-        clients = (lib.concatMapStrings (client: ''
-          rabbitmqctl add_user ${client.node} ${client.password} || true
-          rabbitmqctl change_password ${client.node} ${client.password}
-          rabbitmqctl set_permissions -p /sensu ${client.node} "^${client.node}-.*" "^(keepalives|results)$" "^${client.node}-.*"
-          '') enc_clients);
+        clients = (lib.concatMapStrings (
+          client:
+            let client_name = builtins.head (lib.splitString "." client.node);
+            in ''
+              rabbitmqctl add_user ${client.node} ${client.password} || true
+              rabbitmqctl change_password ${client.node} ${client.password}
+              # Permission for clients in order: conf, write, read
+              # exchange.declare -> configure "keepalives"
+              # queue.declate -> configure "node-*"
+              # queue.bind -> write "node-*"
+              rabbitmqctl set_permissions -p /sensu ${client.node} \
+                "^((default|results|keepalives)$)|${client_name}-.*" \
+                "^((keepalives|results)$)|${client_name}-.*" \
+                "^(default$)|${client_name}-.*"
+              '')
+          enc_clients);
       in
        ''
         set -ex
-        rabbitmqctl start_app
+
+        # rabbitmqctl start_app
         rabbitmqctl delete_user guest || true
         rabbitmqctl add_vhost /sensu || true
 
@@ -148,7 +161,10 @@ in {
     systemd.services.sensu-server = {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.sensu pkgs.sensu_plugins pkgs.openssl pkgs.bash pkgs.mailutils ];
-      requires = [ "prepare-rabbitmq-for-sensu.service" ];
+      requires = [
+        "rabbitmq.service"
+        "redis.service"
+        "prepare-rabbitmq-for-sensu.service" ];
       serviceConfig = {
         User = "sensuserver";
         ExecStart = "${pkgs.sensu}/bin/sensu-server -v -c ${sensu_server_json}";
