@@ -63,7 +63,7 @@ in rec {
         (all nixos.tests.installer.btrfsSimple)
         (all nixos.tests.installer.btrfsSubvols)
         (all nixos.tests.installer.btrfsSubvolDefault)
-        (all nixos.tests.boot.bootBiosCdrom)
+        (all nixos.tests.boot.biosCdrom)
         (all nixos.tests.ipv6)
         (all nixos.tests.kde4)
         #(all nixos.tests.lightdm)

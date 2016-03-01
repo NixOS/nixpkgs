@@ -30,17 +30,17 @@ let
         '';
     };
 in {
-    bootBiosCdrom = makeBootTest "bios-cdrom" ''
+    biosCdrom = makeBootTest "bios-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso")
       '';
-    bootBiosUsb = makeBootTest "bios-usb" ''
+    biosUsb = makeBootTest "bios-usb" ''
         usb => glob("${iso}/iso/*.iso")
       '';
-    bootUefiCdrom = makeBootTest "uefi-cdrom" ''
+    uefiCdrom = makeBootTest "uefi-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
-    bootUefiUsb = makeBootTest "uefi-usb" ''
+    uefiUsb = makeBootTest "uefi-usb" ''
         usb => glob("${iso}/iso/*.iso"),
         bios => '${pkgs.OVMF}/FV/OVMF.fd'
       '';
