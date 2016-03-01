@@ -64,7 +64,7 @@ let
       # { /* the config */ } and
       # { pkgs, ... } : { /* the config */ }
       if builtins.isFunction configExpr
-        then configExpr { pkgs = pkgsFinal; }
+        then configExpr { inherit pkgs; }
         else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
@@ -83,38 +83,51 @@ let
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
 
-  # The complete set of packages, after applying the overrides
-  pkgsFinal = lib.fix' (lib.extends configOverrides (lib.extends stdenvOverrides pkgsFun));
+  # Helper functions that are exported through `pkgs'.
+  helperFunctions =
+    stdenvAdapters //
+    (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
-  stdenvOverrides =
-    # We don't want stdenv overrides in the case of cross-building,
-    # or otherwise the basic overrided packages will not be built
-    # with the crossStdenv adapter.
-    if crossSystem == null
-      then self: super: lib.optionalAttrs (super.stdenv ? overrides) (super.stdenv.overrides super)
-      else self: super: {};
+  stdenvAdapters =
+    import ../stdenv/adapters.nix pkgs;
 
-  # Packages can be overriden globally via the `packageOverrides'
+
+  # Allow packages to be overriden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
-  # The recommended usage follows this snippet:
-  #   packageOverrides = super: let self = super.pkgs in ...
-  # `super' is the *original* (un-overriden) set of packages,
-  # while `self' refers to the final (overriden) set of packages.
-  configOverrides =
-      if config ? packageOverrides && bootStdenv == null # don't apply config overrides in stdenv boot
-        then self: config.packageOverrides
-        else self: super: {};
+  # The `packageOverrides' function is called with the *original*
+  # (un-overriden) set of packages, allowing packageOverrides
+  # attributes to refer to the original attributes (e.g. "foo =
+  # ... pkgs.foo ...").
+  pkgs = applyGlobalOverrides (config.packageOverrides or (pkgs: {}));
+
+  mkOverrides = pkgsOrig: overrides: overrides //
+        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
+
+  # Return the complete set of packages, after applying the overrides
+  # returned by the `overrider' function (see above).  Warning: this
+  # function is very expensive!
+  applyGlobalOverrides = overrider:
+    let
+      # Call the overrider function.  We don't want stdenv overrides
+      # in the case of cross-building, or otherwise the basic
+      # overrided packages will not be built with the crossStdenv
+      # adapter.
+      overrides = mkOverrides pkgsOrig (overrider pkgsOrig);
+
+      # The un-overriden packages, passed to `overrider'.
+      pkgsOrig = pkgsFun pkgs {};
+
+      # The overriden, final packages.
+      pkgs = pkgsFun pkgs overrides;
+    in pkgs;
+
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs:
-    let defaultScope = pkgs // pkgs.xorg;
-        helperFunctions = pkgs_.stdenvAdapters // pkgs_.trivial-builders;
-        pkgsRet = helperFunctions // pkgs_;
-        pkgs_ = with pkgs; {
-  # Helper functions that are exported through `pkgs'.
-  trivial-builders = import ../build-support/trivial-builders.nix { inherit lib; inherit stdenv; inherit (xorg) lndir; };
-  stdenvAdapters = import ../stdenv/adapters.nix pkgs;
+  pkgsFun = pkgs: overrides:
+    with helperFunctions;
+    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
+    self_ = with self; helperFunctions // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -144,7 +157,11 @@ let
   #
   # The result is `pkgs' where all the derivations depending on `foo'
   # will use the new version.
-  overridePackages = f: lib.fix' (lib.extends f pkgs.__unfix__);
+  overridePackages = f:
+    let
+      newpkgs = pkgsFun newpkgs overrides;
+      overrides = mkOverrides pkgs (f newpkgs pkgs);
+    in newpkgs;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ./all-packages.nix) {
@@ -166,7 +183,7 @@ let
 
 
   ### Helper functions.
-  inherit lib config;
+  inherit lib config stdenvAdapters;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
   inherit (misc) versionedDerivation;
@@ -197,10 +214,7 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
-  # We use pkgs_ because accessing pkgs would lead to an infinite recursion in stdenvOverrides
-  defaultStdenv = (import ../stdenv/adapters.nix pkgs_).useHardenFlags (
-    pkgs_.allStdenvs.stdenv // { inherit platform; }
-  );
+  defaultStdenv = stdenvAdapters.useHardenFlags (allStdenvs.stdenv // { inherit platform; });
 
   stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
 
@@ -220,7 +234,7 @@ let
             };
           }
       else
-        pkgs_.defaultStdenv;
+        defaultStdenv;
 
   forceNativeDrv = drv : if crossSystem == null then drv else
     (drv // { crossDrv = drv.nativeDrv; });
@@ -3766,6 +3780,8 @@ let
 
   wml = callPackage ../development/web/wml { };
 
+  wring = callPackage ../tools/text/wring { };
+
   wrk = callPackage ../tools/networking/wrk { };
 
   wv = callPackage ../tools/misc/wv { };
@@ -4907,6 +4923,8 @@ let
 
     re2 = callPackage ../development/ocaml-modules/re2 { };
 
+    result = callPackage ../development/ocaml-modules/ocaml-result { };
+
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
@@ -4985,6 +5003,8 @@ let
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
+
+    tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
 
@@ -5950,8 +5970,8 @@ let
   gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
-  gradle = gradleGen.gradleLatest;
-  gradle25 = gradleGen.gradle25;
+  gradle = self.gradleGen.gradleLatest;
+  gradle25 = self.gradleGen.gradle25;
 
   gperf = callPackage ../development/tools/misc/gperf { };
 
@@ -6057,6 +6077,8 @@ let
   nixbang = callPackage ../development/tools/misc/nixbang {
       pythonPackages = python3Packages;
   };
+
+  nexus = callPackage ../development/tools/repository-managers/nexus { };
 
   node_webkit = node_webkit_0_9;
 
@@ -9789,7 +9811,6 @@ let
 
   samba4 = callPackage ../servers/samba/4.x.nix {
     python = python2;
-    kerberos = null;  # Bundle kerberos because samba uses internal, non-stable functions
     # enableLDAP
   };
 
@@ -9809,7 +9830,6 @@ let
   });
 
   samba4Full = lowPrio (samba4.override {
-    enableKerberos  = true;
     enableInfiniband = true;
     enableLDAP = true;
     enablePrinting = true;
@@ -11511,6 +11531,10 @@ let
 
   cava = callPackage ../applications/audio/cava { };
 
+  cb2bib = callPackage ../applications/office/cb2bib {
+    inherit (xorg) libX11;
+  };
+
   cbatticon = callPackage ../applications/misc/cbatticon { };
 
   cbc = callPackage ../applications/science/math/cbc { };
@@ -11778,7 +11802,7 @@ let
       AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
       ImageCaptureCore GSS ImageIO;
   });
-  emacs24Macport = emacs24Macport_24_5;
+  emacs24Macport = self.emacs24Macport_24_5;
 
   emacs25pre = lowPrio (callPackage ../applications/editors/emacs-25 {
     # use override to enable additional features
@@ -13483,7 +13507,7 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = qt5.callPackage ../applications/networking/dropbox { };
+  dropbox = qt55.callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
@@ -16148,13 +16172,12 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
-};
-# end pkgs_ =
+}; # self_ =
 
 
   ### Deprecated aliases - for backward compatibility
 
-aliases = with pkgs; {
+aliases = with self; rec {
   accounts-qt = qt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
@@ -16243,7 +16266,4 @@ tweakAlias = _n: alias: with lib;
     removeAttrs alias ["recurseForDerivations"]
   else alias;
 
-in lib.mapAttrs tweakAlias aliases // pkgsRet;
-# end pkgsFun
-
-in pkgsFinal
+in lib.mapAttrs tweakAlias aliases // self; in pkgs

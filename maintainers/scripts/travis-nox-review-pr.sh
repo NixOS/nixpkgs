@@ -11,7 +11,7 @@ if [[ $1 == nix ]]; then
 
     # Make sure we can use hydra's binary cache
     sudo mkdir /etc/nix
-    sudo echo "build-max-jobs = 4" > /etc/nix/nix.conf
+    sudo sh -c 'echo "build-max-jobs = 4" > /etc/nix/nix.conf'
 
     # Verify evaluation
     echo "=== Verifying that nixpkgs evaluates..."

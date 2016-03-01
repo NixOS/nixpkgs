@@ -18,10 +18,9 @@ import ../generic rec {
     nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
-    binutils = pkgs.binutils;
+    inherit (pkgs) binutils coreutils gnugrep;
     cc = pkgs.gcc.cc;
     isGNU = true;
-    coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };
 

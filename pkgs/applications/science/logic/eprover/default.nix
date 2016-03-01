@@ -20,7 +20,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ which ];
 
-  preConfigure = "sed -e 's@^EXECPATH\\s.*@EXECPATH = '\$out'/bin@' -i Makefile.vars";
+  preConfigure = ''
+    sed -e 's@^EXECPATH\\s.*@EXECPATH = '\$out'/bin@' \
+    -e 's/^CC *= gcc$//' \
+    -i Makefile.vars
+  '';
 
   buildPhase = "make install";
 
@@ -34,6 +38,8 @@ stdenv.mkDerivation {
   meta = {
     inherit (s) version;
     description = "Automated theorem prover for full first-order logic with equality";
+    homepage = http://www.eprover.org/;
+    license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;
   };

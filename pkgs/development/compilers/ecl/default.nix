@@ -1,35 +1,42 @@
 {stdenv, fetchurl
 , libtool, autoconf, automake
 , gmp, mpfr, libffi
-, noUnicode ? false,
+, noUnicode ? false, 
 }:
-
 let
-  baseName = "ecl";
-  version = "16.0.0";
+  s = # Generated upstream information
+  rec {
+    baseName="ecl";
+    version="16.1.2";
+    name="${baseName}-${version}";
+    hash="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    url="https://common-lisp.net/project/ecl/files/release/16.1.2/ecl-16.1.2.tgz";
+    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+  };
+  buildInputs = [
+    libtool autoconf automake
+  ];
+  propagatedBuildInputs = [
+    libffi gmp mpfr
+  ];
 in
 stdenv.mkDerivation {
-  name = "${baseName}-${version}";
-  inherit version;
+  inherit (s) name version;
+  inherit buildInputs propagatedBuildInputs;
 
   src = fetchurl {
-    url = "https://common-lisp.net/project/ecl/files/ecl-16.0.0.tgz";
-    sha256 = "0czh78z9i5b7jc241mq1h1gdscvdw5fbhfb0g9sn4rchwk1x8gil";
+    inherit (s) url sha256;
   };
 
   configureFlags = [
     "--enable-threads"
     "--with-gmp-prefix=${gmp}"
     "--with-libffi-prefix=${libffi}"
-  ] ++ (stdenv.lib.optional (!noUnicode) "--enable-unicode");
-
-  buildInputs = [
-    libtool autoconf automake
-  ];
-
-  propagatedBuildInputs = [
-    libffi gmp mpfr
-  ];
+    ]
+    ++
+    (stdenv.lib.optional (! noUnicode)
+      "--enable-unicode")
+    ;
 
   hardening_format = false;
 
@@ -38,8 +45,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    inherit (s) version;
     description = "Lisp implementation aiming to be small, fast and easy to embed";
-    license = stdenv.lib.licenses.mit;
+    license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
   };

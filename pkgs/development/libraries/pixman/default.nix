@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "184lazwdpv67zrlxxswpxrdap85wminh1gmq1i5lcz6iycw39fir";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./fix-clang36.patch;
+  patches = [];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = stdenv.lib.optional doCheck libpng;

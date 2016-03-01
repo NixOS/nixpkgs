@@ -559,7 +559,7 @@ in
             algorithm = "hmac-md5";
             keyFile = "/path/to/my/key";
           };
-        };
+        }
       '';
       description = ''
         Define your TSIG keys here.
@@ -719,7 +719,7 @@ in
               ...
             ''';
           };
-        };
+        }
       '';
       description = ''
         Define your zones here. Zones can cascade other zones and therefore
