@@ -23,11 +23,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-7.1p2";
+  name = "openssh-7.2p1";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1gbbvszz74lkc7b2mqr3ccgpm65zj0k5h7a2ssh0c7pjvhjg0xfx";
+    sha256 = "1hsa1f3641pdj57a55gmnvcya3wwww2fc2cvb77y95rm5xxw6g4p";
   };
 
   prePatch = optionalString hpnSupport
