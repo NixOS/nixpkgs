@@ -1,10 +1,12 @@
 #!/usr/bin/env python3.4
+"""Update NixOS system configuration from infrastructure or local sources."""
+
+import argparse
 import json
 import logging
 import os
 import shutil
 import xmlrpc.client
-import sys
 
 
 # TODO
@@ -95,7 +97,7 @@ def update_inventory():
     ])
 
 
-def build_channel():
+def build_channel(build_options):
     print('Switching channel ...')
     try:
         os.system(
@@ -104,12 +106,12 @@ def build_channel():
                 enc['parameters']['environment']))
         os.system('nix-channel --update')
         os.system('nixos-rebuild --no-build-output switch {}'.format(
-                  ' '.join(buildOptions)))
+                  ' '.join(build_options)))
     except Exception:
         logging.exception('Error switching channel ')
 
 
-def build_dev():
+def build_dev(build_options):
     print('Switching to development environment')
     try:
         os.system(
@@ -117,27 +119,49 @@ def build_dev():
     except Exception:
         logging.exception('Error removing channel ')
     os.system('nixos-rebuild -I nixpkgs=/root/nixpkgs switch {}'.format(
-              ' '.join(buildOptions)))
+              ' '.join(build_options)))
 
 
-logging.basicConfig()
+def main():
+    logging.basicConfig()
+    build_options = []
+    a = argparse.ArgumentParser(description=__doc__)
+    a.add_argument('--show-trace', default=False, action='store_true',
+                   help='instruct nixos-rebuild to dump tracebacks on failure')
+    a.add_argument('-e', '--directory', default=False, action='store_true',
+                   help='refresh local ENC copy')
+    a.add_argument('-s', '--system-state', default=False, action='store_true',
+                   help='dump local system information (like memory size) '
+                   'to system_state.json')
+    build = a.add_mutually_exclusive_group()
+    build.add_argument('-c', '--channel', default=False, dest='build',
+                       action='store_const', const='build_channel',
+                       help='switch machine to FCIO channel')
+    build.add_argument('-d', '--dev', default=False, dest='build',
+                       action='store_const', const='build_dev',
+                       help='switch machine to local checkout in '
+                       '/root/nixpkgs')
+    args = a.parse_args()
 
-buildOptions = []
+    if args.show_trace:
+        build_options.append('--show-trace')
 
-if '--show-trace' in sys.argv:
-    buildOptions.append('--show-trace')
+    if args.directory:
+        load_enc()
+        update_inventory()
 
-if '--directory' in sys.argv:
+    if args.system_state:
+        system_state()
+
+    # reload ENC data in case update_inventory changed something
     load_enc()
-    update_inventory()
 
-if '--system-state' in sys.argv:
-    system_state()
+    if args.build:
+        globals()[args.build](build_options)
 
-load_enc()
+    if not args.build and not args.directory and not args.system_state:
+        a.error('no action specified')
 
-if '--channel' in sys.argv:
-    build_channel()
 
-if '--dev' in sys.argv:
-    build_dev()
+if __name__ == '__main__':
+    main()
