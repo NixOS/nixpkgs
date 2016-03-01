@@ -104,9 +104,9 @@ in {
     sha256 = "e7e81d82f3cd538ab0cdba494006d44aab9dd96b7f6233ce9971fb7c7916d511";
   };
 
-  openssl_1_0_2 = lowPrio (common {
+  openssl_1_0_2 = common {
     version = "1.0.2g";
     sha256 = "b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33";
-  });
+  };
 
 }
