@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ coreutils ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   crossAttrs = {
     # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
