@@ -23,6 +23,8 @@ rec {
                   specialArgs ? {}
                 , # This would be remove in the future, Prefer _module.args option instead.
                   args ? {}
+                , # This would be remove in the future, Prefer _module.check option instead.
+                  check ? true
                 }:
     let
       # This internal module declare internal options under the `_module'
@@ -43,21 +45,8 @@ rec {
           _module.check = mkOption {
             type = types.bool;
             internal = true;
-            default = true;
+            default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
-          };
-
-          _module.typeInference = mkOption {
-            type = types.nullOr types.str;
-            internal = true;
-            default = null; # TODO: Move away from 'null' after enough testing.
-            description = ''
-              Mode of type inferencing. Possible values are:
-              null = Disable type inferencing completely. Use 'types.unspecified' for every option without type definition.
-              "silent" = Try to infer type of option without type definition, but do not print anything.
-              "printUnspecified" = Try to infer type of option without type definition and print options for which no full type could be inferred.
-              "printAll" = Try to infer type of option without type definition and print all options without type definition.
-            '';
           };
         };
 
@@ -71,7 +60,7 @@ rec {
       # Note: the list of modules is reversed to maintain backward
       # compatibility with the old module system.  Not sure if this is
       # the most sensible policy.
-      options = mergeModules (config._module) prefix (reverseList closed);
+      options = mergeModules prefix (reverseList closed);
 
       # Traverse options and extract the option values into the final
       # config set.  At the same time, check whether all option
@@ -181,11 +170,11 @@ rec {
      At the same time, for each option declaration, it will merge the
      corresponding option definitions in all machines, returning them
      in the ‘value’ attribute of each option. */
-  mergeModules = _module: prefix: modules:
-    mergeModules' _module prefix modules
+  mergeModules = prefix: modules:
+    mergeModules' prefix modules
       (concatMap (m: map (config: { inherit (m) file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = _module: prefix: options: configs:
+  mergeModules' = prefix: options: configs:
     listToAttrs (map (name: {
       # We're descending into attribute ‘name’.
       inherit name;
@@ -211,8 +200,8 @@ rec {
             (filter (m: m.config ? ${name}) configs);
         in
           if nrOptions == length decls then
-            let opt = fixupOptionType _module.typeInference loc (mergeOptionDecls loc decls);
-            in evalOptionValue _module loc opt defns'
+            let opt = fixupOptionType loc (mergeOptionDecls loc decls);
+            in evalOptionValue loc opt defns'
           else if nrOptions != 0 then
             let
               firstOption = findFirst (m: isOption m.options) "" decls;
@@ -220,7 +209,7 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption.file}' is a prefix of options in `${firstNonOption.file}'."
           else
-            mergeModules' _module loc decls defns;
+            mergeModules' loc decls defns;
     }) (concatMap (m: attrNames m.options) options))
     // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
 
@@ -269,7 +258,7 @@ rec {
 
   /* Merge all the definitions of an option to produce the final
      config value. */
-  evalOptionValue = _module: loc: opt: defs:
+  evalOptionValue = loc: opt: defs:
     let
       # Add in the default value for this option, if any.
       defs' =
@@ -281,7 +270,7 @@ rec {
         if opt.readOnly or false && length defs' > 1 then
           throw "The option `${showOption loc}' is read-only, but it's set multiple times."
         else
-          mergeDefinitions _module loc opt.type defs';
+          mergeDefinitions loc opt.type defs';
 
       # Check whether the option is defined, and apply the ‘apply’
       # function to the merged value.  This allows options to yield a
@@ -302,7 +291,7 @@ rec {
       };
 
   # Merge definitions of a value of a given type.
-  mergeDefinitions = _module: loc: type: defs: rec {
+  mergeDefinitions = loc: type: defs: rec {
     defsFinal =
       let
         # Process mkMerge and mkIf properties.
@@ -325,7 +314,7 @@ rec {
     mergedValue = foldl' (res: def:
       if type.check def.value then res
       else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.name}.")
-      (type.merge _module loc defsFinal) defsFinal;
+      (type.merge loc defsFinal) defsFinal;
 
     isDefined = defsFinal != [];
 
@@ -423,7 +412,7 @@ rec {
   /* Hack for backward compatibility: convert options of type
      optionSet to options of type submodule.  FIXME: remove
      eventually. */
-  fixupOptionType = typeInference: loc: opt:
+  fixupOptionType = loc: opt:
     let
       options = opt.options or
         (throw "Option `${showOption loc'}' has type optionSet but has no option attribute, in ${showFiles opt.declarations}.");
@@ -435,64 +424,10 @@ rec {
         else if tp.name == "list of option sets" then types.listOf (types.submodule options)
         else if tp.name == "null or option set" then types.nullOr (types.submodule options)
         else tp;
-
     in
       if opt.type.getSubModules or null == null
-      then opt // { type = f (opt.type or (inferType typeInference loc opt)); }
+      then opt // { type = f (opt.type or types.unspecified); }
       else opt // { type = opt.type.substSubModules opt.options; options = []; };
-
-
-  /* Function that tries to infer the type of an option from the default value of the option. */
-  inferType = mode: loc: opt:
-    let
-      doc = x: elemAt x 0;
-      type = x: elemAt x 1;
-      containsUnspecified = x: elemAt x 2;
-      inferType' = def:
-        if isDerivation def then [ "package" types.package false ]
-        else if isBool def then [ "bool" types.bool false ]
-        else if builtins.isString def then [ "str" types.str false ]
-        else if isInt def then [ "int" types.int false ]
-        else if isFunction def then [ "functionTo unspecified" (types.functionTo types.unspecified) true ]
-        else if isList def then
-                let nestedType = if (length def > 0) && (all (x: (type (inferType' x)) == (type (inferType' (head def)))) def)
-                                 then inferType' (head def)
-                                 else [ "unspecified" types.unspecified true ];
-                in [ "listOf ${doc nestedType}" (types.listOf (type nestedType)) (containsUnspecified nestedType) ]
-        else if isAttrs def then
-                let list = mapAttrsToList (_: v: v) (removeAttrs def ["_args"]);
-                    nestedType = if (length list > 0) && (all (x: (type (inferType' x)) == (type (inferType' (head list)))) list)
-                                 then inferType' (head list)
-                                 else [ "unspecified" types.unspecified true ];
-                in [ "attrsOf ${doc nestedType}" (types.attrsOf (type nestedType)) (containsUnspecified nestedType) ]
-        else [ "unspecified" types.unspecified true ];
-
-      inferDoc = x: ''
-        Inferring the type of "${showOption loc}" to "${doc x}".
-        Please verify the inferred type and define the type explicitely in ${showFiles opt.declarations}!
-      '';
-
-      inferredType = printMode:
-        let inferred = inferType' opt.default;
-        in if printMode == "silent" then type inferred
-           else if printMode == "printAll" then builtins.trace (inferDoc inferred) (type inferred)
-           else if printMode == "printUnspecified" && (containsUnspecified inferred) then builtins.trace (inferDoc inferred) (type inferred)
-           else type inferred;
-
-      noInferDoc = ''
-        Could not infer a type for "${showOption loc}", using "unspecified" instead.
-        Please define the type explicitely in ${showFiles opt.declarations}!
-      '';
-
-      hasDefault = (opt ? default) && !(opt ? defaultText);
-      isExternalVisible = (opt.visible or true) && !(opt.internal or false);
-    in
-
-    if isNull mode || !isExternalVisible
-    then types.unspecified
-    else if hasDefault
-         then inferredType mode /* Set to 'true' to see every type that is being inferred, not just those types that result in 'unspecified'. */
-         else if mode != "silent" then builtins.trace noInferDoc types.unspecified else types.unspecified;
 
 
   /* Properties. */
@@ -562,7 +497,7 @@ rec {
 
 
   /* Compatibility. */
-  fixMergeModules = modules: args: evalModules { inherit args; modules = (modules ++ [{ _module.check = false; }]); };
+  fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
 
 
   /* Return a module that causes a warning to be shown if the

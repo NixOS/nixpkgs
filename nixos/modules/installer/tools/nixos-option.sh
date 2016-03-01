@@ -115,8 +115,8 @@ let
       let name = head attrsNames; rest = tail attrsNames; in
       if isOption result.options then
         walkOptions rest {
-          options = result.options.type.getSubOptionsPrefix "";
-          opt = ''(\${result.opt}.type.getSubOptionsPrefix "")'';
+          options = result.options.type.getSubOptions "";
+          opt = ''(\${result.opt}.type.getSubOptions "")'';
           cfg = ''\${result.cfg}."\${name}"'';
         }
       else

@@ -15,14 +15,12 @@ in
   options = {
     services.ihaskell = {
       enable = mkOption {
-        type = lib.types.bool;
         default = false;
         example = true;
         description = "Autostart an IHaskell notebook service.";
       };
 
       haskellPackages = mkOption {
-        type = lib.types.packageSet;
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
         example = literalExample "pkgs.haskell.packages.ghc784";
@@ -35,9 +33,7 @@ in
       };
 
       extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
         default = self: [];
-        defaultText = "self: []";
         example = literalExample ''
           haskellPackages: [
             haskellPackages.wreq

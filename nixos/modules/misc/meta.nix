@@ -5,7 +5,6 @@ with lib;
 let
   maintainer = mkOptionType {
     name = "maintainer";
-    typerep = "(maintainer)";
     check = email: elem email (attrValues lib.maintainers);
     merge = loc: defs: listToAttrs (singleton (nameValuePair (last defs).file (last defs).value));
   };

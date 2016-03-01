@@ -64,7 +64,6 @@ in
       consoleKeyMap = mkOption {
         type = mkOptionType {
           name = "string or path";
-          typerep = "(stringOrPath)";
           check = t: (isString t || types.path.check t);
         };
 

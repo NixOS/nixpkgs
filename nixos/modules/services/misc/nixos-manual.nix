@@ -17,8 +17,6 @@ let
       nixpkgs.system = config.nixpkgs.system;
     };
 
-  internalModule = { _module = config._module; };
-
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
     It isn't perfect, but it seems to cover a vast majority of use cases.
@@ -31,7 +29,7 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ versionModule ] ++ baseModules ++ [ internalModule ];
+          modules = [ versionModule ] ++ baseModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };
@@ -45,7 +43,6 @@ let
           )
           pkgSet;
       in scrubbedEval.options;
-    internalModule = config._module;
   };
 
   entry = "${manual.manual}/share/doc/nixos/index.html";

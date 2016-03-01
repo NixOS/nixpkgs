@@ -6,7 +6,6 @@ let
 
   sysctlOption = mkOptionType {
     name = "sysctl option value";
-    typerep = "(sysctl)";
     check = val:
       let
         checkType = x: isBool x || isString x || isInt x || isNull x;

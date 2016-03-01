@@ -1,4 +1,4 @@
-{ pkgs, options, internalModule, version, revision, extraSources ? [] }:
+{ pkgs, options, version, revision, extraSources ? [] }:
 
 with pkgs;
 with pkgs.lib;
@@ -6,10 +6,8 @@ with pkgs.lib;
 let
 
   # Remove invisible and internal options.
-  optionsList = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList internalModule options);
+  optionsList = filter (opt: opt.visible && !opt.internal) (optionAttrSetToDocList options);
 
-  # INFO: Please add 'defaultText' or 'literalExample' to the option
-  #       definition to avoid this substitution!
   # Replace functions by the string <function>
   substFunction = x:
     if builtins.isAttrs x then mapAttrs (name: substFunction) x

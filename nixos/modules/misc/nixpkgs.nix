@@ -3,35 +3,32 @@
 with lib;
 
 let
-  nixpkgsConfig = pkgs:
+  isConfig = x:
+    builtins.isAttrs x || builtins.isFunction x;
+
+  optCall = f: x:
+    if builtins.isFunction f
+    then f x
+    else f;
+
+  mergeConfig = lhs_: rhs_:
     let
-      isConfig = x:
-        builtins.isAttrs x || builtins.isFunction x;
-
-      optCall = f: x:
-        if builtins.isFunction f
-        then f x
-        else f;
-
-      mergeConfig = lhs_: rhs_:
-        let
-          lhs = optCall lhs_ { inherit pkgs; };
-          rhs = optCall rhs_ { inherit pkgs; };
-        in
-        lhs // rhs //
-        optionalAttrs (lhs ? packageOverrides) {
-          packageOverrides = pkgs:
-            optCall lhs.packageOverrides pkgs //
-            optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
-        };
+      lhs = optCall lhs_ { inherit pkgs; };
+      rhs = optCall rhs_ { inherit pkgs; };
     in
-    mkOptionType {
-      name = "nixpkgs config";
-      typerep = "(nixpkgsConfig)";
-      check = lib.traceValIfNot isConfig;
-      merge = config: args: fold (def: mergeConfig def.value) {};
-      defaultValues = [{}];
+    lhs // rhs //
+    optionalAttrs (lhs ? packageOverrides) {
+      packageOverrides = pkgs:
+        optCall lhs.packageOverrides pkgs //
+        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
     };
+
+  configType = mkOptionType {
+    name = "nixpkgs config";
+    check = traceValIfNot isConfig;
+    merge = args: fold (def: mergeConfig def.value) {};
+  };
+
 in
 
 {
@@ -49,7 +46,7 @@ in
             };
           }
         '';
-      type = nixpkgsConfig pkgs;
+      type = configType;
       description = ''
         The configuration of the Nix Packages collection.  (For
         details, see the Nixpkgs documentation.)  It allows you to set

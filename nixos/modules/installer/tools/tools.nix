@@ -54,11 +54,6 @@ let
     inherit (config.system) nixosVersion nixosCodeName nixosRevision;
   };
 
-  nixos-typecheck = makeProg {
-    name = "nixos-typecheck";
-    src = ./nixos-typecheck.sh;
-  };
-
 in
 
 {
@@ -72,11 +67,10 @@ in
         nixos-generate-config
         nixos-option
         nixos-version
-        nixos-typecheck
       ];
 
     system.build = {
-      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild nixos-typecheck;
+      inherit nixos-install nixos-generate-config nixos-option nixos-rebuild;
     };
 
   };

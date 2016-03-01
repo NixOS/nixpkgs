@@ -101,8 +101,6 @@ in rec {
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
   options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
-  optionsSpecs = (buildFromConfig ({ pkgs, ... }: { _module.typeInference = "silent"; }) (config: config.system.build.typechecker.specifications)).x86_64-linux;
-
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
