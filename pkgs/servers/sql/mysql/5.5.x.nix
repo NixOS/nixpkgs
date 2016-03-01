@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0clkr3r44j8nsgmjzv6r09pb0vjangn5hpyjxgg5ynr674ygskkl";
   };
 
+  patches = [
+    ./tztime-symlink-loop-hell.patch
+  ];
+
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''
     ln -s /bin/ps $TMPDIR/ps
     export PATH=$PATH:$TMPDIR
