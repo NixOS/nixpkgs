@@ -8147,7 +8147,7 @@ let self = _self // overrides; _self = with self; {
     name = "MooseX-Role-WithOverloading-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "01mqpvbz7yw993918hgp72vl22i6mgicpq5b3zrrsp6vl8sqj2sw";
+      sha256 = "0rb8k0dp1a55bm2pr6r0vsi5msvjl1dslfidxp1gj80j7zbrbc4j";
     };
     buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
     propagatedBuildInputs = [ aliased Moose namespaceautoclean namespaceclean ];
