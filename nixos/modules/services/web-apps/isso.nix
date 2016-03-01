@@ -10,47 +10,44 @@ let
   home = "/var/lib/isso";
   db = "${home}/comments.db";
 
-  config' = pkgs.runCommand "isso.cfg" {} (''
-    echo '[general]' >> $out
-    echo 'dbpath = ${db}' >> $out
-  ''
-  + optionalString (cfg.hosts != []) ''
-    echo 'host = ${concatMapStrings (h: "\n  " + h) cfg.hosts}' >> $out
-  '' + ''
-    echo '${cfg.configGeneral}' | sed '/dbpath.*=/d' >> $out
-    echo
-    echo '${cfg.config}' >> $out
-  '');
+  mkSection = sect: attrs: ''
+    [${sect}]
+    ${concatStringsSep "\n" (mapAttrsToList (key: val: ''
+      ${key} = ${val}
+    '') attrs)}
+  '';
+
+  compose = f: g: x: f (g x);
+  concatHosts = mapAttrByPath [ "general" "host" ] (hs: concatStringsSep "\n  ") [];
+  generatedConfig = mapAttrsToList mkSection cfg.config;
+  configFile = pkgs.writeText "isso.cfg" (concatStringsSep "\n" generatedConfig);
 
 in
 {
   options = {
 
     services.isso = {
-      enable = mkEnableOption "isso";
 
-      hosts = mkOption {
-        type = with types; listOf string;
-        description = ''
-          List of websites Isso should run on (from [general] config).
-        '';
-        default = [];
-      };
+      enable = mkEnableOption "the ${desc}";
 
       config = mkOption {
-        type = types.lines;
+        type = with types; attrsOf (attrsOf str);
         description = ''
-          INI-style isso config, without the [general] section.
+          Isso INI-style configuration mapped to an attribute set.
+          Is merged recursively with the default.
         '';
+        example = {
+          general = rec {
+            log-file = "${config.users.users.isso.home}/isso.log";
+            host = [ "http://localhost" "http://example.com" ];
+          };
+          server.listen = "http://localhost:8080";
+        };
+        default = {
+          general.dbpath = db;
+        };
       };
 
-      configGeneral = mkOption {
-        type = types.lines;
-        default = "";
-        description = ''
-          The content of [general], dbpath is overwritten to ${db}.
-        '';
-      };
     };
 
   };
@@ -67,7 +64,7 @@ in
       serviceConfig = {
         # TODO: wsgi support
         ExecStart = ''
-          ${pkgs.pythonPackages.isso}/bin/isso -c "${config'}" run
+          ${pkgs.pythonPackages.isso}/bin/isso -c "${configFile}" run
         '';
         User = user;
         Group = user;
