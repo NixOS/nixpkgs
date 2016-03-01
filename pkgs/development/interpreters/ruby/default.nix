@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, darwin ? null
+, buildEnv, bundler, bundix
 } @ args:
 
 let
@@ -35,6 +36,7 @@ let
       , libffi, fiddleSupport ? true
       , autoreconfHook, bison, autoconf
       , darwin ? null
+      , buildEnv, bundler, bundix
       }:
       let rubySrc =
         if useRailsExpress then fetchFromGitHub {
@@ -146,11 +148,15 @@ let
         };
 
         passthru = rec {
-          inherit majorVersion minorVersion teenyVersion patchLevel;
+          inherit majorVersion minorVersion teenyVersion patchLevel version;
           rubyEngine = "ruby";
           baseRuby = baseruby;
           libPath = "lib/${rubyEngine}/${versionNoPatch}";
           gemPath = "lib/${rubyEngine}/gems/${versionNoPatch}";
+          dev = import ./dev.nix {
+            inherit buildEnv bundler bundix;
+            ruby = self;
+          };
         };
       }
     ) args; in self;
