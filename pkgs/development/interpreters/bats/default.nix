@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "05xpvfm0xky1532i3hd2l3wznxzh99bv2hxgykwdpxh18h6jr6jm";
   };
 
+  patchPhase = "patchShebangs ./install.sh";
+
   installPhase = "./install.sh $out";
 
   meta = with stdenv.lib; {
