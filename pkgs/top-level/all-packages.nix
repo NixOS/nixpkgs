@@ -15188,23 +15188,33 @@ let
 
   kde5 =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
-      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
-      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      frameworks = import ../desktops/kde-5/frameworks-5.19 { inherit pkgs; };
+      plasma = import ../desktops/kde-5/plasma-5.5 { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications-15.12 { inherit pkgs; };
       merged = self:
-        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
+        { plasma = plasma self;
+          frameworks = frameworks self;
+          applications = applications self; }
+        // frameworks self
+        // plasma self
+        // applications self
+        // kde5PackagesFun self;
     in
       recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   kde5_latest =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
-      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
-      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      frameworks = import ../desktops/kde-5/frameworks-5.19 { inherit pkgs; };
+      plasma = import ../desktops/kde-5/plasma-5.5 { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications-15.12 { inherit pkgs; };
       merged = self:
-        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
+        { plasma = plasma self;
+          frameworks = frameworks self;
+          applications = applications self; }
+        // frameworks self
+        // plasma self
+        // applications self
+        // kde5PackagesFun self;
     in
       recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
