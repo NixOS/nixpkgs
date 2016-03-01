@@ -66,7 +66,7 @@ let
   defaultIconTheme = adwaita-icon-theme;
 
 # ISO installer
-  installerIso = callPackage ./installer.nix {};
+# installerIso = callPackage ./installer.nix {};
 
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
