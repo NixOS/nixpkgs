@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, python, llvm, clang }:
 
 stdenv.mkDerivation {
-  name = "libclc-2015-03-27";
+  name = "libclc-2015-08-07";
 
   src = fetchFromGitHub {
     owner = "llvm-mirror";
     repo = "libclc";
-    rev = "0a2d1619921545b52303be5608b64dc46f381e97";
-    sha256 = "0hgm013c0vlfqfbbf4cdajl01hhk1mhsfk4h4bfza1san97l0vcc";
+    rev = "f97d9db40718f2e68b3f0b44200760d8e0d50532";
+    sha256 = "10n9qk1dild9yjkjjkzpmp9zid3ysdgvqrad554azcf755frch7g";
   };
 
   buildInputs = [ python llvm clang ];
