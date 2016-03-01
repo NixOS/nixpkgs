@@ -23,6 +23,7 @@ rec {
       then attrByPath (tail attrPath) default e.${attr}
       else default;
 
+
   /* Return if an attribute from nested attribute set exists.
      For instance ["x" "y"] applied to some set e returns true, if e.x.y exists. False
      is returned otherwise. */
@@ -43,6 +44,16 @@ rec {
       [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
 
 
+  /* Map function f over the value of the attribute described by attrPath.
+     For instance, mapAttrByPath [ "x" "y" ] (a: a+1) { x.y = 1; } returns
+     { x.y = 2; }. If the path doesn’t exist the default value is used. */
+  mapAttrByPath = attrPath: f: default: e:
+    recursiveUpdate e
+      (setAttrByPath attrPath
+        (f (attrByPath attrPath default e)));
+
+
+  /* Like attrByPath, but aborts if the attribute is missing. */
   getAttrFromPath = attrPath: set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg) set;
