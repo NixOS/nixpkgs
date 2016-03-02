@@ -5142,10 +5142,13 @@ let
     clisp = clisp;
   };
 
-  scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
-  scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
-  scala_2_11 = callPackage ../development/compilers/scala { };
-  scala = scala_2_11;
+  scala_2_9_3 = callPackage ../development/compilers/scala/2.9.3.nix { };
+  scala_2_9 = scala_2_9_3;
+  scala_2_10_5 = callPackage ../development/compilers/scala/2.10.5.nix { };
+  scala_2_10 = scala_2_10_5;
+  scala_2_11_7 = callPackage ../development/compilers/scala/2.11.7.nix { };
+  scala_2_11 = scala_2_11_7;
+  scala = scala_2_11_7;
 
   sdcc = callPackage ../development/compilers/sdcc { };
 
