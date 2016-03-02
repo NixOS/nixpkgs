@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk7, zlib, file, makeWrapper, xorg, libpulseaudio }:
+{ stdenv, fetchFromGitHub, cmake, qt5Full, jdk7, zlib, file, makeWrapper, xorg, libpulseaudio, qt5 }:
 
 let
   libnbt = fetchFromGitHub {
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
     rmdir $sourceRoot/depends/libnbtplusplus
     cp -r ${libnbt} $sourceRoot/depends/libnbtplusplus
     chmod 755 -R $sourceRoot/depends/libnbtplusplus
+    mkdir -pv $sourceRoot/build/
+    cp -v ${qt5.quazip.src} $sourceRoot/build/quazip-0.7.1.tar.gz
   '';
 
   patches = [ ./multimc.patch ];
@@ -51,5 +53,6 @@ stdenv.mkDerivation {
     '';
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21Plus;
+    maintainers = stdenv.lib.maintainers.cleverca22;
   };
 }

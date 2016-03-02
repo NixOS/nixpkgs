@@ -68,6 +68,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
