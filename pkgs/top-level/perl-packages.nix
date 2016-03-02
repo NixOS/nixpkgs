@@ -1415,7 +1415,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "CGI" = buildPerlPackage rec {
+  CGI = buildPerlPackage rec {
     name = "CGI-4.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/${name}.tar.gz";
@@ -3522,7 +3522,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "DevelDeclare" = buildPerlPackage rec {
+  DevelDeclare = buildPerlPackage rec {
     name = "Devel-Declare-0.006018";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
@@ -6901,7 +6901,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "LWP" = buildPerlPackage rec {
+  LWP = buildPerlPackage rec {
     name = "libwww-perl-6.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
@@ -8241,7 +8241,7 @@ let self = _self // overrides; _self = with self; {
       [ ClassMOP Moose namespaceautoclean ListMoreUtils ];
   };
 
-  "MooseXTypes" = buildPerlPackage rec {
+  MooseXTypes = buildPerlPackage rec {
     name = "MooseX-Types-0.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
@@ -8257,7 +8257,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "MooseXTypesCommon" = buildPerlPackage rec {
+  MooseXTypesCommon = buildPerlPackage rec {
     name = "MooseX-Types-Common-0.001013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
@@ -10718,7 +10718,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "SubExporterForMethods" = buildPerlPackage rec {
+  SubExporterForMethods = buildPerlPackage rec {
     name = "Sub-Exporter-ForMethods-0.100052";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
@@ -11977,7 +11977,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "TestWarnings" = buildPerlPackage rec {
+  TestWarnings = buildPerlPackage rec {
     name = "Test-Warnings-0.026";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
@@ -13004,7 +13004,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "URI" = buildPerlPackage rec {
+  URI = buildPerlPackage rec {
     name = "URI-1.71";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
