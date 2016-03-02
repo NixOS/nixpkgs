@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ./disable-fma.patch # http://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
   ];
 
-  doCheck = true;
+  doCheck = stdenv.system != "i686-linux"; # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
 
   meta = {
     description = "The GNU Scientific Library, a large numerical library";
