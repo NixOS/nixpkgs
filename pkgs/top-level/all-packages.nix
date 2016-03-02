@@ -11112,6 +11112,8 @@ let
 
   gentium = callPackage ../data/fonts/gentium {};
 
+  gentium-book-basic = callPackage ../data/fonts/gentium-book-basic {};
+
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
   gohufont = callPackage ../data/fonts/gohufont { };
