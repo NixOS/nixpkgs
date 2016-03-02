@@ -13,14 +13,30 @@ let
     then config.flyingcircus.enc.parameters.location
     else "local";
 
-  uchiwa_json = pkgs.writeText "uchiwa.json" ''
+  api_servers = filter
+    (x: x.service == "sensuserver-api")
+    config.flyingcircus.enc_services;
+
+  uchiwa_json = let
+    api_servers_config = (lib.concatMapStringsSep ",\n" (
+      api_server:
+        ''
+          {
+            "name": "${api_server.location}",
+            "host": "sensu.${api_server.location}.gocept.net",
+            "port": 443,
+            "ssl": true,
+            "insecure": true,
+            "path": "/api",
+            "timeout": 5,
+            "user": "${config.networking.hostName}.gocept.net"  ,
+            "pass": "${api_server.password}"
+           }'')
+      api_servers);
+    in pkgs.writeText "uchiwa.json" ''
     {
       "sensu": [
-        {
-          "name": "${sensu_name}",
-          "host": "localhost",
-          "port": 4567
-        }
+        ${api_servers_config}
       ],
       "uchiwa": {
         "host": "0.0.0.0",

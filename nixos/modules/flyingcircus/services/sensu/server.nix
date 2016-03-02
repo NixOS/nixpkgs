@@ -6,14 +6,13 @@ let
 
   cfg = config.flyingcircus.services.sensu-server;
 
-  enc_clients =
-    if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
-    then config.flyingcircus.enc_service_clients.sensuserver
-    else [];
+  sensu_clients = filter
+    (x: x.service == "sensuserver-server")
+    config.flyingcircus.enc_service_clients;
 
   server_password = (lib.findSingle
     (x: x.node == "${config.networking.hostName}.gocept.net")
-    { password = ""; } { password = ""; } enc_clients).password;
+    { password = ""; } { password = ""; } sensu_clients).password;
 
   directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
 
@@ -98,7 +97,7 @@ in {
     # Sensu Server
 
     networking.firewall.extraCommands = ''
-    iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
+      iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
     '';
 
     users.extraGroups.sensuserver.gid = config.ids.gids.sensuserver;
@@ -140,7 +139,7 @@ in {
                 "^((keepalives|results)$)|${client_name}-.*" \
                 "^(default$)|${client_name}-.*"
               '')
-          enc_clients);
+          sensu_clients);
       in
        ''
         set -ex

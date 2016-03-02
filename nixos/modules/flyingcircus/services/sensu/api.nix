@@ -9,13 +9,13 @@ let
   cfg = config.flyingcircus.services.sensu-api;
 
   # Duplicated from server.nix.
-  enc_clients = if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
-    then config.flyingcircus.enc_service_clients.sensuserver
-    else [];
+  sensu_clients = filter
+    (x: x.service == "sensuserver-server")
+    config.flyingcircus.enc_service_clients;
 
   server_password = (lib.findSingle
     (x: x.node == "${config.networking.hostName}.gocept.net")
-     { password = ""; } { password = ""; } enc_clients).password;
+    { password = ""; } { password = ""; } sensu_clients).password;
 
   sensu_api_json = pkgs.writeText "sensu-server.json"
     ''
