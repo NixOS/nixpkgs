@@ -4123,13 +4123,6 @@ let
     cross = crossSystem;
   };
 
-  gcc44 = lowPrio (wrapCC (makeOverridable (import ../development/compilers/gcc/4.4) {
-    inherit fetchurl stdenv gmp mpfr /* ppl cloogppl */
-      gettext which noSysDirs;
-    texinfo = texinfo4;
-    profiledCompiler = true;
-  }));
-
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
     inherit noSysDirs;
     texinfo = texinfo4;
@@ -4283,17 +4276,6 @@ let
     langC = true;
     langGo = true;
     profiledCompiler = false;
-  });
-
-  ghdl = wrapCC (import ../development/compilers/gcc/4.3 {
-    inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
-    texinfo = texinfo4;
-    name = "ghdl";
-    langVhdl = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    enableMultilib = false;
   });
 
   ghdl_mcode = callPackage ../development/compilers/ghdl { };
