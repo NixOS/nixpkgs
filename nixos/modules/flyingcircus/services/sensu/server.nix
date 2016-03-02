@@ -90,7 +90,7 @@ in {
 
     services.rabbitmq.enable = true;
     services.rabbitmq.listenAddress = "::";
-    #services.rabbitmq.plugins = [ "rabbitmq_management" ];
+    services.rabbitmq.plugins = [ "rabbitmq_management" ];
     services.redis.enable = true;
     services.postfix.enable = true;
 
@@ -133,7 +133,7 @@ in {
               rabbitmqctl change_password ${client.node} ${client.password}
               # Permission for clients in order: conf, write, read
               # exchange.declare -> configure "keepalives"
-              # queue.declate -> configure "node-*"
+              # queue.declare -> configure "node-*"
               # queue.bind -> write "node-*"
               rabbitmqctl set_permissions -p /sensu ${client.node} \
                 "^((default|results|keepalives)$)|${client_name}-.*" \
@@ -145,7 +145,7 @@ in {
        ''
         set -ex
 
-        # rabbitmqctl start_app
+        rabbitmqctl start_app || sleep 5
         rabbitmqctl delete_user guest || true
         rabbitmqctl add_vhost /sensu || true
 
