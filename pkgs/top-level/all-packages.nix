@@ -1270,7 +1270,8 @@ let
     cudatoolkit5
     cudatoolkit6
     cudatoolkit65
-    cudatoolkit7;
+    cudatoolkit7
+    cudatoolkit75;
 
   cudatoolkit = cudatoolkit7;
 
