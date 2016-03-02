@@ -97,7 +97,7 @@ in {
     # Sensu Server
 
     networking.firewall.extraCommands = ''
-    iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
+      iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
     '';
 
     users.extraGroups.sensuserver.gid = config.ids.gids.sensuserver;
