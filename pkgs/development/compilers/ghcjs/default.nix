@@ -125,11 +125,17 @@ in mkDerivation (rec {
         --with-gmp-includes ${gmp}/include \
         --with-gmp-libraries ${gmp}/lib
   '';
-  passthru = {
+  passthru = let
+    ghcjsNodePkgs = pkgs.nodePackages.override {
+      generated = ./node-packages-generated.nix;
+      self = ghcjsNodePkgs;
+    };
+  in {
     inherit bootPkgs;
     isCross = true;
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
+    inherit (ghcjsNodePkgs) "socket.io";
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";
