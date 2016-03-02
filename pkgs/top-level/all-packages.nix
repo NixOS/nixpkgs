@@ -1805,6 +1805,8 @@ let
 
   go-pup = goPackages.pup.bin // { outputs = [ "bin" ]; };
 
+  go-upower-notify = goPackages.upower-notify.bin // { outputs = [ "bin" ]; };
+
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };

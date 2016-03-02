@@ -3791,4 +3791,19 @@ let
     sha256 = "153hf4dq4jh1yv35pv30idmxhc917qzl590qy5394l48d4rapgb5";
     buildInputs = [ go-colortext yaml-v2 godotenv ];
   };
+
+  # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:
+  #
+  # service.xserver.displayManager.sessionCommands = ''
+  #   ${pkgs.dunst}/bin/dunst -shrink -geometry 0x0-50-50 -key space & # ...if don't already have a dbus notification display app
+  #   (sleep 3; exec ${pkgs.yeshup}/bin/yeshup ${pkgs.go-upower-notify}/bin/upower-notify) &
+  # '';
+  upower-notify = buildFromGitHub rec {
+    rev    = "14c581e683a7e90ec9fa6d409413c16599a5323c";
+    date   = "2016-03-10";
+    owner  = "omeid";
+    repo   = "upower-notify";
+    sha256 = "16zlvn53p9m10ph8n9gps51fkkvl6sf4afdzni6azk05j0ng49jw";
+    propagatedBuildInputs = [ dbus ];
+  };
 }; in self
