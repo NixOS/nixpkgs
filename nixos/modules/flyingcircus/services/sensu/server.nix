@@ -6,14 +6,13 @@ let
 
   cfg = config.flyingcircus.services.sensu-server;
 
-  enc_clients =
-    if builtins.hasAttr "sensuserver" config.flyingcircus.enc_service_clients
-    then config.flyingcircus.enc_service_clients.sensuserver
-    else [];
+  sensu_clients = filter
+    (x: x.service == "sensuserver-server")
+    config.flyingcircus.enc_service_clients;
 
   server_password = (lib.findSingle
     (x: x.node == "${config.networking.hostName}.gocept.net")
-    "" "" enc_clients).password;
+    { password = ""; } { password = ""; } sensu_clients).password;
 
   directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
 
@@ -90,7 +89,7 @@ in {
 
     services.rabbitmq.enable = true;
     services.rabbitmq.listenAddress = "::";
-    #services.rabbitmq.plugins = [ "rabbitmq_management" ];
+    services.rabbitmq.plugins = [ "rabbitmq_management" ];
     services.redis.enable = true;
     services.postfix.enable = true;
 
@@ -133,19 +132,19 @@ in {
               rabbitmqctl change_password ${client.node} ${client.password}
               # Permission for clients in order: conf, write, read
               # exchange.declare -> configure "keepalives"
-              # queue.declate -> configure "node-*"
+              # queue.declare -> configure "node-*"
               # queue.bind -> write "node-*"
               rabbitmqctl set_permissions -p /sensu ${client.node} \
                 "^((default|results|keepalives)$)|${client_name}-.*" \
                 "^((keepalives|results)$)|${client_name}-.*" \
                 "^(default$)|${client_name}-.*"
               '')
-          enc_clients);
+          sensu_clients);
       in
        ''
         set -ex
 
-        # rabbitmqctl start_app
+        rabbitmqctl start_app || sleep 5
         rabbitmqctl delete_user guest || true
         rabbitmqctl add_vhost /sensu || true
 

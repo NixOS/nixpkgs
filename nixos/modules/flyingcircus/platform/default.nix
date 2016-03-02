@@ -22,11 +22,11 @@ let
     get_json cfg.enc_path
     (get_json /etc/nixos/enc.json {});
 
-  enc_services =
-    get_json cfg.enc_services_path {};
+  enc_services =(
+    get_json cfg.enc_services_path []);
 
-  enc_service_clients =
-    get_json cfg.enc_service_clients_path {};
+  enc_service_clients = (
+    get_json cfg.enc_service_clients_path []);
 
   system_state =
     get_json cfg.system_state_path {};
@@ -75,8 +75,8 @@ in
     };
 
     flyingcircus.enc_services = mkOption {
-      default = {};
-      type = types.attrs;
+      default = [];
+      type = types.listOf types.attrs;
       description = "Services in the environment as provided by the ENC.";
     };
 
@@ -87,8 +87,8 @@ in
     };
 
     flyingcircus.enc_service_clients = mkOption {
-      default = {};
-      type = types.attrs;
+      default = [];
+      type = types.listOf types.attrs;
       description = "Service clients in the environment as provided by the ENC.";
     };
 
@@ -189,6 +189,14 @@ in
           ";
         });
       };
+
+    system.activationScripts.flyingcircus_platform = ''
+      # /srv must be accessible for unprivileged users
+      if [ ! -e /srv ]; then
+        install -d -m 0755 /srv
+      fi
+      chmod 0755 /srv
+    '';
 
     security.sudo.extraConfig =
         ''

@@ -32,7 +32,7 @@ in
           # Use basic auth instead of real login until
           # https://github.com/sensu/uchiwa/issues/448 gets solved.
           admins = map (user: "${user}:${config.users.users."${user}".hashedPassword}") config.users.groups.admins.members;
-          htpasswd = builtins.toFile "admins.htpasswd" (concatStringsSep "\n" admins);
+          admins_htpasswd = builtins.toFile "admins.htpasswd" (concatStringsSep "\n" admins);
           in
           ''
           server {
@@ -56,14 +56,22 @@ in
 
             add_header Strict-Transport-Security "max-age=31536000";
 
-            auth_basic "Flying Circus";
-            auth_basic_user_file ${htpasswd};
 
             location / {
                 proxy_pass http://localhost:3000;
                 # https://github.com/sensu/uchiwa/issues/449
                 # proxy_hide_header Authorization;
+                auth_basic "Flying Circus";
+                auth_basic_user_file ${admins_htpasswd};
             }
+
+            # The trailing slashes are important to have nginx
+            # strip the leading /api and the API is not vhost
+            # compatible, thus needs this removed.
+            location /api/ {
+                proxy_pass http://localhost:4567/;
+            }
+
           }
         '';
 
