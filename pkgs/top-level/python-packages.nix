@@ -7838,12 +7838,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.2";
+    version = "1.9.3";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "0bwapyjdl1w62cdv3kx27kj1s5zj93fyby8mhgysapdkxqi368vs";
+      sha256 = "0miv4jb2p4xpcdif0zqimmqw1jypzyq6q5v4m79jc9yyhwj1l685";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
