@@ -8244,7 +8244,9 @@ let
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = openalSoft;
-  openalSoft = callPackage ../development/libraries/openal-soft { };
+  openalSoft = callPackage ../development/libraries/openal-soft {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
+  };
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
