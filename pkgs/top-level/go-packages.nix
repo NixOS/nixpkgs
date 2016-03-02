@@ -3546,10 +3546,10 @@ let
   };
 
   vcs = buildFromGitHub {
-    rev    = "1.0.0";
+    rev    = "1.4.0";
     owner  = "Masterminds";
     repo   = "vcs";
-    sha256 = "1qav4lf4ln5gs81714876q2cy9gfaxblbvawg3hxznbwakd9zmd8";
+    sha256 = "0590ww2av4407y7zy3bcmnr8i74fv00k9zzcxcpjxivl6qszna0d";
   };
 
   viper = buildFromGitHub {
@@ -3734,4 +3734,44 @@ let
     '';
     disabled = isGo14;
   };
+
+  template = buildFromGitHub {
+    rev = "14fd436dd20c3cc65242a9f396b61bfc8a3926fc";
+    owner = "alecthomas";
+    repo = "template";
+    sha256 = "19rzvvcgvr1z2wz9xpqsmlm8syizbpxjp5zbzgakvrqlajpbjvx2";
+  };
+
+  units = buildFromGitHub {
+    rev = "2efee857e7cfd4f3d0138cc3cbb1b4966962b93a";
+    owner = "alecthomas";
+    repo = "units";
+    sha256 = "1j65b91qb9sbrml9cpabfrcf07wmgzzghrl7809hjjhrmbzri5bl";
+  };
+
+  go-difflib = buildFromGitHub {
+    rev = "d8ed2627bdf02c080bf22230dbb337003b7aba2d";
+    owner = "pmezard";
+    repo = "go-difflib";
+    sha256 = "0w1jp4k4zbnrxh3jvh8fgbjgqpf2hg31pbj8fb32kh26px9ldpbs";
+  };
+
+  kingpin = buildFromGitHub {
+    rev = "21551c2a6259a8145110ca80a36e25c9d7624032";
+    owner = "alecthomas";
+    repo = "kingpin";
+    sha256 = "1zhpqc4qxsw9lc1b4dwk5r42k9r702ihzrabs3mnsphvm9jx4l59";
+    propagatedBuildInputs = [ template units ];
+    goPackageAliases = [ "gopkg.in/alecthomas/kingpin.v2" ];
+  };
+
+  go2nix = buildFromGitHub rec {
+    rev = "dd513f1f1336a3cdceb9dd4be0f3c47a09929651";
+    owner = "kamilchm";
+    repo = "go2nix";
+    sha256 = "1ad7zcab5vjbw7a8ns0aspkblqqz0z96b7ak3zdx409rq7rlqdsj";
+    buildInputs = [ go-bindata.bin tools.bin vcs go-spew gls go-difflib assertions goconvey testify kingpin ];
+    preBuild = ''go generate ./...'';
+  };
+
 }; in self

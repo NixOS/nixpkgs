@@ -9237,6 +9237,8 @@ let
 
   goPackages = go15Packages;
 
+  go2nix = goPackages.go2nix.bin // { outputs = [ "bin" ]; };
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
