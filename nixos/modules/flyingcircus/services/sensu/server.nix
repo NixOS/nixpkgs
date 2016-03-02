@@ -13,7 +13,7 @@ let
 
   server_password = (lib.findSingle
     (x: x.node == "${config.networking.hostName}.gocept.net")
-    "" "" enc_clients).password;
+    { password = ""; } { password = ""; } enc_clients).password;
 
   directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
 

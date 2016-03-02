@@ -15,7 +15,7 @@ let
 
   server_password = (lib.findSingle
     (x: x.node == "${config.networking.hostName}.gocept.net")
-    "" "" enc_clients).password;
+     { password = ""; } { password = ""; } enc_clients).password;
 
   sensu_api_json = pkgs.writeText "sensu-server.json"
     ''
