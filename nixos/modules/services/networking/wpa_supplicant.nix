@@ -125,10 +125,12 @@ in {
       # FIXME: start a separate wpa_supplicant instance per interface.
       systemd.services.wpa_supplicant = let
         ifaces = cfg.interfaces;
+        deviceUnit = interface: [ "sys-subsystem-net-devices-${interface}.device" ];
       in {
         description = "WPA Supplicant";
 
         after = [ "network-interfaces.target" ];
+        requires = lib.concatMap deviceUnit ifaces;
         wantedBy = [ "network.target" ];
 
         path = [ pkgs.wpa_supplicant ];
