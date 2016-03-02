@@ -69,6 +69,21 @@ let
         (map (addr: addr.address) ethsrv.ip6)
     else [];
 
+  # I hate you nix. /a/path in nix is obviously different from the string
+  # "/a/path". Like the former puts the path into the store. But how do I get
+  # from string to path? builtins.toPath does *not* do the trick.
+  local_config_path =
+    if version == "9.4"
+    then /etc/local/postgresql/9.4
+    else if version == "9.3"
+    then /etc/local/postgresql/9.3
+    else null;
+
+  local_config =
+    if local_config_path != null && pathExists local_config_path
+    then "include_dir '${local_config_path}'"
+    else "";
+
 in
 {
   options = {
@@ -104,10 +119,8 @@ in
       home = "/srv/postgresql";
     };
     system.activationScripts.flyingcircus_postgresql = ''
-      if ! test -e /srv/postgresql; then
-        mkdir -p /srv/postgresql
-      fi
-      chown ${toString config.ids.uids.postgres} /srv/postgresql
+      install -d -o ${toString config.ids.uids.postgres} /srv/postgresql
+      install -d -o ${toString config.ids.uids.postgres} -g service /etc/local/postgresql/${version}
     '';
     security.sudo.extraConfig = ''
       # Service users may switch to the postgres system user
@@ -121,8 +134,7 @@ in
       "kernel.shmall" = toString (shared_memory_max / 4096);
     };
 
-
-    # Custom postgresql configuration
+        # Custom postgresql configuration
     services.postgresql.extraConfig = ''
       #------------------------------------------------------------------------------
       # CONNECTIONS AND AUTHENTICATION
@@ -176,7 +188,13 @@ in
       lc_numeric = 'en_US.utf8'
       lc_time = 'en_US.utf8'
 
+      ${local_config}
     '';
+
+    environment.etc."local/postgresql/${version}/README.txt".text = ''
+        Put your local postgresql configuration here. This directory
+        is being included with include_dir.
+        '';
 
     services.postgresql.authentication = ''
       host all  all  0.0.0.0/0  md5
