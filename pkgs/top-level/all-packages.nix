@@ -13329,7 +13329,7 @@ in
   panotools = callPackage ../applications/graphics/panotools { };
 
   paprefs = callPackage ../applications/audio/paprefs {
-    inherit (gnome) libglademm gconfmm;
+    inherit (gnome) libglademm gconfmm GConf;
   };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
