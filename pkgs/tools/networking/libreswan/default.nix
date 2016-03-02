@@ -64,6 +64,8 @@ stdenv.mkDerivation {
     done
   '';
 
+  enableParallelBuilding = false;
+
   meta = {
     homepage = "https://libreswan.org";
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
