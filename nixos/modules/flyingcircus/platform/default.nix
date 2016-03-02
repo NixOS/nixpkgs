@@ -190,6 +190,14 @@ in
         });
       };
 
+    system.activationScripts.flyingcircus_platform = ''
+      # /srv must be accessible for unprivileged users
+      if [ ! -e /srv ]; then
+        install -d -m 0755 /srv
+      fi
+      chmod 0755 /srv
+    '';
+
     security.sudo.extraConfig =
         ''
         Defaults lecture = never
