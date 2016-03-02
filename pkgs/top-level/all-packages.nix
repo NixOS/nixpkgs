@@ -4024,7 +4024,6 @@ let
   clang_36 = llvmPackages_36.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
-  clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
     clang = clang_34;
@@ -4508,7 +4507,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
-    llvm = llvm_33;
     openblas = openblasCompat;
   };
 
@@ -4532,7 +4530,6 @@ let
   llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
-  llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix { };
 
   llvmPackages = recurseIntoAttrs llvmPackages_37;
 
