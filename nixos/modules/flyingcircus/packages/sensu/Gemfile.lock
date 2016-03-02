@@ -15,23 +15,23 @@ GEM
       eventmachine (>= 0.12.10)
     em-worker (0.0.2)
       eventmachine
-    eventmachine (1.0.8)
+    eventmachine (1.0.9.1)
     ffi (1.9.10)
     multi_json (1.11.2)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
-    sensu (0.22.0)
+    sensu (0.22.1)
       async_sinatra (= 1.2.0)
       em-redis-unified (= 1.0.1)
-      eventmachine (= 1.0.8)
+      eventmachine (= 1.0.9.1)
       multi_json (= 1.11.2)
       sensu-extension (= 1.3.0)
       sensu-extensions (= 1.4.0)
       sensu-logger (= 1.1.0)
       sensu-settings (= 3.3.0)
-      sensu-spawn (= 1.6.0)
-      sensu-transport (= 3.3.0)
+      sensu-spawn (= 1.7.0)
+      sensu-transport (= 4.0.0)
       sinatra (= 1.4.6)
       thin (= 1.6.3)
       uuidtools (= 2.1.5)
@@ -47,11 +47,11 @@ GEM
       multi_json
     sensu-settings (3.3.0)
       multi_json
-    sensu-spawn (1.6.0)
+    sensu-spawn (1.7.0)
       childprocess (= 0.5.8)
       em-worker (= 0.0.2)
       eventmachine
-    sensu-transport (3.3.0)
+    sensu-transport (4.0.0)
       amq-protocol (= 1.9.2)
       amqp (= 1.5.0)
       em-redis-unified (>= 1.0.0)
@@ -71,7 +71,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  sensu (= 0.22.0)
+  sensu (= 0.22.1)
 
 BUNDLED WITH
-   1.10.5
+   1.10.6
