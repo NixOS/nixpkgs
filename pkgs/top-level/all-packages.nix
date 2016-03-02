@@ -470,6 +470,8 @@ let
 
   afl = callPackage ../tools/security/afl { };
 
+  "afpfs-fuse" = callPackage ../tools/filesystems/afpfs-fuse { };
+
   ahcpd = callPackage ../tools/networking/ahcpd { };
 
   aide = callPackage ../tools/security/aide { };
