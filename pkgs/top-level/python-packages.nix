@@ -11236,17 +11236,19 @@ in modules // {
 
 
   m2crypto = buildPythonPackage rec {
-    version = "0.21.1";
+    version = "0.23.0";
     name = "m2crypto-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-${version}.tar.gz";
-      md5 = "f93d8462ff7646397a9f77a2fe602d17";
+      md5 = "89557730e245294a6cab06de8ad4fb42";
     };
 
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
+    preConfigure = ''
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl}'"
+    '';
 
     doCheck = false; # another test that depends on the network.
 
