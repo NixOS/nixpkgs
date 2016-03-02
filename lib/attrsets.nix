@@ -37,20 +37,33 @@ rec {
 
 
   /* Return nested attribute set in which an attribute is set.  For instance
-     ["x" "y"] applied with some value v returns `x.y = v;' */
+     ["x" "y"] applied with some value v returns `x.y = v;'
+     If you want to update a value in an existing attrset, use setAttrInSetByPath. */
   setAttrByPath = attrPath: value:
     if attrPath == [] then value
     else listToAttrs
       [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
 
 
-  /* Map function f over the value of the attribute described by attrPath.
-     For instance, mapAttrByPath [ "x" "y" ] (a: a+1) { x.y = 1; } returns
+  /* Update attribute in set described by attrPath with value. If the attribute
+     doesn’t exist, it is created.
+     For instance, setAttrInSetByPath [ "x" "y" ] 5 { x.y = 3; } returns { x.y = 5; }
+     The function name was chosen because from setAttrByPath is already taken. */
+  setAttrInSetByPath = attrPath: value: set:
+    if attrPath == [] then value
+    else set // {
+      ${head attrPath} = let new = set.${head attrPath} or {}; in
+        setAttrInSetByPath (tail attrPath) value (optionalAttrs (isAttrs new) new);
+    };
+
+
+  /* Apply function f over the value of the attribute described by attrPath.
+     For instance, updateAttrByPath [ "x" "y" ] (a: a+1) 0 { x.y = 1; } returns
      { x.y = 2; }. If the path doesn’t exist the default value is used. */
-  mapAttrByPath = attrPath: f: default: e:
-    recursiveUpdate e
-      (setAttrByPath attrPath
-        (f (attrByPath attrPath default e)));
+  updateAttrByPath = attrPath: f: default: e:
+      (setAttrInSetByPath attrPath
+        (f (attrByPath attrPath default e))
+        e);
 
 
   /* Like attrByPath, but aborts if the attribute is missing. */
