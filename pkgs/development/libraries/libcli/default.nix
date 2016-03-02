@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libcli-${version}";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
     repo = "libcli";
     owner = "dparrish";
   };
+
+  patches =
+    [ (fetchurl {
+        url = "https://github.com/dparrish/libcli/commit/ebc5a09db457ee1be9996711463cbbafe5ea72d5.patch";
+        sha256 = "0szjiw3gd7by1sv924shnngfxvc98xvaqvx228b575xq93xxjcwl";
+      })
+    ];
 
   enableParallelBuilding = true;
 
