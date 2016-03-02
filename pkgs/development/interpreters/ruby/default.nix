@@ -9,6 +9,10 @@ let
   opString = stdenv.lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
+  rubygemsSrc = import ./rubygems-src.nix { inherit fetchurl; };
+  unpackdir = obj:
+    lib.removeSuffix ".tgz"
+      (lib.removeSuffix ".tar.gz" obj.name);
 
   generic = { majorVersion, minorVersion, teenyVersion, patchLevel, sha256 }: let
     versionNoPatch = "${majorVersion}.${minorVersion}.${teenyVersion}";
@@ -32,12 +36,8 @@ let
       , autoreconfHook, bison, autoconf
       , darwin ? null
       }:
-      stdenv.mkDerivation rec {
-        inherit version;
-
-        name = "ruby-${version}";
-
-        src = if useRailsExpress then fetchFromGitHub {
+      let rubySrc =
+        if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";
           repo   = "ruby";
           rev    = tag;
@@ -46,6 +46,18 @@ let
           url = "http://cache.ruby-lang.org/pub/ruby/${majorVersion}.${minorVersion}/ruby-${fullVersionName}.tar.gz";
           sha256 = sha256.src;
         };
+      in
+      stdenv.mkDerivation rec {
+        inherit version;
+
+        name = "ruby-${version}";
+
+        srcs = [ rubySrc rubygemsSrc ];
+        sourceRoot =
+          if useRailsExpress then
+            "ruby-${tag}-src"
+          else
+            unpackdir rubySrc;
 
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = "${groff}/bin/nroff";
@@ -67,11 +79,15 @@ let
 
         enableParallelBuilding = true;
 
-        patches = (import ./patchsets.nix {
-          inherit patchSet useRailsExpress ops patchLevel;
-        })."${versionNoPatch}";
+        patches =
+          [ ./gem_hook.patch ] ++
+          (import ./patchsets.nix {
+            inherit patchSet useRailsExpress ops patchLevel;
+          })."${versionNoPatch}";
 
-        postUnpack = opString isRuby21 ''
+        postUnpack = ''
+          cp -r ${unpackdir rubygemsSrc} ${sourceRoot}/rubygems
+        '' + opString isRuby21 ''
           rm "$sourceRoot/enc/unicode/name2ctype.h"
         '';
 
@@ -99,6 +115,11 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
+          # Update rubygems
+          pushd rubygems
+          $out/bin/ruby setup.rb
+          popd
+
           # Bundler tries to create this directory
           mkdir -pv $out/${passthru.gemPath}
           mkdir -p $out/nix-support
@@ -119,7 +140,7 @@ let
 
         meta = {
           license = stdenv.lib.licenses.ruby;
-          homepage = "http://www.ruby-lang.org/en/";
+          homepage = http://www.ruby-lang.org/en/;
           description = "The Ruby language";
           platforms = stdenv.lib.platforms.all;
         };

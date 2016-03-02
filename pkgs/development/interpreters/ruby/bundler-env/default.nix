@@ -1,6 +1,5 @@
 { stdenv, runCommand, writeText, writeScript, writeScriptBin, ruby, lib
 , callPackage, defaultGemConfig, fetchurl, fetchgit, buildRubyGem, buildEnv
-, rubygems
 , git
 , makeWrapper
 , bundler
@@ -28,10 +27,9 @@ let
   );
   hasBundler = builtins.hasAttr "bundler" importedGemset;
   bundler = if hasBundler then gems.bundler else defs.bundler.override (attrs: { inherit ruby; });
-  rubygems = defs.rubygems.override (attrs: { inherit ruby; });
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs:
     buildRubyGem ((removeAttrs attrs ["source"]) // attrs.source // {
-      inherit ruby rubygems;
+      inherit ruby;
       gemName = name;
       gemPath = map (gemName: gems."${gemName}") (attrs.dependencies or []);
     }));
@@ -45,7 +43,6 @@ let
 
     cd $out
     chmod +w Gemfile.lock
-    source ${rubygems}/nix-support/setup-hook
     export GEM_PATH=${bundler}/${ruby.gemPath}
     ${ruby}/bin/ruby -rubygems -e \
       "require 'bundler'; Bundler.definition.lock('Gemfile.lock')"
@@ -56,8 +53,6 @@ let
     paths = envPaths;
     pathsToLink = [ "/lib" ];
     postBuild = ''
-      source ${rubygems}/nix-support/setup-hook
-
       ${ruby}/bin/ruby ${./gen-bin-stubs.rb} \
         "${ruby}/bin/ruby" \
         "${confFiles}/Gemfile" \

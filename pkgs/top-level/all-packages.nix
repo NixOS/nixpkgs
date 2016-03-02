@@ -5611,8 +5611,6 @@ let
   ruby_2_2 = ruby_2_2_3;
   ruby_2_3 = ruby_2_3_0;
 
-  rubygems = hiPrio (callPackage ../development/interpreters/ruby/rubygems.nix {});
-
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
@@ -16517,6 +16515,7 @@ aliases = with self; rec {
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rekonqWrapper = rekonq; # added 2015-01
   rssglx = rss-glx; #added 2015-03-25
+  rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02

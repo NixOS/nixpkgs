@@ -1,7 +1,7 @@
-diff --git a/lib/rubygems/installer.rb b/lib/rubygems/installer.rb
+diff --git a/rubygems/lib/rubygems/installer.rb b/rubygems/lib/rubygems/installer.rb
 index d1ef3cb..bf15652 100755
---- a/lib/rubygems/installer.rb
-+++ b/lib/rubygems/installer.rb
+--- a/rubygems/lib/rubygems/installer.rb
++++ b/rubygems/lib/rubygems/installer.rb
 @@ -545,6 +545,13 @@ Results logged to #{File.join(Dir.pwd, 'gem_make.out')}
  
        say path if Gem.configuration.really_verbose
