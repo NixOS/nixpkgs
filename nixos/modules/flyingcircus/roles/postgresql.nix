@@ -59,7 +59,7 @@ let
       (min [64 (shared_buffers / 32)])
       1];
 
-  listen_addresses =
+  listen_addresses = [ "127.0.0.1" "::1" ] ++ (
     if builtins.hasAttr "ethsrv" config.networking.interfaces
     then
       let
@@ -67,7 +67,7 @@ let
       in
         (map (addr: addr.address) ethsrv.ip4) ++
         (map (addr: addr.address) ethsrv.ip6)
-    else [];
+    else []);
 
 in
 {
@@ -127,7 +127,7 @@ in
       #------------------------------------------------------------------------------
       # CONNECTIONS AND AUTHENTICATION
       #------------------------------------------------------------------------------
-      listen_addresses = '${concatStringsSep "," listen_addresses},127.0.0.1,::1'
+      listen_addresses = '${concatStringsSep "," listen_addresses}'
       max_connections = 400
       #------------------------------------------------------------------------------
       # RESOURCE USAGE (except WAL)
