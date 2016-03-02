@@ -5,7 +5,7 @@ with lib;
 let
 
   sensu_server = lib.findFirst
-    (s: s.service == "sensu-server")
+    (s: s.service == "sensuserver-server")
     null
     config.flyingcircus.enc_services;
 
