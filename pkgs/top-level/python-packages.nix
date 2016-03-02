@@ -7862,12 +7862,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.9";
+    version = "1.8.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1qyjpdpsj1n5lx10vak9bwl554br01wbn0kjhy7646i00y2js0gw";
+      sha256 = "08qsgnqq97rg4v80kmbkccr9hm90nw4zh6c46xblk64lnqgb3rfj";
     };
 
     # too complicated to setup
