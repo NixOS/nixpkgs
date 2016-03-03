@@ -15335,12 +15335,28 @@ let
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
+    mpiEnabled = false;
     fftw = fftwSinglePrec;
     cmake = cmakeCurses;
   };
 
+  gromacsMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = true;
+    mpiEnabled = true;
+    fftw = fftwSinglePrec;
+    cmake = cmakeCurses;
+  });
+
   gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = false;
+    mpiEnabled = false;
+    fftw = fftw;
+    cmake = cmakeCurses;
+  });
+
+  gromacsDoubleMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = false;
+    mpiEnabled = true;
     fftw = fftw;
     cmake = cmakeCurses;
   });
