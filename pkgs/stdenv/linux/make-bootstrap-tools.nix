@@ -51,7 +51,15 @@ rec {
         cp -d ${glibc}/lib/crt?.o $out/lib
 
         cp -rL ${glibc}/include $out
-        chmod -R u+w $out/include
+        chmod -R u+w "$out"
+
+        # glibc can contain linker scripts: find them, copy their deps,
+        # and get rid of absolute paths (nuke-refs would make them useless)
+        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc}' | sort -u)
+        for f in $lScripts; do
+          substituteInPlace "$f" --replace '${glibc}/lib/' ""
+        done
 
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
