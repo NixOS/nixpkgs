@@ -14872,7 +14872,7 @@ let
 
   clearlooks-phenix = callPackage ../misc/themes/gtk3/clearlooks-phenix { };
 
-  enlightenment = callPackage ../desktops/enlightenment { };
+  enlightenment16 = callPackage ../desktops/enlightenment16 { };
 
   e19 = recurseIntoAttrs (callPackage ../desktops/e19 {
     callPackage = newScope pkgs.e19;
