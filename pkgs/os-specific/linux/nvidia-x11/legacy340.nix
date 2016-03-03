@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "340.76";
+  versionNumber = "340.96";
   /* This branch is needed for G8x, G9x, and GT2xx GPUs, and motherboard chipsets based on them.
     Ongoing support for new Linux kernels and X servers, as well as fixes for critical bugs,
     will be included in 340.* legacy releases through the end of 2019.
@@ -25,18 +25,16 @@ stdenv.mkDerivation {
 
   builder = ./builder-legacy340.sh;
 
-  patches = [ ./nvidia-340.76-kernel-4.0.patch ];
-
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "1l1nn340hc8iwlzb16gcm2xvnvkw7rf84ll89bcax70094xxjacv";
+        url = "http://download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
+        sha256 = "13j739gg1igll88xpfsx46m7pan4fwpzx5hqdskkdc0srmw2f3n4";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "016hnsgrcm4ly0mnkcd6c1qkciy3qmbwdwy4rlwq3m6dh4ixw7jc";
+        url = "http://download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
+        sha256 = "1i0lri76ghhr4c6fdlv5gwzd99n70hv3kw21w51anb55msr9s3r8";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -62,5 +60,6 @@ stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];
+    priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
   };
 }
