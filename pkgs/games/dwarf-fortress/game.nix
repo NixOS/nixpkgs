@@ -4,7 +4,7 @@
 
 let
   baseVersion = "42";
-  patchVersion = "05";
+  patchVersion = "06";
   dfVersion = "0.${baseVersion}.${patchVersion}";
   libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.glibc dwarf-fortress-unfuck SDL ];
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.bay12games.com/dwarves/df_${baseVersion}_${patchVersion}_linux.tar.bz2";
-    sha256 = "0g7r0v2lsqj9ryxh12q8yrk96bgs00rf2ncw228cwwqgmps3xcws";
+    sha256 = "17y9zq9xn1g0a501w4vkinb0n2yjiczsi2g7r6zggr41pxrqxpq3";
   };
 
   installPhase = ''
@@ -43,6 +43,7 @@ stdenv.mkDerivation {
     description = "A single-player fantasy game with a randomly generated adventure world";
     homepage = http://www.bay12games.com/dwarves;
     license = lib.licenses.unfreeRedistributable;
+    platforms = [ "i686-linux" ];
     maintainers = with lib.maintainers; [ a1russell robbinch roconnor the-kenny abbradar ];
   };
 }
