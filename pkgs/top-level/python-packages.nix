@@ -6397,32 +6397,6 @@ in modules // {
     };
   };
 
-  motuclient = buildPythonPackage rec {
-    name = "motu-client-${version}";
-    version = "1.0.8";
-
-    namePrefix = "";
-    disabled = !isPy27;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/quiet-oceans/motuclient-setuptools/archive/${name}.tar.gz";
-      sha256 = "1naqmav312agn72iad9kyxwscn2lz4v1cfcqqi1qcgvc82vnwkw2";
-    };
-
-    meta = {
-      homepage = https://github.com/quiet-oceans/motuclient-setuptools;
-      description = "CLI to query oceanographic data to Motu servers";
-      longDescription = ''
-        Access data from (motu)[http://sourceforge.net/projects/cls-motu/] servers.
-        This is a refactored fork of the original release in order to simplify integration,
-        deployment and packaging. Upstream code can be found at
-        http://sourceforge.net/projects/cls-motu/ .
-      '';
-      license = licenses.lgpl3Plus;
-      maintainers = [ maintainers.lsix ];
-    };
-  };
-
   mwlib-ext = buildPythonPackage rec {
     version = "0.13.2";
     name = "mwlib.ext-${version}";
@@ -11236,17 +11210,19 @@ in modules // {
 
 
   m2crypto = buildPythonPackage rec {
-    version = "0.21.1";
+    version = "0.23.0";
     name = "m2crypto-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/M/M2Crypto/M2Crypto-${version}.tar.gz";
-      md5 = "f93d8462ff7646397a9f77a2fe602d17";
+      md5 = "89557730e245294a6cab06de8ad4fb42";
     };
 
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
-    preBuild = "${python}/bin/${python.executable} setup.py build_ext --openssl=${pkgs.openssl}";
+    preConfigure = ''
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl}'"
+    '';
 
     doCheck = false; # another test that depends on the network.
 

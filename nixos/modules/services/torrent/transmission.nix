@@ -21,7 +21,7 @@ let
     else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = { download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings // { umask = 2; };
+  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 in
 {
   options = {

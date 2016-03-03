@@ -327,6 +327,7 @@
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
+  ./services/networking/libreswan.nix
   ./services/networking/mailpile.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix

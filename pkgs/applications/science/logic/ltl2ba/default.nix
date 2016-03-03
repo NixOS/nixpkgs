@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   hardening_format = false;
 
+  preConfigure = ''
+    substituteInPlace Makefile \
+    --replace "CC=gcc" ""
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv ltl2ba $out/bin
@@ -20,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "fast translation from LTL formulae to Buchi automata";
     homepage    = "http://www.lsv.ens-cachan.fr/~gastin/ltl2ba";
     license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }
