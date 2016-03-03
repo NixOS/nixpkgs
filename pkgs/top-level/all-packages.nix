@@ -5451,6 +5451,8 @@ let
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
+  taktuk = callPackage ../applications/networking/cluster/taktuk { };
+
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
