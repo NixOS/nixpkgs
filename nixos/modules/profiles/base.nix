@@ -17,6 +17,7 @@
     pkgs.ddrescue
     pkgs.ccrypt
     pkgs.cryptsetup # needed for dm-crypt volumes
+    pkgs.which # 88K size
 
     # Some networking tools.
     pkgs.fuse
