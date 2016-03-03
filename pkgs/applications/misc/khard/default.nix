@@ -18,10 +18,6 @@ pythonPackages.buildPythonApplication rec {
     pyyaml
   ];
 
-  buildInputs = with pythonPackages; [
-    pkgs.vdirsyncer
-  ];
-
   meta = {
     homepage = https://github.com/scheibler/khard;
     description = "Console carddav client";
