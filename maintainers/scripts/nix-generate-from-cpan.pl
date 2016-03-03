@@ -431,7 +431,7 @@ my $build_fun = -e "$pkg_path/Build.PL"
 print STDERR "===\n";
 
 print <<EOF;
-  "$attr_name" = $build_fun rec {
+  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun rec {
     name = "$pkg_name";
     src = fetchurl {
       url = "mirror://cpan/${\$module->path}/\${name}.${\$module->package_extension}";
@@ -450,7 +450,7 @@ EOF
 print <<EOF if defined $homepage;
       homepage = $homepage;
 EOF
-print <<EOF if defined $description;
+print <<EOF if defined $description && $description ne "Unknown";
       description = "$description";
 EOF
 print <<EOF if defined $license;
