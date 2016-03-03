@@ -170,7 +170,13 @@ in {
         Restart = "always";
         RestartSec = "5s";
       };
-        environment = { EMBEDDED_RUBY = "false"; };
+      environment = { EMBEDDED_RUBY = "false"; };
+
+      # rabbitmq needs some time to start up. The wait for pid
+      # in the default service config doesn't really seem to help :(
+      preStart = ''
+          sleep 5
+      '';
     };
 
   };
