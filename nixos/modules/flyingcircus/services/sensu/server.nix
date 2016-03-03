@@ -170,7 +170,7 @@ in {
         Restart = "always";
         RestartSec = "5s";
       };
-        environment = { EMBEDDED_RUBY = "false"; };
+      environment = { EMBEDDED_RUBY = "false"; };
     };
 
   };
