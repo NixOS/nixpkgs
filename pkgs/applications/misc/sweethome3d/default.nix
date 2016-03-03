@@ -51,14 +51,14 @@ let
 in rec {
 
   application = mkSweetHome3D rec {
-    version = "4.6.2";
+    version = "5.2";
     module = "SweetHome3D";
     name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchcvs {
       cvsRoot = ":pserver:anonymous@sweethome3d.cvs.sourceforge.net:/cvsroot/sweethome3d";
-      sha256 = "0pm0rl5y90cjwyjma7g6nnaz6dv4bqcy8vl3zzxfj0q02ww01gbz";
+      sha256 = "0vws3lj5lgix5fz2hpqvz6p79py5gbfpkhmqpfb1knx1a12310bb";
       module = module;
       tag = "V_" + d2u version;
     };
