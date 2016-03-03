@@ -15281,7 +15281,7 @@ in
   };
 
   # You still can override by passing more arguments.
-  spaceOrbit = callPackage ../games/orbit { };
+  space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring {
     boost = boost155;

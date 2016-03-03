@@ -95,6 +95,7 @@ doNotDisplayTwice rec {
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
   scim = sc-im; # added 2016-01-22
+  spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   system_config_printer = system-config-printer;  # added 2016-01-03
