@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline }:
+{ stdenv, fetchurl, ncurses, pcre, libpng, zlib, readline, oniguruma }:
 
 stdenv.mkDerivation rec {
   name = "slang-2.3.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/bin/ln|ln|" src/Makefile.in
   '';
   configureFlags = "--with-png=${libpng} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
-  buildInputs = [ncurses pcre libpng zlib readline];
+  buildInputs = [ncurses pcre libpng zlib readline oniguruma];
 
   meta = {
     description = "A multi-platform programmer's library designed to allow a developer to create robust software";
