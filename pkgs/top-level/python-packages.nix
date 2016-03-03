@@ -950,12 +950,12 @@ in modules // {
   };
 
   atomicwrites = buildPythonPackage rec {
-    version = "0.1.0";
+    version = "0.1.9";
     name = "atomicwrites-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/atomicwrites/atomicwrites-${version}.tar.gz";
-      sha256 = "1lxz0xhnzihqlvl1h6j2nfxjqqgr4s08196z5phnlcz2s7d5z0mg";
+      sha256 = "08s05h211r07vs66r4din3swrbzb344vli041fihpg34q3lcxpvw";
     };
 
     meta = {
