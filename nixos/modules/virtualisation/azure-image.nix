@@ -78,7 +78,7 @@ in
 
           echo Install a configuration.nix.
           mkdir -p /mnt/etc/nixos /mnt/boot/grub
-          cp ${./azure-config.nix} /mnt/etc/nixos/configuration.nix
+          cp ${./azure-config-user.nix} /mnt/etc/nixos/configuration.nix
 
           echo Generate the GRUB menu.
           ln -s vda /dev/sda
