@@ -2102,10 +2102,10 @@ let
   };
 
   logrus = buildFromGitHub rec {
-    rev = "v0.8.6";
+    rev = "v0.9.0";
     owner = "Sirupsen";
     repo = "logrus";
-    sha256 = "1v2qcjy6w24jgdm7kk0f8lqpa25qxzll2x6ycqwidd3pzjhrkifa";
+    sha256 = "1m6vvd4pg4lwglhk54lv5mf6cc8h7bi0d9zb3gar4crz531r66y4";
     propagatedBuildInputs = [ airbrake-go bugsnag-go raven-go ];
   };
 
