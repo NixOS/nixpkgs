@@ -16,7 +16,7 @@ in
 
     buildInputs = [ cups ];
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://github.com/artuuge/NixOS-files/;
       description = "ESC/P-R Driver (generic driver)";
       longDescription = ''
@@ -30,7 +30,9 @@ in
 	    drivers = [ pkgs.epson-escpr ];
 	  };
       '';
-      license = stdenv.lib.licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ artuuge ];
+      platforms = platforms.linux;
     };
 
   }
