@@ -306,7 +306,7 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
-  hjsonschema = overrideCabal (super.hjsonschema.override { hjsonpointer = self.hjsonpointer_0_2_0_4; }) (drv: { testTarget = "local"; });
+  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
