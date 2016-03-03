@@ -8,20 +8,17 @@
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
 , platform ? null, config ? {}, lib ? (import ../../../lib)
-, customBootstrapFiles ? null }:
-
-rec {
-
-  bootstrapFiles =
-    if customBootstrapFiles != null then customBootstrapFiles
-    else if system == "i686-linux" then import ./bootstrap/i686.nix
+, bootstrapFiles ?
+    if system == "i686-linux" then import ./bootstrap/i686.nix
     else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
     else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
     else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
-    else abort "unsupported platform for the pure Linux stdenv";
+    else abort "unsupported platform for the pure Linux stdenv"
+}:
 
+rec {
 
   commonPreHook =
     ''
@@ -310,51 +307,4 @@ rec {
     };
   };
 
-
-  testBootstrapTools = let
-    defaultPkgs = allPackages { inherit system platform; };
-  in derivation {
-    name = "test-bootstrap-tools";
-    inherit system;
-    builder = bootstrapFiles.busybox;
-    args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
-
-    buildCommand = ''
-      export PATH=${bootstrapTools}/bin
-
-      ls -l
-      mkdir $out
-      mkdir $out/bin
-      sed --version
-      find --version
-      diff --version
-      patch --version
-      make --version
-      awk --version
-      grep --version
-      gcc --version
-
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-
-      echo '#include <stdio.h>' >> foo.c
-      echo '#include <limits.h>' >> foo.c
-      echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
-      $CC -o $out/bin/foo foo.c
-      $out/bin/foo
-
-      echo '#include <iostream>' >> bar.cc
-      echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
-      $CXX -v -o $out/bin/bar bar.cc
-      $out/bin/bar
-
-      tar xvf ${defaultPkgs.hello.src}
-      cd hello-*
-      ./configure --prefix=$out
-      make
-      make install
-    '';
-  };
 }
