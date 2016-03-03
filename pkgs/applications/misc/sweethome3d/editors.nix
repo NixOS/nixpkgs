@@ -9,19 +9,21 @@ let
     + "-editor";
   sweetName = m: v: sweetExec m + "-" + v;
 
+  getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
+
   mkEditorProject =
-  { name, module, version, src, license, description }:
+  { name, module, version, src, license, description, desktopName }:
 
   stdenv.mkDerivation rec {
     application = sweethome3dApp;
     inherit name module version src description;
     exec = sweetExec module;
     editorItem = makeDesktopItem {
-      inherit name exec;
+      inherit exec desktopName;
+      name = getDesktopFileName name;
       comment =  description;
-      desktopName = name;
       genericName = "Computer Aided (Interior) Design";
-      categories = "Application;CAD;";
+      categories = "Application;Graphics;2DGraphics;3DGraphics;";
     };
 
     buildInputs = [ ant jre jdk makeWrapper gtk3 gsettings_desktop_schemas ];
@@ -72,6 +74,7 @@ in {
       module = module;
       tag = "V_" + d2u version;
     };
+    desktopName = "Sweet Home 3D - Textures Library Editor";
   };
 
   furniture-editor = mkEditorProject rec {
@@ -86,6 +89,7 @@ in {
       module = module;
       tag = "V_" + d2u version;
     };
+    desktopName = "Sweet Home 3D - Furniture Library Editor";
   };
 
 }
