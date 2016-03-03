@@ -5945,6 +5945,34 @@ in modules // {
     };
   };
 
+  isso = buildPythonPackage rec {
+    name = "isso-${meta.version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/isso/isso-${meta.version}.tar.gz";
+      sha256 = "1dyz4745fn4vrpl3brsvvq9lv0ikr6lippz31yzpmlr2ndjx231w";
+    };
+
+    outputs = [ "out" "js" ];
+
+    preInstall = ''
+      mkdir -p $js
+      mv ./isso/js/* $js
+      rmdir ./isso/js
+    '';
+
+    propagatedBuildInputs = with self; [ html5lib itsdangerous misaka1 configparser ipaddr werkzeug sqlite3 ];
+
+
+    meta = {
+      description = "Lightweight Disqus alternative";
+      homepage = "https://posativ.org/isso/";
+      version = "0.9.10";
+      maintainers = with maintainers; [ profpatsch ];
+      license = licenses.mit;
+    };
+  };
+
   itsdangerous = buildPythonPackage rec {
     name = "itsdangerous-0.24";
 
@@ -11548,6 +11576,37 @@ in modules // {
       homepage = https://pypi.python.org/pypi/MiniMock;
     };
   };
+
+  misaka =
+    let misakaPkg = version: sha:
+      buildPythonPackage rec {
+      name = "misaka-${meta.version}";
+
+      src = pkgs.fetchFromGitHub {
+        owner = "FSX";
+        repo = "misaka";
+        rev = "v${version}";
+        sha256 = sha;
+      };
+
+      propagatedBuildInputs = with self; [ cffi ];
+
+      doCheck = false;
+
+      meta = {
+        description = "A Python binding for Hoedown";
+        homepage = "http://misaka.61924.nl/";
+        version = version;
+        maintainer = with maintainers; [ profpatsch ];
+        license = licenses.mit;
+      };
+    };
+  in {
+    misaka1 = misakaPkg "1.0.2" "15w3l3k6fpyg7vpijwrbjya18g4a72xc9i26ghll7pv7pdklaxfs";
+    misaka2 = misakaPkg "2.0.0" "01fhj8bvbics2hanagyk7n95fhmw9cawhb92x0jc0sqp8nvm9cbv";
+  };
+
+  inherit (self.misaka) misaka1 misaka2;
 
   munch = buildPythonPackage rec {
     name = "munch-${version}";

@@ -130,4 +130,29 @@ runTests {
     expected = false;
   };
 
+  testSetAttrInSetByPathInsert = {
+    expr = setAttrInSetByPath ["a" "b"] 42 {};
+    expected = { a.b = 42; };
+  };
+
+  testSetAttrInSetByPathExisting = {
+    expr = setAttrInSetByPath ["a" "b"] 42 { a.b = 41; foo = "bar"; };
+    expected = { a.b = 42; foo = "bar"; };
+  };
+
+  testSetAttrInSetAttrByPathShorterPath = {
+    expr = setAttrInSetByPath ["a" "b"] 42 { a = 2; };
+    expected = { a.b = 42; };
+  };
+
+  testUpdateAttrByPath = {
+    expr = updateAttrByPath ["a" "b"] (a: a+1) 0 { a.b = 41; };
+    expected = { a.b = 42; };
+  };
+
+  testUpdateAttrByPathDefault = {
+    expr = updateAttrByPath ["a" "b"] (a: a+1) 41 {};
+    expected = { a.b = 42; };
+  };
+
 }
