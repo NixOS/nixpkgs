@@ -5042,10 +5042,6 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
-    why3 = callPackage ../development/ocaml-modules/why3 {
-      why3 = pkgs.why3;
-    };
-
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
