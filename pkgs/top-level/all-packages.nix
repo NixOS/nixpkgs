@@ -12106,6 +12106,10 @@ let
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
+  font-manager = callPackage ../applications/misc/font-manager {
+    vala = vala_0_28;
+  };
+
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
   fossil = callPackage ../applications/version-management/fossil { };
