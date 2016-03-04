@@ -100,7 +100,7 @@ in
 
       useChroot = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = "
           If set, Nix will perform builds in a chroot-environment that it
           will set up automatically for each build.  This prevents
