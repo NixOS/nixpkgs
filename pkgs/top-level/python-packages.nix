@@ -4705,7 +4705,7 @@ in modules // {
 
       mkdir -p $out/bin
       mkdir -p $out/lib/${python.libPrefix}/site-packages
-      cp -r server/* $out/lib/${python.libPrefix}/site-packages
+      cp -r "server/"* $out/lib/${python.libPrefix}/site-packages
       mv $out/lib/${python.libPrefix}/site-packages/deskcon-server $out/bin/deskcon-server
 
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -5514,7 +5514,7 @@ in modules // {
 
     };
     postInstall=''
-    cp -R $out/gateone/* $out/lib/python2.7/site-packages/gateone
+    cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone
     '';
   };
 
