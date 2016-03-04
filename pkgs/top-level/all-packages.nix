@@ -15849,7 +15849,7 @@ let
 
   spyder = pythonPackages.spyder;
 
-  stellarium = callPackage ../applications/science/astronomy/stellarium { };
+  stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
     cmake = cmake-2_8;
