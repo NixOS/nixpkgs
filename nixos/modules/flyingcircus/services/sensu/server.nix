@@ -166,7 +166,7 @@ in {
         "prepare-rabbitmq-for-sensu.service" ];
       serviceConfig = {
         User = "sensuserver";
-        ExecStart = "${pkgs.sensu}/bin/sensu-server -v -c ${sensu_server_json}";
+        ExecStart = "${pkgs.sensu}/bin/sensu-server -c ${sensu_server_json}";
         Restart = "always";
         RestartSec = "5s";
       };
