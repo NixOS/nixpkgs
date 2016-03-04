@@ -12810,6 +12810,8 @@ let
     gtk = gtk2;
   };
 
+  lv2bm = callPackage ../applications/audio/lv2bm { };
+
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
   lyx = callPackage ../applications/misc/lyx { };
