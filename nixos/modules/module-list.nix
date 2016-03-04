@@ -70,6 +70,7 @@
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/info.nix
+  ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
