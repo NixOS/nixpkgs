@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I. -std=gnu90";
 
+  hardening_pic = false;
+  hardening_stackprotector = false;
+
   buildFlags = "memtest.bin";
 
   installPhase = ''
