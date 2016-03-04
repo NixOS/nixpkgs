@@ -36,19 +36,6 @@ rec {
     "${patchSet}/patches/ruby/2.0.0/p${patchLevel}/railsexpress/03-display-more-detailed-stack-trace.patch"
     "${patchSet}/patches/ruby/2.0.0/p${patchLevel}/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
   ];
-  "2.1.3" = [
-    ./ssl_v3.patch
-    ./rand-egd.patch
-  ] ++ ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/04-show-full-backtrace-on-stack-overflow.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/05-funny-falcon-stc-density.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/06-funny-falcon-stc-pool-allocation.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/07-aman-opt-aset-aref-str.patch"
-    "${patchSet}/patches/ruby/2.1.3/railsexpress/08-funny-falcon-method-cache.patch"
-  ];
   "2.1.7" = [
     ./ssl_v3.patch
     ./rand-egd.patch
@@ -62,15 +49,6 @@ rec {
     "${patchSet}/patches/ruby/2.1.7/railsexpress/07-aman-opt-aset-aref-str.patch"
     "${patchSet}/patches/ruby/2.1.7/railsexpress/08-funny-falcon-method-cache.patch"
     "${patchSet}/patches/ruby/2.1.7/railsexpress/09-heap-dump-support.patch"
-  ];
-  "2.2.2" = [
-    ./ssl_v3.patch
-    ./ruby22-rand-egd.patch
-  ] ++ ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.2.2/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.2.2/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.2.2/railsexpress/03-display-more-detailed-stack-trace.patch"
-    "${patchSet}/patches/ruby/2.2.2/railsexpress/04-backported-bugfixes-222.patch"
   ];
   "2.2.3" = [
     ./ssl_v3.patch
