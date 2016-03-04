@@ -12100,7 +12100,9 @@ let
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
-  fluidsynth = callPackage ../applications/audio/fluidsynth { };
+  fluidsynth = callPackage ../applications/audio/fluidsynth {
+     inherit (darwin.apple_sdk.frameworks) CoreServices CoreAudio AudioUnit;
+  };
 
   fmit = qt5.callPackage ../applications/audio/fmit { };
 
