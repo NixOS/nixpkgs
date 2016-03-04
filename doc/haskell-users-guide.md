@@ -363,7 +363,7 @@ instead of `packages`:
 
 For more on how to write a `shell.nix` file see the below section. You'll need
 to express a derivation. Note that Nixpkgs ships with a convenience wrapper
-function around `mkDerivation` called `haskell.buildStackProject` to help you
+function around `mkDerivation` called `haskell.lib.buildStackProject` to help you
 create this derivation in exactly the way Stack expects. All of the same inputs
 as `mkDerivation` can be provided. For example, to build a Stack project that
 including packages that link against a version of the R library compiled with
@@ -373,7 +373,7 @@ special options turned on:
 
     let R = pkgs.R.override { enableStrictBarrier = true; };
     in
-	haskell.buildStackProject {
+	haskell.lib.buildStackProject {
       name = "HaskellR";
 	  buildInputs = [ R zeromq zlib ];
     }

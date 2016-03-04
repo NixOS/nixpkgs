@@ -4,8 +4,6 @@ rec {
 
   lib = import ../development/haskell-modules/lib.nix { inherit pkgs; };
 
-  buildStackProject = callPackage ../development/haskell-modules/generic-stack-builder.nix { };
-
   compiler = {
 
     ghc6102Binary = callPackage ../development/compilers/ghc/6.10.2-binary.nix { gmp = pkgs.gmp4; };
