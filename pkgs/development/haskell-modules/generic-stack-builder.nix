@@ -14,7 +14,7 @@ stdenv.mkDerivation (args // {
     buildInputs ++
     optional stdenv.isLinux glibcLocales ++
     [ ghc pkgconfig ];
-  
+
   STACK_IN_NIX_SHELL=1;
   STACK_IN_NIX_EXTRA_ARGS =
     concatMap (pkg: ["--extra-lib-dirs=${pkg}/lib"
