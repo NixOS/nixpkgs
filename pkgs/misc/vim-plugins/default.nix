@@ -2,7 +2,7 @@
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
 , vim_configurable, vimPlugins, xkb_switch, git
-, Cocoa
+, Cocoa ? null
 }:
 
 let
