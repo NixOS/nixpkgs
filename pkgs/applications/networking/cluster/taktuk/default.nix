@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33412/${name}-3.7.5.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/33412/${name}.tar.gz";
     sha256 = "d96ef6c63d77f32339066f143ef7e0bc00041e10724254bf15787746ad1f1070";
   };
 
