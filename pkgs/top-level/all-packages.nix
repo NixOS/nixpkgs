@@ -12150,6 +12150,8 @@ let
     inherit (gnome) libgnome libgnomeui vte;
   };
 
+  gsimplecal = callPackage ../applications/misc/gsimplecal { };
+
   gtimelog = pythonPackages.gtimelog;
 
   inherit (gnome3) gucharmap;
