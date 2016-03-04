@@ -11389,6 +11389,8 @@ let
     gtk = gtk2;
   };
 
+  ahoviewer = callPackage ../applications/graphics/ahoviewer { };
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
