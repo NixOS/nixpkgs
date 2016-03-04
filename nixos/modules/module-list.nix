@@ -71,6 +71,7 @@
   ./programs/environment.nix
   ./programs/freetds.nix
   ./programs/fish.nix
+  ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
