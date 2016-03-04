@@ -147,7 +147,7 @@ in {
       path = [ pkgs.sensu pkgs.sensu_plugins pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
       serviceConfig = {
         User = "sensuclient";
-        ExecStart = "${sensu}/bin/sensu-client -c ${client_json} ${local_sensu_configuration}";
+        ExecStart = "${sensu}/bin/sensu-client  -L warn  -c ${client_json} ${local_sensu_configuration}";
         Restart = "always";
         RestartSec = "5s";
       };

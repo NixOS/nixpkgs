@@ -41,6 +41,7 @@ let
       "uchiwa": {
         "host": "0.0.0.0",
         "port": 3000,
+        "loglevel": "warn",
         "users": ${config.flyingcircus.services.uchiwa.users}
       }
     }
