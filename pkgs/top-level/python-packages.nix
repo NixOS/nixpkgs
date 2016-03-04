@@ -3058,12 +3058,12 @@ in modules // {
   };
 
   click-log = buildPythonPackage rec {
-    version = "0.1.1";
+    version = "0.1.3";
     name = "click-log-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click-log/${name}.tar.gz";
-      sha256 = "1z3jdwjmwax159zrnyx830xa968rfqrpkm04ad5xqyh0269ydiqb";
+      sha256 = "0kdd1vminxpcfczxl2kkf285n0dr1gxh2cdbx1p6vkj7b7bci3gx";
     };
 
     propagatedBuildInputs = with self; [ click ];
