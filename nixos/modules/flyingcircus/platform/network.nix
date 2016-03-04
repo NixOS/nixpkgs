@@ -62,10 +62,7 @@ let
   };
 
   get_policy_routing_for_interface = interfaces: interface_name:
-    builtins.filter
-      (ruleset: (builtins.length ruleset.addresses) > 0)
-      (map
-        (network: {
+    map (network: {
            priority =
             if builtins.hasAttr interface_name routing_priorities
             then builtins.getAttr interface_name routing_priorities
@@ -77,20 +74,42 @@ let
            family = if (is_ip4 network) then "4" else "6";
          })
         (builtins.attrNames
-          (builtins.getAttr interface_name interfaces).gateways));
+          (builtins.getAttr interface_name interfaces).gateways);
 
+
+  # Those policy routing rules ensure that we can run multiple IP networks
+  # on the same ethernet segment. We will still use the router but we avoid,
+  # for example, that we send out to an SRV network over the FE interface
+  # which may confuse the sender trying to reply to us on the FE interface
+  # or even filtering the traffic when the other interface has a shared
+  # network.
+  #
+  # The address rules ensure that we send out over the interface that belongs
+  # to the connection that a packet belongs to, i.e. established flows.
+  # (Address rules only apply to networks we have an address for.)
+  #
+  # The network rules ensure that we packets over the best interface where
+  # the target network is reachable if we haven't decided the originating
+  # address, yet.
+  # (Network rules apply for all networks on the segment, even if we do not
+  # have an address for it.)
 
   render_policy_routing_rule = ruleset:
     let
       render_address_rules =
-        builtins.toString
-          (map (address: "ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
-           (ruleset.addresses));
+        lib.concatMapStrings
+          (address: "ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
+          ruleset.addresses;
+      render_gateway_rule =
+        if (builtins.length ruleset.addresses) > 0 then
+          "ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true"
+        else
+          "";
     in
     ''
     ${render_address_rules}
     ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
-    ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true
+    ${render_gateway_rule}
     '';
 
   get_policy_routing = interfaces:
@@ -138,10 +157,16 @@ let
 
   ns_by_location = {
     # ns.$location.gocept.net, ns2.$location.gocept.net
+    # We are currently not using IPv6 resolvers as we have seen obscure bugs
+    # when enabling them, like weird search path confusion that results in
+    # arbitrary negative responses, combined with the rotate flag.
+    #
+    # This seems to be https://sourceware.org/bugzilla/show_bug.cgi?id=13028
+    # which is fixed in glibc 2.22 which is included in NixOS 16.03.
     dev = ["172.30.3.10" "172.20.2.38"];
-    rzob = ["195.62.125.5" "2a02:248:101:62::32" "195.62.125.135" "2a02:248:101:63::53"];
-    rzrl1 = ["2a02:2028:1007:8002::53" "2a02:2028:1007:8003::53"];
-    whq = ["212.122.41.143" "2a02:238:f030:102::102a"  "212.122.41.169" "2a02:238:f030:103::53"];
+    rzob = ["195.62.125.5" "195.62.125.135"];
+    rzrl1 = ["172.24.32.3" "172.24.48.4"];
+    whq = ["212.122.41.143" "212.122.41.169"];
   };
 
 in
@@ -224,7 +249,7 @@ in
         ''
         else "";
 
-     services.nscd.enable = false;
+     services.nscd.enable = true;
 
   };
 

@@ -136,9 +136,11 @@ in
     sound.enable = false;
 
     environment.systemPackages = with pkgs; [
+        bind
         cyrus_sasl
         db
         dstat
+        fcagent
         gcc
         git
         libxml2
@@ -147,13 +149,13 @@ in
         ncdu
         openldap
         openssl
+        psmisc
         python27Full
         python27Packages.virtualenv
         python3
+        tcpdump
         vim
         zlib
-        psmisc
-        fcagent
     ];
 
     programs.zsh.enable = true;
