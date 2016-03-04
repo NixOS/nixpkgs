@@ -153,6 +153,7 @@ in
         python27Full
         python27Packages.virtualenv
         python3
+        screen
         tcpdump
         vim
         zlib
