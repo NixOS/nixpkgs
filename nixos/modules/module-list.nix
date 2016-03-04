@@ -240,6 +240,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/spice-vdagentd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix

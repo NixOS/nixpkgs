@@ -10,6 +10,7 @@
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
+  aboseley = "Adam Boseley <adam.boseley@gmail.com>";
   adev = "Adrien Devresse <adev@adev.name>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
