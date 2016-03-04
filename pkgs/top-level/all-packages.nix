@@ -536,6 +536,8 @@ let
 
   albert = qt5.callPackage ../applications/misc/albert {};
 
+  amtterm = callPackage ../tools/system/amtterm {};
+
   analog = callPackage ../tools/admin/analog {};
 
   apktool = callPackage ../development/tools/apktool {
