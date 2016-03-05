@@ -369,8 +369,8 @@ rec {
     name = "neomake-2016-02-20";
     src = fetchgit {
       url = "git://github.com/benekastah/neomake";
-      rev = "645c433b73f527badaac5e315f1ea16e7d34ef99";
-      sha256 = "0vprly61xhl7pqqp8nfr8vanl6ddq7kf5asqz4kpfdpgnbdxrdlc";
+      rev = "e3f6fc538cecf478f826df58314a94b2da936b9f";
+      sha256 = "0wzh7gf9iqa7vdh2j1h1lwjl05xz4r2ci9zz5b78bkwn02pigh29";
     };
     dependencies = [];
 
