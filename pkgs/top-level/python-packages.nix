@@ -2334,11 +2334,12 @@ in modules // {
 
 
   blockdiag = buildPythonPackage rec {
-    name = "blockdiag-1.4.7";
+    name = "blockdiag";
+    version = "1.5.3";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
-      sha256 = "0bc29sh8hj3hmhclifh1by0n6vg2pl9wkxb7fmljyw0arjas54bf";
+      url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";
+      sha256 = "0r0qbmv0ijnqidsgm2rqs162y9aixmnkmzgnzgk52hiy7ydm4k8f";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
