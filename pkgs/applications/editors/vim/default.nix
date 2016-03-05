@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     "--enable-nls"
   ];
 
+  hardeningDisable = [ "fortify" ];
+
   postInstall = ''
     ln -s $out/bin/vim $out/bin/vi
     mkdir -p $out/share/vim
