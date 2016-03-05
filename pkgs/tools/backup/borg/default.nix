@@ -2,12 +2,12 @@
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "0.30.0";
+  version = "1.0.0";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/b/borgbackup/borgbackup-${version}.tar.gz";
-    sha256 = "0n78c982kdfqbyi9jawcvzgdik4l36c2s7rpzkfr1ka6506k2rx4";
+    sha256 = "0wa6cvqs3rni5nwrgagigchcly8a53rxk56z0zn8iaii2cqrw2sh";
   };
 
   nativeBuildInputs = with python3Packages; [
