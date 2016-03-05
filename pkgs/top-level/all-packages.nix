@@ -11029,6 +11029,7 @@ let
   usermount = callPackage ../os-specific/linux/usermount { };
 
   utillinux = callPackage ../os-specific/linux/util-linux { };
+  utillinuxCurses = utillinux;
 
   utillinuxMinimal = appendToName "minimal" (utillinux.override {
     ncurses = null;
