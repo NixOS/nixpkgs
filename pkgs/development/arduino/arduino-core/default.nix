@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep, file, libusb, unzip,
-  readline, zlib, ncurses, withGui ? false, gtk2 ? null
+{ stdenv, fetchFromGitHub, jdk, jre, ant, coreutils, gnugrep, file, libusb,
+  unzip, readline, zlib, ncurses, withGui ? false, gtk2 ? null
 }:
 
 assert withGui -> gtk2 != null;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.0";
+  version = "1.6.7";
   name = "arduino${stdenv.lib.optionalString (withGui == false) "-core"}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = "${version}";
-    sha256 = "1ycbcr16c53lrvqs9yksn80939ivfai28cxd1b29s61fv3xn7ccm";
+    sha256 = "09ab5fcdr4b74ibhp4kd72msbdfvsfn10xghlcxwqyhiabpgai3m";
   };
 
   buildInputs = [ jdk ant file unzip ];
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
 
     ${stdenv.lib.optionalString withGui ''
       mkdir -p "$out/bin"
-      sed -i -e "s|^java|${jdk}/bin/java|" "$out/share/arduino/arduino"
+      sed -i -e "s|^JAVA=java|JAVA=${jdk}/bin/java|" "$out/share/arduino/arduino"
       sed -i -e "s|^LD_LIBRARY_PATH=|LD_LIBRARY_PATH=${gtk2}/lib:|" "$out/share/arduino/arduino"
       ln -sr "$out/share/arduino/arduino" "$out/bin/arduino"
 
       cp -r build/shared/icons $out/share/arduino
       mkdir $out/share/applications
-      cp build/linux/dist/arduino.desktop $out/share/applications
-      echo "Icon=$out/share/arduino/icons/128x128/apps/arduino.png" >> \
-        $out/share/applications/arduino.desktop
+      sed -e "s,<BINARY_LOCATION>,$out/bin/arduino,g" \
+          -e "s,<ICON_NAME>,$out/share/arduino/icons/128x128/apps/arduino.png,g" \
+          "./build/linux/dist/desktop.template" > $out/share/applications/arduino.desktop
     ''}
 
     # Fixup "/lib64/ld-linux-x86-64.so.2" like references in ELF executables.
@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
     ln -s ${ncurses}/lib/libncurses.so.5 $out/share/arduino/hardware/tools/avr/lib/libtinfo.so.5
     ln -s $out/share/arduino/hardware/tools/avr/lib/libtinfo.so.5 $out/share/arduino/hardware/tools/avr/lib/libtinfo.so
 
+    # executables need libstdc++.so.6
+    ln -s "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}/libstdc++.so.6" "$out/share/arduino/lib/libstdc++.so.6"
   '';
 
   meta = with stdenv.lib; {
@@ -83,6 +85,6 @@ stdenv.mkDerivation rec {
     homepage = http://arduino.cc/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ antono robberer bjornfor ];
+    maintainers = with maintainers; [ antono robberer bjornfor flosse ];
   }; 
 }
