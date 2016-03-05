@@ -277,7 +277,7 @@ let
 
   chrootFHSEnv = callPackage ../build-support/build-fhs-chrootenv { };
   userFHSEnv = callPackage ../build-support/build-fhs-userenv {
-   ruby = ruby_2_1_3;
+   ruby = ruby_2_1;
   };
 
   buildFHSChrootEnv = args: chrootFHSEnv {
@@ -5544,7 +5544,7 @@ let
   };
 
   bundix = callPackage ../development/interpreters/ruby/bundix {
-    ruby = ruby_2_1_3;
+    ruby = ruby_2_1;
   };
   bundler = callPackage ../development/interpreters/ruby/bundler.nix { };
   bundler_HEAD = bundler;
@@ -5555,8 +5555,8 @@ let
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_1_9_3
     ruby_2_0_0
-    ruby_2_1_0 ruby_2_1_1 ruby_2_1_2 ruby_2_1_3 ruby_2_1_6 ruby_2_1_7
-    ruby_2_2_0 ruby_2_2_2 ruby_2_2_3
+    ruby_2_1_7
+    ruby_2_2_3
     ruby_2_3_0;
 
   # Ruby aliases
@@ -5818,7 +5818,7 @@ let
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
   chefdk = callPackage ../development/tools/chefdk {
-    ruby = ruby_2_0_0;
+    ruby = ruby_2_0;
   };
 
   matter-compiler = callPackage ../development/compilers/matter-compiler {};
@@ -6302,7 +6302,7 @@ let
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_2_2;
+    ruby = ruby_2_2;
   };
 
   gdb = callPackage ../development/tools/misc/gdb {
@@ -13052,7 +13052,7 @@ let
   smtube = qt5.callPackage ../applications/video/smtube {};
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_1_9_3.override { cursesSupport = true; };
+    ruby = ruby_1_9.override { cursesSupport = true; };
   };
 
   synapse = callPackage ../applications/misc/synapse {
