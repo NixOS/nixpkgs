@@ -215,6 +215,7 @@
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
