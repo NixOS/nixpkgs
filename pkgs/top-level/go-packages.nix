@@ -2651,33 +2651,35 @@ let
     propagatedBuildInputs = [ kr.text ];
   };
 
-  prometheus.alertmanager = buildGoPackage rec {
-    name = "prometheus-alertmanager-${rev}";
-    rev = "0.0.4";
-    goPackagePath = "github.com/prometheus/alertmanager";
-
-    src = fetchFromGitHub {
-      owner = "prometheus";
-      repo = "alertmanager";
-      inherit rev;
-      sha256 = "0g656rzal7m284mihqdrw23vhs7yr65ax19nvi70jl51wdallv15";
-    };
+  prometheus.alertmanager = buildFromGitHub rec {
+    rev = "0.1.0";
+    owner = "prometheus";
+    repo = "alertmanager";
+    sha256 = "1ya465bns6cj2lqbipmfm13wz8kxii5h9mm7lc0ba1xv26xx5zs7";
 
     buildInputs = [
-      fsnotify.v0
-      httprouter
-      prometheus.client_golang
-      prometheus.log
-      pushover
+      # fsnotify.v0
+      # httprouter
+      # prometheus.client_golang
+      # prometheus.log
+      # pushover
     ];
 
-    buildFlagsArray = ''
+    # Tests exist, but seem to clash with the firewall.
+    doCheck = false;
+
+    preBuild = ''
+      export GO15VENDOREXPERIMENT=1
+    '';
+
+    buildFlagsArray = let t = "github.com/${owner}/${repo}/version"; in ''
       -ldflags=
-          -X main.buildVersion=${rev}
-          -X main.buildBranch=master
-          -X main.buildUser=nix@nixpkgs
-          -X main.buildDate=20150101-00:00:00
-          -X main.goVersion=${stdenv.lib.getVersion go}
+         -X ${t}.Version=${rev}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
     '';
 
     meta = with stdenv.lib; {
@@ -2819,10 +2821,10 @@ let
   };
 
   prometheus.node-exporter = buildFromGitHub {
-    rev = "0.10.0";
+    rev = "0.11.0";
     owner = "prometheus";
     repo = "node_exporter";
-    sha256 = "0dmczav52v9vi0kxl8gd2s7x7c94g0vzazhyvlq1h3729is2nf0p";
+    sha256 = "149fs9yxnbiyd4ww7bxsv730mcskblpzb3cs4v12jnq2v84a4kk4";
 
     buildInputs = [
       go-runit
@@ -2832,6 +2834,8 @@ let
       prometheus.log
       protobuf
     ];
+
+    doCheck = true;
 
     meta = with stdenv.lib; {
       description = "Prometheus exporter for machine metrics";
@@ -2871,49 +2875,46 @@ let
     };
   };
 
-  prometheus.prometheus = buildGoPackage rec {
-    name = "prometheus-${version}";
-    version = "0.15.1";
-    goPackagePath = "github.com/prometheus/prometheus";
-    rev = "64349aade284846cb194be184b1b180fca629a7c";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "prometheus";
-      repo = "prometheus";
-      sha256 = "0gljpwnlip1fnmhbc96hji2rc56xncy97qccm7v1z5j1nhc5fam2";
-    };
+  prometheus.prometheus = buildFromGitHub rec {
+    rev = "0.17.0";
+    owner = "prometheus";
+    repo = "prometheus";
+    sha256 = "176198krna2i37dfhwsqi7m36sqn175yiny6n52vj27mc9s8ggzx";
 
     buildInputs = [
-      consul
-      dns
-      fsnotify.v1
-      go-zookeeper
-      goleveldb
-      httprouter
-      logrus
-      net
-      prometheus.client_golang
-      prometheus.log
-      yaml-v2
+      # consul
+      # dns
+      # fsnotify.v1
+      # go-zookeeper
+      # goleveldb
+      # httprouter
+      # logrus
+      # net
+      # prometheus.client_golang
+      # prometheus.log
+      # yaml-v2
     ];
+
+    docheck = true;
+
+    preBuild = ''
+      export GO15VENDOREXPERIMENT=1
+    '';
+
+    buildFlagsArray = let t = "github.com/${owner}/${repo}/version"; in ''
+      -ldflags=
+         -X ${t}.Version=${rev}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+    '';
 
     preInstall = ''
       mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
       cp -a $src/documentation/* $bin/share/doc/prometheus
       cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
-    '';
-
-    # Metadata that gets embedded into the binary
-    buildFlagsArray = let t = "${goPackagePath}/version"; in
-    ''
-      -ldflags=
-          -X ${t}.Version=${version}
-          -X ${t}.Revision=${builtins.substring 0 6 rev}
-          -X ${t}.Branch=master
-          -X ${t}.BuildUser=nix@nixpkgs
-          -X ${t}.BuildDate=20150101-00:00:00
-          -X ${t}.GoVersion=${stdenv.lib.getVersion go}
     '';
 
     meta = with stdenv.lib; {
