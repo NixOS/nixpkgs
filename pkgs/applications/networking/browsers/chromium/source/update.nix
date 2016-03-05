@@ -181,7 +181,8 @@ in rec {
     isLatest = channel: version: let
       ourVersion = sources.${channel}.version or null;
     in if ourVersion == null then false
-       else lib.versionAtLeast version sources.${channel}.version;
+       else lib.versionOlder version sources.${channel}.version
+         || version == sources.${channel}.version;
 
     # We only support GNU/Linux right now.
     linuxChannels = let
