@@ -14813,6 +14813,8 @@ let
 
   ut2004demo = callPackage ../games/ut2004demo { };
 
+  vapor = callPackage ../games/vapor { love = love_0_8; };
+
   vassal = callPackage ../games/vassal { };
 
   vdrift = callPackage ../games/vdrift { };
