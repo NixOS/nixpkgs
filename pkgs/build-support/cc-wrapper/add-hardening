@@ -15,7 +15,8 @@ if [[ ! $hardeningDisable == "all" ]]; then
           hardeningCFlags+=('-fstack-protector-strong')
           ;;
         pie)
-          hardeningCFlags+=('-fPIE' '-pie')
+          hardeningCFlags+=('-fPIE')
+          hardeningLDFlags+=('-pie')
           ;;
         pic)
           hardeningCFlags+=('-fPIC')
