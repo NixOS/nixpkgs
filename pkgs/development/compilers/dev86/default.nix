@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "33398b87ca85e2b69e4062cf59f2f7354af46da5edcba036c6f97bae17b8d00e";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   makeFlags = "PREFIX=$(out)";
 

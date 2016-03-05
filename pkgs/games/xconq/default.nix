@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-tkconfig=${tk}/lib"
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     # Fix Makefiles

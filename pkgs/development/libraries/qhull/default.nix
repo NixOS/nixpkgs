@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DMAN_INSTALL_DIR=share/man/man1 -DDOC_INSTALL_DIR=share/doc/qhull";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://www.qhull.org/;

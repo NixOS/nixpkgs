@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [flex];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = http://detox.sourceforge.net/;

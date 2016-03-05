@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [ ./s_isdir.patch ];
 
   # FIXME needs gcc 4.9 in bootstrap tools
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;

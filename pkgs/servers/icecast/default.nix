@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 libxslt curl libvorbis libtheora speex libkate libopus ];
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "Server software for streaming multimedia";

@@ -5,28 +5,36 @@
 }:
 
 let
-  rev = "f61ff9147e00f3c379ac0458e79eb556a5de1b68";
-  dfVersion = "0.42.05";
+  rev = "5e2fc5662115499c10bfcd8a6105a1efe4de081c";
+  xmlRev = "f371e293002f8f6d1e4704cc5869ca07ccf6c4d5";
+  dfVersion = "0.42.06";
 
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell}
     if [ "$*" = "describe --tags --long" ]; then
       echo "${dfVersion}-unknown"
     elif [ "$*" = "rev-parse HEAD" ]; then
-      echo "${rev}"
+      if [ "$(dirname "$(pwd)")" = "xml" ]; then
+        echo "${xmlRev}"
+      else
+        echo "${rev}"
+      fi
+    elif [ "$*" = "rev-parse HEAD:library/xml" ]; then
+      echo "${xmlRev}"
     else
       exit 1
     fi
   '';
 
-in stdenv.mkDerivation {
-  name = "dfhack-20160118";
+in stdenv.mkDerivation rec {
+  name = "dfhack-${version}";
+  version = "2016-03-03";
 
   # Beware of submodules
   src = fetchgit {
     url = "https://github.com/DFHack/dfhack";
     inherit rev;
-    sha256 = "1ah3cplp4mb9pq7rm1cmn8klfjxw3y2xfzy7734i81b3iwiwlpi4";
+    sha256 = "143zkx6hqpqxjhjd1bllg2kfia215x63zifkhgzycg49kw4wkxi5";
   };
 
   patches = [ ./use-system-libraries.patch ];

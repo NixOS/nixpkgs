@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl
   ];
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"

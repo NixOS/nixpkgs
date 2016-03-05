@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--enable-ansi"
   ];
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   meta = {
     description = "GNU Common Lisp compiler working via GCC";

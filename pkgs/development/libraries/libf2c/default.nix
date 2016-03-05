@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "F2c converts Fortran 77 source code to C";

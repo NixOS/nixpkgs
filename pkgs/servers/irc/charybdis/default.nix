@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-program-prefix=charybdis-"
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ bison flex openssl ];
 

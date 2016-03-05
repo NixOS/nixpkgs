@@ -21,8 +21,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl ];
 
-  hardening_format = false;
-  hardening_stackprotector = false;
+  hardeningDisable = [ "format" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
     "KLIBCARCH=${stdenv.platform.kernelArch}"

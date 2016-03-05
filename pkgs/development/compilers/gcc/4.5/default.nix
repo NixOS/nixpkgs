@@ -134,8 +134,7 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda;
   };
 
-  hardening_format = false;
-  hardening_all = name != "gnat";
+  hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
   patches =
     [ ]

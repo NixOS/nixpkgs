@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [cyrus_sasl libevent];
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   meta = with stdenv.lib; {
     description = "A distributed memory object caching system";

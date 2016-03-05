@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1gsdzzisrk95kajs3gfxks3bjvfd9g680fin6a9pjrism2lyrcr7";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [ ./cccc.patch ];
 

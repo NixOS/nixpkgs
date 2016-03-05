@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  preConfigure = ''
+    configureFlagsArray+=("--syslibdir=$out/lib")
+  '';
+
   configureFlags = [
     "--enable-shared"
     "--enable-static"

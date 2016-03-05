@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
 

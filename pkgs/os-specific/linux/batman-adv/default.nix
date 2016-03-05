@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0r5faf12ifpj8h1fklkzvy4ck359cadk8xh1l3n7vimh67hxbxbz";
   };
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preBuild = ''
     makeFlags="KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

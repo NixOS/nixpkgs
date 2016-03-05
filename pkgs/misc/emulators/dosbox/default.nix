@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   desktopItem = makeDesktopItem {
     name = "dosbox";

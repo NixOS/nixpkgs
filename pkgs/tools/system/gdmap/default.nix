@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./get_sensitive.patch ./set_flags.patch ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = http://gdmap.sourceforge.net;

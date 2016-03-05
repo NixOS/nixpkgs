@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     mimeType = "application/x-pharo-image";
   };
 
+  hardeningDisable = [ "format" ];
+
   # Building
   preConfigure = ''
     cd build/

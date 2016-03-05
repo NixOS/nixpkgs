@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1mj1pj99mgf1a59q9f2mxjli2fzxpnf55233pc1klxk2arhf8cv6";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";
 

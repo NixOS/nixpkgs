@@ -214,12 +214,12 @@ let
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
-  defaultStdenv = stdenvAdapters.useHardenFlags (allStdenvs.stdenv // { inherit platform; });
+  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
 
   stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
 
   stdenv =
-    if bootStdenv != null then ((import ../stdenv/adapters.nix pkgs_).useHardenFlags bootStdenv // {inherit platform;}) else
+    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
       if crossSystem != null then
         stdenvCross
       else
@@ -536,6 +536,8 @@ let
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   albert = qt5.callPackage ../applications/misc/albert {};
+
+  amtterm = callPackage ../tools/system/amtterm {};
 
   analog = callPackage ../tools/admin/analog {};
 
@@ -1147,6 +1149,8 @@ let
 
   connmanui = callPackage ../tools/networking/connmanui { };
 
+  connman_dmenu = callPackage ../tools/networking/connman_dmenu  { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   collectd = callPackage ../tools/system/collectd {
@@ -1267,17 +1271,12 @@ let
 
   cron = callPackage ../tools/system/cron { };
 
-  cudatoolkit5 = callPackage ../development/compilers/cudatoolkit/5.5.nix {
-    python = python26;
-  };
-
-  cudatoolkit6 = callPackage ../development/compilers/cudatoolkit/6.0.nix {
-    python = python26;
-  };
-
-  cudatoolkit65 = callPackage ../development/compilers/cudatoolkit/6.5.nix { };
-
-  cudatoolkit7 = callPackage ../development/compilers/cudatoolkit/7.0.nix { };
+  inherit (callPackages ../development/compilers/cudatoolkit { })
+    cudatoolkit5
+    cudatoolkit6
+    cudatoolkit65
+    cudatoolkit7
+    cudatoolkit75;
 
   cudatoolkit = cudatoolkit7;
 
@@ -2311,6 +2310,8 @@ let
 
   librdmacm = callPackage ../development/libraries/librdmacm { };
 
+  libreswan = callPackage ../tools/networking/libreswan { };
+
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
   limesurvey = callPackage ../servers/limesurvey { };
@@ -2459,7 +2460,7 @@ let
     inherit (perlPackages) IOTty;
   };
 
-  motuclient = python27Packages.motuclient;
+  motuclient = callPackage ../applications/science/misc/motu-client { };
 
   mpage = callPackage ../tools/text/mpage { };
 
@@ -3089,6 +3090,8 @@ let
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
   rescuetime = callPackage ../applications/misc/rescuetime { };
+
+  rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
   rdiff-backup = callPackage ../tools/backup/rdiff-backup { };
 
@@ -3730,6 +3733,8 @@ let
 
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
+  undmg = callPackage ../tools/archivers/undmg { };
+
   uptimed = callPackage ../tools/system/uptimed { };
 
   urjtag = callPackage ../tools/misc/urjtag {
@@ -4021,7 +4026,6 @@ let
   clang_36 = llvmPackages_36.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
-  clang_33 = wrapCC (clangUnwrapped llvm_33 ../development/compilers/llvm/3.3/clang.nix);
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
@@ -4502,7 +4506,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
-    llvm = llvm_33;
     openblas = openblasCompat;
   };
 
@@ -4526,7 +4529,6 @@ let
   llvm_36 = llvmPackages_36.llvm;
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
-  llvm_33 = callPackage ../development/compilers/llvm/3.3/llvm.nix { };
 
   llvmPackages = recurseIntoAttrs llvmPackages_37;
 
@@ -5038,10 +5040,6 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
-    why3 = callPackage ../development/ocaml-modules/why3 {
-      why3 = pkgs.why3;
-    };
-
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
@@ -5322,6 +5320,8 @@ let
 
   davmail = callPackage ../applications/networking/davmail {};
 
+  kanif = callPackage ../applications/networking/cluster/kanif { };
+
   lxappearance = callPackage ../applications/misc/lxappearance {};
 
   kona = callPackage ../development/interpreters/kona {};
@@ -5574,6 +5574,8 @@ let
 
   supercollider_scel = supercollider.override { useSCEL = true; };
 
+  taktuk = callPackage ../applications/networking/cluster/taktuk { };
+
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
@@ -5743,7 +5745,7 @@ let
   };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy sqlalchemy_migrate_0_7;
+    inherit (pythonPackages) twisted jinja2 sqlalchemy_migrate_0_7;
     dateutil = pythonPackages.dateutil_1_5;
   };
 
@@ -7070,6 +7072,8 @@ let
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
+  hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
+
   hwloc = callPackage ../development/libraries/hwloc {};
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
@@ -8221,7 +8225,9 @@ let
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = openalSoft;
-  openalSoft = callPackage ../development/libraries/openal-soft { };
+  openalSoft = callPackage ../development/libraries/openal-soft {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit AudioToolbox;
+  };
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
@@ -9209,6 +9215,8 @@ let
   };
 
   goPackages = go15Packages;
+
+  go2nix = goPackages.go2nix.bin // { outputs = [ "bin" ]; };
 
   ### DEVELOPMENT / LISP MODULES
 
@@ -10217,8 +10225,6 @@ let
 
   i7z = callPackage ../os-specific/linux/i7z { };
 
-  ifplugd = callPackage ../os-specific/linux/ifplugd { };
-
   ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
@@ -10921,6 +10927,7 @@ let
   usermount = callPackage ../os-specific/linux/usermount { };
 
   utillinux = callPackage ../os-specific/linux/util-linux { };
+  utillinuxCurses = utillinux;
 
   utillinuxMinimal = appendToName "minimal" (utillinux.override {
     ncurses = null;
@@ -11112,6 +11119,8 @@ let
   freepats = callPackage ../data/misc/freepats { };
 
   gentium = callPackage ../data/fonts/gentium {};
+
+  gentium-book-basic = callPackage ../data/fonts/gentium-book-basic {};
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
@@ -11664,10 +11673,10 @@ let
   cutecom = callPackage ../tools/misc/cutecom { };
 
   cutegram =
-    let cp = qt5.callPackage;
-    in cp ../applications/networking/instant-messengers/telegram/cutegram rec {
-      libqtelegram-aseman-edition = cp ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
-      telegram-qml = cp ../applications/networking/instant-messengers/telegram/telegram-qml {
+    let callpkg = qt55.callPackage;
+    in callpkg ../applications/networking/instant-messengers/telegram/cutegram rec {
+      libqtelegram-aseman-edition = callpkg ../applications/networking/instant-messengers/telegram/libqtelegram-aseman-edition { };
+      telegram-qml = callpkg ../applications/networking/instant-messengers/telegram/telegram-qml {
         inherit libqtelegram-aseman-edition;
       };
     };
@@ -12075,6 +12084,10 @@ let
 
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
+  font-manager = callPackage ../applications/misc/font-manager {
+    vala = vala_0_28;
+  };
+
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
   fossil = callPackage ../applications/version-management/fossil { };
@@ -12122,6 +12135,8 @@ let
   grip = callPackage ../applications/misc/grip {
     inherit (gnome) libgnome libgnomeui vte;
   };
+
+  gsimplecal = callPackage ../applications/misc/gsimplecal { };
 
   gtimelog = pythonPackages.gtimelog;
 
@@ -12492,6 +12507,8 @@ let
 
   i3minator = callPackage ../tools/misc/i3minator { };
 
+  i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
+
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
@@ -12772,6 +12789,8 @@ let
     inherit (gnome) vte;
     gtk = gtk2;
   };
+
+  lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
@@ -13482,13 +13501,17 @@ let
 
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
+  spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
+
   spideroak = callPackage ../applications/networking/spideroak { };
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
-  sonic-pi = callPackage ../applications/audio/sonic-pi { };
+  sonic-pi = callPackage ../applications/audio/sonic-pi {
+    ruby = ruby_2_2;
+  };
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
@@ -13675,6 +13698,8 @@ let
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
+  tasksh = callPackage ../applications/misc/tasksh { };
+
   taskserver = callPackage ../servers/misc/taskserver { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli/default.nix { };
@@ -13819,7 +13844,7 @@ let
 
   vcprompt = callPackage ../applications/version-management/vcprompt { };
 
-  vdirsyncer = callPackage ../tools/misc/vdirsyncer { };
+  vdirsyncer = callPackage ../tools/misc/vdirsyncer { pythonPackages = python3Packages; };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
@@ -14018,6 +14043,7 @@ let
       ++ optional (cfg.enableFceumm or false) fceumm
       ++ optional (cfg.enableGambatte or false) gambatte
       ++ optional (cfg.enableGenesisPlusGX or false) genesis-plus-gx
+      ++ optional (cfg.enableMAME or false) mame
       ++ optional (cfg.enableMednafenPCEFast or false) mednafen-pce-fast
       ++ optional (cfg.enableMupen64Plus or false) mupen64plus
       ++ optional (cfg.enableNestopia or false) nestopia
@@ -14588,6 +14614,8 @@ let
 
   openxcom = callPackage ../games/openxcom { };
 
+  orthorobot = callPackage ../games/orthorobot { love = love_0_7; };
+
   performous = callPackage ../games/performous { };
 
   pingus = callPackage ../games/pingus {};
@@ -14756,6 +14784,8 @@ let
   ue4demos = recurseIntoAttrs (callPackage ../games/ue4demos { });
 
   ut2004demo = callPackage ../games/ut2004demo { };
+
+  vapor = callPackage ../games/vapor { love = love_0_8; };
 
   vassal = callPackage ../games/vassal { };
 
@@ -15163,23 +15193,33 @@ let
 
   kde5 =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
-      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
-      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      frameworks = import ../desktops/kde-5/frameworks-5.19 { inherit pkgs; };
+      plasma = import ../desktops/kde-5/plasma-5.5 { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications-15.12 { inherit pkgs; };
       merged = self:
-        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
+        { plasma = plasma self;
+          frameworks = frameworks self;
+          applications = applications self; }
+        // frameworks self
+        // plasma self
+        // applications self
+        // kde5PackagesFun self;
     in
       recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
   kde5_latest =
     let
-      frameworks = import ../development/libraries/kde-frameworks-5.19 { inherit pkgs; };
-      plasma = import ../desktops/plasma-5.5 { inherit pkgs; };
-      apps = import ../applications/kde-apps-15.12 { inherit pkgs; };
-      named = self: { plasma = plasma self; frameworks = frameworks self; apps = apps self; };
+      frameworks = import ../desktops/kde-5/frameworks-5.19 { inherit pkgs; };
+      plasma = import ../desktops/kde-5/plasma-5.5 { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications-15.12 { inherit pkgs; };
       merged = self:
-        named self // frameworks self // plasma self // apps self // kde5PackagesFun self;
+        { plasma = plasma self;
+          frameworks = frameworks self;
+          applications = applications self; }
+        // frameworks self
+        // plasma self
+        // applications self
+        // kde5PackagesFun self;
     in
       recurseIntoAttrs (lib.makeScope qt55.newScope merged);
 
@@ -15294,12 +15334,28 @@ let
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
+    mpiEnabled = false;
     fftw = fftwSinglePrec;
     cmake = cmakeCurses;
   };
 
+  gromacsMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = true;
+    mpiEnabled = true;
+    fftw = fftwSinglePrec;
+    cmake = cmakeCurses;
+  });
+
   gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = false;
+    mpiEnabled = false;
+    fftw = fftw;
+    cmake = cmakeCurses;
+  });
+
+  gromacsDoubleMpi = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = false;
+    mpiEnabled = true;
     fftw = fftw;
     cmake = cmakeCurses;
   });
@@ -15617,7 +15673,7 @@ let
 
   spyder = pythonPackages.spyder;
 
-  stellarium = callPackage ../applications/science/astronomy/stellarium { };
+  stellarium = qt5.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = callPackage ../applications/science/misc/tulip {
     cmake = cmake-2_8;

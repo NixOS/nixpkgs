@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
   '';
 
   # FIXME needs gcc 4.9 in bootstrap tools
-    hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)

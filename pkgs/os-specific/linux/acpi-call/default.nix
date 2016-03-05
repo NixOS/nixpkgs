@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0jl19irz9x9pxab2qp4z8c3jijv2m30zhmnzi6ygbrisqqlg4c75";
   };
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preBuild = ''
     sed -e 's/break/true/' -i examples/turn_off_gpu.sh

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk pkgconfig intltool ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = http://pio.sourceforge.net/;

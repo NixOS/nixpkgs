@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preConfigure = ''
     substituteInPlace ./module/zfs/zfs_ctldir.c   --replace "umount -t zfs"           "${utillinux}/bin/umount -t zfs"

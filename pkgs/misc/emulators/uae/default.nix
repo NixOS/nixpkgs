@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk alsaLib SDL ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Ultimate/Unix/Unusable Amiga Emulator";

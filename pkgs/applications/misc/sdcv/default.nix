@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1cnyv7gd1qvz8ma8545d3aq726wxrx4km7ykl97831irx5wz0r51";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = ( if stdenv.isDarwin
               then [ ./sdcv.cpp.patch-darwin ./utils.hpp.patch ]

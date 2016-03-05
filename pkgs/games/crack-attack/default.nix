@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig gtk freeglut SDL mesa libXi libXmu ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A fast-paced puzzle game inspired by the classic Super NES title Tetris Attack!";

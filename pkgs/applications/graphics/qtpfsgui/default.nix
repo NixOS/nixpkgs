@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configurePhase = ''
     export CPATH="${ilmbase}/include/OpenEXR:$CPATH"

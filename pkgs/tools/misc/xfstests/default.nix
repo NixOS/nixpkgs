@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     # Patch the destination directory

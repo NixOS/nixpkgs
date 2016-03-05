@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ which pkgconfig SDL gtk mesa SDL_ttf ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     # Some C++ incompatibility fixes

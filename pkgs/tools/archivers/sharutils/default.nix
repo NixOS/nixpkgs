@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mallg1gprimlggdisfzdmh1xi676jsfdlfyvanlcw72ny8fsj3g";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
      # Fix for building on Glibc 2.16.  Won't be needed once the

@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
                     openjpeg freetype jbig2dec djvulibre openssl ];
   NIX_LDFLAGS = "-lX11 -lXext";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   k2_pa = ./k2pdfopt.patch;
   tess_pa = ./tesseract.patch;

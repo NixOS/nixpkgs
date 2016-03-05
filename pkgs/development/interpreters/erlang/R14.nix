@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-ssl=${openssl}";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postInstall = let
     manpages = fetchurl {

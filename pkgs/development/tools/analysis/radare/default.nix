@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qdrmcnzfvfvqb27c7pknwm8jl2hqa6c4l66wzyddwlb8yjm46hd";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [pkgconfig readline libusb perl]
     ++ optional useX11 [gtkdialog vte gtk]

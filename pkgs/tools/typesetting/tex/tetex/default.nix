@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ flex bison zlib libpng ncurses ed ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   # fixes "error: conflicting types for 'calloc'", etc.
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip cmake /*jdk*/ alsaLib ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = "http://portmedia.sourceforge.net/portmidi/";

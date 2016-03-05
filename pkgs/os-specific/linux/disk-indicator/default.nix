@@ -19,7 +19,8 @@ stdenv.mkDerivation {
   buildPhase = "make -f makefile";
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
-  hardening_fortify = false;
+
+  hardeningDisable = [ "fortify" ];
 
   installPhase = ''
     mkdir -p "$out/bin"

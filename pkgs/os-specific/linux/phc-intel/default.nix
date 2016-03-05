@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   makeFlags = with kernel; [
     "DESTDIR=$(out)"

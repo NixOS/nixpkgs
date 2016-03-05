@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE="-O0";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   # TODO : make mod-check fails
   doCheck = false;

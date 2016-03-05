@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libpcap perl];
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   installPhase = ''
     mkdir -pv $out/bin

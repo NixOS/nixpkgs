@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig qt4 ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configurePhase = ''
     qmake PREFIX="$out"

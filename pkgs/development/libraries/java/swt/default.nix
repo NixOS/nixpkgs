@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   # Alas, the Eclipse Project apparently doesn't produce source-only
   # releases of SWT.  So we just grab a binary release and extract

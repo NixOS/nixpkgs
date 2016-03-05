@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rs3li2hyig6cdzvgqlbz0vw6x7rmgr59qd6m0cvrai8xhqqykda";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     homepage = https://packages.debian.org/source/xbindkeys-config;

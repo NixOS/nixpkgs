@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit gsettings_desktop_schemas ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   installFlags = "PREFIX=/ DESTDIR=$(out)";
 

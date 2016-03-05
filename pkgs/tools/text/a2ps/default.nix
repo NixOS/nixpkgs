@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpaper gperf file ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "An Anyithing to PostScript converter and pretty-printer";

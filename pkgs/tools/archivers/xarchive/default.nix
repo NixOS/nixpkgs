@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk2 pkgconfig ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A GTK+ front-end for command line archiving tools";

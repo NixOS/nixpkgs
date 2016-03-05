@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     description = "omniORB is a robust high performance CORBA ORB for C++ and Python. It is freely available under the terms of the GNU Lesser General Public License (for the libraries), and GNU General Public License (for the tools). omniORB is largely CORBA 2.6 compliant";

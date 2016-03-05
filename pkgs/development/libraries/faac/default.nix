@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ++ optional mp4v2Support "--with-mp4v2"
     ++ optional drmSupport "--enable-drm";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ ]
     ++ optional mp4v2Support mp4v2;

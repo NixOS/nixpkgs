@@ -22,8 +22,7 @@ in
 
     builder = ./builder.sh;
 
-    hardening_stackprotector = false;
-    hardening_fortify = false;
+    hardeningDisable = [ "stackprotector" "fortify" ];
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new

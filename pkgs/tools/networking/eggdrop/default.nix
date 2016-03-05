@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tcl ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     prefix=$out/eggdrop

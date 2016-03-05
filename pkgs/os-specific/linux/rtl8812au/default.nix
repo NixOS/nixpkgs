@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "14ifhplawipfd6971mxw76dv3ygwc0n8sbz2l3f0vvkin6x88bsj";
   };
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   patchPhase = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"

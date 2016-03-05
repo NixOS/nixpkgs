@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       ddccontrol-db
     ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   prePatch = ''
       newPath=$(echo "${ddccontrol-db}/share/ddccontrol-db" | sed "s/\\//\\\\\\//g")

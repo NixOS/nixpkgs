@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
   propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
 
-  hardening_all = false;
+  hardeningDisable = [ "all" ];
 
   # I'm not sure what go wants from its 'src', but the go installation manual
   # describes an installation keeping the src.

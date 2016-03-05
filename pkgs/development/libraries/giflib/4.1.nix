@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1v9b7ywz7qg8hli0s9vv1b8q9xxb2xvqq2mg1zpr73xwqpcwxhg1";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     branch = "4.1";

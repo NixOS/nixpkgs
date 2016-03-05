@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-video" ];
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   meta = with stdenv.lib; {
     description = "Bar code reader";

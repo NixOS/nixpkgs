@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     libXext libXpm libXau libXxf86vm pixman libpthreadstubs fltk
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [ ./install.patch ];
 

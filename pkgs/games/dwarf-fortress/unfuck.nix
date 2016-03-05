@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, cmake
+{ stdenv, fetchFromGitHub, cmake
 , mesa, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile
 }:
 
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-20160118";
+  name = "dwarf_fortress_unfuck-2016-02-11";
 
-  src = fetchgit {
-    url = "https://github.com/svenstaro/dwarf_fortress_unfuck";
-    rev = "9a796c6d3cd7d41784e9d1d22a837a1ee0ff8553";
-    sha256 = "0ibxdn684zpk3v2gigardq6z9mydc2s9hns8hlxjyyyhnk1ar61g";
+  src = fetchFromGitHub {
+    owner = "svenstaro";
+    repo = "dwarf_fortress_unfuck";
+    rev = "2ba59c87bb63bea598825a73bdc896b0e041e2d5";
+    sha256 = "0q2rhigvaabdknmb2c84gg71qz7xncmx04npzx4bki9avyxsrpcl";
   };
 
   cmakeFlags = [
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.dfVersion = "0.42.05";
+  passthru.dfVersion = "0.42.06";
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";

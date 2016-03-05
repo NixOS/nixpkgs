@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     cp -av plugins/script/* $out/lib/qt4/plugins/script
   '';
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "QtScript bindings generator";

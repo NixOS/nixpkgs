@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   configurePhase = "make config PREFIX=$out";
 
   makeFlags = "PREFIX=$(out)";
-  hardening_stackprotector = false;
+
+  hardeningDisable = [ "stackprotector" ];
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d

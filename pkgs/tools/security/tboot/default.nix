@@ -12,8 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./tboot-add-well-known-secret-option-to-lcp_writepol.patch ];
 
-  hardening_pic = false;
-  hardening_stackprotector = false;
+  hardeningDisable = [ "pic" "stackprotector" ];
 
   configurePhase = ''
     for a in lcptools utils tb_polgen; do

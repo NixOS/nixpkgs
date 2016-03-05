@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./include-unistd.diff ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildPhase = ''
     mkdir -p "$out/include"

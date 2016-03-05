@@ -18,7 +18,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
   ++ (with pythonPackages; [ python numpy wrapPython ])
   ++ (stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ]);
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,

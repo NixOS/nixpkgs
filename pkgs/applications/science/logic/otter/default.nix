@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildPhase = ''
     find . -name Makefile | xargs sed -i -e "s@/bin/rm@$(type -P rm)@g"

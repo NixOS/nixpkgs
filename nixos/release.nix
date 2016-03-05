@@ -31,7 +31,7 @@ let
   # If the test is only for a particular system, use only the specified
   # system instead of generating attributes for all available systems.
   in if args ? system then discover (import fn args)
-     else foldAttrs (a: b: a // b) {} (map discoverForSystem supportedSystems);
+     else foldAttrs mergeAttrs {} (map discoverForSystem supportedSystems);
 
   pkgs = import nixpkgs { system = "x86_64-linux"; };
 

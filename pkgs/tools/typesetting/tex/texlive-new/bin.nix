@@ -64,7 +64,7 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
@@ -123,7 +123,7 @@ core-big = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
 

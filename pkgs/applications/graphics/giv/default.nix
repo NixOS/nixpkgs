@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1q0806b66ajppxbv1i71wx5d3ydc1h3hsz23m6g4g80dhiai7dly";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   prePatch = ''
     sed -i s,/usr/bin/perl,${perl}/bin/perl, doc/eperl

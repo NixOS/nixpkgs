@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [qt libXext libX11];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   configurePhase = "qmake PREFIX=$out";
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 

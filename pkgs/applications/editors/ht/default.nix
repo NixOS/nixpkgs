@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "File editor/viewer/analyzer for executables";

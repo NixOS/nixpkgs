@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ iasl flex bison ];
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   buildPhase = ''
     export LEX=${flex}/bin/flex

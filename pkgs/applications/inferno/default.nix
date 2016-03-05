@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       --set INFERNO_ROOT "$out/share/inferno"
   '';
 
-  hardening_fortify = false;
+  hardeningDisable = [ "fortify" ];
 
   meta = {
     description = "A compact distributed operating system for building cross-platform distributed systems";

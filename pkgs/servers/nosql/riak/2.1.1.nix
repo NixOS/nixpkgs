@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.riak;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postPatch = ''
     sed -i deps/node_package/priv/base/env.sh \

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "10sbbkx2752r4i1yshyp47nw29lyi1p34sy6hj7ivvnddiliayca";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     grep -r '/usr/share/boost-build' \

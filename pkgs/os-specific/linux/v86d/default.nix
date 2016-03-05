@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-klibc" "--with-x86emu" ];
 
-  hardening_stackprotector = false;
+  hardeningDisable = [ "stackprotector" ];
 
   makeFlags = [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"

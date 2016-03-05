@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-tcl=${tcl}/lib"
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   NIX_LDFLAGS = "-L${libsepol}/lib -L${libselinux}/lib";

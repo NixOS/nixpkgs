@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ imake makeWrapper ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE = "-I${libXpm}/include/X11";
 

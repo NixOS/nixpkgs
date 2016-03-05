@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nr6c81x55ihs7ly2dwq19v9i1n6wiyad1gacw3aikii0kzlwsv3";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = with stdenv.lib; {
     homepage = "http://sourceforge.net/projects/iperf/"; 

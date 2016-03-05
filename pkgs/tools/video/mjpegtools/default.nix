@@ -15,5 +15,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk libdv libjpeg libpng libX11 pkgconfig SDL SDL_gfx ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ unzip libogg libvorbis ];
 

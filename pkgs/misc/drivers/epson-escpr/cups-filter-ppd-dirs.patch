@@ -1,5 +1,5 @@
 diff --git a/configure b/configure_new
-index c3e7199..ccbf290 100755
+index 3d6f68c..c2b10ff 100755
 --- a/configure
 +++ b/configure_new
 @@ -11585,55 +11585,8 @@ else

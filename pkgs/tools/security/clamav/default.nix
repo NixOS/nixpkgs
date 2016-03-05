@@ -1,5 +1,6 @@
 { stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
-, libmilter, pcre }:
+, libmilter, pcre, freshclamConf ? null }:
+
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
   version = "0.99";
@@ -23,6 +24,8 @@ stdenv.mkDerivation rec {
     "--enable-milter"
     "--disable-clamav"
   ];
+
+  fixupPhase = if (freshclamConf != null) then ''echo "${freshclamConf}" > $out/etc/freshclam.conf'' else "";
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;

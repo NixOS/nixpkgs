@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = ["target=linux"];
   installFlags = ["installdir=$(out)"];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [openssl];
 

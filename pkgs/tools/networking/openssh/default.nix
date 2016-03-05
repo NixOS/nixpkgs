@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardening_pie = true;
+  hardeningEnable = [ "pie" ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.

@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [ openssl ppp autoreconfHook ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     substituteInPlace src/tunnel.c --replace "/usr/sbin/pppd" "${ppp}/bin/pppd"

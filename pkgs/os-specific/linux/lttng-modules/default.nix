@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sk7cyjf5ylmxqrrrz5zmmw4c0dmxh1f98aj870gmcnxfa76y4mx";
   };
 
-  hardening_pic = false;
+  hardeningDisable = [ "pic" ];
 
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

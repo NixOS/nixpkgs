@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   buildInputs = [pkgconfig gtk libpng];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "A fast image viewer";

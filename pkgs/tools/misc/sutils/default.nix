@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
      sha256 = "0xqk42vl82chy458d64fj68a4md4bxaip8n3xw9skxz0a1sgvks8";
    };
 
-   hardening_format = false;
+   hardeningDisable = [ "format" ];
 
    prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

@@ -7,6 +7,6 @@ stdenv.mkDerivation {
     md5 = "efdfcf8e32e35740288a8c5625a70ccb";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 }
 

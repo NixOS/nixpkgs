@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./Makefile.patch ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Bitmap Font Editor";

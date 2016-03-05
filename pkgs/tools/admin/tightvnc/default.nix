@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   inherit xauth fontDirectories perl;
   gcc = stdenv.cc.cc;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ xlibsWrapper zlib libjpeg imake gccmakedep libXmu libXaw
                   libXpm libXp xauth openssh ];

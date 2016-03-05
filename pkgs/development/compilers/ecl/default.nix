@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       "--enable-unicode")
     ;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postInstall = ''
     sed -e 's/@[-a-zA-Z_]*@//g' -i $out/bin/ecl-config

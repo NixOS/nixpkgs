@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     branch = "1.6";

@@ -8,7 +8,7 @@ kde {
 
   nativeBuildInputs = [ cmake ];
 
-  hardening_all = false;
+  hardeningDisable = [ "all" ];
 
   # The patch is not ready for upstream submmission.
   # I should add an option() instead.

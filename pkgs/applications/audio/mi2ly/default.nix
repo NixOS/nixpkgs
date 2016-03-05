@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   sourceRoot=".";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   buildPhase = "./cc";
   installPhase = ''

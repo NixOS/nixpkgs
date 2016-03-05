@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     "--enable-gi-system-install=no"
   ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 

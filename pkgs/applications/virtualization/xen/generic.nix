@@ -75,9 +75,7 @@ stdenv.mkDerivation {
 
   pythonPath = [ pythonPackages.curses ];
 
-  hardening_stackprotector = false;
-  hardening_fortify = false;
-  hardening_pic = false;
+  hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
   patches = stdenv.lib.optionals ((xenserverPatched == false) && (builtins.hasAttr "xenPatches" xenConfig)) xenConfig.xenPatches;
 

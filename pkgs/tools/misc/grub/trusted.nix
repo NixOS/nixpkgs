@@ -47,8 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu;
 
-  hardening_stackprotector = false;
-  hardening_pic = false;
+  hardeningDisable = [ "stackprotector" "pic" ];
 
   preConfigure =
     '' for i in "tests/util/"*.in

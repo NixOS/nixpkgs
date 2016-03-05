@@ -216,7 +216,7 @@ stdenv.mkDerivation ({
     sha256 = "1ny4smkp5bzs3cp8ss7pl6lk8yss0d9m4av1mvdp72r1x695akxq";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   inherit patches;
 

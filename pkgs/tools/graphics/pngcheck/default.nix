@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0pzkj1bb4kdybk6vbfq9s0wzdm5szmrgixkas3xmbpv4mhws1w3p";
   };
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   makefile = "Makefile.unx";
   makeFlags = "ZPATH=${zlib}/lib";

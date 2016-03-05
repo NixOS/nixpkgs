@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcl ];
   nativeBuildInputs = [ makeWrapper ];
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   patchPhase = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure

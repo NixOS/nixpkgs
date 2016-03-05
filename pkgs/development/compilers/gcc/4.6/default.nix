@@ -189,7 +189,7 @@ stdenv.mkDerivation ({
 
   inherit patches enableMultilib;
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   postPatch =
     if (stdenv.isGNU

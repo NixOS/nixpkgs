@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
-  hardening_format = false;
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";

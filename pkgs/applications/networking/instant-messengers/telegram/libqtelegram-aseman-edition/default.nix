@@ -2,14 +2,13 @@
 , qtbase, qtmultimedia, qtquick1 }:
 
 stdenv.mkDerivation rec {
-  name = "libqtelegram-aseman-edition-${version}";
-  version = "6.0";
+  name = "libqtelegram-aseman-edition-${meta.version}";
 
   src = fetchFromGitHub {
     owner = "Aseman-Land";
     repo = "libqtelegram-aseman-edition";
-    rev = "v${version}";
-    sha256 = "17hlxf43xwic8m06q3gwbxjpvz31ks6laffjw6ny98d45zfnfwra";
+    rev = "v${meta.version}-stable";
+    sha256 = "1pfd4pvh51639zk9shv1s4f6pf0ympnhar8a302vhrkga9i4cbx6";
   };
 
   buildInputs = [ qtbase qtmultimedia qtquick1 ];
@@ -25,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "6.1";
     description = "A fork of libqtelegram by Aseman, using qmake";
     homepage = src.meta.homepage;
     license = stdenv.lib.licenses.gpl3;
