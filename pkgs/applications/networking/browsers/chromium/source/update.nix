@@ -46,7 +46,7 @@ in rec {
     in if stdenv.is64bit && chanAttrs ? sha256bin64 then {
       urls = mkUrls "amd64";
       sha256 = chanAttrs.sha256bin64;
-    } else if stdenv.is32bit && chanAttrs ? sha256bin32 then {
+    } else if !stdenv.is64bit && chanAttrs ? sha256bin32 then {
       urls = mkUrls "i386";
       sha256 = chanAttrs.sha256bin32;
     } else throw "No Chrome plugins are available for your architecture.";
