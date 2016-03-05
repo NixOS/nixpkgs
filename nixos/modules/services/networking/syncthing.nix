@@ -33,6 +33,17 @@ in
         '';
       };
 
+      all_proxy = mkOption {
+        type = types.string;
+        default = "";
+        example = "socks5://address.com:1234";
+        description = ''
+          Overwrites all_proxy environment variable for the syncthing process to
+          the given value. This is normaly used to let relay client connect
+          through SOCKS5 proxy server.
+        '';
+      };
+
       dataDir = mkOption {
         default = "/var/lib/syncthing";
         description = ''
@@ -51,7 +62,6 @@ in
       };
 
 
-
     };
 
   };
@@ -66,8 +76,13 @@ in
         description = "Syncthing service";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        environment.STNORESTART = "yes";  # do not self-restart
-        environment.STNOUPGRADE = "yes";
+        environment = {
+          STNORESTART = "yes";  # do not self-restart
+          STNOUPGRADE = "yes";
+        } //
+        (config.networking.proxy.envVars) //
+        (if cfg.all_proxy != "" then { all_proxy = cfg.all_proxy; } else {});
+
         serviceConfig = {
           User = "${cfg.user}";
           PermissionsStartOnly = true;

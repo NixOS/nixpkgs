@@ -235,7 +235,7 @@ in modules // {
       sha256 = "1ywimbisgb5g7xl9nrfwcm7dv3j8fsrjfp7bxb3l58zbsrzj6z2s";
     };
 
-    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy ];
+    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy7 ];
 
     makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${pkgs.fuse}/lib/libfuse.so" ];
 
@@ -252,6 +252,29 @@ in modules // {
     inherit (pkgs.letsencrypt) src version;
 
     name = "acme-${version}";
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-v${version}-src/acme";
+  };
+
+  # Maintained for simp_le compatibility
+  acme_0_1 = buildPythonPackage rec {
+    version = "0.1.0";
+
+    name = "acme-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "letsencrypt";
+      repo = "letsencrypt";
+      rev = "v${version}";
+      sha256 = "1f7406nnybsdbwxf7r9qjf6hzkfd7cg6qp8l9l7hrzwscsq5hicj";
+    };
 
     propagatedBuildInputs = with self; [
       cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
@@ -457,7 +480,7 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest pytestcov mock coverage ];
-    propagatedBuildInputs = with self; [ Mako sqlalchemy_1_0 python-editor ];
+    propagatedBuildInputs = with self; [ Mako sqlalchemy python-editor ];
 
     meta = {
       homepage = http://bitbucket.org/zzzeek/alembic;
@@ -950,12 +973,12 @@ in modules // {
   };
 
   atomicwrites = buildPythonPackage rec {
-    version = "0.1.0";
+    version = "0.1.9";
     name = "atomicwrites-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/atomicwrites/atomicwrites-${version}.tar.gz";
-      sha256 = "1lxz0xhnzihqlvl1h6j2nfxjqqgr4s08196z5phnlcz2s7d5z0mg";
+      sha256 = "08s05h211r07vs66r4din3swrbzb344vli041fihpg34q3lcxpvw";
     };
 
     meta = {
@@ -1605,7 +1628,7 @@ in modules // {
     };
 
     buildInputs =
-      [ self.sqlalchemy
+      [ self.sqlalchemy7
         self.pycryptopp
         self.nose
         self.mock
@@ -2131,7 +2154,7 @@ in modules // {
       pymongo
       pyyaml
       requests2
-      sqlalchemy_1_0
+      sqlalchemy
       tables
       toolz
     ];
@@ -3035,12 +3058,12 @@ in modules // {
   };
 
   click-log = buildPythonPackage rec {
-    version = "0.1.1";
+    version = "0.1.3";
     name = "click-log-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click-log/${name}.tar.gz";
-      sha256 = "1z3jdwjmwax159zrnyx830xa968rfqrpkm04ad5xqyh0269ydiqb";
+      sha256 = "0kdd1vminxpcfczxl2kkf285n0dr1gxh2cdbx1p6vkj7b7bci3gx";
     };
 
     propagatedBuildInputs = with self; [ click ];
@@ -3218,7 +3241,7 @@ in modules // {
       sed -i '/distribute/d' setup.py
     '';
 
-    buildInputs = with self; [ self.coverage self.sqlalchemy ];
+    buildInputs = with self; [ self.coverage self.sqlalchemy7 ];
 
     # ValueError: Could not parse auth file:
     # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
@@ -4682,7 +4705,7 @@ in modules // {
 
       mkdir -p $out/bin
       mkdir -p $out/lib/${python.libPrefix}/site-packages
-      cp -r server/* $out/lib/${python.libPrefix}/site-packages
+      cp -r "server/"* $out/lib/${python.libPrefix}/site-packages
       mv $out/lib/${python.libPrefix}/site-packages/deskcon-server $out/bin/deskcon-server
 
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -5028,6 +5051,27 @@ in modules // {
       homepage = https://www.dropbox.com/developers/core/docs;
       license = licenses.mit;
     };
+  };
+
+
+  ds4drv = buildPythonPackage rec {
+    name = "ds4drv-${version}";
+    version = "0.5.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/ds4drv/${name}.tar.gz";
+      sha256 = "0dq2z1z09zxa6rn3v94vwqaaz29jwiydkss8hbjglixf20krmw3b";
+    };
+
+    propagatedBuildInputs = with self; [ evdev pyudev ];
+
+    buildInputs = [ pkgs.bluez ];
+
+    meta = {
+      description = "Userspace driver for the DualShock 4 controller";
+      homepage = "https://github.com/chrippa/ds4drv";
+      license = licenses.mit;
+    };
+
   };
 
   dyn = buildPythonPackage rec {
@@ -5491,7 +5535,7 @@ in modules // {
 
     };
     postInstall=''
-    cp -R $out/gateone/* $out/lib/python2.7/site-packages/gateone
+    cp -R "$out/gateone/"* $out/lib/python2.7/site-packages/gateone
     '';
   };
 
@@ -5999,41 +6043,6 @@ in modules // {
       description = "tools for i3 users and developers";
       homepage =  "https://github.com/ziberna/i3-py";
       license = licenses.gpl3;
-      platforms = platforms.linux;
-    };
-  };
-
-  i3pystatus = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    version = "3.33";
-    pname = "i3pystatus";
-    namePrefix = "";
-    disabled = !isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/i/${pname}/${name}.tar.gz";
-      sha256 = "1fs2nlzm9in8bwg8cm3567ayiha0v7k8pn793pm5fb7lywaalasy";
-    };
-
-    propagatedBuildInputs = with self; [ keyring colour netifaces praw psutil
-      basiciw pkgs.libpulseaudio ];
-    ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${pkgs.libpulseaudio}/lib\"";
-    makeWrapperArgs = [ ldWrapperSuffix ]; # libpulseaudio.so is loaded manually
-
-    postInstall = ''
-      makeWrapper ${python.interpreter} $out/bin/${pname}-python-interpreter \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        ${ldWrapperSuffix}
-    '';
-
-    meta = {
-      homepage = https://github.com/enkore/i3pystatus;
-      description = "A complete replacement for i3status";
-      longDescription = ''
-        i3pystatus is a growing collection of python scripts for status output compatible
-        to i3status / i3bar of the i3 window manager.
-      '';
-      license = licenses.mit;
       platforms = platforms.linux;
     };
   };
@@ -7092,7 +7101,7 @@ in modules // {
     propagatedBuildInputs = with self; [
       flup
       ldap
-      sqlalchemy
+      sqlalchemy7
     ];
 
     doCheck = true;
@@ -7838,12 +7847,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.2";
+    version = "1.9.3";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "0bwapyjdl1w62cdv3kx27kj1s5zj93fyby8mhgysapdkxqi368vs";
+      sha256 = "0miv4jb2p4xpcdif0zqimmqw1jypzyq6q5v4m79jc9yyhwj1l685";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -7862,12 +7871,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.9";
+    version = "1.8.10";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1qyjpdpsj1n5lx10vak9bwl554br01wbn0kjhy7646i00y2js0gw";
+      sha256 = "08qsgnqq97rg4v80kmbkccr9hm90nw4zh6c46xblk64lnqgb3rfj";
     };
 
     # too complicated to setup
@@ -8899,7 +8908,7 @@ in modules // {
       sha256 = "1i9ps5d5snih9xlqhrvmi3qfiygkmqzxh92n25kj4pf89kj4s965";
     };
 
-    propagatedBuildInputs = with self ; [ flask sqlalchemy_1_0 ];
+    propagatedBuildInputs = with self ; [ flask sqlalchemy ];
 
     meta = {
       description = "SQLAlchemy extension for Flask";
@@ -13711,7 +13720,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      six stevedore sqlalchemy_migrate sqlalchemy_1_0 oslo-utils oslo-context
+      six stevedore sqlalchemy_migrate sqlalchemy oslo-utils oslo-context
       oslo-config oslo-i18n iso8601 Babel alembic pbr psycopg2
     ];
     buildInputs = with self; [
@@ -13856,7 +13865,7 @@ in modules // {
       singledispatch logutils
     ];
     buildInputs = with self; [
-      webtest Mako genshi Kajiki sqlalchemy_1_0 gunicorn jinja2 virtualenv
+      webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
     ];
 
     meta = with stdenv.lib; {
@@ -14579,7 +14588,7 @@ in modules // {
       pytz
       xlrd
       bottleneck
-      sqlalchemy_1_0
+      sqlalchemy
       lxml
       # Disabling this because an upstream dependency, pep8, is broken on v3.5.
       (if isPy35 then null else html5lib)
@@ -20156,7 +20165,7 @@ in modules // {
     rope = if isPy3k then null else self.rope;
   };
 
-  sqlalchemy = self.sqlalchemy9.override rec {
+  sqlalchemy7 = buildPythonPackage rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
@@ -20165,17 +20174,32 @@ in modules // {
       url = "http://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "0rhxgr85xdhjn467qfs0dkyj8x46zxcv6ad3dfx3w14xbkb3kakp";
     };
+
     patches = [
       # see https://groups.google.com/forum/#!searchin/sqlalchemy/module$20logging$20handlers/sqlalchemy/ukuGhmQ2p6g/2_dOpBEYdDYJ
       # waiting for 0.7.11 release
       ../development/python-modules/sqlalchemy-0.7.10-test-failures.patch
     ];
+
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
   };
 
-  sqlalchemy8 = self.sqlalchemy9.override rec {
+  sqlalchemy8 = buildPythonPackage rec {
     name = "SQLAlchemy-0.8.7";
     disabled = isPy34 || isPy35;
     doCheck = !isPyPy;
@@ -20184,9 +20208,23 @@ in modules // {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       md5 = "4f3377306309e46739696721b1785335";
     };
+
     preConfigure = optionalString isPy3k ''
       python3 sa2to3.py --no-diffs -w lib test examples
     '';
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
   };
 
   sqlalchemy9 = buildPythonPackage rec {
@@ -20215,13 +20253,31 @@ in modules // {
     };
   };
 
-  sqlalchemy_1_0 = self.sqlalchemy9.override rec {
-    name = "SQLAlchemy-1.0.10";
-    doCheck = !isPyPy;  # lots of tests fail
+  sqlalchemy = buildPythonPackage rec {
+    name = "SQLAlchemy-${version}";
+    version = "1.0.10";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
       sha256 = "963415bf4ea4fa13698893464bc6917d291331e0e8202dddd0ebfed2864ef7e3";
+    };
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
+    # acceptable reason to make all dependents unavailable on Python 3 as well
+    doCheck = !(isPyPy || isPy3k);
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+      license = licenses.mit;
     };
   };
 
@@ -20285,8 +20341,8 @@ in modules // {
     };
   };
 
-  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy_1_0;
-  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate = self.sqlalchemy_migrate_func self.sqlalchemy;
+  sqlalchemy_migrate_0_7 = self.sqlalchemy_migrate_func self.sqlalchemy7;
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
@@ -24851,7 +24907,7 @@ in modules // {
         thrift
         beautifulsoup4
         markdown2
-        sqlalchemy
+        sqlalchemy7
         html2text
         evernote
     ];

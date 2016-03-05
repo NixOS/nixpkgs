@@ -21,6 +21,9 @@ let
 
     [logging]
     level=WARN
+
+    [connection]
+    ipv6.ip6-privacy=2
   '';
 
   /*

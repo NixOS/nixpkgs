@@ -71,7 +71,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   iana_etc = linux;
   icewm = linux;
   idutils = all;
-  ifplugd = linux;
   inetutils = linux;
   iputils = linux;
   jnettop = linux;

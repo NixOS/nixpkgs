@@ -32,11 +32,12 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
 in
 
 stdenv.mkDerivation rec {
-  name = "uwsgi-2.0.11.2";
+  name = "uwsgi-${version}";
+  version = "2.0.12";
 
   src = fetchurl {
     url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "0p482j4yi48bmpgx1qpdfk86hjn4dswb137jbmigdlrd9l5rp20b";
+    sha256 = "02g46dnw5j1iw8fsq392bxbk8d21b9pdgb3ypcinv3b4jzdm2srh";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];

@@ -9,7 +9,7 @@ let
   stage1Flavours = [ "coreos" "fly" "host" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.0.0";
+  version = "1.1.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1m76hzx550dh35jpb8m46ks04ac3dfy4rg054v035rpwgh50ac6h";
+      sha256 = "1pl5gbfd9wr8nh2h249g7sjs31jz21g24mw375zki9gdhhnpn570";
   };
 
   stage1BaseImage = fetchurl {

@@ -11,25 +11,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.0";
+  version = "2.9.0";
   name = "sonic-pi-${version}";
 
   src = fetchFromGitHub {
     owner = "samaaron";
     repo = "sonic-pi";
     rev = "v${version}";
-    sha256 = "1yyavgazb6ar7xnmjx460s9p8nh70klaja2yb20nci15k8vngq9h";
+    sha256 = "19db5dxrf6h1v2w3frds5g90nb6izd9ppp7cs2xi6i0m67l6jrwb";
   };
 
   buildInputs = [
-    qscintilla
-    supercollider
-    ruby
-    qt48Full
-    cmake
-    pkgconfig
     bash
+    cmake
     makeWrapper
+    pkgconfig
+    qscintilla
+    qt48Full
+    ruby
+    supercollider
   ];
 
   meta = {
@@ -42,13 +42,22 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
+  patches = [ ./fixed-prefixes.patch ];
+
+  preConfigure = ''
+    patchShebangs .
+    substituteInPlace app/gui/qt/mainwindow.cpp \
+      --subst-var-by ruby "${ruby}/bin/ruby" \
+      --subst-var out
+  '';
+
   buildPhase = ''
     pushd app/server/bin
-    ${ruby}/bin/ruby compile-extensions.rb
+      ./compile-extensions.rb
     popd
 
     pushd app/gui/qt
-    ${bash}/bin/bash rp-build-app
+      ./rp-build-app
     popd
   '';
 
