@@ -12530,6 +12530,8 @@ let
 
   i3minator = callPackage ../tools/misc/i3minator { };
 
+  i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
+
   i3status = callPackage ../applications/window-managers/i3/status.nix { };
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
