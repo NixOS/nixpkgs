@@ -2152,6 +2152,8 @@ let
 
   keychain = callPackage ../tools/misc/keychain { };
 
+  keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
+
   kibana = callPackage ../development/tools/misc/kibana { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
