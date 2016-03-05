@@ -13050,6 +13050,8 @@ let
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
+    inherit (darwin) IOKit;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   } // (config.mplayer or {}));
 
   MPlayerPlugin = browser:

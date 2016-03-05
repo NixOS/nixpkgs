@@ -5,11 +5,11 @@
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? true, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? true, cdparanoia ? null
-, dvdnavSupport ? true, libdvdnav ? null
+, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -20,6 +20,9 @@
 , jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
+, fbdevSupport ? stdenv.isLinux
+, vidixSupport ? !stdenv.isDarwin
+, IOKit ? null, Carbon ? null, Cocoa ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
@@ -128,6 +131,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ optional stdenv.isDarwin [ IOKit Carbon Cocoa ]
     ;
 
   nativeBuildInputs = [ yasm ];
@@ -160,11 +164,11 @@ stdenv.mkDerivation rec {
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
       ${optionalString fribidiSupport "--enable-fribidi"}
+      ${optionalString fbdevSupport "--enable-fbdev"}
+      ${optionalString vidixSupport "--enable-vidix"}
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
-      --enable-vidix
-      --enable-fbdev
       --disable-ossaudio
     '';
 
