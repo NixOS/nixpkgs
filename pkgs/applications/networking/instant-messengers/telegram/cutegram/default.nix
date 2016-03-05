@@ -1,5 +1,6 @@
 { stdenv, fetchgit
-, qtbase, qtmultimedia, qtquick1, qtquickcontrols, qtgraphicaleffects
+, qtbase, qtmultimedia, qtquick1, qtquickcontrols
+, qtimageformats, qtgraphicaleffects
 , telegram-qml, libqtelegram-aseman-edition
 , gst_plugins_base, gst_plugins_good, gst_plugins_bad, gst_plugins_ugly
 , makeQtWrapper }:
@@ -14,8 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-  [ qtbase qtmultimedia qtquick1 qtquickcontrols qtgraphicaleffects
-    telegram-qml libqtelegram-aseman-edition
+  [ qtbase qtmultimedia qtquick1 qtquickcontrols
+    qtimageformats qtgraphicaleffects
+    telegram-qml libqtelegram-aseman-edition 
     gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly ];
   nativeBuildInputs = [ makeQtWrapper ];
   enableParallelBuild = true;
@@ -33,5 +35,3 @@ stdenv.mkDerivation rec {
   };
 }
 #TODO: appindicator, for system tray plugin (by @profpatsch)
-
-
