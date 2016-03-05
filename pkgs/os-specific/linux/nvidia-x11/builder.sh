@@ -19,7 +19,7 @@ buildPhase() {
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
         sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make SYSSRC=$sysSrc SYSOUT=$sysOut module
+        make SYSSRC=$sysSrc SYSOUT=$sysOut module -j8 -l8
 
         cd ..
     fi
@@ -33,6 +33,14 @@ installPhase() {
 
     cp -prd *.so.* tls "$out/lib/"
     rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+
+    # According to nvidia, we're supposed to use GLVND.
+    # But so far I've failed to make any applications run using that stack.
+    #
+    # If you want to try it, swap the two lines below.
+
+    #rm "$out"/lib/libGL.so.${versionNumber} # Non-GLVND
+    rm $out/lib/libGL.so.1.* # GLVND
 
     if test -z "$libsOnly"; then
         # Install the X drivers.
@@ -119,15 +127,9 @@ installPhase() {
     # For simplicity and dependency reduction, don't support the gtk3 interface.
     rm $out/lib/libnvidia-gtk3.*
 
-    # We distribute these separately in `libvdpau`
-    rm "$out"/lib/libvdpau{.*,_trace.*}
-
     # Move VDPAU libraries to their place
     mkdir "$out"/lib/vdpau
     mv "$out"/lib/libvdpau* "$out"/lib/vdpau
-
-    # # nvidia no longer distributes them in 361.18 and up, so eventually remove this.
-    # rm -f "$out"/lib/libvdpau{.*,_trace.*}
 }
 
 
