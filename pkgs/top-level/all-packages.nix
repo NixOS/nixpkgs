@@ -10531,6 +10531,8 @@ let
 
     jool = callPackage ../os-specific/linux/jool { };
 
+    mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
+
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
