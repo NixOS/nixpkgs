@@ -927,4 +927,7 @@ self: super: {
 
   # https://github.com/mainland/language-c-quote/issues/57
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
+
+  # https://github.com/agda/agda/issues/1840
+  Agda = super.Agda.override { unordered-containers = self.unordered-containers_0_2_5_1; };
 }
