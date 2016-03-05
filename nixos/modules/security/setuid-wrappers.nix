@@ -76,7 +76,7 @@ in
 
   config = {
 
-    security.setuidPrograms = [ "fusermount" ];
+    security.setuidPrograms = [ "fusermount" "mount" "umount" ];
 
     system.activationScripts.setuid =
       let
