@@ -5545,6 +5545,9 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  pixie = callPackage ../development/interpreters/pixie { };
+  dust = callPackage ../development/interpreters/pixie/dust.nix { };
+
   bundix = callPackage ../development/interpreters/ruby/bundix {
     ruby = ruby_2_1;
   };
