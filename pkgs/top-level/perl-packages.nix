@@ -10796,14 +10796,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SubName = buildPerlPackage {
-    name = "Sub-Name-0.0502";
+  SubName = buildPerlPackage rec {
+    name = "Sub-Name-0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHIPS/Sub-Name-0.0502.tar.gz;
-      sha256 = "1r197binpdy4xfh65qkxxvi9c39pmvvcny4rl8a7zrk1jcws6fac";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "9276412677b445e7e9bdf6ab3a034a05a860e5c5dc560dd9272967745eeb3f17";
     };
     meta = {
-      description = "(Re)name a sub";
+      homepage = https://github.com/karenetheridge/Sub-Name;
+      description = "(re)name a sub";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
