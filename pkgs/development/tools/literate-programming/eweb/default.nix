@@ -5,7 +5,7 @@ stdenv.mkDerivation rec{
   name = "eweb-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/eweb/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/eweb/${name}.tar.bz2";
     sha256 = "1xy7vm2sj5q6s620fm25klmnwnz9xkrxmx4q2f8h6c85ydisayd5";
   };
 

@@ -10,10 +10,12 @@
   aaronschif = "Aaron Schif <aaronschif@gmail.com>";
   abaldeau = "Andreas Baldeau <andreas@baldeau.net>";
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
+  aboseley = "Adam Boseley <adam.boseley@gmail.com>";
   adev = "Adrien Devresse <adev@adev.name>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
+  afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";
   aherrmann = "Andreas Herrmann <andreash87@gmx.ch>";
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
@@ -32,6 +34,7 @@
   ardumont = "Antoine R. Dumont <eniotna.t@gmail.com>";
   aristid = "Aristid Breitkreuz <aristidb@gmail.com>";
   arobyn = "Alexei Robyn <shados@shados.net>";
+  artuuge = "Artur E. Ruuge <artuuge@gmail.com>";
   asppsa = "Alastair Pharo <asppsa@gmail.com>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   aszlig = "aszlig <aszlig@redmoonstudios.org>";
@@ -67,6 +70,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
+  cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
@@ -164,6 +168,7 @@
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
+  jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";
@@ -210,6 +215,7 @@
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
@@ -330,7 +336,7 @@
   tomberek = "Thomas Bereknyei <tomberek@gmail.com>";
   travisbhartwell = "Travis B. Hartwell <nafai@travishartwell.net>";
   trino = "Hubert Mühlhans <muehlhans.hubert@ekodia.de>";
-  tstrobel = "Thomas Strobel <ts468@cam.ac.uk>";
+  tstrobel = "Thomas Strobel <4ZKTUB6TEP74PYJOPWIR013S2AV29YUBW5F9ZH2F4D5UMJUJ6S@hash.domains>";
   ttuegel = "Thomas Tuegel <ttuegel@gmail.com>";
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";

@@ -8,7 +8,6 @@
 , withRiak ? false
 , withElixir ? false, elixir
 , withIconv ? true
-, withLager ? true
 , withTools ? false
 , withRedis ? false
 }:
@@ -27,90 +26,109 @@ let
   # Some dependencies are from another packages. Try commenting them out; then during build
   # you'll get necessary revision information.
   ejdeps = {
-    cache_tab = fetchFromGitHub {
-      owner = "processone";
-      repo = "cache_tab";
-      rev = "1.0.1";
-      sha256 = "1mq5vgqskb0v2pdn6i3610hzd9iyjznh8143pdbz8z57rrhxpxg4";
+    lager = fetchFromGitHub {
+      owner = "basho";
+      repo = "lager";
+      rev = "3.0.2";
+      sha256 = "04l40dlqpl2y6ddpbpknmnjf537bjvrmg8r0jnmw1h60dgyb2ydk";
     };
-    p1_tls = fetchFromGitHub {
-      owner = "processone";
-      repo = "tls";
-      rev = "1.0.0";
-      sha256 = "1q6l5drgmwj4fp4nfh0075lczplia4n40sirk9pd5x76d59qcmnj";
-    };
-    p1_stringprep = fetchFromGitHub {
-      owner = "processone";
-      repo = "stringprep";
-      rev = "1.0.0";
-      sha256 = "105xc0af61xrd4vjxrg49gxbij8x0fq4yribywa8qly303d1nwwa";
-    };
-    p1_xml = fetchFromGitHub {
-      owner = "processone";
-      repo = "xml";
-      rev = "1.1.1";
-      sha256 = "07zxc8ky78sd2mcbhhrxha68arbbk8vyayn9gwi402avnqcic7cx";
-    };
-    esip = fetchFromGitHub {
-      owner = "processone";
-      repo = "p1_sip";
-      rev = "1.0.0";
-      sha256 = "02k920995b0js6srarx0rabavs428rl0dp7zz90x74l8b589zq9a";
-    };
-    p1_stun = fetchFromGitHub {
-      owner = "processone";
-      repo = "stun";
-      rev = "0.9.0";
-      sha256 = "0ghf2p6z1m55f5pm4pv5gj7h7fdcwcsyqz1wzax4w8bgs9id06dm";
-    };
-    p1_yaml = fetchFromGitHub {
-      owner = "processone";
-      repo = "p1_yaml";
-      rev = "1.0.0";
-      sha256 = "0is0vr8ygh3fbiyf0jb85cfpfakxmx31fqk6s4j90gmfhlbm16f8";
+    # dependency of lager
+    goldrush = fetchFromGitHub {
+      owner = "DeadZen";
+      repo = "goldrush";
+      rev = "0.1.7";
+      sha256 = "1104j8v86hdavxf08yjyjkpi5vf95rfvsywdx29c69x3z33i4z3m";
     };
     p1_utils = fetchFromGitHub {
       owner = "processone";
       repo = "p1_utils";
+      rev = "1.0.3";
+      sha256 = "0bw163wx0ji2sz7yb3nzvm1mnnljsdji606xzk33za8c4sgrb4nj";
+    };
+    cache_tab = fetchFromGitHub {
+      owner = "processone";
+      repo = "cache_tab";
       rev = "1.0.2";
-      sha256 = "11b71bnc90riy1qplkpwx6l1yr9849jai3ckri35cavfsk35j687";
+      sha256 = "1krgn6y95jgc8pc0vkj36p0wcazsb8b6h1x4f0r1936jff2vqk33";
+    };
+    fast_tls = fetchFromGitHub {
+      owner = "processone";
+      repo = "fast_tls";
+      rev = "1.0.1";
+      sha256 = "08lh6935k590hix3z69kjjd75w68vmmjcx7gi4zh8j7li4v9k9l2";
+    };
+    stringprep = fetchFromGitHub {
+      owner = "processone";
+      repo = "stringprep";
+      rev = "1.0.2";
+      sha256 = "1wrisajyll45wf6cz1rb2q70sz83i6nfnfiijsbzhy0xk51436sa";
+    };
+    fast_xml = fetchFromGitHub {
+      owner = "processone";
+      repo = "fast_xml";
+      rev = "1.1.3";
+      sha256 = "1a2k21fqz8rp4laz7wn0hsxy58i1gdwc3qhw3k2kar8lgw4m3wqp";
+    };
+    stun = fetchFromGitHub {
+      owner = "processone";
+      repo = "stun";
+      rev = "1.0.1";
+      sha256 = "0bq0qkc7h3nhqxa6ff2nf6bi4kiax4208716hxfz6l1vxrh7f3p2";
+    };
+    esip = fetchFromGitHub {
+      owner = "processone";
+      repo = "esip";
+      rev = "1.0.2";
+      sha256 = "0ibvb85wkqw81y154bagp0kgf1jmdscmfq8yk73j1k986dmiqfn2";
+    };
+    fast_yaml = fetchFromGitHub {
+      owner = "processone";
+      repo = "fast_yaml";
+      rev = "1.0.2";
+      sha256 = "019imn255bkkvilg4nrcidl8w6dn2jrb2nyrs2nixsgcbmvkdl5k";
     };
     jiffy = fetchFromGitHub {
       owner = "davisp";
       repo = "jiffy";
-      rev = "0.14.5";
-      sha256 = "1xs01cl4gq1x6sjj7d1qgg4iq9iwzv3cjqjrj0kr7rqrbfqx2nq3";
+      rev = "0.14.7";
+      sha256 = "1w55vwz4a94v0aajm3lg6nlhpw2w0zdddiw36f2n4sfhbqn0v0jr";
     };
-    oauth2 = fetchFromGitHub {
-      owner = "kivra";
-      repo = "oauth2";
-      rev = "8d129fbf8866930b4ffa6dd84e65bd2b32b9acb8";
-      sha256 = "0mbmw6668l945iqppba991793nmmkyvvf18zxgdahxcwgxg1majn";
+    p1_oauth2 = fetchFromGitHub {
+      owner = "processone";
+      repo = "p1_oauth2";
+      rev = "0.6.1";
+      sha256 = "1wvmi3fj05hlbi3sbqpakznq70n76a7nbvbrjhr8k79bmvsh6lyl";
     };
-    xmlrpc = fetchFromGitHub {
-      owner = "rds13";
-      repo = "xmlrpc";
-      rev = "1.15";
-      sha256 = "0ihwag2hgw9rswxygallc4w1yipgpd6arw3xpr799ib7ybsn8x81";
+    p1_xmlrpc = fetchFromGitHub {
+      owner = "processone";
+      repo = "p1_xmlrpc";
+      rev = "1.15.1";
+      sha256 = "12pfvb3k9alzg7qbph3bc1sw7wk86psm3jrdrfclq90zlpwqa0w3";
+    };
+    luerl = fetchFromGitHub {
+      owner = "rvirding";
+      repo = "luerl";
+      rev = "9524d0309a88b7c62ae93da0b632b185de3ba9db";
+      sha256 = "15yplmv2xybnz3nby940752jw672vj99l1j61rrfy686hgrfnc42";
     };
 
     p1_mysql = fetchFromGitHub {
       owner = "processone";
-      repo = "mysql";
-      rev = "1.0.0";
-      sha256 = "1v3g75hhfpv5bnrar23y7lsk3pd02xl5cy4mj13j0qxl6bc4dgss";
+      repo = "p1_mysql";
+      rev = "1.0.1";
+      sha256 = "17122xhc420kqfsv4c4g0jcllpdbhg84wdlwd3227w4q729jg6bk";
     };
     p1_pgsql = fetchFromGitHub {
       owner = "processone";
-      repo = "pgsql";
-      rev = "1.0.0";
-      sha256 = "1r7dkjzxhwplmhvgvdx990xn98gpslckah5jpkx8c2gm9nj3xi33";
+      repo = "p1_pgsql";
+      rev = "1.0.1";
+      sha256 = "1ca0hhxyfmwjp49zjga1fdhrbaqnxdpmcvs2i6nz6jmapik788nr";
     };
     sqlite3 = fetchFromGitHub {
-      owner = "alexeyr";
+      owner = "processone";
       repo = "erlang-sqlite3";
-      rev = "cbc3505f7a131254265d3ef56191b2581b8cc172";
-      sha256 = "1xrvygv0zhslsqf8044m5ml1zr6di7znvv2zycg3amsz190w0w2g";
+      rev = "1.1.5";
+      sha256 = "17n4clysg540nx9g8k8mi9l7vkz8wigycgxmzzn0wmgxdf6mhxlb";
     };
     p1_pam = fetchFromGitHub {
       owner = "processone";
@@ -118,11 +136,11 @@ let
       rev = "1.0.0";
       sha256 = "0dlbmfwndhyg855vnhwyccxcjqzf2wcgc7522mjb9q38cva50rpr";
     };
-    p1_zlib = fetchFromGitHub {
+    ezlib = fetchFromGitHub {
       owner = "processone";
-      repo = "zlib";
-      rev = "1.0.0";
-      sha256 = "1a6m7wz6cbb8526fwhmgm7mva62absmvyjm8cjnq7cs0mzp18r0m";
+      repo = "ezlib";
+      rev = "1.0.1";
+      sha256 = "1asp7s2q72iql870igc827dvi9iqyd6lhs0q3jbjj2w7xfz4x4kk";
     };
     hamcrest = fetchFromGitHub {
       owner = "hyperthunk";
@@ -150,42 +168,23 @@ let
       rev = "0.8.2";
       sha256 = "0w4jmsnc9x2ykqh1q6b12pl8a9973dxdhqk3y0ph17n83q5xz3h7";
     };
-    rebar_elixir_plugin = fetchFromGitHub {
-      owner = "processone";
-      repo = "rebar_elixir_plugin";
-      rev = "0.1.0";
-      sha256 = "0x04ff53mxwd9va8nl4m70dbamp6p4dpxs646c168iqpnpadk3sk";
-    };
     elixir = fetchFromGitHub {
       owner = "elixir-lang";
       repo = "elixir";
       rev = "v1.1.0";
       sha256 = "0r5673x2qdvfbwmvyvj8ddvzgxnkl3cv9jsf1yzsxgdifjbrzwx7";
     };
-    p1_iconv = fetchFromGitHub {
+    rebar_elixir_plugin = fetchFromGitHub {
       owner = "processone";
-      repo = "eiconv";
-      rev = "0.9.0";
-      sha256 = "1ikccpj3aq6mip6slrq8c7w3kilpb82dr1jdy8kwajmiy9cmsq97";
+      repo = "rebar_elixir_plugin";
+      rev = "0.1.0";
+      sha256 = "0x04ff53mxwd9va8nl4m70dbamp6p4dpxs646c168iqpnpadk3sk";
     };
-    lager = fetchFromGitHub {
-      owner = "basho";
-      repo = "lager";
-      rev = "3.0.2";
-      sha256 = "04l40dlqpl2y6ddpbpknmnjf537bjvrmg8r0jnmw1h60dgyb2ydk";
-    };
-    # dependency of lager
-    goldrush = fetchFromGitHub {
-      owner = "DeadZen";
-      repo = "goldrush";
-      rev = "0.1.7";
-      sha256 = "1104j8v86hdavxf08yjyjkpi5vf95rfvsywdx29c69x3z33i4z3m";
-    };
-    p1_logger = fetchFromGitHub {
+    iconv = fetchFromGitHub {
       owner = "processone";
-      repo = "p1_logger";
+      repo = "iconv";
       rev = "1.0.0";
-      sha256 = "0z11xsr139a75w09syjws4sja6ky2l9rsrwkjr6wcl7p1jz02h4r";
+      sha256 = "0dfc23m2lqilj8ixn23wpj5xp1mgajb9b5ch95riigxzxmx97ri9";
     };
     meck = fetchFromGitHub {
       owner = "eproxus";
@@ -203,12 +202,12 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  version = "16.01";
+  version = "16.02";
   name = "ejabberd-${version}";
 
   src = fetchurl {
     url = "http://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "10fnsw52gxybw731yka63ma8mj39g4i0nsancwp9nlvhb2flgk72";
+    sha256 = "0yiai7zyjdcp0ppc5l5p56bxhg273hwfbv41qlbkg32dhr880f4q";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -224,17 +223,17 @@ in stdenv.mkDerivation rec {
   LANG = "en_US.UTF-8";
 
   depsNames =
-    [ "cache_tab" "p1_tls" "p1_stringprep" "p1_xml" "esip" "p1_stun" "p1_yaml" "p1_utils" "jiffy" "oauth2" "xmlrpc" ]
+    [ "lager" "goldrush" "p1_utils" "cache_tab" "fast_tls" "stringprep" "fast_xml" "stun" "esip" "fast_yaml"
+      "jiffy" "p1_oauth2" "p1_xmlrpc" "luerl"
+    ]
     ++ lib.optional withMysql "p1_mysql"
     ++ lib.optional withPgsql "p1_pgsql"
     ++ lib.optional withSqlite "sqlite3"
     ++ lib.optional withPam "p1_pam"
-    ++ lib.optional withZlib "p1_zlib"
+    ++ lib.optional withZlib "ezlib"
     ++ lib.optionals withRiak [ "hamcrest" "riakc" "riak_pb" "protobuffs" ]
-    ++ lib.optionals withElixir [ "rebar_elixir_plugin" "elixir" ]
-    ++ lib.optional withIconv "p1_iconv"
-    ++ lib.optionals withLager [ "lager" "goldrush" ]
-    ++ lib.optional (!withLager) "p1_logger"
+    ++ lib.optionals withElixir [ "elixir" "rebar_elixir_plugin" ]
+    ++ lib.optional withIconv "iconv"
     ++ lib.optional withTools "meck"
     ++ lib.optional withRedis "eredis"
   ;
@@ -248,7 +247,6 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withRiak "riak")
       (lib.enableFeature withElixir "elixir")
       (lib.enableFeature withIconv "iconv")
-      (lib.enableFeature withLager "lager")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
     ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite}";
@@ -288,8 +286,9 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Open-source XMPP application server written in Erlang";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = http://www.ejabberd.im;
-    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sander lib.maintainers.abbradar ];
   };
 }

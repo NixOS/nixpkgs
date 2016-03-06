@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, plugins ? [] }:
 
 # KeePass looks for plugins in under directory in which KeePass.exe is
 # located. It follows symlinks where looking for that directory, so
@@ -17,7 +17,7 @@ with builtins; buildDotnetPackage rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ unzip makeWrapper ];
+  buildInputs = [ unzip makeWrapper icoutils ];
 
   pluginLoadPathsPatch =
     let outputLc = toString (add 8 (length plugins));
@@ -52,9 +52,14 @@ with builtins; buildDotnetPackage rec {
     name = "keepass";
     exec = "keepass";
     comment = "Password manager";
+    icon = "keepass";
     desktopName = "Keepass";
     genericName = "Password manager";
-    categories = "Application;Other;";
+    categories = "Application;Utility;";
+    mimeType = stdenv.lib.concatStringsSep ";" [
+      "application/x-keepass2"
+      ""
+    ];
   };
 
   outputFiles = [ "Build/KeePass/Release/*" "Build/KeePassLib/Release/*" ];
@@ -67,16 +72,29 @@ with builtins; buildDotnetPackage rec {
   # is found and does not pollute output path.
   binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
 
-  postInstall = ''
+  postInstall = 
+  let
+    extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
+  in
+  ''
     mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
     wrapProgram $out/bin/keepass --prefix PATH : "$binPaths"
+
+    ${extractFDeskIcons} \
+      "./Translation/TrlUtil/Resources/KeePass.ico" \
+      '[^\.]+_[0-9]+_([0-9]+x[0-9]+)x[0-9]+\.png' \
+      '\1' \
+      '([^\.]+).+' \
+      'keepass' \
+      "$out" \
+      "./tmp"
   '';
 
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = http://www.keepass.info/;
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz ];
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };

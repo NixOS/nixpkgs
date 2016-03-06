@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "pgf-3.00";
 
   src = fetchurl {
-    url = http://downloads.sourceforge.net/project/pgf/pgf/version%203.0.0/pgf_3.0.0.tds.zip;
+    url = mirror://sourceforge/project/pgf/pgf/version%203.0.0/pgf_3.0.0.tds.zip;
     sha256 = "0kj769hyp4z2zmdv3f8xv443wcfqn5nkkbzxzqgfxjizlz81aav7";
   };
 

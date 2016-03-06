@@ -78,10 +78,11 @@ in {
         '';
         default = {};
         example = literalExample ''
-          echelon = {
-            psk = "abcdefgh";
-          };
-          "free.wifi" = {};
+          { echelon = {
+              psk = "abcdefgh";
+            };
+            "free.wifi" = {};
+          }
         '';
       };
 

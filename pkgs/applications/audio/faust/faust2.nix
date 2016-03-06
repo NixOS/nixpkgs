@@ -19,7 +19,7 @@ let
   version = "2.0-a41";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/faudiostream/faust-2.0.a41.tgz";
+    url = "mirror://sourceforge/project/faudiostream/faust-2.0.a41.tgz";
     sha256 = "1cq4x1cax0lswrcqv0limx5mjdi3187zlmh7cj2pndr0xq6b96cm";
   };
 

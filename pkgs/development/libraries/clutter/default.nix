@@ -1,6 +1,6 @@
 { stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib, 
-gobjectIntrospection 
+gobjectIntrospection, gtk3
 }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
-      atk json_glib gobjectIntrospection
+      atk json_glib gobjectIntrospection gtk3
     ];
 
   configureFlags = [ "--enable-introspection" ]; # needed by muffin AFAIK

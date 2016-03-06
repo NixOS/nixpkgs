@@ -1,5 +1,5 @@
 { stdenv, makeWrapper, buildEnv,
-  git, subversion, mercurial, bazaar, cvs, unzip, curl, gnused, coreutils
+  git, subversion, mercurial, bazaar, cvs, unzip, curl, gnused, coreutils, nix
 }:
 
 let mkPrefetchScript = tool: src: deps:
@@ -18,6 +18,7 @@ let mkPrefetchScript = tool: src: deps:
         wrapArgs="$wrapArgs --prefix PATH : $dep/bin"
       done
       wrapArgs="$wrapArgs --prefix PATH : ${gnused}/bin"
+      wrapArgs="$wrapArgs --prefix PATH : ${nix}/bin" # For nix-hash
       wrapArgs="$wrapArgs --set HOME : /homeless-shelter"
       wrapProgram $out/bin/$name $wrapArgs
     '';

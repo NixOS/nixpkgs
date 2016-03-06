@@ -46,7 +46,7 @@ in rec {
     in if stdenv.is64bit && chanAttrs ? sha256bin64 then {
       urls = mkUrls "amd64";
       sha256 = chanAttrs.sha256bin64;
-    } else if stdenv.is32bit && chanAttrs ? sha256bin32 then {
+    } else if !stdenv.is64bit && chanAttrs ? sha256bin32 then {
       urls = mkUrls "i386";
       sha256 = chanAttrs.sha256bin32;
     } else throw "No Chrome plugins are available for your architecture.";
@@ -181,7 +181,8 @@ in rec {
     isLatest = channel: version: let
       ourVersion = sources.${channel}.version or null;
     in if ourVersion == null then false
-       else lib.versionAtLeast version sources.${channel}.version;
+       else lib.versionOlder version sources.${channel}.version
+         || version == sources.${channel}.version;
 
     # We only support GNU/Linux right now.
     linuxChannels = let

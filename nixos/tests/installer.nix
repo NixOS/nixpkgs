@@ -46,7 +46,7 @@ let
                   , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
-      iface = if grubVersion == 1 then "scsi" else "virtio";
+      iface = if grubVersion == 1 then "ide" else "virtio";
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");

@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, makeWrapper, ibus, pkgconfig, python3, pygobject3
-, gtk3, atk, dconf, gobjectIntrospection }:
+{ stdenv, fetchurl, pkgconfig
+, gtk3, dconf, gobjectIntrospection, ibus, python3, pygobject3 }:
 
 stdenv.mkDerivation rec {
   name = "ibus-table-${version}";
@@ -25,29 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    gtk3 dconf gobjectIntrospection
-    ibus
-    pkgconfig
-    python3 pygobject3
+    dconf gtk3 gobjectIntrospection ibus python3 pygobject3
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  preFixup = ''
-    for prog in "$out/bin"/*; do #*/
-      wrapProgram "$prog" \
-        --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
-        --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
-    done
-
-    for prog in "$out/libexec"/*; do #*/
-      wrapProgram "$prog" \
-        --prefix PYTHONPATH : "$PYTHONPATH" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0"
-    done
-  '';
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
     isIbusEngine = true;

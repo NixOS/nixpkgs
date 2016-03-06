@@ -1,31 +1,37 @@
-{ stdenv, fetchFromGitHub
-, qtbase, qtquick1, qtmultimedia, qtquickcontrols, qtgraphicaleffects, makeQtWrapper
-, telegram-qml, libqtelegram-aseman-edition }:
+{ stdenv, fetchgit
+, qtbase, qtmultimedia, qtquick1, qtquickcontrols, qtgraphicaleffects
+, telegram-qml, libqtelegram-aseman-edition
+, gst_plugins_base, gst_plugins_good, gst_plugins_bad, gst_plugins_ugly
+, makeQtWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "cutegram-${version}";
-  version = "2.7.0-stable";
+  name = "cutegram-${meta.version}";
 
-  src = fetchFromGitHub {
-    owner = "Aseman-Land";
-    repo = "Cutegram";
-    rev = "v${version}";
-    sha256 = "0qhy30gb8zdrphz1b7zcnv8hmm5fd5qwlvrg7wpsh3hk5niz3zxk";
+  src = fetchgit {
+    url = "https://github.com/Aseman-Land/Cutegram.git";
+    rev = "1dbe2792fb5a1760339379907f906e236c09db84";
+    sha256 = "080153bpa92jpi0zdrfajrn0yqy3jp8m4704sirbz46dv7471rzl";
   };
-  # TODO appindicator, for system tray plugin
-  buildInputs = [ qtbase qtquick1 qtmultimedia qtquickcontrols qtgraphicaleffects telegram-qml libqtelegram-aseman-edition ];
+
+  buildInputs =
+  [ qtbase qtmultimedia qtquick1 qtquickcontrols qtgraphicaleffects
+    telegram-qml libqtelegram-aseman-edition
+    gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly ];
   nativeBuildInputs = [ makeQtWrapper ];
   enableParallelBuild = true;
 
-  fixupPhase = "wrapQtProgram $out/bin/cutegram";
-
   configurePhase = "qmake -r PREFIX=$out";
 
+  fixupPhase = "wrapQtProgram $out/bin/cutegram";
+
   meta = with stdenv.lib; {
+    version = "2.7.1";
     description = "Telegram client forked from sigram";
     homepage = "http://aseman.co/en/products/cutegram/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.profpatsch ];
+    maintainers = with maintainers; [ profpatsch AndersonTorres ];
   };
-
 }
+#TODO: appindicator, for system tray plugin (by @profpatsch)
+
+
