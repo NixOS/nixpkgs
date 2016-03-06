@@ -158,6 +158,8 @@ in
                 pw=$(${pkgs.apg}/bin/apg -a 1 -M lnc -n 1 -m 12)
                 echo "''${pw}" > ${root_password_file}
             fi
+            chown root:service ${root_password_file}
+            chmod 640 ${root_password_file}
 
             if [[ ! -f /root/.my.cnf ]]; then
                 touch /root/.my.cnf
