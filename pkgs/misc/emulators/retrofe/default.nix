@@ -2,11 +2,7 @@
 , python, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, sqlite, zlib
 }:
 
-let
-  gstPlugins = with gst_all_1; [ gst-libav gst-plugins-base gst-plugins-good ];
-  GST_PLUGIN_PATH = stdenv.lib.makeSearchPath "lib/gstreamer-1.0" gstPlugins;
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "retrofe-${version}";
   version = "0.6.169";
 
@@ -20,7 +16,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gst_all_1.gstreamer SDL2 SDL2_image SDL2_mixer SDL2_ttf sqlite zlib
-  ] ++ gstPlugins;
+  ] ++ (with gst_all_1; [ gst-libav gst-plugins-base gst-plugins-good ]);
 
   patches = [ ./include-paths.patch ];
 
@@ -58,22 +54,24 @@ in stdenv.mkDerivation rec {
     EOF
 
     chmod +x $out/bin/retrofe-init
+
+    runHook postInstall
   '';
 
   # retrofe will look for config files in its install path ($out/bin).
   # When set it will use $RETROFE_PATH instead. Sadly this behaviour isn't
   # documented well. To make it behave more like as expected it's set to
   # $PWD by default here.
-  fixupPhase = ''
+  postInstall = ''
     wrapProgram "$out/bin/retrofe" \
-      --prefix GST_PLUGIN_PATH : '${GST_PLUGIN_PATH}/lib/gstreamer-1.0' \
+      --prefix GST_PLUGIN_PATH : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
       --set    RETROFE_PATH      "\''${RETROFE_PATH:-\$PWD}"
   '';
 
   meta = with stdenv.lib; {
     description = "A frontend for arcade cabinets and media PCs";
-    license = licenses.gpl3Plus;
     homepage = http://retrofe.com;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
   };
 }
