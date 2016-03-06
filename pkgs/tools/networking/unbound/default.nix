@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     "--with-libevent=${libevent}"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--sbindir=\${out}/bin"
     "--enable-pie"
     "--enable-relro-now"
   ];
