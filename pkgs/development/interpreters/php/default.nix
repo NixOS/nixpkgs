@@ -249,6 +249,8 @@ let
         calendarSupport = config.php.calendar or true;
       };
 
+      hardeningEnable = [ "pie" ];
+
       configurePhase = ''
         # Don't record the configure flags since this causes unnecessary
         # runtime dependencies.

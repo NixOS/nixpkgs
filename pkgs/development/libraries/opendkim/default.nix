@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   configureFlags= [ "--with-milter=${libmilter}" ];
 
+  hardeningEnable = [ "pie" ];
+
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   buildInputs = [ libbsd openssl libmilter perl ];
