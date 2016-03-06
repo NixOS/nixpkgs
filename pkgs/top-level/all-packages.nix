@@ -2425,6 +2425,8 @@ let
 
   mgba = qt5.callPackage ../misc/emulators/mgba { };
 
+  mimeo = callPackage ../tools/misc/mimeo { };
+
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
