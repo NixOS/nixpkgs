@@ -70,7 +70,7 @@ let
         --prefix PATH : ${bin-path}
     '';
     meta = {
-      description = "Pixie is a clojure-like lisp, built with the pypy vm toolkit.";
+      description = "A clojure-like lisp, built with the pypy vm toolkit";
       homepage = "https://github.com/pixie-lang/pixie";
       license = stdenv.lib.licenses.lgpl3;
       platforms = stdenv.lib.platforms.linux;
