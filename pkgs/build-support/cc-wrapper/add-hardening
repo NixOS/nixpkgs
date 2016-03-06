@@ -16,7 +16,9 @@ if [[ ! $hardeningDisable == "all" ]]; then
           ;;
         pie)
           hardeningCFlags+=('-fPIE')
-          hardeningLDFlags+=('-pie')
+          if [[ ! "$*" =~ "-shared" ]]; then
+            hardeningLDFlags+=('-pie')
+          fi
           ;;
         pic)
           hardeningCFlags+=('-fPIC')
