@@ -249,7 +249,13 @@ in
         ''
         else "";
 
-     services.nscd.enable = true;
+    services.nscd.enable = true;
+
+    networking.dhcpcd.extraConfig = ''
+      # IPv4ll gets in the way if we really do not want
+      # an IPv4 address on some interfaces.
+      noipv4ll
+    '';
 
   };
 
