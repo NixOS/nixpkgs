@@ -74,6 +74,8 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python
     ++ optional pulseSupport libpulseaudio;
 
+  hardeningDisable = [ "fortify" "pic" "stackprotector" ];
+
   prePatch = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel.dev}/lib/modules/*/build`
