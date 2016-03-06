@@ -15793,6 +15793,10 @@ let
 
   beep = callPackage ../misc/beep { };
 
+  brgenml1lpr = callPackage ../misc/cups/drivers/brgenml1lpr {};
+
+  brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
+
   cups = callPackage ../misc/cups {
     libusb = libusb1;
   };
