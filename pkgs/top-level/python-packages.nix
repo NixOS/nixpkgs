@@ -1119,6 +1119,29 @@ in modules // {
     };
   });
 
+  av = buildPythonPackage rec {
+    name = "av-${version}";
+    version = "0.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/a/av/${name}.tar.gz";
+      sha256 = "bdc7e2e213cb9041d9c5c0497e6f8c47e84f89f1f2673a46d891cca0fb0d19a0";
+    };
+
+    buildInputs
+      =  (with self; [ nose pillow numpy ])
+      ++ (with pkgs; [ ffmpeg git libav pkgconfig ]);
+
+    # Because of https://github.com/mikeboers/PyAV/issues/152
+    doCheck = false;
+
+    meta = {
+      description = "Pythonic bindings for FFmpeg/Libav";
+      homepage = https://github.com/mikeboers/PyAV/;
+      license = licenses.bsd2;
+    };
+  };
+
   avro = buildPythonPackage (rec {
     name = "avro-1.7.6";
 
