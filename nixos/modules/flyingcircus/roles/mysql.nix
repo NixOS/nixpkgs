@@ -43,9 +43,9 @@ in
           extraOptions = ''
             character-set-server        = utf8
             user                        = mysql
-            log-error                   = /var/log/mysql/mysqld.err
+            log-error                   = /srv/mysql/mysqld.err
             slow_query_log              = 1
-            slow_query_log_file         = /var/log/mysql/mysql.slow
+            slow_query_log_file         = /srv/mysql/mysql.slow
             long-query-time             = 10
             skip-external-locking
             key_buffer_size             = 16M
@@ -56,10 +56,9 @@ in
             read_buffer_size            = 256K
             read_rnd_buffer_size        = 512K
             myisam_sort_buffer_size     = 8M
-            lc_messages_dir             = /usr/share/mysql
             lc_messages                 = en_US
 
-            bind-address                = 127.0.0.1;
+            bind-address                = 127.0.0.1
 
             log-bin
             server-id                     = 1
