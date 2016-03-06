@@ -4,6 +4,7 @@
 , withKerberos ? false
 , withGssapiPatches ? withKerberos
 , kerberos
+, linkOpenssl? true
 }:
 
 assert withKerberos -> kerberos != null;
@@ -54,7 +55,8 @@ stdenv.mkDerivation rec {
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ optional withKerberos "--with-kerberos5=${kerberos}"
-    ++ optional stdenv.isDarwin "--disable-libutil";
+    ++ optional stdenv.isDarwin "--disable-libutil"
+    ++ optional (!linkOpenssl) "--without-openssl";
 
   preConfigure = ''
     configureFlagsArray+=("--with-privsep-path=$out/empty")
