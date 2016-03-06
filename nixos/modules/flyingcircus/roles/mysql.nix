@@ -6,11 +6,12 @@
 # logrotate aside from systemd journal?
 # sys_kernel::iosched::readahead { '/var/lib/mysql': ra => 4096 }
 # maintenance / consistency check
+# listening on SRV interface
 
 let
     cfg = config;
     root_password_file = "/etc/local/mysql/mysql.passwd";
-    localConfig = if pathExists /etc/local/mysql/
+    localConfig = if pathExists /etc/local/mysql
                   then "!include ${/etc/local/mysql}"
                   else "";
 
@@ -58,7 +59,7 @@ in
             lc_messages_dir             = /usr/share/mysql
             lc_messages                 = en_US
 
-            bind-address                = ${srv_ipv4_addr};
+            bind-address                = 127.0.0.1;
 
             log-bin
             server-id                     = 1
@@ -126,15 +127,15 @@ in
 
             [isamchk]
             key_buffer_size                = 20M
-            sort_buffer_size             = 20M
-            read_buffer                 = 2M
-            write_buffer                 = 2M
+            sort_buffer_size               = 20M
+            read_buffer                    = 2M
+            write_buffer                   = 2M
 
             [myisamchk]
             key_buffer_size                = 20M
-            sort_buffer_size             = 20M
-            read_buffer_size            = 2M
-            write_buffer_size            = 2M
+            sort_buffer_size               = 20M
+            read_buffer_size               = 2M
+            write_buffer_size              = 2M
 
             [mysqlhotcopy]
             interactive-timeout
