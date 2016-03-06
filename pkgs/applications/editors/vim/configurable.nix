@@ -191,6 +191,8 @@ composableDerivation {
 
   dontStrip = 1;
 
+  hardeningDisable = [ "fortify" ];
+
   meta = with stdenv.lib; {
     description = "The most popular clone of the VI editor";
     homepage    = http://www.vim.org;
