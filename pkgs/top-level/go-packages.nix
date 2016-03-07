@@ -3767,12 +3767,22 @@ let
   };
 
   go2nix = buildFromGitHub rec {
-    rev = "dd513f1f1336a3cdceb9dd4be0f3c47a09929651";
+    rev = "4c552dadd855e3694ed3499feb46dca9cd855f60";
     owner = "kamilchm";
     repo = "go2nix";
-    sha256 = "1ad7zcab5vjbw7a8ns0aspkblqqz0z96b7ak3zdx409rq7rlqdsj";
-    buildInputs = [ go-bindata.bin tools.bin vcs go-spew gls go-difflib assertions goconvey testify kingpin ];
+    sha256 = "1pwnm1vrjxvgl17pk9n1k5chmhgwxkrwp2s1bzi64xf12anibj63";
+
+    buildInputs = [ pkgs.makeWrapper go-bindata.bin tools.bin vcs go-spew gls go-difflib assertions goconvey testify kingpin ];
+
     preBuild = ''go generate ./...'';
+
+    postInstall = ''
+      wrapProgram $bin/bin/go2nix \
+        --prefix PATH : ${pkgs.nix-prefetch-git}/bin \
+        --prefix PATH : ${pkgs.git}/bin
+    '';
+
+    allowGoReference = true;
   };
 
   godotenv = buildFromGitHub rec {
