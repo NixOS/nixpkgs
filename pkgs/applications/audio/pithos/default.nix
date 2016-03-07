@@ -19,6 +19,11 @@ pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.py --replace "/usr/share" "$out/share"
   '';
 
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp -v data/pithos.desktop $out/share/applications
+  '';
+
   buildInputs = [ wrapGAppsHook ];
 
   propagatedBuildInputs =

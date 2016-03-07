@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxcb, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-   name = "xdo-0.3";
+   name = "xdo-0.5";
 
    src = fetchurl {
-     url = "https://github.com/baskerville/xdo/archive/0.3.tar.gz";
-     sha256 = "128flaydag9ixsai87p85r84arg2pn1j9h3zgdjwlmbcpb8d4ia8";
+     url = "https://github.com/baskerville/xdo/archive/0.5.tar.gz";
+     sha256 = "0sjnjs12i0gp1dg1m5jid4a3bg9am4qkf0qafyp6yn176yzcz1i6";
    };
 
    prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';

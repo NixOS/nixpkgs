@@ -4,6 +4,7 @@
 , withKerberos ? false
 , withGssapiPatches ? withKerberos
 , kerberos
+, linkOpenssl? true
 }:
 
 assert withKerberos -> kerberos != null;
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
+    "--sbindir=\${out}/bin"
     "--localstatedir=/var"
     "--with-pid-dir=/run"
     "--with-mantype=man"
@@ -54,7 +56,8 @@ stdenv.mkDerivation rec {
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ optional withKerberos "--with-kerberos5=${kerberos}"
-    ++ optional stdenv.isDarwin "--disable-libutil";
+    ++ optional stdenv.isDarwin "--disable-libutil"
+    ++ optional (!linkOpenssl) "--without-openssl";
 
   preConfigure = ''
     configureFlagsArray+=("--with-privsep-path=$out/empty")

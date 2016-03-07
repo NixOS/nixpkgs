@@ -28,6 +28,11 @@ let
     sqlite
   ];
 
+  boolPatch = fetchurl {
+    url = "http://copr-dist-git.fedorainfracloud.org/cgit/bthomas/racket/racket.git/plain/xform-errors-converting-fix.patch";
+    sha256 = "0h5g7a7w8wwj43jb8q69xldgbyxkn0y0i1na6r9fk17dd56nsm68";
+  };
+
 in
 
 stdenv.mkDerivation rec {
@@ -50,6 +55,10 @@ stdenv.mkDerivation rec {
     mkdir src/build
     cd src/build
   '';
+
+  # https://github.com/racket/racket/issues/1222
+  # Fixed upstream after the release of 6.4
+  patches = [ boolPatch ];
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
   configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]

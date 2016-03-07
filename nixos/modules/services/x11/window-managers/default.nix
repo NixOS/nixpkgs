@@ -13,6 +13,7 @@ in
     ./clfswm.nix
     ./compiz.nix
     ./dwm.nix
+    ./exwm.nix
     ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix
