@@ -257,13 +257,11 @@ in
         type = types.bool;
         default = true;
         description = ''
-          If enabled, Nix will only download binaries from binary
-          caches if they are cryptographically signed with any of the
-          keys listed in
-          <option>nix.binaryCachePublicKeys</option>. If disabled (the
-          default), signatures are neither required nor checked, so
-          it's strongly recommended that you use only trustworthy
-          caches and https to prevent man-in-the-middle attacks.
+          If enabled (the default), Nix will only download binaries from binary caches if
+          they are cryptographically signed with any of the keys listed in
+          <option>nix.binaryCachePublicKeys</option>. If disabled, signatures are neither
+          required nor checked, so it's strongly recommended that you use only
+          trustworthy caches and https to prevent man-in-the-middle attacks.
         '';
       };
 
