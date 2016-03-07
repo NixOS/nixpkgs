@@ -24,6 +24,7 @@ in
      ./postgresql.nix
      ./sensuserver.nix
      ./servicecheck.nix
+     ./statshost.nix
      ./varnish.nix
     ];
 

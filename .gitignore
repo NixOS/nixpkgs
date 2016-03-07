@@ -1,7 +1,6 @@
 *~
 ,*
-*.swp
-*.swo
+*.sw?
 result
 result-*
 /doc/NEWS.html
