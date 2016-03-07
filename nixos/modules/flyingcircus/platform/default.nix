@@ -213,5 +213,8 @@ in
       { "directory.secret".text = cfg.enc.parameters.directory_secret;
         "directory.secret".mode = "0600";}) //
       { "nixos/configuration.nix".text = lib.readFile ../files/etc_nixos_configuration.nix; };
+
+    services.nixosManual.enable = false;
+
   };
 }
