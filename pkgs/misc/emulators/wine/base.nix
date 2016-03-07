@@ -22,10 +22,16 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   buildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
     freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
     alsaLib libxml2 libxslt lcms2 gettext dbus mpg123 openal
+
+    libva libpcap saneBackends libv4l libgphoto2 gtk3 gsm openldap
+    opencl-headers opencl-icd gnome.glib cairo libtiff unixODBC
+    
+    ## for libnetapi
+    samba3_light
   ])
   ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
   ++ (with pkgs.xorg; [
-    libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite libXext
+    libX11  libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite libXext
   ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
