@@ -1616,4 +1616,24 @@ rec {
 
   };
 
+  lightline-vim = buildVimPluginFrom2Nix {
+    name = "lightline-2016-02-10";
+    src = fetchgit {
+      url = "git://github.com/itchyny/lightline.vim";
+      rev = "e6a43f98fab1ee2e373bd0b670803222607ed123";
+      sha256 = "abb836d728a8f674f3aa71c4936798c9be02bb352ca0e6e5f5b262886622ac3b";
+    };
+    dependencies = [];
+  };
+
+  Spacegray-vim = buildVimPluginFrom2Nix {
+    name = "spacegray-2015-04-05";
+    src = fetchgit {
+      url = "git://github.com/ajh17/Spacegray.vim";
+      rev = "1c10d0da045609910e8fb03b33c043bbcff35d9e";
+      sha256 = "bced8987539ca42f84350b90e2570a226dad66e8061b90b79a41d51f9fb4b4b5";
+    };
+    dependencies = [];
+  };
+
 }
