@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
+    "--sbindir=\${out}/bin"
     "--localstatedir=/var"
     "--with-pid-dir=/run"
     "--with-mantype=man"
