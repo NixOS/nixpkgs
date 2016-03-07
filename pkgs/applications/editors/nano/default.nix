@@ -12,12 +12,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.5.0";
+  version = "2.5.3";
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.gz";
-    sha256 = "1vl9bim56k1b4zwc3icxp46w6pn6gb042j1h4jlz1jklxxpkwcpz";
+    sha256 = "1vhjrcydcfxqq1719vcsvqqnbjbq2523m00dhzag5vwzkc961c5j";
   };
-  buildInputs = [ ncurses texinfo ] ++ optional enableNls gettext;
+  nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
+  buildInputs = [ ncurses ];
   outputs = [ "out" "info" ];
   configureFlags = ''
     --sysconfdir=/etc
