@@ -10,6 +10,9 @@ let
   home = "/var/lib/isso";
   db = "${home}/comments.db";
 
+  sectEsc = escape [ "[" "]" ];
+  keyEsc = escape [ "=" ];
+  # TODO: assert that the above escapes are not used
   mkSection = sect: attrs: ''
     [${sect}]
     ${concatStringsSep "\n" (mapAttrsToList (key: val: ''
@@ -17,43 +20,66 @@ let
     '') attrs)}
   '';
 
-  compose = f: g: x: f (g x);
-  concatHosts = mapAttrByPath [ "general" "host" ] (hs: concatStringsSep "\n  ") [];
-  generatedConfig = mapAttrsToList mkSection cfg.config;
+  mergedConfig = cfg.config.otherConfig
+    // { general.host = concatStringsSep "\n " cfg.config.general.host; };
+  generatedConfig = mapAttrsToList mkSection mergedConfig;
   configFile = pkgs.writeText "isso.cfg" (concatStringsSep "\n" generatedConfig);
 
 in
 {
   options = {
-
-    services.isso = {
+    services.isso = with types; {
 
       enable = mkEnableOption "the ${desc}";
 
       config = mkOption {
-        type = with types; attrsOf (attrsOf str);
         description = ''
-          Isso INI-style configuration mapped to an attribute set.
-          Is merged recursively with the default.
+          Isso INI-style configuration.
         '';
-        example = {
-          general = rec {
-            log-file = "${config.users.users.isso.home}/isso.log";
-            host = [ "http://localhost" "http://example.com" ];
+        type = submodule ({ options = {
+
+          general = mkOption {
+            description = "Isso [general] section.";
+            type = submodule ({ options = {
+              host = mkOption {
+                type = listOf str;
+                description = ''
+                  Websites isso should respond to. Non-empty.
+                '';
+                example = [ "localhost" "example.com" ];
+                default = [];
+              };
+            };});
+            default = {};
           };
-          server.listen = "http://localhost:8080";
-        };
-        default = {
-          general.dbpath = db;
-        };
+
+          otherConfig = mkOption {
+            type = attrsOf (attrsOf str);
+            description = ''
+              Attribute set converted to INI; more specific options
+              overwrite the contents of this set.
+            '';
+            example = {
+              server.listen = "localhost:8080";
+              general.log-file = "${home}/isso.log";
+            };
+            default = {
+              general.dbpath = db;
+            };
+          };
+
+        };});
       };
-
     };
-
   };
 
-  config =
-   mkIf cfg.enable {
+
+  config = mkIf cfg.enable {
+
+    assertions = [
+      { assertion = cfg.config.general.host != [];
+        message = "host must not be empty"; }
+    ];
 
     systemd.services.isso = {
       description = desc;
@@ -82,5 +108,4 @@ in
     users.groups.isso.gid = config.ids.gids.isso;
 
   };
-
 }
