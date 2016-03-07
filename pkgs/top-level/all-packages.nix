@@ -8148,9 +8148,6 @@ let
 
   mkvtoolnix-cli = mkvtoolnix.override {
     withGUI = false;
-    qt5 = null;
-    legacyGUI = false;
-    wxGTK = null;
   };
 
   mlt-qt4 = callPackage ../development/libraries/mlt {
