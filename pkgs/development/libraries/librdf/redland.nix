@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     [ "--with-threads" ]
     ++ stdenv.lib.optional withBdb "--with-bdb=${db}";
 
+  # Fix broken DT_NEEDED in lib/redland/librdf_storage_sqlite.so.
+  NIX_CFLAGS_LINK = "-lraptor2";
+
   meta = {
     homepage = http://librdf.org/;
   };
