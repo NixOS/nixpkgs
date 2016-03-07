@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1pcdzf2h1prn393dkvg93v80vh38q0v817xnbwrlwxbdz4k7i8r2";
   };
 
-  buildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoconf automake ];
 
   preConfigure = "./bootstrap";
 
