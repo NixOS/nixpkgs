@@ -7,9 +7,7 @@ with lib;
 let
 
   drivers = config.services.xserver.videoDrivers;
-
   enabled = elem "ati_unfree" drivers;
-
   ati_x11 = config.boot.kernelPackages.ati_drivers_x11;
 
 in
@@ -23,13 +21,10 @@ in
 
     hardware.opengl.package = ati_x11;
     hardware.opengl.package32 = pkgs_i686.linuxPackages.ati_drivers_x11.override { libsOnly = true; kernel = null; };
-
+    boot.kernelPackages = pkgs.linuxPackages_3_1;
     environment.systemPackages = [ ati_x11 ];
-
     boot.extraModulePackages = [ ati_x11 ];
-
-    boot.blacklistedKernelModules = [ "radeon" ];
-
+    boot.blacklistedKernelModules = [ "radeon" "amdgpu" "radeonfb" ];
     environment.etc."ati".source = "${ati_x11}/etc/ati";
 
   };

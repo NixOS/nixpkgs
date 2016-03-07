@@ -1,0 +1,10 @@
+--- 10.10/common/lib/modules/fglrx/build_mod/2.6.x/Makefile	2010-09-22 09:15:33.000000000 +0200
++++ 10.10/common/lib/modules/fglrx/build_mod/2.6.x/Makefile	2010-10-01 17:57:21.057820899 +0200
+@@ -66,6 +66,7 @@
+                 -DFGL_GART_RESERVED_SLOT \
+                 -DFGL_LINUX253P1_VMA_API \
+                 -DPAGE_ATTR_FIX=$(PAGE_ATTR_FIX) \
++                -DCOMPAT_ALLOC_USER_SPACE=$(COMPAT_ALLOC_USER_SPACE) \
+ 
+ ifeq ($(KERNELRELEASE),)
+ # on first call from remote location we get into this path

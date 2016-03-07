@@ -1,0 +1,27 @@
+--- 15.9/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-09-09 00:57:14.000000000 +0200
++++ 15.9/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-11-03 19:00:09.121884973 +0100
+@@ -3412,7 +3412,11 @@
+ int ATI_API_CALL KCL_MEM_MTRR_AddRegionWc(unsigned long base, unsigned long size)
+ {
+ #ifdef CONFIG_MTRR
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
++    return arch_phys_wc_add(base, size);
++#else
+     return mtrr_add(base, size, MTRR_TYPE_WRCOMB, 1);
++#endif
+ #else /* !CONFIG_MTRR */
+     return -EPERM;
+ #endif /* !CONFIG_MTRR */
+@@ -3421,7 +3425,12 @@
+ int ATI_API_CALL KCL_MEM_MTRR_DeleteRegion(int reg, unsigned long base, unsigned long size)
+ {
+ #ifdef CONFIG_MTRR
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,3,0)
++    arch_phys_wc_del(reg);
++    return reg;
++#else
+     return mtrr_del(reg, base, size);
++#endif
+ #else /* !CONFIG_MTRR */
+     return -EPERM;
+ #endif /* !CONFIG_MTRR */

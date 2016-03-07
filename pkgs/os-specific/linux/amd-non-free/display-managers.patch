@@ -1,0 +1,55 @@
+--- fglrx-15.302/common/etc/ati/authatieventsd.sh	2016-02-20 17:01:02.182983079 +0000
++++ fglrx-15.302b/common/etc/ati/authatieventsd.sh	2016-02-20 17:01:16.000000000 +0000
+@@ -32,7 +32,7 @@
+     # vary depending upon whether X was started via xdm/kdm, gdm or startx, so
+     # check each one in turn.
+ 
+-    # Check xdm/kdm
++    # Check xdm
+ 
+     XDM_AUTH_MASK=/var/lib/xdm/authdir/authfiles/A$1*
+     XDM_AUTH_FILE=`ls -t $XDM_AUTH_MASK 2>/dev/null | head -n 1`   # Choose the newest file
+@@ -51,6 +51,43 @@
+         return 0
+     fi
+ 
++    # Check kdm
++
++    KDM_AUTH_MASK=/var/run/xauth/A$1*
++    KDM_AUTH_FILE=`ls -t $KDM_AUTH_MASK 2>/dev/null | head -n 1`   # Choose the newest file
++    if [ -n "$KDM_AUTH_FILE" ]; then
++        SERVER_AUTH_FILE=$KDM_AUTH_FILE
++        DISP_SEARCH_STRING="#ffff#"
++        return 0
++    fi
++
++    # Check for gdm 3
++
++    GDM3_AUTH_FILE=/var/run/gdm/auth-for-gdm-*/database
++    if [ -e $GDM3_AUTH_FILE ]; then
++        SERVER_AUTH_FILE=$GDM3_AUTH_FILE
++        DISP_SEARCH_STRING="unix$1"
++        return 0
++    fi
++
++    # Check for lightdm
++	LIGHTDM_AUTH_FILE=/var/run/lightdm/root/$1
++	if [ -e $LIGHTDM_AUTH_FILE ]; then
++		SERVER_AUTH_FILE=$LIGHTDM_AUTH_FILE
++		# Not sure if this is correct
++		DISP_SEARCH_STRING="unix$1"
++		return 0
++	fi
++
++    # Check for sddm
++	SDDM_AUTH_FILE=/var/run/sddm/$1
++	if [ -e $SDDM_AUTH_FILE ]; then
++		SERVER_AUTH_FILE=$SDDM_AUTH_FILE
++		# Not sure if this is correct
++		DISP_SEARCH_STRING="unix$1"
++		return 0
++	fi
++
+     # Finally, check for startx
+ 
+     for XPID in `pidof X`; do
