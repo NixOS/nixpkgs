@@ -54,14 +54,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-I${libxml2}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
 
-  preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules)
-    + optionalString (hardening && (stdenv.cc.cc.isGNU or false)) ''
-      configureFlagsArray=(
-        --with-cc-opt="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
-        --with-ld-opt="-pie -Wl,-z,relro,-z,now"
-      )
-    ''
-    ;
+  preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
   hardeningEnable = [ "pie" ];
 
