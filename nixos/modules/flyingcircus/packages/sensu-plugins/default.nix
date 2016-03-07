@@ -1,6 +1,6 @@
 { lib, bundlerEnv, ruby_2_0, pkgs }:
 
-  bundlerEnv {
+bundlerEnv {
   name = "sensu-plugins";
 
   ruby = ruby_2_0;
