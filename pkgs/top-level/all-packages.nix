@@ -3893,6 +3893,8 @@ let
 
   yaml-merge = callPackage ../tools/text/yaml-merge { };
 
+  yeshup = callPackage ../tools/system/yeshup { };
+
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
 
