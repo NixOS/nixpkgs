@@ -1,3 +1,6 @@
 source 'https://rubygems.org'
 gem 'sensu', "0.22.1"
 #gem 'eventmachine', "1.0.7"
+gem 'sensu-plugins-mailer', "0.1.2"
+gem 'sensu-plugins-ssl', "0.0.6"
+gem 'sensu-plugins-systemd', :git => 'https://github.com/nyxcharon/sensu-plugins-systemd.git'

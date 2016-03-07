@@ -74,6 +74,12 @@ let
             "command": "check_users -w 5 -c 10",
             "interval": 60,
             "standalone": true
+        },
+        "systemd_units": {
+            "notification": "SystemD has failed units",
+            "command": "check-failed-units.rb",
+            "interval": 60,
+            "standalone": true
         }
       }
     }
