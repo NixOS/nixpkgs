@@ -2,11 +2,16 @@ hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
 hardeningFlags+=("${hardeningEnable[@]}")
 hardeningCFlags=()
 hardeningLDFlags=()
+hardeningDisable=(${hardeningDisable[@]})
+
+if [[ "$($LD -z 2>&1)" =~ "unknown option" ]]; then
+  hardeningDisable+=(bindnow relro)
+fi
 
 if [[ ! $hardeningDisable == "all" ]]; then
   for flag in "${hardeningFlags[@]}"
   do
-    if [[ ! "$hardeningDisable" =~ "$flag" ]]; then
+    if [[ ! "${hardeningDisable[@]}" =~ "$flag" ]]; then
       case $flag in
         fortify)
           hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')

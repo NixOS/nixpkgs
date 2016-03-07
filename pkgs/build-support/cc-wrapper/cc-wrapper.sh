@@ -89,6 +89,7 @@ if [[ "@prog@" = *++ ]]; then
     fi
 fi
 
+LD=@ldPath@/ld
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.

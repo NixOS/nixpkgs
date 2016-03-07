@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  hardeningDisable = [ "format" ];
+
   outputs = [ "out" "doc" ];
 
   NIX_CFLAGS_COMPILE = ''
