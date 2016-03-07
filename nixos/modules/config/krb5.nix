@@ -32,7 +32,7 @@ in
 
       kdc = mkOption {
         default = "kerberos.mit.edu";
-        description = "Kerberos Domain Controller.";
+        description = "Key Distribution Center";
       };
 
       kerberosAdminServer = mkOption {

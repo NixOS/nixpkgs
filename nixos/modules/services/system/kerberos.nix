@@ -46,7 +46,7 @@ in
       };
 
     systemd.services.kdc = {
-      description = "Kerberos Domain Controller daemon";
+      description = "Key Distribution Center daemon";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
@@ -55,7 +55,7 @@ in
     };
 
     systemd.services.kpasswdd = {
-      description = "Kerberos Domain Controller daemon";
+      description = "Kerberos Password Changing daemon";
       wantedBy = [ "multi-user.target" ];
       script = "${heimdal}/sbin/kpasswdd";
     };
