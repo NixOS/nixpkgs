@@ -184,9 +184,11 @@ ENV["GEM_PATH"] =
 require 'rubygems'
 require 'bundler/setup'
 
-ENV["BUNDLE_GEMFILE"] = old_gemfile
-ENV["GEM_HOME"]       = old_gem_home
-ENV["GEM_PATH"]       = old_gem_path
+# XXX This is a Flying Circus patch. I'm not proud of it, but as far as I can
+# tell, this has been rewritten on 16.03 anyway.
+#ENV["BUNDLE_GEMFILE"] = old_gemfile
+#ENV["GEM_HOME"]       = old_gem_home
+#ENV["GEM_PATH"]       = old_gem_path
 
 load Gem.bin_path('#{spec.name}', '#{executable}')
 TEXT
