@@ -2674,6 +2674,8 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  oh-my-zsh = callPackage ../shells/oh-my-zsh { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -10490,7 +10492,8 @@ let
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
     nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
     nvidia_x11_legacy340 = callPackage ../os-specific/linux/nvidia-x11/legacy340.nix { };
-    nvidia_x11_beta      = callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
+    nvidia_x11_beta      = nvidia_x11; # latest beta is lower version ATM
+                          # callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
     nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -10506,6 +10509,8 @@ let
     klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
     jool = callPackage ../os-specific/linux/jool { };
+
+    mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -11191,6 +11196,8 @@ let
   media-player-info = callPackage ../data/misc/media-player-info {};
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
+
+  montserrat = callPackage ../data/fonts/montserrat { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
