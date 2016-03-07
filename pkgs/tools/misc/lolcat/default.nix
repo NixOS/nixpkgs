@@ -2,7 +2,7 @@
 , pkgconfig, which }:
 
 bundlerEnv {
-  name = "lolcat-42.1.0";
+  name = "lolcat-42.1.43";
 
   inherit ruby;
   gemfile = ./Gemfile;
