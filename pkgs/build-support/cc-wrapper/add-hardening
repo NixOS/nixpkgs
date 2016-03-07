@@ -12,7 +12,7 @@ if [[ ! $hardeningDisable == "all" ]]; then
           hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
           ;;
         stackprotector)
-          hardeningCFlags+=('-fstack-protector-strong')
+          hardeningCFlags+=('-fstack-protector-strong' '--param ssp-buffer-size=4')
           ;;
         pie)
           hardeningCFlags+=('-fPIE')
