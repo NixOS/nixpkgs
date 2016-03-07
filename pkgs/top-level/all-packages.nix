@@ -2675,6 +2675,8 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  oh-my-zsh = callPackage ../shells/oh-my-zsh { };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
@@ -11214,6 +11216,8 @@ let
   media-player-info = callPackage ../data/misc/media-player-info {};
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
+
+  montserrat = callPackage ../data/fonts/montserrat { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
