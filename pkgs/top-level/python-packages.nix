@@ -18413,6 +18413,24 @@ in modules // {
     };
   };
 
+  geoalchemy2 = buildPythonPackage rec {
+    name = "GeoAlchemy2-${version}";
+    version = "0.3.0.dev1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/G/GeoAlchemy2/${name}.tar.gz";
+      sha256 = "1j95p860ikpcpcirs5791yjpy8rf18zsz7vvsdy6v3x32hkim0k6";
+    };
+
+    propagatedBuildInputs = with self ; [ sqlalchemy shapely ];
+
+    meta = {
+      homepage =  http://geoalchemy.org/;
+      license = licenses.mit;
+      description = "Toolkit for working with spatial databases";
+    };
+  };
+
   geopy = buildPythonPackage rec {
     name = "geopy-${version}";
     version = "1.11.0";
