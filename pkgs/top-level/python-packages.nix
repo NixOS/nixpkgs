@@ -26037,4 +26037,20 @@ in modules // {
     };
   };
 
+  termstyle = buildPythonPackage rec {
+    name = "python-termstyle-${version}";
+    version = "0.1.10";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-termstyle/${name}.tar.gz";
+      sha256 = "1qllzkx1alf14zcfapppf8w87si4cpa7lgjmdp3f5idzdyqnnapl";
+    };
+
+    meta = {
+      description = "console colouring for python";
+      homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
+      license = licenses.bsdOriginal;
+    };
+
+  };
+
 }
