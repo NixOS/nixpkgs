@@ -1,26 +1,17 @@
 let
-  mkOpts = ver: prio: sys: virt: swvirt: hwvirt:
+  mkOpts = prio: sys: virt: swvirt: hwvirt:
     { config.priority               = prio;
       config.system                 = sys;
       config.virtualisationConfig   = virt;
       config.hardwareVirtualisation = hwvirt;
       config.virtualisationSoftware = swvirt;
-    } // builtins.listToAttrs [ { name = ver; value = true; } ];
+    };
 in
 {
-  # Stable kernels
-  linux_grsec_stable_desktop =
-    mkOpts "stable" "performance" "desktop" "host" "kvm" true;
-  linux_grsec_stable_server  =
-    mkOpts "stable" "security" "server" "host" "kvm" true;
-  linux_grsec_stable_server_xen =
-    mkOpts "stable" "security" "server" "guest" "xen" true;
-
-  # Testing kernels
-  linux_grsec_testing_desktop =
-    mkOpts "testing" "performance" "desktop" "host" "kvm" true;
-  linux_grsec_testing_server  =
-    mkOpts "testing" "security" "server" "host" "kvm" true;
-  linux_grsec_testing_server_xen =
-    mkOpts "testing" "security" "server" "guest" "xen" true;
+  desktop =
+    mkOpts "performance" "desktop" "host" "kvm" true;
+  server  =
+    mkOpts "security" "server" "host" "kvm" true;
+  server_xen =
+    mkOpts "security" "server" "guest" "xen" true;
 }
