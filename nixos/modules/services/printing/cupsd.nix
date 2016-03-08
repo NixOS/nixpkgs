@@ -310,7 +310,7 @@ in
               [ ! -e "/var/lib/cups/$i" ] && ln -s "${rootdir}/etc/cups/$i" "/var/lib/cups/$i"
             done
             ${optionalString cfg.gutenprint ''
-              ${gutenprint}/bin/cups-genppdupdate
+              ${gutenprint}/bin/cups-genppdupdate -p /etc/cups/ppd
             ''}
           '';
       };

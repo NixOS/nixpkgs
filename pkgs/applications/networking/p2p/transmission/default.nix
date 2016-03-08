@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "2.84";
+  version = "2.90";
 in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://transmission.cachefly.net/transmission-${version}.tar.xz";
-    sha256 = "1sxr1magqb5s26yvr5yhs1f7bmir8gl09niafg64lhgfnhv1kz59";
+    sha256 = "1lig7y9fhmv2ajgq1isj9wqgpcgignzlczs3dy95ahb8h6pqrzv9";
   };
 
   buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools zlib ]

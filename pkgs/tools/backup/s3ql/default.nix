@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3Packages, sqlite  }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "s3ql";
   version = "2.13";

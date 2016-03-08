@@ -21,6 +21,7 @@
 , youtubeSupport ? true, youtube-dl ? null
 , cacaSupport ? true, libcaca ? null
 , vaapiSupport ? false, libva ? null
+, waylandSupport ? false, wayland ? null, libxkbcommon ? null
 }:
 
 assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
@@ -41,6 +42,7 @@ assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 assert youtubeSupport -> youtube-dl != null;
 assert cacaSupport -> libcaca != null;
+assert waylandSupport -> (wayland != null && libxkbcommon != null);
 
 let
   inherit (stdenv.lib) optional optionals optionalString;
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${meta.version}.tar.gz";
-    sha256 = "0cqjwl0xyg0sv1jflipfkvqjg32y0kqfh4gc3lyhqgv0hgs3fa84";
+    sha256 = "1p0b83048g66icpz5n66v3k4ldr1z0rmg5d2rr7kcbspm1xj2cbx";
   };
 
   patchPhase = ''
@@ -77,7 +79,8 @@ stdenv.mkDerivation rec {
     "--enable-manpage-build"
     "--disable-build-date" # Purity
     "--enable-zsh-comp"
-  ] ++ optional vaapiSupport "--enable-vaapi";
+  ] ++ optional vaapiSupport "--enable-vaapi"
+  ++ optional waylandSupport "--enable-wayland";
 
   configurePhase = ''
     python ${waf} configure --prefix=$out $configureFlags
@@ -105,7 +108,8 @@ stdenv.mkDerivation rec {
     ++ optional youtubeSupport youtube-dl
     ++ optional sdl2Support SDL2
     ++ optional cacaSupport libcaca
-    ++ optional vaapiSupport libva;
+    ++ optional vaapiSupport libva
+    ++ optionals waylandSupport [ wayland libxkbcommon ];
 
   enableParallelBuilding = true;
 
@@ -125,7 +129,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "0.14.0";
+    version = "0.15.0";
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
@@ -139,6 +143,5 @@ stdenv.mkDerivation rec {
     '';
   };
 }
-# TODO: Wayland support
 # TODO: investigate caca support
 # TODO: investigate lua5_sockets bug

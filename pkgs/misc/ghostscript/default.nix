@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, zlib, expat, openssl, autoconf
 , libjpeg, libpng, libtiff, freetype, fontconfig, lcms2, libpaper, jbig2dec
 , libiconv, ijs
 , x11Support ? false, xlibsWrapper ? null
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       libjpeg libpng libtiff freetype fontconfig lcms2 libpaper jbig2dec
       libiconv ijs
     ]
-    ++ stdenv.lib.optional x11Support xlibsWrapper
-    ++ stdenv.lib.optional cupsSupport cups
+    ++ lib.optional x11Support xlibsWrapper
+    ++ lib.optional cupsSupport cups
     ;
 
   patches = [
@@ -87,8 +87,6 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "cups_serverroot=$(out)" "cups_serverbin=$(out)/lib/cups" ];
-
   preConfigure = ''
     # requires in-tree (heavily patched) openjpeg
     rm -rf jpeg libpng zlib jasper expat tiff lcms{,2} jbig2dec freetype cups/libs ijs
@@ -97,25 +95,26 @@ stdenv.mkDerivation rec {
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib}/include@" -i configure.ac
 
     autoconf
+  '' + lib.optionalString cupsSupport ''
+    configureFlags="$configureFlags --with-cups-serverbin=$out/lib/cups --with-cups-serverroot=$out/etc/cups --with-cups-datadir=$out/share/cups"
   '';
 
   configureFlags =
     [ "--with-system-libtiff"
       "--enable-dynamic"
-      (if x11Support then "--with-x" else "--without-x")
-      (if cupsSupport then "--enable-cups" else "--disable-cups")
-    ];
+    ] ++ lib.optional x11Support "--with-x"
+      ++ lib.optional cupsSupport "--enable-cups";
 
   doCheck = true;
-  preCheck = "mkdir ./obj";
-  # parallel check sometimes gave: Fatal error: can't create ./obj/whitelst.o
 
   # don't build/install statically linked bin/gs
-  buildFlags = "so";
-  installTargets="soinstall";
+  buildFlags = [ "so" ];
+  installTargets = [ "soinstall" ];
 
   postInstall = ''
     ln -s gsc "$out"/bin/gs
+
+    cp -r Resource "$out/share/ghostscript/${version}"
 
     mkdir -p "$doc/share/ghostscript/${version}"
     mv "$out/share/ghostscript/${version}"/{doc,examples} "$doc/share/ghostscript/${version}/"
@@ -123,7 +122,7 @@ stdenv.mkDerivation rec {
     ln -s "${fonts}" "$out/share/ghostscript/fonts"
   '';
 
-  preFixup = stdenv.lib.strings.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
   '';
 

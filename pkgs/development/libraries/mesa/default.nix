@@ -86,12 +86,16 @@ stdenv.mkDerivation {
     # TODO: Figure out how to enable opencl without having a runtime dependency on clang
     "--disable-opencl"
 
-    "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+    (if "armv7l-linux" == stdenv.system
+      then null
+      else "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
     "--enable-shared-glapi"
     "--enable-sysfs"
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-glx-tls"
-    "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
+    (if "armv7l-linux" == stdenv.system
+      then "--with-dri-drivers="
+      else "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
     "--with-egl-platforms=x11,wayland,drm"
 
     "--enable-gallium-llvm"

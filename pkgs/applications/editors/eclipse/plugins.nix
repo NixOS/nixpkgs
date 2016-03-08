@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.14.0.201601142217";
+    version = "6.16.0.201603042325";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.14.0/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0ysxir1fv0mb9xnidc9hv6llnk48lkav0sryjbx7pw7vy1f8nd4c";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.16.0/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "0bm1linyw82bryblyabcx89zqw1ingh8mx62bwp3qj05yc9ksnly";
     };
 
     meta = with stdenv.lib; {
@@ -233,6 +233,8 @@ rec {
 
     srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
 
+    propagatedBuildInputs = [ zest ];
+
     phases = [ "installPhase" ];
 
     installPhase = ''
@@ -240,7 +242,8 @@ rec {
       mkdir -p $dropinDir/features
       unzip ${srcFeature} -d $dropinDir/features/
       mkdir -p $dropinDir/plugins
-      cp -v ${srcPlugin1} ${srcPlugin2} $dropinDir/plugins/
+      cp -v ${srcPlugin1} $dropinDir/plugins/''${srcPlugin1#*-}
+      cp -v ${srcPlugin2} $dropinDir/plugins/''${srcPlugin2#*-}
     '';
 
     meta = with stdenv.lib; {
@@ -392,6 +395,23 @@ rec {
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  zest = buildEclipseUpdateSite rec {
+    name = "zest-${version}";
+    version = "3.9.101";
+
+    src = fetchurl {
+      url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${name}.zip";
+      sha256 = "01scn7cmcrjcp387spjm8ifgwrwwi77ypildandbisfvhj3qqs7m";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.eclipse.org/gef/zest/;
+      description = "The Eclipse Visualization Toolkit";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
     };
   };
 

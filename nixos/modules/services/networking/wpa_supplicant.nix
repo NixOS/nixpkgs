@@ -78,10 +78,11 @@ in {
         '';
         default = {};
         example = literalExample ''
-          echelon = {
-            psk = "abcdefgh";
-          };
-          "free.wifi" = {};
+          { echelon = {
+              psk = "abcdefgh";
+            };
+            "free.wifi" = {};
+          }
         '';
       };
 
@@ -127,6 +128,7 @@ in {
       in {
         description = "WPA Supplicant";
 
+        after = [ "network-interfaces.target" ];
         wantedBy = [ "network.target" ];
 
         path = [ pkgs.wpa_supplicant ];

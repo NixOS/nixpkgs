@@ -45,7 +45,7 @@ else
     if [ -n "$langVhdl" ]; then
         gccLDFlags="$gccLDFlags -L$zlib/lib"
     fi
-    echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
+    echo "$gccLDFlags" > $out/nix-support/cc-ldflags
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
     # $gcc/lib64 (even though it does actually search there...)..
@@ -63,7 +63,7 @@ else
         gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
     fi
-    echo "$gccCFlags" > $out/nix-support/gcc-cflags
+    echo "$gccCFlags" > $out/nix-support/cc-cflags
     
     gccPath="$gcc/bin"
     # On Illumos/Solaris we might prefer native ld

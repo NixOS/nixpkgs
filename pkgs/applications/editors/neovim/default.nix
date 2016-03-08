@@ -21,8 +21,8 @@ let
     version = "2015-11-06";
 
     src = fetchFromGitHub {
-      sha256 = "0f9r0wnr9ajcdd6as24igmch0n8s1annycb9f4k0vg6fngwaypy9";
-      rev = "04781d37ce5af3f580376dc721bd3b89c434966b";
+      sha256 = "090pyf1n5asaw1m2l9bsbdv3zd753aq1plb0w0drbc2k43ds7k3g";
+      rev = "a9c7c6fd20fa35e0ad3e0e98901ca12dfca9c25c";
       repo = "libvterm";
       owner = "neovim";
     };
@@ -60,10 +60,10 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.1";
+    version = "0.1.2";
 
     src = fetchFromGitHub {
-      sha256 = "0crswjslp687yp1cpn7nmm0j2sccqhcxryzxv1s81cgpai0fzf60";
+      sha256 = "128aznp2gj08bdz05ri8mqday7wcsy9yz7dw7vdgzk0pk23vjz89";
       rev = "v${version}";
       repo = "neovim";
       owner = "neovim";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, alsaLib, glib, libjack2, libsndfile, pkgconfig
-, libpulseaudio }:
+, libpulseaudio, CoreServices, CoreAudio, AudioUnit }:
 
 stdenv.mkDerivation  rec {
   name = "fluidsynth-${version}";
@@ -18,10 +18,11 @@ stdenv.mkDerivation  rec {
   '';
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
-    "-framework CoreAudio";
+    "-framework CoreAudio -framework CoreServices";
 
   buildInputs = [ glib libsndfile pkgconfig ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ];
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreAudio AudioUnit ];
 
   meta = with stdenv.lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

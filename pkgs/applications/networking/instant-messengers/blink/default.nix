@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages, pyqt4, cython, libvncserver, zlib, twisted
 , gnutls, libvpx }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "blink-${version}";
   version = "1.4.2";
   

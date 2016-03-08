@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       --replace /bin/sh ${stdenv.shell} \
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
       --replace /bin/sed ${gnused}/bin/sed
+    # to enable link-local connections
+    substituteInPlace src/devices/nm-device.c --replace '("avahi-autoipd", NULL, NULL)' '("avahi-autoipd", &"${avahi}/sbin/avahi-autoipd", NULL)'
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
 

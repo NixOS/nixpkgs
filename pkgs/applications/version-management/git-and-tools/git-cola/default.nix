@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, pythonPackages, makeWrapper, gettext }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "git-cola-${version}";
   version = "2.2.1";
 

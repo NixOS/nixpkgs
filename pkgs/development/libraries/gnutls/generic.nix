@@ -17,7 +17,6 @@ stdenv.mkDerivation {
   outputInfo = "docdev";
 
   configureFlags =
-    # FIXME: perhaps use $SSL_CERT_FILE instead
     lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
   ++ [
     "--disable-dependency-tracking"

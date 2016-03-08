@@ -1,6 +1,6 @@
 { stdenv, fetchgit, which, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "euca2ools-2.1.4";
   namePrefix = "";
 

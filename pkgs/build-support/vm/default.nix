@@ -11,6 +11,15 @@ rec {
 
   qemu = pkgs.qemu_kvm;
 
+  qemu-220 = lib.overrideDerivation pkgs.qemu_kvm (attrs: rec {
+    version = "2.2.0";
+    src = fetchurl {
+      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+      sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
+    };
+    patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
+  });
+
   qemuProg = "${qemu}/bin/qemu-kvm";
 
 

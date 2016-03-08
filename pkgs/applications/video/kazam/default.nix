@@ -2,7 +2,7 @@
 , gtk3, libwnck3, keybinder, intltool, libcanberra }:
 
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "kazam-${version}";
   version = "1.4.3";
   namePrefix = "";

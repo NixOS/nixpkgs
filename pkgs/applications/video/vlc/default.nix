@@ -20,11 +20,11 @@ assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "1jqzrzrpw6932lbkf863xk8cfmn4z2ngbxz7w8ggmh4f6xz9sgal";
+    sha256 = "1dazxbmzx2g5570pkg519a7fsj07rdr155kjsw7b9y8npql33lls";
   };
 
   # outputs TODO: some modules are "corrupt", even without splitting vlc

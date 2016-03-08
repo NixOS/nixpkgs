@@ -1,5 +1,7 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, autoconf, automake, otool }:
+, libintlOrEmpty, autoconf, automake, otool
+, substituteAll, nixStoreDir ? builtins.storeDir
+}:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
 # it may be worth thinking about using multiple derivation outputs
 # In that case its about 6MB which could be separated
@@ -15,7 +17,10 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
     sha256 = "6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233";
   };
-  patches = [ ./absolute_shlib_path.patch ];
+  patches = stdenv.lib.singleton (substituteAll {
+    src = ./absolute_shlib_path.patch;
+    inherit nixStoreDir;
+  });
 
   outputs = [ "dev" "out" ];
   outputBin = "dev";

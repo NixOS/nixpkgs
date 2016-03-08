@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${name}.tar.bz2";
-    sha256 = "0wpinar2cxyzq2j7ff7lznc08f0n6qjdm9aavsarbgdpaf2s1xvq";
+    sha256 = "0xyy0qm3h22b69if2hmg36jzvvljxb1w0zy2m2a28kdqfzpa6m8g";
   };
 
   buildInputs = with gst_all_1; [
@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     libnotify
     makeWrapper
   ];
-
-  patches = [ ./liferea-fix-notification-header-location.patch ];
 
   preFixup = ''
     for f in "$out"/bin/*; do

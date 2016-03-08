@@ -73,6 +73,8 @@ stdenv.mkDerivation rec {
     ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.bluez.org/;
     repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;

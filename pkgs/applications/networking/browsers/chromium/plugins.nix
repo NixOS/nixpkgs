@@ -1,4 +1,5 @@
 { stdenv
+, jshon
 , enablePepperFlash ? false
 , enableWideVine ? false
 
@@ -80,12 +81,10 @@ let
       wvName = "Widevine Content Decryption Module";
       wvDescription = "Playback of encrypted HTML audio/video content";
       wvMimeTypes = "application/x-ppapi-widevine-cdm";
-      wvModule = "$widevine/lib/libwidevinecdmadapter.so";
+      wvModule = "@widevine@/lib/libwidevinecdmadapter.so";
       wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
     in ''
-      flashVersion="$(
-        sed -n -r 's/.*"version": "([^"]+)",.*/\1/p' PepperFlash/manifest.json
-      )"
+      flashVersion="$(${jshon}/bin/jshon -F PepperFlash/manifest.json -e version -u)"
 
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"

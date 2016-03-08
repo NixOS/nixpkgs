@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://www.certificate-transparency.org/;
-    description = "Auditing for TLS certificates.";
+    description = "Auditing for TLS certificates";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ philandstuff ];

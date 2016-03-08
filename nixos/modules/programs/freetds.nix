@@ -17,14 +17,14 @@ in
     environment.freetds = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = {
-        MYDATABASE = 
-          ''
-          host = 10.0.2.100
-          port = 1433
-          tds version = 7.2
-          '';
-      };
+      example = literalExample ''
+        { MYDATABASE = '''
+            host = 10.0.2.100
+            port = 1433
+            tds version = 7.2
+          ''';
+        }
+      '';
       description = 
         ''
         Configure freetds database entries. Each attribute denotes

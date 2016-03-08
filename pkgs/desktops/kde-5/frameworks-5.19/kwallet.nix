@@ -1,6 +1,6 @@
 { kdeFramework, lib, extra-cmake-modules, kconfig, kconfigwidgets
-, kcoreaddons , kdbusaddons, kdoctools, ki18n, kiconthemes
-, knotifications , kservice, kwidgetsaddons, kwindowsystem, libgcrypt
+, kcoreaddons, kdbusaddons, kdoctools, ki18n, kiconthemes, knotifications
+, kservice, kwidgetsaddons, kwindowsystem, libgcrypt
 , makeQtWrapper }:
 
 kdeFramework {

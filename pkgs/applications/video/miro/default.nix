@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pythonPackages, pkgconfig
+{ stdenv, fetchurl, python, buildPythonApplication, pythonPackages, pkgconfig
 , pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
 , taglib, sqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
@@ -10,7 +10,7 @@ assert enableBonjour -> avahi != null;
 
 with stdenv.lib;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "miro-${version}";
   namePrefix = "";
   version = "6.0";

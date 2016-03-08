@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python34Packages, }:
 
-python34Packages.buildPythonPackage rec {
+python34Packages.buildPythonApplication rec {
   version = "0.9.5";
   name = "canto-daemon-${version}";
   namePrefix = "";

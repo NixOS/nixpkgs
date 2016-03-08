@@ -76,8 +76,6 @@ in
 
     environment.systemPackages =
       [
-        pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
-
         kde5.frameworkintegration
         kde5.kinit
 
@@ -103,16 +101,12 @@ in
         kde5.plasma-workspace
         kde5.plasma-workspace-wallpapers
 
-        kde5.ark
         kde5.dolphin
         kde5.dolphin-plugins
         kde5.ffmpegthumbs
-        kde5.gwenview
-        kde5.kate
         kde5.kdegraphics-thumbnailers
         kde5.kio-extras
         kde5.konsole
-        kde5.okular
         kde5.print-manager
 
         # Oxygen icons moved to KDE Frameworks 5.16 and later.

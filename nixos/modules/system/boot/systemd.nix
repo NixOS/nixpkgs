@@ -160,6 +160,7 @@ let
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
+      "systemd-binfmt.service"
     ]
 
     ++ cfg.additionalUpstreamSystemUnits;
@@ -779,6 +780,7 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

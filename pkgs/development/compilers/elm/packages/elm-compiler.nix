@@ -10,8 +10,8 @@ mkDerivation {
   version = "0.16";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-compiler";
-    sha256 = "696413b69fa5e66f878ed189094be5f74dfaced42121c82ac88bbab1c2bb9861";
-    rev = "cb1bad3b6ebaa02d5af47e9b98eab7d475a3a48d";
+    sha256 = "b3bcdca469716f3a4195469549a9e9bc53a6030aff132ec620b9c93958a5ffe6";
+    rev = "df86c1c9b3cf06de3ccb78f26b4d2fac0129ce5a";
   };
   isLibrary = true;
   isExecutable = true;
@@ -33,6 +33,6 @@ mkDerivation {
   ];
   jailbreak = true;
   homepage = "http://elm-lang.org";
-  description = "Values to help with elm-package, elm-make, and elm-lang.org.";
+  description = "Values to help with elm-package, elm-make, and elm-lang.org";
   license = stdenv.lib.licenses.bsd3;
 }

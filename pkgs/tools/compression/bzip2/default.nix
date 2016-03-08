@@ -74,7 +74,7 @@ in stdenv.mkDerivation {
     mv "$bin/lib" "$static/"
   '';
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile --replace CC=gcc CC=cc
     substituteInPlace Makefile-libbz2_so --replace CC=gcc CC=cc
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

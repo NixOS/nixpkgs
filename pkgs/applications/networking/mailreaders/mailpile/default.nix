@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pythonPackages, gnupg1orig, makeWrapper, openssl }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mailpile-${version}";
   version = "0.4.1";
 

@@ -1,9 +1,15 @@
 # Maintainer's Notes:
 #
-# How To Update
-#  1. Edit the URL in ./manifest.sh
-#  2. Run ./manifest.sh
-#  3. Fix build errors.
+# Minor updates:
+#  1. Edit ./fetchsrcs.sh to point to the updated URL.
+#  2. Run ./fetchsrcs.sh.
+#  3. Build and enjoy.
+#
+# Major updates:
+#  We prefer not to immediately overwrite older versions with major updates, so
+#  make a copy of this directory first. After copying, be sure to delete ./tmp
+#  if it exists. Then follow the minor update instructions. Be sure to check if
+#  any new components have been added and package them as necessary.
 
 { pkgs, debug ? false }:
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   version = "0.9.11";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/desmume/desmume/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/desmume/desmume/${version}/${name}.tar.gz";
     sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
   };
 

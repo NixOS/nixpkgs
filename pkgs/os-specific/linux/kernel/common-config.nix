@@ -362,7 +362,7 @@ with stdenv.lib;
   X86_MCE y
 
   # PCI-Expresscard hotplug support
-  HOTPLUG_PCI_PCIE y
+  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
@@ -478,6 +478,7 @@ with stdenv.lib;
   ''}
   ${optionalString (versionAtLeast version "3.7") ''
     MEDIA_USB_SUPPORT y
+    MEDIA_PCI_SUPPORT y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.

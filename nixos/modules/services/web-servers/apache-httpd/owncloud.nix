@@ -370,6 +370,7 @@ rec {
     package = mkOption {
       type = types.package;
       default = pkgs.owncloud70;
+      defaultText = "pkgs.owncloud70";
       example = literalExample "pkgs.owncloud70";
       description = ''
           PostgreSQL package to use.

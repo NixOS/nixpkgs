@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "5.4.0";
   
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
+    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
     sha256 = "0ryp26h7pyqing8pyg0xjrp1wm77wwgya4a7d00wczh885pk16kq";
     name = "${name}.tgz";
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-      description = "Universal Media Server: a DLNA-compliant UPnP Media Server.";
+      description = "Universal Media Server: a DLNA-compliant UPnP Media Server";
       license = stdenv.lib.licenses.gpl2;
       platforms = stdenv.lib.platforms.linux;
       maintainers = [ stdenv.lib.maintainers.thall ];

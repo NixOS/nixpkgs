@@ -13,7 +13,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "38.3.0"; in
+let version = "38.6.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {

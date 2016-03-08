@@ -7,17 +7,15 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 stdenv.mkDerivation rec {
-  name = "pcre-8.37";
+  name = "pcre-8.38";
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
+    sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
   patches =
-    [ ./cve-2015-3210.patch
-      ./cve-2015-5073.patch
-    ];
+    [ ];
 
   outputs = [ "dev" "out" "bin" "doc" "man" ];
 

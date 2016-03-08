@@ -408,7 +408,7 @@ let
     packageRequires = [ dash ];
     files = [ "dash-functional.el" ];
     meta = {
-      description = "Collection of useful combinators for Emacs Lisp.";
+      description = "Collection of useful combinators for Emacs Lisp";
       license = gpl3Plus;
     };
   };
@@ -1525,7 +1525,7 @@ let
     };
     packageRequires = [ dash ];
     meta = {
-      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line.";
+      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line";
       license = gpl3Plus;
     };
   };
@@ -1541,7 +1541,7 @@ let
       sha256 = "1wvjisi26lb4g5rjq80kq9jmf1r2m3isy47nwrnahfzxk886qfbq";
       };
     meta = {
-      description = "A major mode for editing rust code.";
+      description = "A major mode for editing rust code";
       license = asl20;
     };
   };

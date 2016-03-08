@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://entrproject.org/;
-    description = "Run arbitrary commands when files change.";
+    description = "Run arbitrary commands when files change";
 
     license = stdenv.lib.licenses.isc;
 

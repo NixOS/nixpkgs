@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
-  configureFlags = [ "--with-module-dir=${mesa_noglu.driverLink}/lib/vdpau" ];
+  configureFlags = stdenv.lib.optional stdenv.isLinux
+    "--with-module-dir=${mesa_noglu.driverLink}/lib/vdpau";
 
   installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 

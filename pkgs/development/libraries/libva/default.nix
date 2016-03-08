@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
     "--enable-glx"
   ];
 
-  installFlags = lib.optional (!minimal) "dummy_drv_video_ladir=$(out)/lib/dri";
-  postInstall = "";
+  installFlags = [ "dummy_drv_video_ladir=$(out)/lib/dri" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;

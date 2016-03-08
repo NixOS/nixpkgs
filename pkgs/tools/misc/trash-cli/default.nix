@@ -2,7 +2,7 @@
 
 assert stdenv.isLinux;
 
-python2Packages.buildPythonPackage rec {
+python2Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
   version = "0.12.9.14";
   namePrefix = "";

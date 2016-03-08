@@ -9,7 +9,7 @@ let arch = if stdenv.system == "x86_64-linux" then "amd64"
     inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
 
 in stdenv.mkDerivation {
-  name = "steam-runtime-20151020";
+  name = "steam-runtime-2016-03-03";
 
   nativeBuildInputs = [ python2 dpkg binutils ];
 

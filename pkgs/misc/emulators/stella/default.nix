@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "4.6.1";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/stella/stella/${version}/${name}-src.tar.gz";
+    url = "mirror://sourceforge/project/stella/stella/${version}/${name}-src.tar.gz";
     sha256 = "126jph21b70jlxapzmll8pq36i53lb304hbsiap25160vdqid4n1";
   };
 

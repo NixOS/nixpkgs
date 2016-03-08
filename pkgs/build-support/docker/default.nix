@@ -267,7 +267,9 @@ EOF
 
     let
 
-      baseJson = writeText "${name}-config.json" (builtins.toJSON {
+      baseName = baseNameOf name;
+
+      baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
           created = "1970-01-01T00:00:01Z";
           architecture = "amd64";
           os = "linux";
@@ -277,11 +279,11 @@ EOF
       layer = (if runAsRoot == null
                then mkPureLayer { inherit baseJson contents extraCommands; }
                else mkRootLayer { inherit baseJson fromImage fromImageName fromImageTag contents runAsRoot diskSize extraCommands; });
-      depsTarball = mkTarball { name = "${name}-deps";
+      depsTarball = mkTarball { name = "${baseName}-deps";
                                 drv = layer;
                                 onlyDeps = true; };
       
-      result = runCommand "${name}.tar.gz" {
+      result = runCommand "${baseName}.tar.gz" {
         buildInputs = [ jshon ];
 
         imageName = name;

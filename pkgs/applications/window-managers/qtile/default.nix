@@ -1,19 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python27Packages, pkgs }:
+{ stdenv, fetchFromGitHub, buildPythonApplication, python27Packages, pkgs }:
 
 let cairocffi-xcffib = python27Packages.cairocffi.override {
     pythonPath = [ python27Packages.xcffib ];
   };
 in
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "qtile-${version}";
-  version = "0.10.3";
+  version = "0.10.4";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    sha256 = "02252sfcniijkpk5rfgb800wvdpl223xrx1bhrxpzgggpgfbnmn6";
+    sha256 = "0rwklzgkp3x242xql6qmfpfnhr788hd3jc1l80pc5ybxlwyfx59i";
   };
 
   patches = [

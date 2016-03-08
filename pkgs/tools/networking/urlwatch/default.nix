@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python3Packages }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "urlwatch-2.0";
 
   src = fetchurl {

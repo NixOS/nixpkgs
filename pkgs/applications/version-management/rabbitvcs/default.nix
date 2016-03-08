@@ -1,5 +1,5 @@
 { fetchFromGitHub, lib, python2Packages, meld, subversion, gvfs, xdg_utils }:
-python2Packages.buildPythonPackage rec {
+python2Packages.buildPythonApplication rec {
   name = "rabbitvcs-${version}";
   version = "0.16";
   namePrefix = "";
