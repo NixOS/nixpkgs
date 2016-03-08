@@ -197,11 +197,15 @@ in
     networking.domain = "gocept.net";
 
     networking.defaultGateway =
-      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      if
+        cfg.network.policy_routing.enable &&
+        lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then get_default_gateway is_ip4 cfg.enc.parameters.interfaces
       else null;
     networking.defaultGateway6 =
-      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
+      if
+        cfg.network.policy_routing.enable &&
+        lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then get_default_gateway is_ip6 cfg.enc.parameters.interfaces
       else null;
 
