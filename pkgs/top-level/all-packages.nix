@@ -1384,6 +1384,8 @@ let
 
   di = callPackage ../tools/system/di { };
 
+  diction = callPackage ../tools/text/diction { };
+
   diffoscope = callPackage ../tools/misc/diffoscope {
     jdk = jdk7;
     pythonPackages = python3Packages;
