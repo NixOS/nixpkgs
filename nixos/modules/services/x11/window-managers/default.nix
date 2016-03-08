@@ -17,6 +17,7 @@ in
     ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix
+    ./jwm.nix
     ./metacity.nix
     ./openbox.nix
     ./notion.nix
