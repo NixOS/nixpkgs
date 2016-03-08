@@ -66,7 +66,7 @@ with lib;
           # networking isn't _really_ up when the timer triggers for the
           # first time even though the 'network-online.target' is waited
           # for.
-          OnBootSec = "10s";
+          OnBootSec = "20s";
           OnUnitActiveSec = "10m";
           # Not yet supported by our systemd version.
           # RandomSec = "3m";
