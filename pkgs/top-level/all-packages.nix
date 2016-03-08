@@ -11729,7 +11729,7 @@ let
     pulseaudioSupport = config.pulseaudio or false;
   };
 
-  communi = callPackage ../applications/networking/irc/communi { };
+  communi = qt5.callPackage ../applications/networking/irc/communi { };
 
   CompBus = callPackage ../applications/audio/CompBus { };
 
