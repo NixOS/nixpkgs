@@ -9,11 +9,18 @@
 # listening on SRV interface
 
 let
-    cfg = config;
+    cfg = config.flyingcircus.roles.mysql;
+
     root_password_file = "/etc/local/mysql/mysql.passwd";
+    root_password_setter =
+        if cfg.rootPassword == null
+        then "$(${pkgs.apg}/bin/apg -a 1 -M lnc -n 1 -m 12)"
+        else "\"${cfg.rootPassword}\"";
+
     localConfig = if pathExists /etc/local/mysql
                   then "!include ${/etc/local/mysql}"
                   else "";
+
 
 in
 
@@ -29,11 +36,19 @@ in
                 description = "Enable the Flying Circus MySQL server role.";
             };
 
+            rootPassword = mkOption {
+                type = types.nullOr types.string;
+                default = null;
+                description = ''
+                    The root password for mysql. If null, a random root
+                    password will be set.
+                '';
+            };
         };
 
     };
 
-    config = mkIf config.flyingcircus.roles.mysql.enable {
+    config = mkIf cfg.enable {
 
         services.mysql = {
           enable = true;
@@ -144,7 +159,7 @@ in
         };
 
         system.activationScripts.fcio-mysql-init = let
-            mysql = cfg.services.mysql.package;
+            mysql = config.services.mysql.package;
           in
           stringAfter [ "users" "groups" ] ''
             # Configure initial root password for mysql.
@@ -155,8 +170,8 @@ in
 
             umask 0066
             if [[ ! -f ${root_password_file} ]]; then
-                pw=$(${pkgs.apg}/bin/apg -a 1 -M lnc -n 1 -m 12)
-                echo "''${pw}" > ${root_password_file}
+                pw=${root_password_setter}
+                echo -n "''${pw}" > ${root_password_file}
             fi
             chown root:service ${root_password_file}
             chmod 640 ${root_password_file}
@@ -180,7 +195,7 @@ in
           wants = [ "mysql-maintenance.timer" ];
           partOf = [ "mysql.service" ];
 
-          path = with pkgs; [ cfg.services.mysql.package ];
+          path = with pkgs; [ config.services.mysql.package ];
 
           serviceConfig = {
             Type = "oneshot";
