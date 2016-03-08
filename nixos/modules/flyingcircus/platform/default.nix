@@ -125,12 +125,11 @@ in
         Docs:      http://flyingcircus.io/doc/
         Release:   ${config.system.nixosVersion}
 
-      '' + lib.optionalString (enc ? name) ''
-
+    '' + lib.optionalString (enc ? name) ''
         Hostname:  ${enc.name}    Environment: ${enc.parameters.environment}    Location:  ${enc.parameters.location}
         Services:  ${enc.parameters.service_description}
 
-      '';
+    '';
 
     environment.noXlibs = true;
     sound.enable = false;
@@ -195,18 +194,14 @@ in
 
     system.activationScripts.flyingcircus_platform = ''
       # /srv must be accessible for unprivileged users
-      if [ ! -e /srv ]; then
-        install -d -m 0755 /srv
-      fi
-      chmod 0755 /srv
+      install -d -m 0755 /srv
     '';
 
-    security.sudo.extraConfig =
-        ''
-        Defaults lecture = never
-        root   ALL=(ALL) SETENV: ALL
-        %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
-        '';
+    security.sudo.extraConfig = ''
+      Defaults lecture = never
+      root   ALL=(ALL) SETENV: ALL
+      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
+    '';
 
     environment.etc = (
       lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)

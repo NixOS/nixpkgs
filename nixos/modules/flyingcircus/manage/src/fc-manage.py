@@ -29,20 +29,34 @@ directory = None
 
 
 def load_enc():
+    """Tries to read enc.json and establish directory connection."""
     global enc, directory
-    if not os.path.exists('/etc/nixos/enc.json'):
-        if not os.path.exists('/tmp/fc-data/enc.json'):
-            # This environment doesn't seem to support an ENC,
-            # i.e. Vagrant. Silently ignore for now.
-            return
-        shutil.copy('/tmp/fc-data/enc.json',
-                    '/etc/nixos/enc.json')
-    enc = json.load(open('/etc/nixos/enc.json'))
+    try:
+        with open('/etc/nixos/enc.json') as f:
+            enc = json.load(f)
+    except OSError:
+        # This environment doesn't seem to support an ENC,
+        # i.e. Vagrant. Silently ignore for now.
+        return
+
     directory = xmlrpc.client.Server(
         'https://{}:{}@directory.fcio.net/v2/api/rg-{}'.format(
             enc['name'],
             enc['parameters']['directory_password'],
             enc['parameters']['resource_group']))
+
+
+def write_json(calls):
+    """Writes JSON files from a list of (lambda, filename) pairs."""
+    for lookup, target in calls:
+        print('Retrieving {} ...'.format(target))
+        try:
+            data = lookup()
+            with open('/etc/nixos/{}'.format(target), 'w') as f:
+                os.chmod(f.fileno(), 0o640)
+                json.dump(data, f, ensure_ascii=False)
+        except Exception:
+            logging.exception('Error retrieving data:')
 
 
 def system_state():
@@ -59,41 +73,22 @@ def system_state():
             pass
         return result
 
-    _load_and_write_json([
-        (lambda: load_system_state(),
-         'system_state.json'),
+    write_json([
+        (lambda: load_system_state(), 'system_state.json'),
     ])
-
-
-def _load_and_write_json(calls):
-    for lookup, target in calls:
-        print('Retrieving {} ...'.format(target))
-        try:
-            data = lookup()
-            with open('/etc/nixos/{}'.format(target), 'w') as f:
-                os.chmod(f.fileno(), 0o600)
-                json.dump(data, f, ensure_ascii=False)
-        except Exception:
-            logging.exception('Error retrieving data:')
 
 
 def update_inventory():
     if directory is None:
         print('No directory. Not updating inventory.')
         return
-    _load_and_write_json([
-        (lambda: directory.lookup_node(enc['name']),
-         'enc.json'),
-        (lambda: directory.list_users(),
-         'users.json'),
-        (lambda: directory.list_permissions(),
-         'permissions.json'),
-        (lambda: directory.lookup_resourcegroup('admins'),
-         'admins.json'),
-        (lambda: directory.list_services(),
-         'services.json'),
-        (lambda: directory.list_service_clients(),
-         'service_clients.json')
+    write_json([
+        (lambda: directory.lookup_node(enc['name']), 'enc.json'),
+        (lambda: directory.list_users(), 'users.json'),
+        (lambda: directory.list_permissions(), 'permissions.json'),
+        (lambda: directory.lookup_resourcegroup('admins'), 'admins.json'),
+        (lambda: directory.list_services(), 'services.json'),
+        (lambda: directory.list_service_clients(), 'service_clients.json'),
     ])
 
 
@@ -137,7 +132,7 @@ def main():
     build.add_argument('-c', '--channel', default=False, dest='build',
                        action='store_const', const='build_channel',
                        help='switch machine to FCIO channel')
-    build.add_argument('-d', '--dev', default=False, dest='build',
+    build.add_argument('-d', '--development', default=False, dest='build',
                        action='store_const', const='build_dev',
                        help='switch machine to local checkout in '
                        '/root/nixpkgs')
