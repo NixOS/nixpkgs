@@ -9570,6 +9570,8 @@ let
 
   fleet = callPackage ../servers/fleet { };
 
+  foswiki = callPackage ../servers/foswiki { };
+
   freepops = callPackage ../servers/mail/freepops { };
 
   freeswitch = callPackage ../servers/sip/freeswitch { };
