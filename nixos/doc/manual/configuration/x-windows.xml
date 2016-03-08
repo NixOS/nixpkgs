@@ -4,116 +4,169 @@
          version="5.0"
          xml:id="sec-x11">
 
-<title>X Window System</title>
+    <title>X Window System</title>
     
-<para>The X Window System (X11) provides the basis of NixOS’ graphical
-user interface.  It can be enabled as follows:
-<programlisting>
-services.xserver.enable = true;
-</programlisting>
-The X server will automatically detect and use the appropriate video
-driver from a set of X.org drivers (such as <literal>vesa</literal>
-and <literal>intel</literal>).  You can also specify a driver
-manually, e.g.
-<programlisting>
-services.xserver.videoDrivers = [ "r128" ];
-</programlisting>
-to enable X.org’s <literal>xf86-video-r128</literal> driver.</para>
+    <para>
+        The X Window System (X11) provides the basis of NixOS’ graphical
+        user interface.  It can be enabled as follows:
+        <programlisting>
+            services.xserver.enable = true;
+        </programlisting>
+        The X server will automatically detect and use the appropriate video
+        driver from a set of X.org drivers (such as <literal>vesa</literal>
+        and <literal>intel</literal>).  You can also specify a driver
+        manually, e.g.
+        <programlisting>
+            services.xserver.videoDrivers = [ "r128" ];
+        </programlisting>
+        to enable X.org’s <literal>xf86-video-r128</literal> driver.
+    </para>
 
-<para>You also need to enable at least one desktop or window manager.
-Otherwise, you can only log into a plain undecorated
-<command>xterm</command> window.  Thus you should pick one or more of
-the following lines:
-<programlisting>
-services.xserver.desktopManager.kde4.enable = true;
-services.xserver.desktopManager.xfce.enable = true;
-services.xserver.windowManager.xmonad.enable = true;
-services.xserver.windowManager.twm.enable = true;
-services.xserver.windowManager.icewm.enable = true;
-</programlisting>
-</para>
+    <para>
+        You also need to enable at least one desktop or window manager.
+        Otherwise, you can only log into a plain undecorated
+        <command>xterm</command> window.  Thus you should pick one or more of
+        the following lines:
+        <programlisting>
+            services.xserver.desktopManager.kde4.enable = true;
+            services.xserver.desktopManager.kde5.enable = true;
+            services.xserver.desktopManager.xfce.enable = true;
+            services.xserver.desktopManager.e19.enable = true;
+            services.xserver.desktopManager.gnome3.enable = true;
+            services.xserver.desktopManager.kodi.enable = true;
+            services.xserver.windowManager.xmonad.enable = true;
+            services.xserver.windowManager.twm.enable = true;
+            services.xserver.windowManager.icewm.enable = true;
+            services.xserver.windowManager.afterstep.enable = true;
+            services.xserver.windowManager.awesome.enable = true;
+            services.xserver.windowManager.bspwm.enable = true;
+            services.xserver.windowManager.clfswm.enable = true;
+            services.xserver.windowManager.compiz.enable = true;
+            services.xserver.windowManager.dwm.enable = true;
+            services.xserver.windowManager.fluxbox.enable = true;
+            services.xserver.windowManager.herbstluftwm.enable = true;
+            services.xserver.windowManager.i3.enable = true;
+            services.xserver.windowManager.metacity.enable = true;
+            services.xserver.windowManager.notion.enable = true;
+            services.xserver.windowManager.openbox.enable = true;
+            services.xserver.windowManager.oroborus.enable = true;
+            services.xserver.windowManager.qtile.enable = true;
+            services.xserver.windowManager.ratpoison.enable = true; 
+            services.xserver.windowManager.sawfish.enable = true;
+            services.xserver.windowManager.spectrwm.enable = true;
+            services.xserver.windowManager.stumpwm.enable = true;
+            services.xserver.windowManager.windowlab.enable = true;
+            services.xserver.windowManager.windowmaker.enable = true;
+            services.xserver.windowManager.wmii.enable = true;
+        </programlisting>
+    </para>
 
-<para>NixOS’s default <emphasis>display manager</emphasis> (the
-program that provides a graphical login prompt and manages the X
-server) is SLiM.  You can select KDE’s <command>kdm</command> instead:
-<programlisting>
-services.xserver.displayManager.kdm.enable = true;
-</programlisting>
-</para>
+    <para>
+        NixOS’s default <emphasis>display manager</emphasis> (the
+        program that provides a graphical login prompt and manages the X
+        server) is SLiM.  You can select KDE’s <command>kdm</command> instead:
+        <programlisting>
+            services.xserver.displayManager.kdm.enable = true;
+        </programlisting>
+        For kde5 you can select:
+        <programlisting>
+          services.xserver.displayManager.lightdm.enable = false;
+          services.xserver.displayManager.sddm.enable = true;
+        </programlisting>
+        Or for gnome select:
+        <programlisting>
+            services.xserver.displayManager.gdm.enable = true;
+        </programlisting>
+    </para>
 
-<para>The X server is started automatically at boot time.  If you
-don’t want this to happen, you can set:
-<programlisting>
-services.xserver.autorun = false;
-</programlisting>
-The X server can then be started manually:
-<screen>
-$ systemctl start display-manager.service
-</screen>
-</para>
+    <para>
+        The X server is started automatically at boot time.  If you
+        don’t want this to happen, you can set:
+        <programlisting>
+            services.xserver.autorun = false;
+        </programlisting>
+        The X server can then be started manually:
+        <screen>
+            $ systemctl start display-manager.service
+        </screen>
+    </para>
 
+    <simplesect>
+        <title>NVIDIA Graphics Cards</title>
+        <para>
+            NVIDIA provides a proprietary driver for its graphics cards that
+            has better 3D performance than the X.org drivers.  It is not enabled
+            by default because it’s not free software.  You can enable it as follows:
+            <programlisting>
+                services.xserver.videoDrivers = [ "nvidia" ];
+            </programlisting>
+            Or if you have an older card, you may have to use one of the legacy drivers:
+            <programlisting>
+                services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
+                services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
+                services.xserver.videoDrivers = [ "nvidiaLegacy173" ];
+            </programlisting>
+            You may need to reboot after enabling this driver to prevent a clash
+            with other kernel modules.
+        </para>
+        <para>
+            On 64-bit systems, if you want full acceleration for 32-bit
+            programs such as Wine, you should also set the following:
+            <programlisting>
+                hardware.opengl.driSupport32Bit = true;
+            </programlisting>
+        </para>
 
-<simplesect><title>NVIDIA Graphics Cards</title>
+    </simplesect>
 
-<para>NVIDIA provides a proprietary driver for its graphics cards that
-has better 3D performance than the X.org drivers.  It is not enabled
-by default because it’s not free software.  You can enable it as follows:
-<programlisting>
-services.xserver.videoDrivers = [ "nvidia" ];
-</programlisting>
-Or if you have an older card, you may have to use one of the legacy drivers:
-<programlisting>
-services.xserver.videoDrivers = [ "nvidiaLegacy340" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
-services.xserver.videoDrivers = [ "nvidiaLegacy173" ];
-</programlisting>
-You may need to reboot after enabling this driver to prevent a clash
-with other kernel modules.</para>
+    <simplesect>
+        <title>AMD Graphics Cards</title>
+        <para>
+            AMD provides a proprietary driver release for its Radeon™
+            graphics cards which has superior performance in comparison
+            to the default radeon kernel module and accompanying X.org driver.
+            It is not enabled by default because the software is not free (libre) software. 
+            If you agree to the terms of the AMD license which can be found at:
+            http://support.amd.com/en-us/download/eula you can enable the driver
+            if you specify:
+            <programlisting>
+                services.xserver.videoDrivers = [ "amd-non-free" ];
+            </programlisting>
+            amd-non-free offers the opportunity to use AMD's latest proprietary Linux Radeon™ driver.
+            You will need to shutdown the machine and then manually power it back on after enabling either
+            of these drivers in order to prevent the possibility of a clash with other kernel modules.
+            <programlisting>
+                services.xserver.videoDrivers = [ "ati_unfree" ];
+            </programlisting>
+            ati_unfree is an older version of AMD's Radeon™ driver.
+            It is provided for compatibility reasons and should be avoided in favour of amd-non-free.
+            It is intended that ati_unfree is depreciated as soon as possible.
+        </para>
+        <para>
+            On 64-bit systems, if you want full acceleration for 32-bit
+            programs such as Wine, you should also set the following:
+            <programlisting>
+                hardware.opengl.driSupport32Bit = true;
+            </programlisting>
+            This option is not required if you select  amd-non-free.
+            It is enabled by default for you.
+        </para>
+    </simplesect>
 
-<para>On 64-bit systems, if you want full acceleration for 32-bit
-programs such as Wine, you should also set the following:
-<programlisting>
-hardware.opengl.driSupport32Bit = true;
-</programlisting>
-</para>
-
-</simplesect>
-
-<simplesect><title>AMD Graphics Cards</title>
-
-<para>AMD provides a proprietary driver for its graphics cards that
-has better 3D performance than the X.org drivers.  It is not enabled
-by default because it’s not free software.  You can enable it as follows:
-<programlisting>
-services.xserver.videoDrivers = [ "ati_unfree" ];
-</programlisting>
-You will need to reboot after enabling this driver to prevent a clash
-with other kernel modules.</para>
-
-<para>On 64-bit systems, if you want full acceleration for 32-bit
-programs such as Wine, you should also set the following:
-<programlisting>
-hardware.opengl.driSupport32Bit = true;
-</programlisting>
-</para>
-
-</simplesect>
-
-<simplesect><title>Touchpads</title>
-
-<para>Support for Synaptics touchpads (found in many laptops such as
-the Dell Latitude series) can be enabled as follows:
-<programlisting>
-services.xserver.synaptics.enable = true;
-</programlisting>
-The driver has many options (see <xref linkend="ch-options"/>).  For
-instance, the following enables two-finger scrolling:
-<programlisting>
-services.xserver.synaptics.twoFingerScroll = true;
-</programlisting>
-</para>
-
-</simplesect>
-
+    <simplesect>
+        <title>Touchpads</title>
+        <para>
+            Support for Synaptics touchpads (found in many laptops such as
+            the Dell Latitude series) can be enabled as follows:
+            <programlisting>
+                services.xserver.synaptics.enable = true;
+            </programlisting>
+            The driver has many options (see <xref linkend="ch-options"/>).  For
+            instance, the following enables two-finger scrolling:
+            <programlisting>
+                services.xserver.synaptics.twoFingerScroll = true;
+            </programlisting>
+        </para>
+    </simplesect>
 
 </chapter>

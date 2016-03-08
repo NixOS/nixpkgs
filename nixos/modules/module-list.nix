@@ -39,6 +39,7 @@
   ./hardware/pcmcia.nix
   ./hardware/video/bumblebee.nix
   ./hardware/video/nvidia.nix
+  ./hardware/video/amd.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
   ./i18n/inputMethod/default.nix

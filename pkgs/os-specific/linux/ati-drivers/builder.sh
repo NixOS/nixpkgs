@@ -6,6 +6,8 @@ set -x
 
 die(){ echo $@; exit 1; }
 
+echo "ati_unfree will be depreciated soon. Please use amd-non-free instead."
+
 mkdir fglrx # custom unpack:
 cd fglrx
 unzip $src

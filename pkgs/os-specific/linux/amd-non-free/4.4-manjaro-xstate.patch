@@ -1,0 +1,22 @@
+--- 15.12/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-12-18 19:47:41.000000000 +0100
++++ 15.12b/common/lib/modules/fglrx/build_mod/firegl_public.c	2015-12-19 20:48:13.223261632 +0100
+@@ -6450,12 +6450,15 @@
+    struct fpu *fpu = &tsk->thread.fpu;
+ 
+    if(static_cpu_has(X86_FEATURE_XSAVE)) {
+-#if LINUX_VERSION_CODE < KERNEL_VERSION(4,2,0)
+-      fpu_xsave(fpu);
+-      if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+-#else
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0)
++	  copy_xregs_to_kernel(&fpu->state.xsave);
++      if (!(fpu->state.xsave.header.xfeatures & XFEATURE_MASK_FP))
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(4,2,0)
+ 	  copy_xregs_to_kernel(&fpu->state.xsave);
+       if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
++#else
++      fpu_xsave(fpu);
++      if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+ #endif
+          return 1;
+    } else if (static_cpu_has(X86_FEATURE_FXSR)) {

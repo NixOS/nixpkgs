@@ -1,0 +1,90 @@
+--- 13.4/common/lib/modules/fglrx/build_mod/kcl_agp.c	2013-05-24 16:45:52.236740084 -0400
++++ 13.4/common/lib/modules/fglrx/build_mod/kcl_agp.c	2013-05-24 16:49:29.283579408 -0400
+@@ -56,6 +56,43 @@ unsigned int KCL_AGP_IsInUse(void)
+     return kcl_agp_is_in_use;
+ }
+
++/** \brief Find AGP caps registers in PCI config space
++ ** \param dev PCI device handle
++ ** \return Positive register index on success, negative errno on error
++ */
++int ATI_API_CALL KCL_AGP_FindCapsRegisters(KCL_PCI_DevHandle dev)
++{
++    u8 capndx;
++    u32 cap_id;
++
++    if (!dev)
++    {
++        return -ENODEV;
++    }
++
++    pci_read_config_byte((struct pci_dev*)dev, 0x34, &capndx);
++
++    if (capndx == 0x00)
++    {
++        return -ENODATA;
++    }
++
++    do
++    { // search capability list for AGP caps
++        pci_read_config_dword((struct pci_dev*)dev, capndx, &cap_id);
++
++        if ((cap_id & 0xff) == 0x02)
++        {
++            return capndx;
++        }
++
++        capndx = (cap_id >> 8) & 0xff;
++    }
++    while (capndx != 0x00);
++
++    return -ENODATA;
++}
++
+ #if defined(CONFIG_AGP) || defined(CONFIG_AGP_MODULE)
+
+ typedef struct {
+@@ -272,43 +309,6 @@ int ATI_API_CALL KCL_AGP_Enable(unsigned
+     }
+ }
+
+-/** \brief Find AGP caps registers in PCI config space
+- ** \param dev PCI device handle
+- ** \return Positive register index on success, negative errno on error
+- */
+-int ATI_API_CALL KCL_AGP_FindCapsRegisters(KCL_PCI_DevHandle dev)
+-{
+-    u8 capndx;
+-    u32 cap_id;
+-
+-    if (!dev)
+-    {
+-        return -ENODEV;
+-    }
+-
+-    pci_read_config_byte((struct pci_dev*)dev, 0x34, &capndx);
+-
+-    if (capndx == 0x00)
+-    {
+-        return -ENODATA;
+-    }
+-
+-    do
+-    { // search capability list for AGP caps
+-        pci_read_config_dword((struct pci_dev*)dev, capndx, &cap_id);
+-
+-        if ((cap_id & 0xff) == 0x02)
+-        {
+-            return capndx;
+-        }
+-
+-        capndx = (cap_id >> 8) & 0xff;
+-    }
+-    while (capndx != 0x00);
+-
+-    return -ENODATA;
+-}
+-
+ /** \brief Get AGP caps
+  ** \param dev PCI device handle
+  ** \param caps pointer to caps vector
