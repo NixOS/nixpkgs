@@ -9,7 +9,7 @@
 # listening on SRV interface
 
 let
-    cfg = config;
+    cfg = config.flyingcircus.roles.mysql;
     root_password_file = "/etc/local/mysql/mysql.passwd";
     localConfig = if pathExists /etc/local/mysql
                   then "!include ${/etc/local/mysql}"
@@ -33,7 +33,7 @@ in
 
     };
 
-    config = mkIf config.flyingcircus.roles.mysql.enable {
+    config = mkIf cfg.enable {
 
         services.mysql = {
           enable = true;
@@ -144,7 +144,7 @@ in
         };
 
         system.activationScripts.fcio-mysql-init = let
-            mysql = cfg.services.mysql.package;
+            mysql = config.services.mysql.package;
           in
           stringAfter [ "users" "groups" ] ''
             # Configure initial root password for mysql.
@@ -180,7 +180,7 @@ in
           wants = [ "mysql-maintenance.timer" ];
           partOf = [ "mysql.service" ];
 
-          path = with pkgs; [ cfg.services.mysql.package ];
+          path = with pkgs; [ config.services.mysql.package ];
 
           serviceConfig = {
             Type = "oneshot";
