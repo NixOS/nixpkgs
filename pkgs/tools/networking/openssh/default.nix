@@ -2,12 +2,13 @@
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
-, withGssapiPatches ? withKerberos
+, withGssapiPatches ? false
 , kerberos
 , linkOpenssl? true
 }:
 
 assert withKerberos -> kerberos != null;
+assert withGssapiPatches -> withKerberos;
 
 let
 
@@ -24,6 +25,8 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
+  # Please ensure that openssh_with_kerberos still builds when
+  # bumping the version here!
   name = "openssh-7.2p1";
 
   src = fetchurl {
