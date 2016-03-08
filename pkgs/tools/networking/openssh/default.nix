@@ -18,8 +18,8 @@ let
   };
 
   gssapiSrc = fetchpatch {
-    url = "http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?h=debian/7.1p2-2";
-    sha256 = "05nsch879nlpyyiwm240wlq9rasy71j9d03j1rfi8kp865zhjfbm";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=46961f5704f8e86cea3e99253faad55aef4d8f35";
+    sha256 = "01mf2vx1gavypbdx06mcbmcrkm2smff0h3jfmr61k6h6j3xk88y5";
   };
 
 in
