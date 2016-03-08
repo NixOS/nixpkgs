@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, dpkg, patchelf, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, udev }:
+{ stdenv, fetchurl, makeWrapper
+, dpkg, patchelf
+, gtk2, glib, gdk_pixbuf, alsaLib, nss, nspr, GConf, cups, libgcrypt, dbus, libudev }:
 
+let
+  inherit (stdenv) lib;
+  LD_LIBRARY_PATH = lib.makeLibraryPath
+    [ glib gtk2 gdk_pixbuf alsaLib nss nspr GConf cups libgcrypt dbus ];
+in
 stdenv.mkDerivation rec {
   version = "2.6.0";
   name = "staruml-${version}";
@@ -16,13 +23,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ dpkg ];
 
   nativeBuildInputs = [ makeWrapper ];
-  
+
   unpackPhase = ''
     mkdir pkg
     dpkg-deb -x $src pkg
     sourceRoot=pkg
   '';
-  
+
   installPhase = ''
     mkdir $out
     mv opt/staruml $out/bin
@@ -30,14 +37,14 @@ stdenv.mkDerivation rec {
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/StarUML
-    
+
     mkdir -p $out/lib
-    
+
     ln -s ${stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
-    ln -s ${udev}/lib/libudev.so.1 $out/lib/libudev.so.0
+    ln -s ${libudev.out}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     wrapProgram $out/bin/StarUML \
-      --prefix LD_LIBRARY_PATH : $out/lib:${glib}/lib:${gtk2}/lib:${gdk_pixbuf}/lib/:${alsaLib}/lib/:${nss}/lib/:${nspr}/lib/:${GConf}/lib/:${cups}/lib/:${libgcrypt}/lib/:${dbus}/lib/
+      --prefix LD_LIBRARY_PATH : $out/lib:${LD_LIBRARY_PATH}
   '';
 
   meta = with stdenv.lib; {
