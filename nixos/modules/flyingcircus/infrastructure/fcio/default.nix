@@ -40,14 +40,10 @@ with lib;
     then config.flyingcircus.enc.name
     else "default";
 
-  networking.useDHCP = true;
-
-  services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
 
   fileSystems."/".device = "/dev/disk/by-label/root";
   fileSystems."/tmp".device = "/dev/disk/by-label/tmp";
-
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   users.users.root = {
@@ -62,8 +58,6 @@ with lib;
     ];
   };
 
-  networking.firewall.allowPing = true;
-  networking.firewall.rejectPackets = true;
 
   systemd.ctrl-alt-del = "poweroff.target";
   systemd.extraConfig = ''

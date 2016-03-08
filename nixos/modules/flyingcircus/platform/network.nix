@@ -137,10 +137,7 @@ let
     6 tr
     7 guest
     8 stb
-
-    200 sdsl
     '';
-
 
   # default route.
 
@@ -185,7 +182,6 @@ in
   };
 
   config = {
-
 
     services.udev.extraRules =
       if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
@@ -253,8 +249,9 @@ in
         ''
         else "";
 
-    services.nscd.enable = true;
-
+    networking.firewall.allowPing = true;
+    networking.firewall.rejectPackets = true;
+    networking.useDHCP = true;
     networking.dhcpcd.extraConfig = ''
       # IPv4ll gets in the way if we really do not want
       # an IPv4 address on some interfaces.

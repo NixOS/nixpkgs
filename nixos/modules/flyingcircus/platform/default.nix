@@ -210,6 +210,7 @@ in
       { "nixos/configuration.nix".text = lib.readFile ../files/etc_nixos_configuration.nix; };
 
     services.nixosManual.enable = false;
-
+    services.openssh.enable = true;
+    services.nscd.enable = true;
   };
 }
