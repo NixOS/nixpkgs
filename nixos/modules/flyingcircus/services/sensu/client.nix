@@ -26,64 +26,34 @@ let
         "password": "${cfg.password}",
         "vhost": "/sensu"
       },
-      "checks": {
-        "load": {
-            "notification": "Load is too high",
-            "command": "check_load -r -w 0.8,0.8,0.8 -c 2,2,2",
-            "interval": 10,
-            "standalone": true
-        },
-        "swap": {
-            "notification": "Swap is running low",
-            "command": "check_swap -w 20% -c 10%",
-            "interval": 300,
-            "standalone": true
-        },
-        "ssh": {
-            "notification": "SSH server is not responding properly",
-            "command": "check_ssh localhost",
-            "interval": 300,
-            "standalone": true
-        },
-        "ntp_time": {
-            "notification": "Clock is skewed",
-            "command": "check_ntp_time -H 0.de.pool.ntp.org",
-            "interval": 300,
-            "standalone": true
-        },
-        "internet_uplink_ipv4": {
-            "notification": "Internet (Google) is not available",
-            "command": "check_ping  -w 100,5% -c 200,10% -H google.com  -4",
-            "interval": 60,
-            "standalone": true
-        },
-        "internet_uplink_ipv6": {
-            "notification": "Internet (Google) is not available",
-            "command": "check_ping  -w 100,5% -c 200,10% -H google.com  -6",
-            "interval": 60,
-            "standalone": true
-        },
-        "uptime": {
-            "notification": "Host was down",
-            "command": "check_uptime",
-            "interval": 60,
-            "standalone": true
-        },
-        "users": {
-            "notification": "Many users logged in",
-            "command": "check_users -w 5 -c 10",
-            "interval": 60,
-            "standalone": true
-        },
-        "systemd_units": {
-            "notification": "SystemD has failed units",
-            "command": "check-failed-units.rb",
-            "interval": 60,
-            "standalone": true
-        }
-      }
+      "checks": ${builtins.toJSON
+        (lib.mapAttrs (name: value: filterAttrs (name: value: name != "_module") value) cfg.checks)}
     }
   '';
+
+  checkOptions = { name, config, ... }: {
+
+    options = {
+      notification = mkOption {
+        type = types.str;
+        description = "The notification on events.";
+      };
+      command = mkOption {
+        type = types.str;
+        description = "The command to execute as the check.";
+      };
+      interval = mkOption {
+        type = types.int;
+        default = 60;
+        description = "The interval (in seconds) how often this check should be performed.";
+      };
+      standalone = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to schedule this check autonomously on the client.";
+      };
+    };
+  };
 
 
 in {
@@ -114,6 +84,17 @@ in {
         type = types.lines;
         description = ''
           Contents of the sensu client configuration file.
+        '';
+      };
+      checks = mkOption {
+        default = {};
+        type = types.attrsOf types.optionSet;
+        options = [ checkOptions ];
+        description = ''
+          Checks that should be run by this client.
+          Defined as attribute sets that conform to the JSON structure
+          defined by Sensu:
+          https://sensuapp.org/docs/latest/checks
         '';
       };
       extraOpts = mkOption {
@@ -158,6 +139,49 @@ in {
         RestartSec = "5s";
       };
         environment = { EMBEDDED_RUBY = "true"; };
+    };
+
+    flyingcircus.services.sensu-client.checks = {
+      load = {
+        notification = "Load is too high";
+        command =  "check_load -r -w 0.8,0.8  ,0.8 -c 2,2,2";
+        interval = 10;
+      };
+      swap = {
+        notification = "Swap is running low";
+        command = "check_swap -w 20% -c 10%";
+        interval = 300;
+      };
+      ssh = {
+        notification = "SSH server is not responding properly";
+        command = "check_ssh localhost";
+        interval = 300;
+      };
+      ntp_time = {
+        notification = "Clock is skewed";
+        command = "check_ntp_time -H 0.de.pool.ntp.org";
+        interval = 300;
+      };
+      internet_uplink_ipv4 = {
+        notification = "Internet (Google) is not available";
+        command = "check_ping  -w 100,5% -c 200,10% -H google.com  -4";
+      };
+      internet_uplink_ipv6 = {
+        notification = "Internet (Google) is not available";
+        command = "check_ping  -w 100,5% -c 200,10% -H google.com  -6";
+      };
+      uptime = {
+        notification = "Host was down";
+        command = "check_uptime";
+      };
+      users = {
+        notification = "Many users logged in";
+        command = "check_users -w 5 -c 10";
+      };
+      systemd_units = {
+        notification = "SystemD has failed units";
+        command = "check-failed-units.rb";
+      };
     };
 
   };
