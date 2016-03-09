@@ -14,39 +14,39 @@ if [[ ! $hardeningDisable == "all" ]]; then
     if [[ ! "${hardeningDisable[@]}" =~ "$flag" ]]; then
       case $flag in
         fortify)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling fortify; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling fortify; fi
           hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
           ;;
         stackprotector)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling stackprotector; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling stackprotector; fi
           hardeningCFlags+=('-fstack-protector-strong' '--param ssp-buffer-size=4')
           ;;
         pie)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling CFlags -fPIE; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling CFlags -fPIE; fi
           hardeningCFlags+=('-fPIE')
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
-            if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling LDFlags -pie; fi
+            if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling LDFlags -pie; fi
             hardeningLDFlags+=('-pie')
           fi
           ;;
         pic)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling pic; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling pic; fi
           hardeningCFlags+=('-fPIC')
           ;;
         strictoverflow)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling strictoverflow; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling strictoverflow; fi
           hardeningCFlags+=('-fno-strict-overflow')
           ;;
         format)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling format; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling format; fi
           hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
           ;;
         relro)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling relro; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling relro; fi
           hardeningLDFlags+=('-z relro')
           ;;
         bindnow)
-          if [ -n "$NIX_DEBUG" ]; then echo HARDENING: enabling bindnow; fi
+          if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling bindnow; fi
           hardeningLDFlags+=('-z now')
           ;;
         *)
