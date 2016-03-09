@@ -7805,8 +7805,6 @@ let
 
   libotr = callPackage ../development/libraries/libotr { };
 
-  libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
-
   libp11 = callPackage ../development/libraries/libp11 { };
 
   libpar2 = callPackage ../development/libraries/libpar2 { };
