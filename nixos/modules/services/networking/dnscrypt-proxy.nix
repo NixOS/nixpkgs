@@ -49,7 +49,7 @@ in
         '';
       };
       resolverName = mkOption {
-        default = "opendns";
+        default = "cisco";
         type = types.nullOr types.string;
         description = ''
           The name of the upstream DNSCrypt resolver to use. See
