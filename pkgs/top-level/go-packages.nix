@@ -8,7 +8,7 @@ let
 
   # When adding entries to the json file, please use `jq . < go-packages.json --sort-keys`
   # to canonicallize the data.
-  ghPackages = builtins.fromJSON (builtins.readFile ./go-packages.json);
+  ghPackages = stdenv.lib.importJSON ./go-packages.json;
 
   self = _self // overrides; _self = with self; {
 
