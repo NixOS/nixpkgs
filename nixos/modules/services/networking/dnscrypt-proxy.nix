@@ -130,6 +130,9 @@ in
         ${pkgs.xz}/lib/liblzma.so.* mr,
         ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
         ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+        ${pkgs.libcap}/lib/libcap.so.* mr,
+        ${pkgs.lz4}/lib/liblz4.so.* mr,
+        ${pkgs.attr}/lib/libattr.so.* mr,
 
         ${resolverListFile} r,
       }
