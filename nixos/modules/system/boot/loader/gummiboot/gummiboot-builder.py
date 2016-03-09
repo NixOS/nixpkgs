@@ -30,6 +30,33 @@ def write_entry(generation, kernel, initrd):
         print >> f, "options %s" % (kernel_params)
     os.rename(tmp_path, entry_file)
 
+def write_xen_entry(generation, xen):
+    entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
+    generation_dir = os.readlink(system_dir(generation))
+    tmp_path = "%s.tmp" % (entry_file)
+    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+    with open(tmp_path, 'w') as f:
+        print >> f, "title NixOS Xen Dom0"
+        print >> f, "version Generation %d" % (generation)
+        if machine_id is not None: print >> f, "machine-id %s" % (machine_id)
+        print >> f, "efi %s" % (xen)
+    os.rename(tmp_path, entry_file)
+
+def write_xen_cfg(generation, xen, kernel, initrd):
+    cfg_file = "@efiSysMountPoint@%s.cfg" % (os.path.splitext(xen)[0])
+    generation_dir = os.readlink(system_dir(generation))
+    kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+    with open("%s/kernel-params" % (generation_dir)) as params_file:
+        kernel_params = kernel_params + params_file.read()
+    with open("%s/xen-params" % (generation_dir)) as params_file:
+        xen_params = params_file.read()
+    tmp_path = "%s.tmp" % (cfg_file)
+    with open(tmp_path, 'w') as f:
+        if machine_id is not None: print >> f, "# machine-id %s" % (machine_id)
+        print >> f, "[global]\ndefault=xen"
+        print >> f, "[xen]\noptions=%s\nkernel=%s %s\nramdisk=%s\n" % (xen_params, os.path.basename(kernel), kernel_params, os.path.basename(initrd))
+    os.rename(tmp_path, cfg_file)
+
 def write_loader_conf(generation):
     with open("@efiSysMountPoint@/loader/loader.conf.tmp", 'w') as f:
         if "@timeout@" != "":
@@ -37,10 +64,13 @@ def write_loader_conf(generation):
         print >> f, "default nixos-generation-%d" % (generation)
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
+def exists_in_profile(generation, name):
+    return os.path.exists("%s/%s" % (system_dir(generation), name))
+ 
 def copy_from_profile(generation, name, dry_run=False):
     store_file_path = os.readlink("%s/%s" % (system_dir(generation), name))
     suffix = os.path.basename(store_file_path)
-    store_dir = os.path.basename(os.path.dirname(store_file_path))
+    store_dir = os.path.basename(os.readlink(system_dir(generation)))
     efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
     if not dry_run:
         copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
@@ -49,7 +79,13 @@ def copy_from_profile(generation, name, dry_run=False):
 def add_entry(generation):
     efi_kernel_path = copy_from_profile(generation, "kernel")
     efi_initrd_path = copy_from_profile(generation, "initrd")
-    write_entry(generation, efi_kernel_path, efi_initrd_path)
+    if exists_in_profile(generation, "xen.efi"):
+	print "xen %d" % (generation)
+        efi_xen_path = copy_from_profile(generation, "xen.efi")
+        write_xen_entry(generation, efi_xen_path)
+        write_xen_cfg(generation, efi_xen_path, efi_kernel_path, efi_initrd_path)
+    else:
+        write_entry(generation, efi_kernel_path, efi_initrd_path)
 
 def mkdir_p(path):
     try:
