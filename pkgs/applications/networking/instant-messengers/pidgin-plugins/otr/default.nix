@@ -1,10 +1,10 @@
 { stdenv, fetchurl, libotr, pidgin, intltool } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-otr-4.0.1";
+  name = "pidgin-otr-4.0.2";
   src = fetchurl {
     url = "http://www.cypherpunks.ca/otr/${name}.tar.gz";
-    sha256 = "02pkkf86fh5jvzsdn9y78impsgzj1n0p81kc2girvk3vq941yy0v";
+    sha256 = "1i5s9rrgbyss9rszq6c6y53hwqyw1k86s40cpsfx5ccl9bprxdgl";
   };
 
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
