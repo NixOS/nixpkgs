@@ -12,7 +12,7 @@
     cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
   '';
 
-  systemd.services.mdadmShutdown = {
+  systemd.services.mdadm-shutdown = {
     wantedBy = [ "final.target"];
     after = [ "umount.target" ];
 
