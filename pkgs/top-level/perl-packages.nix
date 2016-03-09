@@ -3187,6 +3187,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestMost ];
     propagatedBuildInputs = [ DateTime DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
+    doCheck = false;
     meta = {
       description = "Parse a date/time string using the best method available";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
