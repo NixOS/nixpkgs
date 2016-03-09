@@ -56,4 +56,9 @@ in {
     sha256 = "d5b935f904744b8b40b310f19679702387c852498d0dc7aaeda4555a3db9ad5b";
   };
 
+  owncloud90 = common {
+    versiona = "9.0.0";
+    sha256 = "0z57lc6z1h7yn1sa26q8qnhjxyjn0ydy3mf4yy4i9a3p198kfryi";
+  };
+
 }
