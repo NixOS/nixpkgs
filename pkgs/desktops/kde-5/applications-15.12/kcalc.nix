@@ -1,14 +1,14 @@
 { kdeApp
 , lib
-, extra-cmake-modules
-, kdoctools
 , makeQtWrapper
+, extra-cmake-modules
+, gmp
+, kdoctools
 , kconfig
 , kconfigwidgets
 , kguiaddons
 , kinit
 , knotifications
-
 }:
 
 kdeApp {
@@ -20,6 +20,7 @@ kdeApp {
   ];
 
   buildInputs = [
+    gmp
     kconfig
     kconfigwidgets
     kguiaddons
