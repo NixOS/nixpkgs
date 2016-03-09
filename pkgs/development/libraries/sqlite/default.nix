@@ -7,7 +7,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://sqlite.org/2015/sqlite-autoconf-3090200.tar.gz";
-    sha1 = "dae1ae5297fece9671ae0c434a7ecd0cda09c76a";
+    sha256 = "0sy3zdnvwml9q2s8dj4sc95r5y82b5xcl2vp9i6m6xwikjz0lk06";
   };
 
   buildInputs = lib.optionals interactive [ readline ncurses ];
