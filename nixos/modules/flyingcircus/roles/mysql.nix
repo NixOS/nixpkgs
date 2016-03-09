@@ -52,7 +52,7 @@ in
 
         services.mysql = {
           enable = true;
-          package = pkgs.mysql55;
+          package = pkgs.percona;
           rootPassword = root_password_file;
           dataDir = "/srv/mysql";
           extraOptions = ''
@@ -80,8 +80,7 @@ in
 
             tmpdir                         = /tmp/
 
-            innodb_buffer_pool_size = 16M
-            innodb_additional_mem_pool_size = 2M
+            innodb_buffer_pool_size = 20M
             innodb_data_file_path = ibdata1:10M:autoextend:max:128M
             innodb_log_file_size = 5M
             innodb_log_buffer_size = 8M
@@ -95,7 +94,7 @@ in
 
             [client]
             port                        = 3306
-            socket                        = /run/mysqld/mysqld.sock
+            socket                      = /run/mysqld/mysqld.sock
 
             [mysql]
             character-sets-dir=/usr/share/mysql/charsets
