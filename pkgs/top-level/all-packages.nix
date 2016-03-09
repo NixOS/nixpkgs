@@ -5580,8 +5580,6 @@ let
 
   rubygems = hiPrio (callPackage ../development/interpreters/ruby/rubygems.nix {});
 
-  rq = callPackage ../applications/networking/cluster/rq { };
-
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
