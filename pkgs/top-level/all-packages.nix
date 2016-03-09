@@ -2631,6 +2631,8 @@ let
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
+  ntfy = pythonPackages.ntfy;
+
   ntopng = callPackage ../tools/networking/ntopng { };
 
   ntp = callPackage ../tools/networking/ntp {
