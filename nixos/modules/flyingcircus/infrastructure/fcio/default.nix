@@ -58,7 +58,6 @@ with lib;
     ];
   };
 
-
   systemd.ctrl-alt-del = "poweroff.target";
   systemd.extraConfig = ''
     RuntimeWatchdogSec=60
@@ -75,4 +74,16 @@ with lib;
       '';
   };
 
+  systemd.services.enc-move-seed = {
+    description = "move ENC seed into final location at /etc/nixos";
+    wantedBy = [ "timers.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      if [[ ! -e /etc/nixos/enc.json && -e /tmp/fc-data/enc.json ]]; then
+        echo "found ENC seed in /tmp/fc-data"
+        mv /tmp/fc-data/enc.json /etc/nixos/enc.json
+        chmod 0640 /etc/nixos/enc.json
+      fi
+    '';
+  };
 }
