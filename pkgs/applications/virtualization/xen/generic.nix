@@ -114,6 +114,9 @@ stdenv.mkDerivation {
     export EXTRA_QEMUU_CONFIGURE_ARGS="--enable-spice --enable-usb-redir --enable-linux-aio"
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/13590
+  configureFlags = ["--disable-stubdom"];
+
   postConfigure =
     ''
       substituteInPlace tools/libfsimage/common/fsimage_plugin.c \
@@ -169,7 +172,7 @@ stdenv.mkDerivation {
   #makeFlags = "XSM_ENABLE=y FLASK_ENABLE=y PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
   makeFlags = "PREFIX=$(out) CONFIG_DIR=/etc XEN_EXTFILES_URL=\\$(XEN_ROOT)/xen_ext_files ";
 
-  buildFlags = "xen tools stubdom";
+  buildFlags = "xen tools";
 
   postBuild =
     ''
