@@ -5107,6 +5107,8 @@ let
     ocaml = ocaml_3_08_0;
   };
 
+  rgbds = callPackage ../development/compilers/rgbds { };
+
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
