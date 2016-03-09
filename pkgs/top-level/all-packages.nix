@@ -676,6 +676,8 @@ let
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
+  awstats = callPackage ../tools/system/awstats { };
+
   axel = callPackage ../tools/networking/axel { };
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
