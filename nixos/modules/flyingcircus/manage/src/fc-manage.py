@@ -2,12 +2,17 @@
 """Update NixOS system configuration from infrastructure or local sources."""
 
 import argparse
+import filecmp
 import json
 import logging
 import os
-import shutil
+import os.path as p
+import tempfile
 import xmlrpc.client
 
+DIRECTORY_URL = (
+    'https://{enc[name]}:{enc[parameters][directory_password]}@'
+    'directory.fcio.net/v2/api/rg-{enc[parameters][resource_group]}')
 
 # TODO
 #
@@ -22,7 +27,6 @@ import xmlrpc.client
 #     for now, but keep updating ENC data.
 #
 # - better robustness to not leave non-parsable json files around
-
 
 enc = None
 directory = None
@@ -39,11 +43,22 @@ def load_enc():
         # i.e. Vagrant. Silently ignore for now.
         return
 
-    directory = xmlrpc.client.Server(
-        'https://{}:{}@directory.fcio.net/v2/api/rg-{}'.format(
-            enc['name'],
-            enc['parameters']['directory_password'],
-            enc['parameters']['resource_group']))
+    directory = xmlrpc.client.Server(DIRECTORY_URL.format(enc=enc))
+
+
+def conditional_update(filename, data):
+    """Updates JSON file on disk only if there is different content."""
+    with tempfile.NamedTemporaryFile(
+            mode='w', suffix='.tmp', prefix=p.basename(filename),
+            dir=p.dirname(filename), delete=False) as tf:
+        json.dump(data, tf, ensure_ascii=False, indent=2, sort_keys=True)
+        os.chmod(tf.fileno(), 0o640)
+    if not(p.exists(filename)):
+        os.rename(tf.name, filename)
+    elif not(filecmp.cmp(filename, tf.name)):
+        os.rename(tf.name, filename)
+    else:
+        os.unlink(tf.name)
 
 
 def write_json(calls):
@@ -52,11 +67,10 @@ def write_json(calls):
         print('Retrieving {} ...'.format(target))
         try:
             data = lookup()
-            with open('/etc/nixos/{}'.format(target), 'w') as f:
-                os.chmod(f.fileno(), 0o640)
-                json.dump(data, f, ensure_ascii=False)
         except Exception:
             logging.exception('Error retrieving data:')
+            continue
+        conditional_update('/etc/nixos/{}'.format(target), data)
 
 
 def system_state():

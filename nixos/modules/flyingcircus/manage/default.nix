@@ -58,6 +58,8 @@ with lib;
 
       systemd.timers.fc-manage = {
         description = "Timer for fc-manage";
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         wantedBy = [ "timers.target" ];
         enable = true;
         timerConfig = {
@@ -75,14 +77,11 @@ with lib;
 
       systemd.services.fc-manage = {
         description = "Flying Circus Management Task";
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
         restartIfChanged = false;
         unitConfig.X-StopOnRemoval = false;
         serviceConfig.Type = "oneshot";
 
         # This configuration is stolen from NixOS' own automatic updater.
-
         environment = config.nix.envVars // {
           inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
           HOME = "/root";
@@ -90,7 +89,7 @@ with lib;
         script = ''
           ${pkgs.fcmanage}/bin/fc-manage ${config.flyingcircus.agent.steps}
           ${pkgs.fcmanage}/bin/fc-resize-root
-          '';
+        '';
       };
     })
   ];
