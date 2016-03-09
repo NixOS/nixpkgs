@@ -125,26 +125,17 @@ in
         # XXX only on FE!
         networking.firewall.allowedTCPPorts = [ 80 443 ];
 
-        system.activationScripts = {
-            nginx = {
-                deps = [];
-                text = ''
-                mkdir -p /var/log/nginx
-                '';
-            };
-        };
+        system.activationScripts.nginx = ''
+            install -d -o ${toString config.ids.uids.nginx} /var/log/nginx
+        '';
 
         jobs.fcio-stubs-nginx = mkIf config.flyingcircus.compat.gentoo.enable {
             description = "Create FC IO stubs for nginx";
             task = true;
-
             startOn = "started networking";
-
-            script =
-                ''
-                    install -d -o vagrant /etc/nginx/local
-                    install -d -o nginx /var/log/nginx
-                '';
+            script = ''
+              install -d -o vagrant /etc/nginx/local
+            '';
         };
 
 
@@ -178,6 +169,5 @@ in
               '';
           }
         else {};
-
     };
 }

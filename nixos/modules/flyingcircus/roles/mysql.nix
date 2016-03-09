@@ -186,7 +186,6 @@ in
             password = ''${pw}
             __EOT__
             fi
-
           '';
 
         systemd.services.mysql-maintenance = {
