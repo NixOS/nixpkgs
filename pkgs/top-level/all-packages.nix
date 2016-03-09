@@ -15850,6 +15850,8 @@ let
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
+  epson_201207w = callPackage ../misc/drivers/epson_201207w { };
+
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
