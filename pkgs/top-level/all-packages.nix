@@ -5227,6 +5227,8 @@ let
 
   win32hello = callPackage ../development/compilers/visual-c++/test { };
 
+  wla-dx = callPackage ../development/compilers/wla-dx { };
+
   wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
