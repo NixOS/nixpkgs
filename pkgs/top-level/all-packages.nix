@@ -10570,6 +10570,8 @@ let
                           # callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
     nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
 
+    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
+
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
 
     openafsClient = callPackage ../servers/openafs-client { };
