@@ -126,6 +126,7 @@ in
       # Service users may switch to the postgres system user
       %sudo-srv ALL=(postgres) ALL
       %service ALL=(postgres) ALL
+      %sensuclient ALL=(postgres) ALL
     '';
 
     # System tweaks
@@ -197,9 +198,18 @@ in
         '';
 
     services.postgresql.authentication = ''
+      local postgres root       trust
       host all  all  0.0.0.0/0  md5
       host all  all  ::/0       md5
     '';
+
+    flyingcircus.services.sensu-client.checks = {
+      postgresql = {
+        notification = "PostgreSQL alive";
+        command =  "/var/setuid-wrappers/sudo -u postgres check-postgres-alive.rb -d postgres";
+      };
+    };
+
   };
 
 }
