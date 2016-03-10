@@ -45,27 +45,6 @@ rec {
       done
     '';
   
-  mkTarball = { name ? "docker-tar", drv, onlyDeps ? false }:
-    runCommand "${name}.tar.gz" rec {
-      inherit drv onlyDeps;
-      
-      drvClosure = writeReferencesToFile drv;
-      
-    } ''
-      while read dep; do
-        echo Copying $dep
-        dir="$(dirname "$dep")"
-        mkdir -p "rootfs/$dir"
-        cp -drf --preserve=mode $dep "rootfs/$dir/"
-      done < "$drvClosure"
-
-      if [ -z "$onlyDeps" ]; then
-        cp -drf --preserve=mode $drv/* rootfs/
-      fi
-      
-      tar -C rootfs/ -cpzf $out .
-    '';
-
   shellScript = text:
     writeScript "script.sh" ''
       #!${stdenv.shell}
@@ -98,16 +77,6 @@ EOF
       touch /etc/login.defs
     fi
   '';
-
-  # Append to tar instead of unpacking
-  mergeTarballs = tarballs:
-    runCommand "merge-tars" { inherit tarballs; } ''
-      mkdir tmp
-      for tb in $tarballs; do
-        tar -C tmp -xkpf $tb
-      done
-      tar -C tmp -cpzf $out .
-    '';
 
   runWithOverlay = { name , fromImage ? null, fromImageName ? null, fromImageTag ? null
                    , diskSize ? 1024, preMount ? "", postMount ? "", postUmount ? "" }:
@@ -182,7 +151,7 @@ EOF
 
       postMount = ''
         echo Packing raw image
-        tar -C mnt -czf $out .
+        tar -C mnt -cf $out .
       '';
     };
     
@@ -262,8 +231,8 @@ EOF
   # 6. repack the image
   buildImage = args@{ name, tag ? "latest"
                , fromImage ? null, fromImageName ? null, fromImageTag ? null
-               , contents ? null, tarballs ? [], config ? null
-               , runAsRoot ? null, diskSize ? 1024, extraCommands ? "" }:
+               , contents ? null, config ? null, runAsRoot ? null
+               , diskSize ? 1024, extraCommands ? "" }:
 
     let
 
@@ -275,14 +244,10 @@ EOF
           os = "linux";
           config = config;
       });
-      
+
       layer = (if runAsRoot == null
                then mkPureLayer { inherit baseJson contents extraCommands; }
                else mkRootLayer { inherit baseJson fromImage fromImageName fromImageTag contents runAsRoot diskSize extraCommands; });
-      depsTarball = mkTarball { name = "${baseName}-deps";
-                                drv = layer;
-                                onlyDeps = true; };
-      
       result = runCommand "${baseName}.tar.gz" {
         buildInputs = [ jshon ];
 
@@ -290,7 +255,7 @@ EOF
         imageTag = tag;
         inherit fromImage baseJson;
 
-        mergedTarball = if tarballs == [] then depsTarball else mergeTarballs ([ depsTarball ] ++ tarballs);
+        layerClosure = writeReferencesToFile layer;
 
         passthru = {
           buildArgs = args;
@@ -320,22 +285,17 @@ EOF
         mkdir temp
         cp ${layer}/* temp/
         chmod ug+w temp/*
-        
-        echo Adding dependencies
+
+        touch layerFiles
+        for dep in $(cat $layerClosure); do
+          find $dep >> layerFiles
+        done
+
+        echo Adding layer
         tar -tf temp/layer.tar >> baseFiles
-        tar -tf "$mergedTarball" | grep -v ${layer} > layerFiles
-        if [ "$(wc -l layerFiles|cut -d ' ' -f 1)" -gt 3 ]; then
-          sed -i -e 's|^[\./]\+||' baseFiles layerFiles
-          comm <(sort -n baseFiles|uniq) <(sort -n layerFiles|uniq) -1 -3 > newFiles
-          mkdir deps
-          pushd deps
-          tar -xpf "$mergedTarball" --no-recursion --files-from ../newFiles 2>/dev/null || true
-          tar -rf ../temp/layer.tar --no-recursion --files-from ../newFiles 2>/dev/null || true
-          popd
-        else
-          echo No new deps, no diffing needed
-        fi 
-        
+        comm <(sort -n baseFiles|uniq) <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
+        tar -rpf temp/layer.tar --no-recursion --files-from newFiles 2>/dev/null || true
+
         echo Adding meta
         
         if [ -n "$parentID" ]; then
