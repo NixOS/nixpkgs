@@ -5,6 +5,7 @@
 , tag ? "" # tag added to the package name
 , withKDE ? stdenv.isLinux # enable KDE integration
 , kdelibs ? null
+, static ? false # link statically
 
 , stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2 }:
 
@@ -42,8 +43,8 @@ in with stdenv; mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags = [
-    "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF" ]
+    "-DEMBED_DATA=OFF" ]
+    ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
