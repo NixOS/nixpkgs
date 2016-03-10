@@ -969,8 +969,8 @@
   },
   "junegunn": {
     "fzf": {
-      "rev": "0.11.1",
-      "sha256": "1zw1kq4d5sb1qia44q04i33yii9qwlwlwz8vxhln03d4631mhsra"
+      "rev": "0.11.4",
+      "sha256": "12axgg14z4imjskfyfvj95rbhzijjg5nmaphl7m5ap9a3wzlvb32"
     },
     "go-runewidth": {
       "rev": "travisish",
