@@ -41,6 +41,7 @@ with lib;
     else "default";
 
   services.openssh.permitRootLogin = "without-password";
+  services.journald.extraConfig = "SystemMaxUse=5%";
 
   fileSystems."/".device = "/dev/disk/by-label/root";
   fileSystems."/tmp".device = "/dev/disk/by-label/tmp";
@@ -63,20 +64,25 @@ with lib;
     RuntimeWatchdogSec=60
   '';
 
+  systemd.timers.serial-console-liveness = {
+    description = "Timer for Serial console liveness marker";
+    requiredBy = [ "serial-getty@ttyS0.service" ];
+    timerConfig = {
+      Unit = "serial-console-liveness.service";
+      OnActiveSec = "1s";
+      OnUnitActiveSec = "10m";
+    };
+  };
+
   systemd.services.serial-console-liveness = {
     description = "Serial console liveness marker";
-    wantedBy = [ "serial-getty@ttyS0.service" ];
-    script = ''
-      while true; do
-          echo "$(date) -- SERIAL CONSOLE IS LIVE --" > /dev/ttyS0
-          sleep 300;
-      done
-      '';
+    serviceConfig.Type = "oneshot";
+    script = "echo \"$(date) -- SERIAL CONSOLE IS LIVE --\" > /dev/ttyS0";
   };
 
   systemd.services.enc-move-seed = {
     description = "move ENC seed into final location at /etc/nixos";
-    wantedBy = [ "timers.target" ];
+    wantedBy = [ "fc-manage.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
       if [[ ! -e /etc/nixos/enc.json && -e /tmp/fc-data/enc.json ]]; then

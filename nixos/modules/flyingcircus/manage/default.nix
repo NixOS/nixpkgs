@@ -60,14 +60,13 @@ with lib;
         description = "Timer for fc-manage";
         after = [ "network-online.target" ];
         wantedBy = [ "timers.target" ];
-        enable = true;
         timerConfig = {
           Unit = "fc-manage.service";
           # XXX This 10s thing is annoying. There seems to be an issue that
           # networking isn't _really_ up when the timer triggers for the
           # first time even though the 'network-online.target' is waited
           # for.
-          OnBootSec = "20s";
+          OnActiveSec = "5s";
           OnUnitActiveSec = "10m";
           # Not yet supported by our systemd version.
           # RandomSec = "3m";
