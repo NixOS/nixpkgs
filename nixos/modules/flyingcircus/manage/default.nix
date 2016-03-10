@@ -58,7 +58,6 @@ with lib;
 
       systemd.timers.fc-manage = {
         description = "Timer for fc-manage";
-        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "timers.target" ];
         enable = true;
