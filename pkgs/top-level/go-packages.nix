@@ -596,17 +596,20 @@ let
     sha256 = "09sdijfx5d05z4cd5k6lhl7k3kbpdf2amzlngv15h5v0fff9qw4s";
   };
 
-  dbus = buildGoPackage rec {
-    rev = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
-    name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/godbus/dbus";
+  dbus-old-2015-05-19 = buildFromGitHub {
+    rev    = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
+    date   = "2015-05-19";
+    owner  = "godbus";
+    repo   = "dbus";
+    sha256 = "1vk31wal7ncvjwvnb8q1myrkihv1np46f3q8dndi5k0csflbxxdf";
+  };
 
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "godbus";
-      repo = "dbus";
-      sha256 = "1vk31wal7ncvjwvnb8q1myrkihv1np46f3q8dndi5k0csflbxxdf";
-    };
+  dbus = buildFromGitHub {
+    rev    = "230e4b23db2fd81c53eaa0073f76659d4849ce51";
+    date   = "2016-03-02";
+    owner  = "godbus";
+    repo   = "dbus";
+    sha256 = "1wxv2cbihzcsz2z7iycyzl7f3arhhgagcc5kqln1k1mkm4l85z0q";
   };
 
   deis = buildFromGitHub {
@@ -1705,7 +1708,7 @@ let
     owner = "stgraber";
     repo = "lxd-go-systemd";
     sha256 = "006dhy3j8ld0kycm8hrjxvakd7xdn1b6z2dsjp1l4sqrxdmm188w";
-    buildInputs = [ dbus ];
+    buildInputs = [ dbus-old-2015-05-19 ];
   };
 
   go-update-v0 = buildFromGitHub {
