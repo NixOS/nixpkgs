@@ -1687,18 +1687,13 @@ let
     sha256 = "1j53m2wjyczm9m55znfycdvm4c8vfniqgk93dvzwy8vpj5gm6sb3";
   };
 
-  go-systemd = buildGoPackage rec {
-    rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
-    name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/coreos/go-systemd";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "coreos";
-      repo = "go-systemd";
-      sha256 = "0c1k3y5msc1xplhx0ksa7g08yqjaavns8s5zrfg4ig8az30gwlpa";
-    };
-
+  go-systemd = buildFromGitHub {
+    rev    = "7b2428fec40033549c68f54e26e89e7ca9a9ce31";
+    date   = "2016-03-10";
+    owner  = "coreos";
+    repo   = "go-systemd";
+    sha256 = "0kfbxvm9zsjgvgmiq2jl807y4s5z0rya65rm399llr5rr7vz1lxd";
+    nativeBuildInputs = [ pkgs.pkgconfig pkgs.systemd ];
     buildInputs = [ dbus ];
   };
 
