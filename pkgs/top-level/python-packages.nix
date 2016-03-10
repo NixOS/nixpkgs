@@ -8084,6 +8084,24 @@ in modules // {
     };
   };
 
+  django_hijack = buildPythonPackage rec {
+    name = "django-hijack-${version}";
+    version = "2.0.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-hijack/${name}.tar.gz";
+      sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
+    };
+
+    propagatedBuildInputs = with self; [ django django_compat ];
+
+    meta = {
+      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
+      homepage = https://github.com/arteria/django-hijack;
+      license = licenses.mit;
+    };
+  };
+
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
     version = "1.4.3";
