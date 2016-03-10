@@ -197,12 +197,6 @@ in
       install -d -m 0755 /srv
     '';
 
-    security.sudo.extraConfig = ''
-      Defaults lecture = never
-      root   ALL=(ALL) SETENV: ALL
-      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
-    '';
-
     environment.etc = (
       lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)
       { "directory.secret".text = cfg.enc.parameters.directory_secret;

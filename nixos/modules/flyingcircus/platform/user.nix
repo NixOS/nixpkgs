@@ -171,23 +171,19 @@ in
 
     security.sudo.extraConfig = ''
       Defaults set_home,!authenticate,!mail_no_user,env_keep+=SSH_AUTH_SOCK
+      Defaults lecture = never
 
       ## Cmnd alias specification
-      Cmnd_Alias  NGINX = /etc/init.d/nginx
-      Cmnd_Alias  LOCALCONFIG = /usr/local/sbin/localconfig, \
-            /usr/local/sbin/localconfig -v
       Cmnd_Alias  REBOOT = /sbin/reboot, \
             /sbin/shutdown -r now, \
             /sbin/shutdown -h now
 
       ## User privilege specification
-      root ALL=(ALL) ALL
+      root   ALL=(ALL) SETENV: ALL
+      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
 
-      %wheel ALL=(ALL) PASSWD: ALL
       %sudo-srv ALL=(%service:service) ALL
-      %sudo-srv ALL=(root) NGINX, LOCALCONFIG, REBOOT
-      %service ALL=(root) NGINX, LOCALCONFIG
-
+      %sudo-srv ALL=(root) REBOOT
 
       # Allow unrestricted access to super admins
       %admins ALL=(ALL) PASSWD: ALL
