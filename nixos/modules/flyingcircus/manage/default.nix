@@ -5,8 +5,10 @@
 
 with lib;
 
-{
+let
+  cfg = config.flyingcircus;
 
+in {
   options = {
 
     flyingcircus.agent = {
@@ -66,7 +68,7 @@ with lib;
           # networking isn't _really_ up when the timer triggers for the
           # first time even though the 'network-online.target' is waited
           # for.
-          OnActiveSec = "5s";
+          OnStartupSec = "15s";
           OnUnitActiveSec = "10m";
           # Not yet supported by our systemd version.
           # RandomSec = "3m";
@@ -85,7 +87,7 @@ with lib;
           HOME = "/root";
         };
         script = ''
-          ${pkgs.fcmanage}/bin/fc-manage ${config.flyingcircus.agent.steps}
+          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
           ${pkgs.fcmanage}/bin/fc-resize-root
         '';
       };

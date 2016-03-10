@@ -4,6 +4,10 @@
 
 with lib;
 
+let
+  cfg = config.flyingcircus;
+
+in
 {
   imports = [
       <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
@@ -69,7 +73,7 @@ with lib;
     requiredBy = [ "serial-getty@ttyS0.service" ];
     timerConfig = {
       Unit = "serial-console-liveness.service";
-      OnActiveSec = "1s";
+      OnBootSec = "10m";
       OnUnitActiveSec = "10m";
     };
   };
@@ -81,14 +85,14 @@ with lib;
   };
 
   systemd.services.enc-move-seed = {
-    description = "move ENC seed into final location at /etc/nixos";
+    description = "move ENC seed into its final location";
     wantedBy = [ "fc-manage.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
-      if [[ ! -e /etc/nixos/enc.json && -e /tmp/fc-data/enc.json ]]; then
+      if [[ ! -e ${cfg.enc_path} && -e /tmp/fc-data/enc.json ]]; then
         echo "found ENC seed in /tmp/fc-data"
-        mv /tmp/fc-data/enc.json /etc/nixos/enc.json
-        chmod 0640 /etc/nixos/enc.json
+        mv /tmp/fc-data/enc.json ${cfg.enc_path}
+        chmod 0640 ${cfg.enc_path}
       fi
     '';
   };

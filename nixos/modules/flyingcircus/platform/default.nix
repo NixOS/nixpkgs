@@ -57,8 +57,8 @@ in
     };
 
     flyingcircus.enc_path = mkOption {
-      default = /etc/nixos/enc.json;
-      type = types.path;
+      default = "/etc/nixos/enc.json";
+      type = types.string;
       description = "Where to find the ENC json file.";
     };
 

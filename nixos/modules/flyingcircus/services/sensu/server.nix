@@ -14,7 +14,10 @@ let
     (x: x.node == "${config.networking.hostName}.gocept.net")
     { password = ""; } { password = ""; } sensu_clients).password;
 
-  directory_handler = "${pkgs.fcmanage}/bin/fc-monitor handle-result";
+  directory_handler = ''
+    ${pkgs.fcmanage}/bin/fc-monitor \
+      --enc ${config.flyingcircus.enc_path} handle-result
+  '';
 
   sensu_server_json = pkgs.writeText "sensu-server.json"
     ''

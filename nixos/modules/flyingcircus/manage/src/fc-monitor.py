@@ -81,9 +81,8 @@ def handle_result(directory=None, enc=None, **kw):
 def main(argv):
 
     parser = argparse.ArgumentParser(description='Flying Circus Monitoring')
-    parser.add_argument('--enc', action='store',
-                        help='Path to enc.json (default: %(default)s)',
-                        default='/etc/nixos/enc.json')
+    parser.add_argument('-E', '--enc', default='/etc/nixos/enc.json',
+                        help='Path to enc.json (default: %(default)s)')
     subparsers = parser.add_subparsers(help='sub-command help',
                                        dest='subparser_name')
 
@@ -102,7 +101,8 @@ def main(argv):
         parser.print_usage()
         parser.exit("No command given.")
 
-    enc = json.load(open(args.enc, 'r'))
+    with open(args.enc) as f:
+        enc = json.load(f)
     directory = get_directory(
         enc,
         'https://directory.fcio.net/v2/api')  # RING0

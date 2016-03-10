@@ -32,11 +32,11 @@ enc = None
 directory = None
 
 
-def load_enc():
+def load_enc(enc_path):
     """Tries to read enc.json and establish directory connection."""
     global enc, directory
     try:
-        with open('/etc/nixos/enc.json') as f:
+        with open(enc_path) as f:
             enc = json.load(f)
     except OSError:
         # This environment doesn't seem to support an ENC,
@@ -135,6 +135,8 @@ def main():
     logging.basicConfig()
     build_options = []
     a = argparse.ArgumentParser(description=__doc__)
+    a.add_argument('-E', '--enc-path', default='/etc/nixos/enc.json',
+                   help='path to enc.json (default: %(default)s)')
     a.add_argument('--show-trace', default=False, action='store_true',
                    help='instruct nixos-rebuild to dump tracebacks on failure')
     a.add_argument('-e', '--directory', default=False, action='store_true',
@@ -156,14 +158,14 @@ def main():
         build_options.append('--show-trace')
 
     if args.directory:
-        load_enc()
+        load_enc(args.enc_path)
         update_inventory()
 
     if args.system_state:
         system_state()
 
     # reload ENC data in case update_inventory changed something
-    load_enc()
+    load_enc(args.enc_path)
 
     if args.build:
         globals()[args.build](build_options)

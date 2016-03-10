@@ -36,10 +36,8 @@ in
       };
 
       script = ''
-        ${pkgs.fcmanage}/bin/fc-monitor \
-          --enc ${config.flyingcircus.enc_path} \
-          configure-checks
-        '';
+        ${pkgs.fcmanage}/bin/fc-monitor --enc ${cfg.enc_path} configure-checks
+      '';
     };
 
   };
