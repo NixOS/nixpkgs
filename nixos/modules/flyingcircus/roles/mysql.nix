@@ -50,115 +50,90 @@ in
 
     config = mkIf cfg.enable {
 
-        services.mysql = {
+        services.percona = {
           enable = true;
           package = pkgs.percona;
           rootPassword = root_password_file;
           dataDir = "/srv/mysql";
           extraOptions = ''
-            character-set-server        = utf8
-            user                        = mysql
-            log-error                   = /srv/mysql/mysqld.err
-            slow_query_log              = 1
-            slow_query_log_file         = /srv/mysql/mysql.slow
-            long-query-time             = 10
+            [mysqld]
+            default-storage-engine  = innodb
             skip-external-locking
-            key_buffer_size             = 16M
-            max_allowed_packet          = 1M
-            table_open_cache            = 64
-            sort_buffer_size            = 512K
-            net_buffer_length           = 8K
-            read_buffer_size            = 256K
-            read_rnd_buffer_size        = 512K
-            myisam_sort_buffer_size     = 8M
-            lc_messages                 = en_US
+            skip-name-resolve
+            max_allowed_packet    = 512M
+            bulk_insert_buffer_size    = 128M
+            tmp_table_size        = 512M
+            max_heap_table_size    = 512M
+            lower-case-table-names    = 0
+            max_connect_errors      = 20
+            default_storage_engine    = InnoDB
+            table_definition_cache  = 512
+            open_files_limit    = 65535
+            sysdate-is-now        = 1
 
-            bind-address                = 127.0.0.1
+            init-connect        = 'SET NAMES utf8 COLLATE utf8_unicode_ci'
+            character-set-server     = utf8
+            collation-server        = utf8_unicode_ci
+            character_set_server    = utf8
+            collation_server        = utf8_unicode_ci
 
-            log-bin
-            server-id                     = 1
+            # Timeouteinstellung
+            interactive_timeout     = 28800
+            wait_timeout         = 28800
+            connect_timeout     = 10
 
-            tmpdir                         = /tmp/
+            bind-address        = 127.0.0.1
+            max_connections        = 1000
+            thread_cache_size       = 128
+            myisam-recover-options    = FORCE
+            key_buffer_size        = 64M
+            table_open_cache    = 1000
+            # myisam-recover             = FORCE
+            thread_cache_size       = 8
 
-            innodb_buffer_pool_size = 20M
-            innodb_data_file_path = ibdata1:10M:autoextend:max:128M
-            innodb_log_file_size = 5M
-            innodb_log_buffer_size = 8M
-            innodb_log_files_in_group=2
-            innodb_flush_log_at_trx_commit = 1
-            innodb_lock_wait_timeout = 50
-            innodb_file_per_table
+            query_cache_type         = 1
+            query_cache_min_res_unit     = 2k
+            query_cache_size         = 80M
 
-            # 10MiB query cache
-            query_cache_size = 10485760
+            # * InnoDB
+            innodb-buffer-pool-size         = 7G
+            innodb-log-buffer-size          = 8M
+            innodb-file-per-table           = 1
+            ## You may want to tune the below depending on number of cores and disk sub
+            # alte werte waren 4 (laut empfhelung 4 x number of cores)
+            innodb_read_io_threads          = 32
+            innodb_write_io_threads         = 32
+            innodb-doublewrite              = 1
+            innodb_log_file_size            = 128M
+            innodb-log-files-in-group       = 4
+            innodb-flush-method             = O_DIRECT
+            innodb_open_files        = 800
+            innodb_stats_on_metadata        = 0
+            innodb_lock_wait_timeout    = 120
 
-            [client]
-            port                        = 3306
-            socket                      = /run/mysqld/mysqld.sock
-
-            [mysql]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [mysqladmin]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [mysqlcheck]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [mysqldump]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [mysqlimport]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [mysqlshow]
-            character-sets-dir=/usr/share/mysql/charsets
-            default-character-set=utf8
-
-            [myisamchk]
-            character-sets-dir=/usr/share/mysql/charsets
-
-            [myisampack]
-            character-sets-dir=/usr/share/mysql/charsets
-
-            # use [safe_mysqld] with mysql-3
-            [mysqld_safe]
-            err-log                        = /var/log/mysql/mysql.err
 
             [mysqldump]
             quick
-            max_allowed_packet             = 16M
+            quote-names
+            max_allowed_packet    = 512M
 
-            [mysql]
-            # uncomment the next directive if you are not familiar with SQL
-            #safe-updates
+            [xtrabackup]
+            target_dir                      = /opt/backup/xtrabackup
+            compress-threads                = 4
+            compress
+            parallel            = 3
 
             [isamchk]
-            key_buffer_size                = 20M
-            sort_buffer_size               = 20M
-            read_buffer                    = 2M
-            write_buffer                   = 2M
+            key_buffer        = 16M
 
-            [myisamchk]
-            key_buffer_size                = 20M
-            sort_buffer_size               = 20M
-            read_buffer_size               = 2M
-            write_buffer_size              = 2M
 
-            [mysqlhotcopy]
-            interactive-timeout
 
             ${localConfig}
             '';
         };
 
         system.activationScripts.fcio-mysql-init = let
-            mysql = config.services.mysql.package;
+            mysql = config.services.percona.package;
           in
           stringAfter [ "users" "groups" ] ''
             # Configure initial root password for mysql.
@@ -193,7 +168,7 @@ in
           wants = [ "mysql-maintenance.timer" ];
           partOf = [ "mysql.service" ];
 
-          path = with pkgs; [ config.services.mysql.package ];
+          path = with pkgs; [ config.services.percona.package ];
 
           serviceConfig = {
             Type = "oneshot";

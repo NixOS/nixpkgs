@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.services.mysql;
+  cfg = config.services.percona;
 
   mysql = cfg.package;
 
@@ -39,7 +39,7 @@ in
 
   options = {
 
-    services.mysql = {
+    services.percona = {
 
       enable = mkOption {
         default = false;
@@ -50,7 +50,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.mysql";
+        example = literalExample "pkgs.percona";
         description = "
           Which MySQL derivation to use.
         ";
@@ -147,7 +147,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.mysql.enable {
+  config = mkIf config.services.percona.enable {
 
     users.extraUsers.mysql = {
       description = "MySQL server user";
@@ -157,7 +157,7 @@ in
 
     users.extraGroups.mysql.gid = config.ids.gids.mysql;
 
-    environment.systemPackages = [mysql];
+    environment.systemPackages = [ mysql ];
 
     systemd.services.mysql =
       { description = "MySQL Server";
