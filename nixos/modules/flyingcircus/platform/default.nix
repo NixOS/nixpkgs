@@ -135,6 +135,7 @@ in
     sound.enable = false;
 
     environment.systemPackages = with pkgs; [
+        atop
         bind
         cyrus_sasl
         db
@@ -154,6 +155,7 @@ in
         python27Packages.virtualenv
         python3
         screen
+        sysstat
         tcpdump
         tree
         vim
