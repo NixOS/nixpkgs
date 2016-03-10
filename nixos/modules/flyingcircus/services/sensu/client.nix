@@ -7,6 +7,15 @@ let
 
   cfg = config.flyingcircus.services.sensu-client;
 
+  check_timer = writeScript "check-timer.sh" ''
+    #!${pkgs.bash}/bin/bash
+    timer=$1
+    output=$(systemctl status $1.timer)
+    result=$?
+    echo "$output" | iconv -c -f utf-8 -t ascii
+    exit $(( result != 0 ? 2 : 0 ))
+    '';
+
   local_sensu_configuration =
     if  pathExists /etc/local/sensu-client
     then "-d ${/etc/local/sensu-client}"
@@ -131,7 +140,7 @@ in {
 
     systemd.services.sensu-client = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.sensu pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
+      path = [ pkgs.sensu pkgs.glibc pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
       serviceConfig = {
         User = "sensuclient";
         ExecStart = "${sensu}/bin/sensu-client -L warn  -c ${client_json} ${local_sensu_configuration}";
@@ -193,6 +202,27 @@ in {
       local_resolver = {
         notification = "Local resolver not functional";
         command = "check-dns.rb -d ${config.networking.hostName}.gocept.net";
+      };
+      journal = {
+        notification = "Errors in journal in the last hour";
+        command = "check-journal.rb -q '([Ee]rror|[Ee]xception)' -s -60minutes";
+        interval = 600;
+      };
+      manage = {
+        notification = "The FC manage job is not enabled.";
+        command = "${check_timer} fc-manage";
+      };
+      netstat_tcp = {
+        notification = "Netstat TCP connections";
+        command = "check-netstat-tcp.rb";
+      };
+      ethsrv_mtu = {
+        notification = "ethsrv MTU @ 1500";
+        command = "check-mtu.rb -i ethsrv -m 1500";
+      };
+      ethfe_mtu = {
+        notification = "ethfe MTU @ 1500";
+        command = "check-mtu.rb -i ethfe -m 1500";
       };
     };
 
