@@ -149,11 +149,13 @@ in
         openldap
         openssl
         psmisc
+        pv
         python27Full
         python27Packages.virtualenv
         python3
         screen
         tcpdump
+        tree
         vim
         zlib
     ];
