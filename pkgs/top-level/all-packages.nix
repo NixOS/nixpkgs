@@ -5110,6 +5110,8 @@ let
     ocaml = ocaml_3_08_0;
   };
 
+  rgbds = callPackage ../development/compilers/rgbds { };
+
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
@@ -5227,6 +5229,8 @@ let
   webdsl = callPackage ../development/compilers/webdsl { };
 
   win32hello = callPackage ../development/compilers/visual-c++/test { };
+
+  wla-dx = callPackage ../development/compilers/wla-dx { };
 
   wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
     nativeTools = stdenv.cc.nativeTools or false;
