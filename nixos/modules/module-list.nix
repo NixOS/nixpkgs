@@ -126,6 +126,7 @@
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/slave.nix
   ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/buildkite-agent.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix
