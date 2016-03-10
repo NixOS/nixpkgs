@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "simp_le-2016-01-09";
+  name = "simp_le-2016-02-06";
 
   src = fetchFromGitHub {
     owner = "kuba";
     repo = "simp_le";
-    rev = "b9d95e862536d1242e1ca6d7dac5691f32f11373";
-    sha256 = "0l4qs0y4cbih76zrpbkn77xj17iwsm5fi83zc3p048x4hj163805";
+    rev = "8f258bc098a84b7a20c2732536d0740244d814f7";
+    sha256 = "1r2c31bhj91n3cjyf01spx52vkqxi5475zzkc9s1aliy3fs3lc4r";
   };
 
   propagatedBuildInputs = with pythonPackages; [ acme_0_1 ];
