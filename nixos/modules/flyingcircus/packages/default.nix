@@ -12,7 +12,6 @@
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
 
     sensu = pkgs.callPackage ./sensu { };
-    sensu_plugins = pkgs.callPackage ./sensu-plugins { };
     uchiwa = pkgs.callPackage ./uchiwa { };
 
   };

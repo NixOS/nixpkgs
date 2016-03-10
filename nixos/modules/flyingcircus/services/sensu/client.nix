@@ -131,7 +131,7 @@ in {
 
     systemd.services.sensu-client = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.sensu pkgs.sensu_plugins pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
+      path = [ pkgs.sensu pkgs.nagiosPluginsOfficial pkgs.bash pkgs.lm_sensors ];
       serviceConfig = {
         User = "sensuclient";
         ExecStart = "${sensu}/bin/sensu-client -L warn  -c ${client_json} ${local_sensu_configuration}";
@@ -181,6 +181,18 @@ in {
       systemd_units = {
         notification = "SystemD has failed units";
         command = "check-failed-units.rb";
+      };
+      disk_usage = {
+        notification = "Disk usage too high";
+        command = "check-disk-usage.rb";
+      };
+      entropy = {
+        notification = "Too little entropy available";
+        command = "check-entropy.rb -w 120 -c 60";
+      };
+      local_resolver = {
+        notification = "Local resolver not functional";
+        command = "check-dns.rb -d ${config.networking.hostName}.gocept.net";
       };
     };
 
