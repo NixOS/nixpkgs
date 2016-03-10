@@ -35,7 +35,7 @@ let
       "handlers": {
         "mailer": {
           "type": "pipe",
-          "command": "${pkgs.sensu_plugins}/bin/handler-mailer.rb"
+          "command": "${pkgs.sensu}/bin/handler-mailer.rb"
         },
         "directory": {
           "type": "pipe",
@@ -159,7 +159,7 @@ in {
 
     systemd.services.sensu-server = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.sensu pkgs.sensu_plugins pkgs.openssl pkgs.bash pkgs.mailutils ];
+      path = [ pkgs.sensu pkgs.openssl pkgs.bash pkgs.mailutils ];
       requires = [
         "rabbitmq.service"
         "redis.service"
