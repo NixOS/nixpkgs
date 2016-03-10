@@ -282,6 +282,7 @@
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
+  pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
   peti = "Peter Simons <simons@cryp.to>";

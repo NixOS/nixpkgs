@@ -125,10 +125,11 @@
   ./services/computing/torque/server.nix
   ./services/computing/torque/mom.nix
   ./services/computing/slurm/slurm.nix
-  ./services/continuous-integration/jenkins/default.nix
-  ./services/continuous-integration/jenkins/slave.nix
-  ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
+  ./services/continuous-integration/jenkins/default.nix
+  ./services/continuous-integration/jenkins/job-builder.nix
+  ./services/continuous-integration/jenkins/slave.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
   ./services/databases/couchdb.nix

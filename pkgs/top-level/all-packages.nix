@@ -5951,6 +5951,8 @@ in
     inherit (pythonPackages) twisted;
   };
 
+  buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
+
   byacc = callPackage ../development/tools/parsing/byacc { };
 
   cargo = callPackage ../development/tools/build-managers/cargo {
