@@ -1,9 +1,9 @@
 https://github.com/golang/go/issues/13114
 https://gnats.netbsd.org/50777
 
---- a/src/cmd/6l/asm.c	2014-12-11 01:18:10.000000000 +0000
-+++ b/src/cmd/6l/asm.c
-@@ -118,6 +118,8 @@ adddynrel(LSym *s, Reloc *r)
+--- a/src/cmd/6l/asm.c	2015-09-23 06:20:05.000000000 +0200
++++ b/src/cmd/6l/asm.c	2016-03-10 21:00:29.032083210 +0100
+@@ -118,6 +118,8 @@
  		return;
  	
  	case 256 + R_X86_64_GOTPCREL:
@@ -12,29 +12,19 @@ https://gnats.netbsd.org/50777
  		if(targ->type != SDYNIMPORT) {
  			// have symbol
  			if(r->off >= 2 && s->p[r->off-2] == 0x8b) {
-
---- a/src/cmd/ld/ldelf.c.orig	2015-09-23 04:37:36.000000000 +0000
-+++ b/src/cmd/ld/ldelf.c
-@@ -888,12 +888,15 @@ reltype(char *pn, int elftype, uchar *si
- 	case R('6', R_X86_64_PC32):
- 	case R('6', R_X86_64_PLT32):
- 	case R('6', R_X86_64_GOTPCREL):
-+	case R('6', R_X86_64_GOTPCRELX):
-+	case R('6', R_X86_64_REX_GOTPCRELX):
- 	case R('8', R_386_32):
- 	case R('8', R_386_PC32):
- 	case R('8', R_386_GOT32):
- 	case R('8', R_386_PLT32):
- 	case R('8', R_386_GOTOFF):
- 	case R('8', R_386_GOTPC):
-+	case R('8', R_386_GOT32X):
- 		*siz = 4;
- 		break;
- 	case R('6', R_X86_64_64):
-
---- a/src/cmd/ld/elf.h.orig	2015-09-23 04:37:36.000000000 +0000
-+++ b/src/cmd/ld/elf.h
-@@ -478,32 +478,47 @@ typedef struct {
+--- a/src/cmd/8l/asm.c	2015-09-23 06:20:05.000000000 +0200
++++ b/src/cmd/8l/asm.c	2016-03-10 21:02:16.702064080 +0100
+@@ -115,6 +115,7 @@
+ 		return;		
+ 	
+ 	case 256 + R_386_GOT32:
++	case 256 + R_386_GOT32X:
+ 		if(targ->type != SDYNIMPORT) {
+ 			// have symbol
+ 			if(r->off >= 2 && s->p[r->off-2] == 0x8b) {
+--- a/src/cmd/ld/elf.h	2015-09-23 06:20:05.000000000 +0200
++++ b/src/cmd/ld/elf.h	2016-03-10 21:00:29.033083211 +0100
+@@ -478,32 +478,47 @@
   * Relocation types.
   */
  
@@ -108,7 +98,7 @@ https://gnats.netbsd.org/50777
  
  
  #define	R_ALPHA_NONE		0	/* No reloc */
-@@ -581,39 +596,42 @@ typedef struct {
+@@ -581,39 +596,42 @@
  #define	R_ARM_COUNT		38	/* Count of defined relocation types. */
  
  
@@ -184,3 +174,21 @@ https://gnats.netbsd.org/50777
  
  #define	R_PPC_NONE		0	/* No relocation. */
  #define	R_PPC_ADDR32		1
+--- a/src/cmd/ld/ldelf.c	2015-09-23 06:20:05.000000000 +0200
++++ b/src/cmd/ld/ldelf.c	2016-03-10 21:00:29.033083211 +0100
+@@ -888,12 +888,15 @@
+ 	case R('6', R_X86_64_PC32):
+ 	case R('6', R_X86_64_PLT32):
+ 	case R('6', R_X86_64_GOTPCREL):
++	case R('6', R_X86_64_GOTPCRELX):
++	case R('6', R_X86_64_REX_GOTPCRELX):
+ 	case R('8', R_386_32):
+ 	case R('8', R_386_PC32):
+ 	case R('8', R_386_GOT32):
+ 	case R('8', R_386_PLT32):
+ 	case R('8', R_386_GOTOFF):
+ 	case R('8', R_386_GOTPC):
++	case R('8', R_386_GOT32X):
+ 		*siz = 4;
+ 		break;
+ 	case R('6', R_X86_64_64):
