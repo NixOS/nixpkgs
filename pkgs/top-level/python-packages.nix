@@ -16294,6 +16294,19 @@ in modules // {
   };
 
 
+  pycryptodome = buildPythonPackage rec {
+    name = "pycryptodome-3.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycryptodome/${name}.tar.gz";
+      sha256 = "0nc4ry2ah56l40hr1dilw19ksma8bx3cmn99mp5vml4jlz9zkg16";
+    };
+    meta = {
+      homepage = http://www.pycryptodome.org;
+      description = "Self-contained Python package of low-level cryptographic primitives";
+      license = licenses.bsd2;
+    };
+  };
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
     disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
