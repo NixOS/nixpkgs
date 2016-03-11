@@ -3,14 +3,14 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "glance-${version}";
-  version = "11.0.0";
+  version = "11.0.1";
   namePrefix = "";
 
   PBR_VERSION = "${version}";
 
   src = fetchurl {
     url = "https://github.com/openstack/glance/archive/${version}.tar.gz";
-    sha256 = "05rz1lmzdmpnw8sf87vvi0l6q9g6s840z934zyinw17yfcvmqrdg";
+    sha256 = "062y3g0wbyaca1hq4ll7yiylj0pk7z84r2y5wbr2a5ysiak7a8sk";
   };
 
   # https://github.com/openstack/glance/blob/stable/liberty/requirements.txt
