@@ -22,20 +22,20 @@ envHooks+=(addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 
-if [ -n "@cc@" ]; then
-    addToSearchPath PATH @cc@/bin
+if [ -n "@binutils@" ]; then
+    addToSearchPath _PATH @binutils@/bin
 fi
 
-if [ -n "@binutils@" ]; then
-    addToSearchPath PATH @binutils@/bin
+if [ -n "@cc@" ]; then
+    addToSearchPath _PATH @cc@/bin
 fi
 
 if [ -n "@libc@" ]; then
-    addToSearchPath PATH @libc@/bin
+    addToSearchPath _PATH @libc@/bin
 fi
 
 if [ -n "@coreutils@" ]; then
-    addToSearchPath PATH @coreutils@/bin
+    addToSearchPath _PATH @coreutils@/bin
 fi
 
 if [ -z "$crossConfig" ]; then

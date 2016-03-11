@@ -187,7 +187,7 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: {
-      inherit (stage1.pkgs) perl binutils paxctl;
+      inherit (stage1.pkgs) perl binutils paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
   };
@@ -204,7 +204,7 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: rec {
-      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
+      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
@@ -238,7 +238,7 @@ rec {
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
+      inherit (stage3.pkgs) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
