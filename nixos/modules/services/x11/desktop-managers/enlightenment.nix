@@ -76,7 +76,7 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
-    #services.dbus.packages = [ pkgs.efl ]; # dbus-1 folder is not in /etc but in /share, so needs fixing first
+    services.dbus.packages = [ e.efl ];
 
     systemd.user.services.efreet =
       { enable = true;
