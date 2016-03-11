@@ -3004,6 +3004,8 @@ let
 
   pydb = callPackage ../development/tools/pydb { };
 
+  pygmentex = callPackage ../tools/typesetting/pygmentex { };
+
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
   pythonDBus = dbus_python;
