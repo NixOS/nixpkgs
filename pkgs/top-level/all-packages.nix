@@ -9709,7 +9709,10 @@ let
 
   popa3d = callPackage ../servers/mail/popa3d { };
 
-  postfix = callPackage ../servers/mail/postfix { };
+  postfix28 = callPackage ../servers/mail/postfix { };
+  postfix211 = callPackage ../servers/mail/postfix/2.11.nix { };
+  postfix30 = callPackage ../servers/mail/postfix/3.0.nix { };
+  postfix = postfix30;
 
   postsrsd = callPackage ../servers/mail/postsrsd { };
 
