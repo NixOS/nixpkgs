@@ -15278,6 +15278,8 @@ let
       libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
     };
 
+    colord-kde = callPackage ../tools/misc/colord-kde/0.5.nix {};
+
     dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
     fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
