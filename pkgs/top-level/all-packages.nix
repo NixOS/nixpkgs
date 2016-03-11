@@ -3888,6 +3888,8 @@ let
 
   xmpppy = pythonPackages.xmpppy;
 
+  xiccd = callPackage ../tools/misc/xiccd { };
+
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
   xpf = callPackage ../tools/text/xml/xpf {
