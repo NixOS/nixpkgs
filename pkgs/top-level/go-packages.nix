@@ -596,17 +596,20 @@ let
     sha256 = "09sdijfx5d05z4cd5k6lhl7k3kbpdf2amzlngv15h5v0fff9qw4s";
   };
 
-  dbus = buildGoPackage rec {
-    rev = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
-    name = "dbus-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/godbus/dbus";
+  dbus-old-2015-05-19 = buildFromGitHub {
+    rev    = "a5942dec6340eb0d57f43f2003c190ce06e43dea";
+    date   = "2015-05-19";
+    owner  = "godbus";
+    repo   = "dbus";
+    sha256 = "1vk31wal7ncvjwvnb8q1myrkihv1np46f3q8dndi5k0csflbxxdf";
+  };
 
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "godbus";
-      repo = "dbus";
-      sha256 = "1vk31wal7ncvjwvnb8q1myrkihv1np46f3q8dndi5k0csflbxxdf";
-    };
+  dbus = buildFromGitHub {
+    rev    = "230e4b23db2fd81c53eaa0073f76659d4849ce51";
+    date   = "2016-03-02";
+    owner  = "godbus";
+    repo   = "dbus";
+    sha256 = "1wxv2cbihzcsz2z7iycyzl7f3arhhgagcc5kqln1k1mkm4l85z0q";
   };
 
   deis = buildFromGitHub {
@@ -1684,18 +1687,13 @@ let
     sha256 = "1j53m2wjyczm9m55znfycdvm4c8vfniqgk93dvzwy8vpj5gm6sb3";
   };
 
-  go-systemd = buildGoPackage rec {
-    rev = "2688e91251d9d8e404e86dd8f096e23b2f086958";
-    name = "go-systemd-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/coreos/go-systemd";
-
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "coreos";
-      repo = "go-systemd";
-      sha256 = "0c1k3y5msc1xplhx0ksa7g08yqjaavns8s5zrfg4ig8az30gwlpa";
-    };
-
+  go-systemd = buildFromGitHub {
+    rev    = "7b2428fec40033549c68f54e26e89e7ca9a9ce31";
+    date   = "2016-03-10";
+    owner  = "coreos";
+    repo   = "go-systemd";
+    sha256 = "0kfbxvm9zsjgvgmiq2jl807y4s5z0rya65rm399llr5rr7vz1lxd";
+    nativeBuildInputs = [ pkgs.pkgconfig pkgs.systemd ];
     buildInputs = [ dbus ];
   };
 
@@ -1705,7 +1703,7 @@ let
     owner = "stgraber";
     repo = "lxd-go-systemd";
     sha256 = "006dhy3j8ld0kycm8hrjxvakd7xdn1b6z2dsjp1l4sqrxdmm188w";
-    buildInputs = [ dbus ];
+    buildInputs = [ dbus-old-2015-05-19 ];
   };
 
   go-update-v0 = buildFromGitHub {
@@ -3802,5 +3800,20 @@ let
     repo   = "goreman";
     sha256 = "153hf4dq4jh1yv35pv30idmxhc917qzl590qy5394l48d4rapgb5";
     buildInputs = [ go-colortext yaml-v2 godotenv ];
+  };
+
+  # To use upower-notify, the maintainer suggests adding something like this to your configuration.nix:
+  #
+  # service.xserver.displayManager.sessionCommands = ''
+  #   ${pkgs.dunst}/bin/dunst -shrink -geometry 0x0-50-50 -key space & # ...if don't already have a dbus notification display app
+  #   (sleep 3; exec ${pkgs.yeshup}/bin/yeshup ${pkgs.go-upower-notify}/bin/upower-notify) &
+  # '';
+  upower-notify = buildFromGitHub rec {
+    rev    = "14c581e683a7e90ec9fa6d409413c16599a5323c";
+    date   = "2016-03-10";
+    owner  = "omeid";
+    repo   = "upower-notify";
+    sha256 = "16zlvn53p9m10ph8n9gps51fkkvl6sf4afdzni6azk05j0ng49jw";
+    propagatedBuildInputs = [ dbus ];
   };
 }; in self
