@@ -3150,6 +3150,8 @@ let
 
   rosegarden = callPackage ../applications/audio/rosegarden { };
 
+  rowhammer-test = callPackage ../tools/system/rowhammer-test { };
+
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
 
   rpm = callPackage ../tools/package-management/rpm { };
