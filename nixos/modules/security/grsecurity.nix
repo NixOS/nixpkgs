@@ -28,8 +28,7 @@ in
 
       kernelPatch = mkOption {
         type = types.attrs;
-        default = pkgs.kernelPatches.grsecurity_latest;
-        example = pkgs.kernelPatches.grsecurity_4_1;
+        example = lib.literalExample "pkgs.kernelPatches.grsecurity_4_1";
         description = ''
           Grsecurity patch to use.
         '';
@@ -230,6 +229,8 @@ in
          message   = "grsecurity configured for virtualisation but no virtualisation software specified";
         }
       ];
+
+    security.grsecurity.kernelPatch = lib.mkDefault pkgs.kernelPatches.grsecurity_latest;
 
     systemd.services.grsec-lock = mkIf cfg.config.sysctl {
       description     = "grsecurity sysctl-lock Service";
