@@ -11959,14 +11959,16 @@ in modules // {
   };
 
   msrplib = buildPythonPackage rec {
-    name = "python-msrplib-${version}";
-    version = "0.18.0";
+    pname = "python-msrplib";
+    name = "${pname}-${version}";
+    version = "0.19";
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/MSRP/${name}.tar.gz";
-      sha256 = "0vp9g5p015g3f67rl4vz0qnn6x7hciry6nmvwf82h9h5rx11r43j";
-    };
-
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
+    };  
+    
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
