@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, cups, libusb, libxml2 }:
+{ stdenv, fetchurl, patchelf, cups, libusb, libxml2, glibc }:
 
 let
 
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
     my_patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath ${cups}/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
+      --set-rpath ${cups}/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib:${glibc}/lib \
       - ${arch}/{pstosecps,rastertospl,smfpnetdiscovery}
 
     mkdir -p $out/etc/sane.d/dll.d/
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/lib
     my_patchelf \
-      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib \
+      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${glibc}/lib \
       - ${arch}/libscmssc.so*
     install -m755 ${arch}/libscmssc.so* $out/lib
 
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/sane
     my_patchelf \
-      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${stdenv.glibc}/lib:${libusb}/lib:${libxml2}/lib \
+      --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/lib:${glibc}/lib:${libusb}/lib:${libxml2}/lib \
       - ${arch}/libsane-smfp.so*
     install -m755 ${arch}/libsane-smfp.so* $out/lib/sane
     ln -s libsane-smfp.so.1.0.1 $out/lib/sane/libsane-smfp.so.1

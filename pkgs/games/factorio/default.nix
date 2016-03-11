@@ -11,8 +11,7 @@ let
 
   fetch = callPackage ./fetch.nix { username = username; password = password; };
   arch = if stdenv.system == "x86_64-linux" then "x64"
-         else if stdenv.system == "i686-linux" then "x32"
-         else abort "Unsupported platform";
+         else "x32";
 
   variants = {
     x64 = {
