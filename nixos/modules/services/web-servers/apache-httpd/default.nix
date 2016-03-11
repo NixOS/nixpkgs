@@ -12,7 +12,7 @@ let
 
   httpdConf = mainCfg.configFile;
 
-  php = pkgs.php.override { apacheHttpd = httpd; };
+  php = pkgs.php.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
