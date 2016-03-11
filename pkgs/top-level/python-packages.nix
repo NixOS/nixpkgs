@@ -13560,11 +13560,11 @@ in modules // {
 
   oslo-middleware = buildPythonPackage rec {
     name = "oslo.middleware-${version}";
-    version = "2.9.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.middleware/${name}.tar.gz";
-      sha256 = "14acinchdpmc1in39mz9kh1h2rd1ygwg3zdhbwzrlhy8wbzzi4w9";
+      sha256 = "0ix353842dv3s0r6wsmvbsj39hv48iif1ri87r6k80ga99qdw2qf";
     };
 
     propagatedBuildInputs = with self; [
