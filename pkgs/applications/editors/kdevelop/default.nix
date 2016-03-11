@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.7.1";
+  version = "4.7.3";
   pname = "kdevelop";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "e3ad5377f53739a67216d37cda3f88c03f8fbb0c96e2a9ef4056df3c124e95c1";
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
+    sha256 = "9db388d1c8274da7d168c13db612c7e94ece7815757b945b0aa0371620a06b35";
   };
 
   buildInputs = [ kdevplatform kdebase_workspace okteta qjson ];
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
 
   propagatedUserEnvPkgs = [ kdevplatform kate konsole kde_runtime oxygen_icons ];
+
+  patches = [ ./gettext.patch ];
 
   NIX_CFLAGS_COMPILE = "-I${okteta}/include/KDE";
 
@@ -31,6 +33,6 @@ stdenv.mkDerivation rec {
         programing languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
-    homepage = http://www.kdevelop.org;
+    homepage = https://www.kdevelop.org;
   };
 }

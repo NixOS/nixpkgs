@@ -1,0 +1,8 @@
+diff -urN kdevelop-4.7.3.orig/po/CMakeLists.txt kdevelop-4.7.3/po/CMakeLists.txt
+--- kdevelop-4.7.3.orig/po/CMakeLists.txt	2016-03-04 23:29:09.411886565 +0100
++++ kdevelop-4.7.3/po/CMakeLists.txt	2016-03-04 23:28:35.108451713 +0100
+@@ -1,3 +1,4 @@
++cmake_policy(SET CMP0002 OLD)
+ find_package(Gettext REQUIRED)
+ if (NOT GETTEXT_MSGMERGE_EXECUTABLE)
+ MESSAGE(FATAL_ERROR "Please install msgmerge binary")
