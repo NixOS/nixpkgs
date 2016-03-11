@@ -13543,11 +13543,11 @@ in modules // {
 
   oslo-utils = buildPythonPackage rec {
     name = "oslo.utils-${version}";
-    version = "2.6.0";
+    version = "2.8.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.utils/${name}.tar.gz";
-      sha256 = "1prgi03nxkcykyja821qkycsqlnpyzw17mpvj8qf3pjmgb9gv1fy";
+      sha256 = "11l0jv26imcxa3n6rx8jm5fbkylfq4wqb1plh2cfvybq6l5vl2q1";
     };
 
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
