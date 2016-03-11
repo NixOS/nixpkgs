@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Virtual lighttable and darkroom for photographers";
-    homepage = http://www.darktable.org;
+    homepage = https://www.darktable.org;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu maintainers.rickynils maintainers.flosse ];
