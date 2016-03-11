@@ -24047,12 +24047,13 @@ in modules // {
     };
   };
 
+  # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
     name = "python-efl-${version}";
-    version = "1.16.0";
+    version = "1.17.0";
     src = pkgs.fetchurl {
       url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-      sha256 = "142ffki41xj0z2dnf011g8j4b35waviprk4x1dhvy1wgqdywl61l";
+      sha256 = "0yciffcgmyfmy95gidg9jhczv96jyi38zcdj0q19fjmx704zx84y";
     };
 
     preConfigure = ''
