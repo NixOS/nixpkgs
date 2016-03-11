@@ -41,25 +41,43 @@ in stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace src/Makefile.am --subst-var-by mavenRepo ${mavenRepo}
+    
+    substituteInPlace 3rdparty/libprocess/include/process/subprocess.hpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
 
+    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/posix/os.hpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+
+    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/fork.hpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+
+    substituteInPlace src/cli/mesos-scp        \
+      --replace "'scp " "'${openssh}/bin/scp "
+
+    substituteInPlace src/launcher/executor.cpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+    
     substituteInPlace src/launcher/fetcher.cpp \
       --replace '"gzip' '"${gzip}/bin/gzip'    \
       --replace '"tar' '"${gnutar}/bin/tar'    \
       --replace '"unzip' '"${unzip}/bin/unzip'
 
-    substituteInPlace src/cli/mesos-scp        \
-      --replace "'scp " "'${openssh}/bin/scp "
-
     substituteInPlace src/python/cli/src/mesos/cli.py \
      --replace "['mesos-resolve'" "['$out/bin/mesos-resolve'"
+    
+    substituteInPlace src/slave/containerizer/mesos/launch.cpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
 
-  '' + lib.optionalString (stdenv.isLinux) ''
+  '' + lib.optionalString stdenv.isLinux ''
 
     substituteInPlace configure.ac             \
       --replace /usr/include/libnl3 ${libnl}/include/libnl3
 
     substituteInPlace src/linux/perf.cpp       \
       --replace '"perf ' '"${perf}/bin/perf '
+    
+    substituteInPlace src/linux/systemd.cpp \
+      --replace 'os::realpath("/sbin/init")' '"${systemd}/lib/systemd/systemd"'
 
     substituteInPlace src/slave/containerizer/mesos/isolators/filesystem/shared.cpp \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
@@ -72,15 +90,6 @@ in stdenv.mkDerivation rec {
       --replace '"ip ' '"${iproute}/bin/ip '   \
       --replace '"mount ' '"${utillinux}/bin/mount ' \
       --replace '/bin/sh' "${stdenv.shell}"
-    
-    substituteInPlace src/launcher/executor.cpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
-    
-    substituteInPlace src/slave/containerizer/mesos/launch.cpp \
-      --replace '"sh"' '"${bash}/bin/bash"'
-    
-    substituteInPlace src/linux/systemd.cpp \
-      --replace 'os::realpath("/sbin/init")' '"${systemd}/lib/systemd/systemd"'
   '';
 
   configureFlags = [
