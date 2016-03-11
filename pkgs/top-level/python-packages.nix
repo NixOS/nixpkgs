@@ -10115,6 +10115,24 @@ in modules // {
   };
 
   hypothesis = buildPythonPackage rec {
+    name = "hypothesis-3.1.0";
+
+    buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
+    propagatedBuildInputs = with self; optionals isPy27 [enum34];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/hypothesis/${name}.tar.gz";
+      sha256 = "0qyqq9akm4vshhn8cngjc1qykcvsn7cz6dlm6njfsgpbraqrmbbw";
+    };
+
+    meta = {
+      description = "A Python library for property based testing";
+      homepage = https://github.com/DRMacIver/hypothesis;
+      license = licenses.mpl20;
+    };
+  };
+
+  hypothesis1 = buildPythonPackage rec {
     name = "hypothesis-1.14.0";
 
     buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
@@ -17182,7 +17200,8 @@ in modules // {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
+    # Stuck at hypothesis version 1: https://github.com/tobgu/pyrsistent/issues/82
+    buildInputs = with self; [ six pytest hypothesis1 ] ++ optional (!isPy3k) modules.sqlite3;
 
     checkPhase = ''
       py.test
