@@ -1676,6 +1676,7 @@ in modules // {
     };
 
     propagatedBuildInputs = [ self.requests2 ];
+    buildInputs = optionals isPy35 [ self.pytest ];
 
     meta = with stdenv.lib; {
       homepage = https://betamax.readthedocs.org/en/latest/;
