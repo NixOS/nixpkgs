@@ -23529,7 +23529,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyusb/${name}.tar.gz";
-      md5 = "5cc9c7dd77b4d12fcc22fee3b39844bc";
+      md5 = "bc12e83ff3ef1045d4306d13a9955fc1";
     };
 
     # Fix the USB backend library lookup
