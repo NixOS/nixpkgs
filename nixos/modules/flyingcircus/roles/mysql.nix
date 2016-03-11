@@ -60,57 +60,57 @@ in
             default-storage-engine  = innodb
             skip-external-locking
             skip-name-resolve
-            max_allowed_packet    = 512M
+            max_allowed_packet         = 512M
             bulk_insert_buffer_size    = 128M
-            tmp_table_size        = 512M
-            max_heap_table_size    = 512M
-            lower-case-table-names    = 0
-            max_connect_errors      = 20
-            default_storage_engine    = InnoDB
-            table_definition_cache  = 512
-            open_files_limit    = 65535
-            sysdate-is-now        = 1
+            tmp_table_size             = 512M
+            max_heap_table_size        = 512M
+            lower-case-table-names     = 0
+            max_connect_errors         = 20
+            default_storage_engine     = InnoDB
+            table_definition_cache     = 512
+            open_files_limit           = 65535
+            sysdate-is-now             = 1
 
-            init-connect        = 'SET NAMES utf8 COLLATE utf8_unicode_ci'
-            character-set-server     = utf8
-            collation-server        = utf8_unicode_ci
-            character_set_server    = utf8
-            collation_server        = utf8_unicode_ci
+            init-connect               = 'SET NAMES utf8 COLLATE utf8_unicode_ci'
+            character-set-server       = utf8
+            collation-server           = utf8_unicode_ci
+            character_set_server       = utf8
+            collation_server           = utf8_unicode_ci
 
             # Timeouteinstellung
-            interactive_timeout     = 28800
-            wait_timeout         = 28800
-            connect_timeout     = 10
+            interactive_timeout        = 28800
+            wait_timeout               = 28800
+            connect_timeout            = 10
 
-            bind-address        = 127.0.0.1
-            max_connections        = 1000
-            thread_cache_size       = 128
-            myisam-recover-options    = FORCE
-            key_buffer_size        = 64M
-            table_open_cache    = 1000
-            # myisam-recover             = FORCE
-            thread_cache_size       = 8
+            bind-address               = 127.0.0.1
+            max_connections            = 1000
+            thread_cache_size          = 128
+            myisam-recover-options     = FORCE
+            key_buffer_size            = 64M
+            table_open_cache           = 1000
+            # myisam-recover           = FORCE
+            thread_cache_size          = 8
 
-            query_cache_type         = 1
-            query_cache_min_res_unit     = 2k
-            query_cache_size         = 80M
+            query_cache_type           = 1
+            query_cache_min_res_unit   = 2k
+            query_cache_size           = 80M
 
             # * InnoDB
             innodb-buffer-pool-size         = 7G
-            innodb-log-buffer-size          = 8M
+            innodb-log-buffer-size          = 64M
             innodb-file-per-table           = 1
             ## You may want to tune the below depending on number of cores and disk sub
             # alte werte waren 4 (laut empfhelung 4 x number of cores)
             innodb_read_io_threads          = 32
             innodb_write_io_threads         = 32
+            innodb_change_buffer_max_size   = 50
             innodb-doublewrite              = 1
-            innodb_log_file_size            = 128M
+            innodb_log_file_size            = 512M
             innodb-log-files-in-group       = 4
-            innodb-flush-method             = O_DIRECT
-            innodb_open_files        = 800
+            innodb-flush-method             = O_DSYNC
+            innodb_open_files               = 800
             innodb_stats_on_metadata        = 0
-            innodb_lock_wait_timeout    = 120
-
+            innodb_lock_wait_timeout        = 120
 
             [mysqldump]
             quick
@@ -125,8 +125,6 @@ in
 
             [isamchk]
             key_buffer        = 16M
-
-
 
             ${localConfig}
             '';
