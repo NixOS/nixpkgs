@@ -22213,12 +22213,15 @@ in modules // {
   };
 
   xcaplib = buildPythonPackage rec {
-    name = "python-xcaplib-${version}";
-    version = "1.1.0";
+    pname = "python-xcaplib";
+    name = "${pname}-${version}";
+    version = "1.2.0";
+    disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/XCAP/${name}.tar.gz";
-      sha256 = "2f8ea6fe7d005104ef1d854aa87bd8ee85ca242a70cde42f409f8e5557f864b3";
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "0vna5r4ihv7z1yx6r93954jqskcxky77znzy1m9dg9vna1dgwfdn";
     };
 
     propagatedBuildInputs = with self; [ eventlib application ];
