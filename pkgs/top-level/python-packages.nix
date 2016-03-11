@@ -3914,17 +3914,21 @@ in modules // {
 
 
   detox = self.buildPythonPackage rec {
-    name = "detox-0.9.3";
+    name = "detox-0.10.0";
 
     propagatedBuildInputs = with self; [ tox py eventlet ];
 
+    # detox does not yet officially supports Python 3:
+    # "detox runs only on python2.6 and python2.7" (in setup.py)
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/detox/detox-0.9.3.tar.gz";
-      sha256 = "39d48b6758c43ba579f694507d54da96931195eb1b72ad79b46f50af9520b2f3";
+      url = "https://pypi.python.org/packages/source/d/detox/${name}.tar.gz";
+      sha256 = "1v5sq3ak1b6388k1q31cd4pds56z76l2myvj022ncwv5lp109drk";
     };
 
     meta = {
-      description = "What is detox?";
+      description = "Distributed version of tox, a generic virtualenv management and test command line tool";
       homepage = http://bitbucket.org/hpk42/detox;
     };
   };
