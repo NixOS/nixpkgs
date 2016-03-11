@@ -2917,6 +2917,8 @@ let
 
   rosegarden = callPackage ../applications/audio/rosegarden { };
 
+  rowhammer-test = callPackage ../tools/system/rowhammer-test { };
+
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
   };
