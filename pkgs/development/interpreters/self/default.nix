@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, stdenv, xorg, gcc44, makeWrapper, ncurses, cmake }:
+{ fetchurl, fetchgit, stdenv, xorg, makeWrapper, ncurses, cmake }:
 
 stdenv.mkDerivation rec {
   # The Self wrapper stores source in $XDG_DATA_HOME/self or ~/.local/share/self 
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "966025b71542e44fc830b951f404f5721ad410ed24f7236fd0cd820ea0fc5731";
   };
 
-  # gcc 4.6 and above causes crashes on Self startup but gcc 4.4 works.
-  buildInputs = [ gcc44 ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
+  buildInputs = [ ncurses xorg.libX11 xorg.libXext makeWrapper cmake ];
 
   selfWrapper = ./self;
 
@@ -36,9 +35,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A prototype-based dynamic object-oriented programming language, environment, and virtual machine";
-    homepage = "http://selflanguage.org/";
+    homepage = http://selflanguage.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.doublec ];
     platforms = with stdenv.lib.platforms; linux;
+    broken = true; # segfaults on gcc > 4.4
   };
 }

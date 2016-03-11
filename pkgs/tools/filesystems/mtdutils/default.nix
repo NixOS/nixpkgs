@@ -1,13 +1,12 @@
-{stdenv, fetchgit, libuuid, lzo, zlib, acl}:
+{ stdenv, fetchurl, libuuid, lzo, zlib, acl }:
 
 stdenv.mkDerivation rec {
   name = "mtd-utils-${version}";
-  version = "1.5.1";
+  version = "1.5.2";
 
-  src = fetchgit {
-    url = git://git.infradead.org/mtd-utils.git;
-    rev = "refs/tags/v" + version;
-    sha256 = "1bjx42pwl789ara63c672chvgvmqhkj4y132gajqih6naq71f8g7";
+  src = fetchurl {
+    url = ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-1.5.2.tar.bz2;
+    sha256 = "007lhsd8yb34l899r4m37whhzdw815cz4fnjbpnblfha524p7dax";
   };
 
   patchPhase = ''

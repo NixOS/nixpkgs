@@ -117,7 +117,6 @@ let
       gajim = linux;
       gawk = all;
       gcc = linux;
-      gcc44 = linux;
       gcj = linux;
       ghostscript = linux;
       ghostscriptX = linux;
