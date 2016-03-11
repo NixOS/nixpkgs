@@ -13646,11 +13646,11 @@ in modules // {
 
   oslo-messaging = buildPythonPackage rec {
     name = "oslo.messaging-${version}";
-    version = "2.7.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.messaging/${name}.tar.gz";
-      sha256 = "1af7l4ri3xfjcnjp2yhngz34h3ls00yyj1x8i64dxb86ryy43kd1";
+      sha256 = "0759687x1axvkny64fgsv28vz28c9wfq8j27giqyyjhwvk1jwgsn";
     };
 
     propagatedBuildInputs = with self; [
@@ -13662,7 +13662,7 @@ in modules // {
 
     buildInputs = with self; [
       oslotest mock mox3 subunit testtools testscenarios testrepository
-      fixtures oslosphinx
+      fixtures oslosphinx kafka
     ];
 
     preBuild = ''
