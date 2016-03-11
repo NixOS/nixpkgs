@@ -24047,7 +24047,7 @@ in modules // {
     };
   };
 
-  pythonefl_1_16 = buildPythonPackage rec {
+  pythonefl = buildPythonPackage rec {
     name = "python-efl-${version}";
     version = "1.16.0";
     src = pkgs.fetchurl {
@@ -24061,7 +24061,7 @@ in modules // {
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.e19.efl pkgs.e19.elementary ];
+    buildInputs = with self; [ pkgs.pkgconfig pkgs.enlightenment.efl pkgs.enlightenment.elementary ];
     doCheck = false;
 
     meta = {

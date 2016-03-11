@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, e19, libcap, automake114x, autoconf, libdrm, gdbm }:
+{ stdenv, fetchurl, pkgconfig, efl, libcap, automake114x, autoconf, libdrm, gdbm }:
 stdenv.mkDerivation rec {
   name = "elementary-${version}";
   version = "1.16.1";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/rel/libs/elementary/${name}.tar.xz";
     sha256 = "0q58imh7s35q6cq5hsa6gqj84rkckh8s61iass8zyvcw19j66f3y";
   };
-  buildInputs = [ pkgconfig e19.efl libdrm gdbm automake114x autoconf ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+  buildInputs = [ pkgconfig efl libdrm gdbm automake114x autoconf ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
   NIX_CFLAGS_COMPILE = [ "-I${libdrm}/include/libdrm" ];
   patches = [ ./elementary.patch ];
   enableParallelBuilding = true;

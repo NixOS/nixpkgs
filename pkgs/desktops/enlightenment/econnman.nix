@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, e19, python27, python27Packages, dbus, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, elementary, python27, python27Packages, dbus, makeWrapper }:
 stdenv.mkDerivation rec {
   name = "econnman-${version}";
   version = "1.1";
@@ -7,10 +7,10 @@ stdenv.mkDerivation rec {
     sha256 = "057pwwavlvrrq26bncqnfrf449zzaim0zq717xv86av4n940gwv0";
   };
 
-  buildInputs = [ makeWrapper pkgconfig e19.efl python27 dbus ];
-  propagatedBuildInputs = [ python27Packages.pythonefl_1_16 python27Packages.dbus e19.elementary ];
+  buildInputs = [ makeWrapper pkgconfig efl python27 dbus ];
+  propagatedBuildInputs = [ python27Packages.pythonefl python27Packages.dbus elementary ];
   postInstall = ''
-    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl_1_16}/lib/python2.7/site-packages
+    wrapProgram $out/bin/econnman-bin --prefix PYTHONPATH : ${python27Packages.dbus}/lib/python2.7/site-packages:${python27Packages.pythonefl}/lib/python2.7/site-packages
   '';
 
   meta = {
