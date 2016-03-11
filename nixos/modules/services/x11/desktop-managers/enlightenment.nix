@@ -7,7 +7,6 @@ let
   e = pkgs.enlightenment;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.enlightenment;
-  enlightenment = e.enlightenment.override { set_freqset_setuid = true; };
   GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" [
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
@@ -30,7 +29,7 @@ in
   config = mkIf (xcfg.enable && cfg.enable) {
 
     environment.systemPackages = [
-      e.efl e.evas e.emotion e.elementary enlightenment
+      e.efl e.evas e.emotion e.elementary e.enlightenment
       e.terminology e.econnman
       pkgs.xorg.xauth # used by kdesu
       pkgs.gtk # To get GTK+'s themes.
@@ -59,8 +58,7 @@ in
         # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
         ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
-        ${enlightenment}/bin/enlightenment_start
-        waitPID=$!
+        exec ${e.enlightenment}/bin/enlightenment_start
       '';
     }];
 
