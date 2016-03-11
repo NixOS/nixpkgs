@@ -1,8 +1,8 @@
-Index: plasma-workspace-5.5.1/startkde/startkde.cmake
+Index: plasma-workspace-5.5.5/startkde/startkde.cmake
 ===================================================================
---- plasma-workspace-5.5.1.orig/startkde/startkde.cmake
-+++ plasma-workspace-5.5.1/startkde/startkde.cmake
-@@ -1,8 +1,31 @@
+--- plasma-workspace-5.5.5.orig/startkde/startkde.cmake
++++ plasma-workspace-5.5.5/startkde/startkde.cmake
+@@ -1,8 +1,36 @@
 -#!/bin/sh
 +#!@bash@
  #
@@ -32,10 +32,15 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
 +    @sed@ -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
 +fi
 +
++# (NixOS) We run kbuildsycoca5 before starting the user session because things
++# may be missing or moved if they have run nixos-rebuild and it may not be
++# possible for them to start Konsole to run it manually!
++@kbuildsycoca5@
++
  if test "x$1" = x--failsafe; then
      KDE_FAILSAFE=1 # General failsafe flag
      KWIN_COMPOSE=N # Disable KWin's compositing
-@@ -17,29 +40,16 @@ trap 'echo GOT SIGHUP' HUP
+@@ -17,29 +45,16 @@ trap 'echo GOT SIGHUP' HUP
  # we have to unset this for Darwin since it will screw up KDE's dynamic-loading
  unset DYLD_FORCE_FLAT_NAMESPACE
  
@@ -69,7 +74,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  fi
  
  # Boot sequence:
-@@ -57,13 +67,8 @@ fi
+@@ -57,13 +72,8 @@ fi
  # * Then ksmserver is started which takes control of the rest of the startup sequence
  
  # We need to create config folder so we can write startupconfigkeys
@@ -85,7 +90,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
  #This is basically setting defaults so we can use them with kstartupconfig5
  cat >$configDir/startupconfigkeys <<EOF
-@@ -102,42 +107,10 @@ XftSubPixel=none
+@@ -102,42 +112,10 @@ XftSubPixel=none
  EOF
  }
  
@@ -130,7 +135,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
      exit 1
  fi
  [ -r $configDir/startupconfig ] && . $configDir/startupconfig
-@@ -146,9 +119,11 @@ if test "$kdeglobals_kscreen_scalefactor
+@@ -146,9 +124,11 @@ if test "$kdeglobals_kscreen_scalefactor
      export QT_DEVICE_PIXEL_RATIO=$kdeglobals_kscreen_scalefactor
  fi
  
@@ -143,7 +148,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
      kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
      if test $? -eq 10; then
-@@ -164,21 +139,39 @@ if test -n "$kcminputrc_mouse_cursorthem
+@@ -164,21 +144,39 @@ if test -n "$kcminputrc_mouse_cursorthem
      fi
  fi
  
@@ -189,7 +194,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
        ;;
      None)
        ;;
-@@ -201,8 +194,7 @@ fi
+@@ -201,8 +199,7 @@ fi
  # For anything else (that doesn't set env vars, or that needs a window manager),
  # better use the Autostart folder.
  
@@ -199,7 +204,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
  # Add /env/ to the directory to locate the scripts to be sourced
  for prefix in `echo $scriptpath`; do
-@@ -232,7 +224,7 @@ usr_odir=$HOME/.fonts/kde-override
+@@ -232,7 +229,7 @@ usr_odir=$HOME/.fonts/kde-override
  usr_fdir=$HOME/.fonts
  
  if test -n "$KDEDIRS"; then
@@ -208,7 +213,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
    sys_odir=$kdedirs_first/share/fonts/override
    sys_fdir=$kdedirs_first/share/fonts
  else
-@@ -245,23 +237,13 @@ fi
+@@ -245,23 +242,13 @@ fi
  # add the user's dirs to the font path, as they might simply have been made
  # read-only by the administrator, for whatever reason.
  
@@ -237,7 +242,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
  # Get Ghostscript to look into user's KDE fonts dir for additional Fontmap
  if test -n "$GS_LIB" ; then
-@@ -274,26 +256,6 @@ fi
+@@ -274,26 +261,6 @@ fi
  
  echo 'startkde: Starting up...'  1>&2
  
@@ -264,7 +269,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  # Mark that full KDE session is running (e.g. Konqueror preloading works only
  # with full KDE running). The KDE_FULL_SESSION property can be detected by
  # any X client connected to the same X session, even if not launched
-@@ -318,11 +280,11 @@ fi
+@@ -318,11 +285,11 @@ fi
  #
  KDE_FULL_SESSION=true
  export KDE_FULL_SESSION
@@ -278,7 +283,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
  KDE_SESSION_UID=`id -ru`
  export KDE_SESSION_UID
-@@ -332,11 +294,11 @@ export XDG_CURRENT_DESKTOP
+@@ -332,11 +299,11 @@ export XDG_CURRENT_DESKTOP
  
  # At this point all the environment is ready, let's send it to kwalletd if running
  if test -n "$PAM_KWALLET_LOGIN" ; then
@@ -292,7 +297,7 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  fi
  
  # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
-@@ -349,21 +311,26 @@ if test $? -ne 0; then
+@@ -349,18 +316,18 @@ if test $? -ne 0; then
    # Startup error
    echo 'startkde: Could not sync environment to dbus.'  1>&2
    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
@@ -314,14 +319,6 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
    exit 1
  fi
  
-+# (NixOS) We run kbuildsycoca5 before starting the user session because things
-+# may be missing or moved if they have run nixos-rebuild and it may not be
-+# possible for them to start Konsole to run it manually!
-+@kbuildsycoca5@
-+
- # finally, give the session control to the session manager
- # see kdebase/ksmserver for the description of the rest of the startup sequence
- # if the KDEWM environment variable has been set, then it will be used as KDE's
 @@ -379,27 +346,27 @@ test -n "$KDEWM" && KDEWM="--windowmanag
  # lock now and do the rest of the KDE startup underneath the locker.
  KSMSERVEROPTIONS=""
