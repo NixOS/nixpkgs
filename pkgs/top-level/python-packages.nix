@@ -5252,16 +5252,18 @@ in modules // {
 
 
   eventlib = buildPythonPackage rec {
-    name = "python-eventlib-${version}";
-    version = "0.2.1";
+    pname = "python-eventlib";
+    name = "${pname}-${version}";
+    version = "0.2.2";
 
     # Judging from SyntaxError
     disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
-      sha256 = "25224794420f430946fe46932718b521a6264903fe8c0ed3563dfdb844c623e7";
-    };
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
+    };  
 
     propagatedBuildInputs = with self; [ greenlet ];
 
