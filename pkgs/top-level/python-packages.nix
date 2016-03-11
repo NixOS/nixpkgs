@@ -5839,28 +5839,17 @@ in modules // {
   };
 
   gpsoauth = buildPythonPackage rec {
-    version = "0.0.4";
+    version = "0.2.0";
     name = "gpsoauth-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
-      sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+      sha256 = "01zxw8rhml8xfwda7ba8983890bzwkfa55ijd6qf8qrdy6ja1ncn";
     };
 
-    propagatedBuildInputs = with self; [
-      cffi
-      cryptography
-      enum34
-      idna
-      ipaddress
-      ndg-httpsclient
-      pyopenssl
-      pyasn1
-      pycparser
-      pycrypto
-      requests2
-      six
-    ];
+    propagatedBuildInputs = with self; [ pycryptodome requests2 ];
+
+    buildInputs = with self; [ pytest ];
 
     meta = {
       description = "A python client library for Google Play Services OAuth";
