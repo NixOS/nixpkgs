@@ -773,13 +773,18 @@ in modules // {
   };
 
   application = buildPythonPackage rec {
-    name = "python-application-${version}";
-    version = "1.5.0";
+    pname = "python-application";
+    name = "${pname}-${version}";
+    version = "2.0.2";
+    disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-application/${name}.tar.gz";
-      sha256 = "9bc00c2c639bf633e2c5e08d4bf1bb5d7edaad6ccdd473692f0362df08f8aafc";
-    };
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
+    };  
+    buildInputs = with self; [ zope_interface ];
+
   };
 
   appnope = buildPythonPackage rec {
