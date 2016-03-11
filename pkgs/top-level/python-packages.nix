@@ -20292,11 +20292,11 @@ in modules // {
 
   sqlalchemy = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
-    version = "1.0.10";
+    version = "1.0.12";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "963415bf4ea4fa13698893464bc6917d291331e0e8202dddd0ebfed2864ef7e3";
+      sha256 = "1l8qclhd0s90w3pvwhi5mjxdwr5j7gw7cjka2fx6f2vqmq7f4yb6";
     };
 
     buildInputs = with self; [ nose mock ]
