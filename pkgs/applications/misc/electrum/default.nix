@@ -55,6 +55,11 @@ pythonPackages.buildPythonApplication rec {
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
+  doCheck = true;
+  checkPhase = ''
+    $out/bin/electrum help >/dev/null
+  '';
+
   meta = with stdenv.lib; {
     description = "Bitcoin thin-client";
     longDescription = ''
