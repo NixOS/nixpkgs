@@ -2,7 +2,7 @@
 
 with lib;
 let
-  diskSize = "4096";
+  diskSize = "30720";
 in
 {
   system.build.azureImage =

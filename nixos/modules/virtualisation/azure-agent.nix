@@ -54,9 +54,15 @@ in
 
   ###### interface
 
-  options.virtualisation.azure.agent.enable = mkOption {
-    default = false;
-    description = "Whether to enable the Windows Azure Linux Agent.";
+  options.virtualisation.azure.agent = {
+    enable = mkOption {
+      default = false;
+      description = "Whether to enable the Windows Azure Linux Agent.";
+    };
+    verboseLogging = mkOption {
+      default = false;
+      description = "Whether to enable verbose logging.";
+    };
   };
 
   ###### implementation
@@ -88,7 +94,7 @@ in
         Provisioning.DeleteRootPassword=n
 
         # Generate fresh host key pair.
-        Provisioning.RegenerateSshHostKeyPair=y
+        Provisioning.RegenerateSshHostKeyPair=n
 
         # Supported values are "rsa", "dsa" and "ecdsa".
         Provisioning.SshHostKeyPairType=ed25519
@@ -121,7 +127,7 @@ in
         Logs.Console=y
 
         # Enable verbose logging (y|n)
-        Logs.Verbose=n
+        Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
 
         # Root device timeout in seconds.
         OS.RootDeviceScsiTimeout=300
