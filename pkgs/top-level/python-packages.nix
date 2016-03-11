@@ -14528,11 +14528,11 @@ in modules // {
 
   oslo-config = buildPythonPackage rec {
     name = "oslo.config-${version}";
-    version = "2.5.0";
+    version = "2.7.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.config/${name}.tar.gz";
-      sha256 = "043mavrzj7vjn7kh1dddci4sf67qwqnnn6cm0k1d19alks9hismz";
+      sha256 = "13d6brm421fbg1k2az5pz1d7ylkfa0dxkx5gv1kwbh0n5l0nfp8c";
     };
 
     propagatedBuildInputs = with self; [ argparse pbr six netaddr stevedore ];
