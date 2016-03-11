@@ -24040,11 +24040,11 @@ in modules // {
 
   pushbullet = buildPythonPackage rec {
     name = "pushbullet.py-${version}";
-    version = "0.5.0";
+    version = "0.10.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pushbullet.py/pushbullet.py-0.5.0.tar.gz";
-      md5 = "36c83ba5f7d5208bb86c00eba633f921";
+      url = "https://pypi.python.org/packages/source/p/pushbullet.py/pushbullet.py-0.10.0.tar.gz";
+      md5 = "24db6917a12e1c9b3fecca102615376b";
     };
 
     propagatedBuildInputs = with self; [requests websocket_client python_magic ];
