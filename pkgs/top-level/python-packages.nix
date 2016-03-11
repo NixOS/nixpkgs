@@ -13910,11 +13910,11 @@ in modules // {
 
   oslo-service = buildPythonPackage rec {
     name = "oslo.service-${version}";
-    version = "0.10.0";
+    version = "0.13.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/o/oslo.service/oslo.service-0.10.0.tar.gz";
-      sha256 = "1pcnimc2a50arcgq355ad9lramf6y1yv974swgfj6w90v5c6p9gz";
+      url = "https://pypi.python.org/packages/source/o/oslo.service/${name}.tar.gz";
+      sha256 = "1ci6sxdp92l6b591xf24lfmhzs75cvj1hiv4kpwhx97837xqdps4";
     };
 
     propagatedBuildInputs = with self; [
