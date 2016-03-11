@@ -9461,7 +9461,8 @@ let
   };
 
   apacheHttpd_2_4 = lowPrio (callPackage ../servers/http/apache-httpd/2.4.nix {
-    sslSupport = true;
+    # 1.0.2+ for ALPN support
+    openssl = openssl_1_0_2;
   });
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
