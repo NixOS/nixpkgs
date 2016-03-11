@@ -5646,6 +5646,18 @@ in modules // {
       sha256 = "1zji4cgylyzz97cz69lywkbsn5nvvzrhk7iaqnpqpfvj9gwdchwn";
     };
 
+    disabled = isPy3k;
+
+    gpsoauth-old = buildPythonPackage rec {
+      version = "0.0.4";
+      name = "gpsoauth-${version}";
+      src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
+        sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+      };
+      propagatedBuildInputs = with self; [cffi cryptography enum34 idna ipaddress ndg-httpsclient pyopenssl pyasn1 pycparser pycrypto requests2 six];
+    };
+
     propagatedBuildInputs = with self; [
       validictory
       decorator
@@ -5659,9 +5671,8 @@ in modules // {
       appdirs
       oauth2client
       pyopenssl
-      gpsoauth
       MechanicalSoup
-    ];
+    ] ++ [ gpsoauth-old ];
 
     meta = {
       description = "An unofficial API for Google Play Music";
