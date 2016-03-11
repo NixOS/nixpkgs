@@ -10829,6 +10829,30 @@ in modules // {
     };
   };
 
+  kafka = buildPythonPackage rec {
+    name = "kafka-python-${version}";
+    version = "0.9.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kafka-python/${name}.tar.gz";
+      sha256 = "0swisyk9sk20wr3mz8ap3wnxyrr46mqmb9c5gn7kp1zyfz3rmvhl";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    # The error message is:
+    #     ERROR: toxini file 'tox.ini' not found
+    # and I don't understand why because there is a tox.ini
+    doCheck = false;
+
+    buildInputs = with self; [ tox mock ];
+
+    meta = {
+      description = "Client for the Apache Kafka distributed stream processing system";
+      homepage    = https://github.com/dpkp/kafka-python;
+      license     = licenses.asl20;
+    };
+  };
 
   keyring = buildPythonPackage rec {
     name = "keyring-8.4.1";
