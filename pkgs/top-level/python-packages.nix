@@ -12860,10 +12860,10 @@ in modules // {
   };
 
   ntplib = buildPythonPackage rec {
-    name = "ntplib-0.3.2";
+    name = "ntplib-0.3.3";
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/n/ntplib/ntplib-0.3.2.tar.gz;
-      md5 = "0f386dc00c0056ac4d77af0b4c21bb8e";
+      url = https://pypi.python.org/packages/source/n/ntplib/ntplib-0.3.3.tar.gz;
+      md5 = "c7cc8e9b09f40c84819859d70b7784ca";
     };
 
     meta = {
