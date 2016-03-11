@@ -23096,23 +23096,6 @@ in modules // {
     propagatedBuildInputs = with self; [ requests webob ];
   };
 
-  tornadokick = buildPythonPackage rec {
-    name = "tornadokick-0.2.1";
-
-    propagatedBuildInputs = with self; [ tornado ];
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tornadokick/${name}.tar.gz";
-      md5 = "95ee5a295ce3f361c6f843c4f39cbb8c";
-    };
-
-    meta = {
-      description = "A Toolkit for the Tornado Web Framework";
-      homepage = http://github.com/multoncore/tornadokick;
-      license = licenses.asl20;
-    };
-  };
-
   tunigo = buildPythonPackage rec {
     name = "tunigo-${version}";
     version = "0.1.3";
