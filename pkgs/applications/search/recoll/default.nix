@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace egrep         ${gnugrep}/bin/egrep
       substituteInPlace  $f --replace groff         ${groff}/bin/groff
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
-      substituteInPlace  $f --replace iconv         ${libiconv.bin}/bin/iconv
+      substituteInPlace  $f --replace iconv         ${libiconv.bin or libiconv}/bin/iconv
       substituteInPlace  $f --replace lyx           ${lyx}/bin/lyx
       substituteInPlace  $f --replace pdftotext     ${poppler_utils.out}/bin/pdftotext
       substituteInPlace  $f --replace pstotext      ${ghostscript}/bin/ps2ascii 

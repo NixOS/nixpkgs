@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        cups = cups.out;
+        cups = if cups != null then cups.out else null;
         icu = icu.out;
         libXfixes = libXfixes.out;
         glibc = stdenv.cc.libc.out;
