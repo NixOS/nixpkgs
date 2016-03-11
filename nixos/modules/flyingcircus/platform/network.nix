@@ -1,17 +1,19 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
+
+with builtins;
 
 let
 
   cfg = config.flyingcircus;
 
   get_prefix_length = network:
-    lib.toInt (builtins.elemAt (lib.splitString "/" network) 1);
+    lib.toInt (elemAt (lib.splitString "/" network) 1);
 
   is_ip4 = address_or_network:
-    builtins.length (lib.splitString "." address_or_network) > 1;
+    length (lib.splitString "." address_or_network) > 1;
 
   is_ip6 = address_or_network:
-    builtins.length (lib.splitString ":" address_or_network) > 1;
+    length (lib.splitString ":" address_or_network) > 1;
 
   _ip_interface_configuration = networks: network:
       map (
@@ -19,12 +21,12 @@ let
           address = ip_address;
           prefixLength = get_prefix_length network;
         })
-       (builtins.getAttr network networks);
+       (getAttr network networks);
 
   get_ip_configuration = version_filter: networks:
     lib.concatMap
       (_ip_interface_configuration networks)
-      (builtins.filter version_filter (builtins.attrNames networks));
+      (filter version_filter (attrNames networks));
 
 
   get_interface_ips = networks:
@@ -34,25 +36,14 @@ let
 
   get_interface_configuration = interfaces: interface_name:
     { name = "eth${interface_name}";
-      value = get_interface_ips (builtins.getAttr interface_name interfaces).networks;
+      value = get_interface_ips (getAttr interface_name interfaces).networks;
     };
 
   get_network_configuration = interfaces:
-    builtins.listToAttrs
+    listToAttrs
       (map
        (get_interface_configuration interfaces)
-       (builtins.attrNames interfaces));
-
-
-  # Configration for UDEV
-  get_udev_configuration = interfaces:
-    map
-      (interface_name: ''
-       KERNEL=="eth*", ATTR{address}=="${lib.toLower (builtins.getAttr
-         interface_name interfaces).mac}", NAME="eth${interface_name}"
-       '')
-      (builtins.attrNames interfaces);
-
+       (attrNames interfaces));
 
   # Policy routing
 
@@ -64,17 +55,17 @@ let
   get_policy_routing_for_interface = interfaces: interface_name:
     map (network: {
            priority =
-            if builtins.hasAttr interface_name routing_priorities
-            then builtins.getAttr interface_name routing_priorities
+            if hasAttr interface_name routing_priorities
+            then getAttr interface_name routing_priorities
             else 100;
            network = network;
            interface = interface_name;
-           gateway = builtins.getAttr network (builtins.getAttr interface_name interfaces).gateways;
-           addresses = builtins.getAttr network (builtins.getAttr interface_name interfaces).networks;
+           gateway = getAttr network (getAttr interface_name interfaces).gateways;
+           addresses = getAttr network (getAttr interface_name interfaces).networks;
            family = if (is_ip4 network) then "4" else "6";
          })
-        (builtins.attrNames
-          (builtins.getAttr interface_name interfaces).gateways);
+        (attrNames
+          (getAttr interface_name interfaces).gateways);
 
 
   # Those policy routing rules ensure that we can run multiple IP networks
@@ -98,17 +89,17 @@ let
     let
       render_address_rules =
         lib.concatMapStrings
-          (address: "ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
+          (address: "ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
           ruleset.addresses;
       render_gateway_rule =
-        if (builtins.length ruleset.addresses) > 0 then
+        if (length ruleset.addresses) > 0 then
           "ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true"
         else
           "";
     in
     ''
     ${render_address_rules}
-    ip -${ruleset.family} rule add priority ${builtins.toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
+    ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
     ${render_gateway_rule}
     '';
 
@@ -117,9 +108,9 @@ let
       render_policy_routing_rule
       (lib.concatMap
         (get_policy_routing_for_interface interfaces)
-        (builtins.attrNames interfaces));
+        (attrNames interfaces));
 
-  rt_tables = builtins.toFile "rt_tables" ''
+  rt_tables = toFile "rt_tables" ''
     # reserved values
     #
     255 local
@@ -129,27 +120,23 @@ let
     #
     # local
     #
-    1 mgm
-    2 fe
-    3 srv
-    4 sto
-    5 ws
-    6 tr
-    7 guest
-    8 stb
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (n : vlan : "${n} ${vlan}")
+      cfg.static.vlans
+    )}
     '';
 
   # default route.
 
   get_default_gateway = version_filter: interfaces:
-    (builtins.head
-    (builtins.sort
-      (ruleset_a: ruleset_b: builtins.lessThan ruleset_a.priority ruleset_b.priority)
-      (builtins.filter
+    (head
+    (sort
+      (ruleset_a: ruleset_b: lessThan ruleset_a.priority ruleset_b.priority)
+      (filter
         (ruleset: version_filter ruleset.network)
         (lib.concatMap
           (get_policy_routing_for_interface interfaces)
-          (builtins.attrNames interfaces))))).gateway;
+          (attrNames interfaces))))).gateway;
 
 
   ns_by_location = {
@@ -165,6 +152,17 @@ let
     rzrl1 = ["172.24.32.3" "172.24.48.4"];
     whq = ["212.122.41.143" "212.122.41.169"];
   };
+
+  # funny that the modulo function seems not to be defined anywhere
+  mod = x : n : x - (div x n) * n;
+
+  # convert value [0..15] into a single hex digit
+  hexDigit = x : elemAt (lib.stringToCharacters "0123456789abcdef") x;
+
+  # convert value [0..255] into two hex digits
+  byteToHex = x : lib.concatStrings [
+    (hexDigit (div x 16)) (hexDigit (mod x 16))
+  ];
 
 in
 {
@@ -183,12 +181,12 @@ in
 
   config = {
 
-    services.udev.extraRules =
-      if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-      then
-        toString
-        (get_udev_configuration cfg.enc.parameters.interfaces)
-      else "";
+    services.udev.extraRules = (lib.concatStrings
+      (lib.mapAttrsToList (n : vlan : ''
+        KERNEL=="eth*", ATTR{address}=="02:00:00:${
+          byteToHex (lib.toInt n)}:??:??", NAME="eth${vlan}"
+      '') cfg.static.vlans)
+    );
 
     networking.domain = "gocept.net";
 
@@ -209,8 +207,8 @@ in
     networking.nameservers =
       if lib.hasAttrByPath ["parameters" "location"] cfg.enc
       then
-        if builtins.hasAttr cfg.enc.parameters.location ns_by_location
-        then builtins.getAttr cfg.enc.parameters.location ns_by_location
+        if hasAttr cfg.enc.parameters.location ns_by_location
+        then getAttr cfg.enc.parameters.location ns_by_location
         else []
       else [];
     networking.resolvconfOptions = "ndots:1 timeout:1 attempts:4 rotate";
@@ -244,8 +242,7 @@ in
           ip -6 rule add priority 32766 lookup main
           ip -6 rule add priority 32767 lookup default
 
-          ${builtins.toString
-              (get_policy_routing cfg.enc.parameters.interfaces)}
+          ${toString (get_policy_routing cfg.enc.parameters.interfaces)}
         ''
         else "";
 

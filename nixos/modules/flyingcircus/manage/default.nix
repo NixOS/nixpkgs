@@ -53,7 +53,6 @@ in {
       services.udev.path = [
         pkgs.fcmanage
       ];
-
     }
 
     (mkIf config.flyingcircus.agent.enable {
