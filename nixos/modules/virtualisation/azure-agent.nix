@@ -14,6 +14,9 @@ let
       rev = "1b3a8407a95344d9d12a2a377f64140975f1e8e4";
       sha256 = "10byzvmpgrmr4d5mdn2kq04aapqb3sgr1admk13wjmy5cd6bwd2x";
     };
+
+    patches = [ ./azure-agent-entropy.patch ];
+
     buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
                     nettools # for hostname
@@ -156,6 +159,24 @@ in
       before = [ "sshd.service" ];
     };
 
+  systemd.services.consume-hypervisor-entropy =
+    { description = "Consume entropy in ACPI table provided by Hyper-V";
+
+      wantedBy = [ "sshd.service" "waagent.service" ];
+      before = [ "sshd.service" "waagent.service" ];
+      after = [ "local-fs.target" ];
+
+      path  = [ pkgs.coreutils ];
+      script =
+        ''
+          echo "Fetching entropy..."
+          cat /sys/firmware/acpi/tables/OEM0 > /dev/random
+        '';
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.StandardError = "journal+console";
+      serviceConfig.StandardOutput = "journal+console";
+     };
 
     systemd.services.waagent = {
       wantedBy = [ "sshd.service" ];
