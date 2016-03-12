@@ -5695,8 +5695,8 @@ in modules // {
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-2.0.1.tar.gz";
-      sha256 = "d8fb368c6a4dd58bc6cd5e61d4a12d119c4506fd344a371b3429b3ac2623b9ac";
+      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
     propagatedBuildInputs = with self; [ pkgs.gnutls ];
@@ -13288,6 +13288,31 @@ in modules // {
     };
   };
 
+  python-otr = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "python-otr";
+    version = "1.2.0";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "AGProjects";
+      repo = pname;
+      rev = "release-" + version;
+      sha256 = "0p3b1n8jlxwd65gbk2k5007fkhdyjwcvr4982s42hncivxvabzzy";
+    };
+
+    propagatedBuildInputs = with self; [ zope_interface cryptography application gmpy2 ];
+
+    meta = {
+      description = "A pure python implementation of OTR";
+      homepage = https://github.com/AGProjects/otr;
+      license = licenses.lgpl21Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  };
+
   ply = buildPythonPackage (rec {
     name = "ply-3.8";
 
@@ -19950,7 +19975,7 @@ in modules // {
       sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
     };
 
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
   };
 
