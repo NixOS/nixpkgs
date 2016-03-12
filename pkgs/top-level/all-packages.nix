@@ -3558,6 +3558,8 @@ let
 
   ufraw = callPackage ../applications/graphics/ufraw { };
 
+  uget = callPackage ../tools/networking/uget { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
