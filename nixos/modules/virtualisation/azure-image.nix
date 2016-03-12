@@ -23,7 +23,7 @@ in
           postVM =
             ''
               mkdir -p $out
-              ${pkgs.vmTools.qemu-220}/bin/qemu-img convert -f raw -O vpc -o subformat=fixed $diskImage $out/disk.vhd
+              ${pkgs.vmTools.qemu-220}/bin/qemu-img convert -f raw -O vpc $diskImage $out/disk.vhd
               rm $diskImage
             '';
           diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
