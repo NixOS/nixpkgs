@@ -46,7 +46,7 @@ in
       type = types.lines;
       default = "";
       description = ''
-        The contents of config_inc.php, without leading <?php.
+        The contents of config_inc.php, without leading &lt;?php.
         If left empty, the admin directory will be accessible.
       '';
     };
