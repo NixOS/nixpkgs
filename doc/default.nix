@@ -45,11 +45,11 @@ stdenv.mkDerivation {
   + toDocbook {
       inputFile = ./introduction.md;
       outputFile = "introduction.xml";
+      useChapters = true;
     }
   + toDocbook {
       inputFile = ./languages-frameworks/python.md;
       outputFile = "./languages-frameworks/python.xml";
-      useChapters = true;
     }
   + toDocbook {
       inputFile = ./haskell-users-guide.md;
