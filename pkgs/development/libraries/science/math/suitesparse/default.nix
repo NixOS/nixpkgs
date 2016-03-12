@@ -23,6 +23,10 @@ stdenv.mkDerivation {
         -e 's/METIS_PATH .*$/METIS_PATH =/' \
         -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION -DLONGBLAS=${int_t}/' \
         -e '/UMFPACK_CONFIG/ s/$/-DLONGBLAS=${int_t}/'
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
+        -e 's/^[[:space:]]*\(LIB = -lm\) -lrt/\1/'
   '';
 
   makeFlags = [
@@ -33,7 +37,7 @@ stdenv.mkDerivation {
     "LAPACK="
   ];
 
-  NIX_CFLAGS = "-fPIC";
+  NIX_CFLAGS = "-fPIC" + stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
 
   postInstall = ''
     # Build and install shared library
