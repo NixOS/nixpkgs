@@ -6363,6 +6363,14 @@ let
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
+  verasco = callPackage ../development/tools/analysis/verasco ((
+    if system == "x86_64-linux"
+    then { tools = pkgsi686Linux.stdenv.cc; }
+    else {}
+  ) // {
+    ocamlPackages = ocamlPackages_4_02;
+  });
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xmlindent = callPackage ../development/web/xmlindent {};
