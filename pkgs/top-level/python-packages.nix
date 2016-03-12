@@ -5688,8 +5688,8 @@ in modules // {
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-2.0.1.tar.gz";
-      sha256 = "d8fb368c6a4dd58bc6cd5e61d4a12d119c4506fd344a371b3429b3ac2623b9ac";
+      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
     propagatedBuildInputs = with self; [ pkgs.gnutls ];
