@@ -1,6 +1,8 @@
-{stdenv, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
+{stdenv, lib, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
   libxml2, sqlite, libusb1, zlib, sg3_utils, gdk_pixbuf, taglib,
-  libimobiledevice, python, pygobject, mutagen }:
+  libimobiledevice, python, pygobject, mutagen,
+  monoSupport ? true, mono, gtk-sharp
+}:
 
 stdenv.mkDerivation rec {
   name = "libgpod-0.8.3";
@@ -10,13 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "configureFlagsArray=( --with-udev-dir=$out/lib/udev )";
-  configureFlags = "--without-hal --enable-udev";
+
+  configureFlags = [
+    "--without-hal"
+    "--enable-udev"
+  ] ++ lib.optionals monoSupport [ "--with-mono" ];
+
+  dontStrip = true;
 
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
     gdk_pixbuf taglib libimobiledevice python pygobject mutagen ];
 
   nativeBuildInputs = [ gettext perlXMLParser intltool pkgconfig perl
-    libimobiledevice.swig ];
+    libimobiledevice.swig ] ++ lib.optionals monoSupport [ mono gtk-sharp ];
 
   meta = {
     homepage = http://gtkpod.sourceforge.net/;

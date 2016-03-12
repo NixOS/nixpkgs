@@ -4036,6 +4036,10 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  boo = callPackage ../development/compilers/boo {
+    inherit (gnome) gtksourceview;
+  };
+
   colm = callPackage ../development/compilers/colm { };
 
   fetchegg = callPackage ../build-support/fetchegg { };
@@ -6625,6 +6629,12 @@ let
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
   dbus_python     = pythonPackages.dbus;
 
+  dbus-sharp-1_0 = callPackage ../development/libraries/dbus-sharp/dbus-sharp-1.0.nix { };
+  dbus-sharp-2_0 = callPackage ../development/libraries/dbus-sharp { };
+
+  dbus-sharp-glib-1_0 = callPackage ../development/libraries/dbus-sharp-glib/dbus-sharp-glib-1.0.nix { };
+  dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
+
   # Should we deprecate these? Currently there are many references.
   dbus_tools = pkgs.dbus.tools;
   dbus_libs = pkgs.dbus.libs;
@@ -6838,6 +6848,8 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
+  gio-sharp = callPackage ../development/libraries/gio-sharp { };
+
   libgit2 = callPackage ../development/libraries/git2 { };
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
@@ -7048,6 +7060,8 @@ let
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
 
+  gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
+
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
@@ -7069,11 +7083,21 @@ let
     gtksharp = gtk-sharp;
   };
 
-  gtk-sharp = callPackage ../development/libraries/gtk-sharp-2 {
+  gtk-sharp-2_0 = callPackage ../development/libraries/gtk-sharp/2.0.nix {
     inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf gnomepanel;
   };
+
+  gtk-sharp-3_0 = callPackage ../development/libraries/gtk-sharp/3.0.nix {
+    inherit (gnome) libglade libgtkhtml gtkhtml
+              libgnomecanvas libgnomeui libgnomeprint
+              libgnomeprintui GConf gnomepanel;
+  };
+
+  gtk-sharp = gtk-sharp-2_0;
+
+  gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
@@ -7569,6 +7593,7 @@ let
 
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
+    monoSupport = false;
   };
 
   libgsystem = callPackage ../development/libraries/libgsystem { };
@@ -8183,6 +8208,10 @@ let
     qt = qt4;
   };
 
+  mono-addins = callPackage ../development/libraries/mono-addins { };
+
+  mono-zeroconf = callPackage ../development/libraries/mono-zeroconf { };
+
   movit = callPackage ../development/libraries/movit { };
 
   mosquitto = callPackage ../servers/mqtt/mosquitto { };
@@ -8224,6 +8253,8 @@ let
   mythes = callPackage ../development/libraries/mythes { };
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
+
+  notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
   ncurses = callPackage ../development/libraries/ncurses { };
 
@@ -8831,6 +8862,8 @@ let
   taglib_1_9 = callPackage ../development/libraries/taglib/1.9.nix { };
 
   taglib_extras = callPackage ../development/libraries/taglib-extras { };
+
+  taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
     python = python2;
@@ -11604,6 +11637,11 @@ let
 
   baresip = callPackage ../applications/networking/instant-messengers/baresip {
     ffmpeg = ffmpeg_1;
+  };
+
+  banshee = callPackage ../applications/audio/banshee {
+    gconf = pkgs.gnome.GConf;
+    libgpod = pkgs.libgpod.override { monoSupport = true; };
   };
 
   batik = callPackage ../applications/graphics/batik { };
