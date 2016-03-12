@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     (optional withGUI qt5.qtbase)
   ];
 
-  preConfigure = "./autogen.sh";
+  preConfigure = "./autogen.sh; patchShebangs .";
   buildPhase   = "./drake -j $NIX_BUILD_CORES";
   installPhase = "./drake install -j $NIX_BUILD_CORES";
 
