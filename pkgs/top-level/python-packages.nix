@@ -8025,6 +8025,28 @@ in modules // {
     };
   };
 
+  django_compat = buildPythonPackage rec {
+    name = "django-compat-${version}";
+    version = "1.0.8";
+
+    # build process attempts to access a missing README.rst
+    disabled = isPy35;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-compat/${name}.tar.gz";
+      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+    };
+
+    buildInputs = with self; [ django_nose ];
+    propagatedBuildInputs = with self; [ django six ];
+
+    meta = {
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      homepage = https://github.com/arteria/django-compat;
+      license = licenses.mit;
+    };
+  };
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.7.5";
     disabled = isPy3k;
@@ -8081,6 +8103,45 @@ in modules // {
     meta = {
       description = "Class based template tags for Django";
       homepage = https://github.com/ojii/django-classy-tags;
+      license = licenses.bsd3;
+    };
+  };
+
+  django_hijack = buildPythonPackage rec {
+    name = "django-hijack-${version}";
+    version = "2.0.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-hijack/${name}.tar.gz";
+      sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
+    };
+
+    propagatedBuildInputs = with self; [ django django_compat ];
+
+    meta = {
+      description = "Allows superusers to hijack (=login as) and work on behalf of another user";
+      homepage = https://github.com/arteria/django-hijack;
+      license = licenses.mit;
+    };
+  };
+
+  django_nose = buildPythonPackage rec {
+    name = "django-nose-${version}";
+    version = "1.4.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-nose/${name}.tar.gz";
+      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+    };
+
+    # vast dependency list
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ django nose ];
+
+    meta = {
+      description = "Provides all the goodness of nose in your Django tests";
+      homepage = https://github.com/django-nose/django-nose;
       license = licenses.bsd3;
     };
   };
