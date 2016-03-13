@@ -14570,6 +14570,8 @@ in modules // {
     };
   };
 
+  pandas = self.pandas_18;
+
   pandas_17 = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
