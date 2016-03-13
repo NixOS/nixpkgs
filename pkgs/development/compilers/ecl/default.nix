@@ -7,11 +7,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="ecl";
-    version="16.0.0";
+    version="16.1.2";
     name="${baseName}-${version}";
-    hash="0czh78z9i5b7jc241mq1h1gdscvdw5fbhfb0g9sn4rchwk1x8gil";
-    url="https://common-lisp.net/project/ecl/files/release/16.0.0/ecl-16.0.0.tgz";
-    sha256="0czh78z9i5b7jc241mq1h1gdscvdw5fbhfb0g9sn4rchwk1x8gil";
+    hash="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
+    url="https://common-lisp.net/project/ecl/files/release/16.1.2/ecl-16.1.2.tgz";
+    sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
   };
   buildInputs = [
     libtool autoconf automake

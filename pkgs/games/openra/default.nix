@@ -12,7 +12,6 @@ in stdenv.mkDerivation rec {
     homepage    = "http://www.open-ra.org/";
     license     = licenses.gpl3;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

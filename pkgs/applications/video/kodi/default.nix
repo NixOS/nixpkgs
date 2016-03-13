@@ -7,7 +7,7 @@
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
 , libXtst, libXfixes, fixesproto, systemd
-, SDL, SDL_image, SDL_mixer, alsaLib
+, SDL, SDL2, SDL_image, SDL_mixer, alsaLib
 , mesa, glew, fontconfig, freetype, ftgl
 , libjpeg, jasper, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
@@ -26,6 +26,7 @@
 , rtmpdump ? null, rtmpSupport ? true
 , libvdpau ? null, vdpauSupport ? true
 , libpulseaudio ? null, pulseSupport ? true
+, joystickSupport ? true
 }:
 
 assert dbusSupport  -> dbus_libs != null;
@@ -78,7 +79,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional sambaSupport samba
     ++ lib.optional vdpauSupport libvdpau
     ++ lib.optional pulseSupport libpulseaudio
-    ++ lib.optional rtmpSupport rtmpdump;
+    ++ lib.optional rtmpSupport rtmpdump
+    ++ lib.optional joystickSupport SDL2;
+
 
     dontUseCmakeConfigure = true;
 
@@ -98,7 +101,8 @@ in stdenv.mkDerivation rec {
     ++ lib.optional (!sambaSupport) "--disable-samba"
     ++ lib.optional vdpauSupport "--enable-vdpau"
     ++ lib.optional pulseSupport "--enable-pulse"
-    ++ lib.optional rtmpSupport "--enable-rtmp";
+    ++ lib.optional rtmpSupport "--enable-rtmp"
+    ++ lib.optional joystickSupport "--enable-joystick";
 
     postInstall = ''
       for p in $(ls $out/bin/) ; do
@@ -113,7 +117,8 @@ in stdenv.mkDerivation rec {
           --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libcec_platform}/lib" \
           --prefix LD_LIBRARY_PATH ":" "${libass}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${SDL2}/lib"
       done
     '';
 

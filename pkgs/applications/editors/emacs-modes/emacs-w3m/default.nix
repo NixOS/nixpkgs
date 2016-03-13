@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-lispdir=$out/share/emacs/site-lisp"
-    "--with-icondir=$out/share/emacs/site-lisp/images/w3m"
+    "--with-lispdir=$(out)/share/emacs/site-lisp"
+    "--with-icondir=$(out)/share/emacs/site-lisp/images/w3m"
   ];
 
   postInstall = ''

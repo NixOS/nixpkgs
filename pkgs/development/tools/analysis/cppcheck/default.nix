@@ -1,18 +1,18 @@
 { stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
 
 let
-  name = "cppcheck";
-  version = "1.69";
+  pname = "cppcheck";
+  version = "1.72";
 in
-stdenv.mkDerivation {
-  name = "${name}-${version}";
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${name}/${name}-${version}.tar.bz2";
-    sha256 = "0bjkqy4c6ph6nzparcnbxrdn52i3hiind4jc99v2kvsq281wimab";
+    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    sha256 = "085lm8v7biixy6rykq836gfy91jcccpz9qpk8i9x339dzy2b2q4l";
   };
 
-  buildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg'';
 
@@ -22,15 +22,15 @@ stdenv.mkDerivation {
     cp cppcheck.1 $out/share/man/man1/cppcheck.1
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A static analysis tool for C/C++ code";
     longDescription = ''
       Check C/C++ code for memory leaks, mismatching
       allocation-deallocation, buffer overruns and more.
     '';
     homepage = http://cppcheck.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ simons joachifm ];
   };
 }

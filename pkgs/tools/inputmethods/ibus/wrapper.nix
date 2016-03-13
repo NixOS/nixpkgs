@@ -1,11 +1,15 @@
-{ stdenv, runCommand, ibus, lndir, makeWrapper, plugins, hicolor_icon_theme }:
+{ stdenv, runCommand, makeWrapper, lndir
+, dconf, hicolor_icon_theme, ibus, librsvg, plugins
+}:
 
 let
   name = "ibus-with-plugins-" + (builtins.parseDrvName ibus.name).version;
   env = {
+    buildInputs = [ ibus ] ++ plugins;
     nativeBuildInputs = [ lndir makeWrapper ];
     propagatedUserEnvPackages = [ hicolor_icon_theme ];
     paths = [ ibus ] ++ plugins;
+    inherit (ibus) meta;
   };
   command = ''
     for dir in bin etc lib libexec share; do
@@ -19,7 +23,9 @@ let
 
     for prog in ibus ibus-daemon ibus-setup; do
         wrapProgram "$out/bin/$prog" \
-          --suffix XDG_DATA_DIRS : "${hicolor_icon_theme}/share" \
+          --prefix GDK_PIXBUF_MODULE_FILE : ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
+          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
+          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \
           --set IBUS_DATAROOTDIR "$out/share" \
           --set IBUS_LIBEXECDIR "$out/libexec" \
@@ -29,7 +35,9 @@ let
           --set IBUS_TABLE_DATA_DIR "$out/share" \
           --set IBUS_TABLE_LIB_LOCATION "$out/libexec" \
           --set IBUS_TABLE_LOCATION "$out/share/ibus-table" \
-          --set IBUS_TABLE_DEBUG_LEVEL 1
+          --prefix PYTHONPATH : "$PYTHONPATH" \
+          --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
+          --suffix XDG_DATA_DIRS : "${hicolor_icon_theme}/share"
     done
   '';
 in

@@ -1,17 +1,34 @@
-{ stdenv, fetchurl, buildPythonApplication, pythonPackages, slowaes }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+let
+  jsonrpclib = pythonPackages.buildPythonPackage rec {
+    version = "0.1.7";
+    name = "jsonrpclib-${version}";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonrpclib/${name}.tar.gz";
+      sha256 = "02vgirw2bcgvpcxhv5hf3yvvb4h5wzd1lpjx8na5psdmaffj6l3z";
+    };
+    propagatedBuildInputs = [ pythonPackages.cjson ];
+    meta = {
+      homepage = https://pypi.python.org/pypi/jsonrpclib;
+      license = stdenv.lib.licenses.asl20;
+    };
+  };
+in
+
+pythonPackages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.5.4";
+  version = "2.6.2";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "18saa2rg07vfp9scp3i8s0wi2pqw9s8l8b44gq43zzl41120zc60";
+    sha256 = "1wvzlx9aj88z01vljhyg3v67zsk2iz18r58727pdq7h94vwwjc86";
   };
 
   propagatedBuildInputs = with pythonPackages; [
     dns
     ecdsa
+    jsonrpclib
     pbkdf2
     protobuf
     pyasn1
@@ -38,6 +55,11 @@ buildPythonApplication rec {
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
   '';
 
+  doCheck = true;
+  checkPhase = ''
+    $out/bin/electrum help >/dev/null
+  '';
+
   meta = with stdenv.lib; {
     description = "Bitcoin thin-client";
     longDescription = ''
@@ -47,7 +69,7 @@ buildPythonApplication rec {
       of the blockchain.
     '';
     homepage = https://electrum.org;
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = with maintainers; [ ehmry joachifm np ];
   };
 }

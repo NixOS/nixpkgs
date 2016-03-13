@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "5.4.0";
   
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
+    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
     sha256 = "0ryp26h7pyqing8pyg0xjrp1wm77wwgya4a7d00wczh885pk16kq";
     name = "${name}.tgz";
   };

@@ -21,7 +21,7 @@ let
     else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = { download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings // { umask = 2; };
+  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 in
 {
   options = {
@@ -128,6 +128,7 @@ in
           ${pkgs.c-ares}/lib/libcares*.so*          mr,
           ${pkgs.libcap}/lib/libcap*.so*            mr,
           ${pkgs.attr}/lib/libattr*.so*             mr,
+          ${pkgs.lz4}/lib/liblz4*.so*               mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

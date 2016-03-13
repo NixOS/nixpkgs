@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.linux;
     hydraPlatforms = [];
-    maintainers = with maintainers; [ iyzsong koral ];
+    maintainers = with maintainers; [ koral ];
   };
 
   preConfigure = "patchShebangs Tools";

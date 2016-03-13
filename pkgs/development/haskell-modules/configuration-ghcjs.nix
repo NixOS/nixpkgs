@@ -28,7 +28,8 @@ self: super:
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell.packages.ghc7103) jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
+  inherit (self.ghc.bootPkgs)
+    jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
   # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
   # It can be generated with the command:

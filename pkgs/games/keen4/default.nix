@@ -1,4 +1,4 @@
-{stdenv, fetchurl, dosbox, unzip}:
+{ lib, stdenv, fetchurl, dosbox, unzip }:
 
 stdenv.mkDerivation {
   name = "keen4";
@@ -15,5 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Commander Keen Episode 4: Secret of the Oracle";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.eelco ];
   };
 }

@@ -1,6 +1,6 @@
 import ./recent.nix 
   {
     versionMajor = "6";
-    versionMinor = "0.44";
-    sha256 = "0942f0ss6w9k23xg94nir2dbbkqrqp5k628jflk51ikm5qr95dxa";
+    versionMinor = "0.45";
+    sha256 = "0ba8h86padpk23xmscp7sg70g0v8ji2jbwwriz59hxqy5zhd76wg";
   }

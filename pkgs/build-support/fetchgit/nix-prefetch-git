@@ -325,9 +325,9 @@ print_results() {
     fi
     if test -n "$hash"; then
         echo "{"
-        echo "  url = \"$url\";"
-        echo "  rev = \"$fullRev\";"
-        echo "  $hashType = \"$hash\";"
+        echo "  \"url\": \"$url\","
+        echo "  \"rev\": \"$fullRev\","
+        echo "  \"$hashType\": \"$hash\""
         echo "}"
     fi
 }

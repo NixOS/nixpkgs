@@ -183,7 +183,7 @@ let
 
     configurePhase = ''
       # Precompile .pyc files to prevent race conditions during build
-      python -m compileall -q -f . || : # ignore errors
+      python -m compileall -q -f . > /dev/null 2>&1 || : # ignore errors
 
       # This is to ensure expansion of $out.
       libExecPath="${libExecPath}"

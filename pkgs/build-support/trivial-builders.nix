@@ -48,7 +48,10 @@ rec {
 
   # Create a forest of symlinks to the files in `paths'.
   symlinkJoin = name: paths:
-    runCommand name { inherit paths; }
+    runCommand name
+      { inherit paths;
+        preferLocalBuild = true; allowSubstitutes = false;
+      }
       ''
         mkdir -p $out
         for i in $paths; do
@@ -157,6 +160,9 @@ rec {
       '';
 
   # Copy a path to the Nix store.
+  # Nix automatically copies files to the store before stringifying paths.
+  # If you need the store path of a file, ${copyPathToStore <path>} can be
+  # shortened to ${<path>}.
   copyPathToStore = builtins.filterSource (p: t: true);
 
   # Copy a list of paths to the Nix store.

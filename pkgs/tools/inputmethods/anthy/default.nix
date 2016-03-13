@@ -8,7 +8,6 @@ stdenv.mkDerivation {
     homepace    = http://sourceforge.jp/projects/anthy/;
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

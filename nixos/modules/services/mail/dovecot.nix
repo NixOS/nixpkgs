@@ -254,7 +254,7 @@ in
         ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
           if [ -d '${from}' ]; then
             mkdir '${stateDir}/sieve/${to}'
-            cp ${from}/*.sieve '${stateDir}/sieve/${to}'
+            cp "${from}/"*.sieve '${stateDir}/sieve/${to}'
           else
             cp '${from}' '${stateDir}/sieve/${to}'
           fi

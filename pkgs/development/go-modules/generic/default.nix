@@ -30,7 +30,7 @@ if disabled then throw "${name} not supported for go ${go.meta.branch}" else
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
 
-  removeReferences = [ go ];
+  removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
     | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \

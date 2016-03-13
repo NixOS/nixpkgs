@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, firefox, perl, unzipNLS, xorg }:
+{ stdenv, fetchurl, fetchpatch, bash, firefox, perl, unzipNLS, xorg }:
 
 let
 
@@ -6,6 +6,14 @@ let
     url = "https://download.zotero.org/extension/zotero-${version}.xpi";
     sha256 = "02h2ja08v8as4fawj683rh5rmxsjf5d0qmvqa77i176nm20y5s7s";
   };
+
+  firefox' = stdenv.lib.overrideDerivation (firefox) (attrs: {
+    patches = [ (fetchpatch {
+      url = "https://hg.mozilla.org/releases/mozilla-beta/raw-rev/0558da46f20c";
+      sha256 = "08ibp7hny78x8ywfvrh56z90kf8fjpf04mibdlrwkw4f1vgm3fc3";
+      name = "fix-external-xpi-loader";
+    }) ];
+  });
 
   version = "4.0.28";
 
@@ -21,7 +29,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl unzipNLS ];
 
-  inherit bash firefox;
+  inherit bash;
+
+  firefox = firefox';
 
   phases = "unpackPhase installPhase fixupPhase";
 

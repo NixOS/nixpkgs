@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.2.4";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/vym/${version}/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/vym/${version}/${name}.tar.bz2";
     sha256 = "1x4qp6wpszscbbs4czkfvskm7qjglvxm813nqv281bpy4y1hhvgs";
   };
 

@@ -85,18 +85,18 @@
       };
     }
     rec {
-      name = "libasound2_1.0.25-1ubuntu10.1+steamrt1+srt4_amd64";
-      md5 = "11add9186e7d6a171a95fea6b0d15a01";
-      url = "mirror://steamrt/pool/main/a/alsa-lib/libasound2_1.0.25-1ubuntu10.1+steamrt1+srt4_amd64.deb";
+      name = "libasound2_1.1.0-0ubuntu1+steamos1+srt1_amd64";
+      md5 = "9e32b15b95be699bc9270dac78fd384c";
+      url = "mirror://steamrt/pool/main/a/alsa-lib/libasound2_1.1.0-0ubuntu1+steamos1+srt1_amd64.deb";
       source = fetchurl {
         inherit url md5;
         name = "libasound2.deb";
       };
     }
     rec {
-      name = "libasound2-plugins_1.0.25-1ubuntu1+srt4_amd64";
-      md5 = "d4c4fad47ef8f25a8f521f4af9b7fa59";
-      url = "mirror://steamrt/pool/main/a/alsa-plugins/libasound2-plugins_1.0.25-1ubuntu1+srt4_amd64.deb";
+      name = "libasound2-plugins_1.1.0-0ubuntu1+srt1_amd64";
+      md5 = "82b9f608c4e02ae70542466690ddb904";
+      url = "mirror://steamrt/pool/main/a/alsa-plugins/libasound2-plugins_1.1.0-0ubuntu1+srt1_amd64.deb";
       source = fetchurl {
         inherit url md5;
         name = "libasound2-plugins.deb";
@@ -967,9 +967,9 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.4+steamrt1+srt1_amd64";
-      md5 = "95ea5d6fb188e0ef66881e699cbf95b2";
-      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt1+srt1_amd64.deb";
+      name = "libsdl2_2.0.4+steamrt2+srt1_amd64";
+      md5 = "b648fbaea74b0d76b020c6abb78b46ce";
+      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt2+srt1_amd64.deb";
       source = fetchurl {
         inherit url md5;
         name = "libsdl2.deb";
@@ -1824,18 +1824,18 @@
       };
     }
     rec {
-      name = "libasound2_1.0.25-1ubuntu10.1+steamrt1+srt4_i386";
-      md5 = "306ee9c004c5677442661dfdc1617911";
-      url = "mirror://steamrt/pool/main/a/alsa-lib/libasound2_1.0.25-1ubuntu10.1+steamrt1+srt4_i386.deb";
+      name = "libasound2_1.1.0-0ubuntu1+steamos1+srt1_i386";
+      md5 = "b9712e5765c6dc66683e4c7f62090a71";
+      url = "mirror://steamrt/pool/main/a/alsa-lib/libasound2_1.1.0-0ubuntu1+steamos1+srt1_i386.deb";
       source = fetchurl {
         inherit url md5;
         name = "libasound2.deb";
       };
     }
     rec {
-      name = "libasound2-plugins_1.0.25-1ubuntu1+srt4_i386";
-      md5 = "8afcb694c51af22d48366d8d0ee11738";
-      url = "mirror://steamrt/pool/main/a/alsa-plugins/libasound2-plugins_1.0.25-1ubuntu1+srt4_i386.deb";
+      name = "libasound2-plugins_1.1.0-0ubuntu1+srt1_i386";
+      md5 = "eee45bd08e763a5e702707a87b2ee127";
+      url = "mirror://steamrt/pool/main/a/alsa-plugins/libasound2-plugins_1.1.0-0ubuntu1+srt1_i386.deb";
       source = fetchurl {
         inherit url md5;
         name = "libasound2-plugins.deb";
@@ -2706,9 +2706,9 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.4+steamrt1+srt1_i386";
-      md5 = "b88ec76ac0c55871648c51749ba2e661";
-      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt1+srt1_i386.deb";
+      name = "libsdl2_2.0.4+steamrt2+srt1_i386";
+      md5 = "e56c66c0719d067589f7f13e01815274";
+      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.4+steamrt2+srt1_i386.deb";
       source = fetchurl {
         inherit url md5;
         name = "libsdl2.deb";

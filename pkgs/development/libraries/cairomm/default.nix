@@ -1,16 +1,21 @@
 { fetchurl, stdenv, pkgconfig, cairo, xlibsWrapper, fontconfig, freetype, libsigcxx }:
-
+let
+  ver_maj = "1.12";
+  ver_min = "0";
+in
 stdenv.mkDerivation rec {
-  name = "cairomm-1.11.2";
+  name = "cairomm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha1 = "35e190a03f760924bece5dc1204cc36b3583c806";
+    url = "mirror://gnome/sources/cairomm/${ver_maj}/${name}.tar.xz";
+    sha256 = "a54ada8394a86182525c0762e6f50db6b9212a2109280d13ec6a0b29bfd1afe6";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ cairo libsigcxx ];
+  buildInputs = [ fontconfig freetype ];
 
-  propagatedBuildInputs = [ cairo xlibsWrapper fontconfig freetype libsigcxx ];
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";

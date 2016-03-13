@@ -15,10 +15,12 @@
 , defaultIconTheme, glib
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
+, kdeIntegration ? false
 }:
 
 let
-  langsSpaces = stdenv.lib.concatStringsSep " " langs;
+  lib = stdenv.lib;
+  langsSpaces = lib.concatStringsSep " " langs;
   major = "5";
   minor = "1";
   patch = "0";
@@ -90,7 +92,6 @@ in stdenv.mkDerivation rec {
   '';
 
   QT4DIR = qt4;
-  KDE4DIR = kde4.kdelibs;
 
   # Fix boost 1.59 compat
   # Try removing in the next version
@@ -178,7 +179,7 @@ in stdenv.mkDerivation rec {
     "--disable-report-builder"
     "--enable-python=system"
     "--enable-dbus"
-    "--enable-kde4"
+    (lib.enableFeature kdeIntegration "kde4")
     "--with-package-format=installed"
     "--enable-epm"
     "--with-jdk-home=${jdk.home}"
@@ -230,7 +231,7 @@ in stdenv.mkDerivation rec {
     [ ant ArchiveZip autoconf automake bison boost cairo clucene_core
       CompressZlib cppunit cups curl db dbus_glib expat file flex fontconfig
       freetype GConf getopt gnome_vfs gperf gtk3 gtk
-      hunspell icu jdk kde4.kdelibs lcms libcdr libexttextcat unixODBC libjpeg
+      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
       libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
       libXaw libXext libXi libXinerama libxml2 libxslt libXtst
       libXdmcp libpthreadstubs mesa mythes gst_all_1.gstreamer
@@ -241,9 +242,10 @@ in stdenv.mkDerivation rec {
       libxshmfence libatomic_ops graphite2 harfbuzz
       librevenge libe-book libmwaw glm glew
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
-    ];
+    ]
+    ++ lib.optional kdeIntegration kde4.kdelibs;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;
     license = licenses.lgpl3;

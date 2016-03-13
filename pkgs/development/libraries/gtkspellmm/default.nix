@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "gtkspellmm-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gtkspell/gtkspellmm/" +
+    url = "mirror://sourceforge/project/gtkspell/gtkspellmm/" +
           "${name}.tar.gz";
     sha256 = "f9dcc0991621c08e7a972f33487afd6b37491468f0b654f50c741a7e6d810624";
   };

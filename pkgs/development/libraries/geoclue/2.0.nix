@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "geoclue-2.4.1";
+  name = "geoclue-2.4.2";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/geoclue/releases/2.4/${name}.tar.xz";
-    sha256 = "1m1l1npdv804m98xhfpd1wl1whrrp2pjivliwwlnyk86yq0gs6cs";
+    sha256 = "0g4krigdaf5ipkp4mi16rca62crr8pdk3wkhm0fxbcqnil75fyy4";
   };
 
   buildInputs =
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ dbus dbus_glib glib ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
-    maintainers = with stdenv.lib.maintainers; [ raskin garbas ];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.lgpl2;
+    maintainers = with maintainers; [ raskin garbas ];
+    platforms = platforms.linux;
+    license = licenses.lgpl2;
   };
 }
