@@ -1,15 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, readline }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline }:
 
-let version = "0.6.0pre2"; in
 stdenv.mkDerivation rec {
-  name = "abook-${version}";
+  name = "abook-0.6.0pre2";
 
   src = fetchurl {
     url = "http://abook.sourceforge.net/devel/${name}.tar.gz";
-    sha256 = "59d444504109dd96816e003b3023175981ae179af479349c34fa70bc12f6d385";
+    sha256 = "11fkyq9bqw7s6jf38yglk8bsx0ar2wik0fq0ds0rdp8985849m2r";
   };
 
-  buildInputs = [ pkgconfig ncurses readline ];
+  patches = [
+    (fetchpatch {
+       url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/gcc5.patch?h=packages/abook";
+       name = "gcc5.patch";
+       sha256 = "13n3qd6yy45i5n8ppjn9hj6y63ymjrq96280683xk7f7rjavw5nn";
+     })
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses readline ];
 
   meta = {
     homepage = "http://abook.sourceforge.net/";
