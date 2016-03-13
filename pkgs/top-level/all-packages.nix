@@ -9574,6 +9574,8 @@ let
 
   freepops = callPackage ../servers/mail/freepops { };
 
+  freeradius = callPackage ../servers/freeradius { };
+
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   gatling = callPackage ../servers/http/gatling { };
