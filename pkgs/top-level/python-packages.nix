@@ -22247,6 +22247,27 @@ in modules // {
     };
   };
 
+  xlwt = buildPythonPackage rec {
+    name = "xlwt-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xlwt/${name}.tar.gz";
+      sha256 = "1y8w5imsicp01gn749qhw6j0grh9y19zz57ribwaknn8xqwjjhxc";
+    };
+
+    buildInputs = with self; [ nose ];
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    meta = {
+      description = "Library to create spreadsheet files compatible with MS";
+      homepage = https://github.com/python-excel/xlwt;
+      license = with licenses; [ bsdOriginal bsd3 lgpl21 ];
+    };
+  };
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {
     # Release versions don't need pandoc because the formatted man page
     # is included in the tarball.
