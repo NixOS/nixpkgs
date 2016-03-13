@@ -123,6 +123,7 @@
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
   fps = "Florian Paul Schmidt <mista.tapas@gmx.net>";
   fridh = "Frederik Rietdijk <fridh@fridh.nl>";
+  frlan = "Frank Lanitz <frank@frank.uvena.de>";
   fro_ozen = "fro_ozen <fro_ozen@gmx.de>";
   ftrvxmtrx = "Siarhei Zirukin <ftrvxmtrx@gmail.com>";
   funfunctor = "Edward O'Callaghan <eocallaghan@alterapraxis.com>";
