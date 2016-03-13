@@ -1,4 +1,4 @@
-{ pkgs, lib, mercurial, pyPackages ? pkgs.python27Packages }:
+{ pkgs, lib, mercurial, pythonPackages ? pkgs.python27Packages }:
 
 pkgs.buildPythonApplication rec {
     name = "tortoisehg-${version}";
@@ -11,9 +11,9 @@ pkgs.buildPythonApplication rec {
     };
 
     pythonPath = [ pkgs.pyqt4 mercurial ]
-       ++ (with pyPackages; [qscintilla iniparse]);
+       ++ (with pythonPackages; [qscintilla iniparse]);
 
-    propagatedBuildInputs = with pyPackages; [ qscintilla iniparse ];
+    propagatedBuildInputs = with pythonPackages; [ qscintilla iniparse ];
 
     doCheck = false;
 
