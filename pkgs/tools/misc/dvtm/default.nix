@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.brain-dump.org/projects/dvtm;
     license = stdenv.lib.licenses.mit;
     platfroms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

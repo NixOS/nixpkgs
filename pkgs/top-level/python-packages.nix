@@ -99,7 +99,6 @@ in modules // {
       homepage    = "https://python-discid.readthedocs.org/";
       license     = licenses.lgpl3Plus;
       platforms   = platforms.linux;
-      maintainers = with maintainers; [ iyzsong ];
     };
 
     src = pkgs.fetchurl {
