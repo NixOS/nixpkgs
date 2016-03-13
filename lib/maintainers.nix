@@ -301,6 +301,7 @@
   schristo = "Scott Christopher <schristopher@konputa.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
+  sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
