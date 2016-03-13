@@ -5,6 +5,7 @@ let
   name = "suitesparse-${version}";
 
   int_t = if openblas.blas64 then "int64_t" else "int32_t";
+  SHLIB_EXT = if stdenv.isDarwin then "dylib" else "so";
 in
 stdenv.mkDerivation {
   inherit name;
@@ -46,10 +47,10 @@ stdenv.mkDerivation {
         for i in "$out"/lib/lib*.a; do
           ar -x $i
         done
-        gcc *.o --shared -o "$out/lib/libsuitesparse.so" -lopenblas
+        ''${CC} *.o ${if stdenv.isDarwin then "-dynamiclib" else "--shared"} -o "$out/lib/libsuitesparse.${SHLIB_EXT}" -lopenblas
     )
     for i in umfpack cholmod amd camd colamd spqr; do
-      ln -s libsuitesparse.so "$out"/lib/lib$i.so;
+      ln -s libsuitesparse.${SHLIB_EXT} "$out"/lib/lib$i.${SHLIB_EXT}
     done
 
     # Install documentation
