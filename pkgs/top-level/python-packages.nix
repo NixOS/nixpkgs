@@ -6000,6 +6000,7 @@ in modules // {
       pkgs.libpng
       pkgs.libtiff
       pkgs.libwebp
+      pkgs.pkgconfig
     ];
     propagatedBuildInputs = with self; [ numpy ];
 
