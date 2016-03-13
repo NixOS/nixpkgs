@@ -2,17 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "fstar-${version}";
-  version = "2016-01-12";
+  version = "0.9.2.0";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
-    rev = "af9a231566ca52c9bc3409398c801ae9e8191cfa";
-    sha256 = "1zri4gqr6j6hygnh0ckfhq93mqwk9i19vng8chnmvlr27zq734a2";
+    rev = "v${version}";
+    sha256 = "0vrxmxfaslngvbvkzpm1gfl1s34hdsprv8msasxf9sjqc3hlir3l";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = with ocamlPackages; [
-    mono fsharp z3 dotnetPackages.FsLexYacc ocaml findlib ocaml_batteries openssl makeWrapper
+    mono fsharp z3 dotnetPackages.FsLexYacc ocaml findlib ocaml_batteries openssl
   ];
 
   preBuild = ''
