@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--with-systemd-daemon" ]
+    ++ [ "--enable-cli" ]
     ++ optional enableGTK3 "--with-gtk";
 
   preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
