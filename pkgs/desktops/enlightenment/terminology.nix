@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, e19 }:
+{ stdenv, fetchurl, pkgconfig, efl, elementary }:
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
   version = "0.9.1";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
     sha256 = "1kwv9vkhngdm5v38q93xpcykghnyawhjjcb5bgy0p89gpbk7mvpc";
   };
-  buildInputs = [ pkgconfig e19.efl e19.elementary ];
+  buildInputs = [ pkgconfig efl elementary ];
   meta = {
     description = "The best terminal emulator written with the EFL";
     homepage = http://enlightenment.org/;
