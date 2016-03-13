@@ -12,6 +12,15 @@ import ./make-test.nix ({ pkgs, ...} : {
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
 
+      networking.veths = {
+        "routeroutside" = {
+          peername = "routerinside";
+        };
+      };
+      networking.interfaces.routeroutside = {
+        ip4 = [{ address = "10.232.130.1"; prefixLength = 24; }];
+      };
+
       containers.webserver =
         { privateNetwork = true;
           hostAddress = "10.231.136.1";
@@ -23,6 +32,17 @@ import ./make-test.nix ({ pkgs, ...} : {
               networking.firewall.allowPing = true;
             };
         };
+
+      containers.router = {
+        interfaces = [ "routerinside" ];
+        config = {
+          environment.systemPackages = [ pkgs.psmisc ];
+          networking.interfaces.routerinside = {
+            ip4 = [{ address = "10.232.130.2"; prefixLength = 24; }];
+          };
+          networking.firewall.allowPing = true;
+        };
+      };
 
       virtualisation.pathsInNixDB = [ pkgs.stdenv ];
     };
@@ -50,6 +70,54 @@ import ./make-test.nix ({ pkgs, ...} : {
 
         # Destroying a declarative container should fail.
         $machine->fail("nixos-container destroy webserver");
+      };
+
+      subtest "container router", sub {
+        $machine->execute("systemctl -l |grep router >&2");
+        # Start the router
+        #$machine->succeed("ip link add name router type veth peer name #routerinside >&2");
+        #$machine->succeed("ip link set router up >&2");
+        #$machine->succeed("ip link set routerinside up >&2");
+        #$machine->succeed("ip a add 10.232.130.1/24 dev router >&2");
+
+        $machine->succeed("systemctl list-dependencies container\@router >&2");
+        $machine->succeed("systemctl list-dependencies container\@router |grep routeroutside >&2");
+
+        $machine->succeed("ip link >&2");
+        $machine->succeed("ip link show dev routerinside >&2");
+        $machine->succeed("nixos-container start router");
+
+        # Check that pinging the router works
+        $machine->succeed("ping -n -c 2 10.232.130.2 >&2");
+
+        $machine->succeed("ip link >&2");
+        $machine->fail("ip link show dev routerinside >&2");
+
+        $machine->succeed("nixos-container stop router");
+
+        $machine->execute("systemctl status -l -n 20 routeroutside-netdev.service >&2");
+
+        $machine->succeed("ip link >&2");
+        $machine->fail("ip link show dev routerinside >&2");
+
+        $machine->succeed("systemctl stop routeroutside-netdev >&2");
+
+        $machine->execute("systemctl status -l -n 20 routeroutside-netdev.service >&2");
+        $machine->execute("ip link >&2");
+
+        $machine->execute("sleep 10");
+
+        $machine->succeed("nixos-container start router");
+
+        $machine->succeed("systemctl status -l -n 20 routeroutside-netdev.service >&2");
+        $machine->execute("ip a >&2");
+        $machine->execute("nixos-container run router -- ip a >&2");
+
+        $machine->succeed("ping -n -c 2 10.232.130.2 >&2");
+        $machine->succeed("nixos-container stop router");
+
+        $machine->execute("ip link show dev routerinside >&2");
+        $machine->execute("ip link >&2");
       };
 
       subtest "imperative containers", sub {
