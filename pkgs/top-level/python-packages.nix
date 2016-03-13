@@ -14570,7 +14570,7 @@ in modules // {
     };
   };
 
-  pandas = let
+  pandas_17 = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
@@ -14585,16 +14585,14 @@ in modules // {
     buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
       dateutil
-      numpy
-      scipy
+      scipy_0_17
       numexpr
       pytz
       xlrd
       bottleneck
       sqlalchemy
       lxml
-      # Disabling this because an upstream dependency, pep8, is broken on v3.5.
-      (if isPy35 then null else html5lib)
+      html5lib
       modules.sqlite3
       beautifulsoup4
     ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
@@ -14630,7 +14628,7 @@ in modules // {
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
-      ${python.executable} setup.py nosetests -A 'not network' --stop \
+      ${python.executable} setup.py nosetests -A 'not slow and not network' --stop \
         -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
 
       runHook postCheck
