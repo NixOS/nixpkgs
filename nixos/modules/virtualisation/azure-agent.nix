@@ -155,8 +155,6 @@ in
 
     systemd.targets.provisioned = {
       description = "Services Requiring Azure VM provisioning to have finished";
-      wantedBy = [ "sshd.service" ];
-      before = [ "sshd.service" ];
     };
 
   systemd.services.consume-hypervisor-entropy =
@@ -179,10 +177,8 @@ in
      };
 
     systemd.services.waagent = {
-      wantedBy = [ "sshd.service" ];
-      before = [ "sshd.service" ];
-      after = [ "ip-up.target" ];
-      wants = [ "ip-up.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "ip-up.target" "sshd.service" ];
 
       path = [ pkgs.e2fsprogs ];
       description = "Windows Azure Agent Service";
