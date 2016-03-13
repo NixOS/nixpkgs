@@ -79,6 +79,11 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
+        preStart = ''
+          # There should be only one autofs service managed by systemd, so this should be safe.
+          rm -f /tmp/autofs-running
+        '';
+
         serviceConfig = {
           ExecStart = "${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} ${autoMaster} ${if cfg.debug then "-l7" else ""}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
