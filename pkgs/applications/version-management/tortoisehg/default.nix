@@ -1,17 +1,16 @@
-{ pkgs, lib, mercurial, pythonPackages ? pkgs.python27Packages }:
+{lib, fetchurl, mercurial, pythonPackages}:
 
-pkgs.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
     version = "3.7.1";
     namePrefix = "";
 
-    src = pkgs.fetchurl {
+    src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
       sha256 = "1ycf8knwk1rs99s5caq611sk4c4nzwyzq8g35hw5kwj15b6dl4k6";
     };
 
-    pythonPath = [ pkgs.pyqt4 mercurial ]
-       ++ (with pythonPackages; [qscintilla iniparse]);
+    pythonPath = with pythonPackages; [ pyqt4 mercurial qscintilla iniparse ];
 
     propagatedBuildInputs = with pythonPackages; [ qscintilla iniparse ];
 
