@@ -149,6 +149,8 @@ in modules // {
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
+  pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
+
   pygame = callPackage ../development/python-modules/pygame { };
 
   pygobject = callPackage ../development/python-modules/pygobject { };
