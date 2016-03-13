@@ -9347,7 +9347,7 @@ let
 
   pycups = pythonPackages.pycups;
 
-  pyexiv2 = callPackage ../development/python-modules/pyexiv2 { };
+  pyexiv2 = pythonPackages.pyexiv2;
 
   pygame = pythonPackages.pygame;
 
