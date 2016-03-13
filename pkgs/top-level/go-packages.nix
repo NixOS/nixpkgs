@@ -290,6 +290,23 @@ let
     '';
   };
 
+  azure-sdk-for-go = buildFromGitHub {
+    rev   = "v2.0.0-beta";
+    owner = "Azure";
+    repo  = "azure-sdk-for-go";
+    sha256 = "04bixwh4bzgysa79azis1p755rb6zxjjzhpskpvpmvkv49baharc";
+    propagatedBuildInputs = [ go-autorest cli-go ];
+  };
+
+  azure-vhd-tools-for-go = buildFromGitHub {
+    rev    = "7db4795475aeab95590f8643969e06b633ead4ec";
+    owner  = "Microsoft";
+    repo   = "azure-vhd-utils-for-go";
+    sha256 = "0xg6a1qw8jjxqhgvy9zlvq5b8xnnvfkjnkjz9f8g4y1kcw09lird";
+
+    propagatedBuildInputs = [ azure-sdk-for-go ];
+  };
+
   hashicorp.aws-sdk-go = buildFromGitHub {
     rev    = "e6ea0192eee4640f32ec73c0cbb71f63e4f2b65a";
     owner  = "hashicorp";
@@ -1237,6 +1254,14 @@ let
     propagatedBuildInputs = [ pretty ];
   };
 
+  go-autorest = buildFromGitHub {
+    rev = "v6.0.0";
+    owner = "Azure";
+    repo = "go-autorest";
+    sha256 = "07zrbw8p3jc5xfjwn0qj1hrn1r7nbnryc5zmvk42qgximyxsls26";
+    propagatedBuildInputs = [ jwt-go crypto ];
+  };
+
   go-backblaze = buildFromGitHub {
     buildInputs = [ go-flags go-humanize uilive uiprogress ];
     goPackagePath = "gopkg.in/kothar/go-backblaze.v0";
@@ -2000,6 +2025,13 @@ let
     owner  = "spf13";
     repo   = "jwalterweatherman";
     sha256 = "0m8867afsvka5gp2idrmlarpjg7kxx7qacpwrz1wl8y3zxyn3945";
+  };
+
+  jwt-go  = buildFromGitHub {
+    rev = "v2.4.0";
+    owner = "dgrijalva";
+    repo = "jwt-go";
+    sha256 = "00rvv1d2f62svd6311dkr8j56ysx8wgk9yfkb9vqf2mp5ix37dc0";
   };
 
   kagome = buildFromGitHub {
