@@ -16,7 +16,7 @@ let
     sha256 = "1slyj4qha7x649ggwdski9spmyrbs04z2d46vgk8krllg0kppnjv";
   };
 
-  cygwinCross = (import ../../../../top-level/all-packages.nix {
+  cygwinCross = (import ../../../../.. {
     inherit (stdenv) system;
     crossSystem = {
       libc = "msvcrt";
