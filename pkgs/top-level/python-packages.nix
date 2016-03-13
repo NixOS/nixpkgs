@@ -12899,6 +12899,25 @@ in modules // {
     };
   };
 
+  emoji = buildPythonPackage rec {
+    name = "emoji-${version}";
+    version = "0.3.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/emoji/${name}.tar.gz";
+      sha256 = "19p5c2nlq0w9972rf9fghyswnijwgig5f8cyzs32kppnmzvzbkxw";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    meta = {
+      description = "Emoji for Python";
+      homepage = https://pypi.python.org/pypi/emoji/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ joachifm ];
+    };
+  };
+
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
     name = "ntfy-${version}";
