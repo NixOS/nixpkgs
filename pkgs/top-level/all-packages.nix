@@ -4546,6 +4546,7 @@ let
   julia = callPackage ../development/compilers/julia {
     gmp = gmp6;
     openblas = openblasCompat;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
@@ -6850,7 +6851,11 @@ let
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
-  libgit2 = callPackage ../development/libraries/git2 { };
+  libgit2 = callPackage ../development/libraries/git2 (
+    stdenv.lib.optionalAttrs stdenv.isDarwin {
+      inherit (darwin) libiconv;
+    }
+  );
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
 
