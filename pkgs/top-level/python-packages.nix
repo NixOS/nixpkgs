@@ -1676,6 +1676,7 @@ in modules // {
     };
 
     propagatedBuildInputs = [ self.requests2 ];
+    buildInputs = optionals isPy35 [ self.pytest ];
 
     meta = with stdenv.lib; {
       homepage = https://betamax.readthedocs.org/en/latest/;
@@ -3913,17 +3914,21 @@ in modules // {
 
 
   detox = self.buildPythonPackage rec {
-    name = "detox-0.9.3";
+    name = "detox-0.10.0";
 
     propagatedBuildInputs = with self; [ tox py eventlet ];
 
+    # detox does not yet officially supports Python 3:
+    # "detox runs only on python2.6 and python2.7" (in setup.py)
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/d/detox/detox-0.9.3.tar.gz";
-      sha256 = "39d48b6758c43ba579f694507d54da96931195eb1b72ad79b46f50af9520b2f3";
+      url = "https://pypi.python.org/packages/source/d/detox/${name}.tar.gz";
+      sha256 = "1v5sq3ak1b6388k1q31cd4pds56z76l2myvj022ncwv5lp109drk";
     };
 
     meta = {
-      description = "What is detox?";
+      description = "Distributed version of tox, a generic virtualenv management and test command line tool";
       homepage = http://bitbucket.org/hpk42/detox;
     };
   };
@@ -5645,6 +5650,18 @@ in modules // {
       sha256 = "1zji4cgylyzz97cz69lywkbsn5nvvzrhk7iaqnpqpfvj9gwdchwn";
     };
 
+    disabled = isPy3k;
+
+    gpsoauth-old = buildPythonPackage rec {
+      version = "0.0.4";
+      name = "gpsoauth-${version}";
+      src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
+        sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+      };
+      propagatedBuildInputs = with self; [cffi cryptography enum34 idna ipaddress ndg-httpsclient pyopenssl pyasn1 pycparser pycrypto requests2 six];
+    };
+
     propagatedBuildInputs = with self; [
       validictory
       decorator
@@ -5658,9 +5675,8 @@ in modules // {
       appdirs
       oauth2client
       pyopenssl
-      gpsoauth
       MechanicalSoup
-    ];
+    ] ++ [ gpsoauth-old ];
 
     meta = {
       description = "An unofficial API for Google Play Music";
@@ -5827,28 +5843,17 @@ in modules // {
   };
 
   gpsoauth = buildPythonPackage rec {
-    version = "0.0.4";
+    version = "0.2.0";
     name = "gpsoauth-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/g/gpsoauth/${name}.tar.gz";
-      sha256 = "1mhd2lkl1f4fmia1cwxwik8gvqr5q16scjip7kfwzadh9a11n9kw";
+      sha256 = "01zxw8rhml8xfwda7ba8983890bzwkfa55ijd6qf8qrdy6ja1ncn";
     };
 
-    propagatedBuildInputs = with self; [
-      cffi
-      cryptography
-      enum34
-      idna
-      ipaddress
-      ndg-httpsclient
-      pyopenssl
-      pyasn1
-      pycparser
-      pycrypto
-      requests2
-      six
-    ];
+    propagatedBuildInputs = with self; [ pycryptodome requests2 ];
+
+    buildInputs = with self; [ pytest ];
 
     meta = {
       description = "A python client library for Google Play Services OAuth";
@@ -10110,6 +10115,24 @@ in modules // {
   };
 
   hypothesis = buildPythonPackage rec {
+    name = "hypothesis-3.1.0";
+
+    buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
+    propagatedBuildInputs = with self; optionals isPy27 [enum34];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/h/hypothesis/${name}.tar.gz";
+      sha256 = "0qyqq9akm4vshhn8cngjc1qykcvsn7cz6dlm6njfsgpbraqrmbbw";
+    };
+
+    meta = {
+      description = "A Python library for property based testing";
+      homepage = https://github.com/DRMacIver/hypothesis;
+      license = licenses.mpl20;
+    };
+  };
+
+  hypothesis1 = buildPythonPackage rec {
     name = "hypothesis-1.14.0";
 
     buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
@@ -10828,6 +10851,30 @@ in modules // {
     };
   };
 
+  kafka = buildPythonPackage rec {
+    name = "kafka-python-${version}";
+    version = "0.9.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kafka-python/${name}.tar.gz";
+      sha256 = "0swisyk9sk20wr3mz8ap3wnxyrr46mqmb9c5gn7kp1zyfz3rmvhl";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    # The error message is:
+    #     ERROR: toxini file 'tox.ini' not found
+    # and I don't understand why because there is a tox.ini
+    doCheck = false;
+
+    buildInputs = with self; [ tox mock ];
+
+    meta = {
+      description = "Client for the Apache Kafka distributed stream processing system";
+      homepage    = https://github.com/dpkp/kafka-python;
+      license     = licenses.asl20;
+    };
+  };
 
   keyring = buildPythonPackage rec {
     name = "keyring-8.4.1";
@@ -13542,11 +13589,11 @@ in modules // {
 
   oslo-utils = buildPythonPackage rec {
     name = "oslo.utils-${version}";
-    version = "2.6.0";
+    version = "2.8.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.utils/${name}.tar.gz";
-      sha256 = "1prgi03nxkcykyja821qkycsqlnpyzw17mpvj8qf3pjmgb9gv1fy";
+      sha256 = "11l0jv26imcxa3n6rx8jm5fbkylfq4wqb1plh2cfvybq6l5vl2q1";
     };
 
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
@@ -13559,11 +13606,11 @@ in modules // {
 
   oslo-middleware = buildPythonPackage rec {
     name = "oslo.middleware-${version}";
-    version = "2.9.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.middleware/${name}.tar.gz";
-      sha256 = "14acinchdpmc1in39mz9kh1h2rd1ygwg3zdhbwzrlhy8wbzzi4w9";
+      sha256 = "0ix353842dv3s0r6wsmvbsj39hv48iif1ri87r6k80ga99qdw2qf";
     };
 
     propagatedBuildInputs = with self; [
@@ -13645,11 +13692,11 @@ in modules // {
 
   oslo-messaging = buildPythonPackage rec {
     name = "oslo.messaging-${version}";
-    version = "2.7.0";
+    version = "3.0.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.messaging/${name}.tar.gz";
-      sha256 = "1af7l4ri3xfjcnjp2yhngz34h3ls00yyj1x8i64dxb86ryy43kd1";
+      sha256 = "0759687x1axvkny64fgsv28vz28c9wfq8j27giqyyjhwvk1jwgsn";
     };
 
     propagatedBuildInputs = with self; [
@@ -13661,7 +13708,7 @@ in modules // {
 
     buildInputs = with self; [
       oslotest mock mox3 subunit testtools testscenarios testrepository
-      fixtures oslosphinx
+      fixtures oslosphinx kafka
     ];
 
     preBuild = ''
@@ -13909,11 +13956,11 @@ in modules // {
 
   oslo-service = buildPythonPackage rec {
     name = "oslo.service-${version}";
-    version = "0.10.0";
+    version = "0.13.0";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/o/oslo.service/oslo.service-0.10.0.tar.gz";
-      sha256 = "1pcnimc2a50arcgq355ad9lramf6y1yv974swgfj6w90v5c6p9gz";
+      url = "https://pypi.python.org/packages/source/o/oslo.service/${name}.tar.gz";
+      sha256 = "1ci6sxdp92l6b591xf24lfmhzs75cvj1hiv4kpwhx97837xqdps4";
     };
 
     propagatedBuildInputs = with self; [
@@ -14527,11 +14574,11 @@ in modules // {
 
   oslo-config = buildPythonPackage rec {
     name = "oslo.config-${version}";
-    version = "2.5.0";
+    version = "2.7.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/o/oslo.config/${name}.tar.gz";
-      sha256 = "043mavrzj7vjn7kh1dddci4sf67qwqnnn6cm0k1d19alks9hismz";
+      sha256 = "13d6brm421fbg1k2az5pz1d7ylkfa0dxkx5gv1kwbh0n5l0nfp8c";
     };
 
     propagatedBuildInputs = with self; [ argparse pbr six netaddr stevedore ];
@@ -16269,6 +16316,19 @@ in modules // {
   };
 
 
+  pycryptodome = buildPythonPackage rec {
+    name = "pycryptodome-3.4";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pycryptodome/${name}.tar.gz";
+      sha256 = "0nc4ry2ah56l40hr1dilw19ksma8bx3cmn99mp5vml4jlz9zkg16";
+    };
+    meta = {
+      homepage = http://www.pycryptodome.org;
+      description = "Self-contained Python package of low-level cryptographic primitives";
+      license = licenses.bsd2;
+    };
+  };
+
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
     disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
@@ -17140,7 +17200,8 @@ in modules // {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
+    # Stuck at hypothesis version 1: https://github.com/tobgu/pyrsistent/issues/82
+    buildInputs = with self; [ six pytest hypothesis1 ] ++ optional (!isPy3k) modules.sqlite3;
 
     checkPhase = ''
       py.test
