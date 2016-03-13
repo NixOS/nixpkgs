@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://gnu.org/s/guile-opengl";
     license     = licenses.gpl3Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

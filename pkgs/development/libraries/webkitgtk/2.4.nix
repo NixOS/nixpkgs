@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iyzsong ];
+    maintainers = [];
   };
 
   src = fetchurl {

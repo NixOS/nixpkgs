@@ -39,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "A Flexible Input Method Framework";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [iyzsong ericsagnes];
+    maintainers = with stdenv.lib.maintainers; [ ericsagnes ];
   };
 }
