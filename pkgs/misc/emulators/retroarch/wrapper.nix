@@ -18,6 +18,9 @@ stdenv.mkDerivation {
     do
       $(ln -s $coreDir/*.so $out/lib/.)
     done)
+
+    ln -s -t $out ${retroarch}/share
+
     makeWrapper ${retroarch}/bin/retroarch $out/bin/retroarch \
       --suffix-each LD_LIBRARY_PATH ':' "$cores" \
       --add-flags "-L $out/lib/ --menu" \
