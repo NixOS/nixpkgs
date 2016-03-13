@@ -46,6 +46,9 @@ self: super: {
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
+  # help blake finding its native library
+  hs-blake2 = super.hs-blake2.override { b2 = pkgs.libb2; };
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
