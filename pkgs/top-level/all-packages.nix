@@ -2987,7 +2987,7 @@ let
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pyatspi = callPackage ../development/python-modules/pyatspi { };
+  pyatspi = python3Packages.pyatspi;
 
   pycangjie = pythonPackages.pycangjie;
 
