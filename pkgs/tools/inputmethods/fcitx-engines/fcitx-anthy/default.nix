@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description   = "Fcitx Wrapper for anthy";
     license       = licenses.gpl2Plus;
     platforms     = platforms.linux;
-    maintainers   = with maintainers; [ iyzsong ericsagnes ];
+    maintainers   = with maintainers; [ ericsagnes ];
   };
 
 }
