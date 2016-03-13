@@ -12450,15 +12450,13 @@ in modules // {
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
-    version = "1.2.5";
-
-    disabled = (!isPy3k);
+    version = "1.3.1";
 
     propagatedBuildInputs = with self ; [ dns pyasn1 ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
-      sha256 = "07zz0bm098zss0xww11gj45aw417nrkp9k1szzs1zm88wyfr1z31";
+      url = "https://pypi.python.org/packages/source/s/sleekxmpp/${name}.tar.gz";
+      sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
     };
 
     meta = {
