@@ -22305,11 +22305,11 @@ in modules // {
 
   xarray = buildPythonPackage rec {
     name = "xarray-${version}";
-    version = "0.7.0";
+    version = "0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xarray/${name}.tar.gz";
-      sha256 = "b1562e8e2c61f1c3587d557ff48d2bc7be36574d6a8e86f11186c356bdd794cf";
+      sha256 = "1swcpq8x0p5pp94r9j4hr2anz1rqh7fnqax16xn9xsgrikdjipj5";
     };
 
     buildInputs = with self; [ pytest ];
