@@ -6250,12 +6250,12 @@ in modules // {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.1.1";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
-      sha256 = "3f9703b632e38d68713fc2ea1f546edc4db2a8f925c94b6dd91a8d0c13816ce9";
+      sha256 = "1qsa9h7db8qzd4hg9l5mfl8299y4i7jkd6p3vpksk3r5ip8wym6p";
     };
 
     buildInputs = with self; [ nose ];
