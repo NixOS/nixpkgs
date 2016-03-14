@@ -54,18 +54,13 @@ let
 
   get_policy_routing_for_interface = interfaces: interface_name:
     map (network: {
-           priority =
-            if hasAttr interface_name routing_priorities
-            then getAttr interface_name routing_priorities
-            else 100;
-           network = network;
-           interface = interface_name;
-           gateway = getAttr network (getAttr interface_name interfaces).gateways;
-           addresses = getAttr network (getAttr interface_name interfaces).networks;
-           family = if (is_ip4 network) then "4" else "6";
-         })
-        (attrNames
-          (getAttr interface_name interfaces).gateways);
+       priority = lib.attrByPath [ interface_name ] 100 routing_priorities;
+       network = network;
+       interface = interface_name;
+       gateway = getAttr network (getAttr interface_name interfaces).gateways;
+       addresses = getAttr network (getAttr interface_name interfaces).networks;
+       family = if (is_ip4 network) then "4" else "6";
+     }) (attrNames interfaces.${interface_name}.gateways);
 
 
   # Those policy routing rules ensure that we can run multiple IP networks
