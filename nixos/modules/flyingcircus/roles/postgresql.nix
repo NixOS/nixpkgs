@@ -135,7 +135,12 @@ in
       "kernel.shmall" = toString (shared_memory_max / 4096);
     };
 
-        # Custom postgresql configuration
+    services.udev.extraRules = ''
+      # increase readahead for postgresql
+      SUBSYSTEM=="block", ATTR{queue/rotational}=="1", ACTION=="add|change", KERNEL=="vd[a-z]", ATTR{bdi/read_ahead_kb}="1024", ATTR{queue/read_ahead_kb}="1024"
+    '';
+
+    # Custom postgresql configuration
     services.postgresql.extraConfig = ''
       #------------------------------------------------------------------------------
       # CONNECTIONS AND AUTHENTICATION
