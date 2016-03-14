@@ -328,6 +328,8 @@ in
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
+  iconConvTools = callPackage ../build-support/icon-conv-tools {};
+
 
   ### TOOLS
 
