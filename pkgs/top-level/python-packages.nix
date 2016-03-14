@@ -12543,15 +12543,13 @@ in modules // {
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
-    version = "1.2.5";
-
-    disabled = (!isPy3k);
+    version = "1.3.1";
 
     propagatedBuildInputs = with self ; [ dns pyasn1 ];
 
     src = pkgs.fetchurl {
-      url = "https://github.com/fritzy/SleekXMPP/archive/sleek-${version}.tar.gz";
-      sha256 = "07zz0bm098zss0xww11gj45aw417nrkp9k1szzs1zm88wyfr1z31";
+      url = "https://pypi.python.org/packages/source/s/sleekxmpp/${name}.tar.gz";
+      sha256 = "1krkhkvj8xw5a6c2xlf7h1rg9xdcm9d8x2niivwjahahpvbl6krr";
     };
 
     meta = {
@@ -12994,6 +12992,27 @@ in modules // {
     };
   };
 
+  emoji = buildPythonPackage rec {
+    name = "emoji-${version}";
+    version = "0.3.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/e/emoji/${name}.tar.gz";
+      sha256 = "19p5c2nlq0w9972rf9fghyswnijwgig5f8cyzs32kppnmzvzbkxw";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''nosetests'';
+
+    meta = {
+      description = "Emoji for Python";
+      homepage = https://pypi.python.org/pypi/emoji/;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ joachifm ];
+    };
+  };
+
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
     name = "ntfy-${version}";
@@ -13004,7 +13023,7 @@ in modules // {
       sha256 = "0yjxwisxpxy3vpnqk9nw5k3db3xx6wyf6sk1px9m94s30glcq2cc";
     };
 
-    propagatedBuildInputs = with self; [ appdirs pyyaml requests dbus ];
+    propagatedBuildInputs = with self; [ appdirs pyyaml requests2 dbus emoji sleekxmpp mock ];
 
     meta = {
       description = "A utility for sending notifications, on demand and when commands finish";
