@@ -13427,6 +13427,8 @@ let
     quazip = qt5.quazip.override { qt = qt4; };
   };
 
+  torch-packages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch { } );
+
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
