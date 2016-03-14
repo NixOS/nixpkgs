@@ -4239,6 +4239,28 @@ in modules // {
     };
   };
 
+  pytest-localserver = buildPythonPackage rec {
+    name = "pytest-localserver-${version}";
+    version = "0.3.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-localserver/${name}.tar.gz";
+      sha256 = "0dvqspjr6va55zwmnnc2mmpqc7mm65kxig9ya44x1z8aadzxpa4p";
+    };
+
+    propagatedBuildInputs = with self; [ werkzeug ];
+    buildInputs = with self; [ pytest six requests2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Plugin for the pytest testing framework to test server connections locally";
+      homepage = https://pypi.python.org/pypi/pytest-localserver;
+      license = licenses.mit;
+    };
+  };
 
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
