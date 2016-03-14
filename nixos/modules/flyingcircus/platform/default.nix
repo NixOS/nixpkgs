@@ -118,7 +118,7 @@ in
     flyingcircus.system_state = system_state;
 
     users.motd = ''
-        Welcome to the Flying Circus
+        Welcome to the Flying Circus!
 
         Support:   support@flyingcircus.io or +49 345 219401-0
         Status:    http://status.flyingcircus.io/
