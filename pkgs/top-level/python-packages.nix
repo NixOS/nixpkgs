@@ -4239,6 +4239,49 @@ in modules // {
     };
   };
 
+  pytest-localserver = buildPythonPackage rec {
+    name = "pytest-localserver-${version}";
+    version = "0.3.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-localserver/${name}.tar.gz";
+      sha256 = "0dvqspjr6va55zwmnnc2mmpqc7mm65kxig9ya44x1z8aadzxpa4p";
+    };
+
+    propagatedBuildInputs = with self; [ werkzeug ];
+    buildInputs = with self; [ pytest six requests2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Plugin for the pytest testing framework to test server connections locally";
+      homepage = https://pypi.python.org/pypi/pytest-localserver;
+      license = licenses.mit;
+    };
+  };
+
+  pytest-subtesthack = buildPythonPackage rec {
+    name = "pytest-subtesthack-${version}";
+    version = "0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pytest-subtesthack/${name}.tar.gz";
+      sha256 = "15kzcr5pchf3id4ikdvlv752rc0j4d912n589l4rifp8qsj19l1x";
+    };
+
+    propagatedBuildInputs = with self; [ pytest ];
+
+    # no upstream test
+    doCheck = false;
+
+    meta = {
+      description = "Terrible plugin to set up and tear down fixtures within the test function itself";
+      homepage = https://github.com/untitaker/pytest-subtesthack;
+      license = licenses.publicDomain;
+    };
+  };
 
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
