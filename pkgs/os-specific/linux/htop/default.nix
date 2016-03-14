@@ -1,13 +1,12 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, ncurses }:
+{ fetchurl, stdenv, autoreconfHook, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "htop-2.0.0";
+  name = "htop-${version}";
+  version = "2.0.1";
 
-  src = fetchFromGitHub {
-    sha256 = "1z8rzf3ndswk3090qypl0bqzq9f32w0ik2k5x4zd7jg4hkx66k7z";
-    rev = "2.0.0";
-    repo = "htop";
-    owner = "hishamhm";
+  src = fetchurl {
+    url = "http://hisham.hm/htop/releases/${version}/${name}.tar.gz";
+    sha256 = "0rjn9ybqx5sav7z4gn18f1q6k23nmqyb6yydfgghzdznz9nn447l";
   };
 
   buildInputs = [ ncurses ];
