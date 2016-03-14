@@ -17,7 +17,16 @@ has the following highlights: </para>
       A consequence is that UIDs and GIDs are no longer reused.
     </para>
   </listitem>
-
+  <listitem>
+    <para>
+      Xserver services module now allows one to specify configuration for each monitor.
+      This is done via the xrandrHeads property. It is backwards compatible, so your
+      existing configuration still works. You can replace each monitor designation with
+      an attribute set containing the monitor designation, whether the monitor is the
+      primary monitor, and extra configuration for that specific monitor. Only one
+      monitor can be the primary monitor.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>

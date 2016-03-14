@@ -33,12 +33,30 @@ let
 
 
   # Just enumerate all heads without discarding XRandR output information.
-  xrandrHeads = let
-    mkHead = num: output: {
-      name = "multihead${toString num}";
-      inherit output;
-    };
-  in imap mkHead cfg.xrandrHeads;
+  xrandrHeads = (
+    fold
+      (nextHead: { index, alreadyPrimary, processedHeads }:
+        let
+          processedHead = { name = "multihead${toString index}"; } // 
+            (if isAttrs nextHead then
+              {
+                output = nextHead.output;
+                primary = if alreadyPrimary then false else nextHead.primary || index == 0;
+                monitorConfig = nextHead.monitorConfig;
+              }
+            else
+              {
+                output = nextHead;
+                primary = if alreadyPrimary then false else index == 0;
+                monitorConfig = "";
+              }
+            );
+          primariness = if alreadyPrimary then true else processedHead.primary;
+        in
+          { index = index - 1; alreadyPrimary = primariness; processedHeads = ([ processedHead ] ++ processedHeads); })
+      { index = (length cfg.xrandrHeads) - 1; alreadyPrimary = false; processedHeads = []; }
+      cfg.xrandrHeads
+  ).processedHeads;
 
   xrandrDeviceSection = let
     monitors = flip map xrandrHeads (h: ''
@@ -62,9 +80,13 @@ let
       value = ''
         Section "Monitor"
           Identifier "${current.name}"
+          ${optionalString (current.primary) ''
+          Option "Primary" "true"
+          ''}
           ${optionalString (previous != []) ''
           Option "RightOf" "${(head previous).name}"
           ''}
+          ${current.monitorConfig}
         EndSection
       '';
     } ++ previous;
@@ -329,12 +351,27 @@ in
 
       xrandrHeads = mkOption {
         default = [];
-        example = [ "HDMI-0" "DVI-0" ];
-        type = with types; listOf string;
+        example = [ "HDMI-0" { output = "DVI-0"; primary = true; monitorConfig = ""; } ];
+        type = with types; listOf (either
+          str
+          (submodule {
+            options.output = str;
+            options.primary = bool;
+            options.monitorConfig = lines;
+          })
+        );
         description = ''
           Simple multiple monitor configuration, just specify a list of XRandR
-          outputs which will be mapped from left to right in the order of the
-          list.
+          outputs as the values of the list. The monitors will be mapped from
+          left to right in the order of the list.
+
+          By default, the first monitor will be set as the primary monitor.
+          However instead of a list, you can give an attribute set. That set
+          can contain a primary monitor specification and a custom monitor
+          configuration section.
+
+          Only one monitor is allowed to be primary. If multiple monitors are
+          specified as primary, only the last monitor will be primary.
 
           Be careful using this option with multiple graphic adapters or with
           drivers that have poor support for XRandR, unexpected things might
