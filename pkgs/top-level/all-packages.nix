@@ -164,7 +164,7 @@ let
     in newpkgs;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: (import ./all-packages.nix) {
+  forceSystem = system: kernel: (import ./../..) {
     inherit system;
     platform = platform // { kernelArch = kernel; };
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
@@ -211,7 +211,7 @@ let
 
   allStdenvs = import ../stdenv {
     inherit system platform config lib;
-    allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
+    allPackages = args: import ./../.. ({ inherit config system; } // args);
   };
 
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
@@ -228,7 +228,7 @@ let
         in if changer != null then
           changer {
             # We import again all-packages to avoid recursivities.
-            pkgs = import ./all-packages.nix {
+            pkgs = import ./../.. {
               # We remove packageOverrides to avoid recursivities
               config = removeAttrs config [ "replaceStdenv" ];
             };
@@ -3843,7 +3843,7 @@ let
     # load into the Ben Nanonote
     gccCross =
       let
-        pkgsCross = (import ./all-packages.nix) {
+        pkgsCross = (import ./../..) {
           inherit system;
           inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
           # Ben Nanonote system
