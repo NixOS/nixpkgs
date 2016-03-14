@@ -82,7 +82,7 @@ in
             wait_timeout               = 28800
             connect_timeout            = 10
 
-            bind-address               = 127.0.0.1
+            bind-address               = 0.0.0.0
             max_connections            = 1000
             thread_cache_size          = 128
             myisam-recover-options     = FORCE
