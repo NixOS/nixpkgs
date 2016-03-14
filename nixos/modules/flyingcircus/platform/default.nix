@@ -147,6 +147,7 @@ in
         libxslt
         mercurial
         ncdu
+        nmap
         openldap
         openssl
         psmisc
@@ -154,6 +155,7 @@ in
         python27Full
         python27Packages.virtualenv
         python3
+        utillinuxCurses
         screen
         sysstat
         tcpdump
