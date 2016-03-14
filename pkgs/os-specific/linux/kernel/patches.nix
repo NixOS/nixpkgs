@@ -112,9 +112,9 @@ rec {
   grsecurity_4_4 = grsecPatch
     { kernel    = pkgs.grsecurity_base_linux_4_4;
       patches   = [ grsecurity_fix_path_4_4 ];
-      kversion  = "4.4.4";
-      revision  = "201603032158";
-      sha256    = "18b8dmwn4qwrd7i838d9dlfk9fn7m4bjab5583p3980yayxqpa3k";
+      kversion  = "4.4.5";
+      revision  = "201603131305";
+      sha256    = "04k4nhshl6r5n41ha5620s7cd70dmmmvyf9mnn5359jr1720kxpf";
     };
 
   grsecurity_latest = grsecurity_4_4;
