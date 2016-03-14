@@ -24,6 +24,7 @@ python3Packages.buildPythonApplication rec {
     urwid
     pkginfo
   ];
+  buildInputs = with python3Packages; [ setuptools_scm ];
 
   meta = with stdenv.lib; {
     homepage = http://lostpackets.de/khal/;
