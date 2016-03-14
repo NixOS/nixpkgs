@@ -54,6 +54,23 @@ in {
         pkgs.fcmanage
       ];
 
+      systemd.services.fc-manage = {
+        description = "Flying Circus Management Task";
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+        serviceConfig.Type = "oneshot";
+
+        # This configuration is stolen from NixOS' own automatic updater.
+        environment = config.nix.envVars // {
+          inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+          HOME = "/root";
+        };
+        script = ''
+          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
+          ${pkgs.fcmanage}/bin/fc-resize-root
+        '';
+      };
+
     }
 
     (mkIf config.flyingcircus.agent.enable {
@@ -75,22 +92,6 @@ in {
         };
       };
 
-      systemd.services.fc-manage = {
-        description = "Flying Circus Management Task";
-        restartIfChanged = false;
-        unitConfig.X-StopOnRemoval = false;
-        serviceConfig.Type = "oneshot";
-
-        # This configuration is stolen from NixOS' own automatic updater.
-        environment = config.nix.envVars // {
-          inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
-          HOME = "/root";
-        };
-        script = ''
-          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
-          ${pkgs.fcmanage}/bin/fc-resize-root
-        '';
-      };
     })
   ];
 }
