@@ -174,9 +174,8 @@ in
       Defaults lecture = never
 
       ## Cmnd alias specification
-      Cmnd_Alias  REBOOT = /sbin/reboot, \
-            /sbin/shutdown -r now, \
-            /sbin/shutdown -h now
+      Cmnd_Alias  REBOOT = ${pkgs.systemd}/bin/systemctl reboot, \
+            ${pkgs.systemd}/bin/systemctl poweroff
 
       ## User privilege specification
       root   ALL=(ALL) SETENV: ALL
