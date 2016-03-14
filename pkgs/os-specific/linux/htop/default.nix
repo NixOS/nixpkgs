@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";
-    homepage = "http://htop.sourceforge.net";
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ rob simons relrod ];
+    homepage = http://htop.sourceforge.net;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ rob simons relrod nckx ];
   };
 }
