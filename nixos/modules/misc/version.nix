@@ -104,7 +104,7 @@ in
       nixosVersion = mkDefault (maybeEnv "NIXOS_VERSION" (cfg.nixosRelease + cfg.nixosVersionSuffix));
 
       # Note: code names must only increase in alphabetical order.
-      nixosCodeName = "Emu";
+      nixosCodeName = "Flounder";
     };
 
     # Generate /etc/os-release.  See
