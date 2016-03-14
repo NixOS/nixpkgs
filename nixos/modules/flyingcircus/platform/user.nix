@@ -186,6 +186,12 @@ in
 
       # Allow unrestricted access to super admins
       %admins ALL=(ALL) PASSWD: ALL
+
+      # Allow applying config and restarting services to service users
+      Cmnd_Alias  FCMANAGE = ${pkgs.systemd}/bin/systemctl start fc-manage
+      %sudo-srv ALL=(root) FCMANAGE
+      %service  ALL=(root) FCMANAGE
+
     '';
 
   };
