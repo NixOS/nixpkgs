@@ -1,21 +1,21 @@
 { stdenv, fetchurl, pkgconfig, perl
-, http2Support ? true, libnghttp2
+, c-aresSupport ? false, c-ares ? null
+, gssSupport ? false, gss ? null
+, http2Support ? false, libnghttp2 ? null
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
-, zlibSupport ? false, zlib ? null
-, sslSupport ? false, openssl ? null
 , scpSupport ? false, libssh2 ? null
-, gssSupport ? false, gss ? null
-, c-aresSupport ? false, c-ares ? null
+, sslSupport ? false, openssl ? null
+, zlibSupport ? false, zlib ? null
 }:
 
+assert c-aresSupport -> c-ares != null;
 assert http2Support -> libnghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
-assert zlibSupport -> zlib != null;
-assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
-assert c-aresSupport -> c-ares != null;
+assert sslSupport -> openssl != null;
+assert zlibSupport -> zlib != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.47.1";
