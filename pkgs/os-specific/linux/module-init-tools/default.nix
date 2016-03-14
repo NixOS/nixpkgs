@@ -1,5 +1,7 @@
 { stdenv, fetchurl, docbook2x, docbook_sgml_dtd_41 }:
 
+assert (stdenv.lib.elem stdenv.system stdenv.lib.platforms.linux);
+
 stdenv.mkDerivation {
   name = "module-init-tools-3.16";
 
@@ -31,5 +33,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/module-init-tools/;
     description = "Tools for loading and managing Linux kernel modules";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

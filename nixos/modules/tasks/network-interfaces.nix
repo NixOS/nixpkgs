@@ -927,7 +927,7 @@ in
         pkgs.nettools
         pkgs.openresolv
       ]
-      ++ optionals (!config.boot.isContainer) [
+      ++ optionals config.networking.wireless.enable [
         pkgs.wirelesstools # FIXME: obsolete?
         pkgs.iw
         pkgs.rfkill

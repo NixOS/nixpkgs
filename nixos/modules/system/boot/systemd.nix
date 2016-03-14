@@ -61,6 +61,8 @@ let
       "systemd-user-sessions.service"
       "dbus-org.freedesktop.login1.service"
       "dbus-org.freedesktop.machine1.service"
+      "org.freedesktop.login1.busname"
+      "org.freedesktop.machine1.busname"
       "user@.service"
 
       # Journal.
@@ -147,13 +149,18 @@ let
       "systemd-tmpfiles-setup-dev.service"
 
       # Misc.
+      "org.freedesktop.systemd1.busname"
       "systemd-sysctl.service"
       "dbus-org.freedesktop.timedate1.service"
       "dbus-org.freedesktop.locale1.service"
       "dbus-org.freedesktop.hostname1.service"
+      "org.freedesktop.timedate1.busname"
+      "org.freedesktop.locale1.busname"
+      "org.freedesktop.hostname1.busname"
       "systemd-timedated.service"
       "systemd-localed.service"
       "systemd-hostnamed.service"
+      "systemd-binfmt.service"
     ]
 
     ++ cfg.additionalUpstreamSystemUnits;
@@ -773,6 +780,7 @@ in
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
+    systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
 
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";

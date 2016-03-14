@@ -1,41 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, dbus, libvpx, libX11, openal, freetype, libv4l
+{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
 , libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium }:
 
-let
-
-  filteraudio = stdenv.mkDerivation rec {
-    name = "filter_audio-20150516";
-
-    src = fetchFromGitHub {
-      owner = "irungentoo";
-      repo = "filter_audio";
-      rev = "612c5a102550c614e4c8f859e753ea64c0b7250c";
-      sha256 = "0bmf8dxnr4vb6y36lvlwqd5x68r4cbsd625kbw3pypm5yqp0n5na";
-    };
-
-    buildInputs = [ utillinux ];
-
-    doCheck = false;
-
-    makeFlags = "PREFIX=$(out)";
-  };
-
-in stdenv.mkDerivation rec {
-  name = "utox-dev-20151220";
+stdenv.mkDerivation rec {
+  name = "utox-${version}";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "GrayHatter";
     repo = "uTox";
-    rev = "7e2907470835746b6819d631b48dd54bc9c4de66";
+    rev = "v${version}";
     sha256 = "074wa0np8hyqwy9xqgyyds94pdfv2i1jh019m98d8apxc5vn36wk";
   };
 
   buildInputs = [ pkgconfig libtoxcore-dev dbus libvpx libX11 openal freetype
-                  libv4l libXrender fontconfig libXext libXft filteraudio 
+                  libv4l libXrender fontconfig libXext libXft filter-audio
                   git libsodium ];
 
   doCheck = false;
-  
+
   makeFlags = "PREFIX=$(out)";
 
   meta = with stdenv.lib; {

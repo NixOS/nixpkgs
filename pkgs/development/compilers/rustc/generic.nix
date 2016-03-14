@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvmPackages_37, jemalloc, ncurses, binutils
+, llvmPackages_37, jemalloc, ncurses, darwin, binutils
 
 , shortVersion, isRelease
 , forceBundledLLVM ? false
@@ -10,7 +10,7 @@
 , configureFlags ? []
 
 , patches
-}:
+} @ args:
 
 assert !stdenv.isFreeBSD;
 
@@ -36,6 +36,8 @@ let version = if isRelease then
         "${shortVersion}-g${builtins.substring 0 7 srcRev}";
 
     name = "rustc-${version}";
+
+    procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
     llvmShared = llvmPackages_37.llvm.override { enableSharedLibraries = true; };
 

@@ -26,8 +26,8 @@ effect after you run <command>nixos-rebuild</command>.</para>
 
 <!-- FIXME: auto-include NixOS module docs -->
 <xi:include href="postgresql.xml" />
+<xi:include href="gitlab.xml" />
 <xi:include href="acme.xml" />
-<xi:include href="nixos.xml" />
 
 <!-- Apache; libvirtd virtualisation -->
 

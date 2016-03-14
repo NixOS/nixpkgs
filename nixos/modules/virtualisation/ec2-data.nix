@@ -1,6 +1,6 @@
-# This module defines a systemd service that obtains the SSH key and
-# host name of virtual machines running on Amazon EC2, Eucalyptus and
-# OpenStack Compute (Nova).
+# This module defines a systemd service that sets the SSH host key and
+# authorized client key and host name of virtual machines running on
+# Amazon EC2, Eucalyptus and OpenStack Compute (Nova).
 
 { config, lib, pkgs, ... }:
 
@@ -9,58 +9,54 @@ with lib;
 {
   config = {
 
-    systemd.services.fetch-ec2-data =
-      { description = "Fetch EC2 Data";
+    systemd.services.apply-ec2-data =
+      { description = "Apply EC2 Data";
 
         wantedBy = [ "multi-user.target" "sshd.service" ];
         before = [ "sshd.service" ];
-        wants = [ "ip-up.target" ];
-        after = [ "ip-up.target" ];
 
-        path = [ pkgs.wget pkgs.iproute ];
+        path = [ pkgs.iproute ];
 
         script =
           ''
-            wget="wget -q --retry-connrefused -O -"
-
             ${optionalString (config.networking.hostName == "") ''
               echo "setting host name..."
-              ${pkgs.nettools}/bin/hostname $($wget http://169.254.169.254/1.0/meta-data/hostname)
+              if [ -s /etc/ec2-metadata/hostname ]; then
+                  ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
+              fi
             ''}
 
-            # Don't download the SSH key if it has already been injected
-            # into the image (a Nova feature).
             if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
                 mkdir -m 0700 -p /root/.ssh
-                $wget http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key > /root/key.pub
-                if [ $? -eq 0 -a -e /root/key.pub ]; then
-                    cat /root/key.pub >> /root/.ssh/authorized_keys
+                if [ -s /etc/ec2-metadata/public-keys-0-openssh-key ]; then
+                    cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys
                     echo "new key added to authorized_keys"
                     chmod 600 /root/.ssh/authorized_keys
-                    rm -f /root/key.pub
                 fi
             fi
 
             # Extract the intended SSH host key for this machine from
             # the supplied user data, if available.  Otherwise sshd will
             # generate one normally.
-            $wget http://169.254.169.254/2011-01-01/user-data > /root/user-data || true
+            userData=/etc/ec2-metadata/user-data
 
             mkdir -m 0755 -p /etc/ssh
 
-            key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' /root/user-data)"
-            key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
-            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
-                (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
-                echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
-            fi
+            if [ -s "$userData" ]; then
+              key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' $userData)"
+              key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' $userData)"
+              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
+                  (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
+                  echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
+              fi
 
-            key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' /root/user-data)"
-            key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' /root/user-data)"
-            if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
-                (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
-                echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
+              key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' $userData)"
+              key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' $userData)"
+              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
+                  (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
+                  echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
+              fi
             fi
           '';
 

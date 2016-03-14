@@ -34,21 +34,16 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # cabal-install can use the native Cabal library.
+  cabal-install = super.cabal-install.override { Cabal = null; };
+
   # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = null;
-    mkDerivation = drv: self.mkDerivation (drv // {
-      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-    });
-  };
-
-  # Older versions of QuickCheck don't support our version of Template Haskell.
-  QuickCheck = self.QuickCheck_2_8_2;
-
-  # Older versions don't support our version of transformers.
-  transformers-compat = self.transformers-compat_0_5_1_4;
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
 
   # https://github.com/hspec/HUnit/issues/7
   HUnit = dontCheck super.HUnit;
+
+  # https://github.com/hspec/hspec/issues/253
+  hspec-core = dontCheck super.hspec-core;
 
 }

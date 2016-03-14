@@ -41,7 +41,7 @@ self: super: {
   unix = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
-  binary = self.binary_0_8_0_0;
+  binary = self.binary_0_8_2_1;
   deepseq = self.deepseq_1_3_0_1;
   haskeline = self.haskeline_0_7_2_1;
   hoopl = self.hoopl_3_10_2_0;
@@ -53,7 +53,7 @@ self: super: {
   deepseq_1_3_0_1 = dontJailbreak super.deepseq_1_3_0_1;
 
   # Newer versions don't compile.
-  Cabal_1_18_1_6 = dontJailbreak super.Cabal_1_18_1_6;
+  Cabal_1_18_1_7 = dontJailbreak super.Cabal_1_18_1_7;
 
   # We have no working cabal-install at the moment.
   cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
@@ -63,7 +63,7 @@ self: super: {
   hashable = dontCheck super.hashable;
 
   # Needs Cabal >= 1.18.x.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_6; };
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_18_1_7; };
 
   # Haddock chokes on the prologue from the cabal file.
   ChasingBottoms = dontHaddock super.ChasingBottoms;
@@ -83,12 +83,13 @@ self: super: {
   vector = self.vector_0_10_9_3;
 
   # These packages need more recent versions of core libraries to compile.
-  happy = addBuildTools super.happy [self.Cabal_1_18_1_6 self.containers_0_4_2_1];
-  network-uri = addBuildTool super.network-uri self.Cabal_1_18_1_6;
-  stm = addBuildTool super.stm self.Cabal_1_18_1_6;
+  happy = addBuildTools super.happy [self.Cabal_1_18_1_7 self.containers_0_4_2_1];
+  network-uri = addBuildTool super.network-uri self.Cabal_1_18_1_7;
+  stm = addBuildTool super.stm self.Cabal_1_18_1_7;
   split = super.split_0_1_4_3;
 
   # Needs hashable on pre 7.10.x compilers.
+  nats_1 = addBuildDepend super.nats_1 self.hashable;
   nats = addBuildDepend super.nats self.hashable;
 
   # Needs void on pre 7.10.x compilers.

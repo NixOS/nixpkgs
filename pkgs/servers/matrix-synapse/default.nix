@@ -1,6 +1,6 @@
-{ pkgs, stdenv, buildPythonPackage, pythonPackages, fetchurl, fetchFromGitHub }:
+{ pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
 let
-  matrix-angular-sdk = buildPythonPackage rec {
+  matrix-angular-sdk = buildPythonApplication rec {
     name = "matrix-angular-sdk-${version}";
     version = "0.6.6";
 
@@ -10,7 +10,7 @@ let
     };
   };
 in
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "matrix-synapse-${version}";
   version = "0.12.0";
 
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = with pythonPackages; [
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
-    service-identity signedjson systemd twisted15 ujson unpaddedbase64 pyyaml
+    service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
     matrix-angular-sdk
   ];
 

@@ -1,8 +1,9 @@
 { fetchurl, stdenv, pkgconfig, intltool, perl, perlXMLParser, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
 , poppler, ghostscriptX, djvulibre, libspectre, libsecret , makeWrapper
-, librsvg, recentListSize ? null # 5 is not enough, allow passing a different number
-, gobjectIntrospection
+, librsvg, gobjectIntrospection
+, recentListSize ? null # 5 is not enough, allow passing a different number
+, supportXPS ? false    # Open XML Paper Specification via libgxps
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +16,12 @@ stdenv.mkDerivation rec {
     gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
     makeWrapper libsecret librsvg gnome3.adwaita-icon-theme
-  ];
+  ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
 
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
     "--enable-introspection"
+    (if supportXPS then "--enable-xps" else "--disable-xps")
   ];
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";

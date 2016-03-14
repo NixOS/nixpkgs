@@ -1,56 +1,52 @@
-a @ { mpfr, m4, binutils, fetchcvs, emacs, zlib, which
-, texinfo, libX11, xproto, inputproto, libXi
-, libXext, xextproto, libXt, libXaw, libXmu, stdenv, ... } :
-let
-  buildInputs = with a; [
+{ stdenv, fetchurl, mpfr, m4, binutils, fetchcvs, emacs, zlib, which
+, texinfo, libX11, xproto, inputproto, libXi, gmp
+, libXext, xextproto, libXt, libXaw, libXmu } :
+
+assert stdenv ? cc ;
+assert stdenv.cc.isGNU ;
+assert stdenv.cc ? libc ;
+assert stdenv.cc.libc != null ;
+
+stdenv.mkDerivation rec {
+  name = "gcl-${version}";
+  version = "2.6.12";
+
+  src = fetchurl {
+    sha256 = "1s4hs2qbjqmn9h88l4xvsifq5c3dlc5s74lyb61rdi5grhdlkf4f";
+    url = "http://gnu.spinellicreations.com/gcl/${name}.tar.gz";
+  };
+
+  buildInputs = [
     mpfr m4 binutils emacs gmp
     libX11 xproto inputproto libXi
     libXext xextproto libXt libXaw libXmu
     zlib which texinfo
   ];
-in
 
-(
-assert a.stdenv ? cc ;
-assert a.stdenv.cc.isGNU ;
-assert a.stdenv.cc ? libc ;
-assert a.stdenv.cc.libc != null ;
-
-rec {
-  src = a.fetchurl {
-    sha256 = "1s4hs2qbjqmn9h88l4xvsifq5c3dlc5s74lyb61rdi5grhdlkf4f";
-    url="http://gnu.spinellicreations.com/gcl/${name}.tar.gz";
-  };
-
-  name = "gcl-2.6.12";
-  inherit buildInputs;
   configureFlags = [
     "--enable-ansi"
   ];
 
   # Upstream bug submitted - http://savannah.gnu.org/bugs/index.php?30371
   # $TMPDIR must have no extension
-  setVars = a.noDepEntry ''
-    export TMPDIR="''${TMPDIR:-''${TMP:-''${TEMP}}}/tmp-for-gcl"
-    mkdir -p "$TMPDIR"
+  # setVars = a.noDepEntry ''
+  #   export TMPDIR="''${TMPDIR:-''${TMP:-''${TEMP}}}/tmp-for-gcl"
+  #   mkdir -p "$TMPDIR"
+  # '';
+
+  preBuild = ''
+    # sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
+    # sed -re "s@if test -d /proc/self @if false @" -i configure
+    # sed -re 's^([ \t])cpp ^\1cpp -I${stdenv.cc.cc}/include -I${stdenv.cc.libc}/include ^g' -i makefile
   '';
 
-  preBuild = a.fullDepEntry (''
-    sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
-    sed -re "s@if test -d /proc/self @if false @" -i configure
-    sed -re 's^([ \t])cpp ^\1cpp -I${a.stdenv.cc.cc}/include -I${a.stdenv.cc.libc}/include ^g' -i makefile
-  '') ["minInit" "doUnpack" "addInputs"];
-
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doUnpack" "preBuild"
-    "doConfigure" "doMakeInstall"];
-}) // {
+  # phaseNames = ["setVars" "doUnpack" "preBuild"
+  #   "doConfigure" "doMakeInstall"];
+
   meta = {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

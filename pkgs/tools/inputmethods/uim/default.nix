@@ -1,4 +1,5 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs, cmake, anthy}:
+{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs,
+ cmake, anthy, automoc4, m17n_lib, m17n_db}:
 
 stdenv.mkDerivation rec {
   version = "1.8.6";
@@ -13,9 +14,12 @@ stdenv.mkDerivation rec {
     kdelibs
     cmake
     anthy
+    automoc4
+    m17n_lib
+    m17n_db
   ];
 
-  patches = [ ./immodules_cache.patch ];
+  patches = [ ./data-hook.patch ];
 
   configureFlags = [
     "--with-gtk2"
@@ -37,10 +41,11 @@ stdenv.mkDerivation rec {
     sha1 = "43b9dbdead6797880e6cfc9c032ecb2d37d42777";
   };
 
-  meta = {
-    homepage = "http://code.google.com/p/uim/";
+  meta = with stdenv.lib; {
+    homepage    = "http://code.google.com/p/uim/";
     description = "A multilingual input method framework";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    license     = stdenv.lib.licenses.bsd3;
+    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ ericsagnes ];
   };
 }

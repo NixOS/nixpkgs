@@ -5,7 +5,7 @@
 , flex, cmake, ocaml, ocamlPackages, figlet, libaio, yajl
 , checkpolicy, transfig, glusterfs, acl, fetchgit, xz, spice
 , spice_protocol, usbredir, alsaLib, quilt
-, coreutils, gawk, gnused, gnugrep, diffutils, multipath_tools
+, coreutils, gawk, gnused, gnugrep, diffutils, multipath-tools
 , inetutils, iptables, openvswitch, nbd, drbd, xenConfig
 , xenserverPatched ? false, ... }:
 
@@ -51,7 +51,7 @@ let
     ];
 
   scriptEnvPath = stdenv.lib.concatStrings (stdenv.lib.intersperse ":" (map (x: "${x}/bin")
-    [ coreutils gawk gnused gnugrep which perl diffutils utillinux multipath_tools
+    [ coreutils gawk gnused gnugrep which perl diffutils utillinux multipath-tools
       iproute inetutils iptables bridge-utils openvswitch nbd drbd ]));
 in
 

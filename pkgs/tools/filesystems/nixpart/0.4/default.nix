@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage
+{ stdenv, fetchurl, python, buildPythonApplication
 # Propagated to blivet
 , useNixUdev ? true
 # No longer needed, but kept for backwards-compatibility with older NixOps.
@@ -9,7 +9,7 @@
 
 let
   blivet = import ./blivet.nix {
-    inherit stdenv fetchurl buildPythonPackage;
+    inherit stdenv fetchurl buildPythonApplication;
     inherit pykickstart pyparted pyblock cryptsetup multipath_tools;
     inherit useNixUdev;
     inherit (pkgs) lsof utillinux libudev;
@@ -48,15 +48,15 @@ let
   };
 
   pykickstart = import ./pykickstart.nix {
-    inherit stdenv fetchurl python buildPythonPackage urlgrabber;
+    inherit stdenv fetchurl python buildPythonApplication urlgrabber;
   };
 
   pyparted = import ./pyparted.nix {
-    inherit stdenv fetchurl python buildPythonPackage parted;
+    inherit stdenv fetchurl python buildPythonApplication parted;
     inherit (pkgs) pkgconfig e2fsprogs;
   };
 
-in buildPythonPackage rec {
+in buildPythonApplication rec {
   name = "nixpart-${version}";
   version = "0.4.1";
 

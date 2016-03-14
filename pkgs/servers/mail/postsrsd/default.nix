@@ -1,16 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, help2man }:
 
-let
-  version = "1.3";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "postsrsd-${version}";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "roehling";
     repo = "postsrsd";
     rev = version;
-    sha256 = "1z89qh2bnypgb4i2vs0zdzzpqlf445jixwa1acd955hryww50npv";
+    sha256 = "09yzb0fvnbfy534maqlqk79c41p1yz8r9f73n7bahm5lwd0livk9";
   };
 
   cmakeFlags = [ "-DGENERATE_SRS_SECRET=OFF" "-DINIT_FLAVOR=systemd" ];

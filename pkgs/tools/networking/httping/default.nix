@@ -3,7 +3,6 @@
 
 stdenv.mkDerivation rec {
   name = "httping-${version}";
-
   version = "2.4";
 
   src = fetchurl {
@@ -20,7 +19,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    inherit version;
     homepage = http://www.vanheusden.com/httping;
     description = "ping with HTTP requests";
     longDescription = ''

@@ -12,7 +12,8 @@
        "$out/lib/rustlib/uninstall.sh" \
        "$out/lib/rustlib/manifest-cargo"
 
-     wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin"
+     wrapProgram "$out/bin/cargo" --suffix PATH : "${rustc}/bin" \
+       ${stdenv.lib.optionalString stdenv.isDarwin ''--suffix DYLD_LIBRARY_PATH : "${rustc}/lib"''}
   '';
 
   platform = if stdenv.system == "i686-linux"

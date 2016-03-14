@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     # easy proxy configuration.  This is impure, but a fixed-output
     # derivation like fetchurl is allowed to do so since its result is
     # by definition pure.
-    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy"
+    "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" "GIT_PROXY_COMMAND" "SOCKS_SERVER"
     ];
 
   preferLocalBuild = true;

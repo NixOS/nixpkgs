@@ -1,6 +1,6 @@
-{ stdenv, fetchsvn, buildPythonPackage, python, pyGtkGlade, makeWrapper, pyexiv2,  pythonPackages, fbida, which }:
+{ stdenv, fetchsvn, buildPythonApplication, python, pyGtkGlade, makeWrapper, pyexiv2,  pythonPackages, fbida, which }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "jbrout-${version}";
   version = "338";
 

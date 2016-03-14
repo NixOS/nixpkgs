@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
 
@@ -51,8 +51,10 @@ stdenv.mkDerivation rec {
     cd src/build
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ];
+  shared = if stdenv.isDarwin then "dylib" else "shared";
+  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
+                   ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -78,6 +80,6 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -53,13 +53,13 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [{
-      assertion = config.networking.useDHCP == false;
+      assertion = !config.networking.useDHCP;
       message = "You can not use services.networking.connman with services.networking.useDHCP";
     }{
-      assertion = config.networking.wireless.enable == true;
+      assertion = config.networking.wireless.enable;
       message = "You must use services.networking.connman with services.networking.wireless";
     }{
-      assertion = config.networking.networkmanager.enable == false;
+      assertion = !config.networking.networkmanager.enable;
       message = "You can not use services.networking.connman with services.networking.networkmanager";
     }];
 

@@ -1,5 +1,5 @@
 diff --git a/tools/gyp/pylib/gyp/xcode_emulation.py b/tools/gyp/pylib/gyp/xcode_emulation.py
-index c002b11..eeb0400 100644
+index 407ead0..8bf64e7 100644
 --- a/tools/gyp/pylib/gyp/xcode_emulation.py
 +++ b/tools/gyp/pylib/gyp/xcode_emulation.py
 @@ -446,10 +446,16 @@ class XcodeSettings(object):
@@ -55,15 +55,3 @@ index c002b11..eeb0400 100644
  
      is_extension = self._IsIosAppExtension() or self._IsIosWatchKitExtension()
      if sdk_root and is_extension:
-@@ -1032,7 +1040,10 @@ class XcodeSettings(object):
-     sdk_root = self._SdkPath(config_name)
-     if not sdk_root:
-       sdk_root = ''
--    return l.replace('$(SDKROOT)', sdk_root)
-+    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', sdk_root)
-+    else:
-+      return l
- 
-   def AdjustLibraries(self, libraries, config_name=None):
-     """Transforms entries like 'Cocoa.framework' in libraries into entries like

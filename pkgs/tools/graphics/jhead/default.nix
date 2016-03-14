@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace jhead.c \
       --replace "\"   Compiled: \"__DATE__" "" \
-      --replace "jpegtran -trim" "${libjpeg}/bin/jpegtran -trim"
+      --replace "jpegtran -trim" "${libjpeg.bin}/bin/jpegtran -trim"
   '';
 
   installPhase = ''

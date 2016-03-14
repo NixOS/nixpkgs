@@ -13,7 +13,7 @@ fixCmakeFiles() {
 }
 
 cmakeConfigurePhase() {
-    eval "$preConfigure"
+    runHook preConfigure
 
     if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
@@ -53,10 +53,11 @@ cmakeConfigurePhase() {
 
     cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
 
-    eval "$postConfigure"
+    runHook postConfigure
 }
 
 if [ -z "$dontUseCmakeConfigure" -a -z "$configurePhase" ]; then
+    setOutputFlags=
     configurePhase=cmakeConfigurePhase
 fi
 

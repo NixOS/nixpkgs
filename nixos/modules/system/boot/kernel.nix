@@ -184,6 +184,9 @@ in
         "ide_disk"
         "ide_generic"
 
+        # SD cards and internal eMMC drives.
+        "mmc_block"
+
         # Support USB keyboards, in case the boot fails and we only have
         # a USB keyboard.
         "uhci_hcd"

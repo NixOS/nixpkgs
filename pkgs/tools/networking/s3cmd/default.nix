@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "s3cmd-1.5.2";
   
   src = fetchurl {

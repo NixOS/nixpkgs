@@ -4,111 +4,38 @@ with lib;
 
 let
 
+  canonicalHandlers = {
+    powerEvent = {
+      event = "button/power.*";
+      action = config.services.acpid.powerEventCommands;
+    };
+
+    lidEvent = {
+      event = "button/lid.*";
+      action = config.services.acpid.lidEventCommands;
+    };
+
+    acEvent = {
+      event = "ac_adapter.*";
+      action = config.services.acpid.acEventCommands;
+    };
+  };
+
   acpiConfDir = pkgs.runCommand "acpi-events" {}
     ''
       mkdir -p $out
       ${
         # Generate a configuration file for each event. (You can't have
         # multiple events in one config file...)
-        let f = event:
+        let f = name: handler:
           ''
-            fn=$out/${event.name}
-            echo "event=${event.event}" > $fn
-            echo "action=${pkgs.writeScript "${event.name}.sh" event.action}" >> $fn
+            fn=$out/${name}
+            echo "event=${handler.event}" > $fn
+            echo "action=${pkgs.writeScript "${name}.sh" (concatStringsSep "\n" [ "#! ${pkgs.bash}/bin/sh" handler.action ])}" >> $fn
           '';
-        in lib.concatMapStrings f events
+        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // config.services.acpid.handlers))
       }
     '';
-
-  events = [powerEvent lidEvent acEvent muteEvent volumeDownEvent volumeUpEvent cdPlayEvent cdNextEvent cdPrevEvent];
-
-  # Called when the power button is pressed.
-  powerEvent =
-    { name = "power-button";
-      event = "button/power.*";
-      action =
-        ''
-          #! ${pkgs.bash}/bin/sh
-          ${config.services.acpid.powerEventCommands}
-        '';
-    };
-
-  # Called when the laptop lid is opened/closed.
-  lidEvent =
-    { name = "lid";
-      event = "button/lid.*";
-      action =
-        ''
-          #! ${pkgs.bash}/bin/sh
-          ${config.services.acpid.lidEventCommands}
-        '';
-    };
-
-  # Called when the AC power is connected or disconnected.
-  acEvent =
-    { name = "ac-power";
-      event = "ac_adapter.*";
-      action =
-        ''
-          #! ${pkgs.bash}/bin/sh
-          ${config.services.acpid.acEventCommands}
-        '';
-    };
-
-  muteEvent = {
-    name = "mute";
-    event = "button/mute.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.muteCommands}
-    '';
-  };
-
-  volumeDownEvent = {
-    name = "volume-down";
-    event = "button/volumedown.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.volumeDownEventCommands}
-    '';
-  };
-
-  volumeUpEvent = {
-    name = "volume-up";
-    event = "button/volumeup.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.volumeUpEventCommands}
-    '';
-  };
-
-  cdPlayEvent = {
-    name = "cd-play";
-    event = "cd/play.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.cdPlayEventCommands}
-    '';
-  };
-
-  cdNextEvent = {
-    name = "cd-next";
-    event = "cd/next.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.cdNextEventCommands}
-    '';
-  };
-
-  cdPrevEvent = {
-    name = "cd-prev";
-    event = "cd/prev.*";
-    action = ''
-      #! ${pkgs.bash}/bin/sh
-      ${config.services.acpid.cdPrevEventCommands}
-    '';
-  };
-
 
 in
 
@@ -124,6 +51,29 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable the ACPI daemon.";
+      };
+
+      handlers = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            event = mkOption {
+              type = types.str;
+              example = [ "button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*" ];
+              description = "Event type.";
+            };
+
+            action = mkOption {
+              type = types.lines;
+              description = "Shell commands to execute when the event is triggered.";
+            };
+          };
+        });
+
+        description = "Event handlers.";
+        default = {};
+        example = { mute = { event = "button/mute.*"; action = "amixer set Master toggle"; }; };
+
+
       };
 
       powerEventCommands = mkOption {
@@ -142,42 +92,6 @@ in
         type = types.lines;
         default = "";
         description = "Shell commands to execute on an ac_adapter.* event.";
-      };
-
-      muteCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an button/mute.* event.";
-      };
-
-      volumeDownEventCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an button/volumedown.* event.";
-      };
-
-      volumeUpEventCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an button/volumeup.* event.";
-      };
-
-      cdPlayEventCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an cd/play.* event.";
-      };
-
-      cdNextEventCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an cd/next.* event.";
-      };
-
-      cdPrevEventCommands = mkOption {
-        type = types.lines;
-        default = "";
-        description = "Shell commands to execute on an cd/prev.* event.";
       };
 
     };

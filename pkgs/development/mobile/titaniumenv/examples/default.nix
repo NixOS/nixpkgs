@@ -2,20 +2,19 @@
 , systems ? [ "x86_64-linux" "x86_64-darwin" ]
 , xcodeVersion ? "7.2"
 , xcodeBaseDir ? "/Applications/Xcode.app"
-, tiVersion ? "5.1.1.GA"
+, tiVersion ? "5.1.2.GA"
 , rename ? false
-, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "9.2", iosWwdrCertificate ? null
-, allowUnfree ? false
+, newBundleId ? "com.example.kitchensink", iosMobileProvisioningProfile ? null, iosCertificate ? null, iosCertificateName ? "Example", iosCertificatePassword ? "", iosVersion ? "9.2"
 , enableWirelessDistribution ? false, installURL ? null
 }:
 
 let
-  pkgs = import nixpkgs { config.allowUnfree = allowUnfree; };
+  pkgs = import nixpkgs {};
 in
 rec {
   kitchensink_android_debug = pkgs.lib.genAttrs systems (system:
   let
-    pkgs = import nixpkgs { inherit system; config.allowUnfree = allowUnfree; };
+    pkgs = import nixpkgs { inherit system; };
   in
   import ./kitchensink {
     inherit (pkgs) fetchgit;
@@ -26,7 +25,7 @@ rec {
   
   kitchensink_android_release = pkgs.lib.genAttrs systems (system:
   let
-    pkgs = import nixpkgs { inherit system; config.allowUnfree = allowUnfree; };
+    pkgs = import nixpkgs { inherit system; };
   in
   import ./kitchensink {
     inherit (pkgs) fetchgit;
@@ -38,7 +37,7 @@ rec {
   
   emulate_kitchensink_debug = pkgs.lib.genAttrs systems (system:
   let
-    pkgs = import nixpkgs { inherit system; config.allowUnfree = allowUnfree; };
+    pkgs = import nixpkgs { inherit system; };
   in
   import ./emulate-kitchensink {
     inherit (pkgs) androidenv;
@@ -47,7 +46,7 @@ rec {
   
   emulate_kitchensink_release = pkgs.lib.genAttrs systems (system:
   let
-    pkgs = import nixpkgs { inherit system; config.allowUnfree = allowUnfree; };
+    pkgs = import nixpkgs { inherit system; };
   in
   import ./emulate-kitchensink {
     inherit (pkgs) androidenv;
@@ -74,7 +73,7 @@ rec {
   };
 } else {}) // (if rename then
   let
-    pkgs = import nixpkgs { system = "x86_64-darwin"; config.allowUnfree = allowUnfree; };
+    pkgs = import nixpkgs { system = "x86_64-darwin"; };
   in
   {
     kitchensink_ipa = import ./kitchensink {
@@ -84,7 +83,7 @@ rec {
       inherit tiVersion;
       release = true;
       rename = true;
-      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion iosWwdrCertificate;
+      inherit newBundleId iosMobileProvisioningProfile iosCertificate iosCertificateName iosCertificatePassword iosVersion;
       inherit enableWirelessDistribution installURL;
     };
   }

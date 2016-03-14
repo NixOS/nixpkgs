@@ -48,13 +48,14 @@ index 84f6a2d..da31b12 100755
  import logging
  import os
 diff --git a/libqtile/utils.py b/libqtile/utils.py
-index d5f975b..0fdb080 100644
+index 284089b..ec3539e 100644
 --- a/libqtile/utils.py
 +++ b/libqtile/utils.py
-@@ -208,3 +208,10 @@ def get_cache_dir():
-     if not os.path.exists(cache_directory):
-         os.makedirs(cache_directory)
-     return cache_directory
+@@ -227,3 +227,11 @@ def describe_attributes(obj, attrs, func=None):
+             pairs.append('%s=%s' % (attr, value))
+ 
+     return ', '.join(pairs)
++
 +
 +def restore_os_environment():
 +    pythonpath = os.environ.pop("QTILE_SAVED_PYTHONPATH", "")
@@ -62,6 +63,3 @@ index d5f975b..0fdb080 100644
 +    path = os.environ.pop("QTILE_SAVED_PATH", None)
 +    if path:
 +        os.environ["PATH"] = path
--- 
-2.6.3
-

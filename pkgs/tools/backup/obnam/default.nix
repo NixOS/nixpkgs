@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, pythonPackages, pycrypto, attr }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "obnam-${version}";
-  version = "1.18.2";
+  version = "1.19.1";
 
   namePrefix = "";
 
   src = fetchurl rec {
     url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_${version}.orig.tar.xz";
-    sha256 = "185pjd77lnq99x2sskpl7n6h25z0v069575l4qz206npsywbypnb";
+    sha256 = "096abbvz2c9vm8r7zm82yqrd7zj04pb1xzlv6z0dspkngd0cfdqc";
   };
 
   buildInputs = [ pythonPackages.sphinx attr ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, makeDesktopItem }:
 
 { name, src, binary-basename, ... }:
 
@@ -6,24 +6,19 @@ stdenv.mkDerivation rec {
 
   inherit name src binary-basename;
 
-  sources10Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV10.sources.zip;
-    sha256 = "0aijhr3w5w3jzmnpl61g6xkwyi2l1mxy0qbvr9k3whz8zlrsijh2";
-  };
+  pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };
 
-  sources20Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV20.sources.zip;
-    sha256 = "1xsc0p361pp8iha5zckppw29sbapd706wbvzvgjnkv2n6n1q5gj7";
-  };
-
-  sources30Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV30.sources.zip;
-    sha256 = "08d9a7gggwpwgrfbp7iv5896jgqz3vgjfrq19y3jw8k10pva98ak";
-  };
-
-  sources40Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV40.sources.zip;
-    sha256 = "1xq1721ql19hpgr8ir372h92q7g8zwd6k921b21dap4wf8djqnpd";
+  desktopItem = makeDesktopItem {
+    inherit name;
+    desktopName = "Pharo VM";
+    genericName = "Pharo Virtual Machine";
+    exec = "${binary-basename}-x %F";
+    icon = "pharo";
+    terminal = "false";
+    type="Application";
+    startupNotify = "false";
+    categories = "Development;";
+    mimeType = "application/x-pharo-image";
   };
 
   # Building
@@ -32,9 +27,7 @@ stdenv.mkDerivation rec {
   '';
   resources = ./resources;
   installPhase = ''
-    echo Current directory $(pwd)
-    echo Creating prefix "$prefix"
-    mkdir -p "$prefix/lib/pharo-vm"
+    mkdir -p "$prefix/lib/$name"
 
     cd ../../results
 
@@ -44,9 +37,10 @@ stdenv.mkDerivation rec {
     mv vm-sound-ALSA vm-sound-ALSA.so
     mv pharo pharo-vm
 
-    cp * "$prefix/lib/pharo-vm"
+    cp * "$prefix/lib/$name"
 
-    cp -R "$resources/"* "$prefix/"
+    mkdir -p "$prefix/share/applications"
+    cp "${desktopItem}/share/applications/"* $prefix/share/applications
 
     mkdir $prefix/bin
 
@@ -57,7 +51,7 @@ stdenv.mkDerivation rec {
     # disable parameter expansion to forward all arguments unprocessed to the VM
     set -f
 
-    exec $prefix/lib/pharo-vm/pharo-vm "\$@"
+    exec $prefix/lib/$name/pharo-vm "\$@"
     EOF
 
     cat > $prefix/bin/${binary-basename}-nox <<EOF
@@ -66,18 +60,15 @@ stdenv.mkDerivation rec {
     # disable parameter expansion to forward all arguments unprocessed to the VM
     set -f
 
-    exec $prefix/lib/pharo-vm/pharo-vm -vm-display-null "\$@"
+    exec $prefix/lib/$name/pharo-vm -vm-display-null "\$@"
     EOF
 
     chmod +x $prefix/bin/${binary-basename}-x $prefix/bin/${binary-basename}-nox
 
-    unzip ${sources10Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources20Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources30Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources40Zip} -d $prefix/lib/pharo-vm/
+    ln -s "${pharo-share}/lib/"*.sources $prefix/lib/$name
   '';
 
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo ];
+  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
@@ -97,6 +88,10 @@ stdenv.mkDerivation rec {
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.DamienCassou ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    # Pharo VM sources are packaged separately for darwin (OS X)
+    platforms = with stdenv.lib;
+                  intersectLists
+                    platforms.mesaPlatforms
+                    (subtractLists platforms.darwin platforms.unix);
   };
 }

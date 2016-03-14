@@ -1,14 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, ghc, perl, gmp, ncurses, libiconv, binutils, coreutils
+{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
 , hscolour
 }:
 
+let
+  inherit (bootPkgs) ghc;
+
+in 
 stdenv.mkDerivation rec {
-  version = "8.0.0.20160111";
+  version = "8.0.0.20160204";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.1-rc1/${name}-src.tar.xz";
-    sha256 = "0y4nha46mw01ysw90kh8szcbsfdc37rqjm7r5fyk6flqwr8b6pvr";
+    url = "https://downloads.haskell.org/~ghc/8.0.1-rc2/${name}-src.tar.xz";
+    sha256 = "0v8pciva93i4a6h0l76vq6bbvrg76b1y4awwbxcg3m9gnqkvmy2k";
   };
 
   patches = [
@@ -29,8 +33,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
-    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses}/lib"
+    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses.lib}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -50,6 +54,10 @@ stdenv.mkDerivation rec {
       sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
     done
   '';
+
+  passthru = {
+    inherit bootPkgs;
+  };
 
   meta = {
     homepage = "http://haskell.org/ghc";

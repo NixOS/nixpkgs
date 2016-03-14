@@ -6,9 +6,7 @@
 { pkgs, gimp }:
 let
   inherit (pkgs) stdenv fetchurl pkgconfig glib;
-  targetPluginDir = "$out/${gimp.name}-plugins";
-  targetScriptDir = "$out/${gimp.name}-scripts";
-  prefix = "plugin-gimp-";
+  inherit (gimp) targetPluginDir targetScriptDir;
 
   pluginDerivation = a: stdenv.mkDerivation ({
     prePhases = "extraLib";
@@ -52,7 +50,7 @@ rec {
     name = "gap-2.6.0";
     buildInputs = [ gimp pkgconfig glib pkgs.intltool gimp.gtk ] ++ gimp.nativeBuildInputs;
     src = fetchurl {
-      url = ftp://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
+      url = http://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2;
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
     patchPhase = ''

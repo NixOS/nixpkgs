@@ -24,6 +24,9 @@
 ## FOR CONTRIBUTORS
 #
 # When adding a new package here please note that
+# * please use `elpaBuild` for pre-built package.el packages and
+#   `melpaBuild` or `trivialBuild` if the package must actually
+#   be built from the source.
 # * lib.licenses are `with`ed on top of the file here
 # * both trivialBuild and melpaBuild will automatically derive a
 #   `meta` with `platforms` and `homepage` set to something you are
@@ -33,7 +36,7 @@
 
 , lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
 
-, emacs, texinfo, makeWrapper
+, emacs, texinfo, lndir, makeWrapper
 , trivialBuild
 , melpaBuild
 
@@ -57,7 +60,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib makeWrapper stdenv;
+    inherit lib lndir makeWrapper stdenv;
   };
 
   packagesFun = self: with self; {
@@ -235,23 +238,6 @@ let
     };
   };
 
-  auctex = melpaBuild rec {
-    pname   = "auctex";
-    version = "11.87.7";
-    src = fetchurl {
-      url    = "http://elpa.gnu.org/packages/${pname}-${version}.tar";
-      sha256 = "07bhw8zc3d1f2basjy80njmxpsp4f70kg3ynkch9ghlai3mm2b7n";
-    };
-    buildPhase = ''
-      cp $src ${pname}-${version}.tar
-    '';
-    meta = {
-      description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
-      homepage = https://www.gnu.org/software/auctex/;
-      license = gpl3Plus;
-    };
-  };
-
   autotetris = melpaBuild {
     pname = "autotetris-mode";
     version = "20141114.846";
@@ -422,19 +408,19 @@ let
     packageRequires = [ dash ];
     files = [ "dash-functional.el" ];
     meta = {
-      description = "Collection of useful combinators for Emacs Lisp.";
+      description = "Collection of useful combinators for Emacs Lisp";
       license = gpl3Plus;
     };
   };
 
   diminish = melpaBuild rec {
     pname   = "diminish";
-    version = "0.44";
+    version = "0.45";
     src = fetchFromGitHub {
-      owner  = "emacsmirror";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0hshw7z5f8pqxvgxw74kbj6nvprsgfvy45fl854xarnkvqcara09";
+      owner  = "myrjola";
+      repo   = "${pname}.el";
+      rev    = "v${version}";
+      sha256 = "0qpgfgp8hrzz4vdifxq8h25n0a0jlzgf7aa1fpy6r0080v5rqbb6";
     };
     meta = {
       description = "Diminishes the amount of space taken on the mode-line by Emacs minor modes";
@@ -725,54 +711,6 @@ let
     };
   };
 
-  flycheck = melpaBuild rec {
-    pname   = "flycheck";
-    version = "0.25.1";
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = version;
-      sha256 = "19mnx2zm71qrf7qf3mk5kriv5vgq0nl67lj029n63wqd8jcjb5fi";
-    };
-    packageRequires = [ dash let-alist pkg-info seq ];
-    meta = {
-      description = "On-the-fly syntax checking, intended as replacement for the older Flymake which is part of Emacs";
-      license = gpl3Plus;
-    };
-  };
-
-  flycheck-haskell = melpaBuild rec {
-    pname   = "flycheck-haskell";
-    version = "0.7.2";
-    src = fetchFromGitHub {
-      owner  = "flycheck";
-      repo   = pname;
-      rev    = version;
-      sha256 = "0143lcn6g46g7skm4r6lqq09s8mr3268rikbzlh65qg80rpg9frj";
-    };
-    packageRequires = [ dash flycheck haskell-mode let-alist pkg-info ];
-    meta = {
-      description = "Improved Haskell support for Flycheck";
-      license = gpl3Plus;
-    };
-  };
-
-  flycheck-pos-tip = melpaBuild rec {
-    pname   = "flycheck-pos-tip";
-    version = "20140813";
-    src = fetchFromGitHub {
-      owner  = "flycheck";
-      repo   = pname;
-      rev    = "5b3a203bbdb03e4f48d1654efecd71f44376e199";
-      sha256 = "0b4x24aq0jh4j4bjv0fqyaz6hzh3gqf57k9763jj9rl32cc3dpnp";
-    };
-    packageRequires = [ flycheck popup ];
-    meta = {
-      description = "Flycheck errors display in tooltip";
-      license = gpl3Plus;
-    };
-  };
-
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;
@@ -782,6 +720,19 @@ let
     fileSpecs = [ "elisp/*.el" ];
     meta = {
       description = "An extension of haskell-mode that provides completion of symbols and documentation browsing";
+      license = bsd3;
+    };
+  };
+
+  hindent = melpaBuild rec {
+    pname = "hindent";
+    version = external.hindent.version;
+    src = external.hindent.src;
+    packageRequires = [ haskell-mode ];
+    propagatedUserEnvPkgs = [ external.hindent ];
+    fileSpecs = [ "elisp/*.el" ];
+    meta = {
+      description = "Indent haskell code using the \"hindent\" program";
       license = bsd3;
     };
   };
@@ -1172,23 +1123,6 @@ let
     };
   };
 
-  let-alist = melpaBuild rec {
-    pname   = "let-alist";
-    version = "1.0.4";
-    src = fetchurl {
-      url    = "http://elpa.gnu.org/packages/${pname}-${version}.el";
-      sha256 = "07312bvvyz86lf64vdkxg2l1wgfjl25ljdjwlf1bdzj01c4hm88x";
-    };
-    unpackPhase = "true";
-    buildPhase = ''
-      cp $src ${pname}-${version}.el
-    '';
-    meta = {
-      description = "Easily let-bind values of an assoc-list by their names";
-      license = gpl3Plus;
-    };
-  };
-
   log4e = melpaBuild rec {
     pname = "log4e";
     version = "0.3.0";
@@ -1381,16 +1315,13 @@ let
     };
   };
 
-  org-plus-contrib = melpaBuild rec {
+  org-plus-contrib = elpaBuild rec {
     pname   = "org-plus-contrib";
     version = "20150406";
     src = fetchurl {
       url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
       sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
     };
-    buildPhase = ''
-      cp $src ${pname}-${version}.tar
-    '';
     meta = {
       description = "Notes, TODO lists, projects, and authoring in plain-text with Emacs";
       license = gpl3Plus;
@@ -1594,7 +1525,7 @@ let
     };
     packageRequires = [ dash ];
     meta = {
-      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line.";
+      description = "Hiding and/or highlighting the list of minor modes in the Emacs mode-line";
       license = gpl3Plus;
     };
   };
@@ -1610,7 +1541,7 @@ let
       sha256 = "1wvjisi26lb4g5rjq80kq9jmf1r2m3isy47nwrnahfzxk886qfbq";
       };
     meta = {
-      description = "A major mode for editing rust code.";
+      description = "A major mode for editing rust code";
       license = asl20;
     };
   };
@@ -1926,7 +1857,7 @@ in
   lib.makeScope newScope (self:
     {}
     // melpaPackages self
-    // melpaStablePackages self
     // elpaPackages self
+    // melpaStablePackages self
     // packagesFun self
   )

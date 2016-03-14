@@ -3,17 +3,17 @@
 stdenv.mkDerivation rec {
   name = "jruby-${version}";
 
-  version = "1.7.21";
+  version = "9.0.5.0";
 
   src = fetchurl {
-    url = "http://jruby.org.s3.amazonaws.com/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha1 = "4955b69a913b22f96bd599eff2a133d8d1ed42c6";
+    url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
+    sha256 = "1wysymqzc7591743f2ycgwpm232y6i050izn72lck44nhnyr5wwy";
   };
 
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-     mkdir -pv $out
+     mkdir -pv $out/docs
      mv * $out
      rm $out/bin/*.{bat,dll,exe,sh}
      mv $out/COPYING $out/LICENSE* $out/docs

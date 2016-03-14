@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
     substituteInPlace $out/bin/easyrsa \
       --subst-var out \
-      --subst-var-by openssl ${openssl}/bin/openssl
+      --subst-var-by openssl ${openssl.bin}/bin/openssl
 
     # Helper utility
     cat > $out/bin/easyrsa-init <<EOF

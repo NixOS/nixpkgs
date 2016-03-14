@@ -2,7 +2,7 @@
 
 let version = "0.7.6";
 
-in pythonPackages.buildPythonPackage rec {
+in pythonPackages.buildPythonApplication rec {
   name = "cloud-init-${version}";
   namePrefix = "";
 

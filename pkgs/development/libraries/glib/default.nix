@@ -69,11 +69,16 @@ stdenv.mkDerivation rec {
   # internal pcre would only add <200kB, but it's relatively common
   configureFlags = [ "--with-pcre=system" ]
     ++ optional stdenv.isDarwin "--disable-compile-warnings"
-    ++ optional stdenv.isFreeBSD "--with-libiconv=gnu"
-    ++ optional stdenv.isSunOS ["--disable-modular-tests" "--with-libiconv"];
+    ++ optional (stdenv.isFreeBSD || stdenv.isSunOS) "--with-libiconv=gnu"
+    ++ optional stdenv.isSunOS "--disable-dtrace";
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
     + optionalString stdenv.isSunOS " -DBSD_COMP";
+
+  preConfigure = if !stdenv.isSunOS then null else
+    ''
+      sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
+    '';
 
   LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
   LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
@@ -100,7 +105,7 @@ stdenv.mkDerivation rec {
        export XDG_RUNTIME_HOME="$TMP"
        export HOME="$TMP"
        export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
-       export G_TEST_DBUS_DAEMON="${dbus_daemon}/bin/dbus-daemon"
+       export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
 
        substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
        # Needs machine-id, comment the test

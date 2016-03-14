@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonPackage, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject, python }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,7 +7,7 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "zim-${version}";
   version = "0.63";
   namePrefix = "";

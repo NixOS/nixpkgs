@@ -16,14 +16,14 @@ in
               cyl=$(((${diskSize}*1024*1024)/(512*63*255)))
               size=$(($cyl*255*63*512))              
               roundedsize=$((($size/(1024*1024)+1)*(1024*1024)))
-              ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage $roundedsize
+              ${pkgs.vmTools.qemu-220}/bin/qemu-img create -f raw $diskImage $roundedsize
               mv closure xchg/
             '';
 
           postVM =
             ''
               mkdir -p $out
-              ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vpc $diskImage $out/disk.vhd
+              ${pkgs.vmTools.qemu-220}/bin/qemu-img convert -f raw -O vpc -o subformat=fixed $diskImage $out/disk.vhd
               rm $diskImage
             '';
           diskImageBase = "nixos-image-${config.system.nixosLabel}-${pkgs.stdenv.system}.raw";
@@ -78,7 +78,7 @@ in
 
           echo Install a configuration.nix.
           mkdir -p /mnt/etc/nixos /mnt/boot/grub
-          cp ${./azure-config.nix} /mnt/etc/nixos/configuration.nix
+          cp ${./azure-config-user.nix} /mnt/etc/nixos/configuration.nix
 
           echo Generate the GRUB menu.
           ln -s vda /dev/sda

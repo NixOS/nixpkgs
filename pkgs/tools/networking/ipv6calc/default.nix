@@ -2,9 +2,9 @@
 , geoip ? null, geolite-legacy ? null
 , ip2location-database ? null }:
 
-let version = "0.99.1"; in
 stdenv.mkDerivation rec {
   name = "ipv6calc-${version}";
+  version = "0.99.1";
 
   src = fetchurl {
     url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and

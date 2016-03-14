@@ -1,24 +1,28 @@
-{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl }:
+{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl, acl }:
 
-stdenv.mkDerivation rec {
-  name = "netatalk-3.1.0";
+stdenv.mkDerivation rec{
+  name = "netatalk-3.1.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/netatalk/netatalk/${name}.tar.bz2";
-    sha256 = "1d8dc8ysslkis4yl1xab1w9p0pz7a1kg0i6fds4wxsp4fhb6wqhq";
+    sha256 = "0wf09fyqzza024qr1s26z5x7rsvh9zb4pv598gw7gm77wjcr6174";
   };
 
-  buildInputs = [ pkgconfig db libgcrypt avahi pam openssl libiconv ];
+  buildInputs = [ pkgconfig db libgcrypt avahi libiconv pam openssl acl ];
+
+  patches = ./omitLocalstatedirCreation.patch;
 
   configureFlags = [
     "--with-bdb=${db}"
     "--with-openssl=${openssl}"
+    "--with-lockfile=/run/lock/netatalk"
+    "--localstatedir=/var/lib"
   ];
 
   enableParallelBuild = true;
 
   meta = {
-    description = "Apple File Protocl Server";
+    description = "Apple Filing Protocol Server";
     homepage = http://netatalk.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

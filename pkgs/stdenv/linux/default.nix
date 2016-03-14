@@ -64,7 +64,7 @@ rec {
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun =
-    {gccPlain, glibc, binutils, coreutils, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
+    {gccPlain, glibc, binutils, coreutils, gnugrep, name, overrides ? (pkgs: {}), extraBuildInputs ? []}:
 
     let
 
@@ -78,11 +78,11 @@ rec {
             dontPatchShebangs=1
             ${commonPreHook}
           '';
-        shell = "${bootstrapTools}/bin/sh";
+        shell = "${bootstrapTools}/bin/bash";
         initialPath = [bootstrapTools];
-        fetchurlBoot = import ../../build-support/fetchurl {
-          stdenv = stage0.stdenv;
-          curl = bootstrapTools;
+
+        fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
+          inherit system;
         };
 
         cc = if isNull gccPlain
@@ -93,7 +93,7 @@ rec {
           cc = gccPlain;
           isGNU = true;
           libc = glibc;
-          inherit binutils coreutils;
+          inherit binutils coreutils gnugrep;
           name = name;
           stdenv = stage0.stdenv;
         };
@@ -125,6 +125,7 @@ rec {
     glibc = null;
     binutils = null;
     coreutils = null;
+    gnugrep = null;
     name = null;
 
     overrides = pkgs: {
@@ -160,6 +161,7 @@ rec {
     inherit (stage0.pkgs) glibc;
     binutils = bootstrapTools;
     coreutils = bootstrapTools;
+    gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     # Rebuild binutils to use from stage2 onwards.
@@ -184,6 +186,7 @@ rec {
     inherit (stage1.pkgs) glibc;
     binutils = stage1.pkgs.binutils;
     coreutils = bootstrapTools;
+    gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: {
@@ -200,6 +203,7 @@ rec {
     gccPlain = bootstrapTools;
     inherit (stage2.pkgs) glibc binutils;
     coreutils = bootstrapTools;
+    gnugrep = bootstrapTools;
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: rec {
@@ -227,6 +231,7 @@ rec {
   # still from the bootstrap tools.
   stage4 = stageFun {
     inherit (stage3.pkgs) gccPlain glibc binutils;
+    gnugrep = bootstrapTools;
     coreutils = bootstrapTools;
     name = "";
 
@@ -243,7 +248,7 @@ rec {
         isGNU = true;
         cc = stage4.stdenv.cc.cc;
         libc = stage4.pkgs.glibc;
-        inherit (stage4.pkgs) binutils coreutils;
+        inherit (stage4.pkgs) binutils coreutils gnugrep;
         name = "";
         stdenv = stage4.stdenv;
         shell = stage4.pkgs.bash + "/bin/bash";
@@ -329,7 +334,6 @@ rec {
       awk --version
       grep --version
       gcc --version
-      curl --version
 
       ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
       export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"

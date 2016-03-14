@@ -118,15 +118,16 @@ rec {
       name = name_;
       outputHashAlgo = hashAlgo;
       outputHash = hash;
+      preferLocalBuild = true;
       builder = writeScript "restrict-message" ''
-source ${stdenv}/setup
-cat <<_EOF_
+        source ${stdenv}/setup
+        cat <<_EOF_
 
-***
-${msg}
-***
+        ***
+        ${msg}
+        ***
 
-_EOF_
+        _EOF_
       '';
     };
 
@@ -156,6 +157,9 @@ _EOF_
       '';
 
   # Copy a path to the Nix store.
+  # Nix automatically copies files to the store before stringifying paths.
+  # If you need the store path of a file, ${copyPathToStore <path>} can be
+  # shortened to ${<path>}.
   copyPathToStore = builtins.filterSource (p: t: true);
 
   # Copy a list of paths to the Nix store.

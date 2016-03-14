@@ -1,5 +1,6 @@
 { stdenv, fetchgit, pkgconfig, makeWrapper, python27, retroarch
-, fluidsynth, mesa, SDL, ffmpeg, libpng, libjpeg, libvorbis, zlib }:
+, alsaLib, fluidsynth, mesa, portaudio, SDL, ffmpeg, libpng, libjpeg
+, libvorbis, zlib }:
 
 let
 
@@ -33,7 +34,7 @@ let
       inherit description;
       homepage = "http://www.libretro.com/";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ edwtjo MP2E ];
+      maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.linux;
     };
   } // a);
@@ -131,6 +132,18 @@ in
       sha256 = "16jm97h66bb2sqlimjlks31sapb23x4q8sr16wdqn1xgi670xw3c";
     };
     description = "Enhanced Genesis Plus libretro port";
+  };
+
+  mame = mkLibRetroCore {
+    core = "mame";
+    src = fetchRetro {
+      repo = "mame";
+      rev = "8da2303292bb8530f9f4ffad8bf1df95ee4cab74";
+      sha256 = "0rzy5klp8vf9vc8fylbdnp2qcvl1nkgw5a55ljqc5vich4as5alq";
+    };
+    description = "Port of MAME to libretro";
+
+    extraBuildInputs = [ alsaLib portaudio python27 ];
   };
 
   mednafen-pce-fast = (mkLibRetroCore rec {

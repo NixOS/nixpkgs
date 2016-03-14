@@ -8,11 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "10lzfkmnpq6a43a3gkx7x633njh216w0bjwz31rv8a1jlgg1sfxs";
   };
 
-  # Disable xz/zlib support to prevent needing them in the initrd.
-  
-  buildInputs = [ pkgconfig libxslt /* xz zlib */ ];
+  buildInputs = [ pkgconfig libxslt xz /* zlib */ ];
 
-  configureFlags = [ "--sysconfdir=/etc" /* "--with-xz" "--with-zlib" */ ];
+  configureFlags = [ "--sysconfdir=/etc" "--with-xz" /* "--with-zlib" */ ];
 
   patches = [ ./module-dir.patch ];
 

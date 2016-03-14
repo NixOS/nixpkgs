@@ -141,9 +141,9 @@ let
 
         paxmark E $out/bin/python${majorVersion}
 
-        ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
+        ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
 
-        rm "$out"/lib/python*/plat-linux2/regen # refers to glibc.dev
+        rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
       '';
 
     passthru = rec {

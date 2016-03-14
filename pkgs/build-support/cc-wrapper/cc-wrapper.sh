@@ -1,4 +1,8 @@
 #! @shell@ -e
+path_backup="$PATH"
+if [ -n "@coreutils_bin@" ]; then
+  PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
+fi
 
 if [ -n "$NIX_CC_WRAPPER_START_HOOK" ]; then
     source "$NIX_CC_WRAPPER_START_HOOK"
@@ -141,4 +145,5 @@ if [ -n "$NIX_CC_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_CC_WRAPPER_EXEC_HOOK"
 fi
 
+PATH="$path_backup"
 exec @prog@ ${extraBefore[@]} "${params[@]}" "${extraAfter[@]}"

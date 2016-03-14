@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fcitx, makeWrapper, plugins }:
+{ stdenv, buildEnv, fcitx, fcitx-configtool, makeWrapper, plugins, kde5 }:
 
 # This is based on the pidgin-with-plugins package.
 # Users should be able to configure what plugins are used
@@ -16,7 +16,7 @@ let
 drv = buildEnv {
   name = "fcitx-with-plugins-" + (builtins.parseDrvName fcitx.name).version;
 
-  paths = [ fcitx ] ++ plugins;
+  paths = [ fcitx fcitx-configtool kde5.fcitx-qt5 ] ++ plugins;
 
   postBuild = ''
     # TODO: This could be avoided if buildEnv could be forced to create all directories

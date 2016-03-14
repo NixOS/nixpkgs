@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/share/applications
     while read LINE; do
       if [[ $LINE = "Exec=0ad" ]]; then
-        echo "Exec=$out/bin/pyrogenesis"
+        echo "Exec=$out/bin/zeroad"
       elif [[ $LINE = "Icon=0ad" ]]; then
         echo "Icon=$out/share/icons/0ad.png"
       else
@@ -126,5 +126,6 @@ stdenv.mkDerivation rec {
       licenses.zlib # otherwise masked by pkgs.zlib
     ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    hydraPlatforms = []; # the data are too big (~1.5 GB)
   };
 }

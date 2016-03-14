@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "gjay-0.3.2";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gjay/gjay-0.3.2.tar.gz";
+    url = "mirror://sourceforge/project/gjay/gjay-0.3.2.tar.gz";
     sha256 = "1a1vv4r0vnxjdyl0jyv7gga3zfd5azxlwjm1l6hjrf71lb228zn8";
   };
 

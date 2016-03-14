@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk, oraclejdk8
+, androidsdk, jdk
 }:
 
 assert stdenv.isLinux;
@@ -8,12 +8,7 @@ assert stdenv.isLinux;
 let
 
   bnumber = with stdenv.lib; build: last (splitString "-" build);
-  mkIdeaProduct' = callPackage ./common.nix { };
-  mkIdeaProduct = attrs: mkIdeaProduct' ({
-      # After IDEA 15 we can no longer use OpenJDK.
-      # https://youtrack.jetbrains.com/issue/IDEA-147272
-      jdk = if (bnumber attrs.build) < "143" then jdk else oraclejdk8;
-  } // attrs);
+  mkIdeaProduct = callPackage ./common.nix { };
 
   buildAndroidStudio = { name, version, build, src, license, description }:
     let drv = (mkIdeaProduct rec {
@@ -153,26 +148,26 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "1.5.0.4";
-    build = "141.2422023";
+    version = "2.0.0.0";
+    build = "143.2443734";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "1sjxs9cq7mdalxmzp6v2gwbg1w8p43c2cp5j4v212w66h5rqv11z";
+      sha256 = "0j6bi87hb5jxjwfhfya64s673vdkdslsqc6sqa4zl97sabvafk2w";
     };
   };
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.0.4";
-    build = "141.874";
+    version = "1.2.4";
+    build = "143.1186";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "1cz59h2znzjy7zncc049f2w30kc89rvmk7l51a1y6ymf9s7cj4cm";
+      sha256 = "0asjgfshbximjk6i57fz3d2ykby5qw5x6nhw91cpzrzszc59dmm2";
     };
   };
 
@@ -190,25 +185,25 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "15.0.2";
-    build = "IC-143.1184";
+    version = "15.0.4";
+    build = "IC-143.2287";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "0y8rrbsb87avn1dhw5r1xb4axpbm1qvgcd0aysir9bqzhx8qg64c";
+      sha256 = "05kah5cx7x3rlaaxkvbbm7g8jvy9hc38q4jv7j5r9rkxd38fslvn";
     };
   };
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "15.0.2";
-    build = "IU-143.1184";
+    version = "15.0.4";
+    build = "IU-143.2287";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "1r8gw7mv1b0k223k76ib08f4yrrgrw24qmhkbx88rknmls5nsgss";
+      sha256 = "0416y7krrak1q5pb8axskdamy06nfxmn4hj7421j8jaz0nc50dn4";
     };
   };
 

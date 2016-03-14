@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;
+    broken = true; # URL doesn't work anymore
   };
 }

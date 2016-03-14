@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.2/saga-2.2.2.tar.gz";
+    url = "mirror://sourceforge/project/saga-gis/SAGA%20-%202.2/SAGA%202.2.2/saga-2.2.2.tar.gz";
     sha256 = "031cd70b7ec248f32f955a9316aefc7f7ab283c5129c49aa4bd748717d20357e";
   };
 

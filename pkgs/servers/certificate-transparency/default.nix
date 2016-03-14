@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "certificate-transparency-${version}";
 
-  version = "2015-11-27";
-  rev = "dc5a51e55af989ff5871a6647166d00d0de478ab";
+  version = "2016-01-14";
+  rev = "250672b5aef3666edbdfc9a75b95a09e7a57ed08";
 
   meta = with stdenv.lib; {
     homepage = https://www.certificate-transparency.org/;
-    description = "Auditing for TLS certificates.";
+    description = "Auditing for TLS certificates";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ philandstuff ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo  = "certificate-transparency";
     rev   = rev;
-    sha256 = "14sgc2kcjjsnrykwcjin21h1f3v4kg83w6jqiq9qdm1ha165yhvx";
+    sha256 = "1gn0bqzkf09jvc2aq3da8fwhl65y7q57msqsh6iczvd6fdmrpfdj";
   };
 
   # need to disable regex support in evhtp or building will fail

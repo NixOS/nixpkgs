@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://download.videolan.org/pub/videolan/${baseName}/${version}/${baseName}-${version}.tar.bz2";
+    url = "http://get.videolan.org/${baseName}/${version}/${baseName}-${version}.tar.bz2";
     sha256 = "1s5v075hnbs57995r6lljm79wgrip3gnyf55a0y7bja75jh49hwm";
   };
 

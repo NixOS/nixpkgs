@@ -13,11 +13,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libuuid ];
 
-  buildFlags = "mosquitto";
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp src/mosquitto $out/bin/
+  preBuild = ''
+    substituteInPlace config.mk \
+      --replace "/usr/local" ""
   '';
 
   meta = {

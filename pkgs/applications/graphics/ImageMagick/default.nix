@@ -7,6 +7,7 @@ let
   arch =
     if stdenv.system == "i686-linux" then "i686"
     else if stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin" then "x86-64"
+    else if stdenv.system == "armv7l-linux" then "armv7l"
     else throw "ImageMagick is not supported on this platform.";
 in
 
@@ -15,7 +16,11 @@ stdenv.mkDerivation rec {
   version = "6.9.2-0";
 
   src = fetchurl {
-    url = "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz";
+    urls = [
+      "mirror://imagemagick/releases/ImageMagick-${version}.tar.xz"
+      # the original source above removes tarballs quickly
+      "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
+    ];
     sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
   };
 

@@ -41,10 +41,13 @@ in stdenv.mkDerivation {
     done
   '';
 
-  patches =
-    singleton ./nix_plugin_paths_46.patch ++
-    singleton ./build_fixes_46.patch ++
-    singleton ./widevine.patch;
+  patches = [
+    ./build_fixes_46.patch
+    ./widevine.patch
+    (if versionOlder version "50.0.0.0"
+     then ./nix_plugin_paths_46.patch
+     else ./nix_plugin_paths_50.patch)
+  ];
 
   patchPhase = let
     diffmod = sym: "/^${sym} /{s/^${sym} //;${transform ""};s/^/${sym} /}";

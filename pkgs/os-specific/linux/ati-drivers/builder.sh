@@ -6,15 +6,14 @@ set -x
 
 die(){ echo $@; exit 1; }
 
-# custom unpack:
-mkdir fglrx
+mkdir fglrx # custom unpack:
 cd fglrx
 unzip $src
 cd ..
 run_file=$(echo fglrx/amd-driver-installer-*)
 sh $run_file --extract .
 
-eval "$patchPhase"
+eval "$patchPhase1"
 
 case "$system" in
   x86_64-linux)
@@ -31,6 +30,7 @@ case "$system" in
 esac
 
 # Handle/Build the kernel module.
+
 if test -z "$libsOnly"; then
 
   kernelVersion=$(cd ${kernel}/lib/modules && ls)
@@ -41,6 +41,7 @@ if test -z "$libsOnly"; then
   # current kbuild infrastructure allows using CONFIG_* defines
   # but ati sources don't use them yet..
   # copy paste from make.sh
+
   setSMP(){
 
     linuxincludes=$kernelBuild/include
@@ -68,7 +69,6 @@ if test -z "$libsOnly"; then
     if [ "$SMP" = 0 ]; then
       echo "assuming default: SMP=$SMP"
     fi
-
     # act on final result
     if [ ! "$SMP" = 0 ]; then
       smp="-SMP"
@@ -147,19 +147,15 @@ if test -z "$libsOnly"; then
 fi
 
 { # install
-
   mkdir -p $out/lib/xorg
-
   cp -r common/usr/include $out
   cp -r common/usr/sbin $out
   cp -r common/usr/share $out
-  cp -r common/usr/X11R6 $out
-
+  mkdir $out/bin/
+  cp -f common/usr/X11R6/bin/* $out/bin/
   # cp -r arch/$arch/lib $out/lib
-
   # what are those files used for?
   cp -r common/etc $out
-
   cp -r $DIR_DEPENDING_ON_XORG_VERSION/usr/X11R6/$lib_arch/* $out/lib/xorg
 
   # install kernel module
@@ -179,30 +175,26 @@ fi
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri/* $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so* $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/fglrx/fglrx-libGL.so.1.2 $out/lib/fglrx-libGL.so.1.2
-
   cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
-
-  # cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
   ln -s libatiuki.so.1.0 $out/lib/libatiuki.so.1
   ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so.1
   ln -s fglrx-libGL.so.1.2 $out/lib/libGL.so
-
-  ln -s libfglrx_gamma.so.1.0 $out/lib/libfglrx_gamma.so.1
+  # FIXME : This file is missing or has changed versions
+  #ln -s libfglrx_gamma.so.1.0 $out/lib/libfglrx_gamma.so.1
   # make xorg use the ati version
   ln -s $out/lib/xorg/modules/extensions/{fglrx/fglrx-libglx.so,libglx.so}
-
   # Correct some paths that are hardcoded into binary libs.
   if [ "$arch" ==  "x86_64" ]; then
     for lib in \
-      lib/xorg/modules/extensions/fglrx/fglrx-libglx.so \
-      lib/xorg/modules/glesx.so \
-      lib/dri/fglrx_dri.so \
-      lib/fglrx_dri.so \
-      lib/fglrx-libGL.so.1.2
+      xorg/modules/extensions/fglrx/fglrx-libglx.so \
+      xorg/modules/glesx.so \
+      dri/fglrx_dri.so \
+      fglrx_dri.so \
+      fglrx-libGL.so.1.2
     do
       oldPaths="/usr/X11R6/lib/modules/dri"
       newPaths="/run/opengl-driver/lib/dri"
-      sed -i -e "s|$oldPaths|$newPaths|" $out/$lib
+      sed -i -e "s|$oldPaths|$newPaths|" $out/lib/$lib
     done
   else
     oldPaths="/usr/X11R6/lib32/modules/dri\x00/usr/lib32/dri"
@@ -211,34 +203,45 @@ fi
       $out/lib/xorg/modules/extensions/fglrx/fglrx-libglx.so
 
     for lib in \
-      lib/dri/fglrx_dri.so \
-      lib/fglrx_dri.so \
-      lib/xorg/modules/glesx.so
+      dri/fglrx_dri.so \
+      fglrx_dri.so \
+      xorg/modules/glesx.so
     do
       oldPaths="/usr/X11R6/lib32/modules/dri/"
       newPaths="/run/opengl-driver-32/lib/dri"
-      sed -i -e "s|$oldPaths|$newPaths|" $out/$lib
+      sed -i -e "s|$oldPaths|$newPaths|" $out/lib/$lib
     done
 
     oldPaths="/usr/X11R6/lib32/modules/dri\x00"
     newPaths="/run/opengl-driver-32/lib/dri"
     sed -i -e "s|$oldPaths|$newPaths|" $out/lib/fglrx-libGL.so.1.2
   fi
-
   # libstdc++ and gcc are needed by some libs
-  patchelf --set-rpath $gcc/$lib_arch $out/lib/libatiadlxx.so
-  patchelf --set-rpath $gcc/$lib_arch $out/lib/xorg/modules/glesx.so
+  for pelib1 in \
+    fglrx_dri.so \
+    dri/fglrx_dri.so
+  do
+    patchelf --remove-needed libX11.so.6 $out/lib/$pelib1
+  done
+
+  for pelib2 in \
+    libatiadlxx.so \
+    xorg/modules/glesx.so \
+    dri/fglrx_dri.so \
+    fglrx_dri.so \
+    libaticaldd.so
+  do
+    patchelf --set-rpath $gcc/$lib_arch/ $out/lib/$pelib2
+  done
 }
 
 if test -z "$libsOnly"; then
 
 { # build samples
   mkdir -p $out/bin
-
   mkdir -p samples
   cd samples
   tar xfz ../common/usr/src/ati/fglrx_sample_source.tgz
-
   eval "$patchPhaseSamples"
 
   ( # build and install fgl_glxgears
@@ -252,27 +255,42 @@ if test -z "$libsOnly"; then
 
   true || ( # build and install
 
+    ###
+    ## FIXME ?
     # doesn't build  undefined reference to `FGLRX_X11SetGamma'
-    # wich should be contained in -lfglrx_gamma
+    # which should be contained in -lfglrx_gamma
+    # This should create $out/lib/libfglrx_gamma.so.1.0 ? because there is
+    # a symlink named libfglrx_gamma.so.1 linking to libfglrx_gamma.so.1.0 in $out/lib/
 
     cd programs/fglrx_gamma
     gcc -fPIC -I${libXxf86vm}/include \
 	    -I${xf86vidmodeproto}/include \
 	    -I$out/X11R6/include \
 	    -L$out/lib \
-	    -Wall -lm -lfglrx_gamma -lX11 -lXext -o fglrx_xgamma fglrx_xgamma.c 
+	    -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c 
   )
 
-  { # copy binaries and wrap them:
+  {
+    # patch and copy statically linked qt libs used by amdcccle
+    patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 &&
+    patchelf  --set-rpath $gcc/$lib_arch/ $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 &&
+    patchelf --set-rpath $gcc/$lib_arch/:$out/share/ati/:$libXrender/lib/:$libSM/lib/:$libICE/lib/:$libfontconfig/lib/:$libfreetype/lib/ $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtGui.so.4 &&
+    mkdir -p $out/share/ati
+    cp -r $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtCore.so.4 $out/share/ati/
+    cp -r $TMP/arch/$arch/usr/share/ati/$lib_arch/libQtGui.so.4 $out/share/ati/
+    # copy binaries and wrap them:
     BIN=$TMP/arch/$arch/usr/X11R6/bin
-    cp $BIN/* $out/bin
+    patchelf --set-rpath $gcc/$lib_arch/:$out/share/ati/:$libXinerama/lib/:$libXrandr/lib/ $TMP/arch/$arch/usr/X11R6/bin/amdcccle
+    patchelf --set-rpath $libXrender/lib/:$libXrandr/lib/ $TMP/arch/$arch/usr/X11R6/bin/aticonfig
+    patchelf --shrink-rpath $BIN/amdcccle
     for prog in $BIN/*; do
-      patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $out/bin/$(basename $prog)
-      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib:$gcc/lib:$qt4/lib:$LD_LIBRARY_PATH
+      cp -f $prog $out/bin &&
+      patchelf --set-interpreter $(echo $glibc/lib/ld-linux*.so.2) $out/bin/$(basename $prog) &&
+      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib/:$gcc/lib/:$out/share/ati/:$libXinerama/lib/:$libXrandr/lib/:$libfontconfig/lib/:$libfreetype/lib/:$LD_LIBRARY_PATH
     done
   }
 
-  rm -fr $out/lib/modules/fglrx # don't think those .a files are needed. They cause failure of the mod
+  rm -f $out/lib/fglrx/switchlibglx && rm -f $out/lib/fglrx/switchlibGL
 
 }
 

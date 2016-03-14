@@ -40,11 +40,15 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
+              jobs.python.x86_64-linux
+              jobs.python.i686-linux
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-linux
+              jobs.python3.i686-linux
+              jobs.python3.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
-              jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
-              jobs.glib-tested.i686-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
@@ -206,7 +210,7 @@ let
       vice = linux;
       vimHugeX = linux;
       vncrec = linux;
-      vorbisTools = linux;
+      vorbis-tools = linux;
       vsftpd = linux;
       w3m = all;
       weechat = linux;
@@ -229,7 +233,7 @@ let
       zsh = linux;
       zsnes = ["i686-linux"];
 
-      emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
+      #emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
 
       gnome = {
         gnome_panel = linux;
@@ -240,7 +244,7 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
-      rPackages = packagePlatforms pkgs.rPackages;
+      #rPackages = packagePlatforms pkgs.rPackages;
 
       strategoPackages = {
         sdf = linux;
@@ -250,9 +254,15 @@ let
         dryad = linux;
       };
 
-      pythonPackages = {
-        zfec = linux;
-      };
+      ocamlPackages = { };
+
+      perlPackages = { };
+
+      pythonPackages = { };
+      python2Packages = { };
+      python27Packages = { };
+      python3Packages = { };
+      python35Packages = { };
 
       xorg = {
         fontadobe100dpi = linux ++ darwin;

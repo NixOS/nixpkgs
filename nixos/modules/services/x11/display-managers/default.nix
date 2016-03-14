@@ -16,13 +16,6 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
-  vaapiDrivers = pkgs.buildEnv {
-    name = "vaapi-drivers";
-    paths = cfg.vaapiDrivers;
-    # We only want /lib/dri, but with a single input path, we need "/" for it to work
-    pathsToLink = [ "/" ];
-  };
-
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
     ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
@@ -56,18 +49,6 @@ let
         fi
       ''}
 
-      ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
-        # Stop systemd from handling the power button and lid switch,
-        # since presumably the desktop environment will handle these.
-        if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
-          export _INHIBITION_LOCK_TAKEN=1
-          if ! ${config.systemd.package}/bin/loginctl show-session $XDG_SESSION_ID | grep -q '^RemoteHost='; then
-            exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key --why="Desktop environment handles power events" "$0" "$sessionType"
-          fi
-        fi
-
-      ''}
-
       ${optionalString cfg.startGnuPGAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the GnuPG agent.
@@ -90,9 +71,6 @@ let
 
         # Publish access credentials in the root window.
         ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
-
-        # Keep track of devices.  Mostly useful for Phonon/KDE.
-        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-device-manager "do_routing=1"
       ''}
 
       # Tell systemd about our $DISPLAY. This is needed by the
@@ -106,8 +84,6 @@ let
       elif test -e ~/.Xdefaults; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
-
-      export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri
 
       # Speed up application start by 50-150ms according to
       # http://kdemonkey.blogspot.nl/2008/04/magic-trick.html
@@ -231,17 +207,6 @@ in
         '';
       };
 
-      desktopManagerHandlesLidAndPower = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether the display manager should prevent systemd from handling
-          lid and power events. This is normally handled by the desktop
-          environment's power manager. Turn this off when using a minimal
-          X11 setup without a full power manager.
-        '';
-      };
-
       session = mkOption {
         default = [];
         example = literalExample
@@ -321,9 +286,11 @@ in
   };
 
   config = {
-
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
-
   };
+
+  imports = [
+   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+  ];
 
 }

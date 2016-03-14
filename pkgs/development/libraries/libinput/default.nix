@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, libevdev, mtdev, udev
+, libevdev, mtdev, udev, libwacom
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
 , testsSupport ? false, check ? null, valgrind ? null
@@ -15,11 +15,11 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libinput-1.1.1";
+  name = "libinput-1.2.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "05yxz3cds65zmzj98yhsrwvnkv8c7n3zs2fksjzs2fy7vlrv9qid";
+    sha256 = "0b3f67xsy1s84cvzw22mjfkbcv6pj4p4yns4h3m0fmb7zqbvjm0p";
   };
 
   configureFlags = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libevdev mtdev udev ]
+  buildInputs = [ libevdev mtdev udev libwacom ]
     ++ optionals eventGUISupport [ cairo glib gtk3 ]
     ++ optionals documentationSupport [ doxygen graphviz ]
     ++ optionals testsSupport [ check valgrind ];

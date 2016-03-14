@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       for i in $out/bin/*; do
           wrapProgram $i \
             --set EC2_HOME $out \
-            --prefix PATH : ${ruby}/bin:${openssl}/bin
+            --prefix PATH : ${ruby}/bin:${openssl.bin}/bin
       done
 
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb

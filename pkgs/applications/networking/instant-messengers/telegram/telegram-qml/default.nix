@@ -3,17 +3,16 @@
 , libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
-  name = "telegram-qml-${version}";
-  version = "0.9.1-stable";
+  name = "telegram-qml-${meta.version}";
 
   src = fetchFromGitHub {
     owner = "Aseman-Land";
     repo = "TelegramQML";
-    rev = "v${version}";
-    sha256 = "077j06lfr6qccqv664hn0ln023xlh5cfm50kapjc2inapxj2yqmn";
+    rev = "v${meta.version}";
+    sha256 = "0j8vn845f2virvddk9yjbljy6vkr9ikyn6iy7hpj8nvr2xls3499";
   };
 
-  buildInputs = [ qtbase qtmultimedia qtquick1 libqtelegram-aseman-edition ];
+  propagatedBuildInputs = [ qtbase qtmultimedia qtquick1 libqtelegram-aseman-edition ];
   enableParallelBuild = true;
 
   patchPhase = ''
@@ -26,10 +25,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "0.9.2";
     description = "Telegram API tools for QtQml and Qml";
     homepage = src.meta.homepage;
     license = stdenv.lib.licenses.gpl3;
-    maintainer = [ maintainers.profpatsch ];
+    maintainers = [ maintainers.profpatsch ];
   };
 
 }

@@ -14,4 +14,6 @@
       # to the *boot time* of the host).
       hwclock -s
     '';
+
+  security.rngd.enable = false;
 }

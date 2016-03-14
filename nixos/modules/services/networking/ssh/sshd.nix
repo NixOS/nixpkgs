@@ -52,6 +52,8 @@ let
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
+  supportOldHostKeys = !versionAtLeast config.system.stateVersion "15.07";
+
 in
 
 {
@@ -177,7 +179,7 @@ in
         default =
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-          ] ++ optionals (!versionAtLeast config.system.stateVersion "15.07")
+          ] ++ optionals supportOldHostKeys
           [ { type = "dsa"; path = "/etc/ssh/ssh_host_dsa_key"; }
             { type = "ecdsa"; bits = 521; path = "/etc/ssh/ssh_host_ecdsa_key"; }
           ];
@@ -261,7 +263,7 @@ in
 
             serviceConfig =
               { ExecStart =
-                  "${cfgc.package}/sbin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
                   "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
@@ -302,7 +304,7 @@ in
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
-    services.openssh.extraConfig =
+    services.openssh.extraConfig = mkOrder 0
       ''
         PidFile /run/sshd.pid
 
@@ -347,6 +349,15 @@ in
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
         '')}
+
+        # Allow DSA client keys for now. (These were deprecated
+        # in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
+
+        # Re-enable DSA host keys for now.
+        ${optionalString supportOldHostKeys ''
+          HostKeyAlgorithms +ssh-dss
+        ''}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

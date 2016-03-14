@@ -35,10 +35,19 @@ in stdenv.mkDerivation rec {
                 ++ lib.optional withMySQL libmysql
                 ++ lib.optional withSQLite sqlite;
 
-  patches = [ ./postfix-script-shell.patch ./postfix-3.0-no-warnings.patch ];
+  patches = [
+    ./postfix-script-shell.patch
+    ./postfix-3.0-no-warnings.patch
+    ./post-install-script.patch
+    ./relative-symlinks.patch
+  ];
 
   preBuild = ''
     sed -e '/^PATH=/d' -i postfix-install
+    sed -e "s|@PACKAGE@|$out|" -i conf/post-install
+
+    # post-install need skip permissions check/set on all symlinks following to /nix/store
+    sed -e "s|@NIX_STORE@|$NIX_STORE|" -i conf/post-install
 
     export command_directory=$out/sbin
     export config_directory=/etc/postfix
@@ -63,7 +72,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out
     mv -v installdir/$out/* $out/
-    mv -v installdir/etc $out/etc
+    cp -rv installdir/etc $out
     sed -e '/^PATH=/d' -i $out/libexec/postfix/post-install
     wrapProgram $out/libexec/postfix/post-install \
       --prefix PATH ":" ${coreutils}/bin:${findutils}/bin:${gnugrep}/bin

@@ -189,6 +189,17 @@ _addRpathPrefix() {
     fi
 }
 
+# Return success if the specified file is an ELF object.
+isELF() {
+    local fn="$1"
+    local magic
+    exec {fd}< "$fn"
+    read -n 4 -u $fd magic
+    exec {fd}<&-
+    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
+}
+
+
 ######################################################################
 # Initialisation.
 
@@ -371,6 +382,13 @@ export NIX_BUILD_CORES
 paxmark() { true; }
 
 
+# Prevent OpenSSL-based applications from using certificates in
+# /etc/ssl.
+if [ -z "$SSL_CERT_FILE" ]; then
+  export SSL_CERT_FILE=/no-cert-file.crt
+fi
+
+
 ######################################################################
 # Textual substitution functions.
 
@@ -480,9 +498,11 @@ _defaultUnpack() {
     if [ -d "$fn" ]; then
 
         stripHash "$fn"
-        # We can't preserve hardlinks because they may have been introduced by
-        # store optimization, which might break things in the build
-        cp -pr --reflink=auto --no-preserve=timestamps "$fn" $strippedName
+
+        # We can't preserve hardlinks because they may have been
+        # introduced by store optimization, which might break things
+        # in the build.
+        cp -pr --reflink=auto "$fn" $strippedName
 
     else
 
@@ -637,14 +657,14 @@ configurePhase() {
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "$dontAddDisableDepTrack" ]; then
-        if grep -q dependency-tracking $configureScript; then
+        if grep -q dependency-tracking "$configureScript"; then
             configureFlags="--disable-dependency-tracking $configureFlags"
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "$dontDisableStatic" ]; then
-        if grep -q enable-static $configureScript; then
+        if grep -q enable-static "$configureScript"; then
             configureFlags="--disable-static $configureFlags"
         fi
     fi

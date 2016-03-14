@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, avahi, libusb1, libv4l, net_snmp
+, avahi, libjpeg, libusb1, libv4l, net_snmp
 , gettext, pkgconfig
 
 # List of { src name backend } attibute sets - see installFirmware below:
@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation {
-  inherit src;
+  inherit src version;
 
   name = "sane-backends-${version}";
 
@@ -50,11 +50,15 @@ stdenv.mkDerivation {
     mkdir -p $out/etc/udev/rules.d/
     ./tools/sane-desc -m udev > $out/etc/udev/rules.d/49-libsane.rules || \
     cp tools/udev/libsane.rules $out/etc/udev/rules.d/49-libsane.rules
+    # the created 49-libsane references /bin/sh
+    substituteInPlace $out/etc/udev/rules.d/49-libsane.rules \
+      --replace "RUN+=\"/bin/sh" "RUN+=\"${stdenv.shell}"
+
+    substituteInPlace $out/lib/libsane.la \
+      --replace "-ljpeg" "-L${libjpeg}/lib -ljpeg"
   '' + stdenv.lib.concatStrings (builtins.map installFirmware compatFirmware);
 
   meta = with stdenv.lib; {
-    inherit version;
-
     description = "SANE (Scanner Access Now Easy) backends";
     longDescription = ''
       Collection of open-source SANE backends (device drivers).

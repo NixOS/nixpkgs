@@ -30,7 +30,7 @@ in
 
     bootSize = mkOption {
       type = types.int;
-      default = 128;
+      default = 120;
       description = ''
         Size of the /boot partition, in megabytes.
       '';
@@ -66,10 +66,10 @@ in
       buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
-        # Create the image file sized to fit /boot and /, plus 4M of slack
+        # Create the image file sized to fit /boot and /, plus 20M of slack
         rootSizeBlocks=$(du -B 512 --apparent-size ${rootfsImage} | awk '{ print $1 }')
         bootSizeBlocks=$((${toString config.sdImage.bootSize} * 1024 * 1024 / 512))
-        imageSize=$((rootSizeBlocks * 512 + bootSizeBlocks * 512 + 4096 * 1024))
+        imageSize=$((rootSizeBlocks * 512 + bootSizeBlocks * 512 + 20 * 1024 * 1024))
         truncate -s $imageSize $out
 
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
@@ -77,8 +77,8 @@ in
             label: dos
             label-id: 0x2178694e
 
-            start=1M, size=$bootSizeBlocks, type=b, bootable
-            type=83
+            start=8M, size=$bootSizeBlocks, type=b, bootable
+            start=${toString (8 + config.sdImage.bootSize)}M, type=83
         EOF
 
         # Copy the rootfs into the SD image

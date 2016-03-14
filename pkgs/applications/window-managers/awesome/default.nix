@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "3.5.6";
+  version = "3.5.8";
 in with luaPackages;
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "1ms6a3l1i2jdhzrd1zr25cqckznmb44qgz4n635jam42hzhrvx1p";
+    sha256 = "1iifcyphgibmh3cvsy8agjrl9zjl80scrg0bcgnwywmxaxncjc3w";
   };
 
   meta = with stdenv.lib; {

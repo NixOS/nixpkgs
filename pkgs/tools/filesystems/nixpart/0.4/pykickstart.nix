@@ -1,6 +1,6 @@
-{ stdenv, python, buildPythonPackage, fetchurl, urlgrabber }:
+{ stdenv, python, buildPythonApplication, fetchurl, urlgrabber }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "pykickstart-${version}";
   version = "1.99.39";
 

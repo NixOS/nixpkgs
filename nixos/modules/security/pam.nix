@@ -75,7 +75,7 @@ let
       };
 
       oathAuth = mkOption {
-        default = config.security.pam.enableOATH;
+        default = config.security.pam.oath.enable;
         type = types.bool;
         description = ''
           If set, the OATH Toolkit will be used.
@@ -259,8 +259,8 @@ let
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${optionalString cfg.oathAuth
-              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
+          ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
+              "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable ''
@@ -302,8 +302,6 @@ let
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          ${optionalString cfg.oathAuth
-              "session optional ${pkgs.oathToolkit}/lib/security/pam_oath.so window=5 usersfile=/etc/users.oath"}
           ${optionalString cfg.startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString cfg.forwardXAuth
@@ -405,13 +403,6 @@ in
       '';
     };
 
-    security.pam.enableOATH = mkOption {
-      default = false;
-      description = ''
-        Enable the OATH (one-time password) PAM module.
-      '';
-    };
-
     security.pam.enableU2F = mkOption {
       default = false;
       description = ''
@@ -446,7 +437,7 @@ in
       ++ optional config.users.ldap.enable pam_ldap
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
-      ++ optionals config.security.pam.enableOATH [ pkgs.oathToolkit ]
+      ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
       ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
       ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
 

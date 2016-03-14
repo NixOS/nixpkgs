@@ -23,7 +23,7 @@ else
 with { inherit (stdenv.lib) optional optionalString; };
 
 let
-  version = "11.0.8";
+  version = "11.1.1";
   # this is the default search path for DRI drivers
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
         + head (splitString "." version) + ''.x/${version}/mesa-${version}.tar.xz'')
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "5696e4730518b6805d2ed5def393c4293f425a2c2c01bd5ed4bdd7ad62f7ad75";
+    sha256 = "087xlxl8dzmhzjilpsdiy19dn106spq120c9ndgnn4qlqm7hgnv4";
   };
 
   prePatch = "patchShebangs .";
@@ -86,12 +86,16 @@ stdenv.mkDerivation {
     # TODO: Figure out how to enable opencl without having a runtime dependency on clang
     "--disable-opencl"
 
-    "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast"
+    (if "armv7l-linux" == stdenv.system
+      then null
+      else "--with-gallium-drivers=svga,i915,ilo,r300,r600,radeonsi,nouveau,freedreno,swrast")
     "--enable-shared-glapi"
     "--enable-sysfs"
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-glx-tls"
-    "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast"
+    (if "armv7l-linux" == stdenv.system
+      then "--with-dri-drivers="
+      else "--with-dri-drivers=i915,i965,nouveau,radeon,r200,swrast")
     "--with-egl-platforms=x11,wayland,drm"
 
     "--enable-gallium-llvm"

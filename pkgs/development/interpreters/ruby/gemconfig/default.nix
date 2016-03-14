@@ -21,6 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
+, libmsgpack
 }:
 
 let
@@ -40,6 +41,10 @@ in
     '';
   };
 
+  eventmachine = attrs: {
+    buildInputs = [ openssl ];
+  };
+
   ffi = attrs: {
     buildInputs = [ libffi pkgconfig ];
   };
@@ -54,6 +59,10 @@ in
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
     buildFlags = [ "--with-system-v8=true" ];
+  };
+
+  msgpack = attrs: {
+    buildInputs = [ libmsgpack ];
   };
 
   mysql2 = attrs: {
@@ -79,7 +88,6 @@ in
       "--with-exslt-lib=${libxslt.out}/lib"
       "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
-    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   patron = attrs: {
@@ -141,10 +149,6 @@ in
       substituteInPlace lib/tzinfo/zoneinfo_data_source.rb \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
     '';
-  };
-
-  unf_ext = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin darwin.libobjc;
   };
 
   xapian-ruby = attrs: {

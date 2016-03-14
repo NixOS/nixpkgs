@@ -156,13 +156,16 @@ in
       inputClassSections = mkOption {
         type = types.listOf types.lines;
         default = [];
-        example = [ ''
-           Identifier      "Trackpoint Wheel Emulation"
-           MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
-           Option          "EmulateWheel"          "true
-           Option          "EmulateWheelButton"    "2"
-           Option          "Emulate3Buttons"       "false"
-          '' ];
+        example = literalExample ''
+          [ '''
+              Identifier      "Trackpoint Wheel Emulation"
+              MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
+              Option          "EmulateWheel"          "true
+              Option          "EmulateWheelButton"    "2"
+              Option          "Emulate3Buttons"       "false"
+            '''
+          ]
+        '';
         description = "Content of additional InputClass sections of the X server configuration file.";
       };
 
@@ -213,15 +216,6 @@ in
         description = ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
-        '';
-      };
-
-      vaapiDrivers = mkOption {
-        type = types.listOf types.path;
-        default = [ ];
-        example = literalExample "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
-        description = ''
-          Packages providing libva acceleration drivers.
         '';
       };
 

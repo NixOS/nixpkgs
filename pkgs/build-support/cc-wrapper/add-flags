@@ -1,4 +1,4 @@
-# `-B@out@/bin' forces gcc to use ld-wrapper.sh when calling ld.
+# `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
 export NIX_CFLAGS_COMPILE="-B@out@/bin/ $NIX_CFLAGS_COMPILE"
 
 if [ -e @out@/nix-support/libc-cflags ]; then

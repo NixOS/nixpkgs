@@ -11,13 +11,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.9.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "1mhi4y820h2wxz6hqmr95c7yvklyw578dd9c83jr463w7rq0rgr6";
+    sha256 = "0c3a504gjdh4mxvifi0wcppqhd786d1gxncf04dqlq3l5wisfbbw";
   };
 
   buildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

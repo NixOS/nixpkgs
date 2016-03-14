@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml }:
+{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, cmake, kodi, steam, libcec_platform, tinyxml, unzip }:
 
 let
 
@@ -70,17 +70,15 @@ in
 
   };
 
-  genesis = mkKodiPlugin rec {
+  genesis = (mkKodiPlugin rec {
 
     plugin = "genesis";
     namespace = "plugin.video.genesis";
-    version = "5.1.3";
+    version = "5.1.4";
 
-    src = fetchFromGitHub {
-      owner = "lambda81";
-      repo = "lambda-addons";
-      rev = "f2cd04f33af88d60e1330573bbf2ef9cee7f0a56";
-      sha256 = "0z0ldckqqif9v5nhnjr5n2495cm3z9grjmrh7czl4xlnq4bvviqq";
+    src = fetchurl {
+      url = "https://offshoregit.com/lambda81/lambda-repo/${namespace}/${namespace}-${version}.zip";
+      sha256 = "0b0pdzgg42mgxgkb6sb83rldh4k19c3l9z7g2wnvxm3s2p6rjy3v";
     };
 
     meta = with stdenv.lib; {
@@ -89,8 +87,7 @@ in
       platforms = platforms.all;
       maintainers = with maintainers; [ edwtjo ];
     };
-
-  };
+  }).override { buildInputs = [ unzip ]; };
 
   urlresolver = (mkKodiPlugin rec {
 
@@ -112,24 +109,21 @@ in
       maintainers = with maintainers; [ edwtjo ];
     };
   }).override {
-    patches = [ (fetchpatch {
-      url = https://github.com/Eldorados/script.module.urlresolver/pull/355.patch;
-      sha256 = "0q1n2sqdjqq32202s6ifh81c9a1l5a7yfkkf170dbkiajvxglz1m";
-    }) ];
+    postPatch = "sed -i -e 's,settings_file = os.path.join(addon_path,settings_file = os.path.join(profile_path,g' lib/urlresolver/common.py";
   };
 
-  salts = (mkKodiPlugin rec {
+  salts = mkKodiPlugin rec {
 
     plugin = "salts";
     namespace = "plugin.video.salts";
-    version = "1.0.98";
+    version = "2.0.6";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "tknorris";
       repo = plugin;
-      rev = "02cb63360ac1f60c01ec29d1da94902542f9a47a";
-      sha256 = "10cy633g383m1xy6yap46aqzyz96dh62y7c5rn5nvyw8ms18089z";
+      rev = "5100565bec5818cdcd8a891ab6a6d67b0018e070";
+      sha256 = "00nlcddmgzyi3462i12qikdryfwqzqd1i30rkp485ay16akyj0lr";
     };
 
     meta = with stdenv.lib; {
@@ -137,11 +131,6 @@ in
       description = "Stream All The Sources";
       maintainers = with maintainers; [ edwtjo ];
     };
-  }).override {
-    patches = [ (fetchpatch {
-      url = https://github.com/tknorris/salts/pull/115.patch;
-      sha256 = "157dhp049mw8lna6cg3x549jv2b9zq1vj6v94mil65q2hlw09sjd";
-    }) ];
   };
 
   svtplay = mkKodiPlugin rec {
@@ -226,13 +215,13 @@ in
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
-    version = "2.1.18";
+    version = "2.2.13";
 
     src = fetchFromGitHub {
       owner = "kodi-pvr";
       repo = "pvr.hts";
-      rev = "016b0b3251d6d5bffaf68baf59010e4347759c4a";
-      sha256 = "03lhxipz03r516pycabqc9b89kd7wih3c2dr4p602bk64bsmpi0j";
+      rev = "3274354511e970e2101c2aa437001b2f245f80da";
+      sha256 = "0i7cb61pjv6vbj3x96cm1n4w91mvc8z6lxa8ykjasrrbi95ph7ld";
     };
 
     meta = with stdenv.lib; {

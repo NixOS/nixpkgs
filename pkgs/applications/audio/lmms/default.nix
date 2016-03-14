@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, SDL, alsaLib, cmake, fftwSinglePrec, fluidsynth
+{ stdenv, fetchFromGitHub, SDL, alsaLib, cmake, fftwSinglePrec, fluidsynth
 , fltk13, libjack2, libvorbis , libsamplerate, libsndfile, pkgconfig
-, libpulseaudio, qt4, freetype
+, libpulseaudio, qt4, freetype, libgig
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   name = "lmms-${version}";
-  version = "1.1.3";
+  version = "1.1.90";
 
-  src = fetchurl {
-    url = "https://github.com/LMMS/lmms/archive/v${version}.tar.gz";
-    sha256 = "1g76z7ha3hd53vbqaq9n1qg6s3lw8zzaw51iny6y2bz0j1xqwcsr";
+  src = fetchFromGitHub {
+    owner = "LMMS";
+    repo = "lmms";
+    rev = "v${version}";
+    sha256 = "0njiarndwqamqiinr1wbwkzjn87yzr1z5k9cfwk0jdkbalgakkq3";
   };
 
   buildInputs = [
-    SDL alsaLib cmake fftwSinglePrec fltk13 fluidsynth libjack2
+    SDL alsaLib cmake fftwSinglePrec fltk13 fluidsynth libjack2 libgig
     libsamplerate libsndfile libvorbis pkgconfig libpulseaudio qt4
   ];
 

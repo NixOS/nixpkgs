@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, perl, nettools, java, polyml, proofgeneral }:
+{ stdenv, fetchurl, perl, nettools, java, polyml }:
 # nettools needed for hostname
 
 let
-  dirname = "Isabelle2014";
+  dirname = "Isabelle2016";
   theories = ["HOL" "FOL" "ZF"];
 in
 
 stdenv.mkDerivation {
-  name = "isabelle-2014";
+  name = "isabelle-2016";
   inherit dirname theories;
 
   src = if stdenv.isDarwin
     then fetchurl {
-      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_macos.tar.gz;
-      sha256 = "1aa3vz2nnkkyd4mlsqbs69jqfxlll5h0k5fj9m1j9wqiddqwvwcf";
+      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
+      sha256 = "0wawf0cjc52h8hif1867p33qhlh6qz0fy5i2kr1gbf7psickd6iw";
     }
     else fetchurl {
-      url = http://isabelle.in.tum.de/website-Isabelle2014/dist/Isabelle2014_linux.tar.gz;
-      sha256 = "0z81pwwllavka4r57fx6yi9kbpbb9xbanp8dsjix49qpyj2a72jy";
+      url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
+      sha256 = "0jh1qrsyib13fycymwvw7dq7xfy4iyplwq0s65ash842cdzkbxb4";
     };
 
   buildInputs = [ perl polyml ]
@@ -32,18 +32,16 @@ stdenv.mkDerivation {
       --replace /usr/bin/env $ENV
     substituteInPlace lib/Tools/install \
       --replace /usr/bin/env $ENV
+    sed -i 's|isabelle_java java|${java}/bin/java|g' lib/Tools/java
     substituteInPlace etc/settings \
-      --subst-var-by ML_HOME "${polyml}/bin" \
-      --subst-var-by PROOFGENERAL_HOME "${proofgeneral}/share/emacs/site-lisp/ProofGeneral"
+      --subst-var-by ML_HOME "${polyml}/bin"
     substituteInPlace contrib/jdk/etc/settings \
       --replace ISABELLE_JDK_HOME= '#ISABELLE_JDK_HOME='
-    substituteInPlace contrib/polyml-5.5.2-1/etc/settings \
-      --replace 'ML_HOME="$POLYML_HOME/$ML_PLATFORM"' \
-                "ML_HOME=\"${polyml}/bin\""
-  '';
-
-  buildPhase = ''
-    ISABELLE_JDK_HOME=${java} ./bin/isabelle build -s $theories
+    substituteInPlace contrib/polyml-*/etc/settings \
+      --replace '$POLYML_HOME/$ML_PLATFORM' ${polyml}/bin \
+      --replace '$POLYML_HOME/$PLATFORM/polyml' ${polyml}/bin/poly
+    substituteInPlace lib/scripts/run-polyml* lib/scripts/polyml-version \
+      --replace '$ML_HOME/poly' ${polyml}/bin/poly
   '';
 
   installPhase = ''

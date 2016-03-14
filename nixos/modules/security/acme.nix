@@ -56,8 +56,8 @@ let
 
       plugins = mkOption {
         type = types.listOf (types.enum [
-          "cert.der" "cert.pem" "chain.der" "chain.pem" "external_pem.sh"
-          "fullchain.der" "fullchain.pem" "key.der" "key.pem" "account_key.json"
+          "cert.der" "cert.pem" "chain.pem" "external.sh"
+          "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
         ]);
         default = [ "fullchain.pem" "key.pem" "account_key.json" ];
         description = ''

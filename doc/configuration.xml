@@ -89,7 +89,7 @@ packages via <literal>packageOverrides</literal></title>
 
 <para>You can define a function called
 <varname>packageOverrides</varname> in your local
-<filename>~/.nixpkgs/config</filename> to overide nix packages.  It
+<filename>~/.nixpkgs/config.nix</filename> to overide nix packages.  It
 must be a function that takes pkgs as an argument and return modified
 set of packages.
 

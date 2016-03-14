@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   
   postInstall = ''
     wrapProgram $out/bin/nut-scanner --prefix LD_LIBRARY_PATH : \
-      "$out/lib:${neon}/lib:${libusb}/lib:${avahi}/lib:${freeipmi}/lib"
+      "$out/lib:${neon}/lib:${libusb.out}/lib:${avahi}/lib:${freeipmi}/lib"
   '';
 
   meta = {

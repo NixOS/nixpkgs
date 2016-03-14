@@ -1,15 +1,15 @@
-{ stdenv, lib, autoconf, automake, go, file, git, wget, gnupg1, squashfsTools, cpio
-, fetchurl, fetchFromGitHub }:
+{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg1, trousers, squashfsTools,
+  cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper }:
 
 let
   coreosImageRelease = "794.1.0";
   coreosImageSystemdVersion = "222";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
-  stage1Flavours = [ "coreos" "fly" ];
+  stage1Flavours = [ "coreos" "fly" "host" ];
 
 in stdenv.mkDerivation rec {
-  version = "0.14.0";
+  version = "1.1.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "0dmgs9s40xhan2rh9f5n0k5gv8p2dn946zffq02sq35qqvi67s71";
+      sha256 = "1pl5gbfd9wr8nh2h249g7sjs31jz21g24mw375zki9gdhhnpn570";
   };
 
   stage1BaseImage = fetchurl {
@@ -25,7 +25,10 @@ in stdenv.mkDerivation rec {
     sha256 = "05nzl3av6cawr8v203a8c95c443g6h1nfy2n4jmgvn0j4iyy44ym";
   };
 
-  buildInputs = [ autoconf automake go file git wget gnupg1 squashfsTools cpio ];
+  buildInputs = [
+    autoreconfHook go file git wget gnupg1 trousers squashfsTools cpio acl systemd
+    makeWrapper
+  ];
 
   preConfigure = ''
     ./autogen.sh
@@ -45,6 +48,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -Rv $BUILDDIR/bin/* $out/bin
+    wrapProgram $out/bin/rkt \
+      --prefix LD_LIBRARY_PATH : ${systemd}/lib \
+      --prefix PATH : ${iptables}/bin
   '';
 
   meta = with lib; {

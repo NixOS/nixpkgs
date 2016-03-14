@@ -13,12 +13,41 @@ let
   haveTransport = cfg.transport != "";
   haveVirtual = cfg.virtual != "";
 
+  clientAccess =
+    if (cfg.dnsBlacklistOverrides != "")
+    then [ "check_client_access hash:/etc/postfix/client_access" ]
+    else [];
+
+  dnsBl =
+    if (cfg.dnsBlacklists != [])
+    then [ (concatStringsSep ", " (map (s: "reject_rbl_client " + s) cfg.dnsBlacklists)) ]
+    else [];
+
+  clientRestrictions = concatStringsSep ", " (clientAccess ++ dnsBl);
+
   mainCf =
     ''
       compatibility_level = 2
 
       mail_owner = ${user}
       default_privs = nobody
+
+      # NixOS specific locations
+      data_directory = /var/lib/postfix/data
+      queue_directory = /var/lib/postfix/queue
+
+      # Default location of everything in package
+      meta_directory = ${pkgs.postfix}/etc/postfix
+      command_directory = ${pkgs.postfix}/bin
+      sample_directory = /etc/postfix
+      newaliases_path = ${pkgs.postfix}/bin/newaliases
+      mailq_path = ${pkgs.postfix}/bin/mailq
+      readme_directory = no
+      sendmail_path = ${pkgs.postfix}/bin/sendmail
+      daemon_directory = ${pkgs.postfix}/libexec/postfix
+      manpage_directory = ${pkgs.postfix}/share/man
+      html_directory = ${pkgs.postfix}/share/postfix/doc/html
+      shlib_directory = no
 
     ''
     + optionalString config.networking.enableIPv6 ''
@@ -87,6 +116,9 @@ let
     + optionalString haveVirtual ''
       virtual_alias_maps = hash:/etc/postfix/virtual
     ''
+    + optionalString (cfg.dnsBlacklists != []) ''
+      smtpd_client_restrictions = ${clientRestrictions}
+    ''
     + cfg.extraConfig;
 
   masterCf = ''
@@ -144,6 +176,7 @@ let
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
+  checkClientAccessFile = pkgs.writeText "postfix-check-client-access" cfg.dnsBlacklistOverrides;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
   masterCfFile = pkgs.writeText "postfix-master.cf" masterCf;
   transportFile = pkgs.writeText "postfix-transport" cfg.transport;
@@ -349,6 +382,17 @@ in
         ";
       };
 
+      dnsBlacklists = mkOption {
+        default = [];
+        type = with types; listOf string;
+        description = "dns blacklist servers to use with smtpd_client_restrictions";
+      };
+
+      dnsBlacklistOverrides = mkOption {
+        default = "";
+        description = "contents of check_client_access for overriding dnsBlacklists";
+      };
+
       extraMasterConf = mkOption {
         type = types.lines;
         default = "";
@@ -435,31 +479,35 @@ in
               mkdir -p /var/lib
               mv /var/postfix /var/lib/postfix
             fi
-            mkdir -p /var/lib/postfix/data /var/lib/postfix/queue/{pid,public,maildrop}
 
-            chown -R ${user}:${group} /var/lib/postfix
-            chown root /var/lib/postfix/queue
-            chown root /var/lib/postfix/queue/pid
-            chgrp -R ${setgidGroup} /var/lib/postfix/queue/{public,maildrop}
-            chmod 770 /var/lib/postfix/queue/{public,maildrop}
+            # All permissions set according ${pkgs.postfix}/etc/postfix/postfix-files script
+            mkdir -p /var/lib/postfix /var/lib/postfix/queue/{pid,public,maildrop}
+            chmod 0755 /var/lib/postfix
+            chown root:root /var/lib/postfix
 
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
+            chmod 0755 /var/lib/postfix/conf
+            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
+
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
-              postalias /var/lib/postfix/conf/${to}
+              ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
             '') cfg.aliasFiles)}
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
-              postmap /var/lib/postfix/conf/${to}
+              ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
             '') cfg.mapFiles)}
 
             mkdir -p /var/spool/mail
             chown root:root /var/spool/mail
             chmod a+rwxt /var/spool/mail
             ln -sf /var/spool/mail /var/
+
+            #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
+            ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
     }
@@ -472,6 +520,9 @@ in
     })
     (mkIf haveVirtual {
       services.postfix.mapFiles."virtual" = virtualFile;
+    })
+    (mkIf (cfg.dnsBlacklists != []) {
+      services.postfix.mapFiles."client_access" = checkClientAccessFile;
     })
   ]);
 

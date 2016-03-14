@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinuxCurses, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, libwebp, curl, libinput, systemd }:
+{ stdenv, fetchurl, pkgconfig, openssl, libjpeg, zlib, freetype, fontconfig, fribidi, SDL2, SDL, mesa, giflib, libpng, libtiff, glib, gst_all_1, libpulseaudio, libsndfile, xorg, libdrm, libxkbcommon, udev, utillinux, dbus, bullet, luajit, python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg, dbus_libs, alsaLib, poppler, libraw, libspectre, xineLib, libwebp, curl, libinput, systemd }:
 
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.15.0";
+  version = "1.16.1";
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.gz";
-    sha256 = "1x5n2afy5z1akam5y187ajk52mq2k9lwmz7nlrxp92rvx1jf6li5";
+    url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
+    sha256 = "116s4lcfj5lrfhyvvka3np9glqyrh21cyl9rhw7al0wgb60vw0gg";
   };
 
   buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
-    xorg.libX11 udev utillinuxCurses systemd ];
+    xorg.libX11 udev utillinux systemd ];
 
   propagatedBuildInputs = [ libxkbcommon python27Packages.dbus dbus libjpeg xorg.libXcomposite
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext

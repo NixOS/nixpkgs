@@ -3,7 +3,8 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip }:
+{ python, setuptools, unzip, wrapPython, lib, bootstrapped-pip
+, ensureNewerSourcesHook }:
 
 { name
 
@@ -41,6 +42,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Additional flags to pass to "pip install".
+, installFlags ? []
+
 , ... } @ attrs:
 
 
@@ -60,6 +64,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   name = namePrefix + name;
 
   buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
+    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
 
   # propagate python/setuptools to active setup-hook in nix-shell
@@ -93,7 +98,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     pushd dist
-    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache
+    ${bootstrapped-pip}/bin/pip install *.whl --no-index --prefix=$out --no-cache ${toString installFlags}
     popd
 
     runHook postInstall
@@ -112,7 +117,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
 
-    # check if we have two packagegs with the same name in closure and fail
+    # check if we have two packages with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
     ${python.interpreter} ${./catch_conflicts.py}
   '';
@@ -135,7 +140,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   } // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
-    # a marker for release utilies to discover python packages
+    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
 })

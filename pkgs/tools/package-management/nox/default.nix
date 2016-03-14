@@ -1,6 +1,6 @@
 { lib, pythonPackages, fetchurl }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "nox-${version}";
   version = "0.0.2";
   namePrefix = "";

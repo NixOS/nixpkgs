@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libpfm, zlib, python, pkgconfig, pythonPackages, which, procps }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
+  version = "4.0.3";
   name = "rr-${version}";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "rr";
     rev = version;
-    sha256 = "02njg9riziyvgp0q39lhpyf32p1hjjk1wih5dvl74wrzy5anhbwk";
+    sha256 = "0k12r1hzkn5286kz5cg4mvii92m0prs58przchr495r9hfjcy276";
   };
 
   patchPhase = ''

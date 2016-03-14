@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.49.0";
+  version = "2.52.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0jc476pg07c0nwccprhwgjdlvvb2fdzza9xrjqzc0c42c5v7qzxa";
+    sha256 = "1la114vhkm73iv0rrzwws28ydiszl58q5y9d6aafn5sh16ph2aws";
   };
 
   inherit python;
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     export HOME=$TMPDIR/fakehome
     export POPPLER_INC_DIR=${poppler_utils}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils}/lib
+    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
     export MAGICK_INC=${imagemagick}/include/ImageMagick
     export MAGICK_LIB=${imagemagick}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils}/bin
+                     --prefix PATH : ${poppler_utils.out}/bin
     done
   '';
 

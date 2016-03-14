@@ -49,7 +49,12 @@ in {
 
       domains = mkOption {
         type = types.str;
-        description = "Local domains set; messages from them are signed, not verified.";
+        default = "csl:${config.networking.hostName}";
+        example = "csl:example.com,mydomain.net";
+        description = ''
+          Local domains set (see <literal>opendkim(8)</literal> for more information on datasets).
+          Messages from them are signed, not verified.
+        '';
       };
 
       keyFile = mkOption {
@@ -76,8 +81,6 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-
-    services.opendkim.domains = mkDefault "csl:${config.networking.hostName}";
 
     users.extraUsers = optionalAttrs (cfg.user == "opendkim") (singleton
       { name = "opendkim";

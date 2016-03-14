@@ -10,7 +10,7 @@ Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/plugins/platforms/xcb/gl_in
                  QLibrary lib(QLatin1String("GL"));
 +                if (!lib.load()) {
 +                    // Fallback to Mesa driver
-+                    lib.setFileName(QLatin1String("@mesa@/lib/libGL"));
++                    lib.setFileName(QLatin1String("@mesa_lib@/lib/libGL"));
 +                }
                  glXGetProcAddressARB = (qt_glXGetProcAddressARB) lib.resolve("glXGetProcAddressARB");
              }

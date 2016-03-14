@@ -10,12 +10,6 @@ rec {
     aclSupport = false;
   });
 
-  curlMinimal = curl.override {
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  };
-
   busyboxMinimal = busybox.override {
     useMusl = true;
     enableStatic = true;
@@ -57,7 +51,15 @@ rec {
         cp -d ${glibc.out}/lib/crt?.o $out/lib
 
         cp -rL ${glibc.dev}/include $out
-        chmod -R u+w $out/include
+        chmod -R u+w "$out"
+
+        # glibc can contain linker scripts: find them, copy their deps,
+        # and get rid of absolute paths (nuke-refs would make them useless)
+        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc}' | sort -u)
+        for f in $lScripts; do
+          substituteInPlace "$f" --replace '${glibc}/lib/' ""
+        done
 
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
@@ -79,14 +81,12 @@ rec {
         cp -d ${gawk}/bin/awk $out/bin
         cp ${gnutar}/bin/tar $out/bin
         cp ${gzip}/bin/gzip $out/bin
-        cp ${bzip2}/bin/bzip2 $out/bin
+        cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
-        cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin
@@ -112,16 +112,16 @@ rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc}/lib/libmpc*.so* $out/lib
-        cp -d ${zlib}/lib/libz.so* $out/lib
+        cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
-        cp -d ${binutils}/lib/lib*.so* $out/lib
+        cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 

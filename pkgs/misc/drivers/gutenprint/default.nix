@@ -1,78 +1,51 @@
 # this package was called gimp-print in the past
-{ fetchurl, stdenv, pkgconfig, composableDerivation, cups
-, libtiff, libpng, makeWrapper, openssl, gimp }:
+{ stdenv, lib, fetchurl, pkgconfig
+, ijs, makeWrapper
+, gimp2Support ? false, gimp
+, cupsSupport ? true, cups, libusb, perl
+}:
 
-let
-   version = "5.2.10";
-   inherit (composableDerivation) edf wwf;
-in
-
-composableDerivation.composableDerivation {} {
-  name = "gutenprint-${version}";
+stdenv.mkDerivation rec {
+  name = "gutenprint-5.2.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.bz2";
-    sha256 = "0n8f6vpadnagrp6yib3mca1c3lgwl4vmma16s44riyrd84mka7s3";
+    url = "mirror://sourceforge/gimp-print/${name}.tar.bz2";
+    sha256 = "1yadw96rgp1z0jv1wxrz6cds36nb693w3xlv596xw9r5w394r8y1";
   };
 
-  # gimp, gui is still not working (TODO)
-  buildInputs = [ makeWrapper openssl pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs =
+    [ ijs ]
+    ++ lib.optionals gimp2Support [ gimp.gtk gimp ]
+    ++ lib.optionals cupsSupport [ cups libusb perl ];
 
-  configureFlags = ["--enable-static-genppd"];
-  NIX_CFLAGS_COMPILE="-include stdio.h";
-  
-  #preConfigure = ''
-  #  configureFlags="--with-cups=$out/usr-cups $configureFlags"
-  #'';
-  
-  /*
-     is this recommended? without it this warning is printed:
+  configureFlags = lib.optionals cupsSupport [
+    "--disable-static-genppd" # should be harmless on NixOS
+  ];
 
-            ***WARNING: Use of --disable-static-genppd or --disable-static
-                        when building CUPS is very dangerous.  The build may
-                        fail when building the PPD files, or may *SILENTLY*
-                        build incorrect PPD files or cause other problems.
-                        Please review the README and release notes carefully!
-  */
-
-  installPhase = ''
-    eval "make install $installArgs"
-    mkdir -p $out/lib/cups
-    ln -s $out/filter $out/lib/cups/
-    wrapProgram $out/filter/rastertogutenprint.5.2 --prefix LD_LIBRARY_PATH : $out/lib
-    wrapProgram $out/sbin/cups-genppd.5.2 --prefix LD_LIBRARY_PATH : $out/lib
+  # FIXME: hacky because we modify generated configure, but I haven't found a better way.
+  # makeFlags doesn't change this everywhere (e.g. in cups-genppdupdate).
+  preConfigure = lib.optionalString cupsSupport ''
+    sed -i \
+      -e "s,cups_conf_datadir=.*,cups_conf_datadir=\"$out/share/cups\",g" \
+      -e "s,cups_conf_serverbin=.*,cups_conf_serverbin=\"$out/lib/cups\",g" \
+      -e "s,cups_conf_serverroot=.*,cups_conf_serverroot=\"$out/etc/cups\",g" \
+      configure
+  '' + lib.optionalString gimp2Support ''
+    sed -i \
+      -e "s,gimp2_plug_indir=.*,gimp2_plug_indir=\"$out/lib/gimp/${gimp.majorVersion}\",g" \
+      configure
   '';
 
-  meta = { 
+  enableParallelBuilding = true;
+
+  # Testing is very, very long.
+  # doCheck = true;
+
+  meta = with stdenv.lib; {
     description = "Ghostscript and cups printer drivers";
     homepage = http://sourceforge.net/projects/gimp-print/;
-    license = "GPL";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
-
-  mergeAttrBy = { installArgs = stdenv.lib.concat; };
-
-  # most interpreters aren't tested yet.. (see python for example how to do it)
-  flags =
-      wwf {
-        name = "gimp2";
-        enable = {
-          buildInputs = [gimp gimp.gtk];
-          installArgs = [ "gimp2_plug_indir=$out/${gimp.name}-plugins" ];
-        };
-      }
-      // {
-        cups = {
-          set = {
-           buildInputs = [cups libtiff libpng ];
-           installArgs = [ "cups_conf_datadir=$out cups_conf_serverbin=$out cups_conf_serverroot=$out"];
-          };
-        };
-      }
-    ;
-
-  cfg = {
-    gimp2Support = true;
-    cupsSupport = true;
-  };
-
 }

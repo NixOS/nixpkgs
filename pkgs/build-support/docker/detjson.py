@@ -24,9 +24,11 @@ SAFEDELS["container_config"] = SAFEDELS["config"]
 
 def makedet(j, safedels):
     for k,v in safedels.items():
+        if k not in j:
+            continue
         if type(v) == dict:
             makedet(j[k], v)
-        elif k in j and j[k] == v:
+        elif j[k] == v:
             del j[k]
 
 def main():

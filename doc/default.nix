@@ -43,6 +43,11 @@ stdenv.mkDerivation {
     cp -s '${sources-langs}'/* ./languages-frameworks
   ''
   + toDocbook {
+      inputFile = ./introduction.md;
+      outputFile = "introduction.xml";
+      useChapters = true;
+    }
+  + toDocbook {
       inputFile = ./haskell-users-guide.md;
       outputFile = "haskell-users-guide.xml";
       useChapters = true;
@@ -51,8 +56,11 @@ stdenv.mkDerivation {
       inputFile = ./../pkgs/development/idris-modules/README.md;
       outputFile = "languages-frameworks/idris.xml";
     }
+  + toDocbook {
+      inputFile = ./../pkgs/development/r-modules/README.md;
+      outputFile = "languages-frameworks/r.xml";
+    }
   + ''
-    cat languages-frameworks/idris.xml
     echo ${nixpkgsVersion} > .version
 
     xmllint --noout --nonet --xinclude --noxincludenode \

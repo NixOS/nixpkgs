@@ -9,7 +9,7 @@ let
   common = { name, src }: stdenv.mkDerivation rec {
     inherit name src;
 
-    outputs = [ "out" "doc" ];
+    outputs = [ "out" "man" "doc" ];
 
     nativeBuildInputs = [ perl pkgconfig ];
 
@@ -86,22 +86,25 @@ let
 
 in rec {
 
-   nix = nixStable;
+  nix = nixStable;
 
-   nixStable = common rec {
-     name = "nix-1.10";
-     src = fetchurl {
-       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-       sha256 = "5612ca7a549dd1ee20b208123e041aaa95a414a0e8f650ea88c672dc023d10f6";
-     };
-   };
+  nixStable = common rec {
+    name = "nix-1.11.2";
+    src = fetchurl {
+      url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
+      sha256 = "fc1233814ebb385a2a991c1fb88c97b344267281e173fea7d9acd3f9caf969d6";
+    };
+  };
 
-   nixUnstable = lib.lowPrio (common rec {
-     name = "nix-1.11pre4379_786046c";
-     src = fetchurl {
-       url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
-       sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
-     };
-   });
+  nixUnstable = nixStable;
+  /*
+  nixUnstable = lib.lowPrio (common rec {
+    name = "nix-1.11pre4379_786046c";
+    src = fetchurl {
+      url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
+      sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
+    };
+  });
+  */
 
 }

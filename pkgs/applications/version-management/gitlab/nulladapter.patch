@@ -1,0 +1,29 @@
+index acd1874..f493451 100644
+--- a/Gemfile
++++ b/Gemfile
+@@ -318,3 +318,5 @@ gem 'oauth2', '~> 1.0.0'
+ 
+ # Soft deletion
+ gem "paranoia", "~> 2.0"
++
++gem "activerecord-nulldb-adapter"
+index 14d2c76..7a010f0 100644
+--- a/Gemfile.lock
++++ b/Gemfile.lock
+@@ -34,6 +34,8 @@ GEM
+       activesupport (= 4.2.5.1)
+       arel (~> 6.0)
+     activerecord-deprecated_finders (1.0.4)
++    activerecord-nulldb-adapter (0.3.2)
++      activerecord (>= 2.0.0)
+     activerecord-session_store (0.1.2)
+       actionpack (>= 4.0.0, < 5)
+       activerecord (>= 4.0.0, < 5)
+@@ -880,6 +882,7 @@ DEPENDENCIES
+   RedCloth (~> 4.2.9)
+   ace-rails-ap (~> 2.0.1)
+   activerecord-deprecated_finders (~> 1.0.3)
++  activerecord-nulldb-adapter
+   activerecord-session_store (~> 0.1.0)
+   acts-as-taggable-on (~> 3.4)
+   addressable (~> 2.3.8)

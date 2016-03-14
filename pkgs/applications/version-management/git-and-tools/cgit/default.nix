@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "cgit-${version}";
-  version = "0.11.2";
+  version = "0.12";
 
   src = fetchurl {
     url = "http://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
-    sha256 = "0fryh56kyah7v9a8zzhbhwlyy2j116w87sxmgrn2kmwk0rvnw4if";
+    sha256 = "1dx54hgfyabmg9nm5qp6d01f54nlbqbbdwhwl0llb9imjf237qif";
   };
 
   # cgit is tightly coupled with git and needs a git source tree to build.
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   # NOTE: as of 0.10.1, the git version is compatible from 1.9.0 to
   # 1.9.2 (see the repository history)
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.3.2.tar.xz";
-    sha256 = "09gqijsjfnxlbsxbxzlvllg37bfs9f4jwa2plqsanmba09i89sqq";
+    url    = "mirror://kernel/software/scm/git/git-2.7.0.tar.xz";
+    sha256 = "03bvb8s5j8i54qbi3yayl42bv0wf2fpgnh1a2lkhbj79zi7b77zs";
   };
 
   buildInputs = [
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's|"gzip"|"${gzip}/bin/gzip"|' \
-        -e 's|"bzip2"|"${bzip2}/bin/bzip2"|' \
-        -e 's|"xz"|"${xz}/bin/xz"|' \
+        -e 's|"bzip2"|"${bzip2.bin}/bin/bzip2"|' \
+        -e 's|"xz"|"${xz.bin}/bin/xz"|' \
         -i ui-snapshot.c
   '';
 

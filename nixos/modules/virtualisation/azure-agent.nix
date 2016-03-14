@@ -8,10 +8,11 @@ let
 
   waagent = with pkgs; stdenv.mkDerivation rec {
     name = "waagent-2.0";
-    src = pkgs.fetchgit {
-      url = https://github.com/Phreedom/WALinuxAgent.git;
-      rev = "9dba81c7b1239c7971ec96e405e403c7cd224e6b";
-      sha256 = "0khxk3ns3z37v26f2qj6m3m698a0vqpc9bxg5p7fyr3xza5gzwhs";
+    src = pkgs.fetchFromGitHub {
+      owner = "Azure";
+      repo = "WALinuxAgent";
+      rev = "1b3a8407a95344d9d12a2a377f64140975f1e8e4";
+      sha256 = "10byzvmpgrmr4d5mdn2kq04aapqb3sgr1admk13wjmy5cd6bwd2x";
     };
     buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
@@ -155,12 +156,6 @@ in
       before = [ "sshd.service" ];
       after = [ "ip-up.target" ];
       wants = [ "ip-up.target" ];
-
-      environment = {
-        GIT_SSL_CAINFO = "/etc/ssl/certs/ca-certificates.crt";
-        OPENSSL_X509_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-        SSL_CERT_FILE = "/etc/ssl/certs/ca-certificates.crt";
-      };
 
       path = [ pkgs.e2fsprogs ];
       description = "Windows Azure Agent Service";

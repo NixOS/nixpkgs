@@ -1,7 +1,7 @@
 { gestures ? false
 , stdenv, fetchurl, pkgconfig
 , cairo, fontconfig, freetype, libXft, libXcursor, libXinerama
-, libXpm, librsvg, libpng, fribidi, perl
+, libXpm, libXt, librsvg, libpng, fribidi, perl
 , libstroke ? null
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig cairo fontconfig freetype
-    libXft libXcursor libXinerama libXpm
+    libXft libXcursor libXinerama libXpm libXt
     librsvg libpng fribidi perl
   ] ++ stdenv.lib.optional gestures libstroke;
 

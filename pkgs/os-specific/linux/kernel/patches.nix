@@ -22,7 +22,7 @@ let
     { name = "grsecurity-${grversion}-${kversion}";
       inherit grversion kversion revision;
       patch = fetchurl {
-        url = "http://grsecurity.net/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch";
+        url = "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
         inherit sha256;
       };
       features.grsecurity = true;
@@ -87,10 +87,10 @@ rec {
     };
 
   grsecurity_unstable = grsecPatch
-    { kversion  = "4.2.3";
-      revision  = "201510130858";
+    { kversion  = "4.3.4";
+      revision  = "201601231215";
       branch    = "test";
-      sha256    = "0ndzcx9i94c065dlyvgykmin5bfkbydrv0kxxq52a4c9is6nlsrb";
+      sha256    = "1dacld4zlp8mk6ykc0f1v5crppvq3znbdw9rwfrf6qi90984x0mr";
     };
 
   grsec_fix_path =
@@ -103,4 +103,29 @@ rec {
       patch = ./crc-regression.patch;
     };
 
+  genksyms_fix_segfault =
+    { name = "genksyms-fix-segfault";
+      patch = ./genksyms-fix-segfault.patch;
+    };
+
+
+  chromiumos_Kconfig_fix_entries_3_14 =
+    { name = "Kconfig_fix_entries_3_14";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.14.patch;
+    };
+
+  chromiumos_Kconfig_fix_entries_3_18 =
+    { name = "Kconfig_fix_entries_3_18";
+      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
+    };
+
+  chromiumos_no_link_restrictions =
+    { name = "chromium-no-link-restrictions";
+      patch = ./chromiumos-patches/no-link-restrictions.patch;
+    };
+
+  chromiumos_mfd_fix_dependency =
+    { name = "mfd_fix_dependency";
+      patch = ./chromiumos-patches/mfd-fix-dependency.patch;
+    };
 }

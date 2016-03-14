@@ -12,11 +12,11 @@ assert enableGtk2 -> pygtk != null;
 
 buildPythonPackage rec {
   name = "matplotlib-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/source/m/matplotlib/${name}.tar.gz";
-    sha256 = "67b08b1650a00a6317d94b76a30a47320087e5244920604c5462188cba0c2646";
+    sha256 = "3ab8d968eac602145642d0db63dd8d67c85e9a5444ce0e2ecb2a8fedc7224d40";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
@@ -37,6 +37,14 @@ buildPythonPackage rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
 
+  checkPhase = ''
+    ${python.interpreter} tests.py
+  '';
+
+  # The entry point for running tests, tests.py, is not included in the release.
+  # https://github.com/matplotlib/matplotlib/issues/6017
+  doCheck = false;
+
   prePatch = ''
     # Failing test: ERROR: matplotlib.tests.test_style.test_use_url
     sed -i 's/test_use_url/fails/' lib/matplotlib/tests/test_style.py
@@ -52,4 +60,5 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
   };
+
 }

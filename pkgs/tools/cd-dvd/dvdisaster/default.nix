@@ -3,9 +3,9 @@
 , enableSoftening ? true
 }:
 
-let version = "0.79.5"; in
 stdenv.mkDerivation rec {
   name = "dvdisaster-${version}";
+  version = "0.79.5";
 
   src = fetchurl {
     url = "http://dvdisaster.net/downloads/${name}.tar.bz2";
@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     homepage = http://dvdisaster.net/;
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''

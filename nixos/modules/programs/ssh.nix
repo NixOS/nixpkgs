@@ -36,6 +36,7 @@ in
 
       askPassword = mkOption {
         type = types.str;
+        default = "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
         description = ''Program used by SSH to ask for passwords.'';
       };
 
@@ -186,6 +187,9 @@ in
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
+        # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
+
         ${cfg.extraConfig}
       '';
 
@@ -221,12 +225,7 @@ in
         fi
       '';
 
-    environment.interactiveShellInit = optionalString config.services.xserver.enable
-      ''
-        export SSH_ASKPASS=${askPassword}
-      '';
-
-    programs.ssh.askPassword = mkDefault "${pkgs.x11_ssh_askpass}/libexec/x11-ssh-askpass";
+    environment.variables.SSH_ASKPASS = optionalString config.services.xserver.enable askPassword;
 
   };
 }

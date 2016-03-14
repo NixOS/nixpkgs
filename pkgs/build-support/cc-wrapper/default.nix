@@ -9,13 +9,14 @@
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
-, isGNU ? false, isClang ? cc.isClang or false
+, isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 }:
 
 with stdenv.lib;
 
 assert nativeTools -> nativePrefix != "";
-assert !nativeTools -> cc != null && binutils != null && coreutils != null;
+assert !nativeTools ->
+  cc != null && binutils != null && coreutils != null && gnugrep != null;
 assert !nativeLibc -> libc != null;
 
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
@@ -30,9 +31,9 @@ let
   libc_dev = if nativeLibc then null else libc.dev or libc;
   libc_lib = if nativeLibc then null else libc.out or libc;
   cc_solib = cc.lib or cc;
-  binutils_bin = if nativeTools then "$binutils" else binutils.bin or binutils;
-  # The wrapper scripts use 'cat', so we may need coreutils.
-  coreutils_bin = if nativeTools then null else coreutils.bin or coreutils;
+  binutils_bin = if nativeTools then "" else binutils.bin or binutils;
+  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
+  coreutils_bin = if nativeTools then "" else coreutils.bin or coreutils;
 in
 
 stdenv.mkDerivation {
@@ -43,6 +44,7 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
 
   inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  gnugrep_bin = if nativeTools then "" else gnugrep;
 
   passthru = { inherit libc nativeTools nativeLibc nativePrefix isGNU isClang; };
 

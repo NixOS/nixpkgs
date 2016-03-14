@@ -31,6 +31,9 @@ let
     [General]
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
     RebootCommand=${pkgs.systemd}/bin/systemctl reboot
+    ${optionalString cfg.autoNumlock ''
+    Numlock=on
+    ''}
 
     [Theme]
     Current=${cfg.theme}
@@ -107,6 +110,14 @@ in
         default = [];
         description = ''
           Extra packages providing themes.
+        '';
+      };
+
+      autoNumlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable numlock at login.
         '';
       };
 

@@ -12,14 +12,14 @@ let
     then "i386"
     else "amd64";
 
-  shortVersion = "1.15.2-stable";
+  shortVersion = "1.16-stable";
 
   version = "${shortVersion}_${arch}";
 
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
-    then "64e72b5749ea54f75cb0400732af68d1044037c6233a6bc0ba7a560acd3503cb"
-    else "cd13e39ad665b243fa5ca04c30cdc4c7da3ddaa259ea1af8fd1ff60f85f4eb25";
+    then "da56abe0e0e86d868d305119f06cf6d14273d2f65e5c135fc2d190ca599b3cb6"
+    else "e9c2f026fd267db34396ff5f24bce9c6a4beba530bd8b40265a792d417282fba";
 
   deps = [
     gcc.cc

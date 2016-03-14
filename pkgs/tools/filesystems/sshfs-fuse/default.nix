@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, glib, fuse }:
+{ stdenv, fetchFromGitHub, pkgconfig, glib, fuse, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "sshfs-fuse-2.5";
+  version = "2.7";
+  name = "sshfs-fuse-${version}";
   
-  src = fetchurl {
-    url = "mirror://sourceforge/fuse/${name}.tar.gz";
-    sha256 = "0gp6qr33l2p0964j0kds0dfmvyyf5lpgsn11daf0n5fhwm9185z9";
+  src = fetchFromGitHub {
+    repo = "sshfs";
+    owner = "libfuse";
+    rev = "sshfs-${version}";
+    sha256 = "17l9b89zy5qzfcknw3krk74rfrqaa8q1r8jwdsahaqajsy09h4x4";
   };
   
-  buildInputs = [ pkgconfig glib fuse ];
+  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://fuse.sourceforge.net/sshfs.html;
+    homepage = https://github.com/libfuse/sshfs;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds ];

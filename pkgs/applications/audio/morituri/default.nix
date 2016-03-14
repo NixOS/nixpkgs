@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ rycee jgeerds ];
     license = licenses.gpl3Plus;
+    platforms = platforms.linux;
   };
 }

@@ -28,6 +28,9 @@ with lib;
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ])
+
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
     (mkRenamedOptionModule [ "boot" "extraKernelParams" ] [ "boot" "kernelParams" ])
@@ -59,6 +62,9 @@ with lib;
     # Tarsnap
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
 
+    # ibus
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+
     # proxy
     (mkRenamedOptionModule [ "nix" "proxy" ] [ "networking" "proxy" "default" ])
 
@@ -77,6 +83,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ])
     (mkRenamedOptionModule [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ])
     (mkRenamedOptionModule [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ])
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
 
     (mkRenamedOptionModule [ "services" "mysql55" ] [ "services" "mysql" ])
 
@@ -99,6 +106,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ])
     (mkRemovedOptionModule [ "ec2" "metadata" ])
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
 
   ];
 }

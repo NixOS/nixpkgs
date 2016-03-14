@@ -439,7 +439,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "A javascript text diff implementation.";
+        description = "A javascript text diff implementation";
         homepage = "https://github.com/kpdecker/jsdiff#readme";
         license = "BSD-3-Clause";
       };
@@ -454,7 +454,7 @@ let
         sha1 = "319bb7a56e7cb63f00b5c0cd7851cd4b4ddf1df9";
       };
       meta = {
-        description = "Rigorous implementation of RFC4122 (v1 and v4) UUIDs.";
+        description = "Rigorous implementation of RFC4122 (v1 and v4) UUIDs";
         homepage = https://github.com/broofa/node-uuid;
       };
       production = true;
@@ -482,7 +482,7 @@ let
         };
       };
       meta = {
-        description = "Light-weight option parsing with an argv hash. No optstrings attached.";
+        description = "Light-weight option parsing with an argv hash. No optstrings attached";
         homepage = https://github.com/substack/node-optimist;
         license = "MIT/X11";
       };
@@ -497,7 +497,7 @@ let
         sha1 = "a3d5da6cd5c0bc0008d37234bbaf1bed63059107";
       };
       meta = {
-        description = "Wrap those words. Show them at what columns to start and stop.";
+        description = "Wrap those words. Show them at what columns to start and stop";
         homepage = "https://github.com/substack/node-wordwrap#readme";
         license = "MIT";
       };
@@ -645,7 +645,7 @@ let
         };
       };
       meta = {
-        description = "Simplified HTTP request client.";
+        description = "Simplified HTTP request client";
         homepage = "https://github.com/request/request#readme";
         license = "Apache-2.0";
       };
@@ -736,7 +736,7 @@ let
         sha1 = "b5fd54220aa2bc5ab57aab7140c940754503c1a7";
       };
       meta = {
-        description = "The `util.is*` functions introduced in Node v0.12.";
+        description = "The `util.is*` functions introduced in Node v0.12";
         homepage = "https://github.com/isaacs/core-util-is#readme";
         license = "MIT";
       };
@@ -834,7 +834,7 @@ let
         sha1 = "715b96ea9841593cc33067923f5ec60ebda4f7d7";
       };
       meta = {
-        description = "Caseless object set/get/has, very useful when working with HTTP headers.";
+        description = "Caseless object set/get/has, very useful when working with HTTP headers";
         homepage = "https://github.com/mikeal/caseless#readme";
         license = "Apache-2.0";
       };
@@ -868,7 +868,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "HTTP Agent that keeps socket connections alive between keep-alive requests. Formerly part of mikeal/request, now a standalone module.";
+        description = "HTTP Agent that keeps socket connections alive between keep-alive requests. Formerly part of mikeal/request, now a standalone module";
         homepage = https://github.com/mikeal/forever-agent;
         license = "Apache-2.0";
       };
@@ -904,7 +904,7 @@ let
         };
       };
       meta = {
-        description = "A library to create readable \"multipart/form-data\" streams. Can be used to submit forms and file uploads to other web applications.";
+        description = "A library to create readable \"multipart/form-data\" streams. Can be used to submit forms and file uploads to other web applications";
         homepage = "https://github.com/form-data/form-data#readme";
         license = "MIT";
       };
@@ -943,7 +943,7 @@ let
         };
       };
       meta = {
-        description = "A stream that emits multiple other streams one after another.";
+        description = "A stream that emits multiple other streams one after another";
         homepage = https://github.com/felixge/node-combined-stream;
         license = "MIT";
       };
@@ -959,7 +959,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "Buffers events from a stream until you are ready to handle them.";
+        description = "Buffers events from a stream until you are ready to handle them";
         homepage = https://github.com/felixge/node-delayed-stream;
         license = "MIT";
       };
@@ -984,7 +984,7 @@ let
         };
       };
       meta = {
-        description = "The ultimate javascript content-type utility.";
+        description = "The ultimate javascript content-type utility";
         homepage = https://github.com/jshttp/mime-types;
         license = "MIT";
       };
@@ -1017,7 +1017,7 @@ let
         sha1 = "1296a2d58fd45f19a0f6ce01d65701e2c735b6eb";
       };
       meta = {
-        description = "Like JSON.stringify, but doesn't blow up on circular refs.";
+        description = "Like JSON.stringify, but doesn't blow up on circular refs";
         homepage = https://github.com/isaacs/json-stringify-safe;
         license = "ISC";
       };
@@ -1035,7 +1035,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "Rigorous implementation of RFC4122 (v1 and v4) UUIDs.";
+        description = "Rigorous implementation of RFC4122 (v1 and v4) UUIDs";
         homepage = https://github.com/broofa/node-uuid;
       };
       production = true;
@@ -1068,7 +1068,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "HTTP proxy tunneling agent. Formerly part of mikeal/request, now a standalone module.";
+        description = "HTTP proxy tunneling agent. Formerly part of mikeal/request, now a standalone module";
         homepage = "https://github.com/mikeal/tunnel-agent#readme";
         license = "Apache-2.0";
       };
@@ -1120,7 +1120,7 @@ let
         };
       };
       meta = {
-        description = "Reference implementation of Joyent's HTTP Signature scheme.";
+        description = "Reference implementation of Joyent's HTTP Signature scheme";
         homepage = https://github.com/joyent/node-http-signature/;
         license = "MIT";
       };
@@ -1180,7 +1180,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "OAuth 1 signing. Formerly a vendor lib in mikeal/request, now a standalone module.";
+        description = "OAuth 1 signing. Formerly a vendor lib in mikeal/request, now a standalone module";
         homepage = "https://github.com/mikeal/oauth-sign#readme";
         license = "Apache-2.0";
       };
@@ -1327,7 +1327,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "AWS signing. Originally pulled from LearnBoost/knox, maintained as vendor in request, now a standalone module.";
+        description = "AWS signing. Originally pulled from LearnBoost/knox, maintained as vendor in request, now a standalone module";
       };
       production = true;
       linkDependencies = false;
@@ -1463,7 +1463,7 @@ let
         };
       };
       meta = {
-        description = "Terminal string styling done right. Much color.";
+        description = "Terminal string styling done right. Much color";
         homepage = "https://github.com/chalk/chalk#readme";
         license = "MIT";
       };
@@ -1729,7 +1729,7 @@ let
         sha1 = "3af1dd20fe85463910d469a385e33017d2a030d9";
       };
       meta = {
-        description = "Simple JSON Addressing.";
+        description = "Simple JSON Addressing";
         homepage = "https://github.com/janl/node-jsonpointer#readme";
         license = "MIT";
       };
@@ -1763,7 +1763,7 @@ let
         sha1 = "9fb3f4004f900d83c47968fe42f7583e05832cc9";
       };
       meta = {
-        description = "The semantic version parser used by npm.";
+        description = "The semantic version parser used by npm";
         homepage = "https://github.com/npm/node-semver#readme";
         license = "ISC";
       };
@@ -1843,7 +1843,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "Recursive filesystem (and other) operations that Node *should* have.";
+        description = "Recursive filesystem (and other) operations that Node *should* have";
         homepage = https://github.com/ryanmcgrath/wrench-js;
       };
       production = true;
@@ -1935,7 +1935,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "A transform to make UglifyJS work in browserify.";
+        description = "A transform to make UglifyJS work in browserify";
         homepage = https://github.com/ForbesLindesay/uglify-to-browserify;
         license = "MIT";
       };
@@ -1977,7 +1977,7 @@ let
         };
       };
       meta = {
-        description = "Light-weight option parsing with an argv hash. No optstrings attached.";
+        description = "Light-weight option parsing with an argv hash. No optstrings attached";
         homepage = https://github.com/bcoe/yargs;
         license = "MIT/X11";
       };
@@ -2033,7 +2033,7 @@ let
         sha1 = "5438cd2ea93b202efa3a19fe8887aee7c94f9c9d";
       };
       meta = {
-        description = "Reliable way to to get the height and width of the terminal/console in a node.js environment.";
+        description = "Reliable way to to get the height and width of the terminal/console in a node.js environment";
         homepage = https://github.com/jonschlinkert/window-size;
       };
       production = true;
@@ -2048,7 +2048,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "Wrap those words. Show them at what columns to start and stop.";
+        description = "Wrap those words. Show them at what columns to start and stop";
         license = "MIT/X11";
       };
       production = true;
@@ -2064,7 +2064,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "A W3C Standard XML DOM(Level2 CORE) implementation and parser(DOMParser/XMLSerializer).";
+        description = "A W3C Standard XML DOM(Level2 CORE) implementation and parser(DOMParser/XMLSerializer)";
         homepage = https://github.com/jindw/xmldom;
       };
       production = true;
@@ -2194,7 +2194,7 @@ let
         };
       };
       meta = {
-        description = "Simplified HTTP request client.";
+        description = "Simplified HTTP request client";
         homepage = "https://github.com/request/request#readme";
         license = "Apache-2.0";
       };
@@ -2226,7 +2226,7 @@ let
         sha1 = "77466de589cd5d3c95f138aa78bc569a3cb5d27a";
       };
       meta = {
-        description = "The semantic version parser used by npm.";
+        description = "The semantic version parser used by npm";
         homepage = "https://github.com/npm/node-semver#readme";
         license = "ISC";
       };
@@ -2379,7 +2379,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "Get v8 stack traces as an array of CallSite objects.";
+        description = "Get v8 stack traces as an array of CallSite objects";
         homepage = https://github.com/felixge/node-stack-trace;
       };
       production = true;

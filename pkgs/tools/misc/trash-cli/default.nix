@@ -2,7 +2,7 @@
 
 assert stdenv.isLinux;
 
-python2Packages.buildPythonPackage rec {
+python2Packages.buildPythonApplication rec {
   name = "trash-cli-${version}";
   version = "0.12.9.14";
   namePrefix = "";
@@ -34,7 +34,7 @@ python2Packages.buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
-    maintainer = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee ];
     license = licenses.gpl2;
   };
 }

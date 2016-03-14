@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name = "watchman-${version}";
 
-  version = "4.1.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "01ak2gsmc76baswpivzz00g22r547mpp8l7xfziwl5804nzszrcg";
+    sha256 = "0hyj7nbsm5mv8zq2fldd06f92a3wamavha20311518qv7q5jj72v";
   };
 
   buildInputs = [ autoconf automake pcre ];
@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
       "--enable-lenient"
       "--enable-conffile=${if confFile == null then "no" else confFile}"
       "--with-pcre=yes"
+
+      # For security considerations re: --disable-statedir, see:
+      # https://github.com/facebook/watchman/issues/178
       "--disable-statedir"
   ];
 

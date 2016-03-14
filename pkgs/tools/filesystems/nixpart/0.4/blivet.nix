@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, pykickstart, pyparted, pyblock
+{ stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
 , libselinux, cryptsetup, multipath_tools, lsof, utillinux
 , useNixUdev ? true, libudev ? null
 }:
 
 assert useNixUdev -> libudev != null;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "blivet-${version}";
   version = "0.17-1";
 

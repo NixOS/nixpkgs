@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "metis-prover-${version}";
-  version = "2.3.20160101";
+  version = "2.3.20160102";
 
   src = fetchurl {
     url = "http://www.gilith.com/software/metis/metis.tar.gz";
-    sha256 = "0wkh506ggwmfacwl19n84n1xi6ak4xhrc96d9pdkpk8zdwh5w58l";
+    sha256 = "13csr90i9lsxdyzxqiwgi98pa7phfl28drjcv4qdjhzi71wcdc66";
   };
 
   nativeBuildInputs = [ perl ];

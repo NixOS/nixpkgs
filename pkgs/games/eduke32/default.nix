@@ -4,9 +4,9 @@
 let
   date = "20150420";
   rev = "5160";
-  version = "${date}-${rev}";
 in stdenv.mkDerivation rec {
   name = "eduke32-${version}";
+  version = "${date}-${rev}";
 
   src = fetchurl {
     url = "http://dukeworld.duke4.net/eduke32/synthesis/${version}/eduke32_src_${version}.tar.xz";
@@ -66,7 +66,6 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     license = licenses.gpl2Plus;
     homepage = http://eduke32.com;

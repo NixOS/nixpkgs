@@ -1,6 +1,6 @@
 { stdenv
 , coreutils
-, fetchgit
+, fetchurl
 , makeWrapper
 , pkgconfig
 }:
@@ -9,12 +9,11 @@ with stdenv.lib.strings;
 
 let
 
-  version = "8-1-2015";
+  version = "0.9.73";
 
-  src = fetchgit {
-    url = git://git.code.sf.net/p/faudiostream/code;
-    rev = "4db76fdc02b6aec8d15a5af77fcd5283abe963ce";
-    sha256 = "f1ac92092ee173e4bcf6b2cb1ac385a7c390fb362a578a403b2b6edd5dc7d5d0";
+  src = fetchurl {
+    url = "mirror://sourceforge/project/faudiostream/faust-${version}.tgz";
+    sha256 = "0x2scxkwvvjx7b7smj5xb8kr269qakf49z3fxpasd9g7025q44k5";
   };
 
   meta = with stdenv.lib; {

@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./jasper-CVE-2016-1867.diff
     ./jasper-CVE-2014-8137-variant2.diff
     ./jasper-CVE-2014-8137-noabort.diff
     ./jasper-CVE-2014-8138.diff

@@ -21,6 +21,12 @@
 with stdenv.lib;
 
 ''
+  # Compress kernel modules for a sizable disk space savings.
+  ${optionalString (versionAtLeast version "3.18") ''
+    MODULE_COMPRESS y
+    MODULE_COMPRESS_XZ y
+  ''}
+
   # Debugging.
   DEBUG_KERNEL y
   TIMER_STATS y
@@ -147,7 +153,7 @@ with stdenv.lib;
 
   # Video configuration.
   # Enable KMS for devices whose X.org driver supports it.
-  ${optionalString (versionOlder version "4.3") ''
+  ${optionalString (versionOlder version "4.3" && !(features.chromiumos or false)) ''
     DRM_I915_KMS y
   ''}
   # Allow specifying custom EDID on the kernel command line
@@ -355,6 +361,9 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
+  # PCI-Expresscard hotplug support
+  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
+
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
@@ -469,6 +478,7 @@ with stdenv.lib;
   ''}
   ${optionalString (versionAtLeast version "3.7") ''
     MEDIA_USB_SUPPORT y
+    MEDIA_PCI_SUPPORT y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
@@ -503,6 +513,67 @@ with stdenv.lib;
 
   # Disable the firmware helper fallback, udev doesn't implement it any more
   FW_LOADER_USER_HELPER_FALLBACK? n
+
+  # ChromiumOS support
+  ${optionalString (features.chromiumos or false) ''
+    CHROME_PLATFORMS y
+    VGA_SWITCHEROO n
+    MMC_SDHCI_PXAV2 n
+    NET_IPVTI n
+    IPV6_VTI n
+    REGULATOR_FIXED_VOLTAGE n
+    TPS6105X n
+    CPU_FREQ_STAT y
+    IPV6 y
+    MFD_CROS_EC y
+    MFD_CROS_EC_LPC y
+    MFD_CROS_EC_DEV y
+    CHARGER_CROS_USB_PD y
+    I2C y
+    MEDIA_SUBDRV_AUTOSELECT n
+    VIDEO_IR_I2C n
+    BLK_DEV_DM y
+    ANDROID_PARANOID_NETWORK n
+    DM_VERITY n
+    DRM_VGEM n
+    CPU_FREQ_GOV_INTERACTIVE n
+    INPUT_KEYRESET n
+    DM_BOOTCACHE n
+    UID_CPUTIME n
+
+    ${optionalString (versionAtLeast version "3.18") ''
+      CPUFREQ_DT n
+      EXTCON_CROS_EC n
+      DRM_POWERVR_ROGUE n
+      CHROMEOS_OF_FIRMWARE y
+      TEST_RHASHTABLE n
+      BCMDHD n
+      TRUSTY n
+    ''}
+
+    ${optionalString (versionOlder version "3.18") ''
+      MALI_MIDGARD n
+      DVB_USB_DIB0700 n
+      DVB_USB_DW2102 n
+      DVB_USB_PCTV452E n
+      DVB_USB_TTUSB2 n
+      DVB_USB_AF9015 n
+      DVB_USB_AF9035 n
+      DVB_USB_ANYSEE n
+      DVB_USB_AZ6007 n
+      DVB_USB_IT913X n
+      DVB_USB_LME2510 n
+      DVB_USB_RTL28XXU n
+      USB_S2255 n
+      VIDEO_EM28XX n
+      VIDEO_TM6000 n
+      USB_DWC2 n
+      USB_GSPCA n
+      SPEAKUP n
+      XO15_EBOOK n
+      USB_GADGET n
+    ''}
+  ''}
 
   ${kernelPlatform.kernelExtraConfig or ""}
   ${extraConfig}

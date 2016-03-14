@@ -1,4 +1,4 @@
-{ pkgs, options, version, revision }:
+{ pkgs, options, version, revision, extraSources ? [] }:
 
 with pkgs;
 with pkgs.lib;
@@ -17,19 +17,20 @@ let
 
   # Clean up declaration sites to not refer to the NixOS source tree.
   optionsList' = flip map optionsList (opt: opt // {
-    declarations = map (fn: stripPrefix fn) opt.declarations;
+    declarations = map stripAnyPrefixes opt.declarations;
   }
   // optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // optionalAttrs (opt ? default) { default = substFunction opt.default; }
   // optionalAttrs (opt ? type) { type = substFunction opt.type; });
 
-  prefix = toString ../../..;
-
-  stripPrefix = fn:
-    if substring 0 (stringLength prefix) fn == prefix then
-      substring (stringLength prefix + 1) 1000 fn
-    else
-      fn;
+  # We need to strip references to /nix/store/* from options,
+  # including any `extraSources` if some modules came from elsewhere,
+  # or else the build will fail.
+  #
+  # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
+  # you'd need to include `extraSources = [ pkgs.customModules ]`
+  prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
+  stripAnyPrefixes = flip (fold removePrefix) prefixesToStrip;
 
   # Convert the list of options into an XML file.
   optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
@@ -55,8 +56,8 @@ let
       cp -prd $sources/* . # */
       chmod -R u+w .
       cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
+      cp ${../../modules/services/misc/gitlab.xml} configuration/gitlab.xml
       cp ${../../modules/security/acme.xml} configuration/acme.xml
-      cp ${../../modules/misc/nixos.xml} configuration/nixos.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';

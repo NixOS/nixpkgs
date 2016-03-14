@@ -18,7 +18,8 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{ lib, ruby, rubygems, bundler, fetchurl, fetchgit, makeWrapper, git, buildRubyGem
+{ lib, ruby, rubygems, bundler, fetchurl, fetchgit, makeWrapper, git,
+  buildRubyGem, darwin
 } @ defs:
 
 lib.makeOverridable (
@@ -31,7 +32,9 @@ lib.makeOverridable (
 , platform ? "ruby"
 , ruby ? defs.ruby
 , stdenv ? ruby.stdenv
-, namePrefix ? "${ruby.name}" + "-"
+, namePrefix ? (let
+    rubyName = builtins.parseDrvName ruby.name;
+  in "${rubyName.name}${rubyName.version}-")
 , buildInputs ? []
 , doCheck ? false
 , meta ? {}
@@ -49,24 +52,24 @@ lib.makeOverridable (
 , passthru ? {}
 , ...} @ attrs:
 
-if ! builtins.elem type [ "git" "gem" ]
-then throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
-else
-
 let
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   rubygems = (attrs.rubygems or defs.rubygems).override {
     inherit ruby;
   };
   src = attrs.src or (
-    if type == "gem"
-    then fetchurl {
-      urls = map (remote: "${remote}/gems/${gemName}-${version}.gem") remotes;
-      inherit (attrs) sha256;
-    } else fetchgit {
-      inherit (attrs) url rev sha256 fetchSubmodules;
-      leaveDotGit = true;
-    }
+    if type == "gem" then
+      fetchurl {
+        urls = map (remote: "${remote}/gems/${gemName}-${version}.gem") remotes;
+        inherit (attrs) sha256;
+      }
+    else if type == "git" then
+      fetchgit {
+        inherit (attrs) url rev sha256 fetchSubmodules;
+        leaveDotGit = true;
+      }
+    else
+      throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
   documentFlag =
     if document == []
@@ -85,9 +88,10 @@ stdenv.mkDerivation (attrs // {
   buildInputs = [
     ruby rubygems makeWrapper
   ] ++ lib.optionals (type == "git") [ git bundler ]
+    ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
-  name = attrs.name or (namePrefix + gemName);
+  name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;
 
