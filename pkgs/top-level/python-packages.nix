@@ -10066,6 +10066,35 @@ in modules // {
     };
   };
 
+  hypothesis = buildPythonPackage rec {
+    # http://hypothesis.readthedocs.org/en/latest/packaging.html
+
+    name = "hypothesis-${version}";
+    version = "3.1.0";
+
+    # Upstream prefers github tarballs
+    src = pkgs.fetchFromGitHub {
+      owner = "DRMacIver";
+      repo = "hypothesis";
+      rev = "${version}";
+      sha256 = "1fhdb2vwc4blas5fvcly6pmha8psqm4bhi67jz32ypjryzk09iyf";
+    };
+
+    buildInputs = with self; [ flake8 pytest flaky ];
+    propagatedBuildInputs = with self; ([ pytz fake_factory django numpy ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+
+    # https://github.com/DRMacIver/hypothesis/issues/300
+    checkPhase = ''
+      ${python.interpreter} -m pytest tests/cover
+    '';
+
+    meta = {
+      description = "A Python library for property based testing";
+      homepage = https://github.com/DRMacIver/hypothesis;
+      license = licenses.mpl20;
+    };
+  };
+
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
