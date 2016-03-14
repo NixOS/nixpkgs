@@ -13,6 +13,22 @@ in
       <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
   ];
 
+  systemd.services.qemu-guest-agent = {
+    description = "The Qemu guest agent.";
+    wantedBy = [ "basic.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.qemu}/bin/qemu-ga -m virtio-serial -p /dev/virtio-ports/org.qemu.guest_agent.0";
+      Restart = "always";
+      RestartSec = "5s";
+    };
+  };
+
+  # XXX This is rather sad, but Qemu can't ignore the mount and then we can't
+  # freeze the filesystem properly. :(
+  # Would need qemu to help here and notice that this is the same device as
+  # the root.
+  nix.readOnlyStore = false;
+
   boot.blacklistedKernelModules = [ "bochs_drm" ];
   boot.initrd.supportedFilesystems = [ "xfs" ];
   boot.kernelParams = [

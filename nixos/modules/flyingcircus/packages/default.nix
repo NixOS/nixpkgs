@@ -1,6 +1,5 @@
 { ... }:
 
-
 {
   nixpkgs.config.packageOverrides = pkgs: rec {
 
@@ -10,6 +9,10 @@
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
 
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
+    qemu = pkgs.callPackage ./qemu-2.5.nix {
+      inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Cocoa;
+      x86Only = true;
+    };
 
     sensu = pkgs.callPackage ./sensu { };
     uchiwa = pkgs.callPackage ./uchiwa { };
