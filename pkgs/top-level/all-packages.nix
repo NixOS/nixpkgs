@@ -1034,7 +1034,9 @@ let
     inherit (strategoPackages016) strategoxt sdf;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado {
+    inherit (pythonPackages) wxPython;
+  };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (gnome3) dconf gsettings_desktop_schemas;
@@ -9335,65 +9337,6 @@ let
     self = pypyPackages;
   };
 
-  bsddb3 = pythonPackages.bsddb3;
-
-  ecdsa = pythonPackages.ecdsa;
-
-  pycairo = pythonPackages.pycairo;
-
-  pycapnp = pythonPackages.pycapnp;
-
-  pycrypto = pythonPackages.pycrypto;
-
-  pycups = pythonPackages.pycups;
-
-  pyexiv2 = pythonPackages.pyexiv2;
-
-  pygame = pythonPackages.pygame;
-
-  pygobject = pythonPackages.pygobject;
-
-  pygobject3 = pythonPackages.pygobject3;
-
-  pygtk = pythonPackages.pygtk;
-
-  pygtksourceview = pythonPackages.pygtksourceview;
-
-  pyGtkGlade = pythonPackages.pyGtkGlade;
-
-  pylint = pythonPackages.pylint;
-
-  pyopenssl = pythonPackages.pyopenssl;
-
-  rhpl = pythonPackages.rhpl;
-
-  pyqt4 = pythonPackages.pyqt4;
-
-  pysideApiextractor = pythonPackages.pysideApiextractor;
-
-  pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;
-
-  pyside = pythonPackages.pyside;
-
-  pysideTools = pythonPackages.pysideTools;
-
-  pysideShiboken = pythonPackages.pysideShiboken;
-
-  pyxml = pythonPackages.pyxml;
-
-  rbtools = pythonPackages.rbtools;
-
-  setuptools = pythonPackages.setuptools;
-
-  slowaes = pythonPackages.slowaes;
-
-  wxPython = pythonPackages.wxPython;
-  wxPython28 = pythonPackages.wxPython28;
-
-  twisted = pythonPackages.twisted;
-
-  ZopeInterface = pythonPackages.zope_interface;
-
   ### DEVELOPMENT / R MODULES
 
   R = callPackage ../applications/science/math/R {
@@ -11510,7 +11453,9 @@ let
 
   batik = callPackage ../applications/graphics/batik { };
 
-  batti = callPackage ../applications/misc/batti { };
+  batti = callPackage ../applications/misc/batti {
+    inherit (pythonPackages) pygtk;
+  };
 
   baudline = callPackage ../applications/audio/baudline {
     jack = jack1;
@@ -14382,7 +14327,9 @@ let
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
-  anki = callPackage ../games/anki { };
+  anki = callPackage ../games/anki {
+    inherit (pythonPackages) pyqt4;
+  };
 
   armagetronad = callPackage ../games/armagetronad { };
 
