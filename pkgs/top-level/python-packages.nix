@@ -2083,7 +2083,7 @@ in modules // {
       sha256 = "1j4f51dxic39mdwf6alj7gd769wy6mhk916v031wjali51xkh3xb";
     };
 
-    buildInputs = with self; [ hypothesis sqlite3 ];
+    buildInputs = with self; [ hypothesis1 sqlite3 ];
 
     propagatedBuildInputs = with self; [ chardet ];
 
@@ -3599,7 +3599,7 @@ in modules // {
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis ]
+                    self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis1 ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
     propagatedBuildInputs = with self; [ six idna ipaddress pyasn1 cffi pyasn1-modules modules.sqlite3 ]
      ++ optional (pythonOlder "3.4") self.enum34;
@@ -6479,7 +6479,7 @@ in modules // {
 
     buildInputs = with self;
       [
-        hypothesis
+        hypothesis1
         pytestcov
         pytestflakes
         pytestpep8
@@ -8803,6 +8803,28 @@ in modules // {
     };
   };
 
+  flaky = buildPythonPackage rec {
+    name = "flaky-${version}";
+    version = "3.1.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/f/flaky/${name}.tar.gz";
+      sha256 = "1x9ixika7wqjj52x8wnsh1vk7jadkdqpx01plj7mlh8slwyq4s41";
+    };
+
+    propagatedBuildInputs = with self; [ pytest ];
+    buildInputs = with self; [ mock ];
+
+    # waiting for feedback https://github.com/box/flaky/issues/97
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/box/flaky;
+      description = "Plugin for nose or py.test that automatically reruns flaky tests";
+      license = licenses.asl20;
+    };
+  };
+
   flask = buildPythonPackage {
     name = "flask-0.10.1";
 
@@ -10109,7 +10131,7 @@ in modules // {
     };
   };
 
-  hypothesis = buildPythonPackage rec {
+  hypothesis1 = buildPythonPackage rec {
     name = "hypothesis-1.14.0";
 
     buildInputs = with self; [fake_factory django numpy pytz flake8 pytest ];
@@ -10120,6 +10142,35 @@ in modules // {
       url = "https://pypi.python.org/packages/source/h/hypothesis/${name}.tar.gz";
       sha256 = "12dxrvn108q2j20brrk6zcb8w00kn3af1c07c0fv572nf2ngyaxy";
     };
+
+    meta = {
+      description = "A Python library for property based testing";
+      homepage = https://github.com/DRMacIver/hypothesis;
+      license = licenses.mpl20;
+    };
+  };
+
+  hypothesis = buildPythonPackage rec {
+    # http://hypothesis.readthedocs.org/en/latest/packaging.html
+
+    name = "hypothesis-${version}";
+    version = "3.1.0";
+
+    # Upstream prefers github tarballs
+    src = pkgs.fetchFromGitHub {
+      owner = "DRMacIver";
+      repo = "hypothesis";
+      rev = "${version}";
+      sha256 = "1fhdb2vwc4blas5fvcly6pmha8psqm4bhi67jz32ypjryzk09iyf";
+    };
+
+    buildInputs = with self; [ flake8 pytest flaky ];
+    propagatedBuildInputs = with self; ([ pytz fake_factory django numpy ] ++ optionals isPy27 [ enum34 modules.sqlite3 ]);
+
+    # https://github.com/DRMacIver/hypothesis/issues/300
+    checkPhase = ''
+      ${python.interpreter} -m pytest tests/cover
+    '';
 
     meta = {
       description = "A Python library for property based testing";
@@ -17140,7 +17191,7 @@ in modules // {
       sha256 = "0jgyhkkq36wn36rymn4jiyqh2vdslmradq4a2mjkxfbk2cz6wpi5";
     };
 
-    buildInputs = with self; [ six pytest hypothesis ] ++ optional (!isPy3k) modules.sqlite3;
+    buildInputs = with self; [ six pytest hypothesis1 ] ++ optional (!isPy3k) modules.sqlite3;
 
     checkPhase = ''
       py.test
