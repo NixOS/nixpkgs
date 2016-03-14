@@ -131,8 +131,8 @@ in
 
     '';
 
-    environment.noXlibs = true;
     sound.enable = false;
+    fonts.fontconfig.enable = true;
 
     environment.systemPackages = with pkgs; [
         atop
