@@ -93,7 +93,7 @@ let
     config = {
       mountPoint = mkDefault name;
       device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
-      options = mkIf config.autoResize "x-nixos.autoresize";
+      options = mkIf config.autoResize [ "x-nixos.autoresize" ];
 
       # -F needed to allow bare block device without partitions
       formatOptions = mkIf ((builtins.substring 0 3 config.fsType) == "ext") (mkDefault "-F");
