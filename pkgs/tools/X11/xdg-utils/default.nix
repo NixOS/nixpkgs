@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   '' + ''
     for item in $out/bin/*; do
       substituteInPlace $item --replace "cut " "${coreutils}/bin/cut "
-      substituteInPlace $item --replace "sed " "${gnused}/bin/sed "
+      # don't clobber words with "sed " eg "passed ".
+      sed -i "$item" -re "s#([:blank:])sed #\1${gnused}/bin/sed #g"
       substituteInPlace $item --replace "egrep " "${gnugrep}/bin/egrep "
       sed -i $item -re "s#([^e])grep #\1${gnugrep}/bin/grep #g" # Don't replace 'egrep'
       substituteInPlace $item --replace "which " "type -P "
