@@ -12910,6 +12910,8 @@ in modules // {
 
     buildInputs = with self; [ nose ];
 
+    checkPhase = ''nosetests'';
+
     meta = {
       description = "Emoji for Python";
       homepage = https://pypi.python.org/pypi/emoji/;
