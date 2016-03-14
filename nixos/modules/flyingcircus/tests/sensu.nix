@@ -12,6 +12,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
 
       {
         imports = [ ../manage/default.nix
+                    ../static/default.nix
                     ../services/default.nix
                     ../packages/default.nix
                     ../platform/default.nix ];
