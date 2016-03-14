@@ -122,11 +122,7 @@ in
 
     system.path = pkgs.buildEnv {
       name = "system-path";
-      paths =
-        # The default output probably shouldn't be globally configurable.
-        # Services and users should specify them explicitly unless they want this default.
-        map (p: if p.outputUnspecified or false then p.bin or p.out or p else p)
-          config.environment.systemPackages;
+      paths = config.environment.systemPackages;
       inherit (config.environment) pathsToLink extraOutputsToLink;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.

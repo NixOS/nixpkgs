@@ -225,6 +225,9 @@ let
             # If the packager hasn't specified `outputsToInstall`, choose a default,
             # namely `p.bin or p.out or p`;
             # if he has specified it, it will be overridden below in `// meta`.
+            #   Note: This default probably shouldn't be globally configurable.
+            #   Services and users should specify outputs explicitly,
+            #   unless they are comfortable with this default.
           // { outputsToInstall =
             let
               outs = outputs'; # the value passed to derivation primitive

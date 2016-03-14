@@ -48,7 +48,12 @@ runCommand name
             meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
-        [ drv ]
+        # First add the usual output(s): respect if user has chosen explicitly,
+        # and otherwise use `meta.outputsToInstall` (guaranteed to exist by stdenv).
+        (if (drv.outputUnspecified or false)
+          then map (outName: drv.${outName}) drv.meta.outputsToInstall
+          else [ drv ])
+        # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
           (builtins.map (outName: drv.${outName} or null) extraOutputsToLink);
       priority = drv.meta.priority or 5;
