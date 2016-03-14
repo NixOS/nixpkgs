@@ -13,7 +13,7 @@ in
 
   imports =
     infrastructure_modules ++
-    [./data
+    [./static
      ./platform
      ./packages
      ./services
