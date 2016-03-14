@@ -27,7 +27,7 @@
 
 , # The package outputs to include. By default, only the default
   # output is included.
-  extraOutputsToLink ? []
+  extraOutputsToInstall ? []
 
 , # Root the result in directory "$out${extraPrefix}", e.g. "/share".
   extraPrefix ? ""
@@ -55,7 +55,7 @@ runCommand name
           else [ drv ])
         # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
-          (builtins.map (outName: drv.${outName} or null) extraOutputsToLink);
+          (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;

@@ -73,7 +73,7 @@ in
         description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
 
-      extraOutputsToLink = mkOption {
+      extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
         example = [ "doc" "info" "docdev" ];
@@ -123,7 +123,7 @@ in
     system.path = pkgs.buildEnv {
       name = "system-path";
       paths = config.environment.systemPackages;
-      inherit (config.environment) pathsToLink extraOutputsToLink;
+      inherit (config.environment) pathsToLink extraOutputsToInstall;
       ignoreCollisions = true;
       # !!! Hacky, should modularise.
       # outputs TODO: note that the tools will often not be linked by default

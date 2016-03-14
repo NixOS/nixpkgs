@@ -23,7 +23,7 @@ with lib;
 
     environment.pathsToLink = [ "/share/man" ];
 
-    environment.extraOutputsToLink = [ "man" ];
+    environment.extraOutputsToInstall = [ "man" ];
 
   };
 
