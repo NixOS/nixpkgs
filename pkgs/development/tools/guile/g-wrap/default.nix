@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "g-wrap-1.9.15";
   src = fetchurl {
     url = "mirror://savannah/g-wrap/${name}.tar.gz";
-    sha256 = "140fcvp24pqmfmiibhjxl3s75hj26ln7pkl2wxas84lnchbj9m4d";
+    sha256 = "0ak0bha37dfpj9kmyw1r8fj8nva639aw5xr66wr5gd3l1rqf5xhg";
   };
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's
