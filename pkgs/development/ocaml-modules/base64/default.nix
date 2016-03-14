@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/mirage/ocaml-base64;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "Base64 encoding and decoding in OCaml";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

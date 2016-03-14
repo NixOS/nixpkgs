@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/ermine/xml;
     description = "XML Parser for discrete data";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

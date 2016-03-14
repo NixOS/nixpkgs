@@ -11,7 +11,7 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   defaultMeta = {
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 in
   assert minimumSupportedOcamlVersion != null ->

@@ -19,6 +19,6 @@ stdenv.mkDerivation {
     homepage = https://ocaml.janestreet.com/;
     description = "Quotation expanders for enumerating finite types";
     license = stdenv.lib.licenses.asl20;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

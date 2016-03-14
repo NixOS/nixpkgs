@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/UnixJunkie/dolog;
     description = "Minimalistic lazy logger in OCaml";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

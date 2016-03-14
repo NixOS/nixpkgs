@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     homepage = http://typerex.ocamlpro.com/ocp-index.html;
     description = "A simple and light-weight documentation extractor for OCaml";
     license = stdenv.lib.licenses.lgpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }
