@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     ''
       sed -i GNUmakefile \
         -e 's|-march=native|${marchflags} -fPIC|g' \
-        -e 's|-mtune=native||g' \
         -e '/^CXXFLAGS =/s|-g ||'
     '';
 
