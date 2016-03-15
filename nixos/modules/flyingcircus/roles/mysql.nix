@@ -70,6 +70,7 @@ in
             table_definition_cache     = 512
             open_files_limit           = 65535
             sysdate-is-now             = 1
+            sql_mode                   = NO_ENGINE_SUBSTITUTION
 
             init-connect               = 'SET NAMES utf8 COLLATE utf8_unicode_ci'
             character-set-server       = utf8
