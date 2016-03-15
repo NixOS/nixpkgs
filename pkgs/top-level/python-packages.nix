@@ -20362,21 +20362,22 @@ in modules // {
 
 
   sphinxcontrib_plantuml = buildPythonPackage (rec {
-    name = "sphinxcontrib-plantuml-0.5";
+    name = "sphinxcontrib-plantuml-0.7";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sphinxcontrib-plantuml/${name}.tar.gz";
-      sha256 = "654a1c206156634398ffdc87c481c67777610a9311c6677d280963cf28813400";
+      sha256 = "011yprqf41dcm1824zgk2w8vi9115286pmli6apwhlrsxc6b6cwv";
     };
+
+    # No tests included.
+    doCheck = false;
 
     propagatedBuildInputs = with self; [sphinx plantuml];
 
     meta = {
       description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
-
       homepage = http://bitbucket.org/birkenfeld/sphinx-contrib;
-
-      license = "BSD";
+      license = with licenses; [ bsd2 ];
     };
   });
 
