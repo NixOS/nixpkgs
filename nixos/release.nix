@@ -110,7 +110,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forAllSystems (system: makeIso {
+  iso_graphical = genAttrs [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -118,7 +118,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forAllSystems (system: makeIso {
+  iso_minimal_new_kernel = genAttrs [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -126,7 +126,7 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forAllSystems (system:
+  ova = genAttrs [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
