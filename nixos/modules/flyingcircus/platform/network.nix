@@ -6,11 +6,16 @@ let
 
   cfg = config.flyingcircus;
 
+  stripNetmask = addr : elemAt (lib.splitString "/" addr) 0;
+
+  # choose the correct iptables version for addr
+  iptables = addr: if is_ip4 addr then "iptables" else "ip6tables";
+
   get_prefix_length = network:
     lib.toInt (elemAt (lib.splitString "/" network) 1);
 
   is_ip4 = address_or_network:
-    length (lib.splitString "." address_or_network) > 1;
+    length (lib.splitString "." address_or_network) == 4;
 
   is_ip6 = address_or_network:
     length (lib.splitString ":" address_or_network) > 1;
@@ -158,7 +163,7 @@ in
 
   };
 
-  config = {
+  config = rec {
 
     services.udev.extraRules = (lib.concatStrings
       (lib.mapAttrsToList (n : vlan : ''
@@ -199,6 +204,8 @@ in
             "gocept.net"]
       else [];
 
+    # data structure for all configured interfaces with their IP addresses:
+    # { ethfe = { ip4 = [ "..." "..." ]; ip6 = [ "..." "..." ]; }; ... }
     networking.interfaces =
       if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then get_network_configuration cfg.enc.parameters.interfaces
@@ -225,15 +232,30 @@ in
         ''
         else "";
 
+    # firewall configuration: generic options
+
+    # allow srv access for machines in the same RG
     networking.firewall.allowPing = true;
     networking.firewall.rejectPackets = true;
+    networking.firewall.extraCommands =
+      let
+        addrs = map (elem: elem.ip) cfg.enc_addresses.srv;
+        rules = lib.optionalString
+          (lib.hasAttr "ethsrv" networking.interfaces)
+          lib.concatMapStrings (a: ''
+            ${iptables a} -A nixos-fw -i ethsrv -s ${stripNetmask a
+              } -j nixos-fw-accept
+            '')
+            addrs;
+      in "# Accept traffic within the same resource group.\n${rules}";
+
+    # DHCP settings
     networking.useDHCP = true;
     networking.dhcpcd.extraConfig = ''
       # IPv4ll gets in the way if we really do not want
       # an IPv4 address on some interfaces.
       noipv4ll
     '';
-
   };
 
 }

@@ -22,17 +22,15 @@ let
     get_json cfg.enc_path
     (get_json /etc/nixos/enc.json {});
 
-  enc_services =(
-    get_json cfg.enc_services_path []);
+  enc_addresses.srv = get_json cfg.enc_addresses_path.srv [];
 
-  enc_service_clients = (
-    get_json cfg.enc_service_clients_path []);
+  enc_services = get_json cfg.enc_services_path [];
 
-  system_state =
-    get_json cfg.system_state_path {};
+  enc_service_clients = get_json cfg.enc_service_clients_path [];
+
+  system_state = get_json cfg.system_state_path {};
 
 in
-
 {
 
   imports = [
@@ -60,6 +58,27 @@ in
       default = "/etc/nixos/enc.json";
       type = types.string;
       description = "Where to find the ENC json file.";
+    };
+
+    flyingcircus.enc_addresses.srv = mkOption {
+      default = enc_addresses.srv;
+      type = types.listOf types.attrs;
+      description = "List of addresses of machines in the neighbourhood.";
+      example = [ {
+        ip = "2a02:238:f030:1c3::104c/64";
+        mac = "02:00:00:03:11:b1";
+        name = "test03";
+        rg = "test";
+        rg_parent = "";
+        ring = 1;
+        vlan = "srv";
+      } ];
+    };
+
+    flyingcircus.enc_addresses_path.srv = mkOption {
+      default = /etc/nixos/addresses_srv.json;
+      type = types.path;
+      description = "Where to find the address list json file.";
     };
 
     flyingcircus.system_state = mkOption {
