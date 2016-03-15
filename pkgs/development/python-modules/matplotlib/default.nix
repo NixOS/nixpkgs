@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, buildPythonPackage, pycairo
 , which, cycler, dateutil, nose, numpy, pyparsing, sphinx, tornado
-, freetype, libpng, pkgconfig, mock, pytz, pygobject3
+, freetype, libpng, pkgconfig, mock, pytz, pygobject3, six
 , enableGhostscript ? false, ghostscript ? null, gtk3
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
 , enableGtk3 ? false, cairo
@@ -34,6 +34,11 @@ buildPythonPackage rec {
     ]
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ];
+
+  propagatedUserEnvPkgs =
+    [ pyparsing cycler dateutil
+    ]
+    ++ stdenv.lib.optional python.isPy3k six;
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
 
