@@ -100,7 +100,7 @@ in {
     # Sensu Server
 
     networking.firewall.extraCommands = ''
-      iptables -A INPUT -i ethsrv -p tcp --dport 5672 -j ACCEPT
+      ip46tables -A nixos-fw -i ethsrv -p tcp --dport 5672 -j nixos-fw-accept
     '';
 
     users.extraGroups.sensuserver.gid = config.ids.gids.sensuserver;

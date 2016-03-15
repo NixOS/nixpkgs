@@ -3,28 +3,18 @@
 with builtins;
 
 let
-
   cfg = config.flyingcircus;
 
-  stripNetmask = addr : elemAt (lib.splitString "/" addr) 0;
+  fclib = import ../lib;
 
   # choose the correct iptables version for addr
-  iptables = addr: if is_ip4 addr then "iptables" else "ip6tables";
-
-  get_prefix_length = network:
-    lib.toInt (elemAt (lib.splitString "/" network) 1);
-
-  is_ip4 = address_or_network:
-    length (lib.splitString "." address_or_network) == 4;
-
-  is_ip6 = address_or_network:
-    length (lib.splitString ":" address_or_network) > 1;
+  iptables = addr: if fclib.isIp4 addr then "iptables" else "ip6tables";
 
   _ip_interface_configuration = networks: network:
       map (
         ip_address: {
           address = ip_address;
-          prefixLength = get_prefix_length network;
+          prefixLength = fclib.prefixLength network;
         })
        (getAttr network networks);
 
@@ -35,8 +25,8 @@ let
 
 
   get_interface_ips = networks:
-    { ip4 = get_ip_configuration is_ip4 networks;
-      ip6 = get_ip_configuration is_ip6 networks;
+    { ip4 = get_ip_configuration fclib.isIp4 networks;
+      ip6 = get_ip_configuration fclib.isIp6 networks;
     };
 
   get_interface_configuration = interfaces: interface_name:
@@ -64,7 +54,7 @@ let
        interface = interface_name;
        gateway = getAttr network (getAttr interface_name interfaces).gateways;
        addresses = getAttr network (getAttr interface_name interfaces).networks;
-       family = if (is_ip4 network) then "4" else "6";
+       family = if (fclib.isIp4 network) then "4" else "6";
      }) (attrNames interfaces.${interface_name}.gateways);
 
 
@@ -84,28 +74,30 @@ let
   # address, yet.
   # (Network rules apply for all networks on the segment, even if we do not
   # have an address for it.)
-
-  render_policy_routing_rule = ruleset:
+  policy_routing_rules = ruleset:
     let
-      render_address_rules =
+      address_rules =
         lib.concatMapStrings
-          (address: "ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}")
+          (address: ''
+            ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}
+          '')
           ruleset.addresses;
-      render_gateway_rule =
-        if (length ruleset.addresses) > 0 then
-          "ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true"
-        else
-          "";
+      gateway_rule = lib.optionalString
+        ((length ruleset.addresses) > 0)
+        ''
+          ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true
+        '';
     in
     ''
-    ${render_address_rules}
-    ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
-    ${render_gateway_rule}
+      # policy routing rules for ${ruleset.interface}/IPv${ruleset.family}
+      ${address_rules}
+      ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
+      ${gateway_rule}
     '';
 
   get_policy_routing = interfaces:
     map
-      render_policy_routing_rule
+      policy_routing_rules
       (lib.concatMap
         (get_policy_routing_for_interface interfaces)
         (attrNames interfaces));
@@ -137,17 +129,6 @@ let
           (get_policy_routing_for_interface interfaces)
           (attrNames interfaces))))).gateway;
 
-  # funny that the modulo function seems not to be defined anywhere
-  mod = x : n : x - (div x n) * n;
-
-  # convert value [0..15] into a single hex digit
-  hexDigit = x : elemAt (lib.stringToCharacters "0123456789abcdef") x;
-
-  # convert value [0..255] into two hex digits
-  byteToHex = x : lib.concatStrings [
-    (hexDigit (div x 16)) (hexDigit (mod x 16))
-  ];
-
 in
 {
 
@@ -168,7 +149,7 @@ in
     services.udev.extraRules = (lib.concatStrings
       (lib.mapAttrsToList (n : vlan : ''
         KERNEL=="eth*", ATTR{address}=="02:00:00:${
-          byteToHex (lib.toInt n)}:??:??", NAME="eth${vlan}"
+          fclib.byteToHex (lib.toInt n)}:??:??", NAME="eth${vlan}"
       '') cfg.static.vlans)
     );
 
@@ -178,13 +159,13 @@ in
       if
         cfg.network.policy_routing.enable &&
         lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-      then get_default_gateway is_ip4 cfg.enc.parameters.interfaces
+      then get_default_gateway fclib.isIp4 cfg.enc.parameters.interfaces
       else null;
     networking.defaultGateway6 =
       if
         cfg.network.policy_routing.enable &&
         lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
-      then get_default_gateway is_ip6 cfg.enc.parameters.interfaces
+      then get_default_gateway fclib.isIp6 cfg.enc.parameters.interfaces
       else null;
 
     # Only set nameserver if there is an enc set.
@@ -205,7 +186,7 @@ in
       else [];
 
     # data structure for all configured interfaces with their IP addresses:
-    # { ethfe = { ip4 = [ "..." "..." ]; ip6 = [ "..." "..." ]; }; ... }
+    # { ethfe = { ... }; ethsrv = { }; ... }
     networking.interfaces =
       if lib.hasAttrByPath ["parameters" "interfaces"] cfg.enc
       then get_network_configuration cfg.enc.parameters.interfaces
@@ -228,7 +209,7 @@ in
           ip -6 rule add priority 32766 lookup main
           ip -6 rule add priority 32767 lookup default
 
-          ${toString (get_policy_routing cfg.enc.parameters.interfaces)}
+          ${lib.concatStrings (get_policy_routing cfg.enc.parameters.interfaces)}
         ''
         else "";
 
@@ -243,7 +224,7 @@ in
         rules = lib.optionalString
           (lib.hasAttr "ethsrv" networking.interfaces)
           lib.concatMapStrings (a: ''
-            ${iptables a} -A nixos-fw -i ethsrv -s ${stripNetmask a
+            ${iptables a} -A nixos-fw -i ethsrv -s ${fclib.stripNetmask a
               } -j nixos-fw-accept
             '')
             addrs;
