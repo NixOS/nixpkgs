@@ -29,6 +29,15 @@ in
   # the root.
   nix.readOnlyStore = false;
 
+  system.activationScripts.readOnlyStore =
+    if config.nix.readOnlyStore then ''
+      ${pkgs.utillinux}/bin/mount | grep "/nix/store" > /dev/null ||
+        echo "Want to activate nix.readOnlyStore=true" > /reboot
+    '' else ''
+      ${pkgs.utillinux}/bin/mount | grep "/nix/store" > /dev/null &&
+        echo "Want to activate nix.readOnlyStore=false" > /reboot || true
+    '';
+
   boot.blacklistedKernelModules = [ "bochs_drm" ];
   boot.initrd.supportedFilesystems = [ "xfs" ];
   boot.kernelParams = [
