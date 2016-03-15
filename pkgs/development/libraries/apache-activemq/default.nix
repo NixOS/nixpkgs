@@ -1,13 +1,12 @@
-{ version, sha256, mkUrl }:
-# use a function to make the source url, because the url schemes differ between 5.8.0 and greater
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "apache-activemq-${version}";
+  version = "5.13.2";
 
   src = fetchurl {
-    url = mkUrl name;
-    inherit sha256;
+    sha256 = "0vrgny8fw973xvr3w4wc1s44z50b0c2hgcqa91s8fbx2yjmqn5xy";
+    url = "mirror://apache/activemq/${version}/${name}-bin.tar.gz";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
