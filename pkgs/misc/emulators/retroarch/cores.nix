@@ -158,6 +158,18 @@ in
     buildPhase = "make";
   };
 
+  mednafen-psx = (mkLibRetroCore rec {
+    core = "mednafen-psx";
+    src = fetchRetro {
+      repo = "beetle-psx-libretro";
+      rev = "20c9b0eb0062b8768cc40aca0e2b2d626f1002a2";
+      sha256 = "1dhql8zy9wv55m1lgvqv412087cqmlw7zwcsmxkl3r4z199dsh3m";
+    };
+    description = "Port of Mednafen's PSX Engine core to libretro";
+  }).override {
+    buildPhase = "make";
+  };
+
   mupen64plus = (mkLibRetroCore rec {
     core = "mupen64plus";
     src = fetchRetro {

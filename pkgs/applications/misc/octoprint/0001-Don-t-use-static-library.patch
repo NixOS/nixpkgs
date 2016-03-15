@@ -1,7 +1,7 @@
-From 73ff28c3ee5b737303871268a5487db0fcffc0f6 Mon Sep 17 00:00:00 2001
+From 0be3198cccf753226758684955f49a32d8d920c0 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Wed, 17 Feb 2016 14:37:31 +0300
-Subject: [PATCH 1/2] Don't use static library
+Subject: [PATCH] Don't use static library
 
 ---
  octoprint_m3dfio/__init__.py   | 67 +-----------------------------------------
@@ -9,23 +9,23 @@ Subject: [PATCH 1/2] Don't use static library
  2 files changed, 5 insertions(+), 68 deletions(-)
 
 diff --git a/octoprint_m3dfio/__init__.py b/octoprint_m3dfio/__init__.py
-index 5e5369b..9f59768 100644
+index a2ca533..43f178a 100644
 --- a/octoprint_m3dfio/__init__.py
 +++ b/octoprint_m3dfio/__init__.py
-@@ -764,72 +764,7 @@ class M3DFioPlugin(
+@@ -793,72 +793,7 @@ class M3DFioPlugin(
  		# Set file locations
  		self.setFileLocations()
  		
 -		# Check if running on Linux
 -		if platform.uname()[0].startswith("Linux") :
 -		
--			# Check if running on a Raspberry Pi
+-			# Check if running on a Raspberry Pi 1
 -			if platform.uname()[4].startswith("armv6l") and self.getCpuHardware() == "BCM2708" :
 -			
 -				# Set shared library
 -				self.sharedLibrary = ctypes.cdll.LoadLibrary(self._basefolder.replace('\\', '/') + "/static/libraries/preprocessor_arm1176jzf-s.so")
 -			
--			# Otherwise check if running on a Raspberry Pi 2
+-			# Otherwise check if running on a Raspberry Pi 2 or Raspberry Pi 3
 -			elif platform.uname()[4].startswith("armv7l") and self.getCpuHardware() == "BCM2709" :
 -			
 -				# Set shared library
@@ -87,7 +87,7 @@ index 5e5369b..9f59768 100644
  		if self.sharedLibrary :
  		
 diff --git a/shared library source/Makefile b/shared library source/Makefile
-index 4062a91..89dab71 100644
+index 9d015a1..a24f134 100644
 --- a/shared library source/Makefile	
 +++ b/shared library source/Makefile	
 @@ -58,13 +58,15 @@ ifeq ($(TARGET_PLATFORM), OSX64)
@@ -109,5 +109,5 @@ index 4062a91..89dab71 100644
  clean:
  	rm -f ../octoprint_m3dfio/static/libraries/$(PROG)
 -- 
-2.7.0
+2.7.1
 

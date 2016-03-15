@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoconf, automake, autoreconfHook, scheme48 }:
+{ stdenv, fetchgit, autoreconfHook, scheme48 }:
 
 stdenv.mkDerivation {
   name = "scsh-0.7pre";
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0fz1r0bmiii9ld91r84dqkqwhnqk0h6drdycq93zcy5ndyn12fqp";
   };
 
-  buildInputs = [ autoconf automake autoreconfHook scheme48 ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ scheme48 ];
   configureFlags = ''--with-scheme48=${scheme48}'';
 
   meta = with stdenv.lib; {

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       of them.
     '';
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

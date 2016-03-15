@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

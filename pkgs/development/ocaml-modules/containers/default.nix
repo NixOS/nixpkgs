@@ -42,6 +42,6 @@ stdenv.mkDerivation {
       helpers for unix and threads.
     '';
     license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

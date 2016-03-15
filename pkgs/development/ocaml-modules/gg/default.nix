@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       raster data.
     '';
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

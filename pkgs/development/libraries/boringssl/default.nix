@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "boringssl-${version}";
-  version = "20150713-7f15ff53";
+  version = "2016-03-08";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "7f15ff53d82a1991d6732d2303eb652b1cf7e023";
-    sha256 = "0c48vf6wcqm26lyn03f72yw3l1wng02zw1pjya1d1vqld7s0bdxq";
+    rev    = "bfb38b1a3c5e37d43188bbd02365a87bebc8d122";
+    sha256 = "0g9gh915ywawqf1gq7pwkhrhbh79w7si4g34ryml7a6mnmvx8b52";
   };
 
   buildInputs = [ cmake perl go ];

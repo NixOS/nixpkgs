@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     homepage = http://ocaml-safepass.forge.ocamlcore.org/;
     description = "An OCaml library offering facilities for the safe storage of user passwords";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

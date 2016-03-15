@@ -293,7 +293,7 @@ in
       # make sure that the tarsnap server is reachable after systemd starts up
       # the service - therefore we sleep in a loop until we can ping the
       # endpoint.
-      preStart = "while ! ping -q -c 1 betatest-server.tarsnap.com &> /dev/null; do sleep 3; done";
+      preStart = "while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done";
       scriptArgs = "%i";
       script = ''
         mkdir -p -m 0755 ${dirOf cfg.cachedir}

@@ -1,7 +1,7 @@
 { stdenv, fetchzip, fetchgit, bashCompletion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
 , automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms
-, libgudev }:
+, libgudev, sane-backends }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.2.12";
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-    "--with-udevrulesdir=$out/lib/udev/rules.d"
+    "--enable-sane"
+    "--with-udevrulesdir=$(out)/lib/udev/rules.d"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--localstatedir=/var"
     "--disable-bash-completion"
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bashCompletion argyllcms automake autoconf libgudev ];
+                  bashCompletion argyllcms automake autoconf libgudev sane-backends ];
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d

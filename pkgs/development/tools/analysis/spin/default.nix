@@ -1,6 +1,9 @@
-{stdenv, fetchurl, yacc }:
+{ stdenv, fetchurl, makeWrapper, yacc, gcc }:
 
-stdenv.mkDerivation rec {
+let
+  binPath = stdenv.lib.makeBinPath [ gcc ];
+
+in stdenv.mkDerivation rec {
   name = "spin-${version}";
   version = "6.4.5";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
@@ -13,11 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "0x8qnwm2xa8f176c52mzpvnfzglxs6xgig7bcgvrvkb3xf114224";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ yacc ];
 
   sourceRoot = "Spin/Src${version}";
 
-  installPhase = "install -D spin $out/bin/spin";
+  installPhase = ''
+    install -D spin $out/bin/spin
+    wrapProgram $out/bin/spin \
+      --prefix PATH : ${binPath}
+  '';
 
   meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";
