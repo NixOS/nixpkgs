@@ -1,4 +1,4 @@
-{ stdenv, lib, bundler, fetchFromGitHub, bundlerEnv, defaultGemConfig, libiconv, ruby
+{ stdenv, lib, bundler, fetchFromGitHub, bundlerEnv, libiconv, ruby
 , tzdata, git, nodejs, procps
 }:
 
