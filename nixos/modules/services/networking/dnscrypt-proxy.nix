@@ -49,7 +49,7 @@ in
         '';
       };
       resolverName = mkOption {
-        default = "opendns";
+        default = "cisco";
         type = types.nullOr types.string;
         description = ''
           The name of the upstream DNSCrypt resolver to use. See
@@ -130,6 +130,9 @@ in
         ${pkgs.xz}/lib/liblzma.so.* mr,
         ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
         ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+        ${pkgs.libcap}/lib/libcap.so.* mr,
+        ${pkgs.lz4}/lib/liblz4.so.* mr,
+        ${pkgs.attr}/lib/libattr.so.* mr,
 
         ${resolverListFile} r,
       }

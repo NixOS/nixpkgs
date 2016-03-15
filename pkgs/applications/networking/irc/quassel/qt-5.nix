@@ -3,6 +3,7 @@
 , client ? false # build Quassel client
 , previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
+, static ? false # link statically
 
 , stdenv, fetchurl, cmake, makeWrapper, dconf
 , qtbase, qtscript, qtwebkit
@@ -66,9 +67,9 @@ in with stdenv; mkDerivation rec {
 
   cmakeFlags = [
     "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF"
     "-DUSE_QT5=ON"
   ]
+    ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"

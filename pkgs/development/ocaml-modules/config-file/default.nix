@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://config-file.forge.ocamlcore.org/;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "An OCaml library used to manage the configuration file(s) of an application";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

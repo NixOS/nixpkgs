@@ -28,18 +28,17 @@ stdenv.mkDerivation rec {
 
   postInstall = stdenv.lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
-    substituteInPlace $out/bin/xdg-open --replace "awk " "${gawk}/bin/awk "
-    substituteInPlace $out/bin/xdg-open --replace "sort " "${coreutils}/bin/sort "
-    substituteInPlace $out/bin/xdg-open --replace "(file " "(${file}/bin/file "
-  '' + ''
-    for item in $out/bin/*; do
-      substituteInPlace $item --replace "cut " "${coreutils}/bin/cut "
-      substituteInPlace $item --replace "sed " "${gnused}/bin/sed "
-      substituteInPlace $item --replace "egrep " "${gnugrep}/bin/egrep "
-      sed -i $item -re "s#([^e])grep #\1${gnugrep}/bin/grep #g" # Don't replace 'egrep'
-      substituteInPlace $item --replace "which " "type -P "
-      substituteInPlace $item --replace "/usr/bin/file" "${file}/bin/file"
+  ''
+  + ''
+    for tool in "${coreutils}/bin/cut" "${gnused}/bin/sed" \
+      "${gnugrep}"/bin/{e,}grep "${file}/bin/file" \
+      ${stdenv.lib.optionalString mimiSupport
+        '' "${gawk}/bin/awk" "${coreutils}/bin/sort" ''} ;
+    do
+      sed "s# $(basename "$tool") # $tool #g" -i "$out"/bin/*
     done
+
+    sed 's# which # type -P #g' -i "$out"/bin/*
   '';
 
   meta = with stdenv.lib; {

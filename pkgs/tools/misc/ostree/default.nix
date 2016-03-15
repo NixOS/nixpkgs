@@ -10,7 +10,6 @@ stdenv.mkDerivation {
     homepage    = "http://live.gnome.org/OSTree/";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchFromGitHub {

@@ -238,7 +238,8 @@ in
         example = literalExample "[ pkgs.splix ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters, Ghostscript
-          and Samba are added unconditionally.
+          and Samba are added unconditionally. For adding Gutenprint, see
+          <literal>gutenprint</literal>.
         '';
       };
 

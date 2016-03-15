@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.coherentpdf.com/;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

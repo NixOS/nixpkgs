@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     homepage = http://code.google.com/p/ocaml-extlib/;
     description = "Enhancements to the OCaml Standard Library modules";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

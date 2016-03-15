@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "A comprehensive Unicode library for OCaml";
     license = stdenv.lib.licenses.lgpl21;
     branch = "0.8.2";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

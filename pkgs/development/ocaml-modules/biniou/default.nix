@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = "${webpage}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

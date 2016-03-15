@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     description = "A simple OCaml module for computing the least solution of a system of monotone equations";
     license = licenses.cecill-c;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

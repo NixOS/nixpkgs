@@ -14,6 +14,9 @@ let
       rev = "1b3a8407a95344d9d12a2a377f64140975f1e8e4";
       sha256 = "10byzvmpgrmr4d5mdn2kq04aapqb3sgr1admk13wjmy5cd6bwd2x";
     };
+
+    patches = [ ./azure-agent-entropy.patch ];
+
     buildInputs = [ makeWrapper python pythonPackages.wrapPython ];
     runtimeDeps = [ findutils gnugrep gawk coreutils openssl openssh
                     nettools # for hostname
@@ -54,9 +57,15 @@ in
 
   ###### interface
 
-  options.virtualisation.azure.agent.enable = mkOption {
-    default = false;
-    description = "Whether to enable the Windows Azure Linux Agent.";
+  options.virtualisation.azure.agent = {
+    enable = mkOption {
+      default = false;
+      description = "Whether to enable the Windows Azure Linux Agent.";
+    };
+    verboseLogging = mkOption {
+      default = false;
+      description = "Whether to enable verbose logging.";
+    };
   };
 
   ###### implementation
@@ -88,7 +97,7 @@ in
         Provisioning.DeleteRootPassword=n
 
         # Generate fresh host key pair.
-        Provisioning.RegenerateSshHostKeyPair=y
+        Provisioning.RegenerateSshHostKeyPair=n
 
         # Supported values are "rsa", "dsa" and "ecdsa".
         Provisioning.SshHostKeyPairType=ed25519
@@ -121,7 +130,7 @@ in
         Logs.Console=y
 
         # Enable verbose logging (y|n)
-        Logs.Verbose=n
+        Logs.Verbose=${if cfg.verboseLogging then "y" else "n"}
 
         # Root device timeout in seconds.
         OS.RootDeviceScsiTimeout=300
@@ -146,16 +155,30 @@ in
 
     systemd.targets.provisioned = {
       description = "Services Requiring Azure VM provisioning to have finished";
-      wantedBy = [ "sshd.service" ];
-      before = [ "sshd.service" ];
     };
 
+  systemd.services.consume-hypervisor-entropy =
+    { description = "Consume entropy in ACPI table provided by Hyper-V";
+
+      wantedBy = [ "sshd.service" "waagent.service" ];
+      before = [ "sshd.service" "waagent.service" ];
+      after = [ "local-fs.target" ];
+
+      path  = [ pkgs.coreutils ];
+      script =
+        ''
+          echo "Fetching entropy..."
+          cat /sys/firmware/acpi/tables/OEM0 > /dev/random
+        '';
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
+      serviceConfig.StandardError = "journal+console";
+      serviceConfig.StandardOutput = "journal+console";
+     };
 
     systemd.services.waagent = {
-      wantedBy = [ "sshd.service" ];
-      before = [ "sshd.service" ];
-      after = [ "ip-up.target" ];
-      wants = [ "ip-up.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "ip-up.target" "sshd.service" ];
 
       path = [ pkgs.e2fsprogs ];
       description = "Windows Azure Agent Service";

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     homepage = https://forge.ocamlcore.org/projects/calendar/;
     description = "An Objective Caml library managing dates and times";
     license = "LGPL";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

@@ -128,6 +128,7 @@ in
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
+      ++ lib.optional config.services.colord.enable kde5.colord-kde
       ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ]
 
       ++ lib.optionals cfg.phonon.gstreamer.enable

@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
-  version = "3.19.91";
+  version = "3.19.92";
 
   src = fetchurl {
-    sha256 = "1c5glf5vxgld41w4jxfqcv17q76qnh43fawpv33hncgh8d283xkf";
+    sha256 = "1zz6y4cih1v0npxjfxvnqz3bz7i5aripdsfy0hg9mhr1f4r0ig19";
     url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
   };
 

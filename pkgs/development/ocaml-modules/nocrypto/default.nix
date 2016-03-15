@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/mirleft/ocaml-nocrypto;
     description = "Simplest possible crypto to support TLS";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

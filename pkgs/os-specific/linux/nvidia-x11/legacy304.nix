@@ -8,25 +8,23 @@
 
 with stdenv.lib;
 
-let versionNumber = "304.125"; in
+let versionNumber = "304.131"; in
 
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
 
   builder = ./builder-legacy304.sh;
 
-  patches = [ ./nvidia-340.76-kernel-4.0.patch ];
-
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "1xy4g3yc73mb932cfr25as648k12sxpyymppb8nia3lijakv7idf";
+        url = "http://download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
+        sha256 = "1a1d0fsahgijcvs2p59vwhs0dpp7pp2wmvgcs1i7fzl6yyv4nmfj";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "08p6hikn7pbfg0apnsbaqyyh2s9m5r0ckqzgjvxirn5qcyll0g5a";
+        url = "http://download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
+        sha256 = "0gpqzb5gvhrcgrp3kph1p0yjkndx9wfzgh5j88ysrlflkv3q4vig";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
