@@ -21,7 +21,7 @@ in {
 
       steps = mkOption {
         type = types.str;
-        default = "--directory --system-state --channel";
+        default = "--directory --system-state --reboot --channel";
         description = "Steps to run by the agent.";
       };
 
@@ -70,6 +70,9 @@ in {
           ${pkgs.fcmanage}/bin/fc-resize-root
         '';
       };
+
+      # Remove the reboot marker during a reboot.
+      systemd.tmpfiles.rules = [ "r! /reboot" ];
 
     }
 

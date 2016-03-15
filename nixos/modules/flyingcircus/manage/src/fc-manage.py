@@ -133,6 +133,11 @@ def build_dev(build_options):
               ' '.join(build_options)))
 
 
+def ensure_reboot():
+    if os.path.exists('/reboot'):
+        os.system('systemctl reboot')
+
+
 def main():
     logging.basicConfig()
     build_options = []
@@ -146,6 +151,9 @@ def main():
     a.add_argument('-s', '--system-state', default=False, action='store_true',
                    help='dump local system information (like memory size) '
                    'to system_state.json')
+    a.add_argument('-r', '--reboot', default=False, action='store_true',
+                   help='reboot if necessary (if /reboot exists)')
+
     build = a.add_mutually_exclusive_group()
     build.add_argument('-c', '--channel', default=False, dest='build',
                        action='store_const', const='build_channel',
@@ -174,6 +182,9 @@ def main():
 
     if not args.build and not args.directory and not args.system_state:
         a.error('no action specified')
+
+    if args.reboot:
+        ensure_reboot()
 
 
 if __name__ == '__main__':
