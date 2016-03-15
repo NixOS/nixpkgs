@@ -13,16 +13,12 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
       {
         imports = [ ../manage/default.nix
                     ../static/default.nix
+                    ../roles/default.nix
                     ../services/default.nix
                     ../packages/default.nix
                     ../platform/default.nix ];
 
-        flyingcircus.services.sensu-server.enable = true;
-        flyingcircus.services.sensu-client.enable = true;
-        flyingcircus.services.sensu-client.password = "asdf";
-        flyingcircus.services.sensu-client.server = "localhost";
-        flyingcircus.services.sensu-api.enable = true;
-        flyingcircus.services.uchiwa.enable = true;
+        flyingcircus.roles.mysql.enable = true;
 
       };
   };
@@ -30,7 +26,8 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
   testScript = ''
     startAll;
 
-    $master->waitForUnit("sensu-server");
+    $master->waitForUnit("mysql");
+
     # $master->sleep(10);
     # This test was screwed and for some reason passed earlier on.
     # This is only to ensure we build the packages, for now.

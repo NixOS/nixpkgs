@@ -92,6 +92,9 @@ in rec {
         simple;
 
       flyingcircus = {
+            percona = hydraJob
+              (import modules/flyingcircus/tests/percona.nix {
+                  inherit system; });
             sensuserver = hydraJob
               (import modules/flyingcircus/tests/sensu.nix {
                   inherit system; });
