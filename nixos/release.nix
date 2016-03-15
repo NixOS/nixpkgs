@@ -43,34 +43,14 @@ let
 
 
   makeIso =
-    { module, type, description ? type, maintainers ? ["eelco"], system }:
+    { module, type, maintainers ? ["eelco"], system }:
 
     with import nixpkgs { inherit system; };
 
-    let
-
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
-      }).config;
-
-      iso = config.system.build.isoImage;
-
-    in
-      # Declare the ISO as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-iso-${config.system.nixosVersion}"
-        { meta = {
-            description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = map (x: lib.maintainers.${x}) maintainers;
-          };
-          inherit iso;
-          passthru = { inherit config; };
-          preferLocalBuild = true;
-        }
-        ''
-          mkdir -p $out/nix-support
-          echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''); # */
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+    }).config.system.build.isoImage);
 
 
   makeSystemTarball =

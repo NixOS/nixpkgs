@@ -39,7 +39,6 @@
 
 , # The volume ID.
   volumeID ? ""
-
 }:
 
 assert bootable -> bootImage != "";
@@ -47,7 +46,7 @@ assert efiBootable -> efiBootImage != "";
 assert usbBootable -> isohybridMbrImage != "";
 
 stdenv.mkDerivation {
-  name = "iso9660-image";
+  name = isoName;
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl xorriso syslinux];
 
