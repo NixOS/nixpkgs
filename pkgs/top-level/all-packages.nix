@@ -10637,12 +10637,26 @@ let
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
-    nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
-    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
-    nvidia_x11_legacy340 = callPackage ../os-specific/linux/nvidia-x11/legacy340.nix { };
-    nvidia_x11_beta      = nvidia_x11; # latest beta is lower version ATM
-                          # callPackage ../os-specific/linux/nvidia-x11/beta.nix { };
-    nvidia_x11           = callPackage ../os-specific/linux/nvidia-x11 { };
+    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "legacy304";
+    };
+    nvidia_x11_legacy340 = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "legacy340";
+    };
+    nvidia_x11_long_lived = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "long-lived";
+    };
+    nvidia_x11_short_lived = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "short-lived";
+    };
+    nvidia_x11_beta = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "beta";
+    };
+    nvidia_x11_vulkan = callPackage ../os-specific/linux/nvidia-x11 {
+      channel = "vulkan";
+    };
+    # Alias for compatibility
+    nvidia_x11 = nvidia_x11_long_lived;
 
     rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
 
