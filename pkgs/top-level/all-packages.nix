@@ -6716,11 +6716,15 @@ let
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
+  ffmpeg_3_0 = callPackage ../development/libraries/ffmpeg/3.0.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
   ffmpeg_2 = ffmpeg_2_8;
-  ffmpeg = ffmpeg_2;
+  ffmpeg_3 = ffmpeg_3_0;
+  ffmpeg = ffmpeg_3;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     # The following need to be fixed on Darwin
