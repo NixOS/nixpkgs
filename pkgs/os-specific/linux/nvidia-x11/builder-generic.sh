@@ -370,10 +370,7 @@ installPhase() {
     # Wrapped software rendering library
     if test -z "${libsOnly}" ; then
       nvidia_lib_install 0 0 'libnvidia-wfb' '-' "${version}" 'xorg/modules'
-      # symlink libwfb -> libnvidia-wfb
-      ln -fsv \
-        "${out}/lib/xorg/modules/libnvidia-wfb.so.${version}" \
-        "${out}/lib/xorg/modules/libwfb.so"
+      # TODO: figure out symlink libwfb -> libnvidia-wfb
     fi
 
     # Framebuffer capture library
