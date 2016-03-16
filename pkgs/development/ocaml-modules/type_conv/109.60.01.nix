@@ -22,7 +22,8 @@ stdenv.mkDerivation {
     homepage = "http://forge.ocamlcore.org/projects/type-conv/";
     description = "Support library for OCaml preprocessor type conversions";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with stdenv.lib.maintainers; [ z77z ];
   };
 }

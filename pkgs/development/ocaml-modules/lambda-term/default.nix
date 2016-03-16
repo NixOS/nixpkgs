@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
 
     homepage = https://github.com/diml/lambda-term;
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

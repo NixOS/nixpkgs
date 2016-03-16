@@ -50,7 +50,8 @@ stdenv.mkDerivation {
     homepage = "http://www.loria.fr/equipes/calligramme/acg";
     description = "A toolkit for developing ACG signatures and lexicon";
     license = licenses.cecill20;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

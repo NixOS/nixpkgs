@@ -35,6 +35,7 @@ stdenv.mkDerivation {
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     description = "A small OCaml library to ease the creation of graphical toplevels";
     license = stdenv.lib.licenses.lgpl3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

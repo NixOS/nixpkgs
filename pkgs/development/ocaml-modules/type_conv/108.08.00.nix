@@ -23,7 +23,8 @@ stdenv.mkDerivation {
     description = "Support library for OCaml preprocessor type conversions";
     license = licenses.asl20;
     branch = "108";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [ z77z ];
   };
 }

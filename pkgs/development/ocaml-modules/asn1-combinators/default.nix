@@ -24,7 +24,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/mirleft/ocaml-asn1-combinators;
     description = "Combinators for expressing ASN.1 grammars in OCaml";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
     broken = stdenv.isi686; # https://github.com/mirleft/ocaml-asn1-combinators/issues/13

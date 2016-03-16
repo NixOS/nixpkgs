@@ -22,7 +22,8 @@ buildOcaml {
     homepage = "https://bitbucket.org/mmottl/pcre-ocaml";
     description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [ z77z vbmithr ];
   };
 }

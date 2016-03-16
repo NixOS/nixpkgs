@@ -32,7 +32,8 @@ stdenv.mkDerivation {
       x86 or x86-64 processors. Support for additional architectures and
       operating systems is planned, but not yet available.
     '';
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

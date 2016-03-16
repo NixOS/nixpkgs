@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     homepage = http://erratique.ch/software/jsonm;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

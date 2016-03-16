@@ -29,7 +29,8 @@ stdenv.mkDerivation {
     homepage = http://erratique.ch/software/react;
     description = "Applicative events and signals for OCaml";
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [ z77z vbmithr gal_bolle];
   };
 }

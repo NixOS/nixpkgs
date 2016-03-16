@@ -26,7 +26,8 @@ stdenv.mkDerivation {
     homepage = http://www.cduce.org/download.html;
     description = "A lexer generator for Unicode and OCaml";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

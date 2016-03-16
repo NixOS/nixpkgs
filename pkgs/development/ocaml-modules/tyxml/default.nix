@@ -18,7 +18,8 @@ stdenv.mkDerivation {
     homepage = http://ocsigen.org/tyxml/;
     description = "A library that makes it almost impossible for your OCaml programs to generate wrong XML output, using static typing";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [
       gal_bolle vbgl
       ];

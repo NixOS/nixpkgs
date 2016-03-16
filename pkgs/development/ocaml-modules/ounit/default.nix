@@ -26,7 +26,8 @@ stdenv.mkDerivation {
     homepage = http://ounit.forge.ocamlcore.org/;
     description = "Unit test framework for OCaml";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

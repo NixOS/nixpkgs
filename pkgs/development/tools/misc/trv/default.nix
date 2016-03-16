@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     description = "Shim for vrt to enable bootstrapping";
     license = licenses.asl20;
     maintainers = [ maintainers.ericbmerritt ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

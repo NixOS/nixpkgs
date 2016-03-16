@@ -28,7 +28,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/mirage/ocaml-uri;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     description = "RFC3986 URI parsing library for OCaml";
     license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

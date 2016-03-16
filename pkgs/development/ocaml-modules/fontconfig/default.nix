@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Fontconfig bindings for OCaml";
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

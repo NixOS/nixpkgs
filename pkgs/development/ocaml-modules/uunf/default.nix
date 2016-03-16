@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An OCaml module for normalizing Unicode text";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

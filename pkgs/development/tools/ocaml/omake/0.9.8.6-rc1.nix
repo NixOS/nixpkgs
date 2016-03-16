@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     description = "Omake build system";
     homepage = "${webpage}";
     license = "GPL";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

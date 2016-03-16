@@ -26,7 +26,8 @@ stdenv.mkDerivation {
     homepage = http://oasis.forge.ocamlcore.org/;
     description = "Configure, build and install system for OCaml projects";
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [
       vbgl z77z
     ];

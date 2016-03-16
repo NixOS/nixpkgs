@@ -16,7 +16,8 @@ stdenv.mkDerivation {
     homepage = https://github.com/diml/optcomp;
     description = "Optional compilation for OCaml with cpp-like directives";
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [
       stdenv.lib.maintainers.gal_bolle
     ];

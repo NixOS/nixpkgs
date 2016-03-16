@@ -24,6 +24,7 @@ stdenv.mkDerivation {
     description = "Map OCaml arrays onto C-like structs";
     license = stdenv.lib.licenses.isc;
     maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

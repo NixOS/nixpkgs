@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An OCaml module to decode the data of the Unicode character database from its XML representation";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

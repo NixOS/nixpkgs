@@ -27,7 +27,8 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (llvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     description = "OCaml bindings distributed with LLVM";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

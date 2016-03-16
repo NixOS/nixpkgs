@@ -47,7 +47,8 @@ stdenv.mkDerivation {
       and SVG file output.
     '';
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

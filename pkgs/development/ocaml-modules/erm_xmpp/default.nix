@@ -26,7 +26,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/ermine/xmpp;
     description = "OCaml based XMPP implementation";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

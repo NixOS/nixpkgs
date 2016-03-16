@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Non-blocking streaming Unicode codec for OCaml";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

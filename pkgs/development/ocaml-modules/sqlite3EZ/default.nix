@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     description = "A thin wrapper for sqlite3-ocaml with a simplified interface";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

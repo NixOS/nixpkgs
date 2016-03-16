@@ -25,6 +25,7 @@ stdenv.mkDerivation {
     description = "Library for serializing OCaml values to and from S-expressions";
     license = licenses.asl20;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

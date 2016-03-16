@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
        '';
 
     platforms = with platforms; linux ++ darwin;
+    hydraPlatforms = with platforms; linux ++ darwin;
   };
 
 }

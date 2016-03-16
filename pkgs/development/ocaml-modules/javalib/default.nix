@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "${webpage}";
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

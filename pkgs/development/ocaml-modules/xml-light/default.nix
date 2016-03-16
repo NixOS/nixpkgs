@@ -38,6 +38,7 @@ stdenv.mkDerivation {
     homepage = "http://tech.motion-twin.com/xmllight.html";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

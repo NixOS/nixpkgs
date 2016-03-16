@@ -28,7 +28,8 @@ stdenv.mkDerivation {
       this part is currently work in progress).
     '';
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

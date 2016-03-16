@@ -26,7 +26,8 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/rgrinberg/stringext;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     description = "Extra string functions for OCaml";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

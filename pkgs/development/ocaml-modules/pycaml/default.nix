@@ -46,6 +46,7 @@ in stdenv.mkDerivation {
     homepage = "http://github.com/chemoelectric/pycaml";
     description = "Bindings for python and ocaml";
     license = "LGPL";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

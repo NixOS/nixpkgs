@@ -26,7 +26,8 @@ stdenv.mkDerivation (rec {
 
   meta = {
     branch = "2.14";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [
       stdenv.lib.maintainers.z77z
       stdenv.lib.maintainers.roconnor

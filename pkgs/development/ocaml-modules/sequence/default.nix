@@ -33,6 +33,7 @@ stdenv.mkDerivation {
       sequence is iterated/folded on.
     '';
     license = stdenv.lib.licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

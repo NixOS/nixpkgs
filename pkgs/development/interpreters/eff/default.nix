@@ -29,7 +29,8 @@ stdenv.mkDerivation {
       backtracking, multi-threading, and much more...
     '';
     license = licenses.bsd2;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

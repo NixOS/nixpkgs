@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     homepage = https://github.com/ocsigen/deriving;
     description = "Extension to OCaml for deriving functions from type declarations";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with stdenv.lib.maintainers; [
       gal_bolle vbgl
     ];

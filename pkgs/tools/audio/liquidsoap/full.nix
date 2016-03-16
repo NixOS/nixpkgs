@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     homepage = http://liquidsoap.fm/;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
   };
 }

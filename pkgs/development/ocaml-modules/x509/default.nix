@@ -21,7 +21,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/mirleft/ocaml-x509;
     description = "X509 (RFC5280) handling in OCaml";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

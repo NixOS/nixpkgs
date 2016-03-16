@@ -17,7 +17,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod;
     description = "Generate OCaml modules from source files";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with stdenv.lib.maintainers; [
       z77z
     ];

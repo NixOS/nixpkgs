@@ -20,7 +20,8 @@ stdenv.mkDerivation {
     description = "Store data using OCaml notation";
     homepage = https://forge.ocamlcore.org/projects/odn/;
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with maintainers; [
       vbgl z77z
     ];

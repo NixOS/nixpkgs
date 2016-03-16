@@ -18,7 +18,8 @@ stdenv.mkDerivation {
     description = "Optimised functions to read and write int16/32/64";
     homepage = https://github.com/OCamlPro/ocplib-endian;
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms;
+    hydraPlatforms = ocaml.meta.hydraPlatforms;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }
