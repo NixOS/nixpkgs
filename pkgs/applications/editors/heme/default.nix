@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace "/usr/local" "$out" \
       --replace "CFLAGS = " "CFLAGS = -I${ncurses.dev}/include " \
-      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses.lib}/lib " \
+      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses.out}/lib " \
       --replace "-lcurses" "-lncurses"
   '';
   buildInputs = [ ncurses ];

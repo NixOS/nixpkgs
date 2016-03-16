@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
-    "-DCURSES_LIBRARY=${ncurses.lib}/lib/libncurses.dylib"
+    "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
   ];
 
   # fails to find lex_token.h sometimes

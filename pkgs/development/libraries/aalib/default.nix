@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   postInstall = ''
     mkdir -p $dev/bin
     mv $bin/bin/aalib-config $dev/bin/aalib-config
-    substituteInPlace $out/lib/libaa.la --replace "${ncurses.dev}/lib" "${ncurses.lib}/lib"
+    substituteInPlace $out/lib/libaa.la --replace "${ncurses.dev}/lib" "${ncurses.out}/lib"
   '';
 
   meta = {

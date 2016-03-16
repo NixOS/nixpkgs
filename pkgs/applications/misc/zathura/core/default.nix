@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
-    "TPUT=${ncurses.dev}/bin/tput"
+    "TPUT=${ncurses.out}/bin/tput"
   ];
 
   postInstall = ''

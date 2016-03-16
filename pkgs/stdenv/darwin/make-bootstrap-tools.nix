@@ -65,7 +65,7 @@ rec {
       cp -d ${libiconv.lib or libiconv}/lib/lib*.dylib $out/lib
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
-      cp -d ${ncurses.lib}/lib/libncurses*.dylib $out/lib
+      cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib
 
       # Copy what we need of clang
       cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
