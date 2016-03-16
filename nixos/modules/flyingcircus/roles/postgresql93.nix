@@ -69,7 +69,7 @@ in
 
   };
 
-  config = mkIf config.flyingcircus.roles.postgresql93.enable {
+  config = mkIf cfg.roles.postgresql93.enable {
 
     services.postgresql.enable = true;
     services.postgresql.package = pkgs.postgresql93;
