@@ -1,8 +1,7 @@
 { luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
   less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
   gnuplot, fetchurl,
-
-  src ? ./.
+  src
 } :
 
 let
