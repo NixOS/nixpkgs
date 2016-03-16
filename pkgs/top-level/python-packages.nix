@@ -918,6 +918,20 @@ in modules // {
 
   });
 
+  chai = buildPythonPackage rec {
+    name = "chai-${version}";
+    version = "1.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/chai/${name}.tar.gz";
+      sha256 = "016kf3irrclpkpvcm7q0gmkfibq7jgy30a9v73pp42bq9h9a32bl";
+    };
+
+    meta = {
+      description = "Mocking, stubbing and spying framework for python";
+    };
+  };
+
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
     version = "0.5.0";
