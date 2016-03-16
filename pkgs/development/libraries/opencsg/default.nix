@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  preConfigure = ''
+    sed -i 's/^\(LIBS *=.*\)$/\1 -lX11/' example/Makefile
+  '';
+
   installPhase = ''
     mkdir -pv "$out/"{bin,share/doc/opencsg}
 
