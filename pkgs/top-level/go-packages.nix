@@ -3461,6 +3461,16 @@ let
     subPackages = [ "./" ]; # prevent building _demos
   };
 
+  terraform = buildFromGitHub {
+    rev = "v0.6.13";
+    owner = "hashicorp";
+    repo = "terraform";
+    disabled = !isGo16;
+    sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
+
+    buildInputs = [ ];
+  };
+
   testify = buildGoPackage rec {
     rev = "089c7181b8c728499929ff09b62d3fdd8df8adff";
     name = "testify-${stdenv.lib.strings.substring 0 7 rev}";

@@ -16231,6 +16231,8 @@ let
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  terraform = go16Packages.terraform.bin // { outputs = [ "bin" ]; };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
