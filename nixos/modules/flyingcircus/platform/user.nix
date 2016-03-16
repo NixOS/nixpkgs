@@ -171,26 +171,27 @@ in
 
     security.sudo.extraConfig = ''
       Defaults set_home,!authenticate,!mail_no_user,env_keep+=SSH_AUTH_SOCK
+      Defaults lecture = never
 
       ## Cmnd alias specification
-      Cmnd_Alias  NGINX = /etc/init.d/nginx
-      Cmnd_Alias  LOCALCONFIG = /usr/local/sbin/localconfig, \
-            /usr/local/sbin/localconfig -v
-      Cmnd_Alias  REBOOT = /sbin/reboot, \
-            /sbin/shutdown -r now, \
-            /sbin/shutdown -h now
+      Cmnd_Alias  REBOOT = ${pkgs.systemd}/bin/systemctl reboot, \
+            ${pkgs.systemd}/bin/systemctl poweroff
 
       ## User privilege specification
-      root ALL=(ALL) ALL
+      root   ALL=(ALL) SETENV: ALL
+      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
 
-      %wheel ALL=(ALL) PASSWD: ALL
       %sudo-srv ALL=(%service:service) ALL
-      %sudo-srv ALL=(root) NGINX, LOCALCONFIG, REBOOT
-      %service ALL=(root) NGINX, LOCALCONFIG
-
+      %sudo-srv ALL=(root) REBOOT
 
       # Allow unrestricted access to super admins
       %admins ALL=(ALL) PASSWD: ALL
+
+      # Allow applying config and restarting services to service users
+      Cmnd_Alias  FCMANAGE = ${pkgs.systemd}/bin/systemctl start fc-manage
+      %sudo-srv ALL=(root) FCMANAGE
+      %service  ALL=(root) FCMANAGE
+
     '';
 
   };

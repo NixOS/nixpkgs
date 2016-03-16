@@ -16,11 +16,8 @@ with lib;
   };
 
   config = {
-
      system.activationScripts = {
-        fc_ssl_certificates = {
-          deps = [];
-          text = ''
+        fc_ssl_certificates = ''
           export OPENSSL_CNF=${./openssl.cnf}
           for host in ${toString config.flyingcircus.ssl.certificates}; do
             if [ -e /etc/ssl/$host.crt ]; then continue; fi
@@ -28,11 +25,8 @@ with lib;
               -new -nodes -newkey rsa:4096 -keyout /etc/ssl/$host.key \
               -x509 -days 999 -subj "/CN=$host" -out /etc/ssl/$host.crt
           done
-          '';
-        };
-
+        '';
      };
-
   };
 
 }

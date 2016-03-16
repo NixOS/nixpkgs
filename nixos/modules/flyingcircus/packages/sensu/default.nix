@@ -1,13 +1,25 @@
-{ lib, bundlerEnv, ruby_2_0, pkgs }:
+{ lib, bundlerEnv, ruby_2_0, pkgs, which, defaultGemConfig, zlib, libxml2, graphicsmagick, pkgconfig, imagemagickBig }:
 
-  bundlerEnv {
-  name = "sensu-0.21.0";
+bundlerEnv {
+  name = "sensu-0.22.1";
 
   ruby = ruby_2_0;
 
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
+
+  gemConfig = defaultGemConfig // {
+    libxml-ruby = attrs: {
+      buildInputs = [ zlib ];
+      preInstall = ''
+        bundle config build.libxml-ruby "--use-system-libraries --with-xml2-lib=${libxml2}/lib --with-xml2-include=${libxml2}/include/libxml2"
+      '';
+    };
+    rmagick = attrs: {
+      buildInputs = [ which graphicsmagick pkgconfig imagemagickBig ];
+    };
+  };
 
   meta = with lib; {
     description = "A monitoring framework that aims to be simple, malleable, and scalable";

@@ -41,21 +41,6 @@ let
     (if stableBranch then "." else "pre") + "${toString (nixpkgs.revCount - 67824)}.${nixpkgs.shortRev}";
 
 in rec {
-
-  # Disable for now as this does what we expect it to do, but we don't really
-  # care at the moment.
-  #
-  #  backy =
-  #    let
-  #        backy_build = pkgs.fetchhg {
-  #		url = https://bitbucket.org/flyingcircus/backy;
-  #		# master as of 2015-10-13
-  #		rev = "2789e170a93ab2479e3a3cd833e79ba1bf866c1f";
-  #		sha256 = "1kz9hgv7ih34d2rzaz1r2i0jiwvxf3qr9xgxww98nghv67c069lh";
-  #	    };
-  #        backy_release = import "${backy_build}/release.nix";
-  #    in backy_release;
-
   # A bootable Flying Circus disk image (raw) that can be extracted onto
   # Ceph RBD volume.
   flyingcircus_vm_image =
@@ -107,6 +92,9 @@ in rec {
         simple;
 
       flyingcircus = {
+            percona = hydraJob
+              (import modules/flyingcircus/tests/percona.nix {
+                  inherit system; });
             sensuserver = hydraJob
               (import modules/flyingcircus/tests/sensu.nix {
                   inherit system; });
@@ -140,9 +128,9 @@ in rec {
 
   nixpkgs = {
     inherit (nixpkgs')
-      apacheHttpd_2_2
       apacheHttpd_2_4
       cmake
+      collectd
       cryptsetup
       emacs
       gettext
@@ -176,7 +164,7 @@ in rec {
       let all = x: map (system: x.${system}) supportedSystems; in
       [ nixpkgs.tarball
         (all nixpkgs.jdk)
- 	      flyingcircus_vm_image
+        flyingcircus_vm_image
       ]
       ++ lib.collect lib.isDerivation nixos;
   });

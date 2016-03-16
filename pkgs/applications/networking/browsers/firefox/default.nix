@@ -34,7 +34,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
-      xorg.libXext xorg.xextproto sqlite unzip makeWrapper
+      xorg.libXext xorg.xextproto /* sqlite */ unzip makeWrapper
       hunspell libevent libstartup_notification libvpx /* cairo */
       gstreamer gst_plugins_base icu libpng jemalloc
       libpulseaudio # only headers are needed
@@ -56,7 +56,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
       "--enable-system-ffi"
       "--enable-system-hunspell"
       "--enable-system-pixman"
-      "--enable-system-sqlite"
+      #"--enable-system-sqlite"
       #"--enable-system-cairo"
       "--enable-gstreamer"
       "--enable-startup-notification"
@@ -133,8 +133,8 @@ in {
 
   firefox = common {
     pname = "firefox";
-    version = "43.0.3";
-    sha256 = "129f8vmsam498j0s4rbi31a88j9ibkzm4m0w19ppcsha7cp25i8m";
+    version = "44.0.2";
+    sha256 = "17id7ala1slb2mjqkikryqjadcsmdzqmkxrrnb5m1316m50qichb";
   };
 
   firefox-esr = common {

@@ -5,8 +5,10 @@
 
 with lib;
 
-{
+let
+  cfg = config.flyingcircus;
 
+in {
   options = {
 
     flyingcircus.agent = {
@@ -19,7 +21,7 @@ with lib;
 
       steps = mkOption {
         type = types.str;
-        default = "--directory --system-state --channel";
+        default = "--directory --system-state --reboot --channel";
         description = "Steps to run by the agent.";
       };
 
@@ -52,48 +54,47 @@ with lib;
         pkgs.fcmanage
       ];
 
+      systemd.services.fc-manage = {
+        description = "Flying Circus Management Task";
+        restartIfChanged = false;
+        unitConfig.X-StopOnRemoval = false;
+        serviceConfig.Type = "oneshot";
+
+        # This configuration is stolen from NixOS' own automatic updater.
+        environment = config.nix.envVars // {
+          inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+          HOME = "/root";
+        };
+        script = ''
+          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
+          ${pkgs.fcmanage}/bin/fc-resize-root
+        '';
+      };
+
+      # Remove the reboot marker during a reboot.
+      systemd.tmpfiles.rules = [ "r! /reboot" ];
+
     }
 
     (mkIf config.flyingcircus.agent.enable {
 
       systemd.timers.fc-manage = {
         description = "Timer for fc-manage";
+        after = [ "network-online.target" ];
         wantedBy = [ "timers.target" ];
-        enable = true;
         timerConfig = {
           Unit = "fc-manage.service";
           # XXX This 10s thing is annoying. There seems to be an issue that
           # networking isn't _really_ up when the timer triggers for the
           # first time even though the 'network-online.target' is waited
           # for.
-          OnBootSec = "10s";
+          OnStartupSec = "15s";
           OnUnitActiveSec = "10m";
           # Not yet supported by our systemd version.
           # RandomSec = "3m";
         };
       };
 
-      systemd.services.fc-manage = {
-        description = "Flying Circus Management Task";
-        wants = [ "network-online.target" ];
-        after = [ "network-online.target" ];
-        restartIfChanged = false;
-        unitConfig.X-StopOnRemoval = false;
-        serviceConfig.Type = "oneshot";
-
-        # This configuration is stolen from NixOS' own automatic updater.
-
-        environment = config.nix.envVars // {
-          inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
-          HOME = "/root";
-        };
-        script = ''
-          ${pkgs.fcmanage}/bin/fc-manage ${config.flyingcircus.agent.steps}
-          ${pkgs.fcmanage}/bin/fc-resize-root
-          '';
-      };
     })
-
   ];
-
 }

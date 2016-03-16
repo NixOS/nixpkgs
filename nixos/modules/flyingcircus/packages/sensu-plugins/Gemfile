@@ -1,3 +1,0 @@
-source 'https://rubygems.org'
-gem 'sensu-plugins-mailer', "0.1.2"
-gem 'sensu-plugins-ssl', "0.0.6"

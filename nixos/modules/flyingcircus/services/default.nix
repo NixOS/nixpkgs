@@ -3,9 +3,11 @@
 {
 
   imports = [
+     ./influxdb011.nix
+     ./percona.nix
      ./sensu/api.nix
-     ./sensu/server.nix
      ./sensu/client.nix
+     ./sensu/server.nix
      ./sensu/uchiwa.nix
     ];
 

@@ -3,14 +3,28 @@
 let
   cfg = config.flyingcircus;
 
+  # This looks clunky.
+  version =
+      if cfg.roles.postgresql94.enable
+      then "9.4"
+      else if cfg.roles.postgresql93.enable
+      then "9.3"
+      else null;
+
+
+  # Is *any* postgres role enabled?
+  postgres_enabled = version != null;
+
+  package = {
+    "9.3" = pkgs.postgresql93;
+    "9.4" = pkgs.postgresql94;
+  };
+
   min = list:
     builtins.head (builtins.sort builtins.lessThan list);
   max = list:
     lib.last (builtins.sort builtins.lessThan list);
 
-
-  # return the "current" system memory in MiB. We currently use the value from
-  # the ENC but should use the actual system memory.
   current_memory =
     let
       enc_memory =
@@ -45,7 +59,7 @@ let
       (min [64 (shared_buffers / 32)])
       1];
 
-  listen_addresses =
+  listen_addresses = [ "127.0.0.1" "::1" ] ++ (
     if builtins.hasAttr "ethsrv" config.networking.interfaces
     then
       let
@@ -53,7 +67,22 @@ let
       in
         (map (addr: addr.address) ethsrv.ip4) ++
         (map (addr: addr.address) ethsrv.ip6)
-    else [];
+    else []);
+
+  # I hate you nix. /a/path in nix is obviously different from the string
+  # "/a/path". Like the former puts the path into the store. But how do I get
+  # from string to path? builtins.toPath does *not* do the trick.
+  local_config_path =
+    if version == "9.4"
+    then /etc/local/postgresql/9.4
+    else if version == "9.3"
+    then /etc/local/postgresql/9.3
+    else null;
+
+  local_config =
+    if local_config_path != null && pathExists local_config_path
+    then "include_dir '${local_config_path}'"
+    else "";
 
 in
 {
@@ -63,34 +92,40 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Enable the Flying Circus PostgreSQL server role.";
+        description = "Enable the Flying Circus PostgreSQL 9.3 server role.";
+      };
+    };
+
+    flyingcircus.roles.postgresql94 = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the Flying Circus PostgreSQL 9.4 server role.";
       };
     };
 
   };
 
-  config = mkIf cfg.roles.postgresql93.enable {
-
+  config = mkIf postgres_enabled {
     services.postgresql.enable = true;
-    services.postgresql.package = pkgs.postgresql93;
+    services.postgresql.package = builtins.getAttr version package;
 
     services.postgresql.initialScript = ./postgresql-init.sql;
-    services.postgresql.dataDir = "/srv/postgresql/9.3";
+    services.postgresql.dataDir = "/srv/postgresql/${version}";
 
     users.users.postgres = {
       shell = "/run/current-system/sw/bin/bash";
       home = "/srv/postgresql";
     };
-    system.activationScripts.flyingcircus_postgresql93 = ''
-      if ! test -e /srv/postgresql; then
-        mkdir -p /srv/postgresql
-      fi
-      chown ${toString config.ids.uids.postgres} /srv/postgresql
+    system.activationScripts.flyingcircus_postgresql = ''
+      install -d -o ${toString config.ids.uids.postgres} /srv/postgresql
+      install -d -o ${toString config.ids.uids.postgres} -g service /etc/local/postgresql/${version}
     '';
     security.sudo.extraConfig = ''
       # Service users may switch to the postgres system user
       %sudo-srv ALL=(postgres) ALL
       %service ALL=(postgres) ALL
+      %sensuclient ALL=(postgres) ALL
     '';
 
     # System tweaks
@@ -99,13 +134,17 @@ in
       "kernel.shmall" = toString (shared_memory_max / 4096);
     };
 
+    services.udev.extraRules = ''
+      # increase readahead for postgresql
+      SUBSYSTEM=="block", ATTR{queue/rotational}=="1", ACTION=="add|change", KERNEL=="vd[a-z]", ATTR{bdi/read_ahead_kb}="1024", ATTR{queue/read_ahead_kb}="1024"
+    '';
 
     # Custom postgresql configuration
     services.postgresql.extraConfig = ''
       #------------------------------------------------------------------------------
       # CONNECTIONS AND AUTHENTICATION
       #------------------------------------------------------------------------------
-      listen_addresses = '${concatStringsSep "," listen_addresses},127.0.0.1,::1'
+      listen_addresses = '${concatStringsSep "," listen_addresses}'
       max_connections = 400
       #------------------------------------------------------------------------------
       # RESOURCE USAGE (except WAL)
@@ -154,12 +193,27 @@ in
       lc_numeric = 'en_US.utf8'
       lc_time = 'en_US.utf8'
 
+      ${local_config}
     '';
 
+    environment.etc."local/postgresql/${version}/README.txt".text = ''
+        Put your local postgresql configuration here. This directory
+        is being included with include_dir.
+        '';
+
     services.postgresql.authentication = ''
+      local postgres root       trust
       host all  all  0.0.0.0/0  md5
       host all  all  ::/0       md5
     '';
+
+    flyingcircus.services.sensu-client.checks = {
+      postgresql = {
+        notification = "PostgreSQL alive";
+        command =  "/var/setuid-wrappers/sudo -u postgres check-postgres-alive.rb -d postgres";
+      };
+    };
+
   };
 
 }

@@ -26,14 +26,6 @@ in
   # http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
   networking.usePredictableInterfaceNames = false;
 
-  # Services to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
-  # Enable DBus
-  services.dbus.enable    = true;
-
   # Enable guest additions.
   virtualisation.virtualbox.guest.enable = true;
 

@@ -1,31 +1,21 @@
-{ stdenv, fetchgit, ghc, perl, gmp, ncurses, libiconv, autoconf, automake, happy, alex }:
-
-let
-
-  buildMK = ''
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
-    libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
-    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses}/include"
-    libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses}/lib"
-    DYNAMIC_BY_DEFAULT = NO
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
-      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
-      libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
-    ''}
-  '';
-
-in
+{ stdenv, fetchgit, ghc, perl, gmp, ncurses, libiconv, binutils, coreutils
+, autoconf, automake, happy, alex
+}:
 
 stdenv.mkDerivation rec {
-  version = "7.11.20150828";
+  version = "7.11.20151216";
   name = "ghc-${version}";
-  rev = "38c98e4f61a48084995a5347d76ddd024ce1a09c";
+  rev = "28638dfe79e915f33d75a1b22c5adce9e2b62b97";
 
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "0wnxrfzjpjcmsmd2i0zg30jg7zpw1rrfwz8r56g314l7xcns6yp1";
+    sha256 = "0rjzkzn0hz1vdnjikcbwfs5ggs8r3y4gqxfdn4jzfp45gx94wiwv";
   };
+
+  patches = [
+    ./dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+  ];
 
   postUnpack = ''
     pushd ghc-${builtins.substring 0 7 rev}
@@ -38,23 +28,39 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ghc perl autoconf automake happy alex ];
 
+  enableParallelBuilding = true;
+
   preConfigure = ''
-    echo >mk/build.mk "${buildMK}"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    export NIX_LDFLAGS+=" -no_dtrace_dof"
   '';
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
+    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses}/lib"
+  ] ++ stdenv.lib.optional stdenv.isDarwin [
+    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
-
-  enableParallelBuilding = true;
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+
+  postInstall = ''
+    # Install the bash completion file.
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+
+    # Patch scripts to include "readelf" and "cat" in $PATH.
+    for i in "$out/bin/"*; do
+      test ! -h $i || continue
+      egrep --quiet '^#!' <(head -n 1 $i) || continue
+      sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
+    done
+  '';
 
   meta = {
     homepage = "http://haskell.org/ghc";

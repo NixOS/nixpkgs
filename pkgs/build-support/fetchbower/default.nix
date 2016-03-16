@@ -1,7 +1,7 @@
 { stdenv, fetch-bower, git }: name: version: target: outputHash: stdenv.mkDerivation {
   name = "${name}-${version}";
   buildCommand = ''
-    out=$PWD/out fetch-bower ${name} ${version} ${target}
+    out=$PWD/out fetch-bower "${name}" "${version}" "${target}"
     cp -R out $out
   '';
   outputHashMode = "recursive";

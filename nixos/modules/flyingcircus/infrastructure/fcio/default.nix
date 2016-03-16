@@ -4,10 +4,39 @@
 
 with lib;
 
+let
+  cfg = config.flyingcircus;
+
+in
 {
   imports = [
       <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
   ];
+
+  systemd.services.qemu-guest-agent = {
+    description = "The Qemu guest agent.";
+    wantedBy = [ "basic.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.qemu}/bin/qemu-ga -m virtio-serial -p /dev/virtio-ports/org.qemu.guest_agent.0";
+      Restart = "always";
+      RestartSec = "5s";
+    };
+  };
+
+  # XXX This is rather sad, but Qemu can't ignore the mount and then we can't
+  # freeze the filesystem properly. :(
+  # Would need qemu to help here and notice that this is the same device as
+  # the root.
+  nix.readOnlyStore = false;
+
+  system.activationScripts.readOnlyStore =
+    if config.nix.readOnlyStore then ''
+      ${pkgs.utillinux}/bin/mount | grep "/nix/store" > /dev/null ||
+        echo "Want to activate nix.readOnlyStore=true" > /reboot
+    '' else ''
+      ${pkgs.utillinux}/bin/mount | grep "/nix/store" > /dev/null &&
+        echo "Want to activate nix.readOnlyStore=false" > /reboot || true
+    '';
 
   boot.blacklistedKernelModules = [ "bochs_drm" ];
   boot.initrd.supportedFilesystems = [ "xfs" ];
@@ -40,14 +69,11 @@ with lib;
     then config.flyingcircus.enc.name
     else "default";
 
-  networking.useDHCP = true;
-
-  services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
+  services.journald.extraConfig = "SystemMaxUse=5%";
 
   fileSystems."/".device = "/dev/disk/by-label/root";
   fileSystems."/tmp".device = "/dev/disk/by-label/tmp";
-
   swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 
   users.users.root = {
@@ -62,23 +88,37 @@ with lib;
     ];
   };
 
-  networking.firewall.allowPing = true;
-  networking.firewall.rejectPackets = true;
-
   systemd.ctrl-alt-del = "poweroff.target";
   systemd.extraConfig = ''
     RuntimeWatchdogSec=60
   '';
 
-  systemd.services.serial-console-liveness = {
-    description = "Serial console liveness marker";
-    wantedBy = [ "serial-getty@ttyS0.service" ];
-    script = ''
-      while true; do
-          echo "$(date) -- SERIAL CONSOLE IS LIVE --" > /dev/ttyS0
-          sleep 300;
-      done
-      '';
+  systemd.timers.serial-console-liveness = {
+    description = "Timer for Serial console liveness marker";
+    requiredBy = [ "serial-getty@ttyS0.service" ];
+    timerConfig = {
+      Unit = "serial-console-liveness.service";
+      OnBootSec = "10m";
+      OnUnitActiveSec = "10m";
+    };
   };
 
+  systemd.services.serial-console-liveness = {
+    description = "Serial console liveness marker";
+    serviceConfig.Type = "oneshot";
+    script = "echo \"$(date) -- SERIAL CONSOLE IS LIVE --\" > /dev/ttyS0";
+  };
+
+  systemd.services.enc-move-seed = {
+    description = "move ENC seed into its final location";
+    wantedBy = [ "fc-manage.service" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      if [[ ! -e ${cfg.enc_path} && -e /tmp/fc-data/enc.json ]]; then
+        echo "found ENC seed in /tmp/fc-data"
+        mv /tmp/fc-data/enc.json ${cfg.enc_path}
+        chmod 0640 ${cfg.enc_path}
+      fi
+    '';
+  };
 }

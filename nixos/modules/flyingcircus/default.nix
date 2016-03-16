@@ -13,10 +13,10 @@ in
 
   imports =
     infrastructure_modules ++
-    [./data
+    [./static
      ./platform
      ./packages
-     ./services/default.nix
+     ./services
      ./roles
      ./manage
     ];

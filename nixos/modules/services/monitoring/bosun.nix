@@ -9,7 +9,7 @@ let
     tsdbHost = ${cfg.opentsdbHost}
     httpListen = ${cfg.listenAddress}
     stateFile = ${cfg.stateFile}
-    checkFrequency = 5m
+    checkFrequency = ${cfg.checkFrequency}
 
     ${cfg.extraConfig}
   '';
@@ -74,6 +74,14 @@ in {
         default = "/var/lib/bosun/bosun.state";
         description = ''
           Path to bosun's state file.
+        '';
+      };
+
+      checkFrequency = mkOption {
+        type = types.str;
+        default = "5m";
+        description = ''
+          Bosun's check frequency
         '';
       };
 

@@ -56,7 +56,8 @@ class Disk(object):
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         partition_size = partx.splitlines()[1].split()[3]   # sectors
         subprocess.check_call(['resizepart', self.dev, '1', partition_size])
-        subprocess.check_call(['xfs_growfs', '/dev/disk/by-label/root'])
+        subprocess.check_call(['xfs_growfs', '/dev/disk/by-label/root'],
+                              stdout=subprocess.PIPE)
 
     def grow(self):
         self.ensure_gpt_consistency()

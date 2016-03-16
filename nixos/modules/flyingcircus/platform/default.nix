@@ -22,17 +22,22 @@ let
     get_json cfg.enc_path
     (get_json /etc/nixos/enc.json {});
 
-  system_state =
-    get_json cfg.system_state_path {};
+  enc_addresses.srv = get_json cfg.enc_addresses_path.srv [];
+
+  enc_services = get_json cfg.enc_services_path [];
+
+  enc_service_clients = get_json cfg.enc_service_clients_path [];
+
+  system_state = get_json cfg.system_state_path {};
 
 in
-
 {
 
   imports = [
     ./user.nix
     ./network.nix
     ./ssl/certificate.nix
+    ./sensu-client.nix
   ];
 
   options = {
@@ -40,7 +45,7 @@ in
     flyingcircus.enc = mkOption {
       default = null;
       type = types.nullOr types.attrs;
-      description = "Essential node configuration";
+      description = "Data from the external node classifier.";
     };
 
     flyingcircus.load_enc = mkOption {
@@ -50,11 +55,31 @@ in
     };
 
     flyingcircus.enc_path = mkOption {
-      default = /etc/nixos/enc.json;
-      type = types.path;
+      default = "/etc/nixos/enc.json";
+      type = types.string;
       description = "Where to find the ENC json file.";
     };
 
+    flyingcircus.enc_addresses.srv = mkOption {
+      default = enc_addresses.srv;
+      type = types.listOf types.attrs;
+      description = "List of addresses of machines in the neighbourhood.";
+      example = [ {
+        ip = "2a02:238:f030:1c3::104c/64";
+        mac = "02:00:00:03:11:b1";
+        name = "test03";
+        rg = "test";
+        rg_parent = "";
+        ring = 1;
+        vlan = "srv";
+      } ];
+    };
+
+    flyingcircus.enc_addresses_path.srv = mkOption {
+      default = /etc/nixos/addresses_srv.json;
+      type = types.path;
+      description = "Where to find the address list json file.";
+    };
 
     flyingcircus.system_state = mkOption {
       default = {};
@@ -66,6 +91,30 @@ in
       default = /etc/nixos/system_state.json;
       type = types.path;
       description = "Where to find the system state json file.";
+    };
+
+    flyingcircus.enc_services = mkOption {
+      default = [];
+      type = types.listOf types.attrs;
+      description = "Services in the environment as provided by the ENC.";
+    };
+
+    flyingcircus.enc_services_path = mkOption {
+      default = /etc/nixos/services.json;
+      type = types.path;
+      description = "Where to find the ENC services json file.";
+    };
+
+    flyingcircus.enc_service_clients = mkOption {
+      default = [];
+      type = types.listOf types.attrs;
+      description = "Service clients in the environment as provided by the ENC.";
+    };
+
+    flyingcircus.enc_service_clients_path = mkOption {
+      default = /etc/nixos/service_clients.json;
+      type = types.path;
+      description = "Where to find the ENC service clients json file.";
     };
 
   };
@@ -83,45 +132,58 @@ in
     ];
 
     flyingcircus.enc = lib.optionalAttrs cfg.load_enc enc;
+    flyingcircus.enc_services = enc_services;
+    flyingcircus.enc_service_clients = enc_service_clients;
     flyingcircus.system_state = system_state;
 
     users.motd = ''
-        Welcome to the Flying Circus
+        Welcome to the Flying Circus!
 
         Support:   support@flyingcircus.io or +49 345 219401-0
         Status:    http://status.flyingcircus.io/
         Docs:      http://flyingcircus.io/doc/
         Release:   ${config.system.nixosVersion}
 
-      '' + lib.optionalString (enc ? name) ''
-
+    '' + lib.optionalString (enc ? name) ''
         Hostname:  ${enc.name}    Environment: ${enc.parameters.environment}    Location:  ${enc.parameters.location}
         Services:  ${enc.parameters.service_description}
 
-      '';
+    '';
 
-    environment.noXlibs = true;
     sound.enable = false;
+    fonts.fontconfig.enable = true;
 
     environment.systemPackages = with pkgs; [
+        atop
+        bind
         cyrus_sasl
         db
         dstat
+        fcagent
         gcc
         git
         libxml2
         libxslt
         mercurial
         ncdu
+        nmap
         openldap
         openssl
+        psmisc
+        pv
         python27Full
         python27Packages.virtualenv
+        python3
+        utillinuxCurses
+        screen
+        sysstat
+        tcpdump
+        tree
         vim
         zlib
-        fcagent
-        zsh
     ];
+
+    programs.zsh.enable = true;
 
     environment.pathsToLink = [ "/include" ];
     environment.shellInit = ''
@@ -143,19 +205,31 @@ in
               IP_MULTIPLE_TABLES y
             '';
         };
+        nagiosPluginsOfficial = pkgs.nagiosPluginsOfficial.overrideDerivation (oldAttrs: {
+          buildInputs = [ pkgs.openssh pkgs.openssl ];
+          preConfigure= "
+            configureFlagsArray=(
+              --with-openssl=${pkgs.openssl}
+              --with-ping-command='/var/setuid-wrappers/ping -n -U -w %d -c %d %s'
+              --with-ping6-command='/var/setuid-wrappers/ping6 -n -U -w %d -c %d %s'
+            )
+          ";
+        });
       };
 
-    security.sudo.extraConfig =
-        ''
-        Defaults lecture = never
-        root   ALL=(ALL) SETENV: ALL
-        %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
-        '';
+    system.activationScripts.flyingcircus_platform = ''
+      # /srv must be accessible for unprivileged users
+      install -d -m 0755 /srv
+    '';
 
     environment.etc = (
       lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)
       { "directory.secret".text = cfg.enc.parameters.directory_secret;
         "directory.secret".mode = "0600";}) //
       { "nixos/configuration.nix".text = lib.readFile ../files/etc_nixos_configuration.nix; };
+
+    services.nixosManual.enable = false;
+    services.openssh.enable = true;
+    services.nscd.enable = true;
   };
 }
