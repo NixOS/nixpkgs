@@ -6316,12 +6316,12 @@ in modules // {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.1.1";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/j/jupyter_console/${name}.tar.gz";
-      sha256 = "3f9703b632e38d68713fc2ea1f546edc4db2a8f925c94b6dd91a8d0c13816ce9";
+      sha256 = "1qsa9h7db8qzd4hg9l5mfl8299y4i7jkd6p3vpksk3r5ip8wym6p";
     };
 
     buildInputs = with self; [ nose ];
@@ -10505,12 +10505,12 @@ in modules // {
   };
 
   ipython = buildPythonPackage rec {
-    version = "4.0.3";
+    version = "4.1.2";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
-      sha256 = "3a928f59e8ac8dd97858c28390867c87c09510f1f8bbe97e4e9c6b036eb84fc0";
+      sha256 = "14hnf3m087z39ndn5irj1ficc6l197bmdj6fpvz8bwi7la99cbq5";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -13395,17 +13395,20 @@ in modules // {
   };
 
   openpyxl = buildPythonPackage rec {
-    version = "2.3.0";
+    version = "2.3.3";
     name = "openpyxl-${version}";
 
-    src = pkgs.fetchhg {
-      url = "https://bitbucket.org/openpyxl/openpyxl";
-      rev = "${version}";
-      sha256 = "1iisk6rfh9h5xb411kfyzkcab6fdnsx573i0d83wfn4csk4p3p4d";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/o/openpyxl/${name}.tar.gz";
+      sha256 = "1zigyvsq45izkhr1h5gisgi0ag5dm6kz09f01c2cgdfav1bl3mlk";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jdcal et_xmlfile ];
+    propagatedBuildInputs = with self; [ jdcal et_xmlfile lxml ];
+
+    # Tests are not included in archive.
+    # https://bitbucket.org/openpyxl/openpyxl/issues/610
+    doCheck = false;
 
     meta = {
       description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
@@ -14785,7 +14788,9 @@ in modules // {
     };
   };
 
-  pandas = let
+  pandas = self.pandas_18;
+
+  pandas_17 = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
   in buildPythonPackage rec {
@@ -14800,16 +14805,14 @@ in modules // {
     buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
     propagatedBuildInputs = with self; [
       dateutil
-      numpy
-      scipy
+      scipy_0_17
       numexpr
       pytz
       xlrd
       bottleneck
       sqlalchemy
       lxml
-      # Disabling this because an upstream dependency, pep8, is broken on v3.5.
-      (if isPy35 then null else html5lib)
+      html5lib
       modules.sqlite3
       beautifulsoup4
     ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
@@ -14845,8 +14848,81 @@ in modules // {
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
-      ${python.executable} setup.py nosetests -A 'not network' --stop \
+      ${python.executable} setup.py nosetests -A 'not slow and not network' --stop \
         -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
+
+      runHook postCheck
+    '';
+
+    meta = {
+      homepage = "http://pandas.pydata.org/";
+      description = "Python Data Analysis Library";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ raskin fridh ];
+      platforms = platforms.unix;
+    };
+  };
+
+  pandas_18 = let
+    inherit (pkgs.stdenv.lib) optional optionalString;
+    inherit (pkgs.stdenv) isDarwin;
+  in buildPythonPackage rec {
+    name = "pandas-${version}";
+    version = "0.18.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
+      sha256 = "050qw0ap5bhyv5flp78x3lcq1dlminl3xaj6kbrm0jqmx0672xf9";
+    };
+
+
+    LC_ALL = "en_US.UTF-8";
+    buildInputs = with self; [ nose pkgs.glibcLocales ] ++ optional isDarwin pkgs.libcxx;
+    propagatedBuildInputs = with self; [
+      dateutil
+      scipy
+      numexpr
+      pytz
+      xlrd
+      bottleneck
+      sqlalchemy
+      lxml
+      html5lib
+      modules.sqlite3
+      beautifulsoup4
+      openpyxl
+      xlwt
+    ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
+
+    # For OSX, we need to add a dependency on libcxx, which provides
+    # `complex.h` and other libraries that pandas depends on to build.
+    patchPhase = optionalString isDarwin ''
+      cpp_sdk="${pkgs.libcxx}/include/c++/v1";
+      echo "Adding $cpp_sdk to the setup.py common_include variable"
+      substituteInPlace setup.py \
+        --replace "['pandas/src/klib', 'pandas/src']" \
+                  "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
+
+      # disable clipboard tests since pbcopy/pbpaste are not open source
+      substituteInPlace pandas/io/tests/test_clipboard.py \
+        --replace pandas.util.clipboard no_such_module \
+        --replace OSError ImportError
+    '';
+
+    # The flag `-A 'not network'` will disable tests that use internet.
+    # The `-e` flag disables a few problematic tests.
+    # https://github.com/pydata/pandas/issues/11169
+    # https://github.com/pydata/pandas/issues/11287
+    # The test_sql checks fail specifically on python 3.5; see here:
+    # https://github.com/pydata/pandas/issues/11112
+    checkPhase = let
+      testsToSkip = [];
+    in ''
+      runHook preCheck
+      # The flag `-A 'not network'` will disable tests that use internet.
+      # The `-e` flag disables a few problematic tests.
+      ${python.executable} setup.py nosetests -A 'not slow and not network' \
+         --verbosity=3
 
       runHook postCheck
     '';
@@ -14862,11 +14938,18 @@ in modules // {
 
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
+
     version = "0.9.4";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xlrd/xlrd-${version}.tar.gz";
       sha256 = "8e8d3359f39541a6ff937f4030db54864836a06e42988c452db5b6b86d29ea72";
     };
+
+    buildInputs = with self; [ nose ];
+    checkPhase = ''
+      nosetests -v
+    '';
+
   };
 
   bottleneck = buildPythonPackage rec {
@@ -22460,11 +22543,11 @@ in modules // {
 
   xarray = buildPythonPackage rec {
     name = "xarray-${version}";
-    version = "0.7.0";
+    version = "0.7.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/x/xarray/${name}.tar.gz";
-      sha256 = "b1562e8e2c61f1c3587d557ff48d2bc7be36574d6a8e86f11186c356bdd794cf";
+      sha256 = "1swcpq8x0p5pp94r9j4hr2anz1rqh7fnqax16xn9xsgrikdjipj5";
     };
 
     buildInputs = with self; [ pytest ];
@@ -22479,6 +22562,27 @@ in modules // {
       homepage = https://github.com/pydata/xarray;
       license = licenses.asl20;
       maintainers = with maintainers; [ fridh ];
+    };
+  };
+
+  xlwt = buildPythonPackage rec {
+    name = "xlwt-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/x/xlwt/${name}.tar.gz";
+      sha256 = "1y8w5imsicp01gn749qhw6j0grh9y19zz57ribwaknn8xqwjjhxc";
+    };
+
+    buildInputs = with self; [ nose ];
+    checkPhase = ''
+      nosetests -v
+    '';
+
+    meta = {
+      description = "Library to create spreadsheet files compatible with MS";
+      homepage = https://github.com/python-excel/xlwt;
+      license = with licenses; [ bsdOriginal bsd3 lgpl21 ];
     };
   };
 
