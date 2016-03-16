@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake automoc4 gettext pkgconfig ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     maintainers = [ maintainers.ambrop72 ];

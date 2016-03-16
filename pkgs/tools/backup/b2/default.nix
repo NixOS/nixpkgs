@@ -1,24 +1,17 @@
 { fetchFromGitHub, pythonPackages, stdenv }:
 
-stdenv.mkDerivation rec {
+pythonPackages.buildPythonPackage rec {
   name = "b2-${version}";
-  version = "git-26.01.2016";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "B2_Command_Line_Tool";
-    rev = "b3f06fd53eb1c9a07740b962284753cba413a7b8";
-    sha256 = "0kn2lkh8hp6g8q88glyz03z1r8a47pqm91dc5w083i334swqkjp2";
+    rev = "v${version}";
+    sha256 = "1g9j5s69w6n70nb18rvx3gm9f4gi1vis23ib8rn2v1khv6z2acqp";
   };
 
-  buildInputs = [ pythonPackages.wrapPython ];
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp b2 $out/bin
-  '';
-
-  postInstall = "wrapPythonPrograms";
+  pythonPath = [ pythonPackages.six ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Backblaze/B2_Command_Line_Tool;

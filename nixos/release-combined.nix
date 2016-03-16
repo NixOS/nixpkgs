@@ -44,11 +44,11 @@ in rec {
         (all nixos.manual)
 
         (all nixos.iso_minimal)
-        (all nixos.iso_graphical)
-        (all nixos.ova)
+        nixos.iso_graphical.x86_64-linux
+        nixos.ova.x86_64-linux
 
         #(all nixos.tests.containers)
-        (all nixos.tests.chromium.stable)
+        #(all nixos.tests.chromium.stable)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
