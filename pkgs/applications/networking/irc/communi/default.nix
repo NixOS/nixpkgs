@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapQtProgram "$out/bin/communi"
+    substituteInPlace "$out/share/applications/communi.desktop" \
+      --replace "/usr/bin" "$out/bin"
   '';
 
   meta = with stdenv.lib; {

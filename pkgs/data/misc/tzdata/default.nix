@@ -1,25 +1,32 @@
 { stdenv, fetchurl }:
 
-let version = "2015g"; in
-
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
+  version = "2016a";
 
   srcs =
     [ (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "0qb1awqrn3215zd2jikpqnmkzrxwfjf0d3dw2xmnk4c40yzws8xr";
+        sha256 = "1lccd8f8fiwfyr1f6c2ad1rgd58qlmrk5b00ywg95vv49qr6pyjy";
       })
       (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "1i3y1kzjiz2j62c7vd4wf85983sqk9x9lg3473njvbdz4kph5r0q";
+        sha256 = "13f2412ywphrvslmp1cjfyyjfrk67gbrsk4ih5n8qkl4kgandbhi";
       })
     ];
 
   sourceRoot = ".";
   outputs = [ "out" "lib" ];
 
-  makeFlags = "TOPDIR=$(out) TZDIR=$(out)/share/zoneinfo ETCDIR=$(TMPDIR)/etc LIBDIR=$(lib)/lib MANDIR=$(TMPDIR)/man AWK=awk CFLAGS=-DHAVE_LINK=0";
+  makeFlags = [
+    "TOPDIR=$(out)"
+    "TZDIR=$(out)/share/zoneinfo"
+    "ETCDIR=$(TMPDIR)/etc"
+    "LIBDIR=$(lib)/lib"
+    "MANDIR=$(TMPDIR)/man"
+    "AWK=awk"
+    "CFLAGS=-DHAVE_LINK=0"
+  ];
 
   postInstall =
     ''

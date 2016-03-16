@@ -2,6 +2,7 @@
 
 pythonPackages.buildPythonPackage rec {
   name = "b2-${version}";
+  namePrefix = "";
   version = "0.4.4";
 
   src = fetchFromGitHub {

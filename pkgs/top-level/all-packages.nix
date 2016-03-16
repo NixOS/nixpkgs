@@ -3306,10 +3306,6 @@ let
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
-  stardict = callPackage ../applications/misc/stardict/stardict.nix {
-    inherit (gnome) libgnomeui scrollkeeper;
-  };
-
   stdman = callPackage ../data/documentation/stdman { };
 
   storebrowse = callPackage ../tools/system/storebrowse { };
@@ -9575,16 +9571,8 @@ let
 
   dnschain = callPackage ../servers/dnschain { };
 
-  dovecot = dovecot22;
-
-  dovecot21 = callPackage ../servers/mail/dovecot { };
-
-  dovecot22 = callPackage ../servers/mail/dovecot/2.2.x.nix { };
-
-  dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole {
-    dovecot = dovecot22;
-  };
-
+  dovecot = callPackage ../servers/mail/dovecot { };
+  dovecot_pigeonhole = callPackage ../servers/mail/dovecot/plugins/pigeonhole { };
   dovecot_antispam = callPackage ../servers/mail/dovecot/plugins/antispam { };
 
   dspam = callPackage ../servers/mail/dspam {
@@ -10268,7 +10256,9 @@ let
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
-  freefall = callPackage ../os-specific/linux/freefall { };
+  freefall = callPackage ../os-specific/linux/freefall {
+    inherit (linuxPackages) kernel;
+  };
 
   fuse = callPackage ../os-specific/linux/fuse { };
 
@@ -16221,6 +16211,8 @@ let
 
   sqsh = callPackage ../development/tools/sqsh { };
 
+  terraform = go16Packages.terraform.bin // { outputs = [ "bin" ]; };
+
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tewi-font = callPackage ../data/fonts/tewi  {};
@@ -16377,6 +16369,8 @@ let
   };
 
   yafc = callPackage ../applications/networking/yafc { };
+
+  yamdi = callPackage ../tools/video/yamdi { };
 
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 

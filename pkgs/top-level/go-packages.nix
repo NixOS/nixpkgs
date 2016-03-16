@@ -5,6 +5,8 @@
 
 let
   isGo14 = go.meta.branch == "1.4";
+  isGo15 = go.meta.branch == "1.5";
+  isGo16 = go.meta.branch == "1.6";
 
   self = _self // overrides; _self = with self; {
 
@@ -3457,6 +3459,16 @@ let
     };
 
     subPackages = [ "./" ]; # prevent building _demos
+  };
+
+  terraform = buildFromGitHub {
+    rev = "v0.6.13";
+    owner = "hashicorp";
+    repo = "terraform";
+    disabled = !isGo16;
+    sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
+
+    buildInputs = [ ];
   };
 
   testify = buildGoPackage rec {
