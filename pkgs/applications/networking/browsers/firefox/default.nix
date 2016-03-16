@@ -73,7 +73,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
+                             "--enable-optimize"
                              "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
