@@ -23961,12 +23961,15 @@ in modules // {
   };
 
   power = buildPythonPackage rec {
-    name = "power-1.2";
+    name = "power-1.4";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/p/power/${name}.tar.gz";
-      sha256 = "09a00af8357f63dbb1a1eb13b82e39ccc0a14d6d2e44e5b235afe60ce8ee8195";
+      url = "https://pypi.python.org/packages/source/p/power/${name}.tar.gz";
+      sha256 = "7d7d60ec332acbe3a7d00379b45e39abf650bf7ee311d61da5ab921f52f060f0";
     };
+
+    # Tests can't work because there is no power information available.
+    doCheck = false;
 
     meta = {
       description = "Cross-platform system power status information";
