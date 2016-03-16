@@ -295,6 +295,7 @@
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
+  ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";

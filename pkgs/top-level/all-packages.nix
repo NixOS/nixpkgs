@@ -16388,6 +16388,8 @@ let
 
   yafc = callPackage ../applications/networking/yafc { };
 
+  yamdi = callPackage ../tools/video/yamdi { };
+
   yandex-disk = callPackage ../tools/filesystems/yandex-disk { };
 
   yara = callPackage ../tools/security/yara { };
