@@ -5,6 +5,8 @@
 
 let
   isGo14 = go.meta.branch == "1.4";
+  isGo15 = go.meta.branch == "1.5";
+  isGo16 = go.meta.branch == "1.6";
 
   self = _self // overrides; _self = with self; {
 
