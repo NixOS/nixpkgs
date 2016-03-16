@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, python, isPy3k, isPyPy, wxGTK, openglSupport ? true, pyopengl
-, version, sha256, wrapPython, setuptools, ...
+, version, sha256, wrapPython, setuptools, libX11, ...
 }:
 
 assert wxGTK.unicode;
@@ -17,8 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   pythonPath = [ python setuptools ];
-  buildInputs = [ python setuptools pkgconfig wxGTK (wxGTK.gtk) wrapPython ]  ++ stdenv.lib.optional openglSupport pyopengl;
+  buildInputs = [ python setuptools pkgconfig wxGTK (wxGTK.gtk) wrapPython libX11 ]  ++ stdenv.lib.optional openglSupport pyopengl;
   preConfigure = "cd wxPython";
+
+  NIX_LDFLAGS = "-lX11 -lgdk-x11-2.0";
 
   installPhase = ''
     ${python.interpreter} setup.py install WXPORT=gtk2 NO_HEADERS=1 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
