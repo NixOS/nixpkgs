@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   # Source repo is also available here:
   # https://github.com/ioppermann/yamdi
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/project/yamdi/yamdi/${version}/yamdi-${version}.tar.gz";
+    url = "mirror://sourceforge/yamdi/yamdi-${version}.tar.gz";
     sha256 = "4a6630f27f6c22bcd95982bf3357747d19f40bd98297a569e9c77468b756f715";
   };
 
