@@ -10274,7 +10274,9 @@ let
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
-  freefall = callPackage ../os-specific/linux/freefall { };
+  freefall = callPackage ../os-specific/linux/freefall {
+    inherit (linuxPackages) kernel;
+  };
 
   fuse = callPackage ../os-specific/linux/fuse { };
 
