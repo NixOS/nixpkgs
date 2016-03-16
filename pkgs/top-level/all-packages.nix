@@ -3307,10 +3307,6 @@ let
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
-  stardict = callPackage ../applications/misc/stardict/stardict.nix {
-    inherit (gnome) libgnomeui scrollkeeper;
-  };
-
   stdman = callPackage ../data/documentation/stdman { };
 
   storebrowse = callPackage ../tools/system/storebrowse { };
