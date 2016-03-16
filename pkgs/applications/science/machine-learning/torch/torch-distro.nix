@@ -117,8 +117,10 @@ let
             wrapProgram $p \
               --set LD_LIBRARY_PATH "${lib.makeSearchPath "lib" runtimeDeps_}" \
               --set PATH "${lib.makeSearchPath "bin" runtimeDeps_}" \
-              --set LUA_PATH "'$LUA_PATH;$out/share/lua/${luajit.luaversion}/?.lua;$out/share/lua/${luajit.luaversion}/?/init.lua'" \
-              --set LUA_CPATH "'$LUA_CPATH;$out/lib/lua/${luajit.luaversion}/?.so;$out/lib/lua/${luajit.luaversion}/?/init.so'"
+              --suffix LUA_PATH ';' "\"$LUA_PATH\"" \
+              --suffix LUA_PATH ';' "\"$out/share/lua/${luajit.luaversion}/?.lua;$out/share/lua/${luajit.luaversion}/?/init.lua\"" \
+              --suffix LUA_CPATH ';' "\"$LUA_CPATH\"" \
+              --suffix LUA_CPATH ';' "\"$out/lib/lua/${luajit.luaversion}/?.so;$out/lib/lua/${luajit.luaversion}/?/init.so\""
           done
 
           eval "$postInstall"
