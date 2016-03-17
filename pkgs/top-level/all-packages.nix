@@ -92,8 +92,14 @@ let
   # ... pkgs.foo ...").
   pkgs = applyGlobalOverrides pkgsInit (self: config.packageOverrides or (super: {}));
 
-  mkOverrides = pkgsOrig: overrides: overrides //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
+  mkOverrides = pkgs: overrides: overrides // stdenvOverrides pkgs;
+
+  # stdenvOverrides is used to avoid circular dependencies for building the
+  # standard build environment. This mechanism use the override mechanism to
+  # implement some staged compilation of the stdenv.
+  stdenvOverrides = pkgs:
+    lib.optionalAttrs (pkgs.stdenv ? overrides && crossSystem == null)
+      (pkgs.stdenv.overrides pkgs);
 
   # The un-overriden packages, passed to `overrider'.
   pkgsInit = pkgsFun pkgs {};
