@@ -17,5 +17,16 @@
     sensu = pkgs.callPackage ./sensu { };
     uchiwa = pkgs.callPackage ./uchiwa { };
 
+    stdenv = pkgs.stdenv // {
+      platform = pkgs.stdenv.platform // {
+        kernelExtraConfig =
+        ''
+        DEBUG_INFO y
+        LATENCYTOP y
+        SCHEDSTATS y
+        '';
+      };
+    };
+
   };
 }
