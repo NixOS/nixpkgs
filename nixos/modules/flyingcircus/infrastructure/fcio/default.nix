@@ -121,4 +121,10 @@ in
       fi
     '';
   };
+
+  # Configure time keeping;
+  services.ntp.enable = false;
+  services.chrony.enable = true;
+  services.chrony.servers = config.flyingcircus.static.ntpservers.${config.flyingcircus.enc.parameters.location};
+
 }
