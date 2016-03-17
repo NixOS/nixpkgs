@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   makeFlags =
     let
       arch = head (splitString "-" stdenv.system);
-      march = { "x86_64" = "x86-64"; "i686" = "i686"; }."${arch}"
+      march = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
               or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { "x86_64" = "x86-64"; "i686" = "pentium4"; }."${arch}"
