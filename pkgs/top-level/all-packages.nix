@@ -7407,6 +7407,8 @@ let
 
   libcangjie = callPackage ../development/libraries/libcangjie { };
 
+  libcollectdclient = callPackage ../development/libraries/libcollectdclient { };
+
   libcredis = callPackage ../development/libraries/libcredis { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
