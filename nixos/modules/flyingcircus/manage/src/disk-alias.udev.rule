@@ -1,1 +1,0 @@
-SUBSYSTEM=="block", PROGRAM="fc-get-disk-alias %k", SYMLINK+="%c"

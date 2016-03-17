@@ -52,6 +52,10 @@ in
     "systemd.journald.forward_to_console=yes"
     "nosetmode"
     ];
+
+  # installs /dev/disk/device-by-alias/*
+  services.udev.packages = [ pkgs.fc-udev ];
+
   # Changing this can be nasty: grub is reconfigured before any configuration
   # is activated. This means we currently have to make sure that device exists
   # when switching the configuration to it.

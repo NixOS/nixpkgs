@@ -5,8 +5,8 @@
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
-    fcagent = pkgs.callPackage ./fcagent.nix { };
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
+    fc-udev = pkgs.callPackage ./fc-udev { };
 
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
     qemu = pkgs.callPackage ./qemu-2.5.nix {

@@ -159,7 +159,6 @@ in
         cyrus_sasl
         db
         dstat
-        fcagent
         gcc
         git
         libxml2

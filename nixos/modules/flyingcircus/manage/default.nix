@@ -46,14 +46,6 @@ in {
         pkgs.fcmanage
       ];
 
-      services.udev.packages = [
-        pkgs.fcmanage
-      ];
-
-      services.udev.path = [
-        pkgs.fcmanage
-      ];
-
       systemd.services.fc-manage = {
         description = "Flying Circus Management Task";
         restartIfChanged = false;
