@@ -2523,16 +2523,17 @@ let
   };
 
   cryptography = buildPythonPackage rec {
-    name = "cryptography-1.0";
+    # also bump cryptography_vectors
+    name = "cryptography-1.2.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography/${name}.tar.gz";
-      sha256 = "008hq9s4z7y17yjxh1aycvddas320hfbl9vj8gydg4fpfzz04711";
+      sha256 = "0kj511z4g21fhcr649pyzpl0zzkkc7hsgxxjys6z8wwfvmvirccf";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
-                    self.iso8601 self.pyasn1 self.pytest self.py ];
-    propagatedBuildInputs = [ self.six self.idna self.ipaddress ]
+                    self.iso8601 self.pyasn1 self.pytest self.py self.hypothesis ];
+    propagatedBuildInputs = with self; [ six idna ipaddress pyasn1-modules modules.sqlite3 ]
      ++ optional (!isPyPy) self.cffi
      ++ optional (pythonOlder "3.4") self.enum34;
   };
@@ -2553,11 +2554,12 @@ let
   };
 
   cryptography_vectors = buildPythonPackage rec {
-    name = "cryptography_vectors-1.0";
+    # also bump cryptography
+    name = "cryptography_vectors-1.2.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "0d02x93vk0b1fla914bij71pfma0p7sprlvrxq1bb6dxnwc7h9z7";
+      sha256 = "0shawgpax79gvjrj0a313sll9gaqys7q1hxngn6j4k24lmz7bwki";
     };
   };
 
@@ -2666,12 +2668,12 @@ let
     };
   };
 
-  cffi = buildPythonPackage rec {
-    name = "cffi-1.1.2";
+  cffi = if isPyPy then null else buildPythonPackage rec {
+    name = "cffi-1.5.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/cffi/${name}.tar.gz";
-      md5 = "ca6e6c45b45caa87aee9adc7c796eaea";
+      sha256 = "1p91p1n8n46y0k3q7ddgxxjnfh08rjqsjh7zbjxzfiifhycxx6ys";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
