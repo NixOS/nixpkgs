@@ -232,8 +232,11 @@ in
       { linux_4_3 = pkgs.linux_4_3.override {
           extraConfig =
             ''
-              IPV6_MULTIPLE_TABLES y
+              DEBUG_INFO y
               IP_MULTIPLE_TABLES y
+              IPV6_MULTIPLE_TABLES y
+              LATENCYTOP y
+              SCHEDSTATS y
             '';
         };
         nagiosPluginsOfficial = pkgs.nagiosPluginsOfficial.overrideDerivation (oldAttrs: {
