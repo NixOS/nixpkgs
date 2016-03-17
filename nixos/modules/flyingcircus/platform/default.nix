@@ -152,33 +152,64 @@ in
 
     sound.enable = false;
     fonts.fontconfig.enable = true;
-
     environment.systemPackages = with pkgs; [
+        aespipe
+        apacheHttpd
         atop
+        bc
         bind
+        bundler
+        curl
         cyrus_sasl
         db
         dstat
         fcagent
+        fio
         gcc
+        gdbm
         git
+        gnupg
+        go
+        graphviz
+        imagemagick
+        inetutils
+        iotop
+        kerberos
+        libmemcached
         libxml2
         libxslt
+        links
+        lsof
+        lynx
         mercurial
+        mmv
+        nano
+        nc6
         ncdu
+        netcat
+        ngrep
         nmap
+        nodejs
         openldap
         openssl
+        php
+        postgresql
+        protobuf
         psmisc
         pv
         python27Full
         python27Packages.virtualenv
         python3
-        utillinuxCurses
         screen
+        strace
+        subversion
         sysstat
         tcpdump
+        telnet
+        traceroute
         tree
+        unzip
+        utillinuxCurses
         vim
         zlib
     ];
