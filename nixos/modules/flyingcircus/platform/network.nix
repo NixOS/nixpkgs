@@ -223,11 +223,11 @@ in
         addrs = map (elem: elem.ip) cfg.enc_addresses.srv;
         rules = lib.optionalString
           (lib.hasAttr "ethsrv" networking.interfaces)
-          lib.concatMapStrings (a: ''
+          (lib.concatMapStrings (a: ''
             ${iptables a} -A nixos-fw -i ethsrv -s ${fclib.stripNetmask a
               } -j nixos-fw-accept
             '')
-            addrs;
+            addrs);
       in "# Accept traffic within the same resource group.\n${rules}";
 
     # DHCP settings
