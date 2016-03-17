@@ -944,5 +944,7 @@ self: super: {
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
 
   # https://github.com/agda/agda/issues/1840
+  Agda_2_4_2_3 = super.Agda_2_4_2_3.override { unordered-containers = self.unordered-containers_0_2_5_1; };
+  Agda_2_4_2_4 = super.Agda_2_4_2_4.override { unordered-containers = self.unordered-containers_0_2_5_1; };
   Agda = super.Agda.override { unordered-containers = self.unordered-containers_0_2_5_1; };
 }
