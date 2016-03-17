@@ -1009,8 +1009,6 @@ let
 
   asynk = callPackage ../tools/networking/asynk { };
 
-  b2 = callPackage ../tools/backup/b2 { };
-
   bacula = callPackage ../tools/backup/bacula { };
 
   bareos = callPackage ../tools/backup/bareos { };
