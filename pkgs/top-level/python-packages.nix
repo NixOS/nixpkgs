@@ -7821,16 +7821,18 @@ in modules // {
   });
 
   distutils_extra = buildPythonPackage rec {
-    name = "distutils-extra-2.26";
+    name = "distutils-extra-${version}";
+    version = "2.39";
 
     src = pkgs.fetchurl {
-      url = "http://launchpad.net/python-distutils-extra/trunk/2.26/+download/python-${name}.tar.gz";
-      sha256 = "11a3d16efffb00c2b50f40c48531dadaf553ed7a36c5621fde437a16ca40f7ea";
+      url = "http://launchpad.net/python-distutils-extra/trunk/${version}/+download/python-${name}.tar.gz";
+      sha256 = "1bv3h2p9ffbzyddhi5sccsfwrm3i6yxzn0m06fdxkj2zsvs28gvj";
     };
 
     meta = {
       homepage = https://launchpad.net/python-distutils-extra;
       description = "Enhancements to Python's distutils";
+      license = licenses.gpl2;
     };
   };
 
