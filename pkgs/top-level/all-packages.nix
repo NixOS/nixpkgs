@@ -83,15 +83,6 @@ let
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
 
-  # Helper functions that are exported through `pkgs'.
-  helperFunctions =
-    stdenvAdapters //
-    (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
-
-  stdenvAdapters =
-    import ../stdenv/adapters.nix pkgs;
-
-
   # Allow packages to be overriden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
@@ -128,6 +119,15 @@ let
     let
       defaultScope = pkgs // pkgs.xorg;
       self = self_ // overrides;
+
+      # Helper functions that are exported through `pkgs'.
+      helperFunctions =
+        stdenvAdapters //
+        (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
+
+      stdenvAdapters =
+        import ../stdenv/adapters.nix pkgs;
+
       self_ = with self; helperFunctions // (with helperFunctions; {
 
   # Make some arguments passed to all-packages.nix available
