@@ -253,6 +253,13 @@ in
       install -d -m 0755 /srv
     '';
 
+    system.activationScripts.journal = ''
+      # Ensure journal access for privileged users.
+      ${pkgs.acl}/bin/setfacl -n -m g:service:r /var/log/journal/*/system.journal
+      ${pkgs.acl}/bin/setfacl -n -m g:admins:r /var/log/journal/*/system.journal
+      ${pkgs.acl}/bin/setfacl -n -m g:sudo-srv:r /var/log/journal/*/system.journal
+    '';
+
     environment.etc = (
       lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)
       { "directory.secret".text = cfg.enc.parameters.directory_secret;
