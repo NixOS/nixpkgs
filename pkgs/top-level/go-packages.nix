@@ -272,6 +272,13 @@ let
     doCheck = false;
   };
 
+  astrotime = buildFromGitHub {
+    rev = "9c7d514efdb561775030eaf8f1a9ae6bddb3a2ca";
+    owner = "cpucycle";
+    repo = "astrotime";
+    sha256 = "024sc7g55v4s54irssm5wsn74sr2k2ynsm6z16w47q66cxhgvby1";
+  };
+
   aws-sdk-go = buildFromGitHub {
     #rev    = "a28ecdc9741b7905b5198059c94aed20868ffc08";
     rev    = "127313c1b41e534a0456a68b6b3a16712dacb35d";
@@ -1673,6 +1680,21 @@ let
     owner  = "soundcloud";
     repo   = "go-runit";
     sha256 = "00f2rfhsaqj2wjanh5qp73phx7x12a5pwd7lc0rjfv68l6sgpg2v";
+  };
+
+  go-sct = buildFromGitHub {
+    rev = "b82c2f81727357c45a47a43965c50ed5da5a2e74";
+    date = "2016-01-11";
+    owner = "d4l3k";
+    repo = "go-sct";
+    sha256 = "13hgmpv2c8ll5ap8fn1n480bdv1j21n86jjwcssd36kh2i933anl";
+    buildInputs = [ astrotime pkgs.xorg.libX11 pkgs.xorg.libXrandr ];
+    meta = with stdenv.lib; {
+      description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
+      license = licenses.mit;
+      maintainers = with maintainers; [ cstrahan ];
+      platforms = platforms.unix;
+    };
   };
 
   go-simplejson = buildFromGitHub {
