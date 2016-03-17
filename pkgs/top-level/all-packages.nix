@@ -16478,4 +16478,8 @@ tweakAlias = _n: alias: with lib;
     removeAttrs alias ["recurseForDerivations"]
   else alias;
 
-in lib.mapAttrs tweakAlias aliases // self; in pkgs
+in
+  lib.mapAttrs tweakAlias aliases // self;
+
+in
+  pkgs
