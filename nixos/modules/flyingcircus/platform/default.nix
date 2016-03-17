@@ -269,5 +269,11 @@ in
     services.nixosManual.enable = false;
     services.openssh.enable = true;
     services.nscd.enable = true;
-  };
+
+    systemd.tmpfiles.rules = [
+      "R /tmp/* - - - 3d"
+      "x /tmp/lost+found"
+      "R /var/tmp/* - - - 7d"];
+
+    };
 }
