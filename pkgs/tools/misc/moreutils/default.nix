@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "moreutils-${version}";
-  version = "0.57";
+  version = "0.58";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/m/moreutils/moreutils_${version}.orig.tar.gz";
-    sha256 = "078dpkwwwrv8hxnylbc901kib2d1rr3hsja37j6dlpjfcfq58z9s";
+    sha256 = "02n00vqp6jxbxr5v3rdjxmzp6kxxjdkjgcclam6wrw8qamsbljww";
   };
 
   preBuild = ''
