@@ -90,7 +90,7 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = applyGlobalOverrides pkgsInit (config.packageOverrides or (pkgs: {}));
+  pkgs = applyGlobalOverrides pkgsInit (self: config.packageOverrides or (super: {}));
 
   mkOverrides = pkgsOrig: overrides: overrides //
         (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
@@ -107,7 +107,7 @@ let
       # in the case of cross-building, or otherwise the basic
       # overrided packages will not be built with the crossStdenv
       # adapter.
-      overrides = mkOverrides pkgsOrig (overrider pkgsOrig);
+      overrides = mkOverrides pkgsOrig (overrider pkgs pkgsOrig);
 
       # The overriden, final packages.
       pkgs = pkgsFun pkgs overrides;
