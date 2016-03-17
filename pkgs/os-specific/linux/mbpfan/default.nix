@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "mbpfan-${version}";
-  version = "1.9.0";
+  version = "1.9.1";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "15nm1d0a0c0lzxqngrpn2qpsydsmglnn6d20djl7brpsq26j24h9";
+    sha256 = "0issn5233h2nclrmh2jzyy5y0dyyd57f1ia7gvs3bys95glcm2s5";
   };
   patches = [ ./fixes.patch ];
   postPatch = ''
