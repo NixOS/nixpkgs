@@ -10,6 +10,7 @@ let
   daemonArgs =
     [ "--local-address=${localAddress}"
       (optionalString cfg.tcpOnly "--tcp-only")
+      (optionalString cfg.ephemeralKeys "-E")
     ]
     ++ resolverArgs;
   resolverArgs = if (cfg.customResolver != null)
@@ -114,6 +115,17 @@ in
         description = ''
           Force sending encrypted DNS queries to the upstream resolver over
           TCP instead of UDP (on port 443). Use only if the UDP port is blocked.
+        '';
+      };
+      ephemeralKeys = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Compute a new key pair for every query.  Enabling this option
+          increases CPU usage, but makes it more difficult for the upstream
+          resolver to track your usage of their service across IP addresses.
+          The default is to re-use the public key pair for all queries, making
+          tracking trivial.
         '';
       };
     };
