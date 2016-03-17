@@ -24,7 +24,7 @@ rec {
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";
-    kernelHeadersBaseConfig = "kirkwood_defconfig";
+    kernelHeadersBaseConfig = "multi_v5_defconfig";
     kernelBaseConfig = "multi_v5_defconfig";
     kernelArch = "arm";
     kernelAutoModules = false;
