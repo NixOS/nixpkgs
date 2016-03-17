@@ -4,14 +4,14 @@
 #
 # UID ranges
 #
-# 30.000 - 30.999: reserved for nixbldXX and nixos stuff
-# 31.000 - 31.999: reserved for Flying Circus-specific system user
+# 30.000 - 30.999: reserved for nixbldXX and NixOS stuff
+# 31.000 - 65.534: reserved for Flying Circus-specific system user
 #
 #
 # GID ranges
 #
-# 30.000 - 31.000: reserved for nixos-specific stuff
-# 31.000 - 31.999: reserved for Flying Circus-specific system groups
+# 30.000 - 31.000: reserved for NixOS-specific stuff
+# 31.000 - 65.534: reserved for Flying Circus-specific system groups
 
 let
 
@@ -95,7 +95,7 @@ let
           (permission: {
             name = permission.name;
             value = {
-              gid = permission.id;
+              gid = config.ids.gids.${permission.name};
             };
           })
           permissions));
@@ -142,6 +142,8 @@ in
   config = {
 
     ids.uids = {
+
+      # Our custom services
       sensuserver = 31001;
       sensuapi = 31002;
       uchiwa = 31003;
@@ -152,10 +154,19 @@ in
       # The generic 'service' GID is different from Gentoo.
       # But 101 is already used in NixOS.
       service = 900;
+
+      # Our permissions
+      login = 500;
+      code = 501;
+      stats = 502;
+      sudo-srv = 503;
+
+      # Our custom services
       sensuserver = 31001;
       sensuapi = 31002;
       uchiwa = 31003;
       sensuclient = 31004;
+
     };
 
     security.pam.services.sshd.showMotd = true;

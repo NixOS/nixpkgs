@@ -152,32 +152,63 @@ in
 
     sound.enable = false;
     fonts.fontconfig.enable = true;
-
     environment.systemPackages = with pkgs; [
+        aespipe
+        apacheHttpd
         atop
+        bc
         bind
+        bundler
+        curl
         cyrus_sasl
         db
         dstat
+        fio
         gcc
+        gdbm
         git
+        gnupg
+        go
+        graphviz
+        imagemagick
+        inetutils
+        iotop
+        kerberos
+        libmemcached
         libxml2
         libxslt
+        links
+        lsof
+        lynx
         mercurial
+        mmv
+        nano
+        nc6
         ncdu
+        netcat
+        ngrep
         nmap
+        nodejs
         openldap
         openssl
+        php
+        postgresql
+        protobuf
         psmisc
         pv
         python27Full
         python27Packages.virtualenv
         python3
-        utillinuxCurses
         screen
+        strace
+        subversion
         sysstat
         tcpdump
+        telnet
+        traceroute
         tree
+        unzip
+        utillinuxCurses
         vim
         zlib
     ];
@@ -200,8 +231,11 @@ in
       { linux_4_3 = pkgs.linux_4_3.override {
           extraConfig =
             ''
-              IPV6_MULTIPLE_TABLES y
+              DEBUG_INFO y
               IP_MULTIPLE_TABLES y
+              IPV6_MULTIPLE_TABLES y
+              LATENCYTOP y
+              SCHEDSTATS y
             '';
         };
         nagiosPluginsOfficial = pkgs.nagiosPluginsOfficial.overrideDerivation (oldAttrs: {
@@ -221,6 +255,13 @@ in
       install -d -m 0755 /srv
     '';
 
+    system.activationScripts.journal = ''
+      # Ensure journal access for privileged users.
+      ${pkgs.acl}/bin/setfacl -n -m g:service:r /var/log/journal/*/system.journal
+      ${pkgs.acl}/bin/setfacl -n -m g:admins:r /var/log/journal/*/system.journal
+      ${pkgs.acl}/bin/setfacl -n -m g:sudo-srv:r /var/log/journal/*/system.journal
+    '';
+
     environment.etc = (
       lib.optionalAttrs (lib.hasAttrByPath ["parameters" "directory_secret"] cfg.enc)
       { "directory.secret".text = cfg.enc.parameters.directory_secret;
@@ -230,5 +271,11 @@ in
     services.nixosManual.enable = false;
     services.openssh.enable = true;
     services.nscd.enable = true;
-  };
+
+    systemd.tmpfiles.rules = [
+      "R /tmp/* - - - 3d"
+      "x /tmp/lost+found"
+      "R /var/tmp/* - - - 7d"];
+
+    };
 }

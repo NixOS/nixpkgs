@@ -112,9 +112,8 @@ def build_channel(build_options):
     print('Switching channel ...')
     try:
         os.system(
-            'nix-channel --add '
-            'https://hydra.flyingcircus.io/channels/branches/{} nixos'.format(
-                enc['parameters']['environment']))
+            'nix-channel --add {} nixos'.format(
+                enc['parameters']['environment_url']))
         os.system('nix-channel --update')
         os.system('nixos-rebuild --no-build-output switch {}'.format(
                   ' '.join(build_options)))
