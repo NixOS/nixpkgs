@@ -11741,6 +11741,10 @@ let
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
+  catfish = callPackage ../applications/search/catfish {
+    pythonPackages = python3Packages;
+  };
+
   cava = callPackage ../applications/audio/cava { };
 
   cb2bib = callPackage ../applications/office/cb2bib {
