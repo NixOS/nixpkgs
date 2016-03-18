@@ -9803,6 +9803,7 @@ let
 
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
+    boost = boost159;
   };
 
   riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
