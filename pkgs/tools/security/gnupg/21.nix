@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba, libiconv, npth
-, autoreconfHook, gettext, texinfo, pcsclite
+, gettext, texinfo, pcsclite
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba libiconv npth
-    autoreconfHook gettext texinfo
+    pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
