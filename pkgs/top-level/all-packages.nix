@@ -92,8 +92,6 @@ let
   # ... pkgs.foo ...").
   pkgs = applyGlobalOverrides pkgsInit (self: config.packageOverrides or (super: {}));
 
-  mkOverrides = pkgs: overrides: overrides // stdenvOverrides pkgs;
-
   # stdenvOverrides is used to avoid circular dependencies for building the
   # standard build environment. This mechanism use the override mechanism to
   # implement some staged compilation of the stdenv.
@@ -113,12 +111,13 @@ let
   # function is very expensive!
   applyGlobalOverrides = pkgsOrig: overrider:
     let
+      mkOverrides = pkgs: overrides: overrides // stdenvOverrides pkgs;
+
       overrides = mkOverrides pkgsOrig (overrider pkgs pkgsOrig);
 
       # The overriden, final packages.
       pkgs = pkgsFun pkgs overrides;
     in pkgs;
-
 
   # The package compositions.  Yes, this isn't properly indented.
   pkgsFun = pkgs: overrides:
