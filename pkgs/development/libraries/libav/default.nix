@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib
+{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -46,6 +46,7 @@ let
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
+      "--cc=cc"
     ]
       ++ optionals enableGPL [ "--enable-gpl" "--enable-swscale" ]
       ++ optional mp3Support "--enable-libmp3lame"
@@ -62,6 +63,7 @@ let
       ;
 
     buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
+      ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex
       ++ optional theoraSupport libtheora
@@ -79,10 +81,19 @@ let
 
     outputs = [ "out" "tools" ];
 
-    # move avplay to get rid of the SDL dependency in the main output
+    # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
+    buildFlags = "all alltools install-man";
+
     postInstall = ''
+      # move avplay to get rid of the SDL dependency in the main output
       mkdir -p "$tools/bin"
       mv "$out/bin/avplay" "$tools/bin"
+
+      # alltools target compiles an executable in tools/ for every C
+      # source file in tools/, so move those to $out
+      for tool in $(find tools -type f -executable); do
+        mv "$tool" "$out/bin/"
+      done
     '';
 
     doInstallCheck = false; # fails randomly
@@ -105,10 +116,9 @@ let
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = with platforms; linux ++ darwin;
       maintainers = [ maintainers.vcunat ];
     };
   }; # libavFun
 
 in result
-
