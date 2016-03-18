@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dynamic-colors-${version}";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "peterhoeg";
     repo = "dynamic-colors";
     rev = "v${version}";
-    sha256 = "0nm0jv77hvdhdsbrh7j4ky7gx6qxcvl7k145mm9kf5ww0b40f6hv";
+    sha256 = "061lh4qjk4671hwzmj55n3gy5hsi4p3hb30hj5bg3s6glcsbjpr5";
   };
 
   dontBuild = true;
