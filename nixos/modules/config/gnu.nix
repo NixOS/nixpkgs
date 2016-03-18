@@ -37,7 +37,6 @@ with lib;
     services.openssh.enable = false;
     services.lshd.enable = true;
     programs.ssh.startAgent = false;
-    services.xserver.startGnuPGAgent = true;
 
     # TODO: GNU dico.
     # TODO: GNU Inetutils' inetd.
