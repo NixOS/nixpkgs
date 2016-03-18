@@ -7969,7 +7969,9 @@ in modules // {
     };
   };
 
-  django_1_8 = buildPythonPackage rec {
+  django_1_8 =
+  let gdal = (pkgs.gdal.override { pythonPackages = self; });
+  in  buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.11";
     disabled = pythonOlder "2.7";
@@ -7979,6 +7981,10 @@ in modules // {
       sha256 = "1yrmlj3h2hp5kc5m11ybya21x2wfr5bqqbkcsw6hknj86pkqn57c";
     };
 
+    patchPhase = ''
+      sed -e 's#    lib_path = None#    lib_path = "${gdal}/lib/libgdal.so"#' -i django/contrib/gis/gdal/libgdal.py
+    '';
+
     # too complicated to setup
     doCheck = false;
 
@@ -7986,6 +7992,8 @@ in modules // {
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
+
+    propagatedBuildInputs = [ gdal ];
 
     meta = {
       description = "A high-level Python Web framework";
