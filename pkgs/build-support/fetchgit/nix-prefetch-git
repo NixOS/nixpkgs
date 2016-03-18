@@ -118,7 +118,7 @@ url_to_name(){
     # basename removes the / and .git suffixes
     local base=$(basename "$url" .git)
 
-    if [[ $ref =~ [a-z0-9]+ ]]; then
+    if [[ $ref =~ ^[a-z0-9]+$ ]]; then
         echo "$base-${ref:0:7}"
     else
         echo $base
