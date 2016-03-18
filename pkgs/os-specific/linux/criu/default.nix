@@ -1,27 +1,29 @@
 { stdenv, fetchurl, protobuf, protobufc, asciidoc
-, xmlto, utillinux, docbook_xsl, libpaper }:
+, xmlto, utillinux, docbook_xsl, libpaper, libnl, libcap, pkgconfig
+, python }:
 
 stdenv.mkDerivation rec {
   name    = "criu-${version}";
-  version = "1.3-rc2";
+  version = "2.0";
 
   src = fetchurl {
     url    = "http://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "1h9ii91aq8cja22j3520vg3qb3y9h6c064s4115s2ldylm8jmi0s";
+    sha256 = "1zqqshslcf503lqip89azp1zz0i8kb7v19b3dyp52izpak62c1z8";
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap pkgconfig python ];
 
   patchPhase = ''
     chmod +w ./scripts/gen-offsets.sh
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
     substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "-Werror" ""
+    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl}/include/libnl3"
+    substituteInPlace ./Makefile --replace "tar-name := $(shell git tag -l v$(CRIU_VERSION))" "tar-name = 2.0" # --replace "-Werror" ""
+    ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  configurePhase = "make config PREFIX=$out";
   buildPhase     = "make PREFIX=$out";
 
   installPhase = ''
