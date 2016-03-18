@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/n/nghttp2/nghttp2_${version}.orig.tar.bz2";
+    url = "http://security.ubuntu.com/ubuntu/pool/universe/n/nghttp2/nghttp2_${version}.orig.tar.bz2";
     sha256 = "0nbrww5gyjn4il33wz5b4sql5nifi12y2jbkmfbvxwlxlywm48kf";
   };
 

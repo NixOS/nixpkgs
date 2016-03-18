@@ -30,9 +30,9 @@
 , varnish ? null
 , yajl ? null
 }:
-
 stdenv.mkDerivation rec {
-  name = "collectd-5.5.0";
+  version = "5.5.0";
+  name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";

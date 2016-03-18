@@ -160,7 +160,7 @@ in
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
-              Option          "EmulateWheel"          "true
+              Option          "EmulateWheel"          "true"
               Option          "EmulateWheelButton"    "2"
               Option          "Emulate3Buttons"       "false"
             '''

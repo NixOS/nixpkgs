@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "chromaprint-${version}";
-  version = "1.2";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "http://bitbucket.org/acoustid/chromaprint/downloads/${name}.tar.gz";
-    sha256 = "06h36223r4bwcazp42faqs9w9g49wvspivd3z3309b12ld4qjaw2";
+    sha256 = "10dm9cfqb77g12pyjnqaw80860kzdcvskni02ll7afpywq8s15cg";
   };
 
   nativeBuildInputs = [ cmake ];

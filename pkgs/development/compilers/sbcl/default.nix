@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit" }:
+{ stdenv, fetchurl, writeText, sbclBootstrap
+, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
+  # Note that the created binaries still need `patchelf --set-interpreter ...`
+  # to get rid of ${glibc} dependency.
+, purgeNixReferences ? false
+}:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
@@ -37,9 +43,6 @@ stdenv.mkDerivation rec {
     sed -i src/code/target-load.lisp -e \
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
-    # Fix software version retrieval
-    sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
-
     # Fix the tests
     sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
     sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
@@ -54,7 +57,21 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/runtime/Config.x86-64-darwin \
       --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
-  '';
+  ''
+  + (if purgeNixReferences
+    then
+      # This is the default location to look for the core; by default in $out/lib/sbcl
+      ''
+        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+          -i src/runtime/runtime.c
+      ''
+    else
+      # Fix software version retrieval
+      ''
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
+      ''
+    );
+
 
   preBuild = ''
     export INSTALL_ROOT=$out
@@ -68,6 +85,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  '';
+
+  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
+  setupHook = writeText "setupHook.sh" ''
+    envHooks+=(_setSbclHome)
+    _setSbclHome() {
+      export SBCL_HOME='@out@/lib/sbcl/'
+    }
   '';
 
   meta = sbclBootstrap.meta // {
