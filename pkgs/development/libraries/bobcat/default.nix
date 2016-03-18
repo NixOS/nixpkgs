@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
-    patchShebangs ./build
+    patchShebangs .
   '';
 
   buildPhase = ''
