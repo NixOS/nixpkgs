@@ -24,11 +24,13 @@ self: super:
 
   network = addBuildTools super.network (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
   zlib = addBuildTools super.zlib (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
+  unix-compat = addBuildTools super.unix-compat (pkgs.lib.optional pkgs.stdenv.isDarwin pkgs.darwin.libiconv);
 
   # LLVM is not supported on this GHC; use the latest one.
   inherit (pkgs) llvmPackages;
 
-  inherit (pkgs.haskell.packages.ghc7103) jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
+  inherit (self.ghc.bootPkgs)
+    jailbreak-cabal alex happy gtk2hs-buildtools rehoo hoogle;
 
   # This is the list of the Stage 1 packages that are built into a booted ghcjs installation
   # It can be generated with the command:
