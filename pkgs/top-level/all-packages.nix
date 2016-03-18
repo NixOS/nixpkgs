@@ -97,6 +97,10 @@ let
   # stdenvOverrides is used to avoid circular dependencies for building the
   # standard build environment. This mechanism use the override mechanism to
   # implement some staged compilation of the stdenv.
+  #
+  # We don't want stdenv overrides in the case of cross-building, or
+  # otherwise the basic overrided packages will not be built with the
+  # crossStdenv adapter.
   stdenvOverrides = pkgs:
     lib.optionalAttrs (pkgs.stdenv ? overrides && crossSystem == null)
       (pkgs.stdenv.overrides pkgs);
@@ -109,10 +113,6 @@ let
   # function is very expensive!
   applyGlobalOverrides = pkgsOrig: overrider:
     let
-      # Call the overrider function.  We don't want stdenv overrides
-      # in the case of cross-building, or otherwise the basic
-      # overrided packages will not be built with the crossStdenv
-      # adapter.
       overrides = mkOverrides pkgsOrig (overrider pkgs pkgsOrig);
 
       # The overriden, final packages.
