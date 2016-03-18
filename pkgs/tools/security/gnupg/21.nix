@@ -20,24 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "06mn2viiwsyq991arh5i5fhr9jyxq2bi0jkdj7ndfisxihngpc5p";
   };
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
-    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
-  ''; #" fix Emacs syntax highlighting :-(
-
-  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
-
   buildInputs = [
     pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+    sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
+  ''; #" fix Emacs syntax highlighting :-(
+
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+
+  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;
     description = "a complete and free implementation of the OpenPGP standard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington simons ];
     platforms = platforms.all;
   };
 }
