@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
-    patchShebangs ./build
+    patchShebangs .
   '';
 
   buildPhase = ''
@@ -28,11 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install man
-    ./build install manual
-    ./build install program
-    ./build install skel
-    ./build install std
+    ./build install x
   '';
 
   meta = with stdenv.lib; {
