@@ -119,6 +119,7 @@ in
                 Only one of hostAddress* or hostBridge can be given.
               '';
             };
+
             hostAddress = mkOption {
               type = types.nullOr types.string;
               default = null;
@@ -138,7 +139,6 @@ in
                 (Not used when hostBridge is set.)
               '';
             };
-
 
             localAddress = mkOption {
               type = types.nullOr types.string;
@@ -241,6 +241,7 @@ in
 
             if [ "$PRIVATE_NETWORK" = 1 ]; then
               ip link del dev "ve-$INSTANCE" 2> /dev/null || true
+              ip link del dev "vb-$INSTANCE" 2> /dev/null || true
             fi
          '';
 
