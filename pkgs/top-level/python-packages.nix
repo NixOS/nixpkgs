@@ -17194,14 +17194,15 @@ in modules // {
 
 
   pyparsing = buildPythonPackage rec {
-    name = "pyparsing-2.0.1";
+    name = "pyparsing-${version}";
+    version = "2.1.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
-      sha256 = "1r742rjbagf2i166k2w0r192adfw7l9lnsqz7wh4mflf00zws1q0";
+      sha256 = "0099k2aj7y7bd4kgkd2nj6ah6af0xkvlgnwrqv1lf4s9bb42pjzn";
     };
 
-    # error: invalid command 'test'
+    # Not everything necessary to run the tests is included in the distribution
     doCheck = false;
 
     meta = {
