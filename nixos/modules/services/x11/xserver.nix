@@ -219,17 +219,6 @@ in
         '';
       };
 
-      startGnuPGAgent = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to start the GnuPG agent when you log in.  The GnuPG agent
-          remembers private keys for you so that you don't have to type in
-          passphrases every time you make an SSH connection or sign/encrypt
-          data.  Use <command>ssh-add</command> to add a key to the agent.
-        '';
-      };
-
       startDbusSession = mkOption {
         type = types.bool;
         default = true;
@@ -444,14 +433,7 @@ in
       in optional (driver != null) ({ inherit name; driverName = name; } // driver));
 
     assertions =
-      [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);
-          message =
-            ''
-              The OpenSSH agent and GnuPG agent cannot be started both. Please
-              choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
-            '';
-        }
-        { assertion = config.security.polkit.enable;
+      [ { assertion = config.security.polkit.enable;
           message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
         }
       ];
