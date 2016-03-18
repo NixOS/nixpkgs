@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "unifi-controller-${version}";
-  version = "4.7.6";
+  version = "4.8.14";
 
   src = fetchurl {
     url = "https://www.ubnt.com/downloads/unifi/${version}/UniFi.unix.zip";
-    sha256 = "0xinrxcbd5gb2jgcvrx3jcslad0f19qrbjzkiir9zjq59sn68gfn";
+    sha256 = "04gvvz9vyi4aw97hh8fp8mp19mpx3axy9rb2x8vfck4w76cdi614";
   };
 
   buildInputs = [ unzip ];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     description = "Controller for Ubiquiti UniFi accesspoints";
     license = licenses.unfree;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ wkennington fpletz ];
   };
 }
