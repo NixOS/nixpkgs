@@ -7769,6 +7769,8 @@ let
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
+  libmatheval = callPackage ../development/libraries/libmatheval { };
+
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
   libmatroska = callPackage ../development/libraries/libmatroska { };
