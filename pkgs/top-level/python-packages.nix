@@ -8666,6 +8666,34 @@ in modules // {
     };
   };
 
+  django_colorful = buildPythonPackage rec {
+    name = "django-colorful-${version}";
+    version = "1.2";
+
+    disabled = isPy35;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
+      sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
+    };
+
+    # variable used during test
+    DJANGO_SETTINGS_MODULE="colorful.tests.settings";
+    # remove one assertion failing because of un-initialized i18n infrastructure
+    #patchPhase = ''
+    #  sed -i -e '26,31d' colorful/tests/tests.py
+    #'';
+
+    # Requires Django >= 1.8
+    buildInputs = with self ; [ sqlite3 django ];
+
+    meta = {
+      description = "Django extension that provides database and form color fields";
+      homepage = https://github.com/charettes/django-colorful;
+      license = licenses.mit;
+    };
+  };
+
   django_compressor = buildPythonPackage rec {
     name = "django-compressor-${version}";
     version = "1.5";
