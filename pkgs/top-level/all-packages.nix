@@ -540,6 +540,8 @@ let
 
   analog = callPackage ../tools/admin/analog {};
 
+  ansifilter = callPackage ../tools/text/ansifilter {};
+
   apktool = callPackage ../development/tools/apktool {
     buildTools = androidenv.buildTools;
   };
