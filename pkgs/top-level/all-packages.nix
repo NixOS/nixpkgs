@@ -111,9 +111,7 @@ let
   # function is very expensive!
   applyGlobalOverrides = pkgsOrig: overrider:
     let
-      mkOverrides = pkgs: overrides: overrides // stdenvOverrides pkgs;
-
-      overrides = mkOverrides pkgsOrig (overrider pkgs pkgsOrig);
+      overrides = overrider pkgs pkgsOrig // stdenvOverrides pkgsOrig;
 
       # The overriden, final packages.
       pkgs = pkgsFun pkgs overrides;
