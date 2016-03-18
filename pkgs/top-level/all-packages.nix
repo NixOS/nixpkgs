@@ -15370,6 +15370,8 @@ let
     withX = true;
   };
 
+  scotch = callPackage ../applications/science/math/scotch { };
+  
   msieve = callPackage ../applications/science/math/msieve { };
 
   weka = callPackage ../applications/science/math/weka { };
