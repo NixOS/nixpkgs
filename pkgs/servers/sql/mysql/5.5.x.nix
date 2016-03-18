@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, perl }:
+{ stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, perl
+, cctools, CoreServices }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ]
-     ++ stdenv.lib.optional stdenv.isDarwin perl;
+     ++ stdenv.lib.optionals stdenv.isDarwin [ perl cctools CoreServices ];
 
   enableParallelBuilding = true;
 
