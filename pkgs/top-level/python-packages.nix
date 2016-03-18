@@ -7937,7 +7937,9 @@ in modules // {
     ];
   };
 
-  django_1_9 = buildPythonPackage rec {
+  django_1_9 =
+  let gdal = (pkgs.gdal.override { pythonPackages = self; });
+  in buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.9.4";
     disabled = pythonOlder "2.7";
@@ -7947,6 +7949,10 @@ in modules // {
       sha256 = "1sdxixj4p3wx245dm608bqw5bdabl701qab0ar5wjivyd6mfga5d";
     };
 
+    patchPhase = ''
+      sed -e 's#    lib_path = None#    lib_path = "${gdal}/lib/libgdal.so"#' -i django/contrib/gis/gdal/libgdal.py
+    '';
+
     # patch only $out/bin to avoid problems with starter templates (see #3134)
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -7954,6 +7960,8 @@ in modules // {
 
     # too complicated to setup
     doCheck = false;
+
+    propagatedBuildInputs = [ gdal ];
 
     meta = {
       description = "A high-level Python Web framework";
