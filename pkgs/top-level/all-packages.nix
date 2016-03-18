@@ -9302,6 +9302,8 @@ let
 
   radius = callPackage ../servers/radius { };
 
+  rake = callPackage ../development/tools/build-managers/rake { };
+  
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
