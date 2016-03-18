@@ -769,6 +769,8 @@ let
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrbk = callPackage ../tools/backup/btrbk { };
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
