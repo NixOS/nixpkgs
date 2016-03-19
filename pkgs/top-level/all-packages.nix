@@ -121,7 +121,7 @@ let
   pkgsFun = pkgs: overrides:
     let
       defaultScope = pkgs // pkgs.xorg;
-      self = self_ // overrides;
+      self = helperFunctions // self_ // overrides;
 
       # Helper functions that are exported through `pkgs'.
       helperFunctions =
@@ -131,7 +131,7 @@ let
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
 
-      self_ = with self; helperFunctions // {
+      self_ = with self; {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
