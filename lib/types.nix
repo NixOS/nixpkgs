@@ -246,25 +246,7 @@ rec {
     either = t1: t2: mkOptionType {
       name = "${t1.name} or ${t2.name}";
       check = x: t1.check x || t2.check x;
-      merge = loc: defs:
-             if all t1.check (getValues defs) then t1.merge loc defs
-        else if all t2.check (getValues defs) then t2.merge loc defs
-        else throw ( "The option `${showOption loc}' has conflicting"
-                   + " definitions for type either, in"
-                   + " ${showFiles (getFiles defs)}.");
-
-      getSubOptions = prefix: t1.getSubOptions prefix
-                           // t2.getSubOptions prefix;
-
-      getSubModules = concatLists (remove null [
-        t1.getSubModules
-        t2.getSubModules
-      ]);
-
-      substSubModules = m: let
-        maybeDef = def: r: if r == null then def else r;
-      in either (maybeDef t1 (t1.substSubModules m))
-                (maybeDef t2 (t2.substSubModules m));
+      merge = mergeOneOption;
     };
 
     # Obsolete alternative to configOf.  It takes its option
