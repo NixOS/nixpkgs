@@ -121,14 +121,14 @@ in
 
     plugin = "salts";
     namespace = "plugin.video.salts";
-    version = "2.0.6";
+    version = "2.0.19";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "tknorris";
       repo = plugin;
-      rev = "5100565bec5818cdcd8a891ab6a6d67b0018e070";
-      sha256 = "00nlcddmgzyi3462i12qikdryfwqzqd1i30rkp485ay16akyj0lr";
+      rev = "9c1882bad35cab9e62687847e097c37a576b900d";
+      sha256 = "0saq578xsxvyg1v8jg2m3131hfrr95gv74b2npxr7g715yyx5bjq";
     };
 
     meta = with stdenv.lib; {
