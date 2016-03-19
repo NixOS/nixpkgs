@@ -11599,6 +11599,8 @@ let
     gconf = gnome.GConf;
   };
 
+  atom_beta = atom.override { version = "1.7.0-beta0"; };
+
   aseprite = callPackage ../applications/editors/aseprite {
     giflib = giflib_4_1;
   };

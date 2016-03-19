@@ -1,6 +1,7 @@
 { stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
 , gvfs, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, systemd
+, version ? "1.6.0"
 }:
 
 let
@@ -16,11 +17,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.6.0";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "1izp2fwxk4rrksdbhcaj8fn0aazi7brid72n1vp7f49adrkqqc1b";
+    sha256 = if version == "1.6.0" then "1izp2fwxk4rrksdbhcaj8fn0aazi7brid72n1vp7f49adrkqqc1b"
+              else if version == "1.7.0-beta0" then "1c0yazz38pl4q362db6m8c836x5k7fm69dq74nmkafr5fia5qw9w"
+              else throw ("atom: unknown version " ++ version);
     name = "${name}.deb";
   };
 
@@ -31,6 +34,15 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     ar p $src data.tar.gz | tar -C $out -xz ./usr
+
+    # normalize atom suffixes for beta
+    if [[ -d $out/usr/share/atom-beta ]]; then
+      mv -T $out/usr/share/atom-beta/ $out/usr/share/atom/
+      mv $out/usr/share/applications/atom-beta.desktop $out/usr/share/applications/atom.desktop
+      mv $out/usr/bin/atom-beta $out/usr/bin/atom
+      mv $out/usr/bin/apm-beta $out/usr/bin/apm
+    fi
+
     substituteInPlace $out/usr/share/applications/atom.desktop \
       --replace /usr/share/atom $out/bin
     mv $out/usr/* $out/
