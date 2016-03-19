@@ -11250,11 +11250,11 @@ in modules // {
   };
 
   llfuse = buildPythonPackage rec {
-    name = "llfuse-0.40";
+    name = "llfuse-1.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llfuse/${name}.tar.bz2";
-      sha256 = "0mx87n6j2g63mgiimjqn0gj6jgqfdkc04xkxc56r1azjlqji32zf";
+      md5 = "6e71af191381da135a222e3c0e7569a1";
     };
 
     buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];

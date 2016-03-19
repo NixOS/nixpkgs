@@ -32,10 +32,8 @@ paths.each do |path|
 ENV["BUNDLE_GEMFILE"] = "#{gemfile}"
 ENV["BUNDLE_PATH"] = "#{bundle_path}"
 
-gem_path = ENV["GEM_PATH"]
-ENV["GEM_PATH"] = "\#{gem_path}\#{":" unless gem_path.nil? || gem_path.empty?}#{bundler_gem_path}"
+Gem.use_paths("#{bundler_gem_path}", ENV["GEM_PATH"])
 
-require 'rubygems'
 require 'bundler/setup'
 
 load Gem.bin_path(#{name.inspect}, #{exe.inspect})
