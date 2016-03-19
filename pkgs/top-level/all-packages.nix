@@ -3658,6 +3658,8 @@ let
     python = python2;
   };
 
+  xautoclick = callPackage ../applications/misc/xautoclick {};
+
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
   xe = callPackage ../tools/system/xe { };
