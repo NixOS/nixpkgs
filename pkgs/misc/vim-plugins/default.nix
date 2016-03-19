@@ -883,11 +883,11 @@ rec {
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2016-03-08";
+    name = "youcompleteme-2016-03-10";
     src = fetchgit {
       url = "git://github.com/valloric/youcompleteme";
-      rev = "381b2132719a959f41e57ec0e6396fc1c3b6daf4";
-      sha256 = "1gski3s1960pmxisyq85awda0a3kb22ji9y76f67k1a4smy5q9xa";
+      rev = "f44435b88ec98156d17869aa67ad15f38cfecbf3";
+      sha256 = "1y50ilyfwj6rvpvg50iq418maxvsfs54i202v7x0lfs5hmvcb4hi";
     };
     dependencies = [];
     buildInputs = [
@@ -904,7 +904,7 @@ rec {
       mkdir build
       pushd build
       cmake -G "Unix Makefiles" . ../third_party/ycmd/cpp -DPYTHON_LIBRARIES:PATH=${python}/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR:PATH=${python}/include/python2.7 -DUSE_CLANG_COMPLETER=ON -DUSE_SYSTEM_LIBCLANG=ON
-      make ycm_support_libs -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
+      make ycm_core -j''${NIX_BUILD_CORES} -l''${NIX_BUILD_CORES}}
       ${python}/bin/python ../third_party/ycmd/build.py --gocode-completer --clang-completer --system-libclang
       popd
     '';
