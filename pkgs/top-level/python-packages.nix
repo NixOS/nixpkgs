@@ -15487,6 +15487,26 @@ in modules // {
     };
   };
 
+  piep = buildPythonPackage rec {
+    version = "0.8.0";
+    name = "piep-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/p/piep/piep-${version}.tar.gz";
+      sha256 = "1wgkg1kc28jpya5k4zvbc9jmpa60b3d5c3gwxfbp15hw6smyqirj";
+    };
+
+    propagatedBuildInputs = with self; [pygments];
+
+    meta = {
+      description = "Bringing the power of python to stream editing";
+      homepage = https://github.com/timbertson/piep;
+      maintainers = with maintainers; [ gfxmonk ];
+      license = licenses.gpl3;
+    };
+  };
+
   pip = buildPythonPackage rec {
     version = "8.0.2";
     name = "pip-${version}";
