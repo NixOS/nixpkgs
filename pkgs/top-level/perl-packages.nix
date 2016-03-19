@@ -706,10 +706,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CacheFastMmap = buildPerlPackage rec {
-    name = "Cache-FastMmap-1.40";
+    name = "Cache-FastMmap-1.43";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Cache/${name}.tar.gz";
-      sha256 = "0h3ckr04cdn6dvl40m4m97vl5ybf30v1lwhw3jvkr92kpksvq4hd";
+      sha256 = "18k10bhi67iyy8igw8hwb339miwscgnsh9y2pbncw6gdr2b610vi";
     };
   };
 
