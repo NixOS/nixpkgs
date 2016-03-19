@@ -2209,6 +2209,14 @@ let
     postInstall = ''
       cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
     '';
+
+    meta = with stdenv.lib; {
+      description = "Daemon based on liblxc offering a REST API to manage containers";
+      homepage = https://github.com/lxc/lxd;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ globin fpletz ];
+      platforms = platforms.linux;
+    };
   };
 
   manners = buildFromGitHub {
