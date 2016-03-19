@@ -168,6 +168,26 @@ in
     propagatedBuildinputs = [ steam ];
   };
 
+  pdfreader = mkKodiPlugin rec {
+    plugin = "pdfreader";
+    namespace = "plugin.image.pdf";
+    version = "1.0.2";
+
+    src = fetchFromGitHub rec {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "teeedubb";
+      repo = owner + "-xbmc-repo";
+      rev = "0a405b95208ced8a1365ad3193eade8d1c2117ce";
+      sha256 = "1iv7d030z3xvlflvp4p5v3riqnwg9g0yvzxszy63v1a6x5kpjkqa";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = http://forum.kodi.tv/showthread.php?tid=187421;
+      descritpion = "A comic book reader";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  };
+
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
