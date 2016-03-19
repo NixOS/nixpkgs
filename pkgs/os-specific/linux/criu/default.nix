@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
     substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
+    substituteInPlace ./Makefile --replace "-Werror" ""
   '';
 
   configurePhase = "make config PREFIX=$out";
@@ -31,11 +32,11 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
   '';
 
-  meta = {
-    description = "userspace checkpoint/restore for Linux";
-    homepage    = "http://criu.org";
-    license     = stdenv.lib.licenses.gpl2;
+  meta = with stdenv.lib; {
+    description = "Userspace checkpoint/restore for Linux";
+    homepage    = https://criu.org;
+    license     = licenses.gpl2;
     platforms   = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

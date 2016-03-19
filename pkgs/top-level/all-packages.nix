@@ -770,6 +770,8 @@ let
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
+  btrbk = callPackage ../tools/backup/btrbk { };
+
   bwm_ng = callPackage ../tools/networking/bwm-ng { };
 
   byobu = callPackage ../tools/misc/byobu {
@@ -872,6 +874,8 @@ let
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
+
+  dosage = pythonPackages.dosage;
 
   dpic = callPackage ../tools/graphics/dpic { };
 
@@ -5583,8 +5587,6 @@ let
   ruby_2_2 = ruby_2_2_3;
   ruby_2_3 = ruby_2_3_0;
 
-  rubygems = hiPrio (callPackage ../development/interpreters/ruby/rubygems.nix {});
-
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
@@ -7738,6 +7740,8 @@ let
   libmad = callPackage ../development/libraries/libmad { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
+
+  libmatheval = callPackage ../development/libraries/libmatheval { };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
@@ -11707,6 +11711,10 @@ let
   canto-daemon = callPackage ../applications/networking/feedreaders/canto-daemon { };
 
   carddav-util = callPackage ../tools/networking/carddav-util { };
+
+  catfish = callPackage ../applications/search/catfish {
+    pythonPackages = python3Packages;
+  };
 
   cava = callPackage ../applications/audio/cava { };
 
@@ -15803,6 +15811,8 @@ let
     withX = true;
   };
 
+  scotch = callPackage ../applications/science/math/scotch { };
+  
   msieve = callPackage ../applications/science/math/msieve { };
 
   weka = callPackage ../applications/science/math/weka { };
@@ -16429,91 +16439,7 @@ let
 }; # self_ =
 
 
-  ### Deprecated aliases - for backward compatibility
-
-aliases = with self; rec {
-  accounts-qt = qt5.accounts-qt;  # added 2015-12-19
-  adobeReader = adobe-reader;
-  aircrackng = aircrack-ng; # added 2016-01-14
-  arduino_core = arduino-core;  # added 2015-02-04
-  asciidocFull = asciidoc-full;  # added 2014-06-22
-  bar = lemonbar;  # added 2015-01-16
-  bar-xft = lemonbar-xft;  # added 2015-01-16
-  bridge_utils = bridge-utils;  # added 2015-02-20
-  btrfsProgs = btrfs-progs; # added 2016-01-03
-  buildbotSlave = buildbot-slave;  # added 2014-12-09
-  cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
-  clangAnalyzer = clang-analyzer;  # added 2015-02-20
-  conkerorWrapper = conkeror; # added 2015-01
-  cool-old-term = cool-retro-term; # added 2015-01-31
-  cupsBjnp = cups-bjnp; # added 2016-01-02
-  cv = progress; # added 2015-09-06
-  dwarf_fortress = dwarf-fortress; # added 2016-01-23
-  dwbWrapper = dwb; # added 2015-01
-  enblendenfuse = enblend-enfuse; # 2015-09-30
-  exfat-utils = exfat;                  # 2015-09-11
-  firefox-esr-wrapper = firefox-esr;  # 2016-01
-  firefox-wrapper = firefox;          # 2016-01
-  firefoxWrapper = firefox;           # 2015-09
-  fuse_exfat = exfat;                   # 2015-09-11
-  gettextWithExpat = gettext; # 2016-02-19
-  grantlee5 = qt5.grantlee;  # added 2015-12-19
-  gupnptools = gupnp-tools;  # added 2015-12-19
-  htmlTidy = html-tidy;  # added 2014-12-06
-  inherit (haskell.compiler) jhc uhc;   # 2015-05-15
-  inotifyTools = inotify-tools;
-  joseki = apache-jena-fuseki; # added 2016-02-28
-  jquery_ui = jquery-ui;  # added 2014-09-07
-  libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
-  libtidy = html-tidy;  # added 2014-12-21
-  links = links2; # added 2016-01-31
-  lttngTools = lttng-tools;  # added 2014-07-31
-  lttngUst = lttng-ust;  # added 2014-07-31
-  manpages = man-pages; # added 2015-12-06
-  midoriWrapper = midori; # added 2015-01
-  mlt-qt5 = qt5.mlt;  # added 2015-12-19
-  mssys = ms-sys; # added 2015-12-13
-  multipath_tools = multipath-tools;  # added 2016-01-21
-  mupen64plus1_5 = mupen64plus; # added 2016-02-12
-  ncat = nmap;  # added 2016-01-26
-  nfsUtils = nfs-utils;  # added 2014-12-06
-  phonon_qt5 = qt5.phonon;  # added 2015-12-19
-  phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
-  pidginlatexSF = pidginlatex; # added 2014-11-02
-  poppler_qt5 = qt5.poppler;  # added 2015-12-19
-  qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
-  qtcreator = qt5.qtcreator;  # added 2015-12-19
-  quake3game = ioquake3; # added 2016-01-14
-  quassel_kf5 = kde5.quassel; # added 2015-09-30
-  quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
-  quasselClient_kf5 = kde5.quasselClient; # added 2015-09-30
-  quasselClient_qt5 = kde5.quasselClient_qt5; # added 2015-09-30
-  quasselDaemon_qt5 = kde5.quasselDaemon; # added 2015-09-30
-  qwt6 = qt5.qwt;  # added 2015-12-19
-  rdiff_backup = rdiff-backup;  # added 2014-11-23
-  rekonqWrapper = rekonq; # added 2015-01
-  rssglx = rss-glx; #added 2015-03-25
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
-  samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
-  saneBackends = sane-backends; # added 2016-01-02
-  saneBackendsGit = sane-backends-git; # added 2016-01-02
-  saneFrontends = sane-frontends; # added 2016-01-02
-  scim = sc-im; # added 2016-01-22
-  signon = qt5.signon;  # added 2015-12-19
-  speedtest_cli = speedtest-cli;  # added 2015-02-17
-  sqliteInteractive = sqlite-interactive;  # added 2014-12-06
-  system_config_printer = system-config-printer;  # added 2016-01-03
-  telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
-  tftp_hpa = tftp-hpa; # added 2015-04-03
-  vimbWrapper = vimb; # added 2015-01
-  vimprobable2Wrapper = vimprobable2; # added 2015-01
-  virtviewer = virt-viewer; # added 2015-12-24
-  vorbisTools = vorbis-tools; # added 2016-01-26
-  x11 = xlibsWrapper; # added 2015-09
-  xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
-  xlibs = xorg; # added 2015-09
-  youtubeDL = youtube-dl;  # added 2014-10-26
-};
+aliases = import ./aliases.nix self;
 
 tweakAlias = _n: alias: with lib;
   if alias.recurseForDerivations or false then

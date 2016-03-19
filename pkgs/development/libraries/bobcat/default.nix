@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install
+    ./build install x
   '';
 
   meta = with stdenv.lib; {

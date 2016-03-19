@@ -18,7 +18,7 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{ lib, ruby, rubygems, bundler, fetchurl, fetchgit, makeWrapper, git,
+{ lib, ruby, bundler, fetchurl, fetchgit, makeWrapper, git,
   buildRubyGem, darwin
 } @ defs:
 
@@ -54,9 +54,6 @@ lib.makeOverridable (
 
 let
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
-  rubygems = (attrs.rubygems or defs.rubygems).override {
-    inherit ruby;
-  };
   src = attrs.src or (
     if type == "gem" then
       fetchurl {
@@ -79,14 +76,14 @@ let
 in
 
 stdenv.mkDerivation (attrs // {
-  inherit ruby rubygems;
+  inherit ruby;
   inherit doCheck;
   inherit dontBuild;
   inherit dontStrip;
   inherit type;
 
   buildInputs = [
-    ruby rubygems makeWrapper
+    ruby makeWrapper
   ] ++ lib.optionals (type == "git") [ git bundler ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;

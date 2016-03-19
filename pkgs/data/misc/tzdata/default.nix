@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
-  version = "2016a";
+  version = "2016b";
 
   srcs =
     [ (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzdata${version}.tar.gz";
-        sha256 = "1lccd8f8fiwfyr1f6c2ad1rgd58qlmrk5b00ywg95vv49qr6pyjy";
+        sha256 = "6392091d92556a32de488ea06a055c51bc46b7d8046c8a677f0ccfe286b3dbdc";
       })
       (fetchurl {
         url = "http://www.iana.org/time-zones/repository/releases/tzcode${version}.tar.gz";
-        sha256 = "13f2412ywphrvslmp1cjfyyjfrk67gbrsk4ih5n8qkl4kgandbhi";
+        sha256 = "e935c4fe78b5c5da3791f58f3ab7f07fb059a7c71d6b62b69ef345211ae5dfa7";
       })
     ];
 

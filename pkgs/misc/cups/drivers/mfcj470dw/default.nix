@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, dpkg, ghostscript, patchelf, bash, file }:
+{ stdenv, fetchurl, cups, dpkg, ghostscript, patchelf, a2ps, coreutils, gnused, gawk, file }:
 
 stdenv.mkDerivation rec {
   name = "mfcj470dw-cupswrapper-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  buildInputs = [ dpkg cups patchelf bash ];
+    buildInputs = [ cups ghostscript dpkg a2ps ];
 
   unpackPhase = "true";
 
@@ -29,9 +29,20 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
       --replace /opt "$out/opt" \
-      --replace file "/run/current-system/sw/bin/file"
+      --replace file "${file}/bin/file" \
+      --replace sed "${gnused}/bin/sed" \
+      --replace mktemp "${coreutils}/bin/mktemp" \
+      --replace cat "${coreutils}/bin/cat" \
+      --replace rm "${coreutils}/bin/rm"
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/mfcj470dw/lpd/psconvertij2
+    substituteInPlace $out/opt/brother/Printers/mfcj470dw/lpd/psconvertij2 \
+      --replace awk "${gawk}/bin/awk" \
+      --replace cat "${coreutils}/bin/cat" \
+      --replace mktemp "${coreutils}/bin/mktemp" \
+      --replace sed "${gnused}/bin/sed" \
+      --replace expr "${coreutils}/bin/expr" \
+      --replace rm "${coreutils}/bin/rm"
 
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/lpd/brmfcj470dwfilter
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/cupswrapper/brcupsconfpt1
