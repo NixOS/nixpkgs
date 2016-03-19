@@ -878,6 +878,15 @@ let
     sha256 = "1iz4wjxc3zkj0xkfs88ig670gb08p1sd922l0ig2cxpjcfjp1y99";
   };
 
+  gosexy.gettext = buildFromGitHub {
+    rev    = "4a979356fe964fec12e18326a32a89661f93dea7";
+    date   = "2016-02-20";
+    owner  = "gosexy";
+    repo   = "gettext";
+    sha256 = "07f3dmq4qsdykbn3fkha3v1w61hic6xw82dvdmvzhf0m41jxsgy6";
+    buildInputs = [ pkgs.gettext go-flags ];
+  };
+
   ginkgo = buildGoPackage rec {
     rev = "5ed93e443a4b7dfe9f5e95ca87e6082e503021d2";
     name = "ginkgo-${stdenv.lib.strings.substring 0 7 rev}";
@@ -989,6 +998,14 @@ let
     owner  = "dgnorton";
     repo   = "goback";
     sha256 = "1nyg6sckwd0iafs9vcmgbga2k3hid2q0avhwj29qbdhj3l78xi47";
+  };
+
+  gocapability = buildFromGitHub {
+    rev    = "2c00daeb6c3b45114c80ac44119e7b8801fdd852";
+    date   = "2015-07-16";
+    owner  = "syndtr";
+    repo   = "gocapability";
+    sha256 = "1x7jdcg2r5pakjf20q7bdiidfmv7vcjiyg682186rkp2wz0yws0l";
   };
 
   gocryptfs = buildFromGitHub {
@@ -1522,10 +1539,11 @@ let
   };
 
   go-lxc = buildFromGitHub {
-    rev    = "a0fa4019e64b385dfa2fb8abcabcdd2f66871639";
+    rev    = "d89df0ad9dc13a7ce491eedaa771b076cf32db16";
+    date   = "2016-02-12";
     owner  = "lxc";
     repo   = "go-lxc";
-    sha256 = "0fkkmn7ynmzpr7j0ha1qsmh3k86ncxcbajmcb90hs0k0iaaiaahz";
+    sha256 = "051kqvvclfcinqcbi4zch694llvnxa5vvbw6cbdxbkzhr5zxm36q";
     goPackagePath = "gopkg.in/lxc/go-lxc.v2";
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.lxc ];
@@ -1637,6 +1655,14 @@ let
     };
   };
 
+  mattn.go-runewidth = buildFromGitHub {
+    rev    = "d6bea18f789704b5f83375793155289da36a3c7f";
+    date   = "2016-03-15";
+    owner  = "mattn";
+    repo   = "go-runewidth";
+    sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
+  };
+
   go-shellwords = buildGoPackage rec {
     rev = "35d512af75e283aae4ca1fc3d44b159ed66189a4";
     name = "go-shellwords-${rev}";
@@ -1744,15 +1770,6 @@ let
     sha256 = "0kfbxvm9zsjgvgmiq2jl807y4s5z0rya65rm399llr5rr7vz1lxd";
     nativeBuildInputs = [ pkgs.pkgconfig pkgs.systemd ];
     buildInputs = [ dbus ];
-  };
-
-  lxd-go-systemd = buildFromGitHub {
-    rev = "a3dcd1d0480ee0ae9ec354f1632202bfba715e03";
-    date = "2015-07-01";
-    owner = "stgraber";
-    repo = "lxd-go-systemd";
-    sha256 = "006dhy3j8ld0kycm8hrjxvakd7xdn1b6z2dsjp1l4sqrxdmm188w";
-    buildInputs = [ dbus-old-2015-05-19 ];
   };
 
   go-update-v0 = buildFromGitHub {
@@ -2179,19 +2196,27 @@ let
   };
 
   lxd = buildFromGitHub {
-    rev    = "lxd-0.17";
+    rev    = "lxd-2.0.0.rc4";
     owner  = "lxc";
     repo   = "lxd";
-    sha256 = "1yi3dr1bgdplc6nya10k5jsj3psbf3077vqad8x8cjza2z9i48fp";
+    sha256 = "1rpyyj6d38d9kmb47dcmy1x41fiacj384yx01yslsrj2l6qxcdjn";
     excludedPackages = "test"; # Don't build the binary called test which causes conflicts
     buildInputs = [
-      gettext-go websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
-      lxd-go-systemd go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
-      pkgs.python3
+      gosexy.gettext websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
+      go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
+      pkgs.python3 go-systemd uuid gocapability
     ];
     postInstall = ''
       cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
     '';
+
+    meta = with stdenv.lib; {
+      description = "Daemon based on liblxc offering a REST API to manage containers";
+      homepage = https://github.com/lxc/lxd;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ globin fpletz ];
+      platforms = platforms.linux;
+    };
   };
 
   manners = buildFromGitHub {
@@ -3462,11 +3487,12 @@ let
   };
 
   tablewriter = buildFromGitHub {
-    rev    = "bc39950e081b457853031334b3c8b95cdfe428ba";
-    date   = "2015-06-03";
+    rev    = "cca8bbc0798408af109aaaa239cbd2634846b340";
+    date   = "2016-01-15";
     owner  = "olekukonko";
     repo   = "tablewriter";
-    sha256 = "0n4gqjc2dqmnbpqgi9i8vrwdk4mkgyssc7l2n4r5bqx0n3nxpbps";
+    sha256 = "0f9ph3z7lh6p6gihbl1461j9yq5qiaqxr9mzdkp512n18v89ml48";
+    propagatedBuildInputs = [ mattn.go-runewidth ];
   };
 
   termbox-go = buildGoPackage rec {
