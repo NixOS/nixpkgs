@@ -64,8 +64,7 @@ spec.executables.each do |exe|
 # this file is here to facilitate running it.
 #
 
-gem_path = ENV["GEM_PATH"]
-ENV["GEM_PATH"] = "\#{gem_path}\#{":" unless gem_path.nil? || gem_path.empty?}#{(gem_path+[gem_home]).join(":")}"
+Gem.use_paths "#{gem_home}", #{gem_path.to_s}
 
 require 'rubygems'
 
