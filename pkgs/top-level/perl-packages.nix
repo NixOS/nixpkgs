@@ -2059,6 +2059,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigIniFiles = buildPerlPackage rec {
+    name = "Config-IniFiles-2.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WA/WADG/${name}.tar.gz";
+      sha256 = "0cz5gz5qk729nrbmamz84i3335cc3vfzz8z450crrvzip4isdpgc";
+    };
+    meta = {
+      description = "A module for reading .ini-style configuration files.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.otwieracz ];
+    };
+  };
+
   ConfigMerge = buildPerlPackage {
     name = "Config-Merge-1.04";
     src = fetchurl {
@@ -10423,7 +10436,7 @@ let self = _self // overrides; _self = with self; {
       platforms = stdenv.lib.platforms.linux;
     };
   };
-  
+
   PackageVariant = buildPerlPackage {
     name = "Package-Variant-1.002002";
     src = fetchurl {
