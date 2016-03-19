@@ -10993,9 +10993,9 @@ in
     cryptsetup = null; # Infinite recusion
   };
 
-  systemd-with-cryptsetup = systemd.override {
+  systemd-with-cryptsetup = appendToName "-with-cryptsetup" (systemd.override {
     inherit cryptsetup;
-  };
+  });
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
   # LVM2 working in systemd.
