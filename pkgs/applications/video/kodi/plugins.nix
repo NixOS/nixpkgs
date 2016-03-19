@@ -142,14 +142,14 @@ in
 
     plugin = "svtplay";
     namespace = "plugin.video.svtplay";
-    version = "4.0.21";
+    version = "4.0.23";
 
     src = fetchFromGitHub {
       name = plugin + "-" + version + ".tar.gz";
       owner = "nilzen";
       repo = "xbmc-" + plugin;
-      rev = "1fb099dcddc65e58ca8691d19de657321b1b1fc2";
-      sha256 = "178krh8kzll7cprqwyhydb41b1jh961av875bm5yfdlplzaiynm0";
+      rev = "80b6d241adb046c105ceb63d637da3f7f3684f1a";
+      sha256 = "1236kanzl4dra78whpwic1r5iifaj3f27qycia9jr54z01id083s";
     };
 
     meta = with stdenv.lib; {
