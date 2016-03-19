@@ -2202,7 +2202,7 @@ let
     sha256 = "1rpyyj6d38d9kmb47dcmy1x41fiacj384yx01yslsrj2l6qxcdjn";
     excludedPackages = "test"; # Don't build the binary called test which causes conflicts
     buildInputs = [
-      gettext-gosexy websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
+      gosexy.gettext websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
       go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
       pkgs.python3 go-systemd uuid gocapability
     ];
