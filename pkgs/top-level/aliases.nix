@@ -15,6 +15,7 @@ rec {
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
   buildbotSlave = buildbot-slave;  # added 2014-12-09
+  bundler_HEAD = bundler; # added 2015-11-15
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
   conkerorWrapper = conkeror; # added 2015-01
