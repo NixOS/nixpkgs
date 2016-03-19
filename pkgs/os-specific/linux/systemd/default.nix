@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
+      cryptsetup libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp audit lz4 libapparmor
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
