@@ -9431,7 +9431,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
-    propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI ];
+    propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace
+      DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody
+      HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI
+      POSIXstrftimeCompiler ];
     meta = {
       homepage = https://github.com/plack/Plack;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
