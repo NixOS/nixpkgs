@@ -24261,21 +24261,24 @@ in modules // {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-0.7.0";
+    name = "searx-0.8.1";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/asciimoo/searx/archive/v0.7.0.tar.gz";
-      sha256 = "0vq2zjdr1c8mr3zkycqq3732zf4pybbbrs3kzplqgf851k9zfpbw";
+      url = "https://github.com/asciimoo/searx/archive/v0.8.1.tar.gz";
+      sha256 = "0z0s9n8iblrw7y5xrh2apzsazkgm4vzmxn0ckw4yfiya9am8zk32";
     };
 
-    propagatedBuildInputs = with self; [ pyyaml lxml grequests flaskbabel flask requests
-      gevent speaklater Babel pytz dateutil pygments ];
+    propagatedBuildInputs = with self; [
+      pyyaml lxml grequests flaskbabel flask requests2
+      gevent speaklater Babel pytz dateutil pygments
+      pyasn1 pyasn1-modules ndg-httpsclient certifi
+    ];
 
     meta = {
       homepage = https://github.com/asciimoo/searx;
       description = "A privacy-respecting, hackable metasearch engine";
       license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ matejc ];
+      maintainers = with maintainers; [ matejc fpletz ];
     };
   };
 
