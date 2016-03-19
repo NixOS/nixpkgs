@@ -1,0 +1,52 @@
+--- convert/convert_script.lua	2016-03-18 19:30:49.675401969 +0100
++++ convert_script.lua	2016-03-19 01:18:00.801897043 +0100
+@@ -3,6 +3,10 @@
+ local opt = require 'mp.options'
+ local utils = require 'mp.utils'
+ 
++local NOTIFY_CMD = "notify-send"
++local YAD_CMD = "yad"
++local MKVMERGE_CMD = "mkvmerge"
++
+ -- default options, convert_script.conf is read
+ local options = {
+     bitrate_multiplier = 0.975,			-- to make sure the file won’t go over the target file size, set it to 1 if you don’t care
+@@ -354,9 +358,9 @@
+     if ovc == "gif" then
+         full_command = full_command .. ' --vf-add=lavfi=graph=\\"framestep=' .. framestep .. '\\" && convert ' 
+         .. tmpfolder .. '/*.png -set delay ' .. delay .. ' -loop 0 -fuzz ' .. fuzz .. '% ' .. dither .. ' -layers optimize '
+-        .. full_output_path .. ' && rm -rf ' .. tmpfolder .. ' && notify-send "Gif done") & disown'
++        .. full_output_path .. ' && rm -rf ' .. tmpfolder .. ' && ' .. NOTIFY_CMD .. ' "Gif done") & disown'
+     else
+-        full_command = full_command .. ' && notify-send "Encoding done"; mkvpropedit '
++        full_command = full_command .. ' && ' .. NOTIFY_CMD .. ' "Encoding done"; mkvpropedit '
+         .. full_output_path .. ' -s title="' .. metadata_title .. '") & disown'
+     end
+     
+@@ -409,7 +413,7 @@
+     sep = ",+"
+     
+     if enc then
+-        local command = "mkvmerge '" .. video .. "' " .. mkvmerge_parts .. " -o " .. full_output_path
++        local command = MKVMERGE_CMD .. " '" .. video .. "' " .. mkvmerge_parts .. " -o " .. full_output_path
+         msg.info(command)
+         os.execute(command)
+         clear()
+@@ -508,7 +512,7 @@
+     end
+     
+     
+-    local yad_command = [[LC_NUMERIC=C yad --title="Convert Script" --center --form --fixed --always-print-result \
++    local yad_command = [[LC_NUMERIC=C ]] .. YAD_CMD .. [[ --title="Convert Script" --center --form --fixed --always-print-result \
+     --name "convert script" --class "Convert Script" --field="Resize to height:NUM" "]] .. scale_sav		--yad_table 1
+     .. [[" --field="Resize to width instead:CHK" ]] .. resize_to_width_instead .. " "				--yad_table 2
+     if options.legacy_yad then
+@@ -543,7 +547,7 @@
+     yad_command = yad_command .. [[ --button="Crop:1" --button="gtk-cancel:2" --button="gtk-ok:0"; ret=$? && echo $ret]]
+     
+     if gif_dialog then
+-        yad_command = [[echo $(LC_NUMERIC=C yad --title="Gif settings" --name "convert script" --class "Convert Script" \
++        yad_command = [[echo $(LC_NUMERIC=C ]] .. YAD_CMD .. [[ --title="Gif settings" --name "convert script" --class "Convert Script" \
+         --center --form --always-print-result --separator="…" \
+         --field="Fuzz Factor:NUM" '1!0..100!0.5!1' \
+         --field="Framestep:NUM" '3!1..3!1' \

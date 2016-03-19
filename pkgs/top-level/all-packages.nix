@@ -13153,6 +13153,10 @@ let
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
+  mpvScripts = {
+    convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+  };
+
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
