@@ -89,6 +89,34 @@ in
     };
   }).override { buildInputs = [ unzip ]; };
 
+  hyper-launcher = let
+    pname = "hyper-launcher";
+    version = "1.2.0";
+    src = fetchFromGitHub rec {
+      name = pname + "-" + version + ".tar.gz";
+      owner = "teeedubb";
+      repo = owner + "-xbmc-repo";
+      rev = "9bd170407436e736d2d709f8af9968238594669c";
+      sha256 = "019nqf7kixicnrzkg671x4yq723igjkhfl8hz5bifi9gx2qcy8hy";
+    };
+    meta = with stdenv.lib; {
+      homepage = http://forum.kodi.tv/showthread.php?tid=258159;
+      description = "A ROM launcher for Kodi that uses HyperSpin assets.";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  in {
+    service = mkKodiPlugin {
+      plugin = pname + "-service";
+      namespace = "service.hyper.launcher";
+      inherit version src meta;
+    };
+    plugin = mkKodiPlugin {
+      plugin = pname;
+      namespace = "plugin.hyper.launcher";
+      inherit version src meta;
+    };
+  };
+
   salts = mkKodiPlugin rec {
 
     plugin = "salts";
