@@ -130,7 +130,40 @@ let
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
 
-      self = with helperFunctions; with self; with overrides; {
+      stdenvDefault = with helperFunctions; with self; with overrides; {
+
+
+  ### STANDARD ENVIRONMENT
+
+
+  allStdenvs = import ../stdenv {
+    inherit system platform config lib;
+    allPackages = args: import ./../.. ({ inherit config system; } // args);
+  };
+
+  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
+
+  stdenv =
+    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
+      if crossSystem != null then
+        stdenvCross
+      else
+        let
+            changer = config.replaceStdenv or null;
+        in if changer != null then
+          changer {
+            # We import again all-packages to avoid recursivities.
+            pkgs = import ./../.. {
+              # We remove packageOverrides to avoid recursivities
+              config = removeAttrs config [ "replaceStdenv" ];
+            };
+          }
+      else
+        defaultStdenv;
+
+};
+
+      self = with pkgs; stdenvDefault // {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -170,12 +203,24 @@ let
       crossSystem;
   };
 
-
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux" "i386";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
+  forceNativeDrv = drv : if crossSystem == null then drv else
+    (drv // { crossDrv = drv.nativeDrv; });
+
+  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
+
+  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
+  # it uses GCC compiled with multilib support; on i686-linux, it's
+  # just the plain stdenv.
+  stdenv_32bit = lowPrio (
+    if system == "x86_64-linux" then
+      overrideCC stdenv gcc_multi
+    else
+      stdenv);
 
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
@@ -203,49 +248,6 @@ let
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
-
-
-  ### STANDARD ENVIRONMENT
-
-
-  allStdenvs = import ../stdenv {
-    inherit system platform config lib;
-    allPackages = args: import ./../.. ({ inherit config system; } // args);
-  };
-
-  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
-
-  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
-
-  stdenv =
-    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
-      if crossSystem != null then
-        stdenvCross
-      else
-        let
-            changer = config.replaceStdenv or null;
-        in if changer != null then
-          changer {
-            # We import again all-packages to avoid recursivities.
-            pkgs = import ./../.. {
-              # We remove packageOverrides to avoid recursivities
-              config = removeAttrs config [ "replaceStdenv" ];
-            };
-          }
-      else
-        defaultStdenv;
-
-  forceNativeDrv = drv : if crossSystem == null then drv else
-    (drv // { crossDrv = drv.nativeDrv; });
-
-  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
-  # it uses GCC compiled with multilib support; on i686-linux, it's
-  # just the plain stdenv.
-  stdenv_32bit = lowPrio (
-    if system == "x86_64-linux" then
-      overrideCC stdenv gcc_multi
-    else
-      stdenv);
 
 
   ### BUILD SUPPORT
