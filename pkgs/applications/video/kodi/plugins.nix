@@ -89,29 +89,6 @@ in
     };
   }).override { buildInputs = [ unzip ]; };
 
-  urlresolver = (mkKodiPlugin rec {
-
-    plugin = "urlresolver";
-    namespace = "script.module.urlresolver";
-    version = "2.10.0";
-
-    src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "Eldorados";
-      repo = namespace;
-      rev = "72b9d978d90d54bb7a0224a1fd2407143e592984";
-      sha256 = "0r5glfvgy9ri3ar9zdkvix8lalr1kfp22fap2pqp739b6k2iqir6";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/Eldorados/urlresolver";
-      description = "Resolve common video host URL's to be playable in XBMC/Kodi";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  }).override {
-    postPatch = "sed -i -e 's,settings_file = os.path.join(addon_path,settings_file = os.path.join(profile_path,g' lib/urlresolver/common.py";
-  };
-
   salts = mkKodiPlugin rec {
 
     plugin = "salts";
@@ -191,27 +168,6 @@ in
     propagatedBuildinputs = [ steam ];
   };
 
-  t0mm0-common = mkKodiPlugin rec {
-
-    plugin = "t0mm0-common";
-    namespace = "script.module.t0mm0.common";
-    version = "0.0.1";
-
-    src = fetchFromGitHub {
-      name = plugin + "-" + version + ".tar.gz";
-      owner = "t0mm0";
-      repo = "xbmc-urlresolver";
-      rev = "ab16933a996a9e77b572953c45e70900c723d6e1";
-      sha256 = "1yd00md8iirizzaiqy6fv1n2snydcpqvp2f9irzfzxxi3i9asb93";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/t0mm0/xbmc-urlresolver/";
-      description = "t0mm0's common stuff";
-      maintainers = with maintainers; [ edwtjo ];
-    };
-  };
-
   pvr-hts = (mkKodiPlugin rec {
     plugin = "pvr-hts";
     namespace = "pvr.hts";
@@ -243,5 +199,49 @@ in
       make install
       ln -s $out/lib/kodi/addons/pvr.hts/pvr.hts.so $out/share/kodi/addons/pvr.hts
     '';
+  };
+
+  t0mm0-common = mkKodiPlugin rec {
+
+    plugin = "t0mm0-common";
+    namespace = "script.module.t0mm0.common";
+    version = "0.0.1";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "t0mm0";
+      repo = "xbmc-urlresolver";
+      rev = "ab16933a996a9e77b572953c45e70900c723d6e1";
+      sha256 = "1yd00md8iirizzaiqy6fv1n2snydcpqvp2f9irzfzxxi3i9asb93";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/t0mm0/xbmc-urlresolver/";
+      description = "t0mm0's common stuff";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  };
+
+  urlresolver = (mkKodiPlugin rec {
+
+    plugin = "urlresolver";
+    namespace = "script.module.urlresolver";
+    version = "2.10.0";
+
+    src = fetchFromGitHub {
+      name = plugin + "-" + version + ".tar.gz";
+      owner = "Eldorados";
+      repo = namespace;
+      rev = "72b9d978d90d54bb7a0224a1fd2407143e592984";
+      sha256 = "0r5glfvgy9ri3ar9zdkvix8lalr1kfp22fap2pqp739b6k2iqir6";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/Eldorados/urlresolver";
+      description = "Resolve common video host URL's to be playable in XBMC/Kodi";
+      maintainers = with maintainers; [ edwtjo ];
+    };
+  }).override {
+    postPatch = "sed -i -e 's,settings_file = os.path.join(addon_path,settings_file = os.path.join(profile_path,g' lib/urlresolver/common.py";
   };
 }
