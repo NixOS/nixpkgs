@@ -121,7 +121,6 @@ let
   pkgsFun = pkgs: overrides:
     let
       defaultScope = pkgs // pkgs.xorg;
-      self = helperFunctions // self_ // overrides;
 
       # Helper functions that are exported through `pkgs'.
       helperFunctions =
@@ -131,7 +130,7 @@ let
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
 
-      self_ = with self; {
+      self = with helperFunctions; with self; with overrides; {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -16468,7 +16467,7 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
-}; # self_ =
+}; # self =
 
 
 aliases = import ./aliases.nix self;
@@ -16479,7 +16478,7 @@ tweakAlias = _n: alias: with lib;
   else alias;
 
 in
-  lib.mapAttrs tweakAlias aliases // self;
+  lib.mapAttrs tweakAlias aliases // helperFunctions // self // overrides;
 
 in
   pkgs
