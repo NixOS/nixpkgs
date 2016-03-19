@@ -171,13 +171,13 @@ in
 
     plugin = "steam-launcher";
     namespace = "script.steam.launcher";
-    version = "3.1.1";
+    version = "3.1.4";
 
     src = fetchFromGitHub rec {
       owner = "teeedubb";
       repo = owner + "-xbmc-repo";
-      rev = "bb66db7c4927619485373699ff865a9b00e253bb";
-      sha256 = "1skjkz0h6nkg04vylhl4zzavf5lba75j0qbgdhb9g7h0a98jz7s4";
+      rev = "db67704c3e16bdcdd3bdfe2926c609f1f6bdc4fb";
+      sha256 = "001a7zs3a4jfzj8ylxv2klc33mipmqsd5aqax7q81fbgwdlndvbm";
     };
 
     meta = with stdenv.lib; {
