@@ -1658,6 +1658,8 @@ let
 
   fping = callPackage ../tools/networking/fping {};
 
+  fpm = callPackage ../tools/package-management/fpm { };
+
   fprot = callPackage ../tools/security/fprot { };
 
   fprintd = callPackage ../tools/security/fprintd { };
