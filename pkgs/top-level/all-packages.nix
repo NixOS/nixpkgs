@@ -16475,7 +16475,7 @@ let
 aliases = import ./aliases.nix self;
 
 in
-  aliases // helperFunctions // stdenvDefault // self // overrides;
+  helperFunctions // stdenvDefault // self // aliases // overrides;
 
 in
   pkgs
