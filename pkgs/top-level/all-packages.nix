@@ -95,7 +95,7 @@ let
   # (un-overriden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = applyGlobalOverrides (self: config.packageOverrides or (super: {}));
+  pkgs = pkgsWithOverrides (self: config.packageOverrides or (super: {}));
 
   # stdenvOverrides is used to avoid circular dependencies for building the
   # standard build environment. This mechanism use the override mechanism to
@@ -111,7 +111,7 @@ let
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
   # function is very expensive!
-  applyGlobalOverrides = overrider:
+  pkgsWithOverrides = overrider:
     let
       overrides = super: overrider pkgs super // stdenvOverrides super;
 
@@ -167,7 +167,7 @@ let
   #
   # The result is `pkgs' where all the derivations depending on `foo'
   # will use the new version.
-  overridePackages = f: applyGlobalOverrides f;
+  overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ./../..) {
