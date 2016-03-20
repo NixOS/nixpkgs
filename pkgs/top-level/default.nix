@@ -113,13 +113,11 @@ let
   # function is very expensive!
   pkgsWithOverrides = overrider:
     let
-      # Helper functions that are exported through `pkgs'.
-      helperFunctions =
-        stdenvAdapters //
-        (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
-
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
+
+      trivialBuilders =
+        (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
       stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
@@ -128,7 +126,8 @@ let
 
       aliases = import ./aliases.nix self;
 
-      pkgs_3 = helperFunctions;
+      pkgs_2 = stdenvAdapters;
+      pkgs_3 = pkgs_2 // trivialBuilders;
       pkgs_4 = pkgs_3 // stdenvDefault;
       pkgs_5 = pkgs_4 // self;
       pkgs_6 = pkgs_5 // aliases;
