@@ -126,13 +126,13 @@ let
       selfArgs = topLevelArguments // { inherit pkgsWithOverrides; };
       self = (import ./all-packages.nix selfArgs) self pkgs;
 
-      aliases = import ./aliases.nix self;
+      aliases = super: import ./aliases.nix super;
 
       pkgs_2 = stdenvAdapters;
       pkgs_3 = pkgs_2 // trivialBuilders;
       pkgs_4 = pkgs_3 // stdenvDefault;
       pkgs_5 = pkgs_4 // self;
-      pkgs_6 = pkgs_5 // aliases;
+      pkgs_6 = pkgs_5 // aliases pkgs_5;
 
       pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
 
