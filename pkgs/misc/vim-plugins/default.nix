@@ -1451,6 +1451,16 @@ rec {
 
   };
 
+  vim-airline-themes = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-airline-themes-2016-02-24";
+    src = fetchgit {
+      url = "git://github.com/vim-airline/vim-airline-themes";
+      rev = "13bad30d4ee3892cae755c83433ee85fbc96d028";
+      sha256 = "0w36ani4r2v58pd0fcqv12j0hjd97g2q78zici1a72njvwp9qhgj";
+    };
+    dependencies = [ "vim-airline" ];
+  };
+
   vim-coffee-script = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-coffee-script-2015-04-20";
     src = fetchgit {
