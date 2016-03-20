@@ -10993,7 +10993,7 @@ in
     cryptsetup = null; # Infinite recusion
   };
 
-  systemd-with-cryptsetup = appendToName "-with-cryptsetup" (systemd.override {
+  systemd_with_cryptsetup = appendToName "-with-cryptsetup" (systemd.override {
     inherit cryptsetup;
   });
 
