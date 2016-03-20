@@ -134,19 +134,15 @@ let
 
       customOverrides = self: super:
         lib.optionalAttrs (bootStdenv == null) (overrider self super);
-
-      pkgs_1 = {};
-      pkgs_2 = pkgs_1 // stdenvAdapters pkgs pkgs_1;
-      pkgs_3 = pkgs_2 // trivialBuilders pkgs pkgs_2;
-      pkgs_4 = pkgs_3 // stdenvDefault pkgs pkgs_3;
-      pkgs_5 = pkgs_4 // allPackages pkgs pkgs_4;
-      pkgs_6 = pkgs_5 // aliases pkgs pkgs_5;
-
-      pkgs_7 = pkgs_6 // stdenvOverrides pkgs pkgs_6;
-
-      # The overriden, final packages.
-      pkgs =   pkgs_7 // customOverrides pkgs pkgs_7;
-    in pkgs;
-
+    in
+      lib.fix' (
+        lib.extends customOverrides (
+          lib.extends stdenvOverrides (
+            lib.extends aliases (
+              lib.extends allPackages (
+                lib.extends stdenvDefault (
+                  lib.extends trivialBuilders (
+                    lib.extends stdenvAdapters (
+                      self: {}))))))));
 in
   pkgs
