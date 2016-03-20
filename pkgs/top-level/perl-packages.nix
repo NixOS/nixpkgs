@@ -6900,11 +6900,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Log4Perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.46";
+  LogLog4perl = buildPerlPackage rec {
+    name = "Log-Log4perl-1.47";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
-      sha256 = "31011a17c04e78016e73eaa4865d0481d2ffc3dc22813c61065d90ad73c64e6f";
+      sha256 = "9001dded011226538b9a50c7856815bb0dba72a1e6218fdcaba56f651356b96f";
     };
     meta = {
       homepage = https://mschilli.github.io/log4perl/;
@@ -6913,6 +6913,9 @@ let self = _self // overrides; _self = with self; {
       maintainers = [ maintainers.rycee ];
     };
   };
+
+  # For backwards compatibility.
+  Log4Perl = self.LogLog4perl;
 
   LogDispatchArray = buildPerlPackage {
     name = "Log-Dispatch-Array-1.003";
