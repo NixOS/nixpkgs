@@ -84,7 +84,9 @@ let
       wvModule = "@widevine@/lib/libwidevinecdmadapter.so";
       wvInfo = "#${wvName}#${wvDescription};${wvMimeTypes}";
     in ''
-      flashVersion="$(${jshon}/bin/jshon -F PepperFlash/manifest.json -e version -u)"
+      flashVersion="$(
+        "${jshon}/bin/jshon" -F PepperFlash/manifest.json -e version -u
+      )"
 
       install -vD PepperFlash/libpepflashplayer.so \
         "$flash/lib/libpepflashplayer.so"
