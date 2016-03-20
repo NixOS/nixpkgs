@@ -124,7 +124,9 @@ let
       stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
       selfArgs = topLevelArguments // { inherit pkgsWithOverrides; };
-      self = (import ./all-packages.nix selfArgs) self pkgs;
+      self =
+        let res = import ./all-packages.nix selfArgs res pkgs;
+        in res;
 
       aliases = super: import ./aliases.nix super;
 
