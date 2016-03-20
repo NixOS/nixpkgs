@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-with (import ./update.nix {
+with (import ../update.nix {
   inherit (stdenv) system;
 }).getChannel channel;
 
