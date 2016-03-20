@@ -2,9 +2,21 @@ self:
 
 with self;
 
+let
+  # Removind recurseForDerivation prevents derivations of aliased attribute
+  # set to appear while listing all the packages available.
+  removeRecurseForDerivations = _n: alias: with lib;
+    if alias.recurseForDerivations or false then
+      removeAttrs alias ["recurseForDerivations"]
+    else alias;
+
+  doNotDisplayTwice = aliases:
+    lib.mapAttrs removeRecurseForDerivations aliases;
+in
+
   ### Deprecated aliases - for backward compatibility
 
-rec {
+doNotDisplayTwice rec {
   accounts-qt = qt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14

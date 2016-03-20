@@ -16474,13 +16474,8 @@ let
 
 aliases = import ./aliases.nix self;
 
-tweakAlias = _n: alias: with lib;
-  if alias.recurseForDerivations or false then
-    removeAttrs alias ["recurseForDerivations"]
-  else alias;
-
 in
-  lib.mapAttrs tweakAlias aliases // helperFunctions // stdenvDefault // self // overrides;
+  aliases // helperFunctions // stdenvDefault // self // overrides;
 
 in
   pkgs
