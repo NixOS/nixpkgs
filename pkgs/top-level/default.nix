@@ -140,10 +140,10 @@ let
       pkgs_5 = pkgs_4 // allPackages pkgs pkgs_4;
       pkgs_6 = pkgs_5 // aliases pkgs pkgs_5;
 
-      pkgs_7 = pkgs_6 // customOverrides pkgs pkgs_6;
+      pkgs_7 = pkgs_6 // stdenvOverrides pkgs pkgs_6;
 
       # The overriden, final packages.
-      pkgs =   pkgs_7 // stdenvOverrides pkgs pkgs_6;
+      pkgs =   pkgs_7 // customOverrides pkgs pkgs_6;
     in pkgs;
 
 in
