@@ -8,10 +8,6 @@ let
   deployment_env_config = builtins.toJSON {
     production = {
       port = toString cfg.port;
-      maxSockets = 150;
-      batchSize = 100;
-      startIndex = 32570;
-      rippleds = cfg.rippleds;
       redis = {
         enable = cfg.redis.enable;
         host = cfg.redis.host;
@@ -23,8 +19,27 @@ let
 
   db_config = builtins.toJSON {
     production = {
-      username = optional (cfg.couchdb.pass != "") cfg.couchdb.user;
-      password = optional (cfg.couchdb.pass != "") cfg.couchdb.pass;
+      username = optionalString (cfg.couchdb.pass != "") cfg.couchdb.user;
+      password = optionalString (cfg.couchdb.pass != "") cfg.couchdb.pass;
+      host = cfg.couchdb.host;
+      port = cfg.couchdb.port;
+      database = cfg.couchdb.db;
+      protocol = "http";
+    };
+  };
+
+  importer_config = builtins.toJSON {
+    queueLength = 20;
+    logLevel = cfg.importer.logLevel;
+    logFile = null;
+    ripple = {
+      trace = false;
+      allow_partial_history = false;
+      servers = cfg.importer.servers;
+    };
+    couchdb = {
+      username = optionalString (cfg.couchdb.pass != "") cfg.couchdb.user;
+      password = optionalString (cfg.couchdb.pass != "") cfg.couchdb.pass;
       host = cfg.couchdb.host;
       port = cfg.couchdb.port;
       database = cfg.couchdb.db;
@@ -41,24 +56,6 @@ in {
         description = "Ripple data api port";
         default = 5993;
         type = types.int;
-      };
-
-      importMode = mkOption {
-        description = "Ripple data api import mode.";
-        default = "liveOnly";
-        type = types.enum ["live" "liveOnly"];
-      };
-
-      minLedger = mkOption {
-        description = "Ripple data api minimal ledger to fetch.";
-        default = null;
-        type = types.nullOr types.int;
-      };
-
-      maxLedger = mkOption {
-        description = "Ripple data api maximal ledger to fetch.";
-        default = null;
-        type = types.nullOr types.int;
       };
 
       redis = {
@@ -119,13 +116,39 @@ in {
         };
       };
 
-      rippleds = mkOption {
-        description = "List of rippleds to be used by ripple data api.";
-        default = [
-          "http://s_east.ripple.com:51234"
-          "http://s_west.ripple.com:51234"
-        ];
-        type = types.listOf types.str;
+      importer = {
+        logLevel = mkOption {
+          description = "Ripple data importer log level.";
+          default = 3;
+          type = types.int;
+        };
+
+        servers = mkOption {
+          description = "Ripple data importer list of rippled servers to import from.";
+          default = [
+            { host = "s-west.ripple.com"; }
+            { host = "s-east.ripple.com"; }
+          ];
+          type = types.listOf types.optionSet;
+          options = [{
+            host = mkOption {
+              description = "Ripple data importer rippled host.";
+              type = types.str;
+            };
+
+            port = mkOption {
+              description = "Ripple data importer rippled port.";
+              type = types.int;
+              default = 443;
+            };
+
+            secure = mkOption {
+              description = "Ripple data importer rippled enable ssl.";
+              type = types.bool;
+              default = true;
+            };
+          }];
+        };
       };
     };
   };
@@ -146,7 +169,7 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.ripple-data-api}/bin/api";
+        ExecStart = "${pkgs.nodePackages.ripple-data-api}/bin/api";
         Restart = "always";
         User = "ripple-data-api";
       };
@@ -155,25 +178,28 @@ in {
     systemd.services.ripple-data-importer = {
       after = [ "couchdb.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.curl ];
+      path = [ pkgs.curl pkgs.nodejs ];
 
       environment = {
         NODE_ENV = "production";
         DEPLOYMENT_ENVS_CONFIG = pkgs.writeText "deployment.environment.json" deployment_env_config;
         DB_CONFIG = pkgs.writeText "db.config.json" db_config;
-        LOG_FILE = "/dev/null";
       };
 
-      serviceConfig = let
-        importMode =
-          if cfg.minLedger != null && cfg.maxLedger != null then
-            "${toString cfg.minLedger} ${toString cfg.maxLedger}"
-          else
-            cfg.importMode;
-      in {
-        ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
+      script = ''
+        node \
+          ${pkgs.nodePackages.ripple-historical-database}/lib/node_modules/ripple-historical-database/import/live.js \
+            --type couchdb;
+      '';
+
+      serviceConfig = {
         Restart = "always";
         User = "ripple-data-api";
+        WorkingDirectory = pkgs.writeTextFile {
+          name = "ripple-importer-config";
+          text = importer_config;
+          destination = "/config/import.config.json";
+        };
       };
 
       preStart = mkMerge [
@@ -181,14 +207,14 @@ in {
           HOST="http://${optionalString (cfg.couchdb.pass != "") "${cfg.couchdb.user}:${cfg.couchdb.pass}@"}${cfg.couchdb.host}:${toString cfg.couchdb.port}"
           curl -X PUT $HOST/${cfg.couchdb.db} || true
         '')
-        "${pkgs.ripple-data-api}/bin/update-views"
+        "${pkgs.nodePackages.ripple-data-api}/bin/update-views"
       ];
     };
 
-    users.extraUsers = singleton
-      { name = "ripple-data-api";
-        description = "Ripple data api user";
-        uid = config.ids.uids.ripple-data-api;
-      };
+    users.extraUsers = singleton {
+      name = "ripple-data-api";
+      description = "Ripple data api user";
+      uid = config.ids.uids.ripple-data-api;
+    };
   };
 }

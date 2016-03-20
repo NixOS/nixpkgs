@@ -138,7 +138,6 @@
 , "sloc"
 , "peerflix"
 , "peerflix-server"
-, "trash"
 , "empty-trash"
 , "castnow"
 , "parsoid"
@@ -189,4 +188,6 @@
 , "node-red"
 , "sinopia"
 , "docker-registry-server"
+, { "ripple-data-api": "https://github.com/ripple/ripple-data-api/tarball/210896ee4a51f139262ad0f41af36abd83701c41" }
+, { "ripple-historical-database": "https://github.com/ripple/rippled-historical-database/tarball/bfb5b9f54ba69e1ae4cacd732f1c11a1056435c9" }
 ]

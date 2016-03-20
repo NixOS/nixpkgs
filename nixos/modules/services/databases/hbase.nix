@@ -15,6 +15,10 @@ let
         <name>hbase.zookeeper.property.dataDir</name>
         <value>${cfg.dataDir}/zookeeper</value>
       </property>
+      <property>
+        <name>hbase.regionserver.thrift.port</name>
+        <value>9090</value>
+      </property>
     </configuration>
   '';
 
@@ -119,6 +123,23 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = "${cfg.package}/bin/hbase --config ${configDir} master start";
+      };
+    };
+
+    systemd.services.hbase-thrift = {
+      description = "HBase Thrift Server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "hbase.service" ];
+
+      environment = {
+        JAVA_HOME = "${pkgs.jre}";
+        HBASE_LOG_DIR = cfg.logDir;
+      };
+
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${cfg.package}/bin/hbase --config ${configDir} thrift start -f";
       };
     };
 
