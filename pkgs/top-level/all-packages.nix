@@ -1758,6 +1758,8 @@ let
     json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
   };
 
+  grive2 = callPackage ../tools/filesystems/grive2 { };
+
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
