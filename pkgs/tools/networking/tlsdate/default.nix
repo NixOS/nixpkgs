@@ -1,4 +1,4 @@
-{ stdenv, fetchgit
+{ stdenv, fetchFromGitHub, fetchpatch
 , autoconf
 , automake
 , libevent
@@ -7,14 +7,24 @@
 , openssl
 }:
 
-stdenv.mkDerivation {
-  name = "tlsdate-0.0.12";
+stdenv.mkDerivation rec {
+  version = "0.0.13";
+  name = "tlsdate-${version}";
 
-  src = fetchgit {
-    url = https://github.com/ioerror/tlsdate;
-    rev = "fd04f48ed60eb773c8e34d27ef2ee12ee7559a41";
-    sha256 = "d97b7cc6fe64799c12c31a9ebd3a69c9bc954de2eaa7f70d113d39544472854d";
+  src = fetchFromGitHub {
+    owner = "ioerror";
+    repo = "tlsdate";
+    rev = name;
+    sha256 = "0w3v63qmbhpqlxjsvf4k3zp90k6mdzi8cdpgshan9iphy1f44xgl";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "tlsdate-no_sslv3.patch";
+      url = "https://github.com/ioerror/tlsdate/commit/f9d3cba7536d1679e98172ccbddad32bc9ae490c.patch";
+      sha256 = "0prv46vxvb4paxaswmc6ix0kd5sp0552i5msdldnhg9fysbac8s0";
+    })
+  ];
 
   buildInputs = [
     autoconf
@@ -32,10 +42,10 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Secure parasitic rdate replacement";
     homepage = https://github.com/ioerror/tlsdate;
-    maintainers = [ stdenv.lib.maintainers.tv ];
-    platforms = stdenv.lib.platforms.allBut [ "darwin" ];
+    maintainers = with maintainers; [ tv fpletz ];
+    platforms = platforms.allBut [ "darwin" ];
   };
 }
