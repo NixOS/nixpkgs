@@ -245,7 +245,7 @@ in
     # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
     installPhase = ''
       make install
-      ln -s $out/lib/kodi/addons/pvr.hts/pvr.hts.so $out/share/kodi/addons/pvr.hts
+      ln -s $out/lib/kodi/addons/pvr.hts/pvr.hts.so* $out/share/kodi/addons/pvr.hts
     '';
   };
 
