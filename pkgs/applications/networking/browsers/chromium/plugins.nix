@@ -3,7 +3,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 
-, source
+, upstream-info
 }:
 
 with stdenv.lib;
@@ -40,16 +40,15 @@ let
   plugins = stdenv.mkDerivation {
     name = "chromium-binary-plugins";
 
-    # XXX: Only temporary and has to be version-specific
-    src = source.plugins;
+    src = upstream-info.binary;
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
     outputs = [ "flash" "widevine" ];
 
     unpackCmd = let
-      chan = if source.channel == "dev"    then "chrome-unstable"
-        else if source.channel == "stable" then "chrome"
-        else "chrome-${source.channel}";
+      chan = if upstream-info.channel == "dev"    then "chrome-unstable"
+        else if upstream-info.channel == "stable" then "chrome"
+        else "chrome-${upstream-info.channel}";
     in ''
       mkdir -p plugins
       ar p "$src" data.tar.xz | tar xJ -C plugins --strip-components=4 \
