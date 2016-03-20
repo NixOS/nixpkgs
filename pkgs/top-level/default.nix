@@ -114,14 +114,16 @@ let
   pkgsWithOverrides = overrider:
     let
       stdenvAdapters =
-        import ../stdenv/adapters.nix pkgs;
+        let res = import ../stdenv/adapters.nix pkgs; in res // {
+          stdenvAdapters = res;
+        };
 
       trivialBuilders =
         (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
       stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
-      selfArgs = topLevelArguments // { inherit pkgsWithOverrides stdenvAdapters; };
+      selfArgs = topLevelArguments // { inherit pkgsWithOverrides; };
       self = (import ./all-packages.nix selfArgs) self pkgs;
 
       aliases = import ./aliases.nix self;

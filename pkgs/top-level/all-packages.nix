@@ -1,6 +1,6 @@
 { system, bootStdenv, noSysDirs, gccWithCC, gccWithProfiling
 , config, crossSystem, platform, lib
-, pkgsWithOverrides, stdenvAdapters
+, pkgsWithOverrides
 , ... }:
 self: pkgs:
 
@@ -74,7 +74,7 @@ in
 
 
   ### Helper functions.
-  inherit lib config stdenvAdapters;
+  inherit lib config;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
   inherit (misc) versionedDerivation;
