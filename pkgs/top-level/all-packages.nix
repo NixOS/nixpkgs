@@ -163,7 +163,7 @@ let
 
 };
 
-      self = with pkgs; stdenvDefault // {
+      self = with pkgs; {
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -16480,7 +16480,7 @@ tweakAlias = _n: alias: with lib;
   else alias;
 
 in
-  lib.mapAttrs tweakAlias aliases // helperFunctions // self // overrides;
+  lib.mapAttrs tweakAlias aliases // helperFunctions // stdenvDefault // self // overrides;
 
 in
   pkgs
