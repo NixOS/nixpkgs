@@ -97,17 +97,6 @@ let
   # ... pkgs.foo ...").
   pkgs = pkgsWithOverrides (self: config.packageOverrides or (super: {}));
 
-  # stdenvOverrides is used to avoid circular dependencies for building the
-  # standard build environment. This mechanism use the override mechanism to
-  # implement some staged compilation of the stdenv.
-  #
-  # We don't want stdenv overrides in the case of cross-building, or
-  # otherwise the basic overrided packages will not be built with the
-  # crossStdenv adapter.
-  stdenvOverrides = self: pkgs:
-    lib.optionalAttrs (crossSystem == null && pkgs.stdenv ? overrides)
-      (pkgs.stdenv.overrides pkgs);
-
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
   # function is very expensive!
@@ -131,6 +120,17 @@ let
         in res;
 
       aliases = self: super: import ./aliases.nix super;
+
+      # stdenvOverrides is used to avoid circular dependencies for building
+      # the standard build environment. This mechanism use the override
+      # mechanism to implement some staged compilation of the stdenv.
+      #
+      # We don't want stdenv overrides in the case of cross-building, or
+      # otherwise the basic overrided packages will not be built with the
+      # crossStdenv adapter.
+      stdenvOverrides = self: super:
+        lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
+          (super.stdenv.overrides super);
 
       customOverrides = self: super:
         lib.optionalAttrs (bootStdenv == null) (overrider self super);
