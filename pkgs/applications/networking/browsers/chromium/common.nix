@@ -194,7 +194,7 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
-      # Precompile .pyc files to prevent race conditions during build
+      echo "Precompiling .py files to prevent race conditions..." >&2
       python -m compileall -q -f . > /dev/null 2>&1 || : # ignore errors
 
       # This is to ensure expansion of $out.
