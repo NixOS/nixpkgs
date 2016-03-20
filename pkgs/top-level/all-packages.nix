@@ -113,13 +113,13 @@ let
   # function is very expensive!
   pkgsWithOverrides = overrider:
     let
-      overrides = super: overrider pkgs super // stdenvOverrides super;
-
       # The un-overriden packages, passed to `overrider'.
-      pkgs_ = pkgsFun pkgs;
+      pkgs_6 = pkgsFun pkgs;
+
+      pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
 
       # The overriden, final packages.
-      pkgs = pkgs_ // overrides pkgs_;
+      pkgs =   pkgs_7 // stdenvOverrides pkgs_6;
     in pkgs;
 
   # The package compositions.  Yes, this isn't properly indented.
