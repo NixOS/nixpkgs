@@ -42,11 +42,11 @@ in stdenv.mkDerivation {
   '';
 
   patches = [
-    ./build_fixes_46.patch
-    ./widevine.patch
+    ../patches/build_fixes_46.patch
+    ../patches/widevine.patch
     (if versionOlder version "50.0.0.0"
-     then ./nix_plugin_paths_46.patch
-     else ./nix_plugin_paths_50.patch)
+     then ../patches/nix_plugin_paths_46.patch
+     else ../patches/nix_plugin_paths_50.patch)
   ];
 
   patchPhase = let
