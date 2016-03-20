@@ -104,7 +104,7 @@ let
   # We don't want stdenv overrides in the case of cross-building, or
   # otherwise the basic overrided packages will not be built with the
   # crossStdenv adapter.
-  stdenvOverrides = pkgs:
+  stdenvOverrides = self: pkgs:
     lib.optionalAttrs (crossSystem == null && pkgs.stdenv ? overrides)
       (pkgs.stdenv.overrides pkgs);
 
@@ -113,33 +113,34 @@ let
   # function is very expensive!
   pkgsWithOverrides = overrider:
     let
-      stdenvAdapters =
+      stdenvAdapters = self: super:
         let res = import ../stdenv/adapters.nix pkgs; in res // {
           stdenvAdapters = res;
         };
 
-      trivialBuilders =
+      trivialBuilders = self: super:
         (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
 
-      stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
+      stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
 
       allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
-      allPackages =
+      allPackages = self: super:
         let res = import ./all-packages.nix allPackagesArgs res pkgs;
         in res;
 
-      aliases = super: import ./aliases.nix super;
+      aliases = self: super: import ./aliases.nix super;
 
-      pkgs_2 = stdenvAdapters;
-      pkgs_3 = pkgs_2 // trivialBuilders;
-      pkgs_4 = pkgs_3 // stdenvDefault;
-      pkgs_5 = pkgs_4 // allPackages;
-      pkgs_6 = pkgs_5 // aliases pkgs_5;
+      pkgs_1 = {};
+      pkgs_2 = pkgs_1 // stdenvAdapters pkgs pkgs_1;
+      pkgs_3 = pkgs_2 // trivialBuilders pkgs pkgs_2;
+      pkgs_4 = pkgs_3 // stdenvDefault pkgs pkgs_3;
+      pkgs_5 = pkgs_4 // allPackages pkgs pkgs_4;
+      pkgs_6 = pkgs_5 // aliases pkgs pkgs_5;
 
       pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
 
       # The overriden, final packages.
-      pkgs =   pkgs_7 // stdenvOverrides pkgs_6;
+      pkgs =   pkgs_7 // stdenvOverrides pkgs pkgs_6;
     in pkgs;
 
 in
