@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pythonPackages, pyqt4, cython, libvncserver, zlib, twisted
-, gnutls, libvpx }:
+, gnutls, libvpx, makeDesktopItem }:
 
 pythonPackages.buildPythonApplication rec {
   name = "blink-${version}";
@@ -20,16 +20,30 @@ pythonPackages.buildPythonApplication rec {
 
   buildInputs = [ cython zlib libvncserver libvpx ];
 
+  desktopItem = makeDesktopItem {
+    name = "Blink";
+    exec = "blink";
+    comment = meta.description;
+    desktopName = "Blink";
+    icon = "blink";
+    genericName = "Instant Messaging";
+    categories = "Application;Internet;";
+  };
+
   postInstall = ''
     wrapProgram $out/bin/blink \
       --prefix LD_LIBRARY_PATH ":" ${gnutls}/lib
+    mkdir -p "$out/share/applications"
+    mkdir -p "$out/share/pixmaps"
+    cp "$desktopItem"/share/applications/* "$out/share/applications"
+    cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
   '';
 
   meta = with stdenv.lib; {
     homepage = http://icanblink.com/;
-    description = "A state of the art, easy to use SIP client";
+    description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;
-    license = licenses.mit;
+    license = licenses.gplv3;
     maintainers = with maintainers; [ pSub ];
   };
 }
