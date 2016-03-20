@@ -3,7 +3,7 @@ self:
 with self;
 
 let
-  # Removind recurseForDerivation prevents derivations of aliased attribute
+  # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
   removeRecurseForDerivations = _n: alias: with lib;
     if alias.recurseForDerivations or false then

@@ -88,11 +88,11 @@ let
       crossSystem platform lib;
   };
 
-  # Allow packages to be overriden globally via the `packageOverrides'
+  # Allow packages to be overridden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
-  # as an argument and returns a set of new or overriden packages.
+  # as an argument and returns a set of new or overridden packages.
   # The `packageOverrides' function is called with the *original*
-  # (un-overriden) set of packages, allowing packageOverrides
+  # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
   pkgs = pkgsWithOverrides (self: config.packageOverrides or (super: {}));
@@ -122,11 +122,11 @@ let
       aliases = self: super: import ./aliases.nix super;
 
       # stdenvOverrides is used to avoid circular dependencies for building
-      # the standard build environment. This mechanism use the override
+      # the standard build environment. This mechanism uses the override
       # mechanism to implement some staged compilation of the stdenv.
       #
       # We don't want stdenv overrides in the case of cross-building, or
-      # otherwise the basic overrided packages will not be built with the
+      # otherwise the basic overridden packages will not be built with the
       # crossStdenv adapter.
       stdenvOverrides = self: super:
         lib.optionalAttrs (crossSystem == null && super.stdenv ? overrides)
