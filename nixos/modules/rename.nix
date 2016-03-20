@@ -111,6 +111,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ])
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
+    (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ])
 
   ];
 }
