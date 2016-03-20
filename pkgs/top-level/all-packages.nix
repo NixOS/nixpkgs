@@ -83,6 +83,11 @@ let
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
 
+  topLevelArguments = {
+    inherit system bootStdenv noSysDirs gccWithCC gccWithProfiling config
+      crossSystem platform lib;
+  };
+
   # Allow packages to be overriden globally via the `packageOverrides'
   # configuration option, which must be a function that takes `pkgs'
   # as an argument and returns a set of new or overriden packages.
@@ -130,38 +135,7 @@ let
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
 
-      stdenvDefault = with pkgs; with stdenvDefault; {
-
-
-  ### STANDARD ENVIRONMENT
-
-
-  allStdenvs = import ../stdenv {
-    inherit system platform config lib;
-    allPackages = args: import ./../.. ({ inherit config system; } // args);
-  };
-
-  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
-
-  stdenv =
-    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
-      if crossSystem != null then
-        stdenvCross
-      else
-        let
-            changer = config.replaceStdenv or null;
-        in if changer != null then
-          changer {
-            # We import again all-packages to avoid recursivities.
-            pkgs = import ./../.. {
-              # We remove packageOverrides to avoid recursivities
-              config = removeAttrs config [ "replaceStdenv" ];
-            };
-          }
-      else
-        defaultStdenv;
-
-};
+      stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
       self = with pkgs; {
 
