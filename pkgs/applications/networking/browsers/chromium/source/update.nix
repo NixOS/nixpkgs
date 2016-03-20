@@ -5,8 +5,8 @@ let
     inherit system;
   }) lib writeText stdenv;
 
-  sources = if builtins.pathExists ./sources.nix
-            then import ./sources.nix
+  sources = if builtins.pathExists ../upstream-info.nix
+            then import ../upstream-info.nix
             else null;
 
   bucketURL = "https://commondatastorage.googleapis.com/"
