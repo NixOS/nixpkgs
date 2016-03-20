@@ -123,7 +123,7 @@ let
 
       stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
-      selfArgs = topLevelArguments // { inherit pkgsWithOverrides stdenvAdapters helperFunctions; };
+      selfArgs = topLevelArguments // { inherit pkgsWithOverrides stdenvAdapters; };
       self = (import ./all-packages.nix selfArgs) self pkgs;
 
       aliases = import ./aliases.nix self;

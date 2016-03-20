@@ -1,6 +1,6 @@
 { system, bootStdenv, noSysDirs, gccWithCC, gccWithProfiling
 , config, crossSystem, platform, lib
-, pkgsWithOverrides, stdenvAdapters, helperFunctions
+, pkgsWithOverrides, stdenvAdapters
 , ... }:
 self: pkgs:
 
@@ -151,9 +151,7 @@ in
     dotnetfx = dotnetfx40;
   };
 
-  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers {
-    inherit helperFunctions;
-  };
+  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
   dispad = callPackage ../tools/X11/dispad { };
 
