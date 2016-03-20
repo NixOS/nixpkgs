@@ -100,7 +100,7 @@ let
   # otherwise the basic overrided packages will not be built with the
   # crossStdenv adapter.
   stdenvOverrides = pkgs:
-    lib.optionalAttrs (pkgs.stdenv ? overrides && crossSystem == null)
+    lib.optionalAttrs (crossSystem == null && pkgs.stdenv ? overrides)
       (pkgs.stdenv.overrides pkgs);
 
   # The un-overriden packages, passed to `overrider'.
