@@ -3,7 +3,7 @@
 let
   inherit (import ../../../../../. {
     inherit system;
-  }) lib writeText stdenv;
+  }) lib fetchurl writeText stdenv;
 
   sources = if builtins.pathExists ./upstream-info.nix
             then import ./upstream-info.nix
@@ -53,12 +53,12 @@ in rec {
   in {
     inherit (chanAttrs) version;
 
-    main = {
+    main = fetchurl {
       url = "${bucketURL}/chromium-${chanAttrs.version}.tar.xz";
       inherit (chanAttrs) sha256;
     };
 
-    binary = let
+    binary = fetchurl (let
       pname = if channel == "dev"
               then "google-chrome-unstable"
               else "google-chrome-${channel}";
@@ -69,7 +69,7 @@ in rec {
       sha256 = if stdenv.is64bit
                then chanAttrs.sha256bin64
                else chanAttrs.sha256bin32;
-    };
+    });
   };
 
   updateHelpers = writeText "update-helpers.sh" ''
