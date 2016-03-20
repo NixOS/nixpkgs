@@ -10872,13 +10872,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubName = buildPerlPackage rec {
-    name = "Sub-Name-0.14";
+    name = "Sub-Name-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "9276412677b445e7e9bdf6ab3a034a05a860e5c5dc560dd9272967745eeb3f17";
+      sha256 = "dabc9a4abcbe067d120ce005b4203b8a44291cbda013900152ba19a1e7c1c8c8";
     };
     meta = {
-      homepage = https://github.com/karenetheridge/Sub-Name;
+      homepage = https://github.com/p5sagit/Sub-Name;
       description = "(re)name a sub";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
