@@ -39,6 +39,12 @@ stdenv.mkDerivation rec {
       sed "s# $(basename "$tool") # $tool #g" -i "$out"/bin/*
     done
 
+    substituteInPlace $out/bin/xdg-open \
+      --replace "/usr/bin/printf" "${coreutils}/bin/printf"
+
+    substituteInPlace $out/bin/xdg-mime \
+      --replace "/usr/bin/file" "${file}/bin/file"
+
     sed 's# which # type -P #g' -i "$out"/bin/*
   '';
 
