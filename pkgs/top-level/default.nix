@@ -123,9 +123,9 @@ let
 
       stdenvDefault = (import ./stdenv.nix topLevelArguments) {} pkgs;
 
-      selfArgs = topLevelArguments // { inherit pkgsWithOverrides; };
-      self =
-        let res = import ./all-packages.nix selfArgs res pkgs;
+      allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
+      allPackages =
+        let res = import ./all-packages.nix allPackagesArgs res pkgs;
         in res;
 
       aliases = super: import ./aliases.nix super;
@@ -133,7 +133,7 @@ let
       pkgs_2 = stdenvAdapters;
       pkgs_3 = pkgs_2 // trivialBuilders;
       pkgs_4 = pkgs_3 // stdenvDefault;
-      pkgs_5 = pkgs_4 // self;
+      pkgs_5 = pkgs_4 // allPackages;
       pkgs_6 = pkgs_5 // aliases pkgs_5;
 
       pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
