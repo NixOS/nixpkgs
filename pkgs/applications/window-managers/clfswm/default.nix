@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     maintainers = with maintainers; [ robgssp ];
     platforms   = platforms.linux;
+    broken      = true;
   };
 }
