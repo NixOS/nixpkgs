@@ -130,7 +130,7 @@ let
       stdenvAdapters =
         import ../stdenv/adapters.nix pkgs;
 
-      stdenvDefault = with helperFunctions; with self; with overrides; {
+      stdenvDefault = with pkgs; with stdenvDefault; {
 
 
   ### STANDARD ENVIRONMENT
