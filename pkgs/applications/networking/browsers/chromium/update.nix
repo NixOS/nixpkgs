@@ -32,6 +32,7 @@ in rec {
   getChannel = channel: let
     chanAttrs = builtins.getAttr channel sources;
   in {
+    inherit channel;
     inherit (chanAttrs) version;
 
     main = fetchurl {
