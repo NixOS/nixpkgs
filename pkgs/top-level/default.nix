@@ -143,7 +143,7 @@ let
       pkgs_7 = pkgs_6 // stdenvOverrides pkgs pkgs_6;
 
       # The overriden, final packages.
-      pkgs =   pkgs_7 // customOverrides pkgs pkgs_6;
+      pkgs =   pkgs_7 // customOverrides pkgs pkgs_7;
     in pkgs;
 
 in
