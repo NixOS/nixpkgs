@@ -113,18 +113,6 @@ let
   # function is very expensive!
   pkgsWithOverrides = overrider:
     let
-      # The un-overriden packages, passed to `overrider'.
-      pkgs_6 = pkgsFun pkgs;
-
-      pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
-
-      # The overriden, final packages.
-      pkgs =   pkgs_7 // stdenvOverrides pkgs_6;
-    in pkgs;
-
-  # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs:
-    let
       # Helper functions that are exported through `pkgs'.
       helperFunctions =
         stdenvAdapters //
@@ -140,8 +128,13 @@ let
 
       aliases = import ./aliases.nix self;
 
-     in
-       helperFunctions // stdenvDefault // self // aliases;
+      pkgs_6 = helperFunctions // stdenvDefault // self // aliases;
+
+      pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
+
+      # The overriden, final packages.
+      pkgs =   pkgs_7 // stdenvOverrides pkgs_6;
+    in pkgs;
 
 in
   pkgs
