@@ -3,7 +3,7 @@
 channels_url="http://omahaproxy.appspot.com/all?csv=1";
 history_url="http://omahaproxy.appspot.com/history";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
-base_path="$(cd "$(dirname "$0")" && pwd)/source";
+base_path="$(cd "$(dirname "$0")" && pwd)";
 
 source "$(nix-build --no-out-link "$base_path/update.nix" -A updateHelpers)";
 

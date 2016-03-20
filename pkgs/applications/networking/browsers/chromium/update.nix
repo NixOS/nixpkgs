@@ -1,12 +1,12 @@
 { system ? builtins.currentSystem }:
 
 let
-  inherit (import ../../../../../../. {
+  inherit (import ../../../../../. {
     inherit system;
   }) lib writeText stdenv;
 
-  sources = if builtins.pathExists ../upstream-info.nix
-            then import ../upstream-info.nix
+  sources = if builtins.pathExists ./upstream-info.nix
+            then import ./upstream-info.nix
             else null;
 
   bucketURL = "https://commondatastorage.googleapis.com/"
