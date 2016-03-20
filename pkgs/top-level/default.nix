@@ -128,7 +128,10 @@ let
 
       aliases = import ./aliases.nix self;
 
-      pkgs_6 = helperFunctions // stdenvDefault // self // aliases;
+      pkgs_3 = helperFunctions;
+      pkgs_4 = pkgs_3 // stdenvDefault;
+      pkgs_5 = pkgs_4 // self;
+      pkgs_6 = pkgs_5 // aliases;
 
       pkgs_7 = pkgs_6 // overrider pkgs pkgs_6;
 
