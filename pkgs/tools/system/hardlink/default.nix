@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
-    gcc -O2 hardlink.c -o $out/bin/hardlink
+    $CC -O2 hardlink.c -o $out/bin/hardlink
     mv hardlink.1 $out/share/man/man1/hardlink.1
   '';
 
