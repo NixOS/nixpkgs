@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, patchutils, python
+{ stdenv, fetchpatch, patchutils, python
 , channel ? "stable"
 }:
 
@@ -19,7 +19,7 @@ let
 in stdenv.mkDerivation {
   name = "chromium-source-${version}";
 
-  src = fetchurl main;
+  src = main;
 
   buildInputs = [ python ]; # cannot patch shebangs otherwise
 
@@ -73,6 +73,6 @@ in stdenv.mkDerivation {
 
   passthru = {
     inherit version channel;
-    plugins = fetchurl binary;
+    plugins = binary;
   };
 }

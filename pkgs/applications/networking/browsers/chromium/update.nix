@@ -3,7 +3,7 @@
 let
   inherit (import ../../../../../. {
     inherit system;
-  }) lib runCommand writeText stdenv curl cacert nix;
+  }) lib runCommand fetchurl writeText stdenv curl cacert nix;
 
   sources = if builtins.pathExists ./upstream-info.nix
             then import ./upstream-info.nix
@@ -34,12 +34,12 @@ in rec {
   in {
     inherit (chanAttrs) version;
 
-    main = {
+    main = fetchurl {
       url = mkVerURL chanAttrs.version;
       inherit (chanAttrs) sha256;
     };
 
-    binary = let
+    binary = fetchurl (let
       mkUrls = arch: let
         mkURLForMirror = getDebURL channel chanAttrs.version arch;
       in map mkURLForMirror ([ debURL ] ++ debMirrors);
@@ -49,7 +49,7 @@ in rec {
     } else if !stdenv.is64bit && chanAttrs ? sha256bin32 then {
       urls = mkUrls "i386";
       sha256 = chanAttrs.sha256bin32;
-    } else throw "No Chrome plugins are available for your architecture.";
+    } else throw "No Chrome plugins are available for your architecture.");
   };
 
   update = let
