@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ninja, which
+{ stdenv, ninja, which
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -30,7 +30,6 @@
 , hiDPISupport ? false
 
 , source
-, plugins
 }:
 
 buildFun:
