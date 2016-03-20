@@ -113,13 +113,13 @@ let
   # function is very expensive!
   applyGlobalOverrides = overrider:
     let
-      overrides = overrider pkgs pkgsOrig // stdenvOverrides pkgsOrig;
+      overrides = super: overrider pkgs super // stdenvOverrides super;
 
       # The un-overriden packages, passed to `overrider'.
-      pkgsOrig = pkgsFun pkgs;
+      pkgs_ = pkgsFun pkgs;
 
       # The overriden, final packages.
-      pkgs = pkgsFun pkgs // overrides;
+      pkgs = pkgs_ // overrides pkgs_;
     in pkgs;
 
   # The package compositions.  Yes, this isn't properly indented.
