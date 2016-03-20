@@ -109,7 +109,7 @@ let
       (pkgs.stdenv.overrides pkgs);
 
   # The un-overriden packages, passed to `overrider'.
-  pkgsInit = pkgsFun pkgs {};
+  pkgsInit = pkgsFun pkgs;
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
@@ -119,11 +119,11 @@ let
       overrides = overrider pkgs pkgsOrig // stdenvOverrides pkgsOrig;
 
       # The overriden, final packages.
-      pkgs = pkgsFun pkgs overrides;
+      pkgs = pkgsFun pkgs // overrides;
     in pkgs;
 
   # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs: overrides:
+  pkgsFun = pkgs:
     let
       defaultScope = pkgs // pkgs.xorg;
 
@@ -16449,7 +16449,7 @@ let
 aliases = import ./aliases.nix self;
 
 in
-  helperFunctions // stdenvDefault // self // aliases // overrides;
+  helperFunctions // stdenvDefault // self // aliases;
 
 in
   pkgs
