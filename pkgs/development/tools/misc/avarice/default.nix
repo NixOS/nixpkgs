@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, libusb }:
+{ stdenv, fetchurl, pkgconfig, gcc, perl, libusb }:
 
 stdenv.mkDerivation rec {
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jhh1h1k5b41v2ycq8kn43nkrkh0b9l7xjmw38rak871g3z3hix1";
   };
 
-  buildInputs = [ pkgconfig perl libusb ];
+  buildInputs = [ pkgconfig gcc perl libusb ];
 
   meta = {
     license = stdenv.lib.licenses.gpl2;
