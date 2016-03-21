@@ -4831,6 +4831,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileHandleUnget = buildPerlPackage rec {
+    name = "FileHandle-Unget-0.1628";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCOPPIT/${name}.tar.gz";
+      sha256 = "9ef4eb765ddfdc35b350905d8dd0a1e12139eabc586652811bfab41972100fdf";
+    };
+    buildInputs = [ FileSlurp URI ];
+    meta = {
+      homepage = https://github.com/coppit/filehandle-unget/;
+      description = "FileHandle which supports multi-byte unget";
+      license = stdenv.lib.licenses.gpl2;
+      maintainers = with maintainers; [ romildo ];
+    };
+  };
+
   FileHomeDir = buildPerlPackage {
     name = "File-HomeDir-1.00";
     src = fetchurl {
