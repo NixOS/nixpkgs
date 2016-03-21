@@ -38,6 +38,9 @@ let
       url = "${meta.homepage}/releases/${name}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
+
+    preConfigure = "patchShebangs doc/texi2pod.pl";
+
     configureFlags =
       assert stdenv.lib.all (x: x!=null) buildInputs;
     [
