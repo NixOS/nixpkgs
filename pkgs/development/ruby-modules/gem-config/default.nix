@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack
+, libmsgpack, qt5Full
 }:
 
 let
@@ -29,9 +29,13 @@ let
 in
 
 {
-  charlock_holmes = attrs: {
-    buildInputs = [ which icu zlib ];
-  };
+   capybara-webkit = attrs: {
+     buildInputs = [ qt5Full ];
+   };
+
+   capybara-webkit = attrs: {
+     buildInputs = [ qt5Full ];
+   };
 
   dep-selector-libgecode = attrs: {
     USE_SYSTEM_GECODE = true;
