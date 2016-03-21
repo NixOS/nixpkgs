@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, perl, docbook2x
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, perl, docbook2x
 , docbook_xml_dtd_45, python3Packages
 
 # Optional Dependencies
@@ -27,7 +27,13 @@ stdenv.mkDerivation rec {
     python3Packages.python systemd
   ];
 
-  patches = [ ./support-db2x.patch ];
+  patches = [
+    ./support-db2x.patch
+    (fetchpatch {
+      url = "https://github.com/lxc/lxc/commit/3db8dd39a797f87f8b348f1b6b44953a25f3f170.patch";
+      sha256 = "0scbzm9dqqhqsl0ri8da8a34r4qj9ph0cg68l9s7gw01vpvqbs8l";
+    })
+  ];
 
   XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
