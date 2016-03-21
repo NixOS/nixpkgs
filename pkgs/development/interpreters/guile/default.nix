@@ -40,6 +40,8 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
+  configureFlags = [ "--with-libreadline-prefix" ];
+
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
 
