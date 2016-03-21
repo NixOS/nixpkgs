@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
   ];
+
+  postPatch = ''
+      # Patch taken from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=bviplus
+      sed -i -r 's,inline (void compute_percent_complete),\1,' vf_backend.c
+  '';
+
   makeFlags = "PREFIX=$(out)";
   meta = with lib; {
     description = "ncurses based hex editor with a vim-like interface";
