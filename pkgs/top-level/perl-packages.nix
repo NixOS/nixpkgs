@@ -5348,6 +5348,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  grepmail = buildPerlPackage rec {
+    name = "grepmail-5.3104";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCOPPIT/${name}.tar.gz";
+      sha256 = "7969e569ec54b2f569a5af56ac4d884c630ad850974658219b0b6953e97b5d3d";
+    };
+    buildInputs = [ FileSlurp URI ];
+    propagatedBuildInputs = [ DateManip DigestMD5 MailMboxMessageParser TimeDate ];
+    meta = {
+      homepage = https://github.com/coppit/grepmail;
+      description = "Search mailboxes for mail matching a regular expression";
+      license = stdenv.lib.licenses.gpl2;
+      maintainers = with maintainers; [ romildo ];
+    };
+  };
+
   GrowlGNTP = buildPerlModule rec {
     name = "Growl-GNTP-0.20";
     src = fetchurl {
