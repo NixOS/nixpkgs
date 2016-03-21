@@ -22376,12 +22376,12 @@ in modules // {
 
 
   webtest = buildPythonPackage rec {
-    version = "2.0.15";
+    version = "2.0.20";
     name = "webtest-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
-      sha256 = "c320adc2cd862ea71ca9e2012e6157eb12f5f8d1632d1541f2eabf984aaa3ecc";
+      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
+      sha256 = "0bv0qhdjakdsdgj4sk21gnpp8xp8bga4x03p6gjb83ihrsb7n4xv";
     };
 
     preConfigure = ''
