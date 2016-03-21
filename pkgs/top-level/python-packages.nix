@@ -7212,7 +7212,7 @@ in modules // {
     propagatedBuildInputs = with self; [
       flup
       ldap
-      sqlalchemy7
+      sqlalchemy
     ];
 
     doCheck = true;

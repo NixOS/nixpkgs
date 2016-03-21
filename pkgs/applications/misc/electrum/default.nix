@@ -18,11 +18,11 @@ in
 
 pythonPackages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.6.2";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1wvzlx9aj88z01vljhyg3v67zsk2iz18r58727pdq7h94vwwjc86";
+    sha256 = "0lj3a8zg6dznpnnxyza8a05c13py52j62rqlad1zcgksm5g63vic";
   };
 
   propagatedBuildInputs = with pythonPackages; [

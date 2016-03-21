@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";
-    homepage = http://htop.sourceforge.net;
+    homepage = https://hisham.hm/htop/;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ freebsd ++ openbsd ++ darwin;
     maintainers = with maintainers; [ rob simons relrod nckx ];
   };
 }

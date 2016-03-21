@@ -1195,7 +1195,7 @@ let
 
   ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
 
-  ibus-engines = {
+  ibus-engines = recurseIntoAttrs {
 
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy {
       inherit (python3Packages) pygobject3;
@@ -1562,7 +1562,7 @@ let
 
   fcitx = callPackage ../tools/inputmethods/fcitx { };
 
-  fcitx-engines = {
+  fcitx-engines = recurseIntoAttrs {
 
     anthy = callPackage ../tools/inputmethods/fcitx-engines/fcitx-anthy { };
 
@@ -1662,6 +1662,8 @@ let
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
   fping = callPackage ../tools/networking/fping {};
+
+  fpm = callPackage ../tools/package-management/fpm { };
 
   fprot = callPackage ../tools/security/fprot { };
 
@@ -10282,14 +10284,7 @@ let
 
   hostapd = callPackage ../os-specific/linux/hostapd { };
 
-  htop =
-    if stdenv.isLinux then
-      callPackage ../os-specific/linux/htop { }
-    else if stdenv.isDarwin then
-      callPackage ../os-specific/darwin/htop {
-        inherit (darwin.apple_sdk.frameworks) IOKit;
-      }
-    else null;
+  htop = callPackage ../tools/system/htop { };
 
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {

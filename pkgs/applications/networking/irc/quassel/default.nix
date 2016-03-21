@@ -25,7 +25,7 @@ let
 
 in with stdenv; mkDerivation rec {
 
-  version = "0.12.2";
+  version = "0.12.3";
   name = "quassel${tag}-${version}";
 
   src = fetchurl {

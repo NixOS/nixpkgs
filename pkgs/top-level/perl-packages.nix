@@ -1431,10 +1431,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGI = buildPerlPackage rec {
-    name = "CGI-4.27";
+    name = "CGI-4.28";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/${name}.tar.gz";
-      sha256 = "0rjif2z44lnfk4hkf95mq52nsgvlgjdigabjpx3v697lfibhx37c";
+      sha256 = "1297d3ed6616cacb4eb57860e3e743f3890111e7a63ca08849930f42f1360532";
     };
     buildInputs = [ TestDeep TestWarn ];
     propagatedBuildInputs = [ HTMLParser self."if" ];
@@ -6900,11 +6900,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Log4Perl = buildPerlPackage rec {
-    name = "Log-Log4perl-1.46";
+  LogLog4perl = buildPerlPackage rec {
+    name = "Log-Log4perl-1.47";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHILLI/${name}.tar.gz";
-      sha256 = "31011a17c04e78016e73eaa4865d0481d2ffc3dc22813c61065d90ad73c64e6f";
+      sha256 = "9001dded011226538b9a50c7856815bb0dba72a1e6218fdcaba56f651356b96f";
     };
     meta = {
       homepage = https://mschilli.github.io/log4perl/;
@@ -6913,6 +6913,9 @@ let self = _self // overrides; _self = with self; {
       maintainers = [ maintainers.rycee ];
     };
   };
+
+  # For backwards compatibility.
+  Log4Perl = self.LogLog4perl;
 
   LogDispatchArray = buildPerlPackage {
     name = "Log-Dispatch-Array-1.003";
@@ -10872,13 +10875,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   SubName = buildPerlPackage rec {
-    name = "Sub-Name-0.14";
+    name = "Sub-Name-0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "9276412677b445e7e9bdf6ab3a034a05a860e5c5dc560dd9272967745eeb3f17";
+      sha256 = "dabc9a4abcbe067d120ce005b4203b8a44291cbda013900152ba19a1e7c1c8c8";
     };
     meta = {
-      homepage = https://github.com/karenetheridge/Sub-Name;
+      homepage = https://github.com/p5sagit/Sub-Name;
       description = "(re)name a sub";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
