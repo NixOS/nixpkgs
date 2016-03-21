@@ -11935,7 +11935,10 @@ let
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
 
-  docker = callPackage ../applications/virtualization/docker { go = go_1_4; };
+  docker = callPackage ../applications/virtualization/docker {
+    btrfs-progs = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
+    go = go_1_4;
+  };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
