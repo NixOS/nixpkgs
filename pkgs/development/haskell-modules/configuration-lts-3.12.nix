@@ -899,6 +899,7 @@ self: super: {
   "Spock" = doDistribute super."Spock_0_8_1_0";
   "Spock-auth" = dontDistribute super."Spock-auth";
   "Spock-digestive" = doDistribute super."Spock-digestive_0_1_0_1";
+  "Spock-lucid" = dontDistribute super."Spock-lucid";
   "Spock-worker" = doDistribute super."Spock-worker_0_2_1_3";
   "SpreadsheetML" = dontDistribute super."SpreadsheetML";
   "Sprig" = dontDistribute super."Sprig";
@@ -1521,6 +1522,7 @@ self: super: {
   "beautifHOL" = dontDistribute super."beautifHOL";
   "bed-and-breakfast" = dontDistribute super."bed-and-breakfast";
   "bein" = dontDistribute super."bein";
+  "bench" = dontDistribute super."bench";
   "benchmark-function" = dontDistribute super."benchmark-function";
   "benchpress" = dontDistribute super."benchpress";
   "bencoding" = dontDistribute super."bencoding";
@@ -2160,6 +2162,7 @@ self: super: {
   "conduit-resumablesink" = dontDistribute super."conduit-resumablesink";
   "conduit-tokenize-attoparsec" = dontDistribute super."conduit-tokenize-attoparsec";
   "conf" = dontDistribute super."conf";
+  "config-manager" = dontDistribute super."config-manager";
   "config-select" = dontDistribute super."config-select";
   "config-value" = dontDistribute super."config-value";
   "configifier" = dontDistribute super."configifier";
@@ -2344,6 +2347,7 @@ self: super: {
   "daemons" = dontDistribute super."daemons";
   "dag" = dontDistribute super."dag";
   "damnpacket" = dontDistribute super."damnpacket";
+  "danibot" = dontDistribute super."danibot";
   "dao" = dontDistribute super."dao";
   "dapi" = dontDistribute super."dapi";
   "darcs" = dontDistribute super."darcs";
@@ -3078,6 +3082,7 @@ self: super: {
   "float-binstring" = dontDistribute super."float-binstring";
   "floating-bits" = dontDistribute super."floating-bits";
   "floatshow" = dontDistribute super."floatshow";
+  "flow" = doDistribute super."flow_1_0_2";
   "flow2dot" = dontDistribute super."flow2dot";
   "flowdock-api" = dontDistribute super."flowdock-api";
   "flowdock-rest" = dontDistribute super."flowdock-rest";
@@ -3605,6 +3610,7 @@ self: super: {
   "gridland" = dontDistribute super."gridland";
   "grm" = dontDistribute super."grm";
   "groom" = dontDistribute super."groom";
+  "groundhog-converters" = dontDistribute super."groundhog-converters";
   "groundhog-inspector" = dontDistribute super."groundhog-inspector";
   "group-with" = dontDistribute super."group-with";
   "grouped-list" = dontDistribute super."grouped-list";
@@ -4015,6 +4021,7 @@ self: super: {
   "hdis86" = dontDistribute super."hdis86";
   "hdiscount" = dontDistribute super."hdiscount";
   "hdm" = dontDistribute super."hdm";
+  "hdocs" = doDistribute super."hdocs_0_4_4_0";
   "hdph" = dontDistribute super."hdph";
   "hdph-closure" = dontDistribute super."hdph-closure";
   "hdr-histogram" = dontDistribute super."hdr-histogram";
@@ -4688,6 +4695,7 @@ self: super: {
   "imbib" = dontDistribute super."imbib";
   "imgurder" = dontDistribute super."imgurder";
   "imm" = dontDistribute super."imm";
+  "immortal" = doDistribute super."immortal_0_2";
   "imparse" = dontDistribute super."imparse";
   "imperative-edsl" = dontDistribute super."imperative-edsl";
   "imperative-edsl-vhdl" = dontDistribute super."imperative-edsl-vhdl";
@@ -6738,6 +6746,7 @@ self: super: {
   "representable-functors" = dontDistribute super."representable-functors";
   "representable-profunctors" = dontDistribute super."representable-profunctors";
   "representable-tries" = dontDistribute super."representable-tries";
+  "reqcatcher" = dontDistribute super."reqcatcher";
   "request-monad" = dontDistribute super."request-monad";
   "reserve" = dontDistribute super."reserve";
   "resistor-cube" = dontDistribute super."resistor-cube";
@@ -7015,9 +7024,11 @@ self: super: {
   "servant-ede" = dontDistribute super."servant-ede";
   "servant-elm" = dontDistribute super."servant-elm";
   "servant-examples" = dontDistribute super."servant-examples";
+  "servant-foreign" = dontDistribute super."servant-foreign";
   "servant-github" = dontDistribute super."servant-github";
   "servant-haxl-client" = dontDistribute super."servant-haxl-client";
   "servant-jquery" = doDistribute super."servant-jquery_0_4_4_5";
+  "servant-js" = dontDistribute super."servant-js";
   "servant-lucid" = dontDistribute super."servant-lucid";
   "servant-mock" = dontDistribute super."servant-mock";
   "servant-pandoc" = doDistribute super."servant-pandoc_0_4_1_1";
@@ -7090,6 +7101,7 @@ self: super: {
   "shivers-cfg" = dontDistribute super."shivers-cfg";
   "shoap" = dontDistribute super."shoap";
   "shortcircuit" = dontDistribute super."shortcircuit";
+  "shortcut-links" = doDistribute super."shortcut-links_0_4_1_0";
   "shorten-strings" = dontDistribute super."shorten-strings";
   "should-not-typecheck" = dontDistribute super."should-not-typecheck";
   "show-type" = dontDistribute super."show-type";
@@ -7174,6 +7186,7 @@ self: super: {
   "slack-api" = dontDistribute super."slack-api";
   "slack-notify-haskell" = dontDistribute super."slack-notify-haskell";
   "slave-thread" = doDistribute super."slave-thread_1_0_0_0";
+  "sleep" = dontDistribute super."sleep";
   "slice-cpp-gen" = dontDistribute super."slice-cpp-gen";
   "slidemews" = dontDistribute super."slidemews";
   "sloane" = dontDistribute super."sloane";
@@ -7585,6 +7598,7 @@ self: super: {
   "tagged-exception-core" = dontDistribute super."tagged-exception-core";
   "tagged-list" = dontDistribute super."tagged-list";
   "tagged-th" = dontDistribute super."tagged-th";
+  "tagged-timers" = dontDistribute super."tagged-timers";
   "tagged-transformer" = dontDistribute super."tagged-transformer";
   "tagging" = dontDistribute super."tagging";
   "taggy" = dontDistribute super."taggy";
@@ -7612,6 +7626,7 @@ self: super: {
   "tasty-expected-failure" = dontDistribute super."tasty-expected-failure";
   "tasty-fail-fast" = dontDistribute super."tasty-fail-fast";
   "tasty-golden" = doDistribute super."tasty-golden_2_3_0_2";
+  "tasty-groundhog-converters" = dontDistribute super."tasty-groundhog-converters";
   "tasty-html" = dontDistribute super."tasty-html";
   "tasty-hunit-adapter" = dontDistribute super."tasty-hunit-adapter";
   "tasty-integrate" = dontDistribute super."tasty-integrate";

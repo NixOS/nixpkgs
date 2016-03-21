@@ -234,7 +234,7 @@ in modules // {
       sha256 = "1ywimbisgb5g7xl9nrfwcm7dv3j8fsrjfp7bxb3l58zbsrzj6z2s";
     };
 
-    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy7 ];
+    propagatedBuildInputs = with self; [ appdirs colorama dateutil requests2 requests_toolbelt sqlalchemy ];
 
     makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${pkgs.fuse}/lib/libfuse.so" ];
 

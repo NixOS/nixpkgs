@@ -89,7 +89,7 @@ in {
 
   subversion18 = common {
     version = "1.8.15";
-    sha256 = "8bbf6bb125003d88ee1c22935a36b7b1ab7d957e0c8b5fbfe5cb6310b6e86ae0";
+    sha256 = "0b68rjy1sjd66nqcswrm1bhda3vk2ngkgs6drcanmzbcd3vs366g";
   };
 
   subversion19 = common {

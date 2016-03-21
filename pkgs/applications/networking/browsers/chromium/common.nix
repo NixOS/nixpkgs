@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ninja, which
+{ stdenv, ninja, which
 
 # default dependencies
 , bzip2, flac, speex, libopus
@@ -29,8 +29,7 @@
 , pulseSupport ? false, libpulseaudio ? null
 , hiDPISupport ? false
 
-, source
-, plugins
+, upstream-info
 }:
 
 buildFun:
@@ -98,9 +97,17 @@ let
 
   base = rec {
     name = "${packageName}-${version}";
-    inherit (source) version;
+    inherit (upstream-info) version;
     inherit packageName buildType buildPath;
-    src = source;
+
+    src = upstream-info.main;
+
+    unpackCmd = ''
+      tar xf "$src" \
+        --anchored \
+        --no-wildcards-match-slash \
+        --exclude='*/tools/gyp'
+    '';
 
     buildInputs = defaultDependencies ++ [
       which
@@ -118,16 +125,21 @@ let
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
-    # XXX: Wait for https://crbug.com/239107 and https://crbug.com/239181 to
-    #      be fixed, then try again to unbundle everything into separate
-    #      derivations.
-    prePatch = ''
-      cp -dr --no-preserve=mode "${source.main}"/* .
-      cp -dr "${source.bundled}" third_party
-      chmod -R u+w third_party
-    '';
+    patches = [
+      ./patches/build_fixes_46.patch
+      ./patches/widevine.patch
+      (if versionOlder version "50.0.0.0"
+       then ./patches/nix_plugin_paths_46.patch
+       else ./patches/nix_plugin_paths_50.patch)
+    ];
 
     postPatch = ''
+      sed -i -r \
+        -e 's/-f(stack-protector)(-all)?/-fno-\1/' \
+        -e 's|/bin/echo|echo|' \
+        -e "/python_arch/s/: *'[^']*'/: '""'/" \
+        build/common.gypi chrome/chrome_tests.gypi
+
       sed -i -e '/module_path *=.*libexif.so/ {
         s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
       }' chrome/utility/media_galleries/image_metadata_extractor.cc
@@ -182,7 +194,7 @@ let
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
-      # Precompile .pyc files to prevent race conditions during build
+      echo "Precompiling .py files to prevent race conditions..." >&2
       python -m compileall -q -f . > /dev/null 2>&1 || : # ignore errors
 
       # This is to ensure expansion of $out.

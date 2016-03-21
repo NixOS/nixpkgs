@@ -35,12 +35,27 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.pythonPackages.radicale ];
 
+    users.extraUsers = singleton
+      { name = "radicale";
+        uid = config.ids.uids.radicale;
+        description = "radicale user";
+        home = "/var/lib/radicale";
+        createHome = true;
+      };
+
+    users.extraGroups = singleton
+      { name = "radicale";
+        gid = config.ids.gids.radicale;
+      };
+
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
       after = [ "network-interfaces.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.pythonPackages.radicale}/bin/radicale -C ${confFile} -d";
       serviceConfig.Type = "forking";
+      serviceConfig.User = "radicale";
+      serviceConfig.Group = "radicale";
     };
   };
 }

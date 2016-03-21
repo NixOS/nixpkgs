@@ -255,6 +255,7 @@
       avahi-autoipd = 231;
       nntp-proxy = 232;
       mjpg-streamer = 233;
+      radicale = 234;
 
       prometheus = 999;
 
@@ -485,6 +486,7 @@
       cfdyndns = 227;
       pdnsd = 229;
       octoprint = 230;
+      radicale = 234;
 
       prometheus = 999;
 

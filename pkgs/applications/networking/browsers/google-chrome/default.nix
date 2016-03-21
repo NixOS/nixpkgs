@@ -30,7 +30,7 @@
 
 with stdenv.lib;
 
-with (import ../chromium/source/update.nix {
+with (import ../chromium/update.nix {
   inherit (stdenv) system;
 }).getChannel channel;
 
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   name = "google-chrome-${version}";
 
-  src = fetchurl binary;
+  src = binary;
 
   buildInputs = [ env patchelf ];
 
