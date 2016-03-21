@@ -1,5 +1,5 @@
 { system ? builtins.currentSystem
-, pkgs ? import ../.. {}
+, pkgs ? import ../.. { inherit system; }
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
