@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
     echo ${xdpyinfo} > $out/nix-support/xdpyinfo
   '';
 
+  passthru = {
+    inherit sbcl lispPackages;
+  };
+
   meta = with stdenv.lib; {
     description = "A tiling window manager for X11";
     homepage    = https://github.com/stumpwm/;
