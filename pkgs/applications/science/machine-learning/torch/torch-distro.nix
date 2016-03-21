@@ -1,6 +1,6 @@
 { luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
   less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
-  gnuplot, fetchurl, lua, src
+  gnuplot, fetchurl, lua, src, libjpeg, libpng
 } :
 
 let
@@ -227,7 +227,7 @@ let
     image = buildLuaRocks rec {
       name = "image";
       luadeps = [ torch dok sys xlua ];
-      buildInputs = [cmake];
+      buildInputs = [cmake libjpeg libpng];
       src = "${distro_src}/pkg/image";
       rockspec = "image-1.1.alpha-0.rockspec";
       preBuild = ''
