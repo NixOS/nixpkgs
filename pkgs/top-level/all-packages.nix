@@ -660,7 +660,9 @@ let
 
   at = callPackage ../tools/system/at { };
 
-  atftp = callPackage ../tools/networking/atftp {};
+  atftp = callPackage ../tools/networking/atftp {
+    gcc = gcc49;
+  };
 
   autogen = callPackage ../development/tools/misc/autogen { };
 
