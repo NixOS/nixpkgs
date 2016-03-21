@@ -5,6 +5,8 @@ with lib;
 let
 
   cfg = config.services.postfix;
+  postfixPkg = cfg.package;
+  
   user = cfg.user;
   group = cfg.group;
   setgidGroup = cfg.setgidGroup;
@@ -37,16 +39,16 @@ let
       queue_directory = /var/lib/postfix/queue
 
       # Default location of everything in package
-      meta_directory = ${pkgs.postfix}/etc/postfix
-      command_directory = ${pkgs.postfix}/bin
+      meta_directory = ${postfixPkg}/etc/postfix
+      command_directory = ${postfixPkg}/bin
       sample_directory = /etc/postfix
-      newaliases_path = ${pkgs.postfix}/bin/newaliases
-      mailq_path = ${pkgs.postfix}/bin/mailq
+      newaliases_path = ${postfixPkg}/bin/newaliases
+      mailq_path = ${postfixPkg}/bin/mailq
       readme_directory = no
-      sendmail_path = ${pkgs.postfix}/bin/sendmail
-      daemon_directory = ${pkgs.postfix}/libexec/postfix
-      manpage_directory = ${pkgs.postfix}/share/man
-      html_directory = ${pkgs.postfix}/share/postfix/doc/html
+      sendmail_path = ${postfixPkg}/bin/sendmail
+      daemon_directory = ${postfixPkg}/libexec/postfix
+      manpage_directory = ${postfixPkg}/share/man
+      html_directory = ${postfixPkg}/share/postfix/doc/html
       shlib_directory = no
 
     ''
@@ -200,6 +202,13 @@ in
       enableSmtp = mkOption {
         default = true;
         description = "Whether to enable smtp in master.cf.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.postfix;
+        defaultText = "pkgs.postfix";
+        description = "Postfix package to use.";
       };
 
       setSendmail = mkOption {
@@ -429,12 +438,12 @@ in
           };
 
         # This makes comfortable for root to run 'postqueue' for example.
-        systemPackages = [ pkgs.postfix ];
+        systemPackages = [ postfixPkg ];
       };
 
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
-        source = "${pkgs.postfix}/bin/sendmail";
+        source = "${postfixPkg}/bin/sendmail";
         group = setgidGroup;
         setuid = false;
         setgid = true;
@@ -462,15 +471,15 @@ in
 
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
-          path = [ pkgs.postfix ];
+          path = [ postfixPkg ];
 
           serviceConfig = {
             Type = "forking";
             Restart = "always";
             PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${pkgs.postfix}/bin/postfix start";
-            ExecStop = "${pkgs.postfix}/bin/postfix stop";
-            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+            ExecStart = "${postfixPkg}/bin/postfix start";
+            ExecStop = "${postfixPkg}/bin/postfix stop";
+            ExecReload = "${postfixPkg}/bin/postfix reload";
           };
 
           preStart = ''
@@ -480,7 +489,7 @@ in
               mv /var/postfix /var/lib/postfix
             fi
 
-            # All permissions set according ${pkgs.postfix}/etc/postfix/postfix-files script
+            # All permissions set according ${postfixPkg}/etc/postfix/postfix-files script
             mkdir -p /var/lib/postfix /var/lib/postfix/queue/{pid,public,maildrop}
             chmod 0755 /var/lib/postfix
             chown root:root /var/lib/postfix
@@ -488,17 +497,17 @@ in
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
             chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
+            ln -sf ${postfixPkg}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
-              ${pkgs.postfix}/bin/postalias /var/lib/postfix/conf/${to}
+              ${postfixPkg}/bin/postalias /var/lib/postfix/conf/${to}
             '') cfg.aliasFiles)}
             ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
               ln -sf ${from} /var/lib/postfix/conf/${to}
-              ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+              ${postfixPkg}/bin/postmap /var/lib/postfix/conf/${to}
             '') cfg.mapFiles)}
 
             mkdir -p /var/spool/mail
@@ -507,7 +516,7 @@ in
             ln -sf /var/spool/mail /var/
 
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
-            ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
+            ${postfixPkg}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
     }
