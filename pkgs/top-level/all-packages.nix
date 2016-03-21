@@ -12318,6 +12318,8 @@ let
 
   grass = callPackage ../applications/gis/grass { };
 
+  grepm = callPackage ../applications/search/grepm { };
+
   grip = callPackage ../applications/misc/grip {
     inherit (gnome) libgnome libgnomeui vte;
   };
