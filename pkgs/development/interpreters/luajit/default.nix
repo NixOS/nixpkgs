@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   buildFlags     = [ "amalg" ]; # Build highly optimized version
   installPhase   = ''
     make install INSTALL_INC=$out/include PREFIX=$out
+    ln -s $out/bin/luajit* $out/bin/lua
     ln -s $out/bin/luajit* $out/bin/luajit
   '';
 
