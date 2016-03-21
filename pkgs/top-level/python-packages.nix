@@ -1640,27 +1640,32 @@ in modules // {
   });
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-1.7.0";
+    name = "Beaker-${version}";
+    version = "1.8.0";
 
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      sha256 = "0vv4y22b3ly1212n9nnhgvc8yz32adlfl7w7s1wj0i5srpjcgvlq";
+    # The pypy release do not contains the tests
+    src = pkgs.fetchFromGitHub {
+      owner = "bbangert";
+      repo = "beaker";
+      rev = "${version}";
+      sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
     };
 
     buildInputs =
-      [ self.sqlalchemy7
-        self.pycryptopp
-        self.nose
+      [ self.nose
         self.mock
         self.webtest
       ];
-
-    # http://hydra.nixos.org/build/4511591/log/raw
-    doCheck = false;
+    propagatedBuildInputs = [
+      self.sqlalchemy
+      self.pycrypto
+    ] ++ optionals (isPy26 || isPy27) [
+      self.funcsigs
+      self.pycryptopp
+    ];
 
     meta = {
+      description = "A Session and Caching library with WSGI Middleware";
       maintainers = with maintainers; [ garbas iElectric ];
       platforms = platforms.all;
     };
