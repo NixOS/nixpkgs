@@ -11392,6 +11392,7 @@ let
   afterstep = callPackage ../applications/window-managers/afterstep {
     fltk = fltk13;
     gtk = gtk2;
+    stdenv = overrideCC stdenv gcc49;
   };
 
   alchemy = callPackage ../applications/graphics/alchemy { };
