@@ -25323,7 +25323,7 @@ in modules // {
         thrift
         beautifulsoup4
         markdown2
-        sqlalchemy7
+        sqlalchemy
         html2text
         evernote
     ];
