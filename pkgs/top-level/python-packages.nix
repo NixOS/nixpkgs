@@ -20012,6 +20012,22 @@ in modules // {
     };
   };
 
+  pid = buildPythonPackage rec {
+    name = "pid-${version}";
+    version = "2.0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pid/${name}.tar.gz";
+      sha256 = "0cylj8p25nwkdfgy4pzai21wyzmrxdqlwwbzqag9gb5qcjfdwk05";
+    };
+
+    meta = {
+      description = "Pidfile featuring stale detection and file-locking";
+      homepage = https://github.com/trbs/pid/;
+      license = licenses.asl20;
+    };
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
     disabled = isPy3k;
