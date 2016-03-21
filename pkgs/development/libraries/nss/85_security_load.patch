@@ -1,7 +1,8 @@
-diff -ru nss-3.16-orig/nss/cmd/shlibsign/shlibsign.c nss-3.16/nss/cmd/shlibsign/shlibsign.c
---- nss-3.16-orig/nss/cmd/shlibsign/shlibsign.c	2014-03-14 21:31:59.000000000 +0100
-+++ nss-3.16/nss/cmd/shlibsign/shlibsign.c	2014-04-22 14:50:31.340743655 +0200
-@@ -852,6 +852,8 @@
+diff --git a/nss/cmd/shlibsign/shlibsign.c b/nss/cmd/shlibsign/shlibsign.c
+index 63a4836..a128c1d 100644
+--- a/nss/cmd/shlibsign/shlibsign.c
++++ b/nss/cmd/shlibsign/shlibsign.c
+@@ -862,6 +862,8 @@ int main(int argc, char **argv)
      libname = PR_GetLibraryName(NULL, "softokn3");
      assert(libname != NULL);
      lib = PR_LoadLibrary(libname);
@@ -10,21 +11,22 @@ diff -ru nss-3.16-orig/nss/cmd/shlibsign/shlibsign.c nss-3.16/nss/cmd/shlibsign/
      assert(lib != NULL);
      PR_FreeLibraryName(libname);
  
-Only in nss-3.16/nss/cmd/shlibsign: shlibsign.c.orig
-diff -ru nss-3.16-orig/nss/coreconf/config.mk nss-3.16/nss/coreconf/config.mk
---- nss-3.16-orig/nss/coreconf/config.mk	2014-03-14 21:31:59.000000000 +0100
-+++ nss-3.16/nss/coreconf/config.mk	2014-04-22 14:50:51.302731097 +0200
-@@ -188,3 +188,6 @@
- 
- # Hide old, deprecated, TLS cipher suite names when building NSS
- DEFINES += -DSSL_DISABLE_DEPRECATED_CIPHER_SUITE_NAMES
+diff --git a/nss/coreconf/config.mk b/nss/coreconf/config.mk
+index 61d757b..b58a98b 100644
+--- a/nss/coreconf/config.mk
++++ b/nss/coreconf/config.mk
+@@ -205,3 +205,6 @@ $(error Setting NSS_ENABLE_TLS_1_3 and NSS_DISABLE_ECC isn't a good idea.)
+ endif
+ DEFINES += -DNSS_ENABLE_TLS_1_3
+ endif
 +
 +# Nix specific stuff.
 +DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
-diff -ru nss-3.16-orig/nss/lib/pk11wrap/pk11load.c nss-3.16/nss/lib/pk11wrap/pk11load.c
---- nss-3.16-orig/nss/lib/pk11wrap/pk11load.c	2014-03-14 21:31:59.000000000 +0100
-+++ nss-3.16/nss/lib/pk11wrap/pk11load.c	2014-04-22 14:50:22.164749330 +0200
-@@ -406,6 +406,13 @@
+diff --git a/nss/lib/pk11wrap/pk11load.c b/nss/lib/pk11wrap/pk11load.c
+index 5c5d2ca..026e528 100644
+--- a/nss/lib/pk11wrap/pk11load.c
++++ b/nss/lib/pk11wrap/pk11load.c
+@@ -429,6 +429,13 @@ secmod_LoadPKCS11Module(SECMODModule *mod, SECMODModule **oldModule) {
  	 * unload the library if anything goes wrong from here on out...
  	 */
  	library = PR_LoadLibrary(mod->dllName);
@@ -38,10 +40,11 @@ diff -ru nss-3.16-orig/nss/lib/pk11wrap/pk11load.c nss-3.16/nss/lib/pk11wrap/pk1
  	mod->library = (void *)library;
  
  	if (library == NULL) {
-diff -ru nss-3.16-orig/nss/lib/util/secload.c nss-3.16/nss/lib/util/secload.c
---- nss-3.16-orig/nss/lib/util/secload.c	2014-03-14 21:31:59.000000000 +0100
-+++ nss-3.16/nss/lib/util/secload.c	2014-04-22 14:50:31.342743654 +0200
-@@ -69,9 +69,14 @@
+diff --git a/nss/lib/util/secload.c b/nss/lib/util/secload.c
+index eb8a9ec..f94f67d 100644
+--- a/nss/lib/util/secload.c
++++ b/nss/lib/util/secload.c
+@@ -69,9 +69,14 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
  
      /* Remove the trailing filename from referencePath and add the new one */
      c = strrchr(referencePath, PR_GetDirectorySeparator());
@@ -57,7 +60,7 @@ diff -ru nss-3.16-orig/nss/lib/util/secload.c nss-3.16/nss/lib/util/secload.c
          if (fullName) {
              memcpy(fullName, referencePath, referencePathSize);
              strcpy(fullName + referencePathSize, name); 
-@@ -81,6 +86,11 @@
+@@ -81,6 +86,11 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
  #endif
              libSpec.type = PR_LibSpec_Pathname;
              libSpec.value.pathname = fullName;
@@ -69,7 +72,7 @@ diff -ru nss-3.16-orig/nss/lib/util/secload.c nss-3.16/nss/lib/util/secload.c
              dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL
  #ifdef PR_LD_ALT_SEARCH_PATH
              /* allow library's dependencies to be found in the same directory
-@@ -88,6 +98,10 @@
+@@ -88,6 +98,10 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
                                            | PR_LD_ALT_SEARCH_PATH 
  #endif
                                            );
