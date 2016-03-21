@@ -3,9 +3,10 @@
 , httpServer ? false # build web interface for the daemon
 , client ? false # build amule remote gui
 , fetchurl, stdenv, zlib, wxGTK, perl, cryptopp, libupnp, gettext, libpng ? null
-, pkgconfig, makeWrapper }:
+, pkgconfig, makeWrapper, libX11 ? null }:
 
 assert httpServer -> libpng != null;
+assert client -> libX11 != null;
 with stdenv;
 let
   # Enable/Disable Feature
@@ -21,7 +22,8 @@ mkDerivation rec {
 
   buildInputs =
     [ zlib wxGTK perl cryptopp libupnp gettext pkgconfig makeWrapper ]
-    ++ lib.optional httpServer libpng;
+    ++ lib.optional httpServer libpng
+    ++ lib.optional client libX11;
 
   patches = [ ./gcc47.patch ]; # from Gentoo
 
