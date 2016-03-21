@@ -9811,7 +9811,10 @@ let
     ps = procps; /* !!! Linux only */
   };
 
-  mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix { };
+  mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   mysql = mariadb;
   libmysql = mysql.lib;
