@@ -1,4 +1,4 @@
-{ callPackage, fetchgit } :
+{ callPackage, fetchgit, lua } :
 let
   src = fetchgit {
     url = "https://github.com/grwlf/torch-distro";
@@ -7,4 +7,4 @@ let
   };
 
 in
-  callPackage (import ./torch-distro.nix) { inherit src; }
+  callPackage (import ./torch-distro.nix) { inherit lua src; }

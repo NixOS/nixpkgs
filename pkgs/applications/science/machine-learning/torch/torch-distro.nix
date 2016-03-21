@@ -1,6 +1,6 @@
 { luarocks, lib , stdenv,  writeText , readline,  makeWrapper,
   less, ncurses, cmake, openblas, coreutils, fetchgit, libuuid, czmq, openssl,
-  gnuplot, fetchurl, luajit, src
+  gnuplot, fetchurl, lua, src
 } :
 
 let
@@ -21,7 +21,7 @@ let
   luapkgs = rec {
 
     luarocks = default_luarocks.override {
-      lua = luajit;
+      inherit lua;
     };
 
     buildLuaRocks = { rockspec ? "", luadeps ? [] , buildInputs ? []
@@ -36,7 +36,7 @@ let
         runtimeDeps_ =
           runtimeDeps ++
           (lib.concatMap (d : if d ? runtimeDeps then d.runtimeDeps else []) luadeps) ++
-          [ luajit coreutils ];
+          [ lua coreutils ];
 
         mkcfg = ''
           export LUAROCKS_CONFIG=config.lua
@@ -49,7 +49,7 @@ let
             variables = {
               LUA_BINDIR = "$out/bin";
               LUA_INCDIR = "$out/include";
-              LUA_LIBDIR = "$out/lib/lua/${luajit.luaversion}";
+              LUA_LIBDIR = "$out/lib/lua/${lua.luaversion}";
             };
           EOF
         '';
@@ -63,7 +63,7 @@ let
 
         phases = [ "unpackPhase" "patchPhase" "buildPhase"];
 
-        buildInputs = runtimeDeps ++ buildInputs ++ [ makeWrapper luajit ];
+        buildInputs = runtimeDeps ++ buildInputs ++ [ makeWrapper lua ];
 
         buildPhase = ''
           eval "$preBuild"
@@ -76,9 +76,9 @@ let
               --set LD_LIBRARY_PATH "${lib.makeSearchPath "lib" runtimeDeps_}" \
               --set PATH "${lib.makeSearchPath "bin" runtimeDeps_}" \
               --suffix LUA_PATH ';' "\"$LUA_PATH\"" \
-              --suffix LUA_PATH ';' "\"$out/share/lua/${luajit.luaversion}/?.lua;$out/share/lua/${luajit.luaversion}/?/init.lua\"" \
+              --suffix LUA_PATH ';' "\"$out/share/lua/${lua.luaversion}/?.lua;$out/share/lua/${lua.luaversion}/?/init.lua\"" \
               --suffix LUA_CPATH ';' "\"$LUA_CPATH\"" \
-              --suffix LUA_CPATH ';' "\"$out/lib/lua/${luajit.luaversion}/?.so;$out/lib/lua/${luajit.luaversion}/?/init.so\""
+              --suffix LUA_CPATH ';' "\"$out/lib/lua/${lua.luaversion}/?.so;$out/lib/lua/${lua.luaversion}/?/init.so\""
           done
 
           eval "$postInstall"
@@ -100,7 +100,7 @@ let
         makeFlags="PREFIX=$out LUA_LIBRARY=$out/lib/lua"
       '';
 
-      buildInputs = [luajit];
+      buildInputs = [lua];
 
       installPhase = ''
         make install-extra $makeFlags
@@ -260,7 +260,7 @@ let
       runtimeDeps = [ ncurses readline ];
       src = "${distro_src}/exe/trepl";
       meta = common_meta // {
-        description = "A pure Lua REPL for LuaJIT, with heavy support for Torch types.";
+        description = "A pure Lua REPL for Lua(JIT), with heavy support for Torch types.";
       };
     };
 
@@ -281,10 +281,10 @@ let
       };
 
       preConfigure = ''
-        cmakeFlags="-DLUA_LIBRARY=${luajit}/lib/lua/${luajit.luaversion} -DINSTALL_CMOD=$out/lib/lua/${luajit.luaversion} -DINSTALL_MOD=$out/lib/lua/${luajit.luaversion}"
+        cmakeFlags="-DLUA_LIBRARY=${lua}/lib/lua/${lua.luaversion} -DINSTALL_CMOD=$out/lib/lua/${lua.luaversion} -DINSTALL_MOD=$out/lib/lua/${lua.luaversion}"
       '';
 
-      buildInputs = [cmake libuuid luajit];
+      buildInputs = [cmake libuuid lua];
       meta = {
         # FIXME: set the exact revision for src
         broken = true;

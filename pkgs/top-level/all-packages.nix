@@ -5159,6 +5159,7 @@ let
 
   lua51Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_1; });
   lua52Packages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = lua5_2; });
+  luajitPackages = recurseIntoAttrs (callPackage ./lua-packages.nix { lua = luajit; });
 
   luaPackages = lua52Packages;
 
@@ -13427,7 +13428,9 @@ let
     quazip = qt5.quazip.override { qt = qt4; };
   };
 
-  torch-packages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch { } );
+  torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
+    lua = luajit ;
+  } );
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
