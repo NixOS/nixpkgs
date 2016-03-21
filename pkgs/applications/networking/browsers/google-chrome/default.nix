@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   name = "google-chrome-${version}";
 
-  src = fetchurl binary;
+  src = binary;
 
   buildInputs = [ env patchelf ];
 
