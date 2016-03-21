@@ -20025,6 +20025,28 @@ in modules // {
 
   };
 
+  pythondaemon = buildPythonPackage rec {
+    name = "python-daemon-${version}";
+    version = "2.1.1";
+
+    src = pkgs.fetchurl {
+      url = " https://pypi.python.org/packages/source/p/python-daemon/${name}.tar.gz";
+      sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
+    };
+
+    # A test fail within chroot builds.
+    doCheck = false;
+
+    buildInputs = with self; [ mock testscenarios ];
+    propagatedBuildInputs = with self; [ docutils lockfile ];
+
+    meta = {
+      description = "Library to implement a well-behaved Unix daemon process";
+      homepage = https://alioth.debian.org/projects/python-daemon/;
+      licenses =  [ licenses.gpl3Plus licenses.asl20 ];
+    };
+  };
+
   sympy = buildPythonPackage rec {
     name = "sympy-0.7.6.1";
     disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
