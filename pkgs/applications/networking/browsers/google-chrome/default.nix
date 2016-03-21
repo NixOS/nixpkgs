@@ -30,7 +30,7 @@
 
 with stdenv.lib;
 
-with (import ../chromium/source/update.nix {
+with (import ../chromium/update.nix {
   inherit (stdenv) system;
 }).getChannel channel;
 
