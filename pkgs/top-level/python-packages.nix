@@ -3277,23 +3277,19 @@ in modules // {
 
 
   coilmq = buildPythonPackage (rec {
-    name = "coilmq-0.6.1";
+    name = "CoilMQ-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
-      sha256 = "9755733bdae33a9d87630232d166a7da2382f68c2cffb3bb81503806e8d310cb";
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/${name}.tar.gz";
+      sha256 = "0wwa6fsqw1mxsryvgp0yrdjil8axyj0kslzi7lr45cnhgp5ab375";
     };
 
-    propagatedBuildInputs = with self; [ self.stompclient ];
+    propagatedBuildInputs = with self; [ stompclient pythondaemon redis pid];
 
-    preConfigure = ''
-      sed -i '/distribute/d' setup.py
-    '';
+    buildInputs = with self; [ pytest six click coverage sqlalchemy ];
 
-    buildInputs = with self; [ self.coverage self.sqlalchemy7 ];
-
-    # ValueError: Could not parse auth file:
-    # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
+    # The teste data is not included in the distribution
     doCheck = false;
 
     meta = {
