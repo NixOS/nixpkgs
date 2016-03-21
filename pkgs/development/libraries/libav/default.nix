@@ -27,7 +27,6 @@ with { inherit (stdenv.lib) optional optionals; };
 let
   result = {
     libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
-    libav_9   = libavFun   "9.18" "e10cde4587c4d4d3bb11d30c7b47e953664cd714";
     libav_11  = libavFun  "11.6"  "2296cbd7afe98591eb164cebe436dcb5582efc9d";
   };
 
