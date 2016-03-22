@@ -15,8 +15,10 @@ let
 
   callPackage = pkgs.newScope self;
 
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+
   buildPythonPackage = makeOverridable (callPackage ../development/python-modules/generic {
-    bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+    inherit bootstrapped-pip;
   });
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
@@ -40,7 +42,7 @@ let
 
 in modules // {
 
-  inherit python isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
 
   # helpers
 
