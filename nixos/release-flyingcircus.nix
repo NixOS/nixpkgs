@@ -158,7 +158,7 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ lib.maintainers.eelco ];
+      maintainers = [ lib.maintainers.theuni ];
     };
     constituents =
       let all = x: map (system: x.${system}) supportedSystems; in
