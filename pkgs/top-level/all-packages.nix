@@ -5999,6 +5999,8 @@ let
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
+  foreman = callPackage ../tools/system/foreman { };
+
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
