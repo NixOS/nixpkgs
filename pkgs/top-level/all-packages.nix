@@ -5451,8 +5451,6 @@ let
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
     git = gitMinimal;
-
-    nix = nixUnstable;
   };
 
   octave = callPackage ../development/interpreters/octave {
