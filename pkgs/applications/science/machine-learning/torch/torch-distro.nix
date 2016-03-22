@@ -254,9 +254,24 @@ let
       rockspec = "rocks/gnuplot-scm-1.rockspec";
     };
 
+    unsup = buildLuaRocks rec {
+      name = "unsup";
+      luadeps = [ torch xlua optim ];
+      buildInputs = [ cmake ];
+      src = fetchgit {
+        url = "https://github.com/koraykv/unsup";
+        rev = "1d4632e716dc3c82feecc7dd4b22549df442859f";
+        sha256 = "0npjq3y1cfmk026sdijcw3f766innrmb3qggnxsz62grczhfvgls";
+      };
+      rockspec = "unsup-0.1-0.rockspec";
+      preBuild = ''
+        export Torch_DIR=${torch}/share/cmake/torch
+      '';
+    };
+
     trepl = buildLuaRocks rec {
       name = "trepl";
-      luadeps = [torch gnuplot paths penlight graph nn nngraph image gnuplot optim sys dok];
+      luadeps = [torch gnuplot paths penlight graph nn nngraph image gnuplot optim sys dok unsup];
       runtimeDeps = [ ncurses readline ];
       src = "${distro_src}/exe/trepl";
       meta = common_meta // {
