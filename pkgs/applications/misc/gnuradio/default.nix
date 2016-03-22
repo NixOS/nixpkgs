@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.8.1";
+  version = "3.7.9.1";
 
   src = fetchurl {
     url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "1ap5gbgisnbny3jbnm2i5wm2sy6qkbhz747av3sjxp2z12fz81l4";
+    sha256 = "0zlnxyqq3dyrg0nz2hpydlhyzv26vlkdavs8w01k448lxkqz01lw";
   };
 
   buildInputs = [
@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     cheetahTemplate numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable"
@@ -72,6 +74,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnuradio.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }
