@@ -2428,6 +2428,8 @@ let
 
   mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
 
+  mednaffe = callPackage ../misc/emulators/mednaffe/default.nix { };
+
   megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
