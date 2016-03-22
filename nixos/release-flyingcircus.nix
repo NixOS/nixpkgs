@@ -146,6 +146,7 @@ in rec {
       php
       postgresql92
       postgresql93
+      postgresql94
       python
       rsyslog
       stdenv
