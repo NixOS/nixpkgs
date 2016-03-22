@@ -5324,7 +5324,6 @@ let
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   erlangR14 = callPackage ../development/interpreters/erlang/R14.nix { };
-  erlangR15 = callPackage ../development/interpreters/erlang/R15.nix { };
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
@@ -9802,8 +9801,7 @@ let
     sasl = cyrus_sasl;
   };
 
-  riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
-  riak2 = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
 
