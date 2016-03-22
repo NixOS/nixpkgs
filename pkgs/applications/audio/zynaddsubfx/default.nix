@@ -14,6 +14,10 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsaLib libjack2 fftw fltk13 libjpeg minixml zlib liblo ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
+  postPatch = ''
+    substituteInPlace ./src/DSP/FFTwrapper.h --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
+  '';
+
   meta = with stdenv.lib; {
     description = "High quality software synthesizer";
     homepage = http://zynaddsubfx.sourceforge.net;
