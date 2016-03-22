@@ -7,7 +7,7 @@ import ./make-test.nix {
 
       {
         services.riak.enable = true;
-        services.riak.package = pkgs.riak2;
+        services.riak.package = pkgs.riak;
       };
   };
 
