@@ -7100,7 +7100,9 @@ let
     llvmPackages = llvmPackages_37;
   };
 
-  itk = callPackage ../development/libraries/itk { };
+  itk = callPackage ../development/libraries/itk {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   jasper = callPackage ../development/libraries/jasper { };
 
