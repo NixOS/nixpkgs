@@ -3303,6 +3303,16 @@ let
     sha256 = "0g9fj10xnxcv034c8hpcgbhswv6as0d8l176c5nfgh1lh6klmmzc";
   };
 
+  s3gof3r = buildFromGitHub rec {
+    owner    = "rlmcpherson";
+    repo     = "s3gof3r";
+    rev      = "v${version}";
+    version  = "0.5.0";
+    sha256   = "10banc8hnhxpsdmlkf9nc5fjkh1349bgpd9k7lggw3yih1rvmh7k";
+    disabled = isGo14;
+    propagatedBuildInputs = [ go-flags ];
+  };
+
   sandblast = buildGoPackage rec {
     rev = "694d24817b9b7b8bacb6d458b7989b30d7fe3555";
     name = "sandblast-${stdenv.lib.strings.substring 0 7 rev}";
