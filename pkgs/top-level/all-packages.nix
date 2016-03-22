@@ -8293,7 +8293,9 @@ let
     };
   };
 
-  opensubdiv = callPackage ../development/libraries/opensubdiv { };
+  opensubdiv = callPackage ../development/libraries/opensubdiv {
+    cudatoolkit = cudatoolkit75;
+  };
 
   openwsman = callPackage ../development/libraries/openwsman {};
 
@@ -11546,8 +11548,8 @@ let
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
-    cudatoolkit = cudatoolkit7;
-    python = python34;
+    cudatoolkit = cudatoolkit75;
+    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
