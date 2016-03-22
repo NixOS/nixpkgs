@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     openssl zlib python gyp go readline
   ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+
   configureFlagsArray = [ "--with-openssl-lib=${openssl}/lib" ];
 
   patchPhase = ''
