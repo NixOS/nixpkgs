@@ -12572,6 +12572,8 @@ let
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  slack = callPackage ../applications/networking/instant-messengers/slack { };
+
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
   wlc = callPackage ../development/libraries/wlc { };
