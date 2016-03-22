@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, gnuradio, boost, gnuradio-osmosdr
+{ stdenv, fetchFromGitHub, qt4, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -8,11 +8,13 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.3.2";
+  version = "2.5.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/gqrx/${version}/${name}.tar.xz";
-    sha256 = "1vfqqa976xlbapqkpc9nka364zydvsy18xiwfqjy015kpasshdz1";
+  src = fetchFromGitHub {
+    owner = "csete";
+    repo = "gqrx";
+    rev = "v${version}";
+    sha256 = "02pavd1kc0gsnrl18bfa01r2f3j4j05zly4a8zwss9yrsgf8432x";
   };
 
   buildInputs = [
@@ -21,12 +23,14 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''qmake PREFIX="$out"'';
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     mkdir -p "$out/share/applications"
     mkdir -p "$out/share/icons"
 
     cp gqrx.desktop "$out/share/applications/"
-    cp icons/gqrx.svg "$out/share/icons/"
+    cp resources/icons/gqrx.svg "$out/share/icons/"
   '';
 
   meta = with stdenv.lib; {
@@ -42,6 +46,6 @@ stdenv.mkDerivation rec {
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
     platforms = platforms.linux;  # should work on Darwin / OS X too
-    maintainers = with maintainers; [ bjornfor the-kenny ];
+    maintainers = with maintainers; [ bjornfor the-kenny fpletz ];
   };
 }
