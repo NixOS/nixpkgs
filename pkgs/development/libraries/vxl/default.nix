@@ -20,12 +20,13 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  patches = [ ./gcc5.patch ];
+
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = http://vxl.sourceforge.net/;
     license = "VXL License";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-    broken = true; # requires fix for gcc 5: https://lists.fedoraproject.org/pipermail/scm-commits/Week-of-Mon-20150216/1511118.html
   };
 }
