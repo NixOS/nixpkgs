@@ -24,11 +24,7 @@
 , libmsgpack
 }:
 
-let
-  v8 = v8_3_16_14;
-in
-
-{
+rec {
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
   };
@@ -43,21 +39,37 @@ in
 
   eventmachine = attrs: {
     buildInputs = [ openssl ];
+    buildFlags = [ "--with-ssl-dir=${openssl}" ];
   };
 
   ffi = attrs: {
+    dontBuild = false;
     buildInputs = [ libffi pkgconfig ];
+    # Unecessary use of /usr/bin/env to set environment variables
+    postPatch = ''
+      for ext in mk bsd.mk darwin.mk; do
+        substituteInPlace ext/ffi_c/libffi.$ext \
+          --replace "/usr/bin/env " ""
+      done
+    '';
   };
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
 
+  libxml-ruby = attrs: {
+    buildFlags = [
+      "--with-xml2-dir=${libxml2}"
+      "--with-zlib-dir=${zlib}"
+    ];
+  };
+
   # note that you need version >= v3.16.14.8,
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python ];
+    buildInputs = [ which v8_3_16_14 python ];
     buildFlags = [ "--with-system-v8=true" ];
   };
 
@@ -65,8 +77,13 @@ in
     buildInputs = [ libmsgpack ];
   };
 
+  mysql = attrs: {
+    buildFlags = [ "--with-mysql-dir=${mysql.lib}" ];
+  };
+
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ zlib openssl ];
+    buildFlags = [ "--with-mysql-dir=${mysql.lib}" ];
   };
 
   ncursesw = attrs: {
@@ -95,6 +112,7 @@ in
   };
 
   pg = attrs: {
+    buildInputs = [ postgresql ];
     buildFlags = [
       "--with-pg-config=${postgresql}/bin/pg_config"
     ];
@@ -105,7 +123,7 @@ in
   };
 
   rmagick = attrs: {
-    buildInputs = [ imagemagick pkgconfig ];
+    buildInputs = [ imagemagick pkgconfig which ];
   };
 
   rugged = attrs: {
@@ -113,11 +131,9 @@ in
   };
 
   sqlite3 = attrs: {
-    buildFlags = [
-      "--with-sqlite3-include=${sqlite}/include"
-      "--with-sqlite3-lib=${sqlite}/lib"
-    ];
+    buildFlags = [ "--with-sqlite3-dir=${sqlite}" ];
   };
+  sqlite3-ruby = sqlite3;
 
   sup = attrs: {
     dontBuild = false;
@@ -137,9 +153,7 @@ in
 
   therubyracer = attrs: {
     buildFlags = [
-      "--with-v8-dir=${v8}"
-      "--with-v8-include=${v8}/include"
-      "--with-v8-lib=${v8}/lib"
+      "--with-v8-dir=${v8_3_16_14}"
     ];
   };
 

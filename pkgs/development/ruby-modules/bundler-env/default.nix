@@ -18,16 +18,9 @@ let
 
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   importedGemset = import gemset;
-  applyGemConfigs = attrs:
-    (if gemConfig ? "${attrs.gemName}"
-    then attrs // gemConfig."${attrs.gemName}" attrs
-    else attrs);
-  configuredGemset = lib.flip lib.mapAttrs importedGemset (name: attrs:
-    applyGemConfigs (attrs // { gemName = name; })
-  );
   hasBundler = builtins.hasAttr "bundler" importedGemset;
   bundler = if hasBundler then gems.bundler else defs.bundler.override (attrs: { inherit ruby; });
-  gems = lib.flip lib.mapAttrs configuredGemset (name: attrs:
+  gems = lib.flip lib.mapAttrs importedGemset (name: attrs:
     buildRubyGem ((removeAttrs attrs ["source"]) // attrs.source // {
       inherit ruby;
       gemName = name;

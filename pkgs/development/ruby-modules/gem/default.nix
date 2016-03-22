@@ -18,42 +18,53 @@
 # Normal gem packages can be used outside of bundler; a binstub is created in
 # $out/bin.
 
-{ lib, ruby, bundler, fetchurl, fetchgit, makeWrapper, git,
-  buildRubyGem, darwin
+{ lib, fetchurl, fetchgit, makeWrapper, git, darwin
+, ruby, bundler, defaultGemConfig
 } @ defs:
 
-lib.makeOverridable (
+let
+  toArgs = x:
+    if x == null then ""
+    else toString (map lib.escapeShellArg x);
+in
 
-{ name ? null
-, gemName
-, version ? null
-, type ? "gem"
-, document ? [] # e.g. [ "ri" "rdoc" ]
-, platform ? "ruby"
-, ruby ? defs.ruby
-, stdenv ? ruby.stdenv
-, namePrefix ? (let
-    rubyName = builtins.parseDrvName ruby.name;
-  in "${rubyName.name}${rubyName.version}-")
-, buildInputs ? []
-, doCheck ? false
-, meta ? {}
-, patches ? []
-, gemPath ? []
-, dontStrip ? true
-, remotes ? ["https://rubygems.org"]
 # Assume we don't have to build unless strictly necessary (e.g. the source is a
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
+{ gemName
+, buildFlags ? []
+, buildInputs ? []
+, doCheck ? false
+, document ? [] # e.g. [ "ri" "rdoc" ]
 , dontBuild ? true
+, dontStrip ? true
+, gemConfig ? defs.defaultGemConfig
+, gemPath ? []
+, meta ? {}
+, passthru ? {}
+, patches ? []
+, platform ? "ruby"
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
-, buildFlags ? null
-, passthru ? {}
+, remotes ? ["https://rubygems.org"]
+, ruby ? defs.ruby
+, stdenv ? ruby.stdenv
+, type ? "gem"
+, version ? null
 , ...} @ attrs:
 
 let
-  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
+  applyGemConfig = attrs:
+    if gemConfig ? "${gemName}" then
+      attrs // gemConfig."${gemName}" attrs
+    else
+      attrs;
+  name = attrs.name or (
+    let
+      x = builtins.parseDrvName ruby.name;
+    in
+      "${x.name}${x.version}-${gemName}-${version}"
+  );
   src = attrs.src or (
     if type == "gem" then
       fetchurl {
@@ -73,24 +84,43 @@ let
     then "-N"
     else "--document ${lib.concatStringsSep "," document}";
 
+  attrs_ = applyGemConfig (attrs // {
+    inherit
+      buildFlags
+      buildInputs
+      doCheck
+      document
+      dontBuild
+      dontStrip
+      gemName
+      gemPath
+      meta
+      name
+      passthru
+      patches
+      platform
+      propagatedBuildInputs
+      propagatedUserEnvPkgs
+      remotes
+      ruby
+      stdenv
+      src
+      type
+      version
+      ;
+  });
+in
+
+let
+  attrs = attrs_;
 in
 
 stdenv.mkDerivation (attrs // {
-  inherit ruby;
-  inherit doCheck;
-  inherit dontBuild;
-  inherit dontStrip;
-  inherit type;
-
   buildInputs = [
     ruby makeWrapper
   ] ++ lib.optionals (type == "git") [ git bundler ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc
-    ++ buildInputs;
-
-  name = attrs.name or "${namePrefix}${gemName}-${version}";
-
-  inherit src;
+    ++ attrs.buildInputs;
 
   phases = attrs.phases or [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" "fixupPhase" ];
 
@@ -165,7 +195,7 @@ stdenv.mkDerivation (attrs // {
       ${src} \
       ${attrs.rev} \
       ${version} \
-      ${shellEscape (toString buildFlags)}
+      ${toArgs attrs.buildFlags}
     ''}
 
     ${lib.optionalString (type == "gem") ''
@@ -199,11 +229,8 @@ stdenv.mkDerivation (attrs // {
     runHook postInstall
   '';
 
-  propagatedBuildInputs = gemPath ++ propagatedBuildInputs;
-  propagatedUserEnvPkgs = gemPath ++ propagatedUserEnvPkgs;
+  propagatedBuildInputs = gemPath ++ attrs.propagatedBuildInputs;
+  propagatedUserEnvPkgs = gemPath ++ attrs.propagatedUserEnvPkgs;
 
-  passthru = passthru // { isRubyGem = true; };
-  inherit meta;
+  passthru = attrs.passthru // { isRubyGem = true; };
 })
-
-)
