@@ -2340,6 +2340,8 @@ let
 
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
+    # https://debbugs.gnu.org/db/21/21863.html
+    stdenv = overrideCC stdenv gcc49;
   };
 
   email = callPackage ../tools/networking/email { };
