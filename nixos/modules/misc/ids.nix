@@ -256,6 +256,8 @@
       nntp-proxy = 232;
       mjpg-streamer = 233;
       radicale = 234;
+      hydra-queue-runner = 235;
+      hydra-www = 236;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
