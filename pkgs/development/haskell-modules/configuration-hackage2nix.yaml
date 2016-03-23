@@ -99,6 +99,8 @@ package-maintainers:
     - persistent-template
     - persistent-zookeeper
     - shakespeare
+  abbradar:
+    - Agda
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
