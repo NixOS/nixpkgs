@@ -283,6 +283,7 @@
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/tahoe.nix
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
