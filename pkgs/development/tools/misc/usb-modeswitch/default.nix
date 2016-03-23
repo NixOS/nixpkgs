@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 let
-   version = "2.2.1";
+   version = "2.3.0";
 in
 
 stdenv.mkDerivation rec {
