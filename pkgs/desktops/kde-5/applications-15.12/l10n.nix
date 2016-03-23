@@ -152,13 +152,10 @@ lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
     qt4 = callPackage (kdeLocale4 "nds" {}) {};
     qt5 = callPackage (kdeLocale5 "nds" {}) {};
   };
-  # TODO: build broken in 15.11.80; re-enable in next release
-  /*
   nl = {
     qt4 = callPackage (kdeLocale4 "nl" {}) {};
     qt5 = callPackage (kdeLocale5 "nl" {}) {};
   };
-  */
   nn = {
     qt4 = callPackage (kdeLocale4 "nn" {}) {};
     qt5 = callPackage (kdeLocale5 "nn" {}) {};
