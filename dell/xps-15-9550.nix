@@ -25,8 +25,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Honestly forget if needed or just better for touchpad.
-  # Would be nice to try libinput instead once nixos-unstable updates
-  services.xserver.synaptics.enable = true;
+  # Synaptics also works, but doesn't have working palm and thumb detection.
+  services.xserver.libinput.enable = true;
 
   # Intel Graphics confirmed not working at 4.1, confirmed working at {4.3, 4.4}
   kernelAtleast =
