@@ -1069,6 +1069,7 @@ in
   "unionfs-fuse" = callPackage ../tools/filesystems/unionfs-fuse { };
 
   usb-modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
+  usb-modeswitch-data = callPackage ../development/tools/misc/usb-modeswitch/data.nix { };
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
