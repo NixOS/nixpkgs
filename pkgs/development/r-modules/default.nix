@@ -46,6 +46,14 @@ let
     mkHomepage = {name, rVersion}: "https://bioconductor.org/packages/${rVersion}/bioc/html/${name}.html";
     mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/bioc/src/contrib/${name}_${version}.tar.gz" ];
   };
+  deriveBiocAnn = mkDerive {
+    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/annotation/src/contrib/${name}_${version}.tar.gz" ];
+  };
+  deriveBiocExp = mkDerive {
+    mkHomepage = {name, rVersion}: "http://www.bioconductor.org/packages/${name}.html";
+    mkUrls = {name, version, rVersion}: [ "mirror://bioc/${rVersion}/data/experiment/src/contrib/${name}_${version}.tar.gz" ];
+  };
   deriveCran = mkDerive {
     mkHomepage = {name, snapshot}: "http://mran.revolutionanalytics.com/snapshot/${snapshot}/web/packages/${name}/";
     mkUrls = {name, version, snapshot}: [ "http://mran.revolutionanalytics.com/snapshot/${snapshot}/src/contrib/${name}_${version}.tar.gz" ];
@@ -213,6 +221,8 @@ let
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
   _self = import ./bioc-packages.nix { inherit self; derive = deriveBioc; } //
+          import ./bioc-annotation-packages.nix { inherit self; derive = deriveBiocAnn; } //
+          import ./bioc-experiment-packages.nix { inherit self; derive = deriveBiocExp; } //
           import ./cran-packages.nix { inherit self; derive = deriveCran; } //
           import ./irkernel-packages.nix { inherit self; derive = deriveIRkernel; };
 
@@ -267,7 +277,6 @@ let
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw ];
     ncdf4 = [ pkgs.netcdf ];
-    ncdf = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
     openssl = [ pkgs.openssl ];
     outbreaker = [ pkgs.gsl_1 ];
@@ -300,7 +309,6 @@ let
     RGtk2 = [ pkgs.gtk2 ];
     Rhpc = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.openmpi pkgs.pcre ];
     Rhtslib = [ pkgs.zlib ];
-    ridge = [ pkgs.gsl_1 ];
     RJaCGH = [ pkgs.zlib ];
     rjags = [ pkgs.jags ];
     rJava = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre pkgs.jdk pkgs.libzip ];
@@ -329,7 +337,6 @@ let
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
     seewave = [ pkgs.fftw pkgs.libsndfile ];
-    SemiCompRisks = [ pkgs.gsl_1 ];
     seqinr = [ pkgs.zlib ];
     seqminer = [ pkgs.zlib pkgs.bzip2 ];
     showtext = [ pkgs.zlib pkgs.libpng pkgs.icu pkgs.freetype ];
@@ -840,7 +847,6 @@ let
     "bnclassify" # broken build
     "bootnet" # depends on broken package nlopt-2.4.2
     "boral"
-    "boss" # depends on broken package nlopt-2.4.2
     "BradleyTerry2" # depends on broken package nlopt-2.4.2
     "BrailleR" # broken build
     "BRAIN" # broken build
@@ -1242,7 +1248,6 @@ let
     "gfcanalysis" # broken build
     "GGBase" # depends on broken package snpStats-1.19.0
     "ggbio" # depends on broken package Rsamtools-1.21.8
-    "ggsubplot" # build is broken
     "ggtern" # build is broken
     "GGtools" # depends on broken package snpStats-1.19.0
     "ggtree" # broken build
@@ -1282,7 +1287,6 @@ let
     "graphicalVAR" # depends on broken package nlopt-2.4.2
     "graphite" # broken build
     "GraphPAC" # broken build
-    "GraphPCA" # depends on broken package nlopt-2.4.2
     "gRbase" # broken build
     "gRc" # broken build
     "GreyListChIP" # depends on broken package Rsamtools-1.21.8
@@ -1368,7 +1372,6 @@ let
     "immer" # depends on broken package r-sirt-1.8-9
     "immunoClust" # build is broken
     "imputeLCMD" # broken build
-    "imputeR" # depends on broken package nlopt-2.4.2
     "in2extRemes" # depends on broken package nlopt-2.4.2
     "inferference" # depends on broken package nlopt-2.4.2
     "influence_ME" # depends on broken package nlopt-2.4.2
@@ -1603,7 +1606,6 @@ let
     "MSstats" # depends on broken package nlopt-2.4.2
     "msSurv" # broken build
     "Mulcom" # broken build
-    "multiDimBio" # depends on broken package nlopt-2.4.2
     "MultiRR" # depends on broken package nlopt-2.4.2
     "multiscan" # broken build
     "multtest" # broken build
@@ -1712,7 +1714,6 @@ let
     "pbdDMAT" # depends on broken package pbdSLAP-0.2-0
     "pbdSLAP" # build is broken
     "PBImisc" # depends on broken package nlopt-2.4.2
-    "pbkrtest" # depends on broken package nlopt-2.4.2
     "PBSddesolve" # build is broken
     "PBSmapping" # build is broken
     "pcaBootPlot" # depends on broken FactoMineR-1.31.3
@@ -2169,7 +2170,6 @@ let
     "STATegRa" # depends on broken package affyio-1.37.0
     "StatMethRank"
     "Statomica" # broken build
-    "stcm" # depends on broken package nlopt-2.4.2
     "stepp" # depends on broken package nlopt-2.4.2
     "stepwiseCM" # broken build
     "stream" # broken build
@@ -2289,7 +2289,6 @@ let
     "yCrypticRNAs" # depends on broken package biomaRt-2.26.1
     "ZeligChoice" # depends on broken package r-AER-1.2-4
     "Zelig" # depends on broken package r-AER-1.2-4
-    "ZeligMultilevel" # depends on broken package nlopt-2.4.2
     "zetadiv" # depends on broken package nlopt-2.4.2
     "zoib"
   ];
