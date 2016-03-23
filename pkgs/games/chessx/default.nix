@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   installPhase = ''
       mkdir -p "$out/bin"
+      mkdir -p "$out/share/applications"
       cp -pr release/chessx "$out/bin"
+      cp -pr unix/chessx.desktop "$out/share/applications"
   '';
 
   meta = with stdenv.lib; {
