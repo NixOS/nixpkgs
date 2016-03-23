@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/zamaudio/zam-plugins.git";
     deepClone = true;
     rev = "91fe56931a3e57b80f18c740d2dde6b44f962aee";
-    sha256 = "0n29zxg4l2m3jsnfw6q2alyzaw7ibbv9nvk57k07sv3lh2yy3f30";
+    sha256 = "1s0s028h3z3pfd4qvi63fsg6bv33bvz0p5fbmbmhypzqjlx6mlkb";
   };
 
   buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 pkgconfig rubberband libsndfile ];
