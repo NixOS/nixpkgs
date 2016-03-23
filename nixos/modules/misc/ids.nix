@@ -176,7 +176,6 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
-      dnscrypt-proxy = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -414,7 +413,6 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
-      dnscrypt-proxy = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;

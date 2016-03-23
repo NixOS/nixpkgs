@@ -173,11 +173,12 @@ in
       }
     ''));
 
-    users.extraUsers.dnscrypt-proxy = {
-      uid = config.ids.uids.dnscrypt-proxy;
+    users.users.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon user";
+      isSystemUser = true;
+      group = "dnscrypt-proxy";
     };
-    users.extraGroups.dnscrypt-proxy.gid = config.ids.gids.dnscrypt-proxy;
+    users.groups.dnscrypt-proxy = {};
 
     systemd.sockets.dnscrypt-proxy = {
       description = "dnscrypt-proxy listening socket";
