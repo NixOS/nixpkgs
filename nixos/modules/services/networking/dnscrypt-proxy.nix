@@ -204,6 +204,7 @@ in
 
         PrivateTmp = true;
         PrivateDevices = true;
+        ProtectHome = true;
       };
     };
   };
