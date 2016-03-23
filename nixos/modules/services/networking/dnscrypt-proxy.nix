@@ -5,14 +5,17 @@ let
   apparmorEnabled = config.security.apparmor.enable;
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
+
   resolverListFile = "${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
+
   daemonArgs =
     [ "--local-address=${localAddress}"
       (optionalString cfg.tcpOnly "--tcp-only")
       (optionalString cfg.ephemeralKeys "-E")
     ]
     ++ resolverArgs;
+
   resolverArgs = if (cfg.customResolver != null)
     then
       [ "--resolver-address=${cfg.customResolver.address}:${toString cfg.customResolver.port}"
@@ -50,7 +53,7 @@ in
           services.dnsmasq.resolveLocalQueries = true; # this is the default
         }
         </programlisting>
-     ''; };
+      ''; };
       localAddress = mkOption {
         default = "127.0.0.1";
         type = types.string;
@@ -187,14 +190,18 @@ in
 
     systemd.services.dnscrypt-proxy = {
       description = "dnscrypt-proxy daemon";
+
       after = [ "network.target" ] ++ optional apparmorEnabled "apparmor.service";
       requires = [ "dnscrypt-proxy.socket "] ++ optional apparmorEnabled "apparmor.service";
+
       serviceConfig = {
         Type = "simple";
         NonBlocking = "true";
         ExecStart = "${dnscrypt-proxy}/bin/dnscrypt-proxy ${toString daemonArgs}";
+
         User = "dnscrypt-proxy";
         Group = "dnscrypt-proxy";
+
         PrivateTmp = true;
         PrivateDevices = true;
       };
