@@ -920,20 +920,38 @@ in modules // {
 
   });
 
+  chai = buildPythonPackage rec {
+    name = "chai-${version}";
+    version = "1.1.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/chai/${name}.tar.gz";
+      sha256 = "016kf3irrclpkpvcm7q0gmkfibq7jgy30a9v73pp42bq9h9a32bl";
+    };
+
+    meta = {
+      description = "Mocking, stubbing and spying framework for python";
+    };
+  };
+
   arrow = buildPythonPackage rec {
     name = "arrow-${version}";
-    version = "0.5.0";
+    version = "0.7.0";
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/a/arrow/${name}.tar.gz";
-      sha256 = "1q3a6arjm6ysl2ff6lgdm504np7b1rbivrzspybjypq1nczcb7qy";
+      sha256 = "0yx10dz3hp825fcq9w15zbp26v622npcjscb91da05zig8036lra";
     };
 
-    doCheck = false;
+    checkPhase = ''
+      nosetests
+    '';
+
+    buildInputs = with self; [ nose chai simplejson ];
     propagatedBuildInputs = with self; [ dateutil ];
 
     meta = {
-      description = "Twitter API library";
+      description = "Python library for date manipulation";
       license     = "apache";
       maintainers = with maintainers; [ thoughtpolice ];
     };
@@ -26181,6 +26199,64 @@ in modules // {
       license = licenses.mit;
       maintainers = with maintainers; [ np ];
     };
+  };
+
+  termstyle = buildPythonPackage rec {
+    name = "python-termstyle-${version}";
+    version = "0.1.10";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/python-termstyle/${name}.tar.gz";
+      sha256 = "1qllzkx1alf14zcfapppf8w87si4cpa7lgjmdp3f5idzdyqnnapl";
+    };
+
+    meta = {
+      description = "console colouring for python";
+      homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
+      license = licenses.bsdOriginal;
+    };
+
+  };
+
+  green = buildPythonPackage rec {
+    name = "green-${version}";
+    version = "2.3.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/g/green/${name}.tar.gz";
+      sha256 = "1888khfl9yxb8yfxq9b48dxwplqlxx8s0l530z5j7c6bx74v08b4";
+    };
+
+    propagatedBuildInputs = with self; [ termstyle colorama ];
+    buildInputs = with self; [ mock ];
+
+    meta = {
+      description = "python test runner";
+      homepage = "https://github.com/CleanCut/green";
+      licence = licenses.mit;
+    };
+  };
+
+  topydo = buildPythonPackage rec {
+    name = "topydo-${version}";
+    version = "0.9";
+    disabled = (!isPy3k);
+
+    src = pkgs.fetchFromGitHub {
+      owner = "bram85";
+      repo = "topydo";
+      rev = version;
+      sha256 = "0vmfr2cxn3r5zc0c4q3a94xy1r0cv177b9zrm9hkkjcmhgq42s3h";
+    };
+
+    propagatedBuildInputs = with self; [ arrow icalendar ];
+    buildInputs = with self; [ mock freezegun coverage pkgs.glibcLocales ];
+
+    LC_ALL="en_US.UTF-8";
+  };
+
+  meta = {
+    description = "A cli todo application compatible with the todo.txt format";
+    homepage = "https://github.com/bram85/topydo";
+    license = license.gpl3;
   };
 
 }
