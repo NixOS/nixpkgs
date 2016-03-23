@@ -1177,7 +1177,8 @@ let
 
   "unionfs-fuse" = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
+  usb-modeswitch-data = callPackage ../development/tools/misc/usb-modeswitch-data { };
+  usb-modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
