@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     # sed -re "s@/bin/cat@$(which cat)@g" -i configure */configure
     # sed -re "s@if test -d /proc/self @if false @" -i configure
     # sed -re 's^([ \t])cpp ^\1cpp -I${stdenv.cc.cc}/include -I${stdenv.cc.libc}/include ^g' -i makefile
+
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fgnu89-inline"
   '';
 
   /* doConfigure should be removed if not needed */
