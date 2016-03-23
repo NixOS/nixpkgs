@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
     cd go
     patchShebangs ./ # replace /bin/bash
 
+    # This script produces another script at run time,
+    # and thus it is not corrected by patchShebangs.
+    substituteInPlace misc/cgo/testcarchive/test.bash \
+      --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
     rm src/net/{listen,parse}_test.go
