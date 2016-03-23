@@ -2231,6 +2231,7 @@ self: super: {
   "cryptol" = doDistribute super."cryptol_2_2_6";
   "cryptonite" = doDistribute super."cryptonite_0_10";
   "cryptonite-conduit" = dontDistribute super."cryptonite-conduit";
+  "cryptonite-openssl" = dontDistribute super."cryptonite-openssl";
   "cryptsy-api" = dontDistribute super."cryptsy-api";
   "crystalfontz" = dontDistribute super."crystalfontz";
   "cse-ghc-plugin" = dontDistribute super."cse-ghc-plugin";
@@ -3261,6 +3262,7 @@ self: super: {
   "ginger" = dontDistribute super."ginger";
   "ginsu" = dontDistribute super."ginsu";
   "gipeda" = doDistribute super."gipeda_0_2";
+  "giphy-api" = dontDistribute super."giphy-api";
   "gist" = dontDistribute super."gist";
   "git-all" = dontDistribute super."git-all";
   "git-annex" = doDistribute super."git-annex_5_20151218";
@@ -7892,6 +7894,7 @@ self: super: {
   "vinyl" = doDistribute super."vinyl_0_5_1";
   "vinyl-gl" = dontDistribute super."vinyl-gl";
   "vinyl-json" = dontDistribute super."vinyl-json";
+  "vinyl-plus" = dontDistribute super."vinyl-plus";
   "vinyl-utils" = dontDistribute super."vinyl-utils";
   "vinyl-vectors" = dontDistribute super."vinyl-vectors";
   "virthualenv" = dontDistribute super."virthualenv";
