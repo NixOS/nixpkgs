@@ -15532,19 +15532,19 @@ in modules // {
   };
 
   pip = buildPythonPackage rec {
-    version = "8.0.2";
+    version = "8.1.1";
     name = "pip-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pip/pip-${version}.tar.gz";
-      sha256 = "46f4bd0d8dfd51125a554568d646fe4200a3c2c6c36b9f2d06d2212148439521";
+      sha256 = "160pa7xg0vybidhszd1n0ik2xah0yz6gsym5hp8k7dmfd83d6y1y";
     };
 
     # pip detects that we already have bootstrapped_pip "installed", so we need
     # to force it a little.
     installFlags = [ "--ignore-installed" ];
 
-    buildInputs = with self; [ mock scripttest virtualenv pytest ];
+    buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
   };
 
 
