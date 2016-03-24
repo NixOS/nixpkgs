@@ -12,6 +12,7 @@ runCommand "nixpkgs-metrics"
     nix-store --init
 
     mkdir -p $out/nix-support
+    touch $out/nix-support/hydra-build-products
 
     run() {
       local name="$1"
