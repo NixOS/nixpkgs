@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+    # handles both ping and ping6
+    substituteInPlace src/devices/nm-device.c --replace /usr/bin/ping ${pkgs.iputils}/bin/ping
     substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
     substituteInPlace data/85-nm-unmanaged.rules \
       --replace /bin/sh ${stdenv.shell} \
