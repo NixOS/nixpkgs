@@ -14349,6 +14349,8 @@ in
 
   qgis = callPackage ../applications/gis/qgis {};
 
+  qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
+
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader {
     qt = qt4;
   };
