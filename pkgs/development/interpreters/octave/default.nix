@@ -40,11 +40,9 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (python != null) python)
     ;
 
-  # there is a mysterious sh: command not found
-  doCheck = false;
+  doCheck = true;
 
-  # problems on Hydra
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   configureFlags =
     [ "--enable-readline"
