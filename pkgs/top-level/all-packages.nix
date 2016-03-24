@@ -768,6 +768,7 @@ let
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
+  btrfs-progs_4_4_1 = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
@@ -11949,7 +11950,7 @@ let
   };
 
   docker = callPackage ../applications/virtualization/docker {
-    btrfs-progs = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
+    btrfs-progs = btrfs-progs_4_4_1;
     go = go_1_4;
   };
 
@@ -13795,7 +13796,9 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper { };
+  snapper = callPackage ../tools/misc/snapper {
+    btrfs-progs = btrfs-progs_4_4_1;
+  };
 
   snd = callPackage ../applications/audio/snd { };
 
