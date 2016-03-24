@@ -7727,17 +7727,43 @@ let self = _self // overrides; _self = with self; {
       description = "Embed a Perl interpreter in the Apache HTTP server";
     };
   };
-
-  Mojolicious = buildPerlPackage {
-    name = "Mojolicious-4.63";
+  Mojolicious = buildPerlPackage rec {
+    name = "Mojolicious-6.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-4.63.tar.gz;
-      sha256 = "f20f77e86fc560dac1c958e765ed64242dcf6343939ed605b45f2bbe2596d5e9";
+      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
+      sha256 = "82f73553836ac378edf825fd9f24be982653be9e0d78f8ba38b7841aabdafb02";
+    };
+    propagatedBuildInputs = [ JSONPP ];
+    meta = {
+      homepage = http://mojolicious.org;
+      description = "Real-time web framework";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MojoIOLoopForkCall = buildPerlModule rec {
+    name = "Mojo-IOLoop-ForkCall-0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
+      sha256 = "886de5c3b44194a86228471075fac4036073bda19093e776c702aa65c3ef1824";
+    };
+    propagatedBuildInputs = [ IOPipely Mojolicious ];
+    meta = {
+      description = "Run blocking functions asynchronously by forking";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOPipely = buildPerlPackage rec {
+    name = "IO-Pipely-0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/${name}.tar.gz";
+      sha256 = "e33b6cf5cb2b46ee308513f51e623987a50a89901e81bf19701dce35179f2e74";
     };
     meta = {
-      homepage = http://mojolicio.us;
-      description = "Real-time web framework";
-      license = stdenv.lib.licenses.artistic2;
+      homepage = http://search.cpan.org/dist/IO-Pipely/;
+      description = "Portably create pipe() or pipe-like handles";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
