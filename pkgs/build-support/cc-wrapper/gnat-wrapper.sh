@@ -70,6 +70,20 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
 fi
 
 
+# Clear march/mtune=native -- they bring impurity.
+if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
+    rest=()
+    for i in "${params[@]}"; do
+        if [[ "$i" = -m*=native ]]; then
+            skip $i
+        else
+            rest=("${rest[@]}" "$i")
+        fi
+    done
+    params=("${rest[@]}")
+fi
+
+
 # Add the flags for the GNAT compiler proper.
 extraAfter=($NIX_GNATFLAGS_COMPILE)
 extraBefore=()
