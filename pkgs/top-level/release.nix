@@ -25,6 +25,8 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
+      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
