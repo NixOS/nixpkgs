@@ -472,6 +472,13 @@ in
       '';
     };
 
+    systemd.generator-packages = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd generators.";
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -628,7 +635,13 @@ in
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc = {
+    environment.etc = let
+      generators = (fold (p: attrs: let path = "${p}/lib/systemd/system-generators";
+                                    in attrs // (mapAttrs' (name: _: nameValuePair name "${path}/${toString name}")
+                                                           (builtins.readDir "${path}")))
+                         cfg.generators
+                         cfg.generator-packages);
+    in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
 
       "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
@@ -667,7 +680,7 @@ in
 
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
-    } // mapAttrs' (n: v: nameValuePair "systemd/system-generators/${n}" {"source"=v;}) cfg.generators;
+    } // mapAttrs' (n: v: nameValuePair "systemd/system-generators/${n}" {"source"=v;}) generators);
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
