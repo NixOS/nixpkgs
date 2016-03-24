@@ -64,8 +64,7 @@ in
 
     systemd.services.iodined = {
       description = "iodine, ip over dns daemon";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "ip-up.target" ];
       serviceConfig.ExecStart = "${pkgs.iodine}/sbin/iodined -f -u ${iodinedUser} ${cfg.extraConfig} ${cfg.ip} ${cfg.domain}";
     };
 
