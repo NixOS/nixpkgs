@@ -10661,6 +10661,8 @@ let
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
 
+    mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
+
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
     */
