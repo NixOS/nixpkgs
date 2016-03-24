@@ -105,7 +105,10 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = pkgsWithOverridesWithPackages (self: config.packageOverrides or (super: {})) defaultPackages;
+  pkgs = pkgsWithPackages defaultPackages;
+
+  pkgsWithPackages =
+    pkgsWithOverridesWithPackages (self: config.packageOverrides or (super: {}));
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
