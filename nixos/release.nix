@@ -9,7 +9,7 @@ let
 
   version = builtins.readFile ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString (nixpkgs.revCount - 77900)}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "pre") + "${toString (nixpkgs.revCount - 77908)}.${nixpkgs.shortRev}";
 
   forAllSystems = genAttrs supportedSystems;
 
