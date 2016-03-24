@@ -40,6 +40,11 @@
     all = import ./all-packages.nix;
     aliases = import ./aliases.nix;
   }
+
+  # Additional list of packages, similar to defaultPackages, which is used
+  # to apply security fixes to a few packages which would be compiled, and
+  # to patch any of their dependencies, to have a fast turn-around.
+, quickfixPackages ? null
 }:
 
 
@@ -159,5 +164,21 @@ let
                 lib.extends trivialBuilders (
                   lib.extends stdenvAdapters (
                     self: {})))))));
+
+  # Apply ABI compatible fixes:
+  #  1. This will cause the recompilation of packages which have a different
+  #     derivation in quickfix, than what they have in the default packages.
+  #  2. This will patch any of the dependencies to substitute the hash of
+  #     the default packages by the corresponding hash of the quickfix
+  #     packages which got recompiled.
+  #
+  # If there is no quickfix to apply, or if we are bootstrapping the
+  # compilation environment, then there is no need for making any patches.
+  maybeApplyAbiCompatiblePatches = pkgs:
+    if bootStdenv == null && quickfixPackages != null then
+      throw "NYI"
+    else
+      pkgs;
+
 in
-  pkgs
+  maybeApplyAbiCompatiblePatches pkgs
