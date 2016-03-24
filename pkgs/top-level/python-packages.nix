@@ -10327,6 +10327,8 @@ in modules // {
     };
   };
 
+  icdiff = callPackage ../tools/text/icdiff {};
+
   importlib = buildPythonPackage rec {
     name = "importlib-1.0.2";
 
