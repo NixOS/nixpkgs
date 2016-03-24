@@ -30,6 +30,16 @@
 
 , crossSystem ? null
 , platform ? null
+
+  # List of paths that are used to build the base channel, which is used as
+  # a reference for security updates.
+, defaultPackages ? {
+    adapters = import ../stdenv/adapters.nix;
+    builders = import ../build-support/trivial-builders.nix;
+    stdenv = import ./stdenv.nix;
+    all = import ./all-packages.nix;
+    aliases = import ./aliases.nix;
+  }
 }:
 
 
@@ -95,31 +105,34 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = pkgsWithOverrides (self: config.packageOverrides or (super: {}));
+  pkgs = pkgsWithOverridesWithPackages (self: config.packageOverrides or (super: {})) defaultPackages;
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
   # function is very expensive!
-  pkgsWithOverrides = overrider:
+  pkgsWithOverridesWithPackages = overrider: packages:
     let
       stdenvAdapters = self: super:
-        let res = import ../stdenv/adapters.nix self; in res // {
+        let res = packages.adapters self; in res // {
           stdenvAdapters = res;
         };
 
       trivialBuilders = self: super:
-        (import ../build-support/trivial-builders.nix {
+        (packages.builders {
           inherit lib; inherit (self) stdenv; inherit (self.xorg) lndir;
         });
 
-      stdenvDefault = self: super: (import ./stdenv.nix topLevelArguments) {} pkgs;
+      stdenvDefault = self: super: (packages.stdenv topLevelArguments) {} pkgs;
 
-      allPackagesArgs = topLevelArguments // { inherit pkgsWithOverrides; };
+      allPackagesArgs = topLevelArguments // {
+        pkgsWithOverrides = overrider:
+          pkgsWithOverridesWithPackages overrider defaultPackages;
+      };
       allPackages = self: super:
-        let res = import ./all-packages.nix allPackagesArgs res self;
+        let res = packages.all allPackagesArgs res self;
         in res;
 
-      aliases = self: super: import ./aliases.nix super;
+      aliases = self: super: packages.aliases super;
 
       # stdenvOverrides is used to avoid circular dependencies for building
       # the standard build environment. This mechanism uses the override
