@@ -1886,6 +1886,8 @@ in
 
   darkice = callPackage ../tools/audio/darkice { };
 
+  deco = callPackage ../applications/misc/deco { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
