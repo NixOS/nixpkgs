@@ -10990,14 +10990,9 @@ in
 
   systemd = callPackage ../os-specific/linux/systemd {
     linuxHeaders = linuxHeaders_3_18;
-    cryptsetup = null; # Infinite recusion
   };
 
-  systemd_with_cryptsetup = appendToName "-with-cryptsetup" (systemd.override {
-    inherit cryptsetup;
-  });
-
-  # The standalone cryptsetup generator for systemd
+  # standalone cryptsetup generator for systemd
   systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
