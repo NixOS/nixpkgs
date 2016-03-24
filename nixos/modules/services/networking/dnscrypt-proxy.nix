@@ -74,13 +74,13 @@ in
         '';
       };
       resolverName = mkOption {
-        default = "cisco";
+        default = "dnscrypt.eu-nl";
         type = types.nullOr types.string;
         description = ''
           The name of the upstream DNSCrypt resolver to use. See
-          <filename>${resolverListFile}</filename> for alternative resolvers
-          (e.g., if you are concerned about logging and/or server
-          location).
+          <filename>${resolverListFile}</filename> for alternative resolvers.
+          The default resolver is located in Holland, supports DNS security
+          extensions, and claims to not keep logs.
         '';
       };
       customResolver = mkOption {
