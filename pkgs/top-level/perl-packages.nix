@@ -2720,6 +2720,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DataHexDump = buildPerlPackage {
+    name = "Data-HexDump-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FT/FTASSIN/Data-HexDump-0.02.tar.gz;
+      sha256 = "1a9d843e7f667c1c6f77c67af5d77e7462ff23b41937cb17454d03535cd9be70";
+    };
+    meta = {
+      description = "Hexadecimal Dumper";
+      maintainers = with stdenv.lib.maintainers; [ AndersonTorres ];
+    };
+  };
+
   DataHierarchy = buildPerlPackage {
     name = "Data-Hierarchy-0.34";
     src = fetchurl {
