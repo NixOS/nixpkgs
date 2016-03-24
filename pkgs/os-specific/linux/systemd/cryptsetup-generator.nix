@@ -11,11 +11,15 @@ stdenv.lib.overrideDerivation systemd (p: {
 
   buildPhase = ''
     make $makeFlags built-sources
+    make $makeFlags systemd-cryptsetup
     make $makeFlags systemd-cryptsetup-generator
   '';
 
   installPhase = ''
     mkdir -p $out/lib/systemd/system-generators/
     cp systemd-cryptsetup-generator $out/lib/systemd/system-generators/systemd-cryptsetup-generator
+
+    mkdir -p $out/lib/systemd/
+    cp systemd-cryptsetup $out/lib/systemd/systemd-cryptsetup
   '';
 })
