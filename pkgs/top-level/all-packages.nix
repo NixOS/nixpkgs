@@ -11026,7 +11026,12 @@ let
 
   systemd = callPackage ../os-specific/linux/systemd {
     linuxHeaders = linuxHeaders_3_18;
+    cryptsetup = null; # Infinite recusion
   };
+
+  systemd_with_cryptsetup = appendToName "-with-cryptsetup" (systemd.override {
+    inherit cryptsetup;
+  });
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
   # LVM2 working in systemd.
