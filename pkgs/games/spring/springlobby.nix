@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
+{ stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
 , gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring, makeWrapper }:
-stdenv.mkDerivation rec {
 
+stdenv.mkDerivation rec {
   name = "springlobby-${version}";
-  version = "0.195";
+  version = "0.243";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0hxxm97c74rvm78vlfn2byn0zjlrhankxdrs2hz73rdq6451h10b";
+    sha256 = "0ln3fz6c01rh5lhq9xhhvp4lhxjhmxl46i2jv4ivacbgjc46g4aq";
   };
 
   buildInputs = [
-    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar
+    cmake wxGTK30 openal pkgconfig curl gettext libtorrentRasterbar
     boost libpng libX11 libnotify gtk doxygen makeWrapper
   ];
 
