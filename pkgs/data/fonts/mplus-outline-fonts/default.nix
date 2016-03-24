@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "mplus-${version}";
-  version = "TESTFLIGHT-059";
+  version = "059";
 
   src = fetchurl {
     url = "mirror://sourceforgejp/mplus-fonts/62344/mplus-TESTFLIGHT-059.tar.xz";
