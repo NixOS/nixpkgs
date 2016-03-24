@@ -105,15 +105,15 @@ let
   # (un-overridden) set of packages, allowing packageOverrides
   # attributes to refer to the original attributes (e.g. "foo =
   # ... pkgs.foo ...").
-  pkgs = pkgsWithPackages defaultPackages;
+  pkgs = lib.fix' (unfixPkgsWithPackages defaultPackages);
 
-  pkgsWithPackages =
-    pkgsWithOverridesWithPackages (self: config.packageOverrides or (super: {}));
+  unfixPkgsWithPackages =
+    unfixPkgsWithOverridesWithPackages (self: config.packageOverrides or (super: {}));
 
   # Return the complete set of packages, after applying the overrides
   # returned by the `overrider' function (see above).  Warning: this
   # function is very expensive!
-  pkgsWithOverridesWithPackages = overrider: packages:
+  unfixPkgsWithOverridesWithPackages = overrider: packages:
     let
       stdenvAdapters = self: super:
         let res = packages.adapters self; in res // {
@@ -129,7 +129,7 @@ let
 
       allPackagesArgs = topLevelArguments // {
         pkgsWithOverrides = overrider:
-          pkgsWithOverridesWithPackages overrider defaultPackages;
+          lib.fix' (unfixPkgsWithOverridesWithPackages overrider defaultPackages);
       };
       allPackages = self: super:
         let res = packages.all allPackagesArgs res self;
@@ -151,14 +151,13 @@ let
       customOverrides = self: super:
         lib.optionalAttrs (bootStdenv == null) (overrider self super);
     in
-      lib.fix' (
-        lib.extends customOverrides (
-          lib.extends stdenvOverrides (
-            lib.extends aliases (
-              lib.extends allPackages (
-                lib.extends stdenvDefault (
-                  lib.extends trivialBuilders (
-                    lib.extends stdenvAdapters (
-                      self: {}))))))));
+      lib.extends customOverrides (
+        lib.extends stdenvOverrides (
+          lib.extends aliases (
+            lib.extends allPackages (
+              lib.extends stdenvDefault (
+                lib.extends trivialBuilders (
+                  lib.extends stdenvAdapters (
+                    self: {})))))));
 in
   pkgs
