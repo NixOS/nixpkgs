@@ -11818,6 +11818,8 @@ in
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
+  dvdbackup = callPackage ../applications/video/dvdbackup { };
+
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
   dwb-unwrapped = callPackage ../applications/networking/browsers/dwb { dconf = gnome3.dconf; };
