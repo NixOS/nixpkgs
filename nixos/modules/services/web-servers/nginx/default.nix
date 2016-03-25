@@ -117,19 +117,31 @@ let
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
 
-          ${genLocations vhost.locations}
+          ${optionalString (vhost.basicAuth != {}) (mkBasicAuth serverName vhost.basicAuth)}
+
+          ${mkLocations vhost.locations}
 
           ${vhost.extraConfig}
         }
       ''
   ) virtualHosts);
-  genLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
+  mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
       ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${config.extraConfig}
     }
   '') locations);
+  mkBasicAuth = serverName: authDef: let
+    htpasswdFile = pkgs.writeText "${serverName}.htpasswd" (
+      concatStringsSep "\n" (mapAttrsToList (user: password: ''
+        ${user}:{PLAIN}${password}
+      '') authDef)
+    );
+  in ''
+    auth_basic secured;
+    auth_basic_user_file ${htpasswdFile};
+  '';
 in
 
 {
