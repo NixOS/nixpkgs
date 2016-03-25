@@ -81,8 +81,10 @@ let
           location /.well-known/acme-challenge {
             try_files $uri @acme-fallback;
             root ${vhost.acmeRoot};
+            auth_basic off;
           }
           location @acme-fallback {
+            auth_basic off;
             proxy_pass http://${vhost.acmeFallbackHost};
           }
         '';
