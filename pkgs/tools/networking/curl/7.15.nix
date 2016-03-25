@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "061bgjm6rv0l9804vmm4jvr023l52qvmy9qq4zjv4lgqhlljvhz3";
   };
 
-  patches = [ ./disable-ca-install.patch ];
+  patches = [ ./disable-ca-install.patch ./no-sslv2.patch ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

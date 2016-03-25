@@ -1,0 +1,20 @@
+diff -ruN a/lib/ssluse.c b/lib/ssluse.c
+--- a/lib/ssluse.c	2005-08-11 00:57:27.000000000 +0200
++++ b/lib/ssluse.c	2016-03-25 13:10:55.637094954 +0100
+@@ -1139,13 +1139,14 @@
+   default:
+   case CURL_SSLVERSION_DEFAULT:
+     /* we try to figure out version */
+-    req_method = SSLv23_client_method();
++    req_method = TLSv1_client_method();
+     break;
+   case CURL_SSLVERSION_TLSv1:
+     req_method = TLSv1_client_method();
+     break;
+   case CURL_SSLVERSION_SSLv2:
+-    req_method = SSLv2_client_method();
++    failf(data, "OpenSSL was built without SSLv2 support");
++    return CURLE_SSL_CONNECT_ERROR;
+     break;
+   case CURL_SSLVERSION_SSLv3:
+     req_method = SSLv3_client_method();
