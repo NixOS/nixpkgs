@@ -23,6 +23,8 @@ import ./make-test.nix ({ pkgs, ...} : {
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
+      users.users.sybil = { isNormalUser = true; group = "wheel"; };
+      security.sudo = { enable = true; wheelNeedsPassword = false; };
     };
 
   testScript =
@@ -109,6 +111,11 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       subtest "nix-db", sub {
           $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
+      };
+
+      # Test sudo
+      subtest "sudo", sub {
+          $machine->succeed("su - sybil -c 'sudo true'");
       };
     '';
 })
