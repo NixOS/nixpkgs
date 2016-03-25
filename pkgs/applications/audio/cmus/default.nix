@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, pkgconfig
+{ stdenv, fetchFromGitHub, ncurses, pkgconfig, gcc
 
 , alsaSupport ? stdenv.isLinux, alsaLib ? null
 # simple fallback for everyone else
@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  buildInputs = [ ncurses pkgconfig ] ++ concatMap (a: a.deps) opts;
+  buildInputs = [ ncurses pkgconfig gcc ] ++ concatMap (a: a.deps) opts;
 
   meta = {
     description = "Small, fast and powerful console music player for Linux and *BSD";
