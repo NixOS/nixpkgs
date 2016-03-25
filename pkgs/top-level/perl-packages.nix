@@ -816,14 +816,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystActionREST = buildPerlPackage rec {
-    name = "Catalyst-Action-REST-1.19";
+    name = "Catalyst-Action-REST-1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
-      sha256 = "0qiw6b932a73prrg8vw9brpdvjqm37c6wmbliyxvmz0kij6pi2qd";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Action-REST-1.20.tar.gz;
+      sha256 = "c0470541ec0016b837db3186ed77915813c8b856b941db89b86db8602e31ead6";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ CatalystRuntime ClassInspector LWP MROCompat
-      ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
+    propagatedBuildInputs = [ CatalystRuntime ClassInspector JSONMaybeXS MROCompat ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
     meta = {
       description = "Automated REST Method Dispatching";
       license = "perl";
