@@ -2,7 +2,7 @@
 
 let
   major = "5.2";
-  minor = "2";
+  minor = "4";
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgda/${major}/${name}.tar.xz";
-    sha256 = "c9b8b1c32f1011e47b73c5dcf36649aaef2f1edaa5f5d75be20d9caadc2bc3e4";
+    sha256 = "0pkn9dlb53j73ajkhj8lkf5pa26ci1gwl0bcvxdsmjrwb3fkivic";
   };
 
   configureFlags = [
