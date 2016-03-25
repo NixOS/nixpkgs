@@ -6,6 +6,35 @@ let
 
   cfg = config.services.rspamd;
 
+  mkBindSockets = socks: concatStringsSep "\n" (map (each: "  bind_socket = \"${each}\"") socks);
+
+  rspamdConf =
+    ''
+      .include "$CONFDIR/common.conf"
+
+      options {
+        pidfile = "$RUNDIR/rspamd.pid";
+        .include "$CONFDIR/options.inc"
+      }
+
+      logging {
+        type = "file";
+        filename = "$LOGDIR/rspamd.log";
+        .include "$CONFDIR/logging.inc"
+      }
+
+      worker {
+      ${mkBindSockets cfg.bindSocket}
+        .include "$CONFDIR/worker-normal.inc"
+      }
+
+      worker {
+      ${mkBindSockets cfg.bindUISocket}
+        .include "$CONFDIR/worker-controller.inc"
+      }
+   '';
+   rspamdConfFile = pkgs.writeText "rspamd.conf" rspamdConf;
+
 in
 
 {
@@ -24,6 +53,32 @@ in
       debug = mkOption {
         default = false;
         description = "Whether to run the rspamd daemon in debug mode.";
+      };
+
+      bindSocket = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "/run/rspamd.sock mode=0666 owner=${cfg.user}"
+        ];
+        description = ''
+          List of sockets to listen, in format acceptable by rspamd
+        '';
+        example = ''
+          bindSocket = [
+            "/run/rspamd.sock mode=0666 owner=rspamd"
+            "*:11333"
+          ];
+        '';
+      };
+
+      bindUISocket = mkOption {
+        type = types.listOf types.str;
+        default = [
+          "localhost:11334"
+        ];
+        description = ''
+          List of sockets for web interface, in format acceptable by rspamd
+        '';
       };
 
       user = mkOption {
@@ -62,7 +117,7 @@ in
 
     users.extraGroups = singleton {
       name = cfg.group;
-      gid = config.ids.gids.spamd;
+      gid = config.ids.gids.rspamd;
     };
 
     systemd.services.rspamd = {
@@ -72,7 +127,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -f";
+        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c ${rspamdConfFile} -f";
         RuntimeDirectory = "/var/lib/rspamd";
         PermissionsStartOnly = true;
         Restart = "always";
