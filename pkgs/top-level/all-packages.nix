@@ -10295,7 +10295,7 @@ let
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10304,7 +10304,7 @@ let
   };
 
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression link_lguest ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
