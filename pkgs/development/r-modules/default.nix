@@ -698,6 +698,337 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "RareVariantVis" # broken build
+    "ptw" # depends on broken package nloptr
+    "INSPEcT" # broken build
+    "gpuR" # broken build
+    "erma" # broken build
+    "CNVPanelizer" # broken build
+    "MBmca" # depends on broken package chipPCR
+    "dpcR" # depends on broken package chipPCR
+    "chipPCR" # broken build
+    "alsace" # broken build
+    "rrlda" # depends on broken package VIM
+    "qrfactor" # depends on broken package VIM
+    "MVN" # depends on broken package VIM
+    "mvoutlier" # depends on broken package VIM
+    "robCompositions" # depends on broken package VIM
+    "DiagrammeRsvg" # depends on broken package V8
+    "dagitty" # depends on broken package V8
+    "remoter" # depends on broken package sodium
+    "Fletcher2013b" # depends on broken package RTN
+    "apaStyle" # depends on broken package ReporteRs
+    "categoryCompare" # depends on broken package RCytoscape
+    "preseqR" # depends on broken package polynom
+    "permutations" # depends on broken package partitions
+    "yummlyr" # depends on broken package openssl
+    "yhatr" # depends on broken package openssl
+    "WufooR" # depends on broken package openssl
+    "WikiSocio" # depends on broken package openssl
+    "WikipediR" # depends on broken package openssl
+    "WikipediaR" # depends on broken package openssl
+    "WikidataR" # depends on broken package openssl
+    "whoapi" # depends on broken package openssl
+    "whoami" # depends on broken package openssl
+    "WHO" # depends on broken package openssl
+    "WaterML" # depends on broken package openssl
+    "vegdata" # depends on broken package openssl
+    "twitteR" # depends on broken package openssl
+    "tumblR" # depends on broken package openssl
+    "tuber" # depends on broken package openssl
+    "translateR" # depends on broken package openssl
+    "transcribeR" # depends on broken package openssl
+    "TMDb" # depends on broken package openssl
+    "tigris" # depends on broken package openssl
+    "threewords" # depends on broken package openssl
+    "SWMPr" # depends on broken package openssl
+    "swirlify" # depends on broken package openssl
+    "swirl" # depends on broken package openssl
+    "stplanr" # depends on broken package openssl
+    "stmBrowser" # depends on broken package openssl
+    "spareserver" # depends on broken package openssl
+    "solrium" # depends on broken package openssl
+    "solr" # depends on broken package openssl
+    "SocialMediaMineR" # depends on broken package openssl
+    "PogromcyDanych" # depends on broken package openssl
+    "SmarterPoland" # depends on broken package openssl
+    "slackr" # depends on broken package openssl
+    "sbgr" # depends on broken package openssl
+    "RYandexTranslate" # depends on broken package openssl
+    "rwunderground" # depends on broken package openssl
+    "rWBclimate" # depends on broken package openssl
+    "wikipediatrend" # depends on broken package openssl
+    "webchem" # depends on broken package openssl
+    "sejmRP" # depends on broken package openssl
+    "scholar" # depends on broken package openssl
+    "RTCGA_rnaseq" # depends on broken package openssl
+    "RTCGA_mutations" # depends on broken package openssl
+    "RTCGA_clinical" # depends on broken package openssl
+    "RTCGA" # depends on broken package openssl
+    "rNOMADS" # depends on broken package openssl
+    "nhanesA" # depends on broken package openssl
+    "MazamaSpatialUtils" # depends on broken package openssl
+    "gsheet" # depends on broken package openssl
+    "rvest" # depends on broken package openssl
+    "rvertnet" # depends on broken package openssl
+    "rusda" # depends on broken package openssl
+    "rtimes" # depends on broken package openssl
+    "rsunlight" # depends on broken package openssl
+    "rstatscn" # depends on broken package openssl
+    "RSocrata" # depends on broken package openssl
+    "rsnps" # depends on broken package openssl
+    "RSiteCatalyst" # depends on broken package openssl
+    "rscopus" # depends on broken package openssl
+    "rredlist" # depends on broken package openssl
+    "RPublica" # depends on broken package openssl
+    "RPresto" # depends on broken package openssl
+    "rplos" # depends on broken package openssl
+    "rotl" # depends on broken package openssl
+    "rorcid" # depends on broken package openssl
+    "ROptimizely" # depends on broken package openssl
+    "ROpenWeatherMap" # depends on broken package openssl
+    "robotstxt" # depends on broken package openssl
+    "rnoaa" # depends on broken package openssl
+    "RNeo4j" # depends on broken package openssl
+    "rnbn" # depends on broken package openssl
+    "Rmonkey" # depends on broken package openssl
+    "Rlinkedin" # depends on broken package openssl
+    "rinat" # depends on broken package openssl
+    "ridigbio" # depends on broken package openssl
+    "rHealthDataGov" # depends on broken package openssl
+    "RGoogleAnalyticsPremium" # depends on broken package openssl
+    "RGoogleAnalytics" # depends on broken package openssl
+    "heemod" # depends on broken package openssl
+    "rgho" # depends on broken package openssl
+    "rgeolocate" # depends on broken package openssl
+    "RGA" # depends on broken package openssl
+    "RForcecom" # depends on broken package openssl
+    "rfoaas" # depends on broken package openssl
+    "rfml" # depends on broken package openssl
+    "rfisheries" # depends on broken package openssl
+    "rfishbase" # depends on broken package openssl
+    "zoon" # depends on broken package openssl
+    "rfigshare" # depends on broken package openssl
+    "Rfacebook" # depends on broken package openssl
+    "rerddap" # depends on broken package openssl
+    "request" # depends on broken package openssl
+    "repmis" # depends on broken package openssl
+    "rentrez" # depends on broken package openssl
+    "REDCapR" # depends on broken package openssl
+    "redcapAPI" # depends on broken package openssl
+    "rechonest" # depends on broken package openssl
+    "rebird" # depends on broken package openssl
+    "rdrop2" # depends on broken package openssl
+    "rdian" # depends on broken package openssl
+    "RCy3" # depends on broken package openssl
+    "rcrossref" # depends on broken package openssl
+    "RCriteo" # depends on broken package openssl
+    "Rcolombos" # depends on broken package openssl
+    "rclinicaltrials" # depends on broken package openssl
+    "rbison" # depends on broken package openssl
+    "rbhl" # depends on broken package openssl
+    "randNames" # depends on broken package openssl
+    "quickmapr" # depends on broken package openssl
+    "qrmtools" # depends on broken package openssl
+    "Quandl" # depends on broken package openssl
+    "pxweb" # depends on broken package openssl
+    "pvsR" # depends on broken package openssl
+    "pushoverr" # depends on broken package openssl
+    "PSICQUIC" # depends on broken package openssl
+    "prism" # depends on broken package openssl
+    "primerTree" # depends on broken package openssl
+    "pollstR" # depends on broken package openssl
+    "plotly" # depends on broken package openssl
+    "pinnacle_API" # depends on broken package openssl
+    "pdftables" # depends on broken package openssl
+    "pdfetch" # depends on broken package openssl
+    "paxtoolsr" # depends on broken package openssl
+    "pageviews" # depends on broken package openssl
+    "packagetrackr" # depends on broken package openssl
+    "ores" # depends on broken package openssl
+    "OECD" # depends on broken package openssl
+    "rdryad" # depends on broken package openssl
+    "rdatacite" # depends on broken package openssl
+    "pangaear" # depends on broken package openssl
+    "oai" # depends on broken package openssl
+    "neotoma" # depends on broken package openssl
+    "myvariant" # depends on broken package openssl
+    "mygene" # depends on broken package openssl
+    "EMbC" # depends on broken package openssl
+    "move" # depends on broken package openssl
+    "miRLAB" # depends on broken package openssl
+    "AzureML" # depends on broken package openssl
+    "miniCRAN" # depends on broken package openssl
+    "markmyassignment" # depends on broken package openssl
+    "manifestoR" # depends on broken package openssl
+    "TLdating" # depends on broken package openssl
+    "RLumShiny" # depends on broken package openssl
+    "Luminescence" # depends on broken package openssl
+    "lumendb" # depends on broken package openssl
+    "lucr" # depends on broken package openssl
+    "longurl" # depends on broken package openssl
+    "lintr" # depends on broken package openssl
+    "LightningR" # depends on broken package openssl
+    "interAdapt" # depends on broken package openssl
+    "knitcitations" # depends on broken package openssl
+    "ROntoTools" # depends on broken package openssl
+    "RnaSeqSampleSize" # depends on broken package openssl
+    "CompGO" # depends on broken package openssl
+    "pathview" # depends on broken package openssl
+    "PAPi" # depends on broken package openssl
+    "mmnet" # depends on broken package openssl
+    "KEGGprofile" # depends on broken package openssl
+    "Hiiragi2013" # depends on broken package openssl
+    "gage" # depends on broken package openssl
+    "clusterProfiler" # depends on broken package openssl
+    "KEGGREST" # depends on broken package openssl
+    "internetarchive" # depends on broken package openssl
+    "SocialMediaLab" # depends on broken package openssl
+    "instaR" # depends on broken package openssl
+    "imguR" # depends on broken package openssl
+    "idbr" # depends on broken package openssl
+    "httping" # depends on broken package openssl
+    "httpcache" # depends on broken package openssl
+    "htmltab" # depends on broken package openssl
+    "hoardeR" # depends on broken package openssl
+    "googlesheets" # depends on broken package openssl
+    "GoogleGenomics" # depends on broken package openssl
+    "googleformr" # depends on broken package openssl
+    "searchConsoleR" # depends on broken package openssl
+    "googleAuthR" # depends on broken package openssl
+    "gmailr" # depends on broken package openssl
+    "gitlabr" # depends on broken package openssl
+    "switchrGist" # depends on broken package openssl
+    "spoccutils" # depends on broken package openssl
+    "rbokeh" # depends on broken package openssl
+    "mapr" # depends on broken package openssl
+    "gistr" # depends on broken package openssl
+    "geoknife" # depends on broken package openssl
+    "geocodeHERE" # depends on broken package openssl
+    "genderizeR" # depends on broken package openssl
+    "NLPutils" # depends on broken package openssl
+    "qdap" # depends on broken package openssl
+    "gender" # depends on broken package openssl
+    "GAR" # depends on broken package openssl
+    "flora" # depends on broken package openssl
+    "fitbitScraper" # depends on broken package openssl
+    "federalregister" # depends on broken package openssl
+    "eurostat" # depends on broken package openssl
+    "enigma" # depends on broken package openssl
+    "elastic" # depends on broken package openssl
+    "ecoengine" # depends on broken package openssl
+    "ecb" # depends on broken package openssl
+    "dpmr" # depends on broken package openssl
+    "distcomp" # depends on broken package openssl
+    "diezeit" # depends on broken package openssl
+    "wru" # depends on broken package openssl
+    "TCGAbiolinks" # depends on broken package openssl
+    "regionReport" # depends on broken package openssl
+    "rbundler" # depends on broken package openssl
+    "pacman" # depends on broken package openssl
+    "x_ent" # depends on broken package openssl
+    "opencpu" # depends on broken package openssl
+    "inpdfr" # depends on broken package openssl
+    "metacom" # depends on broken package openssl
+    "FedData" # depends on broken package openssl
+    "easypackages" # depends on broken package openssl
+    "demi" # depends on broken package openssl
+    "creditr" # depends on broken package openssl
+    "cogena" # depends on broken package openssl
+    "bisectr" # depends on broken package openssl
+    "devtools" # depends on broken package openssl
+    "ddeploy" # depends on broken package openssl
+    "EGRETci" # depends on broken package openssl
+    "EGRET" # depends on broken package openssl
+    "dataRetrieval" # depends on broken package openssl
+    "dataonderivatives" # depends on broken package openssl
+    "crunch" # depends on broken package openssl
+    "cranlogs" # depends on broken package openssl
+    "covr" # depends on broken package openssl
+    "couchDB" # depends on broken package openssl
+    "ckanr" # depends on broken package openssl
+    "chromer" # depends on broken package openssl
+    "chillR" # depends on broken package openssl
+    "censusr" # depends on broken package openssl
+    "cdcfluview" # depends on broken package openssl
+    "boxr" # depends on broken package openssl
+    "traits" # depends on broken package openssl
+    "TR8" # depends on broken package openssl
+    "SigTree" # depends on broken package openssl
+    "phyext2" # depends on broken package openssl
+    "PCPS" # depends on broken package openssl
+    "BMhyd" # depends on broken package openssl
+    "BioGeoBEARS" # depends on broken package openssl
+    "treescape" # depends on broken package openssl
+    "phylosignal" # depends on broken package openssl
+    "adephylo" # depends on broken package openssl
+    "phylobase" # depends on broken package openssl
+    "RNeXML" # depends on broken package openssl
+    "myTAI" # depends on broken package openssl
+    "MonoPhy" # depends on broken package openssl
+    "brranching" # depends on broken package openssl
+    "bdvis" # depends on broken package openssl
+    "taxize" # depends on broken package openssl
+    "bold" # depends on broken package openssl
+    "biomartr" # depends on broken package openssl
+    "BiocCheck" # depends on broken package openssl
+    "bigrquery" # depends on broken package openssl
+    "benchmarkme" # depends on broken package openssl
+    "atsd" # depends on broken package openssl
+    "fulltext" # depends on broken package openssl
+    "aRxiv" # depends on broken package openssl
+    "SpaDES" # depends on broken package openssl
+    "archivist_github" # depends on broken package openssl
+    "archivist" # depends on broken package openssl
+    "AntWeb" # depends on broken package openssl
+    "RefNet" # depends on broken package openssl
+    "pwOmics" # depends on broken package openssl
+    "grasp2db" # depends on broken package openssl
+    "EnsDb_Rnorvegicus_v79" # depends on broken package openssl
+    "EnsDb_Rnorvegicus_v75" # depends on broken package openssl
+    "EnsDb_Mmusculus_v79" # depends on broken package openssl
+    "EnsDb_Mmusculus_v75" # depends on broken package openssl
+    "EnsDb_Hsapiens_v79" # depends on broken package openssl
+    "EnsDb_Hsapiens_v75" # depends on broken package openssl
+    "REDseq" # depends on broken package openssl
+    "GUIDEseq" # depends on broken package openssl
+    "ggtut" # depends on broken package openssl
+    "FunciSNP" # depends on broken package openssl
+    "ChIPpeakAnno" # depends on broken package openssl
+    "ensembldb" # depends on broken package openssl
+    "ProteomicsAnnotationHubData" # depends on broken package openssl
+    "AnnotationHubData" # depends on broken package openssl
+    "AnnotationHub" # depends on broken package openssl
+    "analogsea" # depends on broken package openssl
+    "alm" # depends on broken package openssl
+    "abbyyR" # depends on broken package openssl
+    "httr" # depends on broken package openssl
+    "bcrypt" # depends on broken package openssl
+    "GLMMRR" # depends on broken package lme4
+    "replicationInterval" # depends on broken package lme4
+    "GWASdata" # depends on broken package GWASTools
+    "vtpnet" # depends on broken package gQTLBase
+    "geuvStore" # depends on broken package gQTLBase
+    "LLSR" # depends on broken package ggtern
+    "ggtern" # broken build
+    "EnsemblePCReg" # depends on broken package EnsembleBase
+    "EnsembleCV" # depends on broken package EnsembleBase
+    "popprxl" # depends on broken package poppr
+    "cpgen" # depends on broken package pedigreemm
+    "mitml" # depends on broken package jomo
+    "gwascat" # depends on broken package gQTLBase
+    "gQTLstats" # depends on broken package gQTLBase
+    "gQTLBase" # broken build
+    "IlluminaHumanMethylation450k_db" # broken build
+    "gahgu95ecdf" # broken build
+    "gahgu95dcdf" # broken build
+    "gahgu95ccdf" # broken build
+    "gahgu95bcdf" # broken build
+    "gahgu95av2cdf" # broken build
+    "PREDAsampledata" # depends on broken package gahgu133plus2cdf
+    "gahgu133plus2cdf" # broken build
+    "gahgu133bcdf" # broken build
+    "gahgu133acdf" # broken build
     "annmap" # depends on broken package RMySQL
     "choroplethr" # depends on broken package acs
     "acs" # broken build
@@ -956,7 +1287,6 @@ let
     "genridge" # depends on broken package nlopt
     "geojsonio" # depends on broken package V8
     "GEWIST" # depends on broken package nlopt
-    "ggtern" # build is broken
     "ggtree" # broken build
     "gimme" # depends on broken package nlopt
     "gmatrix" # depends on broken package cudatoolkit
@@ -971,7 +1301,6 @@ let
     "gplm" # depends on broken package nlopt
     "gpuR" # depends on GPU-specific header files
     "gputools" # depends on broken package cudatoolkit
-    "gQTLBase" # depends on broken package GenomicFiles
     "granova" # depends on broken package nlopt
     "graphicalVAR" # depends on broken package nlopt
     "GraphPAC" # broken build
@@ -1151,7 +1480,6 @@ let
     "parma" # depends on broken package nlopt
     "partitions" # broken build
     "pathRender" # build is broken
-    "pathview" # build is broken
     "PatternClass" # build is broken
     "PBImisc" # depends on broken package nlopt
     "PBSddesolve" # build is broken
