@@ -75,12 +75,12 @@ in
 
       bindUnixSockets =  mkOption {
         type = types.listOf types.str;
-        default = ["/run/rmilter/rmilter.sock"];
+        default = ["/run/rmilter.sock"];
         description = ''
           Unix domain sockets to listen for MTA requests.
         '';
         example = ''
-            [ "/run/rmilter/rmilter.sock"] 
+            [ "/run/rmilter.sock"]
         '';
       };
 
@@ -114,7 +114,7 @@ in
 
         servers = mkOption {
           type = types.listOf types.str;
-          default = ["r:/run/rspamd/rspamd.sock"];
+          default = ["r:/run/rspamd.sock"];
           description = ''
             Spamd socket definitions.
             Is server name is prefixed with r: it is rspamd server.
@@ -214,13 +214,13 @@ milter_default_action = accept
       socketConfig = {
           ListenStream = cfg.bindUnixSockets ++ cfg.bindInetSockets;
           SocketUser = cfg.user;
-          SocketGroup = config.ids.gids.adm;
+          SocketGroup = cfg.group;
           SocketMode = "0660";
       };
     };
 
     services.postfix.extraConfig = optionalString cfg.postfix.enable cfg.postfix.configFragment;
-
+    users.users.postfix.extraGroups = [ cfg.group ];
   };
 
 }
