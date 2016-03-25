@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake, python, doxygen, lzma, boost}:
 
 stdenv.mkDerivation rec {
-  name = "innoextract-1.5";
+  name = "innoextract-1.6";
 
   src = fetchurl {
     url = "http://constexpr.org/innoextract/files/${name}.tar.gz";
-    sha256 = "1ks8z8glak63xvqlv7dnmlzkjrwsn81lhybmai2mja6g5jclwngj";
+    sha256 = "0gh3q643l8qlwla030cmf3qdcdr85ixjygkb7j4dbm7zbwa3yik6";
   };
 
   buildInputs = [ python doxygen lzma boost ];
