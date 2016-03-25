@@ -1809,6 +1809,26 @@ in modules // {
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
   };
 
+  cached-property = buildPythonPackage rec {
+    version = "1.3.0";
+    name = "cached-property-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cached-property/${name}.tar.gz";
+      sha256 = "10dwi3s6f154ag9dvqy5jiwp31fs57lbxjcjgn4cwvi8qyqpi3j5";
+    };
+
+    buildInputs = with self; [ freezegun ];
+
+    meta = {
+      description = "A decorator for caching properties in classes";
+      homepage = https://github.com/pydanny/cached-property;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ ericsagnes ];
+    };
+  };
+
   cgroup-utils = buildPythonPackage rec {
     version = "0.6";
     name = "cgroup-utils-${version}";
