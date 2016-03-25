@@ -636,11 +636,16 @@ in
     environment.systemPackages = [ systemd ];
 
     environment.etc = let
-      generators = (fold (p: attrs: let path = "${p}/lib/systemd/system-generators";
-                                    in attrs // (mapAttrs' (name: _: nameValuePair name "${path}/${toString name}")
-                                                           (builtins.readDir "${path}")))
-                         cfg.generators
-                         cfg.generator-packages);
+      # generate contents for /etc/systemd/system-generators from
+      # systemd.generators and systemd.generator-packages
+      generators = pkgs.runCommand "system-generators" { packages = cfg.generator-packages; } ''
+        mkdir -p $out
+        for package in $packages
+        do
+          ln -s $package/lib/systemd/system-generators/* $out/
+        done;
+        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+      '';
     in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
 
@@ -680,7 +685,9 @@ in
 
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
-    } // mapAttrs' (n: v: nameValuePair "systemd/system-generators/${n}" {"source"=v;}) generators);
+
+      "systemd/system-generators" = { source = generators; };
+    });
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''
