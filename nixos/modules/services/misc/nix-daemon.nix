@@ -39,7 +39,7 @@ let
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
         build-cores = ${toString (cfg.buildCores)}
-        build-use-chroot = ${if cfg.useChroot then "true" else "false"}
+        build-use-chroot = ${if (builtins.isBool cfg.useChroot) then (if cfg.useChroot then "true" else "false") else cfg.useChroot}
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
@@ -99,7 +99,7 @@ in
       };
 
       useChroot = mkOption {
-        type = types.bool;
+        type = types.either types.bool (types.enum ["relaxed"]);
         default = false;
         description = "
           If set, Nix will perform builds in a chroot-environment that it
