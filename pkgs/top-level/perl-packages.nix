@@ -2855,6 +2855,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DataUniqid = buildPerlPackage rec {
+    name = "Data-Uniqid-0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MW/MWX/${name}.tar.gz";
+      sha256 = "b6919ba49b9fe98bfdf3e8accae7b9b7f78dc9e71ebbd0b7fef7a45d99324ccb";
+    };
+  };
+
   DataUUID = buildPerlPackage rec {
     name = "Data-UUID-1.220";
     src = fetchurl {
@@ -6488,6 +6496,21 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Helper module in using JSON::PP in Perl 5.6";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+ JSONWebToken = buildPerlModule rec {
+    name = "JSON-WebToken-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAICRON/${name}.tar.gz";
+      sha256 = "77c182a98528f1714d82afc548d5b3b4dc93e67069128bb9b9413f24cf07248b";
+    };
+    buildInputs = [ TestMockGuard TestRequires ];
+    propagatedBuildInputs = [ JSON ];
+    meta = {
+      homepage = https://github.com/xaicron/p5-JSON-WebToken;
+      description = "JSON Web Token (JWT) implementation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -11797,6 +11820,20 @@ let self = _self // overrides; _self = with self; {
       license = licenses.lgpl2Plus;
       maintainers = with maintainers; [ ocharles ];
       platforms   = platforms.unix;
+    };
+  };
+
+  TestMockGuard = buildPerlModule rec {
+    name = "Test-Mock-Guard-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAICRON/${name}.tar.gz";
+      sha256 = "7f228a63f8d6ceb92aa784080a13e85073121b2835eca06d794f9709950dbd3d";
+    };
+    propagatedBuildInputs = [ ClassLoad ];
+    meta = {
+      homepage = https://github.com/zigorou/p5-test-mock-guard;
+      description = "Simple mock test library using RAII";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
