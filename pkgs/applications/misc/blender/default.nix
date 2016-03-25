@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.goibhniu ];
   };
 }
