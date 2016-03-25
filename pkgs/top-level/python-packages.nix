@@ -16802,7 +16802,7 @@ in modules // {
       downloadPage = https://github.com/progrium/pyjwt/releases;
       license = licenses.mit;
       maintainers = with maintainers; [ prikhi ];
-      platforms = platforms.linux;
+      platforms = platforms.unix;
     };
   };
 
