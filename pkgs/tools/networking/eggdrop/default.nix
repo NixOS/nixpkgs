@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ tcl ];
 
+  patches = [
+    # https://github.com/eggheads/eggdrop/issues/123
+    ./b34a33255f56bbd2317c26da12d702796d67ed50.patch
+  ];
+
   preConfigure = ''
     prefix=$out/eggdrop
     mkdir -p $prefix
