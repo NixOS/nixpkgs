@@ -110,7 +110,7 @@ let
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 https://${vhost.globalRedirect}$request_uri;
+            return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
           ''}
           ${optionalString ssl ''
             ssl_certificate ${vhost.sslCertificate};
