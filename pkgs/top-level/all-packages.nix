@@ -2426,6 +2426,8 @@ let
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+
   nc6 = callPackage ../tools/networking/nc6 { };
 
   ncat = callPackage ../tools/networking/ncat { };
