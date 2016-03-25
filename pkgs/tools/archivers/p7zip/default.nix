@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 let
-  version = "9.38";
+  version = "15.14.1";
 in
 stdenv.mkDerivation rec {
   name = "p7zip-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/p7zip/p7zip_${version}_src_all.tar.bz2";
-    sha256 = "0mxribb9a3lz3bifz6002hg7vyy8h9piinypian533hw8qvswfx7";
+    sha256 = "1m15iwglyjpiw82m7dbpykz8s55imch34w20w09l34116vdb97b9";
   };
 
   preConfigure = ''
