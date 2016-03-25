@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, emscripten }:
 
-let version = "0.8.6"; in
+let version = "0.8.7"; in
 
 stdenv.mkDerivation {
   name = "jsonnet-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "1dkvm81gi1j02zs00mqshn9i71bcnqbxsm5hh3wwa2y0sffvgkwh";
+    sha256 = "0adg7ijz10mc4xs5lfrby5g9sx96icf6cg39hvkh4wqjl85c6i9g";
   };
 
   buildInputs = [ emscripten ];
