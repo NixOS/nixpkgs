@@ -176,9 +176,175 @@ let
   # compilation environment, then there is no need for making any patches.
   maybeApplyAbiCompatiblePatches = pkgs:
     if bootStdenv == null && quickfixPackages != null then
-      throw "NYI"
+      applyAbiCompatiblePatches pkgs
     else
       pkgs;
+
+  applyAbiCompatiblePatches = pkgs: with lib;
+    let
+      #  - pkgs: set of packages compiled by default with no quickfix
+      #          applied.
+      #
+      #  - onefix: set of packages compiled against `pkgs`, without doing a
+      #            fix point. This is used to recompiled packages which have
+      #            security fixes, without recompiling any of the packages
+      #            which are depending on them.
+      #
+      #  - recfix: set of packages compiled against the set of fixed
+      #            packages (`abifix`). This is used as a probe to see if
+      #            any of the dependencies got fixed or patched.
+      #
+      #  - abifix: set of fixed packaged, which are both fixed and patched.
+      #
+      onefix = unfixPkgsWithPackages quickfixPackages pkgs;
+      recfix = unfixPkgsWithPackages quickfixPackages abifix;
+      abifix = zipWithUpdatedPackages ["pkgs"] pkgs onefix recfix;
+
+      # Traverse all packages. For each package, take the quickfix version
+      # of the package, and patch it if any of its dependency is different
+      # than the one used for building it in `pkgs`.
+      zipWithUpdatedPackages = path: pkgs: onefix: recfix:
+        zipAttrsWith (name: values:
+          let pkgsName = concatStringsSep "." (path ++ [name]); in
+          # Somebody added / removed a package in quickfix?
+          assert builtins.length values == 3;
+          let p = elemAt values 0; o = elemAt values 1; r = elemAt values 2; in
+          if name == "pkgs" && path == ["pkgs"] then abifix
+          else if isAttrs p then assert isAttrs o && isAttrs r;
+            if isDerivation p then assert isDerivation o && isDerivation r;
+              addErrorContext "While evaluating package ${pkgsName}"
+                (patchUpdatedDependencies pkgsName p o r)
+            else
+              zipWithUpdatedPackages (path ++ [name]) p o r
+          else
+            o
+        ) [pkgs onefix recfix];
+
+      # For each package:
+      #
+      #  1. Take the onefix version of the package.
+      #
+      #  2. Rename it, such that we can safely patch any of the packages
+      #     which depend on this one.
+      #
+      #  3. Check if the arguments of the nix expression imported by
+      #     `callPackage` are different. if none, return the renamed
+      #     package.
+      #
+      #  4. Otherwise, replace hashes of the `onefix` package, by the hashes
+      #     of the `recfix` package.
+      #
+      patchUpdatedDependencies = name: pkg: onefix: recfix:
+        let
+          # Get build inputs added by the mkDerivation function.
+          getUnfilteredDepenencies = drv:
+            drv.nativeBuildInputs or [];
+
+          # Warn if the package does not provide any list of build inputs.
+          warnIfUnableToFindDeps = drv:
+            if drv ? nativeBuildInputs then true
+            else assert __trace "Security issue: Unable to locate buildInputs of `${name}`." true; true;
+
+          # Note, we need to check the drv.outPath to add some strictness
+          # such that we eliminate derivation which might assert when they
+          # are evaluated.
+          validDeps = drv:
+            let res = builtins.tryEval (isDerivation drv && isString drv.outPath); in
+            res.success && res.value;
+
+          # Get the list of dependencies added listed in build inputs,
+          # but filter out any input which cannot be properly evaluated
+          # to a derivation. The reason being that some arguments are
+          # ordinary values, and some arguments are packages specific to one
+          # architecture.
+          getDeps = drv:
+            filter validDeps (getUnfilteredDepenencies drv);
+
+          assertSameName = {old, new}@result:
+            assert (builtins.parseDrvName old.name).name == (builtins.parseDrvName new.name).name;
+            result;
+
+          differentDeps = {old, new}:
+            old != new;
+
+          # Zip build inputs from the old package with the build inputs of
+          # the new package definition.
+          zipBuildInputs =
+            zipListsWith (old: new: assertSameName { inherit old new; });
+
+          # Extract the list of dependency given as build inputs, and filter
+          # out identical packages.
+          buildInputsDiff = {old, new}:
+            let oldDeps = getDeps old; newDeps = getDeps new; in
+            # assert __trace "${name}.${toString old}: oldDeps: ${toString (map (drv: (builtins.parseDrvName drv).name) oldDeps)}" true;
+            # assert __trace "${name}.${toString new}: newDeps: ${toString (map (drv: (builtins.parseDrvName drv).name) newDeps)}" true;
+            assert (length oldDeps) == (length newDeps);
+            filter differentDeps (zipBuildInputs oldDeps newDeps);
+
+          # Derivation might be different because of the dependency of the
+          # fixed derivation is different. We have to recursively append all
+          # the differencies.
+          recursiveBuildInputsDiff = {old, new}@args:
+            let depDiffs = buildInputsDiff args; in
+            depDiffs ++ concatMap recursiveBuildInputsDiff depDiffs;
+
+          dependencyDifferencies =
+             flip map (recursiveBuildInputsDiff { old = onefix; new = recfix; }) ({old, new}: {
+               old = builtins.unsafeDiscardStringContext (toString old);
+               new = toString new;
+             });
+
+          # If the name of the onefix does not have the same
+          # length, use the old name instead. This might cause a
+          # problem if people do not use --leq while updating.
+          onefixRenamed =
+            if stringLength pkg.name == stringLength onefix.name
+            then onefix
+            else
+              overrideDerivation onefix (drv: {
+                name = pkg.name;
+              });
+
+           # Copy the function and meta information of the recfix stage to
+           # the final package, such that one can extend and mutate the
+           # package as if this abi compatible patches mechanism did not
+           # exists.
+           forwardDrvAttributes = drv: {}
+             // optionalAttrs (drv ? override) { inherit (drv) override; }
+             // optionalAttrs (drv ? overrideDerivation) { inherit (drv) overrideDerivation; }
+             // {
+               inherit (drv) builder args stdenv system userHook
+                 __ignoreNulls buildInputs propagatedBuildInputs
+                 nativeBuildInputs propagatedNativeBuildInputs;
+             };
+        in
+          if length dependencyDifferencies != 0 then
+            assert warnIfUnableToFindDeps onefix;
+
+            patchDependencies onefixRenamed dependencyDifferencies
+            // (forwardDrvAttributes recfix)
+          else
+            onefixRenamed;
+
+      # Create a derivation which is replace all the hashes of `pkgs`, by
+      # the fixed and patched versions of the `abifix` packages.
+      patchDependencies = drv: replaceList:
+        # The list is not bounded, thus to avoid having huge command lines,
+        # we create a file with all the renamed hashes.
+        let sedExpr = {old, new}: "s|${baseNameOf old}|${baseNameOf new}|g;\n"; in
+        let sedScript = pkgs.writeTextFile {
+            name = drv.name + "-patch";
+            text = concatStrings (map sedExpr replaceList);
+          };
+        in
+          pkgs.runCommand "${drv.name}" { nixStore = "${pkgs.nix}/bin/nix-store"; } ''
+            $nixStore --dump ${drv} | \
+              sed -e 's|${baseNameOf drv}|'$(basename $out)'|g' -f ${sedScript} | \
+              $nixStore --restore $out
+          '';
+
+    in
+      abifix;
 
 in
   maybeApplyAbiCompatiblePatches pkgs
