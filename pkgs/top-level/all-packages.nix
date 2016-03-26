@@ -1693,7 +1693,21 @@ let
     sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
 
     sdformat4 = callPackage ../development/libraries/sdformat { };
+
+    gazebo6 = callPackage ../applications/science/robotics/gazebo/6.nix { };
+
+    gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
+
+    gazebo7 = callPackage ../applications/science/robotics/gazebo { };
+  
+    gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
+
   };
+  
+  # at present, Gazebo 7.0.0 does not match Gazebo 6.5.1 for compatibility
+  gazebo = gazeboSimulator.gazebo6;
+
+  gazebo-headless = gazeboSimulator.gazebo6-headless;
 
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
