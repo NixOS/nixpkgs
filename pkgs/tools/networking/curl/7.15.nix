@@ -74,5 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "http://curl.haxx.se/";
     description = "A command line tool for transferring files with URL syntax";
     platforms = with stdenv.lib.platforms; allBut darwin;
+    broken = true;
   };
 }
