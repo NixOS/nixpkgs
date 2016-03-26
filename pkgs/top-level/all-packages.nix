@@ -915,6 +915,10 @@ in
 
   burp = callPackage ../tools/backup/burp { };
 
+  buku = callPackage ../applications/misc/buku {
+    pythonPackages = python3Packages;
+  };
+
   byzanz = callPackage ../applications/video/byzanz {};
 
   ori = callPackage ../tools/backup/ori { };
