@@ -1687,6 +1687,14 @@ let
 
   gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
 
+  gazeboSimulator = recurseIntoAttrs {
+    sdformat = gazeboSimulator.sdformat4;
+
+    sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
+
+    sdformat4 = callPackage ../development/libraries/sdformat { };
+  };
+
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
   };
