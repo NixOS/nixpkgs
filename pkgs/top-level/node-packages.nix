@@ -63,6 +63,12 @@ in rec {
         sha1 = "26220f7e43ee3c0d714860db61c4d0ecc9bb3d89";
       }} ../webdrvr/chromedriver_linux64.zip
     '';
+    bower2nix.buildInputs = [ pkgs.makeWrapper ];
+    bower2nix.postInstall = ''
+      for prog in bower2nix fetch-bower; do
+        wrapProgram "$out/bin/$prog" --prefix PATH : "${pkgs.git}/bin"
+      done
+    '';
   } // args.overrides or {};
 
   # Apply overrides and back compatiblity transformations

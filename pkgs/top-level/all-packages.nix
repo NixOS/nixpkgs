@@ -171,7 +171,7 @@ in
   };
 
   fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) fetch-bower;
+    inherit (nodePackages) bower2nix;
   };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
