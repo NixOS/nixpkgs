@@ -1,11 +1,13 @@
-{stdenv, fetchurl, cmake, luabind, libosmpbf, stxxl, tbb, boost, expat, protobuf, bzip2, zlib, substituteAll}:
+{stdenv, fetchFromGitHub, cmake, luabind, libosmpbf, stxxl, tbb, boost, expat, protobuf, bzip2, zlib, substituteAll}:
 
 stdenv.mkDerivation rec {
   name = "osrm-backend-4.5.0";
 
-  src = fetchurl {
-    url = "https://github.com/Project-OSRM/osrm-backend/archive/v4.5.0.tar.gz";
-    sha256 = "af61e883051f2ecb73520ace6f17cc6da30edc413208ff7cf3d87992eca0756c";
+  src = fetchFromGitHub {
+    rev = "v4.5.0";
+    owner  = "Project-OSRM";
+    repo   = "osrm-backend";
+    sha256 = "19a8d1llvsrysyk1q48dpmh75qcbibfjlszndrysk11yh62hdvsz";
   };
 
   patches = [
