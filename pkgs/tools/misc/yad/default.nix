@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
     "--enable-icon-browser"
   ];
 
+  # for gcc5: c11 inline semantics breaks the build
+  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+
   buildInputs = [ gtk2 ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
