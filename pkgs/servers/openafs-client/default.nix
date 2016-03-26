@@ -44,5 +44,9 @@ stdenv.mkDerivation rec {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.z77z ];
+    broken =
+      (builtins.compareVersions kernel.version  "3.18" == -1) ||
+      (builtins.compareVersions kernel.version "4.4" != -1) ||
+      (kernel.features.grsecurity or false);
   };
 }
