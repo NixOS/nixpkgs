@@ -11808,6 +11808,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestMockGuard = buildPerlModule rec {
+    name = "Test-Mock-Guard-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/X/XA/XAICRON/${name}.tar.gz";
+      sha256 = "7f228a63f8d6ceb92aa784080a13e85073121b2835eca06d794f9709950dbd3d";
+    };
+    propagatedBuildInputs = [ ClassLoad ];
+    meta = {
+      homepage = https://github.com/zigorou/p5-test-mock-guard;
+      description = "Simple mock test library using RAII";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestMockModule = buildPerlPackage {
     name = "Test-MockModule-0.05";
     src = fetchurl {
