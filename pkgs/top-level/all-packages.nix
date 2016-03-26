@@ -2386,6 +2386,8 @@ in
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
+
   nco = callPackage ../development/libraries/nco { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
