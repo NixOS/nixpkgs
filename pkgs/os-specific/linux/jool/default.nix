@@ -26,5 +26,7 @@ stdenv.mkDerivation {
     description = "Fairly compliant SIIT and Stateful NAT64 for Linux - kernel modules";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];
+    # kernel version 4.3 is the most recent supported version
+    broken = builtins.compareVersions kernel.version "4.3" == 1;
   };
 }
