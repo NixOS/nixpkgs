@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtmultimedia qtquick1 libqtelegram-aseman-edition ];
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   patchPhase = ''
     substituteInPlace telegramqml.pro --replace "/\$\$LIB_PATH" ""
@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
     version = "0.9.2";
     description = "Telegram API tools for QtQml and Qml";
     homepage = src.meta.homepage;
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.profpatsch ];
+    platforms = platforms.linux;
   };
 
 }

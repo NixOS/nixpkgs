@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     telegram-qml libqtelegram-aseman-edition 
     gst_plugins_base gst_plugins_good gst_plugins_bad gst_plugins_ugly ];
   nativeBuildInputs = [ makeQtWrapper ];
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   configurePhase = "qmake -r PREFIX=$out";
 
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "http://aseman.co/en/products/cutegram/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ profpatsch AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
 #TODO: appindicator, for system tray plugin (by @profpatsch)
