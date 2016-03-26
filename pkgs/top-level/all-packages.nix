@@ -1906,6 +1906,14 @@ in
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
+  ignition = recurseIntoAttrs { 
+
+    math = callPackage ../development/libraries/ignition-math { };
+  
+    math2 = ignition.math;
+  
+  };
+
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ihaskell ghcWithPackages;
 
