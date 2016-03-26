@@ -4932,11 +4932,11 @@ in modules // {
   };
 
   dockerpty = buildPythonPackage rec {
-    name = "dockerpty-0.3.4";
+    name = "dockerpty-0.4.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dockerpty/${name}.tar.gz";
-      sha256 = "a51044cc49089a2408fdf6769a63eebe0b16d91f34716ecee681984446ce467d";
+      sha256 = "1kjn64wx23jmr8dcc6g7bwlmrhfmxr77gh6iphqsl39sayfxdab9";
     };
 
     propagatedBuildInputs = with self; [ six ];
