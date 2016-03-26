@@ -8788,6 +8788,8 @@ in
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
+  tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
