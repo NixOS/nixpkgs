@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./4.5.0-openmp.patch
+    ./4.5.0-gcc-binutils.patch
     (substituteAll {
       src = ./4.5.0-default-profile-path.template.patch;
     })
