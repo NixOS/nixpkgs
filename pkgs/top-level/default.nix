@@ -45,6 +45,16 @@
   # to apply security fixes to a few packages which would be compiled, and
   # to patch any of their dependencies, to have a fast turn-around.
 , quickfixPackages ? null
+
+  # When a set of quickfix packages is defined, this flag is used to enable
+  # patching packages which are depending on the packages which are updated
+  # in the quickfix packages.
+  #
+  # This flag highly recommend to be `true` on a user/server system, while
+  # it is suggested to set it to `false` on buildfarms, as we do not want to
+  # distribute, and use space for all the variants of the patched packages,
+  # on the buildfarm servers.
+, doPatchWithDependencies ? true
 }:
 
 
@@ -344,7 +354,8 @@ let
           '';
 
     in
-      abifix;
+      if doPatchWithDependencies then abifix
+      else onefix;
 
 in
   maybeApplyAbiCompatiblePatches pkgs
