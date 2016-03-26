@@ -86,6 +86,8 @@ in
         ExecStartPre = ''
           ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir} && mkdir -p ${settingsDir} ${downloadDir} ${incompleteDir} && rm -f ${settingsDir}/settings.json &&   cp -f ${settingsFile} ${settingsDir}/settings.json"
         '';
+        # allow to bind on ports below 1024
+        AmbientCapabilities = "cap_net_bind_service";
         ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "transmission";
