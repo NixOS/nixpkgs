@@ -9150,6 +9150,10 @@ in
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
 
+  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
+
+  buildBowerComponents = callPackage ../development/bower-modules/generic { };
+
   ### DEVELOPMENT / GO MODULES
 
   go14Packages = callPackage ./go-packages.nix {
