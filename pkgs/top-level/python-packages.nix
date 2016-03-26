@@ -4912,11 +4912,12 @@ in modules // {
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-1.5.0";
+    name = "docker-py-${version}";
+    version = "1.7.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      sha256 = "1l7q0179y4lmv24z4q12653141wc1b1zzgbfw46yzbs6mj7i4939";
+      sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
     };
 
     propagatedBuildInputs = with self; [ six requests2 websocket_client ];
