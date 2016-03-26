@@ -305,7 +305,8 @@ in
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ])
+   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+     "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
   ];
 
 }
