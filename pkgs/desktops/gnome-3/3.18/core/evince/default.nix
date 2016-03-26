@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
       sed -i 's/\(if (++n_items == \)5\(.*\)/\1${builtins.toString recentListSize}\2/' shell/ev-window.c
     '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
+  '';
+
   doCheck = false; # would need pythonPackages.dogTail, which is missing
 
   meta = with stdenv.lib; {
