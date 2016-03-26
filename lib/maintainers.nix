@@ -339,6 +339,7 @@
   thall = "Niclas Thall <niclas.thall@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
+  therealpxc = "Patrick Callahan <pxcallahan@gmail.com>";
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
