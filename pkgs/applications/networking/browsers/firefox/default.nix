@@ -81,13 +81,9 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
-      if [ -e ../${pname}-${version} ]; then
-        configureScript=../${pname}-${version}/configure
-      else
-        configureScript=../mozilla-*/configure
-      fi
     '';
 
   preInstall =
