@@ -11479,7 +11479,11 @@ in
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux = callPackage ../applications/video/avidemux { };
+  avidemux_unwrapped = callPackage ../applications/video/avidemux { };
+
+  avidemux = callPackage ../applications/video/avidemux/wrapper.nix {
+    avidemux = avidemux_unwrapped;
+  };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;

@@ -1,0 +1,12 @@
+diff -ru3 avidemux_2.6.12.old/avidemux_core/ADM_core/src/ADM_fileio.cpp avidemux_2.6.12/avidemux_core/ADM_core/src/ADM_fileio.cpp
+--- avidemux_2.6.12.old/avidemux_core/ADM_core/src/ADM_fileio.cpp	2016-03-25 15:26:00.368213627 +0300
++++ avidemux_2.6.12/avidemux_core/ADM_core/src/ADM_fileio.cpp	2016-03-26 02:32:56.163550537 +0300
+@@ -393,7 +393,7 @@
+ 
+ 	return ADM_getRelativePath(buffer, base1, base2, base3);
+ #else
+-	return ADM_getRelativePath(ADM_INSTALL_DIR, base1, base2, base3);
++	return ADM_getRelativePath(getenv("ADM_ROOT_DIR"), base1, base2, base3);
+ #endif
+ }
+ 
