@@ -1,29 +1,7 @@
-/* (new) TeX Live user docs
-  - Basic usage: just pull texlive.combined.scheme-basic
-  for an environment with basic LaTeX support.
-  There are all the schemes as defined upstream (with tiny differences, perhaps).
-  - You can compose your own collection like this:
-    texlive.combine {
-      inherit (texlive) scheme-small collection-langkorean algorithms cm-super;
-    }
-  - By default you only get executables and files needed during runtime,
-  and a little documentation for the core packages.
-  To change that, you need to add `pkgFilter` function to `combine`.
-    texlive.combine {
-      # inherit (texlive) whatever-you-want;
-      pkgFilter = pkg:
-        pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "cm-super";
-     # elem tlType [ "run" "bin" "doc" "source" ]
-     # there are also other attributes: version, name
-    }
-  - Known bugs:
-    * some tools are still missing, e.g. luajittex
-    * some apps aren't packaged/tested yet (xdvi, asymptote, biber, etc.)
-    * feature/bug: when a package is rejected by pkgFilter,
-      its dependencies are still propagated
-    * in case of any bugs or feature requests, file a github issue and /cc @vcunat
+/* TeX Live user docs
+  - source: ../../../../../doc/languages-frameworks/texlive.xml
+  - current html: http://nixos.org/nixpkgs/manual/#sec-language-texlive
 */
-
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, perl, python, ruby
