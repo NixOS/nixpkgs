@@ -8839,14 +8839,13 @@ in modules // {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.5.2";
+    version = "1.6.2";
     name = "docker-compose-${version}";
     namePrefix = "";
-    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      sha256 = "79aa7e2e6ef9ab1936f8777476ffd4bb329875ec3d3664d239896d2f2a3c4f4f";
+      sha256 = "10i4032d99hm5nj1p74pcad9i3gz1h5x3096byklncgssfyjqki6";
     };
 
     # lots of networking and other fails
@@ -8854,8 +8853,9 @@ in modules // {
     buildInputs = with self; [ mock pytest nose ];
     propagatedBuildInputs = with self; [
       requests2 six pyyaml texttable docopt docker dockerpty websocket_client
-      enum34 jsonschema
+      enum34 jsonschema cached-property
     ];
+
     patchPhase = ''
       sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
     '';
