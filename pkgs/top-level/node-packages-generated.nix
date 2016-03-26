@@ -42014,8 +42014,6 @@
     os = [ ];
     cpu = [ ];
   };
-  by-spec."typescript"."*" =
-    self.by-version."typescript"."1.5.0-alpha";
   by-version."typescript"."1.5.0-alpha" = self.buildNodePackage {
     name = "typescript-1.5.0-alpha";
     version = "1.5.0-alpha";
@@ -42033,7 +42031,28 @@
     os = [ ];
     cpu = [ ];
   };
-  "typescript" = self.by-version."typescript"."1.5.0-alpha";
+  by-version."typescript"."1.8.9" = self.buildNodePackage {
+    name = "typescript-1.8.9";
+    version = "1.8.9";
+    bin = true;
+    src = fetchurl {
+      url = "http://registry.npmjs.org/typescript/-/typescript-1.8.9.tgz";
+      name = "typescript-1.8.9.tgz";
+      sha1 = "b3b3a74059fd31cbd3ecad95d62465939e7ed5fa";
+    };
+    deps = {
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  by-spec."typescript"."*" =
+    self.by-version."typescript"."1.8.9";
+  by-spec."typescript"."~1.8.9" =
+    self.by-version."typescript"."1.8.9";
+  "typescript" = self.by-version."typescript"."1.8.9";
   by-spec."typewiselite"."~1.0.0" =
     self.by-version."typewiselite"."1.0.0";
   by-version."typewiselite"."1.0.0" = self.buildNodePackage {
