@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
+  postPatch = ''
+    sed -i src/file.c -e '21i#include <glib/gprintf.h>'
+    sed -i src/form.c -e '21i#include <stdlib.h>'
+  '';
+
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
