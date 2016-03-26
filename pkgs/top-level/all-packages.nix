@@ -1920,7 +1920,13 @@ in
   
     math2 = ignition.math;
   
+    transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
+
+    transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
+
+    transport = ignition.transport0;
   };
+
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ihaskell ghcWithPackages;
