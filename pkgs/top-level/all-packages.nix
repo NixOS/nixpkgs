@@ -8253,6 +8253,7 @@ in
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
   openssl = openssl_1_0_1;
+  
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -8262,7 +8263,8 @@ in
       };
     })
     openssl_1_0_1
-    openssl_1_0_2;
+    openssl_1_0_2
+    openssl_1_0_2g;
 
   openssl-chacha = callPackage ../development/libraries/openssl/chacha.nix {
     cryptodevHeaders = linuxPackages.cryptodev.override {
