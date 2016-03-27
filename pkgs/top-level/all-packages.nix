@@ -13505,7 +13505,13 @@ let
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype = callPackage_i686 ../applications/networking/instant-messengers/skype { };
+  # Needed for skype
+  qt4-clang = qt4.override {
+    stdenv = clangStdenv;
+  };
+  skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
+    qt4 = qt4-clang;
+  };
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
 
