@@ -1,5 +1,8 @@
 { stdenv, fetchgit, perl, buildLinux, ncurses, openssh, ... } @ args:
 
+# ChromiumOS requires a 64bit build host
+assert stdenv.is64bit;
+
 import ./generic.nix (args // rec {
   version = "3.14.0";
   extraMeta.branch = "3.14";
