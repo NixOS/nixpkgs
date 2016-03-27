@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ freebsd;
     maintainers = with maintainers; [ wkennington ];
     # kernel 4.2 is the most recent supported kernel
-    broken = kernel != null && builtins.compareVersions kernel.version "4.2" == 1;
+    broken = kernel != null &&
+      (builtins.compareVersions kernel.version "4.2" == 1 ||
+       (kernel.features.grsecurity or false));
   };
 }
