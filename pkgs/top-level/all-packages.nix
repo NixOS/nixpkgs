@@ -3279,7 +3279,7 @@ in
   talkfilters = callPackage ../misc/talkfilters {};
 
   znapzend = callPackage ../tools/backup/znapzend { };
-  
+
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
@@ -16339,6 +16339,8 @@ in
   httrack = callPackage ../tools/backup/httrack { };
 
   mg = callPackage ../applications/editors/mg { };
+
+  togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
 }
 
