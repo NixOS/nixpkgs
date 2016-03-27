@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages}:
+{ stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages, glibc32 }:
 
 # TODO: patch LLVM so Knights Landing works better (patch included in ispc github)
 
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     flex
     llvm
     clang
+    glibc32
   ];
 
   # https://github.com/ispc/ispc/pull/1190

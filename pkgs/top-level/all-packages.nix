@@ -7107,6 +7107,7 @@ let
 
   ispc = callPackage ../development/compilers/ispc {
     llvmPackages = llvmPackages_37;
+    glibc32 = pkgsi686Linux.glibc;
   };
 
   itk = callPackage ../development/libraries/itk {
