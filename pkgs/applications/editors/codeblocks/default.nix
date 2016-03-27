@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, file, zip, wxGTK, gtk
-, contribPlugins ? false, hunspell, gamin, boost
+, contribPlugins ? false, hunspell, gamin, boost, libX11, cairo
 }:
 
 with { inherit (stdenv.lib) optionalString optional optionals; };
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "044njhps4cm1ijfdyr5f9wjyd0vblhrz9b4603ma52wcdq25093p";
   };
 
-  buildInputs = [ automake autoconf libtool pkgconfig file zip wxGTK gtk ]
+  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+
+  buildInputs = [ file zip wxGTK gtk libX11 cairo ]
     ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
@@ -22,6 +24,9 @@ stdenv.mkDerivation rec {
   postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc}/sbin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
     ++ optional contribPlugins "--with-contrib-plugins";
+
+  # for whatever reason, the build config does not set these flag ...
+  NIX_CFLAGS_COMPILE = "-lX11 -lcairo";
 
   # Fix boost 1.59 compat
   # Try removing in the next version
