@@ -97,10 +97,10 @@ in rec {
   };
 
   nixUnstable = lib.lowPrio (common rec {
-    name = "nix-1.12pre4509_69f28eb";
+    name = "nix-1.12pre4523_3b81b26";
     src = fetchurl {
-      url = "http://hydra.nixos.org/build/33307573/download/4/${name}.tar.xz";
-      sha256 = "0i8l9vlcrhmlq8f7hx3x083lpmp903xy0zbr4gsdc9365j9vlgqk";
+      url = "http://hydra.nixos.org/build/33598573/download/4/${name}.tar.xz";
+      sha256 = "0469zv09m85824w4vqj2ag0nciq51xvrvsys7bd5v4nrxihk9991";
     };
   });
 
