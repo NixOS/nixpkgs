@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/csssuf/rtl8812au";
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = (kernel.features.grsecurity or false);
   };
 }
