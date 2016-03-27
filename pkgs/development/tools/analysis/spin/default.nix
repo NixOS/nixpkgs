@@ -1,7 +1,9 @@
-{ stdenv, fetchurl, makeWrapper, yacc, gcc }:
+{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+, withISpin ? true, tk, swarm, graphviz }:
 
 let
   binPath = stdenv.lib.makeBinPath [ gcc ];
+  ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
 
 in stdenv.mkDerivation rec {
   name = "spin-${version}";
@@ -22,9 +24,13 @@ in stdenv.mkDerivation rec {
   sourceRoot = "Spin/Src${version}";
 
   installPhase = ''
-    install -D spin $out/bin/spin
+    install -Dm755 spin $out/bin/spin
     wrapProgram $out/bin/spin \
       --prefix PATH : ${binPath}
+  '' + lib.optionalString withISpin ''
+    install -Dm755 ../iSpin/ispin.tcl $out/bin/ispin
+    wrapProgram $out/bin/ispin \
+      --prefix PATH ':' "$out/bin:${ibinPath}"
   '';
 
   meta = with stdenv.lib; {

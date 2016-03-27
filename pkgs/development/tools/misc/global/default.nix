@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "global-6.5.2";
+  name = "global-6.5.3";
 
   src = fetchurl {
     url = "mirror://gnu/global/${name}.tar.gz";
-    sha256 = "07qx3dbjwkbd1dn42qs7zgj77rxdj2psfrf7bx7yx9al38f87z60";
+    sha256 = "00h3p10rn312rnsipfvpyr61bsfdqyfpxp506yy6ji58skqr2vrk";
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];

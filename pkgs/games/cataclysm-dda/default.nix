@@ -1,15 +1,7 @@
 { fetchFromGitHub, stdenv, makeWrapper, pkgconfig, ncurses, lua, SDL2, SDL2_image, SDL2_ttf,
 SDL2_mixer, freetype, gettext }:
 
-let architecture =
-      if stdenv.system == "i686-linux" then
-        "linux32"
-      else if stdenv.system == "x86_64-linux" then
-        "linux64"
-      else
-        abort "currently only linux 32-bit and 64-bit are supported";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "0.C";
   name = "cataclysm-dda-${version}";
 
@@ -20,13 +12,15 @@ in stdenv.mkDerivation rec {
     sha256 = "03sdzsk4qdq99qckq0axbsvg1apn6xizscd8pwp5w6kq2fyj5xkv";
   };
 
-  buildInputs = [ makeWrapper pkgconfig ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
-  patchPhase = ''
+  buildInputs = [ ncurses lua SDL2 SDL2_image SDL2_ttf SDL2_mixer freetype gettext ];
+
+  postPatch = ''
     patchShebangs .
-    substituteAllInPlace lang/compile_mo.sh \
-      --replace msgfmt ${gettext}/msgfmt
-    sed -i -e 's|DATA_PREFIX=$(PREFIX)/share/cataclysm-dda/|DATA_PREFIX=$(PREFIX)/share/|g' Makefile
+    sed -i Makefile \
+      -e 's,-Werror,,g' \
+      -e 's,\(DATA_PREFIX=$(PREFIX)/share/\)cataclysm-dda/,\1,g'
   '';
 
   makeFlags = "PREFIX=$(out) LUA=1 TILES=1 SOUND=1 RELEASE=1 USE_HOME_DIR=1";

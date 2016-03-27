@@ -25,6 +25,8 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
+      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
@@ -33,6 +35,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.metrics
               jobs.manual
               jobs.lib-tests
               jobs.stdenv.x86_64-linux

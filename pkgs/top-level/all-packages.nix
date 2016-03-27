@@ -1,133 +1,16 @@
-/* This file composes the Nix Packages collection.  That is, it
-   imports the functions that build the various packages, and calls
-   them with appropriate arguments.  The result is a set of all the
-   packages in the Nix Packages collection for some particular
-   platform. */
+{ system, bootStdenv, noSysDirs, gccWithCC, gccWithProfiling
+, config, crossSystem, platform, lib
+, pkgsWithOverrides
+, ... }:
+self: pkgs:
 
-
-{ # The system (e.g., `i686-linux') for which to build the packages.
-  system ? builtins.currentSystem
-
-, # The standard environment to use.  Only used for bootstrapping.  If
-  # null, the default standard environment is used.
-  bootStdenv ? null
-
-, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
-  # outside of the store.  Thus, GCC, GFortran, & co. must always look for
-  # files in standard system directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-freebsd" && system != "i686-freebsd"
-               && system != "x86_64-solaris"
-               && system != "x86_64-kfreebsd-gnu")
-
-  # More flags for the bootstrapping of stdenv.
-, gccWithCC ? true
-, gccWithProfiling ? true
-
-, # Allow a configuration attribute set to be passed in as an
-  # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
-  # ~/.nixpkgs/config.nix.
-  config ? null
-
-, crossSystem ? null
-, platform ? null
-}:
-
-
-let config_ = config; platform_ = platform; in # rename the function arguments
+with pkgs;
 
 let
+  defaultScope = pkgs // pkgs.xorg;
+in
 
-  lib = import ../../lib;
-
-  # The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
-  # for NIXOS (nixos-rebuild): use nixpkgs.config option
-  config =
-    let
-      toPath = builtins.toPath;
-      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
-      pathExists = name:
-        builtins ? pathExists && builtins.pathExists (toPath name);
-
-      configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
-
-      configExpr =
-        if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
-        else {};
-
-    in
-      # allow both:
-      # { /* the config */ } and
-      # { pkgs, ... } : { /* the config */ }
-      if builtins.isFunction configExpr
-        then configExpr { inherit pkgs; }
-        else configExpr;
-
-  # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
-
-  platformAuto = let
-      platforms = (import ./platforms.nix);
-    in
-      if system == "armv6l-linux" then platforms.raspberrypi
-      else if system == "armv7l-linux" then platforms.armv7l-hf-multiplatform
-      else if system == "armv5tel-linux" then platforms.sheevaplug
-      else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else if system == "x86_64-linux" then platforms.pc64
-      else if system == "i686-linux" then platforms.pc32
-      else platforms.pcBase;
-
-  platform = if platform_ != null then platform_
-    else config.platform or platformAuto;
-
-  # Helper functions that are exported through `pkgs'.
-  helperFunctions =
-    stdenvAdapters //
-    (import ../build-support/trivial-builders.nix { inherit lib; inherit (pkgs) stdenv; inherit (pkgs.xorg) lndir; });
-
-  stdenvAdapters =
-    import ../stdenv/adapters.nix pkgs;
-
-
-  # Allow packages to be overriden globally via the `packageOverrides'
-  # configuration option, which must be a function that takes `pkgs'
-  # as an argument and returns a set of new or overriden packages.
-  # The `packageOverrides' function is called with the *original*
-  # (un-overriden) set of packages, allowing packageOverrides
-  # attributes to refer to the original attributes (e.g. "foo =
-  # ... pkgs.foo ...").
-  pkgs = applyGlobalOverrides (config.packageOverrides or (pkgs: {}));
-
-  mkOverrides = pkgsOrig: overrides: overrides //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
-
-  # Return the complete set of packages, after applying the overrides
-  # returned by the `overrider' function (see above).  Warning: this
-  # function is very expensive!
-  applyGlobalOverrides = overrider:
-    let
-      # Call the overrider function.  We don't want stdenv overrides
-      # in the case of cross-building, or otherwise the basic
-      # overrided packages will not be built with the crossStdenv
-      # adapter.
-      overrides = mkOverrides pkgsOrig (overrider pkgsOrig);
-
-      # The un-overriden packages, passed to `overrider'.
-      pkgsOrig = pkgsFun pkgs {};
-
-      # The overriden, final packages.
-      pkgs = pkgsFun pkgs overrides;
-    in pkgs;
-
-
-  # The package compositions.  Yes, this isn't properly indented.
-  pkgsFun = pkgs: overrides:
-    with helperFunctions;
-    let defaultScope = pkgs // pkgs.xorg; self = self_ // overrides;
-    self_ = with self; helperFunctions // {
+{
 
   # Make some arguments passed to all-packages.nix available
   inherit system platform;
@@ -157,11 +40,7 @@ let
   #
   # The result is `pkgs' where all the derivations depending on `foo'
   # will use the new version.
-  overridePackages = f:
-    let
-      newpkgs = pkgsFun newpkgs overrides;
-      overrides = mkOverrides pkgs (f newpkgs pkgs);
-    in newpkgs;
+  overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: kernel: (import ./../..) {
@@ -171,19 +50,31 @@ let
       crossSystem;
   };
 
-
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux" "i386";
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
+  forceNativeDrv = drv : if crossSystem == null then drv else
+    (drv // { crossDrv = drv.nativeDrv; });
+
+  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
+
+  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
+  # it uses GCC compiled with multilib support; on i686-linux, it's
+  # just the plain stdenv.
+  stdenv_32bit = lowPrio (
+    if system == "x86_64-linux" then
+      overrideCC stdenv gcc_multi
+    else
+      stdenv);
 
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
 
   ### Helper functions.
-  inherit lib config stdenvAdapters;
+  inherit lib config;
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
   inherit (misc) versionedDerivation;
@@ -204,49 +95,6 @@ let
   nix-generate-from-cpan = callPackage ../../maintainers/scripts/nix-generate-from-cpan.nix { };
 
   nixpkgs-lint = callPackage ../../maintainers/scripts/nixpkgs-lint.nix { };
-
-
-  ### STANDARD ENVIRONMENT
-
-
-  allStdenvs = import ../stdenv {
-    inherit system platform config lib;
-    allPackages = args: import ./../.. ({ inherit config system; } // args);
-  };
-
-  defaultStdenv = allStdenvs.stdenv // { inherit platform; };
-
-  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
-
-  stdenv =
-    if bootStdenv != null then (bootStdenv // {inherit platform;}) else
-      if crossSystem != null then
-        stdenvCross
-      else
-        let
-            changer = config.replaceStdenv or null;
-        in if changer != null then
-          changer {
-            # We import again all-packages to avoid recursivities.
-            pkgs = import ./../.. {
-              # We remove packageOverrides to avoid recursivities
-              config = removeAttrs config [ "replaceStdenv" ];
-            };
-          }
-      else
-        defaultStdenv;
-
-  forceNativeDrv = drv : if crossSystem == null then drv else
-    (drv // { crossDrv = drv.nativeDrv; });
-
-  # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
-  # it uses GCC compiled with multilib support; on i686-linux, it's
-  # just the plain stdenv.
-  stdenv_32bit = lowPrio (
-    if system == "x86_64-linux" then
-      overrideCC stdenv gcc_multi
-    else
-      stdenv);
 
 
   ### BUILD SUPPORT
@@ -303,9 +151,7 @@ let
     dotnetfx = dotnetfx40;
   };
 
-  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers {
-    inherit helperFunctions;
-  };
+  dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
   dispad = callPackage ../tools/X11/dispad { };
 
@@ -634,8 +480,6 @@ let
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
-  otool = callPackage ../os-specific/darwin/otool { };
-
   pass = callPackage ../tools/security/pass { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
@@ -771,6 +615,7 @@ let
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
+  btrfs-progs_4_4_1 = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
@@ -1347,7 +1192,7 @@ let
 
   dcfldd = callPackage ../tools/system/dcfldd { };
 
-  debian_devscripts = callPackage ../tools/misc/debian-devscripts {
+  debian-devscripts = callPackage ../tools/misc/debian-devscripts {
     inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
   };
 
@@ -2046,6 +1891,8 @@ let
 
   darkice = callPackage ../tools/audio/darkice { };
 
+  deco = callPackage ../applications/misc/deco { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
@@ -2429,6 +2276,8 @@ let
 
   mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
 
+  mednaffe = callPackage ../misc/emulators/mednaffe/default.nix { };
+
   megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
@@ -2537,6 +2386,8 @@ let
   netcdf = callPackage ../development/libraries/netcdf { };
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
+
+  netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
 
   nco = callPackage ../development/libraries/nco { };
 
@@ -3181,6 +3032,8 @@ let
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
+  s3gof3r = goPackages.s3gof3r.bin // { outputs = [ "bin" ]; };
+
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
   s6LinuxUtils = callPackage ../os-specific/linux/s6-linux-utils { };
@@ -3426,6 +3279,8 @@ let
 
   talkfilters = callPackage ../misc/talkfilters {};
 
+  znapzend = callPackage ../tools/backup/znapzend { };
+  
   tarsnap = callPackage ../tools/backup/tarsnap { };
 
   tcpcrypt = callPackage ../tools/security/tcpcrypt { };
@@ -5304,7 +5159,6 @@ let
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
   erlangR14 = callPackage ../development/interpreters/erlang/R14.nix { };
-  erlangR15 = callPackage ../development/interpreters/erlang/R15.nix { };
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
@@ -5432,9 +5286,9 @@ let
   mujs = callPackage ../development/interpreters/mujs { };
 
   nix-exec = callPackage ../development/interpreters/nix-exec {
-    git = gitMinimal;
-
     nix = nixUnstable;
+
+    git = gitMinimal;
   };
 
   octave = callPackage ../development/interpreters/octave {
@@ -5980,6 +5834,8 @@ let
 
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
+  foreman = callPackage ../tools/system/foreman { };
+
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
@@ -6289,6 +6145,8 @@ let
 
   strace = callPackage ../development/tools/misc/strace { };
 
+  swarm = callPackage ../development/tools/analysis/swarm { };
+
   swig1 = callPackage ../development/tools/misc/swig { };
   swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
   swig3 = callPackage ../development/tools/misc/swig/3.x.nix { };
@@ -6313,6 +6171,8 @@ let
   );
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
+
+  tweak = callPackage ../applications/editors/tweak { };
 
   uhd = callPackage ../development/tools/misc/uhd { };
 
@@ -6911,6 +6771,7 @@ let
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
+    inherit (darwin) cctools;
   };
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
@@ -7313,7 +7174,7 @@ let
 
   libav = libav_11; # branch 11 is API-compatible with branch 10
   libav_all = callPackage ../development/libraries/libav { };
-  inherit (libav_all) libav_0_8 libav_9 libav_11;
+  inherit (libav_all) libav_0_8 libav_11;
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
@@ -8390,7 +8251,9 @@ let
     };
   };
 
-  opensubdiv = callPackage ../development/libraries/opensubdiv { };
+  opensubdiv = callPackage ../development/libraries/opensubdiv {
+    cudatoolkit = cudatoolkit75;
+  };
 
   openwsman = callPackage ../development/libraries/openwsman {};
 
@@ -9779,8 +9642,7 @@ let
     sasl = cyrus_sasl;
   };
 
-  riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
-  riak2 = callPackage ../servers/nosql/riak/2.1.1.nix { };
+  riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
   influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
 
@@ -10632,6 +10494,8 @@ let
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
+
+    mxu11x0 = callPackage ../os-specific/linux/mxu11x0 { };
 
     /* compiles but has to be integrated into the kernel somehow
        Let's have it uncommented and finish it..
@@ -11669,8 +11533,8 @@ let
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
-    cudatoolkit = cudatoolkit7;
-    python = python34;
+    cudatoolkit = cudatoolkit75;
+    python = python35;
   };
 
   bluefish = callPackage ../applications/editors/bluefish {
@@ -11919,7 +11783,7 @@ let
   };
 
   docker = callPackage ../applications/virtualization/docker {
-    btrfs-progs = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
+    btrfs-progs = btrfs-progs_4_4_1;
     go = go_1_4;
   };
 
@@ -11936,6 +11800,8 @@ let
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
+
+  dvdbackup = callPackage ../applications/video/dvdbackup { };
 
   dvd-slideshow = callPackage ../applications/video/dvd-slideshow { };
 
@@ -12656,6 +12522,8 @@ let
   };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
+
+  slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
 
@@ -13415,6 +13283,8 @@ let
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
 
+  telegram-purple = callPackage ../applications/networking/instant-messengers/pidgin-plugins/telegram-purple { };
+
   toxprpl = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tox-prpl { };
 
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
@@ -13763,7 +13633,9 @@ let
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper { };
+  snapper = callPackage ../tools/misc/snapper {
+    btrfs-progs = btrfs-progs_4_4_1;
+  };
 
   snd = callPackage ../applications/audio/snd { };
 
@@ -14463,6 +14335,8 @@ let
   inherit (pythonPackages) youtube-dl;
 
   qgis = callPackage ../applications/gis/qgis {};
+
+  qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader {
     qt = qt4;
@@ -16014,10 +15888,6 @@ let
   gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
   gnuk-git = callPackage ../misc/gnuk/git.nix { };
 
-  guix = callPackage ../tools/package-management/guix {
-    libgcrypt = libgcrypt_1_5;
-  };
-
   gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
@@ -16445,14 +16315,5 @@ let
 
   mg = callPackage ../applications/editors/mg { };
 
-}; # self_ =
+}
 
-
-aliases = import ./aliases.nix self;
-
-tweakAlias = _n: alias: with lib;
-  if alias.recurseForDerivations or false then
-    removeAttrs alias ["recurseForDerivations"]
-  else alias;
-
-in lib.mapAttrs tweakAlias aliases // self; in pkgs

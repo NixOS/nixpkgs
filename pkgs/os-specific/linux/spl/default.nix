@@ -64,5 +64,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ jcumming wizeman wkennington ];
+    broken = (kernel.features.grsecurity or false);
   };
 }

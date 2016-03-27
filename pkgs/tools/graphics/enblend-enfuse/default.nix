@@ -2,13 +2,13 @@
 , boost, freeglut, glew, gsl, lcms2, libpng, libtiff, libxmi, mesa, vigra
 , help2man, pkgconfig, perl }:
 
-let version = "4.1.4"; in
+let version = "4.1.5"; in
 stdenv.mkDerivation rec {
   name = "enblend-enfuse-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/enblend/${name}.tar.gz";
-    sha256 = "0208x01i129hqylmy6jh3krwdac47mx6fi8xccjm9h35c18c7xl5";
+    sha256 = "08dz73jgrwfhz0kh57kz048qy1c6a35ckqn9xs5rajm449vnw0pg";
   };
 
   buildInputs = [ boost freeglut glew gsl lcms2 libpng libtiff libxmi mesa vigra ];

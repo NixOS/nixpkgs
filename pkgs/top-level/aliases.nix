@@ -2,9 +2,21 @@ self:
 
 with self;
 
+let
+  # Removing recurseForDerivation prevents derivations of aliased attribute
+  # set to appear while listing all the packages available.
+  removeRecurseForDerivations = _n: alias: with lib;
+    if alias.recurseForDerivations or false then
+      removeAttrs alias ["recurseForDerivations"]
+    else alias;
+
+  doNotDisplayTwice = aliases:
+    lib.mapAttrs removeRecurseForDerivations aliases;
+in
+
   ### Deprecated aliases - for backward compatibility
 
-rec {
+doNotDisplayTwice rec {
   accounts-qt = qt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
@@ -22,6 +34,7 @@ rec {
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
   cv = progress; # added 2015-09-06
+  debian_devscripts = debian-devscripts; # added 2016-03-23
   dwarf_fortress = dwarf-fortress; # added 2016-01-23
   dwbWrapper = dwb; # added 2015-01
   enblendenfuse = enblend-enfuse; # 2015-09-30
@@ -49,7 +62,6 @@ rec {
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
-  ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
   phonon_qt5 = qt5.phonon;  # added 2015-12-19
   phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19

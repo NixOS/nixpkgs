@@ -22,16 +22,12 @@ assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
+  source = import ./source.nix { inherit fetchurl; };
 
 in with stdenv; mkDerivation rec {
+  inherit (source) src version;
 
-  version = "0.12.3";
   name = "quassel${tag}-${version}";
-
-  src = fetchurl {
-    url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
-    sha256 = "15vqjiw38mifvnc95bhvy0zl23xxldkwg2byx9xqbyw8rfgggmkb";
-  };
 
   enableParallelBuilding = true;
 

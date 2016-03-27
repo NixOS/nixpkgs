@@ -60,6 +60,7 @@
   bodil = "Bodil Stokke <nix@bodil.org>";
   boothead = "Ben Ford <ben@perurbis.com>";
   bosu = "Boris Sukholitko <boriss@gmail.com>";
+  bradediger = "Brad Ediger <brad@bradediger.com>";
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
@@ -251,6 +252,7 @@
   olcai = "Erik Timan <dev@timan.info>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   osener = "Ozan Sener <ozan@ozansener.com>";
+  otwieracz = "Slawomir Gonet <slawek@otwiera.cz>";
   oxij = "Jan Malakhovski <oxij@oxij.org>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   paholg = "Paho Lurie-Gregg <paho@paholg.com>";
@@ -277,6 +279,7 @@
   psibi = "Sibi <sibi@psibi.in>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";
+  pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   ragge = "Ragnar Dahlen <r.dahlen@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
@@ -349,6 +352,7 @@
   tv = "Tomislav Viljetić <tv@shackspace.de>";
   tvestelind = "Tomas Vestelind <tomas.vestelind@fripost.org>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
+  uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";

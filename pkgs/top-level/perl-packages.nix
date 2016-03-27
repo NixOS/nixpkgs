@@ -890,14 +890,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystActionREST = buildPerlPackage rec {
-    name = "Catalyst-Action-REST-1.19";
+    name = "Catalyst-Action-REST-1.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
-      sha256 = "0qiw6b932a73prrg8vw9brpdvjqm37c6wmbliyxvmz0kij6pi2qd";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Action-REST-1.20.tar.gz;
+      sha256 = "c0470541ec0016b837db3186ed77915813c8b856b941db89b86db8602e31ead6";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ CatalystRuntime ClassInspector LWP MROCompat
-      ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
+    propagatedBuildInputs = [ CatalystRuntime ClassInspector JSONMaybeXS MROCompat ModulePluggable Moose ParamsValidate URIFind namespaceautoclean ];
     meta = {
       description = "Automated REST Method Dispatching";
       license = "perl";
@@ -2717,6 +2716,18 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Data-GUID;
       description = "Globally unique identifiers";
       license = "perl";
+    };
+  };
+
+  DataHexDump = buildPerlPackage {
+    name = "Data-HexDump-0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FT/FTASSIN/Data-HexDump-0.02.tar.gz;
+      sha256 = "1a9d843e7f667c1c6f77c67af5d77e7462ff23b41937cb17454d03535cd9be70";
+    };
+    meta = {
+      description = "Hexadecimal Dumper";
+      maintainers = with stdenv.lib.maintainers; [ AndersonTorres ];
     };
   };
 
@@ -7780,17 +7791,43 @@ let self = _self // overrides; _self = with self; {
       description = "Embed a Perl interpreter in the Apache HTTP server";
     };
   };
-
-  Mojolicious = buildPerlPackage {
-    name = "Mojolicious-4.63";
+  Mojolicious = buildPerlPackage rec {
+    name = "Mojolicious-6.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-4.63.tar.gz;
-      sha256 = "f20f77e86fc560dac1c958e765ed64242dcf6343939ed605b45f2bbe2596d5e9";
+      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
+      sha256 = "82f73553836ac378edf825fd9f24be982653be9e0d78f8ba38b7841aabdafb02";
+    };
+    propagatedBuildInputs = [ JSONPP ];
+    meta = {
+      homepage = http://mojolicious.org;
+      description = "Real-time web framework";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
+  MojoIOLoopForkCall = buildPerlModule rec {
+    name = "Mojo-IOLoop-ForkCall-0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
+      sha256 = "886de5c3b44194a86228471075fac4036073bda19093e776c702aa65c3ef1824";
+    };
+    propagatedBuildInputs = [ IOPipely Mojolicious ];
+    meta = {
+      description = "Run blocking functions asynchronously by forking";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOPipely = buildPerlPackage rec {
+    name = "IO-Pipely-0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RC/RCAPUTO/${name}.tar.gz";
+      sha256 = "e33b6cf5cb2b46ee308513f51e623987a50a89901e81bf19701dce35179f2e74";
     };
     meta = {
-      homepage = http://mojolicio.us;
-      description = "Real-time web framework";
-      license = stdenv.lib.licenses.artistic2;
+      homepage = http://search.cpan.org/dist/IO-Pipely/;
+      description = "Portably create pipe() or pipe-like handles";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
