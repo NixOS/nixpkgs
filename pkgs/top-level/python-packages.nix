@@ -2549,7 +2549,6 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/bugwarrior/${name}.tar.gz";
-      # md5 = "09c93f86a27ffc092e69b46889a3bf50"; # provided by pypi website.
       sha256 = "efe41756c152789f39006f157add9bedfa2b85d2cac15c067e635e37c70cb8f8";
     };
 
@@ -2595,7 +2594,6 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/python-bugzilla/python-${name}.tar.gz";
-      # md5 = "c95befd1fecad21f742beaa8180538c0"; # provided by pypi website.
       sha256 = "11361635a4f1613803a0b9b93ba9126f7fd36180653f953e2590b1536d107d46";
     };
 
@@ -2723,7 +2721,7 @@ in modules // {
     };
   };
 
-  zc_recipe_egg_fun = { buildout, version, md5 }: buildPythonPackage rec {
+  zc_recipe_egg_fun = { buildout, version, sha256 }: buildPythonPackage rec {
     inherit version;
     name = "zc.recipe.egg-${version}";
 
@@ -2731,7 +2729,7 @@ in modules // {
     doCheck = false;
 
     src = pkgs.fetchurl {
-      inherit md5;
+      inherit sha256;
       url = "https://pypi.python.org/packages/source/z/zc.recipe.egg/zc.recipe.egg-${version}.tar.gz";
     };
     meta.broken = true;  # https://bitbucket.org/pypa/setuptools/issues/462/pkg_resourcesfind_on_path-thinks-the
@@ -2739,12 +2737,12 @@ in modules // {
   zc_recipe_egg_buildout171 = self.zc_recipe_egg_fun {
     buildout = self.zc_buildout171;
     version = "1.3.2";
-    md5 = "1cb6af73f527490dde461d3614a36475";
+    sha256 = "12zl16fdz85l6hgrkqwily7d2brr9w5pdfqri5n978gh36mqf526";
   };
   zc_recipe_egg_buildout2 = self.zc_recipe_egg_fun {
     buildout = self.zc_buildout2;
     version = "2.0.3";
-    md5 = "69a8ce276029390a36008150444aa0b4";
+    sha256 = "0d7xkxxhm5bwrscchjzc88559njirqxishdwl2qjx3gij3s12l5s";
   };
 
   bunch = buildPythonPackage (rec {
@@ -6773,7 +6771,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pew/${name}.tar.gz";
-      md5 = "0a06ab0885b39f1ef3890893942f3225";
+      sha256 = "0p188ah80l0rzbib2srahj2sswz8rcpqwbrbajyv2r5c1m5k6r4b";
     };
 
     propagatedBuildInputs = with self; [ virtualenv virtualenv-clone ];
@@ -8185,7 +8183,6 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/django-classy-tags/${name}.tar.gz";
-      md5 = "eb686aa767ad8cf88c1fa0f400a42516";
       sha256 = "0wxvpmjdzk0aajk33y4himn3wqjx7k0aqlka9j8ay3yfav78bdq0";
     };
 
@@ -8308,7 +8305,6 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/d/django-reversion/${name}.tar.gz";
-      md5 = "2de5a3fe82aaf505c134570f96fcc7a8";
       sha256 = "0z8fxvxgbxfnalr5br74rsw6g42nry2q656rx7rsgmicd8n42v2r";
     };
 
@@ -10336,7 +10332,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
-      md5 = "4aa23397da8bd7c7426864e88e4db7e1";
+      sha256 = "131jvp6ahllcqblszjg6fxrzh4k50w8g60sq924b4nb8lxm9dl14";
     };
   };
 
@@ -11260,7 +11256,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/llfuse/${name}.tar.bz2";
-      md5 = "6e71af191381da135a222e3c0e7569a1";
+      sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
     buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];
@@ -12900,7 +12896,6 @@ in modules // {
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/nose-cover3/${name}.tar.gz";
       sha256 = "1la4hhc1yszjpcchvkqk5xmzlb2g1b3fgxj9wwc58qc549whlcc1";
-      md5 = "82f981eaa007b430679899256050fa0c";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -13500,7 +13495,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
-      md5 = "a0ed854ee442051b249bfad0f638bbec";
+      sha256 = "07qvy11nvgxpzarrni3wrww3vpc9yafgi2bch4j2vvvc42nb8d8w";
     };
 
     meta = {
@@ -15685,7 +15680,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = https://pypi.python.org/packages/source/p/python3-pika/python3-pika-0.9.14.tar.gz;
-      md5 = "f3a3ee58afe0ae06f1fa553710e1aa28";
+      sha256 = "1c3hifwvn04kvlja88iawf0awyz726jynwnpcb6gn7376b4nfch7";
     };
     buildInputs = with self; [ nose mock pyyaml ];
 
@@ -20680,10 +20675,11 @@ in modules // {
     version = "0.8.2";
     disabled = isPy33;
 
-    src = pkgs.fetchgit {
-      url = https://github.com/crosspop/sqlalchemy-imageattach.git;
-      rev = "refs/tags/${version}";
-      md5 = "cffdcde30952176e35fccf385f579dda";
+    src = pkgs.fetchFromGitHub {
+      repo = "sqlalchemy-imageattach";
+      owner = "crosspop";      
+      rev = "${version}";
+      sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
     };
 
     buildInputs = with self; [ pytest webob pkgs.imagemagick nose ];
@@ -21711,7 +21707,6 @@ in modules // {
 
     src = pkgs.fetchurl {
       url    = "https://pypi.python.org/packages/source/T/Twiggy/Twiggy-0.4.5.tar.gz";
-      # md5 = "b0dfbbb7f56342e448af4d22a47a339c"; # provided by pypi website.
       sha256 = "4e8f1894e5aee522db6cb245ccbfde3c5d1aa08d31330c7e3af783b0e66eec23";
     };
 
@@ -24959,7 +24954,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/${baseName}/${name}.tar.gz";
-      md5 = "5cc79077f386a17b539f1e51c05a3650";
+      sha256 = "0lc1x0pai85avm1r452xnvxc12wijnhz87xv20yp3is9fs6rnkrh";
     };
 
     buildInputs = with self; [ pkgs.coreutils ];
