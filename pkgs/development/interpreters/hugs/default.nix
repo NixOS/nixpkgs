@@ -6,10 +6,18 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://cvs.haskell.org/Hugs/downloads/2006-09/hugs98-Sep2006.tar.gz;
-    sha256 = "3cf4d27673564cffe691bd14032369f646233f14daf2bc37c6c6df9f062b46b6";
+    sha256 = "1dj65c39zpy6qqvvrwns2hzj6ipnd4ih655xj7kgyk2nfdvd5x1w";
   };
 
-  buildInputs = [ bison ];
+  patches =
+    [ (fetchurl {
+        url = https://aur.archlinux.org/cgit/aur.git/plain/hsbase_inline.patch?h=hugs;
+        name = "hsbase_inline.patch";
+        sha256 = "1h0sp16d17hlm6gj7zdbgwrjwi2l4q02m8p0wd60dp4gn9i9js0v";
+      })
+    ];
+
+  nativeBuildInputs = [ bison ];
 
   postUnpack = "find -type f -exec sed -i 's@/bin/cp@cp@' {} +";
 
@@ -29,10 +37,11 @@ stdenv.mkDerivation {
     "--enable-pthreads"                 # build Hugs using POSIX threads C library
   ];
 
-  meta = {
-    homepage = http://www.haskell.org/hugs;
+  meta = with stdenv.lib; {
+    homepage = https://www.haskell.org/hugs;
     description = "Haskell interpreter";
-    license = "as-is";                          # gentoo labels it this way
-    platforms = stdenv.lib.platforms.unix;      # arbitrary choice
+    maintainers = with maintainers; [ joachifm ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }

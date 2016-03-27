@@ -8,24 +8,22 @@
 { system ? builtins.currentSystem
 , allPackages ? import ../../..
 , platform ? null, config ? {}, lib ? (import ../../../lib)
-, customBootstrapFiles ? null }:
-
-rec {
-
-  bootstrapFiles =
-    if customBootstrapFiles != null then customBootstrapFiles
-    else if system == "i686-linux" then import ./bootstrap/i686.nix
+, bootstrapFiles ?
+    if system == "i686-linux" then import ./bootstrap/i686.nix
     else if system == "x86_64-linux" then import ./bootstrap/x86_64.nix
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel.nix
     else if system == "armv6l-linux" then import ./bootstrap/armv6l.nix
     else if system == "armv7l-linux" then import ./bootstrap/armv7l.nix
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f.nix
-    else abort "unsupported platform for the pure Linux stdenv";
+    else abort "unsupported platform for the pure Linux stdenv"
+}:
 
+rec {
 
   commonPreHook =
     ''
-      export NIX_ENFORCE_PURITY=1
+      export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+      export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
       ${if system == "mips64el-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
@@ -190,7 +188,7 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: {
-      inherit (stage1.pkgs) perl binutils paxctl;
+      inherit (stage1.pkgs) perl binutils paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
     };
   };
@@ -207,21 +205,16 @@ rec {
     name = "bootstrap-gcc-wrapper";
 
     overrides = pkgs: rec {
-      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders;
+      inherit (stage2.pkgs) binutils glibc perl patchelf linuxHeaders gnum4 bison;
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       libmpc = pkgs.libmpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      isl_0_11 = pkgs.isl_0_11.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-      cloog_0_18_0 = pkgs.cloog_0_18_0.override {
-        stdenv = pkgs.makeStaticLibraries pkgs.stdenv;
-        isl = isl_0_11;
-      };
+      isl_0_14 = pkgs.isl_0_14.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       gccPlain = pkgs.gcc.cc.override {
-        isl = isl_0_11;
-        cloog = cloog_0_18_0;
+        isl = isl_0_14;
       };
     };
     extraBuildInputs = [ stage2.pkgs.patchelf stage2.pkgs.paxctl ];
@@ -241,7 +234,7 @@ rec {
       # because gcc (since JAR support) already depends on zlib, and
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
-      inherit (stage3.pkgs) gettext gnum4 gmp perl glibc zlib linuxHeaders;
+      inherit (stage3.pkgs) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
@@ -310,51 +303,4 @@ rec {
     };
   };
 
-
-  testBootstrapTools = let
-    defaultPkgs = allPackages { inherit system platform; };
-  in derivation {
-    name = "test-bootstrap-tools";
-    inherit system;
-    builder = bootstrapFiles.busybox;
-    args = [ "ash" "-e" "-c" "eval \"$buildCommand\"" ];
-
-    buildCommand = ''
-      export PATH=${bootstrapTools}/bin
-
-      ls -l
-      mkdir $out
-      mkdir $out/bin
-      sed --version
-      find --version
-      diff --version
-      patch --version
-      make --version
-      awk --version
-      grep --version
-      gcc --version
-
-      ldlinux=$(echo ${bootstrapTools}/lib/ld-linux*.so.?)
-      export CPP="cpp -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools}"
-      export CC="gcc -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-      export CXX="g++ -idirafter ${bootstrapTools}/include-glibc -B${bootstrapTools} -Wl,-dynamic-linker,$ldlinux -Wl,-rpath,${bootstrapTools}/lib"
-
-      echo '#include <stdio.h>' >> foo.c
-      echo '#include <limits.h>' >> foo.c
-      echo 'int main() { printf("Hello World\\n"); return 0; }' >> foo.c
-      $CC -o $out/bin/foo foo.c
-      $out/bin/foo
-
-      echo '#include <iostream>' >> bar.cc
-      echo 'int main() { std::cout << "Hello World\\n"; }' >> bar.cc
-      $CXX -v -o $out/bin/bar bar.cc
-      $out/bin/bar
-
-      tar xvf ${defaultPkgs.hello.src}
-      cd hello-*
-      ./configure --prefix=$out
-      make
-      make install
-    '';
-  };
 }

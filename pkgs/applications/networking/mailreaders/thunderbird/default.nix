@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
                                "--enable-optimize" "--enable-strip" ])
     ++ [
       "--disable-javaxpcom"
-      "--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
+      #"--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
     ]
     ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
   in ''

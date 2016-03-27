@@ -13,9 +13,17 @@ stdenv.mkDerivation rec {
     "--enable-icon-browser"
   ];
 
+  # for gcc5: c11 inline semantics breaks the build
+  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+
   buildInputs = [ gtk2 ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
+
+  postPatch = ''
+    sed -i src/file.c -e '21i#include <glib/gprintf.h>'
+    sed -i src/form.c -e '21i#include <stdlib.h>'
+  '';
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 

@@ -19,6 +19,12 @@ makeWrapper() {
             echo "export $varName=$value" >> $wrapper
         fi
 
+        if test "$p" = "--unset"; then
+            varName=${params[$((n + 1))]}
+            n=$((n + 1))
+            echo "unset $varName" >> "$wrapper"
+        fi
+
         if test "$p" = "--run"; then
             command=${params[$((n + 1))]}
             n=$((n + 1))

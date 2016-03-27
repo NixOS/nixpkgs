@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
         clx/new-clx bindings/glibc pcre rawsock wildcard zlib
   '';
 
-  NIX_CFLAGS_COMPILE="-O0";
+  NIX_CFLAGS_COMPILE = "-O0 ${stdenv.lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
   # TODO : make mod-check fails
   doCheck = false;

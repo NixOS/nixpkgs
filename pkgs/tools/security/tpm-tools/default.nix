@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ trousers openssl opencryptoki ];
 
+  patches = [ ./03-fix-bool-error-parseStringWithValues.patch ];
+
   meta = with stdenv.lib; {
     description = "Management tools for TPM hardware";
     longDescription = ''

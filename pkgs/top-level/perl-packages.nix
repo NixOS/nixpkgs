@@ -1436,7 +1436,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1297d3ed6616cacb4eb57860e3e743f3890111e7a63ca08849930f42f1360532";
     };
     buildInputs = [ TestDeep TestWarn ];
-    propagatedBuildInputs = [ HTMLParser self."if" ];
+    propagatedBuildInputs = [ HTMLParser ];
     meta = {
       homepage = https://metacpan.org/module/CGI;
       description = "Handle Common Gateway Interface requests and responses";
@@ -1732,6 +1732,11 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
       sha256 = "09ifd6v0c94vr20n9yr1dxgcp7hyscqq851szdip7y24bd26nlbc";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      description = "Provide utility methods for factory classes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -3036,7 +3041,8 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ICal-0.09.tar.gz;
       sha256 = "8b09f6539f5e9c0df0e6135031699ed4ef9eef8165fc80aefeecc817ef997c33";
     };
-    propagatedBuildInputs = [ DateTime DateTimeEventICal DateTimeSet DateTimeTimeZone ParamsValidate ];
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ DateTime DateTimeEventICal DateTimeSet DateTimeTimeZone ];
     meta = {
       description = "Parse and format iCal datetime and duration strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -3199,7 +3205,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/R/RO/ROKR/DateTimeX-Easy-0.089.tar.gz;
       sha256 = "17e6d202e7ac6049523048e97bb8f195e3c79208570da1504f4313584e487a79";
     };
-    buildInputs = [ TestMost ];
+    buildInputs = [ TestMost ModuleBuild ];
     propagatedBuildInputs = [ DateTime DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
     doCheck = false;
     meta = {
@@ -3241,6 +3247,15 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0qs7c8jffar2rpvscrd8rcds75zsc46cizp5fi5369821jl4fw3a";
     };
     propagatedBuildInputs = [ IOCaptureOutput ];
+  };
+
+  DevelCheckOS = buildPerlPackage rec {
+    name = "Devel-CheckOS-1.76";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/${name}.tar.gz";
+      sha256 = "f83fb4cb8de060f607214b1e88c98ac6c4e065371e646fe896f16ea887aecb0c";
+    };
+    propagatedBuildInputs = [ DataCompare FileFindRule ];
   };
 
   DevelDProf = buildPerlPackage {
@@ -3638,14 +3653,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   DevelSymdump = buildPerlPackage rec {
-    name = "Devel-Symdump-2.11";
+    name = "Devel-Symdump-2.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AN/ANDK/${name}.tar.gz";
-      sha256 = "0i5m2w8rsmp5lqi1y5y6b6938pidpz9hg92xahrshaddph00358i";
+      sha256 = "76c2a90d31318204ecf1977f0217ce57b142e6681fe2b99fb8789efc5dd86f41";
     };
-    propagatedBuildInputs = [
-      TestPod /* cyclic dependency: TestPodCoverage */
-    ];
+    meta = {
+      description = "Dump symbol names or the symbol table";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   Digest = buildPerlPackage {
@@ -5983,18 +5999,7 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  "if" = buildPerlPackage rec {
-    name = "if-0.0606";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "63d69282d6c4c9e76370b78d770ca720cea88cfe5ee5b612709240fc6078d50e";
-    };
-    meta = {
-      description = "C<use> a Perl module if a condition holds (also can C<no> a module)";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = [ maintainers.rycee ];
-    };
-  };
+  "if" = null;
 
   # For backwards compatibility.
   if_ = self."if";
@@ -6727,13 +6732,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ListMoreUtils = buildPerlPackage {
-    name = "List-MoreUtils-0.33";
+  ListMoreUtils = buildPerlPackage rec {
+    name = "List-MoreUtils-0.413";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/List-MoreUtils-0.33.tar.gz;
-      sha256 = "1bcljhhsk5g0xykvgbxz10ilmj02s58ydiy3g8hbzdr29i20np1i";
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/${name}.tar.gz";
+      sha256 = "4d6429d5672ce74a59d6490320252cb8b5b8285db8fe9c6551a4162e5375ef37";
     };
+    propagatedBuildInputs = [ ExporterTiny ];
     meta = {
+      homepage = https://metacpan.org/release/List-MoreUtils;
       description = "Provide the stuff missing in List::Util";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7647,11 +7654,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ModulePluggable = buildPerlPackage {
-    name = "Module-Pluggable-5.1";
+  ModulePluggable = buildPerlPackage rec {
+    name = "Module-Pluggable-5.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SI/SIMONW/Module-Pluggable-5.1.tar.gz;
-      sha256 = "0vwi433pk7n1ia5wy67j3545jvmjf1hb4jwcvzrz25mv8d03bp72";
+      url = "mirror://cpan/authors/id/S/SI/SIMONW/${name}.tar.gz";
+      sha256 = "b3f2ad45e4fd10b3fb90d912d78d8b795ab295480db56dc64e86b9fa75c5a6df";
     };
     patches = [
       # !!! merge this patch into Perl itself (which contains Module::Pluggable as well)
@@ -7691,6 +7698,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.014.tar.gz;
       sha256 = "19326f094jmjs6mgpwkyisid54k67w34br8yfh0gvaaml87gwi2c";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       description = "Runtime module handling";
@@ -8099,15 +8107,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXDaemonize = buildPerlPackage {
-    name = "MooseX-Daemonize-0.15";
+  MooseXDaemonize = buildPerlPackage rec {
+    name = "MooseX-Daemonize-0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MICHAELR/MooseX-Daemonize-0.15.tar.gz;
-      sha256 = "1h6rzdmk68q4p0nh2bzmwwvr5iaf7pvdfrpwdxmr3z5pc64wajvd";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "111f391221d00f8b09cdcc6c806ab114324cf7f529d12f627fb97d054da42225";
     };
-    buildInputs = [ TestMoose ];
-    propagatedBuildInputs = [ Moose MooseXGetopt MooseXTypesPathClass ];
+    buildInputs = [ DevelCheckOS ModuleBuildTiny Moose TestFatal ];
+    propagatedBuildInputs = [ Moose MooseXGetopt MooseXTypesPathClass namespaceautoclean ];
     meta = {
+      homepage = https://github.com/moose/MooseX-Daemonize;
       description = "Role for daemonizing your Moose based application";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8390,7 +8399,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "e9e8c36284cf1adc6563c980c0a4f0a7df720dbaaece0dd6be66b975dde5db7a";
     };
-    buildInputs = [ ModuleBuildTiny Moose TestFatal TestRequires self."if" ];
+    buildInputs = [ ModuleBuildTiny Moose TestFatal TestRequires ];
     propagatedBuildInputs = [ CarpClan Moose SubExporterForMethods SubName namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types;
@@ -8407,7 +8416,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "ff0c963f5e8304acb5f64bdf9ba1f19284311148e1a8f0d1f81f123f9950f5f2";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestWarnings perl ];
-    propagatedBuildInputs = [ MooseXTypes self."if" ];
+    propagatedBuildInputs = [ MooseXTypes ];
     meta = {
       homepage = https://github.com/moose/MooseX-Types-Common;
       description = "A library of commonly used type constraints";
@@ -9712,13 +9721,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PadWalker = buildPerlPackage {
-    name = "PadWalker-1.98";
+  PadWalker = buildPerlPackage rec {
+    name = "PadWalker-2.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RO/ROBIN/PadWalker-1.98.tar.gz;
-      sha256 = "0v2pldb5awflf10w1p9pwn8w37lkpfc2h459gd9zz6p57883ibw0";
-    };
-    meta = {
+      url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
+      sha256 = "fc1df2084522e29e892da393f3719d2c1be0da022fdd89cff4b814167aecfea3";
     };
   };
 
@@ -10516,22 +10523,20 @@ let self = _self // overrides; _self = with self; {
   };
 
   SQLTranslator = buildPerlPackage rec {
-    name = "SQL-Translator-0.11020";
+    name = "SQL-Translator-0.11021";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
-      sha256 = "18mqnppwk1076sxcink5ajk75ysway0bd049hwxvk8md39x0y7ar";
+      sha256 = "64cb38a9f78367bc115359a999003bbeb3c32cc75bba8306ec1a938fc441bfd1";
     };
-    propagatedBuildInputs = [
-      ClassBase ClassDataInheritable ClassMakeMethods DigestSHA1 CarpClan IOStringy
-      ParseRecDescent ClassAccessor DBI FileShareDir XMLWriter YAML TestDifferences
-      TemplateToolkit GraphViz XMLLibXML TestPod TextRecordParser HTMLParser
-      SpreadsheetParseExcel Graph GD Moo TryTiny PackageVariant
-    ];
+    buildInputs = [ JSON TestDifferences TestException XMLWriter YAML ];
+    propagatedBuildInputs = [ CarpClan DBI FileShareDir ListMoreUtils Moo PackageVariant ParseRecDescent TryTiny ];
     meta = {
+      description = "SQL DDL transformations and more";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
     };
   };
-  
+
   PackageVariant = buildPerlPackage {
     name = "Package-Variant-1.002002";
     src = fetchurl {
@@ -11770,17 +11775,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestMemoryCycle = buildPerlPackage {
-    name = "Test-Memory-Cycle-1.04";
+  TestMemoryCycle = buildPerlPackage rec {
+    name = "Test-Memory-Cycle-1.06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/Test-Memory-Cycle-1.04.tar.gz;
-      sha256 = "09qj48gmj25xgm0k12n1xx7chdk9gdy3sck4pabvzs0v00nmv9p5";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/${name}.tar.gz";
+      sha256 = "9d53ddfdc964cd8454cb0da4c695b6a3ae47b45839291c34cb9d8d1cfaab3202";
     };
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
       maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
@@ -11812,13 +11817,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestMockObject = buildPerlPackage {
-    name = "Test-MockObject-1.09";
+  TestMockObject = buildPerlPackage rec {
+    name = "Test-MockObject-1.20150527";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CH/CHROMATIC/Test-MockObject-1.09.tar.gz;
-      sha256 = "1cz385x0jrkj84nmfs6qyzwwvv8m9v8r2isagfj1zxvhdw49wdyy";
+      url = "mirror://cpan/authors/id/C/CH/CHROMATIC/${name}.tar.gz";
+      sha256 = "adf1357a9014b3a397ff7ecbf1835dec376a67a37bb2e788734a627e17dc1d98";
     };
-    propagatedBuildInputs = [TestException UNIVERSALisa UNIVERSALcan];
+    buildInputs = [ TestException TestWarn CGI ];
+    propagatedBuildInputs = [ UNIVERSALcan UNIVERSALisa ];
+    meta = {
+      description = "Perl extension for emulating troublesome interfaces";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   TestMoose = Moose;
@@ -12147,7 +12157,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
       sha256 = "ae2b68b1b5616704598ce07f5118efe42dc4605834453b7b2be14e26f9cc9a08";
     };
-    buildInputs = [ TestTester CPANMetaCheck ModuleMetadata self."if" ];
+    buildInputs = [ TestTester CPANMetaCheck ModuleMetadata ];
     meta = {
       homepage = https://github.com/karenetheridge/Test-Warnings;
       description = "Test for warnings and the lack of them";
@@ -12176,6 +12186,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PE/PETDANCE/Test-WWW-Mechanize-1.44.tar.gz;
       sha256 = "062pj242vsc73bw11jqpap92ax9wzc9f2m4xhyp1wzrwkfchpl2q";
     };
+    buildInputs = [ CGI ];
     propagatedBuildInputs = [ CarpAssertMore HTMLTree HTTPServerSimple LWP TestLongString URI WWWMechanize ];
     meta = {
       homepage = https://github.com/petdance/test-www-mechanize;
@@ -12218,7 +12229,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/L/LB/LBROCARD/Test-WWW-Mechanize-PSGI-0.35.tar.gz;
       sha256 = "1hih8s49zf38bisvhnhzrrj0zwyiivkrbs7nmmdqm1qqy27wv7pc";
     };
-    buildInputs = [ TestPod ];
+    buildInputs = [ TestPod CGI ];
     propagatedBuildInputs = [ Plack TestWWWMechanize TryTiny ];
     meta = {
       description = "Test PSGI programs using WWW::Mechanize";

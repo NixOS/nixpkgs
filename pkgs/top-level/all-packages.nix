@@ -112,7 +112,7 @@ in
       postUnpackHooks+=(_ensureNewerSources)
       _ensureNewerSources() {
         '${findutils}/bin/find' "$sourceRoot" \
-          '!' -newermt '${year}-01-01' -exec touch -d '${year}-01-02' '{}' '+'
+          '!' -newermt '${year}-01-01' -exec touch -h -d '${year}-01-02' '{}' '+'
       }
     '');
 
@@ -506,7 +506,9 @@ in
 
   at = callPackage ../tools/system/at { };
 
-  atftp = callPackage ../tools/networking/atftp {};
+  atftp = callPackage ../tools/networking/atftp {
+    gcc = gcc49;
+  };
 
   autogen = callPackage ../development/tools/misc/autogen { };
 
@@ -2085,12 +2087,10 @@ in
 
   nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
     libtool = darwin.cctools;
-    openssl = openssl_1_0_2;
   };
 
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
-    openssl = openssl_1_0_2;
   };
 
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
@@ -3889,7 +3889,9 @@ in
 
   avra = callPackage ../development/compilers/avra { };
 
-  bigloo = callPackage ../development/compilers/bigloo { };
+  bigloo = callPackage ../development/compilers/bigloo {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   boo = callPackage ../development/compilers/boo {
     inherit (gnome) gtksourceview;
@@ -3976,7 +3978,7 @@ in
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc49;
+  gcc = gcc5;
 
   gcc_multi =
     if system == "x86_64-linux" then lowPrio (
@@ -4036,13 +4038,6 @@ in
     binutils = binutilsCross;
     cross = crossSystem;
   };
-
-  gcc44 = lowPrio (wrapCC (makeOverridable (import ../development/compilers/gcc/4.4) {
-    inherit fetchurl stdenv gmp mpfr /* ppl cloogppl */
-      gettext which noSysDirs;
-    texinfo = texinfo4;
-    profiledCompiler = true;
-  }));
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
     inherit noSysDirs;
@@ -4127,7 +4122,7 @@ in
     isl = isl_0_14;
   }));
 
-  gfortran = if !stdenv.isDarwin then gfortran49
+  gfortran = if !stdenv.isDarwin then gfortran5
              else callPackage ../development/compilers/gcc/gfortran-darwin.nix {
     inherit (darwin) Libsystem;
   };
@@ -4141,6 +4136,14 @@ in
   });
 
   gfortran49 = wrapCC (gcc49.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran5 = wrapCC (gcc5.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -4197,17 +4200,6 @@ in
     langC = true;
     langGo = true;
     profiledCompiler = false;
-  });
-
-  ghdl = wrapCC (import ../development/compilers/gcc/4.3 {
-    inherit stdenv fetchurl gmp mpfr noSysDirs gnat;
-    texinfo = texinfo4;
-    name = "ghdl";
-    langVhdl = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-    enableMultilib = false;
   });
 
   ghdl_mcode = callPackage ../development/compilers/ghdl { };
@@ -5621,7 +5613,9 @@ in
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  avarice = callPackage ../development/tools/misc/avarice { };
+  avarice = callPackage ../development/tools/misc/avarice {
+    gcc = gcc49;
+  };
 
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
@@ -8252,7 +8246,7 @@ in
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0_1;
+  openssl = openssl_1_0_2;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -11404,6 +11398,7 @@ in
   afterstep = callPackage ../applications/window-managers/afterstep {
     fltk = fltk13;
     gtk = gtk2;
+    stdenv = overrideCC stdenv gcc49;
   };
 
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
@@ -15331,7 +15326,9 @@ in
     motif = lesstif;
   };
 
-  archimedes = callPackage ../applications/science/electronics/archimedes { };
+  archimedes = callPackage ../applications/science/electronics/archimedes {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
