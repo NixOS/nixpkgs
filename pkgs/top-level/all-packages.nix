@@ -4976,11 +4976,6 @@ in
     llvm = llvm_36;
   };
 
-  qcmm = callPackage ../development/compilers/qcmm {
-    lua   = lua4;
-    ocaml = ocaml_3_08_0;
-  };
-
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
