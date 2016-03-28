@@ -7424,6 +7424,8 @@ in
 
   libgdata = gnome3.libgdata;
 
+  libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
+
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
