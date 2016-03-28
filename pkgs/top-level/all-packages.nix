@@ -171,7 +171,7 @@ in
   };
 
   fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) fetch-bower;
+    inherit (nodePackages) bower2nix;
   };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
@@ -9155,6 +9155,10 @@ in
   jquery-ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
+
+  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
+
+  buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
 

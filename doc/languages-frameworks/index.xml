@@ -24,6 +24,24 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="r.xml" /> <!-- generated from ../../pkgs/development/r-modules/README.md  -->
 <xi:include href="qt.xml" />
 <xi:include href="texlive.xml" />
+<xi:include href="bower.xml" />
+
+
+<!--
+<section><title>Haskell</title>
+
+<para>TODO</para>
+
+</section>
+
+
+<section><title>TeX / LaTeX</title>
+
+<para>* Special support for building TeX documents</para>
+
+</section>
+-->
+>>>>>>> 05113a5... nixpkgs manual: Add documentation for bower2nix
 
 
 </chapter>
