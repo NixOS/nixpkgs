@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    # dpkg tries to force some dependents like debian_devscripts to use
+    # dpkg tries to force some dependents like debian-devscripts to use
     # -fstack-protector-strong - not (yet?) a good idea. Disable for now:
     substituteInPlace scripts/Dpkg/Vendor/Debian.pm \
       --replace "stackprotectorstrong => 1" "stackprotectorstrong => 0"

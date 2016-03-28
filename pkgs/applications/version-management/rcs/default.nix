@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-std=gnu99";
+  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
 
   meta = {
     homepage = http://www.gnu.org/software/rcs/;

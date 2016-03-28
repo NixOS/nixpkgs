@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "farbfeld-${version}";
-  version = "1";
+  version = "2";
 
   src = fetchgit {
     url = "http://git.suckless.org/farbfeld";
     rev = "refs/tags/${version}";
-    sha256 = "1mgk46lpqqvn4qx37r0jxz2jjsd4nvl6zjl04y4bfyzf4wkkmmln";
+    sha256 = "1rj6pqn50v6r7l3j7m872fgynxsh22zx863jg0jzmb4x6wx2m2qv";
   };
 
   buildInputs = [ libpng libjpeg ];

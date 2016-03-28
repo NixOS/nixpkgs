@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, libxml2, pkgconfig, curl }:
+{ stdenv, fetchurl, boost, libxml2, pkgconfig, curl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libcmis-${version}";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1dprvk4fibylv24l7gr49gfqbkfgmxynvgssvdcycgpf7n8h4zm8";
   };
 
-  buildInputs = [ boost libxml2 pkgconfig curl ];
+  patches = [ ./gcc5.patch ];
+
+  buildInputs = [ boost libxml2 pkgconfig curl autoreconfHook ];
   configureFlags = "--without-man --with-boost=${boost.dev} --disable-werror --disable-tests";
 
   # Cppcheck cannot find all the include files (use --check-config for details)

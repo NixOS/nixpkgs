@@ -46,4 +46,7 @@ self: super: {
   # https://github.com/hspec/hspec/issues/253
   hspec-core = dontCheck super.hspec-core;
 
+  # Deviate from Stackage here to fix lots of builds.
+  transformers-compat = super.transformers-compat_0_5_1_4;
+
 }

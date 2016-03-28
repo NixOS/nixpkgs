@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, postgresql, ruby }:
+{ stdenv, fetchurl, postgresql, ruby, makeWrapper, nodejs-5_x }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -R * $out/
+    wrapProgram $out/bin/heroku --set HEROKU_NODE_PATH ${nodejs-5_x}/bin/node
   '';
 
-  buildInputs = [ ruby postgresql ];
+  buildInputs = [ ruby postgresql makeWrapper ];
 }

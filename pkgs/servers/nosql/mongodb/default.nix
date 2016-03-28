@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, scons, boost, gperftools, pcre, snappy
+{ stdenv, fetchurl, fetchpatch, scons, boost, gperftools, pcre, snappy
 , zlib, libyamlcpp, sasl, openssl, libpcap, wiredtiger
 }:
 
@@ -54,7 +54,14 @@ in stdenv.mkDerivation rec {
   # vendored header file - regardless of whether or not we're using the system
   # tcmalloc - so we need to lift the include path manipulation out of the
   # conditional.
-  patches = [ ./valgrind-include.patch ];
+  patches =
+    [ ./valgrind-include.patch
+      (fetchpatch {
+        url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
+        name = "boost160.patch";
+        sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
+      })
+    ];
 
   postPatch = ''
     # fix environment variable reading

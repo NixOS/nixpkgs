@@ -206,12 +206,6 @@ in {
         description = "Gitlab database user.";
       };
 
-      emailFrom = mkOption {
-        type = types.str;
-        default = "example@example.org";
-        description = "The source address for emails sent by gitlab.";
-      };
-
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;

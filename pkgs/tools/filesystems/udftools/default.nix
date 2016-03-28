@@ -14,9 +14,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
+  NIX_CFLAGS_COMPILE = "-std=gnu90";
+
   preConfigure = ''
     sed -e '1i#include <limits.h>' -i cdrwtool/cdrwtool.c -i pktsetup/pktsetup.c
     sed -e 's@[(]char[*][)]spm [+]=@spm = ((char*) spm) + @' -i wrudf/wrudf.c
+    sed -e '27i#include <string.h>' -i include/udf_endian.h
+    sed -e '38i#include <string.h>' -i wrudf/wrudf-cdrw.c
+    sed -e '12i#include <string.h>' -i wrudf/wrudf-cdr.c
+    sed -e '37i#include <stdlib.h>' -i wrudf/ide-pc.c
   '';
 
   meta = with stdenv.lib; {

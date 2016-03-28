@@ -29,8 +29,6 @@ mkChromiumDerivation (base: rec {
     done
   '';
 
-  preHook = "unset NIX_ENFORCE_PURITY";
-
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;

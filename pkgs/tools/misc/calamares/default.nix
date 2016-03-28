@@ -52,5 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

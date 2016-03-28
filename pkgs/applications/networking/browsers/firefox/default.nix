@@ -73,7 +73,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
+                             "--enable-optimize"
                              "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
@@ -81,13 +81,9 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
-      if [ -e ../${pname}-${version} ]; then
-        configureScript=../${pname}-${version}/configure
-      else
-        configureScript=../mozilla-*/configure
-      fi
     '';
 
   preInstall =
@@ -133,14 +129,14 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "45.0";
-    sha256 = "1wbrygxj285vs5qbpv3cq26w36bd533779mgi8d0gpxin44hzarn";
+    version = "45.0.1";
+    sha256 = "1j6raz51zcj2hxk0spk5zq8xzxi5nlxxm60dpnb7cs6dv334m0fi";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "38.6.1esr";
-    sha256 = "1zyhzczhknplxfmk2r7cczavbsml8ckyimibj2sphwdc300ls5wi";
+    version = "45.0.1esr";
+    sha256 = "0rkk3cr3r7v5xzbcqhyx8b633v4a16ika0wk46p0ichh9n5mci0s";
   };
 
 }

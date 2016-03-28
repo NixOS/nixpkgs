@@ -2,17 +2,17 @@
 
 let
 
-  rev = "fe4a83540ec73dfc298f16f027277355470ea9a0";
+  rev = "f4b20d47d7df7927967fcd524324b145cfc9e2f9";
 
 in import ./generic.nix (args // rec {
-  version = "3.18.y-${rev}";
+  version = "4.1.y-${rev}";
 
-  modDirVersion = "3.18.7";
+  modDirVersion = "4.1.20-v7";
 
   src = fetchurl {
     url = "https://api.github.com/repos/raspberrypi/linux/tarball/${rev}";
     name = "linux-raspberrypi-${version}.tar.gz";
-    sha256 = "05gq40f038hxjqd3sdb1914g2bzw533dyxy59sgdpybs8801x2vb";
+    sha256 = "0x17hlbi7lpmmnp24dnkync5gzj57j84j0nlrcv1lv9fahjkqsm2";
   };
 
   features.iwlwifi = true;

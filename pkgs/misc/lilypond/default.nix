@@ -30,6 +30,8 @@ stdenv.mkDerivation rec{
     # confused the version detection…
     sed -re 's%("[$]exe" --version .*)([|\\] *$)%\1 | sed -re "s@/nix/store/[a-z0-9]{32}-@@" \2%' \
       -i configure
+
+    export HOME=$TMPDIR/home
   '';
 
   postInstall = ''

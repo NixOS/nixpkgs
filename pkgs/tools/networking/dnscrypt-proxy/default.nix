@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = https://dnscrypt.org/;
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm jgeerds ];
-    platforms = platforms.all;
+    # upstream claims OSX support, but Hydra fails
+    platforms = with platforms; allBut [ darwin ];
   };
 }

@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     -DUSE_ZEITGEIST=OFF
   '';
 
+  NIX_LDFLAGS="-lX11";
+
   preFixup = ''
     wrapProgram $out/bin/midori \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \

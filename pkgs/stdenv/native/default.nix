@@ -16,6 +16,7 @@ rec {
     # Disable purity tests; it's allowed (even needed) to link to
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
+    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
   '';
 
   prehookFreeBSD = ''

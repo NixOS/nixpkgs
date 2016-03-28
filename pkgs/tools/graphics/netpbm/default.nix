@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     touch lib/standardppmdfont.c
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   installPhase = ''
     make package pkgdir=$out

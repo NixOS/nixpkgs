@@ -1,4 +1,11 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem
+, pkgs ? import ../.. { inherit system; }
+, channelMap ? {
+    stable = pkgs.chromium;
+    beta   = pkgs.chromiumBeta;
+    dev    = pkgs.chromiumDev;
+  }
+}:
 
 with import ../lib/testing.nix { inherit system; };
 with pkgs.lib;
@@ -160,8 +167,4 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
     $machine->shutdown;
   '';
-}) {
-  stable = pkgs.chromium;
-  beta   = pkgs.chromiumBeta;
-  dev    = pkgs.chromiumDev;
-}
+}) channelMap

@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, libxml2
-, bash, gtk3, glib, makeWrapper
+, bash, gtk3, glib, wrapGAppsHook
 , itstool, gnome3, librsvg, gdk_pixbuf, mpfr, gmp }:
 
 stdenv.mkDerivation rec {
@@ -9,16 +9,12 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ bash pkgconfig gtk3 glib intltool itstool
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
+  buildInputs = [ bash gtk3 glib intltool itstool
                   libxml2 gnome3.gtksourceview mpfr gmp
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas makeWrapper ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/gnome-calculator" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
+                  gnome3.gsettings_desktop_schemas gnome3.dconf ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Calculator;

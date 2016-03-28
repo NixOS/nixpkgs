@@ -43,34 +43,14 @@ let
 
 
   makeIso =
-    { module, type, description ? type, maintainers ? ["eelco"], system }:
+    { module, type, maintainers ? ["eelco"], system }:
 
     with import nixpkgs { inherit system; };
 
-    let
-
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
-      }).config;
-
-      iso = config.system.build.isoImage;
-
-    in
-      # Declare the ISO as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-iso-${config.system.nixosVersion}"
-        { meta = {
-            description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = map (x: lib.maintainers.${x}) maintainers;
-          };
-          inherit iso;
-          passthru = { inherit config; };
-          preferLocalBuild = true;
-        }
-        ''
-          mkdir -p $out/nix-support
-          echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''); # */
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [ module versionModule { isoImage.isoBaseName = "nixos-${type}"; } ];
+    }).config.system.build.isoImage);
 
 
   makeSystemTarball =
@@ -130,7 +110,7 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forAllSystems (system: makeIso {
+  iso_graphical = genAttrs [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
@@ -138,7 +118,7 @@ in rec {
 
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
-  iso_minimal_new_kernel = forAllSystems (system: makeIso {
+  iso_minimal_new_kernel = genAttrs [ "x86_64-linux" ] (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
@@ -146,35 +126,17 @@ in rec {
 
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
-  ova = forAllSystems (system:
+  ova = genAttrs [ "x86_64-linux" ] (system:
 
     with import nixpkgs { inherit system; };
 
-    let
-
-      config = (import lib/eval-config.nix {
-        inherit system;
-        modules =
-          [ versionModule
-            ./modules/installer/virtualbox-demo.nix
-          ];
-      }).config;
-
-    in
-      # Declare the OVA as a build product so that it shows up in Hydra.
-      hydraJob (runCommand "nixos-ova-${config.system.nixosVersion}-${system}"
-        { meta = {
-            description = "NixOS VirtualBox appliance (${system})";
-            maintainers = maintainers.eelco;
-          };
-          ova = config.system.build.virtualBoxOVA;
-          preferLocalBuild = true;
-        }
-        ''
-          mkdir -p $out/nix-support
-          fn=$(echo $ova/*.ova)
-          echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '') # */
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ versionModule
+          ./modules/installer/virtualbox-demo.nix
+        ];
+    }).config.system.build.virtualBoxOVA)
 
   );
 

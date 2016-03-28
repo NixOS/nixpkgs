@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/skype << EOF
     #!${stdenv.shell}
     export PULSE_LATENCY_MSEC=60  # workaround for pulseaudio glitches
-    $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
+    exec $out/libexec/skype/skype --resources=$out/libexec/skype "\$@"
     EOF
 
     chmod +x $out/bin/skype
@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     description = "A proprietary voice-over-IP (VoIP) client";
     homepage = http://www.skype.com/;
     license = stdenv.lib.licenses.unfree;
+    platforms = [ "i686-linux" ];
   };
 }

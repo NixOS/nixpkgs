@@ -1,4 +1,5 @@
-{ stdenv, fetchzip, fetchFromGitHub, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
+{ stdenv, fetchurl, fetchFromGitHub
+, file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, which, gnugrep, gnused, coreutils
 , mimiSupport ? false, gawk ? null }:
 
@@ -15,12 +16,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "xdg-utils-1.1.0-rc3p46";
+  name = "xdg-utils-${version}";
+  version = "1.1.1";
 
-  src = fetchzip {
-    name = "${name}.tar.gz";
-    url = "http://cgit.freedesktop.org/xdg/xdg-utils/snapshot/03577f987730.tar.gz";
-    sha256 = "1fs0kxalmpqv6x0rv4xg65w8r26sk464xisrbwp4p6a033y5x34l";
+  src = fetchurl {
+    url = "https://portland.freedesktop.org/download/${name}.tar.gz";
+    sha256 = "09a1pk3ifsndc5qz2kcd1557i137gpgnv3d739pv22vfayi67pdh";
   };
 
   # just needed when built from git
@@ -37,6 +38,12 @@ stdenv.mkDerivation rec {
     do
       sed "s# $(basename "$tool") # $tool #g" -i "$out"/bin/*
     done
+
+    substituteInPlace $out/bin/xdg-open \
+      --replace "/usr/bin/printf" "${coreutils}/bin/printf"
+
+    substituteInPlace $out/bin/xdg-mime \
+      --replace "/usr/bin/file" "${file}/bin/file"
 
     sed 's# which # type -P #g' -i "$out"/bin/*
   '';

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    broken = true; # doesn't build with GCC 5; fix in GitHub
   };
 }

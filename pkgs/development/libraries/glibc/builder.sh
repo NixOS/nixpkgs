@@ -37,6 +37,10 @@ postInstall() {
 
     # Get rid of more unnecessary stuff.
     rm -rf $out/var $out/sbin/sln
+
+    for i in $out/lib/*.a; do
+        strip -S "$i"
+    done
 }
 
 genericBuild

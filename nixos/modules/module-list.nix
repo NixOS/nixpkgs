@@ -114,6 +114,7 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes.nix
   ./services/cluster/panamax.nix

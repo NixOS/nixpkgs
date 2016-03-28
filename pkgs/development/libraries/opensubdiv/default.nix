@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation {
-  name = "opensubdiv-3.0.3";
+  name = "opensubdiv-3.0.4";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
-    rev = "v3_0_3";
-    sha256 = "1pd7xsz4lx5l2hdixfgqx9yijchw108wqkvxj78rbblkkawvqhmx";
+    rev = "v3_0_4";
+    sha256 = "14ylpzk4121gi3fl02dwmqjp5sbaqpkm4gd0lh6jijccdih0xsc0";
   };
 
   patches =

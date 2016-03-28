@@ -290,13 +290,13 @@ let
 in {
 
   php55 = generic {
-    version = "5.5.32";
-    sha256 = "1vljdvyqsq0vas4yhvpqycqyxl2gfndbmak6cfgxn1cfvc4c3wmh";
+    version = "5.5.33";
+    sha256 = "1a8ac1zcq68irvdffh08cpi4aaaira4hsqwgns7b95pm9pnv3464";
   };
 
   php56 = generic {
-    version = "5.6.18";
-    sha256 = "1vgl2zjq6ws5cjjb3llhwpfwg9gasq3q84ibdv9hj8snm4llmkf3";
+    version = "5.6.19";
+    sha256 = "0s61fncsdgr1mqgh8jma6pi6xxz4gl350467lk00ls3i97wa691a";
   };
 
   php70 = generic {

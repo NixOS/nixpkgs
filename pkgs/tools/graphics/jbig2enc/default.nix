@@ -17,6 +17,11 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ leptonica zlib libwebp giflib libjpeg libpng libtiff ];
 
+  patches = [
+    # https://github.com/agl/jbig2enc/commit/53ce5fe7e73d7ed95c9e12b52dd4984723f865fa
+    ./53ce5fe7e73d7ed95c9e12b52dd4984723f865fa.patch
+  ];
+
   # This is necessary, because the resulting library has
   # /tmp/nix-build-jbig2enc/src/.libs before /nix/store/jbig2enc/lib
   # in its rpath, which means that patchelf --shrink-rpath removes

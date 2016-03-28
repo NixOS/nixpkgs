@@ -152,13 +152,10 @@ lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
     qt4 = callPackage (kdeLocale4 "nds" {}) {};
     qt5 = callPackage (kdeLocale5 "nds" {}) {};
   };
-  # TODO: build broken in 15.11.80; re-enable in next release
-  /*
   nl = {
     qt4 = callPackage (kdeLocale4 "nl" {}) {};
     qt5 = callPackage (kdeLocale5 "nl" {}) {};
   };
-  */
   nn = {
     qt4 = callPackage (kdeLocale4 "nn" {}) {};
     qt5 = callPackage (kdeLocale5 "nn" {}) {};
@@ -196,9 +193,19 @@ lib.mapAttrs (name: attr: pkgs.recurseIntoAttrs attr) {
     qt5 = callPackage (kdeLocale5 "sl" {}) {};
   };
   sr = {
-    qt4 = callPackage (kdeLocale4 "sr" {}) {};
+    qt4 = callPackage (kdeLocale4 "sr" {
+      preConfigure = ''
+        patchShebangs \
+            4/sr/sr@latin/scripts/ts-pmap-compile.py \
+            4/sr/scripts/ts-pmap-compile.py \
+            4/sr/data/resolve-sr-hybrid \
+            4/sr/sr@ijekavian/scripts/ts-pmap-compile.py \
+            4/sr/sr@ijekavianlatin/scripts/ts-pmap-compile.py
+        '';
+    }) {};
     qt5 = callPackage (kdeLocale5 "sr" {
       preConfigure = ''
+        patchShebangs 5/sr/data/resolve-sr-hybrid
         sed -e 's/add_subdirectory(kdesdk)//' -i 5/sr/data/CMakeLists.txt
       '';
     }) {};

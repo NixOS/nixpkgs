@@ -22,12 +22,13 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, name ? "nixos-disk-image"
 }:
 
 with lib;
 
 pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand "nixos-disk-image"
+  pkgs.runCommand name
     { preVM =
         ''
           mkdir $out

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   installPhase=''
     mkdir -p "$out"/bin
-    cp ${./common-lisp.sh} "$out"/bin/common-lisp.sh
+    substituteAll ${./common-lisp.sh} "$out"/bin/common-lisp.sh
     substituteAll "${./build-with-lisp.sh}" "$out/bin/build-with-lisp.sh"
     substituteAll "${./cl-wrapper.sh}" "$out/bin/cl-wrapper.sh"
     chmod a+x "$out"/bin/*

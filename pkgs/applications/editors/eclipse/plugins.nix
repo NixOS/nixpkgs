@@ -377,16 +377,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.10.201512020421";
+    version = "6.9.11.201603260617";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "17y0cb1xprldjav14iy2sinv7lcw4xnjs2fwz9gl41m9m1c0hajk";
+      sha256 = "0cd7d3bdp6f081vrampsv53z55g1mjn04w9ngz3h8dr0h6jnxz3y";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "1iwq0ifk9l56z11vhy5yscvl8l1xk6igkp103v9vwvcx6nlmkfgc";
+      sha256 = "10kdwnydmsvngn8ahijxrv50aps6wa4ckbf7p24mxbwlnmpqfj03";
     };
 
     meta = with stdenv.lib; {

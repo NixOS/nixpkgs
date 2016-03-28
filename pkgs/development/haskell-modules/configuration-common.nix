@@ -49,9 +49,6 @@ self: super: {
   # The package doesn't compile with ruby 1.9, which is our default at the moment.
   hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
-  # help blake finding its native library
-  hs-blake2 = super.hs-blake2.override { b2 = pkgs.libb2; };
-
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
@@ -646,7 +643,19 @@ self: super: {
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
 
   # Tries to run GUI in tests
-  leksah = dontCheck super.leksah;
+  leksah = dontCheck (overrideCabal super.leksah (drv: {
+    executableSystemDepends = (drv.executableSystemDepends or []) ++ (with pkgs; [
+      gnome3.defaultIconTheme # Fix error: Icon 'window-close' not present in theme ...
+      wrapGAppsHook           # Fix error: GLib-GIO-ERROR **: No GSettings schemas are installed on the system
+      gtk3                    # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
+    ]);
+    postPatch = (drv.postPatch or "") + ''
+      for f in src/IDE/Leksah.hs src/IDE/Utils/ServerConnection.hs
+      do
+        substituteInPlace "$f" --replace "\"leksah-server\"" "\"${self.leksah-server}/bin/leksah-server\""
+      done
+    '';
+  }));
 
   # Patch to consider NIX_GHC just like xmonad does
   dyre = appendPatch super.dyre ./patches/dyre-nix.patch;
@@ -935,5 +944,20 @@ self: super: {
   language-c-quote = super.language-c-quote.override { alex = self.alex_3_1_4; };
 
   # https://github.com/agda/agda/issues/1840
-  Agda = super.Agda.override { unordered-containers = self.unordered-containers_0_2_5_1; };
+  Agda_2_4_2_3 = super.Agda_2_4_2_3.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+  Agda_2_4_2_4 = super.Agda_2_4_2_4.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+  Agda = super.Agda.override {
+    unordered-containers = self.unordered-containers_0_2_5_1;
+    cpphs = self.cpphs_1_19_3;
+  };
+
+  # We get lots of strange compiler errors during the test suite run.
+  jsaddle = dontCheck super.jsaddle;
+
 }

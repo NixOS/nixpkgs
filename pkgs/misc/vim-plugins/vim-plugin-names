@@ -112,6 +112,7 @@
 "vim-addon-toggle-buffer"
 "vim-addon-xdebug"
 "vim-airline"
+"vim-airline-themes"
 "vim-coffee-script"
 "vim-easy-align"
 "vim-gista"

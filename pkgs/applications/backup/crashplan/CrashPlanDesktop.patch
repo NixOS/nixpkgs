@@ -1,8 +1,12 @@
---- ./scripts/CrashPlanDesktop    2014-12-18 09:51:14.050804325 +0100
-+++ ./scripts/CrashPlanDesktop-1  2014-12-18 09:51:32.271009382 +0100
-@@ -9,4 +9,4 @@
- 
+--- ./scripts/CrashPlanDesktop	2016-03-02 21:01:58.000000000 -0500
++++ ./scripts/CrashPlanDesktop-1	2016-03-18 20:52:10.117686266 -0400
+@@ -11,7 +11,7 @@
  cd ${TARGETDIR}
  
--${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop > ${TARGETDIR}/log/ui_output.log 2> ${TARGETDIR}/log/ui_error.log &
-+${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop &
+ if [ "_${VERSION_5_UI}" == "_true" ]; then
+-	${TARGETDIR}/electron/crashplan > ${TARGETDIR}/log/ui_output.log 2> ${TARGETDIR}/log/ui_error.log &
++	${TARGETDIR}/electron/crashplan &
+ else
+-	${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop > ${TARGETDIR}/log/ui_output.log 2> ${TARGETDIR}/log/ui_error.log &
++	${JAVACOMMON} ${GUI_JAVA_OPTS} -classpath "./lib/com.backup42.desktop.jar:./lang:./skin" com.backup42.desktop.CPDesktop &
+ fi
