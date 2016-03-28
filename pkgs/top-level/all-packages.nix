@@ -8345,6 +8345,14 @@ in
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = config.pcre.unicode or true;
   };
+  pcre16 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 16;
+  };
+  pcre32 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 32;
+  };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
