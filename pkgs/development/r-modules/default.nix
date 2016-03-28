@@ -698,6 +698,309 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "rsvg" # broken build
+    "Rothermel" # broken build
+    "rfPermute" # broken build
+    "redland" # broken build
+    "RAppArmor" # broken build
+    "permGPU" # broken build
+    "pdftools" # broken build
+    "OceanView" # broken build
+    "MSeasyTkGUI" # broken build
+    "mrMLM" # broken build
+    "MonetDBLite" # broken build
+    "MixGHD" # broken build
+    "LCMCR" # broken build
+    "hunspell" # broken build
+    "googleformr" # broken build
+    "ggseas" # depends on broken package x13binary
+    "seasonal" # depends on broken package x13binary
+    "gunsales" # depends on broken package x13binary
+    "x13binary" # broken build
+    "fds" # broken build
+    "exifr" # broken build
+    "TTAinterfaceTrendAnalysis" # depends on broken package euroMix
+    "stylo" # depends on broken package euroMix
+    "stosim" # depends on broken package euroMix
+    "SRRS" # depends on broken package euroMix
+    "rite" # depends on broken package euroMix
+    "MBCB" # depends on broken package euroMix
+    "forensim" # depends on broken package euroMix
+    "dynBiplotGUI" # depends on broken package euroMix
+    "cncaGUI" # depends on broken package euroMix
+    "biplotbootGUI" # depends on broken package euroMix
+    "AnthropMMD" # depends on broken package euroMix
+    "ilc" # depends on broken package demography
+    "demography" # broken build
+    "webbioc" # depends on broken package limma
+    "davidTiling" # depends on broken package limma
+    "tilingArray" # depends on broken package limma
+    "NAPPA" # depends on broken package limma
+    "NanoStringNorm" # depends on broken package limma
+    "synapterdata" # depends on broken package limma
+    "synapter" # depends on broken package limma
+    "RforProteomics" # depends on broken package limma
+    "pRolocdata" # depends on broken package limma
+    "ProCoNA" # depends on broken package limma
+    "Pbase" # depends on broken package limma
+    "MSnID" # depends on broken package limma
+    "msmsEDA" # depends on broken package limma
+    "MSnbase" # depends on broken package limma
+    "staRank" # depends on broken package limma
+    "phenoDist" # depends on broken package limma
+    "imageHTS" # depends on broken package limma
+    "Mulder2012" # depends on broken package limma
+    "HTSanalyzeR" # depends on broken package limma
+    "gespeR" # depends on broken package limma
+    "cellHTS2" # depends on broken package limma
+    "affyPara" # depends on broken package limma
+    "vsn" # depends on broken package limma
+    "ttScreening" # depends on broken package limma
+    "metaX" # depends on broken package limma
+    "SSPA" # depends on broken package limma
+    "SQDA" # depends on broken package limma
+    "ADaCGH2" # depends on broken package limma
+    "snapCGH" # depends on broken package limma
+    "Shrinkage" # depends on broken package limma
+    "SafeQuant" # depends on broken package limma
+    "RTopper" # depends on broken package limma
+    "RTCGAToolbox" # depends on broken package limma
+    "RPPanalyzer" # depends on broken package limma
+    "Rnits" # depends on broken package limma
+    "RNAinteractMAPK" # depends on broken package limma
+    "RNAinteract" # depends on broken package limma
+    "SimBindProfiles" # depends on broken package limma
+    "ccTutorial" # depends on broken package limma
+    "Ringo" # depends on broken package limma
+    "rCGH" # depends on broken package limma
+    "qusage" # depends on broken package limma
+    "qpcrNorm" # depends on broken package limma
+    "prot2D" # depends on broken package limma
+    "polyester" # depends on broken package limma
+    "plmDE" # depends on broken package limma
+    "phenoTest" # depends on broken package limma
+    "RANKS" # depends on broken package limma
+    "PerfMeas" # depends on broken package limma
+    "pepStat" # depends on broken package limma
+    "PECA" # depends on broken package limma
+    "PADOG" # depends on broken package limma
+    "OGSA" # depends on broken package limma
+    "nethet" # depends on broken package limma
+    "lpNet" # depends on broken package limma
+    "nem" # depends on broken package limma
+    "monocle" # depends on broken package limma
+    "MmPalateMiRNA" # depends on broken package limma
+    "miRtest" # depends on broken package limma
+    "miRLAB" # depends on broken package limma
+    "mGSZ" # depends on broken package limma
+    "MAMA" # depends on broken package limma
+    "metaMA" # depends on broken package limma
+    "msd16s" # depends on broken package limma
+    "metagenomeSeq" # depends on broken package limma
+    "metabolomics" # depends on broken package limma
+    "maSigPro" # depends on broken package limma
+    "timecourse" # depends on broken package limma
+    "stepNorm" # depends on broken package limma
+    "RBM" # depends on broken package limma
+    "saps" # depends on broken package limma
+    "PharmacoGx" # depends on broken package limma
+    "piano" # depends on broken package limma
+    "OLINgui" # depends on broken package limma
+    "OLIN" # depends on broken package limma
+    "nnNorm" # depends on broken package limma
+    "ListerEtAlBSseq" # depends on broken package limma
+    "compEpiTools" # depends on broken package limma
+    "methylPipe" # depends on broken package limma
+    "dyebiasexamples" # depends on broken package limma
+    "dyebias" # depends on broken package limma
+    "CluMix" # depends on broken package limma
+    "HCsnip" # depends on broken package limma
+    "sigaR" # depends on broken package limma
+    "plrs" # depends on broken package limma
+    "CGHregions" # depends on broken package limma
+    "QDNAseq_mm10" # depends on broken package limma
+    "QDNAseq_hg19" # depends on broken package limma
+    "QDNAseq" # depends on broken package limma
+    "GeneBreak" # depends on broken package limma
+    "focalCall" # depends on broken package limma
+    "CGHnormaliter" # depends on broken package limma
+    "CGHcall" # depends on broken package limma
+    "CGHbase" # depends on broken package limma
+    "beta7" # depends on broken package limma
+    "marray" # depends on broken package limma
+    "LVSmiRNA" # depends on broken package limma
+    "lmdme" # depends on broken package limma
+    "limmaGUI" # depends on broken package limma
+    "InPAS" # depends on broken package limma
+    "iChip" # depends on broken package limma
+    "unifiedWMWqPCR" # depends on broken package limma
+    "nondetects" # depends on broken package limma
+    "HTqPCR" # depends on broken package limma
+    "HD2013SGI" # depends on broken package limma
+    "vtpnet" # depends on broken package limma
+    "gwascat" # depends on broken package limma
+    "gQTLstats" # depends on broken package limma
+    "GOsummaries" # depends on broken package limma
+    "yri1kgv" # depends on broken package limma
+    "hmyriB36" # depends on broken package limma
+    "cheung2010" # depends on broken package limma
+    "GGtools" # depends on broken package limma
+    "GGdata" # depends on broken package limma
+    "encoDnaseI" # depends on broken package limma
+    "dsQTL" # depends on broken package limma
+    "ceuhm3" # depends on broken package limma
+    "ceu1kgv" # depends on broken package limma
+    "ceu1kg" # depends on broken package limma
+    "GGBase" # depends on broken package limma
+    "GeneSelector" # depends on broken package limma
+    "GeneSelectMMD" # depends on broken package limma
+    "gCMAPWeb" # depends on broken package limma
+    "gCMAP" # depends on broken package limma
+    "flowBin" # depends on broken package limma
+    "Fletcher2013a" # depends on broken package limma
+    "FEM" # depends on broken package limma
+    "explorase" # depends on broken package limma
+    "ExiMiR" # depends on broken package limma
+    "tweeDEseq" # depends on broken package limma
+    "tRanslatome" # depends on broken package limma
+    "ToPASeq" # depends on broken package limma
+    "timeSeq" # depends on broken package limma
+    "TCGAbiolinks" # depends on broken package limma
+    "TCC" # depends on broken package limma
+    "systemPipeR" # depends on broken package limma
+    "STATegRa" # depends on broken package limma
+    "ssizeRNA" # depends on broken package limma
+    "RUVSeq" # depends on broken package limma
+    "RnaSeqSampleSizeData" # depends on broken package limma
+    "RnaSeqSampleSize" # depends on broken package limma
+    "rnaSeqMap" # depends on broken package limma
+    "ReportingTools" # depends on broken package limma
+    "QuasiSeq" # depends on broken package limma
+    "PROPER" # depends on broken package limma
+    "myTAI" # depends on broken package limma
+    "msmsTests" # depends on broken package limma
+    "methylMnM" # depends on broken package limma
+    "metaseqR" # depends on broken package limma
+    "MEDIPS" # depends on broken package limma
+    "manta" # depends on broken package limma
+    "HTSFilter" # depends on broken package limma
+    "HTSCluster" # depends on broken package limma
+    "GSAgm" # depends on broken package limma
+    "fdrDiscreteNull" # depends on broken package limma
+    "erccdashboard" # depends on broken package limma
+    "EnrichmentBrowser" # depends on broken package limma
+    "edgeRun" # depends on broken package limma
+    "EDDA" # depends on broken package limma
+    "RnaSeqTutorial" # depends on broken package limma
+    "easyRNASeq" # depends on broken package limma
+    "DEGreport" # depends on broken package limma
+    "Imetagene" # depends on broken package limma
+    "metagene" # depends on broken package limma
+    "DBChIP" # depends on broken package limma
+    "babel" # depends on broken package limma
+    "apmsWAPP" # depends on broken package limma
+    "ampliQueso" # depends on broken package limma
+    "edgeR" # depends on broken package limma
+    "MMDiff" # depends on broken package limma
+    "ChIPQC" # depends on broken package limma
+    "DiffBind" # depends on broken package limma
+    "DCGL" # depends on broken package limma
+    "Prostar" # depends on broken package limma
+    "DAPAR" # depends on broken package limma
+    "DAAGbio" # depends on broken package limma
+    "csaw" # depends on broken package limma
+    "cp4p" # depends on broken package limma
+    "coRNAi" # depends on broken package limma
+    "Cormotif" # depends on broken package limma
+    "CORM" # depends on broken package limma
+    "TurboNorm" # depends on broken package limma
+    "maigesPack" # depends on broken package limma
+    "convert" # depends on broken package limma
+    "compcodeR" # depends on broken package limma
+    "codelink" # depends on broken package limma
+    "clippda" # depends on broken package limma
+    "REDseq" # depends on broken package limma
+    "GUIDEseq" # depends on broken package limma
+    "ggtut" # depends on broken package limma
+    "FunciSNP" # depends on broken package limma
+    "ChIPpeakAnno" # depends on broken package limma
+    "ChIPComp" # depends on broken package limma
+    "ChimpHumanBrainData" # depends on broken package limma
+    "charmData" # depends on broken package limma
+    "charm" # depends on broken package limma
+    "cghMCR" # depends on broken package limma
+    "CCl4" # depends on broken package limma
+    "casper" # depends on broken package limma
+    "CancerMutationAnalysis" # depends on broken package limma
+    "CALIB" # depends on broken package limma
+    "quantro" # depends on broken package limma
+    "RnBeads" # depends on broken package limma
+    "mvoutData" # depends on broken package limma
+    "MineICA" # depends on broken package limma
+    "methyAnalysis" # depends on broken package limma
+    "MAQCsubsetILM" # depends on broken package limma
+    "MAQCsubset" # depends on broken package limma
+    "lumiRatIDMapping" # depends on broken package limma
+    "lumiMouseIDMapping" # depends on broken package limma
+    "lumiHumanIDMapping" # depends on broken package limma
+    "lumiBarnes" # depends on broken package limma
+    "iCheck" # depends on broken package limma
+    "ffpeExampleData" # depends on broken package limma
+    "arrayMvout" # depends on broken package limma
+    "lumi" # depends on broken package limma
+    "ffpe" # depends on broken package limma
+    "methylumi" # depends on broken package limma
+    "shinyMethyl" # depends on broken package limma
+    "MethylAidData" # depends on broken package limma
+    "MethylAid" # depends on broken package limma
+    "IlluminaHumanMethylation450kmanifest" # depends on broken package limma
+    "skewr" # depends on broken package limma
+    "wateRmelon" # depends on broken package limma
+    "missMethyl" # depends on broken package limma
+    "minfiData" # depends on broken package limma
+    "IlluminaHumanMethylation450kanno_ilmn12_hg19" # depends on broken package limma
+    "IlluminaHumanMethylation27kmanifest" # depends on broken package limma
+    "FlowSorted_DLPFC_450k" # depends on broken package limma
+    "FlowSorted_Blood_450k" # depends on broken package limma
+    "ENmix" # depends on broken package limma
+    "ELMER" # depends on broken package limma
+    "MEAL" # depends on broken package limma
+    "DMRcate" # depends on broken package limma
+    "CopyNumber450kData" # depends on broken package limma
+    "CopyNumber450k" # depends on broken package limma
+    "conumee" # depends on broken package limma
+    "ChAMP" # depends on broken package limma
+    "minfi" # depends on broken package limma
+    "regionReport" # depends on broken package limma
+    "derfinderPlot" # depends on broken package limma
+    "derfinder" # depends on broken package limma
+    "bumphunter" # depends on broken package limma
+    "birta" # depends on broken package limma
+    "betr" # depends on broken package limma
+    "beadarrayMSV" # depends on broken package limma
+    "RobLoxBioC" # depends on broken package limma
+    "maGUI" # depends on broken package limma
+    "epigenomix" # depends on broken package limma
+    "blima" # depends on broken package limma
+    "BeadArrayUseCases" # depends on broken package limma
+    "beadarrayFilter" # depends on broken package limma
+    "beadarrayExampleData" # depends on broken package limma
+    "beadarray" # depends on broken package limma
+    "ballgown" # depends on broken package limma
+    "attract" # depends on broken package limma
+    "ArrayTools" # depends on broken package limma
+    "arrayQuality" # depends on broken package limma
+    "DrugVsDisease" # depends on broken package limma
+    "ArrayExpress" # depends on broken package limma
+    "oneChannelGUI" # depends on broken package limma
+    "affylmGUI" # depends on broken package limma
+    "AffyExpress" # depends on broken package limma
+    "AgiMicroRna" # depends on broken package limma
+    "affycoretools" # depends on broken package limma
+    "ABSSeq" # depends on broken package limma
+    "a4" # depends on broken package limma
+    "a4Base" # depends on broken package limma
+    "limma" # broken build
     "TransView" # broken build
     "Starr" # broken build
     "SICtools" # broken build
@@ -747,11 +1050,8 @@ let
     "GLMMRR" # depends on broken package lme4
     "replicationInterval" # depends on broken package lme4
     "GWASdata" # depends on broken package GWASTools
-    "LLSR" # depends on broken package ggtern
-    "ggtern" # broken build
     "EnsemblePCReg" # depends on broken package EnsembleBase
     "EnsembleCV" # depends on broken package EnsembleBase
-    "popprxl" # depends on broken package poppr
     "cpgen" # depends on broken package pedigreemm
     "mitml" # depends on broken package jomo
     "IlluminaHumanMethylation450k_db" # broken build
@@ -864,7 +1164,6 @@ let
     "BEST" # broken build
     "bgmm" # depends on broken package nlopt
     "BIFIEsurvey" # depends on broken package nlopt
-    "bigGP" # build is broken
     "BiGGR" # depends on broken package rsbml
     "bioassayR" # broken build
     "BiodiversityR" # depends on broken package nlopt
@@ -908,12 +1207,10 @@ let
     "ClustGeo" # depends on broken FactoMineR
     "CNORfuzzy" # depends on broken package nlopt
     "CNVPanelizer" # depends on broken cn.mops
-    "coefplot" # build is broken
     "COHCAP" # build is broken
     "colorscience" # broken build
     "compendiumdb" # broken build
     "conformal" # depends on broken package nlopt
-    "CopulaDTA" # depends on broken package rstan
     "corHMM" # depends on broken package nlopt
     "CosmoPhotoz" # depends on broken package nlopt
     "covmat" # depends on broken package VIM
@@ -939,17 +1236,14 @@ let
     "DeducerSurvival" # depends on broken package nlopt
     "DeducerText" # depends on broken package nlopt
     "DEGraph" # depends on broken package RCytoscape
-    "DescribeDisplay" # build is broken
     "destiny" # depends on broken package VIM
     "DiagTest3Grp" # depends on broken package nlopt
     "diffHic" # depends on broken package rhdf5
     "difR" # depends on broken package nlopt
     "DirichletMultinomial" # Build Is Broken
-    "discSurv" # depends on broken package nlopt
     "DistatisR" # depends on broken package nlopt
     "diveRsity" # depends on broken package nlopt
     "DJL" # depends on broken package car
-    "doMPI" # build is broken
     "dpa" # depends on broken package nlopt
     "dpcR" # depends on broken nloptr
     "drc" # depends on broken package nlopt
@@ -1033,7 +1327,6 @@ let
     "GUIDE" # depends on broken package rpanel
     "GWAF" # depends on broken package nlopt
     "GWASTools" # broken build
-    "h2o" # build is broken
     "h5" # build is broken
     "h5vc" # depends on broken package rhdf5
     "hbsae" # depends on broken package nlopt
@@ -1083,7 +1376,6 @@ let
     "learnstats" # depends on broken package nlopt
     "lefse" # build is broken
     "lessR" # depends on broken package nlopt
-    "lfe" # build is broken
     "lgcp" # depends on broken package rpanel
     "Libra" # broken build
     "LinRegInteractive" # depends on broken package rpanel
@@ -1093,7 +1385,6 @@ let
     "LMERConvenienceFunctions" # depends on broken package nlopt
     "lmerTest" # depends on broken package nlopt
     "lmSupport" # depends on broken package nlopt
-    "LogisticDx" # depends on broken package nlopt
     "LOGIT" # depends on broken package caret
     "longpower" # depends on broken package nlopt
     "LPTime" # broken build
@@ -1118,7 +1409,6 @@ let
     "metagear" # build is broken
     "metaheur" # depends on broken package preprocomb
     "metamisc" # broken build
-    "metaMix" # build is broken
     "metaplus" # depends on broken package nlopt
     "metaSEM" # depends on broken package OpenMx
     "Metatron" # depends on broken package nlopt
@@ -1134,7 +1424,6 @@ let
     "mitoODE" # build is broken
     "mixAK" # depends on broken package nlopt
     "MixedPoisson" # broken build
-    "MIXFIM" # build is broken
     "mixlm" # depends on broken package nlopt
     "MixMAP" # depends on broken package nlopt
     "mlma" # depends on broken package lme4
@@ -1185,7 +1474,6 @@ let
     "oz" # broken build
     "PAA" # broken build
     "pamm" # depends on broken package nlopt
-    "PANDA" # build is broken
     "panelAR" # depends on broken package nlopt
     "papeR" # depends on broken package nlopt
     "parboost" # depends on broken package nlopt
@@ -1193,13 +1481,11 @@ let
     "partitions" # broken build
     "PatternClass" # build is broken
     "PBImisc" # depends on broken package nlopt
-    "PBSddesolve" # build is broken
     "pcaBootPlot" # depends on broken FactoMineR
     "pcaL1" # build is broken
     "pcnetmeta" # broken build
     "PDQutils" # broken build
     "pedigreemm" # depends on broken package nlopt
-    "pedometrics" # depends on broken package nlopt
     "pequod" # depends on broken package nlopt
     "pglm" # depends on broken package car
     "PhenStat" # depends on broken package nlopt
@@ -1212,11 +1498,9 @@ let
     "plsRbeta" # depends on broken package nlopt
     "plsRcox" # depends on broken package nlopt
     "plsRglm" # depends on broken package nlopt
-    "pmclust" # build is broken
     "pmm" # depends on broken package nlopt
     "polynom" # broken build
     "pomp" # depends on broken package nlopt
-    "poppr" # depends on broken package  Biostrings
     "predictmeans" # depends on broken package nlopt
     "preprocomb" # depends on broken package caret
     "prevalence" # broken build
@@ -1226,7 +1510,6 @@ let
     "PSAboot" # depends on broken package nlopt
     "ptw" # depends on broken nloptr
     "PurBayes" # broken build
-    "purge" # depends on broken package lme4
     "PVAClone" # broken build
     "pvca" # depends on broken package nlopt
     "PythonInR" # broken build
@@ -1296,7 +1579,6 @@ let
     "Rcpi" # depends on broken package ChemmineR
     "Rcplex" # Build Is Broken
     "RcppAPT" # Build Is Broken
-    "RcppOctave" # build is broken
     "RcppRedis" # build is broken
     "rcrypt" # broken build
     "RCytoscape" # Build Is Broken
@@ -1313,8 +1595,6 @@ let
     "REST" # depends on broken package nlopt
     "rgbif" # depends on broken package V8
     "Rgnuplot" # broken build
-    "rgp" # build is broken
-    "rgpui" # depends on broken package rgp
     "rhdf5" # build is broken
     "rjade" # depends on broken package V8
     "rjags" # broken build
@@ -1326,7 +1606,6 @@ let
     "rmgarch" # depends on broken package nlopt
     "rminer" # depends on broken package nlopt
     "Rmosek" # build is broken
-    "rmumps" # build is broken
     "RMySQL" # broken build
     "RNAither" # depends on broken package nlopt
     "RnavGraph" # build is broken
@@ -1344,10 +1623,8 @@ let
     "RRreg" # depends on broken package lme4
     "RSAP" # build is broken
     "rsbml" # build is broken
-    "rscala" # build is broken
     "RSDA" # depends on broken package nlopt
     "Rsomoclu" # broken build
-    "rstan" # build is broken
     "RStoolbox" # depends on broken package caret
     "Rsymphony" # build is broken
     "rTableICC" # broken build
@@ -1403,9 +1680,7 @@ let
     "splm" # depends on broken package car
     "spocc" # depends on broken package V8
     "spoccutils" # depends on broken spocc
-    "spsann" # depends on broken package pedometrics
     "ssmrob" # depends on broken package nlopt
-    "stagePop" # depends on broken package PBSddesolve
     "StatMethRank" # broken build
     "stepp" # depends on broken package nlopt
     "stringgaussnet" # build is broken
