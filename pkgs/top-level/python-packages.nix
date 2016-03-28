@@ -1809,6 +1809,26 @@ in modules // {
     propagatedBuildInputs = with self; [ boto crcmod psutil ];
   };
 
+  cached-property = buildPythonPackage rec {
+    version = "1.3.0";
+    name = "cached-property-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/cached-property/${name}.tar.gz";
+      sha256 = "10dwi3s6f154ag9dvqy5jiwp31fs57lbxjcjgn4cwvi8qyqpi3j5";
+    };
+
+    buildInputs = with self; [ freezegun ];
+
+    meta = {
+      description = "A decorator for caching properties in classes";
+      homepage = https://github.com/pydanny/cached-property;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ ericsagnes ];
+    };
+  };
+
   cgroup-utils = buildPythonPackage rec {
     version = "0.6";
     name = "cgroup-utils-${version}";
@@ -4890,11 +4910,12 @@ in modules // {
   };
 
   docker = buildPythonPackage rec {
-    name = "docker-py-1.5.0";
+    name = "docker-py-${version}";
+    version = "1.7.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-py/${name}.tar.gz";
-      sha256 = "1l7q0179y4lmv24z4q12653141wc1b1zzgbfw46yzbs6mj7i4939";
+      sha256 = "0k6hm3vmqh1d3wr9rryyif5n4rzvcffdlb1k4jvzp7g4996d3ccm";
     };
 
     propagatedBuildInputs = with self; [ six requests2 websocket_client ];
@@ -4910,11 +4931,11 @@ in modules // {
   };
 
   dockerpty = buildPythonPackage rec {
-    name = "dockerpty-0.3.4";
+    name = "dockerpty-0.4.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/dockerpty/${name}.tar.gz";
-      sha256 = "a51044cc49089a2408fdf6769a63eebe0b16d91f34716ecee681984446ce467d";
+      sha256 = "1kjn64wx23jmr8dcc6g7bwlmrhfmxr77gh6iphqsl39sayfxdab9";
     };
 
     propagatedBuildInputs = with self; [ six ];
@@ -8814,14 +8835,13 @@ in modules // {
   };
 
   docker_compose = buildPythonPackage rec {
-    version = "1.5.2";
+    version = "1.6.2";
     name = "docker-compose-${version}";
     namePrefix = "";
-    disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/d/docker-compose/${name}.tar.gz";
-      sha256 = "79aa7e2e6ef9ab1936f8777476ffd4bb329875ec3d3664d239896d2f2a3c4f4f";
+      sha256 = "10i4032d99hm5nj1p74pcad9i3gz1h5x3096byklncgssfyjqki6";
     };
 
     # lots of networking and other fails
@@ -8829,8 +8849,9 @@ in modules // {
     buildInputs = with self; [ mock pytest nose ];
     propagatedBuildInputs = with self; [
       requests2 six pyyaml texttable docopt docker dockerpty websocket_client
-      enum34 jsonschema
+      enum34 jsonschema cached-property
     ];
+
     patchPhase = ''
       sed -i "s/'requests >= 2.6.1, < 2.8'/'requests'/" setup.py
     '';
