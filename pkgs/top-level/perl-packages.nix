@@ -1528,6 +1528,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1xsl2pz1jrh127pq0b01yffnj4mnp9nvkp88h5mndrscq9hn8xa6";
     };
     buildInputs = [ DBFile ];
+    propagatedBuildInputs = [ CGI ];
   };
 
   CGISimple = buildPerlPackage rec {
