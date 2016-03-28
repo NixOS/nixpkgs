@@ -774,13 +774,18 @@ in modules // {
   };
 
   application = buildPythonPackage rec {
-    name = "python-application-${version}";
-    version = "1.5.0";
+    pname = "python-application";
+    name = "${pname}-${version}";
+    version = "2.0.2";
+    disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-application/${name}.tar.gz";
-      sha256 = "9bc00c2c639bf633e2c5e08d4bf1bb5d7edaad6ccdd473692f0362df08f8aafc";
-    };
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
+    };  
+    buildInputs = with self; [ zope_interface ];
+
   };
 
   appnope = buildPythonPackage rec {
@@ -5357,16 +5362,18 @@ in modules // {
 
 
   eventlib = buildPythonPackage rec {
-    name = "python-eventlib-${version}";
-    version = "0.2.1";
+    pname = "python-eventlib";
+    name = "${pname}-${version}";
+    version = "0.2.2";
 
     # Judging from SyntaxError
     disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/SipClient/${name}.tar.gz";
-      sha256 = "25224794420f430946fe46932718b521a6264903fe8c0ed3563dfdb844c623e7";
-    };
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
+    };  
 
     propagatedBuildInputs = with self; [ greenlet ];
 
@@ -5798,8 +5805,8 @@ in modules // {
   gnutls = buildPythonPackage rec {
     name = "python-gnutls";
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-2.0.1.tar.gz";
-      sha256 = "d8fb368c6a4dd58bc6cd5e61d4a12d119c4506fd344a371b3429b3ac2623b9ac";
+      url = "https://pypi.python.org/packages/source/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
     propagatedBuildInputs = with self; [ pkgs.gnutls ];
@@ -12179,14 +12186,16 @@ in modules // {
   };
 
   msrplib = buildPythonPackage rec {
-    name = "python-msrplib-${version}";
-    version = "0.18.0";
+    pname = "python-msrplib";
+    name = "${pname}-${version}";
+    version = "0.19";
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/MSRP/${name}.tar.gz";
-      sha256 = "0vp9g5p015g3f67rl4vz0qnn6x7hciry6nmvwf82h9h5rx11r43j";
-    };
-
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
+    };  
+    
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
@@ -13523,6 +13532,31 @@ in modules // {
       description = "A drop-in substitute for Py2.7's new collections.OrderedDict that works in Python 2.4-2.6";
       license = licenses.bsd3;
       maintainers = with maintainers; [ garbas ];
+    };
+  };
+
+  python-otr = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "python-otr";
+    version = "1.2.0";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "AGProjects";
+      repo = pname;
+      rev = "release-" + version;
+      sha256 = "0p3b1n8jlxwd65gbk2k5007fkhdyjwcvr4982s42hncivxvabzzy";
+    };
+
+    propagatedBuildInputs = with self; [ zope_interface cryptography application gmpy2 ];
+
+    meta = {
+      description = "A pure python implementation of OTR";
+      homepage = https://github.com/AGProjects/otr;
+      license = licenses.lgpl21Plus;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ edwtjo ];
     };
   };
 
@@ -20282,15 +20316,15 @@ in modules // {
 
   sipsimple = buildPythonPackage rec {
     name = "sipsimple-${version}";
-    version = "2.6.0";
+    version = "3.0.0";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://download.ag-projects.com/SipClient/python-${name}.tar.gz";
-      sha256 = "0xcyasas28q1ad1hgw4vd62b72mf1sng7xwfcls6dc05k9p3q8v3";
+      sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
     };
 
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml ];
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
   };
 
@@ -22563,12 +22597,15 @@ in modules // {
   };
 
   xcaplib = buildPythonPackage rec {
-    name = "python-xcaplib-${version}";
-    version = "1.1.0";
+    pname = "python-xcaplib";
+    name = "${pname}-${version}";
+    version = "1.2.0";
+    disabled = isPy3k;
 
-    src = pkgs.fetchurl {
-      url = "http://download.ag-projects.com/XCAP/${name}.tar.gz";
-      sha256 = "2f8ea6fe7d005104ef1d854aa87bd8ee85ca242a70cde42f409f8e5557f864b3";
+    src = pkgs.fetchdarcs {
+      url = "http://devel.ag-projects.com/repositories/${pname}";
+      rev = "release-${version}";
+      sha256 = "0vna5r4ihv7z1yx6r93954jqskcxky77znzy1m9dg9vna1dgwfdn";
     };
 
     propagatedBuildInputs = with self; [ eventlib application ];
