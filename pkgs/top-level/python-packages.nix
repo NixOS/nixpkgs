@@ -2915,13 +2915,13 @@ in modules // {
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
-    version = "3.1.19";
+    version = "3.1.23";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
-      sha256 = "0wbbsrg3vfq8v7y2nylal1gqmn3h4a5vqzbsjiwcybl21hlj2smx";
+      sha256 = "0614ppp18vmiwdk0rxvz0wn62d7svanwdnx7jgqxpy9pb20rqd8s";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
