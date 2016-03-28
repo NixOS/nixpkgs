@@ -8305,7 +8305,7 @@ in modules // {
     };
   };
 
-  django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+  django_redis = buildPythonPackage rec {
     name = "django-redis-${version}";
     version = "4.2.0";
 
@@ -8316,18 +8316,18 @@ in modules // {
 
     buildInputs = [ self.mock ];
 
-    propagatedBuildInputs = [ django ] ++
-      (with self; [
-        redis
-        msgpack
-      ]);
+    propagatedBuildInputs = with self; [
+      django
+      redis
+      msgpack
+    ];
 
     meta = {
       description = "Full featured redis cache backend for Django";
       homepage = https://github.com/niwibe/django-redis;
       license = licenses.bsd3;
     };
-  }) {};
+  };
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
@@ -8348,7 +8348,7 @@ in modules // {
     };
   };
 
-  django_silk = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+  django_silk = buildPythonPackage rec {
     name = "django-silk-${version}";
     version = "0.5.6";
 
@@ -8359,25 +8359,25 @@ in modules // {
 
     buildInputs = [ self.mock ];
 
-    propagatedBuildInputs = [ django ] ++
-      (with self; [
-        pygments
-        simplejson
-        dateutil
-        requests2
-        sqlparse
-        jinja2
-        autopep8
-        pytz
-        pillow
-      ]);
+    propagatedBuildInputs = with self; [
+      django
+      pygments
+      simplejson
+      dateutil
+      requests2
+      sqlparse
+      jinja2
+      autopep8
+      pytz
+      pillow
+    ];
 
     meta = {
       description = "Silky smooth profiling for the Django Framework";
       homepage = https://github.com/mtford90/silk;
       license = licenses.mit;
     };
-  }) {};
+  };
 
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
