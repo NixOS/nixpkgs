@@ -43,7 +43,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = http://icanblink.com/;
     description = "A state of the art, easy to use SIP client for Voice, Video and IM";
     platforms = platforms.linux;
-    license = licenses.gplv3;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
   };
 }
