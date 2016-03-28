@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   doCheck = ! stdenv.isDarwin;
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   meta = {
