@@ -759,6 +759,8 @@ in
 
   gencfsm = callPackage ../tools/security/gencfsm { };
 
+  genromfs = callPackage ../tools/filesystems/genromfs { };
+
   gist = callPackage ../tools/text/gist { };
 
   gmic = callPackage ../tools/graphics/gmic { };
