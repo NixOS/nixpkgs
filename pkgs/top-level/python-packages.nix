@@ -8331,14 +8331,14 @@ in modules // {
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
-    version = "1.8.5";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/d/django-reversion/${name}.tar.gz";
-      sha256 = "0z8fxvxgbxfnalr5br74rsw6g42nry2q656rx7rsgmicd8n42v2r";
+      url = "https://pypi.python.org/packages/source/d/django-reversion/${name}.tar.gz";
+      sha256 = "01iv8w6lmmq98qjhxmnp8ddjxifmhxcmp612ijd91wc8nv8lk12w";
     };
 
-    propagatedBuildInputs = with self; [ django_1_7 ] ++
+    propagatedBuildInputs = with self; [ django ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     meta = {
