@@ -2097,13 +2097,13 @@ in modules // {
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
-    version = "3.3.0.21";
+    version = "3.3.0.23";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/billiard/${name}.tar.gz";
-      sha256 = "1sfsrkm5xv820wp2mz5zn2rnw6s0c9wal69v1fkr26wp1a7zf1cp";
+      sha256 = "02wxsc6bhqvzh8j6w758kvgqbnj14l796mvmrcms8fgfamd2lak9";
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
