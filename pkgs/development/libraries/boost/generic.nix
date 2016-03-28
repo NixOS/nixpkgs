@@ -58,7 +58,7 @@ let
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
-    "runtime-link=${runtime-link}"
+  ] ++ optional (link != "static") "runtime-link=${runtime-link}" ++ [
     "link=${link}"
     "${cflags}"
   ] ++ optional (variant == "release") "debug-symbols=off";

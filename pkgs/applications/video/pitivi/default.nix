@@ -23,7 +23,6 @@ in stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl21Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   nativeBuildInputs = [ pkgconfig intltool itstool makeWrapper ];

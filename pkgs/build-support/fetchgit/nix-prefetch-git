@@ -327,7 +327,12 @@ print_results() {
         echo "{"
         echo "  \"url\": \"$url\","
         echo "  \"rev\": \"$fullRev\","
-        echo "  \"$hashType\": \"$hash\""
+        echo -n "  \"$hashType\": \"$hash\""
+        if test -n "$fetchSubmodules"; then
+            echo ","
+            echo -n "  \"fetchSubmodules\": true"
+        fi
+        echo ""
         echo "}"
     fi
 }

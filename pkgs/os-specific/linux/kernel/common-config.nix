@@ -478,7 +478,9 @@ with stdenv.lib;
   ''}
   ${optionalString (versionAtLeast version "3.7") ''
     MEDIA_USB_SUPPORT y
-    MEDIA_PCI_SUPPORT y
+    ${optionalString (!(features.chromiumos or false)) ''
+      MEDIA_PCI_SUPPORT y
+    ''}
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.

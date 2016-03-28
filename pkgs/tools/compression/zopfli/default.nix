@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # problems, easily reproducible
   buildFlags = [
     "zopfli"
     "libzopfli"

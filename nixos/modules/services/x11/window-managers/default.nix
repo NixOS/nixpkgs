@@ -10,13 +10,13 @@ in
   imports = [
     ./afterstep.nix
     ./bspwm.nix
-    ./clfswm.nix
     ./compiz.nix
     ./dwm.nix
     ./exwm.nix
     ./fluxbox.nix
     ./herbstluftwm.nix
     ./i3.nix
+    ./jwm.nix
     ./metacity.nix
     ./openbox.nix
     ./notion.nix

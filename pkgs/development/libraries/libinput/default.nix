@@ -15,11 +15,11 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libinput-1.2.0";
+  name = "libinput-1.2.1";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "0b3f67xsy1s84cvzw22mjfkbcv6pj4p4yns4h3m0fmb7zqbvjm0p";
+    sha256 = "1hy1h0a4zx5wj23sah4kms2z0285yl0kcn4fqlrrp1gqax9qrnz2";
   };
 
   configureFlags = [

@@ -18,11 +18,11 @@ in
 
 pythonPackages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "14q6y1hwzki56nfhd3nfbxid07d5fv0pgmklvcf7yxjmpdxrg0iq";
+    sha256 = "0lj3a8zg6dznpnnxyza8a05c13py52j62rqlad1zcgksm5g63vic";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -53,6 +53,11 @@ pythonPackages.buildPythonApplication rec {
     mkdir -p $out/share
     sed -i 's@usr_share = .*@usr_share = os.getenv("out")+"/share"@' setup.py
     pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    $out/bin/electrum help >/dev/null
   '';
 
   meta = with stdenv.lib; {

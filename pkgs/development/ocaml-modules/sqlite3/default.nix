@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = http://mmottl.github.io/sqlite3-ocaml/;
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       z77z vbgl
     ];

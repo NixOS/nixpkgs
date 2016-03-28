@@ -1,6 +1,7 @@
 { stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
 , proxySupport ? true
 , sslSupport ? true, openssl
+, http2Support ? true, libnghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
 , luaSupport ? false, lua5
@@ -12,6 +13,7 @@ in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
+assert http2Support -> libnghttp2 != null;
 
 stdenv.mkDerivation rec {
   version = "2.4.18";
@@ -25,6 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [perl] ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
     optional libxml2Support libxml2 ++
+    optional http2Support libnghttp2 ++
     optional stdenv.isDarwin libiconv;
 
   # Required for ‘pthread_cancel’.
@@ -44,6 +47,7 @@ stdenv.mkDerivation rec {
     --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
+    ${optionalString http2Support "--enable-http2 --with-nghttp2=${libnghttp2}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
     ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
   '';

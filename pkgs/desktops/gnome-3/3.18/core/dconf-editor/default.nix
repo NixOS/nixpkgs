@@ -1,16 +1,13 @@
 { stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus_glib, gnome3
-, libxml2, intltool, docbook_xsl_ns, docbook_xsl, makeWrapper }:
+, libxml2, intltool, docbook_xsl_ns, docbook_xsl, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ vala libxslt pkgconfig glib dbus_glib gnome3.gtk libxml2 gnome3.defaultIconTheme
-                  intltool docbook_xsl docbook_xsl_ns makeWrapper gnome3.dconf ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/dconf-editor" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-  '';
+  buildInputs = [ vala libxslt glib dbus_glib gnome3.gtk libxml2 gnome3.defaultIconTheme
+                  intltool docbook_xsl docbook_xsl_ns gnome3.dconf ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

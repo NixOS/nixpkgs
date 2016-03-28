@@ -103,7 +103,7 @@ in
     hardware.opengl.extraPackages32 = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
+      example = literalExample "with pkgs.pkgsi686Linux; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
       description = ''
         Additional packages to add to 32-bit OpenGL drivers on
         64-bit systems. Used when <option>driSupport32Bit</option> is

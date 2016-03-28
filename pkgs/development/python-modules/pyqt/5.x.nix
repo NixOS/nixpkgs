@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
     homepage    = http://www.riverbankcomputing.co.uk;
     license     = licenses.gpl3;
     platforms   = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ sander iyzsong ];
+    maintainers = with maintainers; [ sander ];
   };
 
   src = fetchurl {

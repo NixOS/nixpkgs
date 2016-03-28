@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0qw77gvr57azjbn76cjlm4sv1hf2hh90g7n7n33gfvlpnbs7mf3p";
   };
 
+  postPatch = ''
+    sed 's/^CXX=g++/#CXX/' -i makefile
+  '';
+
   buildPhase = ''
     make unrar
     make clean

@@ -98,8 +98,8 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.dovecot22;
-      defaultText = "pkgs.dovecot22";
+      default = pkgs.dovecot;
+      defaultText = "pkgs.dovecot";
       description = "Dovecot package to use.";
     };
 

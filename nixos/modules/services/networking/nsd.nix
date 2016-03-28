@@ -346,7 +346,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Wheter NSD should answer VERSION.BIND and VERSION.SERVER CHAOS class queries.
+        Whether NSD should answer VERSION.BIND and VERSION.SERVER CHAOS class queries.
       '';
     };
 
@@ -378,7 +378,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Wheter to listen on IPv4 connections.
+        Whether to listen on IPv4 connections.
       '';
     };
 
@@ -394,7 +394,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Wheter to listen on IPv6 connections.
+        Whether to listen on IPv6 connections.
       '';
     };
 
@@ -434,7 +434,7 @@ in
       type = types.bool;
       default = pkgs.stdenv.isLinux;
       description = ''
-        Wheter to enable SO_REUSEPORT on all used sockets. This lets multiple
+        Whether to enable SO_REUSEPORT on all used sockets. This lets multiple
         processes bind to the same port. This speeds up operation especially
         if the server count is greater than one and makes fast restarts less
         prone to fail
@@ -445,7 +445,7 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Wheter if this server will be a root server (a DNS root server, you
+        Whether this server will be a root server (a DNS root server, you
         usually don't want that).
       '';
     };
@@ -524,7 +524,7 @@ in
       type = types.bool;
       default = true;
       description = ''
-        Wheter to check mtime of all zone files on start and sighup.
+        Whether to check mtime of all zone files on start and sighup.
       '';
     };
 

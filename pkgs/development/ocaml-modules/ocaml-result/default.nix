@@ -25,6 +25,6 @@ stdenv.mkDerivation {
       Result module defined in this library.
     '';
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

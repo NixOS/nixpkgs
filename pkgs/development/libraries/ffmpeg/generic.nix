@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, xvidcore, zlib
+, x264, xvidcore, zlib, libopus
 , openglSupport ? false, mesa ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
       "--enable-libx264"
       "--enable-libxvid"
       "--enable-zlib"
+      (ifMinVer "2.8" "--enable-libopus")
     # Developer flags
       (enableFeature debugDeveloper "debug")
       (enableFeature optimizationsDeveloper "optimizations")
@@ -141,7 +142,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
-    libvdpau libvorbis lzma SDL soxr x264 xvidcore zlib
+    libvdpau libvorbis lzma SDL soxr x264 xvidcore zlib libopus
   ] ++ optional openglSupport mesa
     ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isArm) libva

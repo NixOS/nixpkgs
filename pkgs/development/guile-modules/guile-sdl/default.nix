@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://gnu.org/s/guile-sdl";
     license     = licenses.gpl3Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

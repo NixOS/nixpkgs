@@ -18,11 +18,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-4.3.1";
+  name = "samba-4.3.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "10ic9pxsk3ml5ycmi0bql8wraxhbr2l4fhzd0qwmiqmrjl6sh24r";
+    sha256 = "0929fpk2pq4v389naai519xvsm9bzpar4jlgjxwlx1cnn6jyql9j";
   };
 
   patches =

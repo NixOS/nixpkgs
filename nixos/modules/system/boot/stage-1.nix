@@ -58,6 +58,7 @@ let
 
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
+      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
 
       # Copy udev.
       copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd

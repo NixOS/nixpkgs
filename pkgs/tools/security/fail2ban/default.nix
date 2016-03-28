@@ -1,18 +1,17 @@
-{ stdenv, fetchzip, python, pythonPackages, unzip, gamin }:
+{ stdenv, fetchFromGitHub, python, pythonPackages, gamin }:
 
-let version = "0.9.3"; in
+let version = "0.9.4"; in
 
 pythonPackages.buildPythonApplication {
   name = "fail2ban-${version}";
   namePrefix = "";
 
-  src = fetchzip {
-    name   = "fail2ban-${version}-src";
-    url    = "https://github.com/fail2ban/fail2ban/archive/${version}.tar.gz";
-    sha256 = "1pwgr56i6l6wh2ap8b5vknxgsscfzjqy2nmd1c3vzdii5kf72j0f";
+  src = fetchFromGitHub {
+    owner  = "fail2ban";
+    repo   = "fail2ban";
+    rev    = version;
+    sha256 = "1m8gqj35kwrn30rqwd488sgakaisz22xa5v9llvz6gwf4f7ps0a9";
   };
-
-  buildInputs = [ unzip ];
 
   propagatedBuildInputs = [ python.modules.sqlite3 gamin ]
     ++ (stdenv.lib.optional stdenv.isLinux pythonPackages.systemd);
@@ -48,7 +47,7 @@ pythonPackages.buildPythonApplication {
     homepage    = http://www.fail2ban.org/;
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ eelco lovek323 ];
+    maintainers = with maintainers; [ eelco lovek323 fpletz ];
     platforms   = platforms.linux ++ platforms.darwin;
   };
 }

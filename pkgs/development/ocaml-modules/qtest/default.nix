@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Inline (Unit) Tests for OCaml (formerly “qtest”)";
     homepage = https://github.com/vincent-hugot/iTeML;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

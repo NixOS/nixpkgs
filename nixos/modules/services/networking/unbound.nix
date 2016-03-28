@@ -113,7 +113,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.unbound}/sbin/unbound -d -c ${stateDir}/unbound.conf";
+        ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
       };
     };

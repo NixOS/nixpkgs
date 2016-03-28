@@ -26,6 +26,7 @@ plasmaPackage {
     kwindowsystem plasma-framework qtdeclarative qtmultimedia qtx11extras
   ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
+  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
   postInstall = ''
     wrapQtProgram "$out/bin/kwin_x11"
     wrapQtProgram "$out/bin/kwin_wayland"

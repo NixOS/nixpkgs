@@ -1,21 +1,24 @@
-{ stdenv, fetchurl, libsodium, libevent, pkgconfig, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libsodium, libevent }:
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-wrapper-${version}";
   version = "0.2";
 
-  src = fetchurl {
-    url = "https://github.com/Cofyc/dnscrypt-wrapper/releases/download/v0.2/dnscrypt-wrapper-v0.2.tar.bz2";
-    sha256 = "0kh52dc0v9lxwi39y88z0ab6bwa5bcw8b24psnz72fv555irsvyj";
+  src = fetchFromGitHub {
+    owner = "Cofyc";
+    repo = "dnscrypt-wrapper";
+    rev = "v${version}";
+    sha256 = "06m6p79y0p6f1knk40fbi7dnc5hnq066kafvrq74fxrl51nywjbg";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook libsodium libevent ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ libsodium libevent ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for adding dnscrypt support to any name resolver";
-    homepage = http://dnscrypt.org/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ tstrobel ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://dnscrypt.org/;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ tstrobel joachifm ];
+    platforms = platforms.linux;
   };
 }

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gkqpj8cg6jd6yhssrij1cbh960rg9fkjbdzcpryi6axwv0ag7ki";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [ postgresql wxGTK libxml2 libxslt openssl ];
 
   preConfigure = ''

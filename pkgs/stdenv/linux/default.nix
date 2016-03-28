@@ -6,7 +6,7 @@
 
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
-, allPackages ? import ../../top-level/all-packages.nix
+, allPackages ? import ../../..
 , platform ? null, config ? {}, lib ? (import ../../../lib)
 , bootstrapFiles ?
     if system == "i686-linux" then import ./bootstrap/i686.nix

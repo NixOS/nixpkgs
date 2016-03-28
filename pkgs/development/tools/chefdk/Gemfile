@@ -1,3 +1,17 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 
 gem 'chef-dk'
+gem 'pry'
+gem 'test-kitchen'
+gem 'inspec'
+gem 'kitchen-inspec'
+gem 'kitchen-vagrant'
+gem 'berkshelf'
+gem 'chef-vault'
+gem 'foodcritic'
+gem 'ohai'
+gem 'rubocop'
+gem 'knife-spork'
+gem 'fauxhai'
+gem 'chefspec'
+gem 'chef-provisioning'

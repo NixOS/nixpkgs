@@ -3,7 +3,7 @@ sendmailPath ? "/var/setuid-wrappers/sendmail" }:
 
 stdenv.mkDerivation rec {
 
-  name = "ts-0.7.4";
+  name = "ts-0.7.6";
 
   installPhase=''make install "PREFIX=$out"'';
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://viric.name/~viric/soft/ts/${name}.tar.gz";
-    sha256 = "042r9a09300v4fdrw4r60g5xi25v5m6g12kvvr6pcsm9qnfqyqqs";
+    sha256 = "07b61sx3hqpdxlg5a1xrz9sxww9yqdix3bmr0sm917r3rzk87lwk";
   };
 
   meta = with stdenv.lib; {

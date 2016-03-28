@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"
+    "--pidfile=/var/lib/bitlbee/bitlbee.pid"
   ];
 
   buildPhase = ''

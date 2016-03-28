@@ -17,6 +17,11 @@ in stdenv.mkDerivation {
     cp -R boot/* $out/share/raspberrypi/boot
     cp -R hardfp/opt/vc/* $out
     cp opt/vc/LICENCE $out/share/raspberrypi
+
+    for f in $out/bin/*; do
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f"
+      patchelf --set-rpath "$out/lib" "$f"
+    done
   '';
 
   meta = {

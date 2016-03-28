@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl"
+   export PERL5LIB="$PERL5LIB:${rrdtool}/lib/perl5/site_perl"
    LC_ALL=C make -j1 test 
   '';
 
@@ -109,10 +109,10 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/lib/perl5/site_perl:${rrdtool}/lib/perl:${with perlPackages; stdenv.lib.makePerlPath [
+          --set PERL5LIB "$out/lib/perl5/site_perl:${with perlPackages; stdenv.lib.makePerlPath [
                 Log4Perl IOSocketInet6 Socket6 URI DBFile DateManip
                 HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils TimeHiRes DBDPg LWPUserAgent
+                ListMoreUtils TimeHiRes DBDPg LWPUserAgent rrdtool
                 ]}"
     done
   '';

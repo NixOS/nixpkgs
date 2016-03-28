@@ -1,0 +1,75 @@
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
+
+  cfg = config.services.mjpg-streamer;
+
+in {
+
+  options = {
+
+    services.mjpg-streamer = {
+
+      enable = mkEnableOption "mjpg-streamer webcam streamer";
+
+      inputPlugin = mkOption {
+        type = types.str;
+        default = "input_uvc.so";
+        description = ''
+          Input plugin. See plugins documentation for more information.
+        '';
+      };
+
+      outputPlugin = mkOption {
+        type = types.str;
+        default = "output_http.so -w @www@ -n -p 5050";
+        description = ''
+          Output plugin. <literal>@www@</literal> is substituted for default mjpg-streamer www directory.
+          See plugins documentation for more information.
+        '';
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "mjpg-streamer";
+        description = "mjpg-streamer user name.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "video";
+        description = "mjpg-streamer group name.";
+      };
+
+    };
+
+  };
+
+  config = mkIf cfg.enable {
+
+    users.extraUsers = optional (cfg.user == "mjpg-streamer") {
+      name = "mjpg-streamer";
+      uid = config.ids.uids.mjpg-streamer;
+      group = cfg.group;
+    };
+
+    systemd.services.mjpg-streamer = {
+      description = "mjpg-streamer webcam streamer";
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
+
+      script = ''
+        IPLUGIN="${cfg.inputPlugin}"
+        OPLUGIN="${cfg.outputPlugin}"
+        OPLUGIN="''${OPLUGIN//@www@/${pkgs.mjpg-streamer}/share/mjpg-streamer/www}"
+        exec ${pkgs.mjpg-streamer}/bin/mjpg_streamer -i "$IPLUGIN" -o "$OPLUGIN"
+      '';
+    };
+
+  };
+
+}

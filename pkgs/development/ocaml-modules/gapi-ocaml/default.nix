@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://gapi-ocaml.forge.ocamlcore.org;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

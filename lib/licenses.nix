@@ -175,6 +175,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Eclipse Public License 1.0";
   };
 
+  epson = {
+    fullName = "Seiko Epson Corporation Software License Agreement for Linux";
+    url = https://download.ebz.epson.net/dsc/du/02/eula/global/LINUX_EN.html;
+    free = false;
+  };
+
   fdl12 = spdx {
     spdxId = "GFDL-1.2";
     fullName = "GNU Free Documentation License v1.2";

@@ -29,6 +29,6 @@ stdenv.mkDerivation {
     homepage = "http://mjambon.com/${pname}.html";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

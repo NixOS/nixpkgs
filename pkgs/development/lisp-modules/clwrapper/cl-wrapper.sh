@@ -19,16 +19,19 @@ case "$NIX_LISP" in
 	sbcl)
 		NIX_LISP_LOAD_FILE="--load"
 		NIX_LISP_EXEC_CODE="--eval"
+                NIX_LISP_QUIT="(quit)"
 		NIX_LISP_FINAL_PARAMETERS=
 		;;
 	ecl)
 		NIX_LISP_LOAD_FILE="-load"
 		NIX_LISP_EXEC_CODE="-eval"
+                NIX_LISP_QUIT="(quit)"
 		NIX_LISP_FINAL_PARAMETERS=
 		;;
 	clisp)
 		NIX_LISP_LOAD_FILE="-c -l"
 		NIX_LISP_EXEC_CODE="-x"
+                NIX_LISP_QUIT="(quit)"
 		NIX_LISP_FINAL_PARAMETERS="-repl"
 		;;
 esac

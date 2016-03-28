@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/zsh/site-functions/
     cp n-* $out/share/zsh/site-functions/
+    cp znt-* $out/share/zsh/site-functions/
   '';
 
   meta = with stdenv.lib; {

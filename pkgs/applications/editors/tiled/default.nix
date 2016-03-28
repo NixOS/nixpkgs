@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     # The rest is GPL2 or later.
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 }

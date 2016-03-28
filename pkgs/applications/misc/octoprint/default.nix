@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "OctoPrint-${version}";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchFromGitHub {
     owner = "foosel";
     repo = "OctoPrint";
     rev = version;
-    sha256 = "00hhq52jqwykhk3p57mn9kkcjbjz6g9mcrp96vx8lqzhw42m3a86";
+    sha256 = "1ips1083c4qrfnkssvp1lxrs92svlid29l225ifsymrinpbjawav";
   };
 
   # We need old Tornado

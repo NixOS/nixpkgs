@@ -8,11 +8,11 @@
 # plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.31";
+  version = "2.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "10bqxpq30gzfq2ip6dkmqlzzsh3bnfdb01jry5xhgxvlycq1lnsm";
+    sha256 = "11bkflmqrpfk95v2j7pjcm78nilx2s611mn2x7kxwn77ilnbcjbw";
   };
 
   sourceRoot = ".";

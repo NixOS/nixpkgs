@@ -338,7 +338,7 @@ in
     };
 
     networking.firewall.allowPing = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description =
         ''

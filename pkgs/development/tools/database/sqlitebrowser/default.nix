@@ -1,13 +1,14 @@
-{ stdenv, fetchzip, qt4, sqlite, cmake }:
+{ stdenv, fetchFromGitHub, qt4, sqlite, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.0";
+  version = "3.8.0";
   name = "sqlitebrowser-${version}";
 
-  src = fetchzip {
-    name = "${name}-src";
-    url = "https://github.com/sqlitebrowser/sqlitebrowser/archive/v${version}.tar.gz";
-    sha256 = "1zsgylnxk4lyg7p6k6pv8d3mh1k0wkfcplh5c5da3x3i9a3qs78j";
+  src = fetchFromGitHub {
+    repo   = "sqlitebrowser";
+    owner  = "sqlitebrowser";
+    rev    = "v${version}";
+    sha256 = "009yaamf6f654dl796f1gmj3rb34d55w87snsfgk33gpy6x19ccp";
   };
 
   buildInputs = [ qt4 sqlite cmake ];

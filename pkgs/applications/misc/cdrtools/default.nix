@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ acl libcap ];
 
+  postPatch = ''
+    sed "/\.mk3/d" -i libschily/Targets.man
+    substituteInPlace man/Makefile --replace "man4" ""
+  '';
+
   configurePhase = "true";
 
   GMAKE_NOWARN = true;

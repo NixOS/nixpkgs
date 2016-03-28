@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "smartgithg-${version}";
-  version = "7_1_0";
+  version = "7_1_2";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/downloads/smartgit/smartgit-linux-${version}.tar.gz";
-    sha256 = "0nlv2ipmv3z1j4642gfsrpsgc2y4mxngiz6mz3nidrbrkz0ylsvy";
+    url = "http://www.syntevo.com/static/smart/download/smartgit/smartgit-linux-${version}.tar.gz";
+    sha256 = "18jw4g2akhj6h9w8378kacv7ws35ndcnc3kkhci9iypwy432ak8d";
   };
 
   buildInputs = [
@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.syntevo.com/smartgit/;
     license = licenses.unfree;
     platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
   };
 }

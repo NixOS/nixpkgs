@@ -30,7 +30,7 @@ in
 
       user = mkOption {
         type = types.string;
-        default = "ircd";
+        default = "bird";
         description = ''
           BIRD Internet Routing Daemon user.
         '';
@@ -38,7 +38,7 @@ in
 
       group = mkOption {
         type = types.string;
-        default = "ircd";
+        default = "bird";
         description = ''
           BIRD Internet Routing Daemon group.
         '';

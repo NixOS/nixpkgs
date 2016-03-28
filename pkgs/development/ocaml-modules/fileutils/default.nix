@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://forge.ocamlcore.org/projects/ocaml-fileutils/;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "Library to provide pure OCaml functions to manipulate real file (POSIX like) and filename";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = with stdenv.lib.maintainers; [ vbgl ];

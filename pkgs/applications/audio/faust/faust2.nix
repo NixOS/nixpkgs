@@ -37,7 +37,8 @@ let
 
     inherit src;
 
-    buildInputs = [ makeWrapper llvm emscripten openssl libsndfile pkgconfig libmicrohttpd vim ];
+    nativeBuildInputs = [ makeWrapper pkgconfig vim ];
+    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd ];
 
 
     passthru = {
@@ -53,6 +54,20 @@ let
       # correct system.
       unset system
       sed -e "232s/LLVM_STATIC_LIBS/LLVMLIBS/" -i compiler/Makefile.unix
+
+      # The makefile sets LLVM_<version> depending on the current llvm
+      # version, but the detection code is quite brittle.
+      #
+      # Failing to properly detect the llvm version means that the macro
+      # LLVM_VERSION ends up being the raw output of `llvm-config --version`, while
+      # the code assumes that it's set to a symbol like `LLVM_35`.  Two problems result:
+      # * <command-line>:0:1: error: macro names must be identifiers.; and
+      # * a bunch of undefined reference errors due to conditional definitions relying on
+      #   LLVM_XY being defined.
+      #
+      # For now, fix this by 1) pinning the llvm version; 2) manually setting LLVM_VERSION
+      # to something the makefile will recognize.
+      sed '52iLLVM_VERSION=3.7.0' -i compiler/Makefile.unix
     '';
 
     # Remove most faust2appl scripts since they won't run properly

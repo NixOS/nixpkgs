@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, xulrunner }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.15";
+  version = "2.0.18";
   name = "pencil-${version}";
 
   src = fetchurl {
     url = "https://github.com/prikhi/pencil/releases/download/v${version}/Pencil-${version}-linux-pkg.tar.gz";
-    sha256 = "be338558b613f51506337a2c7c80f209e8644656c2925f41c294e2872feabc3b";
+    sha256 = "0x0kibb2na12fwl0x68xhkjpbm5h2widm346cx2r29gp1kq9kklc";
   };
 
   buildPhase = "";

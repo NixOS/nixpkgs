@@ -128,6 +128,7 @@ in
           ${pkgs.c-ares}/lib/libcares*.so*          mr,
           ${pkgs.libcap}/lib/libcap*.so*            mr,
           ${pkgs.attr}/lib/libattr*.so*             mr,
+          ${pkgs.lz4}/lib/liblz4*.so*               mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

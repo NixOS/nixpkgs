@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     description = "Tools for authors of ppx rewriters";
     homepage = http://www.lexifi.com/ppx_tools;
     license = licenses.mit;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ vbgl ];
   };
 }

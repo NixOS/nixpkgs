@@ -1,0 +1,55 @@
+Fix build errors with gcc-4.9.3 -std=c++11 (after disabling -ansi)
+
+https://gna.org/bugs/?23714
+
+https://bugs.gentoo.org/show_bug.cgi?id=550764
+https://bugs.gentoo.org/show_bug.cgi?id=566328
+
+--- a/src/subtitleview.cc	2015-12-24 01:52:29.322622155 +0100
++++ b/src/subtitleview.cc	2015-12-24 01:52:44.210491213 +0100
+@@ -1363,7 +1363,7 @@
+ 	{
+ 		int num;
+ 		std::istringstream ss(event->string);
+-		bool is_num = ss >> num != 0; 
++		bool is_num = static_cast<bool>(ss >> num) != 0; 
+ 		// Update only if it's different
+ 		if(is_num != get_enable_search())
+ 			set_enable_search(is_num);
+--- a/src/utility.h	2015-12-24 01:49:42.205104858 +0100
++++ b/src/utility.h	2015-12-24 01:50:23.387737071 +0100
+@@ -91,7 +91,7 @@
+ 	std::istringstream s(src);
+ 	// return s >> dest != 0;
+ 
+-	bool state = s >> dest != 0;
++	bool state = static_cast<bool>(s >> dest) != 0;
+ 
+ 	if(!state)
+ 		se_debug_message(SE_DEBUG_UTILITY, "string:'%s'failed.", src.c_str());
+--- a/plugins/actions/dialoguize/dialoguize.cc	2015-12-24 01:06:24.125428454 +0100
++++ b/plugins/actions/dialoguize/dialoguize.cc	2015-12-24 01:06:42.630277006 +0100
+@@ -23,7 +23,7 @@
+  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+  */
+  
+-#include <auto_ptr.h>
++#include <memory>
+ #include "extension/action.h"
+ #include "i18n.h"
+ #include "debug.h"
+--- a/plugins/actions/documentmanagement/documentmanagement.old	2015-12-24 01:17:13.914730337 +0100
++++ b/plugins/actions/documentmanagement/documentmanagement.cc	2015-12-24 01:17:23.339640430 +0100
+@@ -178,9 +178,9 @@
+ 
+ 		ui_id = ui->new_merge_id();
+ 
+-		#define ADD_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/"name, name, name);
+-		#define ADD_OPEN_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/menu-open/"name, name, name);
+-		#define ADD_SAVE_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/menu-save/"name, name, name);
++		#define ADD_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/" name, name, name);
++		#define ADD_OPEN_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/menu-open/" name, name, name);
++		#define ADD_SAVE_UI(name) ui->add_ui(ui_id, "/menubar/menu-file/menu-save/" name, name, name);
+ 
+ 		ADD_UI("new-document");
+ 		ADD_OPEN_UI("open-document");

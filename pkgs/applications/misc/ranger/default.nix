@@ -8,7 +8,6 @@ buildPythonApplication rec {
     homepage = "http://ranger.nongnu.org/";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

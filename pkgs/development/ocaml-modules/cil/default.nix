@@ -20,6 +20,6 @@ stdenv.mkDerivation {
     description = "A front-end for the C programming language that facilitates program analysis and transformation";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

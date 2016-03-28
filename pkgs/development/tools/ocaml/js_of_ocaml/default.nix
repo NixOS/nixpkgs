@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     homepage = http://ocsigen.org/js_of_ocaml/;
     description = "Compiler of OCaml bytecode to Javascript. It makes it possible to run Ocaml programs in a Web browser";
     license = licenses.lgpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       maintainers.gal_bolle
     ];

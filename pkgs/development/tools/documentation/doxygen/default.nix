@@ -1,45 +1,24 @@
-{ stdenv, fetchurl, perl, python, flex, bison, qt4, CoreServices, libiconv }:
+{ stdenv, cmake, fetchurl, perl, python, flex, bison, qt4, CoreServices, libiconv }:
 
-let
-  name = "doxygen-1.8.6";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
 
+  name = "doxygen-1.8.11";
+  
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0pskjlkbj76m9ka7zi66yj8ffjcv821izv3qxqyyphf0y0jqcwba";
+    sha256 = "0ja02pm3fpfhc5dkry00kq8mn141cqvdqqpmms373ncbwi38pl35";
   };
 
-  prePatch = ''
-    substituteInPlace configure --replace /usr/bin/install $(type -P install)
-  '';
-
-  patches = [ ./tmake.patch ];
-
+  nativeBuildInputs = [ cmake ];
+  
   buildInputs =
     [ perl python flex bison ]
     ++ stdenv.lib.optional (qt4 != null) qt4
     ++ stdenv.lib.optional stdenv.isSunOS libiconv
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
-  prefixKey = "--prefix ";
-
-  configureFlags =
-    [ "--dot dot" ]
-    ++ stdenv.lib.optional stdenv.isSunOS "--install install"
-    ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
-
-  preConfigure =
-    ''
-      patchShebangs .
-    '' + stdenv.lib.optionalString (qt4 != null)
-    ''
-      echo "using QTDIR=${qt4}..."
-      export QTDIR=${qt4}
-    '';
-
-  makeFlags = "MAN1DIR=share/man/man1";
+  cmakeFlags =
+    stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
 
   enableParallelBuilding = true;
 

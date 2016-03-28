@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, ppp, iproute }:
+{ stdenv, fetchurl, perl, ppp, iproute, which }:
 
 stdenv.mkDerivation rec {
-  name = "pptp-1.7.2";
+  name = "pptp-1.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pptpclient/${name}.tar.gz";
-    sha256 = "1g4lfv9vhid4v7kx1mlfcrprj3h7ny6g4kv564qzlf9abl3f12p9";
+    sha256 = "1nmvwj7wd9c1isfi9i0hdl38zv55y2khy2k0v1nqlai46gcl5773";
   };
 
   patchPhase =
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
           MANDIR=$out/share/man/man8 PPPDIR=$out/etc/ppp )
     '';
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl which ];
 
   meta = {
     description = "PPTP client for Linux";

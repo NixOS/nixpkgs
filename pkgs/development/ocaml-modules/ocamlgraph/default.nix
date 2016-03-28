@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     homepage = http://ocamlgraph.lri.fr/;
     description = "Graph library for Objective Caml";
     license = stdenv.lib.licenses.gpl2Oss;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.kkallio
     ];

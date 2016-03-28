@@ -1,5 +1,5 @@
 { system         ? builtins.currentSystem
-, allPackages    ? import ../../top-level/all-packages.nix
+, allPackages    ? import ../../..
 , platform       ? null
 , config         ? {}
 
@@ -22,7 +22,7 @@ let
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  allPackages = import ../../top-level/all-packages.nix;
+  allPackages = import ../../..;
 
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"

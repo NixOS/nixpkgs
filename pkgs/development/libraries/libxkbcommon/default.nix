@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://xkbcommon.org/download/${name}.tar.xz";
-    sha1 = "z9dvxrkcyb4b7f2zybgkrqb9zcxrj9vi";
+    sha256 = "176ii5dn2wh74q48sd8ac37ljlvgvp5f506glr96z6ibfhj7igch";
   };
 
   buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
@@ -23,4 +23,3 @@ stdenv.mkDerivation rec {
     homepage = http://xkbcommon.org;
   };
 }
-

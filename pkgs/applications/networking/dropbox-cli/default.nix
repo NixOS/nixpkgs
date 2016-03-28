@@ -16,8 +16,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   installPhase = ''
-    mkdir -p "$out/bin/" "$out/share/applications"
-    cp data/dropbox.desktop "$out/share/applications"
+    mkdir -p "$out/bin/"
     substitute "dropbox.in" "$out/bin/dropbox" \
       --replace '@PACKAGE_VERSION@' ${version} \
       --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \
@@ -25,6 +24,7 @@ stdenv.mkDerivation {
       --replace '@IMAGEDATA64@' '"too-lazy-to-fix"'
     sed -i 's:db_path = .*:db_path = "${dropboxd}":' $out/bin/dropbox
     chmod +x "$out/bin/"*
+    mv $out/bin/dropbox $out/bin/dropbox-cli
     patchShebangs "$out/bin"
   '';
 

@@ -11,13 +11,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.10.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0c3a504gjdh4mxvifi0wcppqhd786d1gxncf04dqlq3l5wisfbbw";
+    sha256 = "0bmrafi0p3fm681y165ps97jki0a8ihl9f0bmpvi22nmc1v0sv6l";
   };
 
   buildInputs = [

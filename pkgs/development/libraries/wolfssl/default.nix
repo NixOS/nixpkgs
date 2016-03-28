@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, autoconf, automake, libtool }:
+{ stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "wolfssl-${version}";
-  version = "3.7.0";
+  version = "3.9.0";
 
-  src = fetchurl {
-    url    = "https://github.com/wolfSSL/wolfssl/archive/v${version}.tar.gz";
-    sha256 = "1r1awivral4xjjvnna9lrfz2rh84rcbp04834rymbsz0kbyykgb6";
+  src = fetchFromGitHub {
+    owner = "wolfSSL";
+    repo = "wolfssl";
+    rev = "v${version}";
+    sha256 = "0j4la9936jcy2fam1x5wplbslqa4zjnrk4wyipkbwz9m8cxg0n6v";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";

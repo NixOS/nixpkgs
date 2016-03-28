@@ -85,6 +85,9 @@ let
         ssl_enable=YES
         rsa_cert_file=${cfg.rsaCertFile}
       ''}
+      ${optionalString (cfg.rsaKeyFile != null) ''
+        rsa_private_key_file=${cfg.rsaKeyFile}
+      ''}
       ${optionalString (cfg.userlistFile != null) ''
         userlist_file=${cfg.userlistFile}
       ''}
@@ -145,6 +148,12 @@ in
         type = types.nullOr types.path;
         default = null;
         description = "RSA certificate file.";
+      };
+
+      rsaKeyFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = "RSA private key file.";
       };
 
       anonymousUmask = mkOption {

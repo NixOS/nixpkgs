@@ -1,13 +1,13 @@
 { stdenv, fetchurl, makeWrapper, jre, cpio, gawk, gnugrep, gnused, procps, swt, gtk2, glib, libXtst }:
 
-let version = "3.6.4";
+let version = "4.6.0";
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}";
 
   crashPlanArchive = fetchurl {
-    url = "http://download.crashplan.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "0xmzpxfm8vghk552jy167wg1nky1pp93dqds1p922hn73g0x5cv3";
+    url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
+    sha256 = "0h9zk6i1pdvl101c8l4v4x6i7q4wkmkqp2dkm0lq7ha96lrvac47";
   };
 
   srcs = [ crashPlanArchive ];
@@ -16,7 +16,6 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    broken = true;  # outdated and new client has trouble starting (nullpointer exception)
     maintainers = with maintainers; [ sztupi iElectric ];
   };
 
@@ -38,7 +37,7 @@ in stdenv.mkDerivation rec {
     # Make sure the daemon is running using the same localization as
     # the (installing) user
     echo "" >> run.conf
-    echo "export LC_ALL=en_US.UTF-8" >> run.conf
+    echo "LC_ALL=en_US.UTF-8" >> run.conf
 
     install -d -m 755 unpacked $out
 
@@ -49,15 +48,15 @@ in stdenv.mkDerivation rec {
     install -D -m 644 scripts/CrashPlan.desktop $out/share/applications/CrashPlan.desktop
 
     rm -r $out/log
+    mv -v $out/conf $out/conf.template
     ln -s $vardir/log $out/log
     ln -s $vardir/cache $out/cache
     ln -s $vardir/backupArchives $out/backupArchives
-    ln -s $vardir/conf/service.model $out/conf/service.model
-    ln -s $vardir/conf/my.service.xml $out/conf/my.service.xml
+    ln -s $vardir/conf $out/conf
 
     echo "JAVACOMMON=${jre}/bin/java" > $out/install.vars
     echo "APP_BASENAME=CrashPlan" >> $out/install.vars
-    echo "TARGETDIR=$out" >> $out/install.vars
+    echo "TARGETDIR=${vardir}" >> $out/install.vars
     echo "BINSDIR=$out/bin" >> $out/install.vars
     echo "MANIFESTDIR=${manifestdir}" >> $out/install.vars
     echo "VARDIR=${vardir}" >> $out/install.vars
@@ -77,7 +76,8 @@ in stdenv.mkDerivation rec {
     
     substituteInPlace $out/share/applications/CrashPlan.desktop \
       --replace /usr/local  $out \
-      --replace crashplan/skin skin
+      --replace crashplan/skin skin \
+      --replace bin/CrashPlanDesktop CrashPlanDesktop
 
     wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
   '';

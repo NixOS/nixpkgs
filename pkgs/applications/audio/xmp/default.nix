@@ -8,7 +8,6 @@ stdenv.mkDerivation rec {
     homepage    = "http://xmp.sourceforge.net/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

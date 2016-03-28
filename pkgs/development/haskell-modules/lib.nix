@@ -81,7 +81,7 @@ rec {
 
   buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
 
-  buildStackProject = pkgs.callPackage ../development/haskell-modules/generic-stack-builder.nix { };
+  buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 

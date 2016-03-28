@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       z77z roconnor vbgl
     ];
