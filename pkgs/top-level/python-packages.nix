@@ -13207,13 +13207,21 @@ in modules // {
     blas = pkgs.openblasCompat_2_14;
   };
 
-  numpy = self.numpy_1_10;
+  numpy = self.numpy_1_11;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/n/numpy/numpy-${version}.tar.gz";
       sha256 = "7356e98fbcc529e8d540666f5a919912752e569150e9a4f8d869c686f14c720b";
+    };
+  };
+
+  numpy_1_11 = self.buildNumpyPackage rec {
+    version = "1.11.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numpy/numpy-${version}.tar.gz";
+      sha256 = "0gml1ng7iqk4xcrvspjd5vnfqdwfinvjfyksfawvy5h8426jdld1";
     };
   };
 
