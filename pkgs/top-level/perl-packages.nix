@@ -2701,6 +2701,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "698ecb092a3284e260cd3c3208408feb791d7d0f06a02673f9125ab2d51cc2d8";
     };
+    buildInputs = [ ModuleBuild ];
   };
 
   DataGUID = buildPerlPackage {
