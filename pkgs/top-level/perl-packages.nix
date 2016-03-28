@@ -396,6 +396,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "67f45fef6a23b7548f387b675cbf7881bf9da62d7d007cbf90d3a4b851b99eb7";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ ScalarString DataInteger DigestCRC ];
   };
 
@@ -414,6 +415,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "55db4520617d859d88c0ee54965da815b7226d792b8cdc8debf92073559e0463";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
       DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
   };
@@ -1799,6 +1801,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "054d0db62df90f22601f2a18fc84e9ca026d81601f5940b2fcc543e39d69b36b";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ParamsClassify];
   };
 
@@ -2403,6 +2406,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ClassMix];
   };
 
@@ -2687,6 +2691,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "2611c4a1a3038594d79ea4ed14d9e15a9af8f77105f51667795fe4f8a53427e4";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ParamsClassify DataFloat CryptRijndael HTTPLite];
   };
 
@@ -2696,6 +2701,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "698ecb092a3284e260cd3c3208408feb791d7d0f06a02673f9125ab2d51cc2d8";
     };
+    buildInputs = [ ModuleBuild ];
   };
 
   DataGUID = buildPerlPackage {
@@ -2741,6 +2747,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "1dk04jf78sv63lww1qzagxlywcc04cfd3cfvzz168d24db9cr5bz";
     };
+    buildInputs = [ ModuleBuild ];
   };
 
   DataOptList = buildPerlPackage {
@@ -2794,6 +2801,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.60.tar.gz;
       sha256 = "0ca4s811l7f2bqkx7vnyxbpp4f0qska89g2pvsfb3k0bhhbk0jdk";
     };
+    buildInputs = [ ModuleBuild ];
     meta = {
       description = "Modules that serialize data structures";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -2978,6 +2986,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-DateParse-0.05.tar.gz;
       sha256 = "f6eca4c8be66ce9992ee150932f8fcf07809fd3d1664caf200b8a5fd3a7e5ebc";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ DateTime DateTimeTimeZone TimeDate ];
     meta = {
       description = "Parses Date::Parse compatible formats";
@@ -5829,6 +5838,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
       sha256 = "10svyy8r5ca86spz21r0k2mdy8g2slzssin4qbg101zc9kr5r65a";
     };
+    buildInputs = [ ModuleBuild ];
   };
 
   HTTPMessage = buildPerlPackage {
@@ -5922,14 +5932,6 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/dist/I18N-Collate;
       description = "Compare 8-bit scalar data according to the current locale";
       license = "perl";
-    };
-  };
-
-  I18NLangTags = buildPerlPackage {
-    name = "I18N-LangTags-0.35";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
-      sha256 = "0idwfi7k8l44d9akpdj6ygdz3q8zxr690m18s7w23ms9d55bh3jy";
     };
   };
 
@@ -6709,7 +6711,6 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/T/TO/TODDR/Locale-Maketext-1.23.tar.gz;
       sha256 = "1r1sq7djafvk5abzc4l068p39dz44hlpgdldj3igvn2bjz78cli1";
     };
-    propagatedBuildInputs = [I18NLangTags];
   };
 
   LocaleMaketextFuzzy = buildPerlPackage {
@@ -9003,7 +9004,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
       sha256 = "1nh9988436rmmmd6x2zz1fyrqy2005a1gvqzgvnc1pg2ylg61fqf";
     };
-    propagatedBuildInputs = [ NetOpenIDCommon JSON LWP ];
+    propagatedBuildInputs = [ CGI NetOpenIDCommon JSON LWP ];
   };
 
   PackageConstants = buildPerlPackage {
@@ -9098,7 +9099,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/modules/by-module/Params/${name}.tar.gz";
       sha256 = "1d4ysd95flszrxrnjgy6s7b80jkagjsb939h42i2hix4q20sy0a1";
     };
-    buildInputs = [ ExtUtilsParseXS ];
+    buildInputs = [ ModuleBuild ExtUtilsParseXS ];
   };
 
   ParamsUtil = buildPerlPackage {
@@ -10095,7 +10096,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "832c84b4f19e97781e8902f123a659fdcfef68e0ed9cfe09055852e9d68f7afc";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ DateTime DateTimeFormatDateParse Error ExceptionClass HTTPCookies HTTPMessage LWP ParamsValidate URI ];
+    propagatedBuildInputs = [ CGI DateTime DateTimeFormatDateParse Error ExceptionClass HTTPCookies HTTPMessage LWP ParamsValidate URI ];
     meta = {
       description = "Talk to RT installation using REST protocol";
       license = "perl";
@@ -10141,6 +10142,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "d3a45cc137bb9f7d8848d5a10a5142d275a98f8dcfd3adb60593cee9d33fa6ae";
     };
+    buildInputs = [ ModuleBuild ];
   };
 
   ScopeGuard = buildPerlPackage {
