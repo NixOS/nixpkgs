@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "provides full ground station support and configuration for the PX4 and APM Flight Stacks";
+    description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = http://qgroundcontrol.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;
