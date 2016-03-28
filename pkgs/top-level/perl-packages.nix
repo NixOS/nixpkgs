@@ -431,6 +431,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "55db4520617d859d88c0ee54965da815b7226d792b8cdc8debf92073559e0463";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
       DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
   };
