@@ -6389,6 +6389,8 @@ in
   box2d = callPackage ../development/libraries/box2d { };
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
+  breakpad = callPackage ../development/libraries/breakpad { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
