@@ -29,6 +29,7 @@ let
 
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
+      tests.security = import ../../pkgs/test/security { inherit nixpkgs pkgs; };
 
       unstable = pkgs.releaseTools.aggregate
         { name = "nixpkgs-${jobs.tarball.version}";
@@ -38,6 +39,9 @@ let
               jobs.metrics
               jobs.manual
               jobs.lib-tests
+              jobs.tests.security.check-quickfix
+              jobs.tests.security.onefix-noop
+              jobs.tests.security.abifix-noop
               jobs.stdenv.x86_64-linux
               jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
