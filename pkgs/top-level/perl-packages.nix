@@ -5761,6 +5761,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/W/WO/WONKO/${name}.tar.gz";
       sha256 = "07ahpfgidxsw2yb7y8i7bbr8s64aq6qgq832h9jswmksxbd0l43q";
     };
+    propagatedBuildInputs = [ CGI ];
   };
 
   HTMLTidy = buildPerlPackage rec {
