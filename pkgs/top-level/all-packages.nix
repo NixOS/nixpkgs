@@ -6549,6 +6549,8 @@ in
   dbus_libs = pkgs.dbus.libs;
   dbus_daemon = pkgs.dbus.daemon;
 
+  dee = callPackage ../development/libraries/dee { };
+
   dhex = callPackage ../applications/editors/dhex { };
 
   double_conversion = callPackage ../development/libraries/double-conversion { };
