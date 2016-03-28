@@ -7906,6 +7906,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libunity = callPackage ../development/libraries/libunity { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
