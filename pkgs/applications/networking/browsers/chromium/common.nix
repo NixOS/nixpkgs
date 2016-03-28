@@ -154,8 +154,8 @@ let
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
       linux_use_bundled_binutils = false;
       linux_use_bundled_gold = false;
-      linux_use_gold_binary = false;
-      linux_use_gold_flags = false;
+      linux_use_gold_flags = true;
+
       proprietary_codecs = false;
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
