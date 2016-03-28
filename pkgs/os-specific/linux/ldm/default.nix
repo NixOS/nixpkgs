@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ udev utillinux ];
 
   postPatch = ''
-    sed -i '1i#include <sys/stat.h>' ldm.c
     substituteInPlace ldm.c \
       --replace "/mnt/" "${mountPath}"
     sed '16i#include <sys/stat.h>' -i ldm.c

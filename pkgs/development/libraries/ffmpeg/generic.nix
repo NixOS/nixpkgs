@@ -1,11 +1,13 @@
 { stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
-, libtheora, libva, libvdpau, libvorbis, libvpx, lzma, libpulseaudio, SDL, soxr
+, libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, xvidcore, zlib, libopus
 , openglSupport ? false, mesa ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
+, sdlSupport ? !stdenv.isArm, SDL ? null
+, vdpauSupport ? !stdenv.isArm, libvdpau ? null
 # Developer options
 , debugDeveloper ? false
 , optimizationsDeveloper ? true
@@ -39,7 +41,7 @@
  */
 
 let
-  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux;
+  inherit (stdenv) icCygwin isDarwin isFreeBSD isLinux isArm;
   inherit (stdenv.lib) optional optionals enableFeature;
 
   cmpVer = builtins.compareVersions;
@@ -51,8 +53,8 @@ let
   # Version specific fix
   verFix = withoutFix: fixVer: withFix: if reqMatch fixVer then withFix else withoutFix;
 
-  # Disable dependency that needs fixes before it will work on Darwin
-  disDarwinFix = origArg: minVer: fixArg: if (isDarwin && reqMin minVer) then fixArg else origArg;
+  # Disable dependency that needs fixes before it will work on Darwin or Arm
+  disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isArm) && reqMin minVer) then fixArg else origArg;
 in
 
 assert openglSupport -> mesa != null;
@@ -117,11 +119,11 @@ stdenv.mkDerivation rec {
       (ifMinVer "0.6" (enableFeature (isLinux || isFreeBSD) "vaapi"))
       "--enable-vdpau"
       "--enable-libvorbis"
-      (disDarwinFix (ifMinVer "0.6" "--enable-libvpx") "0.6" "--disable-libvpx")
+      (disDarwinOrArmFix (ifMinVer "0.6" "--enable-libvpx") "0.6" "--disable-libvpx")
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
-      (disDarwinFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
-      (ifMinVer "2.5" "--enable-sdl") # Only configurable since 2.5, auto detected before then
+      (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
+      (ifMinVer "2.5" (if sdlSupport then "--enable-sdl" else "")) # Only configurable since 2.5, auto detected before then
       (ifMinVer "1.2" "--enable-libsoxr")
       "--enable-libx264"
       "--enable-libxvid"
@@ -142,10 +144,13 @@ stdenv.mkDerivation rec {
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libtheora
     libvdpau libvorbis lzma SDL soxr x264 xvidcore zlib libopus
   ] ++ optional openglSupport mesa
-    ++ optionals (!isDarwin) [ libvpx libpulseaudio ] # Need to be fixed on Darwin
-    ++ optional (isLinux || isFreeBSD) libva
+    ++ optionals (!isDarwin && !isArm) [ libvpx libpulseaudio ] # Need to be fixed on Darwin and ARM
+    ++ optional ((isLinux || isFreeBSD) && !isArm) libva
     ++ optional isLinux alsaLib
-    ++ optional isDarwin Cocoa;
+    ++ optional isDarwin Cocoa
+    ++ optional vdpauSupport libvdpau
+    ++ optional sdlSupport SDL;
+
 
   enableParallelBuilding = true;
 
@@ -179,8 +184,8 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    vaapiSupport = if reqMin "0.6" && (isLinux || isFreeBSD) then true else false;
-    vdpauSupport = true;
+    vaapiSupport = if reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm) then true else false;
+    inherit vdpauSupport;
   };
 
   meta = with stdenv.lib; {

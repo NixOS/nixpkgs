@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  postPatch = ''
-    substituteInPlace {.,pfcquirks}/CMakeLists.txt \
-      --replace "-march=native" ""
-  '';
-
   enableParallelBuilding = true;
 
   doCheck = false;

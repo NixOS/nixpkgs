@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.4.patch
+    ./new-binutils.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

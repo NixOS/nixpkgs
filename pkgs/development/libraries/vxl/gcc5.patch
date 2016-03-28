@@ -1,0 +1,15 @@
+https://lists.fedoraproject.org/pipermail/scm-commits/Week-of-Mon-20150216/1511118.html
+
+--- vxl-git4e07960/vcl/vcl_compiler.h~	2012-11-02 12:08:21.000000000 +0100
++++ vxl-git4e07960/vcl/vcl_compiler.h	2015-02-15 13:50:46.376329878 +0100
+@@ -119,6 +119,10 @@
+ #  else
+ #   define VCL_GCC_40
+ #  endif
++# elif (__GNUC__== 5)
++// pretend GCC 5 to be GCC 4
++#  define VCL_GCC_4
++#  define VCL_GCC_41
+ # else
+ #  error "Dunno about this gcc"
+ # endif

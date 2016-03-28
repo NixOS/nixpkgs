@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     qmake INSTALL_PREFIX=$out -recursive vacuum.pro
   '';
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "An XMPP client fully composed of plugins";
     maintainers = [ maintainers.raskin ];

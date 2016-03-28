@@ -15,29 +15,37 @@ fi
 source @out@/nix-support/utils.sh
 
 
-# Figure out if linker flags should be passed.  GCC prints annoying
-# warnings when they are not needed.
+# Parse command line options and set several variables.
+# For instance, figure out if linker flags should be passed.
+# GCC prints annoying warnings when they are not needed.
 dontLink=0
 getVersion=0
 nonFlagArgs=0
+[[ "@prog@" = *++ ]] && isCpp=1 || isCpp=0
 
-for i in "$@"; do
-    if [ "$i" = -c ]; then
+params=("$@")
+n=0
+while [ $n -lt ${#params[*]} ]; do
+    p=${params[n]}
+    p2=${params[$((n+1))]}
+    if [ "$p" = -c ]; then
         dontLink=1
-    elif [ "$i" = -S ]; then
+    elif [ "$p" = -S ]; then
         dontLink=1
-    elif [ "$i" = -E ]; then
+    elif [ "$p" = -E ]; then
         dontLink=1
-    elif [ "$i" = -E ]; then
+    elif [ "$p" = -E ]; then
         dontLink=1
-    elif [ "$i" = -M ]; then
+    elif [ "$p" = -M ]; then
         dontLink=1
-    elif [ "$i" = -MM ]; then
+    elif [ "$p" = -MM ]; then
         dontLink=1
-    elif [ "$i" = -x ]; then
-        # At least for the cases c-header or c++-header we should set dontLink.
-        # I expect no one use -x other than making precompiled headers.
+    elif [[ "$p" = -x && "$p2" = *-header ]]; then
         dontLink=1
+    elif [[ "$p" = -x && "$p2" = c++* && "$isCpp" = 0 ]]; then
+        isCpp=1
+    elif [ "$p" = -nostdlib ]; then
+        isCpp=-1
     elif [ "${i:0:1}" != - ]; then
         nonFlagArgs=1
     elif [ "$i" = -m32 ]; then
@@ -45,6 +53,7 @@ for i in "$@"; do
             NIX_LDFLAGS="$NIX_LDFLAGS -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
         fi
     fi
+    n=$((n + 1))
 done
 
 # If we pass a flag like -Wl, then gcc will call the linker unless it
@@ -57,7 +66,6 @@ if [ "$nonFlagArgs" = 0 ]; then
 fi
 
 # Optionally filter out paths not refering to the store.
-params=("$@")
 if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
     rest=()
     n=0
@@ -75,18 +83,30 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
         elif [ "$p" = -isystem ] && badPath "$p2"; then
             n=$((n + 1)); skip $p2
         else
-            rest=("${rest[@]}" "$p")
+            rest+=("$p")
         fi
         n=$((n + 1))
     done
     params=("${rest[@]}")
 fi
 
-if [[ "@prog@" = *++ ]]; then
-    if  echo "$@" | grep -qv -- -nostdlib; then
-        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
-        NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
-    fi
+
+# Clear march/mtune=native -- they bring impurity.
+if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
+    rest=()
+    for i in "${params[@]}"; do
+        if [[ "$i" = -m*=native ]]; then
+            skip $i
+        else
+            rest+=("$i")
+        fi
+    done
+    params=("${rest[@]}")
+fi
+
+if [[ "$isCpp" = 1 ]]; then
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
 fi
 
 LD=@ldPath@/ld

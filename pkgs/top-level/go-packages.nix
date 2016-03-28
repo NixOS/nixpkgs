@@ -789,10 +789,11 @@ let
   };
 
   etcd = buildFromGitHub {
-    rev    = "v2.1.2";
+    rev    = "v2.3.0";
     owner  = "coreos";
     repo   = "etcd";
-    sha256 = "1d3wl9rqbhkkdhfkjfrzjfcwz8hx315zbjbmij3pf62bc1p5nh60";
+    sha256 = "1cchlhsdbbqal145cvdiq7rzqqi131iq7z0r2hmzwx414k04wyn7";
+    buildInputs = [ pkgs.libpcap tablewriter ];
   };
 
   fsnotify.v0 = buildGoPackage rec {

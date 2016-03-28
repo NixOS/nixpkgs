@@ -50,6 +50,12 @@ let
     name = "clementine-free-${version}";
     inherit patches src buildInputs;
     enableParallelBuilding = true;
+    postPatch = ''
+      sed -i src/CMakeLists.txt \
+        -e 's,-Werror,,g' \
+        -e 's,-Wno-unknown-warning-option,,g' \
+        -e 's,-Wno-unused-private-field,,g'
+    '';
     meta = with stdenv.lib; {
       homepage = "http://www.clementine-player.org";
       description = "A multiplatform music player";

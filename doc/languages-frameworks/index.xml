@@ -23,22 +23,8 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="idris.xml" /> <!-- generated from ../../pkgs/development/idris-modules/README.md  -->
 <xi:include href="r.xml" /> <!-- generated from ../../pkgs/development/r-modules/README.md  -->
 <xi:include href="qt.xml" />
-
-
-<!--
-<section><title>Haskell</title>
-
-<para>TODO</para>
-
-</section>
-
-
-<section><title>TeX / LaTeX</title>
-
-<para>* Special support for building TeX documents</para>
-
-</section>
--->
+<xi:include href="texlive.xml" />
 
 
 </chapter>
+

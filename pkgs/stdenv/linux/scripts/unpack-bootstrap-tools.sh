@@ -23,7 +23,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/*; do
     if [ -z "${i##*/liblto*}" ]; then continue; fi
     echo patching "$i"
     LD_LIBRARY_PATH=$out/lib $LD_BINARY \
-        $out/bin/patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
+        ./patchelf --set-interpreter $LD_BINARY --set-rpath $out/lib --force-rpath "$i"
 done
 
 for i in $out/lib/librt-*.so $out/lib/libpcre*; do

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     cd builddir
   '';
 
-  NIX_CFLAGS_COMPILE="-O0";
+  NIX_CFLAGS_COMPILE = "-O0 ${stdenv.lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
 
   hardeningDisable = [ "format" ];
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, file, zip, wxGTK, gtk
-, contribPlugins ? false, hunspell, gamin, boost, libX11
+, contribPlugins ? false, hunspell, gamin, boost
 }:
 
 with { inherit (stdenv.lib) optionalString optional optionals; };
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "044njhps4cm1ijfdyr5f9wjyd0vblhrz9b4603ma52wcdq25093p";
   };
 
-  buildInputs = [ automake autoconf libtool pkgconfig file zip wxGTK gtk libX11 ]
+  buildInputs = [ automake autoconf libtool pkgconfig file zip wxGTK gtk ]
     ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];

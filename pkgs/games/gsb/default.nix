@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
     platforms = [ "x86_64-linux" "i686-linux" ] ;
+    broken = true;
   };
 
 }

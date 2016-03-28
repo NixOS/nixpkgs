@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
     sha256 = "1y51c6rxk5qvmab98c8rnmrlyk27hnl248casvbq3cd93sav8vj9";
   };
+
   patches = let
     mkUrl = hash: "http://cgit.freedesktop.org/telepathy/telepathy-qt/patch/?id=" + hash;
     in [
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DDESIRED_QT_VERSION=${builtins.substring 0 1 qtbase.version}";
 
   # should be removable after the next update
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=cpp" "-Wno-error=unused-but-set-variable" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"

@@ -216,7 +216,8 @@ stdenv.mkDerivation ({
     sha256 = "1ny4smkp5bzs3cp8ss7pl6lk8yss0d9m4av1mvdp72r1x695akxq";
   };
 
-  hardeningDisable = [ "format" ];
+  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" "format" ];
 
   inherit patches;
 
@@ -496,6 +497,8 @@ stdenv.mkDerivation ({
   inherit enableParallelBuilding enableMultilib;
 
   inherit (stdenv) is64bit;
+
+  setupHook = ./use-old-abi.sh;
 
   meta = {
     homepage = http://gcc.gnu.org/;

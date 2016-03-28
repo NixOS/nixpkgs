@@ -13,12 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig autoconf automake openssl libgsf gmp ];
 
-  patchPhase = ''
-    substituteInPlace Makefile.in \
-      --replace '-march=native' "" \
-      --replace '-mtune=native' ""
-  '';
-
   installPhase =
   ''
     mkdir -p $out/bin
