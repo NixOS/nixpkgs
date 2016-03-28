@@ -13207,7 +13207,7 @@ in modules // {
     blas = pkgs.openblasCompat_2_14;
   };
 
-  numpy = self.numpy_1_11;
+  numpy = self.numpy_1_10;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
