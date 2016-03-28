@@ -1,10 +1,10 @@
-{ stdenv, writeText, erlang, rebar3, openssl, libyaml, fetchHex, fetchFromGitHub,
+{ stdenv, writeText, erlang, rebar3, openssl, libyaml,
   pc, buildEnv }:
 
 { name, version
 , src
 , setupHook ? null
-, buildInputs ? [], erlangDeps ? [], buildPlugins ? []
+, buildInputs ? [], beamDeps ? [], buildPlugins ? []
 , postPatch ? ""
 , compilePorts ? false
 , installPhase ? null
@@ -27,8 +27,9 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
-    propagatedBuildInputs = unique (erlangDeps ++ ownPlugins);
+    propagatedBuildInputs = unique (beamDeps ++ ownPlugins);
 
+    dontStrip = true;
     # The following are used by rebar3-nix-bootstrap
     inherit compilePorts;
     buildPlugins = ownPlugins;
@@ -81,7 +82,7 @@ let
     passthru = {
       packageName = name;
       env = shell self;
-      inherit erlangDeps;
+      inherit beamDeps;
     };
   });
 in

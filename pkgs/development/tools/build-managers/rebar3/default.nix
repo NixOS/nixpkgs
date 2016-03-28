@@ -1,10 +1,9 @@
 { stdenv, writeText, callPackage, fetchurl,
-  fetchHex, erlang, hermeticRebar3 ? true, rebar3-nix-bootstrap, tree, fetchFromGitHub }:
-
+  fetchHex, erlang, hermeticRebar3 ? true, rebar3-nix-bootstrap,
+  tree, fetchFromGitHub, hexRegistrySnapshot }:
 
 let
   version = "3.0.0-beta.4";
-  registrySnapshot = callPackage ./registrySnapshot.nix { };
 
   # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
   # {erlware_commons,     "0.16.0"},
@@ -89,7 +88,7 @@ stdenv.mkDerivation {
   else [];
 
   buildInputs = [ erlang tree  ];
-  propagatedBuildInputs = [ registrySnapshot rebar3-nix-bootstrap ];
+  propagatedBuildInputs = [ hexRegistrySnapshot rebar3-nix-bootstrap ];
 
   postPatch = ''
     echo postPatch
