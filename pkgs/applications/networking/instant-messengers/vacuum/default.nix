@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
   ];
 
+  NIX_LDFLAGS = "-lz";
+
   configurePhase = ''
     qmake INSTALL_PREFIX=$out -recursive vacuum.pro
   '';
