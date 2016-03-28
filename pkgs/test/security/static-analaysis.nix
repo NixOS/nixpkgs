@@ -10,15 +10,11 @@
 # This file is made to analyze and report issues in the resolutions of
 # dependencies such that we can generate safe security updates.
 
+with import ./lib.nix;
+
 let
   # Load Nixpkgs without any additional wrapping.
-  pkgs = import ../../../. {
-    quickfixPackages = null;
-    doPatchWithDependencies = false;
-  };
   pkgsFun = pkgs.__unfix__;
-
-  lib = pkgs.lib;
 
   # These attributes are unrolling the fix-point of Nixpkgs over a few
   # numbers of iteration, and all derivations of each iteration are annotated
@@ -107,44 +103,6 @@ let
     # Call me lazy...
     recurseForDerivations = true;
   };
-
-  # This is the same as the `collectWithPath` function of Nixpkgs's library,
-  # except that it uses `tryEval` to ignore invalid evaluations, such as
-  # broken and unfree packages.
-  #
-  # Example:
-  #   maybeCollectWithPath (x: x ? outPath)
-  #      { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
-  #   => [ { path = ["a"]; value = { outPath = "a/"; }; }
-  #        { path = ["b"]; value = { outPath = "b/"; }; }
-  #      ]
-  #
-  maybeCollectWithPath = pred: attrs: with lib;
-    let
-      collectInternal = path: attrs:
-        # assert __trace (["maybeCollectWithPath::"] ++ path) true;
-        addErrorContext "while collecting derivations under ${concatStringsSep "." path}:" (
-        if pred attrs then
-          [ { path = concatStringsSep "." path; value = attrs; } ]
-        else if isAttrs attrs && attrs.recurseForDerivations or false then
-          concatMap (name: maybeCollectInternal (path ++ [name]) attrs.${name})
-            (attrNames attrs)
-        else
-          []);
-
-       maybeCollectInternal = path: attrs:
-         # Some evaluation of isAttrs might raise an assertion while
-         # evaluating Nixpkgs, tryEval is used to work-around this issue.
-         let res = builtins.tryEval (collectInternal path attrs); in
-         if res.success then res.value
-         else [];
-
-    in
-      maybeCollectInternal [] attrs;
-
-  # Collect all derivations.
-  collectDerivations = with lib; pkgs:
-    maybeCollectWithPath (drv: isDerivation drv && drv.outPath != "") pkgs;
 
   # Look at the collected derivations, and annotate each derivation with
   # some errors/warnings that should be considered. Filter out any
