@@ -1505,6 +1505,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NW/NWIGER/${name}.tgz";
       sha256 = "0qx8kxj0iy55ss9kraqr8q2m4igi2ylajff7d6qvphqpfx90fjb5";
     };
+
+    propagatedBuildInputs = [ CGI ];
   };
 
   CGIPSGI = buildPerlPackage {
