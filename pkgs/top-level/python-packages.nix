@@ -11019,16 +11019,16 @@ in modules // {
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.33";
+    version = "3.0.35";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "16brjx2lgwbj2a37d0pjbfb84nvld6irghmqrs3qfncajp51hgc5";
+      sha256 = "09xpxpjz9nk8d14dj361dqdwyjwda3jlf1a7v6jif9wn2xm37ar2";
     };
 
-    buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
+    buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose redis ];
 
     propagatedBuildInputs = with self; [ amqp anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
