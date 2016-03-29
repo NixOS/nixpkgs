@@ -1,0 +1,103 @@
+From 22b948c39b32fb45066c4f5a9f99082094fea3d1 Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
+Date: Sat, 1 Aug 2015 21:26:57 +0200
+Subject: [PATCH 2/3] Don't show multiple entries for a single theme
+
+---
+ gtweak/tweaks/tweak_group_interface.py |  8 ++++----
+ gtweak/tweaks/tweak_group_keymouse.py  |  4 ++--
+ gtweak/utils.py                        | 16 ++++++++++++++++
+ 3 files changed, 22 insertions(+), 6 deletions(-)
+
+diff --git a/gtweak/tweaks/tweak_group_interface.py b/gtweak/tweaks/tweak_group_interface.py
+index a319907..82c0286 100644
+--- a/gtweak/tweaks/tweak_group_interface.py
++++ b/gtweak/tweaks/tweak_group_interface.py
+@@ -26,7 +26,7 @@ from gi.repository import Gtk
+ from gi.repository import GLib
+ 
+ import gtweak
+-from gtweak.utils import walk_directories, make_combo_list_with_default, extract_zip_file, get_resource_dirs
++from gtweak.utils import walk_directories, make_combo_list_with_default, extract_zip_file, get_resource_dirs, get_unique_resources
+ from gtweak.tweakmodel import Tweak, TWEAK_GROUP_APPEARANCE
+ from gtweak.gshellwrapper import GnomeShellFactory
+ from gtweak.gsettings import GSettingsSetting
+@@ -49,7 +49,7 @@ class GtkThemeSwitcher(GSettingsComboTweak):
+         valid = walk_directories(get_resource_dirs('themes'), lambda d:
+                     os.path.exists(os.path.join(d, "gtk-2.0")) and \
+                         os.path.exists(os.path.join(d, "gtk-3.0")))
+-        return valid
++        return get_unique_resources(valid)
+ 
+ class IconThemeSwitcher(GSettingsComboTweak):
+     def __init__(self, **options):
+@@ -64,7 +64,7 @@ class IconThemeSwitcher(GSettingsComboTweak):
+         valid = walk_directories(get_resource_dirs("icons"), lambda d:
+                     os.path.isdir(d) and \
+ 			os.path.exists(os.path.join(d, "index.theme")))
+-        return valid
++        return get_unique_resources(valid)
+ 
+ class CursorThemeSwitcher(GSettingsComboTweak):
+     def __init__(self, **options):
+@@ -79,7 +79,7 @@ class CursorThemeSwitcher(GSettingsComboTweak):
+         valid = walk_directories(get_resource_dirs("icons"), lambda d:
+                     os.path.isdir(d) and \
+                         os.path.exists(os.path.join(d, "cursors")))
+-        return valid
++        return get_unique_resources(valid)
+ 
+ class ShellThemeTweak(Gtk.Box, Tweak):
+ 
+diff --git a/gtweak/tweaks/tweak_group_keymouse.py b/gtweak/tweaks/tweak_group_keymouse.py
+index 4ac08b7..ce1d0c1 100644
+--- a/gtweak/tweaks/tweak_group_keymouse.py
++++ b/gtweak/tweaks/tweak_group_keymouse.py
+@@ -20,7 +20,7 @@ import os.path
+ from gi.repository import GLib
+ 
+ import gtweak
+-from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs
++from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs, get_unique_resources
+ from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title, GSettingsComboEnumTweak
+ 
+ class PrimaryPasteTweak(GetterSetterSwitchTweak):
+@@ -51,7 +51,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
+         valid = walk_directories(get_resource_dirs("themes"), lambda d:
+                     os.path.isfile(os.path.join(d, "gtk-3.0", "gtk-keys.css")) and \
+                     os.path.isfile(os.path.join(d, "gtk-2.0-key", "gtkrc")))
+-        return valid
++        return get_unique_resources(valid)
+ 
+ TWEAK_GROUPS = [
+     ListBoxTweakGroup(_("Keyboard and Mouse"),
+diff --git a/gtweak/utils.py b/gtweak/utils.py
+index 535e1f3..42f7d96 100644
+--- a/gtweak/utils.py
++++ b/gtweak/utils.py
+@@ -133,6 +133,22 @@ def get_resource_dirs(resource):
+ 
+     return [dir for dir in dirs if os.path.isdir(dir)]
+ 
++def get_unique_resources(dirs):
++    """Filter out duplicated resources.
++
++    :param list dirs:
++        List of resource dirs (e.g. /usr/share/themes/Adwaita)
++    :return:
++        List of dirs without duplicated resources
++    """
++    unique_dirs = {}
++    for dir in dirs:
++        basename = os.path.basename(dir)
++        if basename not in unique_dirs:
++            unique_dirs[basename] = dir
++
++    return unique_dirs
++
+ @singleton
+ class AutostartManager:
+ 
+-- 
+2.7.0
+
