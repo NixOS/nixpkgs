@@ -16698,7 +16698,7 @@ in modules // {
       sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
     };
 
-    propagatedBuildInputs = with self; [ pkgs.curlOpenssl pkgs.openssl_1_0_1 ];
+    propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
 
     # error: invalid command 'test'
     doCheck = false;
