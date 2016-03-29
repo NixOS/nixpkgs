@@ -69,8 +69,16 @@ class Disk(object):
 
 
 if __name__ == '__main__':
-    partition = subprocess.check_output([
-        'blkid', '-L', 'root'])
+    try:
+        partition = subprocess.check_output([
+            'blkid', '-L', 'root'])
+    except subprocess.CalledProcessError as e:
+        if e.returncode == 2:
+            # Label was not found.
+            # This happends for instance on Vagrant, where it is no problem and
+            # should not be an error.
+            raise SystemExit(0)
+
     # The partition output is '/dev/vda1'. We assume we have a single-digit
     # partition number here.
     disk = partition.strip()[:-1]
