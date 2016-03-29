@@ -13001,6 +13001,8 @@ let
 
   openbrf = callPackage ../applications/misc/openbrf { };
 
+  opencpn = callPackage ../applications/misc/opencpn { };
+
   openimageio = callPackage ../applications/graphics/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
