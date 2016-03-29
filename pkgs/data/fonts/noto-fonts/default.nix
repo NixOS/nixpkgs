@@ -1,15 +1,18 @@
 { stdenv, fetchurl, fetchFromGitHub, optipng, cairo, unzip, fontforge, pythonPackages, pkgconfig }:
 rec {
   # 18MB
-  noto-fonts = let version = "git-2015-09-08"; in stdenv.mkDerivation {
+  noto-fonts = let version = "git-2016-03-29"; in stdenv.mkDerivation {
     name = "noto-fonts-${version}";
+
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-fonts";
-      rev = "9d677e7e47a13f6e88052833277783fe4f27671f";
-      sha256 = "1dw1142znlk19a4mzhfi9pg3jzmz8pl1ivix7sd2grg70vxscxqc";
+      rev = "e8b0af48b15d64bd490edab4418b5e396cf29644";
+      sha256 = "02yv12fbb4n1gp9g9m0qxnj6adpg9hfsr9377h2d4xsf6sxcgy6f";
     };
-    phases = "unpackPhase installPhase";
+
+    phases = [ "unpackPhase" "installPhase" ];
+
     installPhase = ''
       mkdir -p $out/share/fonts/noto
       cp hinted/*.ttf $out/share/fonts/noto
@@ -19,6 +22,9 @@ rec {
       cp -n unhinted/*.ttf $out/share/fonts/noto
       cp -n alpha/*.ttf $out/share/fonts/noto
     '';
+
+    preferLocalBuild = true;
+
     meta = with stdenv.lib; {
       inherit version;
       description = "Beautiful and free fonts for many languages";
