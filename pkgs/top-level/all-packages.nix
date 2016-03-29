@@ -13264,6 +13264,8 @@ in
     inherit (pkgs.kde4) kdelibs;
   };
 
+  vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
+
   opusfile = callPackage ../applications/audio/opusfile { };
 
   opusTools = callPackage ../applications/audio/opus-tools { };
