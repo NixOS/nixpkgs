@@ -6493,6 +6493,8 @@ let
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
 
+  cl = callPackage ../development/libraries/cl { };
+
   clanlib = callPackage ../development/libraries/clanlib { };
 
   classads = callPackage ../development/libraries/classads { };
@@ -8244,6 +8246,8 @@ let
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
+  ocl-icd = callPackage ../development/libraries/ocl-icd { };
+
   ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
@@ -8268,6 +8272,8 @@ let
   };
 
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
+
+  opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
@@ -14079,10 +14085,7 @@ let
 
   winswitch = callPackage ../tools/X11/winswitch { };
 
-  wings = callPackage ../applications/graphics/wings {
-    erlang = erlangR14;
-    esdl = esdl.override { erlang = erlangR14; };
-  };
+  wings = callPackage ../applications/graphics/wings { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
