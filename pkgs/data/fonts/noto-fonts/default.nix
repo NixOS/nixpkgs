@@ -57,9 +57,9 @@ rec {
       sha256 = "1vg3si6slvk8cklq6s5c76s84kqjc4wvwzr4ysljzjpgzra2rfn6";
     };
 
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
-    phases = "unpackPhase installPhase";
+    phases = [ "unpackPhase" "installPhase" ];
 
     sourceRoot = ".";
 
