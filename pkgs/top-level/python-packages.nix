@@ -2124,13 +2124,13 @@ in modules // {
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
-    version = "3.3.0.21";
+    version = "3.3.0.23";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/billiard/${name}.tar.gz";
-      sha256 = "1sfsrkm5xv820wp2mz5zn2rnw6s0c9wal69v1fkr26wp1a7zf1cp";
+      sha256 = "02wxsc6bhqvzh8j6w758kvgqbnj14l796mvmrcms8fgfamd2lak9";
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
@@ -2942,13 +2942,13 @@ in modules // {
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
-    version = "3.1.19";
+    version = "3.1.23";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
-      sha256 = "0wbbsrg3vfq8v7y2nylal1gqmn3h4a5vqzbsjiwcybl21hlj2smx";
+      sha256 = "0614ppp18vmiwdk0rxvz0wn62d7svanwdnx7jgqxpy9pb20rqd8s";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
@@ -11051,23 +11051,23 @@ in modules // {
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.33";
+    version = "3.0.35";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "16brjx2lgwbj2a37d0pjbfb84nvld6irghmqrs3qfncajp51hgc5";
+      sha256 = "09xpxpjz9nk8d14dj361dqdwyjwda3jlf1a7v6jif9wn2xm37ar2";
     };
 
-    buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
+    # most of these are simply to allow the test suite to do its job
+    buildInputs = with self; [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
     propagatedBuildInputs = with self; [ amqp anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    # tests also appear to depend on anyjson, which has Py3k problems
-    doCheck = (pythonAtLeast "2.7") && !isPy3k ;
+    doCheck = (pythonAtLeast "2.7");
 
     meta = {
       description = "Messaging library for Python";
