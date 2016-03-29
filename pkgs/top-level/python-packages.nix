@@ -6911,6 +6911,8 @@ in modules // {
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
                " --include-dirs=${pkgs.poppler_qt4}/include/poppler/";
 
+    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4}/include/poppler/";
+
     meta = {
       description = "A Python binding to Poppler-Qt4";
       longDescription = ''
