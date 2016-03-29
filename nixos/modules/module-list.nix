@@ -77,6 +77,7 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
