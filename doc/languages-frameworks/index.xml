@@ -27,22 +27,5 @@ such as Perl or Haskell.  These are described in this chapter.</para>
 <xi:include href="bower.xml" />
 
 
-<!--
-<section><title>Haskell</title>
-
-<para>TODO</para>
-
-</section>
-
-
-<section><title>TeX / LaTeX</title>
-
-<para>* Special support for building TeX documents</para>
-
-</section>
--->
->>>>>>> 05113a5... nixpkgs manual: Add documentation for bower2nix
-
-
 </chapter>
 
