@@ -3776,6 +3776,8 @@ in
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
+  xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
+
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
