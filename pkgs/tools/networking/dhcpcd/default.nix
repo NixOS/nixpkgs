@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig udev ];
 
-  hardeningEnable = [ "pie" ];
-
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
