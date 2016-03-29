@@ -13,7 +13,7 @@ let
 
   callPackage = pkgs.newScope self;
 
-  version = "3.18";
+  version = "3.20";
   maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
 
   corePackages = with gnome3; [
