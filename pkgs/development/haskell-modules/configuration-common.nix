@@ -29,6 +29,7 @@ self: super: {
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_2_1 = super.hspec_2_2_1.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_2_2 = super.hspec_2_2_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
   hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;
