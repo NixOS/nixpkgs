@@ -3,7 +3,7 @@
 , yasm, fribidi, gtk3, qt4
 , withX264 ? true, x264
 , withLAME ? true, lame
-, withFAAC ? true, faac
+, withFAAC ? false, faac
 , withVorbis ? true, libvorbis
 , withPulse ? true, libpulseaudio
 , withFAAD ? true, faad2
