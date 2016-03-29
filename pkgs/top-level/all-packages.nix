@@ -2937,6 +2937,11 @@ in
     qt = qt4;
   };
 
+  qgifer = callPackage ../applications/video/qgifer {
+    giflib = giflib_4_1;
+    qt = qt4;
+  };
+
   qhull = callPackage ../development/libraries/qhull { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
