@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  rev = "4844fada548ba4d30e1441e063565f9e46334ffd";
-  name = "gnome-shell-pomodoro-${gnome3.version}-${rev}";
+  version = "0.11.2";
+  name = "gnome-shell-pomodoro-${version}";
 
   src = fetchFromGitHub {
       owner = "codito";
       repo = "gnome-pomodoro";
-      rev = "${rev}";
-      sha256 = "11vqlz0gcvrvf87hwwxvpw3lv50ail16nlynlzkqfd2dac028mag";
+      rev = "${version}";
+      sha256 = "0x656drq8vnvdj1x6ghnglgpa0z8yd2yj9dh5iqprwjv0z3qkw4l";
   };
 
   configureScript = ''./autogen.sh'';
