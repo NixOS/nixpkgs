@@ -103,7 +103,7 @@ rec {
       sha256 = "1zh1b617cjr5laha6lx0ys4k1c3az2zkgzjwc2nlb7dsdmfw1n0q";
     };
 
-    buildInputs = [ cairo ]
+    buildInputs = [ cairo ];
     nativeBuildInputs = [ pngquant optipng which cairo pkgconfig imagemagick ]
                      ++ (with pythonPackages; [ python fonttools nototools ]);
 
