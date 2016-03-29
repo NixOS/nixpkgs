@@ -295,8 +295,11 @@ let
           # fixed derivation is different. We have to recursively append all
           # the differencies.
           recursiveBuildInputsDiff = {old, new}@args:
-            let depDiffs = buildInputsDiff args; in
-            depDiffs ++ concatMap recursiveBuildInputsDiff depDiffs;
+            if new ? buildInputsDifferences
+            then new.buildInputsDifferences
+            else
+              let depDiffs = buildInputsDiff args; in
+              depDiffs ++ concatMap recursiveBuildInputsDiff depDiffs;
 
           dependencyDifferencies =
              flip map (recursiveBuildInputsDiff { old = onefix; new = recfix; }) ({old, new}: {
@@ -315,26 +318,25 @@ let
                 name = pkg.name;
               });
 
-           # Copy the function and meta information of the recfix stage to
-           # the final package, such that one can extend and mutate the
-           # package as if this abi compatible patches mechanism did not
-           # exists.
-           forwardDrvAttributes = drv: {}
-             // optionalAttrs (drv ? override) { inherit (drv) override; }
-             // optionalAttrs (drv ? overrideDerivation) { inherit (drv) overrideDerivation; }
-             // {
-               inherit (drv) builder args stdenv system userHook
-                 __ignoreNulls buildInputs propagatedBuildInputs
-                 nativeBuildInputs propagatedNativeBuildInputs;
-             };
+          # If any of the dependencies is different, then patch the package,
+          # and return the patched version of the package, otherwise return
+          # the renamed package.
+          patchedDrv =
+            if length dependencyDifferencies != 0 then
+              assert warnIfUnableToFindDeps onefix;
+              patchDependencies onefixRenamed dependencyDifferencies
+            else
+              onefixRenamed;
         in
-          if length dependencyDifferencies != 0 then
-            assert warnIfUnableToFindDeps onefix;
-
-            patchDependencies onefixRenamed dependencyDifferencies
-            // (forwardDrvAttributes recfix)
-          else
-            onefixRenamed;
+          # As the merge operator is not lazy enough, we have to create a
+          # new attribute set which inherit all the names from the original
+          # package, while the resolution of the name is made through the
+          # recfix version of the package. This way, only the outPath and
+          # outDrv are resolved through the patched version of the package.
+          mapAttrs (n: v: recfix."${n}") pkg // {
+            inherit (patchedDrv) outPath drvPath;
+            buildInputsDifferences = dependencyDifferencies;
+          };
 
       # Create a derivation which is replace all the hashes of `pkgs`, by
       # the fixed and patched versions of the `abifix` packages.
