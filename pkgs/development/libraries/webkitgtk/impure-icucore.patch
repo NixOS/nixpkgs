@@ -1,0 +1,12 @@
+diff -ru webkitgtk-2.4.9-orig/configure webkitgtk-2.4.9/configure
+--- webkitgtk-2.4.9-orig/configure	2016-02-02 13:23:22.000000000 -0500
++++ webkitgtk-2.4.9/configure	2016-02-02 13:24:13.000000000 -0500
+@@ -17715,7 +17715,7 @@
+ case "$host" in
+     *-*-darwin*)
+         UNICODE_CFLAGS="-I$srcdir/Source/JavaScriptCore/icu -I$srcdir/Source/WebCore/icu"
+-        UNICODE_LIBS="-licucore"
++        UNICODE_LIBS="/usr/lib/libicucore.dylib"
+         ;;
+     *-*-mingw*)
+ 

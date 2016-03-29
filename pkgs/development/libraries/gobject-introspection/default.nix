@@ -10,6 +10,7 @@ let
   ver_maj = "1.46";
   ver_min = "0";
 in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "gobject-introspection-${ver_maj}.${ver_min}";
 
@@ -37,6 +38,9 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.singleton (substituteAll {
     src = ./absolute_shlib_path.patch;
+    inherit nixStoreDir;
+  }) ++ optional stdenv.isDarwin (substituteAll {
+    src = ./darwin-fixups.patch;
     inherit nixStoreDir;
   });
 
