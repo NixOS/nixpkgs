@@ -39,8 +39,8 @@ let
     ln -sr -t "$out/include/" "$out"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.46";
-  ver_min = "2";
+  ver_maj = "2.48";
+  ver_min = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "5031722e37036719c1a09163cc6cf7c326e4c4f1f1e074b433c156862bd733db";
+    sha256 = "0d3w2hblrw7vvpx60l1kbvb830ygn3v8zhwdz65cc5593j9ycjvl";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
