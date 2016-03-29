@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
+{ stdenv, fetchpatch, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
 
 with stdenv.lib;
 
@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1xn8kv4v4h4v8mhd9k4s9rilb7k30jgb9rm7n4fwmfrm5swvbc7q";
   };
 
-  patches = optional stdenv.isLinux ./systemd-notify.patch;
+  patches = [
+    # included in next release
+    (fetchpatch {
+      url = https://github.com/OpenVPN/openvpn/commit/9dfc2309c6b4143892137844197f5f84755f6580.patch;
+      sha256 = "1mmqx5zjcb0kjaknzzklb8n07f4spx534bl07abnigvivvs4hca9";
+    })
+  ] ++ optional stdenv.isLinux ./systemd-notify.patch;
 
   buildInputs = [ lzo openssl pkgconfig ]
                   ++ optionals stdenv.isLinux [ pam systemd iproute ];
