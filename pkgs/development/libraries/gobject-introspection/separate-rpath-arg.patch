@@ -1,0 +1,21 @@
+diff -ur gobject-introspection-1.46.0-orig/giscanner/ccompiler.py gobject-introspection-1.46.0/giscanner/ccompiler.py
+--- gobject-introspection-1.46.0-orig/giscanner/ccompiler.py	2016-02-01 12:25:41.000000000 -0500
++++ gobject-introspection-1.46.0/giscanner/ccompiler.py	2016-02-01 12:26:52.000000000 -0500
+@@ -128,7 +128,7 @@
+                     self.compiler.add_runtime_library_dir('.')
+ 
+                 # https://bugzilla.gnome.org/show_bug.cgi?id=625195
+-                args.append('-Wl,-rpath=.')
++                args.append('-Wl,-rpath,.')
+ 
+                 # Ensure libraries are always linked as we are going to use ldd to work
+                 # out their names later
+@@ -140,7 +140,7 @@
+                 for library_path in libpaths:
+                     args.append('-L' + library_path)
+                     if os.path.isabs(library_path):
+-                        args.append('-Wl,-rpath=' + library_path)
++                        args.append('-Wl,-rpath,' + library_path)
+ 
+         else:
+             # libtool case: assemble linker command arguments, like we did before
