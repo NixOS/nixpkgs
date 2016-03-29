@@ -370,6 +370,8 @@ let
     webkitgtk = webkitgtk24x;
   };
 
+  libgames-support = callPackage ./misc/libgames-support { };
+
   libgda = callPackage ./misc/libgda { };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
