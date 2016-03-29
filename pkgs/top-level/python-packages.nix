@@ -11834,11 +11834,17 @@ in modules // {
   };
 
   nototools = buildPythonPackage rec {
-    version = "git-2015-09-16";
+    version = "git-2016-03-25";
     name = "nototools-${version}";
-    disabled = isPy3k;
 
-    pythonPath = with self; [ fonttools numpy ];
+    src = pkgs.fetchFromGitHub {
+      owner = "googlei18n";
+      repo = "nototools";
+      rev = "4f7b067d1b18f59288e5eaee34db5b0abd3a3f63";
+      sha256 = "05brbkfg77ij4pmcrhq9302albzdalr9gv6jfdsbyyi2k8j85gbn";
+    };
+
+    propagatedBuildInputs = with self; [ fonttools numpy ];
 
     postPatch = ''
       sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
@@ -11848,11 +11854,12 @@ in modules // {
       cp -r third_party $out
     '';
 
-    src = pkgs.fetchFromGitHub {
-      owner = "googlei18n";
-      repo = "nototools";
-      rev = "5a79bee819941849da7b414447929fc7ba6c2c08";
-      sha256 = "0srrmyrjgksk4c6smgi1flyq325r4ma8r6bpkvbn731q3yykhmaa";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Noto fonts support tools and scripts plus web site generation";
+      license = licenses.asl20;
+      homepage = https://github.com/googlei18n/nototools;
     };
   };
 
