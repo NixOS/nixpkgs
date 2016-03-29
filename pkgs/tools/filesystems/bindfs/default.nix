@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   buildInputs = [ fuse pkgconfig ];
+  postFixup = ''
+    ln -s $out/bin/bindfs $out/bin/mount.fuse.bindfs
+  '';
 
   meta = {
     description = "A FUSE filesystem for mounting a directory to another location";
