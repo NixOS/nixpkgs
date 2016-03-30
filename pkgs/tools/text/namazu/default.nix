@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     maintainers = [ ];
+    broken = true; # File-MMagic is not compatible with our Perl version
   };
 }
