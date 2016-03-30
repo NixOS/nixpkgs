@@ -31,17 +31,17 @@ let
 
     abnf = abnf_0_0_1;
 
-    absinthe_0_5_2 = callPackage
+    absinthe_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "absinthe";
-            version = "0.5.2";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "absinthe";
-              version = "0.5.2";
+              version = "1.0.0";
               sha256 =
-                "2b926ae2b61e0227caf437419d017bb146a9073a67e4e5fa5ed754f3b30994f6";
+                "c5606be8b46003e7ac47e87c924908cb390b892fef0eae390deb66f8ee123a1c";
             };
 
             meta = {
@@ -52,21 +52,42 @@ let
           }
       ) {};
 
-    absinthe = absinthe_0_5_2;
-
-    absinthe_plug_0_5_0 = callPackage
+    absinthe_1_1_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, absinthe_0_5_2 }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "absinthe";
+            version = "1.1.2";
+            src = fetchHex {
+              pkg = "absinthe";
+              version = "1.1.2";
+              sha256 =
+                "e15a387d865922df70506a4cdb63520de8ae9473358deefaffa3f70195193b07";
+            };
+
+            meta = {
+              description = ''GraphQL for Elixir'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/CargoSense/absinthe";
+            };
+          }
+      ) {};
+
+    absinthe = absinthe_1_1_2;
+
+    absinthe_plug_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, absinthe_1_0_0 }:
           buildMix {
             name = "absinthe_plug";
-            version = "0.5.0";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "absinthe_plug";
-              version = "0.5.0";
+              version = "1.0.0";
               sha256 =
-                "eaa22a2af708ee3c37217ad5fcf31210347bb7c0807f7c96cffb09b311326291";
+                "08459823fe1fd4f0325a8bf0c937a4520583a5a26d73b193040ab30a1dfc0b33";
             };
-            beamDeps  = [ plug_1_1_1 absinthe_0_5_2 ];
+            beamDeps  = [ plug_1_1_3 absinthe_1_0_0 ];
 
             meta = {
               description = ''A plug for Absinthe, an experimental GraphQL
@@ -77,11 +98,35 @@ let
           }
       ) {};
 
-    absinthe_plug = absinthe_plug_0_5_0;
+    absinthe_plug = absinthe_plug_1_0_0;
+
+    absinthe_relay_0_8_0 = callPackage
+      (
+        {  buildMix, fetchHex, absinthe_1_1_2 }:
+          buildMix {
+            name = "absinthe_relay";
+            version = "0.8.0";
+            src = fetchHex {
+              pkg = "absinthe_relay";
+              version = "0.8.0";
+              sha256 =
+                "a54ba3775d06db5d7cf3eaa7165bfa3eeaf26f7ee1d5021e0b4db3d74a3ecdd9";
+            };
+            beamDeps  = [ absinthe_1_1_2 ];
+
+            meta = {
+              description = ''Relay framework support for Absinthe'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/absinthe-graphql/absinthe_relay";
+            };
+          }
+      ) {};
+
+    absinthe_relay = absinthe_relay_0_8_0;
 
     access_token_extractor_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "access_token_extractor";
             version = "0.1.1";
@@ -91,7 +136,7 @@ let
               sha256 =
                 "40f76799f8fbb5b03230b31d4d55c5a169e7c3ad82d776a9d87fe0c65c85396d";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Simple Plug to extract access_token from
@@ -272,9 +317,33 @@ let
 
     aeacus = aeacus_0_3_0;
 
+    ahab_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "ahab";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "ahab";
+              version = "0.1.1";
+              sha256 =
+                "c981c2f62dccd15a055083f9bc088aa0e4a029625ef9aa45104c4ba0ead12bd2";
+            };
+
+            meta = {
+              description = ''A lightweight, low latency TCP acceptor pool for
+                            Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/jquadrin/ahab";
+            };
+          }
+      ) {};
+
+    ahab = ahab_0_1_1;
+
     airbrake_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "airbrake";
             version = "0.1.0";
@@ -284,7 +353,7 @@ let
               sha256 =
                 "45d3e2da7f5a8793b9fd7752cbeaa988a848396f44b77d0265f3bed36182d901";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir notifier to the Airbrake'';
@@ -322,7 +391,7 @@ let
 
     airbrakex_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "airbrakex";
             version = "0.0.6";
@@ -332,7 +401,7 @@ let
               sha256 =
                 "a8efc0a9a641a6c5ada2585ee5889291b74ded10977af7b1a4ac6bc445d166e8";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Airbrake Elixir Notifier'';
@@ -343,6 +412,34 @@ let
       ) {};
 
     airbrakex = airbrakex_0_0_6;
+
+    airbrakify_0_0_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_2_1_0, plug_1_1_3, httpoison_0_8_2
+        }:
+          buildMix {
+            name = "airbrakify";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "airbrakify";
+              version = "0.0.1";
+              sha256 =
+                "973f895ba83e6dd71cf87182419e144db5c3ac23e43b7a1247e51559bf2737b6";
+            };
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''A simple Airbrake/Errbit library for
+                                Elixir/Phoenix projects. Currently only supports
+                                error/exception notifications via a Plug.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/Diamond/airbrakify";
+            };
+          }
+      ) {};
+
+    airbrakify = airbrakify_0_0_1;
 
     alambic_0_1_0 = callPackage
       (
@@ -369,6 +466,52 @@ let
       ) {};
 
     alambic = alambic_0_1_0;
+
+    alchemic_pinyin_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "alchemic_pinyin";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "alchemic_pinyin";
+              version = "0.1.0";
+              sha256 =
+                "b1488866a9501557d9a5089726675bb34affd513316e167baccc155d7abfefd2";
+            };
+
+            meta = {
+              description = ''中文汉字转拼音.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/zhangsoledad/alchemic_pinyin";
+            };
+          }
+      ) {};
+
+    alchemic_pinyin = alchemic_pinyin_0_1_0;
+
+    alchemist_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "alchemist";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "alchemist";
+              version = "0.0.2";
+              sha256 =
+                "095ad9b47258b2d482b782a5794ed800df1c4024abbc126f347738be72a1aa51";
+            };
+
+            meta = {
+              description = ''Carefully refactor critical paths'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/jkakar/alchemist";
+            };
+          }
+      ) {};
+
+    alchemist = alchemist_0_0_2;
 
     alchemy_0_0_1 = callPackage
       (
@@ -417,9 +560,34 @@ let
 
     aleppo = aleppo_0_9_0;
 
+    alexa_0_1_12 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "alexa";
+            version = "0.1.12";
+            src = fetchHex {
+              pkg = "alexa";
+              version = "0.1.12";
+              sha256 =
+                "dbc1da3081766570635abc31a799164a1afb34fce437b1d5ef14bfcc5f8ace3d";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              description = ''Framework for implementing an Amazon Alexa
+                            Skill.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/col/alexa";
+            };
+          }
+      ) {};
+
+    alexa = alexa_0_1_12;
+
     alexa_plug_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "alexa_plug";
             version = "0.2.0";
@@ -429,7 +597,7 @@ let
               sha256 =
                 "a78f6fa5e3ba33ce0943f4cb96d6cfcc9b36637a4575314469c8a0d45fff40d0";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''A simple set of plugs and utilities for
@@ -443,17 +611,42 @@ let
 
     alexa_plug = alexa_plug_0_2_0;
 
-    algae_0_9_1 = callPackage
+    alexa_web_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4, alexa_0_1_12 }:
+          buildMix {
+            name = "alexa_web";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "alexa_web";
+              version = "0.0.2";
+              sha256 =
+                "e60a7fa60eb52bbb91e445cf0ee3781e0e2a148855befa638b274e6720421126";
+            };
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 alexa_0_1_12 ];
+
+            meta = {
+              description = ''A web endpoint for deploying one or a collection
+                            of Amazon Alexa Skills'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/col/alexa_web";
+            };
+          }
+      ) {};
+
+    alexa_web = alexa_web_0_0_2;
+
+    algae_0_10_0 = callPackage
       (
         {  buildMix, fetchHex, quark_1_0_2 }:
           buildMix {
             name = "algae";
-            version = "0.9.1";
+            version = "0.10.0";
             src = fetchHex {
               pkg = "algae";
-              version = "0.9.1";
+              version = "0.10.0";
               sha256 =
-                "6d0877d508bd16098b4fb6d0549c5070b8217016b61ac8b220d9f35f3fb82391";
+                "02d89132d99da1e13271007d1109be958ef8b3b7a5e64323299b84d0aa2353e1";
             };
             beamDeps  = [ quark_1_0_2 ];
 
@@ -465,29 +658,45 @@ let
           }
       ) {};
 
-    algae = algae_0_9_1;
+    algae = algae_0_10_0;
 
-    alice_0_1_2 = callPackage
+    algolia_0_3_1 = callPackage
       (
-        {
-          buildMix,
-          fetchHex,
-          slack_0_4_2,
-          redix_0_3_4,
-          poolboy_1_5_1,
-          poison_2_0_1
-        }:
+        {  buildMix, fetchHex, poison_1_0_3, hackney_1_6_0 }:
+          buildMix {
+            name = "algolia";
+            version = "0.3.1";
+            src = fetchHex {
+              pkg = "algolia";
+              version = "0.3.1";
+              sha256 =
+                "a88020c68712d134e66ccde3d2029766249d3da0188da369448a24f66d2f9f6c";
+            };
+            beamDeps  = [ poison_1_0_3 hackney_1_6_0 ];
+
+            meta = {
+              description = ''Elixir implementation of Algolia Search API'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/sikanhe/algolia-elixir";
+            };
+          }
+      ) {};
+
+    algolia = algolia_0_3_1;
+
+    alice_0_3_3 = callPackage
+      (
+        {  buildMix, fetchHex, slack_0_4_2, redix_0_3_6, poolboy_1_5_1 }:
           buildMix {
             name = "alice";
-            version = "0.1.2";
+            version = "0.3.3";
             src = fetchHex {
               pkg = "alice";
-              version = "0.1.2";
+              version = "0.3.3";
               sha256 =
-                "badb6a115a8de88bab122b197214881cd64d2aaf48d8004013adbc6a024fb985";
+                "637953131f96a877f13661da9640efcca4417c69f51db70db85bfa18648156f8";
             };
-            beamDeps  = [ slack_0_4_2 redix_0_3_4 poolboy_1_5_1 poison_2_0_1
-                      ];
+            beamDeps  = [ slack_0_4_2 redix_0_3_6 poolboy_1_5_1 ];
 
             meta = {
               description = ''A Slack bot'';
@@ -497,21 +706,21 @@ let
           }
       ) {};
 
-    alice = alice_0_1_2;
+    alice = alice_0_3_3;
 
-    alice_against_humanity_0_0_1 = callPackage
+    alice_against_humanity_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, alice_0_1_2 }:
+        {  buildMix, fetchHex, alice_0_3_3 }:
           buildMix {
             name = "alice_against_humanity";
-            version = "0.0.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "alice_against_humanity";
-              version = "0.0.1";
+              version = "0.1.2";
               sha256 =
-                "8c9ddbd7b5db3a18740a354b2e385c7e652e820f4262279dfabee36de93c7816";
+                "aac5f049b59d0eaaea2383e1fc8fec28125b9a29ffda7fbe214d829738ad3935";
             };
-            beamDeps  = [ alice_0_1_2 ];
+            beamDeps  = [ alice_0_3_3 ];
 
             meta = {
               description = ''A handler for the Alice Slack bot. Play Cards
@@ -523,21 +732,21 @@ let
           }
       ) {};
 
-    alice_against_humanity = alice_against_humanity_0_0_1;
+    alice_against_humanity = alice_against_humanity_0_1_2;
 
-    alice_google_images_0_0_1 = callPackage
+    alice_google_images_0_1_3 = callPackage
       (
-        {  buildMix, fetchHex, alice_0_1_2 }:
+        {  buildMix, fetchHex, alice_0_3_3 }:
           buildMix {
             name = "alice_google_images";
-            version = "0.0.1";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "alice_google_images";
-              version = "0.0.1";
+              version = "0.1.3";
               sha256 =
-                "ca276e382bde0a996866c7196ae454d3fdc0eb835398e8ece56c24b2c74736cc";
+                "04b4e23c44a67c032c1ac8e2da4ca0fca03ec20cf207b4cb40eba0cb17e975e8";
             };
-            beamDeps  = [ alice_0_1_2 ];
+            beamDeps  = [ alice_0_3_3 ];
 
             meta = {
               description = ''A handler for the Alice Slack bot. Get random
@@ -549,21 +758,21 @@ let
           }
       ) {};
 
-    alice_google_images = alice_google_images_0_0_1;
+    alice_google_images = alice_google_images_0_1_3;
 
-    alice_karma_0_0_1 = callPackage
+    alice_karma_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, alice_0_1_2 }:
+        {  buildMix, fetchHex, alice_0_3_3 }:
           buildMix {
             name = "alice_karma";
-            version = "0.0.1";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "alice_karma";
-              version = "0.0.1";
+              version = "0.1.1";
               sha256 =
-                "b2c1d8b0b7fe077b2a4bc1f24b01e872e24d4f6c82d50791ef6b3a57fc2af150";
+                "c73198e5edb1f5a05e744ca11afa0d2cc58ec183ca0c32bd5e8a01efa7b61559";
             };
-            beamDeps  = [ alice_0_1_2 ];
+            beamDeps  = [ alice_0_3_3 ];
 
             meta = {
               longDescription = ''A handler for the Alice Slack bot. Allows
@@ -575,7 +784,58 @@ let
           }
       ) {};
 
-    alice_karma = alice_karma_0_0_1;
+    alice_karma = alice_karma_0_1_1;
+
+    alice_shizzle_0_1_2 = callPackage
+      (
+        {  buildMix, fetchHex, gizoogle_0_0_2, alice_0_3_3 }:
+          buildMix {
+            name = "alice_shizzle";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "alice_shizzle";
+              version = "0.1.2";
+              sha256 =
+                "c98481d59c004f905958b9412bff1d288a649cf373afb4fea307222af2597c19";
+            };
+            beamDeps  = [ gizoogle_0_0_2 alice_0_3_3 ];
+
+            meta = {
+              longDescription = ''A handlez fo` tha Alice Slack bot fo` realz.
+                                Uses Gizoogle ta allow you ta drop a rhyme like
+                                a thug n` retrieve links fo` translated sitez'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/notdevinclark/alice_shizzle";
+            };
+          }
+      ) {};
+
+    alice_shizzle = alice_shizzle_0_1_2;
+
+    alice_xkcd_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex, xkcd_0_0_1, alice_0_3_3 }:
+          buildMix {
+            name = "alice_xkcd";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "alice_xkcd";
+              version = "0.0.3";
+              sha256 =
+                "13562b43fd99c7d9cdc568d7511c154842b9a59a19eca9df019069193bd94842";
+            };
+            beamDeps  = [ xkcd_0_0_1 alice_0_3_3 ];
+
+            meta = {
+              longDescription = ''A handler for the Alice Slack bot. Retrieves
+                                latest, specific and random XKCD comics.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/notdevinclark/alice_xkcd";
+            };
+          }
+      ) {};
+
+    alice_xkcd = alice_xkcd_0_0_3;
 
     alphonse_0_1_0 = callPackage
       (
@@ -602,25 +862,21 @@ let
 
     alphonse = alphonse_0_1_0;
 
-    amazon_product_advertising_client_0_1_0 = callPackage
+    amazon_product_advertising_client_0_1_1 = callPackage
       (
         {
-          buildMix,
-          fetchHex,
-          timex_1_0_0_rc4,
-          sweet_xml_0_6_1,
-          httpoison_0_8_1
+          buildMix, fetchHex, timex_1_0_2, sweet_xml_0_6_1, httpoison_0_8_2
         }:
           buildMix {
             name = "amazon_product_advertising_client";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "amazon_product_advertising_client";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "b50ac32e0386060de093955662a8152bcb446c81c6fa5315ec0cf94586c69c24";
+                "406111cedbd475cab29bdcc69f48ddc3670e57d2e3294e8d948c117ae492951c";
             };
-            beamDeps  = [ timex_1_0_0_rc4 sweet_xml_0_6_1 httpoison_0_8_1 ];
+            beamDeps  = [ timex_1_0_2 sweet_xml_0_6_1 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Amazon Product Advertising API client for
@@ -633,7 +889,7 @@ let
       ) {};
 
     amazon_product_advertising_client =
-      amazon_product_advertising_client_0_1_0;
+      amazon_product_advertising_client_0_1_1;
 
     amnesia_0_2_1 = callPackage
       (
@@ -754,17 +1010,17 @@ let
 
     amrita = amrita_0_4_0;
 
-    anaphora_0_1_1 = callPackage
+    anaphora_0_1_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "anaphora";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "anaphora";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "c43d66532152b05caee2cfca06ae1b86bd297c2e67ca358ecdcdc94da57ade83";
+                "fb60a214b2be57d7a08aa8237cd7afb009b637563d64ed5e6ec486e36c484001";
             };
 
             meta = {
@@ -775,7 +1031,31 @@ let
           }
       ) {};
 
-    anaphora = anaphora_0_1_1;
+    anaphora = anaphora_0_1_2;
+
+    anilixir_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "anilixir";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "anilixir";
+              version = "1.0.0";
+              sha256 =
+                "ee5c6dfa7e5250d8ec5c9b04910e3202788ceeba231cb3ff8b22e479cc64f1c3";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Anilist API client for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/sotojuan/anilixir";
+            };
+          }
+      ) {};
+
+    anilixir = anilixir_1_0_0;
 
     anubis_0_1_0 = callPackage
       (
@@ -869,7 +1149,28 @@ let
           }
       ) {};
 
-    apex = apex_0_3_7;
+    apex_0_4_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "apex";
+            version = "0.4.0";
+            src = fetchHex {
+              pkg = "apex";
+              version = "0.4.0";
+              sha256 =
+                "0a566f042e9be5e220ed7ca2869770c0c2c0ca4560c416dee317df86f238eccf";
+            };
+
+            meta = {
+              description = ''Elixir clone of Ruby`s awesome_print gem'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bjro/apex";
+            };
+          }
+      ) {};
+
+    apex = apex_0_4_0;
 
     apix_0_1_0 = callPackage
       (
@@ -896,17 +1197,17 @@ let
 
     apix = apix_0_1_0;
 
-    apns_0_0_11 = callPackage
+    apns_0_0_12 = callPackage
       (
         {  buildMix, fetchHex, poolboy_1_5_1, poison_1_5_2 }:
           buildMix {
             name = "apns";
-            version = "0.0.11";
+            version = "0.0.12";
             src = fetchHex {
               pkg = "apns";
-              version = "0.0.11";
+              version = "0.0.12";
               sha256 =
-                "03258b65f3225f47d3f2c23b087f96b904e9f84b5be242e66c0dbfb54c728011";
+                "3eb40b6ef9e73a5082593f6ac1e8ba8548bbfd4bff1f3a5c5d5707ac114fc172";
             };
             beamDeps  = [ poolboy_1_5_1 poison_1_5_2 ];
 
@@ -919,7 +1220,7 @@ let
           }
       ) {};
 
-    apns = apns_0_0_11;
+    apns = apns_0_0_12;
 
     apostle_0_0_3 = callPackage
       (
@@ -969,19 +1270,21 @@ let
 
     ar2ecto = ar2ecto_0_1_2;
 
-    arc_0_3_0 = callPackage
+    arc_0_5_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, ex_aws_0_4_17 }:
+        {
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, ex_aws_0_4_18
+        }:
           buildMix {
             name = "arc";
-            version = "0.3.0";
+            version = "0.5.1";
             src = fetchHex {
               pkg = "arc";
-              version = "0.3.0";
+              version = "0.5.1";
               sha256 =
-                "cc0bb4e31e9b4eccb164959bfc4f438390d5ddaed5762c49761a69d7e2f75e48";
+                "21c64533b2b13033c57cbe031bc064a7c3edfa9a1cb52286dfeda7c4c6d83426";
             };
-            beamDeps  = [ httpoison_0_8_1 ex_aws_0_4_17 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ex_aws_0_4_18 ];
 
             meta = {
               description = ''Flexible file upload and attachment library for
@@ -992,11 +1295,11 @@ let
           }
       ) {};
 
-    arc = arc_0_3_0;
+    arc = arc_0_5_1;
 
     arc_ecto_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0, arc_0_3_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2, arc_0_5_1 }:
           buildMix {
             name = "arc_ecto";
             version = "0.3.2";
@@ -1006,7 +1309,7 @@ let
               sha256 =
                 "92cb9e81eb75a1a9fdb4f4fc8e83714b9ee67e3ddb96db9d53c46e7002bf7e8d";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 arc_0_3_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 arc_0_5_1 ];
 
             meta = {
               description = ''An integration with Arc and Ecto.'';
@@ -1040,17 +1343,17 @@ let
 
     argent = argent_0_0_1;
 
-    argument_parser_0_1_1 = callPackage
+    argument_parser_0_1_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "argument_parser";
-            version = "0.1.1";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "argument_parser";
-              version = "0.1.1";
+              version = "0.1.3";
               sha256 =
-                "beebcf7216bce18d953a832209ec0e9a3b669f108bf49c09f964060f0a10cb85";
+                "2c56a6c9dfa9790aabdb8f9268ac501404376ffb13396ff515e66f1ebf64817d";
             };
 
             meta = {
@@ -1062,7 +1365,7 @@ let
           }
       ) {};
 
-    argument_parser = argument_parser_0_1_1;
+    argument_parser = argument_parser_0_1_3;
 
     array_1_0_1 = callPackage
       (
@@ -1087,21 +1390,21 @@ let
 
     array = array_1_0_1;
 
-    artifact_0_1_0 = callPackage
+    artifact_0_4_0 = callPackage
       (
         {
-          buildMix, fetchHex, porcelain_2_0_1, poolboy_1_5_1, plug_1_1_1
+          buildMix, fetchHex, porcelain_2_0_1, poolboy_1_5_1, plug_1_1_3
         }:
           buildMix {
             name = "artifact";
-            version = "0.1.0";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "artifact";
-              version = "0.1.0";
+              version = "0.4.0";
               sha256 =
-                "1b03c29afa283429fbd158ce70345b0612a6bc87b743164ddc5b86213b42d9f5";
+                "6c66a3c745418e1f1207940c3815828d1a0f022d8186e5da593599d1f460197f";
             };
-            beamDeps  = [ porcelain_2_0_1 poolboy_1_5_1 plug_1_1_1 ];
+            beamDeps  = [ porcelain_2_0_1 poolboy_1_5_1 plug_1_1_3 ];
 
             meta = {
               description = ''File upload and on-the-fly processing for
@@ -1112,7 +1415,7 @@ let
           }
       ) {};
 
-    artifact = artifact_0_1_0;
+    artifact = artifact_0_4_0;
 
     aruspex_0_1_0 = callPackage
       (
@@ -1189,7 +1492,7 @@ let
 
     assembla_api_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "assembla_api";
             version = "0.1.0";
@@ -1199,7 +1502,7 @@ let
               sha256 =
                 "b4a3898de536e4820702c0f119993fd2804e91e2525d1e7eba57d8744983ef24";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Assembla API client'';
@@ -1257,6 +1560,31 @@ let
 
     atlas = atlas_0_2_0;
 
+    auth_test_support_0_0_6 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3 }:
+          buildMix {
+            name = "auth_test_support";
+            version = "0.0.6";
+            src = fetchHex {
+              pkg = "auth_test_support";
+              version = "0.0.6";
+              sha256 =
+                "930596c61d237fbf74b86d87819f0a7df8da8ef79051294a1982ded403cb2401";
+            };
+            beamDeps  = [ plug_1_1_3 ];
+
+            meta = {
+              description = ''Authentication and authorization test support
+                            functions'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/DockYard/auth_test_support";
+            };
+          }
+      ) {};
+
+    auth_test_support = auth_test_support_0_0_6;
+
     authentic_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -1281,7 +1609,7 @@ let
 
     auto_doc_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3 }:
           buildMix {
             name = "auto_doc";
             version = "0.0.2";
@@ -1291,7 +1619,7 @@ let
               sha256 =
                 "9c4b30c526e59f63173fe2f0d0c360ac678f1e7a11adcf209dfc843a3e63e6f7";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 ];
 
             meta = {
               description = ''A package that will create REST API docs based on
@@ -1306,7 +1634,7 @@ let
 
     autobots_license_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "autobots_license";
             version = "0.1.0";
@@ -1316,7 +1644,7 @@ let
               sha256 =
                 "7cfa258ce5eff01018dfd6faf509b430d03770fb733c1b10217b9e52770014b3";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {    };
           }
@@ -1347,21 +1675,21 @@ let
 
     avex = avex_0_2_0;
 
-    aws_0_0_8 = callPackage
+    aws_0_0_10 = callPackage
       (
         {
-          buildMix, fetchHex, timex_1_0_1, poison_1_5_2, httpoison_0_8_1
+          buildMix, fetchHex, timex_1_0_2, poison_1_5_2, httpoison_0_8_2
         }:
           buildMix {
             name = "aws";
-            version = "0.0.8";
+            version = "0.0.10";
             src = fetchHex {
               pkg = "aws";
-              version = "0.0.8";
+              version = "0.0.10";
               sha256 =
-                "4cd03efff629c01847ec82777ba1af2a8543fde288fe48ab36d9b8aa66ba7e9f";
+                "ce2c9ffbaf7b9a3762826a6f8be8ac6ce8d4ef5c74e021514d14d5cafd625d03";
             };
-            beamDeps  = [ timex_1_0_1 poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ timex_1_0_2 poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''AWS clients for Elixir'';
@@ -1371,11 +1699,11 @@ let
           }
       ) {};
 
-    aws = aws_0_0_8;
+    aws = aws_0_0_10;
 
     aws_auth_0_2_5 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "aws_auth";
             version = "0.2.5";
@@ -1385,7 +1713,7 @@ let
               sha256 =
                 "646f1f42652adfb329b5eedde28ddda516c6d02dce45932108b85e2d8bd91b0a";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               description = ''AWS Signature Version 4 Signing Library'';
@@ -1397,7 +1725,32 @@ let
 
     aws_auth = aws_auth_0_2_5;
 
-    aws_erlang_0_1_0 = callPackage
+    aws_cli_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex, erlexec_1_1_0 }:
+          buildRebar3 {
+            name = "aws_cli";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "aws_cli";
+              version = "0.1.0";
+              sha256 =
+                "14fd91c4752a5eb5b2c781c4843589824b35750d7785b57e0460ba6d96bfe8c1";
+            };
+
+            beamDeps  = [ erlexec_1_1_0 ];
+
+            meta = {
+              description = ''AWS cli wrapper for Erlang'';
+
+              homepage = "https://github.com/fyler/aws_cli";
+            };
+          }
+      ) {};
+
+    aws_cli = aws_cli_0_1_0;
+
+    aws_erlang_0_1_1 = callPackage
       (
         {
           buildMix,
@@ -1408,12 +1761,12 @@ let
         }:
           buildMix {
             name = "aws_erlang";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "aws_erlang";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "274e5232cda0ae883ffd813eb172dc0c00134ee04b3deaad1f34e1d4b42b282e";
+                "5a0f27869ec106eac25fa66aa39f226a2eee3f6b3ab02879e4fa60bab7937709";
             };
             beamDeps  = [ jsx_2_8_0 hackney_1_4_8 erlware_commons_0_18_0 ];
 
@@ -1425,7 +1778,7 @@ let
           }
       ) {};
 
-    aws_erlang = aws_erlang_0_1_0;
+    aws_erlang = aws_erlang_0_1_1;
 
     aws_http_0_2_4 = callPackage
       (
@@ -1454,7 +1807,7 @@ let
 
     b2_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "b2";
             version = "0.0.6";
@@ -1464,7 +1817,7 @@ let
               sha256 =
                 "f8b33d1ec36576dfbca3f2f4c5fad1a9a227207d1ef63b3a388778e8fad3333a";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir B2 cloud API wrapper'';
@@ -1500,7 +1853,7 @@ let
 
     balanced_3_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_2_1, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, poison_1_2_1, httpotion_2_2_2 }:
           buildMix {
             name = "balanced";
             version = "3.1.0";
@@ -1510,7 +1863,7 @@ let
               sha256 =
                 "f86f199d76ac66407fbb82fb927e999ec4119a617500965b824ceb4071fcd2d2";
             };
-            beamDeps  = [ poison_1_2_1 httpotion_1_0_0 ];
+            beamDeps  = [ poison_1_2_1 httpotion_2_2_2 ];
 
             meta = {
               description = ''Balanced API for Elixir'';
@@ -1522,19 +1875,19 @@ let
 
     balanced = balanced_3_1_0;
 
-    bamboo_0_2_0 = callPackage
+    bamboo_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_7_5 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "bamboo";
-            version = "0.2.0";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "bamboo";
-              version = "0.2.0";
+              version = "0.3.2";
               sha256 =
-                "f75790da6235225840be3cf6ea9dcfe91abb51bb20ab8e42425a4d207296bbe5";
+                "1b4bfdddae49f6fc66616c63b4d2d9a0e99d40a08619004f5c4f4e4aebfa20ed";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_7_5 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Straightforward, composable, and adapter
@@ -1547,7 +1900,59 @@ let
           }
       ) {};
 
-    bamboo = bamboo_0_2_0;
+    bamboo_0_4_0 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_2_1_0, plug_1_1_3, httpoison_0_8_2
+        }:
+          buildMix {
+            name = "bamboo";
+            version = "0.4.0";
+            src = fetchHex {
+              pkg = "bamboo";
+              version = "0.4.0";
+              sha256 =
+                "5227b1e65a8634da0f46e1eb41a7ca44d3f6de33bfadf950da16e65e9c8428a7";
+            };
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''Straightforward, composable, and adapter
+                                based Elixir email library for people that love
+                                piping. Adapters for Mandrill, Sendgrid,
+                                in-memory, and test.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/paulcsmith/bamboo";
+            };
+          }
+      ) {};
+
+    bamboo = bamboo_0_4_0;
+
+    bamboo_sendgrid_0_1_0 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, bamboo_0_3_2
+        }:
+          buildMix {
+            name = "bamboo_sendgrid";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "bamboo_sendgrid";
+              version = "0.1.0";
+              sha256 =
+                "ee44ac3f096777064c4cf02df238276338914295f5b17caf38192789a590825c";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 bamboo_0_3_2 ];
+
+            meta = {
+              description = ''A SendGrid adapter for Bamboo.'';
+              license = stdenv.lib.licenses.publicDomain;
+            };
+          }
+      ) {};
+
+    bamboo_sendgrid = bamboo_sendgrid_0_1_0;
 
     bandwidth_1_2_1 = callPackage
       (
@@ -1784,19 +2189,19 @@ let
 
     base58check = base58check_0_1_0;
 
-    base62_1_1_0 = callPackage
+    base62_1_2_0 = callPackage
       (
-        {  buildMix, fetchHex, custom_base_0_1_0 }:
+        {  buildMix, fetchHex, custom_base_0_2_0 }:
           buildMix {
             name = "base62";
-            version = "1.1.0";
+            version = "1.2.0";
             src = fetchHex {
               pkg = "base62";
-              version = "1.1.0";
+              version = "1.2.0";
               sha256 =
-                "3e6d5e21aed7875951236ae25a69ac5a22767c685e4e49e973918ae4ba7d9a2a";
+                "14aac55c7978b7a710906ee29df65ba1cee5af2d43efe236c96311696618088b";
             };
-            beamDeps  = [ custom_base_0_1_0 ];
+            beamDeps  = [ custom_base_0_2_0 ];
 
             meta = {
               description = ''Base62 encoder/decoder in pure Elixir.'';
@@ -1806,7 +2211,7 @@ let
           }
       ) {};
 
-    base62 = base62_1_1_0;
+    base62 = base62_1_2_0;
 
     base64url_0_0_1 = callPackage
       (
@@ -1830,6 +2235,53 @@ let
       ) {};
 
     base64url = base64url_0_0_1;
+
+    basehangul_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, iconv_1_0_0 }:
+          buildMix {
+            name = "basehangul";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "basehangul";
+              version = "0.2.0";
+              sha256 =
+                "ea7b03e7407e4c24778a40eb3edf305cf10897057ff14718344f83badb3525cc";
+            };
+            beamDeps  = [ iconv_1_0_0 ];
+
+            meta = {
+              description = ''Elixir implementation of BaseHangul.'';
+              license = stdenv.lib.licenses.free;
+              homepage = "https://github.com/Dalgona/basehangul";
+            };
+          }
+      ) {};
+
+    basehangul = basehangul_0_2_0;
+
+    basho_poolboy_0_8_1_p3 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "basho_poolboy";
+            version = "0.8.1-p3";
+            src = fetchHex {
+              pkg = "basho_poolboy";
+              version = "0.8.1-p3";
+              sha256 =
+                "8e2ead104eaa80bbfcf5c688774f4ddab73733cab79230e78d097c7ba880c42d";
+            };
+
+            meta = {
+              description = ''A hunky Erlang worker pool factory'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/basho/riak_sysmon";
+            };
+          }
+      ) {};
+
+    basho_poolboy = basho_poolboy_0_8_1_p3;
 
     basho_stats_1_0_3 = callPackage
       (
@@ -1856,7 +2308,7 @@ let
 
     basic_auth_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_2, cowboy_1_0_4 }:
           buildMix {
             name = "basic_auth";
             version = "1.0.0";
@@ -1866,7 +2318,7 @@ let
               sha256 =
                 "e8ed4b5ca05c06dc1c19c69f1f00611e93d17bfa913eefbb6bed4a209af3a5a9";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''Basic Authentication Plug'';
@@ -1905,7 +2357,7 @@ let
 
     battlenet_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "battlenet";
             version = "0.0.2";
@@ -1915,7 +2367,7 @@ let
               sha256 =
                 "cdd4e182da5a2db478e0da9ac1a467fc8f2b8ec638e3e38dd7962ff3fe8c9342";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir library for the Battle.net API.'';
@@ -1995,13 +2447,76 @@ let
 
     bbmustache = bbmustache_1_1_0;
 
+    bbsmq_0_0_4 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          uuid_1_1_3,
+          poison_2_1_0,
+          httpoison_0_8_2,
+          exprotobuf_1_0_0,
+          amqp_0_1_4
+        }:
+          buildMix {
+            name = "bbsmq";
+            version = "0.0.4";
+            src = fetchHex {
+              pkg = "bbsmq";
+              version = "0.0.4";
+              sha256 =
+                "94fc10b314f176c9d4d874c387d41b2cb4bab68d749f3e3ce50096167eb6900c";
+            };
+            beamDeps  = [
+                          uuid_1_1_3
+                          poison_2_1_0
+                          httpoison_0_8_2
+                          exprotobuf_1_0_0
+                          amqp_0_1_4
+                        ];
+
+            meta = {
+              description = ''Translate CloudFoundry BBS events and endpoints
+                            into rabbitmq messages.'';
+
+            };
+          }
+      ) {};
+
+    bbsmq = bbsmq_0_0_4;
+
+    bcrypt_0_5_0_p3a = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "bcrypt";
+            version = "0.5.0-p3a";
+            src = fetchHex {
+              pkg = "bcrypt";
+              version = "0.5.0-p3a";
+              sha256 =
+                "492decdc633399b356a3bbfe8279c10a49b1040fc082c8cbf2d30b41ff88f310";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''An Erlang wrapper (NIF or port program) for the
+                            OpenBSD password scheme, bcrypt.'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/chef/erlang-bcrypt";
+            };
+          }
+      ) {};
+
+    bcrypt = bcrypt_0_5_0_p3a;
+
     beaker_1_2_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
           phoenix_1_1_4,
-          ecto_2_0_0_beta_0,
+          ecto_2_0_0_beta_2,
           bureaucrat_0_1_2
         }:
           buildMix {
@@ -2013,7 +2528,7 @@ let
               sha256 =
                 "f792ee661db3e31f4c6cacae992e81bbcc302ce05aec29c16bab9853bd763438";
             };
-            beamDeps  = [ phoenix_1_1_4 ecto_2_0_0_beta_0 bureaucrat_0_1_2 ];
+            beamDeps  = [ phoenix_1_1_4 ecto_2_0_0_beta_2 bureaucrat_0_1_2 ];
 
             meta = {
               longDescription = ''Measure your Elixir! A metrics library that
@@ -2074,6 +2589,31 @@ let
       ) {};
 
     bear = bear_0_8_3;
+
+    belixir_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "belixir";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "belixir";
+              version = "0.2.0";
+              sha256 =
+                "1d4cea63bf593f8ccdbad32270158704d65aa6f88ee2df48422aced2566465e3";
+            };
+
+            meta = {
+              longDescription = ''Benchmark ips tool for elixir-lang. Runs
+                                given codes in given seconds and compares
+                                them.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/meinac/belixir";
+            };
+          }
+      ) {};
+
+    belixir = belixir_0_2_0;
 
     belvedere_0_0_1 = callPackage
       (
@@ -2174,17 +2714,17 @@ let
 
     benchwarmer = benchwarmer_0_0_2;
 
-    bencode_0_2_0 = callPackage
+    bencode_0_3_0 = callPackage
       (
         {  buildMix, fetchHex, eqc_ex_1_2_4 }:
           buildMix {
             name = "bencode";
-            version = "0.2.0";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "bencode";
-              version = "0.2.0";
+              version = "0.3.0";
               sha256 =
-                "78ec5fbfa24cb98795d80d4982fc30563af4d7cd7c77ee86a3bffeb1b3a312dd";
+                "98d397fd0a13ba47bfb51927fede25c780539d38946e6d53c6b83c998636a002";
             };
             beamDeps  = [ eqc_ex_1_2_4 ];
 
@@ -2200,7 +2740,7 @@ let
           }
       ) {};
 
-    bencode = bencode_0_2_0;
+    bencode = bencode_0_3_0;
 
     bencoder_0_0_7 = callPackage
       (
@@ -2247,6 +2787,31 @@ let
       ) {};
 
     bencodex = bencodex_1_0_0;
+
+    bento_0_9_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "bento";
+            version = "0.9.0";
+            src = fetchHex {
+              pkg = "bento";
+              version = "0.9.0";
+              sha256 =
+                "3bc189cab5909af848cda351cc2bf3ff8998f41b6c21524204217674cbcff8c4";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              description = ''An incredibly fast, pure Elixir Bencoding
+                            library.'';
+              license = stdenv.lib.licenses.mpl20;
+              homepage = "https://github.com/folz/bento";
+            };
+          }
+      ) {};
+
+    bento = bento_0_9_0;
 
     bert_0_1_0 = callPackage
       (
@@ -2296,7 +2861,7 @@ let
 
     bgg_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, quinn_0_0_4, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, quinn_0_0_4, httpoison_0_8_2 }:
           buildMix {
             name = "bgg";
             version = "0.1.0";
@@ -2306,7 +2871,7 @@ let
               sha256 =
                 "d26593e7ebb23f76e6c0e73a9a1acb6a45ec25ea53b6ee716a2291f07c5f1fb6";
             };
-            beamDeps  = [ quinn_0_0_4 httpoison_0_8_1 ];
+            beamDeps  = [ quinn_0_0_4 httpoison_0_8_2 ];
 
             meta = {
               description = ''A BoardGameGeek API wrapper in Elixir
@@ -2318,6 +2883,56 @@ let
       ) {};
 
     bgg = bgg_0_1_0;
+
+    big_query_0_0_2 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_2_1_0, jose_1_4_2, httpoison_0_8_2
+        }:
+          buildMix {
+            name = "big_query";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "big_query";
+              version = "0.0.2";
+              sha256 =
+                "db969991b701113c0991ae0f468a85abfbf1bdaf0bc2706fd8357e15dcfe138a";
+            };
+            beamDeps  = [ poison_2_1_0 jose_1_4_2 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''A Google BigQuery API client.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/jordan0day/big_query";
+            };
+          }
+      ) {};
+
+    big_query = big_query_0_0_2;
+
+    bigflake_0_3_0 = callPackage
+      (
+        {  buildMix, fetchHex, base62_1_2_0 }:
+          buildMix {
+            name = "bigflake";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "bigflake";
+              version = "0.3.0";
+              sha256 =
+                "18505f0ca3a7b77fe267840b9172ec5000e118587cb36d148d73c5e642c400a5";
+            };
+            beamDeps  = [ base62_1_2_0 ];
+
+            meta = {
+              description = ''128-bit, k-ordered, conflict-free IDs Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/stevedomin/bigflake";
+            };
+          }
+      ) {};
+
+    bigflake = bigflake_0_3_0;
 
     billiards_0_0_1 = callPackage
       (
@@ -2361,30 +2976,27 @@ let
 
     bin_format = bin_format_0_0_1;
 
-    bing_translator_0_2_3 = callPackage
+    bing_translator_0_2_6 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          timex_1_0_0_rc4,
+          timex_1_0_2,
           poison_1_5_2,
-          httpoison_0_8_1,
-          floki_0_7_1
+          httpoison_0_8_2,
+          floki_0_8_0
         }:
           buildMix {
             name = "bing_translator";
-            version = "0.2.3";
+            version = "0.2.6";
             src = fetchHex {
               pkg = "bing_translator";
-              version = "0.2.3";
+              version = "0.2.6";
               sha256 =
-                "a1a953a96728e0531c41c96befe4301d80370c2f09a2ed412a8c8a817d7333c9";
+                "d25df43466458eca86c9d5aa22d94bc41c3d182949a9ec36e9387ffe442e540e";
             };
             beamDeps  = [
-                          timex_1_0_0_rc4
-                          poison_1_5_2
-                          httpoison_0_8_1
-                          floki_0_7_1
+                          timex_1_0_2 poison_1_5_2 httpoison_0_8_2 floki_0_8_0
                         ];
 
             meta = {
@@ -2397,7 +3009,7 @@ let
           }
       ) {};
 
-    bing_translator = bing_translator_0_2_3;
+    bing_translator = bing_translator_0_2_6;
 
     binstructor_0_0_1 = callPackage
       (
@@ -2474,6 +3086,30 @@ let
 
     bitbucket_api = bitbucket_api_0_0_2;
 
+    bitcask_2_0_2 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "bitcask";
+            version = "2.0.2";
+            src = fetchHex {
+              pkg = "bitcask";
+              version = "2.0.2";
+              sha256 =
+                "666bd79d17faabd62a626ed6fc98176b818266f7bb9639d76244f003ed5b2fe2";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''Bitcask key value store'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/basho/bitcask";
+            };
+          }
+      ) {};
+
+    bitcask = bitcask_2_0_2;
+
     bitfield_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -2525,7 +3161,7 @@ let
     bitpay_0_2_5 = callPackage
       (
         {
-          buildMix, fetchHex, uuid_0_1_5, httpotion_1_0_0, exjsx_3_1_0
+          buildMix, fetchHex, uuid_1_0_0, httpotion_2_2_2, exjsx_3_1_0
         }:
           buildMix {
             name = "bitpay";
@@ -2536,7 +3172,7 @@ let
               sha256 =
                 "25a0b2dbf6619ddc0db4cf1ee03b3d097adac47dc47c65b71a2661eba0f2e3a2";
             };
-            beamDeps  = [ uuid_0_1_5 httpotion_1_0_0 exjsx_3_1_0 ];
+            beamDeps  = [ uuid_1_0_0 httpotion_2_2_2 exjsx_3_1_0 ];
 
             meta = {
               longDescription = ''Library to allow elixir apps to easily use
@@ -2557,11 +3193,11 @@ let
         {
           buildMix,
           fetchHex,
-          timex_ecto_0_5_0,
+          timex_ecto_1_0_4,
           timex_0_19_5,
           secure_random_0_2_0,
           postgrex_0_11_1,
-          ecto_2_0_0_beta_0,
+          ecto_2_0_0_beta_2,
           earmark_0_2_1,
           comeonin_1_6_0
         }:
@@ -2575,11 +3211,11 @@ let
                 "deecf1248ec5ef7911e3b440a968d8cb2dae54d50e36bf80173a2593f0e4ecde";
             };
             beamDeps  = [
-                          timex_ecto_0_5_0
+                          timex_ecto_1_0_4
                           timex_0_19_5
                           secure_random_0_2_0
                           postgrex_0_11_1
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                           earmark_0_2_1
                           comeonin_1_6_0
                         ];
@@ -2617,7 +3253,7 @@ let
 
     blaguth_1_2_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "blaguth";
             version = "1.2.1";
@@ -2627,7 +3263,7 @@ let
               sha256 =
                 "2900dc5b7c6f7810bdf5e0ede8749632997811ae5b72ada34f59699b4310a65a";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Basic Access Authentication in Plug
@@ -2639,6 +3275,29 @@ let
       ) {};
 
     blaguth = blaguth_1_2_1;
+
+    blake2_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "blake2";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "blake2";
+              version = "0.0.1";
+              sha256 =
+                "3f4d66c465d424076f3673065bdd3f3cdcda2cdc59bbdfc7216fa405fa563264";
+            };
+
+            meta = {
+              description = ''BLAKE2 hash function'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/blake2_ex";
+            };
+          }
+      ) {};
+
+    blake2 = blake2_0_0_1;
 
     blanket_0_3_1 = callPackage
       (
@@ -2664,6 +3323,30 @@ let
 
     blanket = blanket_0_3_1;
 
+    blaze_cloud_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_0_1, httpoison_0_8_2 }:
+          buildMix {
+            name = "blaze_cloud";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "blaze_cloud";
+              version = "0.0.1";
+              sha256 =
+                "c5a26f194691d7c40a008c5aded034ca0a43d4fa6a9173952333479cf2661b2b";
+            };
+            beamDeps  = [ poison_2_0_1 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Elixir Library for Backblaze B2 Cloud Storage.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/PerishableDave/blaze_cloud";
+            };
+          }
+      ) {};
+
+    blaze_cloud = blaze_cloud_0_0_1;
+
     block_timer_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -2687,6 +3370,32 @@ let
       ) {};
 
     block_timer = block_timer_0_0_1;
+
+    blockchain_info_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "blockchain_info";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "blockchain_info";
+              version = "0.0.1";
+              sha256 =
+                "22efbcc8df574ddddb9d548150fa704966a59397c103ce58d82a6597cbd5ccd2";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''WIP BlockchainInfo API wrapper for Elixir.
+                                Provides access to bitcoin blockchain data.'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/cyberpunk-ventures/blockchain_info_ex";
+            };
+          }
+      ) {};
+
+    blockchain_info = blockchain_info_0_0_1;
 
     blocking_queue_1_3_0 = callPackage
       (
@@ -2715,7 +3424,7 @@ let
 
     bloodhound_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "bloodhound";
             version = "0.1.1";
@@ -2725,7 +3434,7 @@ let
               sha256 =
                 "6aaab638fe90fc3714b650b659df774c7cdb12d098fee3910952e0a0f8fcd6ec";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An ElasticSearch library for Elixir that can be
@@ -2762,17 +3471,17 @@ let
 
     bloomex = bloomex_1_0_0;
 
-    bmark_1_0_2 = callPackage
+    bmark_1_0_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "bmark";
-            version = "1.0.2";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "bmark";
-              version = "1.0.2";
+              version = "1.0.3";
               sha256 =
-                "70204b013c75d3b95d58acc42ff62461eaebe1e5345ef029fe59ba30a15b1747";
+                "243b04d2e2431d01d93f442896d5e6ee52396782c161ef0a0e4f51a353393d93";
             };
 
             meta = {
@@ -2784,7 +3493,34 @@ let
           }
       ) {};
 
-    bmark = bmark_1_0_2;
+    bmark = bmark_1_0_3;
+
+    bno055_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, gproc_0_5_0, elixir_ale_0_4_1 }:
+          buildMix {
+            name = "bno055";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "bno055";
+              version = "0.0.1";
+              sha256 =
+                "07f97909748be55dc7e3f31b9fbf708c5b43e9ba229f82b674aaa0ad57f35ef6";
+            };
+            beamDeps  = [ gproc_0_5_0 elixir_ale_0_4_1 ];
+
+            meta = {
+              longDescription = ''OTP application for reading the BNO-055
+                                absolute orientation sensor. Euler angles are
+                                read at 20hz and published to a configured local
+                                `gproc` property.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/TattdCodeMonkey/bno055";
+            };
+          }
+      ) {};
+
+    bno055 = bno055_0_0_1;
 
     boltun_0_0_4 = callPackage
       (
@@ -2837,7 +3573,7 @@ let
 
     botan_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "botan";
             version = "0.1.2";
@@ -2847,7 +3583,7 @@ let
               sha256 =
                 "43541b5c52c91e46295a015f58857c347c85a7753d7c3cd3a1f835b25fdedaa9";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir wrapper for Botan.io'';
@@ -2892,10 +3628,10 @@ let
         {
           buildMix,
           fetchHex,
-          redix_0_3_4,
+          redix_0_3_6,
           poolboy_1_5_1,
           poison_1_5_2,
-          plug_1_1_1,
+          plug_1_1_3,
           phoenix_1_1_4
         }:
           buildMix {
@@ -2908,10 +3644,10 @@ let
                 "82979e9c8df401cbf5eb2dd09dff3952933cf2efd9135be1f0cb51ec04deb996";
             };
             beamDeps  = [
-                          redix_0_3_4
+                          redix_0_3_6
                           poolboy_1_5_1
                           poison_1_5_2
-                          plug_1_1_1
+                          plug_1_1_3
                           phoenix_1_1_4
                         ];
 
@@ -2926,19 +3662,43 @@ let
 
     bouncer = bouncer_0_1_5;
 
-    braintree_0_3_1 = callPackage
+    brady_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, phoenix_1_1_4 }:
+          buildMix {
+            name = "brady";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "brady";
+              version = "0.0.2";
+              sha256 =
+                "90518fe90719cfb64d3b3d8a2947f14b2d8657414d9e9bb86cb03e7901334b0d";
+            };
+            beamDeps  = [ phoenix_1_1_4 ];
+
+            meta = {
+              description = ''Template helpers for Phoenix applications'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/thoughtbot/brady";
+            };
+          }
+      ) {};
+
+    brady = brady_0_0_2;
+
+    braintree_0_3_2 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "braintree";
-            version = "0.3.1";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "braintree";
-              version = "0.3.1";
+              version = "0.3.2";
               sha256 =
-                "a93e78cbf8a1407035d8bcf6e7d53fc2ef2f716f3bd49b833ae105fa06a40ec1";
+                "cfc2aa7fc94c74eeb41c34a401fa8784f9c423268086c797949d0f0dc5c657a3";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               description = ''Native Braintree client library for Elixir'';
@@ -2948,7 +3708,7 @@ let
           }
       ) {};
 
-    braintree = braintree_0_3_1;
+    braintree = braintree_0_3_2;
 
     braise_0_3_2 = callPackage
       (
@@ -2975,17 +3735,17 @@ let
 
     braise = braise_0_3_2;
 
-    brcpfcnpj_0_0_9 = callPackage
+    brcpfcnpj_0_1_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "brcpfcnpj";
-            version = "0.0.9";
+            version = "0.1.0";
             src = fetchHex {
               pkg = "brcpfcnpj";
-              version = "0.0.9";
+              version = "0.1.0";
               sha256 =
-                "d5b7c8b473a07c3c91aa450b91ef9899a423c3f36a3027d4be5da25fdf5cef4b";
+                "19ba4d572c93c70d571a36d6ada2fca4d03330d8f96c6b7d8e4c47fa9f809c90";
             };
 
             meta = {
@@ -2998,21 +3758,21 @@ let
           }
       ) {};
 
-    brcpfcnpj = brcpfcnpj_0_0_9;
+    brcpfcnpj = brcpfcnpj_0_1_0;
 
-    breadcrumble_1_0_2 = callPackage
+    breadcrumble_1_0_3 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "breadcrumble";
-            version = "1.0.2";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "breadcrumble";
-              version = "1.0.2";
+              version = "1.0.3";
               sha256 =
-                "8265e64e363df90e556125e091ba52e92a8eeaad57cc3efdd926aa0b069ad78f";
+                "f1d3ec0d3bf74670c58d4ff6c1d10cad0757c003b56ba9f77e3d76a05ac68be3";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Elixir port of Breadcrumble library'';
@@ -3022,7 +3782,7 @@ let
           }
       ) {};
 
-    breadcrumble = breadcrumble_1_0_2;
+    breadcrumble = breadcrumble_1_0_3;
 
     briefly_0_3_0 = callPackage
       (
@@ -3116,19 +3876,42 @@ let
 
     bstr = bstr_0_3_0;
 
-    bugsnag_1_1_1 = callPackage
+    buffer_0_3_6 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "buffer";
+            version = "0.3.6";
+            src = fetchHex {
+              pkg = "buffer";
+              version = "0.3.6";
+              sha256 =
+                "409f4d725b69bd36635ec18df9e2c3b6e78ef6ebc14a0e55a98dc58b4c65b7c3";
+            };
+
+            meta = {
+              description = ''Provide read and write buffers for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/adrienmo/buffer";
+            };
+          }
+      ) {};
+
+    buffer = buffer_0_3_6;
+
+    bugsnag_1_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "bugsnag";
-            version = "1.1.1";
+            version = "1.2.0";
             src = fetchHex {
               pkg = "bugsnag";
-              version = "1.1.1";
+              version = "1.2.0";
               sha256 =
-                "ed4d8876e9bdf841f6f08e6562ad9455ef3d06fb9d403702e7e24611fbe96247";
+                "23c6e8eb827ec1294684b5fe788d4d1cd670804ddfb74bb2bd427aed44a68f05";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir interface to the Bugsnag API'';
@@ -3138,22 +3921,22 @@ let
           }
       ) {};
 
-    bugsnag = bugsnag_1_1_1;
+    bugsnag = bugsnag_1_2_0;
 
-    bugsnag_erl_0_1_2 = callPackage
+    bugsnag_erl_0_1_3 = callPackage
       (
-        {  buildRebar3, fetchHex, lager_3_0_1, jsx_2_8_0 }:
+        {  buildRebar3, fetchHex, lager_2_1_1, jsx_2_8_0 }:
           buildRebar3 {
             name = "bugsnag_erl";
-            version = "0.1.2";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "bugsnag_erl";
-              version = "0.1.2";
+              version = "0.1.3";
               sha256 =
-                "c54c6e7fcb5e74b1d3611371ce7bd73fb31aaf27f909398a286683802c541851";
+                "02b400b8f7f606c580ca81311279ef8bbe99c2cfc32b0b956af1644594ddaf2b";
             };
 
-            beamDeps  = [ lager_3_0_1 jsx_2_8_0 ];
+            beamDeps  = [ lager_2_1_1 jsx_2_8_0 ];
 
             meta = {
               description = ''Bugsnag notifier'';
@@ -3163,7 +3946,30 @@ let
           }
       ) {};
 
-    bugsnag_erl = bugsnag_erl_0_1_2;
+    bugsnag_erl = bugsnag_erl_0_1_3;
+
+    build_client_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "build_client";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "build_client";
+              version = "0.0.1";
+              sha256 =
+                "ee28ca64db404b76316fa578f30888b7725cbde91d6f89fa7dfc384a32b9c095";
+            };
+
+            meta = {
+              description = ''AX Deployment Client'';
+
+              homepage = "https://github.com/dapdizzy/build_client";
+            };
+          }
+      ) {};
+
+    build_client = build_client_0_0_1;
 
     bump_0_1_0 = callPackage
       (
@@ -3214,7 +4020,7 @@ let
 
     bureaucrat_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1 }:
+        {  buildMix, fetchHex, plug_0_5_2 }:
           buildMix {
             name = "bureaucrat";
             version = "0.1.2";
@@ -3224,7 +4030,7 @@ let
               sha256 =
                 "cd746f6f9ee9927b1b81ae7834c7b0a045df7e53151674d8b3d8de5832ec7402";
             };
-            beamDeps  = [ plug_0_8_1 ];
+            beamDeps  = [ plug_0_5_2 ];
 
             meta = {
               description = ''Generate Phoenix API documentation from tests'';
@@ -3236,17 +4042,17 @@ let
 
     bureaucrat = bureaucrat_0_1_2;
 
-    butler_0_6_2 = callPackage
+    butler_0_7_0 = callPackage
       (
         {  buildMix, fetchHex, poison_1_5_2, httpoison_0_7_5 }:
           buildMix {
             name = "butler";
-            version = "0.6.2";
+            version = "0.7.0";
             src = fetchHex {
               pkg = "butler";
-              version = "0.6.2";
+              version = "0.7.0";
               sha256 =
-                "28d681c4986c6711bf72c645084a83ea108a35039cedf5d03d6779d86cb7db19";
+                "0a6ab3880449370d4fe40355372c8929ff16031fd5d118a8936739cb034b45bd";
             };
             beamDeps  = [ poison_1_5_2 httpoison_0_7_5 ];
 
@@ -3311,7 +4117,7 @@ let
 
     butler_cowsay_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, cowsay_0_0_1, butler_0_6_2 }:
+        {  buildMix, fetchHex, cowsay_0_0_1, butler_0_7_0 }:
           buildMix {
             name = "butler_cowsay";
             version = "0.2.1";
@@ -3321,7 +4127,7 @@ let
               sha256 =
                 "d5b6ef82ebd387666c8b8d4fd93df3d11ff2ed7a129ae3aa7d7faac9ae803195";
             };
-            beamDeps  = [ cowsay_0_0_1 butler_0_6_2 ];
+            beamDeps  = [ cowsay_0_0_1 butler_0_7_0 ];
 
             meta = {
               description = ''ButlerCowsay plugin for Butler SlackBot'';
@@ -3377,7 +4183,7 @@ let
 
     bypass_0_5_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "bypass";
             version = "0.5.1";
@@ -3387,7 +4193,7 @@ let
               sha256 =
                 "bbff87f453cd98a81c9caeb305e5bcee25fe4fe31089cb19127a36dd224c2454";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Bypass provides a quick way to create a
@@ -3431,19 +4237,43 @@ let
 
     cache_tab = cache_tab_1_0_2;
 
-    calecto_0_5_0 = callPackage
+    cachex_0_8_0 = callPackage
       (
-        {  buildMix, fetchHex, ecto_1_1_3, calendar_0_12_4 }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "cachex";
+            version = "0.8.0";
+            src = fetchHex {
+              pkg = "cachex";
+              version = "0.8.0";
+              sha256 =
+                "b6fa0414bc725a557fc73deed144b318831f2f4ed5f67e525da8972eb789059d";
+            };
+
+            meta = {
+              description = ''Powerful in-memory key/value storage for
+                            Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/zackehh/cachex";
+            };
+          }
+      ) {};
+
+    cachex = cachex_0_8_0;
+
+    calecto_0_5_2 = callPackage
+      (
+        {  buildMix, fetchHex, ecto_0_2_7, calendar_0_12_4 }:
           buildMix {
             name = "calecto";
-            version = "0.5.0";
+            version = "0.5.2";
             src = fetchHex {
               pkg = "calecto";
-              version = "0.5.0";
+              version = "0.5.2";
               sha256 =
-                "3414a87a3a355eeb8116c2fc993e3827772f1dc9064aab00a81a76a5ef00ab5b";
+                "ed21765dea78d2b3888a11c83c9642aee0624098625bc32b0eb642b9e3578ef7";
             };
-            beamDeps  = [ ecto_1_1_3 calendar_0_12_4 ];
+            beamDeps  = [ ecto_0_2_7 calendar_0_12_4 ];
 
             meta = {
               longDescription = ''Library for using Calendar with Ecto. This
@@ -3455,42 +4285,11 @@ let
           }
       ) {};
 
-    calecto = calecto_0_5_0;
-
-    calendar_0_12_3 = callPackage
-      (
-        {  buildMix, fetchHex, tzdata_0_1_8 }:
-          buildMix {
-            name = "calendar";
-            version = "0.12.3";
-            src = fetchHex {
-              pkg = "calendar";
-              version = "0.12.3";
-              sha256 =
-                "19aba4c9660239a710ac70e9bef56d8c8db73ebb48a2c89e3ac02cec64838aad";
-            };
-            beamDeps  = [ tzdata_0_1_8 ];
-
-            meta = {
-              longDescription = ''Calendar is a datetime library for Elixir.
-                                Providing explicit types for datetimes, dates
-                                and times. Full timezone support via its sister
-                                package `tzdata`. Safe parsing and formatting of
-                                standard formats (ISO, RFC, Unix, JS etc.) plus
-                                strftime formatting. Easy and safe
-                                interoperability with erlang style datetime
-                                tuples. Extendable through protocols. Related
-                                packages are available for i18n, Ecto and
-                                Phoenix interoperability.'';
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/lau/calendar";
-            };
-          }
-      ) {};
+    calecto = calecto_0_5_2;
 
     calendar_0_12_4 = callPackage
       (
-        {  buildMix, fetchHex, tzdata_0_1_8 }:
+        {  buildMix, fetchHex, tzdata_0_1_201603 }:
           buildMix {
             name = "calendar";
             version = "0.12.4";
@@ -3500,7 +4299,7 @@ let
               sha256 =
                 "1df7cc23b7dfa3228498fff3bd298495d8431433be94db62a60e93ffa455a060";
             };
-            beamDeps  = [ tzdata_0_1_8 ];
+            beamDeps  = [ tzdata_0_1_201603 ];
 
             meta = {
               longDescription = ''Calendar is a datetime library for Elixir.
@@ -3519,11 +4318,42 @@ let
           }
       ) {};
 
-    calendar = calendar_0_12_4;
+    calendar_0_13_2 = callPackage
+      (
+        {  buildMix, fetchHex, tzdata_0_1_201603 }:
+          buildMix {
+            name = "calendar";
+            version = "0.13.2";
+            src = fetchHex {
+              pkg = "calendar";
+              version = "0.13.2";
+              sha256 =
+                "5be3a69db1a177ed39d24d582ac7be3dab59ee8aeae41ee17c36a263a9818460";
+            };
+            beamDeps  = [ tzdata_0_1_201603 ];
+
+            meta = {
+              longDescription = ''Calendar is a datetime library for Elixir.
+                                Providing explicit types for datetimes, dates
+                                and times. Full timezone support via its sister
+                                package `tzdata`. Safe parsing and formatting of
+                                standard formats (ISO, RFC, Unix, JS etc.) plus
+                                strftime formatting. Easy and safe
+                                interoperability with erlang style datetime
+                                tuples. Extendable through protocols. Related
+                                packages are available for i18n, Ecto and
+                                Phoenix interoperability.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/lau/calendar";
+            };
+          }
+      ) {};
+
+    calendar = calendar_0_13_2;
 
     calendar_translations_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, calendar_0_12_4 }:
+        {  buildMix, fetchHex, calendar_0_13_2 }:
           buildMix {
             name = "calendar_translations";
             version = "0.0.3";
@@ -3533,7 +4363,7 @@ let
               sha256 =
                 "b232912959f7f645a34e1a6ceca4657156e64bb5db3573fbc61c603c648dcb09";
             };
-            beamDeps  = [ calendar_0_12_4 ];
+            beamDeps  = [ calendar_0_13_2 ];
 
             meta = {
               description = ''Translations for the Calendar library.'';
@@ -3591,21 +4421,21 @@ let
 
     canada = canada_1_0_0;
 
-    canary_0_14_0 = callPackage
+    canary_0_14_1 = callPackage
       (
         {
-          buildMix, fetchHex, plug_1_1_1, ecto_2_0_0_beta_0, canada_1_0_0
+          buildMix, fetchHex, plug_1_1_3, ecto_2_0_0_beta_2, canada_1_0_0
         }:
           buildMix {
             name = "canary";
-            version = "0.14.0";
+            version = "0.14.1";
             src = fetchHex {
               pkg = "canary";
-              version = "0.14.0";
+              version = "0.14.1";
               sha256 =
-                "5002649bbe4b9c7e00fb7f0c499c109eb34732f50f69ede797ed1e768e4f0029";
+                "8ee0f96f4f98c0c0188eea68b2d90adae8e6af527eb04ee8623811bd58be7f0c";
             };
-            beamDeps  = [ plug_1_1_1 ecto_2_0_0_beta_0 canada_1_0_0 ];
+            beamDeps  = [ plug_1_1_3 ecto_2_0_0_beta_2 canada_1_0_0 ];
 
             meta = {
               longDescription = ''An authorization library to restrict what
@@ -3617,7 +4447,7 @@ let
           }
       ) {};
 
-    canary = canary_0_14_0;
+    canary = canary_0_14_1;
 
     carrier_1_0_4 = callPackage
       (
@@ -3666,6 +4496,54 @@ let
       ) {};
 
     cartographer = cartographer_0_0_1;
+
+    cassette_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, exml_0_1_0 }:
+          buildMix {
+            name = "cassette";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "cassette";
+              version = "1.0.0";
+              sha256 =
+                "cbb9e1bffc2161ac51f6b8b376159e6bf1f39a2f41a9f07f861653cfb4c4e531";
+            };
+            beamDeps  = [ httpoison_0_8_2 exml_0_1_0 ];
+
+            meta = {
+              description = ''A CAS client and validation library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/locaweb/elixir-cassette";
+            };
+          }
+      ) {};
+
+    cassette = cassette_1_0_0;
+
+    cassette_plug_1_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, cassette_1_0_0 }:
+          buildMix {
+            name = "cassette_plug";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "cassette_plug";
+              version = "1.0.1";
+              sha256 =
+                "7c6ca0bacb3660efd1367b95c8a2d70e485e2842b9bfc87bdeb85c33882dc164";
+            };
+            beamDeps  = [ plug_1_1_3 cassette_1_0_0 ];
+
+            meta = {
+              description = ''An auth Plug using Cassette'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/locaweb/cassette-plug";
+            };
+          }
+      ) {};
+
+    cassette_plug = cassette_plug_1_0_1;
 
     cassius_0_0_1 = callPackage
       (
@@ -3717,7 +4595,7 @@ let
     caylir_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, poolboy_1_5_1, poison_1_5_2, hackney_1_4_8
+          buildMix, fetchHex, poolboy_1_5_1, poison_1_5_2, hackney_1_6_0
         }:
           buildMix {
             name = "caylir";
@@ -3728,7 +4606,7 @@ let
               sha256 =
                 "b3699171f2bef699ce1968394cb2aee3b5ec7db529a395d8bf7d85163067f888";
             };
-            beamDeps  = [ poolboy_1_5_1 poison_1_5_2 hackney_1_4_8 ];
+            beamDeps  = [ poolboy_1_5_1 poison_1_5_2 hackney_1_6_0 ];
 
             meta = {
               description = ''Cayley driver for Elixir'';
@@ -3762,6 +4640,48 @@ let
       ) {};
 
     ccc = ccc_0_0_2;
+
+    cep_0_0_1 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          sweet_xml_0_6_1,
+          poolboy_1_5_1,
+          poison_2_1_0,
+          httpoison_0_8_2,
+          codepagex_0_1_2
+        }:
+          buildMix {
+            name = "cep";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "cep";
+              version = "0.0.1";
+              sha256 =
+                "f76e67e1d989fc2edbfbd265f79e4a33a0aa7f9ff06934a1f2d49903df72b79f";
+            };
+            beamDeps  = [
+                          sweet_xml_0_6_1
+                          poolboy_1_5_1
+                          poison_2_1_0
+                          httpoison_0_8_2
+                          codepagex_0_1_2
+                        ];
+
+            meta = {
+              longDescription = ''A package to query Brazilian CEP codes. Has
+                                support for multiple source APIs (Correios,
+                                ViaCep, Postmon, etc). It can query one specific
+                                source or query until one source returns a valid
+                                result.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/douglascamata/cep";
+            };
+          }
+      ) {};
+
+    cep = cep_0_0_1;
 
     certifi_0_1_1 = callPackage
       (
@@ -3805,7 +4725,28 @@ let
           }
       ) {};
 
-    certifi = certifi_0_3_0;
+    certifi_0_4_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "certifi";
+            version = "0.4.0";
+            src = fetchHex {
+              pkg = "certifi";
+              version = "0.4.0";
+              sha256 =
+                "1cc233bee2d6990e7b0ff4c5824d7f401edda8a3cfad04d3328e35ad97de7611";
+            };
+
+            meta = {
+              description = ''An OTP library'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/certifi/erlang-certifi";
+            };
+          }
+      ) {};
+
+    certifi = certifi_0_4_0;
 
     cesso_0_1_3 = callPackage
       (
@@ -3830,7 +4771,7 @@ let
 
     cesso = cesso_0_1_3;
 
-    cet_0_2_2 = callPackage
+    cet_0_2_3 = callPackage
       (
         {
           buildRebar3,
@@ -3844,12 +4785,12 @@ let
         }:
           buildRebar3 {
             name = "cet";
-            version = "0.2.2";
+            version = "0.2.3";
             src = fetchHex {
               pkg = "cet";
-              version = "0.2.2";
+              version = "0.2.3";
               sha256 =
-                "3da06f36791484576e4b338a2d8b5cfa65fe81ae7ed748aa7df85de0cb3bd2b4";
+                "4942c6d86568ee8daffebfece8b73dcef3d91702484480b27a2b32590ad0894e";
             };
 
             beamDeps  = [
@@ -3869,7 +4810,7 @@ let
           }
       ) {};
 
-    cet = cet_0_2_2;
+    cet = cet_0_2_3;
 
     cf_0_1_2 = callPackage
       (
@@ -3912,6 +4853,54 @@ let
       ) {};
 
     cf = cf_0_2_1;
+
+    chacha20_0_3_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "chacha20";
+            version = "0.3.2";
+            src = fetchHex {
+              pkg = "chacha20";
+              version = "0.3.2";
+              sha256 =
+                "26882c84da45dd1158a0249031f5a67329a6c4cd89e075d409324eee30444410";
+            };
+
+            meta = {
+              description = ''Chacha20 symmetric stream cipher'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/chacha20_ex";
+            };
+          }
+      ) {};
+
+    chacha20 = chacha20_0_3_2;
+
+    changeset_0_2_1 = callPackage
+      (
+        {  buildMix, fetchHex, defmemo_0_1_1 }:
+          buildMix {
+            name = "changeset";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "changeset";
+              version = "0.2.1";
+              sha256 =
+                "b2ae6487630bcd2931f54331852f4d834dc1ae47687abc95fbc9194c15c55a5f";
+            };
+            beamDeps  = [ defmemo_0_1_1 ];
+
+            meta = {
+              description = ''A package for calculating between-list edit
+                            distances.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/erwald/elixir-changeset";
+            };
+          }
+      ) {};
+
+    changeset = changeset_0_2_1;
 
     changex_0_1_1 = callPackage
       (
@@ -3970,7 +4959,7 @@ let
           fetchHex,
           cowboy_1_0_4,
           env_conf_0_3_0,
-          uuid_0_1_5,
+          uuid_1_0_0,
           jazz_0_2_1
         }:
           buildMix {
@@ -3982,7 +4971,7 @@ let
               sha256 =
                 "2c0eb1335922bec0c6bc5e8f3dc4d84192657b708c2558742f676ed430f0950f";
             };
-            beamDeps  = [ cowboy_1_0_4 env_conf_0_3_0 uuid_0_1_5 jazz_0_2_1
+            beamDeps  = [ cowboy_1_0_4 env_conf_0_3_0 uuid_1_0_0 jazz_0_2_1
                       ];
 
             meta = {
@@ -4073,9 +5062,40 @@ let
 
     chash = chash_0_1_1;
 
+    chatter_0_0_14 = callPackage
+      (
+        {
+          buildMix, fetchHex, snappy_1_1_1, ranch_1_2_1, exactor_2_2_0
+        }:
+          buildMix {
+            name = "chatter";
+            version = "0.0.14";
+            src = fetchHex {
+              pkg = "chatter";
+              version = "0.0.14";
+              sha256 =
+                "6f6ee9aac860198a08322f77a334df82c43e38aa9f5fa7186034bf84ac86f060";
+            };
+            beamDeps  = [ snappy_1_1_1 ranch_1_2_1 exactor_2_2_0 ];
+
+            meta = {
+              longDescription = ''Chatter is extracted from the ScaleSmall
+                                project as a standalone piece. This may be used
+                                independently to broadcast messages to a set of
+                                nodes. It uses a mixture of UDP multicast and
+                                TCP to deliver messages and tries to minimize
+                                network traffic while doing so.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/dbeck/chatter_ex/";
+            };
+          }
+      ) {};
+
+    chatter = chatter_0_0_14;
+
     chinese_translation_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "chinese_translation";
             version = "0.1.0";
@@ -4085,7 +5105,7 @@ let
               sha256 =
                 "d5e4f59421bad59e465322ce7a8f366179e5f6a732d7e06435e8a7c01f42e7ab";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''ChineseTranslation provides traditional
@@ -4100,17 +5120,17 @@ let
 
     chinese_translation = chinese_translation_0_1_0;
 
-    chronos_1_0_0 = callPackage
+    chronos_0_3_9 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "chronos";
-            version = "1.0.0";
+            version = "0.3.9";
             src = fetchHex {
               pkg = "chronos";
-              version = "1.0.0";
+              version = "0.3.9";
               sha256 =
-                "cfe0087dcf2ab401b3c2c1faa977571f9880f527b54a8c22cda5a8023a8420af";
+                "973e1273088677a12afc1a72aad78fe5070fb0ad6f9b1c648d79dd251292dee4";
             };
 
             meta = {
@@ -4172,17 +5192,17 @@ let
 
     chunky_svg = chunky_svg_0_0_4;
 
-    cidr_0_5_0 = callPackage
+    cidr_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "cidr";
-            version = "0.5.0";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "cidr";
-              version = "0.5.0";
+              version = "1.0.0";
               sha256 =
-                "876baa94135d058a5ff617c8a072cdb2e5381661eb93b70d07844c0f9e00f38d";
+                "3bffa78af48cfbcd89461144bd2e1990b4f2631a8328c42cb033fa71c14b8f46";
             };
 
             meta = {
@@ -4194,7 +5214,7 @@ let
           }
       ) {};
 
-    cidr = cidr_0_5_0;
+    cidr = cidr_1_0_0;
 
     cipher_0_1_0 = callPackage
       (
@@ -4224,7 +5244,36 @@ let
           }
       ) {};
 
-    cipher = cipher_0_1_0;
+    cipher_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "cipher";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "cipher";
+              version = "1.0.0";
+              sha256 =
+                "a83812b09b65c6a821129e709fee31b4f96ccc0c547e29fe42928ed49811ed79";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              longDescription = ''Elixir crypto library to encrypt/decrypt
+                                arbitrary binaries. It uses Erlang Crypto, so
+                                it`s not big deal. Mostly a collection of
+                                helpers wrapping it. It allows to use a crypted
+                                key to validate signed requests. The exact same
+                                cipher is implemented for Python, Ruby and
+                                Elixir, so it can be used to integrate apps from
+                                different languages.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/rubencaro/cipher";
+            };
+          }
+      ) {};
+
+    cipher = cipher_1_0_0;
 
     cirru_parser_0_0_1 = callPackage
       (
@@ -4251,7 +5300,7 @@ let
 
     ckan_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_2_2 }:
           buildMix {
             name = "ckan";
             version = "0.0.2";
@@ -4261,7 +5310,7 @@ let
               sha256 =
                 "471a58f1d38df7a6ff36af9a1e9d4c6cb9d310c5acb2db95ff3184717d7762a0";
             };
-            beamDeps  = [ poison_1_5_2 httpotion_2_1_0 ];
+            beamDeps  = [ poison_1_5_2 httpotion_2_2_2 ];
 
             meta = {
               description = ''A small library for interacting with CKAN
@@ -4322,6 +5371,43 @@ let
 
     cleverbot = cleverbot_0_0_1;
 
+    clicksign_0_0_2 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          plug_1_1_3,
+          httpoison_0_8_2,
+          exjsx_3_2_0,
+          cowboy_1_0_4,
+          bypass_0_5_1
+        }:
+          buildMix {
+            name = "clicksign";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "clicksign";
+              version = "0.0.2";
+              sha256 =
+                "e6e9335c86298d5d5af6c18b85f3533554eca74d6129e1aea7dae17849b48ed2";
+            };
+            beamDeps  = [
+                          plug_1_1_3
+                          httpoison_0_8_2
+                          exjsx_3_2_0
+                          cowboy_1_0_4
+                          bypass_0_5_1
+                        ];
+
+            meta = {
+              description = ''Clicksign client'';
+
+            };
+          }
+      ) {};
+
+    clicksign = clicksign_0_0_2;
+
     clint_0_0_1 = callPackage
       (
         {  buildMix, fetchHex, plug_0_11_3, cowboy_1_0_4 }:
@@ -4347,9 +5433,34 @@ let
 
     clint = clint_0_0_1;
 
+    clique_3_0_1 = callPackage
+      (
+        {  buildRebar3, fetchHex, cuttlefish_2_0_7 }:
+          buildRebar3 {
+            name = "clique";
+            version = "3.0.1";
+            src = fetchHex {
+              pkg = "clique";
+              version = "3.0.1";
+              sha256 =
+                "f26bd1d293a88223b9dc21dc5a2643e64823f3e8e178536fb66e97c4ff4a2ac2";
+            };
+
+            beamDeps  = [ cuttlefish_2_0_7 ];
+
+            meta = {
+              description = ''A CLI library for erlang'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/basho/clique";
+            };
+          }
+      ) {};
+
+    clique = clique_3_0_1;
+
     cloak_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, poison_2_1_0, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "cloak";
             version = "0.2.0";
@@ -4359,7 +5470,7 @@ let
               sha256 =
                 "8e2455ab420102280719efc86cee7a58d1de358a541cd7d1b49b74fa30fa8fb8";
             };
-            beamDeps  = [ poison_2_1_0 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ poison_2_1_0 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Encrypted fields for Ecto.'';
@@ -4370,6 +5481,66 @@ let
       ) {};
 
     cloak = cloak_0_2_0;
+
+    close_enough_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "close_enough";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "close_enough";
+              version = "0.0.1";
+              sha256 =
+                "cbd73a651bffc50259035a311e5a03cb01176667b76aece059778dda9bd72079";
+            };
+
+            meta = {
+              description = ''Forget typos in function names name, CloseEnough
+                            handles them.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/sivsushruth/close_enough";
+            };
+          }
+      ) {};
+
+    close_enough = close_enough_0_0_1;
+
+    cloudex_0_0_2 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          tzdata_0_5_7,
+          timex_0_19_5,
+          poison_1_5_2,
+          httpoison_0_8_2
+        }:
+          buildMix {
+            name = "cloudex";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "cloudex";
+              version = "0.0.2";
+              sha256 =
+                "eb424a8e6610de6f7a2f2be074937c571a86d11e4b942d2ea39900855a66b306";
+            };
+            beamDeps  = [
+                          tzdata_0_5_7 timex_0_19_5 poison_1_5_2 httpoison_0_8_2
+                        ];
+
+            meta = {
+              longDescription = ''A library that helps with uploading image
+                                files and urls to cloudinary. Also provides an
+                                helper to generate transformations and
+                                cloudinary urls pointing to your images'';
+              license = stdenv.lib.licenses.wtfpl;
+              homepage = "https://github.com/smeevil/cloudex";
+            };
+          }
+      ) {};
+
+    cloudex = cloudex_0_0_2;
 
     cloudi_core_1_5_1 = callPackage
       (
@@ -4431,7 +5602,7 @@ let
     cloudi_service_api_requests_1_5_1 = callPackage
       (
         {
-          buildRebar3, fetchHex, trie_1_5_1, jsx_2_4_0, cloudi_core_1_5_1
+          buildRebar3, fetchHex, trie_1_5_1, jsx_2_3_1, cloudi_core_1_5_1
         }:
           buildRebar3 {
             name = "cloudi_service_api_requests";
@@ -4443,7 +5614,7 @@ let
                 "3af4a6bb4ef9f428f6044a752cc5c37cd7bf9fdc7d26407044b8c716b40c86f3";
             };
 
-            beamDeps  = [ trie_1_5_1 jsx_2_4_0 cloudi_core_1_5_1 ];
+            beamDeps  = [ trie_1_5_1 jsx_2_3_1 cloudi_core_1_5_1 ];
 
             meta = {
               description = ''Erlang/Elixir Cloud Framework API requests
@@ -4600,7 +5771,7 @@ let
           fetchHex,
           uuid_erl_1_5_1,
           trie_1_5_1,
-          elli_1_0_4,
+          elli_1_0_5,
           cowlib_1_0_2,
           cloudi_core_1_5_1
         }:
@@ -4617,7 +5788,7 @@ let
             beamDeps  = [
                           uuid_erl_1_5_1
                           trie_1_5_1
-                          elli_1_0_4
+                          elli_1_0_5
                           cowlib_1_0_2
                           cloudi_core_1_5_1
                         ];
@@ -5131,7 +6302,7 @@ let
 
     cloudinary_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_4_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_4_0, httpoison_0_8_2 }:
           buildMix {
             name = "cloudinary";
             version = "0.0.2";
@@ -5141,7 +6312,7 @@ let
               sha256 =
                 "9e32b21717b193f90a526203725811b96294d7c88391e5ad4a57bf178678cc4c";
             };
-            beamDeps  = [ poison_1_4_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_4_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Library to upload to Cloudinary'';
@@ -5155,7 +6326,7 @@ let
     cloudinaryex_0_0_2 = callPackage
       (
         {
-          buildMix, fetchHex, timex_1_0_1, poison_1_5_2, httpoison_0_8_1
+          buildMix, fetchHex, timex_1_0_2, poison_1_5_2, httpoison_0_8_2
         }:
           buildMix {
             name = "cloudinaryex";
@@ -5166,7 +6337,7 @@ let
               sha256 =
                 "31518baacfcca428e30ee8f1c411d76568344e7032ed93cf34535e279c8472fc";
             };
-            beamDeps  = [ timex_1_0_1 poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ timex_1_0_2 poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''A library for connecting with Cloudinary in
@@ -5205,8 +6376,8 @@ let
 
     cmark_0_6_8 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "cmark";
             version = "0.6.8";
             src = fetchHex {
@@ -5215,7 +6386,6 @@ let
               sha256 =
                 "ee148d419684923567be4f413cf82c6f8da2d235e40d434e616febca158372cc";
             };
-            compilePorts = true;
 
             meta = {
               longDescription = ''Elixir NIF for cmark (C), a parser library
@@ -5341,6 +6511,39 @@ let
       ) {};
 
     coinbase = coinbase_0_0_1;
+
+    coincap_io_0_0_1 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          poison_1_5_2,
+          httpoison_0_8_2,
+          exconstructor_1_0_2
+        }:
+          buildMix {
+            name = "coincap_io";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "coincap_io";
+              version = "0.0.1";
+              sha256 =
+                "27638d227a407a204c83534e15917bd77fac64a8bdc96dbad07d59a935639da3";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 exconstructor_1_0_2 ];
+
+            meta = {
+              longDescription = ''WIP, unstable Elixir API wrapper for
+                                coincap.io. Provides access to market
+                                capitalization data of bitcoin, altcoins and
+                                cryptotokens.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/cyberpunk-ventures/coincap_io_ex";
+            };
+          }
+      ) {};
+
+    coincap_io = coincap_io_0_0_1;
 
     colixir_0_0_1 = callPackage
       (
@@ -5531,8 +6734,8 @@ let
 
     comeonin_1_6_0 = callPackage
       (
-        {  buildRebar3, fetchHex, comeonin_i18n_0_1_3 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, comeonin_i18n_0_1_3 }:
+          buildErlangMk {
             name = "comeonin";
             version = "1.6.0";
             src = fetchHex {
@@ -5541,7 +6744,6 @@ let
               sha256 =
                 "40dd0da2c33696d19515888fd86b9ffdcad92d49e9a6b3b13df98e824897a1b1";
             };
-            compilePorts = true;
             beamDeps  = [ comeonin_i18n_0_1_3 ];
 
             meta = {
@@ -5555,8 +6757,8 @@ let
 
     comeonin_2_0_3 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "comeonin";
             version = "2.0.3";
             src = fetchHex {
@@ -5565,7 +6767,6 @@ let
               sha256 =
                 "a9a6f87107ebf6898adeca7130adb1b9e421c1be7e8b30b13ac1e0354ea15198";
             };
-            compilePorts = true;
 
             meta = {
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
@@ -5578,8 +6779,8 @@ let
 
     comeonin_2_1_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "comeonin";
             version = "2.1.1";
             src = fetchHex {
@@ -5588,7 +6789,6 @@ let
               sha256 =
                 "7f85774ae5d453f664d0e7809cc1ab32ff22855d16ff6a2edd68c6d36cb1a1aa";
             };
-            compilePorts = true;
 
             meta = {
               description = ''Password hashing (bcrypt, pbkdf2_sha512) library
@@ -5599,11 +6799,33 @@ let
           }
       ) {};
 
-    comeonin = comeonin_2_1_1;
+    comeonin_2_3_0 = callPackage
+      (
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
+            name = "comeonin";
+            version = "2.3.0";
+            src = fetchHex {
+              pkg = "comeonin";
+              version = "2.3.0";
+              sha256 =
+                "f3463468faa27ec22116a0469406472b0f67cf86c3e9cb44ac2991c5a0c2655d";
+            };
+
+            meta = {
+              description = ''Password hashing (bcrypt, pbkdf2_sha512) library
+                            for Elixir.'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/elixircnx/comeonin";
+            };
+          }
+      ) {};
+
+    comeonin = comeonin_2_3_0;
 
     comeonin_ecto_password_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, ecto_1_1_3, comeonin_2_1_1 }:
+        {  buildMix, fetchHex, ecto_1_1_5, comeonin_2_3_0 }:
           buildMix {
             name = "comeonin_ecto_password";
             version = "0.0.3";
@@ -5613,7 +6835,7 @@ let
               sha256 =
                 "44c8dbf5b81fca515b91422fddb240c5d714bc81bc0d59b3ca60300edb3f856b";
             };
-            beamDeps  = [ ecto_1_1_3 comeonin_2_1_1 ];
+            beamDeps  = [ ecto_1_1_5 comeonin_2_3_0 ];
 
             meta = {
               description = ''Ecto custom type for storing encrypted password
@@ -5656,9 +6878,9 @@ let
         {
           buildMix,
           fetchHex,
-          mock_0_1_1,
+          mock_0_1_3,
           jazz_0_2_1,
-          httpoison_0_8_1,
+          httpoison_0_8_2,
           ex_doc_0_11_4
         }:
           buildMix {
@@ -5670,7 +6892,7 @@ let
               sha256 =
                 "6bb751f496011b974cb8d536b079eb7dfaeee4be827e4cf2fe0585e10f26bd04";
             };
-            beamDeps  = [ mock_0_1_1 jazz_0_2_1 httpoison_0_8_1 ex_doc_0_11_4
+            beamDeps  = [ mock_0_1_3 jazz_0_2_1 httpoison_0_8_2 ex_doc_0_11_4
                       ];
 
             meta = {
@@ -5707,6 +6929,31 @@ let
       ) {};
 
     complex = complex_0_2_0;
+
+    comredis_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "comredis";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "comredis";
+              version = "1.0.0";
+              sha256 =
+                "181989546464dbe57f2feceb39954eea8008e28612df0c6a7b9b0f7003b251e9";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              description = ''Comredis is your comrade for Redis command
+                            generation in Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/iurifq/comredis";
+            };
+          }
+      ) {};
+
+    comredis = comredis_1_0_0;
 
     con_cache_0_11_0 = callPackage
       (
@@ -5760,8 +7007,8 @@ let
 
     conferl_0_0_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "conferl";
             version = "0.0.1";
             src = fetchHex {
@@ -5782,17 +7029,40 @@ let
 
     conferl = conferl_0_0_1;
 
-    configparser_ex_0_2_0 = callPackage
+    config_values_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "config_values";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "config_values";
+              version = "1.0.0";
+              sha256 =
+                "cdbd33fd68cf7fa4fe88dfc1f73e5d26f69d86132650dfba9a636dc75f6cb26c";
+            };
+
+            meta = {
+              description = ''Interpolated configuration values'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/hassox/config_values";
+            };
+          }
+      ) {};
+
+    config_values = config_values_1_0_0;
+
+    configparser_ex_0_2_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "configparser_ex";
-            version = "0.2.0";
+            version = "0.2.1";
             src = fetchHex {
               pkg = "configparser_ex";
-              version = "0.2.0";
+              version = "0.2.1";
               sha256 =
-                "acc487b8671b8fadba6bf5694115c23e04c9754cb226f371f17dc7588687d8ac";
+                "3319861498f5e711058b1b3b54f88275af85e1bf9493bd0b904393d5971f117e";
             };
 
             meta = {
@@ -5804,19 +7074,40 @@ let
           }
       ) {};
 
-    configparser_ex = configparser_ex_0_2_0;
+    configparser_ex = configparser_ex_0_2_1;
 
-    conform_0_13_0 = callPackage
+    conform_0_10_5 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "conform";
-            version = "0.13.0";
+            version = "0.10.5";
             src = fetchHex {
               pkg = "conform";
-              version = "0.13.0";
+              version = "0.10.5";
               sha256 =
-                "72bc5f0e55d15f8387892b664c30e969e3584e8da15d6b5d45caac4d84ee1165";
+                "2ded6a4f7405f2288d7888c86b59d3f2871bd9339f3e396d9f9fb148c4ce2304";
+            };
+
+            meta = {
+              description = ''Easy release configuration for Elixir apps.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bitwalker/conform";
+            };
+          }
+      ) {};
+
+    conform_0_11_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "conform";
+            version = "0.11.0";
+            src = fetchHex {
+              pkg = "conform";
+              version = "0.11.0";
+              sha256 =
+                "2547e29fec74952572a0f2456f38e11dc8247a00d4b197eca2e61a8fd767f3eb";
             };
 
             meta = {
@@ -5871,21 +7162,43 @@ let
           }
       ) {};
 
-    conform = conform_1_0_0_rc8;
-
-    conform_exrm_0_3_0 = callPackage
+    conform_2_0_0 = callPackage
       (
-        {  buildMix, fetchHex, exrm_1_0_0_rc8, conform_1_0_0_rc8 }:
+        {  buildMix, fetchHex, neotoma_1_7_3 }:
+          buildMix {
+            name = "conform";
+            version = "2.0.0";
+            src = fetchHex {
+              pkg = "conform";
+              version = "2.0.0";
+              sha256 =
+                "2a3bc36dd50363778c0cb2f13026d65b5e4c919abf91be21c1a51c480c723403";
+            };
+            beamDeps  = [ neotoma_1_7_3 ];
+
+            meta = {
+              description = ''Easy release configuration for Elixir apps.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bitwalker/conform";
+            };
+          }
+      ) {};
+
+    conform = conform_2_0_0;
+
+    conform_exrm_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, exrm_1_0_3, conform_2_0_0 }:
           buildMix {
             name = "conform_exrm";
-            version = "0.3.0";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "conform_exrm";
-              version = "0.3.0";
+              version = "1.0.0";
               sha256 =
-                "52baf48678b29b8986bc325877489679b597633457397d078782262ee444808e";
+                "acf8eb831b0f8573a92694da4d3b513f551b8d854a8c4670c560379ae5c0f2fd";
             };
-            beamDeps  = [ exrm_1_0_0_rc8 conform_1_0_0_rc8 ];
+            beamDeps  = [ exrm_1_0_3 conform_2_0_0 ];
 
             meta = {
               description = ''Conform plugin for ExRM'';
@@ -5895,7 +7208,7 @@ let
           }
       ) {};
 
-    conform_exrm = conform_exrm_0_3_0;
+    conform_exrm = conform_exrm_1_0_0;
 
     connection_1_0_0_rc_1 = callPackage
       (
@@ -5986,6 +7299,31 @@ let
       ) {};
 
     console = console_0_0_1;
+
+    console_tree_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "console_tree";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "console_tree";
+              version = "0.0.1";
+              sha256 =
+                "c7dea20c14fd8bc6697a68f2917def38d20c772eb4b5715b18197672e7ddc0eb";
+            };
+
+            meta = {
+              longDescription = ''A simple library to print a text
+                                representation of a tree structure, intended for
+                                use in a terminal environment.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ciaran/console_tree";
+            };
+          }
+      ) {};
+
+    console_tree = console_tree_0_0_1;
 
     consul_1_0_3 = callPackage
       (
@@ -6106,19 +7444,19 @@ let
 
     core_data = core_data_0_1_0;
 
-    cors_plug_1_1_0 = callPackage
+    cors_plug_1_1_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "cors_plug";
-            version = "1.1.0";
+            version = "1.1.1";
             src = fetchHex {
               pkg = "cors_plug";
-              version = "1.1.0";
+              version = "1.1.1";
               sha256 =
-                "b6ae0bf0c8a993d7f94f7061774e70403726b2ffe5d648964b72d6f42fd71979";
+                "12300007530a014c32f6dfe71a1775d1b39dd43fd7b35697574ab7d78c5e629c";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''An elixir plug that adds CORS headers to
@@ -6130,21 +7468,21 @@ let
           }
       ) {};
 
-    cors_plug = cors_plug_1_1_0;
+    cors_plug = cors_plug_1_1_1;
 
-    corsica_0_4_0 = callPackage
+    corsica_0_4_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "corsica";
-            version = "0.4.0";
+            version = "0.4.1";
             src = fetchHex {
               pkg = "corsica";
-              version = "0.4.0";
+              version = "0.4.1";
               sha256 =
-                "9f5e7c6b3e6b52f9b07d76f207fbe39273d9cb22099b6b3d83621ded29fb42d6";
+                "718b95d067cba24563b6fcc5ac64ced304c71323df3c0abe58351054125f964d";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Plug-based swiss-army knife for CORS requests.'';
@@ -6154,7 +7492,7 @@ let
           }
       ) {};
 
-    corsica = corsica_0_4_0;
+    corsica = corsica_0_4_1;
 
     couch_factory_0_1_1 = callPackage
       (
@@ -6180,20 +7518,20 @@ let
 
     couch_factory = couch_factory_0_1_1;
 
-    couchbeam_1_2_1 = callPackage
+    couchbeam_1_3_0 = callPackage
       (
-        {  buildRebar3, fetchHex, jsx_2_8_0, hackney_1_4_4 }:
+        {  buildRebar3, fetchHex, jsx_2_8_0, hackney_1_5_7 }:
           buildRebar3 {
             name = "couchbeam";
-            version = "1.2.1";
+            version = "1.3.0";
             src = fetchHex {
               pkg = "couchbeam";
-              version = "1.2.1";
+              version = "1.3.0";
               sha256 =
-                "ed19f0412aa0539ecf622ac8ade1ca0e316f424e3334ad015a3fb8db19e91194";
+                "5d94bfc80532999e4f8e7f5da3abff74fbf3b59d5e02e0a99eb0dc3697c97a50";
             };
 
-            beamDeps  = [ jsx_2_8_0 hackney_1_4_4 ];
+            beamDeps  = [ jsx_2_8_0 hackney_1_5_7 ];
 
             meta = {
               description = ''Erlang CouchDB client'';
@@ -6203,7 +7541,7 @@ let
           }
       ) {};
 
-    couchbeam = couchbeam_1_2_1;
+    couchbeam = couchbeam_1_3_0;
 
     couchdb_client_0_2_5 = callPackage
       (
@@ -6244,7 +7582,7 @@ let
 
     couchdb_connector_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "couchdb_connector";
             version = "0.2.0";
@@ -6254,7 +7592,7 @@ let
               sha256 =
                 "05ac95c3f08038c3f17c03be5f27922b919513dfd4582f2da150f70182dac01b";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''A connector for CouchDB, the Erlang-based,
@@ -6278,6 +7616,30 @@ let
       ) {};
 
     couchdb_connector = couchdb_connector_0_2_0;
+
+    couchex_0_6_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "couchex";
+            version = "0.6.0";
+            src = fetchHex {
+              pkg = "couchex";
+              version = "0.6.0";
+              sha256 =
+                "44e02558dc29d739cf27dad76bfc8e8632c4779ce2c701a418409912641b7c3b";
+            };
+
+            meta = {
+              description = ''CouchDB client, wrapping couchbeam erlang
+                            client.'';
+              license = stdenv.lib.licenses.unlicense;
+              homepage = "https://github.com/ringling/couchex";
+            };
+          }
+      ) {};
+
+    couchex = couchex_0_6_0;
 
     count_buffer_0_1_5 = callPackage
       (
@@ -6330,9 +7692,70 @@ let
 
     countries = countries_1_1_2;
 
+    courier_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex, mail_0_0_4, gen_smtp_0_9_0 }:
+          buildMix {
+            name = "courier";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "courier";
+              version = "0.0.3";
+              sha256 =
+                "8c8c560da7011c8846ed5ee60af867124ff043a7d37773156b6d8a08390b73fc";
+            };
+            beamDeps  = [ mail_0_0_4 gen_smtp_0_9_0 ];
+
+            meta = {
+              description = ''Adapter based email delivery'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/DockYard/courier";
+            };
+          }
+      ) {};
+
+    courier = courier_0_0_3;
+
+    courier_web_0_0_8 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          uuid_1_1_3,
+          poison_2_1_0,
+          plug_1_1_3,
+          ja_serializer_0_8_1,
+          courier_0_0_3
+        }:
+          buildMix {
+            name = "courier_web";
+            version = "0.0.8";
+            src = fetchHex {
+              pkg = "courier_web";
+              version = "0.0.8";
+              sha256 =
+                "c4161f218d487901bc1e63ce1840c73de34d84d8c53eda12f09cea4a8fa2758b";
+            };
+            beamDeps  = [
+                          uuid_1_1_3
+                          poison_2_1_0
+                          plug_1_1_3
+                          ja_serializer_0_8_1
+                          courier_0_0_3
+                        ];
+
+            meta = {
+              description = ''Web client adapter for Courier'';
+
+            };
+          }
+      ) {};
+
+    courier_web = courier_web_0_0_8;
+
     coverex_1_4_8 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "coverex";
             version = "1.4.8";
@@ -6342,7 +7765,7 @@ let
               sha256 =
                 "47f03bd9d00b22893fda81273c310d30d96e849026f5c1d0ad664089c875bac6";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Coverex is an Elixir Coverage tool used by
@@ -6360,8 +7783,8 @@ let
 
     cowboy_1_0_4 = callPackage
       (
-        {  buildRebar3, fetchHex, cowlib_1_0_2, ranch_1_2_1 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, cowlib_1_0_2, ranch_1_2_1 }:
+          buildErlangMk {
             name = "cowboy";
             version = "1.0.4";
             src = fetchHex {
@@ -6370,7 +7793,6 @@ let
               sha256 =
                 "6a0edee96885fae3a8dd0ac1f333538a42e807db638a9453064ccfdaa6b9fdac";
             };
-
             beamDeps  = [ cowlib_1_0_2 ranch_1_2_1 ];
 
             meta = {
@@ -6453,8 +7875,8 @@ let
 
     cowlib_1_0_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "cowlib";
             version = "1.0.0";
             src = fetchHex {
@@ -6475,8 +7897,8 @@ let
 
     cowlib_1_0_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "cowlib";
             version = "1.0.2";
             src = fetchHex {
@@ -6497,8 +7919,8 @@ let
 
     cowlib_1_3_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "cowlib";
             version = "1.3.0";
             src = fetchHex {
@@ -6620,17 +8042,17 @@ let
 
     craterl = craterl_0_2_3;
 
-    crc_0_3_0 = callPackage
+    crc_0_4_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "crc";
-            version = "0.3.0";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "crc";
-              version = "0.3.0";
+              version = "0.4.0";
               sha256 =
-                "23d7cb6a18cca461f46f5a0f341c74fd0a680cdae62460687f1a24f0a7faabd4";
+                "4f0d872d46faea966aeb687158b7e02bfc61c49c4f2fb33f5e52e3d167f4faeb";
             };
 
             meta = {
@@ -6642,7 +8064,7 @@ let
           }
       ) {};
 
-    crc = crc_0_3_0;
+    crc = crc_0_4_0;
 
     credit_card_1_0_0 = callPackage
       (
@@ -6667,17 +8089,17 @@ let
 
     credit_card = credit_card_1_0_0;
 
-    credo_0_1_10 = callPackage
+    credo_0_3_10 = callPackage
       (
         {  buildMix, fetchHex, bunt_0_1_5 }:
           buildMix {
             name = "credo";
-            version = "0.1.10";
+            version = "0.3.10";
             src = fetchHex {
               pkg = "credo";
-              version = "0.1.10";
+              version = "0.3.10";
               sha256 =
-                "2a52a3fc144bc5c70899381a58de603eb14751f4965dfea1866b20324b9806c0";
+                "dbc6e8ed6cd3567576bb6c4cc0dbea6fb3f7ef88a530aa2d17d13a1106cff156";
             };
             beamDeps  = [ bunt_0_1_5 ];
 
@@ -6691,17 +8113,19 @@ let
           }
       ) {};
 
-    credo_0_3_3 = callPackage
+    credo = credo_0_3_10;
+
+    credo_0_3_2 = callPackage
       (
         {  buildMix, fetchHex, bunt_0_1_5 }:
           buildMix {
             name = "credo";
-            version = "0.3.3";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "credo";
-              version = "0.3.3";
+              version = "0.3.2";
               sha256 =
-                "9cf7816093412e31bad13f08f6713ed935312d3a0d489edc76187c21e01a6afe";
+                "0040bfc7a76f3c345647dc32743f4c1ca2911cc1fc53bc2dc3f9fd98704da805";
             };
             beamDeps  = [ bunt_0_1_5 ];
 
@@ -6715,19 +8139,17 @@ let
           }
       ) {};
 
-    credo = credo_0_3_3;
-
-    croma_0_3_8 = callPackage
+    croma_0_4_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "croma";
-            version = "0.3.8";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "croma";
-              version = "0.3.8";
+              version = "0.4.0";
               sha256 =
-                "48735ed0a450c2101a884f14fba5d5946d27601426de220e2327feffb5cc2cca";
+                "6bcf8a0aad588fc57b4a4dedacf54ec4461e6906da5273c4bd8e121d179e3413";
             };
 
             meta = {
@@ -6737,11 +8159,11 @@ let
           }
       ) {};
 
-    croma = croma_0_3_8;
+    croma = croma_0_4_0;
 
     crudex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_auth_0_2_0 }:
+        {  buildMix, fetchHex, plug_auth_0_3_0 }:
           buildMix {
             name = "crudex";
             version = "0.0.2";
@@ -6751,7 +8173,7 @@ let
               sha256 =
                 "2ccf07c728dbb328b9f869a87465c8ba647931ec68f563c4ddea99ec76fa4364";
             };
-            beamDeps  = [ plug_auth_0_2_0 ];
+            beamDeps  = [ plug_auth_0_3_0 ];
 
             meta = {
               description = ''A glue keeping Phoenix and Ecto together'';
@@ -6811,17 +8233,17 @@ let
 
     cryptex = cryptex_0_0_1;
 
-    crypto_ext_0_1_1 = callPackage
+    crypto_ext_0_1_3 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "crypto_ext";
-            version = "0.1.1";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "crypto_ext";
-              version = "0.1.1";
+              version = "0.1.3";
               sha256 =
-                "19715a35b392c557cc9503e2aa1f8fbd1dcd3cdcb11a0d2f73a3fe75f4db76b8";
+                "8caea80b44aa7a8b02399e522b7ff756f07a8ef810dc39d54b4abed68bdb5cf3";
             };
             compilePorts = true;
 
@@ -6834,7 +8256,7 @@ let
           }
       ) {};
 
-    crypto_ext = crypto_ext_0_1_1;
+    crypto_ext = crypto_ext_0_1_3;
 
     crypto_rsassa_pss_1_0_0 = callPackage
       (
@@ -6886,18 +8308,19 @@ let
 
     cspex = cspex_1_0_0;
 
-    csv_1_2_4 = callPackage
+    csv_1_3_3 = callPackage
       (
-        {  buildMix, fetchHex }:
+        {  buildMix, fetchHex, parallel_stream_1_0_3 }:
           buildMix {
             name = "csv";
-            version = "1.2.4";
+            version = "1.3.3";
             src = fetchHex {
               pkg = "csv";
-              version = "1.2.4";
+              version = "1.3.3";
               sha256 =
-                "66fee1eaf536347d493942cb5e085321c51e80de124ff00f4b2651870b919b99";
+                "f3ef7b1ae28a55e53b8cb5c11d0e0b64e76e38d5f3e830bf2e3bf2cc0a89d848";
             };
+            beamDeps  = [ parallel_stream_1_0_3 ];
 
             meta = {
               description = ''CSV Decoding and Encoding for Elixir'';
@@ -6907,7 +8330,7 @@ let
           }
       ) {};
 
-    csv = csv_1_2_4;
+    csv = csv_1_3_3;
 
     csvlixir_2_0_2 = callPackage
       (
@@ -6939,17 +8362,17 @@ let
 
     csvlixir = csvlixir_2_0_2;
 
-    cth_readable_1_2_1 = callPackage
+    cth_readable_1_2_2 = callPackage
       (
         {  buildRebar3, fetchHex, cf_0_2_1 }:
           buildRebar3 {
             name = "cth_readable";
-            version = "1.2.1";
+            version = "1.2.2";
             src = fetchHex {
               pkg = "cth_readable";
-              version = "1.2.1";
+              version = "1.2.2";
               sha256 =
-                "923ae5bd8a044695a3223cc6539126e69f91aff89bb924ccf38da9ee615d6492";
+                "77585432b98b45b9ee086399cefa97b2191b6d780c4e795bf43c529412d9694d";
             };
 
             beamDeps  = [ cf_0_2_1 ];
@@ -6962,7 +8385,7 @@ let
           }
       ) {};
 
-    cth_readable = cth_readable_1_2_1;
+    cth_readable = cth_readable_1_2_2;
 
     cuckoo_1_0_0 = callPackage
       (
@@ -7061,19 +8484,44 @@ let
 
     cure = cure_0_4_1;
 
-    current_streak_ex_0_1_0 = callPackage
+    currency_formatter_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, floki_0_7_1 }:
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "currency_formatter";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "currency_formatter";
+              version = "0.0.1";
+              sha256 =
+                "dab55279ae6377f00a9d01a0a7ab015d380d550d71f303900ae554f8d0065606";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              description = ''A function to format a number to a currency using
+                            iso standards'';
+              license = stdenv.lib.licenses.wtfpl;
+              homepage = "https://github.com/smeevil/currency_formatter";
+            };
+          }
+      ) {};
+
+    currency_formatter = currency_formatter_0_0_1;
+
+    current_streak_ex_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
           buildMix {
             name = "current_streak_ex";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "current_streak_ex";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "08b846b7347fa134d845e0654b4775eba78e995675f18ec51533e7e42aa3abaa";
+                "1c62bcd7bdd69818dc05f0602e03a5aca6b21554206cb6634bedb807ee27d5a7";
             };
-            beamDeps  = [ httpoison_0_8_1 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
 
             meta = {
               description = ''Get github current streak which support only
@@ -7084,7 +8532,7 @@ let
           }
       ) {};
 
-    current_streak_ex = current_streak_ex_0_1_0;
+    current_streak_ex = current_streak_ex_0_1_1;
 
     current_user_0_0_1 = callPackage
       (
@@ -7209,9 +8657,32 @@ let
 
     curtains = curtains_0_0_1;
 
+    curve25519_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "curve25519";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "curve25519";
+              version = "0.1.0";
+              sha256 =
+                "786f9ede0aa9503f65015c19d9cd1b9263c5e7523cd215ee23d6d94ba16473d1";
+            };
+
+            meta = {
+              description = ''Curve25519 Diffie-Hellman functions'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/curve25519_ex";
+            };
+          }
+      ) {};
+
+    curve25519 = curve25519_0_1_0;
+
     cushion_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, httpotion_2_2_2 }:
           buildMix {
             name = "cushion";
             version = "0.0.3";
@@ -7221,7 +8692,7 @@ let
               sha256 =
                 "1371ab210bd3b7ef7381dbe3f53fedb8afbbb0c562f45d614e4849373919482b";
             };
-            beamDeps  = [ httpotion_2_1_0 ];
+            beamDeps  = [ httpotion_2_2_2 ];
 
             meta = {
               longDescription = ''A really simple Buffer API client for sending
@@ -7235,28 +8706,6 @@ let
       ) {};
 
     cushion = cushion_0_0_3;
-
-    custom_base_0_1_0 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "custom_base";
-            version = "0.1.0";
-            src = fetchHex {
-              pkg = "custom_base";
-              version = "0.1.0";
-              sha256 =
-                "3a75d9cabcad3936e9194d387966213cb13a4d14b7b69f2cea0fc22ff2f76726";
-            };
-
-            meta = {
-              description = ''Allow you to make custom base conversion in
-                            Elixir.'';
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/igas/custom_base";
-            };
-          }
-      ) {};
 
     custom_base_0_2_0 = callPackage
       (
@@ -7331,6 +8780,31 @@ let
 
     cypher_query = cypher_query_0_0_1;
 
+    data_leaf_walker_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "data_leaf_walker";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "data_leaf_walker";
+              version = "0.1.0";
+              sha256 =
+                "9d3a8688c3751765453f04e8f60f3826757396dce66baf7e2cf7335c9c373bbd";
+            };
+
+            meta = {
+              longDescription = ''Traverse and map values of deeply nested data
+                                structures: Provides a `map_deeply/2` function
+                                for Maps and Lists and Keyword Lists'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/gutschilla/elixir-map-deeply";
+            };
+          }
+      ) {};
+
+    data_leaf_walker = data_leaf_walker_0_1_0;
+
     database_url_0_1_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -7361,8 +8835,8 @@ let
           buildMix,
           fetchHex,
           poison_1_5_2,
-          httpoison_0_8_1,
-          ex_doc_0_6_2,
+          httpoison_0_8_2,
+          ex_doc_0_7_3,
           erldn_1_0_5
         }:
           buildMix {
@@ -7375,7 +8849,7 @@ let
                 "bb2a5171a5d7783e40776db7fe7a6bff73ff69a4da4205c83b39c26ff73488c0";
             };
             beamDeps  = [
-                          poison_1_5_2 httpoison_0_8_1 ex_doc_0_6_2 erldn_1_0_5
+                          poison_1_5_2 httpoison_0_8_2 ex_doc_0_7_3 erldn_1_0_5
                         ];
 
             meta = {
@@ -7389,17 +8863,17 @@ let
 
     datomex = datomex_0_0_5;
 
-    datomic_gen_server_1_1_0 = callPackage
+    datomic_gen_server_2_0_1 = callPackage
       (
         {  buildMix, fetchHex, exdn_2_1_2 }:
           buildMix {
             name = "datomic_gen_server";
-            version = "1.1.0";
+            version = "2.0.1";
             src = fetchHex {
               pkg = "datomic_gen_server";
-              version = "1.1.0";
+              version = "2.0.1";
               sha256 =
-                "c5369270fa9a21544efc359e80eff4b24d5dfbe869c211da0df6ebf216afa5a3";
+                "601422e876b895d1841c02afe4b89ec32d4859a4c9a81c2ecbe5fa6bf6d651ba";
             };
             beamDeps  = [ exdn_2_1_2 ];
 
@@ -7413,7 +8887,7 @@ let
           }
       ) {};
 
-    datomic_gen_server = datomic_gen_server_1_1_0;
+    datomic_gen_server = datomic_gen_server_2_0_1;
 
     db_0_9_0 = callPackage
       (
@@ -7438,7 +8912,7 @@ let
 
     db = db_0_9_0;
 
-    db_connection_0_2_3 = callPackage
+    db_connection_0_2_4 = callPackage
       (
         {
           buildMix,
@@ -7449,12 +8923,12 @@ let
         }:
           buildMix {
             name = "db_connection";
-            version = "0.2.3";
+            version = "0.2.4";
             src = fetchHex {
               pkg = "db_connection";
-              version = "0.2.3";
+              version = "0.2.4";
               sha256 =
-                "16a1e0a968b3610fd482f64266411bde554515572c2b184af493d749ef206fca";
+                "fbb5074affe8d57d0f677cf3692371a1fa3f90673c81e61214b0388995b4d4a7";
             };
             beamDeps  = [ sbroker_0_7_0 poolboy_1_5_1 connection_1_0_2 ];
 
@@ -7467,7 +8941,7 @@ let
           }
       ) {};
 
-    db_connection = db_connection_0_2_3;
+    db_connection = db_connection_0_2_4;
 
     dbg_1_0_1 = callPackage
       (
@@ -7492,19 +8966,41 @@ let
 
     dbg = dbg_1_0_1;
 
-    dbus_0_4_0 = callPackage
+    dbschema_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poolboy_1_5_1, eredis_1_0_8 }:
-          buildMix {
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "dbschema";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "dbschema";
+              version = "0.2.0";
+              sha256 =
+                "92eed9e62bf5998d33e7826e02f35bafa52bc7f5915c7ebaf4a8c687529688e2";
+            };
+
+            meta = {
+              description = ''Database postgresql migrations util'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/egobrain/dbschema";
+            };
+          }
+      ) {};
+
+    dbschema = dbschema_0_2_0;
+
+    dbus_0_5_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
             name = "dbus";
-            version = "0.4.0";
+            version = "0.5.0";
             src = fetchHex {
               pkg = "dbus";
-              version = "0.4.0";
+              version = "0.5.0";
               sha256 =
-                "d743b06a73286622af4a9390c4a16dcc5bce6be184ed660cfd76bd2f0b8ebedb";
+                "8607c4ae1c9e2f377cfd4c34fd8207ad842347dc86db1360605d0a85266ae2e3";
             };
-            beamDeps  = [ poolboy_1_5_1 eredis_1_0_8 ];
 
             meta = {
               description = ''A native erlang implementation of D-Bus'';
@@ -7514,7 +9010,7 @@ let
           }
       ) {};
 
-    dbus = dbus_0_4_0;
+    dbus = dbus_0_5_0;
 
     ddb_client_0_1_17 = callPackage
       (
@@ -7543,7 +9039,7 @@ let
 
     dealer_0_8_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "dealer";
             version = "0.8.0";
@@ -7553,7 +9049,7 @@ let
               sha256 =
                 "c8c72d38e1cff6a181a6b6f627fb6fd5998279827519e598eb28bcef2be721ee";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An API Client for Stockfighter.'';
@@ -7845,6 +9341,32 @@ let
 
     detergentex = detergentex_0_0_7;
 
+    deviant_elixir_0_0_4 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, feeder_ex_0_0_2 }:
+          buildMix {
+            name = "deviant_elixir";
+            version = "0.0.4";
+            src = fetchHex {
+              pkg = "deviant_elixir";
+              version = "0.0.4";
+              sha256 =
+                "42473969889a47edab66384988e70ab6b4da158043e9231deab822743e3d9943";
+            };
+            beamDeps  = [ httpoison_0_8_2 feeder_ex_0_0_2 ];
+
+            meta = {
+              longDescription = ''WIP. Unstable alpha. Elixir API wrapper for
+                                Deviant Art. At this moment provides only RSS
+                                feeds intergac.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/vdaniuk/deviant-elixir";
+            };
+          }
+      ) {};
+
+    deviant_elixir = deviant_elixir_0_0_4;
+
     dexts_0_2_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -7893,7 +9415,7 @@ let
 
     di_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "di";
             version = "0.1.0";
@@ -7903,7 +9425,7 @@ let
               sha256 =
                 "d7a89568c986c98399667faeb618d5cc42a89965717e758323aa5370d1547260";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir wrapper for DI.FM'';
@@ -7960,17 +9482,17 @@ let
           }
       ) {};
 
-    dialyze_0_2_0 = callPackage
+    dialyze_0_2_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "dialyze";
-            version = "0.2.0";
+            version = "0.2.1";
             src = fetchHex {
               pkg = "dialyze";
-              version = "0.2.0";
+              version = "0.2.1";
               sha256 =
-                "05efe534da3b6d0a89cb655f3dc7cf3a99088b0832c5a75a9898a6241ff01cd2";
+                "f485181fa53229356621261a384963cb47511cccf1454e82ca4fde53274fcd48";
             };
 
             meta = {
@@ -7981,7 +9503,7 @@ let
           }
       ) {};
 
-    dialyze = dialyze_0_2_0;
+    dialyze = dialyze_0_2_1;
 
     diane_0_0_1 = callPackage
       (
@@ -8054,7 +9576,7 @@ let
 
     dicer_0_8_0 = callPackage
       (
-        {  buildMix, fetchHex, sfmt_0_12_2 }:
+        {  buildMix, fetchHex, sfmt_0_12_7 }:
           buildMix {
             name = "dicer";
             version = "0.8.0";
@@ -8064,7 +9586,7 @@ let
               sha256 =
                 "834e5d3f4cd9afac655e0f27869ecfdf6fa4ea061ad9ededdc6f295f71325960";
             };
-            beamDeps  = [ sfmt_0_12_2 ];
+            beamDeps  = [ sfmt_0_12_7 ];
 
             meta = {
               description = ''Elixir library to calculate dice rolls. '';
@@ -8101,17 +9623,17 @@ let
 
     dicks = dicks_0_1_0;
 
-    dicon_0_2_0 = callPackage
+    dicon_0_3_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "dicon";
-            version = "0.2.0";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "dicon";
-              version = "0.2.0";
+              version = "0.3.0";
               sha256 =
-                "7da0fb146e81f34a6112594c88682c89b8cdf0ab9ccdaa92547399c283f2f98f";
+                "52c5839feb9e0fa4247a564b79ac6717d8adc0e65a34739caaf26982fa213a12";
             };
 
             meta = {
@@ -8122,7 +9644,7 @@ let
           }
       ) {};
 
-    dicon = dicon_0_2_0;
+    dicon = dicon_0_3_0;
 
     difficult_0_0_2 = callPackage
       (
@@ -8150,7 +9672,7 @@ let
 
     digoc_0_3_3 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_2 }:
           buildMix {
             name = "digoc";
             version = "0.3.3";
@@ -8160,7 +9682,7 @@ let
               sha256 =
                 "23d5c2f1b977b1f3e12567879a20bc211898efdfcac9a0b6802324bc42ea0605";
             };
-            beamDeps  = [ poison_1_3_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_3_1 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir client for the Digital Ocean API v2.'';
@@ -8171,6 +9693,42 @@ let
       ) {};
 
     digoc = digoc_0_3_3;
+
+    diplomat_0_0_1 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          poison_1_5_2,
+          httpoison_0_8_2,
+          goth_0_0_3,
+          exprotobuf_1_0_0
+        }:
+          buildMix {
+            name = "diplomat";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "diplomat";
+              version = "0.0.1";
+              sha256 =
+                "49d2bff25e177701f988f1abfb164233617c9af2da1701cb06f651e2b789407b";
+            };
+            beamDeps  = [
+                          poison_1_5_2
+                          httpoison_0_8_2
+                          goth_0_0_3
+                          exprotobuf_1_0_0
+                        ];
+
+            meta = {
+              description = ''A library for interacting with Google`s Cloud
+                            Datastore'';
+
+            };
+          }
+      ) {};
+
+    diplomat = diplomat_0_0_1;
 
     dir_walker_0_0_6 = callPackage
       (
@@ -8277,19 +9835,65 @@ let
 
     dismake = dismake_1_0_0;
 
-    distance_api_matrix_1_0_3 = callPackage
+    distance_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "distance";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "distance";
+              version = "0.1.2";
+              sha256 =
+                "8eca7e3d5cf36bc52814a858b07380f13d236ba5d7b70c4d4b1c6a455294aaf3";
+            };
+
+            meta = {
+              description = ''Various distance functions for geometric or
+                            geographic calculations'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/distance";
+            };
+          }
+      ) {};
+
+    distance_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "distance";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "distance";
+              version = "0.2.0";
+              sha256 =
+                "5ee0a5d05468c50c74d6ae4bcb13c5cd8e31f9ea45fce12290f2ad093df04944";
+            };
+
+            meta = {
+              description = ''Various distance functions for geometric or
+                            geographic calculations'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/distance";
+            };
+          }
+      ) {};
+
+    distance = distance_0_2_0;
+
+    distance_api_matrix_2_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "distance_api_matrix";
-            version = "1.0.3";
+            version = "2.0.0";
             src = fetchHex {
               pkg = "distance_api_matrix";
-              version = "1.0.3";
+              version = "2.0.0";
               sha256 =
-                "e4b6848481f4c8f5f15ad1c9f116816a3941f7c96df37fbad350faffc7887a6a";
+                "e6996e829d7cf4e3e6b7790c53207f86aa467c0ba28af7a20df81e3b16d40fa0";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Google Distance Matrix API Library for Elixir'';
@@ -8299,7 +9903,7 @@ let
           }
       ) {};
 
-    distance_api_matrix = distance_api_matrix_1_0_3;
+    distance_api_matrix = distance_api_matrix_2_0_0;
 
     distancex_0_1_0 = callPackage
       (
@@ -8430,9 +10034,35 @@ let
 
     dnsimple = dnsimple_0_0_1;
 
+    doc_first_formatter_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "doc_first_formatter";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "doc_first_formatter";
+              version = "0.0.1";
+              sha256 =
+                "d1bd7a64e8a742847f910557b66d302b65a10b8180e4e660edfc22987cda3262";
+            };
+
+            meta = {
+              longDescription = ''An ExUnit formatter that puts a list of tests
+                                first, distinguishes pending from failed tests,
+                                and saves detailed error information for once
+                                the test suite is finished.'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/bkerley/doc_first_formatter";
+            };
+          }
+      ) {};
+
+    doc_first_formatter = doc_first_formatter_0_0_1;
+
     doc_plug_1_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "doc_plug";
             version = "1.0.2";
@@ -8442,7 +10072,7 @@ let
               sha256 =
                 "2813f85dcd4f7228d54c277898d3d7483d03ef27ed4f9abc9eae6f57b00e79b8";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Plug to automatically generate and serve project
@@ -8457,7 +10087,7 @@ let
 
     docker_0_3_0 = callPackage
       (
-        {  buildRebar3, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildRebar3, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildRebar3 {
             name = "docker";
             version = "0.3.0";
@@ -8468,7 +10098,7 @@ let
                 "ad97dbaa51a615a7694018d95b0b09403b6d552a03ddb3ba50f121c814cc624a";
             };
 
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir client for the Docker Remote API using
@@ -8481,19 +10111,19 @@ let
 
     docker = docker_0_3_0;
 
-    dogma_0_1_0 = callPackage
+    dogma_0_1_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2 }:
+        {  buildMix, fetchHex, poison_2_1_0 }:
           buildMix {
             name = "dogma";
-            version = "0.1.0";
+            version = "0.1.4";
             src = fetchHex {
               pkg = "dogma";
-              version = "0.1.0";
+              version = "0.1.4";
               sha256 =
-                "cd261c67d712ce4e9d8020d9cb6627c756db8dc5466c169611d81b79c5a261d0";
+                "ebf6f6bf8291e4a73b2886fc35e05224f0068237594f0e0609d1834863172245";
             };
-            beamDeps  = [ poison_1_5_2 ];
+            beamDeps  = [ poison_2_1_0 ];
 
             meta = {
               description = ''A code style linter for Elixir, powered by
@@ -8504,7 +10134,7 @@ let
           }
       ) {};
 
-    dogma = dogma_0_1_0;
+    dogma = dogma_0_1_4;
 
     dogstatsd_0_0_3 = callPackage
       (
@@ -8617,8 +10247,8 @@ let
 
     dovetail_0_0_3 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "dovetail";
             version = "0.0.3";
             src = fetchHex {
@@ -8641,7 +10271,7 @@ let
 
     dpd_client_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_0_6, poison_1_0_3 }:
+        {  buildMix, fetchHex, hackney_1_4_8, poison_1_0_3 }:
           buildMix {
             name = "dpd_client";
             version = "0.0.6";
@@ -8651,7 +10281,7 @@ let
               sha256 =
                 "080d8e9e4c68db87e42ead3fa3ffbc8cde2cadac441dbe81fa7a1b903486cc2d";
             };
-            beamDeps  = [ hackney_1_0_6 poison_1_0_3 ];
+            beamDeps  = [ hackney_1_4_8 poison_1_0_3 ];
 
             meta = {
               longDescription = ''`dpd_client` is an API client for the DPD
@@ -8758,7 +10388,7 @@ let
 
     dropbox_0_0_7 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_0_6, jazz_0_2_1 }:
+        {  buildMix, fetchHex, hackney_1_4_8, jazz_0_2_1 }:
           buildMix {
             name = "dropbox";
             version = "0.0.7";
@@ -8768,7 +10398,7 @@ let
               sha256 =
                 "d881be0c042856e0b2ff446dfac0b64337f5cbbb18479f4c81080d3d2cd7e4af";
             };
-            beamDeps  = [ hackney_1_0_6 jazz_0_2_1 ];
+            beamDeps  = [ hackney_1_4_8 jazz_0_2_1 ];
 
             meta = {
               description = ''A Dropbox Core API client for Elixir'';
@@ -8780,19 +10410,19 @@ let
 
     dropbox = dropbox_0_0_7;
 
-    dublin_bus_api_0_1_5 = callPackage
+    dublin_bus_api_0_1_6 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
           buildMix {
             name = "dublin_bus_api";
-            version = "0.1.5";
+            version = "0.1.6";
             src = fetchHex {
               pkg = "dublin_bus_api";
-              version = "0.1.5";
+              version = "0.1.6";
               sha256 =
-                "54fb2c72fa682481970b126f53a45f2a38cc8d7fdff132483534f4ff04407bc1";
+                "4ac4811519a176c149b03c021bebd44771a279c489fe09c18a1f16f373c7bbb8";
             };
-            beamDeps  = [ httpoison_0_8_1 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
 
             meta = {
               description = ''Access to the Real Time Passenger Information
@@ -8803,7 +10433,7 @@ let
           }
       ) {};
 
-    dublin_bus_api = dublin_bus_api_0_1_5;
+    dublin_bus_api = dublin_bus_api_0_1_6;
 
     durga_transport_1_0_1 = callPackage
       (
@@ -8923,17 +10553,41 @@ let
 
     e_queue = e_queue_1_0_1;
 
-    earmark_0_1_14 = callPackage
+    e_quip_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "e_quip";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "e_quip";
+              version = "0.0.1";
+              sha256 =
+                "e6fe9eeb96dbc863b527a792e730ea41aea43caef2a5db68ea2c4c9fc21f552a";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Simple Quip API Client'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/mmartinson/e_quip";
+            };
+          }
+      ) {};
+
+    e_quip = e_quip_0_0_1;
+
+    earmark_0_1_15 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "earmark";
-            version = "0.1.14";
+            version = "0.1.15";
             src = fetchHex {
               pkg = "earmark";
-              version = "0.1.14";
+              version = "0.1.15";
               sha256 =
-                "5e44505d71df50a839bde48c922357f9340168340dfc7502f581f68b6a0a29f9";
+                "cffc809198d000cc9b81cce80ebc673da8647291451015da42fc523f9dd781d7";
             };
 
             meta = {
@@ -9074,6 +10728,31 @@ let
 
     easypost = easypost_0_0_1;
 
+    ec2_0_9_1 = callPackage
+      (
+        {  buildMix, fetchHex, jsx_2_8_0 }:
+          buildMix {
+            name = "ec2";
+            version = "0.9.1";
+            src = fetchHex {
+              pkg = "ec2";
+              version = "0.9.1";
+              sha256 =
+                "ae857fe633bca078fd1ee54232dd3bc74566ff46b93aa53e38d74c546c3d9b6f";
+            };
+            beamDeps  = [ jsx_2_8_0 ];
+
+            meta = {
+              description = ''helper library for working with aws ec2
+                            metadata'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/talentdeficit/ec2";
+            };
+          }
+      ) {};
+
+    ec2 = ec2_0_9_1;
+
     ecc_0_1_3 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -9103,7 +10782,7 @@ let
     ecdo_0_1_4 = callPackage
       (
         {
-          buildMix, fetchHex, postgrex_0_11_1, mariaex_0_6_2, ecto_1_0_7
+          buildMix, fetchHex, postgrex_0_11_1, mariaex_0_7_0, ecto_1_0_7
         }:
           buildMix {
             name = "ecdo";
@@ -9114,7 +10793,7 @@ let
               sha256 =
                 "362c75113bca6c8379ac2b1654ae78ed099ab0faee4a1fbacb7b4b9b137b9f1d";
             };
-            beamDeps  = [ postgrex_0_11_1 mariaex_0_6_2 ecto_1_0_7 ];
+            beamDeps  = [ postgrex_0_11_1 mariaex_0_7_0 ecto_1_0_7 ];
 
             meta = {
               longDescription = ''Ecdo is a dynamic interface for ecto aims to
@@ -9155,6 +10834,30 @@ let
 
     echo = echo_0_2_0;
 
+    echonest_ex_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "echonest_ex";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "echonest_ex";
+              version = "0.0.2";
+              sha256 =
+                "d8b3d7f2b04eb48b689877aaf9db30f33acea3ea02daca5aad8d105ac785bd98";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Echonest api wrapper for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/desmondhume/echonest_ex";
+            };
+          }
+      ) {};
+
+    echonest_ex = echonest_ex_0_0_2;
+
     econfig_0_7_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -9177,6 +10880,46 @@ let
       ) {};
 
     econfig = econfig_0_7_1;
+
+    ecto_0_15_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          sbroker_0_7_0,
+          postgrex_0_9_1,
+          poolboy_1_5_1,
+          poison_1_5_2,
+          mariaex_0_4_3,
+          decimal_1_1_1
+        }:
+          buildMix {
+            name = "ecto";
+            version = "0.15.0";
+            src = fetchHex {
+              pkg = "ecto";
+              version = "0.15.0";
+              sha256 =
+                "44bbe98d66c20aa70dcac2cb41f6ae058aa50c3029089e2158d043113110164b";
+            };
+            beamDeps  = [
+                          sbroker_0_7_0
+                          postgrex_0_9_1
+                          poolboy_1_5_1
+                          poison_1_5_2
+                          mariaex_0_4_3
+                          decimal_1_1_1
+                        ];
+
+            meta = {
+              longDescription = ''Ecto is a domain specific language for
+                                writing queries and interacting with databases
+                                in Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/elixir-lang/ecto";
+            };
+          }
+      ) {};
 
     ecto_0_16_0 = callPackage
       (
@@ -9221,7 +10964,7 @@ let
     ecto_0_2_4 = callPackage
       (
         {
-          buildMix, fetchHex, postgrex_0_6_0, poolboy_1_2_1, decimal_0_2_5
+          buildMix, fetchHex, postgrex_0_8_4, poolboy_1_2_1, decimal_0_2_5
         }:
           buildMix {
             name = "ecto";
@@ -9232,7 +10975,7 @@ let
               sha256 =
                 "b6918fb8a0b72220238832616c42937ac04d2f8016d687b53e3a241234cae4f3";
             };
-            beamDeps  = [ postgrex_0_6_0 poolboy_1_2_1 decimal_0_2_5 ];
+            beamDeps  = [ postgrex_0_8_4 poolboy_1_2_1 decimal_0_2_5 ];
 
             meta = {
               longDescription = ''Ecto is a domain specific language for
@@ -9244,21 +10987,21 @@ let
           }
       ) {};
 
-    ecto_0_2_6 = callPackage
+    ecto_0_2_7 = callPackage
       (
         {
-          buildMix, fetchHex, postgrex_0_6_0, poolboy_1_5_1, decimal_0_2_5
+          buildMix, fetchHex, postgrex_0_8_4, poolboy_1_4_2, decimal_0_2_5
         }:
           buildMix {
             name = "ecto";
-            version = "0.2.6";
+            version = "0.2.7";
             src = fetchHex {
               pkg = "ecto";
-              version = "0.2.6";
+              version = "0.2.7";
               sha256 =
-                "746fd42fa1a9fae304d9bb280782d9456a1f092ea71ead3a876876753c936dc8";
+                "3f26fd41a9e34272f5e753a010b1494646892130c91603da717b375c7acfed7f";
             };
-            beamDeps  = [ postgrex_0_6_0 poolboy_1_5_1 decimal_0_2_5 ];
+            beamDeps  = [ postgrex_0_8_4 poolboy_1_4_2 decimal_0_2_5 ];
 
             meta = {
               longDescription = ''Ecto is a domain specific language for
@@ -9273,7 +11016,7 @@ let
     ecto_0_5_1 = callPackage
       (
         {
-          buildMix, fetchHex, postgrex_0_6_0, poolboy_1_4_2, decimal_0_2_5
+          buildMix, fetchHex, postgrex_0_8_4, poolboy_1_4_2, decimal_0_2_5
         }:
           buildMix {
             name = "ecto";
@@ -9284,7 +11027,7 @@ let
               sha256 =
                 "a7f1f8022f6b8c53edc91076bcc885e1124fdf14cdc2c4a11d3b9b4c26cf34a8";
             };
-            beamDeps  = [ postgrex_0_6_0 poolboy_1_4_2 decimal_0_2_5 ];
+            beamDeps  = [ postgrex_0_8_4 poolboy_1_4_2 decimal_0_2_5 ];
 
             meta = {
               longDescription = ''Ecto is a domain specific language for
@@ -9336,7 +11079,7 @@ let
           }
       ) {};
 
-    ecto_1_1_3 = callPackage
+    ecto_1_1_5 = callPackage
       (
         {
           buildMix,
@@ -9345,24 +11088,24 @@ let
           postgrex_0_11_1,
           poolboy_1_5_1,
           poison_1_5_2,
-          mariaex_0_5_0,
+          mariaex_0_1_7,
           decimal_1_1_1
         }:
           buildMix {
             name = "ecto";
-            version = "1.1.3";
+            version = "1.1.5";
             src = fetchHex {
               pkg = "ecto";
-              version = "1.1.3";
+              version = "1.1.5";
               sha256 =
-                "0db9486edf2bc98cca77e5c22f7cb7e5a2d56fdb0268e4bb2e67353cc058b060";
+                "6283cae93763257ac7a319e28ab2308efcd3a4c1571e65ef55721067a01caf69";
             };
             beamDeps  = [
                           sbroker_0_7_0
                           postgrex_0_11_1
                           poolboy_1_5_1
                           poison_1_5_2
-                          mariaex_0_5_0
+                          mariaex_0_1_7
                           decimal_1_1_1
                         ];
 
@@ -9376,7 +11119,7 @@ let
           }
       ) {};
 
-    ecto_2_0_0_beta_0 = callPackage
+    ecto_2_0_0_beta_2 = callPackage
       (
         {
           buildMix,
@@ -9385,24 +11128,24 @@ let
           postgrex_0_11_1,
           poolboy_1_5_1,
           poison_1_0_3,
-          mariaex_0_6_2,
+          mariaex_0_7_0,
           decimal_1_1_1
         }:
           buildMix {
             name = "ecto";
-            version = "2.0.0-beta.0";
+            version = "2.0.0-beta.2";
             src = fetchHex {
               pkg = "ecto";
-              version = "2.0.0-beta.0";
+              version = "2.0.0-beta.2";
               sha256 =
-                "9c281d7de07610cc1025d2d5d2910aace0b0618c60fcbd6fd6f4b720c2f4e996";
+                "8b4f7ee50b342b9ea8a9c64b855625f2f805ddb981b89261d464fe84e93e40bd";
             };
             beamDeps  = [
                           sbroker_0_7_0
                           postgrex_0_11_1
                           poolboy_1_5_1
                           poison_1_0_3
-                          mariaex_0_6_2
+                          mariaex_0_7_0
                           decimal_1_1_1
                         ];
 
@@ -9416,7 +11159,7 @@ let
           }
       ) {};
 
-    ecto = ecto_2_0_0_beta_0;
+    ecto = ecto_2_0_0_beta_2;
 
     ecto_audit_0_0_1 = callPackage
       (
@@ -9448,8 +11191,8 @@ let
           buildMix,
           fetchHex,
           postgrex_0_11_1,
-          mariaex_0_6_2,
-          ecto_2_0_0_beta_0
+          mariaex_0_7_0,
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "ecto_enum";
@@ -9460,7 +11203,7 @@ let
               sha256 =
                 "2aabbeeee17c67b8336890cc1888b1104b71e29852d464a77efca4257b02a8d9";
             };
-            beamDeps  = [ postgrex_0_11_1 mariaex_0_6_2 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 mariaex_0_7_0 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Ecto extension to support enums in models'';
@@ -9525,7 +11268,7 @@ let
 
     ecto_hstore_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "ecto_hstore";
             version = "0.0.1";
@@ -9535,7 +11278,7 @@ let
               sha256 =
                 "0dca7ad14d0fa42038594e00a6f1e1fb3476644f71299f9e4ca10f1b9d6098cb";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Ecto.Hstore adds Postgres Hstore compatibility to
@@ -9554,8 +11297,8 @@ let
           buildMix,
           fetchHex,
           postgrex_0_11_1,
-          mariaex_0_6_2,
-          ecto_2_0_0_beta_0
+          mariaex_0_7_0,
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "ecto_it";
@@ -9566,7 +11309,7 @@ let
               sha256 =
                 "ddbf27e85547b9812d7b49bc2252b4667468582b174045ba2bb1a804d209a860";
             };
-            beamDeps  = [ postgrex_0_11_1 mariaex_0_6_2 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 mariaex_0_7_0 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''Ecto IT is library for writing integration
@@ -9582,7 +11325,7 @@ let
 
     ecto_lazy_float_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "ecto_lazy_float";
             version = "0.1.2";
@@ -9592,7 +11335,7 @@ let
               sha256 =
                 "76f14bf8d2bf52e3143c79fdf0e9d9bbb2fb1b087e847b13347e52e5b0c5da94";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Ecto.LazyFloat takes integer, strings, and floats
@@ -9605,19 +11348,19 @@ let
 
     ecto_lazy_float = ecto_lazy_float_0_1_2;
 
-    ecto_ldap_0_2_0 = callPackage
+    ecto_ldap_0_2_4 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "ecto_ldap";
-            version = "0.2.0";
+            version = "0.2.4";
             src = fetchHex {
               pkg = "ecto_ldap";
-              version = "0.2.0";
+              version = "0.2.4";
               sha256 =
-                "9228e091811d699c530a717633f0be8f3468d80f81f721c5f4ce2bd9b401de13";
+                "156294145a5d4ab0b71f86f2738a991de0fa6352360f5d5383b22dc18a25dc57";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''An Ecto adapter for LDAP'';
@@ -9627,7 +11370,7 @@ let
           }
       ) {};
 
-    ecto_ldap = ecto_ldap_0_2_0;
+    ecto_ldap = ecto_ldap_0_2_4;
 
     ecto_migrate_0_6_3 = callPackage
       (
@@ -9635,7 +11378,7 @@ let
           buildMix,
           fetchHex,
           postgrex_0_11_1,
-          mariaex_0_6_2,
+          mariaex_0_7_0,
           ecto_it_0_2_0,
           ecto_1_0_7
         }:
@@ -9649,7 +11392,7 @@ let
                 "a604f2fe7874c674bd42fc70f3e89776d3738571d252ec8b785a107a6fa12b5c";
             };
             beamDeps  = [
-                          postgrex_0_11_1 mariaex_0_6_2 ecto_it_0_2_0 ecto_1_0_7
+                          postgrex_0_11_1 mariaex_0_7_0 ecto_it_0_2_0 ecto_1_0_7
                         ];
 
             meta = {
@@ -9690,7 +11433,7 @@ let
 
     ecto_validation_case_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, ex_doc_0_11_4, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ex_doc_0_11_4, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "ecto_validation_case";
             version = "0.1.1";
@@ -9700,7 +11443,7 @@ let
               sha256 =
                 "0bec902247929e66cb0687f09d458633385843d18ca6ec1ac2557e6754b55cbd";
             };
-            beamDeps  = [ ex_doc_0_11_4 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ex_doc_0_11_4 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Ecto.ValidationCase simplifies writing validation
@@ -9714,19 +11457,19 @@ let
 
     ecto_validation_case = ecto_validation_case_0_1_1;
 
-    ectograph_0_0_1 = callPackage
+    ectograph_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, graphql_0_1_2, ecto_1_1_3 }:
+        {  buildMix, fetchHex, graphql_0_2_0, ecto_1_1_5 }:
           buildMix {
             name = "ectograph";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "ectograph";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "1fe701999ff1648cdac64ed6500793f8534fe7771ed5b533c21bc42a648d3484";
+                "44eff08624c5f93af30878f4e1e47d69354078ff9081bf2b0203513bb6e0ead9";
             };
-            beamDeps  = [ graphql_0_1_2 ecto_1_1_3 ];
+            beamDeps  = [ graphql_0_2_0 ecto_1_1_5 ];
 
             meta = {
               longDescription = ''Ectograph is a set of utility functions for
@@ -9738,11 +11481,11 @@ let
           }
       ) {};
 
-    ectograph = ectograph_0_0_1;
+    ectograph = ectograph_0_0_2;
 
     ectoo_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "ectoo";
             version = "0.0.4";
@@ -9752,7 +11495,7 @@ let
               sha256 =
                 "bf5852e97e64666ebd57df710e4cb1239d3fcf135d7ae9d5d666fc53aa0e0b46";
             };
-            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''Make simple things easy in Ecto, e.g.
@@ -9774,7 +11517,7 @@ let
           postgrex_0_9_1,
           poison_1_5_2,
           mariaex_0_4_3,
-          ecto_2_0_0_beta_0
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "ectophile";
@@ -9789,7 +11532,7 @@ let
                           postgrex_0_9_1
                           poison_1_5_2
                           mariaex_0_4_3
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                         ];
 
             meta = {
@@ -9804,7 +11547,7 @@ let
 
     edeliver_1_1_4 = callPackage
       (
-        {  buildMix, fetchHex, exrm_1_0_0_rc8 }:
+        {  buildMix, fetchHex, exrm_1_0_3 }:
           buildMix {
             name = "edeliver";
             version = "1.1.4";
@@ -9814,7 +11557,7 @@ let
               sha256 =
                 "b7c95a499efb0fc9baf681dfaba3c09c64d9cde5c4cf4faafd44d6de9cba8928";
             };
-            beamDeps  = [ exrm_1_0_0_rc8 ];
+            beamDeps  = [ exrm_1_0_3 ];
 
             meta = {
               longDescription = ''Build and Deploy Elixir Applications and
@@ -9855,7 +11598,7 @@ let
 
     edgarex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_0_0, exquery_0_0_11 }:
+        {  buildMix, fetchHex, httpotion_2_2_2, exquery_0_0_11 }:
           buildMix {
             name = "edgarex";
             version = "0.0.2";
@@ -9865,7 +11608,7 @@ let
               sha256 =
                 "99e25e685bc44a1f804729779e77d5e3d1920f42c99478cd9b712d724b4f6af4";
             };
-            beamDeps  = [ httpotion_2_0_0 exquery_0_0_11 ];
+            beamDeps  = [ httpotion_2_2_2 exquery_0_0_11 ];
 
             meta = {
               longDescription = '' A set of utilities for fetching documents
@@ -9933,8 +11676,8 @@ let
 
     edown_0_7_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "edown";
             version = "0.7.0";
             src = fetchHex {
@@ -9959,8 +11702,8 @@ let
         {
           buildMix,
           fetchHex,
-          tzdata_0_1_8,
-          timex_1_0_1,
+          tzdata_0_1_201603,
+          timex_1_0_2,
           plug_0_14_0,
           earmark_0_1_19,
           cowboy_1_0_4
@@ -9975,8 +11718,8 @@ let
                 "c2f4bc1e6dbada6b7086e92db14a401ac1440d25d5c5ac078fc55e6545c73f4e";
             };
             beamDeps  = [
-                          tzdata_0_1_8
-                          timex_1_0_1
+                          tzdata_0_1_201603
+                          timex_1_0_2
                           plug_0_14_0
                           earmark_0_1_19
                           cowboy_1_0_4
@@ -9992,17 +11735,65 @@ let
 
     eeb = eeb_0_1_3;
 
+    efirebirdsql_0_1_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "efirebirdsql";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "efirebirdsql";
+              version = "0.1.1";
+              sha256 =
+                "dff29bcd6f5f99baa18dd339c01f441b498030e88ac4a1d7c4524da79b0a4cb7";
+            };
+
+            meta = {
+              description = ''Firebird Client'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/nakagami/efirebirdsql";
+            };
+          }
+      ) {};
+
+    efirebirdsql = efirebirdsql_0_1_1;
+
+    efrisby_0_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex, jsx_2_8_0, hackney_1_4_8 }:
+          buildRebar3 {
+            name = "efrisby";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "efrisby";
+              version = "0.2.0";
+              sha256 =
+                "5ad6f030a9e6b7611af09ce009106dcad9fa4ab3d23aa6db03573082f4824470";
+            };
+
+            beamDeps  = [ jsx_2_8_0 hackney_1_4_8 ];
+
+            meta = {
+              description = ''A REST API testing framework for erlang'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/FabioBatSilva/efrisby";
+            };
+          }
+      ) {};
+
+    efrisby = efrisby_0_2_0;
+
     egithub_0_2_2 = callPackage
       (
         {
-          buildRebar3,
+          buildErlangMk,
           fetchHex,
           shotgun_0_2_2,
           jiffy_0_14_7,
           lager_3_0_2,
           goldrush_0_1_7
         }:
-          buildRebar3 {
+          buildErlangMk {
             name = "egithub";
             version = "0.2.2";
             src = fetchHex {
@@ -10011,7 +11802,6 @@ let
               sha256 =
                 "ff8e279d3868576cc2a05336c7ca4bed3972f7a01676be859b7e1750da4570f8";
             };
-
             beamDeps  = [
                           shotgun_0_2_2 jiffy_0_14_7 lager_3_0_2 goldrush_0_1_7
                         ];
@@ -10099,7 +11889,7 @@ let
 
     eio_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "eio";
             version = "0.1.0";
@@ -10109,7 +11899,7 @@ let
               sha256 =
                 "f39f017c73713b36ee27d8a0635634ac2e96b4d540f28db9dd358d8744dccd88";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Engine.io server for Elixir.'';
@@ -10121,24 +11911,24 @@ let
 
     eio = eio_0_1_0;
 
-    ejabberd_16_1_0_beta1 = callPackage
+    ejabberd_16_2_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
           stun_1_0_1,
-          stringprep_1_0_2,
+          stringprep_1_0_3,
           sqlite3_1_1_5,
           p1_xmlrpc_1_15_1,
           p1_utils_1_0_3,
-          p1_pgsql_1_0_1,
+          p1_pgsql_1_1_0,
           p1_oauth2_0_6_1,
           p1_mysql_1_0_1,
           lager_3_0_2,
           jiffy_0_14_7,
           iconv_1_0_0,
-          fast_yaml_1_0_2,
-          fast_xml_1_1_3,
+          fast_yaml_1_0_3,
+          fast_xml_1_1_11,
           fast_tls_1_0_1,
           ezlib_1_0_1,
           esip_1_0_2,
@@ -10147,27 +11937,27 @@ let
         }:
           buildMix {
             name = "ejabberd";
-            version = "16.1.0-beta1";
+            version = "16.2.0";
             src = fetchHex {
               pkg = "ejabberd";
-              version = "16.1.0-beta1";
+              version = "16.2.0";
               sha256 =
-                "c1f6b702ab0e75866979c62edeab4dcc01a2cd9d375a73799b7288dbdc77d743";
+                "4e51457ac9f850782a5da63d060b8f710c2c652c7bd2062bb8c804a13985ca6e";
             };
             beamDeps  = [
                           stun_1_0_1
-                          stringprep_1_0_2
+                          stringprep_1_0_3
                           sqlite3_1_1_5
                           p1_xmlrpc_1_15_1
                           p1_utils_1_0_3
-                          p1_pgsql_1_0_1
+                          p1_pgsql_1_1_0
                           p1_oauth2_0_6_1
                           p1_mysql_1_0_1
                           lager_3_0_2
                           jiffy_0_14_7
                           iconv_1_0_0
-                          fast_yaml_1_0_2
-                          fast_xml_1_1_3
+                          fast_yaml_1_0_3
+                          fast_xml_1_1_11
                           fast_tls_1_0_1
                           ezlib_1_0_1
                           esip_1_0_2
@@ -10184,7 +11974,7 @@ let
           }
       ) {};
 
-    ejabberd = ejabberd_16_1_0_beta1;
+    ejabberd = ejabberd_16_2_0;
 
     ejabberd_dev_15_9_0 = callPackage
       (
@@ -10236,19 +12026,19 @@ let
 
     ekstat = ekstat_0_2_2;
 
-    elastex_0_1_1 = callPackage
+    elastex_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "elastex";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "elastex";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "e08e9640f0d68250dfbe3a6d54855f75742db647ace24a42667d88e234c5849c";
+                "eaab5305db3d5d326e471dc1799606b7055971dfb7d9a27571850d2ce7e97f9b";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Data driven elixir client for Elasticsearch.'';
@@ -10258,7 +12048,7 @@ let
           }
       ) {};
 
-    elastex = elastex_0_1_1;
+    elastex = elastex_0_1_2;
 
     elastix_0_1_0 = callPackage
       (
@@ -10287,7 +12077,7 @@ let
 
     elaxtic_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "elaxtic";
             version = "0.0.1";
@@ -10297,7 +12087,7 @@ let
               sha256 =
                 "a912a0327bfe1c6443cec47a03d11450fed2e649bfdcd4e77bdb9176baa8cd45";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               description = ''ElasticSearch client for Elixir and Ecto
@@ -10409,8 +12199,8 @@ let
 
     elixir_ale_0_4_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "elixir_ale";
             version = "0.4.1";
             src = fetchHex {
@@ -10456,17 +12246,17 @@ let
 
     elixir_ami = elixir_ami_0_0_3;
 
-    elixir_authorizenet_0_2_1 = callPackage
+    elixir_authorizenet_0_2_2 = callPackage
       (
         {  buildMix, fetchHex, xml_builder_0_0_8, exmerl_0_1_1 }:
           buildMix {
             name = "elixir_authorizenet";
-            version = "0.2.1";
+            version = "0.2.2";
             src = fetchHex {
               pkg = "elixir_authorizenet";
-              version = "0.2.1";
+              version = "0.2.2";
               sha256 =
-                "ac690facc36206982a7bc1eca4cf3d50a68194e05c2cf927e0e3f166c71e9f0f";
+                "10111f4fe073d69a5ae817838377ba52bf6b04199c8386f48ca13804db6e2f70";
             };
             beamDeps  = [ xml_builder_0_0_8 exmerl_0_1_1 ];
 
@@ -10488,7 +12278,7 @@ let
           }
       ) {};
 
-    elixir_authorizenet = elixir_authorizenet_0_2_1;
+    elixir_authorizenet = elixir_authorizenet_0_2_2;
 
     elixir_bencode_1_0_0 = callPackage
       (
@@ -10537,17 +12327,17 @@ let
 
     elixir_drawille = elixir_drawille_0_0_3;
 
-    elixir_exif_0_1_0 = callPackage
+    elixir_exif_0_1_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "elixir_exif";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "elixir_exif";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "9d8e79d247495347c15d89172e86b49b3c9592b8df8d70ec0a4db126c3cd599b";
+                "a491a3e134c00f2a1f59c8e3a1bd62b9b94c1ce4179a20d737903f3edcc9bd78";
             };
 
             meta = {
@@ -10559,7 +12349,7 @@ let
           }
       ) {};
 
-    elixir_exif = elixir_exif_0_1_0;
+    elixir_exif = elixir_exif_0_1_1;
 
     elixir_feed_parser_0_9_0 = callPackage
       (
@@ -10584,17 +12374,17 @@ let
 
     elixir_feed_parser = elixir_feed_parser_0_9_0;
 
-    elixir_freshbooks_0_0_2 = callPackage
+    elixir_freshbooks_0_0_4 = callPackage
       (
         {  buildMix, fetchHex, xml_builder_0_0_8, exmerl_0_1_1 }:
           buildMix {
             name = "elixir_freshbooks";
-            version = "0.0.2";
+            version = "0.0.4";
             src = fetchHex {
               pkg = "elixir_freshbooks";
-              version = "0.0.2";
+              version = "0.0.4";
               sha256 =
-                "a40deaaf4400c0de95b7bf4b19fc9216a063e44854113301914b7b893e8c66d4";
+                "404ba66129bb1a756f6c06460d483d72d59990bc460616a1e61bd87af4108628";
             };
             beamDeps  = [ xml_builder_0_0_8 exmerl_0_1_1 ];
 
@@ -10606,12 +12396,12 @@ let
           }
       ) {};
 
-    elixir_freshbooks = elixir_freshbooks_0_0_2;
+    elixir_freshbooks = elixir_freshbooks_0_0_4;
 
     elixir_ipfs_api_0_1_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, ex_doc_0_10_0
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, ex_doc_0_10_0
         }:
           buildMix {
             name = "elixir_ipfs_api";
@@ -10622,7 +12412,7 @@ let
               sha256 =
                 "b8b6656ce18ff070b2328436cfa3d55f08b3e0a2f98bee49d4b3cb49c144684b";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ex_doc_0_10_0 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ex_doc_0_10_0 ];
 
             meta = {
               description = ''An elixir client library for the IPFS API'';
@@ -10715,7 +12505,7 @@ let
           uuid_1_1_3,
           socket_0_3_1,
           poison_1_5_2,
-          httpotion_2_1_0
+          httpotion_2_2_2
         }:
           buildMix {
             name = "elixir_nsq";
@@ -10727,7 +12517,7 @@ let
                 "6d30c3754dfdd988f927b9c6ae51d3e0ec4b0d2477b99047baf7a52c96bf9494";
             };
             beamDeps  = [
-                          uuid_1_1_3 socket_0_3_1 poison_1_5_2 httpotion_2_1_0
+                          uuid_1_1_3 socket_0_3_1 poison_1_5_2 httpotion_2_2_2
                         ];
 
             meta = {
@@ -10741,6 +12531,29 @@ let
       ) {};
 
     elixir_nsq = elixir_nsq_1_0_3;
+
+    elixir_prelude_0_2_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "elixir_prelude";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "elixir_prelude";
+              version = "0.2.1";
+              sha256 =
+                "178d8de9762447e8f8271bd6af356a171af9fb7c20fcd4fa510a05e19b24240d";
+            };
+
+            meta = {
+              description = ''Small set of useful utility functions'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ruby2elixir/elixir_prelude";
+            };
+          }
+      ) {};
+
+    elixir_prelude = elixir_prelude_0_2_1;
 
     elixir_radius_0_1_0 = callPackage
       (
@@ -10765,19 +12578,19 @@ let
 
     elixir_radius = elixir_radius_0_1_0;
 
-    elixir_script_0_15_2 = callPackage
+    elixir_script_0_16_0 = callPackage
       (
-        {  buildMix, fetchHex, estree_2_2_0 }:
+        {  buildMix, fetchHex, estree_2_3_0 }:
           buildMix {
             name = "elixir_script";
-            version = "0.15.2";
+            version = "0.16.0";
             src = fetchHex {
               pkg = "elixir_script";
-              version = "0.15.2";
+              version = "0.16.0";
               sha256 =
-                "daa98f9f065576450843e9f867c7c8afe38edb29345aec276c112e4786ff2f5c";
+                "a2ff037d9c3562198fb3e35ff112cb35827078b1a905368be5ff351c582966a9";
             };
-            beamDeps  = [ estree_2_2_0 ];
+            beamDeps  = [ estree_2_3_0 ];
 
             meta = {
               description = ''ElixirScript: compiles Elixir code to
@@ -10788,7 +12601,7 @@ let
           }
       ) {};
 
-    elixir_script = elixir_script_0_15_2;
+    elixir_script = elixir_script_0_16_0;
 
     elixir_talk_1_0_1 = callPackage
       (
@@ -10838,6 +12651,30 @@ let
 
     elixir_tea = elixir_tea_1_0_0;
 
+    elixir_v8_0_2_2 = callPackage
+      (
+        {  buildMix, fetchHex, poolboy_1_5_1, exjsx_3_2_0 }:
+          buildMix {
+            name = "elixir_v8";
+            version = "0.2.2";
+            src = fetchHex {
+              pkg = "elixir_v8";
+              version = "0.2.2";
+              sha256 =
+                "71034e37c2b8113156b19b1ca5b9b772fb454fe11c1cba33567fb61d3c8cedbe";
+            };
+            beamDeps  = [ poolboy_1_5_1 exjsx_3_2_0 ];
+
+            meta = {
+              description = ''V8 engine for Elixir with pools.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/le0pard/elixir_v8";
+            };
+          }
+      ) {};
+
+    elixir_v8 = elixir_v8_0_2_2;
+
     elixlsx_0_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -10864,7 +12701,7 @@ let
     elixtagram_0_2_5 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, oauth2_0_5_0, httpoison_0_7_5
+          buildMix, fetchHex, poison_1_5_2, oauth2_0_6_0, httpoison_0_7_5
         }:
           buildMix {
             name = "elixtagram";
@@ -10875,7 +12712,7 @@ let
               sha256 =
                 "71503f2bfec0d4728449321e4e1aaae7c8ae24974d53b904327bcef5b16e6900";
             };
-            beamDeps  = [ poison_1_5_2 oauth2_0_5_0 httpoison_0_7_5 ];
+            beamDeps  = [ poison_1_5_2 oauth2_0_6_0 httpoison_0_7_5 ];
 
             meta = {
               description = ''Instagram client library for Elixir.'';
@@ -10887,17 +12724,17 @@ let
 
     elixtagram = elixtagram_0_2_5;
 
-    elli_1_0_4 = callPackage
+    elli_1_0_5 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "elli";
-            version = "1.0.4";
+            version = "1.0.5";
             src = fetchHex {
               pkg = "elli";
-              version = "1.0.4";
+              version = "1.0.5";
               sha256 =
-                "87641b9c069b1372dac4e1bdda795076ea3142af78aac0d63896a38079e89e8e";
+                "fb55bab884f1d921f2e86c00738909a9e56aca14604e617b138e163093609c97";
             };
 
             meta = {
@@ -10909,11 +12746,11 @@ let
           }
       ) {};
 
-    elli = elli_1_0_4;
+    elli = elli_1_0_5;
 
     elmit_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, httpotion_2_2_2 }:
           buildMix {
             name = "elmit";
             version = "0.0.1";
@@ -10923,7 +12760,7 @@ let
               sha256 =
                 "90e5df811553733dd7505f9cc81397c3bdaf9c336eb3542c7e44f3c2012ef96e";
             };
-            beamDeps  = [ httpotion_2_1_0 ];
+            beamDeps  = [ httpotion_2_2_2 ];
 
             meta = {
               description = ''Google Translate with speech synthesis in your
@@ -11164,6 +13001,29 @@ let
 
     eper = eper_0_94_0;
 
+    epgpool_1_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "epgpool";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "epgpool";
+              version = "1.0.0";
+              sha256 =
+                "fefcde1302722d010a71733cd2e1403ab40686343e7281221136b24d6fad5889";
+            };
+
+            meta = {
+              description = ''Erlang postgresql pool application'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/egobrain/epgpool";
+            };
+          }
+      ) {};
+
+    epgpool = epgpool_1_0_0;
+
     epgsql_3_1_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -11186,6 +13046,30 @@ let
       ) {};
 
     epgsql = epgsql_3_1_1;
+
+    epiphany_0_1_0_dev = callPackage
+      (
+        {  buildMix, fetchHex, connection_1_0_2 }:
+          buildMix {
+            name = "epiphany";
+            version = "0.1.0-dev";
+            src = fetchHex {
+              pkg = "epiphany";
+              version = "0.1.0-dev";
+              sha256 =
+                "38b15e762a4bb8c57a3ef238531dd465113b1019fb5aa63d7c8b38ed579f15f9";
+            };
+            beamDeps  = [ connection_1_0_2 ];
+
+            meta = {
+              description = ''Cassandra driver for Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/vptheron/epiphany";
+            };
+          }
+      ) {};
+
+    epiphany = epiphany_0_1_0_dev;
 
     episcina_1_1_0 = callPackage
       (
@@ -11306,6 +13190,29 @@ let
 
     eql = eql_0_1_2;
 
+    equery_0_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "equery";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "equery";
+              version = "0.2.0";
+              sha256 =
+                "4e1f91ecdcaf61db99be759ebe133d351aec760ff8e7ea1c33e6f0626cf6068b";
+            };
+
+            meta = {
+              description = ''Sql generator library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/egobrain/equery";
+            };
+          }
+      ) {};
+
+    equery = equery_0_2_0;
+
     eredis_1_0_8 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -11355,17 +13262,17 @@ let
 
     eredis_cluster = eredis_cluster_0_5_4;
 
-    erl2ex_0_0_7 = callPackage
+    erl2ex_0_0_8 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "erl2ex";
-            version = "0.0.7";
+            version = "0.0.8";
             src = fetchHex {
               pkg = "erl2ex";
-              version = "0.0.7";
+              version = "0.0.8";
               sha256 =
-                "2df3a8441cb059784523f7e2da15e897cf211a6cfec942c63032a4e5798805f1";
+                "bbe0b1a43e1621158d7985e77d7d1f00db0410d5987b429c30c8d0cc582e0f6f";
             };
 
             meta = {
@@ -11378,7 +13285,30 @@ let
           }
       ) {};
 
-    erl2ex = erl2ex_0_0_7;
+    erl2ex = erl2ex_0_0_8;
+
+    erlang_dbus_0_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "erlang_dbus";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "erlang_dbus";
+              version = "0.2.0";
+              sha256 =
+                "b00065acfae0cfea909335eab07339292a1f9a9c91b2f542d3841f86f4aac605";
+            };
+
+            meta = {
+              description = ''A native erlang implementation of D-Bus'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/lizenn/erlang-dbus";
+            };
+          }
+      ) {};
+
+    erlang_dbus = erlang_dbus_0_2_0;
 
     erlang_localtime_1_0_0 = callPackage
       (
@@ -11547,11 +13477,34 @@ let
           }
       ) {};
 
-    erlcloud = erlcloud_0_13_0;
+    erlcloud_0_13_2 = callPackage
+      (
+        {  buildRebar3, fetchHex, lhttpc_1_4_0, jsx_2_8_0 }:
+          buildRebar3 {
+            name = "erlcloud";
+            version = "0.13.2";
+            src = fetchHex {
+              pkg = "erlcloud";
+              version = "0.13.2";
+              sha256 =
+                "568d464760802322b7dc81e95f9c7bfb2fa8121423e67b2db6ed1c80697e1277";
+            };
+
+            beamDeps  = [ lhttpc_1_4_0 jsx_2_8_0 ];
+
+            meta = {
+              description = ''Erlang cloud computing library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/erlcloud/erlcloud";
+            };
+          }
+      ) {};
+
+    erlcloud = erlcloud_0_13_2;
 
     erlcloud_0_9_2 = callPackage
       (
-        {  buildRebar3, fetchHex, meck_0_8_4, lhttpc_1_3_0, jsx_2_4_0 }:
+        {  buildRebar3, fetchHex, meck_0_8_4, lhttpc_1_3_0, jsx_2_3_1 }:
           buildRebar3 {
             name = "erlcloud";
             version = "0.9.2";
@@ -11562,7 +13515,7 @@ let
                 "739ab77c3f007b3c8466e093726fb3e62b19691d70dbff4defc4beac61e48f12";
             };
 
-            beamDeps  = [ meck_0_8_4 lhttpc_1_3_0 jsx_2_4_0 ];
+            beamDeps  = [ meck_0_8_4 lhttpc_1_3_0 jsx_2_3_1 ];
 
             meta = {
               description = ''Erlang cloud computing library'';
@@ -11574,8 +13527,8 @@ let
 
     erldn_1_0_5 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "erldn";
             version = "1.0.5";
             src = fetchHex {
@@ -11617,7 +13570,52 @@ let
           }
       ) {};
 
-    erlexec = erlexec_1_1_0;
+    erlexec_1_1_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "erlexec";
+            version = "1.1.1";
+            src = fetchHex {
+              pkg = "erlexec";
+              version = "1.1.1";
+              sha256 =
+                "86e354558e3e2275d5d611d08c87bb66bdffa500573b1af410d117d6b6bc460b";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''OS Process Manager'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/saleyn/erlexec";
+            };
+          }
+      ) {};
+
+    erlexec = erlexec_1_1_1;
+
+    erlogger_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "erlogger";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "erlogger";
+              version = "0.1.0";
+              sha256 =
+                "de2d64f0932e8af46264d92a224ed46e41f2b698b1bbd245ae19321715322146";
+            };
+
+            meta = {
+              description = ''Logging service for Erlang Applications.'';
+              license = stdenv.lib.licenses.free;
+              homepage = "https://github.com/knusbaum/erlogger";
+            };
+          }
+      ) {};
+
+    erlogger = erlogger_0_1_0;
 
     erlsh_0_1_0 = callPackage
       (
@@ -11690,27 +13688,6 @@ let
 
     erltrace = erltrace_0_1_4;
 
-    erlware_commons_0_14_0 = callPackage
-      (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
-            name = "erlware_commons";
-            version = "0.14.0";
-            src = fetchHex {
-              pkg = "erlware_commons";
-              version = "0.14.0";
-              sha256 =
-                "ec36ca48ce0d4e64a7b0e00771260257e91162816254dc2d8d3cc9f83285dafe";
-            };
-
-            meta = {
-              description = ''Additional standard library for Erlang'';
-              license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/erlware/erlware_commons";
-            };
-          }
-      ) {};
-
     erlware_commons_0_15_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -11778,7 +13755,30 @@ let
           }
       ) {};
 
-    erlware_commons = erlware_commons_0_19_0;
+    erlware_commons_0_20_0 = callPackage
+      (
+        {  buildRebar3, fetchHex, cf_0_2_1 }:
+          buildRebar3 {
+            name = "erlware_commons";
+            version = "0.20.0";
+            src = fetchHex {
+              pkg = "erlware_commons";
+              version = "0.20.0";
+              sha256 =
+                "bff981dbd0acb12ac9d10b41ca96ba76a26e2a1f2714d1e0cb0112f4a67d956a";
+            };
+
+            beamDeps  = [ cf_0_2_1 ];
+
+            meta = {
+              description = ''Additional standard library for Erlang'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/erlware/erlware_commons";
+            };
+          }
+      ) {};
+
+    erlware_commons = erlware_commons_0_20_0;
 
     erlydtl_0_11_1 = callPackage
       (
@@ -11828,8 +13828,8 @@ let
 
     erlzk_0_6_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "erlzk";
             version = "0.6.1";
             src = fetchHex {
@@ -11849,6 +13849,54 @@ let
       ) {};
 
     erlzk = erlzk_0_6_1;
+
+    erocksdb_0_4_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "erocksdb";
+            version = "0.4.1";
+            src = fetchHex {
+              pkg = "erocksdb";
+              version = "0.4.1";
+              sha256 =
+                "982f25f0dcf4d1aa176ce4ec1b01b630bef601e4f8e103890fac23e0a3dc72ec";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''RocksDB for Erlang'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/leo-project/erocksdb";
+            };
+          }
+      ) {};
+
+    erocksdb = erocksdb_0_4_1;
+
+    erwatch_0_3_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "erwatch";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "erwatch";
+              version = "0.3.0";
+              sha256 =
+                "0be5f4e83d762aa36ac3582efb480fb8041d06057a122c5d94a9956c4e3dbccc";
+            };
+
+            meta = {
+              description = ''Erwatch is an Erlang/OTP application for tracking
+                            changes in a file system.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/yuce/erwatch.git";
+            };
+          }
+      ) {};
+
+    erwatch = erwatch_0_3_0;
 
     es_0_0_1 = callPackage
       (
@@ -11874,8 +13922,8 @@ let
 
     escalus_2_6_4 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "escalus";
             version = "2.6.4";
             src = fetchHex {
@@ -11944,17 +13992,17 @@ let
 
     esip = esip_1_0_2;
 
-    espec_0_8_11 = callPackage
+    espec_0_8_16 = callPackage
       (
         {  buildMix, fetchHex, meck_0_8_4 }:
           buildMix {
             name = "espec";
-            version = "0.8.11";
+            version = "0.8.16";
             src = fetchHex {
               pkg = "espec";
-              version = "0.8.11";
+              version = "0.8.16";
               sha256 =
-                "a30b084605a8a4eaf41004e9c25036eb493d98cbc2118f18a0e648011a5c3bd1";
+                "f96d469838a747f60bb23a7515e4065808af31da1c0f3c50162b0dd383248a95";
             };
             beamDeps  = [ meck_0_8_4 ];
 
@@ -11967,12 +14015,12 @@ let
           }
       ) {};
 
-    espec = espec_0_8_11;
+    espec = espec_0_8_16;
 
     espec_phoenix_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, phoenix_1_1_4, floki_0_7_1, espec_0_8_11
+          buildMix, fetchHex, phoenix_1_1_4, floki_0_7_2, espec_0_8_16
         }:
           buildMix {
             name = "espec_phoenix";
@@ -11983,7 +14031,7 @@ let
               sha256 =
                 "069e7df74370905cdce3c87144e707174c13e13c6541ecc4ac114465292bf08e";
             };
-            beamDeps  = [ phoenix_1_1_4 floki_0_7_1 espec_0_8_11 ];
+            beamDeps  = [ phoenix_1_1_4 floki_0_7_2 espec_0_8_16 ];
 
             meta = {
               description = ''ESpec for Phoenix web framework.'';
@@ -11997,8 +14045,8 @@ let
 
     esqlite_0_2_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "esqlite";
             version = "0.2.2";
             src = fetchHex {
@@ -12007,7 +14055,6 @@ let
               sha256 =
                 "5f15f8014baa9d31ee83817afe9164b3ecd76f77b2de7515f2cca2ca75b642e0";
             };
-            compilePorts = true;
 
             meta = {
               description = ''A Sqlite3 NIF'';
@@ -12019,17 +14066,17 @@ let
 
     esqlite = esqlite_0_2_2;
 
-    estree_2_2_0 = callPackage
+    estree_2_3_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "estree";
-            version = "2.2.0";
+            version = "2.3.0";
             src = fetchHex {
               pkg = "estree";
-              version = "2.2.0";
+              version = "2.3.0";
               sha256 =
-                "0adb199b79b31f05f2f01ab87f099ea84684ffffb1571fb33cde05500f9367f2";
+                "f73bf510523aac5518845d4d844a9690ba30450fc666ac138e8965a6c88b26ae";
             };
 
             meta = {
@@ -12042,7 +14089,7 @@ let
           }
       ) {};
 
-    estree = estree_2_2_0;
+    estree = estree_2_3_0;
 
     esync_0_0_1 = callPackage
       (
@@ -12070,7 +14117,7 @@ let
 
     etcd_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "etcd";
             version = "0.0.2";
@@ -12080,7 +14127,7 @@ let
               sha256 =
                 "c1b559bc37812b9ab488f90f322dc0b826c94ac9809d9044b42b4fb420710848";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Etcd APIv2 Client for Elixir'';
@@ -12114,6 +14161,34 @@ let
       ) {};
 
     ether = ether_0_0_1;
+
+    etherchain_org_0_0_3 = callPackage
+      (
+        {
+          buildMix, fetchHex, vex_0_5_5, poison_1_5_2, httpoison_0_8_2
+        }:
+          buildMix {
+            name = "etherchain_org";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "etherchain_org";
+              version = "0.0.3";
+              sha256 =
+                "45b231f1d177be098e2ddd575dd53d0b8676d676ed18c932495307e098c40880";
+            };
+            beamDeps  = [ vex_0_5_5 poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''WIP Elixir API wrapper for etherchain.org.
+                                Provides access to ethereum blockchain data.'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/cyberpunk-ventures/etherchain_org_ex";
+            };
+          }
+      ) {};
+
+    etherchain_org = etherchain_org_0_0_3;
 
     ets_map_0_0_1 = callPackage
       (
@@ -12162,21 +14237,19 @@ let
           }
       ) {};
 
-    etude_0_4_0 = callPackage
+    etude_1_0_0_beta_0 = callPackage
       (
-        {
-          buildMix, fetchHex, rebind_0_1_3, parse_trans_2_9_0, lineo_0_1_0
-        }:
+        {  buildMix, fetchHex, poison_2_1_0, nile_0_1_3 }:
           buildMix {
             name = "etude";
-            version = "0.4.0";
+            version = "1.0.0-beta.0";
             src = fetchHex {
               pkg = "etude";
-              version = "0.4.0";
+              version = "1.0.0-beta.0";
               sha256 =
-                "602db062916cfe50b82257f1fdce039b08584d7ff285183c3a51060f197b4f01";
+                "f5a2896982cd062fe188dcb0216ef5c960959aa2ba77f4d31b00d0dda56890dd";
             };
-            beamDeps  = [ rebind_0_1_3 parse_trans_2_9_0 lineo_0_1_0 ];
+            beamDeps  = [ poison_2_1_0 nile_0_1_3 ];
 
             meta = {
               description = ''parallel computation coordination utilities for
@@ -12187,7 +14260,7 @@ let
           }
       ) {};
 
-    etude = etude_0_4_0;
+    etude = etude_1_0_0_beta_0;
 
     euler_0_0_1 = callPackage
       (
@@ -12238,6 +14311,31 @@ let
 
     eunit_formatters = eunit_formatters_0_3_1;
 
+    evel_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex, hash_ring_0_4_0 }:
+          buildRebar3 {
+            name = "evel";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "evel";
+              version = "0.1.0";
+              sha256 =
+                "5f381ab07b2f914b437808da2ef01fb2905349d17d467f5b5008bfdb5a2418dd";
+            };
+
+            beamDeps  = [ hash_ring_0_4_0 ];
+
+            meta = {
+              description = ''An Eventual Leader Election Library for Erlang'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/sile/evel";
+            };
+          }
+      ) {};
+
+    evel = evel_0_1_0;
+
     event_source_encoder_0_0_3 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -12261,6 +14359,59 @@ let
       ) {};
 
     event_source_encoder = event_source_encoder_0_0_3;
+
+    eventstore_0_2_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, postgrex_0_11_1, poolboy_1_5_1, fsm_0_2_0
+        }:
+          buildMix {
+            name = "eventstore";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "eventstore";
+              version = "0.2.1";
+              sha256 =
+                "ca035c60f925868826eb81bc85a91a7fa5e0637e3232d68e2d7aef248bf2ca35";
+            };
+            beamDeps  = [ postgrex_0_11_1 poolboy_1_5_1 fsm_0_2_0 ];
+
+            meta = {
+              description = ''EventStore using PostgreSQL for persistence.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/slashdotdash/eventstore";
+            };
+          }
+      ) {};
+
+    eventstore = eventstore_0_2_1;
+
+    eventstore_client_0_1_4 = callPackage
+      (
+        {
+          buildMix, fetchHex, uuid_1_1_3, poison_2_1_0, httpoison_0_8_2
+        }:
+          buildMix {
+            name = "eventstore_client";
+            version = "0.1.4";
+            src = fetchHex {
+              pkg = "eventstore_client";
+              version = "0.1.4";
+              sha256 =
+                "fa77e1a7906b3ed27c0dfa0bd41f27b3129285857948aa23a3f888b0dd531109";
+            };
+            beamDeps  = [ uuid_1_1_3 poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''HTTP Client for EventStore (geteventstore.com)'';
+
+              homepage =
+                "https://github.com/tbug/elixir-eventstore-http-client";
+            };
+          }
+      ) {};
+
+    eventstore_client = eventstore_client_0_1_4;
 
     everex_0_1_1 = callPackage
       (
@@ -12327,7 +14478,7 @@ let
 
     ewebmachine_2_0_12 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "ewebmachine";
             version = "2.0.12";
@@ -12337,7 +14488,7 @@ let
               sha256 =
                 "66a4ca701594da9396d6bab03f074f1ab56080a62e6545e6e455a24296c96a1a";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Ewebmachine contains macros and plugs to
@@ -12352,28 +14503,6 @@ let
       ) {};
 
     ewebmachine = ewebmachine_2_0_12;
-
-    ex2ms_1_3_0 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "ex2ms";
-            version = "1.3.0";
-            src = fetchHex {
-              pkg = "ex2ms";
-              version = "1.3.0";
-              sha256 =
-                "ff2bfb0adb93830705cd73f2860891fd44a8f22cc2fdaf9f23bfcf2e4bdcfa79";
-            };
-
-            meta = {
-              description = ''Translates Elixir functions to match
-                            specifications for use with `ets`.'';
-              license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/ericmj/ex2ms";
-            };
-          }
-      ) {};
 
     ex2ms_1_4_0 = callPackage
       (
@@ -12445,7 +14574,7 @@ let
 
     ex_aerospike = ex_aerospike_0_0_1;
 
-    ex_aws_0_4_17 = callPackage
+    ex_aws_0_4_18 = callPackage
       (
         {
           buildMix,
@@ -12453,24 +14582,24 @@ let
           sweet_xml_0_6_1,
           poison_1_5_2,
           jsx_2_8_0,
-          httpotion_2_2_0,
-          httpoison_0_8_1
+          httpotion_2_2_2,
+          httpoison_0_8_2
         }:
           buildMix {
             name = "ex_aws";
-            version = "0.4.17";
+            version = "0.4.18";
             src = fetchHex {
               pkg = "ex_aws";
-              version = "0.4.17";
+              version = "0.4.18";
               sha256 =
-                "e0b28688f9409eb3132efc0d01e02854dd1a22fa7df8940ef88a75ba1448a01c";
+                "6e534b4c4b56046a52d86d62be59358418e38cdd994428a80fbdbba5cc37f075";
             };
             beamDeps  = [
                           sweet_xml_0_6_1
                           poison_1_5_2
                           jsx_2_8_0
-                          httpotion_2_2_0
-                          httpoison_0_8_1
+                          httpotion_2_2_2
+                          httpoison_0_8_2
                         ];
 
             meta = {
@@ -12482,7 +14611,7 @@ let
           }
       ) {};
 
-    ex_aws = ex_aws_0_4_17;
+    ex_aws = ex_aws_0_4_18;
 
     ex_bitcask_0_1_0 = callPackage
       (
@@ -12537,7 +14666,7 @@ let
 
     ex_chimp_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "ex_chimp";
             version = "0.0.1";
@@ -12547,7 +14676,7 @@ let
               sha256 =
                 "1a4e97e2a4b7bf7401660acd61d7e35b9c758638c305324971eddc5bd1bb0bee";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Basic/minimal Mailchimp API client.'';
@@ -12561,7 +14690,7 @@ let
 
     ex_clacks_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "ex_clacks";
             version = "0.1.1";
@@ -12571,7 +14700,7 @@ let
               sha256 =
                 "524f966b03b1a1ac4ab3f6beeef6ce5030cf3b16927c466d42a8b08c5355b231";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''A Plug that pays homage to Terry Pratchett'';
@@ -12583,19 +14712,19 @@ let
 
     ex_clacks = ex_clacks_0_1_1;
 
-    ex_closeio_0_0_7 = callPackage
+    ex_closeio_0_0_12 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "ex_closeio";
-            version = "0.0.7";
+            version = "0.0.12";
             src = fetchHex {
               pkg = "ex_closeio";
-              version = "0.0.7";
+              version = "0.0.12";
               sha256 =
-                "8873b4c80e610ebed7a43245aaeb182a56ad6709ca318cf4ee0bf9870fd4b0b4";
+                "6090eaa4b699da9c242f498db0435cd45489702dc9859450cb4e26fd48288e79";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Close.io client library for Elixir.'';
@@ -12605,21 +14734,21 @@ let
           }
       ) {};
 
-    ex_closeio = ex_closeio_0_0_7;
+    ex_closeio = ex_closeio_0_0_12;
 
-    ex_cloudinary_0_1_1 = callPackage
+    ex_cloudinary_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "ex_cloudinary";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "ex_cloudinary";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "1473ab409152d7d61062224ae5402c6ec677c10da63e29b1332c6fd35cf91381";
+                "cbd90bcf8d5f9f7f2c624d2822704f693ff25716d2195281f418db4e13b553ea";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''A wrapper around the HTTPoison.Base module for
@@ -12630,7 +14759,7 @@ let
           }
       ) {};
 
-    ex_cloudinary = ex_cloudinary_0_1_1;
+    ex_cloudinary = ex_cloudinary_0_1_2;
 
     ex_conf_0_1_2 = callPackage
       (
@@ -12678,7 +14807,7 @@ let
 
     ex_crypto_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, poison_2_1_0, pipe_0_0_2 }:
+        {  buildMix, fetchHex, timex_2_1_3, poison_2_1_0, pipe_0_0_2 }:
           buildMix {
             name = "ex_crypto";
             version = "0.0.1";
@@ -12688,7 +14817,7 @@ let
               sha256 =
                 "f9c47326435e52154a6db97359356a44c1fe21a0d26fda24a46367ba33ccb85f";
             };
-            beamDeps  = [ timex_1_0_1 poison_2_1_0 pipe_0_0_2 ];
+            beamDeps  = [ timex_2_1_3 poison_2_1_0 pipe_0_0_2 ];
 
             meta = {
               longDescription = ''A wrapper around the Erlang Crypto module
@@ -12726,7 +14855,7 @@ let
 
     ex_doc_0_10_0 = callPackage
       (
-        {  buildMix, fetchHex, earmark_0_1_14 }:
+        {  buildMix, fetchHex, earmark_0_1_15 }:
           buildMix {
             name = "ex_doc";
             version = "0.10.0";
@@ -12736,7 +14865,7 @@ let
               sha256 =
                 "3d9f15777aa3fb62700d5984eb09ceeb6c1574d61be0f70801e3390e36942b35";
             };
-            beamDeps  = [ earmark_0_1_14 ];
+            beamDeps  = [ earmark_0_1_15 ];
 
             meta = {
               description = ''ExDoc is a documentation generation tool for
@@ -12749,7 +14878,7 @@ let
 
     ex_doc_0_11_4 = callPackage
       (
-        {  buildMix, fetchHex, earmark_0_1_14 }:
+        {  buildMix, fetchHex, earmark_0_1_15 }:
           buildMix {
             name = "ex_doc";
             version = "0.11.4";
@@ -12759,7 +14888,7 @@ let
               sha256 =
                 "639e97b24c1c6c172f557163b830673646983417de9ac0da2c25c7063deed293";
             };
-            beamDeps  = [ earmark_0_1_14 ];
+            beamDeps  = [ earmark_0_1_15 ];
 
             meta = {
               description = ''ExDoc is a documentation generation tool for
@@ -12772,18 +14901,19 @@ let
 
     ex_doc = ex_doc_0_11_4;
 
-    ex_doc_0_6_2 = callPackage
+    ex_doc_0_7_3 = callPackage
       (
-        {  buildMix, fetchHex }:
+        {  buildMix, fetchHex, earmark_0_1_15 }:
           buildMix {
             name = "ex_doc";
-            version = "0.6.2";
+            version = "0.7.3";
             src = fetchHex {
               pkg = "ex_doc";
-              version = "0.6.2";
+              version = "0.7.3";
               sha256 =
-                "fdd21c651fbe96f39697c3acd9ee6b849348cafb4000b92a130e2df8a0a3e2b6";
+                "45efbc6d2dc58d864e41be8a4321a5ecf643a061ec71487453447b29539f81ff";
             };
+            beamDeps  = [ earmark_0_1_15 ];
 
             meta = {
               description = ''ExDoc is a documentation generation tool for
@@ -12796,7 +14926,7 @@ let
 
     ex_doc_dash_0_3_0 = callPackage
       (
-        {  buildMix, fetchHex, ex_doc_0_11_4, earmark_0_1_14 }:
+        {  buildMix, fetchHex, ex_doc_0_11_4, earmark_0_1_15 }:
           buildMix {
             name = "ex_doc_dash";
             version = "0.3.0";
@@ -12806,7 +14936,7 @@ let
               sha256 =
                 "0b511eecda1dd2c51fab8b1e071e3d6292f6a136232425d3f20baa9ca0fbeb43";
             };
-            beamDeps  = [ ex_doc_0_11_4 earmark_0_1_14 ];
+            beamDeps  = [ ex_doc_0_11_4 earmark_0_1_15 ];
 
             meta = {
               description = ''Formatter for ExDoc to generate docset
@@ -12894,6 +15024,31 @@ let
 
     ex_edn = ex_edn_0_1_2;
 
+    ex_enum_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex, gettext_0_10_0 }:
+          buildMix {
+            name = "ex_enum";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "ex_enum";
+              version = "0.1.0";
+              sha256 =
+                "f6685959ef337018e42c4baccdce98cc9618974759d1fdb969fcf9a266e590ea";
+            };
+            beamDeps  = [ gettext_0_10_0 ];
+
+            meta = {
+              description = ''Enum library for Elixir inspired by
+                            ActiveHash::Enum.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kenta-aktsk/ex_enum";
+            };
+          }
+      ) {};
+
+    ex_enum = ex_enum_0_1_0;
+
     ex_fabricators_0_1_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -12916,6 +15071,32 @@ let
       ) {};
 
     ex_fabricators = ex_fabricators_0_1_0;
+
+    ex_guard_0_10_0 = callPackage
+      (
+        {  buildMix, fetchHex, fs_0_9_2 }:
+          buildMix {
+            name = "ex_guard";
+            version = "0.10.0";
+            src = fetchHex {
+              pkg = "ex_guard";
+              version = "0.10.0";
+              sha256 =
+                "5e099659bf2e197e8d7acfbad597b48c59961c1f61f8ec45d4e22a5d6f6e6fb5";
+            };
+            beamDeps  = [ fs_0_9_2 ];
+
+            meta = {
+              longDescription = ''ExGuard automates various tasks by running
+                                custom rules whenever file or directories are
+                                modified.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/slashmili/ex_guard";
+            };
+          }
+      ) {};
+
+    ex_guard = ex_guard_0_10_0;
 
     ex_hl7_0_1_3 = callPackage
       (
@@ -12940,9 +15121,33 @@ let
 
     ex_hl7 = ex_hl7_0_1_3;
 
+    ex_ical_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, timex_1_0_2 }:
+          buildMix {
+            name = "ex_ical";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "ex_ical";
+              version = "0.0.1";
+              sha256 =
+                "b8b41eb4626fc41e36f054de8983d944d100f103979bd82d069b3a982bb51959";
+            };
+            beamDeps  = [ timex_1_0_2 ];
+
+            meta = {
+              description = ''ICalendar parser.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/fazibear/ex_ical";
+            };
+          }
+      ) {};
+
+    ex_ical = ex_ical_0_0_1;
+
     ex_iss_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "ex_iss";
             version = "1.0.0";
@@ -12952,7 +15157,7 @@ let
               sha256 =
                 "8b2b2eebbd75593e814e712555c7f69138864317cf2f0093a82ca305138baa83";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''This package is for interfacing with the Open
@@ -13115,19 +15320,18 @@ let
 
     ex_minimatch = ex_minimatch_0_0_1;
 
-    ex_modbus_0_0_2 = callPackage
+    ex_modbus_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, ex_doc_0_11_4, earmark_0_1_19 }:
+        {  buildMix, fetchHex }:
           buildMix {
             name = "ex_modbus";
-            version = "0.0.2";
+            version = "0.0.3";
             src = fetchHex {
               pkg = "ex_modbus";
-              version = "0.0.2";
+              version = "0.0.3";
               sha256 =
-                "8930d2bdd867ebc649f285689723499f39af181ee84cb4e7856eaa3f9cc21d30";
+                "bdfd52c43e690a9af041f34b7cd1f6c2843e39fe51b9afcc2a83fbf4d254fd50";
             };
-            beamDeps  = [ ex_doc_0_11_4 earmark_0_1_19 ];
 
             meta = {
               description = ''An Elixir ModbusTCP client implementation.'';
@@ -13137,11 +15341,11 @@ let
           }
       ) {};
 
-    ex_modbus = ex_modbus_0_0_2;
+    ex_modbus = ex_modbus_0_0_3;
 
     ex_omegle_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_2 }:
           buildMix {
             name = "ex_omegle";
             version = "0.1.1";
@@ -13151,7 +15355,7 @@ let
               sha256 =
                 "8166d1125a2670f55fce2030367d9da381e577ad122dcf1d03784e536c78cc65";
             };
-            beamDeps  = [ jsex_2_0_0 httpoison_0_8_1 ];
+            beamDeps  = [ jsex_2_0_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''A minimal Omegle chat client library for
@@ -13164,19 +15368,19 @@ let
 
     ex_omegle = ex_omegle_0_1_1;
 
-    ex_orient_1_0_2 = callPackage
+    ex_orient_1_1_1 = callPackage
       (
         {
           buildMix, fetchHex, poolboy_1_2_1, poison_1_0_3, marco_polo_0_2_1
         }:
           buildMix {
             name = "ex_orient";
-            version = "1.0.2";
+            version = "1.1.1";
             src = fetchHex {
               pkg = "ex_orient";
-              version = "1.0.2";
+              version = "1.1.1";
               sha256 =
-                "36296ba45e6d321c8c023ab110a1c80bac9e48afe0c6df00aa44223870d74796";
+                "9cad40957987bb4aa440d798e6f7096de5136f54fe0b7bd7d0d5f67be63a7a08";
             };
             beamDeps  = [ poolboy_1_2_1 poison_1_0_3 marco_polo_0_2_1 ];
 
@@ -13190,7 +15394,7 @@ let
           }
       ) {};
 
-    ex_orient = ex_orient_1_0_2;
+    ex_orient = ex_orient_1_1_1;
 
     ex_parametarized_1_0_0 = callPackage
       (
@@ -13286,19 +15490,43 @@ let
 
     ex_pool = ex_pool_0_1_1;
 
-    ex_rated_1_2_1 = callPackage
+    ex_prometheus_io_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, ex2ms_1_3_0 }:
+        {  buildMix, fetchHex, poison_1_5_2 }:
+          buildMix {
+            name = "ex_prometheus_io";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "ex_prometheus_io";
+              version = "0.0.3";
+              sha256 =
+                "7c2baaf0eef43d3e68d822532e0ca22daea41f6cce85de6b0ba538819fdb3832";
+            };
+            beamDeps  = [ poison_1_5_2 ];
+
+            meta = {
+              description = ''Prometheus.io Elixir client API library'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/kennyballou/ex_prometheus_io";
+            };
+          }
+      ) {};
+
+    ex_prometheus_io = ex_prometheus_io_0_0_3;
+
+    ex_rated_1_2_2 = callPackage
+      (
+        {  buildMix, fetchHex, ex2ms_1_4_0 }:
           buildMix {
             name = "ex_rated";
-            version = "1.2.1";
+            version = "1.2.2";
             src = fetchHex {
               pkg = "ex_rated";
-              version = "1.2.1";
+              version = "1.2.2";
               sha256 =
-                "868282cdf5b8a6698382182411ec46965204a0fbe83e65368004e944a5c608ac";
+                "65f7e9aaba3ba5bf8995b34a29c9572652b051cfdd7988e5f9b7ea329bb71ca1";
             };
-            beamDeps  = [ ex2ms_1_3_0 ];
+            beamDeps  = [ ex2ms_1_4_0 ];
 
             meta = {
               longDescription = ''ExRated, the OTP GenServer with the naughty
@@ -13315,7 +15543,7 @@ let
           }
       ) {};
 
-    ex_rated = ex_rated_1_2_1;
+    ex_rated = ex_rated_1_2_2;
 
     ex_rfc3966_0_2_3 = callPackage
       (
@@ -13369,6 +15597,33 @@ let
 
     ex_rfc3986 = ex_rfc3986_0_2_6;
 
+    ex_slp_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex, ex_doc_0_11_4, earmark_0_2_1 }:
+          buildMix {
+            name = "ex_slp";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "ex_slp";
+              version = "0.1.0";
+              sha256 =
+                "9356a927d0809af648320b56d40929edb7c5807955b7460f362f674f1326e4c2";
+            };
+            beamDeps  = [ ex_doc_0_11_4 earmark_0_2_1 ];
+
+            meta = {
+              longDescription = ''Zero-config local network Elixir/Erlang node
+                                discovery lib. Allows an Elixir node to register
+                                itself as a local netowrk service and discover
+                                the orher registered services.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/4pcbr/ex_slp_tk";
+            };
+          }
+      ) {};
+
+    ex_slp = ex_slp_0_1_0;
+
     ex_spec_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -13391,6 +15646,30 @@ let
       ) {};
 
     ex_spec = ex_spec_1_0_0;
+
+    ex_sshd_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "ex_sshd";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "ex_sshd";
+              version = "0.0.1";
+              sha256 =
+                "5227d6e0bc1c2227f60529679bc60494f6599f1ebe786389e0d15a7a2d92d83e";
+            };
+
+            meta = {
+              longDescription = ''Simple Elixir SSH worker that provides an
+                                Elixir shell over SSH into your application.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/tverlaan/ex_sshd";
+            };
+          }
+      ) {};
+
+    ex_sshd = ex_sshd_0_0_1;
 
     ex_statsd_0_5_3 = callPackage
       (
@@ -13415,17 +15694,17 @@ let
 
     ex_statsd = ex_statsd_0_5_3;
 
-    ex_sync_0_0_1 = callPackage
+    ex_sync_0_0_2 = callPackage
       (
         {  buildMix, fetchHex, connection_1_0_2 }:
           buildMix {
             name = "ex_sync";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "ex_sync";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "82261cf62a567b8eb0eba35dfbf0d9b546110825e8c64bb4ebc2ac8e37458499";
+                "2e6eb61310c708f59d10a5c53549230091a4e75c98352dcf04f34fabf3f81c35";
             };
             beamDeps  = [ connection_1_0_2 ];
 
@@ -13439,19 +15718,19 @@ let
           }
       ) {};
 
-    ex_sync = ex_sync_0_0_1;
+    ex_sync = ex_sync_0_0_2;
 
-    ex_test_0_0_1 = callPackage
+    ex_test_0_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "ex_test";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "ex_test";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "c283542766be3f9044068a6a91c22a8270987334151db7bd10f12c8db1ebfbe3";
+                "fdc33e0fa2fdab921fa54f0484645681ed0695f69439a6f40430e31fbc589756";
             };
 
             meta = {
@@ -13463,23 +15742,23 @@ let
           }
       ) {};
 
-    ex_test = ex_test_0_0_1;
+    ex_test = ex_test_0_0_2;
 
-    ex_twilio_0_1_3 = callPackage
+    ex_twilio_0_1_4 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, inflex_1_0_0, httpotion_2_1_0
+          buildMix, fetchHex, poison_1_5_2, inflex_1_5_0, httpotion_2_2_2
         }:
           buildMix {
             name = "ex_twilio";
-            version = "0.1.3";
+            version = "0.1.4";
             src = fetchHex {
               pkg = "ex_twilio";
-              version = "0.1.3";
+              version = "0.1.4";
               sha256 =
-                "50b949beed606a3e5dceb63c07db7f79cb0806901ea23bc109a9969429d8a2bf";
+                "97caa270770cd0d9f17de05ad8498fab48eb8c6ac28e66cf6a64aa0ebf26b60d";
             };
-            beamDeps  = [ poison_1_5_2 inflex_1_0_0 httpotion_2_1_0 ];
+            beamDeps  = [ poison_1_5_2 inflex_1_5_0 httpotion_2_2_2 ];
 
             meta = {
               description = ''Twilio API library for Elixir'';
@@ -13489,7 +15768,7 @@ let
           }
       ) {};
 
-    ex_twilio = ex_twilio_0_1_3;
+    ex_twilio = ex_twilio_0_1_4;
 
     ex_twiml_2_1_0 = callPackage
       (
@@ -13561,6 +15840,53 @@ let
 
     ex_unit_fixtures = ex_unit_fixtures_0_3_1;
 
+    ex_unit_notifier_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "ex_unit_notifier";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "ex_unit_notifier";
+              version = "0.1.0";
+              sha256 =
+                "e7566bd9ec23dc6862ea660667f1e9525af26609cef5ed03694b4e33049c5325";
+            };
+
+            meta = {
+              description = ''Desktop notifications for ExUnit'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/navinpeiris/ex_unit_notifier";
+            };
+          }
+      ) {};
+
+    ex_unit_notifier = ex_unit_notifier_0_1_0;
+
+    ex_victor_ops_0_2_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpotion_2_2_2 }:
+          buildMix {
+            name = "ex_victor_ops";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "ex_victor_ops";
+              version = "0.2.1";
+              sha256 =
+                "86941d8955783640b7991c0f049ba428a3595d55aa85dcd1cb3e4edaaee62125";
+            };
+            beamDeps  = [ poison_2_1_0 httpotion_2_2_2 ];
+
+            meta = {
+              description = ''VictorOps API library for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/cagedata/ex_victor_ops";
+            };
+          }
+      ) {};
+
+    ex_victor_ops = ex_victor_ops_0_2_1;
+
     ex_vmstats_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -13608,6 +15934,62 @@ let
       ) {};
 
     exactor = exactor_2_2_0;
+
+    exalgebra_0_0_4 = callPackage
+      (
+        {  buildMix, fetchHex, eye_drops_1_0_1 }:
+          buildMix {
+            name = "exalgebra";
+            version = "0.0.4";
+            src = fetchHex {
+              pkg = "exalgebra";
+              version = "0.0.4";
+              sha256 =
+                "8994432fa46db0aa36fa1637a1a856c8ade4472435335220db4f9f56e2c23c4d";
+            };
+            beamDeps  = [ eye_drops_1_0_1 ];
+
+            meta = {
+              longDescription = ''This library collects a host of common
+                                functions that can be used in linear algebraic
+                                computations.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/leighshepperson/exalgebra";
+            };
+          }
+      ) {};
+
+    exalgebra = exalgebra_0_0_4;
+
+    exalice_0_0_5_alpha = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          tirexs_0_8_0_beta5,
+          poison_2_1_0,
+          httpoison_0_8_2
+        }:
+          buildMix {
+            name = "exalice";
+            version = "0.0.5-alpha";
+            src = fetchHex {
+              pkg = "exalice";
+              version = "0.0.5-alpha";
+              sha256 =
+                "205bc2a86dce72fbcfb8cd30ecb4efebcdcff3d5f0c22c176db5bf4530b2820a";
+            };
+            beamDeps  = [ tirexs_0_8_0_beta5 poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''ExAlice, a geocoder with swappable storage'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/kpanic/exalice";
+            };
+          }
+      ) {};
+
+    exalice = exalice_0_0_5_alpha;
 
     example_files_0_2_0 = callPackage
       (
@@ -13661,6 +16043,29 @@ let
       ) {};
 
     exauth = exauth_0_0_1;
+
+    exbackoff_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "exbackoff";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "exbackoff";
+              version = "0.0.3";
+              sha256 =
+                "dc3df168c73800c0978d732c121cd934ce2e5564d6addb953f8601e3010ae225";
+            };
+
+            meta = {
+              description = ''Simple exponential backoffs in Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mingchuno/exbackoff";
+            };
+          }
+      ) {};
+
+    exbackoff = exbackoff_0_0_3;
 
     exbouncer_0_0_1 = callPackage
       (
@@ -13736,17 +16141,17 @@ let
 
     excellent = excellent_0_0_1;
 
-    excheck_0_3_2 = callPackage
+    excheck_0_3_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "excheck";
-            version = "0.3.2";
+            version = "0.3.3";
             src = fetchHex {
               pkg = "excheck";
-              version = "0.3.2";
+              version = "0.3.3";
               sha256 =
-                "138cf65d5ca716b94ff3368e6f089c855e59d95e503612399a231e68fc855484";
+                "3a3b9c163a1b0152df8f6b8fa019d4980d77e36dbe3c7ed3d508ef066ee9f870";
             };
 
             meta = {
@@ -13758,7 +16163,7 @@ let
           }
       ) {};
 
-    excheck = excheck_0_3_2;
+    excheck = excheck_0_3_3;
 
     excoap_0_0_1 = callPackage
       (
@@ -13783,17 +16188,17 @@ let
 
     excoap = excoap_0_0_1;
 
-    exconstructor_0_9_0 = callPackage
+    exconstructor_1_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exconstructor";
-            version = "0.9.0";
+            version = "1.0.2";
             src = fetchHex {
               pkg = "exconstructor";
-              version = "0.9.0";
+              version = "1.0.2";
               sha256 =
-                "14af965ba0370d7808e16f8b2781b8a5ea3e42cf6c34012efe75e60b56b2dbbc";
+                "e8cd1c88d5ea044a340fed75deb1fda2edc71afaac157dce561288a6bf733035";
             };
 
             meta = {
@@ -13808,7 +16213,7 @@ let
           }
       ) {};
 
-    exconstructor = exconstructor_0_9_0;
+    exconstructor = exconstructor_1_0_2;
 
     excountries_0_0_3 = callPackage
       (
@@ -13837,7 +16242,7 @@ let
 
     excoveralls_0_5_1 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_4_8, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, hackney_1_6_0, exjsx_3_2_0 }:
           buildMix {
             name = "excoveralls";
             version = "0.5.1";
@@ -13847,7 +16252,7 @@ let
               sha256 =
                 "26c8bb6dadc8436c1e0155f50327e90c91d6efab88468c09ac10f12be7070324";
             };
-            beamDeps  = [ hackney_1_4_8 exjsx_3_2_0 ];
+            beamDeps  = [ hackney_1_6_0 exjsx_3_2_0 ];
 
             meta = {
               description = ''Coverage report tool for Elixir with coveralls.io
@@ -13910,7 +16315,7 @@ let
 
     exdesk_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "exdesk";
             version = "0.2.0";
@@ -13920,7 +16325,7 @@ let
               sha256 =
                 "0c1e02bb4aef9075ff4affb3354c0e318dc3be1817faae8b450ef590c7d67688";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Desk.com client library for elixir.'';
@@ -13958,32 +16363,32 @@ let
 
     exdisque = exdisque_0_0_1;
 
-    exdjango_0_3_0 = callPackage
+    exdjango_0_3_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          redix_0_3_4,
+          redix_0_3_6,
           poolboy_1_5_1,
           poison_1_0_3,
-          plug_1_1_1,
-          comeonin_2_1_1
+          plug_1_1_3,
+          comeonin_2_3_0
         }:
           buildMix {
             name = "exdjango";
-            version = "0.3.0";
+            version = "0.3.1";
             src = fetchHex {
               pkg = "exdjango";
-              version = "0.3.0";
+              version = "0.3.1";
               sha256 =
-                "62cf5e5870b28b4cdf25b0056897bb92ba3ed7b92d87c8083ebf820c35213ef6";
+                "ae7bb57e696d7e4ca5d05cac85afd67ccce611594f33a98c06a4922bdd44d6d6";
             };
             beamDeps  = [
-                          redix_0_3_4
+                          redix_0_3_6
                           poolboy_1_5_1
                           poison_1_0_3
-                          plug_1_1_1
-                          comeonin_2_1_1
+                          plug_1_1_3
+                          comeonin_2_3_0
                         ];
 
             meta = {
@@ -13994,7 +16399,7 @@ let
           }
       ) {};
 
-    exdjango = exdjango_0_3_0;
+    exdjango = exdjango_0_3_1;
 
     exdm_0_0_4 = callPackage
       (
@@ -14221,7 +16626,7 @@ let
 
     exfavicon_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
           buildMix {
             name = "exfavicon";
             version = "0.3.2";
@@ -14231,7 +16636,7 @@ let
               sha256 =
                 "95503035ea2b6768c7d3fb8af9769830b9933b2579c7fdcfdd6b775e830213c2";
             };
-            beamDeps  = [ httpoison_0_8_1 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
 
             meta = {
               description = ''A exfavicon to detect a site`s favicon.'';
@@ -14243,25 +16648,25 @@ let
 
     exfavicon = exfavicon_0_3_2;
 
-    exfile_0_1_2 = callPackage
+    exfile_0_1_5 = callPackage
       (
         {
           buildMix,
           fetchHex,
           plug_1_0_3,
-          phoenix_html_2_5_0,
-          ecto_2_0_0_beta_0
+          phoenix_html_2_5_1,
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "exfile";
-            version = "0.1.2";
+            version = "0.1.5";
             src = fetchHex {
               pkg = "exfile";
-              version = "0.1.2";
+              version = "0.1.5";
               sha256 =
-                "bb0e2e1ef86017b3d6cbf6d6818abea153f194a50cc84f359146a348bcc61664";
+                "b2aee601b1db3ef5a8c5c638da287ec59153a21fb3b8bdbe0bd404d1e20696a1";
             };
-            beamDeps  = [ plug_1_0_3 phoenix_html_2_5_0 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ plug_1_0_3 phoenix_html_2_5_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''File upload handling in Elixir and Plug.
@@ -14273,23 +16678,53 @@ let
           }
       ) {};
 
-    exfile = exfile_0_1_2;
-
-    exfile_b2_0_1_0 = callPackage
+    exfile_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, exfile_0_1_2
+          buildMix,
+          fetchHex,
+          plug_1_0_3,
+          phoenix_html_2_5_1,
+          ecto_2_0_0_beta_2
+        }:
+          buildMix {
+            name = "exfile";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "exfile";
+              version = "0.2.0";
+              sha256 =
+                "f5977fbb7037e17d93224abec4e46dde7b60a6ce8e37654167c9abfbeacaf274";
+            };
+            beamDeps  = [ plug_1_0_3 phoenix_html_2_5_1 ecto_2_0_0_beta_2 ];
+
+            meta = {
+              longDescription = ''File upload handling in Elixir and Plug.
+                                Supports pluggable processors and storage
+                                backends.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/keichan34/exfile";
+            };
+          }
+      ) {};
+
+    exfile = exfile_0_2_0;
+
+    exfile_b2_0_1_3 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, exfile_0_2_0
         }:
           buildMix {
             name = "exfile_b2";
-            version = "0.1.0";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "exfile_b2";
-              version = "0.1.0";
+              version = "0.1.3";
               sha256 =
-                "62a58a3347387b00fdf666984b02b6b0c28fda0b60395eea08de3c7a21af61f5";
+                "f73e1d45279e9d279f2d8cb112a2d7e791ff0b129eea69252c22a6fc180a5106";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 exfile_0_1_2 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 exfile_0_2_0 ];
 
             meta = {
               description = ''A Backblaze B2 storage backend adapter for
@@ -14300,21 +16735,21 @@ let
           }
       ) {};
 
-    exfile_b2 = exfile_b2_0_1_0;
+    exfile_b2 = exfile_b2_0_1_3;
 
-    exfile_imagemagick_0_1_0 = callPackage
+    exfile_imagemagick_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, exfile_0_1_2 }:
+        {  buildMix, fetchHex, exfile_0_2_0 }:
           buildMix {
             name = "exfile_imagemagick";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "exfile_imagemagick";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "ab290f8a7e43678dc2289cf38558562cc433c59d1ddf8859525e22f5e4033c49";
+                "be501b021d1d4a3603dbc6ed2223a81817ffb39bd51e0ee2a5314bd07f132695";
             };
-            beamDeps  = [ exfile_0_1_2 ];
+            beamDeps  = [ exfile_0_2_0 ];
 
             meta = {
               description = ''An ImageMagick file processor suite for
@@ -14325,11 +16760,11 @@ let
           }
       ) {};
 
-    exfile_imagemagick = exfile_imagemagick_0_1_0;
+    exfile_imagemagick = exfile_imagemagick_0_1_1;
 
     exfile_memory_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, exfile_0_1_2 }:
+        {  buildMix, fetchHex, exfile_0_1_5 }:
           buildMix {
             name = "exfile_memory";
             version = "0.1.0";
@@ -14339,7 +16774,7 @@ let
               sha256 =
                 "66330c408a73094d115227d0e16b936229721e16703197559a828bfb7795f9d7";
             };
-            beamDeps  = [ exfile_0_1_2 ];
+            beamDeps  = [ exfile_0_1_5 ];
 
             meta = {
               description = ''In-memory (ets) storage backend for Exfile.'';
@@ -14353,7 +16788,7 @@ let
 
     exfirebase_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_2_0, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpotion_2_2_2, exjsx_3_2_0 }:
           buildMix {
             name = "exfirebase";
             version = "0.4.0";
@@ -14363,7 +16798,7 @@ let
               sha256 =
                 "acd2f1fe87e83437a5d52b811b3e86bc75933bc29b0daa2da836a97ddd60b478";
             };
-            beamDeps  = [ httpotion_2_2_0 exjsx_3_2_0 ];
+            beamDeps  = [ httpotion_2_2_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''An elixir library for accessing the Firebase REST
@@ -14376,19 +16811,19 @@ let
 
     exfirebase = exfirebase_0_4_0;
 
-    exfoaas_0_0_1 = callPackage
+    exfoaas_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "exfoaas";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "exfoaas";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "ccfd3da421505d131a126d05d0def3ca99cdae6fec397956e4a5f1ee2bfae256";
+                "521f355f8c38c056f66cd8ac236f561c2a3502e451c07a88761e05c22c8848aa";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''brings the utility of FOAAS to elixir.'';
@@ -14398,19 +16833,19 @@ let
           }
       ) {};
 
-    exfoaas = exfoaas_0_0_1;
+    exfoaas = exfoaas_0_0_2;
 
-    exfsm_0_0_3 = callPackage
+    exfsm_0_1_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exfsm";
-            version = "0.0.3";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "exfsm";
-              version = "0.0.3";
+              version = "0.1.3";
               sha256 =
-                "2da7b2b25f9603fc3142da3090abe85425f9852b89c230316fb6d29691ede6eb";
+                "6535a0565d6013ca728c10e11c9ac85216d995652892469f7380147da8c3d727";
             };
 
             meta = {
@@ -14423,7 +16858,7 @@ let
           }
       ) {};
 
-    exfsm = exfsm_0_0_3;
+    exfsm = exfsm_0_1_3;
 
     exfswatch_0_1_1 = callPackage
       (
@@ -14475,7 +16910,7 @@ let
 
     exgenius_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "exgenius";
             version = "0.0.5";
@@ -14485,7 +16920,7 @@ let
               sha256 =
                 "f0f4463ac9ad79a102a1bf0ded91d77ed87ce262da6045990be51450ef240fd5";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               longDescription = '' Elixir library for the (undocumented) Rap
@@ -14501,7 +16936,7 @@ let
 
     exgpg_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, uuid_0_1_5, porcelain_2_0_1 }:
+        {  buildMix, fetchHex, uuid_1_0_0, porcelain_2_0_1 }:
           buildMix {
             name = "exgpg";
             version = "0.0.3";
@@ -14511,7 +16946,7 @@ let
               sha256 =
                 "13499da2a59567f87f5293cc874ab1256e88089784645d997406d8f95978319a";
             };
-            beamDeps  = [ uuid_0_1_5 porcelain_2_0_1 ];
+            beamDeps  = [ uuid_1_0_0 porcelain_2_0_1 ];
 
             meta = {    };
           }
@@ -14545,7 +16980,7 @@ let
     exgrid_0_3_0 = callPackage
       (
         {
-          buildMix, fetchHex, timex_0_13_5, json_0_3_3, httpotion_1_0_0
+          buildMix, fetchHex, timex_0_13_5, json_0_3_3, httpotion_2_2_2
         }:
           buildMix {
             name = "exgrid";
@@ -14556,7 +16991,7 @@ let
               sha256 =
                 "96676dfc20b2e8c7caf5f68c202eada246f192d3246922be7214a0da0d219506";
             };
-            beamDeps  = [ timex_0_13_5 json_0_3_3 httpotion_1_0_0 ];
+            beamDeps  = [ timex_0_13_5 json_0_3_3 httpotion_2_2_2 ];
 
             meta = {
               description = ''Elixir bindings for SendGrid`s REST API'';
@@ -14568,25 +17003,25 @@ let
 
     exgrid = exgrid_0_3_0;
 
-    exhal_4_0_0 = callPackage
+    exhal_4_2_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
           uri_template_1_2_0,
           poison_2_1_0,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildMix {
             name = "exhal";
-            version = "4.0.0";
+            version = "4.2.1";
             src = fetchHex {
               pkg = "exhal";
-              version = "4.0.0";
+              version = "4.2.1";
               sha256 =
-                "94a10116449d0c5dce43bddd0a96ed2dbefa032883841752a48129227ae4b426";
+                "5696572795d659441412e55600a3593d5d57828e0a3efcdc2c7985f9cdbe81a0";
             };
-            beamDeps  = [ uri_template_1_2_0 poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ uri_template_1_2_0 poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Use HAL APIs with ease'';
@@ -14595,7 +17030,7 @@ let
           }
       ) {};
 
-    exhal = exhal_4_0_0;
+    exhal = exhal_4_2_1;
 
     exhcl_0_2_1 = callPackage
       (
@@ -14620,17 +17055,17 @@ let
 
     exhcl = exhcl_0_2_1;
 
-    exiban_0_0_3 = callPackage
+    exiban_0_0_4 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exiban";
-            version = "0.0.3";
+            version = "0.0.4";
             src = fetchHex {
               pkg = "exiban";
-              version = "0.0.3";
+              version = "0.0.4";
               sha256 =
-                "98c2656de7ce4c27090f482704e7e915d9046c0a3c4545d7ae4b68986de776a8";
+                "c1d1da991db264ca99b9e9245bb09d69f6297050b18329be1e4c01d5106778b5";
             };
 
             meta = {
@@ -14642,19 +17077,43 @@ let
           }
       ) {};
 
-    exiban = exiban_0_0_3;
+    exiban = exiban_0_0_4;
 
-    exirc_0_9_2 = callPackage
+    exintercom_0_1_6 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_0_3, httpoison_0_8_2 }:
+          buildMix {
+            name = "exintercom";
+            version = "0.1.6";
+            src = fetchHex {
+              pkg = "exintercom";
+              version = "0.1.6";
+              sha256 =
+                "3e4e112dc29a36244b490bb6fb40c861be12e70a7723323520430059c3ffeb51";
+            };
+            beamDeps  = [ poison_1_0_3 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Intercom client library.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/versality/exintercom";
+            };
+          }
+      ) {};
+
+    exintercom = exintercom_0_1_6;
+
+    exirc_0_10_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exirc";
-            version = "0.9.2";
+            version = "0.10.0";
             src = fetchHex {
               pkg = "exirc";
-              version = "0.9.2";
+              version = "0.10.0";
               sha256 =
-                "5b534e0a1bb3d54b57df9c8265d861e4dc3f3078c5483d7520b398458a1c6367";
+                "f2382ad3d97e791cc38ce54558296bb0afe7d222dc5f248ec72c6a0ca9c494a8";
             };
 
             meta = {
@@ -14665,7 +17124,7 @@ let
           }
       ) {};
 
-    exirc = exirc_0_9_2;
+    exirc = exirc_0_10_0;
 
     exjira_0_0_1 = callPackage
       (
@@ -14697,8 +17156,8 @@ let
           buildMix,
           fetchHex,
           sweet_xml_0_6_1,
-          httpoison_0_8_1,
-          ex_aws_0_4_17
+          httpoison_0_8_2,
+          ex_aws_0_4_18
         }:
           buildMix {
             name = "exjprop";
@@ -14709,7 +17168,7 @@ let
               sha256 =
                 "9fcc1e2e3e12f9f49b1b42cb97df917b5021933d962370dbe67557718a5adee0";
             };
-            beamDeps  = [ sweet_xml_0_6_1 httpoison_0_8_1 ex_aws_0_4_17 ];
+            beamDeps  = [ sweet_xml_0_6_1 httpoison_0_8_2 ex_aws_0_4_18 ];
 
             meta = {
               description = ''Elixir library for reading Java properties files
@@ -14748,7 +17207,7 @@ let
 
     exjsx_3_0_2 = callPackage
       (
-        {  buildMix, fetchHex, jsx_2_4_0 }:
+        {  buildMix, fetchHex, jsx_2_3_1 }:
           buildMix {
             name = "exjsx";
             version = "3.0.2";
@@ -14758,7 +17217,7 @@ let
               sha256 =
                 "2cd67240a54e9cd2616bc83c0c352d47f87bccd2ec599eceedc00bcbe9063f07";
             };
-            beamDeps  = [ jsx_2_4_0 ];
+            beamDeps  = [ jsx_2_3_1 ];
 
             meta = {
               description = ''json for elixir'';
@@ -14822,7 +17281,7 @@ let
           socket_0_2_8,
           poison_1_2_1,
           plug_0_8_4,
-          httpotion_1_0_0,
+          httpotion_2_2_2,
           cowboy_1_0_4
         }:
           buildMix {
@@ -14838,7 +17297,7 @@ let
                           socket_0_2_8
                           poison_1_2_1
                           plug_0_8_4
-                          httpotion_1_0_0
+                          httpotion_2_2_2
                           cowboy_1_0_4
                         ];
 
@@ -14852,19 +17311,19 @@ let
 
     exkad = exkad_0_0_2;
 
-    exkanji_0_2_5 = callPackage
+    exkanji_0_2_6 = callPackage
       (
-        {  buildMix, fetchHex, exromaji_0_2_8 }:
+        {  buildMix, fetchHex, exromaji_0_3_0 }:
           buildMix {
             name = "exkanji";
-            version = "0.2.5";
+            version = "0.2.6";
             src = fetchHex {
               pkg = "exkanji";
-              version = "0.2.5";
+              version = "0.2.6";
               sha256 =
-                "f88383523a4b01dbb534eb2f9f95b87cf75402b7a28962170e19919eb07f86a6";
+                "2de4907764e9f1f2c67d9bc6b49a44d50fd0cbc86b5848cbada14438616636d1";
             };
-            beamDeps  = [ exromaji_0_2_8 ];
+            beamDeps  = [ exromaji_0_3_0 ];
 
             meta = {
               longDescription = ''A Elixir library for translating between
@@ -14876,11 +17335,11 @@ let
           }
       ) {};
 
-    exkanji = exkanji_0_2_5;
+    exkanji = exkanji_0_2_6;
 
     exkismet_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "exkismet";
             version = "0.0.2";
@@ -14890,7 +17349,7 @@ let
               sha256 =
                 "3648f010eb80891b0195f9ced0e02a5a08860a9d96e8f7bbe328c68f27b85b64";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''A client (completely unofficial) for the
@@ -15139,7 +17598,7 @@ let
 
     exmoji = exmoji_0_2_2;
 
-    exns_0_3_1_beta = callPackage
+    exns_0_3_2_beta = callPackage
       (
         {
           buildMix,
@@ -15151,12 +17610,12 @@ let
         }:
           buildMix {
             name = "exns";
-            version = "0.3.1-beta";
+            version = "0.3.2-beta";
             src = fetchHex {
               pkg = "exns";
-              version = "0.3.1-beta";
+              version = "0.3.2-beta";
               sha256 =
-                "ac2042252d873f0449358628a83c49b80587017ed2962960bca0082809e74398";
+                "cc29b065ea9c346a14052e6ebe738fe93714ed936ef23d57b08786f968c4dc48";
             };
             beamDeps  = [ uuid_1_1_3 poolboy_1_5_1 poison_1_5_2 msgpax_0_8_2
                       ];
@@ -15170,7 +17629,7 @@ let
           }
       ) {};
 
-    exns = exns_0_3_1_beta;
+    exns = exns_0_3_2_beta;
 
     exnumerable_0_0_1 = callPackage
       (
@@ -15244,17 +17703,17 @@ let
 
     exnumterator = exnumterator_1_0_0;
 
-    exoddic_1_2_0 = callPackage
+    exoddic_1_3_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exoddic";
-            version = "1.2.0";
+            version = "1.3.1";
             src = fetchHex {
               pkg = "exoddic";
-              version = "1.2.0";
+              version = "1.3.1";
               sha256 =
-                "84d79ad8365f9efb5de30afbe074d5360828b3780ff21dfd06d865a3d7773d2e";
+                "e244c4aab1a25836300973f8afd42aef41dea19121c748c4b6d7b447db842194";
             };
 
             meta = {
@@ -15265,7 +17724,7 @@ let
           }
       ) {};
 
-    exoddic = exoddic_1_2_0;
+    exoddic = exoddic_1_3_1;
 
     exometer_core_1_0_0 = callPackage
       (
@@ -15356,7 +17815,7 @@ let
 
     exparticle_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "exparticle";
             version = "0.0.2";
@@ -15366,7 +17825,7 @@ let
               sha256 =
                 "ce70b77da48e84307791af00143ad4b9677d39765459865976d459d3b1bdcaf2";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''ExParticle is an elixir client to communicate
@@ -15437,7 +17896,7 @@ let
     expinboard_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, ibrowse_4_2_2, httpotion_2_1_0, exjsx_3_2_0
+          buildMix, fetchHex, ibrowse_4_2_2, httpotion_2_2_2, exjsx_3_2_0
         }:
           buildMix {
             name = "expinboard";
@@ -15448,7 +17907,7 @@ let
               sha256 =
                 "3ff152d837293c0f53ead6cba4180ced55308d2869faa698e459abbe23d59bdc";
             };
-            beamDeps  = [ ibrowse_4_2_2 httpotion_2_1_0 exjsx_3_2_0 ];
+            beamDeps  = [ ibrowse_4_2_2 httpotion_2_2_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''A simple elixir pinboard client.'';
@@ -15483,17 +17942,17 @@ let
 
     expletive = expletive_0_1_4;
 
-    expool_0_1_0 = callPackage
+    expool_0_2_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "expool";
-            version = "0.1.0";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "expool";
-              version = "0.1.0";
+              version = "0.2.0";
               sha256 =
-                "dfb6e81957a94080f33e8469c497102a36831d7fba4a902d895c3f82f5232060";
+                "f0cc61c365d1950522ad5816cf638353602db5a5d74feb7c96748dfa2b6f9d07";
             };
 
             meta = {
@@ -15504,7 +17963,30 @@ let
           }
       ) {};
 
-    expool = expool_0_1_0;
+    expool = expool_0_2_0;
+
+    export_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "export";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "export";
+              version = "0.0.2";
+              sha256 =
+                "f956aa84d18d089b9a8250d53ac6c8ecff3ea29313e661cbb19ed329762f2acb";
+            };
+
+            meta = {
+              description = ''Erlport wrapper for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/fazibear/export";
+            };
+          }
+      ) {};
+
+    export = export_0_0_2;
 
     expr_0_1_0 = callPackage
       (
@@ -15627,17 +18109,17 @@ let
           }
       ) {};
 
-    exprotobuf_1_0_0_rc1 = callPackage
+    exprotobuf_1_0_0 = callPackage
       (
         {  buildMix, fetchHex, gpb_3_18_10 }:
           buildMix {
             name = "exprotobuf";
-            version = "1.0.0-rc1";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "exprotobuf";
-              version = "1.0.0-rc1";
+              version = "1.0.0";
               sha256 =
-                "e4cbf0bc2672e0d9fa3afe5acac8617a4e94443256d5fc19e5e7721681dd3eff";
+                "042cc4b2b3e9c13e6fcfd08e49043fa2640aa718e4d743404e1006a372bc2564";
             };
             beamDeps  = [ gpb_3_18_10 ];
 
@@ -15651,28 +18133,28 @@ let
           }
       ) {};
 
-    exprotobuf = exprotobuf_1_0_0_rc1;
+    exprotobuf = exprotobuf_1_0_0;
 
-    exq_0_6_4 = callPackage
+    exq_0_6_5 = callPackage
       (
         {
           buildMix,
           fetchHex,
           uuid_1_1_3,
-          timex_1_0_1,
-          redix_0_3_4,
+          timex_2_1_3,
+          redix_0_3_6,
           poison_2_1_0
         }:
           buildMix {
             name = "exq";
-            version = "0.6.4";
+            version = "0.6.5";
             src = fetchHex {
               pkg = "exq";
-              version = "0.6.4";
+              version = "0.6.5";
               sha256 =
-                "24b75a33da51ea3f3561a127237dbefa5b82d2ff478eb9591314644d89bc8c95";
+                "bacb92950e9c01532c9467dc7b4f7d930d8a70ef8d7b9797237aac6f0b608ba2";
             };
-            beamDeps  = [ uuid_1_1_3 timex_1_0_1 redix_0_3_4 poison_2_1_0 ];
+            beamDeps  = [ uuid_1_1_3 timex_2_1_3 redix_0_3_6 poison_2_1_0 ];
 
             meta = {
               longDescription = ''Exq is a job processing library compatible
@@ -15684,21 +18166,21 @@ let
           }
       ) {};
 
-    exq = exq_0_6_4;
+    exq = exq_0_6_5;
 
-    exq_ui_0_6_4 = callPackage
+    exq_ui_0_6_5 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, exq_0_6_4, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, exq_0_6_5, cowboy_1_0_4 }:
           buildMix {
             name = "exq_ui";
-            version = "0.6.4";
+            version = "0.6.5";
             src = fetchHex {
               pkg = "exq_ui";
-              version = "0.6.4";
+              version = "0.6.5";
               sha256 =
-                "6072838b9161e8b036466dd8fb21ea99fd93beb2488d76f3d6561211eac36b71";
+                "88763e802738438d54e3b33966e2544832ed2d8215497c9c63b08d8c7199b7f3";
             };
-            beamDeps  = [ plug_1_1_1 exq_0_6_4 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 exq_0_6_5 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Exq UI is the UI component for Exq, a job
@@ -15710,7 +18192,7 @@ let
           }
       ) {};
 
-    exq_ui = exq_ui_0_6_4;
+    exq_ui = exq_ui_0_6_5;
 
     exql_0_0_3 = callPackage
       (
@@ -15811,7 +18293,7 @@ let
 
     exrecaptcha_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, httpotion_2_2_2 }:
           buildMix {
             name = "exrecaptcha";
             version = "0.0.3";
@@ -15821,7 +18303,7 @@ let
               sha256 =
                 "2df1a9e868d3adc31a657755df04fabc9c9e7d12f56cbcc86b27f670dcd962b5";
             };
-            beamDeps  = [ httpotion_1_0_0 ];
+            beamDeps  = [ httpotion_2_2_2 ];
 
             meta = {
               longDescription = ''Simple ReCaptcha display/verify code for
@@ -15859,6 +18341,53 @@ let
 
     exredis = exredis_0_2_3;
 
+    exref_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "exref";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "exref";
+              version = "0.1.0";
+              sha256 =
+                "19597fbdd563e447608d5f3a43171c29cde4e0462f5163314cc1db74ccef2f65";
+            };
+
+            meta = {
+              description = ''Damn simple mix integration of xref.'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    exref = exref_0_1_0;
+
+    exrequester_0_5_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_2_2 }:
+          buildMix {
+            name = "exrequester";
+            version = "0.5.2";
+            src = fetchHex {
+              pkg = "exrequester";
+              version = "0.5.2";
+              sha256 =
+                "9c55974b2f9a4294dd9a53ebed8f9b1c2788cd0845dccbc9471cf6869201903a";
+            };
+            beamDeps  = [ poison_1_5_2 httpotion_2_2_2 ];
+
+            meta = {
+              description = ''Quickly create API clients using module
+                            attributes.'';
+
+              homepage = "https://github.com/oarrabi/exrequester";
+            };
+          }
+      ) {};
+
+    exrequester = exrequester_0_5_2;
+
     exrethinkdb_0_0_3 = callPackage
       (
         {  buildRebar3, fetchHex, poison_1_4_0 }:
@@ -15884,19 +18413,43 @@ let
 
     exrethinkdb = exrethinkdb_0_0_3;
 
-    exrm_0_15_1 = callPackage
+    exrm_0_14_17 = callPackage
       (
-        {  buildMix, fetchHex, conform_0_13_0 }:
+        {  buildMix, fetchHex, conform_0_11_0 }:
           buildMix {
             name = "exrm";
-            version = "0.15.1";
+            version = "0.14.17";
             src = fetchHex {
               pkg = "exrm";
-              version = "0.15.1";
+              version = "0.14.17";
               sha256 =
-                "ed2227e8b189af4deca0f1b637fdfe9514b817128f6c2b007ccb05c65d49f132";
+                "c5b0c2bd4bad44d2f67f5ec720e5a4cff829dfac234aa79056970f83236bb976";
             };
-            beamDeps  = [ conform_0_13_0 ];
+            beamDeps  = [ conform_0_11_0 ];
+
+            meta = {
+              longDescription = ''Exrm, or Elixir Release Manager, provides mix
+                                tasks for building, upgrading, and controlling
+                                release packages for your application.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bitwalker/exrm";
+            };
+          }
+      ) {};
+
+    exrm_0_14_2 = callPackage
+      (
+        {  buildMix, fetchHex, conform_0_10_5 }:
+          buildMix {
+            name = "exrm";
+            version = "0.14.2";
+            src = fetchHex {
+              pkg = "exrm";
+              version = "0.14.2";
+              sha256 =
+                "ff70905672059035bfa62a3bb0043809724c6a852050eac52faa06aeb65855c0";
+            };
+            beamDeps  = [ conform_0_10_5 ];
 
             meta = {
               longDescription = ''Exrm, or Elixir Release Manager, provides mix
@@ -15910,7 +18463,7 @@ let
 
     exrm_0_18_8 = callPackage
       (
-        {  buildMix, fetchHex, relx_3_3_1, conform_0_16_0 }:
+        {  buildMix, fetchHex, relx_3_3_2, conform_0_16_0 }:
           buildMix {
             name = "exrm";
             version = "0.18.8";
@@ -15920,7 +18473,7 @@ let
               sha256 =
                 "a8aa031d824f882a762404bc19b6fbe6c10703941097a6ef8bb93a62cc987e22";
             };
-            beamDeps  = [ relx_3_3_1 conform_0_16_0 ];
+            beamDeps  = [ relx_3_3_2 conform_0_16_0 ];
 
             meta = {
               longDescription = ''Exrm, or Elixir Release Manager, provides mix
@@ -15956,19 +18509,19 @@ let
           }
       ) {};
 
-    exrm_1_0_0_rc8 = callPackage
+    exrm_1_0_3 = callPackage
       (
-        {  buildMix, fetchHex, relx_3_17_0 }:
+        {  buildMix, fetchHex, relx_3_18_0 }:
           buildMix {
             name = "exrm";
-            version = "1.0.0-rc8";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "exrm";
-              version = "1.0.0-rc8";
+              version = "1.0.3";
               sha256 =
-                "f4bc906713eb57e9ac7c4bf16aa218cbb437b3392f2183eb3057e8f6921fa8fa";
+                "22ce83a1ffab133ebc94cef871d830971ca0b2f9df3ba44caa8f7eadb13bbe3b";
             };
-            beamDeps  = [ relx_3_17_0 ];
+            beamDeps  = [ relx_3_18_0 ];
 
             meta = {
               longDescription = ''Exrm, or Elixir Release Manager, provides mix
@@ -15980,11 +18533,49 @@ let
           }
       ) {};
 
-    exrm = exrm_1_0_0_rc8;
+    exrm = exrm_1_0_3;
+
+    exrm_deb_0_0_5 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          vex_0_5_5,
+          timex_1_0_2,
+          exrm_1_0_3,
+          ex_doc_0_11_4,
+          earmark_0_2_1
+        }:
+          buildMix {
+            name = "exrm_deb";
+            version = "0.0.5";
+            src = fetchHex {
+              pkg = "exrm_deb";
+              version = "0.0.5";
+              sha256 =
+                "b74c80e7c25750f78c4fefc75e8df66356d235d2c038751037ae60dad0ac7fc3";
+            };
+            beamDeps  = [
+                          vex_0_5_5
+                          timex_1_0_2
+                          exrm_1_0_3
+                          ex_doc_0_11_4
+                          earmark_0_2_1
+                        ];
+
+            meta = {
+              description = ''Create a deb for your elixir release with ease'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/johnhamelink/exrm_deb";
+            };
+          }
+      ) {};
+
+    exrm_deb = exrm_deb_0_0_5;
 
     exrm_heroku_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, exrm_1_0_0_rc8 }:
+        {  buildMix, fetchHex, exrm_1_0_3 }:
           buildMix {
             name = "exrm_heroku";
             version = "0.1.1";
@@ -15994,7 +18585,7 @@ let
               sha256 =
                 "19fc16f1cfcc1c86bc64796a287028b8a8d951f7737024893c1772ba658da76d";
             };
-            beamDeps  = [ exrm_1_0_0_rc8 ];
+            beamDeps  = [ exrm_1_0_3 ];
 
             meta = {
               description = ''Publish Elixir releases created with exrm release
@@ -16009,7 +18600,7 @@ let
 
     exrm_rpm_0_3_0 = callPackage
       (
-        {  buildMix, fetchHex, exrm_0_15_1 }:
+        {  buildMix, fetchHex, exrm_0_14_2 }:
           buildMix {
             name = "exrm_rpm";
             version = "0.3.0";
@@ -16019,7 +18610,7 @@ let
               sha256 =
                 "28c2339fac5073d615fb4a52816dd4fc56c9da2db9e71846b0affdf171643044";
             };
-            beamDeps  = [ exrm_0_15_1 ];
+            beamDeps  = [ exrm_0_14_2 ];
 
             meta = {
               longDescription = ''Adds simple Red Hat Package Manager (RPM)
@@ -16035,17 +18626,17 @@ let
 
     exrm_rpm = exrm_rpm_0_3_0;
 
-    exromaji_0_2_8 = callPackage
+    exromaji_0_3_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "exromaji";
-            version = "0.2.8";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "exromaji";
-              version = "0.2.8";
+              version = "0.3.0";
               sha256 =
-                "c402dc57b246ba09a93612e2ac715e013d063eada3f1a88bfe89ad59ecff23db";
+                "d1b820b3de05bb3729b3b1d8b3e22ee965899a90abbec44ed6d18507a5f174d3";
             };
 
             meta = {
@@ -16057,7 +18648,7 @@ let
           }
       ) {};
 
-    exromaji = exromaji_0_2_8;
+    exromaji = exromaji_0_3_0;
 
     exrun_0_1_1 = callPackage
       (
@@ -16132,7 +18723,7 @@ let
 
     exseed_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "exseed";
             version = "0.0.3";
@@ -16142,7 +18733,7 @@ let
               sha256 =
                 "d5f42ed419c9f1d5d179dc93fdf6a58344b07055764498f222f07f95cb82dd98";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''A library that provides a simple DSL for seeding
@@ -16155,35 +18746,35 @@ let
 
     exseed = exseed_0_0_3;
 
-    exsentry_0_2_1 = callPackage
+    exsentry_0_3_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
           uuid_1_1_3,
-          timex_1_0_1,
-          poison_1_5_2,
-          plug_1_1_1,
+          timex_2_1_3,
+          poison_1_0_3,
+          plug_1_1_3,
           ibrowse_4_2_2,
-          httpotion_2_2_0,
+          httpotion_2_2_2,
           fuzzyurl_0_8_1
         }:
           buildMix {
             name = "exsentry";
-            version = "0.2.1";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "exsentry";
-              version = "0.2.1";
+              version = "0.3.0";
               sha256 =
-                "3feebb7a00f9fac19c989214bf15131d540e1e88c27286c46b3083c4f85972fb";
+                "0cc5b035b58a95e3361de9417a3ab61bf055d02fc3273b048011dcba7f2a515c";
             };
             beamDeps  = [
                           uuid_1_1_3
-                          timex_1_0_1
-                          poison_1_5_2
-                          plug_1_1_1
+                          timex_2_1_3
+                          poison_1_0_3
+                          plug_1_1_3
                           ibrowse_4_2_2
-                          httpotion_2_2_0
+                          httpotion_2_2_2
                           fuzzyurl_0_8_1
                         ];
 
@@ -16196,11 +18787,11 @@ let
           }
       ) {};
 
-    exsentry = exsentry_0_2_1;
+    exsentry = exsentry_0_3_0;
 
     exstatic_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "exstatic";
             version = "0.1.0";
@@ -16210,7 +18801,7 @@ let
               sha256 =
                 "e063b91c0b2995e4a1a2c1aa56cdd578374320a8755844cc6471b58fa3874d0d";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''Serve static files from memory in the Phoenix
@@ -16301,29 +18892,29 @@ let
 
     exsyslog = exsyslog_1_0_1;
 
-    extreme_0_4_3 = callPackage
+    extreme_0_5_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
           uuid_1_1_3,
           poison_1_5_2,
-          httpoison_0_8_1,
+          httpoison_0_8_2,
           exprotobuf_0_10_2
         }:
           buildMix {
             name = "extreme";
-            version = "0.4.3";
+            version = "0.5.0";
             src = fetchHex {
               pkg = "extreme";
-              version = "0.4.3";
+              version = "0.5.0";
               sha256 =
-                "db08580b4b839be7bf3f6198efc7de02c22a3688f46ce32deca983db74f1e330";
+                "ddbc42891e2d16a5d204939809e35236968c6bc06d4adab7027f8635fec222ab";
             };
             beamDeps  = [
                           uuid_1_1_3
                           poison_1_5_2
-                          httpoison_0_8_1
+                          httpoison_0_8_2
                           exprotobuf_0_10_2
                         ];
 
@@ -16335,21 +18926,21 @@ let
           }
       ) {};
 
-    extreme = extreme_0_4_3;
+    extreme = extreme_0_5_0;
 
-    extripe_0_2_0 = callPackage
+    extripe_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "extripe";
-            version = "0.2.0";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "extripe";
-              version = "0.2.0";
+              version = "0.3.2";
               sha256 =
-                "70cccdf79565d34ab4df68d89e22cfe574b2fe64b631303c496e27f83e798491";
+                "4df5dd859ad780bdb4dc0d1c823a8df82cf7421037f1ed40adf20b426d6729a1";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Stripe API wrapper'';
@@ -16359,7 +18950,7 @@ let
           }
       ) {};
 
-    extripe = extripe_0_2_0;
+    extripe = extripe_0_3_2;
 
     exts_0_2_2 = callPackage
       (
@@ -16384,19 +18975,19 @@ let
 
     exts = exts_0_2_2;
 
-    extwitter_0_6_2 = callPackage
+    extwitter_0_7_0 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, poison_1_5_2 }:
+        {  buildMix, fetchHex, poison_1_5_2 }:
           buildMix {
             name = "extwitter";
-            version = "0.6.2";
+            version = "0.7.0";
             src = fetchHex {
               pkg = "extwitter";
-              version = "0.6.2";
+              version = "0.7.0";
               sha256 =
-                "dd5ea2b6c9f99e167024b3ec6fb97f4803f39521229771ae001f7b44ed572f76";
+                "15fca145977192f315382d51258324ffd1862161deb586c67aaf0a205ca3cc73";
             };
-            beamDeps  = [ timex_1_0_1 poison_1_5_2 ];
+            beamDeps  = [ poison_1_5_2 ];
 
             meta = {
               description = ''Twitter client library for elixir.'';
@@ -16406,7 +18997,7 @@ let
           }
       ) {};
 
-    extwitter = extwitter_0_6_2;
+    extwitter = extwitter_0_7_0;
 
     exurban_0_0_1 = callPackage
       (
@@ -16438,8 +19029,8 @@ let
           buildMix,
           fetchHex,
           meck_0_8_4,
-          httpotion_1_0_0,
-          httpoison_0_8_1,
+          httpotion_2_2_2,
+          httpoison_0_8_2,
           exjsx_3_2_0,
           exactor_2_2_0
         }:
@@ -16454,8 +19045,8 @@ let
             };
             beamDeps  = [
                           meck_0_8_4
-                          httpotion_1_0_0
-                          httpoison_0_8_1
+                          httpotion_2_2_2
+                          httpoison_0_8_2
                           exjsx_3_2_0
                           exactor_2_2_0
                         ];
@@ -16469,30 +19060,30 @@ let
           }
       ) {};
 
-    exvcr_0_7_1 = callPackage
+    exvcr_0_7_2 = callPackage
       (
         {
           buildMix,
           fetchHex,
           meck_0_8_4,
-          httpotion_2_2_0,
-          httpoison_0_8_1,
+          httpotion_2_2_2,
+          httpoison_0_8_2,
           exjsx_3_2_0,
           exactor_2_2_0
         }:
           buildMix {
             name = "exvcr";
-            version = "0.7.1";
+            version = "0.7.2";
             src = fetchHex {
               pkg = "exvcr";
-              version = "0.7.1";
+              version = "0.7.2";
               sha256 =
-                "e894995695be15a546c1acf09d87967b078e0f6bc0a2be540d226c8ae40b161d";
+                "8e5feda0b2a9d2f2305bc68c76286cad73a1ecd9638038691cc17e378e321016";
             };
             beamDeps  = [
                           meck_0_8_4
-                          httpotion_2_2_0
-                          httpoison_0_8_1
+                          httpotion_2_2_2
+                          httpoison_0_8_2
                           exjsx_3_2_0
                           exactor_2_2_0
                         ];
@@ -16506,12 +19097,12 @@ let
           }
       ) {};
 
-    exvcr = exvcr_0_7_1;
+    exvcr = exvcr_0_7_2;
 
     exyelp_0_0_2 = callPackage
       (
         {
-          buildMix, fetchHex, poison_2_1_0, oauther_1_0_2, httpoison_0_8_1
+          buildMix, fetchHex, poison_2_1_0, oauther_1_0_2, httpoison_0_8_2
         }:
           buildMix {
             name = "exyelp";
@@ -16522,7 +19113,7 @@ let
               sha256 =
                 "1be8553ea0369a092eac1b6a0b47652b7c0570911483aa3ca454bef05ddd4d5d";
             };
-            beamDeps  = [ poison_2_1_0 oauther_1_0_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 oauther_1_0_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir Yelp API client'';
@@ -16558,17 +19149,17 @@ let
 
     exyz = exyz_1_0_0;
 
-    eye_drops_1_1_0 = callPackage
+    eye_drops_1_0_1 = callPackage
       (
         {  buildMix, fetchHex, fs_0_9_2 }:
           buildMix {
             name = "eye_drops";
-            version = "1.1.0";
+            version = "1.0.1";
             src = fetchHex {
               pkg = "eye_drops";
-              version = "1.1.0";
+              version = "1.0.1";
               sha256 =
-                "e1ed246cd35d0b58798fdec5cca8066d9251cc37251f298e531d8163dbc11332";
+                "4b57c4e6ec58e8e278c5dd2849ad248ccbf1cb9c340476cfebb7ac31e1bbe85d";
             };
             beamDeps  = [ fs_0_9_2 ];
 
@@ -16582,7 +19173,31 @@ let
           }
       ) {};
 
-    eye_drops = eye_drops_1_1_0;
+    eye_drops_1_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, fs_0_9_2 }:
+          buildMix {
+            name = "eye_drops";
+            version = "1.2.0";
+            src = fetchHex {
+              pkg = "eye_drops";
+              version = "1.2.0";
+              sha256 =
+                "0e0fe7ccf1fc4208ae0811c60a0f0d1e37ef9a60dfaefc8ff235a8be51fa9ae7";
+            };
+            beamDeps  = [ fs_0_9_2 ];
+
+            meta = {
+              longDescription = ''A configurable mix task to watch file changes
+                                Watch file changes in a project and run the
+                                corresponding command when a change happens.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/rkotze/eye_drops";
+            };
+          }
+      ) {};
+
+    eye_drops = eye_drops_1_2_0;
 
     ezcryptex_0_0_1 = callPackage
       (
@@ -16636,8 +19251,10 @@ let
 
     ezmq_0_2_0 = callPackage
       (
-        {  buildRebar3, fetchHex, lager_3_0_1, gen_listener_tcp_0_3_2 }:
-          buildRebar3 {
+        {
+          buildErlangMk, fetchHex, lager_2_1_1, gen_listener_tcp_0_3_2
+        }:
+          buildErlangMk {
             name = "ezmq";
             version = "0.2.0";
             src = fetchHex {
@@ -16646,8 +19263,7 @@ let
               sha256 =
                 "bc804ffded0b0d0f684d4313ad3fa676479df962c584daaf5aa14ada5b86a52b";
             };
-
-            beamDeps  = [ lager_3_0_1 gen_listener_tcp_0_3_2 ];
+            beamDeps  = [ lager_2_1_1 gen_listener_tcp_0_3_2 ];
 
             meta = {
               description = ''Native Erlang 0MQ implementation'';
@@ -16659,21 +19275,21 @@ let
 
     ezmq = ezmq_0_2_0;
 
-    facebook_0_4_1 = callPackage
+    facebook_0_4_2 = callPackage
       (
         {
-          buildMix, fetchHex, libex_config_0_2_0, json_0_3_3, hackney_1_4_8
+          buildMix, fetchHex, libex_config_0_2_0, json_0_3_3, hackney_1_6_0
         }:
           buildMix {
             name = "facebook";
-            version = "0.4.1";
+            version = "0.4.2";
             src = fetchHex {
               pkg = "facebook";
-              version = "0.4.1";
+              version = "0.4.2";
               sha256 =
-                "f5583fe383f8a2b421f91ddbc9beccc9626527e96ec3502c723cc99e1c47e863";
+                "033147d8ae278172ea7fb6fd445bdd6288fb06a8479b9f0e0ae376acc1efdad6";
             };
-            beamDeps  = [ libex_config_0_2_0 json_0_3_3 hackney_1_4_8 ];
+            beamDeps  = [ libex_config_0_2_0 json_0_3_3 hackney_1_6_0 ];
 
             meta = {
               longDescription = ''Facebook Graph API Wrapper written in Elixir.
@@ -16686,7 +19302,7 @@ let
           }
       ) {};
 
-    facebook = facebook_0_4_1;
+    facebook = facebook_0_4_2;
 
     factory_girl_elixir_0_1_1 = callPackage
       (
@@ -16711,6 +19327,30 @@ let
       ) {};
 
     factory_girl_elixir = factory_girl_elixir_0_1_1;
+
+    fake_cas_1_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4, bypass_0_5_1 }:
+          buildMix {
+            name = "fake_cas";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "fake_cas";
+              version = "1.0.1";
+              sha256 =
+                "bb3522de447f7a3d84ced7b55e83b9ce72ce7c509581ed87ab26264fb39aafe5";
+            };
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 bypass_0_5_1 ];
+
+            meta = {
+              description = ''A Cas server stub'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/rhruiz/elixir-fake_cas";
+            };
+          }
+      ) {};
+
+    fake_cas = fake_cas_1_0_1;
 
     faker_0_6_0 = callPackage
       (
@@ -16762,17 +19402,17 @@ let
 
     fast_tls = fast_tls_1_0_1;
 
-    fast_xml_1_1_3 = callPackage
+    fast_xml_1_1_11 = callPackage
       (
         {  buildRebar3, fetchHex, p1_utils_1_0_3 }:
           buildRebar3 {
             name = "fast_xml";
-            version = "1.1.3";
+            version = "1.1.11";
             src = fetchHex {
               pkg = "fast_xml";
-              version = "1.1.3";
+              version = "1.1.11";
               sha256 =
-                "ea1abe9cdfa0df67178378ba5ec11e746023b66bc1ed0f980ae69d2aa1f732c3";
+                "58ad965b6e6913a7cc488552bb30a17d029a44c6b1a17f369870cd911ada46b8";
             };
             compilePorts = true;
             beamDeps  = [ p1_utils_1_0_3 ];
@@ -16786,19 +19426,19 @@ let
           }
       ) {};
 
-    fast_xml = fast_xml_1_1_3;
+    fast_xml = fast_xml_1_1_11;
 
-    fast_yaml_1_0_2 = callPackage
+    fast_yaml_1_0_3 = callPackage
       (
         {  buildRebar3, fetchHex, p1_utils_1_0_3 }:
           buildRebar3 {
             name = "fast_yaml";
-            version = "1.0.2";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "fast_yaml";
-              version = "1.0.2";
+              version = "1.0.3";
               sha256 =
-                "2f2034d6003425b02619ba15658665134cfd81e3d1c9379c268f802a5775086d";
+                "f2b2258dfb98ba69c16005d3944582994f2b83f830b717858a5d6807497274ba";
             };
             compilePorts = true;
             beamDeps  = [ p1_utils_1_0_3 ];
@@ -16811,11 +19451,34 @@ let
           }
       ) {};
 
-    fast_yaml = fast_yaml_1_0_2;
+    fast_yaml = fast_yaml_1_0_3;
+
+    faust_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "faust";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "faust";
+              version = "0.1.0";
+              sha256 =
+                "0ab347a6f377a97e621db0f659841436d6dbb31f1b7c8309e3fb543bec0c473e";
+            };
+
+            meta = {
+              description = ''A Markov chain text generator for Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/jquadrin/faust";
+            };
+          }
+      ) {};
+
+    faust = faust_0_1_0;
 
     favicon_0_0_7 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_7_5, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpoison_0_7_5, floki_0_8_0 }:
           buildMix {
             name = "favicon";
             version = "0.0.7";
@@ -16825,7 +19488,7 @@ let
               sha256 =
                 "b9a577d3d22a6e51843eb334b87de512f48a548d7a7edf56e178e0dde420ba0e";
             };
-            beamDeps  = [ httpoison_0_7_5 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_7_5 floki_0_8_0 ];
 
             meta = {
               description = ''A library that fetches the favicon url for a
@@ -16863,6 +19526,31 @@ let
       ) {};
 
     fdg = fdg_0_0_4;
+
+    feature_toggler_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, exredis_0_2_3 }:
+          buildMix {
+            name = "feature_toggler";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "feature_toggler";
+              version = "0.0.1";
+              sha256 =
+                "dac607aa67971e87b9d8fb8eb3057246d4480c99e11951faa1ed9f204b7f48ae";
+            };
+            beamDeps  = [ exredis_0_2_3 ];
+
+            meta = {
+              description = ''This is a simple feature toggler/switch with
+                            redis database written in elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/aravindgd/feature_toggler";
+            };
+          }
+      ) {};
+
+    feature_toggler = feature_toggler_0_0_1;
 
     feeder_1_4_7 = callPackage
       (
@@ -16934,6 +19622,32 @@ let
 
     feeder_ex = feeder_ex_0_0_2;
 
+    feederer_0_5_6 = callPackage
+      (
+        {  buildMix, fetchHex, poolboy_1_5_1 }:
+          buildMix {
+            name = "feederer";
+            version = "0.5.6";
+            src = fetchHex {
+              pkg = "feederer";
+              version = "0.5.6";
+              sha256 =
+                "07e25464b14b9263b343602b649bb9680764481b1dfe64270dcef5c83321522c";
+            };
+            beamDeps  = [ poolboy_1_5_1 ];
+
+            meta = {
+              longDescription = ''Parses XML syndication feeds such as RSS,
+                                Atom, etc. Elixir feedparser wrapper using
+                                erlport.'';
+              license = stdenv.lib.licenses.free;
+              homepage = "https://github.com/draftli/feederer";
+            };
+          }
+      ) {};
+
+    feederer = feederer_0_5_6;
+
     feedistiller_2_0_2 = callPackage
       (
         {
@@ -16972,7 +19686,7 @@ let
 
     feedlex_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_2 }:
           buildMix {
             name = "feedlex";
             version = "0.0.1";
@@ -16982,7 +19696,7 @@ let
               sha256 =
                 "1f20033824f816d6904837601c14bdffcf1a56a53b8ed7d7916a67e48e53b4a5";
             };
-            beamDeps  = [ poison_1_3_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_3_1 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Feedly RSS reader client for Elixir
@@ -17046,19 +19760,19 @@ let
 
     feedparser = feedparser_0_0_3;
 
-    fernet_ecto_0_0_4 = callPackage
+    fernet_ecto_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, ecto_1_1_3 }:
+        {  buildMix, fetchHex, fernetex_0_0_2, ecto_1_1_5 }:
           buildMix {
             name = "fernet_ecto";
-            version = "0.0.4";
+            version = "0.0.5";
             src = fetchHex {
               pkg = "fernet_ecto";
-              version = "0.0.4";
+              version = "0.0.5";
               sha256 =
-                "22a9ab7a7fd1347620ba5dd9e128eae1e97d6403b0ee90a289580c2cb386e1c0";
+                "d4f9d0c6ffda955b9a1870bfc525def01fb65fef0bb3c4ed739ce5bbfbb98cda";
             };
-            beamDeps  = [ ecto_1_1_3 ];
+            beamDeps  = [ fernetex_0_0_2 ecto_1_1_5 ];
 
             meta = {
               description = ''Fernet-encrypted fields for Ecto'';
@@ -17068,21 +19782,21 @@ let
           }
       ) {};
 
-    fernet_ecto = fernet_ecto_0_0_4;
+    fernet_ecto = fernet_ecto_0_0_5;
 
-    fernetex_0_0_1 = callPackage
+    fernetex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, timex_0_19_5, json_0_3_3 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "fernetex";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "fernetex";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "0e386a7d783329a2742398e987b0584ca448b22b27ccfc857eab1b0752178714";
+                "a6d052384397defe780d3551a16b8b639dba6f89aeea7a6984ecadf44501cfc9";
             };
-            beamDeps  = [ timex_0_19_5 json_0_3_3 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               description = ''Elixir implementation of Fernet library based on
@@ -17093,7 +19807,38 @@ let
           }
       ) {};
 
-    fernetex = fernetex_0_0_1;
+    fernetex = fernetex_0_0_2;
+
+    fifo_db_0_2_1 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          lager_3_0_2,
+          erocksdb_0_4_1,
+          eleveldb_2_1_3
+        }:
+          buildRebar3 {
+            name = "fifo_db";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "fifo_db";
+              version = "0.2.1";
+              sha256 =
+                "c712ec4dba2b6c358f44196b7bddb2f93ce7a61db2ce1b28d45ebe872e8bc207";
+            };
+
+            beamDeps  = [ lager_3_0_2 erocksdb_0_4_1 eleveldb_2_1_3 ];
+
+            meta = {
+              description = ''Project-FiFo db wrapper'';
+              license = stdenv.lib.licenses.cddl;
+              homepage = "https://github.com/project-fifo/fifo_db";
+            };
+          }
+      ) {};
+
+    fifo_db = fifo_db_0_2_1;
 
     fifo_dt_0_1_66 = callPackage
       (
@@ -17134,7 +19879,46 @@ let
           }
       ) {};
 
-    fifo_dt = fifo_dt_0_1_66;
+    fifo_dt_0_1_68 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          riak_dt_2_1_1,
+          libsnarlmatch_0_1_7,
+          lager_2_1_1,
+          jsxd_0_1_10,
+          jsx_1_4_5,
+          fifo_utils_0_1_20
+        }:
+          buildRebar3 {
+            name = "fifo_dt";
+            version = "0.1.68";
+            src = fetchHex {
+              pkg = "fifo_dt";
+              version = "0.1.68";
+              sha256 =
+                "dc465553abac1e4a9db50930bbba5ee15f625a440b482311ceb0e428cc121894";
+            };
+
+            beamDeps  = [
+                          riak_dt_2_1_1
+                          libsnarlmatch_0_1_7
+                          lager_2_1_1
+                          jsxd_0_1_10
+                          jsx_1_4_5
+                          fifo_utils_0_1_20
+                        ];
+
+            meta = {
+              description = ''FiFo datatype collection'';
+              license = stdenv.lib.licenses.cddl;
+              homepage = "https://github.com/project-fifo/fifo_dt";
+            };
+          }
+      ) {};
+
+    fifo_dt = fifo_dt_0_1_68;
 
     fifo_lager_0_1_3 = callPackage
       (
@@ -17251,17 +20035,17 @@ let
           }
       ) {};
 
-    fifo_utils_0_1_21 = callPackage
+    fifo_utils_0_1_22 = callPackage
       (
         {  buildRebar3, fetchHex, uuid_erl_1_5_1, lager_2_1_1 }:
           buildRebar3 {
             name = "fifo_utils";
-            version = "0.1.21";
+            version = "0.1.22";
             src = fetchHex {
               pkg = "fifo_utils";
-              version = "0.1.21";
+              version = "0.1.22";
               sha256 =
-                "8a9298fd7486f56b74b4ffc1d6a3ff3713ffde44b248371f7f673a9bd76add60";
+                "dd38d1418298600063354ebb84cbcbf6d49504416323368c8d590dd2a95e257e";
             };
 
             beamDeps  = [ uuid_erl_1_5_1 lager_2_1_1 ];
@@ -17274,7 +20058,30 @@ let
           }
       ) {};
 
-    fifo_utils = fifo_utils_0_1_21;
+    fifo_utils = fifo_utils_0_1_22;
+
+    fifocache_1_0_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "fifocache";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "fifocache";
+              version = "1.0.1";
+              sha256 =
+                "363f03e2871b8d8c7564a47133162ce18c362bd70897f5bd58fa246a0e169a43";
+            };
+
+            meta = {
+              description = ''Fixed size FIFO cache implementation'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/mururu/fifocache";
+            };
+          }
+      ) {};
+
+    fifocache = fifocache_1_0_1;
 
     figaro_0_1_0 = callPackage
       (
@@ -17322,6 +20129,31 @@ let
       ) {};
 
     figaro_elixir = figaro_elixir_1_0_0;
+
+    file_info_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, mimetype_parser_0_1_2 }:
+          buildMix {
+            name = "file_info";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "file_info";
+              version = "0.0.2";
+              sha256 =
+                "f28456aafd014c01a4188fee36c1571e9669b0506eb22c830db357084c0c9cb2";
+            };
+            beamDeps  = [ mimetype_parser_0_1_2 ];
+
+            meta = {
+              description = ''Get MIME-type of a file by its magic number
+                            (linux only)'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/NobbZ/file_info";
+            };
+          }
+      ) {};
+
+    file_info = file_info_0_0_2;
 
     filepreviews_1_0_1 = callPackage
       (
@@ -17375,7 +20207,7 @@ let
 
     finance_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "finance";
             version = "0.0.1";
@@ -17385,7 +20217,7 @@ let
               sha256 =
                 "fe08fc521e65605d54fd8b68fbdfdbd233b408e8330cf8038337214b553c2c17";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               longDescription = ''A library to calculate Xirr through the
@@ -17431,25 +20263,25 @@ let
 
     finch = finch_0_0_3;
 
-    finicity_0_0_4 = callPackage
+    finicity_0_0_5 = callPackage
       (
         {
           buildMix,
           fetchHex,
           xml_builder_0_0_8,
-          httpotion_2_1_0,
-          floki_0_7_1
+          httpotion_2_2_2,
+          floki_0_8_0
         }:
           buildMix {
             name = "finicity";
-            version = "0.0.4";
+            version = "0.0.5";
             src = fetchHex {
               pkg = "finicity";
-              version = "0.0.4";
+              version = "0.0.5";
               sha256 =
-                "bed2444d52366a7e6f49bafff0d985c04540ef298922273df11efebe9c1e8387";
+                "b58ef39987976cf50851311a95b40504ba763c0d82256b012f5b1246bd92d9b4";
             };
-            beamDeps  = [ xml_builder_0_0_8 httpotion_2_1_0 floki_0_7_1 ];
+            beamDeps  = [ xml_builder_0_0_8 httpotion_2_2_2 floki_0_8_0 ];
 
             meta = {
               description = ''Client library for Finicity.'';
@@ -17458,7 +20290,7 @@ let
           }
       ) {};
 
-    finicity = finicity_0_0_4;
+    finicity = finicity_0_0_5;
 
     fireworks_0_5_1 = callPackage
       (
@@ -17513,7 +20345,7 @@ let
     fitbit_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, hackney_1_4_8
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, hackney_1_4_10
         }:
           buildMix {
             name = "fitbit";
@@ -17524,7 +20356,7 @@ let
               sha256 =
                 "dc09d3b6d37ea67d21a52a704bd52357daa223e18afe4831515730452b3ada25";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 hackney_1_4_8 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 hackney_1_4_10 ];
 
             meta = {
               description = ''A Fitbit Library for Elixir'';
@@ -17730,17 +20562,17 @@ let
           }
       ) {};
 
-    floki_0_7_1 = callPackage
+    floki_0_7_2 = callPackage
       (
         {  buildMix, fetchHex, mochiweb_2_12_2 }:
           buildMix {
             name = "floki";
-            version = "0.7.1";
+            version = "0.7.2";
             src = fetchHex {
               pkg = "floki";
-              version = "0.7.1";
+              version = "0.7.2";
               sha256 =
-                "f4d9df7ffbfeed170dc81d9c6309e47fe3d51c6247b42a2341d8675d3ff653b1";
+                "c7078ac2a54501a16ff469c78292bac5013e457ffa8801b74bc293616aa5b0d0";
             };
             beamDeps  = [ mochiweb_2_12_2 ];
 
@@ -17753,7 +20585,30 @@ let
           }
       ) {};
 
-    floki = floki_0_7_1;
+    floki_0_8_0 = callPackage
+      (
+        {  buildMix, fetchHex, mochiweb_html_2_13_0 }:
+          buildMix {
+            name = "floki";
+            version = "0.8.0";
+            src = fetchHex {
+              pkg = "floki";
+              version = "0.8.0";
+              sha256 =
+                "9cc084ca7adf275f639bb7a292838d7dc86d8917314c22f8aa2d8f6ba8b8d18d";
+            };
+            beamDeps  = [ mochiweb_html_2_13_0 ];
+
+            meta = {
+              description = ''Floki is a simple HTML parser that enables search
+                            for nodes using CSS selectors.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/philss/floki";
+            };
+          }
+      ) {};
+
+    floki = floki_0_8_0;
 
     floorplan_0_1_1 = callPackage
       (
@@ -17761,11 +20616,11 @@ let
           buildMix,
           fetchHex,
           xml_builder_0_0_8,
-          tzdata_0_1_8,
-          timex_1_0_1,
+          tzdata_0_1_201603,
+          timex_1_0_2,
           postgrex_0_11_1,
           poison_1_5_2,
-          httpotion_2_1_0
+          httpotion_2_2_2
         }:
           buildMix {
             name = "floorplan";
@@ -17778,11 +20633,11 @@ let
             };
             beamDeps  = [
                           xml_builder_0_0_8
-                          tzdata_0_1_8
-                          timex_1_0_1
+                          tzdata_0_1_201603
+                          timex_1_0_2
                           postgrex_0_11_1
                           poison_1_5_2
-                          httpotion_2_1_0
+                          httpotion_2_2_2
                         ];
 
             meta = {
@@ -17796,21 +20651,21 @@ let
 
     floorplan = floorplan_0_1_1;
 
-    flower_power_0_2_0 = callPackage
+    flower_power_0_3_2 = callPackage
       (
         {
-          buildMix, fetchHex, timex_1_0_1, poison_1_5_2, httpoison_0_7_5
+          buildMix, fetchHex, timex_1_0_2, poison_1_5_2, httpoison_0_7_5
         }:
           buildMix {
             name = "flower_power";
-            version = "0.2.0";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "flower_power";
-              version = "0.2.0";
+              version = "0.3.2";
               sha256 =
-                "1ade69e578fd65dd2d10b8097846411f1a5d0a42ad55e9faa532c65bbaf59bbb";
+                "f0b7d14fbe0ea78225f3b8424bc907ca6d977576d974b57dcd860afa8ed426a8";
             };
-            beamDeps  = [ timex_1_0_1 poison_1_5_2 httpoison_0_7_5 ];
+            beamDeps  = [ timex_1_0_2 poison_1_5_2 httpoison_0_7_5 ];
 
             meta = {
               description = ''Api client for flower power cloud api'';
@@ -17820,12 +20675,12 @@ let
           }
       ) {};
 
-    flower_power = flower_power_0_2_0;
+    flower_power = flower_power_0_3_2;
 
     fluent_client_0_1_0 = callPackage
       (
         {
-          buildMix, fetchHex, socket_0_2_8, poison_1_3_1, msgpax_0_7_0
+          buildMix, fetchHex, socket_0_2_8, poison_1_3_1, msgpax_0_7_1
         }:
           buildMix {
             name = "fluent_client";
@@ -17836,7 +20691,7 @@ let
               sha256 =
                 "df1d05da9475938422a734cd311564eef44bfebea3c37b06ab167368875c2d15";
             };
-            beamDeps  = [ socket_0_2_8 poison_1_3_1 msgpax_0_7_0 ];
+            beamDeps  = [ socket_0_2_8 poison_1_3_1 msgpax_0_7_1 ];
 
             meta = {
               description = ''fluentd client library'';
@@ -17848,6 +20703,29 @@ let
       ) {};
 
     fluent_client = fluent_client_0_1_0;
+
+    fluxter_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "fluxter";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "fluxter";
+              version = "0.2.0";
+              sha256 =
+                "7834e830d156bf9ee819e69929a42f9ce8373a4d50c3e002ad9949cfeb42391d";
+            };
+
+            meta = {
+              description = ''An InfluxDB writer for Elixir'';
+              license = stdenv.lib.licenses.isc;
+              homepage = "https://github.com/lexmag/fluxter";
+            };
+          }
+      ) {};
+
+    fluxter = fluxter_0_2_0;
 
     fn_1_0_0 = callPackage
       (
@@ -17921,17 +20799,17 @@ let
 
     folsom = folsom_0_8_3;
 
-    folsom_ddb_0_1_20 = callPackage
+    folsom_ddb_0_1_22 = callPackage
       (
         {  buildRebar3, fetchHex, ddb_client_0_1_17 }:
           buildRebar3 {
             name = "folsom_ddb";
-            version = "0.1.20";
+            version = "0.1.22";
             src = fetchHex {
               pkg = "folsom_ddb";
-              version = "0.1.20";
+              version = "0.1.22";
               sha256 =
-                "9103ab70b048bf35618daf85b314d815e66c23e7100a71b07dcbec18e75d02d1";
+                "8b2c5b674b993738f22ff265159e6d71d6640632ed98e9c1cd3daef15b586e46";
             };
 
             beamDeps  = [ ddb_client_0_1_17 ];
@@ -17944,7 +20822,7 @@ let
           }
       ) {};
 
-    folsom_ddb = folsom_ddb_0_1_20;
+    folsom_ddb = folsom_ddb_0_1_22;
 
     folsomite_1_2_8 = callPackage
       (
@@ -17973,7 +20851,7 @@ let
 
     font_awesome_phoenix_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_html_2_5_0 }:
+        {  buildMix, fetchHex, phoenix_html_2_5_1 }:
           buildMix {
             name = "font_awesome_phoenix";
             version = "0.3.2";
@@ -17983,7 +20861,7 @@ let
               sha256 =
                 "826dd9e0400351cb539ccced605455d8da25490fd37a75085eb68fa133e65f34";
             };
-            beamDeps  = [ phoenix_html_2_5_0 ];
+            beamDeps  = [ phoenix_html_2_5_1 ];
 
             meta = {
               description = ''HTML helper functions to build Font Awesome icon
@@ -17996,21 +20874,21 @@ let
 
     font_awesome_phoenix = font_awesome_phoenix_0_3_2;
 
-    forcex_0_1_0 = callPackage
+    forcex_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, timex_1_0_0_rc4, httpoison_0_8_1, exjsx_3_2_0
+          buildMix, fetchHex, timex_1_0_2, httpoison_0_8_2, exjsx_3_2_0
         }:
           buildMix {
             name = "forcex";
-            version = "0.1.0";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "forcex";
-              version = "0.1.0";
+              version = "0.2.0";
               sha256 =
-                "3f7c4ddffaa0bfb0408b0148e14e344d7c42349923894ab44b56513c05c14c08";
+                "31c6bd2d550193983812a5e8c4ed53d5d6be0fe30ce6628d62828f00544a7a4b";
             };
-            beamDeps  = [ timex_1_0_0_rc4 httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ timex_1_0_2 httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Elixir library for the Force.com / SalesForce /
@@ -18021,11 +20899,11 @@ let
           }
       ) {};
 
-    forcex = forcex_0_1_0;
+    forcex = forcex_0_2_0;
 
     forecast_io_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, json_0_3_3, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, json_0_3_3, httpotion_2_2_2 }:
           buildMix {
             name = "forecast_io";
             version = "0.2.1";
@@ -18035,7 +20913,7 @@ let
               sha256 =
                 "e109212dcd55c7d94bf9d85c1d6ee6687d35eb065335df13fc105fc242506c09";
             };
-            beamDeps  = [ json_0_3_3 httpotion_1_0_0 ];
+            beamDeps  = [ json_0_3_3 httpotion_2_2_2 ];
 
             meta = {
               description = ''Simple wrapper for Forecast.IO API '';
@@ -18097,7 +20975,7 @@ let
 
     fox_0_1_12 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, timex_2_1_3, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "fox";
             version = "0.1.12";
@@ -18107,7 +20985,7 @@ let
               sha256 =
                 "3b4fe9b49422d99e0c888ca839e828b70b4334637f443a14afc941be5e6a847e";
             };
-            beamDeps  = [ timex_1_0_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ timex_2_1_3 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''Collection of support utility functions and
@@ -18122,27 +21000,6 @@ let
       ) {};
 
     fox = fox_0_1_12;
-
-    fqc_0_1_5 = callPackage
-      (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
-            name = "fqc";
-            version = "0.1.5";
-            src = fetchHex {
-              pkg = "fqc";
-              version = "0.1.5";
-              sha256 =
-                "47536dec351a12e1cbe0bc3b52bfff3b0690b0aec660472b5cf49f812eb9aa4f";
-            };
-
-            meta = {
-              description = ''FiFo EQC helper'';
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/project-fifo/fqc";
-            };
-          }
-      ) {};
 
     fqc_0_1_7 = callPackage
       (
@@ -18192,9 +21049,34 @@ let
 
     frank = frank_0_0_3;
 
+    freegeoip_0_0_4 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "freegeoip";
+            version = "0.0.4";
+            src = fetchHex {
+              pkg = "freegeoip";
+              version = "0.0.4";
+              sha256 =
+                "6776938ddc1318ee8a34ef6e3a5dcb85013bbb27feeae3c7d65487ff17e2b558";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Simple Elixir wrapper for freegeoip.net HTTP
+                            API.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/juljimm/freegeoip-elixir";
+            };
+          }
+      ) {};
+
+    freegeoip = freegeoip_0_0_4;
+
     friendly_1_0_1 = callPackage
       (
-        {  buildMix, fetchHex, floki_0_7_1 }:
+        {  buildMix, fetchHex, floki_0_8_0 }:
           buildMix {
             name = "friendly";
             version = "1.0.1";
@@ -18204,7 +21086,7 @@ let
               sha256 =
                 "5bacdeba9a6752613c037f7ffacd4f7185cf9b348b3b41c73497e539bbb17602";
             };
-            beamDeps  = [ floki_0_7_1 ];
+            beamDeps  = [ floki_0_8_0 ];
 
             meta = {
               longDescription = ''HTML and XML parser with the most friendly
@@ -18267,7 +21149,7 @@ let
 
     fulcrum_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "fulcrum";
             version = "0.0.6";
@@ -18277,7 +21159,7 @@ let
               sha256 =
                 "9cddd3906bad693cad791841d19b2be089e064a5f2dd35d340f46e6cd15d7930";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Fulcrum library for Elixir. The aim is to
@@ -18317,14 +21199,40 @@ let
 
     fumanchu = fumanchu_0_0_1;
 
+    function_decorating_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "function_decorating";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "function_decorating";
+              version = "0.0.1";
+              sha256 =
+                "06016a2765de8ea0243b7993226177c96d0f6d51a2db2f84ee9d224a355c3b92";
+            };
+
+            meta = {
+              longDescription = ''A function decorator macro for Elixir. Used
+                                mainly for adding log statements to the function
+                                calls.'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/elpddev/elixir-function-decorating";
+            };
+          }
+      ) {};
+
+    function_decorating = function_decorating_0_0_1;
+
     funnel_0_4_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
           poolboy_1_5_1,
-          httpoison_0_8_1,
-          uuid_0_1_5,
+          httpoison_0_8_2,
+          uuid_1_0_0,
           poison_1_5_2
         }:
           buildMix {
@@ -18337,7 +21245,7 @@ let
                 "84b937146c9464afc2a92e53aa0109de60caef599f82613fdcd4dc3e864025d7";
             };
             beamDeps  = [
-                          poolboy_1_5_1 httpoison_0_8_1 uuid_0_1_5 poison_1_5_2
+                          poolboy_1_5_1 httpoison_0_8_2 uuid_1_0_0 poison_1_5_2
                         ];
 
             meta = {
@@ -18351,17 +21259,17 @@ let
 
     funnel = funnel_0_4_1;
 
-    fuse_2_0_0 = callPackage
+    fuse_2_2_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "fuse";
-            version = "2.0.0";
+            version = "2.2.0";
             src = fetchHex {
               pkg = "fuse";
-              version = "2.0.0";
+              version = "2.2.0";
               sha256 =
-                "e2c55c0629ce418974165a65b342e54527333303d7e9c1f0493679144c9698cb";
+                "c397f336455ab6596842d2199f018af69855f17df1635e212d3871a135ad46fa";
             };
 
             meta = {
@@ -18372,7 +21280,7 @@ let
           }
       ) {};
 
-    fuse = fuse_2_0_0;
+    fuse = fuse_2_2_0;
 
     fuzzyurl_0_8_1 = callPackage
       (
@@ -18398,10 +21306,34 @@ let
 
     fuzzyurl = fuzzyurl_0_8_1;
 
+    fwatch_0_5_0 = callPackage
+      (
+        {  buildMix, fetchHex, fs_0_9_2, earmark_0_2_1 }:
+          buildMix {
+            name = "fwatch";
+            version = "0.5.0";
+            src = fetchHex {
+              pkg = "fwatch";
+              version = "0.5.0";
+              sha256 =
+                "1cd46bcae7074c10a4a4d25989ef20ab515d075d762af8e6c86e8d50c011604c";
+            };
+            beamDeps  = [ fs_0_9_2 earmark_0_2_1 ];
+
+            meta = {
+              description = ''A file watcher for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ryo33/fwatch-ex";
+            };
+          }
+      ) {};
+
+    fwatch = fwatch_0_5_0;
+
     gateway_0_0_6 = callPackage
       (
         {
-          buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1, fox_0_1_12
+          buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2, fox_0_1_12
         }:
           buildMix {
             name = "gateway";
@@ -18412,7 +21344,7 @@ let
               sha256 =
                 "4d0de05b0168ee0cc41c9c38491a4b4641d446f38170ca170d0d7440b0c8f619";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 fox_0_1_12 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 fox_0_1_12 ];
 
             meta = {
               longDescription = ''A generic set of macros and conventions to
@@ -18453,7 +21385,7 @@ let
 
     gcm_1_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "gcm";
             version = "1.2.0";
@@ -18463,7 +21395,7 @@ let
               sha256 =
                 "281d5c2dc94a24382292f6fbfe7348316e8afa0a40285978f03e7dcae068170a";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''GCM library to send pushes through GCM'';
@@ -18576,6 +21508,29 @@ let
 
     gelfex = gelfex_0_0_1;
 
+    gen_leader_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "gen_leader";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "gen_leader";
+              version = "0.1.0";
+              sha256 =
+                "31340f49935767f12b639b69cdc585f26ebcc1802ba46b33555b229da2366207";
+            };
+
+            meta = {
+              description = ''The gen_leader behaviour'';
+              license = stdenv.lib.licenses.free;
+              homepage = "https://github.com/knusbaum/gen_leader_revival";
+            };
+          }
+      ) {};
+
+    gen_leader = gen_leader_0_1_0;
+
     gen_listener_tcp_0_3_2 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -18598,6 +21553,32 @@ let
       ) {};
 
     gen_listener_tcp = gen_listener_tcp_0_3_2;
+
+    gen_rpc_1_0_2 = callPackage
+      (
+        {  buildRebar3, fetchHex, lager_3_0_2 }:
+          buildRebar3 {
+            name = "gen_rpc";
+            version = "1.0.2";
+            src = fetchHex {
+              pkg = "gen_rpc";
+              version = "1.0.2";
+              sha256 =
+                "2e7669c865be0051d322c092f83c0eadefeb04698098ee4b80cc43f60d39f5dd";
+            };
+
+            beamDeps  = [ lager_3_0_2 ];
+
+            meta = {
+              description = ''A scalable RPC library for Erlang-VM based
+                            languages'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/priestjim/gen_rpc";
+            };
+          }
+      ) {};
+
+    gen_rpc = gen_rpc_1_0_2;
 
     gen_smtp_0_9_0 = callPackage
       (
@@ -18655,7 +21636,7 @@ let
           fetchHex,
           postgrex_0_11_1,
           poison_1_0_3,
-          ecto_2_0_0_beta_0
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "geo";
@@ -18666,7 +21647,7 @@ let
               sha256 =
                 "c0ab2df75521a2f50ff339294ff914b3a71e4f3753c5a82851457e0d40bb2e9c";
             };
-            beamDeps  = [ postgrex_0_11_1 poison_1_0_3 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 poison_1_0_3 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''PostGIS extension for Postgrex. Also encodes and
@@ -18711,7 +21692,7 @@ let
           towel_0_2_1,
           poolboy_1_5_1,
           poison_1_5_2,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildMix {
             name = "geocoder";
@@ -18723,7 +21704,7 @@ let
                 "67c45859114f5b82949cb98b75cfc862d739a5212164e4147552c6b3701cc975";
             };
             beamDeps  = [
-                          towel_0_2_1 poolboy_1_5_1 poison_1_5_2 httpoison_0_8_1
+                          towel_0_2_1 poolboy_1_5_1 poison_1_5_2 httpoison_0_8_2
                         ];
 
             meta = {
@@ -18834,7 +21815,7 @@ let
 
     gh_webhook_plug_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "gh_webhook_plug";
             version = "0.0.2";
@@ -18844,7 +21825,7 @@ let
               sha256 =
                 "f89c7b883923aea3a3c488e3344390e0771735df72dad7fec270ce49aba88854";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''This Plug makes it easy to listen and respond
@@ -18858,17 +21839,17 @@ let
 
     gh_webhook_plug = gh_webhook_plug_0_0_2;
 
-    gibran_0_0_1 = callPackage
+    gibran_0_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "gibran";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "gibran";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "20e221e7743279bb37560c94bf93dea576d9a24d301cd75f3cfa5f6b0ec6dd20";
+                "bdf0eb8c7469ac17e14e898b26fb47d4a360409f7a750bfde5d7d0765f327ca4";
             };
 
             meta = {
@@ -18879,11 +21860,11 @@ let
           }
       ) {};
 
-    gibran = gibran_0_0_1;
+    gibran = gibran_0_0_2;
 
     gil_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_7_5, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpoison_0_7_5, floki_0_8_0 }:
           buildMix {
             name = "gil";
             version = "0.0.3";
@@ -18893,7 +21874,7 @@ let
               sha256 =
                 "5235fdfd30513bd5d75a93272fc952f3ae1c0746e400591c244383d8f0fe9403";
             };
-            beamDeps  = [ httpoison_0_7_5 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_7_5 floki_0_8_0 ];
 
             meta = {
               description = ''"Mix custome task for check exchange rate"'';
@@ -18952,17 +21933,17 @@ let
 
     gimei_ex = gimei_ex_1_0_0;
 
-    git_cli_0_1_0 = callPackage
+    git_cli_0_2_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "git_cli";
-            version = "0.1.0";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "git_cli";
-              version = "0.1.0";
+              version = "0.2.0";
               sha256 =
-                "08cc7b12b7c29cee656d81008e9627b027555cbdf78fa609b599d64bbef71214";
+                "8e52506764fd6ba5f153d2bcd5635c160ed83a7a4e8834b4e67eee317a37f962";
             };
 
             meta = {
@@ -18973,7 +21954,7 @@ let
           }
       ) {};
 
-    git_cli = git_cli_0_1_0;
+    git_cli = git_cli_0_2_0;
 
     gitex_0_1_0 = callPackage
       (
@@ -19025,7 +22006,7 @@ let
 
     github_oauth_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "github_oauth";
             version = "0.1.1";
@@ -19035,7 +22016,7 @@ let
               sha256 =
                 "4e68983af9ed8146a2505ad759cb151c3202471285f07df6132a4acd47aa91f2";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''simple github oauth library'';
@@ -19046,6 +22027,56 @@ let
       ) {};
 
     github_oauth = github_oauth_0_1_1;
+
+    github_trend_ex_0_1_2 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
+          buildMix {
+            name = "github_trend_ex";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "github_trend_ex";
+              version = "0.1.2";
+              sha256 =
+                "019565ad8efe6c25414dcddc6a7fc99e34f0ff457989ec7b5ad03b79b0c8ca8b";
+            };
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
+
+            meta = {
+              description = ''Get trend repositories from Github.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/KazuCocoa/github_trend_ex";
+            };
+          }
+      ) {};
+
+    github_trend_ex = github_trend_ex_0_1_2;
+
+    gizoogle_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
+          buildMix {
+            name = "gizoogle";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "gizoogle";
+              version = "0.0.2";
+              sha256 =
+                "c22d720fc60df8670a194c6ed1fb17fe272a7560b478037aef4a1437331f60e3";
+            };
+            beamDeps  = [ httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''Uses Gizoogle ta allow you ta drop a rhyme
+                                like a thug n` retrieve links fo` translated
+                                sitez'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/notdevinclark/gizoogle";
+            };
+          }
+      ) {};
+
+    gizoogle = gizoogle_0_0_2;
 
     glitchylicious_0_0_1 = callPackage
       (
@@ -19094,25 +22125,44 @@ let
 
     global = global_1_0_0;
 
-    gmail_0_0_17 = callPackage
+    gm_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "gm";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "gm";
+              version = "0.0.2";
+              sha256 =
+                "3dc6e1d336afe370219b8b465a651012168f6fe7b9e9d2b0609b6384e1bcb8f7";
+            };
+
+            meta = {
+              description = ''Idiomatic GraphicsMagick wrapper for Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/utkarshkukreti/gm.ex";
+            };
+          }
+      ) {};
+
+    gm = gm_0_0_2;
+
+    gmail_0_1_8 = callPackage
       (
         {
-          buildMix,
-          fetchHex,
-          timex_1_0_0_rc4,
-          poison_1_5_2,
-          httpoison_0_8_1
+          buildMix, fetchHex, timex_2_1_3, poison_2_1_0, httpoison_0_8_2
         }:
           buildMix {
             name = "gmail";
-            version = "0.0.17";
+            version = "0.1.8";
             src = fetchHex {
               pkg = "gmail";
-              version = "0.0.17";
+              version = "0.1.8";
               sha256 =
-                "3c8fa022730d7e8016c777e48977077d6ebc02c4382d13d94b60f452ed8e650d";
+                "d307c44c9241730fa96d5dbab796295f3d55980465faddf610bf962cd359cbcf";
             };
-            beamDeps  = [ timex_1_0_0_rc4 poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ timex_2_1_3 poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''A simple Gmail REST API client for Elixir'';
@@ -19122,12 +22172,12 @@ let
           }
       ) {};
 
-    gmail = gmail_0_0_17;
+    gmail = gmail_0_1_8;
 
     gold_0_12_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, decimal_1_1_1
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, decimal_1_1_1
         }:
           buildMix {
             name = "gold";
@@ -19138,7 +22188,7 @@ let
               sha256 =
                 "fba43501f6c25116c29358c4b5494de5e078cc516572045ac73a7944b918105b";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 decimal_1_1_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 decimal_1_1_1 ];
 
             meta = {
               description = ''An Elixir library to interface with the Bitcoin
@@ -19177,7 +22227,7 @@ let
 
     good_enough_geoid_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, csv_1_2_4 }:
+        {  buildMix, fetchHex, csv_1_3_3 }:
           buildMix {
             name = "good_enough_geoid";
             version = "0.0.2";
@@ -19187,7 +22237,7 @@ let
               sha256 =
                 "7b2a556206f71e743d77c26a55b60b3282bd799b8254510f62afe2a4ec330746";
             };
-            beamDeps  = [ csv_1_2_4 ];
+            beamDeps  = [ csv_1_3_3 ];
 
             meta = {
               description = ''Get EGM Geoid heights that are good enough for
@@ -19229,7 +22279,7 @@ let
         {
           buildMix,
           fetchHex,
-          plug_1_1_1,
+          plug_1_1_3,
           module_mocker_0_2_0,
           cowboy_1_0_4,
           access_token_extractor_0_1_1
@@ -19244,7 +22294,7 @@ let
                 "029f2399456a7b7474635cab36544d35e200ddd7a470a905191de0fc3612adb5";
             };
             beamDeps  = [
-                          plug_1_1_1
+                          plug_1_1_3
                           module_mocker_0_2_0
                           cowboy_1_0_4
                           access_token_extractor_0_1_1
@@ -19264,25 +22314,25 @@ let
 
     google_auth = google_auth_0_0_2;
 
-    google_sheets_2_0_3 = callPackage
+    google_sheets_2_0_5 = callPackage
       (
         {
           buildMix,
           fetchHex,
           sweet_xml_0_6_1,
-          httpoison_0_8_1,
-          hackney_1_4_8
+          httpoison_0_8_2,
+          hackney_1_6_0
         }:
           buildMix {
             name = "google_sheets";
-            version = "2.0.3";
+            version = "2.0.5";
             src = fetchHex {
               pkg = "google_sheets";
-              version = "2.0.3";
+              version = "2.0.5";
               sha256 =
-                "10b5708d3fb7e41a4e8e026e0cdd2c282fb4804f7f3b53e2a9dd5ddce01749fe";
+                "aeaaab3e2df75289cf14740a76b014652fb77a5ef95be3921fc36f4165812682";
             };
-            beamDeps  = [ sweet_xml_0_6_1 httpoison_0_8_1 hackney_1_4_8 ];
+            beamDeps  = [ sweet_xml_0_6_1 httpoison_0_8_2 hackney_1_6_0 ];
 
             meta = {
               description = ''OTP application for fetching and polling Google
@@ -19293,7 +22343,7 @@ let
           }
       ) {};
 
-    google_sheets = google_sheets_2_0_3;
+    google_sheets = google_sheets_2_0_5;
 
     goth_0_0_3 = callPackage
       (
@@ -19302,7 +22352,7 @@ let
           fetchHex,
           poison_1_5_2,
           json_web_token_0_2_4,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildMix {
             name = "goth";
@@ -19313,7 +22363,7 @@ let
               sha256 =
                 "0bbf59ae842dc4518cf42123b0fb0d0255bcb72ea37c8ec13bab2efe2339ccc3";
             };
-            beamDeps  = [ poison_1_5_2 json_web_token_0_2_4 httpoison_0_8_1
+            beamDeps  = [ poison_1_5_2 json_web_token_0_2_4 httpoison_0_8_2
                       ];
 
             meta = {
@@ -19330,8 +22380,8 @@ let
 
     gpb_3_18_10 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "gpb";
             version = "3.18.10";
             src = fetchHex {
@@ -19352,8 +22402,8 @@ let
 
     gpb_3_18_8 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "gpb";
             version = "3.18.8";
             src = fetchHex {
@@ -19372,17 +22422,17 @@ let
           }
       ) {};
 
-    gpb_3_19_0 = callPackage
+    gpb_3_20_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "gpb";
-            version = "3.19.0";
+            version = "3.20.0";
             src = fetchHex {
               pkg = "gpb";
-              version = "3.19.0";
+              version = "3.20.0";
               sha256 =
-                "9d7fdee6914d5ce3850a58f00ae37240ba7ccb9ecf37aeb0e1bdfae37ca6b4b7";
+                "d83eb25783fdc3f10b4f8e00c8434453a260958c696efa85fee53ed3a9447e83";
             };
 
             meta = {
@@ -19394,7 +22444,7 @@ let
           }
       ) {};
 
-    gpb = gpb_3_19_0;
+    gpb = gpb_3_20_0;
 
     gproc_0_3_1 = callPackage
       (
@@ -19517,17 +22567,17 @@ let
 
     graphmath = graphmath_1_0_2;
 
-    graphql_0_1_2 = callPackage
+    graphql_0_2_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "graphql";
-            version = "0.1.2";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "graphql";
-              version = "0.1.2";
+              version = "0.2.0";
               sha256 =
-                "d517247d9518fb1db9631a988f02935a253da43c3c2818c8a1355631645bd92c";
+                "2469337ef663fb63922e67beafa2a50d56de14176c699758a855210140c269df";
             };
 
             meta = {
@@ -19538,7 +22588,7 @@ let
           }
       ) {};
 
-    graphql = graphql_0_1_2;
+    graphql = graphql_0_2_0;
 
     graphql_ex_0_0_1 = callPackage
       (
@@ -19560,8 +22610,8 @@ let
 
     graphql_parser_0_0_3 = callPackage
       (
-        {  buildRebar3, fetchHex, poison_1_5_2 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, poison_1_5_2 }:
+          buildErlangMk {
             name = "graphql_parser";
             version = "0.0.3";
             src = fetchHex {
@@ -19570,7 +22620,6 @@ let
               sha256 =
                 "c54d6d3a4d5daba22559bc306e3e52cb8d78d3a93738f615c16e405ad56ac6a9";
             };
-
             beamDeps  = [ poison_1_5_2 ];
 
             meta = {
@@ -19583,6 +22632,30 @@ let
       ) {};
 
     graphql_parser = graphql_parser_0_0_3;
+
+    graphql_relay_0_0_16 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_0_3, graphql_0_2_0, ecto_1_1_5 }:
+          buildMix {
+            name = "graphql_relay";
+            version = "0.0.16";
+            src = fetchHex {
+              pkg = "graphql_relay";
+              version = "0.0.16";
+              sha256 =
+                "70c84b22afba3dc47c0a68c4ba58f7f4319d1ef55c8a85364fc05e05bcaf97af";
+            };
+            beamDeps  = [ poison_1_0_3 graphql_0_2_0 ecto_1_1_5 ];
+
+            meta = {
+              description = ''Elixir implementation of Relay for GraphQL'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/graphql-elixir/graphql_relay";
+            };
+          }
+      ) {};
+
+    graphql_relay = graphql_relay_0_0_16;
 
     gravatarify_0_1_0 = callPackage
       (
@@ -19630,6 +22703,34 @@ let
       ) {};
 
     gray = gray_0_0_2;
+
+    group_manager_0_0_8 = callPackage
+      (
+        {  buildMix, fetchHex, chatter_0_0_14 }:
+          buildMix {
+            name = "group_manager";
+            version = "0.0.8";
+            src = fetchHex {
+              pkg = "group_manager";
+              version = "0.0.8";
+              sha256 =
+                "69d9de842663ed764a8f6792c6a0f5a378e717e302058b9050b4a58be0d14cdf";
+            };
+            beamDeps  = [ chatter_0_0_14 ];
+
+            meta = {
+              longDescription = ''GroupManager is extracted from the ScaleSmall
+                                project as a standalone piece. This can be used
+                                independently to manage a set of nodes and
+                                coordinate a common goal expressed as integer
+                                ranges.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/dbeck/groupman_ex/";
+            };
+          }
+      ) {};
+
+    group_manager = group_manager_0_0_8;
 
     growl_0_0_2 = callPackage
       (
@@ -19683,8 +22784,8 @@ let
           fetchHex,
           uuid_1_1_3,
           poison_1_5_2,
-          plug_1_1_1,
-          jose_1_6_1
+          plug_1_1_3,
+          jose_1_7_3
         }:
           buildMix {
             name = "guardian";
@@ -19695,7 +22796,7 @@ let
               sha256 =
                 "741aaa989ab656317a247d1db4dcd8e3efbd840b4d451bed7a37504ffdba6dc9";
             };
-            beamDeps  = [ uuid_1_1_3 poison_1_5_2 plug_1_1_1 jose_1_6_1 ];
+            beamDeps  = [ uuid_1_1_3 poison_1_5_2 plug_1_1_3 jose_1_7_3 ];
 
             meta = {
               description = ''Elixir Authentication framework'';
@@ -19714,8 +22815,8 @@ let
           fetchHex,
           uuid_1_1_3,
           poison_1_5_2,
-          plug_1_1_1,
-          jose_1_6_1
+          plug_1_1_3,
+          jose_1_7_3
         }:
           buildMix {
             name = "guardian";
@@ -19726,7 +22827,7 @@ let
               sha256 =
                 "9a79ae386f777774ab2910007cd30b20e2ea8da51c0712ec07f8cc8a13dfe293";
             };
-            beamDeps  = [ uuid_1_1_3 poison_1_5_2 plug_1_1_1 jose_1_6_1 ];
+            beamDeps  = [ uuid_1_1_3 poison_1_5_2 plug_1_1_3 jose_1_7_3 ];
 
             meta = {
               description = ''Elixir Authentication framework'';
@@ -19743,7 +22844,7 @@ let
           fetchHex,
           postgrex_0_11_1,
           guardian_0_9_1,
-          ecto_2_0_0_beta_0
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "guardian_db";
@@ -19754,7 +22855,7 @@ let
               sha256 =
                 "d8fc1d33885c42c9a35c1c370bfe676b68a9b4fb54ed33ff7075e32cadcd1279";
             };
-            beamDeps  = [ postgrex_0_11_1 guardian_0_9_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 guardian_0_9_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''DB tracking for token validity'';
@@ -19821,7 +22922,7 @@ let
           fetchHex,
           websocket_client_1_1_0,
           poison_1_5_2,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildMix {
             name = "guri";
@@ -19832,7 +22933,7 @@ let
               sha256 =
                 "7fa0f2ebff111c368895798041d982f00eec34589d93f10bb323bb5a09e1f888";
             };
-            beamDeps  = [ websocket_client_1_1_0 poison_1_5_2 httpoison_0_8_1
+            beamDeps  = [ websocket_client_1_1_0 poison_1_5_2 httpoison_0_8_2
                       ];
 
             meta = {
@@ -19892,37 +22993,12 @@ let
 
     gutenex = gutenex_0_1_0;
 
-    hackney_1_0_6 = callPackage
-      (
-        {
-          buildRebar3, fetchHex, ssl_verify_hostname_1_0_1, idna_1_0_2
-        }:
-          buildRebar3 {
-            name = "hackney";
-            version = "1.0.6";
-            src = fetchHex {
-              pkg = "hackney";
-              version = "1.0.6";
-              sha256 =
-                "ba74e309ffd9413ca2fdc0c68871e31db9d6f779f8aa32f4828e08ebab8300da";
-            };
-
-            beamDeps  = [ ssl_verify_hostname_1_0_1 idna_1_0_2 ];
-
-            meta = {
-              description = ''simple HTTP client'';
-              license = stdenv.lib.licenses.asl20;
-              homepage = "https://github.com/benoitc/hackney";
-            };
-          }
-      ) {};
-
     hackney_1_1_0 = callPackage
       (
         {
-          buildRebar3, fetchHex, ssl_verify_hostname_1_0_6, idna_1_0_3
+          buildErlangMk, fetchHex, ssl_verify_hostname_1_0_6, idna_2_0_0
         }:
-          buildRebar3 {
+          buildErlangMk {
             name = "hackney";
             version = "1.1.0";
             src = fetchHex {
@@ -19931,8 +23007,7 @@ let
               sha256 =
                 "c8551072fdc8d5d5faacc5a31050cb943c3a8eb533149798b3ff424ef2d68501";
             };
-
-            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_1_0_3 ];
+            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_2_0_0 ];
 
             meta = {
               description = ''simple HTTP client'';
@@ -19945,9 +23020,9 @@ let
     hackney_1_3_1 = callPackage
       (
         {
-          buildRebar3, fetchHex, ssl_verify_hostname_1_0_6, idna_1_0_3
+          buildErlangMk, fetchHex, ssl_verify_hostname_1_0_6, idna_2_0_0
         }:
-          buildRebar3 {
+          buildErlangMk {
             name = "hackney";
             version = "1.3.1";
             src = fetchHex {
@@ -19956,8 +23031,7 @@ let
               sha256 =
                 "1a6316daceae744758fc88f2961e68c5a8b6cf1e1f49a28fc2caea6d27581add";
             };
-
-            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_1_0_3 ];
+            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_2_0_0 ];
 
             meta = {
               description = ''simple HTTP client'';
@@ -19970,9 +23044,9 @@ let
     hackney_1_3_2 = callPackage
       (
         {
-          buildRebar3, fetchHex, ssl_verify_hostname_1_0_6, idna_1_0_3
+          buildErlangMk, fetchHex, ssl_verify_hostname_1_0_6, idna_2_0_0
         }:
-          buildRebar3 {
+          buildErlangMk {
             name = "hackney";
             version = "1.3.2";
             src = fetchHex {
@@ -19981,8 +23055,42 @@ let
               sha256 =
                 "9b811cff637b29f9c7e2c61abf01986c85cd4f64a9422315fd803993b4e82615";
             };
+            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_2_0_0 ];
 
-            beamDeps  = [ ssl_verify_hostname_1_0_6 idna_1_0_3 ];
+            meta = {
+              description = ''simple HTTP client'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/benoitc/hackney";
+            };
+          }
+      ) {};
+
+    hackney_1_4_10 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          ssl_verify_hostname_1_0_5,
+          mimerl_1_0_2,
+          idna_1_1_0,
+          certifi_0_3_0
+        }:
+          buildRebar3 {
+            name = "hackney";
+            version = "1.4.10";
+            src = fetchHex {
+              pkg = "hackney";
+              version = "1.4.10";
+              sha256 =
+                "dbdda6c342984ab0f35c5099dfab4b419a77771d096089a9173bf11ab6a0f7bf";
+            };
+
+            beamDeps  = [
+                          ssl_verify_hostname_1_0_5
+                          mimerl_1_0_2
+                          idna_1_1_0
+                          certifi_0_3_0
+                        ];
 
             meta = {
               description = ''simple HTTP client'';
@@ -20062,7 +23170,81 @@ let
           }
       ) {};
 
-    hackney = hackney_1_4_8;
+    hackney_1_5_7 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          ssl_verify_fun_1_1_0,
+          mimerl_1_0_2,
+          metrics_1_0_1,
+          idna_1_2_0,
+          certifi_0_4_0
+        }:
+          buildRebar3 {
+            name = "hackney";
+            version = "1.5.7";
+            src = fetchHex {
+              pkg = "hackney";
+              version = "1.5.7";
+              sha256 =
+                "627ed3f048b950d2dbbec918519f89f498a2136d74ca8180c15fad412b9bc869";
+            };
+
+            beamDeps  = [
+                          ssl_verify_fun_1_1_0
+                          mimerl_1_0_2
+                          metrics_1_0_1
+                          idna_1_2_0
+                          certifi_0_4_0
+                        ];
+
+            meta = {
+              description = ''simple HTTP client'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/benoitc/hackney";
+            };
+          }
+      ) {};
+
+    hackney_1_6_0 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          ssl_verify_fun_1_1_0,
+          mimerl_1_0_2,
+          metrics_1_0_1,
+          idna_1_2_0,
+          certifi_0_4_0
+        }:
+          buildRebar3 {
+            name = "hackney";
+            version = "1.6.0";
+            src = fetchHex {
+              pkg = "hackney";
+              version = "1.6.0";
+              sha256 =
+                "8b517f17c794ab611815042d24e149daafbd898d63aac8baf6750b890261c716";
+            };
+
+            beamDeps  = [
+                          ssl_verify_fun_1_1_0
+                          mimerl_1_0_2
+                          metrics_1_0_1
+                          idna_1_2_0
+                          certifi_0_4_0
+                        ];
+
+            meta = {
+              description = ''simple HTTP client'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/benoitc/hackney";
+            };
+          }
+      ) {};
+
+    hackney = hackney_1_6_0;
 
     haikunator_1_0_1 = callPackage
       (
@@ -20090,8 +23272,8 @@ let
 
     hamcrest_0_1_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "hamcrest";
             version = "0.1.1";
             src = fetchHex {
@@ -20159,19 +23341,19 @@ let
 
     harakiri = harakiri_0_6_0;
 
-    harvest_0_0_2 = callPackage
+    harvest_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "harvest";
-            version = "0.0.2";
+            version = "0.0.3";
             src = fetchHex {
               pkg = "harvest";
-              version = "0.0.2";
+              version = "0.0.3";
               sha256 =
-                "d4d7289c7f166cd035140b6ebe6a14c4cf1f1552b597473bcc29588c8e394e6d";
+                "a9b52f37959a97e876603da5a34a0683e9e4a8e534fb7c672175602768fc812a";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Harvest Time Tracking API wrapper written in
@@ -20182,12 +23364,35 @@ let
           }
       ) {};
 
-    harvest = harvest_0_0_2;
+    harvest = harvest_0_0_3;
 
-    hash_ring_ex_1_1_2 = callPackage
+    hash_ring_0_4_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
+            name = "hash_ring";
+            version = "0.4.0";
+            src = fetchHex {
+              pkg = "hash_ring";
+              version = "0.4.0";
+              sha256 =
+                "97f7b4252e660ae3c66fd163277267d3445cfea097342027fe6cc3512fdafd16";
+            };
+
+            meta = {
+              description = ''Consistent Hash Ring'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/sile/hash_ring";
+            };
+          }
+      ) {};
+
+    hash_ring = hash_ring_0_4_0;
+
+    hash_ring_ex_1_1_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "hash_ring_ex";
             version = "1.1.2";
             src = fetchHex {
@@ -20208,17 +23413,17 @@ let
 
     hash_ring_ex = hash_ring_ex_1_1_2;
 
-    hashids_2_0_1 = callPackage
+    hashids_2_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "hashids";
-            version = "2.0.1";
+            version = "2.0.2";
             src = fetchHex {
               pkg = "hashids";
-              version = "2.0.1";
+              version = "2.0.2";
               sha256 =
-                "8f16b2bf57a71ce5da716bdd731c61e789e2c25f1fd5c00130f0efee9a251a26";
+                "3dae063908483454ec691e61da580a056997b4c9affcf12b2330937ee48e6bf0";
             };
 
             meta = {
@@ -20230,7 +23435,54 @@ let
           }
       ) {};
 
-    hashids = hashids_2_0_1;
+    hashids = hashids_2_0_2;
+
+    hdr_histogram_0_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "hdr_histogram";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "hdr_histogram";
+              version = "0.2.0";
+              sha256 =
+                "42b6d038deeb6a6b695f5f18842afef240b2510e433bc08b21c9b3daa99a221e";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''High Dynamic Range Histogram Erlang/OTP
+                            library'';
+              license = with stdenv.lib.licenses; [ cc0 bsd3 ];
+              homepage = "https://github.com/HdrHistogram/hdr_histogram_erl";
+            };
+          }
+      ) {};
+
+    hdr_histogram = hdr_histogram_0_2_0;
+
+    heap_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "heap";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "heap";
+              version = "1.0.0";
+              sha256 =
+                "39ddb188337ef43dd46e1920abba0bb88821a8cc19cc8688aa36045a58f733d0";
+            };
+
+            meta = {
+              description = ''Heap data structure and tools'';
+
+            };
+          }
+      ) {};
+
+    heap = heap_1_0_0;
 
     heapq_0_0_1 = callPackage
       (
@@ -20256,6 +23508,28 @@ let
 
     heapq = heapq_0_0_1;
 
+    hedwig_0_3_0 = callPackage
+      (
+        {  buildMix, fetchHex, gproc_0_5_0 }:
+          buildMix {
+            name = "hedwig";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "hedwig";
+              version = "0.3.0";
+              sha256 =
+                "2a1dfd91c56c43e804fbfb7a24fcaee67f17add19615e66321205ad486231e53";
+            };
+            beamDeps  = [ gproc_0_5_0 ];
+
+            meta = {
+              description = ''An adapter-based chat bot framework'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/hedwig-im/hedwig";
+            };
+          }
+      ) {};
+
     hedwig_1_0_0_rc3 = callPackage
       (
         {  buildMix, fetchHex, gproc_0_5_0 }:
@@ -20280,9 +23554,57 @@ let
 
     hedwig = hedwig_1_0_0_rc3;
 
+    hedwig_hipchat_0_9_4 = callPackage
+      (
+        {  buildMix, fetchHex, romeo_0_4_0, hedwig_0_3_0 }:
+          buildMix {
+            name = "hedwig_hipchat";
+            version = "0.9.4";
+            src = fetchHex {
+              pkg = "hedwig_hipchat";
+              version = "0.9.4";
+              sha256 =
+                "4d42f307e1c9fd91a47808476a1c278997c6990a69db41f6ed081b61a69056f4";
+            };
+            beamDeps  = [ romeo_0_4_0 hedwig_0_3_0 ];
+
+            meta = {
+              description = ''A HipChat adapter for Hedwig'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/jwarlander/hedwig_hipchat";
+            };
+          }
+      ) {};
+
+    hedwig_hipchat = hedwig_hipchat_0_9_4;
+
+    hedwig_irc_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex, hedwig_0_3_0, exirc_0_10_0 }:
+          buildMix {
+            name = "hedwig_irc";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "hedwig_irc";
+              version = "0.1.1";
+              sha256 =
+                "367d1a654069078fad1a5d27a1447c6aa6044517fbe46c9e10182faa418d6085";
+            };
+            beamDeps  = [ hedwig_0_3_0 exirc_0_10_0 ];
+
+            meta = {
+              description = ''An IRC adapter for Hedwig'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/jeffweiss/hedwig_irc";
+            };
+          }
+      ) {};
+
+    hedwig_irc = hedwig_irc_0_1_1;
+
     hedwig_xmpp_1_0_0_rc2 = callPackage
       (
-        {  buildMix, fetchHex, romeo_0_4_0, hedwig_1_0_0_rc3 }:
+        {  buildMix, fetchHex, romeo_0_4_0, hedwig_0_3_0 }:
           buildMix {
             name = "hedwig_xmpp";
             version = "1.0.0-rc2";
@@ -20292,7 +23614,7 @@ let
               sha256 =
                 "79d60e836763c9eb88798bb5921e8eda717fbbf3030ca401f2a3915f58bc59e0";
             };
-            beamDeps  = [ romeo_0_4_0 hedwig_1_0_0_rc3 ];
+            beamDeps  = [ romeo_0_4_0 hedwig_0_3_0 ];
 
             meta = {
               description = ''An XMPP adapter for Hedwig'';
@@ -20354,7 +23676,7 @@ let
 
     hello_world_header_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_2, cowboy_1_0_4 }:
           buildMix {
             name = "hello_world_header";
             version = "0.0.1";
@@ -20364,7 +23686,7 @@ let
               sha256 =
                 "caddb7712a66326face465231cf3bfe9210a62787cf5f499f9fbcc04e4695242";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''Demo plug used for tutorial purposes.'';
@@ -20432,8 +23754,8 @@ let
           fetchHex,
           table_rex_0_4_0,
           ibrowse_4_2_2,
-          httpotion_2_1_0,
-          floki_0_7_1
+          httpotion_2_2_2,
+          floki_0_7_2
         }:
           buildMix {
             name = "hex_searcher";
@@ -20447,8 +23769,8 @@ let
             beamDeps  = [
                           table_rex_0_4_0
                           ibrowse_4_2_2
-                          httpotion_2_1_0
-                          floki_0_7_1
+                          httpotion_2_2_2
+                          floki_0_7_2
                         ];
 
             meta = {
@@ -20534,7 +23856,7 @@ let
 
     hexoku_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_2 }:
           buildMix {
             name = "hexoku";
             version = "0.1.0";
@@ -20544,7 +23866,7 @@ let
               sha256 =
                 "39c24660842061d71922df5f87ac4fa065b3f18f64a4f438d40495ffeb9d711b";
             };
-            beamDeps  = [ jsex_2_0_0 httpoison_0_8_1 ];
+            beamDeps  = [ jsex_2_0_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Heroku API client and Heroku Mix tasks for Elixir
@@ -20580,6 +23902,67 @@ let
 
     hlc = hlc_2_0_0;
 
+    hmc5883l_0_5_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          multidef_0_2_1,
+          mon_handler_1_0_2,
+          elixir_ale_0_4_1,
+          dialyze_0_1_4
+        }:
+          buildMix {
+            name = "hmc5883l";
+            version = "0.5.0";
+            src = fetchHex {
+              pkg = "hmc5883l";
+              version = "0.5.0";
+              sha256 =
+                "cbda55c14a5e1fc5accd49de948331c5dc264286c6ecd58c348cb54c66fe6fa4";
+            };
+            beamDeps  = [
+                          multidef_0_2_1
+                          mon_handler_1_0_2
+                          elixir_ale_0_4_1
+                          dialyze_0_1_4
+                        ];
+
+            meta = {
+              longDescription = ''OTP application for reading the HMC5883L
+                                3-axis magnetometer. Magnetic heading is read at
+                                approx. 13hz (every 75ms)'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/tattdcodemonkey/hmc5883l";
+            };
+          }
+      ) {};
+
+    hmc5883l = hmc5883l_0_5_0;
+
+    hoax_0_11_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "hoax";
+            version = "0.11.1";
+            src = fetchHex {
+              pkg = "hoax";
+              version = "0.11.1";
+              sha256 =
+                "49476b151d5aac771fca9fc079c745339203d5a7313b357e90942b5d929d0110";
+            };
+
+            meta = {
+              description = ''Yet another mocking library for Erlang'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/xenolinguist/hoax";
+            };
+          }
+      ) {};
+
+    hoax = hoax_0_11_1;
+
     holidays_0_1_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -20604,21 +23987,21 @@ let
 
     holidays = holidays_0_1_1;
 
-    honeybadger_0_3_1 = callPackage
+    honeybadger_0_4_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, plug_0_8_1, httpoison_0_8_1
+          buildMix, fetchHex, poison_2_1_0, plug_1_1_3, httpoison_0_8_2
         }:
           buildMix {
             name = "honeybadger";
-            version = "0.3.1";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "honeybadger";
-              version = "0.3.1";
+              version = "0.4.0";
               sha256 =
-                "9555cbe7a4069f27f8182c066411f6c439f79f147eb0a1605e13d55b07fb260b";
+                "d2810f38e4a600476ac585c1980dffdf2f62eb2212fe27f76eb07e0ea2bc2dd8";
             };
-            beamDeps  = [ poison_1_5_2 plug_0_8_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Elixir client, Plug and error_logger for
@@ -20631,7 +24014,7 @@ let
           }
       ) {};
 
-    honeybadger = honeybadger_0_3_1;
+    honeybadger = honeybadger_0_4_0;
 
     honeydew_0_0_8 = callPackage
       (
@@ -20682,7 +24065,7 @@ let
 
     hound_0_8_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "hound";
             version = "0.8.2";
@@ -20692,7 +24075,7 @@ let
               sha256 =
                 "3ecb4b7d20de76e6790d61e53555e3486ed5810bb6f0052321620b1d46ffb188";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Webdriver library for integration testing and
@@ -20705,15 +24088,41 @@ let
 
     hound = hound_0_8_2;
 
+    hpack_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "hpack";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "hpack";
+              version = "1.0.0";
+              sha256 =
+                "092fe46ef1c59bf2d7d47f627520321eb6965861db1516c95ef19d484958aea5";
+            };
+
+            meta = {
+              longDescription = ''Implementation of the
+                                [HPack](https://http2.github.io/http2-spec/compression.html)
+                                protocol, a compression format for efficiently
+                                representing HTTP header fields, to be used in
+                                HTTP/2.'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    hpack = hpack_1_0_0;
+
     hr_0_2_2 = callPackage
       (
         {
           buildMix,
           fetchHex,
           yyid_0_1_2,
-          plug_1_1_1,
-          phoenix_html_2_5_0,
-          phoenix_ecto_3_0_0_beta_0,
+          plug_1_1_3,
+          phoenix_html_2_5_1,
+          phoenix_ecto_3_0_0_beta_2,
           phoenix_1_1_4,
           oauth2_0_3_0,
           linguist_0_1_5,
@@ -20731,9 +24140,9 @@ let
             };
             beamDeps  = [
                           yyid_0_1_2
-                          plug_1_1_1
-                          phoenix_html_2_5_0
-                          phoenix_ecto_3_0_0_beta_0
+                          plug_1_1_3
+                          phoenix_html_2_5_1
+                          phoenix_ecto_3_0_0_beta_2
                           phoenix_1_1_4
                           oauth2_0_3_0
                           linguist_0_1_5
@@ -20754,7 +24163,7 @@ let
 
     hstore_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_6_0, apex_0_3_7 }:
+        {  buildMix, fetchHex, postgrex_0_8_4, apex_0_3_7 }:
           buildMix {
             name = "hstore";
             version = "0.0.2";
@@ -20764,7 +24173,7 @@ let
               sha256 =
                 "bd5040285c29162685f4db37ef3ad30c2bb473f5c54fe03ef29b4383cf23504a";
             };
-            beamDeps  = [ postgrex_0_6_0 apex_0_3_7 ];
+            beamDeps  = [ postgrex_0_8_4 apex_0_3_7 ];
 
             meta = {
               longDescription = ''A collection of encoders and decoders for
@@ -20777,17 +24186,17 @@ let
 
     hstore = hstore_0_0_2;
 
-    html_builder_0_1_0 = callPackage
+    html_builder_0_1_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "html_builder";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "html_builder";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "825fa6d1be1c42bf91dcd198c791eb32156973a70273afb93616285f97dce0c2";
+                "7cba41180419a26e2fb8ff1c075efcdf31e4079e06144d58623c32c1de3835d9";
             };
 
             meta = {
@@ -20799,7 +24208,7 @@ let
           }
       ) {};
 
-    html_builder = html_builder_0_1_0;
+    html_builder = html_builder_0_1_1;
 
     html_entities_0_3_0 = callPackage
       (
@@ -20823,6 +24232,28 @@ let
       ) {};
 
     html_entities = html_entities_0_3_0;
+
+    html_sanitize_ex_0_1_2 = callPackage
+      (
+        {  buildMix, fetchHex, mochiweb_2_12_2 }:
+          buildMix {
+            name = "html_sanitize_ex";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "html_sanitize_ex";
+              version = "0.1.2";
+              sha256 =
+                "e6937b25832bcdccb8b547632428de7fe034199c871f037311d4340c345348a7";
+            };
+            beamDeps  = [ mochiweb_2_12_2 ];
+
+            meta = {
+              description = ''HTML sanitizer for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/rrrene/html_sanitize_ex";
+            };
+          }
+      ) {};
 
     html_sanitize_ex_0_3_1 = callPackage
       (
@@ -20906,7 +24337,7 @@ let
           fetchHex,
           pool_0_0_2,
           excoveralls_0_5_1,
-          ex_doc_0_6_2,
+          ex_doc_0_7_3,
           earmark_0_1_19,
           dialyze_0_1_4
         }:
@@ -20922,7 +24353,7 @@ let
             beamDeps  = [
                           pool_0_0_2
                           excoveralls_0_5_1
-                          ex_doc_0_6_2
+                          ex_doc_0_7_3
                           earmark_0_1_19
                           dialyze_0_1_4
                         ];
@@ -20938,13 +24369,62 @@ let
 
     http = http_0_0_1;
 
+    http2_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "http2";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "http2";
+              version = "0.0.2";
+              sha256 =
+                "fd8354d9c7800223ffcb66c2c359a40a5be3809ea4e3b2046fee253a5d049250";
+            };
+
+            meta = {
+              description = ''HPACK implementation for Elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kiennt/hpack";
+            };
+          }
+      ) {};
+
+    http2 = http2_0_0_2;
+
+    http_params_serializer_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "http_params_serializer";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "http_params_serializer";
+              version = "0.1.1";
+              sha256 =
+                "7d6c2184814b7232130a3193c9832827c5eeaaae928155d96863ec426da6ce69";
+            };
+
+            meta = {
+              longDescription = ''A small library to serialize deeply nested
+                                datastructures into HTTP parameters that most
+                                backends do understand'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/ruby2elixir/http_params_serializer";
+            };
+          }
+      ) {};
+
+    http_params_serializer = http_params_serializer_0_1_1;
+
     http_proxy_1_0_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
           plug_1_0_3,
-          hackney_1_4_8,
+          hackney_1_4_10,
           exjsx_3_2_0,
           cowboy_1_0_4
         }:
@@ -20957,7 +24437,7 @@ let
               sha256 =
                 "7ff5d10c8932b189844f9735742250e4fdbe9de5eba40c84e7447f54fc75fdd3";
             };
-            beamDeps  = [ plug_1_0_3 hackney_1_4_8 exjsx_3_2_0 cowboy_1_0_4
+            beamDeps  = [ plug_1_0_3 hackney_1_4_10 exjsx_3_2_0 cowboy_1_0_4
                       ];
 
             meta = {
@@ -20978,7 +24458,7 @@ let
           fetchHex,
           xml_builder_0_0_8,
           poison_1_5_2,
-          plug_1_1_1,
+          plug_1_1_3,
           cowboy_1_0_4
         }:
           buildMix {
@@ -20991,7 +24471,7 @@ let
                 "9a2844cc8c880621ca2689e0056f50e2c19e3b0e87a8e2524489459b377a8dc3";
             };
             beamDeps  = [
-                          xml_builder_0_0_8 poison_1_5_2 plug_1_1_1 cowboy_1_0_4
+                          xml_builder_0_0_8 poison_1_5_2 plug_1_1_3 cowboy_1_0_4
                         ];
 
             meta = {
@@ -21009,8 +24489,8 @@ let
 
     http_signature_1_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "http_signature";
             version = "1.1.0";
             src = fetchHex {
@@ -21059,7 +24539,7 @@ let
 
     httpehaviour_0_9_0 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_4_8 }:
+        {  buildMix, fetchHex, hackney_1_6_0 }:
           buildMix {
             name = "httpehaviour";
             version = "0.9.0";
@@ -21069,7 +24549,7 @@ let
               sha256 =
                 "54e93dcf0e62d392781078cf029478194797fe67c98dffe99a91b5d5ec33e4e5";
             };
-            beamDeps  = [ hackney_1_4_8 ];
+            beamDeps  = [ hackney_1_6_0 ];
 
             meta = {
               description = ''Yet Yet Another HTTP client for Elixir powered by
@@ -21084,7 +24564,7 @@ let
 
     httpoison_0_7_1 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_3_2 }:
+        {  buildMix, fetchHex, hackney_1_4_8 }:
           buildMix {
             name = "httpoison";
             version = "0.7.1";
@@ -21094,7 +24574,7 @@ let
               sha256 =
                 "ad146f8a1e8cb81d50337ca62bd83a80fc1e3df768b93a9ed4c497c3a554c9b0";
             };
-            beamDeps  = [ hackney_1_3_2 ];
+            beamDeps  = [ hackney_1_4_8 ];
 
             meta = {
               description = ''Yet Another HTTP client for Elixir powered by
@@ -21107,7 +24587,7 @@ let
 
     httpoison_0_7_5 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_3_2 }:
+        {  buildMix, fetchHex, hackney_1_4_8 }:
           buildMix {
             name = "httpoison";
             version = "0.7.5";
@@ -21117,7 +24597,7 @@ let
               sha256 =
                 "a9b32452df3c4671c012953d6bb15e3a52bbb41b618f72cbd464e8c9320847c9";
             };
-            beamDeps  = [ hackney_1_3_2 ];
+            beamDeps  = [ hackney_1_4_8 ];
 
             meta = {
               description = ''Yet Another HTTP client for Elixir powered by
@@ -21130,7 +24610,7 @@ let
 
     httpoison_0_8_0 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_4_8 }:
+        {  buildMix, fetchHex, hackney_1_4_10 }:
           buildMix {
             name = "httpoison";
             version = "0.8.0";
@@ -21140,7 +24620,7 @@ let
               sha256 =
                 "7a6455689233867da40f285e9e3bcce506cd0c60b1094e1c449de76a46b9e50b";
             };
-            beamDeps  = [ hackney_1_4_8 ];
+            beamDeps  = [ hackney_1_4_10 ];
 
             meta = {
               description = ''Yet Another HTTP client for Elixir powered by
@@ -21151,19 +24631,19 @@ let
           }
       ) {};
 
-    httpoison_0_8_1 = callPackage
+    httpoison_0_8_2 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_4_8 }:
+        {  buildMix, fetchHex, hackney_1_5_7 }:
           buildMix {
             name = "httpoison";
-            version = "0.8.1";
+            version = "0.8.2";
             src = fetchHex {
               pkg = "httpoison";
-              version = "0.8.1";
+              version = "0.8.2";
               sha256 =
-                "b4cf6955675f86c77f939b10d29491632a1d227ce1dc4c4db759bc4a52cea600";
+                "00738e34fe2e254199c0324ef60b8150a7b2ced66c2296c4df8425c8e9b8d5c0";
             };
-            beamDeps  = [ hackney_1_4_8 ];
+            beamDeps  = [ hackney_1_5_7 ];
 
             meta = {
               description = ''Yet Another HTTP client for Elixir powered by
@@ -21174,85 +24654,19 @@ let
           }
       ) {};
 
-    httpoison = httpoison_0_8_1;
+    httpoison = httpoison_0_8_2;
 
-    httpotion_1_0_0 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "httpotion";
-            version = "1.0.0";
-            src = fetchHex {
-              pkg = "httpotion";
-              version = "1.0.0";
-              sha256 =
-                "1ff7af8a280928316ba43e15644b75eedd4481dcd56426beb6cad920b244b734";
-            };
-
-            meta = {
-              description = ''Fancy HTTP client for Elixir, based on
-                            ibrowse.'';
-              license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/myfreeweb/httpotion";
-            };
-          }
-      ) {};
-
-    httpotion_2_0_0 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "httpotion";
-            version = "2.0.0";
-            src = fetchHex {
-              pkg = "httpotion";
-              version = "2.0.0";
-              sha256 =
-                "550c94a898f3f2f0bb5f45a18380df66c478fc05b899a1febd7fd3ca666b93c8";
-            };
-
-            meta = {
-              description = ''Fancy HTTP client for Elixir, based on
-                            ibrowse.'';
-              license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/myfreeweb/httpotion";
-            };
-          }
-      ) {};
-
-    httpotion_2_1_0 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "httpotion";
-            version = "2.1.0";
-            src = fetchHex {
-              pkg = "httpotion";
-              version = "2.1.0";
-              sha256 =
-                "d34f1e82283b6b953f611dc24571aa2586e72e19d3d6632b8e3dba78cf1e3761";
-            };
-
-            meta = {
-              description = ''Fancy HTTP client for Elixir, based on
-                            ibrowse.'';
-              license = stdenv.lib.licenses.unlicense;
-              homepage = "https://github.com/myfreeweb/httpotion";
-            };
-          }
-      ) {};
-
-    httpotion_2_2_0 = callPackage
+    httpotion_2_2_2 = callPackage
       (
         {  buildMix, fetchHex, ibrowse_4_2_2 }:
           buildMix {
             name = "httpotion";
-            version = "2.2.0";
+            version = "2.2.2";
             src = fetchHex {
               pkg = "httpotion";
-              version = "2.2.0";
+              version = "2.2.2";
               sha256 =
-                "b5df0909f1cce248a021a1ba970053dbb59bd2695a188396bfc08b6bd73cbd77";
+                "47c6b6c535592547366fe16bfa175385e7de09eecbb2dc6b0f2cea526ef45fbd";
             };
             beamDeps  = [ ibrowse_4_2_2 ];
 
@@ -21265,7 +24679,7 @@ let
           }
       ) {};
 
-    httpotion = httpotion_2_2_0;
+    httpotion = httpotion_2_2_2;
 
     httprot_0_1_7 = callPackage
       (
@@ -21317,7 +24731,7 @@ let
 
     huex_0_5_0 = callPackage
       (
-        {  buildMix, fetchHex, json_0_3_3, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, json_0_3_3, httpoison_0_8_2 }:
           buildMix {
             name = "huex";
             version = "0.5.0";
@@ -21327,7 +24741,7 @@ let
               sha256 =
                 "e5fe37fdc4299567922697516df8ade2f64d2c1573dc9a253e5037f66576858f";
             };
-            beamDeps  = [ json_0_3_3 httpoison_0_8_1 ];
+            beamDeps  = [ json_0_3_3 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir client for Philips Hue connected light
@@ -21417,8 +24831,8 @@ let
           fetchHex,
           porcelain_2_0_1,
           poison_1_5_2,
-          plug_1_1_1,
-          httpoison_0_8_1,
+          plug_1_1_3,
+          httpoison_0_8_2,
           cowboy_1_0_4
         }:
           buildMix {
@@ -21433,8 +24847,8 @@ let
             beamDeps  = [
                           porcelain_2_0_1
                           poison_1_5_2
-                          plug_1_1_1
-                          httpoison_0_8_1
+                          plug_1_1_3
+                          httpoison_0_8_2
                           cowboy_1_0_4
                         ];
 
@@ -21495,7 +24909,7 @@ let
 
     iam_role_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, jsone_1_2_0 }:
+        {  buildMix, fetchHex, jsone_1_2_1 }:
           buildMix {
             name = "iam_role";
             version = "1.0.0";
@@ -21505,7 +24919,7 @@ let
               sha256 =
                 "acfc5d5c5130a36dfb2b460f790bd9e32bf39274f17333bd65c28d216983761d";
             };
-            beamDeps  = [ jsone_1_2_0 ];
+            beamDeps  = [ jsone_1_2_1 ];
 
             meta = {
               description = ''Application for automatically fetching AWS IAM
@@ -21592,8 +25006,8 @@ let
 
     idna_1_0_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "idna";
             version = "1.0.2";
             src = fetchHex {
@@ -21632,20 +25046,108 @@ let
           }
       ) {};
 
-    idna = idna_1_0_3;
+    idna_1_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "idna";
+            version = "1.1.0";
+            src = fetchHex {
+              pkg = "idna";
+              version = "1.1.0";
+              sha256 =
+                "d399393011cd2fa93761d70199b604b2f055bcf6cb45cac922870e122d2eb2fe";
+            };
 
-    ielixir_0_9_0 = callPackage
+            meta = {
+              description = ''A pure Erlang IDNA implementation'';
+
+              homepage = "https://github.com/benoitc/erlang-idna";
+            };
+          }
+      ) {};
+
+    idna_1_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "idna";
+            version = "1.2.0";
+            src = fetchHex {
+              pkg = "idna";
+              version = "1.2.0";
+              sha256 =
+                "1d724cdafb66397e61774ead242c9b725de7033cde8ea98fa4a91e64ac5ef5b3";
+            };
+
+            meta = {
+              description = ''A pure Erlang IDNA implementation'';
+
+              homepage = "https://github.com/benoitc/erlang-idna";
+            };
+          }
+      ) {};
+
+    idna_2_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "idna";
+            version = "2.0.0";
+            src = fetchHex {
+              pkg = "idna";
+              version = "2.0.0";
+              sha256 =
+                "881226593c79eb4b2bf7106a3f2995c70ee6ffbb371c8d1bc71f2869686089f4";
+            };
+
+            meta = {
+              description = ''A pure Erlang IDNA implementation'';
+
+              homepage = "https://github.com/benoitc/erlang-idna";
+            };
+          }
+      ) {};
+
+    idna = idna_2_0_0;
+
+    ieex_0_0_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
+            name = "ieex";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "ieex";
+              version = "0.0.3";
+              sha256 =
+                "c448a86c7979bc75f98e9eb32473041975fb633bc9715f1965958e4a9dbbd1ff";
+            };
+
+            meta = {
+              description = ''Biblioteca para validacao de Inscricao
+                            Estadual'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/edmaarcosta/IEEx";
+            };
+          }
+      ) {};
+
+    ieex = ieex_0_0_3;
+
+    ielixir_0_9_5 = callPackage
+      (
+        {  buildMix, fetchHex, sqlite_ecto_0_5_0, ecto_0_15_0 }:
+          buildMix {
             name = "ielixir";
-            version = "0.9.0";
+            version = "0.9.5";
             src = fetchHex {
               pkg = "ielixir";
-              version = "0.9.0";
+              version = "0.9.5";
               sha256 =
-                "a6cce07a3aeb493bd248f063ba0327e88103b64c0c54657e344dab1c6f568078";
+                "77dae7b4b147da21161b6de0662d3bdeb13d15b12866b2e67add5ec3c550b7ce";
             };
+            beamDeps  = [ sqlite_ecto_0_5_0 ecto_0_15_0 ];
 
             meta = {
               description = ''Jupyter`s kernel for Elixir programming
@@ -21656,11 +25158,11 @@ let
           }
       ) {};
 
-    ielixir = ielixir_0_9_0;
+    ielixir = ielixir_0_9_5;
 
     ifttt_oauth_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, oauth2_0_6_0 }:
           buildMix {
             name = "ifttt_oauth";
             version = "0.0.1";
@@ -21670,7 +25172,7 @@ let
               sha256 =
                 "9029506687be770891b3fb54d9e39bab9dd0f65a9551c6b335a3b0a60dc3026c";
             };
-            beamDeps  = [ oauth2_0_5_0 ];
+            beamDeps  = [ oauth2_0_6_0 ];
 
             meta = {
               longDescription = ''A simple Elixir wrapper around
@@ -21757,8 +25259,8 @@ let
 
     inaka_aleppo_0_9_9 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "inaka_aleppo";
             version = "0.9.9";
             src = fetchHex {
@@ -21780,8 +25282,8 @@ let
 
     inaka_mixer_0_1_5 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "inaka_mixer";
             version = "0.1.5";
             src = fetchHex {
@@ -21897,17 +25399,17 @@ let
 
     inet_cidr = inet_cidr_1_0_1;
 
-    inflex_0_2_3 = callPackage
+    inflex_0_2_4 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "inflex";
-            version = "0.2.3";
+            version = "0.2.4";
             src = fetchHex {
               pkg = "inflex";
-              version = "0.2.3";
+              version = "0.2.4";
               sha256 =
-                "1acb28e23bfb8a38e07fbb764a2691a59fce5c499a79fd27e869a43495710e64";
+                "f4bf8389a59b04f2b92be024d6234fc3583863f06d23db70324f9cb6b5eba8bf";
             };
 
             meta = {
@@ -22032,19 +25534,19 @@ let
 
     ini = ini_0_0_1;
 
-    inquisitor_0_0_2 = callPackage
+    inquisitor_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "inquisitor";
-            version = "0.0.2";
+            version = "0.1.0";
             src = fetchHex {
               pkg = "inquisitor";
-              version = "0.0.2";
+              version = "0.1.0";
               sha256 =
-                "a4d6ed194db0600bad5a19b4efbdd900a0aa943ad79dc03a9a81aaba7ffd4d3d";
+                "06a2cbfba419cc1d81f9c6a62a7f501f3aabaf991b514aa2b012c582c50609bd";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Easily build extendable and composable Ecto
@@ -22055,7 +25557,7 @@ let
           }
       ) {};
 
-    inquisitor = inquisitor_0_0_2;
+    inquisitor = inquisitor_0_1_0;
 
     insert_ordered_set_0_0_1 = callPackage
       (
@@ -22085,19 +25587,19 @@ let
 
     insert_ordered_set = insert_ordered_set_0_0_1;
 
-    insight_0_0_2 = callPackage
+    insight_0_1_3 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "insight";
-            version = "0.0.2";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "insight";
-              version = "0.0.2";
+              version = "0.1.3";
               sha256 =
-                "0088430e0a2826d7b52313d9c29af67712530b18a21a192d5e134f975f0596fe";
+                "5d7519317e4235d56128bef37a5319308921eab748df3295f1fa2842763a6ea3";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir package for consuming any Insight-powered
@@ -22108,7 +25610,7 @@ let
           }
       ) {};
 
-    insight = insight_0_0_2;
+    insight = insight_0_1_3;
 
     insights_0_0_2 = callPackage
       (
@@ -22134,21 +25636,21 @@ let
 
     insights = insights_0_0_2;
 
-    instream_0_9_0 = callPackage
+    instream_0_10_0 = callPackage
       (
         {
-          buildMix, fetchHex, poolboy_1_5_1, poison_1_5_2, hackney_1_4_8
+          buildMix, fetchHex, poolboy_1_5_1, poison_1_0_3, hackney_1_6_0
         }:
           buildMix {
             name = "instream";
-            version = "0.9.0";
+            version = "0.10.0";
             src = fetchHex {
               pkg = "instream";
-              version = "0.9.0";
+              version = "0.10.0";
               sha256 =
-                "e0413b68ca4a593ca11179e968c7c5f79d897a2435d5d40def68f6bc59d7a042";
+                "e43e1400c6c177cb3295585b2d29312571b1f8aaea643b4f605705db858283c4";
             };
-            beamDeps  = [ poolboy_1_5_1 poison_1_5_2 hackney_1_4_8 ];
+            beamDeps  = [ poolboy_1_5_1 poison_1_0_3 hackney_1_6_0 ];
 
             meta = {
               description = ''InfluxDB driver for Elixir'';
@@ -22158,7 +25660,7 @@ let
           }
       ) {};
 
-    instream = instream_0_9_0;
+    instream = instream_0_10_0;
 
     instrumental_0_1_3 = callPackage
       (
@@ -22186,7 +25688,7 @@ let
 
     intellij_elixir_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, exrm_0_15_1 }:
+        {  buildMix, fetchHex, exrm_0_14_17 }:
           buildMix {
             name = "intellij_elixir";
             version = "0.1.2";
@@ -22196,7 +25698,7 @@ let
               sha256 =
                 "023e970e20ef19dbd6e818708c687faf9b47b525b9771bc910a4e48adc101a46";
             };
-            beamDeps  = [ exrm_0_15_1 ];
+            beamDeps  = [ exrm_0_14_17 ];
 
             meta = {
               longDescription = ''IntellijElixir allows intellij-elixir to ask
@@ -22237,7 +25739,7 @@ let
 
     iplist_1_0_2 = callPackage
       (
-        {  buildMix, fetchHex, earmark_0_2_1, cidr_0_5_0 }:
+        {  buildMix, fetchHex, earmark_0_2_1, cidr_1_0_0 }:
           buildMix {
             name = "iplist";
             version = "1.0.2";
@@ -22247,7 +25749,7 @@ let
               sha256 =
                 "fae5b5accc8b7a7618c2d1fbf94607ce6e79ca3b493da6643dbb1bd92be30bd4";
             };
-            beamDeps  = [ earmark_0_2_1 cidr_0_5_0 ];
+            beamDeps  = [ earmark_0_2_1 cidr_1_0_0 ];
 
             meta = {
               description = ''Library and CLI tool to expand IPv4 ranges to
@@ -22259,6 +25761,53 @@ let
       ) {};
 
     iplist = iplist_1_0_2;
+
+    iptools_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "iptools";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "iptools";
+              version = "0.0.1";
+              sha256 =
+                "c8733e46e083c7497f3293e6e366e6fe384abb67557a72c3e362434e4eb0665d";
+            };
+
+            meta = {
+              description = ''A set of functions for validating and
+                            transforming IPv4 addresses'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/blackfist/iptools";
+            };
+          }
+      ) {};
+
+    iptools = iptools_0_0_1;
+
+    is_chinese_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "is_chinese";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "is_chinese";
+              version = "1.0.0";
+              sha256 =
+                "907da2e2995c104bb89152d276c41337b6c4075aa866663e3fb7ebe48da8ff62";
+            };
+
+            meta = {
+              description = ''Check whether string is Chinese'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/lidashuang/is_chinese";
+            };
+          }
+      ) {};
+
+    is_chinese = is_chinese_1_0_0;
 
     is_email_0_0_2 = callPackage
       (
@@ -22286,7 +25835,7 @@ let
 
     is_up_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, httpotion_2_2_2 }:
           buildMix {
             name = "is_up";
             version = "1.0.0";
@@ -22296,7 +25845,7 @@ let
               sha256 =
                 "8811dde26c0142174987941b6395e1934e54c3a88db1d5b19e38b6f794e93c87";
             };
-            beamDeps  = [ httpotion_2_1_0 ];
+            beamDeps  = [ httpotion_2_2_2 ];
 
             meta = {
               description = ''Check whether a given url is up.'';
@@ -22363,7 +25912,7 @@ let
     isbndbex_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, credo_0_1_10
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, credo_0_3_2
         }:
           buildMix {
             name = "isbndbex";
@@ -22374,7 +25923,7 @@ let
               sha256 =
                 "565fe2ea413d0ec50d51c166ad1dd5dc840c3cdb01e70467484017aa6b14d1f9";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 credo_0_1_10 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 credo_0_3_2 ];
 
             meta = {
               description = ''Elixir wrapper for isbndb.com json api.'';
@@ -22388,7 +25937,7 @@ let
 
     isn_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "isn";
             version = "1.0.0";
@@ -22398,7 +25947,7 @@ let
               sha256 =
                 "08fe62a8fa20333f65e750d7e4abe8c2f215994e514e495178fa718b5a4e3673";
             };
-            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Ecto types for the postgreSQL isn extension.'';
@@ -22410,19 +25959,19 @@ let
 
     isn = isn_1_0_0;
 
-    iso3166_0_0_2 = callPackage
+    iso3166_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, floki_0_7_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, floki_0_8_0 }:
           buildMix {
             name = "iso3166";
-            version = "0.0.2";
+            version = "0.0.3";
             src = fetchHex {
               pkg = "iso3166";
-              version = "0.0.2";
+              version = "0.0.3";
               sha256 =
-                "c36a652871f31d4b50b4ebd75e99094a1cf9ad7d3df9ddd467b94c2b4dbf9466";
+                "9d531b578e4535fd7b85d8f50da3374d057ae7b7c7ecc522710eb7f638660b79";
             };
-            beamDeps  = [ poison_1_5_2 floki_0_7_1 ];
+            beamDeps  = [ poison_2_1_0 floki_0_8_0 ];
 
             meta = {
               longDescription = ''A library that provides a list of ISO3166
@@ -22435,34 +25984,34 @@ let
           }
       ) {};
 
-    iso3166 = iso3166_0_0_2;
+    iso3166 = iso3166_0_0_3;
 
-    ja_serializer_0_7_1 = callPackage
+    ja_serializer_0_8_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
           scrivener_1_1_2,
-          poison_1_5_2,
-          plug_1_1_1,
+          poison_1_0_3,
+          plug_1_1_3,
           inflex_1_5_0,
-          ecto_2_0_0_beta_0
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "ja_serializer";
-            version = "0.7.1";
+            version = "0.8.1";
             src = fetchHex {
               pkg = "ja_serializer";
-              version = "0.7.1";
+              version = "0.8.1";
               sha256 =
-                "3f85203b1dd2e1c501ac41d45e9213a659e67c00ebacbe1b3e5b042c50f226ea";
+                "5f68d075f32456e6de55297601c65a8b2a8144135c6adbb51d13c6d0db338b93";
             };
             beamDeps  = [
                           scrivener_1_1_2
-                          poison_1_5_2
-                          plug_1_1_1
+                          poison_1_0_3
+                          plug_1_1_3
                           inflex_1_5_0
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                         ];
 
             meta = {
@@ -22476,11 +26025,11 @@ let
           }
       ) {};
 
-    ja_serializer = ja_serializer_0_7_1;
+    ja_serializer = ja_serializer_0_8_1;
 
     janrain_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "janrain";
             version = "0.0.1";
@@ -22490,7 +26039,7 @@ let
               sha256 =
                 "35299ee088dfd5647e7a5cd129d5011f2d6319fe53045b2a8ce3ddf70792cc78";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''A small library to help with Janrain logins.
@@ -22528,17 +26077,17 @@ let
 
     japanese_holiday = japanese_holiday_0_0_2;
 
-    jazz_0_1_1 = callPackage
+    jazz_0_1_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "jazz";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "jazz";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "e348e93a07c449789d17ddddd11cba080ef43132affdd1a287765f3e307ecd1c";
+                "db316e2334f3dc3745dc208eba1900471d52713e2c65b7b83cb913deffd5f4a7";
             };
 
             meta = {
@@ -22670,7 +26219,7 @@ let
 
     jira_0_0_8 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "jira";
             version = "0.0.8";
@@ -22680,7 +26229,7 @@ let
               sha256 =
                 "71c19ef23ea7351a2dc7b8f14d0c5794ff00382fa43a88a2235ec9c1741a73cb";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir client library for JIRA + JIRA Agile /
@@ -22740,7 +26289,7 @@ let
 
     joken_0_16_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1, jose_1_6_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3, jose_1_7_3 }:
           buildMix {
             name = "joken";
             version = "0.16.1";
@@ -22750,7 +26299,7 @@ let
               sha256 =
                 "a804bfd350f61688f6ce8d9898bc17fd4b59990c054debeea44234d53048d93d";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 jose_1_6_1 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 jose_1_7_3 ];
 
             meta = {
               description = ''JWT Library for Elixir'';
@@ -22762,7 +26311,7 @@ let
 
     joken_1_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_1, jose_1_6_1 }:
+        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_3, jose_1_7_3 }:
           buildMix {
             name = "joken";
             version = "1.1.0";
@@ -22772,7 +26321,7 @@ let
               sha256 =
                 "05e3ff0799b97b8513a5a17a8f57b1d7ee250f32561e559c997c0ecbea462287";
             };
-            beamDeps  = [ poison_1_0_3 plug_1_1_1 jose_1_6_1 ];
+            beamDeps  = [ poison_1_0_3 plug_1_1_3 jose_1_7_3 ];
 
             meta = {
               description = ''JWT Library for Elixir'';
@@ -22786,7 +26335,7 @@ let
 
     jolt_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "jolt";
             version = "0.1.0";
@@ -22796,7 +26345,7 @@ let
               sha256 =
                 "922498b234a1b0a813255d3abf5caa64a9afdc41eb4d8d71f87d71c41fe792e8";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''A full REST JSON API with zero coding,
@@ -22834,19 +26383,18 @@ let
 
     jorel_mix = jorel_mix_0_0_1;
 
-    jose_1_6_1 = callPackage
+    jose_1_4_2 = callPackage
       (
-        {  buildRebar3, fetchHex, base64url_0_0_1 }:
-          buildRebar3 {
+        {  buildMix, fetchHex, base64url_0_0_1 }:
+          buildMix {
             name = "jose";
-            version = "1.6.1";
+            version = "1.4.2";
             src = fetchHex {
               pkg = "jose";
-              version = "1.6.1";
+              version = "1.4.2";
               sha256 =
-                "36f1875790af6a1353a737fa13c6ba1f5356f1bd569341ac035eeaa22be23ac9";
+                "7bc79dfa28b0194c9334eddeaf33d02b51d4101d5b18f08086503a7b82be7cb0";
             };
-
             beamDeps  = [ base64url_0_0_1 ];
 
             meta = {
@@ -22858,7 +26406,30 @@ let
           }
       ) {};
 
-    jose = jose_1_6_1;
+    jose_1_7_3 = callPackage
+      (
+        {  buildMix, fetchHex, base64url_0_0_1 }:
+          buildMix {
+            name = "jose";
+            version = "1.7.3";
+            src = fetchHex {
+              pkg = "jose";
+              version = "1.7.3";
+              sha256 =
+                "d77d20c25873a138da8a64eb867c4115ba9cf44b74c00be2bc255e363da727c8";
+            };
+            beamDeps  = [ base64url_0_0_1 ];
+
+            meta = {
+              description = ''JSON Object Signing and Encryption (JOSE) for
+                            Erlang and Elixir.'';
+              license = stdenv.lib.licenses.mpl20;
+              homepage = "https://github.com/potatosalad/erlang-jose";
+            };
+          }
+      ) {};
+
+    jose = jose_1_7_3;
 
     jsex_2_0_0 = callPackage
       (
@@ -23008,7 +26579,7 @@ let
 
     jsonapi_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "jsonapi";
             version = "0.1.0";
@@ -23018,7 +26589,7 @@ let
               sha256 =
                 "b4c7d4797a680f23ae8dae666b4e71573f0bb3330223ebb53985e754ade265c8";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''Fully functional JSONAPI V1 Serializer as
@@ -23032,17 +26603,17 @@ let
 
     jsonapi = jsonapi_0_1_0;
 
-    jsone_1_2_0 = callPackage
+    jsone_1_2_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "jsone";
-            version = "1.2.0";
+            version = "1.2.1";
             src = fetchHex {
               pkg = "jsone";
-              version = "1.2.0";
+              version = "1.2.1";
               sha256 =
-                "a60e74284d3a923cde65c00a39dd4542fd7da7c22e8385c0378ad419c54b2e08";
+                "d7e772c545a8df144790c3891d09e3be9f917965ebc0bed301f8fd8d3b319059";
             };
 
             meta = {
@@ -23053,7 +26624,7 @@ let
           }
       ) {};
 
-    jsone = jsone_1_2_0;
+    jsone = jsone_1_2_1;
 
     jsx_1_4_5 = callPackage
       (
@@ -23066,6 +26637,29 @@ let
               version = "1.4.5";
               sha256 =
                 "ff5115611c5dd789cebe3addc07d18b86340f701c52ad063caba6fe8da3a489b";
+            };
+
+            meta = {
+              longDescription = ''an erlang application for consuming,
+                                producing and manipulating json. inspired by
+                                yajl'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/talentdeficit/jsx";
+            };
+          }
+      ) {};
+
+    jsx_2_3_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "jsx";
+            version = "2.3.1";
+            src = fetchHex {
+              pkg = "jsx";
+              version = "2.3.1";
+              sha256 =
+                "b57bc292e08c0f4a796c2d2fbb541265ff92474de294131b62468dc5ae808495";
             };
 
             meta = {
@@ -23149,8 +26743,8 @@ let
 
     jsx_2_7_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "jsx";
             version = "2.7.1";
             src = fetchHex {
@@ -23172,8 +26766,8 @@ let
 
     jsx_2_8_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "jsx";
             version = "2.8.0";
             src = fetchHex {
@@ -23244,17 +26838,17 @@ let
 
     jsxn = jsxn_0_2_1;
 
-    junit_formatter_0_1_2 = callPackage
+    junit_formatter_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "junit_formatter";
-            version = "0.1.2";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "junit_formatter";
-              version = "0.1.2";
+              version = "1.0.0";
               sha256 =
-                "1bfd13c71b116541b46ca1b9c07fb82483da9acaaad706e277e4b08e2b198316";
+                "f01064940927874ef2c3d275182822951167c7bd685f5d2b0dfcc84928fa0dcb";
             };
 
             meta = {
@@ -23268,19 +26862,19 @@ let
           }
       ) {};
 
-    junit_formatter = junit_formatter_0_1_2;
+    junit_formatter = junit_formatter_1_0_0;
 
-    jwalk_1_1_0 = callPackage
+    jwalk_1_1_2 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "jwalk";
-            version = "1.1.0";
+            version = "1.1.2";
             src = fetchHex {
               pkg = "jwalk";
-              version = "1.1.0";
+              version = "1.1.2";
               sha256 =
-                "10c150910ba3539583887cb2b5c3f70d602138471e6f6b5c22498aa18ed654e1";
+                "322d6bc04c1b16efdd711711c101415f9df18a87af31315e6d04e48e678d1bf0";
             };
 
             meta = {
@@ -23293,19 +26887,19 @@ let
           }
       ) {};
 
-    jwalk = jwalk_1_1_0;
+    jwalk = jwalk_1_1_2;
 
-    jwt_0_1_1 = callPackage
+    jwt_0_1_2 = callPackage
       (
         {  buildRebar3, fetchHex, jsx_2_8_0, base64url_0_0_1 }:
           buildRebar3 {
             name = "jwt";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "jwt";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "abcff4a2a42af2b7b7bdf55eeb2b73ce2e3bef760750004e74bc5835d64d2188";
+                "be9a6502857f40e3c285909a80a21d00dffcb9330951abe86e6c9cffb17770f1";
             };
 
             beamDeps  = [ jsx_2_8_0 base64url_0_0_1 ];
@@ -23318,7 +26912,7 @@ let
           }
       ) {};
 
-    jwt = jwt_0_1_1;
+    jwt = jwt_0_1_2;
 
     jwt_claims_0_0_3 = callPackage
       (
@@ -23369,17 +26963,40 @@ let
 
     jwtex = jwtex_0_0_1;
 
-    kafka_ex_0_4_0 = callPackage
+    k6_bytea_1_1_5 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "k6_bytea";
+            version = "1.1.5";
+            src = fetchHex {
+              pkg = "k6_bytea";
+              version = "1.1.5";
+              sha256 =
+                "1ce4ca84bbe45890bc3c07809f8e01fb80c4613226fbd318aaac73d4cd233132";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''A mutable byte array for Erlang.'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    k6_bytea = k6_bytea_1_1_5;
+
+    kafka_ex_0_5_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "kafka_ex";
-            version = "0.4.0";
+            version = "0.5.0";
             src = fetchHex {
               pkg = "kafka_ex";
-              version = "0.4.0";
+              version = "0.5.0";
               sha256 =
-                "93355c6acb4d11b000ced332da9ac91dad1ed0468e9f240b040869a0cde5d71a";
+                "5e5d5be9bad3d9b9e77f75047c479aadc140d7e13be85a912cef8e7d647f0ae7";
             };
 
             meta = {
@@ -23390,19 +27007,19 @@ let
           }
       ) {};
 
-    kafka_ex = kafka_ex_0_4_0;
+    kafka_ex = kafka_ex_0_5_0;
 
-    kaguya_0_3_7 = callPackage
+    kaguya_0_4_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "kaguya";
-            version = "0.3.7";
+            version = "0.4.1";
             src = fetchHex {
               pkg = "kaguya";
-              version = "0.3.7";
+              version = "0.4.1";
               sha256 =
-                "eced5d988fb5bc868e09402c2dd1f6cc67e60d9f07af2d263aada831021f0d84";
+                "071fbb9b096d2c4e987a820ea1a9d749d3da378c306053f3c44f5c9a9c748fa1";
             };
 
             meta = {
@@ -23416,7 +27033,7 @@ let
           }
       ) {};
 
-    kaguya = kaguya_0_3_7;
+    kaguya = kaguya_0_4_1;
 
     kalecto_0_3_3 = callPackage
       (
@@ -23447,7 +27064,7 @@ let
 
     kalends_0_6_5 = callPackage
       (
-        {  buildRebar3, fetchHex, tzdata_0_1_8 }:
+        {  buildRebar3, fetchHex, tzdata_0_1_201603 }:
           buildRebar3 {
             name = "kalends";
             version = "0.6.5";
@@ -23458,7 +27075,7 @@ let
                 "b16621edbccdbe5d3f76efe03dab59292f3782d0d7e29bbe2de9943e49968fe2";
             };
 
-            beamDeps  = [ tzdata_0_1_8 ];
+            beamDeps  = [ tzdata_0_1_201603 ];
 
             meta = {
               longDescription = ''Kalends is a datetime library in pure Elixir
@@ -23475,7 +27092,7 @@ let
     kane_0_0_5 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, goth_0_0_3
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, goth_0_0_3
         }:
           buildMix {
             name = "kane";
@@ -23486,7 +27103,7 @@ let
               sha256 =
                 "e4865178b16793d4f947dee2f21448b3639fad2b1edeb515df67707cf30dc2c3";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 goth_0_0_3 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 goth_0_0_3 ];
 
             meta = {
               longDescription = ''A library for interacting with Google Cloud
@@ -23500,28 +27117,22 @@ let
 
     kane = kane_0_0_5;
 
-    katipo_0_2_4 = callPackage
+    katipo_0_3_2 = callPackage
       (
         {
-          buildRebar3,
-          fetchHex,
-          uri_0_1_0,
-          quintana_0_2_0,
-          gproc_0_5_0,
-          cowlib_1_0_0
+          buildRebar3, fetchHex, quintana_0_2_0, gproc_0_5_0, cowlib_1_0_0
         }:
           buildRebar3 {
             name = "katipo";
-            version = "0.2.4";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "katipo";
-              version = "0.2.4";
+              version = "0.3.2";
               sha256 =
-                "7ad315785b1e43a78c9d5912469401ab5fa396182acf1ab40feea39539a53d1e";
+                "b940c01fcffd5609bf325eb15b7e6bfbbf19f57b9fa39d7117cf16b8d0df0890";
             };
             compilePorts = true;
-            beamDeps  = [ uri_0_1_0 quintana_0_2_0 gproc_0_5_0 cowlib_1_0_0
-                      ];
+            beamDeps  = [ quintana_0_2_0 gproc_0_5_0 cowlib_1_0_0 ];
 
             meta = {
               description = ''HTTP client based on libcurl'';
@@ -23531,7 +27142,37 @@ let
           }
       ) {};
 
-    katipo = katipo_0_2_4;
+    katipo = katipo_0_3_2;
+
+    kcl_0_4_1 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          salsa20_0_3_0,
+          poly1305_0_4_0,
+          curve25519_0_1_0
+        }:
+          buildMix {
+            name = "kcl";
+            version = "0.4.1";
+            src = fetchHex {
+              pkg = "kcl";
+              version = "0.4.1";
+              sha256 =
+                "90c2492dc4333ae444d2ec4facee567c73f061e3c10878fcd02b426e347495bc";
+            };
+            beamDeps  = [ salsa20_0_3_0 poly1305_0_4_0 curve25519_0_1_0 ];
+
+            meta = {
+              description = ''KCl - a poor NaCL crypto suite substitute'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/kcl";
+            };
+          }
+      ) {};
+
+    kcl = kcl_0_4_1;
 
     keccakf1600_2_0_0 = callPackage
       (
@@ -23560,7 +27201,7 @@ let
     keelless_0_1_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, hackney_1_4_4
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, hackney_1_4_4
         }:
           buildMix {
             name = "keelless";
@@ -23571,7 +27212,7 @@ let
               sha256 =
                 "b038600bb0520975a052fe6852a2dcd0dbd1069309134c617519079037d6927e";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 hackney_1_4_4 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 hackney_1_4_4 ];
 
             meta = {
               description = ''Keen IO API for Elixir.'';
@@ -23585,7 +27226,7 @@ let
 
     keenex_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpotion_2_2_2 }:
           buildMix {
             name = "keenex";
             version = "0.2.0";
@@ -23595,7 +27236,7 @@ let
               sha256 =
                 "5f66d942fe7066bec625985779d7e69647462e586a704e449cc7229ea752ccb9";
             };
-            beamDeps  = [ poison_1_3_1 httpotion_1_0_0 ];
+            beamDeps  = [ poison_1_3_1 httpotion_2_2_2 ];
 
             meta = {
               description = ''Keen.io API Client'';
@@ -23606,6 +27247,32 @@ let
       ) {};
 
     keenex = keenex_0_2_0;
+
+    kerosene_0_0_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, phoenix_html_2_0_0_dev, ecto_2_0_0_beta_2
+        }:
+          buildMix {
+            name = "kerosene";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "kerosene";
+              version = "0.0.1";
+              sha256 =
+                "a4a54d2ac3179a4b14b2c115740294003cae23cf30adaad203310d79451d5ddd";
+            };
+            beamDeps  = [ phoenix_html_2_0_0_dev ecto_2_0_0_beta_2 ];
+
+            meta = {
+              description = ''Pagination for Ecto and Phoenix.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/elixirdrops/kerosene";
+            };
+          }
+      ) {};
+
+    kerosene = kerosene_0_0_1;
 
     key2value_1_5_1 = callPackage
       (
@@ -23656,7 +27323,7 @@ let
     kindred_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, poison_2_0_1, httpoison_0_8_1, ex_rated_1_2_1
+          buildMix, fetchHex, poison_2_0_1, httpoison_0_8_2, ex_rated_1_2_2
         }:
           buildMix {
             name = "kindred";
@@ -23667,7 +27334,7 @@ let
               sha256 =
                 "48b229e007f3d6d06e38f49c85598c20fb6e76d92afd441a86fdee931c2f5fc2";
             };
-            beamDeps  = [ poison_2_0_1 httpoison_0_8_1 ex_rated_1_2_1 ];
+            beamDeps  = [ poison_2_0_1 httpoison_0_8_2 ex_rated_1_2_2 ];
 
             meta = {
               description = ''League of Legends API client written in Elixir'';
@@ -23732,7 +27399,7 @@ let
 
     kubex_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "kubex";
             version = "0.1.1";
@@ -23742,7 +27409,7 @@ let
               sha256 =
                 "b0bd22246731b1c4d4d7f832cd0015fd6586022c779fb6672f45a648da7dcf79";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Kubernetes integration for and in pure Elixir.'';
@@ -23807,8 +27474,8 @@ let
 
     lager_2_1_1 = callPackage
       (
-        {  buildRebar3, fetchHex, goldrush_0_1_7 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, goldrush_0_1_7 }:
+          buildErlangMk {
             name = "lager";
             version = "2.1.1";
             src = fetchHex {
@@ -23817,7 +27484,6 @@ let
               sha256 =
                 "5eb1c17ff0f8692285b7648ef5d827d492b8d7554da782afc300ebb4861d5aba";
             };
-
             beamDeps  = [ goldrush_0_1_7 ];
 
             meta = {
@@ -23901,6 +27567,31 @@ let
 
     lager_graylog = lager_graylog_0_1_0;
 
+    lager_hipchat_0_2_0 = callPackage
+      (
+        {  buildRebar3, fetchHex, lager_3_0_2 }:
+          buildRebar3 {
+            name = "lager_hipchat";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "lager_hipchat";
+              version = "0.2.0";
+              sha256 =
+                "83dc3246822b33b2889c431975ff0f8ffc6954c9e5f744bfd99acd9fa8605a1c";
+            };
+
+            beamDeps  = [ lager_3_0_2 ];
+
+            meta = {
+              description = ''HipChat backend for Lager'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/synlay/lager_hipchat";
+            };
+          }
+      ) {};
+
+    lager_hipchat = lager_hipchat_0_2_0;
+
     lager_logger_1_0_2 = callPackage
       (
         {  buildMix, fetchHex, lager_3_0_2 }:
@@ -23976,17 +27667,17 @@ let
 
     lager_watchdog = lager_watchdog_0_1_10;
 
-    lasp_0_0_4 = callPackage
+    lasp_0_0_5 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "lasp";
-            version = "0.0.4";
+            version = "0.0.5";
             src = fetchHex {
               pkg = "lasp";
-              version = "0.0.4";
+              version = "0.0.5";
               sha256 =
-                "d119098a34bbd0331ab1cb22e0f1f1d25da35132f8a61ecdc0ed5c0135c84942";
+                "0298ef6ad4a35a3ac93ad64c722adc852d45b2d9f8fb76b47edf257481150349";
             };
 
             meta = {
@@ -23998,12 +27689,12 @@ let
           }
       ) {};
 
-    lasp = lasp_0_0_4;
+    lasp = lasp_0_0_5;
 
     lasse_1_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "lasse";
             version = "1.1.0";
             src = fetchHex {
@@ -24072,6 +27763,54 @@ let
       ) {};
 
     ledx = ledx_0_0_1;
+
+    left_pad_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "left_pad";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "left_pad";
+              version = "0.0.3";
+              sha256 =
+                "9b14a4b7f84f320175bd2ed2f24754a62206fdd67d90117602876c415cf22374";
+            };
+
+            meta = {
+              description = ''Pad a string to the left with any number of
+                            characters.'';
+              license = stdenv.lib.licenses.mpl20;
+              homepage = "https://github.com/folz/left_pad.ex";
+            };
+          }
+      ) {};
+
+    left_pad = left_pad_0_0_3;
+
+    leftpad_1_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "leftpad";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "leftpad";
+              version = "1.0.1";
+              sha256 =
+                "88e4cd8039461f2558f6e8378d834772b9315554080c5b729d65472209824a89";
+            };
+
+            meta = {
+              description = ''left pad for elixir, because why not?
+                            ¯\_(ツ)_/¯'';
+              license = stdenv.lib.licenses.unlicense;
+              homepage = "https://github.com/colinrymer/leftpad.ex";
+            };
+          }
+      ) {};
+
+    leftpad = leftpad_1_0_1;
 
     level_1_0_0 = callPackage
       (
@@ -24168,19 +27907,40 @@ let
           }
       ) {};
 
-    lhttpc = lhttpc_1_3_0;
+    lhttpc_1_4_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "lhttpc";
+            version = "1.4.0";
+            src = fetchHex {
+              pkg = "lhttpc";
+              version = "1.4.0";
+              sha256 =
+                "26d5a12b63fedb3e862a816a472258007dc1e85b75a9bcdb0223425e39827777";
+            };
 
-    libchunter_0_1_45 = callPackage
+            meta = {
+              description = ''Lightweight HTTP Client'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/talko/lhttpc";
+            };
+          }
+      ) {};
+
+    lhttpc = lhttpc_1_4_0;
+
+    libchunter_0_1_46 = callPackage
       (
         {  buildRebar3, fetchHex, lager_2_1_1, fifo_spec_0_1_27 }:
           buildRebar3 {
             name = "libchunter";
-            version = "0.1.45";
+            version = "0.1.46";
             src = fetchHex {
               pkg = "libchunter";
-              version = "0.1.45";
+              version = "0.1.46";
               sha256 =
-                "ecd76f18b2a1ee115b86a6b485119c2a36de9da1d41449dd5bc7e139dedeeb4b";
+                "39f117de7cd71e65c793380266595b5b8fdd29edb8ca28b114efbaa2866eba90";
             };
 
             beamDeps  = [ lager_2_1_1 fifo_spec_0_1_27 ];
@@ -24193,7 +27953,33 @@ let
           }
       ) {};
 
-    libchunter = libchunter_0_1_45;
+    libchunter = libchunter_0_1_46;
+
+    libdecaf_0_0_2 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "libdecaf";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "libdecaf";
+              version = "0.0.2";
+              sha256 =
+                "1e4ab8b542388941118927ae45021c4fb8097f9cce5c2d875624c330adc92b0a";
+            };
+            compilePorts = true;
+
+            meta = {
+              longDescription = ''libdecaf NIF for ECDH (X25519, X448), EdDSA
+                                (Ed25519, Ed25519ph, Ed448, Ed448ph),
+                                curve25519, curve448'';
+              license = stdenv.lib.licenses.mpl20;
+              homepage = "https://github.com/potatosalad/erlang-libdecaf";
+            };
+          }
+      ) {};
+
+    libdecaf = libdecaf_0_0_2;
 
     libex_config_0_2_0 = callPackage
       (
@@ -24218,6 +28004,38 @@ let
       ) {};
 
     libex_config = libex_config_0_2_0;
+
+    libhowl_0_1_34 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          mdns_client_lib_0_1_38,
+          lager_2_1_1,
+          fifo_spec_0_1_27
+        }:
+          buildRebar3 {
+            name = "libhowl";
+            version = "0.1.34";
+            src = fetchHex {
+              pkg = "libhowl";
+              version = "0.1.34";
+              sha256 =
+                "d358c609db2f09d05d51fc73e78b0fbddedbe4cbbc298711e664bfbf0662e10d";
+            };
+
+            beamDeps  = [ mdns_client_lib_0_1_38 lager_2_1_1 fifo_spec_0_1_27
+                      ];
+
+            meta = {
+              description = ''howl client library'';
+              license = stdenv.lib.licenses.cddl;
+              homepage = "https://github.com/project-fifo/libhowl";
+            };
+          }
+      ) {};
+
+    libhowl = libhowl_0_1_34;
 
     libleofs_0_1_2 = callPackage
       (
@@ -24305,30 +28123,43 @@ let
           }
       ) {};
 
-    libsnarl = libsnarl_0_3_40;
-
-    libsnarlmatch_0_1_5 = callPackage
+    libsnarl_0_3_44 = callPackage
       (
-        {  buildRebar3, fetchHex, fqc_0_1_5 }:
+        {
+          buildRebar3,
+          fetchHex,
+          oauth2_erlang_0_6_1,
+          mdns_client_lib_0_1_38,
+          libsnarlmatch_0_1_7,
+          lager_2_1_1,
+          fifo_spec_0_1_27
+        }:
           buildRebar3 {
-            name = "libsnarlmatch";
-            version = "0.1.5";
+            name = "libsnarl";
+            version = "0.3.44";
             src = fetchHex {
-              pkg = "libsnarlmatch";
-              version = "0.1.5";
+              pkg = "libsnarl";
+              version = "0.3.44";
               sha256 =
-                "11410122ca7a0685c4a7df1795d7f5a1e7bf9c5f17096414402fd9d1f0e1ac04";
+                "a77b2f532758a7016c375ddf16e316d5a4a727c65418bf7255ed158c8b1e243c";
             };
 
-            beamDeps  = [ fqc_0_1_5 ];
+            beamDeps  = [
+                          oauth2_erlang_0_6_1
+                          mdns_client_lib_0_1_38
+                          libsnarlmatch_0_1_7
+                          lager_2_1_1
+                          fifo_spec_0_1_27
+                        ];
 
             meta = {
-              description = ''permission matcher library'';
-              license = stdenv.lib.licenses.cddl;
-              homepage = "https://github.com/project-fifo/libsnarlmatch";
+              description = ''snarl interface library'';
+
             };
           }
       ) {};
+
+    libsnarl = libsnarl_0_3_44;
 
     libsnarlmatch_0_1_7 = callPackage
       (
@@ -24353,26 +28184,26 @@ let
 
     libsnarlmatch = libsnarlmatch_0_1_7;
 
-    libsniffle_0_3_37 = callPackage
+    libsniffle_0_3_45 = callPackage
       (
         {
           buildRebar3,
           fetchHex,
-          mdns_client_lib_0_1_33,
-          lager_3_0_2,
+          mdns_client_lib_0_1_38,
+          lager_2_1_1,
           fifo_spec_0_1_27
         }:
           buildRebar3 {
             name = "libsniffle";
-            version = "0.3.37";
+            version = "0.3.45";
             src = fetchHex {
               pkg = "libsniffle";
-              version = "0.3.37";
+              version = "0.3.45";
               sha256 =
-                "fa840488f50292bbe206e7c13cc9640099cacec8aea3c0c581f6cc482b5bd94c";
+                "906329c2a54689f74a53a3cd3fa1fc96ad88be326860227e4a2c731ab40738ed";
             };
 
-            beamDeps  = [ mdns_client_lib_0_1_33 lager_3_0_2 fifo_spec_0_1_27
+            beamDeps  = [ mdns_client_lib_0_1_38 lager_2_1_1 fifo_spec_0_1_27
                       ];
 
             meta = {
@@ -24383,19 +28214,19 @@ let
           }
       ) {};
 
-    libsniffle = libsniffle_0_3_37;
+    libsniffle = libsniffle_0_3_45;
 
-    libsodium_0_0_3 = callPackage
+    libsodium_0_0_4 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "libsodium";
-            version = "0.0.3";
+            version = "0.0.4";
             src = fetchHex {
               pkg = "libsodium";
-              version = "0.0.3";
+              version = "0.0.4";
               sha256 =
-                "e66e9d91647a1519194cb0b240144123d68fae0f8cb57a9be9ced30ba8e24397";
+                "0ace378dd062546571e0607bddf96fe1dcf62a871fab42b4542328e3bca4b38a";
             };
             compilePorts = true;
 
@@ -24407,7 +28238,7 @@ let
           }
       ) {};
 
-    libsodium = libsodium_0_0_3;
+    libsodium = libsodium_0_0_4;
 
     lineo_0_1_0 = callPackage
       (
@@ -24500,6 +28331,30 @@ let
 
     liquid = liquid_0_1_0;
 
+    lob_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, chacha20_0_3_2 }:
+          buildMix {
+            name = "lob";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "lob";
+              version = "0.1.0";
+              sha256 =
+                "adf071a07fde2fbd2393c06a18959e6d48622c7a3769e868cf577095c7eac67e";
+            };
+            beamDeps  = [ poison_2_1_0 chacha20_0_3_2 ];
+
+            meta = {
+              description = ''Length-Object-Binary (LOB) Packet Encoding'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/lob_ex";
+            };
+          }
+      ) {};
+
+    lob = lob_0_1_0;
+
     locker_1_0_8 = callPackage
       (
         {  buildRebar3, fetchHex, proper_1_1_1_beta }:
@@ -24550,17 +28405,17 @@ let
 
     logfmt = logfmt_3_0_2;
 
-    logger_file_backend_0_0_6 = callPackage
+    logger_file_backend_0_0_7 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "logger_file_backend";
-            version = "0.0.6";
+            version = "0.0.7";
             src = fetchHex {
               pkg = "logger_file_backend";
-              version = "0.0.6";
+              version = "0.0.7";
               sha256 =
-                "57554adfad0599adc3ea540accc1791d4adffedbe87640c0b92df9b860bb1c69";
+                "135823f39e810f1826cbd6fa5e1207c6d60a6de09b563c9a204f5b55587cf5a4";
             };
 
             meta = {
@@ -24571,7 +28426,33 @@ let
           }
       ) {};
 
-    logger_file_backend = logger_file_backend_0_0_6;
+    logger_file_backend = logger_file_backend_0_0_7;
+
+    logger_json_file_backend_0_1_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_0_3 }:
+          buildMix {
+            name = "logger_json_file_backend";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "logger_json_file_backend";
+              version = "0.1.2";
+              sha256 =
+                "5734a14534ec57f7b1603c53d091facd4e47d7e5b83cf99d1c73439527d995d9";
+            };
+            beamDeps  = [ poison_1_0_3 ];
+
+            meta = {
+              description = ''Logger backend that write a json map per line to
+                            a file'';
+              license = stdenv.lib.licenses.isc;
+              homepage =
+                "https://github.com/xflagstudio/elixir_logger_json_file_backend";
+            };
+          }
+      ) {};
+
+    logger_json_file_backend = logger_json_file_backend_0_1_2;
 
     logger_logentries_backend_0_0_1 = callPackage
       (
@@ -24599,19 +28480,19 @@ let
 
     logger_logentries_backend = logger_logentries_backend_0_0_1;
 
-    logger_loggly_backend_0_1_0 = callPackage
+    logger_loggly_backend_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "logger_loggly_backend";
-            version = "0.1.0";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "logger_loggly_backend";
-              version = "0.1.0";
+              version = "0.2.0";
               sha256 =
-                "4b19e284f0b910c824a228093afa176ea4b9c4546893b2ad5da2769aa2bcbc85";
+                "111d0e256ace86e2af366b1afc7152b4aadd3cd6c093d5d2b119c08a84395fd6";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               description = ''Loggly logger backend'';
@@ -24621,21 +28502,21 @@ let
           }
       ) {};
 
-    logger_loggly_backend = logger_loggly_backend_0_1_0;
+    logger_loggly_backend = logger_loggly_backend_0_2_0;
 
-    logger_logstash_backend_1_0_0 = callPackage
+    logger_logstash_backend_2_0_0 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, exjsx_3_1_0 }:
+        {  buildMix, fetchHex, timex_2_1_3, exjsx_3_1_0 }:
           buildMix {
             name = "logger_logstash_backend";
-            version = "1.0.0";
+            version = "2.0.0";
             src = fetchHex {
               pkg = "logger_logstash_backend";
-              version = "1.0.0";
+              version = "2.0.0";
               sha256 =
-                "ca36f8ab5f738c143da6b72c9d603ede7e201e2a1c7d683b270c2641d14bbcb2";
+                "e0c709aa8fbddd825ef5cc5287e0d04f4470498173555e07156675aeba2b2b7a";
             };
-            beamDeps  = [ timex_1_0_1 exjsx_3_1_0 ];
+            beamDeps  = [ timex_2_1_3 exjsx_3_1_0 ];
 
             meta = {
               description = ''Logstash UDP producer backend for Logger.'';
@@ -24645,7 +28526,7 @@ let
           }
       ) {};
 
-    logger_logstash_backend = logger_logstash_backend_1_0_0;
+    logger_logstash_backend = logger_logstash_backend_2_0_0;
 
     logger_papertrail_backend_0_0_2 = callPackage
       (
@@ -24789,17 +28670,17 @@ let
 
     ltsv = ltsv_0_1_0;
 
-    luhn_0_3_0 = callPackage
+    luhn_0_3_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "luhn";
-            version = "0.3.0";
+            version = "0.3.1";
             src = fetchHex {
               pkg = "luhn";
-              version = "0.3.0";
+              version = "0.3.1";
               sha256 =
-                "e98e7dac83e18d75dbcb87559f17f7b40c00edf79a38b02b9ab5a7d74b05efc2";
+                "86aba88228660238ad981b92cb7a0e92be04772fc54fe5effb338c94b3b7d9fa";
             };
 
             meta = {
@@ -24810,7 +28691,7 @@ let
           }
       ) {};
 
-    luhn = luhn_0_3_0;
+    luhn = luhn_0_3_1;
 
     luhnatex_0_5_0 = callPackage
       (
@@ -24834,6 +28715,84 @@ let
       ) {};
 
     luhnatex = luhnatex_0_5_0;
+
+    lyn_0_0_16 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          ueberauth_twitter_0_2_2,
+          ueberauth_slack_0_2_0,
+          ueberauth_identity_0_2_3,
+          ueberauth_google_0_2_0,
+          ueberauth_github_0_2_0,
+          ueberauth_facebook_0_3_2,
+          ueberauth_0_2_0,
+          scrivener_1_1_2,
+          postgrex_0_11_1,
+          poolboy_1_5_1,
+          poison_1_5_2,
+          phoenix_html_2_5_1,
+          phoenix_ecto_3_0_0_beta_2,
+          phoenix_1_1_4,
+          json_0_3_3,
+          inflex_1_5_0,
+          guardian_db_0_4_0,
+          guardian_0_9_1,
+          gettext_0_10_0,
+          exos_1_0_0,
+          cowboy_1_0_4,
+          comeonin_2_1_1,
+          absinthe_plug_1_0_0
+        }:
+          buildMix {
+            name = "lyn";
+            version = "0.0.16";
+            src = fetchHex {
+              pkg = "lyn";
+              version = "0.0.16";
+              sha256 =
+                "63eeabb42336605c1fd79addbdf6a3300bb3101e019be9279f69a98c86345660";
+            };
+            beamDeps  = [
+                          ueberauth_twitter_0_2_2
+                          ueberauth_slack_0_2_0
+                          ueberauth_identity_0_2_3
+                          ueberauth_google_0_2_0
+                          ueberauth_github_0_2_0
+                          ueberauth_facebook_0_3_2
+                          ueberauth_0_2_0
+                          scrivener_1_1_2
+                          postgrex_0_11_1
+                          poolboy_1_5_1
+                          poison_1_5_2
+                          phoenix_html_2_5_1
+                          phoenix_ecto_3_0_0_beta_2
+                          phoenix_1_1_4
+                          json_0_3_3
+                          inflex_1_5_0
+                          guardian_db_0_4_0
+                          guardian_0_9_1
+                          gettext_0_10_0
+                          exos_1_0_0
+                          cowboy_1_0_4
+                          comeonin_2_1_1
+                          absinthe_plug_1_0_0
+                        ];
+
+            meta = {
+              longDescription = ''This is a CMS written in Elixir. Aims to be
+                                the great open-source ecommerce and/or startup
+                                solution for those who are searching for a
+                                performance and stability on top of modern
+                                technologies like React and Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/viatsko/lyn";
+            };
+          }
+      ) {};
+
+    lyn = lyn_0_0_16;
 
     lz4_0_2_2 = callPackage
       (
@@ -24883,19 +28842,19 @@ let
 
     lz_string = lz_string_0_0_3;
 
-    m2x_1_3_1 = callPackage
+    m2x_2_0_0 = callPackage
       (
-        {  buildMix, fetchHex, json_0_3_3, hackney_1_4_8 }:
+        {  buildMix, fetchHex, json_0_3_3, hackney_1_6_0 }:
           buildMix {
             name = "m2x";
-            version = "1.3.1";
+            version = "2.0.0";
             src = fetchHex {
               pkg = "m2x";
-              version = "1.3.1";
+              version = "2.0.0";
               sha256 =
-                "3325226ac185b40304469aa94a7376511bf57d535eb1d32b2aca6c2009c54fe2";
+                "e125cf588d48d9b04fb4a003bb62ab1a8e8df359866dba0cde6444e9fd7ce939";
             };
-            beamDeps  = [ json_0_3_3 hackney_1_4_8 ];
+            beamDeps  = [ json_0_3_3 hackney_1_6_0 ];
 
             meta = {
               longDescription = ''Elixir client library for the AT&T M2X
@@ -24910,11 +28869,11 @@ let
           }
       ) {};
 
-    m2x = m2x_1_3_1;
+    m2x = m2x_2_0_0;
 
     m2x_erlang_1_3_1 = callPackage
       (
-        {  buildMix, fetchHex, jsx_2_8_0, hackney_1_4_8 }:
+        {  buildMix, fetchHex, jsx_2_8_0, hackney_1_6_0 }:
           buildMix {
             name = "m2x_erlang";
             version = "1.3.1";
@@ -24924,7 +28883,7 @@ let
               sha256 =
                 "873db746f4428490670b54aabcc93fda8d94c3c4e25c94a9aef7275858a8b809";
             };
-            beamDeps  = [ jsx_2_8_0 hackney_1_4_8 ];
+            beamDeps  = [ jsx_2_8_0 hackney_1_6_0 ];
 
             meta = {
               longDescription = ''Erlang client library for the AT&T M2X
@@ -24964,17 +28923,41 @@ let
 
     mad = mad_0_9_0;
 
-    mail_0_0_2 = callPackage
+    magic_number_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "magic_number";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "magic_number";
+              version = "0.0.1";
+              sha256 =
+                "aef41d128da2cc8f5a4302a15048edd5ff58fcff68e847b6a6ebb000d8d44cc1";
+            };
+
+            meta = {
+              description = ''MagicNumber is the module to determine a file`s
+                            type from its magic number.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ishikawa/elixir-magic-number";
+            };
+          }
+      ) {};
+
+    magic_number = magic_number_0_0_1;
+
+    mail_0_0_4 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "mail";
-            version = "0.0.2";
+            version = "0.0.4";
             src = fetchHex {
               pkg = "mail";
-              version = "0.0.2";
+              version = "0.0.4";
               sha256 =
-                "724cea5cac7b0ffdf2fa65a8d89d7c83de72da7eba6d6b31f8669854cb32baa3";
+                "015bb93bc3233fbf0bb28daf71963ddc290d574d9b3d63e1b45641d1a2d4571e";
             };
 
             meta = {
@@ -24985,7 +28968,7 @@ let
           }
       ) {};
 
-    mail = mail_0_0_2;
+    mail = mail_0_0_4;
 
     mailchimp_0_0_5 = callPackage
       (
@@ -25012,19 +28995,19 @@ let
 
     mailchimp = mailchimp_0_0_5;
 
-    mailer_1_0_0 = callPackage
+    mailer_1_0_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, gen_smtp_0_9_0 }:
+        {  buildMix, fetchHex, timex_2_1_3, gen_smtp_0_9_0 }:
           buildMix {
             name = "mailer";
-            version = "1.0.0";
+            version = "1.0.1";
             src = fetchHex {
               pkg = "mailer";
-              version = "1.0.0";
+              version = "1.0.1";
               sha256 =
-                "cd54048c0cea44b9d96b82352d74fadf078e705b343c62a6e6e27f60de21099b";
+                "08b834102ad6eb2f2a363b70939935d3d23d1e3a68d96a2a7f8730fb7834c63d";
             };
-            beamDeps  = [ timex_1_0_1 gen_smtp_0_9_0 ];
+            beamDeps  = [ timex_2_1_3 gen_smtp_0_9_0 ];
 
             meta = {
               description = ''Mailer - A simple email client'';
@@ -25034,7 +29017,7 @@ let
           }
       ) {};
 
-    mailer = mailer_1_0_0;
+    mailer = mailer_1_0_1;
 
     mailgun_0_0_2 = callPackage
       (
@@ -25083,7 +29066,7 @@ let
 
     mailgun_webhook_auth_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_2, cowboy_1_0_4 }:
           buildMix {
             name = "mailgun_webhook_auth";
             version = "1.0.0";
@@ -25093,7 +29076,7 @@ let
               sha256 =
                 "0e6c93d8fd37fc948db0f92ee545ecbed99787dc04ceb8981e588b06ad3108eb";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''A Plug for validating Mailgun Webhook requests in
@@ -25137,19 +29120,19 @@ let
 
     mailibex = mailibex_0_1_0;
 
-    mailman_0_2_1 = callPackage
+    mailman_0_2_2 = callPackage
       (
         {
           buildMix, fetchHex, gen_smtp_0_9_0, ex_doc_0_11_4, earmark_0_2_1
         }:
           buildMix {
             name = "mailman";
-            version = "0.2.1";
+            version = "0.2.2";
             src = fetchHex {
               pkg = "mailman";
-              version = "0.2.1";
+              version = "0.2.2";
               sha256 =
-                "b1594af744dc0e879ed8e42133c7d1d8136468218be2c6dfbf416dd3861b20c7";
+                "3a7aaf863017c0b9d924e31ccb34649ba31bcbbd8eac4837bbe3a040c37f94ab";
             };
             beamDeps  = [ gen_smtp_0_9_0 ex_doc_0_11_4 earmark_0_2_1 ];
 
@@ -25162,7 +29145,7 @@ let
           }
       ) {};
 
-    mailman = mailman_0_2_1;
+    mailman = mailman_0_2_2;
 
     majremind_0_0_1 = callPackage
       (
@@ -25192,7 +29175,7 @@ let
 
     mandrag_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, exrm_0_15_1 }:
+        {  buildMix, fetchHex, exrm_1_0_3 }:
           buildMix {
             name = "mandrag";
             version = "0.1.1";
@@ -25202,7 +29185,7 @@ let
               sha256 =
                 "e9e9fcbb844a2a86ecd95f5f8fa7db9f6ff88f3e2a6dca2bd996f4f71bbf125d";
             };
-            beamDeps  = [ exrm_0_15_1 ];
+            beamDeps  = [ exrm_1_0_3 ];
 
             meta = {
               description = ''A simple, extremely assumptive deploy script for
@@ -25241,7 +29224,7 @@ let
 
     mandrill_0_4_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_1_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_1_0 }:
           buildMix {
             name = "mandrill";
             version = "0.4.1";
@@ -25251,7 +29234,7 @@ let
               sha256 =
                 "2d554149c425c511a006d978427acc1d384c8f6d4f3699fdce04e42e24268400";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_1_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_1_0 ];
 
             meta = {
               longDescription = ''A Mandrill wrapper for Elixir Requires an
@@ -25268,7 +29251,7 @@ let
     mandrillex_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_1, hackney_1_0_6
+          buildMix, fetchHex, jsex_2_0_0, httpoison_0_8_2, hackney_1_4_8
         }:
           buildMix {
             name = "mandrillex";
@@ -25279,7 +29262,7 @@ let
               sha256 =
                 "840bf36e545cde376797603df4109aae49d2c17b2b06f84a058fff4448d362eb";
             };
-            beamDeps  = [ jsex_2_0_0 httpoison_0_8_1 hackney_1_0_6 ];
+            beamDeps  = [ jsex_2_0_0 httpoison_0_8_2 hackney_1_4_8 ];
 
             meta = {
               longDescription = ''A Mandrill wrapper for Elixir Requires an
@@ -25292,6 +29275,30 @@ let
       ) {};
 
     mandrillex = mandrillex_0_2_0;
+
+    maptu_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "maptu";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "maptu";
+              version = "0.1.0";
+              sha256 =
+                "8dc5fd69e78a948a6cd3b95a1b1cb1a7056948a4445e4abed773cae8c88c16da";
+            };
+
+            meta = {
+              description = ''Tiny library to convert from "encoded" maps to
+                            Elixir structs.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/whatyouhide/maptu";
+            };
+          }
+      ) {};
+
+    maptu = maptu_0_1_0;
 
     marco_polo_0_2_1 = callPackage
       (
@@ -25317,6 +29324,29 @@ let
 
     marco_polo = marco_polo_0_2_1;
 
+    mariaex_0_1_7 = callPackage
+      (
+        {  buildMix, fetchHex, decimal_1_1_1 }:
+          buildMix {
+            name = "mariaex";
+            version = "0.1.7";
+            src = fetchHex {
+              pkg = "mariaex";
+              version = "0.1.7";
+              sha256 =
+                "58daf08d513327b422a68de199202e6a2c1785472e2fa8d8ffe212e6ee51b1fb";
+            };
+            beamDeps  = [ decimal_1_1_1 ];
+
+            meta = {
+              description = ''Pure elixir database driver for MariaDB /
+                            MySQL.'';
+
+              homepage = "https://github.com/xerions/mariaex";
+            };
+          }
+      ) {};
+
     mariaex_0_4_3 = callPackage
       (
         {  buildMix, fetchHex, decimal_1_1_1 }:
@@ -25340,19 +29370,19 @@ let
           }
       ) {};
 
-    mariaex_0_5_0 = callPackage
+    mariaex_0_7_0 = callPackage
       (
-        {  buildMix, fetchHex, decimal_1_1_1 }:
+        {  buildMix, fetchHex, decimal_1_1_1, db_connection_0_2_4 }:
           buildMix {
             name = "mariaex";
-            version = "0.5.0";
+            version = "0.7.0";
             src = fetchHex {
               pkg = "mariaex";
-              version = "0.5.0";
+              version = "0.7.0";
               sha256 =
-                "fe2a576c6b4e446c3744af7dda0a3ed6f179f80451a8e412be520b9005bb26c0";
+                "758c1d8a75a9ce71f047e8d54b0fa1cde518252b25aecb9b8c42f918340bdfb6";
             };
-            beamDeps  = [ decimal_1_1_1 ];
+            beamDeps  = [ decimal_1_1_1 db_connection_0_2_4 ];
 
             meta = {
               description = ''Pure elixir database driver for MariaDB /
@@ -25363,30 +29393,7 @@ let
           }
       ) {};
 
-    mariaex_0_6_2 = callPackage
-      (
-        {  buildMix, fetchHex, decimal_1_1_1, connection_1_0_2 }:
-          buildMix {
-            name = "mariaex";
-            version = "0.6.2";
-            src = fetchHex {
-              pkg = "mariaex";
-              version = "0.6.2";
-              sha256 =
-                "195d9f46e09029872505402159ec713cdfa7b847622cc6b6db658c0d24f85ecd";
-            };
-            beamDeps  = [ decimal_1_1_1 connection_1_0_2 ];
-
-            meta = {
-              description = ''Pure elixir database driver for MariaDB /
-                            MySQL.'';
-
-              homepage = "https://github.com/xerions/mariaex";
-            };
-          }
-      ) {};
-
-    mariaex = mariaex_0_6_2;
+    mariaex = mariaex_0_7_0;
 
     marked_0_0_1 = callPackage
       (
@@ -25410,19 +29417,70 @@ let
 
     marked = marked_0_0_1;
 
-    maru_0_9_3 = callPackage
+    markit_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "markit";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "markit";
+              version = "0.1.2";
+              sha256 =
+                "6304ceb1e7a5787555bc7d048bf3c9c0b432fe5378c6d630fb02d0bb871e57b5";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Access stock market data from markit.com'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/col/markit";
+            };
+          }
+      ) {};
+
+    markit = markit_0_1_2;
+
+    markit_skill_0_0_2 = callPackage
+      (
+        {
+          buildMix, fetchHex, markit_0_1_2, inflex_1_5_0, alexa_0_1_12
+        }:
+          buildMix {
+            name = "markit_skill";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "markit_skill";
+              version = "0.0.2";
+              sha256 =
+                "166d8ef88c08c21821dda379a053af761db4de5dff50226bfcb0e3a18fc855db";
+            };
+            beamDeps  = [ markit_0_1_2 inflex_1_5_0 alexa_0_1_12 ];
+
+            meta = {
+              description = ''Amazon Alexa skill that uses data from
+                            Markit.com'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/col/markit_skill";
+            };
+          }
+      ) {};
+
+    markit_skill = markit_skill_0_0_2;
+
+    maru_0_9_5 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "maru";
-            version = "0.9.3";
+            version = "0.9.5";
             src = fetchHex {
               pkg = "maru";
-              version = "0.9.3";
+              version = "0.9.5";
               sha256 =
-                "6dd160dbc77b72a1954d53c5d584402006f0c28a278f3f28c5ec651246db480d";
+                "36456f36fea5b2fc5cacd280535347f11d949799bfb8506e772e30b062056d3d";
             };
-            beamDeps  = [ poison_1_0_3 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_0_3 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''REST-like API micro-framework for elixir inspired
@@ -25433,7 +29491,7 @@ let
           }
       ) {};
 
-    maru = maru_0_9_3;
+    maru = maru_0_9_5;
 
     maru_entity_0_1_2 = callPackage
       (
@@ -25457,19 +29515,19 @@ let
 
     maru_entity = maru_entity_0_1_2;
 
-    maru_swagger_0_7_1 = callPackage
+    maru_swagger_0_7_3 = callPackage
       (
-        {  buildMix, fetchHex, maru_0_9_3 }:
+        {  buildMix, fetchHex, maru_0_9_5 }:
           buildMix {
             name = "maru_swagger";
-            version = "0.7.1";
+            version = "0.7.3";
             src = fetchHex {
               pkg = "maru_swagger";
-              version = "0.7.1";
+              version = "0.7.3";
               sha256 =
-                "035cfecc126ccdc830694c8c6f6c1d3376b6d037b31d30f31b53334305179940";
+                "919148f80e76bd4dba89021cbffcf359cfe05028250d05a3eacf2bae5e24ec46";
             };
-            beamDeps  = [ maru_0_9_3 ];
+            beamDeps  = [ maru_0_9_5 ];
 
             meta = {
               description = ''Add swagger compliant documentation to your maru
@@ -25480,7 +29538,7 @@ let
           }
       ) {};
 
-    maru_swagger = maru_swagger_0_7_1;
+    maru_swagger = maru_swagger_0_7_3;
 
     marvel_1_0_0 = callPackage
       (
@@ -25489,7 +29547,7 @@ let
           fetchHex,
           timex_0_13_5,
           poison_1_5_2,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildRebar3 {
             name = "marvel";
@@ -25501,7 +29559,7 @@ let
                 "7b5e99ccfa84954c2e46295aa72ab57b7511e1ec8e0bd13d1c5948efe1a0d23d";
             };
 
-            beamDeps  = [ timex_0_13_5 poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ timex_0_13_5 poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Marvel API and CLI Client '';
@@ -25521,7 +29579,7 @@ let
           slack_0_3_0,
           poison_2_1_0,
           ibrowse_4_2_2,
-          httpotion_2_2_0
+          httpotion_2_2_2
         }:
           buildMix {
             name = "marvin";
@@ -25533,7 +29591,7 @@ let
                 "722a97aef1d0f7fb783948002897ea1ec67ac77cb471016386bf485bb8bd86c7";
             };
             beamDeps  = [
-                          slack_0_3_0 poison_2_1_0 ibrowse_4_2_2 httpotion_2_2_0
+                          slack_0_3_0 poison_2_1_0 ibrowse_4_2_2 httpotion_2_2_2
                         ];
 
             meta = {
@@ -25618,36 +29676,36 @@ let
 
     maybe = maybe_0_0_1;
 
-    mazurka_0_3_32 = callPackage
+    mazurka_0_3_34 = callPackage
       (
         {
           buildMix,
           fetchHex,
           xml_builder_0_0_8,
           poison_2_1_0,
-          plug_1_1_1,
-          mimetype_parser_0_1_1,
+          plug_1_1_3,
+          mimetype_parser_0_1_2,
           mazurka_dsl_0_1_1,
-          html_builder_0_1_0,
+          html_builder_0_1_1,
           etude_0_3_7,
           ecto_1_0_7
         }:
           buildMix {
             name = "mazurka";
-            version = "0.3.32";
+            version = "0.3.34";
             src = fetchHex {
               pkg = "mazurka";
-              version = "0.3.32";
+              version = "0.3.34";
               sha256 =
-                "93a1a7fe508daae8df47a6bf8d3969d5cf93a206b65a5c350a0ea26005968f6a";
+                "4efd11082e2c6af965bc2f5e282601858f5e8d78f9ace30ba7baa27b03333023";
             };
             beamDeps  = [
                           xml_builder_0_0_8
                           poison_2_1_0
-                          plug_1_1_1
-                          mimetype_parser_0_1_1
+                          plug_1_1_3
+                          mimetype_parser_0_1_2
                           mazurka_dsl_0_1_1
-                          html_builder_0_1_0
+                          html_builder_0_1_1
                           etude_0_3_7
                           ecto_1_0_7
                         ];
@@ -25660,7 +29718,7 @@ let
           }
       ) {};
 
-    mazurka = mazurka_0_3_32;
+    mazurka = mazurka_0_3_34;
 
     mazurka_dsl_0_1_1 = callPackage
       (
@@ -25687,7 +29745,7 @@ let
 
     mazurka_mediatype_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, etude_0_4_0 }:
+        {  buildMix, fetchHex, etude_1_0_0_beta_0 }:
           buildMix {
             name = "mazurka_mediatype";
             version = "0.2.0";
@@ -25697,7 +29755,7 @@ let
               sha256 =
                 "4ccd8b27d6405e93cb34861f211d69b79ab46c2dbc5c7874d4ee3c580a5754bb";
             };
-            beamDeps  = [ etude_0_4_0 ];
+            beamDeps  = [ etude_1_0_0_beta_0 ];
 
             meta = {
               description = ''mazurka mediatype interface'';
@@ -25716,7 +29774,7 @@ let
           fetchHex,
           poison_1_3_1,
           mazurka_mediatype_0_2_0,
-          etude_0_4_0
+          etude_1_0_0_beta_0
         }:
           buildMix {
             name = "mazurka_mediatype_hyperjson";
@@ -25727,7 +29785,11 @@ let
               sha256 =
                 "f09489f242598ece8496f50c9dfc3d1a051b6115a654ebbb9ce5336e04b2cb8d";
             };
-            beamDeps  = [ poison_1_3_1 mazurka_mediatype_0_2_0 etude_0_4_0 ];
+            beamDeps  = [
+                          poison_1_3_1
+                          mazurka_mediatype_0_2_0
+                          etude_1_0_0_beta_0
+                        ];
 
             meta = {
               description = ''hyper+json mediatype compiler for mazurka'';
@@ -25740,10 +29802,64 @@ let
 
     mazurka_mediatype_hyperjson = mazurka_mediatype_hyperjson_0_2_3;
 
+    mc_data_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "mc_data";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "mc_data";
+              version = "0.0.2";
+              sha256 =
+                "8faba98530129d3a79d7a3062db1f4fa358363be1575fb28acb6e74abb031e86";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              description = ''Provides access to data from the game
+                            Minecraft.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/hansihe/elixir_mc_data";
+            };
+          }
+      ) {};
+
+    mc_data = mc_data_0_0_2;
+
+    mc_protocol_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, uuid_1_1_3 }:
+          buildMix {
+            name = "mc_protocol";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "mc_protocol";
+              version = "0.0.1";
+              sha256 =
+                "683d92c0c6efd034f56a664bcb4f21f17050a89577f4aa0200343673fd357865";
+            };
+            beamDeps  = [ uuid_1_1_3 ];
+
+            meta = {
+              longDescription = ''Implementation of the Minecraft protocol in
+                                Elixir. Aims to provide functional ways to
+                                interact with the minecraft protocol on all
+                                levels, including packet reading and writing,
+                                encryption, compression, authentication and
+                                more.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/hansihe/elixir_mc_protocol";
+            };
+          }
+      ) {};
+
+    mc_protocol = mc_protocol_0_0_1;
+
     mcrypt_0_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "mcrypt";
             version = "0.1.0";
             src = fetchHex {
@@ -25752,7 +29868,6 @@ let
               sha256 =
                 "508a35ba255190f80309dcabf9c81c88b86b9ec13af180627ad51b8e5cf2a4cd";
             };
-            compilePorts = true;
 
             meta = {
               description = ''NIF wrapper around libmcrypt.'';
@@ -25841,7 +29956,36 @@ let
           }
       ) {};
 
-    mdns_client_lib = mdns_client_lib_0_1_33;
+    mdns_client_lib_0_1_38 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          pooler_1_5_0,
+          mdns_client_0_1_7,
+          lager_2_1_1
+        }:
+          buildRebar3 {
+            name = "mdns_client_lib";
+            version = "0.1.38";
+            src = fetchHex {
+              pkg = "mdns_client_lib";
+              version = "0.1.38";
+              sha256 =
+                "46b990c883ca02c780a2295ffe75b51888c028ca42cd86b8ad517eca80cbd765";
+            };
+
+            beamDeps  = [ pooler_1_5_0 mdns_client_0_1_7 lager_2_1_1 ];
+
+            meta = {
+              description = ''client lib for mdns aware tcp servers'';
+              license = stdenv.lib.licenses.cddl;
+              homepage = "https://github.com/Licenser/mdns_client_lib";
+            };
+          }
+      ) {};
+
+    mdns_client_lib = mdns_client_lib_0_1_38;
 
     mdns_server_0_2_0 = callPackage
       (
@@ -25900,8 +30044,8 @@ let
 
     meck_0_8_4 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "meck";
             version = "0.8.4";
             src = fetchHex {
@@ -25923,7 +30067,7 @@ let
 
     medex_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4, consul_1_0_3 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4, consul_1_0_3 }:
           buildMix {
             name = "medex";
             version = "0.1.2";
@@ -25933,7 +30077,7 @@ let
               sha256 =
                 "dd8dd07892a4aedbe7680fa8637b1c17b7615b2aaea0b25b84acad4ed50700d2";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 consul_1_0_3 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 consul_1_0_3 ];
 
             meta = {
               longDescription = ''Medical Examination - application for
@@ -25970,19 +30114,19 @@ let
 
     meld = meld_0_1_2;
 
-    mellon_0_1_0 = callPackage
+    mellon_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, plug_1_1_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, plug_1_1_3 }:
           buildMix {
             name = "mellon";
-            version = "0.1.0";
+            version = "0.1.1";
             src = fetchHex {
               pkg = "mellon";
-              version = "0.1.0";
+              version = "0.1.1";
               sha256 =
-                "e9252f1abdc4c38a4ad9cc3bd194630f7756ba22a25e6ebf8e937b1600cb9aae";
+                "2b05fca901c0b9609cdd65cfb015a7646a9ec239cf1694ee8f1384a53a5ac0b4";
             };
-            beamDeps  = [ poison_2_1_0 plug_1_1_1 ];
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 ];
 
             meta = {
               longDescription = ''Mellon is a Plug used in authentication of
@@ -25994,21 +30138,46 @@ let
           }
       ) {};
 
-    mellon = mellon_0_1_0;
+    mellon = mellon_0_1_1;
 
-    memcache_client_1_0_0 = callPackage
+    mem_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, poolboy_1_5_1, poison_1_5_2 }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "mem";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "mem";
+              version = "0.1.2";
+              sha256 =
+                "492f8bc52ca5d7ccdfdfac19d8a6f145eb9d268b712b02c207544022dfe2d42b";
+            };
+
+            meta = {
+              description = ''ETS based KV cache with TTL and LRU support'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/falood/mem";
+            };
+          }
+      ) {};
+
+    mem = mem_0_1_2;
+
+    memcache_client_1_1_0 = callPackage
+      (
+        {
+          buildMix, fetchHex, poolboy_1_5_1, poison_2_1_0, connection_1_0_2
+        }:
           buildMix {
             name = "memcache_client";
-            version = "1.0.0";
+            version = "1.1.0";
             src = fetchHex {
               pkg = "memcache_client";
-              version = "1.0.0";
+              version = "1.1.0";
               sha256 =
-                "ef5977dc10fd0d55606887168735ae4a0c481a1edbf2a28e042cab3f53e1f9c3";
+                "e12d6add6d9ef817f7cf47d85c37c75c9ec81512a7ad88f23b50963048bce439";
             };
-            beamDeps  = [ poolboy_1_5_1 poison_1_5_2 ];
+            beamDeps  = [ poolboy_1_5_1 poison_2_1_0 connection_1_0_2 ];
 
             meta = {
               description = ''Memcache client library utilizing the memcache
@@ -26019,7 +30188,7 @@ let
           }
       ) {};
 
-    memcache_client = memcache_client_1_0_0;
+    memcache_client = memcache_client_1_1_0;
 
     message_pack_0_2_0 = callPackage
       (
@@ -26071,7 +30240,7 @@ let
 
     metainvestigator_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, floki_0_7_1 }:
+        {  buildMix, fetchHex, floki_0_8_0 }:
           buildMix {
             name = "metainvestigator";
             version = "0.0.3";
@@ -26081,7 +30250,7 @@ let
               sha256 =
                 "774b3973090491a9a342a68c5cf099c98581ae0f1b1d313a08a7d2030d541781";
             };
-            beamDeps  = [ floki_0_7_1 ];
+            beamDeps  = [ floki_0_8_0 ];
 
             meta = {
               description = ''A library for web scraping, inspired by
@@ -26094,17 +30263,17 @@ let
 
     metainvestigator = metainvestigator_0_0_3;
 
-    metrics_0_2_1 = callPackage
+    metrics_1_0_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "metrics";
-            version = "0.2.1";
+            version = "1.0.1";
             src = fetchHex {
               pkg = "metrics";
-              version = "0.2.1";
+              version = "1.0.1";
               sha256 =
-                "1cccc3534fa5a7861a3dcc0414afba00a616937e82c95d6172a523a5d2e97c03";
+                "69b09adddc4f74a40716ae54d140f93beb0fb8978d8636eaded0c31b6f099f16";
             };
 
             meta = {
@@ -26116,7 +30285,29 @@ let
           }
       ) {};
 
-    metrics = metrics_0_2_1;
+    metrics_1_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "metrics";
+            version = "1.1.0";
+            src = fetchHex {
+              pkg = "metrics";
+              version = "1.1.0";
+              sha256 =
+                "48bd4774cef5bd88680cf71c9db46acbe5a80f23072cb2a0a42e8f7d5bd33549";
+            };
+
+            meta = {
+              description = ''A generic interface to different metrics systems
+                            in Erlang.'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/benoitc/erlang-metrics";
+            };
+          }
+      ) {};
+
+    metrics = metrics_1_1_0;
 
     metrix_0_2_0 = callPackage
       (
@@ -26169,19 +30360,19 @@ let
 
     mex = mex_0_0_5;
 
-    microformats2_0_0_1 = callPackage
+    microformats2_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_2_0, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpotion_2_2_2, floki_0_7_2 }:
           buildMix {
             name = "microformats2";
-            version = "0.0.1";
+            version = "0.0.5";
             src = fetchHex {
               pkg = "microformats2";
-              version = "0.0.1";
+              version = "0.0.5";
               sha256 =
-                "9b14b1065763c422beb7fea518a1374bb17bcbe8f903381612e4deb3c9b8e385";
+                "890ca1812738869aa65865339a730c5542949cac4b017b25fc276e81b37157b2";
             };
-            beamDeps  = [ httpotion_2_2_0 floki_0_7_1 ];
+            beamDeps  = [ httpotion_2_2_2 floki_0_7_2 ];
 
             meta = {
               description = ''A microformats2 parser
@@ -26193,7 +30384,7 @@ let
           }
       ) {};
 
-    microformats2 = microformats2_0_0_1;
+    microformats2 = microformats2_0_0_5;
 
     milliseconds_0_0_1 = callPackage
       (
@@ -26309,17 +30500,17 @@ let
 
     mimerl = mimerl_1_1_0;
 
-    mimetype_parser_0_1_1 = callPackage
+    mimetype_parser_0_1_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "mimetype_parser";
-            version = "0.1.1";
+            version = "0.1.2";
             src = fetchHex {
               pkg = "mimetype_parser";
-              version = "0.1.1";
+              version = "0.1.2";
               sha256 =
-                "ec26e5e2bb279babd5bd415d626d04040d9f719fc2b0066eb909777a93015fce";
+                "c495521cad6cf49fb79098e68e921c58955312df46c9c5aa5abab44224c2647d";
             };
 
             meta = {
@@ -26330,7 +30521,7 @@ let
           }
       ) {};
 
-    mimetype_parser = mimetype_parser_0_1_1;
+    mimetype_parser = mimetype_parser_0_1_2;
 
     mimex_0_1_0 = callPackage
       (
@@ -26355,17 +30546,17 @@ let
 
     mimex = mimex_0_1_0;
 
-    minmaxlist_0_0_5 = callPackage
+    minmaxlist_0_0_6 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "minmaxlist";
-            version = "0.0.5";
+            version = "0.0.6";
             src = fetchHex {
               pkg = "minmaxlist";
-              version = "0.0.5";
+              version = "0.0.6";
               sha256 =
-                "6d14c8a55196e803cb6cdfded42f57d61b96e4bd3ce7c31f36e33a3257256d8e";
+                "cc9bc50dc971c8c3743bcecdaca35330593d6466d911c656ba7d718836e68a57";
             };
 
             meta = {
@@ -26378,7 +30569,7 @@ let
           }
       ) {};
 
-    minmaxlist = minmaxlist_0_0_5;
+    minmaxlist = minmaxlist_0_0_6;
 
     misc_random_0_2_6 = callPackage
       (
@@ -26530,17 +30721,17 @@ let
 
     mix_info = mix_info_0_7_2;
 
-    mix_test_watch_0_2_5 = callPackage
+    mix_test_watch_0_2_6 = callPackage
       (
         {  buildMix, fetchHex, fs_0_9_2 }:
           buildMix {
             name = "mix_test_watch";
-            version = "0.2.5";
+            version = "0.2.6";
             src = fetchHex {
               pkg = "mix_test_watch";
-              version = "0.2.5";
+              version = "0.2.6";
               sha256 =
-                "68ddd24df6d6ca77f8a95d4bb0443998031984122aa574d79434fac25f10da7b";
+                "b7019e9a0eba42bc98f15be9c1402f23c2b0dab7b67e71bba8bc5b337b0ab273";
             };
             beamDeps  = [ fs_0_9_2 ];
 
@@ -26552,7 +30743,7 @@ let
           }
       ) {};
 
-    mix_test_watch = mix_test_watch_0_2_5;
+    mix_test_watch = mix_test_watch_0_2_6;
 
     mixpanel_0_0_3 = callPackage
       (
@@ -26581,7 +30772,7 @@ let
 
     mixpanel_api_ex_0_8_3 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "mixpanel_api_ex";
             version = "0.8.3";
@@ -26591,7 +30782,7 @@ let
               sha256 =
                 "1ff5eb4aa333495a86868873deb8fcd04c5f2e6f2560d77ac6ccbe07e2e3d7b4";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir client for the Mixpanel API.'';
@@ -26605,7 +30796,7 @@ let
 
     mixpanel_data_client_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_2 }:
           buildMix {
             name = "mixpanel_data_client";
             version = "0.0.2";
@@ -26615,7 +30806,7 @@ let
               sha256 =
                 "7f3bbd608ae18153655f27bd50ea01ad85630d6c1cc6ab9ed336e95419f06c86";
             };
-            beamDeps  = [ poison_1_3_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_3_1 httpoison_0_8_2 ];
 
             meta = {
               description = ''Client library for interacting with the Mixpanel
@@ -26630,7 +30821,7 @@ let
 
     mixstar_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, netrc_0_0_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, netrc_0_0_2, httpoison_0_8_2 }:
           buildMix {
             name = "mixstar";
             version = "0.0.1";
@@ -26640,7 +30831,7 @@ let
               sha256 =
                 "d7f9014711d04049c90a8f835857d1bde04647b326d1ec949e2a90477f4d4a39";
             };
-            beamDeps  = [ netrc_0_0_2 httpoison_0_8_1 ];
+            beamDeps  = [ netrc_0_0_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''MixStar starred GitHub repository that depends on
@@ -26678,7 +30869,7 @@ let
 
     mmExchangeRate_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, jsx_2_8_0, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, jsx_2_8_0, httpotion_2_2_2 }:
           buildMix {
             name = "mmExchangeRate";
             version = "0.0.1";
@@ -26688,7 +30879,7 @@ let
               sha256 =
                 "6daf6e74bf3ce8f9d7cc19b18b023d700201a847dde94a0eef1f263ce65efbac";
             };
-            beamDeps  = [ jsx_2_8_0 httpotion_1_0_0 ];
+            beamDeps  = [ jsx_2_8_0 httpotion_2_2_2 ];
 
             meta = {
               longDescription = ''A simple exchange rate checker and calculator
@@ -26749,6 +30940,30 @@ let
 
     mmath = mmath_0_1_16;
 
+    mnemonic_slugs_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "mnemonic_slugs";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "mnemonic_slugs";
+              version = "0.0.1";
+              sha256 =
+                "d5200aaf06da3f9f307b58464f5eca2ed1a0dc379a12fe4f42444bb1e30a4bd8";
+            };
+
+            meta = {
+              description = ''MnemonicSlugs is an Elixir library for generating
+                            memorable slugs.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/devshane/mnemonic_slugs";
+            };
+          }
+      ) {};
+
+    mnemonic_slugs = mnemonic_slugs_0_0_1;
+
     mobiledoc_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -26776,8 +30991,8 @@ let
 
     mochiweb_2_12_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "mochiweb";
             version = "2.12.2";
             src = fetchHex {
@@ -26798,19 +31013,41 @@ let
 
     mochiweb = mochiweb_2_12_2;
 
-    mock_0_1_1 = callPackage
+    mochiweb_html_2_13_0 = callPackage
       (
-        {  buildRebar3, fetchHex, meck_0_8_4 }:
+        {  buildRebar3, fetchHex }:
           buildRebar3 {
-            name = "mock";
-            version = "0.1.1";
+            name = "mochiweb_html";
+            version = "2.13.0";
             src = fetchHex {
-              pkg = "mock";
-              version = "0.1.1";
+              pkg = "mochiweb_html";
+              version = "2.13.0";
               sha256 =
-                "d2d73a2f0621bbf23011fdc6a29eca114381e77098e19b71d0774278ca80bc01";
+                "c05f969fd011b357ea2f577c2b996776241d179ba2eb1bcba274cc23fdcf5439";
             };
 
+            meta = {
+              description = ''Mochiweb HTML parser'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mochi/mochiweb";
+            };
+          }
+      ) {};
+
+    mochiweb_html = mochiweb_html_2_13_0;
+
+    mock_0_1_3 = callPackage
+      (
+        {  buildMix, fetchHex, meck_0_8_4 }:
+          buildMix {
+            name = "mock";
+            version = "0.1.3";
+            src = fetchHex {
+              pkg = "mock";
+              version = "0.1.3";
+              sha256 =
+                "bf7cf50d528394d870cdecac4920ab719cec0af98eff95759b57cab0e5ee143e";
+            };
             beamDeps  = [ meck_0_8_4 ];
 
             meta = {
@@ -26826,7 +31063,7 @@ let
           }
       ) {};
 
-    mock = mock_0_1_1;
+    mock = mock_0_1_3;
 
     module_mocker_0_2_0 = callPackage
       (
@@ -26917,7 +31154,7 @@ let
 
     mojoauth_1_0_2 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "mojoauth";
             version = "1.0.2";
@@ -26927,7 +31164,7 @@ let
               sha256 =
                 "72d8b3fdff6d6571d7dcc9ad46b249823c84e0321920a0e9d6f39ee5f9fc2f23";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               longDescription = ''MojoAuth is a set of standard approaches to
@@ -26966,7 +31203,7 @@ let
 
     mon_handler_1_0_2 = callPackage
       (
-        {  buildMix, fetchHex, dialyze_0_2_0 }:
+        {  buildMix, fetchHex, dialyze_0_2_1 }:
           buildMix {
             name = "mon_handler";
             version = "1.0.2";
@@ -26976,7 +31213,7 @@ let
               sha256 =
                 "d18942f95750b94e3da1d9fca7a2ea4b1b1d27c017feff76cb109b29bb308f58";
             };
-            beamDeps  = [ dialyze_0_2_0 ];
+            beamDeps  = [ dialyze_0_2_1 ];
 
             meta = {
               longDescription = ''A minimal GenServer that monitors a given
@@ -27042,7 +31279,7 @@ let
     mondo_0_1_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_2_1_0, plug_1_1_1, httpoison_0_8_1
+          buildMix, fetchHex, poison_2_1_0, plug_1_1_3, httpoison_0_8_2
         }:
           buildMix {
             name = "mondo";
@@ -27053,7 +31290,7 @@ let
               sha256 =
                 "f557216314e098137f5140f1194e2eba7a2a030d78affc23ea5943f586ab1095";
             };
-            beamDeps  = [ poison_2_1_0 plug_1_1_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir client for the Mondo API.'';
@@ -27067,7 +31304,7 @@ let
 
     monetized_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, ecto_1_1_3, decimal_1_1_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, ecto_1_1_5, decimal_1_1_1 }:
           buildMix {
             name = "monetized";
             version = "0.3.2";
@@ -27077,7 +31314,7 @@ let
               sha256 =
                 "1978e46c6dd352fea0e9ce208835886ea4fd07dfc1555ee2f9adce98a9e82ce6";
             };
-            beamDeps  = [ poison_1_5_2 ecto_1_1_3 decimal_1_1_1 ];
+            beamDeps  = [ poison_1_5_2 ecto_1_1_5 decimal_1_1_1 ];
 
             meta = {
               description = ''A lightweight solution for handling and storing
@@ -27163,17 +31400,17 @@ let
 
     mongodb = mongodb_0_1_1;
 
-    mongodb_ecto_0_1_3 = callPackage
+    mongodb_ecto_0_1_4 = callPackage
       (
         {  buildMix, fetchHex, mongodb_0_1_1, ecto_1_0_7 }:
           buildMix {
             name = "mongodb_ecto";
-            version = "0.1.3";
+            version = "0.1.4";
             src = fetchHex {
               pkg = "mongodb_ecto";
-              version = "0.1.3";
+              version = "0.1.4";
               sha256 =
-                "8befad3e958f3924cb780dbf958d63539d48e23ca680e4e9dc1cf63b6827ce8a";
+                "2f9cc8c8cd316e187f4b8b94d0a88618ce4a6cb1b6cfa7856573f3376fb443bf";
             };
             beamDeps  = [ mongodb_0_1_1 ecto_1_0_7 ];
 
@@ -27185,7 +31422,7 @@ let
           }
       ) {};
 
-    mongodb_ecto = mongodb_ecto_0_1_3;
+    mongodb_ecto = mongodb_ecto_0_1_4;
 
     monk_0_1_3 = callPackage
       (
@@ -27307,17 +31544,17 @@ let
 
     mpinyin = mpinyin_0_0_2;
 
-    msgpack_0_4_0 = callPackage
+    msgpack_0_5_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "msgpack";
-            version = "0.4.0";
+            version = "0.5.0";
             src = fetchHex {
               pkg = "msgpack";
-              version = "0.4.0";
+              version = "0.5.0";
               sha256 =
-                "cb69184b254bcddfd0b3b813fa9ffc87dd4642ad026bb8117e2384b55239eae4";
+                "520ae767b3c3c0796d2913c92f463bc8b4dee091880734f5b99a90921e18b704";
             };
 
             meta = {
@@ -27328,19 +31565,19 @@ let
           }
       ) {};
 
-    msgpack = msgpack_0_4_0;
+    msgpack = msgpack_0_5_0;
 
-    msgpax_0_7_0 = callPackage
+    msgpax_0_7_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "msgpax";
-            version = "0.7.0";
+            version = "0.7.1";
             src = fetchHex {
               pkg = "msgpax";
-              version = "0.7.0";
+              version = "0.7.1";
               sha256 =
-                "c51838cc08674eada16ff7ff516b1c4028fecba602bdc04747f85a94dca25202";
+                "3d2bb32de9552482f35b86cbdc547ee94b67615bfcc831222cde869afa202f2c";
             };
 
             meta = {
@@ -27504,7 +31741,7 @@ let
     murdoch_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, goth_0_0_3
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, goth_0_0_3
         }:
           buildMix {
             name = "murdoch";
@@ -27515,7 +31752,7 @@ let
               sha256 =
                 "77ec44ca76d6b4a14df7222104a36cb29ed25f7d52fb3ffe30807ddc82a2d9ad";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 goth_0_0_3 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 goth_0_0_3 ];
 
             meta = {
               longDescription = ''A library for interacting with Google Cloud
@@ -27528,6 +31765,30 @@ let
       ) {};
 
     murdoch = murdoch_0_0_1;
+
+    murmur_0_2_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "murmur";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "murmur";
+              version = "0.2.1";
+              sha256 =
+                "7e38b2f136d4e8039abb88f6cbdf50c939408d3819be4b18b639a968ee9c2bce";
+            };
+
+            meta = {
+              longDescription = ''Murmur is a pure Elixir implementation of the
+                                non-cryptographic hash Murmur3. It aims to
+                                implement the x86_32bit, x86_128bit and
+                                x64_128bit variants.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/gmcabrita/murmur";
+            };
+          }
+      ) {};
 
     murmur_1_0_0 = callPackage
       (
@@ -27600,6 +31861,30 @@ let
       ) {};
 
     mustachex = mustachex_0_0_1;
+
+    mutant_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "mutant";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "mutant";
+              version = "0.0.2";
+              sha256 =
+                "c875062e082242b79c85356993ad3cfd7d550392d34fc6da23a132495b0dcb6f";
+            };
+
+            meta = {
+              description = ''Now you can create mutable structs, use this with
+                            care and only as a last resort'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/hackersguildco/Mutant";
+            };
+          }
+      ) {};
+
+    mutant = mutant_0_0_2;
 
     mynumber_1_0_0 = callPackage
       (
@@ -27675,8 +31960,8 @@ let
 
     n2o_2_3_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "n2o";
             version = "2.3.0";
             src = fetchHex {
@@ -27720,19 +32005,19 @@ let
 
     nacl = nacl_0_3_0;
 
-    nadia_0_3_3 = callPackage
+    nadia_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "nadia";
-            version = "0.3.3";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "nadia";
-              version = "0.3.3";
+              version = "0.4.0";
               sha256 =
-                "8ea94a9a92aac18b98736148892c6ec672fa599cb5aa222757393c1551228b4e";
+                "e76217333ad6d02ec971bfa781e70268285fc417aebb486318e0584affccb08d";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Telegram Bot API Wrapper written in Elixir'';
@@ -27742,7 +32027,7 @@ let
           }
       ) {};
 
-    nadia = nadia_0_3_3;
+    nadia = nadia_0_4_0;
 
     nat_set_0_0_1 = callPackage
       (
@@ -27817,17 +32102,17 @@ let
 
     nats = nats_0_0_1;
 
-    nats_msg_0_3_3 = callPackage
+    nats_msg_0_4_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "nats_msg";
-            version = "0.3.3";
+            version = "0.4.1";
             src = fetchHex {
               pkg = "nats_msg";
-              version = "0.3.3";
+              version = "0.4.1";
               sha256 =
-                "80b2669f8c53395c156d3a121befe71a5131d7a42f14a38fbd7778a179b498ac";
+                "8e21a78bf2ae76d7702bcc03eb87bdddac1b99edebfc99db98e8e94a7a5361c4";
             };
 
             meta = {
@@ -27839,7 +32124,7 @@ let
           }
       ) {};
 
-    nats_msg = nats_msg_0_3_3;
+    nats_msg = nats_msg_0_4_1;
 
     natsio_0_1_4 = callPackage
       (
@@ -27895,7 +32180,7 @@ let
           fetchHex,
           poison_1_5_2,
           httpoison_0_7_5,
-          floki_0_7_1,
+          floki_0_8_0,
           exprintf_0_1_6
         }:
           buildMix {
@@ -27910,7 +32195,7 @@ let
             beamDeps  = [
                           poison_1_5_2
                           httpoison_0_7_5
-                          floki_0_7_1
+                          floki_0_8_0
                           exprintf_0_1_6
                         ];
 
@@ -27927,7 +32212,7 @@ let
 
     navigation_history_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "navigation_history";
             version = "0.2.0";
@@ -27937,7 +32222,7 @@ let
               sha256 =
                 "9fbddedd831930c3f2e784c53442558d90d68040f9921dfa9441da63d6b8dacc";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Navigation history tracking plug'';
@@ -27978,6 +32263,45 @@ let
 
     navigation_tree = navigation_tree_0_4_4;
 
+    ndc_ex_sdk_0_0_7 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          xml_builder_0_0_8,
+          pipe_0_0_2,
+          ibrowse_4_2_2,
+          httpotion_2_2_2
+        }:
+          buildMix {
+            name = "ndc_ex_sdk";
+            version = "0.0.7";
+            src = fetchHex {
+              pkg = "ndc_ex_sdk";
+              version = "0.0.7";
+              sha256 =
+                "73402d51ce6da305409d48e1638e864a336038a03205e66c75c090115c8fe8b8";
+            };
+            beamDeps  = [
+                          xml_builder_0_0_8
+                          pipe_0_0_2
+                          ibrowse_4_2_2
+                          httpotion_2_2_2
+                        ];
+
+            meta = {
+              longDescription = ''This is an Elixir package that wrapps any
+                                NDC-compliant API. It`s host-agnostic and quite
+                                flexible-through-configuration so that it can
+                                reach NDC hosts with a certain flexibility'';
+
+              homepage = "https://github.com/open-ndc/ndc-ex-sdk";
+            };
+          }
+      ) {};
+
+    ndc_ex_sdk = ndc_ex_sdk_0_0_7;
+
     neat_ex_1_1_0 = callPackage
       (
         {  buildMix, fetchHex, json_0_3_3 }:
@@ -28013,30 +32337,80 @@ let
 
     neat_ex = neat_ex_1_1_0;
 
-    neo4j_sips_0_1_12 = callPackage
+    nectar_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "nectar";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "nectar";
+              version = "0.0.1";
+              sha256 =
+                "dffc5f1c68c83d9eb83ca1c8868d923beaccfdf36ae2e5122dc7bc8edd5665f5";
+            };
+
+            meta = {
+              description = ''Placeholder package for nectar ecommerce'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    nectar = nectar_0_0_1;
+
+    neo4j_0_3_0 = callPackage
+      (
+        {  buildErlangMk, fetchHex, jiffy_0_14_7, hackney_1_4_10 }:
+          buildErlangMk {
+            name = "neo4j";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "neo4j";
+              version = "0.3.0";
+              sha256 =
+                "93b07252e5216dbccedda19a28873ab5352f59a3c0f257b85a14d3b4e47d3cf7";
+            };
+            beamDeps  = [ jiffy_0_14_7 hackney_1_4_10 ];
+
+            meta = {
+              longDescription = ''Erlang client library for Neo4J This is a
+                                lightweight wrapper for Neo4j REST API. Exposes
+                                all of the functionality exposed by Neo4J REST
+                                API. Please refer to README to see if you need
+                                version 0.2.1 or 0.3'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/dmitriid/neo4j-erlang";
+            };
+          }
+      ) {};
+
+    neo4j = neo4j_0_3_0;
+
+    neo4j_sips_0_1_25 = callPackage
       (
         {
           buildMix,
           fetchHex,
           poolboy_1_5_1,
-          poison_1_5_2,
-          httpoison_0_7_5,
-          con_cache_0_9_0
+          poison_2_1_0,
+          httpoison_0_8_2,
+          con_cache_0_11_0
         }:
           buildMix {
             name = "neo4j_sips";
-            version = "0.1.12";
+            version = "0.1.25";
             src = fetchHex {
               pkg = "neo4j_sips";
-              version = "0.1.12";
+              version = "0.1.25";
               sha256 =
-                "7a4547b36abd57856f04c8d0b7f2a39eb9fdf7a8c088fdf5836853559ad7aee2";
+                "b81aa758aa45ec67c40d8876e5bf6a69e290e0c8d529e078546e930dbc3dcd8e";
             };
             beamDeps  = [
                           poolboy_1_5_1
-                          poison_1_5_2
-                          httpoison_0_7_5
-                          con_cache_0_9_0
+                          poison_2_1_0
+                          httpoison_0_8_2
+                          con_cache_0_11_0
                         ];
 
             meta = {
@@ -28048,7 +32422,43 @@ let
           }
       ) {};
 
-    neo4j_sips = neo4j_sips_0_1_12;
+    neo4j_sips = neo4j_sips_0_1_25;
+
+    neo4j_sips_models_0_1_1 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          timex_1_0_2,
+          neo4j_sips_0_1_25,
+          inflex_1_5_0,
+          chronos_1_5_1
+        }:
+          buildMix {
+            name = "neo4j_sips_models";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "neo4j_sips_models";
+              version = "0.1.1";
+              sha256 =
+                "6572993cd5acdcdf77490d608236c869ce0cda2931beda2a272f85f2f1831759";
+            };
+            beamDeps  = [
+                          timex_1_0_2
+                          neo4j_sips_0_1_25
+                          inflex_1_5_0
+                          chronos_1_5_1
+                        ];
+
+            meta = {
+              description = ''Add Models support to the Neo4J Elixir driver'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/florinpatrascu/neo4j_sips_models";
+            };
+          }
+      ) {};
+
+    neo4j_sips_models = neo4j_sips_models_0_1_1;
 
     neotoma_1_7_3 = callPackage
       (
@@ -28097,10 +32507,35 @@ let
 
     neotomex = neotomex_0_1_4;
 
+    nerves_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, exrm_1_0_3 }:
+          buildMix {
+            name = "nerves";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "nerves";
+              version = "0.2.0";
+              sha256 =
+                "b53cd891c3d719597ccb084bdcfc6eb714f820d9c53c44f1bab4d530c9b0734f";
+            };
+            beamDeps  = [ exrm_1_0_3 ];
+
+            meta = {
+              longDescription = ''Nerves - Create firmware for embedded devices
+                                like Raspberry Pi, BeagleBone Black, and more'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/nerves-project/nerves";
+            };
+          }
+      ) {};
+
+    nerves = nerves_0_2_0;
+
     nerves_io_neopixel_0_2_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "nerves_io_neopixel";
             version = "0.2.0";
             src = fetchHex {
@@ -28146,19 +32581,19 @@ let
 
     nest = nest_0_0_1;
 
-    nested_set_0_0_1 = callPackage
+    nested_set_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, ecto_1_1_3 }:
+        {  buildMix, fetchHex, ecto_1_1_5 }:
           buildMix {
             name = "nested_set";
-            version = "0.0.1";
+            version = "0.0.2";
             src = fetchHex {
               pkg = "nested_set";
-              version = "0.0.1";
+              version = "0.0.2";
               sha256 =
-                "cd38faeaef21ad1675d4a4467cff6b439b90ca1c07fac72857ab63804967a00d";
+                "283fac1cbaf129d29a7ea6b6c050248bdc63631421d395f0b909510c3f7d2e83";
             };
-            beamDeps  = [ ecto_1_1_3 ];
+            beamDeps  = [ ecto_1_1_5 ];
 
             meta = {
               longDescription = ''Nested Set implementation for Ecto/Phoenix.
@@ -28171,7 +32606,7 @@ let
           }
       ) {};
 
-    nested_set = nested_set_0_0_1;
+    nested_set = nested_set_0_0_2;
 
     netrc_0_0_2 = callPackage
       (
@@ -28196,17 +32631,17 @@ let
 
     netrc = netrc_0_0_2;
 
-    netstrings_2_0_0 = callPackage
+    netstrings_2_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "netstrings";
-            version = "2.0.0";
+            version = "2.0.1";
             src = fetchHex {
               pkg = "netstrings";
-              version = "2.0.0";
+              version = "2.0.1";
               sha256 =
-                "f510110b2a821363409fd77942f61309b6c0000a8cdda91a6f653e95f3c36c23";
+                "f6a3727dba6ae5aa3371ffddf7adf6aaf46bf387e84873f65152083ecf821845";
             };
 
             meta = {
@@ -28217,7 +32652,32 @@ let
           }
       ) {};
 
-    netstrings = netstrings_2_0_0;
+    netstrings = netstrings_2_0_1;
+
+    neural_network_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "neural_network";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "neural_network";
+              version = "0.1.0";
+              sha256 =
+                "80e84eaf4e0ff5455651c6c7cef484b9eefd60d6bd8e59606eb72a42cf18587c";
+            };
+
+            meta = {
+              longDescription = ''A neural network made up of layers of neurons
+                                connected to each other to form a relationship
+                                allowing it to learn.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kblake/neural-net-elixir";
+            };
+          }
+      ) {};
+
+    neural_network = neural_network_0_1_0;
 
     news_0_3_0 = callPackage
       (
@@ -28317,17 +32777,17 @@ let
 
     nifty = nifty_0_0_3;
 
-    nile_0_1_2 = callPackage
+    nile_0_1_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "nile";
-            version = "0.1.2";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "nile";
-              version = "0.1.2";
+              version = "0.1.3";
               sha256 =
-                "3b7c463f7e0d12a38757b893d41d08772d6f06e5e4a15812409b655acb4b6dfc";
+                "73a2c8be8507bb39de74eb3fa5ae40e3c40cabef30cd884f67ab6d3400a7bea4";
             };
 
             meta = {
@@ -28338,11 +32798,11 @@ let
           }
       ) {};
 
-    nile = nile_0_1_2;
+    nile = nile_0_1_3;
 
     ninjaproxies_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "ninjaproxies";
             version = "0.2.0";
@@ -28352,7 +32812,7 @@ let
               sha256 =
                 "5524329d00944690b362d30fef9c4032c03c401cc44d0ad9e98e147f5792fade";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Ninjaproxies client library for Elixir.'';
@@ -28366,7 +32826,7 @@ let
 
     nio_google_authenticator_1_0_1 = callPackage
       (
-        {  buildMix, fetchHex, pot_0_9_4, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, pot_0_9_4, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "nio_google_authenticator";
             version = "1.0.1";
@@ -28376,7 +32836,7 @@ let
               sha256 =
                 "a8a82c6c40e9575e8bea2fc7302af05bcd478b3a6a0e9df212617f807fe23758";
             };
-            beamDeps  = [ pot_0_9_4 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ pot_0_9_4 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''NioGoogleAuthenticator is a collection of
@@ -28400,8 +32860,8 @@ let
           buildMix,
           fetchHex,
           poison_1_5_2,
-          httpoison_0_8_1,
-          ecto_2_0_0_beta_0
+          httpoison_0_8_2,
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "nio_google_geocoder";
@@ -28412,7 +32872,7 @@ let
               sha256 =
                 "ba551ad6138b133d6b90ac96c0443aa31724084049059bf15710dac4c1f3e701";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''NioGoogleGeocoder is a collection of Elixir
@@ -28427,6 +32887,30 @@ let
       ) {};
 
     nio_google_geocoder = nio_google_geocoder_0_7_0;
+
+    njord_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "njord";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "njord";
+              version = "0.1.1";
+              sha256 =
+                "b438430dbf6ceaf2bede01a285c5032be3041cbedd7c1552653d75179fab4dfb";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''A wrapper over HTTPoison to build client APIs.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/gmtprime/njord";
+            };
+          }
+      ) {};
+
+    njord = njord_0_1_1;
 
     nodefinder_1_5_1 = callPackage
       (
@@ -28452,6 +32936,30 @@ let
       ) {};
 
     nodefinder = nodefinder_1_5_1;
+
+    normalixr_0_3_0 = callPackage
+      (
+        {  buildMix, fetchHex, ecto_0_2_7 }:
+          buildMix {
+            name = "normalixr";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "normalixr";
+              version = "0.3.0";
+              sha256 =
+                "22a9c5137c23b1485a6b13027cb2979ce04d5b119b257e863975a7fb336c1e46";
+            };
+            beamDeps  = [ ecto_0_2_7 ];
+
+            meta = {
+              description = ''Normalization and backfilling Ecto Schemas'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/theemuts/normalixr";
+            };
+          }
+      ) {};
+
+    normalixr = normalixr_0_3_0;
 
     normalize_email_0_0_1 = callPackage
       (
@@ -28500,17 +33008,17 @@ let
 
     normalize_url = normalize_url_0_0_2;
 
-    not_qwerty123_1_0_0 = callPackage
+    not_qwerty123_1_1_0 = callPackage
       (
         {  buildMix, fetchHex, gettext_0_10_0 }:
           buildMix {
             name = "not_qwerty123";
-            version = "1.0.0";
+            version = "1.1.0";
             src = fetchHex {
               pkg = "not_qwerty123";
-              version = "1.0.0";
+              version = "1.1.0";
               sha256 =
-                "f1ec4634e5608ffae5c1d546696e77abfce8ee1fa415de93e43a2161d70d59d4";
+                "4997296d742f72fe95f8933cba92ab6cee3147888dc9bbd7b703c7f970e8ab58";
             };
             beamDeps  = [ gettext_0_10_0 ];
 
@@ -28523,7 +33031,7 @@ let
           }
       ) {};
 
-    not_qwerty123 = not_qwerty123_1_0_0;
+    not_qwerty123 = not_qwerty123_1_1_0;
 
     number_0_4_1 = callPackage
       (
@@ -28555,9 +33063,9 @@ let
           buildMix,
           fetchHex,
           poison_1_5_2,
-          plug_1_1_1,
-          httpoison_0_8_1,
-          hackney_1_4_8
+          plug_1_1_3,
+          httpoison_0_8_2,
+          hackney_1_6_0
         }:
           buildMix {
             name = "oauth2";
@@ -28569,7 +33077,7 @@ let
                 "ee23e6fb6ac84abce23713ba93f1df2fd368c9ad7b9288f0ef6fcec0e0249043";
             };
             beamDeps  = [
-                          poison_1_5_2 plug_1_1_1 httpoison_0_8_1 hackney_1_4_8
+                          poison_1_5_2 plug_1_1_3 httpoison_0_8_2 hackney_1_6_0
                         ];
 
             meta = {
@@ -28580,25 +33088,25 @@ let
           }
       ) {};
 
-    oauth2_0_5_0 = callPackage
+    oauth2_0_6_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          poison_1_5_2,
-          mimetype_parser_0_1_1,
-          httpoison_0_8_1
+          poison_1_0_3,
+          mimetype_parser_0_1_2,
+          httpoison_0_8_2
         }:
           buildMix {
             name = "oauth2";
-            version = "0.5.0";
+            version = "0.6.0";
             src = fetchHex {
               pkg = "oauth2";
-              version = "0.5.0";
+              version = "0.6.0";
               sha256 =
-                "1bc7d89a27a85fcdd9ebad7a0f4b80c4ae4ae98ed4cf87545667892f92e6a4dd";
+                "1fcc76a12fcaa57392c0288be90df0eabd898c0982944c67d0e84e980c423e10";
             };
-            beamDeps  = [ poison_1_5_2 mimetype_parser_0_1_1 httpoison_0_8_1
+            beamDeps  = [ poison_1_0_3 mimetype_parser_0_1_2 httpoison_0_8_2
                       ];
 
             meta = {
@@ -28609,7 +33117,7 @@ let
           }
       ) {};
 
-    oauth2 = oauth2_0_5_0;
+    oauth2 = oauth2_0_6_0;
 
     oauth2_erlang_0_6_1 = callPackage
       (
@@ -28642,7 +33150,7 @@ let
           poison_1_5_2,
           plug_0_9_0,
           httpoison_0_7_5,
-          hackney_1_4_8,
+          hackney_1_6_0,
           cowboy_1_0_4
         }:
           buildMix {
@@ -28658,7 +33166,7 @@ let
                           poison_1_5_2
                           plug_0_9_0
                           httpoison_0_7_5
-                          hackney_1_4_8
+                          hackney_1_6_0
                           cowboy_1_0_4
                         ];
 
@@ -28672,30 +33180,30 @@ let
 
     oauth2cli = oauth2cli_0_0_4;
 
-    oauth2ex_0_0_8 = callPackage
+    oauth2ex_0_0_9 = callPackage
       (
         {
           buildMix,
           fetchHex,
           timex_1_0_0_rc4,
-          plug_1_1_1,
-          httpoison_0_8_1,
+          plug_1_1_3,
+          httpoison_0_8_2,
           exjsx_3_2_0,
           cowboy_1_0_4
         }:
           buildMix {
             name = "oauth2ex";
-            version = "0.0.8";
+            version = "0.0.9";
             src = fetchHex {
               pkg = "oauth2ex";
-              version = "0.0.8";
+              version = "0.0.9";
               sha256 =
-                "0420cc1ee402922a77cdd9a090cb886083fdc42658df9d8401e72d7a1daab4c0";
+                "46f5f13c0474da8727f45c6d7c455d86d94a1b20176230a2b21be0494066a564";
             };
             beamDeps  = [
                           timex_1_0_0_rc4
-                          plug_1_1_1
-                          httpoison_0_8_1
+                          plug_1_1_3
+                          httpoison_0_8_2
                           exjsx_3_2_0
                           cowboy_1_0_4
                         ];
@@ -28708,7 +33216,7 @@ let
           }
       ) {};
 
-    oauth2ex = oauth2ex_0_0_8;
+    oauth2ex = oauth2ex_0_0_9;
 
     oauther_1_0_2 = callPackage
       (
@@ -28741,10 +33249,10 @@ let
           fetchHex,
           rss_0_2_1,
           plug_0_11_3,
-          mock_0_1_1,
+          mock_0_1_3,
           earmark_0_1_19,
           cowboy_1_0_4,
-          chronos_1_0_0,
+          chronos_0_3_9,
           calliope_0_3_0,
           anubis_0_1_0
         }:
@@ -28760,10 +33268,10 @@ let
             beamDeps  = [
                           rss_0_2_1
                           plug_0_11_3
-                          mock_0_1_1
+                          mock_0_1_3
                           earmark_0_1_19
                           cowboy_1_0_4
-                          chronos_1_0_0
+                          chronos_0_3_9
                           calliope_0_3_0
                           anubis_0_1_0
                         ];
@@ -28805,21 +33313,44 @@ let
 
     observer_cli = observer_cli_1_0_3;
 
-    octokit_0_0_3 = callPackage
+    octet_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "octet";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "octet";
+              version = "0.0.2";
+              sha256 =
+                "12c7d7cff035f48139e7304913e7c227ce5bf95508ad8096ed510328d916ede3";
+            };
+
+            meta = {
+              description = ''Octet string converter'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kiennt/octet";
+            };
+          }
+      ) {};
+
+    octet = octet_0_0_2;
+
+    octokit_0_1_0 = callPackage
       (
         {
-          buildMix, fetchHex, timex_1_0_1, poison_2_1_0, httpoison_0_8_1
+          buildMix, fetchHex, timex_1_0_2, poison_2_1_0, httpoison_0_8_2
         }:
           buildMix {
             name = "octokit";
-            version = "0.0.3";
+            version = "0.1.0";
             src = fetchHex {
               pkg = "octokit";
-              version = "0.0.3";
+              version = "0.1.0";
               sha256 =
-                "5cc713c2052c3a46e24ac04781bee4199926e2a175597b9f1c4c7d9ddb2b4241";
+                "1c761130e94dbbe16a7751ee1289e1334c9208222da03a8ae9fd77c50f5e969b";
             };
-            beamDeps  = [ timex_1_0_1 poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ timex_1_0_2 poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir library for accessing the GitHub
@@ -28830,19 +33361,67 @@ let
           }
       ) {};
 
-    octokit = octokit_0_0_3;
+    octokit = octokit_0_1_0;
 
-    og_0_0_5 = callPackage
+    odgn_json_pointer_1_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "odgn_json_pointer";
+            version = "1.1.0";
+            src = fetchHex {
+              pkg = "odgn_json_pointer";
+              version = "1.1.0";
+              sha256 =
+                "04330904e76a596342a5a9ac09c5d10250a237fc39c59d5576c8ac3b15842f3d";
+            };
+
+            meta = {
+              description = ''This is an implementation of JSON Pointer (RFC
+                            6901) for Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/odogono/elixir-jsonpointer";
+            };
+          }
+      ) {};
+
+    odgn_json_pointer = odgn_json_pointer_1_1_0;
+
+    odt_potion_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "odt_potion";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "odt_potion";
+              version = "0.0.1";
+              sha256 =
+                "f2c429129dc1e636dbd3563750c667315aff650ddfe7aefe06991299f76f35bd";
+            };
+
+            meta = {
+              description = ''Substitute placeholders in ODT`s with custom
+                            information'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/andrewcottage/odt_potion";
+            };
+          }
+      ) {};
+
+    odt_potion = odt_potion_0_0_1;
+
+    og_0_0_6 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "og";
-            version = "0.0.5";
+            version = "0.0.6";
             src = fetchHex {
               pkg = "og";
-              version = "0.0.5";
+              version = "0.0.6";
               sha256 =
-                "6260a10988cee65dfc6245e60a719c15a8239167946a7f8f847fb3b9fa624022";
+                "8934f5e495dc8fcc8ed56f37f0067e0a360c9588c04c6b800d91eb593b9067d3";
             };
 
             meta = {
@@ -28854,7 +33433,7 @@ let
           }
       ) {};
 
-    og = og_0_0_5;
+    og = og_0_0_6;
 
     ok_0_1_3 = callPackage
       (
@@ -28928,7 +33507,7 @@ let
 
     omise_0_1_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "omise";
             version = "0.1.4";
@@ -28938,7 +33517,7 @@ let
               sha256 =
                 "35e7fe1776da9cf5ddeb0138391868d6dbbe976e5a932183c4f445371b1b0c4d";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Omise client library for Elixir.'';
@@ -28952,7 +33531,7 @@ let
 
     one_signal_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "one_signal";
             version = "0.0.6";
@@ -28962,7 +33541,7 @@ let
               sha256 =
                 "d90ec5f9e43d164e2942422d3c1e9a6b26a956ea135eb1a316380e12ef6b27d1";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir wrapper of OneSignal'';
@@ -28976,7 +33555,7 @@ let
 
     onetime_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "onetime";
             version = "1.0.0";
@@ -28986,7 +33565,7 @@ let
               sha256 =
                 "28481e7e239caa0002a42178af46cb80c3501faca7c1b953558e9d8dbba76c4c";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               description = ''An onetime key-value store'';
@@ -29023,7 +33602,7 @@ let
 
     opbeat_0_3_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "opbeat";
             version = "0.3.0";
@@ -29033,7 +33612,7 @@ let
               sha256 =
                 "20977e8ae08a1789326a3e5c0c8fa3265dd0e6ddc1fb6abe25c3a33d3fc9e692";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir client for opbeat'';
@@ -29045,34 +33624,60 @@ let
 
     opbeat = opbeat_0_3_0;
 
-    openmaize_0_15_1 = callPackage
+    open_graphx_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
+          buildMix {
+            name = "open_graphx";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "open_graphx";
+              version = "0.0.2";
+              sha256 =
+                "2eef951c4fbb8a01f11ed3ab6ca62dc695a84baf9ae0fbe7698058eac8020b70";
+            };
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
+
+            meta = {
+              description = ''Load Open Graph Protocol'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/yoavlt/open_graphx";
+            };
+          }
+      ) {};
+
+    open_graphx = open_graphx_0_0_2;
+
+    openmaize_0_17_2 = callPackage
       (
         {
           buildMix,
           fetchHex,
           postgrex_0_11_1,
-          poison_1_5_2,
-          plug_1_1_1,
-          ecto_2_0_0_beta_0,
+          poison_2_1_0,
+          plug_1_1_3,
+          not_qwerty123_1_1_0,
+          ecto_2_0_0_beta_2,
           cowboy_1_0_4,
-          comeonin_2_1_1
+          comeonin_2_3_0
         }:
           buildMix {
             name = "openmaize";
-            version = "0.15.1";
+            version = "0.17.2";
             src = fetchHex {
               pkg = "openmaize";
-              version = "0.15.1";
+              version = "0.17.2";
               sha256 =
-                "2ef5890c2fa041cd7d11d2b16b76dd7d8b6ac6e5044093732b1441fdaa10fd56";
+                "d3199c1513d4033ccec4fcc52a0d0dd6afb09b5c58c848a33d43dd4da08eda91";
             };
             beamDeps  = [
                           postgrex_0_11_1
-                          poison_1_5_2
-                          plug_1_1_1
-                          ecto_2_0_0_beta_0
+                          poison_2_1_0
+                          plug_1_1_3
+                          not_qwerty123_1_1_0
+                          ecto_2_0_0_beta_2
                           cowboy_1_0_4
-                          comeonin_2_1_1
+                          comeonin_2_3_0
                         ];
 
             meta = {
@@ -29083,7 +33688,7 @@ let
           }
       ) {};
 
-    openmaize = openmaize_0_15_1;
+    openmaize = openmaize_0_17_2;
 
     openstack_0_0_4 = callPackage
       (
@@ -29093,7 +33698,7 @@ let
           table_0_0_4,
           poison_1_5_2,
           maybe_0_0_1,
-          httpoison_0_8_1
+          httpoison_0_8_2
         }:
           buildMix {
             name = "openstack";
@@ -29105,7 +33710,7 @@ let
                 "ddc471e2d95edb26b3f826986f730fbb1fb70de62edaa00a0c1cd7fd6de7fde1";
             };
             beamDeps  = [
-                          table_0_0_4 poison_1_5_2 maybe_0_0_1 httpoison_0_8_1
+                          table_0_0_4 poison_1_5_2 maybe_0_0_1 httpoison_0_8_2
                         ];
 
             meta = {
@@ -29213,6 +33818,31 @@ let
 
     overpass = overpass_0_1_1;
 
+    oxr_0_3_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "oxr";
+            version = "0.3.1";
+            src = fetchHex {
+              pkg = "oxr";
+              version = "0.3.1";
+              sha256 =
+                "85b9525da74c1c36c3e8121d4db79775fc62ba27bb34be1f7f4b5615c70dc57c";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''A thin API wrapper for Open Exchange Rates
+                            (https://openexchangerates.org)'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/marksilvis/oxr-elixir";
+            };
+          }
+      ) {};
+
+    oxr = oxr_0_3_1;
+
     p1_mysql_1_0_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -29259,17 +33889,17 @@ let
 
     p1_oauth2 = p1_oauth2_0_6_1;
 
-    p1_pgsql_1_0_1 = callPackage
+    p1_pgsql_1_1_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "p1_pgsql";
-            version = "1.0.1";
+            version = "1.1.0";
             src = fetchHex {
               pkg = "p1_pgsql";
-              version = "1.0.1";
+              version = "1.1.0";
               sha256 =
-                "7436d18f320b200e4cab6a0c16d6416aa32115b9dcfabfb05af6e9cbd62d1c0c";
+                "d6616a30e8d6964b488cebd6b9ca754783640ca85c4792bf7b1260a15303bf1c";
             };
 
             meta = {
@@ -29280,7 +33910,7 @@ let
           }
       ) {};
 
-    p1_pgsql = p1_pgsql_1_0_1;
+    p1_pgsql = p1_pgsql_1_1_0;
 
     p1_stringprep_1_0_1 = callPackage
       (
@@ -29426,7 +34056,7 @@ let
 
     pagexduty_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_1_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_1_0 }:
           buildMix {
             name = "pagexduty";
             version = "0.1.0";
@@ -29436,7 +34066,7 @@ let
               sha256 =
                 "7292a63eeb27637ff19f91f50910d2bbbc860e1eb0413aa5a5035ef32b41b232";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_1_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_1_0 ];
 
             meta = {
               description = ''A Pagerduty client for Elixir.'';
@@ -29472,19 +34102,19 @@ let
 
     paginex = paginex_0_0_1;
 
-    painstaking_0_5_6 = callPackage
+    painstaking_0_5_8 = callPackage
       (
-        {  buildMix, fetchHex, exoddic_1_2_0 }:
+        {  buildMix, fetchHex, exoddic_1_3_1 }:
           buildMix {
             name = "painstaking";
-            version = "0.5.6";
+            version = "0.5.8";
             src = fetchHex {
               pkg = "painstaking";
-              version = "0.5.6";
+              version = "0.5.8";
               sha256 =
-                "f7efbebacbea3e0bb8adf79ab90ca896e54d179eb76a4da4eb1687411fa4af58";
+                "f9de5ab6139fdda653df0a90e57fe229728a25f3611bf520c9433edd2ab81318";
             };
-            beamDeps  = [ exoddic_1_2_0 ];
+            beamDeps  = [ exoddic_1_3_1 ];
 
             meta = {
               description = ''Bet stake sizing recommendations'';
@@ -29494,7 +34124,7 @@ let
           }
       ) {};
 
-    painstaking = painstaking_0_5_6;
+    painstaking = painstaking_0_5_8;
 
     palette_0_0_2 = callPackage
       (
@@ -29621,17 +34251,17 @@ let
 
     parallel = parallel_0_0_3;
 
-    parallel_stream_1_0_1 = callPackage
+    parallel_stream_1_0_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "parallel_stream";
-            version = "1.0.1";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "parallel_stream";
-              version = "1.0.1";
+              version = "1.0.3";
               sha256 =
-                "de54833225b0e67f21db47333a08685aed50d778a2f11cf7e36ae9e3fe4ee107";
+                "8b0090b13a42343ad709ed088111fd40a9e4c2d1819ef6c1e601347134ed34d0";
             };
 
             meta = {
@@ -29642,21 +34272,21 @@ let
           }
       ) {};
 
-    parallel_stream = parallel_stream_1_0_1;
+    parallel_stream = parallel_stream_1_0_3;
 
-    params_1_0_1 = callPackage
+    params_2_0_0_beta_0 = callPackage
       (
-        {  buildMix, fetchHex, ecto_1_1_3 }:
+        {  buildMix, fetchHex, ecto_0_2_7 }:
           buildMix {
             name = "params";
-            version = "1.0.1";
+            version = "2.0.0-beta.0";
             src = fetchHex {
               pkg = "params";
-              version = "1.0.1";
+              version = "2.0.0-beta.0";
               sha256 =
-                "182cfd185f886ad72e350baa7c2b1a5a0f77c52140ddc2604a5efef0f122dd51";
+                "c8db0e2c6d4c592e66d19f6fdef0ecfab8aeb23101cbacf7cd3c5c8624780a72";
             };
-            beamDeps  = [ ecto_1_1_3 ];
+            beamDeps  = [ ecto_0_2_7 ];
 
             meta = {
               description = ''Parameter structure validation and casting with
@@ -29667,19 +34297,19 @@ let
           }
       ) {};
 
-    params = params_1_0_1;
+    params = params_2_0_0_beta_0;
 
-    paratize_2_1_2 = callPackage
+    paratize_2_1_3 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "paratize";
-            version = "2.1.2";
+            version = "2.1.3";
             src = fetchHex {
               pkg = "paratize";
-              version = "2.1.2";
+              version = "2.1.3";
               sha256 =
-                "3ac2970f8c40979bdd7ea6eebb106fb8c51e64e745e0f068e059cfbecbace433";
+                "7dc6135524c65473f680ec3ade55c2f65b77ad40451ffd2bbd4128066b037d84";
             };
 
             meta = {
@@ -29691,7 +34321,7 @@ let
           }
       ) {};
 
-    paratize = paratize_2_1_2;
+    paratize = paratize_2_1_3;
 
     parse_client_0_2_3 = callPackage
       (
@@ -29717,19 +34347,19 @@ let
 
     parse_client = parse_client_0_2_3;
 
-    parse_torrent_0_1_0 = callPackage
+    parse_torrent_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, bencodex_1_0_0 }:
+        {  buildMix, fetchHex, earmark_0_2_1, bencode_0_3_0 }:
           buildMix {
             name = "parse_torrent";
-            version = "0.1.0";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "parse_torrent";
-              version = "0.1.0";
+              version = "0.2.0";
               sha256 =
-                "4dd7e2a51e6da91d0bbf843735ceeee43dda1f704a0d2717cefa11a259dec65d";
+                "444d49f20ede110e33e0817134ef3f0b843a7af01c88e9c168acc4892ae2d320";
             };
-            beamDeps  = [ bencodex_1_0_0 ];
+            beamDeps  = [ earmark_0_2_1 bencode_0_3_0 ];
 
             meta = {
               description = ''Parses a .torrent file and returns a map'';
@@ -29739,7 +34369,7 @@ let
           }
       ) {};
 
-    parse_torrent = parse_torrent_0_1_0;
+    parse_torrent = parse_torrent_0_2_0;
 
     parse_trans_2_9_0 = callPackage
       (
@@ -29791,7 +34421,7 @@ let
 
     parsex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, poison_1_1_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, poison_1_1_1 }:
           buildMix {
             name = "parsex";
             version = "0.0.2";
@@ -29801,7 +34431,7 @@ let
               sha256 =
                 "024657ae8d29eba99caf90276ac2d7f27cf435a543d4036859fd4ab6ffbceb75";
             };
-            beamDeps  = [ httpoison_0_8_1 poison_1_1_1 ];
+            beamDeps  = [ httpoison_0_8_2 poison_1_1_1 ];
 
             meta = {
               description = ''ParsEx is an Elixir HTTP Client for communicating
@@ -29816,7 +34446,7 @@ let
 
     passport_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_1_1_4, comeonin_2_1_1 }:
+        {  buildMix, fetchHex, phoenix_1_1_4, comeonin_2_3_0 }:
           buildMix {
             name = "passport";
             version = "0.0.4";
@@ -29826,7 +34456,7 @@ let
               sha256 =
                 "10e8e42cfd5fa834d7c3c3276c39274a3824100f2ffeed26adb4ed8475f0be91";
             };
-            beamDeps  = [ phoenix_1_1_4 comeonin_2_1_1 ];
+            beamDeps  = [ phoenix_1_1_4 comeonin_2_3_0 ];
 
             meta = {
               description = ''Provides authentication for phoenix
@@ -29939,6 +34569,30 @@ let
 
     pbkdf2 = pbkdf2_2_0_0;
 
+    pbkdf2_nif_0_3_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "pbkdf2_nif";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "pbkdf2_nif";
+              version = "0.3.0";
+              sha256 =
+                "7ad61389164cceac87e2bed9d8f184cd713cca85d51e096604c40bf86d96a8b7";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''PBKDF2 NIF implementation'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/barrel-db/erlang-pbkdf2-nif";
+            };
+          }
+      ) {};
+
+    pbkdf2_nif = pbkdf2_nif_0_3_0;
+
     pc_1_2_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
@@ -30018,7 +34672,7 @@ let
           buildMix,
           fetchHex,
           poison_1_5_2,
-          httpoison_0_8_1,
+          httpoison_0_8_2,
           hackney_1_4_4,
           decimal_1_1_1
         }:
@@ -30033,7 +34687,7 @@ let
             };
             beamDeps  = [
                           poison_1_5_2
-                          httpoison_0_8_1
+                          httpoison_0_8_2
                           hackney_1_4_4
                           decimal_1_1_1
                         ];
@@ -30118,26 +34772,100 @@ let
 
     petick = petick_0_0_1;
 
-    phoenix_0_2_10 = callPackage
+    pg2pubsub_0_1_12 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "pg2pubsub";
+            version = "0.1.12";
+            src = fetchHex {
+              pkg = "pg2pubsub";
+              version = "0.1.12";
+              sha256 =
+                "13d653d3f35108b3d83430794127d3df3294f205790ab27ac58e353614487af2";
+            };
+
+            meta = {
+              description = ''A PubSub implementation for Elixir, using PG2
+                            (Erlang process groups).'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kbremner/pg2pubsub";
+            };
+          }
+      ) {};
+
+    pg2pubsub = pg2pubsub_0_1_12;
+
+    pgpool_1_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "pgpool";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "pgpool";
+              version = "1.0.0";
+              sha256 =
+                "694ae752dc02734cbe174577d8bdf4058d0353379385a3448aec1bec5d9b49ff";
+            };
+
+            meta = {
+              longDescription = ''A PosgreSQL client that automatically uses
+                                connection pools and reconnects in case of
+                                errors.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ostinelli/pgpool";
+            };
+          }
+      ) {};
+
+    pgpool = pgpool_1_0_0;
+
+    phasedb_0_0_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, inflex_1_5_0, heap_1_0_0, calendar_0_12_4
+        }:
+          buildMix {
+            name = "phasedb";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "phasedb";
+              version = "0.0.1";
+              sha256 =
+                "42927c48bc8ab9645ec799b5cb7f1379692bb7ba14eff8a6895dacd98217e22d";
+            };
+            beamDeps  = [ inflex_1_5_0 heap_1_0_0 calendar_0_12_4 ];
+
+            meta = {
+              description = ''A real-time time series database.'';
+
+            };
+          }
+      ) {};
+
+    phasedb = phasedb_0_0_1;
+
+    phoenix_0_2_11 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          inflex_0_2_3,
+          inflex_0_2_4,
           ex_conf_0_1_2,
-          plug_0_5_0,
-          jazz_0_1_1
+          plug_0_5_1,
+          jazz_0_1_2
         }:
           buildMix {
             name = "phoenix";
-            version = "0.2.10";
+            version = "0.2.11";
             src = fetchHex {
               pkg = "phoenix";
-              version = "0.2.10";
+              version = "0.2.11";
               sha256 =
-                "bb65584ef5696cf90cb4823fd82d5fd930d7e092f171410687c90924519b0022";
+                "49bae6b4308f118942446154a63ea81d40a1ff79a0f20a846498f481c680ebdd";
             };
-            beamDeps  = [ inflex_0_2_3 ex_conf_0_1_2 plug_0_5_0 jazz_0_1_1 ];
+            beamDeps  = [ inflex_0_2_4 ex_conf_0_1_2 plug_0_5_1 jazz_0_1_2 ];
 
             meta = {
               longDescription = ''Productive. Reliable. Fast. A productive web
@@ -30183,7 +34911,7 @@ let
 
     phoenix_1_0_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "phoenix";
             version = "1.0.4";
@@ -30193,7 +34921,7 @@ let
               sha256 =
                 "591d5f7f3a6f5407e8491a92dc6a2d0b7b94ef4f3526ad8ef4eb82660e6f69f6";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Productive. Reliable. Fast. A productive web
@@ -30207,7 +34935,7 @@ let
 
     phoenix_1_1_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, poison_1_0_3, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "phoenix";
             version = "1.1.4";
@@ -30217,7 +34945,7 @@ let
               sha256 =
                 "5765238fd5caef83a8ce9242d63b4302963f44aefe70510a597aae86b5b6cd10";
             };
-            beamDeps  = [ poison_1_0_3 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_0_3 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Productive. Reliable. Fast. A productive web
@@ -30233,7 +34961,7 @@ let
 
     phoenix_calendar_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_html_2_5_0, calendar_0_12_3 }:
+        {  buildMix, fetchHex, phoenix_html_2_5_1, calendar_0_12_4 }:
           buildMix {
             name = "phoenix_calendar";
             version = "0.1.2";
@@ -30243,7 +34971,7 @@ let
               sha256 =
                 "f22968fd2287b419bf9791845b62501bf0177630d01a92b0ba33e5f00978ca3c";
             };
-            beamDeps  = [ phoenix_html_2_5_0 calendar_0_12_3 ];
+            beamDeps  = [ phoenix_html_2_5_1 calendar_0_12_4 ];
 
             meta = {
               description = ''Integration between Phoenix & Calendar'';
@@ -30279,21 +35007,21 @@ let
 
     phoenix_dtl = phoenix_dtl_0_0_1;
 
-    phoenix_ecto_3_0_0_beta_0 = callPackage
+    phoenix_ecto_3_0_0_beta_2 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_0_3, phoenix_html_2_5_0, ecto_0_2_6
+          buildMix, fetchHex, poison_1_0_3, phoenix_html_2_5_1, ecto_0_2_7
         }:
           buildMix {
             name = "phoenix_ecto";
-            version = "3.0.0-beta.0";
+            version = "3.0.0-beta.2";
             src = fetchHex {
               pkg = "phoenix_ecto";
-              version = "3.0.0-beta.0";
+              version = "3.0.0-beta.2";
               sha256 =
-                "f5e7c174329e9f64e6970c46a122654b6d27c619f3e6184e4db10577b0e5daac";
+                "7df3a54eb77846e306255d7953a2c3b6484e8b50c1dac510c779df28f28641b8";
             };
-            beamDeps  = [ poison_1_0_3 phoenix_html_2_5_0 ecto_0_2_6 ];
+            beamDeps  = [ poison_1_0_3 phoenix_html_2_5_1 ecto_0_2_7 ];
 
             meta = {
               description = ''Integration between Phoenix & Ecto'';
@@ -30303,7 +35031,34 @@ let
           }
       ) {};
 
-    phoenix_ecto = phoenix_ecto_3_0_0_beta_0;
+    phoenix_ecto = phoenix_ecto_3_0_0_beta_2;
+
+    phoenix_ember_0_0_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, hackney_1_4_10
+        }:
+          buildMix {
+            name = "phoenix_ember";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "phoenix_ember";
+              version = "0.0.1";
+              sha256 =
+                "2d108380a8eb25b88b80b950b7022bc061b77b8bfd2e37769e01499d6a6d2884";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 hackney_1_4_10 ];
+
+            meta = {
+              description = ''Ember.js integration via
+                            ember-phoenix/phoenix-ember'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/levanto-financial/phoenix-ember";
+            };
+          }
+      ) {};
+
+    phoenix_ember = phoenix_ember_0_0_1;
 
     phoenix_gen_gulp_jspm_1_0_0 = callPackage
       (
@@ -30359,7 +35114,7 @@ let
         {
           buildMix,
           fetchHex,
-          phoenix_html_2_5_0,
+          phoenix_html_2_5_1,
           phoenix_1_0_4,
           calliope_0_3_0
         }:
@@ -30372,7 +35127,7 @@ let
               sha256 =
                 "ec4f0dae227972a472661f1e8f9c51e8618290c8b6e5ca084ff81f6e7318468e";
             };
-            beamDeps  = [ phoenix_html_2_5_0 phoenix_1_0_4 calliope_0_3_0 ];
+            beamDeps  = [ phoenix_html_2_5_1 phoenix_1_0_4 calliope_0_3_0 ];
 
             meta = {
               description = ''Phoenix Template Engine for Haml'';
@@ -30384,19 +35139,19 @@ let
 
     phoenix_haml = phoenix_haml_0_2_0;
 
-    phoenix_html_2_5_0 = callPackage
+    phoenix_html_2_0_0_dev = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1 }:
+        {  buildMix, fetchHex, plug_0_5_2 }:
           buildMix {
             name = "phoenix_html";
-            version = "2.5.0";
+            version = "2.0.0-dev";
             src = fetchHex {
               pkg = "phoenix_html";
-              version = "2.5.0";
+              version = "2.0.0-dev";
               sha256 =
-                "a3ef7288bf4a8304c65092774f602e3b1120536bed20dba9e90a5d2d41163fd4";
+                "3057019ee9159d7916ca80a85aa9b2848250916ccfa08047f821a9b19893c8aa";
             };
-            beamDeps  = [ plug_0_8_1 ];
+            beamDeps  = [ plug_0_5_2 ];
 
             meta = {
               description = ''Phoenix.HTML functions for working with HTML
@@ -30407,12 +35162,35 @@ let
           }
       ) {};
 
-    phoenix_html = phoenix_html_2_5_0;
+    phoenix_html_2_5_1 = callPackage
+      (
+        {  buildMix, fetchHex, plug_0_5_2 }:
+          buildMix {
+            name = "phoenix_html";
+            version = "2.5.1";
+            src = fetchHex {
+              pkg = "phoenix_html";
+              version = "2.5.1";
+              sha256 =
+                "a5ebd47c5d0b5e3707fd9364e3ec228d8b84efa83e0ff80de451a42906ed1e60";
+            };
+            beamDeps  = [ plug_0_5_2 ];
+
+            meta = {
+              description = ''Phoenix.HTML functions for working with HTML
+                            strings and templates'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/phoenixframework/phoenix_html";
+            };
+          }
+      ) {};
+
+    phoenix_html = phoenix_html_2_5_1;
 
     phoenix_html_sanitizer_0_2_0 = callPackage
       (
         {
-          buildMix, fetchHex, phoenix_html_2_5_0, html_sanitize_ex_0_3_1
+          buildMix, fetchHex, phoenix_html_2_5_1, html_sanitize_ex_0_3_1
         }:
           buildMix {
             name = "phoenix_html_sanitizer";
@@ -30423,7 +35201,7 @@ let
               sha256 =
                 "4cb5ae02d5560ff4e24cc378487065d038f0efd4883925a770b05c1c1d56a13c";
             };
-            beamDeps  = [ phoenix_html_2_5_0 html_sanitize_ex_0_3_1 ];
+            beamDeps  = [ phoenix_html_2_5_1 html_sanitize_ex_0_3_1 ];
 
             meta = {
               description = ''HTML sanitizer for Phoenix'';
@@ -30435,6 +35213,45 @@ let
       ) {};
 
     phoenix_html_sanitizer = phoenix_html_sanitizer_0_2_0;
+
+    phoenix_html_simplified_helpers_0_3_2 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          timex_ecto_1_0_4,
+          timex_1_0_2,
+          gettext_0_10_0,
+          ecto_2_0_0_beta_2
+        }:
+          buildMix {
+            name = "phoenix_html_simplified_helpers";
+            version = "0.3.2";
+            src = fetchHex {
+              pkg = "phoenix_html_simplified_helpers";
+              version = "0.3.2";
+              sha256 =
+                "e34d2dae01c5803b1fdc1f6514b920541c7028f18322d6c8c8587dc77e5a7837";
+            };
+            beamDeps  = [
+                          timex_ecto_1_0_4
+                          timex_1_0_2
+                          gettext_0_10_0
+                          ecto_2_0_0_beta_2
+                        ];
+
+            meta = {
+              longDescription = ''Some view helpers for phoenix html( truncate,
+                                time_ago_in_words, number_with_delimiter )'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/ikeikeikeike/phoenix_html_simplified_helpers";
+            };
+          }
+      ) {};
+
+    phoenix_html_simplified_helpers =
+      phoenix_html_simplified_helpers_0_3_2;
 
     phoenix_linguist_0_0_1 = callPackage
       (
@@ -30465,7 +35282,7 @@ let
 
     phoenix_live_reload_1_0_3 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_0_2_10, fs_0_9_2 }:
+        {  buildMix, fetchHex, phoenix_0_2_11, fs_0_9_2 }:
           buildMix {
             name = "phoenix_live_reload";
             version = "1.0.3";
@@ -30475,7 +35292,7 @@ let
               sha256 =
                 "fbb65b7e4f4205b2e5d7061480889bd34d5c943a56feebd20b3dd949332fed85";
             };
-            beamDeps  = [ phoenix_0_2_10 fs_0_9_2 ];
+            beamDeps  = [ phoenix_0_2_11 fs_0_9_2 ];
 
             meta = {
               description = ''Provides live-reload functionality for Phoenix'';
@@ -30615,7 +35432,7 @@ let
 
     phoenix_simple_form_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_html_2_5_0 }:
+        {  buildMix, fetchHex, phoenix_html_2_5_1 }:
           buildMix {
             name = "phoenix_simple_form";
             version = "0.0.2";
@@ -30625,7 +35442,7 @@ let
               sha256 =
                 "e059ada8c507168d2267d6a1db1790192c063ca5e2a3579dfd2d1b07e25e9f45";
             };
-            beamDeps  = [ phoenix_html_2_5_0 ];
+            beamDeps  = [ phoenix_html_2_5_1 ];
 
             meta = {
               description = ''Easy form handling for phoenix'';
@@ -30643,7 +35460,7 @@ let
           buildMix,
           fetchHex,
           slim_fast_0_10_0,
-          phoenix_html_2_5_0,
+          phoenix_html_2_5_1,
           phoenix_1_1_4
         }:
           buildMix {
@@ -30655,7 +35472,7 @@ let
               sha256 =
                 "4225e74608e29c93c603c6cde61766b604495e04ef65d6ca325ff1a9a492c563";
             };
-            beamDeps  = [ slim_fast_0_10_0 phoenix_html_2_5_0 phoenix_1_1_4
+            beamDeps  = [ slim_fast_0_10_0 phoenix_html_2_5_1 phoenix_1_1_4
                       ];
 
             meta = {
@@ -30668,28 +35485,28 @@ let
 
     phoenix_slim = phoenix_slim_0_4_1;
 
-    phoenix_slime_0_4_1 = callPackage
+    phoenix_slime_0_5_1 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          slime_0_12_1,
-          phoenix_html_2_5_0,
+          slime_0_12_2,
+          phoenix_html_2_5_1,
           phoenix_1_1_4,
           cowboy_1_0_4
         }:
           buildMix {
             name = "phoenix_slime";
-            version = "0.4.1";
+            version = "0.5.1";
             src = fetchHex {
               pkg = "phoenix_slime";
-              version = "0.4.1";
+              version = "0.5.1";
               sha256 =
-                "aa4036f88a0cab517ca8fa506c7c465fbb89f9857270c5711f6b83cec1cb8849";
+                "23a0028271f7ad03b199336efa9c3f4df02049de10dc94b5c133b4bb69f5e7e1";
             };
             beamDeps  = [
-                          slime_0_12_1
-                          phoenix_html_2_5_0
+                          slime_0_12_2
+                          phoenix_html_2_5_1
                           phoenix_1_1_4
                           cowboy_1_0_4
                         ];
@@ -30703,11 +35520,42 @@ let
           }
       ) {};
 
-    phoenix_slime = phoenix_slime_0_4_1;
+    phoenix_slime = phoenix_slime_0_5_1;
+
+    phoenix_swoosh_0_1_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          swoosh_0_1_0,
+          phoenix_html_2_5_1,
+          phoenix_1_1_4
+        }:
+          buildMix {
+            name = "phoenix_swoosh";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "phoenix_swoosh";
+              version = "0.1.0";
+              sha256 =
+                "cba68c2e421fbe7f54fbe8641918b0a276abbf81bee5a8eb37026cac85af9bd1";
+            };
+            beamDeps  = [ swoosh_0_1_0 phoenix_html_2_5_1 phoenix_1_1_4 ];
+
+            meta = {
+              description = ''Use Swoosh to easily send emails in your Phoenix
+                            project.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/swoosh/phoenix_swoosh";
+            };
+          }
+      ) {};
+
+    phoenix_swoosh = phoenix_swoosh_0_1_0;
 
     phoenix_timex_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, phoenix_html_2_5_0 }:
+        {  buildMix, fetchHex, timex_1_0_2, phoenix_html_2_5_1 }:
           buildMix {
             name = "phoenix_timex";
             version = "0.0.3";
@@ -30717,7 +35565,7 @@ let
               sha256 =
                 "47b2c32de83581ef12b58bdd9518c8180684ec7161cc7944d3b27542e414bc84";
             };
-            beamDeps  = [ timex_1_0_1 phoenix_html_2_5_0 ];
+            beamDeps  = [ timex_1_0_2 phoenix_html_2_5_1 ];
 
             meta = {
               description = ''Phoenix and Timex integration'';
@@ -30741,7 +35589,7 @@ let
           phoenix_1_1_4,
           mailgun_0_1_2,
           joken_0_13_1,
-          ecto_2_0_0_beta_0,
+          ecto_2_0_0_beta_2,
           cowboy_1_0_4,
           comeonin_2_0_3
         }:
@@ -30762,7 +35610,7 @@ let
                           phoenix_1_1_4
                           mailgun_0_1_2
                           joken_0_13_1
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                           cowboy_1_0_4
                           comeonin_2_0_3
                         ];
@@ -30778,6 +35626,53 @@ let
       ) {};
 
     phoenix_token_auth = phoenix_token_auth_0_4_0;
+
+    phoenix_webpack_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "phoenix_webpack";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "phoenix_webpack";
+              version = "0.1.0";
+              sha256 =
+                "9a5b53836b60bfc3baf36e9aa85b48cfc227f004419b81c195e5e08936562ba7";
+            };
+
+            meta = {
+              description = ''Easily generate webpack configs for phoenix'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/keathley/phoenix_webpack";
+            };
+          }
+      ) {};
+
+    phoenix_webpack = phoenix_webpack_0_1_0;
+
+    phone_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "phone";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "phone";
+              version = "0.0.1";
+              sha256 =
+                "9f56ea4a2a3790b779d9bedbe04f63bae4e68c7a57c6331258917edc78f0f8bd";
+            };
+
+            meta = {
+              description = ''Parser for phone numbers in international
+                            standard. NOT READY FOR USE.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/fcevado/phone";
+            };
+          }
+      ) {};
+
+    phone = phone_0_0_1;
 
     phst_transform_0_9_0 = callPackage
       (
@@ -30827,19 +35722,19 @@ let
 
     picosat = picosat_0_1_0;
 
-    pigeon_0_3_0 = callPackage
+    pigeon_0_4_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_7_5 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "pigeon";
-            version = "0.3.0";
+            version = "0.4.1";
             src = fetchHex {
               pkg = "pigeon";
-              version = "0.3.0";
+              version = "0.4.1";
               sha256 =
-                "cb332c872656fc426b10309f0c840635549727f35df4deb52816f2c6b920639c";
+                "f27413b863d470a8689e6378b9b36ee68f8bbcf8720f0b616756530f92bc23a0";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_7_5 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''HTTP2-compliant wrapper for sending iOS and
@@ -30850,11 +35745,11 @@ let
           }
       ) {};
 
-    pigeon = pigeon_0_3_0;
+    pigeon = pigeon_0_4_1;
 
     pin_elixir_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_2_2 }:
           buildMix {
             name = "pin_elixir";
             version = "0.0.1";
@@ -30864,7 +35759,7 @@ let
               sha256 =
                 "0140eecb7c714f9dadbcec26c45e2b2d770735029b7dcf98cdba9d793d80130a";
             };
-            beamDeps  = [ poison_1_5_2 httpotion_2_1_0 ];
+            beamDeps  = [ poison_1_5_2 httpotion_2_2_2 ];
 
             meta = {
               description = ''A library to wrap the Pin Payments API'';
@@ -30878,7 +35773,7 @@ let
 
     pinglix_1_1_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_0_19_5, poison_1_4_0, plug_1_1_1 }:
+        {  buildMix, fetchHex, timex_0_19_5, poison_1_4_0, plug_1_1_3 }:
           buildMix {
             name = "pinglix";
             version = "1.1.1";
@@ -30888,7 +35783,7 @@ let
               sha256 =
                 "bff8166655cc143518c0089aca104755ab188816707fb73a5739dd094f45e895";
             };
-            beamDeps  = [ timex_0_19_5 poison_1_4_0 plug_1_1_1 ];
+            beamDeps  = [ timex_0_19_5 poison_1_4_0 plug_1_1_3 ];
 
             meta = {
               longDescription = ''Plug compatible health check system in Elixir
@@ -30999,7 +35894,7 @@ let
 
     pipette_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, mock_0_1_1 }:
+        {  buildMix, fetchHex, mock_0_1_3 }:
           buildMix {
             name = "pipette";
             version = "0.0.4";
@@ -31009,7 +35904,7 @@ let
               sha256 =
                 "8742ea9b115071c3aa7cec4ddacfa161ff63fd647e0491ac442cb118d7198e26";
             };
-            beamDeps  = [ mock_0_1_1 ];
+            beamDeps  = [ mock_0_1_3 ];
 
             meta = {
               description = ''new_data = pipette(data, template)'';
@@ -31137,7 +36032,7 @@ let
 
     plasm_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "plasm";
             version = "0.1.0";
@@ -31147,7 +36042,7 @@ let
               sha256 =
                 "0eb476cae0b02dedbbc558f59ca22f0791221129d15fba570c0a3b96401d6836";
             };
-            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''Plasm is a composable query library for Ecto
@@ -31161,17 +36056,17 @@ let
 
     plasm = plasm_0_1_0;
 
-    plist_0_0_2 = callPackage
+    plist_0_0_4 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "plist";
-            version = "0.0.2";
+            version = "0.0.4";
             src = fetchHex {
               pkg = "plist";
-              version = "0.0.2";
+              version = "0.0.4";
               sha256 =
-                "e3560e6d94c4464b7479bb42a0fc1450e89fe99e67af099fb5cb2b2c7402409f";
+                "533836ee86188fa2a0aed92410534851aac3cb46ee0919c98553b1f38a63aa1a";
             };
 
             meta = {
@@ -31183,7 +36078,7 @@ let
           }
       ) {};
 
-    plist = plist_0_0_2;
+    plist = plist_0_0_4;
 
     plug_0_11_3 = callPackage
       (
@@ -31277,18 +36172,63 @@ let
           }
       ) {};
 
-    plug_0_5_0 = callPackage
+    plug_0_5_1 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "plug";
-            version = "0.5.0";
+            version = "0.5.1";
             src = fetchHex {
               pkg = "plug";
-              version = "0.5.0";
+              version = "0.5.1";
               sha256 =
-                "e34388510cdf725521cc772a8e711a090e1684bd964ced89d86b53dfd7a66ff5";
+                "95271e2372bf794e19ce50c097a439e1586a6b125f432ee21fbea96ab9832fc1";
             };
+
+            meta = {
+              description = ''A specification and conveniences for composable
+                            modules between web applications'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/elixir-lang/plug";
+            };
+          }
+      ) {};
+
+    plug_0_5_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "plug";
+            version = "0.5.2";
+            src = fetchHex {
+              pkg = "plug";
+              version = "0.5.2";
+              sha256 =
+                "d31cde7d9d3867a544e427a3431113f276fe9269cd00054440d38b56e61c53ea";
+            };
+
+            meta = {
+              description = ''A specification and conveniences for composable
+                            modules between web applications'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/elixir-lang/plug";
+            };
+          }
+      ) {};
+
+    plug_0_5_3 = callPackage
+      (
+        {  buildMix, fetchHex, cowboy_1_0_4 }:
+          buildMix {
+            name = "plug";
+            version = "0.5.3";
+            src = fetchHex {
+              pkg = "plug";
+              version = "0.5.3";
+              sha256 =
+                "97457d419def5bf13b17fa953cf56b8ca9f2e3973174d6890cd54fe84110c955";
+            };
+            beamDeps  = [ cowboy_1_0_4 ];
 
             meta = {
               description = ''A specification and conveniences for composable
@@ -31310,29 +36250,6 @@ let
               version = "0.7.0";
               sha256 =
                 "c25ceaacbdd0085653d84f8187c179e523b2edd54d393673df2d761f85795867";
-            };
-            beamDeps  = [ cowboy_1_0_4 ];
-
-            meta = {
-              description = ''A specification and conveniences for composable
-                            modules between web applications'';
-              license = stdenv.lib.licenses.apsl20;
-              homepage = "https://github.com/elixir-lang/plug";
-            };
-          }
-      ) {};
-
-    plug_0_8_1 = callPackage
-      (
-        {  buildMix, fetchHex, cowboy_1_0_4 }:
-          buildMix {
-            name = "plug";
-            version = "0.8.1";
-            src = fetchHex {
-              pkg = "plug";
-              version = "0.8.1";
-              sha256 =
-                "bf16b2ac50df99b6179b25dd35737d5fb9dda1442f00bbeb54190244de5d8617";
             };
             beamDeps  = [ cowboy_1_0_4 ];
 
@@ -31414,17 +36331,17 @@ let
           }
       ) {};
 
-    plug_1_1_1 = callPackage
+    plug_1_1_3 = callPackage
       (
         {  buildMix, fetchHex, cowboy_1_0_4 }:
           buildMix {
             name = "plug";
-            version = "1.1.1";
+            version = "1.1.3";
             src = fetchHex {
               pkg = "plug";
-              version = "1.1.1";
+              version = "1.1.3";
               sha256 =
-                "15a8ebd70bc8e545ee96212f26751d57908a3ea63cd5ca1d664a5d70038b8071";
+                "3063801910afe580891477f7e03c5c7a51592fa790a04f12815a127e4e0e336f";
             };
             beamDeps  = [ cowboy_1_0_4 ];
 
@@ -31437,11 +36354,11 @@ let
           }
       ) {};
 
-    plug = plug_1_1_1;
+    plug = plug_1_1_3;
 
     plug_abort_2_1_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4, poison_1_0_3 }:
+        {  buildMix, fetchHex, plug_0_5_3, cowboy_1_0_4, poison_1_0_3 }:
           buildMix {
             name = "plug_abort";
             version = "2.1.1";
@@ -31451,7 +36368,7 @@ let
               sha256 =
                 "8da98a882ea79e08443e7d26c94ee2b572560efca3f0a5922c69e508ac02d883";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 poison_1_0_3 ];
+            beamDeps  = [ plug_0_5_3 cowboy_1_0_4 poison_1_0_3 ];
 
             meta = {
               description = ''Easily abort the processing of a plug stack '';
@@ -31486,26 +36403,26 @@ let
 
     plug_accept_language = plug_accept_language_0_1_0;
 
-    plug_accesslog_0_10_0 = callPackage
+    plug_accesslog_0_11_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          tzdata_0_5_6,
-          timex_1_0_1,
-          plug_1_1_1,
+          tzdata_0_5_7,
+          timex_2_1_3,
+          plug_1_1_3,
           cowboy_1_0_4
         }:
           buildMix {
             name = "plug_accesslog";
-            version = "0.10.0";
+            version = "0.11.0";
             src = fetchHex {
               pkg = "plug_accesslog";
-              version = "0.10.0";
+              version = "0.11.0";
               sha256 =
-                "c7cb4562e6ee51f9329b0aea877c3c82d5c109a1946b40b19f7311b7290d474a";
+                "86ee180fd234a3c6d413153764f2a9e2d57171d3e89df2643a276b8760bcc867";
             };
-            beamDeps  = [ tzdata_0_5_6 timex_1_0_1 plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ tzdata_0_5_7 timex_2_1_3 plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Plug for writing access logs'';
@@ -31515,7 +36432,7 @@ let
           }
       ) {};
 
-    plug_accesslog = plug_accesslog_0_10_0;
+    plug_accesslog = plug_accesslog_0_11_0;
 
     plug_assign_1_0_0 = callPackage
       (
@@ -31542,19 +36459,19 @@ let
 
     plug_assign = plug_assign_1_0_0;
 
-    plug_auth_0_2_0 = callPackage
+    plug_auth_0_3_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_2, cowboy_1_0_4 }:
           buildMix {
             name = "plug_auth";
-            version = "0.2.0";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "plug_auth";
-              version = "0.2.0";
+              version = "0.3.0";
               sha256 =
-                "beb4fe7afce35714055b7cf362b1bd31665c0f4f2f2f6e59076d70ed60c48dc8";
+                "e9935f31526baff0262ef17055f853f0045172adf7b39fd9b1c54c6347477a71";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''A collection of authentication-related plugs'';
@@ -31564,11 +36481,11 @@ let
           }
       ) {};
 
-    plug_auth = plug_auth_0_2_0;
+    plug_auth = plug_auth_0_3_0;
 
     plug_basic_auth_1_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_2, cowboy_1_0_4 }:
           buildMix {
             name = "plug_basic_auth";
             version = "1.1.0";
@@ -31578,7 +36495,7 @@ let
               sha256 =
                 "6763e5ad0f17d6693e296cc3a69c1db627f9b66bda2bcded4ddfcc84a42f0c03";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''A Plug for using HTTP Basic Authentication in
@@ -31616,19 +36533,19 @@ let
 
     plug_byte_serve = plug_byte_serve_0_3_2;
 
-    plug_cloudflare_1_2_1 = callPackage
+    plug_cloudflare_1_3_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cidr_0_5_0 }:
+        {  buildMix, fetchHex, plug_1_1_3, cidr_1_0_0 }:
           buildMix {
             name = "plug_cloudflare";
-            version = "1.2.1";
+            version = "1.3.0";
             src = fetchHex {
               pkg = "plug_cloudflare";
-              version = "1.2.1";
+              version = "1.3.0";
               sha256 =
-                "854e202c40f86c50e0b95c373c5335106f21f9059fc74d8379915ab560ecf8b6";
+                "641df2e40267446172c43b2f52dd9a1cbcd1f24dccd101bda29732a13335ab21";
             };
-            beamDeps  = [ plug_1_1_1 cidr_0_5_0 ];
+            beamDeps  = [ plug_1_1_3 cidr_1_0_0 ];
 
             meta = {
               description = ''Convert CloudFlare`s CF-Connecting-IP header to
@@ -31639,11 +36556,11 @@ let
           }
       ) {};
 
-    plug_cloudflare = plug_cloudflare_1_2_1;
+    plug_cloudflare = plug_cloudflare_1_3_0;
 
     plug_cors_0_8_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "plug_cors";
             version = "0.8.2";
@@ -31653,7 +36570,7 @@ let
               sha256 =
                 "286a36b000989538c168d115f6a017aaa15a4031e4f867d300878d81c3b8c6aa";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Deprecated: CORS Plug Middleware. Please use
@@ -31668,7 +36585,7 @@ let
 
     plug_exception_handler_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_0_5_3, cowboy_1_0_4 }:
           buildMix {
             name = "plug_exception_handler";
             version = "0.0.4";
@@ -31678,7 +36595,7 @@ let
               sha256 =
                 "477ea599e516bcf8efb399ca43ca3d9cecd50982222b1f5f259092d4c99fca28";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_0_5_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Rescue exceptions from your plug stack'';
@@ -31693,7 +36610,7 @@ let
 
     plug_forwarded_peer_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_forwarded_peer";
             version = "0.0.2";
@@ -31703,7 +36620,7 @@ let
               sha256 =
                 "c2466e0f0ef75a0d925a957fa50dfcded2c4788fe67857a675411e7184ae5ec3";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''Very simple plug which reads
@@ -31744,7 +36661,7 @@ let
 
     plug_geoip2_0_4_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, geolix_0_9_0 }:
+        {  buildMix, fetchHex, plug_1_1_3, geolix_0_9_0 }:
           buildMix {
             name = "plug_geoip2";
             version = "0.4.2";
@@ -31754,7 +36671,7 @@ let
               sha256 =
                 "2a6443040e07e677b0ff7749d2cdf7797a97254466f6740aee11544a18f4993a";
             };
-            beamDeps  = [ plug_1_1_1 geolix_0_9_0 ];
+            beamDeps  = [ plug_1_1_3 geolix_0_9_0 ];
 
             meta = {
               longDescription = ''Adds geo location to a Plug connection based
@@ -31767,26 +36684,26 @@ let
 
     plug_geoip2 = plug_geoip2_0_4_2;
 
-    plug_graphql_0_1_5 = callPackage
+    plug_graphql_0_2_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          poison_1_5_2,
-          plug_0_8_1,
-          graphql_0_1_2,
+          poison_1_0_3,
+          plug_0_5_2,
+          graphql_0_2_0,
           cowboy_1_0_4
         }:
           buildMix {
             name = "plug_graphql";
-            version = "0.1.5";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "plug_graphql";
-              version = "0.1.5";
+              version = "0.2.0";
               sha256 =
-                "a0a93dfe74a701393428bd0963dd2b93db5e418f8bf095a0b1f9bdab854ef0b7";
+                "d633309e386fb4feafcadaa390fb1ae2cf26416823b1c1484ed4d018e13c769a";
             };
-            beamDeps  = [ poison_1_5_2 plug_0_8_1 graphql_0_1_2 cowboy_1_0_4
+            beamDeps  = [ poison_1_0_3 plug_0_5_2 graphql_0_2_0 cowboy_1_0_4
                       ];
 
             meta = {
@@ -31797,11 +36714,11 @@ let
           }
       ) {};
 
-    plug_graphql = plug_graphql_0_1_5;
+    plug_graphql = plug_graphql_0_2_0;
 
     plug_heartbeat_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "plug_heartbeat";
             version = "0.2.0";
@@ -31811,7 +36728,7 @@ let
               sha256 =
                 "23cb357dad510695b6bb339fdbf5d3fc8581546124f7389d63c9cf723e4ad40f";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''A tiny plug for responding to heartbeat requests
@@ -31826,7 +36743,7 @@ let
 
     plug_json_parser_0_0_6 = callPackage
       (
-        {  buildMix, fetchHex, plug_0_8_1, cowboy_1_0_4, poison_1_1_1 }:
+        {  buildMix, fetchHex, plug_0_7_0, cowboy_1_0_4, poison_1_1_1 }:
           buildMix {
             name = "plug_json_parser";
             version = "0.0.6";
@@ -31836,7 +36753,7 @@ let
               sha256 =
                 "4c07f3adade5ad8730b6ec5d33d50b5dbe1a960e2be29a764b415c5234c79204";
             };
-            beamDeps  = [ plug_0_8_1 cowboy_1_0_4 poison_1_1_1 ];
+            beamDeps  = [ plug_0_7_0 cowboy_1_0_4 poison_1_1_1 ];
 
             meta = {
               description = ''JSON parse for Plug.Parsers '';
@@ -31850,7 +36767,7 @@ let
 
     plug_jwt_0_7_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, joken_0_16_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, joken_0_16_1, cowboy_1_0_4 }:
           buildMix {
             name = "plug_jwt";
             version = "0.7.1";
@@ -31860,7 +36777,7 @@ let
               sha256 =
                 "a87cd8815454093c3300bdae4f2af7ec8c671fd22ce55f598309b5bed4ac3a2a";
             };
-            beamDeps  = [ plug_1_1_1 joken_0_16_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 joken_0_16_1 cowboy_1_0_4 ];
 
             meta = {
               description = ''JWT Plug Middleware'';
@@ -31874,7 +36791,7 @@ let
 
     plug_media_type_router_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_media_type_router";
             version = "0.0.2";
@@ -31884,7 +36801,7 @@ let
               sha256 =
                 "e5f72ee4fd1a43321532e3165b3609a1184ba2d576279a1a63e17afba084f12b";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''An Elixir Plug for routing requests to other
@@ -31897,9 +36814,33 @@ let
 
     plug_media_type_router = plug_media_type_router_0_0_2;
 
+    plug_pagecache_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
+          buildMix {
+            name = "plug_pagecache";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "plug_pagecache";
+              version = "0.2.0";
+              sha256 =
+                "8f33202de45d772dd1f416a10d43f8e2daabf937d459e010fa9c850834e1877f";
+            };
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
+
+            meta = {
+              description = ''Plug for full page response caching'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/mneudert/plug_pagecache";
+            };
+          }
+      ) {};
+
+    plug_pagecache = plug_pagecache_0_2_0;
+
     plug_rails_cookie_session_store_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "plug_rails_cookie_session_store";
             version = "0.1.0";
@@ -31909,7 +36850,7 @@ let
               sha256 =
                 "e08041d2ad4884826d8296a5560609df04a936ceca492d094f06458699ac69da";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''Rails compatible Plug session store'';
@@ -31923,19 +36864,43 @@ let
     plug_rails_cookie_session_store =
       plug_rails_cookie_session_store_0_1_0;
 
-    plug_redirect_https_0_0_4 = callPackage
+    plug_redirect_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
+          buildMix {
+            name = "plug_redirect";
+            version = "0.1.2";
+            src = fetchHex {
+              pkg = "plug_redirect";
+              version = "0.1.2";
+              sha256 =
+                "f5fb2653ed39cf843bcc3cb13ba2bf547b1f66ef7c24f963551acd0b8e1c4705";
+            };
+            beamDeps  = [ plug_1_1_3 ];
+
+            meta = {
+              description = ''A plug builder for redirecting requests.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/lpil/plug-redirect";
+            };
+          }
+      ) {};
+
+    plug_redirect = plug_redirect_0_1_2;
+
+    plug_redirect_https_0_0_6 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_redirect_https";
-            version = "0.0.4";
+            version = "0.0.6";
             src = fetchHex {
               pkg = "plug_redirect_https";
-              version = "0.0.4";
+              version = "0.0.6";
               sha256 =
-                "b0cf8d86bb6d39653923e48067e6259beb6daee3f0e6ea6beff9ddcbef22b4d5";
+                "73f1b3172183005f0fb59a43c50a94a708c06ffcc35a7387967d87e001369068";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Plug to redirect http requests to https requests
@@ -31946,11 +36911,11 @@ let
           }
       ) {};
 
-    plug_redirect_https = plug_redirect_https_0_0_4;
+    plug_redirect_https = plug_redirect_https_0_0_6;
 
     plug_require_header_0_8_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, plug_1_1_3 }:
           buildMix {
             name = "plug_require_header";
             version = "0.8.0";
@@ -31960,7 +36925,7 @@ let
               sha256 =
                 "b721158316f6d2efd4b24bd05a8a1c06caa699ee25249185c8c4f03f9204b283";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 ];
 
             meta = {
               description = ''An Elixir Plug for requiring and extracting a
@@ -31975,7 +36940,7 @@ let
 
     plug_response_header_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_response_header";
             version = "0.2.1";
@@ -31985,7 +36950,7 @@ let
               sha256 =
                 "82fd11fc70d925ed5a608ac13a9f604a80e24827f6603999d6a0f3f123862048";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''This plug allows manipulation of HTTP response
@@ -32000,7 +36965,7 @@ let
 
     plug_ribbon_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_ribbon";
             version = "0.2.1";
@@ -32010,7 +36975,7 @@ let
               sha256 =
                 "34fcbffb6fc3adde6bb167506934ab19787d2fff82b6bf93918e0000159bfe9d";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Injects a ribbon to your web application
@@ -32023,19 +36988,19 @@ let
 
     plug_ribbon = plug_ribbon_0_2_1;
 
-    plug_runtime_0_0_1 = callPackage
+    plug_runtime_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_runtime";
-            version = "0.0.1";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "plug_runtime";
-              version = "0.0.1";
+              version = "1.0.0";
               sha256 =
-                "b47ec0f5870e3c6adcad708c37ecbdd69ec25cd1f5bf1c15e21f78b518b7eb1c";
+                "58e213a40fe339771ab93520da56c2108488cfd9e99c7e92def367567ce225a7";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''A simple Plug to measure the runtime of a
@@ -32047,11 +37012,11 @@ let
           }
       ) {};
 
-    plug_runtime = plug_runtime_0_0_1;
+    plug_runtime = plug_runtime_1_0_0;
 
     plug_secure_headers_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "plug_secure_headers";
             version = "0.0.1";
@@ -32061,7 +37026,7 @@ let
               sha256 =
                 "727c5b7216aaa4bec2e0f88ed72199082820341602fad49cfc4c74477f55a905";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''HTTP security headers with validatation for
@@ -32079,7 +37044,7 @@ let
         {
           buildMix,
           fetchHex,
-          plug_1_1_1,
+          plug_1_1_3,
           ex_doc_0_11_4,
           earmark_0_2_1,
           cowboy_1_0_4
@@ -32093,7 +37058,7 @@ let
               sha256 =
                 "f9cd5de250dbab0180166c873a50d297036d72f7cbac1a076972444c41f0b4c3";
             };
-            beamDeps  = [ plug_1_1_1 ex_doc_0_11_4 earmark_0_2_1 cowboy_1_0_4
+            beamDeps  = [ plug_1_1_3 ex_doc_0_11_4 earmark_0_2_1 cowboy_1_0_4
                       ];
 
             meta = {
@@ -32135,7 +37100,7 @@ let
 
     plug_statsd_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, ex_statsd_0_5_3 }:
+        {  buildMix, fetchHex, plug_1_1_3, ex_statsd_0_5_3 }:
           buildMix {
             name = "plug_statsd";
             version = "0.4.0";
@@ -32145,7 +37110,7 @@ let
               sha256 =
                 "c618161e5ad93c727be6ce776e7f53542950d97a602691aee2acef2d57dbdea9";
             };
-            beamDeps  = [ plug_1_1_1 ex_statsd_0_5_3 ];
+            beamDeps  = [ plug_1_1_3 ex_statsd_0_5_3 ];
 
             meta = {
               description = ''A (Phoenix) plug for sending request counts and
@@ -32181,6 +37146,30 @@ let
       ) {};
 
     plug_test_helpers = plug_test_helpers_0_1_0;
+
+    plug_utm_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
+          buildMix {
+            name = "plug_utm";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "plug_utm";
+              version = "0.0.2";
+              sha256 =
+                "d473d6b360f5a9189cee2a0f95c06ffb1cb9495a9bb8c729a631c2fa33ed5fc9";
+            };
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
+
+            meta = {
+              description = ''UTM tracking parameters to cookies'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/honeypotio/plug_utm";
+            };
+          }
+      ) {};
+
+    plug_utm = plug_utm_0_0_2;
 
     plug_wait1_0_1_4 = callPackage
       (
@@ -32255,7 +37244,7 @@ let
 
     plugs_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "plugs";
             version = "0.1.0";
@@ -32265,7 +37254,7 @@ let
               sha256 =
                 "8d6cafd3ea0d373795774c9de2a0503433d65d9c2c0d58bd23ba0d9ba3547297";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               description = ''A collection of Plug middleware for web
@@ -32278,19 +37267,19 @@ let
 
     plugs = plugs_0_1_0;
 
-    plugsnag_1_0_1 = callPackage
+    plugsnag_1_1_0 = callPackage
       (
-        {  buildMix, fetchHex, bugsnag_1_1_1 }:
+        {  buildMix, fetchHex, bugsnag_1_2_0 }:
           buildMix {
             name = "plugsnag";
-            version = "1.0.1";
+            version = "1.1.0";
             src = fetchHex {
               pkg = "plugsnag";
-              version = "1.0.1";
+              version = "1.1.0";
               sha256 =
-                "cf6c257d400b872787ced1a7175adb7332a7aa9d12d1a6ac6abcd8cf799bd06c";
+                "aa3a9e587042f5519d8309fc4cf764a0262eda0da752ddf87c5fcfea176208ad";
             };
-            beamDeps  = [ bugsnag_1_1_1 ];
+            beamDeps  = [ bugsnag_1_2_0 ];
 
             meta = {
               description = ''Bugsnag reporter for Elixir`s Plug'';
@@ -32300,7 +37289,7 @@ let
           }
       ) {};
 
-    plugsnag = plugsnag_1_0_1;
+    plugsnag = plugsnag_1_1_0;
 
     plumber_girl_0_9_6 = callPackage
       (
@@ -32354,7 +37343,7 @@ let
 
     pocketex_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpoison_0_8_2 }:
           buildMix {
             name = "pocketex";
             version = "0.1.0";
@@ -32364,7 +37353,7 @@ let
               sha256 =
                 "b832df8e3f3102b69892cc5cfab4418de876a6ecc5780805458b9946aa407cbf";
             };
-            beamDeps  = [ poison_1_3_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_3_1 httpoison_0_8_2 ];
 
             meta = {
               description = ''Pocketex is an Elixir client for the Pocket read
@@ -32591,6 +37580,56 @@ let
 
     poker = poker_0_0_2;
 
+    poloniex_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "poloniex";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "poloniex";
+              version = "0.0.3";
+              sha256 =
+                "976011016844c86ddded4310962194dfbbd296f5c7b9af469ea13131987d403b";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''WIP Poloniex API wrapper for Elixir. Provides
+                                access to market data including trading pairs
+                                between ETH, BTC, DOGE, LTC and others.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/cyberpunk-ventures/poloniex_ex";
+            };
+          }
+      ) {};
+
+    poloniex = poloniex_0_0_3;
+
+    poly1305_0_4_0 = callPackage
+      (
+        {  buildMix, fetchHex, chacha20_0_3_2 }:
+          buildMix {
+            name = "poly1305";
+            version = "0.4.0";
+            src = fetchHex {
+              pkg = "poly1305";
+              version = "0.4.0";
+              sha256 =
+                "a31cd3dcc1244033b0981adfe9b2d0766115152ea42ba1c62a8dc93c87f094b7";
+            };
+            beamDeps  = [ chacha20_0_3_2 ];
+
+            meta = {
+              description = ''Poly1305 message authentication'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/poly1305_ex";
+            };
+          }
+      ) {};
+
+    poly1305 = poly1305_0_4_0;
+
     polyglot_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -32615,6 +37654,30 @@ let
       ) {};
 
     polyglot = polyglot_0_0_1;
+
+    polyline_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex, vector_0_1_0 }:
+          buildMix {
+            name = "polyline";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "polyline";
+              version = "0.1.0";
+              sha256 =
+                "6df2ebd1a5f55d6f680924200175bc5473beadd013acec72d201fcec18d31afd";
+            };
+            beamDeps  = [ vector_0_1_0 ];
+
+            meta = {
+              description = ''Encoding and decoding of Polylines'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/polyline_ex";
+            };
+          }
+      ) {};
+
+    polyline = polyline_0_1_0;
 
     polyvox_id3_0_2_1 = callPackage
       (
@@ -32754,8 +37817,8 @@ let
 
     pooler_1_4_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "pooler";
             version = "1.4.0";
             src = fetchHex {
@@ -32775,8 +37838,8 @@ let
 
     pooler_1_5_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "pooler";
             version = "1.5.0";
             src = fetchHex {
@@ -32871,6 +37934,31 @@ let
 
     portal = portal_0_0_1;
 
+    porter_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "porter";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "porter";
+              version = "0.0.1";
+              sha256 =
+                "81ef97a1d6eb495b6a919cdaae4268a49a3591903424d4ed00f67104d09e89dd";
+            };
+
+            meta = {
+              longDescription = ''Porter provides an OTP application that runs
+                                the specified system command using the Erlang
+                                Port library and then streams the results back
+                                to you.'';
+
+            };
+          }
+      ) {};
+
+    porter = porter_0_0_1;
+
     porterstemmer_0_0_1 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -32896,19 +37984,65 @@ let
 
     porterstemmer = porterstemmer_0_0_1;
 
-    posterize_0_9_2 = callPackage
+    portmidi_3_2_0 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_11_1 }:
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
+            name = "portmidi";
+            version = "3.2.0";
+            src = fetchHex {
+              pkg = "portmidi";
+              version = "3.2.0";
+              sha256 =
+                "93344ce66905d0c841d1e387eb24572bb2d2214668b45bf926d0363e9c064641";
+            };
+
+            meta = {
+              description = ''Elixir bindings to the portmidi C library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/lucidstack/ex-portmidi";
+            };
+          }
+      ) {};
+
+    portmidi = portmidi_3_2_0;
+
+    positive_13_3_7 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "positive";
+            version = "13.3.7";
+            src = fetchHex {
+              pkg = "positive";
+              version = "13.3.7";
+              sha256 =
+                "516964039cbae4e64226d9e50787f32134f3411bc0ae8cedf26488ba004616be";
+            };
+
+            meta = {
+              description = ''Library: check if an integer is positive'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/jlouis/positive";
+            };
+          }
+      ) {};
+
+    positive = positive_13_3_7;
+
+    posterize_0_10_0 = callPackage
+      (
+        {  buildMix, fetchHex, postgrex_0_11_1, jsx_2_8_0 }:
           buildMix {
             name = "posterize";
-            version = "0.9.2";
+            version = "0.10.0";
             src = fetchHex {
               pkg = "posterize";
-              version = "0.9.2";
+              version = "0.10.0";
               sha256 =
-                "c88f4fdefb2bc0cad5a7b19eca21fe9954f0a6b88a3af7eb685ee5df324b0ce2";
+                "3569fd8f8097acb2a49fb23c446d3a8ff57879779866d71929eb356d076e7eb9";
             };
-            beamDeps  = [ postgrex_0_11_1 ];
+            beamDeps  = [ postgrex_0_11_1 jsx_2_8_0 ];
 
             meta = {
               description = ''erlang wrapper for postgrex'';
@@ -32918,7 +38052,7 @@ let
           }
       ) {};
 
-    posterize = posterize_0_9_2;
+    posterize = posterize_0_10_0;
 
     postgrex_0_11_1 = callPackage
       (
@@ -32926,7 +38060,7 @@ let
           buildMix,
           fetchHex,
           decimal_1_1_1,
-          db_connection_0_2_3,
+          db_connection_0_2_4,
           connection_1_0_2
         }:
           buildMix {
@@ -32938,7 +38072,7 @@ let
               sha256 =
                 "f56d47038f4f642cee0f9c40eeea0ef9ba645b7fc77723b4764f282df95baeb8";
             };
-            beamDeps  = [ decimal_1_1_1 db_connection_0_2_3 connection_1_0_2
+            beamDeps  = [ decimal_1_1_1 db_connection_0_2_4 connection_1_0_2
                       ];
 
             meta = {
@@ -32964,6 +38098,28 @@ let
                 "aa2aede73938a952ffbbe2b1173ac52c377a2055fd3e44ac1843bef782f5f8d4";
             };
             beamDeps  = [ decimal_0_2_5 ];
+
+            meta = {
+              description = ''PostgreSQL driver for Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/ericmj/postgrex";
+            };
+          }
+      ) {};
+
+    postgrex_0_8_4 = callPackage
+      (
+        {  buildMix, fetchHex, decimal_1_1_1 }:
+          buildMix {
+            name = "postgrex";
+            version = "0.8.4";
+            src = fetchHex {
+              pkg = "postgrex";
+              version = "0.8.4";
+              sha256 =
+                "19c205c8de0e2e5817f2250100281c58e717cb11ff1bb410bf661ee78c24e79b";
+            };
+            beamDeps  = [ decimal_1_1_1 ];
 
             meta = {
               description = ''PostgreSQL driver for Elixir.'';
@@ -33067,6 +38223,31 @@ let
 
     pqueue = pqueue_1_5_1;
 
+    pragmatic_0_1_6 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "pragmatic";
+            version = "0.1.6";
+            src = fetchHex {
+              pkg = "pragmatic";
+              version = "0.1.6";
+              sha256 =
+                "e26b1b60d9657a61b6543646817a5d2dff73120bae33fa3de4c60bb356cf49b0";
+            };
+
+            meta = {
+              longDescription = ''A small, simple library to deal with the
+                                practical issues arising from using Elixir on
+                                Windows'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/OnorioCatenacci/pragmatic";
+            };
+          }
+      ) {};
+
+    pragmatic = pragmatic_0_1_6;
+
     prefecture_jp_0_0_2 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -33090,6 +38271,31 @@ let
       ) {};
 
     prefecture_jp = prefecture_jp_0_0_2;
+
+    prelude_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, etude_1_0_0_beta_0 }:
+          buildMix {
+            name = "prelude";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "prelude";
+              version = "0.0.1";
+              sha256 =
+                "805c5a43a043864b4793f4aeff574b88e9eaac18e49d93cb71cbd6270283bde9";
+            };
+            beamDeps  = [ etude_1_0_0_beta_0 ];
+
+            meta = {
+              description = ''a preprocessor/compiler toolset for erlang and
+                            elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/camshaft/prelude";
+            };
+          }
+      ) {};
+
+    prelude = prelude_0_0_1;
 
     presentex_0_0_10 = callPackage
       (
@@ -33140,7 +38346,7 @@ let
 
     pricing_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1, porcelain_2_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2, porcelain_2_0_1 }:
           buildMix {
             name = "pricing";
             version = "0.0.1";
@@ -33150,7 +38356,7 @@ let
               sha256 =
                 "82e0438611507f600bd799c986872588f88627fdcf7a15d4031d779c9d1cd4d7";
             };
-            beamDeps  = [ timex_1_0_1 porcelain_2_0_1 ];
+            beamDeps  = [ timex_1_0_2 porcelain_2_0_1 ];
 
             meta = {
               description = ''Pricing financial instruments in Elixir'';
@@ -33209,6 +38415,33 @@ let
 
     proper = proper_1_1_1_beta;
 
+    proper_case_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "proper_case";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "proper_case";
+              version = "0.1.1";
+              sha256 =
+                "63c279ad8721fb91175f74a03584fda2baaea6f5d79d5e899dddfd934e924d8a";
+            };
+
+            meta = {
+              longDescription = ''An Elixir library that converts keys in maps
+                                between `snake_case` and `camel_case`. Useful as
+                                a plug in Phoenix for converting incoming params
+                                from JavaScript`s `camelCase` to Elixir`s
+                                `snake_case`'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/johnnyji/proper_case";
+            };
+          }
+      ) {};
+
+    proper_case = proper_case_0_1_1;
+
     proplist_1_1_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -33233,10 +38466,36 @@ let
 
     proplist = proplist_1_1_0;
 
+    proto_def_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0 }:
+          buildMix {
+            name = "proto_def";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "proto_def";
+              version = "0.0.1";
+              sha256 =
+                "0b045cd0f4684c7b0fe8100e136e7b54c2be247423cad741d4d9405e6178a769";
+            };
+            beamDeps  = [ poison_2_1_0 ];
+
+            meta = {
+              longDescription = ''ProtoDef compiler for Elixir. (mostly)
+                                Compatible with
+                                https://github.com/ProtoDef-io/ProtoDef.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ProtoDef-io/elixir-protodef";
+            };
+          }
+      ) {};
+
+    proto_def = proto_def_0_0_1;
+
     protobuffs_0_8_2 = callPackage
       (
-        {  buildRebar3, fetchHex, meck_0_8_4 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, meck_0_8_4 }:
+          buildErlangMk {
             name = "protobuffs";
             version = "0.8.2";
             src = fetchHex {
@@ -33245,7 +38504,6 @@ let
               sha256 =
                 "b77e9d03518927b290cc5bb5cc9622a177e70289100fea9ccb57873573e54553";
             };
-
             beamDeps  = [ meck_0_8_4 ];
 
             meta = {
@@ -33260,17 +38518,17 @@ let
 
     protobuffs = protobuffs_0_8_2;
 
-    provider_asn1_0_1_2 = callPackage
+    provider_asn1_0_2_1 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "provider_asn1";
-            version = "0.1.2";
+            version = "0.2.1";
             src = fetchHex {
               pkg = "provider_asn1";
-              version = "0.1.2";
+              version = "0.2.1";
               sha256 =
-                "b310c46a2d5675431737f10a55d6b37347c11bf3efc4c1d7b63e710e3842c1bb";
+                "1fbf4a1a9711b6308423a213d45dbe409937cdfbad0816491d18aea5d3c44242";
             };
 
             meta = {
@@ -33281,7 +38539,7 @@ let
           }
       ) {};
 
-    provider_asn1 = provider_asn1_0_1_2;
+    provider_asn1 = provider_asn1_0_2_1;
 
     providers_1_4_1 = callPackage
       (
@@ -33334,7 +38592,7 @@ let
     proxy_0_0_1 = callPackage
       (
         {
-          buildMix, fetchHex, plug_1_1_1, httpoison_0_8_1, cowboy_1_0_4
+          buildMix, fetchHex, plug_1_1_3, httpoison_0_8_2, cowboy_1_0_4
         }:
           buildMix {
             name = "proxy";
@@ -33345,7 +38603,7 @@ let
               sha256 =
                 "74691b18a0918d6e14df1f254ee9f342a547bc280151a4d88a540839ae75bbae";
             };
-            beamDeps  = [ plug_1_1_1 httpoison_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 httpoison_0_8_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''Proxy plug for upstream servers'';
@@ -33359,7 +38617,7 @@ let
 
     pubnub_ex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "pubnub_ex";
             version = "0.0.2";
@@ -33369,7 +38627,7 @@ let
               sha256 =
                 "83d270cfe2be6728fb96d9145371a87ddc876a97f91cdca2584cc82c2a0b91cb";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''A pubsub tool for pubnub.'';
@@ -33404,6 +38662,32 @@ let
 
     pubsub = pubsub_0_0_2;
 
+    pulse_0_1_3 = callPackage
+      (
+        {  buildMix, fetchHex, sonic_0_1_3 }:
+          buildMix {
+            name = "pulse";
+            version = "0.1.3";
+            src = fetchHex {
+              pkg = "pulse";
+              version = "0.1.3";
+              sha256 =
+                "8d9ab6b8f5b3e8da2feedb32062b97243bfc8c250ad5bab09fd61944e51e6aa0";
+            };
+            beamDeps  = [ sonic_0_1_3 ];
+
+            meta = {
+              longDescription = ''Service registration and discovery library
+                                for Elixir. Relies on etcd as an external
+                                service registry.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/heroiclabs/pulse";
+            };
+          }
+      ) {};
+
+    pulse = pulse_0_1_3;
+
     pulse_libs_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -33427,25 +38711,25 @@ let
 
     pulse_libs = pulse_libs_1_0_0;
 
-    pusher_0_1_2 = callPackage
+    pusher_0_1_3 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          signaturex_0_0_8,
-          httpoison_0_8_1,
+          signaturex_1_0_1,
+          httpoison_0_8_2,
           exjsx_3_2_0
         }:
           buildMix {
             name = "pusher";
-            version = "0.1.2";
+            version = "0.1.3";
             src = fetchHex {
               pkg = "pusher";
-              version = "0.1.2";
+              version = "0.1.3";
               sha256 =
-                "6a21b65a7a1e6a4fe7b1cd0d555ca25c871e68441cef3373dc5771ab0c2a47c2";
+                "1443c9652d3a3d03fcfef0e8dca817affa80d1c4e0eb582282af0d9c69a087f3";
             };
-            beamDeps  = [ signaturex_0_0_8 httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ signaturex_1_0_1 httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Pusher HTTP client'';
@@ -33455,7 +38739,31 @@ let
           }
       ) {};
 
-    pusher = pusher_0_1_2;
+    pusher = pusher_0_1_3;
+
+    pushex_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_0_3, httpoison_0_8_2 }:
+          buildMix {
+            name = "pushex";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "pushex";
+              version = "0.0.2";
+              sha256 =
+                "7330d48e2816b9d3444b96d30f9144607490807684f2f231fa91bc7c6888fe03";
+            };
+            beamDeps  = [ poison_1_0_3 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Mobile push notification library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/tuvistavie/pushex";
+            };
+          }
+      ) {};
+
+    pushex = pushex_0_0_2;
 
     qdate_0_4_2 = callPackage
       (
@@ -33489,7 +38797,7 @@ let
 
     qiita_ex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "qiita_ex";
             version = "0.0.2";
@@ -33499,7 +38807,7 @@ let
               sha256 =
                 "0bb9a5535c0915c426ff13350b907cbd2b455bb99d8bcb8324ffadb6c9bcf1eb";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Qiita API v2 Interface for Elixir'';
@@ -33558,18 +38866,19 @@ let
 
     qlc = qlc_1_0_0;
 
-    quantum_1_6_1 = callPackage
+    quantum_1_7_1 = callPackage
       (
-        {  buildMix, fetchHex }:
+        {  buildMix, fetchHex, timex_2_1_3 }:
           buildMix {
             name = "quantum";
-            version = "1.6.1";
+            version = "1.7.1";
             src = fetchHex {
               pkg = "quantum";
-              version = "1.6.1";
+              version = "1.7.1";
               sha256 =
-                "877ef048391ff0c0268cc17078dd707351241af0c04041bc432398017b998bbf";
+                "55a74be6a021816fe78d9a4a9450281e027302806313c9fa6e51694d44106c0a";
             };
+            beamDeps  = [ timex_2_1_3 ];
 
             meta = {
               description = ''Cron-like job scheduler for Elixir.'';
@@ -33579,7 +38888,7 @@ let
           }
       ) {};
 
-    quantum = quantum_1_6_1;
+    quantum = quantum_1_7_1;
 
     quark_1_0_2 = callPackage
       (
@@ -33722,6 +39031,30 @@ let
 
     quintana = quintana_0_2_1;
 
+    ra_0_3_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "ra";
+            version = "0.3.2";
+            src = fetchHex {
+              pkg = "ra";
+              version = "0.3.2";
+              sha256 =
+                "696cc4fd2dc1a36c705af7e7a1551bd054ad245841fccbc5d9d210f375c2dcf4";
+            };
+
+            meta = {
+              description = ''Ra is a framework for building command line
+                            applications.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/NobbZ/ra";
+            };
+          }
+      ) {};
+
+    ra = ra_0_3_2;
+
     rabbitElixir_1_0_1 = callPackage
       (
         {  buildMix, fetchHex, exjsx_3_1_0 }:
@@ -33771,26 +39104,26 @@ let
 
     rabbit_common = rabbit_common_3_5_6;
 
-    rackla_0_1_0 = callPackage
+    rackla_1_0_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          poison_1_5_2,
-          plug_0_14_0,
-          hackney_1_4_8,
+          poison_2_1_0,
+          plug_1_1_3,
+          hackney_1_4_10,
           cowboy_1_0_4
         }:
           buildMix {
             name = "rackla";
-            version = "0.1.0";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "rackla";
-              version = "0.1.0";
+              version = "1.0.0";
               sha256 =
-                "640b77e8a78e66085a49fc4af6fc3b028b2db8af39ee4c950e4a812c15c8657f";
+                "8d299ccea08686953beb11841eeb70ffba7fa040422bc62eaded785432422032";
             };
-            beamDeps  = [ poison_1_5_2 plug_0_14_0 hackney_1_4_8 cowboy_1_0_4
+            beamDeps  = [ poison_2_1_0 plug_1_1_3 hackney_1_4_10 cowboy_1_0_4
                       ];
 
             meta = {
@@ -33801,7 +39134,7 @@ let
           }
       ) {};
 
-    rackla = rackla_0_1_0;
+    rackla = rackla_1_0_0;
 
     radpath_0_0_5 = callPackage
       (
@@ -33830,7 +39163,7 @@ let
 
     rails_4_2_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "rails";
             version = "4.2.0";
@@ -33840,7 +39173,7 @@ let
               sha256 =
                 "731692769aa106a20c87b12dca15336fd1d16a7f02e2615ad76f6ce83a2b0b46";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               longDescription = ''A plug to get your plug/phoenix applications
@@ -33855,8 +39188,8 @@ let
 
     ranch_1_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "ranch";
             version = "1.1.0";
             src = fetchHex {
@@ -33876,8 +39209,8 @@ let
 
     ranch_1_2_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "ranch";
             version = "1.2.1";
             src = fetchHex {
@@ -33971,20 +39304,20 @@ let
 
     range_extras = range_extras_0_1_0;
 
-    rankmatcher_0_1_2 = callPackage
+    rankmatcher_0_1_4 = callPackage
       (
-        {  buildRebar3, fetchHex, libsnarlmatch_0_1_5 }:
+        {  buildRebar3, fetchHex, libsnarlmatch_0_1_7 }:
           buildRebar3 {
             name = "rankmatcher";
-            version = "0.1.2";
+            version = "0.1.4";
             src = fetchHex {
               pkg = "rankmatcher";
-              version = "0.1.2";
+              version = "0.1.4";
               sha256 =
-                "8ea5974be574159e6ac188fc4309ef86889d6b227df44b1426f39b02b7d533e7";
+                "ae02bd458ba5c4298809e056668206dac3675c15319780808cbdde48068185c6";
             };
 
-            beamDeps  = [ libsnarlmatch_0_1_5 ];
+            beamDeps  = [ libsnarlmatch_0_1_7 ];
 
             meta = {
               description = ''Library to rank and match lists'';
@@ -33994,12 +39327,12 @@ let
           }
       ) {};
 
-    rankmatcher = rankmatcher_0_1_2;
+    rankmatcher = rankmatcher_0_1_4;
 
     rapidax_0_0_3 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, cowboy_1_0_4
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, cowboy_1_0_4
         }:
           buildMix {
             name = "rapidax";
@@ -34010,7 +39343,7 @@ let
               sha256 =
                 "9912b79b3d2729465bf66315bd955e031aeb038f05a63faa2dc0414026edb18c";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 cowboy_1_0_4 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 cowboy_1_0_4 ];
 
             meta = {
               description = ''Rapidly develop your API client - based on
@@ -34053,8 +39386,8 @@ let
 
     ratx_0_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "ratx";
             version = "0.1.0";
             src = fetchHex {
@@ -34077,7 +39410,7 @@ let
 
     raven_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_0_6, uuid_0_1_5, poison_1_2_1 }:
+        {  buildMix, fetchHex, hackney_1_4_8, uuid_1_0_0, poison_1_2_1 }:
           buildMix {
             name = "raven";
             version = "0.0.5";
@@ -34087,7 +39420,7 @@ let
               sha256 =
                 "dac032f4a14adbd174927508709585bd34f9baa2836ff3987b4d071790cb229a";
             };
-            beamDeps  = [ hackney_1_0_6 uuid_0_1_5 poison_1_2_1 ];
+            beamDeps  = [ hackney_1_4_8 uuid_1_0_0 poison_1_2_1 ];
 
             meta = {
               description = ''Raven is an Elixir client for Sentry'';
@@ -34104,10 +39437,10 @@ let
         {
           buildMix,
           fetchHex,
-          timex_1_0_1,
+          timex_1_0_2,
           poison_1_5_2,
-          plug_1_1_1,
-          httpoison_0_8_1
+          plug_1_1_3,
+          httpoison_0_8_2
         }:
           buildMix {
             name = "raygun";
@@ -34118,7 +39451,7 @@ let
               sha256 =
                 "742fe2fef4fff5933802566375ce8efe27eaa2afbb8609c1bca50ef43f30bc3f";
             };
-            beamDeps  = [ timex_1_0_1 poison_1_5_2 plug_1_1_1 httpoison_0_8_1
+            beamDeps  = [ timex_1_0_2 poison_1_5_2 plug_1_1_3 httpoison_0_8_2
                       ];
 
             meta = {
@@ -34158,7 +39491,7 @@ let
 
     readme_md_doc_0_1_2 = callPackage
       (
-        {  buildMix, fetchHex, ex_doc_0_11_4, argument_parser_0_1_1 }:
+        {  buildMix, fetchHex, ex_doc_0_11_4, argument_parser_0_1_3 }:
           buildMix {
             name = "readme_md_doc";
             version = "0.1.2";
@@ -34168,7 +39501,7 @@ let
               sha256 =
                 "3353e8598991afbaa8d12344212fdd9c85413d1664b026a7ee1036573c6f536c";
             };
-            beamDeps  = [ ex_doc_0_11_4 argument_parser_0_1_1 ];
+            beamDeps  = [ ex_doc_0_11_4 argument_parser_0_1_3 ];
 
             meta = {
               description = ''README.md generation tool for small Elixir
@@ -34264,7 +39597,7 @@ let
           fetchHex,
           poolboy_1_5_1,
           poison_1_4_0,
-          plug_1_1_1,
+          plug_1_1_3,
           exos_1_0_0,
           cowboy_1_0_4
         }:
@@ -34280,7 +39613,7 @@ let
             beamDeps  = [
                           poolboy_1_5_1
                           poison_1_4_0
-                          plug_1_1_1
+                          plug_1_1_3
                           exos_1_0_0
                           cowboy_1_0_4
                         ];
@@ -34416,17 +39749,17 @@ let
 
     rebar3_autotest = rebar3_autotest_0_1_1;
 
-    rebar3_cuttlefish_0_5_0 = callPackage
+    rebar3_cuttlefish_0_10_0 = callPackage
       (
         {  buildRebar3, fetchHex, cuttlefish_2_0_7 }:
           buildRebar3 {
             name = "rebar3_cuttlefish";
-            version = "0.5.0";
+            version = "0.10.0";
             src = fetchHex {
               pkg = "rebar3_cuttlefish";
-              version = "0.5.0";
+              version = "0.10.0";
               sha256 =
-                "dd2cdb1e6cbcf5cdb92adec0e359a3ec5f407c49a6182e7fdfcde1b45e790348";
+                "e19a7393b09f2ed35e6ebbac392290d6ff1428e6d8573eac9ce49684b324b6e0";
             };
 
             beamDeps  = [ cuttlefish_2_0_7 ];
@@ -34439,7 +39772,7 @@ let
           }
       ) {};
 
-    rebar3_cuttlefish = rebar3_cuttlefish_0_5_0;
+    rebar3_cuttlefish = rebar3_cuttlefish_0_10_0;
 
     rebar3_diameter_compiler_0_3_1 = callPackage
       (
@@ -34488,17 +39821,17 @@ let
 
     rebar3_elixirc = rebar3_elixirc_0_1_0;
 
-    rebar3_eqc_0_0_8 = callPackage
+    rebar3_eqc_0_0_10 = callPackage
       (
         {  buildRebar3, fetchHex, cf_0_1_2 }:
           buildRebar3 {
             name = "rebar3_eqc";
-            version = "0.0.8";
+            version = "0.0.10";
             src = fetchHex {
               pkg = "rebar3_eqc";
-              version = "0.0.8";
+              version = "0.0.10";
               sha256 =
-                "0a5cd09106a23ccad2b528e5c2f68f7884cba367b03e81c055f1f3fc742d1526";
+                "5f901a542ca237da5106c35ae67224316b4aca7ba16204efc874fd1329414729";
             };
 
             beamDeps  = [ cf_0_1_2 ];
@@ -34512,7 +39845,7 @@ let
           }
       ) {};
 
-    rebar3_eqc = rebar3_eqc_0_0_8;
+    rebar3_eqc = rebar3_eqc_0_0_10;
 
     rebar3_exunit_0_1_1 = callPackage
       (
@@ -34537,20 +39870,20 @@ let
 
     rebar3_exunit = rebar3_exunit_0_1_1;
 
-    rebar3_gpb_plugin_1_2_0 = callPackage
+    rebar3_gpb_plugin_1_3_0 = callPackage
       (
-        {  buildRebar3, fetchHex, gpb_3_18_8 }:
+        {  buildRebar3, fetchHex, gpb_3_20_0 }:
           buildRebar3 {
             name = "rebar3_gpb_plugin";
-            version = "1.2.0";
+            version = "1.3.0";
             src = fetchHex {
               pkg = "rebar3_gpb_plugin";
-              version = "1.2.0";
+              version = "1.3.0";
               sha256 =
-                "a5b305359d17399a2f4bfc26c6f4fd12ad846966642241ff85eb6e04bd1e97b6";
+                "8708e32b99a98d25179a831a7192ed75b15ed396c7e9b927d8bf705f13b3269c";
             };
 
-            beamDeps  = [ gpb_3_18_8 ];
+            beamDeps  = [ gpb_3_20_0 ];
 
             meta = {
               description = ''A rebar3 gpb plugin for compiling .proto files'';
@@ -34560,7 +39893,7 @@ let
           }
       ) {};
 
-    rebar3_gpb_plugin = rebar3_gpb_plugin_1_2_0;
+    rebar3_gpb_plugin = rebar3_gpb_plugin_1_3_0;
 
     rebar3_hex_1_19_0 = callPackage
       (
@@ -34659,17 +39992,17 @@ let
 
     rebar3_neotoma_plugin = rebar3_neotoma_plugin_0_2_0;
 
-    rebar3_proper_0_5_0 = callPackage
+    rebar3_proper_0_6_0 = callPackage
       (
         {  buildRebar3, fetchHex, proper_1_1_1_beta }:
           buildRebar3 {
             name = "rebar3_proper";
-            version = "0.5.0";
+            version = "0.6.0";
             src = fetchHex {
               pkg = "rebar3_proper";
-              version = "0.5.0";
+              version = "0.6.0";
               sha256 =
-                "c73549e279454f6a5887d564addafb779a4dd276460f17af5c26045ef8f44059";
+                "8d951f0ef4cfdf699b1dec0b035a9c00a6ac9544b0145ec28621add21b46298d";
             };
 
             beamDeps  = [ proper_1_1_1_beta ];
@@ -34682,7 +40015,7 @@ let
           }
       ) {};
 
-    rebar3_proper = rebar3_proper_0_5_0;
+    rebar3_proper = rebar3_proper_0_6_0;
 
     rebar3_proper_plugin_0_1_0 = callPackage
       (
@@ -34754,6 +40087,29 @@ let
       ) {};
 
     rebar3_run = rebar3_run_0_2_0;
+
+    rebar3_vendor_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "rebar3_vendor";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "rebar3_vendor";
+              version = "0.1.0";
+              sha256 =
+                "db0c9623e1c45eda4daa04752768d580682a827a314a548e5fd61ffcf950b301";
+            };
+
+            meta = {
+              description = ''Rebar3 plugin for vendoring dependencies.'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "http://github.com/tsloughter/rebar3_vendor";
+            };
+          }
+      ) {};
+
+    rebar3_vendor = rebar3_vendor_0_1_0;
 
     rebar3_yang_plugin_0_2_1 = callPackage
       (
@@ -34871,7 +40227,7 @@ let
 
     recaptcha_1_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "recaptcha";
             version = "1.1.1";
@@ -34881,7 +40237,7 @@ let
               sha256 =
                 "ebfa37443d23d2c70366f3f84f00bd50d59da5583ffde2673bc5ea83667b5751";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''A simple reCaptcha package for Phoenix
@@ -35018,7 +40374,7 @@ let
 
     reddhl_0_0_1 = callPackage
       (
-        {  buildRebar3, fetchHex, poison_1_4_0, httpoison_0_8_1 }:
+        {  buildRebar3, fetchHex, poison_1_4_0, httpoison_0_8_2 }:
           buildRebar3 {
             name = "reddhl";
             version = "0.0.1";
@@ -35029,7 +40385,7 @@ let
                 "4b2a5b1e3119b5b44e57c10e395fc817d977bf7fd72464605efff08266336871";
             };
 
-            beamDeps  = [ poison_1_4_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_4_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''An headline and link puller for Reddit and its
@@ -35041,6 +40397,31 @@ let
       ) {};
 
     reddhl = reddhl_0_0_1;
+
+    redis_pool_0_2_3 = callPackage
+      (
+        {  buildMix, fetchHex, poolboy_1_5_1, eredis_1_0_8 }:
+          buildMix {
+            name = "redis_pool";
+            version = "0.2.3";
+            src = fetchHex {
+              pkg = "redis_pool";
+              version = "0.2.3";
+              sha256 =
+                "e30620f1376b516fb0ccbb40b0f1097e23a21c5676b1cd3fe9fe89fb9f655339";
+            };
+            beamDeps  = [ poolboy_1_5_1 eredis_1_0_8 ];
+
+            meta = {
+              description = ''Redis pool for Elixir. Build on top of eredis and
+                            poolboy.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/le0pard/redis_pool";
+            };
+          }
+      ) {};
+
+    redis_pool = redis_pool_0_2_3;
 
     redis_poolex_0_0_5 = callPackage
       (
@@ -35067,17 +40448,17 @@ let
 
     redis_poolex = redis_poolex_0_0_5;
 
-    redix_0_3_4 = callPackage
+    redix_0_3_6 = callPackage
       (
         {  buildMix, fetchHex, connection_1_0_2 }:
           buildMix {
             name = "redix";
-            version = "0.3.4";
+            version = "0.3.6";
             src = fetchHex {
               pkg = "redix";
-              version = "0.3.4";
+              version = "0.3.6";
               sha256 =
-                "111acb6b4250f2c2aa1757bf9404176a5fc1e2a70cfd2413cbf26e217f61927e";
+                "6c7e3d6bf904eeff99232d28832d3234e4309179dc11516829dd672c8a98a663";
             };
             beamDeps  = [ connection_1_0_2 ];
 
@@ -35090,7 +40471,7 @@ let
           }
       ) {};
 
-    redix = redix_0_3_4;
+    redix = redix_0_3_6;
 
     redo_2_0_1 = callPackage
       (
@@ -35117,7 +40498,7 @@ let
 
     redtube_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "redtube";
             version = "1.0.0";
@@ -35127,7 +40508,7 @@ let
               sha256 =
                 "f9c5b83c3f860c448328079f1250b54f06749d9c1adb593f7e11e45fe8131a0d";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''API Wrapper for Redtube'';
@@ -35163,15 +40544,38 @@ let
 
     ref_inspector = ref_inspector_0_8_0;
 
+    regdom_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "regdom";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "regdom";
+              version = "0.0.1";
+              sha256 =
+                "845cdc5c60e50bac9684fa762ecd42627a84eedf96c7f554fceb0d8f3bfc86bd";
+            };
+
+            meta = {
+              description = ''elixir port of regdom-lib'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/adqio/regdom-lib";
+            };
+          }
+      ) {};
+
+    regdom = regdom_0_0_1;
+
     relax_0_3_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
           poison_1_5_2,
-          plug_1_1_1,
-          ja_serializer_0_7_1,
-          ecto_2_0_0_beta_0,
+          plug_1_1_3,
+          ja_serializer_0_8_1,
+          ecto_2_0_0_beta_2,
           cowboy_1_0_4
         }:
           buildMix {
@@ -35185,9 +40589,9 @@ let
             };
             beamDeps  = [
                           poison_1_5_2
-                          plug_1_1_1
-                          ja_serializer_0_7_1
-                          ecto_2_0_0_beta_0
+                          plug_1_1_3
+                          ja_serializer_0_8_1
+                          ecto_2_0_0_beta_2
                           cowboy_1_0_4
                         ];
 
@@ -35205,17 +40609,17 @@ let
 
     relax = relax_0_3_0;
 
-    relflow_1_0_4 = callPackage
+    relflow_1_0_5 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "relflow";
-            version = "1.0.4";
+            version = "1.0.5";
             src = fetchHex {
               pkg = "relflow";
-              version = "1.0.4";
+              version = "1.0.5";
               sha256 =
-                "e6d9652ed7511aea18fa012d5abc19301acd8cbe81a44a159391086a5be12e1f";
+                "7a991b7e5e390f1cdb16dd0cbb9327bd70ce785e6cebcb6ea25a6693fd836b18";
             };
 
             meta = {
@@ -35225,7 +40629,7 @@ let
           }
       ) {};
 
-    relflow = relflow_1_0_4;
+    relflow = relflow_1_0_5;
 
     relief_0_0_1 = callPackage
       (
@@ -35276,17 +40680,17 @@ let
 
     relisa = relisa_0_1_0;
 
-    relocker_0_0_6 = callPackage
+    relocker_0_0_8 = callPackage
       (
         {  buildMix, fetchHex, exredis_0_2_3 }:
           buildMix {
             name = "relocker";
-            version = "0.0.6";
+            version = "0.0.8";
             src = fetchHex {
               pkg = "relocker";
-              version = "0.0.6";
+              version = "0.0.8";
               sha256 =
-                "8aaaa5f7d118b543764005fa7af47a77d9c74d606603c29005b0637ef1c192df";
+                "e5678d5fe1795384c672a15a80bf91e3007683e5d22bc523eed634635e89bf4b";
             };
             beamDeps  = [ exredis_0_2_3 ];
 
@@ -35298,7 +40702,7 @@ let
           }
       ) {};
 
-    relocker = relocker_0_0_6;
+    relocker = relocker_0_0_8;
 
     reltool_util_1_5_1 = callPackage
       (
@@ -35324,31 +40728,31 @@ let
 
     reltool_util = reltool_util_1_5_1;
 
-    relx_3_17_0 = callPackage
+    relx_3_18_0 = callPackage
       (
         {
           buildRebar3,
           fetchHex,
           providers_1_6_0,
           getopt_0_8_2,
-          erlware_commons_0_18_0,
+          erlware_commons_0_19_0,
           cf_0_2_1,
           bbmustache_1_0_4
         }:
           buildRebar3 {
             name = "relx";
-            version = "3.17.0";
+            version = "3.18.0";
             src = fetchHex {
               pkg = "relx";
-              version = "3.17.0";
+              version = "3.18.0";
               sha256 =
-                "c22f3d8400394787cb67191dea4de1acccf1563f6cd2f1934bf2a13a525c5ef6";
+                "e76e0446b8d1b113f2b7dcc713f032ccdf1dbda33d76edfeb19c2b6b686dcad7";
             };
 
             beamDeps  = [
                           providers_1_6_0
                           getopt_0_8_2
-                          erlware_commons_0_18_0
+                          erlware_commons_0_19_0
                           cf_0_2_1
                           bbmustache_1_0_4
                         ];
@@ -35361,32 +40765,32 @@ let
           }
       ) {};
 
-    relx = relx_3_17_0;
+    relx = relx_3_18_0;
 
-    relx_3_3_1 = callPackage
+    relx_3_3_2 = callPackage
       (
         {
           buildRebar3,
           fetchHex,
           providers_1_4_1,
           getopt_0_8_2,
-          erlware_commons_0_14_0,
+          erlware_commons_0_15_0,
           bbmustache_1_0_3
         }:
           buildRebar3 {
             name = "relx";
-            version = "3.3.1";
+            version = "3.3.2";
             src = fetchHex {
               pkg = "relx";
-              version = "3.3.1";
+              version = "3.3.2";
               sha256 =
-                "782fdce1daccb5dca6b372cdffb979cda3431ac245db5fafe93247f4fdab049b";
+                "4c97df0ceb82890b3612b9c30e8d865e3d738fc69186bc94da0f75f619f7195a";
             };
 
             beamDeps  = [
                           providers_1_4_1
                           getopt_0_8_2
-                          erlware_commons_0_14_0
+                          erlware_commons_0_15_0
                           bbmustache_1_0_3
                         ];
 
@@ -35538,8 +40942,8 @@ let
           buildMix,
           fetchHex,
           poison_2_1_0,
-          httpoison_0_8_1,
-          floki_0_7_1,
+          httpoison_0_8_2,
+          floki_0_8_0,
           feeder_ex_0_0_2
         }:
           buildMix {
@@ -35553,8 +40957,8 @@ let
             };
             beamDeps  = [
                           poison_2_1_0
-                          httpoison_0_8_1
-                          floki_0_7_1
+                          httpoison_0_8_2
+                          floki_0_8_0
                           feeder_ex_0_0_2
                         ];
 
@@ -35603,7 +41007,7 @@ let
 
     resin_0_4_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "resin";
             version = "0.4.1";
@@ -35613,7 +41017,7 @@ let
               sha256 =
                 "c6bdfd13e91cbc289df91440e216b91aa590a7dafe59958b0197cedd8cfef792";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Pour resin in your plug pipeline to add
@@ -35655,9 +41059,9 @@ let
           buildMix,
           fetchHex,
           poison_1_5_2,
-          mock_0_1_1,
+          mock_0_1_3,
           inflex_1_4_1,
-          httpotion_2_1_0
+          httpotion_2_2_2
         }:
           buildMix {
             name = "rest_client";
@@ -35669,7 +41073,7 @@ let
                 "b537f9bc91fbf09ecb6c5890c0e5a01f20de869bc804f730688f61d6acd96cf8";
             };
             beamDeps  = [
-                          poison_1_5_2 mock_0_1_1 inflex_1_4_1 httpotion_2_1_0
+                          poison_1_5_2 mock_0_1_3 inflex_1_4_1 httpotion_2_2_2
                         ];
 
             meta = {
@@ -35684,17 +41088,17 @@ let
 
     rest_client = rest_client_0_0_1;
 
-    rethinkdb_0_3_2 = callPackage
+    rethinkdb_0_4_0 = callPackage
       (
         {  buildMix, fetchHex, poison_1_0_3, connection_1_0_2 }:
           buildMix {
             name = "rethinkdb";
-            version = "0.3.2";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "rethinkdb";
-              version = "0.3.2";
+              version = "0.4.0";
               sha256 =
-                "b97da3f1281575ac4e24d1cc0ce20a7f5a2e05bc7d212e4e58e0c9f2411a1c8a";
+                "ca2d13a226987edf6943f7af968510b1836becc3c14b42667f82cd57bbcd4e8f";
             };
             beamDeps  = [ poison_1_0_3 connection_1_0_2 ];
 
@@ -35706,7 +41110,31 @@ let
           }
       ) {};
 
-    rethinkdb = rethinkdb_0_3_2;
+    rethinkdb = rethinkdb_0_4_0;
+
+    rethinkdb_changefeed_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, rethinkdb_0_4_0, connection_1_0_2 }:
+          buildMix {
+            name = "rethinkdb_changefeed";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "rethinkdb_changefeed";
+              version = "0.0.1";
+              sha256 =
+                "c895db0d57d55c7c7ab4aeb6ce167c82de1d0f7a884c93d4ea0cdea16df11b82";
+            };
+            beamDeps  = [ rethinkdb_0_4_0 connection_1_0_2 ];
+
+            meta = {
+              description = ''RethinkDB Supervised Changefeeds'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/hamiltop/rethinkdb_changefeed";
+            };
+          }
+      ) {};
+
+    rethinkdb_changefeed = rethinkdb_changefeed_0_0_1;
 
     reup_0_1_0 = callPackage
       (
@@ -35764,7 +41192,7 @@ let
 
     revision_plate_ex_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "revision_plate_ex";
             version = "0.1.0";
@@ -35774,7 +41202,7 @@ let
               sha256 =
                 "6c88a514ae5b36999fd52c01cc3ea746f8ba9c7900b47f4758a65c197b8aed71";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''Plug application and middleware that serves
@@ -35787,17 +41215,17 @@ let
 
     revision_plate_ex = revision_plate_ex_0_1_0;
 
-    rfc3339_0_2_0 = callPackage
+    rfc3339_0_9_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildMix, fetchHex }:
+          buildMix {
             name = "rfc3339";
-            version = "0.2.0";
+            version = "0.9.0";
             src = fetchHex {
               pkg = "rfc3339";
-              version = "0.2.0";
+              version = "0.9.0";
               sha256 =
-                "992ebf382d6982f2fff48928394d4d50d413b7a4abe576ba518b92c82ac2eb99";
+                "182314de35c9f4180b22eb5f22916d8d7a799c1109a060c752970273a9332ad6";
             };
 
             meta = {
@@ -35808,7 +41236,7 @@ let
           }
       ) {};
 
-    rfc3339 = rfc3339_0_2_0;
+    rfc3339 = rfc3339_0_9_0;
 
     riak_1_0_0 = callPackage
       (
@@ -35835,6 +41263,63 @@ let
       ) {};
 
     riak = riak_1_0_0;
+
+    riak_core_ng_2_2_3 = callPackage
+      (
+        {
+          buildRebar3,
+          fetchHex,
+          riak_sysmon_2_1_2,
+          riak_ensemble_2_1_3,
+          pbkdf2_2_0_0,
+          lager_3_0_2,
+          goldrush_0_1_7,
+          exometer_core_1_0_0,
+          erocksdb_0_4_1,
+          eleveldb_2_1_3,
+          edown_0_7_0,
+          cuttlefish_2_0_7,
+          clique_3_0_1,
+          chash_0_1_1,
+          basho_stats_1_0_3,
+          basho_poolboy_0_8_1_p3
+        }:
+          buildRebar3 {
+            name = "riak_core_ng";
+            version = "2.2.3";
+            src = fetchHex {
+              pkg = "riak_core_ng";
+              version = "2.2.3";
+              sha256 =
+                "41cc44bf8e0c6a18858d9a5327bc0098526d6c5d272b3e73bf3ff19019b53cd3";
+            };
+
+            beamDeps  = [
+                          riak_sysmon_2_1_2
+                          riak_ensemble_2_1_3
+                          pbkdf2_2_0_0
+                          lager_3_0_2
+                          goldrush_0_1_7
+                          exometer_core_1_0_0
+                          erocksdb_0_4_1
+                          eleveldb_2_1_3
+                          edown_0_7_0
+                          cuttlefish_2_0_7
+                          clique_3_0_1
+                          chash_0_1_1
+                          basho_stats_1_0_3
+                          basho_poolboy_0_8_1_p3
+                        ];
+
+            meta = {
+              description = ''Riak Core'';
+              license = stdenv.lib.licenses.apsl20;
+              homepage = "https://github.com/project-fifo/riak_core";
+            };
+          }
+      ) {};
+
+    riak_core_ng = riak_core_ng_2_2_3;
 
     riak_dt_2_1_1 = callPackage
       (
@@ -35886,8 +41371,8 @@ let
 
     riak_pb_2_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex, protobuffs_0_8_2, hamcrest_0_1_1 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, protobuffs_0_8_2, hamcrest_0_1_1 }:
+          buildErlangMk {
             name = "riak_pb";
             version = "2.1.0";
             src = fetchHex {
@@ -35896,7 +41381,6 @@ let
               sha256 =
                 "76309b9b831d276bf9abf92362183030ed63910a2e153f1f8a389e97dec6c287";
             };
-
             beamDeps  = [ protobuffs_0_8_2 hamcrest_0_1_1 ];
 
             meta = {
@@ -35936,8 +41420,8 @@ let
 
     riakc_2_1_1 = callPackage
       (
-        {  buildRebar3, fetchHex, riak_pb_2_1_0 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, riak_pb_2_1_0 }:
+          buildErlangMk {
             name = "riakc";
             version = "2.1.1";
             src = fetchHex {
@@ -35946,7 +41430,6 @@ let
               sha256 =
                 "4f7141c03529d4f1c28c71eafcd797be0a538ba21d5d6923a17a9ca9e64e744e";
             };
-
             beamDeps  = [ riak_pb_2_1_0 ];
 
             meta = {
@@ -35961,7 +41444,7 @@ let
 
     riboflavin_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "riboflavin";
             version = "0.0.2";
@@ -35971,7 +41454,7 @@ let
               sha256 =
                 "cc4ac4c80b6d591deaea136a3d055eba4ead6bbe2fc9b220a4432f160d0ddec6";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Backblaze B2 client.'';
@@ -36010,7 +41493,7 @@ let
 
     robotex_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_1_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_1_0 }:
           buildMix {
             name = "robotex";
             version = "0.0.1";
@@ -36020,7 +41503,7 @@ let
               sha256 =
                 "ae1c618b20e3847f4c372350bdda3b0dc577e1491310ef97fd5869c4f750533e";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_1_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_1_0 ];
 
             meta = {
               description = ''Robotex is a client for the Telegram Bot API.'';
@@ -36058,19 +41541,19 @@ let
 
     rogger = rogger_0_1_0;
 
-    rollbax_0_5_3 = callPackage
+    rollbax_0_5_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_0_3, hackney_1_4_8 }:
+        {  buildMix, fetchHex, poison_1_0_3, hackney_1_6_0 }:
           buildMix {
             name = "rollbax";
-            version = "0.5.3";
+            version = "0.5.4";
             src = fetchHex {
               pkg = "rollbax";
-              version = "0.5.3";
+              version = "0.5.4";
               sha256 =
-                "0f24d041c932043915a14ab4e186bd3f1613bccee30ad251bb79a60533680336";
+                "e089f9c2ea51447111c14e2491e0b2d27eaff9efc6f1bfda5edcd64881923197";
             };
-            beamDeps  = [ poison_1_0_3 hackney_1_4_8 ];
+            beamDeps  = [ poison_1_0_3 hackney_1_6_0 ];
 
             meta = {
               description = ''Exception tracking and logging from Elixir to
@@ -36081,11 +41564,11 @@ let
           }
       ) {};
 
-    rollbax = rollbax_0_5_3;
+    rollbax = rollbax_0_5_4;
 
     rollex_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, sfmt_0_12_2 }:
+        {  buildMix, fetchHex, sfmt_0_12_7 }:
           buildMix {
             name = "rollex";
             version = "0.4.0";
@@ -36095,7 +41578,7 @@ let
               sha256 =
                 "53410bbd7687ff751b51b9737965bff1ba9c3d0673af65752f4ae3be0de1b44c";
             };
-            beamDeps  = [ sfmt_0_12_2 ];
+            beamDeps  = [ sfmt_0_12_7 ];
 
             meta = {
               description = ''Elixir library using a Pratt Parser algorithm to
@@ -36419,6 +41902,29 @@ let
 
     safetybox = safetybox_0_1_2;
 
+    salsa20_0_3_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "salsa20";
+            version = "0.3.0";
+            src = fetchHex {
+              pkg = "salsa20";
+              version = "0.3.0";
+              sha256 =
+                "4b2c2fc873c5443443220966f8c87e73d3d99725cd99cb93f6d752ce3cf3c335";
+            };
+
+            meta = {
+              description = ''Salsa20 symmetric stream cipher'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/salsa20_ex";
+            };
+          }
+      ) {};
+
+    salsa20 = salsa20_0_3_0;
+
     saltie_0_3_2 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -36444,7 +41950,7 @@ let
 
     sap_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, control_0_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, control_0_0_4 }:
           buildMix {
             name = "sap";
             version = "0.0.2";
@@ -36454,7 +41960,7 @@ let
               sha256 =
                 "63f2db3cbbb753eac51177783463fb364dd560745bf5e4e8ba10a237e557903c";
             };
-            beamDeps  = [ plug_1_1_1 control_0_0_4 ];
+            beamDeps  = [ plug_1_1_3 control_0_0_4 ];
 
             meta = {
               longDescription = ''Sap is a toolkit for Plug applications to
@@ -36566,7 +42072,7 @@ let
 
     scaffold_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, gitex_0_1_0, configparser_ex_0_2_0 }:
+        {  buildMix, fetchHex, gitex_0_1_0, configparser_ex_0_2_1 }:
           buildMix {
             name = "scaffold";
             version = "0.0.5";
@@ -36576,7 +42082,7 @@ let
               sha256 =
                 "fad499b712a576bc9d0f4842494baf9ec8d4c388f99c14f74654b1dbd158945c";
             };
-            beamDeps  = [ gitex_0_1_0 configparser_ex_0_2_0 ];
+            beamDeps  = [ gitex_0_1_0 configparser_ex_0_2_1 ];
 
             meta = {
               description = ''A mix task for creating new projects based on
@@ -36643,8 +42149,8 @@ let
           fetchHex,
           timex_1_0_0_rc4,
           parallel_0_0_3,
-          httpoison_0_8_1,
-          floki_0_7_1,
+          httpoison_0_8_2,
+          floki_0_8_0,
           codepagex_0_1_2
         }:
           buildMix {
@@ -36659,8 +42165,8 @@ let
             beamDeps  = [
                           timex_1_0_0_rc4
                           parallel_0_0_3
-                          httpoison_0_8_1
-                          floki_0_7_1
+                          httpoison_0_8_2
+                          floki_0_8_0
                           codepagex_0_1_2
                         ];
 
@@ -36677,7 +42183,7 @@ let
 
     scrivener_1_1_2 = callPackage
       (
-        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, postgrex_0_11_1, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "scrivener";
             version = "1.1.2";
@@ -36687,7 +42193,7 @@ let
               sha256 =
                 "9be46bdce0d8179ece431226eb9eddbe13bc158d647a3daee64a49bc26ca9dcf";
             };
-            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ postgrex_0_11_1 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''Paginate your Ecto queries'';
@@ -36699,25 +42205,50 @@ let
 
     scrivener = scrivener_1_1_2;
 
-    scrivener_html_1_0_8 = callPackage
+    scrivener_headers_1_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, scrivener_1_1_2, plug_1_1_3 }:
+          buildMix {
+            name = "scrivener_headers";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "scrivener_headers";
+              version = "1.0.1";
+              sha256 =
+                "2b004352dc5f394b33d4414ce9ebf379db7a9c4b1c92130d73a52e0a16efc93f";
+            };
+            beamDeps  = [ scrivener_1_1_2 plug_1_1_3 ];
+
+            meta = {
+              description = ''Helpers for paginating API responses with
+                            Scrivener and HTTP headers'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/doomspork/scrivener_headers";
+            };
+          }
+      ) {};
+
+    scrivener_headers = scrivener_headers_1_0_1;
+
+    scrivener_html_1_0_9 = callPackage
       (
         {
           buildMix,
           fetchHex,
           scrivener_1_1_2,
-          phoenix_html_2_5_0,
+          phoenix_html_2_5_1,
           phoenix_1_1_4
         }:
           buildMix {
             name = "scrivener_html";
-            version = "1.0.8";
+            version = "1.0.9";
             src = fetchHex {
               pkg = "scrivener_html";
-              version = "1.0.8";
+              version = "1.0.9";
               sha256 =
-                "1bea661f9940acae0ef28949c35e61dd1d314d0ac93c333ed85c7a37593a6406";
+                "e65645698e35463e1f0f553f76bf24d47a905870837b7c7544220d3e71c3a23b";
             };
-            beamDeps  = [ scrivener_1_1_2 phoenix_html_2_5_0 phoenix_1_1_4 ];
+            beamDeps  = [ scrivener_1_1_2 phoenix_html_2_5_1 phoenix_1_1_4 ];
 
             meta = {
               description = ''HTML helpers for Scrivener'';
@@ -36727,11 +42258,89 @@ let
           }
       ) {};
 
-    scrivener_html = scrivener_html_1_0_8;
+    scrivener_html = scrivener_html_1_0_9;
+
+    seat_json_0_0_18 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "seat_json";
+            version = "0.0.18";
+            src = fetchHex {
+              pkg = "seat_json";
+              version = "0.0.18";
+              sha256 =
+                "d0e7339fb24e156e53aa4cc733dda90d1c3bfa5f5fc38b7e293b690e7289c516";
+            };
+
+            meta = {
+              description = ''Simple Elixir Api Testing lib'';
+
+            };
+          }
+      ) {};
+
+    seat_json = seat_json_0_0_18;
+
+    sec_company_filings_rss_feed_parser_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, floki_0_7_2 }:
+          buildMix {
+            name = "sec_company_filings_rss_feed_parser";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "sec_company_filings_rss_feed_parser";
+              version = "0.0.2";
+              sha256 =
+                "b9c07c900a0afd5d8b4df68d4673d6fbb30ff50fe93579bab5133b748dde90a2";
+            };
+            beamDeps  = [ floki_0_7_2 ];
+
+            meta = {
+              longDescription = ''XML Parser for a Company`s SEC Filings Feed
+                                An example of such a feed can be found here:
+                                https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001418091&CIK=0001418091&type=&dateb=&owner=exclude&start=0&count=40&output=atom'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/vikram7/sec_company_filings_rss_feed_parser";
+            };
+          }
+      ) {};
+
+    sec_company_filings_rss_feed_parser =
+      sec_company_filings_rss_feed_parser_0_0_2;
+
+    sec_recent_filings_rss_feed_parser_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex, floki_0_7_2 }:
+          buildMix {
+            name = "sec_recent_filings_rss_feed_parser";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "sec_recent_filings_rss_feed_parser";
+              version = "0.0.3";
+              sha256 =
+                "e58bc230abd16e972fc49e25db63afd5d2b7aa5b03c9c2d31f03bbd311ec7cee";
+            };
+            beamDeps  = [ floki_0_7_2 ];
+
+            meta = {
+              longDescription = ''XML Parser for the SEC`s Latest Filings Feed
+                                An example of such a feed can be found here:
+                                https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&CIK=&type=10-K&company=&dateb=&owner=include&start=0&count=40&output=atom'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/vikram7/sec_latest_filings_rss_feed_parser";
+            };
+          }
+      ) {};
+
+    sec_recent_filings_rss_feed_parser =
+      sec_recent_filings_rss_feed_parser_0_0_3;
 
     secure_headers_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, pipe_0_0_2 }:
+        {  buildMix, fetchHex, plug_1_1_3, pipe_0_0_2 }:
           buildMix {
             name = "secure_headers";
             version = "0.0.1";
@@ -36741,7 +42350,7 @@ let
               sha256 =
                 "df5ffa08c91a270da9a167edac6181c87a8467e7c98d65651bd6b1c928e75cb1";
             };
-            beamDeps  = [ plug_1_1_1 pipe_0_0_2 ];
+            beamDeps  = [ plug_1_1_3 pipe_0_0_2 ];
 
             meta = {
               description = ''HTTP Security Headers for Phoenix or Plug'';
@@ -36753,19 +42362,19 @@ let
 
     secure_headers = secure_headers_0_0_1;
 
-    secure_password_0_3_1 = callPackage
+    secure_password_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0, comeonin_2_1_1 }:
+        {  buildMix, fetchHex, ecto_0_2_7, comeonin_2_3_0 }:
           buildMix {
             name = "secure_password";
-            version = "0.3.1";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "secure_password";
-              version = "0.3.1";
+              version = "0.4.0";
               sha256 =
-                "04d91c55486177940d480e802f28f8ee4b5ac6590ed1e0a3ab16603d39c35673";
+                "b4f0ffe0bbac3e629356fa508438c23b6a99f6aac17a6b1f6314250e2c5a9a68";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 comeonin_2_1_1 ];
+            beamDeps  = [ ecto_0_2_7 comeonin_2_3_0 ];
 
             meta = {
               description = ''A port of Rails has_secure_password for Ecto
@@ -36776,7 +42385,7 @@ let
           }
       ) {};
 
-    secure_password = secure_password_0_3_1;
+    secure_password = secure_password_0_4_0;
 
     secure_random_0_1_1 = callPackage
       (
@@ -36828,7 +42437,7 @@ let
 
     segment_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_3_1, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, poison_1_3_1, httpotion_2_2_2 }:
           buildMix {
             name = "segment";
             version = "0.1.0";
@@ -36838,7 +42447,7 @@ let
               sha256 =
                 "1747bf7a3f8d524d28890ce4499ef30a635f91c826d62e2b95711061faf02423";
             };
-            beamDeps  = [ poison_1_3_1 httpotion_2_1_0 ];
+            beamDeps  = [ poison_1_3_1 httpotion_2_2_2 ];
 
             meta = {
               description = ''analytics_elixir'';
@@ -36899,6 +42508,32 @@ let
 
     semver = semver_0_1_2;
 
+    sendgrid_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
+          buildMix {
+            name = "sendgrid";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "sendgrid";
+              version = "0.0.2";
+              sha256 =
+                "b9f27a1ae636688941998174b8595d9a5a4b24b870019f8a0009202f919bf151";
+            };
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''A wrapper for SendGrid`s API to create composable
+                            emails.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/alexgaribay/sendgrid_elixir
+";
+            };
+          }
+      ) {};
+
+    sendgrid = sendgrid_0_0_2;
+
     sentient_0_0_2 = callPackage
       (
         {  buildMix, fetchHex, poison_1_5_2 }:
@@ -36923,7 +42558,7 @@ let
 
     sentient = sentient_0_0_2;
 
-    sentinel_0_0_4 = callPackage
+    sentinel_0_1_0 = callPackage
       (
         {
           buildMix,
@@ -36932,37 +42567,37 @@ let
           secure_random_0_2_0,
           postgrex_0_11_1,
           phoenix_1_1_4,
-          jose_1_6_1,
+          jose_1_7_3,
           guardian_db_0_4_0,
-          guardian_0_9_1,
+          guardian_0_10_1,
           ex_doc_0_11_4,
-          ecto_2_0_0_beta_0,
+          ecto_2_0_0_beta_2,
           earmark_0_2_1,
           cowboy_1_0_4,
-          comeonin_2_1_1
+          comeonin_2_3_0
         }:
           buildMix {
             name = "sentinel";
-            version = "0.0.4";
+            version = "0.1.0";
             src = fetchHex {
               pkg = "sentinel";
-              version = "0.0.4";
+              version = "0.1.0";
               sha256 =
-                "a97e13dd2c629eea7f5b6f2b818869e6f206a320eb3bfcfc9b315aa08cbeeac4";
+                "8fd20d50c00a9a431308e13aac5910e46d44b347e9bb5147f83da25c768bff82";
             };
             beamDeps  = [
                           ueberauth_0_2_0
                           secure_random_0_2_0
                           postgrex_0_11_1
                           phoenix_1_1_4
-                          jose_1_6_1
+                          jose_1_7_3
                           guardian_db_0_4_0
-                          guardian_0_9_1
+                          guardian_0_10_1
                           ex_doc_0_11_4
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                           earmark_0_2_1
                           cowboy_1_0_4
-                          comeonin_2_1_1
+                          comeonin_2_3_0
                         ];
 
             meta = {
@@ -36975,11 +42610,11 @@ let
           }
       ) {};
 
-    sentinel = sentinel_0_0_4;
+    sentinel = sentinel_0_1_0;
 
     sentry_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0, comeonin_1_6_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2, comeonin_1_6_0 }:
           buildMix {
             name = "sentry";
             version = "0.3.2";
@@ -36989,7 +42624,7 @@ let
               sha256 =
                 "fd4aa8c6b5d51b85e452a01292fbd437dfbfc5d37515c13f4a9a94441dc89609";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 comeonin_1_6_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 comeonin_1_6_0 ];
 
             meta = {
               description = ''Simplified authentication and authorization
@@ -37002,10 +42637,64 @@ let
 
     sentry = sentry_0_3_2;
 
+    sequences_1_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "sequences";
+            version = "1.1.0";
+            src = fetchHex {
+              pkg = "sequences";
+              version = "1.1.0";
+              sha256 =
+                "e087e078b8813052213d0812b4fe1d8ffbdbdf7d6379c174b78cfd22b9058fb0";
+            };
+
+            meta = {
+              longDescription = ''The Sequences module defines multiple methods
+                                that return a Stream of numbers, usually
+                                integers. The different Streams can be tapped in
+                                on-demand, by running any `Enum` function on
+                                them. For efficiency, these sequences are
+                                calculated in a way that re-uses previously
+                                calculated results whenever possible. List of
+                                included sequences: •
+                                Sequences.integers(start, step): a helper
+                                function to create any kind of lazy integer
+                                sequence with a regular step distance. •
+                                Sequences.integers •
+                                Sequences.positive_integers •
+                                Sequences.odd_integers •
+                                Sequences.even_integers • Sequences.zeroes •
+                                Sequences.ones • Sequences.factorials •
+                                Sequences.fibonacci • Sequences.catalan •
+                                Sequences.triangular • Sequences.primes •
+                                Sequences.squareroot_tuple(n): Returns a tuple
+                                with an integer part (single integer number) and
+                                decimal part (digit stream) •
+                                Sequences.squareroot_tuple(n, num_of_digits):
+                                Returns a tuple with an integer part (single
+                                integer number) and decimal part (digit list
+                                with given length) •
+                                Sequences.squareroot_decimals(n): Returns
+                                decimal stream of the decimal expansion of a
+                                square root. •
+                                Sequences.squareroot_expansion/1: Returns a
+                                digit stream of the decimal expansion of a
+                                square root, including the digits of the
+                                integral part at the front.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/Qqwy/elixir-sequences";
+            };
+          }
+      ) {};
+
+    sequences = sequences_1_1_0;
+
     serial_0_1_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "serial";
             version = "0.1.2";
             src = fetchHex {
@@ -37074,19 +42763,18 @@ let
 
     setup = setup_1_7_0;
 
-    sfmt_0_12_2 = callPackage
+    sfmt_0_12_7 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "sfmt";
-            version = "0.12.2";
+            version = "0.12.7";
             src = fetchHex {
               pkg = "sfmt";
-              version = "0.12.2";
+              version = "0.12.7";
               sha256 =
-                "8c541998bedb7d6bfe699ba6ee319f563190ead5a01f30c02ff504c20f4e8e2a";
+                "4e295f5053b4a525c00b990cd88b38e492716e7e0c62abf0c626d9fea0ba800e";
             };
-            compilePorts = true;
 
             meta = {
               description = ''SIMD-oriented Fast Mersenne Twister (SFMT) for
@@ -37099,8 +42787,8 @@ let
 
     sfmt_0_13_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "sfmt";
             version = "0.13.0";
             src = fetchHex {
@@ -37109,7 +42797,6 @@ let
               sha256 =
                 "aaacd4824f2b3e439d360bcce6079863da1e7f564014602e9e7815f8740b6358";
             };
-            compilePorts = true;
 
             meta = {
               description = ''SIMD-oriented Fast Mersenne Twister (SFMT) for
@@ -37170,7 +42857,7 @@ let
 
     shameless_plug_1_0_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "shameless_plug";
             version = "1.0.0";
@@ -37180,7 +42867,7 @@ let
               sha256 =
                 "65c8af34d1853e85c8412d6ca15fd39354668c09c124cbc8e35cffea59d3a617";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''A novelty Plug to remove the word "shame" from
@@ -37243,8 +42930,8 @@ let
 
     shotgun_0_2_2 = callPackage
       (
-        {  buildRebar3, fetchHex, gun_1_0_0_pre_1 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, gun_1_0_0_pre_1 }:
+          buildErlangMk {
             name = "shotgun";
             version = "0.2.2";
             src = fetchHex {
@@ -37253,7 +42940,6 @@ let
               sha256 =
                 "d2993953cff0c82eb47744206ae171a141deeff84539fe2f58068e3909ae066c";
             };
-
             beamDeps  = [ gun_1_0_0_pre_1 ];
 
             meta = {
@@ -37266,8 +42952,8 @@ let
 
     shotgun_0_2_3 = callPackage
       (
-        {  buildRebar3, fetchHex, gun_1_0_0_pre_1, cowlib_1_0_2 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, gun_1_0_0_pre_1, cowlib_1_0_2 }:
+          buildErlangMk {
             name = "shotgun";
             version = "0.2.3";
             src = fetchHex {
@@ -37276,7 +42962,6 @@ let
               sha256 =
                 "7b40dcf0faebf698fea541db5f6338f555d0c9c828493e9953d1748d9e5280b5";
             };
-
             beamDeps  = [ gun_1_0_0_pre_1 cowlib_1_0_2 ];
 
             meta = {
@@ -37396,6 +43081,29 @@ let
 
     sidejob = sidejob_2_0_0;
 
+    sideshow_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "sideshow";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "sideshow";
+              version = "0.0.1";
+              sha256 =
+                "b1816b137826a6c5da5d19b0d52f1f0a1263756e1598ece8cd31be95a74e1a85";
+            };
+
+            meta = {
+              description = ''Background jobs OTP style'';
+              license = stdenv.lib.licenses.gpl3;
+              homepage = "https://github.com/pavlos/sideshow";
+            };
+          }
+      ) {};
+
+    sideshow = sideshow_0_0_1;
+
     sidetask_1_1_0 = callPackage
       (
         {  buildMix, fetchHex, sidejob_2_0_0 }:
@@ -37428,28 +43136,6 @@ let
       ) {};
 
     sidetask = sidetask_1_1_0;
-
-    signaturex_0_0_8 = callPackage
-      (
-        {  buildMix, fetchHex }:
-          buildMix {
-            name = "signaturex";
-            version = "0.0.8";
-            src = fetchHex {
-              pkg = "signaturex";
-              version = "0.0.8";
-              sha256 =
-                "5897373a265e41245a251d828e4782457f129d5c49179a29079ff86139beeb0e";
-            };
-
-            meta = {
-              description = ''Simple key/secret based authentication for
-                            APIs'';
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/edgurgel/signaturex";
-            };
-          }
-      ) {};
 
     signaturex_1_0_1 = callPackage
       (
@@ -37550,7 +43236,7 @@ let
 
     simple_format_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, phoenix_html_2_5_0 }:
+        {  buildMix, fetchHex, phoenix_html_2_5_1 }:
           buildMix {
             name = "simple_format";
             version = "0.1.0";
@@ -37560,7 +43246,7 @@ let
               sha256 =
                 "747cc74f743f89bcced219282f8639743f679b65183defecc7721f46e31dfcd0";
             };
-            beamDeps  = [ phoenix_html_2_5_0 ];
+            beamDeps  = [ phoenix_html_2_5_1 ];
 
             meta = {
               description = ''Rail`s simple_format helper for Phoenix.HTML'';
@@ -37602,11 +43288,11 @@ let
         {
           buildMix,
           fetchHex,
-          timex_1_0_1,
+          timex_1_0_2,
           sweet_xml_0_6_1,
           poison_1_5_2,
           ibrowse_4_2_2,
-          httpotion_2_2_0
+          httpotion_2_2_2
         }:
           buildMix {
             name = "simplex";
@@ -37618,11 +43304,11 @@ let
                 "43dfdc62aa2c4919464615b5acc4f03b028b3b9875fa72c128563e7d794ba2a2";
             };
             beamDeps  = [
-                          timex_1_0_1
+                          timex_1_0_2
                           sweet_xml_0_6_1
                           poison_1_5_2
                           ibrowse_4_2_2
-                          httpotion_2_2_0
+                          httpotion_2_2_2
                         ];
 
             meta = {
@@ -37636,10 +43322,60 @@ let
 
     simplex = simplex_0_4_0;
 
-    siphash_3_0_0 = callPackage
+    simplify_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, geo_1_0_1, distance_0_1_2 }:
+          buildMix {
+            name = "simplify";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "simplify";
+              version = "0.2.0";
+              sha256 =
+                "1b1af67f19e3a6589361665f4ca80e27873107bc9ef579e08fce43e52f62cffd";
+            };
+            beamDeps  = [ poison_2_1_0 geo_1_0_1 distance_0_1_2 ];
+
+            meta = {
+              longDescription = ''Implementation of the
+                                Ramer–Douglas–Peucker algorithm for reducing
+                                the number of points used to represent a
+                                curve.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/simplify_ex";
+            };
+          }
+      ) {};
+
+    simplify = simplify_0_2_0;
+
+    simpre_0_1_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
+            name = "simpre";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "simpre";
+              version = "0.1.0";
+              sha256 =
+                "db0a48789360d2a683ea3a8605c2fb0134eb9fb63f07c0069be78906cdf5fb94";
+            };
+
+            meta = {
+              description = ''Simple Process Registry'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/yuce/simpre.git";
+            };
+          }
+      ) {};
+
+    simpre = simpre_0_1_0;
+
+    siphash_3_0_0 = callPackage
+      (
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "siphash";
             version = "3.0.0";
             src = fetchHex {
@@ -37648,7 +43384,6 @@ let
               sha256 =
                 "91b8efc8f3e26713c1bb91a91c9b6a8f6a5f949986622b1d548e8fee1cde7347";
             };
-            compilePorts = true;
 
             meta = {
               description = ''Elixir implementation of the SipHash hash
@@ -37666,9 +43401,9 @@ let
         {
           buildMix,
           fetchHex,
-          httpoison_0_8_1,
+          httpoison_0_8_2,
           html_entities_0_3_0,
-          floki_0_7_1
+          floki_0_8_0
         }:
           buildMix {
             name = "sips_downloader";
@@ -37679,7 +43414,7 @@ let
               sha256 =
                 "358d10e61f2d8b03e644194d09f1ca6c9c339bb9c80371eba21576571a857f94";
             };
-            beamDeps  = [ httpoison_0_8_1 html_entities_0_3_0 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_8_2 html_entities_0_3_0 floki_0_8_0 ];
 
             meta = {
               description = ''Automatically download new ElixirSips episodes'';
@@ -37715,19 +43450,19 @@ let
 
     skills = skills_0_0_1;
 
-    skroutz_0_0_1 = callPackage
+    skroutz_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "skroutz";
-            version = "0.0.1";
+            version = "0.1.0";
             src = fetchHex {
               pkg = "skroutz";
-              version = "0.0.1";
+              version = "0.1.0";
               sha256 =
-                "08d6703c21e2371e68cae0c559d7a1ff119f767662e2f76a0f3a53551742721b";
+                "af54cd490adf503f378f57806b4c12bbd2506fa24f6e4f7c1cbceaf8c86d2b51";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir library for accessing the Skroutz API'';
@@ -37737,7 +43472,7 @@ let
           }
       ) {};
 
-    skroutz = skroutz_0_0_1;
+    skroutz = skroutz_0_1_0;
 
     slack_0_3_0 = callPackage
       (
@@ -37763,7 +43498,7 @@ let
 
     slack_0_4_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_1_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_1_0 }:
           buildMix {
             name = "slack";
             version = "0.4.2";
@@ -37773,7 +43508,7 @@ let
               sha256 =
                 "a32ced7527706b6adaae428eb03836260bdcf560be6ef92662ea6ec1541e687f";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_1_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_1_0 ];
 
             meta = {
               description = ''A Slack Real Time Messaging API client.'';
@@ -37784,6 +43519,30 @@ let
       ) {};
 
     slack = slack_0_4_2;
+
+    slack_logger_backend_0_1_3 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "slack_logger_backend";
+            version = "0.1.3";
+            src = fetchHex {
+              pkg = "slack_logger_backend";
+              version = "0.1.3";
+              sha256 =
+                "12e9809e981abb0243f1fe72a4cb331142d9d3ce4425822c28f5b3d51ed7a5fe";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''A logger backend for posting errors to Slack.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/craigp/slack_logger_backend";
+            };
+          }
+      ) {};
+
+    slack_logger_backend = slack_logger_backend_0_1_3;
 
     slack_webhook_0_0_2 = callPackage
       (
@@ -37813,7 +43572,7 @@ let
     slacker_0_0_2 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, inflex_1_0_0, httpoison_0_8_1
+          buildMix, fetchHex, poison_1_5_2, inflex_1_0_0, httpoison_0_8_2
         }:
           buildMix {
             name = "slacker";
@@ -37824,7 +43583,7 @@ let
               sha256 =
                 "4d3a110772e7b273a6d771bf4bc869fd13cb3bb9e99bca8f038e58d384f0ef1b";
             };
-            beamDeps  = [ poison_1_5_2 inflex_1_0_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 inflex_1_0_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''A bot library for the Slack chat service.'';
@@ -37838,7 +43597,7 @@ let
 
     slackex_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "slackex";
             version = "0.0.1";
@@ -37848,7 +43607,7 @@ let
               sha256 =
                 "bdd1d523cd576ff054ed3eee4efe22eee87ded127054332ca5a3bc1d6a997f33";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               longDescription = ''A Slack wrapper for Elixir Requires an active
@@ -37885,17 +43644,17 @@ let
 
     slim_fast = slim_fast_0_10_0;
 
-    slime_0_12_1 = callPackage
+    slime_0_12_2 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "slime";
-            version = "0.12.1";
+            version = "0.12.2";
             src = fetchHex {
               pkg = "slime";
-              version = "0.12.1";
+              version = "0.12.2";
               sha256 =
-                "0a2f92f2f7523118efadcb20fe54611ddfb65428c6a21b69182fc247e361dc1e";
+                "389ed56ef536f25e29a99979ff1a3402ce21a0d40fcc49be93e44dcde11b9633";
             };
 
             meta = {
@@ -37907,12 +43666,12 @@ let
           }
       ) {};
 
-    slime = slime_0_12_1;
+    slime = slime_0_12_2;
 
     slp_0_0_2 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "slp";
             version = "0.0.2";
             src = fetchHex {
@@ -37933,6 +43692,29 @@ let
       ) {};
 
     slp = slp_0_0_2;
+
+    slugerl_1_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "slugerl";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "slugerl";
+              version = "1.0.0";
+              sha256 =
+                "5a06364270afb773b32a7a4e05cf9cb4ccf904faedb2825d7336f3065e4f791b";
+            };
+
+            meta = {
+              description = ''slugify'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/thraxil/slugerl";
+            };
+          }
+      ) {};
+
+    slugerl = slugerl_1_0_0;
 
     slugger_0_1_0 = callPackage
       (
@@ -37961,7 +43743,7 @@ let
 
     smex_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, murmur_1_0_0, amqp_0_1_4 }:
+        {  buildMix, fetchHex, murmur_0_2_1, amqp_0_1_4 }:
           buildMix {
             name = "smex";
             version = "0.0.1";
@@ -37971,7 +43753,7 @@ let
               sha256 =
                 "3a84a2b3b3f09965bb0c2d57d04ba435b33c47319ee308feb4a182ddd9e69867";
             };
-            beamDeps  = [ murmur_1_0_0 amqp_0_1_4 ];
+            beamDeps  = [ murmur_0_2_1 amqp_0_1_4 ];
 
             meta = {
               description = ''An Elixir library for simplifying the sending of
@@ -38031,6 +43813,30 @@ let
 
     snappy = snappy_1_1_1;
 
+    snowflake_client_0_1_1 = callPackage
+      (
+        {  buildMix, fetchHex, oauth2_0_6_0 }:
+          buildMix {
+            name = "snowflake_client";
+            version = "0.1.1";
+            src = fetchHex {
+              pkg = "snowflake_client";
+              version = "0.1.1";
+              sha256 =
+                "94b21c7ad47775ef5853399e22ba2f8a91d8e174ca3a1da4e2fea05dfad12459";
+            };
+            beamDeps  = [ oauth2_0_6_0 ];
+
+            meta = {
+              description = ''A OAuth 2.0 client for Snowflake.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/IoraHealth/snowflake_client";
+            };
+          }
+      ) {};
+
+    snowflake_client = snowflake_client_0_1_1;
+
     socket_0_2_8 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -38074,6 +43880,30 @@ let
       ) {};
 
     socket = socket_0_3_1;
+
+    sonic_0_1_3 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, hackney_1_6_0 }:
+          buildMix {
+            name = "sonic";
+            version = "0.1.3";
+            src = fetchHex {
+              pkg = "sonic";
+              version = "0.1.3";
+              sha256 =
+                "2bf88f0e86cf04db4b426569153f26fd41f6202aee1e9175e0a242eb5a0a0586";
+            };
+            beamDeps  = [ poison_2_1_0 hackney_1_6_0 ];
+
+            meta = {
+              description = ''etcd library and bindings for Elixir.'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/heroiclabs/sonic";
+            };
+          }
+      ) {};
+
+    sonic = sonic_0_1_3;
 
     sorted_set_1_1_0 = callPackage
       (
@@ -38149,9 +43979,34 @@ let
 
     spaced_repetitions = spaced_repetitions_0_0_1;
 
+    spacesaving_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex, earmark_0_2_1, dialyze_0_2_1 }:
+          buildMix {
+            name = "spacesaving";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "spacesaving";
+              version = "0.0.3";
+              sha256 =
+                "e13f6ceb1adaad447f12eab1cfc5668a2ab4784393c67b4c8cde815533cd43f8";
+            };
+            beamDeps  = [ earmark_0_2_1 dialyze_0_2_1 ];
+
+            meta = {
+              description = ''stream count distinct element estimation using
+                            the "space saving" algorithm.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/rozap/spacesaving";
+            };
+          }
+      ) {};
+
+    spacesaving = spacesaving_0_0_3;
+
     sparkpost_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_1_0 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpotion_2_2_2 }:
           buildMix {
             name = "sparkpost";
             version = "0.1.0";
@@ -38161,7 +44016,7 @@ let
               sha256 =
                 "704fa320132235db00c4b40b6990e63ec3c2581d681d86c0765ef930c88a2694";
             };
-            beamDeps  = [ poison_1_5_2 httpotion_2_1_0 ];
+            beamDeps  = [ poison_1_5_2 httpotion_2_2_2 ];
 
             meta = {
               description = ''The official Elixir package for the SparkPost
@@ -38176,7 +44031,7 @@ let
 
     spawndir_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, exrm_0_15_1 }:
+        {  buildMix, fetchHex, exrm_0_14_2 }:
           buildMix {
             name = "spawndir";
             version = "0.1.1";
@@ -38186,7 +44041,7 @@ let
               sha256 =
                 "c407c9eb1f6f8ebb622df28b2f19a34447add6555f87208446a458b60ea9750c";
             };
-            beamDeps  = [ exrm_0_15_1 ];
+            beamDeps  = [ exrm_0_14_2 ];
 
             meta = {
               longDescription = ''# SpawnDir Spawns commands from the file
@@ -38317,7 +44172,7 @@ let
     spotify_ex_0_0_4 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, plug_1_1_1, httpoison_0_8_1
+          buildMix, fetchHex, poison_1_5_2, plug_1_1_3, httpoison_0_8_2
         }:
           buildMix {
             name = "spotify_ex";
@@ -38328,7 +44183,7 @@ let
               sha256 =
                 "f2e8647410096d34d9baecf8d9622896214320641ed72c11c711f9a463e4a961";
             };
-            beamDeps  = [ poison_1_5_2 plug_1_1_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 plug_1_1_3 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir wrapper for Spotify API O-Auth.'';
@@ -38340,9 +44195,33 @@ let
 
     spotify_ex = spotify_ex_0_0_4;
 
+    spout_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "spout";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "spout";
+              version = "0.0.1";
+              sha256 =
+                "5389628219cfa6df18ba366cb668055e44e97eccfea38d385d0581c489f3926a";
+            };
+
+            meta = {
+              longDescription = ''A TAP producer that integrates with existing
+                                ExUnit tests via an ExUnit formatter'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/Stratus3D/Spout";
+            };
+          }
+      ) {};
+
+    spout = spout_0_0_1;
+
     spreedly_0_1_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "spreedly";
             version = "0.1.1";
@@ -38352,7 +44231,7 @@ let
               sha256 =
                 "a8aa76698a4fe95cb4c5cb77be2cfc4e085685570aacb25382fffdca4c7e1a6f";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''A wrapper for the Spreedly API.'';
@@ -38364,19 +44243,19 @@ let
 
     spreedly = spreedly_0_1_1;
 
-    sql_dust_0_1_5 = callPackage
+    sql_dust_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, inflex_1_5_0, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, inflex_1_5_0, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "sql_dust";
-            version = "0.1.5";
+            version = "0.3.2";
             src = fetchHex {
               pkg = "sql_dust";
-              version = "0.1.5";
+              version = "0.3.2";
               sha256 =
-                "8b8ec15b23c964e74e020cc7bd9ff9456d302ceb173465ebd0cc04c10bc3775d";
+                "58282299f10ac2cd2684f043052e0186979cf886d2a9e788d0555d9ef19c7bad";
             };
-            beamDeps  = [ inflex_1_5_0 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ inflex_1_5_0 ecto_2_0_0_beta_2 ];
 
             meta = {
               longDescription = ''Easy. Simple. Powerful. Generate (complex)
@@ -38387,7 +44266,7 @@ let
           }
       ) {};
 
-    sql_dust = sql_dust_0_1_5;
+    sql_dust = sql_dust_0_3_2;
 
     sqlite3_1_1_5 = callPackage
       (
@@ -38413,14 +44292,38 @@ let
 
     sqlite3 = sqlite3_1_1_5;
 
+    sqlite_ecto_0_5_0 = callPackage
+      (
+        {
+          buildMix, fetchHex, sqlitex_0_8_3, poison_1_5_2, ecto_0_15_0
+        }:
+          buildMix {
+            name = "sqlite_ecto";
+            version = "0.5.0";
+            src = fetchHex {
+              pkg = "sqlite_ecto";
+              version = "0.5.0";
+              sha256 =
+                "cb26ae002ee444aa9b12d680ec11570204ba128631ccd7d2d6d3aafcd521880e";
+            };
+            beamDeps  = [ sqlitex_0_8_3 poison_1_5_2 ecto_0_15_0 ];
+
+            meta = {
+              description = ''SQLite3 adapter for Ecto'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/jazzyb/sqlite_ecto";
+            };
+          }
+      ) {};
+
     sqlite_ecto_1_1_0 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          sqlitex_0_8_2,
+          sqlitex_0_8_3,
           poison_1_5_2,
-          ecto_2_0_0_beta_0
+          ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "sqlite_ecto";
@@ -38431,7 +44334,7 @@ let
               sha256 =
                 "88951b424e909d8047f0d03c13418c321df9e94560ac30241d8b1f7e48f49201";
             };
-            beamDeps  = [ sqlitex_0_8_2 poison_1_5_2 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ sqlitex_0_8_3 poison_1_5_2 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''SQLite3 adapter for Ecto'';
@@ -38443,19 +44346,19 @@ let
 
     sqlite_ecto = sqlite_ecto_1_1_0;
 
-    sqlitex_0_8_2 = callPackage
+    sqlitex_0_8_3 = callPackage
       (
         {
           buildMix, fetchHex, pipe_0_0_2, esqlite_0_2_2, decimal_1_1_1
         }:
           buildMix {
             name = "sqlitex";
-            version = "0.8.2";
+            version = "0.8.3";
             src = fetchHex {
               pkg = "sqlitex";
-              version = "0.8.2";
+              version = "0.8.3";
               sha256 =
-                "8485c24f945ce9c04ad894aff14cb965dcae3e93e08fbdca51a18ea85e9719df";
+                "44daaeb135178165d0a6cd6754e4af05e56e5d2943c0b1108df7df718745ec0f";
             };
             beamDeps  = [ pipe_0_0_2 esqlite_0_2_2 decimal_1_1_1 ];
 
@@ -38467,7 +44370,29 @@ let
           }
       ) {};
 
-    sqlitex = sqlitex_0_8_2;
+    sqlitex_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, esqlite_0_2_2, decimal_1_1_1 }:
+          buildMix {
+            name = "sqlitex";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "sqlitex";
+              version = "1.0.0";
+              sha256 =
+                "cbd7310e900841aa2dc6071b497330e730de1cd9618003006e0af48afb24d5f8";
+            };
+            beamDeps  = [ esqlite_0_2_2 decimal_1_1_1 ];
+
+            meta = {
+              description = ''A thin Elixir wrapper around esqlite'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mmmries/sqlitex";
+            };
+          }
+      ) {};
+
+    sqlitex = sqlitex_1_0_0;
 
     ssdb_0_3_0 = callPackage
       (
@@ -38559,32 +44484,33 @@ let
 
     sshex = sshex_2_1_0;
 
-    ssl_verify_hostname_1_0_1 = callPackage
+    ssl_verify_fun_1_1_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
-            name = "ssl_verify_hostname";
-            version = "1.0.1";
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
+            name = "ssl_verify_fun";
+            version = "1.1.0";
             src = fetchHex {
-              pkg = "ssl_verify_hostname";
-              version = "1.0.1";
+              pkg = "ssl_verify_fun";
+              version = "1.1.0";
               sha256 =
-                "630baab6b1dd68f516b779353b368e4c605f1a022f3e544833b1667fdd321493";
+                "6c0e0d857fdb031ba67b0a791202bee116bea2313db7b649839000847591ba1e";
             };
 
             meta = {
-              description = ''Hostname verification library for Erlang'';
+              description = ''SSL verification functions for Erlang'';
               license = stdenv.lib.licenses.mit;
-              homepage =
-                "https://github.com/deadtrickster/ssl_verify_hostname.erl";
+              homepage = "https://github.com/deadtrickster/ssl_verify_fun.erl";
             };
           }
       ) {};
 
+    ssl_verify_fun = ssl_verify_fun_1_1_0;
+
     ssl_verify_hostname_1_0_5 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "ssl_verify_hostname";
             version = "1.0.5";
             src = fetchHex {
@@ -38605,8 +44531,8 @@ let
 
     ssl_verify_hostname_1_0_6 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "ssl_verify_hostname";
             version = "1.0.6";
             src = fetchHex {
@@ -38671,6 +44597,29 @@ let
       ) {};
 
     stash = stash_1_0_0;
+
+    stathat_0_0_3 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "stathat";
+            version = "0.0.3";
+            src = fetchHex {
+              pkg = "stathat";
+              version = "0.0.3";
+              sha256 =
+                "2d3663d1bbbf13fbae688a89656dd53f747e69d23ec73bcfd8835c2ca9d09c35";
+            };
+
+            meta = {
+              description = ''StatHat client library.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/travisjeffery/stathat";
+            };
+          }
+      ) {};
+
+    stathat = stathat_0_0_3;
 
     statistics_0_4_0 = callPackage
       (
@@ -38752,19 +44701,19 @@ let
 
     std_json_io = std_json_io_0_1_0;
 
-    steamex_0_0_3 = callPackage
+    steamex_0_0_5 = callPackage
       (
-        {  buildMix, fetchHex, sweet_xml_0_4_0, httpoison_0_7_5 }:
+        {  buildMix, fetchHex, sweet_xml_0_6_1, httpoison_0_8_2 }:
           buildMix {
             name = "steamex";
-            version = "0.0.3";
+            version = "0.0.5";
             src = fetchHex {
               pkg = "steamex";
-              version = "0.0.3";
+              version = "0.0.5";
               sha256 =
-                "4e9a5da88acb54897593dadc3e8a4cbdae86a31e7662888105463d20c0430dd8";
+                "4a290c432c0480cf372fece76cc4f09e231261fda64ef5027e8855e16aa5a2f6";
             };
-            beamDeps  = [ sweet_xml_0_4_0 httpoison_0_7_5 ];
+            beamDeps  = [ sweet_xml_0_6_1 httpoison_0_8_2 ];
 
             meta = {
               description = ''Steam API and Auth (with Phoenix/Plug
@@ -38775,7 +44724,7 @@ let
           }
       ) {};
 
-    steamex = steamex_0_0_3;
+    steamex = steamex_0_0_5;
 
     stemex_0_1_1 = callPackage
       (
@@ -38805,6 +44754,29 @@ let
 
     stemex = stemex_0_1_1;
 
+    stillir_1_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "stillir";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "stillir";
+              version = "1.0.0";
+              sha256 =
+                "04afdee2e5123b6da11fcc28c38d581f74db0cbe1faa1c36ed4f364797b588c0";
+            };
+
+            meta = {
+              description = ''Read Unix env vars into application config'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/heroku/stillir";
+            };
+          }
+      ) {};
+
+    stillir = stillir_1_0_0;
+
     stmd_0_0_2 = callPackage
       (
         {  buildMix, fetchHex, ex_doc_0_11_4, earmark_0_2_1 }:
@@ -38831,7 +44803,7 @@ let
 
     stockastic_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "stockastic";
             version = "0.0.2";
@@ -38841,7 +44813,7 @@ let
               sha256 =
                 "f180915a21d4aa4a64f660696b77c5788334d4bae2639a58814565af0d75ca56";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Simple Elixir wrapper for the Stockfighter API'';
@@ -38855,7 +44827,7 @@ let
 
     stockfighter_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "stockfighter";
             version = "0.0.1";
@@ -38865,7 +44837,7 @@ let
               sha256 =
                 "d72726cf055068e2b62ef9091ec17ab9292b60bc7f4a7306c17cad6d022a3bd7";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''a simple wrapper of stockfighter http api'';
@@ -38879,7 +44851,7 @@ let
 
     stopwatch_0_0_7 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "stopwatch";
             version = "0.0.7";
@@ -38889,7 +44861,7 @@ let
               sha256 =
                 "de20ad70ca3b0f70d0a2000858e80c0afd4163101e18d0428ee62a58e7c8360a";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               description = ''The stopwatch provides an easy api to measure
@@ -38901,6 +44873,30 @@ let
       ) {};
 
     stopwatch = stopwatch_0_0_7;
+
+    strava_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "strava";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "strava";
+              version = "0.0.1";
+              sha256 =
+                "f0b50d8c65fe769c08fd97afc4e3039eb1d3d2eb324adf8a52aaaa93685723e2";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Elixir wrapper for the Strava API (V3)'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/slashdotdash/strava";
+            };
+          }
+      ) {};
+
+    strava = strava_0_0_1;
 
     stream_runner_1_1_0 = callPackage
       (
@@ -38994,17 +44990,17 @@ let
 
     strict_comparison = strict_comparison_0_0_1;
 
-    stringprep_1_0_2 = callPackage
+    stringprep_1_0_3 = callPackage
       (
         {  buildRebar3, fetchHex, p1_utils_1_0_3 }:
           buildRebar3 {
             name = "stringprep";
-            version = "1.0.2";
+            version = "1.0.3";
             src = fetchHex {
               pkg = "stringprep";
-              version = "1.0.2";
+              version = "1.0.3";
               sha256 =
-                "6990e6d9d9bc241a77ceb54d4afd7332319710dbebdae8f4f0c627186194c520";
+                "140c8300f29e33649580d9d2416f6684b00f386f690c76cc275b7ee43c735074";
             };
             compilePorts = true;
             beamDeps  = [ p1_utils_1_0_3 ];
@@ -39017,11 +45013,11 @@ let
           }
       ) {};
 
-    stringprep = stringprep_1_0_2;
+    stringprep = stringprep_1_0_3;
 
     stripe_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, jazz_0_2_1, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, jazz_0_2_1, httpotion_2_2_2 }:
           buildMix {
             name = "stripe";
             version = "0.0.1";
@@ -39031,7 +45027,7 @@ let
               sha256 =
                 "99f9920ce562109abb70a1998a4f6b5bcd07f5063237cf28dd81387163df3f02";
             };
-            beamDeps  = [ jazz_0_2_1 httpotion_1_0_0 ];
+            beamDeps  = [ jazz_0_2_1 httpotion_2_2_2 ];
 
             meta = {
               longDescription = ''Wrapper around Stripe`s API. Full
@@ -39072,31 +45068,21 @@ let
 
     stripex = stripex_0_1_0;
 
-    stripity_stripe_1_2_0 = callPackage
+    stripity_stripe_1_4_0 = callPackage
       (
         {
-          buildMix,
-          fetchHex,
-          poison_1_5_2,
-          httpoison_0_8_1,
-          hackney_1_4_8,
-          earmark_0_2_1
+          buildMix, fetchHex, poison_2_0_1, httpoison_0_8_2, hackney_1_4_10
         }:
           buildMix {
             name = "stripity_stripe";
-            version = "1.2.0";
+            version = "1.4.0";
             src = fetchHex {
               pkg = "stripity_stripe";
-              version = "1.2.0";
+              version = "1.4.0";
               sha256 =
-                "25cb8c92ce83354a8d160514f183167a6c67ec3f1221e925cff3750da0fe4cd6";
+                "1ba06bf31efd899c03c09f1b6faa3ca5da3f48571202c8999f8ea6e5ca47c02f";
             };
-            beamDeps  = [
-                          poison_1_5_2
-                          httpoison_0_8_1
-                          hackney_1_4_8
-                          earmark_0_2_1
-                        ];
+            beamDeps  = [ poison_2_0_1 httpoison_0_8_2 hackney_1_4_10 ];
 
             meta = {
               description = ''A Stripe Library for Elixir'';
@@ -39106,19 +45092,19 @@ let
           }
       ) {};
 
-    stripity_stripe = stripity_stripe_1_2_0;
+    stripity_stripe = stripity_stripe_1_4_0;
 
-    struct_fields_0_2_0 = callPackage
+    struct_fields_0_3_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "struct_fields";
-            version = "0.2.0";
+            version = "0.3.0";
             src = fetchHex {
               pkg = "struct_fields";
-              version = "0.2.0";
+              version = "0.3.0";
               sha256 =
-                "245be58f06535a05247b6539e2640eb649c25eb896010452f2ee43b5e2604b72";
+                "d0ec469ccb59d2207a94cb8e3d3ce9b8bf09f239695e33a0e2447e2a1ff2178b";
             };
 
             meta = {
@@ -39130,7 +45116,7 @@ let
           }
       ) {};
 
-    struct_fields = struct_fields_0_2_0;
+    struct_fields = struct_fields_0_3_0;
 
     structurez_0_0_1 = callPackage
       (
@@ -39189,9 +45175,9 @@ let
           postgrex_0_11_1,
           poison_1_5_2,
           plugs_0_1_0,
-          plug_1_1_1,
+          plug_1_1_3,
           http_router_0_0_8,
-          ecto_2_0_0_beta_0,
+          ecto_2_0_0_beta_2,
           cowboy_1_0_4
         }:
           buildMix {
@@ -39208,9 +45194,9 @@ let
                           postgrex_0_11_1
                           poison_1_5_2
                           plugs_0_1_0
-                          plug_1_1_1
+                          plug_1_1_3
                           http_router_0_0_8
-                          ecto_2_0_0_beta_0
+                          ecto_2_0_0_beta_2
                           cowboy_1_0_4
                         ];
 
@@ -39324,6 +45310,30 @@ let
 
     swaggerdoc = swaggerdoc_0_0_1;
 
+    swapi_1_0_0 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
+          buildMix {
+            name = "swapi";
+            version = "1.0.0";
+            src = fetchHex {
+              pkg = "swapi";
+              version = "1.0.0";
+              sha256 =
+                "55b40ddd97d632b027463aefccb8d6fa9ffa77f224a25af5565bbaecff5c7a3c";
+            };
+            beamDeps  = [ httpoison_0_8_2 ];
+
+            meta = {
+              description = ''An Elixir wrapper for the Star Wars API.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/twhitacre/swapi.ex";
+            };
+          }
+      ) {};
+
+    swapi = swapi_1_0_0;
+
     sweet_xml_0_4_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -39425,6 +45435,71 @@ let
 
     switchboard = switchboard_0_3_2;
 
+    swoosh_0_1_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          poison_2_1_0,
+          plug_1_1_3,
+          httpoison_0_8_2,
+          gen_smtp_0_9_0,
+          cowboy_1_0_4
+        }:
+          buildMix {
+            name = "swoosh";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "swoosh";
+              version = "0.1.0";
+              sha256 =
+                "46488cbd7d158e4907869d7b097d7663d608405021c43aeb6a51a6c70cb7ee3b";
+            };
+            beamDeps  = [
+                          poison_2_1_0
+                          plug_1_1_3
+                          httpoison_0_8_2
+                          gen_smtp_0_9_0
+                          cowboy_1_0_4
+                        ];
+
+            meta = {
+              longDescription = ''Compose, deliver and test your emails easily
+                                in Elixir. Supports SMTP, Sendgrid, Mandrill,
+                                Postmark and Mailgun out of the box. Works great
+                                with Phoenix.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/swoosh/swoosh";
+            };
+          }
+      ) {};
+
+    swoosh = swoosh_0_1_0;
+
+    syn_1_2_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "syn";
+            version = "1.2.1";
+            src = fetchHex {
+              pkg = "syn";
+              version = "1.2.1";
+              sha256 =
+                "a21864a00c39f6753cde0269c979c5260dc9bf1991ca0d5c9635ebec499d6f61";
+            };
+
+            meta = {
+              description = ''A global Process Registry and Process Group
+                            manager.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ostinelli/syn";
+            };
+          }
+      ) {};
+
+    syn = syn_1_2_1;
+
     syn_osc_0_1_0 = callPackage
       (
         {  buildMix, fetchHex, osc_0_1_1 }:
@@ -39496,6 +45571,31 @@ let
       ) {};
 
     syslog = syslog_1_0_2;
+
+    system_env_loader_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "system_env_loader";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "system_env_loader";
+              version = "0.1.0";
+              sha256 =
+                "b271e8dcc857d7e36159554c343ed0af950e9dc8adf0f4cee399228142f68ec6";
+            };
+
+            meta = {
+              longDescription = ''A little package to load (bashlike) files
+                                with exported ENV variables into Elixir
+                                runtime'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/ruby2elixir/system_env_loader";
+            };
+          }
+      ) {};
+
+    system_env_loader = system_env_loader_0_1_0;
 
     table_0_0_4 = callPackage
       (
@@ -39589,6 +45689,29 @@ let
 
     tabula = tabula_2_0_1;
 
+    tachometer_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "tachometer";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "tachometer";
+              version = "0.1.0";
+              sha256 =
+                "5b2624c593280fc7a4621b264688509ba76ca3450a70ae0cfff43183604f903c";
+            };
+
+            meta = {
+              description = ''Scheduler instrumentation for BEAM in Elixir'';
+              license = stdenv.lib.licenses.gpl3;
+              homepage = "https://github.com/pavlos/tachometer";
+            };
+          }
+      ) {};
+
+    tachometer = tachometer_0_1_0;
+
     tagplay_0_1_0 = callPackage
       (
         {  buildMix, fetchHex, httpoison_0_7_5, exjsx_3_1_0 }:
@@ -39661,32 +45784,32 @@ let
 
     tane = tane_0_3_1;
 
-    tanegashima_0_0_3 = callPackage
+    tanegashima_0_0_9 = callPackage
       (
         {
           buildMix,
           fetchHex,
           poison_2_1_0,
-          httpoison_0_8_1,
+          httpoison_0_8_2,
           ex_doc_0_11_4,
           earmark_0_2_1,
-          dialyze_0_2_0
+          dialyze_0_2_1
         }:
           buildMix {
             name = "tanegashima";
-            version = "0.0.3";
+            version = "0.0.9";
             src = fetchHex {
               pkg = "tanegashima";
-              version = "0.0.3";
+              version = "0.0.9";
               sha256 =
-                "a087f30aa519aae47c1d9d03dfcccef0305e72052d3951b2aa327ca3017ca989";
+                "91d0496f57e156a4f5b205ca4743f857cbf7739012b4b5eb704a31d00062cad6";
             };
             beamDeps  = [
                           poison_2_1_0
-                          httpoison_0_8_1
+                          httpoison_0_8_2
                           ex_doc_0_11_4
                           earmark_0_2_1
-                          dialyze_0_2_0
+                          dialyze_0_2_1
                         ];
 
             meta = {
@@ -39697,11 +45820,11 @@ let
           }
       ) {};
 
-    tanegashima = tanegashima_0_0_3;
+    tanegashima = tanegashima_0_0_9;
 
     tanuki_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "tanuki";
             version = "0.2.0";
@@ -39711,7 +45834,7 @@ let
               sha256 =
                 "f499d6bcb80fc29f2d0b68d16d8309cb25589583b1f4d0eb23cbc4fe5afbab8c";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''GitLab API wrapper in Elixir, named after GitLabs
@@ -39797,7 +45920,7 @@ let
     tds_ecto_1_0_2 = callPackage
       (
         {
-          buildMix, fetchHex, tds_0_5_4, poison_1_5_2, ecto_2_0_0_beta_0
+          buildMix, fetchHex, tds_0_5_4, poison_1_5_2, ecto_2_0_0_beta_2
         }:
           buildMix {
             name = "tds_ecto";
@@ -39808,7 +45931,7 @@ let
               sha256 =
                 "c592061c97b923fd3f2a7b212eefdd7a35ddb0dac94886b8995ed03b2b9dfd53";
             };
-            beamDeps  = [ tds_0_5_4 poison_1_5_2 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ tds_0_5_4 poison_1_5_2 ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''MSSQL / TDS Adapter for Ecto.'';
@@ -39842,6 +45965,56 @@ let
       ) {};
 
     tea_crypto = tea_crypto_1_0_0;
+
+    teacup_0_3_2 = callPackage
+      (
+        {  buildRebar3, fetchHex, simpre_0_1_0 }:
+          buildRebar3 {
+            name = "teacup";
+            version = "0.3.2";
+            src = fetchHex {
+              pkg = "teacup";
+              version = "0.3.2";
+              sha256 =
+                "53d616e19d858524e34cf113f0f418c5631db4ee01430f7b3d19afcf9beb68b1";
+            };
+
+            beamDeps  = [ simpre_0_1_0 ];
+
+            meta = {
+              description = ''Simple TCP client library for Erlang'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    teacup = teacup_0_3_2;
+
+    teacup_nats_0_3_1 = callPackage
+      (
+        {
+          buildRebar3, fetchHex, teacup_0_3_2, nats_msg_0_4_1, jsx_2_8_0
+        }:
+          buildRebar3 {
+            name = "teacup_nats";
+            version = "0.3.1";
+            src = fetchHex {
+              pkg = "teacup_nats";
+              version = "0.3.1";
+              sha256 =
+                "5ffd0732ca26931784c8c9fc713545ef02449a8ae9208e3c8b079623a36044c9";
+            };
+
+            beamDeps  = [ teacup_0_3_2 nats_msg_0_4_1 jsx_2_8_0 ];
+
+            meta = {
+              description = ''Teacup based NATS Client for Erlang'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    teacup_nats = teacup_nats_0_3_1;
 
     teamcity_exunit_formatter_0_2_0 = callPackage
       (
@@ -39893,6 +46066,29 @@ let
 
     telebot = telebot_0_1_2;
 
+    telehashname_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "telehashname";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "telehashname";
+              version = "0.0.2";
+              sha256 =
+                "301a92653dafa69f118fdb8b8ca42259ac2e82441175231e1d67afcd26409f71";
+            };
+
+            meta = {
+              description = ''Telehash hashname implementation'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/mwmiller/telehashname_ex";
+            };
+          }
+      ) {};
+
+    telehashname = telehashname_0_0_2;
+
     telephonist_0_1_2 = callPackage
       (
         {  buildMix, fetchHex, immortal_0_2_0, ex_twiml_2_1_0 }:
@@ -39916,17 +46112,17 @@ let
 
     telephonist = telephonist_0_1_2;
 
-    temp_0_3_0 = callPackage
+    temp_0_4_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "temp";
-            version = "0.3.0";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "temp";
-              version = "0.3.0";
+              version = "0.4.0";
               sha256 =
-                "e1d2584bb62453e6bbb6247821909ae2d6a0fa7f59da9e4dc5581c0565d9c38b";
+                "1a852035e1c8bb9b33d00d322161689553d412fea783617afbd22112d481ffff";
             };
 
             meta = {
@@ -39938,7 +46134,7 @@ let
           }
       ) {};
 
-    temp = temp_0_3_0;
+    temp = temp_0_4_0;
 
     templates_0_0_5 = callPackage
       (
@@ -39991,7 +46187,7 @@ let
 
     tentabucket_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "tentabucket";
             version = "0.0.1";
@@ -40001,7 +46197,7 @@ let
               sha256 =
                 "5784dad17f973efcc3c4ea7672927095864d58af1f830614e4c8f06c63d4822d";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Simple Bitbucket API client library for Elixir'';
@@ -40013,19 +46209,19 @@ let
 
     tentabucket = tentabucket_0_0_1;
 
-    tentacat_0_3_1 = callPackage
+    tentacat_0_4_0 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
           buildMix {
             name = "tentacat";
-            version = "0.3.1";
+            version = "0.4.0";
             src = fetchHex {
               pkg = "tentacat";
-              version = "0.3.1";
+              version = "0.4.0";
               sha256 =
-                "fea53526c4d1847bddfc6033cdb9ea7cdbd516e18d6bed25bfcff88b5d2d6551";
+                "3fc0ab0b8f218fc3486d00f47d4b71ae70709c4137a8d8d573b44038b4ee43b3";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
 
             meta = {
               description = ''Simple Elixir wrapper for the GitHub API'';
@@ -40035,7 +46231,7 @@ let
           }
       ) {};
 
-    tentacat = tentacat_0_3_1;
+    tentacat = tentacat_0_4_0;
 
     term_table_0_0_2 = callPackage
       (
@@ -40210,6 +46406,68 @@ let
 
     theriac = theriac_0_0_1;
 
+    thermex_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "thermex";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "thermex";
+              version = "0.0.2";
+              sha256 =
+                "10ac274c919012c31539ecd7c4b2b27ba413af46c4dad86029203dc84b956ec3";
+            };
+
+            meta = {
+              description = ''An OTP application for watching temperature
+                            sensors'';
+
+            };
+          }
+      ) {};
+
+    thermex = thermex_0_0_2;
+
+    thesis_0_0_8 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          plug_1_1_3,
+          phoenix_html_2_5_1,
+          phoenix_1_1_4,
+          html_sanitize_ex_0_1_2,
+          ecto_2_0_0_beta_2
+        }:
+          buildMix {
+            name = "thesis";
+            version = "0.0.8";
+            src = fetchHex {
+              pkg = "thesis";
+              version = "0.0.8";
+              sha256 =
+                "8fc1a3fd06b66c695a270519009903f1d2d5bd586f5061a614c37d7b46df7896";
+            };
+            beamDeps  = [
+                          plug_1_1_3
+                          phoenix_html_2_5_1
+                          phoenix_1_1_4
+                          html_sanitize_ex_0_1_2
+                          ecto_2_0_0_beta_2
+                        ];
+
+            meta = {
+              description = ''Thesis is a lightweight bolt-on content editing
+                            system for Phoenix websites.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/infinite_red/thesis";
+            };
+          }
+      ) {};
+
+    thesis = thesis_0_0_8;
+
     thrift_1_2_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -40237,7 +46495,7 @@ let
 
     time_distance_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, timex_1_0_1 }:
+        {  buildMix, fetchHex, timex_1_0_2 }:
           buildMix {
             name = "time_distance";
             version = "0.0.1";
@@ -40247,7 +46505,7 @@ let
               sha256 =
                 "41ebe658882f2defd2cd472960e5a31b18d7ea2a4520c06907f7f2093d030e58";
             };
-            beamDeps  = [ timex_1_0_1 ];
+            beamDeps  = [ timex_1_0_2 ];
 
             meta = {
               longDescription = ''Show the difference between two specified
@@ -40261,17 +46519,17 @@ let
 
     time_distance = time_distance_0_0_1;
 
-    time_seer_0_0_5 = callPackage
+    time_seer_0_0_6 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "time_seer";
-            version = "0.0.5";
+            version = "0.0.6";
             src = fetchHex {
               pkg = "time_seer";
-              version = "0.0.5";
+              version = "0.0.6";
               sha256 =
-                "70a70fe4d6032d9a0cc41bfede0ed88e1cad1430de29d7dbb0b942f2d4b8768f";
+                "b5cfe4b5126deef913a91463c735c214efdde1cfb57e9303444d1a687fde53f5";
             };
 
             meta = {
@@ -40286,7 +46544,7 @@ let
           }
       ) {};
 
-    time_seer = time_seer_0_0_5;
+    time_seer = time_seer_0_0_6;
 
     timex_0_12_9 = callPackage
       (
@@ -40410,7 +46668,7 @@ let
 
     timex_0_16_2 = callPackage
       (
-        {  buildMix, fetchHex, tzdata_0_1_8 }:
+        {  buildMix, fetchHex, tzdata_0_1_201603 }:
           buildMix {
             name = "timex";
             version = "0.16.2";
@@ -40420,7 +46678,7 @@ let
               sha256 =
                 "951b740468c5de3495ce750d33c9df313100de75060242fd2dfe308f40706793";
             };
-            beamDeps  = [ tzdata_0_1_8 ];
+            beamDeps  = [ tzdata_0_1_201603 ];
 
             meta = {
               longDescription = ''A comprehensive date/time library for Elixir
@@ -40471,7 +46729,7 @@ let
 
     timex_0_19_5 = callPackage
       (
-        {  buildMix, fetchHex, tzdata_0_5_6, combine_0_7_0 }:
+        {  buildMix, fetchHex, tzdata_0_5_7, combine_0_7_0 }:
           buildMix {
             name = "timex";
             version = "0.19.5";
@@ -40481,7 +46739,7 @@ let
               sha256 =
                 "be1985ab99a6aebc3672b1d82b27e409c9a7af4658f3cc5900fa8754e159b02c";
             };
-            beamDeps  = [ tzdata_0_5_6 combine_0_7_0 ];
+            beamDeps  = [ tzdata_0_5_7 combine_0_7_0 ];
 
             meta = {
               longDescription = ''A comprehensive date/time library for Elixir
@@ -40532,7 +46790,7 @@ let
 
     timex_1_0_0_rc4 = callPackage
       (
-        {  buildMix, fetchHex, tzdata_0_1_8, combine_0_7_0 }:
+        {  buildMix, fetchHex, tzdata_0_1_201603, combine_0_7_0 }:
           buildMix {
             name = "timex";
             version = "1.0.0-rc4";
@@ -40542,7 +46800,7 @@ let
               sha256 =
                 "3da1356901fe205455404c83d2ea7804b63ed47e3a2cdb428545e568e05d6885";
             };
-            beamDeps  = [ tzdata_0_1_8 combine_0_7_0 ];
+            beamDeps  = [ tzdata_0_1_201603 combine_0_7_0 ];
 
             meta = {
               longDescription = ''A comprehensive date/time library for Elixir
@@ -40591,19 +46849,19 @@ let
           }
       ) {};
 
-    timex_1_0_1 = callPackage
+    timex_1_0_2 = callPackage
       (
-        {  buildMix, fetchHex, tzdata_0_1_8, combine_0_7_0 }:
+        {  buildMix, fetchHex, tzdata_0_1_201603, combine_0_7_0 }:
           buildMix {
             name = "timex";
-            version = "1.0.1";
+            version = "1.0.2";
             src = fetchHex {
               pkg = "timex";
-              version = "1.0.1";
+              version = "1.0.2";
               sha256 =
-                "6124f84b38f9ee526df91abca6d14bf503cc014b1f3c86d0d3412192e2b12d07";
+                "cbc359d21b5e2e694ab437e614bb4198af5be1031da4969dfd7ddf1b56064c88";
             };
-            beamDeps  = [ tzdata_0_1_8 combine_0_7_0 ];
+            beamDeps  = [ tzdata_0_1_201603 combine_0_7_0 ];
 
             meta = {
               longDescription = ''A comprehensive date/time library for Elixir
@@ -40652,21 +46910,88 @@ let
           }
       ) {};
 
-    timex = timex_1_0_1;
-
-    timex_ecto_0_5_0 = callPackage
+    timex_2_1_3 = callPackage
       (
-        {  buildMix, fetchHex, timex_0_19_5, ecto_2_0_0_beta_0 }:
+        {
+          buildMix,
+          fetchHex,
+          tzdata_0_1_201603,
+          gettext_0_10_0,
+          combine_0_7_0
+        }:
+          buildMix {
+            name = "timex";
+            version = "2.1.3";
+            src = fetchHex {
+              pkg = "timex";
+              version = "2.1.3";
+              sha256 =
+                "d39de4fc4ca4ceb08841f4ea362a5d3e6c07d6300b77d18581b0c034a8c8ac60";
+            };
+            beamDeps  = [ tzdata_0_1_201603 gettext_0_10_0 combine_0_7_0 ];
+
+            meta = {
+              longDescription = ''A comprehensive date/time library for Elixir
+                                Fully timezone-aware, using the Olson Timezone
+                                database - Supports local-timezone lookups -
+                                Supports POSIX-style timezones - Supports
+                                lookups of any Olson tzdata timezones - Supports
+                                arbitrary shifts across time and through
+                                timezones, including ambiguous time periods,
+                                non-existent time periods, and leaps. Provides
+                                both Date and DateTime types, for use depending
+                                on your needs, with an AmbiguousDateTime type
+                                for handling those DateTime values which fall on
+                                an ambigouos timezone period. Extendable via
+                                Convertable and Comparable protocols, so you can
+                                use Timex with your own types! Locale-aware,
+                                currently only supports "ru" and "en", but more
+                                will be added over time. Provides a broad array
+                                of date/time helper functions -
+                                shifting/adding/subtracting - diffing -
+                                comparing/before?/after?/between? - conversions
+                                - get day of week, week of year, ISO dates, and
+                                names for each - get the beginning or ending of
+                                a given week - get the beginning or ending of a
+                                year, quarter, week, or month - get days in a
+                                given month - normalization Provides a broad
+                                array of time-specific helpers - convert to and
+                                from units: weeks, days, hours, seconds, ms, and
+                                microseconds - measure execution time -
+                                diff/compare - to/from 12/24 hour clock times -
+                                add/subtract Safe date/time string formatting
+                                and parsing - Informative parser errors -
+                                Supports strftime, as well as an easier to read
+                                formatter, i.e. `{ISO:Basic}`, `{YYYY}` -
+                                Supports many formats out of the box: ISO8601
+                                basic and extended, RFC822, RFC1123, RFC3339,
+                                ANSIC, UNIX - Relative time formatter (i.e. "2
+                                years from now") Extendable - Protocols for core
+                                modules like the parser tokenizer - Easy to wrap
+                                to add extra functionality Can be used with
+                                Phoenix and Ecto when used with timex_ecto
+                                package'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bitwalker/timex";
+            };
+          }
+      ) {};
+
+    timex = timex_2_1_3;
+
+    timex_ecto_1_0_4 = callPackage
+      (
+        {  buildMix, fetchHex, timex_2_1_3, ecto_0_2_7 }:
           buildMix {
             name = "timex_ecto";
-            version = "0.5.0";
+            version = "1.0.4";
             src = fetchHex {
               pkg = "timex_ecto";
-              version = "0.5.0";
+              version = "1.0.4";
               sha256 =
-                "6fe5ffbcfd3abeda54a1ce01206e982d7470c095520694c3cc2637d558e723b0";
+                "98818bc66aad2234c78a879b57445ea329dea64d74d8bf67adc331eb4c504a74";
             };
-            beamDeps  = [ timex_0_19_5 ecto_2_0_0_beta_0 ];
+            beamDeps  = [ timex_2_1_3 ecto_0_2_7 ];
 
             meta = {
               description = ''A plugin for Ecto and Timex which allows use of
@@ -40677,30 +47002,7 @@ let
           }
       ) {};
 
-    timex_ecto_0_9_0 = callPackage
-      (
-        {  buildMix, fetchHex, timex_1_0_1, ecto_2_0_0_beta_0 }:
-          buildMix {
-            name = "timex_ecto";
-            version = "0.9.0";
-            src = fetchHex {
-              pkg = "timex_ecto";
-              version = "0.9.0";
-              sha256 =
-                "454cbd67b18fa75485369b266c0142a2a5d78bb3d4078cd10dc2ec99f1088232";
-            };
-            beamDeps  = [ timex_1_0_1 ecto_2_0_0_beta_0 ];
-
-            meta = {
-              description = ''A plugin for Ecto and Timex which allows use of
-                            Timex types with Ecto'';
-              license = stdenv.lib.licenses.mit;
-              homepage = "https://github.com/bitwalker/timex_ecto";
-            };
-          }
-      ) {};
-
-    timex_ecto = timex_ecto_0_9_0;
+    timex_ecto = timex_ecto_1_0_4;
 
     timex_interval_0_6_0 = callPackage
       (
@@ -40729,8 +47031,8 @@ let
 
     tinymt_0_3_1 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "tinymt";
             version = "0.3.1";
             src = fetchHex {
@@ -40750,17 +47052,17 @@ let
 
     tinymt = tinymt_0_3_1;
 
-    tirexs_0_8_0_beta1 = callPackage
+    tirexs_0_8_0_beta5 = callPackage
       (
         {  buildMix, fetchHex, exjsx_3_2_0 }:
           buildMix {
             name = "tirexs";
-            version = "0.8.0-beta1";
+            version = "0.8.0-beta5";
             src = fetchHex {
               pkg = "tirexs";
-              version = "0.8.0-beta1";
+              version = "0.8.0-beta5";
               sha256 =
-                "3d7187e73f9ac85204b45ecd81a49b607415d2aecfe628d23dfd45baeb9486ee";
+                "5aec67541a1361aca21e6849c78755727596a6e93e2ad90d53add537892d399c";
             };
             beamDeps  = [ exjsx_3_2_0 ];
 
@@ -40773,12 +47075,35 @@ let
           }
       ) {};
 
-    tirexs = tirexs_0_8_0_beta1;
+    tirexs = tirexs_0_8_0_beta5;
+
+    tlv_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "tlv";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "tlv";
+              version = "0.1.0";
+              sha256 =
+                "bc040b662594ad6c83f1d931ee2e74f8d00697afa215087297f64546a0c500e9";
+            };
+
+            meta = {
+              description = ''Encodes/Decodes BER-TLVs structures'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/bitgamma/elixir_tlv";
+            };
+          }
+      ) {};
+
+    tlv = tlv_0_1_0;
 
     tmdb_0_0_6 = callPackage
       (
         {
-          buildRebar3, fetchHex, poison_1_4_0, httpoison_0_8_1, exjsx_3_1_0
+          buildRebar3, fetchHex, poison_1_4_0, httpoison_0_8_2, exjsx_3_1_0
         }:
           buildRebar3 {
             name = "tmdb";
@@ -40790,7 +47115,7 @@ let
                 "4cbad6ffa556a0eeecb22c3960d47451e918313e5651808439f039403dd38d3a";
             };
 
-            beamDeps  = [ poison_1_4_0 httpoison_0_8_1 exjsx_3_1_0 ];
+            beamDeps  = [ poison_1_4_0 httpoison_0_8_2 exjsx_3_1_0 ];
 
             meta = {    };
           }
@@ -40798,17 +47123,17 @@ let
 
     tmdb = tmdb_0_0_6;
 
-    todo_1_0_1 = callPackage
+    todo_1_2_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "todo";
-            version = "1.0.1";
+            version = "1.2.0";
             src = fetchHex {
               pkg = "todo";
-              version = "1.0.1";
+              version = "1.2.0";
               sha256 =
-                "40b40fe538ff54d090d2992b107361de7b1a18ef3ad41b69ec2bb5b327e951ba";
+                "92b0da31ee335a4caff5bb91950688fc3195c2eb78cc70be80e3b616f2be88bc";
             };
 
             meta = {
@@ -40819,7 +47144,31 @@ let
           }
       ) {};
 
-    todo = todo_1_0_1;
+    todo = todo_1_2_0;
+
+    togglex_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "togglex";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "togglex";
+              version = "0.2.0";
+              sha256 =
+                "725b4299c5aad1c87900e667d6a01c88ba18f8e545283f31d2f726745c174e30";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Simple Elixir wrapper for the Toggl API'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/diacode/togglex";
+            };
+          }
+      ) {};
+
+    togglex = togglex_0_2_0;
 
     tomlex_0_0_4 = callPackage
       (
@@ -40844,17 +47193,17 @@ let
 
     tomlex = tomlex_0_0_4;
 
-    toniq_1_0_4 = callPackage
+    toniq_1_0_5 = callPackage
       (
         {  buildMix, fetchHex, uuid_1_1_3, exredis_0_2_3 }:
           buildMix {
             name = "toniq";
-            version = "1.0.4";
+            version = "1.0.5";
             src = fetchHex {
               pkg = "toniq";
-              version = "1.0.4";
+              version = "1.0.5";
               sha256 =
-                "77c88b11b00180a7eacd0a7b722c89d4abf22fae818d50aa955d401f91c07c93";
+                "aa67c43131393872d82d53b9a8bf4a3d5b97c52a6588d53aaa61c29828e0664a";
             };
             beamDeps  = [ uuid_1_1_3 exredis_0_2_3 ];
 
@@ -40869,7 +47218,7 @@ let
           }
       ) {};
 
-    toniq = toniq_1_0_4;
+    toniq = toniq_1_0_5;
 
     towel_0_2_1 = callPackage
       (
@@ -40950,7 +47299,7 @@ let
         {
           buildMix,
           fetchHex,
-          timex_1_0_1,
+          timex_1_0_2,
           exml_0_1_0,
           exmerl_0_1_1,
           erlsom_1_2_1,
@@ -40966,7 +47315,7 @@ let
                 "42ee5d56b2ec0c55715e7f03a9aacd6d7ce8543519e9ec696335348eb1a24f7c";
             };
             beamDeps  = [
-                          timex_1_0_1
+                          timex_1_0_2
                           exml_0_1_0
                           exmerl_0_1_1
                           erlsom_1_2_1
@@ -40982,6 +47331,45 @@ let
       ) {};
 
     trackline = trackline_0_0_1;
+
+    tractor_0_1_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          postgrex_0_11_1,
+          phoenix_ecto_3_0_0_beta_2,
+          phoenix_1_1_4,
+          gettext_0_10_0,
+          cowboy_1_0_4
+        }:
+          buildMix {
+            name = "tractor";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "tractor";
+              version = "0.1.0";
+              sha256 =
+                "f88e92d512b9c696bb250c0caa1bd85f60893bbf855eb34d622e0aae156f3063";
+            };
+            beamDeps  = [
+                          postgrex_0_11_1
+                          phoenix_ecto_3_0_0_beta_2
+                          phoenix_1_1_4
+                          gettext_0_10_0
+                          cowboy_1_0_4
+                        ];
+
+            meta = {
+              description = ''A fast and scalable pure Elixir BitTorrent
+                            tracker.'';
+              license = stdenv.lib.licenses.mpl20;
+              homepage = "https://github.com/folz/tractor";
+            };
+          }
+      ) {};
+
+    tractor = tractor_0_1_0;
 
     tradie_0_0_1 = callPackage
       (
@@ -41011,7 +47399,7 @@ let
 
     trailing_format_plug_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, cowboy_1_0_4 }:
+        {  buildMix, fetchHex, plug_1_1_3, cowboy_1_0_4 }:
           buildMix {
             name = "trailing_format_plug";
             version = "0.0.4";
@@ -41021,7 +47409,7 @@ let
               sha256 =
                 "16e2485b7069c8e025460d183d4711d9c5bbf46ae532dde859cc6623d12bfc71";
             };
-            beamDeps  = [ plug_1_1_1 cowboy_1_0_4 ];
+            beamDeps  = [ plug_1_1_3 cowboy_1_0_4 ];
 
             meta = {
               longDescription = ''An elixir plug to support legacy APIs that
@@ -41042,7 +47430,7 @@ let
           fetchHex,
           poison_1_1_1,
           httpoison_0_7_5,
-          hackney_1_0_6,
+          hackney_1_4_8,
           exvcr_0_3_9,
           ex_conf_0_1_3
         }:
@@ -41058,7 +47446,7 @@ let
             beamDeps  = [
                           poison_1_1_1
                           httpoison_0_7_5
-                          hackney_1_0_6
+                          hackney_1_4_8
                           exvcr_0_3_9
                           ex_conf_0_1_3
                         ];
@@ -41108,7 +47496,7 @@ let
 
     travis_ex_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "travis_ex";
             version = "0.0.2";
@@ -41118,7 +47506,7 @@ let
               sha256 =
                 "80589ec01596dfc1e02cef61ce0adc3c9b73977b56a528e214c37af079efa10a";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Travis-ci API client library for Elixir'';
@@ -41129,6 +47517,33 @@ let
       ) {};
 
     travis_ex = travis_ex_0_0_2;
+
+    tributary_0_0_2 = callPackage
+      (
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
+          buildMix {
+            name = "tributary";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "tributary";
+              version = "0.0.2";
+              sha256 =
+                "f35f7f025b7db0555d4477ddf10622972f9200523355b09bdbb9ecf0f6c95d73";
+            };
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
+
+            meta = {
+              longDescription = ''A simple stream generation library for Ecto
+                                queries that facilitates more efficient paging
+                                of queries both in the database and in your
+                                Ecto-reliant applicaton.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/davidantaramian/tributary";
+            };
+          }
+      ) {};
+
+    tributary = tributary_0_0_2;
 
     trie_1_5_0 = callPackage
       (
@@ -41213,17 +47628,17 @@ let
 
     trot = trot_0_5_3;
 
-    tsuru_1_0_2 = callPackage
+    tsuru_1_4_0 = callPackage
       (
         {  buildRebar3, fetchHex }:
           buildRebar3 {
             name = "tsuru";
-            version = "1.0.2";
+            version = "1.4.0";
             src = fetchHex {
               pkg = "tsuru";
-              version = "1.0.2";
+              version = "1.4.0";
               sha256 =
-                "b586ad8d47799a086e4225494f5e3cf4e306ca255a173a4b48fe51d542cefb6b";
+                "7825d3b530b46a8c4ff93b3c83a31d0f2ce042ddc741a89d3776edfd9f2828f7";
             };
 
             meta = {
@@ -41234,7 +47649,31 @@ let
           }
       ) {};
 
-    tsuru = tsuru_1_0_2;
+    tsuru = tsuru_1_4_0;
+
+    tubex_0_0_7 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "tubex";
+            version = "0.0.7";
+            src = fetchHex {
+              pkg = "tubex";
+              version = "0.0.7";
+              sha256 =
+                "8b34ade3d0484ee5ebb1155c16454d545284d0c215bf999a206cbcc198acea83";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              description = ''Elixir wrapper of YouTube Data API v3'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/yoavlt/tubex";
+            };
+          }
+      ) {};
+
+    tubex = tubex_0_0_7;
 
     tuco_tuco_0_8_1 = callPackage
       (
@@ -41260,9 +47699,34 @@ let
 
     tuco_tuco = tuco_tuco_0_8_1;
 
+    twittertex_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex, phoenix_html_2_5_1 }:
+          buildMix {
+            name = "twittertex";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "twittertex";
+              version = "0.1.0";
+              sha256 =
+                "76548d5cc68c098e7b04d2cb5846859ac38adb20aa9c3925436b9967ce785503";
+            };
+            beamDeps  = [ phoenix_html_2_5_1 ];
+
+            meta = {
+              description = ''Formats a tweet as HTML, using the entities from
+                            its JSON structure.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/tomtaylor/twittertex";
+            };
+          }
+      ) {};
+
+    twittertex = twittertex_0_1_0;
+
     twittex_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, oauther_1_0_2, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, oauther_1_0_2, oauth2_0_6_0 }:
           buildMix {
             name = "twittex";
             version = "0.0.4";
@@ -41272,7 +47736,7 @@ let
               sha256 =
                 "2cfe144fe70ed0d0fcfbc18f232a54a844d1ef79db74cd385c8640e40ea30aa7";
             };
-            beamDeps  = [ oauther_1_0_2 oauth2_0_5_0 ];
+            beamDeps  = [ oauther_1_0_2 oauth2_0_6_0 ];
 
             meta = {
               description = ''Twitter client library for Elixir'';
@@ -41309,7 +47773,7 @@ let
 
     typeformx_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "typeformx";
             version = "0.0.1";
@@ -41319,7 +47783,7 @@ let
               sha256 =
                 "8f6f1613f53f8c5012eb6d05276f5d305bdb9d4b0e94926680b536d0e1d94a62";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Elixir client library for the Typeform API
@@ -41332,17 +47796,17 @@ let
 
     typeformx = typeformx_0_0_1;
 
-    tzdata_0_1_8 = callPackage
+    tzdata_0_1_201603 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "tzdata";
-            version = "0.1.8";
+            version = "0.1.201603";
             src = fetchHex {
               pkg = "tzdata";
-              version = "0.1.8";
+              version = "0.1.201603";
               sha256 =
-                "68af93cc1e0e0e6be76a583faaf15d57972a1afbf1e39f9d70524da87dfae825";
+                "77598cedfb09cfdfb8f431c51131eb84229c46b2c5a7eebdf5904b2b8f003225";
             };
 
             meta = {
@@ -41354,19 +47818,19 @@ let
           }
       ) {};
 
-    tzdata_0_5_6 = callPackage
+    tzdata_0_5_7 = callPackage
       (
-        {  buildMix, fetchHex, hackney_1_4_8 }:
+        {  buildMix, fetchHex, hackney_1_6_0 }:
           buildMix {
             name = "tzdata";
-            version = "0.5.6";
+            version = "0.5.7";
             src = fetchHex {
               pkg = "tzdata";
-              version = "0.5.6";
+              version = "0.5.7";
               sha256 =
-                "e2be18ea3e7c7dc83520b0eed369bbeea0c478299590524009a9dbaf0a9bfb04";
+                "1747ca537ddd0861a56a5f37f9fa480a66eb7dfc0f5f1fcdd0b08ba300c87743";
             };
-            beamDeps  = [ hackney_1_4_8 ];
+            beamDeps  = [ hackney_1_6_0 ];
 
             meta = {
               description = ''Tzdata is a parser and library for the tz
@@ -41377,19 +47841,44 @@ let
           }
       ) {};
 
-    tzdata = tzdata_0_5_6;
+    tzdata = tzdata_0_5_7;
 
-    ua_inspector_0_10_0 = callPackage
+    u2f_0_1_3 = callPackage
+      (
+        {  buildRebar3, fetchHex, jiffy_0_14_7, base64url_0_0_1 }:
+          buildRebar3 {
+            name = "u2f";
+            version = "0.1.3";
+            src = fetchHex {
+              pkg = "u2f";
+              version = "0.1.3";
+              sha256 =
+                "2a781f1664fac6a4de53b25115c1b00a143e02d7b7bdb583e1965a061d20e30c";
+            };
+
+            beamDeps  = [ jiffy_0_14_7 base64url_0_0_1 ];
+
+            meta = {
+              description = ''Server-side U2F library'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/sharpfin/u2f-erl";
+            };
+          }
+      ) {};
+
+    u2f = u2f_0_1_3;
+
+    ua_inspector_0_11_0 = callPackage
       (
         {  buildMix, fetchHex, poolboy_1_5_1 }:
           buildMix {
             name = "ua_inspector";
-            version = "0.10.0";
+            version = "0.11.0";
             src = fetchHex {
               pkg = "ua_inspector";
-              version = "0.10.0";
+              version = "0.11.0";
               sha256 =
-                "10f53183f10fcdbafb912e32798decec31fa0477fb4ddaa48048467936231d9a";
+                "ddc05b1293962317caab370610131e950a697a62ac7d041c885e5540dba1cf72";
             };
             beamDeps  = [ poolboy_1_5_1 ];
 
@@ -41401,7 +47890,7 @@ let
           }
       ) {};
 
-    ua_inspector = ua_inspector_0_10_0;
+    ua_inspector = ua_inspector_0_11_0;
 
     uber_0_1_0 = callPackage
       (
@@ -41426,6 +47915,30 @@ let
       ) {};
 
     uber = uber_0_1_0;
+
+    ucol_2_0_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "ucol";
+            version = "2.0.0";
+            src = fetchHex {
+              pkg = "ucol";
+              version = "2.0.0";
+              sha256 =
+                "b544b88ce034d1d1ab58e093744cbded9a1e8b05006870b4d3865d6cd5066a21";
+            };
+            compilePorts = true;
+
+            meta = {
+              description = ''ICU based collation module'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/refuge/ucol_nif";
+            };
+          }
+      ) {};
+
+    ucol = ucol_2_0_0;
 
     ucol_nif_1_1_5 = callPackage
       (
@@ -41476,7 +47989,7 @@ let
 
     ueberauth_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "ueberauth";
             version = "0.2.0";
@@ -41486,7 +47999,7 @@ let
               sha256 =
                 "d6ee9cfe96be0e2b4005cb482b8e29c20ae0d6f7332ea9f686397c4ab20bf4de";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''An Elixir Authentication System for Plug-based
@@ -41501,7 +48014,7 @@ let
 
     ueberauth_facebook_0_3_2 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_6_0 }:
           buildMix {
             name = "ueberauth_facebook";
             version = "0.3.2";
@@ -41511,7 +48024,7 @@ let
               sha256 =
                 "d766a41a0b26bccfc1371b776bfcfb760f09639ac3de9aa8885023af9e5641c5";
             };
-            beamDeps  = [ ueberauth_0_2_0 oauth2_0_5_0 ];
+            beamDeps  = [ ueberauth_0_2_0 oauth2_0_6_0 ];
 
             meta = {
               description = ''An Uberauth strategy for Facebook
@@ -41526,7 +48039,7 @@ let
 
     ueberauth_fitbit_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_6_0 }:
           buildMix {
             name = "ueberauth_fitbit";
             version = "0.2.1";
@@ -41536,7 +48049,7 @@ let
               sha256 =
                 "669e2bba8f498651dc4c31fbb978179b9d344264ace2ff8f53e007cc6d243956";
             };
-            beamDeps  = [ ueberauth_0_2_0 oauth2_0_5_0 ];
+            beamDeps  = [ ueberauth_0_2_0 oauth2_0_6_0 ];
 
             meta = {
               description = ''An Ueberauth strategy for Fitbit OAuth2
@@ -41551,7 +48064,7 @@ let
 
     ueberauth_github_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_6_0 }:
           buildMix {
             name = "ueberauth_github";
             version = "0.2.0";
@@ -41561,7 +48074,7 @@ let
               sha256 =
                 "b12b3dae8c097d5cd57a3e1cd97286b796ee36794b031f92a76e848f572cb4ab";
             };
-            beamDeps  = [ ueberauth_0_2_0 oauth2_0_5_0 ];
+            beamDeps  = [ ueberauth_0_2_0 oauth2_0_6_0 ];
 
             meta = {
               description = ''An Ueberauth strategy for using Github to
@@ -41576,7 +48089,7 @@ let
 
     ueberauth_google_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_6_0 }:
           buildMix {
             name = "ueberauth_google";
             version = "0.2.0";
@@ -41586,7 +48099,7 @@ let
               sha256 =
                 "b57f13534f37b7062df5a696976453af1faabc00d608ccdce29f9289164fce44";
             };
-            beamDeps  = [ ueberauth_0_2_0 oauth2_0_5_0 ];
+            beamDeps  = [ ueberauth_0_2_0 oauth2_0_6_0 ];
 
             meta = {
               description = ''An Uberauth strategy for Google
@@ -41599,21 +48112,19 @@ let
 
     ueberauth_google = ueberauth_google_0_2_0;
 
-    ueberauth_identity_0_2_2 = callPackage
+    ueberauth_identity_0_2_3 = callPackage
       (
-        {
-          buildMix, fetchHex, ueberauth_0_2_0, poison_1_5_2, plug_1_1_1
-        }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, plug_1_1_3 }:
           buildMix {
             name = "ueberauth_identity";
-            version = "0.2.2";
+            version = "0.2.3";
             src = fetchHex {
               pkg = "ueberauth_identity";
-              version = "0.2.2";
+              version = "0.2.3";
               sha256 =
-                "6c3d7e5917a5030f737152cc86af4c7066a66a30aea049562c687e5af51bee82";
+                "ebbb4d7fe6c94053486a32794ab2a561f004f01fd1099c7e0a69901dc32c51ca";
             };
-            beamDeps  = [ ueberauth_0_2_0 poison_1_5_2 plug_1_1_1 ];
+            beamDeps  = [ ueberauth_0_2_0 plug_1_1_3 ];
 
             meta = {
               description = ''An Ueberauth strategy for basic
@@ -41624,11 +48135,11 @@ let
           }
       ) {};
 
-    ueberauth_identity = ueberauth_identity_0_2_2;
+    ueberauth_identity = ueberauth_identity_0_2_3;
 
     ueberauth_slack_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_5_0 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, oauth2_0_6_0 }:
           buildMix {
             name = "ueberauth_slack";
             version = "0.2.0";
@@ -41638,7 +48149,7 @@ let
               sha256 =
                 "1b109ed50d34b3a18d5db04234475baa3ae08893b46a7b5a1726fec4adb6753b";
             };
-            beamDeps  = [ ueberauth_0_2_0 oauth2_0_5_0 ];
+            beamDeps  = [ ueberauth_0_2_0 oauth2_0_6_0 ];
 
             meta = {
               description = ''An Ueberauth strategy for using Slack to
@@ -41652,7 +48163,7 @@ let
 
     ueberauth_twitter_0_2_2 = callPackage
       (
-        {  buildMix, fetchHex, ueberauth_0_2_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, ueberauth_0_2_0, httpoison_0_8_2 }:
           buildMix {
             name = "ueberauth_twitter";
             version = "0.2.2";
@@ -41662,7 +48173,7 @@ let
               sha256 =
                 "911a227b8290e8d65cee8d45015477d4ea51dbcf637c8a41ff88b34fcc5ab65a";
             };
-            beamDeps  = [ ueberauth_0_2_0 httpoison_0_8_1 ];
+            beamDeps  = [ ueberauth_0_2_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''An Uberauth strategy for Twitter
@@ -41795,7 +48306,7 @@ let
     unsplash_0_3_0 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, oauth2_0_5_0, httpoison_0_8_1
+          buildMix, fetchHex, poison_1_5_2, oauth2_0_6_0, httpoison_0_8_2
         }:
           buildMix {
             name = "unsplash";
@@ -41806,7 +48317,7 @@ let
               sha256 =
                 "609ded0d452729df1d6272ca7997a6bd6fb65821606f17d078c73a1b2ecbc37a";
             };
-            beamDeps  = [ poison_1_5_2 oauth2_0_5_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 oauth2_0_6_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Unsplash API in Elixir'';
@@ -41817,6 +48328,30 @@ let
       ) {};
 
     unsplash = unsplash_0_3_0;
+
+    untappd_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0 }:
+          buildMix {
+            name = "untappd";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "untappd";
+              version = "0.0.1";
+              sha256 =
+                "f4560612cd78002202234660cf248f004c91ade8c10dc87ad136eb5d8f49d66a";
+            };
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 ];
+
+            meta = {
+              description = ''Elixir wrapper for the Untappd API'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/nimi/untappd";
+            };
+          }
+      ) {};
+
+    untappd = untappd_0_0_1;
 
     upyun_0_0_1 = callPackage
       (
@@ -41909,19 +48444,19 @@ let
 
     urilib = urilib_0_1_1;
 
-    url_unroller_0_0_2 = callPackage
+    url_unroller_0_0_3 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2 }:
           buildMix {
             name = "url_unroller";
-            version = "0.0.2";
+            version = "0.0.3";
             src = fetchHex {
               pkg = "url_unroller";
-              version = "0.0.2";
+              version = "0.0.3";
               sha256 =
-                "9e12c97ff7b45e457734293cabfdd1e60dbfe3d4f80ec7706814a84b61cf11ec";
+                "65a46b7335060111bdc5ad164548361f3c7ff5a39ff9493a9109dd20b98498b9";
             };
-            beamDeps  = [ httpoison_0_8_1 ];
+            beamDeps  = [ httpoison_0_8_2 ];
 
             meta = {
               description = ''A simple url unroller/unshortener'';
@@ -41931,7 +48466,7 @@ let
           }
       ) {};
 
-    url_unroller = url_unroller_0_0_2;
+    url_unroller = url_unroller_0_0_3;
 
     urna_0_1_4 = callPackage
       (
@@ -41957,17 +48492,17 @@ let
 
     urna = urna_0_1_4;
 
-    uuid_0_1_5 = callPackage
+    uuid_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
           buildMix {
             name = "uuid";
-            version = "0.1.5";
+            version = "1.0.0";
             src = fetchHex {
               pkg = "uuid";
-              version = "0.1.5";
+              version = "1.0.0";
               sha256 =
-                "5cfb91972f5cacb0bcb2f00414d5747dd575d84b864c96f668ab3b729cc08422";
+                "ff0a92c21c23935a944a5c5608c1c5af8d629ff5e11593001434d21efcb343b4";
             };
 
             meta = {
@@ -42051,7 +48586,7 @@ let
 
     valid_field_0_3_0 = callPackage
       (
-        {  buildMix, fetchHex, ecto_2_0_0_beta_0 }:
+        {  buildMix, fetchHex, ecto_2_0_0_beta_2 }:
           buildMix {
             name = "valid_field";
             version = "0.3.0";
@@ -42061,7 +48596,7 @@ let
               sha256 =
                 "258591717d45835be4f3b299a2c332dc33702876c272f2fff455956c4a5409dc";
             };
-            beamDeps  = [ ecto_2_0_0_beta_0 ];
+            beamDeps  = [ ecto_2_0_0_beta_2 ];
 
             meta = {
               description = ''ValidField aids unit testing a changeset for
@@ -42097,9 +48632,83 @@ let
 
     varpool = varpool_1_5_1;
 
+    vector_0_1_0 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "vector";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "vector";
+              version = "0.1.0";
+              sha256 =
+                "2399175b7daa136a15ddbaeeb007de0b903fd21979aec1afa2ead92d37033870";
+            };
+
+            meta = {
+              longDescription = ''Library of common vector functions for use in
+                                geometric or graphical calculations.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/vector_ex";
+            };
+          }
+      ) {};
+
+    vector_0_2_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "vector";
+            version = "0.2.1";
+            src = fetchHex {
+              pkg = "vector";
+              version = "0.2.1";
+              sha256 =
+                "20c7d2b83aae6da37c53e7d3139096b4dcfbd289a57b38a07dfb570a1c6e38fb";
+            };
+
+            meta = {
+              longDescription = ''Library of common vector functions for use in
+                                geometric or graphical calculations.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/pkinney/vector_ex";
+            };
+          }
+      ) {};
+
+    vector = vector_0_2_1;
+
+    velkoz_0_0_1 = callPackage
+      (
+        {
+          buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2, ex_rated_1_2_2
+        }:
+          buildMix {
+            name = "velkoz";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "velkoz";
+              version = "0.0.1";
+              sha256 =
+                "3eaa4d2f1b1904d57811e42a841735eb2eb74eb4ea93c7182e1c0b1e0a01a7e8";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ex_rated_1_2_2 ];
+
+            meta = {
+              longDescription = ''Velkoz is an api wrapper for the game leauge
+                                of legends. You can find the api documentation
+                                :: https://developer.riotgames.com/api'';
+              license = stdenv.lib.licenses.asl20;
+              homepage = "https://github.com/tesseract-tech/velkoz";
+            };
+          }
+      ) {};
+
+    velkoz = velkoz_0_0_1;
+
     verify_origin_0_1_0 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "verify_origin";
             version = "0.1.0";
@@ -42109,7 +48718,7 @@ let
               sha256 =
                 "90834033676cb0ca632f208f489f6eb92ae94323fe7243efba577e1deb031167";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''A library for using Origin header checking to
@@ -42122,27 +48731,33 @@ let
 
     verify_origin = verify_origin_0_1_0;
 
-    verk_0_9_6 = callPackage
+    verk_0_9_11 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          timex_1_0_1,
-          redix_0_3_4,
+          watcher_1_0_0,
+          timex_1_0_2,
+          redix_0_3_6,
           poolboy_1_5_1,
           poison_1_5_2
         }:
           buildMix {
             name = "verk";
-            version = "0.9.6";
+            version = "0.9.11";
             src = fetchHex {
               pkg = "verk";
-              version = "0.9.6";
+              version = "0.9.11";
               sha256 =
-                "a8b021d474d199c946fc6b7b38053218d8157faa60e9068c18db86ea5a978869";
+                "79183e0e79a106f0712bd291ac1c81124a497d4e1aef0f9db6672ec5b6190b49";
             };
-            beamDeps  = [ timex_1_0_1 redix_0_3_4 poolboy_1_5_1 poison_1_5_2
-                      ];
+            beamDeps  = [
+                          watcher_1_0_0
+                          timex_1_0_2
+                          redix_0_3_6
+                          poolboy_1_5_1
+                          poison_1_5_2
+                        ];
 
             meta = {
               description = ''Verk is a job processing system backed by
@@ -42153,31 +48768,31 @@ let
           }
       ) {};
 
-    verk = verk_0_9_6;
+    verk = verk_0_9_11;
 
-    verk_web_0_9_1 = callPackage
+    verk_web_0_9_4 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          verk_0_9_6,
-          phoenix_html_2_5_0,
+          verk_0_9_11,
+          phoenix_html_2_5_1,
           phoenix_1_1_4,
           gettext_0_10_0,
           cowboy_1_0_4
         }:
           buildMix {
             name = "verk_web";
-            version = "0.9.1";
+            version = "0.9.4";
             src = fetchHex {
               pkg = "verk_web";
-              version = "0.9.1";
+              version = "0.9.4";
               sha256 =
-                "71eb5c4ab6f73676b21c24b1ba86a3c11a1979339d83ab52a77a3be70da6e61b";
+                "58c5c58515d435eda9f2ddb42d418b8e189b624f2b365e0a70fcd18880c8cb07";
             };
             beamDeps  = [
-                          verk_0_9_6
-                          phoenix_html_2_5_0
+                          verk_0_9_11
+                          phoenix_html_2_5_1
                           phoenix_1_1_4
                           gettext_0_10_0
                           cowboy_1_0_4
@@ -42191,7 +48806,7 @@ let
           }
       ) {};
 
-    verk_web = verk_web_0_9_1;
+    verk_web = verk_web_0_9_4;
 
     vex_0_5_5 = callPackage
       (
@@ -42217,19 +48832,19 @@ let
 
     vex = vex_0_5_5;
 
-    viktor_0_0_5 = callPackage
+    viktor_0_0_9 = callPackage
       (
-        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
           buildMix {
             name = "viktor";
-            version = "0.0.5";
+            version = "0.0.9";
             src = fetchHex {
               pkg = "viktor";
-              version = "0.0.5";
+              version = "0.0.9";
               sha256 =
-                "df49c25a93ea36d6f65b25716c894a9479ab6f990ed138170bdeea2930ef6cec";
+                "876c3b9dbac7503640144fc9850c80e56148daa3aa28029f5d8fb44b35b999ff";
             };
-            beamDeps  = [ poison_2_1_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Client API wrapper for League of Legends API.'';
@@ -42239,7 +48854,7 @@ let
           }
       ) {};
 
-    viktor = viktor_0_0_5;
+    viktor = viktor_0_0_9;
 
     vimeo_0_0_2 = callPackage
       (
@@ -42267,7 +48882,7 @@ let
 
     virus_total_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, jsx_2_8_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, jsx_2_8_0, httpoison_0_8_2 }:
           buildMix {
             name = "virus_total";
             version = "0.0.1";
@@ -42277,7 +48892,7 @@ let
               sha256 =
                 "bed3680d17c98f978a90f5b443b6e269ee0a3f2239d2262502d8d10ee042ebfa";
             };
-            beamDeps  = [ jsx_2_8_0 httpoison_0_8_1 ];
+            beamDeps  = [ jsx_2_8_0 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir OTP application for the VirusTotal Public
@@ -42314,6 +48929,66 @@ let
 
     voorhees = voorhees_0_1_1;
 
+    voxpop_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "voxpop";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "voxpop";
+              version = "0.0.1";
+              sha256 =
+                "85a410b1df2de5852ce491c653d29781b1db2845f8d2e51d9809f7ebbe90a6c9";
+            };
+
+            meta = {
+              description = ''Voxpop generates text from declarative
+                            grammars.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/zovafit/voxpop";
+            };
+          }
+      ) {};
+
+    voxpop = voxpop_0_0_1;
+
+    wallaby_0_1_0 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          poolboy_1_5_1,
+          poison_2_1_0,
+          httpoison_0_8_2,
+          dialyze_0_2_1
+        }:
+          buildMix {
+            name = "wallaby";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "wallaby";
+              version = "0.1.0";
+              sha256 =
+                "836fd7f97f1f70befc6e2e3a9bc785ff70b5de053d2e9ca021a5918edfa0a099";
+            };
+            beamDeps  = [
+                          poolboy_1_5_1
+                          poison_2_1_0
+                          httpoison_0_8_2
+                          dialyze_0_2_1
+                        ];
+
+            meta = {
+              description = ''Concurrent feature tests for elixir'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/keathley/wallaby";
+            };
+          }
+      ) {};
+
+    wallaby = wallaby_0_1_0;
+
     watcher_1_0_0 = callPackage
       (
         {  buildMix, fetchHex }:
@@ -42339,7 +49014,7 @@ let
 
     wayback_archiver_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpotion_2_1_0, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpotion_2_2_2, floki_0_8_0 }:
           buildMix {
             name = "wayback_archiver";
             version = "0.0.1";
@@ -42349,7 +49024,7 @@ let
               sha256 =
                 "9f8bea06d6dcac6c017a3a41859373c10a1b46fb133db47300c2ae7c9fada590";
             };
-            beamDeps  = [ httpotion_2_1_0 floki_0_7_1 ];
+            beamDeps  = [ httpotion_2_2_2 floki_0_8_0 ];
 
             meta = {
               description = ''Send URLs to Wayback Machine'';
@@ -42416,7 +49091,7 @@ let
 
     webdriver_0_8_1 = callPackage
       (
-        {  buildMix, fetchHex, jazz_0_2_1, httpotion_2_2_0 }:
+        {  buildMix, fetchHex, jazz_0_2_1, httpotion_2_2_2 }:
           buildMix {
             name = "webdriver";
             version = "0.8.1";
@@ -42426,7 +49101,7 @@ let
               sha256 =
                 "fe2009920fb210cd50df3a7d2bb40cd6f2844a538d52a48952f18008e1c5f3d3";
             };
-            beamDeps  = [ jazz_0_2_1 httpotion_2_2_0 ];
+            beamDeps  = [ jazz_0_2_1 httpotion_2_2_2 ];
 
             meta = {
               description = ''Webdriver protocol for driving web browsers.'';
@@ -42461,9 +49136,35 @@ let
 
     weber = weber_0_1_0;
 
+    webmentions_0_0_5 = callPackage
+      (
+        {  buildMix, fetchHex, httpotion_2_2_2, floki_0_7_2 }:
+          buildMix {
+            name = "webmentions";
+            version = "0.0.5";
+            src = fetchHex {
+              pkg = "webmentions";
+              version = "0.0.5";
+              sha256 =
+                "8240363589044572bc1ceddef0843d03ccb23e7ca5bb660e9dd11fb7c9e06414";
+            };
+            beamDeps  = [ httpotion_2_2_2 floki_0_7_2 ];
+
+            meta = {
+              description = ''A Webmentions
+                            (https://indiewebcamp.com/Webmention) module for
+                            Elixir'';
+              license = stdenv.lib.licenses.agpl3;
+              homepage = "https://github.com/ckruse/webmentions-elixir";
+            };
+          }
+      ) {};
+
+    webmentions = webmentions_0_0_5;
+
     webpay_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "webpay";
             version = "0.0.4";
@@ -42473,7 +49174,7 @@ let
               sha256 =
                 "abab40fc7fda25a55d3a3dce4327d3f322df378432a9ed5e7c43e553989f467e";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir Webpay API wrapper'';
@@ -42509,7 +49210,7 @@ let
 
     wechat_check_signature_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "wechat_check_signature";
             version = "0.0.1";
@@ -42519,7 +49220,7 @@ let
               sha256 =
                 "5c5bb053c15082e12ad6da485fc4f711efa9198107368a42456aeafcf870caec";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''An Elixir Plug for checking wechat signature.'';
@@ -42533,7 +49234,7 @@ let
 
     wechatex_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1 }:
+        {  buildMix, fetchHex, plug_1_1_3 }:
           buildMix {
             name = "wechatex";
             version = "0.0.1";
@@ -42543,7 +49244,7 @@ let
               sha256 =
                 "211971a79d38326dbf5e603ee00165708eb17670f2a84e54df929191c6fef81c";
             };
-            beamDeps  = [ plug_1_1_1 ];
+            beamDeps  = [ plug_1_1_3 ];
 
             meta = {
               description = ''Wechat plugins for Elixir.'';
@@ -42606,7 +49307,7 @@ let
 
     wifi_0_2_0 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_4_0, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_4_0, httpoison_0_8_2 }:
           buildMix {
             name = "wifi";
             version = "0.2.0";
@@ -42616,7 +49317,7 @@ let
               sha256 =
                 "0060d0dda9308e9dc652e83f7646485d932188a11e17fb814125ccd7449effc5";
             };
-            beamDeps  = [ poison_1_4_0 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_4_0 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''Various utility functions for working with
@@ -42659,7 +49360,7 @@ let
 
     witchcraft_0_4_2 = callPackage
       (
-        {  buildMix, fetchHex, quark_1_0_2, algae_0_9_1 }:
+        {  buildMix, fetchHex, quark_1_0_2, algae_0_10_0 }:
           buildMix {
             name = "witchcraft";
             version = "0.4.2";
@@ -42669,7 +49370,7 @@ let
               sha256 =
                 "cdd6379d5a8b0baab3b79b0c9b87473d8292e0d9a80fa2e21fac61d31218609f";
             };
-            beamDeps  = [ quark_1_0_2 algae_0_9_1 ];
+            beamDeps  = [ quark_1_0_2 algae_0_10_0 ];
 
             meta = {
               description = ''Common algebraic structures and functions'';
@@ -42707,7 +49408,7 @@ let
 
     wizardry_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, plug_1_1_1, comeonin_1_6_0 }:
+        {  buildMix, fetchHex, plug_1_1_3, comeonin_1_6_0 }:
           buildMix {
             name = "wizardry";
             version = "0.0.1";
@@ -42717,7 +49418,7 @@ let
               sha256 =
                 "4a85b8c3e5813dee20aa0d5503811568743644883723c9b226436616c9a779a3";
             };
-            beamDeps  = [ plug_1_1_1 comeonin_1_6_0 ];
+            beamDeps  = [ plug_1_1_3 comeonin_1_6_0 ];
 
             meta = {
               description = ''Simple, low-level user account framework for
@@ -42828,17 +49529,17 @@ let
 
     workshop = workshop_0_5_1;
 
-    world_json_0_1_5 = callPackage
+    world_json_0_1_6 = callPackage
       (
         {  buildMix, fetchHex, poison_1_3_1 }:
           buildMix {
             name = "world_json";
-            version = "0.1.5";
+            version = "0.1.6";
             src = fetchHex {
               pkg = "world_json";
-              version = "0.1.5";
+              version = "0.1.6";
               sha256 =
-                "3a960d9794627a1927f7410185bf36c22d6b4d8f079bf74e131d0f5606b7f567";
+                "f91493355bc522e6ee58eed6d21fca41c32f246052c1324cb5f08b2eb1eb5e83";
             };
             beamDeps  = [ poison_1_3_1 ];
 
@@ -42851,7 +49552,7 @@ let
           }
       ) {};
 
-    world_json = world_json_0_1_5;
+    world_json = world_json_0_1_6;
 
     wpa_supplicant_0_1_0 = callPackage
       (
@@ -42883,7 +49584,7 @@ let
 
     wykop_api_0_0_4 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "wykop_api";
             version = "0.0.4";
@@ -42893,7 +49594,7 @@ let
               sha256 =
                 "0c2acade581168e5cdf3d1dbde53183bc1c49882c8ba8793e045f20d5a9a26d0";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Library for Wykop API.'';
@@ -42907,7 +49608,7 @@ let
 
     xe_0_0_1 = callPackage
       (
-        {  buildMix, fetchHex, httpoison_0_8_1, floki_0_7_1 }:
+        {  buildMix, fetchHex, httpoison_0_8_2, floki_0_8_0 }:
           buildMix {
             name = "xe";
             version = "0.0.1";
@@ -42917,7 +49618,7 @@ let
               sha256 =
                 "53d693612db1343c36a7bbe6286c23f7ccfdbd44500c2a38970743238d230a77";
             };
-            beamDeps  = [ httpoison_0_8_1 floki_0_7_1 ];
+            beamDeps  = [ httpoison_0_8_2 floki_0_8_0 ];
 
             meta = {
               description = ''Real time conversion for currencies'';
@@ -42931,7 +49632,7 @@ let
 
     xfighter_0_2_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "xfighter";
             version = "0.2.1";
@@ -42941,7 +49642,7 @@ let
               sha256 =
                 "67bb43379cd89b4b95f65f02ad5421719723d262fdbe7e399fb82ac7f3b490a8";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''An API wrapper for the programming game
@@ -42954,12 +49655,37 @@ let
 
     xfighter = xfighter_0_2_1;
 
+    xkcd_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex, poison_2_1_0, httpoison_0_8_2 }:
+          buildMix {
+            name = "xkcd";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "xkcd";
+              version = "0.0.1";
+              sha256 =
+                "1c757360b9c5ff3d098e9c04874ed273289ea890e4d87e7dd99164633fe061b5";
+            };
+            beamDeps  = [ poison_2_1_0 httpoison_0_8_2 ];
+
+            meta = {
+              longDescription = ''Uses the XKCD JSON API to retrieve the
+                                random, specific and the latest XKCD comic.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/notdevinclark/xkcd";
+            };
+          }
+      ) {};
+
+    xkcd = xkcd_0_0_1;
+
     xlsx_parser_0_0_4 = callPackage
       (
         {
           buildMix,
           fetchHex,
-          timex_1_0_1,
+          timex_1_0_2,
           sweet_xml_0_5_1,
           simple_agent_0_0_7
         }:
@@ -42972,7 +49698,7 @@ let
               sha256 =
                 "53d86e1142483421d5c1fe769f69980560a6809ca37a13c3dcd4c49fee46a831";
             };
-            beamDeps  = [ timex_1_0_1 sweet_xml_0_5_1 simple_agent_0_0_7 ];
+            beamDeps  = [ timex_1_0_2 sweet_xml_0_5_1 simple_agent_0_0_7 ];
 
             meta = {
               longDescription = ''Simple parsing of xlsx spreadsheet data. Data
@@ -42985,6 +49711,34 @@ let
       ) {};
 
     xlsx_parser = xlsx_parser_0_0_4;
+
+    xlsxir_0_0_2 = callPackage
+      (
+        {
+          buildMix, fetchHex, sweet_xml_0_6_1, ex_doc_0_11_4, earmark_0_2_1
+        }:
+          buildMix {
+            name = "xlsxir";
+            version = "0.0.2";
+            src = fetchHex {
+              pkg = "xlsxir";
+              version = "0.0.2";
+              sha256 =
+                "7019d6c58f87543fcccc463cec5132d7a2343f5ef2ffdbb77095b694646e6ab0";
+            };
+            beamDeps  = [ sweet_xml_0_6_1 ex_doc_0_11_4 earmark_0_2_1 ];
+
+            meta = {
+              longDescription = ''Parses Microsoft Excel worksheets (currently
+                                only .xlsx format) and returns the data in
+                                either a list or a map.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/kennellroxco/xlsxir";
+            };
+          }
+      ) {};
+
+    xlsxir = xlsxir_0_0_2;
 
     xml_builder_0_0_8 = callPackage
       (
@@ -43038,7 +49792,7 @@ let
     xoauth2_0_0_3 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, mock_0_1_1, httpoison_0_8_1
+          buildMix, fetchHex, poison_1_5_2, mock_0_1_3, httpoison_0_8_2
         }:
           buildMix {
             name = "xoauth2";
@@ -43049,7 +49803,7 @@ let
               sha256 =
                 "4a43a0bca1707b579c6a141524666006dd25ed2efdc19aee5d6eeedf6efc3418";
             };
-            beamDeps  = [ poison_1_5_2 mock_0_1_1 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 mock_0_1_3 httpoison_0_8_2 ];
 
             meta = {
               description = ''A simple XOAuth2 module for Elixir'';
@@ -43063,8 +49817,8 @@ let
 
     xref_runner_0_2_5 = callPackage
       (
-        {  buildRebar3, fetchHex, getopt_0_8_2 }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex, getopt_0_8_2 }:
+          buildErlangMk {
             name = "xref_runner";
             version = "0.2.5";
             src = fetchHex {
@@ -43073,7 +49827,6 @@ let
               sha256 =
                 "12ca46c02789b0b2755284dedeb73aac0d9a3120c28c992040feb86766ee2c9a";
             };
-
             beamDeps  = [ getopt_0_8_2 ];
 
             meta = {
@@ -43086,25 +49839,42 @@ let
 
     xref_runner = xref_runner_0_2_5;
 
-    yahoo_fx_0_1_3 = callPackage
+    xxhash_0_2_0 = callPackage
       (
-        {
-          buildMix,
-          fetchHex,
-          hackney_1_0_6,
-          time_seer_0_0_5,
-          httpoison_0_7_5
-        }:
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "xxhash";
+            version = "0.2.0";
+            src = fetchHex {
+              pkg = "xxhash";
+              version = "0.2.0";
+              sha256 =
+                "ed57fd84e2c4fc440c28fa6a59d2c2ec0d3957b58dfd05cf06da8824ee6494d8";
+            };
+
+            meta = {
+              description = ''Native Elixir xxHash port.'';
+              license = stdenv.lib.licenses.free;
+              homepage = "https://github.com/ttvd/elixir-xxhash";
+            };
+          }
+      ) {};
+
+    xxhash = xxhash_0_2_0;
+
+    yahoo_fx_0_2_0 = callPackage
+      (
+        {  buildMix, fetchHex, time_seer_0_0_6, httpoison_0_8_2 }:
           buildMix {
             name = "yahoo_fx";
-            version = "0.1.3";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "yahoo_fx";
-              version = "0.1.3";
+              version = "0.2.0";
               sha256 =
-                "6f8691b2de712ea5e870f48291a2a2debd8ae8977e37480e69ce81f423e40479";
+                "e06b6986c483cad62081e19fba3089f3eab4a4f1e1cc06cd17aa45d34dd14913";
             };
-            beamDeps  = [ hackney_1_0_6 time_seer_0_0_5 httpoison_0_7_5 ];
+            beamDeps  = [ time_seer_0_0_6 httpoison_0_8_2 ];
 
             meta = {
               longDescription = ''YahooFx is an Elixir library for getting
@@ -43115,7 +49885,7 @@ let
           }
       ) {};
 
-    yahoo_fx = yahoo_fx_0_1_3;
+    yahoo_fx = yahoo_fx_0_2_0;
 
     yaml_elixir_1_0_0 = callPackage
       (
@@ -43166,17 +49936,40 @@ let
 
     yar = yar_0_1_0;
 
-    yggdrasil_1_1_0 = callPackage
+    yes_msg_0_1_0 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "yes_msg";
+            version = "0.1.0";
+            src = fetchHex {
+              pkg = "yes_msg";
+              version = "0.1.0";
+              sha256 =
+                "45e0a13d87cf84fa50001b27f898b470c610207947e4ddb1b1160804b4e62e0e";
+            };
+
+            meta = {
+              description = ''Yet another simple message (YES) parser for
+                            Erlang.'';
+              license = stdenv.lib.licenses.mit;
+            };
+          }
+      ) {};
+
+    yes_msg = yes_msg_0_1_0;
+
+    yggdrasil_1_1_1 = callPackage
       (
         {  buildMix, fetchHex, exredis_0_2_3, amqp_0_1_4 }:
           buildMix {
             name = "yggdrasil";
-            version = "1.1.0";
+            version = "1.1.1";
             src = fetchHex {
               pkg = "yggdrasil";
-              version = "1.1.0";
+              version = "1.1.1";
               sha256 =
-                "f4412a82c09c09b70a9520f91113d9aa064f74b597ff5bdad6601ca7cf860f63";
+                "0e83184601187cfc2a7a101085eed98b31911279e442dd761bdbc692b6c87a40";
             };
             beamDeps  = [ exredis_0_2_3 amqp_0_1_4 ];
 
@@ -43192,12 +49985,12 @@ let
           }
       ) {};
 
-    yggdrasil = yggdrasil_1_1_0;
+    yggdrasil = yggdrasil_1_1_1;
 
     yocingo_0_0_2 = callPackage
       (
         {
-          buildMix, fetchHex, httpoison_0_8_1, exjsx_3_2_0, earmark_0_2_1
+          buildMix, fetchHex, httpoison_0_8_2, exjsx_3_2_0, earmark_0_2_1
         }:
           buildMix {
             name = "yocingo";
@@ -43208,7 +50001,7 @@ let
               sha256 =
                 "3ce350bb833e72edc684dc6ece956146161d4b7215cd9557f95bb2d7dcb1abf4";
             };
-            beamDeps  = [ httpoison_0_8_1 exjsx_3_2_0 earmark_0_2_1 ];
+            beamDeps  = [ httpoison_0_8_2 exjsx_3_2_0 earmark_0_2_1 ];
 
             meta = {
               longDescription = ''This is a full Telegram Bot API. With this
@@ -43221,21 +50014,21 @@ let
 
     yocingo = yocingo_0_0_2;
 
-    yodlee_0_0_9 = callPackage
+    yodlee_0_1_4 = callPackage
       (
         {
-          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1, hackney_1_4_8
+          buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2, hackney_1_4_10
         }:
           buildMix {
             name = "yodlee";
-            version = "0.0.9";
+            version = "0.1.4";
             src = fetchHex {
               pkg = "yodlee";
-              version = "0.0.9";
+              version = "0.1.4";
               sha256 =
-                "4bc779bc847bfb39ebc04789116da830d049e0755a594d5d8f38dffc250cf69e";
+                "a5ecf2c7ec42611f7f6cdaf0980da6028f5881e23484b2bf001d75fb6f0525df";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 hackney_1_4_8 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 hackney_1_4_10 ];
 
             meta = {
               description = ''Yodlee API'';
@@ -43245,12 +50038,12 @@ let
           }
       ) {};
 
-    yodlee = yodlee_0_0_9;
+    yodlee = yodlee_0_1_4;
 
     yomel_0_5_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "yomel";
             version = "0.5.0";
             src = fetchHex {
@@ -43259,7 +50052,6 @@ let
               sha256 =
                 "737be278c9ae9ed40b24a45a461ea47b4979429e1d51b28961d43ee3a6426827";
             };
-            compilePorts = true;
 
             meta = {
               description = ''Decodes yaml into elixir terms'';
@@ -43294,6 +50086,30 @@ let
       ) {};
 
     ytx = ytx_0_0_5;
+
+    yubico_0_1_4 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "yubico";
+            version = "0.1.4";
+            src = fetchHex {
+              pkg = "yubico";
+              version = "0.1.4";
+              sha256 =
+                "0609f63f3b6141e56014b5247526448a41bf9f61431800891b8c219310f425ad";
+            };
+
+            meta = {
+              description = ''Client implementing the Yubico Validation
+                            Protocol Version 2.0.'';
+              license = stdenv.lib.licenses.bsd3;
+              homepage = "https://github.com/project-fifo/erlang-yubico";
+            };
+          }
+      ) {};
+
+    yubico = yubico_0_1_4;
 
     yuri_1_0_0 = callPackage
       (
@@ -43427,7 +50243,7 @@ let
 
     zencoder_1_0_1 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_4_0, httpotion_1_0_0 }:
+        {  buildMix, fetchHex, poison_1_4_0, httpotion_2_2_2 }:
           buildMix {
             name = "zencoder";
             version = "1.0.1";
@@ -43437,7 +50253,7 @@ let
               sha256 =
                 "b2220575aa2ee1da5101774c82e1d68f2e5f86d6cefd6f04811c882fc05473bc";
             };
-            beamDeps  = [ poison_1_4_0 httpotion_1_0_0 ];
+            beamDeps  = [ poison_1_4_0 httpotion_2_2_2 ];
 
             meta = {
               description = ''Elixir API wrapper for the Zencoder video
@@ -43450,9 +50266,33 @@ let
 
     zencoder = zencoder_1_0_1;
 
+    zigzag_0_0_1 = callPackage
+      (
+        {  buildMix, fetchHex }:
+          buildMix {
+            name = "zigzag";
+            version = "0.0.1";
+            src = fetchHex {
+              pkg = "zigzag";
+              version = "0.0.1";
+              sha256 =
+                "27a151e219cf0dcabda9977aad3fbae7b8c366c88a88846e830bc4364f31ed95";
+            };
+
+            meta = {
+              description = ''Zigzag is a fast and flexible parallel processing
+                            library for Elixir.'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/utkarshkukreti/zigzag.ex";
+            };
+          }
+      ) {};
+
+    zigzag = zigzag_0_0_1;
+
     zipcloudx_0_0_2 = callPackage
       (
-        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_1 }:
+        {  buildMix, fetchHex, poison_1_5_2, httpoison_0_8_2 }:
           buildMix {
             name = "zipcloudx";
             version = "0.0.2";
@@ -43462,7 +50302,7 @@ let
               sha256 =
                 "1e474ec0229b6dd1404c34fbd2a851d136d9549d5ecccbd01d017baac64b264e";
             };
-            beamDeps  = [ poison_1_5_2 httpoison_0_8_1 ];
+            beamDeps  = [ poison_1_5_2 httpoison_0_8_2 ];
 
             meta = {
               description = ''Elixir zipcloud API wrapper'';
@@ -43473,17 +50313,17 @@ let
 
     zipcloudx = zipcloudx_0_0_2;
 
-    zipper_0_1_5 = callPackage
+    zipper_0_2_0 = callPackage
       (
-        {  buildRebar3, fetchHex }:
-          buildRebar3 {
+        {  buildErlangMk, fetchHex }:
+          buildErlangMk {
             name = "zipper";
-            version = "0.1.5";
+            version = "0.2.0";
             src = fetchHex {
               pkg = "zipper";
-              version = "0.1.5";
+              version = "0.2.0";
               sha256 =
-                "7df5552f41169a8feb1a2e81e2753ec4e4debb7d48cdf1edc77037205782d547";
+                "8f5a9271cebd535ff9bf9fd6829a36b3031d16c71b2ae6712e171f117520c023";
             };
 
             meta = {
@@ -43494,7 +50334,7 @@ let
           }
       ) {};
 
-    zipper = zipper_0_1_5;
+    zipper = zipper_0_2_0;
 
     zipper_tree_0_1_1 = callPackage
       (
@@ -43519,6 +50359,69 @@ let
       ) {};
 
     zipper_tree = zipper_tree_0_1_1;
+
+    zlist_1_0_1 = callPackage
+      (
+        {  buildRebar3, fetchHex }:
+          buildRebar3 {
+            name = "zlist";
+            version = "1.0.1";
+            src = fetchHex {
+              pkg = "zlist";
+              version = "1.0.1";
+              sha256 =
+                "d63b2ef3328f9b4b3ad827663db3d3b878311d08973c2abc202a66ad55c8a78c";
+            };
+
+            meta = {
+              description = ''Erlang lazy list library'';
+              license = stdenv.lib.licenses.mit;
+              homepage = "https://github.com/egobrain/zlist";
+            };
+          }
+      ) {};
+
+    zlist = zlist_1_0_1;
+
+    zuppler_users_client_0_0_5 = callPackage
+      (
+        {
+          buildMix,
+          fetchHex,
+          poolboy_1_5_1,
+          phoenix_1_1_4,
+          oauth2_0_6_0,
+          lru_cache_0_1_0,
+          httpotion_2_2_2
+        }:
+          buildMix {
+            name = "zuppler_users_client";
+            version = "0.0.5";
+            src = fetchHex {
+              pkg = "zuppler_users_client";
+              version = "0.0.5";
+              sha256 =
+                "519d87847b792db04bf97b6c6d56b26724b65f83b0f5ee17b83e82c5fb371557";
+            };
+            beamDeps  = [
+                          poolboy_1_5_1
+                          phoenix_1_1_4
+                          oauth2_0_6_0
+                          lru_cache_0_1_0
+                          httpotion_2_2_2
+                        ];
+
+            meta = {
+              description = ''An Elixir OAuth 2.0 Client Library to protect
+                            Zuppler API'';
+              license = stdenv.lib.licenses.mit;
+              homepage =
+                "https://github.com/zuppler/zuppler-users-client-elixir.git";
+            };
+          }
+      ) {};
+
+    zuppler_users_client = zuppler_users_client_0_0_5;
 
   };
 in stdenv.lib.fix' (stdenv.lib.extends overrides packages)
