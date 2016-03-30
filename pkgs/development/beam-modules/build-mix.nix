@@ -8,7 +8,6 @@
 , beamDeps ? []
 , postPatch ? ""
 , compilePorts ? false
-, installPhase ? null
 , meta ? {}
 , ... }@attrs:
 

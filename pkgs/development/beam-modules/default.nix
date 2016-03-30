@@ -12,6 +12,5 @@ let
     ## Non hex packages
     hex = callPackage ./hex {};
     webdriver = callPackage ./webdriver {};
-    elli = callPackage ./elli {};
   };
 in self // self.hexPackages
