@@ -371,6 +371,8 @@ let
     webkitgtk = webkitgtk24x;
   };
 
+  gspell = callPackage ./misc/gspell { };
+
   libgames-support = callPackage ./misc/libgames-support { };
 
   libgda = callPackage ./misc/libgda { };
