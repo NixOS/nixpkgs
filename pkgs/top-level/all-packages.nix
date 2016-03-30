@@ -1539,6 +1539,8 @@ in
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fswebcam = callPackage ../os-specific/linux/fswebcam { };
+
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
