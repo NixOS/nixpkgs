@@ -6389,6 +6389,8 @@ in
   box2d = callPackage ../development/libraries/box2d { };
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
+  breakpad = callPackage ../development/libraries/breakpad { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
@@ -6548,6 +6550,8 @@ in
   dbus_tools = pkgs.dbus.tools;
   dbus_libs = pkgs.dbus.libs;
   dbus_daemon = pkgs.dbus.daemon;
+
+  dee = callPackage ../development/libraries/dee { };
 
   dhex = callPackage ../applications/editors/dhex { };
 
@@ -7424,6 +7428,8 @@ in
 
   libgdata = gnome3.libgdata;
 
+  libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
+
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
@@ -7900,6 +7906,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libunity = callPackage ../development/libraries/libunity { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
@@ -8344,6 +8352,14 @@ in
 
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = config.pcre.unicode or true;
+  };
+  pcre16 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 16;
+  };
+  pcre32 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 32;
   };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
@@ -13836,7 +13852,9 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli/default.nix { };
+  tdesktop = qt55.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+
+  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
