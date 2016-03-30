@@ -1141,6 +1141,8 @@ let
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
+  cloud-utils = callPackage ../tools/misc/cloud-utils { };
+
   compass = callPackage ../development/tools/compass { };
 
   convmv = callPackage ../tools/misc/convmv { };
