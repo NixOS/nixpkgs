@@ -10,7 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp libantlr3c boost autoreconfHook ];
-  preConfigure = "patchShebangs ./src/";
+  preConfigure = ''
+    patchShebangs ./src/
+    OLD_CPPFLAGS="$CPPFLAGS"
+    export CPPFLAGS="$CPPFLAGS -P"
+  '';
+  postConfigure = ''CPPFLAGS="$OLD_CPPFLAGS"'';
   doChecks = true;
 
   meta = with stdenv.lib; {
