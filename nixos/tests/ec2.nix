@@ -20,6 +20,14 @@ let
               ln -s vda /dev/xvda
               ln -s vda1 /dev/xvda1
             '';
+
+          # Needed by nixos-rebuild due to the lack of network
+          # access. Mostly copied from
+          # modules/profiles/installation-device.nix.
+          system.extraDependencies =
+            [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio
+              pkgs.unionfs-fuse pkgs.mkinitcpio-nfs-utils
+            ];
         }
       ];
     }).config.system.build.amazonImage;
