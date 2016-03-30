@@ -5,7 +5,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  config = mkIf config.ec2.hvm {
+  config = lib.mkIf config.ec2.hvm {
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
