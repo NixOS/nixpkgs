@@ -66,6 +66,7 @@ rec {
       mknod -m 666 ${dev}/random  c 1 8
       mknod -m 666 ${dev}/urandom c 1 9
       mknod -m 666 ${dev}/tty     c 5 0
+      mknod -m 666 ${dev}/ttyS0   c 4 64
       mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
@@ -208,7 +209,7 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${bash}/bin/sh
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/ttyS0 &> /dev/ttyS0
     fi
   '';
 
