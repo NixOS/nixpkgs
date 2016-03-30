@@ -2,11 +2,13 @@
 , libxml2, gnome3, gobjectIntrospection, libsoup }:
 
 stdenv.mkDerivation rec {
-  name = "grilo-0.2.12";
+  major = "0.3";
+  minor = "0";
+  name = "grilo-${major}.${minor}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/grilo/0.2/${name}.tar.xz";
-    sha256 = "11bvc7rsrjjwz8hp67p3fn8zmywrpawrcbi3vgw8b0dwa0sndd2m";
+    url = "mirror://gnome/sources/grilo/${major}/${name}.tar.xz";
+    sha256 = "0q5wcvnckpfks48hy0gvlfdmvqm67vnblm3912rssmkgc1ysil8z";
   };
 
   setupHook = ./setup-hook.sh;
