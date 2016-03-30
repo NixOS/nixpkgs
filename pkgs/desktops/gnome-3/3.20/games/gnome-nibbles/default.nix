@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
 , librsvg, libcanberra_gtk3, clutter_gtk, intltool, itstool
-, libxml2 }:
+, libxml2, libgee, libgames-support }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2
     librsvg libcanberra_gtk3 clutter_gtk gnome3.defaultIconTheme
+    libgee libgames-support
   ];
 
   meta = with stdenv.lib; {
