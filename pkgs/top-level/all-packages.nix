@@ -1748,6 +1748,8 @@ in
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
+  graylog = callPackage ../tools/misc/graylog { };
+
   gprof2dot = callPackage ../development/tools/profiling/gprof2dot {
     # Using pypy provides significant performance improvements (~2x)
     pythonPackages = pypyPackages;
