@@ -11,7 +11,6 @@ let
       modules = [
         ../maintainers/scripts/ec2/amazon-image.nix
         ../modules/testing/test-instrumentation.nix
-        ../modules/profiles/minimal.nix
         ../modules/profiles/qemu-guest.nix
         { ec2.hvm = true;
 
@@ -30,9 +29,8 @@ let
       metaData = pkgs.stdenv.mkDerivation {
         name = "metadata";
         buildCommand = ''
-          mkdir -p $out/2011-01-01
-          ln -s ${pkgs.writeText "userData" userData} $out/2011-01-01/user-data
           mkdir -p $out/1.0/meta-data
+          ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
           echo "${hostname}" > $out/1.0/meta-data/hostname
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
         '' + optionalString (sshPublicKey != null) ''
@@ -48,7 +46,7 @@ let
           my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";
           mkdir $imageDir, 0700;
           my $diskImage = "$imageDir/machine.qcow2";
-          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.img $diskImage") == 0 or die;
+          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.qcow2 $diskImage") == 0 or die;
           system("qemu-img resize $diskImage 10G") == 0 or die;
 
           # Note: we use net=169.0.0.0/8 rather than
@@ -91,7 +89,7 @@ in {
     '';
     script = ''
       $machine->start;
-      $machine->waitForFile("/root/user-data");
+      $machine->waitForFile("/etc/ec2-metadata/user-data");
       $machine->waitForUnit("sshd.service");
 
       $machine->succeed("grep unknown /etc/ec2-metadata/ami-manifest-path");
@@ -121,7 +119,7 @@ in {
       # Just to make sure resizing is idempotent.
       $machine->shutdown;
       $machine->start;
-      $machine->waitForFile("/root/user-data");
+      $machine->waitForFile("/etc/ec2-metadata/user-data");
     '';
   };
 
@@ -135,6 +133,7 @@ in {
         imports = [
           <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
           <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+          <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
         ];
         environment.etc.testFile = {
           text = "whoa";
