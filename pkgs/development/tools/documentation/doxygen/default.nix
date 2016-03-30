@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   cmakeFlags =
     stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
 
+  NIX_CFLAGS_COMPILE =
+    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+
   enableParallelBuilding = true;
 
   meta = {

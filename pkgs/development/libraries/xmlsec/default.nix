@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
+  # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
+  NIX_LDFLAGS = [ "-lgcrypt" ];
+
   postFixup = ''
     wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
   '';

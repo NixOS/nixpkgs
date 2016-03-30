@@ -366,8 +366,8 @@ in {
               "mkdir /mnt/boot",
               "mount LABEL=boot /mnt/boot",
               "udevadm settle",
-              "mdadm -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
-              "mdadm -W /dev/md1",
+              "mdadm --verbose -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
+              "mdadm --verbose -W /dev/md1",
           );
         '';
     };
