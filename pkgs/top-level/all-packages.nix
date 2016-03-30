@@ -2315,6 +2315,8 @@ let
 
   libiberty = callPackage ../development/libraries/libiberty { };
 
+  libiberty_static = callPackage ../development/libraries/libiberty { staticBuild = true; };
+
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
