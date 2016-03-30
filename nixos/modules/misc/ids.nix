@@ -264,6 +264,7 @@
       taskd = 240;
       factorio = 241;
       emby = 242;
+      graylog = 243;
 
       prometheus = 999;
 
