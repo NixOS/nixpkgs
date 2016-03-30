@@ -4,7 +4,7 @@
 set -x
 
 # The trailing slash at the end is necessary!
-WGET_ARGS='http://download.kde.org/stable/applications/15.12.1/ -A *.tar.xz'
+WGET_ARGS='http://download.kde.org/stable/applications/15.12.3/ -A *.tar.xz'
 
 mkdir tmp; cd tmp
 
