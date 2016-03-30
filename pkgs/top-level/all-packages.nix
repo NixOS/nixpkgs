@@ -6435,6 +6435,9 @@ in
   clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
     clutter = clutter_1_22;
   };
+  clutter_gtk_1_8 = callPackage ../development/libraries/clutter-gtk/1.8.nix {
+    clutter = clutter_1_26;
+  };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
