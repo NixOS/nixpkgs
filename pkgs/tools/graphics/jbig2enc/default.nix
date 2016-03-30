@@ -8,13 +8,6 @@ stdenv.mkDerivation {
     sha256 = "1wc0lmqz4jag3rhhk1xczlqpfv2qqp3fz7wzic2lba3vsbi1rrw3";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/agl/jbig2enc/commit/53ce5fe7e73d7ed95c9e12b52dd4984723f865fa.diff";
-      sha256 = "0n6s24i1fy9xspawns3r0kmx2fl0q3wqp68l1yai36jhfw08i3n4";
-    })
-  ];
-
   propagatedBuildInputs = [ leptonica zlib libwebp giflib libjpeg libpng libtiff ];
 
   # This is necessary, because the resulting library has

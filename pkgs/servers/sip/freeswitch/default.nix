@@ -1,18 +1,18 @@
 { fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg
-, libzrtpcpp, gcc48 }:
+, libzrtpcpp }:
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.2.3";
+  name = "freeswitch-1.6.6";
 
   src = fetchurl {
-    url = http://files.freeswitch.org/freeswitch-1.2.3.tar.bz2;
+    url = "http://files.freeswitch.org/releases/freeswitch/${name}.tar.bz2";
     sha256 = "0kfvn5f75c6r6yp18almjz9p6llvpm66gpbxcjswrg3ddgbkzg0k";
   };
 
   buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
-    libzrtpcpp gcc48 ];
+    libzrtpcpp ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "format" ];
 

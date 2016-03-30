@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, perl, perlXMLParser }:
+{ stdenv, fetchurl, fetchpatch, gettext, perl, perlXMLParser }:
 
 stdenv.mkDerivation rec {
   name = "intltool-${version}";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "https://launchpad.net/intltool/trunk/${version}/+download/${name}.tar.gz";
     sha256 = "1karx4sb7bnm2j67q0q74hspkfn6lqprpy5r99vkn5bb36a4viv7";
   };
+
+  # fix "unescaped left brace" errors when using intltool in some cases
+  patches = [(fetchpatch {
+    name = "perl-5.22.patch";
+    url = "https://anonscm.debian.org/viewvc/pkg-gnome/desktop/unstable/intltool"
+      + "/debian/patches/perl5.22-regex-fixes?revision=47255&view=co";
+    sha256 = "17clqczb9fky7hp8czxa0fy82b5478irvz4f3fnans3sqxl95hx3";
+  })];
 
   propagatedBuildInputs = [ gettext perl perlXMLParser ];
 
