@@ -1,18 +1,18 @@
 { stdenv, fetchurl, intltool, autoreconfHook, pkgconfig, vala, glib
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, makeWrapper }:
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, makeWrapper, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  version = "${gnome3.version}.3";
+  version = "${gnome3.version}";
   name = "gpaste-${version}";
 
   src = fetchurl {
     url = "https://github.com/Keruspe/GPaste/archive/v${version}.tar.gz";
-    sha256 = "1fyrdgsn4m3fh8450qcic243sl7llfs44cdbspwpn5zb4h2hk8rj";
+    sha256 = "129bz9ph398n1n43qggr8xfrd7y30nm8gdgn1hq0xq7a4v1fb2dj";
   };
 
   buildInputs = [ intltool autoreconfHook pkgconfig vala glib
                   gtk3 gnome3.gnome_control_center dbus.libs
-                  clutter pango appstream-glib makeWrapper ];
+                  clutter pango appstream-glib makeWrapper systemd gobjectIntrospection ];
 
   preConfigure = "intltoolize -f";
 
