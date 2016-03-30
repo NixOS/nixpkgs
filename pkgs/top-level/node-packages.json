@@ -122,7 +122,6 @@
 , "git-run"
 , "bower"
 , "bower2nix"
-, "fetch-bower"
 , "npm-check-updates"
 , "node-stringprep"
 , "ltx"

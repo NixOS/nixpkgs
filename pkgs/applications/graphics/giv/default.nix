@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, gdk_pixbuf, scons, pkgconfig, gtk, glib,
+{ stdenv, fetchFromGitHub, gdk_pixbuf, scons, pkgconfig, gtk, glib,
   pcre, cfitsio, perl, gob2, vala, libtiff, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "giv-0.9.22";
+  name = "giv-20150811-git";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/giv/${name}.tar.gz";
-    sha256 = "1q0806b66ajppxbv1i71wx5d3ydc1h3hsz23m6g4g80dhiai7dly";
+  src = fetchFromGitHub {
+    owner = "dov";
+    repo = "giv";
+    rev = "64648bfbbf10ec4a9adfbc939c96c7d1dbdce57a";
+    sha256 = "1sz2n7jbmg3g97bs613xxjpzqbsl5rvpg6v7g3x3ycyd35r8vsfp";
   };
 
   hardeningDisable = [ "format" ];

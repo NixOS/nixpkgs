@@ -274,6 +274,20 @@ services.syncthing = {
     </para>
   </listitem>
 
+  <listitem>
+    <para>
+      Systems with some broadcom cards used to result into a generated config
+      that is no longer accepted. If you get errors like
+      <screen>error: path ‘/nix/store/*-broadcom-sta-*’ does not exist and cannot be created</screen>
+      you should either re-run <command>nixos-generate-config</command> or manually replace
+      <literal>"${config.boot.kernelPackages.broadcom_sta}"</literal>
+      by
+      <literal>config.boot.kernelPackages.broadcom_sta</literal>
+      in your <filename>/etc/nixos/hardware-configuration.nix</filename>.
+      More discussion is on <link xlink:href="https://github.com/NixOS/nixpkgs/pull/12595">
+      the github issue</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 

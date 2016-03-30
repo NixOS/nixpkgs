@@ -41,12 +41,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ readline python icu ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+
   buildFlags = [
     "LINK=g++"
     "-C out"
     "builddir=$(CURDIR)/Release"
     "BUILDTYPE=Release"
   ];
+
+  postPatch = stdenv.lib.optionalString (!stdenv.cc.isClang) ''
+    sed -i build/standalone.gyp -e 's,-Wno-format-pedantic,,g'
+  '';
 
   enableParallelBuilding = true;
 

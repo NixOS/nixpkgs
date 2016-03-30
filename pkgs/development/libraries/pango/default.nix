@@ -2,6 +2,8 @@
 , fontconfig, freetype, libintlOrEmpty, gobjectIntrospection
 }:
 
+with stdenv.lib;
+
 let
   ver_maj = "1.38";
   ver_min = "1";
@@ -28,6 +30,8 @@ stdenv.mkDerivation rec {
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
   # .../bin/sh: line 5: 14823 Abort trap: 6 srcdir=. PANGO_RC_FILE=./pangorc ${dir}$tst
   # FAIL: testiter
+
+  configureFlags = optional stdenv.isDarwin "--without-x";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

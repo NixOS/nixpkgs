@@ -4,9 +4,15 @@
 , libxml2, libsoup, libsecret, libxslt, harfbuzz
 , gst-plugins-base
 , withGtk2 ? false
-, enableIntrospection ? true
+, enableIntrospection ? !stdenv.isDarwin
+, enableCredentialStorage ? !stdenv.isDarwin
+, readline, libedit
 }:
 
+assert stdenv.isDarwin -> !enableIntrospection;
+assert stdenv.isDarwin -> !enableCredentialStorage;
+
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
   version = "2.4.9";
@@ -29,15 +35,31 @@ stdenv.mkDerivation rec {
   prePatch = ''
     patchShebangs Tools/gtk
   '';
-  patches = [ ./webcore-svg-libxml-cflags.patch ];
+  patches = [
+    ./webcore-svg-libxml-cflags.patch
+  ] ++ optionals stdenv.isDarwin [
+    ./impure-icucore.patch
+    ./quartz-webcore.patch
+    ./libc++.patch
+    ./plugin-none.patch
+  ];
 
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
     (optionalString enableIntrospection "--enable-introspection")
-  ] ++ stdenv.lib.optional withGtk2 [
+  ] ++ optional withGtk2 [
     "--with-gtk=2.0"
+  ] ++ optionals (withGtk2 || stdenv.isDarwin) [
     "--disable-webkit2"
+  ] ++ optionals stdenv.isDarwin [
+    "--disable-x11-target"
+    "--enable-quartz-target"
+    "--disable-web-audio"
+  ] ++ optionals (!enableCredentialStorage) [
+    "--disable-credential-storage"
   ];
+
+  NIX_CFLAGS_COMPILE = "-DU_NOEXCEPT=";
 
   dontAddDisableDepTrack = true;
 
@@ -47,10 +69,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk2 wayland libwebp enchant
-    libxml2 libsecret libxslt
+    gtk2 libwebp enchant
+    libxml2 libxslt
     gst-plugins-base sqlite
-  ];
+  ] ++ optionals enableCredentialStorage [
+    libsecret
+  ] ++ (if stdenv.isDarwin then [
+    readline libedit
+  ] else [
+    wayland
+  ]);
 
   propagatedBuildInputs = [
     libsoup harfbuzz/*icu in *.la*/

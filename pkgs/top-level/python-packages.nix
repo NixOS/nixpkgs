@@ -2124,13 +2124,13 @@ in modules // {
 
   billiard = buildPythonPackage rec {
     name = "billiard-${version}";
-    version = "3.3.0.21";
+    version = "3.3.0.23";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/billiard/${name}.tar.gz";
-      sha256 = "1sfsrkm5xv820wp2mz5zn2rnw6s0c9wal69v1fkr26wp1a7zf1cp";
+      sha256 = "02wxsc6bhqvzh8j6w758kvgqbnj14l796mvmrcms8fgfamd2lak9";
     };
 
     buildInputs = with self; [ nose unittest2 mock ];
@@ -2942,13 +2942,13 @@ in modules // {
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
-    version = "3.1.19";
+    version = "3.1.23";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/celery/${name}.tar.gz";
-      sha256 = "0wbbsrg3vfq8v7y2nylal1gqmn3h4a5vqzbsjiwcybl21hlj2smx";
+      sha256 = "0614ppp18vmiwdk0rxvz0wn62d7svanwdnx7jgqxpy9pb20rqd8s";
     };
 
     buildInputs = with self; [ mock nose unittest2 ];
@@ -6911,6 +6911,8 @@ in modules // {
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
                " --include-dirs=${pkgs.poppler_qt4}/include/poppler/";
 
+    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4}/include/poppler/";
+
     meta = {
       description = "A Python binding to Poppler-Qt4";
       longDescription = ''
@@ -8305,7 +8307,7 @@ in modules // {
     };
   };
 
-  django_redis = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+  django_redis = buildPythonPackage rec {
     name = "django-redis-${version}";
     version = "4.2.0";
 
@@ -8316,29 +8318,29 @@ in modules // {
 
     buildInputs = [ self.mock ];
 
-    propagatedBuildInputs = [ django ] ++
-      (with self; [
-        redis
-        msgpack
-      ]);
+    propagatedBuildInputs = with self; [
+      django
+      redis
+      msgpack
+    ];
 
     meta = {
       description = "Full featured redis cache backend for Django";
       homepage = https://github.com/niwibe/django-redis;
       license = licenses.bsd3;
     };
-  }) {};
+  };
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
-    version = "1.8.5";
+    version = "1.10.1";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/d/django-reversion/${name}.tar.gz";
-      sha256 = "0z8fxvxgbxfnalr5br74rsw6g42nry2q656rx7rsgmicd8n42v2r";
+      url = "https://pypi.python.org/packages/source/d/django-reversion/${name}.tar.gz";
+      sha256 = "01iv8w6lmmq98qjhxmnp8ddjxifmhxcmp612ijd91wc8nv8lk12w";
     };
 
-    propagatedBuildInputs = with self; [ django_1_7 ] ++
+    propagatedBuildInputs = with self; [ django ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     meta = {
@@ -8348,7 +8350,7 @@ in modules // {
     };
   };
 
-  django_silk = makeOverridable ({ django ? self.django }: buildPythonPackage rec {
+  django_silk = buildPythonPackage rec {
     name = "django-silk-${version}";
     version = "0.5.6";
 
@@ -8359,25 +8361,25 @@ in modules // {
 
     buildInputs = [ self.mock ];
 
-    propagatedBuildInputs = [ django ] ++
-      (with self; [
-        pygments
-        simplejson
-        dateutil
-        requests2
-        sqlparse
-        jinja2
-        autopep8
-        pytz
-        pillow
-      ]);
+    propagatedBuildInputs = with self; [
+      django
+      pygments
+      simplejson
+      dateutil
+      requests2
+      sqlparse
+      jinja2
+      autopep8
+      pytz
+      pillow
+    ];
 
     meta = {
       description = "Silky smooth profiling for the Django Framework";
       homepage = https://github.com/mtford90/silk;
       license = licenses.mit;
     };
-  }) {};
+  };
 
   django_taggit = buildPythonPackage rec {
     name = "django-taggit-${version}";
@@ -11049,23 +11051,23 @@ in modules // {
 
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
-    version = "3.0.33";
+    version = "3.0.35";
 
     disabled = pythonOlder "2.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kombu/${name}.tar.gz";
-      sha256 = "16brjx2lgwbj2a37d0pjbfb84nvld6irghmqrs3qfncajp51hgc5";
+      sha256 = "09xpxpjz9nk8d14dj361dqdwyjwda3jlf1a7v6jif9wn2xm37ar2";
     };
 
-    buildInputs = with self; optionals (!isPy3k) [ anyjson mock unittest2 nose ];
+    # most of these are simply to allow the test suite to do its job
+    buildInputs = with self; [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
     propagatedBuildInputs = with self; [ amqp anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    # tests also appear to depend on anyjson, which has Py3k problems
-    doCheck = (pythonAtLeast "2.7") && !isPy3k ;
+    doCheck = (pythonAtLeast "2.7");
 
     meta = {
       description = "Messaging library for Python";
@@ -11832,11 +11834,17 @@ in modules // {
   };
 
   nototools = buildPythonPackage rec {
-    version = "git-2015-09-16";
+    version = "git-2016-03-25";
     name = "nototools-${version}";
-    disabled = isPy3k;
 
-    pythonPath = with self; [ fonttools numpy ];
+    src = pkgs.fetchFromGitHub {
+      owner = "googlei18n";
+      repo = "nototools";
+      rev = "4f7b067d1b18f59288e5eaee34db5b0abd3a3f63";
+      sha256 = "05brbkfg77ij4pmcrhq9302albzdalr9gv6jfdsbyyi2k8j85gbn";
+    };
+
+    propagatedBuildInputs = with self; [ fonttools numpy ];
 
     postPatch = ''
       sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
@@ -11846,11 +11854,12 @@ in modules // {
       cp -r third_party $out
     '';
 
-    src = pkgs.fetchFromGitHub {
-      owner = "googlei18n";
-      repo = "nototools";
-      rev = "5a79bee819941849da7b414447929fc7ba6c2c08";
-      sha256 = "0srrmyrjgksk4c6smgi1flyq325r4ma8r6bpkvbn731q3yykhmaa";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Noto fonts support tools and scripts plus web site generation";
+      license = licenses.asl20;
+      homepage = https://github.com/googlei18n/nototools;
     };
   };
 
@@ -13207,7 +13216,7 @@ in modules // {
     blas = pkgs.openblasCompat_2_14;
   };
 
-  numpy = self.numpy_1_11;
+  numpy = self.numpy_1_10;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
