@@ -13911,6 +13911,12 @@ in
     quazip = qt5.quazip.override { qt = qt4; };
   };
 
+  torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
+    lua = luajit ;
+  } );
+
+  torch-repl = lib.setName "torch-repl" torchPackages.trepl;
+
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
