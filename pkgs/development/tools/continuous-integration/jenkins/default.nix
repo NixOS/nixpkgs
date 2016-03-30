@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.coconnor ];
   };
 
-  buildCommand = "ln -s $src $out";
+  buildCommand = "cp $src $out";
 }
