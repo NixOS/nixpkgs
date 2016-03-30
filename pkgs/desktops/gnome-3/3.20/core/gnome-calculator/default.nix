@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, pkgconfig, libxml2
 , bash, gtk3, glib, wrapGAppsHook
-, itstool, gnome3, librsvg, gdk_pixbuf, mpfr, gmp }:
+, itstool, gnome3, librsvg, gdk_pixbuf, mpfr, gmp, libsoup }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash gtk3 glib intltool itstool
                   libxml2 gnome3.gtksourceview mpfr gmp
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas gnome3.dconf ];
+                  gnome3.gsettings_desktop_schemas gnome3.dconf libsoup ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Calculator;
