@@ -250,6 +250,7 @@ let
       };
 
       hardeningEnable = [ "pie" ];
+      hardeningDisable = [ "bindnow" ];
 
       configurePhase = ''
         # Don't record the configure flags since this causes unnecessary
