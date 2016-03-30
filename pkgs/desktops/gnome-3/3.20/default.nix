@@ -52,8 +52,8 @@ let
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   orbit = ORBit2;
   gnome3 = self // { recurseForDerivations = false; };
-  clutter = pkgs.clutter_1_24;
-  clutter_gtk = pkgs.clutter_gtk_1_6.override { inherit clutter gtk3; };
+  clutter = pkgs.clutter_1_26;
+  clutter_gtk = pkgs.clutter_gtk_1_8.override { inherit clutter gtk3; };
   clutter-gst_2 = pkgs.clutter-gst;
   clutter-gst = pkgs.clutter-gst_3_0.override { inherit clutter cogl; };
   cogl = pkgs.cogl_1_22;
