@@ -13,8 +13,6 @@ stdenv.mkDerivation (rec {
     sha256 = "0bd17g6znn2r98gzpjppsqjg33iraky4px923j3k8kdl8qgy7sad";
   };
 
-  hardeningDisable = [ "bindnow" ];
-
   outputs = [ "out" "doc" ];
 
   buildInputs = stdenv.lib.optional pythonSupport python
