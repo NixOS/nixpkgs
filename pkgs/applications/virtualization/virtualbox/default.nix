@@ -134,7 +134,8 @@ in stdenv.mkDerivation {
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
-      --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
+      --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs \
+      --disable-vmmraw
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
