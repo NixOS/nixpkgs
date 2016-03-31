@@ -17736,6 +17736,9 @@ in modules // {
 
     buildInputs = with self; [ ];
 
+    # Not supported. Package is no longer maintained.
+    disabled = isPy3k;
+
     meta = {
       description = "Pure-Python PDF toolkit";
       homepage = "http://pybrary.net/pyPdf/";
