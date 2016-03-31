@@ -15646,7 +15646,7 @@ let
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
-    wxGTK = wxGTK29;
+    wxGTK = wxGTK30;
   };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
