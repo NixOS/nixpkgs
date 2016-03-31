@@ -20042,6 +20042,11 @@ in modules // {
       sha256 = "0cylj8p25nwkdfgy4pzai21wyzmrxdqlwwbzqag9gb5qcjfdwk05";
     };
 
+    buildInputs = with self; [ nose ];
+
+    # No tests included
+    doCheck = false;
+
     meta = {
       description = "Pidfile featuring stale detection and file-locking";
       homepage = https://github.com/trbs/pid/;
