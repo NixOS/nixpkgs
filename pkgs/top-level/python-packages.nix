@@ -25613,6 +25613,9 @@ in modules // {
       sha256 = "7d3e54add7dccdaeb6cc9e61ceaf7b587914cf8ebd6821cfea008acdc1e50d4a";
     };
 
+    # Tests fail with 3.x. Furthermore, package is no longer maintained.
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [
       pyparsing
     ];
