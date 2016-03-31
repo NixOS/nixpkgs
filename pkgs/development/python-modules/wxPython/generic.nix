@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ python setuptools ];
   buildInputs = [ python setuptools pkgconfig wxGTK (wxGTK.gtk) wrapPython libX11 ]  ++ stdenv.lib.optional openglSupport pyopengl;
-  preConfigure = "cd wxPython";
 
   NIX_LDFLAGS = "-lX11 -lgdk-x11-2.0";
 
