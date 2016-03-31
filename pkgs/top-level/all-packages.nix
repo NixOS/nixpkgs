@@ -15483,12 +15483,10 @@ in
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
-  openblas_2_14 = callPackage ../development/libraries/science/math/openblas/0.2.14.nix { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
-  openblasCompat_2_14 = openblas_2_14.override { blas64 = false; };
 
   openlibm = callPackage ../development/libraries/science/math/openlibm {};
 
