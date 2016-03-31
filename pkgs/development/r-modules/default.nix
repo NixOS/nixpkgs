@@ -369,9 +369,7 @@ let
     ShortRead = [ pkgs.zlib ];
     oligo = [ pkgs.zlib ];
     gmapR = [ pkgs.zlib ];
-    ncdf = [ pkgs.netcdf ];
     Rsubread = [ pkgs.zlib ];
-    SemiCompRisks = [ pkgs.gsl_1 ];
     XVector = [ pkgs.zlib ];
     Rsamtools = [ pkgs.zlib ];
     rtracklayer = [ pkgs.zlib ];
@@ -698,6 +696,8 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "spoccutils" # depends on broken package spocc
+    "mapr" # depends on broken package spocc
     "vmsbase" # broken build
     "vcfR" # broken build
     "strataG" # broken build
@@ -1084,14 +1084,12 @@ let
     "rjags" # broken build
     "proteoQC" # depends on broken package rTANDEM
     "PGA" # depends on broken package rTANDEM
-    "cudatoolkit" # broken build
     "MBESS" # depends on broken package OpenMx
     "IONiseR" # depends on broken package rhdf5
     "DOQTL" # depends on broken package rhdf5
     "DmelSGI" # depends on broken package rhdf5
     "flowDiv" # depends on broken package ncdfFlow
     "ChemmineDrugs" # depends on broken package ChemmineR
-    "nlopt" # broken build
     "stpm" # depends on broken package nloptr
     "sjmisc" # depends on broken package nloptr
     "rstanarm" # depends on broken package nloptr
