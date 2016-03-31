@@ -58,10 +58,57 @@ has the following highlights:</para>
 
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
-    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
-    <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
-    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
+    <listitem><para><literal>hardware/video/webcam/facetimehd.nix</literal></para></listitem>
     <listitem><para><literal>i18n/inputMethod/default.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/fcitx.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/ibus.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/nabi.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/uim.nix</literal></para></listitem>
+    <listitem><para><literal>programs/fish.nix</literal></para></listitem>
+    <listitem><para><literal>security/acme.nix</literal></para></listitem>
+    <listitem><para><literal>security/audit.nix</literal></para></listitem>
+    <listitem><para><literal>security/oath.nix</literal></para></listitem>
+    <listitem><para><literal>services/hardware/irqbalance.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/dspam.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/opendkim.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/postsrsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/rspamd.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/rmilter.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/autofs.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/bepasty.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/calibre-server.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/cfdyndns.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/gammu-smsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/mathics.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/matrix-synapse.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/octoprint.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/hdaps.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/heapster.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+    <listitem><para><literal>services/network-filesystems/netatalk.nix</literal></para></listitem>
+    <listitem><para><literal>services/network-filesystems/xtreemfs.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/autossh.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/dnschain.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/gale.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/miniupnpd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/namecoind.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/ostinato.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/shairport-sync.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/supplicant.nix</literal></para></listitem>
+    <listitem><para><literal>services/search/kibana.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/physlock.nix</literal></para></listitem>
+    <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/hardware/libinput.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/window-managers/windowlab.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/initrd-network.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/initrd-ssh.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/loader/loader.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/networkd.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/resolved.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/lxd.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/rkt.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
