@@ -34,6 +34,10 @@ has the following highlights:</para>
   </listitem>
 
   <listitem>
+    <para>Binutils 2.26 (was 2.23.1). See #909</para>
+  </listitem>
+
+  <listitem>
     <para>Improved support for ensuring <link
     xlink:href="https://reproducible-builds.org/">bitwise reproducible
     builds</link>. For example, <literal>stdenv</literal> now sets the
