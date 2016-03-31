@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libsecret nss nspr libical db ];
 
   # uoa irrelevant for now
-  configureFlags = [ "--disable-uoa" ]
+  configureFlags = [ "--disable-uoa" "--disable-google-auth" ]
                    ++ stdenv.lib.optional valaSupport "--enable-vala-bindings";
 
   preFixup = ''
