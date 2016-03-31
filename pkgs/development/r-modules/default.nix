@@ -698,6 +698,12 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "vmsbase" # broken build
+    "vcfR" # broken build
+    "strataG" # broken build
+    "SSDM" # broken build
+    "SimInf" # broken build
+    "shazam" # broken build
     "rsvg" # broken build
     "Rothermel" # broken build
     "rfPermute" # broken build
@@ -719,10 +725,6 @@ let
     "x13binary" # broken build
     "fds" # broken build
     "exifr" # broken build
-    "TTAinterfaceTrendAnalysis" # depends on broken package euroMix
-    "stylo" # depends on broken package euroMix
-    "stosim" # depends on broken package euroMix
-    "SRRS" # depends on broken package euroMix
     "rite" # depends on broken package euroMix
     "MBCB" # depends on broken package euroMix
     "forensim" # depends on broken package euroMix
@@ -1687,8 +1689,6 @@ let
     "Surrogate" # depends on broken package nlopt
     "svglite" # depends on broken package gdtools
     "sybilSBML" # build is broken
-    "synchronicity" # build is broken
-    "synthpop" # build is broken
     "systemfit" # depends on broken package nlopt
     "TcGSA" # depends on broken package nlopt
     "TDMR" # depends on broken package nlopt
