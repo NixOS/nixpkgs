@@ -23901,11 +23901,11 @@ in modules // {
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0b2";
+    name = "pyusb-1.0.0rc1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyusb/${name}.tar.gz";
-      sha256 = "14ec66077bdcd6f1aa9e892a0a35a54bb3c1ec56aa740ead64349c18f0186d19";
+      sha256 = "07cjq11qhngzjd746k7688s6y2x7lpj669fxqfsiy985rg0jsn7j";
     };
 
     # Fix the USB backend library lookup
@@ -23914,6 +23914,9 @@ in modules // {
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
     '';
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
