@@ -12,14 +12,44 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
-    The package and attribute names are plain <literal>firefox</literal>
-    or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
-    but note that <command>nix-env -u</command> will <emphasis>not</emphasis> update
-    your current <literal>firefox-with-plugins</literal>;
-    you have to uninstall it and install <literal>firefox</literal> instead.
-    More discussion is <link xlink:href="https://github.com/NixOS/nixpkgs/pull/12299">
-    on the PR</link>.  </para>
+    <para>Systemd 229, bringing <link
+    xlink:href="https://github.com/systemd/systemd/blob/v229/NEWS">numerous
+    improvements</link> over 217.</para>
+  </listitem>
+
+  <listitem>
+    <para>Linux 4.4 (was 3.18).</para>
+  </listitem>
+
+  <listitem>
+    <para>GCC 5.3 (was 4.9). Note that GCC 5 <link
+    xlink:href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html">changes
+    the C++ ABI in an incompatible way</link>; this may cause problems
+    if you try to link objects compiled with different versions of
+    GCC.</para>
+  </listitem>
+
+  <listitem>
+    <para>Glibc 2.23 (was 2.21).</para>
+  </listitem>
+
+  <listitem>
+    <para>Improved support for ensuring <link
+    xlink:href="https://reproducible-builds.org/">bitwise reproducible
+    builds</link>. For example, <literal>stdenv</literal> now sets the
+    environment variable <envar
+    xlink:href="https://reproducible-builds.org/specs/source-date-epoch/">SOURCE_DATE_EPOCH</envar>
+    to a deterministic value, and Nix has <link
+    xlink:href="http://nixos.org/nix/manual/#ssec-relnotes-1.11">gained
+    an option</link> to repeat a build a number of times to test
+    determinism. An ongoing project, the goal of exact reproducibility
+    is to allow binaries to be verified independently (e.g., a user
+    might only trust binaries that appear in three independent binary
+    caches).</para>
+  </listitem>
+
+  <listitem>
+    <para>Perl 5.22.</para>
   </listitem>
 
 </itemizedlist>
@@ -39,6 +69,22 @@ has the following highlights:</para>
 following incompatible changes:</para>
 
 <itemizedlist>
+
+  <listitem>
+    <para>We no longer produce graphical ISO images and VirtualBox
+    images for <literal>i686-linux</literal>. A minimal ISO image is
+    still provided.</para>
+  </listitem>
+
+  <listitem>
+    <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
+    The package and attribute names are plain <literal>firefox</literal>
+    or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
+    but note that <command>nix-env -u</command> will <emphasis>not</emphasis> update
+    your current <literal>firefox-with-plugins</literal>;
+    you have to uninstall it and install <literal>firefox</literal> instead.</para>
+  </listitem>
+
   <listitem>
     <para><command>wmiiSnap</command> has been replaced with
     <command>wmii_hg</command>, but
@@ -292,14 +338,18 @@ services.syncthing = {
 
 
 <para>Other notable improvements:
+
 <itemizedlist>
+
+  <!--
   <listitem>
     <para>The <command>command-not-found</command> hook was extended.
     Apart from <literal>$NIX_AUTO_INSTALL</literal> variable,
     it newly also checks for <literal>$NIX_AUTO_RUN</literal>
     which causes it to directly run the missing commands via
-    <command>nix-shell</command> (without installing anything). </para>
+    <command>nix-shell</command> (without installing anything).</para>
   </listitem>
+  -->
 
   <listitem>
     <para><literal>ejabberd</literal> module is brought back and now works on
