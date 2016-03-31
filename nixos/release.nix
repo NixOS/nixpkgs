@@ -222,6 +222,7 @@ in rec {
   tests.ipv6 = callTest tests/ipv6.nix {};
   tests.jenkins = callTest tests/jenkins.nix {};
   tests.kde4 = callTest tests/kde4.nix {};
+  tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };

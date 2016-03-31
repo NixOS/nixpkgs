@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
        substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
        # Needs machine-id, comment the test
        sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+       sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
        # All gschemas fail to pass the test, upstream bug?
        sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
        # Cannot reproduce the failing test_associations on hydra
