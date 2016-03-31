@@ -1,4 +1,5 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
+, gnugrep, gzip, openssh
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
@@ -9,7 +10,7 @@
 }:
 
 let
-  version = "2.7.4";
+  version = "2.8.0";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -18,14 +19,22 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0ys55v2xrhzj74jrrqx75xpr458klnyxshh8d8swfpp0zgg79rfy";
+    sha256 = "0k77b5x41k80fqqmkmg59rdvs92xgp73iigh01l49h383r7rl2cs";
   };
 
   patches = [
     ./docbook2texi.patch
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
+    ./ssh-path.patch
   ];
+
+  postPatch = ''
+    for x in connect.c git-gui/lib/remote_add.tcl ; do
+      substituteInPlace "$x" \
+        --subst-var-by ssh "${openssh}/bin/ssh"
+    done
+  '';
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x

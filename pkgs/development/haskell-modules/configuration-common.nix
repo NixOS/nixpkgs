@@ -957,4 +957,9 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
+  # https://github.com/gwern/mueval/issues/14
+  mueval = super.mueval.override {
+    hint = self.hint_0_4_3;
+  };
+
 }

@@ -111,7 +111,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  ncat = linux;
   netcat = all;
   nfs-utils = linux;
   nix = all;

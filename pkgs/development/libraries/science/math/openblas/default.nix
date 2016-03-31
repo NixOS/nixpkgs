@@ -22,13 +22,13 @@ let local = config.openblas.preferLocalBuild or false;
       optionals (hasAttr "target" config.openblas) [ "TARGET=${config.openblas.target}" ];
     blas64 = if blas64_ != null then blas64_ else hasPrefix "x86_64" stdenv.system;
 
-    version = "0.2.15";
+    version = "0.2.17";
 in
 stdenv.mkDerivation {
   name = "openblas-${version}";
   src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/archive/v${version}.tar.gz";
-    sha256 = "0i4hrjx622vw5ff35wm6cnga3ic8hcfa88p1wlj24a3qb770mi3k";
+    sha256 = "1gqdrxgc7qmr3xqq4wqcysjhv7ix4ar7ymn3vk5g97r1xvgkds0g";
     name = "openblas-${version}.tar.gz";
   };
 

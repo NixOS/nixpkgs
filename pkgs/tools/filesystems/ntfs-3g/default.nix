@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs-3g";
-  version = "2015.3.14";
+  version = "2016.2.22";
   name = "${pname}-${version}";
 
   buildInputs = [ libuuid ] ++ stdenv.lib.optionals crypto [ gnutls libgcrypt ];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://tuxera.com/opensource/ntfs-3g_ntfsprogs-${version}.tgz";
-    sha256 = "1wiqcmy07y02k3iqq56cscnhg5syisbjj9mxfaid85l3bl0rdycp";
+    sha256 = "180y5y09h30ryf2vim8j30a2npwz1iv9ly5yjmh3wjdkwh2jrdyp";
   };
 
   patchPhase = ''
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.tuxera.com/community/;
+    homepage = http://www.tuxera.com/community/open-source-ntfs-3g/;
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = [ maintainers.urkud ];
+    maintainers = with maintainers; [ urkud dezgeg ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus; # and (lib)fuse-lite under LGPL2+
   };

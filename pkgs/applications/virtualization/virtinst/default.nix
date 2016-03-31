@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   pythonPath = with pythonPackages;
-    [ setuptools eventlet greenlet gflags netaddr sqlalchemy7 carrot routes
+    [ setuptools eventlet greenlet gflags netaddr carrot routes
       PasteDeploy m2crypto ipy twisted sqlalchemy_migrate
       distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that

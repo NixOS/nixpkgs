@@ -171,7 +171,7 @@ in
   };
 
   fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) fetch-bower;
+    inherit (nodePackages) bower2nix;
   };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
@@ -1111,6 +1111,8 @@ in
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
 
+  cloud-utils = callPackage ../tools/misc/cloud-utils { };
+
   compass = callPackage ../development/tools/compass { };
 
   convmv = callPackage ../tools/misc/convmv { };
@@ -1183,9 +1185,7 @@ in
 
   darkstat = callPackage ../tools/networking/darkstat { };
 
-  davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon_0_29;
-  };
+  davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -1539,6 +1539,8 @@ in
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fswebcam = callPackage ../os-specific/linux/fswebcam { };
+
   fuseiso = callPackage ../tools/filesystems/fuseiso { };
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
@@ -1571,6 +1573,28 @@ in
     (gawk.override { readlineSupport = true; });
 
   gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
+
+  gazeboSimulator = recurseIntoAttrs {
+    sdformat = gazeboSimulator.sdformat4;
+
+    sdformat3 = callPackage ../development/libraries/sdformat/3.nix { };
+
+    sdformat4 = callPackage ../development/libraries/sdformat { };
+
+    gazebo6 = callPackage ../applications/science/robotics/gazebo/6.nix { };
+
+    gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
+
+    gazebo7 = callPackage ../applications/science/robotics/gazebo { };
+  
+    gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
+
+  };
+  
+  # at present, Gazebo 7.0.0 does not match Gazebo 6.5.1 for compatibility
+  gazebo = gazeboSimulator.gazebo6;
+
+  gazebo-headless = gazeboSimulator.gazebo6-headless;
 
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2;
@@ -1906,6 +1930,20 @@ in
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
+  ignition = recurseIntoAttrs { 
+
+    math = callPackage ../development/libraries/ignition-math { };
+  
+    math2 = ignition.math;
+  
+    transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
+
+    transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
+
+    transport = ignition.transport0;
+  };
+
+
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
     inherit (haskellPackages) ihaskell ghcWithPackages;
 
@@ -2166,6 +2204,8 @@ in
 
   libiberty = callPackage ../development/libraries/libiberty { };
 
+  libiberty_static = callPackage ../development/libraries/libiberty { staticBuild = true; };
+
   libibverbs = callPackage ../development/libraries/libibverbs { };
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
@@ -2397,8 +2437,6 @@ in
   nco = callPackage ../development/libraries/nco { };
 
   nc6 = callPackage ../tools/networking/nc6 { };
-
-  ncat = callPackage ../tools/networking/ncat { };
 
   ncftp = callPackage ../tools/networking/ncftp { };
 
@@ -3739,6 +3777,8 @@ in
   xdeltaUnstable = callPackage ../tools/compression/xdelta/unstable.nix { };
 
   xdummy = callPackage ../tools/misc/xdummy { };
+
+  xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
   xflux = callPackage ../tools/misc/xflux { };
 
@@ -5180,7 +5220,6 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  erlangR14 = callPackage ../development/interpreters/erlang/R14.nix { };
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
   erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
@@ -6350,6 +6389,8 @@ in
   box2d = callPackage ../development/libraries/box2d { };
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
+  breakpad = callPackage ../development/libraries/breakpad { };
+
   buddy = callPackage ../development/libraries/buddy { };
 
   bwidget = callPackage ../development/libraries/bwidget { };
@@ -6395,6 +6436,8 @@ in
   cilaterm = callPackage ../development/libraries/cil-aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
+
+  cl = callPackage ../development/libraries/cl { };
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
@@ -6507,6 +6550,8 @@ in
   dbus_tools = pkgs.dbus.tools;
   dbus_libs = pkgs.dbus.libs;
   dbus_daemon = pkgs.dbus.daemon;
+
+  dee = callPackage ../development/libraries/dee { };
 
   dhex = callPackage ../applications/editors/dhex { };
 
@@ -7383,6 +7428,8 @@ in
 
   libgdata = gnome3.libgdata;
 
+  libgee_0_6 = callPackage ../development/libraries/libgee/0.6.nix { };
+
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
@@ -7859,6 +7906,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libunity = callPackage ../development/libraries/libunity { };
+
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
@@ -8181,6 +8230,8 @@ in
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
+  ocl-icd = callPackage ../development/libraries/ocl-icd { };
+
   ode = callPackage ../development/libraries/ode { };
 
   ogre = callPackage ../development/libraries/ogre {};
@@ -8207,6 +8258,8 @@ in
   };
 
   opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
+
+  opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
@@ -8299,6 +8352,14 @@ in
 
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = config.pcre.unicode or true;
+  };
+  pcre16 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 16;
+  };
+  pcre32 = pcre.override {
+    cplusplusSupport = false;
+    withCharSize = 32;
   };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
@@ -8788,6 +8849,8 @@ in
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
+  tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
+
   tk = tk-8_6;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
@@ -9155,6 +9218,10 @@ in
   jquery-ui = callPackage ../development/libraries/javascript/jquery-ui { };
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
+
+  ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
+
+  buildBowerComponents = callPackage ../development/bower-modules/generic { };
 
   ### DEVELOPMENT / GO MODULES
 
@@ -9611,8 +9678,6 @@ in
   openxpki = callPackage ../servers/openxpki { };
 
   osrm-backend = callPackage ../servers/osrm-backend { };
-
-  osrm-backend_luajit = callPackage ../servers/osrm-backend { luabind = luabind_luajit; };
 
   p910nd = callPackage ../servers/p910nd { };
 
@@ -11486,7 +11551,11 @@ in
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux = callPackage ../applications/video/avidemux { };
+  avidemux_unwrapped = callPackage ../applications/video/avidemux { };
+
+  avidemux = callPackage ../applications/video/avidemux/wrapper.nix {
+    avidemux = avidemux_unwrapped;
+  };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
@@ -13208,6 +13277,8 @@ in
 
   openbrf = callPackage ../applications/misc/openbrf { };
 
+  opencpn = callPackage ../applications/misc/opencpn { };
+
   openimageio = callPackage ../applications/graphics/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
@@ -13558,7 +13629,7 @@ in
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     qt4 = pkgsi686Linux.qt4.override {
-      stdenv = clangStdenv;
+      stdenv = pkgsi686Linux.clangStdenv;
     };
   };
 
@@ -13781,7 +13852,9 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli/default.nix { };
+  tdesktop = qt55.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+
+  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
 
@@ -13856,6 +13929,12 @@ in
     enableTelepathy = config.tomahawk.enableTelepathy or false;
     quazip = qt5.quazip.override { qt = qt4; };
   };
+
+  torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
+    lua = luajit ;
+  } );
+
+  torch-repl = lib.setName "torch-repl" torchPackages.trepl;
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
@@ -14087,10 +14166,7 @@ in
 
   winswitch = callPackage ../tools/X11/winswitch { };
 
-  wings = callPackage ../applications/graphics/wings {
-    erlang = erlangR14;
-    esdl = esdl.override { erlang = erlangR14; };
-  };
+  wings = callPackage ../applications/graphics/wings { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
@@ -15283,6 +15359,8 @@ in
       themes = [];  # extra themes, etc.
     };
 
+    yakuake = callPackage ../applications/misc/yakuake/3.0.nix {};
+
   };
 
   kde5 =
@@ -16356,4 +16434,3 @@ in
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
 }
-

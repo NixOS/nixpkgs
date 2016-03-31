@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, boost }:
+{ stdenv, fetchurl, unzip, cmake, boost, zlib }:
 
 let
   major = "3";
@@ -14,14 +14,14 @@ stdenv.mkDerivation {
     sha256 = "17nyzsqzqpafamhi779f1bkh5mfgj8rpas034x3v9a0hdy3jg66s";
   };
 
-  buildInputs = [ unzip cmake boost ];
+  buildInputs = [ unzip cmake boost zlib ];
 
   meta = with stdenv.lib; {
     description = "A library to import various 3D model formats";
     homepage = http://assimp.sourceforge.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];
-    platfroms = platforms.linux;
+    platfroms = [ platforms.linux platforms.darwin ];
     inherit version;
   };
 }

@@ -15,30 +15,3 @@ index 16eccd9..603e931 100644
  
  env['SBOX'] = False
  
-diff --git a/giv/SConstruct b/giv/SConstruct
-index 047839a..2c267aa 100644
---- a/giv/SConstruct
-+++ b/giv/SConstruct
-@@ -3,8 +3,9 @@
- 
- import sys
- import re
-+import os
- 
--env = Environment()
-+env = Environment(ENV = os.environ)
- 
- src = ["giv.c",
-        "giv-backstore.c",
-diff --git a/src/plugins/dcmtk/SConstruct.standalone b/src/plugins/dcmtk/SConstruct.standalone
-index ffce001..74246f8 100644
---- a/src/plugins/dcmtk/SConstruct.standalone
-+++ b/src/plugins/dcmtk/SConstruct.standalone
-@@ -1,4 +1,6 @@
--env = Environment()
-+import os
-+
-+env = Environment(ENV = os.environ)
- 
- variant = "Debug"
- 
