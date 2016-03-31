@@ -166,6 +166,12 @@ if [ "$NIX_SET_BUILD_ID" = 1 ]; then
 fi
 
 
+# Don't allow undefined symbols in shared libraries.
+if [ "$NIX_ENFORCE_NO_SHLIB_UNDEFINED" = 1 ]; then
+    extra+=(--no-allow-shlib-undefined)
+fi
+
+
 # Optionally print debug info.
 if [ -n "$NIX_DEBUG" ]; then
   echo "original flags to @prog@:" >&2

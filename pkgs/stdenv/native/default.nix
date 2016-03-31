@@ -17,6 +17,7 @@ rec {
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
     export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+    export NIX_ENFORCE_NO_SHLIB_UNDEFINED="''${NIX_ENFORCE_NO_SHLIB_UNDEFINED-1}"
   '';
 
   prehookFreeBSD = ''
