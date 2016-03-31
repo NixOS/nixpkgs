@@ -9029,6 +9029,7 @@ let
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
+    php = php56;
   };
 
   xapian10 = callPackage ../development/libraries/xapian/1.0.x.nix { };
