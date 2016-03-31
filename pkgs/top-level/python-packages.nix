@@ -11302,7 +11302,16 @@ in modules // {
       sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
-    buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+
+    propagatedBuildInputs = with self; [ contextlib2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
 
     meta = {
       description = "Python bindings for the low-level FUSE API";
