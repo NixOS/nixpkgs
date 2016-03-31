@@ -18,7 +18,7 @@ let
   # revision/hash as well. See
   # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
   # for hashes.
-  version = "5.0.14";
+  version = "5.0.16";
 
   forEachModule = action: ''
     for mod in \
@@ -63,7 +63,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "69abac7255b2251a18fd73c0b7c200d5f8ce72a59fa019b53a5cdbf7f2843002";
+    sha256 = "0g56iy3fyxsm4dd8nj5sbi9nmackj8nx5cifbd21z4fvl4rlv97m";
   };
 
   buildInputs =
