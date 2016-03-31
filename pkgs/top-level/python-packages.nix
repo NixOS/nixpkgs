@@ -1882,12 +1882,15 @@ in modules // {
 
   colorlog = buildPythonPackage rec {
     name = "colorlog-${version}";
-    version = "2.6.0";
+    version = "2.6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/colorlog/${name}.tar.gz";
-      sha256 = "1s8z9zr4r18igr4rri71nba01arnpppifrkaxhi2xb51500sw0qg";
+      sha256 = "0djv6ky1yk28s1l093w8plg19kp88q4nyrm1vfxyq0s9j4pix29l";
     };
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       description = "Log formatting with colors";
