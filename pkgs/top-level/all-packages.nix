@@ -1586,11 +1586,11 @@ in
     gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
 
     gazebo7 = callPackage ../applications/science/robotics/gazebo { };
-  
+
     gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
 
   };
-  
+
   # at present, Gazebo 7.0.0 does not match Gazebo 6.5.1 for compatibility
   gazebo = gazeboSimulator.gazebo6;
 
@@ -1932,12 +1932,12 @@ in
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
-  ignition = recurseIntoAttrs { 
+  ignition = recurseIntoAttrs {
 
     math = callPackage ../development/libraries/ignition-math { };
-  
+
     math2 = ignition.math;
-  
+
     transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
 
     transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
@@ -9024,11 +9024,6 @@ in
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
-  };
-
-  xapian10 = callPackage ../development/libraries/xapian/1.0.x.nix { };
-
-  xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
   };
 
   xapian-omega = callPackage ../tools/misc/xapian-omega {};
