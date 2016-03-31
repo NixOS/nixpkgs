@@ -68,6 +68,9 @@ let
 
     enableParallelBuilding = true;
 
+    # Builds Perl plugins.
+    NIX_ENFORCE_NO_SHLIB_UNDEFINED = false;
+
     meta = {
       description = "Powerful package manager that makes package management reliable and reproducible";
       longDescription = ''
