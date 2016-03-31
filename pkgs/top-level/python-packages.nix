@@ -1572,13 +1572,16 @@ in modules // {
   };
 
   batinfo = buildPythonPackage rec {
-    version = "0.2";
+    version = "0.3";
     name = "batinfo-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/batinfo/${name}.tar.gz";
-      sha256 = "1kmrdr1c2ivpqgp2csln7vbanga3sh3nvaqmgbsg96z6fbg7f7w8";
+      sha256 = "0gyzkxzvj5l6qrw706bnm3cckqzzzbrjr7jkxc087d7775a73499";
     };
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/nicolargo/batinfo;
