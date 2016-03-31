@@ -13214,10 +13214,10 @@ in modules // {
 
   buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
     gfortran = pkgs.gfortran;
-    blas = pkgs.openblasCompat_2_14;
+    blas = pkgs.openblasCompat;
   };
 
-  numpy = self.numpy_1_10;
+  numpy = self.numpy_1_11;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
