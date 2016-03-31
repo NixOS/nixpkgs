@@ -14973,18 +14973,17 @@ in modules // {
 
     # The flag `-A 'not network'` will disable tests that use internet.
     # The `-e` flag disables a few problematic tests.
-    # https://github.com/pydata/pandas/issues/11169
-    # https://github.com/pydata/pandas/issues/11287
-    # The test_sql checks fail specifically on python 3.5; see here:
-    # https://github.com/pydata/pandas/issues/11112
+
+    # Disable two tests that are broken since numpy 1.11. Fixed upstream.
+
     checkPhase = let
-      testsToSkip = [];
+      testsToSkip = [ "test_range_slice_day" "test_range_slice_seconds" ];
     in ''
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
-      ${python.executable} setup.py nosetests -A 'not slow and not network' \
-         --verbosity=3
+      ${python.executable} setup.py nosetests -A 'not slow and not network' --stop \
+        -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
 
       runHook postCheck
     '';
