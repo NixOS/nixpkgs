@@ -26325,12 +26325,12 @@ in modules // {
     buildInputs = with self; [ mock freezegun coverage pkgs.glibcLocales ];
 
     LC_ALL="en_US.UTF-8";
-  };
 
-  meta = {
-    description = "A cli todo application compatible with the todo.txt format";
-    homepage = "https://github.com/bram85/topydo";
-    license = license.gpl3;
+    meta = {
+      description = "A cli todo application compatible with the todo.txt format";
+      homepage = "https://github.com/bram85/topydo";
+      license = licenses.gpl3;
+    };
   };
 
 }

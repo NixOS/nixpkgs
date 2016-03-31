@@ -1,14 +1,24 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
+{ stdenv, lib, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
 , windows ? null
+, withCharSize ? 8
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.38";
+assert withCharSize != 8 -> !cplusplusSupport;
+
+let
+  charFlags = if withCharSize == 8 then [ ]
+              else if withCharSize == 16 then [ "--enable-pcre16" "--disable-pcre8" ]
+              else if withCharSize == 32 then [ "--enable-pcre32" "--disable-pcre8" ]
+              else abort "Invalid character size";
+
+in stdenv.mkDerivation rec {
+  name = "pcre${lib.optionalString (withCharSize != 8) (toString withCharSize)}-8.38";
+  # FIXME: add "version" attribute and use it in URL
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.bz2";
     sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
@@ -17,11 +27,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" ];
 
+  # FIXME: Refactor into list!
   configureFlags = ''
     --enable-jit
-    ${if unicodeSupport then "--enable-unicode-properties" else ""}
-    ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '';
+    ${lib.optionalString unicodeSupport "--enable-unicode-properties"}
+    ${lib.optionalString (!cplusplusSupport) "--disable-cpp"}
+  '' + lib.optionalString (charFlags != []) " ${toString charFlags}";
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin

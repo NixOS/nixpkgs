@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, staticBuild ? false }:
 
 stdenv.mkDerivation rec {
   version = "4.9.3";
@@ -11,11 +11,16 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/libiberty";
 
-  enable_shared = 1;
+  enable_shared = !staticBuild;
 
   installPhase = ''
-    mkdir -p $out/lib
-    cp pic/libiberty.a $out/lib/libiberty_pic.a
+    mkdir -p $out/lib $out/include
+    cp ../include/libiberty.h $out/include/
+    if [ -z "$enabled_shared" ]; then
+      cp libiberty.a $out/lib/libiberty.a
+    else
+      cp pic/libiberty.a $out/lib/libiberty_pic.a
+    fi
   '';
 
   meta = with stdenv.lib; {

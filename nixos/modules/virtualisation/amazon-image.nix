@@ -65,8 +65,7 @@ let cfg = config.ec2; in
         fi
 
         if ! [ -e "$metaDir/user-data" ]; then
-          wget -q -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data
-          chmod 600 "$metaDir/user-data"
+          wget -q -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data && chmod 600 "$metaDir/user-data"
         fi
 
         if ! [ -e "$metaDir/hostname" ]; then

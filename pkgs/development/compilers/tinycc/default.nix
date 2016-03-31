@@ -1,13 +1,19 @@
-{ stdenv, fetchurl, perl, texinfo }:
+{ stdenv, fetchurl, fetchgit, perl, texinfo }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  name = "tcc-0.9.26";
+  #name = "tcc-0.9.26";
+  name = "tcc-git-0.9.27pre-20160328";
 
-  src = fetchurl {
-    url = "mirror://savannah/tinycc/${name}.tar.bz2";
-    sha256 = "0wbdbdq6090ayw8bxnbikiv989kykff3m5rzbia05hrnwhd707jj";
+  #src = fetchurl {
+  #  url = "mirror://savannah/tinycc/${name}.tar.bz2";
+  #  sha256 = "0wbdbdq6090ayw8bxnbikiv989kykff3m5rzbia05hrnwhd707jj";
+  #};
+  src = fetchgit {
+    url = "git://repo.or.cz/tinycc.git";
+    rev = "80343ab7d829c21c65f8f9a14dd20158d028549f";
+    sha256 = "1bz75aj93ivb2d8hfk2bczsrwa56lv7vprvdi8c1r5phjvawbshy";
   };
 
   nativeBuildInputs = [ perl texinfo ];
