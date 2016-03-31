@@ -13631,7 +13631,7 @@ in
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     qt4 = pkgsi686Linux.qt4.override {
-      stdenv = clangStdenv;
+      stdenv = pkgsi686Linux.clangStdenv;
     };
   };
 
