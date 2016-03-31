@@ -53,7 +53,7 @@ in with self; {
   BayesPeak = derive2 { name="BayesPeak"; version="1.22.0"; sha256="1jmn8p461rmgjarf4rlhyqzrjg8xkpq56rlrk6964kqxp6jkh8bi"; depends=[IRanges]; };
   BeadDataPackR = derive2 { name="BeadDataPackR"; version="1.22.0"; sha256="04ww55171fbv9170aknl2gbc0mqlpcvwjl9146xamxskc5hxivnh"; depends=[]; };
   BiGGR = derive2 { name="BiGGR"; version="1.6.0"; sha256="1bhjw46mwqyz67p82ag8y4jxvkhpd7d3a8flrs7h28d8srp9jvf8"; depends=[hyperdraw hypergraph LIM rsbml stringr]; };
-  BiRewire = derive2 { name="BiRewire"; version="2.4.1"; sha256="0g72phdy6wry03x5ahqqyd8cpcm2682pkyn1nm5v1ymlk62jfk0h"; depends=[igraph Matrix slam tsne]; };
+  BiRewire = derive2 { name="BiRewire"; version="2.4.2"; sha256="0xzdbh0didyk4wwr1ac9n1dj1473iqgn7s3i5spj2mrvqkj6jrgm"; depends=[igraph Matrix slam tsne]; };
   BiSeq = derive2 { name="BiSeq"; version="1.10.0"; sha256="0vl0arr6chqvyysmajga91m5as54jsnx2z5a23pa7lzgvgv5xzij"; depends=[betareg Biobase BiocGenerics Formula GenomeInfoDb GenomicRanges globaltest IRanges lokern rtracklayer S4Vectors SummarizedExperiment]; };
   BicARE = derive2 { name="BicARE"; version="1.28.0"; sha256="1bnwnrv6bb5va2l54y1c560s7fkmknaayf0vs4pm2s4mdamy0k2k"; depends=[Biobase GSEABase multtest]; };
   BioMVCClass = derive2 { name="BioMVCClass"; version="1.38.0"; sha256="00dzbfq1rxwpp09cg2cl7rm989jidjnvw4rmmkiq8hkqv5r1mssn"; depends=[Biobase graph MVCClass Rgraphviz]; };
@@ -1058,7 +1058,7 @@ in with self; {
   spikeLI = derive2 { name="spikeLI"; version="2.30.0"; sha256="0xqqwxhb89ngfr9jz3z3wsmq8l6lky4hcjnqvf9qd1cwjkf51am9"; depends=[]; };
   spkTools = derive2 { name="spkTools"; version="1.26.0"; sha256="0aznmn9si99x32kn2x5swhpahp96bsg71i1wizml0ni6lvmbxn0j"; depends=[Biobase gtools RColorBrewer]; };
   spliceR = derive2 { name="spliceR"; version="1.12.0"; sha256="0r5j0ibl2ccsxb7rr2fxw4b07wbdiyfndxkl4pgd9h0ks4qyhyjy"; depends=[cummeRbund GenomicRanges IRanges plyr RColorBrewer rtracklayer VennDiagram]; };
-  spliceSites = derive2 { name="spliceSites"; version="1.8.2"; sha256="0y7im56nmrn438ac3fb62xdx5kpy0c4dcxzda22pjbnrj9fifnw7"; depends=[Biobase BiocGenerics Biostrings doBy IRanges rbamtools refGenome seqLogo]; };
+  spliceSites = derive2 { name="spliceSites"; version="1.8.3"; sha256="1jifh0nbqjhrc07jfc50hfk4wn1hv3a863rbr3fnqlg9rwg044w7"; depends=[Biobase BiocGenerics Biostrings doBy IRanges rbamtools refGenome seqLogo]; };
   splicegear = derive2 { name="splicegear"; version="1.42.0"; sha256="1g2fqql1wqzwz1vx5cq03ckld0gccqk6rv9l99xsaa8mhf0rn1qa"; depends=[annotate Biobase XML]; };
   splots = derive2 { name="splots"; version="1.36.0"; sha256="1cj8bygsv1g91cypdz2zbf2slirls7sqdxrvg6qka0n8las58sxd"; depends=[RColorBrewer]; };
   spotSegmentation = derive2 { name="spotSegmentation"; version="1.44.0"; sha256="074nzh18pj6dpk9bqh8id0j2vpaxvhi2ddrz6hnza381wzdgxdr3"; depends=[mclust]; };
