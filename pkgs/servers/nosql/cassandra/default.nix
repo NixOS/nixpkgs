@@ -25,7 +25,7 @@ let
           --prefix PATH : ${procps}/bin
       done
 
-      wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
+      sed -i '66s/pass/print "no readline"/' $out/bin/cqlsh.py
       '';
 
     meta = with stdenv.lib; {
