@@ -24,8 +24,8 @@ composableDerivation.composableDerivation {} rec {
             preConfigure = ''
               export PYTHON_LIB=$out/lib/${python.libPrefix}/site-packages
               mkdir -p $out/nix-support
-              echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook 
-              echo "export PYTHONPATH=\"$PYTHON_LIB:\$PYTHONPATH\"" >> $out/nix-support/setup-hook 
+              echo "export NIX_PYTHON_SITES=\"$out:\$NIX_PYTHON_SITES\"" >> $out/nix-support/setup-hook
+              echo "export PYTHONPATH=\"$PYTHON_LIB:\$PYTHONPATH\"" >> $out/nix-support/setup-hook
             '';
            };
          }
@@ -46,8 +46,8 @@ composableDerivation.composableDerivation {} rec {
                export RUBY_LIB=$out/${ruby.libPath}
                export RUBY_LIB_ARCH=$RUBY_LIB
                mkdir -p $out/nix-support
-               echo "export RUBYLIB=\"$RUBY_LIB:\$RUBYLIB\"" >> $out/nix-support/setup-hook 
-               echo "export GEM_PATH=\"$out:\$GEM_PATH\"" >> $out/nix-support/setup-hook 
+               echo "export RUBYLIB=\"$RUBY_LIB:\$RUBYLIB\"" >> $out/nix-support/setup-hook
+               echo "export GEM_PATH=\"$out:\$GEM_PATH\"" >> $out/nix-support/setup-hook
              '';
            };
          }
@@ -64,7 +64,7 @@ composableDerivation.composableDerivation {} rec {
     rubySupport = true;
   };
 
-  meta = { 
+  meta = {
     description = "Bindings for the Xapian library";
     homepage = xapian.meta.homepage;
     license = stdenv.lib.licenses.gpl2Plus;
