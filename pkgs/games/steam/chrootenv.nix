@@ -24,7 +24,10 @@ buildFHSUserEnv {
       perl
     ]
     ++ lib.optional withJava jdk
-    ++ lib.optional withPrimus primus
+    ++ lib.optional withPrimus (primus.override {
+      stdenv = useOldCXXAbi stdenv;
+      stdenv_i686 = useOldCXXAbi pkgsi686Linux.stdenv;
+    })
     ;
 
   multiPkgs = pkgs: with pkgs; [
