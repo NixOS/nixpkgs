@@ -60,7 +60,7 @@ composableDerivation.composableDerivation {} rec {
 
   cfg = {
     pythonSupport = true;
-    phpSupport = true;
+    phpSupport = false;
     rubySupport = true;
   };
 
