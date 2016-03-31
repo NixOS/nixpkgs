@@ -165,7 +165,7 @@ following incompatible changes:</para>
 
 <programlisting><![CDATA[
 {
-  imports = [ <nixos/modules/services/misc/gitit.nix> ];
+  imports = [ <nixpkgs/nixos/modules/services/misc/gitit.nix> ];
 }
 ]]></programlisting>
 
