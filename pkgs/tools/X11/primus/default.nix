@@ -4,6 +4,7 @@
 # same LD_LIBRARY_PATH.
 # Other distributions do the same.
 { stdenv
+, stdenv_i686
 , primusLib
 , writeScriptBin
 , primusLib_i686 ? null
@@ -11,8 +12,12 @@
 }:
 
 let
-  primus = if useNvidia then primusLib else primusLib.override { nvidia_x11 = null; };
-  primus_i686 = if useNvidia then primusLib_i686 else primusLib_i686.override { nvidia_x11 = null; };
+  # We override stdenv in case we need different ABI for libGL
+  primusLib_ = primusLib.override { inherit stdenv; };
+  primusLib_i686_ = primusLib_i686.override { stdenv = stdenv_i686; };
+
+  primus = if useNvidia then primusLib_ else primusLib_.override { nvidia_x11 = null; };
+  primus_i686 = if useNvidia then primusLib_i686_ else primusLib_i686_.override { nvidia_x11 = null; };
   ldPath = stdenv.lib.makeLibraryPath ([primus] ++ stdenv.lib.optional (primusLib_i686 != null) primus_i686);
 
 in writeScriptBin "primusrun" ''
