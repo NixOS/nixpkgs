@@ -48,12 +48,19 @@ let
   };
 
   get_policy_routing_for_interface = interfaces: interface_name:
-    map (network: {
-       priority = lib.attrByPath [ interface_name ] 100 routing_priorities;
+    map (network:
+    let
+      addresses = getAttr network (getAttr interface_name interfaces).networks;
+    in
+    {
+       priority =
+        if builtins.length addresses == 0
+        then 1000
+        else lib.attrByPath [ interface_name ] 100 routing_priorities;
        network = network;
        interface = interface_name;
        gateway = getAttr network (getAttr interface_name interfaces).gateways;
-       addresses = getAttr network (getAttr interface_name interfaces).networks;
+       addresses = addresses;
        family = if (fclib.isIp4 network) then "4" else "6";
      }) (attrNames interfaces.${interface_name}.gateways);
 
