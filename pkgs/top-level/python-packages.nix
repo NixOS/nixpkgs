@@ -4909,6 +4909,10 @@ in modules // {
       sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
     };
 
+    # Not supported.
+    # See instead https://pypi.python.org/pypi/dnspython3/1.12.0
+    disabled = isPy3k;
+
     meta = {
       description = "A DNS toolkit for Python 3.x";
       homepage = http://www.dnspython.org;
