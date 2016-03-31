@@ -19746,14 +19746,19 @@ in modules // {
   };
 
   sigal = buildPythonPackage rec {
-    name = "sigal-0.9.2";
+    name = "sigal-1.0.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sigal/${name}.tar.gz";
-      sha256 = "0mk3bzaxn9snx9lc0pj9zvgdgdyhkza6b8z5x91772mlv84sfw6c";
+      sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
     };
 
-    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click pytest blinker ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click blinker ];
+
+    # No tests included
+    doCheck = false;
+
 
     meta = {
       description = "Yet another simple static gallery generator";
