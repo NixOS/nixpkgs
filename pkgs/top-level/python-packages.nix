@@ -1667,27 +1667,32 @@ in modules // {
   });
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-1.7.0";
+    name = "Beaker-${version}";
+    version = "1.8.0";
 
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      sha256 = "0vv4y22b3ly1212n9nnhgvc8yz32adlfl7w7s1wj0i5srpjcgvlq";
+    # The pypy release do not contains the tests
+    src = pkgs.fetchFromGitHub {
+      owner = "bbangert";
+      repo = "beaker";
+      rev = "${version}";
+      sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
     };
 
     buildInputs =
-      [ self.sqlalchemy7
-        self.pycryptopp
-        self.nose
+      [ self.nose
         self.mock
         self.webtest
       ];
-
-    # http://hydra.nixos.org/build/4511591/log/raw
-    doCheck = false;
+    propagatedBuildInputs = [
+      self.sqlalchemy
+      self.pycrypto
+    ] ++ optionals (isPy26 || isPy27) [
+      self.funcsigs
+      self.pycryptopp
+    ];
 
     meta = {
+      description = "A Session and Caching library with WSGI Middleware";
       maintainers = with maintainers; [ garbas iElectric ];
       platforms = platforms.all;
     };
@@ -3317,23 +3322,19 @@ in modules // {
 
 
   coilmq = buildPythonPackage (rec {
-    name = "coilmq-0.6.1";
+    name = "CoilMQ-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
-      sha256 = "9755733bdae33a9d87630232d166a7da2382f68c2cffb3bb81503806e8d310cb";
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/${name}.tar.gz";
+      sha256 = "0wwa6fsqw1mxsryvgp0yrdjil8axyj0kslzi7lr45cnhgp5ab375";
     };
 
-    propagatedBuildInputs = with self; [ self.stompclient ];
+    propagatedBuildInputs = with self; [ stompclient pythondaemon redis pid];
 
-    preConfigure = ''
-      sed -i '/distribute/d' setup.py
-    '';
+    buildInputs = with self; [ pytest six click coverage sqlalchemy ];
 
-    buildInputs = with self; [ self.coverage self.sqlalchemy7 ];
-
-    # ValueError: Could not parse auth file:
-    # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
+    # The teste data is not included in the distribution
     doCheck = false;
 
     meta = {
@@ -20105,6 +20106,22 @@ in modules // {
     };
   };
 
+  pid = buildPythonPackage rec {
+    name = "pid-${version}";
+    version = "2.0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pid/${name}.tar.gz";
+      sha256 = "0cylj8p25nwkdfgy4pzai21wyzmrxdqlwwbzqag9gb5qcjfdwk05";
+    };
+
+    meta = {
+      description = "Pidfile featuring stale detection and file-locking";
+      homepage = https://github.com/trbs/pid/;
+      license = licenses.asl20;
+    };
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
     disabled = isPy3k;
@@ -20116,6 +20133,28 @@ in modules // {
 
     doCheck = false;
 
+  };
+
+  pythondaemon = buildPythonPackage rec {
+    name = "python-daemon-${version}";
+    version = "2.1.1";
+
+    src = pkgs.fetchurl {
+      url = " https://pypi.python.org/packages/source/p/python-daemon/${name}.tar.gz";
+      sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
+    };
+
+    # A test fail within chroot builds.
+    doCheck = false;
+
+    buildInputs = with self; [ mock testscenarios ];
+    propagatedBuildInputs = with self; [ docutils lockfile ];
+
+    meta = {
+      description = "Library to implement a well-behaved Unix daemon process";
+      homepage = https://alioth.debian.org/projects/python-daemon/;
+      licenses =  [ licenses.gpl3Plus licenses.asl20 ];
+    };
   };
 
   sympy = buildPythonPackage rec {
@@ -22474,12 +22513,12 @@ in modules // {
 
 
   webtest = buildPythonPackage rec {
-    version = "2.0.15";
+    version = "2.0.20";
     name = "webtest-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
-      sha256 = "c320adc2cd862ea71ca9e2012e6157eb12f5f8d1632d1541f2eabf984aaa3ecc";
+      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
+      sha256 = "0bv0qhdjakdsdgj4sk21gnpp8xp8bga4x03p6gjb83ihrsb7n4xv";
     };
 
     preConfigure = ''
@@ -25385,7 +25424,7 @@ in modules // {
         thrift
         beautifulsoup4
         markdown2
-        sqlalchemy7
+        sqlalchemy
         html2text
         evernote
     ];
