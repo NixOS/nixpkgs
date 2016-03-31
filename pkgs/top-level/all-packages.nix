@@ -5377,7 +5377,7 @@ in
 
   inherit (callPackages ../development/interpreters/perl {}) perl perl520 perl522;
 
-  php = php56;
+  php = php70;
 
   phpPackages = php56Packages;
 
