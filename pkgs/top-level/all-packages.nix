@@ -13998,6 +13998,7 @@ let
   };
 
   primus = callPackage ../tools/X11/primus {
+    stdenv_i686 = pkgsi686Linux.stdenv;
     primusLib_i686 = if system == "x86_64-linux"
       then pkgsi686Linux.primusLib
       else null;
