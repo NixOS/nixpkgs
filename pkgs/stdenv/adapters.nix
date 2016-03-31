@@ -241,4 +241,11 @@ rec {
       then pkgs.allStdenvs.stdenvDarwinNaked
       else pkgs.stdenv;
   };
+
+  /* Modify a stdenv so a build uses pre-C++11 ABI by default. */
+  useOldCXXAbi = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -D_GLIBCXX_USE_CXX11_ABI=0";
+      });
+    };
 }
