@@ -23936,6 +23936,10 @@ in modules // {
       sha256 = "3edf4b83a3fa1a7bd953b452b76542d54285ff6f1145b6e19f9b5438120fa408";
     };
 
+    # Requires pyusb 1.0.0b1.
+    # Likely current pyusb will work but we need to patch the hard requirement then.
+    broken = true;
+
     propagatedBuildInputs = with self; [ pyusb ];
 
     meta = {
