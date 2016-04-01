@@ -122,6 +122,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   passthru = {
     inherit gtk nspr version;
     isFirefox3Like = true;
+    browserName = pname;
   };
 };
 
