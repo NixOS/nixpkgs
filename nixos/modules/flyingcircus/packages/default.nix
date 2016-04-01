@@ -8,6 +8,8 @@
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
     fc-udev = pkgs.callPackage ./fc-udev { };
 
+    powerdns = pkgs.callPackage ./powerdns.nix { };
+
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
     qemu = pkgs.callPackage ./qemu-2.5.nix {
       inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Cocoa;
