@@ -189,6 +189,7 @@ in
 
         # Allow DSA keys for now. (These were deprecated in OpenSSH 7.0.)
         PubkeyAcceptedKeyTypes +ssh-dss
+        HostKeyAlgorithms +ssh-dss
 
         ${cfg.extraConfig}
       '';
