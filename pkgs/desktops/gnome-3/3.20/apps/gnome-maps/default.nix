@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
                   gdk_pixbuf librsvg autoreconfHook
                   gnome3.gnome_online_accounts gnome3.defaultIconTheme ];
 
-  patches = [ ./soup.patch ];
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Maps;
     description = "A map application for GNOME 3";
