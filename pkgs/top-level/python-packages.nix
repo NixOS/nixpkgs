@@ -6961,11 +6961,11 @@ in modules // {
 
 
   pyramid_beaker = buildPythonPackage rec {
-    name = "pyramid_beaker-0.7";
+    name = "pyramid_beaker-0.8";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyramid_beaker/${name}.tar.gz";
-      md5 = "acb863517a98b90b5f29648ce55dd563";
+      sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
     };
 
     propagatedBuildInputs = with self; [ beaker pyramid ];
@@ -6973,6 +6973,7 @@ in modules // {
     meta = {
       maintainers = with maintainers; [ iElectric ];
       platforms = platforms.all;
+      broken = true;
     };
   };
 
