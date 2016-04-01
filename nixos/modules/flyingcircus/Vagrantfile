@@ -9,8 +9,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "../../../", "/root/nixpkgs"
 
-  config.vm.network "private_network", mac: "100000021225", ip: "192.168.12.146"
-  config.vm.network "private_network", mac: "100000031225", ip: "192.168.13.146"
+  config.vm.network "private_network", mac: "020000021225", ip: "192.168.12.146"
+  config.vm.network "private_network", mac: "020000031225", ip: "192.168.13.146"
 
   config.vm.provision :shell, :inline => <<SCRIPT
     cp /root/nixpkgs/nixos/modules/flyingcircus/vagrant-provision.nix /etc/nixos/local.nix
