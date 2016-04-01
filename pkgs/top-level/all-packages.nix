@@ -13924,6 +13924,8 @@ in
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid { };
 
+  timewarrior = callPackage ../applications/misc/timewarrior { };
+
   timidity = callPackage ../tools/misc/timidity { };
 
   tint2 = callPackage ../applications/misc/tint2 { };
