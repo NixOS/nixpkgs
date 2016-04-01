@@ -785,7 +785,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
-    };  
+    };
     buildInputs = with self; [ zope_interface ];
 
   };
@@ -5386,7 +5386,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
-    };  
+    };
 
     propagatedBuildInputs = with self; [ greenlet ];
 
@@ -12244,8 +12244,8 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
-    };  
-    
+    };
+
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
@@ -20534,14 +20534,13 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.4";
+    name = "Sphinx-1.3.6";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
+      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
 
-    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -20784,7 +20783,7 @@ in modules // {
 
     src = pkgs.fetchFromGitHub {
       repo = "sqlalchemy-imageattach";
-      owner = "crosspop";      
+      owner = "crosspop";
       rev = "${version}";
       sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
     };
