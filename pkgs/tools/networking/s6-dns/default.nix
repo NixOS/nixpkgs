@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.0.0.4";
+  version = "2.0.0.7";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-dns";
     rev = "refs/tags/v${version}";
-    sha256 = "0h2s0r0g0qi74aw04c0jap09yjzzprwc6ihknx8bqgbzv08yv03w";
+    sha256 = "033pijilkvj3vw94aqrvavr4mqafm7kcc8ql8lc3ma6lqkx4xyak";
   };
 
   dontDisableStatic = true;
@@ -25,7 +25,9 @@ in stdenv.mkDerivation rec {
     "--with-include=${skalibs}/include"
     "--with-lib=${skalibs}/lib"
     "--with-dynlib=${skalibs}/lib"
-  ] ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ]);
+  ]
+  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
+  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-dns/;
