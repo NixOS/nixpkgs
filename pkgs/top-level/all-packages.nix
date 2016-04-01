@@ -15524,6 +15524,15 @@ in
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
+  lammps = callPackage ../applications/science/molecular-dynamics/lammps {
+    fftw = fftw;
+  };
+
+  lammps-mpi = appendToName "mpi" (lammps.override {
+    mpiSupport = true;
+    mpi = openmpi;
+  });
+
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
     mpiEnabled = false;
