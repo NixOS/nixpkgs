@@ -222,9 +222,7 @@ let
 
   rest = callPackage ./core/rest { };
 
-  sushi = callPackage ./core/sushi {
-    clutter-gst = pkgs.clutter-gst;
-  };
+  sushi = callPackage ./core/sushi { };
 
   totem = callPackage ./core/totem { };
 
