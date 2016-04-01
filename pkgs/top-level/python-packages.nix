@@ -16660,6 +16660,30 @@ in modules // {
     };
   };
 
+  pydot_ng = buildPythonPackage rec {
+    name = "pydot_ng-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pydot-ng/${name}.tar.gz";
+      sha256 = "0h8k8wlzvnb40v4js7afgfyhp3wasmb1kg4gr6z7ck63iv8fq864";
+    };
+
+    buildInputs = [ self.pytest self.unittest2 ];
+    propagatedBuildInputs = [ pkgs.graphviz self.pyparsing ];
+
+    checkPhase = ''
+      mkdir test/my_tests
+      py.test test
+    '';
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/pydot-ng";
+      description = "Python 3-compatible update of pydot, a Python interface to Graphviz's Dot";
+      license = licenses.mit;
+      maintainers = [ maintainers.bcdarwin ];
+    };
+  };
+
   pyelasticsearch = buildPythonPackage (rec {
     name = "pyelasticsearch-1.4";
 
