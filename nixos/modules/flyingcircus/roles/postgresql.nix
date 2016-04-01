@@ -2,6 +2,7 @@
 
 let
   cfg = config.flyingcircus;
+  fclib = import ../lib;
 
   # This looks clunky.
   version =
@@ -59,15 +60,7 @@ let
       (min [64 (shared_buffers / 32)])
       1];
 
-  listen_addresses = [ "127.0.0.1" "::1" ] ++ (
-    if builtins.hasAttr "ethsrv" config.networking.interfaces
-    then
-      let
-        ethsrv = config.networking.interfaces.ethsrv;
-      in
-        (map (addr: addr.address) ethsrv.ip4) ++
-        (map (addr: addr.address) ethsrv.ip6)
-    else []);
+  listen_addresses = fclib.listenAddresses config "ethsrv";
 
   # I hate you nix. /a/path in nix is obviously different from the string
   # "/a/path". Like the former puts the path into the store. But how do I get

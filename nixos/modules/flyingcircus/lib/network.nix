@@ -15,4 +15,16 @@
 
   isIp6 = address_or_network:
     builtins.length (lib.splitString ":" address_or_network) > 1;
+
+  listenAddresses = config: interface:
+  [ "127.0.0.1" "::1" ] ++ (
+    if builtins.hasAttr interface config.networking.interfaces
+    then
+      let
+        interface_config = builtins.getAttr interface config.networking.interfaces;
+      in
+        (map (addr: addr.address) interface_config.ip4) ++
+        (map (addr: addr.address) interface_config.ip6)
+    else []);
+
 }
