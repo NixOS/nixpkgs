@@ -6478,6 +6478,10 @@ in
     cogl = cogl_1_22;
   };
 
+  clutter_1_26 = callPackage ../development/libraries/clutter/1.26.nix {
+    cogl = cogl_1_22;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
@@ -6488,6 +6492,9 @@ in
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
   clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
     clutter = clutter_1_22;
+  };
+  clutter_gtk_1_8 = callPackage ../development/libraries/clutter-gtk/1.8.nix {
+    clutter = clutter_1_26;
   };
 
   cminpack = callPackage ../development/libraries/cminpack { };
@@ -8974,6 +8981,11 @@ in
   wcslib = callPackage ../development/libraries/wcslib { };
 
   webkitgtk = callPackage ../development/libraries/webkitgtk {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk_gtk3_20 = callPackage ../development/libraries/webkitgtk/2.12.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -15066,6 +15078,7 @@ in
   };
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
+  gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = gnome3_18;
 

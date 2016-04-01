@@ -1,0 +1,123 @@
+From bdbbe312e6520ce70e91319162e85367a69ce044 Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
+Date: Sat, 1 Aug 2015 21:01:11 +0200
+Subject: [PATCH 1/3] Search for themes and icons in system data dirs
+
+---
+ gtweak/tweaks/tweak_group_interface.py | 17 ++++-------------
+ gtweak/tweaks/tweak_group_keymouse.py  |  7 ++-----
+ gtweak/utils.py                        | 17 +++++++++++++++++
+ 3 files changed, 23 insertions(+), 18 deletions(-)
+
+diff --git a/gtweak/tweaks/tweak_group_interface.py b/gtweak/tweaks/tweak_group_interface.py
+index ed2ad5f..a319907 100644
+--- a/gtweak/tweaks/tweak_group_interface.py
++++ b/gtweak/tweaks/tweak_group_interface.py
+@@ -26,7 +26,7 @@ from gi.repository import Gtk
+ from gi.repository import GLib
+ 
+ import gtweak
+-from gtweak.utils import walk_directories, make_combo_list_with_default, extract_zip_file
++from gtweak.utils import walk_directories, make_combo_list_with_default, extract_zip_file, get_resource_dirs
+ from gtweak.tweakmodel import Tweak, TWEAK_GROUP_APPEARANCE
+ from gtweak.gshellwrapper import GnomeShellFactory
+ from gtweak.gsettings import GSettingsSetting
+@@ -46,10 +46,7 @@ class GtkThemeSwitcher(GSettingsComboTweak):
+ 
+     def _get_valid_themes(self):
+         """ Only shows themes that have variations for gtk+-3 and gtk+-2 """
+-        dirs = ( os.path.join(gtweak.DATA_DIR, "themes"),
+-                 os.path.join(GLib.get_user_data_dir(), "themes"),
+-                 os.path.join(os.path.expanduser("~"), ".themes"))
+-        valid = walk_directories(dirs, lambda d:
++        valid = walk_directories(get_resource_dirs('themes'), lambda d:
+                     os.path.exists(os.path.join(d, "gtk-2.0")) and \
+                         os.path.exists(os.path.join(d, "gtk-3.0")))
+         return valid
+@@ -64,10 +61,7 @@ class IconThemeSwitcher(GSettingsComboTweak):
+             **options)
+ 
+     def _get_valid_icon_themes(self):
+-        dirs = ( os.path.join(gtweak.DATA_DIR, "icons"),
+-                 os.path.join(GLib.get_user_data_dir(), "icons"),
+-                 os.path.join(os.path.expanduser("~"), ".icons"))
+-        valid = walk_directories(dirs, lambda d:
++        valid = walk_directories(get_resource_dirs("icons"), lambda d:
+                     os.path.isdir(d) and \
+ 			os.path.exists(os.path.join(d, "index.theme")))
+         return valid
+@@ -82,10 +76,7 @@ class CursorThemeSwitcher(GSettingsComboTweak):
+             **options)
+ 
+     def _get_valid_cursor_themes(self):
+-        dirs = ( os.path.join(gtweak.DATA_DIR, "icons"),
+-                 os.path.join(GLib.get_user_data_dir(), "icons"),
+-                 os.path.join(os.path.expanduser("~"), ".icons"))
+-        valid = walk_directories(dirs, lambda d:
++        valid = walk_directories(get_resource_dirs("icons"), lambda d:
+                     os.path.isdir(d) and \
+                         os.path.exists(os.path.join(d, "cursors")))
+         return valid
+diff --git a/gtweak/tweaks/tweak_group_keymouse.py b/gtweak/tweaks/tweak_group_keymouse.py
+index e4cce7b..4ac08b7 100644
+--- a/gtweak/tweaks/tweak_group_keymouse.py
++++ b/gtweak/tweaks/tweak_group_keymouse.py
+@@ -20,7 +20,7 @@ import os.path
+ from gi.repository import GLib
+ 
+ import gtweak
+-from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default
++from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs
+ from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title, GSettingsComboEnumTweak
+ 
+ class PrimaryPasteTweak(GetterSetterSwitchTweak):
+@@ -48,10 +48,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
+             **options)
+ 
+     def _get_valid_key_themes(self):
+-        dirs = ( os.path.join(gtweak.DATA_DIR, "themes"),
+-                 os.path.join(GLib.get_user_data_dir(), "themes"),
+-                 os.path.join(os.path.expanduser("~"), ".themes"))
+-        valid = walk_directories(dirs, lambda d:
++        valid = walk_directories(get_resource_dirs("themes"), lambda d:
+                     os.path.isfile(os.path.join(d, "gtk-3.0", "gtk-keys.css")) and \
+                     os.path.isfile(os.path.join(d, "gtk-2.0-key", "gtkrc")))
+         return valid
+diff --git a/gtweak/utils.py b/gtweak/utils.py
+index 6e4d701..535e1f3 100644
+--- a/gtweak/utils.py
++++ b/gtweak/utils.py
+@@ -21,6 +21,7 @@ import tempfile
+ import shutil
+ import subprocess
+ import glob
++import itertools
+ 
+ import gtweak
+ from gtweak.gsettings import GSettingsSetting
+@@ -116,6 +117,22 @@ def execute_subprocess(cmd_then_args, block=True):
+         stdout, stderr = p.communicate()
+         return stdout, stderr, p.returncode
+ 
++def get_resource_dirs(resource):
++    """Returns a list of all known resource dirs for a given resource.
++
++    :param str resource:
++        Name of the resource (e.g. "themes")
++    :return:
++        A list of resource dirs
++    """
++    dirs = [os.path.join(dir, resource)
++            for dir in itertools.chain(GLib.get_system_data_dirs(),
++                                       (gtweak.DATA_DIR,
++                                        GLib.get_user_data_dir()))]
++    dirs += [os.path.join(os.path.expanduser("~"), ".{}".format(resource))]
++
++    return [dir for dir in dirs if os.path.isdir(dir)]
++
+ @singleton
+ class AutostartManager:
+ 
+-- 
+2.7.0
+
