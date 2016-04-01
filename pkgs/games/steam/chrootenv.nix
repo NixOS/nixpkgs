@@ -25,8 +25,8 @@ buildFHSUserEnv {
     ]
     ++ lib.optional withJava jdk
     ++ lib.optional withPrimus (primus.override {
-      stdenv = useOldCXXAbi stdenv;
-      stdenv_i686 = useOldCXXAbi pkgsi686Linux.stdenv;
+      stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
+      stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
     })
     ;
 
