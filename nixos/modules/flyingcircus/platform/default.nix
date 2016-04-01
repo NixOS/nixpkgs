@@ -257,9 +257,11 @@ in
 
     system.activationScripts.journal = ''
       # Ensure journal access for privileged users.
-      ${pkgs.acl}/bin/setfacl -n -m g:service:r /var/log/journal/*/system.journal
-      ${pkgs.acl}/bin/setfacl -n -m g:admins:r /var/log/journal/*/system.journal
-      ${pkgs.acl}/bin/setfacl -n -m g:sudo-srv:r /var/log/journal/*/system.journal
+      # This fails if the users are not there (hence || true). This does not
+      # matter though: a non existing user/group does not need access.
+      ${pkgs.acl}/bin/setfacl -n -m g:service:r /var/log/journal/*/system.journal || true
+      ${pkgs.acl}/bin/setfacl -n -m g:admins:r /var/log/journal/*/system.journal || true
+      ${pkgs.acl}/bin/setfacl -n -m g:sudo-srv:r /var/log/journal/*/system.journal || true
     '';
 
     environment.etc = (
