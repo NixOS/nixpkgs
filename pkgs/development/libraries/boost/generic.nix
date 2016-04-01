@@ -160,6 +160,9 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "lib" ];
 
+  # Used during building; results seem fine.
+  NIX_ENFORCE_NO_SHLIB_UNDEFINED = false;
+
   crossAttrs = rec {
     buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
