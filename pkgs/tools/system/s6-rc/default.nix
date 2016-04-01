@@ -29,7 +29,9 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${skalibs}/lib"
     "--with-dynlib=${execline}/lib"
     "--with-dynlib=${s6}/lib"
-  ] ++ [ (if stdenv.isDarwin then "--disable-shared" else "--enable-shared") ];
+  ]
+  ++ (if stdenv.isDarwin then [ "--disable-shared" ] else [ "--enable-shared" ])
+  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
 
   meta = {
     homepage = http://skarnet.org/software/s6-rc/;

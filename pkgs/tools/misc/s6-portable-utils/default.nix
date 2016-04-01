@@ -20,7 +20,8 @@ in stdenv.mkDerivation rec {
     "--with-include=${skalibs}/include"
     "--with-lib=${skalibs}/lib"
     "--with-dynlib=${skalibs}/lib"
-  ];
+  ]
+  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-portable-utils/;

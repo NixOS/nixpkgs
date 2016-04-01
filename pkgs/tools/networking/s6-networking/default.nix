@@ -32,7 +32,8 @@ in stdenv.mkDerivation rec {
     "--with-dynlib=${execline}/lib"
     "--with-dynlib=${s6}/lib"
     "--with-dynlib=${s6Dns}/lib"
-  ];
+  ]
+  ++ (stdenv.lib.optional stdenv.isDarwin "--target=${stdenv.system}");
 
   meta = {
     homepage = http://www.skarnet.org/software/s6-networking/;
