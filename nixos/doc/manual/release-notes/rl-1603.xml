@@ -56,6 +56,11 @@ has the following highlights:</para>
     <para>Perl 5.22.</para>
   </listitem>
 
+  <listitem>
+    <para>KDE Plasma 5.5.5 (was 5.3.2) and Applications 15.12.3 (was
+    15.04.3), based on KDE Frameworks 5.19 (was 5.12).</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>The following new services were added since the last release:
