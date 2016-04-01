@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, tzdata, iana_etc, go_1_4, runCommand
-, perl, which, pkgconfig, patch
+, perl, which, pkgconfig, patch, fetchpatch
 , pcre
 , Security, Foundation }:
 
@@ -46,6 +46,11 @@ stdenv.mkDerivation rec {
     cd go
     patchShebangs ./ # replace /bin/bash
 
+    # This script produces another script at run time,
+    # and thus it is not corrected by patchShebangs.
+    substituteInPlace misc/cgo/testcarchive/test.bash \
+      --replace '#!/usr/bin/env bash' '#!${stdenv.shell}'
+
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
     rm src/net/{listen,parse}_test.go
@@ -91,6 +96,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.5.patch
+    # Fix bug when using musl (see https://github.com/golang/go/issues/14476)
+    # Should be fixed by go 1.6.1
+    (fetchpatch {
+      url = "https://github.com/golang/go/commit/1439158120742e5f41825de90a76b680da64bf76.patch";
+      sha256 = "0yixpbx056ns5wgd3f4absgiyc2ymmqk8mkhhz5ja90dvilzxcwd";
+    })
   ]
   # -ldflags=-s is required to compile on Darwin, see
   # https://github.com/golang/go/issues/11994

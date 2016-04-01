@@ -1,28 +1,15 @@
-{ stdenv, fetchurl, ruby }:
+{ buildRubyGem, lib, ruby_2_2 }:
 
-stdenv.mkDerivation rec {
-  name = "flvtool2-1.0.6";
-  
-  src = fetchurl {
-    url = "http://rubyforge.org/frs/download.php/17497/${name}.tgz";
-    sha256 = "1pbsf0fvqrs6xzfkqal020bplb68dfiz6c5sfcz36k255v7c5w9a";
-  };
-
-  buildInputs = [ ruby ];
-
-  configurePhase =
-    ''
-      substituteInPlace bin/flvtool2 --replace "/usr/bin/env ruby" "ruby -I$out/lib/ruby/site_ruby/1.8"
-      ruby setup.rb config --prefix=$out --siterubyver=$out/lib/ruby/site_ruby/1.8
-    '';
-  
-  installPhase =
-    ''
-      ruby setup.rb install
-    '';
+buildRubyGem rec {
+  ruby = ruby_2_2;
+  name = "${gemName}-${version}";
+  gemName = "flvtool2";
+  version = "1.0.6";
+  sha256 = "0xsla1061pi4ryh3jbvwsbs8qchprchbqjy7652g2g64v37i74qj";
 
   meta = {
-    homepage = http://www.inlet-media.de/flvtool2/;
+    homepage = https://github.com/unnu/flvtool2;
     description = "A tool to manipulate Macromedia Flash Video files";
+    platforms = ruby.meta.platforms;
   };
 }

@@ -51,7 +51,13 @@ let
   '';
 
   carbonEnv = {
-    PYTHONPATH = "${pkgs.python27Packages.carbon}/lib/python2.7/site-packages";
+    PYTHONPATH = let
+      cenv = pkgs.python.buildEnv.override {
+        extraLibs = [ pkgs.python27Packages.carbon ];
+      };
+      cenvPack =  "${cenv}/${pkgs.python.sitePackages}";
+    # opt/graphite/lib contains twisted.plugins.carbon-cache
+    in "${cenvPack}/opt/graphite/lib:${cenvPack}";
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
@@ -445,10 +451,21 @@ in {
         after = [ "network-interfaces.target" ];
         path = [ pkgs.perl ];
         environment = {
-          PYTHONPATH = "${pkgs.python27Packages.graphite_web}/lib/python2.7/site-packages";
+          PYTHONPATH = let
+              penv = pkgs.python.buildEnv.override {
+                extraLibs = [
+                  pkgs.python27Packages.graphite_web
+                  pkgs.python27Packages.pysqlite
+                ];
+              };
+              penvPack = "${penv}/${pkgs.python.sitePackages}";
+              # opt/graphite/webapp contains graphite/settings.py
+              # explicitly adding pycairo in path because it cannot be imported via buildEnv
+            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pycairo}/${pkgs.python.sitePackages}";
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
+          LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
         };
         serviceConfig = {
           ExecStart = ''
@@ -486,9 +503,11 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
         environment = {
-          PYTHONPATH =
-            "${cfg.api.package}/lib/python2.7/site-packages:" +
-            concatMapStringsSep ":" (f: f + "/lib/python2.7/site-packages") cfg.api.finders;
+          PYTHONPATH = let
+              aenv = pkgs.python.buildEnv.override {
+                extraLibs = [ cfg.api.package pkgs.cairo ] ++ cfg.api.finders;
+              };
+            in "${aenv}/${pkgs.python.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
           LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };

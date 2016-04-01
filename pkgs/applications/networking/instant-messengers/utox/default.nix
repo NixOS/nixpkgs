@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "GrayHatter";
     repo = "uTox";
     rev = "v${version}";
-    sha256 = "074wa0np8hyqwy9xqgyyds94pdfv2i1jh019m98d8apxc5vn36wk";
+    sha256 = "1md8fw6zqd3giskd89i56dgrsl83vn27xwr8k22263wkj1fxxw4c";
   };
 
   buildInputs = [ pkgconfig libtoxcore-dev dbus libvpx libX11 openal freetype

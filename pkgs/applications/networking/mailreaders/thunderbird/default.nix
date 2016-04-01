@@ -13,7 +13,7 @@
   enableOfficialBranding ? false
 }:
 
-let version = "38.6.0"; in
+let version = "38.7.0"; in
 let verName = "${version}"; in
 
 stdenv.mkDerivation rec {
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://archive.mozilla.org/pub/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.bz2";
-
-    # https://archive.mozilla.org/pub/thunderbird/releases/${verName}/SHA1SUMS
-    sha1 = "7c8ef066d6b6516fddbb654b38353f894f85d469";
+    sha256 = "1wbkj8a0p62mcbxlq8yyzrx51xi65qm8f2ccqiv5pb6qd51b5d0v";
   };
 
   buildInputs = # from firefox30Pkgs.xulrunner, but without gstreamer and libvpx
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
                                "--enable-optimize" "--enable-strip" ])
     ++ [
       "--disable-javaxpcom"
-      "--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
+      #"--enable-stdcxx-compat" # Avoid dependency on libstdc++ 4.7
     ]
     ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
   in ''

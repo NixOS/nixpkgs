@@ -3,10 +3,10 @@
   
 pythonPackages.buildPythonApplication rec {
   name = "sshuttle-${version}";
-  version = "0.76";
+  version = "0.77.2";
 
   src = fetchurl {
-    sha256 = "1q0hr0vhdvv23cw5dqndsmf61283mvs6b14662ci00xj6zp5v48b";
+    sha256 = "1fwlhr5r9pl3pns65nn4mxf5ivypmd2a12gv3vpyznfy5f097k10";
     url = "https://pypi.python.org/packages/source/s/sshuttle/${name}.tar.gz";
   };
 

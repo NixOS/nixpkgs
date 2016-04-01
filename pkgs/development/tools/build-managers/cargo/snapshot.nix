@@ -2,7 +2,7 @@
 
 /* Cargo binary snapshot */
 
-let snapshotDate = "2015-06-17";
+let snapshotDate = "2016-01-31";
 in
 
 with ((import ./common.nix) {
@@ -11,13 +11,13 @@ with ((import ./common.nix) {
 });
 
 let snapshotHash = if stdenv.system == "i686-linux"
-      then "g2h9l35123r72hqdwayd9h79kspfb4y9"
+      then "7e2f9c82e1af5aa43ef3ee2692b985a5f2398f0a"
       else if stdenv.system == "x86_64-linux"
-      then "fnx2rf1j8zvrplcc7xzf89czn0hf3397"
+      then "4c03a3fd2474133c7ad6d8bb5f6af9915ca5292a"
       else if stdenv.system == "i686-darwin"
-      then "3viz3fi2jx18qjwrc90nfhm9cik59my6"
+      then "4d84d31449a5926f9e7ceb344540d6e5ea530b88"
       else if stdenv.system == "x86_64-darwin"
-      then "h2bf3db4vwz5cjjkn98lxayivdc6dflp"
+      then "f8baef5b0b3e6f9825be1f1709594695ac0f0abc"
       else throw "no snapshot for platform ${stdenv.system}";
     snapshotName = "cargo-nightly-${platform}.tar.gz";
 in

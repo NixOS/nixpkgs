@@ -32,17 +32,27 @@ let
         self = pythonPackages;
       };
 
-      json = builtins.toJSON {
+      penv = python.buildEnv.override {
+        extraLibs = (c.pythonPackages or (self: [])) pythonPackages;
+      };
+
+      uwsgiCfg = {
         uwsgi =
           if c.type == "normal"
             then {
               inherit plugins;
             } // removeAttrs c [ "type" "pythonPackages" ]
               // optionalAttrs (python != null) {
-                pythonpath = "@PYTHONPATH@";
-                env = (c.env or {}) // {
-                  PATH = optionalString (c ? env.PATH) "${c.env.PATH}:" + "@PATH@";
-                };
+                pythonpath = "${penv}/${python.sitePackages}";
+                env =
+                  # Argh, uwsgi expects list of key-values there instead of a dictionary.
+                  let env' = c.env or [];
+                      getPath =
+                        x: if hasPrefix "PATH=" x
+                           then substring (stringLength "PATH=") (stringLength x) x
+                           else null;
+                      oldPaths = filter (x: x != null) (map getPath env');
+                  in env' ++ [ "PATH=${optionalString (oldPaths != []) "${last oldPaths}:"}${penv}/bin" ];
               }
           else if c.type == "emperor"
             then {
@@ -55,35 +65,7 @@ let
           else throw "`type` attribute in UWSGI configuration should be either 'normal' or 'emperor'";
       };
 
-    in
-      if python == null || c.type != "normal"
-      then pkgs.writeTextDir "${name}.json" json
-      else pkgs.stdenv.mkDerivation {
-        name = "uwsgi-config";
-        inherit json;
-        passAsFile = [ "json" ];
-        nativeBuildInputs = [ pythonPackages.wrapPython ];
-        pythonInputs = (c.pythonPackages or (self: [])) pythonPackages;
-
-        buildCommand = ''
-          mkdir $out
-          declare -A pythonPathsSeen=()
-          program_PYTHONPATH=
-          program_PATH=
-          if [ -n "$pythonInputs" ]; then
-            for i in $pythonInputs; do
-              _addToPythonPath $i
-            done
-          fi
-          # A hack to replace "@PYTHONPATH@" with a JSON list
-          if [ -n "$program_PYTHONPATH" ]; then
-            program_PYTHONPATH="\"''${program_PYTHONPATH//:/\",\"}\""
-          fi
-          substitute $jsonPath $out/${name}.json \
-            --replace '"@PYTHONPATH@"' "[$program_PYTHONPATH]" \
-            --subst-var-by PATH "$program_PATH"
-        '';
-      };
+    in pkgs.writeTextDir "${name}.json" (builtins.toJSON uwsgiCfg);
 
 in {
 

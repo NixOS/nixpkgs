@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtmultimedia qtquick1 ];
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
   patchPhase = ''
     substituteInPlace libqtelegram-ae.pro --replace "/libqtelegram-ae" ""
@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
     version = "6.1";
     description = "A fork of libqtelegram by Aseman, using qmake";
     homepage = src.meta.homepage;
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.profpatsch ];
+    platforms = platforms.linux;
   };
 
 }

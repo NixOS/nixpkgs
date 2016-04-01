@@ -4,8 +4,7 @@ with lib;
 
 let
   cfg = {
-    stable  = grsecOptions.stable  or false;
-    testing = grsecOptions.testing or false;
+    kernelPatch = grsecOptions.kernelPatch;
     config = {
       mode = "auto";
       sysctl = false;
@@ -22,18 +21,13 @@ let
 
   vals = rec {
 
-    mkKernel = kernel: patch:
-      assert patch.kversion == kernel.version;
-        { inherit kernel patch;
-          inherit (patch) grversion revision;
+    mkKernel = patch:
+        {
+          inherit patch;
+          inherit (patch) kernel patches grversion revision;
         };
 
-    test-patch = with pkgs.kernelPatches; grsecurity_unstable;
-    stable-patch = with pkgs.kernelPatches; grsecurity_stable;
-
-    grKernel = if cfg.stable
-               then mkKernel pkgs.linux_3_14 stable-patch
-               else mkKernel pkgs.linux_4_3 test-patch;
+    grKernel = mkKernel cfg.kernelPatch;
 
     ## -- grsecurity configuration ---------------------------------------------
 
@@ -90,8 +84,8 @@ let
 
           # Disable restricting links under the testing kernel, as something
           # has changed causing it to fail miserably during boot.
-          restrictLinks = optionalString cfg.testing
-            "GRKERNSEC_LINK n";
+          #restrictLinks = optionalString cfg.testing
+          #  "GRKERNSEC_LINK n";
       in ''
         GRKERNSEC y
         ${grsecMainConfig}
@@ -109,7 +103,6 @@ let
         GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
         GRKERNSEC_DENYUSB ${boolToKernOpt cfg.config.denyUSB}
         GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
-        ${restrictLinks}
 
         ${cfg.config.kernelExtraConfig}
       '';
@@ -123,12 +116,14 @@ let
     grsecurityOverrider = args: grkern: {
       # Apparently as of gcc 4.6, gcc-plugin headers (which are needed by PaX plugins)
       # include libgmp headers, so we need these extra tweaks
-      buildInputs = args.buildInputs ++ [ pkgs.gmp ];
+      # As of gcc5 we also need libmpc
+      buildInputs = args.buildInputs ++ [ pkgs.gmp pkgs.libmpc pkgs.mpfr ];
       preConfigure = ''
+        extraIncludes="-I${pkgs.gmp.dev}/include -I${pkgs.libmpc}/include -I${pkgs.mpfr.dev}/include"
         ${args.preConfigure or ""}
-        sed -i 's|-I|-I${pkgs.gmp.dev}/include -I|' scripts/gcc-plugin.sh
-        sed -i 's|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += -I${pkgs.gmp.dev}/include|' tools/gcc/Makefile
-        sed -i 's|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += -I${pkgs.gmp.dev}/include|' tools/gcc/Makefile
+        sed -i "s|-I|$extraIncludes -I|" scripts/gcc-plugin.sh
+        sed -i "s|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += $extraIncludes|" tools/gcc/Makefile
+        sed -i "s|HOST_EXTRACXXFLAGS +=|HOST_EXTRACXXFLAGS += $extraIncludes|" tools/gcc/Makefile
         rm localversion-grsec
         echo ${localver grkern} > localversion-grsec
       '';
@@ -136,7 +131,7 @@ let
 
     mkGrsecKern = grkern:
       lowPrio (overrideDerivation (grkern.kernel.override (args: {
-        kernelPatches = args.kernelPatches ++ [ grkern.patch pkgs.kernelPatches.grsec_fix_path ];
+        kernelPatches = args.kernelPatches ++ [ grkern.patch  ] ++ grkern.patches;
         argsOverride = {
           modDirVersion = "${grkern.kernel.modDirVersion}${localver grkern}";
         };

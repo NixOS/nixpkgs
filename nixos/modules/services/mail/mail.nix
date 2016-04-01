@@ -12,9 +12,9 @@ with lib;
 
       sendmailSetuidWrapper = mkOption {
         default = null;
+        internal = true;
         description = ''
-          Configuration for the sendmail setuid wrwapper (like an element of
-          security.setuidOwners)";
+          Configuration for the sendmail setuid wapper.
         '';
       };
 

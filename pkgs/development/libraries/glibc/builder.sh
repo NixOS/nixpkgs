@@ -40,6 +40,9 @@ postInstall() {
     # Get rid of more unnecessary stuff.
     rm -rf $out/var $out/sbin/sln
 
+    for i in $out/lib/*.a; do
+        strip -S "$i"
+    done
     # Put libraries for static linking in a separate output.  Note
     # that libc_nonshared.a and libpthread_nonshared.a are required
     # for dynamically-linked applications.

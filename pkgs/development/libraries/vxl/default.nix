@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  patches = [ ./gcc5.patch ];
+
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
     homepage = http://vxl.sourceforge.net/;

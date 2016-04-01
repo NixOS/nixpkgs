@@ -3,11 +3,7 @@
 stdenv.mkDerivation rec {
   name = "ilbc-rfc3951";
 
-  script = fetchurl {
-    url = http://ilbcfreeware.org/documentation/extract-cfile.txt;
-    name = "extract-cfile.awk";
-    sha256 = "0md76qlszaras9grrxaq7xfxn1yikmz4qqgnjj6y50jg31yr5wyd";
-  };
+  script = ./extract-cfile.awk;
 
   rfc3951 = fetchurl {
     url = http://www.ietf.org/rfc/rfc3951.txt;

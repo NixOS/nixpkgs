@@ -1,37 +1,40 @@
-{ stdenv, fetchFromGitHub, makeWrapper, tmux, vim }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "dynamic-colors-git-${version}";
-  version = "2013-12-28";
+  name = "dynamic-colors-${version}";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
-    owner = "sos4nt";
+    owner = "peterhoeg";
     repo = "dynamic-colors";
-    rev = "35325f43620c5ee11a56db776b8f828bc5ae1ddd";
-    sha256 = "1xsjanqyvjlcj1fb8x4qafskxp7aa9b43ba9gyjgzr7yz8hkl4iz";
+    rev = "v${version}";
+    sha256 = "061lh4qjk4671hwzmj55n3gy5hsi4p3hb30hj5bg3s6glcsbjpr5";
   };
 
-  buildInputs = [ makeWrapper ];
-
-  patches = [ ./separate-config-and-dynamic-root-path.patch ];
+  dontBuild = true;
+  dontStrip = true;
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc/bash_completion.d $out/share/dynamic-colors
-    cp bin/dynamic-colors $out/bin/
-    cp completions/dynamic-colors.bash $out/etc/bash_completion.d/
-    cp -r colorschemes $out/share/dynamic-colors/
+    mkdir -p \
+      $out/bin \
+      $out/share/colorschemes \
+      $out/share/bash-completion/completions \
+      $out/share/zsh/site-packages
 
-    sed -e 's|\<tmux\>|${tmux}/bin/tmux|g' \
-        -e 's|/usr/bin/vim|${vim}/bin/vim|g' \
-        -i "$out/bin/dynamic-colors"
+    install -m755 bin/dynamic-colors              $out/bin/
+    install -m644 completions/dynamic-colors.bash $out/share/bash-completion/completions/dynamic-colors
+    install -m644 completions/dynamic-colors.zsh  $out/share/zsh/site-packages/_dynamic-colors
+    install -m644 colorschemes/*               -t $out/share/colorschemes
 
-    wrapProgram $out/bin/dynamic-colors --set DYNAMIC_COLORS_ROOT "$out/share/dynamic-colors"
+    sed -e "s|/usr/share/dynamic-colors|$out/share|g" \
+        -i $out/bin/dynamic-colors
   '';
 
   meta = {
-    homepage = https://github.com/sos4nt/dynamic-colors;
+    homepage = https://github.com/peterhoeg/dynamic-colors;
     license = stdenv.lib.licenses.mit;
     description = "Change terminal colors on the fly";
     platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.peterhoeg ];
   };
 }

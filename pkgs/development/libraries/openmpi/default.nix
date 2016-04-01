@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gfortran, perl
+{stdenv, fetchurl, gfortran, perl, libibverbs
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
     sha256 = "14p4px9a3qzjc22lnl6braxrcrmd9rgmy7fh4qpanawn2pgfq6br";
   };
 
-  buildInputs = [ gfortran ];
+  buildInputs = [ gfortran libibverbs ];
 
   nativeBuildInputs = [ perl ];
 

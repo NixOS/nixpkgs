@@ -1,34 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchpatch, git, mono, v8, icu }:
+{ stdenv, fetchFromGitHub, fetchpatch, mono, v8 }:
 
 # There are some similarities with the pinta derivation. We should
 # have a helper to make it easy to package these Mono apps.
 
 stdenv.mkDerivation rec {
   name = "EventStore-${version}";
-  version = "3.0.3";
+  version = "3.5.0";
   src = fetchFromGitHub {
     owner  = "EventStore";
     repo   = "EventStore";
     rev    = "oss-v${version}";
-    sha256 = "1xz1dpnbkqqd3ph9g3z5cghr8zp14sr9y31lrdjrdydr3gm4sll2";
+    sha256 = "0dp5914hxwdzw62q49wavqfqkw3jy0dvml09y7gh8frnbiajcxq9";
   };
 
-  patches = [
-    # see: https://github.com/EventStore/EventStore/issues/461
-    (fetchpatch {
-      url = https://github.com/EventStore/EventStore/commit/9a0987f19935178df143a3cf876becaa1b11ffae.patch;
-      sha256 = "04qw0rb1pypa8dqvj94j2mwkc1y6b40zrpkn1d3zfci3k8cam79y";
-    })
-  ];
-
   buildPhase = ''
-    ln -s ${v8}/lib/libv8.so src/libs/libv8.so
-    ln -s ${icu.out}/lib/libicui18n.so src/libs/libicui18n.so
-    ln -s ${icu.out}/lib/libicuuc.so src/libs/libicuuc.so
+    mkdir -p src/libs/x64/nixos
+    pushd src/EventStore.Projections.v8Integration
+    cc -o ../libs/x64/nixos/libjs1.so -fPIC -lv8 -shared -std=c++0x *.cpp
+    popd
 
     patchShebangs build.sh
-    ./build.sh js1
-    ./build.sh quick ${version}
+    ./build.sh ${version} release nixos
   '';
 
   installPhase = ''
@@ -41,8 +33,9 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/clusternode
   '';
 
-  buildInputs = [ git v8 mono ];
+  buildInputs = [ v8 mono ];
 
+  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
   dontStrip = true;
 
   meta = {
@@ -50,6 +43,6 @@ stdenv.mkDerivation rec {
     description = "Event sourcing database with processing logic in JavaScript";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ puffnfresh ];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

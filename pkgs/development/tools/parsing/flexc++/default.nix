@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "flexc++-${version}";
-  version = "2.03.00";
+  version = "2.04.00";
 
   src = fetchFromGitHub {
-    sha256 = "1knb5h6l71n5zi9xzml5f6v7wspbk7vrcaiy2div8bnj7na3z717";
+    sha256 = "0fz9gxpc491cngj9z9y059vbl65ng48c4nw9k3sl983zfnqfy26y";
     rev = version;
     repo = "flexcpp";
     owner = "fbb-git";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace INSTALL.im --replace /usr $out
-    patchShebangs ./build
+    patchShebangs .
   '';
 
   buildPhase = ''
@@ -28,11 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ./build install man
-    ./build install manual
-    ./build install program
-    ./build install skel
-    ./build install std
+    ./build install x
   '';
 
   meta = with stdenv.lib; {

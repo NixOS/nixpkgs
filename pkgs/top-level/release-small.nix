@@ -1,7 +1,7 @@
 /* A small release file, with few packages to be built.  The aim is to reduce
    the load on Hydra when testing the `stdenv-updates' branch. */
 
-{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ./../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
 }:
 
@@ -111,7 +111,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mpg321 = linux;
   mutt = linux;
   mysql = linux;
-  ncat = linux;
   netcat = all;
   nfs-utils = linux;
   nix = all;

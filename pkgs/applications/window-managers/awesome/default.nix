@@ -3,11 +3,11 @@
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
 , which, dbus, nettools, git, asciidoc, doxygen
-#, xmlto, docbook_xml_dtd_45 , docbook_xsl
+, xmlto, docbook_xml_dtd_45, docbook_xsl, findXMLCatalogs
 }:
 
 let
-  version = "3.5.8";
+  version = "3.5.9";
 in with luaPackages;
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url    = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "1iifcyphgibmh3cvsy8agjrl9zjl80scrg0bcgnwywmxaxncjc3w";
+    sha256 = "0kynair1ykr74b39a4gcm2y24viial64337cf26nhlc7azjbby67";
   };
 
   meta = with stdenv.lib; {
@@ -26,25 +26,29 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     asciidoc
-    cairo
     cmake
-    dbus
     doxygen
+    imagemagick
+    makeWrapper
+    pkgconfig
+    xmlto docbook_xml_dtd_45 docbook_xsl findXMLCatalogs
+  ];
+
+  buildInputs = [
+    cairo
+    dbus
     gdk_pixbuf
     gobjectIntrospection
     git
-    imagemagick
     lgi
     libpthreadstubs
     libstartup_notification
     libxdg_basedir
     lua
-    makeWrapper
     nettools
     pango
-    pkgconfig
     xcb-util-cursor
     xorg.libXau
     xorg.libXdmcp
@@ -55,7 +59,6 @@ stdenv.mkDerivation rec {
     xorg.xcbutilkeysyms
     xorg.xcbutilrenderutil
     xorg.xcbutilwm
-    #xmlto docbook_xml_dtd_45 docbook_xsl
   ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";

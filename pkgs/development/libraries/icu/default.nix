@@ -4,7 +4,7 @@ let
   pname = "icu4c";
   version = "56.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = pname + "-" + version;
 
   src = fetchurl {
@@ -50,4 +50,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin urkud ];
     platforms = platforms.all;
   };
-}
+} // (if stdenv.isArm then {
+  patches = [ ./0001-Disable-LDFLAGSICUDT-for-Linux.patch ];
+} else {}))

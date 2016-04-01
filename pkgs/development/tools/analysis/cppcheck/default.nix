@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "085lm8v7biixy6rykq836gfy91jcccpz9qpk8i9x339dzy2b2q4l";
   };
 
-  buildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
   makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg'';
 

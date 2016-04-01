@@ -2,11 +2,11 @@
 sftpPath ? "/var/run/current-system/sw/libexec/sftp-server" }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2015.71";
+  name = "dropbear-2016.73";
 
   src = fetchurl {
     url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "1bw3lzmisn6gs6zy9vcqbfnicl437ydskqcayklpw60fkhb18qip";
+    sha256 = "1mzg18jss1bsmcnn88zv7kv5yj01hzimndnd5636hfq9kgva8qaw";
   };
 
   dontDisableStatic = enableStatic;

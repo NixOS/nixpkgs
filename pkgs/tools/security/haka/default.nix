@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha1 = "87625ed32841cc0b3aa92aa49397ce71ce434bc2";
   };
 
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   preConfigure = ''
     sed -i 's,/etc,'$out'/etc,' src/haka/haka.c
     sed -i 's,/etc,'$out'/etc,' src/haka/CMakeLists.txt

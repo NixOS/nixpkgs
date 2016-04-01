@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "jQuery Binding for Eliom";
     homepage = http://ocsigen.org/ojquery/;
     license = stdenv.lib.licenses.lgpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

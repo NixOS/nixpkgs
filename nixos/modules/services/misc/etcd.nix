@@ -114,6 +114,7 @@ in {
       }) // (mapAttrs' (n: v: nameValuePair "ETCD_${n}" v) cfg.extraConf);
 
       serviceConfig = {
+        Type = "notify";
         ExecStart = "${pkgs.etcd}/bin/etcd";
         User = "etcd";
         PermissionsStartOnly = true;

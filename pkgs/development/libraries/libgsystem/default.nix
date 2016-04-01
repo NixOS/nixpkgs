@@ -10,7 +10,6 @@ stdenv.mkDerivation {
     homepage    = "https://wiki.gnome.org/Projects/LibGSystem";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchFromGitHub {

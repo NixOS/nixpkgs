@@ -1,5 +1,5 @@
 { system         ? builtins.currentSystem
-, allPackages    ? import ../../top-level/all-packages.nix
+, allPackages    ? import ../../..
 , platform       ? null
 , config         ? {}
 
@@ -22,10 +22,11 @@ let
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  allPackages = import ../../top-level/all-packages.nix;
+  allPackages = import ../../..;
 
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY=1
+    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
     export NIX_IGNORE_LD_THROUGH_GCC=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
     export MACOSX_DEPLOYMENT_TARGET=10.7
@@ -55,8 +56,7 @@ in rec {
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
                           overrides         ? (pkgs: {}),
                           extraPreHook      ? "",
-                          extraBuildInputs  ? with last.pkgs; [ xz darwin.CF libcxx ],
-                          extraInitialPath  ? [],
+                          extraBuildInputs,
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
@@ -85,7 +85,7 @@ in rec {
           ${commonPreHook}
           ${extraPreHook}
         '';
-        initialPath  = extraInitialPath ++ [ bootstrapTools ];
+        initialPath  = [ bootstrapTools ];
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl   = bootstrapTools;
@@ -174,6 +174,8 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx ];
+
     allowedRequisites =
       [ bootstrapTools ] ++
       (with pkgs; [ xz.bin xz.out libcxx libcxxabi icu.out ]) ++
@@ -203,9 +205,10 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraInitialPath = [ pkgs.bash ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
 
     extraPreHook = ''
+      export PATH=${pkgs.bash}/bin:$PATH
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
@@ -236,7 +239,7 @@ in rec {
 
   stage4 = with stage3; stageFun 4 stage3 {
     shell = "${pkgs.bash}/bin/bash";
-    extraInitialPath = [ pkgs.bash ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';

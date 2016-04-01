@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     homepage = "${webpage}";
     license = stdenv.lib.licenses.bsd3;
     branch = "5";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

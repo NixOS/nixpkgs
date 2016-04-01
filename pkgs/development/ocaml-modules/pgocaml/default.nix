@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     description = "An interface to PostgreSQL databases for OCaml applications";
     homepage = http://pgocaml.forge.ocamlcore.org/;
     license = licenses.lgpl2;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ vbgl ];
   };
 }

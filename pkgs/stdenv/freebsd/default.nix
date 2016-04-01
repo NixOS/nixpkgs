@@ -1,11 +1,11 @@
 { system      ? builtins.currentSystem
-, allPackages ? import ../../top-level/all-packages.nix
+, allPackages ? import ../../..
 , platform    ? null
 , config      ? {}
 }:
 
 rec {
-  allPackages = import ../../top-level/all-packages.nix;
+  allPackages = import ../../..;
 
   bootstrapTools = derivation {
     inherit system;

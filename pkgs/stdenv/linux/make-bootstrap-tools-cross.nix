@@ -3,7 +3,7 @@
 let buildFor = toolsArch: (
 
 let
-  pkgsFun = import ../../top-level/all-packages.nix;
+  pkgsFun = import ../../..;
   pkgsNoParams = pkgsFun {};
   
   sheevaplugCrossSystem = {

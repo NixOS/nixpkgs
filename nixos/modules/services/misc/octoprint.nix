@@ -6,12 +6,16 @@ let
 
   cfg = config.services.octoprint;
 
-  cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON {
+  baseConfig = {
     plugins.cura.cura_engine = "${pkgs.curaengine}/bin/CuraEngine";
     server.host = cfg.host;
     server.port = cfg.port;
     webcam.ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
-  });
+  };
+
+  fullConfig = recursiveUpdate cfg.extraConfig baseConfig;
+
+  cfgUpdate = pkgs.writeText "octoprint-config.yaml" (builtins.toJSON fullConfig);
 
   pluginsEnv = pkgs.python.buildEnv.override {
     extraLibs = cfg.plugins pkgs.octoprint-plugins;
@@ -62,11 +66,16 @@ in
       };
 
       plugins = mkOption {
-        #type = types.functionTo (types.listOf types.package);
         default = plugins: [];
         defaultText = "plugins: []";
         example = literalExample "plugins: [ m3d-fio ]";
         description = "Additional plugins.";
+      };
+
+      extraConfig = mkOption {
+        type = types.attrs;
+        default = {};
+        description = "Extra options which are added to OctoPrint's YAML configuration file.";
       };
 
     };

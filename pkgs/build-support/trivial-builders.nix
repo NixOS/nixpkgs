@@ -48,7 +48,10 @@ rec {
 
   # Create a forest of symlinks to the files in `paths'.
   symlinkJoin = name: paths:
-    runCommand name { inherit paths; }
+    runCommand name
+      { inherit paths;
+        preferLocalBuild = true; allowSubstitutes = false;
+      }
       ''
         mkdir -p $out
         for i in $paths; do

@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "An OCaml module for functional reactive programming (FRP) based on React";
     homepage = https://github.com/hhugo/reactiveData;
     license = licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ vbgl ];
   };
 }

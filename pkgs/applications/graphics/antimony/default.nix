@@ -16,6 +16,15 @@ in
     };
 
     patches = [ ./paths-fix.patch ];
+    # fix build with glibc-2.23
+    postPatch = ''
+      sed 's/\<isinf(/std::isinf(/g' -i \
+        src/export/export_heightmap.cpp \
+        src/fab/types/bounds.cpp \
+        src/graph/hooks/meta.cpp \
+        src/ui/dialogs/resolution_dialog.cpp \
+        src/render/render_task.cpp
+    '';
 
     buildInputs = [
       libpng python3 (boost.override { python = python3; })
@@ -31,6 +40,8 @@ in
       export sourceRoot=$sourceRoot/qt
       qmake antimony.pro PREFIX=$out
     '';
+
+    enableParallelBuilding = true;
 
     meta = with stdenv.lib; {
       description = "A computer-aided design (CAD) tool from a parallel universe";

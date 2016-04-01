@@ -1,53 +1,43 @@
-{ lib, stdenv, fetchurl, runCommand, makeWrapper, nwjs, zip }:
+{ lib, stdenv, fetchurl, makeWrapper, nwjs, zip }:
 
 let
-  version = "0.3.8-3";
+  arch = if stdenv.system == "x86_64-linux" then "64"
+    else if stdenv.system == "i686-linux"   then "32" 
+    else throw "Unsupported system ${stdenv.system}";
 
-  popcorntimePackage = stdenv.mkDerivation rec {
-    name = "popcorntime-${version}";
-    src = if stdenv.system == "x86_64-linux" then
-        fetchurl {
-          url = "http://get.popcorntime.io/build/Popcorn-Time-${version}-Linux-64.tar.xz";
-          sha256 = "0q8c6m9majgv5a6hjl1b2ndmq4xx05zbarsydhqkivhh9aymvxgm";
-        }
-      else if stdenv.system == "i686-linux" then
-        fetchurl {
-          url = "https://get.popcorntime.io/build/Popcorn-Time-${version}-Linux-32.tar.xz";
-          sha256 = "1dz1cp31qbwamm9pf8ydmzzhnb6d9z73bigdv3y74dgicz3dpr92";
-        }
-      else throw "Unsupported system ${stdenv.system}";
+in stdenv.mkDerivation rec {
+  name = "popcorntime-${version}";
+  version = "0.3.9";
 
-    sourceRoot = ".";
-
-    buildInputs = [ zip ];
-
-    buildPhase = ''
-      rm Popcorn-Time install
-      zip -r package.nw package.json src node_modules
-      cat ${nwjs}/bin/nw package.nw > Popcorn-Time
-      chmod 555 Popcorn-Time
-    '';
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
-    '';
-
-    dontPatchELF = true;
+  src = fetchurl {
+    url = "http://get.popcorntime.sh/build/Popcorn-Time-${version}-Linux-${arch}.tar.xz";
+    sha256 =
+      if arch == "64"
+      then "0qaqdz45frgiy440jyz6hikhklx2yp08qp94z82r03dkbf4a2hvx"
+      else "0y08a42pm681s97lkczdq5dblxl2jbr850hnl85hknl3ynag9kq4";
   };
-in
-  runCommand "popcorntime-${version}" {
-    buildInputs = [ makeWrapper ];
-    meta = with stdenv.lib; {
-      homepage = http://popcorntime.io/;
-      description = "An application that streams movies and TV shows from torrents";
-      license = stdenv.lib.licenses.gpl3;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ bobvanderlinden ];
-      broken = true;  # popcorntime.io is dead
-    };
-  }
-  ''
+
+  dontPatchELF = true;
+  sourceRoot   = "linux${arch}";
+  buildInputs  = [ zip makeWrapper ];
+
+  buildPhase = ''
+    rm Popcorn-Time
+    cat ${nwjs}/bin/nw nw.pak > Popcorn-Time
+    chmod 555 Popcorn-Time
+  '';
+
+  installPhase = ''
     mkdir -p $out/bin
-    makeWrapper ${popcorntimePackage}/Popcorn-Time $out/bin/popcorntime
-  ''
+    cp -r * $out/
+    makeWrapper $out/Popcorn-Time $out/bin/popcorntime
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = https://popcorntime.sh/;
+    description = "An application that streams movies and TV shows from torrents";
+    license = stdenv.lib.licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ bobvanderlinden rnhmjoj ];
+  };
+}

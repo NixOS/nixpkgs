@@ -77,6 +77,7 @@
   ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/tmux.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
@@ -114,6 +115,7 @@
   ./services/backup/rsnapshot.nix
   ./services/backup/sitecopy-backup.nix
   ./services/backup/tarsnap.nix
+  ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes.nix
   ./services/cluster/panamax.nix
@@ -176,6 +178,7 @@
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thermald.nix
+  ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
@@ -219,6 +222,7 @@
   ./services/misc/gitolite.nix
   ./services/misc/gpsd.nix
   ./services/misc/ihaskell.nix
+  ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
   ./services/misc/matrix-synapse.nix
   ./services/misc/mbpfan.nix
@@ -329,6 +333,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/mailpile.nix
+  ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
   ./services/networking/mstpd.nix
@@ -439,6 +444,7 @@
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
+  ./services/x11/colord.nix
   ./services/x11/unclutter.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix

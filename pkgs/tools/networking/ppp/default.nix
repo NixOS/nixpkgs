@@ -22,6 +22,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
+  installPhase = ''
+    mkdir -p $out/bin
+    make install
+    install -D -m 755 scripts/{pon,poff,plog} $out/bin
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/bin/{pon,poff,plog} --replace "/usr/sbin" "$out/bin"
+  '';
+
   meta = {
     homepage = https://ppp.samba.org/;
     description = "Point-to-point implementation for Linux and Solaris";

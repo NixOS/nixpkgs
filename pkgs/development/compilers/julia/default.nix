@@ -7,6 +7,8 @@
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , openblas, arpack, suitesparse
+# Darwin frameworks
+, CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -19,6 +21,9 @@ in
 let
   arpack = arpack_.override { inherit openblas; };
   suitesparse = suitesparse_.override { inherit openblas; };
+  llvmShared = if stdenv.isDarwin
+               then llvm.override { enableSharedLibraries = true; }
+               else llvm;
 in
 
 let
@@ -68,10 +73,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvm mpfr
+    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvmShared mpfr
     pcre2 openblas openlibm openspecfun readline suitesparse utf8proc
     zlib
-  ];
+  ] ++
+    stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices] ;
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
 
@@ -126,6 +132,8 @@ stdenv.mkDerivation rec {
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
     openspecfun pcre2 suitesparse
   ];
+
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   dontStrip = true;
   dontPatchELF = true;

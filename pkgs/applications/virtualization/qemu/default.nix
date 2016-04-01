@@ -1,11 +1,15 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, ncurses, perl, pixman
-, attr, libcap, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
-, libseccomp, libaio, libcap_ng, gnutls, nettle, numactl
+, vde2, alsaLib, texinfo, libuuid, flex, bison, lzo, snappy
+, libaio, gnutls, nettle
 , makeWrapper
-, pulseSupport ? true, libpulseaudio
-, sdlSupport ? true, SDL
+, attr, libcap, libcap_ng
+, CoreServices, Cocoa, rez, setfile
+, numaSupport ? stdenv.isLinux, numactl
+, seccompSupport ? stdenv.isLinux, libseccomp
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, sdlSupport ? !stdenv.isDarwin, SDL
 , vncSupport ? true, libjpeg, libpng
-, spiceSupport ? true, spice, spice_protocol, usbredir
+, spiceSupport ? !stdenv.isDarwin, spice, spice_protocol, usbredir
 , x86Only ? false
 }:
 
@@ -26,31 +30,35 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ python zlib pkgconfig glib ncurses perl pixman attr libcap
-      vde2 texinfo libuuid flex bison makeWrapper lzo snappy libseccomp
-      libcap_ng gnutls nettle numactl
+    [ python zlib pkgconfig glib ncurses perl pixman
+      vde2 texinfo libuuid flex bison makeWrapper lzo snappy
+      gnutls nettle
     ]
+    ++ optionals stdenv.isDarwin [ CoreServices Cocoa rez setfile ]
+    ++ optionals seccompSupport [ libseccomp ]
+    ++ optionals numaSupport [ numactl ]
     ++ optionals pulseSupport [ libpulseaudio ]
     ++ optionals sdlSupport [ SDL ]
     ++ optionals vncSupport [ libjpeg libpng ]
     ++ optionals spiceSupport [ spice_protocol spice usbredir ]
-    ++ optionals (hasSuffix "linux" stdenv.system) [ alsaLib libaio ];
+    ++ optionals stdenv.isLinux [ alsaLib libaio libcap_ng libcap attr ];
 
   enableParallelBuilding = true;
 
   patches = [ ./no-etc-install.patch ];
 
   configureFlags =
-    [ "--enable-seccomp"
-      "--enable-numa"
-      "--smbd=smbd" # use `smbd' from $PATH
+    [ "--smbd=smbd" # use `smbd' from $PATH
       "--audio-drv-list=${audio}"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ]
+    ++ optional numaSupport "--enable-numa"
+    ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
     ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
-    ++ optional (hasSuffix "linux" stdenv.system) "--enable-linux-aio";
+    ++ optional stdenv.isDarwin "--enable-cocoa"
+    ++ optional stdenv.isLinux "--enable-linux-aio";
 
   postInstall =
     ''
@@ -66,6 +74,6 @@ stdenv.mkDerivation rec {
     description = "A generic and open source machine emulator and virtualizer";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ viric eelco ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

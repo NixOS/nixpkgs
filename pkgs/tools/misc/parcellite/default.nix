@@ -15,6 +15,5 @@ stdenv.mkDerivation rec {
     homepage = "http://parcellite.sourceforge.net";
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 }

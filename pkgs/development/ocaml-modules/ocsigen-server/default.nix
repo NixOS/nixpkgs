@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
     license = stdenv.lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };
 

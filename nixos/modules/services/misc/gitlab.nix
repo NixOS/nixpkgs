@@ -206,12 +206,6 @@ in {
         description = "Gitlab database user.";
       };
 
-      emailFrom = mkOption {
-        type = types.str;
-        default = "example@example.org";
-        description = "The source address for emails sent by gitlab.";
-      };
-
       host = mkOption {
         type = types.str;
         default = config.networking.hostName;
@@ -328,7 +322,7 @@ in {
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailer -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gtk2, which, pkgconfig, intltool, file }:
 
 let
-  version = "1.26";
+  version = "1.27";
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "e38530e87c577e1e9806be3b40e08fb9ee321eb1abc6361ddacdad89c825f90d";
+    sha256 = "846ff699a5944c5c3c068ae0199d4c13946a668bfc6d03f8c79765667c20cadf";
   };
 
   buildInputs = [ gtk2 which pkgconfig intltool file ];

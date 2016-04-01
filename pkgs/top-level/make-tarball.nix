@@ -48,8 +48,8 @@ releaseTools.sourceTarball rec {
     # Make sure that derivation paths do not depend on the Nixpkgs path.
     mkdir $TMPDIR/foo
     ln -s $(readlink -f .) $TMPDIR/foo/bar
-    p1=$(nix-instantiate pkgs/top-level/all-packages.nix --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar/pkgs/top-level/all-packages.nix --dry-run -A firefox)
+    p1=$(nix-instantiate ./. --dry-run -A firefox --show-trace)
+    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
         exit 1

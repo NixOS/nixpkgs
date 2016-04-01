@@ -223,7 +223,6 @@ PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH $i/bin
-    addToSearchPath PATH $i/sbin
 done
 
 if [ "$NIX_DEBUG" = 1 ]; then
@@ -271,6 +270,10 @@ findInputs() {
         source "$pkg"
     fi
 
+    if [ -d $1/bin ]; then
+        addToSearchPath _PATH $1/bin
+    fi
+
     if [ -f "$pkg/nix-support/setup-hook" ]; then
         source "$pkg/nix-support/setup-hook"
     fi
@@ -298,10 +301,6 @@ done
 _addToNativeEnv() {
     local pkg=$1
 
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
-    fi
-
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook envHook "$pkg"
 }
@@ -312,13 +311,6 @@ done
 
 _addToCrossEnv() {
     local pkg=$1
-
-    # Some programs put important build scripts (freetype-config and similar)
-    # into their crossDrv bin path. Intentionally these should go after
-    # the nativePkgs in PATH.
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
-    fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook crossEnvHook "$pkg"

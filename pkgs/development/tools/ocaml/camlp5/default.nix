@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://pauillac.inria.fr/~ddr/camlp5/;
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       z77z vbgl
     ];

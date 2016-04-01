@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper }:
+{ lib, stdenv, fetchurl, readline, tcp_wrappers, pcre, makeWrapper, gcc }:
 assert stdenv.isLinux;
 assert stdenv.cc.isGNU;
 let
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     url = "mirror://debian/pool/main/a/atftp/atftp_${version}.dfsg.orig.tar.gz";
     sha256 = "0nd5dl14d6z5abgcbxcn41rfn3syza6s57bbgh4aq3r9cxdmz08q";
   };
-  buildInputs = [ readline tcp_wrappers pcre makeWrapper ];
+  buildInputs = [ readline tcp_wrappers pcre makeWrapper gcc ];
   patches = [ debianPatch ];
   postInstall = ''
     wrapProgram $out/sbin/atftpd --prefix LD_LIBRARY_PATH : ${stdenv.cc.cc}/lib${if stdenv.system == "x86_64-linux" then "64" else ""}

@@ -8,11 +8,11 @@
 , nvidia_cg_toolkit }:
 
 stdenv.mkDerivation {
-  name = "ogre-1.9.0";
+  name = "ogre-1.9-hg-20160322";
 
   src = fetchurl {
-     url = "https://bitbucket.org/sinbad/ogre/get/v1-9-0.tar.gz";
-     sha256 = "0p8gyn293qn3iyiy1smfmjd9zpnjb8h2zgvff8778fwh0ylbmlpa";
+     url = "https://bitbucket.org/sinbad/ogre/get/v1-9.tar.gz";
+     sha256 = "0w3argjy1biaxwa3c80zxxgll67wjp8czd83p87awlcvwzdk5mz9";
   };
 
   cmakeFlags = [ "-DOGRE_INSTALL_SAMPLES=yes" ]

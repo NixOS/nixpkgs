@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     homepage = http://www.typerex.org/ocaml-top.html;
     license = stdenv.lib.licenses.gpl3;
     description = "A simple cross-platform OCaml code editor built for top-level evaluation";
-    platforms = ocamlPackages.ocaml.meta.platforms;
+    platforms = ocamlPackages.ocaml.meta.platforms or [];
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };
 }

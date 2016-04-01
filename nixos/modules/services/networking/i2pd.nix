@@ -10,9 +10,10 @@ let
 
   extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
-  toOneZero = b: if b then "1" else "0";
+  toYesNo = b: if b then "yes" else "no";
 
   mkEndpointOpt = name: addr: port: {
+    enable = mkEnableOption name;
     name = mkOption {
       type = types.str;
       default = name;
@@ -63,9 +64,9 @@ let
   } // mkEndpointOpt name "127.0.0.1" 0;
 
   i2pdConf = pkgs.writeText "i2pd.conf" ''
-      ipv6 = ${toOneZero cfg.enableIPv6}
-      notransit = ${toOneZero cfg.notransit}
-      floodfill = ${toOneZero cfg.floodfill}
+      ipv6 = ${toYesNo cfg.enableIPv6}
+      notransit = ${toYesNo cfg.notransit}
+      floodfill = ${toYesNo cfg.floodfill}
       ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
       ${flip concatMapStrings
         (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
@@ -73,6 +74,7 @@ let
       [${proto.name}]
       address = ${proto.address}
       port = ${toString proto.port}
+      enabled = ${toYesNo proto.enable}
       '')
       }
   '';

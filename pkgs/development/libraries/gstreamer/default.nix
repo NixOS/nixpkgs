@@ -3,6 +3,8 @@
 rec {
   gstreamer = callPackage ./core { };
 
+  gstreamermm = callPackage ./gstreamermm { };
+
   gst-plugins-base = callPackage ./base { inherit gstreamer; };
 
   gst-plugins-good = callPackage ./good { inherit gst-plugins-base; };

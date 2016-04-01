@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk, runCommand, gcc
+{ stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk, runCommand, gcc, autoconf, automake, which, procps
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
 }:
 
 let
   name    = "distcc";
-  version = "3.1";
+  version = "2016-02-24";
   distcc = stdenv.mkDerivation {
     name = "${name}-${version}";
-    src = fetchurl {
-      url = "http://distcc.googlecode.com/files/${name}-${version}.tar.bz2";
-      sha256 = "f55dbafd76bed3ce57e1bbcdab1329227808890d90f4c724fcd2d53f934ddd89";
+    src = fetchFromGitHub {
+      owner = "distcc";
+      repo = "distcc";
+      rev = "b2fa4e21b4029e13e2c33f7b03ca43346f2cecb8";
+      sha256 = "1vj31wcdas8wy52hy6749mlrca9v6ynycdiigx5ay8pnya9z73c6";
     };
 
-    buildInputs = [popt avahi pkgconfig python gtk];
+    buildInputs = [popt avahi pkgconfig python gtk autoconf automake pkgconfig which procps];
     preConfigure =
     ''
+      export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
+
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
@@ -29,8 +33,9 @@ let
                             --disable-Werror   # a must on gcc 4.6
                            )
       installFlags="sysconfdir=$out/etc";
+
+      ./autogen.sh
     '';
-    patches = [ ./20-minute-io-timeout.patch ];
 
     # The test suite fails because it uses hard-coded paths, i.e. /usr/bin/gcc.
     doCheck = false;
@@ -69,7 +74,7 @@ let
       license = "GPL";
 
       platforms = stdenv.lib.platforms.linux;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      maintainers = with stdenv.lib.maintainers; [ simons anderspapitto ];
     };
   };
 in

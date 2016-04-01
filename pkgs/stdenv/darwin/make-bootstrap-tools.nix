@@ -1,6 +1,6 @@
 { system ? builtins.currentSystem }:
 
-with import ../../top-level/all-packages.nix { inherit system; };
+with import ../../.. { inherit system; };
 
 rec {
   # We want coreutils without ACL support.
@@ -291,7 +291,7 @@ rec {
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = let
     stdenv = import ./. { inherit system bootstrapFiles; };
-  in import ../../top-level/all-packages.nix {
+  in import ../../.. {
     inherit system;
     bootStdenv = stdenv.stdenvDarwin;
   };

@@ -35,11 +35,11 @@ self:
     };
 
     overrides = {
-      # These packages require emacs-25
-      el-search = markBroken super.el-search;
-      iterators = markBroken super.iterators;
-      midi-kbd = markBroken super.midi-kbd;
-      stream = markBroken super.stream;
+      el-search = markBroken super.el-search; # requires emacs-25
+      iterators = markBroken super.iterators; # requires emacs-25
+      midi-kbd = markBroken super.midi-kbd; # requires emacs-25
+      stream = markBroken super.stream; # requires emacs-25
+      cl-lib = null; # builtin
     };
 
     elpaPackages = super // overrides;

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, flex, bison, pkgconfig, libffi, python
-, libintlOrEmpty, autoconf, automake, otool
+, libintlOrEmpty, cctools
 , substituteAll, nixStoreDir ? builtins.storeDir
 }:
 # now that gobjectIntrospection creates large .gir files (eg gtk3 case)
@@ -10,6 +10,7 @@ let
   ver_maj = "1.46";
   ver_min = "0";
 in
+with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "gobject-introspection-${ver_maj}.${ver_min}";
 
@@ -17,10 +18,6 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
     sha256 = "6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233";
   };
-  patches = stdenv.lib.singleton (substituteAll {
-    src = ./absolute_shlib_path.patch;
-    inherit nixStoreDir;
-  });
 
   outputs = [ "dev" "out" ];
   outputBin = "dev";
@@ -28,22 +25,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
-    ++ stdenv.lib.optional stdenv.isDarwin otool;
+    ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
 
   preConfigure = ''
     sed 's|/usr/bin/env ||' -i tools/g-ir-tool-template.in
   '';
-  configureFlags = [
-    # Tests depend on cairo, which is undesirable (it pulls in lots of
-    # other dependencies).
-    "--disable-tests"
-  ];
 
   # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
   # by pygobject3 (and maybe others), but it's only searched in $out
 
   setupHook = ./setup-hook.sh;
+
+  patches = stdenv.lib.singleton (substituteAll {
+    src = ./absolute_shlib_path.patch;
+    inherit nixStoreDir;
+  }) ++ optional stdenv.isDarwin (substituteAll {
+    src = ./darwin-fixups.patch;
+    inherit nixStoreDir;
+  });
 
   meta = with stdenv.lib; {
     description = "A middleware layer between C libraries and language bindings";

@@ -2,25 +2,21 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.4.1";
+  name = "bitlbee-3.4.2";
 
   src = fetchurl {
     url = "mirror://bitlbee/src/${name}.tar.gz";
-    sha256 = "1qf0ypa9ba5jvsnpg9slmaran16hcc5fnfzbb1sdch1hjhchn2jh";
+    sha256 = "0mza8lnfwibmklz8hdzg4f7p83hblf4h6fbf7d732kzpvra5bj39";
   };
 
   buildInputs = [ gnutls glib pkgconfig libotr python ]
     ++ optional doCheck check;
 
-  patches = [(fetchpatch {
-    url = "https://github.com/bitlbee/bitlbee/commit/34d16d5b4b5265990125894572a90493284358cd.patch";
-    sha256 = "05in9kxabb6s2c1l4b9ry58ppfciwmwzrkaq33df2zv0pr3z7w33";
-  })];
-
   configureFlags = [
     "--gcov=1"
     "--otr=1"
     "--ssl=gnutls"
+    "--pidfile=/var/lib/bitlbee/bitlbee.pid"
   ];
 
   buildPhase = ''

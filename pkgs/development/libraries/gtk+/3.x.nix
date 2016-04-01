@@ -3,9 +3,12 @@
 , xorg, wayland, epoxy, json_glib, libxkbcommon, gmp
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
+, darwin
 }:
 
 assert cupsSupport -> cups != null;
+
+with stdenv.lib;
 
 let
   ver_maj = "3.18";
@@ -30,6 +33,7 @@ stdenv.mkDerivation rec {
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
     ++ optionals stdenv.isLinux [ wayland ]
+    ++ optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
   #TODO: colord?
@@ -40,6 +44,14 @@ stdenv.mkDerivation rec {
   preConfigure = "sed '/^SRC_SUBDIRS /s/demos//' -i Makefile.in";
 
   enableParallelBuilding = true;
+
+  configureFlags = optional stdenv.isDarwin [
+    "--disable-debug"
+    "--disable-dependency-tracking"
+    "--disable-glibtest"
+    "--with-gdktarget=quartz"
+    "--enable-quartz-backend"
+  ];
 
   postInstall = ''
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \

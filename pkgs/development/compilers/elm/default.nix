@@ -61,6 +61,9 @@ let
       in elmPkgs // {
         inherit elmPkgs;
         elmVersion = elmRelease.version;
+
+        # To unbreak elm-compiler
+        language-ecmascript = self.language-ecmascript_0_17_0_2;
       };
   };
 in hsPkgs.elmPkgs // {

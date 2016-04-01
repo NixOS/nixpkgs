@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://github.com/mirage/io-page;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     description = "IO memory page library for Mirage backends";
     maintainers = with stdenv.lib.maintainers; [ vbgl ];
   };

@@ -5,7 +5,7 @@ with stdenv.lib;
 
 let
 
-  opensslCrossSystem = stdenv.cross.openssl.system or 
+  opensslCrossSystem = stdenv.cross.openssl.system or
     (throw "openssl needs its platform name cross building");
 
   common = { version, sha256 }: stdenv.mkDerivation rec {
@@ -105,13 +105,13 @@ let
 in {
 
   openssl_1_0_1 = common {
-    version = "1.0.1r";
-    sha256 = "0iik7a3b0mrfrxzngdf7ywfscg9inbw77y0jp2ccw0gdap9xhjvq";
+    version = "1.0.1s";
+    sha256 = "e7e81d82f3cd538ab0cdba494006d44aab9dd96b7f6233ce9971fb7c7916d511";
   };
 
-  openssl_1_0_2 = lowPrio (common {
-    version = "1.0.2f";
-    sha256 = "932b4ee4def2b434f85435d9e3e19ca8ba99ce9a065a61524b429a9d5e9b2e9c";
-  });
+  openssl_1_0_2 = common {
+    version = "1.0.2g";
+    sha256 = "b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33";
+  };
 
 }

@@ -2,12 +2,13 @@
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
-, withGssapiPatches ? withKerberos
+, withGssapiPatches ? false
 , kerberos
 , linkOpenssl? true
 }:
 
 assert withKerberos -> kerberos != null;
+assert withGssapiPatches -> withKerberos;
 
 let
 
@@ -17,18 +18,20 @@ let
   };
 
   gssapiSrc = fetchpatch {
-    url = "http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?h=debian/7.1p2-2";
-    sha256 = "05nsch879nlpyyiwm240wlq9rasy71j9d03j1rfi8kp865zhjfbm";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=46961f5704f8e86cea3e99253faad55aef4d8f35";
+    sha256 = "01mf2vx1gavypbdx06mcbmcrkm2smff0h3jfmr61k6h6j3xk88y5";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-7.2p1";
+  # Please ensure that openssh_with_kerberos still builds when
+  # bumping the version here!
+  name = "openssh-7.2p2";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1hsa1f3641pdj57a55gmnvcya3wwww2fc2cvb77y95rm5xxw6g4p";
+    sha256 = "132lh9aanb0wkisji1d6cmsxi520m8nh7c7i9wi6m1s3l38q29x7";
   };
 
   prePatch = optionalString hpnSupport
@@ -79,7 +82,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.org/";
+    homepage = "http://www.openssh.com/";
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;

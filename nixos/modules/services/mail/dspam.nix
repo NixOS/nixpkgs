@@ -104,6 +104,7 @@ in {
       systemd.services.dspam = {
         description = "dspam spam filtering daemon";
         wantedBy = [ "multi-user.target" ];
+        after = [ "postgresql.service" ];
         restartTriggers = [ cfgfile ];
 
         serviceConfig = {
@@ -114,7 +115,7 @@ in {
           RuntimeDirectoryMode = optional (cfg.domainSocket == defaultSock) "0750";
           PermissionsStartOnly = true;
           # DSPAM segfaults on just about every error
-          Restart = "on-failure";
+          Restart = "on-abort";
           RestartSec = "1s";
         };
 

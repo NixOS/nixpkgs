@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgs }:
 
 let
 
@@ -18,11 +18,14 @@ let
       };
     };
 
-  grsecPatch = { grversion ? "3.1", kversion, revision, branch, sha256 }:
+  grsecPatch = { grversion ? "3.1", kernel, patches, kversion, revision, branch ? "test", sha256 }:
+    assert kversion == kernel.version;
     { name = "grsecurity-${grversion}-${kversion}";
-      inherit grversion kversion revision;
+      inherit grversion kernel patches kversion revision;
       patch = fetchurl {
-        url = "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
+        url = if branch == "stable"
+              then "https://github.com/kdave/grsecurity-patches/blob/master/grsecurity_patches/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true"
+              else "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
         inherit sha256;
       };
       features.grsecurity = true;
@@ -79,23 +82,41 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_stable = grsecPatch
-    { kversion  = "3.14.51";
+  grsecurity_3_14 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_3_14;
+      patches   = [ grsecurity_fix_path_3_14 ];
+      kversion  = "3.14.51";
       revision  = "201508181951";
       branch    = "stable";
       sha256    = "1sp1gwa7ahzflq7ayb51bg52abrn5zx1hb3pff3axpjqq7vfai6f";
     };
 
-  grsecurity_unstable = grsecPatch
-    { kversion  = "4.3.4";
-      revision  = "201601231215";
-      branch    = "test";
-      sha256    = "1dacld4zlp8mk6ykc0f1v5crppvq3znbdw9rwfrf6qi90984x0mr";
+  grsecurity_4_1 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_4_1;
+      patches   = [ grsecurity_fix_path_3_14 ];
+      kversion  = "4.1.7";
+      revision  = "201509201149";
+      sha256    = "1agv8c3c4vmh5algbzmrq2f6vwk72rikrlcbm4h7jbrb9js6fxk4";
     };
 
-  grsec_fix_path =
-    { name = "grsec-fix-path";
-      patch = ./grsec-path.patch;
+  grsecurity_4_4 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_4_4;
+      patches   = [ grsecurity_fix_path_4_4 ];
+      kversion  = "4.4.5";
+      revision  = "201603131305";
+      sha256    = "04k4nhshl6r5n41ha5620s7cd70dmmmvyf9mnn5359jr1720kxpf";
+    };
+
+  grsecurity_latest = grsecurity_4_4;
+
+  grsecurity_fix_path_3_14 =
+    { name = "grsecurity-fix-path-3.14";
+      patch = ./grsecurity-path-3.14.patch;
+    };
+
+  grsecurity_fix_path_4_4 =
+    { name = "grsecurity-fix-path-4.4";
+      patch = ./grsecurity-path-4.4.patch;
     };
 
   crc_regression =

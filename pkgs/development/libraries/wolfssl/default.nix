@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "wolfssl-${version}";
-  version = "3.8.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}";
-    sha256 = "0vc2120a9gfxg3rv018ch1g84ia2cpplcqbpy8v6vpfb79rn1nf5";
+    sha256 = "0j4la9936jcy2fam1x5wplbslqa4zjnrk4wyipkbwz9m8cxg0n6v";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

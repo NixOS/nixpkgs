@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   # fails to find lex_token.h sometimes
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
   setOutputFlags = false;

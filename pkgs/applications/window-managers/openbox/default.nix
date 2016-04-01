@@ -3,7 +3,8 @@
 , imlib2, pango, libstartup_notification, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "openbox-3.6.1";
+  name = "openbox-${version}";
+  version = "3.6.1";
 
   buildInputs = [
     pkgconfig libxml2
@@ -40,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "X window manager for non-desktop embedded systems";
     homepage = http://openbox.org/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

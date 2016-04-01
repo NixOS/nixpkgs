@@ -51,7 +51,7 @@ stdenv.mkDerivation rec
 
     license = stdenv.lib.licenses.lgpl21;
 
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };

@@ -85,6 +85,7 @@ let
     libpulseaudio
     alsaLib
     openalSoft
+    libva
   ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []

@@ -96,15 +96,12 @@ in rec {
     };
   };
 
-  nixUnstable = nixStable;
-  /*
   nixUnstable = lib.lowPrio (common rec {
-    name = "nix-1.11pre4379_786046c";
+    name = "nix-1.12pre4523_3b81b26";
     src = fetchurl {
-      url = "http://hydra.nixos.org/build/30375557/download/4/${name}.tar.xz";
-      sha256 = "ff42c70697fce7ca6eade622a31e5fbe45aed0edf1204fb491b40df207a807d5";
+      url = "http://hydra.nixos.org/build/33598573/download/4/${name}.tar.xz";
+      sha256 = "0469zv09m85824w4vqj2ag0nciq51xvrvsys7bd5v4nrxihk9991";
     };
   });
-  */
 
 }

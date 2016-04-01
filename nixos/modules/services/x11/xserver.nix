@@ -13,9 +13,9 @@ let
 
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
-    virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
-    ati = { modules = [ pkgs.xorg.xf86videoati pkgs.xorg.glamoregl ]; };
-    intel-testing = { modules = with pkgs.xorg; [ xf86videointel-testing glamoregl ]; driverName = "intel"; };
+    virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
+    ati = { modules = with pkgs.xorg; [ xf86videoati glamoregl ]; };
+    intel = { modules = with pkgs.xorg; [ xf86videointel glamoregl ]; };
   };
 
   fontsForXServer =
@@ -160,7 +160,7 @@ in
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
               MatchProduct    "ThinkPad USB Keyboard with TrackPoint"
-              Option          "EmulateWheel"          "true
+              Option          "EmulateWheel"          "true"
               Option          "EmulateWheelButton"    "2"
               Option          "Emulate3Buttons"       "false"
             '''
@@ -216,17 +216,6 @@ in
         description = ''
           A list of attribute sets specifying drivers to be loaded by
           the X11 server.
-        '';
-      };
-
-      startGnuPGAgent = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to start the GnuPG agent when you log in.  The GnuPG agent
-          remembers private keys for you so that you don't have to type in
-          passphrases every time you make an SSH connection or sign/encrypt
-          data.  Use <command>ssh-add</command> to add a key to the agent.
         '';
       };
 
@@ -444,14 +433,7 @@ in
       in optional (driver != null) ({ inherit name; driverName = name; } // driver));
 
     assertions =
-      [ { assertion = !(config.programs.ssh.startAgent && cfg.startGnuPGAgent);
-          message =
-            ''
-              The OpenSSH agent and GnuPG agent cannot be started both. Please
-              choose between ‘programs.ssh.startAgent’ and ‘services.xserver.startGnuPGAgent’.
-            '';
-        }
-        { assertion = config.security.polkit.enable;
+      [ { assertion = config.security.polkit.enable;
           message = "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
         }
       ];

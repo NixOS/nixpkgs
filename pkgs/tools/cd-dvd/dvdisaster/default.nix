@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (builtins.elem stdenv.system
       stdenv.lib.platforms.x86_64) "--with-sse2=yes";
 
-  enableParallelBuilding = true;
+  # fatal error: inlined-icons.h: No such file or directory
+  enableParallelBuilding = false;
 
   doCheck = true;
   checkPhase = ''

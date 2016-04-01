@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jb6g3kbfyr5yf8mvblnciva2bmc01ijpr51m21r27rqmgi8gj5k";
   };
 
-  patches = [ ./buf_rect.patch ];
+  patches = [ ./buf_rect.patch ./fix_build_with_gcc-5.patch];
 
   buildInputs =
     [ pkgconfig SDL SDL_image libjack2

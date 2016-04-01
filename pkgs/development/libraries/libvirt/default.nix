@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "ebcf5645fa565e3fe2fe94a86e841db9b768cf0e0a7e6cf395c6327f9a23bd64";
+    sha256 = "01fg9jbifndwc3jzzizsisvz98q325xarczgf6rn11hphckgrip3";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

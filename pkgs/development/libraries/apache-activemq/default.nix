@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "apache-activemq-${version}";
-  version = "5.8.0";
+  version = "5.13.2";
 
   src = fetchurl {
-    url = "mirror://apache/activemq/apache-activemq/${version}/${name}-bin.tar.gz";
-    sha256 = "12a1lmmqapviqdgw307jm07vw1z5q53r56pkbp85w9wnqwspjrbk";
+    sha256 = "0vrgny8fw973xvr3w4wc1s44z50b0c2hgcqa91s8fbx2yjmqn5xy";
+    url = "mirror://apache/activemq/${version}/${name}-bin.tar.gz";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

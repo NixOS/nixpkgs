@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     homepage = http://savonet.rastageeks.org/;
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

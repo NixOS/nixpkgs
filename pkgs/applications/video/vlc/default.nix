@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "1dazxbmzx2g5570pkg519a7fsj07rdr155kjsw7b9y8npql33lls";
   };
 
-  # outputs TODO: some modules are "corrupt", even without splitting vlc
+  # Comment-out the Qt 5.5 version check, as we do apply the relevant patch.
+  # https://trac.videolan.org/vlc/ticket/16497
+  postPatch = if (!withQt5) then null else
+    "sed '/I78ef29975181ee22429c9bd4b11d96d9e68b7a9c/s/^/: #/' -i configure";
 
   buildInputs =
     [ xz bzip2 perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread

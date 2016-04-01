@@ -10,11 +10,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "blender-2.76b";
+  name = "blender-2.77";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0pb0mlj4vj0iir528ifqq67nsh3ca1942933d9cwlbpcja2jm1dx";
+    sha256 = "0aynm249xgrnm6h5hlp9x40ww0hn391d9ka2mg9mmqrdzhih286n";
   };
 
   buildInputs =
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.goibhniu ];
   };
 }

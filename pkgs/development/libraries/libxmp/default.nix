@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.lgpl21Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

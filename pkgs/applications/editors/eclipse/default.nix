@@ -312,7 +312,7 @@ rec {
   };
   eclipse_sdk_451 = eclipse-sdk-451; # backward compatibility, added 2016-01-30
 
-  eclipse-platform = eclipse-platform-451;
+  eclipse-platform = eclipse-platform-452;
 
   eclipse-platform-45 = buildEclipse {
     name = "eclipse-platform-4.5";
@@ -340,6 +340,21 @@ rec {
       "i686-linux" = fetchurl {
           url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/eclipse-platform-4.5.1-linux-gtk.tar.gz;
           sha256 = "17x8w4k0rba0c0v9ghxdl0zqfadla5c1aakfd5k0q9q3x3qi6rxp";
+        };
+    };
+  };
+
+  eclipse-platform-452 = buildEclipse {
+    name = "eclipse-platform-4.5.2";
+    description = "Eclipse platform";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.2-201602121500/eclipse-SDK-4.5.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "13dsd5f5i39wd0sr2bgp57hd2msn8g2dnmw5j8hfwif22c62py47";
+        };
+      "i686-linux" = fetchurl {
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.2-201602121500/eclipse-SDK-4.5.2-linux-gtk.tar.gz;
+          sha256 = "00jsmbrl4xhpbgd8hyxijgzqdic700kd3yw2qwgl0cs3ncvybxvq";
         };
     };
   };

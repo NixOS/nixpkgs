@@ -5,6 +5,8 @@ let pydir = "lib/python${python.majorVersion}"; in
 
 kde {
 
+  patches = [ ./pykde4-gcc-5.patch ];
+
   # todo: polkit isn't found by the build system
 
   buildInputs = [

@@ -1,6 +1,11 @@
-{stdenv, fetchurl, yacc }:
+{ stdenv, lib, fetchurl, makeWrapper, yacc, gcc
+, withISpin ? true, tk, swarm, graphviz }:
 
-stdenv.mkDerivation rec {
+let
+  binPath = stdenv.lib.makeBinPath [ gcc ];
+  ibinPath = stdenv.lib.makeBinPath [ gcc tk swarm graphviz tk ];
+
+in stdenv.mkDerivation rec {
   name = "spin-${version}";
   version = "6.4.5";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
@@ -13,11 +18,20 @@ stdenv.mkDerivation rec {
     sha256 = "0x8qnwm2xa8f176c52mzpvnfzglxs6xgig7bcgvrvkb3xf114224";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ yacc ];
 
   sourceRoot = "Spin/Src${version}";
 
-  installPhase = "install -D spin $out/bin/spin";
+  installPhase = ''
+    install -Dm755 spin $out/bin/spin
+    wrapProgram $out/bin/spin \
+      --prefix PATH : ${binPath}
+  '' + lib.optionalString withISpin ''
+    install -Dm755 ../iSpin/ispin.tcl $out/bin/ispin
+    wrapProgram $out/bin/ispin \
+      --prefix PATH ':' "$out/bin:${ibinPath}"
+  '';
 
   meta = with stdenv.lib; {
     description = "Formal verification tool for distributed software systems";

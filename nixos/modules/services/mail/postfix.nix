@@ -27,7 +27,7 @@ let
 
   mainCf =
     ''
-      compatibility_level = 2
+      compatibility_level = 9999
 
       mail_owner = ${user}
       default_privs = nobody

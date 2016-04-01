@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng, cairo }:
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm }:
 
 let
-  ver_maj = "2.34";
-  ver_min = "0";
+  ver_maj = "2.38";
+  ver_min = "1";
 in
 stdenv.mkDerivation rec {
   name = "pangomm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pangomm/${ver_maj}/${name}.tar.xz";
-    sha256 = "0hcyvv7c5zmivprdam6cp111i6hn2y5jsxzk00m6j9pncbzvp0hf";
+    sha256 = "effb18505b36d81fc32989a39ead8b7858940d0533107336a30bc3eef096bc8b";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ pango glibmm cairomm libpng cairo ];
+  propagatedBuildInputs = [ pango glibmm cairomm ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "C++ interface to the Pango text rendering library";

@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlagsArray = [ "--with-openssl-lib=${openssl.out}/lib" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+
+
   patchPhase = ''
     substituteInPlace 3rdParty/V8-3.31.74.1/build/gyp/gyp --replace /bin/bash ${bash}/bin/bash
     substituteInPlace 3rdParty/etcd/build --replace /bin/bash ${bash}/bin/bash

@@ -16,8 +16,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 zlib ];
 
-  prefixKey="INSTALL_PREFIX=";
+  prefixKey = "INSTALL_PREFIX=";
   configureScript = "qmake leocad.pro";
+  postPatch = ''
+    substituteInPlace common/camera.cpp --replace "isnan(" "std::isnan("
+  '';
 
   meta = with stdenv.lib; {
     description = "CAD program for creating virtual LEGO models";

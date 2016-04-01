@@ -14,6 +14,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ colord libX11 libXrandr lcms2 kdelibs ];
 
+  patches = [ ./fix_check_include_files.patch ];
+  patchFlags = [ "-p0" ];
+
   enableParallelBuilding = true;
 
   meta = {

@@ -166,7 +166,7 @@ with stdenv.lib; stdenv.mkDerivation {
   buildInputs = [ ncurses ]
     ++ optional (!forceBundledLLVM) llvmShared;
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # missing files during linking, occasionally
 
   outputs = [ "out" "doc" ];
 

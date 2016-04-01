@@ -11,15 +11,6 @@ diff -rupN higan_v095-source.orig/GNUmakefile higan_v095-source/GNUmakefile
  objects := libco
  
  # profile-guided optimization mode
-@@ -43,7 +44,7 @@ ifeq ($(platform),windows)
- else ifeq ($(platform),macosx)
-   flags += -march=native
- else ifeq ($(platform),linux)
--  flags += -march=native -fopenmp
-+  flags += -fopenmp
-   link += -fopenmp
-   link += -Wl,-export-dynamic
-   link += -lX11 -lXext -ldl
 diff -rupN higan_v095-source.orig/icarus/GNUmakefile higan_v095-source/icarus/GNUmakefile
 --- higan_v095-source.orig/icarus/GNUmakefile	2015-11-04 10:28:26.186486119 +0100
 +++ higan_v095-source/icarus/GNUmakefile	2015-11-04 10:28:48.755059317 +0100

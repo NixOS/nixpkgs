@@ -35,9 +35,9 @@ import ./make-test.nix ( { pkgs, ... } : {
       # Local connections should still work.
       $walled->succeed("curl -v http://localhost/ >&2");
 
-      # Connections to the firewalled machine should fail.
+      # Connections to the firewalled machine should fail, but ping should succeed.
       $attacker->fail("curl --fail --connect-timeout 2 http://walled/ >&2");
-      $attacker->fail("ping -c 1 walled >&2");
+      $attacker->succeed("ping -c 1 walled >&2");
 
       # Outgoing connections/pings should still work.
       $walled->succeed("curl -v http://attacker/ >&2");
