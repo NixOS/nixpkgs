@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Used during building; results seem fine.
+  NIX_ENFORCE_NO_SHLIB_UNDEFINED = false;
+
   meta = {
     description = "MIT Kerberos 5";
     homepage = http://web.mit.edu/kerberos/;
