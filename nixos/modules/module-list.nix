@@ -334,6 +334,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/mailpile.nix
+  ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix

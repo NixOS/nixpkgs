@@ -8909,6 +8909,10 @@ in
     gnutls = gnutls;
   });
 
+  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
     # The build succeeds using gcc5 but it fails to build pkgs.consul-ui
@@ -9626,6 +9630,8 @@ in
 
   meteor = callPackage ../servers/meteor/default.nix { };
 
+  mfi = callPackage ../servers/mfi { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
@@ -9742,6 +9748,8 @@ in
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
   };
+
+  mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
