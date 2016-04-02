@@ -14613,7 +14613,7 @@ in
   crafty = callPackage ../games/crafty { };
   craftyFull = appendToName "full" (self.crafty.override { fullVariant = true; });
 
-  crawlTiles = crawl.override {
+  crawlTiles = self.crawl.override {
     tileMode = true;
   };
 
