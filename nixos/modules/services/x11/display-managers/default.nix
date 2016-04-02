@@ -49,12 +49,6 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
-      ${optionalString cfg.startDbusSession ''
-        if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
-        fi
-      ''}
-
       # Handle being called by kdm.
       if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
@@ -134,13 +128,8 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
-      # FIXME: gdbus should not be in glib.dev!
-      ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
-        ${pkgs.glib.dev}/bin/gdbus call --session \
-          --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
-          --method org.freedesktop.DBus.UpdateActivationEnvironment \
-          "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
-                  | ${pkgs.coreutils}/bin/paste -sd,)}"
+      ${optionalString cfg.updateDbusEnvironment ''
+        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
       ''}
 
       test -n "$waitPID" && wait "$waitPID"

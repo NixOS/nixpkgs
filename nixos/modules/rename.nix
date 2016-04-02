@@ -150,6 +150,7 @@ with lib;
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+    (mkRemovedOptionModule [ "services" "xserver" "startDbusSession" ] "")
     (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
       "See the 16.03 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")

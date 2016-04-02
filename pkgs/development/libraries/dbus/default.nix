@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.10.8";
-  sha256 = "0560y3hxpgh346w6avcrcz79c8ansmn771y5xpcvvlr6m8mx5wxs";
+  version = "1.10.10";
+  sha256 = "0hwsfczhx2djmc9116vj5v230i7gpjihwh3vbljs1ldlk831v3wx";
 
 self =  stdenv.mkDerivation {
     name = "dbus-${version}";
@@ -44,7 +44,11 @@ self =  stdenv.mkDerivation {
       "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-session-socket-dir=/tmp"
+      "--with-system-pid-file=/run/dbus/pid"
+      "--with-system-socket=/run/dbus/system_bus_socket"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemduserunitdir=$(out)/etc/systemd/user"
+      "--enable-user-session"
       # this package installs nothing into those dirs and they create a dependency
       "--datadir=/run/current-system/sw/share"
       "--libexecdir=$(out)/libexec" # we don't need dbus-daemon-launch-helper
@@ -81,4 +85,3 @@ self =  stdenv.mkDerivation {
     };
   };
 in self
-

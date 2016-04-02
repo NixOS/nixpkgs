@@ -226,14 +226,6 @@ in
         description = "DPI resolution to use for X server.";
       };
 
-      startDbusSession = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to start a new DBus session when you log in with dbus-launch.
-        '';
-      };
-
       updateDbusEnvironment = mkOption {
         type = types.bool;
         default = false;

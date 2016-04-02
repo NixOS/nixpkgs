@@ -187,16 +187,6 @@ fi
 
 echo 'startkde: Starting up...'  1>&2
 
-# Make sure that D-Bus is running
-if qdbus >/dev/null 2>/dev/null; then
-    : # ok
-else
-    echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-    xmessage -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
-    exit 1
-fi
-
 # Mark that full KDE session is running (e.g. Konqueror preloading works only
 # with full KDE running). The KDE_FULL_SESSION property can be detected by
 # any X client connected to the same X session, even if not launched
