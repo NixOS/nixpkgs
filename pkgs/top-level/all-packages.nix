@@ -11718,7 +11718,7 @@ in
 
   cddiscid = callPackage ../applications/audio/cd-discid { };
 
-  cdparanoia = cdparanoiaIII;
+  cdparanoia = self.cdparanoiaIII;
 
   cdparanoiaIII = callPackage ../applications/audio/cdparanoia {
     inherit (darwin) IOKit;
