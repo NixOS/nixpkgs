@@ -7,10 +7,18 @@
 <title>Booting from a USB Drive</title>
 
 <para>For systems without CD drive, the NixOS live CD can be booted from
-a USB stick. For non-UEFI installations,
-<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>
-will work. For UEFI installations, you should mount the ISO, copy its contents
-verbatim to your drive, then either:
+a USB stick. You can use the <command>dd</command> utility to write the image:
+<command>dd if=<replaceable>path-to-image</replaceable>
+of=<replaceable>/dev/sdb</replaceable></command>. Be careful in specifying the
+correct drive, you can use the <command>lsblk</command> command to get a list of
+block devices.</para>
+
+<para>The <command>dd</command> utility will write the image verbatim to the drive,
+making it the recommended option for both UEFI and non-UEFI installations. For
+non-UEFI installations, you can alternatively use
+<link xlink:href="http://unetbootin.sourceforge.net/">unetbootin</link>. If you
+cannot use <command>dd</command> for a UEFI installation, you can also mount the
+ISO, copy its contents verbatim to your drive, then either:
 
 <itemizedlist>
   <listitem>
