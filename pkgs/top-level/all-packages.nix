@@ -3985,7 +3985,7 @@ in
 
   clangUnwrapped = llvm: pkg: callPackage pkg { inherit llvm; };
 
-  clangSelf = clangWrapSelf llvmPackagesSelf.clang;
+  clangSelf = self.clangWrapSelf llvmPackagesSelf.clang;
 
   clangWrapSelf = build: callPackage ../build-support/cc-wrapper {
     cc = build;
