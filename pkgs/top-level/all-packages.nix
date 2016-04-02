@@ -1542,6 +1542,7 @@ let
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       inherit (pythonPackages) gyp;
+      protobuf = protobuf.override { stdenv = clangStdenv; };
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
