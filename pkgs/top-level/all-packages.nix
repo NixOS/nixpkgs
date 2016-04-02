@@ -11612,7 +11612,7 @@ in
 
   backintime-qt4 = callPackage ../applications/networking/sync/backintime/qt4.nix { };
 
-  backintime = backintime-qt4;
+  backintime = self.backintime-qt4;
 
   bandwidth = callPackage ../tools/misc/bandwidth { };
 
