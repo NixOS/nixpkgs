@@ -6479,7 +6479,7 @@ in
 
   clucene_core_1 = callPackage ../development/libraries/clucene-core { };
 
-  clucene_core = clucene_core_1;
+  clucene_core = self.clucene_core_1;
 
   clutter = callPackage ../development/libraries/clutter { };
 
