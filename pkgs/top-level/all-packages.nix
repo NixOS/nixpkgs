@@ -11602,7 +11602,7 @@ in
     cairo = cairo.override { xcbSupport = true; };
     luaPackages = luaPackages.override { inherit lua; };
   };
-  awesome = awesome-3-5;
+  awesome = self.awesome-3-5;
 
   awesomebump = qt5.callPackage ../applications/graphics/awesomebump { };
 
