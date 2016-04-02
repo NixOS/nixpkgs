@@ -785,7 +785,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
-    };  
+    };
     buildInputs = with self; [ zope_interface ];
 
   };
@@ -5386,7 +5386,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
-    };  
+    };
 
     propagatedBuildInputs = with self; [ greenlet ];
 
@@ -6113,6 +6113,23 @@ in modules // {
       license = licenses.bsd2;
       maintainers = with maintainers; [ matthiasbeyer ];
     };
+  };
+
+  imagesize = buildPythonPackage rec {
+    name = "imagesize-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/imagesize/${name}.tar.gz";
+      sha256 = "0msgz4ncp2nb5nbsxnf8kvxsl6nhwvc3b46ik097fvznl3y10gdv";
+    };
+
+    meta = {
+      description = "Getting image size from png/jpeg/jpeg2000/gif file";
+      homepage = https://github.com/shibukawa/imagesize_py;
+      license = with licenses; [ mit ];
+    };
+
   };
 
   imread = buildPythonPackage rec {
@@ -8918,11 +8935,11 @@ in modules // {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.1";
+    version = "2.5.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "448aed48b0671fe6062f47b98c3081f3a4b36fbe99ddb8ac2a3be6e6cb135603";
+      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -11648,11 +11665,11 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.3";
+    name = "mccabe-0.4.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      sha256 = "3d8ca9bf65c5014f469180544d1dd5bb5b9df709aad6304f9c2e4370ae0a7b7c";
+      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
     };
 
     # See https://github.com/flintwork/mccabe/issues/31
@@ -11663,6 +11680,8 @@ in modules // {
         sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
       }}" test_mccabe.py
     '';
+
+    buildInputs = with self; [ pytestrunner pytest ];
 
     meta = {
       description = "McCabe checker, plugin for flake8";
@@ -12225,8 +12244,8 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
-    };  
-    
+    };
+
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
@@ -16916,12 +16935,12 @@ in modules // {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.1.1";
+    version = "2.1.3";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "06y0b7xh9h3r0wbxl41ccnnnw8dxfz48zj8x09y4rranbfldkxrd";
+      sha256 = "10axnp2wpjnq9g8wg53fx0c70dfxqrz498jyz8mrdx9a3flwir48";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
@@ -18126,11 +18145,11 @@ in modules // {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2015.7";
+    version = "2016.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.gz";
-      sha256 = "99266ef30a37e43932deec2b7ca73e83c8dbc3b9ff703ec73eca6b1dae6befea";
+      sha256 = "1a3hjclyylc4m1v1dn04b38wm2vl649ijdswpg0d8m8n0lcxlj9l";
     };
 
     meta = {
@@ -20515,14 +20534,16 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.4";
+    name = "Sphinx-1.3.6";
+
+    # 1.4 is broken
+    # https://github.com/sphinx-doc/sphinx/issues/2394
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
+      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
 
-    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -20555,11 +20576,11 @@ in modules // {
   };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.8";
+    name = "sphinx_rtd_theme-0.1.9";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sphinx_rtd_theme/${name}.tar.gz";
-      sha256 = "12mnb7qscr07mllmyyqfpx37778sr21m8663b4fivnk17bnk7xkl";
+      sha256 = "18d0r63w7jpdrk4q5qy26n08vdlmnj9sar93akwjphyambw4cf17";
     };
 
     postPatch = ''
@@ -20765,7 +20786,7 @@ in modules // {
 
     src = pkgs.fetchFromGitHub {
       repo = "sqlalchemy-imageattach";
-      owner = "crosspop";      
+      owner = "crosspop";
       rev = "${version}";
       sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
     };
