@@ -3832,12 +3832,12 @@ let
     subPackages = [ "./" ];
   };
 
-  godep = buildFromGitHub {
-    rev    = "5598a9815350896a2cdf9f4f1d0a3003ab9677fb";
-    version = "2015-10-15";
+  godep = buildFromGitHub rec {
+    version = "60";
+    rev    = "v${version}";
     owner  = "tools";
     repo   = "godep";
-    sha256 = "0zc1ah5cvaqa3zw0ska89a40x445vwl1ixz8v42xi3zicx16ibwz";
+    sha256 = "1v05185ikfcb3sz9ygcwm9x8la77i27ml1bg9fs6vvahjzyr0rif";
   };
 
   color = buildFromGitHub {
