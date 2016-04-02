@@ -8736,11 +8736,11 @@ in modules // {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.1";
+    version = "2.5.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "448aed48b0671fe6062f47b98c3081f3a4b36fbe99ddb8ac2a3be6e6cb135603";
+      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
     };
 
     buildInputs = with self; [ nose mock ];
