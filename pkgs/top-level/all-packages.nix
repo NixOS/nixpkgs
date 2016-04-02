@@ -4017,7 +4017,7 @@ in
     ocamlPackages = ocamlPackages_4_02;
   });
 
-  cryptol = haskellPackages.cryptol;
+  cryptol = self.haskellPackages.cryptol;
 
   cython = pythonPackages.cython;
   cython3 = python3Packages.cython;
