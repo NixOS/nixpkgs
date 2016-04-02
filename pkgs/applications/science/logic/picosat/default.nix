@@ -9,12 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
-  configurePhase = "./configure.sh --shared";
+  configurePhase = "./configure.sh --shared --trace";
 
   installPhase = ''
    mkdir -p $out/bin $out/lib $out/include/picosat
-   cp picomus "$out"/bin
-   cp picosat "$out"/bin
+   cp picomus picomcs picosat picogcnf "$out"/bin
 
    cp libpicosat.a "$out"/lib
    cp libpicosat.so "$out"/lib
