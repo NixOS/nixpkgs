@@ -35,6 +35,7 @@ in
   services.mongodb.extraConfig =
     ''
     ipv6 = true
+    ${local_config}
     '';
 
     users.users.mongodb = {
