@@ -11753,9 +11753,9 @@ in
 
   chronos = callPackage ../applications/networking/cluster/chronos { };
 
-  chromiumBeta = lowPrio (chromium.override { channel = "beta"; });
+  chromiumBeta = lowPrio (self.chromium.override { channel = "beta"; });
 
-  chromiumDev = lowPrio (chromium.override { channel = "dev"; });
+  chromiumDev = lowPrio (self.chromium.override { channel = "dev"; });
 
   chuck = callPackage ../applications/audio/chuck { };
 
