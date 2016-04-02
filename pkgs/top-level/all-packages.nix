@@ -14604,7 +14604,7 @@ in
     freeglut = null;
   });
 
-  construo = construoBase.override {
+  construo = self.construoBase.override {
     inherit mesa freeglut;
   };
 
