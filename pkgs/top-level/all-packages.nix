@@ -15489,7 +15489,7 @@ in
     withLapack = false;
   };
 
-  atlasWithLapack = atlas.override { withLapack = true; };
+  atlasWithLapack = self.atlas.override { withLapack = true; };
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
