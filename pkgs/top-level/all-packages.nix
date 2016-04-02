@@ -3786,6 +3786,8 @@ in
 
   udunits = callPackage ../development/libraries/udunits { };
 
+  uhttpmock = callPackage ../development/libraries/uhttpmock { };
+
   uim = callPackage ../tools/inputmethods/uim {
     inherit (pkgs.kde4) kdelibs;
   };
