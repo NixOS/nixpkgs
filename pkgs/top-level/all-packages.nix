@@ -11569,8 +11569,8 @@ in
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
     callPackage = newScope { boost = boost155; };
   } );
-  bitcoin = altcoins.bitcoin;
-  bitcoin-xt = altcoins.bitcoin-xt;
+  bitcoin = self.altcoins.bitcoin;
+  bitcoin-xt = self.altcoins.bitcoin-xt;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
