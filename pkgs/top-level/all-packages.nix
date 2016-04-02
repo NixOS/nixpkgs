@@ -495,9 +495,9 @@ in
     pkgs_i686 = pkgsi686Linux;
   };
 
-  inherit (androidenv) androidsdk_4_4 androidndk;
+  inherit (self.androidenv) androidsdk_4_4 androidndk;
 
-  androidsdk = androidenv.androidsdk_6_0;
+  androidsdk = self.androidenv.androidsdk_6_0;
 
   arc-gtk-theme = callPackage ../misc/themes/arc { };
 
