@@ -11530,7 +11530,7 @@ in
 
   antiword = callPackage ../applications/office/antiword {};
 
-  ardour = ardour4;
+  ardour = self.ardour4;
 
   ardour3 =  callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
