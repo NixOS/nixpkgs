@@ -851,12 +851,12 @@ in
     enableStandardFeatures = false;
   };
 
-  asciidoc-full = appendToName "full" (asciidoc.override {
+  asciidoc-full = appendToName "full" (self.asciidoc.override {
     inherit (pythonPackages) pygments;
     enableStandardFeatures = true;
   });
 
-  asciidoc-full-with-plugins = appendToName "full-with-plugins" (asciidoc.override {
+  asciidoc-full-with-plugins = appendToName "full-with-plugins" (self.asciidoc.override {
     inherit (pythonPackages) pygments;
     enableStandardFeatures = true;
     enableExtraPlugins = true;
