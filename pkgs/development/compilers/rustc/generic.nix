@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvmPackages_37, jemalloc, ncurses, darwin, binutils
+, llvm, jemalloc, ncurses, darwin, binutils
 
 , shortVersion, isRelease
 , forceBundledLLVM ? false
@@ -11,8 +11,6 @@
 
 , patches
 } @ args:
-
-assert !stdenv.isFreeBSD;
 
 /* Rust's build process has a few quirks :
 
@@ -39,7 +37,7 @@ let version = if isRelease then
 
     procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
-    llvmShared = llvmPackages_37.llvm.override { enableSharedLibraries = true; };
+    llvmShared = llvm.override { enableSharedLibraries = true; };
 
     platform = if stdenv.system == "i686-linux"
       then "linux-i386"
@@ -66,7 +64,7 @@ let version = if isRelease then
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
       license = [ licenses.mit licenses.asl20 ];
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
     };
 
     snapshotHash = if stdenv.system == "i686-linux"
