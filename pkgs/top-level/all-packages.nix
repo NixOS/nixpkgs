@@ -5817,9 +5817,9 @@ in
     inherit (darwin) ps;
   };
 
-  cmakeCurses = cmake.override { useNcurses = true; };
+  cmakeCurses = self.cmake.override { useNcurses = true; };
 
-  cmakeWithGui = cmakeCurses.override { useQt4 = true; };
+  cmakeWithGui = self.cmakeCurses.override { useQt4 = true; };
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
