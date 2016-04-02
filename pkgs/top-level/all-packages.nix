@@ -504,7 +504,7 @@ in
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  aria = aria2;
+  aria = self.aria2;
 
   at = callPackage ../tools/system/at { };
 
