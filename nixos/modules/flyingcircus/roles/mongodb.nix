@@ -53,7 +53,6 @@ in
       %sensuclient ALL=(mongodb) ALL
     '';
 
-
     environment.etc."local/mongodb/README.txt".text = ''
         Put your local mongodb configuration into `mongodb.conf` here.
         It will be joined with the basic config.
