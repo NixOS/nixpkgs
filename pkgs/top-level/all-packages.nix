@@ -5578,7 +5578,7 @@ in
     version = "2.8";
   };
 
-  amdappsdk = amdappsdk28;
+  amdappsdk = self.amdappsdk28;
 
   amdappsdkFull = callPackage ../development/misc/amdapp-sdk {
     version = "2.8";
