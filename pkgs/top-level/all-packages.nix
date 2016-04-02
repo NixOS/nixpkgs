@@ -1147,7 +1147,7 @@ in
 
   cudatoolkit = self.cudatoolkit7;
 
-  curlFull = curl.override {
+  curlFull = self.curl.override {
     idnSupport = true;
     ldapSupport = true;
     gssSupport = true;
