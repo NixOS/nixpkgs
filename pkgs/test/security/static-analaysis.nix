@@ -43,7 +43,9 @@ let
       # returned by it.
       validFunctionName = path:
         let funName = elemAt path (length path - 1); in
-          ! elem funName [ "newScope" "callPackage" "callPackages" "callPackage_i686" "mkDerivation" ];
+          ! elem funName [ "newScope" "callPackage" "callPackages" "callPackage_i686" "mkDerivation"
+            "forceNativeDrv" "lowPrio"
+          ];
 
       annotateValue = path: value:
         if isDerivation value then
