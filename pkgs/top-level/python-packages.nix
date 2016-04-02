@@ -20536,6 +20536,9 @@ in modules // {
   sphinx = buildPythonPackage (rec {
     name = "Sphinx-1.3.6";
 
+    # 1.4 is broken
+    # https://github.com/sphinx-doc/sphinx/issues/2394
+
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
       sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
