@@ -1,0 +1,26 @@
+diff --git a/SPIRV/CMakeLists.txt b/SPIRV/CMakeLists.txt
+index 50cda68..d4ba381 100755
+--- a/SPIRV/CMakeLists.txt
++++ b/SPIRV/CMakeLists.txt
+@@ -26,3 +26,8 @@ endif(WIN32)
+
+ install(TARGETS SPIRV
+         ARCHIVE DESTINATION lib)
++
++foreach(file ${HEADERS})
++    get_filename_component(dir ${file} DIRECTORY)
++    install(FILES ${file} DESTINATION include/SPIRV/${dir})
++endforeach()
+diff --git a/glslang/CMakeLists.txt b/glslang/CMakeLists.txt
+index 28f4742..5a25cbb 100644
+--- a/glslang/CMakeLists.txt
++++ b/glslang/CMakeLists.txt
+@@ -87,3 +87,8 @@ endif(WIN32)
+
+ install(TARGETS glslang
+         ARCHIVE DESTINATION lib)
++
++foreach(file ${HEADERS})
++    get_filename_component(dir ${file} DIRECTORY)
++    install(FILES ${file} DESTINATION include/glslang/${dir})
++endforeach()
