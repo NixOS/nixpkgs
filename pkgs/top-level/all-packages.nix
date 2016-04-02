@@ -6364,7 +6364,7 @@ in
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
 
-  aterm = aterm25;
+  aterm = self.aterm25;
 
   aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
