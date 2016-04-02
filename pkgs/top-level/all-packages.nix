@@ -636,7 +636,7 @@ in
 
   btfs = callPackage ../os-specific/linux/btfs { };
 
-  cabal2nix = haskellPackages.cabal2nix;
+  cabal2nix = self.haskellPackages.cabal2nix;
 
   capstone = callPackage ../development/libraries/capstone { };
 
