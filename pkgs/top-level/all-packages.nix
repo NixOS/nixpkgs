@@ -11813,7 +11813,7 @@ in
   comical = callPackage ../applications/graphics/comical { };
 
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
-  conkeror = wrapFirefox conkeror-unwrapped { };
+  conkeror = self.wrapFirefox conkeror-unwrapped { };
 
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
