@@ -10085,7 +10085,7 @@ in
   # Needed for LibreOffice
   bluez5_28 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5_28.nix { });
 
-  bluez = bluez5;
+  bluez = self.bluez5;
 
   inherit (pythonPackages) bedup;
 
