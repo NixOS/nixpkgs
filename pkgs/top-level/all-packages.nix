@@ -9792,6 +9792,8 @@ in
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
 
+  vulkan-loader = callPackage ../development/libraries/vulkan-loader { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vtkWithQt4 = vtk.override { qtLib = qt4; };
