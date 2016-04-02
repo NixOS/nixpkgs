@@ -6,16 +6,18 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.0.6";
+  version = "1.0.12";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd";
+    sha256 = "17jan0g5jzp8mrpklyacwdgnnw016m1c5pc4az5im6qhc260yirs";
   };
 
   preConfigure = ''
     substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
     substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace data/84-nm-drivers.rules \
+      --replace /bin/sh ${stdenv.shell}
     substituteInPlace data/85-nm-unmanaged.rules \
       --replace /bin/sh ${stdenv.shell} \
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
