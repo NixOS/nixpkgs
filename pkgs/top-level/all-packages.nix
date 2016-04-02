@@ -5668,7 +5668,7 @@ in
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
-  automake = automake115x;
+  automake = self.automake115x;
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
