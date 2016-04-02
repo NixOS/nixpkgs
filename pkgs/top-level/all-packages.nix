@@ -1145,7 +1145,7 @@ in
     cudatoolkit7
     cudatoolkit75;
 
-  cudatoolkit = cudatoolkit7;
+  cudatoolkit = self.cudatoolkit7;
 
   curlFull = curl.override {
     idnSupport = true;
