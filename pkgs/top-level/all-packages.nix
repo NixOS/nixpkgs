@@ -457,12 +457,12 @@ in
 
   amule = callPackage ../tools/networking/p2p/amule { };
 
-  amuleDaemon = appendToName "daemon" (amule.override {
+  amuleDaemon = appendToName "daemon" (self.amule.override {
     monolithic = false;
     daemon = true;
   });
 
-  amuleGui = appendToName "gui" (amule.override {
+  amuleGui = appendToName "gui" (self.amule.override {
     monolithic = false;
     client = true;
   });
