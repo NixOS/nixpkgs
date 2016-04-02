@@ -5645,7 +5645,7 @@ in
 
   antlr3 = callPackage ../development/tools/parsing/antlr { };
 
-  ant = apacheAnt;
+  ant = self.apacheAnt;
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
