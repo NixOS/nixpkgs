@@ -16,14 +16,16 @@ stdenv.mkDerivation rec {
     ];
 
   sourceRoot = ".";
-  outputs = [ "out" "lib" ];
+
+  outputs = [ "out" "man" "dev" ];
+  propagatedBuildOutputs = [];
 
   makeFlags = [
     "TOPDIR=$(out)"
     "TZDIR=$(out)/share/zoneinfo"
     "ETCDIR=$(TMPDIR)/etc"
-    "LIBDIR=$(lib)/lib"
-    "MANDIR=$(TMPDIR)/man"
+    "LIBDIR=$(dev)/lib"
+    "MANDIR=$(man)/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
   ];
@@ -34,8 +36,8 @@ stdenv.mkDerivation rec {
       ln -s . $out/share/zoneinfo/posix
       mv $out/share/zoneinfo-leaps $out/share/zoneinfo/right
 
-      mkdir -p "$lib/include"
-      cp tzfile.h "$lib/include/tzfile.h"
+      mkdir -p "$dev/include"
+      cp tzfile.h "$dev/include/tzfile.h"
     '';
 
   meta = {
