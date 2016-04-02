@@ -13718,7 +13718,7 @@ in
 
   sxiv = callPackage ../applications/graphics/sxiv { };
 
-  bittorrentSync = bittorrentSync14;
+  bittorrentSync = self.bittorrentSync14;
   bittorrentSync14 = callPackage ../applications/networking/bittorrentsync/1.4.x.nix { };
   bittorrentSync20 = callPackage ../applications/networking/bittorrentsync/2.0.x.nix { };
 
