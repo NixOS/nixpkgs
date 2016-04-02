@@ -11665,11 +11665,11 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.3";
+    name = "mccabe-0.4.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      sha256 = "3d8ca9bf65c5014f469180544d1dd5bb5b9df709aad6304f9c2e4370ae0a7b7c";
+      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
     };
 
     # See https://github.com/flintwork/mccabe/issues/31
@@ -11680,6 +11680,8 @@ in modules // {
         sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
       }}" test_mccabe.py
     '';
+
+    buildInputs = with self; [ pytestrunner pytest ];
 
     meta = {
       description = "McCabe checker, plugin for flake8";
