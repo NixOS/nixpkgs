@@ -16935,12 +16935,12 @@ in modules // {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.1.1";
+    version = "2.1.3";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "06y0b7xh9h3r0wbxl41ccnnnw8dxfz48zj8x09y4rranbfldkxrd";
+      sha256 = "10axnp2wpjnq9g8wg53fx0c70dfxqrz498jyz8mrdx9a3flwir48";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
