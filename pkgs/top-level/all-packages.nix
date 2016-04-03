@@ -10169,7 +10169,7 @@ in
     inherit (darwin) libobjc;
   };
 
-  devicemapper = lvm2;
+  devicemapper = self.lvm2;
 
   disk_indicator = callPackage ../os-specific/linux/disk-indicator { };
 
