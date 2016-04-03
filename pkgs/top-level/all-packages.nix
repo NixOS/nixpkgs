@@ -11955,10 +11955,10 @@ in
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs24;
-  emacsPackages = emacs24Packages;
-  emacsPackagesNg = emacs24PackagesNg;
-  emacsMelpa = emacs24PackagesNg; # for backward compatibility
+  emacs = self.emacs24;
+  emacsPackages = self.emacs24Packages;
+  emacsPackagesNg = self.emacs24PackagesNg;
+  emacsMelpa = self.emacs24PackagesNg; # for backward compatibility
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to enable additional features
@@ -11972,7 +11972,7 @@ in
     inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   };
 
-  emacs24-nox = lowPrio (appendToName "nox" (emacs24.override {
+  emacs24-nox = lowPrio (appendToName "nox" (self.emacs24.override {
     withX = false;
     withGTK2 = false;
     withGTK3 = false;
