@@ -11901,7 +11901,7 @@ in
 
   dmenu2 = callPackage ../applications/misc/dmenu2 { };
 
-  dmtx = dmtx-utils;
+  dmtx = self.dmtx-utils;
 
   dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
   };
