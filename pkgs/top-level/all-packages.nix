@@ -2919,7 +2919,7 @@ in
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pythonDBus = dbus_python;
+  pythonDBus = self.dbus_python;
 
   pythonIRClib = pythonPackages.pythonIRClib;
 
@@ -6560,7 +6560,7 @@ in
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
-  dbus_python     = pythonPackages.dbus;
+  dbus_python     = self.pythonPackages.dbus;
 
   dbus-sharp-1_0 = callPackage ../development/libraries/dbus-sharp/dbus-sharp-1.0.nix { };
   dbus-sharp-2_0 = callPackage ../development/libraries/dbus-sharp { };
@@ -6569,9 +6569,9 @@ in
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = pkgs.dbus.tools;
-  dbus_libs = pkgs.dbus.libs;
-  dbus_daemon = pkgs.dbus.daemon;
+  dbus_tools = self.dbus.tools;
+  dbus_libs = self.dbus.libs;
+  dbus_daemon = self.dbus.daemon;
 
   dee = callPackage ../development/libraries/dee { };
 
