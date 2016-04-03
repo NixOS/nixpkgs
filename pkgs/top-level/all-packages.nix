@@ -8480,6 +8480,9 @@ in
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
     mysql = if (!stdenv.isFreeBSD) then mysql else null;
+
+    # Workaround for #14234
+    stdenv = if system == "i686-linux" then clangStdenv else stdenv;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -13650,11 +13653,7 @@ in
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
-    qt4 = pkgsi686Linux.qt4.override {
-      stdenv = pkgsi686Linux.clangStdenv;
-    };
-  };
+  skype = callPackage_i686 ../applications/networking/instant-messengers/skype { };
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
 
