@@ -11903,8 +11903,7 @@ in
 
   dmtx = self.dmtx-utils;
 
-  dmtx-utils = callPackage (callPackage ../tools/graphics/dmtx-utils) {
-  };
+  dmtx-utils = callPackage ../tools/graphics/dmtx-utils { };
 
   docker = callPackage ../applications/virtualization/docker {
     btrfs-progs = btrfs-progs_4_4_1;
