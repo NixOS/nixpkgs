@@ -12340,15 +12340,15 @@ in
     enableGTK3 = false;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
-  firefox = wrapFirefox firefox-unwrapped { };
-  firefox-esr = wrapFirefox firefox-esr-unwrapped { };
+  firefox = self.wrapFirefox firefox-unwrapped { };
+  firefox-esr = self.wrapFirefox firefox-esr-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
   };
 
-  firefox-bin = wrapFirefox firefox-bin-unwrapped {
+  firefox-bin = self.wrapFirefox firefox-bin-unwrapped {
     browserName = "firefox";
     name = "firefox-bin-" +
       (builtins.parseDrvName firefox-bin-unwrapped.name).version;
