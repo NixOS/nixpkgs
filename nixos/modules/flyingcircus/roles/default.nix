@@ -19,6 +19,7 @@ in
      ./dovecot.nix
      ./generic.nix
      ./haproxy.nix
+     ./mailserver.nix
      ./mongodb.nix
      ./mysql.nix
      ./nginx.nix
