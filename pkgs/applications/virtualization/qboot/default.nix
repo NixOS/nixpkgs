@@ -12,7 +12,9 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp bios.bin* $out/.
-    '';
+  '';
+
+  hardeningDisable = [ "stackprotector" "pic" ];
 
   meta = {
     description = "A simple x86 firmware for booting Linux";
