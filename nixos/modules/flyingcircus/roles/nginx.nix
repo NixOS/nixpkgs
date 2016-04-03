@@ -128,7 +128,7 @@ in
 
     system.activationScripts.nginx = ''
       install -d -o ${toString config.ids.uids.nginx} /var/log/nginx
-      install -d -o ${toString config.ids.uids.nginx} /etc/local/nginx
+      install -d -o ${toString config.ids.uids.nginx} -g service -m 02775 /etc/local/nginx
     '';
 
     environment.etc = {

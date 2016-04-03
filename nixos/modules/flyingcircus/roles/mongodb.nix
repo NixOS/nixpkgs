@@ -46,7 +46,7 @@ in
     };
     system.activationScripts.flyingcircus_mongodb = ''
       install -d -o ${toString config.ids.uids.mongodb} /srv/mongodb
-      install -d -o ${toString config.ids.uids.mongodb} -g service /etc/local/mongodb
+      install -d -o ${toString config.ids.uids.mongodb} -g service -m 02775 /etc/local/mongodb
     '';
     security.sudo.extraConfig = ''
       # Service users may switch to the mongodb system user

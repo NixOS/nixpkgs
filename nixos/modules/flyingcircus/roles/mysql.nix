@@ -139,7 +139,7 @@ in
             # * set password
             # * write password to /etc/mysql/mysql.passwd
             # * create initial /root/.my.cnf if none exists
-            install -d -o mysql -g service /etc/local/mysql/
+            install -d -o mysql -g service  -m 02775 /etc/local/mysql/
 
             umask 0066
             if [[ ! -f ${root_password_file} ]]; then

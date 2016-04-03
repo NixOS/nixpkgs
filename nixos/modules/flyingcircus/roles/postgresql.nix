@@ -114,7 +114,7 @@ in
     };
     system.activationScripts.flyingcircus_postgresql = ''
       install -d -o ${toString config.ids.uids.postgres} /srv/postgresql
-      install -d -o ${toString config.ids.uids.postgres} -g service /etc/local/postgresql/${version}
+      install -d -o ${toString config.ids.uids.postgres} -g service  -m 02775 /etc/local/postgresql/${version}
     '';
     security.sudo.extraConfig = ''
       # Service users may switch to the postgres system user
