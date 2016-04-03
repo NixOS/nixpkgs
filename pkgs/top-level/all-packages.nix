@@ -700,7 +700,7 @@ in
 
   deis = goPackages.deis.bin // { outputs = [ "bin" ]; };
 
-  dfilemanager = kde5.dfilemanager;
+  dfilemanager = self.kde5.dfilemanager;
 
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
