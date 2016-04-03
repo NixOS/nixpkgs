@@ -14896,11 +14896,14 @@ in
   stockfish = callPackage ../games/stockfish { };
 
   steamPackages = callPackage ../games/steam { };
+
   steam = steamPackages.steam-chrootenv.override {
     # DEPRECATED
     withJava = config.steam.java or false;
     withPrimus = config.steam.primus or false;
   };
+
+  steam-run = steam.run;
 
   stepmania = callPackage ../games/stepmania { };
 
