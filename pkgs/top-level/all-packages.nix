@@ -6730,7 +6730,7 @@ in
 
   funambol = callPackage ../development/libraries/funambol { };
 
-  fam = gamin;
+  fam = self.gamin;
 
   gamin = callPackage ../development/libraries/gamin { };
 
