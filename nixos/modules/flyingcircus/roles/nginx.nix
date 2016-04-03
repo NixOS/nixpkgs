@@ -238,12 +238,14 @@ in
             }
         }
         '';
-      } //
-      (if cfg.compat.gentoo.enable
-       then {
-        "nginx/local".source = /etc/local/nginx;
-        "nginx/fastcgi_params".source = /etc/local/nginx/fastcgi_params;
-      }
-      else {});
+      "nginx/local" = {
+        source = /etc/local/nginx;
+        enable = cfg.compat.gentoo.enable;
+      };
+      "nginx/fastcgi_params" = {
+        source = /etc/local/nginx/fastcgi_params;
+        enable = cfg.compat.gentoo.enable;
+      };
     };
-  }
+  };
+}
