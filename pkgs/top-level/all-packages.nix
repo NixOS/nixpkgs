@@ -14629,10 +14629,8 @@ in
   duckmarines = callPackage ../games/duckmarines { love = love_0_9; };
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
-
-  dwarf-fortress = self.dwarf-fortress-packages.dwarf-fortress;
-
-  dwarf-therapist = self.dwarf-fortress-packages.dwarf-therapist;
+  inherit (self.dwarf-fortress-packages)
+    dwarf-fortress dwarf-therapist;
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
