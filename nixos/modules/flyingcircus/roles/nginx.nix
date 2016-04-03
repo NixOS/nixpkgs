@@ -132,6 +132,16 @@ in
     '';
 
     environment.etc = {
+
+      "local/nginx/README.txt".text = ''
+        Nginx is enabled on this machine.
+
+        Put your site configuration into this directory as `*.conf`. You may
+        add other files, like SSL keys, as well.
+
+        There is an `example-configuration` here.
+      '';
+
       "local/nginx/fastcgi_params".text = ''
         fastcgi_param  QUERY_STRING       $query_string;
         fastcgi_param  REQUEST_METHOD     $request_method;
