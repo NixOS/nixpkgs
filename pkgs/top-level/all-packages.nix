@@ -5897,7 +5897,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  doxygen_gui = lowPrio (doxygen.override { inherit qt4; });
+  doxygen_gui = lowPrio (self.doxygen.override { inherit qt4; });
 
   drush = callPackage ../development/tools/misc/drush { };
 
