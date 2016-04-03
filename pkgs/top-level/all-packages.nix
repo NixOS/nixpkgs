@@ -15985,7 +15985,7 @@ in
 
   fakenes = callPackage ../misc/emulators/fakenes { };
 
-  faust = faust2;
+  faust = self.faust2;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
