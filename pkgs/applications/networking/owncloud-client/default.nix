@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, qt4, pkgconfig, neon, qtkeychain, sqlite }:
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, qtkeychain, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "owncloud-client" + "-" + version;
 
-  version = "1.7.1";
+  version = "2.1.1";
 
   src = fetchurl {
-    url = "https://download.owncloud.com/desktop/stable/mirall-${version}.tar.bz2";
-    sha256 = "0n9gv97jqval7xjyix2lkywvmvvfv052s0bd1i8kybdl9rwca6yf";
+    url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
+    sha256 = "4e7cfeb72ec565392e7968f352c4a7f0ef2988cc577ebdfd668a3887d320b1cb";
   };
 
   buildInputs =
-    [ cmake qt4 pkgconfig neon qtkeychain sqlite];
+    [ cmake qt4 pkgconfig qtkeychain sqlite];
 
   #configurePhase = ''
   #  mkdir build
