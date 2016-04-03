@@ -60,7 +60,9 @@ let
       (min [64 (shared_buffers / 32)])
       1];
 
-  listen_addresses = fclib.listenAddresses config "ethsrv";
+  listen_addresses =
+    fclib.listenAddresses config "lo" ++
+    fclib.listenAddresses config "ethsrv";
 
   # I hate you nix. /a/path in nix is obviously different from the string
   # "/a/path". Like the former puts the path into the store. But how do I get

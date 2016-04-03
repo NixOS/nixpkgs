@@ -4,7 +4,9 @@ let
   cfg = config.flyingcircus;
   fclib = import ../lib;
 
-  listen_addresses = fclib.listenAddresses config "ethsrv";
+  listen_addresses =
+    fclib.listenAddresses config "lo" ++
+    fclib.listenAddresses config "ethsrv";
 
   local_config_path = /etc/local/mongodb/mongodb.conf;
 
