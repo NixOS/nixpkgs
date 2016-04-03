@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter [
+  <!ENTITY ndash "&#x2013;"> <!-- @vcunat likes to use this one ;-) -->
+]>
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-multiple-output">
+
+<title>Multiple-output packages</title>
+
+<section><title>Introduction</title>
+  <para>The Nix language allows a derivation to produce multiple outputs, which is similar to what is utilized by other Linux distribution packaging systems.  The outputs reside in separate nix store paths, so they can be mostly handled independently of each other, including passing to build inputs, garbage collection or binary substitution.  The exception is that building from source always produces all the outputs.</para>
+  <para>The main motivation is to save disk space by reducing runtime closure sizes; consequently also sizes of substituted binaries get reduced.  Splitting can be used to have more granular runtime dependencies, for example the typical reduction is to split away development-only files, as those are typically not needed during runtime.  As a result, closure sizes of many packages can get reduced to a half or even much less.</para>
+  <note><para>Similarly to other packaging systems, the reduction effects could be instead achieved by building the parts in completely separate derivations.  That would often additionally reduce build-time closures, but it would be much harder to write such derivations, due to build systems assuming all parts are being built at once.</para></note>
+</section>
+
+<section><title>Installing a split package</title>
+  <para>When installing a package via <varname>systemPackages</varname> or <command>nix-env</command> you have several options:</para>
+  <warning><para>Currently <command>nix-env</command> almost always installs all outputs until https://github.com/NixOS/nix/pull/815 gets merged.</para></warning>
+  <itemizedlist>
+    <listitem><para>You can install particular outputs explicitly, as each is available in the Nix language as an attribute of the package.  The <varname>outputs</varname> attribute contains a list of output names.</para></listitem>
+    <listitem><para>You can let it use the default outputs.  These are handled by <varname>meta.outputsToInstall</varname> attribute that contains a list of output names.</para>
+      <para>TODO: more about tweaking the attribute, etc.</para></listitem>
+    <listitem><para>NixOS provides configuration option <varname>environment.extraOutputsToInstall</varname> that allows adding extra outputs of <varname>environment.systemPackages</varname> atop the default ones.  It's mainly meant for documentation and debug symbols, and it's also modified by specific options.</para>
+      <note><para>At this moment there is no similar configurability for packages installed by <command>nix-env</command>.  You can still use approach from <xref linkend="sec-modify-via-packageOverrides" /> to override <varname>meta.outputsToInstall</varname> attributes, but that's a rather inconvenient way.</para></note>
+    </listitem>
+  </itemizedlist>
+</section>
+
+<section><title>Using a split package</title>
+  <para>In the Nix language the individual outputs can be reached explicitly as attributes, e.g. <varname>coreutils.info</varname>, but the typical case is just using packages as build inputs.</para>
+  <para>When a multiple-output derivation gets into a build input of another derivation, the first output is added (<varname>.dev</varname> by convention) and also <varname>propagatedBuildOutputs</varname> of that package which by default contain <varname>$outputBin</varname> and <varname>$outputLib</varname>. (See <xref linkend="multiple-output-file-type-groups" />.)</para>
+</section>
+
+
+<section><title>Writing a split derivation</title>
+  <para>Here you find how to write a derivation that produces multiple outputs.</para>
+  <para>In nixpkgs there is a framework supporting multiple-output derivations. It tries to cover most cases by default behavior.  You can find the source separated in &lt;<filename>nixpkgs/pkgs/build-support/setup-hooks/multiple-outputs.sh</filename>&gt;; it's relatively well-readable.  The whole machinery is triggered by defining the <varname>outputs</varname> attribute to contain the list of desired output names (strings).</para>
+  <programlisting>outputs = [ "dev" "out" "bin" "doc" ];</programlisting>
+  <para>Often such a single line is enough.  For each output an equally named environment variable is passed to the builder and contains the path in nix store for that output.  By convention, the first output should usually be <varname>dev</varname>; typically you also want to have the main <varname>out</varname> output, as it catches any files that didn't get elsewhere.</para>
+
+  <note><para>There is a special handling of the <varname>debug</varname> output, described at <xref linkend="stdenv-separateDebugInfo" />.</para></note>
+
+  <section xml:id="multiple-output-file-type-groups">
+    <title>File type groups</title>
+    <para>The support code currently recognizes some particular kinds of outputs and either instructs the build system of the package to put files into their desired outputs or it moves the files during the fixup phase.  Each group of file types has an <varname>outputFoo</varname> variable specifying the output name where they should go.  If that variable isn't defined by the derivation writer, it is guessed &ndash; a default output name is defined, falling back to other possibilities if the output isn't defined.</para>
+    <variablelist>
+      <varlistentry><term><varname>
+         $outputDev</varname></term><listitem><para>
+         is for development-only files. These include C(++) headers, pkg-config, cmake and aclocal files.  They go to <varname>dev</varname> or <varname>out</varname> by default.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputBin</varname></term><listitem><para>
+        is meant for user-facing binaries, typically residing in bin/.  They go to <varname>bin</varname> or <varname>out</varname> by default.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputLib</varname></term><listitem><para>
+        is meant for libraries, typically residing in <filename>lib/</filename> and <filename>libexec/</filename>.  They go to <varname>lib</varname> or <varname>out</varname> by default.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputDoc</varname></term><listitem><para>
+        is for user documentation, typically residing in <filename>share/doc/</filename>.  It goes to <varname>doc</varname> or <varname>out</varname> by default.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputDocdev</varname></term><listitem><para>
+        is for <emphasis>developer</emphasis> documentation.  Currently we count gtk-doc and man3 pages in there.  It goes to <varname>docdev</varname> or is removed (!) by default.  This is because e.g. gtk-doc tends to be rather large and completely unused by nixpkgs users.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputMan</varname></term><listitem><para>
+        is for man pages (except for section 3). They go to <varname>man</varname> or <varname>doc</varname> or <varname>$outputBin</varname> by default.
+        </para></listitem></varlistentry>
+      <varlistentry><term><varname>
+        $outputInfo</varname></term><listitem><para>
+        is for info pages. They go to <varname>info</varname> or <varname>doc</varname> or <varname>$outputMan</varname> by default.
+        </para></listitem></varlistentry>
+    </variablelist>
+  </section>
+
+  <section><title>Common caveats</title>
+    <itemizedlist>
+      <listitem><para>Some configure scripts don't like some of the parameters passed by default by the framework, e.g. <literal>--docdir=/foo/bar</literal>.  You can disable this by setting <literal>setOutputFlags = false;</literal>.</para></listitem>
+      <listitem><para>The outputs of a single derivation can retain references to each other, but note that circular references are not allowed.  (And each strongly-connected component would act as a single output anyway.)</para></listitem>
+      <listitem><para>Most of split packages contain their core functionality in libraries.  These libraries tend to refer to various kind of data that typically gets into <varname>out</varname>, e.g. locale strings, so there is often no advantage in separating the libraries into <varname>lib</varname>, as keeping them in <varname>out</varname> is easier.</para></listitem>
+      <listitem><para>Some packages have hidden assumptions on install paths, which complicates splitting.</para></listitem>
+    </itemizedlist>
+  </section>
+
+</section><!--Writing a split derivation-->
+
+</chapter>
+

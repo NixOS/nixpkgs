@@ -956,7 +956,7 @@ following:
     phase.</para></listitem>
   </varlistentry>
 
-  <varlistentry>
+  <varlistentry xml:id="stdenv-separateDebugInfo">
     <term><varname>separateDebugInfo</varname></term>
     <listitem><para>If set to <literal>true</literal>, the standard
     environment will enable debug information in C/C++ builds. After
