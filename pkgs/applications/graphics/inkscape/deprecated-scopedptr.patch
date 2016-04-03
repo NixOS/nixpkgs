@@ -1,0 +1,16 @@
+glibmm deprecated ScopedPtr
+---
+diff -u src/ui/clipboard.cpp src/ui/clipboard.cpp
+--- a/src/ui/clipboard.cpp	2015-01-28 04:32:28.162676000 +0100
++++ b/src/ui/clipboard.cpp	2016-04-03 09:13:12.360980533 +0200
+@@ -1402,7 +1402,7 @@
+ 
+         Glib::ustring target;
+         if (atom_name) {
+-            target = Glib::ScopedPtr<char>(atom_name).get(); //This frees the gchar*.
++            target = Glib::make_unique_ptr_gfree(atom_name).get(); //This frees the gchar*.
+         }
+ 
+         listTargets.push_back(target);
+
+Diff finished.  Sun Apr  3 09:13:51 2016

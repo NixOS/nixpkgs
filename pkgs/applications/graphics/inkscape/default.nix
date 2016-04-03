@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "06ql3x732x2rlnanv0a8aharsnj91j5kplksg574090rks51z42d";
   };
 
+  patches = [ ./deprecated-scopedptr.patch ];
+
   postPatch = ''
     patchShebangs share/extensions
   ''
