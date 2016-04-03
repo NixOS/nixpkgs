@@ -9511,7 +9511,7 @@ in
     java = jdk;
   };
 
-  fuseki = apache-jena-fuseki;
+  fuseki = self.apache-jena-fuseki;
 
   apcupsd = callPackage ../servers/apcupsd { };
 
