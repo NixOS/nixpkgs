@@ -249,7 +249,6 @@ let
         calendarSupport = config.php.calendar or true;
       };
 
-      hardeningEnable = [ "pie" ];
       hardeningDisable = [ "bindnow" ];
 
       configurePhase = ''
