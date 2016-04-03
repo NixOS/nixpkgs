@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x4b6x40ymbaamqqq9p97lc0mnah4q7bza04fjs35c8agpm19zir";
   };
 
+  configureFlagsArray = [ "CFLAGS=-ansi" ];
+
   buildInputs = [ boost ];
 
   enableParallelBuilding = true;
