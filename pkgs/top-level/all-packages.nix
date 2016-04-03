@@ -14630,7 +14630,7 @@ in
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
-  dwarf-fortress = self.dwarf-fortress-packages.dwarf-fortress.override { };
+  dwarf-fortress = self.dwarf-fortress-packages.dwarf-fortress;
 
   dwarf-therapist = self.dwarf-fortress-packages.dwarf-therapist;
 
