@@ -3,8 +3,8 @@
 let
     cfg = config.flyingcircus;
 
-    localConfig = if pathExists /etc/nginx/local
-                  then "include ${/etc/nginx/local}/*.conf;"
+    localConfig = if pathExists /etc/local/nginx
+                  then "include ${/etc/local/nginx}/*.conf;"
                   else "";
 
     baseConfig =
@@ -127,22 +127,11 @@ in
 
         system.activationScripts.nginx = ''
             install -d -o ${toString config.ids.uids.nginx} /var/log/nginx
+            install -d -o ${toString config.ids.uids.nginx} /etc/local/nginx
         '';
 
-        jobs.fcio-stubs-nginx = mkIf config.flyingcircus.compat.gentoo.enable {
-            description = "Create FC IO stubs for nginx";
-            task = true;
-            startOn = "started networking";
-            script = ''
-              install -d -o vagrant /etc/nginx/local
-            '';
-        };
-
-
-      environment.etc =
-        if cfg.compat.gentoo.enable
-        then {
-            "nginx/fastcgi_params".text = ''
+        environment.etc = {
+            "local/nginx/fastcgi_params".text = ''
                 fastcgi_param  QUERY_STRING       $query_string;
                 fastcgi_param  REQUEST_METHOD     $request_method;
                 fastcgi_param  CONTENT_TYPE       $content_type;
@@ -167,7 +156,12 @@ in
                 # PHP only, required if PHP was built with --enable-force-cgi-redirect
                 fastcgi_param  REDIRECT_STATUS    200;
               '';
+        } //
+        (if cfg.compat.gentoo.enable
+        then {
+            "nginx/local".source = /etc/local/nginx;
+            "nginx/fastcgi_params".source = /etc/local/nginx/fastcgi_params;
           }
-        else {};
+        else {});
     };
 }
