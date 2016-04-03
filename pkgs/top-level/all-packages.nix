@@ -10222,7 +10222,7 @@ in
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
-  eject = utillinux;
+  eject = self.utillinux;
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
 
