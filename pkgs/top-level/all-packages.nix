@@ -325,6 +325,8 @@ in
 
   separateDebugInfo = makeSetupHook { } ../build-support/setup-hooks/separate-debug-info.sh;
 
+  useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
+
 
   ### TOOLS
 
@@ -1061,6 +1063,7 @@ in
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       inherit (pythonPackages) gyp;
+      protobuf = protobuf.override { stdenv = clangStdenv; };
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1181,9 +1184,7 @@ in
 
   darkstat = callPackage ../tools/networking/darkstat { };
 
-  davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon_0_29;
-  };
+  davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -1422,6 +1423,7 @@ in
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
       inherit (pythonPackages) gyp;
+      protobuf = protobuf.override { stdenv = clangStdenv; };
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -1743,6 +1745,8 @@ in
   grive = callPackage ../tools/filesystems/grive {
     json_c = json-c-0-11; # won't configure with 0.12; others are vulnerable
   };
+
+  grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
@@ -2933,6 +2937,11 @@ in
     qt = qt4;
   };
 
+  qgifer = callPackage ../applications/video/qgifer {
+    giflib = giflib_4_1;
+    qt = qt4;
+  };
+
   qhull = callPackage ../development/libraries/qhull { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
@@ -3772,6 +3781,8 @@ in
 
   xdummy = callPackage ../tools/misc/xdummy { };
 
+  xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
+
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
@@ -3905,14 +3916,7 @@ in
 
   ### DEVELOPMENT / COMPILERS
 
-  abc =
-    abcPatchable [];
-
-  abcPatchable = patches :
-    callPackage ../development/compilers/abc/default.nix {
-      inherit patches;
-      javaCup = callPackage ../development/libraries/java/cup { };
-    };
+  abc = callPackage ../development/compilers/abc/default.nix { };
 
   aldor = callPackage ../development/compilers/aldor { };
 
@@ -5190,10 +5194,21 @@ in
 
   erlangR16 = callPackage ../development/interpreters/erlang/R16.nix { };
   erlangR16_odbc = callPackage ../development/interpreters/erlang/R16.nix { odbcSupport = true; };
-  erlangR17 = callPackage ../development/interpreters/erlang/R17.nix { };
-  erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix { odbcSupport = true; };
-  erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; };
-  erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix { javacSupport = true; odbcSupport = true; };
+  erlangR17 = callPackage ../development/interpreters/erlang/R17.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+  erlangR17_odbc = callPackage ../development/interpreters/erlang/R17.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
+  erlangR17_javac = callPackage ../development/interpreters/erlang/R17.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    javacSupport = true;
+  };
+  erlangR17_odbc_javac = callPackage ../development/interpreters/erlang/R17.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    javacSupport = true; odbcSupport = true;
+  };
   erlangR18 = callPackage ../development/interpreters/erlang/R18.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
@@ -8864,6 +8879,10 @@ in
     gnutls = gnutls;
   });
 
+  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
   };
@@ -9579,6 +9598,8 @@ in
 
   meteor = callPackage ../servers/meteor/default.nix { };
 
+  mfi = callPackage ../servers/mfi { };
+
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
   mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
@@ -9695,6 +9716,8 @@ in
   mongodb = callPackage ../servers/nosql/mongodb {
     sasl = cyrus_sasl;
   };
+
+  mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
@@ -13591,7 +13614,7 @@ in
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     qt4 = pkgsi686Linux.qt4.override {
-      stdenv = clangStdenv;
+      stdenv = pkgsi686Linux.clangStdenv;
     };
   };
 
@@ -13869,6 +13892,8 @@ in
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid { };
 
+  timewarrior = callPackage ../applications/misc/timewarrior { };
+
   timidity = callPackage ../tools/misc/timidity { };
 
   tint2 = callPackage ../applications/misc/tint2 { };
@@ -14042,6 +14067,7 @@ in
   };
 
   primus = callPackage ../tools/X11/primus {
+    stdenv_i686 = pkgsi686Linux.stdenv;
     primusLib_i686 = if system == "x86_64-linux"
       then pkgsi686Linux.primusLib
       else null;
@@ -15436,12 +15462,10 @@ in
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
-  openblas_2_14 = callPackage ../development/libraries/science/math/openblas/0.2.14.nix { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
-  openblasCompat_2_14 = openblas_2_14.override { blas64 = false; };
 
   openlibm = callPackage ../development/libraries/science/math/openlibm {};
 
@@ -15461,6 +15485,15 @@ in
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
+
+  lammps = callPackage ../applications/science/molecular-dynamics/lammps {
+    fftw = fftw;
+  };
+
+  lammps-mpi = appendToName "mpi" (lammps.override {
+    mpiSupport = true;
+    mpi = openmpi;
+  });
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
@@ -15713,7 +15746,7 @@ in
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
-    wxGTK = wxGTK29;
+    wxGTK = wxGTK30;
   };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };

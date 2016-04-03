@@ -1,18 +1,20 @@
 { stdenv, fetchurl, neon, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.4.7";
+  name = "davfs2-1.5.2";
 
   src = fetchurl {
     url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "0i7hrwlfzisb4l2mza1kjj9q9xxixggjplsjm339zl7828mfxh2h";
+    sha256 = "0n5k2xxfxmbsavg5fhp65lmy30hq9jg3w242rdzafvksnnda2d5y";
   };
 
   buildInputs = [ neon zlib ];
 
-  patches = [ ./davfs2-install.patch ./isdir.patch ./fix-sysconfdir.patch ];
+  patches = [ ./isdir.patch ./fix-sysconfdir.patch ];
 
   configureFlags = "--sysconfdir=/etc";
+
+  makeFlags = ["sbindir=$(out)/sbin" "ssbindir=$(out)/sbin"];
 
   meta = {
     homepage = "http://savannah.nongnu.org/projects/davfs2";

@@ -41,7 +41,9 @@ stdenv.mkDerivation rec {
     '';
 
   patches =
-    [ ./locale_archive.patch ]
+    [ ./locale_archive.patch
+      ./fix-host-key-algorithms-plus.patch
+    ]
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]

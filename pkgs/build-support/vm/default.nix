@@ -414,12 +414,12 @@ rec {
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name preInstall postInstall rpms;
-      memSize = 512;
+      inherit name preInstall postInstall rpms QEMU_OPTS memSize;
       preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
@@ -685,10 +685,11 @@ rec {
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir;
+      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir QEMU_OPTS memSize;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;

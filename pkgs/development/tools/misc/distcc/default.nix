@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk, runCommand, gcc, autoconf, automake, which, procps
+{ stdenv, fetchFromGitHub, popt, avahi, pkgconfig, python, gtk, runCommand
+, gcc, autoconf, automake, which, procps, libiberty_static
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
 }:
@@ -15,7 +16,7 @@ let
       sha256 = "1vj31wcdas8wy52hy6749mlrca9v6ynycdiigx5ay8pnya9z73c6";
     };
 
-    buildInputs = [popt avahi pkgconfig python gtk autoconf automake pkgconfig which procps];
+    buildInputs = [popt avahi pkgconfig python gtk autoconf automake pkgconfig which procps libiberty_static];
     preConfigure =
     ''
       export CPATH=$(ls -d ${gcc.cc}/lib/gcc/*/${gcc.cc.version}/plugin/include)
