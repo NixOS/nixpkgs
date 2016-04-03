@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share ];
+  propagatedBuildInputs = [ cairo ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";
