@@ -14137,6 +14137,10 @@ in
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
+  vscode = callPackage ../applications/editors/vscode {
+    gconf = pkgs.gnome.GConf;
+  };
+
   vue = callPackage ../applications/misc/vue { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
