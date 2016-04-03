@@ -80,6 +80,14 @@ with lib;
       '';
     };
 
+    default = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Makes this vhost the default.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
