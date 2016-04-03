@@ -15972,7 +15972,7 @@ in
     enableAllFeatures = false;
   };
 
-  dblatexFull = appendToName "full" (dblatex.override {
+  dblatexFull = appendToName "full" (self.dblatex.override {
     enableAllFeatures = true;
   });
 
