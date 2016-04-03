@@ -14630,9 +14630,9 @@ in
 
   dwarf-fortress-packages = recurseIntoAttrs (callPackage ../games/dwarf-fortress { });
 
-  dwarf-fortress = dwarf-fortress-packages.dwarf-fortress.override { };
+  dwarf-fortress = self.dwarf-fortress-packages.dwarf-fortress.override { };
 
-  dwarf-therapist = dwarf-fortress-packages.dwarf-therapist;
+  dwarf-therapist = self.dwarf-fortress-packages.dwarf-therapist;
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
