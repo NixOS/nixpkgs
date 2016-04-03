@@ -11227,9 +11227,9 @@ in
     docbook_xsl
     docbook_xsl_ns;
 
-  docbook_xml_xslt = docbook_xsl;
+  docbook_xml_xslt = self.docbook_xsl;
 
-  docbook5_xsl = docbook_xsl_ns;
+  docbook5_xsl = self.docbook_xsl_ns;
 
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
