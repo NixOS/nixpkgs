@@ -40,6 +40,13 @@ in
     ${local_config}
     '';
 
+  systemd.services.mongodb.preStart = ''
+      echo never > /sys/kernel/mm/transparent_hugepage/defrag
+  '';
+  systemd.services.mongodb.postStop = ''
+      echo always > /sys/kernel/mm/transparent_hugepage/defrag
+  '';
+
     users.users.mongodb = {
       shell = "/run/current-system/sw/bin/bash";
       home = "/srv/mongodb";
