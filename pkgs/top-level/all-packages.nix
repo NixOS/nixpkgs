@@ -8477,7 +8477,7 @@ in
     libpng = libpng12;
   };
 
-  qt4 = pkgs.kde4.qt4;
+  qt4 = self.kde4.qt4;
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
@@ -15091,7 +15091,7 @@ in
 
   kakasi = callPackage ../tools/text/kakasi { };
 
-  kde4 = recurseIntoAttrs pkgs.kde414;
+  kde4 = recurseIntoAttrs self.kde414;
 
   kde414 =
     kdePackagesFor
@@ -16340,7 +16340,7 @@ in
   };
   vimprobable2 = wrapFirefox vimprobable2-unwrapped { };
 
-  inherit (kde4) rekonq;
+  inherit (self.kde4) rekonq;
 
   vimb-unwrapped = callPackage ../applications/networking/browsers/vimb {
     webkit = webkitgtk2;
