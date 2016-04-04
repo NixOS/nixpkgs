@@ -4378,44 +4378,44 @@ in
         bootjdk = callPackage ../development/compilers/openjdk/bootstrap.nix { version = "8"; };
       };
 
-  openjdk = if stdenv.isDarwin then openjdk7 else openjdk8;
+  openjdk = if stdenv.isDarwin then self.openjdk7 else self.openjdk8;
 
-  jdk7 = openjdk7 // { outputs = [ "out" ]; };
-  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (openjdk7.jre // { outputs = [ "jre" ]; });
+  jdk7 = self.openjdk7 // { outputs = [ "out" ]; };
+  jre7 = lib.setName "openjre-${lib.getVersion pkgs.openjdk7.jre}" (self.openjdk7.jre // { outputs = [ "jre" ]; });
 
-  jdk8 = openjdk8 // { outputs = [ "out" ]; };
-  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (openjdk8.jre // { outputs = [ "jre" ]; });
+  jdk8 = self.openjdk8 // { outputs = [ "out" ]; };
+  jre8 = lib.setName "openjre-${lib.getVersion pkgs.openjdk8.jre}" (self.openjdk8.jre // { outputs = [ "jre" ]; });
 
-  jdk = if stdenv.isDarwin then jdk7 else jdk8;
-  jre = if stdenv.isDarwin then jre7 else jre8;
+  jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
+  jre = if stdenv.isDarwin then self.jre7 else self.jre8;
 
-  oraclejdk = pkgs.jdkdistro true false;
+  oraclejdk = self.jdkdistro true false;
 
-  oraclejdk7 = pkgs.oraclejdk7distro true false;
+  oraclejdk7 = self.oraclejdk7distro true false;
 
-  oraclejdk7psu = pkgs.oraclejdk7psu_distro true false;
+  oraclejdk7psu = self.oraclejdk7psu_distro true false;
 
-  oraclejdk8 = pkgs.oraclejdk8distro true false;
+  oraclejdk8 = self.oraclejdk8distro true false;
 
-  oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
+  oraclejdk8psu = self.oraclejdk8psu_distro true false;
 
-  oraclejre = lowPrio (pkgs.jdkdistro false false);
+  oraclejre = lowPrio (self.jdkdistro false false);
 
-  oraclejre7 = lowPrio (pkgs.oraclejdk7distro false false);
+  oraclejre7 = lowPrio (self.oraclejdk7distro false false);
 
-  oraclejre7psu = lowPrio (pkgs.oraclejdk7psu_distro false false);
+  oraclejre7psu = lowPrio (self.oraclejdk7psu_distro false false);
 
-  oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
+  oraclejre8 = lowPrio (self.oraclejdk8distro false false);
 
-  oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
+  oraclejre8psu = lowPrio (self.oraclejdk8psu_distro false false);
 
-  jrePlugin = jre8Plugin;
+  jrePlugin = self.jre8Plugin;
 
-  jre6Plugin = lowPrio (pkgs.jdkdistro false true);
+  jre6Plugin = lowPrio (self.jdkdistro false true);
 
-  jre7Plugin = lowPrio (pkgs.oraclejdk7distro false true);
+  jre7Plugin = lowPrio (self.oraclejdk7distro false true);
 
-  jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
+  jre8Plugin = lowPrio (self.oraclejdk8distro false true);
 
   supportsJDK =
     system == "i686-linux" ||
