@@ -3,7 +3,7 @@
 with lib;
 {
   config = mkIf (config.i18n.inputMethod.enabled == "nabi") {
-    environment.systemPackages = [ pkgs.nabi ];
+    i18n.inputMethod.package = pkgs.nabi;
 
     environment.variables = {
       GTK_IM_MODULE = "nabi";
