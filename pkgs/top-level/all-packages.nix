@@ -10059,9 +10059,8 @@ in
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
-  apparmor = callPackage ../os-specific/linux/apparmor { swig = swig2; };
-  inherit (self.apparmor) libapparmor apparmor-pam apparmor-parser
-    apparmor-profiles apparmor-utils;
+  inherit (callPackages ../os-specific/linux/apparmor { swig = swig2; })
+    libapparmor apparmor-pam apparmor-parser apparmor-profiles apparmor-utils;
 
   atop = callPackage ../os-specific/linux/atop { };
 
