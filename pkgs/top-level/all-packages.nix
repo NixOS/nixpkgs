@@ -7035,7 +7035,7 @@ in
               libgnomeprintui GConf gnomepanel;
   };
 
-  gtk-sharp = gtk-sharp-2_0;
+  gtk-sharp = self.gtk-sharp-2_0;
 
   gtk-sharp-beans = callPackage ../development/libraries/gtk-sharp-beans { };
 
