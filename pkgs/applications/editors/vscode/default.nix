@@ -42,8 +42,8 @@ in
     '';
 
     buildPhase  = ''
-      # INSTALL COMPILE- & RUN-TIME DEPENDENCIES
-      echo "INSTALL COMPILE- & RUN-TIME DEPENDENCIES"
+      # BUILD COMPILE- & RUN-TIME DEPENDENCIES
+      echo "BUILD COMPILE- & RUN-TIME DEPENDENCIES"
       mkdir -p ./tmp
       HOME=./tmp ./scripts/npm.sh install
 
@@ -60,6 +60,10 @@ in
     '';
 
     installPhase = ''
+      # PRUNE COMPILE-TIME DEPENDENCIES
+      echo "PRUNE COMPILE-TIME DEPENDENCIES"
+      npm prune --production
+
       # COPY FILES NEEDED FOR RUNNING APPLICATION TO OUT DIRECTORY
       echo "COPY FILES NEEDED FOR RUNNING APPLICATION TO OUT DIRECTORY"
       mkdir -p "$out"
