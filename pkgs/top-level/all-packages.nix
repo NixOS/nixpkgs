@@ -6746,7 +6746,7 @@ in
 
   gecode_3 = callPackage ../development/libraries/gecode/3.nix { };
   gecode_4 = callPackage ../development/libraries/gecode { };
-  gecode = gecode_4;
+  gecode = self.gecode_4;
 
   gegl = callPackage ../development/libraries/gegl { };
 
