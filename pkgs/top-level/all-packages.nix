@@ -10256,7 +10256,7 @@ in
     ncurses = null;  # Keep curses disabled for lack of value
   };
 
-  gpm-ncurses = gpm.override { inherit ncurses; };
+  gpm-ncurses = self.gpm.override { inherit ncurses; };
 
   gradm = callPackage ../os-specific/linux/gradm {
     flex = flex_2_5_35;
