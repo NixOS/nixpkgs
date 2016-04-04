@@ -50,5 +50,7 @@ fi
 
 enableParallelBuilding=1
 
+# breaks module loading
+hardeningDisable="bindnow"
 
 genericBuild
