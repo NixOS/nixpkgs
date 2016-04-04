@@ -48,13 +48,13 @@ let
 
     # certificates
     ${if needToCreateCA then ''
-    ca.cert = ${cfg.dataDir}/keys/ca.cert
-    server.cert = ${cfg.dataDir}/keys/server.cert
-    server.key = ${cfg.dataDir}/keys/server.key
+      ca.cert = ${cfg.dataDir}/keys/ca.cert
+      server.cert = ${cfg.dataDir}/keys/server.cert
+      server.key = ${cfg.dataDir}/keys/server.key
     '' else ''
-    ca.cert = ${cfg.caCert}
-    server.cert = ${cfg.server.cert}
-    server.key = ${cfg.server.key}
+      ca.cert = ${cfg.caCert}
+      server.cert = ${cfg.server.cert}
+      server.key = ${cfg.server.key}
     ''}
   '';
 
