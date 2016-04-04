@@ -1,5 +1,6 @@
 { stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
   # Note that the created binaries still need `patchelf --set-interpreter ...`
   # to get rid of ${glibc} dependency.
@@ -23,10 +24,11 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-        #-arm
-        (enable :sb-thread)
-        #+arm
-        (enable :arm))) " > customize-target-features.lisp
+    ''
+    + stdenv.lib.optionalString threadSupport "(enable :sb-thread)"
+    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + ''
+      )) " > customize-target-features.lisp
 
     pwd
 
