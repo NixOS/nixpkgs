@@ -5286,7 +5286,7 @@ in
 
   guile_2_0 = callPackage ../development/interpreters/guile { };
 
-  guile = guile_2_0;
+  guile = self.guile_2_0;
 
   hadoop = callPackage ../applications/networking/cluster/hadoop { };
 
