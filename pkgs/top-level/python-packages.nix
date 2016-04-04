@@ -24849,17 +24849,17 @@ in modules // {
 
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
-    version = "1.5.11";
+    version = "1.5.13";
     disabled = !isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
-      sha256 = "1byq2k2f36f1jli9599ygfm2qsb4adl9140sxjpgfjbznb74q90q";
+      sha256 = "06ss88j2gkgqchwd51fwynf2i41ssazs2xwiin8g7p8bc517ywmq";
     };
 
     propagatedBuildInputs = with self; [
-      pyramid sqlalchemy9 simplejson mozsvc cornice pyramid_hawkauth pymysql
+      pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
       pymysqlsa umemcache WSGIProxy requests pybrowserid
     ];
     buildInputs = with self; [ testfixtures unittest2  ];
