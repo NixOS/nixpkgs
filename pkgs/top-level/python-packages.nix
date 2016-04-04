@@ -4992,7 +4992,7 @@ in modules // {
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
       setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests2 rsa sqlalchemy9 setuptools backports_lzma m2crypto
+      requests2 rsa sqlalchemy setuptools backports_lzma m2crypto
     ];
 
     patchPhase = "> requirements/main.txt";
