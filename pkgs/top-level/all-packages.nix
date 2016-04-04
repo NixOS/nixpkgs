@@ -16029,7 +16029,7 @@ in
     cupsSupport = config.ghostscript.cups or (!stdenv.isDarwin);
   };
 
-  ghostscriptX = appendToName "with-X" (ghostscript.override {
+  ghostscriptX = appendToName "with-X" (self.ghostscript.override {
     x11Support = true;
   });
 
