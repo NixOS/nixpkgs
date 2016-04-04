@@ -4302,7 +4302,7 @@ in
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm { };
-  hiphopvm = hhvm; /* Compatibility alias */
+  hiphopvm = self.hhvm; /* Compatibility alias */
 
   hop = callPackage ../development/compilers/hop { };
 
