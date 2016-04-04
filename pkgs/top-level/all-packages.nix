@@ -4328,7 +4328,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_5;
+  go = self.go_1_5;
 
   go-repo-root = goPackages.go-repo-root.bin // { outputs = [ "bin" ]; };
 
