@@ -5,6 +5,8 @@ source $stdenv/setup
 # *our* versions, not the ones found in the system, as it would do by default.
 # On other platforms, this appears to be unnecessary.
 preConfigure() {
+    ./autogen.sh
+
     for i in Makefile.in ./src/Makefile.in ./lib-src/Makefile.in ./leim/Makefile.in; do
         substituteInPlace $i --replace /bin/pwd pwd
     done

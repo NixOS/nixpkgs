@@ -51,8 +51,11 @@ stdenv.mkDerivation {
   inherit emacs explicitRequires;
   phases = [ "installPhase" ];
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/emacs/site-lisp
+    readonly SHARE="share/emacs-with-packages"
+
+    mkdir -p "$out/bin"
+    mkdir -p "$out/$SHARE/bin"
+    mkdir -p "$out/$SHARE/site-lisp"
 
     local requires
     for pkg in $explicitRequires; do
@@ -60,29 +63,32 @@ stdenv.mkDerivation {
     done
     # requires now holds all requested packages and their transitive dependencies
 
-    siteStart="$out/share/emacs/site-lisp/site-start.el"
+    siteStart="$out/$SHARE/site-lisp/site-start.el"
 
     # Begin the new site-start.el by loading the original, which sets some
     # NixOS-specific paths. Paths are searched in the reverse of the order
     # they are specified in, so user and system profile paths are searched last.
     cat >"$siteStart" <<EOF
 (load-file "$emacs/share/emacs/site-lisp/site-start.el")
-(add-to-list 'load-path "$out/share/emacs/site-lisp")
+(add-to-list 'load-path "$out/$SHARE/site-lisp")
+(add-to-list 'exec-path "$out/$SHARE/bin")
 EOF
 
     linkPath() {
       local pkg=$1
-      local path=$2
+      local origin_path=$2
+      local dest_path=$3
+
       # Add the path to the search path list, but only if it exists
-      if [[ -d "$pkg/$path" ]]; then
-        lndir -silent "$pkg/$path" "$out/$path"
+      if [[ -d "$pkg/$origin_path" ]]; then
+        lndir -silent "$pkg/$origin_path" "$out/$dest_path"
       fi
     }
 
     # Add a package's paths to site-start.el
     linkEmacsPackage() {
-      linkPath "$1" "bin"
-      linkPath "$1" "share/emacs/site-lisp"
+      linkPath "$1" "bin" "$SHARE/bin"
+      linkPath "$1" "share/emacs/site-lisp" "$SHARE/site-lisp"
     }
 
     # First, link all the explicitly-required packages.
@@ -103,7 +109,7 @@ EOF
       local progname=$(basename "$prog")
       rm -f "$out/bin/$progname"
       makeWrapper "$prog" "$out/bin/$progname" \
-        --suffix EMACSLOADPATH ":" "$out/share/emacs/site-lisp:"
+        --suffix EMACSLOADPATH ":" "$out/$SHARE/site-lisp:"
     done
 
     mkdir -p $out/share
