@@ -16045,11 +16045,11 @@ in
 
   hplip = callPackage ../misc/drivers/hplip { };
 
-  hplipWithPlugin = hplip.override { withPlugin = true; };
+  hplipWithPlugin = self.hplip.override { withPlugin = true; };
 
   hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
 
-  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
+  hplipWithPlugin_3_15_9 = self.hplip_3_15_9.override { withPlugin = true; };
 
   # using the new configuration style proposal which is unstable
   jack1 = callPackage ../misc/jackaudio/jack1.nix { };
