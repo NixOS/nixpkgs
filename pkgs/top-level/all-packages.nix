@@ -14294,23 +14294,23 @@ in
   };
 
   kodiPlain = callPackage ../applications/video/kodi { };
-  xbmcPlain = kodiPlain;
+  xbmcPlain = self.kodiPlain;
 
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {
     kodi = kodiPlain;
   });
-  xbmcPlugins = kodiPlugins;
+  xbmcPlugins = self.kodiPlugins;
 
-  kodi = wrapKodi {
+  kodi = self.wrapKodi {
     kodi = kodiPlain;
   };
-  xbmc = kodi;
+  xbmc = self.kodi;
 
   kodi-retroarch-advanced-launchers =
     callPackage ../misc/emulators/retroarch/kodi-advanced-launchers.nix {
       cores = retroArchCores;
   };
-  xbmc-retroarch-advanced-launchers = kodi-retroarch-advanced-launchers;
+  xbmc-retroarch-advanced-launchers = self.kodi-retroarch-advanced-launchers;
 
   xca = callPackage ../applications/misc/xca { };
 
