@@ -4281,7 +4281,7 @@ in
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
   };
-  gcc-arm-embedded = gcc-arm-embedded-4_9;
+  gcc-arm-embedded = self.gcc-arm-embedded-4_9;
 
   gforth = callPackage ../development/compilers/gforth {};
 
