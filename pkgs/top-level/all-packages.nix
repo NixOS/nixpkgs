@@ -6756,7 +6756,7 @@ in
 
   geoclue2 = callPackage ../development/libraries/geoclue/2.0.nix {};
 
-  geoipWithDatabase = callPackage ../development/libraries/geoip {
+  geoipWithDatabase = self.geoip.override {
     drvName = "geoip-tools";
     geoipDatabase = geolite-legacy;
   };
