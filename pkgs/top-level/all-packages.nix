@@ -6248,6 +6248,8 @@ in
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
+  travis = callPackage ../development/tools/misc/travis { };
+
   tweak = callPackage ../applications/editors/tweak { };
 
   uhd = callPackage ../development/tools/misc/uhd { };
