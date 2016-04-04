@@ -1,0 +1,150 @@
+--- a/gtk/deprecated/gtkrc.c	2016-04-02 18:43:08.401663112 +0900
++++ b/gtk/deprecated/gtkrc.c	2016-04-02 18:29:19.927608592 +0900
+@@ -768,10 +768,13 @@
+ gchar *
+ gtk_rc_get_im_module_file (void)
+ {
++  const gchar *var3 = g_getenv ("GTK3_IM_MODULE_FILE");
+   const gchar *var = g_getenv ("GTK_IM_MODULE_FILE");
+   gchar *result = NULL;
+ 
+-  if (var)
++  if (var3)
++    result = g_strdup (var3);
++  else
+     result = g_strdup (var);
+ 
+   if (!result)
+
+--- a/gtk/gtksettings.c 2015-11-17 03:30:14.000000000 +0900
++++ b/gtk/gtksettings.c 2016-04-03 21:12:03.147713964 +0900
+@@ -3160,7 +3160,9 @@
+   *theme_name = NULL;
+   *theme_variant = NULL;
+ 
+-  if (g_getenv ("GTK_THEME"))
++  if (g_getenv ("GTK3_THEME"))
++    *theme_name = g_strdup (g_getenv ("GTK3_THEME"));
++  else if (g_getenv ("GTK_THEME"))
+     *theme_name = g_strdup (g_getenv ("GTK_THEME"));
+ 
+   if (*theme_name && **theme_name)
+
+--- a/gtk/inspector/visual.c    2015-11-17 03:30:14.000000000 +0900
++++ b/gtk/inspector/visual.c    2016-04-03 21:14:51.551667101 +0900
+@@ -256,7 +256,7 @@
+                           vis->priv->theme_combo, "active-id",
+                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+ 
+-  if (g_getenv ("GTK_THEME") != NULL)
++  if ((g_getenv ("GTK_THEME") != NULL) || (g_getenv ("GTK3_THEME") != NULL))
+     {
+       /* theme is hardcoded, nothing we can do */
+       gtk_widget_set_sensitive (vis->priv->theme_combo, FALSE);
+@@ -271,7 +271,7 @@
+                           vis->priv->dark_switch, "active",
+                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+ 
+-  if (g_getenv ("GTK_THEME") != NULL)
++  if ((g_getenv ("GTK_THEME") != NULL) || (g_getenv ("GTK3_THEME") != NULL))
+     {
+       /* theme is hardcoded, nothing we can do */
+       gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
+
+--- a/gtk/gtkcssprovider.c      2015-11-17 04:02:32.000000000 +0900
++++ b/gtk/gtkcssprovider.c      2016-04-03 21:45:34.178574914 +0900
+@@ -2972,8 +2972,11 @@
+   const gchar *var;
+   gchar *path;
+ 
++  const gchar *var3 = g_getenv ("GTK3_DATA_PREFIX");
+   var = g_getenv ("GTK_DATA_PREFIX");
+-  if (var)
++  if (var3)
++    path = g_build_filename (var3, "share", "themes", NULL);
++  else if (var)
+     path = g_build_filename (var, "share", "themes", NULL);
+   else
+     path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
+@@ -3062,8 +3065,11 @@
+     return path;
+ 
+   /* Finally, try in the default theme directory */
++  const gchar *var3 = g_getenv ("GTK3_DATA_PREFIX");
+   var = g_getenv ("GTK_DATA_PREFIX");
+-  if (!var)
++  if (var3)
++    var = var3;
++  else if (!var)
+     var = _gtk_get_data_prefix ();
+ 
+   path = _gtk_css_find_theme_dir (var, "share" G_DIR_SEPARATOR_S "themes", name, variant);
+
+--- a/gtk/deprecated/gtkrc.c    2016-04-02 18:43:08.401663112 +0900
++++ b/gtk/deprecated/gtkrc.c    2016-04-03 21:47:56.737589013 +0900
+@@ -802,9 +802,12 @@
+   const gchar *var;
+   gchar *path;
+ 
++  const gchar *var3 = g_getenv ("GTK3_DATA_PREFIX");
+   var = g_getenv ("GTK_DATA_PREFIX");
+ 
+-  if (var)
++  if (var3)
++    path = g_build_filename (var3, "share", "themes", NULL);
++  else if (var)
+     path = g_build_filename (var, "share", "themes", NULL);
+   else
+     path = g_build_filename (_gtk_get_data_prefix (), "share", "themes", NULL);
+
+--- a/gtk/gtkmodules.c  2015-11-17 03:30:14.000000000 +0900
++++ b/gtk/gtkmodules.c  2016-04-03 22:04:18.475585197 +0900
+@@ -60,15 +60,22 @@
+   if (result)
+     return result;
+ 
++  const gchar *module_path_env3 = g_getenv ("GTK3_PATH");
+   module_path_env = g_getenv ("GTK_PATH");
++  const gchar *exe_prefix3 = g_getenv ("GTK3_EXE_PREFIX");
+   exe_prefix = g_getenv ("GTK_EXE_PREFIX");
+ 
+-  if (exe_prefix)
++  if (exe_prefix3)
++    default_dir = g_build_filename (exe_prefix3, "lib", "gtk-3.0", NULL);
++  else if (exe_prefix)
+     default_dir = g_build_filename (exe_prefix, "lib", "gtk-3.0", NULL);
+   else
+     default_dir = g_build_filename (_gtk_get_libdir (), "gtk-3.0", NULL);
+ 
+-  if (module_path_env)
++  if (module_path_env3)
++    module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
++                               module_path_env3, default_dir, NULL);
++  else if (module_path_env)
+     module_path = g_build_path (G_SEARCHPATH_SEPARATOR_S,
+                                module_path_env, default_dir, NULL);
+   else
+
+--- a/gtk/gtkimmodule.c 2015-11-17 03:30:14.000000000 +0900
++++ b/gtk/gtkimmodule.c 2016-04-03 22:17:44.129673779 +0900
+@@ -809,8 +809,18 @@
+   if (!contexts_hash)
+     gtk_im_module_initialize ();
+ 
++  const gchar *envvar3 = g_getenv ("GTK3_IM_MODULE");
+   envvar = g_getenv ("GTK_IM_MODULE");
+-  if (envvar)
++  if (envvar3)
++    {
++        immodules = g_strsplit (envvar3, ":", 0);
++        context_id = lookup_immodule (immodules);
++        g_strfreev (immodules);
++
++        if (context_id)
++          return context_id;
++    }
++  else if (envvar)
+     {
+         immodules = g_strsplit (envvar, ":", 0);
+         context_id = lookup_immodule (immodules);
+

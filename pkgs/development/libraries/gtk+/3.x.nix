@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
+  patches = [ ./env-var.patch ];
+
   buildInputs = [ libxkbcommon epoxy ];
   propagatedBuildInputs = with xlibs; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk libXrandr libXrender libXcomposite libXi libXcursor ]
@@ -50,13 +52,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
-
-  passthru = {
-    gtkExeEnvPostBuild = ''
-      rm $out/lib/gtk-3.0/3.0.0/immodules.cache
-      $out/bin/gtk-query-immodules-3.0 $out/lib/gtk-3.0/3.0.0/immodules/*.so > $out/lib/gtk-3.0/3.0.0/immodules.cache
-    ''; # workaround for bug of nix-mode for Emacs */ '';
-  };
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
