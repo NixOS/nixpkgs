@@ -1986,7 +1986,7 @@ in
 
   iperf2 = callPackage ../tools/networking/iperf/2.nix { };
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
-  iperf = iperf3;
+  iperf = self.iperf3;
 
   ipfs = goPackages.ipfs.bin // { outputs = [ "bin" ]; };
 
