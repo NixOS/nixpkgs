@@ -6796,7 +6796,7 @@ in
   glew = callPackage ../development/libraries/glew { };
   glew110 = callPackage ../development/libraries/glew/1.10.nix { };
 
-  glfw = glfw3;
+  glfw = self.glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix { };
 
