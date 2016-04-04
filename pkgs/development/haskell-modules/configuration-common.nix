@@ -43,8 +43,7 @@ self: super: {
   statistics = dontCheck super.statistics;
   c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
 
-  # The package doesn't compile with ruby 1.9, which is our default at the moment.
-  hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
+  hruby = addExtraLibrary (super.hruby) pkgs.ruby;
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
