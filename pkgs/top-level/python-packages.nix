@@ -3383,18 +3383,16 @@ in modules // {
 
 
   ColanderAlchemy = buildPythonPackage rec {
-    name = "ColanderAlchemy-0.2.0";
+    name = "ColanderAlchemy-${version}";
+    version = "0.3.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/ColanderAlchemy/${name}.tar.gz";
-      sha256 = "d10e97b5f4648dcdc38c5e5c9f9b77fe39c8fa7f594d89d558b0d82e5631bfd7";
+      sha256 = "11wcni2xmfmy001rj62q2pwf305vvngkrfm5c4zlwvgbvlsrvnnw";
     };
 
     buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ colander sqlalchemy9 ];
-
-    # string: argument name cannot be overridden via info kwarg.
-    doCheck = false;
+    propagatedBuildInputs = with self; [ colander sqlalchemy ];
 
     meta = {
       description = "Autogenerate Colander schemas based on SQLAlchemy models";
