@@ -875,7 +875,7 @@ in modules // {
 
     buildInputs = with self; [
       pytest
-      sqlalchemy9
+      sqlalchemy
       tornado
       twisted
       mock
