@@ -23362,17 +23362,17 @@ in modules // {
 
 
   zope_sqlalchemy = buildPythonPackage rec {
-    name = "zope.sqlalchemy-0.7.5";
+    name = "zope.sqlalchemy-0.7.6";
 
     doCheck = !isPyPy; # https://github.com/zopefoundation/zope.sqlalchemy/issues/12
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.sqlalchemy/${name}.zip";
-      sha256 = "e196d1b2cf796f46e2c6127717e359ddd35d8d084a8ba059f0f0fabff245b9e1";
+      sha256 = "0vxhpdvzihsmg63aralmc7hx62lzrsnlxvskvlcr4mkwzwb22haj";
     };
 
     buildInputs = with self; [ zope_testing zope_interface ];
-    propagatedBuildInputs = with self; [ sqlalchemy9 transaction ];
+    propagatedBuildInputs = with self; [ sqlalchemy transaction ];
 
     meta = {
       maintainers = with maintainers; [ garbas iElectric ];
