@@ -15083,9 +15083,9 @@ in
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
 
-  gnome3 = gnome3_18;
+  gnome3 = self.gnome3_18;
 
-  gnome = recurseIntoAttrs gnome2;
+  gnome = recurseIntoAttrs self.gnome2;
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 
