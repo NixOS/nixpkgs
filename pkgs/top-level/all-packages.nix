@@ -1865,16 +1865,16 @@ in
     mpi = null;
   };
 
-  hdf5-mpi = appendToName "mpi" (hdf5.override {
+  hdf5-mpi = appendToName "mpi" (self.hdf5.override {
     szip = null;
     mpi = pkgs.openmpi;
   });
 
-  hdf5-cpp = appendToName "cpp" (hdf5.override {
+  hdf5-cpp = appendToName "cpp" (self.hdf5.override {
     cpp = true;
   });
 
-  hdf5-fortran = appendToName "fortran" (hdf5.override {
+  hdf5-fortran = appendToName "fortran" (self.hdf5.override {
     inherit gfortran;
   });
 
