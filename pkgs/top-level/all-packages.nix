@@ -755,6 +755,8 @@ in
 
   fasd = callPackage ../tools/misc/fasd { };
 
+  fastJson = callPackage ../development/libraries/fastjson { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
@@ -1590,11 +1592,11 @@ in
     gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
 
     gazebo7 = callPackage ../applications/science/robotics/gazebo { };
-  
+
     gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
 
   };
-  
+
   # at present, Gazebo 7.0.0 does not match Gazebo 6.5.1 for compatibility
   gazebo = gazeboSimulator.gazebo6;
 
@@ -1936,12 +1938,12 @@ in
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
-  ignition = recurseIntoAttrs { 
+  ignition = recurseIntoAttrs {
 
     math = callPackage ../development/libraries/ignition-math { };
-  
+
     math2 = ignition.math;
-  
+
     transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
 
     transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
