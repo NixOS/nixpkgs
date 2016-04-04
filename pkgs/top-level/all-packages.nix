@@ -7934,7 +7934,7 @@ in
 
   libupnp = callPackage ../development/libraries/pupnp { };
 
-  giflib = giflib_5_1;
+  giflib = self.giflib_5_1;
   giflib_4_1 = callPackage ../development/libraries/giflib/4.1.nix { };
   giflib_5_0 = callPackage ../development/libraries/giflib/5.0.nix { };
   giflib_5_1 = callPackage ../development/libraries/giflib/5.1.nix { };
