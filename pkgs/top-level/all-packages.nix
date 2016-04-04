@@ -7070,7 +7070,7 @@ in
 
   herqq = callPackage ../development/libraries/herqq { };
 
-  heyefi = haskellPackages.heyefi;
+  heyefi = self.haskellPackages.heyefi;
 
   hidapi = callPackage ../development/libraries/hidapi {
     libusb = libusb1;
