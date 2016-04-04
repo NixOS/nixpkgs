@@ -12416,7 +12416,7 @@ in
     wrapPython = pythonPackages.wrapPython;
   };
 
-  gimp = gimp_2_8;
+  gimp = self.gimp_2_8;
 
   gimp-with-plugins = callPackage ../applications/graphics/gimp/wrapper.nix {
     gimp = gimp_2_8;
