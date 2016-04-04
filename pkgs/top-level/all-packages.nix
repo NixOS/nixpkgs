@@ -4348,7 +4348,7 @@ in
     xulrunner = firefox-unwrapped;
   };
 
-  icedtea_web = icedtea8_web;
+  icedtea_web = self.icedtea8_web;
 
   idrisPackages = callPackage ../development/idris-modules {
     inherit (haskellPackages) idris;
