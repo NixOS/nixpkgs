@@ -24826,18 +24826,18 @@ in modules // {
 
   syncserver = buildPythonPackage rec {
     name = "syncserver-${version}";
-    version = "1.5.0";
+    version = "1.5.2";
     disabled = ! isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/syncserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "1xljylycxg7351hmqh7aa6fvvsjg06zvd4r7hcjqyd0k0sxvk7y6";
+      sha256 = "002if8wk3bhz70zycggvp5qfvr1n2c6i27wnzj317wlkkjmcknx7";
     };
 
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [
-      cornice gunicorn pyramid requests simplejson sqlalchemy9 mozsvc tokenserver
+      cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
       serversyncstorage configparser
     ];
 
