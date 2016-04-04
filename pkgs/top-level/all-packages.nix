@@ -8504,7 +8504,7 @@ in
     let imported = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
-  qt5 = qt54;
+  qt5 = self.qt54;
 
   qt5LibsFun = self: with self; {
 
