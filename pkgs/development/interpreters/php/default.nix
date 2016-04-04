@@ -99,7 +99,9 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql=${mysql.lib}"];
+          configureFlags =
+            throw "MySQL support in PHP is broken! (See https://github.com/NixOS/nixpkgs/issues/14351.)";
+            #["--with-mysql=${mysql.lib}"];
           buildInputs = [ mysql.lib ];
         };
 
@@ -215,9 +217,9 @@ let
         imapSupport = config.php.imap or true;
         ldapSupport = config.php.ldap or true;
         mhashSupport = config.php.mhash or true;
-        mysqlSupport = (!php7) && (config.php.mysql or true);
-        mysqliSupport = config.php.mysqli or true;
-        pdo_mysqlSupport = config.php.pdo_mysql or true;
+        mysqlSupport = (!php7) && (config.php.mysql or false);
+        mysqliSupport = config.php.mysqli or false;
+        pdo_mysqlSupport = config.php.pdo_mysql or false;
         libxml2Support = config.php.libxml2 or true;
         apxs2Support = config.php.apxs2 or true;
         bcmathSupport = config.php.bcmath or true;
