@@ -1,10 +1,30 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
+let
+  cfg = config.i18n.inputMethod;
+  gtk2_cache = pkgs.stdenv.mkDerivation {
+    preferLocalBuild = true; 
+    allowSubstitutes = false;
+    name = "gtk2-immodule.cache";
+    buildInputs = [ pkgs.gtk cfg.package ];
+    buildCommand = ''
+      GTK_PATH=${cfg.package}/lib/gtk-2.0/ gtk-query-immodules-2.0 > $out
+    '';
+  };
+  gtk3_cache = pkgs.stdenv.mkDerivation {
+    preferLocalBuild = true; 
+    allowSubstitutes = false;
+    name = "gtk3-immodule.cache";
+    buildInputs = [ pkgs.gtk3 cfg.package ];
+    buildCommand = ''
+      GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out
+    '';
+  };
+in
 {
-  options = {
-    i18n.inputMethod = {
+  options.i18n = {
+    inputMethod = {
       enabled = mkOption {
         type    = types.nullOr (types.enum [ "ibus" "fcitx" "nabi" "uim" ]);
         default = null;
@@ -24,6 +44,33 @@ with lib;
           </itemizedlist>
         '';
       };
+
+      package = mkOption {
+        internal = true;
+        type     = types.path;
+        default  = null;
+        description = ''
+          The input method method package.
+        '';
+      };
     };
   };
+
+  config = mkIf (cfg.enabled != null) {
+    environment.systemPackages = [ cfg.package ];
+
+    environment.variables = {
+      GTK_IM_MODULE_FILE  = "/etc/gtk2.0/immodules.cache";
+      GTK3_IM_MODULE_FILE = "/etc/gtk3.0/immodules.cache";
+    };
+
+    environment.etc = [
+      { source = gtk2_cache;
+        target = "gtk2.0/immodules.cache"; }
+      { source = gtk3_cache;
+        target = "gtk3.0/immodules.cache"; }
+    ];
+
+  };
+
 }
