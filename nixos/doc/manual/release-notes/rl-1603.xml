@@ -348,7 +348,7 @@ $TTL 1800
     <para>
     <literal>service.syncthing.dataDir</literal> options now has to point
     to exact folder where syncthing is writing to. Example configuration should
-    loook something like:
+    look something like:
     </para>
     <programlisting>
 services.syncthing = {
