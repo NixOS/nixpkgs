@@ -1677,10 +1677,10 @@ in
 
   gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
 
-  gnuplot_qt = gnuplot.override { withQt = true; };
+  gnuplot_qt = self.gnuplot.override { withQt = true; };
 
   # must have AquaTerm installed separately
-  gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
+  gnuplot_aquaterm = self.gnuplot.override { aquaterm = true; };
 
   gnused = callPackage ../tools/text/gnused { };
 
