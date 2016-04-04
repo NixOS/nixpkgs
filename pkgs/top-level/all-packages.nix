@@ -1764,15 +1764,15 @@ in
 
   trustedGrub-for-HP = callPackage_i686 ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };
 
-  grub2 = grub2_full;
+  grub2 = self.grub2_full;
 
   grub2_full = callPackage ../tools/misc/grub/2.0x.nix { };
 
-  grub2_efi = grub2_full.override {
+  grub2_efi = self.grub2_full.override {
     efiSupport = true;
   };
 
-  grub2_light = grub2_full.override {
+  grub2_light = self.grub2_full.override {
     zfsSupport = false;
   };
 
