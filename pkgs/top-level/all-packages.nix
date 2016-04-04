@@ -12695,7 +12695,7 @@ in
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
   };
 
-  imagemagick_light = imagemagick.override {
+  imagemagick_light = self.imagemagick.override {
     bzip2 = null;
     zlib = null;
     libX11 = null;
@@ -12713,7 +12713,7 @@ in
     libxml2 = null;
   };
 
-  imagemagick = imagemagickBig.override {
+  imagemagick = self.imagemagickBig.override {
     ghostscript = null;
   };
 
