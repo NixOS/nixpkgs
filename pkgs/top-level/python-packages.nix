@@ -12438,7 +12438,7 @@ in modules // {
     name = "pymysqlsa-${version}";
     version = "1.0";
 
-    propagatedBuildInputs = with self; [ pymysql sqlalchemy9 ];
+    propagatedBuildInputs = with self; [ pymysql sqlalchemy ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
