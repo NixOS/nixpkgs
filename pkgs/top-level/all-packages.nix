@@ -6974,7 +6974,7 @@ in
   };
 
   glib = callPackage ../development/libraries/glib { };
-  glib-tested = glib.override { # checked version separate to break cycles
+  glib-tested = self.glib.override { # checked version separate to break cycles
     doCheck = true;
     libffi = libffi.override { doCheck = true; };
   };
