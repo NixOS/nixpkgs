@@ -1988,7 +1988,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = self.iperf3;
 
-  ipfs = goPackages.ipfs.bin // { outputs = [ "bin" ]; };
+  ipfs = self.goPackages.ipfs.bin // { outputs = [ "bin" ]; };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
