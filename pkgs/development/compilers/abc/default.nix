@@ -1,23 +1,6 @@
-{stdenv, fetchurl, javaCup, jre, apacheAnt, patches} :
+{stdenv, fetchurl, javaCup, jre, apacheAnt}:
 
-let { 
-  body =
-    stdenv.mkDerivation {
-      name = "abc-1.2.0";
-      builder = ./builder.sh;
-
-      src = fetchurl {
-        url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/abc-1.2.0-src.tar.gz;
-        md5 = "aef9e8eac860f904f2a841e18770dc47";
-      };
-
-      inherit apacheAnt polyglot soot javaCup xact jasmin jre javabdd paddle jedd patches;
-
-      meta = {
-        description = "The AspectBench Compiler for AspectJ";
-      };
-    };
-
+let
   soot =
     import ./soot {
       inherit stdenv fetchurl apacheAnt polyglot jasmin;
@@ -76,4 +59,21 @@ let {
         md5 = "9810ad8762101ea691a895f0a6b7a5c3";
       };
     };
+in
+
+stdenv.mkDerivation {
+  name = "abc-1.2.0";
+  builder = ./builder.sh;
+
+  src = fetchurl {
+    url = http://abc.comlab.ox.ac.uk/dists/1.2.0/files/abc-1.2.0-src.tar.gz;
+    md5 = "aef9e8eac860f904f2a841e18770dc47";
+  };
+
+  inherit apacheAnt polyglot soot javaCup xact jasmin jre javabdd paddle jedd;
+  patches = [];
+
+  meta = {
+    description = "The AspectBench Compiler for AspectJ";
+  };
 }

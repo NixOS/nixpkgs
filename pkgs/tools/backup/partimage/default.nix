@@ -1,4 +1,4 @@
-{stdenv, fetchurl, bzip2, zlib, newt, openssl, pkgconfig, slang
+{stdenv, fetchurl, fetchpatch, bzip2, zlib, newt, openssl, pkgconfig, slang
 , automake, autoconf, libtool, gettext
 }:
 stdenv.mkDerivation {
@@ -17,6 +17,12 @@ stdenv.mkDerivation {
 
   patches = [
     ./gentoos-zlib.patch
+    (fetchpatch {
+      name = "no-SSLv2.patch";
+      url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk"
+        + "/use-SSLv3-by-default.patch?h=packages/partimage&id=7e95d1c6614e";
+      sha256 = "1zfixa6g1nb1hqfzn2wvyvxsr38gm7908zfml2iaqnwy6iz6jd8v";
+    })
   ];
 
   meta = {

@@ -258,7 +258,7 @@ rec {
   /* Cut a string with a separator and produces a list of strings which
      were separated by this separator.
 
-     NOTE: this function is not performant and should be avoided
+     NOTE: this function is not performant and should never be used.
 
      Example:
        splitString "." "foo.bar.baz"

@@ -285,6 +285,7 @@
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/tahoe.nix
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
@@ -335,6 +336,7 @@
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/mailpile.nix
+  ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
@@ -544,4 +546,5 @@
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
+  ./virtualisation/xe-guest-utilities.nix
 ]

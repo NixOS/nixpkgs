@@ -4,7 +4,7 @@
          version="5.0"
          xml:id="sec-release-16.03">
 
-<title>Release 16.03 (“Emu”, 2016/03/??)</title>
+<title>Release 16.03 (“Emu”, 2016/03/31)</title>
 
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights:</para>
@@ -12,14 +12,48 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
-    The package and attribute names are plain <literal>firefox</literal>
-    or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
-    but note that <command>nix-env -u</command> will <emphasis>not</emphasis> update
-    your current <literal>firefox-with-plugins</literal>;
-    you have to uninstall it and install <literal>firefox</literal> instead.
-    More discussion is <link xlink:href="https://github.com/NixOS/nixpkgs/pull/12299">
-    on the PR</link>.  </para>
+    <para>Systemd 229, bringing <link
+    xlink:href="https://github.com/systemd/systemd/blob/v229/NEWS">numerous
+    improvements</link> over 217.</para>
+  </listitem>
+
+  <listitem>
+    <para>Linux 4.4 (was 3.18).</para>
+  </listitem>
+
+  <listitem>
+    <para>GCC 5.3 (was 4.9). Note that GCC 5 <link
+    xlink:href="https://gcc.gnu.org/onlinedocs/libstdc++/manual/using_dual_abi.html">changes
+    the C++ ABI in an incompatible way</link>; this may cause problems
+    if you try to link objects compiled with different versions of
+    GCC.</para>
+  </listitem>
+
+  <listitem>
+    <para>Glibc 2.23 (was 2.21).</para>
+  </listitem>
+
+  <listitem>
+    <para>Binutils 2.26 (was 2.23.1). See #909</para>
+  </listitem>
+
+  <listitem>
+    <para>Improved support for ensuring <link
+    xlink:href="https://reproducible-builds.org/">bitwise reproducible
+    builds</link>. For example, <literal>stdenv</literal> now sets the
+    environment variable <envar
+    xlink:href="https://reproducible-builds.org/specs/source-date-epoch/">SOURCE_DATE_EPOCH</envar>
+    to a deterministic value, and Nix has <link
+    xlink:href="http://nixos.org/nix/manual/#ssec-relnotes-1.11">gained
+    an option</link> to repeat a build a number of times to test
+    determinism. An ongoing project, the goal of exact reproducibility
+    is to allow binaries to be verified independently (e.g., a user
+    might only trust binaries that appear in three independent binary
+    caches).</para>
+  </listitem>
+
+  <listitem>
+    <para>Perl 5.22.</para>
   </listitem>
 
 </itemizedlist>
@@ -28,10 +62,57 @@ has the following highlights:</para>
 
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
-    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
-    <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
-    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
+    <listitem><para><literal>hardware/video/webcam/facetimehd.nix</literal></para></listitem>
     <listitem><para><literal>i18n/inputMethod/default.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/fcitx.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/ibus.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/nabi.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/inputMethod/uim.nix</literal></para></listitem>
+    <listitem><para><literal>programs/fish.nix</literal></para></listitem>
+    <listitem><para><literal>security/acme.nix</literal></para></listitem>
+    <listitem><para><literal>security/audit.nix</literal></para></listitem>
+    <listitem><para><literal>security/oath.nix</literal></para></listitem>
+    <listitem><para><literal>services/hardware/irqbalance.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/dspam.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/opendkim.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/postsrsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/rspamd.nix</literal></para></listitem>
+    <listitem><para><literal>services/mail/rmilter.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/autofs.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/bepasty.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/calibre-server.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/cfdyndns.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/gammu-smsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/mathics.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/matrix-synapse.nix</literal></para></listitem>
+    <listitem><para><literal>services/misc/octoprint.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/hdaps.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/heapster.nix</literal></para></listitem>
+    <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
+    <listitem><para><literal>services/network-filesystems/netatalk.nix</literal></para></listitem>
+    <listitem><para><literal>services/network-filesystems/xtreemfs.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/autossh.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/dnschain.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/gale.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/miniupnpd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/namecoind.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/ostinato.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/pdnsd.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/shairport-sync.nix</literal></para></listitem>
+    <listitem><para><literal>services/networking/supplicant.nix</literal></para></listitem>
+    <listitem><para><literal>services/search/kibana.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/haka.nix</literal></para></listitem>
+    <listitem><para><literal>services/security/physlock.nix</literal></para></listitem>
+    <listitem><para><literal>services/web-apps/pump.io.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/hardware/libinput.nix</literal></para></listitem>
+    <listitem><para><literal>services/x11/window-managers/windowlab.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/initrd-network.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/initrd-ssh.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/loader/loader.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/networkd.nix</literal></para></listitem>
+    <listitem><para><literal>system/boot/resolved.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/lxd.nix</literal></para></listitem>
+    <listitem><para><literal>virtualisation/rkt.nix</literal></para></listitem>
   </itemizedlist>
 </para>
 
@@ -39,6 +120,22 @@ has the following highlights:</para>
 following incompatible changes:</para>
 
 <itemizedlist>
+
+  <listitem>
+    <para>We no longer produce graphical ISO images and VirtualBox
+    images for <literal>i686-linux</literal>. A minimal ISO image is
+    still provided.</para>
+  </listitem>
+
+  <listitem>
+    <para>Firefox and similar browsers are now <emphasis>wrapped by default</emphasis>.
+    The package and attribute names are plain <literal>firefox</literal>
+    or <literal>midori</literal>, etc.  Backward-compatibility attributes were set up,
+    but note that <command>nix-env -u</command> will <emphasis>not</emphasis> update
+    your current <literal>firefox-with-plugins</literal>;
+    you have to uninstall it and install <literal>firefox</literal> instead.</para>
+  </listitem>
+
   <listitem>
     <para><command>wmiiSnap</command> has been replaced with
     <command>wmii_hg</command>, but
@@ -68,7 +165,7 @@ following incompatible changes:</para>
 
 <programlisting><![CDATA[
 {
-  imports = [ <nixos/modules/services/misc/gitit.nix> ];
+  imports = [ <nixpkgs/nixos/modules/services/misc/gitit.nix> ];
 }
 ]]></programlisting>
 
@@ -292,14 +389,18 @@ services.syncthing = {
 
 
 <para>Other notable improvements:
+
 <itemizedlist>
+
+  <!--
   <listitem>
     <para>The <command>command-not-found</command> hook was extended.
     Apart from <literal>$NIX_AUTO_INSTALL</literal> variable,
     it newly also checks for <literal>$NIX_AUTO_RUN</literal>
     which causes it to directly run the missing commands via
-    <command>nix-shell</command> (without installing anything). </para>
+    <command>nix-shell</command> (without installing anything).</para>
   </listitem>
+  -->
 
   <listitem>
     <para><literal>ejabberd</literal> module is brought back and now works on

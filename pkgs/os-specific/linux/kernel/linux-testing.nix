@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  version = "4.6-rc1";
-  modDirVersion = "4.6.0-rc1";
+  version = "4.6-rc2";
+  modDirVersion = "4.6.0-rc2";
   extraMeta.branch = "4.6";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/testing/linux-${version}.tar.xz";
-    sha256 = "1y73sjd7i48d1c8x52z59imx8g8d00wy67r5666cvwqrq8d407h0";
+    sha256 = "0zihk9s1rkgmn0ghiz9xkg0w88w524af5mmad45rbxhm5751nxcr";
   };
 
   features.iwlwifi = true;

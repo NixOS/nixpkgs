@@ -806,7 +806,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "19dszv44py8qrq0jcjdycxpa7z2p8hi3ijq9gnqdsazbbjzf9svn";
-    };  
+    };
     buildInputs = with self; [ zope_interface ];
 
   };
@@ -1593,13 +1593,16 @@ in modules // {
   };
 
   batinfo = buildPythonPackage rec {
-    version = "0.2";
+    version = "0.3";
     name = "batinfo-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/batinfo/${name}.tar.gz";
-      sha256 = "1kmrdr1c2ivpqgp2csln7vbanga3sh3nvaqmgbsg96z6fbg7f7w8";
+      sha256 = "0gyzkxzvj5l6qrw706bnm3cckqzzzbrjr7jkxc087d7775a73499";
     };
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/nicolargo/batinfo;
@@ -1688,27 +1691,32 @@ in modules // {
   });
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-1.7.0";
+    name = "Beaker-${version}";
+    version = "1.8.0";
 
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      sha256 = "0vv4y22b3ly1212n9nnhgvc8yz32adlfl7w7s1wj0i5srpjcgvlq";
+    # The pypy release do not contains the tests
+    src = pkgs.fetchFromGitHub {
+      owner = "bbangert";
+      repo = "beaker";
+      rev = "${version}";
+      sha256 = "17yfr7a307n8rdl09was4j60xqk2s0hk0hywdkigrpj4qnw0is7g";
     };
 
     buildInputs =
-      [ self.sqlalchemy7
-        self.pycryptopp
-        self.nose
+      [ self.nose
         self.mock
         self.webtest
       ];
-
-    # http://hydra.nixos.org/build/4511591/log/raw
-    doCheck = false;
+    propagatedBuildInputs = [
+      self.sqlalchemy
+      self.pycrypto
+    ] ++ optionals (isPy26 || isPy27) [
+      self.funcsigs
+      self.pycryptopp
+    ];
 
     meta = {
+      description = "A Session and Caching library with WSGI Middleware";
       maintainers = with maintainers; [ garbas iElectric ];
       platforms = platforms.all;
     };
@@ -1895,12 +1903,15 @@ in modules // {
 
   colorlog = buildPythonPackage rec {
     name = "colorlog-${version}";
-    version = "2.6.0";
+    version = "2.6.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/colorlog/${name}.tar.gz";
-      sha256 = "1s8z9zr4r18igr4rri71nba01arnpppifrkaxhi2xb51500sw0qg";
+      sha256 = "0djv6ky1yk28s1l093w8plg19kp88q4nyrm1vfxyq0s9j4pix29l";
     };
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       description = "Log formatting with colors";
@@ -3338,23 +3349,19 @@ in modules // {
 
 
   coilmq = buildPythonPackage (rec {
-    name = "coilmq-0.6.1";
+    name = "CoilMQ-${version}";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
-      sha256 = "9755733bdae33a9d87630232d166a7da2382f68c2cffb3bb81503806e8d310cb";
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/${name}.tar.gz";
+      sha256 = "0wwa6fsqw1mxsryvgp0yrdjil8axyj0kslzi7lr45cnhgp5ab375";
     };
 
-    propagatedBuildInputs = with self; [ self.stompclient ];
+    propagatedBuildInputs = with self; [ stompclient pythondaemon redis pid];
 
-    preConfigure = ''
-      sed -i '/distribute/d' setup.py
-    '';
+    buildInputs = with self; [ pytest six click coverage sqlalchemy ];
 
-    buildInputs = with self; [ self.coverage self.sqlalchemy7 ];
-
-    # ValueError: Could not parse auth file:
-    # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
+    # The teste data is not included in the distribution
     doCheck = false;
 
     meta = {
@@ -4929,6 +4936,10 @@ in modules // {
       sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
     };
 
+    # Not supported.
+    # See instead https://pypi.python.org/pypi/dnspython3/1.12.0
+    disabled = isPy3k;
+
     meta = {
       description = "A DNS toolkit for Python 3.x";
       homepage = http://www.dnspython.org;
@@ -5398,7 +5409,7 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "1zxhpq8i4jwsk7wmfncqfm211hqikj3hp38cfv509924bi76wak8";
-    };  
+    };
 
     propagatedBuildInputs = with self; [ greenlet ];
 
@@ -6125,6 +6136,23 @@ in modules // {
       license = licenses.bsd2;
       maintainers = with maintainers; [ matthiasbeyer ];
     };
+  };
+
+  imagesize = buildPythonPackage rec {
+    name = "imagesize-${version}";
+    version = "0.7.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/i/imagesize/${name}.tar.gz";
+      sha256 = "0msgz4ncp2nb5nbsxnf8kvxsl6nhwvc3b46ik097fvznl3y10gdv";
+    };
+
+    meta = {
+      description = "Getting image size from png/jpeg/jpeg2000/gif file";
+      homepage = https://github.com/shibukawa/imagesize_py;
+      license = with licenses; [ mit ];
+    };
+
   };
 
   imread = buildPythonPackage rec {
@@ -8930,11 +8958,11 @@ in modules // {
 
   flake8 = buildPythonPackage rec {
     name = "flake8-${version}";
-    version = "2.5.1";
+    version = "2.5.4";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      sha256 = "448aed48b0671fe6062f47b98c3081f3a4b36fbe99ddb8ac2a3be6e6cb135603";
+      sha256 = "0bs9cz4fr99r2rwig1b8jwaadl1nan7kgpdzqwj0bwbckwbmh7nc";
     };
 
     buildInputs = with self; [ nose mock ];
@@ -11314,7 +11342,16 @@ in modules // {
       sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
-    buildInputs = [ pkgs.pkgconfig pkgs.fuse pkgs.attr ];
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+
+    propagatedBuildInputs = with self; [ contextlib2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
 
     meta = {
       description = "Python bindings for the low-level FUSE API";
@@ -11651,11 +11688,11 @@ in modules // {
 
 
   mccabe = buildPythonPackage (rec {
-    name = "mccabe-0.3";
+    name = "mccabe-0.4.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
-      sha256 = "3d8ca9bf65c5014f469180544d1dd5bb5b9df709aad6304f9c2e4370ae0a7b7c";
+      sha256 = "0yr08a36h8lqlif10l4xcikbbig7q8f41gqywir7rrvnv3mi4aws";
     };
 
     # See https://github.com/flintwork/mccabe/issues/31
@@ -11666,6 +11703,8 @@ in modules // {
         sha256 = "0xhjxpnaxvbpi4myj9byrban7a5nrw931br9sgvfk42ayg4sn6lm";
       }}" test_mccabe.py
     '';
+
+    buildInputs = with self; [ pytestrunner pytest ];
 
     meta = {
       description = "McCabe checker, plugin for flake8";
@@ -12228,8 +12267,8 @@ in modules // {
       url = "http://devel.ag-projects.com/repositories/${pname}";
       rev = "release-${version}";
       sha256 = "0jqvvssbwzq7bwqn3wrjfnpj8zb558mynn2visnlrcma6b57yhwd";
-    };  
-    
+    };
+
     propagatedBuildInputs = with self; [ eventlib application gnutls ];
   };
 
@@ -12813,12 +12852,12 @@ in modules // {
   });
 
   nibabel = buildPythonPackage rec {
-    version = "2.0.1";
+    version = "2.0.2";
     name = "nibabel-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/n/nibabel/${name}.tar.gz";
-      sha256 = "e559bcb40ae395c7f75c51079f815a13a94cd8a035a47315fc9fba0d2ae2ecaf";
+      sha256 = "0k8mv5zmwb6vc8kwrydl3pp0pnw937rf5mz10figkxczrw6dkk7h";
     };
 
     propagatedBuildInputs = with self; [
@@ -12827,17 +12866,10 @@ in modules // {
       modules.sqlite3
     ];
 
-    preCheck = ''
-      # Test does not work on Py3k because it calls 'python'.
-      # https://github.com/nipy/nibabel/issues/341
-      rm nisext/tests/test_testers.py
-      # Test fails with numpy 1.10.1: ERROR: nibabel.tests.test_proxy_api.TestPARRECAPI.test_proxy_slicing
-      # See https://github.com/nipy/nibabel/pull/358
-      # and https://github.com/numpy/numpy/issues/6491
-      rm nibabel/tests/test_proxy_api.py
-      # https://github.com/nipy/nibabel/issues/366
-      rm nisext/tests/test_doctest_markup.py
-    '';
+    # Failing tests
+    # nibabel.tests.test_minc1.test_old_namespace
+    # nisext.tests.test_testers.test_back_tick
+    doCheck = false;
 
     meta = {
       homepage = http://nipy.org/nibabel/;
@@ -13236,10 +13268,10 @@ in modules // {
 
   buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
     gfortran = pkgs.gfortran;
-    blas = pkgs.openblasCompat_2_14;
+    blas = pkgs.openblasCompat;
   };
 
-  numpy = self.numpy_1_10;
+  numpy = self.numpy_1_11;
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
@@ -14935,79 +14967,6 @@ in modules // {
 
   pandas = self.pandas_18;
 
-  pandas_17 = let
-    inherit (pkgs.stdenv.lib) optional optionalString;
-    inherit (pkgs.stdenv) isDarwin;
-  in buildPythonPackage rec {
-    name = "pandas-${version}";
-    version = "0.17.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "cfd7214a7223703fe6999fbe34837749540efee1c985e6aee9933f30e3f72837";
-    };
-
-    buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
-    propagatedBuildInputs = with self; [
-      dateutil
-      scipy_0_17
-      numexpr
-      pytz
-      xlrd
-      bottleneck
-      sqlalchemy
-      lxml
-      html5lib
-      modules.sqlite3
-      beautifulsoup4
-    ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
-
-    # For OSX, we need to add a dependency on libcxx, which provides
-    # `complex.h` and other libraries that pandas depends on to build.
-    patchPhase = optionalString isDarwin ''
-      cpp_sdk="${pkgs.libcxx}/include/c++/v1";
-      echo "Adding $cpp_sdk to the setup.py common_include variable"
-      substituteInPlace setup.py \
-        --replace "['pandas/src/klib', 'pandas/src']" \
-                  "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-      # disable clipboard tests since pbcopy/pbpaste are not open source
-      substituteInPlace pandas/io/tests/test_clipboard.py \
-        --replace pandas.util.clipboard no_such_module \
-        --replace OSError ImportError
-    '';
-
-    # The flag `-A 'not network'` will disable tests that use internet.
-    # The `-e` flag disables a few problematic tests.
-    # https://github.com/pydata/pandas/issues/11169
-    # https://github.com/pydata/pandas/issues/11287
-    # The test_sql checks fail specifically on python 3.5; see here:
-    # https://github.com/pydata/pandas/issues/11112
-    checkPhase = let
-      testsToSkip = ["test_data" "test_excel" "test_html" "test_json"
-                     "test_frequencies" "test_frame"
-                     "test_read_clipboard_infer_excel"
-                     "test_interp_alt_scipy" "test_nanops" "test_stats"] ++
-                    optional isPy35 "test_sql";
-    in ''
-      runHook preCheck
-      # The flag `-A 'not network'` will disable tests that use internet.
-      # The `-e` flag disables a few problematic tests.
-      ${python.executable} setup.py nosetests -A 'not slow and not network' --stop \
-        -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
-
-      runHook postCheck
-    '';
-
-    meta = {
-      homepage = "http://pandas.pydata.org/";
-      description = "Python Data Analysis Library";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ raskin fridh ];
-      platforms = platforms.unix;
-    };
-  };
-
   pandas_18 = let
     inherit (pkgs.stdenv.lib) optional optionalString;
     inherit (pkgs.stdenv) isDarwin;
@@ -15056,18 +15015,17 @@ in modules // {
 
     # The flag `-A 'not network'` will disable tests that use internet.
     # The `-e` flag disables a few problematic tests.
-    # https://github.com/pydata/pandas/issues/11169
-    # https://github.com/pydata/pandas/issues/11287
-    # The test_sql checks fail specifically on python 3.5; see here:
-    # https://github.com/pydata/pandas/issues/11112
+
+    # Disable two tests that are broken since numpy 1.11. Fixed upstream.
+
     checkPhase = let
-      testsToSkip = [];
+      testsToSkip = [ "test_range_slice_day" "test_range_slice_seconds" ];
     in ''
       runHook preCheck
       # The flag `-A 'not network'` will disable tests that use internet.
       # The `-e` flag disables a few problematic tests.
-      ${python.executable} setup.py nosetests -A 'not slow and not network' \
-         --verbosity=3
+      ${python.executable} setup.py nosetests -A 'not slow and not network' --stop \
+        -e '${concatStringsSep "|" testsToSkip}' --verbosity=3
 
       runHook postCheck
     '';
@@ -16763,6 +16721,30 @@ in modules // {
     };
   };
 
+  pydot_ng = buildPythonPackage rec {
+    name = "pydot_ng-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pydot-ng/${name}.tar.gz";
+      sha256 = "0h8k8wlzvnb40v4js7afgfyhp3wasmb1kg4gr6z7ck63iv8fq864";
+    };
+
+    buildInputs = [ self.pytest self.unittest2 ];
+    propagatedBuildInputs = [ pkgs.graphviz self.pyparsing ];
+
+    checkPhase = ''
+      mkdir test/my_tests
+      py.test test
+    '';
+
+    meta = {
+      homepage = "https://pypi.python.org/pypi/pydot-ng";
+      description = "Python 3-compatible update of pydot, a Python interface to Graphviz's Dot";
+      license = licenses.mit;
+      maintainers = [ maintainers.bcdarwin ];
+    };
+  };
+
   pyelasticsearch = buildPythonPackage (rec {
     name = "pyelasticsearch-1.4";
 
@@ -16995,12 +16977,12 @@ in modules // {
   };
 
   pygments = buildPythonPackage rec {
-    version = "2.1";
+    version = "2.1.3";
     name = "Pygments-${version}";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      sha256 = "0yx4p3w9lw1kw24zr87xnaqxm007mdxgwa5wjpwnrcfpmxgyz80k";
+      sha256 = "10axnp2wpjnq9g8wg53fx0c70dfxqrz498jyz8mrdx9a3flwir48";
     };
 
     propagatedBuildInputs = with self; [ docutils ];
@@ -17838,6 +17820,9 @@ in modules // {
 
     buildInputs = with self; [ ];
 
+    # Not supported. Package is no longer maintained.
+    disabled = isPy3k;
+
     meta = {
       description = "Pure-Python PDF toolkit";
       homepage = "http://pybrary.net/pyPdf/";
@@ -18202,11 +18187,11 @@ in modules // {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2015.7";
+    version = "2016.3";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.gz";
-      sha256 = "99266ef30a37e43932deec2b7ca73e83c8dbc3b9ff703ec73eca6b1dae6befea";
+      sha256 = "1a3hjclyylc4m1v1dn04b38wm2vl649ijdswpg0d8m8n0lcxlj9l";
     };
 
     meta = {
@@ -19850,14 +19835,19 @@ in modules // {
   };
 
   sigal = buildPythonPackage rec {
-    name = "sigal-0.9.2";
+    name = "sigal-1.0.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sigal/${name}.tar.gz";
-      sha256 = "0mk3bzaxn9snx9lc0pj9zvgdgdyhkza6b8z5x91772mlv84sfw6c";
+      sha256 = "198g2r8bii6a0p44mlk1wg07jjv95xpfvnqhhxxziqpizc776b34";
     };
 
-    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click pytest blinker ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ jinja2 markdown pillow pilkit clint click blinker ];
+
+    # No tests included
+    doCheck = false;
+
 
     meta = {
       description = "Yet another simple static gallery generator";
@@ -20147,6 +20137,27 @@ in modules // {
     };
   };
 
+  pid = buildPythonPackage rec {
+    name = "pid-${version}";
+    version = "2.0.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pid/${name}.tar.gz";
+      sha256 = "0cylj8p25nwkdfgy4pzai21wyzmrxdqlwwbzqag9gb5qcjfdwk05";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    # No tests included
+    doCheck = false;
+
+    meta = {
+      description = "Pidfile featuring stale detection and file-locking";
+      homepage = https://github.com/trbs/pid/;
+      license = licenses.asl20;
+    };
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
     disabled = isPy3k;
@@ -20158,6 +20169,28 @@ in modules // {
 
     doCheck = false;
 
+  };
+
+  pythondaemon = buildPythonPackage rec {
+    name = "python-daemon-${version}";
+    version = "2.1.1";
+
+    src = pkgs.fetchurl {
+      url = " https://pypi.python.org/packages/source/p/python-daemon/${name}.tar.gz";
+      sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
+    };
+
+    # A test fail within chroot builds.
+    doCheck = false;
+
+    buildInputs = with self; [ mock testscenarios ];
+    propagatedBuildInputs = with self; [ docutils lockfile ];
+
+    meta = {
+      description = "Library to implement a well-behaved Unix daemon process";
+      homepage = https://alioth.debian.org/projects/python-daemon/;
+      licenses =  [ licenses.gpl3Plus licenses.asl20 ];
+    };
   };
 
   sympy = buildPythonPackage rec {
@@ -20307,6 +20340,10 @@ in modules // {
       license = licenses.mit;
     };
   };
+
+  salt = callPackage ../tools/admin/salt {};
+
+  salttesting = callPackage ../tools/admin/salt/testing.nix {};
 
   sandboxlib = buildPythonPackage rec {
     name = "sandboxlib-${version}";
@@ -20543,14 +20580,16 @@ in modules // {
 
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.3.4";
+    name = "Sphinx-1.3.6";
+
+    # 1.4 is broken
+    # https://github.com/sphinx-doc/sphinx/issues/2394
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      sha256 = "0mw06q7bzzjylgwh0wnnaxmwc95hx8w95as4vcgpan579brw7b4a";
+      sha256 = "12pzlfkjjlwgvsj56k0y809jpx5mgcs9548k1l4kdbr028ifjfqb";
     };
 
-    patches = [ ../development/python-modules/sphinx-fix-tests-with-pygments-2.1.patch ];
     LC_ALL = "en_US.UTF-8";
     checkPhase = ''
       PYTHON=${python.executable} make test
@@ -20583,11 +20622,11 @@ in modules // {
   };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.8";
+    name = "sphinx_rtd_theme-0.1.9";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/s/sphinx_rtd_theme/${name}.tar.gz";
-      sha256 = "12mnb7qscr07mllmyyqfpx37778sr21m8663b4fivnk17bnk7xkl";
+      sha256 = "18d0r63w7jpdrk4q5qy26n08vdlmnj9sar93akwjphyambw4cf17";
     };
 
     postPatch = ''
@@ -20793,7 +20832,7 @@ in modules // {
 
     src = pkgs.fetchFromGitHub {
       repo = "sqlalchemy-imageattach";
-      owner = "crosspop";      
+      owner = "crosspop";
       rev = "${version}";
       sha256 = "1pqf7vk4lsvnhw169cqfyk0iz5f8n45470mdslklpi38z2fax9p0";
     };
@@ -22513,12 +22552,12 @@ in modules // {
 
 
   webtest = buildPythonPackage rec {
-    version = "2.0.15";
+    version = "2.0.20";
     name = "webtest-${version}";
 
     src = pkgs.fetchurl {
-      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.zip";
-      sha256 = "c320adc2cd862ea71ca9e2012e6157eb12f5f8d1632d1541f2eabf984aaa3ecc";
+      url = "http://pypi.python.org/packages/source/W/WebTest/WebTest-${version}.tar.gz";
+      sha256 = "0bv0qhdjakdsdgj4sk21gnpp8xp8bga4x03p6gjb83ihrsb7n4xv";
     };
 
     preConfigure = ''
@@ -23974,11 +24013,11 @@ in modules // {
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0b2";
+    name = "pyusb-1.0.0rc1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pyusb/${name}.tar.gz";
-      sha256 = "14ec66077bdcd6f1aa9e892a0a35a54bb3c1ec56aa740ead64349c18f0186d19";
+      sha256 = "07cjq11qhngzjd746k7688s6y2x7lpj669fxqfsiy985rg0jsn7j";
     };
 
     # Fix the USB backend library lookup
@@ -23987,6 +24026,9 @@ in modules // {
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
     '';
+
+    # No tests included
+    doCheck = false;
 
     meta = {
       description = "Python USB access module (wraps libusb 1.0)";  # can use other backends
@@ -24005,6 +24047,10 @@ in modules // {
       url = "https://pypi.python.org/packages/source/B/BlinkStick/${name}.tar.gz";
       sha256 = "3edf4b83a3fa1a7bd953b452b76542d54285ff6f1145b6e19f9b5438120fa408";
     };
+
+    # Requires pyusb 1.0.0b1.
+    # Likely current pyusb will work but we need to patch the hard requirement then.
+    broken = true;
 
     propagatedBuildInputs = with self; [ pyusb ];
 
@@ -25424,7 +25470,7 @@ in modules // {
         thrift
         beautifulsoup4
         markdown2
-        sqlalchemy7
+        sqlalchemy
         html2text
         evernote
     ];
@@ -25663,6 +25709,9 @@ in modules // {
       url = "https://pypi.python.org/packages/source/d/dot2tex/dot2tex-2.9.0.tar.gz";
       sha256 = "7d3e54add7dccdaeb6cc9e61ceaf7b587914cf8ebd6821cfea008acdc1e50d4a";
     };
+
+    # Tests fail with 3.x. Furthermore, package is no longer maintained.
+    disabled = isPy3k;
 
     propagatedBuildInputs = with self; [
       pyparsing

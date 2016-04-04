@@ -257,6 +257,8 @@
       radicale = 234;
       hydra-queue-runner = 235;
       hydra-www = 236;
+      syncthing = 237;
+      mfi = 238;
 
       prometheus = 999;
 
@@ -487,6 +489,8 @@
       pdnsd = 229;
       octoprint = 230;
       radicale = 234;
+      syncthing = 237;
+      #mfi = 238; # unused
 
       prometheus = 999;
 
