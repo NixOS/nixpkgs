@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
   };
   configurePhase = ''
     substituteInPlace Makefile --replace /usr/local "$out"
+    substituteInPlace rnd.h --replace "/dev/random" "/dev/urandom"
   '';
 
   patches = [ ./apg.patch ];
