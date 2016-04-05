@@ -10968,8 +10968,8 @@ in
   };
 
   # Provided with sysfsutils.
-  libsysfs = sysfsutils;
-  systool = sysfsutils;
+  libsysfs = self.sysfsutils;
+  systool = self.sysfsutils;
 
   sysklogd = callPackage ../os-specific/linux/sysklogd { };
 
