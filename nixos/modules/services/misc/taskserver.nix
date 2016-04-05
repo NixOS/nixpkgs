@@ -308,7 +308,7 @@ in {
             --bits 2048 \
             --outfile "${cfg.dataDir}/keys/server.key"
 
-          ${pkgs.gnutls}/bin/certtool -s \
+          ${pkgs.gnutls}/bin/certtool -c \
             --template "${pkgs.writeText "taskserver-cert.template" ''
               cn = ${cfg.server.fqdn}
               tls_www_server
