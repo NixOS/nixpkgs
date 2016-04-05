@@ -6032,7 +6032,7 @@ in
   lemon = callPackage ../development/tools/parsing/lemon { };
 
 
-  libtool = libtool_2;
+  libtool = self.libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
 
