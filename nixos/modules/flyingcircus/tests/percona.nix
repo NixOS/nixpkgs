@@ -1,7 +1,7 @@
 # This test has been broken but still signaled "green" earlier on.
 # I have disabled it for now.
 import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
-  name = "sensuserver";
+  name = "percona";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ theuni ];
   };
@@ -19,6 +19,14 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
                     ../platform/default.nix ];
 
         flyingcircus.roles.mysql.enable = true;
+
+        # Tune those arguments as we'd like to run this on Hydra
+        # in a rather small VM.
+        flyingcircus.roles.mysql.extraConfig = ''
+            [mysqld]
+            innodb-buffer-pool-size         = 10M
+            innodb_log_file_size            = 10M
+        '';
 
       };
   };

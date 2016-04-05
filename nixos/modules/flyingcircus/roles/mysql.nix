@@ -44,6 +44,19 @@ in
                     password will be set.
                 '';
             };
+
+            extraConfig = mkOption {
+              type = types.lines;
+              default = "";
+              description =
+                ''
+                    Extra MySQL configuration to append at the end of the
+                    configuration file. Do not assume this to be located
+                    in any specific section.
+                '';
+            };
+
+
         };
 
     };
@@ -127,6 +140,10 @@ in
             [isamchk]
             key_buffer        = 16M
 
+            # flyingcircus.roles.mysql.extraConfig
+            ${cfg.extraConfig}
+
+            # /etc/local/mysql/*
             ${localConfig}
             '';
         };
