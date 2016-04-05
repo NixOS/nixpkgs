@@ -11289,7 +11289,7 @@ in
 
   liberation_ttf_from_source = callPackage ../data/fonts/redhat-liberation-fonts { };
   liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
-  liberation_ttf = liberation_ttf_binary;
+  liberation_ttf = self.liberation_ttf_binary;
 
   libertine = callPackage ../data/fonts/libertine { };
 
