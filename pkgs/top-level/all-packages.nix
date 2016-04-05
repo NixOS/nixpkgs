@@ -756,6 +756,8 @@ in
 
   fasd = callPackage ../tools/misc/fasd { };
 
+  fastJson = callPackage ../development/libraries/fastjson { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
