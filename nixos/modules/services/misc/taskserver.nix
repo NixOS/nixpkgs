@@ -719,8 +719,24 @@ in {
 
       environment.TASKDDATA = cfg.dataDir;
 
+      preStart = ''
+        ${concatStrings (mapAttrsToList (orgName: attrs: ''
+          ${ctlcmd} add-org ${mkShellStr orgName}
+
+          ${concatMapStrings (user: ''
+            echo Creating ${user} >&2
+            ${ctlcmd} add-user ${mkShellStr orgName} ${mkShellStr user}
+          '') attrs.users}
+
+          ${concatMapStrings (group: ''
+            ${ctlcmd} add-group ${mkShellStr orgName} ${mkShellStr user}
+          '') attrs.groups}
+        '') cfg.organisations)}
+      '';
+
       serviceConfig = {
         ExecStart = "@${taskd} taskd server";
+        PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
       };
