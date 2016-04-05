@@ -34,7 +34,9 @@ def get_sensucheck_configuration(servicechecks):
 
         command = [
             'check_http',
-            '-H', shlex.quote(url.netloc)]
+            '-H', shlex.quote(url.hostname)]
+        if url.port:
+            command.extend(['-p', str(url.port)])
         if path:
             command.extend(['-u', shlex.quote(path)])
         if url.scheme == 'https':
