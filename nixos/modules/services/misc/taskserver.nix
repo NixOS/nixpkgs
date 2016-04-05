@@ -198,7 +198,7 @@ in {
           type = types.str;
           default = "localhost";
           description = ''
-            The address (IPv4, IPv6 or DNS) of the Taskserver.
+            The address (IPv4, IPv6 or DNS) to listen on.
           '';
         };
 
@@ -207,6 +207,14 @@ in {
           default = 53589;
           description = ''
             Port number of the Taskserver.
+          '';
+        };
+
+        fqdn = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = ''
+            The fully qualified domain name of this server.
           '';
         };
 
@@ -284,7 +292,7 @@ in {
             --outfile "${cfg.dataDir}/keys/ca.key"
           ${pkgs.gnutls}/bin/certtool -s \
             --template "${pkgs.writeText "taskserver-ca.template" ''
-              cn = ${cfg.server.host}
+              cn = ${cfg.server.fqdn}
               cert_signing_key
               ca
             ''}" \
@@ -302,7 +310,7 @@ in {
 
           ${pkgs.gnutls}/bin/certtool -s \
             --template "${pkgs.writeText "taskserver-cert.template" ''
-              cn = ${cfg.server.host}
+              cn = ${cfg.server.fqdn}
               tls_www_server
               encryption_key
               signing_key
