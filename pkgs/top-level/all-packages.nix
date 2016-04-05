@@ -7812,7 +7812,7 @@ in
   libpgf = callPackage ../development/libraries/libpgf { };
 
   libpng = callPackage ../development/libraries/libpng { };
-  libpng_apng = libpng.override { apngSupport = true; };
+  libpng_apng = self.libpng.override { apngSupport = true; };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libpaper = callPackage ../development/libraries/libpaper { };
