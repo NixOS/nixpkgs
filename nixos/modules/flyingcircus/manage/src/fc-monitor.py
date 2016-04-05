@@ -34,7 +34,9 @@ def get_sensucheck_configuration(servicechecks):
 
         command = [
             'check_http',
-            '-H', shlex.quote(url.netloc)]
+            '-H', shlex.quote(url.hostname)]
+        if url.port:
+            command.extend(['-p', str(url.port)])
         if path:
             command.extend(['-u', shlex.quote(path)])
         if url.scheme == 'https':
@@ -62,7 +64,7 @@ def write_checks(directory=None, config_file=None, **kw):
         old_check_configuration = None
     if old_check_configuration != sensu_checks:
         with open(config_file, 'w') as f:
-            json.dump(sensu_checks, f)
+            json.dump(sensu_checks, f, indent=2, sort_keys=True)
 
 
 def handle_result(directory=None, enc=None, **kw):
