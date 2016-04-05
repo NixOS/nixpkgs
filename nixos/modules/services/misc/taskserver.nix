@@ -59,6 +59,26 @@ let
     ''}
   '';
 
+  orgOptions = { name, ... }: {
+    options.users = mkOption {
+      type = types.uniq (types.listOf types.str);
+      default = [];
+      example = [ "alice" "bob" ];
+      description = ''
+        A list of user names that belong to the organization.
+      '';
+    };
+
+    options.groups = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "workers" "slackers" ];
+      description = ''
+        A list of group names that belong to the organization.
+      '';
+    };
+  };
+
 in {
 
   options = {
@@ -97,6 +117,19 @@ in {
         description = ''
           List of GnuTLS ciphers to use. See the GnuTLS documentation for full
           details.
+        '';
+      };
+
+      organisations = mkOption {
+        type = types.attrsOf (types.submodule orgOptions);
+        default = {};
+        example.myShinyOrganisation.users = [ "alice" "bob" ];
+        example.myShinyOrganisation.groups = [ "staff" "outsiders" ];
+        example.yetAnotherOrganisation.users = [ "foo" "bar" ];
+        description = ''
+          An attribute set where the keys name the organisation and the values
+          are a set of lists of <option>users</option> and
+          <option>groups</option>.
         '';
       };
 
