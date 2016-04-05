@@ -434,11 +434,8 @@ udevadm control --exit
 
 # Reset the logging file descriptors.
 # Do this just before pkill, which will kill the tee process.
-if test -n "@logCommands@"
-then
-    exec 1>&$logOutFd 2>&$logErrFd
-    eval "exec $logOutFd>&- $logErrFd>&-"
-fi
+exec 1>&$logOutFd 2>&$logErrFd
+eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2. But keep storage daemons like unionfs-fuse.
