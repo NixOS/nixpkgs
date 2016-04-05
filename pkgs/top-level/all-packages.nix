@@ -4468,13 +4468,13 @@ in
 
   lessc = callPackage ../development/compilers/lessc { };
 
-  llvm = llvmPackages.llvm;
+  llvm = self.llvmPackages.llvm;
 
-  llvm_38 = llvmPackages_38.llvm;
-  llvm_37 = llvmPackages_37.llvm;
-  llvm_36 = llvmPackages_36.llvm;
-  llvm_35 = llvmPackages_35.llvm;
-  llvm_34 = llvmPackages_34.llvm;
+  llvm_38 = self.llvmPackages_38.llvm;
+  llvm_37 = self.llvmPackages_37.llvm;
+  llvm_36 = self.llvmPackages_36.llvm;
+  llvm_35 = self.llvmPackages_35.llvm;
+  llvm_34 = self.llvmPackages_34.llvm;
 
   llvmPackages = recurseIntoAttrs self.llvmPackages_37;
 
