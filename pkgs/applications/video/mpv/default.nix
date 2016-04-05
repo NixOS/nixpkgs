@@ -58,12 +58,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-
-  name = "mpv-${meta.version}";
+  name = "mpv-${version}";
+  version = "0.16.0";
 
   src = fetchurl {
-    url = "https://github.com/mpv-player/mpv/archive/v${meta.version}.tar.gz";
-    sha256 = "1p0b83048g66icpz5n66v3k4ldr1z0rmg5d2rr7kcbspm1xj2cbx";
+    url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
+    sha256 = "1fiqxx85s418qynq2fp0v7cpzrz8j285hwmc4fqgn5ny1vg1jdpw";
   };
 
   patchPhase = ''
@@ -129,7 +129,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    version = "0.15.0";
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = http://mpv.io;
     license = licenses.gpl2Plus;
