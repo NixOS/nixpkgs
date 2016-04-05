@@ -12779,6 +12779,8 @@ in
 
   jamin = callPackage ../applications/audio/jamin { };
 
+  japa = callPackage ../applications/audio/japa { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
