@@ -13730,7 +13730,7 @@ in
     withQt5 = false;
   };
 
-  lightdm_qt = lightdm.override { withQt5 = true; };
+  lightdm_qt = self.lightdm.override { withQt5 = true; };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
 
