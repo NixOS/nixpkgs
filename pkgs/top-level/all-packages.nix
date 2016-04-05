@@ -8320,7 +8320,7 @@ in
   openslp = callPackage ../development/libraries/openslp {};
 
   # 2.3 breaks some backward-compability
-  libressl = libressl_2_2;
+  libressl = self.libressl_2_2;
   libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
     fetchurl = fetchurlBoot;
   };
