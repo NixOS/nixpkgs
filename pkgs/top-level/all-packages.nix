@@ -8222,7 +8222,7 @@ in
   newt = callPackage ../development/libraries/newt { };
 
   nghttp2 = callPackage ../development/libraries/nghttp2 { };
-  libnghttp2 = nghttp2.override {
+  libnghttp2 = self.nghttp2.override {
     prefix = "lib";
     fetchurl = fetchurlBoot;
   };
