@@ -10231,7 +10231,7 @@ in
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
   ffadoFull = callPackage ../os-specific/linux/ffado { };
-  libffado = ffadoFull.override { prefix = "lib"; };
+  libffado = self.ffadoFull.override { prefix = "lib"; };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
 
