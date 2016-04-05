@@ -4476,9 +4476,9 @@ in
   llvm_35 = llvmPackages_35.llvm;
   llvm_34 = llvmPackages_34.llvm;
 
-  llvmPackages = recurseIntoAttrs llvmPackages_37;
+  llvmPackages = recurseIntoAttrs self.llvmPackages_37;
 
-  llvmPackagesSelf = llvmPackages_34.override {
+  llvmPackagesSelf = self.llvmPackages_34.override {
     stdenv = libcxxStdenv;
   };
 
