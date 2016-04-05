@@ -3410,10 +3410,10 @@ let
   };
 
   skydns = buildFromGitHub {
-    rev = "2.5.2b";
+    rev = "2.5.3a";
     owner = "skynetservices";
     repo = "skydns";
-    sha256 = "01vac6bd71wky5jbd5k4a0x665bjn1cpmw7p655jrdcn5757c2lv";
+    sha256 = "0i1iaif79cwnwm7pc8nxfa261cgl4zhm3p2a5a3smhy1ibgccpq7";
 
     buildInputs = [
       go-etcd rcrowley.go-metrics dns go-systemd prometheus.client_golang
