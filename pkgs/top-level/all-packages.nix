@@ -957,7 +957,7 @@ in
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
-  libceph = ceph.lib;
+  libceph = self.ceph.lib;
   ceph = callPackage ../tools/filesystems/ceph { boost = boost159; };
   ceph-dev = self.ceph;
   #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
