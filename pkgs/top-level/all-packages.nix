@@ -11990,8 +11990,7 @@ in
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
-    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   });
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
