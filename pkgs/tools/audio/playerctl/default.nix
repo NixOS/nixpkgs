@@ -2,14 +2,14 @@
   pkgconfig, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "playerctl";
-  version = "0.4.2";
+  name = "playerctl-${version}";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "0dy6wc7qr00p53hlhpbg9x40w4ag95r2i7r1nsyb4ym3wzrvskzh";
+    sha256 = "0b4pg5pwblgbf6kvvynzh9dshfikxy5c2ks7733n7wza5wkpgmng";
   };
 
   buildInputs = [
