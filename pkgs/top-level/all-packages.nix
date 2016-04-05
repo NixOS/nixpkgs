@@ -7968,7 +7968,7 @@ in
 
   libuv = self.libuvVersions.v1_7_5;
 
-  libv4l = lowPrio (v4l_utils.override {
+  libv4l = lowPrio (self.v4l_utils.override {
     alsaLib = null;
     libX11 = null;
     qt4 = null;
