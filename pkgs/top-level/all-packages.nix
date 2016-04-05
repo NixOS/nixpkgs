@@ -7745,7 +7745,7 @@ in
 
   libmusicbrainz5 = callPackage ../development/libraries/libmusicbrainz/5.x.nix { };
 
-  libmusicbrainz = libmusicbrainz3;
+  libmusicbrainz = self.libmusicbrainz3;
 
   libmwaw = callPackage ../development/libraries/libmwaw { };
 
