@@ -10466,7 +10466,7 @@ in
                     ];
   };
 
-  linux_chromiumos_latest = linux_chromiumos_3_18;
+  linux_chromiumos_latest = self.linux_chromiumos_3_18;
 
   /* grsec configuration
 
@@ -10517,36 +10517,36 @@ in
       grsecOptions = { kernelPatch = patch; } // opts;
     });
 
-  grKernel  = patch: opts: (mkGrsecurity patch opts).grsecKernel;
-  grPackage = patch: opts: recurseIntoAttrs (mkGrsecurity patch opts).grsecPackage;
+  grKernel  = patch: opts: (self.mkGrsecurity patch opts).grsecKernel;
+  grPackage = patch: opts: recurseIntoAttrs (self.mkGrsecurity patch opts).grsecPackage;
 
   # grsecurity kernels (see also linuxPackages_grsec_*)
 
-  linux_grsec_desktop_3_14    = grKernel kernelPatches.grsecurity_3_14 grFlavors.desktop;
-  linux_grsec_server_3_14     = grKernel kernelPatches.grsecurity_3_14 grFlavors.server;
-  linux_grsec_server_xen_3_14 = grKernel kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+  linux_grsec_desktop_3_14    = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
+  linux_grsec_server_3_14     = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server;
+  linux_grsec_server_xen_3_14 = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
 
-  linux_grsec_desktop_4_1    = grKernel kernelPatches.grsecurity_4_1 grFlavors.desktop;
-  linux_grsec_server_4_1     = grKernel kernelPatches.grsecurity_4_1 grFlavors.server;
-  linux_grsec_server_xen_4_1 = grKernel kernelPatches.grsecurity_4_1 grFlavors.server_xen;
+  linux_grsec_desktop_4_1    = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
+  linux_grsec_server_4_1     = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server;
+  linux_grsec_server_xen_4_1 = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
 
-  linux_grsec_desktop_4_4    = grKernel kernelPatches.grsecurity_4_4 grFlavors.desktop;
-  linux_grsec_server_4_4     = grKernel kernelPatches.grsecurity_4_4 grFlavors.server;
-  linux_grsec_server_xen_4_4 = grKernel kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+  linux_grsec_desktop_4_4    = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
+  linux_grsec_server_4_4     = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.server;
+  linux_grsec_server_xen_4_4 = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
 
-  linux_grsec_desktop_latest    = grKernel kernelPatches.grsecurity_latest grFlavors.desktop;
-  linux_grsec_server_latest     = grKernel kernelPatches.grsecurity_latest grFlavors.server;
-  linux_grsec_server_xen_latest = grKernel kernelPatches.grsecurity_latest grFlavors.server_xen;
+  linux_grsec_desktop_latest    = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.desktop;
+  linux_grsec_server_latest     = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server;
+  linux_grsec_server_xen_latest = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server_xen;
 
   # grsecurity: old names
 
-  linux_grsec_testing_desktop    = linux_grsec_desktop_latest;
-  linux_grsec_testing_server     = linux_grsec_server_latest;
-  linux_grsec_testing_server_xen = linux_grsec_server_xen_latest;
+  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
+  linux_grsec_testing_server     = self.linux_grsec_server_latest;
+  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
 
-  linux_grsec_stable_desktop    = linux_grsec_desktop_3_14;
-  linux_grsec_stable_server     = linux_grsec_server_3_14;
-  linux_grsec_stable_server_xen = linux_grsec_server_xen_3_14;
+  linux_grsec_stable_desktop    = self.linux_grsec_desktop_3_14;
+  linux_grsec_stable_server     = self.linux_grsec_server_3_14;
+  linux_grsec_stable_server_xen = self.linux_grsec_server_xen_3_14;
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -10666,67 +10666,67 @@ in
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = linuxPackages_4_4;
-  linux = linuxPackages.kernel;
+  linuxPackages = self.linuxPackages_4_4;
+  linux = self.linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = pkgs.linuxPackages_4_5;
-  linux_latest = linuxPackages_latest.kernel;
+  linuxPackages_latest = self.linuxPackages_4_5;
+  linux_latest = self.linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp linuxPackages_mptcp;
-  linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi linuxPackages_rpi;
-  linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10 linuxPackages_3_10);
-  linuxPackages_3_10_tuxonice = linuxPackagesFor pkgs.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
-  linuxPackages_3_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_12 linuxPackages_3_12);
-  linuxPackages_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_14 linuxPackages_3_14);
-  linuxPackages_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_18 linuxPackages_3_18);
-  linuxPackages_4_1 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_1 linuxPackages_4_1);
-  linuxPackages_4_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_3 linuxPackages_4_3);
-  linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
-  linuxPackages_4_5 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_5 linuxPackages_4_5);
-  linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
+  linuxPackages_mptcp = self.linuxPackagesFor self.linux_mptcp linuxPackages_mptcp;
+  linuxPackages_rpi = self.linuxPackagesFor self.linux_rpi linuxPackages_rpi;
+  linuxPackages_3_10 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_10 linuxPackages_3_10);
+  linuxPackages_3_10_tuxonice = self.linuxPackagesFor self.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
+  linuxPackages_3_12 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_12 linuxPackages_3_12);
+  linuxPackages_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_14 linuxPackages_3_14);
+  linuxPackages_3_18 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_18 linuxPackages_3_18);
+  linuxPackages_4_1 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_1 linuxPackages_4_1);
+  linuxPackages_4_3 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_3 linuxPackages_4_3);
+  linuxPackages_4_4 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_4 linuxPackages_4_4);
+  linuxPackages_4_5 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_5 linuxPackages_4_5);
+  linuxPackages_testing = recurseIntoAttrs (self.linuxPackagesFor self.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
-                           let linuxPackages_self = (linuxPackagesFor (pkgs.linuxManualConfig {inherit version src configfile;
-                                                                                               allowImportFromDerivation=true;})
+                           let linuxPackages_self = (self.linuxPackagesFor (self.linuxManualConfig {inherit version src configfile;
+                                                                                                    allowImportFromDerivation=true;})
                                                      linuxPackages_self);
                            in recurseIntoAttrs linuxPackages_self;
 
   # Build a kernel for Xen dom0
-  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
+  linuxPackages_latest_xen_dom0 = recurseIntoAttrs (self.linuxPackagesFor (self.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
 
   # grsecurity packages
 
-  linuxPackages_grsec_desktop_3_14    = grPackage kernelPatches.grsecurity_3_14 grFlavors.desktop;
-  linuxPackages_grsec_server_3_14     = grPackage kernelPatches.grsecurity_3_14 grFlavors.server;
-  linuxPackages_grsec_server_xen_3_14 = grPackage kernelPatches.grsecurity_3_14 grFlavors.server_xen;
+  linuxPackages_grsec_desktop_3_14    = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
+  linuxPackages_grsec_server_3_14     = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server;
+  linuxPackages_grsec_server_xen_3_14 = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
 
-  linuxPackages_grsec_desktop_4_1    = grPackage kernelPatches.grsecurity_4_1 grFlavors.desktop;
-  linuxPackages_grsec_server_4_1     = grPackage kernelPatches.grsecurity_4_1 grFlavors.server;
-  linuxPackages_grsec_server_xen_4_1 = grPackage kernelPatches.grsecurity_4_1 grFlavors.server_xen;
+  linuxPackages_grsec_desktop_4_1    = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
+  linuxPackages_grsec_server_4_1     = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server;
+  linuxPackages_grsec_server_xen_4_1 = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
 
-  linuxPackages_grsec_desktop_4_4    = grPackage kernelPatches.grsecurity_4_4 grFlavors.desktop;
-  linuxPackages_grsec_server_4_4     = grPackage kernelPatches.grsecurity_4_4 grFlavors.server;
-  linuxPackages_grsec_server_xen_4_4 = grPackage kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+  linuxPackages_grsec_desktop_4_4    = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
+  linuxPackages_grsec_server_4_4     = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server;
+  linuxPackages_grsec_server_xen_4_4 = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
 
-  linuxPackages_grsec_desktop_latest    = grPackage kernelPatches.grsecurity_latest grFlavors.desktop;
-  linuxPackages_grsec_server_latest     = grPackage kernelPatches.grsecurity_latest grFlavors.server;
-  linuxPackages_grsec_server_xen_latest = grPackage kernelPatches.grsecurity_latest grFlavors.server_xen;
+  linuxPackages_grsec_desktop_latest    = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.desktop;
+  linuxPackages_grsec_server_latest     = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server;
+  linuxPackages_grsec_server_xen_latest = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server_xen;
 
   # grsecurity: old names
 
-  linuxPackages_grsec_testing_desktop    = linuxPackages_grsec_desktop_latest;
-  linuxPackages_grsec_testing_server     = linuxPackages_grsec_server_latest;
-  linuxPackages_grsec_testing_server_xen = linuxPackages_grsec_server_xen_latest;
+  linuxPackages_grsec_testing_desktop    = self.linuxPackages_grsec_desktop_latest;
+  linuxPackages_grsec_testing_server     = self.linuxPackages_grsec_server_latest;
+  linuxPackages_grsec_testing_server_xen = self.linuxPackages_grsec_server_xen_latest;
 
-  linuxPackages_grsec_stable_desktop    = linuxPackages_grsec_desktop_3_14;
-  linuxPackages_grsec_stable_server     = linuxPackages_grsec_server_3_14;
-  linuxPackages_grsec_stable_server_xen = linuxPackages_grsec_server_xen_3_14;
+  linuxPackages_grsec_stable_desktop    = self.linuxPackages_grsec_desktop_3_14;
+  linuxPackages_grsec_stable_server     = self.linuxPackages_grsec_server_3_14;
+  linuxPackages_grsec_stable_server_xen = self.linuxPackages_grsec_server_xen_3_14;
 
   # ChromiumOS kernels
-  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
-  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
-  linuxPackages_chromiumos_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_chromiumos_latest linuxPackages_chromiumos_latest);
+  linuxPackages_chromiumos_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
+  linuxPackages_chromiumos_3_18 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_18 linuxPackages_chromiumos_3_18);
+  linuxPackages_chromiumos_latest = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_latest linuxPackages_chromiumos_latest);
 
   # A function to build a manually-configured kernel
   linuxManualConfig = pkgs.buildLinux;
