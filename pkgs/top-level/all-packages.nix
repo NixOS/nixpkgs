@@ -7055,7 +7055,7 @@ in
 
   # TODO : Let admin choose.
   # We are using mit-krb5 because it is better maintained
-  kerberos = libkrb5;
+  kerberos = self.libkrb5;
 
   heimdalFull = callPackage ../development/libraries/kerberos/heimdal.nix { };
   libheimdal = self.heimdalFull.override { type = "lib"; };
@@ -7201,7 +7201,7 @@ in
   krb5Full = callPackage ../development/libraries/kerberos/krb5.nix {
     inherit (darwin) bootstrap_cmds;
   };
-  libkrb5 = krb5Full.override { type = "lib"; };
+  libkrb5 = self.krb5Full.override { type = "lib"; };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
