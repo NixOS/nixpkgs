@@ -7363,7 +7363,7 @@ in
     sqlite = null;
   };
 
-  libdbiDrivers = libdbiDriversBase.override {
+  libdbiDrivers = self.libdbiDriversBase.override {
     inherit sqlite libmysql;
   };
 
