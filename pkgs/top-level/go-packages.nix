@@ -661,11 +661,11 @@ let
   };
 
   dns = buildFromGitHub {
-    rev    = "e59f851c912767b1db587dcabee6e6652e495c75";
-    version = "2015-07-22";
-    owner  = "miekg";
-    repo   = "dns";
-    sha256 = "1zcj4drmmskwvjy5ld54qd8a34ls9651ysl3q7c2bcambax5r0hp";
+    rev     = "7e024ce8ce18b21b475ac6baf8fa3c42536bf2fa";
+    version = "2016-03-28";
+    owner   = "miekg";
+    repo    = "dns";
+    sha256  = "0hlwb52lnnj3c6papjk9i5w5cjdw6r7c891v4xksnfvk1f9cy9kl";
   };
 
   docopt-go = buildFromGitHub {
