@@ -7381,7 +7381,7 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL;
   };
 
-  libdevil-nox = libdevil.override {
+  libdevil-nox = self.libdevil.override {
     libX11 = null;
     mesa = null;
   };
