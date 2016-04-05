@@ -91,7 +91,7 @@ in {
       };
 
       ciphers = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "NORMAL";
         description = ''
@@ -195,7 +195,7 @@ in {
 
       server = {
         host = mkOption {
-          type = types.string;
+          type = types.str;
           default = "localhost";
           description = ''
             The address (IPv4, IPv6 or DNS) of the Taskserver.
