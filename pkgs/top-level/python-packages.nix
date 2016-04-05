@@ -9538,11 +9538,11 @@ in modules // {
   });
 
   fusepy = buildPythonPackage rec {
-    name = "fusepy-2.0.2";
+    name = "fusepy-2.0.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/fusepy/${name}.tar.gz";
-      sha256 = "1z0va3z1hzjw167skl21k9dsklbmr46k66j80qadibjc8vajjnda";
+      sha256 = "0v5grm4zyf58hsplwsxfbihddw95lz9w8cy3rpzbyha287swgx8h";
     };
 
     propagatedBuildInputs = [ pkgs.fuse ];
