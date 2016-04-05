@@ -81,12 +81,12 @@ let
 
   mkShellStr = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
 
-  nixos-taskdctl = import ./helper-tool.nix {
+  nixos-taskserver = import ./helper-tool.nix {
     inherit pkgs lib mkShellStr taskd;
     config = cfg;
   };
 
-  ctlcmd = "${nixos-taskdctl}/bin/nixos-taskdctl --service-helper";
+  ctlcmd = "${nixos-taskserver}/bin/nixos-taskserver --service-helper";
 
 in {
 
@@ -303,7 +303,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.taskserver nixos-taskdctl ];
+    environment.systemPackages = [ pkgs.taskserver nixos-taskserver ];
 
     users.users = optional (cfg.user == "taskd") {
       name = "taskd";

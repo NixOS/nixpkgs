@@ -1,6 +1,7 @@
 { config, pkgs, lib, mkShellStr, taskd }:
 
 let
+  commandName = "nixos-taskserver";
   mkShellName = lib.replaceStrings ["-"] ["_"];
 
   genClientKey = ''
@@ -51,7 +52,7 @@ let
     }
 
     usage_${mkShellName name}() {
-      echo "  nixos-taskdctl ${name} ${usagePosArgs}" >&2
+      echo "  ${commandName} ${name} ${usagePosArgs}" >&2
       ${lib.concatMapStringsSep "\n  " mkDesc description}
     }
   '';
@@ -265,7 +266,7 @@ let
       subcmd "${name}" ${cmdArgs};;
   '';
 
-in pkgs.writeScriptBin "nixos-taskdctl" ''
+in pkgs.writeScriptBin commandName ''
   #!${pkgs.stdenv.shell}
   export TASKDDATA=${mkShellStr config.dataDir}
 
@@ -311,7 +312,7 @@ in pkgs.writeScriptBin "nixos-taskdctl" ''
 
   case "$1" in
     ${lib.concatStrings (lib.mapAttrsToList mkCase subcommands)}
-    *) echo "Usage: nixos-taskdctl <subcommand> [<args>]" >&2
+    *) echo "Usage: ${commandName} <subcommand> [<args>]" >&2
        echo >&2
        echo "A tool to manage taskserver users on NixOS" >&2
        echo >&2

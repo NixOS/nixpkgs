@@ -50,7 +50,7 @@ import ./make-test.nix {
           );
 
           my $exportinfo = $server->succeed(
-            "nixos-taskdctl export-user $org $user"
+            "nixos-taskserver export-user $org $user"
           );
 
           $exportinfo =~ s/'/'\\'''/g;
@@ -70,9 +70,9 @@ import ./make-test.nix {
     $server->waitForUnit("taskserver.service");
 
     $server->succeed(
-      "nixos-taskdctl list-users testOrganisation | grep -qxF alice",
-      "nixos-taskdctl list-users testOrganisation | grep -qxF foo",
-      "nixos-taskdctl list-users anotherOrganisation | grep -qxF bob"
+      "nixos-taskserver list-users testOrganisation | grep -qxF alice",
+      "nixos-taskserver list-users testOrganisation | grep -qxF foo",
+      "nixos-taskserver list-users anotherOrganisation | grep -qxF bob"
     );
 
     $server->waitForOpenPort(${portStr});
