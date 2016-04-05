@@ -3794,7 +3794,7 @@ in
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
-  libxfs = xfsprogs.lib;
+  libxfs = self.xfsprogs.lib;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
