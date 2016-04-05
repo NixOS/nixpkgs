@@ -14,6 +14,8 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ unzip nasm ];
 
+  hardeningDisable = [ "stackprotector" ];
+
   configureFlags = [ "--host=${arch}-pc-linux-gnu" ];
 
   postInstall = ''
