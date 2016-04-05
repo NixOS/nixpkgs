@@ -10335,7 +10335,7 @@ in
 
   # -- Linux kernel expressions ------------------------------------------------
 
-  linuxHeaders = linuxHeaders_3_18;
+  linuxHeaders = self.linuxHeaders_3_18;
 
   linuxHeaders24Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/2.4.nix {
     cross = assert crossSystem != null; crossSystem;
@@ -10348,12 +10348,12 @@ in
   linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
 
   # We can choose:
-  linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
-    else if ver == "2.6" then linuxHeaders26Cross
+  linuxHeadersCrossChooser = ver : if ver == "2.4" then self.linuxHeaders24Cross
+    else if ver == "2.6" then self.linuxHeaders26Cross
     else throw "Unknown linux kernel version";
 
   linuxHeadersCross = assert crossSystem != null;
-    linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
+    self.linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
