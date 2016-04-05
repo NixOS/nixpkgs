@@ -8032,7 +8032,7 @@ in
     pythonSupport = false;
   };
 
-  libxml2Python = lowPrio (libxml2.override {
+  libxml2Python = lowPrio (self.libxml2.override {
     pythonSupport = true;
   });
 
