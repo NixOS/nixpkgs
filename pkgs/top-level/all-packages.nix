@@ -4464,6 +4464,8 @@ in
 
   lessc = callPackage ../development/compilers/lessc { };
 
+  liquibase = callPackage ../development/tools/database/liquibase { };
+
   llvm = llvmPackages.llvm;
 
   llvm_38 = llvmPackages_38.llvm;
