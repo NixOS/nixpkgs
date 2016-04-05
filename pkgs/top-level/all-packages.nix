@@ -7205,7 +7205,7 @@ in
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
-  lcms = lcms1;
+  lcms = self.lcms1;
 
   lcms1 = callPackage ../development/libraries/lcms { };
 
