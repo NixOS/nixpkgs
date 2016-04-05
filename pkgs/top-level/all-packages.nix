@@ -9412,10 +9412,12 @@ in
 
   slowaes = pythonPackages.slowaes;
 
+  twisted = pythonPackages.twisted;
+
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
 
-  twisted = pythonPackages.twisted;
+  yolk = callPackage ../development/python-modules/yolk {};
 
   ZopeInterface = pythonPackages.zope_interface;
 
