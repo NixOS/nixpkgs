@@ -12911,7 +12911,7 @@ in
   ledger3 = callPackage ../applications/office/ledger {
     boost = boost155;
   };
-  ledger = ledger3;
+  ledger = self.ledger3;
 
   lighttable = callPackage ../applications/editors/lighttable {};
 
