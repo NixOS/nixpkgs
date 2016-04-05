@@ -7478,7 +7478,7 @@ in
 
   liblo = callPackage ../development/libraries/liblo { };
 
-  liblrdf = librdf;
+  liblrdf = self.librdf;
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
