@@ -965,5 +965,10 @@ self: super: {
     dns_sd = pkgs.avahi.override {
       withLibdnssdCompat = true;
     };
+
+  # https://github.com/danidiaz/pipes-transduce/issues/2
+  pipes-transduce = super.pipes-transduce.override {
+    foldl = self.foldl_1_1_6;
   };
+
 }
