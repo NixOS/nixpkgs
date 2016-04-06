@@ -24559,11 +24559,12 @@ in modules // {
 
 
   uncertainties = buildPythonPackage rec {
-    name = "uncertainties-2.4.6.1";
+    name = "uncertainties-${version}";
+    version = "2.4.8.1";
 
     src = pkgs.fetchurl {
-       url = "https://github.com/lebigot/uncertainties/archive/2.4.6.1.tar.gz";
-       sha256 = "993ad1a380185ff9548510401ed89fe96cf1f18ca48b44657356c8dcd3ad5032";
+       url = "https://github.com/lebigot/uncertainties/archive/${version}.tar.gz";
+       sha256 = "1j5z0h5l3plsywsmwjpaggkr6rn5cjxw0lhkwgl6a8a25f8bz4pz";
     };
 
     buildInputs = with self; [ nose numpy ];
