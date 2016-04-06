@@ -190,15 +190,6 @@ let
           $installFlags "''${installFlagsArray[@]}"
       '');
 
-      # !!! This leaves references to gcc in $dev
-      # that we might be able to avoid
-      postFixup = if isModular then ''
-        # !!! Should this be part of stdenv? Also patchELF should take an argument...
-        prefix=$dev
-        patchELF
-        prefix=$out
-      '' else null;
-
       meta = {
         description =
           "The Linux kernel" +
