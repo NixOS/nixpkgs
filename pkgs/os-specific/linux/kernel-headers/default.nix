@@ -1,4 +1,4 @@
-{ stdenv, kernel, perl }:
+{ stdenv, kernel, perl, libmpc }:
 
 let
   baseBuildFlags = [ "INSTALL_HDR_PATH=$(out)" "headers_install" ];
@@ -7,7 +7,7 @@ in stdenv.mkDerivation {
 
   inherit (kernel) src patches;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl libmpc ];
 
   buildFlags = [ "ARCH=${stdenv.platform.kernelArch}" ] ++ baseBuildFlags;
 
