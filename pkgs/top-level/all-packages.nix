@@ -7259,6 +7259,8 @@ in
 
   libass = callPackage ../development/libraries/libass { };
 
+  libast = callPackage ../development/libraries/libast { };
+
   libassuan = callPackage ../development/libraries/libassuan { };
 
   libasyncns = callPackage ../development/libraries/libasyncns { };
@@ -12207,6 +12209,8 @@ in
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
   esniper = callPackage ../applications/networking/esniper { };
+
+  eterm = callPackage ../applications/misc/eterm { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
     inherit (gnome) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
