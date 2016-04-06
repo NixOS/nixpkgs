@@ -960,4 +960,10 @@ self: super: {
     hint = self.hint_0_4_3;
   };
 
+  # Looks like Avahi provides the missing library
+  dnssd = super.dnssd.override {
+    dns_sd = pkgs.avahi.override {
+      withLibdnssdCompat = true;
+    };
+  };
 }
