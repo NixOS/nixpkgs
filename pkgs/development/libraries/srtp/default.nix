@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libsrtp-${version}";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "libsrtp";
     rev = "v${version}";
-    sha256 = "0iy1il72gnjcwbi16wf4kzdqs1xx8is9qvs6m49pg37218s26gdw";
+    sha256 = "0s029m4iw0nsvnsm2hlz8yajrasdvf315iv2dw8mfm7nhbshwsqa";
   };
 
   buildInputs = [ pkgconfig ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ] ++ optional (openssl != null) "--enable-openssl";
 
   postInstall = ''
-    rmdir $out/bin
+    rm -rf $out/bin
   '';
 
   meta = {

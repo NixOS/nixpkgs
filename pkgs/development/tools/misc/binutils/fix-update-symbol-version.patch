@@ -1,0 +1,106 @@
+NOTE: removed Changelog diffs to avoid the patch failing to apply
+
+From 544ddf9322b1b83982e5cb84a54d084ee7e718ea Mon Sep 17 00:00:00 2001
+From: H.J. Lu <hjl.tools@gmail.com>
+Date: Wed, 24 Feb 2016 15:13:35 -0800
+Subject: [PATCH] Update symbol version for symbol from linker script
+
+We need to update symbol version for symbols from linker script.
+
+Backport from master
+
+bfd/
+
+	PR ld/19698
+	* elflink.c (bfd_elf_record_link_assignment): Set versioned if
+	symbol version is unknown.
+
+ld/
+
+	PR ld/19698
+	* testsuite/ld-elf/pr19698.d: New file.
+	* testsuite/ld-elf/pr19698.s: Likewise.
+	* testsuite/ld-elf/pr19698.t: Likewise.
+---
+ bfd/ChangeLog                 |    9 +++++++++
+ bfd/elflink.c                 |   13 +++++++++++++
+ ld/ChangeLog                  |   10 ++++++++++
+ ld/testsuite/ld-elf/pr19698.d |   10 ++++++++++
+ ld/testsuite/ld-elf/pr19698.s |    5 +++++
+ ld/testsuite/ld-elf/pr19698.t |   11 +++++++++++
+ 6 files changed, 58 insertions(+), 0 deletions(-)
+ create mode 100644 ld/testsuite/ld-elf/pr19698.d
+ create mode 100644 ld/testsuite/ld-elf/pr19698.s
+ create mode 100644 ld/testsuite/ld-elf/pr19698.t
+
+diff --git a/bfd/elflink.c b/bfd/elflink.c
+index ae8d148..8fcaadd 100644
+--- a/bfd/elflink.c
++++ b/bfd/elflink.c
+@@ -555,6 +555,19 @@ bfd_elf_record_link_assignment (bfd *output_bfd,
+   if (h == NULL)
+     return provide;
+ 
++  if (h->versioned == unknown)
++    {
++      /* Set versioned if symbol version is unknown.  */
++      char *version = strrchr (name, ELF_VER_CHR);
++      if (version)
++	{
++	  if (version > name && version[-1] != ELF_VER_CHR)
++	    h->versioned = versioned_hidden;
++	  else
++	    h->versioned = versioned;
++	}
++    }
++
+   switch (h->root.type)
+     {
+     case bfd_link_hash_defined:
+diff --git a/ld/testsuite/ld-elf/pr19698.d b/ld/testsuite/ld-elf/pr19698.d
+new file mode 100644
+index 0000000..a39f67a
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr19698.d
+@@ -0,0 +1,10 @@
++#ld: -shared $srcdir/$subdir/pr19698.t
++#readelf : --dyn-syms --wide
++#target: *-*-linux* *-*-gnu* *-*-solaris*
++
++Symbol table '\.dynsym' contains [0-9]+ entries:
++#...
++ +[0-9]+: +[0-9a-f]+ +[0-9a-f]+ +FUNC +GLOBAL +DEFAULT +[0-9]+ +foo@VERS.1
++#...
++ +[0-9]+: +[0-9a-f]+ +[0-9a-f]+ +FUNC +GLOBAL +DEFAULT +[0-9]+ +foo@@VERS.2
++#pass
+diff --git a/ld/testsuite/ld-elf/pr19698.s b/ld/testsuite/ld-elf/pr19698.s
+new file mode 100644
+index 0000000..875dca4
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr19698.s
+@@ -0,0 +1,5 @@
++	.text
++	.globl	foo
++	.type	foo, %function
++foo:
++	.byte 0
+diff --git a/ld/testsuite/ld-elf/pr19698.t b/ld/testsuite/ld-elf/pr19698.t
+new file mode 100644
+index 0000000..09d9125
+--- /dev/null
++++ b/ld/testsuite/ld-elf/pr19698.t
+@@ -0,0 +1,11 @@
++"foo@VERS.1" = foo;
++
++VERSION {
++VERS.2 {
++  global:
++    foo;
++};
++
++VERS.1 {
++};
++}
+-- 
+1.7.1
+

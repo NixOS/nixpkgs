@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp
+{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp, libdrm
 , pkgconfig, freetype, fontconfig, which, imagemagick, curl, sane-backends
 }:
 
 stdenv.mkDerivation rec {
-  name = "fbida-2.10";
+  name = "fbida-2.11";
   
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
-    sha256 = "1dkc1d6qlfa1gn94wcbyr7ayiy728q52fvbipwmnl2mlc6n3lnks";
+    sha256 = "00x1lppb66b0gvp6sqs7zjgnlfh80lnkwvsm15ifzvlss3b67akw";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
   buildInputs =
     [ libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
-      imagemagick curl sane-backends
+      imagemagick curl sane-backends libdrm
     ];
   
   makeFlags = [ "prefix=$(out)" "verbose=yes" ];

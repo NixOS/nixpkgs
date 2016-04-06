@@ -49,4 +49,7 @@ self: super: {
   # Deviate from Stackage here to fix lots of builds.
   transformers-compat = super.transformers-compat_0_5_1_4;
 
+  # https://github.com/sol/doctest/issues/125
+  doctest = self.doctest_0_11_0;
+
 }

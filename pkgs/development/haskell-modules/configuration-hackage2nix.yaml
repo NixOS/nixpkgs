@@ -625,7 +625,7 @@ dont-distribute-packages:
   clafer:                                       [ i686-linux, x86_64-darwin, x86_64-linux ]
   claferIG:                                     [ i686-linux, x86_64-darwin, x86_64-linux ]
   claferwiki:                                   [ i686-linux, x86_64-darwin, x86_64-linux ]
-  clang-pure:                                   [ x86_64-darwin ]
+  clang-pure:                                   [ i686-linux, x86_64-darwin, x86_64-linux ]
   CLASE:                                        [ i686-linux, x86_64-darwin, x86_64-linux ]
   clash-prelude-quickcheck:                     [ i686-linux, x86_64-darwin, x86_64-linux ]
   clash:                                        [ i686-linux, x86_64-darwin, x86_64-linux ]

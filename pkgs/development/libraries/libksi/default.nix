@@ -4,12 +4,12 @@ stdenv.mkDerivation rec {
   name = "libksi-2015-07-03";
 
   src = fetchFromGitHub {
-    owner = "rgerhards";
+    owner = "Guardtime";
     repo = "libksi";
-    rev = "b1ac0346395b4f52ec42a050bf33ac223f194443";
-    sha256 = "0gg0fl56flwqmsph7j92lgybaa39i715w0nwgkcr58njm0c02wlw";
+    rev = "b82dd65bd693722db92397cbe0920170e0d2ae1c";
+    sha256 = "1sqd31l55kx6knl0sg26ail1k5rgmamq8760p6aj7bpb4jwb8r1n";
   };
-  
+
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ openssl curl ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/rgerhards/libksi";
+    homepage = "https://github.com/GuardTime/libksi";
     description = "Keyless Signature Infrastructure API library";
     license = licenses.asl20;
     platforms = platforms.all;

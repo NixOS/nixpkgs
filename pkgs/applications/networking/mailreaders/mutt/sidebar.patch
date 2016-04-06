@@ -78,7 +78,7 @@ index 5dfeff6..cf1ac98 100644
  	score.c send.c sendlib.c signal.c sort.c \
  	status.c system.c thread.c charset.c history.c lib.c \
 +	sidebar.c \
- 	muttlib.c editmsg.c mbyte.c \
+ 	muttlib.c editmsg.c mbyte.c mutt_idna.c \
  	url.c ascii.c crypt-mod.c crypt-mod.h safe_asprintf.c
  
 diff --git a/OPS b/OPS
