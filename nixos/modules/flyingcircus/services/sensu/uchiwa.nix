@@ -80,9 +80,6 @@ in {
 
   config = mkIf cfg.enable {
 
-    ids.gids.uchiwa = 209;
-    ids.uids.uchiwa = 209;
-
     users.extraGroups.uchiwa.gid = config.ids.gids.uchiwa;
 
     users.extraUsers.uchiwa = {
