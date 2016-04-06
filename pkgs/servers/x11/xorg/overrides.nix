@@ -305,6 +305,7 @@ in
   };
 
   xf86inputsynaptics = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # *.pc pulls xorgserver.dev
     buildInputs = attrs.buildInputs ++ [args.mtdev args.libevdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/share/X11/xorg.conf.d";
   };
