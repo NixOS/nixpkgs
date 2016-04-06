@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,
+{ stdenv, fetchgit,
   bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg, libpng, perl, python, ruby, sqlite,
   darwin, writeScriptBin, cups
 }:
@@ -33,11 +33,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "phantomjs-${version}";
-  version = "2.0.0-20150528";
+  version = "2.1.1";
 
-  src = fetchurl {
-    url = "https://github.com/bprodoehl/phantomjs/archive/v2.0.0-20150528.tar.gz";
-    sha256 = "18h37bxxg25lacry9k3vb5yim057bqcxmsifw97jrjp7gzfx56v5";
+  # needs git submodules, so can't use fetchFromGitHub
+  src = fetchgit {
+    rev = "refs/tags/${version}";
+    url = "https://github.com/ariya/phantomjs.git";
+    sha256 = "16x104cw5f1dyhf7fg12vlpcywvc9c43r9afhl0dvssgxklrn0q7";
   };
 
   buildInputs = [ bison2 flex fontconfig freetype gperf icu openssl libjpeg libpng perl python ruby sqlite ]
@@ -49,7 +51,8 @@ in stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs .
-    sed -i -e 's|/bin/pwd|pwd|' src/qt/qtbase/configure 
+    sed -i -e 's|/bin/pwd|pwd|' src/qt/qtbase/configure
+    touch src/qt/{qtbase,qtwebkit,3rdparty}/.git
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's,-licucore,/usr/lib/libicucore.dylib,' src/qt/qtwebkit/Source/WTF/WTF.pri
     substituteInPlace src/qt/qtwebkit/Tools/qmake/mkspecs/features/features.pri \
@@ -78,7 +81,9 @@ in stdenv.mkDerivation rec {
 
   __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 
-  buildPhase = "./build.sh --confirm";
+  buildPhase = "./build.py --confirm -j$NIX_BUILD_CORES";
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     mkdir -p $out/share/doc/phantomjs
