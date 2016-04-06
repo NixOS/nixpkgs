@@ -783,7 +783,6 @@ in
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.automount" ];
 
     # Don't bother with certain units in containers.
-    systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";
 
   };
