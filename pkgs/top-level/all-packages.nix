@@ -12210,6 +12210,8 @@ in
 
   esniper = callPackage ../applications/networking/esniper { };
 
+  eterm = callPackage ../applications/misc/eterm { };
+
   etherape = callPackage ../applications/networking/sniffers/etherape {
     inherit (gnome) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
   };
