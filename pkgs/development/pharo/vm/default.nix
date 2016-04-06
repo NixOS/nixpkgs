@@ -6,12 +6,12 @@ rec {
   base-url = http://files.pharo.org/vm/src/vm-unix-sources/blessed;
 
   pharo-no-spur = pharo-vm-build rec {
-    version = "2015.08.06";
+    version = "2016.02.18";
     name = "pharo-vm-i386-${version}";
     binary-basename = "pharo-vm";
     src = fetchurl {
       url = "${base-url}/pharo-vm-${version}.tar.bz2";
-      sha256 = "1kmb6phxb94d37awwldwbkj704l6m0c6sv0m54mcz6d4rx41fqgp";
+      sha256 = "16n2zg7v2s1ml0vvpbhkw6khmgn637sr0d7n2b28qm5yc8pfhcj4";
     };
   };
 
