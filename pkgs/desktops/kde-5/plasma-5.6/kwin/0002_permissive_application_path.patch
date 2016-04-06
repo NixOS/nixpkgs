@@ -1,0 +1,12 @@
+diff -ur kwin-5.5.5.orig/plugins/qpa/main.cpp kwin-5.5.5/plugins/qpa/main.cpp
+--- kwin-5.5.5.orig/plugins/qpa/main.cpp	2016-04-06 15:24:05.705736356 +0200
++++ kwin-5.5.5/plugins/qpa/main.cpp	2016-04-06 15:48:47.142816105 +0200
+@@ -33,7 +33,7 @@
+ QPlatformIntegration *KWinIntegrationPlugin::create(const QString &system, const QStringList &paramList)
+ {
+     Q_UNUSED(paramList)
+-    if (!QCoreApplication::applicationFilePath().endsWith(QLatin1Literal("kwin_wayland")) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
++    if (!QCoreApplication::applicationFilePath().contains(QLatin1Literal("kwin_wayland"), Qt::CaseSensitive) && !qEnvironmentVariableIsSet("KWIN_FORCE_OWN_QPA")) {
+         // Not KWin
+         return nullptr;
+     }
