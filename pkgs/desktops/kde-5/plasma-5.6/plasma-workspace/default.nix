@@ -8,7 +8,7 @@
 , pam, phonon, plasma-framework, qtquick1, qtscript, qtx11extras, wayland
 , libksysguard, bash, coreutils, gnused, gnugrep, socat, kconfig
 , kinit, kservice, qttools, dbus_tools, mkfontdir, xmessage
-, xprop, xrdb, xset, xsetroot, solid, qtquickcontrols
+, xprop, xrdb, xset, xsetroot, solid, qtquickcontrols, oxygen
 }:
 
 plasmaPackage rec {
@@ -23,7 +23,7 @@ plasmaPackage rec {
     kcmutils kcrash kdbusaddons kdesu kdewebkit kjsembed knewstuff
     knotifyconfig kpackage ktextwidgets kwallet kwayland kxmlrpcclient
     libdbusmenu libSM libXcursor networkmanager-qt pam phonon
-    qtscript wayland
+    qtscript wayland oxygen
   ];
   propagatedBuildInputs = [
     baloo kactivities kdeclarative kdelibs4support kglobalaccel
@@ -37,14 +37,10 @@ plasmaPackage rec {
   inherit dbus_tools mkfontdir xmessage xprop xrdb xset xsetroot;
   postPatch = ''
     substituteAllInPlace startkde/startkde.cmake
+    substituteAllInPlace startkde/startplasmacompositor.cmake
+    substituteAllInPlace startkde/startplasma.cmake
     substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
       --replace kdostartupconfig5 $out/bin/kdostartupconfig5
-  '';
-
-  postInstall = ''
-    rm "$out/bin/startplasmacompositor"
-    rm "$out/lib/libexec/startplasma"
-    rm -r "$out/share/wayland-sessions"
   '';
 
   postFixup = ''

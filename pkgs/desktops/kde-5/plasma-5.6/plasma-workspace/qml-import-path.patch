@@ -6,6 +6,7 @@ Index: plasma-workspace-5.5.1/applets/analog-clock/contents/ui/analogclock.qml
  import QtQuick.Layouts 1.1
  
  import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0 as PlasmaComponents
 -import "logic.js" as Logic
 +import "../code/logic.js" as Logic
  

@@ -278,20 +278,6 @@ Index: plasma-workspace-5.5.1/startkde/startkde.cmake
  
  KDE_SESSION_UID=`id -ru`
  export KDE_SESSION_UID
-@@ -332,11 +294,11 @@ export XDG_CURRENT_DESKTOP
- 
- # At this point all the environment is ready, let's send it to kwalletd if running
- if test -n "$PAM_KWALLET_LOGIN" ; then
--    env | socat STDIN UNIX-CONNECT:$PAM_KWALLET_LOGIN
-+    env | @socat@/bin/socat STDIN UNIX-CONNECT:$PAM_KWALLET_LOGIN
- fi
- # ...and also to kwalletd5
- if test -n "$PAM_KWALLET5_LOGIN" ; then
--    env | socat STDIN UNIX-CONNECT:$PAM_KWALLET5_LOGIN
-+    env | @socat@/bin/socat STDIN UNIX-CONNECT:$PAM_KWALLET5_LOGIN
- fi
- 
- # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
 @@ -349,21 +311,26 @@ if test $? -ne 0; then
    # Startup error
    echo 'startkde: Could not sync environment to dbus.'  1>&2
