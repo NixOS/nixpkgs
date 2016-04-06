@@ -5,6 +5,8 @@ with import ../lib/qemu-flags.nix;
 with pkgs.lib;
 
 let
+  # increase timeout due to IO on build machines
+  udevsettleCmd = "udevadm settle --timeout=600";
 
   # The configuration to install.
   makeConfig = { grubVersion, grubDevice, grubIdentifier
@@ -62,7 +64,7 @@ let
       $machine->waitForUnit("nixos-manual");
 
       # Wait for hard disks to appear in /dev
-      $machine->succeed("udevadm settle");
+      $machine->succeed("${udevsettleCmd}");
 
       # Partition the disk.
       ${createPartitions}
@@ -227,7 +229,7 @@ in {
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s",
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mkswap /dev/vda1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/vda2",
@@ -245,7 +247,7 @@ in {
               "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
               "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/vda3",
@@ -266,7 +268,7 @@ in {
               "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
               "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/vda3",
@@ -289,7 +291,7 @@ in {
               "parted /dev/vda -- set 1 lvm on",
               "parted /dev/vda -- mkpart primary 2048M -1s", # PV2
               "parted /dev/vda -- set 2 lvm on",
-              "udevadm settle",
+              "${udevsettleCmd}",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
               "lvcreate --size 1G --name swap MyVolGroup",
@@ -310,7 +312,7 @@ in {
           "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
           "parted /dev/vda -- mkpart primary linux-swap 50M 1024M",
           "parted /dev/vda -- mkpart primary 1024M -1s", # LUKS
-          "udevadm settle",
+          "${udevsettleCmd}",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
           "modprobe dm_mod dm_crypt",
@@ -352,12 +354,12 @@ in {
               . " mkpart logical 1603M 3103M" # md0 (root), second device
               . " mkpart logical 3104M 3360M" # md1 (swap), first device
               . " mkpart logical 3361M 3617M", # md1 (swap), second device
-              "udevadm settle",
+              "${udevsettleCmd}",
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",
               "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
               "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda7 /dev/vda8",
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mkswap -f /dev/md1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/md0",
@@ -365,7 +367,7 @@ in {
               "mkfs.ext3 -L boot /dev/vda1",
               "mkdir /mnt/boot",
               "mount LABEL=boot /mnt/boot",
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mdadm -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
               "mdadm -W /dev/md1",
           );
@@ -380,7 +382,7 @@ in {
               "parted /dev/sda mklabel msdos",
               "parted /dev/sda -- mkpart primary linux-swap 1M 1024M",
               "parted /dev/sda -- mkpart primary ext2 1024M -1s",
-              "udevadm settle",
+              "${udevsettleCmd}",
               "mkswap /dev/sda1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/sda2",
