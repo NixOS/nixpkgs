@@ -16648,16 +16648,25 @@ in modules // {
   };
 
 
-  pika = buildPythonPackage {
-    name = "pika-0.9.12";
-    disabled = isPy3k;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/p/pika/pika-0.9.12.tar.gz;
-      sha256 = "670787ee6ade47cadd1ec8220876b9b7ae4df7bc4b9dd1d808261a6b47e9ce5d";
-    };
-    buildInputs = with self; [ nose mock pyyaml ];
+  pika = buildPythonPackage rec {
+    name = "pika-${version}";
+    version = "0.10.0";
 
-    propagatedBuildInputs = with self; [ unittest2 ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pika/${name}.tar.gz";
+      sha256 = "0nb4h08di432lv7dy2v9kpwgk0w92f24sqc2hw2s9vwr5b8v8xvj";
+    };
+
+    # Tests require twisted which is only availalble for python-2.x
+    doCheck = !isPy3k;
+
+    buildInputs = with self; [ nose mock pyyaml unittest2 pyev ] ++ optionals (!isPy3k) [ twisted tornado ];
+
+    meta = {
+      description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
+      homepage = https://pika.readthedocs.org;
+      license = licenses.bsd3;
+    };
   };
 
   platformio =  buildPythonPackage rec {
