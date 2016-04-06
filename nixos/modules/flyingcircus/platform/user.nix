@@ -148,6 +148,8 @@ in
       sensuapi = 31002;
       uchiwa = 31003;
       sensuclient = 31004;
+      powerdns = 31005;
+
     };
 
     ids.gids = {
