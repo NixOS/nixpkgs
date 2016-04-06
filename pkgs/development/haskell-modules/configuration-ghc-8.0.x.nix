@@ -55,4 +55,8 @@ self: super: {
   # No modules defined for this compiler.
   fail = dontHaddock super.fail;
 
+  # Version 4.x doesn't compile with transformers 0.5 or later.
+  comonad_5 = dontCheck super.comonad_5;  # https://github.com/ekmett/comonad/issues/33
+  comonad = self.comonad_5;
+
 }
