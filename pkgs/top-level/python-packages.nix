@@ -19957,11 +19957,11 @@ in modules // {
   };
 
   sopel = buildPythonPackage rec {
-    name = "sopel-6.3.0";
+    name = "sopel-6.3.1";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/sopel/${name}.tar.gz";
-      sha256 = "10g3p603qiz4whacknnslmkza5y1f7a8blq1q07dfrny4442c6nb";
+      sha256 = "1swvw7xw8n5anb8ah8jilk4vk1y30y62fkibfd9vm9fbk45d1q48";
     };
 
     buildInputs = with self; [ pytest ];
