@@ -240,7 +240,9 @@ self: super: {
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = addPkgconfigDepend super.glib pkgs.glib;
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addPkgconfigDepend super.gtk pkgs.gtk;
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
