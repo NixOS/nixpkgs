@@ -7259,6 +7259,8 @@ in
 
   libass = callPackage ../development/libraries/libass { };
 
+  libast = callPackage ../development/libraries/libast { };
+
   libassuan = callPackage ../development/libraries/libassuan { };
 
   libasyncns = callPackage ../development/libraries/libasyncns { };
