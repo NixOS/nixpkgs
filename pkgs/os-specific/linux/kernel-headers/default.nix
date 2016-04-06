@@ -22,4 +22,6 @@ in stdenv.mkDerivation {
 
   # Headers shouldn't reference anything else
   allowedReferences = [];
+
+  meta.platforms = stdenv.lib.platforms.linux;
 }
