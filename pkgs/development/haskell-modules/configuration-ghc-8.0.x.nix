@@ -52,4 +52,7 @@ self: super: {
   # https://github.com/sol/doctest/issues/125
   doctest = self.doctest_0_11_0;
 
+  # No modules defined for this compiler.
+  fail = dontHaddock super.fail;
+
 }
