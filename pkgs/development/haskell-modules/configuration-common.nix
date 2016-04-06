@@ -440,7 +440,9 @@ self: super: {
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
-  lvmrun = dontCheck super.lvmrun;
+  lvmrun = pkgs.lib.overrideDerivation (dontCheck super.lvmrun) (drv: {
+    hardeningDisable = [ "format" ];
+  });
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
