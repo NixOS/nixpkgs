@@ -2872,6 +2872,58 @@ in modules // {
     };
   };
 
+  cefpython3 = buildPythonPackage rec {
+    name = "cefpython3-${version}";
+    version = "31.2";
+
+    disabled = !isPy27;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/cztomczak/cefpython/releases/download/v${version}/cefpython3-${version}-linux64-setup.zip";
+      sha256 = "0275va62wyml2624wfd7yv0pcrsmdsmynpk78zzny408bx9fask1";
+    };
+
+    patches = [ ../development/python-modules/cefpython3/no-post-install.patch ];
+
+    postInstall = with pkgs; ''
+      cd $out
+      patchelf --set-rpath \
+${alsaLib}/lib:\
+${atk}/lib:\
+${cairo}/lib:\
+${cups}/lib:\
+${dbus}/lib:\
+${expat}/lib:\
+${fontconfig}/lib:\
+${freetype}/lib:\
+${gdk_pixbuf}/lib:\
+${glib}/lib:\
+${gnome.GConf}/lib:\
+${gnome.gtk}/lib:\
+${gnome.pango}/lib:\
+${libgcrypt_1_5}/lib:\
+${nspr}/lib:\
+${nss}/lib:\
+${stdenv.cc.cc}/lib:\
+${udev182}/lib:\
+${xorg.libX11}/lib:\
+${xorg.libXcomposite}/lib:\
+${xorg.libXdamage}/lib:\
+${xorg.libXext}/lib:\
+${xorg.libXfixes}/lib:\
+${xorg.libXi}/lib:\
+${xorg.libXrender}/lib:\
+${xorg.libXtst}/lib \
+        lib/python2.7/site-packages/cefpython3/libcef.so
+      cd -
+    '';
+
+    meta = {
+      homepage = "https://github.com/cztomczak/cefpython";
+      description = "Python bindings for the Chromium Embedded Framework";
+      license = licenses.bsd3;
+    };
+  };
 
   celery = buildPythonPackage rec {
     name = "celery-${version}";
