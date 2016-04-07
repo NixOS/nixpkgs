@@ -13521,7 +13521,6 @@ let
       description = "A client for Etsy's node-js statsd server";
       homepage = https://github.com/WoLpH/python-statsd;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
     };
   };
 
