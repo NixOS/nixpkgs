@@ -1,7 +1,8 @@
 { stdenv, fetchsvn, mavenbuild, fetchurl, fetchmaven, pkgs }:
 
 with pkgs.mavenPlugins;
-with import ../../poms.nix { inherit fetchurl; inherit fetchmaven; };
+with pkgs.javaPackages;
+with import ./poms.nix { inherit fetchurl; inherit fetchmaven; };
 
 rec {
   mavenArchiverGen = { name, src, mavenDeps, m2Path }: mavenbuild rec {
@@ -24,7 +25,7 @@ rec {
       rev = 1724719;
       sha256 = "1irxgz6amxq1f5q6w7lq77ay6yc0g1lr9ys8vy7xhaaxrj3c7875";
     };
-    mavenDeps = [  ];
+    mavenDeps = [ bootstrapMavenClean241Jar bootstrapMavenCompiler232Jar bootstrapMavenInstall231Jar bootstrapMavenJar231Jar bootstrapMavenRemoteResources11Jar bootstrapMavenResources243Jar bootstrapMavenSurefire272Jar apacheParent9 mavenArtifact206 mavenModel206 mavenParent16 mavenProject206 mavenShared15 ];
     m2Path = "/org/apache/maven/maven-archiver/2.4.1";
   };
 }

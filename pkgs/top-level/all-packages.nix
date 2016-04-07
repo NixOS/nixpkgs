@@ -4311,7 +4311,7 @@ let
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk; });
 
   javaPackages = {
-    commonsIo = callPackage ../development/java-modules/commons-io.nix {};
+    commonsIo =  callPackage ../development/java-modules/commons-io.nix {};
 
     mavenArchiver = callPackage ../development/java-modules/maven-archiver.nix {};
     mavenArchiver241 = self.javaPackages.mavenArchiver.mavenArchiver241;

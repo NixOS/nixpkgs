@@ -474,6 +474,18 @@ rec {
     m2File = "maven-plugin-tools-3.2.pom";
   };
 
+  mavenShared15 = fetchmaven {
+    version = "15";
+    name = "maven-shared-components";
+    src = fetchurl rec {
+      url = "http://svn.apache.org/repos/asf/maven/shared/tags/maven-shared-components-15/pom.xml";
+      sha256 = "1n2lfks6h5iaqyhf2av5mfdq7sylbwg87a12ivlnlql8icg5b0ar";
+    };
+    m2Path = "org/apache/maven/shared/maven-shared-components/15";
+    m2File = "maven-shared-components-15.pom";
+  };
+
+
   plexusParent205 = fetchmaven {
     version = "2.0.5";
     name = "plexus-pom-2.0.5";
