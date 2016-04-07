@@ -13498,7 +13498,6 @@ let
       description = "Statistical computations and models for use with SciPy";
       homepage = "https://www.github.com/statsmodels/statsmodels";
       license = licenses.bsd3;
-      maintainer = with maintainers; [ fridh ];
     };
     
     # Many tests fail when using latest numpy and pandas.
