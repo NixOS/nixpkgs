@@ -2946,6 +2946,7 @@ in modules // {
     };
   };
 
+  # This package is no longer actively maintained and can be removed if it becomes broken.
   cgkit = buildPythonPackage rec {
     version = "2.0.0";
     name = "cgkit-${version}";
@@ -2969,6 +2970,7 @@ in modules // {
     meta = {
       homepage = http://cgkit.sourceforge.net;
       description = "Python Computer Graphics Kit";
+      maintainers = with maintainers; [ expipiplus1 ];
     };
   };
 
