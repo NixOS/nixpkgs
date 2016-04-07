@@ -70,6 +70,8 @@ stdenv.mkDerivation {
         patchelf --set-rpath ${rpath}:$out/libexec/hipchat/lib:\$ORIGIN $file || true
     done
 
+    patchShebangs $d/linuxbrowserlaunch.sh
+
     substituteInPlace $out/share/applications/hipchat4.desktop \
       --replace /opt/HipChat4/bin/HipChat4 $out/bin/hipchat
 

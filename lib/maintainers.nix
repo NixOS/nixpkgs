@@ -186,6 +186,7 @@
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
   lassulus = "Lassulus <lassulus@gmail.com>";
   layus = "Guillaume Maudoux <layus.on@gmail.com>";
+  ldesgoui = "Lucas Desgouilles <ldesgoui@gmail.com>";
   lebastr = "Alexander Lebedev <lebastr@gmail.com>";
   leenaars = "Michiel Leenaars <ml.software@leenaa.rs>";
   leonardoce = "Leonardo Cecchi <leonardo.cecchi@gmail.com>";

@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
-, alsaLib, cairo, acl, gpm, AppKit, Foundation, libobjc
+, alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , autoconf, automake
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
@@ -23,17 +23,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "emacs-25.0.50-1b5630e";
+  name = "emacs-25.0.92";
 
   builder = ./builder.sh;
 
-  src = fetchgit {
-    url = "git://git.savannah.gnu.org/emacs.git";
-    rev = "1b5630eb47d3f4bade09708c958ab006b83b3fc0";
-    sha256 = "0n3qbri84akmy7ad1pbv89j4jn4x9pnkz0p4nbhh6m1c37cbz58l";
+  src = fetchurl {
+    url = "ftp://alpha.gnu.org/gnu/emacs/pretest/emacs-25.0.92.tar.xz";
+    sha256 = "13jnj1js2l90k4yk219r3z67fff90r6mniprsp0sgip2kaak75y2";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./at-fdcwd.patch
   ];
 
@@ -52,11 +51,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
     ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit Foundation libobjc
-  ];
-
-  NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
-    "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   configureFlags =
     if stdenv.isDarwin
@@ -81,17 +76,15 @@ stdenv.mkDerivation rec {
     mv nextstep/Emacs.app $out/Applications
   '';
 
-  doCheck = !stdenv.isDarwin;
+  # https://github.com/NixOS/nixpkgs/issues/13573
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "GNU Emacs 25 (pre), the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
+    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny jwiegley ];
     platforms   = platforms.all;
-
-    # So that Exuberant ctags is preferred
-    priority = 1;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

@@ -8,14 +8,15 @@ echo "keeping state in $stateDir"
 mkdir -p $stateDir
 
 version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.nixpkgsVersion | sed s/'"'//g)
-echo "NixOS version is $version"
+major=${version:0:5}
+echo "NixOS version is $version ($major)"
 
 rm -f ec2-amis.nix
 
 
 for type in hvm pv; do
     link=$stateDir/$type
-    imageFile=$link/nixos.img
+    imageFile=$link/nixos.qcow2
     system=x86_64-linux
     arch=x86_64
 
@@ -61,12 +62,19 @@ for type in hvm pv; do
                         # Bundle the image.
                         imageDir=$stateDir/$type-bundled
 
+                        # Convert the image to raw format.
+                        rawFile=$stateDir/$type.raw
+                        if ! [ -e $rawFile ]; then
+                            qemu-img convert -f qcow2 -O raw $imageFile $rawFile.tmp
+                            mv $rawFile.tmp $rawFile
+                        fi
+
                         if ! [ -d $imageDir ]; then
                             rm -rf $imageDir.tmp
                             mkdir -p $imageDir.tmp
                             ec2-bundle-image \
                                 -d $imageDir.tmp \
-                                -i $imageFile --arch $arch \
+                                -i $rawFile --arch $arch \
                                 --user "$AWS_ACCOUNT" -c "$EC2_CERT" -k "$EC2_PRIVATE_KEY"
                             mv $imageDir.tmp $imageDir
                         fi
@@ -75,14 +83,14 @@ for type in hvm pv; do
                         if ! [ -e $imageDir/uploaded ]; then
                             echo "uploading bundle to S3..."
                             ec2-upload-bundle \
-                                -m $imageDir/nixos.img.manifest.xml \
+                                -m $imageDir/$type.raw.manifest.xml \
                                 -b "$bucket/$bucketDir" \
                                 -a "$EC2_ACCESS_KEY" -s "$EC2_SECRET_KEY" \
                                 --location EU
                             touch $imageDir/uploaded
                         fi
 
-                        extraFlags="$bucket/$bucketDir/nixos.img.manifest.xml"
+                        extraFlags="$bucket/$bucketDir/$type.raw.manifest.xml"
 
                     else
 
@@ -90,7 +98,7 @@ for type in hvm pv; do
                         # to upload a huge raw image.
                         vhdFile=$stateDir/$type.vhd
                         if ! [ -e $vhdFile ]; then
-                            qemu-img convert -O vpc $imageFile $vhdFile.tmp
+                            qemu-img convert -f qcow2 -O vpc $imageFile $vhdFile.tmp
                             mv $vhdFile.tmp $vhdFile
                         fi
 
@@ -209,7 +217,7 @@ for type in hvm pv; do
                 prevRegion="$region"
             fi
 
-            echo "  \"15.09\".$region.$type-$store = \"$ami\";" >> ec2-amis.nix
+            echo "  \"$major\".$region.$type-$store = \"$ami\";" >> ec2-amis.nix
         done
 
     done

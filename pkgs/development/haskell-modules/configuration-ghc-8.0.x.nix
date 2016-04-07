@@ -47,9 +47,16 @@ self: super: {
   hspec-core = dontCheck super.hspec-core;
 
   # Deviate from Stackage here to fix lots of builds.
-  transformers-compat = super.transformers-compat_0_5_1_4;
+  transformers-compat = self.transformers-compat_0_5_1_4;
 
   # https://github.com/sol/doctest/issues/125
   doctest = self.doctest_0_11_0;
+
+  # No modules defined for this compiler.
+  fail = dontHaddock super.fail;
+
+  # Version 4.x doesn't compile with transformers 0.5 or later.
+  comonad_5 = dontCheck super.comonad_5;  # https://github.com/ekmett/comonad/issues/33
+  comonad = self.comonad_5;
 
 }

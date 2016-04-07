@@ -1,0 +1,29 @@
+From 54c2f3fdb941204cad136024c7b854b7ad112ab6 Mon Sep 17 00:00:00 2001
+From: Andi Kleen <ak@linux.intel.com>
+Date: Mon, 5 Aug 2013 15:02:45 -0700
+Subject: x86, asmlinkage, apm: Make APM data structure used from assembler
+ visible
+
+Signed-off-by: Andi Kleen <ak@linux.intel.com>
+Link: http://lkml.kernel.org/r/1375740170-7446-12-git-send-email-andi@firstfloor.org
+Signed-off-by: H. Peter Anvin <hpa@linux.intel.com>
+---
+ arch/x86/kernel/apm_32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kernel/apm_32.c b/arch/x86/kernel/apm_32.c
+index 53a4e27..3ab0343 100644
+--- a/arch/x86/kernel/apm_32.c
++++ b/arch/x86/kernel/apm_32.c
+@@ -392,7 +392,7 @@ static struct cpuidle_device apm_cpuidle_device;
+ /*
+  * Local variables
+  */
+-static struct {
++__visible struct {
+ 	unsigned long	offset;
+ 	unsigned short	segment;
+ } apm_bios_entry;
+-- 
+cgit v0.12
+

@@ -756,6 +756,8 @@ in
 
   fasd = callPackage ../tools/misc/fasd { };
 
+  fastJson = callPackage ../development/libraries/fastjson { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
@@ -1587,11 +1589,11 @@ in
     gazebo6-headless = callPackage ../applications/science/robotics/gazebo/6.nix { withHeadless = true;  };
 
     gazebo7 = callPackage ../applications/science/robotics/gazebo { };
-  
+
     gazebo7-headless = callPackage ../applications/science/robotics/gazebo { withHeadless = true; };
 
   };
-  
+
   # at present, Gazebo 7.0.0 does not match Gazebo 6.5.1 for compatibility
   gazebo = gazeboSimulator.gazebo6;
 
@@ -1935,12 +1937,12 @@ in
 
   ifuse = callPackage ../tools/filesystems/ifuse/default.nix { };
 
-  ignition = recurseIntoAttrs { 
+  ignition = recurseIntoAttrs {
 
     math = callPackage ../development/libraries/ignition-math { };
-  
+
     math2 = ignition.math;
-  
+
     transport0 = callPackage ../development/libraries/ignition-transport/0.9.0.nix { };
 
     transport1 = callPackage ../development/libraries/ignition-transport/1.0.1.nix { };
@@ -2710,6 +2712,8 @@ in
 
   parted = callPackage ../tools/misc/parted { hurd = null; };
 
+  pell = callPackage ../applications/misc/pell { };
+
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1 //
       { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
@@ -3190,7 +3194,7 @@ in
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
-  snabbswitch = callPackage ../tools/networking/snabbswitch { } ;
+  snabb = callPackage ../tools/networking/snabb { } ;
 
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
@@ -3544,6 +3548,8 @@ in
   vtun = callPackage ../tools/networking/vtun { };
 
   weather = callPackage ../applications/misc/weather { };
+
+  wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
@@ -4452,6 +4458,8 @@ in
   };
 
   lessc = callPackage ../development/compilers/lessc { };
+
+  liquibase = callPackage ../development/tools/database/liquibase { };
 
   llvm = llvmPackages.llvm;
 
@@ -7217,6 +7225,8 @@ in
 
   libass = callPackage ../development/libraries/libass { };
 
+  libast = callPackage ../development/libraries/libast { };
+
   libassuan = callPackage ../development/libraries/libassuan { };
 
   libasyncns = callPackage ../development/libraries/libasyncns { };
@@ -9006,11 +9016,7 @@ in
   xapian = callPackage ../development/libraries/xapian { };
 
   xapianBindings = callPackage ../development/libraries/xapian/bindings {  # TODO perl php Java, tcl, C#, python
-  };
-
-  xapian10 = callPackage ../development/libraries/xapian/1.0.x.nix { };
-
-  xapianBindings10 = callPackage ../development/libraries/xapian/bindings/1.0.x.nix {  # TODO perl php Java, tcl, C#, python
+    php = php56;
   };
 
   xapian-omega = callPackage ../tools/misc/xapian-omega {};
@@ -9378,10 +9384,12 @@ in
 
   slowaes = pythonPackages.slowaes;
 
+  twisted = pythonPackages.twisted;
+
   wxPython = pythonPackages.wxPython;
   wxPython28 = pythonPackages.wxPython28;
 
-  twisted = pythonPackages.twisted;
+  yolk = callPackage ../development/python-modules/yolk {};
 
   ZopeInterface = pythonPackages.zope_interface;
 
@@ -10334,7 +10342,7 @@ in
   };
 
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10343,7 +10351,7 @@ in
   };
 
   linux_3_12 = callPackage ../os-specific/linux/kernel/linux-3.12.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.crc_regression ]
+    kernelPatches = with kernelPatches; [ bridge_stp_helper crc_regression link_lguest ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11956,8 +11964,7 @@ in
     imagemagick = null;
     acl = null;
     gpm = null;
-    inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
-    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreWLAN GSS Kerberos ImageIO;
   });
 
   emacsPackagesGen = emacs: self: let callPackage = newScope self; in rec {
@@ -12166,6 +12173,8 @@ in
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
   esniper = callPackage ../applications/networking/esniper { };
+
+  eterm = callPackage ../applications/misc/eterm { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
     inherit (gnome) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
@@ -12738,6 +12747,8 @@ in
 
   jamin = callPackage ../applications/audio/jamin { };
 
+  japa = callPackage ../applications/audio/japa { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
@@ -13154,7 +13165,7 @@ in
   smtube = qt5.callPackage ../applications/video/smtube {};
 
   sup = callPackage ../applications/networking/mailreaders/sup {
-    ruby = ruby_1_9.override { cursesSupport = true; };
+    ruby = ruby_2_3.override { cursesSupport = true; };
   };
 
   synapse = callPackage ../applications/misc/synapse {
@@ -13294,7 +13305,7 @@ in
   panotools = callPackage ../applications/graphics/panotools { };
 
   paprefs = callPackage ../applications/audio/paprefs {
-    inherit (gnome) libglademm gconfmm;
+    inherit (gnome) libglademm gconfmm GConf;
   };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
@@ -16432,4 +16443,5 @@ in
 
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
+  discord = callPackage ../applications/networking/instant-messengers/discord { };
 }

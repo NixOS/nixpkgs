@@ -3,8 +3,8 @@
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
-, fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre
-, zlib, libjpeg, libpng, libtiff, sqlite, icu
+, fontconfig, freetype, openssl, dbus, glib, udev, libxml2, libxslt, pcre16
+, zlib, libjpeg, libpng, libtiff, sqlite, icu, harfbuzz
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
 , python, perl, pkgconfig
@@ -164,8 +164,10 @@ stdenv.mkDerivation {
     -system-zlib
     -system-libpng
     -system-libjpeg
+    -system-harfbuzz
     -system-xcb
     -system-xkbcommon
+    -system-pcre
     -openssl-linked
     -dbus-linked
 
@@ -186,8 +188,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     xlibs.libXcomposite libX11 libxcb libXext libXrender libXi
-    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre
-    zlib libjpeg libpng libtiff sqlite icu
+    fontconfig freetype openssl dbus.libs glib udev libxml2 libxslt pcre16
+    zlib libjpeg libpng libtiff sqlite icu harfbuzz
     xcbutil xcbutilimage xcbutilkeysyms xcbutilwm libxkbcommon
   ]
   # Qt doesn't directly need GLU (just GL), but many apps use, it's small and

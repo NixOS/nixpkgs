@@ -20,6 +20,12 @@ in stdenv.mkDerivation rec {
     sha256 = "14p4px9a3qzjc22lnl6braxrcrmd9rgmy7fh4qpanawn2pgfq6br";
   };
 
+  # Bug in openmpi implementation for zero sized messages
+  # Patch required to make mpi4py pass. Will NOT
+  # be required when openmpi >= 2.0.0
+  # https://www.open-mpi.org/community/lists/users/2015/11/28030.php
+  patches = [ ./nbc_copy.patch ];
+
   buildInputs = [ gfortran libibverbs ];
 
   nativeBuildInputs = [ perl ];
@@ -42,4 +48,3 @@ in stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.mornfall ];
   };
 }
-
