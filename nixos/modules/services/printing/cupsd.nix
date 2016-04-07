@@ -8,6 +8,8 @@ let
 
   cfg = config.services.printing;
 
+  boolToStr = bool: if bool then "Yes" else "No";
+
   avahiEnabled = config.services.avahi.enable;
   polkitEnabled = config.security.polkit.enable;
 
@@ -66,6 +68,12 @@ let
     User cups
     Group lp
 
+    ${lib.optionalString cfg.startWhenNeeded ''
+      # As we are socket activated, exit after ${toString cfg.exitWhenIdle} seconds
+      SystemdIdleExit on
+      IdleExitTimeout ${toString cfg.exitWhenIdle}
+    ''}
+
     ${cfg.extraFilesConf}
   '';
 
@@ -73,17 +81,22 @@ let
     ${concatMapStrings (addr: ''
       Listen ${addr}
     '') cfg.listenAddresses}
-    Listen /var/run/cups/cups.sock
+    Listen /run/cups/cups.sock
 
     SetEnv PATH /var/lib/cups/path/lib/cups/filter:/var/lib/cups/path/bin
 
-    DefaultShared ${if cfg.defaultShared then "Yes" else "No"}
+    DefaultShared ${boolToStr cfg.defaultShared}
 
-    Browsing ${if cfg.browsing then "Yes" else "No"}
+    Browsing ${boolToStr cfg.browsing}
 
-    WebInterface ${if cfg.webInterface then "Yes" else "No"}
+    WebInterface ${boolToStr cfg.webInterface}
 
     LogLevel ${cfg.logLevel}
+
+    ${lib.optionalString cfg.startWhenNeeded ''
+      # As we are socket activated, exit after ${toString cfg.exitWhenIdle} seconds
+      IdleExitTimeout ${toString cfg.exitWhenIdle}
+    ''}
 
     ${cfg.extraConf}
   '';
@@ -97,7 +110,7 @@ let
       cupsdFile
       (writeConf "client.conf" cfg.clientConf)
       (writeConf "snmp.conf" cfg.snmpConf)
-    ] ++ optional avahiEnabled browsedFile
+    ] ++ optional cfg.discover browsedFile
       ++ cfg.drivers;
     pathsToLink = [ "/etc/cups" ];
     ignoreCollisions = true;
@@ -156,6 +169,14 @@ in
         default = false;
         description = ''
           Specifies whether shared printers are advertised.
+        '';
+      };
+
+      discover = mkOption {
+        type = types.bool;
+        default = config.services.avahi.enable;
+        description = ''
+          Specifies whether shared printers should be discovered on the network. If you enable Avahi, this will also be enabled unless disabled.
         '';
       };
 
@@ -259,8 +280,31 @@ in
           CUPSd temporary directory.
         '';
       };
-    };
 
+      startWhenNeeded = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Start CUPS processes on demand.
+        '';
+      };
+
+      exitWhenIdle = mkOption {
+        type = types.int;
+        default = 60;
+        description = ''
+          Number of seconds of idleness before exiting when running socket activated.
+        '';
+      };
+
+      lpdCompatibility = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Listen for lpd connections.
+        '';
+      };
+    };
   };
 
 
@@ -285,73 +329,85 @@ in
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    systemd.packages = [ cups.out ];
+    systemd = {
+      packages = [ cups.out ];
+
+      paths.cups.wantedBy = [ "paths.target" ];
+
+      sockets = {
+        cups = {
+          wantedBy = [ "sockets.target" ];
+          socketConfig.ListenStream = "631";
+        };
+
+        cups-lpd = mkIf cfg.lpdCompatibility {
+          wantedBy = [ "sockets.target" ];
+        };
+      };
+    };
 
     systemd.services.cups =
-      { wantedBy = [ "multi-user.target" ];
-        wants = [ "network.target" ];
+      { wantedBy = [ "printer.target" ];
         after = [ "network.target" ];
 
         path = [ cups.out ];
 
-        preStart =
-          ''
-            mkdir -m 0700 -p /var/cache/cups
-            mkdir -m 0700 -p /var/spool/cups
-            mkdir -m 0755 -p ${cfg.tempDir}
+        preStart = ''
+          install -dm700 /var/{cache,spool}/cups
+          install -dm755 ${cfg.tempDir}
 
-            mkdir -m 0755 -p /var/lib/cups
-            # Backwards compatibility
-            if [ ! -L /etc/cups ]; then
-              mv /etc/cups/* /var/lib/cups
-              rmdir /etc/cups
-              ln -s /var/lib/cups /etc/cups
-            fi
-            # First, clean existing symlinks
-            if [ -n "$(ls /var/lib/cups)" ]; then
-              for i in /var/lib/cups/*; do
-                [ -L "$i" ] && rm "$i"
-              done
-            fi
-            # Then, populate it with static files
-            cd ${rootdir}/etc/cups
-            for i in *; do
-              [ ! -e "/var/lib/cups/$i" ] && ln -s "${rootdir}/etc/cups/$i" "/var/lib/cups/$i"
+          # Backwards compatibility
+          if [ ! -L /etc/cups ]; then
+            mv /etc/cups/* /var/lib/cups
+            rmdir /etc/cups
+            ln -s /var/lib/cups /etc/cups
+          fi
+          # First, clean existing symlinks
+          if [ -n "$(ls /var/lib/cups)" ]; then
+            for i in /var/lib/cups/*; do
+              [ -L "$i" ] && rm "$i"
             done
+          fi
+          # Then, populate it with static files
+          cd ${rootdir}/etc/cups
+          for i in *; do
+            [ ! -e "/var/lib/cups/$i" ] && ln -s "${rootdir}/etc/cups/$i" "/var/lib/cups/$i"
+          done
 
-            #update path reference
-            [ -L /var/lib/cups/path ] && \
-              rm /var/lib/cups/path
-            [ ! -e /var/lib/cups/path ] && \
-              ln -s ${bindir} /var/lib/cups/path
+          #update path reference
+          [ -L /var/lib/cups/path ] && \
+            rm /var/lib/cups/path
+          [ ! -e /var/lib/cups/path ] && \
+            ln -s ${bindir} /var/lib/cups/path
 
-            ${optionalString (containsGutenprint cfg.drivers) ''
-              if [ -d /var/lib/cups/ppd ]; then
-                ${getGutenprint cfg.drivers}/bin/cups-genppdupdate -p /var/lib/cups/ppd
-              fi
-            ''}
-          '';
+          ${optionalString (containsGutenprint cfg.drivers) ''
+            if [ -d /var/lib/cups/ppd ]; then
+              ${getGutenprint cfg.drivers}/bin/cups-genppdupdate -p /var/lib/cups/ppd
+            fi
+          ''}
+        '';
 
           serviceConfig = {
+            StateDirectory = "cups";
             PrivateTmp = true;
             RuntimeDirectory = [ "cups" ];
           };
       };
 
-    systemd.services.cups-browsed = mkIf avahiEnabled
-      { description = "CUPS Remote Printer Discovery";
+    systemd.services.cups-browsed = {
+      description = "CUPS Remote Printer Discovery";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "cups.service" "avahi-daemon.service" ];
-        bindsTo = [ "cups.service" "avahi-daemon.service" ];
-        partOf = [ "cups.service" "avahi-daemon.service" ];
-        after = [ "cups.service" "avahi-daemon.service" ];
+      wantedBy = mkIf cfg.discover [ "multi-user.target" ];
+      wants    = [ "cups.service" "avahi-daemon.service" ];
+      bindsTo  = [ "cups.service" "avahi-daemon.service" ];
+      partOf   = [ "cups.service" "avahi-daemon.service" ];
+      after    = [ "cups.service" "avahi-daemon.service" ];
 
-        path = [ cups ];
+      path = [ cups ];
 
-        serviceConfig.ExecStart = "${cups-filters}/bin/cups-browsed";
+      serviceConfig.ExecStart = "${cups-filters}/bin/cups-browsed --autoshutdown=${if cfg.startWhenNeeded then (if avahiEnabled then "avahi" else "on") else "off"}";
 
-        restartTriggers = [ browsedFile ];
+      restartTriggers = [ browsedFile ];
       };
 
     services.printing.extraConf =
