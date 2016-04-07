@@ -3557,6 +3557,8 @@ in
 
   weather = callPackage ../applications/misc/weather { };
 
+  wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
+
   wal_e = callPackage ../tools/backup/wal-e { };
 
   watchman = callPackage ../development/tools/watchman { };

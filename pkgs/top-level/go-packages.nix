@@ -3979,4 +3979,22 @@ let
     sha256 = "16zlvn53p9m10ph8n9gps51fkkvl6sf4afdzni6azk05j0ng49jw";
     propagatedBuildInputs = [ dbus ];
   };
+
+  ingo = buildFromGitHub rec {
+    rev     = "fab41e4e62cbef5d92998746ec25f7e195100f38";
+    version = "2016-04-07";
+    owner   = "schachmat";
+    repo    = "ingo";
+    sha256  = "04yfnch7pdabjjqfl2qxjmsaknvp4m1rbjlv8qrpmnqwjkxzx0hb";
+    propagatedBuildInputs = [ ];
+  };
+
+  wego = buildFromGitHub rec {
+    rev     = "81d72ffd761f032fbd73dba4f94bd94c8c2d53d5";
+    version = "2016-04-07";
+    owner   = "schachmat";
+    repo    = "wego";
+    sha256  = "14p3hvv82bsxqnbnzz8hjv75i39kzg154a132n6cdxx3vgw76gck";
+    propagatedBuildInputs = [ go-colorable mattn.go-runewidth ingo ];
+  };
 }; in self
