@@ -39,8 +39,8 @@ let
 
     # client
     ${mkConfLine "client.cert" cfg.client.cert}
-    ${mkConfLine "client.allow" cfg.client.allow}
-    ${mkConfLine "client.deny" cfg.client.deny}
+    ${mkConfLine "client.allow" cfg.allowedClientIDs}
+    ${mkConfLine "client.deny" cfg.disallowedClientIDs}
 
     # server
     server = ${cfg.server.host}:${toString cfg.server.port}
@@ -196,45 +196,41 @@ in {
         '';
       };
 
-      client = {
+      allowedClientIDs = mkOption {
+        type = with types; loeOf (either (enum ["all" "none"]) str);
+        default = [];
+        example = [ "[Tt]ask [2-9]+" ];
+        description = ''
+          A list of regular expressions that are matched against the reported
+          client id (such as <literal>task 2.3.0</literal>).
 
-        allow = mkOption {
-          type = with types; loeOf (either (enum ["all" "none"]) str);
-          default = [];
-          example = [ "[Tt]ask [2-9]+" ];
-          description = ''
-            A list of regular expressions that are matched against the reported
-            client id (such as <literal>task 2.3.0</literal>).
+          The values <literal>all</literal> or <literal>none</literal> have
+          special meaning. Overidden by any entry in the option
+          <option>services.taskserver.client.deny</option>.
+        '';
+      };
 
-            The values <literal>all</literal> or <literal>none</literal> have
-            special meaning. Overidden by any entry in the option
-            <option>services.taskserver.client.deny</option>.
-          '';
-        };
+      disallowedClientIDs = mkOption {
+        type = with types; loeOf (either (enum ["all" "none"]) str);
+        default = [];
+        example = [ "[Tt]ask [2-9]+" ];
+        description = ''
+          A list of regular expressions that are matched against the reported
+          client id (such as <literal>task 2.3.0</literal>).
 
-        cert = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = ''
-            Fully qualified path of the client cert. This is used by the
-            <command>client</command> command.
-          '';
-        };
+          The values <literal>all</literal> or <literal>none</literal> have
+          special meaning. Any entry here overrides these in
+          <option>services.taskserver.client.allow</option>.
+        '';
+      };
 
-        deny = mkOption {
-          type = with types; loeOf (either (enum ["all" "none"]) str);
-          default = [];
-          example = [ "[Tt]ask [2-9]+" ];
-          description = ''
-            A list of regular expressions that are matched against the reported
-            client id (such as <literal>task 2.3.0</literal>).
-
-            The values <literal>all</literal> or <literal>none</literal> have
-            special meaning. Any entry here overrides these in
-            <option>services.taskserver.client.allow</option>.
-          '';
-        };
-
+      client.cert = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = ''
+          Fully qualified path of the client cert. This is used by the
+          <command>client</command> command.
+        '';
       };
 
       server = {
