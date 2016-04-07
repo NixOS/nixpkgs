@@ -113,19 +113,6 @@ in
     script = "echo \"$(date) -- SERIAL CONSOLE IS LIVE --\" > /dev/ttyS0";
   };
 
-  systemd.services.enc-move-seed = {
-    description = "move ENC seed into its final location";
-    wantedBy = [ "fc-manage.service" ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      if [[ ! -e ${cfg.enc_path} && -e /tmp/fc-data/enc.json ]]; then
-        echo "found ENC seed in /tmp/fc-data"
-        mv /tmp/fc-data/enc.json ${cfg.enc_path}
-        chmod 0640 ${cfg.enc_path}
-      fi
-    '';
-  };
-
   # Configure time keeping;
   services.ntp.enable = false;
   services.chrony.enable = true;

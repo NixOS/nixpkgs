@@ -7,6 +7,7 @@ import json
 import logging
 import os
 import os.path as p
+import shutil
 import tempfile
 import xmlrpc.client
 
@@ -137,6 +138,14 @@ def ensure_reboot():
         os.system('systemctl reboot')
 
 
+def seed_enc(path):
+    if os.path.exists(path):
+        return
+    if not os.path.exists('/tmp/fc-data/enc.json'):
+        return
+    shutil.move('/tmp/fc-data/enc.json', path)
+
+
 def main():
     logging.basicConfig()
     build_options = []
@@ -162,6 +171,8 @@ def main():
                        help='switch machine to local checkout in '
                        '/root/nixpkgs')
     args = a.parse_args()
+
+    seed_enc(args.enc_path)
 
     if args.show_trace:
         build_options.append('--show-trace')
