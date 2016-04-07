@@ -120,12 +120,14 @@ in {
       };
 
       ciphers = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.separatedString ":");
         default = null;
-        example = "NORMAL";
-        description = ''
-          List of GnuTLS ciphers to use. See the GnuTLS documentation for full
-          details.
+        example = "NORMAL:-VERS-SSL3.0";
+        description = let
+          url = "https://gnutls.org/manual/html_node/Priority-Strings.html";
+        in ''
+          List of GnuTLS ciphers to use. See the GnuTLS documentation about
+          priority strings at <link xlink:href="${url}"/> for full details.
         '';
       };
 
