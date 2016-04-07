@@ -133,7 +133,8 @@ let result = stdenv.mkDerivation rec {
 
     if test -n "${jce}"; then
       unzip ${jce}
-      cp -v UnlimitedJCEPolicy*/*.jar $jrePath/lib/security
+      mkdir -p $jrePath/lib/security
+      cp -v UnlimitedJCEPolicy*/*.jar $jrePath/lib/security/
     fi
 
     rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
