@@ -275,9 +275,11 @@ in
     services.nscd.enable = true;
 
     systemd.tmpfiles.rules = [
-      "R /tmp/* - - - 3d"
-      "x /tmp/lost+found"
-      "R /var/tmp/* - - - 7d"];
+      # D instead of R to a) respect the age rule and allow exclusion
+      # of fc-data to avoid killing the seeded ENC upon boot.
+      "d /tmp - - - 3d"
+      "x /tmp/fc-data/*"
+      "D /var/tmp - - - 7d"];
 
     };
 }
