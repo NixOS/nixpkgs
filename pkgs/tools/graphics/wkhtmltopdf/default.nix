@@ -2,13 +2,13 @@
 , openssl, libX11, libXext, libXrender, overrideDerivation }:
 
 stdenv.mkDerivation rec {
-  version = "0.12.2.4";
+  version = "0.12.3.2";
   name = "wkhtmltopdf-${version}";
 
   src = fetchgit {
     url = "https://github.com/wkhtmltopdf/wkhtmltopdf.git";
     rev = "refs/tags/${version}";
-    sha256 = "0g96vgi3s633j4myjfzakkyiml1zspvdvbc0q1vhw8fp5n1xdknm";
+    sha256 = "1fvql7xcgdgwxm2fw9ksl7p53ckjl153p91k5rprfwz8k5k6gkmd";
     fetchSubmodules = false;
   };
 
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     enableParallelBuilding = true;
     src = fetchgit {
       url = "https://github.com/wkhtmltopdf/qt.git";
-      rev = "48e71c19c7fc67517fb3dca6d42eacb57341c9ba"; # From git submodule spec in wkhtml repo.
-      sha256 = "1ygr7g3k900zjf54ji6kkfppqnxaqwbh8npr53g2krdw3bmny6fx";
+      rev = "fe194f9dac0b515757392a18f7fc9527c91d45ab"; # From git submodule spec in wkhtml repo.
+      sha256 = "1rkkaf9i7si4kd1l00rgy41ljq3j1yvisvj5fllfjsgxhrasign0";
     };
     configureFlags =
       ''
