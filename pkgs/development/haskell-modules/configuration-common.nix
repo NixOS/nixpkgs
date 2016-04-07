@@ -956,19 +956,12 @@ self: super: {
   jsaddle = dontCheck super.jsaddle;
 
   # https://github.com/gwern/mueval/issues/14
-  mueval = super.mueval.override {
-    hint = self.hint_0_4_3;
-  };
+  mueval = super.mueval.override { hint = self.hint_0_4_3; };
 
   # Looks like Avahi provides the missing library
-  dnssd = super.dnssd.override {
-    dns_sd = pkgs.avahi.override {
-      withLibdnssdCompat = true;
-    };
+  dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
 
   # https://github.com/danidiaz/pipes-transduce/issues/2
-  pipes-transduce = super.pipes-transduce.override {
-    foldl = self.foldl_1_1_6;
-  };
+  pipes-transduce = super.pipes-transduce.override { foldl = self.foldl_1_1_6; };
 
 }
