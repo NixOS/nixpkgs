@@ -197,7 +197,7 @@ in {
       client = {
 
         allow = mkOption {
-          type = types.listOf types.str;
+          type = with types; loeOf (either (enum ["all" "none"]) str);
           default = [];
           example = [ "[Tt]ask [2-9]+" ];
           description = ''
@@ -220,7 +220,7 @@ in {
         };
 
         deny = mkOption {
-          type = types.listOf types.str;
+          type = with types; loeOf (either (enum ["all" "none"]) str);
           default = [];
           example = [ "[Tt]ask [2-9]+" ];
           description = ''
