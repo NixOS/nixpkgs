@@ -59,7 +59,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit ];
+    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
 
     systemd.packages = [ pkgs.polkit.out ];
 
