@@ -88,6 +88,8 @@ let
 
   ctlcmd = "${nixos-taskserver}/bin/nixos-taskserver --service-helper";
 
+  withMeta = meta: defs: mkMerge [ defs { inherit meta; } ];
+
 in {
 
   options = {
@@ -299,7 +301,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = withMeta {
+    doc = ./taskserver.xml;
+  } (mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.taskserver nixos-taskserver ];
 
@@ -424,5 +428,5 @@ in {
         Group = cfg.group;
       };
     };
-  };
+  });
 }

@@ -28,6 +28,7 @@ effect after you run <command>nixos-rebuild</command>.</para>
 <xi:include href="postgresql.xml" />
 <xi:include href="gitlab.xml" />
 <xi:include href="acme.xml" />
+<xi:include href="taskserver.xml" />
 
 <!-- Apache; libvirtd virtualisation -->
 

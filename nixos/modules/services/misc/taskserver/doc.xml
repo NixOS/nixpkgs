@@ -1,0 +1,52 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    version="5.0"
+    xml:id="module-taskserver">
+
+  <title>Taskserver</title>
+
+  <para>
+    Taskserver is the server component of
+    <link xlink:href="https://taskwarrior.org/">Taskwarrior</link>, a free and
+    open source todo list application.
+  </para>
+
+  <para>
+    <emphasis>Upstream documentation:</emphasis>
+    <link xlink:href="https://taskwarrior.org/docs/#taskd"/>
+  </para>
+
+  <section>
+    <title>Configuration</title>
+
+    <para>
+      Taskserver does all of its authentication via TLS using client
+      certificates, so you either need to roll your own CA or purchase a
+      certificate from a known CA, which allows creation of client
+      certificates.
+
+      These certificates are usually advertised as
+      <quote>server certificates</quote>.
+    </para>
+
+    <para>
+      So in order to make it easier to handle your own CA, there is a helper
+      tool called <command>nixos-taskserver</command> which manages the custom
+      CA along with Taskserver users and groups.
+    </para>
+
+    <para>
+      While the client certificates in Taskserver only authenticate whether a
+      user is allowed to connect, every user has its own UUID which identifies
+      it as an entity.
+    </para>
+
+    <para>
+      With <command>nixos-taskserver</command> the client certificate is created
+      along with the UUID of the user, so it handles all of the credentials
+      needed in order to setup the Taskwarrior client to work with a Taskserver.
+    </para>
+
+    <!-- TODO: Go more into the details of nixos-taskserver. -->
+  </section>
+</chapter>
