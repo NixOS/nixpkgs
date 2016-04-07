@@ -58,6 +58,7 @@ clangStdenv.mkDerivation rec {
     description =
     "Provides an iOS cross compiler from 7.1 up to iOS-${version} and ldid";
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [ fxfactorial ];
     license = stdenv.lib.licenses.gpl2;
   };

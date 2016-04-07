@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       gmp libyaml libedit libvpx imagemagick fribidi gperf
     ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
   MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";

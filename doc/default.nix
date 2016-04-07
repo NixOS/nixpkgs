@@ -67,9 +67,9 @@ stdenv.mkDerivation {
   + ''
     echo ${nixpkgsVersion} > .version
 
-    xmllint --noout --nonet --xinclude --noxincludenode \
-      --relaxng ${docbook5}/xml/rng/docbook/docbook.rng \
-      manual.xml
+    # validate against relaxng schema
+    xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
+    ${jing}/bin/jing ${docbook5}/xml/rng/docbook/docbook.rng manual-full.xml
 
     dst=$out/share/doc/nixpkgs
     mkdir -p $dst

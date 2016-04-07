@@ -500,8 +500,6 @@ stdenv.mkDerivation ({
 
   inherit (stdenv) is64bit;
 
-  setupHook = ./use-old-abi.sh;
-
   meta = {
     homepage = http://gcc.gnu.org/;
     license = stdenv.lib.licenses.gpl3Plus;  # runtime support libraries are typically LGPLv3+

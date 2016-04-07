@@ -1,5 +1,5 @@
 { stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxHeaders
-, withGUI ? false , qt4 ? null}:
+, libiberty_static, withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
 assert withGUI -> qt4 != null;
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0v1nn38h227bgxjwqf22rjp2iqgjm4ls3gckzifks0x6w5nrlxfg";
   };
 
-  buildInputs = [ binutils zlib popt pkgconfig linuxHeaders ]
+  buildInputs = [ binutils zlib popt pkgconfig linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [

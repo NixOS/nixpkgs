@@ -8,7 +8,7 @@ let
   gitBase = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
-      tk makeWrapper subversionClient gzip libiconv;
+      tk makeWrapper subversionClient gzip openssh libiconv;
     texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk

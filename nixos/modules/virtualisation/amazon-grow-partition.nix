@@ -4,37 +4,13 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
-let
-
-  growpart = pkgs.stdenv.mkDerivation {
-    name = "growpart";
-    src = pkgs.fetchurl {
-      url = "https://launchpad.net/cloud-utils/trunk/0.27/+download/cloud-utils-0.27.tar.gz";
-      sha256 = "16shlmg36lidp614km41y6qk3xccil02f5n3r4wf6d1zr5n4v8vd";
-    };
-    patches = [ ./growpart-util-linux-2.26.patch ];
-    buildPhase = ''
-      cp bin/growpart $out
-      sed -i 's|awk|gawk|' $out
-      sed -i 's|sed|gnused|' $out
-    '';
-    dontInstall = true;
-    dontPatchShebangs = true;
-  };
-
-in
-
 {
-
-  config = mkIf config.ec2.hvm {
-
+  config = lib.mkIf config.ec2.hvm {
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.gawk}/bin/gawk
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
       copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
-      cp -v ${growpart} $out/bin/growpart
+      cp -v ${pkgs.cloud-utils}/bin/growpart $out/bin/growpart
       ln -s sed $out/bin/gnused
     '';
 
@@ -44,7 +20,5 @@ in
         udevadm settle
       fi
     '';
-
   };
-
 }

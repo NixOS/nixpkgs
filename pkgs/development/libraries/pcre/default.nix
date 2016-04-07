@@ -1,16 +1,23 @@
 { stdenv, fetchurl
 , windows ? null, variant ? null, pcre
+, withCharSize ? 8
 }:
 
 with stdenv.lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.38";
+let
+  version = "8.38";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
+
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
     sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 

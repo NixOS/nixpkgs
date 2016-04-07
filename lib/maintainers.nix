@@ -51,6 +51,7 @@
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
   benley = "Benjamin Staffin <benley@gmail.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
+  benwbooth = "Ben Booth <benwbooth@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
   bergey = "Daniel Bergey <bergey@teallabs.org>";
   bjg = "Brian Gough <bjg@gnu.org>";

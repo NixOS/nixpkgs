@@ -4,7 +4,7 @@
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
 , fontconfig, freetype, harfbuzz
-, openssl, dbus, glib, udev, libxml2, libxslt, pcre
+, openssl, dbus, glib, udev, libxml2, libxslt, pcre16
 , zlib, libjpeg, libpng, libtiff, sqlite, icu
 
 , coreutils, bison, flex, gdb, gperf, lndir, ruby
@@ -188,11 +188,12 @@ stdenv.mkDerivation {
     -no-mips_dspr2
 
     -system-zlib
-    -system-harfbuzz
     -system-libpng
     -system-libjpeg
+    -system-harfbuzz
     -system-xcb
     -system-xkbcommon
+    -system-pcre
     -openssl-linked
     -dbus-linked
 
@@ -212,7 +213,7 @@ stdenv.mkDerivation {
   PSQL_LIBS = lib.optionalString (postgresql != null) "-L${postgresql.lib}/lib -lpq";
 
   propagatedBuildInputs = [
-    dbus glib libxml2 libxslt openssl pcre sqlite udev zlib
+    dbus glib libxml2 libxslt openssl pcre16 sqlite udev zlib
 
     # Image formats
     libjpeg libpng libtiff

@@ -5151,12 +5151,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FinanceQuote = buildPerlPackage rec {
-    name = "Finance-Quote-1.37";
+    name = "Finance-Quote-1.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EC/ECOCODE/${name}.tar.gz";
-      sha256 = "1b6pbh7f76fb5sa4f0lhx085xy55pprz5v7z7li7pqiyw7i4f4bf";
+      sha256 = "0zhqb27y4vdxn476s2kwm9zl2f970yjcyyybnjm9b406krr2fm59";
     };
-    propagatedBuildInputs = [ CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc DateTime JSON ];
+    propagatedBuildInputs = [ CGI CryptSSLeay HTMLTableExtract HTMLTree HTTPMessage LWP DateCalc DateTime JSON ];
     meta = with stdenv.lib; {
       homepage = http://finance-quote.sourceforge.net/;
       description = "Get stock and mutual fund quotes from various exchanges";
@@ -13209,6 +13209,9 @@ let self = _self // overrides; _self = with self; {
 
   UnicodeString = buildPerlPackage rec {
     name = "Unicode-String-2.09";
+    patches = [
+      ../development/perl-modules/Unicode-String-perl-5-22.patch
+    ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
       sha256 = "1bgsaf3dgmlgyvi84r42ysc037mr5280amnypa4d98jfjpdvw5y8";

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "hwinfo-${version}";
-  version = "21.12";
+  version = "21.23";
 
   src = fetchurl {
     url = "https://github.com/opensuse/hwinfo/archive/${version}.tar.gz";
-    sha256 = "01y5jk2jns0a3mgsgmvmpvi5yyc0df7b3yqsg32hn5r2nv17i47p";
+    sha256 = "1a8815zp3a7n2jx0cn0hcr69rfr6vmw8r8grbn5mv61g90bbcj6p";
   };
 
   patchPhase = ''

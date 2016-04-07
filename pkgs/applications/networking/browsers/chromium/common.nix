@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg, snappy
 , libpng, libxml2, libxslt, libcap
 , xdg_utils, yasm, minizip, libwebp
-, libusb1, libexif, pciutils, nss
+, libusb1, pciutils, nss
 
 , python, pythonPackages, perl, pkgconfig
 , nspr, libudev, kerberos
@@ -17,6 +17,7 @@
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
+, libexif ? null # only needed for Chromium before version 51
 
 # package customization
 , enableSELinux ? false, libselinux ? null
@@ -55,9 +56,8 @@ let
     use_system_flac = true;
     use_system_libevent = true;
     use_system_libexpat = true;
-    use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = true;
+    use_system_libpng = versionOlder upstream-info.version "51.0.0.0";
     use_system_libwebp = true;
     use_system_libxml = true;
     use_system_opus = true;
@@ -86,7 +86,7 @@ let
     libevent expat libjpeg snappy
     libpng libxml2 libxslt libcap
     xdg_utils yasm minizip libwebp
-    libusb1 libexif
+    libusb1
   ];
 
   # build paths and release info
@@ -123,7 +123,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optional enableSELinux libselinux
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optional (versionOlder version "51.0.0.0") libexif;
 
     patches = [
       ./patches/build_fixes_46.patch
@@ -140,15 +141,20 @@ let
         -e "/python_arch/s/: *'[^']*'/: '""'/" \
         build/common.gypi chrome/chrome_tests.gypi
 
-      sed -i -e '/module_path *=.*libexif.so/ {
-        s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
-      }' chrome/utility/media_galleries/image_metadata_extractor.cc
+      ${optionalString (versionOlder version "51.0.0.0") ''
+        sed -i -e '/module_path *=.*libexif.so/ {
+          s|= [^;]*|= base::FilePath().AppendASCII("${libexif}/lib/libexif.so")|
+        }' chrome/utility/media_galleries/image_metadata_extractor.cc
+      ''}
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${libudev.out}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
         gpu/config/gpu_info_collector_linux.cc
+    '' + optionalString (!versionOlder version "51.0.0.0") ''
+      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
+        chrome/browser/ui/webui/engagement/site_engagement_ui.cc
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -180,6 +186,8 @@ let
       google_default_client_id = "404761575300.apps.googleusercontent.com";
       google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
 
+    } // optionalAttrs (versionOlder version "51.0.0.0") {
+      use_system_libexif = true;
     } // optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
