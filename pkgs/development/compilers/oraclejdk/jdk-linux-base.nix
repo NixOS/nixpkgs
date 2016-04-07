@@ -31,6 +31,9 @@
 , atk
 , gdk_pixbuf
 , setJavaClassPath
+, useSystemCACerts ? false
+, perl
+, cacert
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -165,6 +168,14 @@ let result = stdenv.mkDerivation rec {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
     EOF
+  '';
+
+  postFixup = stdenv.lib.optionalString useSystemCACerts ''
+    # Generate certificates.
+    pushd $jrePath/lib/security
+    rm cacerts
+    ${perl}/bin/perl ${../openjdk/generate-cacerts.pl} $jrePath/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
   '';
 
   inherit installjdk pluginSupport;
