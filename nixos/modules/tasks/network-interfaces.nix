@@ -519,7 +519,7 @@ in
 
     networking.bonds = mkOption {
       default = { };
-      example = {
+      example = literalExample {
         bond0 = {
           interfaces = [ "eth0" "wlan0" ];
           miimon = 100;
@@ -594,7 +594,7 @@ in
     networking.macvlans = mkOption {
       type = types.attrsOf types.optionSet;
       default = { };
-      example = {
+      example = literalExample {
         wan = {
           interface = "enp2s0";
           mode = "vepa";
@@ -625,7 +625,7 @@ in
     networking.sits = mkOption {
       type = types.attrsOf types.optionSet;
       default = { };
-      example = {
+      example = literalExample {
         hurricane = {
           remote = "10.0.0.1";
           local = "10.0.0.22";
@@ -684,7 +684,7 @@ in
 
     networking.vlans = mkOption {
       default = { };
-      example = {
+      example = literalExample {
         vlan0 = {
           id = 3;
           interface = "enp3s0";
@@ -723,7 +723,7 @@ in
 
     networking.wlanInterfaces = mkOption {
       default = { };
-      example = {
+      example = literalExample {
         "wlan-station0" = {
             device = "wlp6s0";
         };
