@@ -81,6 +81,7 @@
   copumpkin = "Dan Peebles <pumpkingod@gmail.com>";
   coroa = "Jonas Hörsch <jonas@chaoflow.net>";
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
+  CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
   cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
