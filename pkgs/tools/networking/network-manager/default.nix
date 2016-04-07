@@ -2,7 +2,7 @@
 , udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused }:
+, ethtool, gnused, coreutils, file, inetutils }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
+    substituteInPlace src/devices/nm-device.c --replace /usr/bin/ping ${inetutils}/bin/ping
     substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
     substituteInPlace data/85-nm-unmanaged.rules \
       --replace /bin/sh ${stdenv.shell} \
