@@ -131,7 +131,7 @@ in
         };
       };
 
-      syncthing-inotify = mkIf.useInotify header // {
+      syncthing-inotify = mkIf cfg.useInotify header // {
         description = "Monitor Syncthing using inotify";
         after = [ "syncthing.service" ];
         requires = [ "syncthing.service" ];
@@ -140,7 +140,7 @@ in
           User = cfg.user;
           Group = optionalString (cfg.user == defaultUser) defaultUser;
           PermissionsStartOnly = true;
-          ExecStart = "${pkgs.syncthing-inotify}/bin/syncthing -logflags=0";
+          ExecStart = "${pkgs.syncthing-inotify}/bin/syncthing-inotify -logflags=0";
           Restart = "on-failure";
         };
       };
