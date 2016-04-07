@@ -91,7 +91,7 @@ let
       qtsvg = callPackage ./qtsvg.nix {};
       qttools = callPackage ./qttools.nix {};
       qttranslations = callPackage ./qttranslations.nix {};
-      /* qtwayland = not packaged */
+      qtwayland = callPackage ./qtwayland.nix {};
       /* qtwebchannel = not packaged */
       /* qtwebengine = not packaged */
       qtwebkit = callPackage ./qtwebkit {};

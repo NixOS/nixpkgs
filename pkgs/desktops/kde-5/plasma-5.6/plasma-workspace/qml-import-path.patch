@@ -1,0 +1,105 @@
+Index: plasma-workspace-5.5.1/applets/analog-clock/contents/ui/analogclock.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/analog-clock/contents/ui/analogclock.qml
++++ plasma-workspace-5.5.1/applets/analog-clock/contents/ui/analogclock.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.calendar 2.0 as Pl
+ import QtQuick.Layouts 1.1
+ 
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0 as PlasmaComponents
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: analogclock
+Index: plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/BatteryItem.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/batterymonitor/package/contents/ui/BatteryItem.qml
++++ plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/BatteryItem.qml
+@@ -26,7 +26,7 @@ import org.kde.plasma.components 2.0 as
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ import org.kde.plasma.workspace.components 2.0
+ import org.kde.kcoreaddons 1.0 as KCoreAddons
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: batteryItem
+Index: plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
++++ plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/CompactRepresentation.qml
+@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.1
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0 as Components
+ import org.kde.plasma.workspace.components 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ MouseArea {
+     id: root
+Index: plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/PopupDialog.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/batterymonitor/package/contents/ui/PopupDialog.qml
++++ plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/PopupDialog.qml
+@@ -23,7 +23,7 @@ import org.kde.plasma.core 2.0 as Plasma
+ import org.kde.plasma.components 2.0 as Components
+ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ import org.kde.kquickcontrolsaddons 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ FocusScope {
+     id: dialog
+Index: plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/batterymonitor.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/batterymonitor/package/contents/ui/batterymonitor.qml
++++ plasma-workspace-5.5.1/applets/batterymonitor/package/contents/ui/batterymonitor.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.plasmoid 2.0
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.kcoreaddons 1.0 as KCoreAddons
+ import org.kde.kquickcontrolsaddons 2.0
+-import "logic.js" as Logic
++import "../code/logic.js" as Logic
+ 
+ Item {
+     id: batterymonitor
+Index: plasma-workspace-5.5.1/applets/lock_logout/contents/ui/lockout.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/lock_logout/contents/ui/lockout.qml
++++ plasma-workspace-5.5.1/applets/lock_logout/contents/ui/lockout.qml
+@@ -23,7 +23,7 @@ import org.kde.plasma.plasmoid 2.0
+ import org.kde.plasma.core 2.0 as PlasmaCore
+ import org.kde.plasma.components 2.0
+ import org.kde.kquickcontrolsaddons 2.0
+-import "data.js" as Data
++import "../code/data.js" as Data
+ 
+ Flow {
+     id: lockout
+Index: plasma-workspace-5.5.1/applets/notifications/package/contents/ui/main.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/notifications/package/contents/ui/main.qml
++++ plasma-workspace-5.5.1/applets/notifications/package/contents/ui/main.qml
+@@ -28,7 +28,7 @@ import org.kde.plasma.extras 2.0 as Plas
+ 
+ import org.kde.plasma.private.notifications 1.0
+ 
+-import "uiproperties.js" as UiProperties
++import "../code/uiproperties.js" as UiProperties
+ 
+ MouseEventListener {
+     id: notificationsApplet
+Index: plasma-workspace-5.5.1/applets/systemtray/package/contents/ui/main.qml
+===================================================================
+--- plasma-workspace-5.5.1.orig/applets/systemtray/package/contents/ui/main.qml
++++ plasma-workspace-5.5.1/applets/systemtray/package/contents/ui/main.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.core 2.0 as Plasma
+ // import org.kde.plasma.extras 2.0 as PlasmaExtras
+ 
+ import org.kde.private.systemtray 2.0 as SystemTray
+-import "Layout.js" as LayoutManager
++import "../code/Layout.js" as LayoutManager
+ 
+ Item {
+     id: root
