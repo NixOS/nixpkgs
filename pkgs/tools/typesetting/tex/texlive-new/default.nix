@@ -104,6 +104,7 @@ let
   mkUrlName = { pname, tlType, ... }:
     pname + lib.optionalString (tlType != "run") ".${tlType}";
 
+  # command to unpack a single TL package
   unpackPkg =
     { # url ? null, urlPrefix ? null
       md5, pname, tlType, postUnpack ? "", stripPrefix ? 1, ...
@@ -119,6 +120,7 @@ let
             -C "$out" --anchored --exclude=tlpkg --keep-old-files
         '' + postUnpack;
 
+  # create a derivation that contains unpacked upstream TL packages
   mkPkgs = { pname, tlType, version, pkgList }@args:
       /* TODOs:
           - "historic" isn't mirrored; posted a question at #287
