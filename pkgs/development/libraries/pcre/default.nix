@@ -22,8 +22,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
-  patches =
-    [ ];
+  patches = [
+    ./CVE-2016-1283.patch
+  ];
 
   outputs = [ "out" "doc" "man" ];
 
