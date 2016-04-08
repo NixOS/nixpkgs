@@ -7545,7 +7545,9 @@ in
 
   libdwg = callPackage ../development/libraries/libdwg { };
 
-  libdvdcss = callPackage ../development/libraries/libdvdcss { };
+  libdvdcss = callPackage ../development/libraries/libdvdcss {
+    inherit (darwin) IOKit;
+  };
 
   libdvdnav = callPackage ../development/libraries/libdvdnav { };
   libdvdnav_4_2_1 = callPackage ../development/libraries/libdvdnav/4.2.1.nix {
