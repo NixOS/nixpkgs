@@ -49,7 +49,7 @@ let
   suffix =
     if      stdenv.system == "x86_64-linux" then
       if    debug then throw "no x86_64 debugging version available"
-      else             "-release.x86_64"
+      else             "_linux.x86_64"
     else if stdenv.system == "i686-linux"   then
       if    debug then "_linux_debug.i386"
       else             "_linux.i386"
@@ -59,28 +59,30 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "11.2.202.577";
+  version = "11.2.202.616";
 
   src = fetchurl {
     url = "https://fpdownload.macromedia.com/pub/flashplayer/installers/archive/fp_${version}_archive.zip";
-    sha256 = "1k02d6c9y8z9lxyqyq04zsc5735cvm30mkwli71mh87fr1va2q4j";
+    sha256 = "0y4bjkla6ils4crmx61pi31s4gscy8rgiv7xccx1z0g6hba9j73l";
   };
 
   buildInputs = [ unzip ];
 
   postUnpack = ''
     pushd $sourceRoot
-    tar -xvzf *${arch}/*${suffix}.tar.gz
+    tar -xvzf *${suffix}.tar.gz
 
     ${ lib.optionalString is-i686 ''
-       tar -xvzf */*_sa.*.tar.gz
-       tar -xvzf */*_sa_debug.*.tar.gz
+       tar -xvzf *_sa.*.tar.gz
+       tar -xvzf *_sa_debug.*.tar.gz
     ''}
 
     popd
   '';
 
-  sourceRoot = "fp_${version}_archive";
+  setSourceRoot = ''
+    sourceRoot=$(ls -d *${arch})
+  '';
 
   dontStrip = true;
   dontPatchELF = true;
