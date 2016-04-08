@@ -4,9 +4,8 @@ let
   version = "11.0.53191";
 
   ld32 =
-    if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
-    else abort "Unsupported architecture";
+    if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
+    else "${stdenv.cc}/nix-support/dynamic-linker";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
 
   mkLdPath = ps: lib.makeLibraryPath (with ps; [ qt4 dbus alsaLib ]);

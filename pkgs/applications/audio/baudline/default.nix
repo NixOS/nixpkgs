@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libXmu, libXt, libX11, libXext, libXxf86vm, jack
-, makeWrapper
+, makeWrapper, glibc
 }:
 
 let
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     cp -r . "$out/libexec/baudline/"
 
-    interpreter="$(echo ${stdenv.glibc}/lib/ld-linux*)"
+    interpreter="$(echo ${glibc}/lib/ld-linux*)"
     for prog in "$out"/libexec/baudline/baudline*; do
         patchelf --interpreter "$interpreter" "$prog"
         ln -sr "$prog" "$out/bin/"
