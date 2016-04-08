@@ -8996,6 +8996,8 @@ in
     graphviz = graphviz-nox;
   };
 
+  wayland-protocols = callPackage ../development/libraries/wayland/protocols.nix { };
+
   webkit = webkitgtk;
 
   wcslib = callPackage ../development/libraries/wcslib { };
