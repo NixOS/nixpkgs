@@ -210,7 +210,7 @@ let
       text = mkDefault
         ''
           # Account management.
-          account required  pam_access.so accessfile=${accessConf} debug
+          account required pam_access.so accessfile=${accessConf}
           account sufficient pam_unix.so
           ${optionalString config.users.ldap.enable
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
@@ -417,6 +417,7 @@ in
     security.pam.access =  mkOption {
       type = types.nullOr types.lines;
       description = "Contents of the PAM access file.";
+      default = "";
     };
 
   };
