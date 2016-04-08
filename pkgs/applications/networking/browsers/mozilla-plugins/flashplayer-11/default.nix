@@ -73,8 +73,7 @@ stdenv.mkDerivation rec {
     tar -xvzf *${suffix}.tar.gz
 
     ${ lib.optionalString is-i686 ''
-       tar -xvzf *_sa.*.tar.gz
-       tar -xvzf *_sa_debug.*.tar.gz
+       tar -xvzf *_sa[_.]*.tar.gz
     ''}
 
     popd
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  outputs = [ "out" ] ++ lib.optionals is-i686 ["sa" "saDbg" ];
+  outputs = [ "out" ] ++ lib.optional (is-i686 && !debug) "sa" ++ lib.optional (is-i686 && debug) "saDbg";
 
   installPhase = ''
     mkdir -p $out/lib/mozilla/plugins
@@ -95,22 +94,25 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "$rpath" $out/lib/mozilla/plugins/libflashplayer.so
 
     ${ lib.optionalString is-i686 ''
-       mkdir -p $sa/bin
-       cp flashplayer $sa/bin/
+       ${ lib.optionalString (!debug) ''
+         mkdir -p $sa/bin
+         cp flashplayer $sa/bin/
 
-       patchelf \
-         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-         --set-rpath "$rpath" \
-         $sa/bin/flashplayer
+         patchelf \
+           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+           --set-rpath "$rpath" \
+           $sa/bin/flashplayer
+       ''}
 
+       ${ lib.optionalString debug ''
+         mkdir -p $saDbg/bin
+         cp flashplayerdebugger $saDbg/bin/
 
-       mkdir -p $saDbg/bin
-       cp flashplayerdebugger $saDbg/bin/
-
-       patchelf \
-         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-         --set-rpath "$rpath" \
-         $saDbg/bin/flashplayerdebugger
+         patchelf \
+           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+           --set-rpath "$rpath" \
+           $saDbg/bin/flashplayerdebugger
+       ''}
     ''}
   '';
 
