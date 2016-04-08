@@ -12378,7 +12378,7 @@ in
 
   flashplayer-standalone = pkgsi686Linux.flashplayer.sa;
 
-  flashplayer-standalone-debugger = pkgsi686Linux.flashplayer.saDbg;
+  flashplayer-standalone-debugger = (pkgsi686Linux.flashplayer.override { debug = true; }).sa;
 
   fluxbox = callPackage ../applications/window-managers/fluxbox { };
 
