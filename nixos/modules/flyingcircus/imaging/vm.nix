@@ -11,6 +11,9 @@ with lib;
   # Images are provisioned independent of their data center location.
   flyingcircus.enc.parameters.location = "standalone";
 
+  # Enable DHCP on SRV for bootstrapping, bypassing the regular ENC logic.
+  networking.interfaces.ethsrv.useDHCP = true;
+
   # Providing the expected device-indepentend symlink wasn't easily possible,
   # so we just start with the fixed known environment here.
   boot.loader.grub.device = lib.mkOverride 10 "/dev/vda";
