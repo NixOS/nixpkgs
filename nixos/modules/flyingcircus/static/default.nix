@@ -64,5 +64,13 @@ with lib;
                      "3.pool.ntp.org"];
     };
 
+    flyingcircus.static.useDHCP = {
+      standalone = true;
+      dev = false;
+      rzob = false;
+      rzrl1 = false;
+      whq = false;
+    };
+
   };
 }

@@ -29,9 +29,12 @@ let
       ip6 = get_ip_configuration fclib.isIp6 networks;
     };
 
+  allow_dhcp = config.flyingcircus.static.useDHCP.${config.flyingcircus.enc.parameters.location};
+
   get_interface_configuration = interfaces: interface_name:
     { name = "eth${interface_name}";
-      value = get_interface_ips (getAttr interface_name interfaces).networks;
+      value = (get_interface_ips (getAttr interface_name interfaces).networks) //
+              { useDHCP = if interface_name == "srv" then allow_dhcp else false; };
     };
 
   get_network_configuration = interfaces:
@@ -240,8 +243,8 @@ in
             addrs);
       in "# Accept traffic within the same resource group.\n${rules}";
 
-    # DHCP settings
-    networking.useDHCP = true;
+    # DHCP settings: never use implicitly, never do IPv4ll
+    networking.useDHCP = false;
     networking.dhcpcd.extraConfig = ''
       # IPv4ll gets in the way if we really do not want
       # an IPv4 address on some interfaces.
