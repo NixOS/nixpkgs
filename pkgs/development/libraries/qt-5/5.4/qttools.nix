@@ -10,7 +10,6 @@ qtSubmodule {
     fixQtModuleCMakeConfig "Designer"
     fixQtModuleCMakeConfig "Help"
     fixQtModuleCMakeConfig "LinguistTools"
-    fixQtModuleCMakeConfig "UiPlugin"
     fixQtModuleCMakeConfig "UiTools"
   '';
 }
