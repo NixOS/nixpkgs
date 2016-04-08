@@ -58,7 +58,7 @@ in
     services.minidlna.config =
       ''
         port=${toString port}
-        friendly_name=NixOS Media Server
+        friendly_name=${config.networking.hostName} MiniDLNA
         db_dir=/var/cache/minidlna
         log_dir=/var/log/minidlna
         inotify=yes
