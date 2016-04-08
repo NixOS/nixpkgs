@@ -104,6 +104,20 @@ in rec {
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
 
+  netboot = let build = (import lib/eval-config.nix {
+      system = "x86_64-linux";
+      modules = [
+        ./modules/installer/netboot/netboot-minimal.nix
+        versionModule
+      ];
+    }).config.system.build;
+  in
+    pkgs.symlinkJoin "netboot" [
+      build.netbootRamdisk
+      build.kernel
+      build.netbootIpxeScript
+    ];
+
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
