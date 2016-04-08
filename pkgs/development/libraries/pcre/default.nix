@@ -14,11 +14,11 @@ let
               else abort "Invalid character size";
 
 in stdenv.mkDerivation rec {
-  name = "pcre${lib.optionalString (withCharSize != 8) (toString withCharSize)}-8.38";
-  # FIXME: add "version" attribute and use it in URL
+  name = "pcre${lib.optionalString (withCharSize != 8) (toString withCharSize)}-${version}";
+  version = "8.38";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.bz2";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
     sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
@@ -28,12 +28,11 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" ];
 
-  # FIXME: Refactor into list!
-  configureFlags = ''
-    --enable-jit
-    ${lib.optionalString unicodeSupport "--enable-unicode-properties"}
-    ${lib.optionalString (!cplusplusSupport) "--disable-cpp"}
-  '' + lib.optionalString (charFlags != []) " ${toString charFlags}";
+  configureFlags =
+    [ "--enable-jit" ]
+    ++ lib.optional unicodeSupport "--enable-unicode-properties"
+    ++ lib.optional (!cplusplusSupport) "--disable-cpp"
+    ++ charFlags;
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin
