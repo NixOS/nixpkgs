@@ -210,6 +210,7 @@ let
       text = mkDefault
         ''
           # Account management.
+          account required  pam_access.so accessfile=${accessConf} debug
           account sufficient pam_unix.so
           ${optionalString config.users.ldap.enable
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
@@ -311,6 +312,8 @@ let
          "${domain} ${type} ${item} ${toString value}\n")
          limits);
 
+  accessConf = pkgs.writeText "access" config.security.pam.access;
+
   motd = pkgs.writeText "motd" config.users.motd;
 
   makePAMService = pamService:
@@ -409,6 +412,11 @@ in
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
       type = types.nullOr types.string;
       description = "Message of the day shown to users when they log in.";
+    };
+
+    security.pam.access =  mkOption {
+      type = types.nullOr types.lines;
+      description = "Contents of the PAM access file.";
     };
 
   };
