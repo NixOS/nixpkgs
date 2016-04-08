@@ -41,12 +41,11 @@ with lib;
       rzrl1 = ["172.24.32.3" "172.24.48.4"];
       whq = ["212.122.41.143" "212.122.41.169"];
 
-      # Location-independent nameservers (from Germany Privacy Foundation)
-      standalone = [ "87.118.100.175"
-                     "62.141.58.13"
-                     "87.118.104.203"
-                     "85.25.251.254"
-                     "94.75.228.29" ];
+      # We'd like to add reliable open and trustworthy DNS servers here, but
+      # I didn't find reliable ones. FoeBud and Germany Privacy Foundation and
+      # others had long expired listings and I don't trust the remaining ones
+      # to stay around. So, Google DNS it is.
+      standalone = [ "8.8.8.8" "8.8.4.4" ];
     };
 
     flyingcircus.static.ntpservers = {
