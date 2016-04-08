@@ -6,7 +6,7 @@ with lib;
     flyingcircus.static = mkOption {
       type = types.attrsOf types.attrs;
       default = { };
-      description = "Static lookup tables for site-specfic information";
+      description = "Static lookup tables for site-specific information";
     };
 
   };
@@ -40,6 +40,13 @@ with lib;
       rzob = ["195.62.125.5" "195.62.125.135"];
       rzrl1 = ["172.24.32.3" "172.24.48.4"];
       whq = ["212.122.41.143" "212.122.41.169"];
+
+      # Location-independent nameservers (from Germany Privacy Foundation)
+      standalone = [ "87.118.100.175"
+                     "62.141.58.13"
+                     "87.118.104.203"
+                     "85.25.251.254"
+                     "94.75.228.29" ];
     };
 
     flyingcircus.static.ntpservers = {
@@ -49,6 +56,12 @@ with lib;
       rzob = [ "carme" "cartman07" "cartman11" "kenny00" "cartman12" "kenny01" "cartman10" "iocaste" "cartman13" "cartman08" "cartman06" ];
       rzrl1 = [ "kyle04" "kenny03" "kenny02" "cartman04" "cartman05" ];
       whq = [ "barbrady01" "cartman00" "kyle03" "terri" "edna" "hibbert" "bob" "lou" ];
+
+      # Location-independent NTP servers from the global public pool.
+      standalone = [ "0.pool.ntp.org"
+                     "1.pool.ntp.org"
+                     "2.pool.ntp.org"
+                     "3.pool.ntp.org"];
     };
 
   };

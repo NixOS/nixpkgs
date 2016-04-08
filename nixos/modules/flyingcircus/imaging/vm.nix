@@ -8,9 +8,8 @@ with lib;
       <nixpkgs/nixos/modules/profiles/clone-config.nix>
   ];
 
-  # We'll provision our images with settings from our DEV environment
-  # until we find something better.
-  flyingcircus.enc.parameters.location = "dev";
+  # Images are provisioned independent of their data center location.
+  flyingcircus.enc.parameters.location = "standalone";
 
   # Providing the expected device-indepentend symlink wasn't easily possible,
   # so we just start with the fixed known environment here.
