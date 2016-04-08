@@ -172,6 +172,11 @@ in
     };
 
     security.pam.services.sshd.showMotd = true;
+    security.pam.access = ''
+    + : root (admins) (login): ALL
+    - : ALL : ALL
+    '';
+
     users = {
       mutableUsers = false;
       users = map_userdata userdata;
