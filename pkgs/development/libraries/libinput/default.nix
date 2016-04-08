@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libevdev mtdev udev libwacom ]
+  buildInputs = [ libevdev mtdev libwacom ]
     ++ optionals eventGUISupport [ cairo glib gtk3 ]
     ++ optionals documentationSupport [ doxygen graphviz ]
     ++ optionals testsSupport [ check valgrind ];
+
+  propagatedBuildInputs = [ udev ];
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
