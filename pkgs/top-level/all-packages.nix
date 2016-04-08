@@ -5308,6 +5308,8 @@ in
 
   lxappearance = callPackage ../applications/misc/lxappearance {};
 
+  lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
