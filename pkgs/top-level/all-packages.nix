@@ -3200,7 +3200,7 @@ in
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
-  snabbswitch = callPackage ../tools/networking/snabbswitch { } ;
+  snabb = callPackage ../tools/networking/snabb { } ;
 
   sng = callPackage ../tools/graphics/sng {
     libpng = libpng12;
@@ -3556,6 +3556,8 @@ in
   vtun = callPackage ../tools/networking/vtun { };
 
   weather = callPackage ../applications/misc/weather { };
+
+  wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
 
   wal_e = callPackage ../tools/backup/wal-e { };
 

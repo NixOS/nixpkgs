@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "12v6v2ccw1y6ng3kny3xw0lfs58d1klylqq707k0x04m707kydj4";
   };
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" ]
+    ++ stdenv.lib.optional stdenv.isi686 "stackprotector";
 
   buildInputs = [ readline ];
 

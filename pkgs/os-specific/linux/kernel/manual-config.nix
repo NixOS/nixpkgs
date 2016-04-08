@@ -190,15 +190,6 @@ let
           $installFlags "''${installFlagsArray[@]}"
       '');
 
-      # !!! This leaves references to gcc in $dev
-      # that we might be able to avoid
-      postFixup = if isModular then ''
-        # !!! Should this be part of stdenv? Also patchELF should take an argument...
-        prefix=$dev
-        patchELF
-        prefix=$out
-      '' else null;
-
       meta = {
         description =
           "The Linux kernel" +
@@ -225,7 +216,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
-  hardeningDisable = [ "format" "fortify" "stackprotector" "pic" ];
+  hardeningDisable = [ "format" "fortify" "stackprotector" "pic" ]
+    ++ stdenv.lib.optional stdenv.isi686 "bindnow";
 
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"

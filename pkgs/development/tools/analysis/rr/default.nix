@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake libpfm zlib python pkgconfig pythonPackages.pexpect which procps gdb ];
   cmakeFlags = "-DCMAKE_C_FLAGS_RELEASE:STRING= -DCMAKE_CXX_FLAGS_RELEASE:STRING=";
 
+  # we turn on additional warnings due to hardening
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  hardeningDisable = [ "fortify" ];
+
   enableParallelBuilding = true;
 
   # FIXME

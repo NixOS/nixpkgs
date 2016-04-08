@@ -240,7 +240,9 @@ self: super: {
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = addPkgconfigDepend super.glib pkgs.glib;
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
   gtk = addPkgconfigDepend super.gtk pkgs.gtk;
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
@@ -438,7 +440,9 @@ self: super: {
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
-  lvmrun = dontCheck super.lvmrun;
+  lvmrun = pkgs.lib.overrideDerivation (dontCheck super.lvmrun) (drv: {
+    hardeningDisable = [ "format" ];
+  });
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
@@ -959,8 +963,12 @@ self: super: {
   jsaddle = dontCheck super.jsaddle;
 
   # https://github.com/gwern/mueval/issues/14
-  mueval = super.mueval.override {
-    hint = self.hint_0_4_3;
-  };
+  mueval = super.mueval.override { hint = self.hint_0_4_3; };
+
+  # Looks like Avahi provides the missing library
+  dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
+
+  # https://github.com/danidiaz/pipes-transduce/issues/2
+  pipes-transduce = super.pipes-transduce.override { foldl = self.foldl_1_1_6; };
 
 }

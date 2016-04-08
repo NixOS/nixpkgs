@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl texinfo ];
 
+  hardeningDisable = [ "fortify" ];
+
   postPatch = ''
     substituteInPlace "texi2pod.pl" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"

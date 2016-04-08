@@ -599,7 +599,7 @@ Given a `default.nix`:
     src = ./.; }
 
 Running `nix-shell` with no arguments should give you
-the environment in which the package would be build with
+the environment in which the package would be built with
 `nix-build`.
 
 Shortcut to setup environments with C headers/libraries and python packages:

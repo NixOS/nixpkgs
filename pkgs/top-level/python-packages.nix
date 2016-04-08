@@ -896,7 +896,7 @@ in modules // {
 
     buildInputs = with self; [
       pytest
-      sqlalchemy9
+      sqlalchemy
       tornado
       twisted
       mock
@@ -3130,11 +3130,11 @@ in modules // {
   };
 
   click = buildPythonPackage rec {
-    name = "click-6.3";
+    name = "click-6.6";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/c/click/${name}.tar.gz";
-      sha256 = "076cr1xbhfyfrzkvflz1i0950jgjn2161hp3f5xji4z1mgxdj85p";
+      sha256 = "1sggipyz52crrybwbr9xvwxd4aqigvplf53k9w3ygxmzivd1jsnc";
     };
 
     buildInputs = with self; [ pytest ];
@@ -3410,18 +3410,16 @@ in modules // {
 
 
   ColanderAlchemy = buildPythonPackage rec {
-    name = "ColanderAlchemy-0.2.0";
+    name = "ColanderAlchemy-${version}";
+    version = "0.3.3";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/C/ColanderAlchemy/${name}.tar.gz";
-      sha256 = "d10e97b5f4648dcdc38c5e5c9f9b77fe39c8fa7f594d89d558b0d82e5631bfd7";
+      sha256 = "11wcni2xmfmy001rj62q2pwf305vvngkrfm5c4zlwvgbvlsrvnnw";
     };
 
     buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [ colander sqlalchemy9 ];
-
-    # string: argument name cannot be overridden via info kwarg.
-    doCheck = false;
+    propagatedBuildInputs = with self; [ colander sqlalchemy ];
 
     meta = {
       description = "Autogenerate Colander schemas based on SQLAlchemy models";
@@ -5025,7 +5023,7 @@ in modules // {
     doCheck = false; # requires redis server
     propagatedBuildInputs = with self; [
       setuptools docker_registry_core blinker flask gevent gunicorn pyyaml
-      requests2 rsa sqlalchemy9 setuptools backports_lzma m2crypto
+      requests2 rsa sqlalchemy setuptools backports_lzma m2crypto
     ];
 
     patchPhase = "> requirements/main.txt";
@@ -9232,7 +9230,7 @@ in modules // {
     doCheck = false;
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy9 pyyaml rpyc
+    propagatedBuildInputs = with self; [ paver feedparser sqlalchemy pyyaml rpyc
 	    beautifulsoup_4_1_3 html5lib pyrss2gen pynzb progressbar jinja2 flask
 	    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
       guessit pathpy apscheduler ]
@@ -9561,11 +9559,11 @@ in modules // {
   });
 
   fusepy = buildPythonPackage rec {
-    name = "fusepy-2.0.2";
+    name = "fusepy-2.0.4";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/f/fusepy/${name}.tar.gz";
-      sha256 = "1z0va3z1hzjw167skl21k9dsklbmr46k66j80qadibjc8vajjnda";
+      sha256 = "0v5grm4zyf58hsplwsxfbihddw95lz9w8cy3rpzbyha287swgx8h";
     };
 
     propagatedBuildInputs = [ pkgs.fuse ];
@@ -12502,7 +12500,7 @@ in modules // {
     name = "pymysqlsa-${version}";
     version = "1.0";
 
-    propagatedBuildInputs = with self; [ pymysql sqlalchemy9 ];
+    propagatedBuildInputs = with self; [ pymysql sqlalchemy ];
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pymysql_sa/pymysql_sa-1.0.tar.gz";
@@ -20772,32 +20770,6 @@ in modules // {
     };
   };
 
-  sqlalchemy9 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.9.9";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "14az6hhrz4bgnicz4q373z119zmaf7j5zxl1jfbfl5lix5m1z9bj";
-    };
-
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
-    propagatedBuildInputs = with self; [ modules.sqlite3 ];
-
-    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
-    # acceptable reason to make all dependents unavailable on Python 3 as well
-    doCheck = !(isPyPy || isPy3k);
-
-    checkPhase = ''
-      ${python.executable} sqla_nose.py
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-    };
-  };
-
   sqlalchemy = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
     version = "1.0.12";
@@ -23404,17 +23376,17 @@ in modules // {
 
 
   zope_sqlalchemy = buildPythonPackage rec {
-    name = "zope.sqlalchemy-0.7.5";
+    name = "zope.sqlalchemy-0.7.6";
 
     doCheck = !isPyPy; # https://github.com/zopefoundation/zope.sqlalchemy/issues/12
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.sqlalchemy/${name}.zip";
-      sha256 = "e196d1b2cf796f46e2c6127717e359ddd35d8d084a8ba059f0f0fabff245b9e1";
+      sha256 = "0vxhpdvzihsmg63aralmc7hx62lzrsnlxvskvlcr4mkwzwb22haj";
     };
 
     buildInputs = with self; [ zope_testing zope_interface ];
-    propagatedBuildInputs = with self; [ sqlalchemy9 transaction ];
+    propagatedBuildInputs = with self; [ sqlalchemy transaction ];
 
     meta = {
       maintainers = with maintainers; [ garbas iElectric ];
@@ -24744,11 +24716,12 @@ in modules // {
 
 
   uncertainties = buildPythonPackage rec {
-    name = "uncertainties-2.4.6.1";
+    name = "uncertainties-${version}";
+    version = "2.4.8.1";
 
     src = pkgs.fetchurl {
-       url = "https://github.com/lebigot/uncertainties/archive/2.4.6.1.tar.gz";
-       sha256 = "993ad1a380185ff9548510401ed89fe96cf1f18ca48b44657356c8dcd3ad5032";
+       url = "https://github.com/lebigot/uncertainties/archive/${version}.tar.gz";
+       sha256 = "1j5z0h5l3plsywsmwjpaggkr6rn5cjxw0lhkwgl6a8a25f8bz4pz";
     };
 
     buildInputs = with self; [ nose numpy ];
@@ -24875,18 +24848,18 @@ in modules // {
 
   syncserver = buildPythonPackage rec {
     name = "syncserver-${version}";
-    version = "1.5.0";
+    version = "1.5.2";
     disabled = ! isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/syncserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "1xljylycxg7351hmqh7aa6fvvsjg06zvd4r7hcjqyd0k0sxvk7y6";
+      sha256 = "002if8wk3bhz70zycggvp5qfvr1n2c6i27wnzj317wlkkjmcknx7";
     };
 
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [
-      cornice gunicorn pyramid requests simplejson sqlalchemy9 mozsvc tokenserver
+      cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
       serversyncstorage configparser
     ];
 
@@ -24898,17 +24871,17 @@ in modules // {
 
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
-    version = "1.5.11";
+    version = "1.5.13";
     disabled = !isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
-      sha256 = "1byq2k2f36f1jli9599ygfm2qsb4adl9140sxjpgfjbznb74q90q";
+      sha256 = "06ss88j2gkgqchwd51fwynf2i41ssazs2xwiin8g7p8bc517ywmq";
     };
 
     propagatedBuildInputs = with self; [
-      pyramid sqlalchemy9 simplejson mozsvc cornice pyramid_hawkauth pymysql
+      pyramid sqlalchemy simplejson mozsvc cornice pyramid_hawkauth pymysql
       pymysqlsa umemcache WSGIProxy requests pybrowserid
     ];
     buildInputs = with self; [ testfixtures unittest2  ];
