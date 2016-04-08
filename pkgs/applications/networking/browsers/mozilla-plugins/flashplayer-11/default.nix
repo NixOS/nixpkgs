@@ -36,6 +36,13 @@
 
 }:
 
+/* When updating this package, test that the following derivations build:
+
+   * flashplayer
+   * flashplayer-standalone
+   * flashplayer-standalone-debugger
+*/
+
 let
   arch =
     if      stdenv.system == "x86_64-linux" then
@@ -55,6 +62,10 @@ let
       else             "_linux.i386"
     else throw "Flash Player is not supported on this platform";
 
+  saname =
+    if debug then "flashplayerdebugger"
+    else          "flashplayer";
+
   is-i686 = (stdenv.system == "i686-linux");
 in
 stdenv.mkDerivation rec {
@@ -66,53 +77,38 @@ stdenv.mkDerivation rec {
     sha256 = "0y4bjkla6ils4crmx61pi31s4gscy8rgiv7xccx1z0g6hba9j73l";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
+
+  sourceRoot = ".";
 
   postUnpack = ''
-    pushd $sourceRoot
+    cd *${arch}
+
     tar -xvzf *${suffix}.tar.gz
 
-    ${ lib.optionalString is-i686 ''
+    ${lib.optionalString is-i686 ''
        tar -xvzf *_sa[_.]*.tar.gz
     ''}
-
-    popd
-  '';
-
-  setSourceRoot = ''
-    sourceRoot=$(ls -d *${arch})
   '';
 
   dontStrip = true;
   dontPatchELF = true;
 
-  outputs = [ "out" ] ++ lib.optional (is-i686 && !debug) "sa" ++ lib.optional (is-i686 && debug) "saDbg";
+  outputs = [ "out" ] ++ lib.optional is-i686 "sa";
 
   installPhase = ''
     mkdir -p $out/lib/mozilla/plugins
     cp -pv libflashplayer.so $out/lib/mozilla/plugins
+
     patchelf --set-rpath "$rpath" $out/lib/mozilla/plugins/libflashplayer.so
 
-    ${ lib.optionalString is-i686 ''
-       ${ lib.optionalString (!debug) ''
-         mkdir -p $sa/bin
-         cp flashplayer $sa/bin/
+    ${lib.optionalString is-i686 ''
+      install -Dm755 ${saname} $sa/bin/flashplayer
 
-         patchelf \
-           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-           --set-rpath "$rpath" \
-           $sa/bin/flashplayer
-       ''}
-
-       ${ lib.optionalString debug ''
-         mkdir -p $saDbg/bin
-         cp flashplayerdebugger $saDbg/bin/
-
-         patchelf \
-           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-           --set-rpath "$rpath" \
-           $saDbg/bin/flashplayerdebugger
-       ''}
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-rpath "$rpath" \
+        $sa/bin/flashplayer
     ''}
   '';
 
@@ -120,7 +116,7 @@ stdenv.mkDerivation rec {
     mozillaPlugin = "/lib/mozilla/plugins";
   };
 
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ zlib alsaLib curl nspr fontconfig freetype expat libX11
       libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
       libvdpau nss
