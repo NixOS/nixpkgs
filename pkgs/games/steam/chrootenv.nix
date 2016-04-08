@@ -22,6 +22,8 @@ buildFHSUserEnv {
       which
       # Needed by gdialog, including in the steam-runtime
       perl
+      # Open URLs
+      xdg_utils
     ]
     ++ lib.optional withJava jdk
     ++ lib.optional withPrimus (primus.override {
