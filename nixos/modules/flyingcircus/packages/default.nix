@@ -6,7 +6,6 @@
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
-    fc-udev = pkgs.callPackage ./fc-udev { };
 
     powerdns = pkgs.callPackage ./powerdns.nix { };
 
@@ -21,4 +20,3 @@
 
   };
 }
-

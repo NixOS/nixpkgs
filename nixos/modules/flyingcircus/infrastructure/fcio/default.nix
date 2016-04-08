@@ -54,7 +54,10 @@ in
     ];
 
   # installs /dev/disk/device-by-alias/*
-  services.udev.packages = [ pkgs.fc-udev ];
+  services.udev.extraRules = ''
+    # Select GRUB boot device
+    SUBSYSTEM=="block", KERNEL=="[vs]da", SYMLINK+="disk/device-by-alias/root"
+  '';
 
   # Changing this can be nasty: grub is reconfigured before any configuration
   # is activated. This means we currently have to make sure that device exists
