@@ -3,14 +3,14 @@
 stdenv.mkDerivation rec {
 
   name = "doxygen-1.8.11";
-  
+
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
     sha256 = "0ja02pm3fpfhc5dkry00kq8mn141cqvdqqpmms373ncbwi38pl35";
   };
 
   nativeBuildInputs = [ cmake ];
-  
+
   buildInputs =
     [ perl python flex bison ]
     ++ stdenv.lib.optional (qt4 != null) qt4
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices libiconv ];
 
   cmakeFlags =
+    [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
     stdenv.lib.optional (qt4 != null) "-Dbuild_wizard=YES";
 
   NIX_CFLAGS_COMPILE =
