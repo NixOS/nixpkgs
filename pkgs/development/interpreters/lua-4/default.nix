@@ -12,6 +12,8 @@ stdenv.mkDerivation {
   buildFlags = "all so sobin";
   installFlags = "INSTALL_ROOT=$$out";
 
+  hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
+
   meta = {
     homepage = "http://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";

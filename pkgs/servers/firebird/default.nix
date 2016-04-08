@@ -11,7 +11,7 @@
   # icu version missmatch may cause such error when selecting from a table:
   # "Collation unicode for character set utf8 is not installed"
 
-  # icu 3.0 can still be build easily by nix (by dropping the #elif case and
+  # icu 3.0 can still be built easily by nix (by dropping the #elif case and
   # make | make)
   icu ? null
 

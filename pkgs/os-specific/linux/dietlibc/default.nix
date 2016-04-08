@@ -13,7 +13,8 @@ stdenv.mkDerivation {
   inherit glibc;
   kernelHeaders = glibc.linuxHeaders;
 
-  hardeningDisable = [ "stackprotector" ];
+  hardeningDisable = [ "stackprotector" ]
+    ++ stdenv.lib.optional stdenv.isi686 "pic";
 
   patches = [
 
