@@ -169,6 +169,7 @@ with stdenv.lib; stdenv.mkDerivation {
   enableParallelBuilding = false; # missing files during linking, occasionally
 
   outputs = [ "out" "doc" ];
+  setOutputFlags = false;
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
