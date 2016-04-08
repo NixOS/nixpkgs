@@ -3,28 +3,18 @@
 # This board contains a TPM header, but you must supply your own module.
 #
 
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
-  imports = [ ../lib/hardware-notes.nix ];
+  imports = [ ../lib/kernel-version.nix ];
 
   environment.systemPackages = [ pkgs.ipmitool ];
   boot.kernelModules = [ "ipmi_devintf" "ipmi_si" ];
 
-  networking.dhcpcd.extraConfig = "nolink";
-
-  hardwareNotes =
-    [ { title = "IPMI";
-        text = "Load IPMI kernel modules and ipmitool to system environment.";
-      }
-      { title = "Nolink";
-        text =
-          ''
-            Interface link state detection is disabled in dhcpcd because
-            the Linux driver seems to send erronous loss of link messages
-            that cause dhcpcd to release every few seconds, which is
-            more annoying than not releasing when a cable is unplugged.
-          '';
-      }
-    ];
+  kernelAtleast = lib.singleton
+    { version = "4.4";
+      msg =
+        "ethernet driver may be buggy on older kernels, "+
+        ''try 'networking.dhcpcd.extraConfig = "nolink";' if you encounter loss of link problems'';
+    };
 }
