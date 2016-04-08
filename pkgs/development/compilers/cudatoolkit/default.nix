@@ -65,6 +65,9 @@ let
         if [ -d "$out"/cuda-samples ]; then
             mv "$out"/cuda-samples "$out"/samples
         fi
+
+        # Change the #error on GCC > 4.9 to a #warning.
+        sed -i $out/include/host_config.h -e 's/#error\(.*unsupported GNU version\)/#warning\1/'
       '';
 
       meta = {
