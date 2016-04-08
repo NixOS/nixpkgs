@@ -31,6 +31,7 @@ with lib;
           postVM = ''
               ${pkgs.bzip2}/bin/bzip2 $out/image.qcow2
             '';
+          memSize = 1024;
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
