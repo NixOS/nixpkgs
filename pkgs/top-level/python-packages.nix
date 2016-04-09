@@ -1224,11 +1224,11 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.1";
+    version = "1.10.18";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/awscli/${name}.tar.gz";
-      sha256 = "159c8nfcighlkcbdzck102cp06g7rpgbbvxpb73vjymgqrzqywvb";
+      sha256 = "0vdj7p4cwsbzhanhp5f2c0b0qr2gh76dyanji73avvj4jvdb5d4g";
     };
 
     # No tests included
@@ -1237,6 +1237,7 @@ in modules // {
     propagatedBuildInputs = with self; [
       botocore
       bcdoc
+      s3transfer
       six
       colorama
       docutils
@@ -2505,12 +2506,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.3.23"; # This version is required by awscli
+    version = "1.4.9"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "00iaapmy07zdhm2y23fk9igrskzdkix53j7g45lc5dg9nfyngq6j";
+      sha256 = "07rp24lnpjlk0c889g0d8y2ykc711gi04w715nkm9mv734ndsman";
     };
 
     propagatedBuildInputs =
@@ -19373,6 +19374,39 @@ in modules // {
       description = "A Python object API for managing the Linux LIO kernel target";
       homepage = "https://github.com/agrover/rtslib-fb";
       platforms = platforms.linux;
+    };
+  };
+
+  s3transfer = buildPythonPackage rec {
+    version = "0.0.1"; # This version is required by awscli
+    name = "s3transfer-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/s3transfer/${name}.tar.gz";
+      sha256 = "0ma31zvv7gy240xgd1zw853lpzkdci6mapzpg3x4vycann6yvf9b";
+    };
+
+    foo = 1;
+
+    propagatedBuildInputs =
+      [ self.botocore
+      ] ++ stdenv.lib.optional (pythonOlder "3") self.futures;
+
+    buildInputs = with self; [ docutils mock nose coverage wheel unittest2 ];
+
+    checkPhase = ''
+      pushd s3transfer/tests
+      nosetests -v unit/ functional/
+      popd
+    '';
+
+    # version on pypi has no tests/ dir
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/boto/s3transfer;
+      license = stdenv.lib.licenses.asl20;
+      description = "A library for managing Amazon S3 transfers";
     };
   };
 
