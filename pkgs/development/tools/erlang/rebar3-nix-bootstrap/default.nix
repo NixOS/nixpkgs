@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     meta = {
       description = "Shim command to help bootstrap a rebar3 project on Nix";
       license = stdenv.lib.licenses.asl20;
-      homepage = "https://github.com/erl-nix/rebar3-nix-bootstrap";
+      homepage = "https://github.com/erlang-nix/rebar3-nix-bootstrap";
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 }

@@ -1,0 +1,30 @@
+commit 4ee20ba31dd64b8f899447cdad78ec2379acfce7
+Author: Gilles Gouaillardet <gilles@rist.or.jp>
+Date:   Tue Nov 10 08:59:03 2015 +0900
+
+    fix NBC_Copy for legitimate zero size messages
+    
+    (back ported from commit open-mpi/ompi@0bd765eddd33e3d4ac18ec644c60a5c160cb48dc)
+    (back ported from commit open-mpi/ompi@9a70765f27fdf17e70e1a115754fef7e5f16132a)
+
+diff --git a/ompi/mca/coll/libnbc/nbc_internal.h b/ompi/mca/coll/libnbc/nbc_internal.h
+index bf2f1cb..81be8cc 100644
+--- a/ompi/mca/coll/libnbc/nbc_internal.h
++++ b/ompi/mca/coll/libnbc/nbc_internal.h
+@@ -501,7 +501,14 @@ static inline int NBC_Copy(void *src, int srccount, MPI_Datatype srctype, void *
+   } else {
+     /* we have to pack and unpack */
+     res = MPI_Pack_size(srccount, srctype, comm, &size);
+-    if (MPI_SUCCESS != res || 0 == size) { printf("MPI Error in MPI_Pack_size() (%i:%i)\n", res, size); return (MPI_SUCCESS == res) ? MPI_ERR_SIZE : res;}
++    if (MPI_SUCCESS != res) {
++      printf ("MPI Error in MPI_Pack_size() (%i:%i)", res, size);
++      return res;
++    }
++
++    if (0 == size) {
++        return OMPI_SUCCESS;
++    }
+     packbuf = malloc(size);
+     if (NULL == packbuf) { printf("Error in malloc()\n"); return res; }
+     pos=0;
+

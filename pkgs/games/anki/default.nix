@@ -7,7 +7,7 @@
 }:
 
 let
-    version = "2.0.33";
+    version = "2.0.35";
 in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
         "http://ankisrs.net/download/mirror/${name}.tgz"
         "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "1d5rf5gcw98m38wam6wh3hyh7qd78ws7zipm67xg744flqsjrzmr";
+      sha256 = "1d7k38xzw1nbg83d1aqxf2f76fv3hn2fry99k3vf4lgmhndj52mv";
     };
 
     pythonPath = [ pyqt4 pysqlite sqlalchemy pyaudio beautifulsoup httplib2 ]

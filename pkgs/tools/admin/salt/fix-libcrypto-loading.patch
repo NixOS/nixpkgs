@@ -1,0 +1,11 @@
+diff --git a/salt/utils/rsax931.py b/salt/utils/rsax931.py
+index 9eb1f4a..d764f7a 100644
+--- a/salt/utils/rsax931.py
++++ b/salt/utils/rsax931.py
+@@ -36,7 +36,7 @@ def _load_libcrypto():
+                 'libcrypto.so*'))
+             lib = lib[0] if len(lib) > 0 else None
+         if lib:
+-            return cdll.LoadLibrary(lib)
++            return cdll.LoadLibrary('@libcrypto@')
+         raise OSError('Cannot locate OpenSSL libcrypto')

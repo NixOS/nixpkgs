@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
 
     # Bug fix backported from binutils master.
     ./fix-bsymbolic.patch
+
+   # Bug fix backported from binutils master.
+    ./fix-update-symbol-version.patch
   ];
 
   outputs = [ "out" "info" ];

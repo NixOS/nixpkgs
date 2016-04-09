@@ -1,5 +1,5 @@
 { stdenv, fetchzip, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
-, libusb1, libpcap, libXt
+, libusb1, libpcap, libXt, libpng
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qhull flann boost vtk eigen pkgconfig qt4 libusb1 libpcap libXt ];
+  buildInputs = [ cmake qhull flann boost eigen pkgconfig libusb1 libpcap
+                  libpng vtk qt4 libXt ];
 
   meta = {
     homepage = http://pointclouds.org/;

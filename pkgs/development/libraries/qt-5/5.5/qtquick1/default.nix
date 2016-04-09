@@ -1,7 +1,7 @@
-{ qtSubmodule, qtscript, qtsvg, qtwebkit, qtxmlpatterns }:
+{ qtSubmodule, lib, copyPathsToStore, qtscript, qtsvg, qtwebkit, qtxmlpatterns }:
 
 qtSubmodule {
   name = "qtquick1";
-  patches = [ ./0001-nix-profiles-import-paths.patch ];
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   qtInputs = [ qtscript qtsvg qtwebkit qtxmlpatterns ];
 }

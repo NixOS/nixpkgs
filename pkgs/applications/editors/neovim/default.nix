@@ -75,8 +75,10 @@ let
       glib
       libtermkey
       libuv
-      luajit
+      # For some reason, `luajit` has to be listed after `lua`. See
+      # https://github.com/NixOS/nixpkgs/issues/14442
       lua
+      luajit
       lpeg
       luaMessagePack
       luabitop
