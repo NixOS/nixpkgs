@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ setupHook perl pkgconfig gettext ];
 
+  patches = [ ./2.0-immodules.cache.patch ];
+
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ glib cairo pango gdk_pixbuf atk ]
     ++ optionals (stdenv.isLinux || stdenv.isDarwin) [
