@@ -3024,6 +3024,33 @@ in modules // {
     };
   };
 
+  # This package is no longer actively maintained and can be removed if it becomes broken.
+  cgkit = buildPythonPackage rec {
+    version = "2.0.0";
+    name = "cgkit-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://downloads.sourceforge.net/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
+      sha256 = "0vvllc42mdyma3c7yqhahs4bfxymm2kvmc4va7dxqr5x0rzh6rd6";
+    };
+
+    patches = [ ../development/python-modules/cgkit/scons-env.patch ];
+
+    buildInputs = with pkgs; [ scons boost mesa ];
+
+    preBuild = ''
+      cd supportlib
+      scons
+      cd -
+    '';
+
+    meta = {
+      homepage = http://cgkit.sourceforge.net;
+      description = "Python Computer Graphics Kit";
+      maintainers = with maintainers; [ expipiplus1 ];
+    };
+  };
 
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
