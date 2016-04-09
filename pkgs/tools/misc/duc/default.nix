@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://duc.zevv.nl/;
     description = "Collection of tools for inspecting and visualizing disk usage";
-    license = licenses.gplv2;
+    license = licenses.gpl2;
 
     platforms = platforms.linux;
     maintainers = [ maintainers.lethalman ];
