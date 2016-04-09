@@ -1312,6 +1312,8 @@ in
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
+  duc = callPackage ../tools/misc/duc { };
+
   duff = callPackage ../tools/filesystems/duff { };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
