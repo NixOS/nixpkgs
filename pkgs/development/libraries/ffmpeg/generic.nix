@@ -184,6 +184,8 @@ stdenv.mkDerivation rec {
     ];
   };
 
+  installFlags = [ "install-man" ];
+
   passthru = {
     vaapiSupport = if reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm) then true else false;
     inherit vdpauSupport;
