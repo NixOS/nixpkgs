@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl_1_0_1, freetype
+{ fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
 , libgcrypt, udev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
 
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "1.0.26.125.g64dc8bc6-15";
+  version = "1.0.27.71.g0a26e3b2-9";
 
   deps = [
     alsaLib
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   src =
     fetchurl {
       url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "01y4jr1r928251mj9kz1i7x93ya0ky4xaibm0q08q3zjsafianz1";
+      sha256 = "1rs08cvn0y1lzazlmzj4sn2iyacadwi6j70n5c7rvfvvs4p61p42";
     };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -68,8 +68,8 @@ stdenv.mkDerivation {
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
-      ln -s ${openssl_1_0_1}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${openssl_1_0_1}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
       ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
 
