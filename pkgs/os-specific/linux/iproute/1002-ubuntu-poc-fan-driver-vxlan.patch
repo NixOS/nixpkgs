@@ -1,0 +1,177 @@
+Description: Fan driver support VXLAN (p4)
+ Fan driver setup support for vxlan interfaces.
+
+Index: iproute2-4.3.0/include/linux/if_link.h
+===================================================================
+--- iproute2-4.3.0.orig/include/linux/if_link.h
++++ iproute2-4.3.0/include/linux/if_link.h
+@@ -392,6 +392,7 @@ enum {
+ 	IFLA_VXLAN_GBP,
+ 	IFLA_VXLAN_REMCSUM_NOPARTIAL,
+ 	IFLA_VXLAN_COLLECT_METADATA,
++	IFLA_VXLAN_FAN_MAP = 33,
+ 	__IFLA_VXLAN_MAX
+ };
+ #define IFLA_VXLAN_MAX	(__IFLA_VXLAN_MAX - 1)
+Index: iproute2-4.3.0/include/linux/if_tunnel.h
+===================================================================
+--- iproute2-4.3.0.orig/include/linux/if_tunnel.h
++++ iproute2-4.3.0/include/linux/if_tunnel.h
+@@ -145,7 +145,7 @@ enum {
+ 
+ #define IFLA_FAN_MAX (__IFLA_FAN_MAX - 1)
+ 
+-struct ip_tunnel_fan_map {
++struct ifla_fan_map {
+ 	__be32		underlay;
+ 	__be32		overlay;
+ 	__u16		underlay_prefix;
+Index: iproute2-4.3.0/ip/iplink_vxlan.c
+===================================================================
+--- iproute2-4.3.0.orig/ip/iplink_vxlan.c
++++ iproute2-4.3.0/ip/iplink_vxlan.c
+@@ -15,7 +15,10 @@
+ #include <net/if.h>
+ #include <linux/ip.h>
+ #include <linux/if_link.h>
++#include <linux/types.h>
+ #include <arpa/inet.h>
++#include <linux/in6.h>
++#include <linux/if_tunnel.h>
+ 
+ #include "rt_names.h"
+ #include "utils.h"
+@@ -43,6 +46,45 @@ static void explain(void)
+ 	print_explain(stderr);
+ }
+ 
++static int fan_parse_map(int *argcp, char ***argvp, struct nlmsghdr *n)
++{
++	inet_prefix underlay, overlay;
++	struct ifla_fan_map map;
++	struct rtattr *nest;
++	char **argv = *argvp;
++	int argc = *argcp;
++
++	nest = addattr_nest(n, 1024, IFLA_VXLAN_FAN_MAP);
++	while (argc > 0) {
++		char *colon = strchr(*argv, ':');
++
++		if (!colon) {
++			PREV_ARG();
++			break;
++		}
++		*colon = '\0';
++
++		if (get_prefix(&overlay, *argv, AF_INET))
++			invarg("invalid fan-map overlay", *argv);
++		if (get_prefix(&underlay, colon + 1, AF_INET))
++			invarg("invalid fan-map underlay", colon + 1);
++
++		memcpy(&map.underlay, underlay.data, 4);
++		map.underlay_prefix = underlay.bitlen;
++		memcpy(&map.overlay, overlay.data, 4);
++		map.overlay_prefix = overlay.bitlen;
++
++		argc--, argv++;
++
++		addattr_l(n, 1024, IFLA_FAN_MAPPING, &map, sizeof(map));
++	}
++	addattr_nest_end(n, nest);
++
++	*argcp = argc;
++	*argvp = argv;
++	return 0;
++}
++
+ static int vxlan_parse_opt(struct link_util *lu, int argc, char **argv,
+ 			  struct nlmsghdr *n)
+ {
+@@ -201,6 +243,10 @@ static int vxlan_parse_opt(struct link_u
+ 			udp6zerocsumrx = 0;
+ 		} else if (!matches(*argv, "gbp")) {
+ 			gbp = 1;
++		} else if (!matches(*argv, "fan-map")) {
++			NEXT_ARG();
++			if (fan_parse_map(&argc, &argv, n))
++				invarg("invalid fan-map", *argv);
+ 		} else if (matches(*argv, "help") == 0) {
+ 			explain();
+ 			return -1;
+@@ -279,6 +325,28 @@ static int vxlan_parse_opt(struct link_u
+ 	return 0;
+ }
+ 
++static void fan_print_map(FILE *f, struct rtattr *attr)
++{
++	char b1[INET_ADDRSTRLEN], b2[INET_ADDRSTRLEN];
++	struct ifla_fan_map *m;
++	struct rtattr *i;
++	int rem;
++	int p;
++
++	fprintf(f, "fan-map ");
++
++	rem = RTA_PAYLOAD(attr);
++	for (i = RTA_DATA(attr); RTA_OK(i, rem); i = RTA_NEXT(i, rem)) {
++		p = RTA_PAYLOAD(i);
++		m = RTA_DATA(i);
++		fprintf(f, "%s/%d:%s/%d ",
++			rt_addr_n2a(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
++			m->overlay_prefix,
++			rt_addr_n2a(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
++			m->underlay_prefix);
++	}
++}
++
+ static void vxlan_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
+ {
+ 	__u32 vni;
+@@ -321,6 +389,9 @@ static void vxlan_print_opt(struct link_
+ 		}
+ 	}
+ 
++	if (tb[IFLA_VXLAN_FAN_MAP])
++		fan_print_map(f, tb[IFLA_VXLAN_FAN_MAP]);
++
+ 	if (tb[IFLA_VXLAN_LOCAL]) {
+ 		__be32 addr = rta_getattr_u32(tb[IFLA_VXLAN_LOCAL]);
+ 		if (addr)
+Index: iproute2-4.3.0/ip/link_iptnl.c
+===================================================================
+--- iproute2-4.3.0.orig/ip/link_iptnl.c
++++ iproute2-4.3.0/ip/link_iptnl.c
+@@ -49,10 +49,11 @@ static void usage(int sit)
+ 	print_usage(stderr, sit);
+ 	exit(-1);
+ }
++
+ static int fan_parse_map(int *argcp, char ***argvp, struct nlmsghdr *n)
+ {
+ 	inet_prefix underlay, overlay;
+-	struct ip_tunnel_fan_map map;
++	struct ifla_fan_map map;
+ 	struct rtattr *nest;
+ 	char **argv = *argvp;
+ 	int argc = *argcp;
+@@ -61,8 +62,10 @@ static int fan_parse_map(int *argcp, cha
+ 	while (argc > 0) {
+ 		char *colon = strchr(*argv, ':');
+ 
+-		if (!colon)
++		if (!colon) {
++			PREV_ARG();
+ 			break;
++		}
+ 		*colon = '\0';
+ 
+ 		if (get_prefix(&overlay, *argv, AF_INET))
+@@ -371,7 +374,7 @@ get_failed:
+ static void fan_print_map(FILE *f, struct rtattr *attr)
+ {
+ 	char b1[INET_ADDRSTRLEN], b2[INET_ADDRSTRLEN];
+-	struct ip_tunnel_fan_map *m;
++	struct ifla_fan_map *m;
+ 	struct rtattr *i;
+ 	int rem;
+ 	int p;
