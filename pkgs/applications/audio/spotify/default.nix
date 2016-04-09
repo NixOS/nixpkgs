@@ -1,11 +1,11 @@
-{ fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl, freetype
+{ fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
 , libgcrypt, udev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
 
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "1.0.26.125.g64dc8bc6-14";
+  version = "1.0.27.71.g0a26e3b2-9";
 
   deps = [
     alsaLib
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   src =
     fetchurl {
       url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "09wanpml2a6k8asfc0pd56n7fia37amgsplsan1qdh6dwdzr3rv5";
+      sha256 = "1rs08cvn0y1lzazlmzj4sn2iyacadwi6j70n5c7rvfvvs4p61p42";
     };
 
   buildInputs = [ dpkg makeWrapper ];
