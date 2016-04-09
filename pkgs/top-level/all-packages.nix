@@ -10383,6 +10383,10 @@ in
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
+  linux_pine64 = callPackage ../os-specific/linux/kernel/linux-pine64.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ];
+  };
+
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
     kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
