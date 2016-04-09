@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "0.12.28";
+  version = "0.12.29";
 
   fetch = callPackage ./fetch.nix { username = username; password = password; };
   arch = if stdenv.system == "x86_64-linux" then "x64"
