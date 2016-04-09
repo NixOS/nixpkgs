@@ -11,7 +11,7 @@
 <section><title>Introduction</title>
   <para>The Nix language allows a derivation to produce multiple outputs, which is similar to what is utilized by other Linux distribution packaging systems.  The outputs reside in separate nix store paths, so they can be mostly handled independently of each other, including passing to build inputs, garbage collection or binary substitution.  The exception is that building from source always produces all the outputs.</para>
   <para>The main motivation is to save disk space by reducing runtime closure sizes; consequently also sizes of substituted binaries get reduced.  Splitting can be used to have more granular runtime dependencies, for example the typical reduction is to split away development-only files, as those are typically not needed during runtime.  As a result, closure sizes of many packages can get reduced to a half or even much less.</para>
-  <note><para>Similarly to other packaging systems, the reduction effects could be instead achieved by building the parts in completely separate derivations.  That would often additionally reduce build-time closures, but it would be much harder to write such derivations, due to build systems assuming all parts are being built at once.</para></note>
+  <note><para>The reduction effects could be instead achieved by building the parts in completely separate derivations.  That would often additionally reduce build-time closures, but it tends to be much harder to write such derivations, as build systems typically assume all parts are being built at once.  This compromise approach of single source package producing multiple binary packages is also utilized often by rpm and deb.</para></note>
 </section>
 
 <section><title>Installing a split package</title>
