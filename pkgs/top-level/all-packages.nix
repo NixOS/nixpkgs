@@ -1314,6 +1314,8 @@ in
 
   duff = callPackage ../tools/filesystems/duff { };
 
+  dumptorrent = callPackage ../tools/misc/dumptorrent { };
+
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicity = callPackage ../tools/backup/duplicity {
