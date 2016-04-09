@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
   '' + ''
     sed -i "s|/sbin /usr/sbin||" \
            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
+
+    # make fish pick up completions from nix profile
+    echo "set fish_complete_path (echo \$NIX_PROFILES | tr ' ' '\n')\"/share/fish/vendor_completions.d\" \$fish_complete_path" >> $out/share/fish/config.fish
   '';
 
   meta = with stdenv.lib; {
