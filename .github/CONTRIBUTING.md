@@ -12,4 +12,18 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
 ## Submitting changes
 
-See the nixpkgs manual for details on how to [Submit changes to nixpkgs](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-submitting-changes).
+* Format the commits in the following way:
+
+  `(pkg-name | service-name): (from -> to | init at version | refactor | etc)`
+
+  Examples:
+
+  * nginx: init at 2.0.1
+  * firefox: 3.0 -> 3.1.1
+  * hydra service: add bazBaz option
+  * nginx service: refactor config generation
+
+* Don't put dots at the end of package descriptions.
+
+See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](http://hydra.nixos.org/job/nixpkgs/trunk/manual/latest/download-by-type/doc/manual#chap-submitting-changes).
+
