@@ -90,6 +90,7 @@
   ./security/ca.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
+  ./security/hidepid.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix

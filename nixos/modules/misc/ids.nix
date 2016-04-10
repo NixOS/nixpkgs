@@ -47,6 +47,7 @@
       #floppy = 18; # unused
       #uucp = 19; # unused
       #lp = 20; # unused
+      #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID
       gpsd = 23;
       #cdrom = 24; # unused
@@ -288,6 +289,7 @@
       floppy = 18;
       uucp = 19;
       lp = 20;
+      proc = 21;
       pulseaudio = 22; # must match `pulseaudio' UID
       gpsd = 23;
       cdrom = 24;
