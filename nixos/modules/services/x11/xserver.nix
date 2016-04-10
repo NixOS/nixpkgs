@@ -221,7 +221,7 @@ in
 
       dpi = mkOption {
         type = types.nullOr types.int;
-        default = 0;
+        default = null;
         description = "DPI resolution to use for X server.";
       };
 
