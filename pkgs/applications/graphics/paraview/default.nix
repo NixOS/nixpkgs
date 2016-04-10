@@ -7,16 +7,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "paraview-4.0.1";
+  name = "paraview-5.0.1";
   src = fetchurl {
-    url = "http://paraview.org/files/v4.0/ParaView-v4.0.1-source.tgz";
-    sha256 = "1qj8dq8gqpsw75sv4sdc7xm1xcpv0ilsddnrcfhha0zfhp0gq10y";
+    url = "http://paraview.org/files/v5.0/ParaView-v5.0.1-source.tar.gz";
+    sha256 = "1fsh554x4j09bfihxaxlkyjwrlm9wnq7fs64rfi64h98xj1yrpfa";
   };
 
   # [  5%] Generating vtkGLSLShaderLibrary.h
   # ../../../bin/ProcessShader: error while loading shared libraries: libvtksys.so.pv3.10: cannot open shared object file: No such file or directory
   preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/paraview-3.98 -rpath ../../../../../../lib -rpath ../../../../../lib -rpath ../../../../lib -rpath ../../../lib -rpath ../../lib -rpath ../lib"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/paraview-5.01 -rpath ../../../../../../lib -rpath ../../../../../lib -rpath ../../../../lib -rpath ../../../lib -rpath ../../lib -rpath ../lib -ldl -lz"
   '';
   cmakeFlags = [
     "-DPARAVIEW_USE_SYSTEM_HDF5:BOOL=ON"
