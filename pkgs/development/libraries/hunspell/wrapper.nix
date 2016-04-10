@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = (appendToName "with-dicts" hunspell).name;
   buildInputs = [ makeWrapper ];
   buildCommand = ''
-    makeWrapper ${hunspell}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${searchPath}
+    makeWrapper ${hunspell.bin}/bin/hunspell $out/bin/hunspell --prefix DICPATH : ${searchPath}
   '';
   inherit (hunspell) meta;
 }
