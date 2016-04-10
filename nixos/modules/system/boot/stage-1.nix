@@ -67,6 +67,10 @@ let
         copy_bin_and_libs $BIN
       done
 
+      # Copy modprobe.
+      copy_bin_and_libs ${pkgs.kmod}/bin/kmod
+      ln -sf kmod $out/bin/modprobe
+
       # Copy resize2fs if needed.
       ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
         # We need mke2fs in the initrd.

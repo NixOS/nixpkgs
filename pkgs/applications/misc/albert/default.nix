@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, qtbase, qtx11extras, makeQtWrapper, muparser, cmake }:
+{ stdenv, fetchFromGitHub, qtbase, qtsvg, qtx11extras, makeQtWrapper, muparser, cmake }:
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.0";
+  version = "0.8.7.2";
 
   src = fetchFromGitHub {
     owner  = "manuelschneid3r";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "0lzj1gbcc5sp2x1c0d3s21y55kcnnn4dmy8d205mrgnyavjrak7n";
+    sha256 = "04k6cawil6kqkmsilq5mpjy8lwgk0g08s0v23d5a83calpq3ljpc";
   };
 
-  buildInputs = [ cmake qtbase qtx11extras muparser makeQtWrapper ];
+  buildInputs = [ cmake qtbase qtsvg qtx11extras muparser makeQtWrapper ];
 
   fixupPhase = ''
     wrapQtProgram $out/bin/albert

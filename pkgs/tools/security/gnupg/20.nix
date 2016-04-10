@@ -12,11 +12,11 @@ with stdenv.lib;
 assert x11Support -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-2.0.29";
+  name = "gnupg-2.0.30";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1jaakn0mi6pi2b3g3imxj3qzxw2zg0ifxs30baq2b157dcw6pvb8";
+    sha256 = "0wax4cy14hh0h7kg9hj0hjn9424b71z8lrrc5kbsasrn9xd7hag3";
   };
 
   buildInputs

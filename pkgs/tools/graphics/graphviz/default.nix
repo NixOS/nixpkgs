@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs =
-    [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex
+    [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
     ] ++ stdenv.lib.optionals (xorg != null)
-      (with xorg; [ xlibsWrapper libXrender pango libXaw libXpm ])
+      (with xorg; [ xlibsWrapper libXrender libXaw libXpm ])
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.system == "x86_64-darwin")

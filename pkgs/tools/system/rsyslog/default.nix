@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysql ? null, postgresql ? null
 , libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -11,18 +11,18 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.14.0";
+  name = "rsyslog-8.17.0";
 
   src = fetchurl {
     url = "http://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1hp7ga543m6vhijcnjb4z8v26ddjgypk1lh6km1cvxc45cfmnfs4";
+    sha256 = "1fazpbllr3wk8aw41zk7b6iirds4h8j3im080nf8my2cjssij7pc";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc libmysql
+    fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc libmysql
     postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis

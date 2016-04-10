@@ -2,20 +2,24 @@
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused }:
+, ethtool, gnused, coreutils, file, inetutils }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "1.0.6";
+  version = "1.0.12";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "38ea002403e3b884ffa9aae25aea431d2a8420f81f4919761c83fb92648254bd";
+    sha256 = "17jan0g5jzp8mrpklyacwdgnnw016m1c5pc4az5im6qhc260yirs";
   };
 
   preConfigure = ''
-    substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+    substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
+    substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
+    substituteInPlace src/devices/nm-device.c --replace /usr/bin/ping ${inetutils}/bin/ping
     substituteInPlace src/NetworkManagerUtils.c --replace /sbin/modprobe /run/current-system/sw/sbin/modprobe
+    substituteInPlace data/84-nm-drivers.rules \
+      --replace /bin/sh ${stdenv.shell}
     substituteInPlace data/85-nm-unmanaged.rules \
       --replace /bin/sh ${stdenv.shell} \
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \

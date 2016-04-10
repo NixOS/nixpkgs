@@ -464,6 +464,17 @@ rec {
 
   };
 
+  vim-jsonnet = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-jsonnet-2016-01-21";
+    src = fetchgit {
+      url = "git://github.com/google/vim-jsonnet";
+      rev = "5d59d0ba6af2bca4484909e02d72c96fbdd5b220";
+      sha256 = "eb7508aedce86bdcb7f104f62490b92bea6e23fb14fafacd251c6aab80aece78";
+    };
+    dependencies = [];
+
+  };
+
   idris-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "idris-vim-2016-01-29";
     src = fetchgit {
@@ -547,6 +558,17 @@ rec {
       url = "git://github.com/jistr/vim-nerdtree-tabs";
       rev = "0decec122e9bb3e9328b01fa20a9650e79cc6ca7";
       sha256 = "1hmxwwxfrk6c6g2mivazpl72s5vw1w5dvl10ivpn52lfw4xgqjxc";
+    };
+    dependencies = [];
+
+  };
+
+  zenburn = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "zenburn-2015-09-18";
+    src = fetchgit {
+      url = "git://github.com/jnurmine/zenburn";
+      rev = "f7847fb1531b91e2b4bb4aed5db3146f07765179";
+      sha256 = "05d7c348dfaf70b8068abb3eaba3bc961b060e4d7a4c99fb6c4538fba5085ad1";
     };
     dependencies = [];
 

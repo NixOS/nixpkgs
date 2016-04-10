@@ -10,11 +10,13 @@ let
     else null;
 in
 stdenv.mkDerivation rec {
-  name = "bandwidth-1.1b";
+  name = "bandwidth-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "http://zsmith.co/archives/${name}.tar.gz";
-    sha256 = "01c3ca0x3rh65j1s2g6cg5xr9fvm0lp2wpmv71vhz55xwqqqmiz8";
+    url = "https://mutineer.org/file.php?id=ee10698c6a675ece26f08ddb5e6001323d6305c1&p=bandwidth";
+    name = "${name}.tar.gz";
+    sha256 = "1jq6a4n77gcx68bkr8l79agsmgv8saw9nv183297gnah1g67nvw6";
   };
 
   buildInputs = [ nasm ];
@@ -30,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://zsmith.co/bandwidth.html;
-    description = "and artificial benchmark for identifying weaknesses in the memory subsystem";
+    description = "Artificial benchmark for identifying weaknesses in the memory subsystem";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ nckx wkennington ];
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, callPackage, fetchurl, makeWrapper
 # Begin libraries
-, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi
+, alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, mesa_noglu
 # Begin download parameters
 , username ? ""
 , password ? ""
 }:
 
 let
-  version = "0.12.20";
+  version = "0.12.28";
 
   fetch = callPackage ./fetch.nix { username = username; password = password; };
   arch = if stdenv.system == "x86_64-linux" then "x64"
@@ -17,12 +17,12 @@ let
   variants = {
     x64 = {
       url = "https://www.factorio.com/get-download/${version}/alpha/linux64";
-      sha256 = "1xpzrx3q678519qgjl92fxn3qv55hd188x9jp6dcfk2ljhi1gmqk";
+      sha256 = "01si5n9hb2h0c5q8k3hr3nphsakp9kki84qyp70dgddwqsn8wfjl";
     };
 
     x32 = {
       url = "https://www.factorio.com/get-download/${version}/alpha/linux32";
-      sha256 = "1dl1dsp4nni5nda437ckyw1ss6w168g19v51h7cdvb3cgsdb7sab";
+      sha256 = "13h013ixyhv4rpvh0jv5jry3mrwv65v57nqn16bjh3hr8ip70lkq";
     };
   };
 in
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
     libXinerama
     libXrandr
     libXi
+    mesa_noglu
   ];
 
   buildInputs = [ makeWrapper ];

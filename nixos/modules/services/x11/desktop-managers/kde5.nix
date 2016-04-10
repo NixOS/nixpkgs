@@ -183,7 +183,10 @@ in
     services.upower.enable = config.powerManagement.enable;
 
     # Extra UDEV rules used by Solid
-    services.udev.packages = [ pkgs.media-player-info ];
+    services.udev.packages = [
+      pkgs.libmtp
+      pkgs.media-player-info
+    ];
 
     services.xserver.displayManager.sddm = {
       theme = "breeze";

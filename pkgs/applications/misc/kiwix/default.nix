@@ -106,5 +106,6 @@ stdenv.mkDerivation rec {
     homepage = http://kiwix.org;
     license = licenses.gpl3;
     maintainers = with maintainers; [ robbinch ];
+    broken = true;
   };
 }

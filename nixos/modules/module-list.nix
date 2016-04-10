@@ -283,6 +283,7 @@
   ./services/network-filesystems/openafs-client/default.nix
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/tahoe.nix
   ./services/network-filesystems/diod.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/yandex-disk.nix
@@ -327,12 +328,13 @@
   ./services/networking/hostapd.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
-  ./services/networking/iodined.nix
+  ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
   ./services/networking/mailpile.nix
+  ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix

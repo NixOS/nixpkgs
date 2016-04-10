@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libpng, libX11, libXft }:
+{ stdenv, fetchurl, libpng, libX11, libXft
+, patches ? [] }:
 
 stdenv.mkDerivation rec {
   name = "sent-0.2";
@@ -9,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libpng libX11 libXft ];
+
+  inherit patches;
 
   installFlags = [ "PREFIX=$(out)" ];
 

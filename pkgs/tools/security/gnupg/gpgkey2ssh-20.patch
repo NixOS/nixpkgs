@@ -2,7 +2,7 @@ diff --git a/tools/gpgkey2ssh.c b/tools/gpgkey2ssh.c
 index 903fb5b..d5611dc 100644
 --- a/tools/gpgkey2ssh.c
 +++ b/tools/gpgkey2ssh.c
-@@ -266,7 +266,7 @@ main (int argc, char **argv)
+@@ -268,7 +268,7 @@ main (int argc, char **argv)
    keyid = argv[1];
  
    ret = asprintf (&command,

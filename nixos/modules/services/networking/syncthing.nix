@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.syncthing;
+  defaultUser = "syncthing";
 
 in
 
@@ -17,6 +18,7 @@ in
     services.syncthing = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the Syncthing, self-hosted open-source alternative
@@ -26,7 +28,8 @@ in
       };
 
       user = mkOption {
-        default = "syncthing";
+        type = types.string;
+        default = defaultUser;
         description = ''
           Syncthing will be run under this user (user must exist,
           this can be your user name).
@@ -34,8 +37,8 @@ in
       };
 
       all_proxy = mkOption {
-        type = types.string;
-        default = "";
+        type = types.nullOr types.string;
+        default = null;
         example = "socks5://address.com:1234";
         description = ''
           Overwrites all_proxy environment variable for the syncthing process to
@@ -45,6 +48,7 @@ in
       };
 
       dataDir = mkOption {
+        type = types.path;
         default = "/var/lib/syncthing";
         description = ''
           Path where the settings and keys will exist.
@@ -71,20 +75,33 @@ in
 
   config = mkIf cfg.enable {
 
+    users = mkIf (cfg.user == defaultUser) {
+      extraUsers."${defaultUser}" =
+        { group = defaultUser;
+          home  = cfg.dataDir;
+          createHome = true;
+          uid = config.ids.uids.syncthing;
+          description = "Syncthing daemon user";
+        };
+
+      extraGroups."${defaultUser}".gid =
+        config.ids.gids.syncthing;
+    };
+
     systemd.services.syncthing =
       {
         description = "Syncthing service";
-        after = [ "network.target" ];
+        after    = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         environment = {
           STNORESTART = "yes";  # do not self-restart
           STNOUPGRADE = "yes";
-        } //
-        (config.networking.proxy.envVars) //
-        (if cfg.all_proxy != "" then { all_proxy = cfg.all_proxy; } else {});
+          inherit (cfg) all_proxy;
+        } // config.networking.proxy.envVars;
 
         serviceConfig = {
-          User = "${cfg.user}";
+          User  = cfg.user;
+          Group = optionalString (cfg.user == defaultUser) defaultUser;
           PermissionsStartOnly = true;
           Restart = "on-failure";
           ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";

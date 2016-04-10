@@ -150,6 +150,29 @@ in {
         target = "pulse/default.pa";
         source = cfg.configFile;
       };
+
+      systemd.user = {
+        services.pulseaudio = {
+          description = "PulseAudio Server";
+          # NixOS doesn't support "Also" so we bring it in manually
+          wantedBy = [ "default.target" ];
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = "${cfg.package}/bin/pulseaudio --daemonize=no";
+            Restart = "on-failure";
+          };
+        };
+
+        sockets.pulseaudio = {
+          description = "PulseAudio Socket";
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            Priority = 6;
+            Backlog = 5;
+            ListenStream = "%t/pulse/native";
+          };
+        };
+      };
     })
 
     (mkIf systemWide {
@@ -171,8 +194,9 @@ in {
         before = [ "sound.target" ];
         environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
-          ExecStart = "${cfg.package.out}/bin/pulseaudio -D --log-level=${cfg.daemon.logLevel} --system --use-pid-file -n --file=${cfg.configFile}";
-          PIDFile = "${stateDir}/pid";
+          Type = "notify";
+          ExecStart = "${cfg.package.out}/bin/pulseaudio --daemonize=no --log-level=${cfg.daemon.logLevel} --system -n --file=${cfg.configFile}";
+          Restart = "on-failure";
         };
       };
     })
