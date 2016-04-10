@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       BB_MP3DEC=${mpg123}/bin/mpg123 \
       BB_OGGENC=${vorbis-tools}/bin/oggenc \
       BB_OGGDEC=${vorbis-tools}/bin/oggdec \
-      BB_FLACCMD=${flac}/bin/flac \
+      BB_FLACCMD=${flac.bin}/bin/flac \
       BB_EJECT=${utillinux}/bin/eject \
       BB_NORMCMD=${normalize}/bin/normalize \
     ; do
