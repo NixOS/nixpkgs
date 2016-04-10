@@ -295,8 +295,8 @@ in {
   };
 
   php56 = generic {
-    version = "5.6.19";
-    sha256 = "0s61fncsdgr1mqgh8jma6pi6xxz4gl350467lk00ls3i97wa691a";
+    version = "5.6.20";
+    sha256 = "07xz48dz1ijwq45vh90jfzdd56k0s5ppi3j5rwc9p9y7mrybziss";
   };
 
   php70 = generic {
