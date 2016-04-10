@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       "FLEX=${flex}/bin/flex"
       "BISON=${bison}/bin/bison"
       "FIND=${findutils}/bin/find"
-      "STRIP=${binutils}/bin/strip"
+      "STRIP=${binutils.out}/bin/strip"
       "INSTALL=${coreutils}/bin/install"
       "MANDIR=/share/man"
       "MKNOD=true"
