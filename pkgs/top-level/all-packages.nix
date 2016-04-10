@@ -14764,6 +14764,8 @@ in
 
   lgogdownloader = callPackage ../games/lgogdownloader { };
 
+  liberal-crime-squad = callPackage ../games/liberal-crime-squad { };
+
   lincity = callPackage ../games/lincity {};
 
   lincity_ng = callPackage ../games/lincity/ng.nix {};
