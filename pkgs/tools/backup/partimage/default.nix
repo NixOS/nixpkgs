@@ -21,7 +21,7 @@ stdenv.mkDerivation {
       name = "no-SSLv2.patch";
       url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk"
         + "/use-SSLv3-by-default.patch?h=packages/partimage&id=7e95d1c6614e";
-      sha256 = "1zfixa6g1nb1hqfzn2wvyvxsr38gm7908zfml2iaqnwy6iz6jd8v";
+      sha256 = "17dfqwvwnkinz8vs0l3bjjbmfx3a7y8nv3wn67gjsqpmggcpdnd6";
     })
   ];
 
