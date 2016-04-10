@@ -10,7 +10,7 @@ let
     plugins.cura.cura_engine = "${pkgs.curaengine}/bin/CuraEngine";
     server.host = cfg.host;
     server.port = cfg.port;
-    webcam.ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+    webcam.ffmpeg = "${pkgs.ffmpeg.bin}/bin/ffmpeg";
   };
 
   fullConfig = recursiveUpdate cfg.extraConfig baseConfig;
