@@ -1977,7 +1977,7 @@ in
 
   imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
 
-  imgurbash = callPackage ../tools/graphics/imgurbash { };
+  imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
