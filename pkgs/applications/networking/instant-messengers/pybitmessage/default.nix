@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/pybitmessage \
       --replace "exec python2" "exec ${python}/bin/python" \
-      --replace "/opt/openssl-compat-bitcoin/lib/" "${openssl}/lib/"
+      --replace "/opt/openssl-compat-bitcoin/lib/" "${openssl.out}/lib/"
     wrapProgram $out/bin/pybitmessage \
       --prefix PYTHONPATH : "$(toPythonPath $out):$PYTHONPATH"
   '';

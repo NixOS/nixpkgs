@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     for binary in Copy{Agent,Console,Cmd}; do
       binary="$out/${appdir}/$binary"
       ln -sv "$binary" "$out/bin"
-      patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} "$binary"
+      patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} "$binary"
     done
 
     RPATH=${libPaths}:$out/${appdir}

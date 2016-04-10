@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     make install
 
     # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${alsaLib}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
+    sed -i "s|-lasound|-L${alsaLib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
   '';
 
   meta = with stdenv.lib; {

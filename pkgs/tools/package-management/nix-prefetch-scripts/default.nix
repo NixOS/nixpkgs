@@ -36,8 +36,8 @@ in rec {
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [cvs];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [git coreutils];
   nix-prefetch-hg  = mkPrefetchScript "hg"  ../../../build-support/fetchhg/nix-prefetch-hg   [mercurial];
-  nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [subversion];
-  nix-prefetch-zip = mkPrefetchScript "zip" ../../../build-support/fetchzip/nix-prefetch-zip [unzip curl];
+  nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [subversion.out];
+  nix-prefetch-zip = mkPrefetchScript "zip" ../../../build-support/fetchzip/nix-prefetch-zip [unzip curl.bin];
 
   nix-prefetch-scripts = buildEnv {
     name = "nix-prefetch-scripts";

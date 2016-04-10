@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ m4 ];
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
     cp gforth.el $out/share/emacs/site-lisp/

@@ -358,7 +358,7 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.openssl pkgs.utillinux config.programs.ssh.package ]
+      { path = [ nix pkgs.openssl.bin pkgs.utillinux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars

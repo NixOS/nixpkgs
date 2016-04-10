@@ -32,8 +32,8 @@ in stdenv.mkDerivation rec {
 
     bundle config --local build.nokogiri --use-system-libraries \
       --with-iconv-dir=${libiconv} \
-      --with-xslt-dir=${libxslt} \
-      --with-xml2-dir=${libxml2} \
+      --with-xslt-dir=${libxslt.out} \
+      --with-xml2-dir=${libxml2.out} \
       --with-pkg-config \
       --with-pg-config=${postgresql}/bin/pg_config
 

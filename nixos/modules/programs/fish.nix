@@ -101,6 +101,9 @@ in
       end
     '';
 
+    # include programs that bring their own completions
+    environment.pathsToLink = [ "/share/fish/vendor_completions.d" ];
+
     environment.systemPackages = [ pkgs.fish ];
 
     environment.shells = [

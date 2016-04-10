@@ -43,13 +43,14 @@ in stdenv.mkDerivation {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
 
+  buildInputs = [ python zlib libuv openssl python ]
+    ++ optionals stdenv.isLinux [ utillinux http-parser ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isDarwin libtool;
+
   postFixup = ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
   '';
-
-  buildInputs = [ python which zlib libuv openssl python ]
-    ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

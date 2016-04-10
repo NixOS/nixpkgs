@@ -78,7 +78,7 @@ let cfg = config.system.autoUpgrade; in
           HOME = "/root";
         };
 
-      path = [ pkgs.gnutar pkgs.xz config.nix.package ];
+      path = [ pkgs.gnutar pkgs.xz.bin config.nix.package ];
 
       script = ''
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}

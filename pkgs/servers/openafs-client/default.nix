@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
       echo "Patch /usr/include and /usr/src in $i"
       substituteInPlace $i \
-        --replace "/usr/include" "${glibc}/include" \
+        --replace "/usr/include" "${glibc.dev}/include" \
         --replace "/usr/src" "$TMP"
     done
 

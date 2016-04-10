@@ -23,7 +23,7 @@ buildPythonApplication rec {
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   postInstall = stdenv.lib.optionalString (ffmpeg != null)
-    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
+    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg.bin}/bin"'';
 
   # Requires network
   doCheck = false;

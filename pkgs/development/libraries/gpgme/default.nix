@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "17892sclz3yg45wbyqqrzzpq3l0icbnfl28f101b3062g8cy97dh";
   };
 
+  outputs = [ "dev" "out" "info" ];
+  outputBin = "dev"; # gpgme-config; not so sure about gpgme-tool
+
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
 
   nativeBuildInputs = [ pkgconfig gnupg ];
@@ -25,11 +28,11 @@ stdenv.mkDerivation rec {
     "--enable-fixed-path=${gpgStorePath}/bin"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://www.gnupg.org/related_software/gpgme";
     description = "Library for making GnuPG easier to use";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.fuuzetsu ];
   };
 }

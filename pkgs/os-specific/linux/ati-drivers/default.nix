@@ -85,15 +85,17 @@ stdenv.mkDerivation {
 
   inherit glibc /* glibc only used for setting interpreter */;
 
+  # outputs TODO: probably many fixes are needed;
+  # this in particular would be much better by lib.makeLibraryPath
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
-    [ "${xorg.libXrandr}/lib/"
-      "${xorg.libXrender}/lib/"
-      "${xorg.libXext}/lib/"
-      "${xorg.libX11}/lib/"
-      "${xorg.libXinerama}/lib/"
-      "${xorg.libSM}/lib/"
-      "${xorg.libICE}/lib/"
-      "${stdenv.cc.cc}/lib/"
+    [ "${xorg.libXrandr.out}/lib/"
+      "${xorg.libXrender.out}/lib/"
+      "${xorg.libXext.out}/lib/"
+      "${xorg.libX11.out}/lib/"
+      "${xorg.libXinerama.out}/lib/"
+      "${xorg.libSM.out}/lib/"
+      "${xorg.libICE.out}/lib/"
+      "${stdenv.cc.cc.out}/lib/"
     ];
 
   # without this some applications like blender don't start, but they start

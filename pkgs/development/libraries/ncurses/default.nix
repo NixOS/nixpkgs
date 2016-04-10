@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
   # gcc-5.patch should be removed after 5.9
   patches = [ ./clang.patch ./gcc-5.patch ];
 
+  outputs = [ "dev" "out" "man" ];
+  setOutputFlags = false; # some aren't supported
+
   configureFlags = [
     "--with-shared"
     "--without-debug"
@@ -33,9 +36,15 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
-    configureFlagsArray+=("--includedir=$out/include")
-    export PKG_CONFIG_LIBDIR="$out/lib/pkgconfig"
+    export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
     mkdir -p "$PKG_CONFIG_LIBDIR"
+    configureFlagsArray+=(
+      "--libdir=$out/lib"
+      "--includedir=$dev/include"
+      "--bindir=$dev/bin"
+      "--mandir=$man/share/man"
+      "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
+    )
   ''
   + lib.optionalString stdenv.isSunOS ''
     sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
@@ -55,44 +64,52 @@ stdenv.mkDerivation rec {
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
   # wide-character libraries (e.g. libncurses.so to libncursesw.so).
-  postInstall = ''
+  postFixup = ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
-    libs="$(ls $out/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
+    libs="$(ls $dev/lib/pkgconfig | tr ' ' '\n' | sed "s,\(.*\)$suffix\.pc,\1,g")"
     suffixes="$(echo "$suffix" | awk '{for (i=1; i < length($0); i++) {x=substr($0, i+1, length($0)-i); print x}}')"
 
     # Get the path to the config util
-    cfg=$(basename $out/bin/ncurses*-config)
+    cfg=$(basename $dev/bin/ncurses*-config)
 
     # symlink the full suffixed include directory
-    ln -svf . $out/include/ncurses$suffix
+    ln -svf . $dev/include/ncurses$suffix
 
     for newsuffix in $suffixes ""; do
       # Create a non-abi versioned config util links
-      ln -svf $cfg $out/bin/ncurses$newsuffix-config
+      ln -svf $cfg $dev/bin/ncurses$newsuffix-config
 
       # Allow for end users who #include <ncurses?w/*.h>
-      ln -svf . $out/include/ncurses$newsuffix
+      ln -svf . $dev/include/ncurses$newsuffix
 
-      for lib in $libs; do
+      for library in $libs; do
         for dylibtype in so dll dylib; do
-          if [ -e "$out/lib/lib''${lib}$suffix.$dylibtype" ]; then
-            ln -svf lib''${lib}$suffix.$dylibtype $out/lib/lib$lib$newsuffix.$dylibtype
-            ln -svf lib''${lib}$suffix.$dylibtype.${abiVersion} $out/lib/lib$lib$newsuffix.$dylibtype.${abiVersion}
+          if [ -e "$out/lib/lib''${library}$suffix.$dylibtype" ]; then
+            ln -svf lib''${library}$suffix.$dylibtype $out/lib/lib$library$newsuffix.$dylibtype
+            ln -svf lib''${library}$suffix.$dylibtype.${abiVersion} $out/lib/lib$library$newsuffix.$dylibtype.${abiVersion}
           fi
         done
         for statictype in a dll.a la; do
-          if [ -e "$out/lib/lib''${lib}$suffix.$statictype" ]; then
-            ln -svf lib''${lib}$suffix.$statictype $out/lib/lib$lib$newsuffix.$statictype
+          if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
+            ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
           fi
         done
-        ln -svf ''${lib}$suffix.pc $out/lib/pkgconfig/$lib$newsuffix.pc
+        ln -svf ''${library}$suffix.pc $dev/lib/pkgconfig/$library$newsuffix.pc
       done
     done
+
+    # move some utilities to $bin
+    # these programs are used at runtime and don't really belong in $dev
+    moveToOutput "bin/clear" "$out"
+    moveToOutput "bin/reset" "$out"
+    moveToOutput "bin/tabs" "$out"
+    moveToOutput "bin/tput" "$out"
+    moveToOutput "bin/tset" "$out"
   '';
 
   preFixup = ''
-    rm $out/lib/*.a
+    rm "$out"/lib/*.a
   '';
 
   meta = {

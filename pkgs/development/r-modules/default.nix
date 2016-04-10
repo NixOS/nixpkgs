@@ -2311,7 +2311,7 @@ let
 
     xml2 = old.xml2.overrideDerivation (attrs: {
       preConfigure = ''
-        export LIBXML_INCDIR=${pkgs.libxml2}/include/libxml2
+        export LIBXML_INCDIR=${pkgs.libxml2.dev}/include/libxml2
         patchShebangs configure
         '';
     });
@@ -2383,7 +2383,7 @@ let
     });
 
     devEMF = old.devEMF.overrideDerivation (attrs: {
-      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft}/lib -lXft";
+      NIX_CFLAGS_LINK = "-L${pkgs.xorg.libXft.out}/lib -lXft";
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {

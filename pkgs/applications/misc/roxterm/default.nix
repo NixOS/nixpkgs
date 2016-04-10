@@ -24,9 +24,9 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ dbus_libs dbus_glib gdk_pixbuf gettext gsettings_desktop_schemas gtk2 gtk3 hicolor_icon_theme vte ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${dbus_glib}/include/dbus-1.0"
-                         "-I${dbus_libs}/include/dbus-1.0"
-                         "-I${dbus_libs}/lib/dbus-1.0/include" ];
+  NIX_CFLAGS_COMPILE = [ "-I${dbus_glib.dev}/include/dbus-1.0"
+                         "-I${dbus_libs.dev}/include/dbus-1.0"
+                         "-I${dbus_libs.lib}/lib/dbus-1.0/include" ];
 
   # Fix up python path so the lockfile library is on it.
   PYTHONPATH = stdenv.lib.makeSearchPath "lib/${pythonFull.libPrefix}/site-packages" [
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     # Fix up the LD_LIBRARY_PATH so that expat is on it
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${expat}/lib"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${expat.out}/lib"
 
     python mscript.py configure --prefix="$out"
     python mscript.py build

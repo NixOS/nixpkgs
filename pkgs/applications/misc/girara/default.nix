@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk gettext ];
 
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ optional withBuildColors "TPUT=${ncurses}/bin/tput"
+    ++ optional withBuildColors "TPUT=${ncurses.out}/bin/tput"
     ++ optional (!withBuildColors) "TPUT_AVAILABLE=0"
     ;
 

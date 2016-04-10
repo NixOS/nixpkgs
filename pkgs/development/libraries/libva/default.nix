@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, libX11, pkgconfig, libXext, libdrm, libXfixes, wayland, libffi
-, mesa_noglu ? null
+, mesa_noglu
+, minimal ? true, libva
 }:
 
-let
-  withMesa = mesa_noglu != null;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "libva-1.6.2";
 
   src = fetchurl {
@@ -12,9 +11,15 @@ in stdenv.mkDerivation rec {
     sha256 = "1l4bij21shqbfllbxicmqgmay4v509v9hpxyyia9wm7gvsfg05y4";
   };
 
-  buildInputs = [ libX11 libXext pkgconfig libdrm libXfixes wayland libffi mesa_noglu ];
+  outputs = [ "dev" "out" "bin" ];
 
-  configureFlags = lib.optionals withMesa [
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ libdrm ]
+    ++ lib.optionals (!minimal) [ libva libX11 libXext libXfixes wayland libffi mesa_noglu ];
+  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+
+  configureFlags = lib.optionals (!minimal) [
     "--with-drivers-path=${mesa_noglu.driverLink}/lib/dri"
     "--enable-glx"
   ];

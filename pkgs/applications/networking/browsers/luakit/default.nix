@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   in ''
     make DEVELOPMENT_PATHS=0 INSTALLDIR=$out DESTDIR=$out PREFIX=$out USE_GTK3=1 install
     wrapProgram $out/bin/luakit                                         \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/usr/share/:$out/share/:$GSETTINGS_SCHEMAS_PATH"     \
       --prefix XDG_CONFIG_DIRS : "$out/etc/xdg"                         \
       --set LUA_PATH '"${luaKitPath};${luaPath};"'                      \

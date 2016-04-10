@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     mkdir "$out/bin"
     rm "$out/usr/bin/SpiderOakONE"
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
     RPATH=$out/opt/SpiderOakONE/lib:${ldpath}

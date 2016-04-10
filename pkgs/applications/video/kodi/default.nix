@@ -110,15 +110,9 @@ in stdenv.mkDerivation rec {
           --prefix PATH ":" "${pythonFull}/bin" \
           --prefix PATH ":" "${glxinfo}/bin" \
           --prefix PATH ":" "${xdpyinfo}/bin" \
-          --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${systemd}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libmad}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libcec}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libcec_platform}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${libass}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${rtmpdump}/lib" \
-          --prefix LD_LIBRARY_PATH ":" "${SDL2}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
+              [ curl systemd libmad libvdpau libcec libcec_platform rtmpdump libass SDL2 ]
+            }"
       done
     '';
 

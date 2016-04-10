@@ -67,6 +67,10 @@ let
         copy_bin_and_libs $BIN
       done
 
+      # Copy modprobe.
+      copy_bin_and_libs ${pkgs.kmod}/bin/kmod
+      ln -sf kmod $out/bin/modprobe
+
       # Copy resize2fs if needed.
       ${optionalString (any (fs: fs.autoResize) (attrValues config.fileSystems)) ''
         # We need mke2fs in the initrd.
@@ -76,7 +80,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries for the binaries
       for BIN in $(find $out/{bin,sbin} -type f); do

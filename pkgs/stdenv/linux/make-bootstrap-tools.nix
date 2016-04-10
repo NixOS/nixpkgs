@@ -37,20 +37,20 @@ rec {
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
-        cp -d ${glibc}/lib/ld*.so* $out/lib
-        cp -d ${glibc}/lib/libc*.so* $out/lib
-        cp -d ${glibc}/lib/libc_nonshared.a $out/lib
-        cp -d ${glibc}/lib/libm*.so* $out/lib
-        cp -d ${glibc}/lib/libdl*.so* $out/lib
-        cp -d ${glibc}/lib/librt*.so*  $out/lib
-        cp -d ${glibc}/lib/libpthread*.so* $out/lib
-        cp -d ${glibc}/lib/libnsl*.so* $out/lib
-        cp -d ${glibc}/lib/libutil*.so* $out/lib
-        cp -d ${glibc}/lib/libnss*.so* $out/lib
-        cp -d ${glibc}/lib/libresolv*.so* $out/lib
-        cp -d ${glibc}/lib/crt?.o $out/lib
+        cp -d ${glibc.out}/lib/ld*.so* $out/lib
+        cp -d ${glibc.out}/lib/libc*.so* $out/lib
+        cp -d ${glibc.out}/lib/libc_nonshared.a $out/lib
+        cp -d ${glibc.out}/lib/libm*.so* $out/lib
+        cp -d ${glibc.out}/lib/libdl*.so* $out/lib
+        cp -d ${glibc.out}/lib/librt*.so*  $out/lib
+        cp -d ${glibc.out}/lib/libpthread*.so* $out/lib
+        cp -d ${glibc.out}/lib/libnsl*.so* $out/lib
+        cp -d ${glibc.out}/lib/libutil*.so* $out/lib
+        cp -d ${glibc.out}/lib/libnss*.so* $out/lib
+        cp -d ${glibc.out}/lib/libresolv*.so* $out/lib
+        cp -d ${glibc.out}/lib/crt?.o $out/lib
 
-        cp -rL ${glibc}/include $out
+        cp -rL ${glibc.dev}/include $out
         chmod -R u+w "$out"
 
         # glibc can contain linker scripts: find them, copy their deps,
@@ -81,12 +81,12 @@ rec {
         cp -d ${gawk}/bin/awk $out/bin
         cp ${gnutar}/bin/tar $out/bin
         cp ${gzip}/bin/gzip $out/bin
-        cp ${bzip2}/bin/bzip2 $out/bin
+        cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${gcc.cc}/bin/gcc $out/bin
@@ -112,16 +112,16 @@ rec {
         rm -rf $out/include/c++/*/ext/parallel
 
         cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
-        cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
         cp -d ${libmpc}/lib/libmpc*.so* $out/lib
-        cp -d ${zlib}/lib/libz.so* $out/lib
+        cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
         done
-        cp -d ${binutils}/lib/lib*.so* $out/lib
+        cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
 

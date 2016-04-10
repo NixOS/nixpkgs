@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     for i in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$i \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pythonPackages.curses}):$out/libexec:$PYTHONPATH" \
-        --set TERMINFO "${ncurses}/share/terminfo" \
+        --set TERMINFO "${ncurses.out}/share/terminfo" \
         --set TERM     "xterm"
     done
   '';

@@ -29,6 +29,7 @@ self: super: {
   hspec_2_1_7 = super.hspec_2_1_7.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_1_10 = super.hspec_2_1_10.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec_2_2_1 = super.hspec_2_2_1.override { stringbuilder = dontCheck super.stringbuilder; };
+  hspec_2_2_2 = super.hspec_2_2_2.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-expectations_0_6_1_1 = dontCheck super.hspec-expectations_0_6_1_1;
   hspec-expectations_0_6_1 = dontCheck super.hspec-expectations_0_6_1;
   hspec-expectations_0_7_1 = dontCheck super.hspec-expectations_0_7_1;
@@ -42,9 +43,6 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
-
-  # The package doesn't compile with ruby 1.9, which is our default at the moment.
-  hruby = super.hruby.override { ruby = pkgs.ruby_2_1; };
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -223,8 +221,8 @@ self: super: {
     else super.x509-system;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addBuildDepend (overrideCabal super.double-conversion (drv:
+    then addExtraLibrary super.double-conversion pkgs.stdenv.cc.cc.lib
+    else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
@@ -958,8 +956,12 @@ self: super: {
   jsaddle = dontCheck super.jsaddle;
 
   # https://github.com/gwern/mueval/issues/14
-  mueval = super.mueval.override {
-    hint = self.hint_0_4_3;
-  };
+  mueval = super.mueval.override { hint = self.hint_0_4_3; };
+
+  # Looks like Avahi provides the missing library
+  dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
+
+  # https://github.com/danidiaz/pipes-transduce/issues/2
+  pipes-transduce = super.pipes-transduce.override { foldl = self.foldl_1_1_6; };
 
 }

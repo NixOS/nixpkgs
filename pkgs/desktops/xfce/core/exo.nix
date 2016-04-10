@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, intltool, URI, glib, gtk, libxfce4ui, libxfce4util }:
+{ stdenv, fetchurl, pkgconfig, intltool, URI, glib, gtk, libxfce4ui, libxfce4util
+, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "exo";
@@ -11,9 +12,11 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool URI glib gtk libxfce4ui libxfce4util ];
+  outputs = [ "dev" "out" "docdev" ];
+    # lib/xfce4/exo-1/exo-compose-mail-1 is a perl script :-/
 
-  preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
+  nativeBuildInputs = [ pkgconfig intltool ];
+  buildInputs = [ URI glib gtk libxfce4ui libxfce4util hicolor_icon_theme ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.xfce.org/projects/${p_name}";

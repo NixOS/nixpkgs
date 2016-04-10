@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "tldr-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
-    sha256 = "0hxkrzp5njhy7c19v8i3svcb148f1jni7dlv36gc1nmcrz5izsiz";
+    sha256 = "1dyvmxdxm92bfs5i6cngk8isa65qp6xlpim4yizs5rnm0rynf9kr";
     rev = "v${version}";
     repo = "tldr-cpp-client";
     owner = "tldr-pages";
@@ -14,13 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl clang libzip ];
   nativeBuildInputs = [ pkgconfig ];
 
-  preConfigure = ''
-    cd src
-  '';
-
-  installPhase = ''
-    install -Dm755 {.,$out/bin}/tldr
-  '';
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Simplified and community-driven man pages";

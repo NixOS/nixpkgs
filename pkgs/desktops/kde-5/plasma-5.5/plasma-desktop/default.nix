@@ -60,9 +60,6 @@ plasmaPackage rec {
     qtquickcontrols
     qtx11extras
   ];
-  # All propagatedBuildInputs should be present in the profile because
-  # wrappers cannot be used here.
-  propagatedUserEnvPkgs = propagatedBuildInputs;
   patches = [
     ./0001-qt-5.5-QML-import-paths.patch
     (substituteAll {

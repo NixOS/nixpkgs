@@ -74,7 +74,7 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; propagatedBuildOutputs = ""; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile;
       };
@@ -189,15 +189,6 @@ let
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
-
-      # !!! This leaves references to gcc in $dev
-      # that we might be able to avoid
-      postFixup = if isModular then ''
-        # !!! Should this be part of stdenv? Also patchELF should take an argument...
-        prefix=$dev
-        patchELF
-        prefix=$out
-      '' else null;
 
       meta = {
         description =

@@ -64,14 +64,14 @@ in
         restartTriggers = [ config.environment.etc.hosts.source config.environment.etc."nsswitch.conf".source ];
 
         serviceConfig =
-          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${cfgFile}";
+          { ExecStart = "@${pkgs.glibc.bin}/sbin/nscd nscd -f ${cfgFile}";
             Type = "forking";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${pkgs.glibc}/sbin/nscd --invalidate passwd"
-                "${pkgs.glibc}/sbin/nscd --invalidate group"
-                "${pkgs.glibc}/sbin/nscd --invalidate hosts"
+              [ "${pkgs.glibc.bin}/sbin/nscd --invalidate passwd"
+                "${pkgs.glibc.bin}/sbin/nscd --invalidate group"
+                "${pkgs.glibc.bin}/sbin/nscd --invalidate hosts"
               ];
           };
 
@@ -79,7 +79,7 @@ in
         # its pid. So wait until it's ready.
         postStart =
           ''
-            while ! ${pkgs.glibc}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
+            while ! ${pkgs.glibc.bin}/sbin/nscd -g -f ${cfgFile} > /dev/null; do
               sleep 0.2
             done
           '';

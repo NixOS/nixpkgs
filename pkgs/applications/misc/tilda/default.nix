@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig autoreconfHook gettext confuse vte gtk makeWrapper ];
 
-  LD_LIBRARY_PATH = "${expat}/lib"; # ugly hack for xgettext to work during build
+  LD_LIBRARY_PATH = "${expat.out}/lib"; # ugly hack for xgettext to work during build
 
   # The config locking scheme relies on the binary being called "tilda",
   # (`pgrep -C tilda`), so a simple `wrapProgram` won't suffice:

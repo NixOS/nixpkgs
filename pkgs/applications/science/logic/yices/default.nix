@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, gperf, autoreconfHook }:
+{ stdenv, fetchurl, gmp-static, gperf, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1da70n0cah0dh3pk7fcrvjkszx9qmhc0csgl15jqa7bdh707k2zs";
   };
 
-  configureFlags = [ "--with-static-gmp=${gmp}/lib/libgmp.a"
-                     "--with-static-gmp-include-dir=${gmp}/include"
+  configureFlags = [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
+                     "--with-static-gmp-include-dir=${gmp-static.dev}/include"
                    ];
-  buildInputs = [ gmp gperf autoreconfHook ];
+  buildInputs = [ gmp-static gperf autoreconfHook ];
 
   meta = {
     description = "A high-performance theorem prover and SMT solver";

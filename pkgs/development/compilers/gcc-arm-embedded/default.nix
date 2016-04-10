@@ -30,8 +30,8 @@ stdenv.mkDerivation {
 
     for f in $(find $out); do
       if [ -f "$f" ] && patchelf "$f" 2> /dev/null; then
-        patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
-                 --set-rpath $out/lib:${gcc}/lib:${ncurses}/lib \
+        patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
+                 --set-rpath $out/lib:${gcc.lib or gcc}/lib:${ncurses.out}/lib \
                  "$f" || true
       fi
     done

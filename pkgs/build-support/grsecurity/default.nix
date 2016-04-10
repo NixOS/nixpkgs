@@ -119,7 +119,7 @@ let
       # As of gcc5 we also need libmpc
       buildInputs = args.buildInputs ++ [ pkgs.gmp pkgs.libmpc pkgs.mpfr ];
       preConfigure = ''
-        extraIncludes="-I${pkgs.gmp}/include -I${pkgs.libmpc}/include -I${pkgs.mpfr}/include"
+        extraIncludes="-I${pkgs.gmp.dev}/include -I${pkgs.libmpc}/include -I${pkgs.mpfr.dev}/include"
         ${args.preConfigure or ""}
         sed -i "s|-I|$extraIncludes -I|" scripts/gcc-plugin.sh
         sed -i "s|HOST_EXTRACFLAGS +=|HOST_EXTRACFLAGS += $extraIncludes|" tools/gcc/Makefile

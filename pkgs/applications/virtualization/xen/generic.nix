@@ -106,7 +106,7 @@ stdenv.mkDerivation {
         --replace /usr/bin/pkill ${procps}/bin/pkill
 
       substituteInPlace tools/xenstat/Makefile \
-        --replace /usr/include/curses.h ${ncurses}/include/curses.h
+        --replace /usr/include/curses.h ${ncurses.dev}/include/curses.h
 
       substituteInPlace tools/qemu-xen-traditional/xen-hooks.mak \
         --replace /usr/include/pci ${pciutils}/include/pci

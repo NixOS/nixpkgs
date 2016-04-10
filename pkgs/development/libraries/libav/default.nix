@@ -7,10 +7,10 @@
 , x264Support   ? false,  x264      ? null
 , xvidSupport   ? true,   xvidcore  ? null
 , faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? false,  libva     ? null # ToDo: it has huge closure
+, vaapiSupport  ? true,   libva     ? null
 , vdpauSupport  ? true,   libvdpau  ? null
 , freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
-, SDL # only for avplay in $tools, adds nontrivial closure to it
+, SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
 }:
@@ -81,20 +81,18 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "out" "tools" ];
+    outputs = [ "dev" "out" "bin" ];
+    setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
     buildFlags = "all alltools install-man";
 
     postInstall = ''
-      # move avplay to get rid of the SDL dependency in the main output
-      mkdir -p "$tools/bin"
-      mv "$out/bin/avplay" "$tools/bin"
-
+      moveToOutput bin "$bin"
       # alltools target compiles an executable in tools/ for every C
       # source file in tools/, so move those to $out
       for tool in $(find tools -type f -executable); do
-        mv "$tool" "$out/bin/"
+        mv "$tool" "$bin/bin/"
       done
     '';
 

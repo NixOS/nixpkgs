@@ -30,7 +30,7 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry ( stdenv.lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${poppler}/lib"
+    export DYLD_LIBRARY_PATH="${poppler.out}/lib"
   '' + ''
     mkdir -p $out
     mkdir -p $out/nix-support
@@ -54,7 +54,7 @@ rec {
     # sed -e s@ncurses/curses.h@curses.h@g -i $(grep ncurses/curses.h -rl . )
     sed -e '1i\#include <string.h>\n\#include <stdlib.h>' -i $( find libs/teckit -name '*.cpp' -o -name '*.c' )
 
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu}/include/layout";
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${icu.dev}/include/layout";
 
     ./Build --prefix="$out" --datadir="$out/share" --mandir="$out/share/man" --infodir="$out/share/info" \
       ${args.lib.concatStringsSep " " configureFlags}
@@ -106,7 +106,7 @@ rec {
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     for prog in $out/bin/*; do
-      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler}/lib"
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler.out}/lib"
     done
   '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" "promoteLibexec" "patchShebangsInterim"];
 
@@ -119,7 +119,7 @@ rec {
     "patchShebangsInterimLibexec" "patchShebangsInterimTexmfDist"
     "patchShebangsInterimShareTexmfDist"];
 
-  buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11 libICE xproto
+  buildInputs = [ zlib bzip2 ncurses libpng flex bison libX11.out libICE xproto
     freetype t1lib gd libXaw icu ghostscript ed libXt libXpm libXmu libXext
     xextproto perl libSM ruby expat curl libjpeg python fontconfig xz pkgconfig
     poppler libpaper graphite2 lesstif zziplib harfbuzz texinfo potrace gmp mpfr

@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hpxcij9xx9ny3gs9p0iz4r8zslw8wqymbyababiyl7603a6x90y";
   };
 
+  outputDocdev = "out";
+
   # maybe there is a better way to pass the needed dtd and xsl files
   # "-//OASIS//DTD DocBook XML V4.1.2//EN" and "http://docbook.sourceforge.net/release/xsl/current/html/chunk.xsl"
   preConfigure = ''

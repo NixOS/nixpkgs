@@ -8,12 +8,12 @@ let
 
   setuidWrapper = pkgs.stdenv.mkDerivation {
     name = "setuid-wrapper";
-    buildCommand = ''
+    unpackPhase = "true";
+    installPhase = ''
       mkdir -p $out/bin
       cp ${./setuid-wrapper.c} setuid-wrapper.c
       gcc -Wall -O2 -DWRAPPER_DIR=\"${wrapperDir}\" \
           setuid-wrapper.c -o $out/bin/setuid-wrapper
-      strip -S $out/bin/setuid-wrapper
     '';
   };
 

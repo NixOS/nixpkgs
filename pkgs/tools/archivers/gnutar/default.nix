@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ stdenv, fetchurl, autoreconfHook, acl }:
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/system.c --replace '_(' 'N_('
   '';
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  outputs = [ "out" "info" ];
+
+  buildInputs = [ ]
+    ++ stdenv.lib.optional stdenv.isLinux acl
+    ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.

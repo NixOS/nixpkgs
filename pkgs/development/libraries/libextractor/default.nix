@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-ltdl-install "
     + "--with-ltdl-include=${libtool}/include "
-    + "--with-ltdl-lib=${libtool}/lib "
+    + "--with-ltdl-lib=${libtool.lib}/lib "
     + "--enable-xpdf";
 
   # Checks need to be run after "make install", otherwise plug-ins are not in

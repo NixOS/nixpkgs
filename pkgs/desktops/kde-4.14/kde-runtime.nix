@@ -16,7 +16,7 @@ kde {
 
   nativeBuildInputs = [ shared_mime_info ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
 
   passthru.propagatedUserEnvPackages = [ virtuoso ];
 

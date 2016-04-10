@@ -121,9 +121,14 @@ stdenv.mkDerivation rec {
     find $ICAInstDir -type f -exec file {} \; |
       grep 'ELF.*executable' |
       cut -f 1 -d : |
-      xargs -t -n 1 patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$ICAInstDir:$libPath"
+      while read f
+      do
+        echo "Patching ELF intrepreter and rpath for $f"
+        chmod u+w "$f"
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-rpath "$ICAInstDir:$libPath" "$f"
+      done
 
     echo "Wrapping wfica..."
     mkdir "$out/bin"

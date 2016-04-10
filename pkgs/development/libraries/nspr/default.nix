@@ -10,6 +10,9 @@ stdenv.mkDerivation {
     sha256 = "1pk98bmc5xzbl62q5wf2d6mryf0v95z6rsmxz27nclwiaqg0mcg0";
   };
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   preConfigure = ''
     cd nspr
   '';
@@ -21,6 +24,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     find $out -name "*.a" -delete
+    moveToOutput share "$dev" # just aclocal
   '';
 
   enableParallelBuilding = true;

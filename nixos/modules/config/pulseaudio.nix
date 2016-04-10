@@ -26,7 +26,7 @@ let
   # are built with PulseAudio support (like KDE).
   clientConf = writeText "client.conf" ''
     autospawn=${if nonSystemWide then "yes" else "no"}
-    ${optionalString nonSystemWide "daemon-binary=${cfg.package}/bin/pulseaudio"}
+    ${optionalString nonSystemWide "daemon-binary=${cfg.package.out}/bin/pulseaudio"}
   '';
 
   # Write an /etc/asound.conf that causes all ALSA applications to
@@ -130,11 +130,11 @@ in {
         source = clientConf;
       };
 
-      hardware.pulseaudio.configFile = mkDefault "${cfg.package}/etc/pulse/default.pa";
+      hardware.pulseaudio.configFile = mkDefault "${cfg.package.out}/etc/pulse/default.pa";
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ cfg.package ];
+      environment.systemPackages = [ cfg.package.out ];
 
       environment.etc = singleton {
         target = "asound.conf";
@@ -149,6 +149,29 @@ in {
       environment.etc = singleton {
         target = "pulse/default.pa";
         source = cfg.configFile;
+      };
+
+      systemd.user = {
+        services.pulseaudio = {
+          description = "PulseAudio Server";
+          # NixOS doesn't support "Also" so we bring it in manually
+          wantedBy = [ "default.target" ];
+          serviceConfig = {
+            Type = "notify";
+            ExecStart = "${cfg.package}/bin/pulseaudio --daemonize=no";
+            Restart = "on-failure";
+          };
+        };
+
+        sockets.pulseaudio = {
+          description = "PulseAudio Socket";
+          wantedBy = [ "sockets.target" ];
+          socketConfig = {
+            Priority = 6;
+            Backlog = 5;
+            ListenStream = "%t/pulse/native";
+          };
+        };
       };
     })
 
@@ -171,8 +194,9 @@ in {
         before = [ "sound.target" ];
         environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/pulseaudio -D --log-level=${cfg.daemon.logLevel} --system --use-pid-file -n --file=${cfg.configFile}";
-          PIDFile = "${stateDir}/pid";
+          Type = "notify";
+          ExecStart = "${cfg.package.out}/bin/pulseaudio --daemonize=no --log-level=${cfg.daemon.logLevel} --system -n --file=${cfg.configFile}";
+          Restart = "on-failure";
         };
       };
     })

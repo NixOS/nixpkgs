@@ -22,7 +22,7 @@ let
   prePatchCommon = ''
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
     substituteInPlace ./common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
-    substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+    substituteInPlace ./common/Make.rules --replace "/usr/include/linux/capability.h" "${glibc.dev}/include/linux/capability.h"
     substituteInPlace ./common/Make.rules --replace "/usr/share/man" "share/man"
   '';
 
@@ -49,8 +49,8 @@ let
     dontDisableStatic = true;
 
     prePatch = prePatchCommon + ''
-      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
-      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${glibc}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.am --replace "/usr/include/netinet/in.h" "${glibc.dev}/include/netinet/in.h"
+      substituteInPlace ./libraries/libapparmor/src/Makefile.in --replace "/usr/include/netinet/in.h" "${glibc.dev}/include/netinet/in.h"
       '';
 
     postPatch = "cd ./libraries/libapparmor";
@@ -104,7 +104,7 @@ let
     prePatch = prePatchCommon + ''
       substituteInPlace ./parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
       substituteInPlace ./parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
-      substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+      substituteInPlace ./parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc.dev}/include/linux/capability.h"
       ## techdoc.pdf still doesn't build ...
       substituteInPlace ./parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
     '';

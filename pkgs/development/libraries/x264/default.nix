@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
   '';
 
+  outputs = [ "out" "lib" ]; # leaving 52 kB of headers
+
   configureFlags = [ "--enable-shared" ]
     ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic"
     ++ stdenv.lib.optional (enable10bit) "--bit-depth=10";

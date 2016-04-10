@@ -44,6 +44,7 @@ let
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
     outputs = [ "flash" "widevine" ];
+    out = "flash"; # outputs TODO: is this a hack?
 
     unpackCmd = let
       chan = if upstream-info.channel == "dev"    then "chrome-unstable"
@@ -63,7 +64,7 @@ let
     '';
 
     patchPhase = let
-      rpaths = [ stdenv.cc.cc ];
+      rpaths = [ stdenv.cc.cc.lib ];
       mkrpath = p: "${makeSearchPath "lib64" p}:${makeSearchPath "lib" p}";
     in ''
       for sofile in PepperFlash/libpepflashplayer.so \

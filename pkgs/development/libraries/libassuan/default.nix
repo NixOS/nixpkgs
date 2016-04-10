@@ -8,13 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "086bbcdnvs48qq5g4iac7dpk76j0q3jrp16mchdvyx0b720xq1mv";
   };
 
+  outputs = [ "dev" "out" "info" ];
+  outputBin = "dev"; # libassuan-config
+
   buildInputs = [ libgpgerror pth ];
 
   doCheck = true;
 
   # Make sure includes are fixed for callers who don't use libassuan-config
   postInstall = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/assuan.h
+    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' $dev/include/assuan.h
   '';
 
   meta = {

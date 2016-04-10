@@ -40,13 +40,13 @@ let
     LIBDIRS="$(find $out -name \*.so\* -exec dirname {} \; | sort | uniq | tr '\n' ':')"
 
     for i in $out/bin/*; do
-      patchelf --set-interpreter ${glibc}/lib/ld-linux*.so.2 $i || true
-      patchelf --set-rpath "${glibc}/lib:$LIBDIRS" $i || true
+      patchelf --set-interpreter ${glibc.out}/lib/ld-linux*.so.2 $i || true
+      patchelf --set-rpath "${glibc.out}/lib:$LIBDIRS" $i || true
     done
 
     find $out -name \*.so\* | while read lib; do
-      patchelf --set-interpreter ${glibc}/lib/ld-linux*.so.2 $lib || true
-      patchelf --set-rpath "${glibc}/lib:${stdenv.cc.cc}/lib:$LIBDIRS" $lib || true
+      patchelf --set-interpreter ${glibc.out}/lib/ld-linux*.so.2 $lib || true
+      patchelf --set-rpath "${glibc.out}/lib:${stdenv.cc.cc.lib}/lib:$LIBDIRS" $lib || true
     done
 
     # Temporarily, while NixOS's OpenJDK bootstrap tarball doesn't have PaX markings:

@@ -5,13 +5,13 @@
 
 let
   plexpkg = if enablePlexPass then {
-    version = "0.9.16.3.1840";
-    vsnHash = "cece46d";
-    sha256 = "0p1rnia18a67h05f7l7smkpry1ldkpdkyvs9fgrqpay3w0jfk9gd";
+    version = "0.9.16.4.1911";
+    vsnHash = "ee6e505";
+    sha256 = "0lq0lcynmc09d0whynb0x2zgd39dp7z7k86ndgm2clay3zbzqpfd";
   } else {
-    version = "0.9.15.6.1714";
-    vsnHash = "7be11e1";
-    sha256 = "1kyk41qnbm8w5bvnisp3d99cf0r72wvlggfi9h4np7sq4p8ksa0g";
+    version = "0.9.16.4.1911";
+    vsnHash = "ee6e505";
+    sha256 = "0lq0lcynmc09d0whynb0x2zgd39dp7z7k86ndgm2clay3zbzqpfd";
   };
 
 in stdenv.mkDerivation rec {
@@ -40,12 +40,12 @@ in stdenv.mkDerivation rec {
     # Now we need to patch up the executables and libraries to work on Nix.
     # Side note: PLEASE don't put spaces in your binary names. This is stupid.
     for bin in "Plex Media Server" "Plex DLNA Server" "Plex Media Scanner"; do
-      patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
+      patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
       patchelf --set-rpath "$out/usr/lib/plexmediaserver" "$out/usr/lib/plexmediaserver/$bin"
     done
 
     find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
-        -print -exec patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" '{}' \;
+        -print -exec patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" '{}' \;
 
     # executables need libstdc++.so.6
     ln -s "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}/libstdc++.so.6" "$out/usr/lib/plexmediaserver/libstdc++.so.6"

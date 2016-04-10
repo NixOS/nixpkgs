@@ -59,9 +59,9 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit ];
+    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
 
-    systemd.packages = [ pkgs.polkit ];
+    systemd.packages = [ pkgs.polkit.out ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
     systemd.services.polkit.unitConfig.X-StopIfChanged = false;
@@ -79,7 +79,7 @@ in
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit ];
+    services.dbus.packages = [ pkgs.polkit.out ];
 
     security.pam.services.polkit-1 = {};
 
@@ -90,7 +90,7 @@ in
         owner = "root";
         group = "root";
         setuid = true;
-        source = "${pkgs.polkit}/lib/polkit-1/polkit-agent-helper-1";
+        source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
       }
     ];
 

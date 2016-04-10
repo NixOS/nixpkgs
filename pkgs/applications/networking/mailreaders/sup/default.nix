@@ -2,9 +2,14 @@
 , pkgconfig, which }:
 
 bundlerEnv {
-  name = "sup-0.20.0";
+  name = "sup-0.22.1";
 
   inherit ruby;
+
+  # Updated with:
+  # nix-shell -p bundix -p bundler -p ncurses -p ruby -p which -p zlib -p libuuid
+  # bundle install --path ./vendor
+  # bundix
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;

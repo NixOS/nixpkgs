@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, buildEnv, makeDesktopItem, makeWrapper, zlib, glib, alsaLib
+{ stdenv, fetchurl, buildEnv, zlib, glib, alsaLib
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
 , cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, unzip
 , systemd, libnotify
+, version ? "0.36.2", sha256 ? "01d78j8dfrdygm1r141681b3bfz1f1xqg9vddz7j52z1mlfv9f1d", ...
 }:
 let
   atomEnv = buildEnv {
@@ -16,15 +17,15 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "electron-${version}";
-  version = "0.36.2";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/atom/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-    sha256 = "01d78j8dfrdygm1r141681b3bfz1f1xqg9vddz7j52z1mlfv9f1d";
+    inherit sha256;
     name = "${name}.zip";
   };
 
-  buildInputs = [ atomEnv makeWrapper unzip ];
+  buildInputs = [ atomEnv unzip ];
 
   phases = [ "installPhase" "fixupPhase" ];
 
@@ -35,8 +36,12 @@ in stdenv.mkDerivation rec {
     unzip -d $out/bin $src
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
     $out/bin/electron
-    wrapProgram $out/bin/electron \
-    --prefix "LD_LIBRARY_PATH" : "${atomEnv}/lib:${atomEnv}/lib64"
+  '';
+
+  postFixup = ''
+    patchelf \
+    --set-rpath "${atomEnv}/lib:${atomEnv}/lib64:$out/bin:$(patchelf --print-rpath $out/bin/electron)" \
+    $out/bin/electron
   '';
 
   meta = with stdenv.lib; {

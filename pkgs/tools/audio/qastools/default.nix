@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCMAKE_INSALL_PREFIX=$out"
-    "-DALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
+    "-DALSA_INCLUDE=${alsaLib.dev}/include/alsa/version.h"
   ];
 
   meta = with stdenv.lib; {

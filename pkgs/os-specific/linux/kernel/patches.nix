@@ -35,6 +35,16 @@ in
 
 rec {
 
+  link_lguest =
+    { name = "gcc5-link-lguest";
+      patch = ./gcc5-link-lguest.patch;
+    };
+
+  link_apm =
+    { name = "gcc5-link-apm";
+      patch = ./gcc5-link-apm.patch;
+    };
+
   bridge_stp_helper =
     { name = "bridge-stp-helper";
       patch = ./bridge-stp-helper.patch;

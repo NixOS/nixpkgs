@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   prefixKey = "--prefix-dir=";
 
   configureFlags = [
-    "--with-zlib=${zlib}/lib/libz.a"
+    "--with-zlib=${zlib.static}/lib/libz.a"
     "--without-liblzo2"
   ];
 

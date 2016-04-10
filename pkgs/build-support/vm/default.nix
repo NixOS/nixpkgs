@@ -40,9 +40,9 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -414,12 +414,12 @@ rec {
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name preInstall postInstall rpms;
-      memSize = 512;
+      inherit name preInstall postInstall rpms QEMU_OPTS memSize;
       preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
@@ -584,7 +584,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc}/bin:${lzma}/bin
+        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc.bin}/bin:${lzma.bin}/bin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -685,10 +685,11 @@ rec {
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir;
+      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir QEMU_OPTS memSize;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
@@ -1780,22 +1781,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.3-jessie-i386";
-      fullName = "Debian 8.3 Jessie (i386)";
+      name = "debian-8.4-jessie-i386";
+      fullName = "Debian 8.4 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "1240d404bd99afbeec042c08fdab049f0b5a984a393cac7c221553ab08f637f5";
+        sha256 = "1j8swc1nzsi20vbcmya2sv0fzcnz7lhwb32lxabgcwm3xlkzlg58";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.3-jessie-amd64";
-      fullName = "Debian 8.3 Jessie (amd64)";
+      name = "debian-8.4-jessie-amd64";
+      fullName = "Debian 8.4 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "ec937c1b3bbfe4803f0fa43681b19d089eb6b355455ac7caa17ec8e9ff604e56";
+        sha256 = "0kipisyjkhczghzqj4a8y1n4az9c4c8lsj8sw7js13b053lpj6ga";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

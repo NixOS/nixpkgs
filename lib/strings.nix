@@ -98,7 +98,9 @@ rec {
        makeLibraryPath [ pkgs.openssl pkgs.zlib ]
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
   */
-  makeLibraryPath = makeSearchPath "lib";
+  makeLibraryPath = pkgs: makeSearchPath "lib"
+    # try to guess the right output of each pkg
+    (map (pkg: pkg.lib or (pkg.out or pkg)) pkgs);
 
   /* Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
@@ -258,7 +260,7 @@ rec {
   /* Cut a string with a separator and produces a list of strings which
      were separated by this separator.
 
-     NOTE: this function is not performant and should be avoided
+     NOTE: this function is not performant and should never be used.
 
      Example:
        splitString "." "foo.bar.baz"

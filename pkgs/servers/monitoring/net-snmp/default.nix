@@ -31,6 +31,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall = ''
+    for f in $out/lib/*.la $out/bin/net-snmp-config $out/bin/net-snmp-create-v3-user; do
+      sed 's|-L${openssl}|-L${openssl.out}|g' -i $f
+    done
+  '';
+
   meta = with stdenv.lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
     homepage = http://net-snmp.sourceforge.net/;

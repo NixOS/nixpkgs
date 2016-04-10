@@ -8,8 +8,9 @@ mkdir $NIX_FIXINC_DUMMY
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS=""
+    EXTRA_LDFLAGS="-Wl,-rpath,$lib/lib"
 fi
+
 
 # GCC interprets empty paths as ".", which we don't want.
 if test -z "$CPATH"; then unset CPATH; fi
@@ -29,7 +30,7 @@ if test "$noSysDirs" = "1"; then
         # Use *real* header files, otherwise a limits.h is generated
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
-        export NIX_FIXINC_DUMMY=$(cat $NIX_CC/nix-support/orig-libc)/include
+        export NIX_FIXINC_DUMMY=$libc_dev/include
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_CC/nix-support/orig-libc)/lib"
@@ -50,10 +51,10 @@ if test "$noSysDirs" = "1"; then
     # bootstrap compiler are optimized and (optionally) contain
     # debugging information (info "(gccinstall) Building").
     if test -n "$dontStrip"; then
-	extraFlags="-O2 -g $extraFlags"
+        extraFlags="-O2 -g $extraFlags"
     else
-	# Don't pass `-g' at all; this saves space while building.
-	extraFlags="-O2 $extraFlags"
+        # Don't pass `-g' at all; this saves space while building.
+        extraFlags="-O2 $extraFlags"
     fi
 
     EXTRA_FLAGS="$extraFlags"
@@ -170,9 +171,8 @@ preConfigure() {
         # Patch the configure script so it finds glibc headers.  It's
         # important for example in order not to get libssp built,
         # because its functionality is in glibc already.
-        glibc_headers="$(cat $NIX_CC/nix-support/orig-libc)/include"
         sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$glibc_headers", \
+            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
             gcc/configure
     fi
 
@@ -206,6 +206,14 @@ preInstall() {
 
 
 postInstall() {
+    # Move runtime libraries to $lib.
+    mkdir -p $lib/lib
+    ln -s lib $lib/lib64
+    mv -v $out/lib/lib*.so $out/lib/lib*.so.*[0-9] $out/lib/*.la $lib/lib/
+    for i in $lib/lib/*.la; do
+        substituteInPlace $i --replace $out $lib
+    done
+
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
     find $out/include -name "*.gch" -exec rm -rf {} \; -prune
@@ -217,6 +225,7 @@ postInstall() {
 
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
+
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
     for i in $out/libexec/gcc/*/*/*; do
         if PREV_RPATH=`patchelf --print-rpath $i`; then
@@ -225,7 +234,7 @@ postInstall() {
     done
 
     # Get rid of some "fixed" header files
-    rm -rf $out/lib/gcc/*/*/include/root
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do

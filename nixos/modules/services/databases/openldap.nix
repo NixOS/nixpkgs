@@ -87,7 +87,7 @@ in
         mkdir -p ${cfg.dataDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
     };
 
     users.extraUsers.openldap =

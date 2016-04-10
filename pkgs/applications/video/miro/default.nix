@@ -33,7 +33,7 @@ buildPythonApplication rec {
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
            -e 's/BUILD_TIME[^,]*/BUILD_TIME=0/' setup.py
 
-    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg}/bin/ffmpeg"|' \
+    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg.bin}/bin/ffmpeg"|' \
       plat/options.py
 
     sed -i -e 's|/usr/share/miro/themes|'"$out/share/miro/themes"'|' \
@@ -64,7 +64,7 @@ buildPythonApplication rec {
     mv "$out/bin/miro.real" "$out/bin/miro"
     wrapProgram "$out/bin/miro" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 

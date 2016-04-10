@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ alsaLib ];
+  buildInputs = [ alsaLib stdenv.cc.libc/*couldn't find libm*/ ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt \

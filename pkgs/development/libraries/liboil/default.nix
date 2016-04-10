@@ -8,9 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "0sgwic99hxlb1av8cm0albzh8myb7r3lpcwxfm606l0bkc3h4pqh";
   };
 
-  buildInputs = [ pkgconfig ];
-
   patches = [ ./x86_64-cpuid.patch ];
+
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev"; # oil-bugreport
+
+  nativeBuildInputs = [ pkgconfig ];
 
   # fix "argb_paint_i386.c:53:Incorrect register `%rax' used with `l' suffix"
   # errors

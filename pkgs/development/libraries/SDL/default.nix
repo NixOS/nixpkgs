@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [ "dev" "out" ];
+  outputBin = "dev"; # sdl-config
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     "--disable-osmesa-shared"
   ] ++ stdenv.lib.optionals (stdenv ? cross) ([
     "--without-x"
-  ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib}/lib");
+  ] ++ stdenv.lib.optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib");
 
   patches = [
     # Fix window resizing issues, e.g. for xmonad
@@ -95,6 +96,8 @@ stdenv.mkDerivation rec {
       sha256 = "1336g7waaf1c8yhkz11xbs500h8bmvabh4h437ax8l1xdwcppfxv";
     })
   ];
+
+  postFixup = ''moveToOutput share/aclocal "$dev" '';
 
   passthru = { inherit openglSupport; };
 

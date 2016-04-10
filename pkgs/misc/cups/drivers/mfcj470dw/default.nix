@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       --replace expr "${coreutils}/bin/expr" \
       --replace rm "${coreutils}/bin/rm"
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/lpd/brmfcj470dwfilter
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/cupswrapper/brcupsconfpt1
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/lpd/brmfcj470dwfilter
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/mfcj470dw/cupswrapper/brcupsconfpt1
 
     mkdir -p $out/lib/cups/filter/
     ln -s $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw $out/lib/cups/filter/brother_lpdwrapper_mfcj470dw

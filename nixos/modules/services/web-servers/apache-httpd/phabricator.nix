@@ -39,7 +39,7 @@ in {
       "${pkgs.diffutils}"
       ] ++
       (if config.mercurial then ["${pkgs.mercurial}"] else []) ++
-      (if config.subversion then ["${pkgs.subversion}"] else []) ++
+      (if config.subversion then ["${pkgs.subversion.out}"] else []) ++
       (if config.git then ["${pkgs.git}"] else []);
 
   startupScript = pkgs.writeScript "activatePhabricator" ''

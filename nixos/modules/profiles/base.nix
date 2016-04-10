@@ -35,7 +35,7 @@
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions
     pkgs.dosfstools
-    pkgs.xfsprogs
+    pkgs.xfsprogs.bin
     pkgs.jfsutils
     pkgs.f2fs-tools
 

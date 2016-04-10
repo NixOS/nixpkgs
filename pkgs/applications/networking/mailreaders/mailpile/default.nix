@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/mailpile \
-      --prefix PATH ":" "${gnupg1orig}/bin:${openssl}/bin"
+      --prefix PATH ":" "${gnupg1orig}/bin:${openssl.bin}/bin"
   '';
 
   meta = with stdenv.lib; {

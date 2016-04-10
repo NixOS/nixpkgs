@@ -44,7 +44,7 @@ let
       echo "for hints about the offending path)."
       exit 1
     fi
-    ${libxslt}/bin/xsltproc \
+    ${libxslt.bin}/bin/xsltproc \
       --stringparam revision '${revision}' \
       -o $out ${./options-to-docbook.xsl} $optionsXML
   '';

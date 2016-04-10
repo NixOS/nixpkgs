@@ -14,7 +14,7 @@ stdenv.mkDerivation {
       --with-mount-prog=${utillinux}/bin/mount \
       --with-umount-prog=${utillinux}/bin/umount \
       --with-losetup-prog=${utillinux}/bin/losetup \
-      --with-setfacl-prog=${acl}/bin/setfacl \
+      --with-setfacl-prog=${acl.bin}/bin/setfacl \
       --sysconfdir=$prefix/etc
   '';
   preConfigure = ''

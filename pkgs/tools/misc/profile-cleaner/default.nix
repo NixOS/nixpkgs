@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     PREFIX=\"\" DESTDIR=$out make install
     wrapProgram $out/bin/profile-cleaner \
-      --prefix PATH : "${parallel}/bin:${sqlite}/bin"
+      --prefix PATH : "${parallel}/bin:${sqlite.bin}/bin"
   '';
 
   meta = {

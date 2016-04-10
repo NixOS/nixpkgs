@@ -1,0 +1,27 @@
+From dbe142c4eda0f15fad9fa85743dd11b81292fa8f Mon Sep 17 00:00:00 2001
+From: Timothy J Fontaine <tjfontaine@gmail.com>
+Date: Thu, 23 May 2013 13:57:59 -0700
+Subject: [PATCH] v8: fix GetLocalizedMessage usage
+
+As is the backport of the abort on uncaught exception wouldn't compile
+because we it was passing in `this` when it was unnecessary.
+---
+ deps/v8/src/isolate.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/isolate.cc b/src/isolate.cc
+index 04a438b..5a5293e 100644
+--- a/src/isolate.cc
++++ b/src/isolate.cc
+@@ -1161,7 +1161,7 @@ void Isolate::DoThrow(Object* exception, MessageLocation* location) {
+           (report_exception || can_be_caught_externally)) {
+         fatal_exception_depth++;
+         fprintf(stderr, "%s\n\nFROM\n",
+-          *MessageHandler::GetLocalizedMessage(this, message_obj));
++          *MessageHandler::GetLocalizedMessage(message_obj));
+         PrintCurrentStackTrace(stderr);
+         OS::Abort();
+       }
+-- 
+1.8.1.6
+

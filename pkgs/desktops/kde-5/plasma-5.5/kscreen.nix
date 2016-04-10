@@ -23,11 +23,6 @@ plasmaPackage {
     qtdeclarative
     qtgraphicaleffects
   ];
-  propagatedUserEnvPkgs = [
-    libkscreen  # D-Bus service
-    qtdeclarative  # QML import
-    qtgraphicaleffects  # QML import
-  ];
   postInstall = ''
     wrapQtProgram "$out/bin/kscreen-console"
   '';

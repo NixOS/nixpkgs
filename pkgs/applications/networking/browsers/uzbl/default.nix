@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+        --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
         --prefix PYTHONPATH : "$PYTHONPATH" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     done

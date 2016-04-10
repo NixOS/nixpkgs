@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     for p in $out/bin/*
       do wrapProgram "$p" \
       --prefix PERL5LIB ":" "${perlPackages.DBFile}/lib/perl5/site_perl" \
-      --prefix PATH ":" "${which}/bin:${bzip2}/bin"
+      --prefix PATH ":" "${which}/bin:${bzip2.bin}/bin"
     done
 
     patchShebangs $out

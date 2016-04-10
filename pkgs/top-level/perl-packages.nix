@@ -1981,7 +1981,7 @@ let self = _self // overrides; _self = with self; {
 
     # Don't build a private copy of bzip2.
     BUILD_BZIP2 = false;
-    BZIP2_LIB = "${pkgs.bzip2}/lib";
+    BZIP2_LIB = "${pkgs.bzip2.out}/lib";
     BZIP2_INCLUDE = "${pkgs.bzip2}/include";
 
     meta = {
@@ -2412,8 +2412,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0f5gdprcql4kwzgxl2s6ngcfg1jl45lzcqh7dkv5bkwlwmxa9rsi";
     };
     buildInputs = [ DevelChecklib TestRequires pkgs.gmp ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
   CryptEksblowfish = buildPerlPackage rec {
@@ -2533,7 +2533,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
     meta = with stdenv.lib; {
       homepage = https://metacpan.org/release/Crypt-OpenSSL-AES;
       description = "Perl wrapper around OpenSSL's AES library";
@@ -2550,7 +2550,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
   };
 
   CryptOpenSSLRandom = buildPerlPackage rec {
@@ -2560,7 +2560,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "12pirh1pj8lpvzcwj2if9i6dbr6a7s9g1zc7gzbd3v87d6mx0rdf";
     };
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
   };
 
   CryptOpenSSLRSA = buildPerlPackage rec {
@@ -2571,7 +2571,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
   };
 
   CryptSSLeay = buildPerlPackage rec {
@@ -2580,7 +2580,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NA/NANIS/${name}.tar.gz";
       sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
     };
-    makeMakerFlags = "--libpath=${pkgs.openssl}/lib --incpath=${pkgs.openssl}/include";
+    makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl}/include";
     buildInputs = [ PathClass TryTiny ];
   };
 
@@ -5239,7 +5239,7 @@ let self = _self // overrides; _self = with self; {
     # tests fail
     doCheck = false;
 
-    makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xorg.libXpm}";
+    makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
   };
 
   GDSecurityImage = buildPerlPackage {
@@ -6538,7 +6538,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ApacheTest ExtUtilsXSBuilder mod_perl2 pkgs.apacheHttpd pkgs.apr pkgs.aprutil ];
     propagatedBuildInputs = [ mod_perl2 ];
-    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd} --with-apache2-apxs=${pkgs.apacheHttpd}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd}/bin/httpd --with-apr-config=${pkgs.apr}/bin/apr-1-config --with-apu-config=${pkgs.aprutil}/bin/apu-1-config";
+    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd} --with-apache2-apxs=${pkgs.apacheHttpd}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr}/bin/apr-1-config --with-apu-config=${pkgs.aprutil}/bin/apu-1-config";
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
@@ -7209,8 +7209,8 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ pkgs.gmp ];
     doCheck = false;
-    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp.out}/lib -lgmp";
   };
 
   MathBigRat = buildPerlPackage rec {
@@ -9012,8 +9012,14 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1x6jjmhvsdq488k6wdg58ajnr4dmbcbk7imyv0aybkhj1ygw7ahv";
     };
     buildInputs = [ pkgs.openssl ];
-    OPENSSL_PREFIX = pkgs.openssl;
     doCheck = false; # Test performs network access.
+    preConfigure = ''
+      mkdir openssl
+      ln -s ${pkgs.openssl.out}/lib openssl
+      ln -s ${pkgs.openssl.bin}/bin openssl
+      ln -s ${pkgs.openssl.dev}/include openssl
+      export OPENSSL_PREFIX=$(realpath openssl)
+    '';
     meta = {
       description = "Perl extension for using OpenSSL";
       license = "SSLeay";
@@ -10452,6 +10458,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/U/UM/UMEMOTO/${name}.tar.gz";
       sha256 = "1ads4k4vvq6pnxkdw0s8gaj03w4h9snxyw7zyikfzd20fy76yx6s";
     };
+    setOutputFlags = false;
     buildInputs = [ pkgs.which ];
   };
 
@@ -11402,7 +11409,7 @@ let self = _self // overrides; _self = with self; {
     preConfigure =
       ''
         substituteInPlace Makefile.PL --replace '$Config{libpth}' \
-          "'${pkgs.ncurses}/lib'"
+          "'${pkgs.ncurses.out}/lib'"
       '';
 
     # Tests don't work because they require /dev/tty.
@@ -13007,7 +13014,7 @@ let self = _self // overrides; _self = with self; {
       url = "http://search.cpan.org/CPAN/authors/id/S/SR/SREZIC/${name}.tar.gz";
       sha256 = "10fsvyr56gm59chc8b70n6bvhd3lh9c05sp8m4arcahid0rpgbwa";
     };
-    makeMakerFlags = "X11LIB=${pkgs.xorg.libX11}/lib";
+    makeMakerFlags = "X11LIB=${pkgs.xorg.libX11.out}/lib";
     buildInputs = with pkgs; [ xorg.libX11 libpng ];
     configurePhase = ''
       perl Makefile.PL PREFIX=$out $makeMakerFlags
@@ -13331,7 +13338,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [
       LWP ConfigGeneral NetIP TermReadKey Perl5lib
-      CryptSSLeay CSSDOM ];
+      CryptSSLeay CSSDOM LWPProtocolHttps ];
     meta = {
       homepage = http://validator.w3.org/checklink;
       description = "A tool to check links and anchors in Web pages or full Web sites";
@@ -13452,7 +13459,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ pkgs.xorg.libXext pkgs.xorg.libXScrnSaver pkgs.xorg.libX11 ];
     propagatedBuildInputs = [ InlineC ];
-    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11}/lib/ -L${pkgs.xorg.libXext}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm'';
+    patchPhase = ''sed -ie 's,-L/usr/X11R6/lib/,-L${pkgs.xorg.libX11.out}/lib/ -L${pkgs.xorg.libXext.out}/lib/ -L${pkgs.xorg.libXScrnSaver}/lib/,' IdleTime.pm'';
     meta = {
       description = "Get the idle time of X11";
     };
@@ -13593,7 +13600,7 @@ let self = _self // overrides; _self = with self; {
     patchPhase = if stdenv.isCygwin then ''
       sed -i"" -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
     '' else null;
-    makeMakerFlags = "EXPATLIBPATH=${pkgs.expat}/lib EXPATINCPATH=${pkgs.expat}/include";
+    makeMakerFlags = "EXPATLIBPATH=${pkgs.expat.out}/lib EXPATINCPATH=${pkgs.expat.dev}/include";
   };
 
   XMLXPath = buildPerlPackage {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, perl, zlib
+{ stdenv, fetchurl, pkgconfig, openssl, perl, zlib
 , sslSupport, proxySupport ? true
 , apr, aprutil, pcre
 , ldapSupport ? true, openldap
@@ -20,17 +20,24 @@ stdenv.mkDerivation rec {
     sha256 = "1b165zi7jrrlz5wmyy3b34lcs3dl4g0dymfb0qxwdnimylcrsbzk";
   };
 
-  buildInputs = [perl apr aprutil pcre] ++
-    stdenv.lib.optional sslSupport openssl;
+  # FIXME: -dev depends on -doc
+  outputs = [ "dev" "out" "doc" ];
+  setOutputFlags = false; # it would move $out/modules, etc.
 
-  # An apr-util header file includes an apr header file
-  # through #include "" (quotes)
-  # passing simply CFLAGS did not help, then I go by NIX_CFLAGS_COMPILE
-  NIX_CFLAGS_COMPILE = "-iquote ${apr}/include/apr-1";
+  propagatedBuildInputs = [ apr ]; # otherwise mod_* fail to find includes often
+  buildInputs = [ pkgconfig perl aprutil pcre zlib ] ++
+    stdenv.lib.optional sslSupport openssl;
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = (if stdenv.isDarwin then "" else "-lgcc_s");
 
+  patchPhase = ''
+    sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+  '';
+
+  preConfigure = ''
+    configureFlags="$configureFlags --includedir=$dev/include"
+  '';
   configureFlags = ''
     --with-z=${zlib}
     --with-pcre=${pcre}
@@ -44,13 +51,18 @@ stdenv.mkDerivation rec {
     --enable-disk-cache
     --enable-file-cache
     --enable-mem-cache
+    --docdir=$(doc)/share/doc
   '';
 
   enableParallelBuilding = true;
 
+  stripDebugList = "lib modules bin";
+
   postInstall = ''
-    echo "removing manual"
-    rm -rf $out/manual
+    mkdir -p $doc/share/doc/httpd
+    mv $out/manual $doc/share/doc/httpd
+    mkdir -p $dev/bin
+    mv $out/bin/apxs $dev/bin/apxs
   '';
 
   passthru = {

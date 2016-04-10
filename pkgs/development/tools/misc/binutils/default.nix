@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ./fix-update-symbol-version.patch
   ];
 
-  outputs = [ "out" "info" ];
+  outputs = (optional (cross == null) "dev") ++ [ "out" "info" ];
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ zlib ];
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
 
   enableParallelBuilding = true;
+
+  postFixup = optionalString (cross == null) "ln -s $out/bin $dev/bin"; # tools needed for development
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating binaries (linker, assembler, etc.)";

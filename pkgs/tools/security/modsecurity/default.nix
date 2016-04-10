@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, pkgconfig
 , curl, apacheHttpd, pcre, apr, aprutil, libxml2 }:
 
 with lib;
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "e2bbf789966c1f80094d88d9085a81bde082b2054f8e38e0db571ca49208f434";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ curl apacheHttpd pcre apr aprutil libxml2 ];
   configureFlags = [
     "--enable-standalone-module"
