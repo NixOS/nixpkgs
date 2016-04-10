@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       -DCMAKE_BUILD_PO=TRUE \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="$out" \
+      -DDISABLE_ADVANCE_SIMD=TRUE \
       -DDISABLE_PCSX2_WRAPPER=TRUE \
       -DDOC_DIR="$out/share/doc/pcsx2" \
       -DGAMEINDEX_DIR="$out/share/pcsx2" \
