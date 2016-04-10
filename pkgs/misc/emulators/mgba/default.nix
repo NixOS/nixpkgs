@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, cmake, ffmpeg, imagemagick, libzip, SDL2
+{ stdenv, fetchgit
+, pkgconfig, cmake, libzip, epoxy, ffmpeg, imagemagick, SDL2
 , qtbase, qtmultimedia }:
 
 stdenv.mkDerivation rec {
-  name = "mgba-${meta.version}";
-  src = fetchurl {
-    url = "https://github.com/mgba-emu/mgba/archive/${meta.version}.tar.gz";
-    sha256 = "0z52w4dkgjjviwi6w13gls082zclljgx1sa8nlyb1xcnnrn6980l";
+  name = "mgba-git-${version}";
+  version = "20160325";
+
+  src = fetchgit {
+    url = "https://github.com/mgba-emu/mgba.git";
+    rev = "be2641c77b4a438e0db487bc82b43bc27a26e0c2";
+    sha256 = "0ygsmmp24w14x5fm2qz2v68p59bs2ravn22axrg2ipn5skkgrvxz";
   };
 
   buildInputs = [
-    pkgconfig cmake ffmpeg imagemagick libzip SDL2
+    pkgconfig cmake libzip epoxy ffmpeg imagemagick SDL2
     qtbase qtmultimedia
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    version = "0.3.1";
     homepage = https://mgba.io;
     description = "A modern GBA emulator with a focus on accuracy";
     longDescription = ''
@@ -38,4 +39,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ MP2E AndersonTorres ];
   };
 }
-
