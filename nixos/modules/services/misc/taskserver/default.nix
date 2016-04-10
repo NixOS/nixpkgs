@@ -38,7 +38,6 @@ let
     ${mkConfLine "request.limit" cfg.requestLimit}
 
     # client
-    ${mkConfLine "client.cert" cfg.client.cert}
     ${mkConfLine "client.allow" cfg.allowedClientIDs}
     ${mkConfLine "client.deny" cfg.disallowedClientIDs}
 
@@ -223,15 +222,6 @@ in {
           The values <literal>all</literal> or <literal>none</literal> have
           special meaning. Any entry here overrides these in
           <option>services.taskserver.client.allow</option>.
-        '';
-      };
-
-      client.cert = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = ''
-          Fully qualified path of the client cert. This is used by the
-          <command>client</command> command.
         '';
       };
 
