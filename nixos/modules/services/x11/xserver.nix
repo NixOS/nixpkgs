@@ -219,6 +219,12 @@ in
         '';
       };
 
+      dpi = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = "DPI resolution to use for X server.";
+      };
+
       startDbusSession = mkOption {
         type = types.bool;
         default = true;
@@ -513,6 +519,7 @@ in
         "-xkbdir" "${cfg.xkbDir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
+        ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
         ++ optionals (cfg.display != null) [ "-logfile" "/var/log/X.${toString cfg.display}.log" ]
         ++ optional (!cfg.enableTCP) "-nolisten tcp";
 

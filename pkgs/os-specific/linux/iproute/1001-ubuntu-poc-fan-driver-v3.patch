@@ -1,27 +1,19 @@
-This provides support for Ubuntu's Fan Networking [1].
-
-These patches were pulled from:
-https://code.launchpad.net/~ubuntu-branches/ubuntu/vivid/iproute2/vivid-proposed
-
-See revisions 18 and 19.
-
-[1] https://wiki.ubuntu.com/FanNetworking
-
-diff --git a/include/linux/if_tunnel.h b/include/linux/if_tunnel.h
-index 102ce7a..7b8f0e5 100644
---- a/include/linux/if_tunnel.h
-+++ b/include/linux/if_tunnel.h
-@@ -57,6 +57,9 @@ enum {
- 	IFLA_IPTUN_ENCAP_FLAGS,
- 	IFLA_IPTUN_ENCAP_SPORT,
+Description: Fan driver support v3
+ Fan driver support v3
+Author: Jay Vosburgh <jay.vosburgh@canonical.com>
+Index: iproute2-4.1.1/include/linux/if_tunnel.h
+===================================================================
+--- iproute2-4.1.1.orig/include/linux/if_tunnel.h
++++ iproute2-4.1.1/include/linux/if_tunnel.h
+@@ -59,6 +59,7 @@ enum {
  	IFLA_IPTUN_ENCAP_DPORT,
-+
-+	IFLA_IPTUN_FAN_UNDERLAY = 32,
+ 
+ 	IFLA_IPTUN_FAN_UNDERLAY = 32,
 +	IFLA_IPTUN_FAN_MAP = 33,
+ 
  	__IFLA_IPTUN_MAX,
  };
- #define IFLA_IPTUN_MAX	(__IFLA_IPTUN_MAX - 1)
-@@ -131,4 +134,20 @@ enum {
+@@ -134,4 +135,20 @@ enum {
  };
  
  #define IFLA_VTI_MAX	(__IFLA_VTI_MAX - 1)
@@ -42,10 +34,10 @@ index 102ce7a..7b8f0e5 100644
 +};
 +
  #endif /* _IF_TUNNEL_H_ */
-diff --git a/ip/link_iptnl.c b/ip/link_iptnl.c
-index 9d6bc98..ec3f05d 100644
---- a/ip/link_iptnl.c
-+++ b/ip/link_iptnl.c
+Index: iproute2-4.1.1/ip/link_iptnl.c
+===================================================================
+--- iproute2-4.1.1.orig/ip/link_iptnl.c
++++ iproute2-4.1.1/ip/link_iptnl.c
 @@ -49,6 +49,42 @@ static void usage(int sit)
  	print_usage(stderr, sit);
  	exit(-1);
@@ -89,21 +81,10 @@ index 9d6bc98..ec3f05d 100644
  
  static int iptunnel_parse_opt(struct link_util *lu, int argc, char **argv,
  			      struct nlmsghdr *n)
-@@ -66,6 +102,7 @@ static int iptunnel_parse_opt(struct link_util *lu, int argc, char **argv,
- 	__u32 link = 0;
- 	__u32 laddr = 0;
- 	__u32 raddr = 0;
-+	__u32 underlay = 0;
- 	__u8 ttl = 0;
- 	__u8 tos = 0;
- 	__u8 pmtudisc = 1;
-@@ -174,6 +211,13 @@ get_failed:
- 				raddr = get_addr32(*argv);
- 			else
- 				raddr = 0;
-+		} else if (strcmp(*argv, "underlay") == 0) {
-+			NEXT_ARG();
-+			underlay = get_addr32(*argv);
+@@ -178,6 +214,10 @@ get_failed:
+ 		} else if (strcmp(*argv, "underlay") == 0) {
+ 			NEXT_ARG();
+ 			underlay = get_addr32(*argv);
 +		} else if (strcmp(*argv, "fan-map") == 0) {
 +			NEXT_ARG();
 +			if (fan_parse_map(&argc, &argv, n))
@@ -111,13 +92,7 @@ index 9d6bc98..ec3f05d 100644
  		} else if (strcmp(*argv, "local") == 0) {
  			NEXT_ARG();
  			if (strcmp(*argv, "any"))
-@@ -318,9 +362,32 @@ get_failed:
- 		}
- 	}
- 
-+	if (underlay)
-+		addattr32(n, 1024, IFLA_IPTUN_FAN_UNDERLAY, underlay);
-+
+@@ -328,6 +368,28 @@ get_failed:
  	return 0;
  }
  
@@ -127,16 +102,18 @@ index 9d6bc98..ec3f05d 100644
 +	struct ip_tunnel_fan_map *m;
 +	struct rtattr *i;
 +	int rem;
++	int p;
 +
 +	fprintf(f, "fan-map ");
 +
 +	rem = RTA_PAYLOAD(attr);
 +	for (i = RTA_DATA(attr); RTA_OK(i, rem); i = RTA_NEXT(i, rem)) {
++		p = RTA_PAYLOAD(i);
 +		m = RTA_DATA(i);
 +		fprintf(f, "%s/%d:%s/%d ",
-+			rt_addr_n2a(AF_INET, sizeof(m->overlay), &m->overlay, b1, INET_ADDRSTRLEN),
++			rt_addr_n2a(AF_INET, p, &m->overlay, b1, INET_ADDRSTRLEN),
 +			m->overlay_prefix,
-+			rt_addr_n2a(AF_INET, sizeof(m->overlay), &m->underlay, b2, INET_ADDRSTRLEN),
++			rt_addr_n2a(AF_INET, p, &m->underlay, b2, INET_ADDRSTRLEN),
 +			m->underlay_prefix);
 +	}
 +}
@@ -144,18 +121,10 @@ index 9d6bc98..ec3f05d 100644
  static void iptunnel_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[])
  {
  	char s1[1024];
-@@ -349,6 +416,17 @@ static void iptunnel_print_opt(struct link_util *lu, FILE *f, struct rtattr *tb[
+@@ -364,6 +426,9 @@ static void iptunnel_print_opt(struct li
+ 				format_host(AF_INET, 4, &addr, s1, sizeof(s1)));
+ 	}
  
- 	fprintf(f, "local %s ", local);
- 
-+	if (tb[IFLA_IPTUN_FAN_UNDERLAY]) {
-+		unsigned addr = rta_getattr_u32(tb[IFLA_IPTUN_FAN_UNDERLAY]);
-+
-+		if (addr)
-+			fprintf(f, "underlay %s ",
-+				format_host(AF_INET, 4, &addr, s1, sizeof(s1)));
-+	}
-+
 +	if (tb[IFLA_IPTUN_FAN_MAP])
 +		fan_print_map(f, tb[IFLA_IPTUN_FAN_MAP]);
 +

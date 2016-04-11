@@ -91,6 +91,7 @@
   ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
+  ./security/hidepid.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
@@ -330,7 +331,7 @@
   ./services/networking/hostapd.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
-  ./services/networking/iodined.nix
+  ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
@@ -434,6 +435,7 @@
   ./services/ttys/kmscon.nix
   ./services/web-apps/pump.io.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix

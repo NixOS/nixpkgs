@@ -16,6 +16,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ ffmpeg flac libvorbis libogg libid3tag libexif libjpeg sqlite gettext ];
 
+  postInstall = ''
+    mkdir -p $out/share/man/man{5,8}
+    cp minidlna.conf.5 $out/share/man/man5
+    cp minidlnad.8 $out/share/man/man8
+  '';
+
   meta = with stdenv.lib; {
     description = "Media server software";
     longDescription = ''

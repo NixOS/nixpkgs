@@ -195,6 +195,16 @@ let
     buildInputs = [ gohtml ];
   };
 
+  acme = buildFromGitHub {
+    rev    = "v0.3.0";
+    owner  = "xenolf";
+    repo   = "lego";
+    sha256 = "0hlnqdn793j4s43bhnmpi2lxgmjxs1ccg26alxnrcyw5x7p2vvdn";
+
+    subPackages = [ "acme" ];
+    propagatedBuildInputs = [ crypto dns go-jose-v1 net ];
+  };
+
   adapted = buildFromGitHub {
     rev = "eaea06aaff855227a71b1c58b18bc6de822e3e77";
     version = "2015-06-03";
@@ -399,6 +409,18 @@ let
     };
 
     propagatedBuildInputs = [ panicwrap revel ];
+  };
+
+  caddy = buildFromGitHub {
+    rev     = "9099375b11b7b5e62b831627c2927d1c4c666071";
+    version = "v0.8.2";
+    owner   = "mholt";
+    repo    = "caddy";
+    sha256  = "1zdy2sxir21ngh2ird01sv4fgj6sy3wl4s6k4piklri8ps1zw0k0";
+    buildInputs = [
+      acme blackfriday crypto go-humanize go-shlex go-syslog
+      http-authentication lumberjack-v2 toml websocket yaml-v2
+    ];
   };
 
   cascadia = buildGoPackage rec {
@@ -661,11 +683,11 @@ let
   };
 
   dns = buildFromGitHub {
-    rev    = "e59f851c912767b1db587dcabee6e6652e495c75";
-    version = "2015-07-22";
-    owner  = "miekg";
-    repo   = "dns";
-    sha256 = "1zcj4drmmskwvjy5ld54qd8a34ls9651ysl3q7c2bcambax5r0hp";
+    rev     = "7e024ce8ce18b21b475ac6baf8fa3c42536bf2fa";
+    version = "2016-03-28";
+    owner   = "miekg";
+    repo    = "dns";
+    sha256  = "0hlwb52lnnj3c6papjk9i5w5cjdw6r7c891v4xksnfvk1f9cy9kl";
   };
 
   docopt-go = buildFromGitHub {
@@ -1561,6 +1583,16 @@ let
     sha256 = "0qrcsh7j9mxcaspw8lfxh9hhflz55vj4aq1xy00v78301czq6jlj";
   };
 
+  go-jose-v1 = buildFromGitHub {
+    rev    = "v1.0.1";
+    owner  = "square";
+    repo   = "go-jose";
+    sha256 = "0asa1kl1qbx0cyayk44jhxxff0awpkwiw6va7yzrzjzhfc5kvg7p";
+    propagatedBuildInputs = [ cli-go ];
+    goPackagePath = "gopkg.in/square/go-jose.v1";
+    goPackageAliases = [ "github.com/square/go-jose" ];
+  };
+
   go-liblzma = buildFromGitHub {
     rev    = "e74be71c3c60411922b5424e875d7692ea638b78";
     version = "2016-01-01";
@@ -1768,6 +1800,13 @@ let
       maintainers = with maintainers; [ cstrahan ];
       platforms = platforms.unix;
     };
+  };
+
+  go-shlex = buildFromGitHub {
+    rev    = "3f9db97f856818214da2e1057f8ad84803971cff";
+    owner  = "flynn";
+    repo   = "go-shlex";
+    sha256 = "2a6a6f8eb150260cd60881ec5f027b7d1d2946ee22c627b450773eaf3d1de4c8";
   };
 
   go-simplejson = buildFromGitHub {
@@ -1994,6 +2033,13 @@ let
       sha256 = "0k8g7dwrkxdvmzs4aa8zz39qa8r2danc4x40hrblcgjhfcwzxrzr";
     };
     buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
+  };
+
+  http-authentication = buildFromGitHub {
+    rev    = "3eca13d6893afd7ecabe15f4445f5d2872a1b012";
+    owner  = "jimstudt";
+    repo   = "http-authentication";
+    sha256 = "08601600811a172d7f806b541f05691e4bef812ed8a68f7de65fde9ee11a3cb7";
   };
 
   http2 = buildFromGitHub rec {
@@ -2241,6 +2287,16 @@ let
     repo   = "luhn";
     sha256 = "1hfj1lx7wdpifn16zqrl4xml6cj5gxbn6hfz1f46g2a6bdf0gcvs";
   };
+
+  lumberjack-v2 = buildFromGitHub {
+    rev    = "v2.0";
+    owner  = "natefinch";
+    repo   = "lumberjack";
+    sha256 = "1v92v8vkip36l2fs6l5dpp655151hrijjc781cif658r8nf7xr82";
+    goPackagePath = "gopkg.in/natefinch/lumberjack.v2";
+    goPackageAliases = [ "github.com/natefinch/lumberjack" ];
+  };
+
 
   lxd = buildFromGitHub {
     rev    = "lxd-2.0.0.rc4";
@@ -3410,10 +3466,10 @@ let
   };
 
   skydns = buildFromGitHub {
-    rev = "2.5.2b";
+    rev = "2.5.3a";
     owner = "skynetservices";
     repo = "skydns";
-    sha256 = "01vac6bd71wky5jbd5k4a0x665bjn1cpmw7p655jrdcn5757c2lv";
+    sha256 = "0i1iaif79cwnwm7pc8nxfa261cgl4zhm3p2a5a3smhy1ibgccpq7";
 
     buildInputs = [
       go-etcd rcrowley.go-metrics dns go-systemd prometheus.client_golang
