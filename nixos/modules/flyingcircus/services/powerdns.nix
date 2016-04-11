@@ -88,10 +88,10 @@ in
                 ExecStart = ''
                   ${powerdns}/bin/pdns_server \
                     --config-dir=${cfg.configDir} \
+                    --config-name=${instance_name} \
                     --setuid=powerdns \
                     --setgid=nogroup \
-                    --daemon \
-                    --config-name=${instance_name}
+                    --daemon
                   '';
               };
             };
