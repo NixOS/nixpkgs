@@ -454,6 +454,7 @@ in {
 
       serviceConfig = {
         ExecStart = "@${taskd} taskd server";
+        ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
         PermissionsStartOnly = true;
         User = cfg.user;
         Group = cfg.group;
