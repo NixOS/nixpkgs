@@ -1,0 +1,10 @@
+--- a/hl/src/CMakeLists.txt 2016-04-11 22:26:02.932898133 +0200
++++ b/hl/src/CMakeLists.txt	2016-04-11 22:26:21.928234233 +0200
+@@ -24,6 +24,7 @@
+     ${HDF5_HL_SRC_SOURCE_DIR}/H5LTpublic.h
+     ${HDF5_HL_SRC_SOURCE_DIR}/H5PTpublic.h
+     ${HDF5_HL_SRC_SOURCE_DIR}/H5TBpublic.h
++    ${HDF5_HL_SRC_SOURCE_DIR}/H5LDpublic.h
+     ${HDF5_HL_SRC_SOURCE_DIR}/hdf5_hl.h
+ )
+ 

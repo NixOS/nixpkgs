@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, cmake
+, file
 , cpp ? false
 , gfortran ? null
 , zlib ? null
@@ -20,14 +22,16 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "http://www.hdfgroup.org/ftp/HDF5/releases/${name}/src/${name}.tar.bz2";
     sha256 = "1ilq8pn9lxbf2wj2rdzwqabxismznjj1d23iw6g78w0bl5dsxahk";
- };
+  };
+
+  patches = [ ./hl-H5LDpublic.patch ];
 
   passthru = {
     mpiSupport = (mpi != null);
     inherit mpi;
   };
 
-  buildInputs = []
+  buildInputs = [ cmake ]
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip;
 
@@ -35,14 +39,23 @@ stdenv.mkDerivation rec {
     ++ optional (zlib != null) zlib
     ++ optional (mpi != null) mpi;
 
-  configureFlags = []
-    ++ optional cpp "--enable-cxx"
-    ++ optional (gfortran != null) "--enable-fortran"
-    ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
-    ++ optional enableShared "--enable-shared";
-
-  patches = [./bin-mv.patch];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_C_FLAGS=-fPIC"
+    "-DHDF5_BUILD_HL_LIB=ON"
+    "-DHDF5_DISABLE_COMPILER_WARNINGS=ON"
+    "-DHDF5_BUILD_TOOLS=ON"
+    "-DCMAKE_EXE_LINKER_FLAGS=''"
+    "-DHDF5_INSTALL_DATA_DIR=share/hdf5"
+    "-DHDF5_INSTALL_CMAKE_DIR=share/cmake/hdf5"
+  ]
+    ++ stdenv.lib.optional (mpi != null)  "-DHDF5_ENABLE_PARALLEL=ON -DHDF5_BUILD_CPP_LIB:BOOL=OFF"
+    ++ stdenv.lib.optional (zlib != null) "-DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON"
+    ++ stdenv.lib.optionals (gfortran != null) [
+      "-DHDF5_BUILD_FORTRAN=ON"
+      "-DHDF5_ENABLE_F2003=ON"
+  ]
+  ;
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
