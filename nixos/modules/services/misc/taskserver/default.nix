@@ -17,7 +17,35 @@ let
     result = "${key} = ${mkVal val}";
   in optionalString (val != null && val != []) result;
 
-  needToCreateCA = all isNull (with cfg.pki; [ key cert crl caCert ]);
+  mkPkiOption = desc: mkOption {
+    type = types.nullOr types.path;
+    default = null;
+    description = desc + ''
+      <note><para>
+      Setting this option will prevent automatic CA creation and handling.
+      </para></note>
+    '';
+  };
+
+  pkiOptions = {
+    cert = mkPkiOption ''
+      Fully qualified path to the server certificate.
+    '';
+
+    caCert = mkPkiOption ''
+      Fully qualified path to the CA certificate.
+    '';
+
+    crl = mkPkiOption ''
+      Fully qualified path to the server certificate revocation list.
+    '';
+
+    key = mkPkiOption ''
+      Fully qualified path to the server key.
+    '';
+  };
+
+  needToCreateCA = all (c: isNull cfg.pki.${c}) (attrNames pkiOptions);
 
   configFile = pkgs.writeText "taskdrc" ''
     # systemd related
@@ -274,38 +302,7 @@ in {
         '';
       };
 
-      pki = {
-        cert = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = "Fully qualified path to the server certificate";
-        };
-
-        caCert = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = "Fully qualified path to the CA certificate.";
-        };
-
-        crl = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = ''
-            Fully qualified path to the server certificate revocation list.
-          '';
-        };
-
-        key = mkOption {
-          type = types.nullOr types.path;
-          default = null;
-          description = ''
-            Fully qualified path to the server key.
-
-            Note that reloading the <literal>taskserver.service</literal> causes
-            a configuration file reload before the next request is handled.
-          '';
-        };
-      };
+      pki = pkiOptions;
     };
   };
 
