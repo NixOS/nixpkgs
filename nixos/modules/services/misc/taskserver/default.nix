@@ -17,9 +17,7 @@ let
     result = "${key} = ${mkVal val}";
   in optionalString (val != null && val != []) result;
 
-  needToCreateCA = all isNull (with cfg; [
-    server.key server.cert server.crl caCert
-  ]);
+  needToCreateCA = all isNull (with cfg.pki; [ key cert crl caCert ]);
 
   configFile = pkgs.writeText "taskdrc" ''
     # systemd related
@@ -43,18 +41,18 @@ let
 
     # server
     server = ${cfg.listenHost}:${toString cfg.listenPort}
-    ${mkConfLine "server.crl" cfg.server.crl}
+    ${mkConfLine "server.crl" cfg.pki.crl}
 
     # certificates
-    ${mkConfLine "trust" cfg.server.trust}
+    ${mkConfLine "trust" cfg.pki.trust}
     ${if needToCreateCA then ''
       ca.cert = ${cfg.dataDir}/keys/ca.cert
       server.cert = ${cfg.dataDir}/keys/server.cert
       server.key = ${cfg.dataDir}/keys/server.key
     '' else ''
-      ca.cert = ${cfg.caCert}
-      server.cert = ${cfg.server.cert}
-      server.key = ${cfg.server.key}
+      ca.cert = ${cfg.pki.caCert}
+      server.cert = ${cfg.pki.cert}
+      server.key = ${cfg.pki.key}
     ''}
   '';
 
@@ -91,7 +89,7 @@ let
         certtool = "${pkgs.gnutls}/bin/certtool";
         inherit taskd;
         inherit (cfg) dataDir user group;
-        inherit (cfg.server) fqdn;
+        inherit (cfg.pki) fqdn;
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup
@@ -132,12 +130,6 @@ in {
         type = types.path;
         default = "/var/lib/taskserver";
         description = "Data directory for Taskserver.";
-      };
-
-      caCert = mkOption {
-        type = types.nullOr types.path;
-        default = null;
-        description = "Fully qualified path to the CA certificate.";
       };
 
       ciphers = mkOption {
@@ -261,12 +253,13 @@ in {
         '';
       };
 
-      server = {
+      pki = {
         fqdn = mkOption {
           type = types.str;
           default = "localhost";
           description = ''
-            The fully qualified domain name of this server.
+            The fully qualified domain name of this server, which is used as the
+            common name in the certificates.
           '';
         };
 
@@ -274,6 +267,12 @@ in {
           type = types.nullOr types.path;
           default = null;
           description = "Fully qualified path to the server certificate";
+        };
+
+        caCert = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          description = "Fully qualified path to the CA certificate.";
         };
 
         crl = mkOption {
@@ -346,7 +345,7 @@ in {
             --outfile "${cfg.dataDir}/keys/ca.key"
           ${pkgs.gnutls}/bin/certtool -s \
             --template "${pkgs.writeText "taskserver-ca.template" ''
-              cn = ${cfg.server.fqdn}
+              cn = ${cfg.pki.fqdn}
               cert_signing_key
               ca
             ''}" \
@@ -364,7 +363,7 @@ in {
 
           ${pkgs.gnutls}/bin/certtool -c \
             --template "${pkgs.writeText "taskserver-cert.template" ''
-              cn = ${cfg.server.fqdn}
+              cn = ${cfg.pki.fqdn}
               tls_www_server
               encryption_key
               signing_key
