@@ -19,6 +19,28 @@ TASKD_GROUP = "@group@"
 FQDN = "@fqdn@"
 
 RE_CONFIGUSER = re.compile(r'^\s*user\s*=(.*)$')
+RE_USERKEY = re.compile(r'New user key: (.+)$', re.MULTILINE)
+
+
+def lazyprop(fun):
+    """
+    Decorator which only evaluates the specified function when accessed.
+    """
+    name = '_lazy_' + fun.__name__
+
+    @property
+    def _lazy(self):
+        val = getattr(self, name, None)
+        if val is None:
+            val = fun(self)
+            setattr(self, name, val)
+        return val
+
+    return _lazy
+
+
+class TaskdError(OSError):
+    pass
 
 
 def run_as_taskd_user():
@@ -29,7 +51,16 @@ def run_as_taskd_user():
 
 
 def taskd_cmd(cmd, *args, **kwargs):
-    return subprocess.call(
+    """
+    Invoke taskd with the specified command with the privileges of the 'taskd'
+    user and 'taskd' group.
+
+    If 'capture_stdout' is passed as a keyword argument with the value True,
+    the return value are the contents the command printed to stdout.
+    """
+    capture_stdout = kwargs.pop("capture_stdout", False)
+    fun = subprocess.check_output if capture_stdout else subprocess.check_call
+    return fun(
         [TASKD_COMMAND, cmd, "--data", TASKD_DATA_DIR] + list(args),
         preexec_fn=run_as_taskd_user,
         **kwargs
@@ -118,6 +149,141 @@ def mktaskkey(cfg, path, keydata):
     return heredoc + "\n" + cmd
 
 
+class User(object):
+    def __init__(self, org, name, key):
+        self.__org = org
+        self.name = name
+        self.key = key
+
+    def export(self):
+        pubcert = getkey(self.__org, self.name, "public.cert")
+        privkey = getkey(self.__org, self.name, "private.key")
+        cacert = getkey("ca.cert")
+
+        keydir = "${TASKDATA:-$HOME/.task}/keys"
+
+        credentials = '/'.join([self.__org, self.name, self.key])
+        allow_unquoted = string.ascii_letters + string.digits + "/-_."
+        if not all((c in allow_unquoted) for c in credentials):
+            credentials = "'" + credentials.replace("'", r"'\''") + "'"
+
+        script = [
+            "umask 0077",
+            'mkdir -p "{}"'.format(keydir),
+            mktaskkey("certificate", os.path.join(keydir, "public.cert"),
+                      pubcert),
+            mktaskkey("key", os.path.join(keydir, "private.key"), privkey),
+            mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert),
+            "task config taskd.credentials -- {}".format(credentials)
+        ]
+
+        return "\n".join(script) + "\n"
+
+
+class Group(object):
+    def __init__(self, org, name):
+        self.__org = org
+        self.name = name
+
+
+class Organisation(object):
+    def __init__(self, name):
+        self.name = name
+
+    def add_user(self, name):
+        """
+        Create a new user along with a certificate and key.
+
+        Returns a 'User' object or None if the user already exists.
+        """
+        if name not in self.users.keys():
+            output = taskd_cmd("add", "user", self.name, name,
+                               capture_stdout=True)
+            key = RE_USERKEY.search(output)
+            if key is None:
+                msg = "Unable to find key while creating user {}."
+                raise TaskdError(msg.format(name))
+
+            generate_key(self.name, name)
+            newuser = User(self.name, name, key)
+            self._lazy_users[name] = newuser
+            return newuser
+        return None
+
+    def add_group(self, name):
+        """
+        Create a new group.
+
+        Returns a 'Group' object or None if the group already exists.
+        """
+        if name not in self.groups.keys():
+            taskd_cmd("add", "group", self.name, name)
+            newgroup = Group(self.name, name)
+            self._lazy_groups[name] = newgroup
+            return newgroup
+        return None
+
+    def get_user(self, name):
+        return self.users.get(name)
+
+    @lazyprop
+    def users(self):
+        result = {}
+        for key in os.listdir(mkpath(self.name, "users")):
+            user = fetch_username(self.name, key)
+            if user is not None:
+                result[user] = User(self.name, user, key)
+        return result
+
+    def get_group(self, name):
+        return self.groups.get(name)
+
+    @lazyprop
+    def groups(self):
+        result = {}
+        for group in os.listdir(mkpath(self.name, "groups")):
+            result[group] = Group(self.name, group)
+        return result
+
+
+class Manager(object):
+    def add_org(self, name):
+        """
+        Create a new organisation.
+
+        Returns an 'Organisation' object or None if the organisation already
+        exists.
+        """
+        if name not in self.orgs.keys():
+            taskd_cmd("add", "org", name)
+            neworg = Organisation(name)
+            self._lazy_orgs[name] = neworg
+            return neworg
+        return None
+
+    def get_org(self, name):
+        return self.orgs.get(name)
+
+    @lazyprop
+    def orgs(self):
+        result = {}
+        for org in os.listdir(mkpath()):
+            result[org] = Organisation(org)
+        return result
+
+
+class OrganisationType(click.ParamType):
+    name = 'organisation'
+
+    def convert(self, value, param, ctx):
+        org = Manager().get_org(value)
+        if org is None:
+            self.fail("Organisation {} does not exist.".format(value))
+        return org
+
+ORGANISATION = OrganisationType()
+
+
 @click.group()
 @click.option('--service-helper', is_flag=True)
 @click.pass_context
@@ -129,16 +295,14 @@ def cli(ctx, service_helper):
 
 
 @cli.command("list-users")
-@click.argument("organisation")
+@click.argument("organisation", type=ORGANISATION)
 def list_users(organisation):
     """
     List all users belonging to the specified organisation.
     """
-    label("The following users exist for {}:".format(organisation))
-    for key in os.listdir(mkpath(organisation, "users")):
-        name = fetch_username(organisation, key)
-        if name is not None:
-            sys.stdout.write(name + "\n")
+    label("The following users exists for {}:".format(organisation.name))
+    for user in organisation.users.values():
+        sys.stdout.write(user.name + "\n")
 
 
 @cli.command("list-orgs")
@@ -147,28 +311,28 @@ def list_orgs():
     List available organisations
     """
     label("The following organisations exist:")
-    for org in os.listdir(mkpath()):
-        sys.stdout.write(org + "\n")
+    for org in Manager().orgs:
+        sys.stdout.write(org.name + "\n")
 
 
 @cli.command("get-uuid")
-@click.argument("organisation")
+@click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def get_uuid(organisation, user):
     """
     Get the UUID of the specified user belonging to the specified organisation.
     """
-    for key in os.listdir(mkpath(organisation, "users")):
-        name = fetch_username(organisation, key)
-        if name is not None and name == user:
-            label("User {} has the following UUID:".format(name))
-            sys.stdout.write(key + "\n")
-            return
-    sys.exit("No UUID found for user {}.".format(user))
+    userobj = organisation.get_user(user)
+    if userobj is None:
+        msg = "User {} doesn't exist in organisation {}."
+        sys.exit(msg.format(userobj.name, organisation.name))
+
+    label("User {} has the following UUID:".format(userobj.name))
+    sys.stdout.write(user.key + "\n")
 
 
 @cli.command("export-user")
-@click.argument("organisation")
+@click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def export_user(organisation, user):
     """
@@ -177,38 +341,12 @@ def export_user(organisation, user):
 
     Note that the private key will be exported as well, so use this with care!
     """
-    name = key = None
-    for current_key in os.listdir(mkpath(organisation, "users")):
-        name = fetch_username(organisation, current_key)
-        if name is not None and name == user:
-            key = current_key
-            break
-
-    if name is None:
+    userobj = organisation.get_user(user)
+    if userobj is None:
         msg = "User {} doesn't exist in organisation {}."
-        sys.exit(msg.format(user, organisation))
+        sys.exit(msg.format(userobj.name, organisation.name))
 
-    pubcert = getkey(organisation, user, "public.cert")
-    privkey = getkey(organisation, user, "private.key")
-    cacert = getkey("ca.cert")
-
-    keydir = "${TASKDATA:-$HOME/.task}/keys"
-
-    credentials = '/'.join([organisation, user, key])
-    allow_unquoted = string.ascii_letters + string.digits + "/-_."
-    if not all((c in allow_unquoted) for c in credentials):
-        credentials = "'" + credentials.replace("'", r"'\''") + "'"
-
-    script = [
-        "umask 0077",
-        'mkdir -p "{}"'.format(keydir),
-        mktaskkey("certificate", os.path.join(keydir, "public.cert"), pubcert),
-        mktaskkey("key", os.path.join(keydir, "private.key"), privkey),
-        mktaskkey("ca", os.path.join(keydir, "ca.cert"), cacert),
-        "task config taskd.credentials -- {}".format(credentials)
-    ]
-
-    sys.stdout.write('\n'.join(script))
+    sys.stdout.write(userobj.export())
 
 
 @cli.command("add-org")
@@ -228,7 +366,7 @@ def add_org(obj, name):
 
 
 @cli.command("add-user")
-@click.argument("organisation")
+@click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 @click.pass_obj
 def add_user(obj, organisation, user):
@@ -239,37 +377,28 @@ def add_user(obj, organisation, user):
     The client certificate along with it's public key can be shown via the
     'export-user' subcommand.
     """
-    if not os.path.exists(mkpath(organisation)):
-        sys.exit("Organisation {} does not exist.".format(organisation))
-
-    if os.path.exists(mkpath(organisation, "users")):
-        for key in os.listdir(mkpath(organisation, "users")):
-            name = fetch_username(organisation, key)
-            if name is not None and name == user:
-                if obj['is_service_helper']:
-                    return
-                msg = "User {} already exists in organisation {}."
-                sys.exit(msg.format(user, organisation))
-
-    taskd_cmd("add", "user", organisation, user)
-    generate_key(organisation, user)
+    userobj = organisation.add_user(user)
+    if userobj is None:
+        if obj['is_service_helper']:
+            return
+        msg = "User {} already exists in organisation {}."
+        sys.exit(msg.format(user, organisation))
 
 
 @cli.command("add-group")
-@click.argument("organisation")
+@click.argument("organisation", type=ORGANISATION)
 @click.argument("group")
 @click.pass_obj
 def add_group(obj, organisation, group):
     """
     Create a group for the given organisation.
     """
-    if os.path.exists(mkpath(organisation, "groups", group)):
+    userobj = organisation.add_group(group)
+    if userobj is None:
         if obj['is_service_helper']:
             return
         msg = "Group {} already exists in organisation {}."
         sys.exit(msg.format(group, organisation))
-
-    taskd_cmd("add", "group", organisation, group)
 
 
 if __name__ == '__main__':
