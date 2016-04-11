@@ -388,9 +388,13 @@ in {
             --load-privkey "${cfg.dataDir}/keys/server.key" \
             --outfile "${cfg.dataDir}/keys/server.cert"
 
-          chgrp "${cfg.group}" "${cfg.dataDir}/keys/server.key"
-          chmod g+r "${cfg.dataDir}/keys/server.key"
-          chmod a+r "${cfg.dataDir}/keys/server.cert"
+          chgrp "${cfg.group}" \
+            "${cfg.dataDir}/keys/server.key" \
+            "${cfg.dataDir}/keys/server.cert"
+
+          chmod g+r \
+            "${cfg.dataDir}/keys/server.key" \
+            "${cfg.dataDir}/keys/server.cert"
         fi
 
         chmod go+x "${cfg.dataDir}/keys"
