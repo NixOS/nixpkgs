@@ -12,7 +12,7 @@ let
   ''
   worker_processes 1;
 
-  error_log /var/log/nginx/error_log notice;
+  error_log stderr;
 
   http {
     default_type application/octet-stream;
@@ -129,6 +129,18 @@ in
     system.activationScripts.nginx = ''
       install -d -o ${toString config.ids.uids.nginx} /var/log/nginx
       install -d -o ${toString config.ids.uids.nginx} -g service -m 02775 /etc/local/nginx
+    '';
+
+    services.logrotate.config = ''
+        /var/log/nginx/*access*log
+        /var/log/nginx/performance.log
+        {
+            rotate 92
+            create 0644 nginx service
+            postrotate
+                systemctl reload nginx
+            endscript
+        }
     '';
 
     environment.etc = {

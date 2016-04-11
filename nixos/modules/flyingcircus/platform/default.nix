@@ -282,5 +282,20 @@ in
       "x /tmp/fc-data/*"
       "D /var/tmp - - - 7d"];
 
+    services.logrotate.enable = true;
+    services.logrotate.config = lib.mkOrder 50 ''
+    daily
+    rotate 14
+    create
+    dateext
+    delaycompress
+    compress
+    notifempty
+    nomail
+    noolddir
+    missingok
+    sharedscripts
+    '';
+
     };
 }
