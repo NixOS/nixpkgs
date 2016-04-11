@@ -202,7 +202,9 @@ def main():
 
     if args.reboot:
         ensure_reboot()
+        return
 
+    # Garbage collection is run after a potential reboot.
     if args.garbage:
         collect_garbage(args.garbage)
 

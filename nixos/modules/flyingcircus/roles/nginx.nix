@@ -11,25 +11,58 @@ let
   baseConfig =
   ''
   worker_processes 1;
+  worker_rlimit_nofile 8192;
 
-  error_log /var/log/nginx/error_log notice;
+  error_log stderr;
+
+  events {
+    worker_connections 4096;
+    multi_accept on;
+  }
 
   http {
+    include ${config.services.nginx.package}/conf/mime.types;
     default_type application/octet-stream;
     charset UTF-8;
 
+    map_hash_bucket_size 64;
+
+    map $remote_addr $remote_addr_anon_head {
+        default 0.0.0;
+        "~(?P<ip>(\d+)\.(\d+)\.(\d+))\.\d+" $ip;
+        "~(?P<ip>[^:]+:[^:]+:[^:]+):" $ip;
+    }
+
+    map $remote_addr $remote_addr_anon_tail {
+        default .0;
+        "~(?P<ip>(\d+)\.(\d+)\.(\d+))\.\d+" .0;
+        "~(?P<ip>[^:]+:[^:]+:[^:]+):" ::;
+    }
+
+    map $remote_addr_anon_head$remote_addr_anon_tail $remote_addr_anon {
+        default 0.0.0.0;
+        "~(?P<ip>.*)" $ip;
+    }
+
+    log_format anonymized '$remote_addr_anon - $remote_user [$time_local] '
+        '"$request" $status $body_bytes_sent '
+        '"$http_referer" "$http_user_agent" '
+        '"$gzip_ratio"';
+
     log_format main
-    '$remote_addr - $remote_user [$time_local] '
-    '"$request" $status $bytes_sent '
-    '"$http_referer" "$http_user_agent" '
-    '"$gzip_ratio"';
+        '$remote_addr - $remote_user [$time_local] '
+        '"$request" $status $bytes_sent '
+        '"$http_referer" "$http_user_agent" '
+        '"$gzip_ratio"';
+
+    log_format performance
+        '$time_iso8601 $pid.$connection.$connection_requests '
+        '$request_method "$scheme://$host$request_uri" $status '
+        '$bytes_sent $request_length $pipe $request_time '
+        '"$upstream_response_time" $gzip_ratio';
+
     open_log_file_cache max=64;
     access_log /var/log/nginx/access.log;
-    log_format performance
-    '$time_iso8601 $remote_addr '
-    '"$request_method $scheme://$host$request_uri" $status '
-    '$bytes_sent $request_length $pipe $request_time '
-    '$upstream_response_time';
     access_log /var/log/nginx/performance.log performance;
 
     client_header_timeout 10m;
@@ -44,9 +77,9 @@ let
     gzip on;
     gzip_min_length 1100;
     gzip_types application/javascript application/json
-    application/vnd.ms-fontobject application/x-javascript
-    application/xml application/xml+rss font/opentype font/truetype
-    image/svg+xml text/css text/javascript text/plain text/xml;
+        application/vnd.ms-fontobject application/x-javascript
+        application/xml application/xml+rss font/opentype font/truetype
+        image/svg+xml text/css text/javascript text/plain text/xml;
     gzip_vary on;
     gzip_disable msie6;
     gzip_proxied any;
@@ -57,8 +90,8 @@ let
 
     keepalive_timeout 75 20;
     reset_timedout_connection on;
-    server_names_hash_bucket_size 64;
-    map_hash_bucket_size 64;
+    server_names_hash_bucket_size 128;
+    server_names_hash_max_size 1024;
     ignore_invalid_headers on;
 
     index index.html;
@@ -71,6 +104,11 @@ let
     proxy_http_version 1.1;
     proxy_read_timeout 120;
     proxy_set_header Connection "";
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Port $server_port;
+    proxy_set_header X-Forwarded-Scheme $scheme;
+    proxy_set_header X-Nginx-Id '$pid.$connection.$connection_requests';
 
     fastcgi_buffers 64 4k;
     fastcgi_keep_conn on;
@@ -87,6 +125,7 @@ let
     ssl_ciphers "EECDH+AESGCM EDH+AESGCM EECDH EDH RSA+3DES -RC4 -aNULL -eNULL -LOW -MD5 -EXP -PSK -DSS -ADH";
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
+    ssl_dhparam /etc/ssl/dhparams.pem;
 
     ${localConfig}
 
@@ -121,6 +160,7 @@ in
   config = mkIf cfg.roles.nginx.enable {
 
     services.nginx.enable = true;
+    services.nginx.config = "";
     services.nginx.appendConfig = baseConfig;
 
     # XXX only on FE!
@@ -129,6 +169,18 @@ in
     system.activationScripts.nginx = ''
       install -d -o ${toString config.ids.uids.nginx} /var/log/nginx
       install -d -o ${toString config.ids.uids.nginx} -g service -m 02775 /etc/local/nginx
+    '';
+
+    services.logrotate.config = ''
+        /var/log/nginx/*access*log
+        /var/log/nginx/performance.log
+        {
+            rotate 92
+            create 0644 nginx service
+            postrotate
+                systemctl reload nginx
+            endscript
+        }
     '';
 
     environment.etc = {
