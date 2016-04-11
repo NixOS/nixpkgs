@@ -5,7 +5,7 @@ import ./make-test.nix {
     server = {
       networking.firewall.enable = false;
       services.taskserver.enable = true;
-      services.taskserver.server.host = "::";
+      services.taskserver.listenHost = "::";
       services.taskserver.server.fqdn = "server";
       services.taskserver.organisations = {
         testOrganisation.users = [ "alice" "foo" ];
@@ -27,7 +27,7 @@ import ./make-test.nix {
 
   testScript = { nodes, ... }: let
     cfg = nodes.server.config.services.taskserver;
-    portStr = toString cfg.server.port;
+    portStr = toString cfg.listenPort;
   in ''
     sub su ($$) {
       my ($user, $cmd) = @_;

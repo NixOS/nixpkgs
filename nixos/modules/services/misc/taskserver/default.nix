@@ -42,7 +42,7 @@ let
     ${mkConfLine "client.deny" cfg.disallowedClientIDs}
 
     # server
-    server = ${cfg.server.host}:${toString cfg.server.port}
+    server = ${cfg.listenHost}:${toString cfg.listenPort}
     ${mkConfLine "server.crl" cfg.server.crl}
 
     # certificates
@@ -245,23 +245,23 @@ in {
         '';
       };
 
+      listenHost = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+          The address (IPv4, IPv6 or DNS) to listen on.
+        '';
+      };
+
+      listenPort = mkOption {
+        type = types.int;
+        default = 53589;
+        description = ''
+          Port number of the Taskserver.
+        '';
+      };
+
       server = {
-        host = mkOption {
-          type = types.str;
-          default = "localhost";
-          description = ''
-            The address (IPv4, IPv6 or DNS) to listen on.
-          '';
-        };
-
-        port = mkOption {
-          type = types.int;
-          default = 53589;
-          description = ''
-            Port number of the Taskserver.
-          '';
-        };
-
         fqdn = mkOption {
           type = types.str;
           default = "localhost";
