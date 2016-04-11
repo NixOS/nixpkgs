@@ -11,7 +11,7 @@ let
     mv config.js $out
   '';
 
-  configFile = if (cfg.configFile != null) then cfg.configFile else ''
+  finalConfigFile = if (cfg.configFile != null) then cfg.configFile else ''
     var _ = require('${pkgs.shout}/lib/node_modules/shout/node_modules/lodash')
 
     module.exports = _.merge(
@@ -48,7 +48,7 @@ in {
 
     configFile = mkOption {
       type = types.nullOr types.lines;
-      default = configFile;
+      default = null;
       description = ''
         Contents of Shout's <filename>config.js</filename> file.
 
@@ -95,7 +95,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      preStart = "ln -sf ${pkgs.writeText "config.js" configFile} ${shoutHome}/config.js";
+      preStart = "ln -sf ${pkgs.writeText "config.js" finalConfigFile} ${shoutHome}/config.js";
       script = concatStringsSep " " [
         "${pkgs.shout}/bin/shout"
         (if cfg.private then "--private" else "--public")
