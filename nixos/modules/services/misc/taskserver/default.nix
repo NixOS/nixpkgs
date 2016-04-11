@@ -142,8 +142,6 @@ let
     propagatedBuildInputs = [ pkgs.pythonPackages.click ];
   };
 
-  ctlcmd = "${nixos-taskserver}/bin/nixos-taskserver --service-helper";
-
   withMeta = meta: defs: mkMerge [ defs { inherit meta; } ];
 
 in {
@@ -432,20 +430,10 @@ in {
 
       environment.TASKDDATA = cfg.dataDir;
 
-      preStart = ''
-        ${concatStrings (mapAttrsToList (orgName: attrs: ''
-          ${ctlcmd} add-org ${mkShellStr orgName}
-
-          ${concatMapStrings (user: ''
-            echo Creating ${user} >&2
-            ${ctlcmd} add-user ${mkShellStr orgName} ${mkShellStr user}
-          '') attrs.users}
-
-          ${concatMapStrings (group: ''
-            ${ctlcmd} add-group ${mkShellStr orgName} ${mkShellStr user}
-          '') attrs.groups}
-        '') cfg.organisations)}
-      '';
+      preStart = let
+        jsonOrgs = builtins.toJSON cfg.organisations;
+        jsonFile = pkgs.writeText "orgs.json" jsonOrgs;
+      in "${nixos-taskserver}/bin/nixos-taskserver process-json '${jsonFile}'";
 
       serviceConfig = {
         ExecStart = "@${taskd} taskd server";

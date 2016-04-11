@@ -1,4 +1,5 @@
 import grp
+import json
 import pwd
 import os
 import re
@@ -210,6 +211,13 @@ class Organisation(object):
             return newuser
         return None
 
+    def del_user(self, name):
+        """
+        Delete a user and revoke its keys.
+        """
+        sys.stderr.write("Delete user {}.".format(name))
+        # TODO: deletion!
+
     def add_group(self, name):
         """
         Create a new group.
@@ -222,6 +230,13 @@ class Organisation(object):
             self._lazy_groups[name] = newgroup
             return newgroup
         return None
+
+    def del_group(self, name):
+        """
+        Delete a group.
+        """
+        sys.stderr.write("Delete group {}.".format(name))
+        # TODO: deletion!
 
     def get_user(self, name):
         return self.users.get(name)
@@ -261,6 +276,14 @@ class Manager(object):
             return neworg
         return None
 
+    def del_org(self, name):
+        """
+        Delete and revoke keys of an organisation with all its users and
+        groups.
+        """
+        sys.stderr.write("Delete org {}.".format(name))
+        # TODO: deletion!
+
     def get_org(self, name):
         return self.orgs.get(name)
 
@@ -285,13 +308,11 @@ ORGANISATION = OrganisationType()
 
 
 @click.group()
-@click.option('--service-helper', is_flag=True)
-@click.pass_context
-def cli(ctx, service_helper):
+def cli():
     """
     Manage Taskserver users and certificates
     """
-    ctx.obj = {'is_service_helper': service_helper}
+    pass
 
 
 @cli.command("list-users")
@@ -351,14 +372,11 @@ def export_user(organisation, user):
 
 @cli.command("add-org")
 @click.argument("name")
-@click.pass_obj
-def add_org(obj, name):
+def add_org(name):
     """
     Create an organisation with the specified name.
     """
     if os.path.exists(mkpath(name)):
-        if obj['is_service_helper']:
-            return
         msg = "Organisation with name {} already exists."
         sys.exit(msg.format(name))
 
@@ -368,8 +386,7 @@ def add_org(obj, name):
 @cli.command("add-user")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
-@click.pass_obj
-def add_user(obj, organisation, user):
+def add_user(organisation, user):
     """
     Create a user for the given organisation along with a client certificate
     and print the key of the new user.
@@ -379,8 +396,6 @@ def add_user(obj, organisation, user):
     """
     userobj = organisation.add_user(user)
     if userobj is None:
-        if obj['is_service_helper']:
-            return
         msg = "User {} already exists in organisation {}."
         sys.exit(msg.format(user, organisation))
 
@@ -388,17 +403,59 @@ def add_user(obj, organisation, user):
 @cli.command("add-group")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("group")
-@click.pass_obj
-def add_group(obj, organisation, group):
+def add_group(organisation, group):
     """
     Create a group for the given organisation.
     """
     userobj = organisation.add_group(group)
     if userobj is None:
-        if obj['is_service_helper']:
-            return
         msg = "Group {} already exists in organisation {}."
         sys.exit(msg.format(group, organisation))
+
+
+def add_or_delete(old, new, add_fun, del_fun):
+    """
+    Given an 'old' and 'new' list, figure out the intersections and invoke
+    'add_fun' against every element that is not in the 'old' list and 'del_fun'
+    against every element that is not in the 'new' list.
+
+    Returns a tuple where the first element is the list of elements that were
+    added and the second element consisting of elements that were deleted.
+    """
+    old_set = set(old)
+    new_set = set(new)
+    to_delete = old_set - new_set
+    to_add = new_set - old_set
+    for elem in to_delete:
+        del_fun(elem)
+    for elem in to_add:
+        add_fun(elem)
+    return to_add, to_delete
+
+
+@cli.command("process-json")
+@click.argument('json-file', type=click.File('rb'))
+def process_json(json_file):
+    """
+    Create and delete users, groups and organisations based on a JSON file.
+
+    The structure of this file is exactly the same as the
+    'services.taskserver.organisations' option of the NixOS module and is used
+    for declaratively adding and deleting users.
+
+    Hence this subcommand is not recommended outside of the scope of the NixOS
+    module.
+    """
+    data = json.load(json_file)
+
+    mgr = Manager()
+    add_or_delete(mgr.orgs.keys(), data.keys(), mgr.add_org, mgr.del_org)
+
+    for org in mgr.orgs.values():
+        add_or_delete(org.users.keys(), data[org.name]['users'],
+                      org.add_user, org.del_user)
+        add_or_delete(org.groups.keys(), data[org.name]['groups'],
+                      org.add_group, org.del_group)
 
 
 if __name__ == '__main__':
