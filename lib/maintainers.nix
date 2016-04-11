@@ -139,7 +139,6 @@
   garrison = "Jim Garrison <jim@garrison.cc>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   gebner = "Gabriel Ebner <gebner@gebner.org>";
-  gfxmonk = "Tim Cuthbertson <tim@gfxmonk.net>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
   globin = "Robin Gloster <mail@glob.in>";
@@ -345,6 +344,7 @@
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   theuni = "Christian Theune <ct@flyingcircus.io>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
+  timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
   tohl = "Tomas Hlavaty <tom@logand.com>";
   tokudan = "Daniel Frank <git@danielfrank.net>";

@@ -15585,7 +15585,7 @@ in modules // {
     meta = {
       description = "Bringing the power of python to stream editing";
       homepage = https://github.com/timbertson/piep;
-      maintainers = with maintainers; [ gfxmonk ];
+      maintainers = with maintainers; [ timbertson ];
       license = licenses.gpl3;
     };
   };

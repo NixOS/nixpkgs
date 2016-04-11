@@ -5,17 +5,17 @@ let
     sha256 = "12yv0j333z6jkaaal8my3jx3k4ml9hq8ldis5zfvr8179d4xah7q";
     rev = "version-${version}";
     repo = "gup";
-    owner = "gfxmonk";
+    owner = "timbertson";
   };
 in
 import ./build.nix
   { inherit stdenv lib python which; }
   { inherit src version;
     meta = {
+      inherit (src.meta) homepage;
       description = "A better make, inspired by djb's redo";
-      homepage = https://github.com/gfxmonk/gup;
       license = stdenv.lib.licenses.lgpl2Plus;
-      maintainers = [ stdenv.lib.maintainers.gfxmonk ];
+      maintainers = [ stdenv.lib.maintainers.timbertson ];
       platforms = stdenv.lib.platforms.all;
     };
   }
