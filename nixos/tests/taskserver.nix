@@ -50,7 +50,15 @@ import ./make-test.nix {
 
           $exportinfo =~ s/'/'\\'''/g;
 
-          $client->succeed(su $user, "eval '$exportinfo' >&2");
+          $client->nest("importing taskwarrior configuration", sub {
+            my $cmd = su $user, "eval '$exportinfo' >&2";
+            my ($status, $out) = $client->execute_($cmd);
+            if ($status != 0) {
+              $client->log("output: $out");
+              die "command `$cmd' did not succeed (exit code $status)\n";
+            }
+          });
+
           $client->succeed(su $user,
             "task config taskd.server server:${portStr} >&2"
           );
