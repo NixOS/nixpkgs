@@ -80,18 +80,19 @@ let
 
     # server
     server = ${cfg.listenHost}:${toString cfg.listenPort}
-    ${mkConfLine "server.crl" cfg.pki.server.crl}
-
-    # certificates
     ${mkConfLine "trust" cfg.trust}
+
+    # PKI options
     ${if needToCreateCA then ''
       ca.cert = ${cfg.dataDir}/keys/ca.cert
       server.cert = ${cfg.dataDir}/keys/server.cert
       server.key = ${cfg.dataDir}/keys/server.key
+      server.crl = ${cfg.dataDir}/keys/server.crl
     '' else ''
       ca.cert = ${cfg.pki.ca.cert}
       server.cert = ${cfg.pki.server.cert}
       server.key = ${cfg.pki.server.key}
+      server.crl = ${cfg.pki.server.crl}
     ''}
   '';
 
