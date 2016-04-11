@@ -37,6 +37,7 @@ in
     ./user.nix
     ./network.nix
     ./ssl/certificate.nix
+    ./ssl/dhparams.nix
     ./sensu-client.nix
   ];
 
