@@ -21,7 +21,10 @@ let
             (lib.hasPrefix "pdns-" filename) &&
             (lib.hasSuffix ".conf" filename)
             )
-          (builtins.readDir cfg.configDir)));
+          (
+           if builtins.pathExists cfg.configDir
+           then builtins.readDir cfg.configDir
+           else {})));
 
 in
 
