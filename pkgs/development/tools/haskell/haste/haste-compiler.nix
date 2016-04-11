@@ -1,4 +1,5 @@
-{ overrideCabal
+{ mkDerivation
+, overrideCabal
 , super-haste-compiler
 }:
 
