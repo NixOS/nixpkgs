@@ -6,7 +6,7 @@ import ./make-test.nix {
       networking.firewall.enable = false;
       services.taskserver.enable = true;
       services.taskserver.listenHost = "::";
-      services.taskserver.pki.fqdn = "server";
+      services.taskserver.fqdn = "server";
       services.taskserver.organisations = {
         testOrganisation.users = [ "alice" "foo" ];
         anotherOrganisation.users = [ "bob" ];

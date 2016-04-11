@@ -88,8 +88,7 @@ let
         src = ./helper-tool.py;
         certtool = "${pkgs.gnutls}/bin/certtool";
         inherit taskd;
-        inherit (cfg) dataDir user group;
-        inherit (cfg.pki) fqdn;
+        inherit (cfg) dataDir user group fqdn;
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup
@@ -253,16 +252,16 @@ in {
         '';
       };
 
-      pki = {
-        fqdn = mkOption {
-          type = types.str;
-          default = "localhost";
-          description = ''
-            The fully qualified domain name of this server, which is used as the
-            common name in the certificates.
-          '';
-        };
+      fqdn = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+          The fully qualified domain name of this server, which is also used
+          as the common name in the certificates.
+        '';
+      };
 
+      pki = {
         cert = mkOption {
           type = types.nullOr types.path;
           default = null;
@@ -345,7 +344,7 @@ in {
             --outfile "${cfg.dataDir}/keys/ca.key"
           ${pkgs.gnutls}/bin/certtool -s \
             --template "${pkgs.writeText "taskserver-ca.template" ''
-              cn = ${cfg.pki.fqdn}
+              cn = ${cfg.fqdn}
               cert_signing_key
               ca
             ''}" \
@@ -363,7 +362,7 @@ in {
 
           ${pkgs.gnutls}/bin/certtool -c \
             --template "${pkgs.writeText "taskserver-cert.template" ''
-              cn = ${cfg.pki.fqdn}
+              cn = ${cfg.fqdn}
               tls_www_server
               encryption_key
               signing_key
