@@ -1,7 +1,7 @@
 import ./make-test.nix {
   name = "taskserver";
 
-  nodes = {
+  nodes = rec {
     server = {
       networking.firewall.enable = false;
       services.taskserver.enable = true;
@@ -19,15 +19,10 @@ import ./make-test.nix {
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
       users.users.foo.isNormalUser = true;
+      users.users.bar.isNormalUser = true;
     };
 
-    client2 = { pkgs, ... }: {
-      networking.firewall.enable = false;
-      environment.systemPackages = [ pkgs.taskwarrior ];
-      users.users.alice.isNormalUser = true;
-      users.users.bob.isNormalUser = true;
-      users.users.foo.isNormalUser = true;
-    };
+    client2 = client1;
   };
 
   testScript = { nodes, ... }: let
@@ -65,6 +60,17 @@ import ./make-test.nix {
       }
     }
 
+    sub testSync ($) {
+      my $user = $_[0];
+      subtest "sync for user $user", sub {
+        $client1->succeed(su $user, "task add foo >&2");
+        $client1->succeed(su $user, "task sync >&2");
+        $client2->fail(su $user, "task list >&2");
+        $client2->succeed(su $user, "task sync >&2");
+        $client2->succeed(su $user, "task list >&2");
+      };
+    }
+
     startAll;
 
     $server->waitForUnit("taskserver.service");
@@ -84,14 +90,16 @@ import ./make-test.nix {
     setupClientsFor "testOrganisation", "foo";
     setupClientsFor "anotherOrganisation", "bob";
 
-    for ("alice", "bob", "foo") {
-      subtest "sync for $_", sub {
-        $client1->succeed(su $_, "task add foo >&2");
-        $client1->succeed(su $_, "task sync >&2");
-        $client2->fail(su $_, "task list >&2");
-        $client2->succeed(su $_, "task sync >&2");
-        $client2->succeed(su $_, "task list >&2");
-      };
-    }
+    testSync $_ for ("alice", "bob", "foo");
+
+    $server->fail("nixos-taskserver add-user imperativeOrg bar");
+    $server->succeed(
+      "nixos-taskserver add-org imperativeOrg",
+      "nixos-taskserver add-user imperativeOrg bar"
+    );
+
+    setupClientsFor "imperativeOrg", "bar";
+
+    testSync "bar";
   '';
 }
