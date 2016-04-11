@@ -1,5 +1,8 @@
 { stdenv, fetchurl }:
 
+let
+  SHLIB_EXT = if stdenv.isDarwin then "dylib" else "so";
+in
 stdenv.mkDerivation {
   name = "tbb-4.4-u2";
 
@@ -13,7 +16,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/{lib,share/doc}
-    cp "build/"*release*"/"*so* $out/lib/
+    cp "build/"*release*"/"*${SHLIB_EXT}* $out/lib/
     mv include $out/
     rm $out/include/index.html
     mv doc/html $out/share/doc/tbb
@@ -33,7 +36,7 @@ stdenv.mkDerivation {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ simons thoughtpolice ];
   };
 }
