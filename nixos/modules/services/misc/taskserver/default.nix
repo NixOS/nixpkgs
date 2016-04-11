@@ -28,24 +28,35 @@ let
   };
 
   pkiOptions = {
-    cert = mkPkiOption ''
-      Fully qualified path to the server certificate.
-    '';
-
-    caCert = mkPkiOption ''
+    ca.cert = mkPkiOption ''
       Fully qualified path to the CA certificate.
     '';
 
-    crl = mkPkiOption ''
+    server.cert = mkPkiOption ''
+      Fully qualified path to the server certificate.
+    '';
+
+    server.crl = mkPkiOption ''
       Fully qualified path to the server certificate revocation list.
     '';
 
-    key = mkPkiOption ''
+    server.key = mkPkiOption ''
       Fully qualified path to the server key.
     '';
   };
 
-  needToCreateCA = all (c: isNull cfg.pki.${c}) (attrNames pkiOptions);
+  needToCreateCA = let
+    notFound = path: let
+      dotted = concatStringsSep "." path;
+    in throw "Can't find option definitions for path `${dotted}'.";
+    findPkiDefinitions = path: attrs: let
+      mkSublist = key: val: let
+        newPath = path ++ singleton key;
+      in if isOption val
+         then attrByPath newPath (notFound newPath) cfg.pki
+         else findPkiDefinitions newPath val;
+    in flatten (mapAttrsToList mkSublist attrs);
+  in all isNull (findPkiDefinitions [] pkiOptions);
 
   configFile = pkgs.writeText "taskdrc" ''
     # systemd related
@@ -69,7 +80,7 @@ let
 
     # server
     server = ${cfg.listenHost}:${toString cfg.listenPort}
-    ${mkConfLine "server.crl" cfg.pki.crl}
+    ${mkConfLine "server.crl" cfg.pki.server.crl}
 
     # certificates
     ${mkConfLine "trust" cfg.trust}
@@ -78,9 +89,9 @@ let
       server.cert = ${cfg.dataDir}/keys/server.cert
       server.key = ${cfg.dataDir}/keys/server.key
     '' else ''
-      ca.cert = ${cfg.pki.caCert}
-      server.cert = ${cfg.pki.cert}
-      server.key = ${cfg.pki.key}
+      ca.cert = ${cfg.pki.ca.cert}
+      server.cert = ${cfg.pki.server.cert}
+      server.key = ${cfg.pki.server.key}
     ''}
   '';
 
