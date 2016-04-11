@@ -17,6 +17,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
                     ../packages/default.nix
                     ../platform/default.nix ];
 
+        flyingcircus.ssl.generate_dhparams = false;
         flyingcircus.services.sensu-server.enable = true;
         flyingcircus.services.sensu-client.enable = true;
         flyingcircus.services.sensu-client.password = "asdf";
