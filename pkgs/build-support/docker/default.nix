@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, runCommand, writeReferencesToFile, writeText, vmTools, writeScript
-, docker, shadow, utillinux, coreutils, jshon, e2fsprogs, goPackages }:
+, docker, shadow, utillinux, coreutils, jshon, e2fsprogs, goPackages, pigz }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
   
@@ -249,7 +249,7 @@ EOF
                then mkPureLayer { inherit baseJson contents extraCommands; }
                else mkRootLayer { inherit baseJson fromImage fromImageName fromImageTag contents runAsRoot diskSize extraCommands; });
       result = runCommand "${baseName}.tar.gz" {
-        buildInputs = [ jshon ];
+        buildInputs = [ jshon pigz ];
 
         imageName = name;
         imageTag = tag;
@@ -317,7 +317,7 @@ EOF
         chmod -R a-w image
 
         echo Cooking the image
-        tar -C image -czf $out .
+        tar -C image -c . | pigz > $out
       '';
 
     in
