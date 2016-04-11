@@ -44,7 +44,7 @@ let
     ${mkConfLine "server.crl" cfg.pki.crl}
 
     # certificates
-    ${mkConfLine "trust" cfg.pki.trust}
+    ${mkConfLine "trust" cfg.trust}
     ${if needToCreateCA then ''
       ca.cert = ${cfg.dataDir}/keys/ca.cert
       server.cert = ${cfg.dataDir}/keys/server.cert
@@ -261,6 +261,19 @@ in {
         '';
       };
 
+      trust = mkOption {
+        type = types.enum [ "allow all" "strict" ];
+        default = "strict";
+        description = ''
+          Determines how client certificates are validated.
+
+          The value <literal>allow all</literal> performs no client
+          certificate validation. This is not recommended. The value
+          <literal>strict</literal> causes the client certificate to be
+          validated against a CA.
+        '';
+      };
+
       pki = {
         cert = mkOption {
           type = types.nullOr types.path;
@@ -290,19 +303,6 @@ in {
 
             Note that reloading the <literal>taskserver.service</literal> causes
             a configuration file reload before the next request is handled.
-          '';
-        };
-
-        trust = mkOption {
-          type = types.enum [ "allow all" "strict" ];
-          default = "strict";
-          description = ''
-            Determines how client certificates are validated.
-
-            The value <literal>allow all</literal> performs no client
-            certificate validation. This is not recommended. The value
-            <literal>strict</literal> causes the client certificate to be
-            validated against a CA.
           '';
         };
       };
