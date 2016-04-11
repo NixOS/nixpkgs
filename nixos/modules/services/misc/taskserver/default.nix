@@ -397,6 +397,19 @@ in {
             "${cfg.dataDir}/keys/server.cert"
         fi
 
+        if [ ! -e "${cfg.dataDir}/keys/server.crl" ]; then
+          ${pkgs.gnutls}/bin/certtool --generate-crl \
+            --template "${pkgs.writeText "taskserver-crl.template" ''
+              expiration_days = 3650
+            ''}" \
+            --load-ca-privkey "${cfg.dataDir}/keys/ca.key" \
+            --load-ca-certificate "${cfg.dataDir}/keys/ca.cert" \
+            --outfile "${cfg.dataDir}/keys/server.crl"
+
+          chgrp "${cfg.group}" "${cfg.dataDir}/keys/server.crl"
+          chmod g+r "${cfg.dataDir}/keys/server.crl"
+        fi
+
         chmod go+x "${cfg.dataDir}/keys"
       '';
     };
