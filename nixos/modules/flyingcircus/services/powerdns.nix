@@ -62,6 +62,8 @@ in
       group = "nogroup";
     };
 
+   environment.systemPackages = [ pkgs.powerdns ];
+
     systemd.services = builtins.listToAttrs
       (map
         (instance_name:
