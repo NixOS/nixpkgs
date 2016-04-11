@@ -80,9 +80,29 @@ let
 
   mkShellStr = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
 
-  nixos-taskserver = import ./helper-tool.nix {
-    inherit pkgs lib mkShellStr taskd;
-    config = cfg;
+  nixos-taskserver = pkgs.buildPythonPackage {
+    name = "nixos-taskserver";
+    namePrefix = "";
+
+    src = pkgs.runCommand "nixos-taskserver-src" {} ''
+      mkdir -p "$out"
+      cat "${pkgs.substituteAll {
+        src = ./helper-tool.py;
+        certtool = "${pkgs.gnutls}/bin/certtool";
+        inherit taskd;
+        inherit (cfg) dataDir user group;
+        inherit (cfg.server) fqdn;
+      }}" > "$out/main.py"
+      cat > "$out/setup.py" <<EOF
+      from setuptools import setup
+      setup(name="nixos-taskserver",
+            py_modules=["main"],
+            install_requires=["Click"],
+            entry_points="[console_scripts]\\nnixos-taskserver=main:cli")
+      EOF
+    '';
+
+    propagatedBuildInputs = [ pkgs.pythonPackages.click ];
   };
 
   ctlcmd = "${nixos-taskserver}/bin/nixos-taskserver --service-helper";
