@@ -147,11 +147,20 @@ let
   withMeta = meta: defs: mkMerge [ defs { inherit meta; } ];
 
 in {
-
   options = {
     services.taskserver = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        example = true;
+        description = ''
+          Whether to enable the Taskwarrior server.
 
-      enable = mkEnableOption "the Taskwarrior server";
+          More instructions about NixOS in conjuction with Taskserver can be
+          found in the NixOS manual at
+          <olink targetdoc="manual" targetptr="module-taskserver"/>.
+        '';
+      };
 
       user = mkOption {
         type = types.str;
