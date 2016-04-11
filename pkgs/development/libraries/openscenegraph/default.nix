@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     pkgconfig kbproto SDL qt4 poppler librsvg gtk
   ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = [
     "-DMATH_LIBRARY="
     "-DCMAKE_C_FLAGS=-D__STDC_CONSTANT_MACROS=1"
