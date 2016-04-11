@@ -7,6 +7,7 @@ import string
 import subprocess
 import sys
 
+from contextlib import contextmanager
 from shutil import rmtree
 from tempfile import NamedTemporaryFile
 
@@ -86,6 +87,19 @@ def fetch_username(org, key):
     return None
 
 
+@contextmanager
+def create_template(contents):
+    """
+    Generate a temporary file with the specified contents as a list of strings
+    and yield its path as the context.
+    """
+    template = NamedTemporaryFile(mode="w", prefix="certtool-template")
+    template.writelines(map(lambda l: l + "\n", contents))
+    template.flush()
+    yield template.name
+    template.close()
+
+
 def generate_key(org, user):
     basedir = os.path.join(TASKD_DATA_DIR, "keys", org, user)
     if os.path.exists(basedir):
@@ -100,28 +114,55 @@ def generate_key(org, user):
         os.makedirs(basedir, mode=0700)
 
         cmd = [CERTTOOL_COMMAND, "-p", "--bits", "2048", "--outfile", privkey]
-        subprocess.call(cmd, preexec_fn=lambda: os.umask(0077))
+        subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
 
-        template = NamedTemporaryFile(mode="w", prefix="certtool-template")
-        template.writelines(map(lambda l: l + "\n", [
+        template_data = [
             "organization = {0}".format(org),
             "cn = {}".format(FQDN),
             "tls_www_client",
             "encryption_key",
             "signing_key"
-        ]))
-        template.flush()
+        ]
 
-        cmd = [CERTTOOL_COMMAND, "-c",
-               "--load-privkey", privkey,
-               "--load-ca-privkey", cakey,
-               "--load-ca-certificate", cacert,
-               "--template", template.name,
-               "--outfile", pubcert]
-        subprocess.call(cmd, preexec_fn=lambda: os.umask(0077))
+        with create_template(template_data) as template:
+            cmd = [CERTTOOL_COMMAND, "-c",
+                   "--load-privkey", privkey,
+                   "--load-ca-privkey", cakey,
+                   "--load-ca-certificate", cacert,
+                   "--template", template,
+                   "--outfile", pubcert]
+            subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
     except:
         rmtree(basedir)
         raise
+
+
+def revoke_key(org, user):
+    cakey = os.path.join(TASKD_DATA_DIR, "keys", "ca.key")
+    cacert = os.path.join(TASKD_DATA_DIR, "keys", "ca.cert")
+    crl = os.path.join(TASKD_DATA_DIR, "keys", "server.crl")
+
+    basedir = os.path.join(TASKD_DATA_DIR, "keys", org, user)
+    if not os.path.exists(basedir):
+        raise OSError("Keyfile directory for {} doesn't exist.".format(user))
+
+    pubcert = os.path.join(basedir, "public.cert")
+
+    with create_template(["expiration_days = 3650"]) as template:
+        oldcrl = NamedTemporaryFile(mode="wb", prefix="old-crl")
+        oldcrl.write(open(crl, "rb").read())
+        oldcrl.flush()
+        cmd = [CERTTOOL_COMMAND,
+               "--generate-crl",
+               "--load-crl", oldcrl.name,
+               "--load-ca-privkey", cakey,
+               "--load-ca-certificate", cacert,
+               "--load-certificate", pubcert,
+               "--template", template,
+               "--outfile", crl]
+        subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
+        oldcrl.close()
+    rmtree(basedir)
 
 
 def is_key_line(line, match):
@@ -215,8 +256,13 @@ class Organisation(object):
         """
         Delete a user and revoke its keys.
         """
-        sys.stderr.write("Delete user {}.".format(name))
-        # TODO: deletion!
+        if name in self.users.keys():
+            # Work around https://bug.tasktools.org/browse/TD-40:
+            user = self.get_user(name)
+            rmtree(mkpath(self.name, "users", user.key))
+
+            revoke_key(self.name, name)
+            del self._lazy_users[name]
 
     def add_group(self, name):
         """
@@ -235,8 +281,9 @@ class Organisation(object):
         """
         Delete a group.
         """
-        sys.stderr.write("Delete group {}.".format(name))
-        # TODO: deletion!
+        if name in self.users.keys():
+            taskd_cmd("remove", "group", self.name, name)
+            del self._lazy_groups[name]
 
     def get_user(self, name):
         return self.users.get(name)
@@ -281,8 +328,14 @@ class Manager(object):
         Delete and revoke keys of an organisation with all its users and
         groups.
         """
-        sys.stderr.write("Delete org {}.".format(name))
-        # TODO: deletion!
+        org = self.get_org(name)
+        if org is not None:
+            for user in org.users.keys():
+                org.del_user(user)
+            for group in org.groups.keys():
+                org.del_group(group)
+            taskd_cmd("remove", "org", name)
+            del self._lazy_orgs[name]
 
     def get_org(self, name):
         return self.orgs.get(name)
@@ -383,6 +436,22 @@ def add_org(name):
     taskd_cmd("add", "org", name)
 
 
+@cli.command("del-org")
+@click.argument("name")
+def del_org(name):
+    """
+    Delete the organisation with the specified name.
+
+    All of the users and groups will be deleted as well and client certificates
+    will be revoked.
+    """
+    Manager().del_org(name)
+    msg = ("Organisation {} deleted. Be sure to restart the Taskserver"
+           " using 'systemctl restart taskserver.service' in order for"
+           " the certificate revocation to apply.")
+    click.echo(msg.format(name), err=True)
+
+
 @cli.command("add-user")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
@@ -400,6 +469,22 @@ def add_user(organisation, user):
         sys.exit(msg.format(user, organisation))
 
 
+@cli.command("del-user")
+@click.argument("organisation", type=ORGANISATION)
+@click.argument("user")
+def del_user(organisation, user):
+    """
+    Delete a user from the given organisation.
+
+    This will also revoke the client certificate of the given user.
+    """
+    organisation.del_user(user)
+    msg = ("User {} deleted. Be sure to restart the Taskserver using"
+           " 'systemctl restart taskserver.service' in order for the"
+           " certificate revocation to apply.")
+    click.echo(msg.format(user), err=True)
+
+
 @cli.command("add-group")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("group")
@@ -411,6 +496,17 @@ def add_group(organisation, group):
     if userobj is None:
         msg = "Group {} already exists in organisation {}."
         sys.exit(msg.format(group, organisation))
+
+
+@cli.command("del-group")
+@click.argument("organisation", type=ORGANISATION)
+@click.argument("group")
+def del_group(organisation, group):
+    """
+    Delete a group from the given organisation.
+    """
+    organisation.del_group(group)
+    click("Group {} deleted.".format(group), err=True)
 
 
 def add_or_delete(old, new, add_fun, del_fun):

@@ -15,7 +15,7 @@ import ./make-test.nix {
 
     client1 = { pkgs, ... }: {
       networking.firewall.enable = false;
-      environment.systemPackages = [ pkgs.taskwarrior ];
+      environment.systemPackages = [ pkgs.taskwarrior pkgs.gnutls ];
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
       users.users.foo.isNormalUser = true;
@@ -60,6 +60,22 @@ import ./make-test.nix {
       }
     }
 
+    sub restartServer {
+      $server->succeed("systemctl restart taskserver.service");
+      $server->waitForOpenPort(${portStr});
+    }
+
+    sub readdImperativeUser {
+      $server->nest("(re-)add imperative user bar", sub {
+        $server->execute("nixos-taskserver del-org imperativeOrg");
+        $server->succeed(
+          "nixos-taskserver add-org imperativeOrg",
+          "nixos-taskserver add-user imperativeOrg bar"
+        );
+        setupClientsFor "imperativeOrg", "bar";
+      });
+    }
+
     sub testSync ($) {
       my $user = $_[0];
       subtest "sync for user $user", sub {
@@ -69,6 +85,16 @@ import ./make-test.nix {
         $client2->succeed(su $user, "task sync >&2");
         $client2->succeed(su $user, "task list >&2");
       };
+    }
+
+    sub checkClientCert ($) {
+      my $user = $_[0];
+      my $cmd = "gnutls-cli".
+        " --x509cafile=/home/$user/.task/keys/ca.cert".
+        " --x509keyfile=/home/$user/.task/keys/private.key".
+        " --x509certfile=/home/$user/.task/keys/public.cert".
+        " --port=${portStr} server < /dev/null";
+      return su $user, $cmd;
     }
 
     startAll;
@@ -93,13 +119,34 @@ import ./make-test.nix {
     testSync $_ for ("alice", "bob", "foo");
 
     $server->fail("nixos-taskserver add-user imperativeOrg bar");
-    $server->succeed(
-      "nixos-taskserver add-org imperativeOrg",
-      "nixos-taskserver add-user imperativeOrg bar"
-    );
-
-    setupClientsFor "imperativeOrg", "bar";
+    readdImperativeUser;
 
     testSync "bar";
+
+    subtest "checking certificate revocation of user bar", sub {
+      $client1->succeed(checkClientCert "bar");
+
+      $server->succeed("nixos-taskserver del-user imperativeOrg bar");
+      restartServer;
+
+      $client1->fail(checkClientCert "bar");
+
+      $client1->succeed(su "bar", "task add destroy everything >&2");
+      $client1->fail(su "bar", "task sync >&2");
+    };
+
+    readdImperativeUser;
+
+    subtest "checking certificate revocation of org imperativeOrg", sub {
+      $client1->succeed(checkClientCert "bar");
+
+      $server->succeed("nixos-taskserver del-org imperativeOrg");
+      restartServer;
+
+      $client1->fail(checkClientCert "bar");
+
+      $client1->succeed(su "bar", "task add destroy even more >&2");
+      $client1->fail(su "bar", "task sync >&2");
+    };
   '';
 }
