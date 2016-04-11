@@ -65,20 +65,4 @@ plasmaPackage {
     rm "$out/lib/libexec/startplasma"
     rm -r "$out/share/wayland-sessions"
   '';
-
-  postFixup = ''
-    wrapQtProgram "$out/bin/ksmserver"
-    wrapQtProgram "$out/bin/plasmawindowed"
-    wrapQtProgram "$out/bin/kcminit_startup"
-    wrapQtProgram "$out/bin/ksplashqml"
-    wrapQtProgram "$out/bin/kcheckrunning"
-    wrapQtProgram "$out/bin/systemmonitor"
-    wrapQtProgram "$out/bin/kstartupconfig5"
-    wrapQtProgram "$out/bin/kdostartupconfig5"
-    wrapQtProgram "$out/bin/klipper"
-    wrapQtProgram "$out/bin/kuiserver5"
-    wrapQtProgram "$out/bin/krunner"
-    wrapQtProgram "$out/bin/plasmashell"
-    wrapQtProgram "$out/lib/libexec/drkonqi"
-  '';
 }
