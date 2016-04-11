@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/n/nghttp2/nghttp2_${version}.orig.tar.bz2";
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
     sha256 = "10xz3s624w208pr9xgm4ammc8bc5mi17vy4357hjfd5vmmp5m8b0";
   };
 
