@@ -1,5 +1,6 @@
 { stdenv, lib, pkgArches,
   name, version, src, monos, geckos, platforms,
+  pkgconfig, fontforge, makeWrapper, flex, bison,
   pulseaudioSupport,
   buildScript ? null, configureFlags ? ""
 }:
@@ -14,9 +15,9 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 }) // rec {
   inherit name src configureFlags;
 
-  nativeBuildInputs = toBuildInputs pkgArches (pkgs: with pkgs; [
+  nativeBuildInputs = [
     pkgconfig fontforge makeWrapper flex bison
-  ]);
+  ];
 
   buildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
     freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
