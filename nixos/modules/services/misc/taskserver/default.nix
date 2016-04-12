@@ -303,7 +303,7 @@ in {
 
           The values <literal>all</literal> or <literal>none</literal> have
           special meaning. Overidden by any entry in the option
-          <option>services.taskserver.client.deny</option>.
+          <option>services.taskserver.disallowedClientIDs</option>.
         '';
       };
 
@@ -316,8 +316,8 @@ in {
           client id (such as <literal>task 2.3.0</literal>).
 
           The values <literal>all</literal> or <literal>none</literal> have
-          special meaning. Any entry here overrides these in
-          <option>services.taskserver.client.allow</option>.
+          special meaning. Any entry here overrides those in
+          <option>services.taskserver.allowedClientIDs</option>.
         '';
       };
 
