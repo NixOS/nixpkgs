@@ -58,7 +58,7 @@ let
       cp ${../../modules/services/databases/postgresql.xml} configuration/postgresql.xml
       cp ${../../modules/services/misc/gitlab.xml} configuration/gitlab.xml
       cp ${../../modules/security/acme.xml} configuration/acme.xml
-      cp ${../../modules/i18n/inputMethod/default.xml} configuration/input-methods.xml
+      cp ${../../modules/i18n/input-method/default.xml} configuration/input-methods.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';

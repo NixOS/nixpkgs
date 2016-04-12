@@ -63,7 +63,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
 
     # ibus
-    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "input-method" "ibus" "engines" ])
 
     # proxy
     (mkRenamedOptionModule [ "nix" "proxy" ] [ "networking" "proxy" "default" ])

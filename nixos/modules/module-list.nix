@@ -41,11 +41,11 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
-  ./i18n/inputMethod/default.nix
-  ./i18n/inputMethod/fcitx.nix
-  ./i18n/inputMethod/ibus.nix
-  ./i18n/inputMethod/nabi.nix
-  ./i18n/inputMethod/uim.nix
+  ./i18n/input-method/default.nix
+  ./i18n/input-method/fcitx.nix
+  ./i18n/input-method/ibus.nix
+  ./i18n/input-method/nabi.nix
+  ./i18n/input-method/uim.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
