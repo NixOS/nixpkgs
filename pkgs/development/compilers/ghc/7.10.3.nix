@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     docFixes
-    ./dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+    ./ghc-7.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
   buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
