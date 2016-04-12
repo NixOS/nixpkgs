@@ -23595,14 +23595,14 @@ in modules // {
 
   tunigo = buildPythonPackage rec {
     name = "tunigo-${version}";
-    version = "0.1.3";
+    version = "1.0.0";
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchFromGitHub {
       owner = "trygveaa";
       repo = "python-tunigo";
       rev = "v${version}";
-      sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
+      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
     };
 
     buildInputs = with self; [ mock nose ];
