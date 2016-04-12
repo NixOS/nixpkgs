@@ -25447,15 +25447,15 @@ in modules // {
   };
 
   geeknote = buildPythonPackage rec {
-    version = "2015-03-02";
+    version = "2015-05-11";
     name = "geeknote-${version}";
     disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "VitaliyRodnenko";
       repo = "geeknote";
-      rev = "7ea2255bb6";
-      sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
+      rev = "8489a87d044e164edb321ba9acca8d4631de3dca";
+      sha256 = "0l16v4xnyqnsf84b1pma0jmdyxvmfwcv3sm8slrv3zv7zpmcm3lf";
     };
 
     /* build with tests fails with "Can not create application dirictory :
