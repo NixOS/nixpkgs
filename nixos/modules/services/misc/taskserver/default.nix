@@ -94,7 +94,7 @@ let
     in flatten (mapAttrsToList mkSublist attrs);
   in all isNull (findPkiDefinitions [] manualPkiOptions);
 
-  configFile = pkgs.writeText "taskdrc" ''
+  configFile = pkgs.writeText "taskdrc" (''
     # systemd related
     daemon = false
     log = -
@@ -130,7 +130,7 @@ let
       server.key = ${cfg.pki.server.key}
       server.crl = ${cfg.pki.server.crl}
     ''}
-  '';
+  '' + cfg.extraConfig);
 
   orgOptions = { name, ... }: {
     options.users = mkOption {
@@ -363,6 +363,15 @@ in {
 
       pki.manual = manualPkiOptions;
       pki.auto = autoPkiOptions;
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = "client.cert = /tmp/debugging.cert";
+        description = ''
+          Extra lines to append to the taskdrc configuration file.
+        '';
+      };
     };
   };
 
