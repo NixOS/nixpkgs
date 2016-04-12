@@ -474,7 +474,7 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = $cpus;
+  nix.maxJobs = lib.mkDefault $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
