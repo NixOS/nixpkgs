@@ -15,6 +15,8 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.displayManager.auto.user = "alice";
 
       services.xserver.desktopManager.xfce.enable = true;
+
+      environment.systemPackages = [ pkgs.xorg.xmessage ];
     };
 
   testScript =
@@ -32,5 +34,9 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->waitForWindow(qr/Terminal/);
       $machine->sleep(10);
       $machine->screenshot("screen");
+
+      # Ensure that the X server does proper access control.
+      $machine->mustFail("su - bob -c 'DISPLAY=:0.0 xmessage Foo'");
+      $machine->mustFail("su - bob -c 'DISPLAY=:0 xmessage Foo'");
     '';
 })
