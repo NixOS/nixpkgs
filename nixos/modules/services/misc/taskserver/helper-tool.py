@@ -570,7 +570,7 @@ def add_user(organisation, user):
     and print the key of the new user.
 
     The client certificate along with it's public key can be shown via the
-    'export-user' subcommand.
+    'user export' subcommand.
     """
     userobj = organisation.add_user(user)
     if userobj is None:
