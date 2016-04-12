@@ -395,7 +395,8 @@ in {
       };
 
       systemd.services.taskserver-init = {
-        requiredBy = [ "taskserver.service" ];
+        wantedBy = [ "taskserver.service" ];
+        before = [ "taskserver.service" ];
         description = "Initialize Taskserver Data Directory";
 
         preStart = ''
@@ -449,7 +450,7 @@ in {
     })
     (mkIf needToCreateCA {
       systemd.services.taskserver-ca = {
-        requiredBy = [ "taskserver.service" ];
+        wantedBy = [ "taskserver.service" ];
         after = [ "taskserver-init.service" ];
         before = [ "taskserver.service" ];
         description = "Initialize CA for TaskServer";
