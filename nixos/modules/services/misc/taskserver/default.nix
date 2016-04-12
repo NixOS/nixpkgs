@@ -440,6 +440,7 @@ in {
         serviceConfig = {
           ExecStart = "@${taskd} taskd server";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
+          Restart = "on-failure";
           PermissionsStartOnly = true;
           PrivateTmp = true;
           PrivateDevices = true;
