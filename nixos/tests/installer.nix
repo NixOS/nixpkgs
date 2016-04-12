@@ -108,8 +108,8 @@ let
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
       # Check whether the channel works.
-      $machine->succeed("nix-env -iA nixos.coreutils >&2");
-      $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
+      $machine->succeed("nix-env -iA nixos.procps >&2");
+      $machine->succeed("type -tP ps | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
       # We need to a writable nix-store on next boot.
