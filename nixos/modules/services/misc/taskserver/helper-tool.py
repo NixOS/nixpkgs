@@ -441,7 +441,31 @@ def cli(ctx):
             ctx.fail(msg.format(path))
 
 
-@cli.command("list-users")
+@cli.group("org")
+def org_cli():
+    """
+    Manage organisations
+    """
+    pass
+
+
+@cli.group("user")
+def user_cli():
+    """
+    Manage users
+    """
+    pass
+
+
+@cli.group("group")
+def group_cli():
+    """
+    Manage groups
+    """
+    pass
+
+
+@user_cli.command("list")
 @click.argument("organisation", type=ORGANISATION)
 def list_users(organisation):
     """
@@ -452,7 +476,18 @@ def list_users(organisation):
         sys.stdout.write(user.name + "\n")
 
 
-@cli.command("list-orgs")
+@group_cli.command("list")
+@click.argument("organisation", type=ORGANISATION)
+def list_groups(organisation):
+    """
+    List all users belonging to the specified organisation.
+    """
+    label("The following users exists for {}:".format(organisation.name))
+    for group in organisation.groups.values():
+        sys.stdout.write(group.name + "\n")
+
+
+@org_cli.command("list")
 def list_orgs():
     """
     List available organisations
@@ -462,7 +497,7 @@ def list_orgs():
         sys.stdout.write(org.name + "\n")
 
 
-@cli.command("get-uuid")
+@user_cli.command("getkey")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def get_uuid(organisation, user):
@@ -478,7 +513,7 @@ def get_uuid(organisation, user):
     sys.stdout.write(user.key + "\n")
 
 
-@cli.command("export-user")
+@user_cli.command("export")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def export_user(organisation, user):
@@ -496,7 +531,7 @@ def export_user(organisation, user):
     sys.stdout.write(userobj.export())
 
 
-@cli.command("add-org")
+@org_cli.command("add")
 @click.argument("name")
 def add_org(name):
     """
@@ -510,7 +545,7 @@ def add_org(name):
     mark_imperative(name)
 
 
-@cli.command("del-org")
+@org_cli.command("remove")
 @click.argument("name")
 def del_org(name):
     """
@@ -526,7 +561,7 @@ def del_org(name):
     click.echo(msg.format(name), err=True)
 
 
-@cli.command("add-user")
+@user_cli.command("add")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def add_user(organisation, user):
@@ -545,7 +580,7 @@ def add_user(organisation, user):
         mark_imperative(organisation.name, "users", userobj.key)
 
 
-@cli.command("del-user")
+@user_cli.command("remove")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("user")
 def del_user(organisation, user):
@@ -561,7 +596,7 @@ def del_user(organisation, user):
     click.echo(msg.format(user), err=True)
 
 
-@cli.command("add-group")
+@group_cli.command("add")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("group")
 def add_group(organisation, group):
@@ -576,7 +611,7 @@ def add_group(organisation, group):
         mark_imperative(organisation.name, "groups", groupobj.name)
 
 
-@cli.command("del-group")
+@group_cli.command("remove")
 @click.argument("organisation", type=ORGANISATION)
 @click.argument("group")
 def del_group(organisation, group):

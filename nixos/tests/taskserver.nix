@@ -44,7 +44,7 @@ import ./make-test.nix {
           );
 
           my $exportinfo = $server->succeed(
-            "nixos-taskserver export-user $org $user"
+            "nixos-taskserver user export $org $user"
           );
 
           $exportinfo =~ s/'/'\\'''/g;
@@ -74,10 +74,10 @@ import ./make-test.nix {
 
     sub readdImperativeUser {
       $server->nest("(re-)add imperative user bar", sub {
-        $server->execute("nixos-taskserver del-org imperativeOrg");
+        $server->execute("nixos-taskserver org remove imperativeOrg");
         $server->succeed(
-          "nixos-taskserver add-org imperativeOrg",
-          "nixos-taskserver add-user imperativeOrg bar"
+          "nixos-taskserver org add imperativeOrg",
+          "nixos-taskserver user add imperativeOrg bar"
         );
         setupClientsFor "imperativeOrg", "bar";
       });
@@ -109,9 +109,9 @@ import ./make-test.nix {
     $server->waitForUnit("taskserver.service");
 
     $server->succeed(
-      "nixos-taskserver list-users testOrganisation | grep -qxF alice",
-      "nixos-taskserver list-users testOrganisation | grep -qxF foo",
-      "nixos-taskserver list-users anotherOrganisation | grep -qxF bob"
+      "nixos-taskserver user list testOrganisation | grep -qxF alice",
+      "nixos-taskserver user list testOrganisation | grep -qxF foo",
+      "nixos-taskserver user list anotherOrganisation | grep -qxF bob"
     );
 
     $server->waitForOpenPort(${portStr});
@@ -125,7 +125,7 @@ import ./make-test.nix {
 
     testSync $_ for ("alice", "bob", "foo");
 
-    $server->fail("nixos-taskserver add-user imperativeOrg bar");
+    $server->fail("nixos-taskserver user add imperativeOrg bar");
     readdImperativeUser;
 
     testSync "bar";
@@ -133,7 +133,7 @@ import ./make-test.nix {
     subtest "checking certificate revocation of user bar", sub {
       $client1->succeed(checkClientCert "bar");
 
-      $server->succeed("nixos-taskserver del-user imperativeOrg bar");
+      $server->succeed("nixos-taskserver user remove imperativeOrg bar");
       restartServer;
 
       $client1->fail(checkClientCert "bar");
@@ -147,7 +147,7 @@ import ./make-test.nix {
     subtest "checking certificate revocation of org imperativeOrg", sub {
       $client1->succeed(checkClientCert "bar");
 
-      $server->succeed("nixos-taskserver del-org imperativeOrg");
+      $server->succeed("nixos-taskserver org remove imperativeOrg");
       restartServer;
 
       $client1->fail(checkClientCert "bar");
