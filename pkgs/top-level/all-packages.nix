@@ -15513,6 +15513,8 @@ in
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
 
+  samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+
 
   ### SCIENCE/MATH
 
