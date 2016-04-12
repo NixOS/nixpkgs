@@ -64,16 +64,16 @@ in stdenv.mkDerivation {
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/share/slack $file || true
+      patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 
     # Fix the symlink
     rm $out/bin/slack
-    ln -s $out/share/slack/slack $out/bin/slack
+    ln -s $out/lib/slack/slack $out/bin/slack
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
-      --replace /usr/share/slack/slack $out/share/slack/slack
+      --replace /usr/lib/slack/slack $out/lib/slack/slack
   '';
 
   meta = with stdenv.lib; {
