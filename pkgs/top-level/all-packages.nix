@@ -1978,7 +1978,7 @@ in
 
   imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
 
-  imgurbash = callPackage ../tools/graphics/imgurbash { };
+  imgurbash2 = callPackage ../tools/graphics/imgurbash2 { };
 
   inadyn = callPackage ../tools/networking/inadyn { };
 
@@ -3413,9 +3413,7 @@ in
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
-    stdenv = overrideCC stdenv gcc5;
-  };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -8553,10 +8551,10 @@ in
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
-    vlc = callPackage ../applications/video/vlc {
+    vlc = lowPrio (callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
-    };
+    });
 
   };
 
@@ -13322,6 +13320,8 @@ in
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.kde4) kdelibs;
   };
+
+  vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
   opusfile = callPackage ../applications/audio/opusfile { };
 
