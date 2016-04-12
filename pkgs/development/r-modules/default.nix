@@ -696,6 +696,18 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "Risa" # depends on broken package mzR
+    "Metab" # depends on broken package mzR
+    "faahKO" # depends on broken package mzR
+    "cosmiq" # depends on broken package mzR
+    "metaMS" # depends on broken package mzR
+    "flagme" # depends on broken package mzR
+    "CAMERA" # depends on broken package mzR
+    "xcms" # depends on broken package mzR
+    "SIMAT" # depends on broken package mzR
+    "RMassBank" # depends on broken package mzR
+    "MSeasy" # depends on broken package mzR
+    "mzR" # broken build
     "spoccutils" # depends on broken package spocc
     "mapr" # depends on broken package spocc
     "vmsbase" # broken build
