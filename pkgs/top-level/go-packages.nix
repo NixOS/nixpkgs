@@ -1734,6 +1734,20 @@ let
     };
   };
 
+  jp = buildFromGitHub {
+    rev = "0.1.2";
+    owner = "jmespath";
+    repo = "jp";
+    sha256 = "1i0jl0c062crigkxqx8zpyqliz8j4d37y95cna33jl777kx42r6h";
+    meta = with stdenv.lib; {
+      description = "A command line to JMESPath, an expression language for manipulating JSON";
+      license = licenses.asl20;
+      homepage = http://jmespath.org;
+      maintainers = with maintainers; [ cransom ];
+      platforms = platforms.unix;
+    };
+  };
+
   mattn.go-runewidth = buildFromGitHub {
     rev    = "d6bea18f789704b5f83375793155289da36a3c7f";
     version = "2016-03-15";
