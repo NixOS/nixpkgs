@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.99";
+  version = "0.99.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "1abyg349yr31z764jcgx67q5v098jrkrj88bqkzmys6xza62qyfj";
+    sha256 = "12nm4mxzx3qlbm65cadflzncjfkxdfqcp0lch29i5yfk4a8nhi71";
   };
 
   buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre ];
