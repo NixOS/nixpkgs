@@ -782,8 +782,6 @@ in
 
   mcrl = callPackage ../tools/misc/mcrl { };
 
-  mcrl2 = callPackage ../tools/misc/mcrl2 { };
-
   meson = callPackage ../development/tools/build-managers/meson { };
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
@@ -15767,6 +15765,8 @@ in
   });
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
+
+  mcrl2 = callPackage ../applications/science/logic/mcrl2 { };
 
   minisat = callPackage ../applications/science/logic/minisat {};
 
