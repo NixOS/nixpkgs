@@ -17,7 +17,7 @@ let
     result = "${key} = ${mkVal val}";
   in optionalString (val != null && val != []) result;
 
-  mkPkiOption = desc: mkOption {
+  mkManualPkiOption = desc: mkOption {
     type = types.nullOr types.path;
     default = null;
     description = desc + ''
@@ -27,22 +27,58 @@ let
     '';
   };
 
-  pkiOptions = {
-    ca.cert = mkPkiOption ''
+  manualPkiOptions = {
+    ca.cert = mkManualPkiOption ''
       Fully qualified path to the CA certificate.
     '';
 
-    server.cert = mkPkiOption ''
+    server.cert = mkManualPkiOption ''
       Fully qualified path to the server certificate.
     '';
 
-    server.crl = mkPkiOption ''
+    server.crl = mkManualPkiOption ''
       Fully qualified path to the server certificate revocation list.
     '';
 
-    server.key = mkPkiOption ''
+    server.key = mkManualPkiOption ''
       Fully qualified path to the server key.
     '';
+  };
+
+  mkAutoDesc = preamble: ''
+    ${preamble}
+
+    <note><para>
+    This option is for the automatically handled CA and will be ignored if any
+    of the <option>services.taskserver.pki.manual.*</option> options are set.
+    </para></note>
+  '';
+
+  mkExpireOption = desc: mkOption {
+    type = types.nullOr types.int;
+    default = null;
+    example = 365;
+    apply = val: if isNull val then -1 else val;
+    description = mkAutoDesc ''
+      The expiration time of ${desc} in days or <literal>null</literal> for no
+      expiration time.
+    '';
+  };
+
+  autoPkiOptions = {
+    bits = mkOption {
+      type = types.int;
+      default = 4096;
+      example = 2048;
+      description = mkAutoDesc "The bit size for generated keys.";
+    };
+
+    expiration = {
+      ca = mkExpireOption "the CA certificate";
+      server = mkExpireOption "the server certificate";
+      client = mkExpireOption "client certificates";
+      crl = mkExpireOption "the certificate revocation list (CRL)";
+    };
   };
 
   needToCreateCA = let
@@ -53,10 +89,10 @@ let
       mkSublist = key: val: let
         newPath = path ++ singleton key;
       in if isOption val
-         then attrByPath newPath (notFound newPath) cfg.pki
+         then attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
     in flatten (mapAttrsToList mkSublist attrs);
-  in all isNull (findPkiDefinitions [] pkiOptions);
+  in all isNull (findPkiDefinitions [] manualPkiOptions);
 
   configFile = pkgs.writeText "taskdrc" ''
     # systemd related
@@ -130,6 +166,9 @@ let
         src = ./helper-tool.py;
         inherit taskd certtool;
         inherit (cfg) dataDir user group fqdn;
+        certBits = cfg.pki.auto.bits;
+        clientExpiration = cfg.pki.auto.expiration.client;
+        crlExpiration = cfg.pki.auto.expiration.crl;
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
       from setuptools import setup
@@ -322,7 +361,8 @@ in {
         '';
       };
 
-      pki = pkiOptions;
+      pki.manual = manualPkiOptions;
+      pki.auto = autoPkiOptions;
     };
   };
 
@@ -364,11 +404,12 @@ in {
 
         if [ ! -e "${cfg.dataDir}/keys/ca.key" ]; then
           silent_certtool -p \
-            --bits 2048 \
+            --bits ${toString cfg.pki.auto.bits} \
             --outfile "${cfg.dataDir}/keys/ca.key"
           silent_certtool -s \
             --template "${pkgs.writeText "taskserver-ca.template" ''
               cn = ${cfg.fqdn}
+              expiration_days = ${toString cfg.pki.auto.expiration.ca}
               cert_signing_key
               ca
             ''}" \
@@ -381,12 +422,13 @@ in {
 
         if [ ! -e "${cfg.dataDir}/keys/server.key" ]; then
           silent_certtool -p \
-            --bits 2048 \
+            --bits ${toString cfg.pki.auto.bits} \
             --outfile "${cfg.dataDir}/keys/server.key"
 
           silent_certtool -c \
             --template "${pkgs.writeText "taskserver-cert.template" ''
               cn = ${cfg.fqdn}
+              expiration_days = ${toString cfg.pki.auto.expiration.server}
               tls_www_server
               encryption_key
               signing_key
@@ -408,7 +450,7 @@ in {
         if [ ! -e "${cfg.dataDir}/keys/server.crl" ]; then
           silent_certtool --generate-crl \
             --template "${pkgs.writeText "taskserver-crl.template" ''
-              expiration_days = 3650
+              expiration_days = ${toString cfg.pki.auto.expiration.crl}
             ''}" \
             --load-ca-privkey "${cfg.dataDir}/keys/ca.key" \
             --load-ca-certificate "${cfg.dataDir}/keys/ca.cert" \

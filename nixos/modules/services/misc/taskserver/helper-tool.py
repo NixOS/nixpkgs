@@ -14,6 +14,10 @@ from tempfile import NamedTemporaryFile
 import click
 
 CERTTOOL_COMMAND = "@certtool@"
+CERT_BITS = "@certBits@"
+CLIENT_EXPIRATION = "@clientExpiration@"
+CRL_EXPIRATION = "@crlExpiration@"
+
 TASKD_COMMAND = "@taskd@"
 TASKD_DATA_DIR = "@dataDir@"
 TASKD_USER = "@user@"
@@ -153,11 +157,12 @@ def generate_key(org, user):
     try:
         os.makedirs(basedir, mode=0700)
 
-        certtool_cmd("-p", "--bits", "2048", "--outfile", privkey)
+        certtool_cmd("-p", "--bits", CERT_BITS, "--outfile", privkey)
 
         template_data = [
             "organization = {0}".format(org),
             "cn = {}".format(FQDN),
+            "expiration_days = {}".format(CLIENT_EXPIRATION),
             "tls_www_client",
             "encryption_key",
             "signing_key"
@@ -188,7 +193,9 @@ def revoke_key(org, user):
 
     pubcert = os.path.join(basedir, "public.cert")
 
-    with create_template(["expiration_days = 3650"]) as template:
+    expiration = "expiration_days = {}".format(CRL_EXPIRATION)
+
+    with create_template([expiration]) as template:
         oldcrl = NamedTemporaryFile(mode="wb", prefix="old-crl")
         oldcrl.write(open(crl, "rb").read())
         oldcrl.flush()
