@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake boost ffmpeg qt4 bullet mygui openscenegraph SDL2 unshield openal pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
     homepage = "http://openmw.org";
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }
