@@ -41,7 +41,8 @@ import ./make-test.nix {
       for my $client ($client1, $client2) {
         $client->nest("initialize client for user $user", sub {
           $client->succeed(
-            su $user, "task rc.confirmation=no config confirmation no"
+            (su $user, "rm -rf /home/$user/.task"),
+            (su $user, "task rc.confirmation=no config confirmation no")
           );
 
           my $exportinfo = $server->succeed(
@@ -155,6 +156,13 @@ import ./make-test.nix {
 
       $client1->succeed(su "bar", "task add destroy even more >&2");
       $client1->fail(su "bar", "task sync >&2");
+    };
+
+    readdImperativeUser;
+
+    subtest "check whether declarative config overrides user bar", sub {
+      restartServer;
+      testSync "bar";
     };
   '';
 }

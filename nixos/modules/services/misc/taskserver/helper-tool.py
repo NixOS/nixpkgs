@@ -96,6 +96,28 @@ def mkpath(*args):
     return os.path.join(TASKD_DATA_DIR, "orgs", *args)
 
 
+def mark_imperative(*path):
+    """
+    Mark the specified path as being imperatively managed by creating an empty
+    file called ".imperative", so that it doesn't interfere with the
+    declarative configuration.
+    """
+    open(os.path.join(mkpath(*path), ".imperative"), 'a').close()
+
+
+def is_imperative(*path):
+    """
+    Check whether the given path is marked as imperative, see mark_imperative()
+    for more information.
+    """
+    full_path = []
+    for component in path:
+        full_path.append(component)
+        if os.path.exists(os.path.join(mkpath(*full_path), ".imperative")):
+            return True
+    return False
+
+
 def fetch_username(org, key):
     for line in open(mkpath(org, "users", key, "config"), "r"):
         match = RE_CONFIGUSER.match(line)
@@ -247,8 +269,9 @@ class Group(object):
 
 
 class Organisation(object):
-    def __init__(self, name):
+    def __init__(self, name, ignore_imperative):
         self.name = name
+        self.ignore_imperative = ignore_imperative
 
     def add_user(self, name):
         """
@@ -256,6 +279,8 @@ class Organisation(object):
 
         Returns a 'User' object or None if the user already exists.
         """
+        if self.ignore_imperative and is_imperative(self.name):
+            return None
         if name not in self.users.keys():
             output = taskd_cmd("add", "user", self.name, name,
                                capture_stdout=True)
@@ -265,7 +290,7 @@ class Organisation(object):
                 raise TaskdError(msg.format(name))
 
             generate_key(self.name, name)
-            newuser = User(self.name, name, key)
+            newuser = User(self.name, name, key.group(1))
             self._lazy_users[name] = newuser
             return newuser
         return None
@@ -275,8 +300,12 @@ class Organisation(object):
         Delete a user and revoke its keys.
         """
         if name in self.users.keys():
-            # Work around https://bug.tasktools.org/browse/TD-40:
             user = self.get_user(name)
+            if self.ignore_imperative and \
+               is_imperative(self.name, "users", user.key):
+                return
+
+            # Work around https://bug.tasktools.org/browse/TD-40:
             rmtree(mkpath(self.name, "users", user.key))
 
             revoke_key(self.name, name)
@@ -288,6 +317,8 @@ class Organisation(object):
 
         Returns a 'Group' object or None if the group already exists.
         """
+        if self.ignore_imperative and is_imperative(self.name):
+            return None
         if name not in self.groups.keys():
             taskd_cmd("add", "group", self.name, name)
             newgroup = Group(self.name, name)
@@ -300,6 +331,9 @@ class Organisation(object):
         Delete a group.
         """
         if name in self.users.keys():
+            if self.ignore_imperative and \
+               is_imperative(self.name, "groups", name):
+                return
             taskd_cmd("remove", "group", self.name, name)
             del self._lazy_groups[name]
 
@@ -327,6 +361,16 @@ class Organisation(object):
 
 
 class Manager(object):
+    def __init__(self, ignore_imperative=False):
+        """
+        Instantiates an organisations manager.
+
+        If ignore_imperative is True, all actions that modify data are checked
+        whether they're created imperatively and if so, they will result in no
+        operation.
+        """
+        self.ignore_imperative = ignore_imperative
+
     def add_org(self, name):
         """
         Create a new organisation.
@@ -336,7 +380,7 @@ class Manager(object):
         """
         if name not in self.orgs.keys():
             taskd_cmd("add", "org", name)
-            neworg = Organisation(name)
+            neworg = Organisation(name, self.ignore_imperative)
             self._lazy_orgs[name] = neworg
             return neworg
         return None
@@ -348,6 +392,8 @@ class Manager(object):
         """
         org = self.get_org(name)
         if org is not None:
+            if self.ignore_imperative and is_imperative(name):
+                return
             for user in org.users.keys():
                 org.del_user(user)
             for group in org.groups.keys():
@@ -362,7 +408,7 @@ class Manager(object):
     def orgs(self):
         result = {}
         for org in os.listdir(mkpath()):
-            result[org] = Organisation(org)
+            result[org] = Organisation(org, self.ignore_imperative)
         return result
 
 
@@ -452,6 +498,7 @@ def add_org(name):
         sys.exit(msg.format(name))
 
     taskd_cmd("add", "org", name)
+    mark_imperative(name)
 
 
 @cli.command("del-org")
@@ -485,6 +532,8 @@ def add_user(organisation, user):
     if userobj is None:
         msg = "User {} already exists in organisation {}."
         sys.exit(msg.format(user, organisation))
+    else:
+        mark_imperative(organisation.name, "users", userobj.key)
 
 
 @cli.command("del-user")
@@ -510,10 +559,12 @@ def add_group(organisation, group):
     """
     Create a group for the given organisation.
     """
-    userobj = organisation.add_group(group)
-    if userobj is None:
+    groupobj = organisation.add_group(group)
+    if groupobj is None:
         msg = "Group {} already exists in organisation {}."
         sys.exit(msg.format(group, organisation))
+    else:
+        mark_imperative(organisation.name, "groups", groupobj.name)
 
 
 @cli.command("del-group")
@@ -562,10 +613,12 @@ def process_json(json_file):
     """
     data = json.load(json_file)
 
-    mgr = Manager()
+    mgr = Manager(ignore_imperative=True)
     add_or_delete(mgr.orgs.keys(), data.keys(), mgr.add_org, mgr.del_org)
 
     for org in mgr.orgs.values():
+        if is_imperative(org.name):
+            continue
         add_or_delete(org.users.keys(), data[org.name]['users'],
                       org.add_user, org.del_user)
         add_or_delete(org.groups.keys(), data[org.name]['groups'],
