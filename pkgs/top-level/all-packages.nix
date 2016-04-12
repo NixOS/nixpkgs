@@ -14729,7 +14729,7 @@ in
 
   exult = callPackage ../games/exult { };
 
-  factorio = callPackage ../games/factorio {};
+  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
   fairymax = callPackage ../games/fairymax {};
 
