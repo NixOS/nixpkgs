@@ -396,6 +396,7 @@ in {
     systemd.services.taskserver-ca = mkIf needToCreateCA {
       requiredBy = [ "taskserver.service" ];
       after = [ "taskserver-init.service" ];
+      before = [ "taskserver.service" ];
       description = "Initialize CA for TaskServer";
       serviceConfig.Type = "oneshot";
       serviceConfig.UMask = "0077";
