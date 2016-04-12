@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "01fg9jbifndwc3jzzizsisvz98q325xarczgf6rn11hphckgrip3";
+    sha256 = "13w56fhspf7ygr3v0jhh44g25xbcx5vmrprzcy9cajsppa6knq4r";
   };
 
   patches = [ ./build-on-bsd.patch ];
