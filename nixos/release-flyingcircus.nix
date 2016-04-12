@@ -147,6 +147,7 @@ in rec {
       postgresql92
       postgresql93
       postgresql94
+      powerdns
       python
       rsyslog
       stdenv
