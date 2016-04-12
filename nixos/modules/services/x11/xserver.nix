@@ -466,6 +466,7 @@ in
         xorg.xsetroot
         xorg.xinput
         xorg.xprop
+        xorg.xauth
         pkgs.xterm
         pkgs.xdg_utils
       ]

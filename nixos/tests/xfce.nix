@@ -20,6 +20,8 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript =
     ''
       $machine->waitForX;
+      $machine->waitForFile("/home/alice/.Xauthority");
+      $machine->succeed("xauth merge ~alice/.Xauthority");
       $machine->waitForWindow(qr/xfce4-panel/);
       $machine->sleep(10);
 
