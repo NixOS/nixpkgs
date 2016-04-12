@@ -233,6 +233,7 @@
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
