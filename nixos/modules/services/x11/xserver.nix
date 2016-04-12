@@ -516,8 +516,7 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-ac"
-        "-terminate"
+      [ "-terminate"
         "-logfile" "/var/log/X.${toString cfg.display}.log"
         "-config ${configFile}"
         ":${toString cfg.display}" "vt${toString cfg.tty}"
