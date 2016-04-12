@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "libeatmydata-82";
+  name = "libeatmydata-105";
   
   src = fetchurl {
     url = "http://www.flamingspork.com/projects/libeatmydata/${name}.tar.gz";
-    sha256 = "0aavq71bf0yxdgyf8gvyzq086shszzwpbsz5rqkjg4cz0rc5yrqb";
+    sha256 = "1pd8sc73cgc41ldsvq6g8ics1m5k8gdcb91as9yg8z5jnrld1lmx";
   };
 
   buildInputs = [ makeWrapper ];
