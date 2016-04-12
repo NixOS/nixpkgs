@@ -27,7 +27,7 @@ in
     services.powerdns.configDir = local_path;
 
     system.activationScripts.fcio-powerdns = ''
-      install -d -o  ${toString config.ids.uids.powerdns} -g service  -m 02775 /etc/local/powerdns
+      install -d -o ${toString config.ids.uids.powerdns} -g service  -m 02775 /etc/local/powerdns
     '';
 
   };
