@@ -69,6 +69,24 @@ def taskd_cmd(cmd, *args, **kwargs):
     )
 
 
+def certtool_cmd(*args, **kwargs):
+    """
+    Invoke certtool from GNUTLS and return the output of the command.
+
+    The provided arguments are added to the certtool command and keyword
+    arguments are added to subprocess.check_output().
+
+    Note that this will suppress all output of certtool and it will only be
+    printed whenever there is an unsuccessful return code.
+    """
+    return subprocess.check_output(
+        [CERTTOOL_COMMAND] + list(args),
+        preexec_fn=lambda: os.umask(0077),
+        stderr=subprocess.STDOUT,
+        **kwargs
+    )
+
+
 def label(msg):
     if sys.stdout.isatty() or sys.stderr.isatty():
         sys.stderr.write(msg + "\n")
@@ -113,8 +131,7 @@ def generate_key(org, user):
     try:
         os.makedirs(basedir, mode=0700)
 
-        cmd = [CERTTOOL_COMMAND, "-p", "--bits", "2048", "--outfile", privkey]
-        subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
+        certtool_cmd("-p", "--bits", "2048", "--outfile", privkey)
 
         template_data = [
             "organization = {0}".format(org),
@@ -125,13 +142,14 @@ def generate_key(org, user):
         ]
 
         with create_template(template_data) as template:
-            cmd = [CERTTOOL_COMMAND, "-c",
-                   "--load-privkey", privkey,
-                   "--load-ca-privkey", cakey,
-                   "--load-ca-certificate", cacert,
-                   "--template", template,
-                   "--outfile", pubcert]
-            subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
+            certtool_cmd(
+                "-c",
+                "--load-privkey", privkey,
+                "--load-ca-privkey", cakey,
+                "--load-ca-certificate", cacert,
+                "--template", template,
+                "--outfile", pubcert
+            )
     except:
         rmtree(basedir)
         raise
@@ -152,15 +170,15 @@ def revoke_key(org, user):
         oldcrl = NamedTemporaryFile(mode="wb", prefix="old-crl")
         oldcrl.write(open(crl, "rb").read())
         oldcrl.flush()
-        cmd = [CERTTOOL_COMMAND,
-               "--generate-crl",
-               "--load-crl", oldcrl.name,
-               "--load-ca-privkey", cakey,
-               "--load-ca-certificate", cacert,
-               "--load-certificate", pubcert,
-               "--template", template,
-               "--outfile", crl]
-        subprocess.check_call(cmd, preexec_fn=lambda: os.umask(0077))
+        certtool_cmd(
+            "--generate-crl",
+            "--load-crl", oldcrl.name,
+            "--load-ca-privkey", cakey,
+            "--load-ca-certificate", cacert,
+            "--load-certificate", pubcert,
+            "--template", template,
+            "--outfile", crl
+        )
         oldcrl.close()
     rmtree(basedir)
 

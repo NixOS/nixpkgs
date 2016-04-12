@@ -118,6 +118,8 @@ let
 
   mkShellStr = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
 
+  certtool = "${pkgs.gnutls}/bin/certtool";
+
   nixos-taskserver = pkgs.buildPythonPackage {
     name = "nixos-taskserver";
     namePrefix = "";
@@ -126,8 +128,7 @@ let
       mkdir -p "$out"
       cat "${pkgs.substituteAll {
         src = ./helper-tool.py;
-        certtool = "${pkgs.gnutls}/bin/certtool";
-        inherit taskd;
+        inherit taskd certtool;
         inherit (cfg) dataDir user group fqdn;
       }}" > "$out/main.py"
       cat > "$out/setup.py" <<EOF
@@ -351,14 +352,21 @@ in {
       serviceConfig.UMask = "0077";
 
       script = ''
+        silent_certtool() {
+          if ! output="$("${certtool}" "$@" 2>&1)"; then
+            echo "GNUTLS certtool invocation failed with output:" >&2
+            echo "$output" >&2
+          fi
+        }
+
         mkdir -m 0700 -p "${cfg.dataDir}/keys"
         chown root:root "${cfg.dataDir}/keys"
 
         if [ ! -e "${cfg.dataDir}/keys/ca.key" ]; then
-          ${pkgs.gnutls}/bin/certtool -p \
+          silent_certtool -p \
             --bits 2048 \
             --outfile "${cfg.dataDir}/keys/ca.key"
-          ${pkgs.gnutls}/bin/certtool -s \
+          silent_certtool -s \
             --template "${pkgs.writeText "taskserver-ca.template" ''
               cn = ${cfg.fqdn}
               cert_signing_key
@@ -372,11 +380,11 @@ in {
         fi
 
         if [ ! -e "${cfg.dataDir}/keys/server.key" ]; then
-          ${pkgs.gnutls}/bin/certtool -p \
+          silent_certtool -p \
             --bits 2048 \
             --outfile "${cfg.dataDir}/keys/server.key"
 
-          ${pkgs.gnutls}/bin/certtool -c \
+          silent_certtool -c \
             --template "${pkgs.writeText "taskserver-cert.template" ''
               cn = ${cfg.fqdn}
               tls_www_server
@@ -398,7 +406,7 @@ in {
         fi
 
         if [ ! -e "${cfg.dataDir}/keys/server.crl" ]; then
-          ${pkgs.gnutls}/bin/certtool --generate-crl \
+          silent_certtool --generate-crl \
             --template "${pkgs.writeText "taskserver-crl.template" ''
               expiration_days = 3650
             ''}" \
