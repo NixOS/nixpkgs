@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, pythonPackages, pygobject, gst_python, wrapGAppsHook
-, glib_networking, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
+{ stdenv, fetchFromGitHub, pythonPackages, pygobject3, wrapGAppsHook
+, gst_all_1, glib_networking, gobjectIntrospection
 }:
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-${version}";
 
-  version = "1.1.2";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "1vn4knpmnp3krmn627iv1r7xa50zl816ac6b24b8ph50cq2sqjfv";
+  src = fetchFromGitHub {
+    owner = "mopidy";
+    repo = "mopidy";
+    rev = "v${version}";
+    sha256 = "06f1y87dqc7p6kq5npmg3ki8x4iacyjzd7nq7188x20y2zglrjbm";
   };
 
-  buildInputs = [
-    wrapGAppsHook gst_plugins_base gst_plugins_good gst_plugins_ugly glib_networking
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = with gst_all_1; [
+    gst-plugins-base gst-plugins-good gst-plugins-ugly
+    glib_networking gobjectIntrospection
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka tornado requests2
+    gst-python pygobject3 pykka tornado requests2
   ];
 
   # There are no tests
