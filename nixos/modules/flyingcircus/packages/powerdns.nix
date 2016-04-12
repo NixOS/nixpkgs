@@ -12,12 +12,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
      pkgs.boost
      pkgs.openssl
+     pkgs.pkgconfig
      pkgs.postgresql
+     pkgs.sqlite
      ];
 
   enableParallelBuilding = true;
   configureFlagsArray = [
-    "--with-modules=bind random gpgsql"
+    "--with-modules=bind random gpgsql gsqlite3"
     ];
   meta = {
     homepage = https://www.powerdns.com/;
