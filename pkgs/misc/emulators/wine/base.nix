@@ -14,12 +14,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 }) // rec {
   inherit name src configureFlags;
 
-  buildInputs = toBuildInputs pkgArches (pkgs: with pkgs; [
-    pkgconfig alsaLib lcms2 fontforge libxml2 libxslt makeWrapper flex bison
+  nativeBuildInputs = toBuildInputs pkgArches (pkgs: with pkgs; [
+    pkgconfig fontforge makeWrapper flex bison
   ]);
 
-  nativeBuildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
+  buildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
     freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
+    alsaLib libxml2 libxslt lcms2
   ])
   ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
   ++ (with pkgs.xorg; [
@@ -29,9 +30,11 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map
-    (path: "-rpath ${path}/lib")
-    ([ stdenv.cc.cc ] ++ nativeBuildInputs);
+  NIX_LDFLAGS = map (path: "-rpath " + path) (
+      map (x: "${x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
+      # libpulsecommon.so is linked but not found otherwise
+      ++ lib.optionals pulseaudioSupport (map (x: "${x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
+    );
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
