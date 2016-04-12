@@ -1,0 +1,23 @@
+diff -ubr ghc-8.0.0.20160411-orig/compiler/main/SysTools.hs ghc-8.0.0.20160411-patched/compiler/main/SysTools.hs
+--- ghc-8.0.0.20160411-orig/compiler/main/SysTools.hs	2016-04-12 10:50:46.533389045 +0200
++++ ghc-8.0.0.20160411-patched/compiler/main/SysTools.hs	2016-04-12 10:53:29.973933760 +0200
+@@ -414,7 +414,7 @@
+       args1 = map Option (getOpts dflags opt_c)
+       args2 = args0 ++ args1 ++ args
+   mb_env <- getGccEnv args2
+-  runSomethingResponseFile dflags cc_filter "C Compiler" p args2 mb_env
++  runSomethingFiltered dflags cc_filter "C Compiler" p args2 mb_env
+  where
+   -- discard some harmless warnings from gcc that we can't turn off
+   cc_filter = unlines . doFilter . lines
+@@ -936,7 +936,7 @@
+       args2     = args0 ++ linkargs ++ args1 ++ args
+       args3     = argFixup args2 []
+   mb_env <- getGccEnv args3
+-  runSomethingResponseFile dflags ld_filter "Linker" p args3 mb_env
++  runSomethingFiltered dflags ld_filter "Linker" p args3 mb_env
+   where
+     testLib lib = "-l" `isPrefixOf` lib || ".a" `isSuffixOf` lib
+     {- GHC is just blindly appending linker arguments from libraries and
+Only in ghc-8.0.0.20160411-patched/compiler/main: SysTools.hs.orig
+Only in ghc-8.0.0.20160411-patched/compiler/main: SysTools.hs.rej
