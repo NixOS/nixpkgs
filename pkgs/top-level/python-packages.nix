@@ -10295,11 +10295,11 @@ in modules // {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.1";
+    name = "httplib2-0.9.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1xc3clbrf77r0600kja71j7hk1218sjiq0gfmb8vjdajka8kjqxw";
+      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
     };
 
     meta = {
