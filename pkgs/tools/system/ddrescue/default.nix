@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lzip }:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.20";
+  name = "ddrescue-1.21";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "1gb0ak2c47nass7qdf9pnfrshcb38c318z1fx5v5v1k7l6qr7yc3";
+    sha256 = "1b71hb42lh33y9843nd1mxlwkk9qh9ajvnz6ivzd1jq9lav4x7ph";
   };
 
   buildInputs = [ lzip ];
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ iElectric fpletz ];
   };
 }
