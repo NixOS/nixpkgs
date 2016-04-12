@@ -26,8 +26,14 @@ in
     services.powerdns.enable = true;
     services.powerdns.configDir = local_path;
 
+    users.users.powerdns = {
+      shell = "/run/current-system/sw/bin/bash";
+      home = "/srv/powerdns";
+    };
+
     system.activationScripts.fcio-powerdns = ''
       install -d -o ${toString config.ids.uids.powerdns} -g service  -m 02775 /etc/local/powerdns
+      install -d -o ${toString config.ids.uids.powerdns} /srv/powerdns
     '';
 
   };
