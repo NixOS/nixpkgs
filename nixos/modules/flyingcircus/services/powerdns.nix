@@ -17,7 +17,7 @@ let
       (attrNames
         (filterAttrs
           (filename: type:
-            (type == "regular") &&
+            (type == "regular" || type == "symlink") &&
             (lib.hasPrefix "pdns-" filename) &&
             (lib.hasSuffix ".conf" filename)
             )
