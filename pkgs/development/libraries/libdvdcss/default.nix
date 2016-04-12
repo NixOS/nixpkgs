@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libdvdcss-${version}";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "http://get.videolan.org/libdvdcss/${version}/${name}.tar.bz2";
-    sha256 = "158k9zagmbk5bkbz96l6lwhh7xcgfcnzflkr4vblskhcab6llhbw";
+    sha256 = "0nl45ifc4xcb196snv9d6hinfw614cqpzcqp92dg43c0hickg290";
   };
 
   meta = {
