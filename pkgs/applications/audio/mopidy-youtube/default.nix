@@ -3,13 +3,13 @@
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-youtube-${version}";
 
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy-youtube";
     rev = "v${version}";
-    sha256 = "1si7j7m5kg0cxlhkw8s2mbnpmc9mb3l69n5sgklb1yv1s55iia6z";
+    sha256 = "06r3ikyg2ch5n7fbn3sgj04hk6icpfpk1r856qch41995k3bbfg7";
   };
 
   propagatedBuildInputs = with pythonPackages; [ mopidy pafy ];
