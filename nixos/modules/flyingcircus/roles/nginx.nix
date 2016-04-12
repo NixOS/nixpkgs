@@ -291,11 +291,11 @@ in
         }
         '';
       "nginx/local" = {
-        source = /etc/local/nginx;
+        source = "/etc/local/nginx";
         enable = cfg.compat.gentoo.enable;
       };
       "nginx/fastcgi_params" = {
-        source = /etc/local/nginx/fastcgi_params;
+        source = "/etc/local/nginx/fastcgi_params";
         enable = cfg.compat.gentoo.enable;
       };
     };
