@@ -417,6 +417,9 @@ in {
         serviceConfig.User = cfg.user;
         serviceConfig.Group = cfg.group;
         serviceConfig.PermissionsStartOnly = true;
+        serviceConfig.PrivateNetwork = true;
+        serviceConfig.PrivateDevices = true;
+        serviceConfig.PrivateTmp = true;
       };
 
       systemd.services.taskserver = {
@@ -437,6 +440,8 @@ in {
           ExecStart = "@${taskd} taskd server";
           ExecReload = "${pkgs.coreutils}/bin/kill -USR1 $MAINPID";
           PermissionsStartOnly = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
           User = cfg.user;
           Group = cfg.group;
         };
@@ -450,6 +455,8 @@ in {
         description = "Initialize CA for TaskServer";
         serviceConfig.Type = "oneshot";
         serviceConfig.UMask = "0077";
+        serviceConfig.PrivateNetwork = true;
+        serviceConfig.PrivateTmp = true;
 
         script = ''
           silent_certtool() {
