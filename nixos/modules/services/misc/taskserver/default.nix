@@ -324,8 +324,13 @@ in {
       listenHost = mkOption {
         type = types.str;
         default = "localhost";
+        example = "::";
         description = ''
           The address (IPv4, IPv6 or DNS) to listen on.
+
+          If the value is something else than <literal>localhost</literal> the
+          port defined by <option>listenPort</option> is automatically added to
+          <option>networking.firewall.allowedTCPPorts</option>.
         '';
       };
 
@@ -518,6 +523,9 @@ in {
           chmod go+x "${cfg.dataDir}/keys"
         '';
       };
+    })
+    (mkIf (cfg.listenHost != "localhost") {
+      networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
     { meta.doc = ./taskserver.xml; }
   ];

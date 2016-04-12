@@ -3,7 +3,6 @@ import ./make-test.nix {
 
   nodes = rec {
     server = {
-      networking.firewall.enable = false;
       services.taskserver.enable = true;
       services.taskserver.listenHost = "::";
       services.taskserver.fqdn = "server";
@@ -14,7 +13,6 @@ import ./make-test.nix {
     };
 
     client1 = { pkgs, ... }: {
-      networking.firewall.enable = false;
       environment.systemPackages = [ pkgs.taskwarrior pkgs.gnutls ];
       users.users.alice.isNormalUser = true;
       users.users.bob.isNormalUser = true;
