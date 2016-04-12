@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-1.6.1";
+  name = "gstreamer-editing-services-1.8.0";
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-editing-services/${name}.tar.xz";
-    sha256 = "1lkvkrsipn35341hwwkhwn44n90y49sjwra1r5pazbjgn1yykxzm";
+    sha256 = "1gisdfa91kq89bsmbvb47alaxh8lpqmr6f3dzlwmf389nkandw2h";
   };
 
   nativeBuildInputs = [ pkgconfig python gobjectIntrospection flex perl ];
