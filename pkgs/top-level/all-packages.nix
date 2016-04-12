@@ -14731,6 +14731,8 @@ in
 
   factorio = callPackage ../games/factorio { releaseType = "alpha"; };
 
+  factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
+
   fairymax = callPackage ../games/fairymax {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
