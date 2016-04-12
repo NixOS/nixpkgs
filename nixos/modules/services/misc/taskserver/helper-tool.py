@@ -24,6 +24,10 @@ TASKD_USER = "@user@"
 TASKD_GROUP = "@group@"
 FQDN = "@fqdn@"
 
+CA_KEY = os.path.join(TASKD_DATA_DIR, "keys", "ca.key")
+CA_CERT = os.path.join(TASKD_DATA_DIR, "keys", "ca.cert")
+CRL_FILE = os.path.join(TASKD_DATA_DIR, "keys", "server.crl")
+
 RE_CONFIGUSER = re.compile(r'^\s*user\s*=(.*)$')
 RE_USERKEY = re.compile(r'New user key: (.+)$', re.MULTILINE)
 
@@ -151,8 +155,6 @@ def generate_key(org, user):
 
     privkey = os.path.join(basedir, "private.key")
     pubcert = os.path.join(basedir, "public.cert")
-    cakey = os.path.join(TASKD_DATA_DIR, "keys", "ca.key")
-    cacert = os.path.join(TASKD_DATA_DIR, "keys", "ca.cert")
 
     try:
         os.makedirs(basedir, mode=0700)
@@ -172,8 +174,8 @@ def generate_key(org, user):
             certtool_cmd(
                 "-c",
                 "--load-privkey", privkey,
-                "--load-ca-privkey", cakey,
-                "--load-ca-certificate", cacert,
+                "--load-ca-privkey", CA_KEY,
+                "--load-ca-certificate", CA_CERT,
                 "--template", template,
                 "--outfile", pubcert
             )
@@ -183,10 +185,6 @@ def generate_key(org, user):
 
 
 def revoke_key(org, user):
-    cakey = os.path.join(TASKD_DATA_DIR, "keys", "ca.key")
-    cacert = os.path.join(TASKD_DATA_DIR, "keys", "ca.cert")
-    crl = os.path.join(TASKD_DATA_DIR, "keys", "server.crl")
-
     basedir = os.path.join(TASKD_DATA_DIR, "keys", org, user)
     if not os.path.exists(basedir):
         raise OSError("Keyfile directory for {} doesn't exist.".format(user))
@@ -197,16 +195,16 @@ def revoke_key(org, user):
 
     with create_template([expiration]) as template:
         oldcrl = NamedTemporaryFile(mode="wb", prefix="old-crl")
-        oldcrl.write(open(crl, "rb").read())
+        oldcrl.write(open(CRL_FILE, "rb").read())
         oldcrl.flush()
         certtool_cmd(
             "--generate-crl",
             "--load-crl", oldcrl.name,
-            "--load-ca-privkey", cakey,
-            "--load-ca-certificate", cacert,
+            "--load-ca-privkey", CA_KEY,
+            "--load-ca-certificate", CA_CERT,
             "--load-certificate", pubcert,
             "--template", template,
-            "--outfile", crl
+            "--outfile", CRL_FILE
         )
         oldcrl.close()
     rmtree(basedir)
@@ -432,11 +430,15 @@ ORGANISATION = OrganisationType()
 
 
 @click.group()
-def cli():
+@click.pass_context
+def cli(ctx):
     """
     Manage Taskserver users and certificates
     """
-    pass
+    for path in (CA_KEY, CA_CERT, CRL_FILE):
+        if not os.path.exists(path):
+            msg = "CA setup not done or incomplete, missing file {}."
+            ctx.fail(msg.format(path))
 
 
 @cli.command("list-users")
