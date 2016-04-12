@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "acpid-2.0.25";
+  name = "acpid-2.0.27";
 
   src = fetchurl {
     url = "mirror://sourceforge/acpid2/${name}.tar.xz";
-    sha256 = "0s2wg84x6pnrkf7i7lpzw2rilq4mj50vwb7p2b2n5hdyfa00lw0b";
+    sha256 = "05m6scbdzi2fb8zzi01c11a10pr0qb1gzccz4bbxj4fcacz24342";
   };
 
   preBuild = ''
