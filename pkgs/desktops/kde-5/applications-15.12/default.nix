@@ -48,6 +48,8 @@ let
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
+    libkomparediff2 = callPackage ./libkomparediff2.nix {};
+    okteta = callPackage ./okteta.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};
