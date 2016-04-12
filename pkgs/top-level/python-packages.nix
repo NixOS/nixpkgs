@@ -21951,13 +21951,13 @@ in modules // {
   };
 
   tzlocal = buildPythonPackage rec {
-    name = "tzlocal-1.1.1";
+    name = "tzlocal-1.2.2";
 
     propagatedBuildInputs = with self; [ pytz ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tzlocal/tzlocal-1.1.1.zip";
-      sha256 = "696bfd8d7c888de039af6c6fdf86fd52e32508277d89c75d200eb2c150487ed4";
+      url = "https://pypi.python.org/packages/source/t/tzlocal/${name}.tar.gz";
+      sha256 = "0paj7vlsb0np8b5sp4bv64wxv7qk2piyp7xg29pkhdjwsbls9fnb";
     };
 
      # test fail (timezone test fail)
