@@ -32,6 +32,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
+      $machine->succeed("xauth merge ~alice/.Xauthority");
       $machine->waitForWindow(qr/Terminal/);
       $machine->sleep(20);
       $machine->screenshot("screen");

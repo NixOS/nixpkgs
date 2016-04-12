@@ -27,6 +27,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
 
       $machine->succeed("su - alice -c 'DISPLAY=:0.0 gnome-terminal &'");
+      $machine->succeed("xauth merge ~alice/.Xauthority");
       $machine->waitForWindow(qr/Terminal/);
       $machine->mustSucceed("timeout 900 bash -c 'journalctl -f|grep -m 1 \"GNOME Shell started\"'");
       $machine->sleep(10);
