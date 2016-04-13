@@ -3,6 +3,7 @@
 { name, profile ? ""
 , pkgs ? null, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
 , extraBuildCommands ? "", extraBuildCommandsMulti ? ""
+, extraOutputsToInstall ? []
 }:
 
 # HOWTO:
@@ -119,12 +120,14 @@ let
   staticUsrProfileTarget = nixpkgs.buildEnv {
     name = "${name}-usr-target";
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
+    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
   staticUsrProfileMulti = nixpkgs.buildEnv {
     name = "system-profile-multi";
     paths = multiPaths;
+    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
@@ -158,8 +161,8 @@ let
     cp -rsHf ${staticUsrProfileTarget}/lib64/* lib64/ && chmod u+w -R lib64/
 
     # copy gcc libs
-    cp -rsHf ${chosenGcc.cc}/lib/*   lib32/
-    cp -rsHf ${chosenGcc.cc}/lib64/* lib64/
+    cp -rsHf ${chosenGcc.cc.lib}/lib/*   lib32/
+    cp -rsHf ${chosenGcc.cc.lib}/lib64/* lib64/
 
     # symlink 32-bit ld-linux.so
     ln -s ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
