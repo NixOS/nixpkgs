@@ -234,6 +234,7 @@
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
+  MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";

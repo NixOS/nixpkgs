@@ -6,13 +6,13 @@
 # some loss of functionality because of it.
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.10.2";
+  version = "1.11.0";
   name = "tahoe-lafs-${version}";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://tahoe-lafs.org/source/tahoe-lafs/releases/allmydata-tahoe-${version}.tar.bz2";
-    sha256 = "1rvv0ik5biy7ji8pg56v0qycnggzr3k6dbg88n555nb6r4cxgmgy";
+    url = "https://tahoe-lafs.org/downloads/tahoe-lafs-${version}.tar.bz2";
+    sha256 = "0hrp87rarbmmpnrxk91s83h6irkykds3pl263dagcddbdl5inqdi";
   };
 
   patchPhase = ''
@@ -30,7 +30,6 @@ pythonPackages.buildPythonApplication rec {
     sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
   '';
 
-  # Some tests want this + http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/mock-0.6.0.tar.bz2
   buildInputs = with pythonPackages; [ unzip numpy mock ];
 
   # The `backup' command requires `sqlite3'.
@@ -48,8 +47,8 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
-    # TODO: broken with wheels
-    #${pythonPackages.python.interpreter} setup.py trial
+    # Still broken. ~ C.
+    #   trial allmydata
   '';
 
   meta = {
@@ -60,9 +59,9 @@ pythonPackages.buildPythonApplication rec {
       such a way that it remains available even when some of the peers
       are unavailable, malfunctioning, or malicious.
     '';
-    homepage = http://allmydata.org/;
+    homepage = http://tahoe-lafs.org/;
     license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
-    maintainers = [ lib.maintainers.simons ];
+    maintainers = with lib.maintainers; [ simons MostAwesomeDude ];
     platforms = lib.platforms.gnu;  # arbitrary choice
   };
 }
