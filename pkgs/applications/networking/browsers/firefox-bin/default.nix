@@ -105,7 +105,7 @@ stdenv.mkDerivation {
       libheimdal
       libpulseaudio
       systemd
-    ] + ":" + stdenv.lib.makeSearchPath "lib64" [
+    ] + ":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] [
       stdenv.cc.cc
     ];
 

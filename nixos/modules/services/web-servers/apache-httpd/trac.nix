@@ -96,7 +96,7 @@ in
   globalEnvVars = singleton
     { name = "PYTHONPATH";
       value =
-        makeSearchPath "lib/${pkgs.python.libPrefix}/site-packages"
+        makeSearchPathOutputs "lib/${pkgs.python.libPrefix}/site-packages" ["lib"]
           [ pkgs.mod_python
             pkgs.pythonPackages.trac
             pkgs.setuptools

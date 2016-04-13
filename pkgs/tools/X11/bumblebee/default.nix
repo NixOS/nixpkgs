@@ -43,7 +43,7 @@ let
 
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
-  bbdPath = lib.makeSearchPath "bin" [ module_init_tools xorgserver ];
+  bbdPath = lib.makeBinPath [ module_init_tools xorgserver ];
   bbdLibs = lib.makeLibraryPath [ libX11 libXext ];
 
   xmodules = lib.concatStringsSep "," (map (x: "${x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));

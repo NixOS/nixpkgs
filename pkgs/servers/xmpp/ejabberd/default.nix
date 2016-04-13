@@ -13,7 +13,7 @@
 }:
 
 let
-  ctlpath = lib.makeSearchPath "bin" [ bash gnused gnugrep coreutils utillinux procps ];
+  ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
   fakegit = writeScriptBin "git" ''
     #! ${stdenv.shell} -e

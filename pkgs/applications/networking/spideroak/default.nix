@@ -16,7 +16,7 @@ let
     else if stdenv.system == "i686-linux" then "8c23271291f40aa144bbf38ceb3cc2a05bed00759c87a65bd798cf8bb289d07a"
     else throw "Spideroak client for: ${stdenv.system} not supported!";
 
-  ldpath = stdenv.lib.makeSearchPath "lib" [
+  ldpath = stdenv.lib.makeLibraryPath [
     glib fontconfig libXext libX11 freetype libXrender
   ];
 

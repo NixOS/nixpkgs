@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
         fi
     done
 
-    patchelf --set-rpath ${stdenv.lib.makeSearchPath "lib" [ libusb ]} \
+    patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ libusb ]} \
         "$out/share/arduino/hardware/tools/avrdude"
   '';
 

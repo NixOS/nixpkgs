@@ -39,7 +39,7 @@ mkDerivation rec {
 
   postInstall =
     let
-      binpath = makeSearchPath "bin" [ out rcs cvs git coreutils rsync ];
+      binpath = makeBinPath [ out rcs cvs git coreutils rsync ];
     in ''
       for prog in cvs-fast-export cvsconvert cvssync; do
         wrapProgram $out/bin/$prog \

@@ -42,7 +42,7 @@ let
 
       wrapProgram "$out/bin/waagent" \
           --prefix PYTHONPATH : $PYTHONPATH \
-          --prefix PATH : "${makeSearchPath "bin" runtimeDeps}"
+          --prefix PATH : "${makeBinPath runtimeDeps}"
     '';
   };
 
