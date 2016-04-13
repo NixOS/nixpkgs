@@ -88,6 +88,16 @@ rec {
   makeSearchPath = subDir: packages:
     concatStringsSep ":" (map (path: path + "/" + subDir) packages);
 
+  /* Construct a Unix-style search path, given trying outputs in order.
+     If no output is found, fallback to `.out` and then to the default.
+
+     Example:
+       makeSearchPathOutputs "bin" ["bin"] [ pkgs.openssl pkgs.zlib ]
+       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-bin/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
+  */
+  makeSearchPathOutputs = subDir: outputs: pkgs:
+    makeSearchPath subDir (map (lib.tryAttrs (outputs ++ ["out"])) pkgs);
+
   /* Construct a library search path (such as RPATH) containing the
      libraries for a set of packages
 
