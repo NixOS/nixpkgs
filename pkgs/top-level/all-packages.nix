@@ -11408,6 +11408,8 @@ in
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
+  profont = callPackage ../data/fonts/profont { };
+
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
