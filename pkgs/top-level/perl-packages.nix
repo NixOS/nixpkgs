@@ -12728,6 +12728,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MA/MATTLAW/Text-Trim-1.02.tar.gz;
       sha256 = "1bnwjl5n04w8nnrzrm75ljn4pijqbijr9csfkjcs79h4gwn9lwqw";
     };
+    propagatedBuildInputs = [ CGI ModuleBuild ];
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
