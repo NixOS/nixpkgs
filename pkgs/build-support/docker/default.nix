@@ -295,6 +295,7 @@ EOF
 
         echo Adding layer
         tar -tf temp/layer.tar >> baseFiles
+        sed 's/^\.//' -i baseFiles
         comm <(sort -n baseFiles|uniq) <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
         tar -rpf temp/layer.tar --no-recursion --files-from newFiles 2>/dev/null || true
 
