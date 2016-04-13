@@ -96,7 +96,7 @@ rec {
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-bin/bin:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/bin"
   */
   makeSearchPathOutputs = subDir: outputs: pkgs:
-    makeSearchPath subDir (map (lib.tryAttrs (outputs ++ ["out"])) pkgs);
+    makeSearchPath subDir (map (pkg: if pkg.outputUnspecified or false then lib.tryAttrs (outputs ++ ["out"]) pkg else pkg) pkgs);
 
   /* Construct a library search path (such as RPATH) containing the
      libraries for a set of packages
@@ -110,7 +110,7 @@ rec {
   */
   makeLibraryPath = pkgs: makeSearchPath "lib"
     # try to guess the right output of each pkg
-    (map (pkg: pkg.lib or (pkg.out or pkg)) pkgs);
+    (map (pkg: if pkg.outputUnspecified or false then pkg.lib or (pkg.out or pkg) else pkg) pkgs);
 
   /* Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
@@ -120,7 +120,7 @@ rec {
        => "/root/bin:/usr/bin:/usr/local/bin"
   */
   makeBinPath = pkgs: makeSearchPath "bin"
-    (map (pkg: pkg.bin or (pkg.out or pkg)) pkgs);
+    (map (pkg: if pkg.outputUnspecified or false then pkg.bin or (pkg.out or pkg) else pkg) pkgs);
 
 
   /* Construct a perl search path (such as $PERL5LIB)
@@ -133,7 +133,7 @@ rec {
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
   makePerlPath = pkgs: makeSearchPath "lib/perl5/site_perl"
-    (map (pkg: pkg.lib or (pkg.out or pkg)) pkgs);
+    (map (pkg: if pkg.outputUnspecified or false then pkg.lib or (pkg.out or pkg) else pkg) pkgs);
 
   /* Dependening on the boolean `cond', return either the given string
      or the empty string. Useful to contatenate against a bigger string.
