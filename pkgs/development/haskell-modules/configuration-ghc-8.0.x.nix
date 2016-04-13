@@ -62,4 +62,7 @@ self: super: {
   # Versions <= 5.2 don't compile with transformers 0.5 or later.
   bifunctors = self.bifunctors_5_3;
 
+  # https://github.com/ekmett/semigroupoids/issues/42
+  semigroupoids = dontCheck super.semigroupoids;
+
 }
