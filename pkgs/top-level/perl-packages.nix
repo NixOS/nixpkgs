@@ -952,7 +952,7 @@ let self = _self // overrides; _self = with self; {
       CatalystViewTT TemplateToolkit TestAggregate TestWWWMechanize
       TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystRuntime
-      ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
+      CGI ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
       namespaceautoclean ];
   };
 
