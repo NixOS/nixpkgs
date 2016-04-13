@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/xdg-mime \
       --replace "/usr/bin/file" "${file}/bin/file"
 
-    sed 's# which # type -P #g' -i "$out"/bin/*
+    sed 's#which # type -P #g' -i "$out"/bin/*
   '';
 
   meta = with stdenv.lib; {
