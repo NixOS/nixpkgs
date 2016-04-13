@@ -109,7 +109,8 @@ rec {
        makeBinPath ["/root" "/usr" "/usr/local"]
        => "/root/bin:/usr/bin:/usr/local/bin"
   */
-  makeBinPath = makeSearchPath "bin";
+  makeBinPath = pkgs: makeSearchPath "bin"
+    (map (pkg: pkg.bin or (pkg.out or pkg)) pkgs);
 
 
   /* Construct a perl search path (such as $PERL5LIB)
