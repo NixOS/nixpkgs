@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     for prog in $(find "$out/share/easy-rsa" -executable -type f); do
       makeWrapper "$prog" "$out/bin/$(basename $prog)" \
         --set EASY_RSA "$out/share/easy-rsa" \
-        --set OPENSSL "${openssl}/bin/openssl" \
+        --set OPENSSL "${openssl.bin}/bin/openssl" \
         --set GREP "${gnugrep}/bin/grep"
     done
     sed -i "/EASY_RSA=\|OPENSSL=\|GREP=/d" $out/share/easy-rsa/vars

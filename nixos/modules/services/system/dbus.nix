@@ -148,8 +148,8 @@ in
         # the .socket, we use basic.target instead of default.target
         wantedBy = [ "basic.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.dbus_daemon}/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation";
-          ExecReload = "${pkgs.dbus_daemon}/bin/dbus-send --print-reply --session --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig";
+          ExecStart = "${pkgs.dbus_daemon.out}/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation";
+          ExecReload = "${pkgs.dbus_daemon.out}/bin/dbus-send --print-reply --session --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig";
         };
       };
 

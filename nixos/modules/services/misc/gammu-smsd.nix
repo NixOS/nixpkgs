@@ -228,7 +228,7 @@ in {
         '')
       + optionalString (service == "sql" && sql.driver == "sqlite") ''
          cat "${gammuPackage}/${initDBDir}/sqlite.sql" \
-         | ${pkgs.sqlite}/bin/sqlite3 ${sql.database}
+         | ${pkgs.sqlite.bin}/bin/sqlite3 ${sql.database}
         ''
       + (let execPsql = extraArgs: concatStringsSep " " [
           (optionalString (sql.password != null) "PGPASSWORD=${sql.password}")
