@@ -218,7 +218,7 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = if langJava then ["out" "man" "info"] else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -315,7 +315,11 @@ stdenv.mkDerivation ({
        FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
       )
     fi
-  '';
+  ''
+  + stdenv.lib.optionalString langJava ''
+    export lib=$out;
+  ''
+  ;
 
   dontDisableStatic = true;
 
@@ -538,4 +542,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
+// optionalAttrs (langJava) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';}
 )
