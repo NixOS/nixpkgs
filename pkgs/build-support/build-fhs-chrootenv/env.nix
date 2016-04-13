@@ -57,6 +57,7 @@ let
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
     export PATH='/var/setuid-wrappers:/usr/bin:/usr/sbin'
+    export PKG_CONFIG_PATH=/usr/lib/pkgconfig
 
     # Force compilers to look in default search paths
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
