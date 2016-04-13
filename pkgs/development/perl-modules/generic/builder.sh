@@ -28,6 +28,7 @@ preConfigure() {
     perl Makefile.PL PREFIX=$out INSTALLDIRS=site $makeMakerFlags
 }
 
+
 postFixup() {
     # If a user installs a Perl package, she probably also wants its
     # dependencies in the user environment (since Perl modules don't

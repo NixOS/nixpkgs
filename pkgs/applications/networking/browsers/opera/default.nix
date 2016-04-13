@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     oldRPATH=`patchelf --print-rpath $out/lib/opera/opera`
-    patchelf --set-rpath $oldRPATH:${cups}/lib $out/lib/opera/opera
+    patchelf --set-rpath $oldRPATH:${cups.out}/lib $out/lib/opera/opera
 
     # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
     # It have no reasons to exist in a redistribuable package

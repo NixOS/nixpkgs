@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvmPackages_37, jemalloc, ncurses, darwin
+, llvmPackages_37, jemalloc, ncurses, darwin, binutils
 
 , shortVersion, isRelease
 , forceBundledLLVM ? false
@@ -114,8 +114,8 @@ with stdenv.lib; stdenv.mkDerivation {
       mkdir -p "$out"
       cp -r bin "$out/bin"
     '' + optionalString stdenv.isLinux ''
-      patchelf --interpreter "${stdenv.glibc}/lib/${stdenv.cc.dynamicLinker}" \
-               --set-rpath "${stdenv.cc.cc}/lib/:${stdenv.cc.cc}/lib64/" \
+      patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
+               --set-rpath "${stdenv.cc.cc.lib}/lib/:${stdenv.cc.cc.lib}/lib64/" \
                "$out/bin/rustc"
     '';
   };
@@ -123,7 +123,7 @@ with stdenv.lib; stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${stdenv.cc.binutils}/bin/ar" ]
+                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils}/bin/ar" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
@@ -169,6 +169,7 @@ with stdenv.lib; stdenv.mkDerivation {
   enableParallelBuilding = false; # missing files during linking, occasionally
 
   outputs = [ "out" "doc" ];
+  setOutputFlags = false;
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 

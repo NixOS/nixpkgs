@@ -307,7 +307,7 @@ in modules // {
     doCheck = false;
 
     patchPhase = ''
-      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl}/bin/openssl"
+      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
       substituteInPlace letsencrypt/le_util.py --replace '"sw_vers"' '"/usr/bin/sw_vers"'
     '';
 
@@ -614,7 +614,7 @@ in modules // {
       mkdir -p $out/share
       cp -r extra/themes $out/share
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib:${pkgs.gpgme}/lib
+        --prefix LD_LIBRARY_PATH : '${pkgs.lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
     '';
 
     meta = {
@@ -2835,10 +2835,9 @@ in modules // {
 
     postPatch = ''
       # Hardcode cairo library path
-      # FIXME: for closure-size branch all pkgs.foo should be replaced with pkgs.foo.lib
-      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo}
-      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib}
-      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf}
+      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo.out}
+      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib.out}
+      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf.out}
     '';
 
     meta = {
@@ -6044,7 +6043,7 @@ in modules // {
     preFixup = ''
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
 
     '';
 
@@ -7400,7 +7399,7 @@ in modules // {
     preConfigure = ''
        cat > site.cfg << END
        [samplerate]
-       library_dirs=${pkgs.libsamplerate}/lib
+       library_dirs=${pkgs.libsamplerate.out}/lib
        include_dirs=${pkgs.libsamplerate}/include
        END
     '';
@@ -12531,7 +12530,7 @@ in modules // {
 
     patchPhase = optionalString stdenv.isLinux ''
       substituteInPlace monotonic.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc}/lib/libc.so.6'"
+        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
     '';
   };
 
@@ -15723,7 +15722,7 @@ in modules // {
     };
 
     prePatch = ''
-      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
+      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile.out}/lib/libsndfile.so'"
     '';
 
     # https://github.com/bastibe/PySoundFile/issues/157
@@ -15786,13 +15785,15 @@ in modules // {
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    preConfigure = ''
+    preConfigure = let
+      libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
+    in ''
       sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+              s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
     ''
     # Remove impurities
@@ -16449,7 +16450,7 @@ in modules // {
     preConfigure = ''
       substituteInPlace setup.py \
         --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+        --replace '"/usr/lib"' '"${pkgs.binutils.out}/lib"'
     '';
 
     meta = {
@@ -16863,11 +16864,11 @@ in modules // {
     doCheck = false;
 
     preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
+      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
       export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw}/lib"
+    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
     #'';
 
     meta = {
@@ -17616,7 +17617,7 @@ in modules // {
 
     postPatch = ''
       sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.udev}/lib/libudev.so.1"|p; d
+        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
       }' pyudev/_libudev.py
     '';
 
@@ -18065,8 +18066,8 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace "setup.cfg"                                     \
-              --replace "/usr/local/include" "${pkgs.sqlite}/include"   \
-              --replace "/usr/local/lib" "${pkgs.sqlite}/lib"
+              --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
+              --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
     '';
 
     # error: invalid command 'test'
@@ -18122,9 +18123,11 @@ in modules // {
       cd Source
       python setup.py backport
       python setup.py configure \
-        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
-        --apu-inc-dir=${pkgs.aprutil}/include/apr-1 \
-        --apr-lib-dir=${pkgs.apr}/lib \
+        --apr-inc-dir=${pkgs.apr.dev}/include \
+        --apu-inc-dir=${pkgs.aprutil.dev}/include \
+        --apr-lib-dir=${pkgs.apr.out}/lib \
+        --svn-lib-dir=${pkgs.subversion.out}/lib \
+        --svn-bin-dir=${pkgs.subversion.out}/bin \
         --svn-root-dir=${pkgs.subversion}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
@@ -18434,7 +18437,7 @@ in modules // {
 
 
   reportlab =
-   let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
+   let freetype = overrideDerivation pkgs.freetype (args: { dontDisableStatic = true; });
    in buildPythonPackage rec {
     name = "reportlab-3.2.0";
 
@@ -19648,7 +19651,7 @@ in modules // {
 
     patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11}/lib/libX11.so.6"
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11.out}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -21258,7 +21261,7 @@ in modules // {
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${pkgs.xorg.libSM}/lib:${pkgs.xorg.libXScrnSaver}/lib
+      libspaths=${with pkgs.xorg; pkgs.lib.makeLibraryPath [ libSM libXScrnSaver ]}
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';
@@ -24017,7 +24020,7 @@ in modules // {
 
     # Fix the USB backend library lookup
     postPatch = ''
-      libusb=${pkgs.libusb1}/lib/libusb-1.0.so
+      libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
     '';
@@ -24188,7 +24191,7 @@ in modules // {
       mock
     ];
 
-    LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+    LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
 
     meta = {
       description = "Graphite-web, without the interface. Just the rendering HTTP API";
@@ -25798,7 +25801,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb}/lib/" + ,' -i xcffib/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
     '';
 
     propagatedBuildInputs = [ self.cffi self.six ];

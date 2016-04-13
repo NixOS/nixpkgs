@@ -220,8 +220,8 @@ self: super: {
     else super.x509-system;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addBuildDepend (overrideCabal super.double-conversion (drv:
+    then addExtraLibrary super.double-conversion pkgs.stdenv.cc.cc.lib
+    else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++

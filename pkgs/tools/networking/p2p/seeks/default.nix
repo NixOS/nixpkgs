@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
+{ fetchgit, stdenv, zlib, bzip2, docbook2x, pcre, curl, libxml2, libevent, perl
 , pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv, autoconf, automake
 , libtool, seeks_confDir ? ""
 }:
@@ -13,14 +13,14 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
+    [ zlib bzip2 docbook2x pcre curl libxml2 libevent perl pkgconfig
       protobuf tokyocabinet tokyotyrant opencv autoconf automake libtool
     ];
 
   configureFlags =
     [ # Enable the built-in web server providing a web search interface.
       "--enable-httpserv-plugin=yes"
-      "--with-libevent=${libevent}"
+      "--with-libevent=${libevent.dev}"
     ];
 
   preConfigure = ''

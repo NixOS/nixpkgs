@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite
-, includeTools ? false
-}:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite }:
 
 let
 
@@ -46,15 +44,18 @@ in stdenv.mkDerivation rec {
     INSTALL_TARGET
   '';
 
+  outputs = [ "dev" "out" "tools" ];
+
   preConfigure = "cd nss";
 
   makeFlags = [
-    "NSPR_INCLUDE_DIR=${nspr}/include/nspr"
-    "NSPR_LIB_DIR=${nspr}/lib"
+    "NSPR_INCLUDE_DIR=${nspr.dev}/include/nspr"
+    "NSPR_LIB_DIR=${nspr.out}/lib"
     "NSDISTMODE=copy"
     "BUILD_OPT=1"
     "SOURCE_PREFIX=\$(out)"
     "NSS_ENABLE_ECC=1"
+    "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
 
@@ -77,8 +78,11 @@ in stdenv.mkDerivation rec {
       libfile="$out/lib/lib$libname.so"
       LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
     done
-  '' + stdenv.lib.optionalString (!includeTools) ''
-    find $out/bin -type f \( -name nss-config -o -delete \)
+
+    moveToOutput bin "$tools"
+    moveToOutput bin/nss-config "$dev"
+    moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
+    rm "$out"/lib/*.a
   '';
 
   meta = {

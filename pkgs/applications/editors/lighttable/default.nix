@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, zlib, glib, alsaLib, makeDesktopItem
 , dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gnome3, nss, xorg, udev, libnotify
+, cairo, cups, expat, libgpgerror, nspr, gnome3, nss, xorg, libudev, libnotify
 }:
 
 let
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
     mv $out/share/LightTable/light $out/bin/light
 
-    ln -s ${udev}/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
+    ln -sf ${libudev.out}/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
     substituteInPlace $out/bin/light \
-        --replace "/usr/lib/x86_64-linux-gnu" "${udev}/lib" \
+        --replace "/usr/lib/x86_64-linux-gnu" "${libudev.out}/lib" \
         --replace "/lib/x86_64-linux-gnu" "$out/share/LightTable" \
         --replace 'HERE=`dirname $(readlink -f $0)`' "HERE=$out/share/LightTable"
 

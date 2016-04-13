@@ -28,9 +28,9 @@ with lib;
         capability setuid,
         network inet raw,
 
-        ${pkgs.glibc}/lib/*.so mr,
-        ${pkgs.libcap}/lib/libcap.so* mr,
-        ${pkgs.attr}/lib/libattr.so* mr,
+        ${pkgs.glibc.out}/lib/*.so mr,
+        ${pkgs.libcap.out}/lib/libcap.so* mr,
+        ${pkgs.attr.out}/lib/libattr.so* mr,
 
         ${pkgs.iputils}/bin/ping mixr,
         /var/setuid-wrappers/ping.real r,

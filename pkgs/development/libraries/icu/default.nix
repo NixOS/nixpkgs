@@ -13,6 +13,9 @@ stdenv.mkDerivation ({
     sha256 = "05j86714qaj0lvhvyr2s1xncw6sk0h2dcghb3iiwykbkbh8fjr1s";
   };
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin
     "CXXFLAGS=-headerpad_max_install_names";
 
@@ -36,6 +39,8 @@ stdenv.mkDerivation ({
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
   '';
+
+  postFixup = ''moveToOutput lib/icu "$dev" '';
 
   enableParallelBuilding = true;
 

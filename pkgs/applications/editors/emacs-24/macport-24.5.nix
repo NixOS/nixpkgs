@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "LDFLAGS=-L${ncurses}/lib"
+    "LDFLAGS=-L${ncurses.out}/lib"
     "--with-xml2=yes"
     "--with-gnutls=yes"
     "--with-mac"
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   CFLAGS = "-O3";
-  LDFLAGS = "-O3 -L${ncurses}/lib";
+  LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/

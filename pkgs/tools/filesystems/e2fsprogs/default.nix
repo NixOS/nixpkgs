@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1m72lk90b5i3h9qnmss6aygrzyn8x2avy3hyaq2fb0jglkrkz6ar";
   };
 
-  buildInputs = [ pkgconfig libuuid ];
+  outputs = [ "bin" "out" "man" ];
+  outputDev = "bin"; # just for *.pc
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libuuid ];
 
   crossAttrs = {
     preConfigure = ''
@@ -16,14 +20,19 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
-  configureFlags = "--enable-elf-shlibs --disable-libuuid --disable-libblkid --disable-uuidd --disable-fsck --enable-symlink-install";
+  configureFlags = [
+    "--enable-elf-shlibs" "--enable-symlink-install" "--enable-relative-symlinks"
+    # libuuid, libblkid, uuidd and fsck are in util-linux-ng (the "libuuid" dependency).
+    "--disable-libuuid" "--disable-uuidd" "--disable-libblkid" "--disable-fsck"
+  ];
+
+  # hacky way to make it install *.pc
+  postInstall = ''
+    make install-libs
+    rm "$out"/lib/*.a
+  '';
 
   enableParallelBuilding = true;
-
-  preInstall = "installFlagsArray=('LN=ln -s')";
-
-  postInstall = "make install-libs";
 
   meta = {
     homepage = http://e2fsprogs.sourceforge.net/;

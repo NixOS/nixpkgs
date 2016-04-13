@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     cp Makefile.AP2 Makefile
-    makeFlags="top_dir=${apacheHttpd} prefix=$out"
+    makeFlags="top_dir=${apacheHttpd}/share prefix=$out"
   '';
 
   meta = {

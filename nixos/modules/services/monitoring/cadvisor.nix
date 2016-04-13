@@ -71,7 +71,7 @@ in {
       after = [ "network.target" "docker.service" "influxdb.service" ];
 
       postStart = mkBefore ''
-        until ${pkgs.curl}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
+        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
           sleep 1;
         done
       '';

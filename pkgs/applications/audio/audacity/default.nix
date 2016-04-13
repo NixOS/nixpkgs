@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
   })];
 
+  # fix with gcc-5 from http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-December/245884.html
+  postPatch = ''
+    substituteInPlace lib-src/libnyquist/nyquist/ffts/src/fftlib.c \
+      --replace 'inline void' 'static inline void'
+  '';
+
   preConfigure = /* we prefer system-wide libs */ ''
     mv lib-src lib-src-rm
     mkdir lib-src

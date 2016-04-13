@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "/usr/local" "$out" \
-      --replace "CFLAGS = " "CFLAGS = -I${ncurses}/include " \
-      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses}/lib " \
+      --replace "CFLAGS = " "CFLAGS = -I${ncurses.dev}/include " \
+      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses.out}/lib " \
       --replace "-lcurses" "-lncurses"
   '';
+  buildInputs = [ ncurses ];
   preBuild = ''
     mkdir -p $out/bin
     mkdir -p $out/man/man1

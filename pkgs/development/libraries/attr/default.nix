@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nd8y0m6awc9ahv0ciiwf8gy54c8d3j51pw9xg7f7cn579jjyxr5";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   nativeBuildInputs = [ gettext ];
 
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";

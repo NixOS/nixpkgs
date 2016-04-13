@@ -1,0 +1,25 @@
+From f14d2a275323a47104b33eb61c5b6910ae1a9f59 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Wed, 14 Oct 2015 06:43:53 -0500
+Subject: [PATCH] qdiriterator follow symlinks
+
+---
+ src/kpluginselector.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/kpluginselector.cpp b/src/kpluginselector.cpp
+index 9c3431d..d6b1ee2 100644
+--- a/src/kpluginselector.cpp
++++ b/src/kpluginselector.cpp
+@@ -305,7 +305,7 @@ void KPluginSelector::addPlugins(const QString &componentName,
+     QStringList desktopFileNames;
+     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, componentName + QStringLiteral("/kpartplugins"), QStandardPaths::LocateDirectory);
+     Q_FOREACH (const QString &dir, dirs) {
+-        QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories);
++      QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+         while (it.hasNext()) {
+             desktopFileNames.append(it.next());
+         }
+-- 
+2.5.2
+

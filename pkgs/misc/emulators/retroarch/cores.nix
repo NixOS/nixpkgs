@@ -207,7 +207,7 @@ in
 
     extraBuildInputs = [ libpng SDL ];
   }).override {
-    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL}/bin/sdl-config\",' configure";
+    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL.dev}/bin/sdl-config\",' configure";
     configurePhase = "./configure";
   };
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       # Fix the path to gzip/bzip2.
       substituteInPlace src/libkeymap/findfile.c \
         --replace gzip ${gzip}/bin/gzip \
-        --replace bzip2 ${bzip2}/bin/bzip2 \
+        --replace bzip2 ${bzip2.bin}/bin/bzip2 \
 
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.

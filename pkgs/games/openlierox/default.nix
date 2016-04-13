@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1k35xppfqi3qfysv81xq3hj4qdy9j2ciinbkfdcmwclcsf3nh94z";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2}/include/libxml2";
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   # The breakpad fails to build on x86_64, and it's only to report bugs upstream
   cmakeFlags = [ "-DBREAKPAD=0" ];

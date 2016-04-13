@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
         JSONPP
         TermReadKey
       ]}" \
-      --prefix PATH : "${openssl}/bin"
+      --prefix PATH : "${openssl.bin}/bin"
   '';
 
   meta = with stdenv.lib; {

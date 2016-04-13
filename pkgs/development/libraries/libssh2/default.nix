@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "116mh112w48vv9k3f15ggp5kxw5sj4b88dzb5j69llsh7ba1ymp4";
   };
 
+  outputs = [ "dev" "out" "docdev" ];
+
   buildInputs = [ openssl zlib ];
 
   crossAttrs = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lvm2, libaio, gzip, readline, udev }:
+{ stdenv, fetchurl, lvm2, libaio, gzip, readline, systemd }:
 
 stdenv.mkDerivation rec {
   name = "multipath-tools-0.4.9";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       substituteInPlace kpartx/kpartx.rules --replace /sbin/kpartx $out/sbin/kpartx
       substituteInPlace kpartx/kpartx_id --replace /sbin/dmsetup ${lvm2}/sbin/dmsetup
 
-      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
-      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${udev}/lib/udev/scsi_id
+      substituteInPlace libmultipath/defaults.h --replace /lib/udev/scsi_id ${systemd.udev.lib}/lib/udev/scsi_id
+      substituteInPlace libmultipath/hwtable.c --replace /lib/udev/scsi_id ${systemd.udev.lib}/lib/udev/scsi_id
     '';
 
   meta = {

@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "13z9gba3q2ybp50z0gdkzhwcx9m0i7qkvm278yz4pql2jfml7inx";
   };
 
+  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+
   nativeBuildInputs = [ pkgconfig perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -61,6 +63,11 @@ stdenv.mkDerivation rec {
 
   CXX = "g++";
   CXXCPP = "g++ -E";
+
+  postInstall = ''
+    moveToOutput bin/curl-config "$dev"
+    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+  '';
 
   crossAttrs = {
     # We should refer to the cross built openssl

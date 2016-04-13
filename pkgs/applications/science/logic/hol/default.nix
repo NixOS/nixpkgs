@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   buildCommand = ''
 
     mkdir chroot-fontconfig
-    cat ${fontconfig}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
+    cat ${fontconfig.out}/etc/fonts/fonts.conf > chroot-fontconfig/fonts.conf
     sed -e 's@</fontconfig>@@' -i chroot-fontconfig/fonts.conf
     echo "<dir>${liberation_ttf}</dir>" >> chroot-fontconfig/fonts.conf
     echo "</fontconfig>" >> chroot-fontconfig/fonts.conf

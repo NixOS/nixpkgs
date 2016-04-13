@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  outputs = [ "dev" "lib" "bin" "out" ]; # $out contains all the config
+
   propagatedBuildInputs = [ freetype ];
   buildInputs = [ pkgconfig expat ];
 
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cd "$out/etc/fonts"
     rm conf.d/{50-user,51-local}.conf
-    "${libxslt}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
+    "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
       --stringparam fontconfig "$out" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \

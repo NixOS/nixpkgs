@@ -45,5 +45,5 @@ stdenv.mkDerivation {
     glib gtk pkgconfig dbus_glib realCurl pcre libsexy libgnomeui gtkspell libnotify libgtkhtml
   ];
 
-  configureFlags="--with-libcurl-libraries=${curl}/lib --with-libcurl-headers=${curl}/include --with-pcre_libraries=${pcre}/lib --with-pcre_headers=${pcre}/include";  
+  configureFlags="--with-libcurl-libraries=${curl.out}/lib --with-libcurl-headers=${curl.dev}/include --with-pcre_libraries=${pcre.out}/lib --with-pcre_headers=${pcre.dev}/include";
 }

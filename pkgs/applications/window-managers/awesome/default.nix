@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 
-  LD_LIBRARY_PATH = "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib";
-  GI_TYPELIB_PATH = "${pango}/lib/girepository-1.0";
+  LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
+  GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
   LUA_CPATH = "${lgi}/lib/lua/${lua.luaversion}/?.so";
   LUA_PATH  = "${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua";
 
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       --prefix LUA_CPATH ";" '"${lgi}/lib/lua/${lua.luaversion}/?.so"' \
       --prefix LUA_PATH ";" '"${lgi}/share/lua/${lua.luaversion}/?.lua;${lgi}/share/lua/${lua.luaversion}/lgi/?.lua"' \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH : "${cairo}/lib:${pango}/lib:${gobjectIntrospection}/lib" \
-      --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl}/bin:${alsaUtils}/bin:${findutils}/bin:${xterm}/bin"
+      --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+      --prefix PATH : "${compton}/bin:${unclutter}/bin:${procps}/bin:${iproute}/sbin:${coreutils}/bin:${curl.bin}/bin:${alsaUtils}/bin:${findutils}/bin:${xterm}/bin"
 
     wrapProgram $out/bin/awesome-client \
       --prefix PATH : "${which}/bin"

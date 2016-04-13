@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr}" "--with-expat=${expat}" ]
@@ -42,7 +45,10 @@ stdenv.mkDerivation rec {
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
-    wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
+    for f in $out/lib/*.la $out/lib/apr-util-1/*.la; do
+      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+    done
+    wrapProgram $dev/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 
   enableParallelBuilding = true;

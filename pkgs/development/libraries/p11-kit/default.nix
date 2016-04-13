@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1i3a1wdpagm0p3y1bwaz5x5rjhcpqbcrnhkcp10p259vkxk72wz5";
   };
 
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev";
+
   buildInputs = [ pkgconfig libffi libtasn1 libiconv ];
 
   configureFlags = [

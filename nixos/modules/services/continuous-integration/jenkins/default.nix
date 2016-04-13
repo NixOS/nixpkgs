@@ -161,11 +161,11 @@ in {
       '';
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} ; do
+        until ${pkgs.curl.bin}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} ; do
           sleep 10
         done
         while true ; do
-          index=`${pkgs.curl}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}`
+          index=`${pkgs.curl.bin}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}`
           if [[ !("$index" =~ 'Please wait while Jenkins is restarting' ||
                   "$index" =~ 'Please wait while Jenkins is getting ready to work') ]]; then
             exit 0

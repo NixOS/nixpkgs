@@ -37,16 +37,16 @@ stdenv.mkDerivation rec {
     sed -i 's|self.install_layout == "deb"|False|' setup.py
   '' + stdenv.lib.optionalString enableAllFeatures ''
     for file in $(find -name "*.py"); do
-        sed -e 's|cmd = \["xsltproc|cmd = \["${libxslt}/bin/xsltproc|g' \
-            -e 's|Popen(\["xsltproc|Popen(\["${libxslt}/bin/xsltproc|g' \
+        sed -e 's|cmd = \["xsltproc|cmd = \["${libxslt.bin}/bin/xsltproc|g' \
+            -e 's|Popen(\["xsltproc|Popen(\["${libxslt.bin}/bin/xsltproc|g' \
             -e 's|cmd = \["texindy|cmd = ["nixpkgs_is_missing_texindy|g' \
             -e 's|cmd = "epstopdf|cmd = "${tex}/bin/epstopdf|g' \
             -e 's|cmd = \["makeindex|cmd = ["${tex}/bin/makeindex|g' \
             -e 's|doc.program = "pdflatex"|doc.program = "${tex}/bin/pdflatex"|g' \
             -e 's|self.program = "latex"|self.program = "${tex}/bin/latex"|g' \
             -e 's|Popen("pdflatex|Popen("${tex}/bin/pdflatex|g' \
-            -e 's|"fc-match"|"${fontconfig}/bin/fc-match"|g' \
-            -e 's|"fc-list"|"${fontconfig}/bin/fc-list"|g' \
+            -e 's|"fc-match"|"${fontconfig.bin}/bin/fc-match"|g' \
+            -e 's|"fc-list"|"${fontconfig.bin}/bin/fc-list"|g' \
             -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
             -e 's|cmd = "fig2dev|cmd = "${transfig}/bin/fig2dev|g' \
             -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \

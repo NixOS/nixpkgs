@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
                                      -rpath ${SDL_mixer}/lib
                                      -rpath ${SDL_net}/lib
                                      -rpath ${SDL_ttf}/lib
-                                     -rpath ${SDL}/lib
-                                     -rpath ${libpng}/lib
+                                     -rpath ${SDL.out}/lib
+                                     -rpath ${libpng.out}/lib
                                      -rpath ${lua5_1}/lib
                                      -rpath ${mesa}/lib
-                                     -rpath ${zlib}/lib
+                                     -rpath ${zlib.out}/lib
                                      "
   '';
 

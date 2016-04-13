@@ -151,7 +151,7 @@ in
         /etc/group r,
         ${config.environment.etc."nsswitch.conf".source} r,
 
-        ${pkgs.glibc}/lib/*.so mr,
+        ${pkgs.glibc.out}/lib/*.so mr,
         ${pkgs.tzdata}/share/zoneinfo/** r,
 
         network inet stream,
@@ -159,12 +159,12 @@ in
         network inet dgram,
         network inet6 dgram,
 
-        ${pkgs.gcc.cc}/lib/libssp.so.* mr,
-        ${pkgs.libsodium}/lib/libsodium.so.* mr,
+        ${pkgs.gcc.cc.lib}/lib/libssp.so.* mr,
+        ${pkgs.libsodium.out}/lib/libsodium.so.* mr,
         ${pkgs.systemd}/lib/libsystemd.so.* mr,
-        ${pkgs.xz}/lib/liblzma.so.* mr,
-        ${pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
-        ${pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+        ${pkgs.xz.out}/lib/liblzma.so.* mr,
+        ${pkgs.libgcrypt.out}/lib/libgcrypt.so.* mr,
+        ${pkgs.libgpgerror.out}/lib/libgpg-error.so.* mr,
         ${pkgs.libcap}/lib/libcap.so.* mr,
         ${pkgs.lz4}/lib/liblz4.so.* mr,
         ${pkgs.attr}/lib/libattr.so.* mr,

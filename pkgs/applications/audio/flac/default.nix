@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "4773c0099dba767d963fd92143263be338c48702172e8754b9bc5103efe1c56c";
   };
 
-  outputs = [ "out" "doc" ];
-
   buildInputs = [ libogg ];
 
   #doCheck = true; # takes lots of time
+
+  outputs = [ "dev" "out" "bin" "doc" ];
 
   meta = with stdenv.lib; {
     homepage = http://xiph.org/flac/;

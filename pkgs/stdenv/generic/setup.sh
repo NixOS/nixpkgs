@@ -174,11 +174,20 @@ ensureDir() {
 }
 
 
-installBin() {
-    mkdir -p $out/bin
-    cp "$@" $out/bin
+# Add $1/lib* into rpaths.
+# The function is used in multiple-outputs.sh hook,
+# so it is defined here but tried after the hook.
+_addRpathPrefix() {
+    if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
+        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+        fi
+        if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+        fi
+    fi
 }
-
 
 # Return success if the specified file is an ELF object.
 isELF() {
@@ -312,16 +321,7 @@ for i in $crossPkgs; do
 done
 
 
-# Add the output as an rpath.
-if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
-    if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
-    fi
-    if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
-    fi
-fi
+_addRpathPrefix "$out"
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -643,7 +643,7 @@ configurePhase() {
         done
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
@@ -708,7 +708,9 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
-    mkdir -p "$prefix"
+    if [ -n "$prefix" ]; then
+        mkdir -p "$prefix"
+    fi
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -737,24 +739,29 @@ fixupPhase() {
         prefix=${!output} runHook fixupOutput
     done
 
+
+    # Propagate build inputs and setup hook into the development output.
+
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
-    fi
-
-    if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "${!outputDev}/nix-support"
+        substituteAll "$setupHook" "${!outputDev}/nix-support/setup-hook"
+    fi
+
+    # Propagate user-env packages into the output with binaries, TODO?
+
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "${!outputBin}/nix-support"
+        echo "$propagatedUserEnvPkgs" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

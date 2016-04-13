@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
   };
 
+  outputs = [ "dev" "bin" "out" "man" "docdev" ];
+
   buildInputs =
     [ openssl db gettext kerberos ]
     ++ lib.optional stdenv.isFreeBSD autoreconfHook
@@ -38,6 +40,12 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+
+  postInstall = ''
+    for f in $out/lib/*.la $out/lib/sasl2/*.la; do
+      substituteInPlace $f --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+    done
+  '';
 
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";

@@ -12,8 +12,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp kzip zipmix $out/bin
     
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/kzip
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $out/bin/zipmix
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/kzip
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
   '';
 
   meta = {

@@ -16,14 +16,15 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "man" ];
-
     patches =
       [ ./use-etc-ssl-certs.patch ]
       ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
       ++ optional
            (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
            ./darwin-arch.patch;
+
+  outputs = [ "dev" "out" "man" "bin" ];
+  setOutputFlags = false;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
@@ -44,9 +45,7 @@ let
       "-DUSE_CRYPTODEV_DIGESTS"
     ];
 
-    makeFlags = [
-      "MANDIR=$(out)/share/man"
-    ];
+  makeFlags = [ "MANDIR=$(man)/share/man" ];
 
     # Parallel building is broken in OpenSSL.
     enableParallelBuilding = false;
@@ -58,14 +57,20 @@ let
           rm "$out/lib/"*.a
       fi
 
+    mkdir -p $bin
+    mv $out/bin $bin/
+
+    mkdir $dev
+    mv $out/include $dev/
+
       # remove dependency on Perl at runtime
-      rm -r $out/etc/ssl/misc $out/bin/c_rehash
+    rm -r $out/etc/ssl/misc
 
       rmdir $out/etc/ssl/{certs,private}
     '';
 
     postFixup = ''
-      # Check to make sure we don't depend on perl
+    # Check to make sure the main output doesn't depend on perl
       if grep -r '${perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1

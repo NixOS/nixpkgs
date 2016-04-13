@@ -1,7 +1,7 @@
 #! @shell@ -e
 path_backup="$PATH"
-if [ -n "@coreutils@" ]; then
-  PATH="@coreutils@/bin:@gnugrep@/bin"
+if [ -n "@coreutils_bin@" ]; then
+  PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
 if [ -n "$NIX_CC_WRAPPER_START_HOOK" ]; then

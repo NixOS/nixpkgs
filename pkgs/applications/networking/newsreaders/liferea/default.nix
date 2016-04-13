@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       wrapProgram "$f" \
         --prefix PYTHONPATH : "$(toPythonPath $out):$(toPythonPath ${pygobject3})" \
         --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking}/lib/gio/modules" \
+        --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules:${glib_networking.out}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
     done
   '';

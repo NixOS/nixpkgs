@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     bin="$out/libexec/TeXmacs/bin/texmacs.bin"
     rpath=$(patchelf --print-rpath "$bin")
-    patchelf --set-rpath "$rpath:${zlib}/lib" "$bin"
+    patchelf --set-rpath "$rpath:${zlib.out}/lib" "$bin"
   '';
 
   meta = {

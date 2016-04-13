@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs }:
+, fontconfig, freetype, pam, dbus_libs, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
-      pam dbus_libs
+      pam dbus_libs (stdenv.cc.libc.out or null)
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     patchShebangs configure
     substituteInPlace configure --replace "which" "command -v"
-    NACL_INC_DIR=${libsodium}/include/sodium NACL_LIB=sodium ./configure
+    NACL_INC_DIR=${libsodium.dev}/include/sodium NACL_LIB=sodium ./configure
   '';
 
   enableParallelBuilding = true;

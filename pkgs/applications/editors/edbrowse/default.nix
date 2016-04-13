@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     substituteInPlace src/ebjs.c --replace \"edbrowse-js\" \"$out/bin/edbrowse-js\"
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${spidermonkey_24}/include/mozjs-24";
+  NIX_CFLAGS_COMPILE = "-I${spidermonkey_24.dev}/include/mozjs-24";
   makeFlags = "-C src prefix=$(out)";
 
   src = fetchurl {

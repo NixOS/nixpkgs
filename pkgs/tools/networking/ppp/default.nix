@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     [ ( substituteAll {
         src = ./nix-purity.patch;
         inherit libpcap;
-        glibc = stdenv.cc.libc;
+        glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
       })
       # Without nonpriv.patch, pppd --version doesn't work when not run as
       # root.

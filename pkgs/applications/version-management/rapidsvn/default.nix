@@ -10,8 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ wxGTK subversion apr aprutil python ];
 
-  configureFlags = [ "--with-svn-include=${subversion}/include" 
-    "--with-svn-lib=${subversion}/lib" ];
+  configureFlags = [ "--with-svn-include=${subversion.dev}/include"
+    "--with-svn-lib=${subversion.out}/lib" ];
 
   meta = {
     description = "Multi-platform GUI front-end for the Subversion revision system";

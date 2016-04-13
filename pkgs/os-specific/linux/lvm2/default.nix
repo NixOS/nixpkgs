@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils, enable_dmeventd ? false }:
+{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, enable_dmeventd ? false }:
 
 let
   version = "2.02.140";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ udev ];
+  buildInputs = [ libudev ];
 
   preConfigure =
     ''
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
         --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
         --replace /usr/sbin/lvm $out/sbin/lvm \
-        --replace /usr/bin/udevadm ${udev}/bin/udevadm
+        --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in

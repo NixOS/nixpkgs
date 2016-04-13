@@ -76,8 +76,8 @@ in
   ncursesw = attrs: {
     buildInputs = [ ncurses ];
     buildFlags = [
-      "--with-cflags=-I${ncurses}/include"
-      "--with-ldflags=-L${ncurses}/lib"
+      "--with-cflags=-I${ncurses.dev}/include"
+      "--with-ldflags=-L${ncurses.out}/lib"
     ];
   };
 
@@ -85,12 +85,12 @@ in
     buildFlags = [
       "--use-system-libraries"
       "--with-zlib-dir=${zlib}"
-      "--with-xml2-lib=${libxml2}/lib"
-      "--with-xml2-include=${libxml2}/include/libxml2"
-      "--with-xslt-lib=${libxslt}/lib"
-      "--with-xslt-include=${libxslt}/include"
-      "--with-exslt-lib=${libxslt}/lib"
-      "--with-exslt-include=${libxslt}/include"
+      "--with-xml2-lib=${libxml2.out}/lib"
+      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+      "--with-xslt-lib=${libxslt.out}/lib"
+      "--with-xslt-include=${libxslt.dev}/include"
+      "--with-exslt-lib=${libxslt.out}/lib"
+      "--with-exslt-include=${libxslt.dev}/include"
     ] ++ lib.optional stdenv.isDarwin "--with-iconv-dir=${libiconv}";
   };
 
@@ -118,8 +118,8 @@ in
 
   sqlite3 = attrs: {
     buildFlags = [
-      "--with-sqlite3-include=${sqlite}/include"
-      "--with-sqlite3-lib=${sqlite}/lib"
+      "--with-sqlite3-include=${sqlite.dev}/include"
+      "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
   };
 

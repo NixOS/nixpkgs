@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   patches = [ ./cstdio.patch ];
 
   cmakeFlags = [
-    "-DM_LIBRARY=${stdenv.glibc}/lib/libm.so"
-    "-DDL_LIBRARY=${stdenv.glibc}/lib/libdl.so"
+    "-DM_LIBRARY=${stdenv.glibc.out}/lib/libm.so"
+    "-DDL_LIBRARY=${stdenv.glibc.out}/lib/libdl.so"
     "-DBUILD_UTILS=1"
     "-DBUILD_SEG3D=1"
     "-DBUILD_DATAFLOW=0"

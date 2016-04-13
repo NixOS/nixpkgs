@@ -30,7 +30,7 @@ let
         # SAPI modules:
 
         apxs2 = {
-          configureFlags = ["--with-apxs2=${apacheHttpd}/bin/apxs"];
+          configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs"];
           buildInputs = [apacheHttpd];
         };
 
@@ -44,7 +44,13 @@ let
         };
 
         ldap = {
-          configureFlags = ["--with-ldap=${openldap}"];
+          configureFlags = [
+            "--with-ldap"
+            "LDAP_DIR=${openldap.dev}"
+            "LDAP_INCDIR=${openldap.dev}/include"
+            "LDAP_LIBDIR=${openldap.out}/lib"
+            "--with-ldap-sasl=${cyrus_sasl.dev}"
+            ];
           buildInputs = [openldap cyrus_sasl openssl];
         };
 
@@ -69,7 +75,7 @@ let
 
         libxml2 = {
           configureFlags = [
-            "--with-libxml-dir=${libxml2}"
+            "--with-libxml-dir=${libxml2.dev}"
             ];
           buildInputs = [ libxml2 ];
         };
@@ -148,7 +154,7 @@ let
         };
 
         openssl = {
-          configureFlags = ["--with-openssl=${openssl}"];
+          configureFlags = ["--enable-openssl"];
           buildInputs = [openssl];
         };
 

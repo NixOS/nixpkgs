@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
     # FIXME: this will give us incorrect man pages for bits of cctools
     ln -s ${binutils-raw}/share $out/share
-    ln -s ${binutils-raw}/lib $out/lib
+    ln -s ${binutils-raw.out}/lib $out/lib
 
     ln -s ${cctools}/libexec $out/libexec
   '';

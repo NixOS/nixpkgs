@@ -121,7 +121,7 @@ in
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus_daemon.lib}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;

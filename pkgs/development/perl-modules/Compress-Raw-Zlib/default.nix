@@ -12,7 +12,7 @@ buildPerlPackage rec {
     cat > config.in <<EOF
       BUILD_ZLIB   = False
       INCLUDE      = ${zlib}/include
-      LIB          = ${zlib}/lib
+      LIB          = ${zlib.out}/lib
       OLD_ZLIB     = False
       GZIP_OS_CODE = AUTO_DETECT
     EOF

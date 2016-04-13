@@ -19,7 +19,7 @@ let
   configureFlagsFun = attrs: ''
         --disable-oss --disable-x11-shared
         --disable-pulseaudio-shared --disable-alsa-shared
-        ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
+        ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib.out}/lib" else ""}
         ${if (!x11Support) then "--without-x" else ""}
       '';
 in

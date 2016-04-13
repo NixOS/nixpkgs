@@ -50,7 +50,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ config.nix.package pkgs.bzip2 ];
+      path = [ config.nix.package pkgs.bzip2.bin ];
       environment.NIX_REMOTE = "daemon";
       environment.NIX_SECRET_KEY_FILE = cfg.secretKeyFile;
 

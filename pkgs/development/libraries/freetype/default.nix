@@ -35,11 +35,15 @@ stdenv.mkDerivation rec {
         "0wcjf9hiymplgqm3szla633i417pb57vpzzs2dyl1dnmcxgqa2y8")
     ];
 
+  outputs = [ "dev" "out" ];
+
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence
   buildInputs = [ pkgconfig which ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
+
+  configureFlags = "--disable-static --bindir=$(dev)/bin";
 
   # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
   NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";

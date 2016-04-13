@@ -29,6 +29,8 @@ let
         name = "${name}-${version}";
         inherit src;
 
+        outputs = args.outputs or [ "dev" "out" ];
+
         cmakeFlags =
           (args.cmakeFlags or [])
           ++ [ "-DBUILD_TESTING=OFF" ]
@@ -64,14 +66,14 @@ let
     kdbusaddons = callPackage ./kdbusaddons.nix {};
     kdeclarative = callPackage ./kdeclarative.nix {};
     kded = callPackage ./kded.nix {};
-    kdelibs4support = callPackage ./kdelibs4support.nix {};
+    kdelibs4support = callPackage ./kdelibs4support {};
     kdesignerplugin = callPackage ./kdesignerplugin.nix {};
     kdewebkit = callPackage ./kdewebkit.nix {};
     kdesu = callPackage ./kdesu.nix {};
     kdnssd = callPackage ./kdnssd.nix {};
     kdoctools = callPackage ./kdoctools {};
     kemoticons = callPackage ./kemoticons.nix {};
-    kfilemetadata = callPackage ./kfilemetadata.nix {};
+    kfilemetadata = callPackage ./kfilemetadata {};
     kglobalaccel = callPackage ./kglobalaccel.nix {};
     kguiaddons = callPackage ./kguiaddons.nix {};
     khtml = callPackage ./khtml.nix {};

@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     make install
     cp -r src/dependencies/xulrunner $out/lib/kiwix
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux${optionalString (stdenv.system == "x86_64-linux") "-x86-64"}.so.2 $out/lib/kiwix/xulrunner/xulrunner
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux${optionalString (stdenv.system == "x86_64-linux") "-x86-64"}.so.2 $out/lib/kiwix/xulrunner/xulrunner
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \

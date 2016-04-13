@@ -17,7 +17,7 @@ composableDerivation.composableDerivation {} {
             /* perl TODO export these (SWIG only if its present) HAVE_PERL=1 HAVE_PERL_DEVEL=1 HAVE_PERL_SWIG=1 */
           };
 
-  buildInputs = [ (pcre.override { unicodeSupport = true; })
+  buildInputs = [ pcre
                    openssl readline libxml2 ]; # optional python perl php java ?
 
   cfg = {

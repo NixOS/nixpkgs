@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ (stdenv.cc.libc.out or null) ];
 
   meta = with stdenv.lib; {
     description = "a wrapper for the user, group and hosts NSS API";

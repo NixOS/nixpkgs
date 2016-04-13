@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qq61k6lp1fp75xs398yzi6wvbx232l7xbyn3p13cnh27mflvgg3";
   };
 
+  outputs = [ "out" "lib" ];
+
   propagatedNativeBuildInputs = [ m4 ];
   nativeBuildInputs = [ perl help2man ];
 
@@ -43,4 +45,3 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 }
-

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
+{ stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat
 , yacc, libtool, fontconfig, pango, gd, xorg, gts, libdevil, gettext, cairo
 , flex
 }:
@@ -22,21 +22,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig libpng libjpeg expat yacc libtool fontconfig gd gts libdevil flex pango
-    ] ++ stdenv.lib.optionals (xorg != null) [ xorg.xlibsWrapper xorg.libXrender libXaw ]
+    ] ++ stdenv.lib.optionals (xorg != null)
+      (with xorg; [ xlibsWrapper libXrender libXaw libXpm ])
     ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   CPPFLAGS = stdenv.lib.optionalString (xorg != null && stdenv.system == "x86_64-darwin")
-    "-I${cairo}/include/cairo";
+    "-I${cairo.dev}/include/cairo";
 
-  configureFlags =
-    [ "--with-pngincludedir=${libpng}/include"
-      "--with-pnglibdir=${libpng}/lib"
-      "--with-jpegincludedir=${libjpeg}/include"
-      "--with-jpeglibdir=${libjpeg}/lib"
-      "--with-expatincludedir=${expat}/include"
-      "--with-expatlibdir=${expat}/lib"
-    ]
-    ++ stdenv.lib.optional (xorg == null) "--without-x";
+  configureFlags = stdenv.lib.optional (xorg == null) "--without-x";
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     for foo in cmd/dot/Makefile.in cmd/edgepaint/Makefile.in \

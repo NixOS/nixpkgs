@@ -9,6 +9,8 @@ let
   shortName = "bash43";
   baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
   sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
+
+  inherit (stdenv.lib) optional optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -19,7 +21,12 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = if (!interactive) # conditional to avoid mass rebuild ATM
+    then [ "out" "doc" ]
+    else [ "out" "doc" "info" ];
+
+  # the man pages are small and useful enough
+  outputMan = if interactive then "out" else null;
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
@@ -41,17 +48,17 @@ stdenv.mkDerivation rec {
         };
     in
       import ./bash-4.3-patches.nix patch) 
-      ++ stdenv.lib.optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
+      ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
     configureFlags = baseConfigureFlags +
       " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing" +
-      stdenv.lib.optionalString stdenv.isCygwin ''
+      optionalString stdenv.isCygwin ''
         --without-libintl-prefix --without-libiconv-prefix
         --with-installed-readline
         bash_cv_dev_stdin=present
         bash_cv_dev_fd=standard
-        bash_cv_termcap_lib=libncurses 
+        bash_cv_termcap_lib=libncurses
       '';
   };
 
@@ -59,20 +66,29 @@ stdenv.mkDerivation rec {
 
   # Note: Bison is needed because the patches above modify parse.y.
   nativeBuildInputs = [bison]
-    ++ stdenv.lib.optional (texinfo != null) texinfo
-    ++ stdenv.lib.optional interactive readline
-    ++ stdenv.lib.optional stdenv.isDarwin binutils;
+    ++ optional (texinfo != null) texinfo
+    ++ optional interactive readline
+    ++ optional stdenv.isDarwin binutils;
 
   # Bash randomly fails to build because of a recursive invocation to
   # build `version.h'.
   enableParallelBuilding = false;
 
   postInstall = ''
-    # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
   '';
 
-  meta = {
+  postFixup = if interactive
+    then ''
+      substituteInPlace "$out/bin/bashbug" \
+        --replace '${stdenv.shell}' "$out/bin/bash"
+    ''
+    # most space is taken by locale data
+    else ''
+      rm -r "$out/share" "$out/bin/bashbug"
+    '';
+
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/bash/;
     description =
       "GNU Bourne-Again Shell, the de facto standard shell on Linux" +
@@ -89,11 +105,11 @@ stdenv.mkDerivation rec {
       Bash without modification.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.all;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ maintainers.simons ];
   };
 
   passthru = {

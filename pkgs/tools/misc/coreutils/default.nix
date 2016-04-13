@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, perl, gmp ? null
+{ lib, stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
@@ -27,9 +27,11 @@ let
       sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
     '';
 
+    outputs = [ "out" "info" ];
+
+    nativeBuildInputs = [ perl xz.bin ];
     configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
-    nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch

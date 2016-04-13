@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     export HOME=$TMPDIR/fakehome
     export POPPLER_INC_DIR=${poppler_utils}/include/poppler
-    export POPPLER_LIB_DIR=${poppler_utils}/lib
+    export POPPLER_LIB_DIR=${poppler_utils.out}/lib
     export MAGICK_INC=${imagemagick}/include/ImageMagick
     export MAGICK_LIB=${imagemagick}/lib
-    export FC_INC_DIR=${fontconfig}/include/fontconfig
-    export FC_LIB_DIR=${fontconfig}/lib
+    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
+    export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo}/include/podofo
     export PODOFO_LIB_DIR=${podofo}/lib
     export SIP_BIN=${sip_4_16}/bin/sip
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH \
-                     --prefix PATH : ${poppler_utils}/bin
+                     --prefix PATH : ${poppler_utils.out}/bin
     done
   '';
 

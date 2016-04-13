@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${gnome-sharp}/lib \
       --prefix LD_LIBRARY_PATH : ${gtk-sharp.gtk}/lib \
       --prefix LD_LIBRARY_PATH : ${gnome3.gconf}/lib \
-      --prefix LD_LIBRARY_PATH : ${poppler}/lib
+      --prefix LD_LIBRARY_PATH : ${poppler.out}/lib
   '';
 
   dontStrip = true;

@@ -47,8 +47,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional wantPS ps;
 
-  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-  
+  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":"
+    (concatMap (p: [ p p.out ]) buildInputs);
+
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
     + stdenv.lib.optionalString useQt4 " --qt-gui";
