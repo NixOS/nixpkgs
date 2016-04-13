@@ -1463,7 +1463,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "06b8f1864101de69b2264ad3c3a2b15333e428cf9f5d17a777cfc61f8c64093f";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ HTTPMessage ];
+    propagatedBuildInputs = [ CGI HTTPMessage ];
     meta = {
       homepage = https://github.com/tokuhirom/p5-cgi-emulate-psgi;
       description = "PSGI adapter for CGI";
