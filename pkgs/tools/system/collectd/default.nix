@@ -31,12 +31,12 @@
 , yajl ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.5.0";
+  version = "5.5.1";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "847684cf5c10de1dc34145078af3fcf6e0d168ba98c14f1343b1062a4b569e88";
+    sha256 = "0gxwq3jl20wgvb7qawivshpkm4i3kvghpnfcn5yrlhphw4kdbigr";
   };
 
   buildInputs = [
