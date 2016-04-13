@@ -286,7 +286,9 @@ EOF
         cp ${layer}/* temp/
         chmod ug+w temp/*
 
-        touch layerFiles
+        # FIXME: might not be /nix/store
+        echo '/nix' >> layerFiles
+        echo '/nix/store' >> layerFiles
         for dep in $(cat $layerClosure); do
           find $dep >> layerFiles
         done
