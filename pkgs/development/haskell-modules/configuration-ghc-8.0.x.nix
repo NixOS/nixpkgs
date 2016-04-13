@@ -68,4 +68,7 @@ self: super: {
   # Version 4.x doesn't compile with transformers 0.5 or later.
   kan-extensions = self.kan-extensions_5_0_1;
 
+  # Earlier versions don't support kan-extensions 5.x.
+  lens = self.lens_4_13_2_1;
+
 }
