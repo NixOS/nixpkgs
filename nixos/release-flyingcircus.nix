@@ -147,13 +147,15 @@ in rec {
       postgresql92
       postgresql93
       postgresql94
-      powerdns
       python
       rsyslog
       stdenv
       subversion
       tarball
       vim;
+
+      powerdns = pkgs.callPackage ./modules/flyingcircus/packages/powerdns.nix { };
+
   };
 
   tested = lib.hydraJob (pkgs.releaseTools.aggregate {
