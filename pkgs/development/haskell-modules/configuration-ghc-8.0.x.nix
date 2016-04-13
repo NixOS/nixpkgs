@@ -65,4 +65,7 @@ self: super: {
   # https://github.com/ekmett/semigroupoids/issues/42
   semigroupoids = dontCheck super.semigroupoids;
 
+  # Version 4.x doesn't compile with transformers 0.5 or later.
+  kan-extensions = self.kan-extensions_5_0_1;
+
 }
