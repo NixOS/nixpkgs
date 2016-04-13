@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.5.3";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "0qxss5rxzac94z5k16xv84ll0n163sphs88xkgv3z7vwramagffq";
+    sha256 = "1cjf9gz7d0sn7893wv9d00q724sxv3d81bgb0c5f5ppz2ssyc4jc";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -34,7 +34,6 @@ stdenv.mkDerivation rec {
   prefixKey = "--prefix-dir=";
 
   configureFlags = [
-    "--with-zlib=${zlib.static}/lib/libz.a"
     "--without-liblzo2"
   ];
 

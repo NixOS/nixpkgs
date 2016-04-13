@@ -1,7 +1,9 @@
 { stdenv, lib, fetchurl, cmake, pkgconfig, lndir
-, zlib, gettext, libvdpau, libva, libXv, sqlite, x265
-, yasm, fribidi, gtk3, qt4
+, zlib, gettext, libvdpau, libva, libXv, sqlite
+, yasm, freetype, fontconfig, fribidi, gtk3, qt4
+, withX265 ? true, x265
 , withX264 ? true, x264
+, withXvid ? true, xvidcore
 , withLAME ? true, lame
 , withFAAC ? false, faac
 , withVorbis ? true, libvorbis
@@ -11,8 +13,7 @@
 , withVPX ? true, libvpx
 }:
 
-stdenv.mkDerivation rec {
-  name = "avidemux-${version}";
+let
   version = "2.6.12";
 
   src = fetchurl {
@@ -20,96 +21,108 @@ stdenv.mkDerivation rec {
     sha256 = "0nz52yih8sff53inndkh2dba759xjzsh4b8xjww419lcpk0qp6kn";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig yasm lndir ];
-  buildInputs = [ zlib gettext libvdpau libva libXv sqlite x265 fribidi gtk3 qt4 ]
-             ++ lib.optional withX264 x264
-             ++ lib.optional withLAME lame
-             ++ lib.optional withFAAC faac
-             ++ lib.optional withVorbis libvorbis
-             ++ lib.optional withPulse libpulseaudio
-             ++ lib.optional withFAAD faad2
-             ++ lib.optional withOpus libopus
-             ++ lib.optional withVPX libvpx
-             ;
+  common = {
+    inherit version src;
 
-  enableParallelBuilding = false;
+    patches = [ ./dynamic_install_dir.patch ];
 
-  outputs = [ "out" "cli" "gtk" "qt4" ];
+    enableParallelBuilding = false;
 
-  patches = [ ./dynamic_install_dir.patch ];
+    nativeBuildInputs = [ cmake pkgconfig yasm ];
+    buildInputs = [ zlib gettext libvdpau libva libXv sqlite fribidi fontconfig freetype ]
+                  ++ lib.optional withX264 x264
+                  ++ lib.optional withX265 x265
+                  ++ lib.optional withXvid xvidcore
+                  ++ lib.optional withLAME lame
+                  ++ lib.optional withFAAC faac
+                  ++ lib.optional withVorbis libvorbis
+                  ++ lib.optional withPulse libpulseaudio
+                  ++ lib.optional withFAAD faad2
+                  ++ lib.optional withOpus libopus
+                  ++ lib.optional withVPX libvpx
+                  ;
 
-  buildCommand = ''
-    unpackPhase
-    cd "$sourceRoot"
-    patchPhase
+    meta = {
+      homepage = http://fixounet.free.fr/avidemux/;
+      description = "Free video editor designed for simple video editing tasks";
+      maintainers = with stdenv.lib.maintainers; [ viric abbradar ];
+      platforms = with stdenv.lib.platforms; linux;
+      license = stdenv.lib.licenses.gpl2;
+    };
+  };
 
-    export cmakeFlags="$cmakeFlags -DAVIDEMUX_SOURCE_DIR=$(pwd)"
+  core = stdenv.mkDerivation (common // {
+    name = "avidemux-${version}";
 
-    function buildOutput() {
-      ( plugin_ui="$1"
-        output_dir="$2"
-        shift 2
-        export cmakeFlags="$cmakeFlags -DPLUGIN_UI=$plugin_ui -DCMAKE_INSTALL_PREFIX=$output_dir"
-        for i in "$@" avidemux_plugins; do
-          ( cd "$i"
-            cmakeConfigurePhase
-            buildPhase
-            installPhase
-          )
-        done
-        rm -rf avidemux_plugins/build
-      )
-    }
+    preConfigure = ''
+      cd avidemux_core
+    '';
+  });
 
-    function buildUi() {
-      plugin_ui="$1"
-      output_dir="$2"
-      shift 2
+  buildPlugin = args: stdenv.mkDerivation (common // {
+    name = "avidemux-${args.pluginName}-${version}";
 
-      # Hack to split builds properly
-      mkdir -p $output_dir
-      lndir $out $output_dir
-      buildOutput $plugin_ui $output_dir "$@"
-    }
+    buildInputs = (args.buildInputs or []) ++ common.buildInputs ++ [ lndir ];
 
-    function fixupUi() {
-      output_dir="$1"
-      shift
+    cmakeFlags = [ "-DPLUGIN_UI=${args.pluginUi}" ];
 
-      find $output_dir -lname $out\* -delete
-      find $output_dir -type f | while read -r f; do
-        rpath="$(patchelf --print-rpath $f 2>/dev/null)" || continue
-        new_rpath=""
-        IFS=':' read -ra old_rpath <<< "$rpath"
-        for p in "''${old_rpath[@]}"; do
-          new_rpath="$new_rpath:$p"
-          if [[ $p = $output_dir* ]]; then
-            new_rpath="$new_rpath:$out/''${p#$output_dir}"
-          fi
-        done
-        patchelf --set-rpath "$new_rpath" $f
-        patchelf --shrink-rpath $f
+    passthru.isUi = args.isUi or false;
+
+    buildCommand = ''
+      unpackPhase
+      cd "$sourceRoot"
+      patchPhase
+
+      mkdir $out
+      lndir ${core} $out
+
+      export cmakeFlags="$cmakeFlags -DAVIDEMUX_SOURCE_DIR=$(pwd)"
+
+      for i in ${toString (args.buildDirs or [])} avidemux_plugins; do
+        ( cd "$i"
+          cmakeConfigurePhase
+          buildPhase
+          installPhase
+        )
       done
-    }
 
-    buildOutput COMMON $out avidemux_core
-    buildOutput SETTINGS $out
-    buildUi CLI $cli avidemux/cli
-    buildUi GTK $gtk avidemux/gtk
-    buildUi QT4 $qt4 avidemux/qt4
+      fixupPhase
+    '';
+  });
 
-    fixupPhase
+in {
+  avidemux_core = core;
 
-    fixupUi $cli
-    fixupUi $gtk
-    fixupUi $qt4
-  '';
+  avidemux_cli = buildPlugin {
+    pluginName = "cli";
+    pluginUi = "CLI";
+    isUi = true;
+    buildDirs = [ "avidemux/cli" ];
+  };
 
-  meta = {
-    homepage = http://fixounet.free.fr/avidemux/;
-    description = "Free video editor designed for simple video editing tasks";
-    maintainers = with stdenv.lib.maintainers; [ viric abbradar ];
-    platforms = with stdenv.lib.platforms; linux;
-    license = stdenv.lib.licenses.gpl2;
+  avidemux_qt4 = buildPlugin {
+    pluginName = "qt4";
+    buildInputs = [ qt4 ];
+    pluginUi = "QT4";
+    isUi = true;
+    buildDirs = [ "avidemux/qt4" ];
+  };
+
+  avidemux_gtk = buildPlugin {
+    pluginName = "gtk";
+    buildInputs = [ gtk3 ];
+    pluginUi = "GTK";
+    isUi = true;
+    buildDirs = [ "avidemux/gtk" ];
+  };
+
+  avidemux_common = buildPlugin {
+    pluginName = "common";
+    pluginUi = "COMMON";
+  };
+
+  avidemux_settings = buildPlugin {
+    pluginName = "settings";
+    pluginUi = "SETTINGS";
   };
 }

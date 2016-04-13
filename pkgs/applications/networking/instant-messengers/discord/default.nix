@@ -2,7 +2,7 @@
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
 , glib, gnome, gtk, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
-, udev }:
+, libudev }:
 
 let version = "0.0.1"; in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
         gdk_pixbuf glib gnome.GConf gtk libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss pango udev
+        libXtst nspr nss pango libudev
      ];
 
     installPhase = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
         ln -s $out/DiscordCanary $out/bin/
 
         # Putting udev in the path won't work :(
-        ln -s ${udev}/lib/libudev.so.1 $out
+        ln -s ${libudev}/lib/libudev.so.1 $out
         '';
 
     meta = with stdenv.lib; {

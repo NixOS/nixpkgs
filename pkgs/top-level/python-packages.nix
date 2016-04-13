@@ -8048,12 +8048,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.4";
+    version = "1.9.5";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "1sdxixj4p3wx245dm608bqw5bdabl701qab0ar5wjivyd6mfga5d";
+      sha256 = "19kaw9flk9jjz1n7q378waybxnkrrhkq240lby4zaaas62nnfip5";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -8072,12 +8072,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.11";
+    version = "1.8.12";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1yrmlj3h2hp5kc5m11ybya21x2wfr5bqqbkcsw6hknj86pkqn57c";
+      sha256 = "04vi1rmin161drssqhi9n54j6mz8l6vs46pc7zbn50vzacysg3xn";
     };
 
     # too complicated to setup
@@ -15584,7 +15584,7 @@ in modules // {
     meta = {
       description = "Bringing the power of python to stream editing";
       homepage = https://github.com/timbertson/piep;
-      maintainers = with maintainers; [ gfxmonk ];
+      maintainers = with maintainers; [ timbertson ];
       license = licenses.gpl3;
     };
   };
@@ -23598,14 +23598,14 @@ in modules // {
 
   tunigo = buildPythonPackage rec {
     name = "tunigo-${version}";
-    version = "0.1.3";
+    version = "1.0.0";
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchFromGitHub {
       owner = "trygveaa";
       repo = "python-tunigo";
       rev = "v${version}";
-      sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
+      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
     };
 
     buildInputs = with self; [ mock nose ];
@@ -25450,15 +25450,15 @@ in modules // {
   };
 
   geeknote = buildPythonPackage rec {
-    version = "2015-03-02";
+    version = "2015-05-11";
     name = "geeknote-${version}";
     disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "VitaliyRodnenko";
       repo = "geeknote";
-      rev = "7ea2255bb6";
-      sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
+      rev = "8489a87d044e164edb321ba9acca8d4631de3dca";
+      sha256 = "0l16v4xnyqnsf84b1pma0jmdyxvmfwcv3sm8slrv3zv7zpmcm3lf";
     };
 
     /* build with tests fails with "Can not create application dirictory :
@@ -25816,11 +25816,11 @@ in modules // {
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.3";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "1la4nn4n66p6dmcf1dyxw7i5j0xprmq82gwmxjv1jjis7vsnk254";
+      sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];

@@ -13,6 +13,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript = { nodes, ... }: ''
     $machine->waitForX;
+    $machine->waitForFile("/home/alice/.Xauthority");
+    $machine->succeed("xauth merge ~alice/.Xauthority");
     $machine->waitForWindow(qr/first configuration/);
     $machine->sleep(1);
     $machine->screenshot("started");

@@ -9,13 +9,13 @@
 , libvdpau, libsamplerate, live555, fluidsynth
 , onlyLibVLC ? false
 , qt4 ? null
-, withQt5 ? false, qtbase ? null
+, withQt5 ? false, qtbase ? null, qtx11extras ? null
 , jackSupport ? false
 }:
 
 with stdenv.lib;
 
-assert (withQt5 -> qtbase != null);
+assert (withQt5 -> qtbase != null && qtx11extras != null);
 assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
       fluidsynth
     ]
     ++ [(if withQt5 then qtbase else qt4)]
+    ++ optional withQt5 qtx11extras
     ++ optional jackSupport libjack2;
 
   nativeBuildInputs = [ pkgconfig ];

@@ -221,7 +221,7 @@ in
 
       dpi = mkOption {
         type = types.nullOr types.int;
-        default = 0;
+        default = null;
         description = "DPI resolution to use for X server.";
       };
 
@@ -466,6 +466,7 @@ in
         xorg.xsetroot
         xorg.xinput
         xorg.xprop
+        xorg.xauth
         pkgs.xterm
         pkgs.xdg_utils
       ]
@@ -513,8 +514,7 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-ac"
-        "-terminate"
+      [ "-terminate"
         "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"

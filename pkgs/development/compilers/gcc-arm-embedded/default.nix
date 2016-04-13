@@ -1,4 +1,5 @@
-{ stdenv, bzip2, patchelf, glibc, gcc, fetchurl, version, releaseType, sha256, ncurses }:
+{ stdenv, bzip2, patchelf, glibc, gcc, fetchurl, version, releaseType, sha256, ncurses
+, dirName ? null, subdirName ? null }:
 with stdenv.lib;
 let
   versionParts = splitString "-" version; # 4.7 2013q3 20130916
@@ -8,13 +9,15 @@ let
   yearQuarterParts = splitString "q" yearQuarter; # 2013 3
   year = elemAt yearQuarterParts 0; # 2013
   quarter = elemAt yearQuarterParts 1; # 3
-  subdirName = "${majorVersion}-${year}-q${quarter}-${releaseType}"; # 4.7-2013-q3-update
+  dirName_ = if dirName != null then dirName else majorVersion;
+  subdirName_ = if subdirName != null then subdirName
+    else "${majorVersion}-${year}-q${quarter}-${releaseType}"; # 4.7-2013-q3-update
 in
 stdenv.mkDerivation {
   name = "gcc-arm-embedded-${version}";
 
   src = fetchurl {
-    url = "https://launchpad.net/gcc-arm-embedded/${majorVersion}/${subdirName}/+download/gcc-arm-none-eabi-${underscoreVersion}-linux.tar.bz2";
+    url = "https://launchpad.net/gcc-arm-embedded/${dirName_}/${subdirName_}/+download/gcc-arm-none-eabi-${underscoreVersion}-linux.tar.bz2";
     sha256 = sha256;
   };
 

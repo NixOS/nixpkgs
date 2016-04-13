@@ -967,7 +967,7 @@ let self = _self // overrides; _self = with self; {
       CatalystViewTT TemplateToolkit TestAggregate TestWWWMechanize
       TestWWWMechanizeCatalyst ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystRuntime
-      ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
+      CGI ConfigAny HTMLFormFu Moose MooseXAttributeChained RegexpAssemble TaskWeaken
       namespaceautoclean ];
   };
 
@@ -1463,7 +1463,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "06b8f1864101de69b2264ad3c3a2b15333e428cf9f5d17a777cfc61f8c64093f";
     };
     buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ HTTPMessage ];
+    propagatedBuildInputs = [ CGI HTTPMessage ];
     meta = {
       homepage = https://github.com/tokuhirom/p5-cgi-emulate-psgi;
       description = "PSGI adapter for CGI";
@@ -1515,6 +1515,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MI/MIYAGAWA/CGI-PSGI-0.15.tar.gz;
       sha256 = "c50dcb10bf8486a9843baed032ad89d879ff2f41c993342dead62f947a598d91";
     };
+    propagatedBuildInputs = [ CGI ];
     meta = {
       description = "Adapt CGI.pm to the PSGI protocol";
       license = "perl";
@@ -3068,7 +3069,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/J/JH/JHOBLITT/DateTime-Format-ISO8601-0.08.tar.gz;
       sha256 = "1syccqd5jlwms8v78ksnf68xijzl97jky5vbwhnyhxi5gvgfx8xk";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ModuleBuild ];
     meta = {
       description = "Parses ISO8601 formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -3110,7 +3111,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/X/XM/XMIKEW/${name}.tar.gz";
       sha256 = "07cgz60gxvrv7xqvngyll60pa8cx93h3jyx9kc9wdkn95qbd864q";
     };
-    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ];
+    propagatedBuildInputs = [ DateTime DateTimeFormatBuilder ModuleBuild ];
     meta = {
       description = "Parse and format MySQL dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -4792,14 +4793,15 @@ let self = _self // overrides; _self = with self; {
   FileBaseDir = buildPerlPackage rec {
     version = "0.03";
     name = "File-BaseDir-${version}";
-    configurePhase = ''
-      preConfigure || true
-      perl Build.PL PREFIX="$out" prefix="$out"
-    '';
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
       sha256 = "0029cba7a3b5d8aa5f7d03cb1b7ba2bcf2829382f7f26aa3bee06fce8611a886";
     };
+    configurePhase = ''
+      preConfigure || true
+      perl Build.PL PREFIX="$out" prefix="$out"
+    '';
+    propagatedBuildInputs = [ ModuleBuild ];
   };
 
   FileCheckTree = buildPerlPackage {
@@ -5620,7 +5622,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0fvilng85wc65pna898x7mp4hx73mhahl7j2s10gj76avmxdizsw";
     };
     buildInputs = [ FileShareDirInstall TestAggregate TestException ];
-    propagatedBuildInputs = [ Clone ConfigAny DataVisitor DateTime
+    propagatedBuildInputs = [ CGI Clone ConfigAny DataVisitor DateTime
       DateTimeFormatBuilder DateTimeFormatNatural DateTimeFormatStrptime
       DateTimeLocale EmailValid FileShareDir HTMLScrubber HTMLTokeParserSimple
       HTTPMessage HashFlatten ListMoreUtils ModulePluggable Moose MooseXAliases
@@ -5656,7 +5658,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "84ac24fb1d551f998145435265e5b6fd4a52ec61e4fadd3d7755eb648be2c4b2";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ CacheCache ClassContainer ExceptionClass HTMLParser LogAny ParamsValidate ];
+    propagatedBuildInputs = [ CacheCache CGI ClassContainer ExceptionClass HTMLParser LogAny ParamsValidate ];
     meta = {
       homepage = http://metacpan.org/release/HTML-Mason;
       description = "High-performance, dynamic web site authoring system";
@@ -8912,7 +8914,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/K/KG/KGRENNAN/Net-OAuth-0.28.tar.gz;
       sha256 = "0k4h4a5048h7qgyx25ih64x0l4airx8a6d9gjq08wmxcl2fk3z3v";
     };
-    buildInputs = [ TestWarn ];
+    buildInputs = [ ModuleBuild TestWarn ];
     propagatedBuildInputs = [ ClassAccessor ClassDataInheritable DigestHMAC DigestSHA1 LWPUserAgent URI ];
     meta = {
       description = "An implementation of the OAuth protocol";
@@ -9032,6 +9034,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MM/MMIMS/Net-Twitter-Lite-0.11002.tar.gz;
       sha256 = "032gyn1h3r5d83wvz7nj3k7g50wcf73lbbmjc18466ml90vigys0";
     };
+    buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ CryptSSLeay LWPUserAgent NetOAuth URI ];
     doCheck = false;
     meta = {
@@ -10869,11 +10872,11 @@ let self = _self // overrides; _self = with self; {
 
   libfile-stripnondeterminism = buildPerlPackage rec {
     name = "libstrip-nondeterminism-${version}";
-    version = "0.014";
+    version = "0.016";
 
     src = fetchurl {
       url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
-      sha256 = "0yiddi9r87iysa2msr6l5fc5631zmi5ldsy8m3sd9chrlhag361g";
+      sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
     buildInputs = [ ArchiveZip_1_53 pkgs.file ];
@@ -10882,11 +10885,11 @@ let self = _self // overrides; _self = with self; {
 
   strip-nondeterminism = buildPerlPackage rec {
     name = "strip-nondeterminism-${version}";
-    version = "0.014";
+    version = "0.016";
 
     src = fetchurl {
       url = "http://http.debian.net/debian/pool/main/s/strip-nondeterminism/strip-nondeterminism_${version}.orig.tar.gz";
-      sha256 = "0yiddi9r87iysa2msr6l5fc5631zmi5ldsy8m3sd9chrlhag361g";
+      sha256 = "1y9lfhxgwyysybing72n3hng2db5njpk2dbb80vskdz75r7ffqjp";
     };
 
     buildInputs = [ ArchiveZip_1_53 libfile-stripnondeterminism pkgs.file ];
@@ -12260,7 +12263,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MR/MRAMBERG/Test-WWW-Mechanize-CGI-0.1.tar.gz;
       sha256 = "0bwwdk0iai5dlvvfpja971qpgvmf6yq67iag4z4szl9v5sra0xm5";
     };
-    propagatedBuildInputs = [ TestWWWMechanize WWWMechanizeCGI ];
+    propagatedBuildInputs = [ CGI TestWWWMechanize WWWMechanizeCGI ];
     meta = {
       maintainers = with maintainers; [ ocharles ];
       platforms   = stdenv.lib.platforms.unix;
@@ -12733,6 +12736,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/MA/MATTLAW/Text-Trim-1.02.tar.gz;
       sha256 = "1bnwjl5n04w8nnrzrm75ljn4pijqbijr9csfkjcs79h4gwn9lwqw";
     };
+    propagatedBuildInputs = [ CGI ModuleBuild ];
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

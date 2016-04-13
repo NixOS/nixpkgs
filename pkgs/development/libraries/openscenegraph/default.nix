@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, cmake, giflib, libjpeg, libtiff, lib3ds, freetype
+{ stdenv, lib, fetchurl, cmake, giflib, libjpeg, libtiff, lib3ds, freetype
 , libpng, coin3d, jasper, gdal_1_11, xproto, libX11, libXmu
 , freeglut, mesa, doxygen, ffmpeg, xineLib, unzip, zlib, openal
 , libxml2, curl, a52dec, faad2, gdk_pixbuf, pkgconfig, kbproto, SDL
-, qt4, poppler, librsvg, gtk }:
+, qt4, poppler, librsvg, gtk
+, withApps ? true }:
 
 stdenv.mkDerivation rec {
   name = "openscenegraph-${version}";
@@ -20,11 +21,13 @@ stdenv.mkDerivation rec {
     pkgconfig kbproto SDL qt4 poppler librsvg gtk
   ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = [
     "-DMATH_LIBRARY="
     "-DCMAKE_C_FLAGS=-D__STDC_CONSTANT_MACROS=1"
     "-DCMAKE_CXX_FLAGS=-D__STDC_CONSTANT_MACROS=1"
-  ];
+  ] ++ lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF";
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";

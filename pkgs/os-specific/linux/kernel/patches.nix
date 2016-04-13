@@ -71,14 +71,9 @@ rec {
       patch = ./mips-ext3-n32.patch;
     };
 
-  ubuntu_fan =
+  ubuntu_fan_4_4 =
     { name = "ubuntu-fan";
-      patch = ./ubuntu-fan-3.patch;
-    };
-
-  ubuntu_fan_4 =
-    { name = "ubuntu-fan";
-      patch = ./ubuntu-fan-4.patch;
+      patch = ./ubuntu-fan-4.4.patch;
     };
 
   ubuntu_unprivileged_overlayfs =
@@ -158,5 +153,9 @@ rec {
   chromiumos_mfd_fix_dependency =
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
+    };
+  qat_common_Makefile =
+    { name = "qat_common_Makefile";
+      patch = ./qat_common_Makefile.patch;
     };
 }

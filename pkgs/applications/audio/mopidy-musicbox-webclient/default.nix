@@ -3,13 +3,13 @@
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-musicbox-webclient-${version}";
 
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "pimusicbox";
     repo = "mopidy-musicbox-webclient";
     rev = "v${version}";
-    sha256 = "0gnw6jn55jr6q7bdp70mk3cm5f6jy8lm3s7ayfmisihhjbl3rnaq";
+    sha256 = "0v09wy40ipl0b0dpgmcdl15c5g732c9jl7zipm4sy4pr8xiy6baa";
   };
 
   propagatedBuildInputs = [ mopidy ];

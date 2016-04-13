@@ -1,5 +1,6 @@
 { stdenv, fetchurl, docutils, makeWrapper, perl, pkgconfig, python, which
 , ffmpeg, freefont_ttf, freetype, libass, libpthreadstubs, lua, lua5_sockets
+, libuchardet, rubberband
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
@@ -59,11 +60,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchurl {
     url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "1fiqxx85s418qynq2fp0v7cpzrz8j285hwmc4fqgn5ny1vg1jdpw";
+    sha256 = "0vms3viwqcwl1mrgmf2yy4c69fvv7xpbkyrl693l6zpwynqd4b30";
   };
 
   patchPhase = ''
@@ -89,7 +90,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python which ];
 
   buildInputs = [
-    ffmpeg freetype libass libpthreadstubs lua lua5_sockets
+    ffmpeg freetype libass libpthreadstubs lua lua5_sockets libuchardet rubberband
   ] ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv

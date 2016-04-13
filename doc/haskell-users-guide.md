@@ -647,6 +647,30 @@ command, i.e. by running:
     rm /nix/var/nix/manifests/*
     rm /nix/var/nix/channel-cache/*
 
+### How to use the Haste Haskell-to-Javascript transpiler
+
+Open a shell with `haste-compiler` and `haste-cabal-install` (you don't actually need
+`node`, but it can be useful to test stuff):
+
+    $ nix-shell -p "haskellPackages.ghcWithPackages (self: with self; [haste-cabal-install haste-compiler])" -p nodejs
+
+You may not need the following step but if `haste-boot` fails to compile all the
+packages it needs, this might do the trick
+
+    $ haste-cabal update
+
+`haste-boot` builds a set of core libraries so that they can be used from Javascript
+transpiled programs:
+
+    $ haste-boot
+
+Transpile and run a "Hello world" program:
+
+    $ echo 'module Main where main = putStrLn "Hello world"' > hello-world.hs
+    $ hastec --onexec hello-world.hs
+    $ node hello-world.js
+    Hello world
+
 ### Builds on Darwin fail with `math.h` not found
 
 Users of GHC on Darwin have occasionally reported that builds fail, because the

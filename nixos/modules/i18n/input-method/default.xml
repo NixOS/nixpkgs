@@ -1,0 +1,131 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-input-methods">
+
+<title>Input Methods</title>
+
+<para>Input methods are an operating system component that allows any data, such 
+  as keyboard strokes or mouse movements, to be received as input. In this way 
+  users can enter characters and symbols not found on their input devices. Using 
+  an input method is obligatory for any language that has more graphemes than 
+  there are keys on the keyboard.</para>
+
+<para>The following input methods are available in NixOS:</para>
+
+<itemizedlist>
+  <listitem><para>IBus: The intelligent input bus.</para></listitem>
+  <listitem><para>Fcitx: A customizable lightweight input 
+      method.</para></listitem>
+  <listitem><para>Nabi: A Korean input method based on XIM.</para></listitem>
+  <listitem><para>Uim: The universal input method, is a library with a XIM 
+      bridge.</para></listitem>
+</itemizedlist>
+
+<section><title>IBus</title>
+
+<para>IBus is an Intelligent Input Bus. It provides full featured and user 
+  friendly input method user interface.</para>
+
+<para>The following snippet can be used to configure IBus:</para>
+
+<programlisting>
+i18n.inputMethod = {
+  enabled = "ibus";
+  ibus.engines = with pkgs.ibus-engines; [ anthy hangul mozc ];
+};
+</programlisting>
+
+<para><literal>i18n.inputMethod.ibus.engines</literal> is optional and can be 
+  used to add extra IBus engines.</para>
+
+<para>Available extra IBus engines are:</para>
+
+<itemizedlist>
+  <listitem><para>Anthy (<literal>ibus-engines.anthy</literal>): Anthy is a 
+      system for Japanese input method. It converts Hiragana text to Kana Kanji 
+      mixed text.</para></listitem>
+  <listitem><para>Hangul (<literal>ibus-engines.hangul</literal>): Korean input 
+      method.</para></listitem>
+  <listitem><para>m17n (<literal>ibus-engines.m17n</literal>): m17n is an input 
+      method that uses input methods and corresponding icons in the m17n 
+      database.</para></listitem>
+  <listitem><para>mozc (<literal>ibus-engines.mozc</literal>): A Japanese input 
+      method from Google.</para></listitem>
+  <listitem><para>Table (<literal>ibus-engines.table</literal>): An input method 
+      that load tables of input methods.</para></listitem>
+  <listitem><para>table-others (<literal>ibus-engines.table-others</literal>): 
+      Various table-based input methods.</para></listitem>
+</itemizedlist>
+</section>
+
+<section><title>Fcitx</title>
+
+<para>Fcitx is an input method framework with extension support. It has three 
+  built-in Input Method Engine, Pinyin, QuWei and Table-based input 
+  methods.</para>
+<para>The following snippet can be used to configure Fcitx:</para>
+
+<programlisting>
+i18n.inputMethod = {
+  enabled = "fcitx";
+  fcitx.engines = with pkgs.fcitx-engines; [ mozc hangul m17n ];
+};
+</programlisting>
+
+<para><literal>i18n.inputMethod.fcitx.engines</literal> is optional and can be 
+  used to add extra Fcitx engines.</para>
+
+<para>Available extra Fcitx engines are:</para>
+
+<itemizedlist>
+  <listitem><para>Anthy (<literal>fcitx-engines.anthy</literal>): Anthy is a 
+      system for Japanese input method. It converts Hiragana text to Kana Kanji 
+      mixed text.</para></listitem>
+  <listitem><para>Chewing (<literal>fcitx-engines.chewing</literal>): Chewing is 
+      an intelligent Zhuyin input method. It is one of the most popular input 
+      methods among Traditional Chinese Unix users.</para></listitem>
+  <listitem><para>Hangul (<literal>fcitx-engines.hangul</literal>): Korean input 
+      method.</para></listitem>
+  <listitem><para>m17n (<literal>fcitx-engines.m17n</literal>): m17n is an input 
+      method that uses input methods and corresponding icons in the m17n 
+      database.</para></listitem>
+  <listitem><para>mozc (<literal>fcitx-engines.mozc</literal>): A Japanese input 
+      method from Google.</para></listitem>
+  <listitem><para>table-others (<literal>fcitx-engines.table-others</literal>): 
+      Various table-based input methods.</para></listitem>
+</itemizedlist>
+</section>
+
+<section><title>Nabi</title>
+
+<para>Nabi is an easy to use Korean X input method. It allows you to enter 
+  phonetic Korean characters (hangul) and pictographic Korean characters 
+  (hanja).</para>
+<para>The following snippet can be used to configure Nabi:</para>
+
+<programlisting>
+i18n.inputMethod = {
+  enabled = "nabi";
+};
+</programlisting>
+</section>
+
+<section><title>Uim</title>
+
+<para>Uim (short for "universal input method") is a multilingual input method 
+  framework. Applications can use it through so-called bridges.</para>
+<para>The following snippet can be used to configure uim:</para>
+
+<programlisting>
+i18n.inputMethod = {
+  enabled = "uim";
+};
+</programlisting>
+
+<para>Note: The <literal>i18n.inputMethod.uim.toolbar</literal> option can be 
+  used to choose uim toolbar.</para>
+
+</section>
+</chapter>
