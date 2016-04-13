@@ -59,4 +59,7 @@ self: super: {
   comonad_5 = dontCheck super.comonad_5;  # https://github.com/ekmett/comonad/issues/33
   comonad = self.comonad_5;
 
+  # Versions <= 5.2 don't compile with transformers 0.5 or later.
+  bifunctors = self.bifunctors_5_3;
+
 }
