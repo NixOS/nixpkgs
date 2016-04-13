@@ -9,11 +9,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calligra-2.9.8";
+  name = "calligra-2.9.11";
 
   src = fetchurl {
     url = "mirror://kde/stable/${name}/${name}.tar.xz";
-    sha256 = "08a5k8gjmzp9yzq46xy0p1sw7dpvxmxh8zz6dyj8q1dq29719kkc";
+    sha256 = "02gaahp7a7m53n0hvrp3868s8w37b457isxir0z7b4mwhw7jv3di";
   };
 
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig makeWrapper ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       vector graphics.
     '';
     homepage = http://calligra.org;
-    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
+    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ebzzry ];
     inherit (kdelibs.meta) platforms;
   };
 }

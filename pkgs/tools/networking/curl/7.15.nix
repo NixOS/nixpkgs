@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "061bgjm6rv0l9804vmm4jvr023l52qvmy9qq4zjv4lgqhlljvhz3";
   };
 
+  patches = [ ./disable-ca-install.patch ];
+
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
@@ -33,12 +35,8 @@ stdenv.mkDerivation rec {
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
 
-  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
-  postConfigure = ''
-    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") || getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
-  '';
-
   configureFlags = [
+      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
     ]
@@ -76,5 +74,6 @@ stdenv.mkDerivation rec {
     homepage = "http://curl.haxx.se/";
     description = "A command line tool for transferring files with URL syntax";
     platforms = with stdenv.lib.platforms; allBut darwin;
+    broken = true;
   };
 }

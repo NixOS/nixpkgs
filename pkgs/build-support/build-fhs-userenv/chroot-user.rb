@@ -53,6 +53,7 @@ $unshare = make_fcall 'unshare', [Fiddle::TYPE_INT], Fiddle::TYPE_INT
 
 MS_BIND = 0x1000
 MS_REC  = 0x4000
+MS_SLAVE  = 0x80000
 $mount = make_fcall 'mount', [Fiddle::TYPE_VOIDP,
                               Fiddle::TYPE_VOIDP,
                               Fiddle::TYPE_VOIDP,
@@ -92,23 +93,31 @@ root = Dir.mktmpdir 'chrootenv'
 # we don't use threads at all.
 $cpid = $fork.call
 if $cpid == 0
-  # Save user UID and GID
-  uid = Process.uid
-  gid = Process.gid
+  # If we are root, no need to create new user namespace.
+  if Process.uid == 0
+    $unshare.call CLONE_NEWNS
+    # Mark all mounted filesystems as slave so changes
+    # don't propagate to the parent mount namespace.
+    $mount.call nil, '/', nil, MS_REC | MS_SLAVE, nil
+  else
+    # Save user UID and GID
+    uid = Process.uid
+    gid = Process.gid
 
-  # Create new mount and user namespaces
-  # CLONE_NEWUSER requires a program to be non-threaded, hence
-  # native fork above.
-  $unshare.call CLONE_NEWNS | CLONE_NEWUSER
+    # Create new mount and user namespaces
+    # CLONE_NEWUSER requires a program to be non-threaded, hence
+    # native fork above.
+    $unshare.call CLONE_NEWNS | CLONE_NEWUSER
 
-  # Map users and groups to the parent namespace
-  begin
-    # setgroups is only available since Linux 3.19
-    write_file '/proc/self/setgroups', 'deny'
-  rescue
+    # Map users and groups to the parent namespace
+    begin
+      # setgroups is only available since Linux 3.19
+      write_file '/proc/self/setgroups', 'deny'
+    rescue
+    end
+    write_file '/proc/self/uid_map', "#{uid} #{uid} 1"
+    write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
   end
-  write_file '/proc/self/uid_map', "#{uid} #{uid} 1"
-  write_file '/proc/self/gid_map', "#{gid} #{gid} 1"
 
   # Do rbind mounts.
   mounts.each do |from, rto|
@@ -117,6 +126,8 @@ if $cpid == 0
     $mount.call from, to, nil, MS_BIND | MS_REC, nil
   end
 
+  # Don't make root private so privilege drops inside chroot are possible
+  File.chmod(0755, root)
   # Chroot!
   Dir.chroot root
   Dir.chdir '/'

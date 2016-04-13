@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "powerline-fonts-2015-06-29";
+  name = "powerline-fonts-2015-12-11";
 
   src = fetchFromGitHub {
     owner = "powerline";
     repo = "fonts";
-    rev = "97dc451724fb24e1dd9892c988642b239b5dc67c";
-    sha256 = "1m0a8k916s74iv2k0kk36dz7d2hfb2zgf8m0b9hg71w4yd3bmj4w";
+    rev = "a44abd0e742ad6e7fd8d8bc4c3cad5155c9f3a92";
+    sha256 = "1pwz83yh28yd8aj6fbyfz8z3q3v67psszpd9mp4vv0ms9w8b5ajn";
   };
 
   buildPhase = "true";
@@ -19,6 +19,15 @@ stdenv.mkDerivation {
 
       mkdir -p $out/share/fonts/truetype
       cp -v */*.ttf $out/share/fonts/truetype
+
+      mkdir -p $out/share/fonts/bdf
+      cp -v */BDF/*.bdf $out/share/fonts/bdf
+
+      mkdir -p $out/share/fonts/pcf
+      cp -v */PCF/*.pcf.gz $out/share/fonts/pcf
+
+      mkdir -p $out/share/fonts/psf
+      cp -v */PSF/*.psf.gz $out/share/fonts/psf
     '';
 
   meta = with stdenv.lib; {
@@ -29,6 +38,6 @@ stdenv.mkDerivation {
     '';
     license = with licenses; [ asl20 free ofl ];
     platforms = platforms.all;
-    maintainer = with maintainers; [ malyn ];
+    maintainers = with maintainers; [ malyn ];
   };
 }

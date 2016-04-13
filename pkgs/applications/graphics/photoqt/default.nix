@@ -1,14 +1,9 @@
-{ stdenv, fetchurl, cmake, makeWrapper, exiv2, graphicsmagick
+{ stdenv, fetchurl, cmake, makeQtWrapper, exiv2, graphicsmagick
 , qtbase, qtdeclarative, qtmultimedia, qtquickcontrols, qttools
 }:
 
 let
   version = "1.3";
-  qmlPath = stdenv.lib.makeSearchPath "lib/qt5/qml/" [
-    qtquickcontrols
-    qtdeclarative
-    qtmultimedia
-  ];
 in
 stdenv.mkDerivation rec {
   name = "photoqt-${version}";
@@ -17,14 +12,17 @@ stdenv.mkDerivation rec {
     sha256 = "0j2kvxfb5pd9abciv161nkcsyam6n8kfqs8ymwj2mxiqflwbmfl1";
   };
 
-  buildInputs = [ cmake makeWrapper qtbase qttools exiv2 graphicsmagick ];
+  buildInputs = [
+    cmake makeQtWrapper qtbase qtquickcontrols qttools exiv2 graphicsmagick
+    qtmultimedia qtdeclarative
+  ];
 
   preConfigure = ''
     export MAGICK_LOCATION="${graphicsmagick}/include/GraphicsMagick"
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/photoqt --set QML2_IMPORT_PATH "${qmlPath}"
+    wrapQtProgram $out/bin/photoqt
   '';
 
   meta = {

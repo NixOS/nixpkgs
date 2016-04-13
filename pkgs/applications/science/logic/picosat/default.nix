@@ -2,20 +2,18 @@
 
 stdenv.mkDerivation rec {
   name    = "picosat-${version}";
-  version = "960";
+  version = "965";
 
   src = fetchurl {
     url = "http://fmv.jku.at/picosat/${name}.tar.gz";
-    sha256 = "05z8cfjk84mkna5ryqlq2jiksjifg3jhlgbijaq36sbn0i51iczd";
+    sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
-  dontAddPrefix = true;
-  configureFlags = "--shared";
+  configurePhase = "./configure.sh --shared --trace";
 
   installPhase = ''
    mkdir -p $out/bin $out/lib $out/include/picosat
-   cp picomus "$out"/bin
-   cp picosat "$out"/bin
+   cp picomus picomcs picosat picogcnf "$out"/bin
 
    cp libpicosat.a "$out"/lib
    cp libpicosat.so "$out"/lib

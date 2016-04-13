@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.4";
   name = "zerotierone";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "2d7ff178bd7fd284ebb7011d8a91bde51befda60f100eb5429a2dcb6626cf676";
+    sha256 = "10aw0dlkmprdvph3aqkqximxqkryf0l4jcnv2bbm7f1qvclqihva";
   };
 
   preConfigure = ''
@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
       substituteInPlace ./make-linux.mk \
           --replace 'CXX=$(shell which clang++ g++ c++ 2>/dev/null | head -n 1)' "CC=${gcc}/bin/g++";
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
-          --replace '/sbin/ip' "${iproute}/bin/ip"
+          --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
   '';
 
   buildInputs = [ openssl lzo zlib gcc iproute ];
 
   installPhase = ''
-    installBin zerotier-one
+    install -Dt "$out/bin/" zerotier-one
     ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
     ln -s $out/bin/zerotier-one $out/bin/zerotier-cli
   '';

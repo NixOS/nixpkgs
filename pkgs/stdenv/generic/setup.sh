@@ -174,14 +174,42 @@ ensureDir() {
 }
 
 
-installBin() {
-    mkdir -p $out/bin
-    cp "$@" $out/bin
+# Add $1/lib* into rpaths.
+# The function is used in multiple-outputs.sh hook,
+# so it is defined here but tried after the hook.
+_addRpathPrefix() {
+    if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
+        export NIX_LDFLAGS="-rpath $1/lib $NIX_LDFLAGS"
+        if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib64 $NIX_LDFLAGS"
+        fi
+        if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
+            export NIX_LDFLAGS="-rpath $1/lib32 $NIX_LDFLAGS"
+        fi
+    fi
+}
+
+# Return success if the specified file is an ELF object.
+isELF() {
+    local fn="$1"
+    local magic
+    exec {fd}< "$fn"
+    read -n 4 -u $fd magic
+    exec {fd}<&-
+    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
 }
 
 
 ######################################################################
 # Initialisation.
+
+
+# Set a fallback default value for SOURCE_DATE_EPOCH, used by some
+# build tools to provide a deterministic substitute for the "current"
+# time. Note that 1 = 1970-01-01 00:00:01. We don't use 0 because it
+# confuses some applications.
+export SOURCE_DATE_EPOCH
+: ${SOURCE_DATE_EPOCH:=1}
 
 
 # Wildcard expansions that don't match should expand to an empty list.
@@ -195,7 +223,6 @@ PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     addToSearchPath PATH $i/bin
-    addToSearchPath PATH $i/sbin
 done
 
 if [ "$NIX_DEBUG" = 1 ]; then
@@ -243,6 +270,10 @@ findInputs() {
         source "$pkg"
     fi
 
+    if [ -d $1/bin ]; then
+        addToSearchPath _PATH $1/bin
+    fi
+
     if [ -f "$pkg/nix-support/setup-hook" ]; then
         source "$pkg/nix-support/setup-hook"
     fi
@@ -270,10 +301,6 @@ done
 _addToNativeEnv() {
     local pkg=$1
 
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
-    fi
-
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook envHook "$pkg"
 }
@@ -285,13 +312,6 @@ done
 _addToCrossEnv() {
     local pkg=$1
 
-    # Some programs put important build scripts (freetype-config and similar)
-    # into their crossDrv bin path. Intentionally these should go after
-    # the nativePkgs in PATH.
-    if [ -d $1/bin ]; then
-        addToSearchPath _PATH $1/bin
-    fi
-
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook crossEnvHook "$pkg"
 }
@@ -301,16 +321,7 @@ for i in $crossPkgs; do
 done
 
 
-# Add the output as an rpath.
-if [ "$NIX_NO_SELF_RPATH" != 1 ]; then
-    export NIX_LDFLAGS="-rpath $out/lib $NIX_LDFLAGS"
-    if [ -n "$NIX_LIB64_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
-    fi
-    if [ -n "$NIX_LIB32_IN_SELF_RPATH" ]; then
-        export NIX_LDFLAGS="-rpath $out/lib32 $NIX_LDFLAGS"
-    fi
-fi
+_addRpathPrefix "$out"
 
 
 # Set the TZ (timezone) environment variable, otherwise commands like
@@ -361,6 +372,13 @@ export NIX_BUILD_CORES
 # Dummy implementation of the paxmark function. On Linux, this is
 # overwritten by paxctl's setup hook.
 paxmark() { true; }
+
+
+# Prevent OpenSSL-based applications from using certificates in
+# /etc/ssl.
+if [ -z "$SSL_CERT_FILE" ]; then
+  export SSL_CERT_FILE=/no-cert-file.crt
+fi
 
 
 ######################################################################
@@ -472,9 +490,11 @@ _defaultUnpack() {
     if [ -d "$fn" ]; then
 
         stripHash "$fn"
-        # We can't preserve hardlinks because they may have been introduced by
-        # store optimization, which might break things in the build
-        cp -pr --reflink=auto --no-preserve=timestamps "$fn" $strippedName
+
+        # We can't preserve hardlinks because they may have been
+        # introduced by store optimization, which might break things
+        # in the build.
+        cp -pr --reflink=auto "$fn" $strippedName
 
     else
 
@@ -612,12 +632,8 @@ fixLibtool() {
 configurePhase() {
     runHook preConfigure
 
-    if [ -z "$configureScript" ]; then
+    if [ -z "$configureScript" -a -x ./configure ]; then
         configureScript=./configure
-        if ! [ -x $configureScript ]; then
-            echo "no configure script, doing nothing"
-            return
-        fi
     fi
 
     if [ -z "$dontFixLibtool" ]; then
@@ -627,26 +643,30 @@ configurePhase() {
         done
     fi
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
         configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "$dontAddDisableDepTrack" ]; then
-        if grep -q dependency-tracking $configureScript; then
+        if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
             configureFlags="--disable-dependency-tracking $configureFlags"
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "$dontDisableStatic" ]; then
-        if grep -q enable-static $configureScript; then
+        if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
             configureFlags="--disable-static $configureFlags"
         fi
     fi
 
-    echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-    $configureScript $configureFlags "${configureFlagsArray[@]}"
+    if [ -n "$configureScript" ]; then
+        echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
+        $configureScript $configureFlags "${configureFlagsArray[@]}"
+    else
+        echo "no configure script, doing nothing"
+    fi
 
     runHook postConfigure
 }
@@ -657,17 +677,16 @@ buildPhase() {
 
     if [ -z "$makeFlags" ] && ! [ -n "$makefile" -o -e "Makefile" -o -e "makefile" -o -e "GNUmakefile" ]; then
         echo "no Makefile, doing nothing"
-        return
+    else
+        # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
+        makeFlags="SHELL=$SHELL $makeFlags"
+
+        echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
+        make ${makefile:+-f $makefile} \
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
+            $makeFlags "${makeFlagsArray[@]}" \
+            $buildFlags "${buildFlagsArray[@]}"
     fi
-
-    # See https://github.com/NixOS/nixpkgs/pull/1354#issuecomment-31260409
-    makeFlags="SHELL=$SHELL $makeFlags"
-
-    echo "make flags: $makeFlags ${makeFlagsArray[@]} $buildFlags ${buildFlagsArray[@]}"
-    make ${makefile:+-f $makefile} \
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
-        $makeFlags "${makeFlagsArray[@]}" \
-        $buildFlags "${buildFlagsArray[@]}"
 
     runHook postBuild
 }
@@ -689,7 +708,9 @@ checkPhase() {
 installPhase() {
     runHook preInstall
 
-    mkdir -p "$prefix"
+    if [ -n "$prefix" ]; then
+        mkdir -p "$prefix"
+    fi
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -718,24 +739,29 @@ fixupPhase() {
         prefix=${!output} runHook fixupOutput
     done
 
+
+    # Propagate build inputs and setup hook into the development output.
+
     if [ -n "$propagatedBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedBuildInputs" > "${!outputDev}/nix-support/propagated-build-inputs"
     fi
 
     if [ -n "$propagatedNativeBuildInputs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
-    fi
-
-    if [ -n "$propagatedUserEnvPkgs" ]; then
-        mkdir -p "$out/nix-support"
-        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+        mkdir -p "${!outputDev}/nix-support"
+        echo "$propagatedNativeBuildInputs" > "${!outputDev}/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$setupHook" ]; then
-        mkdir -p "$out/nix-support"
-        substituteAll "$setupHook" "$out/nix-support/setup-hook"
+        mkdir -p "${!outputDev}/nix-support"
+        substituteAll "$setupHook" "${!outputDev}/nix-support/setup-hook"
+    fi
+
+    # Propagate user-env packages into the output with binaries, TODO?
+
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "${!outputBin}/nix-support"
+        echo "$propagatedUserEnvPkgs" > "${!outputBin}/nix-support/propagated-user-env-packages"
     fi
 
     runHook postFixup

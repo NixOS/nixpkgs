@@ -1,49 +1,42 @@
-{ pkgs, stdenv, fetchurl, python, buildPythonPackage, pythonPackages, mygpoclient, intltool,
-  ipodSupport ? true, libgpod, gnome3 }:
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages, mygpoclient, intltool
+, ipodSupport ? true, libgpod
+, gnome3
+}:
 
-with pkgs.lib;
+buildPythonApplication rec {
+  name = "gpodder-${version}";
+  namePrefix = "";
 
-let
-  inherit (pythonPackages) coverage feedparser minimock sqlite3 dbus pygtk eyeD3;
-
-in buildPythonPackage rec {
-  name = "gpodder-3.8.4";
+  version = "3.9.0";
 
   src = fetchurl {
     url = "http://gpodder.org/src/${name}.tar.gz";
-    sha256 = "0cjpk92qjsws7ddbnq0r2h7vm5019zlpafgbxwsgllmjzkknj6pn";
+    sha256 = "1ik954idi0ldnw0wrv7mm71smyb6x66332jxcaf1dxsl12ccm44l";
   };
 
+  postPatch = with stdenv.lib; ''
+    sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
+
+    makeWrapperArgs="--suffix XDG_DATA_DIRS : '${concatStringsSep ":" [
+      "${gnome3.gnome_themes_standard}/share"
+      "$XDG_ICON_DIRS"
+      "$GSETTINGS_SCHEMAS_PATH"
+    ]}'"
+  '';
+
   buildInputs = [
-    coverage minimock sqlite3 mygpoclient intltool
+    intltool pythonPackages.coverage pythonPackages.minimock
     gnome3.gnome_themes_standard gnome3.defaultIconTheme
     gnome3.gsettings_desktop_schemas
   ];
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  propagatedBuildInputs = with pythonPackages; [
+    feedparser dbus mygpoclient sqlite3 pygtk eyeD3
+  ] ++ stdenv.lib.optional ipodSupport libgpod;
 
-  pythonPath = [ feedparser dbus mygpoclient sqlite3 pygtk eyeD3 ]
-    ++ stdenv.lib.optional ipodSupport libgpod;
-
-  postPatch = "sed -ie 's/PYTHONPATH=src/PYTHONPATH=\$(PYTHONPATH):src/' makefile";
-
-  preFixup = ''
-    wrapProgram $out/bin/gpodder \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  checkPhase = ''
+    LC_ALL=C python -m gpodder.unittests
   '';
-
-  # The `wrapPythonPrograms` script in the postFixup phase breaks gpodder. The
-  # easiest way to fix this is to call wrapPythonPrograms and then to clean up
-  # the wrapped file.
-  postFixup = ''
-    wrapPythonPrograms
-
-    sed -i "$out/bin/..gpodder-wrapped-wrapped" -e '{
-        /import sys; sys.argv/d
-    }'
-  '';
-
-  installPhase = "DESTDIR=/ PREFIX=$out make install";
 
   meta = {
     description = "A podcatcher written in python";

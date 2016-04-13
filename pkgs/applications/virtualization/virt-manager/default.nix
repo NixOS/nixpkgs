@@ -7,7 +7,7 @@
 with stdenv.lib;
 with pythonPackages;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "virt-manager-${version}";
   version = "1.3.1";
   namePrefix = "";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs =
     [ eventlet greenlet gflags netaddr carrot routes
-      PasteDeploy m2crypto ipy twisted sqlalchemy_migrate_0_7
+      PasteDeploy m2crypto ipy twisted
       distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
       urlgrabber virtinst pyGtkGlade pythonDBus gnome_python pygobject3
       libvirt libxml2Python ipaddr vte libosinfo gobjectIntrospection gtk3 mox

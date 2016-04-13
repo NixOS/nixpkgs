@@ -2,14 +2,14 @@
 
 #assert stdenv.lib.versionOlder kernel.version "3.17";
 
-let base = "batman-adv-2015.2"; in
+let base = "batman-adv-2016.0"; in
 
 stdenv.mkDerivation rec {
   name = "${base}-${kernel.version}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
-    sha256 = "0lj8q9fnrf9n434h9wb2385z65skmq8q64svx5hbnlcj0bjhyxw6";
+    sha256 = "0r5faf12ifpj8h1fklkzvy4ck359cadk8xh1l3n7vimh67hxbxbz";
   };
 
   preBuild = ''

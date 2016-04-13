@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, itstool, buildPythonPackage, python27, intltool, makeWrapper
+{ stdenv, fetchurl, itstool, buildPythonApplication, python27, intltool, makeWrapper
 , libxml2, pygobject3, gobjectIntrospection, gtk3, gnome3, pycairo, cairo
 }:
 
@@ -8,7 +8,7 @@ let
   version = "${minor}.0";
 in
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "meld-${version}";
   namePrefix = "";
 

@@ -41,7 +41,10 @@ stdenv.mkDerivation {
   addFlags = ./add-flags;
 
   inherit nativeTools nativeLibc nativePrefix gcc;
+  gcc_lib = gcc.lib or gcc;
   libc = if nativeLibc then null else libc;
+  libc_dev = if nativeLibc then null else libc.dev or libc;
+  libc_bin = if nativeLibc then null else libc.bin or libc;
   binutils = if nativeTools then null else binutils;
   # The wrapper scripts use 'cat', so we may need coreutils
   coreutils = if nativeTools then null else coreutils;

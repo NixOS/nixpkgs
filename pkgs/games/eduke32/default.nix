@@ -2,14 +2,15 @@
 , pkgconfig, SDL2, SDL2_mixer }:
 
 let
+  year = "2015";
   date = "20150420";
   rev = "5160";
-  version = "${date}-${rev}";
 in stdenv.mkDerivation rec {
   name = "eduke32-${version}";
+  version = "${date}-${rev}";
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/${version}/eduke32_src_${version}.tar.xz";
+    url = "http://dukeworld.duke4.net/eduke32/synthesis/old/${year}/${version}/eduke32_src_${version}.tar.xz";
     sha256 = "1nlq5jbglg00c1z1vsyl627fh0mqfxvk5qyxav5vzla2b4svik2v";
   };
 
@@ -66,7 +67,6 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     license = licenses.gpl2Plus;
     homepage = http://eduke32.com;

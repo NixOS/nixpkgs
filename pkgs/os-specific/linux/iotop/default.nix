@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "iotop-0.6";
   namePrefix = "";
 

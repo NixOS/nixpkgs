@@ -19,7 +19,7 @@
 , libtool ? null
 , lm_sensors ? null
 , lvm2 ? null
-, mysql ? null
+, libmysql ? null
 , postgresql ? null
 , protobufc ? null
 , python ? null
@@ -30,9 +30,9 @@
 , varnish ? null
 , yajl ? null
 }:
-
 stdenv.mkDerivation rec {
-  name = "collectd-5.5.0";
+  version = "5.5.0";
+  name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
     cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
-    lm_sensors libxml2 lvm2 mysql.lib postgresql protobufc rabbitmq-c rrdtool
+    lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
     varnish yajl jdk libtool python udev
   ];
 

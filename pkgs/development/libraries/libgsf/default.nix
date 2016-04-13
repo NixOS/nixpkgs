@@ -4,11 +4,11 @@
 with { inherit (stdenv.lib) optionals; };
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.34";
+  name = "libgsf-1.14.36";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/libgsf/1.14/${name}.tar.xz";
-    sha256 = "f0fea447e0374a73df45b498fd1701393f8e6acb39746119f8a292fb4a0cb528";
+    sha256 = "0h19ssxzz0cmznwga2xy55kjibm24mwxqarnpd0w7xy0hrzm1dvi";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

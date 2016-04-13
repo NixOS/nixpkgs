@@ -1,9 +1,9 @@
-{ fetchgit, stdenv, cmake, kdelibs } :
+{ fetchgit, stdenv, cmake, kdelibs, automoc4 } :
 
 stdenv.mkDerivation rec {
   name = "kgocode-0.0.1";
 
-  buildInputs = [ cmake kdelibs ];
+  buildInputs = [ cmake kdelibs automoc4 ];
 
   src = fetchgit {
     url = https://bitbucket.org/lucashnegri/kgocode.git;
@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "a plugin for KTextEditor (Kate, KDevelop, among others) that provides basic code completion for the Go programming language. Uses gocode as completion provider";
+    description = "Go code completion for Kate, KDevelop and others";
+    longDescription = ''
+      A plugin for KTextEditor (Kate, KDevelop, among others) that provides
+      basic code completion for the Go programming language.
+      Uses gocode as completion provider.
+    '';
     homepage    = https://bitbucket.org/lucashnegri/kgocode/overview;
     maintainers = with maintainers; [ qknight ];
     license = licenses.gpl3Plus;

@@ -1,7 +1,7 @@
 
 { stdenv, fetchurl, pythonPackages, sqlite, which, strace }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "glance-${version}";
   version = "11.0.0";
   namePrefix = "";
@@ -15,7 +15,7 @@ pythonPackages.buildPythonPackage rec {
 
   # https://github.com/openstack/glance/blob/stable/liberty/requirements.txt
   propagatedBuildInputs = with pythonPackages; [
-     pbr sqlalchemy_1_0 anyjson eventlet PasteDeploy routes webob sqlalchemy_migrate
+     pbr sqlalchemy anyjson eventlet PasteDeploy routes webob sqlalchemy_migrate
      httplib2 pycrypto iso8601 stevedore futurist keystonemiddleware paste
      jsonschema keystoneclient pyopenssl six retrying semantic-version qpid-python
      WSME osprofiler glance_store castellan taskflow cryptography xattr pysendfile

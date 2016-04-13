@@ -63,7 +63,7 @@ in
     };
 
     boot.extraModulePackages = mkOption {
-      type = types.listOf types.path;
+      type = types.listOf types.package;
       default = [];
       example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
@@ -183,6 +183,9 @@ in
         "ide_cd"
         "ide_disk"
         "ide_generic"
+
+        # SD cards and internal eMMC drives.
+        "mmc_block"
 
         # Support USB keyboards, in case the boot fails and we only have
         # a USB keyboard.

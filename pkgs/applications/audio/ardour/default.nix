@@ -15,7 +15,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "4.4";
+  tag = "4.7";
 
 in
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ardour";
     repo = "ardour";
-    rev = "b00d75adf63db155ef2873bd9d259dc8ca256be6";
-    sha256 = "1gnrcnq2ksnh7fsa301v1c4p5dqrbqpjylf02rg3za3ab58wxi7l";
+    rev = "d84a8222f2b6dab5028b2586f798535a8766670e";
+    sha256 = "149gswphz77m3pkzsn2nqbm6yvcfa3fva560bcvjzlgb73f64q5l";
   };
 
   buildInputs =
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     ];
 
   # ardour's wscript has a "tarball" target but that required the git revision
-  # be available. Since this is an unzipped tarball fetched from github we 
+  # be available. Since this is an unzipped tarball fetched from github we
   # have to do that ourself.
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
-    sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
   '';
 

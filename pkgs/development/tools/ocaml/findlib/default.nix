@@ -4,12 +4,13 @@ let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
 in
 
-stdenv.mkDerivation {
-  name = "ocaml-findlib-1.5.3";
+stdenv.mkDerivation rec {
+  name = "ocaml-findlib-${version}";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = http://download.camlcity.org/download/findlib-1.5.3.tar.gz;
-    sha256 = "1kw2siv4pc8q060m9xpgxvjs07ic1kiphyxmkwcz6nyb91p8286r";
+    url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
+    sha256 = "02abg1lsnwvjg3igdyb8qjgr5kv1nbwl4gaf8mdinzfii5p82721";
   };
 
   buildInputs = [m4 ncurses ocaml];
@@ -50,10 +51,12 @@ stdenv.mkDerivation {
     homepage = http://projects.camlcity.org/projects/findlib.html;
     description = "O'Caml library manager";
     license = stdenv.lib.licenses.mit;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
       stdenv.lib.maintainers.vbmithr
     ];
   };
 }
+
+

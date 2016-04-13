@@ -6,18 +6,18 @@ let
   p = if stdenv.is64bit then {
       arch = "x86_64";
       gcclib = "${stdenv.cc.cc}/lib64";
-      sha256 = "1dr976z0zgg5jk477hrnfmpcx4llh5xi1493k0pkp28m6ypbxy2q";
+      sha256 = "0k05ybvnv0zx4vfx55jyhia38qqysaj68mapq0gwgf74k3a943g2";
     }
     else {
       arch = "i386";
       gcclib = "${stdenv.cc.cc}/lib";
-      sha256 = "01v0caf194y6yb0zc0d3ywx3y0rwb7sxkav4ickd4l968jpi8p91";
+      sha256 = "09z9idmp7idcq0alwkla9kal9h82dx11jqh678lc4rviqggxzxhp";
     };
 in 
 stdenv.mkDerivation rec {
 
   name = "yandex-disk-${version}";
-  version = "0.1.5.940";
+  version = "0.1.5.948";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-disk/rpm/stable/${p.arch}/${name}-1.fedora.${p.arch}.rpm";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
     ${patchelf}/bin/patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${zlib}/lib:${p.gcclib}" \
+      --set-rpath "${zlib.out}/lib:${p.gcclib}" \
       $out/bin/yandex-disk
   '';
 

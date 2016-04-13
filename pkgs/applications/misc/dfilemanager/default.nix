@@ -1,17 +1,17 @@
 { stdenv, fetchgit, cmake, file, qtbase, qttools, qtx11extras, solid }:
 
 let
-  version = "git-2015-07-25";
+  version = "git-2016-01-10";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dfilemanager-${version}";
   src = fetchgit {
     url = "git://git.code.sf.net/p/dfilemanager/code";
-    rev = "99afcde199378eb0d499c49a9e28846c22e27483";
-    sha256 = "1dd21xl24xvxs100j8nzhpaqfqk8srqs92al9c03jmyjlk31s6lf";
+    rev = "2c5078b05e0ad74c037366be1ab3e6a03492bde4";
+    sha256 = "1qwhnlcc2j8sr1f3v63sxs3m7q7w1xy6c2jqsnznjgm23b5h3hxd";
   };
 
-  buildInputs = [ cmake qtbase qttools qtx11extras file solid ];
+  buildInputs = [ cmake qtbase qttools file solid ];
 
   cmakeFlags = "-DQT5BUILD=true";
 

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python, pythonPackages, makeWrapper, gettext }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "git-cola-${version}";
-  version = "2.2.1";
+  version = "2.5";
 
   src = fetchurl {
     url = "https://github.com/git-cola/git-cola/archive/v${version}.tar.gz";
-    sha256 = "1v1s9gx16xihdcck4qp92bdci8zc6pb5a3z3y8k9jqj97hfkw2nz";
+    sha256 = "0ybjmlwm1plnvqi20y91ci7sgldzwlwn86vyyn9a157h7lf4ngb8";
   };
 
   buildInputs = [ makeWrapper gettext ];

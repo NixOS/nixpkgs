@@ -133,3 +133,4 @@ fi
 
 mkdir -p $out/nix-support
 echo $system > $out/nix-support/system
+echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products

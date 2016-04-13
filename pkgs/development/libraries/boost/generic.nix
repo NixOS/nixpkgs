@@ -1,5 +1,5 @@
 { stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
-, toolset ? if stdenv.isDarwin then "clang" else null
+, toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -58,14 +58,14 @@ let
     "--layout=${layout}"
     "variant=${variant}"
     "threading=${threading}"
-    "runtime-link=${runtime-link}"
+  ] ++ optional (link != "static") "runtime-link=${runtime-link}" ++ [
     "link=${link}"
     "${cflags}"
   ] ++ optional (variant == "release") "debug-symbols=off";
 
   nativeB2Flags = [
-    "-sEXPAT_INCLUDE=${expat}/include"
-    "-sEXPAT_LIBPATH=${expat}/lib"
+    "-sEXPAT_INCLUDE=${expat.dev}/include"
+    "-sEXPAT_LIBPATH=${expat.out}/lib"
   ] ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null) "--user-config=user-config.jam";
   nativeB2Args = concatStringsSep " " (genericB2Flags ++ nativeB2Flags);
@@ -148,7 +148,7 @@ stdenv.mkDerivation {
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags ++ [
-    "--with-icu=${icu}"
+    "--with-icu=${icu.dev}"
     "--with-python=${python.interpreter}"
   ] ++ optional (toolset != null) "--with-toolset=${toolset}";
 
@@ -159,6 +159,7 @@ stdenv.mkDerivation {
   postFixup = fixup;
 
   outputs = [ "out" "dev" "lib" ];
+  setOutputFlags = false;
 
   crossAttrs = rec {
     buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];

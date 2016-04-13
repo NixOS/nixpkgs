@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/pdfgrep/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/pdfgrep/${version}/${name}.tar.gz";
     sha256 = "6e8bcaf8b219e1ad733c97257a97286a94124694958c27506b2ea7fc8e532437";
   };
 

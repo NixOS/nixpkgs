@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gpsd, libcap }:
 
 let
-  ver = "2015.2";
+  ver = "2016.0";
 in
 stdenv.mkDerivation rec {
   name = "alfred-${ver}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
-    sha256 = "0cyr3bxwypddifg18yi3i5mcdam8izlq3ayrbkjir2b4vqhixs3s";
+    sha256 = "1zlmcp9r1xwp6li56j5ip9x7h5gjdhh0gi6cb3f8x6ydszhynxbf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

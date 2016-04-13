@@ -1,8 +1,8 @@
 { stdenv, fetchurl, libgcrypt, libnl, pkgconfig, pythonPackages, wireless-regdb }:
 
-let version = "3.18"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "crda-${version}";
+  version = "3.18";
 
   src = fetchurl {
     sha256 = "1gydiqgb08d9gbx4l6gv98zg3pljc984m50hmn3ysxcbkxkvkz23";
@@ -36,7 +36,6 @@ stdenv.mkDerivation {
   checkTarget = "verify";
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Linux wireless Central Regulatory Domain Agent";
     longDescription = ''
       CRDA acts as the udev helper for communication between the kernel and

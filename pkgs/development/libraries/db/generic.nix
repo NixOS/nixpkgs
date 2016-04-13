@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     (if cxxSupport then "--enable-cxx" else "--disable-cxx")
     (if compat185 then "--enable-compat185" else "--disable-compat185")
     "--enable-dbm"
+    (stdenv.lib.optionalString stdenv.isFreeBSD "--with-pic")
   ];
 
   preConfigure = ''

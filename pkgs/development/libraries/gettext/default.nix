@@ -1,34 +1,37 @@
-{ stdenv, fetchurl, libiconv, xz }:
+{ stdenv, lib, fetchurl, libiconv, xz }:
 
-stdenv.mkDerivation (rec {
-  name = "gettext-0.19.6";
+stdenv.mkDerivation rec {
+  name = "gettext-${version}";
+  version = "0.19.7";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0pb9vp4ifymvdmc31ks3xxcnfqgzj8shll39czmk8c1splclqjzd";
+    sha256 = "0gy2b2aydj8r0sapadnjw8cmb8j2rynj28d5qs1mfa800njd51jk";
   };
+  patches = [ ./absolute-paths.diff ];
 
   outputs = [ "out" "doc" ];
 
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]
-     ++ (stdenv.lib.optionals stdenv.isCygwin
-          [ "--disable-java"
+     ++ lib.optionals stdenv.isCygwin [
+            "--disable-java"
             "--disable-native-java"
             # Share the cache among the various `configure' runs.
             "--config-cache"
             "--with-included-gettext"
             "--with-included-glib"
             "--with-included-libcroco"
-          ])
+        ]
      # avoid retaining reference to CF during stdenv bootstrap
-     ++ (stdenv.lib.optionals stdenv.isDarwin [
-        "gt_cv_func_CFPreferencesCopyAppValue=no"
-        "gt_cv_func_CFLocaleCopyCurrent=no"
-      ]);
+     ++ lib.optionals stdenv.isDarwin [
+            "gt_cv_func_CFPreferencesCopyAppValue=no"
+            "gt_cv_func_CFLocaleCopyCurrent=no"
+        ];
 
-  patchPhase = ''
+  postPatch = ''
+   substituteAllInPlace gettext-runtime/src/gettext.sh.in
    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
@@ -43,16 +46,16 @@ stdenv.mkDerivation (rec {
       echo gl_cv_func_wcwidth_works=yes > cachefile
       configureFlags="$configureFlags --cache-file=`pwd`/cachefile"
     fi
-  '' + stdenv.lib.optionalString stdenv.isCygwin ''
+  '' + lib.optionalString stdenv.isCygwin ''
     sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
-  buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ xz xz.bin libiconv ];
 
   enableParallelBuilding = true;
 
   crossAttrs = {
-    buildInputs = stdenv.lib.optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
+    buildInputs = lib.optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
       stdenv.ccCross.libc.libiconv.crossDrv;
     # Gettext fails to guess the cross compiler
     configureFlags = "CXX=${stdenv.cross.config}-g++";
@@ -82,8 +85,8 @@ stdenv.mkDerivation (rec {
 
     homepage = http://www.gnu.org/software/gettext/;
 
-    maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with lib.maintainers; [ zimbatm ];
+    platforms = lib.platforms.all;
   };
 }
 
@@ -100,4 +103,4 @@ stdenv.mkDerivation (rec {
    sed -i gettext-tools/gnulib-lib/Makefile.in \
           -e 's/am_libgettextlib_la_OBJECTS =/am_libgettextlib_la_OBJECTS = error.lo/g'
    '';
-})
+}

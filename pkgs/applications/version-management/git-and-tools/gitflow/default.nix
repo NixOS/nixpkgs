@@ -1,12 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gitflow-${version}";
-  version = "1.8.0";
+  pname = "gitflow";
+  version = "1.9.1";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/petervanderdoes/gitflow/archive/${version}.tar.gz";
-    sha256 = "1vxdawx4sinl19g59ifmrdalmr2dl5pkgawyj9z0s5mcildi6fc2";
+  src = fetchFromGitHub {
+    owner = "petervanderdoes";
+    repo = pname;
+    rev = version;
+    sha256 = "0ad2421r3iq4xrdy46f4rrqbm8r3xphqcsdj3gqy8fnlrmxw5dfw";
   };
 
   preBuild = ''

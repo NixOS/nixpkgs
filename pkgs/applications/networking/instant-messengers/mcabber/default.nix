@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mcabber-${version}";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "http://mcabber.com/files/mcabber-${version}.tar.bz2";
-    sha256 = "0ckh2l5fbnykzbvdrqjwd1ppalaifb79nnizh8kra2sy76xbqxjl";
+    sha256 = "1phzfsl6cfzaga140dm8bb8q678j0qsw29cc03rw4vkcxa8kh577";
   };
 
   buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];

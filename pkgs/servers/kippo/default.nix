@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       url = "https://kippo.googlecode.com/files/kippo-${version}.tar.gz";
       sha1 = "f57a5cf88171cb005afe44a4b33cb16f825c33d6";
     };
-    buildInputs = with pkgs.pythonPackages; [ pycrypto pyasn1 twisted ];
+    buildInputs = with pkgs.pythonPackages; [ pycrypto pyasn1 twisted_11 ];
     installPhase = ''
         substituteInPlace ./kippo.tac --replace "kippo.cfg" "$out/src/kippo.cfg"
         substituteInPlace ./kippo.cfg --replace "log_path = log" "log_path = /var/log/kippo" \

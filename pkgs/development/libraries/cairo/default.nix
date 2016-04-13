@@ -4,6 +4,7 @@
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
 , pdfSupport ? true
+, darwin
 }:
 
 assert glSupport -> mesa_noglu != null;
@@ -11,54 +12,65 @@ assert glSupport -> mesa_noglu != null;
 with { inherit (stdenv.lib) optional optionals; };
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.4";
+  name = "cairo-1.14.6";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "05p75r914d809711yg9rapgmmi4hymzbarhd3w0yrfadhiy9rv7n";
+    sha256 = "0lmjlzmghmr27y615px9hkm552x7ap6pmq9mfbzr6smp8y2b6g31";
   };
 
-  nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev"; # very small
+
+  nativeBuildInputs = [
+    pkgconfig
+    libiconv
+  ] ++ libintlOrEmpty ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    CoreGraphics
+    ApplicationServices
+    Carbon
+  ]);
 
   propagatedBuildInputs =
-    with xorg; [ xorg.xlibsWrapper fontconfig expat freetype pixman zlib libpng ]
+    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng ]
     ++ optional (!stdenv.isDarwin) libXrender
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
-    ++ optionals glSupport [ mesa_noglu ]
-    ;
+    ++ optional glSupport mesa_noglu
+    ; # TODO: maybe liblzo but what would it be for here?
 
-  configureFlags = [ "--enable-tee" ]
+  configureFlags = if stdenv.isDarwin then [
+    "--disable-dependency-tracking"
+    "--enable-quartz"
+    "--enable-quartz-font"
+    "--enable-quartz-image"
+    "--enable-ft"
+  ] else ([ "--enable-tee" ]
     ++ optional xcbSupport "--enable-xcb"
     ++ optional glSupport "--enable-gl"
     ++ optional pdfSupport "--enable-pdf"
-    ;
+  );
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
-    (stdenv.lib.optionalString stdenv.isFreeBSD
+    stdenv.lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '') 
-       +
+       ''
+    +
     ''
     # Work around broken `Requires.private' that prevents Freetype
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
     '';
 
   enableParallelBuilding = true;
 
-  # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc"
-    + stdenv.lib.optionalString stdenv.isDarwin (''
-      #newline
-    '' + glib.flattenInclude
-    );
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
   meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";

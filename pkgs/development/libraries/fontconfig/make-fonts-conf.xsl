@@ -23,15 +23,15 @@
     <fontconfig>
       <xsl:apply-templates select="child::node()[name() != 'dir' and name() != 'cachedir' and name() != 'include']" />
 
-      <!-- fontconfig distribution conf.d -->
-      <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
-      <!-- versioned system-wide config -->
-      <include ignore_missing="yes">/etc/fonts/<xsl:value-of select="$fontconfigConfigVersion" />/conf.d</include>
-
       <!-- the first cachedir will be used to store the cache -->
       <cachedir prefix="xdg">fontconfig</cachedir>
       <!-- /var/cache/fontconfig is useful for non-nixos systems -->
       <cachedir>/var/cache/fontconfig</cachedir>
+
+      <!-- fontconfig distribution conf.d -->
+      <include><xsl:value-of select="$fontconfig" />/etc/fonts/conf.d</include>
+      <!-- versioned system-wide config -->
+      <include ignore_missing="yes">/etc/fonts/<xsl:value-of select="$fontconfigConfigVersion" />/conf.d</include>
 
       <dir prefix="xdg">fonts</dir>
       <xsl:for-each select="str:tokenize($fontDirectories)">

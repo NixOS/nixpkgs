@@ -1,4 +1,4 @@
-{ stdenv, makeQtWrapper, fetchFromGitHub
+{ stdenv, makeQtWrapper, fetchFromGitHub, fetchpatch
 , cmake, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 , themes
@@ -20,13 +20,19 @@ let
     patches = [
       ./0001-ignore-config-mtime.patch
       ./0002-fix-ConfigReader-QStringList-corruption.patch
+      (fetchpatch {
+        url = https://github.com/benjarobin/sddm/commit/7d05362e3c7c5945ad85b0176771bc1c5a370598.patch;
+        sha256 = "17f174lsb8vm7k1vx00yiqcipyyr6hgg4rm1rclps7saapfah5sj";
+      })
     ];
 
     nativeBuildInputs = [ cmake pkgconfig qttools ];
 
     buildInputs = [
-      libxcb libpthreadstubs libXdmcp libXau qtbase qtdeclarative pam systemd
+      libxcb libpthreadstubs libXdmcp libXau qtbase pam systemd
     ];
+
+    propagatedBuildInputs = [ qtdeclarative ];
 
     cmakeFlags = [
       "-DCONFIG_FILE=/etc/sddm.conf"
@@ -66,7 +72,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ lndir makeQtWrapper ];
   buildInputs = [ unwrapped ] ++ themes;
-  inherit themes;
+  themes = map (pkg: pkg.out or pkg) themes;
   inherit unwrapped;
 
   installPhase = ''
@@ -75,7 +81,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/sddm"
     for pkg in $unwrapped $themes; do
         local sddmDir="$pkg/share/sddm"
-        if [[ -d "$sddmDir" ]]; then
+        if [ -d "$sddmDir" ]; then
             lndir -silent "$sddmDir" "$out/share/sddm"
         fi
     done

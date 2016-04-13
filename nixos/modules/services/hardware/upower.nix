@@ -27,6 +27,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.upower;
+        defaultText = "pkgs.upower";
         example = lib.literalExample "pkgs.upower";
         description = ''
           Which upower package to use.
@@ -50,7 +51,7 @@ in
 
     systemd.services.upower =
       { description = "Power Management Daemon";
-        path = [ pkgs.glib ]; # needed for gdbus
+        path = [ pkgs.glib.out ]; # needed for gdbus
         serviceConfig =
           { Type = "dbus";
             BusName = "org.freedesktop.UPower";

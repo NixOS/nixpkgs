@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, alsaLib }:
+{ stdenv, fetchFromGitHub, unzip, alsaLib }:
 let
   version = "1.2";
 in
@@ -6,9 +6,11 @@ stdenv.mkDerivation rec {
   name = "direwolf-${version}";
   inherit version;
 
-  src = fetchurl {
-    url = "http://home.comcast.net/~wb2osz/Version%201.2/direwolf-${version}-src.zip";
-    sha256 = "0csl6harx7gmjmamxy0ylzhbamppphffisk8j33dc6g08k6rc77f";
+  src = fetchFromGitHub {
+    owner = "wb2osz";
+    repo = "direwolf";
+    rev = "8b81a32";
+    sha256 = "0r4fgdxghh292bzhqshr7zl5cg2lfsvlgmy4d5vqcli7x6qa1gcs";
   };
 
   buildInputs = [
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway.";
+    description = "A Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
     # On the page: This page will be disappearing on October 8, 2015.
     homepage = https://home.comcast.net/~wb2osz/site/;
     license = licenses.gpl2;

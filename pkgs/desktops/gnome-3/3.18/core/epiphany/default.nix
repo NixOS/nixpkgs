@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, pkgconfig, gtk3, glib, nspr, icu
-, bash, makeWrapper, gnome3, libwnck3, libxml2, libxslt, libtool
-, webkitgtk, libsoup, libsecret, gnome_desktop, libnotify, p11_kit
+, bash, wrapGAppsHook, gnome3, libwnck3, libxml2, libxslt, libtool
+, webkitgtk, libsoup, glib_networking, libsecret, gnome_desktop, libnotify, p11_kit
 , sqlite, gcr, avahi, nss, isocodes, itstool, file, which
 , gdk_pixbuf, librsvg, gnome_common }:
 
@@ -12,25 +12,17 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ pkgconfig file wrapGAppsHook ];
 
   buildInputs = [ gtk3 glib intltool libwnck3 libxml2 libxslt pkgconfig file 
                   webkitgtk libsoup libsecret gnome_desktop libnotify libtool
                   sqlite isocodes nss itstool p11_kit nspr icu gnome3.yelp_tools
                   gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common
-                  gcr avahi gnome3.gsettings_desktop_schemas makeWrapper ];
+                  gcr avahi gnome3.gsettings_desktop_schemas gnome3.dconf ];
 
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr -I${nss}/include/nss -I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss -I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
-
-  preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram "$f" \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Epiphany;

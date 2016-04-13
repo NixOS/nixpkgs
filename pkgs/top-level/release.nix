@@ -9,7 +9,7 @@
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
 
-{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
+{ nixpkgs ? { outPath = (import ./../.. {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
 , # The platforms for which we build Nixpkgs.
   supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" ]
@@ -25,6 +25,8 @@ let
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
+      metrics = import ./metrics.nix { inherit pkgs nixpkgs; };
+
       manual = import ../../doc;
       lib-tests = import ../../lib/tests/release.nix { inherit nixpkgs; };
 
@@ -33,6 +35,7 @@ let
           meta.description = "Release-critical builds for the Nixpkgs unstable channel";
           constituents =
             [ jobs.tarball
+              jobs.metrics
               jobs.manual
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
@@ -40,11 +43,15 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.linux.i686-linux
+              jobs.python.x86_64-linux
+              jobs.python.i686-linux
+              jobs.python.x86_64-darwin
+              jobs.python3.x86_64-linux
+              jobs.python3.i686-linux
+              jobs.python3.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               jobs.thunderbird.i686-linux
-              jobs.glib-tested.x86_64-linux # standard glib doesn't do checks
-              jobs.glib-tested.i686-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
@@ -113,12 +120,9 @@ let
       gajim = linux;
       gawk = all;
       gcc = linux;
-      gcc44 = linux;
       gcj = linux;
       ghostscript = linux;
       ghostscriptX = linux;
-      git = linux;
-      gitFull = linux;
       glibc = linux;
       glibcLocales = linux;
       glxinfo = linux;
@@ -162,11 +166,7 @@ let
       mod_python = linux;
       mupen64plus = linux;
       mutt = linux;
-      mysql = linux;
-      mysql51 = linux;
-      mysql55 = linux;
       nano = allBut cygwin;
-      ncat = linux;
       netcat = all;
       nss_ldap = linux;
       nssmdns = linux;
@@ -209,10 +209,9 @@ let
       uae = linux;
       viking = linux;
       vice = linux;
-      vim = linux;
       vimHugeX = linux;
       vncrec = linux;
-      vorbisTools = linux;
+      vorbis-tools = linux;
       vsftpd = linux;
       w3m = all;
       weechat = linux;
@@ -235,6 +234,8 @@ let
       zsh = linux;
       zsnes = ["i686-linux"];
 
+      #emacs24PackagesNg = packagePlatforms pkgs.emacs24PackagesNg;
+
       gnome = {
         gnome_panel = linux;
         metacity = linux;
@@ -244,7 +245,7 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
 
-      rPackages = packagePlatforms pkgs.rPackages;
+      #rPackages = packagePlatforms pkgs.rPackages;
 
       strategoPackages = {
         sdf = linux;
@@ -254,9 +255,15 @@ let
         dryad = linux;
       };
 
-      pythonPackages = {
-        zfec = linux;
-      };
+      ocamlPackages = { };
+
+      perlPackages = { };
+
+      pythonPackages = { };
+      python2Packages = { };
+      python27Packages = { };
+      python3Packages = { };
+      python35Packages = { };
 
       xorg = {
         fontadobe100dpi = linux ++ darwin;

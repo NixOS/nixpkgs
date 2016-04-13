@@ -32,7 +32,7 @@ in customEmacsPackages.emacsWithPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 */
 
-{ lib, makeWrapper, stdenv }: self:
+{ lib, lndir, makeWrapper, stdenv }: self:
 
 with lib; let inherit (self) emacs; in
 
@@ -47,65 +47,69 @@ in
 
 stdenv.mkDerivation {
   name = (appendToName "with-packages" emacs).name;
-  nativeBuildInputs = [ emacs makeWrapper ];
+  nativeBuildInputs = [ emacs lndir makeWrapper ];
   inherit emacs explicitRequires;
   phases = [ "installPhase" ];
   installPhase = ''
-    requires=""
+    readonly SHARE="share/emacs-with-packages"
+
+    mkdir -p "$out/bin"
+    mkdir -p "$out/$SHARE/bin"
+    mkdir -p "$out/$SHARE/site-lisp"
+
+    local requires
     for pkg in $explicitRequires; do
       findInputs $pkg requires propagated-user-env-packages
     done
     # requires now holds all requested packages and their transitive dependencies
 
-    siteStart="$out/share/emacs/site-lisp/site-start.el"
+    siteStart="$out/$SHARE/site-lisp/site-start.el"
 
-    addEmacsPath() {
-      local list=$1
-      local path=$2
-      # Add the path to the search path list, but only if it exists
-      if [[ -d "$path" ]]; then
-        echo "(add-to-list '$list \"$path\")" >>"$siteStart"
-      fi
-    }
-
-    # Add a dependency's paths to site-start.el
-    addToEmacsPaths() {
-      addEmacsPath "exec-path" "$1/bin"
-      addEmacsPath "load-path" "$1/share/emacs/site-lisp"
-      addEmacsPath "package-directory-list" "$1/share/emacs/site-lisp/elpa"
-    }
-
-    mkdir -p $out/share/emacs/site-lisp
     # Begin the new site-start.el by loading the original, which sets some
     # NixOS-specific paths. Paths are searched in the reverse of the order
     # they are specified in, so user and system profile paths are searched last.
-    echo "(load-file \"$emacs/share/emacs/site-lisp/site-start.el\")" >"$siteStart"
-    echo "(require 'package)" >>"$siteStart"
+    cat >"$siteStart" <<EOF
+(load-file "$emacs/share/emacs/site-lisp/site-start.el")
+(add-to-list 'load-path "$out/$SHARE/site-lisp")
+(add-to-list 'exec-path "$out/$SHARE/bin")
+EOF
 
-    # Set paths for the dependencies of the requested packages. These paths are
-    # searched before the profile paths, but after the explicitly-required paths.
-    for pkg in $requires; do
-      # The explicitly-required packages are also in the list, but we will add
-      # those paths last.
-      if ! ( echo "$explicitRequires" | grep "$pkg" >/dev/null ) ; then
-        addToEmacsPaths $pkg
+    linkPath() {
+      local pkg=$1
+      local origin_path=$2
+      local dest_path=$3
+
+      # Add the path to the search path list, but only if it exists
+      if [[ -d "$pkg/$origin_path" ]]; then
+        lndir -silent "$pkg/$origin_path" "$out/$dest_path"
       fi
+    }
+
+    # Add a package's paths to site-start.el
+    linkEmacsPackage() {
+      linkPath "$1" "bin" "$SHARE/bin"
+      linkPath "$1" "share/emacs/site-lisp" "$SHARE/site-lisp"
+    }
+
+    # First, link all the explicitly-required packages.
+    for pkg in $explicitRequires; do
+      linkEmacsPackage $pkg
     done
 
-    # Finally, add paths for all the explicitly-required packages. These paths
-    # will be searched first.
-    for pkg in $explicitRequires; do
-      addToEmacsPaths $pkg
+    # Next, link all the dependencies.
+    for pkg in $requires; do
+      linkEmacsPackage $pkg
     done
 
     # Byte-compiling improves start-up time only slightly, but costs nothing.
     emacs --batch -f batch-byte-compile "$siteStart"
 
-    mkdir -p $out/bin
     # Wrap emacs and friends so they find our site-start.el before the original.
     for prog in $emacs/bin/*; do # */
-      makeWrapper "$prog" $out/bin/$(basename "$prog") \
-        --suffix EMACSLOADPATH ":" "$out/share/emacs/site-lisp:"
+      local progname=$(basename "$prog")
+      rm -f "$out/bin/$progname"
+      makeWrapper "$prog" "$out/bin/$progname" \
+        --suffix EMACSLOADPATH ":" "$out/$SHARE/site-lisp:"
     done
 
     mkdir -p $out/share

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.5.5";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/pure-data/libraries/maxlib/${name}.tar.gz";
+    url = "mirror://sourceforge/project/pure-data/libraries/maxlib/${name}.tar.gz";
     sha256 = "0vxl9s815dnay5r0067rxsfh8f6jbk61f0nxrydzjydfycza7p1w";
   };
 

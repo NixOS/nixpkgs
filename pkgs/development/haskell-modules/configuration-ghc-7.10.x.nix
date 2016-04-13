@@ -125,11 +125,6 @@ self: super: {
   # https://github.com/kazu-yamamoto/unix-time/issues/30
   unix-time = dontCheck super.unix-time;
 
-  present = appendPatch super.present (pkgs.fetchpatch {
-    url = "https://github.com/chrisdone/present/commit/6a61f099bf01e2127d0c68f1abe438cd3eaa15f7.patch";
-    sha256 = "1vn3xm38v2f4lzyzkadvq322f3s2yf8c88v56wpdpzfxmvlzaqr8";
-  });
-
   ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
     pname = "ghcjs-prim";
     version = "0.1.0.0";
@@ -205,7 +200,7 @@ self: super: {
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
-  # https://github.com/DanielG/cabal-helper/issues/10
-  cabal-helper = dontCheck super.cabal-helper;
+  # https://github.com/fpco/stackage/issues/1112
+  vector-algorithms = dontCheck super.vector-algorithms;
 
 }

@@ -3,18 +3,18 @@
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
-, libvpx, imagemagick, fribidi
+, libvpx, imagemagick, fribidi, gperf
 }:
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.6.0";
+  version = "3.12.1";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "6ef13f20da20993dc8bab9eb103f73568618d3e8";
-    sha256 = "29a2d4b56cfd348b199d8f90b4e4b07de85dfb2ef1538479cd1e84f5bc1fbf96";
+    rev    = "f516f1bb9046218f89885a220354c19dda6d8f4d";
+    sha256 = "1jdw6j394z7ksg4wdcnm7lkcs7iam5myx6k18w8hr595s1dfk3sj";
     fetchSubmodules = true;
   };
 
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
-      gmp libyaml libedit libvpx imagemagick fribidi
+      gmp libyaml libedit libvpx imagemagick fribidi gperf
     ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
   MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
@@ -40,8 +40,12 @@ stdenv.mkDerivation rec {
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \
       --replace "/usr/bin/env bash" ${stdenv.shell}
-    sed '1i#include <vector>' \
-      -i ./third-party/mcrouter/mcrouter/lib/fibers/TimeoutController.h
+    perl -pi -e 's/([ \t(])(isnan|isinf)\(/$1std::$2(/g' \
+      hphp/runtime/base/*.cpp \
+      hphp/runtime/ext/std/*.cpp \
+      hphp/runtime/ext_zend_compat/php-src/main/*.cpp \
+      hphp/runtime/ext_zend_compat/php-src/main/*.h
+    patchShebangs .
   '';
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];

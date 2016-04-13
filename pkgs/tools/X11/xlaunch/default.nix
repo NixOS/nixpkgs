@@ -45,7 +45,7 @@ EOF
       else
         RESET_OPTION=\"-noreset\"
       fi;
-      XCMD=\"\$(egrep \"^Environment=\" /etc/systemd/system/display-manager.service | sed -e \"s/Environment=/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments// \\| sed -e s/:0/:\${_display}/ \\| sed -e s/vt7/vt\$((7+_display))/ \\) ; echo ${xorgserver}/bin/X \\\$_XARGS_ \$RESET_OPTION )\" 
+      XCMD=\"\$(egrep \"^Environment=\" /etc/systemd/system/display-manager.service | sed -e \"s/Environment=/ export /\" | sed -e '\\''s/#.*//'\\'' ; echo export _XARGS_=\\\$\\( grep xserver_arguments \\\$SLIM_CFGFILE \\| sed -e s/xserver_arguments// \\| sed -e s/:0/:\${_display}/ \\| sed -e s/vt7/vt\$((7+_display))/ \\) ; echo ${xorgserver.out}/bin/X \\\$_XARGS_ \$RESET_OPTION )\" 
       PRE_XCMD=\"\$(egrep \"^ExecStartPre=\" /etc/systemd/system/display-manager.service | sed -e \"\s/ExecStartPre=//\")\"
       echo \"\$PRE_XCMD\" 
       echo \"\$PRE_XCMD\" | bash

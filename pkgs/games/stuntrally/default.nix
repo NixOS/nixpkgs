@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "stunt-rally-${version}";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchgit {
     url = git://github.com/stuntrally/stuntrally.git;
     rev = "refs/tags/${version}";
-    sha256 = "1lsh7z7sjfwpdybg6vbwqx1zxsgbfp2n60n7xl33v225p32qh1qf";
+    sha256 = "0rrfmldl6m7igni1n4rv2i0s2q5j1ik8dh05ydkaqrpcky96bdr8";
   };
 
   tracks = fetchgit {
     url = git://github.com/stuntrally/tracks.git;
     rev = "refs/tags/${version}";
-    sha256 = "1614j6q1d2f69l58kkqndndvf6svcghhw8pzc2s1plf6k87h67mg";
+    sha256 = "186qqyr1nrabfzsgy7b4sjgm38mgd875f4c7qwkm8k2bl7zjkrm2";
   };
 
   preConfigure = ''
@@ -34,5 +34,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
+    # Build failure
+    broken = true;
   };
 }

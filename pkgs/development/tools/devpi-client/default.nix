@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, python} :
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "devpi-client-${version}";
   version = "2.3.2";
 

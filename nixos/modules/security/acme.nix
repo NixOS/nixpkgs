@@ -37,6 +37,12 @@ let
         description = "Group running the ACME client.";
       };
 
+      allowKeysForGroup = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Give read permissions to the specified group to read SSL private certificates.";
+      };
+
       postRun = mkOption {
         type = types.lines;
         default = "";
@@ -50,8 +56,8 @@ let
 
       plugins = mkOption {
         type = types.listOf (types.enum [
-          "cert.der" "cert.pem" "chain.der" "chain.pem" "external_pem.sh"
-          "fullchain.der" "fullchain.pem" "key.der" "key.pem" "account_key.json"
+          "cert.der" "cert.pem" "chain.pem" "external.sh"
+          "fullchain.pem" "full.pem" "key.der" "key.pem" "account_key.json"
         ]);
         default = [ "fullchain.pem" "key.pem" "account_key.json" ];
         description = ''
@@ -137,6 +143,7 @@ in
       systemd.services = flip mapAttrs' cfg.certs (cert: data:
         let
           cpath = "${cfg.directory}/${cert}";
+          rights = if data.allowKeysForGroup then "750" else "700";
           cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
                     ++ optionals (data.email != null) [ "--email" data.email ]
                     ++ concatMap (p: [ "-f" p ]) data.plugins
@@ -159,9 +166,10 @@ in
           preStart = ''
             mkdir -p '${cfg.directory}'
             if [ ! -d '${cpath}' ]; then
-              mkdir -m 700 '${cpath}'
-              chown '${data.user}:${data.group}' '${cpath}'
+              mkdir '${cpath}'
             fi
+            chmod ${rights} '${cpath}'
+            chown -R '${data.user}:${data.group}' '${cpath}'
           '';
           script = ''
             cd '${cpath}'

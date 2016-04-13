@@ -1,16 +1,17 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "progress-${version}";
-  version = "0.9";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "Xfennec";
     repo = "progress";
     rev = "v${version}";
-    sha256 = "07bl5fsr538nk4l8vwj1kf5bivlh3a8cy8jliqfadxmhf1knn2mw";
+    sha256 = "0xzpcvz4n0h8m0mhxgpvn1qg8993naip3asjbk3nmk3d4lbyh0b3";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];

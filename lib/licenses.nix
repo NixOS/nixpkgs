@@ -155,6 +155,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
+  doc = spdx {
+    spdxId = "DOC";
+    fullName = "DOC License";
+  };
+
   efl10 = spdx {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";
@@ -168,6 +173,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   epl10 = spdx {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";
+  };
+
+  epson = {
+    fullName = "Seiko Epson Corporation Software License Agreement for Linux";
+    url = https://download.ebz.epson.net/dsc/du/02/eula/global/LINUX_EN.html;
+    free = false;
   };
 
   fdl12 = spdx {

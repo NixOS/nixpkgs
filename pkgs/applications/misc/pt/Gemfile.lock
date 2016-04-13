@@ -1,0 +1,45 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    builder (3.2.2)
+    colored (1.2)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
+    highline (1.7.8)
+    hirb (0.7.3)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    mime-types (2.99)
+    mini_portile2 (2.0.0)
+    netrc (0.11.0)
+    nokogiri (1.6.7.1)
+      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri-happymapper (0.5.9)
+      nokogiri (~> 1.5)
+    pivotal-tracker (0.5.13)
+      builder
+      crack
+      nokogiri (>= 1.5.5)
+      nokogiri-happymapper (>= 0.5.4)
+      rest-client (>= 1.8.0)
+    pt (0.7.3)
+      colored (>= 1.2)
+      highline (>= 1.6.1)
+      hirb (>= 0.4.5)
+      pivotal-tracker (>= 0.4.1)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    safe_yaml (1.0.4)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pt

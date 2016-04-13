@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainters = with maintainers; [ arobyn ];
+    maintainers = with maintainers; [ arobyn ];
   };
 }

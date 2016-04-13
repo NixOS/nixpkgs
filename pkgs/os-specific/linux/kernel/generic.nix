@@ -23,6 +23,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
+, ignoreConfigErrors ? stdenv.platform.name != "pc"
 , extraMeta ? {}
 , ...
 }:
@@ -41,13 +42,12 @@ let
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
+    inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 
     generateConfig = ./generate-config.pl;
 
     kernelConfig = kernelConfigFun config;
-
-    ignoreConfigErrors = stdenv.platform.name != "pc";
 
     nativeBuildInputs = [ perl ];
 
@@ -56,10 +56,6 @@ let
     kernelTarget = stdenv.platform.kernelTarget;
     autoModules = stdenv.platform.kernelAutoModules;
     arch = stdenv.platform.kernelArch;
-
-    preConfigure = ''
-        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
-    '';
 
     crossAttrs = let
         cp = stdenv.cross.platform;

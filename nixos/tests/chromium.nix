@@ -1,13 +1,17 @@
-import ./make-test.nix (
-{ pkgs
+{ system ? builtins.currentSystem
+, pkgs ? import ../.. { inherit system; }
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
     dev    = pkgs.chromiumDev;
   }
-, ...
-}: rec {
-  name = "chromium";
+}:
+
+with import ../lib/testing.nix { inherit system; };
+with pkgs.lib;
+
+mapAttrs (channel: chromiumPkg: makeTest rec {
+  name = "chromium-${channel}";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aszlig ];
   };
@@ -16,6 +20,7 @@ import ./make-test.nix (
 
   machine.imports = [ ./common/x11.nix ];
   machine.virtualisation.memorySize = 2047;
+  machine.environment.systemPackages = [ chromiumPkg ];
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -105,74 +110,61 @@ import ./make-test.nix (
       closeWin;
     }
 
-    sub chromiumTest {
-      my ($channel, $pkg, $code) = @_;
-      $machine->waitForX;
+    $machine->waitForX;
 
-      my $url = "file://${startupHTML}";
-      my $args = "--user-data-dir=/tmp/chromium-$channel";
-      $machine->execute(
-        "ulimit -c unlimited; ".
-        "$pkg/bin/chromium $args \"$url\" & disown"
-      );
-      $machine->waitForText(qr/Type to search or enter a URL to navigate/);
-      $machine->waitUntilSucceeds("${xdo "check-startup" ''
-        search --sync --onlyvisible --name "startup done"
-        # close first start help popup
-        key -delay 1000 Escape
+    my $url = "file://${startupHTML}";
+    my $args = "--user-data-dir=/tmp/chromium-${channel}";
+    $machine->execute(
+      "ulimit -c unlimited; ".
+      "chromium $args \"$url\" & disown"
+    );
+    $machine->waitForText(qr/Type to search or enter a URL to navigate/);
+    $machine->waitUntilSucceeds("${xdo "check-startup" ''
+      search --sync --onlyvisible --name "startup done"
+      # close first start help popup
+      key -delay 1000 Escape
+      windowfocus --sync
+      windowactivate --sync
+    ''}");
+
+    createAndWaitForNewWin;
+    $machine->screenshot("empty_windows");
+    closeWin;
+
+    $machine->screenshot("startup_done");
+
+    testNewWin "check sandbox", sub {
+      $machine->succeed("${xdo "type-url" ''
+        search --sync --onlyvisible --name "new tab"
         windowfocus --sync
-        windowactivate --sync
+        type --delay 1000 "chrome://sandbox"
       ''}");
 
-      createAndWaitForNewWin;
-      $machine->screenshot($channel."_emptywin");
-      closeWin;
+      $machine->succeed("${xdo "submit-url" ''
+        search --sync --onlyvisible --name "new tab"
+        windowfocus --sync
+        key --delay 1000 Return
+      ''}");
 
-      $machine->screenshot($channel."_startup_done");
+      $machine->screenshot("sandbox_info");
 
-      subtest("Chromium $channel", $code);
+      $machine->succeed("${xdo "submit-url" ''
+        search --sync --onlyvisible --name "sandbox status"
+        windowfocus --sync
+      ''}");
+      $machine->succeed("${xdo "submit-url" ''
+        key --delay 1000 Ctrl+a Ctrl+c
+      ''}");
 
-      $machine->shutdown;
-    }
+      my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
+      die "sandbox not working properly: $clipboard"
+      unless $clipboard =~ /namespace sandbox.*yes/mi
+          && $clipboard =~ /pid namespaces.*yes/mi
+          && $clipboard =~ /network namespaces.*yes/mi
+          && $clipboard =~ /seccomp.*sandbox.*yes/mi
+          && $clipboard =~ /you are adequately sandboxed/mi;
+    };
 
-    for (${let
-      mkArray = name: pkg: "[\"${name}\", \"${pkg}\"]";
-      chanArrays = pkgs.lib.mapAttrsToList mkArray channelMap;
-    in pkgs.lib.concatStringsSep ", " chanArrays}) {
-      my ($channel, $pkg) = @$_;
-      chromiumTest $channel, $pkg, sub {
-        testNewWin "check sandbox", sub {
-          $machine->succeed("${xdo "type-url" ''
-            search --sync --onlyvisible --name "new tab"
-            windowfocus --sync
-            type --delay 1000 "chrome://sandbox"
-          ''}");
-
-          $machine->succeed("${xdo "submit-url" ''
-            search --sync --onlyvisible --name "new tab"
-            windowfocus --sync
-            key --delay 1000 Return
-          ''}");
-
-          $machine->screenshot($channel."_sandbox");
-
-          $machine->succeed("${xdo "submit-url" ''
-            search --sync --onlyvisible --name "sandbox status"
-            windowfocus --sync
-          ''}");
-          $machine->succeed("${xdo "submit-url" ''
-            key --delay 1000 Ctrl+a Ctrl+c
-          ''}");
-
-          my $clipboard = $machine->succeed("${pkgs.xclip}/bin/xclip -o");
-          die "sandbox not working properly: $clipboard"
-          unless $clipboard =~ /namespace sandbox.*yes/mi
-              && $clipboard =~ /pid namespaces.*yes/mi
-              && $clipboard =~ /network namespaces.*yes/mi
-              && $clipboard =~ /seccomp.*sandbox.*yes/mi
-              && $clipboard =~ /you are adequately sandboxed/mi;
-        };
-      };
-    }
+    $machine->shutdown;
   '';
-})
+}) channelMap

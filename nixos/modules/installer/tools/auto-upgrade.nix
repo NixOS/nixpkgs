@@ -74,11 +74,11 @@ let cfg = config.system.autoUpgrade; in
       serviceConfig.Type = "oneshot";
 
       environment = config.nix.envVars //
-        { inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
+        { inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
         };
 
-      path = [ pkgs.gnutar pkgs.xz config.nix.package ];
+      path = [ pkgs.gnutar pkgs.xz.bin config.nix.package ];
 
       script = ''
         ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}

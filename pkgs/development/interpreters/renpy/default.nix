@@ -10,7 +10,6 @@ stdenv.mkDerivation {
     homepage = "http://renpy.org/";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 
   src = fetchurl {

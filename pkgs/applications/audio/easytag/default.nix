@@ -5,11 +5,12 @@
 
 stdenv.mkDerivation rec {
   name = "easytag-${version}";
-  version = "2.3.2";
+  majorVersion = "2.4";
+  version = "${majorVersion}.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/easytag/2.3/${name}.tar.xz";
-    sha256 = "0bj3sj4yzlnhan38j84acs7qv27fl3xy4rdrfq6dnpz4q6qccm84";
+    url = "mirror://gnome/sources/easytag/${majorVersion}/${name}.tar.xz";
+    sha256 = "1mbpwp3lh6yz5xkaq3a329x4r3chmjsr83r349crhi1gax3mzvxr";
   };
 
   preFixup = ''

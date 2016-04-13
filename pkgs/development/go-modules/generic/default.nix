@@ -30,7 +30,7 @@ if disabled then throw "${name} not supported for go ${go.meta.branch}" else
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
 
-  removeReferences = [ go ];
+  removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
 
   removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
     | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
@@ -112,6 +112,9 @@ go.stdenv.mkDerivation (
     }
 
     export -f buildGoDir # parallel needs to see the function
+    if [ -z "$enableParallelBuilding" ]; then
+        export NIX_BUILD_CORES=1
+    fi
     getGoDirs "" | parallel -j $NIX_BUILD_CORES buildGoDir install
 
     runHook postBuild
@@ -160,7 +163,7 @@ go.stdenv.mkDerivation (
   enableParallelBuilding = enableParallelBuilding;
 
   # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-  outputs = [ "out" "bin" ];
+  outputs = args.outputs or [ "out" "bin" ];
 
   meta = {
     # Add default meta information

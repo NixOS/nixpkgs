@@ -2,7 +2,7 @@
 
 let version = "1.0"; in
 
-python3Packages.buildPythonPackage {
+python3Packages.buildPythonApplication {
   name = "zscroll-${version}";
   # don't prefix with python version
   namePrefix = "";

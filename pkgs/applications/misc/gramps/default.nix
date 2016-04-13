@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gtk3, pythonPackages, python, pycairo, pygobject3, intltool,
   pango, gsettings_desktop_schemas }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   version = "4.1.1";
   name = "gramps-${version}";
   namePrefix = "";
@@ -18,7 +18,7 @@ pythonPackages.buildPythonPackage rec {
 
   pythonPath = [ pygobject3 pango pycairo pythonPackages.bsddb ];
 
-  # Same installPhase as in buildPythonPackage but without --old-and-unmanageble
+  # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.
   installPhase = ''
     runHook preInstall

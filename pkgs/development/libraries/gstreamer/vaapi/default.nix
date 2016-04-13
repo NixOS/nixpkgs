@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva
+{ stdenv, fetchurl, pkgconfig, gst-plugins-base, bzip2, libva, wayland
 , libdrm, udev, xorg, mesa, yasm, gstreamer, gst-plugins-bad, nasm
 , libvpx
 }:
@@ -14,8 +14,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];
 
-  buildInputs = with stdenv.lib; [ gstreamer gst-plugins-base gst-plugins-bad libva libdrm udev
-    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM xorg.libICE mesa nasm libvpx ];
+  buildInputs = [
+    gstreamer gst-plugins-base gst-plugins-bad libva wayland libdrm udev
+    xorg.libX11 xorg.libXext xorg.libXv xorg.libXrandr xorg.libSM xorg.libICE mesa nasm libvpx
+  ];
 
   preConfigure = "
     export GST_PLUGIN_PATH_1_0=$out/lib/gstreamer-1.0

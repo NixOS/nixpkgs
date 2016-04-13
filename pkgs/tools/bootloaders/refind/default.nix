@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   srcName = "refind-src-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/refind/${meta.version}/${srcName}.zip";
+    url = "mirror://sourceforge/project/refind/${meta.version}/${srcName}.zip";
     sha256 = "0ai150rzx20sfl92j6y1p6qnyy0wbmazrlp2fg19acs98qyxl8lh";
   };
 

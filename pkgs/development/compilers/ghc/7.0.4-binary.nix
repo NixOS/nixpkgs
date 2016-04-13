@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # We have to patch the GMP paths for the integer-gmp package.
      ''
       find . -name integer-gmp.buildinfo \
-          -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp}/lib@" {} \;
+          -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${gmp.out}/lib@" {} \;
      '' + stdenv.lib.optionalString stdenv.isDarwin ''
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${ncurses}/lib:${gmp}/lib" {} \;
+          --set-rpath "${ncurses.out}/lib:${gmp.out}/lib" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       for prog in ld ar gcc strip ranlib; do
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     ./configure --prefix=$out \
-      --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include \
+      --with-gmp-libraries=${gmp.out}/lib --with-gmp-includes=${gmp}/include \
       ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 

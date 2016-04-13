@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     cp config.mk.in config.mk
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
-        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff}/lib/libtiff.so" \
+        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
         --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
   '';
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     touch lib/standardppmdfont.c
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   installPhase = ''
     make package pkgdir=$out

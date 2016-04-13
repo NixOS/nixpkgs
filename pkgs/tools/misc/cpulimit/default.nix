@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "A tool to throttle the CPU usage of programs";
     platforms = with platforms; linux ++ freebsd;
     license = licenses.gpl2;
-    maintainer = [maintainers.rycee];
+    maintainers = [maintainers.rycee];
   };
 }

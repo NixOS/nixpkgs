@@ -1,6 +1,6 @@
 { stdenv, pythonPackages, fetchgit }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "leo-editor-${version}";
   namePrefix = "";
   version = "5.1";

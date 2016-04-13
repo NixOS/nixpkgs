@@ -1,4 +1,4 @@
-{pkgs, pkgs_i686, xcodeVersion ? "7.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "5.1.1.GA"}:
+{pkgs, pkgs_i686, xcodeVersion ? "7.2", xcodeBaseDir ? "/Applications/Xcode.app", tiVersion ? "5.1.2.GA"}:
 
 rec {
   androidenv = pkgs.androidenv;
@@ -9,7 +9,7 @@ rec {
   } else null;
   
   titaniumsdk = let
-    titaniumSdkFile = if tiVersion == "5.1.1.GA" then ./titaniumsdk-5.1.nix
+    titaniumSdkFile = if tiVersion == "5.1.2.GA" then ./titaniumsdk-5.1.nix
       else throw "Titanium version not supported: "+tiVersion;
     in
     import titaniumSdkFile {

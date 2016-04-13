@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, bash, buildPythonPackage }:
+{ stdenv, fetchurl, bash, buildPythonApplication }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   version = "1.3";
   name = "apt-offline-${version}";
 

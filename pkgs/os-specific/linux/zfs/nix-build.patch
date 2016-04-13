@@ -1,8 +1,8 @@
 diff --git a/Makefile.am b/Makefile.am
-index 49b417a..f4af44d 100644
+index f8abb5f..82e8fb6 100644
 --- a/Makefile.am
 +++ b/Makefile.am
-@@ -12,10 +12,10 @@ endif
+@@ -11,10 +11,10 @@ endif
  if CONFIG_KERNEL
  SUBDIRS += module
  
@@ -28,10 +28,10 @@ index a94cad5..a160fe2 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
-index d00b1c8..3242d2e 100644
+index 595d1db..d41375d 100644
 --- a/include/linux/Makefile.am
 +++ b/include/linux/Makefile.am
-@@ -17,6 +17,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+@@ -18,6 +18,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
  endif
  
  if CONFIG_KERNEL
@@ -40,10 +40,10 @@ index d00b1c8..3242d2e 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/include/sys/Makefile.am b/include/sys/Makefile.am
-index 7ddace0..8da3870 100644
+index 77ecfb2..52b3612 100644
 --- a/include/sys/Makefile.am
 +++ b/include/sys/Makefile.am
-@@ -102,6 +102,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+@@ -114,6 +114,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
  endif
  
  if CONFIG_KERNEL
@@ -88,7 +88,7 @@ index 0859b9f..b0c6eec 100644
  kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
  endif
 diff --git a/module/Makefile.in b/module/Makefile.in
-index 686402b..9cbf598 100644
+index d4ddee2..876c811 100644
 --- a/module/Makefile.in
 +++ b/module/Makefile.in
 @@ -18,9 +18,9 @@ modules:
@@ -107,7 +107,7 @@ index 686402b..9cbf598 100644
  		"*** - @SPL_OBJ@/module/@SPL_SYMBOLS@\n"; \
  		exit 1; \
  	fi
-+	@# when copying a file out of the nix store, we need to make it writable again. 
++	@# when copying a file out of the nix store, we need to make it writable again.
 +	chmod +w @SPL_SYMBOLS@
  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` @KERNELMAKE_PARAMS@ CONFIG_ZFS=m $@
  
@@ -122,8 +122,9 @@ index 686402b..9cbf598 100644
  		KERNELRELEASE=@LINUX_VERSION@
  	@# Remove extraneous build products when packaging
 -	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+-	if [ -n "$(DESTDIR)" ]; then \
 +	kmoddir=@prefix@/$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
- 	if [ -n $$kmoddir ]; then \
++	if [ -n "@prefix@" ]; then \
  		find $$kmoddir -name 'modules.*' | xargs $(RM); \
  	fi
 -	sysmap=$(DESTDIR)$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \

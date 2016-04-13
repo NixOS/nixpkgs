@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''patchShebangs .'';
 
+  outputs = [ "dev" "out" "bin" ];
+  setOutputFlags = false;
+
   configureFlags = [
     (enableFeature (vp8EncoderSupport || vp8DecoderSupport) "vp8")
     (enableFeature vp8EncoderSupport "vp8-encoder")
@@ -145,6 +148,8 @@ stdenv.mkDerivation rec {
     ++ optionals unitTestsSupport [ coreutils curl ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''moveToOutput bin "$bin" '';
 
   crossAttrs = let
     isCygwin = stdenv.cross.libc == "msvcrt";

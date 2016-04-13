@@ -34,6 +34,6 @@ in
         '';
       }];
     };
-    environment.systemPackages = [ pkgs.i3 ];
+    environment.systemPackages = with pkgs; [ i3 ];
   };
 }

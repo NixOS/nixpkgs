@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       qpl /* generator */
       lgpl2 /* library */
     ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ z77z ];
   };
 }

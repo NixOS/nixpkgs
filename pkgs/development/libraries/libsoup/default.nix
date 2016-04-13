@@ -3,29 +3,31 @@
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.50";
-  version = "${majorVersion}.0";
+  majorVersion = "2.52";
+  version = "${majorVersion}.2";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "1e01365ac4af3817187ea847f9d3588c27eee01fc519a5a7cb212bb78b0f667b";
+    sha256 = "1p4k40y2gikr6m8p3hm0vswdzj2pj133dckipd2jk5bxbj5n4mfv";
   };
 
   patchPhase = ''
     patchShebangs libsoup/
   '';
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
-  passthru.propagatedUserEnvPackages = [ glib_networking ];
+  passthru.propagatedUserEnvPackages = [ glib_networking.out ];
 
   # glib_networking is a runtime dependency, not a compile-time dependency
-  configureFlags = "--disable-tls-check" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
+  configureFlags = "--disable-tls-check --enable-vala=no" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 

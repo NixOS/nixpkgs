@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   name = "${pn}-${v}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/choqok/Choqok/choqok-1.5.tar.xz";
+    url = "mirror://sourceforge/project/choqok/Choqok/choqok-1.5.tar.xz";
     sha256 = "5cb97ac4cdf9db4699bb7445a9411393073d213fea649ab0713f659f1308efe4";
   };
 

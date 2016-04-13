@@ -40,6 +40,8 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
+  configureFlags = [ "--with-libreadline-prefix" ];
+
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
 
@@ -49,7 +51,7 @@
     sed -i "$out/lib/pkgconfig/guile-2.0.pc"    \
         -e 's|-lunistring|-L${libunistring}/lib -lunistring|g ;
             s|^Cflags:\(.*\)$|Cflags: -I${libunistring}/include \1|g ;
-            s|-lltdl|-L${libtool}/lib -lltdl|g'
+            s|-lltdl|-L${libtool.lib}/lib -lltdl|g'
   '';
 
   # make check doesn't work on darwin

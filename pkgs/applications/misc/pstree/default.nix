@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "pstree-2.39";
 
   src = fetchurl {
-    url = "http://www.sfr-fresh.com/unix/misc/${name}.tar.gz";
+    urls = [
+      "http://www.sfr-fresh.com/unix/misc/${name}.tar.gz"
+      "http://distfiles.macports.org/pstree/${name}.tar.gz"
+    ];
     sha256 = "17s7v15c4gryjpi11y1xq75022nkg4ggzvjlq2dkmyg67ssc76vw";
   };
 

@@ -1,8 +1,8 @@
 { stdenv, fetchgit, cmake }:
 
-let version = "0.0.3"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pingtcp-${version}";
+  version = "0.0.3";
 
   # This project uses git submodules, which fetchFromGitHub doesn't support:
   src = fetchgit {
@@ -13,11 +13,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  postPatch = ''
-    substituteInPlace {.,pfcquirks}/CMakeLists.txt \
-      --replace "-march=native" ""
-  '';
-
   enableParallelBuilding = true;
 
   doCheck = false;
@@ -27,7 +22,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Measure TCP handshake time";
     homepage = https://github.com/LanetNetwork/pingtcp;
     license = licenses.gpl3;

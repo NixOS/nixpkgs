@@ -3,7 +3,7 @@
 # This package requires a locale ru_RU.cp1251 locale entry.
 # Waiting for a better idea, I created it modifying a store file using:
 #   localedef -f CP1251 -i ru_RU ru_RU.CP1251
-# The store file mentioned is in "${glibc}/lib/locale/locale-archive"
+# The store file mentioned is in "${glibc.out}/lib/locale/locale-archive"
 
 stdenv.mkDerivation {
   name = "multitran-data-0.3";

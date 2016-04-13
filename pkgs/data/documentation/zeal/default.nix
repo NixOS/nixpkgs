@@ -1,19 +1,19 @@
 { stdenv, fetchFromGitHub, libarchive, pkgconfig, qtbase
-, qtimageformats, qtwebkit, xorg }:
+, qtimageformats, qtwebkit, qtx11extras, xorg }:
 
 stdenv.mkDerivation rec {
-  version = "0.1.1";
+  version = "0.2.1";
   name = "zeal-${version}";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     rev = "v${version}";
-    sha256 = "172wf50fq1l5p8hq1irvpwr7ljxkjaby71afrm82jz3ixl6dg2ii";
+    sha256 = "1j1nfvkwkb2xdh289q5gdb526miwwqmqjyd6fz9qm5dg467wmwa3";
   };
 
   buildInputs = [
-    xorg.xcbutilkeysyms pkgconfig qtbase qtimageformats qtwebkit libarchive
+    xorg.xcbutilkeysyms pkgconfig qtbase qtimageformats qtwebkit qtx11extras libarchive
   ];
 
   configurePhase = ''

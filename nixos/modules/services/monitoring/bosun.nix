@@ -33,6 +33,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bosun;
+        defaultText = "pkgs.bosun";
         example = literalExample "pkgs.bosun";
         description = ''
           bosun binary to use.
@@ -128,17 +129,19 @@ in {
       description = "bosun metrics collector (part of Bosun)";
       wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        ''
-        mkdir -p `dirname ${cfg.stateFile}`;
-        touch ${cfg.stateFile}
-        touch ${cfg.stateFile}.tmp
+      preStart = ''
+        mkdir -p "$(dirname "${cfg.stateFile}")";
+        touch "${cfg.stateFile}"
+        touch "${cfg.stateFile}.tmp"
+
+        mkdir -p "${cfg.ledisDir}";
 
         if [ "$(id -u)" = 0 ]; then
-          chown ${cfg.user}:${cfg.group} ${cfg.stateFile}
-          chown ${cfg.user}:${cfg.group} ${cfg.stateFile}.tmp
+          chown ${cfg.user}:${cfg.group} "${cfg.stateFile}"
+          chown ${cfg.user}:${cfg.group} "${cfg.stateFile}.tmp"
+          chown ${cfg.user}:${cfg.group} "${cfg.ledisDir}"
         fi
-        '';
+      '';
 
       serviceConfig = {
         PermissionsStartOnly = true;

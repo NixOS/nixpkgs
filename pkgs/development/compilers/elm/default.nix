@@ -34,7 +34,7 @@ let
       EOF
     '' + lib.concatStrings cmds;
 
-  hsPkgs = haskell.packages.ghc7102.override {
+  hsPkgs = haskell.packages.ghc7103.override {
     overrides = self: super:
       let hlib = haskell.lib;
           elmRelease = import ./packages/release.nix { inherit (self) callPackage; };
@@ -61,6 +61,9 @@ let
       in elmPkgs // {
         inherit elmPkgs;
         elmVersion = elmRelease.version;
+
+        # To unbreak elm-compiler
+        language-ecmascript = self.language-ecmascript_0_17_0_2;
       };
   };
 in hsPkgs.elmPkgs // {

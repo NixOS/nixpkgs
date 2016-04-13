@@ -1,43 +1,49 @@
-{ stdenv, fetchurl, pkgconfig, intltool, python, pyrex, pygobject, pygtk
-, notify, pythonDBus, bluez, glib, gtk, libstartup_notification
-, makeWrapper, xdg_utils, obex_data_server
-, libpulseaudio
-}:
-   
-stdenv.mkDerivation rec {
-  name = "blueman-1.23";
+{ stdenv, lib, fetchurl, intltool, pkgconfig, pythonPackages, bluez, polkit, gtk3
+, obex_data_server, xdg_utils, libnotify, dconf, gsettings_desktop_schemas, dnsmasq, dhcp
+, withPulseAudio ? true, libpulseaudio }:
+
+let
+  binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp ];
+
+in stdenv.mkDerivation rec {
+  name = "blueman-${version}";
+  version = "2.0.3";
    
   src = fetchurl {
-    url = "http://download.tuxfamily.org/blueman/${name}.tar.gz";
-    sha256 = "04ghlh4h5bwp9mqr5jxcmjm01595l5fq5561qxvf369fvjy63cjh";
+    url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
+    sha256 = "09aqlk4c2qzqpmyf7b40sic7d45c1l8fyrb9f3s22b8w83j0adi4";
   };
 
-  configureFlags = "--disable-polkit";
+  nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython ];
 
-  buildInputs =
-    [ pkgconfig intltool python pyrex pygobject pygtk notify pythonDBus
-      bluez glib gtk libstartup_notification makeWrapper
-    ];
+  buildInputs = [ bluez gtk3 pythonPackages.python libnotify dconf gsettings_desktop_schemas ]
+                ++ pythonPath
+                ++ lib.optional withPulseAudio libpulseaudio;
 
-  # !!! Ugly.
-  PYTHONPATH = "${pygobject}/lib/${python.libPrefix}/site-packages/gtk-2.0:${pygtk}/lib/${python.libPrefix}/site-packages/gtk-2.0:${notify}/lib/${python.libPrefix}/site-packages/gtk-2.0";
+  postPatch = lib.optionalString withPulseAudio ''
+    sed -i 's,CDLL(",CDLL("${libpulseaudio}/lib/,g' blueman/main/PulseAudioUtils.py
+  '';
 
-  postInstall =
-    ''
-      # Create wrappers that set the environment correctly.
-      for i in $out/bin/* $out/libexec/*; do
-          wrapProgram $i \
-              --set PYTHONPATH "$(toPythonPath $out):$PYTHONPATH" \
-              --set LD_LIBRARY_PATH "${libpulseaudio}/lib:" \
-              --prefix PATH : ${xdg_utils}/bin
-      done
+  pythonPath = with pythonPackages; [ dbus pygobject3 ];
 
-      mkdir -p $out/nix-support
-      echo ${obex_data_server} > $out/nix-support/propagated-user-env-packages
-    ''; # */
+  propagatedUserEnvPkgs = [ obex_data_server dconf ];
 
-  meta = {
-    homepage = http://blueman-project.org/;
+  configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
+
+  postFixup = ''
+    makeWrapperArgs="\
+      --prefix PATH ':' ${binPath} \
+      --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+      --prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+    wrapPythonPrograms
+  '';
+
+  meta = with lib; {
+    homepage = https://github.com/blueman-project;
     description = "GTK+-based Bluetooth Manager";
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

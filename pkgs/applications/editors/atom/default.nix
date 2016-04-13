@@ -16,11 +16,11 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "atom-${version}";
-  version = "1.3.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://github.com/atom/atom/releases/download/v${version}/atom-amd64.deb";
-    sha256 = "17q5vrvjsyxcd8favp0sldfvhcwr0ba6ws32df6iv2iyla5h94y1";
+    sha256 = "1kl2pc0smacn4lgk5wwlaiw03rm8b0763vaisgp843p35zzsbc9n";
     name = "${name}.deb";
   };
 
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     description = "A hackable text editor for the 21st Century";
     homepage = https://atom.io/;
     license = licenses.mit;
-    maintainers = [ maintainers.offline ];
+    maintainers = [ maintainers.offline maintainers.nequissimus ];
     platforms = [ "x86_64-linux" ];
   };
 }

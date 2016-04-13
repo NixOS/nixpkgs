@@ -5,8 +5,8 @@ export PLAN9_TARGET=$PLAN9
 
 configurePhase()
 {
-    echo CFLAGS=\"-I${fontconfig}/include -I${libXt}/include\" > LOCAL.config
-    echo X11=\"${libXt}/include\" >> LOCAL.config
+    echo CFLAGS=\"-I${fontconfig_dev}/include -I${libXt_dev}/include\" > LOCAL.config
+    echo X11=\"${libXt_dev}/include\" >> LOCAL.config
 
     for f in `grep -l -r /usr/local/plan9`; do
         sed "s,/usr/local/plan9,${PLAN9},g" -i $f

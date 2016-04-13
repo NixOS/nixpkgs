@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An OCaml streaming codec to decode and encode the XML data format";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
   };

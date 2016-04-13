@@ -21,10 +21,9 @@ in
         chown -R root:root /var/lib/zerotier-one
         '';
       serviceConfig = {
-        Type = "forking";
-        User = "root";
-        PIDFile = "/var/lib/zerotier-one/zerotier-one.pid";
-        ExecStart = "${pkgs.zerotierone}/bin/zerotier-one -d";
+        ExecStart = "${pkgs.zerotierone}/bin/zerotier-one";
+        Restart = "always";
+        KillMode = "process";
       };
     };
   environment.systemPackages = [ pkgs.zerotierone ];

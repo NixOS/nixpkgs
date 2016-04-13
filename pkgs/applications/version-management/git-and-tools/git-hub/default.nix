@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, docutils, python }:
 
-let version = "0.9.0"; in
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     sha256 = "0c4kq4a906lr8nzway7qh0560n2ydvidh9rlffh44902rd48kp0h";
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Git command line interface to GitHub";
     longDescription = ''

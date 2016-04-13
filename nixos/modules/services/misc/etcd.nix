@@ -77,11 +77,11 @@ in {
       default = {};
       example = literalExample ''
         {
-          "CORS": "*",
-          "NAME": "default-name",
-          "MAX_RESULT_BUFFER": "1024",
-          "MAX_CLUSTER_SIZE": "9",
-          "MAX_RETRY_ATTEMPTS": "3"
+          "CORS" = "*";
+          "NAME" = "default-name";
+          "MAX_RESULT_BUFFER" = "1024";
+          "MAX_CLUSTER_SIZE" = "9";
+          "MAX_RETRY_ATTEMPTS" = "3";
         }
       '';
     };
@@ -114,6 +114,7 @@ in {
       }) // (mapAttrs' (n: v: nameValuePair "ETCD_${n}" v) cfg.extraConf);
 
       serviceConfig = {
+        Type = "notify";
         ExecStart = "${pkgs.etcd}/bin/etcd";
         User = "etcd";
         PermissionsStartOnly = true;

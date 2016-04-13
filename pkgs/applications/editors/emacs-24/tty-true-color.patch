@@ -1,0 +1,428 @@
+diff --git a/lisp/term/tty-colors.el b/lisp/term/tty-colors.el
+index 98108ce..21814a9 100644
+--- a/lisp/term/tty-colors.el
++++ b/lisp/term/tty-colors.el
+@@ -764,7 +764,8 @@
+     (auto . 0)
+     (ansi8 . 8)
+     (always . 8)
+-    (yes . 8))
++    (yes . 8)
++    (true-color . 16777216))
+   "An alist of supported standard tty color modes and their aliases.")
+ 
+ (defun tty-color-alist (&optional _frame)
+diff --git a/lisp/term/xterm.el b/lisp/term/xterm.el
+index c673749..244cf7f 100644
+--- a/lisp/term/xterm.el
++++ b/lisp/term/xterm.el
+@@ -674,6 +674,15 @@ versions of xterm."
+     ;; are more colors to support, compute them now.
+     (when (> ncolors 0)
+       (cond
++       ((= (display-color-cells (selected-frame)) 16777216)	; 24-bit xterm
++        (let ((idx (length xterm-standard-colors)))
++          ;; Insert standard X colors after the standard xterm ones
++          (mapc (lambda (color)
++                       (if (not (assoc (car color) xterm-standard-colors))
++                           (progn
++                             (tty-color-define (car color) idx (cdr color))
++                             (setq idx (1+ idx)))))
++                color-name-rgb-alist)))
+        ((= ncolors 240)	; 256-color xterm
+ 	;; 216 non-gray colors first
+ 	(let ((r 0) (g 0) (b 0))
+diff --git a/src/dispextern.h b/src/dispextern.h
+index 239c442..5760b84 100644
+--- a/src/dispextern.h
++++ b/src/dispextern.h
+@@ -1739,9 +1739,15 @@ struct face
+ INLINE bool
+ face_tty_specified_color (unsigned long color)
+ {
+-  return color < FACE_TTY_DEFAULT_BG_COLOR;
++  return (color < FACE_TTY_DEFAULT_BG_COLOR);
+ }
+ 
++INLINE bool
++face_tty_specified_24_bit_color (unsigned long color)
++{
++  /* 24 bit colors have 24th but not 25th bit set */
++  return ((color & (0x03 << 24)) == (0x01 << 24));
++}
+ /* Non-zero if FACE was realized for unibyte use.  */
+ 
+ #define FACE_UNIBYTE_P(FACE) ((FACE)->charset < 0)
+diff --git a/src/term.c b/src/term.c
+index 8312491..b14aded 100644
+--- a/src/term.c
++++ b/src/term.c
+@@ -1915,18 +1915,40 @@ turn_on_face (struct frame *f, int face_id)
+       const char *ts;
+       char *p;
+ 
+-      ts = tty->standout_mode ? tty->TS_set_background : tty->TS_set_foreground;
++      if (face_tty_specified_24_bit_color(fg))
++        ts = tty->standout_mode ? tty->TS_set_rgb_background : tty->TS_set_rgb_foreground;
++      else
++        ts = tty->standout_mode ? tty->TS_set_background : tty->TS_set_foreground;
+       if (face_tty_specified_color (fg) && ts)
+ 	{
+-          p = tparam (ts, NULL, 0, fg, 0, 0, 0);
++          if (!face_tty_specified_24_bit_color(fg))
++            p = tparam (ts, NULL, 0, fg, 0, 0, 0);
++          else
++            {
++              const unsigned char r = (fg >> 16) & 0xFF,
++                g = (fg >> 8) & 0xFF,
++                b = fg & 0xFF;
++              p = tparam (ts, NULL, 0, (int)r, (int)g, (int)b, 0);
++            }
+ 	  OUTPUT (tty, p);
+ 	  xfree (p);
+ 	}
+ 
+-      ts = tty->standout_mode ? tty->TS_set_foreground : tty->TS_set_background;
++      if (face_tty_specified_24_bit_color(bg))
++        ts = tty->standout_mode ? tty->TS_set_rgb_foreground : tty->TS_set_rgb_background;
++      else
++        ts = tty->standout_mode ? tty->TS_set_foreground : tty->TS_set_background;
+       if (face_tty_specified_color (bg) && ts)
+ 	{
+-          p = tparam (ts, NULL, 0, bg, 0, 0, 0);
++          if (!face_tty_specified_24_bit_color(bg))
++            p = tparam (ts, NULL, 0, bg, 0, 0, 0);
++          else
++            {
++              const unsigned char r = (bg >> 16) & 0xFF,
++                g = (bg >> 8) & 0xFF,
++                b = bg & 0xFF;
++              p = tparam (ts, NULL, 0, (int)r, (int)g, (int)b, 0);
++          }
+ 	  OUTPUT (tty, p);
+ 	  xfree (p);
+ 	}
+@@ -2028,6 +2050,8 @@ TERMINAL does not refer to a text terminal.  */)
+   struct terminal *t = get_tty_terminal (terminal, 0);
+   if (!t)
+     return make_number (0);
++  else if (t->display_info.tty->TS_set_rgb_foreground)
++    return make_number (16777216); /* 24 bit True Color */
+   else
+     return make_number (t->display_info.tty->TN_max_colors);
+ }
+@@ -2043,6 +2067,8 @@ static int default_no_color_video;
+ static char *default_orig_pair;
+ static char *default_set_foreground;
+ static char *default_set_background;
++static char *default_set_rgb_foreground;
++static char *default_set_rgb_background;
+ 
+ /* Save or restore the default color-related capabilities of this
+    terminal.  */
+@@ -2055,6 +2081,8 @@ tty_default_color_capabilities (struct tty_display_info *tty, bool save)
+       dupstring (&default_orig_pair, tty->TS_orig_pair);
+       dupstring (&default_set_foreground, tty->TS_set_foreground);
+       dupstring (&default_set_background, tty->TS_set_background);
++      dupstring (&default_set_rgb_foreground, tty->TS_set_rgb_foreground);
++      dupstring (&default_set_rgb_background, tty->TS_set_rgb_background);
+       default_max_colors = tty->TN_max_colors;
+       default_max_pairs = tty->TN_max_pairs;
+       default_no_color_video = tty->TN_no_color_video;
+@@ -2064,6 +2092,8 @@ tty_default_color_capabilities (struct tty_display_info *tty, bool save)
+       tty->TS_orig_pair = default_orig_pair;
+       tty->TS_set_foreground = default_set_foreground;
+       tty->TS_set_background = default_set_background;
++      tty->TS_set_rgb_foreground = default_set_rgb_foreground;
++      tty->TS_set_rgb_background = default_set_rgb_background;
+       tty->TN_max_colors = default_max_colors;
+       tty->TN_max_pairs = default_max_pairs;
+       tty->TN_no_color_video = default_no_color_video;
+@@ -2088,6 +2118,7 @@ tty_setup_colors (struct tty_display_info *tty, int mode)
+ 	tty->TN_max_pairs = 0;
+ 	tty->TN_no_color_video = 0;
+ 	tty->TS_set_foreground = tty->TS_set_background = tty->TS_orig_pair = NULL;
++        tty->TS_set_rgb_foreground = tty->TS_set_rgb_background = NULL;
+ 	break;
+       case 0:	 /* default colors, if any */
+       default:
+@@ -2102,10 +2133,45 @@ tty_setup_colors (struct tty_display_info *tty, int mode)
+ 	tty->TS_set_foreground = "\033[3%dm";
+ 	tty->TS_set_background = "\033[4%dm";
+ #endif
++        tty->TS_set_rgb_foreground = NULL;
++        tty->TS_set_rgb_background = NULL;
+ 	tty->TN_max_colors = 8;
+ 	tty->TN_max_pairs = 64;
+ 	tty->TN_no_color_video = 0;
+ 	break;
++      case 16777216: /* RGB colors */
++        tty->TS_orig_pair = "\033[0m";
++
++        /* if the user hasn't explicitly chosen the ":" separator, use ";". */
++        char * true_color_separator = getenv ("EMACS_TRUE_COLOR_SEPARATOR");
++        if (true_color_separator && strcmp (true_color_separator, ":") == 0)
++        {
++          /* XXX chopps use ITU T.421 ':' separator */
++          /* TODO This should be extracted from terminfo/termcap. */
++#ifdef TERMINFO
++          tty->TS_set_rgb_foreground = "\033[38:2:%p1%d:%p2%d:%p3%dm";
++          tty->TS_set_rgb_background = "\033[48:2:%p1%d:%p2%d:%p3%dm";
++#else
++          tty->TS_set_rgb_foreground = "\033[38:2:%d:%d:%dm";
++          tty->TS_set_rgb_background = "\033[48:2:%d:%d:%dm";
++#endif
++        }
++        else
++        {
++          /* TODO This should be extracted from terminfo/termcap. */
++#ifdef TERMINFO
++          tty->TS_set_rgb_foreground = "\033[38;2;%p1%d;%p2%d;%p3%dm";
++          tty->TS_set_rgb_background = "\033[48;2;%p1%d;%p2%d;%p3%dm";
++#else
++          tty->TS_set_rgb_foreground = "\033[38;2;%d;%d;%dm";
++          tty->TS_set_rgb_background = "\033[48;2;%d;%d;%dm";
++#endif
++        }
++
++        tty->TN_max_colors = 16777216;
++        /*tty->TN_max_pairs = 64; TODO */
++        tty->TN_no_color_video = 0;
++        break;
+     }
+ }
+ 
+@@ -4201,6 +4267,38 @@ use the Bourne shell command `TERM=... export TERM' (C-shell:\n\
+       tty->TN_no_color_video = tgetnum ("NC");
+       if (tty->TN_no_color_video == -1)
+         tty->TN_no_color_video = 0;
++
++
++      /* Allow the user to opt-in to True Color support. */
++      char * true_color_separator = getenv ("EMACS_TRUE_COLOR_SEPARATOR");
++      if (true_color_separator && strcmp (true_color_separator, ";") == 0)
++        {
++          /* TODO This should be extracted from terminfo/termcap. */
++#ifdef TERMINFO
++          tty->TS_set_rgb_foreground = "\033[38;2;%p1%d;%p2%d;%p3%dm";
++          tty->TS_set_rgb_background = "\033[48;2;%p1%d;%p2%d;%p3%dm";
++#else
++          tty->TS_set_rgb_foreground = "\033[38;2;%d;%d;%dm";
++          tty->TS_set_rgb_background = "\033[48;2;%d;%d;%dm";
++#endif
++        }
++      else if (true_color_separator && strcmp (true_color_separator, ":") == 0)
++        {
++          /* XXX chopps use ITU T.421 ':' separator */
++          /* TODO This should be extracted from terminfo/termcap. */
++#ifdef TERMINFO
++          tty->TS_set_rgb_foreground = "\033[38:2:%p1%d:%p2%d:%p3%dm";
++          tty->TS_set_rgb_background = "\033[48:2:%p1%d:%p2%d:%p3%dm";
++#else
++          tty->TS_set_rgb_foreground = "\033[38:2:%d:%d:%dm";
++          tty->TS_set_rgb_background = "\033[48:2:%d:%d:%dm";
++#endif
++        }
++      else
++        {
++          tty->TS_set_rgb_foreground = NULL;
++          tty->TS_set_rgb_background = NULL;
++        }
+     }
+ 
+   tty_default_color_capabilities (tty, 1);
+diff --git a/src/termchar.h b/src/termchar.h
+index d8066d7..e48d583 100644
+--- a/src/termchar.h
++++ b/src/termchar.h
+@@ -157,6 +157,10 @@ struct tty_display_info
+   const char *TS_set_foreground;
+   const char *TS_set_background;
+ 
++  /* Support for 24bit RGB color terminals. */
++  const char *TS_set_rgb_foreground;
++  const char *TS_set_rgb_background;
++
+   int TF_hazeltine;             /* termcap hz flag. */
+   int TF_insmode_motion;        /* termcap mi flag: can move while in insert mode. */
+   int TF_standout_motion;       /* termcap mi flag: can move while in standout mode. */
+diff --git a/src/xfaces.c b/src/xfaces.c
+index 29c91f7..347ebf8 100644
+--- a/src/xfaces.c
++++ b/src/xfaces.c
+@@ -382,7 +382,7 @@ static ptrdiff_t lface_id_to_name_size;
+ 
+ /* TTY color-related functions (defined in tty-colors.el).  */
+ 
+-static Lisp_Object Qtty_color_desc, Qtty_color_by_index, Qtty_color_standard_values;
++static Lisp_Object Qtty_color_desc, Qtty_color_by_index, Qtty_color_standard_values, Qtty_color_canonicalize;
+ 
+ /* The name of the function used to compute colors on TTYs.  */
+ 
+@@ -943,54 +943,80 @@ tty_lookup_color (struct frame *f, Lisp_Object color, XColor *tty_color,
+   if (!STRINGP (color) || NILP (Ffboundp (Qtty_color_desc)))
+     return 0;
+ 
+-  XSETFRAME (frame, f);
+-
+-  color_desc = call2 (Qtty_color_desc, color, frame);
+-  if (CONSP (color_desc) && CONSP (XCDR (color_desc)))
++  if (f->output_method == output_termcap
++      && f->output_data.tty->display_info->TS_set_rgb_foreground
++      && !NILP (Ffboundp (Qtty_color_standard_values)))
+     {
+-      Lisp_Object rgb;
+-
+-      if (! INTEGERP (XCAR (XCDR (color_desc))))
+-	return 0;
++      /* Terminal supports 3 byte RGB colors. */
++      if (!NILP (Ffboundp (Qtty_color_canonicalize)))
++        color = call1(Qtty_color_canonicalize, color);
+ 
+-      tty_color->pixel = XINT (XCAR (XCDR (color_desc)));
++      color_desc = call1 (Qtty_color_standard_values, color);
++      if (! parse_rgb_list (color_desc, tty_color))
++        return 0;
+ 
+-      rgb = XCDR (XCDR (color_desc));
+-      if (! parse_rgb_list (rgb, tty_color))
+-	return 0;
++      /* Map XColor to 3 byte values. */
++      tty_color->pixel = 1 << 24 /* Set bit 24 to mark RGB values. */
++        | (tty_color->red / 256) << 16
++        | (tty_color->green / 256) << 8
++        | (tty_color->blue / 256);
+ 
+-      /* Should we fill in STD_COLOR too?  */
+       if (std_color)
+-	{
+-	  /* Default STD_COLOR to the same as TTY_COLOR.  */
+-	  *std_color = *tty_color;
+-
+-	  /* Do a quick check to see if the returned descriptor is
+-	     actually _exactly_ equal to COLOR, otherwise we have to
+-	     lookup STD_COLOR separately.  If it's impossible to lookup
+-	     a standard color, we just give up and use TTY_COLOR.  */
+-	  if ((!STRINGP (XCAR (color_desc))
+-	       || NILP (Fstring_equal (color, XCAR (color_desc))))
+-	      && !NILP (Ffboundp (Qtty_color_standard_values)))
+-	    {
+-	      /* Look up STD_COLOR separately.  */
+-	      rgb = call1 (Qtty_color_standard_values, color);
+-	      if (! parse_rgb_list (rgb, std_color))
+-		return 0;
+-	    }
+-	}
++        *std_color = *tty_color;
+ 
+       return 1;
+     }
+-  else if (NILP (Fsymbol_value (intern ("tty-defined-color-alist"))))
+-    /* We were called early during startup, and the colors are not
+-       yet set up in tty-defined-color-alist.  Don't return a failure
+-       indication, since this produces the annoying "Unable to
+-       load color" messages in the *Messages* buffer.  */
+-    return 1;
+   else
+-    /* tty-color-desc seems to have returned a bad value.  */
+-    return 0;
++    {
++      XSETFRAME (frame, f);
++
++      color_desc = call2 (Qtty_color_desc, color, frame);
++      if (CONSP (color_desc) && CONSP (XCDR (color_desc)))
++        {
++          Lisp_Object rgb;
++
++          if (! INTEGERP (XCAR (XCDR (color_desc))))
++            return 0;
++
++          tty_color->pixel = XINT (XCAR (XCDR (color_desc)));
++
++          rgb = XCDR (XCDR (color_desc));
++          if (! parse_rgb_list (rgb, tty_color))
++            return 0;
++
++          /* Should we fill in STD_COLOR too?  */
++          if (std_color)
++            {
++              /* Default STD_COLOR to the same as TTY_COLOR.  */
++              *std_color = *tty_color;
++
++              /* Do a quick check to see if the returned descriptor is
++                 actually _exactly_ equal to COLOR, otherwise we have to
++                 lookup STD_COLOR separately.  If it's impossible to lookup
++                 a standard color, we just give up and use TTY_COLOR.  */
++              if ((!STRINGP (XCAR (color_desc))
++                   || NILP (Fstring_equal (color, XCAR (color_desc))))
++                  && !NILP (Ffboundp (Qtty_color_standard_values)))
++                {
++                  /* Look up STD_COLOR separately.  */
++                  rgb = call1 (Qtty_color_standard_values, color);
++                  if (! parse_rgb_list (rgb, std_color))
++                    return 0;
++                }
++            }
++
++          return 1;
++        }
++      else if (NILP (Fsymbol_value (intern ("tty-defined-color-alist"))))
++        /* We were called early during startup, and the colors are not
++           yet set up in tty-defined-color-alist.  Don't return a failure
++           indication, since this produces the annoying "Unable to
++           load color" messages in the *Messages* buffer.  */
++        return 1;
++      else
++        /* tty-color-desc seems to have returned a bad value.  */
++        return 0;
++    }
+ }
+ 
+ /* A version of defined_color for non-X frames.  */
+@@ -1008,7 +1034,9 @@ tty_defined_color (struct frame *f, const char *color_name,
+   color_def->green = 0;
+ 
+   if (*color_name)
+-    status = tty_lookup_color (f, build_string (color_name), color_def, NULL);
++    {
++      status = tty_lookup_color (f, build_string (color_name), color_def, NULL);
++    }
+ 
+   if (color_def->pixel == FACE_TTY_DEFAULT_COLOR && *color_name)
+     {
+@@ -5780,6 +5808,7 @@ map_tty_color (struct frame *f, struct face *face,
+   unsigned long default_pixel =
+     foreground_p ? FACE_TTY_DEFAULT_FG_COLOR : FACE_TTY_DEFAULT_BG_COLOR;
+   unsigned long pixel = default_pixel;
++  XColor true_color;
+ #ifdef MSDOS
+   unsigned long default_other_pixel =
+     foreground_p ? FACE_TTY_DEFAULT_BG_COLOR : FACE_TTY_DEFAULT_FG_COLOR;
+@@ -5798,7 +5827,18 @@ map_tty_color (struct frame *f, struct face *face,
+     {
+       /* Associations in tty-defined-color-alist are of the form
+ 	 (NAME INDEX R G B).  We need the INDEX part.  */
+-      pixel = XINT (XCAR (XCDR (def)));
++      if (f->output_method == output_termcap
++          && f->output_data.tty->display_info->TS_set_rgb_foreground
++          && parse_rgb_list (XCDR (XCDR(def)), &true_color))
++        {
++          /* Map XColor to 3 byte values. */
++          pixel = 1 << 24 /* Set bit 24 to mark RGB values. */
++            | (true_color.red / 256) << 16
++            | (true_color.green / 256) << 8
++            | (true_color.blue / 256);
++        }
++       else
++         pixel = XINT (XCAR (XCDR (def)));
+     }
+ 
+   if (pixel == default_pixel && STRINGP (color))
+@@ -6460,6 +6500,7 @@ syms_of_xfaces (void)
+   DEFSYM (Qwindow_divider, "window-divider");
+   DEFSYM (Qwindow_divider_first_pixel, "window-divider-first-pixel");
+   DEFSYM (Qwindow_divider_last_pixel, "window-divider-last-pixel");
++  DEFSYM (Qtty_color_canonicalize, "tty-color-canonicalize");
+   DEFSYM (Qtty_color_desc, "tty-color-desc");
+   DEFSYM (Qtty_color_standard_values, "tty-color-standard-values");
+   DEFSYM (Qtty_color_by_index, "tty-color-by-index");

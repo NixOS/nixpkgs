@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.3.2"; # NOTE: when updating, remove the HACK BUG FIX below
+  name = "nfs-utils-1.3.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "1xwilpdr1vizq2yhpzxpwqqr9f8kn0dy2wcpc626mf30ybp7572v";
+    sha256 = "1svn27j5c873nixm46l111g7cgyaj5zd51ahfq8mx5v9m3vh93py";
   };
 
   buildInputs =
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       "--with-statedir=/var/lib/nfs"
       "--with-tirpcinclude=${libtirpc}/include/tirpc"
     ]
-    ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc}/bin/rpcgen";
+    ++ stdenv.lib.optional (stdenv ? glibc) "--with-rpcgen=${stdenv.glibc.bin}/bin/rpcgen";
 
   patchPhase =
     ''
@@ -31,10 +31,6 @@ stdenv.mkDerivation rec {
         chmod +x "$i"
       done
       sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
-
-      # HACK BUG FIX: needed for 1.3.2
-      # http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=17a3e5bffb7110d46de1bf42b64b90713ff5ea50
-      sed -e 's,daemon_init(!,daemon_init(,' -i utils/statd/statd.c
     '';
 
   preBuild =

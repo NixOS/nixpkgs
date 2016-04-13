@@ -1,12 +1,19 @@
-{ stdenv, fetchurl, sbclBootstrap, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit" }:
+{ stdenv, fetchurl, writeText, sbclBootstrap
+, sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
+, threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
+  # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
+  # Note that the created binaries still need `patchelf --set-interpreter ...`
+  # to get rid of ${glibc} dependency.
+, purgeNixReferences ? false
+}:
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0ggdw2wfbl0gmfkcm3qbqvhalfb1r9wfxzmi8fd38s53f7j4grd2";
+    sha256 = "0zx6z43xfnw1b6v5d3bpjrwgqs14wxlji22nl0lr4wmzbfbzvqli";
   };
 
   patchPhase = ''
@@ -17,10 +24,11 @@ stdenv.mkDerivation rec {
                (pushnew x features))
              (disable (x)
                (setf features (remove x features))))
-        #-arm
-        (enable :sb-thread)
-        #+arm
-        (enable :arm))) " > customize-target-features.lisp
+    ''
+    + stdenv.lib.optionalString threadSupport "(enable :sb-thread)"
+    + stdenv.lib.optionalString stdenv.isArm "(enable :arm)"
+    + ''
+      )) " > customize-target-features.lisp
 
     pwd
 
@@ -37,9 +45,6 @@ stdenv.mkDerivation rec {
     sed -i src/code/target-load.lisp -e \
       '/date defaulted-source/i(or (and (= 2208988801 (file-write-date defaulted-source-truename)) (= 2208988801 (file-write-date defaulted-fasl-truename)))'
 
-    # Fix software version retrieval
-    sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
-
     # Fix the tests
     sed -e '/deftest pwent/inil' -i contrib/sb-posix/posix-tests.lisp
     sed -e '/deftest grent/inil' -i contrib/sb-posix/posix-tests.lisp
@@ -54,7 +59,21 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/runtime/Config.x86-64-darwin \
       --replace mmacosx-version-min=10.4 mmacosx-version-min=10.5
-  '';
+  ''
+  + (if purgeNixReferences
+    then
+      # This is the default location to look for the core; by default in $out/lib/sbcl
+      ''
+        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+          -i src/runtime/runtime.c
+      ''
+    else
+      # Fix software version retrieval
+      ''
+        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp
+      ''
+    );
+
 
   preBuild = ''
     export INSTALL_ROOT=$out
@@ -68,6 +87,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     INSTALL_ROOT=$out sh install.sh
+  '';
+
+  # Specifying $SBCL_HOME is only truly needed with `purgeNixReferences = true`.
+  setupHook = writeText "setupHook.sh" ''
+    envHooks+=(_setSbclHome)
+    _setSbclHome() {
+      export SBCL_HOME='@out@/lib/sbcl/'
+    }
   '';
 
   meta = sbclBootstrap.meta // {

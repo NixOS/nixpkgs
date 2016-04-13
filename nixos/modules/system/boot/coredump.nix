@@ -33,19 +33,24 @@ with lib;
 
   };
 
-  config = mkIf config.systemd.coredump.enable {
+  config = mkMerge [
+    (mkIf config.systemd.coredump.enable {
 
-    environment.etc."systemd/coredump.conf".text =
-      ''
-        [Coredump]
-        ${config.systemd.coredump.extraConfig}
-      '';
+      environment.etc."systemd/coredump.conf".text =
+        ''
+          [Coredump]
+          ${config.systemd.coredump.extraConfig}
+        '';
 
-    # Have the kernel pass core dumps to systemd's coredump helper binary.
-    # From systemd's 50-coredump.conf file. See:
-    # <https://github.com/systemd/systemd/blob/v218/sysctl.d/50-coredump.conf.in>
-    boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %p %u %g %s %t %e";
+      # Have the kernel pass core dumps to systemd's coredump helper binary.
+      # From systemd's 50-coredump.conf file. See:
+      # <https://github.com/systemd/systemd/blob/v218/sysctl.d/50-coredump.conf.in>
+      boot.kernel.sysctl."kernel.core_pattern" = "|${pkgs.systemd}/lib/systemd/systemd-coredump %p %u %g %s %t %e";
+    })
 
-  };
+    (mkIf (!config.systemd.coredump.enable) {
+      boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+    })
+  ];
 
 }

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.0.3";
 
   src = fetchurl {
-    url = "http://download.videolan.org/pub/videolan/libdvdnav/${version}/libdvdnav-${version}.tar.bz2";
+    url = "http://get.videolan.org/libdvdnav/${version}/${name}.tar.bz2";
     sha256 = "5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5f2cbf60b6d";
   };
 

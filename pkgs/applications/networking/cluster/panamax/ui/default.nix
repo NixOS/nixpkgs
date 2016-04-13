@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler_HEAD
-, ruby, rubygemsFun, openssl, sqlite, dataDir ? "/var/lib/panamax-ui"}:
+{ stdenv, fetchgit, fetchurl, makeWrapper, bundlerEnv, bundler
+, ruby, openssl, sqlite, dataDir ? "/var/lib/panamax-ui"}@args:
 
 with stdenv.lib;
 
@@ -13,10 +13,9 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
-    buildInputs = [ openssl ];
   };
 
-  bundler = bundler_HEAD.override { inherit ruby; };
+  bundler = args.bundler.override { inherit ruby; };
 
   src = fetchgit {
     rev = "refs/tags/v${version}";

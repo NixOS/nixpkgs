@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages, python} :
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "git-review-${version}";
   version = "1.25.0";
 

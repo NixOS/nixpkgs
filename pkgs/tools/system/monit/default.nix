@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-ssl-incl-dir=${openssl}/include"
-    "--with-ssl-lib-dir=${openssl}/lib"
+    "--with-ssl-lib-dir=${openssl.out}/lib"
   ] ++ stdenv.lib.optionals (! usePAM) [ "--without-pam" ];
 
   meta = {

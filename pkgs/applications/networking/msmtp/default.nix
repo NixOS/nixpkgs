@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn }:
+{ stdenv, fetchurl, openssl, pkgconfig, gnutls, gsasl, libidn, Security }:
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "12c7ljahb06pgn8yvvw526xvr11vnr6d4nr0apylixddpxycsvig";
   };
 
-  buildInputs = [ openssl pkgconfig gnutls gsasl libidn ];
+  buildInputs = [ openssl pkgconfig gnutls gsasl libidn ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
+
+  configureFlags =
+    stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
     cp scripts/msmtpq/msmtp-queue scripts/msmtpq/msmtpq $prefix/bin/
@@ -21,6 +25,6 @@ stdenv.mkDerivation rec {
       homepage = "http://msmtp.sourceforge.net/";
       license = stdenv.lib.licenses.gpl3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.unix;
     };
 }

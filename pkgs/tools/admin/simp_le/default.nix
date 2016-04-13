@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "simp_le-20151207";
+pythonPackages.buildPythonApplication rec {
+  name = "simp_le-2016-02-06";
 
   src = fetchFromGitHub {
     owner = "kuba";
     repo = "simp_le";
-    rev = "ac836bc0af988cb14dc0a83dc2039e7fa541b677";
-    sha256 = "0r07mlis81n0pmj74wjcvjpi6i3lkzs6hz8iighhk8yymn1a8rbn";
+    rev = "8f258bc098a84b7a20c2732536d0740244d814f7";
+    sha256 = "1r2c31bhj91n3cjyf01spx52vkqxi5475zzkc9s1aliy3fs3lc4r";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ acme ];
+  propagatedBuildInputs = with pythonPackages; [ acme_0_1 ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/kuba/simp_le;
+    inherit (src.meta) homepage;
     description = "Simple Let's Encrypt client";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner nckx ];
     platforms = platforms.all;
   };
 }

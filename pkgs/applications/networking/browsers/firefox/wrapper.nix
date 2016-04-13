@@ -1,11 +1,59 @@
-{ stdenv, lib, browser, makeDesktopItem, makeWrapper, plugins, gst_plugins, libs, gtk_modules
-, browserName, desktopName, nameSuffix, icon, libtrick ? true
+{ stdenv, lib, makeDesktopItem, makeWrapper, config
+
+## various stuff that can be plugged in
+, gnash, flashplayer, hal-flash
+, MPlayerPlugin, gecko_mediaplayer, gst_all, xorg, libpulseaudio, libcanberra
+, supportsJDK, jrePlugin, icedtea_web
+, trezor-bridge, bluejeans, djview4, adobe-reader
+, google_talk_plugin, fribid, gnome3/*.gnome_shell*/
 }:
 
-let p = builtins.parseDrvName browser.name; in
+## configurability of the wrapper itself
+browser:
+{ browserName ? browser.browserName or (builtins.parseDrvName browser.name).name
+, name ? (browserName + "-" + (builtins.parseDrvName browser.name).version)
+, desktopName ? # browserName with first letter capitalized
+  (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
+, nameSuffix ? ""
+, icon ? browserName, libtrick ? true
+}:
 
+let
+  cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+  enableAdobeFlash = cfg.enableAdobeFlash or false;
+  enableGnash = cfg.enableGnash or false;
+  jre = cfg.jre or false;
+  icedtea = cfg.icedtea or false;
+
+  plugins =
+     assert !(enableGnash && enableAdobeFlash);
+     assert !(jre && icedtea);
+     ([ ]
+      ++ lib.optional enableGnash gnash
+      ++ lib.optional enableAdobeFlash flashplayer
+      ++ lib.optional (cfg.enableDjvu or false) (djview4)
+      ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
+      ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
+      ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
+      ++ lib.optional icedtea icedtea_web
+      ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
+      ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
+      ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome_shell
+      ++ lib.optional (cfg.enableTrezor or false) trezor-bridge
+      ++ lib.optional (cfg.enableBluejeans or false) bluejeans
+      ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
+     );
+  libs = [ gst_all.gstreamer gst_all.gst-plugins-base ]
+         ++ lib.optionals (cfg.enableQuakeLive or false)
+         (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
+         ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
+         ++ lib.optional (config.pulseaudio or false) libpulseaudio;
+  gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
+  gtk_modules = [ libcanberra ];
+
+in
 stdenv.mkDerivation {
-  name = "${p.name}-with-plugins-${p.version}";
+  inherit name;
 
   desktopItem = makeDesktopItem {
     name = browserName;
@@ -26,7 +74,7 @@ stdenv.mkDerivation {
     ];
   };
 
-  buildInputs = [makeWrapper] ++ gst_plugins;
+  buildInputs = [makeWrapper] ++ gst-plugins;
 
   buildCommand = ''
     if [ ! -x "${browser}/bin/${browserName}" ]
@@ -82,11 +130,15 @@ stdenv.mkDerivation {
   libs = map (x: x + "/lib") libs ++ map (x: x + "/lib64") libs;
   gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
-  meta = {
+  passthru = { unwrapped = browser; };
+
+  meta = browser.meta // {
     description =
       browser.meta.description
       + " (with plugins: "
       + lib.concatStrings (lib.intersperse ", " (map (x: x.name) plugins))
       + ")";
+    hydraPlatforms = [];
+    priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
   };
 }

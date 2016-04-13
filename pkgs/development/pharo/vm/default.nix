@@ -1,107 +1,27 @@
-{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo }:
+{ stdenv, fetchurl, cmake, bash, unzip, glibc, openssl, gcc, mesa, freetype, xorg, alsaLib, cairo, makeDesktopItem } @args:
 
-stdenv.mkDerivation rec {
+rec {
+  pharo-vm-build = import ./build-vm.nix args;
 
-  version = "2015.08.06";
+  base-url = http://files.pharo.org/vm/src/vm-unix-sources/blessed;
 
-  name = "pharo-vm-core-i386-${version}";
-  system = "x86_32-linux";
-  src = fetchurl {
-    url = "http://files.pharo.org/vm/src/vm-unix-sources/blessed/pharo-vm-${version}.tar.bz2";
-    sha256 = "1kmb6phxb94d37awwldwbkj704l6m0c6sv0m54mcz6d4rx41fqgp";
+  pharo-no-spur = pharo-vm-build rec {
+    version = "2016.02.18";
+    name = "pharo-vm-i386-${version}";
+    binary-basename = "pharo-vm";
+    src = fetchurl {
+      url = "${base-url}/pharo-vm-${version}.tar.bz2";
+      sha256 = "16n2zg7v2s1ml0vvpbhkw6khmgn637sr0d7n2b28qm5yc8pfhcj4";
+    };
   };
 
-  sources10Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV10.sources.zip;
-    sha256 = "0aijhr3w5w3jzmnpl61g6xkwyi2l1mxy0qbvr9k3whz8zlrsijh2";
-  };
-
-  sources20Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV20.sources.zip;
-    sha256 = "1xsc0p361pp8iha5zckppw29sbapd706wbvzvgjnkv2n6n1q5gj7";
-  };
-
-  sources30Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV30.sources.zip;
-    sha256 = "08d9a7gggwpwgrfbp7iv5896jgqz3vgjfrq19y3jw8k10pva98ak";
-  };
-
-  sources40Zip = fetchurl {
-    url = http://files.pharo.org/sources/PharoV40.sources.zip;
-    sha256 = "1xq1721ql19hpgr8ir372h92q7g8zwd6k921b21dap4wf8djqnpd";
-  };
-
-  # Building
-  preConfigure = ''
-    cd build/
-  '';
-  resources = ./resources;
-  installPhase = ''
-    echo Current directory $(pwd)
-    echo Creating prefix "$prefix"
-    mkdir -p "$prefix/lib/pharo-vm"
-
-    cd ../../results
-
-    mv vm-display-null vm-display-null.so
-    mv vm-display-X11 vm-display-X11.so
-    mv vm-sound-null vm-sound-null.so
-    mv vm-sound-ALSA vm-sound-ALSA.so
-    mv pharo pharo-vm
-
-    cp * "$prefix/lib/pharo-vm"
-
-    cp -R "$resources/"* "$prefix/"
-
-    mkdir $prefix/bin
-
-    chmod u+w $prefix/bin
-    cat > $prefix/bin/pharo-vm-x <<EOF
-    #!${bash}/bin/bash
-
-    # disable parameter expansion to forward all arguments unprocessed to the VM
-    set -f
-
-    exec $prefix/lib/pharo-vm/pharo-vm "\$@"
-    EOF
-
-    cat > $prefix/bin/pharo-vm-nox <<EOF
-    #!${bash}/bin/bash
-
-    # disable parameter expansion to forward all arguments unprocessed to the VM
-    set -f
-
-    exec $prefix/lib/pharo-vm/pharo-vm -vm-display-null "\$@"
-    EOF
-
-    chmod +x $prefix/bin/pharo-vm-x $prefix/bin/pharo-vm-nox
-
-    unzip ${sources10Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources20Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources30Zip} -d $prefix/lib/pharo-vm/
-    unzip ${sources40Zip} -d $prefix/lib/pharo-vm/
-  '';
-
-  buildInputs = [ bash unzip cmake glibc openssl gcc mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo ];
-
-  meta = {
-    description = "Clean and innovative Smalltalk-inspired environment";
-    longDescription = ''
-      Pharo's goal is to deliver a clean, innovative, free open-source
-      Smalltalk-inspired environment. By providing a stable and small core
-      system, excellent dev tools, and maintained releases, Pharo is an
-      attractive platform to build and deploy mission critical applications.
-
-      This package provides the executable VM. You should probably not care
-      about this package (which represents a packaging detail) and have a
-      look at the pharo-vm-core package instead.
-
-      Please fill bug reports on http://bugs.pharo.org under the 'Ubuntu
-      packaging (ppa:pharo/stable)' project.
-    '';
-    homepage = http://pharo.org;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.DamienCassou ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+  pharo-spur = pharo-vm-build rec {
+    version = "2016.04.04";
+    name = "pharo-vm-spur-i386-${version}";
+    binary-basename = "pharo-spur-vm";
+    src = fetchurl {
+      url = "${base-url}/pharo-vm-spur-${version}.tar.bz2";
+      sha256 = "1kmf782vdk9xbzi2yn1vpzksv8m04ry8n2ih16jhcihibxzcmz23";
+    };
   };
 }

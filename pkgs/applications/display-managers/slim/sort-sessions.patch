@@ -1,0 +1,40 @@
+diff -ru -x '*~' slim-1.3.6-orig/cfg.cpp slim-1.3.6/cfg.cpp
+--- slim-1.3.6-orig/cfg.cpp	2013-10-02 00:38:05.000000000 +0200
++++ slim-1.3.6/cfg.cpp	2016-01-30 10:35:51.108766802 +0100
+@@ -14,6 +14,7 @@
+ #include <iostream>
+ #include <unistd.h>
+ #include <stdlib.h>
++#include <algorithm>
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+@@ -293,6 +294,8 @@
+ 
+ 	sessions.clear();
+ 
++        typedef pair<string,string> session_t;
++
+ 	if( !strSessionDir.empty() ) {
+ 		DIR *pDir = opendir(strSessionDir.c_str());
+ 
+@@ -325,7 +328,7 @@
+                                      }
+                              }
+                              desktop_file.close();
+-                             pair<string,string> session(session_name,session_exec);
++                             session_t session(session_name,session_exec);
+                              sessions.push_back(session);
+                              cout << session_exec << " - " << session_name << endl;
+                         }
+@@ -341,6 +344,10 @@
+         pair<string,string> session("","");
+         sessions.push_back(session);
+ 	}
++
++        std::sort(sessions.begin(), sessions.end(), [](session_t& a, session_t& b) -> bool{
++                return a.first < b.first;
++        });
+ }
+ 
+ pair<string,string> Cfg::nextSession() {

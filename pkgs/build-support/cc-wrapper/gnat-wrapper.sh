@@ -1,4 +1,8 @@
 #! @shell@ -e
+path_backup="$PATH"
+if [ -n "@coreutils_bin@" ]; then
+  PATH="@coreutils_bin@/bin"
+fi
 
 if [ -n "$NIX_GNAT_WRAPPER_START_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_START_HOOK"
@@ -58,9 +62,23 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
         elif [ "${p:0:4}" = -aO/ ] && badPath "${p:3}"; then
             skip $p
         else
-            rest=("${rest[@]}" "$p")
+            rest+=("$p")
         fi
         n=$((n + 1))
+    done
+    params=("${rest[@]}")
+fi
+
+
+# Clear march/mtune=native -- they bring impurity.
+if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
+    rest=()
+    for i in "${params[@]}"; do
+        if [[ "$i" = -m*=native ]]; then
+            skip $i
+        else
+            rest+=("$i")
+        fi
     done
     params=("${rest[@]}")
 fi
@@ -100,4 +118,5 @@ if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
+PATH="$path_backup"
 exec @prog@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}

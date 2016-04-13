@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, dpkg, xorg, qt4, alsaLib, makeWrapper, openssl_1_0_1, freetype
+{ fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, chromium, udev, fontconfig
-, dbus, expat, ffmpeg_0_10 }:
+, libgcrypt, libudev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
 
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "0.9.17.1.g9b85d43.7";
+  version = "1.0.27.71.g0a26e3b2-9";
 
   deps = [
     alsaLib
     atk
     cairo
     cups
+    curl
     dbus
     expat
     ffmpeg_0_10
@@ -26,19 +26,20 @@ let
     libpng
     nss
     pango
-    qt4
     stdenv.cc.cc
-    udev
+    libudev
     xorg.libX11
     xorg.libXcomposite
+    xorg.libXcursor
     xorg.libXdamage
     xorg.libXext
     xorg.libXfixes
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender
-    xorg.libXrender
     xorg.libXScrnSaver
+    xorg.libXtst
+    zlib
   ];
 
 in
@@ -48,8 +49,8 @@ stdenv.mkDerivation {
 
   src =
     fetchurl {
-      url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}-1_amd64.deb";
-      sha256 = "0x87q7gd2997sgppsm4lmdiz1cm11x5vnd5c34nqb5d4ry5qfyki";
+      url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
+      sha256 = "1rs08cvn0y1lzazlmzj4sn2iyacadwi6j70n5c7rvfvvs4p61p42";
     };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -61,44 +62,40 @@ stdenv.mkDerivation {
       libdir=$out/lib/spotify
       mkdir -p $libdir
       dpkg-deb -x $src $out
-      mv $out/opt/spotify/* $out/
-      rm -rf $out/usr $out/opt
+      mv $out/usr/* $out/
+      rm -rf $out/usr
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
-      ln -s ${openssl_1_0_1}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${openssl_1_0_1}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
-      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
-      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
+      ln -s ${openssl.out}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
+      ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      mkdir -p $out/bin
-
-      rpath="$out/spotify-client/Data:$libdir:$out/spotify-client:${stdenv.cc.cc}/lib64"
-
-      ln -s $out/spotify-client/spotify $out/bin/spotify
+      rpath="$out/share/spotify:$libdir"
 
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $rpath $out/spotify-client/spotify
+        --set-rpath $rpath $out/share/spotify/spotify
 
-      patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath $rpath $out/spotify-client/Data/SpotifyHelper
-
-      preload=$out/libexec/spotify/libpreload.so
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"
-      mkdir -p $out/libexec/spotify
-      gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
-
-      wrapProgram $out/bin/spotify --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "$librarypath"
-      wrapProgram $out/spotify-client/Data/SpotifyHelper --set LD_PRELOAD $preload --prefix LD_LIBRARY_PATH : "$librarypath"
+      wrapProgram $out/share/spotify/spotify \
+        --prefix LD_LIBRARY_PATH : "$librarypath" \
+        --prefix PATH : "${gnome.zenity}/bin"
 
       # Desktop file
       mkdir -p "$out/share/applications/"
-      cp "$out/spotify-client/spotify.desktop" "$out/share/applications/"
-      sed -i "s|Icon=.*|Icon=$out/spotify-client/Icons/spotify-linux-512.png|" "$out/share/applications/spotify.desktop"
-    ''; # */
+      cp "$out/share/spotify/spotify.desktop" "$out/share/applications/"
+
+      # Icons
+      for i in 16 22 24 32 48 64 128 256 512; do
+        ixi="$i"x"$i"
+        mkdir -p "$out/share/icons/hicolor/$ixi/apps"
+        ln -s "$out/share/spotify/icons/spotify-linux-$i.png" \
+          "$out/share/icons/hicolor/$ixi/apps/spotify-client.png"
+      done
+    '';
 
   dontStrip = true;
   dontPatchELF = true;

@@ -224,6 +224,63 @@ genericBuild
 
 </variablelist>
 
+<variablelist>
+  <title>Variables affecting build properties</title>
+
+  <varlistentry>
+    <term><varname>enableParallelBuilding</varname></term>
+    <listitem><para>If set, <literal>stdenv</literal> will pass specific
+    flags to <literal>make</literal> and other build tools to enable
+    parallel building with up to <literal>build-cores</literal>
+    workers.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>preferLocalBuild</varname></term>
+    <listitem><para>If set, specifies that the package is so lightweight
+    in terms of build operations (e.g. write a text file from a Nix string
+    to the store) that there's no need to look for it in binary caches --
+    it's faster to just build it locally. It also tells Hydra and other
+    facilities that this package doesn't need to be exported in binary
+    caches (noone would use it, after all).</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+<variablelist>
+  <title>Special variables</title>
+
+  <varlistentry>
+    <term><varname>passthru</varname></term>
+    <listitem><para>This is an attribute set which can be filled with arbitrary
+    values. For example:
+
+<programlisting>
+passthru = {
+  foo = "bar";
+  baz = {
+    value1 = 4;
+    value2 = 5;
+  };
+}
+</programlisting>
+
+</para>
+
+    <para>Values inside it are not passed to the builder, so you can change
+    them without triggering a rebuild. However, they can be accessed outside of a
+    derivation directly, as if they were set inside a derivation itself, e.g.
+    <literal>hello.baz.value1</literal>. We don't specify any usage or
+    schema of <literal>passthru</literal> - it is meant for values that would be
+    useful outside the derivation in other parts of a Nix expression (e.g. in other
+    derivations). An example would be to convey some specific dependency of your
+    derivation which contains a program with plugins support.  Later, others who
+    make derivations with plugins can use passed-through dependency to ensure that
+    their plugin would be binary-compatible with built program.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
 </section>
 
 
@@ -899,7 +956,7 @@ following:
     phase.</para></listitem>
   </varlistentry>
 
-  <varlistentry>
+  <varlistentry xml:id="stdenv-separateDebugInfo">
     <term><varname>separateDebugInfo</varname></term>
     <listitem><para>If set to <literal>true</literal>, the standard
     environment will enable debug information in C/C++ builds. After
@@ -1184,6 +1241,14 @@ echo @foo@
     <listitem><para>Adds the <filename>share/aclocal</filename>
     subdirectory of each build input to the <envar>ACLOCAL_PATH</envar>
     environment variable.</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term>Autoconf</term>
+    <listitem><para>The <varname>autoreconfHook</varname> derivation adds
+    <varname>autoreconfPhase</varname>, which runs autoreconf, libtoolize and
+    automake, essentially preparing the configure script in autotools-based
+    builds.</para></listitem>
   </varlistentry>
 
   <varlistentry>

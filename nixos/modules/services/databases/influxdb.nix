@@ -120,6 +120,7 @@ in
 
       package = mkOption {
         default = pkgs.influxdb;
+        defaultText = "pkgs.influxdb";
         description = "Which influxdb derivation to use";
         type = types.package;
       };

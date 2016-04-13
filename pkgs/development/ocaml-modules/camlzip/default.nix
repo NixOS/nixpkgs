@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   postPatch = ''
     substitute ${./META} META --subst-var-by VERSION "${version}"
     substituteInPlace Makefile \
-      --subst-var-by ZLIB_LIBDIR "${zlib}/lib" \
+      --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
       --subst-var-by ZLIB_INCLUDE "${zlib}/include"
   '';
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

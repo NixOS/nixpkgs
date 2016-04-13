@@ -1,22 +1,24 @@
 { stdenv, fetchurl, gettext }:
 
-let version = "2.5.1"; in
 stdenv.mkDerivation rec {
   name = "ms-sys-${version}";
+  version = "2.5.3";
  
   src = fetchurl {
     url = "mirror://sourceforge/ms-sys/${name}.tar.gz";
-    sha256 = "1vw8yvcqb6iccs4x7rgk09mqrazkalmpxxxsxmvxn32jzdzl5b26";
+    sha256 = "0mijf82cbji4laip6hiy3l5ka5mzq5sivjvyv7wxnc2fd3v7hgp0";
   };
 
   buildInputs = [ gettext ];
 
+  enableParallelBuilding = true;
+
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = {
-    inherit version;
+  meta = with stdenv.lib; {
+    description = "A program for writing Microsoft-compatible boot records";
     homepage = http://ms-sys.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    description = "A program for writing Microsoft compatible boot records";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ nckx ];
   };
 }

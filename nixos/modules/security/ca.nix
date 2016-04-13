@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  caBundle = pkgs.runCommand "ca-bundle.crt"
+  caCertificates = pkgs.runCommand "ca-certificates.crt"
     { files =
         config.security.pki.certificateFiles ++
         [ (builtins.toFile "extra.crt" (concatStringsSep "\n" config.security.pki.certificates)) ];
@@ -26,7 +26,7 @@ in
       description = ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
-        <filename>/etc/ssl/certs/ca-bundle.crt</filename>, which is
+        <filename>/etc/ssl/certs/ca-certificates.crt</filename>, which is
         used by many programs that use OpenSSL, such as
         <command>curl</command> and <command>git</command>.
       '';
@@ -35,14 +35,17 @@ in
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = singleton ''
-        NixOS.org
-        =========
-        -----BEGIN CERTIFICATE-----
-        MIIGUDCCBTigAwIBAgIDD8KWMA0GCSqGSIb3DQEBBQUAMIGMMQswCQYDVQQGEwJJ
-        TDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjErMCkGA1UECxMiU2VjdXJlIERpZ2l0
-        ...
-        -----END CERTIFICATE-----
+      example = literalExample ''
+        [ '''
+            NixOS.org
+            =========
+            -----BEGIN CERTIFICATE-----
+            MIIGUDCCBTigAwIBAgIDD8KWMA0GCSqGSIb3DQEBBQUAMIGMMQswCQYDVQQGEwJJ
+            TDEWMBQGA1UEChMNU3RhcnRDb20gTHRkLjErMCkGA1UECxMiU2VjdXJlIERpZ2l0
+            ...
+            -----END CERTIFICATE-----
+          '''
+        ]
       '';
       description = ''
         A list of trusted root certificates in PEM format.
@@ -56,19 +59,13 @@ in
     security.pki.certificateFiles = [ "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ];
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
+    environment.etc."ssl/certs/ca-certificates.crt".source = caCertificates;
 
     # Old NixOS compatibility.
-    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
+    environment.etc."ssl/certs/ca-bundle.crt".source = caCertificates;
 
     # CentOS/Fedora compatibility.
-    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
-
-    environment.sessionVariables =
-      { SSL_CERT_FILE          = "/etc/ssl/certs/ca-certificates.crt";
-        # FIXME: unneeded - remove eventually.
-        GIT_SSL_CAINFO         = "/etc/ssl/certs/ca-certificates.crt";
-      };
+    environment.etc."pki/tls/certs/ca-bundle.crt".source = caCertificates;
 
   };
 

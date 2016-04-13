@@ -1,15 +1,15 @@
 { fetchurl, stdenv, which, pkgconfig, makeWrapper, libxcb, xcbutilkeysyms
 , xcbutil, xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl
 , xcb-util-cursor, coreutils, perl, pango, perlPackages, libxkbcommon
-, xorgserver, xvfb_run }:
+, xorgserver, xvfb_run, dmenu, i3status }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.11";
+  version = "4.12";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "0bwqklb6irgjmgvj7mlyz4brr4lggfm3zqmvclvxcbyrzc31xkkq";
+    sha256 = "1d3q3lgpjbkmcwzjhp0dfr0jq847silcfg087slcnj95ikh1r7p1";
   };
 
   buildInputs = [
@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/etc/i3/config --replace dmenu_run ${dmenu}/bin/dmenu_run
+    substituteInPlace $out/etc/i3/config --replace "status_command i3status" "status_command ${i3status}/bin/i3status"
+    substituteInPlace $out/etc/i3/config.keycodes --replace dmenu_run ${dmenu}/bin/dmenu_run
+    substituteInPlace $out/etc/i3/config.keycodes --replace "status_command i3status" "status_command ${i3status}/bin/i3status"
   '';
 
   # Tests have been failing (at least for some people in some cases)

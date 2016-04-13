@@ -22,7 +22,10 @@
   (with empty password).</para></listitem>
 
   <listitem><para>If you downloaded the graphical ISO image, you can
-  run <command>start display-manager</command> to start KDE.</para></listitem>
+  run <command>start display-manager</command> to start KDE. If you
+  want to continue on the terminal, you can use
+  <command>loadkeys</command> to switch to your preferred keyboard layout.
+  (We even provide neo2 via <command>loadkeys de neo</command>!)</para></listitem>
 
   <listitem><para>The boot process should have brought up networking (check
   <command>ip a</command>).  Networking is necessary for the
@@ -153,10 +156,6 @@ $ nano /mnt/etc/nixos/configuration.nix
     <filename>nixos-install</filename>.)  In most cases,
     <command>nixos-generate-config</command> will figure out the
     required modules.</para></note>
-
-    <para>Examples of real-world NixOS configuration files can be
-    found at <link
-    xlink:href="https://nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
   </listitem>
 

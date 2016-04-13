@@ -1,15 +1,15 @@
 { stdenv, fetchurl, groff }:
 
-let version = "52"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "mksh-${version}";
+  version = "52c";
 
   src = fetchurl {
     urls = [
       "http://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/mksh-R${version}.tgz"
     ];
-    sha256 = "13vnncwfx4zq3yi7llw3p6miw0px1bm5rrps3y1nlfn6sb6zbhj5";
+    sha256 = "19ivsic15903hv3ipzk0kvkaxardw7b99s8l5iw3y415lz71ld66";
   };
 
   buildInputs = [ groff ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "MirBSD Korn Shell";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI

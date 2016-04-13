@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       cd src
-      sed -i "s@^CFLAGS.*\$@&\nCFLAGS += -I${libXpm}/include/X11@" tk/makefile
+      sed -i "s@^CFLAGS.*\$@&\nCFLAGS += -I${libXpm.dev}/include/X11@" tk/makefile
       sed -i "s@^INCLUDES.*\$@&\n\t-I$PWD/tcl \\\\@" sim/makefile
     '';
 

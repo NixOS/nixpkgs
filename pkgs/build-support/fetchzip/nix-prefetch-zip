@@ -6,6 +6,7 @@ usage(){
 Options:
       --url         url    The url of the archive to fetch.
       --name        name   The name to use for the store path (defaults to \`basename \$url\`).
+      --ext         ext    The file extension (.zip, .tar.gz, ...) to be REMOVED from name
       --hash        hash   The hash of unpacked archive.
       --hash-type   type   Use the specified cryptographic hash algorithm, which can be one of md5, sha1, and sha256.
       --leave-root         Keep the root directory of the archive.
@@ -16,6 +17,7 @@ Options:
 
 
 name=""
+ext=""
 argi=0
 argfun=""
 for arg; do
@@ -23,6 +25,7 @@ for arg; do
     case $arg in
       --url) argfun=set_url;;
       --name) argfun=set_name;;
+      --ext) argfun=set_ext;;
       --hash) argfun=set_expHash;;
       --hash-type) argfun=set_hashType;;
       --leave-root) leaveRoot=true;;
@@ -67,10 +70,12 @@ hashFormat="--base32"
 tmp=$(mktemp -d 2>/dev/null || mktemp -d -t "$$")
 trap "rm -rf '$tmp'" EXIT
 
-unpackDirTmp=$tmp/unpacked-tmp/$name
+dirname=$(basename -s "$ext" "$name")
+
+unpackDirTmp=$tmp/unpacked-tmp/$dirname
 mkdir -p $unpackDirTmp
 
-unpackDir=$tmp/unpacked/$name
+unpackDir=$tmp/unpacked/$dirname
 mkdir -p $unpackDir
 
 downloadedFile=$tmp/$(basename "$url")

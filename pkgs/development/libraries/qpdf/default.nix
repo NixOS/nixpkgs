@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pcre, zlib, perl }:
 
-let version = "5.1.3";
+let version = "6.0.0";
 in
 stdenv.mkDerivation rec {
   name = "qpdf-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qpdf/qpdf/${version}/${name}.tar.gz";
-    sha256 = "1lq1v7xghvl6p4hgrwbps3a13ad6lh4ib3myimb83hxgsgd4n5nm";
+    sha256 = "0csj2p2gkxrc0rk8ykymlsdgfas96vzf1dip3y1x7z1q9plwgzd9";
   };
 
   nativeBuildInputs = [ perl ];
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://qpdf.sourceforge.net/; 

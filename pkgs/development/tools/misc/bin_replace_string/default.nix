@@ -1,16 +1,20 @@
 { stdenv, fetchurl, libelf, txt2man }:
 
-let version = "0.2"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "bin_replace_string-${version}";
+  version = "0.2";
 
   src = fetchurl {
     sha256 = "1gnpddxwpsfrg4l76x5yplsvbcdbviybciqpn22yq3g3qgnr5c2a";
     url = "ftp://ohnopub.net/mirror/bin_replace_string-0.2.tar.bz2";
   };
 
+  buildInputs = [ libelf ];
+  nativeBuildInputs = [ txt2man ];
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    inherit version;
     description = "Edit precompiled binaries";
     longDescription = ''
       bin_replace_string edits C-style strings in precompiled binaries. This is
@@ -25,9 +29,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
-
-  buildInputs = [ libelf ];
-  nativeBuildInputs = [ txt2man ];
-
-  enableParallelBuilding = true;
 }

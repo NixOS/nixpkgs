@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "opensmtpd-${version}";
-  version = "5.7.3p1";
+  version = "5.7.3p2";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
   buildInputs = [ libasr libevent zlib openssl db pam ];
 
   src = fetchurl {
     url = "http://www.opensmtpd.org/archives/${name}.tar.gz";
-    sha256 = "848a3c72dd22b216bb924b69dc356fc297e8b3671ec30856978950208cba74dd";
+    sha256 = "0d2973008d0f66bebb84bed516be6c32617735241cc54dd26643529281a8e52b";
   };
 
   patches = [ ./proc_path.diff ];
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     "--with-privsep-user=smtpd"
     "--with-queue-user=smtpq"
     "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
-    "--with-libevent-dir=${libevent}"
+    "--with-libevent-dir=${libevent.dev}"
+    "--enable-table-db"
   ];
 
   installFlags = [

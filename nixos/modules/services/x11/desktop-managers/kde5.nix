@@ -55,12 +55,20 @@ in
     services.xserver.desktopManager.session = singleton {
       name = "kde5";
       bgSupport = true;
-      start = ''exec ${kde5.plasma-workspace}/bin/startkde;'';
+      start = ''
+        # Load PulseAudio module for routing support.
+        # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+        ${optionalString config.hardware.pulseaudio.enable ''
+          ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+        ''}
+
+        exec startkde
+      '';
     };
 
     security.setuidOwners = singleton {
       program = "kcheckpass";
-      source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
+      source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
       owner = "root";
       group = "root";
       setuid = true;
@@ -68,8 +76,6 @@ in
 
     environment.systemPackages =
       [
-        pkgs.qt4 # qtconfig is the only way to set Qt 4 theme
-
         kde5.frameworkintegration
         kde5.kinit
 
@@ -95,16 +101,12 @@ in
         kde5.plasma-workspace
         kde5.plasma-workspace-wallpapers
 
-        kde5.ark
         kde5.dolphin
         kde5.dolphin-plugins
         kde5.ffmpegthumbs
-        kde5.gwenview
-        kde5.kate
         kde5.kdegraphics-thumbnailers
         kde5.kio-extras
         kde5.konsole
-        kde5.okular
         kde5.print-manager
 
         # Oxygen icons moved to KDE Frameworks 5.16 and later.
@@ -126,6 +128,7 @@ in
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
+      ++ lib.optional config.services.colord.enable kde5.colord-kde
       ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ]
 
       ++ lib.optionals cfg.phonon.gstreamer.enable
@@ -168,19 +171,22 @@ in
 
     # Enable GTK applications to load SVG icons
     environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
+      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
     };
 
     fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 
-    programs.ssh.askPassword = "${kde5.ksshaskpass}/bin/ksshaskpass";
+    programs.ssh.askPassword = "${kde5.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
     # Extra UDEV rules used by Solid
-    services.udev.packages = [ pkgs.media-player-info ];
+    services.udev.packages = [
+      pkgs.libmtp
+      pkgs.media-player-info
+    ];
 
     services.xserver.displayManager.sddm = {
       theme = "breeze";

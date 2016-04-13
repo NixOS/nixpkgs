@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "urweb-${version}";
-  version = "20151018";
+  version = "20151220";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "08p52p5m1xl2gzdchnayky44mm2b0x8hv0f00iviyyv1gnx3lpy0";
+    sha256 = "155maalm4l1ni7az3yqs0lrgl5f2xr3pz4118ag1hnk82qldd4s5";
   };
 
   buildInputs = [ openssl mlton mysql postgresql sqlite ];
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${mysql.lib}/include/mysql/mysql.h";
-    export SQHEADER="${sqlite}/include/sqlite3.h";
+    export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
     export CCARGS="-I$out/include \
                    -L${mysql.lib}/lib/mysql \
-                   -L${postgresql}/lib \
-                   -L${sqlite}/lib";
+                   -L${postgresql.lib}/lib \
+                   -L${sqlite.out}/lib";
   '';
 
   # Be sure to keep the statically linked libraries

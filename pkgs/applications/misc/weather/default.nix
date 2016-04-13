@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, pythonPackages }:
 
 stdenv.mkDerivation rec {
     version = "2.0";
@@ -9,15 +9,26 @@ stdenv.mkDerivation rec {
         sha256 = "0yil363y9iyr4mkd7xxq0p2260wh50f9i5p0map83k9i5l0gyyl0";
     };
 
+    nativeBuildInputs = [ pythonPackages.wrapPython ];
+
+    buildInputs = [ pythonPackages.python ];
+
     phases = [ "unpackPhase" "installPhase" ];
 
     installPhase = ''
-        mkdir $out/{share,man,bin} -p
-        cp weather{,.py} $out/bin/
-        cp {airports,overrides.{conf,log},places,slist,stations,weatherrc,zctas,zlist,zones} $out/share/
+        site_packages=$out/${pythonPackages.python.sitePackages}
+        mkdir -p $out/{share/{man,weather-util},bin,etc} $site_packages
+        cp weather $out/bin/
+        cp weather.py $site_packages/
         chmod +x $out/bin/weather
-        cp ./weather.1 $out/man/
-        cp ./weatherrc.5 $out/man/
+        cp airports overrides.{conf,log} places slist stations zctas zlist zones $out/share/weather-util/
+        cp weatherrc $out/etc
+        cp weather.1 weatherrc.5 $out/share/man/
+        sed -i \
+          -e "s|/etc|$out/etc|g" \
+          -e "s|else: default_setpath = \".:~/.weather|&:$out/share/weather-util|" \
+          $site_packages/weather.py
+        wrapPythonPrograms
     '';
 
     meta = {

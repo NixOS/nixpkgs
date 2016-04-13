@@ -11,7 +11,7 @@ let
 
 in
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "pytrainer-${version}";
   version = "1.10.0";
 

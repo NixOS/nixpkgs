@@ -16,6 +16,7 @@
 , pango
 , SDL
 , zlib
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   phases = [ "unpackPhase" "installPhase" ];
 
   sourceRoot = ".";
@@ -64,14 +67,17 @@ stdenv.mkDerivation rec {
       --set-rpath $libPath \
       $out/share/zandronum/zandronum-server
 
-    ln -s $out/share/zandronum/zandronum $out/bin/zandronum
-    ln -s $out/share/zandronum/zandronum-server $out/bin/zandronum-server
+    # If we don't set absolute argv0, zandronum.wad file is not found.
+    makeWrapper $out/share/zandronum/zandronum $out/bin/zandronum
+    makeWrapper $out/share/zandronum/zandronum-server $out/bin/zandronum-server
   '';
 
   meta = {
     homepage = http://zandronum.com/;
-    description = "multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software. Binary version for online play.";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    description = "multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software. Binary version for online play";
+    maintainers = [ stdenv.lib.maintainers.lassulus ];
+    # Binary version has different version string than source code version.
+    license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
   };
 }

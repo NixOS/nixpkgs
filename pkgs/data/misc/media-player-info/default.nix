@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, python3, udev }:
+{ stdenv, fetchurl, pkgconfig, python3, udev, systemd }:
 
 let
   name = "media-player-info-22";
@@ -12,7 +12,7 @@ in
       sha256 = "0di3gfx5z8c34yspzyllydr5snzg71r985kbqhrhb1il51qxgrvy";
     };
 
-    buildInputs = [ udev ];
+    buildInputs = [ udev systemd ];
     nativeBuildInputs = [ pkgconfig python3 ];
 
     postPatch = ''
@@ -27,6 +27,6 @@ in
       description = "A repository of data files describing media player capabilities";
       homepage = "http://www.freedesktop.org/wiki/Software/media-player-info/";
       license = licenses.bsd3;
-      maintainer = with maintainers; [ ttuegel ];
+      maintainers = with maintainers; [ ttuegel ];
     };
   }

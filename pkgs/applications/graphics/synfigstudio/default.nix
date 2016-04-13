@@ -1,27 +1,37 @@
-{ stdenv, fetchurl, boost, cairo, fontsConf, gettext, glibmm, gtk3, gtkmm3
+{ stdenv, fetchFromGitHub, boost, cairo, fontsConf, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libtool, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
-, imagemagick, intltool
+, imagemagick, intltool, autoreconfHook, which
 }:
 
 let
-  version = "1.0.1";
+  version = "1.0.2";
 
   ETL = stdenv.mkDerivation rec {
     name = "ETL-0.04.19";
 
-    src = fetchurl {
-       url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
-       sha256 = "1zmqv2fa5zxprza3wbhk5mxjk7491jqshxxai92s7fdiza0nhs91";
+    src = fetchFromGitHub {
+       repo   = "synfig";
+       owner  = "synfig";
+       rev    = version;
+       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
+
+    postUnpack = "sourceRoot=\${sourceRoot}/ETL/";
+
+    buildInputs = [ autoreconfHook ];
   };
 
   synfig = stdenv.mkDerivation rec {
     name = "synfig-${version}";
 
-    src = fetchurl {
-       url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
-       sha256 = "0l1f2xwmzds32g46fqwsq7j5qlnfps6944chbv14d3ynzgyyp1i3";
+    src = fetchFromGitHub {
+       repo   = "synfig";
+       owner  = "synfig";
+       rev    = version;
+       sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
     };
+
+    postUnpack = "sourceRoot=\${sourceRoot}/synfig-core/";
 
     configureFlags = [
       "--with-boost=${boost.dev}"
@@ -29,23 +39,29 @@ let
     ];
 
     buildInputs = [
-      ETL boost cairo gettext glibmm mlt-qt5 libsigcxx libtool libxmlxx pango
-      pkgconfig
+      ETL boost cairo gettext glibmm mlt-qt5 libsigcxx libxmlxx pango
+      pkgconfig autoreconfHook
     ];
   };
 in
 stdenv.mkDerivation rec {
   name = "synfigstudio-${version}";
 
-  src = fetchurl {
-    url = "http://download.tuxfamily.org/synfig/releases/${version}/${name}.tar.gz";
-    sha256 = "0jfa946rfh0dbagp18zknlj9ffrd4h45xcy2dh2vlhn6jdm08yfi";
+  src = fetchFromGitHub {
+     repo   = "synfig";
+     owner  = "synfig";
+     rev    = version;
+     sha256 = "09ldkvzczqvb1yvlibd62y56dkyprxlr0w3rk38rcs7jnrhj2cqc";
   };
+
+  postUnpack = "sourceRoot=\${sourceRoot}/synfig-studio/";
+
+  preConfigure = "./bootstrap.sh";
 
   buildInputs = [
     ETL boost cairo gettext glibmm gtk3 gtkmm3 imagemagick intltool
-    libjack2 libsigcxx libtool libxmlxx makeWrapper mlt-qt5 pkgconfig
-    synfig
+    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5 pkgconfig
+    synfig autoreconfHook which
   ];
 
   postInstall = ''

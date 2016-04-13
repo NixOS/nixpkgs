@@ -22,7 +22,7 @@
 , # Whether this should be an efi-bootable El-Torito CD.
   efiBootable ? false
 
-, # Wheter this should be an hybrid CD (bootable from USB as well as CD).
+, # Whether this should be an hybrid CD (bootable from USB as well as CD).
   usbBootable ? false
 
 , # The path (in the ISO file system) of the boot image.
@@ -39,7 +39,6 @@
 
 , # The volume ID.
   volumeID ? ""
-
 }:
 
 assert bootable -> bootImage != "";
@@ -47,7 +46,7 @@ assert efiBootable -> efiBootImage != "";
 assert usbBootable -> isohybridMbrImage != "";
 
 stdenv.mkDerivation {
-  name = "iso9660-image";
+  name = isoName;
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl xorriso syslinux];
 

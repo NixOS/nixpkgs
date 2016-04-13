@@ -3,6 +3,7 @@
 , bdbSupport ? false, db
 , ldapSupport ? !stdenv.isCygwin, openldap
 , libiconv
+, cyrus_sasl, autoreconfHook
 }:
 
 assert sslSupport -> openssl != null;
@@ -19,23 +20,35 @@ stdenv.mkDerivation rec {
     sha256 = "0bn81pfscy9yjvbmyx442svf43s6dhrdfcsnkpxz43fai5qk5kx6";
   };
 
-  configureFlags = ''
-    --with-apr=${apr} --with-expat=${expat}
-    ${optionalString (!stdenv.isCygwin) "--with-crypto"}
-    ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
-    ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db}"}
-    ${stdenv.lib.optionalString ldapSupport "--with-ldap"}${
-      optionalString stdenv.isCygwin "--without-pgsql --without-sqlite2 --without-sqlite3 --without-freetds --without-berkeley-db --without-crypto"}
-  '';
+  patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;
+
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
+  buildInputs = optional stdenv.isFreeBSD autoreconfHook;
+
+  configureFlags = [ "--with-apr=${apr}" "--with-expat=${expat}" ]
+    ++ optional (!stdenv.isCygwin) "--with-crypto"
+    ++ optional sslSupport "--with-openssl=${openssl}"
+    ++ optional bdbSupport "--with-berkeley-db=${db}"
+    ++ optional ldapSupport "--with-ldap=ldap"
+    ++ optionals stdenv.isCygwin
+      [ "--without-pgsql" "--without-sqlite2" "--without-sqlite3"
+        "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
+    ;
 
   propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
-    ++ optional ldapSupport openldap;
+    ++ optional ldapSupport openldap
+    ++ optional stdenv.isFreeBSD cyrus_sasl;
 
   # Give apr1 access to sed for runtime invocations
   postInstall = ''
-    wrapProgram $out/bin/apu-1-config --prefix PATH : "${gnused}/bin"
+    for f in $out/lib/*.la $out/lib/apr-util-1/*.la; do
+      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+    done
+    wrapProgram $dev/bin/apu-1-config --prefix PATH : "${gnused}/bin"
   '';
 
   enableParallelBuilding = true;

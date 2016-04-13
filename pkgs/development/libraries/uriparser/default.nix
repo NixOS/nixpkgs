@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "uriparser-0.8.2";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/uriparser/Sources/0.8.2/${name}.tar.bz2";
+    url = "mirror://sourceforge/project/uriparser/Sources/0.8.2/${name}.tar.bz2";
     sha256 = "13sh7slys3y5gfscc40g2r3hkjjywjvxlcqr77ifjrazc6q6cvkd";
   };
 

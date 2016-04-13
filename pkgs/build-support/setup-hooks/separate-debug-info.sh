@@ -1,5 +1,6 @@
-export NIX_LDFLAGS+=" --build-id"
-export NIX_CFLAGS_COMPILE+=" -ggdb"
+export NIX_SET_BUILD_ID=1
+export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
+export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
 dontStrip=1
 
 fixupOutputHooks+=(_separateDebugInfo)
@@ -11,14 +12,9 @@ _separateDebugInfo() {
     dst="$dst/lib/debug/.build-id"
 
     # Find executables and dynamic libraries.
-    local -a files=($(find "$prefix" -type f -a \( -perm /0100 -o -name "*.so" -o -name "*.so.*" \)))
-
     local i magic
-    for i in "${files[@]}"; do
-        # Skip non-ELF files.
-        exec 10< "$i"
-        read -n 4 -u 10 magic
-        exec 10<&-
+    while IFS= read -r -d $'\0' i; do
+        if ! isELF "$i"; then continue; fi
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.
         local id="$(readelf -n "$i" | sed 's/.*Build ID: \([0-9a-f]*\).*/\1/; t; d')"
@@ -30,15 +26,10 @@ _separateDebugInfo() {
         # Extract the debug info.
         header "separating debug info from $i (build ID $id)"
         mkdir -p "$dst/${id:0:2}"
-        objcopy --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug" --compress-debug-sections
+        objcopy --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
         strip --strip-debug "$i"
-    done
+
+        # Also a create a symlink <original-name>.debug.
+        ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
+    done < <(find "$prefix" -type f -print0)
 }
-
-# - We might prefer to compress the debug info during link-time already,
-#   but our ld doesn't support --compress-debug-sections=zlib (yet).
-# - Debug info may cause problems due to excessive memory usage during linking.
-#   Using -Wa,--compress-debug-sections should help with that;
-#   further interesting information: https://gcc.gnu.org/wiki/DebugFission
-# - Another related tool: https://fedoraproject.org/wiki/Features/DwarfCompressor
-

@@ -1,6 +1,6 @@
 {stdenv, fetchFromGitHub, python3Packages}:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
   version = "0.1.3";
 

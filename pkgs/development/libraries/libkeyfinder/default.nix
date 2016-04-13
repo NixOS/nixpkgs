@@ -1,23 +1,14 @@
 { stdenv, fetchFromGitHub, fftw, qtbase }:
 
-let version = "2.1"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libkeyfinder-${version}";
+  version = "2.1";
 
   src = fetchFromGitHub {
     sha256 = "07kc0cl6kirgmpdgkgmp6r3yvyf7b1w569z01g8rfl1cig80qdc7";
     rev = "v${version}";
     repo = "libKeyFinder";
     owner = "ibsh";
-  };
-
-  meta = with stdenv.lib; {
-    inherit version;
-    description = "Musical key detection for digital audio (C++ library)";
-    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 
   buildInputs = [ fftw qtbase ];
@@ -40,4 +31,12 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     cp -a lib*.so* $out/lib
   '';
+
+  meta = with stdenv.lib; {
+    description = "Musical key detection for digital audio (C++ library)";
+    homepage = http://www.ibrahimshaath.co.uk/keyfinder/;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
+  };
 }

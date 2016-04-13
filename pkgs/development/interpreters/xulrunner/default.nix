@@ -3,18 +3,18 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, firefox
+, cairo, gstreamer, gst_plugins_base, icu, firefox-unwrapped
 , debugBuild ? false
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
-let version = firefox.version; in
+let version = firefox-unwrapped.version; in
 
 stdenv.mkDerivation rec {
   name = "xulrunner-${version}";
 
-  src = firefox.src;
+  src = firefox-unwrapped.src;
 
   buildInputs =
     [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2

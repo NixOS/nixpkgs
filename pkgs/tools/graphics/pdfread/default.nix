@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     cp -R *.py pylrs $PYDIR
 
     wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pillow}/$LIBSUFFIX/PIL:$PYDIR \
-      --prefix PATH : ${ghostscript}/bin:${pngnq}/bin:${djvulibre}/bin:${unrar}/bin:${optipng}/bin
+      --prefix PATH : ${ghostscript}/bin:${pngnq}/bin:${djvulibre.bin}/bin:${unrar}/bin:${optipng}/bin
   '';
 
   meta = with stdenv.lib; {

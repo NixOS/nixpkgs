@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, pykickstart, pyparted, pyblock
+{ stdenv, fetchurl, buildPythonApplication, pykickstart, pyparted, pyblock
 , libselinux, cryptsetup, multipath_tools, lsof, utillinux
-, useNixUdev ? true, udev ? null
+, useNixUdev ? true, libudev ? null
 }:
 
-assert useNixUdev -> udev != null;
+assert useNixUdev -> libudev != null;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "blivet-${version}";
   version = "0.17-1";
 
@@ -21,21 +21,21 @@ buildPythonPackage rec {
     sed -i -e 's|"multipath"|"${multipath_tools}/sbin/multipath"|' \
       blivet/devicelibs/mpath.py blivet/devices.py
     sed -i -e '/"wipefs"/ {
-      s|wipefs|${utillinux}/sbin/wipefs|
+      s|wipefs|${utillinux.bin}/sbin/wipefs|
       s/-f/--force/
     }' blivet/formats/__init__.py
     sed -i -e 's|"lsof"|"${lsof}/bin/lsof"|' blivet/formats/fs.py
-    sed -i -r -e 's|"(u?mount)"|"${utillinux}/bin/\1"|' blivet/util.py
+    sed -i -r -e 's|"(u?mount)"|"${utillinux.bin}/bin/\1"|' blivet/util.py
     sed -i '/pvscan/s/, *"--cache"//' blivet/devicelibs/lvm.py
   '' + stdenv.lib.optionalString useNixUdev ''
     sed -i -e '/find_library/,/find_library/ {
-      c libudev = "${udev}/lib/libudev.so.1"
+      c libudev = "${libudev.out}/lib/libudev.so.1"
     }' blivet/pyudev.py
   '';
 
   propagatedBuildInputs = [
     pykickstart pyparted pyblock libselinux cryptsetup
-  ] ++ stdenv.lib.optional useNixUdev udev;
+  ] ++ stdenv.lib.optional useNixUdev libudev;
 
   # tests are currently _heavily_ broken upstream
   doCheck = false;

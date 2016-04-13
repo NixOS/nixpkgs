@@ -1,6 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
-, fftw, libsndfile
-}:
+{ stdenv, fetchurl, pkgconfig, libsndfile }:
 
 stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.8";
@@ -11,11 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ fftw libsndfile ];
+  buildInputs = [ libsndfile ];
 
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
   #--disable-cpu-clip      disable tricky cpu specific clipper
+
+  outputs = [ "dev" "bin" "out" ];
 
   postConfigure = stdenv.lib.optionalString stdenv.isDarwin
     ''

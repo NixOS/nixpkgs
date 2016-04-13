@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   version = "2.6.8";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/bochs/bochs/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${version}/${name}.tar.gz";
     sha256 = "1kl5cmbz6qgg33j5vv9898nzdppp1rqgy24r5pv762aaj7q0ww3r";
   };
 
@@ -143,8 +143,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional busMouse "--enable-busmouse"
     ;
 
-  NIX_CFLAGS_COMPILE="-I${gtk}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool}/lib";
+  NIX_CFLAGS_COMPILE="-I${gtk.dev}/include/gtk-2.0/ -I${libtool}/include/";
+  NIX_LDFLAGS="-L${libtool.lib}/lib";
 	
   meta = with stdenv.lib; {
     description = "An open-source IA-32 (x86) PC emulator";

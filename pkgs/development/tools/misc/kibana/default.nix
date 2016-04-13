@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "4.1.2";
+  version = "4.4.1";
 
   src = fetchurl {
     url = "http://download.elastic.co/kibana/kibana-snapshot/${name}-snapshot-linux-x86.tar.gz";
-    sha256 = "00ag4wnlw6h2j6zcz0irz6j1s51fr9ix2g1smrhrdw44z5gb6wrh";
+    sha256 = "0kxvrhrkcvx7pcn7myvabhcm4nj8gi86ij4a1xi392lfds2v350z";
   };
 
   buildInputs = [ makeWrapper ];
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
       --prefix PATH : "${nodejs}/bin:${coreutils}/bin:${which}/bin"
+    sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 
   meta = {

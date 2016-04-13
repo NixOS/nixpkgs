@@ -12,25 +12,26 @@
 <screen>
 <![CDATA[$ cd pkgs/servers/monitoring
 $ mkdir sensu
+$ cd sensu
 $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ bundler package --path /tmp/vendor/bundle
+$ nix-shell -p bundler --command "bundler package --path /tmp/vendor/bundle"
 $ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:
 
-bundlerEnv {
-  name = "sensu-0.17.1";
+bundlerEnv rec {
+  name = "sensu-${version}";
 
+  version = (import gemset).sensu.version;
   inherit ruby;
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
   gemset = ./gemset.nix;
 
   meta = with lib; {
-    description = "A monitoring framework that aims to be simple, malleable,
-and scalable.";
+    description = "A monitoring framework that aims to be simple, malleable, and scalable";
     homepage    = http://sensuapp.org/;
     license     = with licenses; mit;
     maintainers = with maintainers; [ theuni ];
@@ -41,6 +42,38 @@ and scalable.";
 
 <para>Please check in the <filename>Gemfile</filename>, <filename>Gemfile.lock</filename> and the <filename>gemset.nix</filename> so future updates can be run easily.
 </para>
+
+<para>Resulting derivations also have two helpful items, <literal>env</literal> and <literal>wrapper</literal>. The first one allows one to quickly drop into
+<command>nix-shell</command> with the specified environment present. E.g. <command>nix-shell -A sensu.env</command> would give you an environment with Ruby preset
+so it has all the libraries necessary for <literal>sensu</literal> in its paths. The second one can be used to make derivations from custom Ruby scripts which have
+<filename>Gemfile</filename>s with their dependencies specified. It is a derivation with <command>ruby</command> wrapped so it can find all the needed dependencies.
+For example, to make a derivation <literal>my-script</literal> for a <filename>my-script.rb</filename> (which should be placed in <filename>bin</filename>) you should
+run <command>bundix</command> as specified above and then use <literal>bundlerEnv</literal> lile this:</para>
+
+<programlisting>
+<![CDATA[let env = bundlerEnv {
+  name = "my-script-env";
+
+  inherit ruby;
+  gemfile = ./Gemfile;
+  lockfile = ./Gemfile.lock;
+  gemset = ./gemset.nix;
+};
+
+in stdenv.mkDerivation {
+  name = "my-script";
+
+  buildInputs = [ env.wrapper ];
+
+  script = ./my-script.rb;
+
+  buildCommand = ''
+    mkdir -p $out/bin
+    install -D -m755 $script $out/bin/my-script
+    patchShebangs $out/bin/my-script
+  '';
+}]]>
+</programlisting>
 
 </section>
 

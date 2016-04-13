@@ -1,21 +1,27 @@
 { fetchFromGitHub, stdenv, pythonPackages, gtk3, gobjectIntrospection, libnotify
 , gst_all_1, wrapGAppsHook }:
 
-pythonPackages.buildPythonPackage rec {
-  name = "pithos-${version}";
-  version = "1.1.1";
+pythonPackages.buildPythonApplication rec {
+  pname = "pithos";
+  version = "1.1.2";
+  name = "${pname}-${version}";
 
   namePrefix = "";
 
   src = fetchFromGitHub {
-    owner = "pithos";
-    repo  = "pithos";
+    owner = pname;
+    repo  = pname;
     rev = version;
-    sha256 = "0373z7g1wd3g1xl8m4ipx5n2ka67a2wcn387nyk8yvgdikm14jm3";
+    sha256 = "0zk9clfawsnwmgjbk7y5d526ksxd1pkh09ln6sb06v4ygaiifcxp";
   };
 
   postPatch = ''
     substituteInPlace setup.py --replace "/usr/share" "$out/share"
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp -v data/pithos.desktop $out/share/applications
   '';
 
   buildInputs = [ wrapGAppsHook ];

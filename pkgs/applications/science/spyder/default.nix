@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, buildPythonPackage, makeDesktopItem
+{ stdenv, fetchurl, unzip, buildPythonApplication, makeDesktopItem
 # mandatory
 , pyside
 # recommended
@@ -7,7 +7,7 @@
 , ipython ? null, pylint ? null, pep8 ? null
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "spyder-${version}";
   version = "2.3.8";
   namePrefix = "";

@@ -33,6 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.logstash;
+        defaultText = "pkgs.logstash";
         example = literalExample "pkgs.logstash";
         description = "Logstash package to use.";
       };
@@ -84,7 +85,7 @@ in
         type = types.lines;
         default = ''stdin { type => "example" }'';
         description = "Logstash input configuration.";
-        example = literalExample ''
+        example = ''
           # Read from journal
           pipe {
             command => "''${pkgs.systemd}/bin/journalctl -f -o json"

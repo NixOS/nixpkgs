@@ -1,5 +1,5 @@
 { system         ? builtins.currentSystem
-, allPackages    ? import ../../top-level/all-packages.nix
+, allPackages    ? import ../../..
 , platform       ? null
 , config         ? {}
 
@@ -22,10 +22,11 @@ let
     (import "${./standard-sandbox.sb}")
   '';
 in rec {
-  allPackages = import ../../top-level/all-packages.nix;
+  allPackages = import ../../..;
 
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY=1
+    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
     export NIX_IGNORE_LD_THROUGH_GCC=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
     export MACOSX_DEPLOYMENT_TARGET=10.7
@@ -55,8 +56,7 @@ in rec {
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/sh",
                           overrides         ? (pkgs: {}),
                           extraPreHook      ? "",
-                          extraBuildInputs  ? with last.pkgs; [ xz darwin.CF libcxx ],
-                          extraInitialPath  ? [],
+                          extraBuildInputs,
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
@@ -85,7 +85,7 @@ in rec {
           ${commonPreHook}
           ${extraPreHook}
         '';
-        initialPath  = extraInitialPath ++ [ bootstrapTools ];
+        initialPath  = [ bootstrapTools ];
         fetchurlBoot = import ../../build-support/fetchurl {
           stdenv = stage0.stdenv;
           curl   = bootstrapTools;
@@ -95,7 +95,7 @@ in rec {
         stdenvSandboxProfile = binShClosure + libSystemProfile;
         extraSandboxProfile  = binShClosure + libSystemProfile;
 
-        extraAttrs = { inherit platform; };
+        extraAttrs = { inherit platform; parent = last; };
         overrides  = pkgs: (overrides pkgs) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
 
@@ -174,9 +174,11 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx ];
+
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz libcxx libcxxabi icu ]) ++
+      (with pkgs; [ xz.bin xz.out libcxx libcxxabi icu.out ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF locale ]);
 
     overrides = persistent1;
@@ -203,15 +205,16 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraInitialPath = [ pkgs.bash ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
 
     extraPreHook = ''
+      export PATH=${pkgs.bash}/bin:$PATH
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ icu bash libcxx libcxxabi ]) ++
+      (with pkgs; [ xz.bin xz.out icu.out bash libcxx libcxxabi ]) ++
       (with pkgs.darwin; [ dyld Libsystem locale ]);
 
     overrides = persistent2;
@@ -236,7 +239,7 @@ in rec {
 
   stage4 = with stage3; stageFun 4 stage3 {
     shell = "${pkgs.bash}/bin/bash";
-    extraInitialPath = [ pkgs.bash ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
@@ -278,7 +281,7 @@ in rec {
       inherit stdenv shell;
       nativeTools = false;
       nativeLibc  = false;
-      inherit (pkgs) coreutils binutils;
+      inherit (pkgs) coreutils binutils gnugrep;
       inherit (pkgs.darwin) dyld;
       cc   = pkgs.llvmPackages.clang-unwrapped;
       libc = pkgs.darwin.Libsystem;
@@ -290,12 +293,15 @@ in rec {
       inherit platform bootstrapTools;
       libc         = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+      parent       = stage4;
     };
 
     allowedRequisites = (with pkgs; [
-      xz libcxx libcxxabi icu gmp gnumake findutils bzip2 llvm zlib libffi
-      coreutils ed diffutils gnutar gzip ncurses gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre binutils-raw binutils gettext
+      xz.out xz.bin libcxx libcxxabi icu.out gmp.out gnumake findutils bzip2.out
+      bzip2.bin llvm zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
+      gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
+      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
+      binutils-raw.dev binutils gettext
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools libiconv locale
     ]);

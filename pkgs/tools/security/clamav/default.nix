@@ -1,15 +1,16 @@
 { stdenv, fetchurl, zlib, bzip2, libiconv, libxml2, openssl, ncurses, curl
-, libmilter }:
+, libmilter, pcre, freshclamConf ? null }:
+
 stdenv.mkDerivation rec {
   name = "clamav-${version}";
-  version = "0.98.7";
+  version = "0.99.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/clamav/clamav-${version}.tar.gz";
-    sha256 = "0wp2ad8km4cqmlndni5ljv7q3lfxm6y4r3giv0yf23bl0yvif918";
+    sha256 = "12nm4mxzx3qlbm65cadflzncjfkxdfqcp0lch29i5yfk4a8nhi71";
   };
 
-  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter ];
+  buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre ];
 
   configureFlags = [
     "--with-zlib=${zlib}"
@@ -19,9 +20,12 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl}"
     "--with-libncurses-prefix=${ncurses}"
     "--with-libcurl=${curl}"
+    "--with-pcre=${pcre}"
     "--enable-milter"
     "--disable-clamav"
   ];
+
+  fixupPhase = if (freshclamConf != null) then ''echo "${freshclamConf}" > $out/etc/freshclam.conf'' else "";
 
   meta = with stdenv.lib; {
     homepage = http://www.clamav.net;

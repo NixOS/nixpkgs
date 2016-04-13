@@ -22,17 +22,20 @@
 , # Shell code executed after the VM has finished.
   postVM ? ""
 
+, name ? "nixos-disk-image"
+
+, format ? "raw"
 }:
 
 with lib;
 
 pkgs.vmTools.runInLinuxVM (
-  pkgs.runCommand "nixos-disk-image"
+  pkgs.runCommand name
     { preVM =
         ''
           mkdir $out
-          diskImage=$out/nixos.img
-          ${pkgs.vmTools.qemu}/bin/qemu-img create -f raw $diskImage "${toString diskSize}M"
+          diskImage=$out/nixos.${if format == "qcow2" then "qcow2" else "img"}
+          ${pkgs.vmTools.qemu}/bin/qemu-img create -f ${format} $diskImage "${toString diskSize}M"
           mv closure xchg/
         '';
       buildInputs = [ pkgs.utillinux pkgs.perl pkgs.e2fsprogs pkgs.parted ];

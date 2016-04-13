@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "xvidcore-${version}";
-  version = "1.3.3";
+  version = "1.3.4";
   
   src = fetchurl {
     url = "http://downloads.xvid.org/downloads/${name}.tar.bz2";
-    sha256 = "0m5g75qvapr7xpywg6a83v5x19kw1nm9l2q48lg7jvvpba0bmqdh";
+    sha256 = "1xwbmp9wqshc0ckm970zdpi0yvgqxlqg0s8bkz98mnr8p2067bsz";
   };
 
   preConfigure = ''

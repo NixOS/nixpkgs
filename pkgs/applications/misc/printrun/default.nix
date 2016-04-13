@@ -1,6 +1,6 @@
 { stdenv, python27Packages, fetchFromGitHub }:
 
-python27Packages.buildPythonPackage rec {
+python27Packages.buildPythonApplication rec {
   name = "printrun-20150310";
 
   src = fetchFromGitHub {

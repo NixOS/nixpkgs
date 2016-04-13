@@ -65,6 +65,9 @@ let
 # Simplify the nixos module and gnome packages
   defaultIconTheme = adwaita-icon-theme;
 
+# ISO installer
+# installerIso = callPackage ./installer.nix {};
+
 #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
   adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
@@ -176,6 +179,7 @@ let
   libcroco = callPackage ./core/libcroco {};
 
   libgee = callPackage ./core/libgee { };
+  libgee_1 = callPackage ./core/libgee/libgee-1.nix { };
 
   libgdata = callPackage ./core/libgdata { };
 
@@ -308,9 +312,7 @@ let
 
   anjuta = callPackage ./devtools/anjuta { };
 
-  devhelp = callPackage ./devtools/devhelp {
-    webkitgtk = webkitgtk24x;
-  };
+  devhelp = callPackage ./devtools/devhelp { };
 
   gdl = callPackage ./devtools/gdl { };
 

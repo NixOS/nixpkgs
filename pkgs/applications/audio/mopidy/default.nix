@@ -1,27 +1,35 @@
-{ stdenv, fetchurl, pythonPackages, pygobject, gst_python
-, gst_plugins_good, gst_plugins_base, gst_plugins_ugly
+{ stdenv, fetchFromGitHub, pythonPackages, pygobject3, wrapGAppsHook
+, gst_all_1, glib_networking, gobjectIntrospection
 }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "mopidy-${version}";
 
-  version = "1.1.1";
+  version = "2.0.0";
 
-  src = fetchurl {
-    url = "https://github.com/mopidy/mopidy/archive/v${version}.tar.gz";
-    sha256 = "1xfyg8xqgnrb98wx7a4fzr4vlzkffjhkc1s36ka63rwmx86vqhyw";
+  src = fetchFromGitHub {
+    owner = "mopidy";
+    repo = "mopidy";
+    rev = "v${version}";
+    sha256 = "06f1y87dqc7p6kq5npmg3ki8x4iacyjzd7nq7188x20y2zglrjbm";
   };
 
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = with gst_all_1; [
+    gst-plugins-base gst-plugins-good gst-plugins-ugly
+    glib_networking gobjectIntrospection
+  ];
+
   propagatedBuildInputs = with pythonPackages; [
-    gst_python pygobject pykka tornado requests2 gst_plugins_base gst_plugins_good gst_plugins_ugly
+    gst-python pygobject3 pykka tornado requests2
   ];
 
   # There are no tests
   doCheck = false;
 
-  postInstall = ''
-    wrapProgram $out/bin/mopidy \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH")
   '';
 
   meta = with stdenv.lib; {
@@ -31,7 +39,7 @@ pythonPackages.buildPythonPackage rec {
       SoundCloud, Google Play Music, and more
     '';
     license = licenses.asl20;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils fpletz ];
     hydraPlatforms = [];
   };
 }

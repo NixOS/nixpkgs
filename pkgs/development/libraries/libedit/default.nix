@@ -11,23 +11,21 @@ stdenv.mkDerivation rec {
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
   NROFF = "${groff}/bin/nroff";
 
-  patches = if stdenv.isCygwin then [
-    ./01-cygwin.patch
-  ] else null;
+  patches = [ ./01-cygwin.patch ./freebsd-wchar.patch ];
 
-  postInstall = ''
-    find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \
-      -e 's,-lncurses[a-z]*,-L${ncurses}/lib -lncursesw,g'
-  '';
+  propagatedBuildInputs = [ ncurses ];
 
   configureFlags = [ "--enable-widec" ];
 
-  propagatedBuildInputs = [ ncurses ];
+  postInstall = ''
+    find $out/lib -type f | grep '\.\(la\|pc\)''$' | xargs sed -i \
+      -e 's,-lncurses[a-z]*,-L${ncurses.out}/lib -lncursesw,g'
+  '';
 
   meta = with stdenv.lib; {
     homepage = "http://www.thrysoee.dk/editline/";
     description = "A port of the NetBSD Editline library (libedit)";
-    license = licenses.bsd3; 
+    license = licenses.bsd3;
     platforms = platforms.all;
   };
 }

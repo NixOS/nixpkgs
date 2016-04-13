@@ -1,9 +1,8 @@
-{ runCommand, lib, writeText, writeScriptBin, stdenv, bash, ruby } :
-{ env, runScript ? "${bash}/bin/bash", extraBindMounts ? [], extraInstallCommands ? "" } :
+{ runCommand, lib, writeText, writeScriptBin, stdenv, ruby } :
+{ env, runScript ? "bash", extraBindMounts ? [], extraInstallCommands ? "", meta ? {}, passthru ? {} } :
 
 let
   name = env.pname;
-  bash' = "${bash}/bin/bash";
 
   # Sandboxing script
   chroot-user = writeScriptBin "chroot-user" ''
@@ -12,6 +11,8 @@ let
   '';
 
   init = run: writeText "${name}-init" ''
+    source /etc/profile
+
     # Make /tmp directory
     mkdir -m 1777 /tmp
 
@@ -26,11 +27,12 @@ let
   '';
 
 in runCommand name {
-  passthru.env =
-    runCommand "${name}-shell-env" {
+  inherit meta;
+  passthru = passthru // {
+    env = runCommand "${name}-shell-env" {
       shellHook = ''
         export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"
-        exec ${chroot-user}/bin/chroot-user ${env} ${bash'} -l ${init bash'} "$(pwd)"
+        exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init "bash"} "$(pwd)"
       '';
     } ''
       echo >&2 ""
@@ -38,12 +40,13 @@ in runCommand name {
       echo >&2 ""
       exit 1
     '';
+  };
 } ''
   mkdir -p $out/bin
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
   export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:\$CHROOTENV_EXTRA_BINDS"
-  exec ${chroot-user}/bin/chroot-user ${env} ${bash'} -l ${init runScript} "\$(pwd)" "\$@"
+  exec ${chroot-user}/bin/chroot-user ${env} bash ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}
   ${extraInstallCommands}

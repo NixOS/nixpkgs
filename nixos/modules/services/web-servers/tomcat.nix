@@ -24,6 +24,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.tomcat7;
+        defaultText = "pkgs.tomcat7";
         example = lib.literalExample "pkgs.tomcat8";
         description = ''
           Which tomcat package to use.
@@ -72,7 +73,9 @@ in
       };
 
       webapps = mkOption {
+        type = types.listOf types.package;
         default = [ tomcat ];
+        defaultText = "[ tomcat ]";
         description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
@@ -87,7 +90,9 @@ in
       };
 
       jdk = mkOption {
+        type = types.package;
         default = pkgs.jdk;
+        defaultText = "pkgs.jdk";
         description = "Which JDK to use.";
       };
 
@@ -131,7 +136,8 @@ in
       description = "Apache Tomcat server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" ];
-      serviceConfig.Type = "daemon";
+      serviceConfig.Type = "oneshot";
+      serviceConfig.RemainAfterExit = true;
 
       preStart = ''
         # Create the base directory

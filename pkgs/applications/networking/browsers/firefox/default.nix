@@ -18,14 +18,14 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
 
-common = { pname, version, sha256 }: stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+common = { pname, version, sha512 }: stdenv.mkDerivation rec {
+  name = "${pname}-unwrapped-${version}";
 
   src = fetchurl {
     url =
       let ext = if lib.versionAtLeast version "41.0" then "xz" else "bz2";
       in "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${version}/source/firefox-${version}.source.tar.${ext}";
-    inherit sha256;
+    inherit sha512;
   };
 
   buildInputs =
@@ -73,7 +73,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
-                             "--enable-optimize${lib.optionalString (stdenv.system == "i686-linux") "=-O1"}"
+                             "--enable-optimize"
                              "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding";
 
@@ -81,13 +81,9 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
-      if [ -e ../${name} ]; then
-        configureScript=../${name}/configure
-      else
-        configureScript=../mozilla-*/configure
-      fi
     '';
 
   preInstall =
@@ -99,7 +95,7 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   postInstall =
     ''
       # For grsecurity kernels
-      paxmark m $out/lib/${name}/{firefox,firefox-bin,plugin-container}
+      paxmark m $out/lib/${pname}-${version}/{firefox,firefox-bin,plugin-container}
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
@@ -126,21 +122,22 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
   passthru = {
     inherit gtk nspr version;
     isFirefox3Like = true;
+    browserName = pname;
   };
 };
 
 in {
 
-  firefox = common {
+  firefox-unwrapped = common {
     pname = "firefox";
-    version = "43.0.4";
-    sha256 = "0xjs4j26h8fyy8izrcc482vfvgg4gqzap5kh17jfv7flhn9akkvn";
+    version = "45.0.2";
+    sha512 = "8c0b7afb41a1a405fe499299d1a8b1138dac52b9ad67bfc8761b70a26f330581c2aa1d76d67075896ec3a0c3f5367b8b58365ebc8b3a01f801fa37071b3de526";
   };
 
-  firefox-esr = common {
+  firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "38.5.2esr";
-    sha256 = "0xqirpiys2pgzk9hs4s93svknc0sss8ry60zar7n9jj74cgz590m";
+    version = "45.0.2esr";
+    sha512 = "a1e9e9371ee47181b01252d60166c405a7835063dffb4928dfb8abb9f151edd8db1dd2b59f35d7898f1660a0fcd8e41f91a3e799c25b6dd43b6ab056bc5ad6bf";
   };
 
 }

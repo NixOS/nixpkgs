@@ -1,8 +1,8 @@
 diff --git a/src-bin/Boot.hs b/src-bin/Boot.hs
-index 3c68dcf..64f3cf7 100644
+index db8b12e..7b815c5 100644
 --- a/src-bin/Boot.hs
 +++ b/src-bin/Boot.hs
-@@ -512,9 +512,7 @@ initPackageDB :: B ()
+@@ -526,9 +526,7 @@ initPackageDB :: B ()
  initPackageDB = do
    msg info "creating package databases"
    initDB "--global" <^> beLocations . blGlobalDB
@@ -12,7 +12,7 @@ index 3c68dcf..64f3cf7 100644
      initDB dbName db = do
        rm_rf db >> mkdir_p db
        ghcjs_pkg_ ["init", toTextI db] `catchAny_` return ()
-@@ -538,29 +536,22 @@ installDevelopmentTree = subTop $ do
+@@ -552,29 +550,22 @@ installDevelopmentTree = subTop $ do
    msgD info $ "preparing development boot tree"
    checkpoint' "ghcjs-boot-git" "ghcjs-boot repository already cloned and prepared" $ do
      testGit "ghcjs-boot" >>= \case
@@ -46,7 +46,7 @@ index 3c68dcf..64f3cf7 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1085,8 +1076,11 @@ cabalInstallFlags parmakeGhcjs = do
+@@ -1110,14 +1101,14 @@ cabalInstallFlags parmakeGhcjs = do
             , "--avoid-reinstalls"
             , "--builddir",      "dist"
             , "--with-compiler", ghcjs ^. pgmLocText
@@ -58,13 +58,19 @@ index 3c68dcf..64f3cf7 100644
 +           , "--libsubdir",     "$pkgid"
             , bool haddock "--enable-documentation" "--disable-documentation"
             , "--haddock-html"
- -- workaround for hoogle support being broken in haddock for GHC 7.10RC1
+--- workaround for hoogle support being broken in haddock for GHC 7.10RC1
+-#if !(__GLASGOW_HASKELL__ >= 709)
+            , "--haddock-hoogle"
+-#endif
+            , "--haddock-hyperlink-source"
+ -- don't slow down Windows builds too much, on other platforms we get this more
+ -- or less for free, thanks to dynamic-too
 diff --git a/src/Compiler/Info.hs b/src/Compiler/Info.hs
-index 33a401f..79833c5 100644
+index 33a401f..e2405a7 100644
 --- a/src/Compiler/Info.hs
 +++ b/src/Compiler/Info.hs
 @@ -48,13 +48,7 @@ compilerInfo nativeToo dflags = do
-
+ 
  -- | the directory to use if started without -B flag
  getDefaultTopDir :: IO FilePath
 -getDefaultTopDir = do
@@ -75,6 +81,6 @@ index 33a401f..79833c5 100644
 -        targetOS   = os
 -        subdir     = targetARCH ++ '-':targetOS ++ '-':getFullCompilerVersion
 +getDefaultTopDir = return "@PREFIX@/lib/ghcjs-@VERSION@"
-
+ 
  getDefaultLibDir :: IO FilePath
  getDefaultLibDir = getDefaultTopDir

@@ -30,13 +30,11 @@
 
 with stdenv.lib;
 
-with (import ../chromium/source/update.nix {
+with (import ../chromium/update.nix {
   inherit (stdenv) system;
 }).getChannel channel;
 
 let
-  dist = if channel == "dev" then "unstable" else channel;
-
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
   };
@@ -61,7 +59,7 @@ in stdenv.mkDerivation rec {
 
   name = "google-chrome-${version}";
 
-  src = fetchurl binary;
+  src = binary;
 
   buildInputs = [ env patchelf ];
 
@@ -71,7 +69,13 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    exe=$out/bin/google-chrome-${dist}
+    case ${channel} in
+      beta) appname=chrome-beta      dist=beta     ;;
+      dev)  appname=chrome-unstable  dist=unstable ;;
+      *)    appname=chrome           dist=stable   ;;
+    esac
+
+    exe=$out/bin/google-chrome-$dist
     rpath="${env}/lib:${env}/lib64"
 
     mkdir -p $out/bin $out/share
@@ -79,32 +83,32 @@ in stdenv.mkDerivation rec {
     cp -a opt/* $out/share
     cp -a usr/share/* $out/share
 
-    substituteInPlace $out/share/applications/google-chrome.desktop \
-      --replace /usr/bin/google-chrome-${dist} $exe
-    substituteInPlace $out/share/gnome-control-center/default-apps/google-chrome.xml \
-      --replace /opt/google/chrome/google-chrome $exe
-    substituteInPlace $out/share/menu/google-chrome.menu \
+    substituteInPlace $out/share/applications/google-$appname.desktop \
+      --replace /usr/bin/google-chrome-$dist $exe
+    substituteInPlace $out/share/gnome-control-center/default-apps/google-$appname.xml \
+      --replace /opt/google/$appname/google-$appname $exe
+    substituteInPlace $out/share/menu/google-$appname.menu \
       --replace /opt $out/share \
-      --replace $out/share/google/chrome/google-chrome $exe
+      --replace $out/share/google/chrome/google-$appname $exe
 
-    for icon_file in $out/share/google/chrome/product_logo_*[0-9].png; do
+    for icon_file in $out/share/google/chrome*/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
       icon_size="''${num_and_suffix%.*}"
       logo_output_prefix="$out/share/icons/hicolor"
       logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -p "$logo_output_path"
-      mv "$icon_file" "$logo_output_path/google-chrome.png"
+      mv "$icon_file" "$logo_output_path/google-$appname.png"
     done
 
     cat > $exe << EOF
     #!${bash}/bin/sh
     export LD_LIBRARY_PATH=$rpath\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
     export PATH=${env}/bin\''${PATH:+:\$PATH}
-    $out/share/google/chrome/google-chrome "\$@"
+    $out/share/google/$appname/google-$appname "\$@"
     EOF
     chmod +x $exe
 
-    for elf in $out/share/google/chrome/{chrome,chrome-sandbox,nacl_helper}; do
+    for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
       patchelf --set-rpath $rpath $elf
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
     done
@@ -112,7 +116,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A freeware web browser developed by Google";
-    homepage = "https://www.google.com/chrome/browser/";
+    homepage = https://www.google.com/chrome/browser/;
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
     platforms = platforms.linux;

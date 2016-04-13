@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype
+{ stdenv, fetchurl, cpio, pkgconfig, file, which, unzip, zip, xorg, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
@@ -63,6 +63,7 @@ let
 
     outputs = [ "out" "jre" ];
 
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
       cpio file which unzip zip
       xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
@@ -93,7 +94,6 @@ let
     '';
 
     configureFlags = [
-      "--with-freetype=${freetype}"
       "--with-boot-jdk=${bootjdk.home}"
       "--with-update-version=${update}"
       "--with-build-number=${build}"
@@ -140,6 +140,11 @@ let
 
       rm -rf $out/lib/openjdk/jre/bina
       ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+
+      # Make sure cmm/*.pf are not symlinks:
+      # https://youtrack.jetbrains.com/issue/IDEA-147272
+      rm -rf $out/lib/openjdk/jre/lib/cmm
+      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Set PaX markings
       exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')

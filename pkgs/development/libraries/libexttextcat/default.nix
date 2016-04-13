@@ -1,14 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libexttextcat-3.3.1";
+  name = "libexttextcat-3.4.1";
 
   src = fetchurl {
     url = "http://dev-www.libreoffice.org/src/libexttextcat/${name}.tar.xz";
-    sha256 = "1a7ablpipfbiyhl6wsraj5z8pj3qkqgnrms73wzsqhpbyww334h4";
+    sha256 = "0g1spzpsfbv3y8k9m1v53imz18437q93iq101hind7m4x00j6wpl";
   };
-
-  patches = [ ./memory-leaks.patch ];
 
   meta = {
     description = "An N-Gram-Based Text Categorization library primarily intended for language guessing";

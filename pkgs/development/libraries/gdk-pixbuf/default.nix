@@ -3,22 +3,27 @@
 
 let
   ver_maj = "2.32";
-  ver_min = "1";
+  ver_min = "3";
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "1g7kjxv67jcdasi14n7jan4icrnnppd1m99wrdmpv32k4m7vfcj4";
+    sha256 = "0cfh87aqyqbfcwpbv1ihgmgfcn66il5q2n8yjyl8gxkjmkqp2rrb";
   };
+
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev";
 
   setupHook = ./setup-hook.sh;
 
-  # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ libX11 libintlOrEmpty ];
+  enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
+  # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
+  buildInputs = [ libX11 gobjectIntrospection ] ++ libintlOrEmpty;
+
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
@@ -34,12 +39,11 @@ stdenv.mkDerivation rec {
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit (doCheck);
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library for image loading and manipulation";
     homepage = http://library.gnome.org/devel/gdk-pixbuf/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ maintainers.eelco ];
+    platforms = platforms.unix;
   };
 }
+

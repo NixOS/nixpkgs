@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, which, sqlite, lua5_1, perl, zlib, pkgconfig, ncurses
 , dejavu_fonts, libpng, SDL2, SDL2_image, mesa, freetype
-, tileMode ? true
+, tileMode ? false
 }:
 
-let version = "0.17.0";
+let version = "0.17.1";
 in
 stdenv.mkDerivation rec {
   name = "crawl-${version}" + (if tileMode then "-tiles" else "");
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "crawl-ref";
     repo = "crawl-ref";
     rev = version;
-    sha256 = "0igvgi3dgf73da4gznc2dcbiix79hn08qk9yalrc92d2c1xxdawh";
+    sha256 = "05rgqg9kh4bsgzhyan4l9ygj9pqr0nbya0sv8rpm4kny0h3b006a";
   };
 
   patches = [ ./crawl_purify.patch ];
@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cd crawl-ref/source
     echo "${version}" > util/release_ver
-    # Related to issue #1963
-    sed -i 's/-fuse-ld=gold//g' Makefile
     for i in util/*; do
       patchShebangs $i
     done

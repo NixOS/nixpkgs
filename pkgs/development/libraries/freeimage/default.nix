@@ -1,9 +1,9 @@
 {stdenv, fetchurl, unzip}:
 stdenv.mkDerivation {
-  name = "freeimage-3.15.3";
+  name = "freeimage-3.17.0";
   src = fetchurl {
-    url = mirror://sourceforge/freeimage/FreeImage3153.zip;
-    sha256 = "0i60fn1n9rw55dci0yw92zrw7k1jz3f9kv2z1wxmh84s5ngxa626";
+    url = mirror://sourceforge/freeimage/FreeImage3170.zip;
+    sha256 = "12bz57asdcfsz3zr9i9nska0fb6h3z2aizy412qjqkixkginbz7v";
   };
   buildInputs = [ unzip ];
   prePatch = ''
@@ -11,6 +11,10 @@ stdenv.mkDerivation {
         -e 's@-o root -g root@@' \
         -e 's@ldconfig@echo not running ldconfig@' \
         -i Makefile.gnu Makefile.fip
+
+      # Fix gcc 5.1 macro problems
+      # https://chromium.googlesource.com/webm/libwebp/+/eebaf97f5a1cb713d81d311308d8a48c124e5aef%5E!/
+      sed -i -e 's/"\(#[^"]*\)"/" \1 "/g' Source/LibWebP/src/dsp/*
   '';
 
   postBuild = "make -f Makefile.fip";

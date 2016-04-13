@@ -87,12 +87,14 @@ in {
 
     staticRootPath = mkOption {
       description = "Root path for static assets.";
+      default = "${cfg.package}/share/grafana/public";
       type = types.str;
     };
 
     package = mkOption {
       description = "Package to use.";
       default = pkgs.grafana;
+      defaultText = "pkgs.grafana";
       type = types.package;
     };
 
@@ -231,8 +233,5 @@ in {
       home = cfg.dataDir;
       createHome = true;
     };
-
-    services.grafana.staticRootPath = mkDefault "${cfg.package}/share/grafana/public";
-
   };
 }

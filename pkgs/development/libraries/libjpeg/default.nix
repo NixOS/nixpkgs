@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   configureFlags = optional static "--enable-static --disable-shared";
 
+  outputs = [ "dev" "out" "man" "bin" ];
+
   meta = {
     homepage = http://www.ijg.org/;
     description = "A library that implements the JPEG image file format";

@@ -5,7 +5,6 @@
 , gnutls, libgcrypt, libgpgerror
 , ncurses, libunwind, libibverbs, librdmacm, systemd
 
-, enableKerberos ? false
 , enableInfiniband ? false
 , enableLDAP ? false
 , enablePrinting ? false
@@ -19,11 +18,11 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-4.3.1";
+  name = "samba-4.3.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "10ic9pxsk3ml5ycmi0bql8wraxhbr2l4fhzd0qwmiqmrjl6sh24r";
+    sha256 = "0929fpk2pq4v389naai519xvsm9bzpar4jlgjxwlx1cnn6jyql9j";
   };
 
   patches =
@@ -34,10 +33,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
       docbook_xml_dtd_45 */ readline talloc ntdb tdb tevent ldb popt iniparser
-      libbsd libarchive zlib acl fam libiconv gettext libunwind
+      libbsd libarchive zlib acl fam libiconv gettext libunwind kerberos
     ]
     ++ optionals stdenv.isLinux [ libaio pam systemd ]
-    ++ optional enableKerberos kerberos
     ++ optionals (enableInfiniband && stdenv.isLinux) [ libibverbs librdmacm ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
@@ -58,23 +56,22 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--with-static-modules=NONE"
       "--with-shared-modules=ALL"
+      "--with-system-mitkrb5"
       "--enable-fhs"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
-      "--bundled-libraries=${if enableKerberos && kerberos != null &&
-        kerberos.implementation == "heimdal" then "NONE" else "com_err"}"
+      "--bundled-libraries=NONE"
       "--private-libraries=NONE"
-      "--builtin-libraries=replace"
+      "--builtin-libraries=NONE"
     ]
-    ++ optional (enableKerberos && kerberos != null &&
-      kerberos.implementation == "krb5") "--with-system-mitkrb5"
     ++ optional (!enableDomainController) "--without-ad-dc"
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ];
 
   enableParallelBuilding = true;
 
-  stripAllList = [ "bin" "sbin" ];
-
+  # Some libraries don't have /lib/samba in RPATH but need it.
+  # Use find -type f -executable -exec echo {} \; -exec sh -c 'ldd {} | grep "not found"' \;
+  # Looks like a bug in installer scripts.
   postFixup = ''
     export SAMBA_LIBS="$(find $out -type f -name \*.so -exec dirname {} \; | sort | uniq)"
     read -r -d "" SCRIPT << EOF || true
@@ -85,7 +82,7 @@ stdenv.mkDerivation rec {
     patchelf --set-rpath "\$ALL_LIBS" "\$BIN" 2>/dev/null || exit $?;
     patchelf --shrink-rpath "\$BIN";
     EOF
-    find $out -type f -exec $SHELL -c "$SCRIPT" \;
+    find $out -type f -name \*.so -exec $SHELL -c "$SCRIPT" \;
   '';
 
   meta = with stdenv.lib; {

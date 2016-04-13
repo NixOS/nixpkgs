@@ -1,10 +1,7 @@
-{ stdenv, fetchurl, fetchgit ? null, kernelHeaders
-, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
-, mig ? null
+{ lib, stdenv, fetchurl, linuxHeaders
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
-, debugSymbols ? false
 , withGd ? false, gd ? null, libpng ? null
 }:
 
@@ -15,12 +12,9 @@ let
   cross = if gccCross != null then gccCross.target else null;
 in
   build cross ({
-    name = "glibc"
-      + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
-      + stdenv.lib.optionalString debugSymbols "-debug"
-      + stdenv.lib.optionalString withGd "-gd";
+    name = "glibc" + lib.optionalString withGd "-gd";
 
-    inherit fetchurl fetchgit stdenv kernelHeaders installLocales
+    inherit lib stdenv fetchurl linuxHeaders installLocales
       profilingLibraries gccCross withGd gd libpng;
 
     builder = ./builder.sh;
@@ -41,37 +35,10 @@ in
       fi
     '';
 
+    separateDebugInfo = true;
+
     meta.description = "The GNU C Library";
   }
-
-  //
-
-  (if debugSymbols
-   then {
-     # Build with debugging symbols, but leave optimizations on and don't
-     # attempt to keep the build tree.
-     dontStrip = true;
-     dontCrossStrip = true;
-     NIX_STRIP_DEBUG = 0;
-   }
-   else {})
-
-  //
-
-  (if hurdHeaders != null
-   then rec {
-     inherit machHeaders hurdHeaders libpthreadHeaders mig fetchgit;
-
-     propagatedBuildInputs = [ machHeaders hurdHeaders libpthreadHeaders ];
-
-     passthru = {
-       # When building GCC itself `propagatedBuildInputs' above is not
-       # honored, so we pass it here so that the GCC builder can do the right
-       # thing.
-       inherit propagatedBuildInputs;
-     };
-   }
-   else { })
 
   //
 
@@ -97,7 +64,7 @@ in
 
       # To avoid a dependency on the build system 'bash'.
       preFixup = ''
-        rm $out/bin/{ldd,tzselect,catchsegv,xtrace}
+        rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
       '';
     }
    else {}))

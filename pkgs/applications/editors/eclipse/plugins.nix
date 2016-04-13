@@ -152,12 +152,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "8.7.0";
+    version = "8.8.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.7/${name}.zip";
-      sha256 = "0qpcjcl6n98x7ys4qz8p1x5hhk2ydrgh8w3r1kqk0zc7liqrx7vg";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/8.8/${name}.zip";
+      sha256 = "1i1m7g5128q21njgrkiw71y4vi4aqzz8xdd4iv80j3nsvhbv6cnm";
     };
 
     meta = with stdenv.lib; {
@@ -171,12 +171,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "6.11.1.201510102004";
+    version = "6.16.0.201603042325";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.11.1/net.sf.eclipsecs-updatesite_${version}-bin.zip";
-      sha256 = "0l9nfx7a3qdx1pvjgc6ck4rxh7yrvqsskr190yrxxwmpnyj9cjs4";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/6.16.0/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "0bm1linyw82bryblyabcx89zqw1ingh8mx62bwp3qj05yc9ksnly";
     };
 
     meta = with stdenv.lib; {
@@ -209,6 +209,48 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  cup = buildEclipsePluginBase rec {
+    name = "cup-${version}";
+    version = "1.0.0.201412081321";
+
+    srcFeature = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/features/CupEclipsePluginFeature_${version}.jar";
+      sha256 = "353513445f77ed144687bafc20ab85dc31f2f95ffdc47f102ab773ab0b7afb8b";
+    };
+
+    srcPlugin1 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/CupReferencedLibraries_${version}.jar";
+      sha256 = "082b5ed8730ad065efaac6ea2812dae15669ae74a49778911125b171bea41187";
+    };
+
+    srcPlugin2 = fetchurl {
+      url = "http://www2.in.tum.de/projects/cup/eclipse/plugins/de.tum.in.www2.CupPlugin_${version}.jar";
+      sha256 = "6b67937fa11944b0330173a9d8564a19eccd705e76b96291d80077a1d7344939";
+    };
+
+    srcs = [ srcFeature srcPlugin1 srcPlugin2 ];
+
+    propagatedBuildInputs = [ zest ];
+
+    phases = [ "installPhase" ];
+
+    installPhase = ''
+      dropinDir="$out/eclipse/dropins/${name}"
+      mkdir -p $dropinDir/features
+      unzip ${srcFeature} -d $dropinDir/features/
+      mkdir -p $dropinDir/plugins
+      cp -v ${srcPlugin1} $dropinDir/plugins/''${srcPlugin1#*-}
+      cp -v ${srcPlugin2} $dropinDir/plugins/''${srcPlugin2#*-}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = http://www2.cs.tum.edu/projects/cup/eclipse.php;
+      description = "IDE for developing CUP based parsers";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
     };
   };
 
@@ -279,12 +321,12 @@ rec {
 
   gnuarmeclipse = buildEclipseUpdateSite rec {
     name = "gnuarmeclipse-${version}";
-    version = "2.8.1-201504061754";
+    version = "2.11.1-201512141335";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/gnuarmeclipse/Current%20Releases/2.x/ilg.gnuarmeclipse.repository-${version}.zip";
-      sha256 = "08jsnyis1ry62cidr9sl11ylyxbkwh834nlhx6qp31gh1l439px9";
+      url = "https://github.com/gnuarmeclipse/plug-ins/releases/download/v${version}/ilg.gnuarmeclipse.repository-${version}.zip";
+      sha256 = "1ijvnahfw2wc860la7kj8b52z2sfm8k1yk62bl0d4lq60y3aycg9";
     };
 
     meta = with stdenv.lib; {
@@ -298,12 +340,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.5";
+    version = "4.5.1";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5-201506032000/org.eclipse.jdt-4.5.zip";
-      sha256 = "0zrdn26f7qsms2xfiyc049bhhh0czsbf989pgyq736b8hfmmh9iy";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.1-201509040015/org.eclipse.jdt-4.5.1.zip";
+      sha256 = "0nxi552vvpjalnsqhc0zi6fgaj9p22amxsiczpv7za4kr7m47x73";
     };
 
     meta = with stdenv.lib; {
@@ -317,11 +359,11 @@ rec {
 
   scala = buildEclipseUpdateSite rec {
     name = "scala-${version}";
-    version = "4.1.1.20151201";
+    version = "4.4.0.201604010956";
 
     src = fetchzip {
       url = "http://download.scala-ide.org/sdk/lithium/e44/scala211/stable/update-site.zip";
-      sha256 = "19iqaha9c5n5hkyn83xj8znkvshm4823d65zigbj97fz8gzrr0la";
+      sha256 = "1yypzcf2iwlcj43vd6h9n4y2ka1gxjf5vm3yx87bgfbzbchzckz7";
     };
 
     meta = with stdenv.lib; {
@@ -335,16 +377,16 @@ rec {
 
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
-    version = "6.9.10.201512020421";
+    version = "6.9.11.201603260617";
 
     srcFeature = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/features/org.testng.eclipse_${version}.jar";
-      sha256 = "17y0cb1xprldjav14iy2sinv7lcw4xnjs2fwz9gl41m9m1c0hajk";
+      sha256 = "0cd7d3bdp6f081vrampsv53z55g1mjn04w9ngz3h8dr0h6jnxz3y";
     };
 
     srcPlugin = fetchurl {
       url = "http://beust.com/eclipse-old/eclipse_${version}/plugins/org.testng.eclipse_${version}.jar";
-      sha256 = "1iwq0ifk9l56z11vhy5yscvl8l1xk6igkp103v9vwvcx6nlmkfgc";
+      sha256 = "10kdwnydmsvngn8ahijxrv50aps6wa4ckbf7p24mxbwlnmpqfj03";
     };
 
     meta = with stdenv.lib; {
@@ -353,6 +395,23 @@ rec {
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  zest = buildEclipseUpdateSite rec {
+    name = "zest-${version}";
+    version = "3.9.101";
+
+    src = fetchurl {
+      url = "http://archive.eclipse.org/tools/gef/downloads/drops/${version}/R201408150207/GEF-${name}.zip";
+      sha256 = "01scn7cmcrjcp387spjm8ifgwrwwi77ypildandbisfvhj3qqs7m";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://www.eclipse.org/gef/zest/;
+      description = "The Eclipse Visualization Toolkit";
+      platforms = platforms.all;
+      maintainers = [ maintainers.romildo ];
     };
   };
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/sourceforge/premake/${baseName}-src-${version}.zip";
+    url = "mirror://sourceforge/sourceforge/premake/${baseName}-src-${version}.zip";
     sha256 = "b59841a519e75d5b6566848a2c5be2f91455bf0cc6ae4d688fcbd4c40db934d5";
   };
 

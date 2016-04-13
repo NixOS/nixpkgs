@@ -27,19 +27,24 @@ let
 
   nixos-gsettings-desktop-schemas = pkgs.stdenv.mkDerivation {
     name = "nixos-gsettings-desktop-schemas";
-    buildInputs = [ pkgs.nixos-artwork ];
     buildCommand = ''
-     mkdir -p $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
-     cp -rf ${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0 $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/
-     chmod -R a+w $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas
-     cat - > $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
+     mkdir -p $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     cp -rf ${gnome3.gsettings_desktop_schemas}/share/gsettings-schemas/gsettings-desktop-schemas*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+
+     ${concatMapStrings (pkg: "cp -rf ${pkg}/share/gsettings-schemas/*/glib-2.0/schemas/*.xml $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas\n") cfg.extraGSettingsOverridePackages}
+
+     chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
+     cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
        picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
 
        [org.gnome.desktop.screensaver]
        picture-uri='${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png'
+
+       ${cfg.extraGSettingsOverrides}
      EOF
-     ${pkgs.glib}/bin/glib-compile-schemas $out/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas/glib-2.0/schemas/
+
+     ${pkgs.glib}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
     '';
   };
 
@@ -47,23 +52,38 @@ in {
 
   options = {
 
-    services.xserver.desktopManager.gnome3.enable = mkOption {
-      default = false;
-      example = true;
-      description = "Enable Gnome 3 desktop manager.";
-    };
+    services.xserver.desktopManager.gnome3 = {
+      enable = mkOption {
+        default = false;
+        example = true;
+        description = "Enable Gnome 3 desktop manager.";
+      };
 
-    services.xserver.desktopManager.gnome3.sessionPath = mkOption {
-      default = [];
-      example = literalExample "[ pkgs.gnome3.gpaste ]";
-      description = "Additional list of packages to be added to the session search path.
-                     Useful for gnome shell extensions or gsettings-conditionated autostart.";
-      apply = list: list ++ [ gnome3.gnome_shell gnome3.gnome-shell-extensions ];
-    };
+      sessionPath = mkOption {
+        default = [];
+        example = literalExample "[ pkgs.gnome3.gpaste ]";
+        description = "Additional list of packages to be added to the session search path.
+                       Useful for gnome shell extensions or gsettings-conditionated autostart.";
+        apply = list: list ++ [ gnome3.gnome_shell gnome3.gnome-shell-extensions ];
+      };
+
+      extraGSettingsOverrides = mkOption {
+        default = "";
+        type = types.lines;
+        description = "Additional gsettings overrides.";
+      };
+
+      extraGSettingsOverridePackages = mkOption {
+        default = [];
+        type = types.listOf types.path;
+        description = "List of packages for which gsettings are overridden.";
+      };
+    };  
 
     environment.gnome3.packageSet = mkOption {
+      type = types.nullOr types.package;
       default = null;
-      example = literalExample "pkgs.gnome3_16";
+      example = literalExample "pkgs.gnome3_18";
       description = "Which GNOME 3 package set to use.";
       apply = p: if p == null then pkgs.gnome3 else p;
     };
@@ -129,7 +149,7 @@ in {
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
           # Override gsettings-desktop-schema
-          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/nixos-gsettings-schemas/nixos-gsettings-desktop-schemas''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
+          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
           # Let nautilus find extensions
           export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/
@@ -146,7 +166,7 @@ in {
       };
 
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${gnome3.glib_networking}/lib/gio/modules"
+                                                "${gnome3.glib_networking.out}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);

@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "15gxarl2a8mz33fdn8pycj0ccazgmllbg2940n7aqdjlz807p11n";
+    sha256 = "05sdxgg2w7ykw6xbcq6dl2kzxdz4qzhjajiawpy6490wqiji7wm1";
   };
 
-  buildInputs = [ coq ] ++ (with ocamlPackages; [ ocaml menhir ]);
+  buildInputs = [ coq ] ++ (with ocamlPackages; [ ocaml findlib menhir ]);
 
   enableParallelBuilding = true;
 

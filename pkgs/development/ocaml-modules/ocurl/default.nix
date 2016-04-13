@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     homepage = http://ocurl.forge.ocamlcore.org/;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
   };
 }

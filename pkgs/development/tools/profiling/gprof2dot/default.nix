@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonApplication {
   name = "gprof2dot-2015-04-27";
 
   src = fetchFromGitHub {

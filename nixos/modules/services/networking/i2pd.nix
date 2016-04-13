@@ -8,25 +8,75 @@ let
 
   homeDir = "/var/lib/i2pd";
 
-  extip = "EXTIP=\$(${pkgs.curl}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
+  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
-  toOneZero = b: if b then "1" else "0";
+  toYesNo = b: if b then "yes" else "no";
+
+  mkEndpointOpt = name: addr: port: {
+    enable = mkEnableOption name;
+    name = mkOption {
+      type = types.str;
+      default = name;
+      description = "The endpoint name.";
+    };
+    address = mkOption {
+      type = types.str;
+      default = addr;
+      description = "Bind address for ${name} endpoint. Default: " + addr;
+    };
+    port = mkOption {
+      type = types.int;
+      default = port;
+      description = "Bind port for ${name} endoint. Default: " + toString port;
+    };
+  };
+
+  commonTunOpts = let
+    i2cpOpts = {
+      length = mkOption {
+        type = types.int;
+        description = "Guaranteed minimum hops.";
+        default = 3;
+      };
+      quantity = mkOption {
+        type = types.int;
+        description = "Number of simultaneous tunnels.";
+        default = 5;
+      };
+    };
+  in name: {
+    outbound = i2cpOpts;
+    inbound = i2cpOpts;
+    crypto.tagsToSend = mkOption {
+      type = types.int;
+      description = "Number of ElGamal/AES tags to send.";
+      default = 40;
+    };
+   destination = mkOption {
+      type = types.str;
+      description = "Remote endpoint, I2P hostname or b32.i2p address.";
+    };
+    keys = mkOption {
+      type = types.str;
+      default = name + "-keys.dat";
+      description = "Keyset used for tunnel identity.";
+    };
+  } // mkEndpointOpt name "127.0.0.1" 0;
 
   i2pdConf = pkgs.writeText "i2pd.conf" ''
-      v6 = ${toOneZero cfg.enableIPv6}
-      unreachable = ${toOneZero cfg.unreachable}
-      floodfill = ${toOneZero cfg.floodfill}
+      ipv6 = ${toYesNo cfg.enableIPv6}
+      notransit = ${toYesNo cfg.notransit}
+      floodfill = ${toYesNo cfg.floodfill}
       ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
-      httpproxyport = ${toString cfg.proxy.httpPort}
-      socksproxyport = ${toString cfg.proxy.socksPort}
-      ircaddress = ${cfg.irc.host}
-      ircport = ${toString cfg.irc.port}
-      ircdest = ${cfg.irc.dest}
-      irckeys = ${cfg.irc.keyFile}
-      eepport = ${toString cfg.eep.port}
-      ${if isNull cfg.sam.port then "" else "--samport=${toString cfg.sam.port}"}
-      eephost = ${cfg.eep.host}
-      eepkeys = ${cfg.eep.keyFile}
+      ${flip concatMapStrings
+        (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+        (proto: let portStr = toString proto.port; in ''
+      [${proto.name}]
+      address = ${proto.address}
+      port = ${toString proto.port}
+      enabled = ${toYesNo proto.enable}
+      '')
+      }
   '';
 
   i2pdTunnelConf = pkgs.writeText "i2pd-tunnels.conf" ''
@@ -39,10 +89,15 @@ let
   keys = ${tun.keys}
   address = ${tun.address}
   port = ${toString tun.port}
+  inbound.length = ${toString tun.inbound.length}
+  outbound.length = ${toString tun.outbound.length}
+  inbound.quantity = ${toString tun.inbound.quantity}
+  outbound.quantity = ${toString tun.outbound.quantity}
+  crypto.tagsToSend = ${toString tun.crypto.tagsToSend}
   '')
   }
   ${flip concatMapStrings
-    (collect (tun: tun ? port && tun ? host) cfg.outTunnels)
+    (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
     (tun: let portStr = toString tun.port; in ''
   [${tun.name}]
   type = server
@@ -59,10 +114,10 @@ let
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     ${if isNull cfg.extIp then extip else ""}
-    ${pkgs.i2pd}/bin/i2pd --log=1 --daemon=0 --service=0 \
+    ${pkgs.i2pd}/bin/i2pd --log=1 \
       --host=${if isNull cfg.extIp then "$EXTIP" else cfg.extIp} \
       --conf=${i2pdConf} \
-      --tunnelscfg=${i2pdTunnelConf}
+      --tunconf=${i2pdTunnelConf}
   '';
 
 in
@@ -91,11 +146,11 @@ in
         '';
       };
 
-      unreachable = mkOption {
+      notransit = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          If the router is declared to be unreachable and needs introduction nodes.
+          Tells the router to not accept transit tunnels during startup.
         '';
       };
 
@@ -111,7 +166,7 @@ in
         type = with types; nullOr int;
         default = null;
         description = ''
-	        I2P listen port. If no one is given the router will pick between 9111 and 30777.
+          I2P listen port. If no one is given the router will pick between 9111 and 30777.
         '';
       };
 
@@ -123,184 +178,53 @@ in
         '';
       };
 
-      http = {
-        port = mkOption {
-          type = types.int;
-          default = 7070;
-          description = ''
-            HTTP listen port.
-          '';
-        };
-      };
-
-      proxy = {
-        httpPort = mkOption {
-          type = types.int;
-          default = 4446;
-          description = ''
-            HTTP proxy listen port.
-          '';
-        };
-        socksPort = mkOption {
-          type = types.int;
-          default = 4447;
-          description = ''
-            SOCKS proxy listen port.
-          '';
-        };
-      };
-
-      irc = {
-        host = mkOption {
-          type = types.str;
-          default = "127.0.0.1";
-          description = ''
-            Address to forward incoming traffic to. 127.0.0.1 by default.
-          '';
-        };
-        dest = mkOption {
-          type = types.str;
-          default = "irc.postman.i2p";
-          description = ''
-            Destination I2P tunnel endpoint address of IRC server. irc.postman.i2p by default.
-          '';
-        };
-        port = mkOption {
-          type = types.int;
-          default = 6668;
-          description = ''
-            Local IRC tunnel endoint port to listen on. 6668 by default.
-          '';
-        };
-        keyFile = mkOption {
-          type = types.str;
-          default = "privKeys.dat";
-          description = ''
-            File name containing destination keys. privKeys.dat by default.
-          '';
-        };
-      };
-
-      eep = {
-        host = mkOption {
-          type = types.str;
-          default = "127.0.0.1";
-          description = ''
-            Address to forward incoming traffic to. 127.0.0.1 by default.
-          '';
-        };
-        port = mkOption {
-          type = types.int;
-          default = 80;
-          description = ''
-            Port to forward incoming traffic to. 80 by default.
-          '';
-        };
-        keyFile = mkOption {
-          type = types.str;
-          default = "privKeys.dat";
-          description = ''
-            File name containing destination keys. privKeys.dat by default.
-          '';
-        };
-      };
-
-      sam = {
-        port = mkOption {
-          type = with types; nullOr int;
-          default = null;
-          description = ''
-            Local SAM tunnel endpoint. Usually 7656. SAM is disabled if not specified.
-          '';
-        };
-      };
+      proto.http = mkEndpointOpt "http" "127.0.0.1" 7070;
+      proto.sam = mkEndpointOpt "sam" "127.0.0.1" 7656;
+      proto.bob = mkEndpointOpt "bob" "127.0.0.1" 2827;
+      proto.i2pControl = mkEndpointOpt "i2pcontrol" "127.0.0.1" 7650;
+      proto.httpProxy = mkEndpointOpt "httpproxy" "127.0.0.1" 4446;
+      proto.socksProxy = mkEndpointOpt "socksproxy" "127.0.0.1" 4447;
 
       outTunnels = mkOption {
         default = {};
-	      type = with types; loaOf optionSet;
-	      description = ''
-	      '';
-	      options = [ ({ name, config, ... }: {
-
-	        options = {
-	          name = mkOption {
-	            type = types.str;
-	            description = "The name of the tunnel.";
-	          };
-	          destination = mkOption {
-	            type = types.str;
-	            description = "Remote endpoint, I2P hostname or b32.i2p address.";
-	          };
-	          keys = mkOption {
-	            type = types.str;
-	            default = name + "-keys.dat";
-	            description = "Keyset used for tunnel identity.";
-	          };
-	          address = mkOption {
-	            type = types.str;
-	            default = "127.0.0.1";
-	            description = "Local bind address for tunnel.";
-	          };
-	          port = mkOption {
-	            type = types.int;
-	            default = 0;
-	            description = "Local tunnel listen port.";
-	          };
-	        };
-
-	        config = {
-	          name = mkDefault name;
-	        };
-
-	      }) ];
+        type = with types; loaOf optionSet;
+        description = ''
+          Connect to someone as a client and establish a local accept endpoint
+        '';
+        options = [ ({ name, config, ... }: {
+          options = commonTunOpts name;
+          config = {
+            name = mkDefault name;
+          };
+        }) ];
       };
 
       inTunnels = mkOption {
         default = {};
-	      type = with types; loaOf optionSet;
-	      description = ''
-	      '';
-	      options = [ ({ name, config, ... }: {
+        type = with types; loaOf optionSet;
+        description = ''
+          Serve something on I2P network at port and delegate requests to address inPort.
+        '';
+        options = [ ({ name, config, ... }: {
 
-	        options = {
+          options = {
+            inPort = mkOption {
+              type = types.int;
+              default = 0;
+              description = "Service port. Default to the tunnel's listen port.";
+            };
+            accessList = mkOption {
+              type = with types; listOf str;
+              default = [];
+              description = "I2P nodes that are allowed to connect to this service.";
+            };
+          } // commonTunOpts name;
 
-	          name = mkOption {
-	            type = types.str;
-	            description = "The name of the tunnel.";
-	          };
-	          keys = mkOption {
-	            type = types.path;
-	            default = name + "-keys.dat";
-	            description = "Keyset used for tunnel identity.";
-	          };
-	          address = mkOption {
-	            type = types.str;
-	            default = "127.0.0.1";
-	            description = "Local service IP address.";
-	          };
-	          port = mkOption {
-	            type = types.int;
-	            default = 0;
-	            description = "Local tunnel listen port.";
-	          };
-	          inPort = mkOption {
-	            type = types.int;
-	            default = 0;
-	            description = "I2P service port. Default to the tunnel's listen port.";
-	          };
-	          accessList = mkOption {
-	            type = with types; listOf str;
-	            default = [];
-	            description = "I2P nodes that are allowed to connect to this service.";
-	          };
+          config = {
+            name = mkDefault name;
+          };
 
-	        };
-
-	        config = {
-	          name = mkDefault name;
-	        };
-
-	      }) ];
+        }) ];
       };
     };
   };

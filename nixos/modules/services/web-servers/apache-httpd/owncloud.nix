@@ -333,7 +333,7 @@ let
 
       'version' => '${config.package.version}',
 
-      'openssl' => '${pkgs.openssl}/bin/openssl'
+      'openssl' => '${pkgs.openssl.bin}/bin/openssl'
 
       );
 
@@ -370,6 +370,7 @@ rec {
     package = mkOption {
       type = types.package;
       default = pkgs.owncloud70;
+      defaultText = "pkgs.owncloud70";
       example = literalExample "pkgs.owncloud70";
       description = ''
           PostgreSQL package to use.

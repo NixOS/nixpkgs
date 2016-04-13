@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Secure parasitic rdate replacement";
     homepage = https://github.com/ioerror/tlsdate;
-    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.tv ];
+    platforms = stdenv.lib.platforms.allBut [ "darwin" ];
   };
 }

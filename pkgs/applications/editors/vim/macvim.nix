@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/Applications
     cp -r src/MacVim/build/Release/MacVim.app $out/Applications
+    rm -rf $out/MacVim.app
 
     rm $out/bin/{Vimdiff,Vimtutor,Vim,ex,rVim,rview,view}
 

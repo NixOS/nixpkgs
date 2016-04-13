@@ -1,5 +1,5 @@
 { stdenv, pythonPackages, fetchurl }:
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "bleachbit-${version}";
   version = "1.8";
 

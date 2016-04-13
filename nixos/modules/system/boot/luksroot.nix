@@ -229,7 +229,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = [ ];
-      example = [ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ];
+      example = literalExample ''[ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ]'';
       description = ''
         The list of devices that should be decrypted using LUKS before trying to mount the
         root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
@@ -436,9 +436,9 @@ in
       ${optionalString luks.yubikeySupport ''
         copy_bin_and_libs ${pkgs.ykpers}/bin/ykchalresp
         copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
-        copy_bin_and_libs ${pkgs.openssl}/bin/openssl
+        copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
-        cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
+        cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
         strip -s pbkdf2-sha512
         copy_bin_and_libs pbkdf2-sha512
 

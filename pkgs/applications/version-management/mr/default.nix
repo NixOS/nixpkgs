@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.20150503";
+  version = "1.20160123";
   name = "mr-${version}";
 
   src = fetchurl {
     url = "https://github.com/joeyh/myrepos/archive/${version}.tar.gz";
-    sha256 = "12cf8kmn13446rszmah5wws5p2k2gjp6y4505sy1r14qnahf4qbf";
+    sha256 = "1723cg5haplz2w9dwdzp6ds1ip33cx3awmj4wnb0h4yq171v5lqk";
   };
 
   buildInputs = [ perl ];

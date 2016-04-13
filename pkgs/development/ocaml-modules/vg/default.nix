@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     module. An API allows to implement new renderers.
     '';
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

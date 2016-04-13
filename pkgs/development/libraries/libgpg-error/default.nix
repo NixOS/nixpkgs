@@ -1,14 +1,17 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libgpg-error-1.20";
+  name = "libgpg-error-1.21";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "08i5wxs6zlngjkv6s3dwm60w8mihxvi9agp6jfq7z6j1wdf8jrij";
+    sha256 = "0kdq2cbnk84fr4jqcv689rlxpbyl6bda2cn6y3ll19v3mlydpnxp";
   };
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
+
+  outputs = [ "dev" "out" "info" ];
+  outputBin = "dev"; # deps want just the lib, most likely
 
   # If architecture-dependent MO files aren't available, they're generated
   # during build, so we need gettext for cross-builds.
@@ -25,7 +28,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://www.gnupg.org/related_software/libgpg-error/index.html";
     description = "A small library that defines common error values for all GnuPG components";
 
@@ -36,9 +39,9 @@ stdenv.mkDerivation rec {
       Daemon and possibly more in the future.
     '';
 
-    license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    license = licenses.lgpl2Plus;
+    platforms = platforms.all;
+    maintainers = [ maintainers.fuuzetsu ];
   };
 }
 

@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DFMOD_LIBRARY=${fmod}/lib/libfmodex.so"
-    "-DSDL_INCLUDE_DIR=${SDL}/include"
+    "-DSDL_INCLUDE_DIR=${SDL.dev}/include"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I ${SDL}/include/SDL" ];
+  NIX_CFLAGS_COMPILE = [ "-I ${SDL.dev}/include/SDL" ];
    
   preConfigure = ''
     sed s@zdoom.pk3@$out/share/zdoom.pk3@ -i src/version.h
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://zdoom.org/;
     description = "Enhanced port of the official DOOM source code";
-    maintainer = [ stdenv.lib.maintainers.lassulus ];
+    maintainers = [ stdenv.lib.maintainers.lassulus ];
   };
 }
 

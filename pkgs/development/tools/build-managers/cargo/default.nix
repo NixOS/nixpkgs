@@ -5,7 +5,7 @@ with rustPlatform;
 
 with ((import ./common.nix) {
   inherit stdenv rustc;
-  version = "0.7.0";
+  version = "0.8.0";
 });
 
 buildRustPackage rec {
@@ -15,10 +15,10 @@ buildRustPackage rec {
   src = fetchgit {
     url = "git://github.com/rust-lang/cargo";
     rev = "refs/tags/${version}";
-    sha256 = "139rv7d6mk31klbnccmn573i05ygjrnflag6c3qwc075i62yfmx6";
+    sha256 = "02z0b6hpygjjfbskg22ggrhdv2nasrgf8x1fd8y0qzg4krx2czlh";
   };
 
-  depsSha256 = "07p244bcw3aa1hfbsz6q89pyl8ypkw9zp1r8cvd131w890w9ab4b";
+  depsSha256 = "1gwc5ygs3h8jxs506xmbj1xzaqpb3kmg3pkxg9j9yqy616jw6rcn";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ];
 

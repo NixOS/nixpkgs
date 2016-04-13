@@ -76,6 +76,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.redshift;
+      defaultText = "pkgs.redshift";
       description = ''
         redshift derivation to use.
       '';

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/kpcli --set PERL5LIB \
       "${with perlPackages; stdenv.lib.makePerlPath [
-         Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
+         CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
       ]}"
   '';
 

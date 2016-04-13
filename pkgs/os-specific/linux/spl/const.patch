@@ -1,10 +1,10 @@
 diff --git a/module/spl/spl-proc.c b/module/spl/spl-proc.c
-index f25239a..b731123 100644
+index eb00505..6f38cef 100644
 --- a/module/spl/spl-proc.c
 +++ b/module/spl/spl-proc.c
-@@ -38,7 +38,7 @@
- 
- #define SS_DEBUG_SUBSYS SS_PROC
+@@ -36,7 +36,7 @@
+ #include <linux/uaccess.h>
+ #include <linux/version.h>
  
 -#if defined(CONSTIFY_PLUGIN) && LINUX_VERSION_CODE >= KERNEL_VERSION(3,8,0)
 +#if defined(CONSTIFY_PLUGIN)

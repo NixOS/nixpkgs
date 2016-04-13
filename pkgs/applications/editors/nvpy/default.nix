@@ -1,12 +1,12 @@
-{ pkgs, fetchurl, tk, buildPythonPackage, pythonPackages }:
+{ pkgs, fetchurl, tk, buildPythonApplication, pythonPackages }:
 
-buildPythonPackage rec {
-  version = "0.9.2";
+buildPythonApplication rec {
+  version = "0.9.7";
   name = "nvpy-${version}";
 
   src = fetchurl {
     url = "https://github.com/cpbotha/nvpy/archive/v${version}.tar.gz";
-    sha256 = "78e41b80fc5549cba8cfd92b52d6530e8dfc8e8f37e96e4b219f30c266af811d";
+    sha256 = "1rd3vlaqkg16iz6qcw6rkbq0jmyvc0843wa3brnvn1nz0kla243f";
   };
 
   buildInputs = [tk];
@@ -14,6 +14,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pythonPackages.markdown
     pythonPackages.tkinter
+    pythonPackages.docutils
   ];
 
   postInstall = ''

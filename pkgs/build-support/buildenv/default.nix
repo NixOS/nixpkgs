@@ -16,6 +16,10 @@
 , # Whether to ignore collisions or abort.
   ignoreCollisions ? false
 
+, # If there is a collision, check whether the contents and permissions match
+  # and only if not, throw a collision error.
+  checkCollisionContents ? true
+
 , # The paths (relative to each element of `paths') that we want to
   # symlink (e.g., ["/bin"]).  Any file not inside any of the
   # directories in the list is not symlinked.
@@ -23,7 +27,7 @@
 
 , # The package outputs to include. By default, only the default
   # output is included.
-  outputsToLink ? []
+  extraOutputsToInstall ? []
 
 , # Root the result in directory "$out${extraPrefix}", e.g. "/share".
   extraPrefix ? ""
@@ -39,11 +43,19 @@
 }:
 
 runCommand name
-  rec { inherit manifest ignoreCollisions passthru meta pathsToLink extraPrefix postBuild buildInputs;
+  rec {
+    inherit manifest ignoreCollisions checkCollisionContents passthru
+            meta pathsToLink extraPrefix postBuild buildInputs;
     pkgs = builtins.toJSON (map (drv: {
       paths =
-        [ drv ]
-        ++ lib.concatMap (outputName: lib.optional (drv.${outputName}.outPath or null != null) drv.${outputName}) outputsToLink;
+        # First add the usual output(s): respect if user has chosen explicitly,
+        # and otherwise use `meta.outputsToInstall` (guaranteed to exist by stdenv).
+        (if (drv.outputUnspecified or false)
+          then map (outName: drv.${outName}) drv.meta.outputsToInstall
+          else [ drv ])
+        # Add any extra outputs specified by the caller of `buildEnv`.
+        ++ lib.filter (p: p!=null)
+          (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;

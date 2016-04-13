@@ -1,26 +1,29 @@
-{ stdenv, fetchgit, pkgconfig, libtoxcore-dev, openal, opencv,
+{ stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
   pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper,
-  qtbase, qtsvg, qttools, qttranslations }:
+  qtbase, qtsvg, qttools, qttranslations, sqlcipher }:
 
 let
-  revision = "1673b43e26c853f6446f228fec083af166cbf446";
+  version = "1.3.0";
+  revision = "v${version}";
 in
 
 stdenv.mkDerivation rec {
-  name = "qtox-dev-20150925";
+  name = "qtox-${version}";
 
-  src = fetchgit {
-      url = "https://github.com/tux3/qTox.git";
-      rev = "${revision}";
-      md5 = "785f5b305cdcdf777d93ee823a5b9f49";
+  src = fetchFromGitHub {
+      owner = "tux3";
+      repo = "qTox";
+      rev = revision;
+      sha256 = "0z2rxsa23vpl4q0h63mybw7kv8n1sm6nwb93l0cc046a3n9axid8";
   };
 
   buildInputs =
     [
       libtoxcore-dev openal opencv libsodium filter-audio
-      qtbase qttools libXScrnSaver glib gtk2 cairo
+      qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
       pango atk qrencode ffmpeg qttranslations makeWrapper
+      sqlcipher
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -36,6 +39,7 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags cairo)"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags pango)"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags atk)"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags sqlcipher)"
   '';
 
   configurePhase = ''

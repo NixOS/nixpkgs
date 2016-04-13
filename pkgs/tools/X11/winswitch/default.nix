@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages
 , which, xpra, xmodmap }:
 
 let
-  base = buildPythonPackage rec {
+  base = buildPythonApplication rec {
     name = "winswitch-${version}";
     namePrefix = "";
     version = "0.12.16";

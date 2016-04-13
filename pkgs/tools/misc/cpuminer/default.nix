@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cpuminer-${version}";
-  version = "2.4.2";
+  version = "2.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/cpuminer/pooler-${name}.tar.gz";
-    sha256 = "1ds5yfxf25pd8y5z5gh689qb80m4dqw2dy3yx87hibnprlaiym0n";
+    sha256 = "0xdgz5qlx1yr3mw2h4bwlbj94y6v2ygjy334cnc87xgzxf1wgann";
   };
 
   buildInputs = [ curl jansson ];

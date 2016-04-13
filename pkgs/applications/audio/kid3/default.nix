@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "kid3-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/kid3/kid3/${meta.version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/kid3/kid3/${meta.version}/${name}.tar.gz";
     sha256 = "12sa54mg1b3wkagmh5yi20ski8km9d199lk0a1yfxy0ffjfld7js";
   };
 

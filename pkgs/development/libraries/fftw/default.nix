@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "10h9mzjxnwlsjziah4lri85scc05rlajz39nqf3mbh4vja8dw34g";
   };
 
+  outputs = [ "dev" "out" "doc" ]; # it's dev-doc only
+  outputBin = "dev"; # fftw-wisdom
+
   configureFlags =
     [ "--enable-shared" "--disable-static"
       "--enable-threads"

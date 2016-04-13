@@ -67,6 +67,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net45/*" ];
   };
 
+  FsLexYacc = fetchNuGet {
+    baseName = "FsLexYacc";
+    version = "6.1.0";
+    sha256 = "1v5myn62zqs431i046gscqw2v0c969fc7pdplx7z9cnpy0p2s4rv";
+    outputFiles = [ "build/*" ];
+  };
+
   FsPickler = fetchNuGet {
     baseName = "FsPickler";
     version = "1.2.9";
@@ -388,7 +395,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   outputFiles = [ "build/*" ];
   #
   #   meta = {
-  #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#.";
+  #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
   #     homepage = "http://fsprojects.github.io/FSharpx.Extras/";
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
@@ -412,7 +419,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "out/lib/Net40/*" "src/FSharp/MathNet.Numerics.fsx" "src/FSharp/MathNet.Numerics.IfSharp.fsx" ];
 
     meta = {
-      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono.";
+      description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
       homepage = http://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
@@ -524,10 +531,6 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       mono
       pkgconfig
     ];
-
-    preConfigure = ''
-      substituteInPlace configure --replace gmcs mcs
-    '';
 
     postInstall = ''
       # Otherwise pkg-config won't find it and the DLL will get duplicated

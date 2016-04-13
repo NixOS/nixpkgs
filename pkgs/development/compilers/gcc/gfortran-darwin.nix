@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   makeFlags = ["CC=clang"];
   passthru.cc = stdenv.cc.cc;
   meta = with stdenv.lib; {
-    description = "GNU Fortran compiler, part of the GNU Compiler Collection.";
+    description = "GNU Fortran compiler, part of the GNU Compiler Collection";
     homepage    = "https://gcc.gnu.org/fortran/";
     license     = licenses.gpl3Plus;
     platforms   = platforms.darwin;

@@ -6,7 +6,7 @@ in stdenv.mkDerivation {
   name = "clang-${version}";
 
   unpackPhase = ''
-    unpackFile ${fetch "cfe" "1k517b0jj74c4vgnnd4ikbrpb96na541bi8q845ckw8xm72l1msf"}
+    unpackFile ${fetch "cfe" "0x065d0w9b51xvdjxwfzjxng0gzpbx45fgiaxpap45ragi61dqjn"}
     mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
     unpackFile ${clang-tools-extra_src}

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchurl, cmake, shared ? false }:
 
 stdenv.mkDerivation rec {
   name = "pugixml-${version}";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   sourceRoot = "${name}/scripts";
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if shared then "ON" else "OFF"}" ];
 
   preConfigure = ''
     # Enable long long support (required for filezilla)

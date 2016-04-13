@@ -1,0 +1,17 @@
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 1a36a9b..e279c84 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -2211,10 +2211,9 @@ version.c:  $(wget_SOURCES) ../lib/libgnu.a
+ 	echo '' >> $@
+ 	echo '#include "version.h"' >> $@
+ 	echo 'const char *version_string = "@VERSION@";' >> $@
+-	echo 'const char *compilation_string = "'$(COMPILE)'";' \
++	echo 'const char *compilation_string = 0;' \
+ 	    | $(ESCAPEQUOTE) >> $@
+-	echo 'const char *link_string = "'$(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+-	$(AM_LDFLAGS) $(LDFLAGS) $(LIBS) $(wget_LDADD)'";' \
++	echo 'const char *link_string = 0;' \
+ 	    | $(ESCAPEQUOTE) >> $@
+ 
+ css.c: $(srcdir)/css.l

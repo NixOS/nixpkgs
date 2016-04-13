@@ -4,16 +4,17 @@ stdenv.mkDerivation rec {
   name = "heme-${version}";
   version = "0.4.2";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/heme/heme/heme-${version}/heme-${version}.tar.gz";
+    url = "mirror://sourceforge/project/heme/heme/heme-${version}/heme-${version}.tar.gz";
     sha256 = "0wsrnj5mrlazgqs4252k30aw8m86qw0z9dmrsli9zdxl7j4cg99v";
   };
   postPatch = ''
     substituteInPlace Makefile \
       --replace "/usr/local" "$out" \
-      --replace "CFLAGS = " "CFLAGS = -I${ncurses}/include " \
-      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses}/lib " \
+      --replace "CFLAGS = " "CFLAGS = -I${ncurses.dev}/include " \
+      --replace "LDFLAGS = " "LDFLAGS = -L${ncurses.out}/lib " \
       --replace "-lcurses" "-lncurses"
   '';
+  buildInputs = [ ncurses ];
   preBuild = ''
     mkdir -p $out/bin
     mkdir -p $out/man/man1

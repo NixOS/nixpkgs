@@ -1,13 +1,9 @@
-{ stdenv, fetchurl }:
+{ stdenv, kernel }:
 
-let version = "4.3"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+  inherit (kernel) version src;
+
   name = "freefall-${version}";
-
-  src = fetchurl {
-    sha256 = "1bpkr45i4yzp32p0vpnz8mlv9lk4q2q9awf1kg9khg4a9g42qqja";
-    url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-  };
 
   postPatch = ''
     cd tools/laptop/freefall
@@ -20,6 +16,8 @@ stdenv.mkDerivation {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
+    inherit (kernel.meta) homepage license;
+
     description = "Free-fall protection for spinning HP/Dell laptop hard drives";
     longDescription = ''
       Provides a shock protection facility in modern laptops with spinning hard
@@ -29,7 +27,7 @@ stdenv.mkDerivation {
       feature, which should cause the drive to switch to idle mode and unload the
       disk heads, and an accelerometer device. It has no effect on SSD devices!
     '';
-    license = licenses.gpl2;
+
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };

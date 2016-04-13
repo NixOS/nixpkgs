@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext perl pkgconfig libxml2 pango cairo groff ];
   
   postInstall = ''
-    # for munin support
-    mv $out/lib/perl/5*/*/*.pm $out/lib/perl/5*/
+    # for munin and rrdtool support
+    mkdir -p $out/lib/perl5/site_perl/
+    mv $out/lib/perl/5* $out/lib/perl5/site_perl/
   '';
 
   meta = with stdenv.lib; {

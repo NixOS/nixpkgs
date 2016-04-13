@@ -69,7 +69,7 @@ in
 
       greeter =  {
         package = mkOption {
-          type = types.path;
+          type = types.package;
           description = ''
             The LightDM greeter to login via. The package should be a directory
             containing a .desktop file matching the name in the 'name' option.
@@ -86,6 +86,8 @@ in
       };
 
       background = mkOption {
+        type = types.str;
+        default = "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
         description = ''
           The background image or color to use.
         '';
@@ -151,9 +153,6 @@ in
     };
 
     users.extraGroups.lightdm.gid = config.ids.gids.lightdm;
-
-    services.xserver.displayManager.lightdm.background = mkDefault "${pkgs.nixos-artwork}/share/artwork/gnome/Gnome_Dark.png";
-
     services.xserver.tty     = null; # We might start multiple X servers so let the tty increment themselves..
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };

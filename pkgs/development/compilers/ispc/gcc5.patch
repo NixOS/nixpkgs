@@ -1,0 +1,22 @@
+diff --git a/cbackend.cpp b/cbackend.cpp
+index 3552205..9c05824 100644
+--- a/cbackend.cpp
++++ b/cbackend.cpp
+@@ -1641,7 +1641,7 @@ void CWriter::printConstant(llvm::Constant *CPV, bool Static) {
+         V = Tmp.convertToDouble();
+       }
+
+-      if (isnan(V)) {
++      if (std::isnan(V)) {
+         // The value is NaN
+
+         // FIXME the actual NaN bits should be emitted.
+@@ -1665,7 +1665,7 @@ void CWriter::printConstant(llvm::Constant *CPV, bool Static) {
+         else
+           Out << "LLVM_NAN" << (Val == QuietNaN ? "" : "S") << "(\""
+               << Buffer << "\") /*nan*/ ";
+-      } else if (isinf(V)) {
++      } else if (std::isinf(V)) {
+         // The value is Inf
+         if (V < 0) Out << '-';
+         Out << "LLVM_INF" <<

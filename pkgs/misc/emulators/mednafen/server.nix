@@ -2,11 +2,10 @@
 
 stdenv.mkDerivation rec {
 
-  name = "mednafen-server-${version}";
-  version = "0.5.2";
+  name = "mednafen-server-${meta.version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/mednafen/Mednafen-Server/${version}/${name}.tar.gz";
+    url = "http://mednafen.fobby.net/releases/files/${name}.tar.gz";
     sha256="06fal6hwrb8gw94yp7plhcz55109128cgp35m7zs5vvjf1zfhcs9";
   };
 
@@ -16,6 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "0.5.2";
     description = "Netplay server for Mednafen";
     homepage = http://mednafen.sourceforge.net/;
     license = licenses.gpl2;

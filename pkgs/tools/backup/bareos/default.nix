@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, nettools, gettext, libtool, flex
-, readline ? null, openssl ? null, python ? null, ncurses ? null
+, readline ? null, openssl ? null, python ? null, ncurses ? null, rocksdb
 , sqlite ? null, postgresql ? null, libmysql ? null, zlib ? null, lzo ? null
 , jansson ? null, acl ? null, glusterfs ? null, libceph ? null, libcap ? null
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     nettools gettext readline openssl python flex ncurses sqlite postgresql
-    libmysql zlib lzo jansson acl glusterfs libceph libcap
+    libmysql zlib lzo jansson acl glusterfs libceph libcap rocksdb
   ];
 
   postPatch = ''

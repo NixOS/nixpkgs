@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, xorg, libjpeg }:
+{ stdenv, fetchurl, unzip, libjpeg, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "jasper-1.900.1";
@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./jasper-CVE-2016-1867.diff
     ./jasper-CVE-2014-8137-variant2.diff
     ./jasper-CVE-2014-8137-noabort.diff
     ./jasper-CVE-2014-8138.diff
@@ -17,11 +18,16 @@ stdenv.mkDerivation rec {
     ./jasper-CVE-2014-9029.diff
   ];
 
-  nativeBuildInputs = [unzip];
+  # newer reconf to recognize a multiout flag
+  nativeBuildInputs = [ unzip autoreconfHook ];
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";
-  
+
+  outputs = [ "dev" "out" "man" "bin" ];
+
+  enableParallelBuilding = true;
+
   meta = {
     homepage = https://www.ece.uvic.ca/~frodo/jasper/;
     description = "JPEG2000 Library";

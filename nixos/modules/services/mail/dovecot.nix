@@ -9,16 +9,11 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
-  protocols = concatStrings [
-    (optionalString cfg.enableImap "imap")
-    (optionalString cfg.enablePop3 "pop3")
-    (optionalString cfg.enableLmtp "lmtp")
-  ];
-
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
-      protocols = ${protocols}
+      protocols = ${concatStringsSep " " cfg.protocols}
+      sendmail_path = /var/setuid-wrappers/sendmail
     ''
 
     (if isNull cfg.sslServerCert then ''
@@ -33,6 +28,8 @@ let
 
     ''
       default_internal_user = ${cfg.user}
+      ${optionalString (cfg.mailUser != null) "mail_uid = ${cfg.mailUser}"}
+      ${optionalString (cfg.mailGroup != null) "mail_gid = ${cfg.mailGroup}"}
 
       mail_location = ${cfg.mailLocation}
 
@@ -57,11 +54,17 @@ let
       }
     '')
 
+    (optionalString (cfg.sieveScripts != {}) ''
+      plugin {
+        ${concatStringsSep "\n" (mapAttrsToList (to: from: "sieve_${to} = ${stateDir}/sieve/${to}") cfg.sieveScripts)}
+      }
+    '')
+
     cfg.extraConfig
   ];
 
   modulesDir = pkgs.symlinkJoin "dovecot-modules"
-    (map (module: "${module}/lib/dovecot") cfg.modules);
+    (map (pkg: "${pkg}/lib/dovecot") ([ dovecotPkg ] ++ map (module: module.override { dovecot = dovecotPkg; }) cfg.modules));
 
 in
 {
@@ -87,9 +90,16 @@ in
       description = "Start the LMTP listener (when Dovecot is enabled).";
     };
 
+    protocols = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "Additional listeners to start when Dovecot is enabled.";
+    };
+
     package = mkOption {
       type = types.package;
-      default = pkgs.dovecot22;
+      default = pkgs.dovecot;
+      defaultText = "pkgs.dovecot";
       description = "Dovecot package to use.";
     };
 
@@ -128,13 +138,25 @@ in
       '';
     };
 
+    mailUser = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default user to store mail for virtual users.";
+    };
+
+    mailGroup = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "Default group to store mail for virtual users.";
+    };
+
     modules = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = [ pkgs.dovecot_pigeonhole ];
+      example = literalExample "[ pkgs.dovecot_pigeonhole ]";
       description = ''
         Symlinks the contents of lib/dovecot of every given package into
-        /var/lib/dovecot/modules. This will make the given modules available
+        /etc/dovecot/modules. This will make the given modules available
         if a dovecot package with the module_dir patch applied (like
         pkgs.dovecot22, the default) is being used.
       '';
@@ -161,7 +183,13 @@ in
     enablePAM = mkOption {
       type = types.bool;
       default = true;
-      description = "Wether to create a own Dovecot PAM service and configure PAM user logins.";
+      description = "Whether to create a own Dovecot PAM service and configure PAM user logins.";
+    };
+
+    sieveScripts = mkOption {
+      type = types.attrsOf types.path;
+      default = {};
+      description = "Sieve scripts to be executed. Key is a sequence, e.g. 'before2', 'after' etc.";
     };
 
     showPAMFailure = mkOption {
@@ -176,23 +204,31 @@ in
 
     security.pam.services.dovecot2 = mkIf cfg.enablePAM {};
 
+    services.dovecot2.protocols =
+     optional cfg.enableImap "imap"
+     ++ optional cfg.enablePop3 "pop3"
+     ++ optional cfg.enableLmtp "lmtp";
+
     users.extraUsers = [
-      { name = cfg.user;
-        uid = config.ids.uids.dovecot2;
-        description = "Dovecot user";
-        group = cfg.group;
-      }
       { name = "dovenull";
         uid = config.ids.uids.dovenull2;
         description = "Dovecot user for untrusted logins";
         group = cfg.group;
       }
-    ];
+    ] ++ optional (cfg.user == "dovecot2")
+         { name = "dovecot2";
+           uid = config.ids.uids.dovecot2;
+           description = "Dovecot user";
+           group = cfg.group;
+         };
 
-    users.extraGroups = singleton {
-      name = cfg.group;
-      gid = config.ids.gids.dovecot2;
-    };
+    users.extraGroups = optional (cfg.group == "dovecot2")
+      { name = "dovecot2";
+        gid = config.ids.gids.dovecot2;
+      };
+
+    environment.etc."dovecot/modules".source = modulesDir;
+    environment.etc."dovecot/dovecot.conf".source = cfg.configFile;
 
     systemd.services.dovecot2 = {
       description = "Dovecot IMAP/POP3 server";
@@ -200,26 +236,38 @@ in
       after = [ "keys.target" "network.target" ];
       wants = [ "keys.target" ];
       wantedBy = [ "multi-user.target" ];
-
-      preStart = ''
-        mkdir -p "${baseDir}/login"
-        chown -R ${cfg.user}:${cfg.group} "${baseDir}"
-        rm -f "${stateDir}/modules"
-        ln -s "${modulesDir}" "${stateDir}/modules"
-      '';
+      restartTriggers = [ cfg.configFile ];
 
       serviceConfig = {
-        ExecStart = "${dovecotPkg}/sbin/dovecot -F -c ${cfg.configFile}";
+        ExecStart = "${dovecotPkg}/sbin/dovecot -F";
+        ExecReload = "${dovecotPkg}/sbin/doveadm reload";
         Restart = "on-failure";
         RestartSec = "1s";
         StartLimitInterval = "1min";
+        RuntimeDirectory = [ "dovecot2" ];
       };
+
+      preStart = ''
+        rm -rf ${stateDir}/sieve
+      '' + optionalString (cfg.sieveScripts != {}) ''
+        mkdir -p ${stateDir}/sieve
+        ${concatStringsSep "\n" (mapAttrsToList (to: from: ''
+          if [ -d '${from}' ]; then
+            mkdir '${stateDir}/sieve/${to}'
+            cp "${from}/"*.sieve '${stateDir}/sieve/${to}'
+          else
+            cp '${from}' '${stateDir}/sieve/${to}'
+          fi
+           ${pkgs.dovecot_pigeonhole}/bin/sievec '${stateDir}/sieve/${to}'
+        '') cfg.sieveScripts)}
+        chown -R '${cfg.mailUser}:${cfg.mailGroup}' '${stateDir}/sieve'
+      '';
     };
 
     environment.systemPackages = [ dovecotPkg ];
 
     assertions = [
-      { assertion = cfg.enablePop3 || cfg.enableImap;
+      { assertion = intersectLists cfg.protocols [ "pop3" "imap" ] != [];
         message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";
       }
       { assertion = isNull cfg.sslServerCert == isNull cfg.sslServerKey

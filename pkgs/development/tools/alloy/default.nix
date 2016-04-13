@@ -1,31 +1,12 @@
 { stdenv, fetchurl, jre, makeDesktopItem }:
 
-let version = "4.2_2015-02-22"; in
 stdenv.mkDerivation rec {
   name = "alloy-${version}";
+  version = "4.2_2015-02-22";
 
   src = fetchurl {
     sha256 = "0p93v8jwx9prijpikkgmfdzb9qn8ljmvga5d9wvrkxddccjx9k28";
     url = "http://alloy.mit.edu/alloy/downloads/alloy${version}.jar";
-  };
-
-  meta = with stdenv.lib; {
-    inherit version;
-    description = "Language & tool for relational models";
-    longDescription = ''
-      Alloy is a language for describing structures and a tool for exploring
-      them. An Alloy model is a collection of constraints that describes a set
-      of structures, e.g. all the possible security configurations of a web
-      application, or all the possible topologies of a switching network. The
-      Alloy Analyzer is a solver that takes the constraints of a model and
-      finds structures that satisfy them. Structures are displayed graphically,
-      and their appearance can be customized for the domain at hand.
-    '';
-    homepage = http://alloy.mit.edu/;
-    downloadPage = http://alloy.mit.edu/alloy/download.html;
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
   };
 
   desktopItem = makeDesktopItem rec {
@@ -57,4 +38,22 @@ stdenv.mkDerivation rec {
     install -Dm644 ${./icon.png} $out/share/pixmaps/alloy.png
     cp -r ${desktopItem}/share/applications $out/share
   '';
+
+  meta = with stdenv.lib; {
+    description = "Language & tool for relational models";
+    longDescription = ''
+      Alloy is a language for describing structures and a tool for exploring
+      them. An Alloy model is a collection of constraints that describes a set
+      of structures, e.g. all the possible security configurations of a web
+      application, or all the possible topologies of a switching network. The
+      Alloy Analyzer is a solver that takes the constraints of a model and
+      finds structures that satisfy them. Structures are displayed graphically,
+      and their appearance can be customized for the domain at hand.
+    '';
+    homepage = http://alloy.mit.edu/;
+    downloadPage = http://alloy.mit.edu/alloy/download.html;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
+  };
 }

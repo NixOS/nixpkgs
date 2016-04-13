@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, pkgconfig, perl
+, http2Support ? true, libnghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
@@ -8,6 +9,7 @@
 , c-aresSupport ? false, c-ares ? null
 }:
 
+assert http2Support -> libnghttp2 != null;
 assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
@@ -16,17 +18,22 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.45.0";
+  name = "curl-7.47.1";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1slq5c0v9wa8hajgimhkxhvsrd07jmih8sa3gjsl597qp5k4w5b5";
+    sha256 = "13z9gba3q2ybp50z0gdkzhwcx9m0i7qkvm278yz4pql2jfml7inx";
   };
+
+  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+
+  nativeBuildInputs = [ pkgconfig perl ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of
   # applications that use Curl.
   propagatedBuildInputs = with stdenv.lib;
+    optional http2Support libnghttp2 ++
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
@@ -41,13 +48,10 @@ stdenv.mkDerivation rec {
     rm src/tool_hugehelp.c
   '';
 
-  # make curl honor CURL_CA_BUNDLE & SSL_CERT_FILE
-  postConfigure = ''
-    echo  '#define CURL_CA_BUNDLE (getenv("CURL_CA_BUNDLE") ? getenv("CURL_CA_BUNDLE") : getenv("SSL_CERT_FILE"))' >> lib/curl_config.h
-  '';
-
   configureFlags = [
+      "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
+      ( if http2Support then "--with-nghttp2=${libnghttp2}" else "--without-nghttp2" )
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
@@ -59,6 +63,11 @@ stdenv.mkDerivation rec {
 
   CXX = "g++";
   CXXCPP = "g++ -E";
+
+  postInstall = ''
+    moveToOutput bin/curl-config "$dev"
+    sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+  '';
 
   crossAttrs = {
     # We should refer to the cross built openssl

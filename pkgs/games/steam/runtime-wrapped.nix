@@ -1,9 +1,11 @@
-{ stdenv, perl, pkgs, steam-runtime
+{ stdenv, lib, perl, pkgs, steam-runtime
 , nativeOnly ? false
 , runtimeOnly ? false
+, newStdcpp ? false
 }:
 
 assert !(nativeOnly && runtimeOnly);
+assert newStdcpp -> !runtimeOnly;
 
 let 
   runtimePkgs = with pkgs; [
@@ -77,19 +79,19 @@ let
     SDL2_mixer
     gstreamer
     gst_plugins_base
-  ];
+  ] ++ lib.optional (!newStdcpp) gcc48.cc;
 
   overridePkgs = with pkgs; [
-    gcc48.cc # libstdc++
     libpulseaudio
     alsaLib
     openalSoft
-  ];
+    libva
+  ] ++ lib.optional newStdcpp gcc.cc;
 
   ourRuntime = if runtimeOnly then []
                else if nativeOnly then runtimePkgs ++ overridePkgs
                else overridePkgs;
-  steamRuntime = stdenv.lib.optional (!nativeOnly) steam-runtime;
+  steamRuntime = lib.optional (!nativeOnly) steam-runtime;
 
 in stdenv.mkDerivation rec {
   name = "steam-runtime-wrapped";

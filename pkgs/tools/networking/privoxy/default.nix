@@ -1,11 +1,12 @@
 { stdenv, fetchurl, autoreconfHook, zlib, pcre, w3m, man }:
 
-stdenv.mkDerivation {
-  name = "privoxy-3.0.22";
+stdenv.mkDerivation rec{
+
+  name = "privoxy-3.0.24";
 
   src = fetchurl {
-    url = mirror://sourceforge/ijbswa/Sources/3.0.22%20%28stable%29/privoxy-3.0.22-stable-src.tar.gz;
-    sha256 = "0hfcxyb0i7dr6jfxw0y4kqcr09p8gjvcs7igyizyl5in3zn4y88s";
+    url = "mirror://sourceforge/ijbswa/Sources/3.0.22%20%28stable%29/${name}-stable-src.tar.gz";
+    sha256 = "a381f6dc78f08de0d4a2342d47a5949a6608073ada34b933137184f3ca9fb012";
   };
 
   buildInputs = [ autoreconfHook zlib pcre w3m man ];
@@ -17,4 +18,5 @@ stdenv.mkDerivation {
     platforms = platforms.all;
     maintainers = [ maintainers.phreedom ];
   };
+
 }

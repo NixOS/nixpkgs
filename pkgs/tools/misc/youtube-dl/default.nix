@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, makeWrapper, ffmpeg, zip
+{ stdenv, fetchurl, buildPythonApplication, makeWrapper, ffmpeg, zip
 , pandoc ? null
 }:
 
@@ -9,20 +9,24 @@
 # case someone wants to use this derivation to build a Git version of
 # the tool that doesn't have the formatted man page included.
 
-buildPythonPackage rec {
+buildPythonApplication rec {
 
-  name = "youtube-dl-2016.01.01";
+  name = "youtube-dl-${version}";
+  version = "2016.04.06";
 
   src = fetchurl {
-    url = "http://yt-dl.org/downloads/${stdenv.lib.getVersion name}/${name}.tar.gz";
-    sha256 = "0b0pk8h2iswdiyf65c0zcwcad9dm2hid67fnfafj7d3ikp4kfbvk";
+    url = "http://yt-dl.org/downloads/${version}/${name}.tar.gz";
+    sha256 = "1kdrjwrn0x1wmvansvd2222gfqnld4zdihf2jwnz36112r1p8nhi";
   };
 
   buildInputs = [ makeWrapper zip pandoc ];
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   postInstall = stdenv.lib.optionalString (ffmpeg != null)
-    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg}/bin"'';
+    ''wrapProgram $out/bin/youtube-dl --prefix PATH : "${ffmpeg.bin}/bin"'';
+
+  # Requires network
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://rg3.github.io/youtube-dl/;

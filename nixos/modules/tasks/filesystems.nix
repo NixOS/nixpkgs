@@ -41,11 +41,15 @@ let
       };
 
       options = mkOption {
-        default = "defaults";
-        example = "data=journal";
-        type = types.commas; # FIXME: should be a list
+        default = [ "defaults" ];
+        example = [ "data=journal" ];
         description = "Options used to mount the file system.";
-      };
+      } // (if versionAtLeast lib.nixpkgsVersion "16.09" then {
+        type = types.listOf types.str;
+      } else {
+        type = types.either types.commas (types.listOf types.str);
+        apply = x: if isList x then x else lib.strings.splitString "," (builtins.trace "warning: passing a comma-separated string for filesystem options is deprecated; use a list of strings instead. This will become a hard error in 16.09." x);
+      });
 
       autoFormat = mkOption {
         default = false;
@@ -89,7 +93,7 @@ let
     config = {
       mountPoint = mkDefault name;
       device = mkIf (config.fsType == "tmpfs") (mkDefault config.fsType);
-      options = mkIf config.autoResize "x-nixos.autoresize";
+      options = mkIf config.autoResize [ "x-nixos.autoresize" ];
 
       # -F needed to allow bare block device without partitions
       formatOptions = mkIf ((builtins.substring 0 3 config.fsType) == "ext") (mkDefault "-F");
@@ -112,7 +116,7 @@ in
         "/data" = {
           device = "/dev/hda2";
           fsType = "ext3";
-          options = "data=journal";
+          options = [ "data=journal" ];
         };
         "/bigdisk".label = "bigdisk";
       };
@@ -127,7 +131,7 @@ in
         <command>mount</command>; defaults to
         <literal>"auto"</literal>), and <literal>options</literal>
         (the mount options passed to <command>mount</command> using the
-        <option>-o</option> flag; defaults to <literal>"defaults"</literal>).
+        <option>-o</option> flag; defaults to <literal>[ "defaults" ]</literal>).
 
         Instead of specifying <literal>device</literal>, you can also
         specify a volume label (<literal>label</literal>) for file
@@ -177,7 +181,7 @@ in
              else throw "No device specified for mount point ‘${fs.mountPoint}’.")
             + " " + fs.mountPoint
             + " " + fs.fsType
-            + " " + fs.options
+            + " " + builtins.concatStringsSep "," fs.options
             + " 0"
             + " " + (if skipCheck fs then "0" else
                      if fs.mountPoint == "/" then "1" else "2")

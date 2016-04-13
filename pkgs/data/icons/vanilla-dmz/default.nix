@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     homepage = "http://jimmac.musichall.cz";
-    description = "A style neutral scalable cursor theme.";
+    description = "A style neutral scalable cursor theme";
     platforms = platforms.all;
     license = licenses.cc-by-nc-sa-30;
     maintainers = with maintainers; [ cstrahan ];

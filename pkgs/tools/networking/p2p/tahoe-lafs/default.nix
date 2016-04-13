@@ -1,19 +1,18 @@
-{ fetchurl, lib, unzip, buildPythonPackage, twisted, foolscap, nevow
-, simplejson, zfec, pycryptopp, sqlite3, darcsver, setuptoolsTrial, python
-, setuptoolsDarcs, numpy, nettools, pycrypto, pyasn1, mock, zope_interface }:
+{ fetchurl, lib, unzip, nettools, pythonPackages }:
 
 # FAILURES: The "running build_ext" phase fails to compile Twisted
 # plugins, because it tries to write them into Twisted's (immutable)
 # store path. The problem appears to be non-fatal, but there's probably
 # some loss of functionality because of it.
 
-buildPythonPackage rec {
-  name = "tahoe-lafs-1.10.0";
+pythonPackages.buildPythonApplication rec {
+  version = "1.10.2";
+  name = "tahoe-lafs-${version}";
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://tahoe-lafs.org/source/tahoe-lafs/releases/allmydata-tahoe-1.10.0.tar.bz2";
-    sha256 = "1qng7j1vykk8zl5da9yklkljvgxfnjky58gcay6dypz91xq1cmcw";
+    url = "http://tahoe-lafs.org/source/tahoe-lafs/releases/allmydata-tahoe-${version}.tar.bz2";
+    sha256 = "1rvv0ik5biy7ji8pg56v0qycnggzr3k6dbg88n555nb6r4cxgmgy";
   };
 
   patchPhase = ''
@@ -32,13 +31,14 @@ buildPythonPackage rec {
   '';
 
   # Some tests want this + http://tahoe-lafs.org/source/tahoe-lafs/deps/tahoe-dep-sdists/mock-0.6.0.tar.bz2
-  buildInputs = [ unzip numpy ];
+  buildInputs = with pythonPackages; [ unzip numpy mock ];
 
   # The `backup' command requires `sqlite3'.
-  propagatedBuildInputs =
-    [ twisted foolscap nevow simplejson zfec pycryptopp sqlite3
-      darcsver setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface mock
-    ];
+  propagatedBuildInputs = with pythonPackages; [
+    twisted foolscap nevow simplejson zfec pycryptopp sqlite3 darcsver
+    setuptoolsTrial setuptoolsDarcs pycrypto pyasn1 zope_interface
+    service-identity
+  ];
 
   postInstall = ''
     # Install the documentation.
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     # TODO: broken with wheels
-    #${python.interpreter} setup.py trial
+    #${pythonPackages.python.interpreter} setup.py trial
   '';
 
   meta = {

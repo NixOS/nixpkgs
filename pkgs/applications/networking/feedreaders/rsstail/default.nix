@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cppcheck, libmrss }:
 
-let version = "2.1"; in
 stdenv.mkDerivation rec {
   name = "rsstail-${version}";
+  version = "2.1";
 
   src = fetchFromGitHub {
     sha256 = "12p69i3g1fwlw0bds9jqsdmzkid3k5a41w31d227i7vm12wcvjf6";
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Monitor RSS feeds for new entries";
     longDescription = ''
       RSSTail is more or less an RSS reader: it monitors an RSS feed and if it

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, xrandr, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "arandr-0.1.8";
 
   src = fetchurl {

@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, perl, jdk, icu, zlib, gmp, readline }:
+{ stdenv, fetchurl, perl, icu, zlib, gmp, readline }:
 
 stdenv.mkDerivation rec {
   name = "rakudo-star-${version}";
-  version = "2015.03";
+  version = "2016.01";
 
   src = fetchurl {
     url    = "http://rakudo.org/downloads/star/${name}.tar.gz";
-    sha256 = "1fwvmjyc1bv3kq7p25xyl4sqinp19mbrspmf0h7rvxlwnfcrr5mv";
+    sha256 = "feb385c5d05166061f413882e442d3a0ec53884918768940d3f00bb63bc85497";
   };
 
-  buildInputs = [ icu zlib gmp readline jdk perl ];
+  buildInputs = [ icu zlib gmp readline perl ];
   configureScript = "perl ./Configure.pl";
   configureFlags =
-    [ "--backends=moar,jvm"
+    [ "--backends=moar"
       "--gen-moar"
       "--gen-nqp"
     ];

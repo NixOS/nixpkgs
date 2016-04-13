@@ -1,19 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libevent, file, qrencode }:
+{ stdenv, fetchurl, pkgconfig, libevent, file, qrencode, miniupnpc }:
 
 let
-  version = "0.2.6";
+  version = "0.3";
 in stdenv.mkDerivation {
   name = "pshs-${version}";
 
   src = fetchurl {
     url = "https://www.bitbucket.org/mgorny/pshs/downloads/pshs-${version}.tar.bz2";
-    sha256 = "0n8l5sjnwjqjmw0jzg3hb93n6npg2wahmdg1zrpsw8fyh9ggjg4g";
+    sha256 = "0qvy1m9jmbjhbihs1qr9nasbaajl3n0x8bgz1vw9xvpkqymx5i63";
   };
 
-  buildInputs = [ pkgconfig libevent file qrencode ];
+  buildInputs = [ pkgconfig libevent file qrencode miniupnpc ];
 
-  # TODO: enable ssl once dependencies
-  # (libssl libcrypto libevent >= 2.1 libevent_openssl) can be met
+  # SSL requires libevent at 2.1 with ssl support
   configureFlags = "--disable-ssl";
 
   meta = {

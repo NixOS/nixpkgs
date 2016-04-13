@@ -1,5 +1,6 @@
 { stdenv, fetchgit, pkgconfig, makeWrapper, python27, retroarch
-, fluidsynth, mesa, SDL, ffmpeg, libpng, libjpeg, libvorbis, zlib }:
+, alsaLib, fluidsynth, mesa, portaudio, SDL, ffmpeg, libpng, libjpeg
+, libvorbis, zlib }:
 
 let
 
@@ -33,7 +34,7 @@ let
       inherit description;
       homepage = "http://www.libretro.com/";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ edwtjo MP2E ];
+      maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.linux;
     };
   } // a);
@@ -133,6 +134,18 @@ in
     description = "Enhanced Genesis Plus libretro port";
   };
 
+  mame = mkLibRetroCore {
+    core = "mame";
+    src = fetchRetro {
+      repo = "mame";
+      rev = "8da2303292bb8530f9f4ffad8bf1df95ee4cab74";
+      sha256 = "0rzy5klp8vf9vc8fylbdnp2qcvl1nkgw5a55ljqc5vich4as5alq";
+    };
+    description = "Port of MAME to libretro";
+
+    extraBuildInputs = [ alsaLib portaudio python27 ];
+  };
+
   mednafen-pce-fast = (mkLibRetroCore rec {
     core = "mednafen-pce-fast";
     src = fetchRetro {
@@ -141,6 +154,18 @@ in
       sha256 = "1mxlvd3bcc6grryby2xn4k2gia3s49ngkwcvgxlj1fg3hkr5kcp8";
     };
     description = "Port of Mednafen's PC Engine core to libretro";
+  }).override {
+    buildPhase = "make";
+  };
+
+  mednafen-psx = (mkLibRetroCore rec {
+    core = "mednafen-psx";
+    src = fetchRetro {
+      repo = "beetle-psx-libretro";
+      rev = "20c9b0eb0062b8768cc40aca0e2b2d626f1002a2";
+      sha256 = "1dhql8zy9wv55m1lgvqv412087cqmlw7zwcsmxkl3r4z199dsh3m";
+    };
+    description = "Port of Mednafen's PSX Engine core to libretro";
   }).override {
     buildPhase = "make";
   };
@@ -182,7 +207,7 @@ in
 
     extraBuildInputs = [ libpng SDL ];
   }).override {
-    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL}/bin/sdl-config\",' configure";
+    patchPhase = "sed -i -e 's,SDL_CONFIG=\".*\",SDL_CONFIG=\"${SDL.dev}/bin/sdl-config\",' configure";
     configurePhase = "./configure";
   };
 

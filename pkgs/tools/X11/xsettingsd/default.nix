@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "xsettingsd-${version}";
-  version = "0.0.1";
+  version = "git-2015-06-14";
 
   src = fetchFromGitHub {
     owner = "derat";
     repo = "xsettingsd";
-    rev = "2a516a91d8352b3b93a7a1ef5606dbd21fa06b7c";
-    sha256 = "0f9lc5w18x6xs9kf72jpixprp3xb7wqag23cy8zrm33n2bza9dj0";
+    rev = "b4999f5e9e99224caf97d09f25ee731774ecd7be";
+    sha256 = "18cp6a66ji483lrvf0vq855idwmcxd0s67ijpydgjlsr70c65j7s";
   };
 
   patches = [
@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Provides settings to X11 applications via the XSETTINGS specification";
     homepage = https://github.com/derat/xsettingsd;
+    license = licenses.bsd2;
     platforms = platforms.linux;
   };
 }

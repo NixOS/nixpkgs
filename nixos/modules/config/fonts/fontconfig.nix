@@ -129,6 +129,14 @@ with lib;
 
         };
 
+        cache32Bit = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Generate system fonts cache for 32-bit applications.
+          '';
+        };
+
       };
 
     };
@@ -228,15 +236,22 @@ with lib;
       # Versioned fontconfig > 2.10. Take shared fonts.conf from fontconfig.
       # Otherwise specify only font directories.
       environment.etc."fonts/${pkgs.fontconfig.configVersion}/fonts.conf".source =
-        "${pkgs.fontconfig}/etc/fonts/fonts.conf";
+        "${pkgs.fontconfig.out}/etc/fonts/fonts.conf";
 
       environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/00-nixos.conf".text =
-        ''
+        let
+          cache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
+        in ''
           <?xml version='1.0'?>
           <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
           <fontconfig>
             <!-- Font directories -->
             ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+            <!-- Pre-generated font caches -->
+            <cachedir>${cache pkgs.fontconfig}</cachedir>
+            ${optionalString (pkgs.stdenv.isx86_64 && config.fonts.fontconfig.cache32Bit) ''
+              <cachedir>${cache pkgs.pkgsi686Linux.fontconfig}</cachedir>
+            ''}
           </fontconfig>
         '';
 

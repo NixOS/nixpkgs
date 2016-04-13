@@ -1,19 +1,17 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "nim-0.11.2";
-
-  buildInputs = [ unzip ];
+  name = "nim-0.13.0";
 
   src = fetchurl {
-    url = "http://nim-lang.org/download/${name}.zip";
-    sha256 = "0ay8gkd8fki3d8kbnw2px7rjdlr54kyqh5n1rjhq4vjmqs2wg5s4";
+    url = "http://nim-lang.org/download/${name}.tar.xz";
+    sha256 = "1adiij20n1cigsc44dbp60jdbydmkfp7ixbddmcn6h4dfvjzaqfd";
   };
 
   buildPhase   = "sh build.sh";
   installPhase =
     ''
-      installBin bin/nim
+      install -Dt "$out/bin" bin/nim
       substituteInPlace install.sh --replace '$1/nim' "$out"
       sh install.sh $out
     '';

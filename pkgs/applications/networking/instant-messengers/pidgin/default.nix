@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell
-, gstreamer, gst_plugins_base, startupnotification, gettext
+{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk, gtkspell, aspell
+, gstreamer, gst_plugins_base, gst_plugins_good, startupnotification, gettext
 , perl, perlXMLParser, libxml2, nss, nspr, farsight2
 , libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
@@ -22,9 +22,11 @@ stdenv.mkDerivation rec {
 
   inherit nss ncurses;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
     gtkspell aspell
-    gstreamer gst_plugins_base startupnotification
+    gstreamer gst_plugins_base gst_plugins_good startupnotification
     libxml2 nss nspr farsight2
     libXScrnSaver ncurses python
     avahi dbus dbus_glib intltool libidn
@@ -41,11 +43,11 @@ stdenv.mkDerivation rec {
   patches = [./pidgin-makefile.patch ./add-search-path.patch ];
 
   configureFlags = [
-    "--with-nspr-includes=${nspr}/include/nspr"
-    "--with-nspr-libs=${nspr}/lib"
-    "--with-nss-includes=${nss}/include/nss"
-    "--with-nss-libs=${nss}/lib"
-    "--with-ncurses-headers=${ncurses}/include"
+    "--with-nspr-includes=${nspr.dev}/include/nspr"
+    "--with-nspr-libs=${nspr.out}/lib"
+    "--with-nss-includes=${nss.dev}/include/nss"
+    "--with-nss-libs=${nss.out}/lib"
+    "--with-ncurses-headers=${ncurses.dev}/include"
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"
@@ -53,6 +55,11 @@ stdenv.mkDerivation rec {
   ++ (lib.optionals (gnutls != null) ["--enable-gnutls=yes" "--enable-nss=no"]);
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram $out/bin/pidgin \
+      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"
+  '';
 
   meta = with stdenv.lib; {
     description = "Multi-protocol instant messaging client";

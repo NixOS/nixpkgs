@@ -26,6 +26,7 @@ in
 
       extraOptions = mkOption {
         type = types.string;
+        default = "";
         description = ''
           Additional command line arguments to pass to tlsdated.
         '';

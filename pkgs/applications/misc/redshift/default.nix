@@ -7,13 +7,14 @@
 }:
 
 let
-  version = "1.11";
   mkFlag = flag: name: if flag
     then "--enable-${name}"
     else "--disable-${name}";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "redshift-${version}";
+  version = "1.11";
+
   src = fetchurl {
     sha256 = "0ngkwj7rg8nfk806w0sg443w6wjr91xdc0zisqfm5h2i77wm1qqh";
     url = "https://github.com/jonls/redshift/releases/download/v${version}/redshift-${version}.tar.xz";
@@ -51,7 +52,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Gradually change screen color temperature";
     longDescription = ''
       The color temperature is set according to the position of the

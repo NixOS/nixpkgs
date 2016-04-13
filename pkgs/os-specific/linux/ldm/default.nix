@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev utillinux ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace ldm.c \
       --replace "/mnt/" "${mountPath}"
+    sed '16i#include <sys/stat.h>' -i ldm.c
   '';
 
   buildPhase = "make ldm";

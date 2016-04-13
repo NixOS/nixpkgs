@@ -10,6 +10,14 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];
 
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+
+  preConfigure =
+    ''
+      configureFlagsArray+=("--with-installbuilddir=$dev/share/build")
+    '';
+
   configureFlags =
     # Including the Windows headers breaks unistd.h.
     # Based on ftp://sourceware.org/pub/cygwin/release/libapr1/libapr1-1.3.8-2-src.tar.bz2
@@ -17,10 +25,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://apr.apache.org/;
     description = "The Apache Portable Runtime library";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.all;
+    maintainers = [ maintainers.eelco ];
   };
 }

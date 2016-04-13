@@ -149,9 +149,10 @@ nixBuild() {
                 local j="$1"; shift 1
                 instArgs+=("$i" "$j")
                 ;;
-              -I)
-                # We don't want this in buildArgs
+              -I) # We don't want this in buildArgs
                 shift 1
+                ;;
+              --no-out-link) # We don't want this in buildArgs
                 ;;
               "<"*) # nix paths
                 instArgs+=("$i")
@@ -256,9 +257,9 @@ fi
 prebuiltNix() {
     machine="$1"
     if [ "$machine" = x86_64 ]; then
-        return /nix/store/xryr9g56h8yjddp89d6dw12anyb4ch7c-nix-1.10
+        echo /nix/store/xryr9g56h8yjddp89d6dw12anyb4ch7c-nix-1.10
     elif [[ "$machine" =~ i.86 ]]; then
-        return /nix/store/2w92k5wlpspf0q2k9mnf2z42prx3bwmv-nix-1.10
+        echo /nix/store/2w92k5wlpspf0q2k9mnf2z42prx3bwmv-nix-1.10
     else
         echo "$0: unsupported platform"
         exit 1
@@ -270,9 +271,9 @@ remotePATH=
 if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
     nixDrv=
-    if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nixdrv --indirect -A config.nix.package "${extraBuildFlags[@]}")"; then
-        if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nixdrv --indirect -A nixFallback "${extraBuildFlags[@]}")"; then
-            if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nixdrv --indirect -A nix "${extraBuildFlags[@]}")"; then
+    if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A config.nix.package "${extraBuildFlags[@]}")"; then
+        if ! nixDrv="$(nix-instantiate '<nixpkgs/nixos>' --add-root $tmpDir/nix.drv --indirect -A nixFallback "${extraBuildFlags[@]}")"; then
+            if ! nixDrv="$(nix-instantiate '<nixpkgs>' --add-root $tmpDir/nix.drv --indirect -A nix "${extraBuildFlags[@]}")"; then
                 nixStorePath="$(prebuiltNix "$(uname -m)")"
                 if ! nix-store -r $nixStorePath --add-root $tmpDir/nix --indirect \
                     --option extra-binary-caches https://cache.nixos.org/; then
@@ -293,7 +294,7 @@ if [ -n "$buildNix" ]; then
         fi
     fi
     if [ -a "$nixDrv" ]; then
-        nix-store -r "$nixDrv" --add-root $tmpDir/nix --indirect >/dev/null
+        nix-store -r "$nixDrv"'!'"out" --add-root $tmpDir/nix --indirect >/dev/null
         if [ -n "$buildHost" ]; then
             nix-copy-closure --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
@@ -329,7 +330,7 @@ fi
 if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
     if [ "$action" = switch -o "$action" = boot ]; then
-        pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system "${extraBuildFlags[@]}")"
+        pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         copyToTarget "$pathToConfig"
         targetHostCmd nix-env -p "$profile" --set "$pathToConfig"
     elif [ "$action" = test -o "$action" = build -o "$action" = dry-build -o "$action" = dry-activate ]; then

@@ -1,13 +1,17 @@
 { stdenv, fetchurl, ncurses }:
 
-let version = "4.6.patch6"; in
 stdenv.mkDerivation rec {
   name = "clex-${version}";
+  version = "4.6.patch6";
 
   src = fetchurl {
     sha256 = "0bqa2hc9721d62cfsy5c7a5pzgh9b4px7g4q60xlybkwll19qbbp";
     url = "${meta.homepage}/download/${name}.tar.gz";
   };
+
+  buildInputs = [ ncurses ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "File manager with full-screen terminal interface";
@@ -23,8 +27,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];
   };
-
-  buildInputs = [ ncurses ];
-
-  enableParallelBuilding = true;
 }

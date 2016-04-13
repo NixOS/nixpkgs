@@ -1,5 +1,5 @@
 { stdenv, fetchurl, emacs, texinfo
-, mpg321, vorbisTools, taglib, mp3info, alsaUtils }:
+, mpg321, vorbis-tools, taglib, mp3info, alsaUtils }:
 
 # XXX: EMMS also supports Xine, MPlayer, Jack, etc.
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     sed -i "emms-player-mpg321-remote.el" \
         -e 's|emms-player-mpg321-remote-command[[:blank:]]\+"mpg321"|emms-player-mpg321-remote-command "${mpg321}/bin/mpg321"|g'
     sed -i "emms-player-simple.el" \
-        -e 's|"ogg123"|"${vorbisTools}/bin/ogg123"|g'
+        -e 's|"ogg123"|"${vorbis-tools}/bin/ogg123"|g'
     sed -i "emms-info-ogginfo.el" \
-        -e 's|emms-info-ogginfo-program-name[[:blank:]]\+"ogginfo"|emms-info-ogginfo-program-name "${vorbisTools}/bin/ogginfo"|g'
+        -e 's|emms-info-ogginfo-program-name[[:blank:]]\+"ogginfo"|emms-info-ogginfo-program-name "${vorbis-tools}/bin/ogginfo"|g'
     sed -i "emms-info-libtag.el" \
         -e "s|\"emms-print-metadata\"|\"$out/bin/emms-print-metadata\"|g"
     sed -i "emms-volume-amixer.el" \

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   name = "smartgithg-${version}";
-  version = "7_0_2";
+  version = "7_1_2";
 
   src = fetchurl {
-    url = "http://www.syntevo.com/downloads/smartgit/smartgit-generic-${version}.tar.gz";
-    sha256 = "1jpi424aqy6niq31j750rgbspwii013c8kbi965i4jzjpba1pagi";
+    url = "http://www.syntevo.com/static/smart/download/smartgit/smartgit-linux-${version}.tar.gz";
+    sha256 = "18jw4g2akhj6h9w8378kacv7ws35ndcnc3kkhci9iypwy432ak8d";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     install_freedesktop_items = ./install_freedesktop_items.sh;
     runtime_paths = lib.makeSearchPath "bin" [
       jre
-      git mercurial subversion
+      #git mercurial subversion # the paths are requested in configuration
       which
     ];
     runtime_lib_paths = lib.makeLibraryPath [
@@ -58,5 +58,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.syntevo.com/smartgit/;
     license = licenses.unfree;
     platforms = platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ jraygauthier ];
   };
 }

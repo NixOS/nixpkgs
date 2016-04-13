@@ -4,13 +4,13 @@
 
 buildOcaml rec {
   name = "cohttp";
-  version = "0.17.1";
+  version = "0.19.3";
 
   minimumSupportedOcamlVersion = "4.02";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-cohttp/archive/v${version}.tar.gz";
-    sha256 = "fb124fb2fb5ff2e74559bf380627f6a537e208c1518ddcb01f0d37b62b55f673";
+    sha256 = "1nrzpd4h52c1hnzcgsz462676saj9zss708ng001h54dglk8i1iv";
   };
 
   buildInputs = [ alcotest ];

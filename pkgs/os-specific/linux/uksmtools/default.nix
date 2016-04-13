@@ -1,8 +1,8 @@
 { stdenv, fetchgit, cmake }:
 
-let version = "2015-09-25"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "uksmtools-${version}";
+  version = "2015-09-25";
 
   # This project uses git submodules, which fetchFromGitHub doesn't support:
   src = fetchgit {
@@ -18,7 +18,6 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Tools to control Linux UKSM (Ultra Kernel Same-page Merging)";
     homepage = https://github.com/pfactum/uksmtools/;
     license = licenses.gpl3Plus;

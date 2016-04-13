@@ -148,7 +148,7 @@ sub pciCheck {
          $device eq "0x4331" || $device eq "0x43a0" || $device eq "0x43b1"
         ) )
      {
-        push @modulePackages, "\${config.boot.kernelPackages.broadcom_sta}";
+        push @modulePackages, "config.boot.kernelPackages.broadcom_sta";
         push @kernelModules, "wl";
      }
 
@@ -165,7 +165,7 @@ sub pciCheck {
         ) )
     {
         # we need e.g. brcmfmac43602-pcie.bin
-        push @imports, "<nixos/modules/hardware/network/broadcom-43xx.nix>";
+        push @imports, "<nixpkgs/nixos/modules/hardware/network/broadcom-43xx.nix>";
     }
 
     # Can't rely on $module here, since the module may not be loaded
@@ -349,7 +349,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
   fileSystems.\"$mountPoint\" =
     { device = \"$base$path\";
       fsType = \"none\";
-      options = \"bind\";
+      options = \[ \"bind\" \];
     };
 
 EOF
@@ -409,7 +409,7 @@ EOF
 
     if (scalar @extraOptions > 0) {
       $fileSystems .= <<EOF;
-      options = \"${\join ",", uniq(@extraOptions)}\";
+      options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
 EOF
     }
 
@@ -422,10 +422,17 @@ EOF
 
 # Generate the hardware configuration file.
 
-sub toNixExpr {
+sub toNixStringList {
     my $res = "";
     foreach my $s (@_) {
         $res .= " \"$s\"";
+    }
+    return $res;
+}
+sub toNixList {
+    my $res = "";
+    foreach my $s (@_) {
+        $res .= " $s";
     }
     return $res;
 }
@@ -444,9 +451,9 @@ sub multiLineList {
     return $res;
 }
 
-my $initrdAvailableKernelModules = toNixExpr(uniq @initrdAvailableKernelModules);
-my $kernelModules = toNixExpr(uniq @kernelModules);
-my $modulePackages = toNixExpr(uniq @modulePackages);
+my $initrdAvailableKernelModules = toNixStringList(uniq @initrdAvailableKernelModules);
+my $kernelModules = toNixStringList(uniq @kernelModules);
+my $modulePackages = toNixList(uniq @modulePackages);
 
 my $fsAndSwap = "";
 if (!$noFilesystems) {
@@ -467,7 +474,7 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
-  nix.maxJobs = $cpus;
+  nix.maxJobs = lib.mkDefault $cpus;
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 

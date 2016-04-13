@@ -61,6 +61,7 @@ rec {
 
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
+    http://cdn.kernel.org/pub/
     http://www.all.kernel.org/pub/
     http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
     http://linux-kernel.uio.no/pub/
@@ -332,5 +333,11 @@ rec {
     ftp://ftp-stud.fht-esslingen.de/pub/OpenBSD/
     ftp://ftp.halifax.rwth-aachen.de/pub/OpenBSD/
     ftp://mirror.switch.ch/pub/OpenBSD/
+  ];
+
+  # Steam Runtime mirrors
+  steamrt = [
+    http://repo.steampowered.com/steamrt/
+    https://abbradar.net/steamrt/
   ];
 }

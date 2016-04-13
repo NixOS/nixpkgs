@@ -1,0 +1,25 @@
+From 65c5b603489d230b1f1775b01ba1529843cfeba6 Mon Sep 17 00:00:00 2001
+From: Nikolay Amiantov <ab@fmap.me>
+Date: Fri, 25 Dec 2015 17:11:56 +0300
+Subject: [PATCH 2/2] mfd: fix dependency for MFD_CROS_EC
+
+---
+ drivers/mfd/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+index f425dce..a62a285 100644
+--- a/drivers/mfd/Kconfig
++++ b/drivers/mfd/Kconfig
+@@ -61,7 +61,7 @@ config MFD_AAT2870_CORE
+ 
+ config MFD_CROS_EC
+ 	tristate "Support ChromeOS Embedded Controller"
+-	depends on MFD_CORE
++	select MFD_CORE
+ 	help
+ 	  If you say Y here you get support for the ChromeOS Embedded
+ 	  Controller (EC) providing keyboard, battery and power services.
+-- 
+2.6.3
+

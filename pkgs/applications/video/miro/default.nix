@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, buildPythonPackage, pythonPackages, pkgconfig
+{ stdenv, fetchurl, python, buildPythonApplication, pythonPackages, pkgconfig
 , pyrex096, ffmpeg, boost, glib, pygobject, gtk2, webkitgtk2, libsoup, pygtk
 , taglib, sqlite, pycurl, mutagen, pycairo, pythonDBus, pywebkitgtk
 , libtorrentRasterbar, glib_networking, gsettings_desktop_schemas
@@ -10,7 +10,7 @@ assert enableBonjour -> avahi != null;
 
 with stdenv.lib;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "miro-${version}";
   namePrefix = "";
   version = "6.0";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
            -e 's/BUILD_TIME[^,]*/BUILD_TIME=0/' setup.py
 
-    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg}/bin/ffmpeg"|' \
+    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg.bin}/bin/ffmpeg"|' \
       plat/options.py
 
     sed -i -e 's|/usr/share/miro/themes|'"$out/share/miro/themes"'|' \
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     mv "$out/bin/miro.real" "$out/bin/miro"
     wrapProgram "$out/bin/miro" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
   '';
 

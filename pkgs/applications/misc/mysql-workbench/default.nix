@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper, autoconf, automake, boost, file, gettext
+{ stdenv, fetchurl, makeWrapper, autoreconfHook, boost, file
 , glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
 , libctemplate, libglade
 , libiodbc
-, libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
+, libgnome, libsigcxx, libuuid, libxml2, libzip, lua, mesa, mysql
 , pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite, sudo
 }:
 
@@ -16,16 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "1343fn3msdxqfpxw0kgm0mdx5r7g9ra1cpc8p2xhl7kz2pmqp4p6";
   };
 
-  buildInputs = [ autoconf automake boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
-    libctemplate libglade libgnome libiodbc libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
+  buildInputs = [ autoreconfHook boost file glib glibc libgnome_keyring gtk gtkmm intltool
+    libctemplate libglade libgnome libiodbc libsigcxx libuuid libxml2 libzip lua makeWrapper mesa
     mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
-    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
-  '';
-
-  postConfigure = ''
-    autoreconf -fi
+    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc.bin}/bin/catchsegv"
   '';
 
   postInstall = ''

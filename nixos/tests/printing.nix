@@ -78,7 +78,7 @@ import ./make-test.nix ({pkgs, ... }: {
               # (showing that the right filters have been applied).  Of
               # course, since there is no actual USB printer attached, the
               # file will stay in the queue forever.
-              $server->waitForFile("/var/spool/cups/d00001-001");
+              $server->waitForFile("/var/spool/cups/d*-001");
               $server->sleep(10);
               $server->succeed("lpq -a") =~ /$fn/ or die;
 
@@ -90,6 +90,9 @@ import ./make-test.nix ({pkgs, ... }: {
               Machine::retry sub {
                 return 1 if $server->succeed("lpq -a") =~ /no entries/;
               };
+              # The queue is empty already, so this should be safe.
+              # Otherwise, pairs of "c*"-"d*-001" files might persist.
+              $server->execute("rm /var/spool/cups/*");
           };
       }
     '';

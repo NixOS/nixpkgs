@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, gnused, perl, libgcrypt, zlib, bzip2 }:
+{ stdenv, fetchFromGitHub, gnused, perl, libgcrypt, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "munge-0.5.11";
 
-  src = fetchurl {
-    url = "http://munge.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "19aijdrjij2g0xpqgl198jh131j94p4gvam047gsdc0wz0a5c1wf";
+  src = fetchFromGitHub {
+    owner = "dun";
+    repo = "munge";
+    rev = "${name}";
+    sha256 = "02847p742nq3cb8ayf5blrdicybq72nfsnggqkxr33cpppmsfwg9";
   };
 
   buildInputs = [ gnused perl libgcrypt zlib bzip2 ];
@@ -20,11 +22,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://code.google.com/p/munge/;
     description = ''
       An authentication service for creating and validating credentials
     '';
     maintainers = [ stdenv.lib.maintainers.rickynils ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

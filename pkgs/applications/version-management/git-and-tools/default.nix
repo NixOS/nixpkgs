@@ -8,11 +8,11 @@ let
   gitBase = lib.makeOverridable (import ./git) {
     inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
       asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
-      tk makeWrapper subversionClient gzip libiconv;
+      tk makeWrapper subversionClient gzip openssh libiconv;
     texinfo = texinfo5;
-    svnSupport = false;		# for git-svn support
-    guiSupport = false;		# requires tcl/tk
-    sendEmailSupport = false;	# requires plenty of perl libraries
+    svnSupport = false;         # for git-svn support
+    guiSupport = false;         # requires tcl/tk
+    sendEmailSupport = false;   # requires plenty of perl libraries
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
       perlPackages.NetSMTP perlPackages.NetSMTPSSL
@@ -24,20 +24,11 @@ let
 
 in
 rec {
+  # Try to keep this generally alphabetized
 
-  # support for bugzilla
-  gitBz = import ./git-bz {
-    inherit fetchgit stdenv makeWrapper python asciidoc xmlto # docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
-      ;
-    inherit (pythonPackages) pysqlite;
-  };
+  darcsToGit = callPackage ./darcs-to-git { };
 
   git = appendToName "minimal" gitBase;
-
-  # Git with SVN support, but without GUI.
-  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
-    svnSupport = true;
-  }));
 
   # The full-featured Git.
   gitFull = gitBase.override {
@@ -46,8 +37,50 @@ rec {
     sendEmailSupport = !stdenv.isDarwin;
   };
 
+  # Git with SVN support, but without GUI.
+  gitSVN = lowPrio (appendToName "with-svn" (gitBase.override {
+    svnSupport = true;
+  }));
+
   git-annex = pkgs.haskellPackages.git-annex-with-assistant;
   gitAnnex = git-annex;
+
+  git-annex-remote-b2 = pkgs.goPackages.git-annex-remote-b2;
+
+  # support for bugzilla
+  git-bz = callPackage ./git-bz { };
+
+  git-cola = callPackage ./git-cola { };
+
+  git-crypt = callPackage ./git-crypt { };
+
+  git-extras = callPackage ./git-extras { };
+
+  git-imerge = callPackage ./git-imerge { };
+
+  git-radar = callPackage ./git-radar { };
+
+  git-remote-hg = callPackage ./git-remote-hg { };
+
+  git-stree = callPackage ./git-stree { };
+
+  git2cl = import ./git2cl {
+    inherit fetchgit stdenv perl;
+  };
+
+  gitFastExport = import ./fast-export {
+    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
+  };
+
+  gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
+
+  gitflow = callPackage ./gitflow { };
+
+  hub = import ./hub {
+    inherit go;
+    inherit stdenv fetchgit;
+    inherit (darwin) Security;
+  };
 
   qgit = import ./qgit {
     inherit fetchurl stdenv;
@@ -65,27 +98,7 @@ rec {
     inherit fetchurl stdenv python git;
   };
 
-  topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl;
-  };
-
-  tig = callPackage ./tig { };
-
-  transcrypt = callPackage ./transcrypt { };
-
-  hub = import ./hub {
-    inherit go;
-    inherit stdenv fetchgit;
-    inherit (darwin) Security;
-  };
-
-  gitFastExport = import ./fast-export {
-    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
-  };
-
-  git2cl = import ./git2cl {
-    inherit fetchgit stdenv perl;
-  };
+  subgit = callPackage ./subgit { };
 
   svn2git = import ./svn2git {
     inherit stdenv fetchurl ruby makeWrapper;
@@ -94,23 +107,11 @@ rec {
 
   svn2git_kde = callPackage ./svn2git-kde { };
 
-  subgit = callPackage ./subgit { };
+  tig = callPackage ./tig { };
 
-  darcsToGit = callPackage ./darcs-to-git { };
+  topGit = lib.makeOverridable (import ./topgit) {
+    inherit stdenv fetchurl;
+  };
 
-  gitflow = callPackage ./gitflow { };
-
-  git-radar = callPackage ./git-radar { };
-
-  git-remote-hg = callPackage ./git-remote-hg { };
-
-  gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
-
-  git-extras = callPackage ./git-extras { };
-
-  git-cola = callPackage ./git-cola { };
-
-  git-imerge = callPackage ./git-imerge { };
-
-  git-crypt = callPackage ./git-crypt { };
+  transcrypt = callPackage ./transcrypt { };
 }

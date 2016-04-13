@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "qmidinet-${version}";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/qmidinet/${name}.tar.gz";
+    url = "mirror://sourceforge/qmidinet/${name}.tar.gz";
     sha256 = "1a1pj4w74wj1gcfv4a0vzcglmr5sw0xp0y56w8rk3ig4k11xi8sa";
   };
 

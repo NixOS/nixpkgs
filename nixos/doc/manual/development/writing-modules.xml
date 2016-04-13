@@ -107,12 +107,12 @@ the file system.  This module declares two options that can be defined
 by other modules (typically the user’s
 <filename>configuration.nix</filename>):
 <option>services.locate.enable</option> (whether the database should
-be updated) and <option>services.locate.period</option> (when the
+be updated) and <option>services.locate.interval</option> (when the
 update should be done).  It implements its functionality by defining
 two options declared by other modules:
 <option>systemd.services</option> (the set of all systemd services)
-and <option>services.cron.systemCronJobs</option> (the list of
-commands to be executed periodically by <command>cron</command>).</para>
+and <option>systemd.timers</option> (the list of commands to be
+executed periodically by <command>systemd</command>).</para>
 
 <example xml:id='locate-example'><title>NixOS Module for the “locate” Service</title>
 <programlisting>
@@ -120,53 +120,59 @@ commands to be executed periodically by <command>cron</command>).</para>
 
 with lib;
 
-let locatedb = "/var/cache/locatedb"; in
-
-{
-  options = {
-
-    services.locate = {
-
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          If enabled, NixOS will periodically update the database of
-          files used by the <command>locate</command> command.
-        '';
-      };
-
-      period = mkOption {
-        type = types.str;
-        default = "15 02 * * *";
-        description = ''
-          This option defines (in the format used by cron) when the
-          locate database is updated.  The default is to update at
-          02:15 at night every day.
-        '';
-      };
-
+let
+  cfg = config.services.locate;
+in {
+  options.services.locate = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If enabled, NixOS will periodically update the database of
+        files used by the <command>locate</command> command.
+      '';
     };
 
+    interval = mkOption {
+      type = types.str;
+      default = "02:15";
+      example = "hourly";
+      description = ''
+        Update the locate database at this interval. Updates by
+        default at 2:15 AM every day.
+
+        The format is described in
+        <citerefentry><refentrytitle>systemd.time</refentrytitle>
+        <manvolnum>7</manvolnum></citerefentry>.
+      '';
+    };
+
+    # Other options omitted for documentation
   };
 
   config = {
-
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path  = [ pkgs.su ];
         script =
           ''
-            mkdir -m 0755 -p $(dirname ${locatedb})
-            exec updatedb --localuser=nobody --output=${locatedb} --prunepaths='/tmp /var/tmp /run'
+            mkdir -m 0755 -p $(dirname ${toString cfg.output})
+            exec updatedb \
+              --localuser=${cfg.localuser} \
+              ${optionalString (!cfg.includeStore) "--prunepaths='/nix/store'"} \
+              --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
           '';
       };
 
-    services.cron.systemCronJobs = optional config.services.locate.enable
-      "${config.services.locate.period} root ${config.systemd.package}/bin/systemctl start update-locatedb.service";
-
+    systemd.timers.update-locatedb = mkIf cfg.enable
+      { description = "Update timer for locate database";
+        partOf      = [ "update-locatedb.service" ];
+        wantedBy    = [ "timers.target" ];
+        timerConfig.OnCalendar = cfg.interval;
+      };
   };
-}</programlisting>
+}
+</programlisting>
 </example>
 
 <xi:include href="option-declarations.xml" />

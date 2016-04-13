@@ -16,6 +16,11 @@ let
     "forward-zone:\n  name: .\n" +
     concatMapStrings (x: "  forward-addr: ${x}\n") cfg.forwardAddresses;
 
+  rootTrustAnchorFile = "${stateDir}/root.key";
+
+  trustAnchor = optionalString cfg.enableRootTrustAnchor
+    "auto-trust-anchor-file: ${rootTrustAnchorFile}";
+
   confFile = pkgs.writeText "unbound.conf" ''
     server:
       directory: "${stateDir}"
@@ -24,6 +29,7 @@ let
       pidfile: ""
       ${interfaces}
       ${access}
+      ${trustAnchor}
     ${cfg.extraConfig}
     ${forward}
   '';
@@ -38,28 +44,39 @@ in
     services.unbound = {
 
       enable = mkOption {
-	default = false;
-	description = "Whether to enable the Unbound domain name server.";
+        default = false;
+        type = types.bool;
+        description = "Whether to enable the Unbound domain name server.";
       };
 
       allowedAccess = mkOption {
-	default = ["127.0.0.0/24"];
-	description = "What networks are allowed to use unbound as a resolver.";
+        default = ["127.0.0.0/24"];
+        type = types.listOf types.str;
+        description = "What networks are allowed to use unbound as a resolver.";
       };
 
       interfaces = mkOption {
-	default = [ "127.0.0.1" "::1" ];
-	description = "What addresses the server should listen on.";
+        default = [ "127.0.0.1" "::1" ];
+        type = types.listOf types.str;
+        description = "What addresses the server should listen on.";
       };
 
       forwardAddresses = mkOption {
-	default = [ ];
-	description = "What servers to forward queries to.";
+        default = [ ];
+        type = types.listOf types.str;
+        description = "What servers to forward queries to.";
+      };
+
+      enableRootTrustAnchor = mkOption {
+        default = true;
+        type = types.bool;
+        description = "Use and update root trust anchor for DNSSEC validation.";
       };
 
       extraConfig = mkOption {
-	default = "";
-	description = "Extra lines of unbound config.";
+        default = "";
+        type = types.str;
+        description = "Extra lines of unbound config.";
       };
 
     };
@@ -88,14 +105,15 @@ in
 
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
-	cp ${confFile} ${stateDir}/unbound.conf
-	chown unbound ${stateDir}
-	touch ${stateDir}/dev/random
+        cp ${confFile} ${stateDir}/unbound.conf
+        ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
+        chown unbound ${stateDir} ${rootTrustAnchorFile}
+        touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.unbound}/sbin/unbound -d -c ${stateDir}/unbound.conf";
+        ExecStart = "${pkgs.unbound}/bin/unbound -d -c ${stateDir}/unbound.conf";
         ExecStopPost="${pkgs.utillinux}/bin/umount ${stateDir}/dev/random";
       };
     };

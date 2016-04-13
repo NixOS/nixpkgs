@@ -1,6 +1,6 @@
-{ lib, buildPythonPackage, pythonPackages, fetchurl }:
+{ lib, buildPythonApplication, pythonPackages, fetchurl }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "cli53-${version}";
   namePrefix = "";  # Suppress "python27-" name prefix
   version = "0.4.4";

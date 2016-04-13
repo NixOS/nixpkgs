@@ -18,30 +18,24 @@ stdenv.mkDerivation rec {
     cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Liberation Fonts, replacements for Times New Roman, Arial, and Courier New";
     longDescription = ''
       The Liberation Fonts are intended to be replacements for the three most
       commonly used fonts on Microsoft systems: Times New Roman, Arial, and
-      Courier New.
+      Courier New. Since 2012 they are based on croscore fonts.
 
       There are three sets: Sans (a substitute for Arial, Albany, Helvetica,
       Nimbus Sans L, and Bitstream Vera Sans), Serif (a substitute for Times
       New Roman, Thorndale, Nimbus Roman, and Bitstream Vera Serif) and Mono
       (a substitute for Courier New, Cumberland, Courier, Nimbus Mono L, and
       Bitstream Vera Sans Mono).
-
-      You are free to use these fonts on any system you would like.  You are
-      free to redistribute them under the GPL+exception license found in the
-      download.  Using these fonts does not subject your documents to the
-      GPL---it liberates them from any proprietary claim.
     '';
 
-    # See `License.txt' for details.
-    license = stdenv.lib.licenses.gpl2Oss;
+    license = licenses.ofl;
     homepage = https://fedorahosted.org/liberation-fonts/;
     maintainers = [
-      stdenv.lib.maintainers.raskin
+      maintainers.raskin
     ];
   };
 }

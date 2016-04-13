@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     cp checksec.sh $out/bin/checksec
     chmod +x $out/bin/checksec
     substituteInPlace $out/bin/checksec --replace /bin/bash ${stdenv.shell}
-    substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc}/lib/libc.so.6
+    substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
     substituteInPlace $out/bin/checksec --replace find ${findutils}/bin/find
     substituteInPlace $out/bin/checksec --replace "file $" "${file}/bin/file $"
     substituteInPlace $out/bin/checksec --replace "xargs file" "xargs ${file}/bin/file"

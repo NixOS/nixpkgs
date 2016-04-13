@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gmp ? null
+{ lib, stdenv, fetchurl, perl, xz, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
@@ -8,38 +8,30 @@
 assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
-
-with { inherit (stdenv.lib) optional optionals optionalString optionalAttrs; };
+with lib;
 
 let
   self = stdenv.mkDerivation rec {
-    name = "coreutils-8.24";
+    name = "coreutils-8.25";
 
     src = fetchurl {
       url = "mirror://gnu/coreutils/${name}.tar.xz";
-      sha256 = "0w11jw3fb5sslf0f72kxy7llxgk1ia3a6bcw0c9kmvxrlj355mx2";
+      sha256 = "11yfrnb94xzmvi4lhclkcmkqsbhww64wf234ya1aacjvg82prrii";
     };
 
-    patches = if stdenv.isCygwin then ./coreutils-8.23-4.cygwin.patch else
-              (if stdenv.isArm then (fetchurl {
-                  url = "http://git.savannah.gnu.org/cgit/coreutils.git/patch/?id=3ba68f9e64fa2eb8af22d510437a0c6441feb5e0";
-                  sha256 = "1dnlszhc8lihhg801i9sz896mlrgfsjfcz62636prb27k5hmixqz";
-                  name = "coreutils-tail-inotify-race.patch";
-              }) else null);
+    patches = optional stdenv.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
     # The test tends to fail on btrfs and maybe other unusual filesystems.
-    postPatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    postPatch = optionalString (!stdenv.isDarwin) ''
       sed '2i echo Skipping dd sparse test && exit 0' -i ./tests/dd/sparse.sh
       sed '2i echo Skipping cp sparse test && exit 0' -i ./tests/cp/sparse.sh
-    '' +
-       # This is required by coreutils-tail-inotify-race.patch to avoid more deps
-       stdenv.lib.optionalString stdenv.isArm ''
-         touch -r src/stat.c src/tail.c
-       '';
+    '';
 
+    outputs = [ "out" "info" ];
+
+    nativeBuildInputs = [ perl xz.bin ];
     configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
-    nativeBuildInputs = [ perl ];
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
       ++ optionals stdenv.isCygwin [ autoconf automake114x texinfo ]   # due to patch
@@ -83,20 +75,18 @@ let
     enableParallelBuilding = false;
 
     NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
-    FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.system == "armv7l-linux" || stdenv.isSunOS) "1";
+    FORCE_UNSAFE_CONFIGURE = optionalString stdenv.isSunOS "1";
 
     makeFlags = optionalString stdenv.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
 
     # e.g. ls -> gls; grep -> ggrep
-    postFixup = # feel free to simplify on a mass rebuild
-      if withPrefix then
+    postFixup = optionalString withPrefix
       ''
         (
           cd "$out/bin"
           find * -type f -executable -exec mv {} g{} \;
         )
-      ''
-      else null;
+      '';
 
     meta = {
       homepage = http://www.gnu.org/software/coreutils/;
@@ -109,11 +99,11 @@ let
         operating system.
       '';
 
-      license = stdenv.lib.licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
 
-      platforms = stdenv.lib.platforms.all;
+      platforms = platforms.all;
 
-      maintainers = [ stdenv.lib.maintainers.eelco ];
+      maintainers = [ maintainers.eelco ];
     };
   };
 in

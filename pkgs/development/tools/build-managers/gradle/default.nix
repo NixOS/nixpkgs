@@ -4,6 +4,8 @@ rec {
   gradleGen = {name, src} : stdenv.mkDerivation rec {
     inherit name src;
 
+    buildPhase = ":";
+
     installPhase = ''
       mkdir -pv $out/lib/gradle/
       cp -rv lib/ $out/lib/gradle/
@@ -15,7 +17,21 @@ rec {
         --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
     '';
 
-    phases = "unpackPhase installPhase";
+    fixupPhase = if (!stdenv.isLinux) then ":" else
+      let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
+        mkdir patching
+        pushd patching
+        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-0.10.jar
+        patchelf --set-rpath "${stdenv.cc.cc}/lib:${stdenv.cc.cc}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
+        jar cf native-platform-linux-${arch}-0.10.jar .
+        mv native-platform-linux-${arch}-0.10.jar $out/lib/gradle/lib/
+        popd
+
+        # The scanner doesn't pick up the runtime dependency in the jar.
+        # Manually add a reference where it will be found.
+        mkdir $out/nix-support
+        echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
+      '';
 
     buildInputs = [ unzip jdk makeWrapper ];
 
@@ -35,11 +51,11 @@ rec {
   };
 
   gradleLatest = gradleGen rec {
-    name = "gradle-2.10";
+    name = "gradle-2.12";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "66406247f745fc6f05ab382d3f8d3e120c339f34ef54b86f6dc5f6efc18fbb13";
+      sha256 = "0p5b6dngza6c2lchz5j0w4cbsizpzvkf638yzxv09k8636c68w77";
     };
   };
 

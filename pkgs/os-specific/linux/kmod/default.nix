@@ -1,18 +1,16 @@
 { stdenv, fetchurl, xz, zlib, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "kmod-21";
+  name = "kmod-22";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "1h4m1mkknxcshsz1qbg9riszmynix2ikg7q8inq7bkvlmx4982hn";
+    sha256 = "10lzfkmnpq6a43a3gkx7x633njh216w0bjwz31rv8a1jlgg1sfxs";
   };
 
-  # Disable xz/zlib support to prevent needing them in the initrd.
-  
-  buildInputs = [ pkgconfig libxslt /* xz zlib */ ];
+  buildInputs = [ pkgconfig libxslt xz /* zlib */ ];
 
-  configureFlags = [ "--sysconfdir=/etc" /* "--with-xz" "--with-zlib" */ ];
+  configureFlags = [ "--sysconfdir=/etc" "--with-xz" /* "--with-zlib" */ ];
 
   patches = [ ./module-dir.patch ];
 

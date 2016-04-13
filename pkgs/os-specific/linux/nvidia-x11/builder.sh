@@ -21,14 +21,6 @@ buildPhase() {
         unset src # used by the nv makefile
         make SYSSRC=$sysSrc SYSOUT=$sysOut module
 
-        # nvidia no longer provides uvm kernel module for 32-bit archs
-        # http://www.nvidia.com/download/driverResults.aspx/79722/en-us
-        if [[ "$system" = "x86_64-linux" ]]; then
-            cd uvm
-            make SYSSRC=$sysSrc SYSOUT=$sysOut module
-            cd ..
-        fi
-
         cd ..
     fi
 }
@@ -41,6 +33,8 @@ installPhase() {
 
     cp -prd *.so.* tls "$out/lib/"
     rm "$out"/lib/lib{glx,nvidia-wfb}.so.* # handled separately
+
+    rm $out/lib/libGL.so.1.* # GLVND
 
     if test -z "$libsOnly"; then
         # Install the X drivers.
@@ -68,13 +62,19 @@ installPhase() {
 
       libname_short=`echo -n "$libname" | sed 's/so\..*/so/'`
 
-      # nvidia's EGL stack seems to expect libGLESv2.so.2 to be available
-      if [ $(basename "$libname_short") == "libGLESv2.so" ]; then
-          ln -srnf "$libname" "$libname_short.2"
+      if [[ "$libname" != "$libname_short" ]]; then
+        ln -srnf "$libname" "$libname_short"
       fi
 
-      ln -srnf "$libname" "$libname_short"
-      ln -srnf "$libname" "$libname_short.1"
+      if [[ $libname_short =~ libEGL.so || $libname_short =~ libEGL_nvidia.so ]]; then
+          major=0
+      else
+          major=1
+      fi
+
+      if [[ "$libname" != "$libname_short.$major" ]]; then
+        ln -srnf "$libname" "$libname_short.$major"
+      fi
     done
 
     #patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
@@ -123,8 +123,9 @@ installPhase() {
     # For simplicity and dependency reduction, don't support the gtk3 interface.
     rm $out/lib/libnvidia-gtk3.*
 
-    # we distribute these separately in `libvdpau`
-    rm "$out"/lib/libvdpau{.*,_trace.*}
+    # Move VDPAU libraries to their place
+    mkdir "$out"/lib/vdpau
+    mv "$out"/lib/libvdpau* "$out"/lib/vdpau
 }
 
 

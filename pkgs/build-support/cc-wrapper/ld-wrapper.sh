@@ -1,4 +1,8 @@
 #! @shell@ -e
+path_backup="$PATH"
+if [ -n "@coreutils_bin@" ]; then
+  PATH="@coreutils_bin@/bin"
+fi
 
 if [ -n "$NIX_LD_WRAPPER_START_HOOK" ]; then
     source "$NIX_LD_WRAPPER_START_HOOK"
@@ -142,8 +146,23 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
 
     # Finally, add `-rpath' switches.
     for i in $rpath; do
-        extra=(${extra[@]} -rpath $i)
+        extra+=(-rpath $i)
     done
+fi
+
+
+# Only add --build-id if this is a final link. FIXME: should build gcc
+# with --enable-linker-build-id instead?
+if [ "$NIX_SET_BUILD_ID" = 1 ]; then
+    for p in "${params[@]}"; do
+        if [ "$p" = "-r" -o "$p" = "--relocatable" -o "$p" = "-i" ]; then
+            relocatable=1
+            break
+        fi
+    done
+    if [ -z "$relocatable" ]; then
+        extra+=(--build-id)
+    fi
 fi
 
 
@@ -163,4 +182,5 @@ if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
     source "$NIX_LD_WRAPPER_EXEC_HOOK"
 fi
 
+PATH="$path_backup"
 exec @prog@ ${extraBefore[@]} "${params[@]}" ${extra[@]}

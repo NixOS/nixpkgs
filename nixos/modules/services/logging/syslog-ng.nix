@@ -39,6 +39,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.syslogng;
+        defaultText = "pkgs.syslogng";
         description = ''
           The package providing syslog-ng binaries.
         '';

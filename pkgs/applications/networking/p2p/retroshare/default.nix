@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0l2n4pr1hq66q6qa073hrdx3s3d7iw54z8ay1zy82zhk2rwhsavp";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${libxml2}/include/libxml2";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.dev}/lib/glib-2.0/include -I${libxml2.dev}/include/libxml2";
 
   patchPhase = ''
     sed -i 's/UpnpString_get_String(es_event->PublisherUrl)/es_event->PublisherUrl/' \

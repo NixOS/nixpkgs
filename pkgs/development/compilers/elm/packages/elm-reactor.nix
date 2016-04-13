@@ -8,8 +8,8 @@ mkDerivation {
   version = "0.16";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-reactor";
-    sha256 = "dbf881808ff00772d464675f1dd88a40273569ab0e9298805133a3b8f3ed4f26";
-    rev = "ff4ad13ea6b55c63b2d2099b738fd1d5ec2d29b4";
+    sha256 = "55605b8443dad20c78e297ce35a603cb107b0c1e57bf1c4710faaebc60396de0";
+    rev = "b03166296d11e240fa04cdb748e1f3c4af7afc83";
   };
   isLibrary = false;
   isExecutable = true;

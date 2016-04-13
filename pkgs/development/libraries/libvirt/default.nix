@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
 , libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
+, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, xen
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "ebcf5645fa565e3fe2fe94a86e841db9b768cf0e0a7e6cf395c6327f9a23bd64";
+    sha256 = "13w56fhspf7ygr3v0jhh44g25xbcx5vmrprzcy9cajsppa6knq4r";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux udev libcap_ng
+    libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
     libnl numad numactl xen
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
+    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/bin:$PATH
     substituteInPlace configure --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
     PATH=${dnsmasq}/bin:$PATH
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--sysconfdir=/etc"
+    "--sysconfdir=/var/lib"
     "--with-libpcap"
     "--with-vmware"
     "--with-vbox"
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [
     "localstatedir=$(TMPDIR)/var"
-    "sysconfdir=$(out)/etc"
+    "sysconfdir=$(out)/var/lib"
   ];
 
   postInstall = ''
@@ -83,5 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

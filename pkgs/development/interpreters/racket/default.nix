@@ -3,6 +3,7 @@
 , glib, gmp, gtk, libffi, libjpeg, libpng
 , libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
+, disableDocs ? true
 }:
 
 let
@@ -27,20 +28,25 @@ let
     sqlite
   ];
 
+  boolPatch = fetchurl {
+    url = "http://copr-dist-git.fedorainfracloud.org/cgit/bthomas/racket/racket.git/plain/xform-errors-converting-fix.patch";
+    sha256 = "0h5g7a7w8wwj43jb8q69xldgbyxkn0y0i1na6r9fk17dd56nsm68";
+  };
+
 in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.2.1";
+  version = "6.4";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "0555j63k7fs10iv0icmivlxpzgp6s7gwcbfddmbwxlf2rk80qhq0";
+    sha256 = "1qyzq91r1kzk2k0faggqd5idwmsxizkjbdgxn6ik9iwwsjycxbw6";
   };
 
   FONTCONFIG_FILE = fontsConf;
   LD_LIBRARY_PATH = libPath;
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
 
@@ -50,7 +56,14 @@ stdenv.mkDerivation rec {
     cd src/build
   '';
 
-  configureFlags = [ "--enable-shared" "--enable-lt=${libtool}/bin/libtool" "--disable-docs"];
+  # https://github.com/racket/racket/issues/1222
+  # Fixed upstream after the release of 6.4
+  patches = [ boolPatch ];
+
+  shared = if stdenv.isDarwin then "dylib" else "shared";
+  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
+                   ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 
@@ -76,6 +89,6 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

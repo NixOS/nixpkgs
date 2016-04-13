@@ -2,13 +2,21 @@
 
 with lib;
 
+let
+  cfg = config.system;
+
+  releaseFile = "${toString pkgs.path}/.version";
+  suffixFile = "${toString pkgs.path}/.version-suffix";
+  revisionFile = "${toString pkgs.path}/.git-revision";
+in
+
 {
 
-  options = {
+  options.system = {
 
-    system.stateVersion = mkOption {
+    stateVersion = mkOption {
       type = types.str;
-      default = config.system.nixosRelease;
+      default = cfg.nixosRelease;
       description = ''
         Every once in a while, a new NixOS release may change
         configuration defaults in a way incompatible with stateful
@@ -22,38 +30,63 @@ with lib;
       '';
     };
 
-    system.nixosVersion = mkOption {
+    nixosLabel = mkOption {
+      type = types.str;
+      description = ''
+        NixOS version name to be used in the names of generated
+        outputs and boot labels.
+
+        If you ever wanted to influence the labels in your GRUB menu,
+        this is option is for you.
+
+        Can be set directly or with <envar>NIXOS_LABEL</envar>
+        environment variable for <command>nixos-rebuild</command>,
+        e.g.:
+
+        <screen>
+        #!/bin/sh
+        today=`date +%Y%m%d`
+        branch=`(cd nixpkgs ; git branch 2>/dev/null | sed -n '/^\* / { s|^\* ||; p; }')`
+        revision=`(cd nixpkgs ; git rev-parse HEAD)`
+        export NIXOS_LABEL="$today.$branch-''${revision:0:7}"
+        nixos-rebuild switch</screen>
+      '';
+    };
+
+    nixosVersion = mkOption {
       internal = true;
       type = types.str;
       description = "NixOS version.";
     };
 
-    system.nixosRelease = mkOption {
+    nixosRelease = mkOption {
       readOnly = true;
       type = types.str;
-      default = readFile "${toString pkgs.path}/.version";
+      default = readFile releaseFile;
       description = "NixOS release.";
     };
 
-    system.nixosVersionSuffix = mkOption {
+    nixosVersionSuffix = mkOption {
       internal = true;
       type = types.str;
+      default = if pathExists suffixFile then readFile suffixFile else "pre-git";
       description = "NixOS version suffix.";
     };
 
-    system.nixosRevision = mkOption {
+    nixosRevision = mkOption {
       internal = true;
       type = types.str;
+      default = if pathExists revisionFile then readFile revisionFile else "master";
       description = "NixOS Git revision hash.";
     };
 
-    system.nixosCodeName = mkOption {
+    nixosCodeName = mkOption {
       readOnly = true;
       type = types.str;
       description = "NixOS release code name.";
     };
 
-    system.defaultChannel = mkOption {
+    defaultChannel = mkOption {
       internal = true;
       type = types.str;
       default = https://nixos.org/channels/nixos-unstable;
@@ -64,18 +97,15 @@ with lib;
 
   config = {
 
-    system.nixosVersion = mkDefault (config.system.nixosRelease + config.system.nixosVersionSuffix);
+    system = {
+      # These defaults are set here rather than up there so that
+      # changing them would not rebuild the manual
+      nixosLabel   = mkDefault (maybeEnv "NIXOS_LABEL" cfg.nixosVersion);
+      nixosVersion = mkDefault (maybeEnv "NIXOS_VERSION" (cfg.nixosRelease + cfg.nixosVersionSuffix));
 
-    system.nixosVersionSuffix =
-      let suffixFile = "${toString pkgs.path}/.version-suffix"; in
-      mkDefault (if pathExists suffixFile then readFile suffixFile else "pre-git");
-
-    system.nixosRevision =
-      let fn = "${toString pkgs.path}/.git-revision"; in
-      mkDefault (if pathExists fn then readFile fn else "master");
-
-    # Note: code names must only increase in alphabetical order.
-    system.nixosCodeName = "Emu";
+      # Note: code names must only increase in alphabetical order.
+      nixosCodeName = "Flounder";
+    };
 
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the

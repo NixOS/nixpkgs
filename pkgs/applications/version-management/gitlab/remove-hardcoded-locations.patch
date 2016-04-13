@@ -1,8 +1,8 @@
 diff --git a/config/environments/production.rb b/config/environments/production.rb
-index 3316ece..c34dec0 100644
+index 9095266..694a4c5 100644
 --- a/config/environments/production.rb
 +++ b/config/environments/production.rb
-@@ -67,10 +67,10 @@ Gitlab::Application.configure do
+@@ -67,10 +67,10 @@ Rails.application.configure do
  
    config.action_mailer.delivery_method = :sendmail
    # Defaults to:
@@ -18,74 +18,10 @@ index 3316ece..c34dec0 100644
    config.action_mailer.raise_delivery_errors = true
  
 diff --git a/config/gitlab.yml.example b/config/gitlab.yml.example
-index 15930fc..bdb423c 100644
+index 05f127d..6a4ae68 100644
 --- a/config/gitlab.yml.example
 +++ b/config/gitlab.yml.example
-@@ -29,8 +29,8 @@ production: &base
-   ## GitLab settings
-   gitlab:
-     ## Web server settings (note: host is the FQDN, do not include http://)
--    host: localhost
--    port: 80 # Set to 443 if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
-+    host: <%= ENV['GITLAB_HOST'] || 'localhost' %>
-+    port: <%= ENV['GITLAB_PORT'] || 80 %>
-     https: false # Set to true if using HTTPS, see installation.md#using-https for additional HTTPS configuration details
- 
-     # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
-@@ -43,7 +43,7 @@ production: &base
-     # relative_url_root: /gitlab
- 
-     # Uncomment and customize if you can't use the default user to run GitLab (default: 'git')
--    # user: git
-+    user: gitlab
- 
-     ## Date & Time settings
-     # Uncomment and customize if you want to change the default time zone of GitLab application.
-@@ -54,7 +54,7 @@ production: &base
-     # Uncomment and set to false if you need to disable email sending from GitLab (default: true)
-     # email_enabled: true
-     # Email address used in the "From" field in mails sent by GitLab
--    email_from: example@example.com
-+    email_from: <%= ENV['GITLAB_EMAIL_FROM'] %>
-     email_display_name: GitLab
-     email_reply_to: noreply@example.com
- 
-@@ -298,12 +298,12 @@ production: &base
-   # GitLab Satellites
-   satellites:
-     # Relative paths are relative to Rails.root (default: tmp/repo_satellites/)
--    path: /home/git/gitlab-satellites/
-+    path: <%= ENV['GITLAB_SATELLITES_PATH'] %>
-     timeout: 30
- 
-   ## Backup settings
-   backup:
--    path: "tmp/backups"   # Relative paths are relative to Rails.root (default: tmp/backups/)
-+    path: <%= ENV['GITLAB_BACKUP_PATH'] %>
-     # archive_permissions: 0640 # Permissions for the resulting backup.tar file (default: 0600)
-     # keep_time: 604800   # default: 0 (forever) (in seconds)
-     # pg_schema: public     # default: nil, it means that all schemas will be backed up
-@@ -322,15 +322,15 @@ production: &base
- 
-   ## GitLab Shell settings
-   gitlab_shell:
--    path: /home/git/gitlab-shell/
-+    path: <%= ENV['GITLAB_SHELL_PATH'] %>
- 
-     # REPOS_PATH MUST NOT BE A SYMLINK!!!
--    repos_path: /home/git/repositories/
--    hooks_path: /home/git/gitlab-shell/hooks/
-+    repos_path: <%= ENV['GITLAB_REPOSITORIES_PATH'] %>
-+    hooks_path: <%= ENV['GITLAB_SHELL_HOOKS_PATH'] %>
- 
-     # File that contains the secret key for verifying access for gitlab-shell.
-     # Default is '.gitlab_shell_secret' relative to Rails.root (i.e. root of the GitLab app).
--    # secret_file: /home/git/gitlab/.gitlab_shell_secret
-+    secret_file: <%= ENV['GITLAB_SHELL_SECRET_PATH'] %>
- 
-     # Git over HTTP
-     upload_pack: true
-@@ -343,7 +343,7 @@ production: &base
+@@ -423,7 +423,7 @@ production: &base
    # CAUTION!
    # Use the default values unless you really know what you are doing
    git:
@@ -94,25 +30,81 @@ index 15930fc..bdb423c 100644
      # The next value is the maximum memory size grit can use
      # Given in number of bytes per git object (e.g. a commit)
      # This value can be increased if you have very large commits
-@@ -388,7 +388,7 @@ test:
-   gravatar:
-     enabled: true
-   gitlab:
--    host: localhost
-+    host: <%= ENV['GITLAB_HOST'] %>
-     port: 80
- 
-     # When you run tests we clone and setup gitlab-shell
-diff --git a/lib/gitlab/app_logger.rb b/lib/gitlab/app_logger.rb
-index dddcb25..d61f10a 100644
---- a/lib/gitlab/app_logger.rb
-+++ b/lib/gitlab/app_logger.rb
-@@ -1,7 +1,7 @@
- module Gitlab
-   class AppLogger < Gitlab::Logger
-     def self.file_name_noext
--      'application'
-+      ENV["GITLAB_APPLICATION_LOG_PATH"]
+diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
+index 59b2114..4f4a39a 100644
+--- a/lib/gitlab/logger.rb
++++ b/lib/gitlab/logger.rb
+@@ -13,20 +13,20 @@ module Gitlab
      end
  
-     def format_message(severity, timestamp, progname, msg)
+     def self.read_latest
+-      path = Rails.root.join("log", file_name)
++      path = File.join(ENV["GITLAB_LOG_PATH"], file_name)
+       self.build unless File.exist?(path)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.read_latest_for(filename)
+-      path = Rails.root.join("log", filename)
++      path = File.join(ENV["GITLAB_LOG_PATH"], filename)
+       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
+       tail_output.split("\n")
+     end
+ 
+     def self.build
+-      new(Rails.root.join("log", file_name))
++      new(File.join(ENV["GITLAB_LOG_PATH"], file_name))
+     end
+   end
+ end
+diff --git a/lib/gitlab/uploads_transfer.rb b/lib/gitlab/uploads_transfer.rb
+index be8fcc7..7642d74 100644
+--- a/lib/gitlab/uploads_transfer.rb
++++ b/lib/gitlab/uploads_transfer.rb
+@@ -29,7 +29,7 @@ module Gitlab
+     end
+ 
+     def root_dir
+-      File.join(Rails.root, "public", "uploads")
++      ENV['GITLAB_UPLOADS_PATH'] || File.join(Rails.root, "public", "uploads")
+     end
+   end
+ end
+diff --git a/lib/tasks/gitlab/check.rake b/lib/tasks/gitlab/check.rake
+index d59872d..0b8007f 100644
+--- a/lib/tasks/gitlab/check.rake
++++ b/lib/tasks/gitlab/check.rake
+@@ -223,7 +223,7 @@ namespace :gitlab do
+     def check_log_writable
+       print "Log directory writable? ... "
+ 
+-      log_path = Rails.root.join("log")
++      log_path = ENV["GITLAB_LOG_PATH"]
+ 
+       if File.writable?(log_path)
+         puts "yes".green
+@@ -263,10 +263,12 @@ namespace :gitlab do
+     def check_uploads
+       print "Uploads directory setup correctly? ... "
+ 
+-      unless File.directory?(Rails.root.join('public/uploads'))
++      uploads_dir = ENV['GITLAB_UPLOADS_PATH'] || Rails.root.join('public/uploads')
++
++      unless File.directory?(uploads_dir)
+         puts "no".red
+         try_fixing_it(
+-          "sudo -u #{gitlab_user} mkdir #{Rails.root}/public/uploads"
++          "sudo -u #{gitlab_user} mkdir #{uploads_dir}"
+         )
+         for_more_information(
+           see_installation_guide_section "GitLab"
+@@ -275,7 +277,7 @@ namespace :gitlab do
+         return
+       end
+ 
+-      upload_path = File.realpath(Rails.root.join('public/uploads'))
++      upload_path = File.realpath(Rails.root.join(uploads_dir))
+       upload_path_tmp = File.join(upload_path, 'tmp')
+ 
+       if File.stat(upload_path).mode == 040700

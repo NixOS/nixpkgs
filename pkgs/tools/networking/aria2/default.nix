@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "aria2-${version}";
-  version = "1.19.2";
+  version = "1.21.0";
 
   src = fetchurl {
     url = "https://github.com/tatsuhiro-t/aria2/releases/download/release-${version}/${name}.tar.xz";
-    sha256 = "0gnm1b7yp5q6fcajz1ln2f1rv64p6dv0nz9bcwpqrkcmsinlh19n";
+    sha256 = "1035rzx9y7qv4p7cv04f461343dxha7ikprch059x2fci8n5yp12";
   };
 
   nativeBuildInputs = [ pkgconfig ];

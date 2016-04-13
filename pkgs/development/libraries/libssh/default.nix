@@ -1,17 +1,19 @@
 { stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.7.2";
+  name = "libssh-0.7.3";
 
   src = fetchurl {
-    url = "https://red.libssh.org/attachments/download/177/${name}.tar.xz";
-    sha256 = "0qmfxgx88dbzcbyvh40gddn0fcg9adyyskg8pnsclha1cywlab53";
+    url = "https://red.libssh.org/attachments/download/195/${name}.tar.xz";
+    sha256 = "165g49i4kmm3bfsjm0n8hm21kadv79g9yjqyq09138jxanz4dvr6";
   };
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
+
+  outputs = [ "dev" "out" ];
 
   buildInputs = [ zlib openssl libsodium ];
 

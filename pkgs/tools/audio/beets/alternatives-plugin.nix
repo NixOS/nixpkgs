@@ -1,6 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonPackages }:
+{ stdenv, buildPythonApplication, fetchFromGitHub, pythonPackages }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "beets-alternatives-${version}";
   version = "0.8.2";
 

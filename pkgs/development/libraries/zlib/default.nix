@@ -2,7 +2,7 @@
 
 let version = "1.2.8"; in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "zlib-${version}";
 
   src = fetchurl {
@@ -20,18 +20,35 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  configureFlags = if static then "" else "--shared";
+  outputs = [ "dev" "out" "static" ];
+  setOutputFlags = false;
+  outputDoc = "dev"; # single tiny man3 page
+
 
   preConfigure = ''
     if test -n "$crossConfig"; then
       export CC=$crossConfig-gcc
-      configureFlags=${if static then "" else "--shared"}
     fi
+  '';
+
+  configureFlags = stdenv.lib.optional (!static) "--shared";
+
+  postInstall = ''
+    moveToOutput lib/libz.a "$static"
+  ''
+    # jww (2015-01-06): Sometimes this library install as a .so, even on
+    # Darwin; others time it installs as a .dylib.  I haven't yet figured out
+    # what causes this difference.
+  + stdenv.lib.optionalString stdenv.isDarwin ''
+    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
+      install_name_tool -id "$file" $file
+    done
   '';
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.isDarwin) "-static-libgcc "
+                     + stdenv.lib.optionalString (stdenv.isFreeBSD) "-fPIC";
 
   crossAttrs = {
     dontStrip = static;
@@ -57,13 +74,5 @@ stdenv.mkDerivation (rec {
     license = licenses.zlib;
     platforms = platforms.all;
   };
-} // (if stdenv.isDarwin then {
-  postInstall = ''
-    # jww (2015-01-06): Sometimes this library install as a .so, even on
-    # Darwin; others time it installs as a .dylib.  I haven't yet figured out
-    # what causes this difference.
-    for file in $out/lib/*.so* $out/lib/*.dylib* ; do
-      install_name_tool -id "$file" $file
-    done
-  '';
-} else {}))
+}
+

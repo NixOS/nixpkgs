@@ -1,18 +1,24 @@
 { stdenv, fetchurl }:
 
+let version = "0.2"; in
 stdenv.mkDerivation {
-  name = "regionset-20030629";
+  name = "regionset-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dvd/regionset.tar.gz";
-    sha256 = "0ssr7s0g60kq04y8v60rh2fzn9wp93al3v4rl0ybza1skild9v70";
+    url = "http://linvdr.org/download/regionset/regionset-${version}.tar.gz";
+    sha256 = "1fgps85dmjvj41a5bkira43vs2aiivzhqwzdvvpw5dpvdrjqcp0d";
   };
 
-  installPhase = "mkdir -p $out/sbin; cp regionset $out/sbin";
+  installPhase = ''
+    install -Dm755 {.,$out/bin}/regionset
+    install -Dm644 {.,$out/share/man/man8}/regionset.8
+  '';
 
-  meta = {
-    homepage = http://dvd.sourceforge.net/;
+  meta = with stdenv.lib; {
+    inherit version;
+    homepage = http://linvdr.org/projects/regionset/;
     descriptions = "Tool for changing the region code setting of DVD players";
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
   };
 }

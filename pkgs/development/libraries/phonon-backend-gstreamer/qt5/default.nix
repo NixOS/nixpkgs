@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = http://phonon.kde.org/;
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
-    maintainer = with maintainers; [ ttuegel ];
+    maintainers = with maintainers; [ ttuegel ];
   };
 }

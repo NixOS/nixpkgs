@@ -2,93 +2,116 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 with stdenv.lib;
+
 let
-  opensslCrossSystem = attrByPath [ "openssl" "system" ]
-    (throw "openssl needs its platform name cross building" null)
-    stdenv.cross;
-in
-stdenv.mkDerivation rec {
-  name = "openssl-1.0.1q";
 
-  src = fetchurl {
-    urls = [
-      "http://www.openssl.org/source/${name}.tar.gz"
-      "http://openssl.linux-mirror.org/source/${name}.tar.gz"
+  opensslCrossSystem = stdenv.cross.openssl.system or
+    (throw "openssl needs its platform name cross building");
+
+  common = { version, sha256 }: stdenv.mkDerivation rec {
+    name = "openssl-${version}";
+
+    src = fetchurl {
+      url = "http://www.openssl.org/source/${name}.tar.gz";
+      inherit sha256;
+    };
+
+    patches =
+      [ ./use-etc-ssl-certs.patch ]
+      ++ optional stdenv.isCygwin ./1.0.1-cygwin64.patch
+      ++ optional
+           (versionOlder version "1.0.2" && (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")))
+           ./darwin-arch.patch;
+
+  outputs = [ "dev" "out" "man" "bin" ];
+  setOutputFlags = false;
+
+    nativeBuildInputs = [ perl ];
+    buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+
+    # On x86_64-darwin, "./config" misdetects the system as
+    # "darwin-i386-cc".  So specify the system type explicitly.
+    configureScript =
+      if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc"
+      else if stdenv.system == "x86_64-solaris" then "./Configure solaris64-x86_64-gcc"
+      else "./config";
+
+    configureFlags = [
+      "shared"
+      "--libdir=lib"
+      "--openssldir=etc/ssl"
+    ] ++ stdenv.lib.optionals withCryptodev [
+      "-DHAVE_CRYPTODEV"
+      "-DUSE_CRYPTODEV_DIGESTS"
     ];
-    sha256 = "1dvz0hx7fjxag06b51pawy154y6d2xajm5rwxmfnlq7ax628nrdk";
-  };
 
-  outputs = [ "out" "man" ];
+  makeFlags = [ "MANDIR=$(man)/share/man" ];
 
-  patches = optional stdenv.isCygwin ./1.0.1-cygwin64.patch
-    ++ optional (stdenv.isDarwin || (stdenv ? cross && stdenv.cross.libc == "libSystem")) ./darwin-arch.patch;
+    # Parallel building is broken in OpenSSL.
+    enableParallelBuilding = false;
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
+    postInstall = ''
+      # If we're building dynamic libraries, then don't install static
+      # libraries.
+      if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
+          rm "$out/lib/"*.a
+      fi
 
-  # On x86_64-darwin, "./config" misdetects the system as
-  # "darwin-i386-cc".  So specify the system type explicitly.
-  configureScript =
-    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc"
-    else if stdenv.system == "x86_64-solaris" then "./Configure solaris64-x86_64-gcc"
-    else "./config";
+    mkdir -p $bin
+    mv $out/bin $bin/
 
-  configureFlags = [
-    "shared"
-    "--libdir=lib"
-    "--openssldir=etc/ssl"
-  ] ++ stdenv.lib.optionals withCryptodev [
-    "-DHAVE_CRYPTODEV"
-    "-DUSE_CRYPTODEV_DIGESTS"
-  ];
+    mkdir $dev
+    mv $out/include $dev/
 
-  makeFlags = [
-    "MANDIR=$(out)/share/man"
-  ];
+      # remove dependency on Perl at runtime
+    rm -r $out/etc/ssl/misc
 
-  # Parallel building is broken in OpenSSL.
-  enableParallelBuilding = false;
-
-  postInstall = ''
-    # If we're building dynamic libraries, then don't install static
-    # libraries.
-    if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
-        rm "$out/lib/"*.a
-    fi
-
-    # remove dependency on Perl at runtime
-    rm -r $out/etc/ssl/misc $out/bin/c_rehash
-  '';
-
-  postFixup = ''
-    # Check to make sure we don't depend on perl
-    if grep -r '${perl}' $out; then
-      echo "Found an erroneous dependency on perl ^^^" >&2
-      exit 1
-    fi
-  '';
-
-  crossAttrs = {
-    # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
-    postPatch = ''
-       sed -i -e 's/[$][(]CROSS_COMPILE[)]windres/$(WINDRES)/' Makefile.shared
+      rmdir $out/etc/ssl/{certs,private}
     '';
-    preConfigure=''
-      # It's configure does not like --build or --host
-      export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
-      # WINDRES and RANLIB need to be prefixed when cross compiling;
-      # the openssl configure script doesn't do that for us
-      export WINDRES=${stdenv.cross.config}-windres
-      export RANLIB=${stdenv.cross.config}-ranlib
+
+    postFixup = ''
+    # Check to make sure the main output doesn't depend on perl
+      if grep -r '${perl}' $out; then
+        echo "Found an erroneous dependency on perl ^^^" >&2
+        exit 1
+      fi
     '';
-    configureScript = "./Configure";
+
+    crossAttrs = {
+      # upstream patch: https://rt.openssl.org/Ticket/Display.html?id=2558
+      postPatch = ''
+         sed -i -e 's/[$][(]CROSS_COMPILE[)]windres/$(WINDRES)/' Makefile.shared
+      '';
+      preConfigure=''
+        # It's configure does not like --build or --host
+        export configureFlags="${concatStringsSep " " (configureFlags ++ [ opensslCrossSystem ])}"
+        # WINDRES and RANLIB need to be prefixed when cross compiling;
+        # the openssl configure script doesn't do that for us
+        export WINDRES=${stdenv.cross.config}-windres
+        export RANLIB=${stdenv.cross.config}-ranlib
+      '';
+      configureScript = "./Configure";
+    };
+
+    meta = {
+      homepage = http://www.openssl.org/;
+      description = "A cryptographic library that implements the SSL and TLS protocols";
+      platforms = stdenv.lib.platforms.all;
+      maintainers = [ stdenv.lib.maintainers.simons ];
+      priority = 10; # resolves collision with ‘man-pages’
+    };
   };
 
-  meta = {
-    homepage = http://www.openssl.org/;
-    description = "A cryptographic library that implements the SSL and TLS protocols";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
-    priority = 10; # resolves collision with ‘man-pages’
+in {
+
+  openssl_1_0_1 = common {
+    version = "1.0.1s";
+    sha256 = "e7e81d82f3cd538ab0cdba494006d44aab9dd96b7f6233ce9971fb7c7916d511";
   };
+
+  openssl_1_0_2 = common {
+    version = "1.0.2g";
+    sha256 = "b784b1b3907ce39abf4098702dade6365522a253ad1552e267a9a0e89594aa33";
+  };
+
 }

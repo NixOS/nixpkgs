@@ -3,6 +3,7 @@
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
 , curl, Cocoa, Foundation, cf-private, libobjc, tzdata
 , withRecommendedPackages ? true
+, enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
       --with-system-pcre
       --with-system-xz
       --with-ICU
+      ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
       --enable-R-shlib
       AR=$(type -p ar)
       AWK=$(type -p gawk)
@@ -46,7 +48,6 @@ stdenv.mkDerivation rec {
       CXX=$(type -p g++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
-      LDFLAGS="-L${gfortran.cc}/lib"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

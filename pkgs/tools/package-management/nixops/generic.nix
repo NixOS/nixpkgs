@@ -3,7 +3,7 @@
 , src, version
 }:
 
-pythonPackages.buildPythonPackage {
+pythonPackages.buildPythonApplication {
   name = "nixops-${version}";
   namePrefix = "";
 

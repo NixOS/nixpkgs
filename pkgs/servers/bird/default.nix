@@ -1,11 +1,11 @@
 { stdenv, fetchurl, flex, bison, readline }:
 
 stdenv.mkDerivation rec {
-  name = "bird-1.4.5";
+  name = "bird-1.5.0";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
-    sha256 = "1z4z7zmx3054zxi4q6a7095s267mw8ky628gir2n5xy5ch65yj7z";
+    sha256 = "0pbvq6rx4ww46vcdslpiplb5fwq3mqma83434q38kx959qjw9mbr";
   };
 
   buildInputs = [ flex bison readline ];

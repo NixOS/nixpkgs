@@ -6,9 +6,16 @@ let
 
   cfg = config.services.ejabberd;
 
-in
+  ctlcfg = pkgs.writeText "ejabberdctl.cfg" ''
+    ERL_EPMD_ADDRESS=127.0.0.1
+    ${cfg.ctlConfig}
+  '';
 
-{
+  ectl = ''${cfg.package}/bin/ejabberdctl ${if cfg.configFile == null then "" else "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
+
+  dumps = lib.concatMapStringsSep " " lib.escapeShellArg cfg.loadDumps;
+
+in {
 
   ###### interface
 
@@ -17,33 +24,58 @@ in
     services.ejabberd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable ejabberd server";
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.ejabberd;
+        defaultText = "pkgs.ejabberd";
+        description = "ejabberd server package to use";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "ejabberd";
+        description = "User under which ejabberd is ran";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "ejabberd";
+        description = "Group under which ejabberd is ran";
+      };
+
       spoolDir = mkOption {
+        type = types.path;
         default = "/var/lib/ejabberd";
         description = "Location of the spooldir of ejabberd";
       };
 
       logsDir = mkOption {
+        type = types.path;
         default = "/var/log/ejabberd";
         description = "Location of the logfile directory of ejabberd";
       };
 
-      confDir = mkOption {
-        default = "/var/ejabberd";
-        description = "Location of the config directory of ejabberd";
+      configFile = mkOption {
+        type = types.nullOr types.path;
+        description = "Configuration file for ejabberd in YAML format";
+        default = null;
       };
 
-      virtualHosts = mkOption {
-        default = "\"localhost\"";
-        description = "Virtualhosts that ejabberd should host. Hostnames are surrounded with doublequotes and separated by commas";
+      ctlConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Configuration of ejabberdctl";
       };
 
       loadDumps = mkOption {
+        type = types.listOf types.path;
         default = [];
-        description = "Configuration dump that should be loaded on the first startup";
+        description = "Configuration dumps that should be loaded on the first startup";
         example = literalExample "[ ./myejabberd.dump ]";
       };
     };
@@ -54,73 +86,72 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.ejabberd ];
+    environment.systemPackages = [ cfg.package ];
+
+    users.extraUsers = optionalAttrs (cfg.user == "ejabberd") (singleton
+      { name = "ejabberd";
+        group = cfg.group;
+        home = cfg.spoolDir;
+        createHome = true;
+        uid = config.ids.uids.ejabberd;
+      });
+
+    users.extraGroups = optionalAttrs (cfg.group == "ejabberd") (singleton
+      { name = "ejabberd";
+        gid = config.ids.gids.ejabberd;
+      });
 
     systemd.services.ejabberd = {
-      description = "EJabberd server";
-      after = [ "network-interfaces.target" ];
+      description = "ejabberd server";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ ejabberd coreutils bash gnused ];
+      after = [ "network.target" ];
+      path = [ pkgs.findutils pkgs.coreutils ];
+
+      serviceConfig = {
+        Type = "forking";
+        # FIXME: runit is used for `chpst` -- can we get rid of this?
+        ExecStop = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} stop'';
+        ExecReload = ''${pkgs.runit}/bin/chpst -u "${cfg.user}:${cfg.group}" ${ectl} reload_config'';
+        User = cfg.user;
+        Group = cfg.group;
+        PermissionsStartOnly = true;
+      };
 
       preStart = ''
-        # Initialise state data
-        mkdir -p ${cfg.logsDir}
+        mkdir -p -m750 "${cfg.logsDir}"
+        chown "${cfg.user}:${cfg.group}" "${cfg.logsDir}"
 
-        if ! test -d ${cfg.spoolDir}
-        then
-            initialize=1
-            cp -av ${pkgs.ejabberd}/var/lib/ejabberd /var/lib
-        fi
+        mkdir -p -m750 "/var/lock/ejabberdctl"
+        chown "${cfg.user}:${cfg.group}" "/var/lock/ejabberdctl"
 
-        if ! test -d ${cfg.confDir}
-        then
-            mkdir -p ${cfg.confDir}
-            cp ${pkgs.ejabberd}/etc/ejabberd/* ${cfg.confDir}
-            sed -e 's|{hosts, \["localhost"\]}.|{hosts, \[${cfg.virtualHosts}\]}.|' ${pkgs.ejabberd}/etc/ejabberd/ejabberd.cfg > ${cfg.confDir}/ejabberd.cfg
-        fi
-
-        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} start
-
-        ${if cfg.loadDumps == [] then "" else
-          ''
-            if [ "$initialize" = "1" ]
-            then
-                # Wait until the ejabberd server is available for use
-                count=0
-                while ! ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} status
-                do
-                    if [ $count -eq 30 ]
-                    then
-                        echo "Tried 30 times, giving up..."
-                        exit 1
-                    fi
-
-                    echo "Ejabberd daemon not yet started. Waiting for 1 second..."
-                    count=$((count++))
-                    sleep 1
-                done
-
-                ${concatMapStrings (dump:
-                  ''
-                    echo "Importing dump: ${dump}"
-
-                    if [ -f ${dump} ]
-                    then
-                        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load ${dump}
-                    elif [ -d ${dump} ]
-                    then
-                        for i in ${dump}/ejabberd-dump/*
-                        do
-                            ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} load $i
-                        done
-                    fi
-                  '') cfg.loadDumps}
-            fi
-          ''}
+        mkdir -p -m750 "${cfg.spoolDir}"
+        chown -R "${cfg.user}:${cfg.group}" "${cfg.spoolDir}"
       '';
 
-      postStop = ''
-        ejabberdctl --config-dir ${cfg.confDir} --logs ${cfg.logsDir} --spool ${cfg.spoolDir} stop
+      script = ''
+        [ -z "$(ls -A '${cfg.spoolDir}')" ] && firstRun=1
+
+        ${ectl} start
+
+        count=0
+        while ! ${ectl} status >/dev/null 2>&1; do
+          if [ $count -eq 30 ]; then
+            echo "ejabberd server hasn't started in 30 seconds, giving up"
+            exit 1
+          fi
+
+          count=$((count++))
+          sleep 1
+        done
+
+        if [ -n "$firstRun" ]; then
+          for src in ${dumps}; do
+            find "$src" -type f | while read dump; do
+              echo "Loading configuration dump at $dump"
+              ${ectl} load "$dump"
+            done
+          done
+        fi
       '';
     };
 

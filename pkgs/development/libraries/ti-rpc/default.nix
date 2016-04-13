@@ -1,18 +1,15 @@
 { fetchurl, stdenv, autoreconfHook, libkrb5 }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.3.2";
+  name = "libtirpc-1.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "1z1z8xnlqgqznxzmyc6sypjc6b220xkv0s55hxd5sb3zydws6210";
+    sha256 = "17mqrdgsgp9m92pmq7bvr119svdg753prqqxmg4cnz5y657rfmji";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
-
-  # http://sourceforge.net/p/libtirpc/mailman/libtirpc-devel/thread/5581CB06.5020604%40email.com/#msg34216933
-  patches = [ ./fix_missing_rpc_get_default_domain.patch ];
 
   preConfigure = ''
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h

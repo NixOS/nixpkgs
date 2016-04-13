@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath_tools, lsof, utillinux
+, pyudev, six, libselinux, cryptsetup, multipath-tools, lsof, utillinux
 }:
 
 let
@@ -19,7 +19,7 @@ in buildPythonPackage rec {
 
   postPatch = ''
     sed -i \
-      -e 's|"multipath"|"${multipath_tools}/sbin/multipath"|' \
+      -e 's|"multipath"|"${multipath-tools}/sbin/multipath"|' \
       -e '/^def set_friendly_names/a \    return False' \
       blivet/devicelibs/mpath.py
     sed -i -e '/"wipefs"/ {

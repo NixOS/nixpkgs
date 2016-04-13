@@ -1,17 +1,27 @@
-{ fetchurl, stdenv, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, unzip, bash, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
-  version = "9229";
+  version = "9979";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "1a70y2a2srnlca7m5kcg8zijxnmiazhpr6fjl2vwzg00ghv0nxzb";
+    sha256 = "0zy88f4h71qyj7vlhiwnayaaz50gg6bj5pfypy43ghmjrh01d9vh";
   };
 
   phases = [ "installPhase" ];
 
   buildInputs = [ jre8 ];
+
+  desktopItem = makeDesktopItem {
+    name = "josm";
+    exec = "josm";
+    icon = "josm";
+    desktopName = "JOSM";
+    genericName = "OpenStreetMap Editor";
+    comment = meta.description;
+    categories = "Education;Geoscience;Maps;";
+  };
 
   installPhase = ''
     mkdir -p $out/bin $out/share/java
@@ -21,6 +31,11 @@ stdenv.mkDerivation rec {
     exec ${jre8}/bin/java -jar $out/share/java/josm.jar "\$@"
     EOF
     chmod 755 $out/bin/josm
+
+    mkdir -p $out/share/applications
+    cp $desktopItem/share/applications"/"* $out/share/applications
+    mkdir -p $out/share/pixmaps
+    ${unzip}/bin/unzip -p $src images/logo_48x48x32.png > $out/share/pixmaps/josm.png
   '';
 
   meta = with stdenv.lib; {
@@ -28,5 +43,6 @@ stdenv.mkDerivation rec {
     homepage = https://josm.openstreetmap.de/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
   };
 }

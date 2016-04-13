@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/os/os_test.go
     # Disable the unix socket test
     sed -i '/TestShutdownUnix/areturn' src/net/net_test.go
+    # Disable network timeout test
+    sed -i '/TestDialTimeout/areturn' src/net/dial_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/os/os_test.go
     # ParseInLocation fails the test
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
 
     # Find the loader dynamically
-    LOADER="$(find ${libc}/lib -name ld-linux\* | head -n 1)"
+    LOADER="$(find ${libc.out or libc}/lib -name ld-linux\* | head -n 1)"
 
     # Replace references to the loader
     find src/cmd -name asm.c -exec sed -i "s,/lib/ld-linux.*\.so\.[0-9],$LOADER," {} \;
@@ -84,8 +86,8 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    ./cacert-1.4.patch
     ./remove-tools-1.4.patch
+    ./new-binutils.patch
   ];
 
   GOOS = if stdenv.isDarwin then "darwin" else "linux";

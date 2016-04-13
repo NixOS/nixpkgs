@@ -1,21 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite, glib }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.3";
+  version = "0.3.5";
   name = "zathura-core-${version}";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "1rywx09qn6ap5hb1z31wxby4lzdrqdbldm51pjk1ifflr37xwirk";
+    sha256 = "031kdr10065q14nixc4p58c4rgvrqcmn9x39b19h2357kzabaw9a";
   };
 
-  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite ];
+  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib ];
+
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
 
   makeFlags = [
     "PREFIX=$(out)"
     "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
-    "TPUT=${ncurses}/bin/tput"
+    "TPUT=${ncurses.out}/bin/tput"
   ];
 
   postInstall = ''

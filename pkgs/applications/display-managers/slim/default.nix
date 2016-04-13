@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, xorg, libjpeg, libpng
-, fontconfig, freetype, pam, dbus_libs, makeWrapper, pkgs }:
+, fontconfig, freetype, pam, dbus_libs, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.6";
@@ -18,19 +18,23 @@ stdenv.mkDerivation rec {
       # slim's broken PAM session handling (see
       # http://developer.berlios.de/bugs/?func=detailbug&bug_id=19102&group_id=2663).
       ./run-once.patch
+
+      # Ensure that sessions appear in sort order, rather than in
+      # directory order.
+      ./sort-sessions.patch
     ];
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";
 
   cmakeFlags = [ "-DUSE_PAM=1" ];
 
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype";
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype -std=c++11";
 
   enableParallelBuilding = true;
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
-      pam dbus_libs
+      pam dbus_libs (stdenv.cc.libc.out or null)
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 

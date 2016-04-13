@@ -26,19 +26,11 @@ in
         '';
       };
 
-      stable = mkOption {
-        type = types.bool;
-        default = false;
+      kernelPatch = mkOption {
+        type = types.attrs;
+        example = lib.literalExample "pkgs.kernelPatches.grsecurity_4_1";
         description = ''
-          Enable the stable grsecurity patch, based on Linux 3.14.
-        '';
-      };
-
-      testing = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable the testing grsecurity patch, based on Linux 4.0.
+          Grsecurity patch to use.
         '';
       };
 
@@ -219,16 +211,7 @@ in
 
   config = mkIf cfg.enable {
     assertions =
-      [ { assertion = cfg.stable || cfg.testing;
-          message   = ''
-            If grsecurity is enabled, you must select either the
-            stable patch (with kernel 3.14), or the testing patch (with
-            kernel 4.0) to continue.
-          '';
-        }
-        { assertion = !(cfg.stable && cfg.testing);
-          message   = "Select either one of the stable or testing patch";
-        }
+      [
         { assertion = (cfg.config.restrictProc -> !cfg.config.restrictProcWithGroup) ||
                       (cfg.config.restrictProcWithGroup -> !cfg.config.restrictProc);
           message   = "You cannot enable both restrictProc and restrictProcWithGroup";
@@ -246,6 +229,8 @@ in
          message   = "grsecurity configured for virtualisation but no virtualisation software specified";
         }
       ];
+
+    security.grsecurity.kernelPatch = lib.mkDefault pkgs.kernelPatches.grsecurity_latest;
 
     systemd.services.grsec-lock = mkIf cfg.config.sysctl {
       description     = "grsecurity sysctl-lock Service";

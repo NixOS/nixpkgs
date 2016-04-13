@@ -30,10 +30,9 @@
 
 with stdenv.lib;
 
-let version = "3.13.1"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
+  version = "3.13.2";
 
   meta = {
     description = "The user-friendly, lightweight, and fast email client";
@@ -45,7 +44,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "049av7r0xhjjjm1p93l2ns3xisvn125v3ncqar23cqjzgcichg5d";
+    sha256 = "1l8ankx0qpq1ix1an8viphcf11ksh53jsrm1xjmq8cjbh5910wva";
   };
 
   patches = [ ./mime.patch ];

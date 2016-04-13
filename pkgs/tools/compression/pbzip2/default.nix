@@ -1,14 +1,14 @@
 { stdenv, fetchurl, bzip2 }:
 
 let major = "1.1";
-    version = "${major}.12";
+    version = "${major}.13";
 in
 stdenv.mkDerivation rec {
   name = "pbzip2-${version}";
 
   src = fetchurl {
     url = "https://launchpad.net/pbzip2/${major}/${version}/+download/${name}.tar.gz";
-    sha256 = "1vk6065dv3a47p86vmp8hv3n1ygd9hraz0gq89gvzlx7lmcb6fsp";
+    sha256 = "1rnvgcdixjzbrmcr1nv9b6ccrjfrhryaj7jwz28yxxv6lam3xlcg";
   };
 
   buildInputs = [ bzip2 ];

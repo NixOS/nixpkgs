@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchurl, makeWrapper, autoconf, automake,
-  libmspack, openssl, pam, xercesc, icu, libdnet, procps, 
+{ stdenv, lib, fetchurl, makeWrapper, autoreconfHook,
+  libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
   pkgconfig, glib, gtk, gtkmm }:
 
@@ -16,8 +16,8 @@ in stdenv.mkDerivation {
     sha256 = "15lwayrz9bpx4z12fj616hsn25m997y72licwwz7kms4sx9ssip1";
   };
 
-  buildInputs = 
-    [ autoconf automake makeWrapper libmspack openssl pam xercesc icu libdnet procps
+  buildInputs =
+    [ autoreconfHook makeWrapper libmspack openssl pam xercesc icu libdnet procps
       pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
 
   patchPhase = ''
@@ -28,7 +28,6 @@ in stdenv.mkDerivation {
 
   patches = [ ./recognize_nixos.patch ];
 
-  preConfigure = "autoreconf";
   configureFlags = "--without-kernel-modules --without-xmlsecurity";
 
   meta = with stdenv.lib; {

@@ -4,10 +4,11 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.8.0";
+  version = "1.8.1";
   rake = buildRubyGem {
     inherit ruby;
-    name = "rake-10.4.2";
+    gemName = "rake";
+    version = "10.4.2";
     sha256 = "1rn03rqlf1iv6n87a78hkda2yqparhhaivfjpizblmxvlw2hk5r8";
   };
 
@@ -19,12 +20,12 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_x86_64.deb";
-        sha256 = "0hvi6db5lphgzsykm1wn76jj4wwmm6lshvvd0qz7ipyyyhnd7sjp";
+        sha256 = "0gb999ql4kfxd9473cx3xn6a11094dm4iyrx1dzd9v2sygh1l3pd";
       }
     else
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_i686.deb";
-        sha256 = "1jvscbxqbhavw4q81y5718qbyj74b9lwfw3gb4c1f4jmgm08wxxk";
+        sha256 = "1nzg6i9i270xgaih381q096lb23rwxkif4ba9j62y3zjmj6az4xf";
       };
 
   meta = with stdenv.lib; {
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
     # curl: curl, curl-config
     rm opt/vagrant/embedded/bin/{curl,curl-config}
-    ln -s ${curl}/bin/curl opt/vagrant/embedded/bin
+    ln -s ${curl.bin}/bin/curl opt/vagrant/embedded/bin
     ln -s ${curl}/bin/curl-config opt/vagrant/embedded/bin
 
     # libarchive: bsdtar, bsdcpio
@@ -60,8 +61,8 @@ stdenv.mkDerivation rec {
 
     # openssl: c_rehash, openssl
     rm opt/vagrant/embedded/bin/{c_rehash,openssl}
-    ln -s ${openssl}/bin/c_rehash opt/vagrant/embedded/bin
-    ln -s ${openssl}/bin/openssl opt/vagrant/embedded/bin
+    ln -s ${openssl.bin}/bin/c_rehash opt/vagrant/embedded/bin
+    ln -s ${openssl.bin}/bin/openssl opt/vagrant/embedded/bin
 
     # ruby: erb, gem, irb, rake, rdoc, ri, ruby
     rm opt/vagrant/embedded/bin/{erb,gem,irb,rake,rdoc,ri,ruby}
@@ -79,14 +80,14 @@ stdenv.mkDerivation rec {
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
-    ln -s ${libxml2}/bin/xml2-config opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmlcatalog opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmllint opt/vagrant/embedded/bin
+    ln -s ${libxml2.dev}/bin/xml2-config opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmlcatalog opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmllint opt/vagrant/embedded/bin
 
     # libxslt: xslt-config, xsltproc
     rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
-    ln -s ${libxslt}/bin/xslt-config opt/vagrant/embedded/bin
-    ln -s ${libxslt}/bin/xsltproc opt/vagrant/embedded/bin
+    ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
+    ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
 
     mkdir -p "$out"
     cp -r opt "$out"

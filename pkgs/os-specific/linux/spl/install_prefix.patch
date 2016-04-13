@@ -1,5 +1,5 @@
 diff --git a/Makefile.am b/Makefile.am
-index 89af931..674420c 100644
+index 4977448..ac17217 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -12,10 +12,10 @@ endif
@@ -40,10 +40,10 @@ index e0da4b3..d6d7af0 100644
  kernel_HEADERS = $(KERNEL_H)
  endif
 diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
-index 1cca44a..e0d843b 100644
+index 712e94e..4af9fb7 100644
 --- a/include/linux/Makefile.am
 +++ b/include/linux/Makefile.am
-@@ -19,6 +19,6 @@ USER_H =
+@@ -18,6 +18,6 @@ USER_H =
  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
  
  if CONFIG_KERNEL
@@ -76,10 +76,10 @@ index 10e7093..febecdf 100644
  kernel_HEADERS = $(KERNEL_H)
  endif
 diff --git a/include/sys/Makefile.am b/include/sys/Makefile.am
-index 2d21c57..3958cfd 100644
+index 73c4a84..31a9f50 100644
 --- a/include/sys/Makefile.am
 +++ b/include/sys/Makefile.am
-@@ -104,7 +104,7 @@ USER_H =
+@@ -107,7 +107,7 @@ USER_H =
  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
  
  if CONFIG_KERNEL
@@ -125,7 +125,7 @@ index 63d9af3..de1aa18 100644
  kernel_HEADERS = $(KERNEL_H)
  endif
 diff --git a/include/util/Makefile.am b/include/util/Makefile.am
-index b721b50..cbb9a05 100644
+index e2bf09f..3f5d6ce 100644
 --- a/include/util/Makefile.am
 +++ b/include/util/Makefile.am
 @@ -9,6 +9,6 @@ USER_H =
@@ -149,7 +149,7 @@ index 7faab0a..8148b3d 100644
  kernel_HEADERS = $(KERNEL_H)
  endif
 diff --git a/module/Makefile.in b/module/Makefile.in
-index 41c1010..3141397 100644
+index d4e62e1..73fa01c 100644
 --- a/module/Makefile.in
 +++ b/module/Makefile.in
 @@ -21,15 +21,15 @@ clean:
@@ -162,8 +162,9 @@ index 41c1010..3141397 100644
  		KERNELRELEASE=@LINUX_VERSION@
  	@# Remove extraneous build products when packaging
 -	kmoddir=$(DESTDIR)$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
+-	if [ -n "$(DESTDIR)" ]; then \
 +	kmoddir=@prefix@/$(INSTALL_MOD_PATH)/lib/modules/@LINUX_VERSION@; \
- 	if [ -n $$kmoddir ]; then \
++	if [ -n "@prefix@" ]; then \
  		find $$kmoddir -name 'modules.*' | xargs $(RM); \
  	fi
 -	sysmap=$(DESTDIR)$(INSTALL_MOD_PATH)/boot/System.map-@LINUX_VERSION@; \

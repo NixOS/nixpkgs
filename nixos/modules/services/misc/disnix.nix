@@ -110,6 +110,7 @@ in
         // optionalAttrs (config.services.mysql.enable) { mysqlPort = config.services.mysql.port; }
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
         // optionalAttrs (config.services.svnserve.enable) { svnBaseDir = config.services.svnserve.svnBaseDir; }
+        // optionalAttrs (config.services.ejabberd.enable) { ejabberdUser = config.services.ejabberd.user; }
         // optionalAttrs (cfg.publishInfrastructure.enableAuthentication) (
           optionalAttrs (config.services.mysql.enable) { mysqlUsername = "root"; mysqlPassword = readFile config.services.mysql.rootPassword; })
         )

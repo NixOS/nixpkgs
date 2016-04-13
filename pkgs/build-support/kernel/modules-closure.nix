@@ -9,7 +9,7 @@
 stdenv.mkDerivation {
   name = kernel.name + "-shrunk";
   builder = ./modules-closure.sh;
-  buildInputs = [nukeReferences];
-  inherit kernel rootModules kmod allowMissing;
+  buildInputs = [ nukeReferences kmod ];
+  inherit kernel rootModules allowMissing;
   allowedReferences = ["out"];
 }

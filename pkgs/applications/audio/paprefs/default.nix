@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, libpulseaudio, gtkmm, libglademm
-, dbus_glib, gconfmm, intltool }:
+, dbus_glib, GConf, gconfmm, intltool }:
 
 stdenv.mkDerivation rec {
   name = "paprefs-0.9.10";
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpulseaudio gtkmm libglademm dbus_glib gconfmm ];
 
   nativeBuildInputs = [ pkgconfig intltool ];
+
+  propagatedUserEnvPkgs = [ GConf ];
 
   configureFlags = [ "--disable-lynx" ];
 

@@ -8,12 +8,12 @@ assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
 stdenv.mkDerivation rec
 {
   pname = "eliom";
-  version = "4.1.0";
+  version = "4.2.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = https://github.com/ocsigen/eliom/archive/4.1.0.tar.gz;
-    sha256 = "10v7mrq3zsbxdlg8k8xif777mbvcdpabvnd1g7p2yqivr7f1qm24";
+    url = https://github.com/ocsigen/eliom/archive/4.2.tar.gz;
+    sha256 = "0gbqzgn6xgpq6irz2sfr92qj3hjcwl45wy0inc4ps5r15nvq1l9h";
   };
 
   patches = [ ./camlp4.patch ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec
 
     license = stdenv.lib.licenses.lgpl21;
 
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };

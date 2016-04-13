@@ -11,7 +11,6 @@ stdenv.mkDerivation {
     homepage    = "http://performous.org/";
     license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ iyzsong ];
   };
 
   src = fetchFromGitHub {

@@ -1,16 +1,16 @@
-{stdenv, fetchurl, cups, zlib}:
-
+{ stdenv, fetchsvn, fetchurl, cups, zlib }:
+let rev = "315"; in
 stdenv.mkDerivation rec {
-  name = "splix-2.0.0";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/splix/${name}.tar.bz2";
-    sha256 = "0bwivrwwvh6hzvnycpzqs7a0capgycahc4s3v9ihx552fgy07xwp";
+  name = "splix-svn-${rev}";
+  src = fetchsvn {
+    # We build this from svn, because splix hasn't been in released in several years
+    # although the community has been adding some new printer models.
+    url = "svn://svn.code.sf.net/p/splix/code/splix";
+    rev = "r${rev}";
+    sha256 = "16wbm4xnz35ca3mw2iggf5f4jaxpyna718ia190ka6y4ah932jxl";
   };
 
-  patches = [ ./splix-2.0.0-gcc45.patch ];
-
-  preBuild=''
+  preBuild = ''
     makeFlags="V=1 DISABLE_JBIG=1 CUPSFILTER=$out/lib/cups/filter CUPSPPD=$out/share/cups/model"
   '';
 

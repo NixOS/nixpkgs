@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver}/bin/X"
+    substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
     substituteInPlace daemon/gdm-simple-slave.c --replace 'BINDIR "/gnome-session' '"${gnome_session}/bin/gnome-session'
-    substituteInPlace daemon/gdm-launch-environment.c --replace 'BINDIR "/dbus-launch' '"${dbus.tools}/bin/dbus-launch'
+    substituteInPlace daemon/gdm-launch-environment.c --replace 'BINDIR "/dbus-launch' '"${dbus.dbus-launch}'
     substituteInPlace data/gdm.conf-custom.in --replace '#WaylandEnable=false' 'WaylandEnable=false'
     sed 's/#Enable=true/Enable=true/' -i data/gdm.conf-custom.in
  '';

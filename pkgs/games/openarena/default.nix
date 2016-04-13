@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   installPhase = let
     gameDir = "$out/openarena-$version";
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
+    libPath = stdenv.lib.makeLibraryPath [ SDL libogg libvorbis ];
   in ''
     mkdir -pv $out/bin
     cd $out
@@ -23,11 +24,11 @@ stdenv.mkDerivation rec {
     ${if stdenv.system == "x86_64-linux" then ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.x86_64"
       makeWrapper "${gameDir}/openarena.x86_64" "$out/bin/openarena" \
-        --prefix LD_LIBRARY_PATH : "${SDL}/lib:${libogg}/lib:${libvorbis}/lib"
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     '' else ''
       patchelf --set-interpreter "${interpreter}" "${gameDir}/openarena.i386"
       makeWrapper "${gameDir}/openarena.i386" "$out/bin/openarena" \
-        --prefix LD_LIBRARY_PATH : "${SDL}/lib:${libogg}/lib:${libvorbis}/lib"
+        --prefix LD_LIBRARY_PATH : "${libPath}"
     ''}
   '';
 

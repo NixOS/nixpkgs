@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    substituteInPlace configure --replace gmcs mcs
     substituteInPlace lib/poppler-sharp/poppler-sharp/poppler-sharp.dll.config \
       --replace libpoppler-glib.so.4 libpoppler-glib.so
   '';
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${gnome-sharp}/lib \
       --prefix LD_LIBRARY_PATH : ${gtk-sharp.gtk}/lib \
       --prefix LD_LIBRARY_PATH : ${gnome3.gconf}/lib \
-      --prefix LD_LIBRARY_PATH : ${poppler}/lib
+      --prefix LD_LIBRARY_PATH : ${poppler.out}/lib
   '';
 
   dontStrip = true;

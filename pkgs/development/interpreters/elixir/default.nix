@@ -1,17 +1,20 @@
 { stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash }:
 
-let
-  version = "1.1.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "elixir-${version}";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "0shh5brhcrvbvhl4bw0fs2y5llw7i97khkkglygx30ncvd7nwz9v";
+    sha256 = "16759ff84d08b480b7e5499716e663b2fffd26e20cf2863de5613bc7bb05c817";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
+
+  # Elixir expects that UTF-8 locale to be set (see https://github.com/elixir-lang/elixir/issues/3548).
+  # In other cases there is warnings during compilation.
+  LANG = "en_US.UTF-8";
+  LC_TYPE = "en_US.UTF-8";
 
   preBuild = ''
     # The build process uses ./rebar. Link it to the nixpkgs rebar
@@ -30,7 +33,7 @@ stdenv.mkDerivation {
      b=$(basename $f)
       if [ $b == "mix" ]; then continue; fi
       wrapProgram $f \
-        --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl}/bin:${bash}/bin" \
+        --prefix PATH ":" "${erlang}/bin:${coreutils}/bin:${curl.bin}/bin:${bash}/bin" \
         --set CURL_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
     done
 
@@ -52,6 +55,6 @@ stdenv.mkDerivation {
 
     license = licenses.epl10;
     platforms = platforms.unix;
-    maintainers = [ maintainers.the-kenny maintainers.havvy ];
+    maintainers = with maintainers; [ the-kenny havvy couchemar ];
   };
 }

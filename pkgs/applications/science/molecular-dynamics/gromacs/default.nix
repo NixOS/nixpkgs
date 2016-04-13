@@ -1,22 +1,30 @@
 
 { stdenv, fetchurl, cmake,
   singlePrec ? true,
-  fftw
+  mpiEnabled ? false,
+  fftw,
+  openmpi
 }:
 
 
 stdenv.mkDerivation {
-  name = "gromacs-4.6.5";
+  name = "gromacs-4.6.7";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.5.tar.gz";
-    sha256 = "02ggrplh8fppqib86y3rfk4qm08yddlrb1yjgzl138b3b4qjy957";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-4.6.7.tar.gz";
+    sha256 = "6afb1837e363192043de34b188ca3cf83db6bd189601f2001a1fc5b0b2a214d9";
   };
 
-  buildInputs = [cmake fftw];
+  buildInputs = [cmake fftw]
+  ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
   cmakeFlags = ''
     ${if singlePrec then "-DGMX_DOUBLE=OFF" else "-DGMX_DOUBLE=ON -DGMX_DEFAULT_SUFFIX=OFF"}
+    ${if mpiEnabled then "-DGMX_MPI:BOOL=TRUE 
+                          -DGMX_CPU_ACCELERATION:STRING=SSE4.1 
+                          -DGMX_OPENMP:BOOL=TRUE
+                          -DGMX_THREAD_MPI:BOOL=FALSE"
+                     else "-DGMX_MPI:BOOL=FALSE" }
   '';
 
   meta = with stdenv.lib; {

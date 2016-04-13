@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "cpptest-1.1.2";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/cpptest/cpptest/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/cpptest/cpptest/${name}/${name}.tar.gz";
     sha256 = "09v070a9dv6zq6hgj4v67i31zsis3s96psrnhlq9g4vhdcaxykwy";
   };
 

@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "An OCaml library for segmenting Unicode text";
     homepage = "${webpage}";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

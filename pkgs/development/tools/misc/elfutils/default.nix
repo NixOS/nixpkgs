@@ -1,30 +1,28 @@
-{stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext}:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.163";
+  version = "0.165";
 
   src = fetchurl {
-    urls = [
-      "http://fedorahosted.org/releases/e/l/elfutils/${version}/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
-      ];
-    sha256 = "7c774f1eef329309f3b05e730bdac50013155d437518a2ec0e24871d312f2e23";
+    url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/${name}.tar.bz2";
+    sha256 = "0wp91hlh9n0ismikljf63558rzdwim8w1s271grsbaic35vr5z57";
   };
 
-  patches = [
-    (fetchurl {
-      url = "http://fedorahosted.org/releases/e/l/elfutils/${version}/elfutils-portability-${version}.patch";
-      sha256 = "e4e82315dad2efaa4e4476503e7537e01b7c1b1f98a96de4ca1c7fa85f4f1045";
-    }) ];
+  patches = [ ./glibc-2.21.patch ];
 
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
-  nativeBuildInputs = [m4 bison flex gettext bzip2];
-  buildInputs = [zlib bzip2];
+  nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
+  buildInputs = [ zlib bzip2 xz ];
 
-  configureFlags = "--disable-werror";
+  configureFlags =
+    [ "--program-prefix=eu-" # prevent collisions with binutils
+      "--enable-deterministic-archives"
+    ];
+
+  enableParallelBuilding = true;
 
   crossAttrs = {
 
@@ -67,9 +65,11 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  dontAddDisableDepTrack = true;
-
   meta = {
     homepage = https://fedorahosted.org/elfutils/;
+    description = "A set of utilities to handle ELF objects";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = lib.maintainers.eelco;
   };
 }

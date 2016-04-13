@@ -39,7 +39,7 @@ let
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
         build-cores = ${toString (cfg.buildCores)}
-        build-use-chroot = ${if cfg.useChroot then "true" else "false"}
+        build-use-chroot = ${if (builtins.isBool cfg.useChroot) then (if cfg.useChroot then "true" else "false") else cfg.useChroot}
         build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
@@ -66,6 +66,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.nix;
+        defaultText = "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
@@ -98,7 +99,7 @@ in
       };
 
       useChroot = mkOption {
-        type = types.bool;
+        type = types.either types.bool (types.enum ["relaxed"]);
         default = false;
         description = "
           If set, Nix will perform builds in a chroot-environment that it
@@ -256,13 +257,11 @@ in
         type = types.bool;
         default = true;
         description = ''
-          If enabled, Nix will only download binaries from binary
-          caches if they are cryptographically signed with any of the
-          keys listed in
-          <option>nix.binaryCachePublicKeys</option>. If disabled (the
-          default), signatures are neither required nor checked, so
-          it's strongly recommended that you use only trustworthy
-          caches and https to prevent man-in-the-middle attacks.
+          If enabled (the default), Nix will only download binaries from binary caches if
+          they are cryptographically signed with any of the keys listed in
+          <option>nix.binaryCachePublicKeys</option>. If disabled, signatures are neither
+          required nor checked, so it's strongly recommended that you use only
+          trustworthy caches and https to prevent man-in-the-middle attacks.
         '';
       };
 
@@ -359,12 +358,14 @@ in
     systemd.sockets.nix-daemon.wantedBy = [ "sockets.target" ];
 
     systemd.services.nix-daemon =
-      { path = [ nix pkgs.openssl pkgs.utillinux config.programs.ssh.package ]
+      { path = [ nix pkgs.openssl.bin pkgs.utillinux config.programs.ssh.package ]
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
-          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt"; }
+          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
           // config.networking.proxy.envVars;
+
+        unitConfig.RequiresMountsFor = "/nix/store";
 
         serviceConfig =
           { Nice = cfg.daemonNiceLevel;

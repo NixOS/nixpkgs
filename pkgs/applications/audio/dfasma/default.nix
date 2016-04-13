@@ -2,10 +2,6 @@
 
 let
 
-  version = "1.2.5";
-  rev = "v${version}";
-  sha256 = "0mgy2bkmyp7lvaqsr7hkndwdgjf26mlpsj6smrmn1vp0cqyrw72d";
-
   reaperFork = {
     src = fetchFromGitHub {
       sha256 = "07m2wf2gqyya95b65gawrnr4pvc9jyzmg6h8sinzgxlpskz93wwc";
@@ -30,11 +26,13 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "dfasma-${version}";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
-    inherit sha256 rev;
+    sha256 = "0mgy2bkmyp7lvaqsr7hkndwdgjf26mlpsj6smrmn1vp0cqyrw72d";
+    rev = "v${version}";
     repo = "dfasma";
     owner = "gillesdegottex";
   };
@@ -60,7 +58,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Analyse and compare audio files in time and frequency";
     longDescription = ''
       DFasma is free open-source software to compare audio files by time and

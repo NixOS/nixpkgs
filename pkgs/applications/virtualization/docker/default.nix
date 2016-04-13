@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , go, sqlite, iproute, bridge-utils, devicemapper
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux
+, systemd, pkgconfig
 , enableLxc ? false, lxc
 }:
 
@@ -10,21 +11,23 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.9.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "1mhi4y820h2wxz6hqmr95c7yvklyw578dd9c83jr463w7rq0rgr6";
+    sha256 = "0bmrafi0p3fm681y165ps97jki0a8ihl9f0bmpvi22nmc1v0sv6l";
   };
 
   buildInputs = [
     makeWrapper go sqlite iproute bridge-utils devicemapper btrfs-progs
-    iptables e2fsprogs
+    iptables e2fsprogs systemd pkgconfig stdenv.glibc stdenv.glibc.static
   ];
 
   dontStrip = true;
+
+  DOCKER_BUILDTAGS = [ "journald" ];
 
   buildPhase = ''
     patchShebangs .
@@ -37,7 +40,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

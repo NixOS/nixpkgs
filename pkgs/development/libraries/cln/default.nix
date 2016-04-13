@@ -1,11 +1,12 @@
 { stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "cln-1.3.3";
+  name = "cln-${version}";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.bz2";
-    sha256 = "04i6kdjwm4cr5pa70pilifnpvsh430rrlapkgw1x8c5vxkijxz2p";
+    sha256 = "0j5p18hwbbrchsdbnc8d2bf9ncslhflri4i950gdnq7v6g2dg69d";
   };
 
   buildInputs = [ gmp ];

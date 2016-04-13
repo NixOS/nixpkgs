@@ -5,6 +5,7 @@
 , tag ? "" # tag added to the package name
 , withKDE ? stdenv.isLinux # enable KDE integration
 , kdelibs ? null
+, static ? false # link statically
 
 , stdenv, fetchurl, cmake, makeWrapper, qt, automoc4, phonon, dconf, qca2 }:
 
@@ -21,16 +22,12 @@ assert !buildClient -> !withKDE; # KDE is used by the client only
 
 let
   edf = flag: feature: [("-D" + feature + (if flag then "=ON" else "=OFF"))];
+  source = import ./source.nix { inherit fetchurl; };
 
 in with stdenv; mkDerivation rec {
+  inherit (source) src version;
 
-  version = "0.12.2";
   name = "quassel${tag}-${version}";
-
-  src = fetchurl {
-    url = "http://quassel-irc.org/pub/quassel-${version}.tar.bz2";
-    sha256 = "15vqjiw38mifvnc95bhvy0zl23xxldkwg2byx9xqbyw8rfgggmkb";
-  };
 
   enableParallelBuilding = true;
 
@@ -42,8 +39,8 @@ in with stdenv; mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fPIC";
 
   cmakeFlags = [
-    "-DEMBED_DATA=OFF"
-    "-DSTATIC=OFF" ]
+    "-DEMBED_DATA=OFF" ]
+    ++ edf static "STATIC"
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"

@@ -1,25 +1,53 @@
-{ stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
-, zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
-, pythonPackages, cmake, makeWrapper, libobjc, libiconv
+{ stdenv, fetchurl, ncurses, openssl, aspell, gnutls
+, zlib, curl , pkgconfig, libgcrypt
+, cmake, makeWrapper, libobjc, libiconv
+, guileSupport ? true, guile
+, luaSupport ? true, lua5
+, perlSupport ? true, perl
+, pythonPackages
+, rubySupport ? true, ruby
+, tclSupport ? true, tcl
 , extraBuildInputs ? [] }:
 
+assert guileSupport -> guile != null;
+assert luaSupport -> lua5 != null;
+assert perlSupport -> perl != null;
+assert rubySupport -> ruby != null;
+assert tclSupport -> tcl != null;
+
+let
+  inherit (pythonPackages) python pycrypto pync;
+in
+
 stdenv.mkDerivation rec {
-  version = "1.3";
+  version = "1.4";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-    sha256 = "0j2ic1c69ksf78wi0cmc4yi5348x6c92g6annsx928sayxqxfgbh";
+    sha256 = "1m6xq6izcac5186xvvmm8znfjzrg9hq42p69jabdvv7cri4rjvg0";
   };
 
-  cmakeFlags = stdenv.lib.optional stdenv.isDarwin
-    "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib";
+  cmakeFlags = with stdenv.lib; []
+    ++ optional stdenv.isDarwin "-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"
+    ++ optional (!guileSupport) "-DENABLE_GUILE=OFF"
+    ++ optional (!luaSupport)   "-DENABLE_LUA=OFF"
+    ++ optional (!perlSupport)  "-DENABLE_PERL=OFF"
+    ++ optional (!rubySupport)  "-DENABLE_RUBY=OFF"
+    ++ optional (!tclSupport)   "-DENABLE_TCL=OFF"
+    ;
 
-  buildInputs = 
-    [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
-      libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
-      cmake ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ pythonPackages.pync libobjc ]
+  buildInputs = with stdenv.lib; [
+      ncurses python openssl aspell gnutls zlib curl pkgconfig
+      libgcrypt pycrypto makeWrapper
+      cmake
+    ]
+    ++ optionals stdenv.isDarwin [ pync libobjc ]
+    ++ optional  guileSupport    guile
+    ++ optional  luaSupport      lua5
+    ++ optional  perlSupport     perl
+    ++ optional  rubySupport     ruby
+    ++ optional  tclSupport      tcl
     ++ extraBuildInputs;
 
   NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix} -DCA_FILE=/etc/ssl/certs/ca-certificates.crt";

@@ -5,9 +5,9 @@ with lib;
 let
   cfg = config.services.tarsnap;
 
-  configFile = cfg: ''
-    cachedir ${config.services.tarsnap.cachedir}
-    keyfile  ${config.services.tarsnap.keyfile}
+  configFile = name: cfg: ''
+    cachedir ${config.services.tarsnap.cachedir}/${name}
+    keyfile  ${cfg.keyfile}
     ${optionalString cfg.nodump "nodump"}
     ${optionalString cfg.printStats "print-stats"}
     ${optionalString cfg.printStats "humanize-numbers"}
@@ -41,6 +41,20 @@ in
           account.
           Create the keyfile with <command>tarsnap-keygen</command>.
 
+          Note that each individual archive (specified below) may also have its
+          own individual keyfile specified. Tarsnap does not allow multiple
+          concurrent backups with the same cache directory and key (starting a
+          new backup will cause another one to fail). If you have multiple
+          archives specified, you should either spread out your backups to be
+          far apart, or specify a separate key for each archive. By default
+          every archive defaults to using
+          <literal>"/root/tarsnap.key"</literal>.
+
+          It's recommended for backups that you generate a key for every archive
+          using <literal>tarsnap-keygen(1)</literal>, and then generate a
+          write-only tarsnap key using <literal>tarsnap-keymgmt(1)</literal>,
+          and keep your master key(s) for a particular machine off-site.
+
           The keyfile name should be given as a string and not a path, to
           avoid the key being copied into the Nix store.
         '';
@@ -57,6 +71,12 @@ in
           will refuse to run until you manually rebuild the cache with
           <command>tarsnap --fsck</command>.
 
+          Note that each individual archive (specified below) has its own cache
+          directory specified under <literal>cachedir</literal>; this is because
+          tarsnap locks the cache during backups, meaning multiple services
+          archives cannot be backed up concurrently or overlap with a shared
+          cache.
+
           Set to <literal>null</literal> to disable caching.
         '';
       };
@@ -65,6 +85,28 @@ in
         type = types.attrsOf (types.submodule (
           {
             options = {
+              keyfile = mkOption {
+                type = types.str;
+                default = config.services.tarsnap.keyfile;
+                description = ''
+                  Set a specific keyfile for this archive. This defaults to
+                  <literal>"/root/tarsnap.key"</literal> if left unspecified.
+
+                  Use this option if you want to run multiple backups
+                  concurrently - each archive must have a unique key. You can
+                  generate a write-only key derived from your master key (which
+                  is recommended) using <literal>tarsnap-keymgmt(1)</literal>.
+
+                  Note: every archive must have an individual master key. You
+                  must generate multiple keys with
+                  <literal>tarsnap-keygen(1)</literal>, and then generate write
+                  only keys from those.
+
+                  The keyfile name should be given as a string and not a path, to
+                  avoid the key being copied into the Nix store.
+                '';
+              };
+
               nodump = mkOption {
                 type = types.bool;
                 default = true;
@@ -251,13 +293,14 @@ in
       # make sure that the tarsnap server is reachable after systemd starts up
       # the service - therefore we sleep in a loop until we can ping the
       # endpoint.
-      preStart = "while ! ping -q -c 1 betatest-server.tarsnap.com &> /dev/null; do sleep 3; done";
+      preStart = "while ! ping -q -c 1 v1-0-0-server.tarsnap.com &> /dev/null; do sleep 3; done";
       scriptArgs = "%i";
       script = ''
         mkdir -p -m 0755 ${dirOf cfg.cachedir}
         mkdir -p -m 0700 ${cfg.cachedir}
         chown root:root ${cfg.cachedir}
         chmod 0700 ${cfg.cachedir}
+        mkdir -p -m 0700 ${cfg.cachedir}/$1
         DIRS=`cat /etc/tarsnap/$1.dirs`
         exec tarsnap --configfile /etc/tarsnap/$1.conf -c -f $1-$(date +"%Y%m%d%H%M%S") $DIRS
       '';
@@ -280,7 +323,7 @@ in
 
     environment.etc =
       (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.conf"
-        { text = configFile cfg;
+        { text = configFile name cfg;
         }) cfg.archives) //
       (mapAttrs' (name: cfg: nameValuePair "tarsnap/${name}.dirs"
         { text = concatStringsSep " " cfg.directories;

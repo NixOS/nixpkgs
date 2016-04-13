@@ -34,7 +34,7 @@ let
 
       # dump tar of *current directory* at given revision
       git -C ${srcStr} archive --format=tar ${gitHash} \
-        | tar xvf - -C $out
+        | tar xf - -C $out
     '';
 
 in nixPath

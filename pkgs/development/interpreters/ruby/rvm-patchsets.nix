@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner  = "skaes";
   repo   = "rvm-patchsets";
-  rev    = "8ccf24490fec2218374734520c27d925078096de";
-  sha256 = "88418484d2d3963975190836eafb2e28206e3e2bac9ee7c6208645bfe7428e2f";
+  rev    = "84d0634ce5639781c4d8e9396ec20341d6524901";
+  sha256 = "06x2r43i8kpcmk6s5idrc3z49p8vy18b2lsh1jdqla69i5z2vqlf";
 }

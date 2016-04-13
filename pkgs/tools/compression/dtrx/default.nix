@@ -1,6 +1,6 @@
 {stdenv, fetchurl, pythonPackages}:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "dtrx-${version}";
   version = "7.1";
 

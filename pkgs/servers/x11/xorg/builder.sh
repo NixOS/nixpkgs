@@ -10,7 +10,7 @@ postInstall() {
 
     local r p requires
     set +o pipefail
-    requires=$(grep "Requires:" $out/lib/pkgconfig/*.pc | \
+    requires=$(grep "Requires:" ${!outputDev}/lib/pkgconfig/*.pc | \
         sed "s/Requires://" | sed "s/,/ /g")
     set -o pipefail
 
@@ -33,10 +33,6 @@ postInstall() {
             done
         fi
     done
-
-    mkdir -p "$out/nix-support"
-    echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
 }
 
 

@@ -1,24 +1,18 @@
-{ stdenv, fetchurl, zlib, xz, python ? null, pythonSupport ? true, findXMLCatalogs }:
+{ stdenv, fetchurl, zlib, xz, python, findXMLCatalogs }:
 
-assert pythonSupport -> python != null;
-
-#TODO: share most stuff between python and non-python builds, perhaps via multiple-output
-
-let
-  version = "2.9.2";
-in
-
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "libxml2-${version}";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "1g6mf03xcabmk5ing1lwqmasr803616gb2xhn7pll10x2l5w6y2i";
+    sha256 = "0bd17g6znn2r98gzpjppsqjg33iraky4px923j3k8kdl8qgy7sad";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "dev" "out" "bin" "doc" "py" ];
+  propagatedBuildOutputs = "out bin py";
 
-  buildInputs = stdenv.lib.optional pythonSupport python
+  buildInputs = [ python ]
     # Libxml2 has an optional dependency on liblzma.  However, on impure
     # platforms, it may end up using that from /usr/lib, and thus lack a
     # RUNPATH for that, leading to undefined references for its users.
@@ -26,9 +20,20 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  passthru = { inherit pythonSupport version; };
+  configureFlags = "--with-python=${python}";
 
   enableParallelBuilding = true;
+
+  preInstall = ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
+  installFlags = ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
+
+  postFixup = ''
+    moveToOutput bin/xml2-config "$dev"
+    moveToOutput lib/xml2Conf.sh "$dev"
+    moveToOutput share/man/man1 "$bin"
+  '';
+
+  passthru = { inherit version; pythonSupport = true; };
 
   meta = {
     homepage = http://xmlsoft.org/;
@@ -37,15 +42,4 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
-
-} // stdenv.lib.optionalAttrs pythonSupport {
-  configureFlags = "--with-python=${python}";
-
-  # this is a pair of ugly hacks to make python stuff install into the right place
-  preInstall = ''substituteInPlace python/libxml2mod.la --replace "${python}" "$out"'';
-  installFlags = ''pythondir="$(out)/lib/${python.libPrefix}/site-packages"'';
-
-} // stdenv.lib.optionalAttrs (!pythonSupport) {
-  configureFlags = "--with-python=no"; # otherwise build impurity bites us
-})
-
+}

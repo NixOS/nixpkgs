@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   rev = "e716a9e1a9e460a45663694ba4e9e8894a8452b2";
-  version = "v0.2-e716a9e1a9e460a45663694ba4e9e8894a8452b2";
+  version = "0.2-${rev}";
   name = "git-remote-hg-${version}";
 
   src = fetchgit {

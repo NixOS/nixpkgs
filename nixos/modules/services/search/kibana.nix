@@ -7,37 +7,33 @@ let
 
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
     (filterAttrsRecursive (n: v: v != null) ({
-      server = {
-        host = cfg.listenAddress;
-        port = cfg.port;
-        ssl = {
-          cert = cfg.cert;
-          key = cfg.key;
-        };
-      };
+      host = cfg.listenAddress;
+      port = cfg.port;
+      ssl_cert_file = cfg.cert;
+      ssl_key_file = cfg.key;
 
-      kibana = {
-        index = cfg.index;
-        defaultAppId = cfg.defaultAppId;
-      };
+      kibana_index = cfg.index;
+      default_app_id = cfg.defaultAppId;
 
-      elasticsearch = {
-        url = cfg.elasticsearch.url;
-        username = cfg.elasticsearch.username;
-        password = cfg.elasticsearch.password;
-        ssl = {
-          cert = cfg.elasticsearch.cert;
-          key = cfg.elasticsearch.key;
-          ca = cfg.elasticsearch.ca;
-        };
-      };
+      elasticsearch_url = cfg.elasticsearch.url;
+      kibana_elasticsearch_username = cfg.elasticsearch.username;
+      kibana_elasticsearch_password = cfg.elasticsearch.password;
+      kibana_elasticsearch_cert = cfg.elasticsearch.cert;
+      kibana_elasticsearch_key = cfg.elasticsearch.key;
+      ca = cfg.elasticsearch.ca;
 
-      logging = {
-        verbose = cfg.logLevel == "verbose";
-        quiet = cfg.logLevel == "quiet";
-        silent = cfg.logLevel == "silent";
-        dest = "stdout";
-      };
+      bundled_plugin_ids = [
+        "plugins/dashboard/index"
+        "plugins/discover/index"
+        "plugins/doc/index"
+        "plugins/kibana/index"
+        "plugins/markdown_vis/index"
+        "plugins/metric_vis/index"
+        "plugins/settings/index"
+        "plugins/table_vis/index"
+        "plugins/vis_types/index"
+        "plugins/visualize/index"
+      ];
     } // cfg.extraConf)
   )));
 in {
@@ -118,15 +114,10 @@ in {
       };
     };
 
-    logLevel = mkOption {
-      description = "Kibana log level";
-      default = "normal";
-      type = types.enum ["verbose" "normal" "silent" "quiet"];
-    };
-
     package = mkOption {
       description = "Kibana package to use";
       default = pkgs.kibana;
+      defaultText = "pkgs.kibana";
       type = types.package;
     };
 
@@ -148,6 +139,7 @@ in {
       description = "Kibana Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-interfaces.target" "elasticsearch.service" ];
+      environment = { BABEL_CACHE_PATH = "${cfg.dataDir}/.babelcache.json"; };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/kibana --config ${cfgFile}";
         User = "kibana";

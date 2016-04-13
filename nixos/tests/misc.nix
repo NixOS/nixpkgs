@@ -16,13 +16,17 @@ import ./make-test.nix ({ pkgs, ...} : {
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       fileSystems = mkVMOverride { "/tmp2" =
         { fsType = "tmpfs";
-          options = "mode=1777,noauto";
+          options = [ "mode=1777" "noauto" ];
         };
       };
       systemd.automounts = singleton
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
+      users.users.sybil = { isNormalUser = true; group = "wheel"; };
+      security.sudo = { enable = true; wheelNeedsPassword = false; };
+      security.hideProcessInformation = true;
+      users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
     };
 
   testScript =
@@ -109,6 +113,18 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       subtest "nix-db", sub {
           $machine->succeed("nix-store -qR /run/current-system | grep nixos-");
+      };
+
+      # Test sudo
+      subtest "sudo", sub {
+          $machine->succeed("su - sybil -c 'sudo true'");
+      };
+
+      # Test hidepid
+      subtest "hidepid", sub {
+          $machine->succeed("grep -Fq hidepid=2 /etc/mtab");
+          $machine->succeed("[ `su - sybil -c 'pgrep -c -u root'` = 0 ]");
+          $machine->succeed("[ `su - alice -c 'pgrep -c -u root'` != 0 ]");
       };
     '';
 })

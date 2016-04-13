@@ -6,7 +6,9 @@
 let
   pn = "network-manager-applet";
   major = "1.0";
-  version = networkmanager.version;
+  # With version 1.0.12 of NM, we are no longer in sync
+  # version = "${networkmanager.version}.10";
+  version = "${major}.10";
 in
 
 stdenv.mkDerivation rec {
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "1yj0m6fb9v12d0di0rfmk3hx1vmygjkiff2c476rf792sbh56kax";
+    sha256 = "1szh5jyijxm6z55irkp5s44pwah0nikss40mx7pvpk38m8zaqidh";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ];
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"

@@ -27,8 +27,9 @@ in
       };
 
       autoMaster = mkOption {
+        type = types.str;
         example = literalExample ''
-          autoMaster = let
+          let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
              boot      -fstype=ext2        :/dev/hda1
@@ -77,6 +78,11 @@ in
       { description = "Filesystem automounter";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+
+        preStart = ''
+          # There should be only one autofs service managed by systemd, so this should be safe.
+          rm -f /tmp/autofs-running
+        '';
 
         serviceConfig = {
           ExecStart = "${pkgs.autofs5}/sbin/automount ${if cfg.debug then "-d" else ""} -f -t ${builtins.toString cfg.timeout} ${autoMaster} ${if cfg.debug then "-l7" else ""}";

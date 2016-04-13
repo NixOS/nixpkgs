@@ -1,27 +1,18 @@
 { stdenv, fetchurl, fetchgit, which, autoconf, automake, flex, yacc,
   kernel, glibc, ncurses, perl, kerberos }:
 
-let
-  version = if stdenv.lib.versionAtLeast kernel.version "4.2"
-    then "1.6.14-1-602130"
-    else "1.6.14";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
+  version = "1.6.17";
 
-  src = if version == "1.6.14-1-602130"
-    # 1.6.14 + patches to run on linux 4.2 that will get into 1.6.15
-    then fetchgit {
-      url = "git://git.openafs.org/openafs.git";
-      rev = "feab09080ec050b3026eff966352b058e2c2295b";
-      sha256 = "03j71c7y487jbjmm6ydr1hw38pf43j2dz153xknndf4x4v21nnp2";
-    }
-    else fetchurl {
-      url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
-      sha256 = "3e62c798a7f982c4f88d85d32e46bee6a47848d207b1e318fe661ce44ae4e01f";
-    };
+  src = fetchurl {
+    url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
+    sha256 = "16532f4951piv1g2i539233868xfs1damrnxql61gjgxpwnklhcn";
+  };
 
-  buildInputs = [ autoconf automake flex yacc ncurses perl which ];
+  nativeBuildInputs = [ autoconf automake flex yacc perl which ];
+
+  buildInputs = [ ncurses ];
 
   preConfigure = ''
     ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
@@ -30,7 +21,7 @@ stdenv.mkDerivation {
     for i in `grep -l -R '/usr/\(include\|src\)' .`; do
       echo "Patch /usr/include and /usr/src in $i"
       substituteInPlace $i \
-        --replace "/usr/include" "${glibc}/include" \
+        --replace "/usr/include" "${glibc.dev}/include" \
         --replace "/usr/src" "$TMP"
     done
 
@@ -47,11 +38,15 @@ stdenv.mkDerivation {
     )
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open AFS client";
-    homepage = http://www.openafs.org;
-    license = stdenv.lib.licenses.ipl10;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.z77z ];
+    homepage = https://www.openafs.org;
+    license = licenses.ipl10;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.z77z ];
+    broken =
+      (builtins.compareVersions kernel.version  "3.18" == -1) ||
+      (builtins.compareVersions kernel.version "4.4" != -1) ||
+      (kernel.features.grsecurity or false);
   };
 }

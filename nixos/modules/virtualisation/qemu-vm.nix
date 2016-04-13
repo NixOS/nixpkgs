@@ -77,14 +77,14 @@ let
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
           -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
           ${if cfg.useBootLoader then ''
-            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=none,werror=report \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
             -drive index=1,id=drive2,file=$TMPDIR/disk.img,media=disk \
             ${if cfg.useEFIBoot then ''
               -pflash $TMPDIR/bios.bin \
             '' else ''
             ''}
           '' else ''
-            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=none,werror=report \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
             -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
@@ -110,6 +110,7 @@ let
 
   # Generate a hard disk image containing a /boot partition and GRUB
   # in the MBR.  Used when the `useBootLoader' option is set.
+  # FIXME: use nixos/lib/make-disk-image.nix.
   bootDisk =
     pkgs.vmTools.runInLinuxVM (
       pkgs.runCommand "nixos-boot-disk"
@@ -427,38 +428,38 @@ in
         ${if cfg.writableStore then "/nix/.ro-store" else "/nix/store"} =
           { device = "store";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,cache=loose";
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L,cache=loose";
+            options = [ "trans=virtio" "version=9p2000.L" "cache=loose" ];
             neededForBoot = true;
           };
         "/tmp/shared" =
           { device = "shared";
             fsType = "9p";
-            options = "trans=virtio,version=9p2000.L";
+            options = [ "trans=virtio" "version=9p2000.L" ];
             neededForBoot = true;
           };
       } // optionalAttrs cfg.writableStore
       { "/nix/store" =
           { fsType = "unionfs-fuse";
             device = "unionfs";
-            options = "allow_other,cow,nonempty,chroot=/mnt-root,max_files=32768,hide_meta_files,dirs=/nix/.rw-store=rw:/nix/.ro-store=ro";
+            options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
           };
       } // optionalAttrs (cfg.writableStore && cfg.writableStoreUseTmpfs)
       { "/nix/.rw-store" =
           { fsType = "tmpfs";
-            options = "mode=0755";
+            options = [ "mode=0755" ];
             neededForBoot = true;
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
           { device = "/dev/vdb2";
             fsType = "vfat";
-            options = "ro";
+            options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
           };
       });

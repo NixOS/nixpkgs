@@ -8,7 +8,7 @@ in
 
 {
   options = {
-    services.xserver.windowManager.openbox.enable = mkEnableOption "oroborus";
+    services.xserver.windowManager.openbox.enable = mkEnableOption "openbox";
   };
 
   config = mkIf cfg.enable {

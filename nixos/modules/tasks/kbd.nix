@@ -5,13 +5,15 @@ with lib;
 let
 
   makeColor = n: value: "COLOR_${toString n}=${value}";
+  colors = concatImapStringsSep "\n" makeColor config.i18n.consoleColors;
 
-  vconsoleConf = pkgs.writeText "vconsole.conf"
-    ''
-      KEYMAP=${config.i18n.consoleKeyMap}
-      FONT=${config.i18n.consoleFont}
-    '' + concatImapStringsSep "\n" makeColor config.i18n.consoleColors;
+  vconsoleConf = pkgs.writeText "vconsole.conf" ''
+    KEYMAP=${config.i18n.consoleKeyMap}
+    FONT=${config.i18n.consoleFont}
+    ${colors}
+  '';
 
+  setVconsole = !config.boot.isContainer;
 in
 
 {
@@ -41,26 +43,33 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkMerge [
+    (mkIf (!setVconsole) {
+      systemd.services."systemd-vconsole-setup".enable = false;
+    })
 
-    environment.systemPackages = [ pkgs.kbd ];
+    (mkIf setVconsole {
+      environment.systemPackages = [ pkgs.kbd ];
 
-    # Let systemd-vconsole-setup.service do the work of setting up the
-    # virtual consoles.  FIXME: trigger a restart of
-    # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
-    environment.etc."vconsole.conf".source = vconsoleConf;
+      # Let systemd-vconsole-setup.service do the work of setting up the
+      # virtual consoles.  FIXME: trigger a restart of
+      # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
+      environment.etc = [ {
+        target = "vconsole.conf";
+        source = vconsoleConf;
+      } ];
 
-    # This is identical to the systemd-vconsole-setup.service unit
-    # shipped with systemd, except that it uses /dev/tty1 instead of
-    # /dev/tty0 to prevent putting the X server in non-raw mode, and
-    # it has a restart trigger.
-    systemd.services."systemd-vconsole-setup" =
-      { wantedBy = [ "multi-user.target" ];
-        before = [ "display-manager.service" ];
-        after = [ "systemd-udev-settle.service" ];
-        restartTriggers = [ vconsoleConf ];
-      };
-
-  };
+      # This is identical to the systemd-vconsole-setup.service unit
+      # shipped with systemd, except that it uses /dev/tty1 instead of
+      # /dev/tty0 to prevent putting the X server in non-raw mode, and
+      # it has a restart trigger.
+      systemd.services."systemd-vconsole-setup" =
+        { wantedBy = [ "multi-user.target" ];
+          before = [ "display-manager.service" ];
+          after = [ "systemd-udev-settle.service" ];
+          restartTriggers = [ vconsoleConf ];
+        };
+    })
+  ];
 
 }

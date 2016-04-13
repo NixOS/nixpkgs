@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "spacefm-${version}";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "IgnorantGuru";
     repo = "spacefm";
     rev = "${version}";
-    sha256 = "1jywsb5yjrq4w9m94m4mbww36npd1jk6s0b59liz6965hv3xp2sy";
+    sha256 = "06askkrwls09d1x382zjrmnvcm0ghfgz4cms2qbhdkazfyy0ff65";
   };
 
   configureFlags = [

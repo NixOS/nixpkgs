@@ -32,11 +32,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "lp_solve is a Mixed Integer Linear Programming (MILP) solver.";
+    description = "lp_solve is a Mixed Integer Linear Programming (MILP) solver";
     homepage    = "http://lpsolve.sourceforge.net";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
     platforms   = platforms.unix;
+    broken      = true;
   };
 
 }

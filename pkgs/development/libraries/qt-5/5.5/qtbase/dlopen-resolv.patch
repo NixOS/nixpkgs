@@ -7,7 +7,7 @@ Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/network/kernel/qdnslookup_u
  #endif
      {
 -        lib.setFileName(QLatin1String("resolv"));
-+        lib.setFileName(QLatin1String("@glibc/lib/resolv"));
++        lib.setFileName(QLatin1String("@glibc@/lib/resolv"));
          if (!lib.load())
              return;
      }

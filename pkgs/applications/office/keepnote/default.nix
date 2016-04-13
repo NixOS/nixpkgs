@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pygtk }:
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages, pygtk }:
 
-buildPythonPackage {
+buildPythonApplication {
   name = "keepnote-0.7.8";
   namePrefix = "";
 

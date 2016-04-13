@@ -21,6 +21,9 @@ let
 
     [logging]
     level=WARN
+
+    [connection]
+    ipv6.ip6-privacy=2
   '';
 
   /*
@@ -110,7 +113,7 @@ in {
 
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
-        type = types.attrsOf types.path;
+        type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
                             networkmanager_openconnect
@@ -228,6 +231,11 @@ in {
     users.extraUsers = [{
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
+    }
+    {
+      # to enable link-local connections
+      name = "avahi-autoipd";
+      uid = config.ids.uids.avahi-autoipd;
     }];
 
     systemd.packages = cfg.packages;

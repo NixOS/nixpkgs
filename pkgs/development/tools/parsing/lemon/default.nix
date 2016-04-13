@@ -2,8 +2,6 @@
 
 let
 
-  version = "1.0";
-
   srcs = {
     lemon = fetchurl {
       sha256 = "1grm95m2cnc61zim332g7z8nchmcy91ljf50k13lm421v0ygyyv6";
@@ -17,8 +15,9 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "lemon-${version}";
+  version = "1.0";
 
   phases = [ "buildPhase" "installPhase" ];
 
@@ -32,7 +31,6 @@ in stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "An LALR(1) parser generator";
     longDescription = ''
       The Lemon program is an LALR(1) parser generator that takes a

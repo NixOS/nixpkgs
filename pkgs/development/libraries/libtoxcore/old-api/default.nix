@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, libtool, automake, libsodium, ncurses, libopus
+{ stdenv, fetchFromGitHub, autoreconfHook, libsodium, ncurses, libopus
 , libvpx, check, libconfig, pkgconfig }:
 
 let
@@ -26,19 +26,15 @@ stdenv.mkDerivation rec {
       auto_tests/tox_test.c
   '';
 
-  preConfigure = ''
-    autoreconf -i
-  '';
-
   configureFlags = [
-    "--with-libsodium-headers=${libsodium}/include"
-    "--with-libsodium-libs=${libsodium}/lib"
+    "--with-libsodium-headers=${libsodium.dev}/include"
+    "--with-libsodium-libs=${libsodium.out}/lib"
     "--enable-ntox"
     "--enable-daemon"
   ];
 
   buildInputs = [
-    autoconf libtool automake libsodium ncurses
+    autoreconfHook libsodium ncurses
     check libconfig pkgconfig
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     libopus

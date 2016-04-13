@@ -1,7 +1,7 @@
-From 175218579aa2b4f4974ff1cf4fd1ac93082a4714 Mon Sep 17 00:00:00 2001
-From: Jascha Geerds <jg@ekby.de>
+From bdbbe312e6520ce70e91319162e85367a69ce044 Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
 Date: Sat, 1 Aug 2015 21:01:11 +0200
-Subject: [PATCH 1/1] Search for themes and icons in system data dirs
+Subject: [PATCH 1/3] Search for themes and icons in system data dirs
 
 ---
  gtweak/tweaks/tweak_group_interface.py | 17 ++++-------------
@@ -59,7 +59,7 @@ index ed2ad5f..a319907 100644
                          os.path.exists(os.path.join(d, "cursors")))
          return valid
 diff --git a/gtweak/tweaks/tweak_group_keymouse.py b/gtweak/tweaks/tweak_group_keymouse.py
-index b56a4f4..3486098 100644
+index e4cce7b..4ac08b7 100644
 --- a/gtweak/tweaks/tweak_group_keymouse.py
 +++ b/gtweak/tweaks/tweak_group_keymouse.py
 @@ -20,7 +20,7 @@ import os.path
@@ -68,10 +68,10 @@ index b56a4f4..3486098 100644
  import gtweak
 -from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default
 +from gtweak.utils import XSettingsOverrides, walk_directories, make_combo_list_with_default, get_resource_dirs
- from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title
+ from gtweak.widgets import ListBoxTweakGroup, GSettingsComboTweak, GSettingsSwitchTweak, GetterSetterSwitchTweak, Title, GSettingsComboEnumTweak
  
  class PrimaryPasteTweak(GetterSetterSwitchTweak):
-@@ -47,10 +47,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
+@@ -48,10 +48,7 @@ class KeyThemeSwitcher(GSettingsComboTweak):
              **options)
  
      def _get_valid_key_themes(self):
@@ -84,7 +84,7 @@ index b56a4f4..3486098 100644
                      os.path.isfile(os.path.join(d, "gtk-2.0-key", "gtkrc")))
          return valid
 diff --git a/gtweak/utils.py b/gtweak/utils.py
-index 3d20425..0fcb51d 100644
+index 6e4d701..535e1f3 100644
 --- a/gtweak/utils.py
 +++ b/gtweak/utils.py
 @@ -21,6 +21,7 @@ import tempfile
@@ -95,7 +95,7 @@ index 3d20425..0fcb51d 100644
  
  import gtweak
  from gtweak.gsettings import GSettingsSetting
-@@ -114,6 +115,22 @@ def execute_subprocess(cmd_then_args, block=True):
+@@ -116,6 +117,22 @@ def execute_subprocess(cmd_then_args, block=True):
          stdout, stderr = p.communicate()
          return stdout, stderr, p.returncode
  
@@ -119,5 +119,5 @@ index 3d20425..0fcb51d 100644
  class AutostartManager:
  
 -- 
-2.4.5
+2.7.0
 

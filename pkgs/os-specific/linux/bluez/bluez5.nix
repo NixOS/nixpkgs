@@ -5,24 +5,26 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.36";
+  name = "bluez-5.37";
    
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "1wkqwmi5krr37mxcqqlp5m2xnw7vw70v3ww7j09vvlskxcdflhx3";
+    sha256 = "c14ba9ddcb0055522073477b8fd8bf1ddf5d219e75fdfd4699b7e0ce5350d6b0";
   };
 
   pythonPath = with pythonPackages;
     [ pythonDBus pygobject pygobject3 recursivePthLoader ];
 
   buildInputs =
-    [ pkgconfig dbus.libs glib alsaLib python pythonPackages.wrapPython
+    [ pkgconfig dbus glib alsaLib python pythonPackages.wrapPython
       readline libsndfile udev libical
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
       # gstreamer gst_plugins_base 
     ];
 
+  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
+    
   preConfigure = ''
       substituteInPlace tools/hid2hci.rules --replace /sbin/udevadm ${systemd}/bin/udevadm
       substituteInPlace tools/hid2hci.rules --replace "hid2hci " "$out/lib/udev/hid2hci "
@@ -68,7 +70,10 @@ stdenv.mkDerivation rec {
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
+    ln -s ../libexec/bluetooth/obexd $out/sbin/obexd
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.bluez.org/;

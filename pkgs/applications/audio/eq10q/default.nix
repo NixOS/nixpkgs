@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   name = "eq10q-2-${version}";
   version = "beta7.1";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/eq10q/${name}.tar.gz";
+    url = "mirror://sourceforge/project/eq10q/${name}.tar.gz";
     sha256 = "1jmrcx4jlx8kgsy5n4jcxa6qkjqvx7d8l2p7dsmw4hj20s39lgyi";
   };
 

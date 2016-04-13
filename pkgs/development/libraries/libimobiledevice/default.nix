@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
   propagatedBuildInputs = [ libusbmuxd glib libgcrypt libtasn1 libplist openssl ];
 
-  patchPhase = ''sed -e 's@1\.3\.21@@' -i configure'';
+  patches = [ ./disable_sslv3.patch ];
+
+  postPatch = ''sed -e 's@1\.3\.21@@' -i configure'';
   passthru.swig = libplist.swig;
 
   src = fetchurl {

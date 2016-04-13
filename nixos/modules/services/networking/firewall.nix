@@ -338,7 +338,7 @@ in
     };
 
     networking.firewall.allowPing = mkOption {
-      default = false;
+      default = true;
       type = types.bool;
       description =
         ''
@@ -421,8 +421,9 @@ in
     };
 
     networking.firewall.extraPackages = mkOption {
+      type = types.listOf types.package;
       default = [ ];
-      example = [ pkgs.ipset ];
+      example = literalExample "[ pkgs.ipset ]";
       description =
         ''
           Additional packages to be included in the environment of the system

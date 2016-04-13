@@ -58,6 +58,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.plex;
+        defaultText = "pkgs.plex";
         description = ''
           The Plex package to use. Plex subscribers may wish to use their own
           package here, pointing to subscriber-only server versions.
@@ -75,7 +76,7 @@ in
       preStart = ''
         test -d "${cfg.dataDir}" || {
           echo "Creating initial Plex data directory in \"${cfg.dataDir}\"."
-          mkdir -p "${cfg.dataDir}"
+          mkdir -p "${cfg.dataDir}/Plex Media Server"
           chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
         }
 
@@ -127,6 +128,7 @@ in
         Group = cfg.group;
         PermissionsStartOnly = "true";
         ExecStart = "/bin/sh -c '${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
+        Restart = "on-failure";
       };
       environment = {
         PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=cfg.dataDir;

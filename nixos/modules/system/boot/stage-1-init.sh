@@ -71,6 +71,23 @@ mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
 
+# Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
+mkdir -p /tmp
+mkfifo /tmp/stage-1-init.log.fifo
+logOutFd=8 && logErrFd=9
+eval "exec $logOutFd>&1 $logErrFd>&2"
+if test -w /dev/kmsg; then
+    tee -i < /tmp/stage-1-init.log.fifo /proc/self/fd/"$logOutFd" | while read -r line; do
+        if test -n "$line"; then
+            echo "<7>stage-1-init: $line" > /dev/kmsg
+        fi
+    done &
+else
+    mkdir -p /run/log
+    tee -i < /tmp/stage-1-init.log.fifo /run/log/stage-1-init.log &
+fi
+exec > /tmp/stage-1-init.log.fifo 2>&1
+
 
 # Process the kernel command line.
 export stage2Init=/init
@@ -148,10 +165,6 @@ mkdir -p /dev/.mdadm
 systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle
-
-
-# Additional devices initialization.
-@postEarlyDeviceCommands@
 
 
 # Load boot-time keymap before any LVM/LUKS initialization
@@ -418,6 +431,11 @@ fi
 
 # Stop udevd.
 udevadm control --exit
+
+# Reset the logging file descriptors.
+# Do this just before pkill, which will kill the tee process.
+exec 1>&$logOutFd 2>&$logErrFd
+eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2. But keep storage daemons like unionfs-fuse.

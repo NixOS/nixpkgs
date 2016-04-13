@@ -24,7 +24,7 @@ if test -z "$nativeLibc"; then
     # compile, because it uses "#include_next <limits.h>" to find the
     # limits.h file in ../includes-fixed. To remedy the problem,
     # another -idirafter is necessary to add that directory again.
-    echo "-B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+    echo "-B$libc/lib/ -idirafter $libc_dev/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
     echo "-L$libc/lib" > $out/nix-support/libc-ldflags
 
@@ -39,13 +39,13 @@ if test -n "$nativeTools"; then
     ldPath="$nativePrefix/bin"
 else
     if test -e "$gcc/lib64"; then
-        gccLDFlags="$gccLDFlags -L$gcc/lib64"
+        gccLDFlags="$gccLDFlags -L$gcc_lib/lib64"
     fi
-    gccLDFlags="$gccLDFlags -L$gcc/lib"
+    gccLDFlags="$gccLDFlags -L$gcc_lib/lib"
     if [ -n "$langVhdl" ]; then
         gccLDFlags="$gccLDFlags -L$zlib/lib"
     fi
-    echo "$gccLDFlags" > $out/nix-support/gcc-ldflags
+    echo "$gccLDFlags" > $out/nix-support/cc-ldflags
 
     # GCC shows $gcc/lib in `gcc -print-search-dirs', but not
     # $gcc/lib64 (even though it does actually search there...)..
@@ -63,7 +63,7 @@ else
         gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
     fi
-    echo "$gccCFlags" > $out/nix-support/gcc-cflags
+    echo "$gccCFlags" > $out/nix-support/cc-cflags
     
     gccPath="$gcc/bin"
     # On Illumos/Solaris we might prefer native ld
@@ -95,6 +95,7 @@ doSubstitute() {
         -e "s^@binutils@^$binutils^g" \
         -e "s^@coreutils@^$coreutils^g" \
         -e "s^@libc@^$libc^g" \
+        -e "s^@libc_bin@^$libc_bin^g" \
         -e "s^@ld@^$ld^g" \
         < "$src" > "$dst" 
 }
@@ -210,5 +211,5 @@ cp -p $utils $out/nix-support/utils.sh
 # tools like gcov, the manpages, etc. as well (including for binutils
 # and Glibc).
 if test -z "$nativeTools"; then
-    echo $gcc $binutils $libc > $out/nix-support/propagated-user-env-packages
+    echo $gcc $binutils $libc $libc_bin > $out/nix-support/propagated-user-env-packages
 fi

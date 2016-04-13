@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo, perl }:
+{ lib, stdenv, fetchurl, texinfo, perl }:
 
 let build = import ./common.nix; in
 
@@ -6,7 +6,9 @@ let build = import ./common.nix; in
 build null {
   name = "glibc-info";
 
-  inherit fetchurl stdenv;
+  inherit fetchurl stdenv lib;
+
+  outputs = [ "out" ];
 
   configureFlags = [ "--enable-add-ons" ];
 

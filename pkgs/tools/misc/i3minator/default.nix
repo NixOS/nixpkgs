@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages, python }:
+{ stdenv, fetchurl, buildPythonApplication, pythonPackages, python }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "i3minator-${version}";
   version = "0.0.4";
 

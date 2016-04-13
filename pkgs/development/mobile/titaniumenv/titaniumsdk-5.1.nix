@@ -1,14 +1,14 @@
 {stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
-  name = "mobilesdk-5.1.1.GA";
+  name = "mobilesdk-5.1.2.GA";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-    url = http://builds.appcelerator.com/mobile/5_1_1/mobilesdk-5.1.1.v20151203123251-linux.zip;
-    sha256 = "197pia5a0bacwwyi0s7s69iyx4i2jdrgjc3ybiahaqv27dhw9zr2";
+    url = http://builds.appcelerator.com/mobile/5_1_X/mobilesdk-5.1.2.v20151216190036-linux.zip;
+    sha256 = "013ipqwkfqj60mn09jbbf6a9mc4pjrn0kr0ix906whzb888zz6bv";
   }
   else if stdenv.system == "x86_64-darwin" then fetchurl {
-    url = http://builds.appcelerator.com/mobile/5_1_1/mobilesdk-5.1.1.v20151203123251-osx.zip;
-    sha256 = "1ij2zc5450fnl13w8ia1z6pa12vja6ks1ssvlb73n2rx52krgvxr";
+    url = http://builds.appcelerator.com/mobile/5_1_X/mobilesdk-5.1.2.v20151216190036-osx.zip;
+    sha256 = "1ylwh7zxa5yfyckzn3a9zc4cmh8gdndgb3jyr61s3j7zb1whn9ww";
   }
   else throw "Platform: ${stdenv.system} not supported!";
   
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     
     # Rename ugly version number
     cd mobilesdk/*
-    mv * 5.1.1.GA
+    mv * 5.1.2.GA
     cd *
     
     # Hack to make dx.jar work with new build-tools

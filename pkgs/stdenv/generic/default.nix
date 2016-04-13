@@ -82,8 +82,10 @@ let
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/multiple-outputs.sh
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
+      ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
       cc
     ];
 
@@ -218,12 +220,25 @@ let
         # The meta attribute is passed in the resulting attribute set,
         # but it's not part of the actual derivation, i.e., it's not
         # passed to the builder and is not a dependency.  But since we
-        # include it in the result, it *is* available to nix-env for
-        # queries.  We also a meta.position attribute here to
-        # identify the source location of the package.
-        meta = meta // (if pos' != null then {
-          position = pos'.file + ":" + toString pos'.line;
-        } else {});
+        # include it in the result, it *is* available to nix-env for queries.
+        meta = { }
+            # If the packager hasn't specified `outputsToInstall`, choose a default,
+            # namely `p.bin or p.out or p`;
+            # if he has specified it, it will be overridden below in `// meta`.
+            #   Note: This default probably shouldn't be globally configurable.
+            #   Services and users should specify outputs explicitly,
+            #   unless they are comfortable with this default.
+          // { outputsToInstall =
+            let
+              outs = outputs'; # the value passed to derivation primitive
+              hasOutput = out: builtins.elem out outs;
+            in [( lib.findFirst hasOutput null (["bin" "out"] ++ outs) )];
+          }
+          // meta
+            # Fill `meta.position` to identify the source location of the package.
+          // lib.optionalAttrs (pos' != null)
+            { position = pos'.file + ":" + toString pos'.line; }
+          ;
         inherit passthru;
       } //
       # Pass through extra attributes that are not inputs, but

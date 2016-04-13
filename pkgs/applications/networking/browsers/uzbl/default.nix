@@ -1,39 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, python, makeWrapper, pygtk
-, webkit, glib_networking, gsettings_desktop_schemas
+{ stdenv, fetchurl, pkgconfig, python3, makeWrapper, pygtk
+, webkit, glib_networking, gsettings_desktop_schemas, pythonPackages
 }:
 
 stdenv.mkDerivation rec {
-  name = "uzbl-20120514";
+  name = "uzbl-v0.9.0";
 
   meta = with stdenv.lib; {
     description = "Tiny externally controllable webkit browser";
     homepage    = "http://uzbl.org/";
     license     = licenses.gpl3;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin dgonyeo ];
   };
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "https://github.com/uzbl/uzbl/archive/2012.05.14.tar.gz";
-    sha256 = "1flpf0rg0c3n9bjifr37zxljn9yxslg8vkll7ghkm341x76cbkwn";
+    url = "https://github.com/uzbl/uzbl/archive/v0.9.0.tar.gz";
+    sha256 = "0iskhv653fdm5raiidimh9fzlsw28zjqx7b5n3fl1wgbj6yz074k";
   };
 
   preConfigure = ''
     makeFlags="$makeFlags PREFIX=$out"
     makeFlags="$makeFlags PYINSTALL_EXTRA=--prefix=$out"
+    mkdir -p $out/lib/python3.4/site-packages/
+    export PYTHONPATH=$PYTHONPATH:$out/lib/python3.4/site-packages/
   '';
 
   preFixup = ''
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+        --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
         --prefix PYTHONPATH : "$PYTHONPATH" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     done
   '';
 
-  nativeBuildInputs = [ pkgconfig python makeWrapper ];
+  nativeBuildInputs = [ pkgconfig python3 makeWrapper ];
 
-  buildInputs = [ gsettings_desktop_schemas webkit pygtk ];
+  buildInputs = [ gsettings_desktop_schemas webkit pygtk pythonPackages.six ];
 }

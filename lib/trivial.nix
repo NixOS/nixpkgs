@@ -75,4 +75,25 @@ rec {
   min = x: y: if x < y then x else y;
   max = x: y: if x > y then x else y;
 
+  /* Reads a JSON file. It is useful to import pure data into other nix
+     expressions.
+
+     Example:
+
+       mkDerivation {
+         src = fetchgit (importJSON ./repo.json)
+         #...
+       }
+
+       where repo.json contains:
+
+       {
+         "url": "git://some-domain/some/repo",
+         "rev": "265de7283488964f44f0257a8b4a055ad8af984d",
+         "sha256": "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h"
+       }
+
+  */
+  importJSON = path:
+    builtins.fromJSON (builtins.readFile path);
 }

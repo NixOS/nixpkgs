@@ -12,11 +12,14 @@ stdenv.mkDerivation ({
 
     args=
 
-    cd "$src"
+    pushd "$src"
     echo -ne "${concatStringsSep "\\0" args.files}" | xargs -0 -n1 -I {} -- find {} -type f -print0 | while read -d "" line; do
       mkdir -p "$out/$(dirname "$line")"
       substituteAll "$line" "$out/$line"
     done
+    popd
+
+    eval "$postInstall"
   '';
   preferLocalBuild = true;
 } // args)

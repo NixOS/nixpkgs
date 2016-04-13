@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig, libpulseaudio, alsaLib, libcap
+, CoreAudio, CoreServices, AudioUnit
 , usePulseAudio }:
 
 stdenv.mkDerivation rec {
@@ -9,10 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "1bwwv1g9lchaq6qmhvj1pp3hnyqr64ydd4j38x94pmprs4d27b83";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   buildInputs =
     [ pkgconfig ] ++
     lib.optional stdenv.isLinux (if usePulseAudio then libpulseaudio else alsaLib) ++
-    lib.optional stdenv.isLinux libcap;
+    lib.optional stdenv.isLinux libcap ++
+    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
   meta = {
     longDescription = ''

@@ -48,7 +48,7 @@ EOF
       modeled after the famous log4j logging framework for Java.
     '';
     license = licenses.lgpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pythonPackages }:
 
-let version = "2.21"; in
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "rawdog-${version}";
+  version = "2.21";
 
   src = fetchurl {
     url = "http://offog.org/files/${name}.tar.gz";
@@ -14,7 +14,6 @@ pythonPackages.buildPythonPackage rec {
   namePrefix = "";
   
   meta = with stdenv.lib; {
-    inherit version;
     homepage = "http://offog.org/code/rawdog/";
     description = "RSS Aggregator Without Delusions Of Grandeur";
     license = licenses.gpl2;

@@ -2,20 +2,24 @@
 
 let
   wheel_source = fetchurl {
-    url = "https://pypi.python.org/packages/py2.py3/w/wheel/wheel-0.26.0-py2.py3-none-any.whl";
-    sha256 = "1sl642ncvipqx0hzypvl5hsiqngy0sib0kq242g4mic7vnid6bn9";
+    url = "https://pypi.python.org/packages/py2.py3/w/wheel/wheel-0.29.0-py2.py3-none-any.whl";
+    sha256 = "ea8033fc9905804e652f75474d33410a07404c1a78dd3c949a66863bd1050ebd";
   };
   setuptools_source = fetchurl {
-    url = "https://pypi.python.org/packages/3.4/s/setuptools/setuptools-18.2-py2.py3-none-any.whl";
-    sha256 = "0jhafl8wmjc8xigl1ib5hqiq9crmipcz0zcga52riymgqbf2bzh4";
+    url = "https://pypi.python.org/packages/3.5/s/setuptools/setuptools-19.4-py2.py3-none-any.whl";
+    sha256 = "0801e6d862ca4ce24d918420d62f07ee2fe736dc016e3afa99d2103e7a02e9a6";
+  };
+  argparse_source = fetchurl {
+    url = "https://pypi.python.org/packages/2.7/a/argparse/argparse-1.4.0-py2.py3-none-any.whl";
+    sha256 = "0533cr5w14da8wdb2q4py6aizvbvsdbk3sj7m1jx9lwznvnlf5n3";
   };
 in stdenv.mkDerivation rec {
   name = "python-${python.version}-bootstrapped-pip-${version}";
-  version = "7.1.2";
+  version = "8.1.1";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/py2.py3/p/pip/pip-${version}-py2.py3-none-any.whl";
-    sha256 = "133hx6jaspm6hd02gza66lng37l65yficc2y2x1gh16fbhxrilxr";
+    sha256 = "0p62v87lm595kwmxrnqxc81dr7h6maaxj1y28b00bf9ag11c7fa4";
   };
 
   unpackPhase = ''
@@ -23,16 +27,13 @@ in stdenv.mkDerivation rec {
     unzip -d $out/${python.sitePackages} $src
     unzip -d $out/${python.sitePackages} ${setuptools_source}
     unzip -d $out/${python.sitePackages} ${wheel_source}
+  '' + stdenv.lib.optionalString (python.isPy26 or false) ''
+    unzip -d $out/${python.sitePackages} ${argparse_source}
   '';
+
 
   patchPhase = ''
     mkdir -p $out/bin
-
-    # patch pip to support "pip install --prefix"
-    # https://github.com/pypa/pip/pull/3252
-    pushd $out/${python.sitePackages}/
-    patch -p1 < ${./pip-7.0.1-prefix.patch}
-    popd
   '';
 
   buildInputs = [ python makeWrapper unzip ];
@@ -40,7 +41,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
 
     # install pip binary
-    echo '${python.interpreter} -m pip "$@"' > $out/bin/pip
+    echo '#!${python.interpreter}' > $out/bin/pip
+    echo 'import sys;from pip import main' >> $out/bin/pip
+    echo 'sys.exit(main())' >> $out/bin/pip
     chmod +x $out/bin/pip
 
     # wrap binaries with PYTHONPATH

@@ -21,7 +21,7 @@ let
     else toString ''"${x}"'';
 
   # for users in group "transmission" to have access to torrents
-  fullSettings = { download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings // { umask = 2; };
+  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 in
 {
   options = {
@@ -113,21 +113,22 @@ in
           #include <abstractions/base>
           #include <abstractions/nameservice>
 
-          ${pkgs.glibc}/lib/*.so                    mr,
-          ${pkgs.libevent}/lib/libevent*.so*        mr,
-          ${pkgs.curl}/lib/libcurl*.so*             mr,
-          ${pkgs.openssl}/lib/libssl*.so*           mr,
-          ${pkgs.openssl}/lib/libcrypto*.so*        mr,
-          ${pkgs.zlib}/lib/libz*.so*                mr,
-          ${pkgs.libssh2}/lib/libssh2*.so*          mr,
+          ${pkgs.glibc.out}/lib/*.so                    mr,
+          ${pkgs.libevent.out}/lib/libevent*.so*        mr,
+          ${pkgs.curl.out}/lib/libcurl*.so*             mr,
+          ${pkgs.openssl.out}/lib/libssl*.so*           mr,
+          ${pkgs.openssl.out}/lib/libcrypto*.so*        mr,
+          ${pkgs.zlib.out}/lib/libz*.so*                mr,
+          ${pkgs.libssh2.out}/lib/libssh2*.so*          mr,
           ${pkgs.systemd}/lib/libsystemd*.so*       mr,
-          ${pkgs.xz}/lib/liblzma*.so*               mr,
-          ${pkgs.libgcrypt}/lib/libgcrypt*.so*      mr,
-          ${pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
-          ${pkgs.libnghttp2}/lib/libnghttp2*.so*    mr,
-          ${pkgs.c-ares}/lib/libcares*.so*          mr,
-          ${pkgs.libcap}/lib/libcap*.so*            mr,
-          ${pkgs.attr}/lib/libattr*.so*             mr,
+          ${pkgs.xz.out}/lib/liblzma*.so*               mr,
+          ${pkgs.libgcrypt.out}/lib/libgcrypt*.so*      mr,
+          ${pkgs.libgpgerror.out}/lib/libgpg-error*.so* mr,
+          ${pkgs.libnghttp2.out}/lib/libnghttp2*.so*    mr,
+          ${pkgs.c-ares.out}/lib/libcares*.so*          mr,
+          ${pkgs.libcap.out}/lib/libcap*.so*            mr,
+          ${pkgs.attr.out}/lib/libattr*.so*             mr,
+          ${pkgs.lz4}/lib/liblz4*.so*               mr,
 
           @{PROC}/sys/kernel/random/uuid   r,
           @{PROC}/sys/vm/overcommit_memory r,

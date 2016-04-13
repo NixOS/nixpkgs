@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cairo, colord, glib, gtk3, gusb, intltool, itstool
 , libusb1, libxml2, pkgconfig, sane-backends, vala, wrapGAppsHook }:
 
-let version = "3.19.3"; in
 stdenv.mkDerivation rec {
   name = "simple-scan-${version}";
+  version = "3.20.0";
 
   src = fetchurl {
-    sha256 = "0il7ikd5hj9mgzrivm01g572g9101w8la58h3hjyakwcfw3jp976";
-    url = "https://launchpad.net/simple-scan/3.19/${version}/+download/${name}.tar.xz";
+    sha256 = "0b5ndrjwi7yipkr9bhyifpbdil65izdm677if23yj832n2jsbxcd";
+    url = "https://launchpad.net/simple-scan/3.20/${version}/+download/${name}.tar.xz";
   };
 
   buildInputs = [ cairo colord glib gusb gtk3 libusb1 libxml2 sane-backends
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-packagekit" ];
 
   preBuild = ''
-    # Clean up stale generated .c files still referencing packagekit headers:
+    # Clean up stale .c files referencing packagekit headers as of 3.20.0:
     make clean
   '';
 
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Simple scanning utility";
     longDescription = ''
       A really easy way to scan both documents and photos. You can crop out the

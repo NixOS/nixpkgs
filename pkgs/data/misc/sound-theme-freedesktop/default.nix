@@ -1,8 +1,8 @@
 { stdenv, fetchurl, intltool }:
 
-let version = "0.8"; in
 stdenv.mkDerivation rec {
   name = "sound-theme-freedesktop-${version}";
+  version = "0.8";
 
   src = fetchurl {
     sha256 = "054abv4gmfk9maw93fis0bf605rc56dah7ys5plc4pphxqh8nlfb";
@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ intltool ];
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Freedesktop reference sound theme";
     homepage = http://freedesktop.org/wiki/Specifications/sound-theme-spec;
     # See http://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:

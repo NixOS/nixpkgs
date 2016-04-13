@@ -1,16 +1,14 @@
-Use $SSL_CERT_FILE to get the CA certificates.
-
-diff -ru -x '*~' LWP-Protocol-https-6.02-orig/lib/LWP/Protocol/https.pm LWP-Protocol-https-6.02/lib/LWP/Protocol/https.pm
---- LWP-Protocol-https-6.02-orig/lib/LWP/Protocol/https.pm	2011-03-27 13:54:01.000000000 +0200
-+++ LWP-Protocol-https-6.02/lib/LWP/Protocol/https.pm	2011-10-07 13:23:41.398628375 +0200
-@@ -21,6 +21,11 @@
+diff -ru -x '*~' LWP-Protocol-https-6.04-orig/lib/LWP/Protocol/https.pm LWP-Protocol-https-6.04/lib/LWP/Protocol/https.pm
+--- LWP-Protocol-https-6.04-orig/lib/LWP/Protocol/https.pm	2013-04-29 23:16:18.000000000 +0200
++++ LWP-Protocol-https-6.04/lib/LWP/Protocol/https.pm	2016-03-02 14:59:01.639844511 +0100
+@@ -24,6 +24,11 @@
      }
      if ($ssl_opts{SSL_verify_mode}) {
  	unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
-+            if (defined $ENV{'SSL_CERT_FILE'}) {
-+                $ssl_opts{SSL_ca_file} = $ENV{'SSL_CERT_FILE'};
-+            }
-+        }
++	    $ssl_opts{SSL_ca_file} = $ENV{'SSL_CERT_FILE'};
++	    $ssl_opts{SSL_ca_file} = "/etc/ssl/certs/ca-certificates.crt"
++		if !defined $ssl_opts{SSL_ca_file} && -e "/etc/ssl/certs/ca-certificates.crt";
++	}
 +	unless (exists $ssl_opts{SSL_ca_file} || exists $ssl_opts{SSL_ca_path}) {
  	    eval {
  		require Mozilla::CA;

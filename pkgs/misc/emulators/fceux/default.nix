@@ -1,4 +1,4 @@
-{stdenv, fetchurl, scons, zlib, SDL, lua5, pkgconfig}:
+{stdenv, fetchurl, scons, zlib, SDL, lua5_1, pkgconfig}:
 
 stdenv.mkDerivation {
   name = "fceux-2.2.2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    scons zlib SDL lua5 pkgconfig
+    scons zlib SDL lua5_1 pkgconfig
   ];
 
   phases = "unpackPhase buildPhase";
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     export CC="gcc"
     export CXX="g++"
     mkdir -p "$out" "$out/share/applications" "$out/share/pixmaps"
-    scons --prefix="$out" OPENGL=false GTK=false CREATE_AVI=false LOGO=false SYSTEM_LUA=false install
+    scons --prefix="$out" OPENGL=false GTK=false CREATE_AVI=false LOGO=false install
   '';
 
   meta = {

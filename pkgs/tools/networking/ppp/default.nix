@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     [ ( substituteAll {
         src = ./nix-purity.patch;
         inherit libpcap;
-        glibc = stdenv.cc.libc;
+        glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
       })
       # Without nonpriv.patch, pppd --version doesn't work when not run as
       # root.
@@ -21,6 +21,16 @@ stdenv.mkDerivation rec {
     ];
 
   buildInputs = [ libpcap ];
+
+  installPhase = ''
+    mkdir -p $out/bin
+    make install
+    install -D -m 755 scripts/{pon,poff,plog} $out/bin
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/bin/{pon,poff,plog} --replace "/usr/sbin" "$out/bin"
+  '';
 
   meta = {
     homepage = https://ppp.samba.org/;

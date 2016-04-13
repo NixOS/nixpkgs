@@ -1,23 +1,14 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, perl, unzip }:
 let
   s = # Generated upstream information
   rec {
     baseName="zpaq";
-    version="705";
+    version="710";
     name="${baseName}-${version}";
-    hash="0d1knq4f6693nvbwjx4wznb45hm4zyn4k88xvhynyk0dcbiy7ayq";
-    url="http://mattmahoney.net/dc/zpaq705.zip";
-    sha256="0d1knq4f6693nvbwjx4wznb45hm4zyn4k88xvhynyk0dcbiy7ayq";
+    hash="089h09rlcyag1j1i38jjzwzm69p6p4wnh6n2rsbl3p5mcvdfnwhk";
+    url="http://mattmahoney.net/dc/zpaq710.zip";
+    sha256="089h09rlcyag1j1i38jjzwzm69p6p4wnh6n2rsbl3p5mcvdfnwhk";
   };
-  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
-  isx86 = stdenv.isi686 || stdenv.isx86_64;
-  compileFlags = with stdenv; ""
-    + (lib.optionalString (isUnix) " -Dunix -pthread")
-    + (lib.optionalString (isi686) " -march=i686")
-    + (lib.optionalString (isx86_64) " -march=nocona")
-    + (lib.optionalString (!isx86) " -DNOJIT")
-    + " -O3 -mtune=generic -DNDEBUG"
-    ;
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -28,20 +19,24 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
+  nativeBuildInputs = [ perl /* for pod2man */ ];
   buildInputs = [ unzip ];
 
-  buildPhase = ''
-    g++ ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
-    g++ ${compileFlags} -L. -L"$out/lib" -lzpaq zpaq.cpp -o zpaq
+  preBuild = let
+    CPPFLAGS = with stdenv; ""
+      + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
+      + "-Dunix";
+    CXXFLAGS = with stdenv; ""
+      + (lib.optionalString (isi686) "-march=i686 ")
+      + (lib.optionalString (isx86_64) "-march=nocona ")
+      + "-O3 -mtune=generic -DNDEBUG";
+  in ''
+    buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
   '';
 
-  installPhase = ''
-    mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
-    cp libzpaq.so "$out/lib"
-    cp zpaq "$out/bin"
-    cp libzpaq.h "$out/include"
-    cp readme.txt "$out/share/doc/zpaq"
-  '';
+  enableParallelBuilding = true;
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     inherit (s) version;

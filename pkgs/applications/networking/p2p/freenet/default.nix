@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, ant, jdk, makeWrapper }:
+{ stdenv, fetchurl, fetchgit, ant, jdk, bash, coreutils, substituteAll }:
 
 let
   freenet_ext = fetchurl {
@@ -15,46 +15,56 @@ let
     sha256 = "109zn9w8axdkjwhkkcm2s8dvib0mq0n8imjgs3r8hvi128cjsmg9";
   };
   version = "build01470";
-in
-stdenv.mkDerivation {
-  name = "freenet-${version}";
 
+  freenet-jars = stdenv.mkDerivation {
+    name = "freenet-jars-${version}";
 
-  src = fetchgit {
-    url = https://github.com/freenet/fred;
-    rev = "refs/tags/${version}";
-    sha256 = "1b6e6fec2b9a729d4a25605fa142df9ea42e59b379ff665f580e32c6178c9746";
+    src = fetchgit {
+      url = https://github.com/freenet/fred;
+      rev = "refs/tags/${version}";
+      sha256 = "1b6e6fec2b9a729d4a25605fa142df9ea42e59b379ff665f580e32c6178c9746";
+    };
+
+    patchPhase = ''
+      cp ${freenet_ext} lib/freenet/freenet-ext.jar
+      cp ${bcprov} lib/bcprov-jdk15on-152.jar
+
+      sed '/antcall.*-ext/d' -i build.xml
+      sed 's/@unknown@/${version}/g' -i build-clean.xml
+    '';
+
+    buildInputs = [ ant jdk ];
+
+    buildPhase = "ant package-only";
+
+    installPhase = ''
+      mkdir -p $out/share/freenet
+      cp lib/bcprov-jdk15on-152.jar $out/share/freenet
+      cp lib/freenet/freenet-ext.jar $out/share/freenet
+      cp dist/freenet.jar $out/share/freenet
+    '';
   };
 
-  patchPhase = ''
-    cp ${freenet_ext} lib/freenet/freenet-ext.jar
-    cp ${bcprov} lib/bcprov-jdk15on-152.jar
+in stdenv.mkDerivation {
+  name = "freenet-${version}";
+  inherit version;
 
-    sed '/antcall.*-ext/d' -i build.xml
-    sed 's/@unknown@/${version}/g' -i build-clean.xml
-  '';
+  src = substituteAll {
+    src = ./freenetWrapper;
+    inherit bash coreutils seednodes;
+    freenet = freenet-jars;
+    jre = jdk.jre;
+  };
 
-  buildInputs = [ ant jdk makeWrapper ];
+  jars = freenet-jars;
 
-  buildPhase = "ant package-only";
-
-  freenetWrapper = ./freenetWrapper;
+  phases = [ "installPhase" ];
 
   installPhase = ''
-    mkdir -p $out/share/freenet $out/bin
-    cp lib/bcprov-jdk15on-152.jar $out/share/freenet
-    cp lib/freenet/freenet-ext.jar $out/share/freenet
-    cp dist/freenet.jar $out/share/freenet
-
-    cat <<EOF > $out/bin/freenet.wrapped
-    #!${stdenv.shell}
-    ${jdk.jre}/bin/java -cp $out/share/freenet/bcprov-jdk15on-152.jar:$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
-      -Xmx1024M freenet.node.NodeStarter
-    EOF
-    chmod +x $out/bin/freenet.wrapped
-    makeWrapper $freenetWrapper $out/bin/freenet \
-      --set FREENET_ROOT "$out" \
-      --set FREENET_SEEDNODES "${seednodes}"
+    mkdir -p $out/bin
+    cp $src $out/bin/freenet
+    chmod +x $out/bin/freenet
+    ln -s ${freenet-jars}/share $out/share
   '';
 
   meta = {

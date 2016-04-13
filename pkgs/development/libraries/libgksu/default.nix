@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, makeWrapper, gtk, gnome, gnome3,
-  libstartup_notification, libgtop, perl, perlXMLParser, autoconf,
-  automake, libtool, intltool, gtk_doc, docbook_xsl, xauth, sudo
+  libstartup_notification, libgtop, perl, perlXMLParser,
+  autoreconfHook, intltool, gtk_doc, docbook_xsl, xauth, sudo
 }:
 
 stdenv.mkDerivation rec {
@@ -52,13 +52,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     intltoolize --force --copy --automake
-    autoreconf -vfi
   '';
 
   buildInputs = [
     pkgconfig makeWrapper gtk gnome.GConf libstartup_notification
     gnome3.libgnome_keyring libgtop gnome.libglade perl perlXMLParser
-    autoconf automake libtool intltool gtk_doc docbook_xsl
+    autoreconfHook intltool gtk_doc docbook_xsl
   ];
 
   preFixup = ''

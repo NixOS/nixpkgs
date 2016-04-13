@@ -88,6 +88,7 @@ mkDerivation {
         -e '1i initialPath="${toString initialPath}"' \
         "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
+      defaultNativeBuildInputs="$defaultNativeBuildInputs"
       nativeBuildInputs="$nativeBuildInputs"
       propagatedBuildInputs="$propagatedBuildInputs2"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards

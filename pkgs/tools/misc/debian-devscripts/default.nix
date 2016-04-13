@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.15.8";
+  version = "2.16.2";
   name = "debian-devscripts-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
-    sha256 = "1zw7phaigncblxb3jp4m8pk165hylk1f088k51nhj9d7z5iz6bbx";
+    sha256 = "0qlzciiyfhq11j5wf0x6jsa18bmmf2z7f2x5psq2wkkccfi0fxc4";
   };
 
   buildInputs = [ perl CryptSSLeay LWP unzip xz dpkg TimeDate DBFile 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
       -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
       -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv2@g" \
-      -e "s@(command -v|/usr/bin/)curl@${curl}/bin/curl@g" \
+      -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
       -i {} +
     sed -e "s@/usr/share/sgml/[^ ]*/manpages/docbook.xsl@${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl@" -i scripts/Makefile
     sed -r \

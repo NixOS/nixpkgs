@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, xdg_utils, pkgs, pkgsi686Linux }:
 
 let
-  version = "11.0.52520";
+  version = "11.0.53191";
 
   ld32 =
     if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     # There is a 64-bit package, but it has no differences apart from Debian dependencies.
     # Generic versioned packages (teamviewer_${version}_i386.tar.xz) are not available for some reason.
     url = "http://download.teamviewer.com/download/teamviewer_${version}_i386.deb";
-    sha256 = "1430dimcv69plpj0ad0wsn10k15x9fwlk6fiq7yz51qbcr5l9wk6";
+    sha256 = "1yr4c7d6hymw7kvca2jqxzaz6rw5xr66iby77aknd0v4afh4yzz3";
   };
 
   unpackPhase = ''
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     ${if stdenv.system == "x86_64-linux" then ''
       sed -i "s,TV_LD64_PATH=.*,TV_LD64_PATH=$(cat ${ld64})," script/tvw_config
     '' else ''
-      sed -i ",TV_LD64_PATH=.*,d" script/tvw_config
+      sed -i "/TV_LD64_PATH=.*/d" script/tvw_config
     ''}
 
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" desktop/teamviewer-*.desktop

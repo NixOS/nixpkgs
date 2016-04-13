@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "python2nix-20140927";
  
   src = fetchFromGitHub {

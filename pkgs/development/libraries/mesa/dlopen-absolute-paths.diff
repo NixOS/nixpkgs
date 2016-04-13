@@ -16,7 +16,7 @@ index 4fdf3c2..69ea22d 100644
     do {
        for (version = 1; version >= 0; version--) {
 -         snprintf(name, sizeof(name), "libudev.so.%d", version);
-+         snprintf(name, sizeof(name), "@udev@/lib/libudev.so.%d", version);
++         snprintf(name, sizeof(name), "@libudev@/lib/libudev.so.%d", version);
           udev_handle = dlopen(name, flags);
           if (udev_handle)
              return udev_handle;

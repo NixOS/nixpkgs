@@ -6,12 +6,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "mednafen-${version}";
-  version = "0.9.38.6";
+  name = "mednafen-${meta.version}";
 
   src = fetchurl {
     url = "http://mednafen.fobby.net/releases/files/${name}.tar.bz2";
-    sha256 = "0ivy0vqy1cjd5namn4bdm9ambay6rdccjl9x5418mjyqdhydlq4l";
+    sha256 = "1n6y7b86sv11vd6rv8if3wr4qyihkjai9km1s4smqcisi3pvxcqv";
   };
 
   buildInputs = with stdenv.lib;
@@ -26,6 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    version = "0.9.38.7";
     description = "A portable, CLI-driven, SDL+OpenGL-based, multi-system emulator";
     homepage = http://mednafen.sourceforge.net/;
     license = licenses.gpl2;

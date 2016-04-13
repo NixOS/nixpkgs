@@ -17,16 +17,32 @@ let
       nixpkgs.system = config.nixpkgs.system;
     };
 
-  eval = evalModules {
-    modules = [ versionModule ] ++ baseModules;
-    args = (config._module.args) // { modules = [ ]; };
-  };
-
+  /* For the purpose of generating docs, evaluate options with each derivation
+    in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
+    It isn't perfect, but it seems to cover a vast majority of use cases.
+    Caveat: even if the package is reached by a different means,
+    the path above will be shown and not e.g. `${config.services.foo.package}`. */
   manual = import ../../../doc/manual {
     inherit pkgs;
     version = config.system.nixosVersion;
     revision = config.system.nixosRevision;
-    options = eval.options;
+    options =
+      let
+        scrubbedEval = evalModules {
+          modules = [ versionModule ] ++ baseModules;
+          args = (config._module.args) // { modules = [ ]; };
+          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
+        };
+        scrubDerivations = namePrefix: pkgSet: mapAttrs
+          (name: value:
+            let wholeName = "${namePrefix}.${name}"; in
+            if isAttrs value then
+              scrubDerivations wholeName value
+              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+            else value
+          )
+          pkgSet;
+      in scrubbedEval.options;
   };
 
   entry = "${manual.manual}/share/doc/nixos/index.html";
@@ -72,7 +88,8 @@ in
     };
 
     services.nixosManual.ttyNumber = mkOption {
-      default = "8";
+      type = types.int;
+      default = 8;
       description = ''
         Virtual console on which to show the manual.
       '';
@@ -80,6 +97,7 @@ in
 
     services.nixosManual.browser = mkOption {
       type = types.path;
+      default = "${pkgs.w3m-nox}/bin/w3m";
       description = ''
         Browser used to show the manual.
       '';
@@ -96,7 +114,7 @@ in
       [ manual.manual help ]
       ++ optional config.programs.man.enable manual.manpages;
 
-    boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
+    boot.extraTTYs = mkIf cfg.showManual ["tty${toString cfg.ttyNumber}"];
 
     systemd.services = optionalAttrs cfg.showManual
       { "nixos-manual" =
@@ -106,7 +124,7 @@ in
             { ExecStart = "${cfg.browser} ${entry}";
               StandardInput = "tty";
               StandardOutput = "tty";
-              TTYPath = "/dev/tty${cfg.ttyNumber}";
+              TTYPath = "/dev/tty${toString cfg.ttyNumber}";
               TTYReset = true;
               TTYVTDisallocate = true;
               Restart = "always";
@@ -116,8 +134,6 @@ in
 
     services.mingetty.helpLine = mkIf cfg.showManual
       "\nPress <Alt-F${toString cfg.ttyNumber}> for the NixOS manual.";
-
-    services.nixosManual.browser = mkDefault "${pkgs.w3m-nox}/bin/w3m";
 
   };
 

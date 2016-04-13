@@ -15,7 +15,7 @@ Usage:
   Attention:
 
   let
-    pkgs = (import /etc/nixos/nixpkgs/pkgs/top-level/all-packages.nix) {};
+    pkgs = (import <nixpkgs>) {};
   in let
     inherit (pkgs.stringsWithDeps) fullDepEntry packEntry noDepEntry textClosureMap;
     inherit (pkgs.lib) id;

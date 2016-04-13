@@ -66,7 +66,7 @@ stdenv.mkDerivation (
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
               header "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
-              cp -R $TMPDIR/* $KEEPBUILDDIR
+              cp -R "$TMPDIR/"* $KEEPBUILDDIR
               stopNest
           fi
       fi

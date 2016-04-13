@@ -93,6 +93,10 @@ installPhase() {
         substituteInPlace $out/share/applications/nvidia-settings.desktop \
             --replace '__UTILS_PATH__' $out/bin \
             --replace '__PIXMAP_PATH__' $out/share/pixmaps
+
+        # Move VDPAU libraries to their place
+        mkdir "$out"/lib/vdpau
+        mv "$out"/lib/libvdpau* "$out"/lib/vdpau
     fi
 }
 

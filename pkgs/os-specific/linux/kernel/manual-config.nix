@@ -74,7 +74,7 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; propagatedBuildOutputs = ""; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile;
       };
@@ -102,7 +102,8 @@ let
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
-        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=Thu Jan 1 00:00:01 UTC 1970")
+        # Note: we can get rid of this once http://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
+        buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
       '';
 
       buildFlags = [
@@ -128,6 +129,9 @@ let
         mkdir -p $out/dtbs
         cp $buildRoot/arch/$karch/boot/dts/*.dtb $out/dtbs
       '' else "") + (if isModular then ''
+        if [ -z "$dontStrip" ]; then
+          installFlagsArray+=("INSTALL_MOD_STRIP=1")
+        fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
@@ -185,18 +189,6 @@ let
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
-
-      # !!! This leaves references to gcc in $dev
-      # that we might be able to avoid
-      postFixup = if isModular then ''
-        if [ -z "$dontStrip" ]; then
-            find $out -name "*.ko" -print0 | xargs -0 -r ''${crossConfig+$crossConfig-}strip -S
-        fi
-        # !!! Should this be part of stdenv? Also patchELF should take an argument...
-        prefix=$dev
-        patchELF
-        prefix=$out
-      '' else null;
 
       meta = {
         description =

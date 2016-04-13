@@ -81,6 +81,8 @@ rec {
 
   buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
 
+  buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
+
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
   #FIXME: throw this away sometime in the future. added 2015-08-18

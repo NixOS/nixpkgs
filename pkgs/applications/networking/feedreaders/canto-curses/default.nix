@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python34Packages, readline, ncurses, canto-daemon }:
 
-python34Packages.buildPythonPackage rec {
+python34Packages.buildPythonApplication rec {
   version = "0.9.6";
   name = "canto-curses-${version}";
 

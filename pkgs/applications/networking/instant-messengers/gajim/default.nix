@@ -7,6 +7,7 @@
 , enableRST ? true
 , enableSpelling ? true, gtkspell ? null
 , enableNotifications ? false
+, extraPythonPackages ? pkgs: []
 }:
 
 assert enableJingle -> farstream != null && gst_plugins_bad != null
@@ -61,7 +62,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
-    ++ optional enableNotifications pythonPackages.notify;
+    ++ optional enableNotifications pythonPackages.notify
+    ++ extraPythonPackages pythonPackages;
 
   postInstall = ''
     install -m 644 -t "$out/share/gajim/icons/hicolor" \

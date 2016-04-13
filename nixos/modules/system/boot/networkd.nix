@@ -93,11 +93,13 @@ let
 
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
-      "Description" "DHCP" "DHCPServer" "IPv4LL" "IPv4LLRoute"
+      "Description" "DHCP" "DHCPServer" "IPForward" "IPMasquerade" "IPv4LL" "IPv4LLRoute"
       "LLMNR" "Domains" "Bridge" "Bond"
     ])
     (assertValueOneOf "DHCP" ["both" "none" "v4" "v6"])
     (assertValueOneOf "DHCPServer" boolValues)
+    (assertValueOneOf "IPForward" ["yes" "no" "ipv4" "ipv6"])
+    (assertValueOneOf "IPMasquerade" boolValues)
     (assertValueOneOf "IPv4LL" boolValues)
     (assertValueOneOf "IPv4LLRoute" boolValues)
     (assertValueOneOf "LLMNR" boolValues)
@@ -127,6 +129,16 @@ let
     (assertValueOneOf "UseRoutes" boolValues)
     (assertValueOneOf "CriticalConnections" boolValues)
     (assertValueOneOf "RequestBroadcast" boolValues)
+  ];
+
+  checkDhcpServer = checkUnitConfig "DHCPServer" [
+    (assertOnlyFields [
+      "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
+      "EmitDNS" "DNS" "EmitNTP" "NTP" "EmitTimezone" "Timezone"
+    ])
+    (assertValueOneOf "EmitDNS" boolValues)
+    (assertValueOneOf "EmitNTP" boolValues)
+    (assertValueOneOf "EmitTimezone" boolValues)
   ];
 
   commonNetworkOptions = {
@@ -336,6 +348,18 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[DHCP]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    dhcpServerConfig = mkOption {
+      default = {};
+      example = { PoolOffset = 50; EmitDNS = false; };
+      type = types.addCheck (types.attrsOf unitOption) checkDhcpServer;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[DHCPServer]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -564,6 +588,11 @@ let
           ${optionalString (def.dhcpConfig != { }) ''
             [DHCP]
             ${attrsToSection def.dhcpConfig}
+
+          ''}
+          ${optionalString (def.dhcpServerConfig != { }) ''
+            [DHCPServer]
+            ${attrsToSection def.dhcpServerConfig}
 
           ''}
           ${flip concatMapStrings def.addresses (x: ''

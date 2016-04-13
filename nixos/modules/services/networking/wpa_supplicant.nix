@@ -8,11 +8,15 @@ let
     ${optionalString cfg.userControlled.enable ''
       ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
-    ${concatStringsSep "\n" (mapAttrsToList (ssid: networkConfig: ''
+    ${concatStringsSep "\n" (mapAttrsToList (ssid: networkConfig: let
+      psk = if networkConfig.psk != null
+        then ''"${networkConfig.psk}"''
+        else networkConfig.pskRaw;
+    in ''
       network={
         ssid="${ssid}"
-        ${optionalString (networkConfig.psk != null) ''psk="${networkConfig.psk}"''}
-        ${optionalString (networkConfig.psk == null) ''key_mgmt=NONE''}
+        ${optionalString (psk != null) ''psk=${psk}''}
+        ${optionalString (psk == null) ''key_mgmt=NONE''}
       }
     '') cfg.networks)}
   '' else "/etc/wpa_supplicant.conf";
@@ -49,6 +53,19 @@ in {
 
                 Be aware that these will be written to the nix store
                 in plaintext!
+
+                Mutually exclusive with <varname>pskRaw</varname>.
+              '';
+            };
+
+            pskRaw = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              description = ''
+                The network's pre-shared key in hex defaulting
+                to being a network without any authentication.
+
+                Mutually exclusive with <varname>psk</varname>.
               '';
             };
           };
@@ -61,10 +78,11 @@ in {
         '';
         default = {};
         example = literalExample ''
-          echelon = {
-            psk = "abcdefgh";
-          };
-          "free.wifi" = {};
+          { echelon = {
+              psk = "abcdefgh";
+            };
+            "free.wifi" = {};
+          }
         '';
       };
 
@@ -95,6 +113,11 @@ in {
 
   config = mkMerge [
     (mkIf cfg.enable {
+      assertions = flip mapAttrsToList cfg.networks (name: cfg: {
+        assertion = cfg.psk == null || cfg.pskRaw == null;
+        message = ''networking.wireless."${name}".psk and networking.wireless."${name}".pskRaw are mutually exclusive'';
+      });
+
       environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
       services.dbus.packages = [ pkgs.wpa_supplicant ];
@@ -102,9 +125,12 @@ in {
       # FIXME: start a separate wpa_supplicant instance per interface.
       systemd.services.wpa_supplicant = let
         ifaces = cfg.interfaces;
+        deviceUnit = interface: [ "sys-subsystem-net-devices-${interface}.device" ];
       in {
         description = "WPA Supplicant";
 
+        after = [ "network-interfaces.target" ];
+        requires = lib.concatMap deviceUnit ifaces;
         wantedBy = [ "network.target" ];
 
         path = [ pkgs.wpa_supplicant ];

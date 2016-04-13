@@ -1,24 +1,20 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig
-, libX11, libXinerama, libXft, pango, cairo
+{ stdenv, fetchurl, autoreconfHook, pkgconfig
+, libX11, libXinerama, pango, cairo
 , libstartup_notification, i3Support ? false, i3
 }:
 
 stdenv.mkDerivation rec {
   name = "rofi-${version}";
-  version = "0.15.10";
+  version = "0.15.12";
 
   src = fetchurl {
     url = "https://github.com/DaveDavenport/rofi/archive/${version}.tar.gz";
-    sha256 = "0wwdc9dj8qfmqv4pcllq78h38hqmz9s3hqf71fsk71byiid69ln9";
+    sha256 = "112fgx2awsw1xf1983bmy3jvs33qwyi8qj7j59jqc4gx07nv1rp5";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libX11 libXinerama libXft pango
+  buildInputs = [ autoreconfHook pkgconfig libX11 libXinerama pango
                   cairo libstartup_notification
                 ] ++ stdenv.lib.optional i3Support i3;
-
-  preConfigure = ''
-    autoreconf -vif
-  '';
 
   meta = {
       description = "Window switcher, run dialog and dmenu replacement";

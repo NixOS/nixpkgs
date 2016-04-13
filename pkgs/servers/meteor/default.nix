@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace "@RPATH@" "${stdenv.cc.cc}/lib:${zlib}/lib" \
+      --replace "@RPATH@" "${stdenv.cc.cc}/lib:${zlib.out}/lib" \
       --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
     # Patch node.
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     for p in $devBundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib:${zlib}/lib" \
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib:${zlib.out}/lib" \
         $p
     done
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, tempita, jinja2, pyyaml, clepy, mock
+{ stdenv, fetchurl, buildPythonApplication, tempita, jinja2, pyyaml, clepy, mock
 , nose, decorator, docutils
 }:
 
@@ -11,7 +11,7 @@
 # pitz-shell is not the primary interface, so it is not critical to have it
 # working. Concider fixing pitz upstream.
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "pitz-1.2.4";
   namePrefix = "";
 

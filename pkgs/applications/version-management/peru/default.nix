@@ -4,7 +4,7 @@ let
   version = "0.2.3"; 
 in
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   
   # Do not prefix name with python specific version identifier.
   namePrefix = "";

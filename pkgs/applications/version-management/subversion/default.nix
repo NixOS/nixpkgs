@@ -17,14 +17,17 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha1 }: stdenv.mkDerivation (rec {
+  common = { version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
     name = "subversion-${version}";
 
     src = fetchurl {
       url = "mirror://apache/subversion/${name}.tar.bz2";
-      inherit sha1;
+      inherit sha256;
     };
+
+  # Can't do separate $lib and $bin, as libs reference bins
+  outputs = [ "dev" "out" "man" ];
 
     buildInputs = [ zlib apr aprutil sqlite ]
       ++ stdenv.lib.optional httpSupport serf
@@ -65,6 +68,12 @@ let
 
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
+
+    for f in $out/lib/*.la; do
+      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+      substituteInPlace $f --replace "${zlib.dev}/lib" "${zlib.out}/lib"
+      substituteInPlace $f --replace "${sqlite.dev}/lib" "${sqlite.out}/lib"
+    done
     '';
 
     inherit perlBindings pythonBindings;
@@ -89,12 +98,12 @@ in {
 
   subversion18 = common {
     version = "1.8.15";
-    sha1 = "680acf88f0db978fbbeac89ed63776d805b918ef";
+    sha256 = "0b68rjy1sjd66nqcswrm1bhda3vk2ngkgs6drcanmzbcd3vs366g";
   };
 
   subversion19 = common {
     version = "1.9.3";
-    sha1 = "27e8df191c92095f48314a415194ec37c682cbcf";
+    sha256 = "8bbf6bb125003d88ee1c22935a36b7b1ab7d957e0c8b5fbfe5cb6310b6e86ae0";
   };
 
 }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 , alsaLib, cairo, acl, gpm, AppKit, CoreWLAN, Kerberos, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
 , withGTK2 ? true, gtk2
+, enableTTYTrueColor ? false
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -31,8 +32,14 @@ stdenv.mkDerivation rec {
     sha256 = "0kn3rzm91qiswi0cql89kbv6mqn27rwsyjfb8xmwy9m5s8fxfiyx";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.isDarwin [
     ./at-fdcwd.patch
+  ] ++ lib.optionals enableTTYTrueColor [
+    # Modified TTY True Color patch from: https://gist.github.com/choppsv1/36aacdd696d505566088
+    # To use, pass --color=true-color, which will default to using ';'
+    # as the separator.
+    # Alternatively, set $EMACS_TRUE_COLOR_SEPARATOR to ';' or ':'.
+    ./tty-true-color.patch
   ];
 
   postPatch = ''
@@ -60,7 +67,7 @@ stdenv.mkDerivation rec {
              "--with-gif=no" "--with-tiff=no" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo}/include/cairo";
+    "-I${cairo.dev}/include/cairo";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/
@@ -76,11 +83,8 @@ stdenv.mkDerivation rec {
     description = "GNU Emacs 24, the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny ];
+    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny jwiegley ];
     platforms   = platforms.all;
-
-    # So that Exuberant ctags is preferred
-    priority = 1;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

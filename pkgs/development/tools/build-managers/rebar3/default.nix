@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, fetchHex, erlang, tree, fetchFromGitHub }:
+{ stdenv, writeText, callPackage, fetchurl,
+  fetchHex, erlang, hermeticRebar3 ? true, rebar3-nix-bootstrap, tree, fetchFromGitHub }:
 
 
 let
   version = "3.0.0-beta.4";
-  registrySnapshot = import ./registrySnapshot.nix { inherit fetchFromGitHub; };
-  setupRegistry = ''
-    mkdir -p _build/default/{lib,plugins,packages}/ ./.cache/rebar3/hex/default/
-    zcat ${registrySnapshot}/registry.ets.gz > .cache/rebar3/hex/default/registry
-  '';
+  registrySnapshot = callPackage ./registrySnapshot.nix { };
+
   # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
   # {erlware_commons,     "0.16.0"},
   erlware_commons = fetchHex {
@@ -69,27 +67,36 @@ let
     version = "0.2.0";
     sha256 = "03kiszlbgzscfd2ns7na6bzbfzmcqdb5cx3p6qy3657jk2fai332";
   };
+  # {eunit_formatters,    "0.2.0"}
+  rebar3_hex = fetchHex {
+    pkg = "rebar3_hex";
+    version = "1.12.0";
+    sha256 = "45467e93ae8d776c6038fdaeaffbc55d8f2f097f300a54dab9b81c6d1cf21f73";
+  };
 
 in
 stdenv.mkDerivation {
   name = "rebar3-${version}";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
     sha256 = "0px66scjdia9aaa5z36qzxb848r56m0k98g0bxw065a2narsh4xy";
   };
 
-  patches = [ ./hermetic-bootstrap.patch ];
+  patches = if hermeticRebar3 == true
+  then  [ ./hermetic-bootstrap.patch ./hermetic-rebar3.patch ]
+  else [];
 
-  buildInputs = [ erlang
-                  tree
-                ];
-  inherit setupRegistry;
+  buildInputs = [ erlang tree  ];
+  propagatedBuildInputs = [ registrySnapshot rebar3-nix-bootstrap ];
 
   postPatch = ''
     echo postPatch
-    ${setupRegistry}
+    rebar3-nix-bootstrap registry-only
+    echo "$ERL_LIBS"
     mkdir -p _build/default/lib/
+    mkdir -p _build/default/plugins
     cp --no-preserve=mode -R ${erlware_commons} _build/default/lib/erlware_commons
     cp --no-preserve=mode -R ${providers} _build/default/lib/providers
     cp --no-preserve=mode -R ${getopt} _build/default/lib/getopt
@@ -100,6 +107,7 @@ stdenv.mkDerivation {
     cp --no-preserve=mode -R ${eunit_formatters} _build/default/lib/eunit_formatters
     cp --no-preserve=mode -R ${relx} _build/default/lib/relx
     cp --no-preserve=mode -R ${ssl_verify_hostname} _build/default/lib/ssl_verify_hostname
+    cp --no-preserve=mode -R ${rebar3_hex} _build/default/plugins/rebar3_hex
   '';
 
   buildPhase = ''
@@ -112,7 +120,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/rebar/rebar3";
-    description = "rebar 3.0 is an Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases.";
+    description = "rebar 3.0 is an Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''
       rebar is a self-contained Erlang script, so it's easy to distribute or

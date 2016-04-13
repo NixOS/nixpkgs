@@ -10,8 +10,9 @@ with lib;
 
   options = {
     environment.unixODBCDrivers = mkOption {
+      type = types.listOf types.package;
       default = [];
-      example = literalExample "map (x : x.ini) (with pkgs.unixODBCDrivers; [ mysql psql psqlng ] )";
+      example = literalExample "with pkgs.unixODBCDrivers; [ mysql psql psqlng ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
         <filename>/etc/odbcinst.ini</filename>.  You may also want to
@@ -26,7 +27,7 @@ with lib;
   config = mkIf (config.environment.unixODBCDrivers != []) {
 
     environment.etc."odbcinst.ini".text =
-      let inis = config.environment.unixODBCDrivers;
+      let inis = map (x : x.ini) config.environment.unixODBCDrivers;
       in lib.concatStringsSep "\n" inis;
 
   };

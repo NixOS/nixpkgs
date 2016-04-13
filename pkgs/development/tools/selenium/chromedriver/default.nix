@@ -8,12 +8,12 @@ assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   product = "chromedriver_linux64";
-  name = "${product}-2.14";
-  version = "2.14";
+  name = "${product}-2.21";
+  version = "2.21";
 
   src = fetchurl {
     url = "http://chromedriver.storage.googleapis.com/${version}/${product}.zip";
-    sha256 = "18kpky1v5pc3fv6kv9i2mf4wr4qicmfhf27h9zqy18gh16rlwrin";
+    sha256 = "1fhwvqjwqkfm18icacvk0312ii8hf1p03icd3isfcxp7j69qf2wg";
   };
 
   buildInputs = [ unzip makeWrapper ];
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv chromedriver $out/bin
-    patchelf --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" \
-      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64:${cairo}/lib:${fontconfig}/lib:${freetype}/lib:${gdk_pixbuf}/lib:${glib}/lib:${gtk}/lib:${libX11}/lib:${nspr}/lib:${nss}/lib:${pango}/lib:${libXrender}/lib:${gconf}/lib:${libXext}/lib:${libXi}/lib:\$LD_LIBRARY_PATH"
+      --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.cc}/nix-support/orig-cc)/lib64:${stdenv.lib.makeLibraryPath [ cairo fontconfig freetype gdk_pixbuf glib gtk libX11 nspr nss pango libXrender gconf libXext libXi ]}:\$LD_LIBRARY_PATH"
   '';
 
   meta = with stdenv.lib; {

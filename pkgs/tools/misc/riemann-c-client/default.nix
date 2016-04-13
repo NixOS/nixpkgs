@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, file
-, protobufc }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file , protobufc }:
 
 stdenv.mkDerivation rec {
   name = "riemann-c-client-${version}";
@@ -13,9 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jc2bbw7sp2gr4cswx78srs0p1kp81prcarq4ivqpfw4bmzg6xg4";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig file protobufc ];
-
-  preConfigure = "autoreconf -i";
+  buildInputs = [ autoreconfHook pkgconfig file protobufc ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/algernon/riemann-c-client;

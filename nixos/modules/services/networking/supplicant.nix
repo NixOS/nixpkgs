@@ -115,7 +115,7 @@ in
 
           path = mkOption {
             type = types.path;
-            example = "/etc/wpa_supplicant.conf";
+            example = literalExample "/etc/wpa_supplicant.conf";
             description = ''
               External <literal>wpa_supplicant.conf</literal> configuration file.
               The configuration options defined declaratively within <literal>networking.supplicant</literal> have

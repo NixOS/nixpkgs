@@ -18,14 +18,9 @@
 }:
 
 let
-  src = fetch "llvm" "0lrirklh4nrcb078qc2f6vbmmc34kxqgsy9s18a1xbfdkmgqjidb";
+  src = fetch "llvm" "1masakdp9g2dan1yrazg7md5am2vacbkb3nahb3dchpc1knr8xxy";
 in stdenv.mkDerivation rec {
   name = "llvm-${version}";
-
-  patches = [
-    # Backport for Rust, remove when 3.7.1 is released
-    ./r242372-fix-LLVMBuildLandingPad.patch
-  ];
 
   unpackPhase = ''
     unpackFile ${src}
@@ -60,6 +55,8 @@ in stdenv.mkDerivation rec {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ];
+
+  NIX_LDFLAGS = "-lpthread"; # no idea what's the problem
 
   postBuild = ''
     rm -fR $out

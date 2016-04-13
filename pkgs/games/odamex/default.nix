@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "odamex-0.7.0";
   src = fetchurl {
-    url = http://downloads.sourceforge.net/odamex/odamex-src-0.7.0.tar.bz2;
+    url = mirror://sourceforge/odamex/odamex-src-0.7.0.tar.bz2;
     sha256 = "0cb6p58yv55kdyfj7s9n9xcwpvxrj8nyc6brw9jvwlc5n4y3cd5a";
   };
 

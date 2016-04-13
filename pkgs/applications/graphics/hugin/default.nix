@@ -1,23 +1,25 @@
-{ stdenv, cmake, fetchurl, gnumake, pkgconfig
+{ stdenv, cmake, fetchurl, gnumake, pkgconfig, makeWrapper
 , boost, gettext, tclap, wxGTK
-, freeglut, glew, libXi, libXmu, mesa
-, autopanosiftc, enblend-enfuse, exiv2, ilmbase, lensfun, libpng, libtiff
-, openexr, panotools, perlPackages
+, freeglut, glew, libX11, libXi, libXmu, mesa, cairo
+, autopanosiftc, enblend-enfuse, exiv2, fftw, ilmbase, lensfun, libpng, libtiff
+, openexr, panotools, perlPackages, sqlite, vigra
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2013.0.0";
+  name = "hugin-2015.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "1mgbvg09xvf0zcm9jfv5lb65nd292l86ffa23yp4pzm6izaiwkj8";
+    sha256 = "1gfblax9rxay8xskz5r8bips4nfh70vkyrb8ksgl6pg91c8krn9c";
   };
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
   buildInputs = [ boost gettext tclap wxGTK
-                  freeglut glew libXi libXmu mesa
-                  exiv2 ilmbase lensfun libtiff libpng openexr panotools
+                  freeglut glew libX11 libXi libXmu mesa cairo
+                  exiv2 fftw ilmbase lensfun libtiff libpng openexr panotools
+                  sqlite vigra
+                  perlPackages.ImageExifTool makeWrapper
                 ];
 
   # disable installation of the python scripting interface
@@ -27,22 +29,21 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # commandline tools needed by the hugin batch processor
-  # you may have to tell hugin (in the preferences) where these binaries reside
-  propagatedUserEnvPackages = [ autopanosiftc enblend-enfuse gnumake
-                                perlPackages.ImageExifTool
-                              ];
-
   postInstall = ''
-    mkdir -p "$out/nix-support"
-    echo $propagatedUserEnvPackages > $out/nix-support/propagated-user-env-packages
+    for p in $out/bin/*; do
+      wrapProgram "$p" \
+        --suffix PATH : ${autopanosiftc}/bin \
+        --suffix PATH : ${enblend-enfuse}/bin \
+        --suffix PATH : ${gnumake}/bin \
+        --suffix PATH : ${perlPackages.ImageExifTool}/bin
+    done
   '';
 
   meta = {
     homepage = http://hugin.sourceforge.net/;
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric hrdinka ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

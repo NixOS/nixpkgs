@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/lib/liboauth.la \
-      --replace "-lnss3" "-L${nss}/lib -lnss3"
+      --replace "-lnss3" "-L${nss.out}/lib -lnss3"
   '';
 
   meta = with stdenv.lib; {

@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "1pkkid657zgjymwxv3fm32cxnq9llfz29rl15vp6mn42vnzbj1di";
   };
 
-  buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
+  buildInputs =
+    [ pkgconfig glib ]
+    ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
   postInstall = ''
     mkdir -p "$out/share/doc/${name}"

@@ -81,6 +81,8 @@ appleDerivation {
     export HOST_CODESIGN='echo dummy_codesign'
     export HOST_CODESIGN_ALLOCATE=echo
 
+    export BUILT_PRODUCTS_DIR=.
+
     export DSTROOT=$out
     make installhdrs
 

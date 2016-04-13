@@ -2,15 +2,16 @@
 , gd, geoip
 , withStream ? false
 , modules ? []
+, hardening ? true
 }:
 
 with stdenv.lib;
 
 let
-  version = "1.9.9";
+  version = "1.9.14";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "0wwd0q00pnkw4gjn3izjr63sndp7piyc5k5mbjm369f824mvnrny";
+    sha256 = "1ljpyigqb6sbm4f8mi4fyvwfcvfapzg4z35s9cwb9ri8dl3r6j1b";
   };
 
 in
@@ -49,9 +50,16 @@ stdenv.mkDerivation rec {
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
-  preConfigure = concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules)
+    + optionalString (hardening && (stdenv.cc.cc.isGNU or false)) ''
+      configureFlagsArray=(
+        --with-cc-opt="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+        --with-ld-opt="-pie -Wl,-z,relro,-z,now"
+      )
+    ''
+    ;
 
   postInstall = ''
     mv $out/sbin $out/bin

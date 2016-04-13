@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "httpie-0.9.2";
   namePrefix = "";
 

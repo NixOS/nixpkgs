@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "lxappearance-0.6.1";
   src = fetchurl{
-    url = "http://downloads.sourceforge.net/project/lxde/LXAppearance/${name}.tar.xz";
+    url = "mirror://sourceforge/project/lxde/LXAppearance/${name}.tar.xz";
     sha256 = "1phnv1b2jdj2vlibjyc9z01izcf3k5zxj8glsaf0i3vh77zqmqq9";
   };
   buildInputs = [ intltool libX11 pkgconfig gtk ];

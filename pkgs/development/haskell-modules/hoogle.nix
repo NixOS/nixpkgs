@@ -23,13 +23,34 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, hoogle, rehoo
+{ lib, stdenv, hoogle, rehoo, writeText
 , ghc, packages ? [ ghc.ghc ]
 }:
 
 let
   inherit (stdenv.lib) optional;
   wrapper = ./hoogle-local-wrapper.sh;
+  isGhcjs = ghc.isGhcjs or false;
+  opts = lib.optionalString;
+  haddockExe =
+    if !isGhcjs
+    then "haddock"
+    else "haddock-ghcjs";
+  ghcName =
+    if !isGhcjs
+    then "ghc"
+    else "ghcjs";
+  docLibGlob =
+    if !isGhcjs
+    then ''share/doc/ghc*/html/libraries''
+    else ''doc/lib'';
+  # On GHCJS, use a stripped down version of GHC's prologue.txt
+  prologue =
+    if !isGhcjs
+    then "${ghc}/${docLibGlob}/prologue.txt"
+    else writeText "ghcjs-prologue.txt" ''
+      This index includes documentation for many Haskell modules.
+    '';
 in
 stdenv.mkDerivation {
   name = "hoogle-local-0.1";
@@ -58,17 +79,19 @@ stdenv.mkDerivation {
     }
 
     echo importing builtin packages
-    for docdir in ${ghc}/share/doc/ghc*/html/libraries/*; do
+    for docdir in ${ghc}/${docLibGlob}/*; do
+      name="$(basename $docdir)"
+      ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
         import_dbs $docdir
-        ln -sfn $docdir $out/share/doc/hoogle
+        ln -sfn $docdir $out/share/doc/hoogle/$name
       fi
     done
 
     echo importing other packages
     for i in $docPackages; do
       if [[ ! $i == $out ]]; then
-        for docdir in $i/share/doc/*-ghc-*/* $i/share/doc/*; do
+        for docdir in $i/share/doc/*-${ghcName}-*/* $i/share/doc/*; do
           name=`basename $docdir`
           docdir=$docdir/html
           if [[ -d $docdir ]]; then
@@ -99,9 +122,9 @@ stdenv.mkDerivation {
         args="$args --read-interface=$name_version,$hdfile"
     done
 
-    ${ghc}/bin/haddock --gen-index --gen-contents -o . \
+    ${ghc}/bin/${haddockExe} --gen-index --gen-contents -o . \
          -t "Haskell Hierarchical Libraries" \
-         -p ${ghc}/share/doc/ghc*/html/libraries/prologue.txt \
+         -p ${prologue} \
          $args
 
     echo finishing up

@@ -1,38 +1,37 @@
-{ stdenv, fetchgit, python, asciidoc, xmlto, pysqlite, makeWrapper }:
+{ stdenv, fetchgit
+, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, makeWrapper, xmlto
+, pythonPackages }:
 
-let
-  version = "3.20110902";
-in
-stdenv.mkDerivation {
-  name = "git-bz";
+stdenv.mkDerivation rec {
+  name = "git-bz-${version}";
+  version = "3.2015-09-08";
 
   src = fetchgit {
+    sha256 = "19d9c81d4eeabe87079d8f60e4cfa7303f776f5a7c9874642cf2bd188851d029";
+    rev = "e17bbae7a2ce454d9f69c32fc40066995d44913d";
     url = "git://git.fishsoup.net/git-bz";
-    rev = "refs/heads/master";
   };
 
-  buildInputs = [
-    makeWrapper python pysqlite # asciidoc xmlto
+  nativeBuildInputs = [
+    asciidoc docbook_xml_dtd_45 docbook_xsl libxslt makeWrapper xmlto
   ];
+  buildInputs = []
+    ++ (with pythonPackages; [ python pysqlite ]);
 
-  buildPhase = ''
-    true
-    # make git-bz.1
+  postPatch = ''
+    patchShebangs configure
+
+    # Don't create a .html copy of the man page that isn't installed anyway:
+    substituteInPlace Makefile --replace "git-bz.html" ""
   '';
 
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/bin
-    cp git-bz $out/bin
+  postInstall = ''
     wrapProgram $out/bin/git-bz \
-      --prefix PYTHONPATH : "$(toPythonPath $python):$(toPythonPath $pysqlite)"
+      --prefix PYTHONPATH : "$(toPythonPath "${pythonPackages.pysqlite}")"
   '';
 
-  meta = {
-    homepage = "http://git.fishsoup.net/cgit/git-bz/";
-    description = "integration of git with Bugzilla";
-    license = stdenv.lib.licenses.gpl2;
-
+  meta = with stdenv.lib; {
+    description = "Bugzilla integration for git";
     longDescription = ''
       git-bz is a tool for integrating the Git command line with the
       Bugzilla bug-tracking system. Operations such as attaching patches to
@@ -46,9 +45,10 @@ stdenv.mkDerivation {
       currently is able to do this for Firefox, Epiphany, Galeon and
       Chromium on Linux.
     '';
+    license = licenses.gpl2Plus;
+    homepage = http://git.fishsoup.net/cgit/git-bz/;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.pierron ];
-    broken = true;
+    maintainers = with maintainers; [ nckx ];
+    platforms = platforms.linux;
   };
 }

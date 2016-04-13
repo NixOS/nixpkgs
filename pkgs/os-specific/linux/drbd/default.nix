@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, udev, perl }:
+{ stdenv, fetchurl, flex, systemd, perl }:
 
 assert stdenv.isLinux;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export PATH=${udev}/sbin:$PATH
+      export PATH=${systemd.udev.bin}/sbin:$PATH
       substituteInPlace user/Makefile.in --replace /sbin/ $out/sbin/
       substituteInPlace user/legacy/Makefile.in \
         --replace /sbin/ $out/sbin/ \
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "SHELL=${stdenv.shell}";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d DESTDIR=$(out)";
 
   meta = {
     homepage = http://www.drbd.org/;

@@ -38,6 +38,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.couchdb;
+        defaultText = "pkgs.couchdb";
         example = literalExample "pkgs.couchdb";
         description = ''
           CouchDB package to use.

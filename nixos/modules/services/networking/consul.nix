@@ -33,6 +33,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
+        defaultText = "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';
@@ -118,6 +119,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
+          defaultText = "pkgs.consul-alerts";
           type = types.package;
         };
 

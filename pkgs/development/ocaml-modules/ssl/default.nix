@@ -2,15 +2,16 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.4.7";
+  version = "0.5.2";
 in
 
 stdenv.mkDerivation {
   name = "ocaml-ssl-${version}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/o/ocaml-ssl/ocaml-ssl_${version}.orig.tar.gz";
-    sha256 = "0i0j89b10n3xmmawcq4qfwa42133pddw4x5nysmsnpd15srv5gp9";
+  url = "mirror://sourceforge/project/savonet/ocaml-ssl/0.5.2/ocaml-ssl-0.5.2.tar.gz";
+
+    sha256 = "0341rm8aqrckmhag1lrqfnl17v6n4ci8ibda62ahkkn5cxd58cpp";
   };
 
   buildInputs = [which ocaml findlib];
@@ -19,15 +20,13 @@ stdenv.mkDerivation {
 
   dontAddPrefix = true;
 
-  configureFlags = "--disable-ldconf";
-
   createFindlibDestdir = true;
 
   meta = {
     homepage = http://savonet.rastageeks.org/;
     description = "OCaml bindings for libssl ";
     license = "LGPL+link exception";
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];

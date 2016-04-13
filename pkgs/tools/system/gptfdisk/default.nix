@@ -1,8 +1,8 @@
 { fetchurl, stdenv, libuuid, popt, icu, ncurses }:
 
-let version = "1.0.1"; in
 stdenv.mkDerivation rec {
   name = "gptfdisk-${version}";
+  version = "1.0.1";
 
   src = fetchurl {
     # http://www.rodsbooks.com/gdisk/${name}.tar.gz also works, but the home
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.mac --replace \
       " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
     substituteInPlace Makefile.mac --replace \
-      "/opt/local/lib/libncurses.a" "${ncurses}/lib/libncurses.dylib"
+      "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
   '';
 
   buildPhase = stdenv.lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = http://www.rodsbooks.com/gdisk/;

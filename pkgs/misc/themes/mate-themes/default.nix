@@ -15,6 +15,5 @@ stdenv.mkDerivation {
     homepage = "http://mate-desktop.org";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ iyzsong ];
   };
 }

@@ -47,6 +47,7 @@
       #floppy = 18; # unused
       #uucp = 19; # unused
       #lp = 20; # unused
+      #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID
       gpsd = 23;
       #cdrom = 24; # unused
@@ -176,7 +177,6 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
-      dnscrypt-proxy = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -240,6 +240,27 @@
       pumpio = 216;
       nm-openvpn = 217;
       mathics = 218;
+      ejabberd = 219;
+      postsrsd = 220;
+      opendkim = 221;
+      dspam = 222;
+      gale = 223;
+      matrix-synapse = 224;
+      rspamd = 225;
+      rmilter = 226;
+      cfdyndns = 227;
+      gammu-smsd = 228;
+      pdnsd = 229;
+      octoprint = 230;
+      avahi-autoipd = 231;
+      nntp-proxy = 232;
+      mjpg-streamer = 233;
+      radicale = 234;
+      hydra-queue-runner = 235;
+      hydra-www = 236;
+      syncthing = 237;
+      mfi = 238;
+      caddy = 239;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -269,6 +290,7 @@
       floppy = 18;
       uucp = 19;
       lp = 20;
+      proc = 21;
       pulseaudio = 22; # must match `pulseaudio' UID
       gpsd = 23;
       cdrom = 24;
@@ -396,7 +418,6 @@
       seeks = 148;
       prosody = 149;
       i2pd = 150;
-      dnscrypt-proxy = 151;
       systemd-network = 152;
       systemd-resolve = 153;
       systemd-timesync = 154;
@@ -457,6 +478,21 @@
       pumpio = 216;
       nm-openvpn = 217;
       mathics = 218;
+      ejabberd = 219;
+      postsrsd = 220;
+      opendkim = 221;
+      dspam = 222;
+      gale = 223;
+      matrix-synapse = 224;
+      rspamd = 225;
+      rmilter = 226;
+      cfdyndns = 227;
+      pdnsd = 229;
+      octoprint = 230;
+      radicale = 234;
+      syncthing = 237;
+      #mfi = 238; # unused
+      caddy = 239;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

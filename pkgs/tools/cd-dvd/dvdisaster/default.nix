@@ -3,9 +3,9 @@
 , enableSoftening ? true
 }:
 
-let version = "0.79.5"; in
 stdenv.mkDerivation rec {
   name = "dvdisaster-${version}";
+  version = "0.79.5";
 
   src = fetchurl {
     url = "http://dvdisaster.net/downloads/${name}.tar.bz2";
@@ -33,7 +33,8 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (builtins.elem stdenv.system
       stdenv.lib.platforms.x86_64) "--with-sse2=yes";
 
-  enableParallelBuilding = true;
+  # fatal error: inlined-icons.h: No such file or directory
+  enableParallelBuilding = false;
 
   doCheck = true;
   checkPhase = ''
@@ -70,7 +71,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     homepage = http://dvdisaster.net/;
     description = "Data loss/scratch/aging protection for CD/DVD media";
     longDescription = ''

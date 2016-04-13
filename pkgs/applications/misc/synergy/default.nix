@@ -5,13 +5,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
-    owner = "synergy";
+    owner = "symless";
     repo = "synergy";
     rev = "v${version}-stable";
-    sha256 = "0pxj0qpnsaffpaxik8vc5rjfinmx8ab3b2lssrxkfbs7isskvs33";
+    sha256 = "02zv8m7yagx80wi7m0ckglfqjqyrj6rd1gywxzqzl6841scmf87n";
   };
 
   postPatch = ''

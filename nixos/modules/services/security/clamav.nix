@@ -16,6 +16,7 @@ let
 
     ${cfg.daemon.extraConfig}
   '';
+  pkg = pkgs.clamav.override { freshclamConf = cfg.updater.config; };
 in
 {
   options = {
@@ -54,7 +55,7 @@ in
   };
 
   config = mkIf cfg.updater.enable or cfg.daemon.enable {
-    environment.systemPackages = [ pkgs.clamav ];
+    environment.systemPackages = [ pkg ];
     users.extraUsers = singleton {
       name = clamavUser;
       uid = config.ids.uids.clamav;
@@ -76,7 +77,7 @@ in
 
     systemd.services.clamd = mkIf cfg.daemon.enable {
       description = "ClamAV daemon (clamd)";
-      path = [ pkgs.clamav ];
+      path = [ pkg ];
       after = [ "network.target" "freshclam.service" ];
       requires = [ "freshclam.service" ];
       wantedBy = [ "multi-user.target" ];
@@ -87,7 +88,7 @@ in
         chown ${clamavUser}:${clamavGroup} ${runDir}
       '';
       serviceConfig = {
-        ExecStart = "${pkgs.clamav}/bin/clamd --config-file=${clamdConfigFile}";
+        ExecStart = "${pkg}/bin/clamd --config-file=${clamdConfigFile}";
         Type = "forking";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
@@ -100,13 +101,13 @@ in
       description = "ClamAV updater (freshclam)";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.clamav ];
+      path = [ pkg ];
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
         chown ${clamavUser}:${clamavGroup} ${stateDir}
       '';
       serviceConfig = {
-        ExecStart = "${pkgs.clamav}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
+        ExecStart = "${pkg}/bin/freshclam --daemon --config-file=${pkgs.writeText "freshclam.conf" cfg.updater.config}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
         RestartSec = "10s";

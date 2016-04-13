@@ -33,6 +33,6 @@ stdenv.mkDerivation {
     homepage = "http://jena.apache.org";
     downloadPage = "http://archive.apache.org/dist/jena/binaries/";
     updateWalker = true;
-    downloadURLRegex = "apache-jena-.*[.]tar[.]gz\$";
+    downloadURLRegexp = "apache-jena-.*[.]tar[.]gz\$";
   };
 }

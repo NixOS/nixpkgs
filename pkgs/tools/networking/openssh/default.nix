@@ -2,11 +2,13 @@
 , etcDir ? null
 , hpnSupport ? false
 , withKerberos ? false
-, withGssapiPatches ? withKerberos
+, withGssapiPatches ? false
 , kerberos
+, linkOpenssl? true
 }:
 
 assert withKerberos -> kerberos != null;
+assert withGssapiPatches -> withKerberos;
 
 let
 
@@ -16,18 +18,20 @@ let
   };
 
   gssapiSrc = fetchpatch {
-    url = "http://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?h=debian/6.9p1-3";
-    sha256 = "03zlgkb3a1igj20kn8cz55ggaxg65h6f0kg20m39m0wsb94qjdb1";
+    url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian/patches/gssapi.patch?id=46961f5704f8e86cea3e99253faad55aef4d8f35";
+    sha256 = "01mf2vx1gavypbdx06mcbmcrkm2smff0h3jfmr61k6h6j3xk88y5";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "openssh-6.9p1";
+  # Please ensure that openssh_with_kerberos still builds when
+  # bumping the version here!
+  name = "openssh-7.2p2";
 
   src = fetchurl {
     url = "mirror://openbsd/OpenSSH/portable/${name}.tar.gz";
-    sha256 = "1zkci5nbpb4frmzj2vr3kv9j47x2h72kvybcpr0d8mzk73sls1vf";
+    sha256 = "132lh9aanb0wkisji1d6cmsxi520m8nh7c7i9wi6m1s3l38q29x7";
   };
 
   prePatch = optionalString hpnSupport
@@ -36,7 +40,10 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ./openssh-6.9p1-security-7.0.patch ]
+  patches =
+    [ ./locale_archive.patch
+      ./fix-host-key-algorithms-plus.patch
+    ]
     ++ optional withGssapiPatches gssapiSrc;
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
@@ -45,6 +52,7 @@ stdenv.mkDerivation rec {
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
   configureFlags = [
+    "--sbindir=\${out}/bin"
     "--localstatedir=/var"
     "--with-pid-dir=/run"
     "--with-mantype=man"
@@ -53,7 +61,8 @@ stdenv.mkDerivation rec {
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ optional withKerberos "--with-kerberos5=${kerberos}"
-    ++ optional stdenv.isDarwin "--disable-libutil";
+    ++ optional stdenv.isDarwin "--disable-libutil"
+    ++ optional (!linkOpenssl) "--without-openssl";
 
   preConfigure = ''
     configureFlagsArray+=("--with-privsep-path=$out/empty")
@@ -75,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.org/";
+    homepage = "http://www.openssh.com/";
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;

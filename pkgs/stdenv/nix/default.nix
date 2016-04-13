@@ -5,7 +5,8 @@ import ../generic rec {
 
   preHook =
     ''
-      export NIX_ENFORCE_PURITY=1
+      export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+      export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
       export NIX_IGNORE_LD_THROUGH_GCC=1
     '';
 
@@ -18,10 +19,9 @@ import ../generic rec {
     nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
-    binutils = pkgs.binutils;
+    inherit (pkgs) binutils coreutils gnugrep;
     cc = pkgs.gcc.cc;
     isGNU = true;
-    coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };
 

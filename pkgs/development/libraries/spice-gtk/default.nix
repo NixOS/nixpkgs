@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, spice_protocol, intltool, celt_0_5_1
 , openssl, libpulseaudio, pixman, gobjectIntrospection, libjpeg_turbo, zlib
-, cyrus_sasl, python, pygtk, autoconf, automake, libtool, usbredir, libsoup
+, cyrus_sasl, python, pygtk, autoreconfHook, usbredir, libsoup
 , gtk3, enableGTK3 ? false }:
 
 with stdenv.lib;
@@ -18,14 +18,16 @@ stdenv.mkDerivation rec {
     libjpeg_turbo zlib cyrus_sasl python pygtk usbredir
   ] ++ (if enableGTK3 then [ gtk3 ] else [ gtk ]);
 
-  nativeBuildInputs = [ pkgconfig intltool libtool libsoup autoconf automake ];
+  nativeBuildInputs = [ pkgconfig intltool libsoup autoreconfHook ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
-  preConfigure = ''
+  preAutoreconf = ''
     substituteInPlace src/Makefile.am \
-      --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
-    autoreconf -v --force --install
+          --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
+  '';
+
+  preConfigure = ''
     intltoolize -f
   '';
 

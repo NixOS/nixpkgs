@@ -90,7 +90,7 @@ for (my $i = 0; $i < scalar(@packagesFiles); $i++) {
 }
 
 my %provides;
-PKG: foreach my $pkgName (keys %pkgs) {
+PKG: foreach my $pkgName (sort(keys %pkgs)) {
     #print STDERR "looking at $pkgName\n";
     my $pkg = $pkgs{$pkgName};
 

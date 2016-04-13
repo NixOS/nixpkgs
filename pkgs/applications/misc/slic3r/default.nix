@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     EncodeLocale MathClipper ExtUtilsXSpp threads
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
-    ExtUtilsMakeMaker OpenGL WxGLCanvas
+    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild
   ];
 
   desktopItem = makeDesktopItem {

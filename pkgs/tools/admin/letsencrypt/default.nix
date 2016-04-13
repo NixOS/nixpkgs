@@ -1,22 +1,36 @@
-{ stdenv, pythonPackages, fetchurl, dialog }:
+{ stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
-pythonPackages.buildPythonPackage rec {
-  version = "0.1.0";
+pythonPackages.buildPythonApplication rec {
   name = "letsencrypt-${version}";
+  version = "0.4.0";
 
-  src = fetchurl {
-    url = "https://github.com/letsencrypt/letsencrypt/archive/v${version}.tar.gz";
-    sha256 = "056y5bsmpc4ya5xxals4ypzsm927j6n5kwby3bjc03sy3sscf6hw";
+  src = fetchFromGitHub {
+    owner = "letsencrypt";
+    repo = "letsencrypt";
+    rev = "v${version}";
+    sha256 = "0r2wis48w5nailzp2d5brkh2f40al6sbz816xx0akh3ll0rl1hbv";
   };
 
   propagatedBuildInputs = with pythonPackages; [
-    zope_interface zope_component six requests2 pytz pyopenssl psutil mock acme
-    cryptography configobj pyRFC3339 python2-pythondialog parsedatetime ConfigArgParse
+    ConfigArgParse
+    acme
+    configobj
+    cryptography
+    parsedatetime
+    psutil
+    pyRFC3339
+    pyopenssl
+    python2-pythondialog
+    pytz
+    six
+    zope_component
+    zope_interface
   ];
   buildInputs = with pythonPackages; [ nose dialog ];
 
   patchPhase = ''
     substituteInPlace letsencrypt/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
+    substituteInPlace letsencrypt/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
   '';
 
   postInstall = ''

@@ -24,22 +24,22 @@
 
 stdenv.mkDerivation rec {
   name = "citrix-receiver-${version}";
-  version = "13.2.1";
-  homepage = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-1321.html;
+  version = "13.3.0";
+  homepage = https://www.citrix.com/downloads/citrix-receiver/linux/receiver-for-linux-latest.html;
 
   prefixWithBitness = if stdenv.is64bit then "linuxx64" else "linuxx86";
 
   src = requireFile rec {
-    name = "${prefixWithBitness}-${version}.328635.tar.gz";
+    name = "${prefixWithBitness}-${version}.344519.tar.gz";
     sha256 =
       if stdenv.is64bit
-      then "3a11d663b1a11cc4ebb3e3595405d520ec279e1330462645c53edd5cc79d9ca0"
-      else "0yjw8q8mh4adns2i04m4p273vb4ifakixal7yi3hnbg43b36wfaw";
+      then "11l0s4f1si43qlxai053ps4nks7v4bahipsmcdpnrdzq0vps17ls"
+      else "0sbgkb9a3ss2n08lal7qk8pmxyqbvkm7jj7l995ddjaa6jbkr3fz";
     message = ''
       In order to use Citrix Receiver, you need to comply with the Citrix EULA and download
       the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
 
-      ${homepage}#ctx-dl-eula
+      ${homepage}
 
       Once you have downloaded the file, please use the following command and re-run the
       installation:
@@ -121,9 +121,14 @@ stdenv.mkDerivation rec {
     find $ICAInstDir -type f -exec file {} \; |
       grep 'ELF.*executable' |
       cut -f 1 -d : |
-      xargs -t -n 1 patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$ICAInstDir:$libPath"
+      while read f
+      do
+        echo "Patching ELF intrepreter and rpath for $f"
+        chmod u+w "$f"
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-rpath "$ICAInstDir:$libPath" "$f"
+      done
 
     echo "Wrapping wfica..."
     mkdir "$out/bin"

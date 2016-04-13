@@ -11,6 +11,15 @@ rec {
 
   qemu = pkgs.qemu_kvm;
 
+  qemu-220 = lib.overrideDerivation pkgs.qemu_kvm (attrs: rec {
+    version = "2.2.0";
+    src = fetchurl {
+      url = "http://wiki.qemu.org/download/qemu-${version}.tar.bz2";
+      sha256 = "1703c3scl5n07gmpilg7g2xzyxnr7jczxgx6nn4m8kv9gin9p35n";
+    };
+    patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
+  });
+
   qemuProg = "${qemu}/bin/qemu-kvm";
 
 
@@ -31,9 +40,9 @@ rec {
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
-      cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/ld-linux*.so.? $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc.out}/lib/libm.so.* $out/lib
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* $out/bin
@@ -57,6 +66,7 @@ rec {
       mknod -m 666 ${dev}/random  c 1 8
       mknod -m 666 ${dev}/urandom c 1 9
       mknod -m 666 ${dev}/tty     c 5 0
+      mknod -m 666 ${dev}/ttyS0   c 4 64
       mknod ${dev}/rtc     c 254 0
       . /sys/class/block/${hd}/uevent
       mknod ${dev}/${hd} b $MAJOR $MINOR
@@ -199,7 +209,7 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${bash}/bin/sh
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/ttyS0 &> /dev/ttyS0
     fi
   '';
 
@@ -210,7 +220,7 @@ rec {
       -nographic -no-reboot \
       -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
       -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-      -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
+      -drive file=$diskImage,if=virtio,cache=unsafe,werror=report \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
@@ -404,12 +414,12 @@ rec {
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name preInstall postInstall rpms;
-      memSize = 512;
+      inherit name preInstall postInstall rpms QEMU_OPTS memSize;
       preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
@@ -574,7 +584,7 @@ rec {
       buildCommand = ''
         ${createRootFS}
 
-        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc}/bin:${lzma}/bin
+        PATH=$PATH:${dpkg}/bin:${dpkg}/bin:${glibc.bin}/bin:${lzma.bin}/bin
 
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
@@ -675,10 +685,11 @@ rec {
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512
     , unifiedSystemDir ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir;
+      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir QEMU_OPTS memSize;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
@@ -1770,22 +1781,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.2-jessie-i386";
-      fullName = "Debian 8.2 Jessie (i386)";
+      name = "debian-8.4-jessie-i386";
+      fullName = "Debian 8.4 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "f7eda33a296d792d467b84ba608a33f00ff249cb9a385c005586925645d83778";
+        sha256 = "1j8swc1nzsi20vbcmya2sv0fzcnz7lhwb32lxabgcwm3xlkzlg58";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.2-jessie-amd64";
-      fullName = "Debian 8.2 Jessie (amd64)";
+      name = "debian-8.4-jessie-amd64";
+      fullName = "Debian 8.4 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "ff1b82b4c767769e594fd482de4ef8f70bce8e9f01fa8ef2d6952def0b071ba0";
+        sha256 = "0kipisyjkhczghzqj4a8y1n4az9c4c8lsj8sw7js13b053lpj6ga";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

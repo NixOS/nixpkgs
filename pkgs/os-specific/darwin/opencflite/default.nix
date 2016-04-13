@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--with-uuid=${libuuid}" ];
-  buildInputs = [ icu tzdata.lib ];
+  buildInputs = [ icu tzdata.dev ];
   enableParallelBuilding = true;
 
   meta = {

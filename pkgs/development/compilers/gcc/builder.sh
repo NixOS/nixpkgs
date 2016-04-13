@@ -8,8 +8,9 @@ mkdir $NIX_FIXINC_DUMMY
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS=""
+    EXTRA_LDFLAGS="-Wl,-rpath,$lib/lib"
 fi
+
 
 # GCC interprets empty paths as ".", which we don't want.
 if test -z "$CPATH"; then unset CPATH; fi
@@ -24,12 +25,12 @@ if test "$noSysDirs" = "1"; then
         # Figure out what extra flags to pass to the gcc compilers
         # being generated to make sure that they use our glibc.
         extraFlags="$(cat $NIX_CC/nix-support/libc-cflags)"
-        extraLDFlags="$(cat $NIX_CC/nix-support/libc-ldflags) $(cat $NIX_CC/nix-support/libc-ldflags-before)"
+        extraLDFlags="$(cat $NIX_CC/nix-support/libc-ldflags) $(cat $NIX_CC/nix-support/libc-ldflags-before || true)"
 
         # Use *real* header files, otherwise a limits.h is generated
         # that does not include Glibc's limits.h (notably missing
         # SSIZE_MAX, which breaks the build).
-        export NIX_FIXINC_DUMMY=$(cat $NIX_CC/nix-support/orig-libc)/include
+        export NIX_FIXINC_DUMMY=$libc_dev/include
 
         # The path to the Glibc binaries such as `crti.o'.
         glibc_libdir="$(cat $NIX_CC/nix-support/orig-libc)/lib"
@@ -171,9 +172,8 @@ preConfigure() {
         # Patch the configure script so it finds glibc headers.  It's
         # important for example in order not to get libssp built,
         # because its functionality is in glibc already.
-        glibc_headers="$(cat $NIX_CC/nix-support/orig-libc)/include"
         sed -i \
-            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$glibc_headers", \
+            -e "s,glibc_header_dir=/usr/include,glibc_header_dir=$libc_dev/include", \
             gcc/configure
     fi
 
@@ -210,9 +210,15 @@ preInstall() {
 
 
 postInstall() {
-    # Remove precompiled headers for now.  They are very big and
-    # probably not very useful yet.
-    find $out/include -name "*.gch" -exec rm -rf {} \; -prune
+    # Move runtime libraries to $lib.
+    moveToOutput "lib/lib*.so*" "$lib"
+    moveToOutput "lib/lib*.la"  "$lib"
+    ln -s lib "$lib/lib64" # for *.la
+    moveToOutput "share/gcc-*/python" "$lib"
+
+    for i in "$lib"/lib/*.{la,py}; do
+        substituteInPlace "$i" --replace "$out" "$lib"
+    done
 
     # Remove `fixincl' to prevent a retained dependency on the
     # previous gcc.
@@ -221,15 +227,23 @@ postInstall() {
 
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
+
     # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-    for i in $out/libexec/gcc/*/*/*; do
-        if PREV_RPATH=`patchelf --print-rpath $i`; then
-            patchelf --set-rpath `echo $PREV_RPATH | sed 's,:[^:]*bootstrap-tools/lib,,'` $i
-        fi
+    for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
+        PREV_RPATH=`patchelf --print-rpath "$i"`
+        NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
+        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+    done
+
+    # For some reason the libs retain RPATH to $out
+    for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+        PREV_RPATH=`patchelf --print-rpath "$i"`
+        NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
+        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
     done
 
     # Get rid of some "fixed" header files
-    rm -rf $out/lib/gcc/*/*/include/root
+    rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
 
     # Replace hard links for i686-pc-linux-gnu-gcc etc. with symlinks.
     for i in $out/bin/*-gcc*; do
@@ -250,6 +264,9 @@ postInstall() {
     paxmark r $out/libexec/gcc/*/*/{cc1,cc1plus}
 
     eval "$postInstallGhdl"
+
+    # Two identical man pages are shipped (moving and compressing is done later)
+    ln -sf gcc.1 "$out"/share/man/man1/g++.1
 }
 
 genericBuild

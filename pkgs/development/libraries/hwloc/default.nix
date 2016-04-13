@@ -2,11 +2,11 @@
 , pciutils, numactl }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.6";
+  name = "hwloc-1.11.2";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.6/downloads/${name}.tar.bz2";
-    sha256 = "0y561bryiqp1f5af5lm432dcw93xwp1jw55si7wa6skxnd6ch25w";
+    url = "http://www.open-mpi.org/software/hwloc/v1.11/downloads/${name}.tar.bz2";
+    sha1 = "3d68de060808f04349538be4e63cde501cd53b0a";
   };
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
              -e "s|-lnuma|-L$numalibdir -lnuma|g"
       '';
 
-  # XXX: A test hangs on Cygwin, see
-  # <http://hydra.bordeaux.inria.fr/build/51474/nixlog/1/raw>.
-  doCheck = !stdenv.isCygwin;
+  # Checks disabled because they're impure (hardware dependent) and
+  # fail on some build machines.
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Portable abstraction of hierarchical architectures for high-performance computing";

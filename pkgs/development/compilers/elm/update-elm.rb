@@ -14,6 +14,7 @@ for pkg, ver in $elm_packages
 end
 
 File.open("release.nix", 'w') do |file|
+  file.puts "{ callPackage }:"
   file.puts "{"
   file.puts "  version = \"#{$elm_version}\";"
   file.puts "  packages = {"

@@ -34,6 +34,15 @@ in {
       type = bool;
     };
 
+    package = mkOption {
+      default = pkgs.collectd;
+      defaultText = "pkgs.collectd";
+      description = ''
+        Which collectd package to use.
+      '';
+      type = package;
+    };
+
     user = mkOption {
       default = "collectd";
       description = ''
@@ -91,7 +100,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.collectd}/sbin/collectd -C ${conf} -P ${cfg.pidFile}";
+        ExecStart = "${cfg.package}/sbin/collectd -C ${conf} -P ${cfg.pidFile}";
         Type = "forking";
         PIDFile = cfg.pidFile;
         User = optional (cfg.user!="root") cfg.user;

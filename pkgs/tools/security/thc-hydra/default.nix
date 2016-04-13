@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
+{ stdenv, fetchurl, pkgconfig, openssl, libidn, ncurses, pcre, libssh, postgresql92 }:
 
 with stdenv.lib;
 
@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-   substituteInPlace configure --replace "\$LIBDIRS" "${openssl}/lib ${pcre}/lib ${libssh}/lib ${postgresql92}/lib"
-   substituteInPlace configure --replace "\$INCDIRS" "${openssl}/include ${pcre}/include ${libssh}/include ${postgresql92}/include"
+   substituteInPlace configure --replace "\$LIBDIRS" "${openssl.out}/lib ${pcre.out}/lib ${libssh.out}/lib ${postgresql92.lib}/lib"
+   substituteInPlace configure --replace "\$INCDIRS" "${openssl.dev}/include ${pcre.dev}/include ${libssh.dev}/include ${postgresql92}/include"
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libidn ncurses pcre libssh ];
 
   meta = {

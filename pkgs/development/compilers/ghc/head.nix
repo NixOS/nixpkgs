@@ -1,8 +1,11 @@
-{ stdenv, fetchgit, ghc, perl, gmp, ncurses, libiconv, binutils, coreutils
+{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, libiconv, binutils, coreutils
 , autoconf, automake, happy, alex
 }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (bootPkgs) ghc;
+
+in stdenv.mkDerivation rec {
   version = "7.11.20151216";
   name = "ghc-${version}";
   rev = "28638dfe79e915f33d75a1b22c5adce9e2b62b97";
@@ -40,8 +43,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
-    "--with-gmp-includes=${gmp}/include" "--with-gmp-libraries=${gmp}/lib"
-    "--with-curses-includes=${ncurses}/include" "--with-curses-libraries=${ncurses}/lib"
+    "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ];
@@ -61,6 +64,10 @@ stdenv.mkDerivation rec {
       sed -i -e '2i export PATH="$PATH:${binutils}/bin:${coreutils}/bin"' $i
     done
   '';
+
+  passthru = {
+    inherit bootPkgs;
+  };
 
   meta = {
     homepage = "http://haskell.org/ghc";

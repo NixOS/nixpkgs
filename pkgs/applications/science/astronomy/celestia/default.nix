@@ -1,5 +1,5 @@
 { stdenv, fetchurl, freeglut, gtk2, gtkglext, libjpeg_turbo, libtheora, libXmu
-, lua, mesa, pkgconfig, perl, automake, autoconf, libtool, gettext, glib, cairo
+, lua, mesa, pkgconfig, perl, autoreconfHook, glib, cairo
 , pango, gdk_pixbuf, atk
 }:
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu mesa pkgconfig lua
-    perl automake autoconf libtool gettext ];
+    perl autoreconfHook ];
 
   patchPhase = ''
     patch -Np0 -i "${gcc46Patch}"
@@ -53,17 +53,14 @@ stdenv.mkDerivation {
     patch -Np2 -i "${libpng16Patch}"
     patch -Np1 -i "${linkingPatch}"
     patch -Np1 -i "${gcc47Patch}"
-    autoreconf
-    configureFlagsArray=(
-      --with-gtk
-      --with-lua=${lua}
-      CPPFLAGS="-DNDEBUG"
-      CFLAGS="-O2 -fsigned-char"
-      CXXFLAGS="-O2 -fsigned-char"
-      GTK_CFLAGS="-I${gtk2}/include/gtk-2.0 -I${gtk2}/lib/gtk-2.0/include -I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include -I${cairo}/include/cairo -I${pango}/include/pango-1.0 -I${gdk_pixbuf}/include/gdk-pixbuf-2.0 -I${atk}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include"
-      GTK_LIBS="-lgtk-x11-2.0 -lgtkglext-x11-1.0 -lcairo -lgdk_pixbuf-2.0 -lpango-1.0 -lgobject-2.0"
-    )
   '';
+
+  configureFlags = "--with-gtk --with-lua=${lua}";
+  CPPFLAGS = "-DNDEBUG";
+  CFLAGS = "-O2 -fsigned-char";
+  CXXFLAGS = "-O2 -fsigned-char";
+  GTK_CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I${gtk2.out}/lib/gtk-2.0/include -I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include -I${cairo.dev}/include/cairo -I${pango.dev}/include/pango-1.0 -I${gdk_pixbuf.dev}/include/gdk-pixbuf-2.0 -I${atk}/include/atk-1.0 -I${gtkglext}/include/gtkglext-1.0 -I${gtkglext}/lib/gtkglext-1.0/include";
+  GTK_LIBS = "-lgtk-x11-2.0 -lgtkglext-x11-1.0 -lcairo -lgdk_pixbuf-2.0 -lpango-1.0 -lgobject-2.0";
 
   installPhase = ''make MKDIR_P="mkdir -p" install'';
 

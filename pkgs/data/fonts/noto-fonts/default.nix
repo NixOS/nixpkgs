@@ -1,15 +1,19 @@
-{ stdenv, fetchurl, fetchFromGitHub, optipng, cairo, unzip, fontforge, pythonPackages, pkgconfig }:
+{ stdenv, fetchurl, fetchFromGitHub, optipng, cairo, unzip, pythonPackages, pkgconfig, pngquant, which, imagemagick }:
+
 rec {
   # 18MB
-  noto-fonts = let version = "git-2015-09-08"; in stdenv.mkDerivation {
+  noto-fonts = let version = "git-2016-03-29"; in stdenv.mkDerivation {
     name = "noto-fonts-${version}";
+
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-fonts";
-      rev = "9d677e7e47a13f6e88052833277783fe4f27671f";
-      sha256 = "1dw1142znlk19a4mzhfi9pg3jzmz8pl1ivix7sd2grg70vxscxqc";
+      rev = "e8b0af48b15d64bd490edab4418b5e396cf29644";
+      sha256 = "02yv12fbb4n1gp9g9m0qxnj6adpg9hfsr9377h2d4xsf6sxcgy6f";
     };
-    phases = "unpackPhase installPhase";
+
+    phases = [ "unpackPhase" "installPhase" ];
+
     installPhase = ''
       mkdir -p $out/share/fonts/noto
       cp hinted/*.ttf $out/share/fonts/noto
@@ -19,6 +23,9 @@ rec {
       cp -n unhinted/*.ttf $out/share/fonts/noto
       cp -n alpha/*.ttf $out/share/fonts/noto
     '';
+
+    preferLocalBuild = true;
+
     meta = with stdenv.lib; {
       inherit version;
       description = "Beautiful and free fonts for many languages";
@@ -51,9 +58,9 @@ rec {
       sha256 = "1vg3si6slvk8cklq6s5c76s84kqjc4wvwzr4ysljzjpgzra2rfn6";
     };
 
-    buildInputs = [ unzip ];
+    nativeBuildInputs = [ unzip ];
 
-    phases = "unpackPhase installPhase";
+    phases = [ "unpackPhase" "installPhase" ];
 
     sourceRoot = ".";
 
@@ -86,34 +93,30 @@ rec {
     };
   };
   # 12MB
-  noto-fonts-emoji = let version = "git-2015-08-17"; in stdenv.mkDerivation {
+  noto-fonts-emoji = let version = "git-2016-03-17"; in stdenv.mkDerivation {
     name = "noto-fonts-emoji-${version}";
 
     src = fetchFromGitHub {
       owner = "googlei18n";
       repo = "noto-emoji";
-      rev = "ffd7cfd0c84b7bf37210d0908ac94adfe3259ff2";
-      sha256 = "1pa94gw2y0b6p8r81zbjzcjgi5nrx4dqrqr6mk98wj6jbi465sh2";
+      rev = "c6379827aaa9cb0baca1a08a9d44ae74ca505236";
+      sha256 = "1zh1b617cjr5laha6lx0ys4k1c3az2zkgzjwc2nlb7dsdmfw1n0q";
     };
 
-    buildInputs = with pythonPackages; [
-      optipng cairo fontforge python nototools fonttools pkgconfig
-    ];
+    buildInputs = [ cairo ];
+    nativeBuildInputs = [ pngquant optipng which cairo pkgconfig imagemagick ]
+                     ++ (with pythonPackages; [ python fonttools nototools ]);
 
-    #FIXME: perhaps use our pngquant instead
-    preConfigure = ''
-      for f in ./*.py ./third_party/pngquant/configure; do
-        patchShebangs "$f"
-      done
+    postPatch = ''
+      sed -i 's,^PNGQUANT :=.*,PNGQUANT := ${pngquant}/bin/pngquant,' Makefile
+      patchShebangs flag_glyph_name.py
     '';
 
-    preBuild = ''
-      export PYTHONPATH=$PYTHONPATH:$PWD
-    '';
+    enableParallelBuilding = true;
 
     installPhase = ''
       mkdir -p $out/share/fonts/noto
-      cp NotoColorEmoji.ttf NotoEmoji-Regular.ttf $out/share/fonts/noto
+      cp NotoColorEmoji.ttf fonts/NotoEmoji-Regular.ttf $out/share/fonts/noto
     '';
 
     meta = with stdenv.lib; {

@@ -1,15 +1,18 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "libdvdcss-1.3.0";
-  
+stdenv.mkDerivation rec {
+  name = "libdvdcss-${version}";
+  version = "1.3.0";
+
   src = fetchurl {
-    url = http://download.videolan.org/pub/libdvdcss/1.3.0/libdvdcss-1.3.0.tar.bz2;
+    url = "http://get.videolan.org/libdvdcss/${version}/${name}.tar.bz2";
     sha256 = "158k9zagmbk5bkbz96l6lwhh7xcgfcnzflkr4vblskhcab6llhbw";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.videolan.org/developers/libdvdcss.html;
     description = "A library for decrypting DVDs";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

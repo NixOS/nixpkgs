@@ -26,6 +26,10 @@ with lib;
     (mkRenamedOptionModule [ "services" "sslh" "host" ] [ "services" "sslh" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "statsd" "host" ] [ "services" "statsd" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
+    (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
+
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ])
 
     # Old Grub-related options.
     (mkRenamedOptionModule [ "boot" "initrd" "extraKernelModules" ] [ "boot" "initrd" "kernelModules" ])
@@ -58,6 +62,9 @@ with lib;
     # Tarsnap
     (mkRenamedOptionModule [ "services" "tarsnap" "config" ] [ "services" "tarsnap" "archives" ])
 
+    # ibus
+    (mkRenamedOptionModule [ "programs" "ibus" "plugins" ] [ "i18n" "inputMethod" "ibus" "engines" ])
+
     # proxy
     (mkRenamedOptionModule [ "nix" "proxy" ] [ "networking" "proxy" "default" ])
 
@@ -76,6 +83,7 @@ with lib;
     (mkRenamedOptionModule [ "services" "xserver" "driSupport32Bit" ] [ "hardware" "opengl" "driSupport32Bit" ])
     (mkRenamedOptionModule [ "services" "xserver" "s3tcSupport" ] [ "hardware" "opengl" "s3tcSupport" ])
     (mkRenamedOptionModule [ "hardware" "opengl" "videoDrivers" ] [ "services" "xserver" "videoDrivers" ])
+    (mkRenamedOptionModule [ "services" "xserver" "vaapiDrivers" ] [ "hardware" "opengl" "extraPackages" ])
 
     (mkRenamedOptionModule [ "services" "mysql55" ] [ "services" "mysql" ])
 
@@ -90,6 +98,16 @@ with lib;
 
     (mkRenamedOptionModule [ "services" "hostapd" "extraCfg" ] [ "services" "hostapd" "extraConfig" ])
 
+    # Enlightenment
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
+
+    # Iodine
+    (mkRenamedOptionModule [ "services" "iodined" "enable" ] [ "services" "iodine" "server" "enable" ])
+    (mkRenamedOptionModule [ "services" "iodined" "domain" ] [ "services" "iodine" "server" "domain" ])
+    (mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
+    (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
+    (mkRemovedOptionModule [ "services" "iodined" "client" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ])
     (mkRemovedOptionModule [ "programs" "bash" "enable" ])
@@ -98,6 +116,9 @@ with lib;
     (mkRemovedOptionModule [ "services" "syslog-ng" "listenToJournal" ])
     (mkRemovedOptionModule [ "ec2" "metadata" ])
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
+    (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ])
 
   ];
 }

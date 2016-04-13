@@ -1,0 +1,164 @@
+From b9d70fb9fb0bd0bf84eb2302cba1691aea74c42e Mon Sep 17 00:00:00 2001
+From: Mark Wielaard <mjw@redhat.com>
+Date: Wed, 13 Jan 2016 17:16:48 +0100
+Subject: [PATCH] libelf: Add ELF compression types and defines to libelf.h for
+ older glibc.
+
+Older glibc elf.h might not define the new ELF compression defines and
+types. If not just define them in libelf.h directly to make the libelf
+headers work on older glibc systems.
+
+Also include a testcase to check the libelf headers build against the
+system elf.h.
+
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=810885
+
+Signed-off-by: Mark Wielaard <mjw@redhat.com>
+---
+ libelf/ChangeLog               |  5 +++++
+ libelf/libelf.h                | 28 ++++++++++++++++++++++++++++
+ tests/ChangeLog                |  8 ++++++++
+ tests/Makefile.am              |  9 +++++++--
+ tests/system-elf-libelf-test.c | 35 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 83 insertions(+), 2 deletions(-)
+ create mode 100644 tests/system-elf-libelf-test.c
+
+diff --git a/libelf/ChangeLog b/libelf/ChangeLog
+index 3a1fe91..aabf6f6 100644
+--- a/libelf/ChangeLog
++++ b/libelf/ChangeLog
+@@ -1,3 +1,8 @@
++2016-01-13  Mark Wielaard  <mjw@redhat.com>
++
++	* libelf.h: Check SHF_COMPRESSED is defined. If not define it and the
++	associated ELF compression types/defines.
++
+ 2015-11-26  Mark Wielaard  <mjw@redhat.com>
+ 
+ 	* elf_compress.c (__libelf_decompress_elf): New function, extracted
+diff --git a/libelf/libelf.h b/libelf/libelf.h
+index 364e776..c0d6389 100644
+--- a/libelf/libelf.h
++++ b/libelf/libelf.h
+@@ -35,6 +35,34 @@
+ /* Get the ELF types.  */
+ #include <elf.h>
+ 
++#ifndef SHF_COMPRESSED
++ /* Older glibc elf.h might not yet define the ELF compression types.  */
++ #define SHF_COMPRESSED      (1 << 11)  /* Section with compressed data. */
++
++ /* Section compression header.  Used when SHF_COMPRESSED is set.  */
++
++ typedef struct
++ {
++   Elf32_Word   ch_type;        /* Compression format.  */
++   Elf32_Word   ch_size;        /* Uncompressed data size.  */
++   Elf32_Word   ch_addralign;   /* Uncompressed data alignment.  */
++ } Elf32_Chdr;
++
++ typedef struct
++ {
++   Elf64_Word   ch_type;        /* Compression format.  */
++   Elf64_Word   ch_reserved;
++   Elf64_Xword  ch_size;        /* Uncompressed data size.  */
++   Elf64_Xword  ch_addralign;   /* Uncompressed data alignment.  */
++ } Elf64_Chdr;
++
++ /* Legal values for ch_type (compression algorithm).  */
++ #define ELFCOMPRESS_ZLIB       1          /* ZLIB/DEFLATE algorithm.  */
++ #define ELFCOMPRESS_LOOS       0x60000000 /* Start of OS-specific.  */
++ #define ELFCOMPRESS_HIOS       0x6fffffff /* End of OS-specific.  */
++ #define ELFCOMPRESS_LOPROC     0x70000000 /* Start of processor-specific.  */
++ #define ELFCOMPRESS_HIPROC     0x7fffffff /* End of processor-specific.  */
++#endif
+ 
+ /* Known translation types.  */
+ typedef enum
+diff --git a/tests/ChangeLog b/tests/ChangeLog
+index 366aea9..234ae56 100644
+--- a/tests/ChangeLog
++++ b/tests/ChangeLog
+@@ -1,3 +1,11 @@
++2016-01-13  Mark Wielaard  <mjw@redhat.com>
++
++	* system-elf-libelf-test.c: New test.
++	* Makefile.am (TESTS): Add system-elf-libelf-test, if !STANDALONE.
++	(check_PROGRAMS): Likewise.
++	(system_elf_libelf_test_CPPFLAGS): New variable.
++	(system_elf_libelf_test_LDADD): Likewise.
++
+ 2016-01-08  Mark Wielaard  <mjw@redhat.com>
+ 
+ 	* elfputzdata.c (main): Fix parentheses in strncmp test.
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index d09a6d7..7b9e108 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -136,8 +136,8 @@ export ELFUTILS_DISABLE_DEMANGLE = 1
+ endif
+ 
+ if !STANDALONE
+-check_PROGRAMS += msg_tst md5-sha1-test
+-TESTS += msg_tst md5-sha1-test
++check_PROGRAMS += msg_tst md5-sha1-test system-elf-libelf-test
++TESTS += msg_tst md5-sha1-test system-elf-libelf-test
+ endif
+ 
+ if LZMA
+@@ -473,6 +473,11 @@ elfgetzdata_LDADD = $(libelf)
+ elfputzdata_LDADD = $(libelf)
+ zstrptr_LDADD = $(libelf)
+ 
++# We want to test the libelf header against the system elf.h header.
++# Don't include any -I CPPFLAGS.
++system_elf_libelf_test_CPPFLAGS =
++system_elf_libelf_test_LDADD = $(libelf)
++
+ if GCOV
+ check: check-am coverage
+ .PHONY: coverage
+diff --git a/tests/system-elf-libelf-test.c b/tests/system-elf-libelf-test.c
+new file mode 100644
+index 0000000..7dfe498
+--- /dev/null
++++ b/tests/system-elf-libelf-test.c
+@@ -0,0 +1,35 @@
++/* Explicit test compiling with system elf.h header plus libelf header.
++
++   Copyright (C) 2016 Red Hat, Inc.
++   This file is part of elfutils.
++
++   This file is free software; you can redistribute it and/or modify
++   it under the terms of the GNU General Public License as published by
++   the Free Software Foundation; either version 3 of the License, or
++   (at your option) any later version.
++
++   elfutils is distributed in the hope that it will be useful, but
++   WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++   GNU General Public License for more details.
++
++   You should have received a copy of the GNU General Public License
++   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
++
++#include <elf.h>
++#include <stddef.h>
++#include "../libelf/libelf.h"
++
++int
++main (void)
++{
++  /* Trivial test, this is really a compile test anyway.  */
++  if (elf_version (EV_CURRENT) == EV_NONE)
++    return -1;
++
++  /* This will obviously fail. It is just to check that Elf32_Chdr and
++     elf32_getchdr are available (both at compile time and runtime).  */
++  Elf32_Chdr *chdr = elf32_getchdr (NULL);
++
++  return chdr == NULL ? 0 : -1;
++}
+-- 
+1.8.3.1
+

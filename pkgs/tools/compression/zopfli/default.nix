@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, fetchpatch }:
 
-let version = "1.0.1"; in
 stdenv.mkDerivation rec {
   name = "zopfli-${version}";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false; # problems, easily reproducible
   buildFlags = [
     "zopfli"
     "libzopfli"
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    inherit version;
     inherit (src.meta) homepage;
     description = "Very good, but slow, deflate or zlib compression";
     longDescription = ''

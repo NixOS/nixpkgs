@@ -13,10 +13,10 @@ stdenv.mkDerivation {
 
   inherit src patches postPatch;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "dev" "out" "bin" "man" "docdev" ];
+  outputInfo = "docdev";
 
   configureFlags =
-    # FIXME: perhaps use $SSL_CERT_FILE instead
     lib.optional stdenv.isLinux "--with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt"
   ++ [
     "--disable-dependency-tracking"
@@ -30,13 +30,11 @@ stdenv.mkDerivation {
   enableParallelBuilding = !guileBindings;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
-    ++ lib.optional (stdenv.isDarwin) libiconv
+    ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  # AutoreconfHook is temporary until the patch lands upstream to fix
-  # header file generation with parallel building
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
@@ -46,9 +44,10 @@ stdenv.mkDerivation {
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''
     sed ${lib.optionalString tpmSupport "-e 's,-ltspi,-L${trousers}/lib -ltspi,'"} \
-        -e 's,-lz,-L${zlib}/lib -lz,' \
-        -e 's,-lgmp,-L${gmp}/lib -lgmp,' \
-        -i $out/lib/libgnutls.la $out/lib/pkgconfig/gnutls.pc
+        -e 's,-lz,-L${zlib.out}/lib -lz,' \
+        -e 's,-L${gmp.dev}/lib,-L${gmp.out}/lib,' \
+        -e 's,-lgmp,-L${gmp.out}/lib -lgmp,' \
+        -i $out/lib/*.la "$dev/lib/pkgconfig/gnutls.pc"
   '';
 
   meta = with lib; {

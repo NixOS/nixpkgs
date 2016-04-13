@@ -1,7 +1,8 @@
 { fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
 , intltool, glib, gtk, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
 , webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
-, gettext, swig, slibGuile, enchant, bzip2, isocodes
+, gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
+, pango, gdk_pixbuf
 }:
 
 /*
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     perl perlPackages.FinanceQuote perlPackages.DateManip
     # guile
     guile slibGuile
+    # database backends
+    libdbi libdbiDrivers
     # build
     makeWrapper
   ];
@@ -41,8 +44,14 @@ stdenv.mkDerivation rec {
   patchShebangs ./src
   '';
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx --enable-aqbanking";
-
+  configureFlags = [
+    "CFLAGS=-O3"
+    "CXXFLAGS=-O3"
+    "--enable-dbi"
+    "--with-dbi-dbd-dir=${libdbiDrivers}/lib/dbd/"
+    "--enable-ofx"
+    "--enable-aqbanking"
+  ];
 
   postInstall = ''
     # Auto-updaters don't make sense in Nix.
@@ -70,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
-  NIX_LDFLAGS = "-rpath=${guile}/lib -rpath=${glib}/lib";
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ guile glib gtk pango gdk_pixbuf ];
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
 

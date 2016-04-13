@@ -251,6 +251,7 @@ in
       };
 
       extraFiles = mkOption {
+        type = types.attrsOf types.path;
         default = {};
         example = literalExample ''
           { "memtest.bin" = "''${pkgs.memtest86plus}/memtest.bin"; }

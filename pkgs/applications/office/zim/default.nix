@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildPythonPackage, pythonPackages, pygtk, pygobject, python }:
+{ stdenv, lib, fetchurl, buildPythonApplication, pythonPackages, pygtk, pygobject, python }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -7,21 +7,20 @@
 #  -  pyxdg: Need to make it work first (see setupPyInstallFlags).
 #
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.63";
+  version = "0.65";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "077vf4h0hjmbk8bxj9l0z9rxcb3dw642n32lvfn6vjdna1qm910m";
+    sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
   };
 
   propagatedBuildInputs = [ pythonPackages.sqlite3 pygtk pythonPackages.pyxdg pygobject ];
 
   preBuild = ''
-    mkdir -p /tmp/home
-    export HOME="/tmp/home"
+    export HOME=$TMP
 
     sed -i '/zim_install_class,/d' setup.py
   '';
@@ -30,8 +29,14 @@ buildPythonPackage rec {
   preFixup = ''
     export makeWrapperArgs="--prefix XDG_DATA_DIRS : $out/share --argv0 $out/bin/.zim-wrapped"
   '';
-  # Testing fails.
-  doCheck = false;
+
+  postFixup = ''
+    wrapPythonPrograms
+    substituteInPlace $out/bin/.zim-wrapped \
+    --replace "sys.argv[0] = 'zim'" "sys.argv[0] = '$out/bin/zim'"
+  '';
+
+  doCheck = true;
 
   meta = {
       description = "A desktop wiki";

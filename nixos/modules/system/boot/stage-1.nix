@@ -58,6 +58,7 @@ let
 
       # Add RAID mdadm tool.
       copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
+      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
 
       # Copy udev.
       copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
@@ -79,7 +80,7 @@ let
       ${config.boot.initrd.extraUtilsCommands}
 
       # Copy ld manually since it isn't detected correctly
-      cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
+      cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
 
       # Copy all of the needed libraries for the binaries
       for BIN in $(find $out/{bin,sbin} -type f); do
@@ -161,7 +162,9 @@ let
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm \
-            --replace /bin/sh ${extraUtils}/bin/sh
+            --replace /bin/sh ${extraUtils}/bin/sh \
+            --replace /usr/bin/readlink ${extraUtils}/bin/readlink \
+            --replace /usr/bin/basename ${extraUtils}/bin/basename
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -203,13 +206,13 @@ let
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
-      preLVMCommands preDeviceCommands postEarlyDeviceCommands postDeviceCommands postMountCommands kernelModules;
+      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: (sd ? label || hasPrefix "/dev/" sd.device) && !sd.randomEncryption) config.swapDevices);
 
     fsInfo =
-      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
+      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType (builtins.concatStringsSep "," fs.options) ];
       in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
 
     setHostId = optionalString (config.networking.hostId != null) ''
@@ -319,14 +322,6 @@ in
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
         <filename>/dev</filename>.
-      '';
-    };
-
-    boot.initrd.postEarlyDeviceCommands = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Shell commands to be executed early after creation of device nodes.
       '';
     };
 

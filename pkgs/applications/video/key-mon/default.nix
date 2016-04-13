@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, gnome, librsvg, pygtk, pythonPackages }:
+{ stdenv, fetchurl, buildPythonApplication, gnome, librsvg, pygtk, pythonPackages }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "key-mon-${version}";
   version = "1.17";
   namePrefix = "";

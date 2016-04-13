@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     homepage = "http://typerex.ocamlpro.com/ocp-indent.html";
     description = "A customizable tool to indent OCaml code";
     license = licenses.gpl3;
-    platforms = ocaml.meta.platforms;
+    platforms = ocaml.meta.platforms or [];
     maintainers = [ maintainers.jirkamarsik ];
   };
 }

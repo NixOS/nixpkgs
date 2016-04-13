@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "4.0.3-20150806";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/gnomesword/Xiphos/4.0.3/${name}.tar.gz";
+    url = "mirror://sourceforge/project/gnomesword/Xiphos/4.0.3/${name}.tar.gz";
     sha256 = "1xkvhpasdlda2rp0874znz158z4rjh1hpynwy13d96kjxq4npiqv";
   };
 

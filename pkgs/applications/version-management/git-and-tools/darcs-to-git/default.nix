@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "darcs-to-git-${version}";
-  version = "0.2git";
+  version = "2015-06-04";
 
   src = fetchgit {
     url = "git://github.com/purcell/darcs-to-git.git";
-    rev = "58a55936899c7e391df5ae1326c307fbd4617a25";
-    sha256 = "366aa691920991e21cfeebd4cbd53a6c42d80e2bc46ff398af482d1d15bac4c3";
+    rev = "e5fee32495908fe0f7d700644c7b37347b7a0a5b";
+    sha256 = "0ycp7pzv9g9pgj25asiby3p3m5vg5czqf4rpy2mavjqhiblxlcv5";
   };
 
   patchPhase = let

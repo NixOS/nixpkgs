@@ -1,8 +1,8 @@
 { stdenv, fetchurl }:
 
-let version = "7.0.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ip2location-${version}";
+  version = "7.0.0";
 
   src = fetchurl {
     sha256 = "05zbc02z7vm19byafi05i1rnkxc6yrfkhnm30ly68zzyipkmzx1l";
@@ -14,7 +14,6 @@ stdenv.mkDerivation {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    inherit version;
     description = "Look up locations of host names and IP addresses";
     longDescription = ''
       A command-line tool to find the country, region, city,coordinates,

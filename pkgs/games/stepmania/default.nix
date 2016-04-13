@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, nasm
+{ stdenv, lib, fetchpatch, fetchFromGitHub, cmake, nasm
 , gtk2, glib, ffmpeg, alsaLib, libmad, libogg, libvorbis
 , glew, libpulseaudio
 }:
@@ -25,6 +25,14 @@ stdenv.mkDerivation rec {
     "-DWITH_SYSTEM_FFMPEG=1"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib}/lib/glib-2.0/include"
+  ];
+
+  patches = [
+    # Fix compilation on i686
+    (fetchpatch {
+      url = "https://github.com/stepmania/stepmania/commit/f1e114aa03c90884946427bb43a75badec21f163.patch";
+      sha256 = "1cm14w92dilqvlyqfffiihf09ra97hxzgfal5gx08brc3j1yyzdw";
+    })
   ];
 
   postInstall = ''

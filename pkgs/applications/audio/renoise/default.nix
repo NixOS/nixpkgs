@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libXext libXcursor libXrandr alsaLib libjack2 ];
 
   src =
-    if builtins.currentSystem == "x86_64-linux" then
+    if stdenv.system == "x86_64-linux" then
         if demo then
         fetchurl {
             url = "http://files.renoise.com/demo/Renoise_3_0_1_Demo_x86_64.tar.bz2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
             name = "rns_3_0_1_linux_x86_64.tar.gz";
             sha256 = "1yb5w5jrg9dk9fg5rfvfk6p0rxn4r4i32vxp2l9lzhbs02pv15wd";
         }
-    else if builtins.currentSystem == "i686-linux" then
+    else if stdenv.system == "i686-linux" then
         if demo then
         fetchurl {
             url = "http://files.renoise.com/demo/Renoise_3_0_1_Demo_x86.tar.bz2";

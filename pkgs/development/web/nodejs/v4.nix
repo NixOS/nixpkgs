@@ -7,7 +7,7 @@
 assert stdenv.system != "armv5tel-linux";
 
 let
-  version = "4.2.3";
+  version = "4.3.1";
 
   deps = {
     inherit openssl zlib libuv;
@@ -31,7 +31,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "0ksmbln5qhrr7qhdz3npwmyz44y1vpznpxk3j7sqkc5lzvjss22h";
+    sha256 = "0wzf5sirbph5kaik3pm9i2dxbjwqh5qlnqn71azrsv0vhs7dbqk1";
   };
 
   configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
@@ -41,15 +41,16 @@ in stdenv.mkDerivation {
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
   '';
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ./pkg-libpath.patch ];
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
+
+  buildInputs = [ python zlib libuv openssl python ]
+    ++ optionals stdenv.isLinux [ utillinux http-parser ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ optional stdenv.isDarwin libtool;
 
   postFixup = ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' $out/lib/node_modules/npm/node_modules/node-gyp/gyp/pylib/gyp/xcode_emulation.py
   '';
-
-  buildInputs = [ python which zlib libuv openssl python ]
-    ++ optionals stdenv.isLinux [ utillinux http-parser ]
-    ++ optionals stdenv.isDarwin [ pkgconfig openssl libtool ];
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

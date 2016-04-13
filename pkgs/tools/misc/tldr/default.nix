@@ -1,37 +1,30 @@
-{stdenv, clang, fetchurl, curl}:
+{ stdenv, fetchFromGitHub, clang, curl, libzip, pkgconfig }:
 
-with stdenv.lib;
-
-let version = "1.0"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "tldr-${version}";
+  version = "1.2.0";
 
-  src = fetchurl {
-    url = "https://github.com/tldr-pages/tldr-cpp-client/archive/v${version}.tar.gz";
-    sha256 = "11k2pc4vfhx9q3cfd1145sdwhis9g0zhw4qnrv7s7mqnslzrrkgw";
+  src = fetchFromGitHub {
+    sha256 = "1dyvmxdxm92bfs5i6cngk8isa65qp6xlpim4yizs5rnm0rynf9kr";
+    rev = "v${version}";
+    repo = "tldr-cpp-client";
+    owner = "tldr-pages";
   };
 
-  meta = {
-    inherit version;
+  buildInputs = [ curl clang libzip ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  installFlags = [ "PREFIX=$(out)" ];
+
+  meta = with stdenv.lib; {
     description = "Simplified and community-driven man pages";
     longDescription = ''
-      tldr pages gives common use cases for commands, so you don't need to hunt through a man page for the correct flags.
+      tldr pages gives common use cases for commands, so you don't need to hunt
+      through a man page for the correct flags.
     '';
     homepage = http://tldr-pages.github.io;
     license = licenses.mit;
-    maintainers = [maintainers.taeer];
+    maintainers = with maintainers; [ taeer nckx ];
     platforms = platforms.linux;
-
   };
-
-  buildInputs = [curl clang];
-
-  preBuild = ''
-    cd src
-  '';
-
-  installPhase = ''
-    install -d $prefix/bin
-    install tldr $prefix/bin
-  '';
 }

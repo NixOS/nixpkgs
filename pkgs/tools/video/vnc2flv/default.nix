@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pythonPackages }:
 
-pythonPackages.buildPythonPackage rec {
+pythonPackages.buildPythonApplication rec {
   name = "vnc2flv-20100207";
   namePrefix = "";
 

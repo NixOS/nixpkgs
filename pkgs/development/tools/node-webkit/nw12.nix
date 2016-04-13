@@ -1,6 +1,6 @@
 { stdenv, fetchurl, buildEnv, makeWrapper
 , xorg, alsaLib, dbus, glib, gtk, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, udev, libcap
+, gdk_pixbuf, cairo, zlib, nss, nssTools, nspr, gconf, expat, libudev, libcap
 , libnotify}:
 let
   bits = if stdenv.system == "x86_64-linux" then "x64"
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nwjc
 
-    ln -s ${udev}/lib/libudev.so $out/share/nwjs/libudev.so.0
+    ln -s ${libudev.out}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nw
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nwjc

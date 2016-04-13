@@ -1,16 +1,18 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, which, zlib, bzip2, libpng, gnumake
+, glib /* passthru only */
+
   # FreeType supports sub-pixel rendering.  This is patented by
   # Microsoft, so it is disabled by default.  This option allows it to
   # be enabled.  See http://www.freetype.org/patents.html.
-, glib/*passthru only*/
 , useEncumberedCode ? true
 }:
 
 let
-  version = "2.5.4";
+  version = "2.6.2";
 
-  fetch_bohoomil = name: sha256: fetchpatch {
-    url = https://raw.githubusercontent.com/bohoomil/fontconfig-ultimate/e4c99bcf5ac9595e2c64393c0661377685c0ad24/01_freetype2-iu/ + name;
+  # Don't use fetchpatch. It mangles them. That's an hour I'll never get back.
+  fetchbohoomil = name: sha256: fetchurl {
+    url = https://raw.githubusercontent.com/bohoomil/fontconfig-ultimate/254b688f96d4a37f78fb594303a43160fc15c7cd/freetype/ + name;
     inherit sha256;
   };
 in
@@ -20,22 +22,28 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/freetype/${name}.tar.bz2";
-    sha256 = "1fxsbk4lp6ymifldzrb86g3x6mz771jmrzphkz92mcrkddk2qkiv";
+    sha256 = "14mqrfgl18q2by1yzv6vcxi97zjy4kppcgsqf312mhfwgkpvvxms";
   };
 
-  patches = [ ./enable-validation.patch ] # from Gentoo, bohoomil has the same patch as well
-    ++ [ ./fix-pcf.patch ]
+  patches = []
     ++ optionals useEncumberedCode [
-      (fetch_bohoomil "02-ftsmooth-2.5.4.patch" "11w4wb7gwgpijc788mpkxj92d7rfdwrdv7jzrpxwv5w5cgpx9iw9")
-      (fetch_bohoomil "03-upstream-2014.12.07.patch" "0gq7y63mg3gc5z69nfkv2kl7xad0bjzsvnl6j1j9q79jjbvaqdq0")
-      (fetch_bohoomil "04-infinality-2.5.4-2014.12.07.patch" "1gph7z9s2221gy5dxn01v3lga0m9yib8yqsaqj5km74bqx1vlalh")
+      (fetchbohoomil "01-freetype-2.6.2-enable-valid.patch"
+        "1szq0zha7n41f4pq179wgfkam034mp2xn0xc36sdl5sjp9s9hv08")
+      (fetchbohoomil "02-upstream-2015.12.05.patch"
+        "0781r9n35kpn8db8nma0l47cpkzh0hbp84ziii5sald90dnrqdj4")
+      (fetchbohoomil "03-infinality-2.6.2-2015.12.05.patch"
+        "0wcjf9hiymplgqm3szla633i417pb57vpzzs2dyl1dnmcxgqa2y8")
     ];
+
+  outputs = [ "dev" "out" ];
 
   propagatedBuildInputs = [ zlib bzip2 libpng ]; # needed when linking against freetype
   # dependence on harfbuzz is looser than the reverse dependence
   buildInputs = [ pkgconfig which ]
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
+
+  configureFlags = "--disable-static --bindir=$(dev)/bin";
 
   # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
   NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
@@ -46,10 +54,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # compat hacks
-  postInstall = glib.flattenInclude + ''
-    ln -s . "$out"/include/freetype
-  '';
+  postInstall = glib.flattenInclude;
 
   crossAttrs = {
     # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead

@@ -46,7 +46,7 @@ let
                   , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
-      iface = if grubVersion == 1 then "scsi" else "virtio";
+      iface = if grubVersion == 1 then "ide" else "virtio";
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
@@ -108,8 +108,8 @@ let
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
       # Check whether the channel works.
-      $machine->succeed("nix-env -i coreutils >&2");
-      $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
+      $machine->succeed("nix-env -iA nixos.procps >&2");
+      $machine->succeed("type -tP ps | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
       # We need to a writable nix-store on next boot.
@@ -366,8 +366,8 @@ in {
               "mkdir /mnt/boot",
               "mount LABEL=boot /mnt/boot",
               "udevadm settle",
-              "mdadm -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
-              "mdadm -W /dev/md1",
+              "mdadm --verbose -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
+              "mdadm --verbose -W /dev/md1",
           );
         '';
     };

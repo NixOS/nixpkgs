@@ -1,9 +1,9 @@
-{ pkgs, stdenv, fetchurl, pythonPackages, buildPythonPackage, pygtk, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor }:
+{ pkgs, stdenv, fetchurl, pythonPackages, buildPythonApplication, pygtk, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor }:
 
 let
   inherit (pythonPackages) dbus;
 
-in buildPythonPackage rec {
+in buildPythonApplication rec {
   name = "devede-3.23.0";
   namePrefix = "";
 

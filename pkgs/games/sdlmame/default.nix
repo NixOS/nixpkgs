@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${alsaLib}/lib:${qt48}/lib:${SDL}/lib:${fontconfig}/lib:${freetype}/lib:${SDL_ttf}/lib:${xorg.libX11}/lib:${xorg.libXinerama}/lib:${stdenv.cc.cc}/lib" \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ alsaLib qt48 SDL fontconfig freetype SDL_ttf xorg.libX11 xorg.libXinerama stdenv.cc.cc ]}" \
       share/sdlmame/sdlmame
 
     mkdir -p "$out/bin"
@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;
+    broken = true; # URL doesn't work anymore
   };
 }

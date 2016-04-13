@@ -3,7 +3,7 @@
 
 {
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = http://tarballs.nixos.org/stdenv-linux/x86_64/8d66a51a872af1ab58edc68a2ebddcc79958b563/bootstrap-tools.tar.xz;
-    sha256 = "325230b74d3d98f62ddcb595543887d09cd8421745a4eda229d2a87a1f1ed336";
+    url = http://tarballs.nixos.org/stdenv-linux/x86_64/4907fc9e8d0d82b28b3c56e3a478a2882f1d700f/bootstrap-tools.tar.xz;
+    sha256 = "abe3f0727dd771a60b7922892d308da1bc7b082afc13440880862f0c8823c09f";
   };
 }

@@ -4,7 +4,7 @@ let
   pname = "icu4c";
   version = "56.1";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = pname + "-" + version;
 
   src = fetchurl {
@@ -12,6 +12,9 @@ stdenv.mkDerivation {
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
     sha256 = "05j86714qaj0lvhvyr2s1xncw6sk0h2dcghb3iiwykbkbh8fjr1s";
   };
+
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
 
   makeFlags = stdenv.lib.optionalString stdenv.isDarwin
     "CXXFLAGS=-headerpad_max_install_names";
@@ -30,12 +33,14 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = "--disable-debug" +
-    stdenv.lib.optionalString stdenv.isDarwin " --enable-rpath";
+    stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath";
 
   # remove dependency on bootstrap-tools in early stdenv build
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
   '';
+
+  postFixup = ''moveToOutput lib/icu "$dev" '';
 
   enableParallelBuilding = true;
 
@@ -45,4 +50,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ raskin urkud ];
     platforms = platforms.all;
   };
-}
+} // (if stdenv.isArm then {
+  patches = [ ./0001-Disable-LDFLAGSICUDT-for-Linux.patch ];
+} else {}))

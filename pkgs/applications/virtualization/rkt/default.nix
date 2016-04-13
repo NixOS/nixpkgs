@@ -1,15 +1,15 @@
-{ stdenv, lib, autoconf, automake, go, file, git, wget, gnupg1, squashfsTools, cpio
-, fetchurl, fetchFromGitHub }:
+{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg1, trousers, squashfsTools,
+  cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper }:
 
 let
-  coreosImageRelease = "835.9.0";
-  coreosImageSystemdVersion = "225";
+  coreosImageRelease = "794.1.0";
+  coreosImageSystemdVersion = "222";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
-  stage1Flavours = [ "coreos" ];
+  stage1Flavours = [ "coreos" "fly" "host" ];
 
 in stdenv.mkDerivation rec {
-  version = "0.14.0";
+  version = "1.2.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,15 +17,18 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "0dmgs9s40xhan2rh9f5n0k5gv8p2dn946zffq02sq35qqvi67s71";
+      sha256 = "0icsrh118mm3rabbcr0gd3b22m5rizdbqlrfp9d79g591p7bjh38";
   };
 
   stage1BaseImage = fetchurl {
-    url = "http://stable.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "51dc10b4269b9c1801c233de49da817d29ca8d858bb0881df94dc90f7e86ce70";
+    url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
+    sha256 = "05nzl3av6cawr8v203a8c95c443g6h1nfy2n4jmgvn0j4iyy44ym";
   };
 
-  buildInputs = [ autoconf automake go file git wget gnupg1 squashfsTools cpio ];
+  buildInputs = [
+    autoreconfHook go file git wget gnupg1 trousers squashfsTools cpio acl systemd
+    makeWrapper
+  ];
 
   preConfigure = ''
     ./autogen.sh
@@ -45,6 +48,9 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -Rv $BUILDDIR/bin/* $out/bin
+    wrapProgram $out/bin/rkt \
+      --prefix LD_LIBRARY_PATH : ${systemd}/lib \
+      --prefix PATH : ${iptables}/bin
   '';
 
   meta = with lib; {

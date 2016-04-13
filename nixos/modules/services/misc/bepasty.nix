@@ -103,9 +103,13 @@ in
           after = [ "network.target" ];
           restartIfChanged = true;
 
-          environment = {
+          environment = let
+            penv = python.buildEnv.override {
+              extraLibs = [ bepasty gevent ];
+            };
+          in {
             BEPASTY_CONFIG = "${server.workDir}/bepasty-${name}.conf";
-            PYTHONPATH= "${bepasty}/lib/${python.libPrefix}/site-packages:${gevent}/lib/${python.libPrefix}/site-packages";
+            PYTHONPATH= "${penv}/${python.sitePackages}/";
           };
 
           serviceConfig = {

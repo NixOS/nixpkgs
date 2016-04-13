@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "043kckxjqanw8dl3m9f6kvsf0l20ywxmgxd1xb0slj6m8l4w4hz6";
   };
 
-  buildInputs = [ lcms2 jasper ] ;
+  buildInputs = [ lcms2 jasper ];
 
   nativeBuildInputs = [ pkgconfig ];
 

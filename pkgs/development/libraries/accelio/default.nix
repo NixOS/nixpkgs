@@ -47,9 +47,17 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.accelio.org/;
-    description = "a high-performance asynchronous reliable messaging and RPC library optimized for hardware acceleration";
+    description = "High-performance messaging and RPC library";
+    longDescription = ''
+      A high-performance asynchronous reliable messaging and RPC library
+      optimized for hardware acceleration.
+    '';
     license = licenses.bsd3;
     platforms = with platforms; linux ++ freebsd;
     maintainers = with maintainers; [ wkennington ];
+    # kernel 4.2 is the most recent supported kernel
+    broken = kernel != null &&
+      (builtins.compareVersions kernel.version "4.2" == 1 ||
+       (kernel.features.grsecurity or false));
   };
 }

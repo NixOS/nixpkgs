@@ -1,15 +1,16 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip
 , modules ? []
+, hardening ? true
 }:
 
 with stdenv.lib;
 
 let
-  version = "1.8.0";
+  version = "1.8.1";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "1mgkkmmwkhmpn68sdvbd73ssv6lpqhh864fsyvc1ij4hk4is3k13";
+    sha256 = "1dwpyw4pvhj68vxramqxm8f79pqz9lrm8mvifbn49h3615ikqjwg";
   };
 
 in
@@ -51,9 +52,16 @@ stdenv.mkDerivation rec {
         [ "--with-file-aio" "--with-aio_module" ]
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
 
-  preConfigure = concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules)
+    + optionalString (hardening && (stdenv.cc.cc.isGNU or false)) ''
+      configureFlagsArray=(
+        --with-cc-opt="-fPIE -fstack-protector-all --param ssp-buffer-size=4 -O2 -D_FORTIFY_SOURCE=2"
+        --with-ld-opt="-pie -Wl,-z,relro,-z,now"
+      )
+    ''
+    ;
 
   meta = {
     description = "A reverse proxy and lightweight webserver";

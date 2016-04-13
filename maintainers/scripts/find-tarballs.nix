@@ -14,11 +14,12 @@ let
     operator = const [ ];
   });
 
-  urls = map (drv: { url = head drv.urls; hash = drv.outputHash; type = drv.outputHashAlgo; }) fetchurlDependencies;
+  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; type = drv.outputHashAlgo; }) fetchurlDependencies;
 
   fetchurlDependencies =
     filter
-      (drv: drv.outputHash or "" != "" && drv.outputHashMode == "flat" && drv.postFetch or "" == "" && drv ? urls)
+      (drv: drv.outputHash or "" != "" && drv.outputHashMode or "flat" == "flat"
+          && drv.postFetch or "" == "" && (drv ? url || drv ? urls))
       dependencies;
 
   dependencies = map (x: x.value) (genericClosure {

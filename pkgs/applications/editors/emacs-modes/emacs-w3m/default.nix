@@ -1,4 +1,4 @@
-{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoconf }:
+{ fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoreconfHook }:
 
 let date = "2013-03-21"; in
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lmcj8rf83w13q8q68hh7sa1abc2m6j2zmfska92xdp7hslhdgc5";
   };
 
-  buildInputs = [ emacs w3m texinfo autoconf ];
+  buildInputs = [ emacs w3m texinfo autoreconfHook ];
 
   # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
   patchPhase = ''
@@ -26,11 +26,10 @@ stdenv.mkDerivation rec {
             s|(w3m-which-command "identify")|"${imagemagick}/bin/identify"|g'
   '';
 
-  configurePhase = ''
-    autoreconf -vfi && \
-    ./configure --prefix="$out" --with-lispdir="$out/share/emacs/site-lisp" \
-                --with-icondir="$out/share/emacs/site-lisp/images/w3m"
-  '';
+  configureFlags = [
+    "--with-lispdir=$(out)/share/emacs/site-lisp"
+    "--with-icondir=$(out)/share/emacs/site-lisp/images/w3m"
+  ];
 
   postInstall = ''
     cd "$out/share/emacs/site-lisp"

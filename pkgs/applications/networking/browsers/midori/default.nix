@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = "http://midori-browser.org";
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ raskin iyzsong ];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
   };
 
   src = fetchurl {
@@ -39,9 +39,11 @@ stdenv.mkDerivation rec {
     -DUSE_ZEITGEIST=OFF
   '';
 
+  NIX_LDFLAGS="-lX11";
+
   preFixup = ''
     wrapProgram $out/bin/midori \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 }

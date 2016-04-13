@@ -8,9 +8,9 @@ runCommand "fonts.conf"
   }
   ''
     xsltproc --stringparam fontDirectories "$fontDirectories" \
-      --stringparam fontconfig "${fontconfig}" \
+      --stringparam fontconfig "${fontconfig.out}" \
       --stringparam fontconfigConfigVersion "${fontconfig.configVersion}" \
-      --path ${fontconfig}/share/xml/fontconfig \
-      ${./make-fonts-conf.xsl} ${fontconfig}/etc/fonts/fonts.conf \
+      --path ${fontconfig.out}/share/xml/fontconfig \
+      ${./make-fonts-conf.xsl} ${fontconfig.out}/etc/fonts/fonts.conf \
       > $out
   ''

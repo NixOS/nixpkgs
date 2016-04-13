@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "05bk3lrp5jwg0v338lvylp7glpliydzz4jf5pjr6k3kagrv3jyik";
   };
 
-  patches = if stdenv.isDarwin then [ ./no-darwin-getopt.patch ] else null;
+  patches =
+    [ ./program-name.patch ] ++
+    stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch;
 
   buildInputs = [ makeWrapper ];
 
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
-    mkdir -p "$out/share/fish/completions"
+    mkdir -p "$out/share/fish/vendor_completions.d"
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

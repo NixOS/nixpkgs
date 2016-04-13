@@ -1,25 +1,29 @@
 { fetchurl, stdenv, pkgconfig, intltool, perl, perlXMLParser, libxml2
 , glib, gtk3, pango, atk, gdk_pixbuf, shared_mime_info, itstool, gnome3
-, poppler, ghostscriptX, djvulibre, libspectre, libsecret , makeWrapper
-, librsvg, recentListSize ? null # 5 is not enough, allow passing a different number
-, gobjectIntrospection
+, poppler, ghostscriptX, djvulibre, libspectre, libsecret , wrapGAppsHook
+, librsvg, gobjectIntrospection
+, recentListSize ? null # 5 is not enough, allow passing a different number
+, supportXPS ? false    # Open XML Paper Specification via libgxps
 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
   buildInputs = [
-    pkgconfig intltool perl perlXMLParser libxml2
+    intltool perl perlXMLParser libxml2
     glib gtk3 pango atk gdk_pixbuf gobjectIntrospection
     itstool gnome3.adwaita-icon-theme
     gnome3.libgnome_keyring gnome3.gsettings_desktop_schemas
     poppler ghostscriptX djvulibre libspectre
-    makeWrapper libsecret librsvg gnome3.adwaita-icon-theme
-  ];
+    libsecret librsvg gnome3.adwaita-icon-theme gnome3.dconf
+  ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
 
   configureFlags = [
     "--disable-nautilus" # Do not use nautilus
     "--enable-introspection"
+    (if supportXPS then "--enable-xps" else "--disable-xps")
   ];
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
@@ -36,12 +40,7 @@ stdenv.mkDerivation rec {
     '';
 
   preFixup = ''
-    # Tell Glib/GIO about the MIME info directory, which is used
-    # by `g_file_info_get_content_type ()'.
-    wrapProgram "$out/bin/evince" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:${shared_mime_info}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared_mime_info}/share")
   '';
 
   doCheck = false; # would need pythonPackages.dogTail, which is missing

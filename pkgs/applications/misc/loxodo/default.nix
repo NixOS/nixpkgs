@@ -3,7 +3,7 @@ let
   py = python27Packages;
   python = py.python;
 in
-py.buildPythonPackage rec {
+py.buildPythonApplication rec {
   name = "loxodo-0.20150124";
 
   src = fetchgit {

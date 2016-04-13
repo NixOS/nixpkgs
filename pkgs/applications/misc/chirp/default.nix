@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A free, open-source tool for programming your amateur radio.";
+    description = "A free, open-source tool for programming your amateur radio";
     homepage = http://chirp.danplanet.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;

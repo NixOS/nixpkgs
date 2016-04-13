@@ -10,9 +10,9 @@ let
       inherit system;
       modules = [
         ../maintainers/scripts/ec2/amazon-image.nix
-        ../../nixos/modules/testing/test-instrumentation.nix
-        { boot.initrd.kernelModules = [ "virtio" "virtio_blk" "virtio_pci" "virtio_ring" ];
-          ec2.hvm = true;
+        ../modules/testing/test-instrumentation.nix
+        ../modules/profiles/qemu-guest.nix
+        { ec2.hvm = true;
 
           # Hack to make the partition resizing work in QEMU.
           boot.initrd.postDeviceCommands = mkBefore
@@ -20,6 +20,14 @@ let
               ln -s vda /dev/xvda
               ln -s vda1 /dev/xvda1
             '';
+
+          # Needed by nixos-rebuild due to the lack of network
+          # access. Mostly copied from
+          # modules/profiles/installation-device.nix.
+          system.extraDependencies =
+            [ pkgs.stdenv pkgs.busybox pkgs.perlPackages.ArchiveCpio
+              pkgs.unionfs-fuse pkgs.mkinitcpio-nfs-utils
+            ];
         }
       ];
     }).config.system.build.amazonImage;
@@ -29,10 +37,10 @@ let
       metaData = pkgs.stdenv.mkDerivation {
         name = "metadata";
         buildCommand = ''
-          mkdir -p $out/2011-01-01
-          ln -s ${pkgs.writeText "userData" userData} $out/2011-01-01/user-data
           mkdir -p $out/1.0/meta-data
+          ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
           echo "${hostname}" > $out/1.0/meta-data/hostname
+          echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
         '' + optionalString (sshPublicKey != null) ''
           mkdir -p $out/1.0/meta-data/public-keys/0
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
@@ -46,7 +54,7 @@ let
           my $imageDir = ($ENV{'TMPDIR'} // "/tmp") . "/vm-state-machine";
           mkdir $imageDir, 0700;
           my $diskImage = "$imageDir/machine.qcow2";
-          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.img $diskImage") == 0 or die;
+          system("qemu-img create -f qcow2 -o backing_file=${image}/nixos.qcow2 $diskImage") == 0 or die;
           system("qemu-img resize $diskImage 10G") == 0 or die;
 
           # Note: we use net=169.0.0.0/8 rather than
@@ -56,7 +64,7 @@ let
           # again when it deletes link-local addresses.) Ideally we'd
           # turn off the DHCP server, but qemu does not have an option
           # to do that.
-          my $startCommand = "qemu-kvm -m 768 -net nic -net 'user,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
+          my $startCommand = "qemu-kvm -m 768 -net nic,vlan=0,model=virtio -net 'user,vlan=0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'";
           $startCommand .= " -drive file=$diskImage,if=virtio,werror=report";
           $startCommand .= " \$QEMU_OPTS";
 
@@ -89,8 +97,10 @@ in {
     '';
     script = ''
       $machine->start;
-      $machine->waitForFile("/root/user-data");
+      $machine->waitForFile("/etc/ec2-metadata/user-data");
       $machine->waitForUnit("sshd.service");
+
+      $machine->succeed("grep unknown /etc/ec2-metadata/ami-manifest-path");
 
       # We have no keys configured on the client side yet, so this should fail
       $machine->fail("ssh -o BatchMode=yes localhost exit");
@@ -117,7 +127,7 @@ in {
       # Just to make sure resizing is idempotent.
       $machine->shutdown;
       $machine->start;
-      $machine->waitForFile("/root/user-data");
+      $machine->waitForFile("/etc/ec2-metadata/user-data");
     '';
   };
 
@@ -131,6 +141,7 @@ in {
         imports = [
           <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
           <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+          <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
         ];
         environment.etc.testFile = {
           text = "whoa";

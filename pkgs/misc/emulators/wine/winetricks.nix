@@ -1,16 +1,10 @@
-{ stdenv, fetchFromGitHub, wine, perl, which, coreutils, zenity, curl
+{ stdenv, callPackage, wine, perl, which, coreutils, zenity, curl
 , cabextract, unzip, p7zip, gnused, gnugrep, bash } :
 
-let v = (import ./versions.nix).winetricks;
-in stdenv.mkDerivation rec {
-  name = "winetricks-${v.version}";
+stdenv.mkDerivation rec {
+  name = "winetricks-${src.version}";
 
-  src = fetchFromGitHub {
-    owner = "Winetricks";
-    repo = "winetricks";
-    rev = v.version;
-    sha256 = v.sha256;
-  };
+  src = (callPackage ./sources.nix {}).winetricks;
 
   buildInputs = [ perl which ];
 

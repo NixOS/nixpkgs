@@ -17,6 +17,10 @@ buildPerlPackage rec {
     ./external-sqlite.patch
   ];
 
+  sqlite_dev = sqlite.dev;
+  sqlite_out = sqlite.out;
+  postPatch = "substituteAllInPlace Makefile.PL; cat Makefile.PL";
+
   preBuild =
     ''
       substituteInPlace Makefile --replace -L/usr/lib ""

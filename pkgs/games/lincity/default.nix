@@ -1,24 +1,19 @@
-args @ { libX11, libXext, xextproto, libICE, libSM, xproto, libpng, zlib, ... }: with args;
-let
-  version = lib.attrByPath ["version"] "1.12.1" args;
-  sha256 = lib.attrByPath ["sha256"]
-    "0xmrp7vkkp1hfblb6nl3rh2651qsbcm21bnncpnma1sf40jaf8wj" args;
-  pkgName = "lincity";
-in
-rec {
+{ stdenv, fetchurl, libX11, libXext, xextproto, libICE, libSM, xproto, libpng, zlib }:
+
+stdenv.mkDerivation rec {
+  name = "lincity-${version}";
+  version = "1.12.1";
+
   src = fetchurl {
-    url = "mirror://sourceforge/lincity/${pkgName}-${version}.tar.gz";
-    inherit sha256;
+    url = "mirror://sourceforge/lincity/${name}.tar.gz";
+    sha256 = "0xmrp7vkkp1hfblb6nl3rh2651qsbcm21bnncpnma1sf40jaf8wj";
   };
 
-  buildInputs = [libICE libpng libSM libX11 libXext
-    xextproto zlib xproto];
-  configureFlags = [];
+  buildInputs = [
+    libICE libpng libSM libX11 libXext
+    xextproto zlib xproto
+  ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-
-  name = "${pkgName}-" + version;
   meta = {
     description = "City simulation game";
   };

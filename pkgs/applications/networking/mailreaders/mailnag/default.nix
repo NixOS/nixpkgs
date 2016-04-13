@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchurl, gettext, gtk3, pythonPackages
+{ stdenv, buildPythonApplication, fetchurl, gettext, gtk3, pythonPackages
 , gdk_pixbuf, libnotify, gst_all_1
 , libgnome_keyring3 ? null, networkmanager ? null
 }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "mailnag-${version}";
   version = "1.1.0";
 

@@ -6,13 +6,13 @@ let
 
   mainCfg = config.services.httpd;
 
-  httpd = mainCfg.package;
+  httpd = mainCfg.package.out;
 
   version24 = !versionOlder httpd.version "2.4";
 
   httpdConf = mainCfg.configFile;
 
-  php = pkgs.php.override { apacheHttpd = httpd; };
+  php = pkgs.php.override { apacheHttpd = httpd.dev; /* otherwise it only gets .out */ };
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
@@ -173,7 +173,8 @@ let
     SSLRandomSeed connect builtin
 
     SSLProtocol All -SSLv2 -SSLv3
-    SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!EXP
+    SSLCipherSuite HIGH:!aNULL:!MD5:!EXP
+    SSLHonorCipherOrder on
   '';
 
 
@@ -429,6 +430,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.apacheHttpd;
+        defaultText = "pkgs.apacheHttpd";
         description = ''
           Overridable attribute of the Apache HTTP Server package to use.
         '';
@@ -437,7 +439,8 @@ in
       configFile = mkOption {
         type = types.path;
         default = confFile;
-        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ...";'';
+        defaultText = "confFile";
+        example = literalExample ''pkgs.writeText "httpd.conf" "# my custom config file ..."'';
         description = ''
           Override the configuration file used by Apache. By default,
           NixOS generates one automatically.
@@ -682,6 +685,7 @@ in
 
         serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf}";
         serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
+        serviceConfig.ExecReload = "${httpd}/bin/httpd -f ${httpdConf} -k graceful";
         serviceConfig.Type = "forking";
         serviceConfig.PIDFile = "${mainCfg.stateDir}/httpd.pid";
         serviceConfig.Restart = "always";

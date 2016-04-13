@@ -16,10 +16,10 @@ index 6f2cabd..81b9849 100644
  {
      if (!udevLibrary->isLoaded()) {
 -        udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 1);
-+        udevLibrary->setFileNameAndVersion(QStringLiteral("@udev@/lib/libudev"), 1);
++        udevLibrary->setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 1);
          if (!udevLibrary->load()) {
 -            udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 0);
-+            udevLibrary->setFileNameAndVersion(QStringLiteral("@udev@/lib/libudev"), 0);
++            udevLibrary->setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 0);
              if (!udevLibrary->load()) {
                  qWarning("Failed to load the library: %s, supported version(s): %i and %i", qPrintable(udevLibrary->fileName()), 1, 0);
                  return false;

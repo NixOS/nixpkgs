@@ -39,6 +39,17 @@ in
       '';
     };
 
+    networking.dnsExtensionMechanism = lib.mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable the <code>edns0</code> option in <filename>resolv.conf</filename>. With
+        that option set, <code>glibc</code> supports use of the extension mechanisms for
+        DNS (EDNS) specified in RFC 2671. The most popular user of that feature is DNSSEC,
+        which does not work without it.
+      '';
+    };
+
     networking.extraResolvconfConf = lib.mkOption {
       type = types.lines;
       default = "";
@@ -137,7 +148,7 @@ in
         "protocols".source  = pkgs.iana_etc + "/etc/protocols";
 
         # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc + "/etc/rpc";
+        "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
@@ -162,7 +173,10 @@ in
               libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
             '' + optionalString cfg.dnsSingleRequest ''
               # only send one DNS request at a time
-              resolv_conf_options='single-request'
+              resolv_conf_options+=' single-request'
+            '' + optionalString cfg.dnsExtensionMechanism ''
+              # enable extension mechanisms for DNS
+              resolv_conf_options+=' edns0'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'

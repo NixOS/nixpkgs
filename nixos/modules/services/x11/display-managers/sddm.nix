@@ -31,6 +31,9 @@ let
     [General]
     HaltCommand=${pkgs.systemd}/bin/systemctl poweroff
     RebootCommand=${pkgs.systemd}/bin/systemctl reboot
+    ${optionalString cfg.autoNumlock ''
+    Numlock=on
+    ''}
 
     [Theme]
     Current=${cfg.theme}
@@ -45,7 +48,7 @@ let
     [XDisplay]
     MinimumVT=${toString xcfg.tty}
     ServerPath=${xserverWrapper}
-    XephyrPath=${pkgs.xorg.xorgserver}/bin/Xephyr
+    XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
     SessionCommand=${dmcfg.session.script}
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
@@ -107,6 +110,14 @@ in
         default = [];
         description = ''
           Extra packages providing themes.
+        '';
+      };
+
+      autoNumlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable numlock at login.
         '';
       };
 

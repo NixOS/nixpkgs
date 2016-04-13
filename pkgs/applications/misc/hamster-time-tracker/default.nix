@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, buildPythonPackage, docbook2x, libxslt, gnome_doc_utils
+{ stdenv, fetchzip, buildPythonApplication, docbook2x, libxslt, gnome_doc_utils
 , intltool, dbus_glib, pygobject, pygtk, pyxdg, gnome_python, dbus, sqlite3
 , hicolor_icon_theme
 }:
@@ -8,7 +8,7 @@
 #
 #   WARNING:root:Could not import wnck - workspace tracking will be disabled
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   name = "hamster-time-tracker-1.04";
   namePrefix = "";
 

@@ -4,205 +4,21 @@
 let
   goDeps = [
     {
-      root = "code.google.com/p/go.crypto";
-      src = fetchhg {
-        url = "https://code.google.com/p/go.crypto";
-        rev = "235";
-        sha256 = "0b3nlkhmraj84n9mhg5nqcd3815ipyj1xx1yzkajcdf2pz2ym4l6";
-      };
-    }
-    {
-      root = "code.google.com/p/goauth2";
-      src = fetchhg {
-        url = "https://code.google.com/p/goauth2";
-        rev = "80";
-        sha256 = "0xgkgcb97hv2rvzvh21rvydq5cc83j7sdsdb1chrymq8k7l4dzc1";
-      };
-    }
-    {
-      root = "code.google.com/p/google-api-go-client";
-      src = fetchhg {
-        url = "https://code.google.com/p/google-api-go-client";
-        rev = "135";
-        sha256 = "17a0mlq76cmgv84xh5vjzi72r6rjq0abl6gv3zkbmj3cphl9cis9";
-      };
-    }
-    {
-      root = "code.google.com/p/goprotobuf";
-      src = fetchhg {
-        url = "https://code.google.com/p/goprotobuf";
-        rev = "267";
-        sha256 = "0kamslfmxs6hi9ww52izmsq48ldaf67xawwhzwwdsbslhv0b9lf7";
-      };
-    }
-    {
-      root = "code.google.com/p/gosshold";
-      src = fetchhg {
-        url = "https://code.google.com/p/gosshold";
-        rev = "2";
-        sha256 = "1ljl8pcxxfz5rv89b2ajd31gxxzifl57kzpksvdhyjdxh98gkvg8";
-      };
-    }
-    {
-      root = "github.com/ActiveState/tail";
-      src = fetchFromGitHub {
-        owner = "ActiveState";
-        repo = "tail";
-        rev = "068b72961a6bc5b4a82cf4fc14ccc724c0cfa73a";
-        sha256 = "08zwlrsyr75cqdar51cihhp1qfm6wnn03i9srdkyzllw4zfymcd2";
-      };
-    }
-    {
-      root = "github.com/bmizerany/assert";
-      src = fetchFromGitHub {
-        owner = "bmizerany";
-        repo = "assert";
-        rev = "e17e99893cb6509f428e1728281c2ad60a6b31e3";
-        sha256 = "1lfrvqqmb09y6pcr76yjv4r84cshkd4s7fpmiy7268kfi2cvqnpc";
-      };
-    }
-    {
-      root = "github.com/going/toolkit";
-      src = fetchFromGitHub {
-        owner = "going";
-        repo = "toolkit";
-        rev = "6185c1893604d52d36a97dd6bb1247ace93a9b80";
-        sha256 = "1kzy5yppalcidsmv5yxmr6lpqplqj07kdqpn77fdp6fbb0y0sg11";
-      };
-    }
-    {
-      root = "github.com/golang/protobuf";
-      src = fetchFromGitHub {
-        owner = "golang";
-        repo = "protobuf";
-        rev = "a11b6342f0e28eab4059c0cabbad38cef38b9b6e";
-        sha256 = "1bjig0bwgw1r56r8paskm880lw36nh4c6n64v4ww6mszwmk7dkn7";
-      };
-    }
-    {
-      root = "github.com/hashicorp/atlas-go";
-      src = fetchFromGitHub {
-        owner = "hashicorp";
-        repo = "atlas-go";
-        rev = "137646809ce33b755be51e5e82b40775217ff74d";
-        sha256 = "06ilw0bwd3ijfcpkg84j3q9gwgllzwg0g6gab3w08cn1p49jicjg";
-      };
-    }
-    {
-      root = "github.com/hashicorp/go-checkpoint";
-      src = fetchFromGitHub {
-        owner = "hashicorp";
-        repo = "go-checkpoint";
-        rev = "efefdc69845f7fa7245d20827d31fb27b848d955";
-        sha256 = "1vpi414bw3rsyg5rx52hpvjhnk2qazmsvl3f13g79zwwkvbj2vvq";
-      };
-    }
-    {
-      root = "github.com/hashicorp/go-msgpack";
-      src = fetchFromGitHub {
-        owner = "hashicorp";
-        repo = "go-msgpack";
-        rev = "71c2886f5a673a35f909803f38ece5810165097b";
-        sha256 = "157f24xnkhclrjwwa1b7lmpj112ynlbf7g1cfw0c657iqny5720j";
-      };
-    }
-    {
-      root = "github.com/hashicorp/go-version";
-      src = fetchFromGitHub {
-        owner = "hashicorp";
-        repo = "go-version";
-        rev = "bb92dddfa9792e738a631f04ada52858a139bcf7";
-        sha256 = "0fl5a6j6nk1xsxwjdpa24a24fxvgnvm3jjlgpyrnmbdn380zil3m";
-      };
-    }
-    {
-      root = "github.com/hashicorp/yamux";
-      src = fetchFromGitHub {
-        owner = "hashicorp";
-        repo = "yamux";
-        rev = "9feabe6854fadca1abec9cd3bd2a613fe9a34000";
-        sha256 = "03lgbhwhiqk6rivc5cl6zxph5n2pdbdz95h0x7m0ngp3yk3aqgan";
-      };
-    }
-    {
-      root = "github.com/howeyc/fsnotify";
-      src = fetchFromGitHub {
-        owner = "howeyc";
-        repo = "fsnotify";
-        rev = "4894fe7efedeeef21891033e1cce3b23b9af7ad2";
-        sha256 = "09r3h200nbw8a4d3rn9wxxmgma2a8i6ssaplf3zbdc2ykizsq7mn";
-      };
-    }
-    {
-      root = "github.com/kr/pretty";
-      src = fetchFromGitHub {
-        owner = "kr";
-        repo = "pretty";
-        rev = "cb0850c1681cbca3233e84f7e6ec3e4c3f352085";
-        sha256 = "0j3jd7qlfv6iw7icn66y1fpdn88ri29n9qv9di92mkc6vjw4ifb1";
-      };
-    }
-    {
-      root = "github.com/kr/pty";
-      src = fetchFromGitHub {
-        owner = "kr";
-        repo = "pty";
-        rev = "05017fcccf23c823bfdea560dcc958a136e54fb7";
-        sha256 = "0f7xa8lkazif2jzacryryrg8rqz5lfl3j7hqvnis4qa8cjy5dpqb";
-      };
-    }
-    {
-      root = "github.com/kr/text";
-      src = fetchFromGitHub {
-        owner = "kr";
-        repo = "text";
-        rev = "6807e777504f54ad073ecef66747de158294b639";
-        sha256 = "1wkszsg08zar3wgspl9sc8bdsngiwdqmg3ws4y0bh02sjx5a4698";
-      };
-    }
-    {
-      root = "github.com/mitchellh/cli";
+      root = "github.com/mitchellh/packer";
       src = fetchFromGitHub {
         owner = "mitchellh";
-        repo = "cli";
-        rev = "e3c2e3d39391e9beb9660ccd6b4bd9a2f38dd8a0";
-        sha256 = "1fwf7wmlhri19bl2yyjd4zlgndgwwqrdry45clpszzjsr8b5wfgm";
+        repo = "packer";
+        rev = "f8f7b7a34c1be06058f5aca23a51247db12cdbc5";
+        sha256 = "162ja4klyb3nv44rhdg2gd3xrr4n0l0gi49cn1mr1s2h9yznphyp";
       };
     }
     {
-      root = "github.com/mitchellh/go-fs";
+      root = "github.com/mitchellh/gox";
       src = fetchFromGitHub {
         owner = "mitchellh";
-        repo = "go-fs";
-        rev = "faaa223588dd7005e49bf66fa2d19e35c8c4d761";
-        sha256 = "19jsvy35g14f18ckymzxasy0zfd6n99zlqg6grpj1yqdfxfvqn9b";
-      };
-    }
-    {
-      root = "github.com/mitchellh/go-vnc";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "go-vnc";
-        rev = "fc93dd80f5da4ccde0a9d97f0c73e56e04e0cf72";
-        sha256 = "03rwsp1frvfx6c7yxr711lq7jdgsr1gcwg14jw26xvbzzxwjvnsf";
-      };
-    }
-    {
-      root = "github.com/mitchellh/goamz";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "goamz";
-        rev = "6932a73f35dfdd5489a95284552c0ae868be0944";
-        sha256 = "03hbakfxvxkj1r0xy2c4b8xpb7bw6nbryyxpwlii6qv7gsx478yw";
-      };
-    }
-    {
-      root = "github.com/mitchellh/gophercloud-fork-40444fb";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "gophercloud-fork-40444fb";
-        rev = "40444fbc2b10960682b34e6822eb9179216e1ae1";
-        sha256 = "06bm7hfi03c75npzy51wbl9qyln35c3kzj9yn2w4fhn0k9dia9s3";
+        repo = "gox";
+        rev = "ef1967b9f538fe467e6a82fc42ec5dff966ad4ea";
+        sha256 = "0i9s8fp6m2igx93ffv3rf5v5hz7cwrx7pbxrz4cg94hba3sy3nfj";
       };
     }
     {
@@ -210,8 +26,71 @@ let
       src = fetchFromGitHub {
         owner = "mitchellh";
         repo = "iochan";
-        rev = "b584a329b193e206025682ae6c10cdbe03b0cd77";
-        sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
+        rev = "87b45ffd0e9581375c491fef3d32130bb15c5bd7";
+        sha256 = "1435kdcx3j1xgr6mm5c7w7hjx015jb20yfqlkp93q143hspf02fx";
+      };
+    }
+    {
+      root = "github.com/hashicorp/atlas-go";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "atlas-go";
+        rev = "d1d08e8e25f0659388ede7bb8157aaa4895f5347";
+        sha256 = "0bbqh94i8qllp51ln1mmcjy5srny7s4xg0l353kccvk3c7s68m03";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-checkpoint";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-checkpoint";
+        rev = "88326f6851319068e7b34981032128c0b1a6524d";
+        sha256 = "1npasn9lmvx57nw3wkswwvl5k0wmn01jpalbwv832x5wq4r0nsz4";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-msgpack";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-msgpack";
+        rev = "fa3f63826f7c23912c15263591e65d54d080b458";
+        sha256 = "1f6rd6bm2dm2rk46x8cqrxh5nks1gpk6dvvsag7s5pdjgdxy951k";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-multierror";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-multierror";
+        rev = "56912fb08d85084aa318edcf2bba735b97cf35c5";
+        sha256 = "0s01cqdab2f7fxkkjjk2wqx05a1shnwlvfn45h2pi3i4gapvcn0r";
+      };
+    }
+    {
+      root = "github.com/hashicorp/go-version";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "go-version";
+        rev = "999359b6b7a041ce16e695d51e92145b83f01087";
+        sha256 = "0z2bzphrdkaxh5vnvjh3g25d6cykchshwwbyqgji91mpgjd30pbm";
+      };
+    }
+    {
+      root = "github.com/hashicorp/yamux";
+      src = fetchFromGitHub {
+        owner = "hashicorp";
+        repo = "yamux";
+        rev = "ae139c4ae7fe21e9d99459d2acc57967cebb6918";
+        sha256 = "1p5h2wklj8lb1vnjnd5kw7cshfmiw7jmzw9radln955hzd5xzbnl";
+      };
+    }
+    {
+      root = "github.com/mitchellh/cli";
+      src = fetchFromGitHub {
+        owner = "mitchellh";
+        repo = "cli";
+        rev = "8102d0ed5ea2709ade1243798785888175f6e415";
+        sha256 = "08mj1l94pww72jy34gk9a483hpic0rrackskfw13r3ycy997w7m2";
       };
     }
     {
@@ -219,17 +98,8 @@ let
       src = fetchFromGitHub {
         owner = "mitchellh";
         repo = "mapstructure";
-        rev = "442e588f213303bec7936deba67901f8fc8f18b1";
-        sha256 = "076svhy5jlnw4jykm3dsrx2dswifajrpr7d09mz9y6g3lg901rqd";
-      };
-    }
-    {
-      root = "github.com/mitchellh/multistep";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "multistep";
-        rev = "162146fc57112954184d90266f4733e900ed05a5";
-        sha256 = "0ydhbxziy9204qr43pjdh88y2jg34g2mhzdapjyfpf8a1rin6dn3";
+        rev = "281073eb9eb092240d33ef253c404f1cca550309";
+        sha256 = "1zjx9fv29639sp1fn84rxs830z7gp7bs38yd5y1hl5adb8s5x1mh";
       };
     }
     {
@@ -239,15 +109,6 @@ let
         repo = "osext";
         rev = "0dd3f918b21bec95ace9dc86c7e70266cfc5c702";
         sha256 = "02pczqml6p1mnfdrygm3rs02g0r65qx8v1bi3x24dx8wv9dr5y23";
-      };
-    }
-    {
-      root = "github.com/mitchellh/packer";
-      src = fetchFromGitHub {
-        owner = "mitchellh";
-        repo = "packer";
-        rev = "e3c2f01cb8d8f759c02bd3cfc9d27cc1a941d498";
-        sha256 = "0sp2qjdsf0cqmw11a3vfs9alyz76vf415vv71bwdarfagz466inw";
       };
     }
     {
@@ -269,12 +130,114 @@ let
       };
     }
     {
-      root = "github.com/motain/gocheck";
+      root = "github.com/mitchellh/reflectwalk";
       src = fetchFromGitHub {
-        owner = "motain";
-        repo = "gocheck";
-        rev = "9beb271d26e640863a5bf4a3c5ea40ccdd466b84";
-        sha256 = "07arpwfdb51b5f7kzqnm5s5ndfmxv5j793hpn30nbdcya46diwjd";
+        owner = "mitchellh";
+        repo = "reflectwalk";
+        rev = "eecf4c70c626c7cfbb95c90195bc34d386c74ac6";
+        sha256 = "1nm2ig7gwlmf04w7dbqd8d7p64z2030fnnfbgnd56nmd7dz8gpxq";
+      };
+    }
+    {
+      root = "github.com/mitchellh/go-fs";
+      src = fetchFromGitHub {
+        owner = "mitchellh";
+        repo = "go-fs";
+        rev = "a34c1b9334e86165685a9449b782f20465eb8c69";
+        sha256 = "11sy85p77ffmavpiichzybrfvjm1ilsi4clx98n3363arksavs5i";
+      };
+    }
+    {
+      root = "github.com/mitchellh/goamz";
+      src = fetchFromGitHub {
+        owner = "mitchellh";
+        repo = "goamz";
+        rev = "caaaea8b30ee15616494ee68abd5d8ebbbef05cf";
+        sha256 = "0bshq69ir9h2nszbr74yvcg5wnd9a5skfmr9bgk014k9wwk7dc72";
+      };
+    }
+    {
+      root = "github.com/mitchellh/multistep";
+      src = fetchFromGitHub {
+        owner = "mitchellh";
+        repo = "multistep";
+        rev = "162146fc57112954184d90266f4733e900ed05a5";
+        sha256 = "0ydhbxziy9204qr43pjdh88y2jg34g2mhzdapjyfpf8a1rin6dn3";
+      };
+    }
+    {
+      root = "github.com/ActiveState/tail";
+      src = fetchFromGitHub {
+        owner = "ActiveState";
+        repo = "tail";
+        rev = "4b368d1590196ade29993d6a0896591403180bbd";
+        sha256 = "183y44skn75lkpsjd3zlbx8vc3b930p3nkpc1ybq3k50s4bzhsll";
+      };
+    }
+    {
+      root = "google.golang.org/api";
+      src = fetchgit {
+        url = "https://github.com/google/google-api-go-client.git";
+        rev = "a5c3e2a4792aff40e59840d9ecdff0542a202a80";
+        sha256 = "1kigddnbyrl9ddpj5rs8njvf1ck54ipi4q1282k0d6b3am5qfbj8";
+      };
+    }
+    {
+      root = "golang.org/x/crypto";
+      src = fetchgit {
+        url = "https://go.googlesource.com/crypto.git";
+        rev = "81bf7719a6b7ce9b665598222362b50122dfc13b";
+        sha256 = "0rwzc2ls842d0g588b5xik59srwzawch3nb1dlcqwm4a1132mvmr";
+      };
+    }
+    {
+      root = "golang.org/x/oauth2";
+      src = fetchgit {
+        url = "https://go.googlesource.com/oauth2.git";
+        rev = "397fe7649477ff2e8ced8fc0b2696f781e53745a";
+        sha256 = "0fza0l7iwh6llkq2yzqn7dxi138vab0da64lnghfj1p71fprjzn8";
+      };
+    }
+    {
+      root = "golang.org/x/net";
+      src = fetchgit {
+        url = "https://go.googlesource.com/net.git";
+        rev = "7654728e381988afd88e58cabfd6363a5ea91810";
+        sha256 = "08i6kkzbckbc5k15bdlqkbird48zmc24qr505hlxlb11djjgdiml";
+      };
+    }
+    {
+      root = "google.golang.org/appengine";
+      src = fetchgit {
+        url = "https://github.com/golang/appengine.git";
+        rev = "cdd515334b113fdc9b35cb1e7a3b457eeb5ad5cf";
+        sha256 = "0l0rddpfbddbi8kizg2n25w7bdhf99f0iz7ghwz7fq6k4rmq44ws";
+      };
+    }
+    {
+      root = "google.golang.org/cloud";
+      src = fetchgit {
+        url = "https://github.com/GoogleCloudPlatform/gcloud-golang.git";
+        rev = "e34a32f9b0ecbc0784865fb2d47f3818c09521d4";
+        sha256 = "1rzac44kzhd7r6abdy5qyj69y64wy9r73vnxsdalfr5m0i55fqk4";
+      };
+    }
+    {
+      root = "github.com/golang/protobuf";
+      src = fetchFromGitHub {
+        owner = "golang";
+        repo = "protobuf";
+        rev = "59b73b37c1e45995477aae817e4a653c89a858db";
+        sha256 = "1dx22jvhvj34ivpr7gw01fncg9yyx35mbpal4mpgnqka7ajmgjsa";
+      };
+    }
+    {
+      root = "github.com/mitchellh/gophercloud-fork-40444fb";
+      src = fetchFromGitHub {
+        owner = "mitchellh";
+        repo = "gophercloud-fork-40444fb";
+        rev = "40444fbc2b10960682b34e6822eb9179216e1ae1";
+        sha256 = "06bm7hfi03c75npzy51wbl9qyln35c3kzj9yn2w4fhn0k9dia9s3";
       };
     }
     {
@@ -287,39 +250,38 @@ let
       };
     }
     {
-      root = "github.com/rackspace/gophercloud";
+      root = "github.com/going/toolkit";
       src = fetchFromGitHub {
-        owner = "rackspace";
-        repo = "gophercloud";
-        rev = "d7f07fc0a7ff4b608c6f9e34197930093c7c7ee1";
-        sha256 = "1cyfvynwl5z6f9s0lmj92mhsriy7nl7kq5f8jay67wmdn0nhyybs";
+        owner = "going";
+        repo = "toolkit";
+        rev = "5bff591dc40da25dcc875d3fa1a3373d74d45411";
+        sha256 = "15gnlqignm7xcp2chrz7d7qqlibkbfrrsvbcysk8lrj9l7md8vjf";
       };
     }
     {
-      root = "github.com/rasa/oauth2-fork-b3f9a68";
+      root = "github.com/mitchellh/go-vnc";
       src = fetchFromGitHub {
-        owner = "rasa";
-        repo = "oauth2-fork-b3f9a68";
-        rev = "94a7bc9691e0841393b875eaad68fbfd069b2a18";
-        sha256 = "101bv0zwbchdql86x8c4qhvmlahkfcw4bnqw7v8hihqxd5zf9fxp";
+        owner = "mitchellh";
+        repo = "go-vnc";
+        rev = "723ed9867aed0f3209a81151e52ddc61681f0b01";
+        sha256 = "0nlya2rbmwb3jycqsyah1pn4386712mfrfiprprkbzcna9q7lp1h";
       };
     }
     {
-      root = "github.com/ugorji/go";
+      root = "github.com/howeyc/fsnotify";
       src = fetchFromGitHub {
-        owner = "ugorji";
-        repo = "go";
-        rev = "39815c8993d27d88435f3d267be35a6d26e43f03";
-        sha256 = "1g5nbcs3900chwv0jz1a9x0s3scxjhksi1268w112mq2k1rinq3j";
+        owner = "howeyc";
+        repo = "fsnotify";
+        rev = "4894fe7efedeeef21891033e1cce3b23b9af7ad2";
+        sha256 = "09r3h200nbw8a4d3rn9wxxmgma2a8i6ssaplf3zbdc2ykizsq7mn";
       };
     }
     {
-      root = "github.com/ugorji/go-msgpack";
-      src = fetchFromGitHub {
-        owner = "ugorji";
-        repo = "go-msgpack";
-        rev = "75092644046c5e38257395b86ed26c702dc95b92";
-        sha256 = "1bmqi16bfiqw7qhb3d5hbh0dfzhx2bbq1g15nh2pxwxckwh80x98";
+      root = "gopkg.in/tomb.v1";
+      src = fetchgit {
+        url = "https://gopkg.in/tomb.v1.git";
+        rev = "dd632973f1e7218eb1089048e0798ec9ae7dceb8";
+        sha256 = "1lqmq1ag7s4b3gc3ddvr792c5xb5k6sfn0cchr3i2s7f1c231zjv";
       };
     }
     {
@@ -332,101 +294,201 @@ let
       };
     }
     {
-      root = "github.com/vmihailenco/msgpack";
+      root = "github.com/aws/aws-sdk-go";
       src = fetchFromGitHub {
-        owner = "vmihailenco";
-        repo = "msgpack";
-        rev = "1efcd9943dd320d41d8a00189e568d794f1b4e78";
-        sha256 = "0brbrss7hja2d06cca633ggn5jawqwb8p0prp5cg1m26w9f3hzis";
+        owner = "aws";
+        repo = "aws-sdk-go";
+        rev = "f096b7d61df3d7d6d97f0e701f92616d1ea5420d";
+        sha256 = "0z2fknqxdyb5vw4am46cn60m15p9fjsqzpzaj2pamp436l0cpjkw";
       };
     }
     {
-      root = "github.com/xiocode/toolkit";
+      root = "github.com/digitalocean/godo";
       src = fetchFromGitHub {
-        owner = "xiocode";
-        repo = "toolkit";
-        rev = "352fd7c6700074a81056cdfc9e82b3e8c5681ac5";
-        sha256 = "0p33zh57xpxyk2wyp9xahdxyrkq48ysihpr0n9kj713q0dh7x4a3";
+        owner = "digitalocean";
+        repo = "godo";
+        rev = "2a0d64a42bb60a95677748a4d5729af6184330b4";
+        sha256 = "0854577b08fw9bjflk044ph16p15agxhh6xbzn71rhfvxg5yg5mi";
       };
     }
     {
-      root = "golang.org/x/crypto";
-      src = fetchgit {
-        url = "https://go.googlesource.com/crypto";
-        rev = "bfc286917c5fcb7420d7e3092b50bbfd31b38a98";
-        sha256 = "04ryvpbd2z4q4wqaffmj4wc541y744rfjg6arhwf4qn64r171am0";
+      root = "github.com/dylanmei/winrmtest";
+      src = fetchFromGitHub {
+        owner = "dylanmei";
+        repo = "winrmtest";
+        rev = "025617847eb2cf9bd1d851bc3b22ed28e6245ce5";
+        sha256 = "1i0wq6r1vm3nhnia3ycm5l590gyia7cwh6971ppnn4rrdmvsw2qh";
       };
     }
     {
-      root = "golang.org/x/net";
-      src = fetchgit {
-        url = "https://go.googlesource.com/net";
-        rev = "2033b3a5e8688bdd590c647ca70a12384ddc6824";
-        sha256 = "06zla6nja6af735b2rskb5l2pjggw99v05fl4n306dcnvwj3gvg6";
+      root = "github.com/klauspost/pgzip";
+      src = fetchFromGitHub {
+        owner = "klauspost";
+        repo = "pgzip";
+        rev = "47f36e165cecae5382ecf1ec28ebf7d4679e307d";
+        sha256 = "1bfka02xrhp4fg9pz2v4ppxa46b59bwy5n88c7hbbxqxm8z30yca";
       };
     }
     {
-      root = "golang.org/x/text";
-      src = fetchgit {
-        url = "https://go.googlesource.com/text";
-        rev = "bfad311ce93436dc888b40d76c78f99dc3104473";
-        sha256 = "1mbhp5q24drz2l2x6ib3180i42f9015ry80bn7jhr7rwizvyp6lh";
+      root = "github.com/masterzen/winrm";
+      src = fetchFromGitHub {
+        owner = "masterzen";
+        repo = "winrm";
+        rev = "54ea5d01478cfc2afccec1504bd0dfcd8c260cfa";
+        sha256 = "0qzdmsjgcf5n0jzjf4gd22lhqwn9yagynk1izjz3978gr025p2zm";
       };
     }
     {
-      root = "google.golang.org/appengine";
-      src = fetchgit {
-        url = "https://github.com/golang/appengine.git";
-        rev = "d1e7e222a24d1e085466ed8b44aedd572f5a51c4";
-        sha256 = "045dmq0m56m1n16fygdghmkaqh7xb2g80xrm7lkcbkf3763w8gfw";
+      root = "github.com/google/go-querystring";
+      src = fetchFromGitHub {
+        owner = "google";
+        repo = "go-querystring";
+        rev = "2a60fc2ba6c19de80291203597d752e9ba58e4c0";
+        sha256 = "0raf6r3dd8rxxppzrbhp1y6k5csgfkfs7b0jylj65sbg0hbzxvbr";
       };
     }
     {
-      root = "gopkg.in/check.v1";
-      src = fetchgit {
-        url = "https://gopkg.in/check.v1";
-        rev = "64131543e7896d5bcc6bd5a76287eb75ea96c673";
-        sha256 = "0ybxgxkkmfhgd4pmjf7hgpp7d7zxsskc7kv9dklqbaf6aszsqbxl";
+      root = "github.com/go-ini/ini";
+      src = fetchFromGitHub {
+        owner = "go-ini";
+        repo = "ini";
+        rev = "afbd495e5aaea13597b5e14fe514ddeaa4d76fc3";
+        sha256 = "0xi8zr9qw38sdbv95c2ip31yczbm4axdvmj3ljyivn9xh2nbxfia";
       };
     }
     {
-      root = "gopkg.in/tomb.v1";
-      src = fetchgit {
-        url = "https://gopkg.in/tomb.v1";
-        rev = "dd632973f1e7218eb1089048e0798ec9ae7dceb8";
-        sha256 = "1lqmq1ag7s4b3gc3ddvr792c5xb5k6sfn0cchr3i2s7f1c231zjv";
+      root = "github.com/klauspost/compress";
+      src = fetchFromGitHub {
+        owner = "klauspost";
+        repo = "compress";
+        rev = "112706bf3743c241303219f9c5ce2e6635f69221";
+        sha256 = "1gyf5hf8wivbx6s99x2rxq2a335b49av2xb43nikgbzm4qn7win7";
       };
     }
     {
-      root = "gopkg.in/vmihailenco/msgpack.v2";
-      src = fetchgit {
-        url = "https://gopkg.in/vmihailenco/msgpack.v2";
-        rev = "1efcd9943dd320d41d8a00189e568d794f1b4e78";
-        sha256 = "0brbrss7hja2d06cca633ggn5jawqwb8p0prp5cg1m26w9f3hzis";
+      root = "github.com/masterzen/simplexml";
+      src = fetchFromGitHub {
+        owner = "masterzen";
+        repo = "simplexml";
+        rev = "95ba30457eb1121fa27753627c774c7cd4e90083";
+        sha256 = "0pwsis1f5n4is0nmn6dnggymj32mldhbvihv8ikn3nglgxclz4kz";
       };
     }
     {
-      root = "labix.org/v2/mgo";
-      src = fetchbzr {
-        url = "https://launchpad.net/mgo/v2";
-        rev = "287";
-        sha256 = "0602x0liyp3w2v8cj1nyq73576vbxlxx1z1a8nn173pajxx9pm2z";
+      root = "github.com/masterzen/xmlpath";
+      src = fetchFromGitHub {
+        owner = "masterzen";
+        repo = "xmlpath";
+        rev = "13f4951698adc0fa9c1dda3e275d489a24201161";
+        sha256 = "1y81h7ymk3dp3w3a2iy6qd1dkm323rkxa27dzxw8vwy888j5z8bk";
       };
     }
     {
-      root = "launchpad.net/gocheck";
-      src = fetchbzr {
-        url = "https://launchpad.net/gocheck";
-        rev = "87";
-        sha256 = "1y9fa2mv61if51gpik9isls48idsdz87zkm1p3my7swjdix7fcl0";
+      root = "github.com/jmespath/go-jmespath";
+      src = fetchFromGitHub {
+        owner = "jmespath";
+        repo = "go-jmespath";
+        rev = "c01cf91b011868172fdcd9f41838e80c9d716264";
+        sha256 = "0gfrqwl648qngp77g8m1g9g7difggq2cac4ydjw9bpx4bd7mw1rw";
       };
     }
     {
-      root = "launchpad.net/mgo";
-      src = fetchbzr {
-        url = "https://launchpad.net/mgo";
-        rev = "2";
-        sha256 = "0h1dxzyx5c4r4gfnmjxv92hlhjxrgx9p4g53p4fhmz6x2fdglb0x";
+      root = "github.com/klauspost/cpuid";
+      src = fetchFromGitHub {
+        owner = "klauspost";
+        repo = "cpuid";
+        rev = "349c675778172472f5e8f3a3e0fe187e302e5a10";
+        sha256 = "1s8baj42k66ny77qkm3n06kwayk4srwf4b9ss42612f3h86ka5i2";
+      };
+    }
+    {
+      root = "github.com/nu7hatch/gouuid";
+      src = fetchFromGitHub {
+        owner = "nu7hatch";
+        repo = "gouuid";
+        rev = "179d4d0c4d8d407a32af483c2354df1d2c91e6c3";
+        sha256 = "1isyfix5w1wm26y3a15ha3nnpsxqaxz5ngq06hnh6c6y0inl2fwj";
+      };
+    }
+    {
+      root = "github.com/klauspost/crc32";
+      src = fetchFromGitHub {
+        owner = "klauspost";
+        repo = "crc32";
+        rev = "999f3125931f6557b991b2f8472172bdfa578d38";
+        sha256 = "00ws3hrszxdnyj0cjk9b8b44xc8x5hizm0h22x6m3bb4c5b487wv";
+      };
+    }
+    {
+      root = "github.com/pierrec/lz4";
+      src = fetchFromGitHub {
+        owner = "pierrec";
+        repo = "lz4";
+        rev = "383c0d87b5dd7c090d3cddefe6ff0c2ffbb88470";
+        sha256 = "0l23bmzqfvgh61zlikj6iakg0kz7lybs8zf0nscylskl2hlr09rp";
+      };
+    }
+    {
+      root = "github.com/packer-community/winrmcp";
+      src = fetchFromGitHub {
+        owner = "packer-community";
+        repo = "winrmcp";
+        rev = "3d184cea22ee1c41ec1697e0d830ff0c78f7ea97";
+        sha256 = "0g2rwwhykm1z099gwkg1nmb1ggnizqlm2pbmy3qsdvjnl5246ca4";
+      };
+    }
+    {
+      root = "github.com/dylanmei/iso8601";
+      src = fetchFromGitHub {
+        owner = "dylanmei";
+        repo = "iso8601";
+        rev = "2075bf119b58e5576c6ed9f867b8f3d17f2e54d4";
+        sha256 = "0px5aq4w96yyjii586h3049xm7rvw5r8w7ph3axhyismrqddqgx1";
+      };
+    }
+    {
+      root = "github.com/pierrec/xxHash";
+      src = fetchFromGitHub {
+        owner = "pierrec";
+        repo = "xxHash";
+        rev = "5a004441f897722c627870a981d02b29924215fa";
+        sha256 = "146ibrgvgh61jhbbv9wks0mabkci3s0m68sg6shmlv1yixkw6gja";
+      };
+    }
+    {
+      root = "github.com/satori/go.uuid";
+      src = fetchFromGitHub {
+        owner = "satori";
+        repo = "go.uuid";
+        rev = "d41af8bb6a7704f00bc3b7cba9355ae6a5a80048";
+        sha256 = "0lw8k39s7hab737rn4nngpbsganrniiv7px6g41l6f6vci1skyn2";
+      };
+    }
+    {
+      root = "github.com/rackspace/gophercloud";
+      src = fetchFromGitHub {
+        owner = "rackspace";
+        repo = "gophercloud";
+        rev = "680aa02616313d8399abc91f17a444cf9292f0e1";
+        sha256 = "0pxzvhh6l1gfn31k6g8fz3x4b6mz88cx2rgpims0ys5cl212zrp1";
+      };
+    }
+    {
+      root = "gopkg.in/fsnotify.v0";
+      src = fetchFromGitHub {
+        owner = "go-fsnotify";
+        repo = "fsnotify";
+        rev = "ea925a0a47d225b2ca7f9932b01d2ed4f3ec74f6";
+        sha256 = "15wqjpkfzsxnaxbz6y4r91hw6812g3sc4ipagxw1bya9klbnkdc9";
+      };
+    }
+    {
+      root = "github.com/tent/http-link-go";
+      src = fetchFromGitHub {
+        owner = "tent";
+        repo = "http-link-go";
+        rev = "ac974c61c2f990f4115b119354b5e0b47550e888";
+        sha256 = "1fph21b6vp4cm73fkkykffggi57m656x9fd1k369fr6jbvq5fffj";
       };
     }
   ];

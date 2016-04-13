@@ -1,33 +1,49 @@
-{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
-, windows ? null
+{ stdenv, fetchurl
+, windows ? null, variant ? null, pcre
+, withCharSize ? 8
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "pcre-8.37";
+assert elem variant [ null "cpp" "pcre16" "pcre32" ];
+
+let
+  version = "8.38";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
+
+in stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
-    sha256 = "17bqykp604p7376wj3q2nmjdhrb6v1ny8q08zdwi7qvc02l9wrsi";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
+    sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
-  patches =
-    [ ./cve-2015-3210.patch
-      ./cve-2015-5073.patch
-    ];
+  patches = [
+    ./CVE-2016-1283.patch
+  ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "dev" "out" "bin" "doc" "man" ];
 
-  configureFlags = ''
-    --enable-jit
-    ${if unicodeSupport then "--enable-unicode-properties" else ""}
-    ${if !cplusplusSupport then "--disable-cpp" else ""}
-  '';
+  configureFlags = [
+    "--enable-jit"
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+    ++ optional (variant != null) "--enable-${variant}";
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
+
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+    + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.so.*.*.*
+  '';
 
   crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
     buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];

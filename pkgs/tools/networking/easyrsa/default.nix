@@ -1,39 +1,33 @@
-{ stdenv, fetchurl, autoconf, automake111x, makeWrapper
-, gnugrep, openssl}:
+{ stdenv, fetchFromGitHub, openssl }:
 
-stdenv.mkDerivation rec {
-  name = "easyrsa-2.2.0";
+let
+  version = "3.0.0";
+in stdenv.mkDerivation rec {
+  name = "easyrsa-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/OpenVPN/easy-rsa/archive/v2.2.0.tar.gz";
-    sha256 = "1xq4by5frb6ikn53ss3y8v7ss639dccxfq8jfrbk07ynkmk668qk";
+  src = fetchFromGitHub {
+    owner = "OpenVPN";
+    repo = "easy-rsa";
+    rev = "v${version}";
+    sha256 = "0wbdv3wmqwm5680rpb971l56xiw49adpicqshk3vhfmpvqzl4dbs";
   };
 
-  # Copy missing files and autoreconf
-  preConfigure = ''
-    cp ${automake111x}/share/automake/install-sh .
-    cp ${automake111x}/share/automake/missing .
+  patches = [ ./fix-paths.patch ];
 
-    autoreconf
-  '';
+  installPhase = ''
+    mkdir -p $out/share/easyrsa
+    cp -r easyrsa3/{openssl*.cnf,x509-types,vars.example} $out/share/easyrsa
+    install -D -m755 easyrsa3/easyrsa $out/bin/easyrsa
+    substituteInPlace $out/bin/easyrsa \
+      --subst-var out \
+      --subst-var-by openssl ${openssl.bin}/bin/openssl
 
-  preBuild = ''
-    mkdir -p $out/share/easy-rsa
-  '';
-
-  nativeBuildInputs = [ autoconf makeWrapper automake111x ];
-  buildInputs = [ gnugrep openssl];
-
-  # Make sane defaults and patch default config vars
-  postInstall = ''
-    cp $out/share/easy-rsa/openssl-1.0.0.cnf $out/share/easy-rsa/openssl.cnf
-    for prog in $(find "$out/share/easy-rsa" -executable -type f); do
-      makeWrapper "$prog" "$out/bin/$(basename $prog)" \
-        --set EASY_RSA "$out/share/easy-rsa" \
-        --set OPENSSL "${openssl}/bin/openssl" \
-        --set GREP "${gnugrep}/bin/grep"
-    done
-    sed -i "/EASY_RSA=\|OPENSSL=\|GREP=/d" $out/share/easy-rsa/vars
+    # Helper utility
+    cat > $out/bin/easyrsa-init <<EOF
+    #!${stdenv.shell} -e
+    cp -r $out/share/easyrsa/* .
+    EOF
+    chmod +x $out/bin/easyrsa-init
   '';
 
   meta = with stdenv.lib; {

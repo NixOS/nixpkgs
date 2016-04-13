@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonPackage, pycrypto }:
+{ stdenv, fetchurl, buildPythonApplication, pycrypto }:
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   namePrefix = "";
   name = "volatility-2.4";
 

@@ -37,5 +37,5 @@ if (isPyPy || isPy35) then throw "pycairo not supported for interpreter ${python
   buildPhase = "${python.executable} waf";
   installPhase = "${python.executable} waf install";
 
-  meta.platforms = stdenv.lib.platforms.linux;
+  meta.platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
 }

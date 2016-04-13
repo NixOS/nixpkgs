@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installFlags = "PREFIX=\${out} VERSION=${version}";
 
   meta = with stdenv.lib; {
-    description = "A flexible scheduler for your i3bar blocks.";
+    description = "A flexible scheduler for your i3bar blocks";
     homepage = https://github.com/vivien/i3blocks;
     license = licenses.gpl3;
     maintainers = [ "MindTooth" ];

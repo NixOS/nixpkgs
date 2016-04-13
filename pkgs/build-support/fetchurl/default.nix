@@ -61,6 +61,7 @@ in
 , md5 ? ""
 , sha1 ? ""
 , sha256 ? ""
+, sha512 ? ""
 
 , recursiveHash ? false
 
@@ -73,6 +74,9 @@ in
   # is communicated to postFetch via $downloadedFile.
   downloadToTemp ? false
 
+, # If true, set executable bit on downloaded file
+  executable ? false
+
 , # If set, don't download the file, but write a list of all possible
   # URLs (resulting from resolving mirror:// URLs) to $out.
   showURLs ? false
@@ -82,14 +86,13 @@ in
 }:
 
 assert builtins.isList urls;
-assert urls != [] -> url == "";
-assert url != "" -> urls == [];
+assert (urls == []) != (url == "");
 
 
 let
 
   hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
-    || md5 != "" || sha1 != "" || sha256 != "";
+    || md5 != "" || sha1 != "" || sha256 != "" || sha512 != "";
   urls_ = if urls != [] then urls else [url];
 
 in
@@ -112,13 +115,13 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
 
   # New-style output content requirements.
   outputHashAlgo = if outputHashAlgo != "" then outputHashAlgo else
-      if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
+      if sha512 != "" then "sha512" else if sha256 != "" then "sha256" else if sha1 != "" then "sha1" else "md5";
   outputHash = if outputHash != "" then outputHash else
-      if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
+      if sha512 != "" then sha512 else if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
 
-  outputHashMode = if recursiveHash then "recursive" else "flat";
+  outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp;
+  inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp executable;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.

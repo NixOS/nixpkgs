@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib
+{ stdenv, fetchurl, pkgconfig, yasm, bzip2, zlib, perl
 , mp3Support    ? true,   lame      ? null
 , speexSupport  ? true,   speex     ? null
 , theoraSupport ? true,   libtheora ? null
@@ -7,10 +7,10 @@
 , x264Support   ? false,  x264      ? null
 , xvidSupport   ? true,   xvidcore  ? null
 , faacSupport   ? false,  faac      ? null
-, vaapiSupport  ? false,  libva     ? null # ToDo: it has huge closure
+, vaapiSupport  ? true,   libva     ? null
 , vdpauSupport  ? true,   libvdpau  ? null
 , freetypeSupport ? true, freetype  ? null # it's small and almost everywhere
-, SDL # only for avplay in $tools, adds nontrivial closure to it
+, SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
 }:
@@ -27,8 +27,7 @@ with { inherit (stdenv.lib) optional optionals; };
 let
   result = {
     libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
-    libav_9   = libavFun   "9.18" "e10cde4587c4d4d3bb11d30c7b47e953664cd714";
-    libav_11  = libavFun  "11.4"  "c2ab12102de187f2675a56b828b4a5e9136ab747";
+    libav_11  = libavFun  "11.6"  "2296cbd7afe98591eb164cebe436dcb5582efc9d";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -38,6 +37,9 @@ let
       url = "${meta.homepage}/releases/${name}.tar.xz";
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
+
+    preConfigure = "patchShebangs doc/texi2pod.pl";
+
     configureFlags =
       assert stdenv.lib.all (x: x!=null) buildInputs;
     [
@@ -46,6 +48,7 @@ let
       "--enable-avplay"
       "--enable-shared"
       "--enable-runtime-cpudetect"
+      "--cc=cc"
     ]
       ++ optionals enableGPL [ "--enable-gpl" "--enable-swscale" ]
       ++ optional mp3Support "--enable-libmp3lame"
@@ -62,6 +65,7 @@ let
       ;
 
     buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
+      ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex
       ++ optional theoraSupport libtheora
@@ -77,12 +81,19 @@ let
 
     enableParallelBuilding = true;
 
-    outputs = [ "out" "tools" ];
+    outputs = [ "dev" "out" "bin" ];
+    setOutputFlags = false;
 
-    # move avplay to get rid of the SDL dependency in the main output
+    # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
+    buildFlags = "all alltools install-man";
+
     postInstall = ''
-      mkdir -p "$tools/bin"
-      mv "$out/bin/avplay" "$tools/bin"
+      moveToOutput bin "$bin"
+      # alltools target compiles an executable in tools/ for every C
+      # source file in tools/, so move those to $out
+      for tool in $(find tools -type f -executable); do
+        mv "$tool" "$bin/bin/"
+      done
     '';
 
     doInstallCheck = false; # fails randomly
@@ -105,10 +116,9 @@ let
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = with platforms; linux ++ darwin;
       maintainers = [ maintainers.vcunat ];
     };
   }; # libavFun
 
 in result
-

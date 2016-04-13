@@ -12,6 +12,13 @@ stdenv.mkDerivation rec {
     sha256 = "1aa848cck8qrp67ha9vrkzm3k24r2aiv1v4dxla6pi22rw98yxzm";
   };
 
+  # https://github.com/yvt/openspades/issues/354
+  postPatch = ''
+    substituteInPlace Sources/Client/Client_Input.cpp --replace "isnan(" "std::isnan("
+    substituteInPlace Sources/Client/Corpse.cpp --replace "isnan(" "std::isnan("
+    substituteInPlace Sources/Draw/SWMapRenderer.cpp --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
+  '';
+
   nativeBuildInputs = 
     with stdenv.lib;
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
