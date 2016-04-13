@@ -5586,7 +5586,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "84ac24fb1d551f998145435265e5b6fd4a52ec61e4fadd3d7755eb648be2c4b2";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ CacheCache ClassContainer ExceptionClass HTMLParser LogAny ParamsValidate ];
+    propagatedBuildInputs = [ CacheCache CGI ClassContainer ExceptionClass HTMLParser LogAny ParamsValidate ];
     meta = {
       homepage = http://metacpan.org/release/HTML-Mason;
       description = "High-performance, dynamic web site authoring system";
