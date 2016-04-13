@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "hostapd-${version}";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "0zv5pnfrp6z7jjbskzgdb2rlmlbvdxmmis7ca94x5jy9s5mypq3g";
+    sha256 = "0jn77r39ysshkzihv5rjbdajqazci59v2yab4rn05my09najs9wf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
