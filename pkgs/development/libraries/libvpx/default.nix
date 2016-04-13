@@ -13,10 +13,12 @@
 , runtimeCpuDetectSupport ? true # detect cpu capabilities at runtime
 , thumbSupport ? false # build arm assembly in thumb mode
 , examplesSupport ? true # build examples (vpxdec & vpxenc are part of examples)
+, fastUnalignedSupport ? true # use unaligned accesses if supported by hardware
 , debugLibsSupport ? false # include debug version of each library
 , postprocSupport ? true # postprocessing
 , multithreadSupport ? true # multithreaded decoding & encoding
 , internalStatsSupport ? false # output of encoder internal stats for debug, if supported (encoders)
+, memTrackerSupport ? false # track memory usage
 , spatialResamplingSupport ? true # spatial sampling (scaling)
 , realtimeOnlySupport ? false # build for real-time encoding
 , ontheflyBitpackingSupport ? false # on-the-fly bitpacking in real-time encoding
@@ -59,13 +61,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   name = "libvpx-${version}";
-  version = "1.5.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = "libvpx";
     rev = "v${version}";
-    sha256 = "19ill4c7dak5f8m4pdbas87zknw3a34sca8a4i952q0l0jnif0np";
+    sha256 = "1y8cf2q5ij8z8ab5j36m18rbs62aah6sw6shzbs3jr70ja0z6n8s";
   };
 
   patchPhase = ''patchShebangs .'';
@@ -98,6 +100,7 @@ stdenv.mkDerivation rec {
     "--as=yasm"
     # Limit default decoder max to WHXGA
     (if sizeLimitSupport then "--size-limit=5120x3200" else null)
+    (enableFeature fastUnalignedSupport "fast-unaligned")
     "--disable-codec-srcs"
     (enableFeature debugLibsSupport "debug-libs")
     (enableFeature isMips "dequant-tokens")
@@ -106,6 +109,7 @@ stdenv.mkDerivation rec {
     (enableFeature (postprocSupport && (vp9DecoderSupport || vp9EncoderSupport)) "vp9-postproc")
     (enableFeature multithreadSupport "multithread")
     (enableFeature internalStatsSupport "internal-stats")
+    (enableFeature memTrackerSupport "mem-tracker")
     (enableFeature spatialResamplingSupport "spatial-resampling")
     (enableFeature realtimeOnlySupport "realtime-only")
     (enableFeature ontheflyBitpackingSupport "onthefly-bitpacking")
