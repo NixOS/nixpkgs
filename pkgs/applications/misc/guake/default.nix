@@ -16,8 +16,7 @@ gconftool-2 --recursive-unset /apps/guake
 with lib;
 
 let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_common ];
-    pySubDir = "lib/${python2.libPrefix}/site-packages";
-    pyPath = makeSearchPath pySubDir (attrVals [ "dbus" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
+    pyPath = makeSearchPathOutputs python2.sitePackages ["lib"] (attrVals [ "dbus" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
  in stdenv.mkDerivation rec {
   name = "guake-${version}";
   version = "0.8.3";
@@ -63,7 +62,7 @@ let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_co
       wrapProgram $bin \
         --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH : ${makeLibraryPath inputs} \
-        --prefix PYTHONPATH : "$out/${pySubDir}:${pyPath}:$PYTHONPATH"
+        --prefix PYTHONPATH : "$out/${python2.sitePackages}:${pyPath}:$PYTHONPATH"
     done
   '';
 

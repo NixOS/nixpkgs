@@ -6,7 +6,7 @@
 }:
 
 let
-  binpath = stdenv.lib.makeSearchPath "bin"
+  binpath = stdenv.lib.makeBinPath
     ([ coreutils ncurses gnused gnugrep ] ++ stdenv.lib.optional (jdk != null) jdk);
 in
 stdenv.mkDerivation rec {

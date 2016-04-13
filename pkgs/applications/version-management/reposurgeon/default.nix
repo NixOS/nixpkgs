@@ -46,12 +46,12 @@ mkDerivation rec {
 
   postInstall =
     let
-      binpath = makeSearchPath "bin" (
+      binpath = makeBinPath (
         filter (x: x != null)
         [ out git bazaar cvs darcs fossil mercurial
           monotone rcs src subversion cvs_fast_export ]
       );
-      pythonpath = makeSearchPath (python27.sitePackages) (
+      pythonpath = makeSearchPathOutputs python27.sitePackages ["lib"] (
         filter (x: x != null)
         [ python27Packages.readline or null python27Packages.hglib or null ]
       );

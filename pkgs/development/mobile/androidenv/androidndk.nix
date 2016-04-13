@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed_script_2 =
       "'s|^MYNDKDIR=`dirname $0`" +
       "|MYNDKDIR=`dirname $(readlink -f $(which $0))`|'";
-    runtime_paths = (lib.makeSearchPath "bin" [
+    runtime_paths = (lib.makeBinPath [
       coreutils file findutils
       gawk gnugrep gnused
       jdk

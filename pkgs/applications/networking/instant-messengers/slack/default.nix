@@ -6,7 +6,7 @@ let
 
   version = "2.0.3";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
