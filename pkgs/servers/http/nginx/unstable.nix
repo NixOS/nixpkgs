@@ -8,10 +8,10 @@
 with stdenv.lib;
 
 let
-  version = "1.9.11";
+  version = "1.9.14";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "07x5d2ryf547xrj4wp8w90kz2d93sxjhkfjb0vdscmxgmzs74p3a";
+    sha256 = "1ljpyigqb6sbm4f8mi4fyvwfcvfapzg4z35s9cwb9ri8dl3r6j1b";
   };
 
 in
