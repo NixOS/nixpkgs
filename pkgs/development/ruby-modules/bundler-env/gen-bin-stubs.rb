@@ -31,6 +31,7 @@ paths.each do |path|
 
 ENV["BUNDLE_GEMFILE"] = "#{gemfile}"
 ENV["BUNDLE_PATH"] = "#{bundle_path}"
+ENV['BUNDLE_FROZEN'] = '1'
 
 Gem.use_paths("#{bundler_gem_path}", ENV["GEM_PATH"])
 
