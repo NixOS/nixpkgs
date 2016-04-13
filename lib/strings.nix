@@ -132,7 +132,8 @@ rec {
        makePerlPath [ pkgs.perlPackages.NetSMTP ]
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
-  makePerlPath = makeSearchPath "lib/perl5/site_perl";
+  makePerlPath = pkgs: makeSearchPath "lib/perl5/site_perl"
+    (map (pkg: pkg.lib or (pkg.out or pkg)) pkgs);
 
   /* Dependening on the boolean `cond', return either the given string
      or the empty string. Useful to contatenate against a bigger string.
