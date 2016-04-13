@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
-, defaultIconTheme, glib
+, defaultIconTheme, glib, ncurses
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" ]
 , withHelp ? true
 }:
@@ -21,8 +21,8 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "5";
   minor = "1";
-  patch = "0";
-  tweak = "3";
+  patch = "2";
+  tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
@@ -48,14 +48,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "1qqffq7646yh7rskzd1wvy0zgkdnkpdbyhvsny424lxqjglyw3px";
+      sha256 = "1w2m4hfrxb706p8bjfgklqv0j5hnivbvif3vav7sbngp5ms0vgvz";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0ixlq6yzn6z8hsih24l934sa05vvz2vk3p03nalpqqrhm7vdzsf2";
+      sha256 = "0lr90z5fdg157lcid5w4p0zxi72c4xziiw51kh38kbbqrbb9ykfw";
     };
 
   };
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1csphxpbpc7bxrwnl5i9nvm3bh3p0j7r3h9ivsdl7cys13q066xl";
+    sha256 = "108p8jg22lg3g9wypqv5d71j4vkcpmg2x2w9l2v4z9h10agdrv2l";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -239,7 +239,7 @@ in stdenv.mkDerivation rec {
       python3 sablotron sane-backends tcsh unzip vigra which zip zlib
       mdds bluez5 glibc libcmis libwps libabw
       libxshmfence libatomic_ops graphite2 harfbuzz
-      librevenge libe-book libmwaw glm glew
+      librevenge libe-book libmwaw glm glew ncurses
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
     ];
 

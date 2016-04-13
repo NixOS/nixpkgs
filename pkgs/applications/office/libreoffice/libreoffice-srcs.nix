@@ -190,8 +190,8 @@
   brief = false;
 }
 {
-  name = "graphite2-minimal-1.3.4.tgz";
-  md5 = "5c0c9ac0996fbb4a0e17780ff5441959";
+  name = "graphite-minimal-1.3.6.tgz";
+  md5 = "17df8301bcc459e83f8a8f3aca6183b2";
   brief = false;
 }
 {
@@ -285,8 +285,8 @@
   brief = true;
 }
 {
-  name = "language-subtag-registry-2015-08-04.tar.bz2";
-  md5 = "bf5986dbfa1c9a0f26cf1b00ed369484";
+  name = "language-subtag-registry-2016-02-10.tar.bz2";
+  md5 = "d1e7c55a0383f7d720d3ead0b6117284";
   brief = true;
 }
 {
@@ -376,13 +376,13 @@
   brief = false;
 }
 {
-  name = "neon-0.29.5.tar.gz";
-  md5 = "ff369e69ef0f0143beb5626164e87ae2";
+  name = "neon-0.30.1.tar.gz";
+  md5 = "231adebe5c2f78fded3e3df6e958878e";
   brief = false;
 }
 {
-  name = "nss-3.19.4-with-nspr-4.10.10.tar.gz";
-  md5 = "478e0e90ebc4a90159549e77021021fd";
+  name = "nss-3.22.2-with-nspr-4.12.tar.gz";
+  md5 = "6b254cf2f8cb4b27a3f0b8b7b9966ea7";
   brief = false;
 }
 {
@@ -401,8 +401,8 @@
   brief = false;
 }
 {
-  name = "openssl-1.0.2a.tar.gz";
-  md5 = "a06c547dac9044161a477211049f60ef";
+  name = "openssl-1.0.2g.tar.gz";
+  md5 = "f3c710c045cdee5fd114feb69feba7aa";
   brief = true;
 }
 {
