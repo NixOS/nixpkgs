@@ -6,11 +6,11 @@ let
   s = # Generated upstream information 
   rec {
     baseName="glusterfs";
-    version="3.7.8";
+    version="3.7.10";
     name="${baseName}-${version}";
-    hash="0r5l8ax1gavhl06k30lg88xs8fj7w6iyd69s5qq5fw1jvavkx709";
-    url="http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.8/glusterfs-3.7.8.tar.gz";
-    sha256="0r5l8ax1gavhl06k30lg88xs8fj7w6iyd69s5qq5fw1jvavkx709";
+    hash="0shqvhqlmiywrr3vy8yazc8xcj6b04ci2zjgyca2vy7wa60lzfgg";
+    url="http://download.gluster.org/pub/gluster/glusterfs/3.7/3.7.10/glusterfs-3.7.10.tar.gz";
+    sha256="0shqvhqlmiywrr3vy8yazc8xcj6b04ci2zjgyca2vy7wa60lzfgg";
   };
   buildInputs = [
     fuse bison flex_2_5_35 openssl python ncurses readline
