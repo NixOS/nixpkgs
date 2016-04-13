@@ -696,6 +696,8 @@ in
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   contacts = callPackage ../tools/misc/contacts { };
+  
+  daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
 
