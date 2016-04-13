@@ -20,7 +20,7 @@ let
 
 in
 
-runCommand "rustRegistry-${version}-${builtins.substring 0 7 rev}" {} ''
+runCommand "rustRegistry-${version}-${builtins.substring 0 7 rev}" { inherit src; } ''
   # For some reason, cargo doesn't like fetchgit's git repositories, not even
   # if we set leaveDotGit to true, set the fetchgit branch to 'master' and clone
   # the repository (tested with registry rev
