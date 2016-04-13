@@ -10268,7 +10268,9 @@ in
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
-  hostapd = callPackage ../os-specific/linux/hostapd { };
+  hostapd = callPackage ../os-specific/linux/hostapd {
+    openssl = openssl_1_0_2;
+  };
 
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
