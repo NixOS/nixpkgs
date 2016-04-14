@@ -16,7 +16,7 @@ gconftool-2 --recursive-unset /apps/guake
 with lib;
 
 let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_common ];
-    pyPath = makeSearchPathOutputs python2.sitePackages ["lib"] (attrVals [ "dbus" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
+    pyPath = makeSearchPathOutput "lib" python2.sitePackages (attrVals [ "dbus" "notify" "pyGtkGlade" "pyxdg" ] python2Packages ++ [ gnome2.gnome_python ]);
  in stdenv.mkDerivation rec {
   name = "guake-${version}";
   version = "0.8.3";

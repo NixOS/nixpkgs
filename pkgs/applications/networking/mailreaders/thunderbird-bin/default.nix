@@ -105,7 +105,7 @@ stdenv.mkDerivation {
       nspr
       nss
       pango
-    ] + ":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] [
+    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 

@@ -7,7 +7,7 @@ let
   e = pkgs.enlightenment;
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.enlightenment;
-  GST_PLUGIN_PATH = lib.makeSearchPathOutputs "lib/gstreamer-1.0" ["lib"] [
+  GST_PLUGIN_PATH = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
     pkgs.gst_all_1.gst-plugins-bad

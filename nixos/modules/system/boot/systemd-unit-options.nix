@@ -193,7 +193,7 @@ in rec {
 
     path = mkOption {
       default = [];
-      apply = ps: "${makeBinPath ps}:${makeSearchPathOutputs "sbin" ["bin"] ps}";
+      apply = ps: "${makeBinPath ps}:${makeSearchPathOutput "bin" "sbin" ps}";
       description = ''
         Packages added to the service's <envar>PATH</envar>
         environment variable.  Both the <filename>bin</filename>
