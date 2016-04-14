@@ -2150,6 +2150,8 @@ in
 
   mxt-app = callPackage ../misc/mxt-app { };
 
+  netdata = callPackage ../tools/system/netdata { };
+
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
