@@ -12804,6 +12804,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextWrapI18N = buildPerlPackage {
+    name = "Text-WrapI18N-0.06";
+    src = fetchurl {
+      url = http://search.cpan.org/CPAN/authors/id/K/KU/KUBOTA/Text-WrapI18N-0.06.tar.gz;
+      sha256 = "4bd29a17f0c2c792d12c1005b3c276f2ab0fae39c00859ae1741d7941846a488";
+    };
+    propagatedBuildInputs = [ pkgs.glibc TextCharWidth ];
+    preConfigure = ''
+      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.glibc}/bin/locale'
+    '';
+    meta = {
+      description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
+    };
+  };
+
   TextWrapper = buildPerlPackage {
     name = "Text-Wrapper-1.05";
     src = fetchurl {
