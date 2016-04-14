@@ -67,6 +67,7 @@ self =  stdenv.mkDerivation {
     postFixup = ''
       moveToOutput bin/dbus-launch "$lib"
       ln -s "$lib/bin/dbus-launch" "$out/bin/"
+      ln -s "$lib/lib/dbus-1.0" "$dev/lib"
     '';
 
     passthru = {
