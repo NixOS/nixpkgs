@@ -113,22 +113,6 @@ in
         config.ids.gids.syncthing;
     };
 
-    systemd.services.syncthing =
-      {
-        description = "Syncthing service";
-        after    = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          STNORESTART = "yes";  # do not self-restart
-          STNOUPGRADE = "yes";
-          inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
-
-        serviceConfig = {
-          User  = cfg.user;
-          Group = cfg.group;
-    };
-
     environment.systemPackages = [ cfg.package ];
 
     systemd.services = mkIf cfg.systemService {
