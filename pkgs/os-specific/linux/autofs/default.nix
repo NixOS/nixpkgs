@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, flex, bison, linuxHeaders }:
+{ stdenv, fetchurl, flex, bison, linuxHeaders, libxml2, kerberos, kmod,
+  openldap, sssd, cyrus_sasl, openssl }:
 
 let
   version = "5.1.1";
@@ -12,7 +13,9 @@ in stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    configureFlags="--disable-move-mount --with-path=$PATH"
+    configureFlags="--disable-move-mount --with-path=$PATH --with-openldap=${openldap} --with-sasl=${cyrus_sasl}"
+    export sssldir="${sssd}/lib/sssd/modules"
+    export HAVE_SSS_AUTOFS=1
     export MOUNT=/var/run/current-system/sw/bin/mount
     export UMOUNT=/var/run/current-system/sw/bin/umount
     export MODPROBE=/var/run/current-system/sw/bin/modprobe
@@ -29,7 +32,8 @@ in stdenv.mkDerivation {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ flex bison linuxHeaders ];
+  buildInputs = [ flex bison linuxHeaders libxml2 kerberos kmod openldap sssd
+                  openssl cyrus_sasl ];
 
   meta = {
     inherit version;
