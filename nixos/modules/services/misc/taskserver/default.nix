@@ -154,7 +154,7 @@ let
 
   mkShellStr = val: "'${replaceStrings ["'"] ["'\\''"] val}'";
 
-  certtool = "${pkgs.gnutls}/bin/certtool";
+  certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
   nixos-taskserver = pkgs.buildPythonPackage {
     name = "nixos-taskserver";
