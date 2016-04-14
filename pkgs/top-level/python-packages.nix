@@ -19705,6 +19705,9 @@ in modules // {
   setuptools_scm_18 = self.setuptools_scm.override rec {
     name = "setuptools_scm-${version}";
     version = "1.8.0";
+    
+    # tests fail: ImportError: cannot import name 'find_files'
+    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/s/setuptools_scm/${name}.tar.bz2";
