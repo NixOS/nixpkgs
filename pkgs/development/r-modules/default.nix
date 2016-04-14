@@ -696,6 +696,15 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
+    "TED" # depends on broken package animation
+    "streamMOA" # depends on broken package animation
+    "stream" # depends on broken package animation
+    "spdynmod" # depends on broken package animation
+    "treeplyr" # depends on broken package animation
+    "recluster" # depends on broken package animation
+    "geomorph" # depends on broken package animation
+    "phytools" # depends on broken package animation
+    "animation" # broken build
     "srd" # broken build
     "paleotree" # broken build
     "ndtv" # broken build
