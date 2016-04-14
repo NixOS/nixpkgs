@@ -1356,6 +1356,14 @@ let
     sha256 = "0ywa52kcii8g2a9lbqcx8ghdf6y56lqq96sl5nl9p6h74rdvmjr7";
   };
 
+  gosu = buildFromGitHub {
+    rev = "1.7";
+    owner = "tianon";
+    repo = "gosu";
+    sha256 = "02vln88yyhj8k8cyzac0sgw84626vshmzdrrc1jpl4k4sc27vcbp";
+    buildInputs = [ opencontainers.runc ];
+  };
+
   gox = buildGoPackage rec {
     rev = "e8e6fd4fe12510cc46893dff18c5188a6a6dc549";
     name = "gox-${stdenv.lib.strings.substring 0 7 rev}";
