@@ -58,11 +58,14 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  preConfigure = optionalString (stdenv ? glibc)
+  preConfigure = with stdenv; optionalString (stdenv ? glibc)
     ''
       source $setupHook
       fixCmakeFiles .
-      substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
+      substituteInPlace Modules/Platform/UnixPaths.cmake \
+        --subst-var-by glibc_bin ${glibc.bin or glibc} \
+        --subst-var-by glibc_dev ${glibc.dev or glibc} \
+        --subst-var-by glibc_lib ${glibc.out or glibc}
     '';
 
   meta = {
