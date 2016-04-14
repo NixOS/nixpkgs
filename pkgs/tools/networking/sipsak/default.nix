@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook, c-ares, openssl ? null }:
+{ stdenv, fetchurl, gcc48, autoreconfHook, c-ares, openssl ? null }:
 
 stdenv.mkDerivation rec {
   name = "sipsak-${version}";
   version = "4.1.2.1";
 
   buildInputs = [
+    gcc48
     autoreconfHook
     openssl
     c-ares
