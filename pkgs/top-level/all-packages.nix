@@ -618,6 +618,8 @@ let
 
   awscli = callPackage ../tools/admin/awscli { };
 
+  azure-cli = callPackage ../tools/virtualization/azure-cli { };
+
   ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
@@ -1649,6 +1651,8 @@ let
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell {
     ruby = ruby_2_1_3;
   };
+
+  gitstats = callPackage ../applications/version-management/gitstats { };
 
   glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
@@ -2914,6 +2918,8 @@ let
   rockbox_utility = callPackage ../tools/misc/rockbox-utility { };
 
   rosegarden = callPackage ../applications/audio/rosegarden { };
+
+  rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = builderDefsPackage (import ../tools/networking/rp-pppoe) {
     inherit ppp;
@@ -6009,6 +6015,8 @@ let
 
   audiofile = callPackage ../development/libraries/audiofile { };
 
+  aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
+
   babl = callPackage ../development/libraries/babl { };
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
@@ -7329,8 +7337,6 @@ let
   libosmpbf = callPackage ../development/libraries/libosmpbf {};
 
   libotr = callPackage ../development/libraries/libotr { };
-
-  libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
 
   libp11 = callPackage ../development/libraries/libp11 { };
 
@@ -12845,7 +12851,9 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = callPackage ../applications/networking/dropbox { };
+  dropbox = callPackage ../applications/networking/dropbox {
+    qt5 = qt55;
+  };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 

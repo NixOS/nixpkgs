@@ -1,12 +1,12 @@
 { system ? builtins.currentSystem }:
 
 let
-  inherit (import ../../../../../../. {
+  inherit (import ../../../../../. {
     inherit system;
-  }) lib writeText stdenv;
+  }) lib fetchurl writeText stdenv;
 
-  sources = if builtins.pathExists ./sources.nix
-            then import ./sources.nix
+  sources = if builtins.pathExists ./upstream-info.nix
+            then import ./upstream-info.nix
             else null;
 
   bucketURL = "https://commondatastorage.googleapis.com/"
@@ -51,14 +51,15 @@ in rec {
   getChannel = channel: let
     chanAttrs = builtins.getAttr channel sources;
   in {
+    inherit channel;
     inherit (chanAttrs) version;
 
-    main = {
+    main = fetchurl {
       url = "${bucketURL}/chromium-${chanAttrs.version}.tar.xz";
       inherit (chanAttrs) sha256;
     };
 
-    binary = let
+    binary = fetchurl (let
       pname = if channel == "dev"
               then "google-chrome-unstable"
               else "google-chrome-${channel}";
@@ -69,7 +70,7 @@ in rec {
       sha256 = if stdenv.is64bit
                then chanAttrs.sha256bin64
                else chanAttrs.sha256bin32;
-    };
+    });
   };
 
   updateHelpers = writeText "update-helpers.sh" ''

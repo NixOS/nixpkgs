@@ -76,7 +76,7 @@ let
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
     in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
       passthru = {
-        inherit version modDirVersion config kernelPatches;
+        inherit version modDirVersion config kernelPatches configfile;
       };
 
       inherit src;

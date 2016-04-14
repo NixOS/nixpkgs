@@ -50,20 +50,20 @@ in
 
       jails = mkOption {
         default = { };
-        example =
-          { "apache-nohome-iptables" =
-              ''
-                # Block an IP address if it accesses a non-existent
-                # home directory more than 5 times in 10 minutes,
-                # since that indicates that it's scanning.
-                filter   = apache-nohome
-                action   = iptables-multiport[name=HTTP, port="http,https"]
-                logpath  = /var/log/httpd/error_log*
-                findtime = 600
-                bantime  = 600
-                maxretry = 5
-              '';
-          };
+        example = literalExample ''
+          { apache-nohome-iptables = '''
+              # Block an IP address if it accesses a non-existent
+              # home directory more than 5 times in 10 minutes,
+              # since that indicates that it's scanning.
+              filter   = apache-nohome
+              action   = iptables-multiport[name=HTTP, port="http,https"]
+              logpath  = /var/log/httpd/error_log*
+              findtime = 600
+              bantime  = 600
+              maxretry = 5
+            ''';
+          }
+        '';
         type = types.attrsOf types.lines;
         description =
           ''
@@ -138,6 +138,7 @@ in
         findtime = 600
         maxretry = 3
         backend  = systemd
+        enabled  = true
        '';
 
     # Block SSH if there are too many failing connection attempts.

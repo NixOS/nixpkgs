@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   name = "gitinspector-${version}";
-  version = "0.4.1";
+  version = "0.4.4";
   namePrefix = "";
 
   src = fetchzip {
     url = "https://github.com/ejwa/gitinspector/archive/v${version}.tar.gz";
-    sha256 = "07kjvf9cj6g6gvjgnnas5facm3nhxppf0l0fcxyd4vq6xhdb3swp";
+    sha256 = "1pfsw6xldm6jigs3nhysvqaxk8a0zf8zczgfkrp920as9sya3c7m";
     name = name + "-src";
   };
 
