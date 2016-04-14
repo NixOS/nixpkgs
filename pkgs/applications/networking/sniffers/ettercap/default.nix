@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre,
-  openssl, ncurses, glib, gtk, atk, pango, flex, bison }:
+  openssl, ncurses, glib, gtk2, atk, pango, flex, bison }:
 
 stdenv.mkDerivation rec {
   name = "ettercap-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake libpcap libnet zlib curl pcre openssl ncurses
-    glib gtk atk pango flex bison
+    glib gtk2 atk pango flex bison
   ];
 
   preConfigure = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk}/lib/gtk-2.0/include"
+    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
   meta = with stdenv.lib; {
