@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
                   gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
                   gnome3.geocode_glib libchamplain file libsoup
                   gdk_pixbuf librsvg autoreconfHook
+                  gnome3.gsettings_desktop_schemas gnome3.evolution_data_server
                   gnome3.gnome_online_accounts gnome3.defaultIconTheme ];
 
   patches = [ ./soup.patch ];
