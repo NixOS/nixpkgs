@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     moveToOutput share/gtk-2.0/demo "$docdev"
+    mkdir "$dev/lib/gtk-2.0"
+    ln -s "$out/lib/gtk-2.0/include" "$dev/lib/gtk-2.0"
   '';
 
   passthru = {
