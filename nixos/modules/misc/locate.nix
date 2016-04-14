@@ -88,7 +88,7 @@ in {
         serviceConfig.PrivateNetwork = "yes";
         serviceConfig.NoNewPrivileges = "yes";
         serviceConfig.ReadOnlyDirectories = "/";
-        serviceConfig.ReadWriteDirectories = cfg.output;
+        serviceConfig.ReadWriteDirectories = dirOf cfg.output;
       };
 
     systemd.timers.update-locatedb = mkIf cfg.enable
