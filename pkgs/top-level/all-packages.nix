@@ -13900,6 +13900,8 @@ in
 
   syncthing = go15Packages.syncthing.bin // { outputs = [ "bin" ]; };
   syncthing011 = go15Packages.syncthing011.bin // { outputs = [ "bin" ]; };
+  syncthing012 = go15Packages.syncthing012.bin // { outputs = [ "bin" ]; };
+  syncthing-inotify = go15Packages.syncthing-inotify.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };

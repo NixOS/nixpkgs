@@ -348,6 +348,13 @@ let
     ];
   };
 
+  backoff = buildFromGitHub {
+    rev    = "32cd0c5b3aef12c76ed64aaf678f6c79736be7dc";
+    owner  = "cenkalti";
+    repo   = "backoff";
+    sha256 = "08b475bzg4q14bx0v83vxyb86ndy1s4mz5f05hd0j7av0awwam43";
+  };
+
   bleve = buildFromGitHub {
     rev    = "fc34a97875840b2ae24517e7d746b69bdae9be90";
     version = "2016-01-19";
@@ -2574,6 +2581,14 @@ let
     buildFlags = [ "-tags release" ];
   };
 
+  notify = buildFromGitHub {
+    rev    = "921f2bc094bff902bf6089603902a84ac988d351";
+    owner  = "zillode";
+    repo   = "notify";
+    sha256 = "057lpzqc99hrafpdhfxm4cx4zak64fqfi6i8ix8mih46y0lbrisk";
+  };
+
+
   nitro = buildFromGitHub {
     rev    = "24d7ef30a12da0bdc5e2eb370a79c659ddccf0e8";
     owner  = "spf13";
@@ -3569,11 +3584,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.19";
+    version = "0.12.21";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "11ij8whaqrrzriavxa08jpsmbd1zkc2qxsni1nbgszw2hymmv38g";
+    sha256 = "18bq8677nnnwkns0diy3hmzdlhyq6c3faqddiwz4ysbl3vjyr847";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
@@ -3600,6 +3615,18 @@ let
       # Mostly a cosmetic change
       sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
     '';
+  };
+
+  syncthing012 = syncthing;
+
+  syncthing-inotify = buildFromGitHub rec {
+    version = "0.6.8";
+    rev = "v${version}";
+    owner = "syncthing";
+    repo = "syncthing-inotify";
+    sha256 = "0ppnrxxybqa97rvain3g41cpk8bda55y0lyd5bhmbca7q002z29q";
+    # disabled = isGo14;
+    buildInputs = [ backoff notify ];
   };
 
   syncthing-lib = buildFromGitHub {

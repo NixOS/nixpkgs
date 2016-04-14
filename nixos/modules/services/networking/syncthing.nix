@@ -7,6 +7,21 @@ let
   cfg = config.services.syncthing;
   defaultUser = "syncthing";
 
+  header = {
+    description = "Syncthing service";
+    environment = {
+      STNORESTART = "yes";
+      STNOUPGRADE = "yes";
+      inherit (cfg) all_proxy;
+    } // config.networking.proxy.envVars;
+  };
+
+  service = {
+    Restart = "on-failure";
+    SuccessExitStatus = "2 3 4";
+    RestartForceExitStatus="3 4";
+  };
+
 in
 
 {
@@ -27,12 +42,30 @@ in
         '';
       };
 
+      systemService = mkOption {
+        default = true;
+        description = "Auto launch syncthing as a system service.";
+      };
+
+      useInotify = mkOption {
+        default = false;
+        description = "Watch files using inotify.";
+      };
+
       user = mkOption {
         type = types.string;
         default = defaultUser;
         description = ''
-          Syncthing will be run under this user (user must exist,
-          this can be your user name).
+          Syncthing will be run under this user (user will be created if it doesn't exist.
+          This can be your user name).
+        '';
+      };
+
+      group = mkOption {
+        default = defaultUser;
+        description = ''
+          Syncthing will be run under this group (group will be created if it doesn't exist.
+          This can be your user name).
         '';
       };
 
@@ -58,16 +91,12 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.syncthing;
-        defaultText = "pkgs.syncthing";
         example = literalExample "pkgs.syncthing";
         description = ''
           Syncthing package to use.
         '';
       };
-
-
     };
-
   };
 
 
@@ -88,30 +117,53 @@ in
         config.ids.gids.syncthing;
     };
 
-    systemd.services.syncthing =
-      {
-        description = "Syncthing service";
-        after    = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          STNORESTART = "yes";  # do not self-restart
-          STNOUPGRADE = "yes";
-          inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
+    environment.systemPackages = [ cfg.package ] ++ lib.optional cfg.useInotify pkgs.syncthing-inotify;
 
-        serviceConfig = {
-          User  = cfg.user;
+    systemd.services = mkIf cfg.systemService {
+      syncthing = header // {
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = service // {
+          User = cfg.user;
           Group = optionalString (cfg.user == defaultUser) defaultUser;
           PermissionsStartOnly = true;
-          Restart = "on-failure";
           ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";
-          SuccessExitStatus = "2 3 4";
-          RestartForceExitStatus="3 4";
         };
       };
 
-    environment.systemPackages = [ cfg.package ];
+      syncthing-inotify = mkIf cfg.useInotify header // {
+        description = "Monitor Syncthing using inotify";
+        after = [ "syncthing.service" ];
+        requires = [ "syncthing.service" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          User = cfg.user;
+          Group = optionalString (cfg.user == defaultUser) defaultUser;
+          PermissionsStartOnly = true;
+          ExecStart = "${pkgs.syncthing-inotify}/bin/syncthing-inotify -logflags=0";
+          Restart = "on-failure";
+        };
+      };
+    };
 
+    systemd.user.services =  {
+      syncthing = header // {
+        serviceConfig = service // {
+          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser";
+        };
+      };
+
+      syncthing-inotify = {
+        description = "Monitor Syncthing using inotify";
+        after = [ "syncthing.service" ];
+        requires = [ "syncthing.service" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.syncthing-inotify}/bin/syncthing-inotify -logflags=0";
+          Restart = "on-failure";
+          ProtectSystem = "full";
+          ProtectHome = "read-only";
+        };
+      };
+    };
   };
-
 }
