@@ -34,11 +34,10 @@ in
   services.mongodb.enable = true;
   services.mongodb.dbpath = "/srv/mongodb";
   services.mongodb.bind_ip = concatStringsSep "," listen_addresses;
-  services.mongodb.extraConfig =
-    ''
+  services.mongodb.extraConfig = ''
     ipv6 = true
     ${local_config}
-    '';
+  '';
 
   systemd.services.mongodb.preStart = ''
       echo never > /sys/kernel/mm/transparent_hugepage/defrag
@@ -47,25 +46,27 @@ in
       echo always > /sys/kernel/mm/transparent_hugepage/defrag
   '';
 
-    users.users.mongodb = {
-      shell = "/run/current-system/sw/bin/bash";
-      home = "/srv/mongodb";
-    };
-    system.activationScripts.flyingcircus_mongodb = ''
-      install -d -o ${toString config.ids.uids.mongodb} /srv/mongodb
-      install -d -o ${toString config.ids.uids.mongodb} -g service -m 02775 /etc/local/mongodb
-    '';
-    security.sudo.extraConfig = ''
-      # Service users may switch to the mongodb system user
-      %sudo-srv ALL=(mongodb) ALL
-      %service ALL=(mongodb) ALL
-      %sensuclient ALL=(mongodb) ALL
-    '';
+  users.users.mongodb = {
+    shell = "/run/current-system/sw/bin/bash";
+    home = "/srv/mongodb";
+  };
 
-    environment.etc."local/mongodb/README.txt".text = ''
-        Put your local mongodb configuration into `mongodb.conf` here.
-        It will be joined with the basic config.
-        '';
+  system.activationScripts.flyingcircus_mongodb = ''
+    install -d -o ${toString config.ids.uids.mongodb} /srv/mongodb
+    install -d -o ${toString config.ids.uids.mongodb} -g service -m 02775 /etc/local/mongodb
+  '';
+
+  security.sudo.extraConfig = ''
+    # Service users may switch to the mongodb system user
+    %sudo-srv ALL=(mongodb) ALL
+    %service ALL=(mongodb) ALL
+    %sensuclient ALL=(mongodb) ALL
+  '';
+
+  environment.etc."local/mongodb/README.txt".text = ''
+      Put your local mongodb configuration into `mongodb.conf` here.
+      It will be joined with the basic config.
+      '';
 
 
     # flyingcircus.services.sensu-client.checks = {

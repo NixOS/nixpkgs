@@ -29,7 +29,7 @@ let
       ip6 = get_ip_configuration fclib.isIp6 networks;
     };
 
-  allow_dhcp = config.flyingcircus.static.useDHCP.${config.flyingcircus.enc.parameters.location};
+  allow_dhcp = config.flyingcircus.static.allowDHCP.${config.flyingcircus.enc.parameters.location};
 
   get_interface_configuration = interfaces: interface_name:
     { name = "eth${interface_name}";

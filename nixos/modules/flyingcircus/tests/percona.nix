@@ -18,6 +18,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
                     ../packages/default.nix
                     ../platform/default.nix ];
 
+        flyingcircus.ssl.generate_dhparams = false;
         flyingcircus.roles.mysql.enable = true;
 
         # Tune those arguments as we'd like to run this on Hydra

@@ -63,11 +63,13 @@ with lib;
                      "3.pool.ntp.org"];
     };
 
-    flyingcircus.static.useDHCP = {
-      standalone = true;
+    # Generally allow DHCP?
+    flyingcircus.static.allowDHCP = {
       dev = false;
       rzob = false;
       rzrl1 = false;
+      standalone = true;
+      vagrant = true;
       whq = false;
     };
 

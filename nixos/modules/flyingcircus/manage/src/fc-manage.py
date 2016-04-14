@@ -146,6 +146,10 @@ def seed_enc(path):
     shutil.move('/tmp/fc-data/enc.json', path)
 
 
+def collect_garbage(age):
+    os.system('nix-collect-garbage --delete-older-than {}d'.format(age))
+
+
 def main():
     logging.basicConfig()
     build_options = []
@@ -161,6 +165,9 @@ def main():
                    'to system_state.json')
     a.add_argument('-r', '--reboot', default=False, action='store_true',
                    help='reboot if necessary (if /reboot exists)')
+    a.add_argument('-g', '--garbage', default=0, type=int,
+                   help='collect garbage and remove generations older than '
+                        '<INT> days')
 
     build = a.add_mutually_exclusive_group()
     build.add_argument('-c', '--channel', default=False, dest='build',
@@ -195,6 +202,11 @@ def main():
 
     if args.reboot:
         ensure_reboot()
+        return
+
+    # Garbage collection is run after a potential reboot.
+    if args.garbage:
+        collect_garbage(args.garbage)
 
 
 if __name__ == '__main__':

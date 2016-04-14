@@ -18,6 +18,7 @@ with lib;
   config = {
      system.activationScripts = {
         fc_ssl_certificates = ''
+          mkdir -p /etc/ssl/
           export OPENSSL_CNF=${./openssl.cnf}
           for host in ${toString config.flyingcircus.ssl.certificates}; do
             if [ -e /etc/ssl/$host.crt ]; then continue; fi

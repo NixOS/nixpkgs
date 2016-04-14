@@ -21,7 +21,10 @@ let
             (lib.hasPrefix "pdns-" filename) &&
             (lib.hasSuffix ".conf" filename)
             )
-          (builtins.readDir cfg.configDir)));
+          (
+           if builtins.pathExists cfg.configDir
+           then builtins.readDir cfg.configDir
+           else {})));
 
 in
 
@@ -62,6 +65,8 @@ in
       group = "nogroup";
     };
 
+   environment.systemPackages = [ pkgs.powerdns ];
+
     systemd.services = builtins.listToAttrs
       (map
         (instance_name:
@@ -86,10 +91,10 @@ in
                 ExecStart = ''
                   ${powerdns}/bin/pdns_server \
                     --config-dir=${cfg.configDir} \
+                    --config-name=${instance_name} \
                     --setuid=powerdns \
                     --setgid=nogroup \
-                    --daemon \
-                    --config-name=${instance_name}
+                    --daemon
                   '';
               };
             };

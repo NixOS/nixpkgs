@@ -26,11 +26,21 @@ in
   # http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
   networking.usePredictableInterfaceNames = false;
 
+  # In vagrant the location is set to vagrant to fix various other settings.
+  flyingcircus.enc.parameters.location = "vagrant";
+
+  # Enable DHCP on eth0 for vagrant to be able to actually do things.
+  networking.interfaces.eth0.useDHCP = true;
+
   # Enable guest additions.
   virtualisation.virtualbox.guest.enable = true;
 
   # Creates a "vagrant" users with password-less sudo access
-  users.extraGroups = [ { name = "vagrant"; } { name = "vboxsf"; } ];
+  users.extraGroups = [
+    { name = "login"; }
+    { name = "vagrant"; }
+    { name = "vboxsf"; }
+  ];
   users.extraUsers  = [
       # Try to avoid ask password
       { name = "root"; password = "vagrant"; }
@@ -38,7 +48,7 @@ in
         description     = "Vagrant User";
         name            = "vagrant";
         group           = "vagrant";
-        extraGroups     = [ "users" "vboxsf" "wheel" ];
+        extraGroups     = [ "users" "vboxsf" "wheel" "login" ];
         password        = "vagrant";
         home            = "/home/vagrant";
         createHome      = true;
