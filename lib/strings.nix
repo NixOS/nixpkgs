@@ -107,9 +107,7 @@ rec {
        makeLibraryPath [ pkgs.openssl pkgs.zlib ]
        => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r/lib:/nix/store/wwh7mhwh269sfjkm6k5665b5kgp7jrk2-zlib-1.2.8/lib"
   */
-  makeLibraryPath = pkgs: makeSearchPath "lib"
-    # try to guess the right output of each pkg
-    (map (pkg: if pkg.outputUnspecified or false then pkg.lib or (pkg.out or pkg) else pkg) pkgs);
+  makeLibraryPath = makeSearchPathOutput "lib" "lib";
 
   /* Construct a binary search path (such as $PATH) containing the
      binaries for a set of packages.
@@ -118,8 +116,7 @@ rec {
        makeBinPath ["/root" "/usr" "/usr/local"]
        => "/root/bin:/usr/bin:/usr/local/bin"
   */
-  makeBinPath = pkgs: makeSearchPath "bin"
-    (map (pkg: if pkg.outputUnspecified or false then pkg.bin or (pkg.out or pkg) else pkg) pkgs);
+  makeBinPath = makeSearchPathOutput "bin" "bin";
 
 
   /* Construct a perl search path (such as $PERL5LIB)
@@ -131,8 +128,7 @@ rec {
        makePerlPath [ pkgs.perlPackages.NetSMTP ]
        => "/nix/store/n0m1fk9c960d8wlrs62sncnadygqqc6y-perl-Net-SMTP-1.25/lib/perl5/site_perl"
   */
-  makePerlPath = pkgs: makeSearchPath "lib/perl5/site_perl"
-    (map (pkg: if pkg.outputUnspecified or false then pkg.lib or (pkg.out or pkg) else pkg) pkgs);
+  makePerlPath = makeSearchPathOutput "lib" "lib/perl5/site_perl";
 
   /* Dependening on the boolean `cond', return either the given string
      or the empty string. Useful to contatenate against a bigger string.
