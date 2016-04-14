@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     tar xf data.tar.xz
   '';
 
-  rpath = makeLibraryPath deps;
+  rpath = makeLibraryPath deps + ":" + makeSearchPathOutputs "lib64" ["lib"] deps;
   binpath = makeBinPath deps;
 
   installPhase = ''
