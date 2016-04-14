@@ -438,6 +438,18 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
 
+  /* Get a package output.
+     If no output is found, fallback to `.out` and then to the default.
+
+     Example:
+       getOutput "dev" pkgs.openssl
+       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
+  */
+  getOutput = output: pkg:
+    if pkg.outputUnspecified or false
+      then pkg.${output} or pkg.out or pkg
+      else pkg;
+
 
   /*** deprecated stuff ***/
 
