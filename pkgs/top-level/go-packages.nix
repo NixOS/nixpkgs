@@ -490,10 +490,11 @@ let
   };
 
   cli-go = buildFromGitHub {
-    rev    = "142e6cd241a4dfbf7f07a018f1f8225180018da4";
+    rev    = "71f57d300dd6a780ac1856c005c4b518cfd498ec";
     owner  = "codegangsta";
     repo   = "cli";
-    sha256 = "1w8naax4gvkkxw5h31a2c2dwniw5hj92nv0hn6ybdlavffyax9h5";
+    sha256 = "1fxznirkvank5461789dm5aw5z8aqi0jvwligvz44659rfl376p3";
+    propagatedBuildInputs = [ yaml-v2 ];
   };
 
   columnize = buildFromGitHub {
@@ -695,6 +696,24 @@ let
     owner  = "docopt";
     repo   = "docopt-go";
     sha256 = "1sddkxgl1pwlipfvmv14h8vg9b9wq1km427j1gjarhb5yfqhh3l1";
+  };
+
+  docker.docker = buildFromGitHub {
+    rev = "cb87b6eb6a955e5a66b17e0a15557f37f76b85c0";
+    version = "2016-04-14";
+    owner = "docker";
+    repo = "docker";
+    sha256 = "1hkah4scs8a589jhp82kw5wcx21nhq41asfq8icwy6bzdz1bq0j0";
+    buildInputs = [ docker.go-units ];
+    subPackages = [ "pkg/term" "pkg/symlink" "pkg/system" "pkg/mount" ];
+  };
+
+  docker.go-units = buildFromGitHub {
+    rev = "5d2041e26a699eaca682e2ea41c8f891e1060444";
+    version = "2016-01-25";
+    owner = "docker";
+    repo = "go-units";
+    sha256 = "0hn8xdbaykp046inc4d2mwig5ir89ighma8hk18dfkm8rh1vvr8i";
   };
 
   drive = buildFromGitHub {
@@ -922,6 +941,32 @@ let
     owner  = "chai2010";
     repo   = "gettext-go";
     sha256 = "1iz4wjxc3zkj0xkfs88ig670gb08p1sd922l0ig2cxpjcfjp1y99";
+  };
+
+  gojsonpointer = buildFromGitHub {
+    rev = "e0fe6f68307607d540ed8eac07a342c33fa1b54a";
+    version = "2015-11-27";
+    owner = "xeipuuv";
+    repo = "gojsonpointer";
+    sha256 = "0yfbisaas3w3ygh0cvb82mj6c1f8adqmnwmyid8l5p12r55531f8";
+  };
+
+  gojsonreference = buildFromGitHub {
+    rev = "e02fc20de94c78484cd5ffb007f8af96be030a45";
+    version = "2015-08-08";
+    owner = "xeipuuv";
+    repo = "gojsonreference";
+    sha256 = "195in5zr3bhb3r1iins2h610kz339naj284b3839xmrhc15wqxzq";
+    propagatedBuildInputs = [ gojsonpointer ];
+  };
+
+  gojsonschema = buildFromGitHub {
+    rev = "93e72a773fade158921402d6a24c819b48aba29d";
+    version = "2016-03-23";
+    owner = "xeipuuv";
+    repo = "gojsonschema";
+    sha256 = "0hqpcy4xgm9xw16dxbs1skrh6ga60bwfjv5dyz5zh86xsxpln3nr";
+    propagatedBuildInputs = [ gojsonreference ];
   };
 
   gosexy.gettext = buildFromGitHub {
@@ -1869,7 +1914,7 @@ let
     repo   = "go-systemd";
     sha256 = "0kfbxvm9zsjgvgmiq2jl807y4s5z0rya65rm399llr5rr7vz1lxd";
     nativeBuildInputs = [ pkgs.pkgconfig pkgs.systemd ];
-    buildInputs = [ dbus ];
+    propagatedBuildInputs = [ dbus ];
   };
 
   go-update-v0 = buildFromGitHub {
@@ -2550,6 +2595,14 @@ let
     propagatedBuildInputs = [ ugorji.go ];
   };
 
+  netlink = buildFromGitHub {
+    rev = "a632d6dc2806fa19d2f7693017d3fb79d3d8fa03";
+    version = "2016-04-05";
+    owner = "vishvananda";
+    repo = "netlink";
+    sha256 = "1m1aanxlsb1zqqxmdi528ma8c5k2h0hp6vk2nmplm6rldcnvyr4v";
+  };
+
   ngrok = buildFromGitHub {
     rev = "1.7.1";
     owner = "inconshreveable";
@@ -2697,6 +2750,27 @@ let
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.openssl ];
     propagatedBuildInputs = [ spacelog ];
+  };
+
+  opencontainers.runtime-spec = buildFromGitHub {
+    rev = "53f0da5e98284a39b3aaa04d5be6730924380686";
+    version = "2016-04-14";
+    owner = "opencontainers";
+    repo = "runtime-spec";
+    sha256 = "1vxhbp8rcws4kix1v0pmrbg4x1k7zmsyq1an9526q4jdrdckp7kb";
+    propagatedBuildInputs = [ gojsonschema ];
+  };
+
+  opencontainers.runc = buildFromGitHub {
+    rev = "d1e00150320329da347de8ec830618c697c3df79";
+    version = "2016-04-14";
+    owner = "opencontainers";
+    repo = "runc";
+    sha256 = "18dhbb1d25s4cpikrari2ws3w7x92r6yxj4si64h9y177wmn6kml";
+    propagatedBuildInputs = [
+      go-systemd opencontainers.runtime-spec protobuf gocapability
+      docker.go-units logrus docker.docker netlink cli-go
+    ];
   };
 
   opsgenie-go-sdk = buildFromGitHub {
