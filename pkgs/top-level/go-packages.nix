@@ -3498,11 +3498,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.19";
+    version = "0.12.22";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "11ij8whaqrrzriavxa08jpsmbd1zkc2qxsni1nbgszw2hymmv38g";
+    sha256 = "1pycmb5cwkp21p11rj6lbrqr66yiffi23zk5laas3p581ljdg5vj";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
