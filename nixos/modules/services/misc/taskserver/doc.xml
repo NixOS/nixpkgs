@@ -102,11 +102,11 @@
   services.taskserver.enable = true;
   services.taskserver.fqdn = "server";
   services.taskserver.listenHost = "::";
-  services.taskserver.organisations.NixOS.users = [ "alice" ];
+  services.taskserver.organisations.my-company.users = [ "alice" ];
 }
 </screen>
-      This creates an organisation called <literal>NixOS</literal> with the user
-      <literal>alice</literal>.
+      This creates an organisation called <literal>my-company</literal> with the
+      user <literal>alice</literal>.
     </para>
 
     <para>
@@ -114,7 +114,7 @@
       machine <literal>alicebox</literal>, all we need to do is something like
       this:
 <screen>
-$ ssh server nixos-taskserver user export NixOS alice | sh
+$ ssh server nixos-taskserver user export my-company alice | sh
 </screen>
       Of course, if no SSH daemon is available on the server you can also copy
       &amp; paste it directly into a shell.
