@@ -15176,6 +15176,7 @@ in
     shellExtensions = {
       impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix {};
       volume-mixer = callPackage ../desktops/gnome-3/extensions/volume-mixer.nix {};
+      workspace-grid = callPackage ../desktops/gnome-3/extensions/workspace-grid.nix {};
     };
   };
 
