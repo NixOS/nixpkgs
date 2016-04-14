@@ -3569,6 +3569,8 @@ in
     gnutls = gnutls;
   });
 
+  ding-libs = callPackage ../tools/misc/ding-libs { };
+
   vtun = callPackage ../tools/networking/vtun { };
 
   weather = callPackage ../applications/misc/weather { };
