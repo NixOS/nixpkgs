@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, libedit, ncurses, gmp}:
+{stdenv, lib, fetchurl, perl, libedit, ncurses, gmp}:
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${gmp.out}/lib --with-gmp-includes=${gmp.dev or gmp}/include
+    ./configure --prefix=$out --with-gmp-libraries=${lib.getLib gmp}/lib --with-gmp-includes=${lib.getDev gmp}/include
   '';
 
   # Stripping combined with patchelf breaks the executables (they die

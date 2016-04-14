@@ -58,8 +58,8 @@ stdenv.mkDerivation {
      ''}
 
     configureFlagsArray=( --enable-shared --with-threads
-                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${p.dev or p}/include") buildInputs)}"
-                          LDFLAGS="${concatStringsSep " " (map (p: "-L${p.lib or (p.out or p)}/lib") buildInputs)}"
+                          CPPFLAGS="${makeSearchPathOutput "dev" "include" buildInputs}"
+                          LDFLAGS="${makeLibraryPath buildInputs}"
                           LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';

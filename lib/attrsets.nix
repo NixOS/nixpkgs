@@ -450,6 +450,10 @@ rec {
       then pkg.${output} or pkg.out or pkg
       else pkg;
 
+  getBin = getOutput "bin";
+  getLib = getOutput "lib";
+  getDev = getOutput "dev";
+
 
   /*** deprecated stuff ***/
 
