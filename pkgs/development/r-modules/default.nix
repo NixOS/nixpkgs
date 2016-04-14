@@ -696,18 +696,64 @@ let
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
-    "Risa" # depends on broken package mzR
-    "Metab" # depends on broken package mzR
-    "faahKO" # depends on broken package mzR
-    "cosmiq" # depends on broken package mzR
-    "metaMS" # depends on broken package mzR
-    "flagme" # depends on broken package mzR
-    "CAMERA" # depends on broken package mzR
-    "xcms" # depends on broken package mzR
-    "SIMAT" # depends on broken package mzR
-    "RMassBank" # depends on broken package mzR
-    "MSeasy" # depends on broken package mzR
-    "mzR" # broken build
+    "srd" # broken build
+    "paleotree" # broken build
+    "ndtv" # broken build
+    "mvMORPH" # broken build
+    "mptools" # broken build
+    "monogeneaGM" # broken build
+    "molaR" # broken build
+    "idm" # broken build
+    "hisse" # broken build
+    "gfcanalysis" # broken build
+    "evolqg" # broken build
+    "evobiR" # broken build
+    "convevol" # broken build
+    "bayou" # broken build
+    "anim_plots" # broken build
+    "TKF" # broken build
+    "Rphylopars" # broken build
+    "RAM" # broken build
+    "PhySortR" # broken build
+    "MonoPhy" # broken build
+    "Momocs" # broken build
+    "Evomorph" # broken build
+    "PBD" # depends on broken package DDD
+    "DDD" # broken build
+    "BMhyd" # broken build
+    "rscala" # broken build
+    "rgpui" # depends on broken package rgp
+    "rgp" # broken build
+    "qcmetrics" # broken build
+    "lfe" # broken build
+    "interactiveDisplay" # depends on broken package interactiveDisplayBase
+    "RefNet" # depends on broken package interactiveDisplayBase
+    "pwOmics" # depends on broken package interactiveDisplayBase
+    "grasp2db" # depends on broken package interactiveDisplayBase
+    "EnsDb_Rnorvegicus_v79" # depends on broken package interactiveDisplayBase
+    "EnsDb_Rnorvegicus_v75" # depends on broken package interactiveDisplayBase
+    "EnsDb_Mmusculus_v79" # depends on broken package interactiveDisplayBase
+    "EnsDb_Mmusculus_v75" # depends on broken package interactiveDisplayBase
+    "EnsDb_Hsapiens_v79" # depends on broken package interactiveDisplayBase
+    "EnsDb_Hsapiens_v75" # depends on broken package interactiveDisplayBase
+    "ensembldb" # depends on broken package interactiveDisplayBase
+    "AnnotationHubData" # depends on broken package interactiveDisplayBase
+    "AnnotationHub" # depends on broken package interactiveDisplayBase
+    "interactiveDisplayBase" # broken build
+    "h2o" # broken build
+    "funModeling" # broken build
+    "brr" # broken build
+    "bedr" # broken build
+    "Sabermetrics" # broken build
+    "RKEEL" # depends on broken package RKEELjars
+    "RKEELjars" # broken build
+    "RapidPolygonLookup" # depends on broken package PBSmapping
+    "PBSmapping" # broken build
+    "stagePop" # depends on broken package PBSddesolve
+    "PBSddesolve" # broken build
+    "Metab" # broken build
+    "Crossover" # broken build
+    "CardinalWorkflows" # broken build
     "spoccutils" # depends on broken package spocc
     "mapr" # depends on broken package spocc
     "vmsbase" # broken build
