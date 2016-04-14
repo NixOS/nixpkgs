@@ -9654,6 +9654,34 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Po4a = buildPerlPackage rec {
+    name = "po4a-0.47";
+    src = fetchurl {
+      url = "https://alioth.debian.org/frs/download.php/file/4142/po4a-0.47.tar.gz";
+      sha256 = "5010e1b7df1115cbd475f46587fc05fefc97301f9bba0c2f15106005ca017507";
+    };
+    propagatedBuildInputs = [ pkgs.docbook_xml_xslt TextWrapI18N LocaleGettext TermReadKey SGMLSpm ModuleBuild UnicodeLineBreak ModuleBuild ];
+    buildInputs = [ pkgs.gettext pkgs.libxslt pkgs.glibcLocales pkgs.docbook_xml_dtd_412 pkgs.docbook_sgml_dtd_41 pkgs.texlive.combined.scheme-basic pkgs.jade ];
+    LC_ALL="en_US.UTF-8";
+    SGML_CATALOG_FILES = "${pkgs.docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml";
+    preConfigure = ''
+      touch Makefile.PL
+      export PERL_MB_OPT="--install_base=$out --prefix=$out"
+      substituteInPlace Po4aBuilder.pm --replace "\$self->install_sets(\$self->installdirs)->{'bindoc'}" "'$out/share/man/man1'"
+    '';
+    buildPhase = "perl Build.PL --install_base=$out; ./Build build";
+    installPhase = "./Build install";
+    checkPhase = ''
+      export SGML_CATALOG_FILES=${pkgs.docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat
+      ./Build test
+    '';
+    meta = {
+      homepage = https://po4a.alioth.debian.org/;
+      description = "tools for helping translation of documentation";
+      license = with stdenv.lib.licenses; [ gpl2 ];
+    };
+  };
+
   PPI = buildPerlPackage {
     name = "PPI-1.220";
     src = fetchurl {
