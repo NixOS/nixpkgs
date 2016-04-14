@@ -1045,6 +1045,10 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  libpinyin = callPackage ../tools/inputmethods/libpinyin { };
+
+  ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
+
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
@@ -1063,6 +1067,10 @@ in
     };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul {
+      inherit (python3Packages) pygobject3;
+    };
+
+    libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin {
       inherit (python3Packages) pygobject3;
     };
 
