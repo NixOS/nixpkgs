@@ -126,6 +126,14 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
+      ${optionalString cfg.startDbusSession ''
+        ${pkgs.glib}/bin/gdbus call --session \
+          --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
+          --method org.freedesktop.DBus.UpdateActivationEnvironment \
+          "{$(env | ${pkgs.gnused}/bin/sed "s/'/\\\\'/g; s/\([^=]*\)=\(.*\)/'\1':'\2'/" \
+                  | ${pkgs.coreutils}/bin/paste -sd,)}"
+      ''}
+
       test -n "$waitPID" && wait "$waitPID"
       exit 0
     '';
