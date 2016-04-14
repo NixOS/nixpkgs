@@ -48,7 +48,7 @@ with frameworks; with libs; {
   ForceFeedback           = [ CF IOKit ];
   Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
-  GLUT                    = [ GL OpenGL ];
+  GLUT                    = [ OpenGL ];
   GSS                     = [];
   GameController          = [];
   GameKit                 = [ Foundation ];
