@@ -40,12 +40,6 @@ let
     mkdir -p $out
     cp ${gemfile} $out/Gemfile
     cp ${lockfile} $out/Gemfile.lock
-
-    cd $out
-    chmod +w Gemfile.lock
-    export GEM_PATH=${bundler}/${ruby.gemPath}
-    ${ruby}/bin/ruby -rubygems -e \
-      "require 'bundler'; Bundler.definition.lock('Gemfile.lock')"
   '';
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
   bundlerEnv = buildEnv {
@@ -72,6 +66,7 @@ let
             makeWrapper "$i" $out/bin/$(basename "$i") \
               --set BUNDLE_GEMFILE ${confFiles}/Gemfile \
               --set BUNDLE_PATH ${bundlerEnv}/${ruby.gemPath} \
+              --set BUNDLE_FROZEN 1 \
               --set GEM_HOME ${bundlerEnv}/${ruby.gemPath} \
               --set GEM_PATH ${bundlerEnv}/${ruby.gemPath}
           done
