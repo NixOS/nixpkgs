@@ -32,13 +32,11 @@ in
 
     services.syncthing = {
 
-      enable = mkEnableOption {
-        description = ''
-          Whether to enable Syncthing - the self-hosted open-source alternative
-          to Dropbox and Bittorrent Sync. Initial interface will be
-          available on http://127.0.0.1:8384/.
-        '';
-      };
+      enable = mkEnableOption ''
+        Syncthing - the self-hosted open-source alternative
+        to Dropbox and Bittorrent Sync. Initial interface will be
+        available on http://127.0.0.1:8384/.
+      '';
 
       systemService = mkOption {
         type = types.bool;
