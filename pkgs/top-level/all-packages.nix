@@ -15175,6 +15175,7 @@ in
   gnome3 = self.gnome3_18 // {
     shellExtensions = {
       impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix {};
+      volume-mixer = callPackage ../desktops/gnome-3/extensions/volume-mixer.nix {};
     };
   };
 
