@@ -3571,6 +3571,11 @@ in
 
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
+  sssd = callPackage ../os-specific/linux/sssd {
+    inherit (perlPackages) Po4a;
+    inherit (python27Packages) ldap;
+  };
+
   vtun = callPackage ../tools/networking/vtun { };
 
   weather = callPackage ../applications/misc/weather { };

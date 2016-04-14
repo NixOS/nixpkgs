@@ -223,6 +223,8 @@ let
           account sufficient pam_unix.so
           ${optionalString config.users.ldap.enable
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "account sufficient ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
 
@@ -263,6 +265,8 @@ let
               "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
+          ${optionalString config.services.sssd.enable
+              "auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass"}
           ${optionalString config.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
@@ -278,6 +282,8 @@ let
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
           ${optionalString config.users.ldap.enable
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
           ${optionalString config.services.samba.syncPasswordsByPam
@@ -298,6 +304,8 @@ let
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString config.users.ldap.enable
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
+          ${optionalString config.services.sssd.enable
+              "session optional ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth
@@ -435,6 +443,7 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+      ++ optionals config.services.sssd.enable [ pkgs.sssd ]
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
