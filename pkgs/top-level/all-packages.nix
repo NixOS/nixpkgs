@@ -13230,6 +13230,8 @@ in
 
   mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
 
+  neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
