@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase exiv2 ];
 
   configurePhase = ''
+    runHook preConfigure
     sed -i 's;/usr;;' phototonic.pro
     qmake PREFIX=""
+    runHook postConfigure
   '';
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
