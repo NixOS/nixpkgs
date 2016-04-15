@@ -100,6 +100,11 @@ let
           })
           permissions));
 
+  home_dir_permissions = userdata:
+    map
+      (user: "install -d -m 0755 ${user.home_directory}")
+      userdata;
+
 in
 
 {
@@ -207,6 +212,9 @@ in
       %sudo-srv ALL=(root) FCMANAGE
       %service  ALL=(root) FCMANAGE
     '';
+
+    system.activationScripts.fcio-homedirpermissions =
+      builtins.concatStringsSep "\n" (home_dir_permissions userdata);
 
   };
 
