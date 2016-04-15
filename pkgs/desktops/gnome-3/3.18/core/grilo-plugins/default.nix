@@ -3,11 +3,11 @@
 , gmime, json_glib, avahi, tracker, itstool }:
 
 stdenv.mkDerivation rec {
-  name = "grilo-plugins-0.2.13";
+  name = "grilo-plugins-0.2.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo-plugins/0.2/${name}.tar.xz";
-    sha256 = "008jwm5ydl0k25p3d2fkcail40fj9y3qknihxb5fg941p8qlhm55";
+    sha256 = "00sjmkzxc8w4qn4lp5yj65c4y83mwhp0zlvk11ghvpxnklgmgd40";
   };
 
   installFlags = [ "GRL_PLUGINS_DIR=$(out)/lib/grilo-0.2" ];
