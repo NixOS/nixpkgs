@@ -48,7 +48,7 @@ in
         description     = "Vagrant User";
         name            = "vagrant";
         group           = "vagrant";
-        extraGroups     = [ "users" "vboxsf" "wheel" "login" ];
+        extraGroups     = [ "users" "vboxsf" "wheel" "login" "service"];
         password        = "vagrant";
         home            = "/home/vagrant";
         createHome      = true;
