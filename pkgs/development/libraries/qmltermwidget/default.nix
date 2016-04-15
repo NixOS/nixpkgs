@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_QML]' "/lib/qt5/qml/"
   '';
 
-  configurePhase = "qmake PREFIX=$out";
+  configurePhase = ''
+    runHook preConfigure
+    qmake PREFIX=$out
+    runHook postConfigure
+  '';
 
   installPhase=''make INSTALL_ROOT="$out" install'';
 
