@@ -2,9 +2,6 @@
 
 PATH="@prefix_PATH@:$PATH"
 
-export NIX_PROFILES
-echo "NIX_PROFILES=$NIX_PROFILES"
-
 # The KDE icon cache is supposed to update itself
 # automatically, but it uses the timestamp on the icon
 # theme directory as a trigger.  Since in Nix the

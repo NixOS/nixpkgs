@@ -1,10 +1,8 @@
 { stdenv, lib, runCommand
-, dbus
+, dbus, qttools, socat
 , gnugrep, gnused
 , kconfig, kinit, kservice
 , plasma-workspace
-, qttools
-, socat
 , xmessage, xprop, xsetroot
 }:
 
@@ -12,15 +10,14 @@ let
 
   env = {
     inherit (stdenv) shell;
-    paths = [
-      dbus.tools
-      gnugrep gnused
-      kconfig kinit kservice
-      plasma-workspace
-      qttools
-      socat
-      xmessage xprop xsetroot
-    ];
+    paths = builtins.map (pkg: pkg.out or pkg)
+      [
+        dbus qttools socat
+        gnugrep gnused
+        kconfig kinit kservice
+        plasma-workspace
+        xmessage xprop xsetroot
+      ];
   };
 
 in runCommand "startkde" env ''
