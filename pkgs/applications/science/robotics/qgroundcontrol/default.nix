@@ -29,12 +29,10 @@ stdenv.mkDerivation rec {
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
 
   configurePhase = ''
+    runHook preConfigure
     mkdir build
-    pushd build
-
-    qmake ../qgroundcontrol.pro
-
-    popd
+    (cd build && qmake ../qgroundcontrol.pro)
+    runHook postConfigure
   '';
 
   preBuild = "pushd build/";
