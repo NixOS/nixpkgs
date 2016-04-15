@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
-    homepace    = https://sourceforge.net/projects/libpinyin;
+    homepage    = https://sourceforge.net/projects/libpinyin;
     license     = licenses.gpl2;
     platforms   = platforms.linux;
   };
