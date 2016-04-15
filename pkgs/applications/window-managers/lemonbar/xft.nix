@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, libxcb, libXft }:
+{ stdenv, fetchFromGitHub, perl, libxcb, libXft }:
 
 let
   version = "2015-07-23";
@@ -6,10 +6,11 @@ in
   stdenv.mkDerivation rec {
     name = "bar-xft-git-${version}";
 
-    src = fetchgit {
-      url = "https://github.com/krypt-n/bar";
-      rev = "020a3e1848ce03287886e9ff80b0b443e9aed543";
-      sha256 = "1xzs37syhlwyjfxnk36qnij5bqa0mi53lf1k851viw4qai2bfkgr";
+    src = fetchFromGitHub {
+      owner = "krypt-n";
+      repo = "bar";
+      rev = "3020df19232153f9e98ae0c8111db3de938a2719";
+      sha256 = "0a54yr534jd4l5gjzpypc0y5lh2qb2wsrd662s84jjgq8bpss8av";
     };
 
     buildInputs = [ libxcb libXft perl ];
