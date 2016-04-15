@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl, libxml2, upower
-, pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool, vala, sqlite, libxslt
+, pkgconfig, gtk3, glib, dconf
+, bash, wrapGAppsHook, itstool, vala, sqlite, libxslt
 , gnome3, librsvg, gdk_pixbuf, file, libnotify
 , evolution_data_server, gst_all_1, poppler
 , icu, taglib, libjpeg, libtiff, giflib, libcue
@@ -8,41 +8,36 @@
 , libpng, libexif, libgsf, libuuid, bzip2 }:
 
 let
-  majorVersion = "1.4";
+  majorVersion = "1.8";
 in
 stdenv.mkDerivation rec {
   name = "tracker-${majorVersion}.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/tracker/${majorVersion}/${name}.tar.xz";
-    sha256 = "1ssisbix7ib3d6bgx9s675gx6ayy68jq2srhpzv038mkbaskaz68";
+    sha256 = "0zchaahk4w7dwanqk1vx0qgnyrlzlp81krwawfx3mv5zffik27x1";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0 -I${poppler}/include/poppler";
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
-  enableParallelBuilding = true;
-
-  buildInputs = [ vala pkgconfig gtk3 glib intltool itstool libxml2
+  buildInputs = [ vala gtk3 glib dconf intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
-                  gnome3.gsettings_desktop_schemas makeWrapper file
+                  gnome3.gsettings_desktop_schemas wrapGAppsHook file
                   gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite
                   upower libnotify evolution_data_server gnome3.libgee
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base flac
                   poppler icu taglib libjpeg libtiff giflib libvorbis
                   exempi networkmanager libpng libexif libgsf libuuid ];
 
-  preConfigure = ''
-    substituteInPlace src/libtracker-sparql/Makefile.in --replace "--shared-library=libtracker-sparql" "--shared-library=$out/lib/libtracker-sparql"
-  '';
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0 -I${poppler.dev}/include/poppler";
 
-  preFixup = ''
-    for f in $out/bin/* $out/libexec/*; do
-      wrapProgram $f \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
-    done
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    substituteInPlace src/libtracker-sparql/Makefile.in \
+      --replace "--shared-library=libtracker-sparql" "--shared-library=$out/lib/libtracker-sparql"
   '';
 
   meta = with stdenv.lib; {
