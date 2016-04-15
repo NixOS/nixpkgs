@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
 
-  preConfigure = ''
-    git submodule init
-    git submodule update
-
-  '';
-
   configurePhase = ''
     mkdir build
     pushd build
