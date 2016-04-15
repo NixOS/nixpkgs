@@ -1,0 +1,12 @@
+diff --git a/source/main/framework/ContentManager.cpp b/source/main/framework/ContentManager.cpp
+index 0bfea8c..82cdab9 100644
+--- a/source/main/framework/ContentManager.cpp
++++ b/source/main/framework/ContentManager.cpp
+@@ -238,6 +238,7 @@ bool ContentManager::init(void)
+ #endif // USE_OPENAL
+ 
+ 	// and the content
++	ResourceGroupManager::getSingleton().addResourceLocation(SSETTING("Program Path")+"packs", "FileSystem", "Packs", true);
+ 	ResourceGroupManager::getSingleton().addResourceLocation(SSETTING("User Path")+"packs", "FileSystem", "Packs", true);
+ 	ResourceGroupManager::getSingleton().addResourceLocation(SSETTING("User Path")+"mods",  "FileSystem", "Packs", true);
+ 

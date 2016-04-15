@@ -14944,6 +14944,10 @@ in
     openglSupport = mesaSupported;
   };
 
+  rigsofrods = callPackage ../games/rigsofrods {
+    mygui = myguiSvn;
+  };
+
   rili = callPackage ../games/rili { };
 
   rimshot = callPackage ../games/rimshot { love = love_0_7; };
