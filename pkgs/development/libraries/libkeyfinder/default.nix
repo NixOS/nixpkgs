@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
     qmake
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
