@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
   propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
+    runHook preConfigure
     mkdir -p $out
     lndir ${pythonDBus} $out
 
@@ -44,6 +45,7 @@ in stdenv.mkDerivation {
       --destdir=$out/lib/${python.libPrefix}/site-packages \
       --sipdir=$out/share/sip \
       --designer-plugindir=$out/plugins/designer
+    runHook postConfigure
   '';
 
   postInstall = ''
