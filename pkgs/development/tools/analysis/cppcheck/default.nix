@@ -2,14 +2,14 @@
 
 let
   pname = "cppcheck";
-  version = "1.72";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
+  version = "1.73";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "085lm8v7biixy6rykq836gfy91jcccpz9qpk8i9x339dzy2b2q4l";
+    sha256 = "0l7yslf311h3kidi91q4zhqj3f3vsjp1gb2z50y20423fda87xin";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
