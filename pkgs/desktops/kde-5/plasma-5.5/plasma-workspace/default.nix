@@ -17,11 +17,11 @@ plasmaPackage {
     kdoctools
   ];
   buildInputs = [
-    dbus_tools kcmutils kconfig kcrash kdbusaddons kdesu kdewebkit
-    kinit kjsembed knewstuff knotifyconfig kpackage kservice
+    kcmutils kconfig kcrash kdbusaddons kdesu kdewebkit
+    kjsembed knewstuff knotifyconfig kpackage
     ktextwidgets kwallet kwayland kxmlrpcclient libdbusmenu libSM
-    libXcursor mkfontdir networkmanager-qt pam phonon qtscript qttools
-    socat wayland xmessage xprop xset xsetroot
+    libXcursor networkmanager-qt pam phonon qtscript
+    wayland
   ];
   propagatedBuildInputs = [
     baloo kactivities kdeclarative kdelibs4support kglobalaccel
