@@ -1,9 +1,11 @@
 { stdenv, writeText, callPackage, fetchurl,
-  fetchHex, erlang, hermeticRebar3 ? true, rebar3-nix-bootstrap,
+  fetchHex, erlang, hermeticRebar3 ? true,
   tree, fetchFromGitHub, hexRegistrySnapshot }:
 
 let
   version = "3.0.0-beta.4";
+
+  bootstrapper = ./rebar3-nix-bootstrap;
 
   # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
   # {erlware_commons,     "0.16.0"},
@@ -83,16 +85,18 @@ stdenv.mkDerivation {
     sha256 = "0px66scjdia9aaa5z36qzxb848r56m0k98g0bxw065a2narsh4xy";
   };
 
+  inherit bootstrapper;
+
   patches = if hermeticRebar3 == true
   then  [ ./hermetic-bootstrap.patch ./hermetic-rebar3.patch ]
   else [];
 
   buildInputs = [ erlang tree  ];
-  propagatedBuildInputs = [ hexRegistrySnapshot rebar3-nix-bootstrap ];
+  propagatedBuildInputs = [ hexRegistrySnapshot ];
 
   postPatch = ''
     echo postPatch
-    rebar3-nix-bootstrap registry-only
+    ${erlang}/bin/escript ${bootstrapper} registry-only
     echo "$ERL_LIBS"
     mkdir -p _build/default/lib/
     mkdir -p _build/default/plugins

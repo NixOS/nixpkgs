@@ -48,7 +48,7 @@ let
 
     configurePhase = ''
       runHook preConfigure
-      rebar3-nix-bootstrap
+      ${erlang}/bin/escript ${rebar3.bootstrapper}
       runHook postConfigure
     '';
 
