@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtsvg boost ];
 
   configurePhase = ''
+    runHook preConfigure
     cd fritzing-${version}.source
     echo $PATH
     qmake PREFIX=$out phoenix.pro
+    runHook postConfigure
   '';
 
   meta = {

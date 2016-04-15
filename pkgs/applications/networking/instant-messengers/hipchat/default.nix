@@ -6,7 +6,7 @@ let
 
   version = "4.0.1631";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
+  rpath = stdenv.lib.makeLibraryPath [
     xorg.libXext
     xorg.libSM
     xorg.libICE

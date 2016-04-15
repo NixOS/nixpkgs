@@ -123,7 +123,7 @@ with stdenv.lib; stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils}/bin/ar" ]
+                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 

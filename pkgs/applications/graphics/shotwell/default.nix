@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cgqaaikrb10plhf6zxbgqy32zqpiwyi9dpx3g8yr261q72r5c81";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
 
   configureFlags = [ "--disable-gsettings-convert-install" ];
 

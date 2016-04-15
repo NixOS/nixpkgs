@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
   nativeBuildInputs = [ makeQtWrapper ];
 
-  configurePhase = "qmake PREFIX=$out";
+  configurePhase = ''
+    runHook preConfigure
+    qmake PREFIX=$out
+    runHook postConfigure
+  '';
 
   installPhase = "make -j $NIX_BUILD_CORES INSTALL_ROOT=$out install";
 

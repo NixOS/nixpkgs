@@ -48,7 +48,9 @@ in stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
     qmake PREFIX=$out PREFIXSHORTCUT=$out dfasma.pro
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;

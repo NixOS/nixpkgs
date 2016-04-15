@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git gnupg makeQtWrapper pass qtbase qtsvg qttools ];
 
-  configurePhase = "qmake CONFIG+=release PREFIX=$out DESTDIR=$out";
+  configurePhase = ''
+    runHook preConfigure
+    qmake CONFIG+=release PREFIX=$out DESTDIR=$out
+    runHook postConfigure
+  '';
 
   installPhase = ''
     mkdir $out/bin

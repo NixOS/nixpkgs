@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtx11extras pkgconfig boost ];
 
   configurePhase = ''
+    runHook preConfigure
     sed -i s/-Werror// twmnd/twmnd.pro
     qmake
+    runHook postConfigure
   '';
 
   installPhase = ''

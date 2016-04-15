@@ -50,7 +50,7 @@ let
               doCheck = false;
               buildTools = drv.buildTools or [] ++ [ makeWrapper ];
               postInstall =
-                let bins = lib.makeSearchPath "bin" [ nodejs self.elm-make ];
+                let bins = lib.makeBinPath [ nodejs self.elm-make ];
                 in ''
                   wrapProgram $out/bin/elm-repl \
                     --prefix PATH ':' ${bins}

@@ -3,7 +3,7 @@
 , perl, pcscperl, Glib, Gtk2, Pango
 }:
 
-let deps = lib.makeSearchPath "bin" [ wget coreutils ];
+let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
   name = "pcsc-tools-1.4.25";

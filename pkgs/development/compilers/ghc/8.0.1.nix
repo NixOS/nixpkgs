@@ -7,16 +7,16 @@ let
 
 in 
 stdenv.mkDerivation rec {
-  version = "8.0.0.20160204";
+  version = "8.0.0.20160411";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.1-rc2/${name}-src.tar.xz";
-    sha256 = "0v8pciva93i4a6h0l76vq6bbvrg76b1y4awwbxcg3m9gnqkvmy2k";
+    url = "https://downloads.haskell.org/~ghc/8.0.1-rc3/${name}-src.tar.xz";
+    sha256 = "0cgk0li3pwag65xcrjci8l840aphklymjfmsrq0qpdi8bpsmi97d";
   };
 
   patches = [
-    ./dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+    ./ghc-8.x-dont-pass-linker-flags-via-response-files.patch  # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
   buildInputs = [ ghc perl hscolour ];

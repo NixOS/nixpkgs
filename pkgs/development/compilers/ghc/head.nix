@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
+    ./ghc-7.x-dont-pass-linker-flags-via-response-files.patch   # https://github.com/NixOS/nixpkgs/issues/10752
   ];
 
   postUnpack = ''

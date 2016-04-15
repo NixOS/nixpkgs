@@ -158,6 +158,7 @@
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
+  ./services/games/factorio.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
@@ -250,6 +251,7 @@
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/taskserver
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
@@ -427,6 +429,7 @@
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
+  ./services/torrent/flexget.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/transmission.nix
   ./services/ttys/agetty.nix

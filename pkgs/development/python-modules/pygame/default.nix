@@ -18,14 +18,17 @@ buildPythonPackage {
   # /nix/store/94kswjlwqnc0k2bnwgx7ckx0w2kqzaxj-stdenv/setup: line 73: python: command not found
   disabled = isPy3k;
 
+  # Tests fail because of no audio device and display.
+  doCheck = false;
+
   patches = [ ./pygame-v4l.patch ];
 
-  preConfigure = ''
-    for i in ${SDL_image} ${SDL_mixer} ${SDL_ttf} ${libpng} ${libjpeg} ${portmidi} ${libX11}; do
-      sed -e "/origincdirs =/a'$i/include'," -i config_unix.py
-      sed -e "/origlibdirs =/aoriglibdirs += '$i/lib'," -i config_unix.py
-    done
-
+  preConfigure = stdenv.lib.concatMapStrings (dep: ''
+    sed \
+      -e "/origincdirs =/a'${dep.dev or dep.out}/include'," \
+      -e "/origlibdirs =/aoriglibdirs += '${dep.lib or dep.out}/lib'," \
+      -i config_unix.py
+  '') [ SDL_image SDL_mixer SDL_ttf libpng libjpeg portmidi libX11 ] + ''
     LOCALBASE=/ python config.py
   '';
 

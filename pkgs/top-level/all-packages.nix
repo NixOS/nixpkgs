@@ -639,7 +639,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = go16Packages.caddy.bin // { outputs = [ "bin" ]; };
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -696,6 +696,8 @@ in
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   contacts = callPackage ../tools/misc/contacts { };
+
+  daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
 
@@ -1043,6 +1045,10 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  libpinyin = callPackage ../development/libraries/libpinyin { };
+
+  ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
+
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
@@ -1061,6 +1067,10 @@ in
     };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul {
+      inherit (python3Packages) pygobject3;
+    };
+
+    libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin {
       inherit (python3Packages) pygobject3;
     };
 
@@ -2139,6 +2149,8 @@ in
   multitail = callPackage ../tools/misc/multitail { };
 
   mxt-app = callPackage ../misc/mxt-app { };
+
+  netdata = callPackage ../tools/system/netdata { };
 
   netperf = callPackage ../applications/networking/netperf { };
 
@@ -9031,6 +9043,11 @@ in
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
+  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
   webkitgtk2 = webkitgtk24x.override {
     withGtk2 = true;
     enableIntrospection = false;
@@ -11406,6 +11423,8 @@ in
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
+  profont = callPackage ../data/fonts/profont { };
+
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
@@ -12807,6 +12826,8 @@ in
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
+
+  j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop/default.nix { };
 
   jabref = callPackage ../applications/office/jabref/default.nix { };
 
@@ -14710,7 +14731,9 @@ in
 
   exult = callPackage ../games/exult { };
 
-  factorio = callPackage ../games/factorio {};
+  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+
+  factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
   fairymax = callPackage ../games/fairymax {};
 

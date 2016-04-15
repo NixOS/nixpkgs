@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline ];
 
   configurePhase = ''
-    qmake;
+    runHook preConfigure
+    qmake
     sed -e "s@/usr/@$out/@g" -i $(find . -name Makefile)
+    runHook postConfigure
   '';
 
   meta = {

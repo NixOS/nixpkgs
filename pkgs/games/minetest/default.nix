@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit, freetype
-, gettext
+, gettext, doxygen
 }:
 
 let
@@ -25,13 +25,14 @@ in stdenv.mkDerivation {
   cmakeFlags = [
     "-DENABLE_FREETYPE=1"
     "-DENABLE_GETTEXT=1"
+    "-DGETTEXT_INCLUDE_DIR=${gettext}/include/gettext"
     "-DCURL_INCLUDE_DIR=${curl.dev}/include/curl"
     "-DIRRLICHT_INCLUDE_DIR=${irrlicht}/include/irrlicht"
   ];
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
-    openal libvorbis xlibsWrapper sqlite luajit freetype gettext
+    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen
   ];
 
   postInstall = ''

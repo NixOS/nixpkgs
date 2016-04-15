@@ -10,6 +10,10 @@ stdenv.mkDerivation {
     sha256 = "0rgrsyi7951fsv3lzprlzrg55jf6pbdjfql85dylwmg9nc4y8xym";
   };
 
+  postPatch = ''
+    sed -i 's,--static,,g' Makefile
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp build/CuraEngine $out/bin/

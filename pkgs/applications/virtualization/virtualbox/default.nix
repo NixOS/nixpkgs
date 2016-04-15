@@ -195,6 +195,9 @@ in stdenv.mkDerivation {
 
   passthru = { inherit version; /* for guest additions */ };
 
+  # Workaround for https://github.com/NixOS/patchelf/issues/93 (can be removed once this issue is addressed)
+  dontPatchELF = true;
+
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;

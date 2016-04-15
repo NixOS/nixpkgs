@@ -36,7 +36,7 @@ let
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
-  ldpath = stdenv.lib.makeSearchPath "lib"
+  ldpath = stdenv.lib.makeLibraryPath
     [
       dbus_libs gcc.cc glib libdrm libffi libICE libSM libX11 libXmu
       ncurses popt qtbase qtdeclarative qtwebkit zlib

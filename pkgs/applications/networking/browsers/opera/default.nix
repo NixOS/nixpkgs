@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
-      (":" + stdenv.lib.makeSearchPath "lib64" buildInputs);
+      (":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] buildInputs);
 
   preFixup =
     ''

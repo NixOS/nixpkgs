@@ -261,6 +261,8 @@
       syncthing = 237;
       mfi = 238;
       caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -493,6 +495,8 @@
       syncthing = 237;
       #mfi = 238; # unused
       caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

@@ -6,7 +6,7 @@ let
 
   version = "2.0.3";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
@@ -23,6 +23,7 @@ let
     libnotify
     nspr
     nss
+    stdenv.cc.cc
     systemd
 
     xorg.libX11
@@ -57,7 +58,7 @@ in stdenv.mkDerivation {
     mkdir -p $out
     dpkg -x $src $out
     cp -av $out/usr/* $out
-    rm -rf $out/usr
+    rm -rf $out/usr $out/share/lintian
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
@@ -73,7 +74,8 @@ in stdenv.mkDerivation {
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
-      --replace /usr/lib/slack/slack $out/lib/slack/slack
+      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/share/ $out/share/
   '';
 
   meta = with stdenv.lib; {

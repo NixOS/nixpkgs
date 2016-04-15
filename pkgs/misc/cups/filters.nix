@@ -4,7 +4,7 @@
 }:
 
 let
-  binPath = stdenv.lib.makeSearchPath "bin" [ coreutils gnused bc gawk gnugrep which ];
+  binPath = stdenv.lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
 
 in stdenv.mkDerivation rec {
   name = "cups-filters-${version}";

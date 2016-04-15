@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   configurePhase = ''
-    qmake PREFIX=$out
+    $QMAKE PREFIX=$out
   '';
 
   # Move layout files so they cannot be found by Therapist

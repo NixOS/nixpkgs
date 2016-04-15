@@ -31,7 +31,6 @@ let
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
-      doublePatchelf = pkgs.stdenv.isArm;
     }
     ''
       set +o pipefail
@@ -111,9 +110,6 @@ let
           if ! test -L $i; then
               echo "patching $i..."
               patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-              if [ -n "$doublePatchelf" ]; then
-                  patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-              fi
           fi
       done
 

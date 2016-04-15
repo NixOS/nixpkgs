@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/checksec --replace find ${findutils}/bin/find
     substituteInPlace $out/bin/checksec --replace "file $" "${file}/bin/file $"
     substituteInPlace $out/bin/checksec --replace "xargs file" "xargs ${file}/bin/file"
-    substituteInPlace $out/bin/checksec --replace " readelf -" " ${binutils}/bin/readelf -"
-    substituteInPlace $out/bin/checksec --replace "(readelf -" "(${binutils}/bin/readelf -"
-    substituteInPlace $out/bin/checksec --replace "command_exists readelf" "command_exists ${binutils}/bin/readelf"
+    substituteInPlace $out/bin/checksec --replace " readelf -" " ${binutils.out}/bin/readelf -"
+    substituteInPlace $out/bin/checksec --replace "(readelf -" "(${binutils.out}/bin/readelf -"
+    substituteInPlace $out/bin/checksec --replace "command_exists readelf" "command_exists ${binutils.out}/bin/readelf"
     substituteInPlace $out/bin/checksec --replace "/sbin/sysctl -" "${procps}/sbin/sysctl -"
     substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
   '';

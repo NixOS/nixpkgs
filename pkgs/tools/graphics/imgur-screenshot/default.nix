@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, makeWrapper, curl, gnugrep, libnotify, scrot, which, xclip }:
 
-let deps = stdenv.lib.makeSearchPath "bin" [ curl gnugrep libnotify scrot which xclip ];
+let deps = stdenv.lib.makeBinPath [ curl gnugrep libnotify scrot which xclip ];
 in stdenv.mkDerivation rec {
-  version = "1.5.4";
+  version = "1.7.1";
   name = "imgur-screenshot-${version}";
 
   src = fetchFromGitHub {
     owner = "jomo";
     repo = "imgur-screenshot";
     rev = "v${version}";
-    sha256 = "1ff88mvrd0b7nmrkjljs3rnprk5ih0iif92dn39s3vnag3fp9f10";
+    sha256 = "01wiqrc7xxvk7kzgw756jahwa0szb200l8030iwfcgxb679k3v0j";
   };
 
   nativeBuildInputs = [ makeWrapper ];
