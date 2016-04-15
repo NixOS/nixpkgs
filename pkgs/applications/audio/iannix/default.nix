@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
 
     buildInputs = [ alsaLib pkgconfig qt5.qtbase qt5.qtscript ];
 
-  configurePhase = ''qmake PREFIX=/'';
+  configurePhase = ''
+    runHook preConfigure
+    qmake PREFIX=/
+    runHook postConfigure
+  '';
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
