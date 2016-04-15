@@ -41,6 +41,8 @@ in stdenv.mkDerivation {
     postInstall = "";
   };
 
+  outputs = [ "dev" "bin" "static" ] ++ stdenv.lib.optional sharedLibrary "out";
+
   preBuild = stdenv.lib.optionalString sharedLibrary ''
     make -f ${if stdenv.isDarwin then "Makefile-libbz2_dylib" else "Makefile-libbz2_so"}
   '';
@@ -61,12 +63,15 @@ in stdenv.mkDerivation {
     )
   '');
 
-  installFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(bin)" ];
 
   postInstall = ''
-    rm $out/bin/bunzip2* $out/bin/bzcat*
-    ln -s bzip2 $out/bin/bunzip2
-    ln -s bzip2 $out/bin/bzcat
+    rm $bin/bin/bunzip2* $bin/bin/bzcat*
+    ln -s bzip2 $bin/bin/bunzip2
+    ln -s bzip2 $bin/bin/bzcat
+
+    mkdir "$static"
+    mv "$bin/lib" "$static/"
   '';
 
   postPatch = ''

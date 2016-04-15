@@ -456,7 +456,7 @@ in
         ]);
 
     environment.systemPackages =
-      [ xorg.xorgserver
+      [ xorg.xorgserver.out
         xorg.xrandr
         xorg.xrdb
         xorg.setxkbmap
@@ -466,6 +466,7 @@ in
         xorg.xsetroot
         xorg.xinput
         xorg.xprop
+        xorg.xauth
         pkgs.xterm
         pkgs.xdg_utils
       ]
@@ -493,7 +494,7 @@ in
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11}/lib" "${xorg.libXext}/lib" ]
+              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
@@ -513,8 +514,7 @@ in
       };
 
     services.xserver.displayManager.xserverArgs =
-      [ "-ac"
-        "-terminate"
+      [ "-terminate"
         "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
@@ -525,7 +525,7 @@ in
 
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
-      [ xorg.xorgserver
+      [ xorg.xorgserver.out
         xorg.xf86inputevdev
       ];
 

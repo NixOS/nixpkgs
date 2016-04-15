@@ -48,7 +48,7 @@ let
     [XDisplay]
     MinimumVT=${toString xcfg.tty}
     ServerPath=${xserverWrapper}
-    XephyrPath=${pkgs.xorg.xorgserver}/bin/Xephyr
+    XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
     SessionCommand=${dmcfg.session.script}
     SessionDir=${dmcfg.session.desktops}
     XauthPath=${pkgs.xorg.xauth}/bin/xauth

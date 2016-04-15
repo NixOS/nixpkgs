@@ -11,11 +11,11 @@ let
     call_ui = x : x // {
       NIX_CFLAGS_COMPILE =
         "-I${telepathy_glib}/include/telepathy-1.0"
-        + " -I${dbus_glib}/include/dbus-1.0"
-        + " -I${dbus_libs}/include/dbus-1.0";
+        + " -I${dbus_glib.dev}/include/dbus-1.0"
+        + " -I${dbus_libs.dev}/include/dbus-1.0";
     };
     telepathy_logger_qt = x : x // {
-      NIX_CFLAGS_COMPILE = "-I${dbus_libs}/include/dbus-1.0";
+      NIX_CFLAGS_COMPILE = "-I${dbus_libs.dev}/include/dbus-1.0";
     };
   };
 

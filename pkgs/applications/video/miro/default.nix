@@ -33,7 +33,7 @@ buildPythonApplication rec {
     sed -i -e 's|/usr/bin/||' -e 's|/usr||' \
            -e 's/BUILD_TIME[^,]*/BUILD_TIME=0/' setup.py
 
-    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg}/bin/ffmpeg"|' \
+    sed -i -e 's|default="/usr/bin/ffmpeg"|default="${ffmpeg.bin}/bin/ffmpeg"|' \
       plat/options.py
 
     sed -i -e 's|/usr/share/miro/themes|'"$out/share/miro/themes"'|' \

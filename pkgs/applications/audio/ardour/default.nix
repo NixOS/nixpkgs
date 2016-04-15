@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # have to do that ourself.
   patchPhase = ''
     printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = \"${tag}-${builtins.substring 0 8 src.rev}\"; }\n' > libs/ardour/revision.cc
-    sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
     patchShebangs ./tools/
   '';
 

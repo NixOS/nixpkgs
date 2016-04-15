@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
   substituteInPlace converter_ffmpeg.cpp \
-    --replace '"ffmpeg"' '"${ffmpeg}/bin/ffmpeg"' \
-    --replace '"ffmpeg ' '"${ffmpeg}/bin/ffmpeg '
+    --replace '"ffmpeg"' '"${ffmpeg.bin}/bin/ffmpeg"' \
+    --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
   '';
 
   configurePhase = ''

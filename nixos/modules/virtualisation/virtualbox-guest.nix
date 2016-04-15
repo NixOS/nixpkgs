@@ -66,7 +66,7 @@ in
 
     services.xserver.displayManager.sessionCommands =
       ''
-        PATH=${makeSearchPath "bin" [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver ]}:$PATH \
+        PATH=${makeBinPath [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver.out ]}:$PATH \
           ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
       '';
 

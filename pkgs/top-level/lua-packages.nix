@@ -104,7 +104,7 @@ let
       makeFlagsArray=(
         LUA_LDIR="$out/share/lua/${lua.luaversion}"
         LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
-        EXPAT_INC="-I${expat}/include");
+        EXPAT_INC="-I${expat.dev}/include");
     '';
 
     meta = {

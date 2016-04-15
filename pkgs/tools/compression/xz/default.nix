@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1da071wyx921pyx3zkxlnbpp14p6km98pnp66mg1arwi9dxgbxbg";
   };
 
+  outputs = [ "dev" "out" "bin" "man" "doc" ];
+
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.

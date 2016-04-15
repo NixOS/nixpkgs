@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''sed -e 's/upstartconfdir = \/etc\/init/upstartconfdir = $(out)\/etc\/init/' -i data/Makefile.am'';
 
   preConfigure = ''
-                   export PKG_CONFIG_PATH="${dbus_libs}/lib/pkgconfig:$PKG_CONFIG_PATH"
+                   export PKG_CONFIG_PATH="${dbus_libs.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
                    ./autogen.sh #--prefix="$out"
                  '';
 

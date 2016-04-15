@@ -27,6 +27,13 @@ let
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
+  libc_bin = if nativeLibc then null else libc.bin or libc;
+  libc_dev = if nativeLibc then null else libc.dev or libc;
+  libc_lib = if nativeLibc then null else libc.out or libc;
+  cc_solib = cc.lib or cc;
+  binutils_bin = if nativeTools then "" else binutils.bin or binutils;
+  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
+  coreutils_bin = if nativeTools then "" else coreutils.bin or coreutils;
 in
 
 stdenv.mkDerivation {
@@ -36,15 +43,10 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc shell;
-  libc = if nativeLibc then null else libc;
-  binutils = if nativeTools then "" else binutils;
-  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils
-  # and gnugrep.
-  coreutils = if nativeTools then "" else coreutils;
-  gnugrep = if nativeTools then "" else gnugrep;
+  inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  passthru = { inherit nativeTools nativeLibc nativePrefix isGNU isClang; };
+  passthru = { inherit libc nativeTools nativeLibc nativePrefix isGNU isClang; };
 
   buildCommand =
     ''
@@ -60,11 +62,11 @@ stdenv.mkDerivation {
     ''
 
     + optionalString (!nativeLibc) (if (!stdenv.isDarwin) then ''
-      dynamicLinker="$libc/lib/$dynamicLinker"
+      dynamicLinker="${libc_lib}/lib/$dynamicLinker"
       echo $dynamicLinker > $out/nix-support/dynamic-linker
 
-      if [ -e $libc/lib/32/ld-linux.so.2 ]; then
-        echo $libc/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+      if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+        echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
       fi
 
       # The dynamic linker is passed in `ldflagsBefore' to allow
@@ -78,7 +80,7 @@ stdenv.mkDerivation {
     '')
 
     + optionalString (!nativeLibc) ''
-      # The "-B$libc/lib/" flag is a quick hack to force gcc to link
+      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
       # against the crt1.o from our own glibc, rather than the one in
       # /usr/lib.  (This is only an issue when using an `impure'
       # compiler/linker, i.e., one that searches /usr/lib and so on.)
@@ -89,11 +91,11 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B$libc/lib/ -idirafter $libc/include -idirafter $cc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter ${cc}/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
-      echo "-L$libc/lib" > $out/nix-support/libc-ldflags
+      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
-      echo $libc > $out/nix-support/orig-libc
+      echo "${libc_lib}" > $out/nix-support/orig-libc
     ''
 
     + (if nativeTools then ''
@@ -102,23 +104,23 @@ stdenv.mkDerivation {
     '' else ''
       echo $cc > $out/nix-support/orig-cc
 
-      # GCC shows $cc/lib in `gcc -print-search-dirs', but not
-      # $cc/lib64 (even though it does actually search there...)..
+      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
+      # ${cc_solib}/lib64 (even though it does actually search there...)..
       # This confuses libtool.  So add it to the compiler tool search
       # path explicitly.
-      if [ -e "$cc/lib64" -a ! -L "$cc/lib64" ]; then
-        ccLDFlags+=" -L$cc/lib64"
-        ccCFlags+=" -B$cc/lib64"
+      if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
+        ccLDFlags+=" -L${cc_solib}/lib64"
+        ccCFlags+=" -B${cc_solib}/lib64"
       fi
-      ccLDFlags+=" -L$cc/lib"
+      ccLDFlags+=" -L${cc_solib}/lib"
 
       ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib}/lib"
+        ccLDFlags+=" -L${zlib.out}/lib"
       ''}
 
       # Find the gcc libraries path (may work only without multilib).
       ${optionalString cc.langAda or false ''
-        basePath=`echo $cc/lib/*/*/*`
+        basePath=`echo ${cc_solib}/lib/*/*/*`
         ccCFlags+=" -B$basePath -I$basePath/adainclude"
         gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
@@ -134,13 +136,13 @@ stdenv.mkDerivation {
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
 
-      ccPath="$cc/bin"
-      ldPath="$binutils/bin"
+      ccPath="${cc}/bin"
+      ldPath="${binutils_bin}/bin"
 
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      echo $cc $binutils $libc > $out/nix-support/propagated-user-env-packages
+      echo ${cc} ${cc.man or ""} ${binutils_bin} ${libc_bin} > $out/nix-support/propagated-user-env-packages
 
       echo ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
@@ -162,12 +164,12 @@ stdenv.mkDerivation {
 
       wrap ld ${./ld-wrapper.sh} ''${ld:-$ldPath/ld}
 
-      if [ -e $binutils/bin/ld.gold ]; then
-        wrap ld.gold ${./ld-wrapper.sh} $binutils/bin/ld.gold
+      if [ -e ${binutils_bin}/bin/ld.gold ]; then
+        wrap ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/ld.gold
       fi
 
-      if [ -e $binutils/bin/ld.bfd ]; then
-        wrap ld.bfd ${./ld-wrapper.sh} $binutils/bin/ld.bfd
+      if [ -e ${binutils_bin}/bin/ld.bfd ]; then
+        wrap ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/ld.bfd
       fi
 
       export real_cc=cc

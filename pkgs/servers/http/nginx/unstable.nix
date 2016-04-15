@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 

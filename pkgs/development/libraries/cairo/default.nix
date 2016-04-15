@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "0lmjlzmghmr27y615px9hkm552x7ap6pmq9mfbzr6smp8y2b6g31";
   };
 
+  outputs = [ "dev" "out" "docdev" ];
+  outputBin = "dev"; # very small
+
   nativeBuildInputs = [
     pkgconfig
     libiconv
@@ -29,12 +32,12 @@ stdenv.mkDerivation rec {
   ]);
 
   propagatedBuildInputs =
-    with xorg; [ xorg.xlibsWrapper fontconfig expat freetype pixman zlib libpng ]
+    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng ]
     ++ optional (!stdenv.isDarwin) libXrender
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
-    ++ optionals glSupport [ mesa_noglu ]
-    ;
+    ++ optional glSupport mesa_noglu
+    ; # TODO: maybe liblzo but what would it be for here?
 
   configureFlags = if stdenv.isDarwin then [
     "--disable-dependency-tracking"
@@ -50,29 +53,24 @@ stdenv.mkDerivation rec {
 
   preConfigure =
   # On FreeBSD, `-ldl' doesn't exist.
-    (stdenv.lib.optionalString stdenv.isFreeBSD
+    stdenv.lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t
             mv t "$i"
           done
-       '') 
-       +
+       ''
+    +
     ''
     # Work around broken `Requires.private' that prevents Freetype
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
     '';
 
   enableParallelBuilding = true;
 
-  # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc"
-    + stdenv.lib.optionalString stdenv.isDarwin (''
-      #newline
-    '' + glib.flattenInclude
-    );
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin glib.flattenInclude;
 
   meta = with stdenv.lib; {
     description = "A 2D graphics library with support for multiple output devices";

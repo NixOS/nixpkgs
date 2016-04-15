@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     ln -sv ${libsoup}/include/*/libsoup $out/include
-    ln -sv ${libxml2}/include/*/libxml $out/include
+    ln -sv ${libxml2.dev}/include/*/libxml $out/include
     ln -sv ${gssdp}/include/*/libgssdp $out/include
   '';
 

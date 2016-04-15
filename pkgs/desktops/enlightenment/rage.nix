@@ -7,19 +7,23 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/rel/apps/rage/${name}.tar.gz";
     sha256 = "10j3n8crk16jzqz2hn5djx6vms5f6x83qyiaphhqx94h9dgv2mgg";
   };
-  buildInputs = [ elementary efl automake autoconf libtool pkgconfig
-    makeWrapper ];
-  GST_PLUGIN_PATH = lib.makeSearchPath "lib/gstreamer-1.0" [
+  buildInputs = [
+    elementary efl automake autoconf libtool pkgconfig
+    makeWrapper
+    gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav ];
+    gst_all_1.gst-libav
+ ];
+
   configurePhase = ''
     ./autogen.sh --prefix=$out
   '';
+
   postInstall = ''
     wrapProgram $out/bin/rage \
-      --prefix GST_PLUGIN_PATH : "$GST_PLUGIN_PATH"
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
   meta = {
     description = "Video + Audio player along the lines of mplayer";

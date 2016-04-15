@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = [ zlib openssl libsodium ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

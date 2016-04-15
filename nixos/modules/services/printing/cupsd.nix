@@ -14,21 +14,21 @@ let
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
       mkdir -p $out
-      if [ ! -e ${cups}/lib/cups/backend/smb ]; then
+      if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
-      if [ ! -e ${cups}/lib/cups/backend/https ]; then
+      if [ ! -e ${cups.out}/lib/cups/backend/https ]; then
         mkdir -p $out/lib/cups/backend
-        ln -sv ${cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
+        ln -sv ${cups.out}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
     '';
 
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
-  # we can't update ${cups}/lib/cups itself, we create a symlink tree
+  # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
   # cupsd.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {

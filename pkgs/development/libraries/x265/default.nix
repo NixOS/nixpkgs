@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake yasm ];
 
+  NIX_LDFLAGS = "-L${stdenv.cc.libc.out}/lib"; #outputs TODO: this is strange
+
   meta = with stdenv.lib; {
     description = "Library for encoding h.265/HEVC video streams";
     homepage    = http://x265.org;

@@ -1,0 +1,36 @@
+Index: ktexteditor-5.18.0/src/syntax/data/katehighlightingindexer.cpp
+===================================================================
+--- ktexteditor-5.18.0.orig/src/syntax/data/katehighlightingindexer.cpp
++++ ktexteditor-5.18.0/src/syntax/data/katehighlightingindexer.cpp
+@@ -55,19 +55,16 @@ QStringList readListing(const QString &f
+ 
+ int main(int argc, char *argv[])
+ {
+-    // get app instance
+-    QCoreApplication app(argc, argv);
+-
+     // ensure enough arguments are passed
+-    if (app.arguments().size() < 3)
++    if (argc < 3)
+         return 1;
+ 
+     // open schema
+     QXmlSchema schema;
+-    if (!schema.load(QUrl::fromLocalFile(app.arguments().at(2))))
++    if (!schema.load(QUrl::fromLocalFile(QString::fromLocal8Bit(argv[2]))))
+         return 2;
+ 
+-    const QString hlFilenamesListing = app.arguments().value(3);
++    const QString hlFilenamesListing = QString::fromLocal8Bit(argv[3]);
+     if (hlFilenamesListing.isEmpty()) {
+         return 1;
+     }
+@@ -152,7 +149,7 @@ int main(int argc, char *argv[])
+         return anyError;
+ 
+     // create outfile, after all has worked!
+-    QFile outFile(app.arguments().at(1));
++    QFile outFile(QString::fromLocal8Bit(argv[1]));
+     if (!outFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
+         return 7;
+ 

@@ -60,13 +60,15 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
-    "-DCURSES_LIBRARY=${ncurses}/lib/libncurses.dylib"
+    "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
   ];
 
   # fails to find lex_token.h sometimes
   enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
+  setOutputFlags = false;
+  moveToDev = false;
 
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
@@ -112,8 +114,8 @@ stdenv.mkDerivation rec {
   '' + ''
     # Fix the mysql_config
     sed -i $out/bin/mysql_config \
-      -e 's,-lz,-L${zlib}/lib -lz,g' \
-      -e 's,-lssl,-L${openssl}/lib -lssl,g'
+      -e 's,-lz,-L${zlib.out}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl.out}/lib -lssl,g'
 
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin

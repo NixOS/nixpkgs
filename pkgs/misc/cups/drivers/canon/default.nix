@@ -202,10 +202,10 @@ stdenv.mkDerivation rec {
       cp libs/ThLB* $out/share/ufr2filter
     )
 
-    patchelf --set-rpath "$out/lib32:${i686_libxml2}/lib" $out/lib32/libcanonufr2.so.1.0.0
+    patchelf --set-rpath "$out/lib32:${i686_libxml2.out}/lib" $out/lib32/libcanonufr2.so.1.0.0
 
     patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/cnpkmoduleufr2
-    patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32:${i686_libxml2}/lib" $out/bin/cnpkbidi
+    patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32:${i686_libxml2.out}/lib" $out/bin/cnpkbidi
 
     makeWrapper "${ghostscript}/bin/gs" "$out/bin/gs" \
       --prefix LD_LIBRARY_PATH ":" "$out/lib" \

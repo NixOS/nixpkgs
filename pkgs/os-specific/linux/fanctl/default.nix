@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace fanctl \
       --replace '@PATH@' \
-                '${lib.makeSearchPath "bin" [
+                '${lib.makeBinPath [
                      gnugrep gawk coreutils bridge-utils iproute dnsmasq
                      iptables kmod utillinux gnused
                      glibc # needed for getent

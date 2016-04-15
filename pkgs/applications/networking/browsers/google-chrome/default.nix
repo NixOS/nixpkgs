@@ -7,7 +7,7 @@
 , dbus_libs, gtk, gdk_pixbuf, gcc
 
 # Will crash without.
-, udev
+, libudev
 
 # Loaded at runtime.
 , libexif
@@ -39,21 +39,18 @@ let
     withCustomModes = true;
   };
 
-  env = buildEnv {
-    name = "google-chrome-env";
-    paths = [
-      glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
-      libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
-      alsaLib libXdamage libXtst libXrandr expat cups
-      dbus_libs gtk gdk_pixbuf gcc
-      udev
-      libexif
-      liberation_ttf curl utillinux xdg_utils wget
-      flac harfbuzz icu libpng opusWithCustomModes snappy speechd
-      bzip2 libcap
-    ]
-    ++ optional pulseSupport libpulseaudio;
-  };
+  deps = [
+    stdenv.cc.cc
+    glib fontconfig freetype pango cairo libX11 libXi atk gconf nss nspr
+    libXcursor libXext libXfixes libXrender libXScrnSaver libXcomposite
+    alsaLib libXdamage libXtst libXrandr expat cups
+    dbus_libs gtk gdk_pixbuf gcc
+    libudev
+    libexif
+    liberation_ttf curl utillinux xdg_utils wget
+    flac harfbuzz icu libpng opusWithCustomModes snappy speechd
+    bzip2 libcap
+  ] ++ optional pulseSupport libpulseaudio;
 in stdenv.mkDerivation rec {
   inherit version;
 
@@ -61,12 +58,15 @@ in stdenv.mkDerivation rec {
 
   src = binary;
 
-  buildInputs = [ env patchelf ];
+  buildInputs = [ patchelf ];
 
   unpackPhase = ''
     ar x $src
     tar xf data.tar.xz
   '';
+
+  rpath = makeLibraryPath deps + ":" + makeSearchPathOutputs "lib64" ["lib"] deps;
+  binpath = makeBinPath deps;
 
   installPhase = ''
     case ${channel} in
@@ -76,7 +76,6 @@ in stdenv.mkDerivation rec {
     esac
 
     exe=$out/bin/google-chrome-$dist
-    rpath="${env}/lib:${env}/lib64"
 
     mkdir -p $out/bin $out/share
 
@@ -103,7 +102,7 @@ in stdenv.mkDerivation rec {
     cat > $exe << EOF
     #!${bash}/bin/sh
     export LD_LIBRARY_PATH=$rpath\''${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}
-    export PATH=${env}/bin\''${PATH:+:\$PATH}
+    export PATH=$binpath\''${PATH:+:\$PATH}
     $out/share/google/$appname/google-$appname "\$@"
     EOF
     chmod +x $exe

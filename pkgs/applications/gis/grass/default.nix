@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     "--with-wxwidgets"
     "--with-netcdf"
     "--with-geos"
-    "--with-postgres"
+    "--with-postgres" "--with-postgres-libs=${postgresql.lib}/lib/"
     "--with-mysql" "--with-mysql-includes=${mysql.lib}/include/mysql"
     "--with-blas"
   ];

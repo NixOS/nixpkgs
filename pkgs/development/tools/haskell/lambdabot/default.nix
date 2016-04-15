@@ -14,14 +14,14 @@ let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ pac
       inherit haskellPackages;
       packages = allPkgs;
     };
-    bins = lib.makeSearchPath "bin" ([ mueval'
-                                       (haskellPackages.ghcWithPackages allPkgs)
-                                       haskellPackages.unlambda
-                                       haskellPackages.brainfuck
-                                     ]
-                                     ++ lib.optional withDjinn haskellPackages.djinn
-                                     ++ lib.optional (aspell != null) aspell
-                                    );
+    bins = lib.makeBinPath ([ mueval'
+                              (haskellPackages.ghcWithPackages allPkgs)
+                              haskellPackages.unlambda
+                              haskellPackages.brainfuck
+                            ]
+                            ++ lib.optional withDjinn haskellPackages.djinn
+                            ++ lib.optional (aspell != null) aspell
+                           );
     modulesStr = lib.replaceChars ["\n"] [" "] modules;
     configStr = lib.replaceChars ["\n"] [" "] configuration;
 

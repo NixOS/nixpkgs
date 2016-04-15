@@ -8,7 +8,7 @@
 , libusb1, pciutils, nss
 
 , python, pythonPackages, perl, pkgconfig
-, nspr, udev, kerberos
+, nspr, libudev, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk, dbus_glib
@@ -112,7 +112,7 @@ let
     buildInputs = defaultDependencies ++ [
       which
       python perl pkgconfig
-      nspr nss udev
+      nspr nss libudev
       utillinux alsaLib
       bison gperf kerberos
       glib gtk dbus_glib
@@ -147,7 +147,7 @@ let
         }' chrome/utility/media_galleries/image_metadata_extractor.cc
       ''}
 
-      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${udev}/lib/\1!' \
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${libudev.out}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
 
       sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \

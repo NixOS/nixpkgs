@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fdbpfzbx3hgzi6jcmz1zv5lrxvgasc54bvqdzg8hhh4ql5s5fj2";
   };
 
+  outputs = [ "out" "doc" ];
+
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ xlibsWrapper imlib2 libjpeg libpng libXinerama curl libexif ];
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
                                --add-flags '--theme=feh'
   '';
 

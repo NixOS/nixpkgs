@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
   configurePhase = ''
+    runHook preConfigure
     mkdir build
     cd build
     qmake \
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
       CONFIG+=${stdenv.lib.optionalString portaudioSupport "acs_portaudio"} \
       PREFIX="$out" PREFIXSHORTCUT="$out" \
       ../fmit.pro
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;

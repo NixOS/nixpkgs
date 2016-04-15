@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext libuuid readline ];
 
-  outputs = [ "out" "lib" ];
+  outputs = [ "dev" "out" "bin" ]; # TODO: review xfs
 
   preConfigure = ''
     NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
     "XGETTEXT=xgettext"
     "--disable-lib64"
     "--enable-readline"
-    "--includedir=$(lib)/include"
-    "--libdir=$(lib)/lib"
   ];
 
   installFlags = [ "install-dev" ];

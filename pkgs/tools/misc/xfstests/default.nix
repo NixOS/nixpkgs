@@ -74,7 +74,7 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeSearchPath "bin" [acl attr bc e2fsprogs fio gawk libcap_progs lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap_progs lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 

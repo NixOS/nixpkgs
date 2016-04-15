@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, libsigsegv, readline, readlineSupport ? false
+{ stdenv, fetchurl, xz, libsigsegv, readline, interactive ? false
 , locale ? null }:
 
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec {
   name = "gawk-4.1.3";
 
@@ -9,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "09d6pmx6h3i2glafm0jd1v1iyrs03vcyv2rkz12jisii3vlmbkz3";
   };
 
+  # When we do build separate interactive version, it makes sense to always include man.
+  outputs = [ "out" "info" ] ++ stdenv.lib.optional (!interactive) "man";
+
   doCheck = !(
        stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
     || stdenv.isDarwin # XXX: `locale' segfaults
@@ -16,18 +22,17 @@ stdenv.mkDerivation rec {
     || stdenv.isFreeBSD
   );
 
-  buildInputs = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
-    ++ stdenv.lib.optional readlineSupport readline
+  buildInputs = [ xz.bin ]
+    ++ stdenv.lib.optional (stdenv.system != "x86_64-cygwin") libsigsegv
+    ++ stdenv.lib.optional interactive readline
     ++ stdenv.lib.optional stdenv.isDarwin locale;
 
   configureFlags = stdenv.lib.optional (stdenv.system != "x86_64-cygwin") "--with-libsigsegv-prefix=${libsigsegv}"
-    ++ stdenv.lib.optional readlineSupport "--with-readline=${readline}"
-      # only darwin where reported, seems OK on non-chrooted Fedora (don't rebuild stdenv)
-    ++ stdenv.lib.optional (!readlineSupport && stdenv.isDarwin) "--without-readline";
+    ++ [(if interactive then "--with-readline=${readline}" else "--without-readline")];
 
   postInstall = "rm $out/bin/gawk-*";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/gawk/;
     description = "GNU implementation of the Awk programming language";
 
@@ -45,8 +50,11 @@ stdenv.mkDerivation rec {
       lines of code.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+
+    platforms = platforms.unix;
 
     maintainers = [ ];
   };
 }
+

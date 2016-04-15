@@ -1,42 +1,49 @@
-{ stdenv, lib, fetchurl, unicodeSupport ? true, cplusplusSupport ? true
-, windows ? null
+{ stdenv, fetchurl
+, windows ? null, variant ? null, pcre
 , withCharSize ? 8
 }:
 
 with stdenv.lib;
 
-assert withCharSize != 8 -> !cplusplusSupport;
+assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  charFlags = if withCharSize == 8 then [ ]
-              else if withCharSize == 16 then [ "--enable-pcre16" "--disable-pcre8" ]
-              else if withCharSize == 32 then [ "--enable-pcre32" "--disable-pcre8" ]
-              else abort "Invalid character size";
+  version = "8.38";
+  pname = if (variant == null) then "pcre"
+    else  if (variant == "cpp") then "pcre-cpp"
+    else  variant;
 
 in stdenv.mkDerivation rec {
-  name = "pcre${lib.optionalString (withCharSize != 8) (toString withCharSize)}-8.38";
-  # FIXME: add "version" attribute and use it in URL
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-8.38.tar.bz2";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
     sha256 = "1pvra19ljkr5ky35y2iywjnsckrs9ch2anrf5b0dc91hw8v2vq5r";
   };
 
-  patches =
-    [ ];
+  patches = [
+    ./CVE-2016-1283.patch
+  ];
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "dev" "out" "bin" "doc" "man" ];
 
-  # FIXME: Refactor into list!
-  configureFlags = ''
-    --enable-jit
-    ${lib.optionalString unicodeSupport "--enable-unicode-properties"}
-    ${lib.optionalString (!cplusplusSupport) "--disable-cpp"}
-  '' + lib.optionalString (charFlags != []) " ${toString charFlags}";
+  configureFlags = [
+    "--enable-jit"
+    "--enable-unicode-properties"
+    "--disable-cpp"
+  ]
+    ++ optional (variant != null) "--enable-${variant}";
 
   doCheck = with stdenv; !(isCygwin || isFreeBSD);
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
+
+  postFixup = ''
+    moveToOutput bin/pcre-config "$dev"
+  ''
+    + optionalString (variant != null) ''
+    ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.so.*.*.*
+  '';
 
   crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
     buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];

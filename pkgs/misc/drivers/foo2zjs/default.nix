@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , foomatic_filters, bc, unzip, ghostscript, udev, vim
+  , foomatic_filters, bc, unzip, ghostscript, systemd, vim
   , ...}:
 builderDefsPackage
 (a :  
@@ -36,7 +36,7 @@ rec {
       ''PIXMAPS=$out/share/pixmaps''
       ''UDEVBIN=$out/bin''
       ''UDEVDIR=$out/etc/udev/rules.d''
-      ''UDEVD=${udev}/sbin/udevd''
+      ''UDEVD=${systemd.udev.bin}/sbin/udevd''
       ''LIBUDEVDIR=$out/lib/udev/rules.d''
       ''USBDIR=$out/etc/hotplug/usb''
       ''FOODB=$out/share/foomatic/db/source''

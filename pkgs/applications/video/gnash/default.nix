@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     for lib in $libs; do
       echo -n "$lib " >> macros/libslist
     done
-    echo -n "${stdenv.glibc}/lib" >> macros/libslist
+    echo -n "${stdenv.glibc.out}/lib" >> macros/libslist
 
     # Make sure to honor $TMPDIR, for chroot builds.
     for file in configure gui/Makefile.in Makefile.in
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     '' configureFlags="                                         \
-         --with-sdl-incl=${SDL}/include/SDL                     \
+         --with-sdl-incl=${SDL.dev}/include/SDL                     \
          --with-npapi-plugindir=$out/plugins                    \
          --enable-media=gst                                     \
          --without-gconf

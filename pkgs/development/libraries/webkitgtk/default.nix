@@ -2,7 +2,7 @@
 , pkgconfig, gettext, gobjectIntrospection, libnotify
 , gtk2, gtk3, wayland, libwebp, enchant
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs
-, enableGeoLocation ? false, geoclue2, sqlite
+, enableGeoLocation ? false, geoclue2, sqlite, xorg
 , enableCredentialStorage ? !stdenv.isDarwin
 , gst-plugins-base, readline, libedit
 }:
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 libwebp enchant libnotify
     libxml2 libxslt harfbuzz libpthreadstubs
-    gst-plugins-base
+    gst-plugins-base xorg.libXt
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [

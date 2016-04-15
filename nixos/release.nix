@@ -256,6 +256,7 @@ in rec {
   tests.sddm = callTest tests/sddm.nix {};
   tests.sddm-kde5 = callTest tests/sddm-kde5.nix {};
   tests.simple = callTest tests/simple.nix {};
+  tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };

@@ -223,8 +223,8 @@ self: super: {
     else super.x509-system;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then super.double-conversion
-    else addBuildDepend (overrideCabal super.double-conversion (drv:
+    then addExtraLibrary super.double-conversion pkgs.stdenv.cc.cc.lib
+    else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
           substituteInPlace double-conversion.cabal --replace stdc++ c++
@@ -365,7 +365,6 @@ self: super: {
   aws = dontCheck super.aws;                            # needs aws credentials
   aws-kinesis = dontCheck super.aws-kinesis;            # needs aws credentials for testing
   binary-protocol = dontCheck super.binary-protocol;    # http://hydra.cryp.to/build/499749/log/raw
-  bindings-GLFW = dontCheck super.bindings-GLFW;        # requires an active X11 display
   bits = dontCheck super.bits;                          # http://hydra.cryp.to/build/500239/log/raw
   bloodhound = dontCheck super.bloodhound;
   buildwrapper = dontCheck super.buildwrapper;
@@ -974,4 +973,54 @@ self: super: {
   haste-Cabal         = self.callPackage ../tools/haskell/haste/haste-Cabal.nix {};
   haste-cabal-install = self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; HTTP = self.HTTP_4000_2_23; };
   haste-compiler      = self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; };
+
+  # Ensure the necessary frameworks are propagatedBuildInputs on darwin
+  OpenGLRaw = overrideCabal super.OpenGLRaw (drv: {
+    librarySystemDepends =
+      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
+                            [ pkgs.darwin.apple_sdk.frameworks.OpenGL ];
+    preConfigure = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      frameworkPaths=($(for i in $nativeBuildInputs; do if [ -d "$i"/Library/Frameworks ]; then echo "-F$i/Library/Frameworks"; fi done))
+      frameworkPaths=$(IFS=, ; echo "''${frameworkPaths[@]}")
+      configureFlags+=$(if [ -n "$frameworkPaths" ]; then echo -n "--ghc-options=-optl=$frameworkPaths"; fi)
+    '';
+  });
+  GLURaw = overrideCabal super.GLURaw (drv: {
+    librarySystemDepends =
+      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
+                            [ pkgs.darwin.apple_sdk.frameworks.OpenGL ];
+  });
+  bindings-GLFW = overrideCabal super.bindings-GLFW (drv: {
+    doCheck = false; # requires an active X11 display
+    librarySystemDepends =
+      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
+                            (with pkgs.darwin.apple_sdk.frameworks;
+                             [ AGL Cocoa OpenGL IOKit Kernel CoreVideo
+                               pkgs.darwin.CF ]);
+  });
+  OpenCL = overrideCabal super.OpenCL (drv: {
+    librarySystemDepends =
+      pkgs.lib.optionals (!pkgs.stdenv.isDarwin) drv.librarySystemDepends;
+    libraryHaskellDepends = drv.libraryHaskellDepends
+      ++ pkgs.lib.optionals pkgs.stdenv.isDarwin
+                            [ pkgs.darwin.apple_sdk.frameworks.OpenCL ];
+  });
+
+  # Tests must be disabled on darwin for all versions of c2hs
+  # (e.g. Stackage LTS releases).
+  c2hs_0_20_1 = if pkgs.stdenv.isDarwin
+                then dontCheck super.c2hs_0_20_1
+                else super.c2hs_0_20_1;
+  c2hs_0_25_2 = if pkgs.stdenv.isDarwin
+                then dontCheck super.c2hs_0_25_2
+                else super.c2hs_0_25_2;
+  c2hs_0_27_1 = if pkgs.stdenv.isDarwin
+                then dontCheck super.c2hs_0_27_1
+                else super.c2hs_0_27_1;
 }

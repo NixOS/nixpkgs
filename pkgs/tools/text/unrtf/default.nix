@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
+  outputs = [ "out" "man" ];
+
   meta = with stdenv.lib; {
     description = "A converter from Rich Text Format to other formats";
     longDescription = ''

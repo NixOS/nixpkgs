@@ -514,7 +514,7 @@ in {
               };
             in "${aenv}/${pkgs.python.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;
-          LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+          LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
         serviceConfig = {
           ExecStart = ''

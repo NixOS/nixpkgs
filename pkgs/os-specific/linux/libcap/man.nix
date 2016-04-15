@@ -10,6 +10,4 @@ stdenv.mkDerivation rec {
   makeFlags = "MANDIR=$(out)/share/man";
 
   preConfigure = "cd doc";
-
-  postInstall = libcap.postinst name;
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     sed_script_2 =
       "'s|^MYNDKDIR=`dirname $0`" +
       "|MYNDKDIR=`dirname $(readlink -f $(which $0))`|'";
-    runtime_paths = (lib.makeSearchPath "bin" [
+    runtime_paths = (lib.makeBinPath [
       coreutils file findutils
       gawk gnugrep gnused
       jdk
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
     find $out \( \
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
-        \) -exec patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-*so.? \
-                          --set-rpath ${zlib}/lib:${ncurses}/lib {} \;
+        \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
+                          --set-rpath ${stdenv.lib.makeLibraryPath [ zlib ncurses ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ndk-gdb ndk-gdb-py
     do

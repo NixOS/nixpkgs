@@ -73,8 +73,8 @@ let
 
           for p in $out/bin/*; do
             wrapProgram $p \
-              --suffix LD_LIBRARY_PATH ';' "${lib.makeSearchPath "lib" runtimeDeps_}" \
-              --suffix PATH ';' "${lib.makeSearchPath "bin" runtimeDeps_}" \
+              --suffix LD_LIBRARY_PATH ';' "${lib.makeLibraryPath runtimeDeps_}" \
+              --suffix PATH ';' "${lib.makeBinPath runtimeDeps_}" \
               --suffix LUA_PATH ';' "\"$LUA_PATH\"" \
               --suffix LUA_PATH ';' "\"$out/share/lua/${lua.luaversion}/?.lua;$out/share/lua/${lua.luaversion}/?/init.lua\"" \
               --suffix LUA_CPATH ';' "\"$LUA_CPATH\"" \

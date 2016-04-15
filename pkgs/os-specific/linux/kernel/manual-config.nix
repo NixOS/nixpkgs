@@ -74,7 +74,7 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; propagatedBuildOutputs = ""; }) // {
       passthru = {
         inherit version modDirVersion config kernelPatches configfile;
       };

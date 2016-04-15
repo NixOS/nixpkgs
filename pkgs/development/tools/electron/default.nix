@@ -1,27 +1,16 @@
-{ stdenv, fetchurl, buildEnv, zlib, glib, alsaLib
-, dbus, gtk, atk, pango, freetype, fontconfig, libgnome_keyring3, gdk_pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gconf, nss, xorg, libcap, unzip
-, systemd, libnotify
-, version ? "0.36.2", sha256 ? "01d78j8dfrdygm1r141681b3bfz1f1xqg9vddz7j52z1mlfv9f1d", ...
-}:
+{ stdenv, callPackage, fetchurl, unzip
+, ...
+} @ args:
+
 let
-  atomEnv = buildEnv {
-    name = "env-atom";
-    paths = [
-      stdenv.cc.cc zlib glib dbus gtk atk pango freetype libgnome_keyring3
-      fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
-      xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
-      xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
-      xorg.libXcursor libcap systemd libnotify
-    ];
-  };
+  atomEnv = callPackage ./env-atom.nix (args);
 in stdenv.mkDerivation rec {
   name = "electron-${version}";
-  inherit version;
+  version = "0.36.2";
 
   src = fetchurl {
     url = "https://github.com/atom/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-    inherit sha256;
+    sha256 = "01d78j8dfrdygm1r141681b3bfz1f1xqg9vddz7j52z1mlfv9f1d";
     name = "${name}.zip";
   };
 

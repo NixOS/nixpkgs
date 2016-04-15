@@ -50,6 +50,11 @@ with lib;
 
     (mkIf (!config.systemd.coredump.enable) {
       boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+
+      systemd.extraConfig =
+        ''
+          DefaultLimitCORE=0:infinity
+        '';
     })
   ];
 

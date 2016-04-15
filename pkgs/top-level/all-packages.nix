@@ -640,7 +640,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = go16Packages.caddy.bin // { outputs = [ "bin" ]; };
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -697,6 +697,8 @@ in
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   contacts = callPackage ../tools/misc/contacts { };
+
+  daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
 
@@ -782,8 +784,6 @@ in
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
-
-  mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
@@ -1046,6 +1046,10 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
+  libpinyin = callPackage ../development/libraries/libpinyin { };
+
+  ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
+
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
@@ -1064,6 +1068,10 @@ in
     };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul {
+      inherit (python3Packages) pygobject3;
+    };
+
+    libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin {
       inherit (python3Packages) pygobject3;
     };
 
@@ -1584,7 +1592,7 @@ in
   };
 
   gawkInteractive = appendToName "interactive"
-    (gawk.override { readlineSupport = true; });
+    (gawk.override { interactive = true; });
 
   gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
 
@@ -2024,6 +2032,8 @@ in
   isl_0_14 = callPackage ../development/libraries/isl/0.14.1.nix { };
   isl_0_15 = callPackage ../development/libraries/isl/0.15.0.nix { };
 
+  ispike = callPackage ../development/libraries/science/robotics/ispike { };
+
   isync = callPackage ../tools/networking/isync { };
   isyncUnstable = callPackage ../tools/networking/isync/unstable.nix { };
 
@@ -2140,6 +2150,8 @@ in
   multitail = callPackage ../tools/misc/multitail { };
 
   mxt-app = callPackage ../misc/mxt-app { };
+
+  netdata = callPackage ../tools/system/netdata { };
 
   netperf = callPackage ../applications/networking/netperf { };
 
@@ -3807,7 +3819,7 @@ in
   xflux = callPackage ../tools/misc/xflux { };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
-  libxfs = self.xfsprogs.lib;
+  libxfs = self.xfsprogs.dev; # outputs TODO
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
@@ -4041,18 +4053,20 @@ in
 
   gcc = gcc5;
 
-  gcc_multi =
+  wrapCCMulti = cc:
     if system == "x86_64-linux" then lowPrio (
       let
         extraBuildCommands = ''
           echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
         '';
-      in wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi extraBuildCommands (gcc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi "" gcc.cc);
+      in wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi extraBuildCommands (cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith (callPackage ../build-support/cc-wrapper) glibc_multi "" cc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
-    else throw "Multilib gcc not supported on ‘${system}’";
+    else throw "Multilib ${cc.name} not supported on ‘${system}’";
+
+  gcc_multi = wrapCCMulti gcc;
 
   gcc_debug = lowPrio (wrapCC (gcc.cc.override {
     stripped = false;
@@ -4283,6 +4297,13 @@ in
     version = "4.9-2015q1-20150306";
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
+  };
+  gcc-arm-embedded-5_2 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
+    dirName = "5.0";
+    subdirName = "5-2015-q4-major";
+    version = "5.2-2015q4-20151219";
+    releaseType = "major";
+    sha256 = "12mbwl9iwbw7h6gwwkvyvfmrsz7vgjz27jh2cz9z006ihzigi50y";
   };
   gcc-arm-embedded = self.gcc-arm-embedded-4_9;
 
@@ -6566,8 +6587,8 @@ in
   dbus-sharp-glib-2_0 = callPackage ../development/libraries/dbus-sharp-glib { };
 
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = self.dbus.tools;
-  dbus_libs = self.dbus.libs;
+  dbus_tools = self.dbus.out;
+  dbus_libs = self.dbus;
   dbus_daemon = self.dbus.daemon;
 
   dee = callPackage ../development/libraries/dee { };
@@ -6853,7 +6874,7 @@ in
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions
   gmp5 = callPackage ../development/libraries/gmp/5.1.x.nix { };
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
-  gmp = self.gmp5;
+  gmp = self.gmp6;
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   #GMP ex-satellite, so better keep it near gmp
@@ -6982,6 +7003,7 @@ in
   ace = callPackage ../development/libraries/ace { };
 
   atk = callPackage ../development/libraries/atk { };
+
   atkmm = callPackage ../development/libraries/atkmm { };
 
   pixman = callPackage ../development/libraries/pixman { };
@@ -6990,6 +7012,8 @@ in
     glSupport = config.cairo.gl or (stdenv.isLinux &&
       !stdenv.isArm && !stdenv.isMips);
   };
+
+
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
@@ -7975,6 +7999,7 @@ in
   });
 
   libva = callPackage ../development/libraries/libva { };
+  libva-full = libva.override { minimal = false; };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
@@ -8027,13 +8052,17 @@ in
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 {
-    pythonSupport = false;
+  libxml2 = callPackage ../development/libraries/libxml2 { };
+  libxml2Python = pkgs.buildEnv { # slightly hacky
+    name = "libxml2+py-${self.libxml2.version}";
+    paths = with self.libxml2; [ dev bin py ];
+    inherit (self.libxml2) passthru;
+    # the hook to find catalogs is hidden by buildEnv
+    postBuild = ''
+      mkdir "$out/nix-support"
+      cp '${self.libxml2.dev}/nix-support/propagated-native-build-inputs' "$out/nix-support/"
+    '';
   };
-
-  libxml2Python = lowPrio (self.libxml2.override {
-    pythonSupport = true;
-  });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
 
@@ -8124,7 +8153,7 @@ in
   );
   mesa = mesaDarwinOr (buildEnv {
     name = "mesa-${mesa_noglu.version}";
-    paths = [ mesa_noglu mesa_glu ];
+    paths = [ mesa_noglu.dev mesa_noglu.out mesa_glu ];
   });
 
   meterbridge = callPackage ../applications/audio/meterbridge { };
@@ -8237,12 +8266,9 @@ in
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
+  nssTools = nss.tools;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
-
-  nssTools = callPackage ../development/libraries/nss {
-    includeTools = true;
-  };
 
   ntk = callPackage ../development/libraries/audio/ntk { };
 
@@ -8369,17 +8395,10 @@ in
     vtk = vtkWithQt4;
   };
 
-  pcre = callPackage ../development/libraries/pcre {
-    unicodeSupport = config.pcre.unicode or true;
-  };
-  pcre16 = pcre.override {
-    cplusplusSupport = false;
-    withCharSize = 16;
-  };
-  pcre32 = pcre.override {
-    cplusplusSupport = false;
-    withCharSize = 32;
-  };
+  pcre = callPackage ../development/libraries/pcre { };
+  pcre16 = self.pcre.override { variant = "pcre16"; };
+  # pcre32 seems unused
+  pcre-cpp = self.pcre.override { variant = "cpp"; };
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
@@ -8784,7 +8803,7 @@ in
 
   sqlite-amalgamation = callPackage ../development/libraries/sqlite-amalgamation { };
 
-  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; });
+  sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
@@ -8939,9 +8958,13 @@ in
     inherit (pythonPackages) gyp;
   };
 
-  vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
+  vaapiIntel = callPackage ../development/libraries/vaapi-intel {
+    libva = libva-full; # also wants libva-{x11,drm,wayland}
+  };
 
-  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau { };
+  vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
+    libva = libva-full; # needs libva-{x11,glx}
+  };
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
@@ -8993,6 +9016,11 @@ in
   };
 
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -9645,7 +9673,6 @@ in
 
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
-  mod_evasive = pkgs.apacheHttpdPackages.mod_evasive;
   mod_fastcgi = pkgs.apacheHttpdPackages.mod_fastcgi;
   mod_python = pkgs.apacheHttpdPackages.mod_python;
   mod_wsgi = pkgs.apacheHttpdPackages.mod_wsgi;
@@ -10301,6 +10328,11 @@ in
   };
 
   iptables = callPackage ../os-specific/linux/iptables { };
+  # The freshest version — possibly crashing connmand?
+  # https://github.com/NixOS/nixpkgs/commit/fe00c8a83f696e3430ee4aa3fc850f171da52450
+  iptables_16 = callPackage ../os-specific/linux/iptables/1.6.nix {
+    flex = flex_2_5_35;
+  };
 
   ipset = callPackage ../os-specific/linux/ipset { };
 
@@ -10430,7 +10462,7 @@ in
   };
 
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10984,7 +11016,15 @@ in
 
   systemd = callPackage ../os-specific/linux/systemd {
     linuxHeaders = linuxHeaders_3_18;
-  };
+    utillinux = utillinuxMinimal; # break the cyclic dependency
+  }
+    // {
+      udev.bin = systemd;     # ${systemd.udev.bin}/bin/udevadm
+      udev.lib = libudev.out; # ${systemd.udev.lib}/lib/libudev.*
+    };
+
+  # standalone cryptsetup generator for systemd
+  systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
 
   # In nixos, you can set systemd.package = pkgs.systemd_with_lvm2 to get
   # LVM2 working in systemd.
@@ -11038,7 +11078,11 @@ in
     cross = assert crossSystem != null; crossSystem;
   });
 
-  udev = pkgs.systemd;
+  # This hacky alias covers most use cases without mass-replace (build inputs)
+  # and causes an *evaluation* error if "${udev}" is attempted.
+  udev = [ libudev.dev libudev.out ];
+  libudev = callPackage ../os-specific/linux/systemd/libudev.nix { };
+
   eudev = callPackage ../os-specific/linux/eudev {};
 
   # libudev.so.0
@@ -11359,6 +11403,8 @@ in
 
   powerline-fonts = callPackage ../data/fonts/powerline-fonts { };
 
+  profont = callPackage ../data/fonts/profont { };
+
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
@@ -11581,11 +11627,11 @@ in
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux_unwrapped = callPackage ../applications/video/avidemux { };
-
-  avidemux = callPackage ../applications/video/avidemux/wrapper.nix {
-    avidemux = avidemux_unwrapped;
+  avidemux_unwrapped = callPackage ../applications/video/avidemux {
+    libva = libva-full; # also wants libva-x11
   };
+
+  avidemux = callPackage ../applications/video/avidemux/wrapper.nix { };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
@@ -12451,9 +12497,7 @@ in
 
   inherit (gnome3) gitg;
 
-  giv = callPackage ../applications/graphics/giv {
-    pcre = pcre.override { unicodeSupport = true; };
-  };
+  giv = callPackage ../applications/graphics/giv { };
 
   gmrun = callPackage ../applications/misc/gmrun {};
 
@@ -12762,6 +12806,8 @@ in
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
   bip = callPackage ../applications/networking/irc/bip { };
+
+  j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop/default.nix { };
 
   jabref = callPackage ../applications/office/jabref/default.nix { };
 
@@ -13699,10 +13745,12 @@ in
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
+    patches = config.st.patches or null;
   };
 
   st-wayland = callPackage ../applications/misc/st/wayland.nix {
     conf = config.st.conf or null;
+    patches = config.st.patches or null;
   };
 
   stag = callPackage ../applications/misc/stag {
@@ -14138,6 +14186,7 @@ in
 
   vlc = callPackage ../applications/video/vlc {
     ffmpeg = ffmpeg_2;
+    libva = libva-full; # also wants libva-x11
   };
 
   vlc_qt5 = qt5.vlc;
@@ -14664,7 +14713,9 @@ in
 
   exult = callPackage ../games/exult { };
 
-  factorio = callPackage ../games/factorio {};
+  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+
+  factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
   fairymax = callPackage ../games/fairymax {};
 
@@ -15484,6 +15535,8 @@ in
 
   plink = callPackage ../applications/science/biology/plink/default.nix { };
 
+  samtools = callPackage ../applications/science/biology/samtools/default.nix { };
+
 
   ### SCIENCE/MATH
 
@@ -15741,6 +15794,8 @@ in
 
   metis-prover = callPackage ../applications/science/logic/metis-prover { };
 
+  mcrl2 = callPackage ../applications/science/logic/mcrl2 { };
+
   minisat = callPackage ../applications/science/logic/minisat {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
@@ -15780,7 +15835,9 @@ in
 
   why3 = callPackage ../applications/science/logic/why3 {};
 
-  yices = callPackage ../applications/science/logic/yices {};
+  yices = callPackage ../applications/science/logic/yices {
+    gmp-static = gmp.override { withStatic = true; };
+  };
 
   z3 = callPackage ../applications/science/logic/z3 {};
   z3_opt = callPackage ../applications/science/logic/z3_opt {};

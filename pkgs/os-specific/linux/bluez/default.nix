@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig dbus.libs glib libusb alsaLib python makeWrapper
+    [ pkgconfig dbus glib libusb alsaLib python makeWrapper
       readline libsndfile
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.

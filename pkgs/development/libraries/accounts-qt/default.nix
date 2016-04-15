@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ doxygen pkgconfig ];
 
   configurePhase = ''
+    runHook preConfigure
     qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake
+    runHook postConfigure
   '';
 
   meta = with stdenv.lib; {

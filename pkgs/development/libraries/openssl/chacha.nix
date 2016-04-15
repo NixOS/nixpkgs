@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1030rs4bdaysxbq0mmck1dn6g5adspzkwsrnhvv16b4ig0r4ncgj";
   };
 
+  outputs = [ "dev" "out" "man" "bin" ];
+  setOutputFlags = false;
+
   nativeBuildInputs = [ perl zlib ];
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
@@ -35,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "MANDIR=$(out)/share/man"
+    "MANDIR=$(man)/share/man"
   ];
 
   # Parallel building is broken in OpenSSL.
@@ -48,8 +51,16 @@ stdenv.mkDerivation rec {
         rm "$out/lib/"*.a
     fi
 
+    mkdir -p $bin
+    mv $out/bin $bin/
+
+    mkdir $dev
+    mv $out/include $dev/
+
     # remove dependency on Perl at runtime
-    rm -r $out/etc/ssl/misc $out/bin/c_rehash
+    rm -r $out/etc/ssl/misc
+
+    rmdir $out/etc/ssl/{certs,private}
   '';
 
   postFixup = ''

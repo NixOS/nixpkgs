@@ -478,6 +478,13 @@ in
       '';
     };
 
+    systemd.generator-packages = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      example = literalExample "[ pkgs.systemd-cryptsetup-generator ]";
+      description = "Packages providing systemd generators.";
+    };
+
     systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.str;
@@ -634,7 +641,18 @@ in
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc = {
+    environment.etc = let
+      # generate contents for /etc/systemd/system-generators from
+      # systemd.generators and systemd.generator-packages
+      generators = pkgs.runCommand "system-generators" { packages = cfg.generator-packages; } ''
+        mkdir -p $out
+        for package in $packages
+        do
+          ln -s $package/lib/systemd/system-generators/* $out/
+        done;
+        ${concatStrings (mapAttrsToList (generator: target: "ln -s ${target} $out/${generator};\n") cfg.generators)}
+      '';
+    in ({
       "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
 
       "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
@@ -673,7 +691,9 @@ in
 
         ${concatStringsSep "\n" cfg.tmpfiles.rules}
       '';
-    } // mapAttrs' (n: v: nameValuePair "systemd/system-generators/${n}" {"source"=v;}) cfg.generators;
+
+      "systemd/system-generators" = { source = generators; };
+    });
 
     system.activationScripts.systemd = stringAfter [ "groups" ]
       ''

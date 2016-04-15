@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
     openssl zlib python gyp go readline
   ];
 
+  configureFlagsArray = [ "--with-openssl-lib=${openssl.out}/lib" ];
+
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 
-  configureFlagsArray = [ "--with-openssl-lib=${openssl}/lib" ];
 
   patchPhase = ''
     substituteInPlace 3rdParty/V8-3.31.74.1/build/gyp/gyp --replace /bin/bash ${bash}/bin/bash

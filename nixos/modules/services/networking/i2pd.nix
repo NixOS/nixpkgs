@@ -8,7 +8,7 @@ let
 
   homeDir = "/var/lib/i2pd";
 
-  extip = "EXTIP=\$(${pkgs.curl}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
+  extip = "EXTIP=\$(${pkgs.curl.bin}/bin/curl -sf \"http://jsonip.com\" | ${pkgs.gawk}/bin/awk -F'\"' '{print $4}')";
 
   toYesNo = b: if b then "yes" else "no";
 

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1z87x5c5x951lhnm70iqr2gqn15wns5cqsw8nnkvl48jwdw00a8f";
   };
 
+  outputs = [ "dev" "out" ];
+
   configureFlags = stdenv.lib.optional fixedPoint "--enable-fixed-point"
                 ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
 

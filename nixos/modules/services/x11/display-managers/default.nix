@@ -45,7 +45,7 @@ let
 
       ${optionalString cfg.startDbusSession ''
         if test -z "$DBUS_SESSION_BUS_ADDRESS"; then
-          exec ${pkgs.dbus.tools}/bin/dbus-launch --exit-with-session "$0" "$sessionType"
+          exec ${pkgs.dbus.dbus-launch} --exit-with-session "$0" "$sessionType"
         fi
       ''}
 
@@ -55,11 +55,11 @@ let
       # Start PulseAudio if enabled.
       ${optionalString (config.hardware.pulseaudio.enable) ''
         ${optionalString (!config.hardware.pulseaudio.systemWide)
-          "${config.hardware.pulseaudio.package}/bin/pulseaudio --start"
+          "${config.hardware.pulseaudio.package.out}/bin/pulseaudio --start"
         }
 
         # Publish access credentials in the root window.
-        ${config.hardware.pulseaudio.package}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
+        ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
       ''}
 
       # Tell systemd about our $DISPLAY. This is needed by the
@@ -275,7 +275,7 @@ in
   };
 
   config = {
-    services.xserver.displayManager.xserverBin = "${xorg.xorgserver}/bin/X";
+    services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
   };
 
   imports = [

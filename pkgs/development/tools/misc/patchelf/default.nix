@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   # FIXME needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "stackprotector" ];
 
+  #doCheck = true; # problems when loading libc.so.6
+
   meta = {
     homepage = http://nixos.org/patchelf.html;
     license = "GPL";

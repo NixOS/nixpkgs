@@ -19,7 +19,7 @@ stdenv.mkDerivation rec{
 
   configureFlags = [
     "--with-boost-libdir=${boost.lib}/lib"
-    "--with-libcurl-headers=${curl}/include"
+    "--with-libcurl-headers=${curl.dev}/include"
   ] ++ optionals withGui [ "--with-gui=qt4" ];
 
   meta = {

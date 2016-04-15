@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/nm-applet" \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gnome3.gtk}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
       --prefix PATH ":" "${gnome3.gconf}/bin"

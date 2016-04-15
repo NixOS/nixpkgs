@@ -26,6 +26,15 @@ in
               The port on which the introducer will listen.
             '';
           };
+          tub.location = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              The external location that the introducer should listen on.
+
+              If specified, the port should be included.
+            '';
+          };
           package = mkOption {
             default = pkgs.tahoelafs;
             defaultText = "pkgs.tahoelafs";
@@ -58,6 +67,18 @@ in
 
               This is the correct setting to tweak if you want Tahoe's storage
               system to listen on a different port.
+            '';
+          };
+          tub.location = mkOption {
+            default = null;
+            type = types.nullOr types.str;
+            description = ''
+              The external location that the node should listen on.
+
+              This is the setting to tweak if there are multiple interfaces
+              and you want to alter which interface Tahoe is advertising.
+
+              If specified, the port should be included.
             '';
           };
           web.port = mkOption {
@@ -144,6 +165,8 @@ in
                 [node]
                 nickname = ${settings.nickname}
                 tub.port = ${toString settings.tub.port}
+                ${optionalString (settings.tub.location != null)
+                  "tub.location = ${settings.tub.location}"}
               '';
             });
           # Actually require Tahoe, so that we will have it installed.
@@ -209,6 +232,8 @@ in
                 [node]
                 nickname = ${settings.nickname}
                 tub.port = ${toString settings.tub.port}
+                ${optionalString (settings.tub.location != null)
+                  "tub.location = ${settings.tub.location}"}
                 # This is a Twisted endpoint. Twisted Web doesn't work on
                 # non-TCP. ~ C.
                 web.port = tcp:${toString settings.web.port}

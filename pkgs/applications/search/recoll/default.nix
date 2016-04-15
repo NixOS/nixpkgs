@@ -29,20 +29,20 @@ stdenv.mkDerivation rec {
       substituteInPlace  $f --replace antiword      ${antiword}/bin/antiword
       substituteInPlace  $f --replace awk           ${gawk}/bin/awk
       substituteInPlace  $f --replace catppt        ${catdoc}/bin/catppt
-      substituteInPlace  $f --replace djvused       ${djvulibre}/bin/djvused
-      substituteInPlace  $f --replace djvutxt       ${djvulibre}/bin/djvutxt
+      substituteInPlace  $f --replace djvused       ${djvulibre.bin}/bin/djvused
+      substituteInPlace  $f --replace djvutxt       ${djvulibre.bin}/bin/djvutxt
       substituteInPlace  $f --replace egrep         ${gnugrep}/bin/egrep
       substituteInPlace  $f --replace groff         ${groff}/bin/groff
       substituteInPlace  $f --replace gunzip        ${gzip}/bin/gunzip
-      substituteInPlace  $f --replace iconv         ${libiconv}/bin/iconv
+      substituteInPlace  $f --replace iconv         ${libiconv.bin or libiconv}/bin/iconv
       substituteInPlace  $f --replace lyx           ${lyx}/bin/lyx
-      substituteInPlace  $f --replace pdftotext     ${poppler_utils}/bin/pdftotext
+      substituteInPlace  $f --replace pdftotext     ${poppler_utils.out}/bin/pdftotext
       substituteInPlace  $f --replace pstotext      ${ghostscript}/bin/ps2ascii 
       substituteInPlace  $f --replace sed           ${gnused}/bin/sed
       substituteInPlace  $f --replace tar           ${gnutar}/bin/tar
       substituteInPlace  $f --replace unzip         ${unzip}/bin/unzip
       substituteInPlace  $f --replace xls2csv       ${catdoc}/bin/xls2csv
-      substituteInPlace  $f --replace xsltproc      ${libxslt}/bin/xsltproc
+      substituteInPlace  $f --replace xsltproc      ${libxslt.bin}/bin/xsltproc
       substituteInPlace  $f --replace unrtf         ${unrtf}/bin/unrtf
       substituteInPlace  $f --replace untex         ${untex}/bin/untex
       substituteInPlace  $f --replace wpd2html      ${libwpd}/bin/wpd2html

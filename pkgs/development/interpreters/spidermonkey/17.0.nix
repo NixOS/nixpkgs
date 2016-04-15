@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fig2wf4f10v43mqx67y68z6h77sy900d1w0pz9qarrqx57rc7ij";
   };
 
+  outputs = [ "dev" "out" "lib" ];
+
   propagatedBuildInputs = [ nspr ];
 
   buildInputs = [ pkgconfig perl python zip libffi readline ];
@@ -21,11 +23,14 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr}/include/nspr"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
     export LIBXUL_DIST=$out
   '';
 
+  setOutputFlags = false;
   configureFlags = [
+    "--libdir=$(lib)/lib"
+    "--includedir=$(dev)/include"
     "--enable-threadsafe"
     "--with-system-nspr"
     "--with-system-ffi"
@@ -49,7 +54,10 @@ stdenv.mkDerivation rec {
     paxmark mr jsapi-tests/jsapi-tests
   '';
 
-  postInstall = ''rm "$out"/lib/*.a''; # halve the output size
+  postInstall = ''
+    rm "$lib"/lib/*.a # halve the output size
+    moveToOutput "bin/js*-config" "$dev" # break the cycle
+  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

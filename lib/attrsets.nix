@@ -438,6 +438,24 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
 
+  /* Try given attributes in order. If no attributes are found, return
+     attribute list itself.
+
+     Example:
+       tryAttrs ["a" "b"] { a = 1; b = 2; }
+       => 1
+       tryAttrs ["a" "b"] { c = 3; }
+       => { c = 3; }
+  */
+  tryAttrs = allAttrs: set:
+    let tryAttrs_ = attrs:
+      if attrs == [] then set
+      else
+        (let h = head attrs; in
+         if hasAttr h set then getAttr h set
+         else tryAttrs_ (tail attrs));
+    in tryAttrs_ allAttrs;
+
 
   /*** deprecated stuff ***/
 

@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configurePhase = "qmake -r PREFIX=$out";
+  configurePhase = ''
+    runHook preConfigure
+    qmake -r PREFIX=$out
+    runHook postConfigure
+  '';
 
   fixupPhase = ''
     wrapQtProgram $out/bin/cutegram \

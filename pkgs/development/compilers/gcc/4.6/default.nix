@@ -170,7 +170,7 @@ let version = "4.6.4";
       "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
-  bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
 
 in
 
@@ -182,14 +182,20 @@ stdenv.mkDerivation ({
 
   builder = ./builder.sh;
 
-  src = (import ./sources.nix) {
+  srcs = (import ./sources.nix) {
     inherit fetchurl optional version;
     inherit langC langCC langFortran langJava langAda langGo;
   };
 
+  outputs = [ "out" "lib" ];
+
+  setOutputFlags = false;
+
   inherit patches enableMultilib;
 
   hardeningDisable = [ "format" ];
+
+  libc_dev = stdenv.cc.libc_dev;
 
   postPatch =
     if (stdenv.isGNU

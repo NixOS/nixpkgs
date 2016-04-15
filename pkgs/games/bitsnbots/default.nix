@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   makefile = "Makefile.linux";
 
-  NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
+  NIX_CFLAGS_COMPILE = "-I${SDL.dev}/include/SDL";
 
   NIX_LDFLAGS = "-lGL";
 

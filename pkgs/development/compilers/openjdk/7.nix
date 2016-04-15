@@ -106,9 +106,9 @@ let
 
     makeFlags = [
       "SORT=${coreutils}/bin/sort"
-      "ALSA_INCLUDE=${alsaLib}/include/alsa/version.h"
-      "FREETYPE_HEADERS_PATH=${freetype}/include"
-      "FREETYPE_LIB_PATH=${freetype}/lib"
+      "ALSA_INCLUDE=${alsaLib.dev}/include/alsa/version.h"
+      "FREETYPE_HEADERS_PATH=${freetype.dev}/include"
+      "FREETYPE_LIB_PATH=${freetype.out}/lib"
       "MILESTONE=${update}"
       "BUILD_NUMBER=b${build}"
       "USRBIN_PATH="

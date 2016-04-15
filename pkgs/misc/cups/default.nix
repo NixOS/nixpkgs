@@ -18,8 +18,11 @@ stdenv.mkDerivation {
     sha256 = "1lyl3z01xhg9xb9c8m42398c6h9kw8qr6jwiv8bjdsjab11hv9rn";
   };
 
+  # FIXME: the cups libraries contains some $out/share strings so can't be split.
+  outputs = [ "dev" "out" "doc" "man" ]; # TODO: above
+
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus.libs acl ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);
@@ -67,6 +70,9 @@ stdenv.mkDerivation {
   postInstall = ''
       # Delete obsolete stuff that conflicts with cups-filters.
       rm -rf $out/share/cups/banners $out/share/cups/data/testprint
+
+      mkdir $dev/bin
+      mv $out/bin/cups-config $dev/bin/
 
       # Rename systemd files provided by CUPS
       for f in $out/lib/systemd/system/*; do

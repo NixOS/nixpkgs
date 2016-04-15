@@ -53,19 +53,24 @@ stdenv.mkDerivation rec {
       ./libressl.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
-        inherit cups icu libXfixes;
-        glibc = stdenv.cc.libc;
+        cups = if cups != null then cups.out else null;
+        icu = icu.out;
+        libXfixes = libXfixes.out;
+        glibc = stdenv.cc.libc.out;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
     ] ++ stdenv.lib.optional gtkStyle (substituteAll {
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
-        gconf = GConf;
-        inherit gnome_vfs libgnomeui gtk;
+        gconf = GConf.out;
+        gtk = gtk.out;
+        libgnomeui = libgnomeui.out;
+        gnome_vfs = gnome_vfs.out;
       })
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
-        inherit gtk gdk_pixbuf;
+        gtk = gtk.out;
+        gdk_pixbuf = gdk_pixbuf.out;
       })
     ++ [(fetchpatch {
         name = "fix-medium-font.patch";
@@ -113,7 +118,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes libXv libXi
-      libSM zlib libpng openssl dbus.libs freetype fontconfig glib ]
+      libSM zlib libpng openssl dbus freetype fontconfig glib ]
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
@@ -131,7 +136,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
-    "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+    "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
 
   NIX_LDFLAGS = optionalString (stdenv.isFreeBSD || stdenv.isDarwin)
     "-lglib-2.0";

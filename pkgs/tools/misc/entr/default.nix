@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile.bsd --replace /bin/echo echo
     substituteInPlace entr.c --replace /bin/cat ${coreutils}/bin/cat
-    substituteInPlace entr.c --replace /usr/bin/clear ${ncurses}/bin/clear
+    substituteInPlace entr.c --replace /usr/bin/clear ${ncurses.out}/bin/clear
     substituteInPlace entr.1 --replace /bin/cat cat
     substituteInPlace entr.1 --replace /usr/bin/clear clear
   '';

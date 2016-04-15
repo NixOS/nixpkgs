@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
       CXX=$(type -p g++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
-      LDFLAGS="-L${gfortran.cc}/lib"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''

@@ -56,6 +56,8 @@ in stdenv.mkDerivation rec {
     "-DCAN_TARGET_i386=false"
   ];
 
+  NIX_LDFLAGS = "-lpthread"; # no idea what's the problem
+
   postBuild = ''
     rm -fR $out
 

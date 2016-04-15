@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gphoto/${name}.tar.bz2";
-    sha256 = "0chz57rhzdz1cbdjw1q5rs439s879kk06jrci4jyn5rlm7iyic6d";
+    sha256 = "1wjf79ipqwb5phfjjwf15rwgigakylnfqaj4crs5qnds6ba6i1ld";
   };
 
   nativeBuildInputs = [ pkgconfig gettext ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.9";
+    version = "2.5.10";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = with stdenv.lib.platforms; unix;

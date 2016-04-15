@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
-, udev, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
+, systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-libsoup=yes"
   ];
 
-  buildInputs = [ wirelesstools udev libgudev libnl libuuid polkit ppp libndp
+  buildInputs = [ wirelesstools systemd libgudev libnl libuuid polkit ppp libndp
                   xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # The fpc is not properly wrapped to add -rpath. I add this manually.
   # I even do a trick on lib/lib64 for libgcc, that I expect it will work.
   preBuild = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL}/lib -rpath ${SDL_image}/lib -rpath ${libpng}/lib -rpath ${freetype}/lib -rpath ${portaudio}/lib -rpath ${ffmpeg}/lib -rpath ${zlib}/lib -rpath ${sqlite}/lib -rpath ${libX11}/lib -rpath ${pcre}/lib -rpath ${lua}/lib -rpath ${stdenv.cc.cc}/lib64 -rpath ${stdenv.cc.cc}/lib"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL.out}/lib -rpath ${SDL_image}/lib -rpath ${libpng.out}/lib -rpath ${freetype.out}/lib -rpath ${portaudio}/lib -rpath ${ffmpeg.out}/lib -rpath ${zlib.out}/lib -rpath ${sqlite.out}/lib -rpath ${libX11.out}/lib -rpath ${pcre.out}/lib -rpath ${lua}/lib -rpath ${stdenv.cc.cc.out}/lib64 -rpath ${stdenv.cc.cc.out}/lib"
 
     sed -i 414,424d Makefile
   '';

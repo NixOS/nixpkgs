@@ -7,8 +7,9 @@ stdenv.mkDerivation rec {
     url = http://www.hboehm.info/gc/gc_source/gc-7.2f.tar.gz;
     sha256 = "119x7p1cqw40mpwj80xfq879l9m1dkc7vbc1f3bz3kvkf8bf6p16";
   };
-
   patches = if stdenv.isCygwin then [ ./cygwin.patch ] else null;
+
+  outputs = [ "dev" "out" "doc" ];
 
   configureFlags =
     [ "--enable-cplusplus" ]
@@ -18,6 +19,12 @@ stdenv.mkDerivation rec {
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = stdenv ? cross;
+
+  postInstall =
+    ''
+      mkdir -p $out/share/doc
+      mv $out/share/gc $out/share/doc/gc
+    '';
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

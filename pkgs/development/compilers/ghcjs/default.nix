@@ -117,13 +117,13 @@ in mkDerivation (rec {
   # This is necessary due to: https://github.com/haskell/cabal/commit/af19fb2c2d231d8deff1cb24164a2bf7efb8905a
   # Cabal otherwise fails to build: http://hydra.nixos.org/build/31824079/nixlog/1/raw
   postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
+    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
         --quick \
         --with-cabal ${cabal-install}/bin/cabal \
-        --with-gmp-includes ${gmp}/include \
-        --with-gmp-libraries ${gmp}/lib
+        --with-gmp-includes ${gmp.dev}/include \
+        --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = let
     ghcjsNodePkgs = pkgs.nodePackages.override {

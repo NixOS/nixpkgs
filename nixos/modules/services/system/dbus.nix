@@ -121,7 +121,7 @@ in
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";
-        source = "${pkgs.dbus_daemon}/libexec/dbus-daemon-launch-helper";
+        source = "${pkgs.dbus_daemon.lib}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;
@@ -138,30 +138,6 @@ in
     systemd.services.dbus.reloadIfChanged = true;
 
     systemd.services.dbus.restartTriggers = [ configDir ];
-
-    systemd.user = {
-      services.dbus = {
-        description = "D-Bus User Message Bus";
-        requires = [ "dbus.socket" ];
-        # NixOS doesn't support "Also" so we pull it in manually
-        # As the .service is supposed to come up at the same time as
-        # the .socket, we use basic.target instead of default.target
-        wantedBy = [ "basic.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.dbus_daemon}/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation";
-          ExecReload = "${pkgs.dbus_daemon}/bin/dbus-send --print-reply --session --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig";
-        };
-      };
-
-      sockets.dbus = {
-        description = "D-Bus User Message Bus Socket";
-        socketConfig = {
-          ListenStream = "%t/bus";
-          ExecStartPost = "-${config.systemd.package}/bin/systemctl --user set-environment DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus";
-        };
-        wantedBy = [ "sockets.target" ];
-      };
-    };
 
     environment.pathsToLink = [ "/etc/dbus-1" "/share/dbus-1" ];
 

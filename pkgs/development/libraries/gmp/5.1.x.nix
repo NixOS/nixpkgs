@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q5i39pxrasgn9qdxzpfbwhh11ph80p57x6hf48m74261d97j83m";
   };
 
+  outputs = [ "out" "info" ];
+
   nativeBuildInputs = [ m4 ];
 
   # FIXME needs gcc 4.9 in bootstrap tools

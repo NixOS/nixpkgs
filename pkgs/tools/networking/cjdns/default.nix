@@ -11,13 +11,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ which python27 nodejs ] ++
     # for flock
-    stdenv.lib.optional stdenv.isLinux [ utillinux ];
+    stdenv.lib.optional stdenv.isLinux utillinux;
 
   buildPhase =
     stdenv.lib.optionalString stdenv.isArm "Seccomp_NO=1 "
     + "bash do";
   installPhase = ''
-    installBin cjdroute makekeys privatetopublic publictoip6
+    install -Dt "$out/bin/" cjdroute makekeys privatetopublic publictoip6
     sed -i 's,/usr/bin/env node,'$(type -P node), \
       $(find contrib -name "*.js")
     sed -i 's,/usr/bin/env python,'$(type -P python), \

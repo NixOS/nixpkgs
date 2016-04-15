@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/blink \
-      --prefix LD_LIBRARY_PATH ":" ${gnutls}/lib
+      --prefix LD_LIBRARY_PATH ":" ${gnutls.out}/lib
     mkdir -p "$out/share/applications"
     mkdir -p "$out/share/pixmaps"
     cp "$desktopItem"/share/applications/* "$out/share/applications"

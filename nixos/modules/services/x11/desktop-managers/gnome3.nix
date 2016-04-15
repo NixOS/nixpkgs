@@ -166,7 +166,7 @@ in {
       };
 
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
-                                                "${gnome3.glib_networking}/lib/gio/modules"
+                                                "${gnome3.glib_networking.out}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
       ++ (removePackagesByName gnome3.optionalPackages config.environment.gnome3.excludePackages);

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, udev, perl }:
+{ stdenv, fetchurl, flex, systemd, perl }:
 
 assert stdenv.isLinux;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export PATH=${udev}/sbin:$PATH
+      export PATH=${systemd.udev.bin}/sbin:$PATH
       substituteInPlace user/Makefile.in --replace /sbin/ $out/sbin/
       substituteInPlace user/legacy/Makefile.in \
         --replace /sbin/ $out/sbin/ \

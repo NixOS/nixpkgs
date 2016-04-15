@@ -40,12 +40,12 @@ in stdenv.mkDerivation rec {
     # Now we need to patch up the executables and libraries to work on Nix.
     # Side note: PLEASE don't put spaces in your binary names. This is stupid.
     for bin in "Plex Media Server" "Plex DLNA Server" "Plex Media Scanner"; do
-      patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
+      patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" "$out/usr/lib/plexmediaserver/$bin"
       patchelf --set-rpath "$out/usr/lib/plexmediaserver" "$out/usr/lib/plexmediaserver/$bin"
     done
 
     find $out/usr/lib/plexmediaserver/Resources -type f -a -perm -0100 \
-        -print -exec patchelf --set-interpreter "${glibc}/lib/ld-linux-x86-64.so.2" '{}' \;
+        -print -exec patchelf --set-interpreter "${glibc.out}/lib/ld-linux-x86-64.so.2" '{}' \;
 
     # executables need libstdc++.so.6
     ln -s "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}/libstdc++.so.6" "$out/usr/lib/plexmediaserver/libstdc++.so.6"

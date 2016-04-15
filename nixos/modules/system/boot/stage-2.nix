@@ -7,11 +7,14 @@ let
   kernel = config.boot.kernelPackages.kernel;
   activateConfiguration = config.system.activationScripts.script;
 
-  readonlyMountpoint = pkgs.runCommand "readonly-mountpoint" {} ''
-    mkdir -p $out/bin
-    cc -O3 ${./readonly-mountpoint.c} -o $out/bin/readonly-mountpoint
-    strip -s $out/bin/readonly-mountpoint
-  '';
+  readonlyMountpoint = pkgs.stdenv.mkDerivation {
+    name = "readonly-mountpoint";
+    unpackPhase = "true";
+    installPhase = ''
+      mkdir -p $out/bin
+      cc -O3 ${./readonly-mountpoint.c} -o $out/bin/readonly-mountpoint
+    '';
+  };
 
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;

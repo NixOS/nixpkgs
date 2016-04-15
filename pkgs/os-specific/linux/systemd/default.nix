@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinuxMinimal
+{ stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
+, zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders, libseccomp
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
@@ -19,17 +19,26 @@ stdenv.mkDerivation rec {
     sha256 = "1q0pyrljmq73qcan9rfqsiw66l1g159m5in5qgb8zwlwhl928670";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  patches = [ ./hwdb-location.diff ];
+
+  /* gave up for now!
+  outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
+  # note: there are many references to ${systemd}/...
+  outputDev = "out";
+  propagatedBuildOutputs = "libudev";
+  */
+  outputs = [ "out" "man" ];
 
   buildInputs =
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
-      libmicrohttpd kexectools libseccomp audit lz4 libapparmor
+      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ];
+
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -74,14 +83,15 @@ stdenv.mkDerivation rec {
       for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.in src/journal/cat.c src/core/shutdown.c src/nspawn/nspawn.c src/shared/generator.c; do
         test -e $i
         substituteInPlace $i \
-          --replace /usr/bin/getent ${stdenv.glibc}/bin/getent \
-          --replace /bin/mount ${utillinuxMinimal}/bin/mount \
-          --replace /bin/umount ${utillinuxMinimal}/bin/umount \
-          --replace /sbin/swapon ${utillinuxMinimal}/sbin/swapon \
-          --replace /sbin/swapoff ${utillinuxMinimal}/sbin/swapoff \
+          --replace /usr/bin/getent ${stdenv.glibc.bin}/bin/getent \
+          --replace /bin/mount ${utillinux.bin}/bin/mount \
+          --replace /bin/umount ${utillinux.bin}/bin/umount \
+          --replace /sbin/swapon ${utillinux.bin}/sbin/swapon \
+          --replace /sbin/swapoff ${utillinux.bin}/sbin/swapoff \
+          --replace /sbin/fsck ${utillinux.bin}/sbin/fsck \
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
-          --replace /sbin/sulogin ${utillinuxMinimal}/sbin/sulogin \
+          --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
           --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
       done
 
@@ -89,12 +99,24 @@ stdenv.mkDerivation rec {
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
+
+      #export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
+
+  /*
+  makeFlags = [
+    "udevlibexecdir=$(libudev)/lib/udev"
+    # udev rules refer to $out, and anything but libs should probably go to $out
+    "udevrulesdir=$(out)/lib/udev/rules.d"
+    "udevhwdbdir=$(out)/lib/udev/hwdb.d"
+  ];
+  */
+
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit}/bin/pkttyagent here because that would
+    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
       "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
@@ -147,8 +169,30 @@ stdenv.mkDerivation rec {
       # "kernel-install" shouldn't be used on NixOS.
       find $out -name "*kernel-install*" -exec rm {} \;
     ''; # */
+  /*
+      # Move lib(g)udev to a separate output. TODO: maybe split them up
+      #   to avoid libudev pulling glib
+      mkdir -p "$libudev/lib"
+      mv "$out"/lib/lib{,g}udev* "$libudev/lib/"
+
+      for i in "$libudev"/lib/*.la; do
+        substituteInPlace $i --replace "$out" "$libudev"
+      done
+      for i in "$out"/lib/pkgconfig/{libudev,gudev-1.0}.pc; do
+        substituteInPlace $i --replace "libdir=$out" "libdir=$libudev"
+      done
+  */
 
   enableParallelBuilding = true;
+  /*
+  # some libs fail to link to liblzma and/or libffi
+  postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];
+    in ''
+      for f in "$out"/lib/*.so.0.*; do
+        patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
+      done
+    '';
+  */
 
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
@@ -165,3 +209,4 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
+

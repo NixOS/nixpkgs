@@ -32,6 +32,7 @@ in
     ];
 
     configurePhase = ''
+      runHook preConfigure
       export GITREV=${gitRev}
       export GITBRANCH=${gitBranch}
       export GITTAG=${gitTag}
@@ -39,6 +40,7 @@ in
       cd qt
       export sourceRoot=$sourceRoot/qt
       qmake antimony.pro PREFIX=$out
+      runHook postConfigure
     '';
 
     enableParallelBuilding = true;

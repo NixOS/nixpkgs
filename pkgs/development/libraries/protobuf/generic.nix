@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
+  outputs = [ "out" "lib" ];
+
   buildInputs = [ autoreconfHook zlib ];
 
   doCheck = true;

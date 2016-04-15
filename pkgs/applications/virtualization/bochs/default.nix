@@ -143,10 +143,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional busMouse "--enable-busmouse"
     ;
 
-  NIX_CFLAGS_COMPILE="-I${gtk}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool}/lib";
-
   hardeningDisable = [ "format" ];
+
+  NIX_CFLAGS_COMPILE="-I${gtk.dev}/include/gtk-2.0/ -I${libtool}/include/";
+  NIX_LDFLAGS="-L${libtool.lib}/lib";
 
   meta = with stdenv.lib; {
     description = "An open-source IA-32 (x86) PC emulator";

@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-libsodium-headers=${libsodium}/include"
-    "--with-libsodium-libs=${libsodium}/lib"
+    "--with-libsodium-headers=${libsodium.dev}/include"
+    "--with-libsodium-libs=${libsodium.out}/lib"
     "--enable-ntox"
     "--enable-daemon"
   ];

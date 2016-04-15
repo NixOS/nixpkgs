@@ -1,6 +1,6 @@
 { fetchurl, stdenv, dpkg, xorg, alsaLib, makeWrapper, openssl, freetype
 , glib, pango, cairo, atk, gdk_pixbuf, gtk, cups, nspr, nss, libpng, GConf
-, libgcrypt, udev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
+, libgcrypt, libudev, fontconfig, dbus, expat, ffmpeg_0_10, curl, zlib, gnome }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -27,7 +27,7 @@ let
     nss
     pango
     stdenv.cc.cc
-    udev
+    libudev
     xorg.libX11
     xorg.libXcomposite
     xorg.libXcursor
@@ -68,10 +68,10 @@ stdenv.mkDerivation {
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
 
-      ln -s ${openssl}/lib/libssl.so $libdir/libssl.so.1.0.0
-      ln -s ${openssl}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
-      ln -s ${nspr}/lib/libnspr4.so $libdir/libnspr4.so
-      ln -s ${nspr}/lib/libplc4.so $libdir/libplc4.so
+      ln -s ${openssl.out}/lib/libssl.so $libdir/libssl.so.1.0.0
+      ln -s ${openssl.out}/lib/libcrypto.so $libdir/libcrypto.so.1.0.0
+      ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
+      ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
       rpath="$out/share/spotify:$libdir"
 

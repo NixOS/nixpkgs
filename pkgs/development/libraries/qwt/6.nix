@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
 
-  configurePhase = "qmake -after doc.path=$out/share/doc/${name} -r";
+  configurePhase = ''
+    runHook preConfigure
+    qmake -after doc.path=$out/share/doc/${name} -r
+    runHook postConfigure
+  '';
 
   meta = with stdenv.lib; {
     description = "Qt widgets for technical applications";

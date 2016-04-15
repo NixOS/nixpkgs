@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "07j1p21rvbrrfpxngk8xswzkmjkh94bp1971xfjh1p0ja709qwzj";
   };
 
-  outputs = [ "out" "info" ];
+  outputs = [ "dev" "out" "docdev" ];
 
   buildInputs = [ libgcrypt ];
 

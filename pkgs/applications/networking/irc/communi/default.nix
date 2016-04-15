@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   enableParallelBuild = true;
 
   configurePhase = ''
+    runHook preConfigure
     export QMAKEFEATURES=${libcommuni}/features
     qmake -r \
       COMMUNI_INSTALL_PREFIX=$out \
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
       COMMUNI_INSTALL_ICONS=$out/share/icons/hicolor \
       COMMUNI_INSTALL_DESKTOP=$out/share/applications \
       COMMUNI_INSTALL_THEMES=$out/share/communi/themes
+    runHook postConfigure
   '';
 
   postInstall = ''

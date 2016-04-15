@@ -6,7 +6,7 @@ let
 
   version = "2.0.3";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
@@ -23,6 +23,7 @@ let
     libnotify
     nspr
     nss
+    stdenv.cc.cc
     systemd
 
     xorg.libX11
@@ -57,23 +58,24 @@ in stdenv.mkDerivation {
     mkdir -p $out
     dpkg -x $src $out
     cp -av $out/usr/* $out
-    rm -rf $out/usr
+    rm -rf $out/usr $out/share/lintian
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/share/slack $file || true
+      patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 
     # Fix the symlink
     rm $out/bin/slack
-    ln -s $out/share/slack/slack $out/bin/slack
+    ln -s $out/lib/slack/slack $out/bin/slack
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
-      --replace /usr/share/slack/slack $out/share/slack/slack
+      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/share/ $out/share/
   '';
 
   meta = with stdenv.lib; {

@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     '' else ""}
   '';
 
-  wrapperPath = with stdenv.lib; makeSearchPath "bin/" ([
+  wrapperPath = with stdenv.lib; makeBinPath ([
     coreutils
     gnused
     getopt

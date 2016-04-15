@@ -199,7 +199,7 @@ let version = "4.9.3";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
-  bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+  bootstrap = cross == null;
 
 in
 
@@ -211,8 +211,6 @@ stdenv.mkDerivation ({
 
   builder = ../builder.sh;
 
-  outputs = [ "out" "info" ];
-
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     sha256 = "0zmnm00d2a1hsd41g34bhvxzvxisa2l584q3p447bd91lfjv4ci3";
@@ -221,6 +219,12 @@ stdenv.mkDerivation ({
   inherit patches;
 
   hardeningDisable = [ "format" ];
+
+  outputs = if langJava then ["out" "man" "info"] else [ "out" "lib" "man" "info" ];
+  setOutputFlags = false;
+  NIX_NO_SELF_RPATH = true;
+
+  libc_dev = stdenv.cc.libc_dev;
 
   postPatch =
     if (stdenv.isGNU
@@ -313,7 +317,11 @@ stdenv.mkDerivation ({
        FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
       )
     fi
-  '';
+  ''
+  + stdenv.lib.optionalString langJava ''
+    export lib=$out;
+  ''
+  ;
 
   dontDisableStatic = true;
 
@@ -362,7 +370,7 @@ stdenv.mkDerivation ({
       )
     }
     ${if (stdenv ? glibc && cross == null)
-      then " --with-native-system-header-dir=${stdenv.glibc}/include"
+      then " --with-native-system-header-dir=${stdenv.glibc.dev}/include"
       else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
@@ -536,4 +544,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
+// optionalAttrs (langJava) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';}
 )

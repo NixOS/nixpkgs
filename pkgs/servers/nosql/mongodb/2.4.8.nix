@@ -2,7 +2,7 @@
 # by elitak for use with the Ubiquiti mFi Controller package, which breaks at
 # runtime on mongodb3+ and jre8+. We will need to pull in sufficiently old
 # versions of boost and v8 to build this, as well.
-{ stdenv, fetchurl, scons, boost155, v8_3_14, gperftools, pcre, snappy }:
+{ stdenv, fetchurl, scons, boost155, v8_3_14, gperftools, pcre-cpp, snappy }:
 with stdenv.lib;
 let
   version = "2.4.8";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p6gnharypglfp39halp72fig96fqjhakyy7m76a1prxwpjkqw7x";
   };
 
-  nativeBuildInputs = [ scons boost155 v8_3_14 gperftools pcre snappy ];
+  nativeBuildInputs = [ scons boost155 v8_3_14 gperftools pcre-cpp snappy ];
 
   postPatch = ''
     substituteInPlace SConstruct \

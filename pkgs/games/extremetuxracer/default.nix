@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-tcl=${tcl}/lib" ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL"
   '';
 
   meta = {

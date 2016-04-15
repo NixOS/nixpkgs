@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for f in $out/lib/*.la; do
-      sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $f
+      sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $f
     done
   '';
 

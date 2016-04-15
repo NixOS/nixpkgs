@@ -71,6 +71,10 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''patchShebangs .'';
 
+  outputs = [ "dev" "out" "bin" ]
+    ++ optional (reqMin "1.0") "doc" ; # just dev-doc
+  setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
+
   configureFlags = [
     # License
       "--enable-gpl"
@@ -154,6 +158,11 @@ stdenv.mkDerivation rec {
 
 
   enableParallelBuilding = true;
+
+  postFixup = ''
+    moveToOutput bin "$bin"
+    moveToOutput share/ffmpeg/examples "$doc"
+  '';
 
   /* Cross-compilation is untested, consider this an outline, more work
      needs to be done to portions of the build to get it to work correctly */

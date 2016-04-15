@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "out" ] ++ lib.optional (!minimal) "doc";
+  outputs = [ "dev" "out" ];
 
   patches = [ ./datadir_env.patch ];
 

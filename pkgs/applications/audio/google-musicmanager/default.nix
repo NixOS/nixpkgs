@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/opt/google/musicmanager:${readline}/lib:${ncurses}/lib:${stdenv.cc.libc}/lib:${qt48}/lib:${stdenv.cc.cc}/lib:${libidn}/lib:${expat}/lib:${flac}/lib:${libvorbis}/lib" opt/google/musicmanager/MusicManager
+      --set-rpath "$out/opt/google/musicmanager:${stdenv.lib.makeLibraryPath [ readline ncurses stdenv.cc.libc.out qt48 stdenv.cc.cc libidn expat flac libvorbis ]}" opt/google/musicmanager/MusicManager
   '';
 
   dontPatchELF = true;

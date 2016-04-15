@@ -380,7 +380,10 @@ rec {
     lts-5_11 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.11.nix { };
     };
-    lts-5 = packages.lts-5_11;
+    lts-5_12 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-5.12.nix { };
+    };
+    lts-5 = packages.lts-5_12;
 
     lts = packages.lts-5;
   };

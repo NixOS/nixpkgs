@@ -112,6 +112,8 @@ stdenv.mkDerivation ({
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
+  outputs = [ "dev" "out" "bin" "static" ];
+
   buildInputs = lib.optionals (cross != null) [ gccCross ]
     ++ lib.optionals withGd [ gd libpng ];
 

@@ -40,7 +40,7 @@ rec {
       cd ..
     '';
 
-    configureFlags = "--with-expat --with-expat-inc=${expat}/include " +
+    configureFlags = "--with-expat --with-expat-inc=${expat.dev}/include " +
       "--with-expat-lib=-lexpat --with-opus ";
 
     buildInputs = [ libyaml alsaLib openssl libuuid pkgconfig libpulseaudio libsamplerate

@@ -18,6 +18,8 @@ build null {
 
   builder = ./locales-builder.sh;
 
+  outputs = [ "out" ];
+
   # Awful hack: `localedef' doesn't allow the path to `locale-archive'
   # to be overriden, but you *can* specify a prefix, i.e. it will use
   # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
@@ -25,7 +27,7 @@ build null {
   # $TMPDIR/nix/store/...-glibc-.../lib/locale/locale-archive.
   buildPhase =
     ''
-      mkdir -p $TMPDIR/"$(dirname $(readlink -f $(type -p localedef)))/../lib/locale"
+      mkdir -p $TMPDIR/"${stdenv.cc.libc.out}/lib/locale"
 
       # Hack to allow building of the locales (needed since glibc-2.12)
       sed -i -e 's,^$(rtld-prefix) $(common-objpfx)locale/localedef,localedef --prefix='$TMPDIR',' ../glibc-2*/localedata/Makefile

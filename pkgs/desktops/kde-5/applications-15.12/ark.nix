@@ -20,7 +20,7 @@
 , zip
 }:
 
-let PATH = lib.makeSearchPath "bin" [
+let PATH = lib.makeBinPath [
       p7zip unrar unzipNLS zip
     ];
 in

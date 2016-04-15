@@ -261,6 +261,8 @@
       syncthing = 237;
       mfi = 238;
       caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       prometheus = 999;
 
@@ -495,6 +497,8 @@
       syncthing = 237;
       #mfi = 238; # unused
       caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       prometheus = 999;
 

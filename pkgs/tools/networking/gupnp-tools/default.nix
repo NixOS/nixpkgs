@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for program in gupnp-av-cp gupnp-universal-cp; do
       wrapProgram "$out/bin/$program" \
-        --prefix XDG_DATA_DIRS : "${gtk3}/share:${gnome3.gnome_themes_standard}/share:${gnome2.gnome_icon_theme}/share:$out/share"
+        --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share:${gnome2.gnome_icon_theme}/share:$out/share"
     done
   '';
 

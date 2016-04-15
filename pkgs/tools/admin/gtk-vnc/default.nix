@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # Fix broken .la files
   preFixup = ''
-    sed 's,-lgpg-error,-L${libgpgerror}/lib -lgpg-error,' -i $out/lib/*.la
+    sed 's,-lgpg-error,-L${libgpgerror.out}/lib -lgpg-error,' -i $out/lib/*.la
   '';
 
   meta = with stdenv.lib; {

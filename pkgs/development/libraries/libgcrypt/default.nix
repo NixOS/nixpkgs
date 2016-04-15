@@ -10,16 +10,19 @@ stdenv.mkDerivation rec {
     sha256 = "0959mwfzsxhallxdqlw359xg180ll2skxwyy35qawmfl89cbr7pl";
   };
 
+  outputs = [ "dev" "out" "info" ];
+  outputBin = "dev";
+
   buildInputs =
     [ libgpgerror ]
     ++ lib.optional enableCapabilities libcap;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
-  postInstall = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror}/include/gpg-error.h",g' $out/include/gcrypt.h
+  postFixup = ''
+    sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
   '' + stdenv.lib.optionalString enableCapabilities ''
-    sed -i 's,\(-lcap\),-L${libcap}/lib \1,' $out/lib/libgcrypt.la
+    sed -i 's,\(-lcap\),-L${libcap.out}/lib \1,' $out/lib/libgcrypt.la
   '';
 
   # TODO: figure out why this is even necessary and why the missing dylib only crashes

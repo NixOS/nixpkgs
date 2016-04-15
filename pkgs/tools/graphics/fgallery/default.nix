@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram "$out/share/fgallery/fgallery" \
         --set PERL5LIB "$PERL5LIB" \
-        --set PATH "${stdenv.lib.makeSearchPath "bin"
+        --set PATH "${stdenv.lib.makeBinPath
                      [ coreutils zip imagemagick pngcrush lcms2 fbida ]}"
   '';
 

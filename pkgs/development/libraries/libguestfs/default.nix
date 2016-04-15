@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-appliance --disable-daemon";
   patches = [ ./libguestfs-syms.patch ];
-  NIX_CFLAGS_COMPILE="-I${libxml2}/include/libxml2/";
+  NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
 
   postInstall = ''
     for bin in $out/bin/*; do

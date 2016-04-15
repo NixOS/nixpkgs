@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   # Only needed to make it build
   preConfigure = ''
-    substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver}/bin/X"
+    substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
   '';
 
   configureFlags = [ "--sysconfdir=/etc"

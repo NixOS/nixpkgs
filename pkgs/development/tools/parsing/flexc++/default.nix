@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "flexc++-${version}";
-  version = "2.04.00";
+  version = "2.05.00";
 
   src = fetchFromGitHub {
-    sha256 = "0fz9gxpc491cngj9z9y059vbl65ng48c4nw9k3sl983zfnqfy26y";
+    sha256 = "0s25d9jsfsqvm34rwf48cxwz23aq1zja3cqlzfz3z33p29wwazwz";
     rev = version;
     repo = "flexcpp";
     owner = "fbb-git";

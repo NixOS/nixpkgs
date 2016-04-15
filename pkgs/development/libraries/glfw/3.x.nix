@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = "-DBUILD_SHARED_LIBS=ON";
+  NIX_LDFLAGS= "-lpthread -L${stdenv.cc.libc.out}/lib";
 
   meta = with stdenv.lib; { 
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
