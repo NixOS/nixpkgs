@@ -32,6 +32,8 @@ stdenv.mkDerivation {
      nvidia_cg_toolkit
    ];
 
+  patches = [ ./gcc5.patch ];
+
   meta = {
     description = "A 3D engine";
     homepage = http://www.ogre3d.org/;
