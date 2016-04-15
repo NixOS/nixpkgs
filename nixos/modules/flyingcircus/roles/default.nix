@@ -29,6 +29,7 @@ in
      ./servicecheck.nix
      ./statshost.nix
      ./varnish.nix
+     ./webgateway.nix
     ];
 
   options = {
