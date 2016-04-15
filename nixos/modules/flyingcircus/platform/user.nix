@@ -187,29 +187,25 @@ in
         // get_group_memberships userdata;
     };
 
-    security.sudo.extraConfig = ''
-      Defaults set_home,!authenticate,!mail_no_user,env_keep+=SSH_AUTH_SOCK
+    # needs to be first in sudoers because of the %admins rule
+    security.sudo.extraConfig = lib.mkBefore ''
+      Defaults set_home,!authenticate,!mail_no_user
       Defaults lecture = never
+
+      # Allow unrestricted access to super admins
+      %admins ALL=(ALL) PASSWD: ALL
 
       ## Cmnd alias specification
       Cmnd_Alias  REBOOT = ${pkgs.systemd}/bin/systemctl reboot, \
             ${pkgs.systemd}/bin/systemctl poweroff
 
-      ## User privilege specification
-      root   ALL=(ALL) SETENV: ALL
-      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
-
-      %sudo-srv ALL=(%service:service) ALL
+      %sudo-srv ALL=(%service) ALL
       %sudo-srv ALL=(root) REBOOT
-
-      # Allow unrestricted access to super admins
-      %admins ALL=(ALL) PASSWD: ALL
 
       # Allow applying config and restarting services to service users
       Cmnd_Alias  FCMANAGE = ${pkgs.systemd}/bin/systemctl start fc-manage
       %sudo-srv ALL=(root) FCMANAGE
       %service  ALL=(root) FCMANAGE
-
     '';
 
   };
