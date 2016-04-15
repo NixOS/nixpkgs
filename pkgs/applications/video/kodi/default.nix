@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper
 , pkgconfig, cmake, gnumake, yasm, pythonFull
 , boost, avahi, libdvdcss, lame, autoreconfHook
-, gettext, pcre, yajl, fribidi, which
+, gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto, libxml2
 , libXt, libXmu, libXext, xextproto
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
       makeWrapper libxml2 gnutls
       pkgconfig cmake gnumake yasm pythonFull
       boost libmicrohttpd autoreconfHook
-      gettext pcre yajl fribidi libva
+      gettext pcre-cpp yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
       libXt libXmu libXext xextproto
