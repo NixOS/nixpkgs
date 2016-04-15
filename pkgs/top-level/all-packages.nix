@@ -5232,6 +5232,8 @@ let
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
+  angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
+
   chibi = callPackage ../development/interpreters/chibi { };
 
   ceptre = callPackage ../development/interpreters/ceptre { };
@@ -14666,7 +14668,7 @@ let
   };
 
   rigsofrods = callPackage ../games/rigsofrods {
-    mygui = myguiSvn;
+    angelscript = angelscript_2_22;
   };
 
   rili = callPackage ../games/rili { };
