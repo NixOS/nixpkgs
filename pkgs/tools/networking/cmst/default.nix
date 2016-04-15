@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase makeWrapper ];
 
   configurePhase = ''
+    runHook preConfigure
     substituteInPlace ./cmst.pro \
       --replace "/usr/bin" "$out/bin" \
       --replace "/usr/share" "$out/usr/share"
@@ -28,11 +29,14 @@ stdenv.mkDerivation rec {
     substituteInPlace ./apps/rootapp/rootapp.pro \
       --replace "/etc" "$out/etc" \
       --replace "/usr/share" "$out/share"
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
     qmake PREFIX=$out
     make
+    runHook postBuild
   '';
 
   postInstall = ''
