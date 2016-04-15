@@ -5178,6 +5178,8 @@ in
     ocaml = ocaml_4_02;
   };
 
+  bupc = callPackage ../development/compilers/bupc { };
+
   urweb = callPackage ../development/compilers/urweb { };
 
   vala = callPackage ../development/compilers/vala/default.nix { };
