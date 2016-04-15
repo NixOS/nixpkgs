@@ -1045,7 +1045,7 @@ in
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
-  libpinyin = callPackage ../tools/inputmethods/libpinyin { };
+  libpinyin = callPackage ../development/libraries/libpinyin { };
 
   ibus-libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 
