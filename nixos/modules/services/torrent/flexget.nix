@@ -24,7 +24,7 @@ in {
       };
 
       homeDir = mkOption {
-        default = /var/lib/deluge;
+        default = "/var/lib/deluge";
         example = "/home/flexget";
         type = types.path;
         description = "Where files live.";
