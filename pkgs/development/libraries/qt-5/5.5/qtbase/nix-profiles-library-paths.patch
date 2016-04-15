@@ -2,24 +2,18 @@ Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/kernel/qcoreapplica
 ===================================================================
 --- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/corelib/kernel/qcoreapplication.cpp
 +++ qt-everywhere-opensource-src-5.5.1/qtbase/src/corelib/kernel/qcoreapplication.cpp
-@@ -2498,6 +2498,22 @@ QStringList QCoreApplication::libraryPat
+@@ -2498,6 +2498,16 @@ QStringList QCoreApplication::libraryPat
                  }
              }
          }
 +        qunsetenv("QT_PLUGIN_PATH"); // do not propagate to child processes
 +
 +        // Add library paths derived from NIX_PROFILES.
-+        const QByteArray nixProfilesEnv = qgetenv("NIX_PROFILES");
-+        if (!nixProfilesEnv.isEmpty()) {
-+            QLatin1Char pathSep(' ');
-+            QStringList paths = QFile::decodeName(nixProfilesEnv).split(pathSep, QString::SkipEmptyParts);
-+            for (QStringList::iterator it = paths.begin(); it != paths.end(); ++it) {
-+                it->append("/lib/qt5/plugins");
-+                QString canonicalPath = QDir(*it).canonicalPath();
-+                if (!canonicalPath.isEmpty()
-+                    && !app_libpaths->contains(canonicalPath)) {
-+                    app_libpaths->append(canonicalPath);
-+                }
++        const QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
++        const QString plugindir = QString::fromLatin1("/lib/qt5/plugins");
++        Q_FOREACH (const QByteArray &profile, profiles) {
++            if (!profile.isEmpty()) {
++                app_libpaths->append(QFile::decodeName(profile) + plugindir);
 +            }
 +        }
      }
