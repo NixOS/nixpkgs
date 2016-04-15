@@ -187,7 +187,8 @@ in
         // get_group_memberships userdata;
     };
 
-    security.sudo.extraConfig = ''
+    # needs to be first in sudoers because of the %admins rule
+    security.sudo.extraConfig = lib.mkBefore ''
       Defaults set_home,!authenticate,!mail_no_user
       Defaults lecture = never
 
@@ -198,10 +199,6 @@ in
       Cmnd_Alias  REBOOT = ${pkgs.systemd}/bin/systemctl reboot, \
             ${pkgs.systemd}/bin/systemctl poweroff
 
-      ## User privilege specification
-      root   ALL=(ALL) SETENV: ALL
-      %wheel ALL=(ALL) NOPASSWD: ALL, SETENV: ALL
-
       %sudo-srv ALL=(%service) ALL
       %sudo-srv ALL=(root) REBOOT
 
@@ -209,7 +206,6 @@ in
       Cmnd_Alias  FCMANAGE = ${pkgs.systemd}/bin/systemctl start fc-manage
       %sudo-srv ALL=(root) FCMANAGE
       %service  ALL=(root) FCMANAGE
-
     '';
 
   };
