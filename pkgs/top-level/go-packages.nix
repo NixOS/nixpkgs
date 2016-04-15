@@ -421,6 +421,7 @@ let
       acme blackfriday crypto go-humanize go-shlex go-syslog
       http-authentication lumberjack-v2 toml websocket yaml-v2
     ];
+    disabled = isGo14 || isGo15;
   };
 
   cascadia = buildGoPackage rec {
