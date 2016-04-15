@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_LDFLAGS = "-rpath-link ${boost.lib}/lib";
+
   buildInputs = [ libX11 unzip ogre cmake ois freetype libuuid boost pkgconfig ];
 
   meta = {
