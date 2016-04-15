@@ -16,10 +16,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg'';
 
+  outputs = [ "out" "man" ];
+
   postInstall = ''
     make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
-    mkdir -p $out/share/man/man1
-    cp cppcheck.1 $out/share/man/man1/cppcheck.1
+    mkdir -p $man/share/man/man1
+    cp cppcheck.1 $man/share/man/man1/cppcheck.1
   '';
 
   meta = with stdenv.lib; {
