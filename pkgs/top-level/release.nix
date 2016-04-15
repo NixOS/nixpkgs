@@ -184,6 +184,7 @@ let
       pythonFull = linux;
       sbcl = linux;
       qt3 = linux;
+      qt4_clang = ["i686-linux"];
       quake3demo = linux;
       reiserfsprogs = linux;
       rubber = allBut cygwin;
