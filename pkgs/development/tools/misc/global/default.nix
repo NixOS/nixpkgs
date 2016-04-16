@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-ltdl-include=${libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ncurses=${ncurses.dev}"
-    "--with-sqlite3=${sqlite}"
+    "--with-sqlite3=${sqlite.dev}"
     "--with-exuberant-ctags=${ctags}/bin/ctags"
     "--with-posix-sort=${coreutils}/bin/sort"
   ];

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
     ++ optional (python != null) "--with-python=${python}"
     ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
-    ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
+    ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
     ++ optional (libmysql != null) "--with-mysql=${libmysql}"
     ++ optional (zlib != null) "--with-zlib=${zlib}"

@@ -90,7 +90,7 @@ in stdenv.mkDerivation rec {
       (lib.enableFeature withIconv "iconv")
       (lib.enableFeature withTools "tools")
       (lib.enableFeature withRedis "redis")
-    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite}";
+    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
