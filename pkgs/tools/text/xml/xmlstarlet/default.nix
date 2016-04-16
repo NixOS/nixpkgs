@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      export LIBXSLT_PREFIX=${libxslt}
+      export LIBXSLT_PREFIX=${libxslt.dev}
       export LIBXML_PREFIX=${libxml2}
       export LIBXSLT_LIBS=$(pkg-config --libs libxslt libexslt)
       export LIBXML_LIBS=$(pkg-config --libs libxml-2.0)
