@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
-      ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
+      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
       ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )

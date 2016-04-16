@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   configureFlags = "
     --enable-shared --disable-all-vads --with-readline=${readline}
     --disable-hslookup --disable-wbxml2 --without-iodbc
-    --enable-openssl=${openssl}
+    --enable-openssl=${openssl.dev}
     ";
 
   postInstall=''

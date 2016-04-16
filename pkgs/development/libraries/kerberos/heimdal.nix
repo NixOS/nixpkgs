@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--enable-hdb-openldap-module"
     "--with-sqlite3=${sqlite}"
     "--with-libedit=${libedit}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--without-x"
     "--with-berkeley-db=${db}"
   ] ++ optionals (!libOnly) [

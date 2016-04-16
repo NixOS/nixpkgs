@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     );
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
   ];
 
   # Set this variable at build-time to make sure $out can be evaluated.

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-thread-safe-client"
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
     "--with-embedded-server"
     "--with-plugins=max-no-ndb"
     "--with-unix-socket-path=/run/mysqld/mysqld.sock"

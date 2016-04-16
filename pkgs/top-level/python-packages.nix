@@ -12031,7 +12031,7 @@ in modules // {
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
     preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl}'"
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
     '';
 
     doCheck = false; # another test that depends on the network.

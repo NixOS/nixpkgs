@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
     ++ optional (!stdenv.isCygwin) "--with-crypto"
-    ++ optional sslSupport "--with-openssl=${openssl}"
+    ++ optional sslSupport "--with-openssl=${openssl.dev}"
     ++ optional bdbSupport "--with-berkeley-db=${db}"
     ++ optional ldapSupport "--with-ldap=ldap"
     ++ optionals stdenv.isCygwin

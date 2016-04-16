@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
   
   configureFlags = []
-    ++ stdenv.lib.optionals sslSupport [ "--with-ssl=${openssl}" ];
+    ++ stdenv.lib.optionals sslSupport [ "--with-ssl=${openssl.dev}" ];
   
   buildInputs = [ ncurses gzip ];
   nativeBuildInputs = [ ncurses ];

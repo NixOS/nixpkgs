@@ -18,7 +18,7 @@ stdenv.mkDerivation {
       -e "s|/bin/rm|rm|"
   '';
 
-  configureFlags = "--with-slang=${slang} --with-ssl=${openssl}";
+  configureFlags = "--with-slang=${slang} --with-ssl=${openssl.dev}";
 
   buildInputs = [ slang ncurses openssl ];
 

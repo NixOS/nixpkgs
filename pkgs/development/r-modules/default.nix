@@ -1922,7 +1922,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
+      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {

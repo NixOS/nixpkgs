@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "--enable-scsi-crypto"
   ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
     ++ optional (python != null) "--with-python=${python}"
-    ++ optional (openssl != null) "--with-openssl=${openssl}"
+    ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
     ++ optional (libmysql != null) "--with-mysql=${libmysql}"

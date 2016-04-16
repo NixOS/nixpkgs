@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     "--enable-optimize"
     "--disable-python-dependency-install"
     "--enable-ssl"
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
     "--enable-libevent"
     "--with-libevent=${libevent.dev}"
   ] ++ lib.optionals stdenv.isLinux [
