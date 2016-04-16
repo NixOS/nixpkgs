@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     "--with-pcre=${pcre}"
     "--with-apr=${apr.dev}"
-    "--with-apu=${aprutil}/bin/apu-1-config"
+    "--with-apu=${aprutil.dev}/bin/apu-1-config"
     "--with-libxml=${libxml2}"
   ];
 

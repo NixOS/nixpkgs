@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
   configureFlags = ''
     --with-apr=${apr.dev}
-    --with-apr-util=${aprutil}
+    --with-apr-util=${aprutil.dev}
     --with-z=${zlib}
     --with-pcre=${pcre}
     --disable-maintainer-mode
