@@ -324,7 +324,7 @@
       }:
       mkDerivation {
         pname = "Cabal";
-        version = "1.22.4.0";
+        version = "1.22.8.0";
         src = "${ghcjsBoot}/boot/cabal/Cabal";
         doCheck = false;
         libraryHaskellDepends = [
