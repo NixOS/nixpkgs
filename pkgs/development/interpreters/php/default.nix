@@ -134,7 +134,7 @@ let
           configureFlags = [
             "--with-gd"
             "--with-freetype-dir=${freetype.dev}"
-            "--with-png-dir=${libpng}"
+            "--with-png-dir=${libpng.dev}"
             "--with-jpeg-dir=${libjpeg.dev}"
           ];
           buildInputs = [ libpng libjpeg freetype ];

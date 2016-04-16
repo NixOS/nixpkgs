@@ -26,7 +26,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff}" # optional (without largetiff support)
-    "--with-libpng=${libpng}"   # optional
+    "--with-libpng=${libpng.dev}"   # optional
     "--with-libz=${zlib}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"

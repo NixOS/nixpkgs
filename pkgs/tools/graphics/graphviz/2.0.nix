@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [pkgconfig xlibsWrapper libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
   
   configureFlags =
-    [ "--with-pngincludedir=${libpng}/include"
+    [ "--with-pngincludedir=${libpng.dev}/include"
       "--with-pnglibdir=${libpng.out}/lib"
       "--with-jpegincludedir=${libjpeg.dev}/include"
       "--with-jpeglibdir=${libjpeg.out}/lib"
