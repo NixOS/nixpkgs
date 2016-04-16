@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
-      ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
+      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
