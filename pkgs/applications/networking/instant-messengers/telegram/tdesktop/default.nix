@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
     "CONFIG+=release"
     "DEFINES+=TDESKTOP_DISABLE_AUTOUPDATE"
     "DEFINES+=TDESKTOP_DISABLE_REGISTER_CUSTOM_SCHEME"
-    "INCLUDEPATH+=${gtk2}/include/gtk-2.0"
+    "INCLUDEPATH+=${gtk2.dev}/include/gtk-2.0"
     "INCLUDEPATH+=${glib.dev}/include/glib-2.0"
     "INCLUDEPATH+=${glib.out}/lib/glib-2.0/include"
     "INCLUDEPATH+=${cairo.dev}/include/cairo"
