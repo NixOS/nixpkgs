@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     "INCLUDEPATH+=${glib.dev}/include/glib-2.0"
     "INCLUDEPATH+=${glib.out}/lib/glib-2.0/include"
     "INCLUDEPATH+=${cairo.dev}/include/cairo"
-    "INCLUDEPATH+=${pango}/include/pango-1.0"
+    "INCLUDEPATH+=${pango.dev}/include/pango-1.0"
     "INCLUDEPATH+=${gtk2.out}/lib/gtk-2.0/include"
     "INCLUDEPATH+=${gdk_pixbuf.dev}/include/gdk-pixbuf-2.0"
     "INCLUDEPATH+=${atk.dev}/include/atk-1.0"
