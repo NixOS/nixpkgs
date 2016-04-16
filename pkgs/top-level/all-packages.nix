@@ -13660,9 +13660,7 @@ in
     qt = qt4;
   };
 
-  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix {
-    qt = qt4;
-  });
+  retroshare06 = lowPrio (callPackage ../applications/networking/p2p/retroshare/0.6.nix { });
 
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
