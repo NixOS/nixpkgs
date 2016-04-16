@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-zlib=${zlib}"
-    "--with-libbz2-prefix=${bzip2}"
+    "--with-libbz2-prefix=${bzip2.dev}"
     "--with-iconv-dir=${libiconv}"
     "--with-xml=${libxml2}"
     "--with-openssl=${openssl}"
