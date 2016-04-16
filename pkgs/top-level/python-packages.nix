@@ -18670,7 +18670,7 @@ in modules // {
         --apr-lib-dir=${pkgs.apr.out}/lib \
         --svn-lib-dir=${pkgs.subversion.out}/lib \
         --svn-bin-dir=${pkgs.subversion.out}/bin \
-        --svn-root-dir=${pkgs.subversion}
+        --svn-root-dir=${pkgs.subversion.dev}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
     '');

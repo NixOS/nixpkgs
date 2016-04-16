@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--sbindir=\${out}/bin"
     "--with-apr=${apr.dev}"
-    "--with-svn=${subversion}"
+    "--with-svn=${subversion.dev}"
     "--with-leveldb=${leveldb}"
     "--with-glog=${glog}"
     "--with-glog=${glog}"
