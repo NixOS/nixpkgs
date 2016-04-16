@@ -22,7 +22,7 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    for i in ${binutils-raw}/include/*.h; do
+    for i in ${binutils-raw.dev}/include/*.h; do
       ln -s "$i" "$out/include/$(basename $i)"
     done
 
