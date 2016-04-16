@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--enable-standalone-module"
     "--enable-static"
     "--with-curl=${curl}"
-    "--with-apxs=${apacheHttpd}/bin/apxs"
+    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     "--with-pcre=${pcre}"
     "--with-apr=${apr}"
     "--with-apu=${aprutil}/bin/apu-1-config"

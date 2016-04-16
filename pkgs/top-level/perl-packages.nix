@@ -6720,7 +6720,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ApacheTest ExtUtilsXSBuilder mod_perl2 pkgs.apacheHttpd pkgs.apr pkgs.aprutil ];
     propagatedBuildInputs = [ mod_perl2 ];
-    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd} --with-apache2-apxs=${pkgs.apacheHttpd}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr}/bin/apr-1-config --with-apu-config=${pkgs.aprutil}/bin/apu-1-config";
+    makeMakerFlags = "--with-apache2-src=${pkgs.apacheHttpd.dev} --with-apache2-apxs=${pkgs.apacheHttpd.dev}/bin/apxs --with-apache2-httpd=${pkgs.apacheHttpd.out}/bin/httpd --with-apr-config=${pkgs.apr}/bin/apr-1-config --with-apu-config=${pkgs.aprutil}/bin/apu-1-config";
     preConfigure = ''
       # override broken prereq check
       substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
@@ -6731,7 +6731,7 @@ let self = _self // overrides; _self = with self; {
     installPhase = ''
       mkdir $out
       make install DESTDIR=$out
-      cp -r $out/${pkgs.apacheHttpd}/. $out/.
+      cp -r $out/${pkgs.apacheHttpd.dev}/. $out/.
       cp -r $out/$out/. $out/.
       rm -r $out/nix
       '';
