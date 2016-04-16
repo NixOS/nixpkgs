@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-standalone-module"
     "--enable-static"
-    "--with-curl=${curl}"
+    "--with-curl=${curl.dev}"
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     "--with-pcre=${pcre}"
     "--with-apr=${apr.dev}"

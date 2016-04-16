@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--with-xml=${libxml2}"
     "--with-openssl=${openssl}"
     "--with-libncurses-prefix=${ncurses}"
-    "--with-libcurl=${curl}"
+    "--with-libcurl=${curl.dev}"
     "--with-pcre=${pcre}"
     "--enable-milter"
     "--disable-clamav"

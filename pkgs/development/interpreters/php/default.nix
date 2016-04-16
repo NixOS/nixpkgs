@@ -60,7 +60,7 @@ let
         };
 
         curl = {
-          configureFlags = ["--with-curl=${curl}"];
+          configureFlags = ["--with-curl=${curl.dev}"];
           buildInputs = [curl openssl];
         };
 
