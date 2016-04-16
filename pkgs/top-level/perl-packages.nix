@@ -1824,16 +1824,16 @@ let self = _self // overrides; _self = with self; {
 
   ClassMOP = Moose;
 
-  ClassReturnValue = buildPerlPackage {
+  ClassReturnValue = buildPerlPackage rec {
     name = "Class-ReturnValue-0.55";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JE/JESSE/Class-ReturnValue-0.55.tar.gz;
+      url = "mirror://cpan/authors/id/J/JE/JESSE/${name}.tar.gz";
       sha256 = "ed3836885d78f734ccd7a98550ec422a616df7c31310c1b7b1f6459f5fb0e4bd";
     };
     propagatedBuildInputs = [ DevelStackTrace ];
     meta = {
       description = "A smart return value object";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
