@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/gsettings-schemas/$name
     mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name
-    ${glib}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
+    ${glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/$name/glib-2.0/schemas
   '';
 
   preFixup = ''
