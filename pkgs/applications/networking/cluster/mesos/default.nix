@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
 
     substituteInPlace configure.ac             \
-      --replace /usr/include/libnl3 ${libnl}/include/libnl3
+      --replace /usr/include/libnl3 ${libnl.dev}/include/libnl3
 
     substituteInPlace src/linux/perf.cpp       \
       --replace '"perf ' '"${perf}/bin/perf '
