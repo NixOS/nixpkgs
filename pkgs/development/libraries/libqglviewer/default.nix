@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "libqglviewer-2.6.3";
@@ -9,13 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "00jdkyk4wg1356c3ar6nk3hyp494ya3yvshq9m57kfmqpn3inqdy";
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qt4 qmake4Hook ];
 
-  buildPhase =
+  postPatch =
     ''
       cd QGLViewer
-      qmake PREFIX=$out
-      make
     '';
 
   meta = with stdenv.lib; {
