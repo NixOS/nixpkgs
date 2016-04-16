@@ -85,7 +85,7 @@ let
         };
 
         readline = {
-          configureFlags = ["--with-readline=${readline}"];
+          configureFlags = ["--with-readline=${readline.dev}"];
           buildInputs = [ readline ];
         };
 

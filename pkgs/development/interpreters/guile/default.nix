@@ -100,7 +100,7 @@
       "--with-libgmp-prefix=${gmp.dev}"
 
       # Same for these (?).
-      "--with-libreadline-prefix=${readline}"
+      "--with-libreadline-prefix=${readline.dev}"
       "--with-libunistring-prefix=${libunistring}"
 
       # See below.

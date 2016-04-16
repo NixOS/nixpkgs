@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     "--enable-dynamic-cats-backends"
     "--enable-sql-pooling"
     "--enable-scsi-crypto"
-  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline}" ]
+  ] ++ optionals (readline != null) [ "--disable-conio" "--enable-readline" "--with-readline=${readline.dev}" ]
     ++ optional (python != null) "--with-python=${python}"
     ++ optional (openssl != null) "--with-openssl=${openssl.dev}"
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite}"
