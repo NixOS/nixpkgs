@@ -2970,9 +2970,7 @@ in
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
 
-  qastools = callPackage ../tools/audio/qastools {
-    qt = qt4;
-  };
+  qastools = callPackage ../tools/audio/qastools { };
 
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
