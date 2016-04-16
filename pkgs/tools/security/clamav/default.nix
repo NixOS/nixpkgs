@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-iconv-dir=${libiconv}"
     "--with-xml=${libxml2}"
     "--with-openssl=${openssl}"
-    "--with-libncurses-prefix=${ncurses}"
+    "--with-libncurses-prefix=${ncurses.dev}"
     "--with-libcurl=${curl.dev}"
     "--with-pcre=${pcre}"
     "--enable-milter"

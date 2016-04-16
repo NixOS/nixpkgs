@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-ltdl-include=${libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
-    "--with-ncurses=${ncurses}"
+    "--with-ncurses=${ncurses.dev}"
     "--with-sqlite3=${sqlite}"
     "--with-exuberant-ctags=${ctags}/bin/ctags"
     "--with-posix-sort=${coreutils}/bin/sort"
