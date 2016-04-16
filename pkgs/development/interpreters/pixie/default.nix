@@ -47,7 +47,7 @@ let
     patchPhase = ''
       (cd pixie-src
        patch -p1 < ${./load_paths.patch}
-       libraryPaths='["${libuv}" "${libedit}" "${libffi}" "${boost.dev}" "${boost.out}" "${zlib}"]'
+       libraryPaths='["${libuv}" "${libedit}" "${libffi.dev}" "${boost.dev}" "${boost.out}" "${zlib}"]'
        export libraryPaths
        substituteAllInPlace ./pixie/ffi-infer.pxi)
     '';
