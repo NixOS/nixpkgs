@@ -275,6 +275,9 @@ let
         cp php.ini-production $iniFile
       '';
 
+      # Also strip libphp5.so which resides in /modules
+      stripDebugList= [ "lib" "modules" "bin" "sbin" ];
+
       src = fetchurl {
         url = "http://www.php.net/distributions/php-${version}.tar.bz2";
         inherit sha256;
