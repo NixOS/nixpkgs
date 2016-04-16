@@ -2976,7 +2976,6 @@ in
 
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
-    qt = qt4;
   };
 
   qhull = callPackage ../development/libraries/qhull { };

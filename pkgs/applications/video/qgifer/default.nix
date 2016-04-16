@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, cmake, opencv, qt, giflib }:
+{ stdenv, fetchsvn, cmake, opencv, qt4, giflib }:
 
 stdenv.mkDerivation rec {
   name = "qgifer-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "SET(CMAKE_INSTALL_PREFIX" "#"
   '';
 
-  buildInputs = [ cmake opencv qt giflib ];
+  buildInputs = [ cmake opencv qt4 giflib ];
 
   meta = with stdenv.lib; {
     description = "Video-based animated GIF creator";
