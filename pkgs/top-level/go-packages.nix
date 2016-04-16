@@ -2724,11 +2724,11 @@ let
   };
 
   oh = buildFromGitHub {
-    rev = "f54be52450a07398a2f605222eb22e69bb34f565";
-    version = "2016-03-02";
+    rev = "22d91b0ea97f817cd5cccd90549f74923a57daa4";
+    version = "2016-03-28";
     owner = "michaelmacinnis";
     repo = "oh";
-    sha256 = "0gczqi9aw6sv7vmjdandxmaz1m6pfzchmbkf12qmpmc6dmh2wy6b";
+    sha256 = "1dkw3c0d640g7ciw0mmbdq94zyykdcfada05m5amnqymknphmdvl";
     goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
     buildInputs = [ adapted liner ];
     disabled = isGo14;
