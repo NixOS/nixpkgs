@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, taglib }:
+{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmakeHook, taglib }:
 
 stdenv.mkDerivation rec {
   name = "keyfinder-${version}";
@@ -11,19 +11,12 @@ stdenv.mkDerivation rec {
     owner = "ibsh";
   };
 
-  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
+  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns qmakeHook taglib ];
 
   postPatch = ''
     substituteInPlace is_KeyFinder.pro \
        --replace "keyfinder.0" "keyfinder" \
-       --replace '$$[QT_INSTALL_PREFIX]' "$out" \
        --replace "-stdlib=libc++" ""
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-    qmake
-    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
