@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
-      ( if idnSupport then "--with-libidn=${libidn}" else "--without-libidn" )
+      ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
