@@ -7385,7 +7385,7 @@ in
 
   libcm = callPackage ../development/libraries/libcm { };
 
-  libcommuni = callPackage ../development/libraries/libcommuni { };
+  libcommuni = qt5.callPackage ../development/libraries/libcommuni { };
 
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
