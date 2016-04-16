@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
     '';
 
   outputs = [ "out" "modules" ];
+  setOutputFlags = false;
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
