@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   };
   configureFlags = [
     "--enable-threads"
-    "--with-gmp-prefix=${gmp}"
+    "--with-gmp-prefix=${gmp.dev}"
     "--with-libffi-prefix=${libffi}"
     ]
     ++

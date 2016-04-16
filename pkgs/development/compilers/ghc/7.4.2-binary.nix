@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     ./configure --prefix=$out \
-      --with-gmp-libraries=${gmp.out}/lib --with-gmp-includes=${gmp}/include \
+      --with-gmp-libraries=${gmp.out}/lib --with-gmp-includes=${gmp.dev}/include \
       ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
   '';
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "./Configure";
   configureFlags =
-    "--with-gmp=${gmp} " +
+    "--with-gmp=${gmp.dev} " +
     "--with-readline=${readline}";
 
   meta = with stdenv.lib; {
