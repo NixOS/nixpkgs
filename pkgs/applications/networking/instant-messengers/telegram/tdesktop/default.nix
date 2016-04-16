@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
     "INCLUDEPATH+=${pango}/include/pango-1.0"
     "INCLUDEPATH+=${gtk2.out}/lib/gtk-2.0/include"
     "INCLUDEPATH+=${gdk_pixbuf}/include/gdk-pixbuf-2.0"
-    "INCLUDEPATH+=${atk}/include/atk-1.0"
+    "INCLUDEPATH+=${atk.dev}/include/atk-1.0"
     "INCLUDEPATH+=${libappindicator-gtk2}/include/libappindicator-0.1"
     "INCLUDEPATH+=${libunity}/include/unity"
     "INCLUDEPATH+=${dee}/include/dee-1.0"
