@@ -17407,7 +17407,7 @@ in modules // {
 
     preConfigure = ''
       export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
     #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
