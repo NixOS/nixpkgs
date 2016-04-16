@@ -23,12 +23,23 @@ import ./make-test.nix ({ pkgs, ...} : {
               networking.firewall.allowPing = true;
             };
         };
+      containers.router =
+        { interfaces = [ "roeth" ];
+          config =
+            { networking.interfaces.roeth.ipAddress = "10.100.0.1";
+            };
+        };
 
       virtualisation.pathsInNixDB = [ pkgs.stdenv ];
     };
 
   testScript =
     ''
+      $machine->succeed("nixos-container list") =~ /router/ or die;
+
+      $machine->succeed("ip link add veth0 type veth peer name roeth");
+      $machine->succeed("nixos-container start router");
+
       $machine->succeed("nixos-container list") =~ /webserver/ or die;
 
       # Start the webserver container.

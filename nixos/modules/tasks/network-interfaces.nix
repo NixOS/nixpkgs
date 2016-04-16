@@ -960,7 +960,7 @@ in
       { description = "Link configuration of ${i.name}";
         wantedBy = [ "network-interfaces.target" ];
         before = [ "network-interfaces.target" ];
-        bindsTo = [ (subsystemDevice i.name) ];
+        bindsTo = if config.boot.isContainer then [] else [ (subsystemDevice i.name) ];
         after = [ (subsystemDevice i.name) "network-pre.target" ];
         path = [ pkgs.iproute ];
         serviceConfig = {
