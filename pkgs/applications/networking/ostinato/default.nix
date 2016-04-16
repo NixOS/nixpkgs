@@ -1,5 +1,5 @@
 { stdenv, fetchgit, fetchurl, writeText
-, qt4, protobuf, libpcap
+, qt4, qmake4Hook, protobuf, libpcap
 , wireshark, gzip, diffutils, gawk
 }:
 
@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 protobuf libpcap ];
 
-  patches = [ ./drone_ini.patch ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  configurePhase = "qmake PREFIX=$out"
-    + stdenv.lib.optionalString stdenv.isDarwin " -spec macx-g++";
+  patches = [ ./drone_ini.patch ];
 
   postInstall = ''
     cat > $out/bin/ostinato.ini <<EOF
