@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-curl=${curl}"
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
     "--with-pcre=${pcre}"
-    "--with-apr=${apr}"
+    "--with-apr=${apr.dev}"
     "--with-apu=${aprutil}/bin/apu-1-config"
     "--with-libxml=${libxml2}"
   ];

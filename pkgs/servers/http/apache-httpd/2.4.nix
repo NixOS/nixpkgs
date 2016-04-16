@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
   configureFlags = ''
-    --with-apr=${apr}
+    --with-apr=${apr.dev}
     --with-apr-util=${aprutil}
     --with-z=${zlib}
     --with-pcre=${pcre}

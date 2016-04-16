@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
-  configureFlags = [ "--with-apr=${apr}" "--with-expat=${expat}" ]
+  configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat}" ]
     ++ optional (!stdenv.isCygwin) "--with-crypto"
     ++ optional sslSupport "--with-openssl=${openssl}"
     ++ optional bdbSupport "--with-berkeley-db=${db}"
