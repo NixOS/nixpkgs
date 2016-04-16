@@ -27,7 +27,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  DOCKER_BUILDTAGS = [ "journald" ];
+  DOCKER_BUILDTAGS = [ "journald" ]
+    ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
+    ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
 
   buildPhase = ''
     patchShebangs .
