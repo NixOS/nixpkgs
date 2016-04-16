@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = with stdenv.lib;
-    [ "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr}" "--with-system-readline"
+    [ "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
       "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ]

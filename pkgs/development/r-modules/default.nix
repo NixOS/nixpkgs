@@ -1860,7 +1860,7 @@ let
 
     Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr}/include"
+        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
       ];
     });
 
