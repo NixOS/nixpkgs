@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 poppler_qt4 zlib ];
   nativeBuildInputs = [ pkgconfig poppler qmake4Hook ];
-  NIX_CFLAGS_COMPILE="-I${poppler}/include/poppler";
+  NIX_CFLAGS_COMPILE="-I${poppler.dev}/include/poppler";
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags DESKTOPDIR=$out/share/applications ICONDIR=$out/share/pixmaps"

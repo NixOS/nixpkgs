@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${poppler}/include/poppler"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${poppler.dev}/include/poppler"
   '';
 
   buildInputs = [
