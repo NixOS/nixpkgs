@@ -80,11 +80,8 @@ in
         description = ''
           Name of directory from which to import ZFS devices.
 
-          Usually /dev works. However, ZFS import may fail if a device node is renamed.
-          It should therefore use stable device names, such as from /dev/disk/by-id.
-
-          The default remains /dev for 15.09, due to backwards compatibility concerns.
-          It will change to /dev/disk/by-id in the next NixOS release.
+          This should be a path under /dev containing stable names for all devices needed, as
+          import may fail if device nodes are renamed concurrently with a device failing.
         '';
       };
 
