@@ -365,12 +365,12 @@ let self = _self // overrides; _self = with self; {
     name = "Archive-Extract-0.76";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "1z2chz7a5q6024h9rmzpq0z53x0jw7983ia5k1yxsih3lw60irws";
+      sha256 = "9ae7080ca70346dd7d9845c581d2e112f4513ec0f7d79c2011c0e0a2ce874cfc";
     };
-    propagatedBuildInputs = [ if_ ];
+    propagatedBuildInputs = [ self."if" ];
     meta = {
       description = "Generic archive extracting mechanism";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
