@@ -104,7 +104,7 @@ in stdenv.mkDerivation rec {
     "--enable-ssl"
     "--with-ssl=${openssl}"
     "--enable-libevent"
-    "--with-libevent=${libevent}"
+    "--with-libevent=${libevent.dev}"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-network-isolator"
   ];
