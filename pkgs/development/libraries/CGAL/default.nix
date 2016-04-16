@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, boost, gmp, mpfr }:
+{ stdenv, fetchurl, cmake, boost, gmp, mpfr, mesa_glu }:
 
 stdenv.mkDerivation rec {
   version = "4.7";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   # note: optional component libCGAL_ImageIO would need zlib and opengl;
   #   there are also libCGAL_Qt{3,4} omitted ATM
   buildInputs = [ cmake boost gmp mpfr ];
+  #propagatedBuildInputs = [ mesa_glu ];
 
   doCheck = false;
 
