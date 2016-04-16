@@ -8544,6 +8544,12 @@ in
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
   };
 
+  qmake48Hook = makeSetupHook
+    { substitutions = { qt4 = qt48; }; }
+    ../development/libraries/qt-4.x/4.8/qmake-hook.sh;
+
+  qmake4Hook = qmake48Hook;
+
   qt48Full = appendToName "full" (qt48.override {
     docs = true;
     demos = true;
