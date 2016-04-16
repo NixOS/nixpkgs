@@ -465,7 +465,7 @@ in {
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
-          LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+          LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
         };
         serviceConfig = {
           ExecStart = ''
