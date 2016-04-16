@@ -254,7 +254,6 @@ stdenv.mkDerivation {
       fixQtModuleCMakeConfig "Xml"
     '';
 
-  inherit lndir;
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
