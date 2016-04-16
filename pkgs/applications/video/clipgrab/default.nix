@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeDesktopItem, ffmpeg, qt4 }:
+{ stdenv, fetchurl, makeDesktopItem, ffmpeg, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ffmpeg qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
   postPatch = stdenv.lib.optionalString (ffmpeg != null) ''
   substituteInPlace converter_ffmpeg.cpp \
@@ -18,9 +19,7 @@ stdenv.mkDerivation rec {
     --replace '"ffmpeg ' '"${ffmpeg.bin}/bin/ffmpeg '
   '';
 
-  configurePhase = ''
-    qmake clipgrab.pro
-  '';
+  qmakeFlags = [ "clipgrab.pro" ];
 
   enableParallelBuilding = true;
 
