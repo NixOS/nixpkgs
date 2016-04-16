@@ -9478,6 +9478,8 @@ in
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
+  yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
+
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
     libusb = libusb1;
   };
