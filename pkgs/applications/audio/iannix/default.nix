@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qt5
+{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmakeHook
 }:
 
 stdenv.mkDerivation rec {
@@ -11,13 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "184ydb9f1303v332k5k3f1ki7cb6nkxhh6ij0yn72v7dp7figrgj";
   };
 
-    buildInputs = [ alsaLib pkgconfig qt5.qtbase qt5.qtscript ];
+  buildInputs = [ alsaLib pkgconfig qtbase qtscript qmakeHook ];
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=/
-    runHook postConfigure
-  '';
+  qmakeFlags = [ "PREFIX=/" ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 

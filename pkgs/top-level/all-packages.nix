@@ -1939,7 +1939,7 @@ in
 
   iasl = callPackage ../development/compilers/iasl { };
 
-  iannix = callPackage ../applications/audio/iannix { };
+  iannix = qt5.callPackage ../applications/audio/iannix { };
 
   icecast = callPackage ../servers/icecast { };
 
