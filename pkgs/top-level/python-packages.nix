@@ -7380,9 +7380,9 @@ in modules // {
     propagatedBuildInputs = [ pkgs.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4}/include/poppler/";
+               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
 
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4}/include/poppler/";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
 
     meta = {
       description = "A Python binding to Poppler-Qt4";
