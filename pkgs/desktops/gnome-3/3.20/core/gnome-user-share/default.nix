@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   preConfigure = ''
     sed -e 's,^LoadModule dnssd_module.\+,LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so,' -i data/dav_user_2.2.conf 
