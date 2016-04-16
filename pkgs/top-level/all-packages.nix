@@ -2783,6 +2783,8 @@ in
 
   patchage = callPackage ../applications/audio/patchage { };
 
+  pcapfix = callPackage ../tools/networking/pcapfix { };
+
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
 
   pciutils = callPackage ../tools/system/pciutils { };
