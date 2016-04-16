@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   qmakeFlags = [
     "EXIV2PATH=${exiv2}/include/exiv2"
     "OPENEXRDIR=${openexr}/include/OpenEXR"
-    "FFTW3DIR=${fftwSinglePrec}/include"
+    "FFTW3DIR=${fftwSinglePrec.dev}/include"
     "LIBTIFFDIR=${libtiff}/include"
   ];
 
