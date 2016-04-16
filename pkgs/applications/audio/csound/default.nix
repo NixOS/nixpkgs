@@ -23,8 +23,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake libsndfile flex bison alsaLib libpulseaudio tcltk ];
 
-  NIX_LDFLAGS="-L${stdenv.cc.libc.out}/lib";
-
   meta = {
     description = "sound design, audio synthesis, and signal processing system, providing facilities for music composition and performance on all major operating systems and platforms";
     homepage = http://www.csounds.com/;

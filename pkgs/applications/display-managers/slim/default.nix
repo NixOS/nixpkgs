@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ cmake pkgconfig libjpeg libpng fontconfig freetype
-      pam dbus_libs (stdenv.cc.libc.out or null)
+      pam dbus_libs
       xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXmu xorg.libXft makeWrapper
     ];
 
