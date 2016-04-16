@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt4, vcg, glew }:
+{ stdenv, fetchFromGitHub, qt4, qmake4Hook, vcg, glew }:
 
 stdenv.mkDerivation {
   name = "openbrf-2016-01-09";
@@ -10,16 +10,14 @@ stdenv.mkDerivation {
     sha256 = "0laikpz0ljz7l5fgapwj09ygizmvj1iywnpfgfd0i14j46s134xb";
   };
 
-  buildInputs = [ qt4 vcg glew ];
+  buildInputs = [ qt4 qmake4Hook vcg glew ];
 
   enableParallelBuilding = true;
 
+  qmakeFlags = [ "openBrf.pro" ];
+
   postPatch = ''
     sed -i 's,^VCGLIB .*,VCGLIB = ${vcg}/include,' openBrf.pro
-  '';
-
-  configurePhase = ''
-    qmake PREFIX=$out openBrf.pro
   '';
 
   installPhase = ''
