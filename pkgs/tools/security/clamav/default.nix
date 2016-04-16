@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre ];
 
   configureFlags = [
-    "--with-zlib=${zlib}"
+    "--with-zlib=${zlib.dev}"
     "--with-libbz2-prefix=${bzip2.dev}"
     "--with-iconv-dir=${libiconv}"
     "--with-xml=${libxml2}"

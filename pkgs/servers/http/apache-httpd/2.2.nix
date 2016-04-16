@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
   configureFlags = ''
-    --with-z=${zlib}
+    --with-z=${zlib.dev}
     --with-pcre=${pcre.dev}
     --enable-mods-shared=all
     --enable-authn-alias

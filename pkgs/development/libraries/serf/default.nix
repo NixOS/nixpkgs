@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    scons PREFIX="$out" OPENSSL="${openssl.dev}" ZLIB="${zlib}" APR="$(echo "${apr.dev}"/bin/*-config)" \
+    scons PREFIX="$out" OPENSSL="${openssl.dev}" ZLIB="${zlib.dev}" APR="$(echo "${apr.dev}"/bin/*-config)" \
         APU="$(echo "${aprutil.dev}"/bin/*-config)" CC="${
           if stdenv.cc.isClang then "clang" else "${stdenv.cc}/bin/gcc"
         }" ${

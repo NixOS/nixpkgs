@@ -45,7 +45,7 @@ let
 
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
-    configureFlags = "--with-zlib-dir=${pkgs.zlib}";
+    configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
   };
 
   memcached = if isPhp7 then memcachedPhp7 else memcached22;
@@ -56,7 +56,7 @@ let
     sha256 = "0n4z2mp4rvrbmxq079zdsrhjxjkmhz6mzi7mlcipz02cdl7n1f8p";
 
     configureFlags = [
-      "--with-zlib-dir=${pkgs.zlib}"
+      "--with-zlib-dir=${pkgs.zlib.dev}"
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
@@ -74,7 +74,7 @@ let
     };
 
     configureFlags = [
-      "--with-zlib-dir=${pkgs.zlib}"
+      "--with-zlib-dir=${pkgs.zlib.dev}"
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 

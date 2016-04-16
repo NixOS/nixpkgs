@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ optional (sqlite != null) "--with-sqlite3=${sqlite.dev}"
     ++ optional (postgresql != null) "--with-postgresql=${postgresql}"
     ++ optional (libmysql != null) "--with-mysql=${libmysql}"
-    ++ optional (zlib != null) "--with-zlib=${zlib}"
+    ++ optional (zlib != null) "--with-zlib=${zlib.dev}"
     ++ optional (lzo != null) "--with-lzo=${lzo}"
     ++ optional (jansson != null) "--with-jansson=${jansson}"
     ++ optional (acl != null) "--enable-acl"

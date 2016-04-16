@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    gmp="${gmp.dev}" zlib="${zlib}" PATH=$PATH:`pwd`/seam-support/install/bin make -C make all PREFIX="$out"
+    gmp="${gmp.dev}" zlib="${zlib.dev}" PATH=$PATH:`pwd`/seam-support/install/bin make -C make all PREFIX="$out"
   '';
 
   meta = {
