@@ -14584,9 +14584,7 @@ in
 
   qgroundcontrol = qt55.callPackage ../applications/science/robotics/qgroundcontrol { };
 
-  qtbitcointrader = callPackage ../applications/misc/qtbitcointrader {
-    qt = qt4;
-  };
+  qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
   pahole = callPackage ../development/tools/misc/pahole {};
 

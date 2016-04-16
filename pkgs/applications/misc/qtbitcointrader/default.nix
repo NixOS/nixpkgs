@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt }:
+{ stdenv, fetchFromGitHub, qt4, qmake4Hook }:
 
 let
   version = "1.08.03";
@@ -13,23 +13,24 @@ stdenv.mkDerivation {
     sha256 = "0kxb0n11agqid0nyqdspfndm03b8l0nl8x4yx2hsrizs6m5z08h4";
   };
 
-  buildInputs = [ qt ];
+  buildInputs = [ qt4 ];
+
+  nativeBuildHooks = [ qmake4Hook ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
-  configurePhase = ''
-    qmake \
-      PREFIX=$out \
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags \
       DESKTOPDIR=$out/share/applications \
       ICONDIR=$out/share/pixmaps \
-        QtBitcoinTrader_Desktop.pro
+    "
   '';
 
   meta = with stdenv.lib;
     { description = "Secure bitcoin trading client";
       homepage = https://centrabit.com/;
       license = licenses.lgpl3;
-      platforms = qt.meta.platforms;
+      platforms = qt4.meta.platforms;
       maintainers = [ maintainers.ehmry ];
     };
 }
