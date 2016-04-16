@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeQtWrapper
 , libX11, libxcb, mesa
-, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras
+, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmakeHook
 , ffmpeg
 , libchardet
 , mpg123
@@ -76,6 +76,8 @@ stdenv.mkDerivation rec {
       ${optionalString youtubeSupport "--prefix PATH ':' '${youtube-dl}/bin'"}
   '';
 
+  dontUseQmakeConfigure = true;
+
   configureFlags = with stdenv.lib;
                    [ "--qmake=qmake" ]
                    ++ optional jackSupport "--enable-jack"
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl python which qttools makeQtWrapper ];
+  nativeBuildInputs = [ pkgconfig perl python which qttools makeQtWrapper qmakeHook ];
 
   enableParallelBuilding = true;
 
