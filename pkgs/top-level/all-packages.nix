@@ -3143,7 +3143,7 @@ in
   screen-message = callPackage ../tools/X11/screen-message { };
 
   screencloud = callPackage ../applications/graphics/screencloud {
-    quazip = qt5.quazip.override { qt = qt4; };
+    quazip = qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
   };
 
   scrot = callPackage ../tools/graphics/scrot { };
