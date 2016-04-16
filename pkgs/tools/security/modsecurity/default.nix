@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "--enable-static"
     "--with-curl=${curl.dev}"
     "--with-apxs=${apacheHttpd.dev}/bin/apxs"
-    "--with-pcre=${pcre}"
+    "--with-pcre=${pcre.dev}"
     "--with-apr=${apr.dev}"
     "--with-apu=${aprutil.dev}/bin/apu-1-config"
     "--with-libxml=${libxml2}"

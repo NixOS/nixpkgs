@@ -271,7 +271,7 @@ let
     buildPhase = let
       luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
 
-      pcreVariable = "PCRE_DIR=${pcre}";
+      pcreVariable = "PCRE_DIR=${pcre.dev}";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";

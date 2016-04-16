@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     --with-apr=${apr.dev}
     --with-apr-util=${aprutil.dev}
     --with-z=${zlib}
-    --with-pcre=${pcre}
+    --with-pcre=${pcre.dev}
     --disable-maintainer-mode
     --disable-debugger-mode
     --enable-mods-shared=all

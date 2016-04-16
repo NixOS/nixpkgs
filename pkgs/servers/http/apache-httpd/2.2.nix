@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
   configureFlags = ''
     --with-z=${zlib}
-    --with-pcre=${pcre}
+    --with-pcre=${pcre.dev}
     --enable-mods-shared=all
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}

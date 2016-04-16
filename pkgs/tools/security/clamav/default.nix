@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--with-libncurses-prefix=${ncurses.dev}"
     "--with-libcurl=${curl.dev}"
-    "--with-pcre=${pcre}"
+    "--with-pcre=${pcre.dev}"
     "--enable-milter"
     "--disable-clamav"
   ];

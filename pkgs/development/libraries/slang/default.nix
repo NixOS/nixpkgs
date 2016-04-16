@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|/bin/ln|ln|" src/Makefile.in
     sed -i -e "s|-ltermcap|-lncurses|" ./configure
   '';
-  configureFlags = "--with-png=${libpng.dev} --with-z=${zlib} --with-pcre=${pcre} --with-readline=${readline}";
+  configureFlags = "--with-png=${libpng.dev} --with-z=${zlib} --with-pcre=${pcre.dev} --with-readline=${readline}";
   buildInputs = [ pcre libpng zlib readline ];
   propagatedBuildInputs = [ ncurses ];
 
