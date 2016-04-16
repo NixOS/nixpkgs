@@ -244,7 +244,7 @@ stdenv.mkDerivation ({
           ++ stdenv.lib.optional (libpthread != null) libpthread;
         extraCPPSpec =
           concatStrings (intersperse " "
-                          (map (x: "-I${x}/include") extraCPPDeps));
+                          (map (x: "-I${x.dev or x}/include") extraCPPDeps));
         extraLibSpec =
           if libpthreadCross != null
           then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
@@ -467,7 +467,7 @@ stdenv.mkDerivation ({
   # Likewise, the LTO code doesn't find zlib.
 
   CPATH = concatStrings
-            (intersperse ":" (map (x: x + "/include")
+            (intersperse ":" (map (x: "${x.dev or x}/include")
                                   (optionals (zlib != null) [ zlib ]
                                    ++ optionals langJava [ boehmgc ]
                                    ++ optionals javaAwtGtk xlibs
