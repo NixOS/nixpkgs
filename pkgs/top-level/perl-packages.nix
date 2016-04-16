@@ -1819,7 +1819,11 @@ let self = _self // overrides; _self = with self; {
       sha256 = "054d0db62df90f22601f2a18fc84e9ca026d81601f5940b2fcc543e39d69b36b";
     };
     buildInputs = [ ModuleBuild ];
-    propagatedBuildInputs = [ParamsClassify];
+    propagatedBuildInputs = [ ParamsClassify self."if" ];
+    meta = {
+      description = "Dynamic class mixing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   ClassMOP = Moose;
