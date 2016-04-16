@@ -16035,7 +16035,7 @@ in
 
   beep = callPackage ../misc/beep { };
 
-  brgenml1lpr = callPackage ../misc/cups/drivers/brgenml1lpr {};
+  brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
