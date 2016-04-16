@@ -7818,7 +7818,7 @@ in modules // {
        cat > site.cfg << END
        [samplerate]
        library_dirs=${pkgs.libsamplerate.out}/lib
-       include_dirs=${pkgs.libsamplerate}/include
+       include_dirs=${pkgs.libsamplerate.dev}/include
        END
     '';
 
