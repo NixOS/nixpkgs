@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
       "--with-pnglibdir=${libpng.out}/lib"
-      "--with-jpegincludedir=${libjpeg}/include"
+      "--with-jpegincludedir=${libjpeg.dev}/include"
       "--with-jpeglibdir=${libjpeg.out}/lib"
       "--with-expatincludedir=${expat.dev}/include"
       "--with-expatlibdir=${expat.out}/lib"

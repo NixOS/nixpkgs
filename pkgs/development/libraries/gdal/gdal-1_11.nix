@@ -24,7 +24,7 @@ composableDerivation.composableDerivation {} (fixed: rec {
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
 
   configureFlags = [
-    "--with-jpeg=${libjpeg}"
+    "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff}" # optional (without largetiff support)
     "--with-libpng=${libpng}"   # optional
     "--with-libz=${zlib}"       # optional

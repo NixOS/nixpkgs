@@ -7123,7 +7123,7 @@ in modules // {
     HDF5_DIR="${pkgs.hdf5}";
     NETCDF4_DIR="${pkgs.netcdf}";
     CURL_DIR="${pkgs.curl.dev}";
-    JPEG_DIR="${pkgs.libjpeg}";
+    JPEG_DIR="${pkgs.libjpeg.dev}";
 
     meta = {
       description = "interface to netCDF library (versions 3 and 4)";
