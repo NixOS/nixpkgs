@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--without-x"
     "--with-berkeley-db=${db}"
   ] ++ optionals (!libOnly) [
-    "--with-openldap=${openldap}"
+    "--with-openldap=${openldap.dev}"
   ] ++ optionals (!stdenv.isFreeBSD) [
     "--with-capng"
   ];

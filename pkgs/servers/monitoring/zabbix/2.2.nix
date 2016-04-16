@@ -47,7 +47,7 @@ in
     ++ stdenv.lib.optional enableJabber "--with-jabber=${minmay}"
     ++ stdenv.lib.optional enableSnmp "--with-net-snmp"
     ++ stdenv.lib.optional enableSsh "--with-ssh2=${libssh2.dev}"
-    ++ stdenv.lib.optional enableLdap "--with-ldap=${openldap}";
+    ++ stdenv.lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
     postPatch = ''
       sed -i -e 's/iksemel/minmay/g' configure src/libs/zbxmedia/jabber.c

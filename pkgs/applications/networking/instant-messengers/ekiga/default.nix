@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-ldap-dir=${openldap}"
+    "--with-ldap-dir=${openldap.dev}"
     "--with-libsasl2-dir=${cyrus_sasl.dev}"
     "--with-boost-libdir=${boost.out}/lib"
     "--disable-gconf"
