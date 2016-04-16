@@ -14154,6 +14154,10 @@ in
 
   neovim-pygui = pythonPackages.neovim_gui;
 
+  vis = callPackage ../applications/editors/vis {
+    inherit (lua52Packages) lpeg;
+  };
+
   virt-viewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
