@@ -73,8 +73,8 @@ let version = "4.9.3";
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       # The NXConstStr.patch can be removed at 4.9.4
-      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch; 
-	  
+      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch;
+
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -218,7 +218,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = if langJava then ["out" "man" "info"] else [ "out" "lib" "man" "info" ];
+  outputs = if langJava || langGo then ["out" "man" "info"]
+    else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -316,7 +317,7 @@ stdenv.mkDerivation ({
       )
     fi
   ''
-  + stdenv.lib.optionalString langJava ''
+  + stdenv.lib.optionalString (langJava || langGo) ''
     export lib=$out;
   ''
   ;
