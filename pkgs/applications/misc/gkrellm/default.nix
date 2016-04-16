@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
      echo "patching makefiles..."
      for i in Makefile src/Makefile server/Makefile
      do
-       sed -i "$i" -e "s|/usr/X11R6|${libX11}|g ; s|-lICE|-lX11 -lICE|g"
+       sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
      done '';
 
   buildPhase = ''
