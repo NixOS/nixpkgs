@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = ''
     -I${SDL.dev}/include/SDL
-    -I${freetype}include/freetype2
+    -I${freetype.dev}include/freetype2
   '';
 
   meta = {

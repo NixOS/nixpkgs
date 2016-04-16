@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     mkdir -p $out
     sed -e 's/chown/true/' \
         -e 's/chgrp/true/' \
-        -e 's@^CFLAGS_FT =.*@CFLAGS_FT=-DUSE_FREETYPE -I${freetype}/include/freetype2@' \
+        -e 's@^CFLAGS_FT =.*@CFLAGS_FT=-DUSE_FREETYPE -I${freetype.dev}/include/freetype2@' \
         -i scripts/{inst_dir,inst_file} Makefile
     makeFlags="INSTDIR=$out OWNER=`id -u`"
   '';

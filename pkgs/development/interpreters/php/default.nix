@@ -133,7 +133,7 @@ let
           # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
           configureFlags = [
             "--with-gd"
-            "--with-freetype-dir=${freetype}"
+            "--with-freetype-dir=${freetype.dev}"
             "--with-png-dir=${libpng}"
             "--with-jpeg-dir=${libjpeg}"
           ];
