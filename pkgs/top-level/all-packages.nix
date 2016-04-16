@@ -9162,9 +9162,7 @@ in
     libusb = libusb1;
   };
 
-  yubikey-personalization-gui = callPackage ../tools/misc/yubikey-personalization-gui {
-    qt = qt4;
-  };
+  yubikey-personalization-gui = callPackage ../tools/misc/yubikey-personalization-gui { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
