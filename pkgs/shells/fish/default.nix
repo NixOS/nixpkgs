@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       --replace "| ul" "| ${utillinux}/bin/ul" 
 
     for cur in $out/share/fish/functions/*.fish; do
-      substituteInPlace "$cur" --replace "/usr/bin/getent" "${glibc}/bin/getent" 
+      substituteInPlace "$cur" --replace "/usr/bin/getent" "${glibc.bin}/bin/getent"
     done
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"
