@@ -277,7 +277,7 @@ in
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    systemd.packages = [ cups ];
+    systemd.packages = [ cups.out ];
 
     systemd.services.cups =
       { wantedBy = [ "multi-user.target" ];
