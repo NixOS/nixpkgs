@@ -14424,6 +14424,8 @@ in
     w3m = w3m-batch;
   };
 
+  xdgmenumaker = callPackage ../applications/misc/xdgmenumaker { };
+
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen_4_5_0 = callPackage ../applications/virtualization/xen/4.5.0.nix { stdenv = overrideCC stdenv gcc49; };
