@@ -8908,6 +8908,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  NetDomainTLD = buildPerlPackage rec {
+    name = "Net-Domain-TLD-1.74";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AL/ALEXP/${name}.tar.gz";
+      sha256 = "bf936cc20834d5b9497e33dc41c2da6a58536b7a1e0df0b8f6ce7ed5111ca868";
+    };
+    meta = {
+      description = "Work with TLD names";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   NetHTTP = buildPerlPackage {
     name = "Net-HTTP-6.09";
     src = fetchurl {
