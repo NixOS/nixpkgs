@@ -1,20 +1,19 @@
---- a/src/web_client.c.orig     2016-04-15 19:00:49.912539101 +0200
-+++ b/src/web_client.c  2016-04-15 19:01:19.379960970 +0200
-@@ -293,6 +293,7 @@
-        }
- 
-        // check if the file is owned by us
+--- a/src/web_client.c.orig	2016-04-17 11:34:20.044455323 +0200
++++ b/src/web_client.c	2016-04-17 11:34:47.432897957 +0200
+@@ -291,14 +291,14 @@
+ 		buffer_sprintf(w->response.data, "File '%s' does not exist, or is not accessible.", filename);
+ 		return 404;
+ 	}
+-
 +#if 0
-        if(stat.st_uid != web_files_uid()) {
-                error("%llu: File '%s' is owned by user %d (I run as user %d). Access Denied.", w->id, webfilename, stat.st_uid, getuid());
-                buffer_sprintf(w->response.data, "Access to file '%s' is not permitted.", filename);
-@@ -303,7 +304,7 @@
-                snprintf(webfilename, FILENAME_MAX+1, "%s/index.html", filename);
-                return mysendfile(w, webfilename);
-        }
+ 	// check if the file is owned by us
+ 	if(stat.st_uid != web_files_uid()) {
+ 		error("%llu: File '%s' is owned by user %d (I run as user %d). Access Denied.", w->id, webfilename, stat.st_uid, getuid());
+ 		buffer_sprintf(w->response.data, "Access to file '%s' is not permitted.", filename);
+ 		return 403;
+ 	}
 -
 +#endif
-        if((stat.st_mode & S_IFMT) != S_IFREG) {
-                error("%llu: File '%s' is not a regular file. Access Denied.", w->id, webfilename);
-                buffer_sprintf(w->response.data, "Access to file '%s' is not permitted.", filename);
-
+ 	if((stat.st_mode & S_IFMT) == S_IFDIR) {
+ 		snprintf(webfilename, FILENAME_MAX+1, "%s/index.html", filename);
+ 		return mysendfile(w, webfilename);
