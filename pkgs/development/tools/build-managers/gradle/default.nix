@@ -22,7 +22,7 @@ rec {
         mkdir patching
         pushd patching
         jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-0.10.jar
-        patchelf --set-rpath "${stdenv.cc.cc}/lib:${stdenv.cc.cc}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
+        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
         jar cf native-platform-linux-${arch}-0.10.jar .
         mv native-platform-linux-${arch}-0.10.jar $out/lib/gradle/lib/
         popd
