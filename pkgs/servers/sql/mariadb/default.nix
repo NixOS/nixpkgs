@@ -103,15 +103,6 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-    # Fix library rpaths
-    # TODO: put this in the stdenv to prepare for wide usage of multi-output derivations
-    for file in $(grep -rl $out/lib $lib); do
-      install_name_tool -delete_rpath $out/lib -add_rpath $lib $file
-    done
-
-  '' + ''
     # Fix the mysql_config
     sed -i $out/bin/mysql_config \
       -e 's,-lz,-L${zlib.out}/lib -lz,g' \
