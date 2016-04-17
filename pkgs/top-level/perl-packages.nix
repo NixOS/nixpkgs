@@ -2932,6 +2932,22 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DataValidateIP = buildPerlPackage rec {
+    name = "Data-Validate-IP-0.25";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "b0386bb8aa31ed1b9b58760745eaab4d29edb0c7bdc7dc16dd5479d21f26ee3b";
+    };
+    buildInputs = [ TestRequires ];
+    propagatedBuildInputs = [ NetAddrIP ];
+    meta = {
+      homepage = http://metacpan.org/release/Data-Validate-IP;
+      description = "IPv4 and IPv6 validation methods";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   DataVisitor = buildPerlPackage rec {
     name = "Data-Visitor-0.30";
     src = fetchurl {
