@@ -2948,6 +2948,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DataValidateURI = buildPerlPackage rec {
+    name = "Data-Validate-URI-0.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SO/SONNEN/${name}.tar.gz";
+      sha256 = "f06418d2a4603913d1b6ce52b167dd13e787e13bf2be325a065df7d408f79c60";
+    };
+    propagatedBuildInputs = [ DataValidateDomain DataValidateIP ];
+    meta = {
+      description = "Common URL validation methods";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   DataVisitor = buildPerlPackage rec {
     name = "Data-Visitor-0.30";
     src = fetchurl {
