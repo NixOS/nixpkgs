@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
     (if stdenv.is64bit then snappy else null)
     pcre libxml2 boost judy bison libevent cracklib
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
+    ++ stdenv.lib.optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
