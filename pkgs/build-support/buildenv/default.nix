@@ -49,8 +49,11 @@ runCommand name
     pkgs = builtins.toJSON (map (drv: {
       paths =
         # First add the usual output(s): respect if user has chosen explicitly,
-        # and otherwise use `meta.outputsToInstall` (guaranteed to exist by stdenv).
-        (if (drv.outputUnspecified or false)
+        # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
+        # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
+        # aren't expected to have multiple outputs.
+        (if drv.outputUnspecified or false
+            && drv.meta.outputsToInstall or null != null
           then map (outName: drv.${outName}) drv.meta.outputsToInstall
           else [ drv ])
         # Add any extra outputs specified by the caller of `buildEnv`.
