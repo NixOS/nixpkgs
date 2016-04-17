@@ -166,5 +166,15 @@ in
       export XAPIAN_CONFIG=${xapian}/bin/xapian-config
     '';
   };
+
+  # patching shebangs would fail on the templates/Executable file, so we
+  # temporarily remove the executable flag.
+  bundler = attrs:
+    let
+      templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
+    in {
+      preFixup  = "chmod -x $out/${templates}/Executable";
+      postFixup = "chmod +x $out/${templates}/Executable";
+    };
 }
 
