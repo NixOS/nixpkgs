@@ -502,7 +502,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Load subroutines only on demand";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
