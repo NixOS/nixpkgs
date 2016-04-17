@@ -2917,6 +2917,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DataValidateDomain = buildPerlPackage rec {
+    name = "Data-Validate-Domain-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "f2ae0830f423a46080b185ffc2428c9a37278167a8d19bfdeec26d977b43822c";
+    };
+    propagatedBuildInputs = [ NetDomainTLD ];
+    meta = {
+      homepage = http://metacpan.org/release/Data-Validate-Domain;
+      description = "Domain and host name validation";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   DataVisitor = buildPerlPackage rec {
     name = "Data-Visitor-0.30";
     src = fetchurl {
