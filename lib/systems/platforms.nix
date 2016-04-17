@@ -307,6 +307,14 @@ rec {
     uboot = null;
   };
 
+  scaleway-c1 = armv7l-hf-multiplatform // {
+    gcc = {
+      cpu = "cortex-a9";
+      fpu = "vfpv3";
+      float = "hard";
+    };
+  };
+
   guruplug = sheevaplug // {
     # Define `CONFIG_MACH_GURUPLUG' (see
     # <http://kerneltrap.org/mailarchive/git-commits-head/2010/5/19/33618>)
