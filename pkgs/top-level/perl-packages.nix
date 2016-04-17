@@ -527,17 +527,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  BC = buildPerlPackage {
-    name = "B-C-1.52";
+  BC = buildPerlPackage rec {
+    name = "B-C-1.54";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/B-C-1.52.tar.gz;
-      sha256 = "072b4b9e39431ad8ef5173557c26ade97f985cf150f6580a20f42dd9fc3651a7";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
+      sha256 = "d07e5af5fb798fcd3f4eda5e40744a14c1b3ef9e585a7dca55b5db31cb1d28d3";
     };
     propagatedBuildInputs = [ BFlags IPCRun Opcodes ];
     meta = {
       homepage = http://www.perl-compiler.org;
       description = "Perl compiler";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
