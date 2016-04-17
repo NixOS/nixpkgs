@@ -1819,7 +1819,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/S/SC/SCHWIGON/class-methodmaker/${name}.tar.gz";
       sha256 = "0a03i4k3a33qqwhykhz5k437ld5mag2vq52vvsy03gbynb65ivsy";
     };
-    preConfigure = "patchShebangs .";
+    # Remove unnecessary, non-autoconf, configure script.
+    prePatch = "rm configure";
     meta = {
       description = "A module for creating generic methods";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
