@@ -194,7 +194,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestDeep TestException ];
     meta = {
       description = "A persistence framework for session data";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
