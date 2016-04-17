@@ -4302,6 +4302,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  EmailValidLoose = buildPerlPackage rec {
+    name = "Email-Valid-Loose-0.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "e718e76eddee240251c999e139c8cbe6f2cc80192da5af875cbd12fa8ab93a59";
+    };
+    propagatedBuildInputs = [ EmailValid ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   Encode = buildPerlPackage {
     name = "Encode-2.78";
     src = fetchurl {
