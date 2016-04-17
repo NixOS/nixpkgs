@@ -2850,7 +2850,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ DataPage MathRound ];
     meta = {
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
