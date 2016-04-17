@@ -312,7 +312,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Simpler definition of attribute handlers";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
