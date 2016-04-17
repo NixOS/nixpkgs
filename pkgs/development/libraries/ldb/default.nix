@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     "--builtin-libraries=replace"
   ];
 
+  stripDebugList= [ "bin" "lib" "modules" ]; # also strip modules.
+
   meta = with stdenv.lib; {
     description = "a LDAP-like embedded database";
     homepage = http://ldb.samba.org/;
