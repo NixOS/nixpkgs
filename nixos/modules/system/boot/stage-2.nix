@@ -20,6 +20,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
+    inherit (config.boot) cleanTmpDir tmpOnTmpfs tmpFsSize;
     inherit (config.boot) devShmSize runSize;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;

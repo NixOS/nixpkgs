@@ -24,16 +24,15 @@ with lib;
       '';
     };
 
-  };
-
-  ###### implementation
-
-  config = {
-
-    systemd.additionalUpstreamSystemUnits = optional config.boot.tmpOnTmpfs "tmp.mount";
-
-    systemd.tmpfiles.rules = optional config.boot.cleanTmpDir "D! /tmp 1777 root root";
-
+    boot.tmpFsSize = mkOption {
+        default = "90%";
+        example = "256m";
+        type = types.str;
+        description = ''
+          Size limit for the <filename>/tmp</filename> tmpfs. Look at mount(8), tmpfs size option,
+          for the accepted syntax.
+        '';
+    };
   };
 
 }

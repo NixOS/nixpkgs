@@ -91,6 +91,12 @@ if ! mountpoint -q /dev/shm; then
 fi
 mkdir -m 0755 -p /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs usbfs /proc/bus/usb # UML doesn't have USB by default
+
+# Clean tmp directory, if requested
+if [ -n "@cleanTmpDir@" ]; then
+    rm -rf /tmp
+fi
+
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log /var/lib /var/db
 mkdir -m 0755 -p /nix/var
@@ -109,6 +115,10 @@ rm -f /etc/{group,passwd,shadow}.lock
 # Also get rid of temporary GC roots.
 rm -rf /nix/var/nix/gcroots/tmp /nix/var/nix/temproots
 
+# Create a tmpfs on /tmp, if tmpOnTmpfs is enabled
+if [ -n "@tmpOnTmpfs@" ]; then
+    mount -t tmpfs -o "mode=1777,strictatime,size=@tmpFsSize@" tmpfs /tmp
+fi
 
 # Create a tmpfs on /run to hold runtime state for programs such as
 # udev (if stage 1 hasn't already done so).

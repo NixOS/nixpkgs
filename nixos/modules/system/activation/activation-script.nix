@@ -158,8 +158,11 @@ in
         ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
         ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
         ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
+      '' + optionalString config.boot.tmpOnTmpfs ''
+        if [ mountpoint -q /tmp ]; then
+          ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.tmpFsSize}" none /tmp
+        fi
       '';
-
   };
 
 }
