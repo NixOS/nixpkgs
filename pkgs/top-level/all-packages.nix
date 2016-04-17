@@ -16035,6 +16035,8 @@ in
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
+  areca = callPackage ../applications/backup/areca { };
+
   beep = callPackage ../misc/beep { };
 
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
