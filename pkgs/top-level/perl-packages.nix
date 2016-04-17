@@ -12786,16 +12786,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextvFileasData = buildPerlPackage {
+  TextvFileasData = buildPerlPackage rec {
     name = "Text-vFile-asData-0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RC/RCLAMP/Text-vFile-asData-0.08.tar.gz;
+      url = "mirror://cpan/authors/id/R/RC/RCLAMP/${name}.tar.gz";
       sha256 = "b291ab5e0f987c5172560a692234711a75e4596d83475f72d01278369532f82a";
     };
     propagatedBuildInputs = [ ClassAccessorChained ];
     meta = {
       description = "Parse vFile formatted files into data structures";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
