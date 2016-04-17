@@ -2090,7 +2090,7 @@ let
   };
 
   hologram = buildGoPackage rec {
-    rev  = "63014b81675e1228818bf36ef6ef0028bacad24b";
+    rev  = "8d86e3fdcbfd967ba58d8de02f5e8173c101212e";
     name = "hologram-${stdenv.lib.strings.substring 0 7 rev}";
     goPackagePath = "github.com/AdRoll/hologram";
 
@@ -2098,9 +2098,9 @@ let
       inherit rev;
       owner  = "AdRoll";
       repo   = "hologram";
-      sha256 = "0k8g7dwrkxdvmzs4aa8zz39qa8r2danc4x40hrblcgjhfcwzxrzr";
+      sha256 = "0i0p170brdsczfz079mqbc5y7x7mdph04p3wgqsd7xcrddvlkkaf";
     };
-    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox ];
+    buildInputs = [ crypto protobuf goamz rgbterm go-bindata go-homedir ldap g2s gox gopass ];
   };
 
   http-authentication = buildFromGitHub {
