@@ -3305,15 +3305,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DevelPPPort = buildPerlPackage {
-    name = "Devel-PPPort-3.31";
+  DevelPPPort = buildPerlPackage rec {
+    name = "Devel-PPPort-3.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WO/WOLFSAGE/Devel-PPPort-3.31.tar.gz;
-      sha256 = "ead2c49f0442a26890723231a92d3c0ac6ac297b814839e421a77d7889a2471d";
+      url = "mirror://cpan/authors/id/W/WO/WOLFSAGE/${name}.tar.gz";
+      sha256 = "257801ef441f317bc79d20cdc72344e5b4ff6f685d65bdf79ff153e733fa3856";
     };
     meta = {
       description = "Perl/Pollution/Portability";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
