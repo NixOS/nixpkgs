@@ -8750,10 +8750,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetAddrIP = buildPerlPackage rec {
-    name = "NetAddr-IP-4.075";
+    name = "NetAddr-IP-4.079";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKER/${name}.tar.gz";
-      sha256 = "0fc8jvrcp42szscnn41sxz8z8qa4fr4dr9i9s067hvrhiyxpb0mb";
+      sha256 = "ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7";
+    };
+    meta = {
+      description = "Manages IPv4 and IPv6 addresses and subnets";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
