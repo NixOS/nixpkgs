@@ -2726,6 +2726,20 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
   };
 
+  DataFormValidator = buildPerlModule rec {
+    name = "Data-FormValidator-4.81";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARKSTOS/${name}.tar.gz";
+      sha256 = "f844056231b2eeb4068cafbcab1ddf5d46cb348bd5cfb1d234421c09ee8a0de3";
+    };
+    buildInputs = [ CGI ModuleBuild ];
+    propagatedBuildInputs = [ DateCalc EmailValid FileMMagic ImageSize MIMETypes Perl6Junction RegexpCommon ];
+    meta = {
+      description = "Validates user input (usually from an HTML form) based on input profile";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DataGUID = buildPerlPackage {
     name = "Data-GUID-0.048";
     src = fetchurl {
