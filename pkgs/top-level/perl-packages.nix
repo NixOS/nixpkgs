@@ -4957,6 +4957,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ FileBaseDir FileDesktopEntry ];
   };
 
+  FileMMagic = buildPerlPackage rec {
+    name = "File-MMagic-1.30";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KN/KNOK/${name}.tar.gz";
+      sha256 = "cf0c1b1eb29705c02d97c2913648009c0be42ce93ec24b36c696bf2d4f5ebd7e";
+    };
+    meta = {
+      description = "Guess file type from contents";
+      license = stdenv.lib.licenses.free; # Some form of BSD4/Apache mix.
+    };
+  };
+
   FileModified = buildPerlPackage {
     name = "File-Modified-0.07";
     src = fetchurl {
