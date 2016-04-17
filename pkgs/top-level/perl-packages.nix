@@ -3205,14 +3205,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeTimeZone = buildPerlPackage rec {
-    name = "DateTime-TimeZone-1.94";
+    name = "DateTime-TimeZone-1.97";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1crn4n6izzw2r0ymcb7px9b1bkis8hzczs48skk7szvs3svn3naz";
+      sha256 = "68a5f4b0a77074f9cc96b2c1d2282e2110db74f55e43fbad72926cee0fd434c8";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ListAllUtils ModuleRuntime ParamsValidate TryTiny ];
     meta = {
+      homepage = http://metacpan.org/release/DateTime-TimeZone;
       description = "Time zone object base class and factory";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
