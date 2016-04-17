@@ -10,6 +10,8 @@ rec {
     aclSupport = false;
   });
 
+  tarMinimal = gnutar.override { acl = null; };
+
   busyboxMinimal = busybox.override {
     useMusl = true;
     enableStatic = true;
@@ -79,7 +81,7 @@ rec {
         cp -d ${gnugrep.out}/bin/grep $out/bin
         cp ${gawk.out}/bin/gawk $out/bin
         cp -d ${gawk.out}/bin/awk $out/bin
-        cp ${gnutar.out}/bin/tar $out/bin
+        cp ${tarMinimal.out}/bin/tar $out/bin
         cp ${gzip.out}/bin/gzip $out/bin
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake.out}/bin/* $out/bin
