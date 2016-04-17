@@ -1189,6 +1189,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CatalystPluginFormValidatorSimple = buildPerlPackage rec {
+    name = "Catalyst-Plugin-FormValidator-Simple-0.15";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DH/DHOSS/${name}.tar.gz";
+      sha256 = "486c6a0e8f410fd017279f4804ab9e35ba46321d33a0a9721fe1e08a391de7a0";
+    };
+    propagatedBuildInputs = [ CatalystPluginFormValidator CatalystRuntime FormValidatorSimple ];
+    meta = {
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   CatalystPluginUnicodeEncoding = buildPerlPackage {
     name = "Catalyst-Plugin-Unicode-Encoding-1.9";
     src = fetchurl {
