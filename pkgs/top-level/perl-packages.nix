@@ -3172,7 +3172,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://search.cpan.org/dist/DateTime-Format-W3CDTF/;
       description = "Parse and format W3CDTF datetime strings";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
