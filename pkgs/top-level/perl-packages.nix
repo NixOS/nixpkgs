@@ -2630,17 +2630,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CryptX = buildPerlModule {
-    name = "CryptX-0.026";
+  CryptX = buildPerlPackage rec {
+    name = "CryptX-0.030";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.026.tar.gz;
-      sha256 = "0465843c86eb16b13717fde5b803c7390bb14805e277e1a1841a62e5124debc2";
+      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
+      sha256 = "b0e26b4c4de66134f1f1ae4227fdd18cf10f95cecc64a651a8af2710ef7519e5";
     };
-    buildInputs = [ JSONMaybeXS ];
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
       description = "Crypto toolkit";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
