@@ -3286,8 +3286,8 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       homepage = http://search.cpan.org/dist/Devel-DProf;
-      description = "A B<DEPRECATED> Perl code profiler";
-      license = "perl";
+      description = "A DEPRECATED Perl code profiler";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
