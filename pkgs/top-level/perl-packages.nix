@@ -3191,16 +3191,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeSet = buildPerlPackage {
-    name = "DateTime-Set-0.3400";
+  DateTimeSet = buildPerlPackage rec {
+    name = "DateTime-Set-0.3600";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FG/FGLOCK/DateTime-Set-0.3400.tar.gz;
-      sha256 = "1b27699zkj68w5ll9chjhs52vmf39f9via6x5r5844as30qh9zxb";
+      url = "mirror://cpan/authors/id/F/FG/FGLOCK/${name}.tar.gz";
+      sha256 = "83503960c773efadfe2b0255e61bc1eb531bb6f497463d3b3880d7a516bc2f13";
     };
     propagatedBuildInputs = [ DateTime SetInfinite ];
     meta = {
       description = "DateTime set objects";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
