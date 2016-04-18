@@ -47,11 +47,28 @@ _overrideFirst outputInfo "info" "doc" "$outputMan"
 _multioutConfig() {
     if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
+    # try to detect share/doc/${shareDocName}
+    # Note: sadly, $configureScript detection comes later in configurePhase,
+    #   and reordering would cause more trouble than worth.
+    if [ -z "$shareDocName" ]; then
+        local confScript="$configureScript"
+        if [ -z "$confScript" ] && [ -x ./configure ]; then
+            confScript=./configure
+        fi
+        if [ -f "$confScript" ]; then
+            local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
+        fi
+                                    # PACKAGE_TARNAME sometimes contains garbage.
+        if [ -n "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z-_0-9]'; then
+            shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+        fi
+    fi
+
     configureFlags="\
         --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
         --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
         --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc \
+        --docdir=${!outputDoc}/share/doc/${shareDocName} \
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
         --localedir=${!outputLib}/share/locale \
         $configureFlags"
@@ -61,6 +78,7 @@ _multioutConfig() {
         m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
         $installFlags"
 }
+
 
 # Add rpath prefixes to library paths, and avoid stdenv doing it for $out.
 _addRpathPrefix "${!outputLib}"
