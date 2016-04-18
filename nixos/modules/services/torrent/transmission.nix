@@ -124,7 +124,7 @@ in
           ${pkgs.xz.out}/lib/liblzma*.so*               mr,
           ${pkgs.libgcrypt.out}/lib/libgcrypt*.so*      mr,
           ${pkgs.libgpgerror.out}/lib/libgpg-error*.so* mr,
-          ${pkgs.libnghttp2.out}/lib/libnghttp2*.so*    mr,
+          ${pkgs.nghttp2.lib}/lib/libnghttp2*.so*       mr,
           ${pkgs.c-ares.out}/lib/libcares*.so*          mr,
           ${pkgs.libcap.out}/lib/libcap*.so*            mr,
           ${pkgs.attr.out}/lib/libattr*.so*             mr,
