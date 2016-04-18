@@ -7977,6 +7977,23 @@ in modules // {
     };
   });
 
+  distribute = buildPythonPackage rec {
+    version = "0.7.3";
+    name = "distribute-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/distribute/distribute-${version}.zip";
+      sha256 = "0plc2dkmfd6p8lsqqvl1rryz03pf4i5198igml72zxywb78aiirx";
+    };
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "distribute legacy wrapper";
+      homepage = http://packages.python.org/distribute;
+    };
+  };
+
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-${version}";
     version = "2.39";
