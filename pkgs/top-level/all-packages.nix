@@ -14948,6 +14948,9 @@ in
 
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;
+    mygui = mygui.override {
+      withOgre = true;
+    };
   };
 
   rili = callPackage ../games/rili { };
