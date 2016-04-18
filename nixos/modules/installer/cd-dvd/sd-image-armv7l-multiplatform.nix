@@ -24,6 +24,7 @@ in
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=tty0"];
+  boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";
