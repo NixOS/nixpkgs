@@ -19227,6 +19227,27 @@ in modules // {
      };
   };
 
+  rosdistro = buildPythonPackage rec {
+    version = "0.4.7";
+    name = "rosdistro-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosdistro/rosdistro-${version}.tar.gz";
+      sha256 = "1i7d3qv3bgfqc2pdcf2jzvmrxq64wx404mvddyghir6fdcrmfizl";
+    };
+
+    propagatedBuildInputs = with self; [ catkin_pkg rospkg ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "A tool to work with rosdistro files";
+      homepage = http://wiki.ros.org/rosdistro;
+      license = licenses.bsd3;
+    };
+  };
+
   rospkg = buildPythonPackage rec {
     version = "1.0.38";
     name = "rospkg-${version}";
