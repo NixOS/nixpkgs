@@ -10670,8 +10670,6 @@ in
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
-
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
