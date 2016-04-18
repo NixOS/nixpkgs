@@ -1,14 +1,11 @@
-"""Resize root filesystem if needed.
+"""Resizes root filesystem if needed.
 
 We expect the root partition to be partition 1 on its device, but we're
 looking up the device by checking the root partition by label first.
 
 Some of the tools need partition numbers, though. We hardcoded that for now.
-
 """
 
-
-from __future__ import print_function
 import re
 import subprocess
 
@@ -68,7 +65,7 @@ class Disk(object):
         self.resize_partition()
 
 
-if __name__ == '__main__':
+def main():
     try:
         partition = subprocess.check_output([
             'blkid', '-L', 'root'])
@@ -84,3 +81,6 @@ if __name__ == '__main__':
     disk = partition.strip()[:-1]
     d = Disk(disk)
     d.grow()
+
+if __name__ == '__main__':
+    main()

@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.4
 """Update NixOS system configuration from infrastructure or local sources."""
 
 import argparse
