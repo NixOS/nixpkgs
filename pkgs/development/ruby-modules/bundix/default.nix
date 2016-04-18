@@ -15,13 +15,13 @@ buildRubyGem rec {
     substituteInPlace $GEM_HOME/gems/${gemName}-${version}/lib/bundix.rb \
       --replace \
         "'nix-instantiate'" \
-        "'${nix}/bin/nix-instantiate'" \
+        "'${nix.out}/bin/nix-instantiate'" \
       --replace \
         "'nix-hash'" \
-        "'${nix}/bin/nix-hash'" \
+        "'${nix.out}/bin/nix-hash'" \
       --replace \
         "'nix-prefetch-url'" \
-        "'${nix}/bin/nix-prefetch-url'" \
+        "'${nix.out}/bin/nix-prefetch-url'" \
       --replace \
         "'nix-prefetch-git'" \
         "'${nix-prefetch-git}/bin/nix-prefetch-git'"
