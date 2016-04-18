@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, kernelHeaders, kernel, perl }:
+{ stdenv, fetchurl, linuxHeaders, perl }:
 
 let
-  version = "2.0.4";
-
   commonMakeFlags = [
     "prefix=$(out)"
     "SHLIBDIR=$(out)/lib"
   ];
 in
 
-stdenv.mkDerivation {
-  name = "klibc-${version}-${kernel.version}";
+stdenv.mkDerivation rec {
+  name = "klibc-${version}";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
@@ -23,13 +22,13 @@ stdenv.mkDerivation {
 
   makeFlags = commonMakeFlags ++ [
     "KLIBCARCH=${stdenv.platform.kernelArch}"
-    "KLIBCKERNELSRC=${kernelHeaders}"
+    "KLIBCKERNELSRC=${linuxHeaders}"
   ] ++ stdenv.lib.optional (stdenv.platform.kernelArch == "arm") "CONFIG_AEABI=y";
 
   crossAttrs = {
     makeFlags = commonMakeFlags ++ [
       "KLIBCARCH=${stdenv.cross.platform.kernelArch}"
-      "KLIBCKERNELSRC=${kernelHeaders.crossDrv}"
+      "KLIBCKERNELSRC=${linuxHeaders.crossDrv}"
       "CROSS_COMPILE=${stdenv.cross.config}-"
     ] ++ stdenv.lib.optional (stdenv.cross.platform.kernelArch == "arm") "CONFIG_AEABI=y";
   };
@@ -41,7 +40,7 @@ stdenv.mkDerivation {
     cp $(find $(find . -name static) -type f ! -name "*.g" -a ! -name ".*") $dir/
     cp usr/dash/sh $dir/
 
-    for file in ${kernelHeaders}/include/*; do
+    for file in ${linuxHeaders}/include/*; do
       ln -sv $file $out/lib/klibc/include
     done
   '';
