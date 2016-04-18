@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+"""Manages local Sensu monitoring checks"""
 
 import argparse
 import datetime
@@ -80,8 +80,7 @@ def handle_result(directory=None, enc=None, **kw):
                 check['executed']).isoformat())])
 
 
-def main(argv):
-
+def main():
     parser = argparse.ArgumentParser(description='Flying Circus Monitoring')
     parser.add_argument('-E', '--enc', default='/etc/nixos/enc.json',
                         help='Path to enc.json (default: %(default)s)')
@@ -98,7 +97,7 @@ def main(argv):
     result_parser = subparsers.add_parser('handle-result')
     result_parser.set_defaults(func=handle_result)
 
-    args = parser.parse_args(argv[1:])
+    args = parser.parse_args()
     if not args.subparser_name:
         parser.print_usage()
         parser.exit("No command given.")
@@ -114,4 +113,4 @@ def main(argv):
     args.func(directory=directory, enc=enc, **kw)
 
 if __name__ == '__main__':
-    main(sys.argv)
+    main()

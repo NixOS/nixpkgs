@@ -12,7 +12,6 @@ in {
   options = {
 
     flyingcircus.agent = {
-
       enable = mkOption {
         type = types.bool;
         default = true;
@@ -24,7 +23,6 @@ in {
         default = "--directory --system-state --garbage 30 --reboot --channel";
         description = "Steps to run by the agent.";
       };
-
     };
 
   };
@@ -33,15 +31,6 @@ in {
     {
       # We always install the management agent, but we don't necessarily
       # enable it running automatically.
-
-      nixpkgs.config.packageOverrides = pkgs: rec {
-        fcmanage = pkgs.callPackage ./fcmanage.nix { };
-      };
-
-      # XXX This isn't activated cleanly. We can merge
-      # https://github.com/NixOS/nixpkgs/pull/12797
-      # if we like, once upstream has accepted it.
-
       environment.systemPackages = [
         pkgs.fcmanage
       ];

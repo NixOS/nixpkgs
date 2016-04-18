@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 with lib;
 
@@ -10,7 +10,6 @@ let
 
 in
 {
-
   imports =
     infrastructure_modules ++
     [./static
@@ -18,7 +17,5 @@ in
      ./packages
      ./services
      ./roles
-     ./manage
     ];
-
 }

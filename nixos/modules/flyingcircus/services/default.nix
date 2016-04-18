@@ -1,8 +1,9 @@
 { ... }:
 
 {
-
-  imports = [
+  imports =
+    [
+     ./fcmanage.nix
      ./influxdb011.nix
      ./percona.nix
      ./powerdns.nix
@@ -11,5 +12,4 @@
      ./sensu/server.nix
      ./sensu/uchiwa.nix
     ];
-
 }
