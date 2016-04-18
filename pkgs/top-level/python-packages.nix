@@ -22296,6 +22296,27 @@ in modules // {
     };
   };
 
+  vcstools = buildPythonPackage rec {
+    name = "vcstools-${version}";
+    version = "0.1.38";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/vcstools/vcstools-${version}.tar.gz";
+      sha256 = "0wmgnrbb0kw3dm1xa0rqlxh5c6lg09s6qqwk3rg97iscx8vvz0lw";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil pyyaml ];
+
+    # No test suite.
+    doCheck = false;
+
+    meta = {
+      description = "VCS/SCM source control library for svn, git, hg, and bzr";
+      homepage = "http://wiki.ros.org/vcstools";
+      license = licenses.bsd3;
+    };
+  };
+
   virtual-display = buildPythonPackage rec {
     name = "PyVirtualDisplay-0.1.5";
 
