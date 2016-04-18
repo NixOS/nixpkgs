@@ -20091,6 +20091,34 @@ in modules // {
     };
   };
 
+  theano = buildPythonPackage rec {
+    name = "Theano-0.8.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/T/Theano/${name}.tar.gz";
+      sha256 = "17dikk94r8bzkxg976srqlhj5c7phs9gl837iabyfdpixkbrl79g";
+    };
+
+    propagatedBuildInputs = with self; [ numpy scipy six ];
+
+    # On Python 3:
+    # `TypeError: scan() missing 1 required positional argument: 'fn'`
+    doCheck = !isPy3k;
+
+    meta = {
+      description = "Theano is a Python library that allows you to define, optimize, and evaluate mathematical expressions involving multi-dimensional arrays efficiently.";
+      longDescription = ''
+        Theano is a Python library that allows you
+        to define, optimize, and evaluate mathematical expressions
+        involving multi-dimensional arrays efficiently. It can use
+        GPUs and perform efficient symbolic
+        differentiation.
+      '';
+      homepage = "http://www.deeplearning.net/software/theano";
+      license = licenses.bsd3;
+    };
+  };
+
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
     name = "pytidylib-${version}";
