@@ -18,7 +18,6 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig gtk3 intltool itstool libxml2 brasero libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas libmusicbrainz5 libdiscid isocodes
                   gnome3.dconf wrapGAppsHook
-                  makeWrapper gnome3.dconf
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   gst_all_1.gst-libav
