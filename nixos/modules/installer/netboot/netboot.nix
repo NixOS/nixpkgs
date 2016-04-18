@@ -74,8 +74,6 @@ with lib;
         ];
     };
 
-    system.build.netbootKernelAppend = pkgs.writeTextDir "kernelAppend" "init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}";
-    system.build.netbootTestScript = pkgs.writeTextDir "testScript" "qemu-system-x86_64 --enable-kvm -m 2G -curses -serial mon:stdio -boot order=n -net nic,model=e1000 -net user,tftp=result/,bootfile=netboot.ipxe";
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" "#!ipxe\nkernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0\ninitrd initrd\nboot";
 
     boot.loader.timeout = 10;

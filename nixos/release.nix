@@ -115,8 +115,6 @@ in rec {
     pkgs.symlinkJoin "netboot" [
       build.netbootRamdisk
       build.kernel
-      build.netbootKernelAppend
-      build.netbootTestScript
       build.netbootIpxeScript
     ];
 
