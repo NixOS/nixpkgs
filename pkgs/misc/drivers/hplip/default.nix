@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, polkit
+, net_snmp, openssl, polkit
 , bash, coreutils, utillinux
 , qtSupport ? true, qt4, pyqt4
 , withPlugin ? false
@@ -59,6 +59,7 @@ stdenv.mkDerivation {
     sane-backends
     dbus
     net_snmp
+    openssl
   ] ++ stdenv.lib.optionals qtSupport [
     qt4
   ];
