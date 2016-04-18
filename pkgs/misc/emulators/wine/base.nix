@@ -41,6 +41,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # elements specified above.
   dontPatchELF = true;
 
+  # Disable stripping to avoid breaking placeholder DLLs/EXEs.
+  # Symptoms of broken placeholders are: when the wineprefix is created
+  # drive_c/windows/system32 will only contain a few files instead of
+  # hundreds, there will be an error about winemenubuilder and MountMgr
+  # on startup of Wine, and the Drives tab in winecfg will show an error.
+  dontStrip = true;
+
   ## FIXME
   # Add capability to ignore known failing tests
   # and enable doCheck
