@@ -37,7 +37,9 @@ in
 
   # Creates a "vagrant" users with password-less sudo access
   users.extraGroups = [
+    { name = "admins"; }
     { name = "login"; }
+    { name = "sudo-srv"; }
     { name = "vagrant"; }
     { name = "vboxsf"; }
   ];
@@ -48,7 +50,7 @@ in
         description     = "Vagrant User";
         name            = "vagrant";
         group           = "vagrant";
-        extraGroups     = [ "users" "vboxsf" "wheel" "login" "service"];
+        extraGroups     = [ "users" "vboxsf" "wheel" "login" "service" ];
         password        = "vagrant";
         home            = "/home/vagrant";
         createHome      = true;
