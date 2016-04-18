@@ -2936,6 +2936,27 @@ in modules // {
     };
   };
 
+  catkin_pkg = buildPythonPackage rec {
+    name = "catkin_pkg-${version}";
+    version = "0.2.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/catkin_pkg/catkin_pkg-${version}.tar.gz";
+      sha256 = "034kbkmiicg82mzhp684v2vr64z7w758ddf84z308ndiz20x7ljg";
+    };
+
+    propagatedBuildInputs = with self; [ argparse dateutil docutils ];
+
+    # There are no tests
+    doCheck = false;
+
+    meta = {
+      homepage = http://wiki.ros.org/catkin_pkg;
+      description = "Library for retrieving information about catkin packages.";
+      license = licenses.bsd3;
+    };
+  };
+
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
 
