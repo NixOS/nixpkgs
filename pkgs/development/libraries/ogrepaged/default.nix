@@ -1,11 +1,12 @@
 { stdenv, fetchurl, cmake, pkgconfig, ois, ogre, libX11, boost }:
 
 stdenv.mkDerivation rec {
-  name = "ogre-paged-1.1.3";
+  name = "ogre-paged-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "http://ogre-paged.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1qqlkg17plk87dm3fsm34x8lkd5rxkhiz77ppcgc71a7z050vhjq";
+    url = "https://github.com/RigsOfRods/ogre-pagedgeometry/archive/v${version}.tar.gz";
+    sha256 = "17j7rw9wbkynxbhm2lay3qgjnnagb2vd5jn9iijnn2lf8qzbgy82";
   };
 
   buildInputs = [ ois ogre libX11 boost ];
