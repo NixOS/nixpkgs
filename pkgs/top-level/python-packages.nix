@@ -19227,6 +19227,29 @@ in modules // {
      };
   };
 
+  rosdep = buildPythonPackage rec {
+    version = "0.11.4";
+    name = "rosdep-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosdep/rosdep-${version}.tar.gz";
+      sha256 = "1f4br1sq9shg5lh2s7vvzgchi8vf8l8s25pvqldqnya5096ivwz4";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    propagatedBuildInputs = with self; [ rosdistro ];
+
+    # Some tests require network access
+    doCheck = false;
+
+    meta = {
+      description = "rosdep package manager abstrction tool for ROS";
+      homepage = http://wiki.ros.org/rosdep;
+      license = licenses.bsd3;
+    };
+  };
+
   rosdistro = buildPythonPackage rec {
     version = "0.4.7";
     name = "rosdistro-${version}";
