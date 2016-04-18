@@ -19271,6 +19271,27 @@ in modules // {
     };
   };
 
+  rosinstall_generator = buildPythonPackage rec {
+    version = "0.1.11";
+    name = "rosinstall_generator-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosinstall_generator/rosinstall_generator-${version}.tar.gz";
+      sha256 = "0qgigpy7r81rfcwg7qb2fkwxxkijcclrzjhfwc84dw1x8p589dz6";
+    };
+
+    propagatedBuildInputs = with self; [ argparse catkin_pkg distribute rosdistro rospkg ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "A tool to generator rosinstall files";
+      homepage = http://wiki.ros.org/rosinstall_generator;
+      license = licenses.bsd3;
+    };
+  };
+
   rospkg = buildPythonPackage rec {
     version = "1.0.38";
     name = "rospkg-${version}";
