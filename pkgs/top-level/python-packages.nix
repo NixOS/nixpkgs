@@ -22760,6 +22760,27 @@ in modules // {
     };
   };
 
+  wstool = buildPythonPackage rec {
+    name = "wstool-${version}";
+    version = "0.1.12";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/wstool/wstool-${version}.tar.gz";
+      sha256 = "0vrf3sfkadmzb3kz2p8nvq7sa2bbwwczldprfm1x5hifv93w21r5";
+    };
+
+    propagatedBuildInputs = with self; [ vcstools ];
+
+    # No test suite.
+    doCheck = false;
+
+    meta = {
+      description = "workspace multi-SCM commands";
+      homepage = http://wiki.ros.org/wstool;
+      license = licenses.bsd3;
+    };
+  };
+
   wxPython = self.wxPython28;
 
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
