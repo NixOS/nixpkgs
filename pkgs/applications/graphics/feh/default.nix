@@ -2,11 +2,11 @@
 , libXinerama, curl, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "feh-2.15";
+  name = "feh-2.15.2";
 
   src = fetchurl {
     url = "http://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "0fdbpfzbx3hgzi6jcmz1zv5lrxvgasc54bvqdzg8hhh4ql5s5fj2";
+    sha256 = "0bnfk50y2l5zkr292l4yyws1m7ibdmr398vxj7c0djh965frpj1q";
   };
 
   outputs = [ "out" "doc" ];

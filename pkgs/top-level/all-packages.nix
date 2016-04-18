@@ -2197,6 +2197,8 @@ in
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  leatherman = callPackage ../development/libraries/leatherman {};
+
   leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -3225,6 +3227,8 @@ in
   };
 
   snort = callPackage ../applications/networking/ids/snort { };
+
+  softhsm = callPackage ../tools/security/softhsm { };
 
   solr = callPackage ../servers/search/solr { };
 
@@ -5223,6 +5227,8 @@ in
   };
 
   angelscript = callPackage ../development/interpreters/angelscript {};
+
+  angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
 
   chibi = callPackage ../development/interpreters/chibi { };
 
@@ -10088,7 +10094,7 @@ in
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { swig = swig2; })
+  inherit (callPackages ../os-specific/linux/apparmor { pythonPackages = python27Packages; swig = swig2; })
     libapparmor apparmor-pam apparmor-parser apparmor-profiles apparmor-utils;
 
   atop = callPackage ../os-specific/linux/atop { };
@@ -11313,6 +11319,8 @@ in
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
   hack-font = callPackage ../data/fonts/hack { };
+
+  helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
 
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
@@ -13212,6 +13220,8 @@ in
 
   mutt-kz = callPackage ../applications/networking/mailreaders/mutt-kz { };
 
+  neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
+
   notion = callPackage ../applications/window-managers/notion { };
 
   openshift = callPackage ../applications/networking/cluster/openshift { };
@@ -14136,6 +14146,10 @@ in
 
   neovim-pygui = pythonPackages.neovim_gui;
 
+  vis = callPackage ../applications/editors/vis {
+    inherit (lua52Packages) lpeg;
+  };
+
   virt-viewer = callPackage ../applications/virtualization/virt-viewer {
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
@@ -14399,6 +14413,8 @@ in
   xdg_utils = callPackage ../tools/X11/xdg-utils {
     w3m = w3m-batch;
   };
+
+  xdgmenumaker = callPackage ../applications/misc/xdgmenumaker { };
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
@@ -14910,6 +14926,13 @@ in
 
   residualvm = callPackage ../games/residualvm {
     openglSupport = mesaSupported;
+  };
+
+  rigsofrods = callPackage ../games/rigsofrods {
+    angelscript = angelscript_2_22;
+    mygui = mygui.override {
+      withOgre = true;
+    };
   };
 
   rili = callPackage ../games/rili { };
@@ -16001,9 +16024,11 @@ in
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
+  areca = callPackage ../applications/backup/areca { };
+
   beep = callPackage ../misc/beep { };
 
-  brgenml1lpr = callPackage ../misc/cups/drivers/brgenml1lpr {};
+  brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
 
@@ -16526,7 +16551,6 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome) gtksourceview;
-    profile = config.higan.profile or "balanced";
   };
 
   misc = callPackage ../misc/misc.nix { };
@@ -16542,4 +16566,6 @@ in
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
+
+  #golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 }

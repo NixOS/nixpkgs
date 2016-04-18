@@ -34,7 +34,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups additionalBackends cups_filters pkgs.ghostscript ]
+      [ cups.out additionalBackends cups_filters pkgs.ghostscript ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
@@ -267,24 +267,24 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
+    environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     environment.etc."cups".source = "/var/lib/cups";
 
-    services.dbus.packages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
+    services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
 
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    systemd.packages = [ cups ];
+    systemd.packages = [ cups.out ];
 
     systemd.services.cups =
       { wantedBy = [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
-        path = [ cups ];
+        path = [ cups.out ];
 
         preStart =
           ''

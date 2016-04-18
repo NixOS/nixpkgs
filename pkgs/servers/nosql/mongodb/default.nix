@@ -50,13 +50,21 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ scons ];
   inherit buildInputs;
 
-  # When not building with the system valgrind, the build should use the
-  # vendored header file - regardless of whether or not we're using the system
-  # tcmalloc - so we need to lift the include path manipulation out of the
-  # conditional.
   patches =
-    [ ./valgrind-include.patch
+    [
+      # When not building with the system valgrind, the build should use the
+      # vendored header file - regardless of whether or not we're using the system
+      # tcmalloc - so we need to lift the include path manipulation out of the
+      # conditional.
+      ./valgrind-include.patch
+
+      # MongoDB keeps track of its build parameters, which tricks nix into
+      # keeping dependencies to build inputs in the final output.
+      # We remove the build flags from buildInfo data.
+      ./forget-build-dependencies.patch
+
       ./asio-sslv3.patch  # remove when using system asio
+
       (fetchpatch {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";

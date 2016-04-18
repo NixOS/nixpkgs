@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.factorio.com/;
     license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.maintainers; [ Baughn elitak ];
+    maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

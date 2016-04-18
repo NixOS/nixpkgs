@@ -56,7 +56,7 @@ in
       */
 
       shellAliases = mkOption {
-        default = config.environment.shellAliases // { which = "type -P"; };
+        default = config.environment.shellAliases;
         description = ''
           Set of aliases for bash shell. See <option>environment.shellAliases</option>
           for an option format description.

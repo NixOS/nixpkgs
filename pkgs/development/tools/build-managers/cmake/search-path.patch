@@ -1,8 +1,7 @@
-diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
-index fe8e003..378512c 100644
---- a/Modules/Platform/Linux.cmake
-+++ b/Modules/Platform/Linux.cmake
-@@ -36,13 +36,13 @@ else()
+diff -ru3 cmake-2.8.12.2/Modules/Platform/Linux.cmake cmake-2.8.12.2-new/Modules/Platform/Linux.cmake
+--- cmake-2.8.12.2/Modules/Platform/Linux.cmake	2014-01-16 21:15:08.000000000 +0400
++++ cmake-2.8.12.2-new/Modules/Platform/Linux.cmake	2016-04-13 22:00:32.928575740 +0300
+@@ -36,22 +36,11 @@
    # checking the platform every time.  This option is advanced enough
    # that only package maintainers should need to adjust it.  They are
    # capable of providing a setting on the command line.
@@ -10,46 +9,40 @@ index fe8e003..378512c 100644
 -    set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
 -      "Install .so files without execute permission.")
 -  else()
-+  # if(EXISTS "/etc/debian_version")
-+  #   set(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
-+  #     "Install .so files without execute permission.")
-+  # else()
-     set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
-       "Install .so files without execute permission.")
+-    set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
 -  endif()
-+  # endif()
++  set(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
  endif()
  
  # Match multiarch library directory names.
-@@ -52,6 +52,6 @@ include(Platform/UnixPaths)
+ set(CMAKE_LIBRARY_ARCHITECTURE_REGEX "[a-z0-9_]+(-[a-z0-9_]+)?-linux-gnu[a-z0-9_]*")
  
- # Debian has lib64 paths only for compatibility so they should not be
- # searched.
+ include(Platform/UnixPaths)
+-
+-# Debian has lib64 paths only for compatibility so they should not be
+-# searched.
 -if(EXISTS "/etc/debian_version")
 -  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
 -endif()
-+# if(EXISTS "/etc/debian_version")
-+#  set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
-+#endif()
-diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index ccb2663..39834e6 100644
---- a/Modules/Platform/UnixPaths.cmake
-+++ b/Modules/Platform/UnixPaths.cmake
-@@ -33,55 +33,18 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
+diff -ru3 cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake cmake-2.8.12.2-new/Modules/Platform/UnixPaths.cmake
+--- cmake-2.8.12.2/Modules/Platform/UnixPaths.cmake	2014-01-16 21:15:08.000000000 +0400
++++ cmake-2.8.12.2-new/Modules/Platform/UnixPaths.cmake	2016-04-14 00:09:10.106362636 +0300
+@@ -32,9 +32,6 @@
+ # List common installation prefixes.  These will be used for all
  # search types.
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
-   # Standard
+-  # Standard
 -  /usr/local /usr /
 -
--  # CMake install location
--  "${_CMAKE_INSTALL_DIR}"
--
--  # Project install destination.
--  "${CMAKE_INSTALL_PREFIX}"
--  )
--
--# List common include file locations not under the common prefixes.
--list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+   # CMake install location
+   "${_CMAKE_INSTALL_DIR}"
+ 
+@@ -44,44 +41,26 @@
+ 
+ # List common include file locations not under the common prefixes.
+ list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
 -  # Windows API on Cygwin
 -  /usr/include/w32api
 -
@@ -60,9 +53,10 @@ index ccb2663..39834e6 100644
 -  /usr/pkg/include
 -  /opt/csw/include /opt/include
 -  /usr/openwin/include
--  )
--
--list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
++  @glibc_dev@/include
+   )
+ 
+ list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
 -  # Windows API on Cygwin
 -  /usr/lib/w32api
 -
@@ -73,25 +67,26 @@ index ccb2663..39834e6 100644
 -  /usr/pkg/lib
 -  /opt/csw/lib /opt/lib
 -  /usr/openwin/lib
--  )
--
--list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
++  @glibc_lib@/lib
+   )
+ 
+ list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
-+  "@glibc@"
++  @glibc_bin@/bin
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /usr/lib /usr/lib32 /usr/lib64
-+  "@glibc@/lib"
++  @glibc_lib@/lib
    )
  
  list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  @glibc_dev@/include
    )
  list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  @glibc_dev@/include
    )
  
  # Enable use of lib64 search path variants by default.

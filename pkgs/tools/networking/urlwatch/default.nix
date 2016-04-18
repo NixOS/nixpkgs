@@ -1,17 +1,17 @@
 { stdenv, fetchurl, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  name = "urlwatch-2.0";
+  name = "urlwatch-2.1";
 
   src = fetchurl {
     url = "http://thp.io/2008/urlwatch/${name}.tar.gz";
-    sha256 = "0j38qzw4jxw41vnnpi6j851hqpv8d6p1cbni6cv8r2vqf5307s3b";
+    sha256 = "0xn435cml9wjwk39117p1diqmvw3jbmv9ccr7230iaf7z59vf9v6";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    keyring
     minidb
     pyyaml
+    requests2
   ];
 
   postFixup = ''

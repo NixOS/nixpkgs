@@ -1,26 +1,28 @@
-{ fetchurl, stdenv, mesa, SDL, scons, freeglut, SDL_image, glew, libvorbis,
-  asio, boost, SDL_gfx, pkgconfig, bullet, curl, libarchive }:
+{ stdenv, fetchFromGitHub, fetchsvn, pkgconfig, scons, mesa, SDL2, SDL2_image, libvorbis,
+  bullet, curl, gettext }:
 
 stdenv.mkDerivation rec {
-  version = "2012-07-22";
+  version = "2014-10-20";
   name = "vdrift-${version}";
-  patch = "c"; # see https://github.com/VDrift/vdrift/issues/110
 
-  src = fetchurl {
-    url = "mirror://sourceforge/vdrift/${name}.tar.bz2";
-    sha256 = "1yqkc7y4s4g5ylw501bf0c03la7kfddjdk4yyi1xkcwy3pmgw2al";
+  src = fetchFromGitHub {
+    owner = "VDrift";
+    repo = "vdrift";
+    rev = version;
+    sha256 = "09yny5qzdrpffq3xhqwfymsracwsxwmdd5xa8bxx9a56hhxbak2l";
   };
 
-  patches = fetchurl {
-    url = "mirror://sourceforge/vdrift/${name}${patch}_patch.diff";
-    sha256 = "08mfg4xxkzyp6602cgqyjzc3rn0zsaa3ddjkpd44b83drv19lriy";
+  data = fetchsvn {
+    url = "svn://svn.code.sf.net/p/vdrift/code/vdrift-data";
+    rev = 1386;
+    sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
   };
-  patchFlags = "-p0";
 
-  buildInputs = [ scons mesa SDL freeglut SDL_image glew libvorbis asio boost
-    SDL_gfx pkgconfig bullet curl libarchive ];
+  buildInputs = [ pkgconfig scons mesa SDL2 SDL2_image libvorbis bullet curl gettext ];
 
   buildPhase = ''
+    cp -r --reflink=auto $data data
+    chmod -R +w data
     sed -i -e s,/usr/local,$out, SConstruct
     scons
   '';
