@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   # cherry pick for acceptable performance https://github.com/freeorion/freeorion/commit/92455f97c28055e296718230d2e3744eccd738ec
   patches = [ ./92455f9.patch ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A free, open source, turn-based space empire and galactic conquest (4X) computer game";
     homepage = "http://www.freeorion.org";
