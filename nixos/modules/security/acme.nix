@@ -152,7 +152,7 @@ in
         in nameValuePair
         ("acme-${cert}")
         ({
-          description = "ACME cert renewal for ${cert} using simp_le";
+          description = "Renew ACME Certificate for ${cert}";
           after = [ "network.target" ];
           serviceConfig = {
             Type = "oneshot";
@@ -192,7 +192,7 @@ in
       systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
         ({
-          description = "timer for ACME cert renewal of ${cert}";
+          description = "Renew ACME Certificate for ${cert}";
           wantedBy = [ "timers.target" ];
           timerConfig = {
             OnCalendar = cfg.renewInterval;
