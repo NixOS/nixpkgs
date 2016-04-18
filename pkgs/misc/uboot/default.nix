@@ -68,6 +68,12 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootBeagleboneBlack = buildUBoot rec {
+    defconfig = "am335x_boneblack_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
   ubootJetsonTK1 = buildUBoot rec {
     defconfig = "jetson-tk1_defconfig";
     targetPlatforms = ["armv7l-linux"];
