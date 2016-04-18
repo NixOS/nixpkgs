@@ -19227,7 +19227,26 @@ in modules // {
      };
   };
 
+  rospkg = buildPythonPackage rec {
+    version = "1.0.38";
+    name = "rospkg-${version}";
 
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rospkg/rospkg-${version}.tar.gz";
+      sha256 = "0clc7c8y0l8kjn1006pg72w9iy2sg2pj1ha07mrlkzmjny7lfjvp";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "ROS package library";
+      homepage = http://wiki.ros.org/rospkg;
+      license = licenses.bsd3;
+    };
+  };
 
   routes = buildPythonPackage rec {
     name = "routes-1.12.3";
