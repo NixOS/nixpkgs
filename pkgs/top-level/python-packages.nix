@@ -19271,6 +19271,27 @@ in modules // {
     };
   };
 
+  rosinstall = buildPythonPackage rec {
+    version = "0.7.7";
+    name = "rosinstall-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosinstall/rosinstall-${version}.tar.gz";
+      sha256 = "1b91bcsrdv5vydbpibmddm835v5g7m3hn886fzraj6bpqqipkym0";
+    };
+
+    propagatedBuildInputs = with self; [ catkin_pkg rosdistro vcstools wstool ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "The installer for ROS";
+      homepage = http://wiki.ros.org/rosinstall;
+      license = licenses.bsd3;
+    };
+  };
+
   rosinstall_generator = buildPythonPackage rec {
     version = "0.1.11";
     name = "rosinstall_generator-${version}";
