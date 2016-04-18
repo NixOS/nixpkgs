@@ -2,7 +2,7 @@ if [[ -z "$QMAKE" ]]; then
 
 _qtLinkDependencyDir() {
     @lndir@/bin/lndir -silent "$1/$2" "$qtOut/$2"
-    if [[ -n "$NIX_QT_SUBMODULE" ]]; then
+    if [ -n "$NIX_QT_SUBMODULE" ]; then
         find "$1/$2" -printf "$2/%P\n" >> "$out/nix-support/qt-inputs"
     fi
 }
@@ -22,13 +22,13 @@ _qtLinkModule() {
 
 _qtRmModules() {
     cat "$out/nix-support/qt-inputs" | while read file; do
-      if [[ -h "$out/$file" ]]; then
+      if [ -h "$out/$file" ]; then
         rm "$out/$file"
       fi
     done
 
     cat "$out/nix-support/qt-inputs" | while read file; do
-      if [[ -d "$out/$file" ]]; then
+      if [ -d "$out/$file" ]; then
         rmdir --ignore-fail-on-non-empty -p "$out/$file"
       fi
     done
@@ -43,11 +43,14 @@ addToSearchPathOnceWithCustomDelimiter() {
     local dirs
     local exported
     IFS="$delim" read -a dirs <<< "${!search}"
-    for dir in ${dirs[@]}; do
-        if [ "z$dir" == "z$target" ]; then exported=1; fi
-    done
-    if [ -z $exported ]; then
-        eval "export ${search}=\"${!search}${!search:+$delim}$target\""
+    local canonical
+    if canonical=$(readlink -e "$target"); then
+        for dir in ${dirs[@]}; do
+            if [ "z$dir" == "z$canonical" ]; then exported=1; fi
+        done
+        if [ -z $exported ]; then
+            eval "export ${search}=\"${!search}${!search:+$delim}$canonical\""
+        fi
     fi
 }
 
@@ -97,7 +100,7 @@ _qtMultioutDevs() {
 }
 
 qtOut=""
-if [[ -z "$NIX_QT_SUBMODULE" ]]; then
+if [ -z "$NIX_QT_SUBMODULE" ]; then
     qtOut=`mktemp -d`
 else
     qtOut=$out
