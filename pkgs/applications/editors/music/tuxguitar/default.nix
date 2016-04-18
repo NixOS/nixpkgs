@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/tuxguitar \
       --set JAVA "${jdk}/bin/java" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${swt}/lib:${alsaLib}/lib" \
+      --prefix LD_LIBRARY_PATH : "$out/lib/:${swt}/lib:${alsaLib.out}/lib" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
   '';
 

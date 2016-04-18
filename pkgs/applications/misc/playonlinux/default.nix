@@ -26,7 +26,7 @@ assert stdenv.isLinux;
 let
   version = "4.2.9";
 
-  binpath = stdenv.lib.makeSearchPath "bin"
+  binpath = stdenv.lib.makeBinPath
     [ cabextract
       python2Packages.python
       gettext

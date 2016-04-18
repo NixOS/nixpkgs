@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     mkdir -pv $out/res
     cp -r * $out/res
 
-    patchelf --set-interpreter ${glibc}/lib/ld-linux.so.2 \
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 \
              --set-rpath ${stdenv.cc.cc}/lib:${libX11}/lib:${mesa}/lib \
              "$out/res/Tibia"
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     cat << EOF > "$out/bin/Tibia"
     #!${stdenv.shell}
     cd $out/res
-    ${glibc}/lib/ld-linux.so.2 --library-path \$LD_LIBRARY_PATH ./Tibia "\$@"
+    ${glibc.out}/lib/ld-linux.so.2 --library-path \$LD_LIBRARY_PATH ./Tibia "\$@"
     EOF
 
     chmod +x $out/bin/Tibia

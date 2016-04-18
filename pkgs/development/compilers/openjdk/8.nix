@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, file, which, unzip, zip, xorg, cups, freetype
+{ stdenv, fetchurl, cpio, pkgconfig, file, which, unzip, zip, xorg, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib
 , setJavaClassPath
 , minimal ? false
@@ -63,6 +63,7 @@ let
 
     outputs = [ "out" "jre" ];
 
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
       cpio file which unzip zip
       xorg.libX11 xorg.libXt xorg.libXext xorg.libXrender xorg.libXtst
@@ -93,7 +94,6 @@ let
     '';
 
     configureFlags = [
-      "--with-freetype=${freetype}"
       "--with-boot-jdk=${bootjdk.home}"
       "--with-update-version=${update}"
       "--with-build-number=${build}"

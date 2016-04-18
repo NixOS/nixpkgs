@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+    sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullIterator.h
+    sed -i 's/namespace std { struct bidirectional_iterator_tag; struct random_access_iterator_tag; }/#include <iterator>/' ./src/libqhullcpp/QhullLinkedList.h
+  '';
+
   meta = {
     homepage = http://www.qhull.org/;
     description = "Computes the convex hull, Delaunay triangulation, Voronoi diagram and more";

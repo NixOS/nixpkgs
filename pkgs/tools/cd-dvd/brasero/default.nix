@@ -5,7 +5,7 @@
 let
   major = "3.12";
   minor = "0";
-  binpath = stdenv.lib.makeSearchPath "bin" [ dvdauthor cdrdao dvdplusrwtools cdrtools ];
+  binpath = stdenv.lib.makeBinPath [ dvdauthor cdrdao dvdplusrwtools cdrtools ];
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";

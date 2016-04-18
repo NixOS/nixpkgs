@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ doxygen ];
 
   configurePhase = ''
+    runHook preConfigure
     qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/SignOnQt5
+    runHook postConfigure
   '';
 
 }

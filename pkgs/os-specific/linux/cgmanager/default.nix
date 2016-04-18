@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libnih, dbus, pam }:
 
 stdenv.mkDerivation rec {
-  name = "cgmanager-0.39";
+  name = "cgmanager-0.41";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/cgmanager/${name}.tar.gz";
-    sha256 = "0ysv8klnybp727aad2k0aa67s05q027pzfl7rmm0map4nizlhrcy";
+    sha256 = "0n5l4g78ifvyfnj8x9xz06mqn4y8j73sgg4xsbak7hiszfz5bc99";
   };
 
   nativeBuildInputs = [ pkgconfig ];

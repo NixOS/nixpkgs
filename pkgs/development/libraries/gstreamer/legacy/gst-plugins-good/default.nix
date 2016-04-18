@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca, libvpx
 , libiec61883, libavc1394, taglib, libpulseaudio, gdk_pixbuf, orc
-, glib, gstreamer, bzip2, libsoup, libshout, libintlOrEmpty
+, glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintlOrEmpty
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
   minimalDeps ? false
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    substituteInPlace $out/lib/gstreamer-0.10/libgstaasink.la \
+      --replace "${ncurses.dev}/lib" "${ncurses.out}/lib"
+  '';
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

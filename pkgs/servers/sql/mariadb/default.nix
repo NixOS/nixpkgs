@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
     (if stdenv.is64bit then snappy else null)
     pcre libxml2 boost judy bison libevent cracklib
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd numactl ]
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
+    ++ stdenv.lib.optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
@@ -60,13 +61,15 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
-    "-DCURSES_LIBRARY=${ncurses}/lib/libncurses.dylib"
+    "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
   ];
 
   # fails to find lex_token.h sometimes
   enableParallelBuilding = false;
 
   outputs = [ "out" "lib" ];
+  setOutputFlags = false;
+  moveToDev = false;
 
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
@@ -101,19 +104,10 @@ stdenv.mkDerivation rec {
     mv $out/lib $lib
     mv $out/include $lib
 
-  ''
-  + stdenv.lib.optionalString stdenv.isDarwin ''
-    # Fix library rpaths
-    # TODO: put this in the stdenv to prepare for wide usage of multi-output derivations
-    for file in $(grep -rl $out/lib $lib); do
-      install_name_tool -delete_rpath $out/lib -add_rpath $lib $file
-    done
-
-  '' + ''
     # Fix the mysql_config
     sed -i $out/bin/mysql_config \
-      -e 's,-lz,-L${zlib}/lib -lz,g' \
-      -e 's,-lssl,-L${openssl}/lib -lssl,g'
+      -e 's,-lz,-L${zlib.out}/lib -lz,g' \
+      -e 's,-lssl,-L${openssl.out}/lib -lssl,g'
 
     # Add mysql_config to libs since configure scripts use it
     mkdir -p $lib/bin

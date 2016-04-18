@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     substituteInPlace planet.py \
         --replace "#!/usr/bin/env python" "#!${python}/bin/python"
     substituteInPlace tests/test_apply.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
     substituteInPlace planet/shell/xslt.py \
-        --replace "'xsltproc" "'${libxslt}/bin/xsltproc"
+        --replace "'xsltproc" "'${libxslt.bin}/bin/xsltproc"
   '';
 
   doCheck = true;

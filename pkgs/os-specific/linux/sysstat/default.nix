@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PATH_CP=$(type -tp cp)
     export PATH_CHKCONFIG=/no-such-program
-    export BZIP=${bzip2}/bin/bzip2
+    export BZIP=${bzip2.bin}/bin/bzip2
     export SYSTEMCTL=systemctl
   '';
 

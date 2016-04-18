@@ -148,7 +148,7 @@ in
         "protocols".source  = pkgs.iana_etc + "/etc/protocols";
 
         # /etc/rpc: RPC program numbers.
-        "rpc".source = pkgs.glibc + "/etc/rpc";
+        "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =

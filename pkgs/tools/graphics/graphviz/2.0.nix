@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
-      "--with-pnglibdir=${libpng}/lib"
+      "--with-pnglibdir=${libpng.out}/lib"
       "--with-jpegincludedir=${libjpeg}/include"
-      "--with-jpeglibdir=${libjpeg}/lib"
+      "--with-jpeglibdir=${libjpeg.out}/lib"
       "--with-expatincludedir=${expat}/include"
-      "--with-expatlibdir=${expat}/lib"
+      "--with-expatlibdir=${expat.out}/lib"
     ]
     ++ stdenv.lib.optional (xlibsWrapper == null) "--without-x";
 

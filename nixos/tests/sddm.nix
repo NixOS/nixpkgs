@@ -23,6 +23,8 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript = { nodes, ... }: ''
     startAll;
+    $machine->waitForFile("/home/alice/.Xauthority");
+    $machine->succeed("xauth merge ~alice/.Xauthority");
     $machine->waitForWindow("^IceWM ");
   '';
 })

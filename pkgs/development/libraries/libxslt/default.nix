@@ -17,14 +17,13 @@ stdenv.mkDerivation rec {
       })
     ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "dev" "out" "bin" "doc" ];
 
   buildInputs = [ libxml2 ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 
   configureFlags = [
-    "--with-libxml-prefix=${libxml2}"
     "--without-python"
     "--without-crypto"
     "--without-debug"
@@ -32,11 +31,17 @@ stdenv.mkDerivation rec {
     "--without-debugger"
   ];
 
-  meta = {
+  postFixup = ''
+    moveToOutput bin/xslt-config "$dev"
+    moveToOutput lib/xsltConf.sh "$dev"
+    moveToOutput share/man/man1 "$bin"
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = "bsd";
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = platforms.unix;
+    maintainers = [ maintainers.eelco ];
   };
 }

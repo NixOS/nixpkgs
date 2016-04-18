@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   patches = [./pidgin-makefile.patch ./add-search-path.patch ];
 
   configureFlags = [
-    "--with-nspr-includes=${nspr}/include/nspr"
-    "--with-nspr-libs=${nspr}/lib"
-    "--with-nss-includes=${nss}/include/nss"
-    "--with-nss-libs=${nss}/lib"
-    "--with-ncurses-headers=${ncurses}/include"
+    "--with-nspr-includes=${nspr.dev}/include/nspr"
+    "--with-nspr-libs=${nspr.out}/lib"
+    "--with-nss-includes=${nss.dev}/include/nss"
+    "--with-nss-libs=${nss.out}/lib"
+    "--with-ncurses-headers=${ncurses.dev}/include"
     "--disable-meanwhile"
     "--disable-nm"
     "--disable-tcl"

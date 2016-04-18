@@ -47,6 +47,7 @@
       #floppy = 18; # unused
       #uucp = 19; # unused
       #lp = 20; # unused
+      #proc = 21; # unused
       pulseaudio = 22; # must match `pulseaudio' GID
       gpsd = 23;
       #cdrom = 24; # unused
@@ -259,6 +260,9 @@
       hydra-www = 236;
       syncthing = 237;
       mfi = 238;
+      caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -288,6 +292,7 @@
       floppy = 18;
       uucp = 19;
       lp = 20;
+      proc = 21;
       pulseaudio = 22; # must match `pulseaudio' UID
       gpsd = 23;
       cdrom = 24;
@@ -489,6 +494,9 @@
       radicale = 234;
       syncthing = 237;
       #mfi = 238; # unused
+      caddy = 239;
+      taskd = 240;
+      factorio = 241;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

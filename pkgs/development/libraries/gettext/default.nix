@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/\(am_libgettextlib_la_OBJECTS = \)error.lo/\\1/" gettext-tools/gnulib-lib/Makefile.in
   '';
 
-  buildInputs = [ xz ] ++ lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ xz xz.bin libiconv ];
 
   enableParallelBuilding = true;
 

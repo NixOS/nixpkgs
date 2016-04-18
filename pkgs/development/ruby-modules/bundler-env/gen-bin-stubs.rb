@@ -10,6 +10,7 @@ gemfile = ARGV[1]
 bundle_path = ARGV[2]
 bundler_gem_path = ARGV[3]
 paths = ARGV[4].split
+groups = ARGV[5].split
 
 # generate binstubs
 FileUtils.mkdir_p("#{out}/bin")
@@ -29,14 +30,16 @@ paths.each do |path|
 # this file is here to facilitate running it.
 #
 
-ENV["BUNDLE_GEMFILE"] = "#{gemfile}"
-ENV["BUNDLE_PATH"] = "#{bundle_path}"
+ENV["BUNDLE_GEMFILE"] = #{gemfile.dump}
+ENV["BUNDLE_PATH"] = #{bundle_path.dump}
+ENV['BUNDLE_FROZEN'] = '1'
 
-Gem.use_paths("#{bundler_gem_path}", ENV["GEM_PATH"])
+Gem.use_paths(#{bundler_gem_path.dump}, ENV["GEM_PATH"])
 
-require 'bundler/setup'
+require 'bundler'
+Bundler.setup(#{groups.map(&:dump).join(', ')})
 
-load Gem.bin_path(#{name.inspect}, #{exe.inspect})
+load Gem.bin_path(#{name.dump}, #{exe.dump})
 EOF
       FileUtils.chmod("+x", "#{out}/bin/#{exe}")
     end

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "176ii5dn2wh74q48sd8ac37ljlvgvp5f506glr96z6ibfhj7igch";
   };
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
 
   configureFlags = ''

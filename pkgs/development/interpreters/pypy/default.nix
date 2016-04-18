@@ -25,17 +25,17 @@ let
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
-    C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-    LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p}/lib")
+    C_INCLUDE_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.dev or p}/include") buildInputs);
+    LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.lib or p.out or p}/lib") buildInputs);
+    LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":" (map (p: "${p.lib or p.out or p}/lib")
       (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs));
 
     preConfigure = ''
       # hint pypy to find nix ncurses
       substituteInPlace pypy/module/_minimal_curses/fficurses.py \
-        --replace "/usr/include/ncurses/curses.h" "${ncurses}/include/curses.h" \
-        --replace "ncurses/curses.h" "${ncurses}/include/curses.h" \
-        --replace "ncurses/term.h" "${ncurses}/include/term.h" \
+        --replace "/usr/include/ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
+        --replace "ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
+        --replace "ncurses/term.h" "${ncurses.dev}/include/term.h" \
         --replace "libraries=['curses']" "libraries=['ncurses']"
 
       # tkinter hints
@@ -44,7 +44,7 @@ let
         --replace "linklibs = ['tcl' + _ver, 'tk' + _ver]" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
         --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
 
-      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite}/include'], library_dirs=['${sqlite}/lib']@" lib_pypy/_sqlite3_build.py
+      sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
     '';
 
     buildPhase = ''
@@ -66,7 +66,7 @@ let
 
     doCheck = true;
     checkPhase = ''
-       export TERMINFO="${ncurses}/share/terminfo/";
+       export TERMINFO="${ncurses.out}/share/terminfo/";
        export TERM="xterm";
        export HOME="$TMPDIR";
        # disable shutils because it assumes gid 0 exists

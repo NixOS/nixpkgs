@@ -9,7 +9,7 @@ let
   common = { name, src }: stdenv.mkDerivation rec {
     inherit name src;
 
-    outputs = [ "out" "doc" ];
+    outputs = [ "out" "man" "doc" ];
 
     nativeBuildInputs = [ perl pkgconfig ];
 
@@ -22,8 +22,8 @@ let
     # would end up using the wrong bzip2 when cross-compiling.
     # XXX: The right thing would be to reinstate `--with-bzip2' in Nix.
     postUnpack =
-      '' export CPATH="${bzip2}/include"
-         export LIBRARY_PATH="${bzip2}/lib"
+      '' export CPATH="${bzip2.dev}/include"
+         export LIBRARY_PATH="${bzip2.out}/lib"
          export CXXFLAGS="-Wno-error=reserved-user-defined-literal"
       '';
 

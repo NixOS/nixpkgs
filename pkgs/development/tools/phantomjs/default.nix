@@ -1,6 +1,9 @@
-{ stdenv, fetchurl, freetype, fontconfig, openssl, unzip }:
+{ stdenv, lib, fetchurl, freetype, fontconfig, openssl, unzip }:
 
-assert stdenv.lib.elem stdenv.system [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+let
+  platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+in
+assert lib.elem stdenv.system platforms;
 
 stdenv.mkDerivation rec {
   name = "phantomjs-1.9.8";
@@ -27,12 +30,12 @@ stdenv.mkDerivation rec {
               sha256 = "0j0aq8dgzmb210xdrh0v3d4nblskl3zsckl8bzf1a603wcx085cg";
             };
 
-  buildInputs = if stdenv.isDarwin then [ unzip ] else [];
+  buildInputs = lib.optional stdenv.isDarwin unzip;
 
-  buildPhase = if stdenv.isDarwin then "" else ''
+  buildPhase = lib.optionalString (!stdenv.isDarwin) ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${freetype}/lib:${fontconfig}/lib:${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib:${openssl}/lib" \
+      --set-rpath "${stdenv.lib.makeLibraryPath [ freetype fontconfig stdenv.cc.cc stdenv.cc.cc openssl ]}" \
       bin/phantomjs
   '';
 
@@ -60,9 +63,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://phantomjs.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = lib.licenses.bsd3;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    maintainers = [ lib.maintainers.bluescreen303 ];
+    inherit platforms;
   };
 }

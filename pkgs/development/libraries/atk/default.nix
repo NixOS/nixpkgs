@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "ce6c48d77bf951083029d5a396dd552d836fff3c1715d3a7022e917e46d0c92b";
   };
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" ];
+
   buildInputs = libintlOrEmpty;
 
   nativeBuildInputs = [ pkgconfig perl ];
@@ -19,8 +23,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
 
   #doCheck = true; # no checks in there (2.10.0)
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "Accessibility toolkit";

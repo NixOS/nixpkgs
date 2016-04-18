@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0cgqaaikrb10plhf6zxbgqy32zqpiwyi9dpx3g8yr261q72r5c81";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib}/lib/glib-2.0/include";
+  NIX_CFLAGS_COMPILE = "-I${glib}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
 
   configureFlags = [ "--disable-gsettings-convert-install" ];
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/shotwell" \
      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
+     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gtk3.out}/share:$out/share:$GSETTINGS_SCHEMAS_PATH" \
      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
   '';
 

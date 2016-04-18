@@ -52,6 +52,10 @@ let
     [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline xlibsWrapper tcl tk sqlite ]
     ++ optional zlibSupport zlib;
 
+  mkPaths = paths: {
+    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
+    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
+  };
 
   # Build the basic Python interpreter without modules that have
   # external dependencies.
@@ -62,8 +66,7 @@ let
     inherit majorVersion version src patches buildInputs preConfigure
             configureFlags;
 
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+    inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
 
@@ -83,9 +86,9 @@ let
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
         mv $out/share/man/man1/{python.1,python2.6.1}
         ln -s $out/share/man/man1/{python2.6.1,python.1}
-        
+
         paxmark E $out/bin/python${majorVersion}
-        
+
         ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
@@ -139,8 +142,7 @@ let
 
       buildInputs = [ python ] ++ deps;
 
-      C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-      LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
+      inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
       buildPhase =
         ''

@@ -44,6 +44,7 @@ let
 
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
     outputs = [ "flash" "widevine" ];
+    out = "flash"; # outputs TODO: is this a hack?
 
     unpackCmd = let
       chan = if upstream-info.channel == "dev"    then "chrome-unstable"
@@ -64,7 +65,7 @@ let
 
     patchPhase = let
       rpaths = [ stdenv.cc.cc ];
-      mkrpath = p: "${makeSearchPath "lib64" p}:${makeSearchPath "lib" p}";
+      mkrpath = p: "${makeSearchPathOutputs "lib64" ["lib"] p}:${makeLibraryPath p}";
     in ''
       for sofile in PepperFlash/libpepflashplayer.so \
                     libwidevinecdm.so libwidevinecdmadapter.so; do

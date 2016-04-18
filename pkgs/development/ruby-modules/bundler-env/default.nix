@@ -10,6 +10,7 @@
 , postBuild ? null
 , document ? []
 , meta ? {}
+, groups ? ["default"]
 , ignoreCollisions ? false
 , ...
 }@args:
@@ -18,14 +19,19 @@ let
 
   shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   importedGemset = import gemset;
+  filteredGemset = (lib.filterAttrs (name: attrs:
+    if (builtins.hasAttr "groups" attrs)
+    then (builtins.any (gemGroup: builtins.any (group: group == gemGroup) groups) attrs.groups)
+    else true
+  ) importedGemset);
   applyGemConfigs = attrs:
     (if gemConfig ? "${attrs.gemName}"
     then attrs // gemConfig."${attrs.gemName}" attrs
     else attrs);
-  configuredGemset = lib.flip lib.mapAttrs importedGemset (name: attrs:
-    applyGemConfigs (attrs // { gemName = name; })
+  configuredGemset = lib.flip lib.mapAttrs filteredGemset (name: attrs:
+    applyGemConfigs (attrs // { inherit ruby; gemName = name; })
   );
-  hasBundler = builtins.hasAttr "bundler" importedGemset;
+  hasBundler = builtins.hasAttr "bundler" filteredGemset;
   bundler = if hasBundler then gems.bundler else defs.bundler.override (attrs: { inherit ruby; });
   gems = lib.flip lib.mapAttrs configuredGemset (name: attrs:
     buildRubyGem ((removeAttrs attrs ["source"]) // attrs.source // {
@@ -40,12 +46,6 @@ let
     mkdir -p $out
     cp ${gemfile} $out/Gemfile
     cp ${lockfile} $out/Gemfile.lock
-
-    cd $out
-    chmod +w Gemfile.lock
-    export GEM_PATH=${bundler}/${ruby.gemPath}
-    ${ruby}/bin/ruby -rubygems -e \
-      "require 'bundler'; Bundler.definition.lock('Gemfile.lock')"
   '';
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
   bundlerEnv = buildEnv {
@@ -58,7 +58,8 @@ let
         "${confFiles}/Gemfile" \
         "$out/${ruby.gemPath}" \
         "${bundler}/${ruby.gemPath}" \
-        ${shellEscape (toString envPaths)}
+        ${shellEscape (toString envPaths)} \
+        ${shellEscape (toString groups)}
     '' + lib.optionalString (postBuild != null) postBuild;
     passthru = rec {
       inherit ruby bundler meta gems;
@@ -72,6 +73,7 @@ let
             makeWrapper "$i" $out/bin/$(basename "$i") \
               --set BUNDLE_GEMFILE ${confFiles}/Gemfile \
               --set BUNDLE_PATH ${bundlerEnv}/${ruby.gemPath} \
+              --set BUNDLE_FROZEN 1 \
               --set GEM_HOME ${bundlerEnv}/${ruby.gemPath} \
               --set GEM_PATH ${bundlerEnv}/${ruby.gemPath}
           done

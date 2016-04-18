@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuild = true;
 
-  configurePhase = ''
-    sed -i -e 's|/bin/pwd|pwd|g' configure
-    ./configure -config release -prefix $out -qmake ${qt5.qtbase}/bin/qmake
+  postPatch = ''
+    sed -i -e 's|/bin/pwd|pwd|g' -e 's/which/type -P/' configure
   '';
+
+  configureFlags = [ "-config release" ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform IRC framework written with Qt";

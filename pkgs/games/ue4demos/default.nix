@@ -12,7 +12,7 @@ let
 
       rtdeps = stdenv.lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPath "lib64" [ stdenv.cc.cc ];
+        + ":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] [ stdenv.cc.cc ];
 
       buildCommand =
       ''
@@ -20,7 +20,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \

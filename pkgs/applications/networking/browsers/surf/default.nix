@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/bin/surf" \
-      --prefix GIO_EXTRA_MODULES : ${glib_networking}/lib/gio/modules \
+      --prefix GIO_EXTRA_MODULES : ${glib_networking.out}/lib/gio/modules \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

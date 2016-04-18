@@ -143,8 +143,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional busMouse "--enable-busmouse"
     ;
 
-  NIX_CFLAGS_COMPILE="-I${gtk}/include/gtk-2.0/ -I${libtool}/include/";
-  NIX_LDFLAGS="-L${libtool}/lib";
+  NIX_CFLAGS_COMPILE="-I${gtk.dev}/include/gtk-2.0/ -I${libtool}/include/";
+  NIX_LDFLAGS="-L${libtool.lib}/lib";
 
   hardeningDisable = [ "format" ];
 

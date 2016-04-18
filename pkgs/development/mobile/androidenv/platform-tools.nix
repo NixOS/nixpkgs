@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       ''
         for i in adb dmtracedump fastboot hprof-conv sqlite3
         do
-            patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
+            patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
             patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:`pwd`/lib $i
         done
         

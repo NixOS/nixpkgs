@@ -41,11 +41,13 @@ import ./make-test.nix ({ pkgs, ... }: {
           pkgs.kde4.kdenetwork
           pkgs.kde4.kdetoys
           pkgs.kde4.kdewebdev
+          pkgs.xorg.xmessage
         ];
     };
 
-  testScript = '' 
+  testScript = ''
       $machine->waitUntilSucceeds("pgrep plasma-desktop");
+      $machine->succeed("xauth merge ~alice/.Xauthority");
       $machine->waitForWindow(qr/plasma-desktop/);
 
       # Check that logging in has given the user ownership of devices.
@@ -62,7 +64,7 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       $machine->sleep(10);
 
-      $machine->screenshot("screen"); 
+      $machine->screenshot("screen");
     '';
 
 })

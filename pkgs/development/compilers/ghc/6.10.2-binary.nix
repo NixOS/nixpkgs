@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
     (if stdenv.isLinux then ''
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${libedit}/lib:${ncurses}/lib:${gmp}/lib" {} \;
+          --set-rpath "${libedit}/lib:${ncurses.out}/lib:${gmp.out}/lib" {} \;
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done
      '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${gmp}/lib --with-gmp-includes=${gmp}/include
+    ./configure --prefix=$out --with-gmp-libraries=${gmp.out}/lib --with-gmp-includes=${gmp.dev or gmp}/include
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
@@ -65,8 +65,8 @@ stdenv.mkDerivation rec {
     (if stdenv.isDarwin then
       ''
         mkdir -p $out/frameworks/GMP.framework/Versions/A
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
-        ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
+        ln -s ${gmp.out}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
+        ln -s ${gmp.out}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
         # !!! fix this
         mkdir -p $out/frameworks/GNUeditline.framework/Versions/A
         ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/GNUeditline
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     +
       ''
         # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
-        sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp}/lib\",\2@" $out/lib/ghc-${version}/package.conf
+        sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp.out}/lib\",\2@" $out/lib/ghc-${version}/package.conf
 
         # Sanity check, can ghc create executables?
         cd $TMP

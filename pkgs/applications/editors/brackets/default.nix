@@ -1,11 +1,11 @@
 { stdenv, fetchurl, buildEnv, gtk, glib, gdk_pixbuf, alsaLib, nss, nspr, gconf
-, cups, libgcrypt_1_5, makeWrapper, dbus, udev }:
+, cups, libgcrypt_1_5, libudev, makeWrapper, dbus }:
 let
   bracketsEnv = buildEnv {
     name = "env-brackets";
     paths = [
       gtk glib gdk_pixbuf stdenv.cc.cc alsaLib nss nspr gconf cups libgcrypt_1_5
-      dbus udev
+      dbus libudev.out
     ];
   };
 in
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
     ln -sf $out/opt/brackets/brackets $out/bin/brackets
 
-    ln -s ${udev}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
+    ln -s ${libudev.out}/lib/libudev.so.1 $out/opt/brackets/lib/libudev.so.0
 
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${bracketsEnv}/lib:${bracketsEnv}/lib64" \

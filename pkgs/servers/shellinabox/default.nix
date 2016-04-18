@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./shellinabox/launcher.c --replace "/usr/games" "${openssh}/bin"
     substituteInPlace ./shellinabox/service.c --replace "/bin/login" "${shadow}/bin/login"
     substituteInPlace ./shellinabox/launcher.c --replace "/bin/login" "${shadow}/bin/login"
-    substituteInPlace ./libhttp/ssl.c --replace "/usr/bin" "${openssl}/bin"
+    substituteInPlace ./libhttp/ssl.c --replace "/usr/bin" "${openssl.bin}/bin"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/shellinaboxd \
-      --prefix LD_LIBRARY_PATH : ${openssl}/lib
+      --prefix LD_LIBRARY_PATH : ${openssl.out}/lib
     mkdir -p $out/lib
     cp shellinabox/* $out/lib
   '';

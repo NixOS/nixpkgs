@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL frei0r gettext makeWrapper mlt pkgconfig qtbase ];
 
-  configurePhase = "qmake PREFIX=$out";
+  configurePhase = ''
+    runHook preConfigure
+    qmake PREFIX=$out
+    runHook postConfigure
+  '';
 
   postInstall = ''
     mkdir -p $out/share/shotcut

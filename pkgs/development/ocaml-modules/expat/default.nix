@@ -28,8 +28,8 @@ stdenv.mkDerivation {
   postPatch = ''
     substituteInPlace "unittest.ml" \
       --replace "/home/maas/xml-samples/REC-xml-19980210.xml.txt" "${testcase}"
-    substituteInPlace Makefile --replace "EXPAT_LIBDIR=/usr/local/lib" "EXPAT_LIBDIR=${expat}/lib" \
-    substituteInPlace Makefile --replace "EXPAT_INCDIR=/usr/local/include" "EXPAT_INCDIR=${expat}/include" \
+    substituteInPlace Makefile --replace "EXPAT_LIBDIR=/usr/local/lib" "EXPAT_LIBDIR=${expat.out}/lib" \
+    substituteInPlace Makefile --replace "EXPAT_INCDIR=/usr/local/include" "EXPAT_INCDIR=${expat.dev}/include" \
   '';
 
   configurePhase = "true";  	# Skip configure

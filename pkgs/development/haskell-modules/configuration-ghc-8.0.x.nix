@@ -59,4 +59,22 @@ self: super: {
   comonad_5 = dontCheck super.comonad_5;  # https://github.com/ekmett/comonad/issues/33
   comonad = self.comonad_5;
 
+  # Versions <= 5.2 don't compile with transformers 0.5 or later.
+  bifunctors = self.bifunctors_5_3;
+
+  # https://github.com/ekmett/semigroupoids/issues/42
+  semigroupoids = dontCheck super.semigroupoids;
+
+  # Version 4.x doesn't compile with transformers 0.5 or later.
+  kan-extensions = self.kan-extensions_5_0_1;
+
+  # Earlier versions don't support kan-extensions 5.x.
+  lens = self.lens_4_13_2_1;
+
+  # https://github.com/dreixel/generic-deriving/issues/37
+  generic-deriving = dontHaddock super.generic-deriving;
+
+  # https://github.com/haskell-suite/haskell-src-exts/issues/302
+  haskell-src-exts = dontCheck super.haskell-src-exts;
+
 }

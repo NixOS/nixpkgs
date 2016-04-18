@@ -26,6 +26,9 @@ let
       inherit sha256;
     };
 
+  # Can't do separate $lib and $bin, as libs reference bins
+  outputs = [ "dev" "out" "man" ];
+
     buildInputs = [ zlib apr aprutil sqlite ]
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
@@ -65,6 +68,12 @@ let
 
       mkdir -p $out/share/bash-completion/completions
       cp tools/client-side/bash_completion $out/share/bash-completion/completions/subversion
+
+    for f in $out/lib/*.la; do
+      substituteInPlace $f --replace "${expat.dev}/lib" "${expat.out}/lib"
+      substituteInPlace $f --replace "${zlib.dev}/lib" "${zlib.out}/lib"
+      substituteInPlace $f --replace "${sqlite.dev}/lib" "${sqlite.out}/lib"
+    done
     '';
 
     inherit perlBindings pythonBindings;

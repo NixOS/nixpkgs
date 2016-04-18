@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-I${libXpm}/include/X11";
+  NIX_CFLAGS_COMPILE = "-I${libXpm.dev}/include/X11";
 
   patches =
     let

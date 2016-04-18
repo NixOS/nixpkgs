@@ -101,7 +101,8 @@ core = stdenv.mkDerivation rec {
     cp ../texk/texlive/linked_scripts/scripts.lst "$out/share/texmf-dist/scripts/texlive/"
   '' + /* doc location identical with individual TeX pkgs */ ''
     mkdir -p "$doc/doc"
-    mv "$out"/share/{man,info} "$doc"/doc
+    mv "$doc"/share/{man,info} "$doc"/doc
+    rmdir "$doc"/share
   '' + cleanBrokenLinks;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, http-parser, libiconv}:
+{ stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, http-parser, libiconv }:
 
 stdenv.mkDerivation (rec {
   version = "0.23.2";

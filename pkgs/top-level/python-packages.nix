@@ -307,7 +307,7 @@ in modules // {
     doCheck = false;
 
     patchPhase = ''
-      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl}/bin/openssl"
+      substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
       substituteInPlace letsencrypt/le_util.py --replace '"sw_vers"' '"/usr/bin/sw_vers"'
     '';
 
@@ -614,7 +614,7 @@ in modules // {
       mkdir -p $out/share
       cp -r extra/themes $out/share
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib:${pkgs.gpgme}/lib
+        --prefix LD_LIBRARY_PATH : '${pkgs.lib.makeLibraryPath [ pkgs.notmuch pkgs.file pkgs.gpgme ]}'
     '';
 
     meta = {
@@ -1224,11 +1224,11 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.1";
+    version = "1.10.18";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/awscli/${name}.tar.gz";
-      sha256 = "159c8nfcighlkcbdzck102cp06g7rpgbbvxpb73vjymgqrzqywvb";
+      sha256 = "0vdj7p4cwsbzhanhp5f2c0b0qr2gh76dyanji73avvj4jvdb5d4g";
     };
 
     # No tests included
@@ -1237,6 +1237,7 @@ in modules // {
     propagatedBuildInputs = with self; [
       botocore
       bcdoc
+      s3transfer
       six
       colorama
       docutils
@@ -1767,17 +1768,20 @@ in modules // {
   };
 
   bedup = buildPythonPackage rec {
-    name = "bedup-20140413";
+    version = "0.10";
+    name = "bedup-${version}";
 
     src = pkgs.fetchgit {
       url = "https://github.com/g2p/bedup.git";
-      rev = "5189e166145b8954ac41883f81ef3c3b50dc96ab";
-      sha256 = "e61768fa19934bd176799f90bda3ea9f49a5def21fa2523a8e47df8a48e730e9";
+      rev = "598fd4b";
+      sha256 = "0s11dpf4k26n8qxrx6wcsr78vp98rx3yibzkh6ifmsyaqcmpm7wy";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
     propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
       ++ optionals (!isPyPy) [ cffi ];
+
+    disabled = pythonOlder "3.3";
 
     # No proper test suite. Included tests cannot be run because of relative import
     doCheck = false;
@@ -2505,12 +2509,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.3.23"; # This version is required by awscli
+    version = "1.4.9"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "00iaapmy07zdhm2y23fk9igrskzdkix53j7g45lc5dg9nfyngq6j";
+      sha256 = "07rp24lnpjlk0c889g0d8y2ykc711gi04w715nkm9mv734ndsman";
     };
 
     propagatedBuildInputs =
@@ -2834,10 +2838,9 @@ in modules // {
 
     postPatch = ''
       # Hardcode cairo library path
-      # FIXME: for closure-size branch all pkgs.foo should be replaced with pkgs.foo.lib
-      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo}
-      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib}
-      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf}
+      substituteInPlace cairocffi/__init__.py --subst-var-by cairo ${pkgs.cairo.out}
+      substituteInPlace cairocffi/__init__.py --subst-var-by glib ${pkgs.glib.out}
+      substituteInPlace cairocffi/__init__.py --subst-var-by gdk_pixbuf ${pkgs.gdk_pixbuf.out}
     '';
 
     meta = {
@@ -3024,6 +3027,33 @@ in modules // {
     };
   };
 
+  # This package is no longer actively maintained and can be removed if it becomes broken.
+  cgkit = buildPythonPackage rec {
+    version = "2.0.0";
+    name = "cgkit-${version}";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "http://downloads.sourceforge.net/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
+      sha256 = "0vvllc42mdyma3c7yqhahs4bfxymm2kvmc4va7dxqr5x0rzh6rd6";
+    };
+
+    patches = [ ../development/python-modules/cgkit/scons-env.patch ];
+
+    buildInputs = with pkgs; [ scons boost mesa ];
+
+    preBuild = ''
+      cd supportlib
+      scons
+      cd -
+    '';
+
+    meta = {
+      homepage = http://cgkit.sourceforge.net;
+      description = "Python Computer Graphics Kit";
+      maintainers = with maintainers; [ expipiplus1 ];
+    };
+  };
 
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
@@ -6016,7 +6046,7 @@ in modules // {
     preFixup = ''
         wrapProgram $out/bin/gtimelog \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${pkgs.gtk3.out}/lib" \
 
     '';
 
@@ -7372,7 +7402,7 @@ in modules // {
     preConfigure = ''
        cat > site.cfg << END
        [samplerate]
-       library_dirs=${pkgs.libsamplerate}/lib
+       library_dirs=${pkgs.libsamplerate.out}/lib
        include_dirs=${pkgs.libsamplerate}/include
        END
     '';
@@ -8021,12 +8051,12 @@ in modules // {
 
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.9.4";
+    version = "1.9.5";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.9/${name}.tar.gz";
-      sha256 = "1sdxixj4p3wx245dm608bqw5bdabl701qab0ar5wjivyd6mfga5d";
+      sha256 = "19kaw9flk9jjz1n7q378waybxnkrrhkq240lby4zaaas62nnfip5";
     };
 
     # patch only $out/bin to avoid problems with starter templates (see #3134)
@@ -8045,12 +8075,12 @@ in modules // {
 
   django_1_8 = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.8.11";
+    version = "1.8.12";
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.8/${name}.tar.gz";
-      sha256 = "1yrmlj3h2hp5kc5m11ybya21x2wfr5bqqbkcsw6hknj86pkqn57c";
+      sha256 = "04vi1rmin161drssqhi9n54j6mz8l6vs46pc7zbn50vzacysg3xn";
     };
 
     # too complicated to setup
@@ -10265,11 +10295,11 @@ in modules // {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.1";
+    name = "httplib2-0.9.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1xc3clbrf77r0600kja71j7hk1218sjiq0gfmb8vjdajka8kjqxw";
+      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
     };
 
     meta = {
@@ -12503,7 +12533,7 @@ in modules // {
 
     patchPhase = optionalString stdenv.isLinux ''
       substituteInPlace monotonic.py --replace \
-        "ctypes.util.find_library('c')" "'${stdenv.glibc}/lib/libc.so.6'"
+        "ctypes.util.find_library('c')" "'${stdenv.glibc.out}/lib/libc.so.6'"
     '';
   };
 
@@ -15557,7 +15587,7 @@ in modules // {
     meta = {
       description = "Bringing the power of python to stream editing";
       homepage = https://github.com/timbertson/piep;
-      maintainers = with maintainers; [ gfxmonk ];
+      maintainers = with maintainers; [ timbertson ];
       license = licenses.gpl3;
     };
   };
@@ -15695,7 +15725,7 @@ in modules // {
     };
 
     prePatch = ''
-      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile}/lib/libsndfile.so'"
+      substituteInPlace soundfile.py --replace "'sndfile'" "'${pkgs.libsndfile.out}/lib/libsndfile.so'"
     '';
 
     # https://github.com/bastibe/PySoundFile/issues/157
@@ -15758,13 +15788,15 @@ in modules // {
       ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    preConfigure = ''
+    preConfigure = let
+      libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
+    in ''
       sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
               s|^LCMS_ROOT =.*$|LCMS_ROOT = _lib_include("${pkgs.libwebp}")|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = _lib_include("${pkgs.libtiff}")|g ;
+              s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
               s|^TCL_ROOT=.*$|TCL_ROOT = _lib_include("${pkgs.tcl}")|g ;'
     ''
     # Remove impurities
@@ -16421,7 +16453,7 @@ in modules // {
     preConfigure = ''
       substituteInPlace setup.py \
         --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+        --replace '"/usr/lib"' '"${pkgs.binutils.out}/lib"'
     '';
 
     meta = {
@@ -16835,11 +16867,11 @@ in modules // {
     doCheck = false;
 
     preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw}/lib -L${pkgs.fftwFloat}/lib -L${pkgs.fftwLongDouble}/lib"
+      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
       export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
     '';
     #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw}/lib"
+    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
     #'';
 
     meta = {
@@ -17588,7 +17620,7 @@ in modules // {
 
     postPatch = ''
       sed -i -e '/udev_library_name/,/^ *libudev/ {
-        s|CDLL([^,]*|CDLL("${pkgs.udev}/lib/libudev.so.1"|p; d
+        s|CDLL([^,]*|CDLL("${pkgs.libudev.out}/lib/libudev.so.1"|p; d
       }' pyudev/_libudev.py
     '';
 
@@ -18037,8 +18069,8 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace "setup.cfg"                                     \
-              --replace "/usr/local/include" "${pkgs.sqlite}/include"   \
-              --replace "/usr/local/lib" "${pkgs.sqlite}/lib"
+              --replace "/usr/local/include" "${pkgs.sqlite.dev}/include"   \
+              --replace "/usr/local/lib" "${pkgs.sqlite.out}/lib"
     '';
 
     # error: invalid command 'test'
@@ -18094,9 +18126,11 @@ in modules // {
       cd Source
       python setup.py backport
       python setup.py configure \
-        --apr-inc-dir=${pkgs.apr}/include/apr-1 \
-        --apu-inc-dir=${pkgs.aprutil}/include/apr-1 \
-        --apr-lib-dir=${pkgs.apr}/lib \
+        --apr-inc-dir=${pkgs.apr.dev}/include \
+        --apu-inc-dir=${pkgs.aprutil.dev}/include \
+        --apr-lib-dir=${pkgs.apr.out}/lib \
+        --svn-lib-dir=${pkgs.subversion.out}/lib \
+        --svn-bin-dir=${pkgs.subversion.out}/bin \
         --svn-root-dir=${pkgs.subversion}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
@@ -18406,7 +18440,7 @@ in modules // {
 
 
   reportlab =
-   let freetype = overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
+   let freetype = overrideDerivation pkgs.freetype (args: { dontDisableStatic = true; });
    in buildPythonPackage rec {
     name = "reportlab-3.2.0";
 
@@ -19349,6 +19383,39 @@ in modules // {
     };
   };
 
+  s3transfer = buildPythonPackage rec {
+    version = "0.0.1"; # This version is required by awscli
+    name = "s3transfer-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/s3transfer/${name}.tar.gz";
+      sha256 = "0ma31zvv7gy240xgd1zw853lpzkdci6mapzpg3x4vycann6yvf9b";
+    };
+
+    foo = 1;
+
+    propagatedBuildInputs =
+      [ self.botocore
+      ] ++ stdenv.lib.optional (pythonOlder "3") self.futures;
+
+    buildInputs = with self; [ docutils mock nose coverage wheel unittest2 ];
+
+    checkPhase = ''
+      pushd s3transfer/tests
+      nosetests -v unit/ functional/
+      popd
+    '';
+
+    # version on pypi has no tests/ dir
+    doCheck = false;
+
+    meta = {
+      homepage = https://github.com/boto/s3transfer;
+      license = stdenv.lib.licenses.asl20;
+      description = "A library for managing Amazon S3 transfers";
+    };
+  };
+
   seqdiag = buildPythonPackage rec {
     name = "seqdiag-0.9.4";
 
@@ -19587,7 +19654,7 @@ in modules // {
 
     patchPhase = ''
       cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11}/lib/libX11.so.6"
+      substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${pkgs.xorg.libX11.out}/lib/libX11.so.6"
       gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
       gcc -shared \
         -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -21197,7 +21264,7 @@ in modules // {
     # I don't know why I need to add these libraries. Shouldn't they
     # be part of wxPython?
     postInstall = ''
-      libspaths=${pkgs.xorg.libSM}/lib:${pkgs.xorg.libXScrnSaver}/lib
+      libspaths=${with pkgs.xorg; pkgs.lib.makeLibraryPath [ libSM libXScrnSaver ]}
       wrapProgram $out/bin/taskcoach.py \
         --prefix LD_LIBRARY_PATH : $libspaths
     '';
@@ -21887,13 +21954,13 @@ in modules // {
   };
 
   tzlocal = buildPythonPackage rec {
-    name = "tzlocal-1.1.1";
+    name = "tzlocal-1.2.2";
 
     propagatedBuildInputs = with self; [ pytz ];
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tzlocal/tzlocal-1.1.1.zip";
-      sha256 = "696bfd8d7c888de039af6c6fdf86fd52e32508277d89c75d200eb2c150487ed4";
+      url = "https://pypi.python.org/packages/source/t/tzlocal/${name}.tar.gz";
+      sha256 = "0paj7vlsb0np8b5sp4bv64wxv7qk2piyp7xg29pkhdjwsbls9fnb";
     };
 
      # test fail (timezone test fail)
@@ -23534,14 +23601,14 @@ in modules // {
 
   tunigo = buildPythonPackage rec {
     name = "tunigo-${version}";
-    version = "0.1.3";
+    version = "1.0.0";
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchFromGitHub {
       owner = "trygveaa";
       repo = "python-tunigo";
       rev = "v${version}";
-      sha256 = "02ili37dbs5mk5f6v3fmi1sji39ymc4zyq44x0abxzr88nc8nh97";
+      sha256 = "07q9girrjjffzkn8xj4l3ynf9m4psi809zf6f81f54jdb330p2fs";
     };
 
     buildInputs = with self; [ mock nose ];
@@ -23956,7 +24023,7 @@ in modules // {
 
     # Fix the USB backend library lookup
     postPatch = ''
-      libusb=${pkgs.libusb1}/lib/libusb-1.0.so
+      libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
     '';
@@ -24127,7 +24194,7 @@ in modules // {
       mock
     ];
 
-    LD_LIBRARY_PATH = "${pkgs.cairo}/lib";
+    LD_LIBRARY_PATH = "${pkgs.cairo.out}/lib";
 
     meta = {
       description = "Graphite-web, without the interface. Just the rendering HTTP API";
@@ -25386,15 +25453,15 @@ in modules // {
   };
 
   geeknote = buildPythonPackage rec {
-    version = "2015-03-02";
+    version = "2015-05-11";
     name = "geeknote-${version}";
     disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
       owner = "VitaliyRodnenko";
       repo = "geeknote";
-      rev = "7ea2255bb6";
-      sha256 = "0lw3m8g7r8r7dxhqih08x0i6agd201q2ig35a59rd4vygr3xqw2j";
+      rev = "8489a87d044e164edb321ba9acca8d4631de3dca";
+      sha256 = "0l16v4xnyqnsf84b1pma0jmdyxvmfwcv3sm8slrv3zv7zpmcm3lf";
     };
 
     /* build with tests fails with "Can not create application dirictory :
@@ -25737,7 +25804,7 @@ in modules // {
 
     patchPhase = ''
       # Hardcode cairo library path
-      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb}/lib/" + ,' -i xcffib/__init__.py
+      sed -e 's,ffi\.dlopen(,&"${pkgs.xorg.libxcb.out}/lib/" + ,' -i xcffib/__init__.py
     '';
 
     propagatedBuildInputs = [ self.cffi self.six ];
@@ -25752,11 +25819,11 @@ in modules // {
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.4.3";
+    version = "0.5.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pafy/${name}.tar.gz";
-      sha256 = "1la4nn4n66p6dmcf1dyxw7i5j0xprmq82gwmxjv1jjis7vsnk254";
+      sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
 
     propagatedBuildInputs = with self; [ youtube-dl ];

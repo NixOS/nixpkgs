@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/share/bash-completion/completions"
     mkdir -p "$out/share/zsh/site-functions"
-    mkdir -p "$out/share/fish/completions"
+    mkdir -p "$out/share/fish/vendor_completions.d"
   '';
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     '' else ""}
   '';
 
-  wrapperPath = with stdenv.lib; makeSearchPath "bin/" ([
+  wrapperPath = with stdenv.lib; makeBinPath ([
     coreutils
     gnused
     getopt

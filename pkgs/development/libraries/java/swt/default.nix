@@ -1,9 +1,6 @@
 { stdenv, fetchurl, unzip, jdk, pkgconfig, gtk
-, libXtst
-, libXi
-, mesa
-, webkit
-, libsoup
+, libXtst, libXi, mesa, webkit, libsoup, xorg
+, pango, gdk_pixbuf, glib
 }:
 
 let
@@ -26,8 +23,6 @@ in stdenv.mkDerivation rec {
   fullVersion = "${version}-201202080800";
   name = "swt-${version}";
 
-  builder = ./builder.sh;
-
   hardeningDisable = [ "format" ];
 
   # Alas, the Eclipse Project apparently doesn't produce source-only
@@ -38,6 +33,41 @@ in stdenv.mkDerivation rec {
     sha256 = metadata.sha256;
   };
 
-  buildInputs = [unzip jdk pkgconfig gtk libXtst libXi mesa webkit libsoup];
-  inherit jdk;
+  sourceRoot = ".";
+
+  buildInputs = [ unzip jdk pkgconfig gtk libXtst libXi mesa webkit libsoup ];
+
+  NIX_LFLAGS = [ "-lX11" "-I${xorg.libX11}/lib"
+    "-lpango-1.0" "-I${pango}/lib"
+    "-lgdk_pixbuf-2.0" "-I${gdk_pixbuf}/lib"
+    "-lglib-2.0" "-I${glib}/lib"];
+
+  buildPhase = ''
+    unzip src.zip -d src
+
+    cd src
+    sed -i "s#^LFLAGS =#LFLAGS = $NIX_LFLAGS #g"  *.mak
+    export JAVA_HOME=${jdk}
+
+    sh ./build.sh
+
+    mkdir out
+    javac -d out/ $(find org/ -name "*.java")
+  '';
+
+  installPhase = ''
+    mkdir -p $out/lib
+    cp *.so $out/lib
+
+    mkdir -p $out/jars
+    cp version.txt out/
+    cd out && jar -c * > $out/jars/swt.jar
+  '';
+
+  meta = with stdenv.lib; {
+    homepage = http://www.eclipse.org/swt/;
+    description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
+    license = licenses.epl10;
+    maintainers = with maintainers; [ pSub ];
+  };
 }

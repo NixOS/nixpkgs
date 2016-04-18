@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # To avoid problems finding SDL_types.h.
-  configureFlags = [ "CFLAGS=-I${SDL}/include/SDL" ];
+  configureFlags = [ "CFLAGS=-I${SDL.dev}/include/SDL" ];
 
   meta = with stdenv.lib; {
     description = "Quick tactics game";

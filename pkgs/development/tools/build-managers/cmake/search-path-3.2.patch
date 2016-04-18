@@ -1,31 +1,20 @@
-diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
-index 20ee1d1..39834e6 100644
---- a/Modules/Platform/UnixPaths.cmake
-+++ b/Modules/Platform/UnixPaths.cmake
-@@ -33,64 +33,18 @@ get_filename_component(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
+diff -ru3 cmake-3.4.3/Modules/Platform/UnixPaths.cmake cmake-3.4.3-new/Modules/Platform/UnixPaths.cmake
+--- cmake-3.4.3/Modules/Platform/UnixPaths.cmake	2016-01-25 19:57:19.000000000 +0300
++++ cmake-3.4.3-new/Modules/Platform/UnixPaths.cmake	2016-04-14 00:20:08.963492213 +0300
+@@ -32,9 +32,6 @@
+ # List common installation prefixes.  These will be used for all
  # search types.
  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
-   # Standard
+-  # Standard
 -  /usr/local /usr /
 -
--  # CMake install location
--  "${_CMAKE_INSTALL_DIR}"
--  )
--if (NOT CMAKE_FIND_NO_INSTALL_PREFIX)
--  list(APPEND CMAKE_SYSTEM_PREFIX_PATH
--    # Project install destination.
--    "${CMAKE_INSTALL_PREFIX}"
--  )
--  if(CMAKE_STAGING_PREFIX)
--    list(APPEND CMAKE_SYSTEM_PREFIX_PATH
--      # User-supplied staging prefix.
--      "${CMAKE_STAGING_PREFIX}"
--    )
--  endif()
--endif()
--
--# List common include file locations not under the common prefixes.
--list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+   # CMake install location
+   "${_CMAKE_INSTALL_DIR}"
+   )
+@@ -53,44 +50,25 @@
+ 
+ # List common include file locations not under the common prefixes.
+ list(APPEND CMAKE_SYSTEM_INCLUDE_PATH
 -  # Windows API on Cygwin
 -  /usr/include/w32api
 -
@@ -36,9 +25,10 @@ index 20ee1d1..39834e6 100644
 -  /usr/pkg/include
 -  /opt/csw/include /opt/include
 -  /usr/openwin/include
--  )
++  @glibc_dev@/include
+   )
 -
--list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+ list(APPEND CMAKE_SYSTEM_LIBRARY_PATH
 -  # Windows API on Cygwin
 -  /usr/lib/w32api
 -
@@ -49,26 +39,26 @@ index 20ee1d1..39834e6 100644
 -  /usr/pkg/lib
 -  /opt/csw/lib /opt/lib
 -  /usr/openwin/lib
--  )
--
--list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
++  @glibc_lib@/lib
+   )
+ 
+ list(APPEND CMAKE_SYSTEM_PROGRAM_PATH
 -  /usr/pkg/bin
-+  "@glibc@"
++  @glibc_bin@/bin
    )
  
  list(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
 -  /lib /lib32 /lib64 /usr/lib /usr/lib32 /usr/lib64
-+  "@glibc@/lib"
++  @glibc_lib@/lib
    )
  
  list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  @glibc_dev@/include
    )
  list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
 -  /usr/include
-+  "@glibc@/include"
++  @glibc_dev@/include
    )
  
  # Enable use of lib64 search path variants by default.
-

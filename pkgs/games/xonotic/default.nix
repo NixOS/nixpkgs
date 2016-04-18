@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
   #'';
 
   NIX_LDFLAGS = ''
-    -rpath ${zlib}/lib
-    -rpath ${libvorbis}/lib
-    -rpath ${curl}/lib
+    -rpath ${zlib.out}/lib
+    -rpath ${libvorbis.out}/lib
+    -rpath ${curl.out}/lib
   '';
 
   buildPhase = ''

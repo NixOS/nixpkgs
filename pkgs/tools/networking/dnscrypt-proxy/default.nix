@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsodium ] ++ optional stdenv.isLinux systemd;
 
+  outputs = [ "out" "man" ];
+
   meta = {
     description = "A tool for securing communications between a client and a DNS resolver";
     homepage = https://dnscrypt.org/;

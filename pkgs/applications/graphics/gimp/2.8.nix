@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # "screenshot" needs this.
-  NIX_LDFLAGS = "-rpath ${xorg.libX11}/lib"
+  NIX_LDFLAGS = "-rpath ${xorg.libX11.out}/lib"
     + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
 
   meta = {

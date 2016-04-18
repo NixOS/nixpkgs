@@ -25,6 +25,8 @@ import ./make-test.nix ({ pkgs, ...} : {
         };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       security.sudo = { enable = true; wheelNeedsPassword = false; };
+      security.hideProcessInformation = true;
+      users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
     };
 
   testScript =
@@ -116,6 +118,13 @@ import ./make-test.nix ({ pkgs, ...} : {
       # Test sudo
       subtest "sudo", sub {
           $machine->succeed("su - sybil -c 'sudo true'");
+      };
+
+      # Test hidepid
+      subtest "hidepid", sub {
+          $machine->succeed("grep -Fq hidepid=2 /etc/mtab");
+          $machine->succeed("[ `su - sybil -c 'pgrep -c -u root'` = 0 ]");
+          $machine->succeed("[ `su - alice -c 'pgrep -c -u root'` != 0 ]");
       };
     '';
 })

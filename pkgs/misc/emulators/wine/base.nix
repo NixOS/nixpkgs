@@ -1,5 +1,6 @@
 { stdenv, lib, pkgArches,
   name, version, src, monos, geckos, platforms,
+  pkgconfig, fontforge, makeWrapper, flex, bison,
   pulseaudioSupport,
   buildScript ? null, configureFlags ? ""
 }:
@@ -14,28 +15,38 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 }) // rec {
   inherit name src configureFlags;
 
-  buildInputs = toBuildInputs pkgArches (pkgs: with pkgs; [
-    pkgconfig alsaLib lcms2 fontforge libxml2 libxslt makeWrapper flex bison
-  ]);
+  nativeBuildInputs = [
+    pkgconfig fontforge makeWrapper flex bison
+  ];
 
-  nativeBuildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
+  buildInputs = toBuildInputs pkgArches (pkgs: (with pkgs; [
     freetype fontconfig mesa mesa_noglu.osmesa libdrm libpng libjpeg openssl gnutls cups ncurses
+    alsaLib libxml2 libxslt lcms2 gettext dbus mpg123 openal
   ])
   ++ lib.optional pulseaudioSupport pkgs.libpulseaudio
   ++ (with pkgs.xorg; [
-    xlibsWrapper libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite
+    libXi libXcursor libXinerama libXrandr libXrender libXxf86vm libXcomposite libXext
   ]));
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
-  NIX_LDFLAGS = map
-    (path: "-rpath ${path}/lib")
-    ([ stdenv.cc.cc ] ++ nativeBuildInputs);
+  NIX_LDFLAGS = map (path: "-rpath " + path) (
+      map (x: "${x}/lib") ([ stdenv.cc.cc ] ++ (map (x: x.lib or x.out) buildInputs))
+      # libpulsecommon.so is linked but not found otherwise
+      ++ lib.optionals pulseaudioSupport (map (x: "${x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
+    );
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
   dontPatchELF = true;
+
+  # Disable stripping to avoid breaking placeholder DLLs/EXEs.
+  # Symptoms of broken placeholders are: when the wineprefix is created
+  # drive_c/windows/system32 will only contain a few files instead of
+  # hundreds, there will be an error about winemenubuilder and MountMgr
+  # on startup of Wine, and the Drives tab in winecfg will show an error.
+  dontStrip = true;
 
   ## FIXME
   # Add capability to ignore known failing tests

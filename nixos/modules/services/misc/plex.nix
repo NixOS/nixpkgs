@@ -128,6 +128,7 @@ in
         Group = cfg.group;
         PermissionsStartOnly = "true";
         ExecStart = "/bin/sh -c '${cfg.package}/usr/lib/plexmediaserver/Plex\\ Media\\ Server'";
+        Restart = "on-failure";
       };
       environment = {
         PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR=cfg.dataDir;

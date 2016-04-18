@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     substituteInPlace cipherscan \
       --replace "@OPENSSLBIN@" \
-                "${openssl}/bin/openssl" \
+                "${openssl.bin}/bin/openssl" \
       --replace "@TIMEOUTBIN@" \
                 "${coreutils}/bin/timeout" \
       --replace "@READLINKBIN@" \
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace analyze.py \
       --replace "@OPENSSLBIN@" \
-                "${openssl}/bin/openssl"
+                "${openssl.bin}/bin/openssl"
   '';
   installPhase = ''
     mkdir -p $out/bin

@@ -10,7 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "159988vv3fd78bzhisfl1dl4dd7km3vjzs2d8899a0vcvn412fzh";
   };
 
-  patches = lib.optionals enableFan [ ./ubuntu-fan.patch ];
+  patches = lib.optionals enableFan [
+    # These patches were pulled from:
+    # https://launchpad.net/ubuntu/xenial/+source/iproute2
+    ./1000-ubuntu-poc-fan-driver.patch
+    ./1001-ubuntu-poc-fan-driver-v3.patch
+    ./1002-ubuntu-poc-fan-driver-vxlan.patch
+  ];
 
   preConfigure = ''
     patchShebangs ./configure

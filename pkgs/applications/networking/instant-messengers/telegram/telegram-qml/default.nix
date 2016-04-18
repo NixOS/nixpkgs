@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
     qmake -r PREFIX=$out BUILD_MODE+=lib
+    runHook postConfigure
   '';
 
   meta = with stdenv.lib; {

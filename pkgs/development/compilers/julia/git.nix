@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-fPIC" ];
 
-  LD_LIBRARY_PATH = makeSearchPath "lib" [
+  LD_LIBRARY_PATH = makeLibraryPath [
     arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
     openspecfun pcre2 suitesparse
   ];

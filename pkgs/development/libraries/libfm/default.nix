@@ -3,11 +3,15 @@
 let
     inherit (stdenv.lib) optional;
 in
-stdenv.mkDerivation {
-  name = if extraOnly then "libfm-extra-1.2.3" else "libfm-1.2.3";
+stdenv.mkDerivation rec {
+  name = if extraOnly
+    then "libfm-extra-${version}"
+    else "libfm-${version}";
+  version = "1.2.4";
+
   src = fetchurl {
-    url = "mirror://sourceforge/pcmanfm/libfm-1.2.3.tar.xz";
-    sha256 = "1ygvw52262r3jp1f45m9cdpx5xgvd4rkyfszslfqvg2c99ig34n6";
+    url = "mirror://sourceforge/pcmanfm/libfm-${version}.tar.xz";
+    sha256 = "0bsh4p7h2glhxf1cc1lvbxyb4qy0y1zsnl9izf7vrldkikrgc13q";
   };
 
   buildInputs = [ glib gtk intltool pango pkgconfig vala ]

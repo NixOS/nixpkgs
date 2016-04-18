@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/smpeg-config \
       --prefix PATH ":" "${pkgconfig}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
   '';
 
   meta = {

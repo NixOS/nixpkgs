@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     owner = "thom311";
   };
 
+  outputs = [ "dev" "bin" "out" "man" ];
+
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig ];
 
   meta = {

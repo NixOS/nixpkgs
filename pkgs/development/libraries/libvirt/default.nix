@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, makeWrapper
 , libxml2, gnutls, devicemapper, perl, python
-, iproute, iptables, readline, lvm2, utillinux, udev, libpciaccess, gettext
+, iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
 , curl, libiconv, gmp, xen
@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "01fg9jbifndwc3jzzizsisvz98q325xarczgf6rn11hphckgrip3";
+    sha256 = "13w56fhspf7ygr3v0jhh44g25xbcx5vmrprzcy9cajsppa6knq4r";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux udev libcap_ng
+    libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
     libnl numad numactl xen
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${udev}/sbin:$PATH
+    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/bin:$PATH
     substituteInPlace configure --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
     PATH=${dnsmasq}/bin:$PATH

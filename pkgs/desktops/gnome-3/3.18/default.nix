@@ -382,6 +382,8 @@ let
 
   gpaste = callPackage ./misc/gpaste { };
 
+  pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
+  
   gtkhtml = callPackage ./misc/gtkhtml { };
 
   pomodoro = callPackage ./misc/pomodoro { };

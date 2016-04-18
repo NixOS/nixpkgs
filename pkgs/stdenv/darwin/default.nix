@@ -178,7 +178,7 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ xz libcxx libcxxabi icu ]) ++
+      (with pkgs; [ xz.bin xz.out libcxx libcxxabi icu.out ]) ++
       (with pkgs.darwin; [ dyld Libsystem CF locale ]);
 
     overrides = persistent1;
@@ -214,7 +214,7 @@ in rec {
 
     allowedRequisites =
       [ bootstrapTools ] ++
-      (with pkgs; [ icu bash libcxx libcxxabi ]) ++
+      (with pkgs; [ xz.bin xz.out icu.out bash libcxx libcxxabi ]) ++
       (with pkgs.darwin; [ dyld Libsystem locale ]);
 
     overrides = persistent2;
@@ -297,9 +297,11 @@ in rec {
     };
 
     allowedRequisites = (with pkgs; [
-      xz libcxx libcxxabi icu gmp gnumake findutils bzip2 llvm zlib libffi
-      coreutils ed diffutils gnutar gzip ncurses gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre binutils-raw binutils gettext
+      xz.out xz.bin libcxx libcxxabi icu.out gmp.out gnumake findutils bzip2.out
+      bzip2.bin llvmPackages.llvm zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
+      gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
+      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
+      binutils-raw.dev binutils gettext
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools libiconv locale
     ]);

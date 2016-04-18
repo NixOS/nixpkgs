@@ -19,20 +19,21 @@ stdenv.mkDerivation rec {
     sha256 = "6658bd3c2b8813eb3e2511ee153238d09ace9d309e4574af27443d87423e4233";
   };
 
-  buildInputs = [ flex bison pkgconfig python ]
+  outputs = [ "dev" "out" ];
+  outputBin = "dev";
+  outputMan = "dev"; # tiny pages
+
+  buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];
-
-  # The '--disable-tests' flag is no longer recognized, so can be safely removed
-  # next time this package changes.
-  configureFlags = [ "--disable-tests" ];
 
   preConfigure = ''
     sed 's|/usr/bin/env ||' -i tools/g-ir-tool-template.in
   '';
 
-  postInstall = "rm -rf $out/share/gtk-doc";
+  # outputs TODO: share/gobject-introspection-1.0/tests is needed during build
+  # by pygobject3 (and maybe others), but it's only searched in $out
 
   setupHook = ./setup-hook.sh;
 

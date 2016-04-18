@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./caps-fix.patch ];
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
 
   propagatedBuildInputs =
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ json_c libsndfile speexdsp fftwFloat ]
-    ++ lib.optionals stdenv.isLinux [ glib dbus.libs ]
+    ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -110,8 +112,9 @@ stdenv.mkDerivation rec {
 
   postInstall = lib.optionalString libOnly ''
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
-    sed 's|-lltdl|-L${libtool}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
-  '';
+    sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
+  ''
+    + ''moveToOutput lib/cmake "$dev" '';
 
   meta = {
     description = "Sound server for POSIX and Win32 systems";

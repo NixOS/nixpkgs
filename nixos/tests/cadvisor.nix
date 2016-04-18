@@ -14,7 +14,7 @@ import ./make-test.nix ({ pkgs, ... } : {
       services.cadvisor.storageDriver = "influxdb";
       services.influxdb.enable = true;
       systemd.services.influxdb.postStart = mkAfter ''
-        ${pkgs.curl}/bin/curl -X POST 'http://localhost:8086/db?u=root&p=root' \
+        ${pkgs.curl.bin}/bin/curl -X POST 'http://localhost:8086/db?u=root&p=root' \
           -d '{"name": "root"}'
       '';
     };

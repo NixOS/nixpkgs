@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     # curl: curl, curl-config
     rm opt/vagrant/embedded/bin/{curl,curl-config}
-    ln -s ${curl}/bin/curl opt/vagrant/embedded/bin
+    ln -s ${curl.bin}/bin/curl opt/vagrant/embedded/bin
     ln -s ${curl}/bin/curl-config opt/vagrant/embedded/bin
 
     # libarchive: bsdtar, bsdcpio
@@ -61,8 +61,8 @@ stdenv.mkDerivation rec {
 
     # openssl: c_rehash, openssl
     rm opt/vagrant/embedded/bin/{c_rehash,openssl}
-    ln -s ${openssl}/bin/c_rehash opt/vagrant/embedded/bin
-    ln -s ${openssl}/bin/openssl opt/vagrant/embedded/bin
+    ln -s ${openssl.bin}/bin/c_rehash opt/vagrant/embedded/bin
+    ln -s ${openssl.bin}/bin/openssl opt/vagrant/embedded/bin
 
     # ruby: erb, gem, irb, rake, rdoc, ri, ruby
     rm opt/vagrant/embedded/bin/{erb,gem,irb,rake,rdoc,ri,ruby}
@@ -80,14 +80,14 @@ stdenv.mkDerivation rec {
 
     # libxml: xml2-config, xmlcatalog, xmllint
     rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
-    ln -s ${libxml2}/bin/xml2-config opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmlcatalog opt/vagrant/embedded/bin
-    ln -s ${libxml2}/bin/xmllint opt/vagrant/embedded/bin
+    ln -s ${libxml2.dev}/bin/xml2-config opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmlcatalog opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmllint opt/vagrant/embedded/bin
 
     # libxslt: xslt-config, xsltproc
     rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
-    ln -s ${libxslt}/bin/xslt-config opt/vagrant/embedded/bin
-    ln -s ${libxslt}/bin/xsltproc opt/vagrant/embedded/bin
+    ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
+    ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
 
     mkdir -p "$out"
     cp -r opt "$out"

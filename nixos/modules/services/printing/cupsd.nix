@@ -14,27 +14,27 @@ let
   additionalBackends = pkgs.runCommand "additional-cups-backends" { }
     ''
       mkdir -p $out
-      if [ ! -e ${cups}/lib/cups/backend/smb ]; then
+      if [ ! -e ${cups.out}/lib/cups/backend/smb ]; then
         mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
-      if [ ! -e ${cups}/lib/cups/backend/https ]; then
+      if [ ! -e ${cups.out}/lib/cups/backend/https ]; then
         mkdir -p $out/lib/cups/backend
-        ln -sv ${cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
+        ln -sv ${cups.out}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
     '';
 
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
-  # we can't update ${cups}/lib/cups itself, we create a symlink tree
+  # we can't update ${cups.out}/lib/cups itself, we create a symlink tree
   # here and add the additional programs.  The ServerBin directive in
   # cupsd.conf tells cupsd to use this tree.
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups additionalBackends cups_filters pkgs.ghostscript ]
+      [ cups.out additionalBackends cups_filters pkgs.ghostscript ]
       ++ optional cfg.gutenprint gutenprint
       ++ cfg.drivers;
     pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
@@ -267,24 +267,24 @@ in
         description = "CUPS printing services";
       };
 
-    environment.systemPackages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
+    environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
     environment.etc."cups".source = "/var/lib/cups";
 
-    services.dbus.packages = [ cups ] ++ optional polkitEnabled cups-pk-helper;
+    services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
 
     # Cups uses libusb to talk to printers, and does not use the
     # linux kernel driver. If the driver is not in a black list, it
     # gets loaded, and then cups cannot access the printers.
     boot.blacklistedKernelModules = [ "usblp" ];
 
-    systemd.packages = [ cups ];
+    systemd.packages = [ cups.out ];
 
     systemd.services.cups =
       { wantedBy = [ "multi-user.target" ];
         wants = [ "network.target" ];
         after = [ "network.target" ];
 
-        path = [ cups ];
+        path = [ cups.out ];
 
         preStart =
           ''

@@ -41,11 +41,11 @@
   ./hardware/video/nvidia.nix
   ./hardware/video/ati.nix
   ./hardware/video/webcam/facetimehd.nix
-  ./i18n/inputMethod/default.nix
-  ./i18n/inputMethod/fcitx.nix
-  ./i18n/inputMethod/ibus.nix
-  ./i18n/inputMethod/nabi.nix
-  ./i18n/inputMethod/uim.nix
+  ./i18n/input-method/default.nix
+  ./i18n/input-method/fcitx.nix
+  ./i18n/input-method/ibus.nix
+  ./i18n/input-method/nabi.nix
+  ./i18n/input-method/uim.nix
   ./installer/tools/auto-upgrade.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
@@ -90,6 +90,7 @@
   ./security/ca.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
+  ./security/hidepid.nix
   ./security/oath.nix
   ./security/pam.nix
   ./security/pam_usb.nix
@@ -157,6 +158,7 @@
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
+  ./services/games/factorio.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
@@ -249,6 +251,7 @@
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/misc/taskserver
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
@@ -328,7 +331,7 @@
   ./services/networking/hostapd.nix
   ./services/networking/i2pd.nix
   ./services/networking/i2p.nix
-  ./services/networking/iodined.nix
+  ./services/networking/iodine.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
@@ -425,6 +428,7 @@
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
   ./services/torrent/deluge.nix
+  ./services/torrent/flexget.nix
   ./services/torrent/peerflix.nix
   ./services/torrent/transmission.nix
   ./services/ttys/agetty.nix
@@ -432,6 +436,7 @@
   ./services/ttys/kmscon.nix
   ./services/web-apps/pump.io.nix
   ./services/web-servers/apache-httpd/default.nix
+  ./services/web-servers/caddy.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix

@@ -18,11 +18,13 @@ stdenv.mkDerivation {
     patchShebangs libsoup/
   '';
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = libintlOrEmpty ++ [ intltool python sqlite ];
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 gobjectIntrospection ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring ];
-  passthru.propagatedUserEnvPackages = [ glib_networking ];
+  passthru.propagatedUserEnvPackages = [ glib_networking.out ];
 
   # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check --enable-vala=no" + stdenv.lib.optionalString (!gnomeSupport) " --without-gnome";

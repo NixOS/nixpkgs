@@ -3,13 +3,13 @@
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-spotify-tunigo-${version}";
 
-  version = "0.2.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "trygveaa";
     repo = "mopidy-spotify-tunigo";
     rev = "v${version}";
-    sha256 = "0827wghbgrscncnshz30l97hgg0g5bsnm0ad8596zh7cai0ibss0";
+    sha256 = "1jwk0b2iz4z09qynnhcr07w15lx6i1ra09s9lp48vslqcf2fp36x";
   };
 
   propagatedBuildInputs = [ mopidy mopidy-spotify pythonPackages.tunigo ];

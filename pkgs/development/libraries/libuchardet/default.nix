@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "libuchardet-${version}";
 
-  version = "0.0.1";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner  = "BYVoid";
     repo   = "uchardet";
-    rev    = "69b7133995e4ee260b093323c57a7f8c6c6803b8";
-    sha256 = "0yqrc9a7wxsh2fvigjppjp55v4r1q8p40yh048xsvl3kly2rkqy9";
+    rev    = "v${version}";
+    sha256 = "0rkym5bhq3hn7623fy0fggw0qaghha71k8bi41ywqd2lchpahrrm";
   };
 
   buildInputs = [ cmake ];

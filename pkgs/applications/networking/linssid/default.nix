@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
     rm -fr qwt-lib
   '';
 
-  configurePhase = "qmake linssid.pro";
+  configurePhase = ''
+    runHook preConfigure
+    qmake linssid.pro
+    runHook postConfigure
+  '';
 
   meta = with stdenv.lib; {
     description = "Graphical wireless scanning for Linux";

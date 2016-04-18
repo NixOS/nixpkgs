@@ -51,7 +51,7 @@ in
 
     systemd.services.upower =
       { description = "Power Management Daemon";
-        path = [ pkgs.glib ]; # needed for gdbus
+        path = [ pkgs.glib.out ]; # needed for gdbus
         serviceConfig =
           { Type = "dbus";
             BusName = "org.freedesktop.UPower";

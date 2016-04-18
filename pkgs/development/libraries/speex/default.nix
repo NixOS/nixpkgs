@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "speex-1.2rc2";
-  
+
   src = fetchurl {
     url = "http://downloads.us.xiph.org/releases/speex/${name}.tar.gz";
     sha256 = "14g8ph39inkrif749lzjm089g7kwk0hymq1a3i9ch5gz8xr7r8na";
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i '/AC_CONFIG_MACRO_DIR/i PKG_PROG_PKG_CONFIG' configure.ac
   '';
-  
+
+  outputs = [ "dev" "out" "doc" ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ fftw speexdsp ];
 

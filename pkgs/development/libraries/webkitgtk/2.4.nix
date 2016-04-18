@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, python, ruby, bison, gperf, flex
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
-, libxml2, libsoup, libsecret, libxslt, harfbuzz
+, libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
 , gst-plugins-base
 , withGtk2 ? false
 , enableIntrospection ? !stdenv.isDarwin
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gtk2 libwebp enchant
     libxml2 libxslt
-    gst-plugins-base sqlite
+    gst-plugins-base sqlite xorg.libXt
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [

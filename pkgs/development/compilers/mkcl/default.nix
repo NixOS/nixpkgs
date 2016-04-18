@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "GMP_CFLAGS=-I${gmp}/include"
-    "GMP_LDFLAGS=-L${gmp}/lib"
+    "GMP_CFLAGS=-I${gmp.dev}/include"
+    "GMP_LDFLAGS=-L${gmp.out}/lib"
   ];
 
   postInstall = ''

@@ -47,8 +47,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional wantPS ps;
 
-  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":" buildInputs;
-  
+  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":"
+    (concatMap (p: [ p p.out ]) buildInputs);
+
   configureFlags =
     "--docdir=/share/doc/${name} --mandir=/share/man --system-libs"
     + stdenv.lib.optionalString useQt4 " --qt-gui";
@@ -57,11 +58,14 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  preConfigure = optionalString (stdenv ? glibc)
+  preConfigure = with stdenv; optionalString (stdenv ? glibc)
     ''
       source $setupHook
       fixCmakeFiles .
-      substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
+      substituteInPlace Modules/Platform/UnixPaths.cmake \
+        --subst-var-by glibc_bin ${glibc.bin or glibc} \
+        --subst-var-by glibc_dev ${glibc.dev or glibc} \
+        --subst-var-by glibc_lib ${glibc.out or glibc}
     '';
 
   meta = {

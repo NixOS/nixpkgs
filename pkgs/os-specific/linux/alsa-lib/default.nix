@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     sed -i -e 's/u_int\([0-9]*\)_t/uint\1_t/g' include/pcm.h
   '';
 
+  outputs = [ "dev" "out" ];
+
   crossAttrs = {
     patchPhase = ''
       sed -i s/extern/static/g include/iatomic.h

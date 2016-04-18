@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, cmake, mesa, freeglut }:
+{ stdenv, fetchFromGitHub, cmake, mesa, freeglut }:
 
 stdenv.mkDerivation rec {
-  name = "bullet-2.80"; # vdrift 2012-07-22 doesn't build with 2.81
-  rev = "2531";
-  src = fetchurl {
-    url = "http://bullet.googlecode.com/files/${name}-rev${rev}.tgz";
-    sha256 = "0dig6k88jz5y0cz6dn186vc4l96l4v56zvwpsp5bv9f5wdwjskj6";
+  name = "bullet-${version}";
+  version = "2.83.7";
+
+  src = fetchFromGitHub {
+    owner = "bulletphysics";
+    repo = "bullet3";
+    rev = version;
+    sha256 = "1zz3vs6i5975y9mgb1k1vxrjbf1028v0nc11p646dsvv2vplxx5r";
   };
 
   buildInputs = [ cmake mesa freeglut ];
-  configurePhase = ''
-    cmake -DBUILD_SHARED_LIBS=ON -DBUILD_EXTRAS=OFF -DBUILD_DEMOS=OFF \
-      -DCMAKE_INSTALL_PREFIX=$out .
-  '';
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DBUILD_CPU_DEMOS=OFF" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "A professional free 3D Game Multiphysics Library";

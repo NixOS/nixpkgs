@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "ums-${version}";
-  version = "5.4.0";
+  version = "6.2.2";
   
   src = fetchurl {
     url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
-    sha256 = "0ryp26h7pyqing8pyg0xjrp1wm77wwgya4a7d00wczh885pk16kq";
+    sha256 = "1qa999la9hixy0pdj9phjvr6lwqycgdvm94nc1606vz0ivf95b15";
     name = "${name}.tgz";
   };
 

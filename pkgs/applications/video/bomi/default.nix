@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeWrapper
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeQtWrapper
 , libX11, libxcb, mesa
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras
 , ffmpeg
@@ -27,9 +27,6 @@ assert pulseSupport -> libpulseaudio != null;
 assert cddaSupport -> libcdda != null;
 assert youtubeSupport -> youtube-dl != null;
 
-let qtPath = makeSearchPath "lib/qt5/qml" [ qtdeclarative qtquickcontrols ];
-in
-
 stdenv.mkDerivation rec {
   name = "bomi-${version}";
   version = "0.9.11";
@@ -56,6 +53,7 @@ stdenv.mkDerivation rec {
                   libvdpau
                   libva
                   libbluray
+                  qtdeclarative
                   qtquickcontrols
                 ]
                 ++ optional jackSupport jack
@@ -74,8 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/bomi \
-      --set QML2_IMPORT_PATH ${qtPath} \
+    wrapQtProgram $out/bin/bomi \
       ${optionalString youtubeSupport "--prefix PATH ':' '${youtube-dl}/bin'"}
   '';
 
@@ -87,7 +84,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ pkgconfig perl python which qttools makeWrapper ];
+  nativeBuildInputs = [ pkgconfig perl python which qttools makeQtWrapper ];
 
   enableParallelBuilding = true;
 

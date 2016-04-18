@@ -63,11 +63,11 @@ has the following highlights:</para>
   <itemizedlist>
     <listitem><para><literal>services/monitoring/longview.nix</literal></para></listitem>
     <listitem><para><literal>hardware/video/webcam/facetimehd.nix</literal></para></listitem>
-    <listitem><para><literal>i18n/inputMethod/default.nix</literal></para></listitem>
-    <listitem><para><literal>i18n/inputMethod/fcitx.nix</literal></para></listitem>
-    <listitem><para><literal>i18n/inputMethod/ibus.nix</literal></para></listitem>
-    <listitem><para><literal>i18n/inputMethod/nabi.nix</literal></para></listitem>
-    <listitem><para><literal>i18n/inputMethod/uim.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/input-method/default.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/input-method/fcitx.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/input-method/ibus.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/input-method/nabi.nix</literal></para></listitem>
+    <listitem><para><literal>i18n/input-method/uim.nix</literal></para></listitem>
     <listitem><para><literal>programs/fish.nix</literal></para></listitem>
     <listitem><para><literal>security/acme.nix</literal></para></listitem>
     <listitem><para><literal>security/audit.nix</literal></para></listitem>

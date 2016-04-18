@@ -2,12 +2,12 @@
 , json_c, m4, glib_networking, gsettings_desktop_schemas, dconf }:
 
 stdenv.mkDerivation {
-  name = "dwb-2015-07-07";
+  name = "dwb-2016-03-21";
 
   src = fetchgit {
-    url = "https://bitbucket.org/0mark/dwb_collect";
-    rev = "9a50dcc7134015c6cb1d26afb77840cf69f7c782";
-    sha256 = "03nyr3c0x5b1jqax0zh407vvi4j47zkj1i52lqs35j2d2sci3lkb";
+    url = "https://bitbucket.org/portix/dwb";
+    rev = "7fb82bc1db36a5d1d2436088c9b58054d2c51f96";
+    sha256 = "16y3cfk4bq89d1lzpj4ci4gq9cx5m2br5i7kmw5rv396527yvn0i";
   };
 
   buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup
@@ -18,10 +18,10 @@ stdenv.mkDerivation {
 
   preFixup=''
     wrapProgram "$out/bin/dwb" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules:${dconf}/lib/gio/modules" \
+     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${dconf}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     wrapProgram "$out/bin/dwbem" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules"
   '';
 
   meta = with stdenv.lib; {
@@ -30,9 +30,5 @@ stdenv.mkDerivation {
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ pSub ];
     license = licenses.gpl3;
-
-    # dwb is no longer maintained by portix and efforts to keep it alive
-    # were not successful, see issue #7952 for discussion.
-    broken = true;
   };
 }

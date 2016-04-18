@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
              "--with-gif=no" "--with-tiff=no" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
-    "-I${cairo}/include/cairo";
+    "-I${cairo.dev}/include/cairo";
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp/

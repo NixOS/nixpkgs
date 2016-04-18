@@ -22,12 +22,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper go sqlite iproute bridge-utils devicemapper btrfs-progs
-    iptables e2fsprogs systemd pkgconfig
+    iptables e2fsprogs systemd pkgconfig stdenv.glibc stdenv.glibc.static
   ];
 
   dontStrip = true;
 
-  DOCKER_BUILDTAGS = [ "journald" ];
+  DOCKER_BUILDTAGS = [ "journald" ]
+    ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
+    ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
 
   buildPhase = ''
     patchShebangs .
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

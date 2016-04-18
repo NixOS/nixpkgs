@@ -16,7 +16,7 @@ let
     else if stdenv.system == "i686-linux" then "8c23271291f40aa144bbf38ceb3cc2a05bed00759c87a65bd798cf8bb289d07a"
     else throw "Spideroak client for: ${stdenv.system} not supported!";
 
-  ldpath = stdenv.lib.makeSearchPath "lib" [
+  ldpath = stdenv.lib.makeLibraryPath [
     glib fontconfig libXext libX11 freetype libXrender
   ];
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation {
     mkdir "$out/bin"
     rm "$out/usr/bin/SpiderOakONE"
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/${interpreter} \
+    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
     RPATH=$out/opt/SpiderOakONE/lib:${ldpath}

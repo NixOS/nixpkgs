@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, cups, perl, brgenml1lpr, debugLvl ? "0"}:
+{ stdenv, fetchurl, makeWrapper, cups, perl, coreutils, gnused, gnugrep
+, brgenml1lpr, debugLvl ? "0"}:
 
 /*
     [Setup instructions](http://support.brother.com/g/s/id/linux/en/instruction_prn1a.html).
@@ -21,14 +22,11 @@
 
      1.  >  Error: /tmp/brBrGenML1rc_15642 :cannot open file !!
 
-        This is a non fatal issue. The job will still be printed. However, not sure
-        what kind of information could be lost.
-
-        There should be a more elegant way to patch this.
+        Fixed.
 
      2.  >  touch: cannot touch '/tmp/BrGenML1_latest_print_info': Permission denied
 
-        TODO: Address.
+        Fixed.
 
      3.  >  perl: warning: Falling back to the standard locale ("C").
     
@@ -40,6 +38,17 @@
             perl: warning: Setting locale failed.
 
         TODO: Address.
+
+     4. Since nixos 16.03 release, in `brother_lpdwrapper_BrGenML1`:
+
+        > sh: grep: command not found
+          sh: chmod: command not found
+          sh: cp: command not found
+          Error: /tmp/brBrGenML1rc_1850 :cannot open file !!
+          sh: sed: command not found
+
+        Fixed by use of a wrapper that brings `coreutils`, `gnused`, `gnugrep`
+        in `PATH`.
 */
 
 stdenv.mkDerivation rec {
@@ -55,7 +64,10 @@ stdenv.mkDerivation rec {
     tar xfvz data.tar.gz
   '';
 
-  buildInputs = [ cups perl brgenml1lpr ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ cups perl coreutils gnused gnugrep brgenml1lpr ];
+
+  configurePhase = ":";
   buildPhase = ":";
 
   patchPhase = ''
@@ -67,7 +79,7 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"BrGenML1\"; #" \
       --replace "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
 
-    # Fixing issue #2.
+    # Fixing issue #1 and #2.
     substituteInPlace $WRAPPER \
       --replace "\`cp " "\`cp -p " \
       --replace "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
@@ -78,22 +90,30 @@ stdenv.mkDerivation rec {
       --replace "/etc/cups/ppd" "$out/share/cups/model"
   '';
 
+
   installPhase = ''
-    CUPSFILTER=$out/lib/cups/filter
-    CUPSPPD=$out/share/cups/model
+    CUPSFILTER_DIR=$out/lib/cups/filter
+    CUPSPPD_DIR=$out/share/cups/model
+    CUPSWRAPPER_DIR=opt/brother/Printers/BrGenML1/cupswrapper
 
-    CUPSWRAPPER=opt/brother/Printers/BrGenML1/cupswrapper
-    mkdir -p $out/$CUPSWRAPPER
-    cp -rp $CUPSWRAPPER/* $out/$CUPSWRAPPER
+    mkdir -p $out/$CUPSWRAPPER_DIR
+    cp -rp $CUPSWRAPPER_DIR/* $out/$CUPSWRAPPER_DIR
 
-    mkdir -p $CUPSFILTER
-    ln -s $out/$CUPSWRAPPER/brother_lpdwrapper_BrGenML1 $CUPSFILTER
+    mkdir -p $CUPSFILTER_DIR
+    # Fixing issue #4.
+    makeWrapper \
+      $out/$CUPSWRAPPER_DIR/brother_lpdwrapper_BrGenML1 \
+      $CUPSFILTER_DIR/brother_lpdwrapper_BrGenML1 \
+      --prefix PATH : ${coreutils}/bin \
+      --prefix PATH : ${gnused}/bin \
+      --prefix PATH : ${gnugrep}/bin
 
-    mkdir -p $CUPSPPD
-    ln -s $out/$CUPSWRAPPER/brother-BrGenML1-cups-en.ppd $CUPSPPD
+    mkdir -p $CUPSPPD_DIR
+    ln -s $out/$CUPSWRAPPER_DIR/brother-BrGenML1-cups-en.ppd $CUPSPPD_DIR
   '';
 
   dontPatchELF = true;
+  dontStrip = true;
 
   meta = {
     description = "Brother BrGenML1 CUPS wrapper driver";

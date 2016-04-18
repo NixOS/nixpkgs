@@ -1,6 +1,6 @@
 { fetchurl, stdenv, gettext, glibc }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "libelf-0.8.13";
 
   src = fetchurl {
@@ -18,6 +18,11 @@ stdenv.mkDerivation (rec {
     nativeBuildInputs = [ glibc ];
   };
 
+  # Libelf's custom NLS macros fail to determine the catalog file extension on
+  # Darwin, so disable NLS for now.
+  # FIXME: Eventually make Gettext a build input on all platforms.
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-nls";
+
   buildInputs = [ gettext ];
 
   meta = {
@@ -31,12 +36,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ ];
   };
 }
-
-//
-
-# Libelf's custom NLS macros fail to determine the catalog file extension on
-# Darwin, so disable NLS for now.
-# FIXME: Eventually make Gettext a build input on all platforms.
-(if stdenv.isDarwin
- then { configureFlags = [ "--disable-nls" ]; }
- else { }))

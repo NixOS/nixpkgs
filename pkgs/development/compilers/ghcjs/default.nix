@@ -40,8 +40,8 @@
 
 , ghcjsBootSrc ? fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "97dea5c4145bf80a1e7cffeb1ecd4d0ecacd5a2f";
-    sha256 = "1cgjzm595l2dx6fibzbkyv23bp1857qia0hb9d8aghf006al558j";
+    rev = "758e79e420403e0f6625eda19b10c46564f7cbb5";
+    sha256 = "0gq1mc86cb2z875a7sdj44yy8g95rwxzkl3z1q8gg33k05s3b58r";
     fetchSubmodules = true;
   }
 , ghcjsBoot ? import ./ghcjs-boot.nix {
@@ -60,8 +60,8 @@ in mkDerivation (rec {
   src = fetchFromGitHub {
     owner = "ghcjs";
     repo = "ghcjs";
-    rev = "13a99c6da40e3700e070e430d4c0f2ea96217b24";
-    sha256 = "01yg6babmhn2bfbmgkddisfj9ai7fc4r08s6acd49s9amcw7g5ld";
+    rev = "689c7753f50353dd05606ed79c51cd5a94d3922a";
+    sha256 = "076020a9gjv8ldj5ckm43sbzq9s6c5xj6lpd8v28ybpiama3m6b4";
   };
   isLibrary = true;
   isExecutable = true;
@@ -117,13 +117,13 @@ in mkDerivation (rec {
   # This is necessary due to: https://github.com/haskell/cabal/commit/af19fb2c2d231d8deff1cb24164a2bf7efb8905a
   # Cabal otherwise fails to build: http://hydra.nixos.org/build/31824079/nixlog/1/raw
   postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
+    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
         --dev \
         --quick \
         --with-cabal ${cabal-install}/bin/cabal \
-        --with-gmp-includes ${gmp}/include \
-        --with-gmp-libraries ${gmp}/lib
+        --with-gmp-includes ${gmp.dev}/include \
+        --with-gmp-libraries ${gmp.out}/lib
   '';
   passthru = let
     ghcjsNodePkgs = pkgs.nodePackages.override {

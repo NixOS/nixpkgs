@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, utillinux, coreutils }:
+{ stdenv, fetchurl, pkgconfig, libudev, systemd, utillinux, coreutils }:
 
 let
   v = "2.02.106";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   configureFlags =
     "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
 
-  buildInputs = [ pkgconfig udev ];
+  buildInputs = [ pkgconfig libudev ];
 
   preConfigure =
     ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
         --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
         --replace /usr/sbin/lvm $out/sbin/lvm \
-        --replace /usr/bin/udevadm ${udev}/bin/udevadm
+        --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
   postInstall =
     ''
       substituteInPlace $out/lib/udev/rules.d/13-dm-disk.rules \
-        --replace $out/sbin/blkid ${utillinux}/sbin/blkid
+        --replace $out/sbin/blkid ${utillinux.bin}/sbin/blkid
 
       # Systemd stuff
       mkdir -p $out/etc/systemd/system $out/lib/systemd/system-generators

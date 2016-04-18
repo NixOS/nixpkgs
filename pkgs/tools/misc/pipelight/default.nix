@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
       --wine-path=${wine_custom} \
       --gpg-exec=${gnupg}/bin/gpg2 \
       --bash-interp=${bash}/bin/bash \
-      --downloader=${curl}/bin/curl
+      --downloader=${curl.bin}/bin/curl
       $configureFlags
   '';
 

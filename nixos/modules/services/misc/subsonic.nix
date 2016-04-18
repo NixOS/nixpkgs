@@ -97,7 +97,7 @@ in
 
       transcoders = mkOption {
         type = types.listOf types.path;
-        default = [ "${pkgs.ffmpeg}/bin/ffmpeg" ];
+        default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
         description = ''
           List of paths to transcoder executables that should be accessible
           from Subsonic. Symlinks will be created to each executable inside

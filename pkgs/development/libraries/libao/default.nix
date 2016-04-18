@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bwwv1g9lchaq6qmhvj1pp3hnyqr64ydd4j38x94pmprs4d27b83";
   };
 
+  outputs = [ "dev" "out" "doc" ];
+
   buildInputs =
     [ pkgconfig ] ++
     lib.optional stdenv.isLinux (if usePulseAudio then libpulseaudio else alsaLib) ++

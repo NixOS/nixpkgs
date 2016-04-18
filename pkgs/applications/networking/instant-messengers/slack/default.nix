@@ -4,9 +4,9 @@
 
 let
 
-  version = "2.0.1";
+  version = "2.0.3";
 
-  rpath = stdenv.lib.makeSearchPath "lib" [
+  rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     cairo
@@ -23,6 +23,7 @@ let
     libnotify
     nspr
     nss
+    stdenv.cc.cc
     systemd
 
     xorg.libX11
@@ -41,7 +42,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://slack-ssb-updates.global.ssl.fastly.net/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "12d84e61ba366cc5bac105b3f9930f2dfdd64c1e5fabbb08a6877e1c98bfb9c7";
+        sha256 = "0pp8n1w9kmh3pph5kc6akdswl3z2lqwryjg9d267wgj62mslr3cg";
       }
     else
       throw "Slack is not supported on ${stdenv.system}";
@@ -57,23 +58,24 @@ in stdenv.mkDerivation {
     mkdir -p $out
     dpkg -x $src $out
     cp -av $out/usr/* $out
-    rm -rf $out/usr
+    rm -rf $out/usr $out/share/lintian
 
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/share/slack $file || true
+      patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 
     # Fix the symlink
     rm $out/bin/slack
-    ln -s $out/share/slack/slack $out/bin/slack
+    ln -s $out/lib/slack/slack $out/bin/slack
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
-      --replace /usr/share/slack/slack $out/share/slack/slack
+      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/share/ $out/share/
   '';
 
   meta = with stdenv.lib; {

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
+  outputs = [ "out" "info" ];
+
   crossAttrs = {
     # http://osdir.com/ml/bug-findutils-gnu/2009-08/msg00026.html
     configureFlags = [ "gl_cv_func_wcwidth_works=yes" ];

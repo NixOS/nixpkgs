@@ -38,7 +38,7 @@ with lib;
     # environment.pathsToLink, and we can't have both.
     #environment.pathsToLink = [ "/lib/debug/.build-id" ];
 
-    environment.outputsToLink =
+    environment.extraOutputsToInstall =
       optional config.environment.enableDebugInfo "debug";
 
   };

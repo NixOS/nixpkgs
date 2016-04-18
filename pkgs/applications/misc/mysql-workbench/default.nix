@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     mysql.lib paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
-    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
+    substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc.bin}/bin/catchsegv"
   '';
 
   postInstall = ''

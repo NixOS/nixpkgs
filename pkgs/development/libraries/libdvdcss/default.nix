@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "libdvdcss-${version}";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "158k9zagmbk5bkbz96l6lwhh7xcgfcnzflkr4vblskhcab6llhbw";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.videolan.org/developers/libdvdcss.html;
     description = "A library for decrypting DVDs";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

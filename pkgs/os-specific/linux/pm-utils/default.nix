@@ -3,10 +3,10 @@
 
 let
 
-  binPath = stdenv.lib.makeSearchPath "bin"
+  binPath = stdenv.lib.makeBinPath
     [ coreutils gnugrep utillinux module_init_tools procps kbd dbus_tools ];
 
-  sbinPath = stdenv.lib.makeSearchPath "sbin"
+  sbinPath = stdenv.lib.makeSearchPathOutputs "sbin" ["bin"]
     [ procps ];
 
 in

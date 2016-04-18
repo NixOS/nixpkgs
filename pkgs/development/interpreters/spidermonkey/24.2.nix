@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1n1phk8r3l8icqrrap4czplnylawa0ddc2cc4cgdz46x3lrkybz6";
   };
 
+  outputs = [ "dev" "out" "lib" ];
+
   propagatedBuildInputs = [ nspr ];
 
   buildInputs = [ pkgconfig perl python zip libffi readline ];
@@ -21,11 +23,14 @@ stdenv.mkDerivation rec {
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr}/include/nspr"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${nspr.dev}/include/nspr"
     export LIBXUL_DIST=$out
   '';
 
+  setOutputFlags = false;
   configureFlags = [
+    "--libdir=$(lib)/lib"
+    "--includedir=$(dev)/include"
     "--enable-threadsafe"
     "--with-system-nspr"
     "--with-system-ffi"
@@ -39,6 +44,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   preCheck = "rm jit-test/tests/sunspider/check-date-format-tofte.js"; # https://bugzil.la/600522
+
+  postInstall = ''
+    rm "$lib"/lib/*.a # halve the output size
+    moveToOutput "bin/js*-config" "$dev" # break the cycle
+  '';
 
   meta = with stdenv.lib; {
     description = "Mozilla's JavaScript engine written in C/C++";

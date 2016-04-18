@@ -17,7 +17,7 @@ python2Packages.buildPythonApplication rec {
       sed -ie 's|if sys\.argv\[1\] == "install":|if False:|' ./setup.py
       sed -ie "s|PREFIX = sys.prefix|PREFIX = \"$out\"|" ./setup.py
       sed -ie 's|/usr/bin/meld|${meld}/bin/meld|' ./rabbitvcs/util/configspec/configspec.ini
-      sed -ie 's|/usr/bin/svnadmin|${subversion}/bin/svnadmin|' ./rabbitvcs/ui/create.py
+      sed -ie 's|/usr/bin/svnadmin|${subversion.out}/bin/svnadmin|' ./rabbitvcs/ui/create.py
       sed -ie "s|/usr/share/doc|$out/share/doc|" ./rabbitvcs/ui/about.py
       sed -ie "s|gnome-open|xdg-open|" ./rabbitvcs/util/helper.py
     '';

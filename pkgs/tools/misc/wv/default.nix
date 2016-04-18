@@ -1,12 +1,14 @@
 { stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkgconfig, libgsf
 , libxml2, bzip2 }:
 
-stdenv.mkDerivation {
-  name = "wv-1.2.4";
+stdenv.mkDerivation rec {
+  pname = "wv";
+  version = "1.2.9";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/wvware/wv-1.2.4.tar.gz;
-    sha256 = "1mn2ax6qjy3pvixlnvbkn6ymy6y4l2wxrr4brjaczm121s8hjcb7";
+    url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
+    sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
   };
 
   buildInputs = [ zlib imagemagick libpng glib pkgconfig libgsf libxml2 bzip2 ];

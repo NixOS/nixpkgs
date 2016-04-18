@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${mysql.lib}/include/mysql/mysql.h";
-    export SQHEADER="${sqlite}/include/sqlite3.h";
+    export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
     export CCARGS="-I$out/include \
                    -L${mysql.lib}/lib/mysql \
-                   -L${postgresql}/lib \
-                   -L${sqlite}/lib";
+                   -L${postgresql.lib}/lib \
+                   -L${sqlite.out}/lib";
   '';
 
   # Be sure to keep the statically linked libraries

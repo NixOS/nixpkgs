@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r . "$out/src"
     mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${which}/bin:${php}/bin:${bash}/bin:${coreutils}/bin:${ncurses}/bin"
+    wrapProgram "$out/src/drush" --prefix PATH : "${which}/bin:${php}/bin:${bash}/bin:${coreutils}/bin:${ncurses.out}/bin"
     ln -s "$out/src/drush" "$out/bin/drush"
   '';
 }

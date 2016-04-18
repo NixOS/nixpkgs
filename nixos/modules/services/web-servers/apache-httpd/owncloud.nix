@@ -333,7 +333,7 @@ let
 
       'version' => '${config.package.version}',
 
-      'openssl' => '${pkgs.openssl}/bin/openssl'
+      'openssl' => '${pkgs.openssl.bin}/bin/openssl'
 
       );
 

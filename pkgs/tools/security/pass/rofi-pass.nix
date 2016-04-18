@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -a $src/config.example $out/share/doc/rofi-pass/config.example
   '';
 
-  wrapperPath = with stdenv.lib; makeSearchPath "bin/" [
+  wrapperPath = with stdenv.lib; makeBinPath [
     coreutils
     findutils
     gnugrep

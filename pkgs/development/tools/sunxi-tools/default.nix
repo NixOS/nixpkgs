@@ -1,11 +1,13 @@
-{ stdenv, fetchgit, pkgconfig, libusb }:
+{ stdenv, fetchFromGitHub, pkgconfig, libusb }:
+
 stdenv.mkDerivation {
   name = "sunxi-tools-1.3";
 
-  src = fetchgit {
-    url = "https://github.com/linux-sunxi/sunxi-tools";
+  src = fetchFromGitHub {
+    owner = "linux-sunxi";
+    repo = "sunxi-tools";
     rev = "be1b4c7400161b90437432076360c1f99970f54f";
-    sha256 = "0qbl4v66a3mvqai29q2y60zf2b5lj32mh9gyn44gfp0w2bsb10yj";
+    sha256 = "02pqaaahra4wbv325264qh5i17mxwicmjx9nm33nw2dpmfmg9xhr";
   };
 
   buildInputs = [ pkgconfig libusb ];
@@ -23,7 +25,7 @@ stdenv.mkDerivation {
     description = "Tools for Allwinner A10 devices";
     homepage = http://linux-sunxi.org/;
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ elitak ];
   };
 }
