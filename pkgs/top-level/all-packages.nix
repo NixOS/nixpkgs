@@ -2195,6 +2195,8 @@ in
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  leatherman = callPackage ../development/libraries/leatherman {};
+
   leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
