@@ -22,6 +22,9 @@ use JSON;
 use Net::Amazon::S3;
 use Nix::Store;
 
+isValidPath("/nix/store/foo"); # FIXME: forces Nix::Store initialisation
+
+
 # S3 setup.
 my $aws_access_key_id = $ENV{'AWS_ACCESS_KEY_ID'} or die;
 my $aws_secret_access_key = $ENV{'AWS_SECRET_ACCESS_KEY'} or die;
@@ -127,6 +130,7 @@ elsif ($op eq "--expr") {
         my $url = $fetch->{url};
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
+        my $name = $fetch->{name};
 
         if (defined $ENV{DEBUG}) {
             print "$url $algo $hash\n";
@@ -143,21 +147,34 @@ elsif ($op eq "--expr") {
             next;
         }
 
-        print STDERR "mirroring $url...\n";
+        my $storePath = makeFixedOutputPath(0, $algo, $hash, $name);
+
+        print STDERR "mirroring $url ($storePath)...\n";
 
         next if $ENV{DRY_RUN};
 
-        # Download the file using nix-prefetch-url.
-        $ENV{QUIET} = 1;
-        $ENV{PRINT_PATH} = 1;
-        my $fh;
-        my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
-        waitpid($pid, 0) or die;
-        if ($? != 0) {
-            print STDERR "failed to fetch $url: $?\n";
-            next;
+        # Substitute the output.
+        if (!isValidPath($storePath)) {
+            system("nix-store", "-r", $storePath);
         }
-        <$fh>; my $storePath = <$fh>; chomp $storePath;
+
+        # Otherwise download the file using nix-prefetch-url.
+        if (!isValidPath($storePath)) {
+            $ENV{QUIET} = 1;
+            $ENV{PRINT_PATH} = 1;
+            my $fh;
+            my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
+            waitpid($pid, 0) or die;
+            if ($? != 0) {
+                print STDERR "failed to fetch $url: $?\n";
+                next;
+            }
+            <$fh>; my $storePath2 = <$fh>; chomp $storePath2;
+            if ($storePath ne $storePath2) {
+                warn "strange: $storePath != $storePath2\n";
+                next;
+            }
+        }
 
         uploadFile($storePath, $url);
         $mirrored++;
