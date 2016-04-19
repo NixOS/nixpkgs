@@ -62,13 +62,11 @@ with lib;
 
     # Create the initrd
     system.build.netbootRamdisk = pkgs.makeInitrd {
-      inherit (config.boot.initrd) compressor prepend;
+      inherit (config.boot.initrd) compressor;
+      prepend = [ "${config.system.build.initialRamdisk}/initrd" ];
 
       contents =
-        [ { object = config.system.build.bootStage1;
-            symlink = "/init";
-          }
-          { object = config.system.build.squashfsStore;
+        [ { object = config.system.build.squashfsStore;
             symlink = "/nix-store.squashfs";
           }
         ];
