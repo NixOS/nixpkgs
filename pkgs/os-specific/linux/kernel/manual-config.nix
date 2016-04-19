@@ -216,8 +216,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
-  hardeningDisable = [ "format" "fortify" "stackprotector" "pic" ]
-    ++ stdenv.lib.optional stdenv.isi686 "bindnow";
+  hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
