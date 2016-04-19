@@ -255,9 +255,6 @@ self: super: {
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
-  # While waiting for https://github.com/jwiegley/gitlib/pull/53 to be merged
-  hlibgit2 = addBuildTool super.hlibgit2 pkgs.git;
-
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
@@ -270,9 +267,6 @@ self: super: {
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
-  # https://github.com/vincenthz/hs-tls/issues/102
-  tls = dontCheck super.tls;
-
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
@@ -281,9 +275,6 @@ self: super: {
 
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
-
-  # https://github.com/vincenthz/tasty-kat/issues/1
-  tasty-kat = dontCheck super.tasty-kat;
 
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
@@ -309,7 +300,6 @@ self: super: {
   test-sandbox = dontCheck super.test-sandbox;
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
-  wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
   hapistrano = dontCheck super.hapistrano;
