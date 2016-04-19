@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   # FIXME: -dev depends on -doc
   outputs = [ "dev" "out" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
+  stripDebugList= [ "bin" "lib" "modules" ]; # also strip modules.
 
   buildInputs = [perl] ++
     optional sslSupport openssl ++

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   # FIXME: -dev depends on -doc
   outputs = [ "dev" "out" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
+  stripDebugList= [ "bin" "lib" "modules" ]; # also strip modules.
 
   propagatedBuildInputs = [ apr ]; # otherwise mod_* fail to find includes often
   buildInputs = [ pkgconfig perl aprutil pcre zlib ] ++
@@ -55,8 +56,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  stripDebugList = "lib modules bin";
 
   postInstall = ''
     mkdir -p $doc/share/doc/httpd
