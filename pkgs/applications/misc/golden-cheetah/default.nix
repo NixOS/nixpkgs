@@ -18,12 +18,13 @@ stdenv.mkDerivation rec {
     echo 'QMAKE_LRELEASE = ${qttools}/bin/lrelease' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
     qmake PREFIX=$out build.pro
-  '' + (
-    with (config.golden-cheetah);
-    stdenv.lib.optionalString (dropbox-client-id != null && dropbox-client-secret != null) ''
-      echo 'DEFINES += GC_DROPBOX_CLIENT_ID=\\\"${config.golden-cheetah.dropbox-client-id}\\\"' >>  src/gcconfig.pri
-      echo 'DEFINES += GC_DROPBOX_CLIENT_SECRET=\\\"${config.golden-cheetah.dropbox-client-secret}\\\"' >>  src/gcconfig.pri
-    '');
+  '';
+    #  + (
+    # with (config.golden-cheetah);
+    # stdenv.lib.optionalString (dropbox-client-id != null && dropbox-client-secret != null) ''
+    #   echo 'DEFINES += GC_DROPBOX_CLIENT_ID=\\\"${config.golden-cheetah.dropbox-client-id}\\\"' >>  src/gcconfig.pri
+    #   echo 'DEFINES += GC_DROPBOX_CLIENT_SECRET=\\\"${config.golden-cheetah.dropbox-client-secret}\\\"' >>  src/gcconfig.pri
+    # '');
   installPhase = ''
     mkdir -p $out/bin
     cp src/GoldenCheetah $out/bin
