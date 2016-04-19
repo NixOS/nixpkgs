@@ -10425,6 +10425,10 @@ in
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
+  klibc = callPackage ../os-specific/linux/klibc { };
+
+  klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
+
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10669,12 +10673,6 @@ in
     openafsClient = callPackage ../servers/openafs-client { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
-
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
-
-    klibc = callPackage ../os-specific/linux/klibc { };
-
-    klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
     jool = callPackage ../os-specific/linux/jool { };
 
