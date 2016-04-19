@@ -523,6 +523,8 @@ in
     qt4Support = config.avahi.qt4Support or false;
   };
 
+  avro-cpp = callPackage ../development/libraries/avro-c++ { };
+
   aws = callPackage ../tools/virtualization/aws { };
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
