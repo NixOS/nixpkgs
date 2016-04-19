@@ -1,4 +1,14 @@
-{ pkgs, stdenv, python, self }:
+{ pkgs, stdenv, python, self,
+  # Set the default version of numpy, which will be used for packages that
+  # don't depend on a specific version of numpy.
+  defaultNumpyVersion ? "1.10",
+  # Set the default version of scipy, which will be used for packages that
+  # don't depend on a specific version of scipy.
+  defaultScipyVersion ? "0.16",
+  # Set the default version of sqlalchemy, which will be used for packages
+  # that don't depend on a specific version of sqlalchemy.
+  defaultSqlalchemyVersion ? "1.0"
+}:
 
 with pkgs.lib;
 
@@ -3600,7 +3610,7 @@ in modules // {
     meta = {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
-    propagatedBuildInputs = with self; [ self.coverage ];
+    propagatedBuildInputs = [self.coverage];
   };
 
   crcmod = buildPythonPackage rec {
@@ -10361,7 +10371,6 @@ in modules // {
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
-    disabled = isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
@@ -13277,7 +13286,19 @@ in modules // {
     blas = pkgs.openblasCompat;
   };
 
-  numpy = self.numpy_1_11;
+  numpy = if defaultNumpyVersion == "1.11" then self.numpy_1_11
+          else if defaultNumpyVersion == "1.10" then self.numpy_1_10
+          else if defaultNumpyVersion == "1.9" then self.numpy_1_9
+          else throw "Unsupported numpy version: ${defaultNumpyVersion}";
+
+  numpy_1_9 = self.buildNumpyPackage rec {
+    version = "1.9.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numpy/numpy-${version}.tar.gz";
+      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
+    };
+  };
+
 
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
@@ -13601,7 +13622,6 @@ in modules // {
 
   ordereddict = buildPythonPackage rec {
     name = "ordereddict-1.1";
-    disabled = !isPy26;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
@@ -19520,7 +19540,9 @@ in modules // {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_17;
+  scipy = if defaultScipyVersion == "0.17" then self.scipy_0_17
+          else if defaultScipyVersion == "0.16" then self.scipy_0_16
+          else throw "Unsupported scipy version: ${defaultScipyVersion}";
 
   scipy_0_16 = self.buildScipyPackage rec {
     version = "0.16.1";
@@ -19528,7 +19550,7 @@ in modules // {
       url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
       sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
     };
-    numpy = self.numpy_1_10;
+    numpy = self.numpy;
   };
 
   scipy_0_17 = self.buildScipyPackage rec {
@@ -20035,7 +20057,7 @@ in modules // {
     disabled = isPyPy || isPy26 || isPy27;
 
     checkPhase = ''
-    ${python.interpreter} test/*.py
+    ${python.interpreter} test/*.py     #*/ unconfuse emacs nix mode
     '';
     meta = {
       description = "Simple and extensible IRC bot";
@@ -20733,6 +20755,13 @@ in modules // {
     rope = if isPy3k then null else self.rope;
   };
 
+  sqlalchemy =
+    if defaultSqlalchemyVersion == "0.7" then self.sqlalchemy7
+    else if defaultSqlalchemyVersion == "0.8" then self.sqlalchemy8
+    else if defaultSqlalchemyVersion == "0.9" then self.sqlalchemy9
+    else if defaultSqlalchemyVersion == "1.0" then self.sqlalchemy_1_0
+    else throw "Unsupported sqlalchemy version: ${defaultSqlalchemyVersion}";
+
   sqlalchemy7 = buildPythonPackage rec {
     name = "SQLAlchemy-0.7.10";
     disabled = isPy34 || isPy35;
@@ -20795,7 +20824,33 @@ in modules // {
     };
   };
 
-  sqlalchemy = buildPythonPackage rec {
+  sqlalchemy9 = buildPythonPackage rec {
+    name = "SQLAlchemy-0.9.9";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
+      sha256 = "14az6hhrz4bgnicz4q373z119zmaf7j5zxl1jfbfl5lix5m1z9bj";
+    };
+
+    buildInputs = with self; [ nose mock ]
+      ++ stdenv.lib.optional doCheck pysqlite;
+    propagatedBuildInputs = with self; [ modules.sqlite3 ];
+
+    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
+    # acceptable reason to make all dependents unavailable on Python 3 as well
+    doCheck = !(isPyPy || isPy3k);
+
+    checkPhase = ''
+      ${python.executable} sqla_nose.py
+    '';
+
+    meta = {
+      homepage = http://www.sqlalchemy.org/;
+      description = "A Python SQL toolkit and Object Relational Mapper";
+    };
+  };
+
+  sqlalchemy_1_0 = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
     version = "1.0.12";
 
