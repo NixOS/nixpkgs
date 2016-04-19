@@ -235,7 +235,9 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = addPkgconfigDepend super.gio pkgs.glib;
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gio pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
