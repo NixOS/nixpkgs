@@ -24,10 +24,10 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc.blackbee.source = "/srv/blackbee/etc";
+    environment.etc.blackbee.source = "/srv/s-blackbee/etc";
 
     system.activationScripts.webdata_blackbee = ''
-      test -L /home/pricing || ln -s /srv/blackbee/pricing /home/pricing
+      test -L /home/pricing || ln -s /srv/s-blackbee/pricing /home/pricing
     '';
 
   };
