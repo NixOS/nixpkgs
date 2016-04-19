@@ -18,12 +18,13 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cmakeFlags+=" -DCMAKE_INSTALL_LIBDIR=''${!outputLib}/lib"
+    cmakeFlags+=" -DCMAKE_INSTALL_INCLUDEDIR=''${!outputDev}/include"
   '';
 
   postFixup = ''
     # Fix library location in CMake module
     sed -i "$dev/lib/cmake/PolkitQt5-1/PolkitQt5-1Config.cmake" \
-        -e "s,set_and_check.POLKITQT-1_LIB_DIR.*$,set_and_check(POLKITQT-1_LIB_DIR \"''${!outputLib}/lib\"),"
+        -e "s,\\(set_and_check.POLKITQT-1_LIB_DIR\\).*$,\\1 \"''${!outputLib}/lib\"),"
   '';
 
   meta = {
