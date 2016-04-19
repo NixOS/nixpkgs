@@ -162,8 +162,8 @@ _multioutDevs() {
 
 # Make the first output (typically "dev") propagate other outputs needed for development.
 # Take the first, because that's what one gets when putting the package into buildInputs.
-# Note: during the build, probably only the "native" development packages are useful.
-# With current cross-building setup, all packages are "native" if not cross-building.
+# Note: with current cross-building setup, all packages are "native" if not cross-building;
+# however, if cross-building, the outputs are non-native. We have to choose the right file.
 _multioutPropagateDev() {
     if [ "$outputs" = "out" ]; then return; fi;
 
@@ -188,8 +188,15 @@ _multioutPropagateDev() {
     fi
 
     mkdir -p "${!outputFirst}"/nix-support
+    local propagatedBuildInputsFile
+    if [ -z "$crossConfig" ]; then
+        propagatedBuildInputsFile=propagated-native-build-inputs
+    else
+        propagatedBuildInputsFile=propagated-build-inputs
+    fi
+
     for output in $propagatedBuildOutputs; do
-        echo -n " ${!output}" >> "${!outputFirst}"/nix-support/propagated-native-build-inputs
+        echo -n " ${!output}" >> "${!outputFirst}"/nix-support/$propagatedBuildInputsFile
     done
 }
 
