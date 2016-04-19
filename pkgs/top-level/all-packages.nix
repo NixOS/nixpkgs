@@ -8256,6 +8256,8 @@ in
 
   mythes = callPackage ../development/libraries/mythes { };
 
+  nanoflann = callPackage ../development/libraries/nanoflann { };
+
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
