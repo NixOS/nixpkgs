@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   ++ optional waylandSupport "--enable-wayland";
 
   configurePhase = ''
-    python ${waf} configure --prefix=$out $configureFlags
+    python ${waf} configure --prefix=$out --confloaddir=/etc/mpv $configureFlags
   '';
 
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python which ];
