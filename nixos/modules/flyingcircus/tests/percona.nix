@@ -11,8 +11,7 @@ import <nixpkgs/nixos/tests/make-test.nix> ({ pkgs, ...} : {
       { pkgs, config, ... }:
 
       {
-        imports = [ ../manage/default.nix
-                    ../static/default.nix
+        imports = [ ../static/default.nix
                     ../roles/default.nix
                     ../services/default.nix
                     ../packages/default.nix
