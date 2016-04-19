@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
     ./all.bash
   '';
 
+  stripDebugList = [ "bin" "share" ];
+
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {

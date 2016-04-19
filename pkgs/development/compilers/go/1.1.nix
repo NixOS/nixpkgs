@@ -90,6 +90,8 @@ stdenv.mkDerivation {
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
+  stripDebugList = [ "bin" "share" ];
+
   meta = {
     branch = "1.1";
     homepage = http://golang.org/;

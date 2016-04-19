@@ -100,6 +100,8 @@ stdenv.mkDerivation {
     cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
+  stripDebugList = [ "bin" "share" ];
+
   setupHook = ./setup-hook.sh;
 
   meta = {
