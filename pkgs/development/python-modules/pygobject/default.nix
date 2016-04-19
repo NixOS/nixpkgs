@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "docdev" ];
 
+  patches = [
+    # Fix warning spam
+    ./pygobject-2.28.6-set_qdata.patch
+    ./pygobject-2.28.6-gio-types-2.32.patch
+  ];
+
   configureFlags = "--disable-introspection";
 
   buildInputs = [ python pkgconfig glib ];
