@@ -4,6 +4,11 @@
 let
   cfg = config.flyingcircus.roles.webdata_blackbee;
 
+  additional_hosts =
+    if pathExists /srv/s-blackbee/hosts
+    then readFile /srv/s-blackbee/hosts
+    else "";
+
 in
 {
 
@@ -29,6 +34,8 @@ in
     system.activationScripts.webdata_blackbee = ''
       test -L /home/pricing || ln -s /srv/s-blackbee/pricing /home/pricing
     '';
+
+    networking.extraHosts = additional_hosts;
 
   };
 
