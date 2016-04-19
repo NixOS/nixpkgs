@@ -111,9 +111,9 @@ def update_inventory():
 def build_channel(build_options):
     print('Switching channel ...')
     try:
-        os.system(
-            'nix-channel --add {} nixos'.format(
-                enc['parameters']['environment_url']))
+        if enc:
+            channel_url = enc['parameters']['environment_url']
+            os.system('nix-channel --add {} nixos'.format(channel_url))
         os.system('nix-channel --update')
         os.system('nixos-rebuild --no-build-output switch {}'.format(
                   ' '.join(build_options)))
