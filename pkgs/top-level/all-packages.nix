@@ -8469,7 +8469,7 @@ in
     spidermonkey = spidermonkey_17;
   };
 
-  polkit_qt4 = callPackage ../development/libraries/polkit-qt-1 { };
+  polkit_qt4 = callPackage ../development/libraries/polkit-qt-1/qt-4.nix { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
 
@@ -8581,9 +8581,7 @@ in
 
     phonon-backend-vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
-    polkit-qt = callPackage ../development/libraries/polkit-qt-1 {
-      withQt5 = true;
-    };
+    polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
     poppler = callPackage ../development/libraries/poppler {
       lcms = lcms2;
