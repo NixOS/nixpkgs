@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl }:
+{ stdenv, fetchurl, pythonPackages, intltool, libxml2Python, curl, libvirt }:
 
 with stdenv.lib;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       distutils_extra simplejson readline glanceclient cheetah lockfile httplib2
       # !!! should libvirt be a build-time dependency?  Note that
       # libxml2Python is a dependency of libvirt.py.
-      libvirt libxml2Python urlgrabber
+      pythonPackages.libvirt libxml2Python urlgrabber
     ];
 
   buildInputs =
@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
   installPhase =
     ''
        python setup.py install --prefix="$out";
+       substituteInPlace "$out/bin/virt-install" \
+          --replace "/usr/bin/virsh" ${libvirt}/bin/virsh \
+          --replace "/usr/bin/virt-viewer" "virt-viewer"
+
        wrapPythonPrograms
     '';
 
