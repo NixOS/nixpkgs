@@ -72,7 +72,7 @@ with lib;
         ];
     };
 
-    system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" "#!ipxe\nkernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0\ninitrd initrd\nboot";
+    system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" "#!ipxe\nkernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}\ninitrd initrd\nboot";
 
     boot.loader.timeout = 10;
 
