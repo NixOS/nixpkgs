@@ -337,7 +337,7 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional enablePHP { name = "php5"; path = "${php}/modules/libphp5.so"; }
+          ++ optional enablePHP { name = "php5"; path = "${php.out}/modules/libphp5.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -406,7 +406,7 @@ let
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
     }
     ''
-      cat ${php}/etc/php-recommended.ini > $out
+      cat ${php.out}/etc/php-recommended.ini > $out
       echo "$options" >> $out
     '';
 
