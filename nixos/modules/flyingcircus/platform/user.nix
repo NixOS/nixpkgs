@@ -105,6 +105,12 @@ let
       (user: "install -d -m 0755 ${user.home_directory}")
       userdata;
 
+  configure_lingering = userdata:
+    # Service users should have lingering enabled
+    map
+      (user: " ${config.systemd.package}/bin/loginctl ${if (get_primary_group user) == "service" then "enable" else "disable"}-linger ${user.uid}")
+      userdata;
+
 in
 
 {
@@ -215,6 +221,9 @@ in
 
     system.activationScripts.fcio-homedirpermissions =
       builtins.concatStringsSep "\n" (home_dir_permissions userdata);
+
+    system.activationScripts.fcio-configure-lingering =
+      builtins.concatStringsSep "\n" (configure_lingering userdata);
 
   };
 
