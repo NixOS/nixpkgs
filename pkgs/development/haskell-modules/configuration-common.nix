@@ -43,8 +43,13 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   c2hs = dontCheck super.c2hs;
+
+  # fix errors caused by hardening flags
   epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
     hardeningDisable = [ "format" ];
+  });
+  pango = super.pango.overrideDerivation (drv: {
+    hardeningDisable = [ "fortify" ];
   });
 
   # Use the default version of mysql to build this package (which is actually mariadb).
