@@ -30,6 +30,7 @@ in
      ./statshost.nix
      ./varnish.nix
      ./webgateway.nix
+     ./webdata_blackbee.nix
     ];
 
   options = {
