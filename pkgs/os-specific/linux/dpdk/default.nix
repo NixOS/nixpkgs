@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = http://dpdk.org/;
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms =  [ "x86_64-linux" ];;
+    platforms =  [ "x86_64-linux" ];
     maintainers = [ maintainers.iElectric ];
   };
 }
