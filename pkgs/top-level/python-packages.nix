@@ -26641,4 +26641,27 @@ in modules // {
       license = licenses.mit;
     };
   };
+
+  clize = buildPythonPackage rec {
+    name = "clize-${version}";
+    version = "3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/clize/${name}.tar.gz";
+      sha256 = "1xkr3h404d7pgj5gdpg6bddv3v3yq2hgx8qlwkgw5abg218k53hm";
+    };
+
+    buildInputs = with self; [
+      dateutil
+    ];
+    propagatedBuildInputs = with self; [
+      sigtools
+    ];
+
+    meta = {
+      description = "Command-line argument parsing for Python";
+      homepage = "https://github.com/epsy/clize";
+      license = licenses.mit;
+    };
+  };
 }
