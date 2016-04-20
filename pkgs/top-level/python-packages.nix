@@ -26611,4 +26611,34 @@ in modules // {
       license = licenses.mit;
     };
   };
+
+  sigtools = buildPythonPackage rec {
+    name = "sigtools-${version}";
+    version = "1.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sigtools/${name}.tar.gz";
+      sha256 = "190w14vzbiyvxcl9jmyyimpahar5b0bq69v9iv7chi852yi71w6w";
+    };
+
+    buildInputs = with self; [
+      repeated_test
+      sphinx
+      mock
+      coverage
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      funcsigs
+      six
+    ];
+
+    patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
+
+    meta = {
+      description = "Utilities for working with 3.3's inspect.Signature objects.";
+      homepage = "https://pypi.python.org/pypi/sigtools";
+      license = licenses.mit;
+    };
+  };
 }
