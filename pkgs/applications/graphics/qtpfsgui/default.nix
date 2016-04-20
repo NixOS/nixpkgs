@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, exiv2, openexr, fftwSinglePrec, libtiff, ilmbase }:
+{stdenv, fetchurl, qt4, qmake4Hook, exiv2, openexr, fftwSinglePrec, libtiff, ilmbase }:
 
 stdenv.mkDerivation rec {
   name = "qtpfsgui-1.9.3";
@@ -9,14 +9,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  configurePhase = ''
+  preConfigure = ''
     export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
-    qmake PREFIX=$out EXIV2PATH=${exiv2}/include/exiv2  \
-      OPENEXRDIR=${openexr}/include/OpenEXR             \
-      FFTW3DIR=${fftwSinglePrec}/include                \
-      LIBTIFFDIR=${libtiff}/include
   '';
+
+  qmakeFlags = [
+    "EXIV2PATH=${exiv2}/include/exiv2"
+    "OPENEXRDIR=${openexr}/include/OpenEXR"
+    "FFTW3DIR=${fftwSinglePrec}/include"
+    "LIBTIFFDIR=${libtiff}/include"
+  ];
 
   meta = {
     homepage = http://qtpfsgui.sourceforge.net/;

@@ -3,7 +3,7 @@
 , qtimageformats, qtgraphicaleffects
 , telegram-qml, libqtelegram-aseman-edition
 , gst_all_1
-, makeQtWrapper }:
+, makeQtWrapper, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "cutegram-${meta.version}";
@@ -20,15 +20,9 @@ stdenv.mkDerivation rec {
     telegram-qml libqtelegram-aseman-edition 
   ] ++ (with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly ]);
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
 
   enableParallelBuilding = true;
-
-  configurePhase = ''
-    runHook preConfigure
-    qmake -r PREFIX=$out
-    runHook postConfigure
-  '';
 
   fixupPhase = ''
     wrapQtProgram $out/bin/cutegram \

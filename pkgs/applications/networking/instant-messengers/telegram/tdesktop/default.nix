@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchgit, qtbase, qtimageformats
 , breakpad, ffmpeg, openalSoft, openssl, zlib, libexif, lzma, libopus
 , gtk2, glib, cairo, pango, gdk_pixbuf, atk, libappindicator-gtk2
-, libunity, dee, libdbusmenu-glib, libva
+, libunity, dee, libdbusmenu-glib, libva, qmakeHook
 
 , pkgconfig, libxcb, xcbutilwm, xcbutilimage, xcbutilkeysyms
 , libxkbcommon, libpng, libjpeg, freetype, harfbuzz, pcre16
@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     breakpad ffmpeg openalSoft openssl zlib libexif lzma libopus
     gtk2 glib libappindicator-gtk2 libunity cairo pango gdk_pixbuf atk
-    dee libdbusmenu-glib libva
+    dee libdbusmenu-glib libva qmakeHook
     # Qt dependencies
     libxcb xcbutilwm xcbutilimage xcbutilkeysyms libxkbcommon
     libpng libjpeg freetype harfbuzz pcre16 xproto libX11
@@ -73,10 +73,9 @@ in stdenv.mkDerivation rec {
   qtSrcs = qtbase.srcs ++ [ qtimageformats.src ];
   qtPatches = qtbase.patches;
 
-  buildCommand = ''
-    # We don't use nativeBuildInputs to avoid adding system Qt 5 libraries to various paths.
-    export PATH="${qtbase}/bin:$PATH"
+  dontUseQmakeConfigure = true;
 
+  buildCommand = ''
     unpackPhase
     cd "$sourceRoot"
     patchPhase

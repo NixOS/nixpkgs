@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+{ stdenv, fetchurl, cmake, qt4, qmake4Hook, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
 , libXScrnSaver, speex, curl, libxml2, libxslt }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0l2n4pr1hq66q6qa073hrdx3s3d7iw54z8ay1zy82zhk2rwhsavp";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.dev}/lib/glib-2.0/include -I${libxml2.dev}/include/libxml2";
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/glib-2.0" "-I${glib.dev}/lib/glib-2.0/include" "-I${libxml2.dev}/include/libxml2" ];
 
   patchPhase = ''
     sed -i 's/UpnpString_get_String(es_event->PublisherUrl)/es_event->PublisherUrl/' \
@@ -22,13 +22,13 @@ stdenv.mkDerivation {
       libretroshare/src/rsserver/rsinit.cc
   '';
 
-  buildInputs = [ speex qt libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
+  buildInputs = [ speex qt4 qmake4Hook libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
                   protobuf bzip2 libXScrnSaver curl libxml2 libxslt ];
 
   sourceRoot = "retroshare-0.5.5/src";
 
-  configurePhase = ''
-    qmake PREFIX=$out DESTDIR=$out RetroShare.pro
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags DESTDIR=$out"
   '';
 
   postInstall = ''

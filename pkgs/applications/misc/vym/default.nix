@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, qt4 }:
+{ stdenv, fetchurl, pkgconfig, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "vym-${version}";
@@ -9,11 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1x4qp6wpszscbbs4czkfvskm7qjglvxm813nqv281bpy4y1hhvgs";
   };
 
-  buildInputs = [ pkgconfig qt4 ];
-
-  configurePhase = ''
-    qmake PREFIX="$out"
-  '';
+  buildInputs = [ pkgconfig qt4 qmake4Hook ];
 
   meta = with stdenv.lib; {
     description = "A mind-mapping software";

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qtbase, qtmultimedia, qtquick1
+, qtbase, qtmultimedia, qtquick1, qmakeHook
 , libqtelegram-aseman-edition }:
 
 stdenv.mkDerivation rec {
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtmultimedia qtquick1 libqtelegram-aseman-edition ];
+  nativeBuildInputs = [ qmakeHook ];
   enableParallelBuilding = true;
 
   patchPhase = ''
@@ -20,11 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace telegramqml.pro --replace "INSTALL_HEADERS_PREFIX/telegramqml" "INSTALL_HEADERS_PREFIX"
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake -r PREFIX=$out BUILD_MODE+=lib
-    runHook postConfigure
-  '';
+  qmakeFlags = [ "BUILD_MODE+=lib" ];
 
   meta = with stdenv.lib; {
     version = "0.9.2";

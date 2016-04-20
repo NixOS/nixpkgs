@@ -1,4 +1,4 @@
-{stdenv, fetchgit, bzip2, qt4, libX11}:
+{ stdenv, fetchgit, bzip2, qt4, qmake4Hook, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "evopedia-${version}";
@@ -10,11 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1biq9zaj8nhxx1pixidsn97iwp9qy1yslgl0znpa4d4p35jcg48g";
   };
 
-  configurePhase = ''
-    qmake PREFIX=$out
-  '';
-
   buildInputs = [ bzip2 qt4 libX11 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
     description = "Offline Wikipedia Viewer";

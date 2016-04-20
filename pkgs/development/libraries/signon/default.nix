@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, doxygen, qtbase }:
+{ stdenv, fetchurl, doxygen, qtbase, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "signon-${version}";
@@ -9,12 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ doxygen ];
+  nativeBuildInputs = [ doxygen qmakeHook ];
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/SignOnQt5
-    runHook postConfigure
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake/SignOnQt5"
   '';
 
 }

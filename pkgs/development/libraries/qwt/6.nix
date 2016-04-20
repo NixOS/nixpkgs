@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qtsvg, qttools }:
+{ stdenv, fetchurl, qtbase, qtsvg, qttools, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "qwt-6.1.2";
@@ -9,16 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
+  nativeBuildInputs = [ qmakeHook ];
 
   postPatch = ''
     sed -e "s|QWT_INSTALL_PREFIX.*=.*|QWT_INSTALL_PREFIX = $out|g" -i qwtconfig.pri
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake -after doc.path=$out/share/doc/${name} -r
-    runHook postConfigure
-  '';
+  qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
 
   meta = with stdenv.lib; {
     description = "Qt widgets for technical applications";

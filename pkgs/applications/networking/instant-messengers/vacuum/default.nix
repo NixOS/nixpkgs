@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl
-  , qt4, openssl
+  , qt4, qmake4Hook, openssl
   , xproto, libX11, libXScrnSaver, scrnsaverproto
   , xz, zlib
 }:
@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
     qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
   ];
 
-  configurePhase = ''
-    qmake INSTALL_PREFIX=$out -recursive vacuum.pro
+  nativeBuildInputs = [ qmake4Hook ];
+
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 
   meta = with stdenv.lib; {

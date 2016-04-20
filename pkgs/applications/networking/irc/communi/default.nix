@@ -1,4 +1,4 @@
-{ fetchgit, libcommuni, makeQtWrapper, qt5, stdenv }:
+{ fetchgit, libcommuni, makeQtWrapper, qtbase, qmakeHook, stdenv }:
 
 stdenv.mkDerivation rec {
   name = "communi-${version}";
@@ -10,23 +10,22 @@ stdenv.mkDerivation rec {
     sha256 = "0gk6gck09zb44qfsal7bs4ln2vl9s9x3vfxh7jvfc7mmf7l3sspd";
   };
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
 
-  buildInputs = [ libcommuni qt5.qtbase ];
+  buildInputs = [ libcommuni qtbase ];
 
   enableParallelBuild = true;
 
-  configurePhase = ''
-    runHook preConfigure
+  preConfigure = ''
     export QMAKEFEATURES=${libcommuni}/features
-    qmake -r \
+    qmakeFlags="$qmakeFlags \
       COMMUNI_INSTALL_PREFIX=$out \
       COMMUNI_INSTALL_BINS=$out/bin \
       COMMUNI_INSTALL_PLUGINS=$out/lib/communi/plugins \
       COMMUNI_INSTALL_ICONS=$out/share/icons/hicolor \
       COMMUNI_INSTALL_DESKTOP=$out/share/applications \
       COMMUNI_INSTALL_THEMES=$out/share/communi/themes
-    runHook postConfigure
+    "
   '';
 
   postInstall = ''

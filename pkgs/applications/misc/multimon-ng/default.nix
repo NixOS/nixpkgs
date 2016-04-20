@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt4, libpulseaudio }:
+{ stdenv, fetchFromGitHub, qt4, qmake4Hook, libpulseaudio }:
 let
   version = "1.0.0";
 in
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ qt4 libpulseaudio ];
 
-  preBuild = "qmake multimon-ng.pro";
+  nativeBuildInputs = [ qmake4Hook ];
 
   installPhase = ''
     mkdir -p $out/bin
