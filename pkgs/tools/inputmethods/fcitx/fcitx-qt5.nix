@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace platforminputcontext/cmake_install.cmake \
-      --replace ${qtbase} $out
+      --replace ${qtbase.out} $out
   '';
 
   meta = with stdenv.lib; {
