@@ -156,5 +156,6 @@ rec {
     maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
     hydraPlatforms = [];
+    broken = true; # https://github.com/NixOS/nixpkgs/issues/14807
   };
 }
