@@ -52,8 +52,7 @@ in
   # Include some utilities that are useful for installing or repairing
   # the system.
   environment.systemPackages =
-    [ pkgs.subversion # for nixos-checkout
-      pkgs.w3m # needed for the manual anyway
+    [ pkgs.w3m # needed for the manual anyway
       pkgs.testdisk # useful for repairing boot problems
       pkgs.mssys # for writing Microsoft boot sectors / MBRs
       pkgs.parted
