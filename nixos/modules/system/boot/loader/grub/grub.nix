@@ -499,7 +499,7 @@ in
         }
       ] ++ flip map args.devices (device: {
         assertion = device == "nodev" || hasPrefix "/" device;
-        message = "GRUB devices must be absolute paths, not ${dev} in ${args.path}";
+        message = "GRUB devices must be absolute paths, not ${device} in ${args.path}";
       }));
     })
 
