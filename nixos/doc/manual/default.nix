@@ -15,14 +15,6 @@ let
     else if builtins.isFunction x then "<function>"
     else x;
 
-  # Clean up declaration sites to not refer to the NixOS source tree.
-  optionsList' = flip map optionsList (opt: opt // {
-    declarations = map stripAnyPrefixes opt.declarations;
-  }
-  // optionalAttrs (opt ? example) { example = substFunction opt.example; }
-  // optionalAttrs (opt ? default) { default = substFunction opt.default; }
-  // optionalAttrs (opt ? type) { type = substFunction opt.type; });
-
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
   # or else the build will fail.
@@ -32,8 +24,25 @@ let
   prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
   stripAnyPrefixes = flip (fold removePrefix) prefixesToStrip;
 
+  # Clean up declaration sites to not refer to the NixOS source tree.
+  optionsList' = flip map optionsList (opt: opt // {
+    declarations = map stripAnyPrefixes opt.declarations;
+  }
+  // optionalAttrs (opt ? example) { example = substFunction opt.example; }
+  // optionalAttrs (opt ? default) { default = substFunction opt.default; }
+  // optionalAttrs (opt ? type) { type = substFunction opt.type; });
+
+  # Custom "less" that pushes up all the things ending in ".enable*"
+  isEnable = x: hasPrefix "enable" (last (splitString "." x));
+  enableFirst = a: b: if       isEnable a && !isEnable b then true
+                      else if !isEnable a &&  isEnable b then false
+                      else a < b;
+
+  # Customly sort option list for the man page.
+  optionsList'' = sort (a: b: enableFirst a.name b.name) optionsList';
+
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList'');
 
   optionsDocBook = runCommand "options-db.xml" {} ''
     optionsXML=${optionsXML}
