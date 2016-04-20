@@ -4,17 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "makemkv-${ver}";
-  ver = "1.9.9";
+  ver = "1.9.10";
   builder = ./builder.sh;
 
   src_bin = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "1rsmsfyxjh18bdj93gy7whm4j6k1098zfak8napxsqfli7dyijb6";
+    sha256 = "1i5nqk5gyin6rgvc0fy96pdzq0wsmfvsm6w9mfsibj0yrfqnhi6r";
   };
 
   src_oss = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "070x8l88nv70abd9gy8jchs09mh09x6psjc0zs4vplk61cbqk3b0";
+    sha256 = "1ypc2hisx71kpmjwxnlq6zh4q6r2i1p32gapb0ampjflcjyvx5dk";
   };
 
   buildInputs = [openssl qt4 mesa zlib pkgconfig libav];

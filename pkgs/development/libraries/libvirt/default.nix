@@ -7,7 +7,7 @@
 , curl, libiconv, gmp
 , withXen ? false, xen ? null
 }:
-
+# if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
   version = "1.3.3";
