@@ -46,7 +46,6 @@ let
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
       dontFixLibtool = args.dontFixLibtool or true;
-      configureScript = args.configureScript or "qmake";
 
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = args.setOutputFlags or false;
