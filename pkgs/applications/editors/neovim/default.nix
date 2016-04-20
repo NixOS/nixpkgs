@@ -60,10 +60,10 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.2";
+    version = "0.1.3";
 
     src = fetchFromGitHub {
-      sha256 = "128aznp2gj08bdz05ri8mqday7wcsy9yz7dw7vdgzk0pk23vjz89";
+      sha256 = "1bkyfxsgb7894848nphsi6shr8bvi9z6ch0zvh2df7vkkzji8chr";
       rev = "v${version}";
       repo = "neovim";
       owner = "neovim";
@@ -134,7 +134,7 @@ let
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage    = http://www.neovim.io;
+      homepage    = https://www.neovim.io;
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
       # Contributions committed after b17d96 are licensed under Apache 2.0 unless

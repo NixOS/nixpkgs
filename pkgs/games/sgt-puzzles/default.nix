@@ -1,15 +1,14 @@
-{stdenv, gtk, pkgconfig, libX11, perl, fetchsvn}:
+{stdenv, gtk3, pkgconfig, libX11, perl, fetchurl, automake114x, autoconf}:
 let
-  version = "10286";
+  version = "20160410.9d15092";
   buildInputs = [
-    gtk pkgconfig libX11 perl
+    gtk3 pkgconfig libX11 perl automake114x autoconf
   ];
 in
 stdenv.mkDerivation {
-  src = fetchsvn {
-   url = svn://svn.tartarus.org/sgt/puzzles;
-   rev = version;
-   sha256 = "1mp1s33hjikby7jy6bcjwyzkdwlw1bw9dcc4cg5d80wmzkb0sqv0";
+  src = fetchurl {
+   url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
+   sha256 = "184n29mfgj56alp5853mya878rlxf5zxy0r3zfhi9h2yfqiwszi4";
   };
   name = "sgt-puzzles-r" + version;
   inherit buildInputs;
@@ -31,5 +30,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };
 }

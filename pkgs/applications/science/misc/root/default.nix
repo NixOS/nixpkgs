@@ -1,36 +1,26 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, mesa, gfortran
-, libX11,libXpm, libXft, libXext, zlib }:
+{ stdenv, fetchurl, fetchpatch, cmake, pkgconfig, python
+, libX11, libXpm, libXft, libXext, zlib, lzma }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "5.34.15";
+  version = "6.04.16";
 
   src = fetchurl {
-    url = "ftp://root.cern.ch/root/root_v${version}.source.tar.gz";
-    sha256 = "1bkiggcyya39a794d3d2rzzmmkbdymf86hbqhh0l1pl4f38xvp6i";
+    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
+    sha256 = "0f58dg83aqhggkxmimsfkd1qyni2vhmykq4qa89cz6jr9p73i1vm";
   };
 
-  buildInputs = [ cmake pkgconfig gfortran mesa libX11 libXpm libXft libXext zlib ];
+  buildInputs = [ cmake pkgconfig python libX11 libXpm libXft libXext zlib lzma ];
 
-  NIX_CFLAGS_LINK = "-lX11";
-
-  # CMAKE_INSTALL_RPATH_USE_LINK_PATH is set to FALSE in
-  # <rootsrc>/cmake/modules/RootBuildOptions.cmake.
-  # This patch sets it to TRUE.
-  patches = [
-    ./cmake.patch
-    (fetchpatch {
-      name = "fix-tm_t-member.diff";
-      url = "https://github.com/root-mirror/root/commit/"
-        + "08b08412bafc24fa635b0fdb832097a3aa2fa1d2.diff";
-      sha256 = "0apbp51pk8471gl06agx3i88dn76p6gpkgf1ssfhcyam0bjl8907";
-    })
-  ];
+  cmakeFlags = [
+    "-Drpath=ON"
+  ]
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://root.cern.ch/drupal/";
+    homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
     platforms = stdenv.lib.platforms.linux;
   };

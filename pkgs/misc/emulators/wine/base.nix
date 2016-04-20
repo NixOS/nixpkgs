@@ -32,7 +32,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath " + path) (
-      map (x: "${x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
+      map (x: "${x}/lib") ([ stdenv.cc.cc ] ++ (map (x: x.lib or x.out) buildInputs))
       # libpulsecommon.so is linked but not found otherwise
       ++ lib.optionals pulseaudioSupport (map (x: "${x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
     );
@@ -40,6 +40,13 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
   # elements specified above.
   dontPatchELF = true;
+
+  # Disable stripping to avoid breaking placeholder DLLs/EXEs.
+  # Symptoms of broken placeholders are: when the wineprefix is created
+  # drive_c/windows/system32 will only contain a few files instead of
+  # hundreds, there will be an error about winemenubuilder and MountMgr
+  # on startup of Wine, and the Drives tab in winecfg will show an error.
+  dontStrip = true;
 
   ## FIXME
   # Add capability to ignore known failing tests

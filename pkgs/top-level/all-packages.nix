@@ -523,6 +523,8 @@ in
     qt4Support = config.avahi.qt4Support or false;
   };
 
+  avro-cpp = callPackage ../development/libraries/avro-c++ { };
+
   aws = callPackage ../tools/virtualization/aws { };
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
@@ -2195,6 +2197,8 @@ in
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
+  leatherman = callPackage ../development/libraries/leatherman {};
+
   leela = callPackage ../tools/graphics/leela { };
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -3228,6 +3232,8 @@ in
 
   snort = callPackage ../applications/networking/ids/snort { };
 
+  softhsm = callPackage ../tools/security/softhsm { };
+
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
@@ -3669,6 +3675,8 @@ in
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
+
+  xbanish = callPackage ../tools/X11/xbanish { };
 
   xbrightness = callPackage ../tools/X11/xbrightness { };
 
@@ -5243,6 +5251,8 @@ in
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
+  angelscript_2_22 = callPackage ../development/interpreters/angelscript/2.22.nix {};
+
   chibi = callPackage ../development/interpreters/chibi { };
 
   ceptre = callPackage ../development/interpreters/ceptre { };
@@ -6059,6 +6069,8 @@ in
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
+
+  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends { };
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
@@ -7530,7 +7542,9 @@ in
 
   libechonest = callPackage ../development/libraries/libechonest { };
 
-  libev = callPackage ../development/libraries/libev { };
+  libev = callPackage ../development/libraries/libev {
+    fetchurl = fetchurlBoot;
+  };
 
   libevent = callPackage ../development/libraries/libevent { };
 
@@ -8248,6 +8262,8 @@ in
 
   mythes = callPackage ../development/libraries/mythes { };
 
+  nanoflann = callPackage ../development/libraries/nanoflann { };
+
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
@@ -8270,11 +8286,10 @@ in
 
   newt = callPackage ../development/libraries/newt { };
 
-  nghttp2 = callPackage ../development/libraries/nghttp2 { };
-  libnghttp2 = self.nghttp2.override {
-    prefix = "lib";
+  nghttp2 = callPackage ../development/libraries/nghttp2 {
     fetchurl = fetchurlBoot;
   };
+  libnghttp2 = nghttp2.lib;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = pkgs.nixUnstable;
@@ -8524,6 +8539,9 @@ in
 
     # XXX: mariadb doesn't built on fbsd as of nov 2015
     mysql = if (!stdenv.isFreeBSD) then mysql else null;
+
+    inherit (pkgs.darwin) cf-private libobjc;
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
   };
 
   qt48Full = appendToName "full" (qt48.override {
@@ -10110,7 +10128,7 @@ in
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
-  inherit (callPackages ../os-specific/linux/apparmor { swig = swig2; })
+  inherit (callPackages ../os-specific/linux/apparmor { pythonPackages = python27Packages; swig = swig2; })
     libapparmor apparmor-pam apparmor-parser apparmor-profiles apparmor-utils;
 
   atop = callPackage ../os-specific/linux/atop { };
@@ -10414,6 +10432,10 @@ in
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
+  klibc = callPackage ../os-specific/linux/klibc { };
+
+  klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
+
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10658,12 +10680,6 @@ in
     openafsClient = callPackage ../servers/openafs-client { };
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
-
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
-
-    klibc = callPackage ../os-specific/linux/klibc { };
-
-    klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
     jool = callPackage ../os-specific/linux/jool { };
 
@@ -11333,6 +11349,8 @@ in
   gyre-fonts = callPackage ../data/fonts/gyre {};
 
   hack-font = callPackage ../data/fonts/hack { };
+
+  helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
 
   hicolor_icon_theme = callPackage ../data/icons/hicolor-icon-theme { };
 
@@ -14762,6 +14780,8 @@ in
 
   freedink = callPackage ../games/freedink { };
 
+  freeorion = callPackage ../games/freeorion { };
+
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
   };
@@ -14936,6 +14956,13 @@ in
 
   residualvm = callPackage ../games/residualvm {
     openglSupport = mesaSupported;
+  };
+
+  rigsofrods = callPackage ../games/rigsofrods {
+    angelscript = angelscript_2_22;
+    mygui = mygui.override {
+      withOgre = true;
+    };
   };
 
   rili = callPackage ../games/rili { };
@@ -16033,6 +16060,8 @@ in
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
+  areca = callPackage ../applications/backup/areca { };
+
   beep = callPackage ../misc/beep { };
 
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
@@ -16558,7 +16587,6 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome) gtksourceview;
-    profile = config.higan.profile or "balanced";
   };
 
   misc = callPackage ../misc/misc.nix { };
@@ -16574,4 +16602,6 @@ in
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
+
+  #golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 }

@@ -1768,17 +1768,20 @@ in modules // {
   };
 
   bedup = buildPythonPackage rec {
-    name = "bedup-20140413";
+    version = "0.10";
+    name = "bedup-${version}";
 
     src = pkgs.fetchgit {
       url = "https://github.com/g2p/bedup.git";
-      rev = "5189e166145b8954ac41883f81ef3c3b50dc96ab";
-      sha256 = "e61768fa19934bd176799f90bda3ea9f49a5def21fa2523a8e47df8a48e730e9";
+      rev = "598fd4b";
+      sha256 = "0s11dpf4k26n8qxrx6wcsr78vp98rx3yibzkh6ifmsyaqcmpm7wy";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
     propagatedBuildInputs = with self; [ contextlib2 pyxdg pycparser alembic ]
       ++ optionals (!isPyPy) [ cffi ];
+
+    disabled = pythonOlder "3.3";
 
     # No proper test suite. Included tests cannot be run because of relative import
     doCheck = false;
@@ -10292,11 +10295,11 @@ in modules // {
   };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.1";
+    name = "httplib2-0.9.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/h/httplib2/${name}.tar.gz";
-      sha256 = "1xc3clbrf77r0600kja71j7hk1218sjiq0gfmb8vjdajka8kjqxw";
+      sha256 = "126rsryvw9vhbf3qmsfw9lf4l4xm2srmgs439lgma4cpag4s3ay3";
     };
 
     meta = {
@@ -24422,13 +24425,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.3.2";
+    version = "1.3.3";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1y0b2sglc6q43pw1sr0by5wx8037kvrp2969p69k6mq1g2gawdbd";
+      sha256 = "0jhf1h4zdysxf5mj769l5ddcbs5j3mzj4sdy8gp4kbj4imwaws5a";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

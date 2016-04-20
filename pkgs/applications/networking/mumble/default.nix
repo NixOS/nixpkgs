@@ -40,7 +40,9 @@ let
       ++ (overrides.configureFlags or [ ]);
 
     configurePhase = ''
+      runHook preConfigure
       qmake $configureFlags DEFINES+="PLUGIN_PATH=$out/lib"
+      runHook postConfigure
     '';
 
     makeFlags = [ "release" ];

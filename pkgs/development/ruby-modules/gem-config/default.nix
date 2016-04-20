@@ -21,7 +21,7 @@
 , libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, gecode_3, curl
-, libmsgpack, qt5Full
+, libmsgpack, qt48
 }:
 
 let
@@ -30,7 +30,7 @@ in
 
 {
   capybara-webkit = attrs: {
-    buildInputs = [ qt5Full ];
+    buildInputs = [ qt48 ];
   };
 
   charlock_holmes = attrs: {
@@ -166,5 +166,15 @@ in
       export XAPIAN_CONFIG=${xapian}/bin/xapian-config
     '';
   };
+
+  # patching shebangs would fail on the templates/Executable file, so we
+  # temporarily remove the executable flag.
+  bundler = attrs:
+    let
+      templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
+    in {
+      preFixup  = "chmod -x $out/${templates}/Executable";
+      postFixup = "chmod +x $out/${templates}/Executable";
+    };
 }
 

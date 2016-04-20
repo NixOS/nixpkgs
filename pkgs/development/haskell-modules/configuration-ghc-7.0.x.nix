@@ -77,4 +77,10 @@ self: super: {
   # Needs void on pre 7.10.x compilers.
   conduit = addBuildDepend super.conduit self.void;
 
+  # Needs tagged on pre 7.6.x compilers.
+  reflection = addBuildDepend super.reflection self.tagged;
+
+  # Needs nats on pre 7.6.x compilers.
+  semigroups = addBuildDepend super.semigroups self.nats;
+
 }

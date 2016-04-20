@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
-, dbus, acl, gmp, darwin
+, dbus, systemd, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation {
   };
 
   # FIXME: the cups libraries contains some $out/share strings so can't be split.
-  outputs = [ "dev" "out" "doc" "man" ]; # TODO: above
+  outputs = [ "dev" "out" "man" ]; # TODO: above
 
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
-    ++ optionals stdenv.isLinux [ avahi pam dbus acl ]
+    ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices
     ]);

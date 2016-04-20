@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
 
   src = if stdenv.system == "x86_64-linux"
     then fetchurl {
-      url    = "ftp://ftp.archlinux.org/community/os/x86_64/${name}-x86_64.pkg.tar.xz";
+      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-x86_64.pkg.tar.xz";
       sha256 = "1j9vjxhrhsskrlk5wr7al4wk2hh3983kcva42mqal09bmc8qg3m9";
     }
     else fetchurl {
-      url    = "ftp://ftp.archlinux.org/community/os/i686/${name}-i686.pkg.tar.xz";
+      url    = "http://seblu.net/a/archive/packages/s/sdlmame/${name}-i686.pkg.tar.xz";
       sha256 = "1i38j9ml66pyxzm0zzf1fv4lb40f6w47cdgaw846q91pzakkkqn7";
     };
 
@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license     = "MAME";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux;
-    broken = true; # URL doesn't work anymore
   };
 }

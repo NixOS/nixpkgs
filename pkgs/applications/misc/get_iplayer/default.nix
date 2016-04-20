@@ -7,6 +7,7 @@ buildPerlPackage {
 
   preConfigure = "touch Makefile.PL";
   doCheck = false;
+  outputs = [ "out" "man" ];
 
   patchPhase = ''
     sed -e 's|^update_script|#update_script|' \
@@ -15,10 +16,11 @@ buildPerlPackage {
   '';
 
   installPhase = '' 
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/man/man1
     cp get_iplayer $out/bin
     wrapProgram $out/bin/get_iplayer --suffix PATH : ${ffmpeg.bin}/bin:${flvstreamer}/bin:${vlc}/bin:${rtmpdump}/bin --prefix PERL5LIB : $PERL5LIB
-  '';  
+    cp get_iplayer.1 $out/share/man/man1
+  '';
   
   src = fetchurl {
     url = ftp://ftp.infradead.org/pub/get_iplayer/get_iplayer-2.94.tar.gz;

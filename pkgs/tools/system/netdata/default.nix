@@ -13,6 +13,8 @@ stdenv.mkDerivation rec{
 
   buildInputs = [ autoreconfHook zlib pkgconfig ];
 
+  patches = [ ./web_access.patch ];
+
   meta = with stdenv.lib; {
     description = "Real-time performance monitoring tool";
     homepage = http://netdata.firehol.org;
