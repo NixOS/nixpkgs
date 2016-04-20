@@ -16601,6 +16601,8 @@ in
 
   mg = callPackage ../applications/editors/mg { };
 
+  aucdtect = callPackage ../tools/audio/aucdtect { };
+
   togglesg-download = callPackage ../tools/misc/togglesg-download { };
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
