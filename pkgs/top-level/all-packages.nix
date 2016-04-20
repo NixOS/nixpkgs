@@ -6068,6 +6068,8 @@ in
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
+  kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends { };
+
   kcov = callPackage ../development/tools/analysis/kcov { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
