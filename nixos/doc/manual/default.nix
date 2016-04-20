@@ -15,13 +15,27 @@ let
     else if builtins.isFunction x then "<function>"
     else x;
 
-  # Clean up declaration sites to not refer to the NixOS source tree.
+  # Generate DocBook documentation for a list of packages
+  genRelatedPackages = packages:
+    let
+      unpack = p: if lib.isString p then { name = p; } else p;
+      describe = { name, package ? pkgs.${name}, comment ? "" }:
+          "<listitem>"
+        + "<para><option>pkgs.${name}</option> (${package.name}): ${package.meta.description or "???"}.</para>"
+        + lib.optionalString (comment != "") "\n<para>${comment}</para>"
+        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
+        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
+        + "</listitem>";
+    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+
   optionsList' = lib.flip map optionsList (opt: opt // {
+    # Clean up declaration sites to not refer to the NixOS source tree.
     declarations = map stripAnyPrefixes opt.declarations;
   }
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; });
+  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
