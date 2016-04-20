@@ -15,13 +15,43 @@ let
     else if lib.isFunction x then "<function>"
     else x;
 
-  # Clean up declaration sites to not refer to the NixOS source tree.
+  # Generate DocBook documentation for a list of packages. This is
+  # what `relatedPackages` option of `mkOption` from
+  # ../../../lib/options.nix influences.
+  #
+  # Each element of `relatedPackages` can be either
+  # - a string:  that will be interpreted as an attribute name from `pkgs`,
+  # - a list:    that will be interpreted as an attribute path from `pkgs`,
+  # - an attrset: that can specify `name`, `path`, `package`, `comment`
+  #   (either of `name`, `path` is required, the rest are optional).
+  genRelatedPackages = packages:
+    let
+      unpack = p: if lib.isString p then { name = p; }
+                  else if lib.isList p then { path = p; }
+                  else p;
+      describe = args:
+        let
+          name = args.name or (lib.concatStringsSep "." args.path);
+          path = args.path or [ args.name ];
+          package = args.package or (lib.attrByPath path (throw "Invalid package attribute path `${toString path}'") pkgs);
+        in "<listitem>"
+        + "<para><literal>pkgs.${name} (${package.meta.name})</literal>"
+        + lib.optionalString (!package.meta.evaluates) " <emphasis>[UNAVAILABLE]</emphasis>"
+        + ": ${package.meta.description or "???"}.</para>"
+        + lib.optionalString (args ? comment) "\n<para>${args.comment}</para>"
+        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
+        + lib.optionalString (package.meta ? longDescription) "\n<programlisting>${package.meta.longDescription}</programlisting>"
+        + "</listitem>";
+    in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
+
   optionsListDesc = lib.flip map optionsListVisible (opt: opt // {
+    # Clean up declaration sites to not refer to the NixOS source tree.
     declarations = map stripAnyPrefixes opt.declarations;
   }
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
   // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; });
+  // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+  // lib.optionalAttrs (opt ? relatedPackages) { relatedPackages = genRelatedPackages opt.relatedPackages; });
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
