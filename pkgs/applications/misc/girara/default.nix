@@ -5,11 +5,11 @@ assert withBuildColors -> ncurses != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "girara-${version}";
-  version = "0.2.5";
+  version = "0.2.6";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "14m8mfbck49ldwi1w2i47bbg5c9daglcmvz9v2g1hnrq8k8g5x2w";
+    sha256 = "03wsxj27hvcbs3x96nah7j3paclifwlfag8kdph4kldl48srp9pb";
   };
 
   preConfigure = ''
