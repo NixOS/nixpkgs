@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "hasklig-0.4";
+  name = "hasklig-0.9";
 
   src = fetchurl {
-    url = "https://github.com/i-tu/Hasklig/releases/download/0.4/Hasklig-0.4.zip";
-    sha256 = "14j0zfapw6s6x5psp1rvx2i59rxdwb1jgwfgfhzhypr22qy40xi8";
+    url = "https://github.com/i-tu/Hasklig/releases/download/0.9/Hasklig-0.9.zip";
+    sha256 = "0rav55f6j1b8pqjgwvw52b92j2m630ampamlsiiym2xf684wnw2d";
   };
 
   buildInputs = [ unzip ];
