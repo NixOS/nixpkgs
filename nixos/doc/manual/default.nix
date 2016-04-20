@@ -32,8 +32,22 @@ let
   prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
   stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
 
+  # Custom "less" that pushes up all the things ending in ".enable*"
+  # and ".package"
+  optionListLess = a: b:
+    let
+      splt = lib.splitString ".";
+      ise = lib.hasPrefix "enable";
+      isp = lib.hasPrefix "package";
+      cmp = lib.splitByAndCompare ise lib.compare
+                                 (lib.splitByAndCompare isp lib.compare lib.compare);
+    in lib.compareLists cmp (splt a) (splt b) < 0;
+
+  # Customly sort option list for the man page.
+  optionsList'' = lib.sort (a: b: optionListLess a.name b.name) optionsList';
+
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList'');
 
   optionsDocBook = runCommand "options-db.xml" {} ''
     optionsXML=${optionsXML}
