@@ -6,7 +6,7 @@ let
   lib = pkgs.lib;
 
   # Remove invisible and internal options.
-  optionsList = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
+  optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
   # Replace functions by the string <function>
   substFunction = x:
@@ -16,7 +16,7 @@ let
     else x;
 
   # Clean up declaration sites to not refer to the NixOS source tree.
-  optionsList' = lib.flip map optionsList (opt: opt // {
+  optionsListDesc = lib.flip map optionsListVisible (opt: opt // {
     declarations = map stripAnyPrefixes opt.declarations;
   }
   // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
@@ -32,8 +32,22 @@ let
   prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
   stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
 
+  # Custom "less" that pushes up all the things ending in ".enable*"
+  # and ".package"
+  optionListLess = a: b:
+    let
+      splt = lib.splitString ".";
+      ise = lib.hasPrefix "enable";
+      isp = lib.hasPrefix "package";
+      cmp = lib.splitByAndCompare ise lib.compare
+                                 (lib.splitByAndCompare isp lib.compare lib.compare);
+    in lib.compareLists cmp (splt a) (splt b) < 0;
+
+  # Customly sort option list for the man page.
+  optionsList = lib.sort (a: b: optionListLess a.name b.name) optionsListDesc;
+
   # Convert the list of options into an XML file.
-  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList');
+  optionsXML = builtins.toFile "options.xml" (builtins.toXML optionsList);
 
   optionsDocBook = runCommand "options-db.xml" {} ''
     optionsXML=${optionsXML}
@@ -191,7 +205,7 @@ in rec {
       mkdir -p $dst
 
       cp ${builtins.toFile "options.json" (builtins.unsafeDiscardStringContext (builtins.toJSON
-        (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList'))))
+        (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList))))
       } $dst/options.json
 
       mkdir -p $out/nix-support
