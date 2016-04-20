@@ -70,7 +70,10 @@ in
 {
 
   options.services.dovecot2 = {
-    enable = mkEnableOption "Dovecot 2.x POP3/IMAP server";
+    enable = mkEnableOption' {
+      name = "Dovecot POP3/IMAP server";
+      package = literalPackage pkgs "pkgs.dovecot";
+    };
 
     enablePop3 = mkOption {
       type = types.bool;

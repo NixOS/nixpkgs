@@ -44,7 +44,10 @@ in {
 
     services.icecast = {
 
-      enable = mkEnableOption "Icecast server";
+      enable = mkEnableOption' {
+        name = "Icecast server";
+        package = literalPackage pkgs "pkgs.icecast";
+      };
 
       hostname = mkOption {
         type = types.str;

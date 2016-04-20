@@ -8,7 +8,12 @@ in
 {
   options = {
     services.znapzend = {
-      enable = mkEnableOption "ZnapZend daemon";
+
+      enable = mkWheneverToPkgOption {
+        what = "enable backups with ZsnapZend";
+        package = literalPackage pkgs "pkgs.znapzend";
+      };
+
     };
   };
 

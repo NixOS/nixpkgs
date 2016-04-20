@@ -16,7 +16,11 @@ in
 
     services.riak = {
 
-      enable = mkEnableOption "riak";
+      enable = mkEnableOption' {
+        name = "riak";
+        broken = true;
+        package = literalPackage pkgs "pkgs.riak";
+      };
 
       package = mkOption {
         type = types.package;

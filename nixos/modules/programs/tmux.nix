@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
 
+with lib;
+
 let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types;
 
   cfg = config.programs.tmux;
 
@@ -12,7 +13,10 @@ in
   options = {
     programs.tmux = {
 
-      enable = mkEnableOption "<command>tmux</command> - a <command>screen</command> replacement.";
+      enable = mkWheneverToPkgOption {
+        what = "globally configure tmux";
+        package = literalPackage pkgs "pkgs.tmux";
+      };
 
       tmuxconf = mkOption {
         default = "";

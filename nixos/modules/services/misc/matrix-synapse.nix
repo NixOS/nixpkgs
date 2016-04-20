@@ -57,7 +57,11 @@ ${cfg.extraConfig}
 in {
   options = {
     services.matrix-synapse = {
-      enable = mkEnableOption "matrix.org synapse";
+      enable = mkEnableOption' {
+        name = "matrix.org synapse";
+        package = literalPackage pkgs "pkgs.matrix-synapse";
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.matrix-synapse;

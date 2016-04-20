@@ -14,6 +14,11 @@ in
 
     programs.atop = {
 
+      enable = mkWheneverToPkgOption {
+        what = "globally configure atop";
+        package = literalPackage pkgs "pkgs.atop";
+      };
+
       settings = mkOption {
         type = types.attrs;
         default = {};
@@ -29,7 +34,7 @@ in
     };
   };
 
-  config = mkIf (cfg.settings != {}) {
+  config = mkIf cfg.enable {
     environment.etc."atoprc".text =
       concatStrings (mapAttrsToList (n: v: "${n} ${toString v}\n") cfg.settings);
   };

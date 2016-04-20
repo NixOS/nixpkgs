@@ -35,7 +35,11 @@ let
 in {
   options = {
     services.rippleDataApi = {
-      enable = mkEnableOption "ripple data api";
+      enable = mkEnableOption' {
+        name = "ripple data api";
+        broken = true; # does not exists
+        package = literalPackage pkgs "pkgs.ripple-data-api";
+      };
 
       port = mkOption {
         description = "Ripple data api port";
