@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
+{ stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
 , librsvg, pango, gtk, bzip2, intltool, libtool, automake, autoconf, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.0-20140619";
+  name = "gegl-0.3.6";
 
-  src = fetchgit {
-    url = "https://git.gnome.org/browse/gegl";
-    sha256 = "1rjmv2y7z34zrnlqczmmh0bm724iszzdf6jpibszxnp3w0npwjrb";
-    rev = "0014eb1bad50244314ed09592fe57efa9322678c";
+  src = fetchurl {
+    url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
+    sha256 = "08m7dlf2kwmp7jw3qskwxas192swhn1g4jcd8aldg9drfjygprvh";
   };
 
   configureScript = "./autogen.sh";

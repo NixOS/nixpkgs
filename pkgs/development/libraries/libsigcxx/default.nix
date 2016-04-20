@@ -1,14 +1,14 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, gnum4 }:
 let
-  ver_maj = "2.6"; # odd major numbers are unstable
-  ver_min = "2";
+  ver_maj = "2.8"; # odd major numbers are unstable
+  ver_min = "0";
 in
 stdenv.mkDerivation rec {
   name = "libsigc++-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsigc++/${ver_maj}/${name}.tar.xz";
-    sha256 = "fdace7134c31de792c17570f9049ca0657909b28c4c70ec4882f91a03de54437";
+    sha256 = "0lcnzzdq6718znfshs1hflpwqq6awbzwdyp4kv5lfaf54z880jbp";
   };
   patches = [(fetchpatch {
     url = "https://anonscm.debian.org/cgit/collab-maint/libsigc++-2.0.git/plain"
