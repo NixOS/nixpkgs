@@ -401,6 +401,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
+  ./services/networking/zerobin.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix
