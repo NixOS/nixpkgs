@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "3784d4a15b6b5d0e6dab5e3941d24c1e3fee509f7abf9008f64fef2760bd610d";
+    sha256 = "03b1pmh2gvsgyq491gvskx8fwgqy9k942faymdnhwpbbbfhx911p";
   };
 
   configureFlags = [
