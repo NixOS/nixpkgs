@@ -214,5 +214,9 @@ in
           # increase readahead for mysql
           SUBSYSTEM=="block", ATTR{queue/rotational}=="1", ACTION=="add|change", KERNEL=="vd[a-z]", ATTR{bdi/read_ahead_kb}="1024", ATTR{queue/read_ahead_kb}="1024"
         '';
+
+        environment.systemPackages = [
+            pkgs.xtrabackup
+        ];
     };
 }
