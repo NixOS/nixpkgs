@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, ncurses}:
+{ stdenv, fetchurl, qt4, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "i7z-0.27.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wa7ix6m75wl3k2n88sz0x8cckvlzqklja2gvzqfw5rcfdjjvxx7";
   };
 
-  buildInputs = [qt4 ncurses];
+  buildInputs = [ qt4 ncurses ];
 
   buildPhase = ''
     make

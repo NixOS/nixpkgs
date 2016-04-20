@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, alsaLib, udev, qt }:
+{ stdenv, fetchurl, cmake, alsaLib, udev, qt4 }:
 
 let
   version = "0.18.1";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    cmake alsaLib udev qt
+    cmake alsaLib udev qt4
   ];
 
   cmakeFlags = [

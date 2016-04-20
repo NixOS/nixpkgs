@@ -1,5 +1,5 @@
 { stdenv, fetchgit, pkgconfig, qt4, SDL, SDL_image, libvorbis, libtar, libxml2
-, gamin
+, gamin, qmake4Hook
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1xkkrhllgy2d7k0vrdj794ya7y3g3n7xh8c2qgnb26yrarz79dqj";
   };
 
-  buildInputs = [ pkgconfig qt4 SDL SDL_image libvorbis libtar libxml2 gamin ];
+  buildInputs = [ pkgconfig qt4 SDL SDL_image libvorbis libtar libxml2 gamin qmake4Hook ];
 
   patches = [ ./linuxstopmotion-fix-wrong-isProcess-logic.patch ];
-
-  configurePhase = ''
-    qmake PREFIX="$out"
-  '';
 
   # Installation breaks without this
   preInstall = ''

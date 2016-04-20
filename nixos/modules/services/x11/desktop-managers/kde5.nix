@@ -62,17 +62,25 @@ in
           ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
         ''}
 
-        exec startkde
+        exec "${kde5.startkde}"
+
       '';
     };
 
-    security.setuidOwners = singleton {
-      program = "kcheckpass";
-      source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
-      owner = "root";
-      group = "root";
-      setuid = true;
-    };
+    security.setuidOwners = [
+      {
+        program = "kcheckpass";
+        source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
+        owner = "root";
+        setuid = true;
+      }
+      {
+        program = "start_kdeinit_wrapper";
+        source = "${kde5.plasma-workspace}/lib/libexec/kf5/start_kdeinit_wrapper";
+        owner = "root";
+        setuid = true;
+      }
+    ];
 
     environment.systemPackages =
       [

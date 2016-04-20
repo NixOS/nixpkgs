@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libpng, python3, boost, mesa, qtbase, ncurses }:
+{ stdenv, fetchgit, libpng, python3, boost, mesa, qtbase, qmakeHook, ncurses }:
 
 let
   gitRev    = "745eca3a2d2657c495d5509e9083c884e021d09c";
@@ -31,16 +31,14 @@ in
       mesa qtbase ncurses
     ];
 
-    configurePhase = ''
-      runHook preConfigure
+    nativeBuildHooks = [ qmakeHook ];
+
+    preConfigure = ''
       export GITREV=${gitRev}
       export GITBRANCH=${gitBranch}
       export GITTAG=${gitTag}
 
       cd qt
-      export sourceRoot=$sourceRoot/qt
-      qmake antimony.pro PREFIX=$out
-      runHook postConfigure
     '';
 
     enableParallelBuilding = true;

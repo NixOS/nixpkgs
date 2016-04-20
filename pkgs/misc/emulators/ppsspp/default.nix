@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, zlib, libpng, qt4, pkgconfig
+{ stdenv, fetchgit, zlib, libpng, qt4, qmake4Hook, pkgconfig
 , withGamepads ? true, SDL # SDL is used for gamepad functionality
 }:
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec{
     sha256 = "71dfa0be045f31969b1d6ab4f1adf6a208f9ef4834d708bc7bf6d9195efb5f80";
   };
 
-  buildInputs = [ zlib libpng pkgconfig qt4 ]
+  buildInputs = [ zlib libpng pkgconfig qt4 qmake4Hook ]
                 ++ (if withGamepads then [ SDL ] else [ ]);
 
-  configurePhase = "cd Qt && qmake PPSSPPQt.pro";
+  preConfigure = "cd Qt";
   installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
 
   meta = {

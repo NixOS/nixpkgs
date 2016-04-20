@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, libarchive, pkgconfig, qtbase
-, qtimageformats, qtwebkit, qtx11extras, xorg }:
+, qtimageformats, qtwebkit, qtx11extras, xcbutilkeysyms, qmakeHook }:
 
 stdenv.mkDerivation rec {
   version = "0.2.1";
@@ -13,18 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    xorg.xcbutilkeysyms pkgconfig qtbase qtimageformats qtwebkit qtx11extras libarchive
+    xcbutilkeysyms pkgconfig qtbase qtimageformats qtwebkit qtx11extras libarchive qmakeHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=/
-    runHook postConfigure
-  '';
+  qmakeFlags = [ "PREFIX=/" ];
 
-  installPhase = ''
-    make INSTALL_ROOT=$out install
-  '';
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   enableParallelBuilding = true;
 

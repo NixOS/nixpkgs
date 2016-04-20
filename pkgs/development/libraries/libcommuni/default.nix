@@ -1,4 +1,4 @@
-{ fetchgit, qt5, stdenv
+{ fetchgit, qtbase, qmakeHook, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -11,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "15sb7vinaaz1v5nclxpnp5p9a0kmfmlgiqibkipnyydizclidpfx";
   };
 
-  buildInputs = [ qt5.qtbase ];
+  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ qmakeHook ];
 
   enableParallelBuild = true;
 
-  postPatch = ''
-    sed -i -e 's|/bin/pwd|pwd|g' -e 's/which/type -P/' configure
+  configurePhase = ''
+    sed -i -e 's|/bin/pwd|pwd|g' configure
+    ./configure -config release -prefix $out -qmake $QMAKE
   '';
-
-  configureFlags = [ "-config release" ];
 
   meta = with stdenv.lib; {
     description = "A cross-platform IRC framework written with Qt";

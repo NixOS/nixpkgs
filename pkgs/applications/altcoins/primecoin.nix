@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode
+, zlib, miniupnpc, qt4, qmake4Hook, utillinux, protobuf, qrencode
 , withGui }:
 
 with stdenv.lib;
@@ -15,12 +15,10 @@ stdenv.mkDerivation rec{
 
   buildInputs = [ pkgconfig openssl db48 boost zlib
                   miniupnpc utillinux protobuf ]
-                  ++ optionals withGui [ qt4 qrencode ];
+                  ++ optionals withGui [ qt4 qmake4Hook qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
-
-  configurePhase = optional withGui "qmake";
 
   preBuild = optional (!withGui) "cd src; cp makefile.unix Makefile";
 

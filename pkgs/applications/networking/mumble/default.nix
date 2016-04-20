@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, pkgconfig
-, qt4, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
+, qt4, qmake4Hook, qt5, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsaLib
 , jackSupport ? false, libjack2 ? null
 , speechdSupport ? false, speechd ? null
@@ -20,13 +20,13 @@ let
     patches = optional jackSupport ./mumble-jack-support.patch;
 
     nativeBuildInputs = [ pkgconfig ]
-      ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
       ++ (overrides.buildInputs or [ ]);
 
-    configureFlags = [
+    qmakeFlags = [
       "CONFIG+=shared"
       "CONFIG+=no-g15"
       "CONFIG+=packaged"
@@ -39,10 +39,8 @@ let
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
       ++ (overrides.configureFlags or [ ]);
 
-    configurePhase = ''
-      runHook preConfigure
-      qmake $configureFlags DEFINES+="PLUGIN_PATH=$out/lib"
-      runHook postConfigure
+    preConfigure = ''
+       qmakeFlags="$qmakeFlags DEFINES+=PLUGIN_PATH=$out/lib"
     '';
 
     makeFlags = [ "release" ];

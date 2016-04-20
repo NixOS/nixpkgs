@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, makeDesktopItem, unzip
 , qtbase, qttools, makeQtWrapper, qtmultimedia, qtquick1, qtquickcontrols
-, openssl, protobuf
+, openssl, protobuf, qmakeHook
 }:
 
 stdenv.mkDerivation rec {
@@ -27,15 +27,13 @@ stdenv.mkDerivation rec {
     openssl protobuf
   ];
 
-  nativeBuildInputs = [ pkgconfig makeQtWrapper ];
+  nativeBuildInputs = [ pkgconfig makeQtWrapper qmakeHook ];
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags openssl)"
   '';
 
-  configureScript = "qmake";
-  dontAddPrefix = true;
-  configureFlags = [ "PREFIX=$(out)" "DEFINES+=RICOCHET_NO_PORTABLE" ];
+  qmakeFlags = [ "DEFINES+=RICOCHET_NO_PORTABLE" ];
 
   installPhase = ''
     mkdir -p $out/bin

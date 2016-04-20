@@ -98,9 +98,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight;
-        defaultText = "pkgs.pulseaudioLight";
-        example = literalExample "pkgs.pulseaudioFull";
+        default = pulseaudioLight.out;
+        defaultText = "pkgs.pulseaudioLight.out";
+        example = literalExample "pkgs.pulseaudioFull.out";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
