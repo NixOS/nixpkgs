@@ -25,12 +25,55 @@ rec {
     } @ attrs:
     attrs // { _type = "option"; };
 
-  mkEnableOption = name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
+  # A boolean which determines whenever to do (or not to do) something.
+  mkWheneverToOption =
+    { default ? false
+    , what
+    , description ? null
+    , ...
+    } @ attrs:
+    mkOption ((removeAttrs attrs [ "what" ]) // {
+      inherit default;
+      example = !default;
+      type = lib.types.bool;
+      description = ''
+        Whether to ${what}.
+
+        ${optionalString (description != null) description}
+      '';
+    });
+
+  mkWheneverToPkgOption =
+    { description ? null
+    , broken ? false
+    , package ? null
+    , packages ? []
+    , ...
+    } @ attrs: let
+      pkgs = optional (package != null) package
+          ++ packages;
+    in
+    mkWheneverToOption (removeAttrs attrs [ "broken" "package" ] // {
+      description = ''
+        ${optionalString (description != null) description}
+
+        ${if broken then "THIS IS BROKEN."
+          else if (length pkgs > 1) then "Related packages:"
+          else if (length pkgs == 1) then "The package is:"
+          else ""}
+      '';
+      # Don't evaluate when marked as broken
+      packages = optional (!broken && package != null) package;
+    });
+
+  mkEnableOption = name: mkWheneverToPkgOption {
+    what = "enable ${name}";
   };
+
+  mkEnableOption' = { name ? null, ... } @ attrs:
+    mkWheneverToPkgOption (removeAttrs attrs [ "name" ] // {
+      what = "enable ${name}";
+    });
 
   # This option accept anything, but it does not produce any result.  This
   # is useful for sharing a module across different module sets without
