@@ -16,11 +16,6 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ polkit glib qtbase ];
 
-  preConfigure = ''
-    cmakeFlags+=" -DCMAKE_INSTALL_LIBDIR=''${!outputLib}/lib"
-    cmakeFlags+=" -DCMAKE_INSTALL_INCLUDEDIR=''${!outputDev}/include"
-  '';
-
   postFixup = ''
     # Fix library location in CMake module
     sed -i "$dev/lib/cmake/PolkitQt5-1/PolkitQt5-1Config.cmake" \
