@@ -26664,4 +26664,28 @@ in modules // {
       license = licenses.mit;
     };
   };
+
+  zerobin = buildPythonPackage rec {
+    name = "zerobin-${version}";
+    version = "20160108";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "sametmax";
+      repo = "0bin";
+      rev = "7da1615";
+      sha256 = "1pzcwy454kn5216pvwjqzz311s6jbh7viw9s6kw4xps6f5h44bid";
+    };
+
+    propagatedBuildInputs = with self; [
+      cherrypy
+      bottle
+      lockfile
+      clize
+    ];
+    meta = {
+      description = "A client side encrypted pastebin";
+      homepage = "http://0bin.net/";
+      license = licenses.wtfpl;
+    };
+  };
 }
