@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    mkdir $out
     cp -pr x86_64-native-linuxapp-gcc/{app,lib,include,kmod} $out/
 
     mkdir $examples
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries and drivers for fast packet processing";
     homepage = http://dpdk.org/;
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
-    platforms = platforms.linux;
+    platforms =  [ "x86_64-linux" ];;
     maintainers = [ maintainers.iElectric ];
   };
 }
