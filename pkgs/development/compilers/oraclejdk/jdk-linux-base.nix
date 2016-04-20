@@ -119,12 +119,6 @@ let result = stdenv.mkDerivation rec {
       done
     fi
 
-    # construct the rpath
-    rpath=
-    for i in $libraries; do
-        rpath=$rpath''${rpath:+:}$i/lib:$i/lib64
-    done
-
     if test -z "$installjdk"; then
       jrePath=$out
     else
@@ -175,6 +169,8 @@ let result = stdenv.mkDerivation rec {
   libraries =
     [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
+
+  rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 
