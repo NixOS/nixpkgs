@@ -37,6 +37,12 @@ in
 
     networking.extraHosts = additional_hosts;
 
+    environment.systemPackages = [
+
+      pkgs.percona   # client is required on almost all nodes
+
+    ];
+
   };
 
 }
