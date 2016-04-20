@@ -10652,6 +10652,8 @@ in
 
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
+    dpdk = callPackage ../os-specific/linux/dpdk { };
+
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
