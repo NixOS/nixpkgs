@@ -3,7 +3,7 @@ pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
 gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
-  version = "2.12";
+  version = "2.16";
   name = "${python.libPrefix}-graph-tool-${version}";
 
   meta = with stdenv.lib; {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/count0/graph-tool/archive/release-${version}.tar.gz";
-    sha256 = "12w58djyx6nn00wixqnxnxby9ksabhzdkkvynl8b89parfvfbpwl";
+    sha256 = "3784d4a15b6b5d0e6dab5e3941d24c1e3fee509f7abf9008f64fef2760bd610d";
   };
 
   configureFlags = [
