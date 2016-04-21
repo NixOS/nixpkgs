@@ -1,0 +1,67 @@
+commit 3f6c80ad63bba52b1450651c298eb483c4fe2a15
+Author: Ethan Pailes <ethanpailes@gmail.com>
+Date:   Thu Apr 21 12:07:15 2016 -0400
+
+    Added derivation for tomb.
+    
+    Tomb is a wrapper script for some common encryption tools for
+    GNU/Linux.
+
+diff --git a/pkgs/os-specific/linux/tomb/default.nix b/pkgs/os-specific/linux/tomb/default.nix
+new file mode 100644
+index 0000000..ede3889
+--- /dev/null
++++ b/pkgs/os-specific/linux/tomb/default.nix
+@@ -0,0 +1,41 @@
++{ stdenv, fetchurl, zsh, pinentry, cryptsetup, gnupg1orig, makeWrapper }:
++
++let
++    version = "2.2";
++in
++
++stdenv.mkDerivation rec {
++  name = "tomb-${version}";
++
++  src = fetchurl {
++    url = "https://files.dyne.org/tomb/tomb-${version}.tar.gz";
++    sha256 = "11msj38fdmymiqcmwq1883kjqi5zr01ybdjj58rfjjrw4zw2w5y0";
++  };
++
++  buildInputs = [ makeWrapper ];
++
++  buildPhase = ''
++    # manually patch the interpreter
++    sed -i -e "1s|.*|#!${zsh}/bin/zsh|g" tomb
++  '';
++
++  installPhase = ''
++    mkdir -p $out/bin
++    mkdir -p $out/man
++
++    cp tomb $out/bin/tomb
++    cp doc/tomb.1 $out/man.1
++
++    wrapProgram $out/bin/tomb \
++        --prefix PATH : "${pinentry}/bin" \
++        --prefix PATH : "${cryptsetup}/bin" \
++        --prefix PATH : "${gnupg1orig}/bin"
++  '';
++
++  meta = {
++    description = "File encryption on GNU/Linux.";
++    homepage = https://www.dyne.org/software/tomb/;
++    license = stdenv.lib.licenses.gpl3;
++    platforms = stdenv.lib.platforms.linux;
++  };
++}
+diff --git a/pkgs/top-level/all-packages.nix b/pkgs/top-level/all-packages.nix
+index b8a7364..108ade2 100644
+--- a/pkgs/top-level/all-packages.nix
++++ b/pkgs/top-level/all-packages.nix
+@@ -16617,5 +16617,5 @@ in
+ 
+   discord = callPackage ../applications/networking/instant-messengers/discord { };
+ 
+-  golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
++  tomb = callPackage ../os-specific/linux/tomb { };
+ }
