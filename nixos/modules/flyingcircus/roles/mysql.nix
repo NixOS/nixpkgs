@@ -217,6 +217,7 @@ in
 
         environment.systemPackages = [
             pkgs.xtrabackup
+            pkgs.qpress
         ];
     };
 }

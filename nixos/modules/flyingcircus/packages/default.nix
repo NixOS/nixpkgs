@@ -13,6 +13,7 @@
 
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
     xtrabackup = pkgs.callPackage ./xtrabackup.nix { };
+    qpress = pkgs.callPackage ./qpress.nix { };
 
     qemu = pkgs.callPackage ./qemu-2.5.nix {
       inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices Cocoa;
