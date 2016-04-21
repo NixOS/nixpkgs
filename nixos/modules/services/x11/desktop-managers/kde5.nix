@@ -111,6 +111,9 @@ in
       # Install Breeze icons if available
       ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
 
+      # Install activity manager if available
+      ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
+
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
