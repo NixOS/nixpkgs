@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
   ]);
 
   propagatedBuildInputs =
-    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng ]
-    ++ optional (!stdenv.isDarwin) libXrender
+    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng libXrender ]
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
     ++ optional glSupport mesa_noglu
