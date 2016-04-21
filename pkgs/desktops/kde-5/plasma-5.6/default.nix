@@ -77,7 +77,7 @@ let
     plasma-mediacenter = callPackage ./plasma-mediacenter.nix {};
     plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {};
-    plasma-workspace = callPackage ./plasma-workspace {};
+    plasma-workspace = callPackage ./plasma-workspace.nix {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
     powerdevil = callPackage ./powerdevil.nix {};

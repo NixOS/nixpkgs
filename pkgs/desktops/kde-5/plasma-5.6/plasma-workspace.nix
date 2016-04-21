@@ -1,4 +1,4 @@
-{ plasmaPackage, lib, copyPathsToStore
+{ plasmaPackage, lib
 , extra-cmake-modules, kdoctools
 , baloo, kactivities, kcmutils, kcrash, kdbusaddons, kdeclarative
 , kdelibs4support, kdesu, kdewebkit, kglobalaccel, kidletime
@@ -28,8 +28,6 @@ plasmaPackage {
     kidletime krunner ktexteditor kwin libkscreen libksysguard
     plasma-framework qtquick1 qtquickcontrols qtx11extras solid
   ];
-
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
   postPatch = ''
     substituteInPlace startkde/kstartupconfig/kstartupconfig.cpp \
