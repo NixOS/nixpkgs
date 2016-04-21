@@ -1,0 +1,36 @@
+From d0056fa6c1158408db169a7f5e6eb75691083094 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@gmail.com>
+Date: Sun, 22 Nov 2015 09:34:43 -0600
+Subject: [PATCH 2/3] hwclock
+
+---
+ kcms/dateandtime/helper.cpp | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/kcms/dateandtime/helper.cpp b/kcms/dateandtime/helper.cpp
+index e955f0c..5171753 100644
+--- a/kcms/dateandtime/helper.cpp
++++ b/kcms/dateandtime/helper.cpp
+@@ -48,10 +48,6 @@
+ #include <sys/stat.h>
+ #endif
+ 
+-// We cannot rely on the $PATH environment variable, because D-Bus activation
+-// clears it. So we have to use a reasonable default.
+-static const QString exePath = QStringLiteral("/usr/sbin:/usr/bin:/sbin:/bin");
+-
+ int ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
+ {
+     int ret = 0;
+@@ -227,7 +223,7 @@ int ClockHelper::tzreset()
+ 
+ void ClockHelper::toHwclock()
+ {
+-    QString hwclock = KStandardDirs::findExe(QStringLiteral("hwclock"), exePath);
++    QString hwclock = "@hwclock@";
+     if (!hwclock.isEmpty()) {
+         KProcess::execute(hwclock, QStringList() << QStringLiteral("--systohc"));
+     }
+-- 
+2.6.3
+
