@@ -3741,7 +3741,9 @@ let
     disabled = isGo14 || isGo15;
     sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
 
-    buildInputs = [ ];
+    postInstall = ''
+      for i in $bin/bin/{provider,provisioner}-*; do mv $i $bin/bin/terraform-$(basename $i); done
+    '';
   };
 
   testify = buildGoPackage rec {
