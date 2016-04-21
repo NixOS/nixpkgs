@@ -2378,7 +2378,11 @@ in
 
   minixml = callPackage ../development/libraries/minixml { };
 
-  mjpegtools = callPackage ../tools/video/mjpegtools { };
+  mjpegtoolsFull = callPackage ../tools/video/mjpegtools { };
+
+  mjpegtools = self.mjpegtoolsFull.override {
+    withMinimal = true;
+  };
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
