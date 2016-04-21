@@ -369,6 +369,8 @@ in
 
   afl = callPackage ../tools/security/afl { };
 
+  ag = callPackage ../tools/text/ag { };
+
   aha = callPackage ../tools/text/aha { };
 
   ahcpd = callPackage ../tools/networking/ahcpd { };
