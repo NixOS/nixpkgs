@@ -22,26 +22,6 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
-      phonon = {
-
-        gstreamer = {
-          enable = mkOption {
-            type = types.bool;
-            default = true;
-            description = "Enable the GStreamer Phonon backend (recommended).";
-          };
-        };
-
-        vlc = {
-          enable = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Enable the VLC Phonon backend.";
-          };
-        };
-
-      };
-
     };
 
   };
@@ -141,26 +121,14 @@ in
 
       ++ lib.optionals cfg.phonon.gstreamer.enable
         [
-          pkgs.phonon_backend_gstreamer
-          pkgs.gst_all.gstreamer
-          pkgs.gst_all.gstPluginsBase
-          pkgs.gst_all.gstPluginsGood
-          pkgs.gst_all.gstPluginsUgly
-          pkgs.gst_all.gstPluginsBad
-          pkgs.gst_all.gstFfmpeg # for mp3 playback
-          pkgs.qt55.phonon-backend-gstreamer
+          pkgs.phonon-backend-gstreamer
+          pkgs.kde5.phonon-backend-gstreamer
           pkgs.gst_all_1.gstreamer
           pkgs.gst_all_1.gst-plugins-base
           pkgs.gst_all_1.gst-plugins-good
           pkgs.gst_all_1.gst-plugins-ugly
           pkgs.gst_all_1.gst-plugins-bad
           pkgs.gst_all_1.gst-libav # for mp3 playback
-        ]
-
-      ++ lib.optionals cfg.phonon.vlc.enable
-        [
-          pkgs.phonon_qt5_backend_vlc
-          pkgs.qt55.phonon-backend-vlc
         ];
 
     environment.pathsToLink = [ "/share" ];

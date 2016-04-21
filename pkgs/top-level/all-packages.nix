@@ -8437,9 +8437,7 @@ in
 
   phonon = callPackage ../development/libraries/phonon {};
 
-  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt4 {};
-
-  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc/qt4 {};
+  phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -8575,12 +8573,6 @@ in
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {};
 
     openbr = callPackage ../development/libraries/openbr { };
-
-    phonon = callPackage ../development/libraries/phonon { };
-
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer/qt5 { };
-
-    phonon-backend-vlc = callPackage ../development/libraries/phonon-backend-vlc/qt5 { };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
@@ -15461,8 +15453,11 @@ in
 
     kile = callPackage ../applications/editors/kile/frameworks.nix { };
 
-    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix {
-    };
+    konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
+
+    phonon = callPackage ../development/libraries/phonon { };
+
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;

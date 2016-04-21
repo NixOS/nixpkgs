@@ -1,21 +1,20 @@
-{ stdenv, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
-, qt4 ? null, automoc4 ? null
-, qtbase ? null, qtquick1 ? null, qttools ? null
+{ stdenv, lib, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
+, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qtquick1 ? null, qttools ? null
 , debug ? false }:
 
-with stdenv.lib;
+with lib;
 
 let
-  v = "4.8.3";
-  withQt5 = qtbase != null;
+  v = "4.9.0";
+  withQt5 = extra-cmake-modules != null;
 in
 
+assert withQt5 -> qtbase != null;
 assert withQt5 -> qtquick1 != null;
 assert withQt5 -> qttools != null;
-assert !withQt5 -> automoc4 != null;
 
 stdenv.mkDerivation rec {
-  name = "phonon-${v}";
+  name = "phonon-${if withQt5 then "qt5" else "qt4"}-${v}";
 
   meta = {
     homepage = http://phonon.kde.org/;
@@ -27,16 +26,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${v}/src/phonon-${v}.tar.xz";
-    sha256 = "05nshngk03ln90vsjz44dx8al576f4vd5fvhs1l0jmx13jb9q551";
+    sha256 = "1q5hvsk4sfcb91625wcmldy7kgjmfpmpmkgzi6mxkqdd307v8x5v";
   };
 
   buildInputs =
     [ mesa libpulseaudio ]
     ++ (if withQt5 then [ qtbase qtquick1 qttools ] else [ qt4 ]);
 
-  nativeBuildInputs =
-    [ cmake pkgconfig ]
-    ++ optional (!withQt5) automoc4;
+  nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
 
   NIX_CFLAGS_COMPILE = "-fPIC";
 
@@ -47,8 +44,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i PhononConfig.cmake.in \
         -e "/get_filename_component(rootDir/ s/^.*$//" \
-        -e "s,\\(set(PHONON_INCLUDE_DIR\\).*$,\\1 \"''${!outputDev}/include\")," \
-        -e "s,\\(set(PHONON_LIBRARY_DIR\\).*$,\\1 \"''${!outputLib}/lib\")," \
-        -e "s,\\(set(PHONON_BUILDSYSTEM_DIR\\).*$,\\1 \"''${!outputDev}/share/phonon${if withQt5 then "4qt5" else ""}/buildsystem\"),"
+        -e "/^set(PHONON_INCLUDE_DIR/ s,\''${rootDir},''${!outputDev}," \
+        -e "/^set(PHONON_LIBRARY_DIR/ s,\''${rootDir}/,," \
+        -e "/^set(PHONON_BUILDSYSTEM_DIR/ s,\''${rootDir},''${!outputDev},"
   '';
 }
