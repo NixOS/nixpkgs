@@ -36,19 +36,6 @@ _qtRmModules() {
     rm "$out/nix-support/qt-inputs"
 }
 
-_qtPropagateRuntimeDependencies() {
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
-        if [ -d "$1/$dir" ]; then
-            propagateOnce propagatedBuildInputs "$1"
-            propagateOnce propagatedUserEnvPkgs "$1"
-            break
-        fi
-    done
-    addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
-    addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
-}
-
 _qtRmQmake() {
     rm "$qtOut/bin/qmake" "$qtOut/bin/qt.conf"
 }
@@ -66,11 +53,6 @@ _qtMultioutModuleDevs() {
     # The destination directory must exist or moveToOutput will do nothing
     mkdir -p "${!outputDev}/share"
     moveToOutput "share/doc" "${!outputDev}"
-}
-
-_qtMultioutDevs() {
-    # This is necessary whether the package is a Qt module or not
-    moveToOutput "mkspecs" "${!outputDev}"
 }
 
 qmakeConfigurePhase() {
@@ -102,7 +84,7 @@ EOF
 
 export QMAKE="$qtOut/bin/qmake"
 
-envHooks+=(_qtLinkModule _qtPropagateRuntimeDependencies)
+envHooks+=(_qtLinkModule)
 # Set PATH to find qmake first in a preConfigure hook
 # It must run after all the envHooks!
 postHooks+=(_qtSetQmakePath)
@@ -111,7 +93,6 @@ if [ -z "$dontUseQmakeConfigure" -a -z "$configurePhase" ]; then
     configurePhase=qmakeConfigurePhase
 fi
 
-preFixupHooks+=(_qtMultioutDevs)
 if [ -n "$NIX_QT_SUBMODULE" ]; then
     postInstallHooks+=(_qtRmQmake _qtRmModules)
     preFixupHooks+=(_qtMultioutModuleDevs)
