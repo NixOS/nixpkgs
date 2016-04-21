@@ -1,6 +1,6 @@
 { plasmaPackage
 , extra-cmake-modules
-, libXrandr
+, kwayland, libXrandr
 , qtx11extras
 }:
 
@@ -10,7 +10,7 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    libXrandr
+    kwayland libXrandr
   ];
   propagatedBuildInputs = [
     qtx11extras

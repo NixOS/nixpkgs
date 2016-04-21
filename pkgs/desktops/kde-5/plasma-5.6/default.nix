@@ -69,7 +69,7 @@ let
     kwayland = callPackage ./kwayland.nix {};
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};
-    libkscreen = callPackage ./libkscreen {};
+    libkscreen = callPackage ./libkscreen.nix {};
     libksysguard = callPackage ./libksysguard {};
     milou = callPackage ./milou.nix {};
     oxygen = callPackage ./oxygen.nix {};
