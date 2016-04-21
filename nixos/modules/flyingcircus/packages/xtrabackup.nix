@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://www.percona.com/;
-    description = "XXXX";
+    description = "Percona XtraBackup";
   };
 }
