@@ -669,20 +669,6 @@ let
     sha256 = "1wxv2cbihzcsz2z7iycyzl7f3arhhgagcc5kqln1k1mkm4l85z0q";
   };
 
-  deis = buildFromGitHub {
-    rev = "v1.12.2";
-    owner = "deis";
-    repo = "deis";
-    sha256 = "03lznzcij3gn08kqj2p6skifcdv5aw09dm6zxgvqw7nxx2n1j2ib";
-    subPackages = [ "client" ];
-    buildInputs = [ docopt-go crypto yaml-v2 ];
-    postInstall = ''
-      if [ -f "$bin/bin/client" ]; then
-        mv "$bin/bin/client" "$bin/bin/deis"
-      fi
-    '';
-  };
-
   dns = buildFromGitHub {
     rev     = "7e024ce8ce18b21b475ac6baf8fa3c42536bf2fa";
     version = "2016-03-28";
@@ -932,24 +918,6 @@ let
     owner  = "peterbourgon";
     repo   = "g2s";
     sha256 = "1p4p8755v2nrn54rik7yifpg9szyg44y5rpp0kryx4ycl72307rj";
-  };
-
-  gawp = buildFromGitHub {
-    rev    = "488705639109de54d38974cc31353d34cc2cd609";
-    version = "2015-08-31";
-    owner  = "martingallagher";
-    repo   = "gawp";
-    sha256 = "0iqqd63nqdijdskdb9f0jwnm6akkh1p2jw4p2w7r1dbaqz1znyay";
-    dontInstallSrc = true;
-    buildInputs = [ fsnotify.v1 yaml-v2 ];
-
-    meta = with stdenv.lib; {
-      homepage    = "https://github.com/martingallagher/gawp";
-      description = "A simple, configurable, file watching, job execution tool implemented in Go";
-      maintainers = with maintainers; [ kamilchm ];
-      license     = licenses.asl20 ;
-      platforms   = platforms.all;
-    };
   };
 
   gcloud-golang = buildFromGitHub {

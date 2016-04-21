@@ -730,7 +730,7 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
-  deis = goPackages.deis.bin // { outputs = [ "bin" ]; };
+  deis = (callPackage ../development/tools/deis {}).bin;
 
   dfilemanager = self.kde5.dfilemanager;
 
@@ -1644,7 +1644,7 @@ in
   gawkInteractive = appendToName "interactive"
     (gawk.override { interactive = true; });
 
-  gawp = goPackages.gawp.bin // { outputs = [ "bin" ]; };
+  gawp = (callPackage ../tools/misc/gawp {}).bin;
 
   gazeboSimulator = recurseIntoAttrs {
     sdformat = gazeboSimulator.sdformat4;
