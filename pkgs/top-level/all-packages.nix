@@ -2126,6 +2126,10 @@ in
     lua = lua5_2_compat;
   };
 
+  kdbg = callPackage ../development/tools/misc/kdbg {
+    inherit (pkgs.kde4) kdelibs;
+  };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
