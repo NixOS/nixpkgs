@@ -26588,4 +26588,27 @@ in modules // {
       maintainers = with maintainers; [];
     };
   };
+
+  repeated_test = buildPythonPackage rec {
+    name = "repeated_test-${version}";
+    version = "0.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/repeated-test/${name}.tar.gz";
+      sha256 = "062syp7kl2g0x6qx3z8zb5sdycpi7qcpxp9iml2v8dqzqnij9bpg";
+    };
+
+    buildInputs = with self; [
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      six
+    ];
+
+    meta = {
+      description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
+      homepage = "https://github.com/epsy/repeated_test";
+      license = licenses.mit;
+    };
+  };
 }
