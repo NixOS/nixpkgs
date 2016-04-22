@@ -2,13 +2,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rtl8723bs-${kernel.version}-${rev}";
-  rev = "c517f2bf8bcc3d57311252ea7cd49ae81466eead";
+  rev = "6918e9b2ff297b1cc7fde193e72452c33c10e1c8";
 
   src = fetchFromGitHub {
     owner = "hadess";
     repo = "rtl8723bs";
     inherit rev;
-    sha256 = "0phzrhq85g52pi2b74a9sr9l2x6dzlz714k3pix486w2x5axw4xb";
+    sha256 = "07srd457wnz29nvvq02wz66s387bhjbydnmbs3qr7ljprabhsgmi";
   };
 
   buildInputs = [ nukeReferences ];
