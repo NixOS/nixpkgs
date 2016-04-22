@@ -3932,17 +3932,18 @@ in modules // {
   };
 
   MDP = buildPythonPackage rec {
-    version = "0.1.0";
+    version = "3.5";
     name = "MDP-${version}";
 
     src = pkgs.fetchurl {
-      url = https://pypi.python.org/packages/source/M/MDP/MDP-3.5.tar.gz;
+      url = "https://pypi.python.org/packages/source/M/MDP/${name}.tar.gz";
       sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
     };
 
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ future numpy ];
 
-    doCheck = false;
+    doCheck = true;
 
     meta = {
       description = "Library for building complex data processing software by combining widely used machine learning algorithms";
@@ -6794,6 +6795,25 @@ in modules // {
       license = licenses.asl20;
     };
   };
+
+  oger = buildPythonPackage rec {
+    name = "oger-${version}";
+    version = "1.1.3";
+    src = pkgs.fetchurl {
+      url = "http://organic.elis.ugent.be/sites/organic.elis.ugent.be/files/Oger-${version}.tar.gz";
+      sha256 = "1k02ys812lz0x0yymljp102amkm8bvfgqsrphnk235xbcrb0akg5";
+    };
+
+    propagatedBuildInputs = with self; [ MDP scipy numpy matplotlib ];
+
+    meta = {
+      homepage = http://organic.elis.ugent.be/organic/engine;
+      description = "Rapidly build, train, and evalue modular learning architectures";
+      maintainers = with maintainers; [ nico202 ];
+      license = licenses.lgpl3;
+    };
+  };
+		  
 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
