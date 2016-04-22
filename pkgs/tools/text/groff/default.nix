@@ -32,13 +32,12 @@ stdenv.mkDerivation rec {
     '';
   };
 
+  # Remove example output with (random?) colors and creation date
+  # to avoid non-determinism in the output.
   postInstall = ''
-      # Remove example output with (random?) colors to 
-      # avoid non-determinism in the output
-      rm $doc/share/doc/examples/hdtbl/*color*ps
-      # Remove creation date
-      find $doc/share/doc/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
-    '';
+    rm $doc/share/doc/groff/examples/hdtbl/*color*ps
+    find $doc/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/groff/;

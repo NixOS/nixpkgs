@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, muparser, which, boost, pkgconfig }:
+{ stdenv, fetchurl, qt4, qmake4Hook, muparser, which, boost, pkgconfig }:
 
 stdenv.mkDerivation rec {
   version = "2.0.9";
@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     sed -i -e s,/usr/share,$out/share, librecad/src/lib/engine/rs_system.cpp
   '';
 
-  configurePhase = ''
-    qmake librecad.pro PREFIX=$out MUPARSER_DIR=${muparser} BOOST_DIR=${boost.dev}
-  '';
+  qmakeFlags = [ "MUPARSER_DIR=${muparser}" "BOOST_DIR=${boost.dev}" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ qt4 muparser which boost ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig qmake4Hook ];
 
   enableParallelBuilding = true;
 

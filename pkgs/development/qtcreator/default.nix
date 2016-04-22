@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper
-, qtbase, qtquickcontrols, qtscript, qtdeclarative
+, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmakeHook
 , withDocumentation ? false
 }:
 
@@ -21,20 +21,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper qtbase qtscript qtquickcontrols qtdeclarative ];
 
+  nativeBuildInputs = [ qmakeHook makeQtWrapper ];
+
   doCheck = false;
 
   enableParallelBuilding = true;
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake -spec linux-g++ qtcreator.pro
-    runHook postConfigure
-  '';
+  buildFlags = optional withDocumentation "docs";
 
-  buildFlags = optionalString withDocumentation " docs";
-
-  installFlags = "INSTALL_ROOT=$(out)"
-    + optionalString withDocumentation " install_docs";
+  installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   postInstall = ''
     # Install desktop file
@@ -49,13 +44,7 @@ stdenv.mkDerivation rec {
     Type=Application
     Categories=Qt;Development;IDE;
     __EOF__
-    # Wrap the qtcreator binary
-    addToSearchPath QML2_IMPORT_PATH "${qtquickcontrols}/lib/qt5/qml"
-    addToSearchPath QML2_IMPORT_PATH "${qtdeclarative}/lib/qt5/qml"
-    wrapProgram $out/bin/qtcreator \
-      --prefix QT_PLUGIN_PATH : "$QT_PLUGIN_PATH" \
-      --prefix QML_IMPORT_PATH : "$QML_IMPORT_PATH" \
-      --prefix QML2_IMPORT_PATH : "$QML2_IMPORT_PATH"
+    wrapQtProgram $out/bin/qtcreator
   '';
 
   meta = {

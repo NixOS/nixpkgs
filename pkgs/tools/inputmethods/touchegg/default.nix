@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, xorgserver, qt4, mesa, geis  }:
+{ stdenv, fetchurl, xorg, xorgserver, qt4, mesa, geis, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "touchegg-${version}";
@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorgserver mesa xorg.libX11 xorg.libXtst xorg.libXext qt4 geis ];
 
-  configurePhase = ''
+  nativeBuildInputs = [ qmake4Hook ];
+
+  preConfigure = ''
     sed -e "s@/usr/@$out/@g" -i $(find . -name touchegg.pro)
     sed -e "s@/usr/@$out/@g" -i $(find ./src/touchegg/config/ -name Config.cpp)
-    qmake touchegg.pro
   '';
 
   meta = {

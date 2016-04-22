@@ -2,11 +2,11 @@
 , gobjectIntrospection, valaSupport ? true, vala }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-glib-0.24.0";
+  name = "telepathy-glib-0.24.1";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-glib/${name}.tar.gz";
-    sha256 = "ae0002134991217f42e503c43dea7817853afc18863b913744d51ffa029818cf";
+    sha256 = "1symyzbjmxvksn2ifdkk50lafjm2llf2sbmky062gq2pz3cg23cy";
   };
 
   configureFlags = stdenv.lib.optional valaSupport "--enable-vala-bindings";

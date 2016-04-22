@@ -1,5 +1,5 @@
 { stdenv, fetchurl, qtbase, qtsvg, qtserialport, qtwebkit, qtmultimedia
-, qttools, yacc, flex, zlib, config, makeQtWrapper }:
+, qttools, yacc, flex, zlib, config, qmakeHook, makeQtWrapper }:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
   version = "V4.0-DEV1603";
@@ -10,15 +10,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase qtsvg qtserialport qtwebkit qtmultimedia qttools yacc flex zlib
   ];
-  nativeBuildInputs = [ makeQtWrapper ];
-  configurePhase = ''
-    runHook preConfigure
+  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
+  preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri
     cp qwt/qwtconfig.pri.in qwt/qwtconfig.pri
     echo 'QMAKE_LRELEASE = ${qttools}/bin/lrelease' >> src/gcconfig.pri
     sed -i -e '21,23d' qwt/qwtconfig.pri # Removed forced installation to /usr/local
-    qmake PREFIX=$out build.pro
   '';
+  #postConfigure =
     #  + (
     # with (config.golden-cheetah);
     # stdenv.lib.optionalString (dropbox-client-id != null && dropbox-client-secret != null) ''

@@ -210,10 +210,14 @@ preInstall() {
 
 
 postInstall() {
+    mkdir -p "$lib" # some configs don't have anything to put into $lib
+
     # Move runtime libraries to $lib.
     moveToOutput "lib/lib*.so*" "$lib"
     moveToOutput "lib/lib*.la"  "$lib"
-    ln -s lib "$lib/lib64" # for *.la
+    if [ -d "$lib/lib" ]; then
+        ln -s lib "$lib/lib64" # for *.la
+    fi
     moveToOutput "share/gcc-*/python" "$lib"
 
     for i in "$lib"/lib/*.{la,py}; do

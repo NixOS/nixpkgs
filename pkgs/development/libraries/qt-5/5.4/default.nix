@@ -37,12 +37,10 @@ let
       inherit src;
 
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig ];
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
-      dontAddPrefix = args.dontAddPrefix or true;
       dontFixLibtool = args.dontFixLibtool or true;
-      configureScript = args.configureScript or "qmake";
 
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = false;
@@ -109,6 +107,7 @@ let
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
       fixQtModuleCMakeConfig = makeSetupHook { } ./fix-qt-module-cmake-config.sh;
+      qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
 
     };
 

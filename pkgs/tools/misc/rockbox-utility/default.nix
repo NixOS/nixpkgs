@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libusb1, qt4 }:
+{ stdenv, fetchurl, libusb1, qt4, qmake4Hook }:
 
 stdenv.mkDerivation  rec {
   name = "rockbox-utility-${version}";
@@ -10,10 +10,10 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [ libusb1 qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  preBuild = ''
+  preConfigure = ''
     cd rbutil/rbutilqt
-    qmake
   '';
 
   installPhase = ''

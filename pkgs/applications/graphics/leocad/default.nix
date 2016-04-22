@@ -3,7 +3,7 @@ To use aditional parts libraries
 set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
-{ stdenv, fetchsvn, qt4, zlib }:
+{ stdenv, fetchsvn, qt4, qmake4Hook, zlib }:
 
 stdenv.mkDerivation rec {
   name = "leocad-${version}";
@@ -14,12 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "1190gb437ls51hhfiwa79fq131026kywpy3j3k4fkdgfr8a9v3q8";
   };
 
-  buildInputs = [ qt4 zlib ];
+  buildInputs = [ qt4 qmake4Hook zlib ];
 
-  prefixKey = "INSTALL_PREFIX=";
-  configureScript = "qmake leocad.pro";
   postPatch = ''
     substituteInPlace common/camera.cpp --replace "isnan(" "std::isnan("
+    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
   '';
 
   meta = with stdenv.lib; {

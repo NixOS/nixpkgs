@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, poppler_qt4 }:
+{ stdenv, fetchurl, qt4, poppler_qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   version = "2.1.3";
@@ -12,13 +12,12 @@ stdenv.mkDerivation rec {
   patches = [ ./fix_path_poppler_qt4.patch ];
 
   buildInputs = [ qt4 poppler_qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
-  preBuild = ''
+  preConfigure = ''
     substituteInPlace diffpdf.pro --replace @@NIX_POPPLER_QT4@@ ${poppler_qt4}
-    [ -e "*.qm" ] && make clean
     lrelease diffpdf.pro
-    qmake -makefile PREFIX=\$out
-    '';
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1

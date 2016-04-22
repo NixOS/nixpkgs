@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtbase, qttools, pkgconfig, python }:
+{ stdenv, fetchurl, qtbase, qttools, qmakeHook, pkgconfig, python }:
 
 let
   version = "0.12.3";
@@ -13,9 +13,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ qtbase qttools pkgconfig python ];
-
-  preConfigure = "qmake -r PREFIX=$out";
+  buildInputs = [ qtbase qttools qmakeHook pkgconfig python ];
 
   meta = {
     description = "A free, easy to use and flexible tile map editor";

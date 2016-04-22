@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, qtbase, qtquick1 }:
+{ stdenv, fetchgit, qtbase, qtquick1, qmakeHook }:
 
 stdenv.mkDerivation rec {
   version = "0.1.0";
@@ -11,19 +11,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtquick1 ];
+  nativeBuildInputs = [ qmakeHook ];
 
   patchPhase = ''
     substituteInPlace qmltermwidget.pro \
       --replace '$$[QT_INSTALL_QML]' "/lib/qt5/qml/"
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=$out
-    runHook postConfigure
-  '';
-
-  installPhase=''make INSTALL_ROOT="$out" install'';
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   enableParallelBuilding = true;
 

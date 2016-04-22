@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "valkyrie-2.0.0";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qt4 ];
-
-  configurePhase = "qmake PREFIX=$out";
+  nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
     homepage = http://www.valgrind.org/;
