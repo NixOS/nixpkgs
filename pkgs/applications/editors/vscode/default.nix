@@ -1,10 +1,6 @@
-{ stdenv, callPackage, fetchurl, unzip
-, ...
-} @ args:
+{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv }:
 
 let
-  atomEnv = callPackage ../../../development/tools/electron/env-atom.nix (args);
-
   version = "0.10.10";
   rev = "5b5f4db87c10345b9d5c8d0bed745bcad4533135";
   sha256 = if stdenv.system == "i686-linux"    then "1mmgq4fxi2h4hvz7yxgzzyvlznkb42qwr8i1g2b1akdlgnrvvpby"
@@ -30,21 +26,16 @@ in
     buildInputs = [ unzip ];
 
     installPhase = ''
-      mkdir -p $out/bin
-      cp -r ./* $out/bin
-
-      ${if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then ''
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        $out/bin/code
-      '' else ""}
+      mkdir -p $out/lib/vscode $out/bin
+      cp -r ./* $out/lib/vscode
+      ln -s $out/lib/vscode/code $out/bin
     '';
 
-    postFixup = ''
-      ${if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then ''
-        patchelf \
-        --set-rpath "${atomEnv}/lib:${atomEnv}/lib64:$out/bin:$(patchelf --print-rpath $out/bin/code)" \
-        $out/bin/code
-      '' else ""}
+    fixupPhase = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \
+        $out/lib/vscode/code
     '';
 
     meta = with stdenv.lib; {

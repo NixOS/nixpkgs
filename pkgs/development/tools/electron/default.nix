@@ -1,10 +1,6 @@
-{ stdenv, callPackage, fetchurl, unzip
-, ...
-} @ args:
+{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv }:
 
-let
-  atomEnv = callPackage ./env-atom.nix (args);
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "electron-${version}";
   version = "0.36.2";
 
@@ -14,23 +10,17 @@ in stdenv.mkDerivation rec {
     name = "${name}.zip";
   };
 
-  buildInputs = [ atomEnv unzip ];
+  buildInputs = [ unzip ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  buildCommand = ''
+    mkdir -p $out/lib/electron $out/bin
+    unzip -d $out/lib/electron $src
+    ln -s $out/lib/electron/electron $out/bin
 
-  unpackCmd = "unzip";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    unzip -d $out/bin $src
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-    $out/bin/electron
-  '';
-
-  postFixup = ''
     patchelf \
-    --set-rpath "${atomEnv}/lib:${atomEnv}/lib64:$out/bin:$(patchelf --print-rpath $out/bin/electron)" \
-    $out/bin/electron
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
+      $out/lib/electron/electron
   '';
 
   meta = with stdenv.lib; {

@@ -5700,10 +5700,7 @@ in
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
-  electron = callPackage ../development/tools/electron {
-    gconf = pkgs.gnome.GConf;
-  };
-
+  electron = callPackage ../development/tools/electron { };
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -11647,9 +11644,11 @@ in
 
   artha = callPackage ../applications/misc/artha { };
 
-  atom = callPackage ../applications/editors/atom {
+  atomEnv = callPackage ../applications/editors/atom/env.nix {
     gconf = gnome.GConf;
   };
+
+  atom = callPackage ../applications/editors/atom { };
 
   aseprite = callPackage ../applications/editors/aseprite {
     giflib = giflib_4_1;
@@ -14253,9 +14252,7 @@ in
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
-  vscode = callPackage ../applications/editors/vscode {
-    gconf = pkgs.gnome.GConf;
-  };
+  vscode = callPackage ../applications/editors/vscode { };
 
   vue = callPackage ../applications/misc/vue { };
 
