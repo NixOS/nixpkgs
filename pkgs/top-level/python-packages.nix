@@ -1721,11 +1721,11 @@ in modules // {
 
   betamax-matchers = buildPythonPackage rec {
     name = "betamax-matchers-${version}";
-    version = "0.2.0";
+    version = "0.3.0";
 
     src = pkgs.fetchurl {
        url = "https://pypi.python.org/packages/source/b/betamax-matchers/${name}.tar.gz";
-      sha256 = "13n2dy8s2jx8x8bbx684bff3444584bnmg0zhkfxhxndpy18p4is";
+      sha256 = "039kvqsdcvvlfxjc3n1x2xvjg6qkqbql0p7rc4z7bnxm9kcm88la";
     };
 
     buildInputs = with self; [ betamax requests_toolbelt ];
