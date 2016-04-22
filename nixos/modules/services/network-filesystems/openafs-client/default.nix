@@ -80,7 +80,7 @@ in
       preStart = ''
         mkdir -p -m 0755 /afs
         mkdir -m 0700 -p ${cfg.cacheDirectory}
-        ${pkgs.module_init_tools}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
+        ${pkgs.kmod}/sbin/insmod ${openafsPkgs}/lib/openafs/libafs-*.ko || true
         ${openafsPkgs}/sbin/afsd -confdir ${afsConfig} -cachedir ${cfg.cacheDirectory} ${if cfg.sparse then "-dynroot-sparse" else "-dynroot"} -fakestat -afsdb
         ${openafsPkgs}/bin/fs setcrypt ${if cfg.crypt then "on" else "off"}
       '';
@@ -92,7 +92,7 @@ in
       preStop = ''
         ${pkgs.utillinux}/bin/umount /afs
         ${openafsPkgs}/sbin/afsd -shutdown
-        ${pkgs.module_init_tools}/sbin/rmmod libafs
+        ${pkgs.kmod}/sbin/rmmod libafs
       '';
     };
   };
