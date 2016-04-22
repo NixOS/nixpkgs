@@ -25,8 +25,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
+  configurePhase = ''
+    runHook preConfigure
     qmake -spec linux-g++ qtcreator.pro
+    runHook postConfigure
   '';
 
   buildFlags = optionalString withDocumentation " docs";
