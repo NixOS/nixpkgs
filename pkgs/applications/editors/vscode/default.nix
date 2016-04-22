@@ -1,4 +1,5 @@
-{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv }:
+{ stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem }:
+
 
 let
   version = "0.10.10";
@@ -23,12 +24,28 @@ in
       inherit sha256;
     };
 
+    desktopItem = makeDesktopItem {
+      name = "code";
+      exec = "code";
+      icon = "code";
+      comment = "Visual Studio Code is a code editor redefined and optimized for building and debugging modern web and cloud applications";
+      desktopName = "Visual Studio Code";
+      genericName = "Text Editor";
+      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+    };
+
     buildInputs = [ unzip ];
 
     installPhase = ''
       mkdir -p $out/lib/vscode $out/bin
       cp -r ./* $out/lib/vscode
       ln -s $out/lib/vscode/code $out/bin
+
+      mkdir -p $out/share/applications
+      cp $desktopItem/share/applications/* $out/share/applications
+
+      mkdir -p $out/share/pixmaps
+      cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
     '';
 
     fixupPhase = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
