@@ -7128,6 +7128,8 @@ in
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
+  haxor-news = callPackage ../applications/misc/haxor-news { };
+
   herqq = callPackage ../development/libraries/herqq { };
 
   heyefi = self.haskellPackages.heyefi;
