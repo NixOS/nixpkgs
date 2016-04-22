@@ -151,6 +151,7 @@ in
 
     '';
 
+    services.cron.enable = true;
     sound.enable = false;
     fonts.fontconfig.enable = true;
     environment.systemPackages = with pkgs; [
