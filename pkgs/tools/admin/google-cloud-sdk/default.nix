@@ -1,5 +1,7 @@
 {stdenv, fetchurl, python27, python27Packages, makeWrapper}:
 
+with python27Packages;
+
 stdenv.mkDerivation rec {
   version = "106.0.0";
   name = "google-cloud-sdk-${version}";
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
         wrapper="$out/bin/$program"
         makeWrapper "$programPath" "$wrapper" \
             --set CLOUDSDK_PYTHON "${python27}/bin/python" \
-            --prefix PYTHONPATH : "$(toPythonPath ${python27Packages.crcmod})"
+            --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl}):$(toPythonPath ${crcmod})"
     done
 
     # install man pages
