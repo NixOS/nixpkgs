@@ -10,6 +10,7 @@ let
       fontconfig gdk_pixbuf cairo xorg.libXrender xorg.libX11 xorg.libXext
       xorg.libXt
     ];
+    extraOutputsToInstall = [ "lib" "out" ];
   };
 
   ldLibraryPath = ''${torEnv}/lib${stdenv.lib.optionalString stdenv.is64bit ":${torEnv}/lib64"}'';
