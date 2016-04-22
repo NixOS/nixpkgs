@@ -625,7 +625,9 @@ in modules // {
 
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.3";
-    disabled = isPy3k;
+
+    # The tests are written in a python2 syntax but anyjson is python3 valid
+    doCheck = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/a/anyjson/${name}.tar.gz";
@@ -8067,7 +8069,9 @@ in modules // {
     ];
   };
 
-  django_1_9 = buildPythonPackage rec {
+  django_1_9 =
+  let gdal = (pkgs.gdal.override { pythonPackages = self; });
+  in buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.9.5";
     disabled = pythonOlder "2.7";
@@ -8077,6 +8081,10 @@ in modules // {
       sha256 = "19kaw9flk9jjz1n7q378waybxnkrrhkq240lby4zaaas62nnfip5";
     };
 
+    patchPhase = ''
+      sed -e 's#    lib_path = None#    lib_path = "${gdal}/lib/libgdal.so"#' -i django/contrib/gis/gdal/libgdal.py
+    '';
+
     # patch only $out/bin to avoid problems with starter templates (see #3134)
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
@@ -8085,13 +8093,17 @@ in modules // {
     # too complicated to setup
     doCheck = false;
 
+    propagatedBuildInputs = [ gdal ];
+
     meta = {
       description = "A high-level Python Web framework";
       homepage = https://www.djangoproject.com/;
     };
   };
 
-  django_1_8 = buildPythonPackage rec {
+  django_1_8 =
+  let gdal = (pkgs.gdal.override { pythonPackages = self; });
+  in  buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.8.12";
     disabled = pythonOlder "2.7";
@@ -8101,6 +8113,10 @@ in modules // {
       sha256 = "04vi1rmin161drssqhi9n54j6mz8l6vs46pc7zbn50vzacysg3xn";
     };
 
+    patchPhase = ''
+      sed -e 's#    lib_path = None#    lib_path = "${gdal}/lib/libgdal.so"#' -i django/contrib/gis/gdal/libgdal.py
+    '';
+
     # too complicated to setup
     doCheck = false;
 
@@ -8108,6 +8124,8 @@ in modules // {
     postFixup = ''
       wrapPythonProgramsIn $out/bin "$out $pythonPath"
     '';
+
+    propagatedBuildInputs = [ gdal ];
 
     meta = {
       description = "A high-level Python Web framework";
@@ -8205,6 +8223,33 @@ in modules // {
     };
   };
 
+  django_colorful = buildPythonPackage rec {
+    name = "django-colorful-${version}";
+    version = "1.1.0";
+
+    disabled = isPy35;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-colorful/${name}.tar.gz";
+      sha256 = "1s8nrd9nhfyv0ixmbkw6hcm5zwn4id16asncbfghd1arp0j42zsh";
+    };
+
+    # variable used during test
+    DJANGO_SETTINGS_MODULE="colorful.tests.settings";
+    # remove one assertion failing because of un-initialized i18n infrastructure
+    patchPhase = ''
+      sed -i -e '26,31d' colorful/tests/tests.py
+    '';
+
+    buildInputs = with self ; [ sqlite3 django ];
+
+    meta = {
+      description = "Django extension that provides database and form color fields";
+      homepage = https://github.com/charettes/django-colorful;
+      license = licenses.mit;
+    };
+  };
+
   django_compressor = buildPythonPackage rec {
     name = "django-compressor-${version}";
     version = "1.5";
@@ -8263,6 +8308,29 @@ in modules // {
     };
   };
 
+  django_raster = buildPythonPackage rec {
+    name = "django-raster-${version}";
+    version = "0.1.7a1";
+
+    # Test data is missing
+    doCheck = false;
+
+    src = pkgs.fetchFromGitHub {
+      sha256 = "1ssvs3yf3wsk0yjsbzg9bla6kfr8dqv3hxbm2g4f3bfkxp4kj5gq";
+      rev = "011cd72d1308164b133db72123cdd2cd86fd9ed6";
+      repo = "django-raster";
+      owner = "geodesign";
+    };
+
+    propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2 pyparsing celery
+                                          django_1_9 ];
+
+    meta = {
+      description = "Basic raster data integration for Django";
+      homepage = https://github.com/geodesign/django-raster;
+      license = licenses.mit;
+    };
+  };
 
   django_tagging = buildPythonPackage rec {
     name = "django-tagging-0.3.1";
@@ -17321,14 +17389,15 @@ in modules // {
 
 
   pyparsing = buildPythonPackage rec {
-    name = "pyparsing-2.0.1";
+    name = "pyparsing-${version}";
+    version = "2.1.0";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/p/pyparsing/${name}.tar.gz";
-      sha256 = "1r742rjbagf2i166k2w0r192adfw7l9lnsqz7wh4mflf00zws1q0";
+      sha256 = "0099k2aj7y7bd4kgkd2nj6ah6af0xkvlgnwrqv1lf4s9bb42pjzn";
     };
 
-    # error: invalid command 'test'
+    # Not everything necessary to run the tests is included in the distribution
     doCheck = false;
 
     meta = {
