@@ -80,6 +80,8 @@ let
       "CONFIG+=no-server"
     ];
 
+    NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+
     installPhase = ''
       cp scripts/mumble-overlay $out/bin
       sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
