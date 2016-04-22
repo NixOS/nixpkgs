@@ -34,11 +34,11 @@ in
 {
 
   imports = [
-    ./user.nix
     ./network.nix
+    ./sensu-client.nix
     ./ssl/certificate.nix
     ./ssl/dhparams.nix
-    ./sensu-client.nix
+    ./user.nix
   ];
 
   options = {
