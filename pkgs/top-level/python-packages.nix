@@ -4598,6 +4598,40 @@ in modules // {
     };
   });
 
+  neurotools = buildPythonPackage (rec {
+    name = "NeuroTools-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/N/NeuroTools/${name}.tar.gz";
+      sha256 = "0ly6qa87l3afhksab06vp1iimlbm1kdnsw98mxcnpzz9q07l4nd4";
+    };
+
+    disabled = isPy3k;
+
+    # Tests are not automatically run
+    # Many tests fail (using py.test), and some need R
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      scipy
+      numpy
+      matplotlib
+      tables
+      pyaml
+      urllib3
+      rpy2
+      mpi4py
+    ];
+
+    meta = {
+      description = "Collection of tools to support analysis of neural activity";
+      homepage = https://pypi.python.org/pypi/NeuroTools;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ nico202 ];
+    };
+  });
+
   jdatetime = buildPythonPackage (rec {
     name = "jdatetime-${version}";
     version = "1.7.1";
