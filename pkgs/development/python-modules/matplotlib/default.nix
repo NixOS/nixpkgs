@@ -5,6 +5,7 @@
 , enableGtk2 ? false, pygtk ? null, gobjectIntrospection
 , enableGtk3 ? false, cairo
 , Cocoa, Foundation, CoreData, cf-private, libobjc, libcxx
+, installTests ? false
 }:
 
 assert enableGhostscript -> ghostscript != null;
@@ -52,6 +53,11 @@ buildPythonPackage rec {
     sed -i 's/TestTinyPages/fails/' lib/matplotlib/sphinxext/tests/test_tinypages.py
     # Transient errors
     sed -i 's/test_invisible_Line_rendering/noop/' lib/matplotlib/tests/test_lines.py
+
+    cat > setup.cfg <<EOF
+    [packages]
+    tests = ${if installTests then "True" else "False"}
+    EOF
   '';
 
   meta = with stdenv.lib; {
