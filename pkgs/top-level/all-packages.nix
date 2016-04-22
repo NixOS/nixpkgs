@@ -11015,6 +11015,8 @@ in
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
+  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
+
   s3ql = callPackage ../tools/backup/s3ql { };
 
   sassc = callPackage ../development/tools/sassc { };

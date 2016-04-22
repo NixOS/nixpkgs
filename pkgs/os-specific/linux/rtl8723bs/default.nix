@@ -25,10 +25,6 @@ stdenv.mkDerivation rec {
     mkdir -p      $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless
     cp r8723bs.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless
 
-    mkdir -p                "$out/lib/firmware/rtlwifi"
-    cp rtl8723bs_nic.bin    "$out/lib/firmware/rtlwifi"
-    cp rtl8723bs_wowlan.bin "$out/lib/firmware/rtlwifi"
-
     nuke-refs $(find $out -name "*.ko")
   '';
 
