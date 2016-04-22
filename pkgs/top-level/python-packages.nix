@@ -16109,15 +16109,21 @@ in modules // {
   });
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.5.4";
+    name = "psycopg2-2.6.1";
     disabled = isPyPy;
 
-    # error: invalid command 'test'
+    # The unit tests is disabled because they require a local instance of PostgreSQL.
+    # Python 3.5 is not officially supported (https://github.com/psycopg/psycopg2/issues/412)
+    # but only one test fails.
     doCheck = false;
+
+    checkPhase = ''
+      make check PYTHON=${python.executable}
+    '';
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/psycopg2/${name}.tar.gz";
-      sha256 = "07ivzl7bq8bjcq5n90w4bsl29gjfm5l8yamw0paxh25si8r3zfi4";
+      sha256 = "0k4hshvrwsh8yagydyxgmd0pjm29lwdxkngcq9fzfzkmpsxrmkva";
     };
 
     buildInputs = optional stdenv.isDarwin pkgs.openssl;
@@ -16128,7 +16134,6 @@ in modules // {
       license = with licenses; [ gpl2 zpt20 ];
     };
   };
-
 
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
