@@ -6,9 +6,9 @@ let
   torEnv = buildEnv {
     name = "tor-env";
     paths = [
-      stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
-      fontconfig gdk_pixbuf cairo xorg.libXrender xorg.libX11 xorg.libXext
-      xorg.libXt
+      stdenv.cc.cc.lib zlib glib alsaLib dbus.lib dbus_glib gtk atk pango.out
+      freetype fontconfig.lib gdk_pixbuf cairo xorg.libXrender xorg.libX11
+      xorg.libXext xorg.libXt
     ];
   };
 
