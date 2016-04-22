@@ -64,8 +64,6 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
-  phonon_qt5 = qt5.phonon;  # added 2015-12-19
-  phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
