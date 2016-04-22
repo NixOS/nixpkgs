@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, procps, module_init_tools }:
+, withGnome ? true, gnome3, procps, kmod }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
        --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-openvpn-service.c" \
        --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn" \
-       --replace "/sbin/modprobe" "${module_init_tools}/sbin/modprobe"
+       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
      substituteInPlace "properties/auth-helpers.c" \
        --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn"
   '';
