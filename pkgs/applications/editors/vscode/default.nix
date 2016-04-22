@@ -47,7 +47,7 @@ in
       cp $out/lib/vscode/resources/app/resources/linux/code.png $out/share/pixmaps/code.png
     '';
 
-    fixupPhase = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
+    postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:$out/lib/vscode" \

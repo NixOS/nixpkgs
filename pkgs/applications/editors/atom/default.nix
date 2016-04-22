@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/atom \
       --prefix "PATH" : "${gvfs}/bin"
 
+    fixupPhase
+
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:$out/share/atom" \
       $out/share/atom/atom

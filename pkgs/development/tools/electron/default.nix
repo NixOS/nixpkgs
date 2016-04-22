@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     unzip -d $out/lib/electron $src
     ln -s $out/lib/electron/electron $out/bin
 
+    fixupPhase
+
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
