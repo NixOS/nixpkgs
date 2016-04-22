@@ -26423,4 +26423,64 @@ in modules // {
     };
   };
 
+  w3lib = buildPythonPackage rec {
+    name = "w3lib-${version}";
+    version = "1.14.2";
+
+    buildInputs = with self ; [ six pytest ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/w3lib/${name}.tar.gz";
+      sha256 = "bd87eae62d208eef70869951abf05e96a8ee559714074a485168de4c5b190004";
+    };
+
+    meta = {
+      description = "A library of web-related functions";
+      homepage = "https://github.com/scrapy/w3lib";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+    };
+  };
+
+  queuelib = buildPythonPackage rec {
+    name = "queuelib-${version}";
+    version = "1.4.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/queuelib/${name}.tar.gz";
+      sha256 = "a6829918157ed433fafa87b0bb1e93e3e63c885270166db5884a02c34c86f914";
+    };
+
+    buildInputs = with self ; [ pytest ];
+
+    meta = {
+      description = "A collection of persistent (disk-based) queues for Python";
+      homepage = "https://github.com/scrapy/queuelib";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+    };
+  };
+
+  scrapy = buildPythonPackage rec {
+    name = "Scrapy-${version}";
+    version = "1.0.5";
+
+    disabled = isPy3k;
+
+    buildInputs = with self ; [ pytest ];
+    propagatedBuildInputs = with self ; [ six twisted w3lib lxml cssselect queuelib pyopenssl service-identity ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/Scrapy/${name}.tar.gz";
+      sha256 = "0a51c785a310d65f6e70285a2da56d48ef7d049bd7fd60a08eef05c52328ca96";
+    };
+
+    meta = {
+      description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
+      homepage = "http://scrapy.org/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+      platforms = platforms.linux;
+    };
+  };
 }
