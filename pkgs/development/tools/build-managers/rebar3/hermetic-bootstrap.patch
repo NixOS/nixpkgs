@@ -1,39 +1,61 @@
 diff --git a/bootstrap b/bootstrap
-index 25bd658..b2a986b 100755
+index 35759b0..939c838 100755
 --- a/bootstrap
 +++ b/bootstrap
-@@ -8,9 +8,6 @@ main(_Args) ->
+@@ -7,9 +7,11 @@ main(_) ->
      application:start(asn1),
      application:start(public_key),
      application:start(ssl),
 -    inets:start(),
 -    inets:start(httpc, [{profile, rebar}]),
 -    set_httpc_options(),
- 
++    %%  Removed for hermeticity on Nix
++    %%
++    %%  inets:start(),
++    %%  inets:start(httpc, [{profile, rebar}]),
++    %%    set_httpc_options(),
+
      %% Fetch and build deps required to build rebar3
      BaseDeps = [{providers, []}
-@@ -33,7 +30,6 @@ main(_Args) ->
- 
-     setup_env(),
-     os:putenv("REBAR_PROFILE", "bootstrap"),
--    rebar3:run(["update"]),
-     {ok, State} = rebar3:run(["compile"]),
-     reset_env(),
-     os:putenv("REBAR_PROFILE", ""),
-@@ -71,33 +67,7 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
+@@ -74,12 +76,12 @@ default_registry_file() ->
+     filename:join([CacheDir, "hex", "default", "registry"]).
+
+ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
+-    case lists:keyfind(Name, 1, Deps) of
+-        {Name, Vsn} ->
+-            ok = fetch({pkg, atom_to_binary(Name, utf8), list_to_binary(Vsn)}, Name);
+-        {Name, _, Source} ->
+-            ok = fetch(Source, Name)
+-    end,
++    %% case lists:keyfind(Name, 1, Deps) of
++    %%     {Name, Vsn} ->
++    %%         ok = fetch({pkg, atom_to_binary(Name, utf8), list_to_binary(Vsn)}, Name);
++    %%     {Name, _, Source} ->
++    %%         ok = fetch(Source, Name)
++    %% end,
+
+     %% Hack: erlware_commons depends on a .script file to check if it is being built with
+     %% rebar2 or rebar3. But since rebar3 isn't built yet it can't get the vsn with get_key.
+@@ -88,63 +90,63 @@ fetch_and_compile({Name, ErlFirstFiles}, Deps) ->
+
      compile(Name, ErlFirstFiles).
- 
- fetch({pkg, Name, Vsn}, App) ->
+
+-fetch({pkg, Name, Vsn}, App) ->
 -    Dir = filename:join([filename:absname("_build/default/lib/"), App]),
--    CDN = "https://s3.amazonaws.com/s3.hex.pm/tarballs",
--    Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
--    Url = string:join([CDN, Package], "/"),
--    case request(Url) of
--        {ok, Binary} ->
--            {ok, Contents} = extract(Binary),
--            ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
--        _ ->
--            io:format("Error: Unable to fetch package ~p ~p~n", [Name, Vsn])
+-    case filelib:is_dir(Dir) of
+-        false ->
+-            CDN = "https://s3.amazonaws.com/s3.hex.pm/tarballs",
+-            Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
+-            Url = string:join([CDN, Package], "/"),
+-            case request(Url) of
+-                {ok, Binary} ->
+-                    {ok, Contents} = extract(Binary),
+-                    ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
+-                _ ->
+-                    io:format("Error: Unable to fetch package ~p ~p~n", [Name, Vsn])
+-            end;
+-        true ->
+-            io:format("Dependency ~s already exists~n", [Name])
 -    end.
 -
 -extract(Binary) ->
@@ -51,14 +73,17 @@ index 25bd658..b2a986b 100755
 -        Error ->
 -            Error
 -    end.
-+    ok.
- 
- get_rebar_config() ->
-     {ok, [[Home]]} = init:get_argument(home),
-@@ -109,20 +79,6 @@ get_rebar_config() ->
-             []
-     end.
- 
+-
+-get_rebar_config() ->
+-    {ok, [[Home]]} = init:get_argument(home),
+-    ConfDir = filename:join(Home, ".config/rebar3"),
+-    case file:consult(filename:join(ConfDir, "rebar.config")) of
+-        {ok, Config} ->
+-            Config;
+-        _ ->
+-            []
+-    end.
+-
 -get_http_vars(Scheme) ->
 -    proplists:get_value(Scheme, get_rebar_config(), []).
 -
@@ -72,7 +97,63 @@ index 25bd658..b2a986b 100755
 -set_httpc_options(Scheme, Proxy) ->
 -    {ok, {_, _, Host, Port, _, _}} = http_uri:parse(Proxy),
 -    httpc:set_options([{Scheme, {{Host, Port}, []}}], rebar).
--
++%% fetch({pkg, Name, Vsn}, App) ->
++%%     Dir = filename:join([filename:absname("_build/default/lib/"), App]),
++%%     case filelib:is_dir(Dir) of
++%%         false ->
++%%             CDN = "https://s3.amazonaws.com/s3.hex.pm/tarballs",
++%%             Package = binary_to_list(<<Name/binary, "-", Vsn/binary, ".tar">>),
++%%             Url = string:join([CDN, Package], "/"),
++%%             case request(Url) of
++%%                 {ok, Binary} ->
++%%                     {ok, Contents} = extract(Binary),
++%%                     ok = erl_tar:extract({binary, Contents}, [{cwd, Dir}, compressed]);
++%%                 _ ->
++%%                     io:format("Error: Unable to fetch package ~p ~p~n", [Name, Vsn])
++%%             end;
++%%         true ->
++%%             io:format("Dependency ~s already exists~n", [Name])
++%%     end.
++
++%% extract(Binary) ->
++%%     {ok, Files} = erl_tar:extract({binary, Binary}, [memory]),
++%%     {"contents.tar.gz", Contents} = lists:keyfind("contents.tar.gz", 1, Files),
++%%     {ok, Contents}.
++
++%% request(Url) ->
++%%     case httpc:request(get, {Url, []},
++%%                        [{relaxed, true}],
++%%                        [{body_format, binary}],
++%%                        rebar) of
++%%         {ok, {{_Version, 200, _Reason}, _Headers, Body}} ->
++%%             {ok, Body};
++%%         Error ->
++%%             Error
++%%     end.
++
++%% get_rebar_config() ->
++%%     {ok, [[Home]]} = init:get_argument(home),
++%%     ConfDir = filename:join(Home, ".config/rebar3"),
++%%     case file:consult(filename:join(ConfDir, "rebar.config")) of
++%%         {ok, Config} ->
++%%             Config;
++%%         _ ->
++%%             []
++%%     end.
++
++%% get_http_vars(Scheme) ->
++%%     proplists:get_value(Scheme, get_rebar_config(), []).
++
++%% set_httpc_options() ->
++%%     set_httpc_options(https_proxy, get_http_vars(https_proxy)),
++%%     set_httpc_options(proxy, get_http_vars(http_proxy)).
++
++%% set_httpc_options(_, []) ->
++%%     ok;
++
++%% set_httpc_options(Scheme, Proxy) ->
++%%     {ok, {_, _, Host, Port, _, _}} = http_uri:parse(Proxy),
++%%     httpc:set_options([{Scheme, {{Host, Port}, []}}], rebar).
+
  compile(App, FirstFiles) ->
      Dir = filename:join(filename:absname("_build/default/lib/"), App),
-     filelib:ensure_dir(filename:join([Dir, "ebin", "dummy.beam"])),
