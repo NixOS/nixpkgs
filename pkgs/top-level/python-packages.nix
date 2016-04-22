@@ -1702,11 +1702,11 @@ in modules // {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.5.1";
+    name = "betamax-0.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/betamax/${name}.tar.gz";
-      sha256 = "1glzigrbip9w2jr2gcmwa96rffhi9x9l1455dhbcx2gh3pmcykl6";
+      sha256 = "0vw4d53jbbb2kdl7l891h8iyxklqcd6ldvgcyhw9hl40ljdhv1wz";
     };
 
     propagatedBuildInputs = [ self.requests2 ];
