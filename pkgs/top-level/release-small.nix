@@ -105,7 +105,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   mingetty = linux;
   mk = linux;
   mktemp = all;
-  module_init_tools = linux;
   mono = linux;
   monotone = linux;
   mpg321 = linux;

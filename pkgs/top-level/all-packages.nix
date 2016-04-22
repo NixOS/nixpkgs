@@ -10870,8 +10870,6 @@ in
 
   mmc-utils = callPackage ../os-specific/linux/mmc-utils { };
 
-  module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
-
   aggregateModules = modules:
     callPackage ../os-specific/linux/kmod/aggregator.nix {
       inherit modules;
