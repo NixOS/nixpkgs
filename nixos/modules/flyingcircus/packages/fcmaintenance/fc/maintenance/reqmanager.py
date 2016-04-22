@@ -4,8 +4,8 @@ from .request import Request
 from .state import State, ARCHIVE
 
 import argparse
-import fc.directory
 import fcntl
+import fc.util.directory
 import glob
 import json
 import logging
@@ -32,7 +32,7 @@ def require_directory(func):
             if self.enc_path:
                 with open(self.enc_path) as f:
                     enc_data = json.load(f)
-            self.directory = fc.directory.connect(enc_data)
+            self.directory = fc.util.directory.connect(enc_data)
         return func(self, *args, **kwargs)
     return with_directory_connection
 
@@ -75,7 +75,10 @@ class ReqManager:
 
     def __str__(self):
         """Human-readable listing of active maintenance requests."""
-        return '\n\n'.join((str(r) for r in self.requests))
+        if not self.requests:
+            return ''
+        return ('St Id       Scheduled             Estimate  Comment\n' +
+                '\n'.join((str(r) for r in sorted(self.requests.values()))))
 
     def dir(self, request):
         """Return file system path for request identified by `reqid`."""
@@ -92,6 +95,8 @@ class ReqManager:
             except Exception as e:
                 LOG.exception('error loading request from %s', d,
                               exc_info=e)
+                LOG.error('archiving defective request dir', d)
+                os.rename(d, p.join(self.archivedir, p.basename(d)))
 
     def add(self, request):
         self.requests[request.id] = request
@@ -102,7 +107,8 @@ class ReqManager:
     @require_lock
     @require_directory
     def schedule(self):
-        """Trigger request scheduling on server."""
+        """Triggers request scheduling on server."""
+        LOG.debug('scheduling maintenance requests')
         if not self.requests:
             return
         schedule_maintenance = {reqid: {
@@ -146,6 +152,7 @@ class ReqManager:
         If there is an already active request, run to termination first.
         After that, select the oldest due request as next active request.
         """
+        LOG.debug('executing maintenance requests')
         for req in self.runnable():
             LOG.info('(req %s) starting execution', req.id)
             try:
@@ -164,6 +171,7 @@ class ReqManager:
         Postponed requests get their new scheduled time with the next
         schedule call.
         """
+        LOG.debug('postponing maintenance requests')
         postponed = [r for r in self.requests.values()
                      if r.state == State.postpone]
         if not postponed:
@@ -180,6 +188,7 @@ class ReqManager:
     @require_directory
     def archive(self):
         """Move all completed requests to archivedir."""
+        LOG.debug('archiving maintenance requests')
         archived = [r for r in self.requests.values() if r.state in ARCHIVE]
         if not archived:
             return
@@ -196,6 +205,14 @@ class ReqManager:
             req.save()
 
 
+def cycle(spooldir, enc_path):
+    with ReqManager(spooldir, enc_path) as rm:
+        rm.schedule()
+        rm.execute()
+        rm.postpone()
+        rm.archive()
+
+
 def main(verbose=False):
     a = argparse.ArgumentParser(description="""\
 Schedules, runs, and archives maintenance requests.
@@ -206,10 +223,22 @@ Schedules, runs, and archives maintenance requests.
     a.add_argument('-E', '--enc-path', metavar='PATH', default=None,
                    help='full path to enc.json')
     args = a.parse_args()
-    logging.basicConfig(level=logging.DEBUG if verbose else logging.INFO)
+    logging.basicConfig(format='%(levelname)s: %(message)s',
+                        level=logging.DEBUG if args.verbose else logging.INFO)
+    cycle(args.spooldir, args.enc_path)
 
-    with ReqManager(args.spooldir, args.enc_path) as rm:
-        rm.schedule()
-        rm.execute()
-        rm.postpone()
-        rm.archive()
+
+def list_maintenance():
+    """List active maintenance requests on this node."""
+    a = argparse.ArgumentParser(description=list_maintenance.__doc__,
+                                epilog="""\
+States are: pending (-), due (*), running (=), success (s), tempfail (t),
+retrylimit exceeded (r), hard error (e), deleted (d), postponed (p).
+""")
+    a.add_argument('-d', '--spooldir', metavar='DIR', default=DEFAULT_DIR,
+                   help='spool dir for requests (default: %(default)s)')
+    args = a.parse_args()
+
+    rm = ReqManager(args.spooldir)
+    rm.scan()
+    print(str(rm))

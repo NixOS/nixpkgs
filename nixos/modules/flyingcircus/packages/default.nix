@@ -5,13 +5,16 @@
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
+    fcmaintenance = pkgs.callPackage ./fcmaintenance { };
     fcmanage = pkgs.callPackage ./fcmanage { };
+    fcutil = pkgs.callPackage ./fcutil { };
 
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
 
     powerdns = pkgs.callPackage ./powerdns.nix { };
 
     percona = pkgs.callPackage ./percona.nix { boost = boost159; };
+
     xtrabackup = pkgs.callPackage ./xtrabackup.nix { };
     qpress = pkgs.callPackage ./qpress.nix { };
 

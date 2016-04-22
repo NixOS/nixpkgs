@@ -1,5 +1,7 @@
+"""Unified client access to fc.directory."""
+
 import json
-import xmlrpc
+import xmlrpc.client
 
 
 DIRECTORY_URL_RING0 = (
@@ -17,6 +19,14 @@ def load_default_enc_json():
 
 
 def connect(enc_data=None, ring=1):
+    """Returns XML-RPC directory connection.
+
+    The directory secret is read from `/etc/nixos/enc.json`.
+    Alternatively, the parsed JSON content can be passed directly as
+    dict.
+
+    Selects ring0/ring1 API according to the `ring` parameter.
+    """
     if not enc_data:
         enc_data = load_default_enc_json()
     url = {0: DIRECTORY_URL_RING0,

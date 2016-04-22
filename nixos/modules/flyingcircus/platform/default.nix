@@ -164,6 +164,7 @@ in
         cyrus_sasl
         db
         dstat
+        fcmaintenance
         fio
         gcc
         gdbm
@@ -198,8 +199,8 @@ in
         psmisc
         pv
         python27Full
-        python27Packages.virtualenv
         python3
+        python34Packages.virtualenv
         screen
         strace
         subversion

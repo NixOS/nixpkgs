@@ -2,15 +2,15 @@ import enum
 
 
 class State(enum.Enum):
-    pending = ' '
-    due = '='
-    running = '*'
-    success = 'S'
-    tempfail = 'T'
-    retrylimit = 'R'
-    error = 'E'
-    deleted = 'D'
-    postpone = 'P'
+    pending = '-'
+    due = '*'
+    running = '='
+    success = 's'
+    tempfail = 't'
+    retrylimit = 'r'
+    error = 'e'
+    deleted = 'd'
+    postpone = 'p'
 
     def __str__(self):
         return self.name
@@ -19,7 +19,9 @@ class State(enum.Enum):
         """Arbitrary sort order. It sufficient to have a sort order at all."""
         return self.name < other.name
 
+    @property
     def short(self):
+        """Single-letter representation."""
         return self.value
 
 

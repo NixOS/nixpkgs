@@ -1,6 +1,6 @@
 from fc.maintenance.activity import Activity
 from fc.maintenance.reqmanager import ReqManager
-from fc.maintenance.request import Request
+from fc.maintenance.request import Request, Attempt
 from fc.maintenance.state import State, ARCHIVE, EXIT_POSTPONE
 
 import fc.maintenance.reqmanager
@@ -86,14 +86,14 @@ def test_scan_invalid(tmpdir):
     assert True
 
 
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_schedule_empty(connect, reqmanager):
     rpccall = connect().schedule_maintenance
     reqmanager.schedule()
     rpccall.assert_not_called()
 
 
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_schedule_requests(connect, reqmanager):
     req = reqmanager.add(Request(Activity(), 1, 'comment'))
     rpccall = connect().schedule_maintenance
@@ -105,7 +105,7 @@ def test_schedule_requests(connect, reqmanager):
         2016, 4, 20, 15, 12, 40, 900000, tzinfo=pytz.UTC)
 
 
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_delete_disappeared_requests(connect, reqmanager):
     req = reqmanager.add(Request(Activity(), 1, 'comment'))
     sched = connect().schedule_maintenance
@@ -151,10 +151,10 @@ def test_execute_logs_exception(reqmanager, caplog):
     req = reqmanager.add(Request(FailingActivity(), 1))
     req.state = State.due
     reqmanager.execute()
-    assert 'error in activity' in caplog.text()
+    assert 'error in activity' in caplog.text
 
 
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_postpone(connect, reqmanager):
     req = reqmanager.add(Request(Activity(), 90))
     req.state = State.postpone
@@ -165,7 +165,7 @@ def test_postpone(connect, reqmanager):
     assert req.next_due is None
 
 
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_archive(connect, tmpdir):
     endm = connect().end_maintenance
     with request_population(5, tmpdir) as (rm, reqs):
@@ -173,13 +173,16 @@ def test_archive(connect, tmpdir):
         for req, state in zip(reqs, sorted(ARCHIVE)):
             req.state = state
             req._reqid = str(state)
+            att = Attempt()
+            att.finished = att.started + datetime.timedelta(seconds=5)
+            req.attempts = [att]
             req.save()
         rm.archive()
         endm.assert_called_once_with({
-            'success': {'duration': None, 'result': 'success'},
-            'error': {'duration': None, 'result': 'error'},
-            'retrylimit': {'duration': None, 'result': 'retrylimit'},
-            'deleted': {'duration': None, 'result': 'deleted'},
+            'success': {'duration': 5, 'result': 'success'},
+            'error': {'duration': 5, 'result': 'error'},
+            'retrylimit': {'duration': 5, 'result': 'retrylimit'},
+            'deleted': {'duration': 5, 'result': 'deleted'},
         })
         for r in reqs[0:3]:
             assert 'archive/' in r.dir
@@ -193,7 +196,7 @@ class PostponeActivity(Activity):
 
 
 @freezegun.freeze_time('2016-04-20 12:00:00')
-@unittest.mock.patch('fc.directory.connect')
+@unittest.mock.patch('fc.util.directory.connect')
 def test_end_to_end(connect, tmpdir):
     with request_population(3, tmpdir) as (rm, reqs):
         # 0: due, exec, archive
@@ -216,3 +219,30 @@ def test_end_to_end(connect, tmpdir):
     assert sched.call_count == 1
     assert endm.call_count == 2  # delete, archive
     assert postp.call_count == 1
+
+
+def test_list_empty(reqmanager):
+    assert '' == str(reqmanager)
+
+
+def test_list(reqmanager):
+    r1 = Request(Activity(), '14m', 'pending request')
+    reqmanager.add(r1)
+    r2 = Request(Activity(), '2h', 'due request')
+    r2.state = State.due
+    r2.next_due = datetime.datetime(2016, 4, 20, 12, tzinfo=pytz.UTC)
+    reqmanager.add(r2)
+    r3 = Request(Activity(), '1m 30s', 'error request')
+    r3.state = State.error
+    r3.next_due = datetime.datetime(2016, 4, 20, 11, tzinfo=pytz.UTC)
+    att = Attempt()
+    att.finished = att.started + datetime.timedelta(seconds=75)
+    att.returncode = 1
+    r3.attempts = [att]
+    reqmanager.add(r3)
+    assert str(reqmanager) == """\
+St Id       Scheduled             Estimate  Comment
+e  {id3}  2016-04-20 11:00 UTC  1m 30s    error request (duration: 1m 15s)
+*  {id2}  2016-04-20 12:00 UTC  2h        due request
+-  {id1}  --- TBA ---           14m       pending request\
+""".format(id1=r1.id[:7], id2=r2.id[:7], id3=r3.id[:7])
