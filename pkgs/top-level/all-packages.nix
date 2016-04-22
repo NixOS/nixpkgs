@@ -8439,6 +8439,8 @@ in
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {};
 
+  phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {};
+
   physfs = callPackage ../development/libraries/physfs { };
 
   pipelight = callPackage ../tools/misc/pipelight {
@@ -15458,6 +15460,8 @@ in
     phonon = callPackage ../development/libraries/phonon { };
 
     phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
+
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
 
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
