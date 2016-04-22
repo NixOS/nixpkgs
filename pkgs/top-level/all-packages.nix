@@ -12516,6 +12516,8 @@ let
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
 
+  svox = callPackage ../applications/audio/svox { };
+
   gkrellm = callPackage ../applications/misc/gkrellm { };
 
   gmu = callPackage ../applications/audio/gmu { };
