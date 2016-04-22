@@ -1,22 +1,20 @@
 { config, lib, pkgs, ... }:
 
-# services.hoogle = {
-#   enable = true;
-#   packages = hp: with hp; [ text lens ];
-#   haskellPackages = pkgs.haskellPackages;
-# };
-
 with lib;
 
 let
 
   cfg = config.services.hoogle;
-  ghcWithHoogle = pkgs.haskellPackages.ghcWithHoogle;
+
+  hoogleEnv = pkgs.buildEnv {
+    name = "hoogle";
+    paths = [ (cfg.haskellPackages.ghcWithHoogle cfg.packages) ];
+  };
 
 in {
 
   options.services.hoogle = {
-    enable = mkEnableOption "Hoogle Documentation service";
+    enable = mkEnableOption "Haskell documentation server";
 
     port = mkOption {
       type = types.int;
@@ -28,39 +26,43 @@ in {
 
     packages = mkOption {
       default = hp: [];
+      defaultText = "hp: []";
       example = "hp: with hp; [ text lens ]";
       description = ''
-        A function that returns a list of Haskell packages to generate
-        documentation for.
+        The Haskell packages to generate documentation for.
 
-        The argument will be a Haskell package set provided by the
-        haskellPackages config option.
+        The option value is a function that takes the package set specified in
+        the <varname>haskellPackages</varname> option as its sole parameter and
+        returns a list of packages.
       '';
     };
 
     haskellPackages = mkOption {
       description = "Which haskell package set to use.";
-      example = "pkgs.haskellPackages";
-      type = types.attrs;
+      default = pkgs.haskellPackages;
+      defaultText = "pkgs.haskellPackages";
     };
 
   };
 
   config = mkIf cfg.enable {
     systemd.services.hoogle = {
-      description = "Hoogle Haskell documentation search";
+      description = "Haskell documentation server";
+
       wantedBy = [ "multi-user.target" ];
+
       serviceConfig = {
         Restart = "always";
-        ExecStart =
-          let env = cfg.haskellPackages.ghcWithHoogle cfg.packages;
-              hoogleEnv = pkgs.buildEnv {
-                name = "hoogleServiceEnv";
-                paths = [env];
-              };
-          in ''
-            ${hoogleEnv}/bin/hoogle server --local -p ${toString cfg.port}
-          '';
+        ExecStart = ''${hoogleEnv}/bin/hoogle server --local -p ${toString cfg.port}'';
+
+        User = "nobody";
+        Group = "nogroup";
+
+        PrivateTmp = true;
+        ProtectHome = true;
+
+        RuntimeDirectory = "hoogle";
+        WorkingDirectory = "%t/hoogle";
       };
     };
   };
