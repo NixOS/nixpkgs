@@ -17,6 +17,10 @@ let
       what = "${pkgs.mongodb}/bin";
       where = "${stateDir}/bin";
     }
+    {
+      what = "${cfg.dataDir}";
+      where = "${stateDir}/data";
+    }
   ];
   systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
@@ -29,6 +33,16 @@ in
       default = false;
       description = ''
         Whether or not to enable the unifi controller service.
+      '';
+    };
+
+    services.unifi.dataDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/data";
+      description = ''
+        Where to store the database and other data.
+
+        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
       '';
     };
 
