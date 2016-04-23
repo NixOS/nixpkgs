@@ -93,11 +93,9 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.redshift = {
+  config = 
+    let redshift = {
       description = "Redshift colour temperature adjuster";
-      requires = [ "display-manager.service" ];
-      after = [ "display-manager.service" ];
       wantedBy = [ "graphical.target" ];
       serviceConfig = {
         ExecStart = ''
@@ -112,6 +110,15 @@ in {
       environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";
     };
-  };
+    in mkMerge [
+      (mkIf cfg.enable {
+        # user systemd doesn’t know display-manager.service
+        systemd.services.redshift = redshift // {
+            requires = [ "display-manager.service" ];
+            after = [ "display-manager.service" ];
+          };
+      })
+      { systemd.user.services.redshift = redshift; }
+    ];
 
 }
