@@ -119,6 +119,6 @@ done
 </screen>
 </para>
 
-  <para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/cstrahan/go2nix">go2nix</link>.</para>
+  <para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>.</para>
 </section>
 
