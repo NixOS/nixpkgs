@@ -31,7 +31,7 @@ in
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''
-      ${pkgs.module_init_tools}/bin/rmmod -f facetimehd
+      ${pkgs.module_init_tools}/bin/lsmod | ${pkgs.gnugrep}/bin/grep -q "^facetimehd" && ${pkgs.module_init_tools}/bin/rmmod -f -v facetimehd
     '';
 
     # and load it back on resume
