@@ -609,7 +609,9 @@ in
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
-  brasero = callPackage ../tools/cd-dvd/brasero { };
+  brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
+
+  brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
