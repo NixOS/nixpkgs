@@ -14904,6 +14904,8 @@ in
 
   openarena = callPackage ../games/openarena { };
 
+  opendungeons = callPackage ../games/opendungeons { };
+
   openlierox = callPackage ../games/openlierox { };
 
   openmw = callPackage ../games/openmw { };
