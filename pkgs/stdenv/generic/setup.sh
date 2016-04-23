@@ -408,6 +408,11 @@ substitute() {
 
         if [ "$p" = --subst-var ]; then
             varName="${params[$((n + 1))]}"
+            # check if the used nix attribute name is a valid bash name
+            if ! [[ "$varName" =~ ^[a-zA-Z_]+[a-zA-Z0-9_]*$ ]]; then
+                echo "substitution variables must be valid bash names, \"$varName\" isn't."
+                exit 1;
+            fi
             pattern="@$varName@"
             replacement="${!varName}"
             n=$((n + 1))
@@ -439,6 +444,7 @@ substituteAll() {
     local output="$2"
 
     # Select all environment variables that start with a lowercase character.
+    # Will not work with nix attribute names (and thus env variables) containing '\n'.
     for envVar in $(env | sed -e $'s/^\([a-z][^=]*\)=.*/\\1/; t \n d'); do
         if [ "$NIX_DEBUG" = "1" ]; then
             echo "$envVar -> ${!envVar}"
