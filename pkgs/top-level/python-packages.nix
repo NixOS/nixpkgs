@@ -11876,6 +11876,8 @@ in modules // {
 
   mock = buildPythonPackage (rec {
     name = "mock";
+    version = "1.3.0";
+    # Newer version requires funcsigs 1.0.
 
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ funcsigs six pbr ];
