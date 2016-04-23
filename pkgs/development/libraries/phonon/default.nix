@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${v}/src/phonon-${v}.tar.xz";
+    url = "mirror://kde/stable/phonon/${v}/phonon-${v}.tar.xz";
     sha256 = "1q5hvsk4sfcb91625wcmldy7kgjmfpmpmkgzi6mxkqdd307v8x5v";
   };
 
