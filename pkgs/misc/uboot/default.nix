@@ -92,6 +92,18 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
+  ubootRaspberryPi2 = buildUBoot rec {
+    defconfig = "rpi_2_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi3 = buildUBoot rec {
+    defconfig = "rpi_3_32b_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   # Intended only for QEMU's vexpress-a9 emulation target!
   ubootVersatileExpressCA9 = buildUBoot rec {
     defconfig = "vexpress_ca9x4_defconfig";
