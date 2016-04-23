@@ -10,6 +10,11 @@
 
 let
   cfg = config.flyingcircus.roles.mysql;
+  fclib = import ../lib;
+
+
+  current_memory = fclib.current_memory config 256;
+  cores = fclib.current_cores config 1;
 
   root_password_file = "/etc/local/mysql/mysql.passwd";
   root_password_setter =
@@ -21,7 +26,6 @@ let
     if pathExists /etc/local/mysql
     then "!include ${/etc/local/mysql}"
     else "";
-
 
 in
 
@@ -111,18 +115,17 @@ in
       query_cache_size           = 80M
 
       # * InnoDB
-      innodb-buffer-pool-size         = 7G
-      innodb-log-buffer-size          = 64M
-      innodb-file-per-table           = 1
-      ## You may want to tune the below depending on number of cores and disk sub
-      # alte werte waren 4 (laut empfhelung 4 x number of cores)
-      innodb_read_io_threads          = 32
-      innodb_write_io_threads         = 32
+      innodb_buffer_pool_size         = ${toString (current_memory * 80 / 100)}M
+      innodb_log_buffer_size          = 64M
+      innodb_file_per_table           = 1
+      innodb_read_io_threads          = ${toString (cores * 4)}
+      innodb_write_io_threads         = ${toString (cores * 4)}
+      # Percentage. Probably needs local tuning depending on the workload.
       innodb_change_buffer_max_size   = 50
-      innodb-doublewrite              = 1
+      innodb_doublewrite              = 1
       innodb_log_file_size            = 512M
-      innodb-log-files-in-group       = 4
-      innodb-flush-method             = O_DSYNC
+      innodb_log_files_in_group       = 4
+      innodb_flush_method             = O_DSYNC
       innodb_open_files               = 800
       innodb_stats_on_metadata        = 0
       innodb_lock_wait_timeout        = 120
@@ -134,7 +137,7 @@ in
 
       [xtrabackup]
       target_dir                      = /opt/backup/xtrabackup
-      compress-threads                = 4
+      compress-threads                = ${toString (cores * 2)}
       compress
       parallel            = 3
 
