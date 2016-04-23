@@ -5124,6 +5124,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileReadBackwards = buildPerlPackage rec {
+    name = "File-ReadBackwards-1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/U/UR/URI/${name}.tar.gz";
+      sha256 = "82b261af87507cc3e7e66899c457104ebc8d1c09fb85c53f67c1f90f70f18d6e";
+    };
+    meta = {
+      description = "Read a file backwards by lines";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   FileRemove = buildPerlPackage rec {
     name = "File-Remove-1.52";
     src = fetchurl {
