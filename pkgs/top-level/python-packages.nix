@@ -676,7 +676,7 @@ in modules // {
 
   ansible = buildPythonPackage rec {
     version = "1.9.4";
-    name = "ansible-${version}";
+    name = "ansible";
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
