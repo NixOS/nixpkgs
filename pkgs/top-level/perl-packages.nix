@@ -4516,16 +4516,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExceptionBase = buildPerlPackage {
-    name = "Exception-Base-0.25";
+  ExceptionBase = buildPerlPackage rec {
+    name = "Exception-Base-0.2501";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
-      sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
+      url = "mirror://cpan/authors/id/D/DE/DEXTER/${name}.tar.gz";
+      sha256 = "5723dd78f4ac0b4d262a05ea46af663ea00d8096b2e9c0a43515c210760e1e75";
     };
     buildInputs = [ TestUnitLite ];
     meta = {
+      description = "Lightweight exceptions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
