@@ -707,8 +707,8 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version    = "v2.0.0.2";
-    name       = "ansible-${version}";
+    version    = "2.0.0.2";
+    name       = "ansible";
 
     src = pkgs.fetchurl {
       url    = "http://releases.ansible.com/ansible/ansible-2.0.0.2.tar.gz";
