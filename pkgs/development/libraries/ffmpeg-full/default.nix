@@ -141,7 +141,7 @@
 /*
  *  Darwin frameworks
  */
-, Cocoa, CoreServices
+, Cocoa, CoreServices, AVFoundation, MediaToolbox, VideoDecodeAcceleration, CF
 }:
 
 /* Maintainer notes:
@@ -177,7 +177,7 @@
 
 let
   inherit (stdenv) isCygwin isFreeBSD isLinux;
-  inherit (stdenv.lib) optional optionals enableFeature;
+  inherit (stdenv.lib) optional optionals optionalString enableFeature;
 in
 
 /*
@@ -410,11 +410,25 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ faac fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
-    ++ optionals stdenv.isDarwin [ Cocoa CoreServices ];
+    ++ optionals stdenv.isDarwin [ Cocoa CoreServices AVFoundation MediaToolbox
+                                   VideoDecodeAcceleration ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';
-  postInstall = optional qtFaststartProgram ''cp -a tools/qt-faststart $out/bin/'';
+
+  # Hacky framework patching technique borrowed from the phantomjs2 package
+  postInstall = optionalString qtFaststartProgram ''
+    cp -a tools/qt-faststart $out/bin/
+  '' + optionalString stdenv.isDarwin ''
+    FILES=($(ls $out/bin/*))
+    FILES+=($(ls $out/lib/*.dylib))
+    for f in ''${FILES[@]}; do
+      if [ ! -h "$f" ]; then
+        install_name_tool -change ${CF}/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation /System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation "$f"
+      fi
+    done
+  '';
+
 
   enableParallelBuilding = true;
 

@@ -6717,7 +6717,9 @@ in
     vid-stab = if stdenv.isDarwin then null else vid-stab;
     x265 = if stdenv.isDarwin then null else x265;
     xavs = if stdenv.isDarwin then null else xavs;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices;
+    inherit (darwin) CF;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices AVFoundation
+                                          MediaToolbox VideoDecodeAcceleration;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
