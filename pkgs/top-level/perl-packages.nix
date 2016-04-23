@@ -7565,6 +7565,20 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ProcWaitStat ];
   };
 
+  MIMELite = buildPerlPackage rec {
+    name = "MIME-Lite-3.030";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
+    };
+    propagatedBuildInputs = [ EmailDateFormat MailTools MIMETypes ];
+    meta = {
+      description = "Low-calorie MIME generator (DEPRECATED)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   MIMEtools = buildPerlPackage {
     name = "MIME-tools-5.507";
     src = fetchurl {
