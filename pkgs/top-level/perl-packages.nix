@@ -9608,6 +9608,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PDFAPI2 = buildPerlPackage rec {
+    name = "PDF-API2-2.027";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
+      sha256 = "d24db02d902198406270551857830633b289ad39f5a9ba5431246f8cd60e7599";
+    };
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = stdenv.lib.licenses.lgpl21;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   Pegex = buildPerlPackage rec {
     name = "Pegex-0.60";
     src = fetchurl {
