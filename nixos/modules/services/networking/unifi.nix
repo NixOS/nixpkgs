@@ -62,7 +62,7 @@ in
       bindsTo = systemdMountPoints;
       unitConfig.RequiresMountsFor = stateDir;
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
-      environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc}/lib";
+      environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
 
       preStart = ''
         # Ensure privacy of state
