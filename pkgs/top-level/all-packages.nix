@@ -7338,6 +7338,8 @@ in
 
   libbson = callPackage ../development/libraries/libbson { };
 
+  libburn = callPackage ../development/libraries/libburn { };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
