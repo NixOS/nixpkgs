@@ -10,13 +10,13 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2016.01";
+    version = "2016.05";
 
     nativeBuildInputs = [ bc dtc ];
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "1md5jpq5n9jh08s7sdkjrvg2q7kpzwa7yrpgl9581ncrjfx2yyg5";
+      sha256 = "0wdivib8kbm17qr6r7n7wyzg5vnwpagvwk5m0z80rbssc5sj5l47";
     };
 
     configurePhase = ''
