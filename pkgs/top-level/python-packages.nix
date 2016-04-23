@@ -11258,6 +11258,8 @@ in modules // {
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite";
+    version = "0.8.0";
+    # In 10.0.0 the change to llvm_37 is made.
 
     disabled = isPyPy;
 
