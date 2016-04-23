@@ -1,6 +1,11 @@
 { ... }:
 
 {
+
+  imports = [
+    ./percona
+  ];
+
   nixpkgs.config.packageOverrides = pkgs: rec {
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
