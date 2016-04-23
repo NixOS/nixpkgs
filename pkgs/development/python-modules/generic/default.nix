@@ -4,7 +4,7 @@
    number of Python packages nowadays.  */
 
 { python, setuptools, unzip, wrapPython, lib, bootstrapped-pip
-, ensureNewerSourcesHook }:
+, ensureNewerSourcesHook, fetchurl, pypi-sources }:
 
 { name
 
@@ -53,24 +53,41 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
+
 let
   # use setuptools shim (so that setuptools is imported before distutils)
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
   # For backwards compatibility, let's use an alias
   doInstallCheck = doCheck;
+
+  # Whether to use PyPI
+  pypi = !(builtins.hasAttr "src" attrs || builtins.hasAttr "srcs" attrs);
+
+  # Use Meta data from PyPI
+  pypimeta = if pypi then pypi-sources.${name}.meta else {};
+
+  # Version. When specified, use that.
+  # Otherwise, if src is not given and there is a PyPI source available, then use the latest version available.
+  version = attrs.version or (if pypi && builtins.hasAttr name pypi-sources then pypi-sources.${name}.latest_version else "");
+  # Use src if given. Otherwise, pick the right version via PyPI.
+  src = attrs.src or attrs.srcs or (fetchurl pypi-sources.${name}.versions.${version});
+
+
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
-  name = namePrefix + name;
+  name = namePrefix + name + "-" + version;
 
   buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
+    ++ (lib.optional (lib.hasSuffix "zip" src.name or "") unzip);
 
   # propagate python/setuptools to active setup-hook in nix-shell
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   pythonPath = pythonPath;
+
+  src = src;
 
   configurePhase = attrs.configurePhase or ''
     runHook preConfigure
@@ -137,7 +154,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   meta = with lib.maintainers; {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // {
+  } // pypimeta // meta // {
     # add extra maintainer(s) to every package
     maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
     # a marker for release utilities to discover python packages
