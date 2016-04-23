@@ -7735,6 +7735,8 @@ in
     graphviz = graphviz-nox;
   };
 
+  libisofs = callPackage ../development/libraries/libisofs { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
