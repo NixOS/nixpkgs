@@ -973,6 +973,22 @@ let self = _self // overrides; _self = with self; {
       namespaceautoclean ];
   };
 
+  CatalystControllerPOD = buildPerlPackage rec {
+    name = "Catalyst-Controller-POD-1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLER/${name}.tar.gz";
+      sha256 = "ee2a4bb3ed78baa1464335408f284345b6ba0ef6576ad7bfbd7b656c788a39f9";
+    };
+    buildInputs = [ CatalystRuntime ModuleBuild ModuleInstall TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ CatalystPluginStaticSimple CatalystRuntime ClassAccessor FileShareDir FileSlurp JSONXS LWP ListMoreUtils PathClass PodPOM PodPOMViewTOC TestWWWMechanizeCatalyst XMLSimple ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Catalyst-Controller-POD/;
+      description = "Serves PODs right from your Catalyst application";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   CatalystDevel = buildPerlPackage {
     name = "Catalyst-Devel-1.39";
     src = fetchurl {
