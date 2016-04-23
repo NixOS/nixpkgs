@@ -10076,6 +10076,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PodPOM = buildPerlPackage rec {
+    name = "Pod-POM-2.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "1b50fba9bbdde3ead192beeba0eaddd0c614e3afb1743fa6fff805f57c56f7f4";
+    };
+    buildInputs = [ FileSlurper TestDifferences TextDiff ];
+    meta = {
+      homepage = https://github.com/neilb/Pod-POM;
+      description = "POD Object Model";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   PodLaTeX = buildPerlModule rec {
     name = "Pod-LaTeX-0.61";
     src = fetchurl {
