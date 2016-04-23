@@ -328,14 +328,14 @@ rec {
       buildInputs = [ utillinux ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/bin/modprobe loop
-        ${module_init_tools}/bin/modprobe ext4
-        ${module_init_tools}/bin/modprobe hfs
-        ${module_init_tools}/bin/modprobe hfsplus
-        ${module_init_tools}/bin/modprobe squashfs
-        ${module_init_tools}/bin/modprobe iso9660
-        ${module_init_tools}/bin/modprobe ufs
-        ${module_init_tools}/bin/modprobe cramfs
+        ${kmod}/bin/modprobe loop
+        ${kmod}/bin/modprobe ext4
+        ${kmod}/bin/modprobe hfs
+        ${kmod}/bin/modprobe hfsplus
+        ${kmod}/bin/modprobe squashfs
+        ${kmod}/bin/modprobe iso9660
+        ${kmod}/bin/modprobe ufs
+        ${kmod}/bin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
         mkdir -p $out
@@ -354,12 +354,12 @@ rec {
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/bin/modprobe mtd
-        ${module_init_tools}/bin/modprobe mtdram total_size=131072
-        ${module_init_tools}/bin/modprobe mtdchar
-        ${module_init_tools}/bin/modprobe mtdblock
-        ${module_init_tools}/bin/modprobe jffs2
-        ${module_init_tools}/bin/modprobe zlib
+        ${kmod}/bin/modprobe mtd
+        ${kmod}/bin/modprobe mtdram total_size=131072
+        ${kmod}/bin/modprobe mtdchar
+        ${kmod}/bin/modprobe mtdblock
+        ${kmod}/bin/modprobe jffs2
+        ${kmod}/bin/modprobe zlib
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
