@@ -62,7 +62,7 @@ import ./make-test.nix ({pkgs, ... }: {
       # Test printing various file types.
       foreach my $file ("${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
                         "${pkgs.groff.doc}/share/doc/*/meref.ps",
-                        "${pkgs.cups}/share/doc/cups/images/cups.png",
+                        "${pkgs.cups.out}/share/doc/cups/images/cups.png",
                         "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt")
       {
           $file =~ /([^\/]*)$/; my $fn = $1;
