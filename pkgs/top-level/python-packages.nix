@@ -17141,7 +17141,7 @@ in modules // {
 
     # SyntaxError Python 3
     # https://github.com/defunkt/pystache/issues/181
-    disabled = isPy3k;
+    doCheck = false;
 
     meta = {
       description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
