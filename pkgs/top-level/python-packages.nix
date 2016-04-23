@@ -85,6 +85,8 @@ in modules // {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  pypi-sources = builtins.fromJSON (builtins.readFile ../development/python-modules/pypi-sources.json);
+
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
