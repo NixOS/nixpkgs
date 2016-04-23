@@ -2273,6 +2273,8 @@ in
 
   lrzip = callPackage ../tools/compression/lrzip { };
 
+  lsb-release = callPackage ../os-specific/linux/lsb-release { };
+
   # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
   # former a lower priority than Nettle.
   lsh = lowPrio (callPackage ../tools/networking/lsh { });
