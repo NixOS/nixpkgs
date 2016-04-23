@@ -4,23 +4,24 @@
   pkgconfig, glib, gtk, gtkmm }:
 
 let
-  majorVersion = "9.10";
-  minorVersion = "0";
-  patchSet = "2476743";
-  version = "${majorVersion}.${minorVersion}-${patchSet}";
+  majorVersion = "10.0";
+  minorVersion = "7";
+  version = "${majorVersion}.${minorVersion}";
 
 in stdenv.mkDerivation {
   name = "open-vm-tools-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/project/open-vm-tools/open-vm-tools/stable-${majorVersion}.x/open-vm-tools-${version}.tar.gz";
-    sha256 = "15lwayrz9bpx4z12fj616hsn25m997y72licwwz7kms4sx9ssip1";
+    url = "https://github.com/vmware/open-vm-tools/archive/stable-${version}.tar.gz";
+    sha256 = "1j1fm6sv2rqgg04ifr9s975i93wyr0523iw0mv7xqfgxmz1nvmw7";
   };
+
+  sourceRoot = "open-vm-tools-stable-${version}/open-vm-tools";
 
   buildInputs =
     [ autoreconfHook makeWrapper libmspack openssl pam xercesc icu libdnet procps
       pkgconfig glib gtk gtkmm xlibsWrapper libXinerama libXi libXrender libXrandr libXtst ];
 
-  patchPhase = ''
+  postPatch = ''
      sed -i s,-Werror,,g configure.ac
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
