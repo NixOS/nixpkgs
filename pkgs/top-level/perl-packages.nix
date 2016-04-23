@@ -7325,13 +7325,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MailTools = buildPerlPackage {
-    name = "MailTools-2.13";
+  MailTools = buildPerlPackage rec {
+    name = "MailTools-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.13.tar.gz;
-      sha256 = "1djjl05ndn8dmwri4vw5wfky5sqy7sf63qaijvhf9g5yh53405kj";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1y6zndb4rsn8i65g1bg3b0zb7966cz83q19zg7m7bvxjfkv7wz2b";
     };
-    propagatedBuildInputs = [TimeDate TestPod];
+    propagatedBuildInputs = [ TimeDate ];
+    meta = {
+      description = "Various e-mail related modules";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   MathLibm = buildPerlPackage rec {
