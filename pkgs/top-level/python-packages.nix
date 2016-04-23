@@ -16269,11 +16269,11 @@ in modules // {
 
   pysaml2 = buildPythonPackage rec {
     name = "pysaml2-${version}";
-    version = "3.0.0";
+    version = "3.0.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pysaml2/${name}.tar.gz";
-      sha256 = "1h2wvagvl59642jq0s63mfr01q637vq6526mr8riykrjnchcbbi2";
+      sha256 = "0y2iw1dddcvi13xjh3l52z1mvnrbc41ik9k4nn7lwj8x5kimnk9n";
     };
 
     propagatedBuildInputs = with self; [
@@ -25063,12 +25063,12 @@ in modules // {
 
   unpaddedbase64 = buildPythonPackage rec {
     name = "unpaddedbase64-${version}";
-    version = "1.0.1";
+    version = "1.1.0";
 
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-unpaddedbase64.git";
       rev = "refs/tags/v${version}";
-      sha256 = "f221240a6d414c4244ab906b1dc8983c4d1114acb778cb857f6fc50d710be502";
+      sha256 = "2dad07b53cf816a5c2fc14a1a193b0df63ab5aacaccffb328753e7d3027d434e";
     };
   };
 
