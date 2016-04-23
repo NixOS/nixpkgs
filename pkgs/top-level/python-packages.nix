@@ -431,11 +431,11 @@ in modules // {
 
   aiohttp = buildPythonPackage rec {
     name = "aiohttp-${version}";
-    version = "0.19.0";
+    version = "0.21.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/aiohttp/${name}.tar.gz";
-      sha256 = "9bfb173baec179431a1c8f3566185e8ebbd1517cf4450217087d79e26e44c287";
+      sha256 = "0n8517wc8b6yc925f7zhgl4wqf4ay1w2fzar0pj1h20yfa1wiids";
     };
 
     disabled = pythonOlder "3.4";
