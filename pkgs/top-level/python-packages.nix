@@ -23,6 +23,8 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
+  pypi-sources = builtins.fromJSON (builtins.readFile ../development/python-modules/pypi-sources.json);
+
   # Unique python version identifier
   pythonName =
     if isPy26 then "python26" else
