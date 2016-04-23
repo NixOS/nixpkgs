@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook,
   libmspack, openssl, pam, xercesc, icu, libdnet, procps,
   xlibsWrapper, libXinerama, libXi, libXrender, libXrandr, libXtst,
-  pkgconfig, glib, gtk, gtkmm }:
+  pkgconfig, glib, gtk, gtkmm, iproute, dbus, systemd }:
 
 let
   majorVersion = "10.0";
@@ -32,6 +32,14 @@ in stdenv.mkDerivation rec {
   patches = [ ./recognize_nixos.patch ];
 
   configureFlags = "--without-kernel-modules --without-xmlsecurity";
+
+  postInstall = ''
+	sed -i 's,which ,command -v ,' "$out/etc/vmware-tools/scripts/vmware/network"
+	wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
+		--prefix PATH ':' "${iproute}/bin" \
+		--prefix PATH ':' "${dbus}/bin" \
+		--prefix PATH ':' "${systemd}/bin"
+  '';
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/vmware/open-vm-tools";
