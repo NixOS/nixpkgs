@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec
 {
-  version = "1.4.2";
-  seafileVersion = "4.0.6";
+  version = "5.0.7";
+  seafileVersion = "5.0.7";
   name = "ccnet-${version}";
 
   src = fetchurl
   {
-    url = "https://github.com/haiwen/ccnet/archive/v${seafileVersion}.tar.gz";
-    sha256 = "06srvyphrfx7g18vk899850q0aw8cxx34cj96mjzc3sqm0bkzqsh";
+    url = "https://github.com/haiwen/ccnet/archive/v${version}.tar.gz";
+    sha256 = "1e1c670a85619b174328a15925a050c7a8b323fecd13434992332f5c15e05de1";
   };
 
   buildInputs = [ which automake autoconf pkgconfig libtool vala  python ];
