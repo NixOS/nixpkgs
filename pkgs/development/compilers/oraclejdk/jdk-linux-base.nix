@@ -11,6 +11,7 @@
 { swingSupport ? true
 , stdenv
 , requireFile
+, makeWrapper
 , unzip
 , file
 , xorg ? null
@@ -82,6 +83,8 @@ let result = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;
+
+  buildInputs = [ makeWrapper ];
 
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
@@ -159,6 +162,10 @@ let result = stdenv.mkDerivation rec {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    # Oracle Java Mission Control needs to know where libgtk-x11 and related is
+    wrapProgram "$out/bin/jmc" \
+        --suffix-each LD_LIBRARY_PATH ':' "${rpath}" \
   '';
 
   inherit installjdk pluginSupport;
