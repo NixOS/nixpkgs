@@ -10076,17 +10076,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodLaTeX = buildPerlModule {
+  PodLaTeX = buildPerlModule rec {
     name = "Pod-LaTeX-0.61";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz;
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${name}.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
-    propagatedBuildInputs = [ if_ ];
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ self."if" ];
     meta = {
       homepage = http://github.com/timj/perl-Pod-LaTeX/tree/master;
       description = "Convert Pod data to formatted Latex";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
