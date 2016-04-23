@@ -1,5 +1,7 @@
-{ stdenv, cacert, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
-, cmake, zlib, makeWrapper }:
+{ stdenv, lib, cacert, fetchgit, rustPlatform, file, curl, python, pkgconfig, openssl
+, cmake, zlib, makeWrapper
+# Darwin dependencies
+, libiconv }:
 
 with rustPlatform;
 
@@ -20,7 +22,8 @@ buildRustPackage rec {
 
   depsSha256 = "1x2m7ww2z8nl5ic2nds85p7ma8x0zp654jg7ay905ia95daiabzg";
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ];
+  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ]
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   configurePhase = ''
     ./configure --enable-optimize --prefix=$out --local-cargo=${cargo}/bin/cargo
