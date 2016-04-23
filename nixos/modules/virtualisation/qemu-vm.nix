@@ -149,11 +149,11 @@ let
           ${pkgs.mtools}/bin/mlabel -i /dev/vda2 ::boot
 
           # Mount /boot; load necessary modules first.
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko || true
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko || true
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko || true
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko || true
-          ${pkgs.module_init_tools}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko || true
+          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_cp437.ko.xz || true
+          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/nls/nls_iso8859-1.ko.xz || true
+          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/fat.ko.xz || true
+          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/fat/vfat.ko.xz || true
+          ${pkgs.kmod}/sbin/insmod ${pkgs.linux}/lib/modules/*/kernel/fs/efivarfs/efivarfs.ko.xz || true
           mkdir /boot
           mount /dev/vda2 /boot
 
