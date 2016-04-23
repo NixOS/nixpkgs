@@ -21,43 +21,24 @@ let
     "9.4" = pkgs.postgresql94;
   };
 
-  min = list:
-    builtins.head (builtins.sort builtins.lessThan list);
-  max = list:
-    lib.last (builtins.sort builtins.lessThan list);
-
-  current_memory =
-    let
-      enc_memory =
-        if lib.hasAttrByPath ["parameters" "memory"] cfg.enc
-        then cfg.enc.parameters.memory
-        else null;
-      system_memory =
-        if hasAttr "memory" cfg.system_state
-        then cfg.system_state.memory
-        else null;
-      options = lib.remove null [enc_memory system_memory];
-    in
-      if options == []
-      then 256
-      else min options;
+  current_memory = fclib.current_memory config 256;
 
   shared_memory_max = current_memory / 2 * 1048576;
 
   shared_buffers =
-    min [
-      (max [16 (current_memory / 4)])
+    fclib.min [
+      (fclib.max [16 (current_memory / 4)])
        (shared_memory_max * 4 / 5)];
 
   work_mem =
-    max [1 shared_buffers 200];
+    fclib.max [1 shared_buffers 200];
 
   maintenance_work_mem =
-    max [16 work_mem (current_memory / 20)];
+    fclib.max [16 work_mem (current_memory / 20)];
 
   wal_buffers =
-    max [
-      (min [64 (shared_buffers / 32)])
+    fclib.max [
+      (fclib.min [64 (shared_buffers / 32)])
       1];
 
   listen_addresses =

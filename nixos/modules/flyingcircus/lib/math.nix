@@ -15,4 +15,10 @@ rec {
   byteToHex = x : lib.concatStrings [
     (hexDigit (builtins.div x 16)) (hexDigit (mod x 16))
   ];
+
+  min = list:
+    builtins.head (builtins.sort builtins.lessThan list);
+  max = list:
+    lib.last (builtins.sort builtins.lessThan list);
+
 }
