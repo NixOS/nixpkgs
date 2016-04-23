@@ -5360,11 +5360,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Guard = buildPerlPackage {
-    name = "Guard-1.022";
+  Guard = buildPerlPackage rec {
+    name = "Guard-1.023";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Guard-1.022.tar.gz;
-      sha256 = "0saq9949d13mdvpnls7mw1cy74lm4ncl7agbs7n2jl4sy6bvmw9m";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc";
     };
     meta = {
       maintainers = with maintainers; [ ocharles ];
