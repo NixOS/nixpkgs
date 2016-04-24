@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "arora-${version}";
@@ -10,8 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qt4 ];
-
-  configurePhase = "qmake PREFIX=$out";
+  nativeBuildInputs = [ qmake4Hook ];
 
   meta = with stdenv.lib; {
     platforms = qt4.meta.platforms;

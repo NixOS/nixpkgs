@@ -2,12 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
     name = "tortoisehg-${version}";
-    version = "3.7.1";
-    namePrefix = "";
+    version = "3.7.3";
 
     src = fetchurl {
       url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "1ycf8knwk1rs99s5caq611sk4c4nzwyzq8g35hw5kwj15b6dl4k6";
+      sha256 = "1vahiavpkf9ib2mx8z5i6f0kh072zycazmbrc4sl94p5pvv5w1dh";
     };
 
     pythonPath = with pythonPackages; [ pyqt4 mercurial qscintilla iniparse ];
@@ -15,14 +14,11 @@ pythonPackages.buildPythonApplication rec {
     propagatedBuildInputs = with pythonPackages; [ qscintilla iniparse ];
 
     doCheck = false;
-
-    postUnpack = ''
-     substituteInPlace $sourceRoot/setup.py \
-       --replace "sharedir = os.path.join(installcmd.install_data[rootlen:], 'share')" "sharedir = '$out/share/'"
-    '';
-
-    postInstall = ''
-     ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+    dontStrip = true;
+    buildPhase = "";
+    installPhase = ''
+      ${pythonPackages.python.executable} setup.py install --prefix=$out
+      ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
     '';
 
     meta = {

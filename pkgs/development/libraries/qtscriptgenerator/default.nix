@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4}:
+{ stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation {
   name = "qtscriptgenerator-0.1.0";

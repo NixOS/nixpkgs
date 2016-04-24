@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, makeWrapper, libX11 }:
+{ stdenv, fetchFromGitHub, qtbase, qmakeHook, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "cmst-2016.01.28";
@@ -10,10 +10,9 @@ stdenv.mkDerivation rec {
     owner  = "andrew-bibb";
   };
 
-  buildInputs = [ qtbase makeWrapper ];
+  buildInputs = [ qtbase makeWrapper qmakeHook ];
 
-  configurePhase = ''
-    runHook preConfigure
+  preConfigure = ''
     substituteInPlace ./cmst.pro \
       --replace "/usr/bin" "$out/bin" \
       --replace "/usr/share" "$out/usr/share"
@@ -29,14 +28,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ./apps/rootapp/rootapp.pro \
       --replace "/etc" "$out/etc" \
       --replace "/usr/share" "$out/share"
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    qmake PREFIX=$out
-    make
-    runHook postBuild
   '';
 
   postInstall = ''

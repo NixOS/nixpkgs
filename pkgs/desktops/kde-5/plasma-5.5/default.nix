@@ -81,6 +81,7 @@ let
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
     powerdevil = callPackage ./powerdevil.nix {};
+    startkde = callPackage ./startkde {};
     systemsettings = callPackage ./systemsettings.nix {};
   };
 

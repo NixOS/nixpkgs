@@ -31,13 +31,13 @@ in
 
     # unload module during suspend/hibernate as it crashes the whole system
     powerManagement.powerDownCommands = ''
-      ${pkgs.module_init_tools}/bin/rmmod -f facetimehd
+      ${pkgs.kmod}/bin/lsmod | ${pkgs.gnugrep}/bin/grep -q "^facetimehd" && ${pkgs.kmod}/bin/rmmod -f -v facetimehd
     '';
 
     # and load it back on resume
     powerManagement.resumeCommands = ''
       export MODULE_DIR=/run/current-system/kernel-modules/lib/modules
-      ${pkgs.module_init_tools}/bin/modprobe -v facetimehd
+      ${pkgs.kmod}/bin/modprobe -v facetimehd
     '';
 
   };

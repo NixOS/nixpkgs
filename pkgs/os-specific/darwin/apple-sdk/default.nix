@@ -66,7 +66,18 @@ let
         mkdir -p "$dest"
         pushd "$dest" >/dev/null
 
-        cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
+        # Keep track of if this is a child or a child rescue as with
+        # ApplicationServices in the 10.9 SDK
+        local isChild
+
+        if [ -d "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" ]; then
+          isChild=1
+          cp -R "${sdk}/Library/Frameworks/$path/Versions/$current/Headers" .
+        else
+          isChild=0
+          current="$(readlink "/System/Library/Frameworks/$name.framework/Versions/Current")"
+          cp -R "${sdk}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
+        fi
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
         ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
 
@@ -74,8 +85,17 @@ let
           ln -s "/System/Library/Frameworks/$path/module.map"
         fi
 
-        pushd "${sdk}/Library/Frameworks/$path/Versions/$current" >/dev/null
+        if [ $isChild -eq 1 ]; then
+          pushd "${sdk}/Library/Frameworks/$path/Versions/$current" >/dev/null
+        else
+          pushd "${sdk}/Library/Frameworks/$name.framework/Versions/$current" >/dev/null
+        fi
         local children=$(echo Frameworks/*.framework)
+        if [ "$name" == "ApplicationServices" ]; then
+          # Fixing up ApplicationServices which is missing
+          # CoreGraphics in the 10.9 SDK
+          children="$children Frameworks/CoreGraphics.framework"
+        fi
         popd >/dev/null
 
         for child in $children; do

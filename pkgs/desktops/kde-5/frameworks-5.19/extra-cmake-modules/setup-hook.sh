@@ -7,7 +7,6 @@ _ecmSetXdgDirs() {
 _ecmPropagateSharedData() {
     local sharedPaths=( \
         "config.cfg" \
-        "doc" \
         "kconf_update" \
         "kservices5" \
         "kservicetypes5" \
@@ -20,7 +19,6 @@ _ecmPropagateSharedData() {
         "applications" \
         "desktop-directories" \
         "mime" \
-        "info" \
         "dbus-1" \
         "interfaces" \
         "services" \
@@ -28,6 +26,7 @@ _ecmPropagateSharedData() {
     for dir in ${sharedPaths[@]}; do
         if [ -d "$1/share/$dir" ]; then
             addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+            propagateOnce propagatedBuildInputs "$1"
             propagateOnce propagatedUserEnvPkgs "$1"
             break
         fi

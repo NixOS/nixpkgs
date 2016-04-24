@@ -263,6 +263,7 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
+      emby = 242;
 
       prometheus = 999;
 
@@ -499,6 +500,7 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
+      emby = 242;
 
       prometheus = 999;
 

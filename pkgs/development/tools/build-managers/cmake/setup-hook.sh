@@ -44,6 +44,8 @@ cmakeConfigurePhase() {
     # executable. This flag makes the shared library accessible from its
     # nix/store directory.
     cmakeFlags="-DCMAKE_INSTALL_NAME_DIR=$prefix/lib $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
 
     # Avoid cmake resetting the rpath of binaries, on make install
     # And build always Release, to ensure optimisation flags

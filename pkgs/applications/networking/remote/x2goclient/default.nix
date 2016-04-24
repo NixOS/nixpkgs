@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, makeWrapper, qt4 }:
+{ stdenv, fetchurl, cups, libssh, libXpm, nxproxy, openldap, makeWrapper, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "x2goclient-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cups libssh libXpm nxproxy openldap qt4 ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper qmake4Hook ];
 
   patchPhase = ''
      substituteInPlace Makefile \
@@ -19,7 +19,9 @@ stdenv.mkDerivation rec {
        --replace "-o root -g root" ""
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" ];
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags ETCDIR=$out/etc"
+  '';
 
   enableParallelBuilding = true;
 

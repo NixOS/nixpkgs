@@ -1,6 +1,6 @@
 { stdenv, fetchgit, git,  espeak, SDL, udev, doxygen, cmake, overrideCC#, gcc48
   , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
-  , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects
+  , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmakeHook
   , makeQtWrapper, lndir
   , gst_all_1, qt_gstreamer1, pkgconfig, glibc
   , version ? "2.9.4"
@@ -23,20 +23,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [
-    pkgconfig makeQtWrapper
+    pkgconfig makeQtWrapper qmakeHook
  ] ++ qtInputs;
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
-
-  configurePhase = ''
-    runHook preConfigure
-    mkdir build
-    (cd build && qmake ../qgroundcontrol.pro)
-    runHook postConfigure
-  '';
-
-  preBuild = "pushd build/";
-  postBuild = "popd";
 
   installPhase = ''
     mkdir -p $out/share/applications

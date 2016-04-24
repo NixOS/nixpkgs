@@ -59,6 +59,7 @@ doNotDisplayTwice rec {
   manpages = man-pages; # added 2015-12-06
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
+  module_init_tools = kmod; # added 2016-04-22
   mssys = ms-sys; # added 2015-12-13
   multipath_tools = multipath-tools;  # added 2016-01-21
   mupen64plus1_5 = mupen64plus; # added 2016-02-12

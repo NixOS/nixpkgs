@@ -1,0 +1,31 @@
+Index: kinit-5.19.0/src/kdeinit/kinit.cpp
+===================================================================
+--- kinit-5.19.0.orig/src/kdeinit/kinit.cpp
++++ kinit-5.19.0/src/kdeinit/kinit.cpp
+@@ -658,15 +658,17 @@ static pid_t launch(int argc, const char
+         if (!libpath.isEmpty()) {
+             if (!l.load()) {
+                 if (libpath_relative) {
+-                    // NB: Because Qt makes the actual dlopen() call, the
+-                    //     RUNPATH of kdeinit is *not* respected - see
+-                    //     https://sourceware.org/bugzilla/show_bug.cgi?id=13945
+-                    //     - so we try hacking it in ourselves
+-                    QString install_lib_dir = QFile::decodeName(
+-                            CMAKE_INSTALL_PREFIX "/" LIB_INSTALL_DIR "/");
+-                    libpath = install_lib_dir + libpath;
+-                    l.setFileName(libpath);
+-                    l.load();
++                    // Try to load the library relative to the active profiles.
++                    QByteArrayList profiles = qgetenv("NIX_PROFILES").split(' ');
++                    // Reverse the profile list.
++                    std::reverse(profiles.begin(), profiles.end());
++                    const QString libdir = QString::fromLatin1("/lib/");
++                    Q_FOREACH (const QByteArray &profile, profiles) {
++                        if (!profile.isEmpty()) {
++                            l.setFileName(QFile::decodeName(profile) + libdir + libpath);
++                            if (l.load()) break;
++                        }
++                    }
+                 }
+             }
+             if (!l.isLoaded()) {

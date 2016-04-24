@@ -1,11 +1,17 @@
-{ stdenv, fetchurl, makeWrapper, automoc4, cmake, perl, pkgconfig
-, shared_mime_info, libvorbis, taglib , flac, libsamplerate
+{ stdenv, lib, fetchurl, makeWrapper, automoc4, cmake, perl, pkgconfig
+, shared_mime_info, libvorbis, taglib, flac, libsamplerate
 , libdvdread, lame, libsndfile, libmad, gettext , transcode, cdrdao
-, cdrtools, dvdplusrwtools, vcdimager, cdparanoia , kdelibs
+, cdrtools, dvdplusrwtools, vcdimager, cdparanoia, kdelibs, libdvdcss, ffmpeg
 , kdemultimedia, phonon, libkcddb ? null
 }:
 
-stdenv.mkDerivation rec {
+let
+  # at runtime, k3b needs the executables cdrdao, cdrecord, dvd+rw-format,
+  # eMovix, growisofs, mkisofs, normalize, readcd, transcode, vcdxbuild,
+  # vcdxminfo, and vcdxrip
+  binPath = lib.makeBinPath [ cdrdao dvdplusrwtools transcode vcdimager cdrtools ];
+
+in stdenv.mkDerivation rec {
   name = "k3b-2.0.3a";
 
   src = fetchurl {
@@ -19,18 +25,16 @@ stdenv.mkDerivation rec {
     shared_mime_info libvorbis taglib flac libsamplerate libdvdread
     lame libsndfile libmad stdenv.cc.libc kdelibs
     kdemultimedia phonon libkcddb makeWrapper cdparanoia
+    libdvdcss ffmpeg
   ];
 
   enableParallelBuilding = true;
 
-  # at runtime, k3b needs the executables cdrdao, cdrecord, dvd+rw-format,
-  # eMovix, growisofs, mkisofs, normalize, readcd, transcode, vcdxbuild,
-  # vcdxminfo, and vcdxrip
-  propagatedUserEnvPkgs = [ cdrdao cdrtools dvdplusrwtools transcode vcdimager ];
+  NIX_CFLAGS_LINK = [ "-lcdda_interface" "-lcdda_paranoia" "-ldvdcss" ];
 
   postInstall = ''
     wrapProgram $out/bin/k3b \
-      --prefix LD_LIBRARY_PATH ":" "${cdparanoia}/lib"
+      --prefix PATH ":" "${binPath}"
   '';
 
   meta = with stdenv.lib; {

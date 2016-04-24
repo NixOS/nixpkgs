@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, wxGTK, pkgconfig, gettext, gtk, glib, zlib, perl, intltool,
+{ stdenv, fetchurl, wxGTK30, pkgconfig, gettext, gtk, glib, zlib, perl, intltool,
   libogg, libvorbis, libmad, alsaLib, libsndfile, soxr, flac, lame, fetchpatch,
   expat, libid3tag, ffmpeg, soundtouch /*, portaudio - given up fighting their portaudio.patch */
   }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.1";
+  version = "2.1.2";
   name = "audacity-${version}";
 
   src = fetchurl {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "15c5ff7ac1c0b19b08f4bdcb0f4988743da2f9ed3fab41d6f07600e67cb9ddb6";
+    sha256 = "1ggr6g0mk36rqj7ahsg8b0b1r9kphwajzvxgn43md263rm87n04h";
   };
   patches = [(fetchpatch {
     name = "new-ffmpeg.patch";
@@ -18,12 +18,6 @@ stdenv.mkDerivation rec {
     sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
   })];
 
-  # fix with gcc-5 from http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2012-December/245884.html
-  postPatch = ''
-    substituteInPlace lib-src/libnyquist/nyquist/ffts/src/fftlib.c \
-      --replace 'inline void' 'static inline void'
-  '';
-
   preConfigure = /* we prefer system-wide libs */ ''
     mv lib-src lib-src-rm
     mkdir lib-src
@@ -31,11 +25,11 @@ stdenv.mkDerivation rec {
     rm -r lib-src-rm/
   '';
 
-  configureFlags = "--with-libsamplerate";
+  configureFlags = [ "--with-libsamplerate" ];
 
   buildInputs = [
-    pkgconfig gettext wxGTK gtk expat alsaLib
-    libsndfile soxr libid3tag
+    pkgconfig gettext wxGTK30 expat alsaLib
+    libsndfile soxr libid3tag gtk
     ffmpeg libmad lame libvorbis flac soundtouch
   ]; #ToDo: detach sbsms
 

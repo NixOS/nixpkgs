@@ -15,11 +15,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.6";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "04g7w34qamgy9gqpy75xm03s8xbbslv1735iv1a06z8sphpkgs7m";
+    sha256 = "17sfhg3xfnakk666wlsbhxp4vbn19hlywf5cn1zfcd4zqkcyx30h";
   };
 
   # perl is used for testing go vet
@@ -98,12 +98,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-tools-1.5.patch
-    # Fix bug when using musl (see https://github.com/golang/go/issues/14476)
-    # Should be fixed by go 1.6.1
-    (fetchpatch {
-      url = "https://github.com/golang/go/commit/1439158120742e5f41825de90a76b680da64bf76.patch";
-      sha256 = "0yixpbx056ns5wgd3f4absgiyc2ymmqk8mkhhz5ja90dvilzxcwd";
-    })
   ]
   # -ldflags=-s is required to compile on Darwin, see
   # https://github.com/golang/go/issues/11994

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtoxcore-dev, openal, opencv,
   libsodium, libXScrnSaver, glib, gdk_pixbuf, gtk2, cairo,
-  pango, atk, qrencode, ffmpeg, filter-audio, makeWrapper,
-  qtbase, qtsvg, qttools, qttranslations, sqlcipher }:
+  pango, atk, qrencode, ffmpeg, filter-audio, makeQtWrapper,
+  qtbase, qtsvg, qttools, qmakeHook, qttranslations, sqlcipher }:
 
 let
   version = "1.3.0";
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     [
       libtoxcore-dev openal opencv libsodium filter-audio
       qtbase qttools qtsvg libXScrnSaver glib gtk2 cairo
-      pango atk qrencode ffmpeg qttranslations makeWrapper
+      pango atk qrencode ffmpeg qttranslations makeQtWrapper
       sqlcipher
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig qmakeHook ];
 
   preConfigure = ''
     # patch .pro file for proper set of the git hash
@@ -42,16 +42,10 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags sqlcipher)"
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
     cp qtox $out/bin
-    wrapProgram $out/bin/qtox \
-      --prefix QT_PLUGIN_PATH : ${qtsvg}/lib/qt5/plugins
+    wrapQtProgram $out/bin/qtox
   '';
 
   enableParallelBuilding = true;

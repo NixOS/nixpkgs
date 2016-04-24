@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase }:
+{ stdenv, fetchFromGitLab, doxygen, glib, libaccounts-glib, pkgconfig, qtbase, qmakeHook }:
 
 stdenv.mkDerivation rec {
   name = "accounts-qt-${version}";
@@ -12,12 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib libaccounts-glib qtbase ];
-  nativeBuildInputs = [ doxygen pkgconfig ];
+  nativeBuildInputs = [ doxygen pkgconfig qmakeHook ];
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake PREFIX=$out LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake
-    runHook postConfigure
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags LIBDIR=$out/lib CMAKE_CONFIG_PATH=$out/lib/cmake"
   '';
 
   meta = with stdenv.lib; {

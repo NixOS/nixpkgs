@@ -140,12 +140,16 @@ in modules // {
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
+  pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
+
   pycairo = callPackage ../development/python-modules/pycairo {
   };
 
   pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
+
+  pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
 
   pygame = callPackage ../development/python-modules/pygame { };
 
@@ -166,10 +170,9 @@ in modules // {
     pythonPackages = self;
   };
 
-  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix {
+  pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = self.sip_4_16;
     pythonDBus = self.dbus;
-    inherit (pkgs.qt55) qtbase qtsvg qtwebkit;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
@@ -183,6 +186,8 @@ in modules // {
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
 
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+
+  rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
   sip = callPackage ../development/python-modules/sip { };
 
@@ -453,11 +458,11 @@ in modules // {
 
   aiohttp = buildPythonPackage rec {
     name = "aiohttp-${version}";
-    version = "0.19.0";
+    version = "0.21.5";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/a/aiohttp/${name}.tar.gz";
-      sha256 = "9bfb173baec179431a1c8f3566185e8ebbd1517cf4450217087d79e26e44c287";
+      sha256 = "0n8517wc8b6yc925f7zhgl4wqf4ay1w2fzar0pj1h20yfa1wiids";
     };
 
     disabled = pythonOlder "3.4";
@@ -1724,11 +1729,11 @@ in modules // {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.5.1";
+    name = "betamax-0.6.0";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/b/betamax/${name}.tar.gz";
-      sha256 = "1glzigrbip9w2jr2gcmwa96rffhi9x9l1455dhbcx2gh3pmcykl6";
+      sha256 = "0vw4d53jbbb2kdl7l891h8iyxklqcd6ldvgcyhw9hl40ljdhv1wz";
     };
 
     propagatedBuildInputs = [ self.requests2 ];
@@ -1743,11 +1748,11 @@ in modules // {
 
   betamax-matchers = buildPythonPackage rec {
     name = "betamax-matchers-${version}";
-    version = "0.2.0";
+    version = "0.3.0";
 
     src = pkgs.fetchurl {
        url = "https://pypi.python.org/packages/source/b/betamax-matchers/${name}.tar.gz";
-      sha256 = "13n2dy8s2jx8x8bbx684bff3444584bnmg0zhkfxhxndpy18p4is";
+      sha256 = "039kvqsdcvvlfxjc3n1x2xvjg6qkqbql0p7rc4z7bnxm9kcm88la";
     };
 
     buildInputs = with self; [ betamax requests_toolbelt ];
@@ -4619,6 +4624,40 @@ in modules // {
     };
   });
 
+  neurotools = buildPythonPackage (rec {
+    name = "NeuroTools-${version}";
+    version = "0.3.1";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/N/NeuroTools/${name}.tar.gz";
+      sha256 = "0ly6qa87l3afhksab06vp1iimlbm1kdnsw98mxcnpzz9q07l4nd4";
+    };
+
+    disabled = isPy3k;
+
+    # Tests are not automatically run
+    # Many tests fail (using py.test), and some need R
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      scipy
+      numpy
+      matplotlib
+      tables
+      pyaml
+      urllib3
+      rpy2
+      mpi4py
+    ];
+
+    meta = {
+      description = "Collection of tools to support analysis of neural activity";
+      homepage = https://pypi.python.org/pypi/NeuroTools;
+      license = licenses.gpl2;
+      maintainers = with maintainers; [ nico202 ];
+    };
+  });
+
   jdatetime = buildPythonPackage (rec {
     name = "jdatetime-${version}";
     version = "1.7.1";
@@ -5719,6 +5758,25 @@ in modules // {
     meta = with stdenv.lib; {
       description = "This is a backport of the functools standard library module from";
       homepage = "https://github.com/MiCHiLU/python-functools32";
+    };
+  };
+
+  gandi-cli = buildPythonPackage rec {
+    name = "gandi-cli-${version}";
+    version = "0.18";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "045gnz345nfbi1g7j3gcyzrxrx3hcidaxzr05cb49rcr8nmqh1s3";
+      rev = version;
+      repo = "gandi.cli";
+      owner = "Gandi";
+    };
+    propagatedBuildInputs = with self; [ click ipy pyyaml requests ];
+    doCheck = false;	# Tests try to contact the actual remote API
+    meta = {
+      homepage = http://cli.gandi.net/;
+      description = "Command-line interface to the public Gandi.net API";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ nckx ];
     };
   };
 
@@ -16293,11 +16351,11 @@ in modules // {
 
   pysaml2 = buildPythonPackage rec {
     name = "pysaml2-${version}";
-    version = "3.0.0";
+    version = "3.0.2";
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/p/pysaml2/${name}.tar.gz";
-      sha256 = "1h2wvagvl59642jq0s63mfr01q637vq6526mr8riykrjnchcbbi2";
+      sha256 = "0y2iw1dddcvi13xjh3l52z1mvnrbc41ik9k4nn7lwj8x5kimnk9n";
     };
 
     propagatedBuildInputs = with self; [
@@ -25084,12 +25142,12 @@ in modules // {
 
   unpaddedbase64 = buildPythonPackage rec {
     name = "unpaddedbase64-${version}";
-    version = "1.0.1";
+    version = "1.1.0";
 
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-unpaddedbase64.git";
       rev = "refs/tags/v${version}";
-      sha256 = "f221240a6d414c4244ab906b1dc8983c4d1114acb778cb857f6fc50d710be502";
+      sha256 = "2dad07b53cf816a5c2fc14a1a193b0df63ab5aacaccffb328753e7d3027d434e";
     };
   };
 
@@ -26462,4 +26520,64 @@ in modules // {
     };
   };
 
+  w3lib = buildPythonPackage rec {
+    name = "w3lib-${version}";
+    version = "1.14.2";
+
+    buildInputs = with self ; [ six pytest ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/w3lib/${name}.tar.gz";
+      sha256 = "bd87eae62d208eef70869951abf05e96a8ee559714074a485168de4c5b190004";
+    };
+
+    meta = {
+      description = "A library of web-related functions";
+      homepage = "https://github.com/scrapy/w3lib";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+    };
+  };
+
+  queuelib = buildPythonPackage rec {
+    name = "queuelib-${version}";
+    version = "1.4.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/q/queuelib/${name}.tar.gz";
+      sha256 = "a6829918157ed433fafa87b0bb1e93e3e63c885270166db5884a02c34c86f914";
+    };
+
+    buildInputs = with self ; [ pytest ];
+
+    meta = {
+      description = "A collection of persistent (disk-based) queues for Python";
+      homepage = "https://github.com/scrapy/queuelib";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+    };
+  };
+
+  scrapy = buildPythonPackage rec {
+    name = "Scrapy-${version}";
+    version = "1.0.5";
+
+    disabled = isPy3k;
+
+    buildInputs = with self ; [ pytest ];
+    propagatedBuildInputs = with self ; [ six twisted w3lib lxml cssselect queuelib pyopenssl service-identity ];
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/S/Scrapy/${name}.tar.gz";
+      sha256 = "0a51c785a310d65f6e70285a2da56d48ef7d049bd7fd60a08eef05c52328ca96";
+    };
+
+    meta = {
+      description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
+      homepage = "http://scrapy.org/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ drewkett ];
+      platforms = platforms.linux;
+    };
+  };
 }

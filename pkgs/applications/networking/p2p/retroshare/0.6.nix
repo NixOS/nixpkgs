@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, qt, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+{ stdenv, fetchFromGitHub, cmake, qt4, qmake4Hook, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
 , libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "189qndkfq9kgv3qi3wx8ivla4j8fxr4iv7c8y9rjrjaz8jwdkn5x";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.dev}/lib/glib-2.0/include -I${libxml2.dev}/include/libxml2 -I${sqlcipher}/include/sqlcipher";
+  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/glib-2.0" "-I${glib.dev}/lib/glib-2.0/include" "-I${libxml2.dev}/include/libxml2" "-I${sqlcipher}/include/sqlcipher" ];
 
   patchPhase = ''
     # Fix build error
@@ -29,11 +29,11 @@ stdenv.mkDerivation {
   #    retroshare-gui/src/retroshare-gui.pro \
   #    retroshare-nogui/src/retroshare-nogui.pro
 
-  buildInputs = [ speex qt libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
+  buildInputs = [ speex qt4 libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig qmake4Hook
                   protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ];
 
-  configurePhase = ''
-    qmake PREFIX=$out DESTDIR=$out RetroShare.pro
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags DESTDIR=$out"
   '';
 
   enableParallelBuilding = true;

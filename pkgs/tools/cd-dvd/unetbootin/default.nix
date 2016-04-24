@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, qt4, utillinux, coreutils, which
+{ stdenv, fetchurl, makeWrapper, qt4, utillinux, coreutils, which, qmake4Hook
 , p7zip, mtools, syslinux }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ makeWrapper qt4 ];
+  buildInputs = [ makeWrapper qt4 qmake4Hook ];
 
   # Lots of nice hard-coded paths...
   postUnpack = ''
@@ -30,11 +30,9 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '';
 
-  buildPhase = ''
+  preConfigure = ''
     lupdate unetbootin.pro
     lrelease unetbootin.pro
-    qmake
-    make
   '';
 
   installPhase = ''

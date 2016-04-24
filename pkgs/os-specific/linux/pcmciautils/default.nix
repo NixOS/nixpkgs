@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , yacc, flex
-, sysfsutils, module_init_tools, udev
+, sysfsutils, kmod, udev
 , firmware # Special pcmcia cards.
 , config   # Special hardware (map memory & port & irq)
 , lib      # used to generate postInstall script.
@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "5d8e2efad8a7f692129610603da232f2144851753d8d49a70eeb8eb1be6f6bc3";
   };
 
-  buildInputs = [udev yacc sysfsutils module_init_tools flex];
+  buildInputs = [udev yacc sysfsutils kmod flex];
 
   patchPhase = ''
     sed -i "
-      s,/sbin/modprobe,${module_init_tools}&,;
+      s,/sbin/modprobe,${kmod}&,;
       s,/lib/udev/,$out/sbin/,;
     " udev/* # fix-color */
     sed -i "

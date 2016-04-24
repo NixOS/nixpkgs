@@ -121,11 +121,6 @@ stdenv.mkDerivation {
         # The destination directory must exist or moveToOutput will do nothing
         mkdir -p "$dev/share"
         moveToOutput "share/doc" "$dev"
-
-        mkdir -p "$dev/lib"
-        lndir -silent "$out/lib" "$dev/lib"
-        if [[ -h "$dev/lib/cmake" ]]; then rm "$dev/lib/cmake"; fi
-        if [[ -h "$dev/lib/pkgconfig" ]]; then rm "$dev/lib/pkgconfig"; fi
     }
     preFixupHooks+=(_multioutQtDevs)
 
@@ -259,7 +254,6 @@ stdenv.mkDerivation {
       fixQtModuleCMakeConfig "Xml"
     '';
 
-  inherit lndir;
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;

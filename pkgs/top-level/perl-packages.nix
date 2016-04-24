@@ -973,6 +973,22 @@ let self = _self // overrides; _self = with self; {
       namespaceautoclean ];
   };
 
+  CatalystControllerPOD = buildPerlPackage rec {
+    name = "Catalyst-Controller-POD-1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLER/${name}.tar.gz";
+      sha256 = "ee2a4bb3ed78baa1464335408f284345b6ba0ef6576ad7bfbd7b656c788a39f9";
+    };
+    buildInputs = [ CatalystRuntime ModuleBuild ModuleInstall TestWWWMechanizeCatalyst ];
+    propagatedBuildInputs = [ CatalystPluginStaticSimple CatalystRuntime ClassAccessor FileShareDir FileSlurp JSONXS LWP ListMoreUtils PathClass PodPOM PodPOMViewTOC TestWWWMechanizeCatalyst XMLSimple ];
+    meta = {
+      homepage = http://search.cpan.org/dist/Catalyst-Controller-POD/;
+      description = "Serves PODs right from your Catalyst application";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   CatalystDevel = buildPerlPackage {
     name = "Catalyst-Devel-1.39";
     src = fetchurl {
@@ -4500,16 +4516,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ExceptionBase = buildPerlPackage {
-    name = "Exception-Base-0.25";
+  ExceptionBase = buildPerlPackage rec {
+    name = "Exception-Base-0.2501";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DE/DEXTER/Exception-Base-0.25.tar.gz;
-      sha256 = "1s2is862xba2yy633wn2nklrya36yrlwxlbpqjrv8m31xj2c8khw";
+      url = "mirror://cpan/authors/id/D/DE/DEXTER/${name}.tar.gz";
+      sha256 = "5723dd78f4ac0b4d262a05ea46af663ea00d8096b2e9c0a43515c210760e1e75";
     };
     buildInputs = [ TestUnitLite ];
     meta = {
+      description = "Lightweight exceptions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
@@ -5124,6 +5141,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  FileReadBackwards = buildPerlPackage rec {
+    name = "File-ReadBackwards-1.05";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/U/UR/URI/${name}.tar.gz";
+      sha256 = "82b261af87507cc3e7e66899c457104ebc8d1c09fb85c53f67c1f90f70f18d6e";
+    };
+    meta = {
+      description = "Read a file backwards by lines";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   FileRemove = buildPerlPackage rec {
     name = "File-Remove-1.52";
     src = fetchurl {
@@ -5564,11 +5594,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Guard = buildPerlPackage {
-    name = "Guard-1.022";
+  Guard = buildPerlPackage rec {
+    name = "Guard-1.023";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/Guard-1.022.tar.gz;
-      sha256 = "0saq9949d13mdvpnls7mw1cy74lm4ncl7agbs7n2jl4sy6bvmw9m";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
+      sha256 = "34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc";
     };
     meta = {
       maintainers = with maintainers; [ ocharles ];
@@ -7312,13 +7342,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MailTools = buildPerlPackage {
-    name = "MailTools-2.13";
+  MailTools = buildPerlPackage rec {
+    name = "MailTools-2.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MailTools-2.13.tar.gz;
-      sha256 = "1djjl05ndn8dmwri4vw5wfky5sqy7sf63qaijvhf9g5yh53405kj";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1y6zndb4rsn8i65g1bg3b0zb7966cz83q19zg7m7bvxjfkv7wz2b";
     };
-    propagatedBuildInputs = [TimeDate TestPod];
+    propagatedBuildInputs = [ TimeDate ];
+    meta = {
+      description = "Various e-mail related modules";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   MathLibm = buildPerlPackage rec {
@@ -7550,6 +7585,20 @@ let self = _self // overrides; _self = with self; {
       sha256 = "00wk9950i9q6qwp1vdq9xdddgk54lqd0bhcq2hnijh8xnmhvpmsc";
     };
     buildInputs = [ ProcWaitStat ];
+  };
+
+  MIMELite = buildPerlPackage rec {
+    name = "MIME-Lite-3.030";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
+    };
+    propagatedBuildInputs = [ EmailDateFormat MailTools MIMETypes ];
+    meta = {
+      description = "Low-calorie MIME generator (DEPRECATED)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
   };
 
   MIMEtools = buildPerlPackage {
@@ -9559,6 +9608,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  PDFAPI2 = buildPerlPackage rec {
+    name = "PDF-API2-2.027";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
+      sha256 = "d24db02d902198406270551857830633b289ad39f5a9ba5431246f8cd60e7599";
+    };
+    propagatedBuildInputs = [ FontTTF ];
+    meta = {
+      description = "Facilitates the creation and modification of PDF files";
+      license = stdenv.lib.licenses.lgpl21;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   Pegex = buildPerlPackage rec {
     name = "Pegex-0.60";
     src = fetchurl {
@@ -10063,17 +10126,48 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodLaTeX = buildPerlModule {
+  PodPOM = buildPerlPackage rec {
+    name = "Pod-POM-2.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "1b50fba9bbdde3ead192beeba0eaddd0c614e3afb1743fa6fff805f57c56f7f4";
+    };
+    buildInputs = [ FileSlurper TestDifferences TextDiff ];
+    meta = {
+      homepage = https://github.com/neilb/Pod-POM;
+      description = "POD Object Model";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  PodPOMViewTOC = buildPerlPackage rec {
+    name = "Pod-POM-View-TOC-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLER/${name}.tar.gz";
+      sha256 = "ccb42272c7503379cb1131394620ee50276d72844e0e80eb4b007a9d58f87623";
+    };
+    buildInputs = [ TestMore ];
+    propagatedBuildInputs = [ PodPOM ];
+    meta = {
+      description = "Generate the TOC of a POD with Pod::POM";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  PodLaTeX = buildPerlModule rec {
     name = "Pod-LaTeX-0.61";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TJ/TJENNESS/Pod-LaTeX-0.61.tar.gz;
+      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${name}.tar.gz";
       sha256 = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46";
     };
-    propagatedBuildInputs = [ if_ ];
+    buildInputs = [ ModuleBuild ];
+    propagatedBuildInputs = [ self."if" ];
     meta = {
       homepage = http://github.com/timj/perl-Pod-LaTeX/tree/master;
       description = "Convert Pod data to formatted Latex";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -11839,17 +11933,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TestFatal = buildPerlPackage {
-    name = "Test-Fatal-0.013";
+  TestFatal = buildPerlPackage rec {
+    name = "Test-Fatal-0.014";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.013.tar.gz;
-      sha256 = "1rrndzkjff3bdlzzdsfsd3fhng142la2m74ihkgv17islkp17yq2";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "bcdcef5c7b2790a187ebca810b0a08221a63256062cfab3c3b98685d91d1cbb0";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
-      homepage = https://github.com/rjbs/test-fatal;
+      homepage = https://github.com/rjbs/Test-Fatal;
       description = "Incredibly simple helpers for testing code with exceptions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, qtbase, qtmultimedia
+{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmakeHook
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -18,22 +18,17 @@ stdenv.mkDerivation rec {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw freeglut qtbase qtmultimedia ]
+  buildInputs = [ fftw freeglut mesa_glu qtbase qtmultimedia qmakeHook ]
     ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
     ++ stdenv.lib.optionals jackSupport [ libjack2 ]
     ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
 
-  configurePhase = ''
-    runHook preConfigure
-    mkdir build
-    cd build
-    qmake \
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags \
       CONFIG+=${stdenv.lib.optionalString alsaSupport "acs_alsa"} \
       CONFIG+=${stdenv.lib.optionalString jackSupport "acs_jack"} \
       CONFIG+=${stdenv.lib.optionalString portaudioSupport "acs_portaudio"} \
-      PREFIX="$out" PREFIXSHORTCUT="$out" \
-      ../fmit.pro
-    runHook postConfigure
+      PREFIXSHORTCUT=$out"
   '';
 
   enableParallelBuilding = true;

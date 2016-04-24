@@ -47,11 +47,28 @@ _overrideFirst outputInfo "info" "doc" "$outputMan"
 _multioutConfig() {
     if [ "$outputs" = "out" ] || [ -z "${setOutputFlags-1}" ]; then return; fi;
 
+    # try to detect share/doc/${shareDocName}
+    # Note: sadly, $configureScript detection comes later in configurePhase,
+    #   and reordering would cause more trouble than worth.
+    if [ -z "$shareDocName" ]; then
+        local confScript="$configureScript"
+        if [ -z "$confScript" ] && [ -x ./configure ]; then
+            confScript=./configure
+        fi
+        if [ -f "$confScript" ]; then
+            local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
+        fi
+                                    # PACKAGE_TARNAME sometimes contains garbage.
+        if [ -n "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z-_0-9]'; then
+            shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
+        fi
+    fi
+
     configureFlags="\
         --bindir=${!outputBin}/bin --sbindir=${!outputBin}/sbin \
         --includedir=${!outputInclude}/include --oldincludedir=${!outputInclude}/include \
         --mandir=${!outputMan}/share/man --infodir=${!outputInfo}/share/info \
-        --docdir=${!outputDoc}/share/doc \
+        --docdir=${!outputDoc}/share/doc/${shareDocName} \
         --libdir=${!outputLib}/lib --libexecdir=${!outputLib}/libexec \
         --localedir=${!outputLib}/share/locale \
         $configureFlags"
@@ -61,6 +78,7 @@ _multioutConfig() {
         m4datadir=${!outputDev}/share/aclocal aclocaldir=${!outputDev}/share/aclocal \
         $installFlags"
 }
+
 
 # Add rpath prefixes to library paths, and avoid stdenv doing it for $out.
 _addRpathPrefix "${!outputLib}"
@@ -144,8 +162,8 @@ _multioutDevs() {
 
 # Make the first output (typically "dev") propagate other outputs needed for development.
 # Take the first, because that's what one gets when putting the package into buildInputs.
-# Note: during the build, probably only the "native" development packages are useful.
-# With current cross-building setup, all packages are "native" if not cross-building.
+# Note: with current cross-building setup, all packages are "native" if not cross-building;
+# however, if cross-building, the outputs are non-native. We have to choose the right file.
 _multioutPropagateDev() {
     if [ "$outputs" = "out" ]; then return; fi;
 
@@ -170,8 +188,15 @@ _multioutPropagateDev() {
     fi
 
     mkdir -p "${!outputFirst}"/nix-support
+    local propagatedBuildInputsFile
+    if [ -z "$crossConfig" ]; then
+        propagatedBuildInputsFile=propagated-native-build-inputs
+    else
+        propagatedBuildInputsFile=propagated-build-inputs
+    fi
+
     for output in $propagatedBuildOutputs; do
-        echo -n " ${!output}" >> "${!outputFirst}"/nix-support/propagated-native-build-inputs
+        echo -n " ${!output}" >> "${!outputFirst}"/nix-support/$propagatedBuildInputsFile
     done
 }
 

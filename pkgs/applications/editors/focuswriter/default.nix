@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, pkgconfig, hunspell}:
+{ stdenv, fetchurl, qt4, qmake4Hook, pkgconfig, hunspell }:
 
 stdenv.mkDerivation rec {
   name = "focuswriter-${version}";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1i58jxbiy95ijf81g8c3gwxhcg3irzssna3wv7vhrd57g4lcfj0w";
   };
 
-  buildInputs = [ qt4 pkgconfig hunspell ];
+  buildInputs = [ qt4 qmake4Hook pkgconfig hunspell ];
   
-  configurePhase = "qmake PREFIX=/";
+  qmakeFlags = [ "PREFIX=/" ];
 
-  installPhase = "make install INSTALL_ROOT=$out";
+  installFlags = [ "INSTALL_ROOT=$(out)" ];
 
   meta = {
     description = "Simple, distraction-free writing environment";

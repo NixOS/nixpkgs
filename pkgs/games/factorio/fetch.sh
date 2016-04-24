@@ -8,7 +8,7 @@ source $stdenv/setup
 curl="curl \
  --max-redirs 20 \
  --retry 3 \
- --cacert /etc/ssl/certs/ca-bundle.crt \
+ --cacert $cacert/etc/ssl/certs/ca-bundle.crt \
  $curlOpts \
  $NIX_CURL_FLAGS"
 

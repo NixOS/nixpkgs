@@ -11,35 +11,25 @@ uses the NixOS and Nixpkgs sources provided by the
 <literal>nixos-unstable</literal> channel (kept in
 <filename>/nix/var/nix/profiles/per-user/root/channels/nixos</filename>).
 To modify NixOS, however, you should check out the latest sources from
-Git.  This is done using the following command:
+Git.  This is as follows:
 
 <screen>
-$ nixos-checkout <replaceable>/my/sources</replaceable>
-</screen>
-
-or
-
-<screen>
-$ mkdir -p <replaceable>/my/sources</replaceable>
-$ cd <replaceable>/my/sources</replaceable>
-$ nix-env -i git
 $ git clone git://github.com/NixOS/nixpkgs.git
 $ cd nixpkgs
 $ git remote add channels git://github.com/NixOS/nixpkgs-channels.git
 $ git remote update channels
 </screen>
 
-This will check out the latest NixOS sources to
-<filename><replaceable>/my/sources</replaceable>/nixpkgs/nixos</filename>
-and the Nixpkgs sources to
-<filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
-(The NixOS source tree lives in a subdirectory of the Nixpkgs
-repository.) The remote <literal>channels</literal> refers to a
-read-only repository that tracks the Nixpkgs/NixOS channels (see <xref
-linkend="sec-upgrading"/> for more information about channels). Thus,
-the Git branch <literal>channels/nixos-14.12</literal> will contain
-the latest built and tested version available in the
-<literal>nixos-14.12</literal> channel.</para>
+This will check out the latest Nixpkgs sources to
+<filename>./nixpkgs</filename> the NixOS sources to
+<filename>./nixpkgs/nixos</filename>. (The NixOS source tree lives in
+a subdirectory of the Nixpkgs repository.) The remote
+<literal>channels</literal> refers to a read-only repository that
+tracks the Nixpkgs/NixOS channels (see <xref linkend="sec-upgrading"/>
+for more information about channels). Thus, the Git branch
+<literal>channels/nixos-14.12</literal> will contain the latest built
+and tested version available in the <literal>nixos-14.12</literal>
+channel.</para>
 
 <para>It’s often inconvenient to develop directly on the master
 branch, since if somebody has just committed (say) a change to GCC,
