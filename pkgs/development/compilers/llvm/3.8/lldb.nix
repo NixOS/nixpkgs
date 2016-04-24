@@ -7,7 +7,7 @@
 , which
 , libedit
 , llvm
-, clang
+, clang-unwrapped
 , python
 , version
 }:
@@ -25,11 +25,17 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake python which swig ncurses zlib libedit ];
 
+  preConfigure = ''
+    export CXXFLAGS="-pthread"
+    export LDFLAGS="-ldl"
+  '';
+
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-DLLDB_PATH_TO_LLVM_BUILD=${llvm}"
-    "-DLLDB_PATH_TO_CLANG_BUILD=${clang}"
+    "-DLLDB_PATH_TO_CLANG_BUILD=${clang-unwrapped}"
+    "-DPYTHON_VERSION_MAJOR=2"
+    "-DPYTHON_VERSION_MINOR=7"
   ];
 
   enableParallelBuilding = true;
@@ -39,6 +45,6 @@ stdenv.mkDerivation {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
-    broken = true;
   };
 }
+
