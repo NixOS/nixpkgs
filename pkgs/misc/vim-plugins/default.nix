@@ -2,7 +2,7 @@
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
 , vim_configurable, vimPlugins, xkb_switch, git
-, Cocoa
+, Cocoa ? null
 }:
 
 let
@@ -1682,4 +1682,25 @@ rec {
 
   };
 
+  vim-pandoc-after = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-pandoc-after-2015-06-01";
+    src = fetchgit {
+      url = "git://github.com/vim-pandoc/vim-pandoc-after";
+      rev = "4377665e5c98f29ea838deb3b942200b8dd096ef";
+      sha256 = "1di82bgi7sjn7lmma7g9zbdraamsy9c6g7ms6jgglfvynbbvmgg0";
+    };
+    dependencies = [];
+
+  };
+
+  vimpreviewpandoc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vimpreviewpandoc-2016-03-03";
+    src = fetchgit {
+      url = "git://github.com/tex/vimpreviewpandoc";
+      rev = "7c05b4a7bf55a361c7ac33e6e05f7965daed5889";
+      sha256 = "12xnnsvdsl2wc7fy537pdk6s3nfxw46g1l4xqr0fxzhz712nczk5";
+    };
+    dependencies = [];
+
+  };
 }

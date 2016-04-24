@@ -2355,11 +2355,12 @@ in modules // {
 
 
   blockdiag = buildPythonPackage rec {
-    name = "blockdiag-1.4.7";
+    name = "blockdiag";
+    version = "1.5.3";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/blockdiag/${name}.tar.gz";
-      sha256 = "0bc29sh8hj3hmhclifh1by0n6vg2pl9wkxb7fmljyw0arjas54bf";
+      url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";
+      sha256 = "0r0qbmv0ijnqidsgm2rqs162y9aixmnkmzgnzgk52hiy7ydm4k8f";
     };
 
     buildInputs = with self; [ pep8 nose unittest2 docutils ];
@@ -26578,6 +26579,52 @@ in modules // {
       license = licenses.bsd3;
       maintainers = with maintainers; [ drewkett ];
       platforms = platforms.linux;
+    };
+  };
+  pandocfilters = buildPythonPackage rec{
+    version = "1.3.0";
+    pname = "pandocfilters";
+    name = pname + "-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "jgm";
+      repo = pname;
+      rev = version;
+      sha256 = "0ky9k800ixwiwvra0na6d6qaqcyps83mycgd8qvkrn5r80hddkzz";
+    };
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "A python module for writing pandoc filters, with a collection of examples";
+      homepage = https://github.com/jgm/pandocfilters;
+      license = licenses.mit;
+      maintainers = with maintainers; [];
+    };
+  };
+
+  htmltreediff = buildPythonPackage rec{
+    version = "0.1.2";
+    pname = "htmltreediff";
+    name = pname + "-${version}";
+
+    # Does not work with Py >= 3
+    disabled = !isPy27;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "christian-oudard";
+      repo = pname;
+      rev = "v" + version;
+      sha256 = "16mqp2jyznrw1mgd3qzybq28h2k5wz7vmmz1m6xpgscazyjhvvd1";
+    };
+
+    propagatedBuildInputs = with self; [ lxml html5lib ];
+
+    meta = {
+      description = " Structure-aware diff for html and xml documents";
+      homepage = https://github.com/christian-oudard/htmltreediff;
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [];
     };
   };
 }

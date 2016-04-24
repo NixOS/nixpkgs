@@ -6289,7 +6289,7 @@ in
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
-  tinc-haskell = haskellPackages.callPackage ../development/tools/misc/tinc { };
+  tinc-haskell = haskellPackages.callPackage ../development/tools/misc/tinc-haskell { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
@@ -6474,6 +6474,8 @@ in
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix {};
+
+  cegui = callPackage ../development/libraries/cegui {};
 
   cgal = callPackage ../development/libraries/CGAL {};
 
@@ -13260,6 +13262,12 @@ in
       iceSupport = config.murmur.iceSupport or true;
     }) mumble mumble_git murmur murmur_git;
 
+  mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
+    mumble_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.mumble
+      else null;
+  };
+
   musescore = qt5.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -14916,6 +14924,8 @@ in
   onscripter-en = callPackage ../games/onscripter-en { };
 
   openarena = callPackage ../games/openarena { };
+
+  opendungeons = callPackage ../games/opendungeons { };
 
   openlierox = callPackage ../games/openlierox { };
 
