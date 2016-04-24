@@ -14,7 +14,7 @@ let
   inherit (stdenv.lib) optional optionalString;
 in
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-1.6.1";
+  name = "gst-plugins-bad-1.8.0";
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
-    sha256 = "0rjla9zcal9b5ynagq7cscjs53qrd9bafjkjssrp8s2z2apsjxp1";
+    sha256 = "03m99igngm37653353n5d724bcqw7p6hw6xjw0i2824523fpcqqi";
   };
 
   nativeBuildInputs = [ pkgconfig python ];
