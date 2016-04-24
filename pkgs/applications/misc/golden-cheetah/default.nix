@@ -2,9 +2,10 @@
 , qttools, yacc, flex, zlib, config, qmakeHook, makeQtWrapper }:
 stdenv.mkDerivation rec {
   name = "golden-cheetah-${version}";
-  version = "V4.0-DEV1603";
+  version = "4.0-DEV1603";
   src = fetchurl {
-    url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/${version}.tar.gz";
+    name = "${name}.tar.gz";
+    url = "https://github.com/GoldenCheetah/GoldenCheetah/archive/V${version}.tar.gz";
     sha256 = "12knlzqmq8b3nyl3kvcsnzrbjksgd83mzwzj97wccyfiffjl4wah";
   };
   buildInputs = [
