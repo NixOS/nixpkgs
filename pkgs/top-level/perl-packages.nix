@@ -2284,19 +2284,6 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CGICookieXS ];
   };
 
-  Coro = buildPerlPackage rec {
-    name = "Coro-6.41";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "1r1gam4yyl6w88ga8rkbvj33v1r5ald3ryqlpg13c7y1i79yizxa";
-    };
-    propagatedBuildInputs = [ AnyEvent Guard CommonSense ];
-    meta = {
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
-    };
-  };
-
   CPAN = buildPerlPackage rec {
     name = "CPAN-2.10";
     src = fetchurl {
@@ -9138,22 +9125,6 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Check a remote host for reachability";
-    };
-  };
-
-  NetRabbitFoot = buildPerlPackage {
-    name = "Net-RabbitFoot-1.03";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/I/IK/IKUTA/Net-RabbitFoot-1.03.tar.gz;
-      sha256 = "0544b1914e7847b32b60a643abc6f0b1fdc6d4a816afd84bcd3eee0c28b001ac";
-    };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ AnyEventRabbitMQ ConfigAny Coro JSONXS ListMoreUtils Moose MooseXAppCmd MooseXAttributeHelpers MooseXConfigFromFile ];
-    meta = {
-      description = "An Asynchronous and multi channel Perl AMQP client";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
