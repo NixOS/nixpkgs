@@ -147,11 +147,11 @@ let
   };
 
   tools = buildFromGitHub {
-    rev = "b48dc8da98ae78c3d11f220e7d327304c84e623a";
-    version = "2015-08-24";
+    rev = "c887be1b2ebd11663d4bf2fbca508c449172339e";
+    version = "2016-02-04";
     owner = "golang";
     repo = "tools";
-    sha256 = "187p3jjxrw2qjnzqwwrq7f9w10zh6vcnwnfl3q7ms8rbiffpjy5c";
+    sha256 = "15cm7wmab5na4hphvriazlz639882z0ipb466xmp7500rn6f5kzf";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
