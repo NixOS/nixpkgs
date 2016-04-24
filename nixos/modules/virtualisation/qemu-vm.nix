@@ -403,7 +403,7 @@ in
     boot.postBootCommands =
       ''
         if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
-          ${config.nix.package}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
+          ${config.nix.package.out}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
         fi
       '';
 
