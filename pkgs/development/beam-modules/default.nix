@@ -1,4 +1,4 @@
-{ stdenv, pkgs }: #? import <nixpkgs> {} }:
+{ stdenv, pkgs }:
 
 let
   self = rec {
