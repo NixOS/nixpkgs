@@ -7377,11 +7377,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260802";
+    name = "Math-BigRat-0.260803";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "1b1ed448c355677bf6403705f8428fee5bdf2bb138a3fe721bf51414c1695508";
+      sha256 = "0558fab8ffe0de8751ccfa3bd129d6f34b82cf75454de82b051d4ddffd4ec99b";
     };
+    propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Arbitrary big rational numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
