@@ -48,9 +48,11 @@ in stdenv.mkDerivation rec
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
   ] ++ stdenv.lib.optional enableSharedLibraries
+  [
       "-DBUILD_SHARED_LIBS=OFF" # make libLLVM.so have no dynamic dependencies
       "-DLLVM_BUILD_LLVM_DYLIB_ON"
       "-DLLVM_DYLIB_EXPORT_ALL=ON"
+  ]
     ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
     ++ stdenv.lib.optionals (isDarwin)
@@ -62,7 +64,7 @@ in stdenv.mkDerivation rec
   # NIX_LDFLAGS = "-lpthread";
 
   postBuild = ''
-    rm -rf $out
+    rm -rf $outs
     paxmark m bin/{lli, llvm-rtdyld}
 
     paxmark m unittests/ExecutionEngine/JIT/JITTests
