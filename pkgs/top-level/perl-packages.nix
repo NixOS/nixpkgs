@@ -83,7 +83,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ AlgorithmDiff ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -125,7 +125,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "16nnqzxy5baiar6gxnq5w296mmjgijcn1jq8rp867nksph03mxz8";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -154,7 +154,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "An asynchronous and multi channel Perl AMQP client";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -227,7 +227,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/app-cmd;
       description = "Write command line apps with less suffering";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -581,7 +581,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Wrap OP check callbacks";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -607,7 +607,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [CarpClan];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -727,7 +727,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ StringCRC32 ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -741,7 +741,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perl client for B<memcached>, in C language";
       license = "perl";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -755,7 +755,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TimeDate DBFile DigestSHA1 FileNFSLock HeapFibonacci IOString ];
     doCheck = false; # can time out
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -806,7 +806,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [HTMLTiny LWP];
     buildInputs = [TestPod];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -919,7 +919,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "HTTP Basic and Digest authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -1149,7 +1149,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Flexible caching support for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -1165,7 +1165,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "HTTP/1.1 cache validators for Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -1229,7 +1229,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Unicode aware Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -1524,7 +1524,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TestException ];
     meta = {
       description = "Convert flat hash to nested data using TT2's dot convention";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -1645,7 +1645,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -2250,7 +2250,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ SymbolUtil ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -2509,7 +2509,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/dist/Crypt-Random-Source;
       description = "Get weak or strong random data from pluggable sources";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -2695,7 +2695,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Polymorphic data cloning";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -2942,7 +2942,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/release/Data-UUID-MT;
       description = "Fast random UUID generator using the Mersenne Twister algorithm";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3012,7 +3012,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [CarpClan BitVector];
     doCheck = false; # some of the checks rely on the year being <2015
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3167,7 +3167,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Parses ISO8601 formats";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3223,7 +3223,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Parse and format PostgreSQL dates and times";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3595,7 +3595,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/dist/DBIx-Connector/;
       description = "Fast, safe DBI connection and transaction management";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3645,7 +3645,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DBI ];
     meta = {
       description = "Very complete easy-to-use OO interface to DBI";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3668,7 +3668,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Find memory cycles in objects";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3684,7 +3684,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Adding keywords to perl, in perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -3731,7 +3731,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ Moose namespaceclean SubExporter Testuseok TestWarn ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3815,7 +3815,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Keyed-Hashing for Message Authentication";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -3862,7 +3862,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ LWP ];
     meta = {
       description = "Perl extension for getting MD5 sums for files and urls";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4273,7 +4273,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Generate world unique message-ids";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4289,7 +4289,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Email-MIME;
       description = "Easy MIME message handling";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -4303,7 +4303,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Email-MIME-ContentType;
       description = "Parse a MIME Content-Type Header";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -4318,7 +4318,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Email-MIME-Encodings;
       description = "A unified interface to MIME encoding and decoding";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -4475,7 +4475,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1qhmj15a66h90pjl2dgnxsb9jj3b1r5mpvnr87cafcl8g69z0jr4";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4513,7 +4513,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Lightweight exceptions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -4535,7 +4535,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ constantboolean ExceptionBase ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4549,7 +4549,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4566,7 +4566,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://open-exodus.net/projects/Exporter-Declare;
       description = "Exporting done right";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4680,7 +4680,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4835,7 +4835,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ExceptionWarning TestAssert TestUnitLite ];
     propagatedBuildInputs = [ ExceptionBase ExceptionDied ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -4871,7 +4871,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://open-exodus.net/projects/Fennec-Lite;
       description = "Minimalist Fennec, the commonly used bits";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5096,7 +5096,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1kclhmyha2xijq49darlz82f3bn7gq3saycxpfiz3dndqhr5i9iz";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5123,7 +5123,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/release/File-pushd;
       description = "Change directory temporarily for a limited scope";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5160,7 +5160,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://github.com/ingydotnet/file-share-pm/tree;
       description = "Extend File::ShareDir to Local Libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5187,7 +5187,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Install shared files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5481,7 +5481,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ pkgs.gnupg1orig ];
     meta = {
       platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -5588,7 +5588,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "34c4ddf91fc93d1090d86da14df706d175b1610c67372c01e12ce9555d4dd1dc";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5661,7 +5661,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ Testuseok ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5673,7 +5673,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1plv2djbyhvkdcw2ic54rdqb745cwksxckgzvw7ssxiir7rjknnc";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5796,7 +5796,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ClassLoad DataClone DateTime DateTimeFormatStrptime EmailValid FileShareDir HTMLTree JSON ListAllUtils Moose MooseXGetopt MooseXTypes MooseXTypesCommon MooseXTypesLoadableClass SubExporter SubName TryTiny aliased namespaceautoclean ];
     meta = {
       description = "HTML forms using Moose";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5879,7 +5879,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestBase ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -5977,7 +5977,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Add XPath support to HTML::TreeBuilder";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -6225,7 +6225,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/ingydotnet/io-all-pm/tree;
       description = "IO::All of it to Graham and Damian!";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -6405,7 +6405,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/io-tiecombine;
       description = "Produce tied (and other) separate but combined variables";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -6721,7 +6721,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1ylz6yhjifblhmnva0k05ch12a4cdii5v0icah69ma1gdhsidnk0";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -6880,7 +6880,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Combines List::Util and List::MoreUtils in one bite-sized package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -6914,7 +6914,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1xcsgz8898h670zmwqd8azfn3a2y9nq7z8cva9dsyhzkk8ajmra1";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7005,7 +7005,7 @@ let self = _self // overrides; _self = with self; {
       description = "Perl module for manipulating .po entries from GNU gettext";
       license = "unknown";
       platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -7054,7 +7054,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Simple logging interface with a contextual log";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7069,7 +7069,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Dispatches messages to one or more outputs";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7263,7 +7263,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ LWP HookLexWrap ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
     # Tests require network connectivity
@@ -7443,7 +7443,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://search.cpan.org/dist/Math-Random-ISAAC;
       description = "Perl interface to the ISAAC PRNG algorithm";
       license = with stdenv.lib.licenses; [ publicDomain mit artistic2 gpl3 ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7458,7 +7458,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Auto-seeded Mersenne Twister PRNGs";
       license = "unrestricted";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7474,7 +7474,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Cryptographically-secure, cross-platform replacement for rand()";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7505,7 +7505,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Tools for creating Meta objects to track custom metrics";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7520,7 +7520,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Basic method declarations with signatures, without source filters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7783,7 +7783,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Declare author-only dependencies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7798,7 +7798,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Designate tests only run by module authors";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -7954,7 +7954,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ pkgs.unzip ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8106,7 +8106,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/MooseX-ABC;
       description = "Abstract base classes for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8133,7 +8133,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8258,7 +8258,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Extend your attribute interfaces (deprecated)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8271,7 +8271,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ DataVisitor HashUtilFieldHashCompat Moose namespaceclean Testuseok ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8287,7 +8287,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "An abstract Moose role for setting attributes from a configfile";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8349,7 +8349,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/pshangov/moosex-has-options;
       description = "Succinct options for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8506,7 +8506,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Testuseok TestTableDriven ];
     propagatedBuildInputs = [ ListMoreUtils Moose MooseXGetopt MooseXTypes MooseXTypesPathClass namespaceautoclean ParamsUtil ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8538,7 +8538,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ Moose TestFatal TestRequires ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8606,7 +8606,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/moose/MooseX-Types-Common;
       description = "A library of commonly used type constraints";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
     };
   };
 
@@ -8618,7 +8618,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException Testuseok ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8646,7 +8646,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuildTiny Moose TestFatal ];
     propagatedBuildInputs = [ ClassLoad ModuleRuntime Moose MooseXTypes namespaceautoclean ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
       homepage = https://github.com/moose/MooseX-Types-LoadableClass;
       description = "ClassName type constraint with coercion to load the class";
@@ -8679,7 +8679,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/karenetheridge/moosex-types-path-tiny;
       description = "Path::Tiny types and coercions for Moose";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8709,7 +8709,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/dagolden/moosex-types-stringlike;
       description = "Moose type constraints for strings or string-like objects";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8726,7 +8726,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/MooseX-Types-Structured;
       description = "MooseX::Types::Structured - Structured Type Constraints for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8739,7 +8739,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass namespaceclean Testuseok URI URIFromHash ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8914,7 +8914,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Perl extension to create signatures for AWS requests";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -8984,7 +8984,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Manage Amazon S3 policies for HTTP POST forms";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -9001,7 +9001,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Advanced Message Queue Protocol (de)serialization and representation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -9032,7 +9032,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/metabrainz/CoverArtArchive;
       description = "Query the coverartarchive.org";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -9261,7 +9261,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Comprehensive inside-out object support module";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -9538,7 +9538,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/release/Path-Tiny;
       description = "File path utility";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
     preConfigure =
@@ -9772,7 +9772,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Display information about the current request/response";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10310,7 +10310,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/pod/Redis;
       description = "Perl binding for Redis database";
       license = stdenv.lib.licenses.artistic2;
-      maintainers = with maintainers; [ ocharles rycee ];
+      maintainers = with maintainers; [ rycee ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10390,7 +10390,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://jaldhar.github.com/REST-Utils;
       description = "Utility functions for REST applications";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10475,7 +10475,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ SOAPLite ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10626,7 +10626,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10662,7 +10662,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perl's Web Services Toolkit";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10855,7 +10855,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ NumberFormat ];
     meta = {
       license = "open_source";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -10942,7 +10942,7 @@ let self = _self // overrides; _self = with self; {
         sha256 = "0m3hjk292hnxyi8nkfy8hlr1khnbf2clgkb4kzj0ycq8gcd2z0as";
       };
       meta = {
-        maintainers = with maintainers; [ ocharles ];
+        maintainers = with maintainers; [ ];
         platforms   = stdenv.lib.platforms.unix;
       };
   };
@@ -10968,7 +10968,7 @@ let self = _self // overrides; _self = with self; {
         sha256 = "12ls7f7847i4qcikkp3skwraqvjphjiv2zxfhl5d49326f5myr7x";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11037,7 +11037,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0dfxhr6hxc2majkkrm0qbx3qcbykzpphbj2ms93dc86f7183c1p6";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11076,7 +11076,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Use TT to interpolate lexical variables";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11292,7 +11292,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0cnwwrd5d6i80f33s7n2ak90rh4s53ss7q57wndrpkpr4bfn3djm";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11384,7 +11384,7 @@ let self = _self // overrides; _self = with self; {
       description = "Stream TAP from pgTAP test scripts";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       platforms = stdenv.lib.platforms.linux;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -11455,7 +11455,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11482,7 +11482,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ TemplateToolkit ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11495,7 +11495,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ JSON TemplateToolkit ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11718,7 +11718,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ClassInspector TestUnitLite ];
     propagatedBuildInputs = [ constantboolean ExceptionBase SymbolUtil ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11874,7 +11874,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://metacpan.org/release/Test-EOL;
       description = "Check the correct line endings in your project";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -11899,7 +11899,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://metacpan.org/release/Test-FailWarnings;
       description = "Add test failures if warnings are caught";
       license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12007,7 +12007,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ JSONAny TestDifferences TestTester ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12041,7 +12041,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ DevelCycle PadWalker ];
     meta = {
       description = "Verifies code hasn't left circular references";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms = stdenv.lib.platforms.unix;
     };
   };
@@ -12057,7 +12057,7 @@ let self = _self // overrides; _self = with self; {
     meta = with stdenv.lib; {
       description = "Simulating other classes";
       license = licenses.lgpl2Plus;
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = platforms.unix;
     };
   };
@@ -12070,7 +12070,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ SUPER ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12150,7 +12150,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Check the presence of tabs in your project";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12280,7 +12280,7 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/rjbs/Test-Routine;
       description = "Composable units of assertion";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12356,7 +12356,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Write tests, not scripts that run them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12391,7 +12391,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Unit testing without external dependencies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12447,7 +12447,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Test fallback behaviour in absence of modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12490,7 +12490,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CGI TestWWWMechanize WWWMechanizeCGI ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12517,7 +12517,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12734,7 +12734,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Spy on objects to achieve test doubles (mock testing)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12762,7 +12762,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Micro template engine with Perl5 language";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12965,7 +12965,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Remove leading and/or trailing whitespace from strings";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -12977,7 +12977,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
     };
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -13024,7 +13024,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ URI ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -13404,7 +13404,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Wrapper around ICU collation services";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
       broken = true; # tests fail http://hydra.nixos.org/build/25141764/nixlog/1/raw
     };
@@ -13506,7 +13506,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Build a URI from a set of named parameters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -13615,7 +13615,7 @@ let self = _self // overrides; _self = with self; {
         --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
     '';
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -13849,7 +13849,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "A re-usable XPath engine for DOM-like trees";
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
@@ -13924,7 +13924,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ XMLParser ];
     meta = {
-      maintainers = with maintainers; [ ocharles ];
+      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
