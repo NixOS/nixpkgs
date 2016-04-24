@@ -23161,28 +23161,20 @@ in modules // {
     };
   };
 
-  tornado = buildPythonPackage rec {
-    name = "tornado-${version}";
-    version = "4.2.1";
+  tornado = self.tornado_4_2;
 
+  tornado_4_3 = buildPythonPackage {
+    name = "tornado";
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969";
-    };
   };
 
-  tornado_4_0_1 = buildPythonPackage rec {
-    name = "tornado-${version}";
+  tornado_4_2 = self.tornado_4_3.override {
+    version = "4.2.1";
+  };
+
+  # Used by octoprint
+  tornado_4_0_1 = self.tornado_4_3.override {
     version = "4.0.1";
-
-    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/t/tornado/${name}.tar.gz";
-      sha256 = "00crp5vnasxg7qyjv89qgssb69vd7qr13jfghdryrcbnn9l8c1df";
-    };
   };
 
   tokenlib = buildPythonPackage rec {

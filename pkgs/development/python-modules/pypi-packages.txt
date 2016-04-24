@@ -75,6 +75,7 @@ Sphinx
 statsmodels
 tabulate
 toolz
+tornado
 traitlets
 traits
 tqdm

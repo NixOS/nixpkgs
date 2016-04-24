@@ -7245,6 +7245,148 @@
       }
     }
   },
+  "tornado": {
+    "latest_version": "4.3",
+    "meta": {
+      "description": "Tornado is a Python web framework and asynchronous networking library, originally developed at FriendFeed",
+      "homepage": "http://www.tornadoweb.org/",
+      "license": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "versions": {
+      "0.2": {
+        "sha256": "ed1594a264dee1d1432a08b4c5564e5ec098bf3623fe1a66a879750997b454b9",
+        "url": "https://pypi.io/packages/5a/f1/f5fc3e5a155996b6fcf3051e7061709ab66ff175cf5642044523cbb66fd0/tornado-0.2.tar.gz"
+      },
+      "1.0": {
+        "sha256": "6b6743afbe3282434251ef5f4c681f8ecb63a01d8230771bce95fa05fdccc9da",
+        "url": "https://pypi.io/packages/01/ff/3fe5581bbdec37c396dd04ae3e5019c31e45cc05a6afc5276ff990fe1667/tornado-1.0.tar.gz"
+      },
+      "1.1": {
+        "sha256": "3c3d8cee02b38e99fc0f1cf148651fbe0439a3d244b5fe147c7e3195a2275c99",
+        "url": "https://pypi.io/packages/f9/58/f19092451cdf2bd2ff5822a81153c049fa21d62cb0866cb2680202827d2d/tornado-1.1.tar.gz"
+      },
+      "1.1.1": {
+        "sha256": "88e930200859d3d83add1f9b17cb44574b19ba84ac50222178314b283960416e",
+        "url": "https://pypi.io/packages/b0/ca/4a5b1fc704757bc946d3c7d3916350efff344ee3ab5c85998cd51b48e2c3/tornado-1.1.1.tar.gz"
+      },
+      "1.2": {
+        "sha256": "73f054d20dc47dc02ac7274a09201afe36676dd72773a36b73b9e698f079bcc5",
+        "url": "https://pypi.io/packages/bb/5d/0fc9ca2a2b936007dc8e910d18e4de9bd6d63c42c26c9051ab04c5aafc66/tornado-1.2.tar.gz"
+      },
+      "1.2.1": {
+        "sha256": "a0cc7385f85061211816d3e0fa54b2bce30ff6338806f3167de3303ee01beee4",
+        "url": "https://pypi.io/packages/74/a0/c99f504adbf39c339df4c0619c82f101c0bfb17f0c85065ffc96de9198df/tornado-1.2.1.tar.gz"
+      },
+      "2.0": {
+        "sha256": "24c445f0cd2b95f5c637b90e080ea187b185b7e45bc0e334359b62e433132c4e",
+        "url": "https://pypi.io/packages/74/af/e90c7643bae2cfb10933312329ef4304843f93482ff5a2beed32938c44f0/tornado-2.0.tar.gz"
+      },
+      "2.1": {
+        "sha256": "036b2987b96341f8d9075f72a171a27a59b403e2c385446696c7d1a11497f1ab",
+        "url": "https://pypi.io/packages/07/97/619800ed69a46bc0c0fdc6c9a595ddedd18bab32876b8eadfc9a2ebd583c/tornado-2.1.tar.gz"
+      },
+      "2.1.1": {
+        "sha256": "cfb3808d62d3b27f5db2a7599043b9a419ddbad518e30353e78f27bc02e064b5",
+        "url": "https://pypi.io/packages/68/cd/89f3838913bc999c5d3692e8069314f4dec4e099636ee36f65b23d867b67/tornado-2.1.1.tar.gz"
+      },
+      "2.2": {
+        "sha256": "246f9c7cd476fc17a09c86cbcbab2350353dc0c6d9220e1acc8814186a1a0466",
+        "url": "https://pypi.io/packages/7f/0c/9f276b1575b1f787623258c9db44afa4e8a65867b86a1ded910e26670052/tornado-2.2.tar.gz"
+      },
+      "2.2.1": {
+        "sha256": "466fea7696457be3d7b9c9a97c16011f0988788336e7d6fd344554a042d203c1",
+        "url": "https://pypi.io/packages/d8/da/b44fa82b5396b23b2ed88e84b04c3b477d88e8891ceb801dcc21ab6888b2/tornado-2.2.1.tar.gz"
+      },
+      "2.3": {
+        "sha256": "627ef58b7134781c814ac81d83cd435d4b9ebf3b5ba94c2102a1259740c4415c",
+        "url": "https://pypi.io/packages/2d/3e/5bdd940faa3fb7134055c88d236b9c6cb84d279ac88713825da7b980a4d2/tornado-2.3.tar.gz"
+      },
+      "2.4": {
+        "sha256": "154f69547fd4731f3472b4094055567c3836b2af613068499cc6d09c2333ffbf",
+        "url": "https://pypi.io/packages/2d/9a/38e855094bd11cba89cd2a50a54c31019ef4a45785fe12be6aa9a7c633de/tornado-2.4.tar.gz"
+      },
+      "2.4.1": {
+        "sha256": "14d392cf14698eba75b9299748fa83716f7c02fc49684dfc5011668c30ba6b00",
+        "url": "https://pypi.io/packages/2b/29/c8590fd2072afd307412277a4505e282225425d89e556e2cc223eb2ecad7/tornado-2.4.1.tar.gz"
+      },
+      "3.0": {
+        "sha256": "f5740cd779caa1effb0e6f079433c97bc1b7948c88b296279b63faa463b4222d",
+        "url": "https://pypi.io/packages/94/28/496d3eb40f3f5a3c315f94830c729f2dff00e637b560ed29d8fd48f374da/tornado-3.0.tar.gz"
+      },
+      "3.0.1": {
+        "sha256": "1d0f13df1358ba8f0511bf2d2f7b2cf74abb46f43d45974f8f0797bfcbfbe8f3",
+        "url": "https://pypi.io/packages/5a/03/459c9a4565cabf02d151d0392dc26ef714e3730ac349b4cd0dc27e338287/tornado-3.0.1.tar.gz"
+      },
+      "3.0.2": {
+        "sha256": "9dd868586871ff18579ddef4ba962a206aa12da21da7df23ea6296e8759c6651",
+        "url": "https://pypi.io/packages/e1/0d/53e1d7de1dcee2b75a2e5bbba43c8f2e51a406de1d44625ae069c4ebe161/tornado-3.0.2.tar.gz"
+      },
+      "3.1": {
+        "sha256": "898b577e37b8681bf3d31483b7a30a2db062e99fb1b2b2cb65d203759d3a88d0",
+        "url": "https://pypi.io/packages/fe/f2/b61b801ffb8426f6c039f9c5fc4dd98e75589b1d66cf098a5f275f26960f/tornado-3.1.tar.gz"
+      },
+      "3.1.1": {
+        "sha256": "345904bfe4a0ce5d687203f783986a73cfd7dc3a9957ee3342cd43d4e310fdc6",
+        "url": "https://pypi.io/packages/c9/52/90892c57793f1fb13eeb745adfa32a325ee59875eac46719c641e96f54ec/tornado-3.1.1.tar.gz"
+      },
+      "3.2": {
+        "sha256": "c8c2949c8d42af781437e356978f00a42b16a090612573cd7385c62451a00c2b",
+        "url": "https://pypi.io/packages/5f/f1/12c9fb39434a10b9851d404f3c6db67b48bf4a46929c76138e91b9b8c3c3/tornado-3.2.tar.gz"
+      },
+      "3.2.1": {
+        "sha256": "4a5f0b1b381d80ec320c7c8f3265e6008afc527cc35b6c36d03acf18c21fcac6",
+        "url": "https://pypi.io/packages/29/c9/7ad276f8309ddf55ead1d515e69fda2f62dde8c6a08059c7fbbc7c650478/tornado-3.2.1.tar.gz"
+      },
+      "3.2.2": {
+        "sha256": "11592d3ed0d2c97ce2c735049e70d72243213579f48b8b28fe292594ba35b88e",
+        "url": "https://pypi.io/packages/55/10/1ec5c6f225a91758353e551fc39493a627a4cb401a0218f9929f0672dfc8/tornado-3.2.2.tar.gz"
+      },
+      "4.0": {
+        "sha256": "ea5a7eba713befffb428ba93f57e9e15f548632d363cdfdcb331e09d27877026",
+        "url": "https://pypi.io/packages/3f/69/dd214321e2d85baa95873536974a2d0e38ffffb492769e09a0ecd22d7316/tornado-4.0.tar.gz"
+      },
+      "4.0.1": {
+        "sha256": "ae058668b276b1ec7383cfc911323e6d27b3b47e38a12d3d3eaf6b6577b99901",
+        "url": "https://pypi.io/packages/c5/9d/b72f3f5f0e966a112e91dc1b457ec931381f802af75c964e565e7c3dca86/tornado-4.0.1.tar.gz"
+      },
+      "4.0.2": {
+        "sha256": "900c5124ebdb6598ca8e8a0c5888f41a5f14117952d5515258e3d20222b21bfa",
+        "url": "https://pypi.io/packages/66/bb/782999291b390181aa2c38ac3ad167567d933e92c0d7ce3f421b3abe4586/tornado-4.0.2.tar.gz"
+      },
+      "4.1": {
+        "sha256": "99abd3aede45c93739346ee7384e710120121c3744da155d5cff1c0101702228",
+        "url": "https://pypi.io/packages/ca/71/40996a61c5551871f4315eb60b4f0cbef6d62e5147a0c7b2c64a80a18286/tornado-4.1.tar.gz"
+      },
+      "4.1b2": {
+        "sha256": "f6ed424a83727c6d243ff63db0b15b7e66fd1881aa1124ffa955f10165891544",
+        "url": "https://pypi.io/packages/ae/35/545417764283761b99ccc788d99f94dc138c972d1547251b29f1e0ebb3f2/tornado-4.1b2.tar.gz"
+      },
+      "4.2": {
+        "sha256": "e8b1207da67dbdceebfb291292b4ef1b547d6171525bec1b366853f923456a5f",
+        "url": "https://pypi.io/packages/b5/f6/73e51867c998bf8d0f815fcc97f5e6ee6d2ced0b000ef23e8de115546e85/tornado-4.2.tar.gz"
+      },
+      "4.2.1": {
+        "sha256": "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969",
+        "url": "https://pypi.io/packages/ec/af/c40ad78dacdef134f3e08b3103c3c859b14ceb9639d344811339227b6444/tornado-4.2.1.tar.gz"
+      },
+      "4.2b1": {
+        "sha256": "216e505f14978143248030e62c275853272316fbd20f3447e40c7295898a2a8e",
+        "url": "https://pypi.io/packages/9e/f4/628a4b7751aa49106bcb5c1c532c0d2ad7b64b5ec8472986bfcba82cc7d7/tornado-4.2b1.tar.gz"
+      },
+      "4.3": {
+        "sha256": "c9c2d32593d16eedf2cec1b6a41893626a2649b40b21ca9c4cac4243bde2efbf",
+        "url": "https://pypi.io/packages/21/29/e64c97013e97d42d93b3d5997234a6f17455f3744847a7c16289289f8fa6/tornado-4.3.tar.gz"
+      },
+      "4.3b1": {
+        "sha256": "c7ddda61d9469c5745f3ac00e480ede0703dd1a4ef540a3d9bd5e03e9796e430",
+        "url": "https://pypi.io/packages/c9/b0/bd4ba081d2084ccc7e99ab1d8039aeb91b44918f0fd2232fd6e95ce78666/tornado-4.3b1.tar.gz"
+      },
+      "4.3b2": {
+        "sha256": "77be9fc537cc499fbf082e8b487fbd9302d0ae6a761f18fd2814bb482e57a0ed",
+        "url": "https://pypi.io/packages/c8/eb/8d5b04286573f5e4c131e7e9dd3c7253bad90daf8e12e8a657e862f59c16/tornado-4.3b2.tar.gz"
+      }
+    }
+  },
   "tqdm": {
     "latest_version": "4.4.1",
     "meta": {
