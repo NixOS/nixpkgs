@@ -48,12 +48,13 @@ in stdenv.mkDerivation rec
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_ENABLE_RTTI=ON"
   ] ++ stdenv.lib.optional enableSharedLibraries
-    "-DBUILD_SHARED_LIBS=ON"
+      "-DBUILD_SHARED_LIBS=OFF" # make libLLVM.so have no dynamic dependencies
+      "-DLLVM_BUILD_LLVM_DYLIB_ON"
+      "-DLLVM_DYLIB_EXPORT_ALL=ON"
     ++ stdenv.lib.optional (!isDarwin)
     "-DLLVM_BINUTILS_INCDIR=${binutils}/include"
     ++ stdenv.lib.optionals (isDarwin)
   [
-    #"-DLLVM_ENABLE_LIBCXX=ON"
     "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
     "-DCAN_TARGET_i386=false"
   ];
