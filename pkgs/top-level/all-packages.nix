@@ -6306,7 +6306,7 @@ in
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
-  tinc-haskell = haskellPackages.callPackage ../development/tools/misc/tinc { };
+  tinc-haskell = haskellPackages.callPackage ../development/tools/misc/tinc-haskell { };
 
   travis = callPackage ../development/tools/misc/travis { };
 
