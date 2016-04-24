@@ -83,10 +83,6 @@ let
     NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
     installPhase = ''
-      install -m755 scripts/mumble-overlay $out/bin
-      sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
-      ( cd $out/lib; ln -s libmumble.so.1.* libmumble.so.1 )
-
       mkdir -p $out/share/applications
       cp scripts/mumble.desktop $out/share/applications
 

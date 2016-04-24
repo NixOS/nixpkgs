@@ -13280,6 +13280,12 @@ in
       iceSupport = config.murmur.iceSupport or true;
     }) mumble mumble_git murmur murmur_git;
 
+  mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
+    mumble_i686 = if system == "x86_64-linux"
+      then pkgsi686Linux.mumble
+      else null;
+  };
+
   musescore = qt5.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
