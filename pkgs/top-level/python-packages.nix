@@ -1489,6 +1489,15 @@ in modules // {
     };
   };
 
+  backports_shutil_get_terminal_size = buildPythonPackage {
+    name = "backports.shutil_get_terminal_size";
+
+    buildInputs = with self; [ pytest ];
+    checkPhase = ''
+      py.test
+    '';
+  };
+
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
