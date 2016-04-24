@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/
     ln -sv $PWD/lib $out
@@ -77,7 +78,7 @@ in stdenv.mkDerivation rec
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ lovek323 raskin viric ];
     platforms   = stdenv.lib.platforms.all;
   };
 }

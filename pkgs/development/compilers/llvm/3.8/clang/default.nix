@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     mv clang-tools-extra-* $sourceRoot/tools/extra
   '';
 
-  buildInputs = [ cmake libedit libxml2 llvm ];
+  buildInputs = [ cmake libedit libxml2 llvm python ];
 
   cmakeFlags =
   [
