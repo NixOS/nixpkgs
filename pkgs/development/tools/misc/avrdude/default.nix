@@ -6,11 +6,11 @@
 assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
 stdenv.mkDerivation rec {
-  name = "avrdude-6.1";
+  name = "avrdude-6.3";
 
   src = fetchurl {
     url = "mirror://savannah/avrdude/${name}.tar.gz";
-    sha256 = "0frxg0q09nrm95z7ymzddx7ysl77ilfbdix1m81d9jjpiv5bm64y";
+    sha256 = "15m1w1qad3dj7r8n5ng1qqcaiyx1gyd6hnc3p2apgjllccdp77qg";
   };
 
   configureFlags = stdenv.lib.optionalString docSupport "--enable-doc";
