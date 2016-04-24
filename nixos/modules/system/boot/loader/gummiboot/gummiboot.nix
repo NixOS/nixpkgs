@@ -14,7 +14,7 @@ let
 
     inherit (pkgs) python gummiboot;
 
-    nix = config.nix.package;
+    nix = config.nix.package.out;
 
     timeout = if cfg.timeout != null then cfg.timeout else "";
 
