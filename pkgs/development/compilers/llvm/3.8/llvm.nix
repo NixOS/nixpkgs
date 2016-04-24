@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec
   ] ++ stdenv.lib.optional enableSharedLibraries
   [
       "-DBUILD_SHARED_LIBS=OFF" # make libLLVM.so have no dynamic dependencies
-      "-DLLVM_BUILD_LLVM_DYLIB_ON"
+      "-DLLVM_BUILD_LLVM_DYLIB=ON"
       "-DLLVM_DYLIB_EXPORT_ALL=ON"
   ]
     ++ stdenv.lib.optional (!isDarwin)
