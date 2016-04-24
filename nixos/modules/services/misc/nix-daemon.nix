@@ -6,7 +6,7 @@ let
 
   cfg = config.nix;
 
-  nix = cfg.package;
+  nix = cfg.package.out;
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
