@@ -33,10 +33,9 @@ let
       inherit clang-tools-extra_src stdenv;
     };
 
-    # lld doesn't build yet
-    #lld = callPackage ./lld.nix { };
+    lld = callPackage ./lld.nix { };
 
-    #lldb = callPackage ./lldb.nix { };
+    lldb = callPackage ./lldb.nix { };
 
     # libc++ and libc++abi aren't actually used for anything currently.
     # they're only really necessary on OS X, and even then only when testing compiler-rt
