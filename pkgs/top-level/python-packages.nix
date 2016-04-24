@@ -10582,7 +10582,7 @@ in modules // {
     buildInputs = with self; [ nose pkgs.glibcLocales pygments ] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
-      [decorator pickleshare simplegeneric traitlets readline requests2 pexpect sqlite3]
+      [decorator pickleshare simplegeneric traitlets readline requests2 pexpect sqlite3 backports_shutil_get_terminal_size]
       ++ optionals stdenv.isDarwin [appnope gnureadline];
 
     LC_ALL="en_US.UTF-8";
