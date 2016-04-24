@@ -1,16 +1,16 @@
 diff -ru -x '*~' libcxx-3.8.0.src-orig/lib/CMakeLists.txt libcxx-3.8.0.src/lib/CMakeLists.txt
---- libcxx-3.8.0.src-orig/lib/CMakeLists.txt.old	2016-04-23 17:22:25.000000000 -0600
-+++ libcxx-3.8.0.src/lib/CMakeLists.txt	2016-04-23 17:24:10.000000000 -0600
-@@ -97,7 +97,7 @@
+--- libcxx-3.8.0.src-orig/lib/CMakeLists.txt	2013-11-15 18:18:57.000000000 +0100
++++ libcxx-3.8.0.src/lib/CMakeLists.txt	2014-09-24 14:04:01.000000000 +0200
+@@ -56,7 +56,7 @@
        "-compatibility_version 1"
-       "-current_version 1"
+       "-current_version ${LIBCXX_VERSION}"
        "-install_name /usr/lib/libc++.1.dylib"
 -      "-Wl,-reexport_library,/usr/lib/libc++abi.dylib"
 +      "-Wl,-reexport_library,${LIBCXX_LIBCXXABI_LIB_PATH}/libc++abi.dylib"
        "-Wl,-unexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++unexp.exp"
        "/usr/lib/libSystem.B.dylib")
    else()
-@@ -105,14 +105,14 @@
+@@ -64,14 +64,14 @@
        list(FIND ${CMAKE_OSX_ARCHITECTURES} "armv7" OSX_HAS_ARMV7)
        if (OSX_HAS_ARMV7)
          set(OSX_RE_EXPORT_LINE
@@ -23,8 +23,8 @@ diff -ru -x '*~' libcxx-3.8.0.src-orig/lib/CMakeLists.txt libcxx-3.8.0.src/lib/C
 +          "-Wl,-reexport_library,${CMAKE_OSX_SYSROOT}${LIBCXX_LIBCXXABI_LIB_PATH}/libc++abi.dylib")
        endif()
      else()
--      set(OSX_RE_EXPORT_LINE "/usr/lib/libc++abi.dylib -Wl,-reexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++abi${LIBCXX_LIBCPPABI_VERSION}.exp")
-+      set(OSX_RE_EXPORT_LINE "${LIBCXX_LIBCXXABI_LIB_PATH}/libc++abi.dylib -Wl,-reexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++abi${LIBCXX_LIBCPPABI_VERSION}.exp")
+-      set (OSX_RE_EXPORT_LINE "/usr/lib/libc++abi.dylib -Wl,-reexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++abi${LIBCXX_LIBCPPABI_VERSION}.exp")
++      set (OSX_RE_EXPORT_LINE "${LIBCXX_LIBCXXABI_LIB_PATH}/libc++abi.dylib -Wl,-reexported_symbols_list,${CMAKE_CURRENT_SOURCE_DIR}/libc++abi${LIBCXX_LIBCPPABI_VERSION}.exp")
      endif()
  
-     add_link_flags(
+     list(APPEND link_flags

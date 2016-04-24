@@ -3,15 +3,16 @@
 stdenv.mkDerivation rec {
   name = "libc++-${version}";
 
-  src = fetch "libcxx" "0yr3fh8vj38289b9cwk37zsy7x98dcd3kjy7xxy8mg20p48lb01n";
+  src = fetch "libcxx" "36804511b940bc8a7cefc7cb391a6b28f5e3f53f6372965642020db91174237b";
 
-  postUnpack = ''
-    unpackFile ${libcxxabi.src}
-  '';
-
-  preConfigure = ''
-    # Get headers from the cxxabi source so we can see private headers not installed by the cxxabi package
-    cmakeFlagsArray=($cmakeFlagsArray -DLIBCXX_CXX_ABI_INCLUDE_PATHS="$NIX_BUILD_TOP/libcxxabi-${version}.src/include")
+  # instead of allowing libc++ to link with /usr/lib/libc++abi.dylib,
+  # force it to link with our copy
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace lib/CMakeLists.txt \
+      --replace 'OSX_RE_EXPORT_LINE "/usr/lib/libc++abi.dylib' \
+                'OSX_RE_EXPORT_LINE "${libcxxabi}/lib/libc++abi.dylib' \
+      --replace '"''${CMAKE_OSX_SYSROOT}/usr/lib/libc++abi.dylib"' \
+                '"${libcxxabi}/lib/libc++abi.dylib"'
   '';
 
   patches = [ ./darwin.patch ];
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [ "-DCMAKE_BUILD_TYPE=Release"
+      "-DLIBCXX_LIBCXXABI_INCLUDE_PATHS=${libcxxabi}/include"
       "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
       "-DLIBCXX_LIBCPPABI_VERSION=2"
       "-DLIBCXX_CXX_ABI=libcxxabi"

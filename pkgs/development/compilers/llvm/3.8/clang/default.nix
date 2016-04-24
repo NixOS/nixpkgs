@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, libedit, llvm, version, clang-tools-extra_src }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -6,16 +6,17 @@ in stdenv.mkDerivation {
   name = "clang-${version}";
 
   unpackPhase = ''
-    unpackFile ${fetch "cfe" "1ybcac8hlr9vl3wg8s4v6cp0c0qgqnwprsv85lihbkq3vqv94504"}
+    unpackFile ${fetch "cfe" "04149236de03cf05232d68eb7cb9c50f03062e339b68f4f8a03b650a11536cf9"}
     mv cfe-${version}.src clang
     sourceRoot=$PWD/clang
     unpackFile ${clang-tools-extra_src}
     mv clang-tools-extra-* $sourceRoot/tools/extra
   '';
 
-  buildInputs = [ cmake libedit libxml2 llvm python ];
+  buildInputs = [ cmake libedit libxml2 llvm ];
 
-  cmakeFlags = [
+  cmakeFlags =
+  [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++
