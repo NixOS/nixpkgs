@@ -12484,9 +12484,11 @@ in modules // {
 
   nbconvert = buildPythonPackage rec {
     name = "nbconvert";
-    buildInputs = with self; [nose ipykernel ];
+    version = "4.1.0";
+    # Newer version require Flit package `entrypoints`
 
-    propagatedBuildInputs = with self; [mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+    buildInputs = with self; [nose ipykernel ];
+    propagatedBuildInputs = with self; [ mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
 
     checkPhase = ''
       nosetests -v
