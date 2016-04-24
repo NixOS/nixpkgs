@@ -2405,18 +2405,23 @@ in modules // {
       markdown
       pyyaml
       pyzmq
-      tornado
+      tornado_4_3
       colorama
       ]
       ++ optionals ( isPy26 ) [ argparse ]
       ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
-      ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
+      ++ optionals ( !isPyPy ) [ numpy pandas greenlet ]
+      ++ optionals ( !isPy3k) [ futures ];
 
     meta = {
       description = "Statistical and novel interactive HTML plots for Python";
       homepage = "http://github.com/bokeh/bokeh";
       license = licenses.bsd3;
     };
+
+    # Tests are not included
+    doCheck = false;
+
   };
 
   boto = buildPythonPackage rec {
