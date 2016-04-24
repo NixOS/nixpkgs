@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, gettext, intltool, libtool, pkgconfig,
-  libXtst, cheetah, libXScrnSaver,
+  libXtst, cheetah, libXScrnSaver, xorg,
   glib, glibmm,
   gtk, gtkmm,
   atk,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
 
     glib glibmm gtk gtkmm atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
+    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx xorg.libICE xorg.libSM
   ];
 
   preConfigure = "./autogen.sh";
