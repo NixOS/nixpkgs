@@ -10692,10 +10692,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SoftwareLicense = buildPerlPackage rec {
-    name = "Software-License-0.103011";
+    name = "Software-License-0.103012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "03dyc5sx0asq1m3276l224q5776ng24fw5llf3gr9mbgklkgj05s";
+      sha256 = "47f9acb7f4eeed35e38c1bec37a71b61e651965233d67dadfae6390571517db1";
     };
     propagatedBuildInputs = [ DataSection TextTemplate TryTiny ];
     meta = {
