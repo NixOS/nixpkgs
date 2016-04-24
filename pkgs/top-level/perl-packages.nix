@@ -10051,14 +10051,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodElementalPerlMunger = buildPerlPackage {
-    name = "Pod-Elemental-PerlMunger-0.200003";
+  PodElementalPerlMunger = buildPerlPackage rec {
+    name = "Pod-Elemental-PerlMunger-0.200005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200003.tar.gz;
-      sha256 = "94b3abe6894c96b7990cb324a3789af05489dc2b5d1ec8961d37309cc6e8c243";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "35146bdcf0d3ac271f9ba2a4d4611b98373215c43de43dd4f012f46c44004d57";
     };
     buildInputs = [ Moose PodElemental ];
-    propagatedBuildInputs = [ ListMoreUtils Moose PPI ParamsUtil PodElemental namespaceautoclean ];
+    propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
     meta = {
       homepage = https://github.com/rjbs/Pod-Elemental-PerlMunger;
       description = "A thing that takes a string of Perl and rewrites its documentation";
