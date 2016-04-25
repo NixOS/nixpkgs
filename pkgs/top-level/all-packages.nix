@@ -609,7 +609,9 @@ in
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
-  brasero = callPackage ../tools/cd-dvd/brasero { };
+  brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
+
+  brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
@@ -7346,6 +7348,8 @@ in
 
   libbson = callPackage ../development/libraries/libbson { };
 
+  libburn = callPackage ../development/libraries/libburn { };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
@@ -7740,6 +7744,8 @@ in
   libinput = callPackage ../development/libraries/libinput {
     graphviz = graphviz-nox;
   };
+
+  libisofs = callPackage ../development/libraries/libisofs { };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
@@ -15303,9 +15309,9 @@ in
 
           eventlist = callPackage ../applications/office/eventlist {};
 
-          k3b = callPackage ../applications/misc/k3b {
-            cdrtools = cdrkit;
-          };
+          k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
+
+          k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
 
           kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 

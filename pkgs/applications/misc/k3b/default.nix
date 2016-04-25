@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper, automoc4, cmake, perl, pkgconfig
 , shared_mime_info, libvorbis, taglib, flac, libsamplerate
 , libdvdread, lame, libsndfile, libmad, gettext , transcode, cdrdao
-, cdrtools, dvdplusrwtools, vcdimager, cdparanoia, kdelibs, libdvdcss, ffmpeg
+, dvdplusrwtools, vcdimager, cdparanoia, kdelibs, libdvdcss, ffmpeg
 , kdemultimedia, phonon, libkcddb ? null
 }:
 
@@ -9,10 +9,11 @@ let
   # at runtime, k3b needs the executables cdrdao, cdrecord, dvd+rw-format,
   # eMovix, growisofs, mkisofs, normalize, readcd, transcode, vcdxbuild,
   # vcdxminfo, and vcdxrip
-  binPath = lib.makeBinPath [ cdrdao dvdplusrwtools transcode vcdimager cdrtools ];
+  binPath = lib.makeBinPath [ cdrdao dvdplusrwtools transcode vcdimager ];
 
 in stdenv.mkDerivation rec {
-  name = "k3b-2.0.3a";
+  name = "k3b-${version}";
+  version = "2.0.3a";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/k3b/${name}.tar.xz";

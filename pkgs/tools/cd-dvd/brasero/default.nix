@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
-, libcanberra_gtk3, intltool, makeWrapper, dvdauthor, cdrdao
-, dvdplusrwtools, cdrtools, vcdimager, wrapGAppsHook }:
+, libcanberra_gtk3, intltool, makeWrapper, dvdauthor, libburn, libisofs
+, vcdimager, wrapGAppsHook }:
 
 # libdvdcss is "too old" (in fast "too new"), see https://bugs.launchpad.net/ubuntu/+source/brasero/+bug/611590
 
 let
   major = "3.12";
   minor = "1";
-  binpath = lib.makeBinPath [ dvdauthor cdrdao dvdplusrwtools vcdimager cdrtools ];
+  binpath = lib.makeBinPath [ dvdauthor vcdimager ];
 
 in stdenv.mkDerivation rec {
   version = "${major}.${minor}";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
 
-  buildInputs = [ gtk3 libxml2 libnotify libcanberra_gtk3
+  buildInputs = [ gtk3 libxml2 libnotify libcanberra_gtk3 libburn libisofs
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   gst_all_1.gst-plugins-ugly gst_all_1.gst-libav ];
