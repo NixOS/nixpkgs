@@ -10429,11 +10429,11 @@ in modules // {
 
   lsi = buildPythonPackage rec {
     name = "lsi-${version}";
-    version = "0.2.0";
+    version = "0.2.2";
     disabled = isPy3k;
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/l/lsi/${name}.tar.gz";
-      sha256 = "0rw5w0kvsqvj6y5dshk8aq4pk7dfy0j9ycmf1r9lk782m71jgzs9";
+      sha256 = "0429iilb06yhsmvj3xp6wyhfh1rp4ndxlhwrm80r97z0w7plrk94";
     };
     propagatedBuildInputs = [
       self.colored
