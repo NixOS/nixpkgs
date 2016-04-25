@@ -22288,7 +22288,7 @@ in modules // {
 
     patches = [ ../development/python-modules/pyuv-external-libuv.patch ];
 
-    buildInputs = with self; [ pkgs.libuvVersions.v0_11_29 ];
+    buildInputs = with self; [ pkgs.libuv ];
 
     meta = {
       description = "Python interface for libuv";

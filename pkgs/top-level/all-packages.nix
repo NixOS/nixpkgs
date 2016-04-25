@@ -8037,12 +8037,9 @@ in
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
-    automake = automake113x; # fails with 14
+  libuv = callPackage ../development/libraries/libuv {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  });
-
-  libuv = self.libuvVersions.v1_7_5;
+  };
 
   libv4l = lowPrio (self.v4l_utils.override {
     alsaLib = null;
