@@ -12,6 +12,7 @@
   abbradar = "Nikolay Amiantov <ab@fmap.me>";
   aboseley = "Adam Boseley <adam.boseley@gmail.com>";
   adev = "Adrien Devresse <adev@adev.name>";
+  adnelson = "Allen Nelson <anelson@narrativescience.com>";
   Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";

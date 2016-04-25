@@ -5477,22 +5477,6 @@ in
   python2Packages = python27Packages;
   python3Packages = python34Packages;
 
-  # Some arguments that pythonPackages uses; these can be overridden in your
-  # nixpkgs config. For example, to have python packages use numpy verison 1.9
-  # by default, you can specify the following in your config:
-  #
-  #   packageOverrides = self: {
-  #     defaultNumpyVersion = "1.9";
-  #   };
-  #
-
-  # Default version of numpy
-  defaultNumpyVersion = "1.10";
-  # Default version of scipy
-  defaultScipyVersion = "0.16";
-  # Default version of sqlalchemy
-  defaultSqlalchemyVersion = "1.0";
-
   python26 = callPackage ../development/interpreters/python/2.6 {
     db = db47;
     self = python26;

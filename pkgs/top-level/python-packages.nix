@@ -1,14 +1,4 @@
-{ pkgs, stdenv, python, self,
-  # Set the default version of numpy, which will be used for packages that
-  # don't depend on a specific version of numpy.
-  defaultNumpyVersion ? "1.10",
-  # Set the default version of scipy, which will be used for packages that
-  # don't depend on a specific version of scipy.
-  defaultScipyVersion ? "0.16",
-  # Set the default version of sqlalchemy, which will be used for packages
-  # that don't depend on a specific version of sqlalchemy.
-  defaultSqlalchemyVersion ? "1.0"
-}:
+{ pkgs, stdenv, python, self }:
 
 with pkgs.lib;
 
@@ -13286,10 +13276,7 @@ in modules // {
     blas = pkgs.openblasCompat;
   };
 
-  numpy = if defaultNumpyVersion == "1.11" then self.numpy_1_11
-          else if defaultNumpyVersion == "1.10" then self.numpy_1_10
-          else if defaultNumpyVersion == "1.9" then self.numpy_1_9
-          else throw "Unsupported numpy version: ${defaultNumpyVersion}";
+  numpy = self.numpy_1_10;
 
   numpy_1_9 = self.buildNumpyPackage rec {
     version = "1.9.2";
@@ -19540,9 +19527,7 @@ in modules // {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = if defaultScipyVersion == "0.17" then self.scipy_0_17
-          else if defaultScipyVersion == "0.16" then self.scipy_0_16
-          else throw "Unsupported scipy version: ${defaultScipyVersion}";
+  scipy = self.scipy_0_17;
 
   scipy_0_16 = self.buildScipyPackage rec {
     version = "0.16.1";
@@ -20755,12 +20740,7 @@ in modules // {
     rope = if isPy3k then null else self.rope;
   };
 
-  sqlalchemy =
-    if defaultSqlalchemyVersion == "0.7" then self.sqlalchemy7
-    else if defaultSqlalchemyVersion == "0.8" then self.sqlalchemy8
-    else if defaultSqlalchemyVersion == "0.9" then self.sqlalchemy9
-    else if defaultSqlalchemyVersion == "1.0" then self.sqlalchemy_1_0
-    else throw "Unsupported sqlalchemy version: ${defaultSqlalchemyVersion}";
+  sqlalchemy = self.sqlalchemy_1_0;
 
   sqlalchemy7 = buildPythonPackage rec {
     name = "SQLAlchemy-0.7.10";
@@ -20813,32 +20793,6 @@ in modules // {
     buildInputs = with self; [ nose mock ]
       ++ stdenv.lib.optional doCheck pysqlite;
     propagatedBuildInputs = with self; [ modules.sqlite3 ];
-
-    checkPhase = ''
-      ${python.executable} sqla_nose.py
-    '';
-
-    meta = {
-      homepage = http://www.sqlalchemy.org/;
-      description = "A Python SQL toolkit and Object Relational Mapper";
-    };
-  };
-
-  sqlalchemy9 = buildPythonPackage rec {
-    name = "SQLAlchemy-0.9.9";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "14az6hhrz4bgnicz4q373z119zmaf7j5zxl1jfbfl5lix5m1z9bj";
-    };
-
-    buildInputs = with self; [ nose mock ]
-      ++ stdenv.lib.optional doCheck pysqlite;
-    propagatedBuildInputs = with self; [ modules.sqlite3 ];
-
-    # Test-only dependency pysqlite doesn't build on Python 3. This isn't an
-    # acceptable reason to make all dependents unavailable on Python 3 as well
-    doCheck = !(isPyPy || isPy3k);
 
     checkPhase = ''
       ${python.executable} sqla_nose.py
