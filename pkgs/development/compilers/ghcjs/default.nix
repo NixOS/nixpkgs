@@ -40,8 +40,8 @@
 
 , ghcjsBootSrc ? fetchgit {
     url = git://github.com/ghcjs/ghcjs-boot.git;
-    rev = "758e79e420403e0f6625eda19b10c46564f7cbb5";
-    sha256 = "0gq1mc86cb2z875a7sdj44yy8g95rwxzkl3z1q8gg33k05s3b58r";
+    rev = "8c549931da27ba9e607f77195208ec156c840c8a";
+    sha256 = "0yg9bnabja39qysh9pg1335qbvbc0r2mdw6cky94p7kavacndfdv";
     fetchSubmodules = true;
   }
 , ghcjsBoot ? import ./ghcjs-boot.nix {

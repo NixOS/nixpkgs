@@ -17,6 +17,10 @@ let
       what = "${pkgs.mongodb}/bin";
       where = "${stateDir}/bin";
     }
+    {
+      what = "${cfg.dataDir}";
+      where = "${stateDir}/data";
+    }
   ];
   systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
 in
@@ -29,6 +33,16 @@ in
       default = false;
       description = ''
         Whether or not to enable the unifi controller service.
+      '';
+    };
+
+    services.unifi.dataDir = mkOption {
+      type = types.str;
+      default = "${stateDir}/data";
+      description = ''
+        Where to store the database and other data.
+
+        This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
       '';
     };
 
@@ -62,7 +76,7 @@ in
       bindsTo = systemdMountPoints;
       unitConfig.RequiresMountsFor = stateDir;
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
-      environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc}/lib";
+      environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
 
       preStart = ''
         # Ensure privacy of state

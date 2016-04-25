@@ -1,17 +1,16 @@
 { stdenv, fetchurl, glib, pkgconfig, gnome3, intltool, itstool, libxml2, libarchive
-, attr, bzip2, acl, wrapGAppsHook, librsvg, gdk_pixbuf }:
+, attr, bzip2, acl, wrapGAppsHook, librsvg, libnotify, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  # TODO: support nautilus
-  # it tries to create {nautilus}/lib/nautilus/extensions-3.0/libnautilus-fileroller.so
-
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ glib gnome3.gtk intltool itstool libxml2 libarchive
+  buildInputs = [ glib gnome3.gtk intltool itstool libxml2 libarchive libnotify
                   gnome3.defaultIconTheme attr bzip2 acl gdk_pixbuf librsvg
                   gnome3.dconf ];
+
+  installFlags = [ "nautilus_extensiondir=$(out)/lib/nautilus/extensions-3.0" ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/FileRoller;

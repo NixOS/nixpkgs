@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "gst-vaapi-${version}";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "${meta.homepage}/software/vaapi/releases/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.bz2";
-    sha256 = "1cv7zlz5wj6b3acv0pr5cq5wqzd5vcs1lrrlvyl9wrzcnzz8mz1n";
+    sha256 = "14jal2g5mf8r59w8420ixl3kg50vcmy56446ncwd0xrizd6yms5b";
   };
 
   nativeBuildInputs = with stdenv.lib; [ pkgconfig bzip2 ];

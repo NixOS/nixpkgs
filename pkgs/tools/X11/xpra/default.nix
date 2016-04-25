@@ -6,11 +6,11 @@
 , libfakeXinerama }:
 
 buildPythonApplication rec {
-  name = "xpra-0.16.2";
+  name = "xpra-0.17.0";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "0h55rv46byzv2g8g77bm0a0py8jpz3gbr5fhr5jy9sisyr0vk6ff";
+    sha256 = "0abli2gc174v8zh1dsc3nq8c5aivnni67cjrr8yhsqsl8fwj0c2l";
   };
 
   buildInputs = [

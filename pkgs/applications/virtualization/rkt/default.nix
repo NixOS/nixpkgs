@@ -1,15 +1,15 @@
 { stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg1, trousers, squashfsTools,
-  cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper }:
+  cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
-  coreosImageRelease = "794.1.0";
-  coreosImageSystemdVersion = "222";
+  coreosImageRelease = "991.0.0";
+  coreosImageSystemdVersion = "225";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" "host" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.2.0";
+  version = "1.4.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,15 +17,16 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "0icsrh118mm3rabbcr0gd3b22m5rizdbqlrfp9d79g591p7bjh38";
+      sha256 = "0lnvqhg88aa6zx4wnkz17v3f529i9hi0y2aihfsq09pvsn56hwjl";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "05nzl3av6cawr8v203a8c95c443g6h1nfy2n4jmgvn0j4iyy44ym";
+    sha256 = "1vaimrbynhjh4f30rq92bv1h3c1lxnf8isx5c2qvnn3lghypss9k";
   };
 
   buildInputs = [
+    glibc.out glibc.static
     autoreconfHook go file git wget gnupg1 trousers squashfsTools cpio acl systemd
     makeWrapper
   ];

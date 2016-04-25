@@ -1,16 +1,11 @@
-diff --git a/SConscript b/SConscript
-index fd08935..4d879b2 100644
 --- a/SConscript
 +++ b/SConscript
-@@ -93,9 +93,9 @@ if msvc and platform != "Windows":
- 
- #Create SCons Environment
- if platform == "Windows" and not GetOption('msvc'):
--	env = Environment(tools = ['mingw'], ENV = {'PATH' : os.environ['PATH']})
-+	env = Environment(tools = ['mingw'], ENV = os.environ)
+@@ -99,7 +99,7 @@
+ elif platform == "Windows" and not GetOption('msvc'):
+ 	env = Environment(tools=['mingw'], ENV={'PATH' : os.environ['PATH']})
  else:
--	env = Environment(tools = ['default'], ENV = {'PATH' : os.environ['PATH']})
-+	env = Environment(tools = ['default'], ENV = os.environ)
+-	env = Environment(tools=['default'], ENV={'PATH' : os.environ['PATH']})
++	env = Environment(tools=['default'], ENV = os.environ)
  
  #attempt to automatically find cross compiler
  if not tool and compilePlatform == "Linux" and compilePlatform != platform:

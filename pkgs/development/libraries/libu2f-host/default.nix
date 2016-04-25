@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ json_c hidapi ];
 
+  postInstall = ''
+    mkdir -p $out/lib/udev/rules.d/
+    cp -v *.rules $out/lib/udev/rules.d/
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libu2f-host;
     description = "A C library and command-line tool thati mplements the host-side of the U2F protocol";

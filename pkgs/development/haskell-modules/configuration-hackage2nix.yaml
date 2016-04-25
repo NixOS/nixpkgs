@@ -123,6 +123,9 @@ dont-distribute-packages:
   Win32-services-wrapper:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   XInput:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
 
+  # Depens on shine, which is a ghcjs project.
+  shine-varying:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
+
   # The build succeeds, but takes insanely long (> 2 hours).
   sharc-timbre:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
 

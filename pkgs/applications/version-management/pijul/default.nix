@@ -1,6 +1,6 @@
-{ stdenv, fetchdarcs, rustUnstable, openssl, libssh }:
+{ stdenv, fetchdarcs, rustPlatform, openssl, libssh }:
 
-with rustUnstable;
+with rustPlatform;
 
 buildRustPackage rec {
   name = "pijul-${version}";

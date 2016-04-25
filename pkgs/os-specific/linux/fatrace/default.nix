@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, which }:
+{ stdenv, fetchurl, fetchpatch, python3, which }:
 
 stdenv.mkDerivation rec {
   name = "fatrace-${version}";
@@ -8,6 +8,15 @@ stdenv.mkDerivation rec {
     url = "http://launchpad.net/fatrace/trunk/${version}/+download/${name}.tar.bz2";
     sha256 = "1f77v222nlfbf8fv7d28cnpm7x8xz0mhxavgz19c2jc51pjlv84s";
   };
+
+  patchFlags = "-p0";
+  patches = [
+    (fetchpatch {
+      sha256 = "0gym1zg42vb4czpbkz4shnc7z3lskn1ny6dpx10ykwf145xyf9m2";
+      name = "fatrace-fix-crash-when-using-p-option.patch";
+      url = "http://bazaar.launchpad.net/~pitti/fatrace/trunk/diff/67?context=3";
+    })
+  ];
 
   buildInputs = [ python3 which ];
 

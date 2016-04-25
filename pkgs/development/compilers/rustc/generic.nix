@@ -62,7 +62,7 @@ let version = if isRelease then
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
       description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
+      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
       license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -164,7 +164,8 @@ with stdenv.lib; stdenv.mkDerivation {
   buildInputs = [ ncurses ]
     ++ optional (!forceBundledLLVM) llvmShared;
 
-  enableParallelBuilding = false; # missing files during linking, occasionally
+  # https://github.com/rust-lang/rust/issues/30181
+  # enableParallelBuilding = false; # missing files during linking, occasionally
 
   outputs = [ "out" "doc" ];
   setOutputFlags = false;

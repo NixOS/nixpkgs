@@ -3,6 +3,7 @@
 , ApplicationServices, cf-private }:
 
 let
+  # if you bump version, update pkgs.tortoisehg too or ping maintainer
   version = "3.7.3";
   name = "mercurial-${version}";
 in
