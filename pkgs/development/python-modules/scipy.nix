@@ -9,8 +9,8 @@ in buildPythonPackage (args // rec {
 
   name = "scipy-${version}";
 
-  buildInputs = (args.buildInputs or [ gfortran nose passthru.blas ]);
-  propagatedBuildInputs = (args.propagatedBuildInputs or [ numpy]);
+  buildInputs = (args.buildInputs or [ gfortran nose ]);
+  propagatedBuildInputs = (args.propagatedBuildInputs or [ passthru.blas numpy]);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
