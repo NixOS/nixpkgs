@@ -126,7 +126,7 @@ let
         (*) echo "$0: Desktop manager '$desktopManager' not found.";;
       esac
 
-      ${optionalString cfg.startDbusSession ''
+      ${optionalString (cfg.startDbusSession && cfg.updateDbusEnvironment) ''
         ${pkgs.glib}/bin/gdbus call --session \
           --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus \
           --method org.freedesktop.DBus.UpdateActivationEnvironment \
