@@ -47,8 +47,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i PhononConfig.cmake.in \
         -e "/get_filename_component(rootDir/ s/^.*$//" \
-        -e "s,\\(set(PHONON_INCLUDE_DIR\\).*$,\\1 \"''${!outputDev}/include\")," \
-        -e "s,\\(set(PHONON_LIBRARY_DIR\\).*$,\\1 \"''${!outputLib}/lib\")," \
-        -e "s,\\(set(PHONON_BUILDSYSTEM_DIR\\).*$,\\1 \"''${!outputDev}/share/phonon${if withQt5 then "4qt5" else ""}/buildsystem\"),"
+        -e "/^set(PHONON_INCLUDE_DIR/ s,\''${rootDir},''${!outputDev}," \
+        -e "/^set(PHONON_LIBRARY_DIR/ s,\''${rootDir}/,," \
+        -e "/^set(PHONON_BUILDSYSTEM_DIR/ s,\''${rootDir},''${!outputDev},"
   '';
 }
