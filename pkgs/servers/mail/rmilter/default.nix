@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, bison, flex, openssl, pcre, libmilter, opendkim }:
+{ stdenv, fetchFromGitHub, cmake, bison, flex, openssl, pcre, libmilter, opendkim,
+ libmemcached }:
 
 let patchedLibmilter = stdenv.lib.overrideDerivation  libmilter (_ : {
     patches = libmilter.patches ++ [ ./fd-passing-libmilter.patch ];
@@ -7,21 +8,21 @@ in
 
 stdenv.mkDerivation rec {
   name = "rmilter-${version}";
-  version = "1.7.3";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "vstakhov";
     repo = "rmilter";
     rev = version;
-    sha256 = "04xalaxq5xgg5ls0f4ayp8yhzdfq5gqjb8qwfyha3mrx4dqrgh7s";
+    sha256 = "0cplkc1acgysxn8id9wakd1fx0f76cazscpfqhrxyjbk5fb11ll4";
   };
 
   nativeBuildInputs = [ bison cmake flex ];
-  buildInputs = [ patchedLibmilter openssl pcre opendkim];
+  buildInputs = [ libmemcached patchedLibmilter openssl pcre opendkim];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/vstakhov/rmilter";
-    license = licenses.bsd2;
+    license = licenses.asl20;
     description = ''
       Daemon to integrate rspamd and milter compatible MTA, for example
       postfix or sendmail
