@@ -1169,7 +1169,15 @@ PATH=/nix/store/68afga4khv0w...-coreutils-6.12/bin
 echo @foo@
 </programlisting>
 
-    That is, no substitution is performed for undefined variables.</para></listitem>
+    That is, no substitution is performed for undefined variables.</para>
+
+    <para>Environment variables that start with an uppercase letter are filtered out,
+    to prevent global variables (like <literal>HOME</literal>) from accidentally
+    getting substituted.
+    The variables also have to be valid bash “names”, as
+    defined in the bash manpage (alphanumeric or <literal>_</literal>, must not
+    start with a number).</para>
+  </listitem>
   </varlistentry>
 
 
