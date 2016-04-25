@@ -34,6 +34,7 @@ in
 {
 
   imports = [
+    ./firewall
     ./logrotate
     ./network.nix
     ./sensu-client.nix
