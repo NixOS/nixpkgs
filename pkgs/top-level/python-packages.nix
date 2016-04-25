@@ -10443,7 +10443,8 @@ in modules // {
       DIFF
 
       # Explicit encoding flag is required with python3, unless locale is set.
-      patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}
+      ${if !self.isPy3k then "" else
+        "patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}"}
     '';
 
     meta = {
