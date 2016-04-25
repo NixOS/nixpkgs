@@ -1,6 +1,6 @@
 ###### Things done
 
-- [ ] Tested using sandboxing (`nix-build --option build-use-chroot true` or [nix.useChroot](http://nixos.org/nixos/manual/options.html#opt-nix.useChroot) on NixOS)
+- [ ] Tested using sandboxing (`nix-build --option build-use-sandbox true` or [nix.useSandbox](http://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS)
 - Built on platform(s)
    - [ ] NixOS
    - [ ] OS X

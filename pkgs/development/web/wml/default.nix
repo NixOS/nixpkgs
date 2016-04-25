@@ -8,6 +8,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "0jjxpq91x7y2mgixz7ghqp01m24qa37wl3zz515rrzv7x8cyy4cf";
   };
 
+  setOutputFlags = false;
+
   # Getting lots of Non-ASCII character errors from pod2man.
   # Inserting =encoding utf8 before the first =head occurrence.
   # Wasn't able to fix mp4h.

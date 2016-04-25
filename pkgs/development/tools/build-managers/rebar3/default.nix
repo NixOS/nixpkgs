@@ -1,73 +1,62 @@
 { stdenv, writeText, callPackage, fetchurl,
-  fetchHex, erlang, hermeticRebar3 ? true, rebar3-nix-bootstrap, tree, fetchFromGitHub }:
-
+  fetchHex, erlang, hermeticRebar3 ? true,
+  tree, fetchFromGitHub, hexRegistrySnapshot }:
 
 let
-  version = "3.0.0-beta.4";
-  registrySnapshot = callPackage ./registrySnapshot.nix { };
+  version = "3.1.0";
 
-  # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
-  # {erlware_commons,     "0.16.0"},
+  bootstrapper = ./rebar3-nix-bootstrap;
+
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
-    version = "0.16.0";
-    sha256 = "0kh24d0001390wfx28d0xa874vrsfvjgj41g315vg4hac632krxx";
+    version = "0.19.0";
+    sha256 = "1gfsy9bbhjb94c5ghff2niamn93x2x08lnklh6pp7sfr5i0gkgsv";
   };
-  # {ssl_verify_hostname, "1.0.5"},
   ssl_verify_hostname = fetchHex {
     pkg = "ssl_verify_hostname";
     version = "1.0.5";
     sha256 = "1gzavzqzljywx4l59gvhkjbr1dip4kxzjjz1s4wsn42f2kk13jzj";
   };
-  # {certifi,             "0.1.1"},
   certifi = fetchHex {
     pkg = "certifi";
-    version = "0.1.1";
-    sha256 = "0afylwqg74gprbg116asz0my2nipmki0512c8mdiq6xdiyjdvlg6";
+    version = "0.4.0";
+    sha256 = "04bnvsbssdcf6b9h9bfglflds7j0gx6q5igl1xxhx6fnwaz37hhw";
   };
-  # {providers,           "1.5.0"},
   providers = fetchHex {
     pkg = "providers";
-    version = "1.5.0";
-    sha256 = "1hc8sp2l1mmx9dfpmh1f8j9hayfg7541rmx05wb9cmvxvih7zyvf";
+    version = "1.6.0";
+    sha256 = "0byfa1h57n46jilz4q132j0vk3iqc0v1vip89li38gb1k997cs0g";
   };
-  # {getopt,              "0.8.2"},
   getopt = fetchHex {
     pkg = "getopt";
     version = "0.8.2";
     sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
   };
-  # {bbmustache,          "1.0.4"},
   bbmustache = fetchHex {
     pkg = "bbmustache";
     version = "1.0.4";
     sha256 = "04lvwm7f78x8bys0js33higswjkyimbygp4n72cxz1kfnryx9c03";
   };
-  # {relx,                "3.8.0"},
   relx = fetchHex {
     pkg = "relx";
-    version = "3.8.0";
-    sha256 = "0y89iirjz3kc1rzkdvc6p3ssmwcm2hqgkklhgm4pkbc14fcz57hq";
+    version = "3.17.0";
+    sha256 = "1xjybi93m8gj9f9z3lkc7xbg3k5cw56yl78rcz5qfirr0223sby2";
   };
-  # {cf,                  "0.2.1"},
   cf = fetchHex {
     pkg = "cf";
     version = "0.2.1";
     sha256 = "19d0yvg8wwa57cqhn3vqfvw978nafw8j2rvb92s3ryidxjkrmvms";
   };
-  # {cth_readable,        "1.1.0"},
   cth_readable = fetchHex {
     pkg = "cth_readable";
-    version = "1.0.1";
-    sha256 = "1cnc4fbypckqllfi5h73rdb24dz576k3177gzvp1kbymwkp1xcz1";
+    version = "1.2.2";
+    sha256 = "0kb9v4998liwyidpjkhcg1nin6djjzxcx6b313pbjicbp4r58n3p";
   };
-  # {eunit_formatters,    "0.2.0"}
   eunit_formatters = fetchHex {
     pkg = "eunit_formatters";
-    version = "0.2.0";
-    sha256 = "03kiszlbgzscfd2ns7na6bzbfzmcqdb5cx3p6qy3657jk2fai332";
+    version = "0.3.1";
+    sha256 = "0cg9dasv60v09q3q4wja76pld0546mhmlpb0khagyylv890hg934";
   };
-  # {eunit_formatters,    "0.2.0"}
   rebar3_hex = fetchHex {
     pkg = "rebar3_hex";
     version = "1.12.0";
@@ -81,19 +70,21 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/rebar/rebar3/archive/${version}.tar.gz";
-    sha256 = "0px66scjdia9aaa5z36qzxb848r56m0k98g0bxw065a2narsh4xy";
+    sha256 = "0r4wpnpi81ha4iirv9hcif3vrgc82qd51kah7rnhvpym55wcy9ml";
   };
+
+  inherit bootstrapper;
 
   patches = if hermeticRebar3 == true
   then  [ ./hermetic-bootstrap.patch ./hermetic-rebar3.patch ]
   else [];
 
   buildInputs = [ erlang tree  ];
-  propagatedBuildInputs = [ registrySnapshot rebar3-nix-bootstrap ];
+  propagatedBuildInputs = [ hexRegistrySnapshot ];
 
   postPatch = ''
     echo postPatch
-    rebar3-nix-bootstrap registry-only
+    ${erlang}/bin/escript ${bootstrapper} registry-only
     echo "$ERL_LIBS"
     mkdir -p _build/default/lib/
     mkdir -p _build/default/plugins

@@ -244,10 +244,10 @@ let
   };
 
   asciinema = buildFromGitHub {
-    rev = "v1.1.1";
+    rev = "v1.2.0";
     owner = "asciinema";
     repo = "asciinema";
-    sha256 = "0k48k8815k433s25lh8my2swl89kczp0m2gbqzjlpy1xwmk06nxc";
+    sha256 = "0wvrq92ackhfycfs1fircs8al3ji69igqqrc55ic29wbpnvz355x";
   };
 
   asmfmt = buildFromGitHub {

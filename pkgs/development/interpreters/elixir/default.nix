@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash }:
+{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash,
+  debugInfo ? false }:
 
 stdenv.mkDerivation rec {
   name = "elixir-${version}";
@@ -15,6 +16,12 @@ stdenv.mkDerivation rec {
   # In other cases there is warnings during compilation.
   LANG = "en_US.UTF-8";
   LC_TYPE = "en_US.UTF-8";
+
+  setupHook = ./setup-hook.sh;
+
+  buildFlags = if debugInfo
+   then "ERL_COMPILER_OPTIONS=debug_info"
+   else "";
 
   preBuild = ''
     # The build process uses ./rebar. Link it to the nixpkgs rebar

@@ -19629,7 +19629,7 @@ in modules // {
       url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
       sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
     };
-    numpy = self.numpy_1_10;
+    numpy = self.numpy;
   };
 
   scipy_0_17 = self.buildScipyPackage rec {
@@ -20189,6 +20189,36 @@ in modules // {
       description = "Manage dynamic plugins for Python applications";
       homepage = "https://pypi.python.org/pypi/stevedore";
       license = licenses.asl20;
+    };
+  };
+
+  Theano = buildPythonPackage rec {
+    name = "Theano-0.8.1";
+
+    disabled = isPyPy || pythonOlder "2.6" || (isPy3k && pythonOlder "3.3");
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/T/Theano/${name}.tar.gz";
+      sha256 = "17dikk94r8bzkxg976srqlhj5c7phs9gl837iabyfdpixkbrl79g";
+    };
+
+    #preCheck = ''
+    #  mkdir -p check-phase
+    #  export HOME=$(pwd)/check-phase
+    #'';
+    doCheck = false;
+    # takes far too long, also throws "TypeError: sort() missing 1 required positional argument: 'a'"
+    # when run from the installer, and testing with Python 3.5 hits github.com/Theano/Theano/issues/4276,
+    # the fix for which hasn't been merged yet.
+
+    # keep Nose around since running the tests by hand is possible from Python or bash
+    propagatedBuildInputs = [ stdenv ] ++ (with self; [ nose numpy numpy.blas pydot_ng scipy six ]);
+
+    meta = {
+      homepage = http://deeplearning.net/software/theano/;
+      description = "A Python library for large-scale array computation";
+      license = stdenv.lib.licenses.bsd3;
+      maintainers = [ maintainers.bcdarwin ];
     };
   };
 
@@ -26625,6 +26655,106 @@ in modules // {
       homepage = https://github.com/christian-oudard/htmltreediff;
       license = licenses.bsdOriginal;
       maintainers = with maintainers; [];
+    };
+  };
+
+  repeated_test = buildPythonPackage rec {
+    name = "repeated_test-${version}";
+    version = "0.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/repeated-test/${name}.tar.gz";
+      sha256 = "062syp7kl2g0x6qx3z8zb5sdycpi7qcpxp9iml2v8dqzqnij9bpg";
+    };
+
+    buildInputs = with self; [
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      six
+    ];
+
+    meta = {
+      description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
+      homepage = "https://github.com/epsy/repeated_test";
+      license = licenses.mit;
+    };
+  };
+
+  sigtools = buildPythonPackage rec {
+    name = "sigtools-${version}";
+    version = "1.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sigtools/${name}.tar.gz";
+      sha256 = "190w14vzbiyvxcl9jmyyimpahar5b0bq69v9iv7chi852yi71w6w";
+    };
+
+    buildInputs = with self; [
+      repeated_test
+      sphinx
+      mock
+      coverage
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      funcsigs
+      six
+    ];
+
+    patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
+
+    meta = {
+      description = "Utilities for working with 3.3's inspect.Signature objects.";
+      homepage = "https://pypi.python.org/pypi/sigtools";
+      license = licenses.mit;
+    };
+  };
+
+  clize = buildPythonPackage rec {
+    name = "clize-${version}";
+    version = "3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/clize/${name}.tar.gz";
+      sha256 = "1xkr3h404d7pgj5gdpg6bddv3v3yq2hgx8qlwkgw5abg218k53hm";
+    };
+
+    buildInputs = with self; [
+      dateutil
+    ];
+    propagatedBuildInputs = with self; [
+      sigtools
+    ];
+
+    meta = {
+      description = "Command-line argument parsing for Python";
+      homepage = "https://github.com/epsy/clize";
+      license = licenses.mit;
+    };
+  };
+
+  zerobin = buildPythonPackage rec {
+    name = "zerobin-${version}";
+    version = "20160108";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "sametmax";
+      repo = "0bin";
+      rev = "7da1615";
+      sha256 = "1pzcwy454kn5216pvwjqzz311s6jbh7viw9s6kw4xps6f5h44bid";
+    };
+
+    propagatedBuildInputs = with self; [
+      cherrypy
+      bottle
+      lockfile
+      clize
+    ];
+    meta = {
+      description = "A client side encrypted pastebin";
+      homepage = "http://0bin.net/";
+      license = licenses.wtfpl;
     };
   };
 }

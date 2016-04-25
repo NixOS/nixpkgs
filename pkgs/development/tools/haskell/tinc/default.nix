@@ -6,7 +6,7 @@
 , ghc, cabal2nix, cabal-install, makeWrapper
 }:
 mkDerivation {
-  pname = "tinc-haskell";
+  pname = "tinc";
   version = "20160419";
   src = fetchFromGitHub {
     owner = "sol";

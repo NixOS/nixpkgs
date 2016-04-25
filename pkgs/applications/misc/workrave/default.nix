@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, gettext, intltool, libtool, pkgconfig,
-  libXtst, cheetah, libXScrnSaver,
+  libXtst, cheetah, libXScrnSaver, xorg,
   glib, glibmm,
   gtk, gtkmm,
   atk,
@@ -10,11 +10,15 @@
   gdome2, gstreamer, libsigcxx }:
 
 stdenv.mkDerivation rec {
-  version = "v1_10_6";
+  version = "1.10.6";
   name = "workrave-${version}";
 
-  src = fetchurl {
-    url = "http://github.com/rcaelers/workrave/archive/${version}.tar.gz";
+  src = let
+    version_ = with stdenv.lib;
+      concatStringsSep "_" (splitString "." version);
+  in fetchurl {
+    name = "${name}.tar.gz";
+    url = "http://github.com/rcaelers/workrave/archive/v${version_}.tar.gz";
     sha256 = "0q2p83n33chbqzdcdm7ykfsy73frfi6drxzm4qidxwzpzsxrysgq";
   };
 
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
 
     glib glibmm gtk gtkmm atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
+    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx xorg.libICE xorg.libSM
   ];
 
   preConfigure = "./autogen.sh";

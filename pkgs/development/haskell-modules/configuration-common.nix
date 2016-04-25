@@ -1013,4 +1013,8 @@ self: super: {
   c2hs_0_27_1 = if pkgs.stdenv.isDarwin
                 then dontCheck super.c2hs_0_27_1
                 else super.c2hs_0_27_1;
+
+  # tinc is a new build driver a la Stack that's not yet available from Hackage.
+  tinc = self.callPackage ../tools/haskell/tinc {};
+
 }

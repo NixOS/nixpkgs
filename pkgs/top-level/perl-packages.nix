@@ -4409,6 +4409,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NE/NEZUMI/Encode-EUCJPASCII-0.03.tar.gz;
       sha256 = "f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861";
     };
+    outputs = [ "out" ];
     meta = {
       description = "EucJP-ascii - An eucJP-open mapping";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -4433,6 +4434,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.02.tar.gz;
       sha256 = "5d718add5857f37fc270f24360bc9d100b72e0e13a11ca3149fe4e4d7c7cc4bf";
     };
+    outputs = [ "out" ];
     meta = {
     };
   };
@@ -7352,10 +7354,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999717";
+    name = "Math-BigInt-1.999718";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "871c936cbd943b95c5561b82f077cbb1bbb4c85bdae14b668eca985e2a051fb6";
+      sha256 = "3edb44123d6c03a4031057f449b41a0d05ebc48d25ad64b08a5fe2f4ae2ac240";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -7377,11 +7379,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260802";
+    name = "Math-BigRat-0.260803";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "1b1ed448c355677bf6403705f8428fee5bdf2bb138a3fe721bf51414c1695508";
+      sha256 = "0558fab8ffe0de8751ccfa3bd129d6f34b82cf75454de82b051d4ddffd4ec99b";
     };
+    propagatedBuildInputs = [ MathBigInt ];
     meta = {
       description = "Arbitrary big rational numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -8221,13 +8224,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MouseXGetOpt = buildPerlModule {
-    name = "mousex-getopt-0.36";
+  MouseXGetOpt = self.MouseXGetopt;
+
+  MouseXGetopt = buildPerlModule rec {
+    name = "MouseX-Getopt-0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFUJI/MouseX-Getopt-0.36.tar.gz;
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
       sha256 = "172ab0609f1638c6d8800d2dff1bdaa044e305aaa2e9b1fbb8a9dc722a3bf430";
     };
-    buildInputs = [ MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
+    buildInputs = [ ModuleBuild Mouse MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
     meta = {
       homepage = https://github.com/gfx/mousex-getopt;
@@ -8322,12 +8327,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXGetopt = buildPerlPackage rec {
-    name = "MooseX-Getopt-0.68";
+    name = "MooseX-Getopt-0.69";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "acb5118b4666352e58d4268040869d7dc2b68968fe26b5dd6715f51ebd784483";
+      sha256 = "0ef348a5edb8aca9a8bf4aff9dbcc2ac4281682fdc65b210b3c87cffd7501308";
     };
-    buildInputs = [ CPANMeta ModuleBuildTiny ModuleRuntime Moose PathTiny TestDeep TestFatal TestRequires TestTrap TestWarnings if_ ];
+    buildInputs = [ ModuleBuildTiny Moose PathTiny TestDeep TestFatal TestRequires TestTrap TestWarnings self."if" ];
     propagatedBuildInputs = [ GetoptLongDescriptive Moose MooseXRoleParameterized TryTiny namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Getopt;
@@ -10048,14 +10053,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PodElementalPerlMunger = buildPerlPackage {
-    name = "Pod-Elemental-PerlMunger-0.200003";
+  PodElementalPerlMunger = buildPerlPackage rec {
+    name = "Pod-Elemental-PerlMunger-0.200005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200003.tar.gz;
-      sha256 = "94b3abe6894c96b7990cb324a3789af05489dc2b5d1ec8961d37309cc6e8c243";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "35146bdcf0d3ac271f9ba2a4d4611b98373215c43de43dd4f012f46c44004d57";
     };
     buildInputs = [ Moose PodElemental ];
-    propagatedBuildInputs = [ ListMoreUtils Moose PPI ParamsUtil PodElemental namespaceautoclean ];
+    propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
     meta = {
       homepage = https://github.com/rjbs/Pod-Elemental-PerlMunger;
       description = "A thing that takes a string of Perl and rewrites its documentation";
@@ -10454,12 +10459,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   RoleTiny = buildPerlPackage rec {
-    name = "Role-Tiny-2.000001";
+    name = "Role-Tiny-2.000003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "31883410a7c85d6dc7501c718b1f83edba013a7b9bbccf0338a1033c391f296d";
+      sha256 = "6e6c967e1154f290a40c9c60a762cc3b2ec5438107a4fbadddbe55a55b393434";
     };
-    buildInputs = [ TestFatal ];
     meta = {
       description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -10690,10 +10694,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SoftwareLicense = buildPerlPackage rec {
-    name = "Software-License-0.103011";
+    name = "Software-License-0.103012";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "03dyc5sx0asq1m3276l224q5776ng24fw5llf3gr9mbgklkgj05s";
+      sha256 = "47f9acb7f4eeed35e38c1bec37a71b61e651965233d67dadfae6390571517db1";
     };
     propagatedBuildInputs = [ DataSection TextTemplate TryTiny ];
     meta = {

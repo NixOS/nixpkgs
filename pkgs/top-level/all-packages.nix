@@ -330,6 +330,8 @@ in
 
   generateDiffieHellman = callPackage ../build-support/dhparams.nix { };
 
+  iconConvTools = callPackage ../build-support/icon-conv-tools {};
+
   ### TOOLS
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
@@ -610,7 +612,9 @@ in
 
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
-  brasero = callPackage ../tools/cd-dvd/brasero { };
+  brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
+
+  brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
   brltty = callPackage ../tools/misc/brltty {
     alsaSupport = (!stdenv.isDarwin);
@@ -2927,6 +2931,8 @@ in
   proxychains = callPackage ../tools/networking/proxychains { };
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
+
+  pws = callPackage ../tools/misc/pws { };
 
   cntlm = callPackage ../tools/networking/cntlm { };
 
@@ -5296,14 +5302,16 @@ in
   rebar = callPackage ../development/tools/build-managers/rebar { };
   rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
   rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
-  rebar3-nix-bootstrap = callPackage ../development/tools/erlang/rebar3-nix-bootstrap { };
-  fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
+  hexRegistrySnapshot = callPackage ../development/beam-modules/hex-registry-snapshot.nix { };
+  fetchHex = callPackage ../development/beam-modules/fetch-hex.nix { };
 
-  erlangPackages = callPackage ../development/erlang-modules { };
-  cuter = erlangPackages.callPackage ../development/tools/erlang/cuter { };
-  hex2nix = erlangPackages.callPackage ../development/tools/erlang/hex2nix { };
+  beamPackages = callPackage ../development/beam-modules { };
+  hex2nix = beamPackages.callPackage ../development/tools/erlang/hex2nix { };
+  cuter = callPackage ../development/tools/erlang/cuter { };
 
-  elixir = callPackage ../development/interpreters/elixir { };
+  relxExe = callPackage ../development/tools/erlang/relx-exe {};
+
+  elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
@@ -6289,8 +6297,6 @@ in
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
-  tinc-haskell = haskellPackages.callPackage ../development/tools/misc/tinc-haskell { };
-
   travis = callPackage ../development/tools/misc/travis { };
 
   tweak = callPackage ../applications/editors/tweak { };
@@ -6424,6 +6430,14 @@ in
 
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
+  beignet = callPackage ../development/libraries/beignet {
+    inherit (llvmPackages) clang-unwrapped; 
+    inherit (xlibs) libX11; 
+    inherit (xorg) libXfixes libpthreadstubs libXdmcp libXdamage libXxf86vm; 
+    inherit (python3Packages) python; 
+    inherit (purePackages) gl; 
+  }; 
+  
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
   bobcat = callPackage ../development/libraries/bobcat { };
@@ -7327,6 +7341,8 @@ in
 
   libbson = callPackage ../development/libraries/libbson { };
 
+  libburn = callPackage ../development/libraries/libburn { };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
@@ -7721,6 +7737,8 @@ in
   libinput = callPackage ../development/libraries/libinput {
     graphviz = graphviz-nox;
   };
+
+  libisofs = callPackage ../development/libraries/libisofs { };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
@@ -15282,9 +15300,9 @@ in
 
           eventlist = callPackage ../applications/office/eventlist {};
 
-          k3b = callPackage ../applications/misc/k3b {
-            cdrtools = cdrkit;
-          };
+          k3b-original = lowPrio (callPackage ../applications/misc/k3b { });
+
+          k3b = callPackage ../applications/misc/k3b/wrapper.nix { };
 
           kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 

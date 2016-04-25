@@ -6,7 +6,7 @@ let
 
   cfg = config.nix;
 
-  nix = cfg.package;
+  nix = cfg.package.out;
 
   makeNixBuildUser = nr:
     { name = "nixbld${toString nr}";
@@ -24,8 +24,8 @@ let
 
   nixConf =
     let
-      # If we're using a chroot for builds, then provide /bin/sh in
-      # the chroot as a bind-mount to bash. This means we also need to
+      # If we're using sandbox for builds, then provide /bin/sh in
+      # the sandbox as a bind-mount to bash. This means we also need to
       # include the entire closure of bash.
       sh = pkgs.stdenv.shell;
       binshDeps = pkgs.writeReferencesToFile sh;
@@ -39,8 +39,8 @@ let
         build-users-group = nixbld
         build-max-jobs = ${toString (cfg.maxJobs)}
         build-cores = ${toString (cfg.buildCores)}
-        build-use-chroot = ${if (builtins.isBool cfg.useChroot) then (if cfg.useChroot then "true" else "false") else cfg.useChroot}
-        build-chroot-dirs = ${toString cfg.chrootDirs} /bin/sh=${sh} $(echo $extraPaths)
+        build-use-sandbox = ${if (builtins.isBool cfg.useSandbox) then (if cfg.useSandbox then "true" else "false") else cfg.useSandbox}
+        build-sandbox-paths = ${toString cfg.sandboxPaths} /bin/sh=${sh} $(echo $extraPaths)
         binary-caches = ${toString cfg.binaryCaches}
         trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
         binary-cache-public-keys = ${toString cfg.binaryCachePublicKeys}
@@ -65,8 +65,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.nix.out;
-        defaultText = "pkgs.nix.out";
+        default = pkgs.nix;
+        defaultText = "pkgs.nix";
         description = ''
           This option specifies the Nix package instance to use throughout the system.
         '';
@@ -98,25 +98,25 @@ in
         '';
       };
 
-      useChroot = mkOption {
+      useSandbox = mkOption {
         type = types.either types.bool (types.enum ["relaxed"]);
         default = false;
         description = "
-          If set, Nix will perform builds in a chroot-environment that it
+          If set, Nix will perform builds in a sandboxed environment that it
           will set up automatically for each build.  This prevents
           impurities in builds by disallowing access to dependencies
           outside of the Nix store.
         ";
       };
 
-      chrootDirs = mkOption {
+      sandboxPaths = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "/dev" "/proc" ];
         description =
           ''
             Directories from the host filesystem to be included
-            in the chroot.
+            in the sandbox.
           '';
       };
 
