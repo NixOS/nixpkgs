@@ -35,7 +35,8 @@ setup(
         'console_scripts': [
             'fc-maintenance=fc.maintenance.reqmanager:main',
             'list-maintenance=fc.maintenance.reqmanager:list_maintenance',
-            'maintenance-script=fc.maintenance.lib.shellscript:main',
+            'scheduled-script=fc.maintenance.lib.shellscript:main',
+            'scheduled-reboot=fc.maintenance.lib.reboot:main',
         ],
     },
 )

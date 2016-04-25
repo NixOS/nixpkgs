@@ -144,8 +144,6 @@ class Request:
         if self.next_due and not self.next_due.tzinfo:
             raise TypeError('next_due lacks time zone', self.next_due, self.id)
         self.update_state()
-        print('old:', old)
-        print('new:', self.next_due)
         return self.next_due != old
 
     def update_state(self):

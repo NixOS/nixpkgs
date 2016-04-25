@@ -92,10 +92,12 @@ class ReqManager:
             try:
                 req = Request.load(d)
                 self.requests[req.id] = req
-            except Exception as e:
-                LOG.exception('error loading request from %s', d,
-                              exc_info=e)
-                LOG.error('archiving defective request dir', d)
+            except Exception as exc:
+                LOG.exception('error loading request from %s', d)
+                with open(p.join(d, '_load_request_yaml_error'), 'a') as f:
+                    print(exc, file=f)
+                LOG.error('(req %s) archiving defective request',
+                          p.basename(d))
                 os.rename(d, p.join(self.archivedir, p.basename(d)))
 
     def add(self, request):
@@ -157,8 +159,8 @@ class ReqManager:
             LOG.info('(req %s) starting execution', req.id)
             try:
                 req.execute()
-            except Exception as e:
-                LOG.exception('(req %s) error during execution', exc_info=e)
+            except Exception:
+                LOG.exception('(req %s) error during execution', req.id)
                 req.state = State.error
             req.save()
             LOG.debug('(req %s) executed, state %s', req.id, req.state)
@@ -205,7 +207,7 @@ class ReqManager:
             req.save()
 
 
-def cycle(spooldir, enc_path):
+def transaction(spooldir=DEFAULT_DIR, enc_path=None):
     with ReqManager(spooldir, enc_path) as rm:
         rm.schedule()
         rm.execute()
@@ -225,7 +227,9 @@ Schedules, runs, and archives maintenance requests.
     args = a.parse_args()
     logging.basicConfig(format='%(levelname)s: %(message)s',
                         level=logging.DEBUG if args.verbose else logging.INFO)
-    cycle(args.spooldir, args.enc_path)
+    # this is really annoying
+    logging.getLogger('iso8601').setLevel(logging.INFO)
+    transaction(args.spooldir, args.enc_path)
 
 
 def list_maintenance():
