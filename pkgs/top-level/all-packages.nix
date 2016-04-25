@@ -2170,17 +2170,21 @@ in
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
+  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     libtool = darwin.cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
   };
 
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
   };
 
-  nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
+  nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
     libtool = darwin.cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
+  };
+
+  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
+    libtool = darwin.cctools;
   };
 
   nodejs = if stdenv.system == "armv5tel-linux" then
