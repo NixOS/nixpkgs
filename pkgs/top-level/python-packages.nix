@@ -18717,7 +18717,7 @@ in modules // {
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pyqt4
       cython ];
 
-    buildInputs = [ pkgs.gcc pkgs.qt4 numpy.blas self.nose ];
+    buildInputs = [ pkgs.gcc pkgs.qt4 self.numpy.blas self.nose ];
 
     meta = {
       description = "QuTiP - Quantum Toolbox in Python";
@@ -19629,8 +19629,8 @@ in modules // {
       sha256 = "9f4cf58e57d81783289fc503caaed1f210bab49b7a6f680bf3c04b1e0a96e5f0";
     };
 
-    buildInputs = with self; [ nose pillow pkgs.gfortran pkgs.glibcLocales ];
-    propagatedBuildInputs = with self; [ numpy scipy numpy.blas ];
+    buildInputs = with self; [ numpy.blas nose pillow pkgs.gfortran pkgs.glibcLocales ];
+    propagatedBuildInputs = with self; [ numpy scipy ];
 
     LC_ALL="en_US.UTF-8";
 
