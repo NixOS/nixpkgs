@@ -6,7 +6,7 @@ let
   binPath = stdenv.lib.makeBinPath
     [ coreutils gnugrep utillinux kmod procps kbd dbus_tools ];
 
-  sbinPath = stdenv.lib.makeSearchPathOutputs "sbin" ["bin"]
+  sbinPath = stdenv.lib.makeSearchPathOutput "bin" "sbin"
     [ procps ];
 
 in

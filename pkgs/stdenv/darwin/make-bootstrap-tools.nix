@@ -62,7 +62,7 @@ rec {
       cp -d ${openssl.out}/lib/*.dylib $out/lib
 
       cp -d ${gnugrep.pcre.out}/lib/libpcre*.dylib $out/lib
-      cp -d ${libiconv.lib or libiconv}/lib/lib*.dylib $out/lib
+      cp -d ${lib.getLib libiconv}/lib/lib*.dylib $out/lib
       cp -d ${gettext}/lib/libintl*.dylib $out/lib
       chmod +x $out/lib/libintl*.dylib
       cp -d ${ncurses.out}/lib/libncurses*.dylib $out/lib

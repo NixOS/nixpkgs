@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     ''
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc_bin ${glibc.bin or glibc} \
-        --subst-var-by glibc_dev ${glibc.dev or glibc} \
-        --subst-var-by glibc_lib ${glibc.out or glibc}
+        --subst-var-by glibc_bin ${getBin glibc} \
+        --subst-var-by glibc_dev ${getDev glibc} \
+        --subst-var-by glibc_lib ${getLib glibc}
     '';
   configureFlags =
     [ "--docdir=/share/doc/${name}"

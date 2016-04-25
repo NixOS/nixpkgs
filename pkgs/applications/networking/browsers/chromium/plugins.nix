@@ -65,7 +65,7 @@ let
 
     patchPhase = let
       rpaths = [ stdenv.cc.cc ];
-      mkrpath = p: "${makeSearchPathOutputs "lib64" ["lib"] p}:${makeLibraryPath p}";
+      mkrpath = p: "${makeSearchPathOutput "lib" "lib64" p}:${makeLibraryPath p}";
     in ''
       for sofile in PepperFlash/libpepflashplayer.so \
                     libwidevinecdm.so libwidevinecdmadapter.so; do
