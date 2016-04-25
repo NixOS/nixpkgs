@@ -16,13 +16,15 @@ stdenv.mkDerivation rec {
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";
-  
+
   preBuild = "sed -i Makefile -e 's/^CFGF=/&	-DHASIPv6=1/;';";
-  
-  configurePhase = if stdenv.isDarwin
-    then "./Configure -n darwin;"
-    else "./Configure -n linux;";
-  
+
+  configurePhase = ''
+    # Stop build scripts from searching global include paths
+    export LSOF_INCLUDE=/$(md5sum <(echo $name) | awk '{print $1}')
+    ./Configure -n ${if stdenv.isDarwin then "darwin" else "linux"}
+  '';
+
   installPhase = ''
     mkdir -p $out/bin $out/man/man8
     cp lsof.8 $out/man/man8/
