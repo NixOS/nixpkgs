@@ -1,12 +1,16 @@
 { stdenv, fetchurl, intltool, pkgconfig, libX11, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "lxappearance-0.6.1";
+  name = "lxappearance-0.6.2";
+
   src = fetchurl{
     url = "mirror://sourceforge/project/lxde/LXAppearance/${name}.tar.xz";
-    sha256 = "1phnv1b2jdj2vlibjyc9z01izcf3k5zxj8glsaf0i3vh77zqmqq9";
+    sha256 = "07r0xbi6504zjnbpan7zrn7gi4j0kbsqqfpj8v2x94gr05p16qj4";
   };
-  buildInputs = [ intltool libX11 pkgconfig gtk ];
+
+  nativeBuildInputs = [ intltool pkgconfig ];
+  buildInputs = [ libX11 gtk ];
+
   meta = {
     description = "A lightweight program for configuring the theme and fonts of gtk applications";
     maintainers = [ stdenv.lib.maintainers.hinton ];
