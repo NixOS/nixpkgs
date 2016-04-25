@@ -6,7 +6,7 @@ let
   inherit (args) version;
 in buildPythonPackage (args // rec {
 
-  name = "numpy-${version}";
+  name = "numpy";
 
   disabled = isPyPy;
   buildInputs = args.buildInputs or [ gfortran nose ];

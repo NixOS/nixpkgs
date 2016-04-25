@@ -7,7 +7,7 @@ let
   inherit (args) numpy;
 in buildPythonPackage (args // rec {
 
-  name = "scipy-${version}";
+  name = "scipy";
 
   buildInputs = (args.buildInputs or [ gfortran nose ]);
   propagatedBuildInputs = (args.propagatedBuildInputs or [ passthru.blas numpy]);
