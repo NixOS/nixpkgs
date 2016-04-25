@@ -2483,8 +2483,8 @@ in modules // {
       name = "botocore-${version}";
       version = "1.3.30";
       src = pkgs.fetchurl {
-        url = "https://pypi.python.org/packages/6c/79/5d3abfb9fffe4a8cb0a113f088c1012743cf40db805aaac625b2e3cf2111/botocore-1.3.30.tar.gz";
-        md5 = "0bbccf3385a0e509e5a674ddb2d27752";
+        url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
+        sha256 = "12c6xjvlvgaz6rlzfy6x1k7xan8lhxgw3c5bgh5dlpfhz7kf5m2v";
       };
     };
   in buildPythonPackage rec {
