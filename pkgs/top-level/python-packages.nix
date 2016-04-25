@@ -20105,7 +20105,7 @@ in modules // {
     # the fix for which hasn't been merged yet.
 
     # keep Nose around since running the tests by hand is possible from Python or bash
-    propagatedBuildInputs = [ stdenv pkgs.blas ] ++ (with self; [ nose numpy pydot_ng scipy six ]);
+    propagatedBuildInputs = [ stdenv ] ++ (with self; [ nose numpy numpy.blas pydot_ng scipy six ]);
 
     meta = {
       homepage = http://deeplearning.net/software/theano/;
