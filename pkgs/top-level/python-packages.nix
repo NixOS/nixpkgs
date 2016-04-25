@@ -2477,7 +2477,17 @@ in modules // {
     };
   };
 
-  boto3 = buildPythonPackage rec {
+  boto3 = let
+    # Version >=1.3,<1.4 is required by boto3.
+    botocore-1_3 = self.botocore.override rec {
+      name = "botocore-${version}";
+      version = "1.3.30";
+      src = pkgs.fetchurl {
+        url = "https://pypi.python.org/packages/6c/79/5d3abfb9fffe4a8cb0a113f088c1012743cf40db805aaac625b2e3cf2111/botocore-1.3.30.tar.gz";
+        md5 = "0bbccf3385a0e509e5a674ddb2d27752";
+      };
+    };
+  in buildPythonPackage rec {
     name = "boto3-${version}";
     version = "1.2.2";
 
@@ -2488,16 +2498,17 @@ in modules // {
       sha256 = "1w53lhhdzi29d31qzhflb5mcwb24mfrj4frv70w6qyn8vmqznnjy";
     };
 
-    propagatedBuildInputs = [ self.botocore
-                              self.jmespath
-                            ] ++ (if isPy3k then [] else [self.futures_2_2]);
+    propagatedBuildInputs = [ botocore-1_3 self.jmespath ] ++
+                            (if isPy3k then [] else [self.futures_2_2]);
     buildInputs = [ self.docutils self.nose self.mock ];
-
-    # Tests are failing with `botocore.exceptions.NoCredentialsError:
-    # Unable to locate credentials`. There also seems to be some mock
-    # issues (`assert_called_once` doesn't exist in mock but boto
-    # seems to think it is?).
-    doCheck = false;
+    checkPhase = ''
+      runHook preCheck
+      # This method is not in mock. It might have appeared in some versions.
+      sed -i 's/action.assert_called_once()/self.assertEqual(action.call_count, 1)/' \
+        tests/unit/resources/test_factory.py
+      nosetests -d tests/unit --verbose
+      runHook postCheck
+    '';
 
     meta = {
       homepage = https://github.com/boto3/boto;
