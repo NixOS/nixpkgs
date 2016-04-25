@@ -204,11 +204,11 @@ in
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
+                "${cfg.package}/bin/ssh-agent -D " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
                 "-a %t/ssh-agent";
             StandardOutput = "null";
-            Type = "forking";
+            Type = "simple";
             Restart = "on-failure";
             SuccessExitStatus = "0 2";
           };
