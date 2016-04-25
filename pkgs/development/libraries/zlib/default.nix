@@ -64,9 +64,6 @@ stdenv.mkDerivation rec {
     makeFlags = [ "RANLIB=${stdenv.cross.config}-ranlib" ];
   };
 
-  # CYGXXX: This is not needed anymore and non-functional, but left not to trigger rebuilds
-  cygwinConfigureEnableShared = if (!stdenv.isCygwin) then true else null;
-
   passthru.version = version;
 
   meta = with stdenv.lib; {
