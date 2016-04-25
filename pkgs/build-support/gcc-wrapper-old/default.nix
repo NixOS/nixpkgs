@@ -45,9 +45,9 @@ stdenv.mkDerivation {
   libc = if nativeLibc then null else libc;
   libc_dev = if nativeLibc then null else lib.getDev libc;
   libc_bin = if nativeLibc then null else lib.getBin libc;
-  binutils = if nativeTools then null else binutils;
+  binutils = if nativeTools then null else lib.getBin binutils;
   # The wrapper scripts use 'cat', so we may need coreutils
-  coreutils = if nativeTools then null else coreutils;
+  coreutils = if nativeTools then null else lib.getBin coreutils;
 
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;
