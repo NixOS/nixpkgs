@@ -9,8 +9,8 @@ in buildPythonPackage (args // rec {
   name = "numpy-${version}";
 
   disabled = isPyPy;
-  buildInputs = args.buildInputs or [ gfortran nose passthru.blas ];
-  propagatedBuildInputs = args.propagatedBuildInputs or [ ];
+  buildInputs = args.buildInputs or [ gfortran nose ];
+  propagatedBuildInputs = args.propagatedBuildInputs or [ passthru.blas ];
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
