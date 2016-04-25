@@ -12,8 +12,8 @@ if [[ $1 == nix ]]; then
     # Make sure we can use hydra's binary cache
     sudo mkdir /etc/nix
     sudo tee /etc/nix/nix.conf <<EOF >/dev/null
-binary-caches = http://cache.nixos.org http://hydra.nixos.org
-trusted-binary-caches = http://hydra.nixos.org
+binary-caches = http://cache.nixos.org http://hydra.nixos.org http://hydra.flyingcircus.io
+trusted-binary-caches = http://hydra.nixos.org http://hydra.flyingcircus.io
 build-max-jobs = 4
 EOF
 
