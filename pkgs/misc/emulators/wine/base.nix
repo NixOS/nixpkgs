@@ -32,9 +32,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath " + path) (
-      map (x: "${x}/lib") ([ stdenv.cc.cc ] ++ (map (x: x.lib or x.out) buildInputs))
+      map (x: "${lib.getLib x}/lib") ([ stdenv.cc.cc ] ++ buildInputs)
       # libpulsecommon.so is linked but not found otherwise
-      ++ lib.optionals pulseaudioSupport (map (x: "${x}/lib/pulseaudio") (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
+      ++ lib.optionals pulseaudioSupport (map (x: "${lib.getLib x}/lib/pulseaudio")
+          (toBuildInputs pkgArches (pkgs: [ pkgs.libpulseaudio ])))
     );
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH

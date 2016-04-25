@@ -53,8 +53,8 @@ let
     ++ optional zlibSupport zlib;
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
+    C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
+    LIBRARY_PATH = makeLibraryPath paths;
   };
 
   # Build the basic Python interpreter without modules that have

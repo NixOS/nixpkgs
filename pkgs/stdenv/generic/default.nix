@@ -223,7 +223,7 @@ let
         # include it in the result, it *is* available to nix-env for queries.
         meta = { }
             # If the packager hasn't specified `outputsToInstall`, choose a default,
-            # namely `p.bin or p.out or p`;
+            # which is the name of `p.bin or p.out or p`;
             # if he has specified it, it will be overridden below in `// meta`.
             #   Note: This default probably shouldn't be globally configurable.
             #   Services and users should specify outputs explicitly,
