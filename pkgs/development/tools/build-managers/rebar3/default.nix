@@ -7,68 +7,56 @@ let
 
   bootstrapper = ./rebar3-nix-bootstrap;
 
-  # TODO: all these below probably should go into nixpkgs.erlangModules.sources.*
-  # {erlware_commons,     "0.19.0"},
   erlware_commons = fetchHex {
     pkg = "erlware_commons";
     version = "0.19.0";
     sha256 = "1gfsy9bbhjb94c5ghff2niamn93x2x08lnklh6pp7sfr5i0gkgsv";
   };
-  # {ssl_verify_hostname, "1.0.5"},
   ssl_verify_hostname = fetchHex {
     pkg = "ssl_verify_hostname";
     version = "1.0.5";
     sha256 = "1gzavzqzljywx4l59gvhkjbr1dip4kxzjjz1s4wsn42f2kk13jzj";
   };
-  # {certifi,             "0.4.0"},
   certifi = fetchHex {
     pkg = "certifi";
     version = "0.4.0";
     sha256 = "04bnvsbssdcf6b9h9bfglflds7j0gx6q5igl1xxhx6fnwaz37hhw";
   };
-  # {providers,           "1.6.0"},
   providers = fetchHex {
     pkg = "providers";
     version = "1.6.0";
     sha256 = "0byfa1h57n46jilz4q132j0vk3iqc0v1vip89li38gb1k997cs0g";
   };
-  # {getopt,              "0.8.2"},
   getopt = fetchHex {
     pkg = "getopt";
     version = "0.8.2";
     sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
   };
-  # {bbmustache,          "1.0.4"},
   bbmustache = fetchHex {
     pkg = "bbmustache";
     version = "1.0.4";
     sha256 = "04lvwm7f78x8bys0js33higswjkyimbygp4n72cxz1kfnryx9c03";
   };
-  # {relx,                "3.17.0"},
   relx = fetchHex {
     pkg = "relx";
     version = "3.17.0";
     sha256 = "1xjybi93m8gj9f9z3lkc7xbg3k5cw56yl78rcz5qfirr0223sby2";
   };
-  # {cf,                  "0.2.1"},
   cf = fetchHex {
     pkg = "cf";
     version = "0.2.1";
     sha256 = "19d0yvg8wwa57cqhn3vqfvw978nafw8j2rvb92s3ryidxjkrmvms";
   };
-  # {cth_readable,        "1.2.2"},
   cth_readable = fetchHex {
     pkg = "cth_readable";
     version = "1.2.2";
     sha256 = "0kb9v4998liwyidpjkhcg1nin6djjzxcx6b313pbjicbp4r58n3p";
   };
-  # {eunit_formatters,    "0.3.1"}
   eunit_formatters = fetchHex {
     pkg = "eunit_formatters";
     version = "0.3.1";
     sha256 = "0cg9dasv60v09q3q4wja76pld0546mhmlpb0khagyylv890hg934";
   };
-  # {rebar3_hex,    "1.12.0"}
   rebar3_hex = fetchHex {
     pkg = "rebar3_hex";
     version = "1.12.0";

@@ -38,15 +38,14 @@
 main(Args) ->
     {ok, ArgData} = parse_args(Args),
     {ok, RequiredData} = gather_required_data_from_the_environment(ArgData),
-    do(RequiredData).
+    do_the_bootstrap(RequiredData).
 
-%% @doc
-%% This actually runs the command. There are two modes 'register_only'
-%% where the register is created from hex and everything else.
--spec do(#data{}) -> ok.
-do(RequiredData = #data{registry_only = true}) ->
+%% @doc There are two modes 'registery_only' where the register is
+%% created from hex and everything else.
+-spec do_the_bootstrap(#data{}) -> ok.
+do_the_bootstrap(RequiredData = #data{registry_only = true}) ->
     ok = bootstrap_registry(RequiredData);
-do(RequiredData) ->
+do_the_bootstrap(RequiredData) ->
     ok = bootstrap_registry(RequiredData),
     ok = bootstrap_configs(RequiredData),
     ok = bootstrap_plugins(RequiredData),
@@ -55,10 +54,15 @@ do(RequiredData) ->
 %% @doc
 %% Argument parsing is super simple only because we want to keep the
 %% dependencies minimal. For now there can be two entries on the
-%% command line, "register-only" and "compile-ports"
+%% command line, "registery-only"
 -spec parse_args([string()]) -> #data{}.
+parse_args(["registry-only"]) ->
+    {ok, #data{registry_only = true}};
+parse_args([]) ->
+    {ok, #data{registry_only = false}};
 parse_args(Args) ->
-    {ok, #data{registry_only = lists:member("registry-only", Args)}}.
+    io:format("Unexpected command line arguments passed in: ~p~n", [Args]),
+    erlang:halt(120).
 
 -spec bootstrap_configs(#data{}) -> ok.
 bootstrap_configs(RequiredData)->
@@ -76,7 +80,7 @@ bootstrap_plugins(#data{plugins = Plugins}) ->
                             gather_dependency(Path) ++ Acc
                     end, [], Paths),
     lists:foreach(fun (Path) ->
-                          link_app(Path, Target)
+                          ok = link_app(Path, Target)
                   end, CopiableFiles).
 
 -spec bootstrap_libs(#data{}) -> ok.
@@ -89,7 +93,7 @@ bootstrap_libs(#data{erl_libs = ErlLibs}) ->
                             gather_directory_contents(Path) ++ Acc
                     end, [], Paths),
     lists:foreach(fun (Path) ->
-                          link_app(Path, Target)
+                          ok = link_app(Path, Target)
                   end, CopiableFiles).
 
 -spec gather_dependency(string()) -> [{string(), string()}].
@@ -199,21 +203,20 @@ guard_env(Name) ->
 %% include the 'pc' plugin.
 -spec if_compile_ports_add_pc_plugin(#data{}) -> ok.
 if_compile_ports_add_pc_plugin(#data{compile_ports = true}) ->
-    ConfigTerms = update_config(read_rebar_config()),
+    ConfigTerms = add_pc_to_plugins(read_rebar_config()),
     Text = lists:map(fun(Term) -> io_lib:format("~tp.~n", [Term]) end,
                      ConfigTerms),
     file:write_file("rebar.config", Text);
 if_compile_ports_add_pc_plugin(_) ->
     ok.
 
--spec update_config([term()]) -> [term()].
-update_config(Config) ->
-    case lists:keysearch(plugins, 1, Config) of
-        {ok, {plugins, PluginList}} ->
-            lists:keystore(plugins, 1, Config, {plugins, [Config | PluginList]});
-        _ ->
-            [{plugins, [pc]} | Config]
-    end.
+-spec add_pc_to_plugins([term()]) -> [term()].
+add_pc_to_plugins(Config) ->
+    PluginList = case lists:keysearch(plugins, 1, Config) of
+                     {ok, {plugins, ExistingPluginList}} -> ExistingPluginList;
+                     _ -> []
+                 end,
+    lists:keystore(plugins, 1, Config, {plugins, [pc | PluginList]}).
 
 -spec read_rebar_config() -> [term()].
 read_rebar_config() ->
@@ -229,10 +232,13 @@ read_rebar_config() ->
 -spec if_single_app_project_update_app_src_version(#data{}) -> ok.
 if_single_app_project_update_app_src_version(#data{name = Name,
                                                    version = Version}) ->
-    case app_src_exists(Name) of
-        {true, SrcFile} ->
+    SrcFile = filename:join("src",
+                            lists:concat([Name, ".app.src"])),
+
+    case filelib:is_file(SrcFile) of
+        true ->
             update_app_src_with_version(SrcFile, Version);
-        {false, _} ->
+        false ->
             ok
     end.
 
@@ -240,14 +246,7 @@ if_single_app_project_update_app_src_version(#data{name = Name,
 update_app_src_with_version(SrcFile, Version) ->
     {ok, [{application, Name, Details}]} = file:consult(SrcFile),
     NewDetails = lists:keyreplace(vsn, 1, Details, {vsn, Version}),
-    file:write_file(SrcFile, io_lib:fwrite("~p.\n", [{application, Name, NewDetails}])).
-
--spec app_src_exists(string()) -> boolean().
-app_src_exists(Name) ->
-    FileName = filename:join("src",
-                             lists:concat([Name, ".app.src"])),
-    {filelib:is_file(FileName), FileName}.
-
+    ok = file:write_file(SrcFile, io_lib:fwrite("~p.\n", [{application, Name, NewDetails}])).
 
 %% @doc
 %% Write the result of the format string out to stderr.
