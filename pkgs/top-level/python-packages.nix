@@ -13338,6 +13338,14 @@ in modules // {
 
   numpy = self.numpy_1_11;
 
+  numpy_1_9 = self.buildNumpyPackage rec {
+    version = "1.9.2";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/numpy/numpy-${version}.tar.gz";
+      sha256 = "0apgmsk9jlaphb2dp1zaxqzdxkf69h1y3iw2d1pcnkj31cmmypij";
+    };
+  };
+
   numpy_1_10 = self.buildNumpyPackage rec {
     version = "1.10.4";
     src = pkgs.fetchurl {
