@@ -26588,4 +26588,104 @@ in modules // {
       maintainers = with maintainers; [];
     };
   };
+
+  repeated_test = buildPythonPackage rec {
+    name = "repeated_test-${version}";
+    version = "0.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/repeated-test/${name}.tar.gz";
+      sha256 = "062syp7kl2g0x6qx3z8zb5sdycpi7qcpxp9iml2v8dqzqnij9bpg";
+    };
+
+    buildInputs = with self; [
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      six
+    ];
+
+    meta = {
+      description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
+      homepage = "https://github.com/epsy/repeated_test";
+      license = licenses.mit;
+    };
+  };
+
+  sigtools = buildPythonPackage rec {
+    name = "sigtools-${version}";
+    version = "1.1a3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/s/sigtools/${name}.tar.gz";
+      sha256 = "190w14vzbiyvxcl9jmyyimpahar5b0bq69v9iv7chi852yi71w6w";
+    };
+
+    buildInputs = with self; [
+      repeated_test
+      sphinx
+      mock
+      coverage
+      unittest2
+    ];
+    propagatedBuildInputs = with self; [
+      funcsigs
+      six
+    ];
+
+    patchPhase = ''sed -i s/test_suite="'"sigtools.tests"'"/test_suite="'"unittest2.collector"'"/ setup.py'';
+
+    meta = {
+      description = "Utilities for working with 3.3's inspect.Signature objects.";
+      homepage = "https://pypi.python.org/pypi/sigtools";
+      license = licenses.mit;
+    };
+  };
+
+  clize = buildPythonPackage rec {
+    name = "clize-${version}";
+    version = "3.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/clize/${name}.tar.gz";
+      sha256 = "1xkr3h404d7pgj5gdpg6bddv3v3yq2hgx8qlwkgw5abg218k53hm";
+    };
+
+    buildInputs = with self; [
+      dateutil
+    ];
+    propagatedBuildInputs = with self; [
+      sigtools
+    ];
+
+    meta = {
+      description = "Command-line argument parsing for Python";
+      homepage = "https://github.com/epsy/clize";
+      license = licenses.mit;
+    };
+  };
+
+  zerobin = buildPythonPackage rec {
+    name = "zerobin-${version}";
+    version = "20160108";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "sametmax";
+      repo = "0bin";
+      rev = "7da1615";
+      sha256 = "1pzcwy454kn5216pvwjqzz311s6jbh7viw9s6kw4xps6f5h44bid";
+    };
+
+    propagatedBuildInputs = with self; [
+      cherrypy
+      bottle
+      lockfile
+      clize
+    ];
+    meta = {
+      description = "A client side encrypted pastebin";
+      homepage = "http://0bin.net/";
+      license = licenses.wtfpl;
+    };
+  };
 }
