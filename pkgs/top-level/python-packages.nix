@@ -19587,7 +19587,7 @@ in modules // {
       url = "https://pypi.python.org/packages/source/s/scipy/scipy-${version}.tar.gz";
       sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
     };
-    numpy = self.numpy;
+    numpy = self.numpy_1_10;
   };
 
   scipy_0_17 = self.buildScipyPackage rec {
