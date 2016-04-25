@@ -4433,6 +4433,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-JIS2K-0.02.tar.gz;
       sha256 = "5d718add5857f37fc270f24360bc9d100b72e0e13a11ca3149fe4e4d7c7cc4bf";
     };
+    outputs = [ "out" ];
     meta = {
     };
   };
