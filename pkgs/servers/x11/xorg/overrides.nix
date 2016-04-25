@@ -265,6 +265,7 @@ in
   };
 
   xcbutilcursor = attrs: attrs // {
+    outputs = [ "dev" "out" ];
     meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
   };
 
