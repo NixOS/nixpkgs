@@ -2,14 +2,14 @@
 
 let
   version = "4.6.0";
-  rev = "2"; #tracks unversioned changes that occur on download.code42.com from time to time
+  rev = "3"; #tracks unversioned changes that occur on download.code42.com from time to time
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}-r${rev}";
 
   crashPlanArchive = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "13rmmdj048r8k4v7ig4i6pnvwyzc1vasfgksf070bx6ksklgbq47";
+    sha256 = "0crrx8gy132xcpjfah08qhsl8g2arx14p5mpypcihl9j6mldi6mz";
   };
 
   srcs = [ crashPlanArchive ];
