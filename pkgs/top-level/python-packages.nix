@@ -13659,8 +13659,8 @@ in modules // {
   # });
 
   ordereddict = buildPythonPackage rec {
-    name = "ordereddict-1.1";
-    disabled = !isPy26;
+    name = "ordereddict-${version}";
+    version = "1.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
