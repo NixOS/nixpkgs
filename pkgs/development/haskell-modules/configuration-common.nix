@@ -1013,4 +1013,12 @@ self: super: {
   # generate enough conclusive test cases.
   split = dontCheck super.split;
 
+  # https://github.com/NixOS/nixpkgs/issues/14967
+  yi = markBroken super.yi;
+  yi-fuzzy-open = markBroken super.yi-fuzzy-open;
+  yi-monokai = markBroken super.yi-monokai;
+  yi-snippet = markBroken super.yi-snippet;
+  yi-solarized = markBroken super.yi-solarized;
+  yi-spolsky = markBroken super.yi-spolsky;
+
 }
