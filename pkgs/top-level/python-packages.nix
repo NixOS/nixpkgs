@@ -18718,7 +18718,7 @@ in modules // {
     propagatedBuildInputs = with self; [ numpy scipy matplotlib pyqt4
       cython ];
 
-    buildInputs = [ pkgs.gcc pkgs.qt4 numpy.blas self.nose ];
+    buildInputs = [ pkgs.gcc pkgs.qt4 pkgs.blas self.nose ];
 
     meta = {
       description = "QuTiP - Quantum Toolbox in Python";
