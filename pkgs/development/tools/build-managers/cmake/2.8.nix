@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional wantPS ps;
 
-  CMAKE_PREFIX_PATH = stdenv.lib.concatStringsSep ":"
+  CMAKE_PREFIX_PATH = concatStringsSep ":"
     (concatMap (p: [ p p.out ]) buildInputs);
 
   configureFlags =
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
       source $setupHook
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc_bin ${glibc.bin or glibc} \
-        --subst-var-by glibc_dev ${glibc.dev or glibc} \
-        --subst-var-by glibc_lib ${glibc.out or glibc}
+        --subst-var-by glibc_bin ${getBin glibc} \
+        --subst-var-by glibc_dev ${getDev glibc} \
+        --subst-var-by glibc_lib ${getLib glibc}
     '';
 
   meta = {
