@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     breakpad ffmpeg openalSoft openssl zlib libexif lzma libopus
     gtk2 glib libappindicator-gtk2 libunity cairo pango gdk_pixbuf atk
-    dee libdbusmenu-glib libva qmakeHook
+    dee libdbusmenu-glib libva qtbase qmakeHook
     # Qt dependencies
     libxcb xcbutilwm xcbutilimage xcbutilkeysyms libxkbcommon
     libpng libjpeg freetype harfbuzz pcre16 xproto libX11
