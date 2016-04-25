@@ -34,11 +34,13 @@ in
 {
 
   imports = [
-    ./user.nix
+    ./firewall
+    ./logrotate
     ./network.nix
+    ./sensu-client.nix
     ./ssl/certificate.nix
     ./ssl/dhparams.nix
-    ./sensu-client.nix
+    ./user.nix
   ];
 
   options = {
@@ -151,6 +153,7 @@ in
 
     '';
 
+    services.cron.enable = true;
     sound.enable = false;
     fonts.fontconfig.enable = true;
     environment.systemPackages = with pkgs; [
@@ -282,21 +285,6 @@ in
       "d /tmp - - - 3d"
       "x /tmp/fc-data/*"
       "D /var/tmp - - - 7d"];
-
-    services.logrotate.enable = true;
-    services.logrotate.config = lib.mkOrder 50 ''
-    daily
-    rotate 14
-    create
-    dateext
-    delaycompress
-    compress
-    notifempty
-    nomail
-    noolddir
-    missingok
-    sharedscripts
-    '';
 
     };
 }

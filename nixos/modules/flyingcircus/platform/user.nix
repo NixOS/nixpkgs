@@ -184,7 +184,12 @@ in
 
     security.pam.services.sshd.showMotd = true;
     security.pam.access = ''
+    # Local logins are always fine. This is to unblock any automation like
+    # systemd services
+    + : ALL : LOCAL
+    # Remote logins are restricted to admins and the login group.
     + : root (admins) (login): ALL
+    # Other remote logins are not allowed.
     - : ALL : ALL
     '';
 

@@ -85,6 +85,15 @@ def system_state():
                         break
         except IOError:
             pass
+        try:
+            with open('/proc/cpuinfo') as f:
+                cores = 0
+                for line in f:
+                    if line.startswith('processor'):
+                        cores += 1
+            result['cores'] = cores
+        except IOError:
+            pass
         return result
 
     write_json([
