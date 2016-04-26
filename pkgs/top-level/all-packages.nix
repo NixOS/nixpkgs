@@ -2978,6 +2978,8 @@ in
     qt = qt4;
   };
 
+  qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
+
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
     qt = qt4;
