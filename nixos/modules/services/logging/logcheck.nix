@@ -11,7 +11,10 @@ let
                    rm $out/logcheck.*
                  '';
 
-  rulesDir = pkgs.symlinkJoin "logcheck-rules-dir" ([ defaultRules ] ++ cfg.extraRulesDirs);
+  rulesDir = pkgs.symlinkJoin
+    { name = "logcheck-rules-dir";
+      paths = ([ defaultRules ] ++ cfg.extraRulesDirs);
+    };
 
   configFile = pkgs.writeText "logcheck.conf" cfg.config;
 
