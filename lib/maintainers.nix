@@ -14,6 +14,7 @@
   adev = "Adrien Devresse <adev@adev.name>";
   Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
+  adnelson = "Allen Nelson <ithinkican@gmail.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   afranchuk = "Alex Franchuk <alex.franchuk@gmail.com>";

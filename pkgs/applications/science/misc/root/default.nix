@@ -12,8 +12,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake pkgconfig python libX11 libXpm libXft libXext zlib lzma ];
 
+  preConfigure = ''
+    patchShebangs build/unix/
+  '';
+
   cmakeFlags = [
     "-Drpath=ON"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ]
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
 

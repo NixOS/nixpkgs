@@ -3287,6 +3287,30 @@ in modules // {
     };
   });
 
+  /* There is a project called "closure-linter" on PyPI that is the
+     same as this, but it does not appear to be owned by Google.
+     So we're pulling from Google's GitHub repo instead. */
+  closure-linter = buildPythonPackage rec {
+    name = "closure-linter-${version}";
+    version = "2.3.19";
+
+    /* This project has no Python 3 support, as noted by
+       https://github.com/google/closure-linter/issues/81 */
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ gflags ];
+    src = pkgs.fetchgit {
+      url = "https://github.com/google/closure-linter";
+      rev = "5c27529075bb88bdc45e73008f496dec8438d658";
+      sha256 = "076c7q7pr7akfvq5y8lxr1ab81wwps07gw00igdkcxnc5k9dzxwc";
+    };
+    meta = {
+      description = "Checks JavaScript files against Google's style guide.";
+      homepage = "https://developers.google.com/closure/utilities/";
+      license = with licenses; [ asl20 ];
+    };
+  };
+
   cloudpickle = buildPythonPackage rec {
     name = "cloudpickle-${version}";
     version = "0.1.1";
@@ -10440,6 +10464,38 @@ in modules // {
     };
   };
 
+  colored = buildPythonPackage rec {
+    name = "colored-${version}";
+    version = "1.1.5";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/colored/${name}.tar.gz";
+      sha256 = "1r1vsypk8v7az82d66bidbxlndx1h7xd4m43hpg1a6hsjr30wrm3";
+    };
+  };
+
+
+  lsi = buildPythonPackage rec {
+    name = "lsi-${version}";
+    version = "0.2.2";
+    disabled = isPy3k;
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/lsi/${name}.tar.gz";
+      sha256 = "0429iilb06yhsmvj3xp6wyhfh1rp4ndxlhwrm80r97z0w7plrk94";
+    };
+    propagatedBuildInputs = [
+      self.colored
+      self.boto
+      pkgs.openssh
+      pkgs.which
+    ];
+    meta = {
+      description = "CLI for querying and SSHing onto AWS EC2 instances";
+      homepage = https://github.com/NarrativeScience/lsi;
+      maintainers = [maintainers.adnelson];
+      license = licenses.mit;
+    };
+  };
+
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
@@ -13682,8 +13738,8 @@ in modules // {
   # });
 
   ordereddict = buildPythonPackage rec {
-    name = "ordereddict-1.1";
-    disabled = !isPy26;
+    name = "ordereddict-${version}";
+    version = "1.1";
 
     src = pkgs.fetchurl {
       url = "http://pypi.python.org/packages/source/o/ordereddict/${name}.tar.gz";
@@ -20136,7 +20192,7 @@ in modules // {
     disabled = isPyPy || isPy26 || isPy27;
 
     checkPhase = ''
-    ${python.interpreter} test/*.py
+    ${python.interpreter} test/*.py                                         #*/
     '';
     meta = {
       description = "Simple and extensible IRC bot";
