@@ -2,15 +2,14 @@
 
 # Updating
 
-To update the list of packages from MELPA Stable,
+To update the list of packages from MELPA,
 
-1. Clone https://github.com/ttuegel/emacs2nix
-2. Clone https://github.com/milkypostman/melpa
-3. Run `./melpa-stable-packages.sh PATH_TO_MELPA_CLONE` from emacs2nix.
-   Error messages about missing versions are normal; most packages in
-   MELPA do not have a stable version.
-4. Copy the new melpa-stable-packages.json file into Nixpkgs
-5. `git commit -m "melpa-stable-packages $(date -Idate)"`
+1. Clone https://github.com/ttuegel/emacs2nix.
+2. Clone https://github.com/milkypostman/melpa.
+3. Run `./melpa-stable-packages.sh --melpa PATH_TO_MELPA_CLONE` from emacs2nix.
+4. Copy the new `melpa-stable-generated.nix` file into Nixpkgs.
+5. Check for evaluation errors: `nix-instantiate ./. -A emacsPackagesNg.melpaStablePackages`.
+6. `git add pkgs/applications/editors/emacs-modes/melpa-stable-generated.nix && git commit -m "melpa-stable-packages $(date -Idate)"`
 
 */
 
