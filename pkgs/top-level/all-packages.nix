@@ -9142,6 +9142,8 @@ in
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  xalanc = callPackage ../development/libraries/xalanc {};
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
