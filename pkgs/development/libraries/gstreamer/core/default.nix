@@ -18,12 +18,19 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "dev" "out" ];
+  outputBin = "dev";
 
   nativeBuildInputs = [
     pkgconfig perl bison flex python gobjectIntrospection makeWrapper
   ];
 
   propagatedBuildInputs = [ glib ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    configureFlagsArray+=("--exec-prefix=$dev")
+  '';
 
   postInstall = ''
     for prog in "$out/bin/"*; do
@@ -32,7 +39,6 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    moveToOutput "bin" "$dev"
     moveToOutput "share/bash-completion" "$dev"
   '';
 
