@@ -10441,6 +10441,38 @@ in modules // {
     };
   };
 
+  colored = buildPythonPackage rec {
+    name = "colored-${version}";
+    version = "1.1.5";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/colored/${name}.tar.gz";
+      sha256 = "1r1vsypk8v7az82d66bidbxlndx1h7xd4m43hpg1a6hsjr30wrm3";
+    };
+  };
+
+
+  lsi = buildPythonPackage rec {
+    name = "lsi-${version}";
+    version = "0.2.2";
+    disabled = isPy3k;
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/l/lsi/${name}.tar.gz";
+      sha256 = "0429iilb06yhsmvj3xp6wyhfh1rp4ndxlhwrm80r97z0w7plrk94";
+    };
+    propagatedBuildInputs = [
+      self.colored
+      self.boto
+      pkgs.openssh
+      pkgs.which
+    ];
+    meta = {
+      description = "CLI for querying and SSHing onto AWS EC2 instances";
+      homepage = https://github.com/NarrativeScience/lsi;
+      maintainers = [maintainers.adnelson];
+      license = licenses.mit;
+    };
+  };
+
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
@@ -20118,7 +20150,7 @@ in modules // {
     disabled = isPyPy || isPy26 || isPy27;
 
     checkPhase = ''
-    ${python.interpreter} test/*.py
+    ${python.interpreter} test/*.py                                         #*/
     '';
     meta = {
       description = "Simple and extensible IRC bot";
