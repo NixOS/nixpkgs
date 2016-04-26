@@ -7448,6 +7448,8 @@ in
     mesa = null;
   };
 
+  libdigidoc = callPackage ../development/libraries/libdigidoc { };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
