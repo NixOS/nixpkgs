@@ -16569,6 +16569,8 @@ in
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
   wraith = callPackage ../applications/networking/irc/wraith { };
+  
+  wtftw = callPackage ../applications/window-managers/wtftw { };
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
