@@ -25,6 +25,16 @@ let
 
   pypi-sources = builtins.fromJSON (builtins.readFile ../development/python-modules/pypi-sources.json);
 
+  buildPyPIPackage = makeOverridable (callPackage ../development/python-modules/generic/buildpypi.nix {
+    buildPythonPackage = buildPythonPackage;
+    inherit pypi-sources;
+  });
+
+  buildPyPIApplication = makeOverridable (callPackage ../development/python-modules/generic/buildpypi.nix {
+    buildPythonPackage = buildPythonApplication;
+    inherit pypi-sources;
+  });
+
   # Unique python version identifier
   pythonName =
     if isPy26 then "python26" else
