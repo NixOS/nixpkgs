@@ -13,7 +13,8 @@
 , glibc
 , gst_plugins_base
 , gstreamer
-, gtk
+, gtk2
+, gtk3
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -85,7 +86,8 @@ stdenv.mkDerivation {
       glibc
       gst_plugins_base
       gstreamer
-      gtk
+      gtk2
+      gtk3
       libX11
       libXScrnSaver
       libXcomposite
