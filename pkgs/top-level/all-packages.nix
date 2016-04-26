@@ -2979,6 +2979,8 @@ in
   };
 
   qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
+  qdigidoc = qt5.callPackage ../tools/security/qdigidoc { } ;
+  esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
 
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
