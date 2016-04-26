@@ -7450,6 +7450,8 @@ in
 
   libdigidoc = callPackage ../development/libraries/libdigidoc { };
 
+  libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
