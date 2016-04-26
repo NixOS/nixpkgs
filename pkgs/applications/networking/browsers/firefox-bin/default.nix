@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config
+{ stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , atk
 , cairo
@@ -27,6 +27,7 @@
 , libcanberra
 , libgnome
 , libgnomeui
+, defaultIconTheme
 , mesa
 , nspr
 , nss
@@ -111,6 +112,8 @@ stdenv.mkDerivation {
       stdenv.cc.cc
     ];
 
+  buildInputs = [ makeWrapper gtk3 defaultIconTheme ];
+
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
@@ -146,6 +149,11 @@ stdenv.mkDerivation {
       GenericName=Web Browser
       Categories=Application;Network;
       EOF
+
+      wrapProgram "$out/bin/firefox" \
+        --argv0 "$out/bin/.firefox-wrapped" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
   meta = with stdenv.lib; {
