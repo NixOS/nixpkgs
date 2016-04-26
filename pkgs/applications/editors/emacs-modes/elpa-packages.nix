@@ -2,12 +2,13 @@
 
 # Updating
 
-To update the list of packages from ELPA,
+To update the list of packages from MELPA,
 
-1. Clone https://github.com/ttuegel/emacs2nix
-2. Run `./elpa-packages.sh` from emacs2nix
-3. Copy the new elpa-packages.json file into Nixpkgs
-4. `git commit -m "elpa-packages $(date -Idate)"`
+1. Clone https://github.com/ttuegel/emacs2nix.
+2. Run `./elpa-packages.sh` from emacs2nix.
+3. Copy the new `elpa-generated.nix` file into Nixpkgs.
+4. Check for evaluation errors: `nix-instantiate ./. -A emacsPackagesNg.elpaPackages`.
+5. `git add pkgs/applications/editors/emacs-modes/elpa-generated.nix && git commit -m "elpa-packages $(date -Idate)"`
 
 */
 
