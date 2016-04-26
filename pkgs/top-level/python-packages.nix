@@ -12369,11 +12369,11 @@ in modules // {
 
   msgpack = buildPythonPackage rec {
     name = "msgpack-python-${version}";
-    version = "0.4.6";
+    version = "0.4.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/msgpack-python/${name}.tar.gz";
-      sha256 = "bfcc581c9dbbf07cc2f951baf30c3249a57e20dcbd60f7e6ffc43ab3cc614794";
+      sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
     };
 
     propagatedBuildInputs = with self; [ ];
