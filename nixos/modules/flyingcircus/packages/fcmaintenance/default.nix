@@ -29,27 +29,27 @@ let
   };
 
 in
-py.buildPythonPackage rec {
-  name = "fc-maintenance-${version}";
-  version = "2.0";
-  namePrefix = "";
-  src = ./.;
-  propagatedBuildInputs =
-    [ fcutil
-      py.iso8601
-      py.pytz
-      py.pyyaml
-      py.shortuuid
-    ];
-  buildInputs = with py;
-    [ freezegun
-      pytest
-      pytestcatchlog
-      pytestcov
-    ];
-  checkPhase = ''
-    export PYTHONPATH=".:$PYTHONPATH"
-    py.test -x fc/maintenance
-  '';
-  dontStrip = true;
-}
+  py.buildPythonPackage rec {
+    name = "fc-maintenance-${version}";
+    version = "2.0";
+    namePrefix = "";
+    src = ./.;
+    propagatedBuildInputs =
+      [ fcutil
+        py.iso8601
+        py.pytz
+        py.pyyaml
+        py.shortuuid
+      ];
+    buildInputs = with py;
+      [ freezegun
+        pytest
+        pytestcatchlog
+        pytestcov
+      ];
+    checkPhase = ''
+      export PYTHONPATH=".:$PYTHONPATH"
+      py.test -x fc/maintenance
+    '';
+    dontStrip = true;
+  }

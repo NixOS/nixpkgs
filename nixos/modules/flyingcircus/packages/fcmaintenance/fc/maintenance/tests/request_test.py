@@ -4,17 +4,42 @@ from fc.maintenance.state import State
 
 import datetime
 import pytest
+import unittest.mock
 
 
 def test_duration():
     r = Request(Activity(), 1)
     a = Attempt()
-    a.finished = a.started + datetime.timedelta(seconds=10)
+    a.duration = 10
     r.attempts.append(a)
     a = Attempt()
-    a.finished = a.started + datetime.timedelta(seconds=5)
+    a.duration = 5
     r.attempts.append(a)
     assert r.duration == 5  # last attempt counts
+
+
+@unittest.mock.patch('fc.maintenance.request.utcnow')
+def test_duration_from_started_finished(utcnow, tmpdir):
+    utcnow.side_effect = [
+        datetime.datetime(2016, 4, 20, 6, 0),
+        datetime.datetime(2016, 4, 20, 6, 2),
+    ]
+    r = Request(Activity(), 1, dir=str(tmpdir))
+    r.execute()
+    assert r.duration == 120.0
+
+
+class FixedDurationActivity(Activity):
+
+    def run(self):
+        self.duration = 90
+        self.returncode = 0
+
+
+def test_duration_from_activity_duration(tmpdir):
+    r = Request(FixedDurationActivity(), 1, dir=str(tmpdir))
+    r.execute()
+    assert r.duration == 90
 
 
 def test_save_yaml(tmpdir):

@@ -174,7 +174,7 @@ def test_archive(connect, tmpdir):
             req.state = state
             req._reqid = str(state)
             att = Attempt()
-            att.finished = att.started + datetime.timedelta(seconds=5)
+            att.duration = 5
             req.attempts = [att]
             req.save()
         rm.archive()
@@ -236,7 +236,7 @@ def test_list(reqmanager):
     r3.state = State.error
     r3.next_due = datetime.datetime(2016, 4, 20, 11, tzinfo=pytz.UTC)
     att = Attempt()
-    att.finished = att.started + datetime.timedelta(seconds=75)
+    att.duration = datetime.timedelta(seconds=75)
     att.returncode = 1
     r3.attempts = [att]
     reqmanager.add(r3)

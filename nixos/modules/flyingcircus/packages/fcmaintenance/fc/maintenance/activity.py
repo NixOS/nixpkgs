@@ -7,11 +7,18 @@ class Activity:
     Activities are executed possibly several times until they succeed or
     exceeed their retry limit. Individual maintenance activities should
     subclass this class and add custom behaviour to its methods.
+
+    Attributes: `stdout`, `stderr` capture the outcomes of shellouts.
+    `returncode` controls the resulting request state. If `duration` is
+    set, it overrules execution timing done by the calling scope. Use
+    this if a logical transaction spans several attempts, e.g. for
+    reboots.
     """
 
     stdout = None
     stderr = None
     returncode = None
+    duration = None
 
     def __init__(self):
         """Creates activity object (add args if you like).

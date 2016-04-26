@@ -140,7 +140,6 @@ class ReqManager:
         requests = []
         for request in self.requests.values():
             new_state = request.update_state()
-            LOG.debug('(req %s) next due: %s', request.id, request.next_due)
             if new_state is State.running:
                 yield request
             elif new_state in (State.due, State.tempfail):

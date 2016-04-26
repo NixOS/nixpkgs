@@ -13,7 +13,7 @@ import yaml
 
 
 def utcnow():
-    return pytz.utc.localize(datetime.datetime.utcnow())
+    return pytz.UTC.localize(datetime.datetime.utcnow())
 
 
 @contextlib.contextmanager
@@ -74,17 +74,20 @@ class Request:
 
     @property
     def id(self):
+        """Unique request id. Generated on first access."""
         if not self._reqid:
             self._reqid = shortuuid.uuid()
         return self._reqid
 
     @property
     def duration(self):
+        """Duration of the last attempt in seconds (float)."""
         if self.attempts:
-            return self.attempts[-1].duration.total_seconds()
+            return self.attempts[-1].duration
 
     @property
     def filename(self):
+        """Full path to request.yaml."""
         return p.join(self.dir, 'request.yaml')
 
     @classmethod
@@ -92,7 +95,7 @@ class Request:
         with open(p.join(dir, 'request.yaml')) as f:
             instance = yaml.load(f)
             if instance.next_due and not instance.next_due.tzinfo:
-                instance.next_due = pytz.utc.localize(instance.next_due)
+                instance.next_due = pytz.UTC.localize(instance.next_due)
         instance.dir = dir
         with cd(dir):
             instance.activity.load()
@@ -106,6 +109,7 @@ class Request:
                 mode='w', dir=self.dir, delete=False) as tf:
             yaml.dump(self, tf)
             tf.flush()
+            os.fsync(tf.fileno())
             os.chmod(tf.fileno(), 0o644)
             os.rename(tf.name, self.filename)
         with cd(self.dir):
@@ -163,6 +167,7 @@ class Attempt:
     stderr = None
     returncode = None
     finished = None
+    duration = None
 
     def __init__(self):
         self.started = utcnow()
@@ -172,9 +177,7 @@ class Attempt:
         self.finished = utcnow()
         (self.stdout, self.stderr, self.returncode) = (
             activity.stdout, activity.stderr, activity.returncode)
-
-    @property
-    def duration(self):
-        """Activity run time as timedelta."""
-        if self.started and self.finished:
-            return self.finished - self.started
+        if activity.duration:
+            self.duration = activity.duration
+        elif self.started and not self.duration:
+            self.duration = (self.finished - self.started).total_seconds()
