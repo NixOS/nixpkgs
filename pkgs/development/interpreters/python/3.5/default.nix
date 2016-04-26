@@ -35,16 +35,16 @@ stdenv.mkDerivation {
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CF configd ];
+  buildInputs = optionals stdenv.isDarwin [ CF configd ];
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
     sha256 = "1j95yx32ggqx8jf13h3c8qfp34ixpyg8ipqcdjmn143d6q67rmf6";
   };
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
+  NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
 
-  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
   '';
 
@@ -58,8 +58,8 @@ stdenv.mkDerivation {
      ''}
 
     configureFlagsArray=( --enable-shared --with-threads
-                          CPPFLAGS="${makeSearchPathOutput "dev" "include" buildInputs}"
-                          LDFLAGS="${makeLibraryPath buildInputs}"
+                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
+                          LDFLAGS="${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}"
                           LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';
@@ -113,8 +113,8 @@ stdenv.mkDerivation {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = stdenv.lib.licenses.psfl;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric cstrahan ];
+    license = licenses.psfl;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ simons chaoflow iElectric cstrahan ];
   };
 }
