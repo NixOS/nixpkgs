@@ -207,6 +207,7 @@ in
                 "${cfg.package}/bin/ssh-agent -D " +
                 optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
                 "-a %t/ssh-agent";
+            ExecStartPost = "/bin/sh -c 'set -eu ; while [ ! -f $SSH_AUCK_SOCK ]; do sleep 1; done'";
             StandardOutput = "null";
             Type = "simple";
             Restart = "on-failure";
