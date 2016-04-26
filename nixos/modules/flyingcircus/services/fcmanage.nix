@@ -20,7 +20,7 @@ in {
 
       steps = mkOption {
         type = types.str;
-        default = "--directory --system-state --garbage 30 --maintenence --channel";
+        default = "--directory --system-state --garbage 30 --maintenance --channel";
         description = "Steps to run by the agent.";
       };
     };
