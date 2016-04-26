@@ -10,7 +10,9 @@
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
+    fcmaintenance = pkgs.callPackage ./fcmaintenance { };
     fcmanage = pkgs.callPackage ./fcmanage { };
+    fcutil = pkgs.callPackage ./fcutil { };
 
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
 
