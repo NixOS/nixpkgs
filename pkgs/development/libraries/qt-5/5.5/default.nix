@@ -45,7 +45,6 @@ let
       nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
-      dontFixLibtool = args.dontFixLibtool or true;
 
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = args.setOutputFlags or false;

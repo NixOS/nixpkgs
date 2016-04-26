@@ -235,6 +235,19 @@ stdenv.mkDerivation {
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
+  preFixup = ''
+    # Move libtool archives and qmake projects
+    if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
+        pushd "''${!outputLib}"
+        find lib -name '*.a' -o -name '*.la' -o -name '*.prl' | \
+            while read -r file; do
+                mkdir -p "''${!outputDev}/$(dirname "$file")"
+                mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+            done
+        popd
+    fi
+  '';
+
   postFixup =
     ''
       # Don't retain build-time dependencies like gdb and ruby.
