@@ -41,6 +41,7 @@ self:
       midi-kbd = markBroken super.midi-kbd; # requires emacs-25
       stream = markBroken super.stream; # requires emacs-25
       cl-lib = null; # builtin
+      tle = null; # builtin
     };
 
     elpaPackages = super // overrides;
