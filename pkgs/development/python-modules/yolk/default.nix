@@ -7,7 +7,7 @@ buildPythonApplication rec {
   version = "0.4.3";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/y/yolk/yolk-${version}.tar.gz";
+    url = "mirror://pypi/y/yolk/yolk-${version}.tar.gz";
     sha256 = "1f6xwx210jnl5nq0m3agh2p1cxmaizawaf3fwq43q4yw050fn1qw";
   };
 

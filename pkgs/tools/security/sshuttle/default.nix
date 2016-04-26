@@ -7,7 +7,7 @@ pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     sha256 = "18hrwi2gyri1n2rq0nghvv7hfhbhh5h67am89524vc1yyx40vn3b";
-    url = "https://pypi.python.org/packages/source/s/sshuttle/${name}.tar.gz";
+    url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
   patches = [ ./sudo.patch ];

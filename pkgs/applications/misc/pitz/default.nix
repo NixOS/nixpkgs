@@ -16,7 +16,7 @@ buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://pypi.python.org/packages/source/p/pitz/${name}.tar.gz";
+    url = "mirror://pypi/p/pitz/${name}.tar.gz";
     sha256 = "1k7f3h4acllzqy3mjqnjd4w5jskp03s79b7dx3c85vlmd7824smr";
   };
 

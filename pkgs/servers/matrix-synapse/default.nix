@@ -5,7 +5,7 @@ let
     version = "0.6.8";
 
     src = fetchurl {
-      url = "https://pypi.python.org/packages/source/m/matrix-angular-sdk/matrix-angular-sdk-${version}.tar.gz";
+      url = "mirror://pypi/m/matrix-angular-sdk/matrix-angular-sdk-${version}.tar.gz";
       sha256 = "0gmx4y5kqqphnq3m7xk2vpzb0w2a4palicw7wfdr1q2schl9fhz2";
     };
   };
