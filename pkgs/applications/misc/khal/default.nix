@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   name = "khal-${version}";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/k/khal/khal-${version}.tar.gz";
+    url = "mirror://pypi/k/khal/khal-${version}.tar.gz";
     sha256 = "00llxj7cv31mjsx0j6zxmyi9s1q20yvfkn025xcy8cv1ylfwic66";
   };
 

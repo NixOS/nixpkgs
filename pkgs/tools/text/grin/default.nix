@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/g/grin/${name}.tar.gz";
+    url = "mirror://pypi/g/grin/${name}.tar.gz";
     sha256 = "1swzwb17wibam8jszdv98h557hlx44pg6psv6rjz7i33qlxk0fdz";
   };
 
