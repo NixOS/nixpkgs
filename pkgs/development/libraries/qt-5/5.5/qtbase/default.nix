@@ -111,19 +111,6 @@ stdenv.mkDerivation {
     export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
-    _multioutQtDevs() {
-        # We cannot simply set these paths in configureFlags because libQtCore retains
-        # references to the paths it was built with.
-        moveToOutput "bin" "$dev"
-        moveToOutput "include" "$dev"
-        moveToOutput "mkspecs" "$dev"
-
-        # The destination directory must exist or moveToOutput will do nothing
-        mkdir -p "$dev/share"
-        moveToOutput "share/doc" "$dev"
-    }
-    preFixupHooks+=(_multioutQtDevs)
-
     configureFlags+="\
         -plugindir $out/lib/qt5/plugins \
         -importdir $out/lib/qt5/imports \
@@ -236,6 +223,16 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
   preFixup = ''
+    # We cannot simply set these paths in configureFlags because libQtCore retains
+    # references to the paths it was built with.
+    moveToOutput "bin" "$dev"
+    moveToOutput "include" "$dev"
+    moveToOutput "mkspecs" "$dev"
+
+    # The destination directory must exist or moveToOutput will do nothing
+    mkdir -p "$dev/share"
+    moveToOutput "share/doc" "$dev"
+
     # Move libtool archives and qmake projects
     if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
         pushd "''${!outputLib}"
