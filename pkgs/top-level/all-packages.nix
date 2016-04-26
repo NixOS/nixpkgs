@@ -12441,7 +12441,6 @@ in
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
-    enableGTK3 = false;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = self.wrapFirefox firefox-unwrapped { };
