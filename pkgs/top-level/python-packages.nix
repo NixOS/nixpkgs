@@ -27,6 +27,14 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
+  buildPyPIPackage = makeOverridable (callPackage ../development/interpreters/python/buildpypi.nix {
+    buildPythonPackage = buildPythonPackage;
+  });
+
+  buildPyPIApplication = makeOverridable (callPackage ../development/interpreters/python/buildpypi.nix {
+    buildPythonPackage = buildPythonApplication;
+  });
+
 in {
 
   inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
