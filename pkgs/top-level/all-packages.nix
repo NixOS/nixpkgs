@@ -14548,6 +14548,8 @@ in
 
   xrestop = callPackage ../tools/X11/xrestop { };
 
+  xsd = callPackage ../development/libraries/xsd { };
+
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
   };
