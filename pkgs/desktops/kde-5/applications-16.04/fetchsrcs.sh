@@ -4,14 +4,13 @@
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.kde.org/stable/frameworks/5.19/"
-EXTRA_WGET_ARGS='-A *.tar.xz'
+WGET_ARGS='http://download.kde.org/stable/applications/16.04.0/ -A *.tar.xz'
 
 mkdir tmp; cd tmp
 
 rm -f ../srcs.csv
 
-wget -nH -r -c --no-parent $RELEASE_URL $EXTRA_WGET_ARGS
+wget -nH -r -c --no-parent $WGET_ARGS
 
 find . | while read src; do
     if [[ -f "${src}" ]]; then

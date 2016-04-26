@@ -53,6 +53,7 @@ let
       in
         symlinkJoin "breeze-${version}"
         (map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ]);
+    kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
     kde-gtk-config = callPackage ./kde-gtk-config {};
     kdecoration = callPackage ./kdecoration.nix {};
@@ -69,7 +70,7 @@ let
     kwayland = callPackage ./kwayland.nix {};
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};
-    libkscreen = callPackage ./libkscreen {};
+    libkscreen = callPackage ./libkscreen.nix {};
     libksysguard = callPackage ./libksysguard {};
     milou = callPackage ./milou.nix {};
     oxygen = callPackage ./oxygen.nix {};
@@ -77,7 +78,7 @@ let
     plasma-mediacenter = callPackage ./plasma-mediacenter.nix {};
     plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {};
-    plasma-workspace = callPackage ./plasma-workspace {};
+    plasma-workspace = callPackage ./plasma-workspace.nix {};
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
     powerdevil = callPackage ./powerdevil.nix {};

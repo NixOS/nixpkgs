@@ -5,6 +5,7 @@
 , kconfig
 , kcoreaddons
 , kdbusaddons
+, kdeclarative
 , ki18n
 , kio
 , knotifications
@@ -19,23 +20,11 @@
 kdeApp {
   name = "spectacle";
   nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
+    extra-cmake-modules kdoctools makeQtWrapper
   ];
   buildInputs = [
-    kconfig
-    kcoreaddons
-    kdbusaddons
-    ki18n
-    kio
-    knotifications
-    kscreen
-    kwidgetsaddons
-    kwindowsystem
-    kxmlgui
-    libkipi
-    xcb-util-cursor
+    kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
+    kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi xcb-util-cursor
   ];
   postFixup = ''
     wrapQtProgram "$out/bin/spectacle"

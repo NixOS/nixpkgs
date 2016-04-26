@@ -52,6 +52,7 @@ let
     extra-cmake-modules = callPackage ./extra-cmake-modules {};
     frameworkintegration = callPackage ./frameworkintegration.nix {};
     kactivities = callPackage ./kactivities.nix {};
+    kactivities-stats = callPackage ./kactivities-stats.nix {};
     kapidox = callPackage ./kapidox.nix {};
     karchive = callPackage ./karchive.nix {};
     kauth = callPackage ./kauth {};
@@ -68,8 +69,8 @@ let
     kded = callPackage ./kded.nix {};
     kdelibs4support = callPackage ./kdelibs4support {};
     kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-    kdewebkit = callPackage ./kdewebkit.nix {};
     kdesu = callPackage ./kdesu.nix {};
+    kdewebkit = callPackage ./kdewebkit.nix {};
     kdnssd = callPackage ./kdnssd.nix {};
     kdoctools = callPackage ./kdoctools {};
     kemoticons = callPackage ./kemoticons.nix {};

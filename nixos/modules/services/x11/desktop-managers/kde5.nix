@@ -102,6 +102,15 @@ in
         pkgs.hicolor_icon_theme
 
         kde5.kde-gtk-config
+
+        pkgs.phonon-backend-gstreamer
+        pkgs.kde5.phonon-backend-gstreamer
+        pkgs.gst_all_1.gstreamer
+        pkgs.gst_all_1.gst-plugins-base
+        pkgs.gst_all_1.gst-plugins-good
+        pkgs.gst_all_1.gst-plugins-ugly
+        pkgs.gst_all_1.gst-plugins-bad
+        pkgs.gst_all_1.gst-libav # for mp3 playback
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
@@ -111,25 +120,16 @@ in
       # Install Breeze icons if available
       ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
 
+      # Install activity manager if available
+      ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
+
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
       ++ lib.optional config.services.colord.enable kde5.colord-kde
-      ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ]
-
-      ++ lib.optionals cfg.phonon.gstreamer.enable
-        [
-          pkgs.phonon-backend-gstreamer
-          pkgs.kde5.phonon-backend-gstreamer
-          pkgs.gst_all_1.gstreamer
-          pkgs.gst_all_1.gst-plugins-base
-          pkgs.gst_all_1.gst-plugins-good
-          pkgs.gst_all_1.gst-plugins-ugly
-          pkgs.gst_all_1.gst-plugins-bad
-          pkgs.gst_all_1.gst-libav # for mp3 playback
-        ];
+      ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ];
 
     environment.pathsToLink = [ "/share" ];
 
@@ -138,12 +138,9 @@ in
       target = "X11/xkb";
     };
 
-    environment.profileRelativeEnvVars =
-      mkIf cfg.phonon.gstreamer.enable
-      {
-        GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
-        GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
-      };
+    environment.profileRelativeEnvVars = {
+      GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
+    };
 
     # Enable GTK applications to load SVG icons
     environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {

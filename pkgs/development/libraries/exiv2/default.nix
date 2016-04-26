@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
   postPatch = "patchShebangs ./src/svn_version.sh";
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ gettext ];
   propagatedBuildInputs = [ zlib expat ];
 

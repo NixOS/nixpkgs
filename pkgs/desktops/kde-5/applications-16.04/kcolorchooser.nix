@@ -1,15 +1,16 @@
 { kdeApp, lib
-, automoc4, cmake, kdelibs
+, extra-cmake-modules
+, ki18n, kwidgetsaddons, kxmlgui
 }:
 
 kdeApp {
   name = "kcolorchooser";
 
-  nativeBuildInputs = [ automoc4 cmake ];
-  buildInputs = [ kdelibs ];
-
   meta = {
     license = with lib.licenses; [ mit ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
+
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ ki18n kwidgetsaddons kxmlgui ];
 }
