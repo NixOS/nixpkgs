@@ -9159,6 +9159,8 @@ in
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
 
+  xml-security-c = callPackage ../development/libraries/xml-security-c { };
+
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
