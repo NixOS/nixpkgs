@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs = [ libelf setupHook pcre ]
+  buildInputs = [ libelf setupHook ]
     ++ optionals doCheck [ tzdata libxml2 desktop_file_utils shared_mime_info ];
 
   nativeBuildInputs = [ pkgconfig gettext perl python ];
 
-  propagatedBuildInputs = [ zlib libffi libiconv ]
+  propagatedBuildInputs = [ zlib libffi libiconv pcre ]
     ++ libintlOrEmpty;
 
   # internal pcre would only add <200kB, but it's relatively common
