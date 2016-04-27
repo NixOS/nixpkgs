@@ -10,6 +10,7 @@
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
+    easyrsa3 = pkgs.callPackage ./easyrsa { };
     fcmanage = pkgs.callPackage ./fcmanage { };
 
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };
