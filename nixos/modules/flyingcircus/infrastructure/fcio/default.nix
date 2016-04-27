@@ -11,6 +11,7 @@ in
 {
   imports = [
       <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+      ./quota.nix
   ];
 
   systemd.services.qemu-guest-agent = {

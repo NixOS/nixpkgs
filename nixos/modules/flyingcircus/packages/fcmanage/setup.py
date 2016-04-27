@@ -28,7 +28,9 @@ setup(
     ],
     packages=find_packages('src'),
     package_dir={'': 'src'},
-    install_requires=[],
+    install_requires=[
+        'fc.util',
+    ],
     extras_require={
         'test': ['pytest'],
     },
@@ -36,7 +38,7 @@ setup(
         'console_scripts': [
             'fc-manage=fcmanage.manage:main',
             'fc-monitor=fcmanage.monitor:main',
-            'fc-resize-root=fcmanage.resizeroot:main'
+            'fc-resize=fcmanage.resize:main'
         ],
     },
 )

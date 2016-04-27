@@ -7,11 +7,12 @@ python34Packages.buildPythonPackage rec {
   dontStrip = true;
   src = ./.;
   propagatedBuildInputs = with pkgs;
-    [ gptfdisk
+    [ fcmaintenance
+      fcutil
+      gptfdisk
       lvm2
       multipath_tools
       utillinux
       xfsprogs
-      fcmaintenance
     ];
 }

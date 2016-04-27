@@ -48,7 +48,7 @@ in {
         };
         script = ''
           ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
-          ${pkgs.fcmanage}/bin/fc-resize-root
+          ${pkgs.fcmanage}/bin/fc-resize -E ${cfg.enc_path}
         '';
       };
 

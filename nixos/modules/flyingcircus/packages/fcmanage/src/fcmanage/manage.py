@@ -1,5 +1,7 @@
 """Update NixOS system configuration from infrastructure or local sources."""
 
+from fc.util.directory import connect
+
 import argparse
 import filecmp
 import json
@@ -7,12 +9,9 @@ import logging
 import os
 import os.path as p
 import shutil
+import socket
 import tempfile
 import xmlrpc.client
-
-DIRECTORY_URL = (
-    'https://{enc[name]}:{enc[parameters][directory_password]}@'
-    'directory.fcio.net/v2/api/rg-{enc[parameters][resource_group]}')
 
 # TODO
 #
@@ -29,12 +28,11 @@ DIRECTORY_URL = (
 # - better robustness to not leave non-parsable json files around
 
 enc = None
-directory = None
 
 
 def load_enc(enc_path):
-    """Tries to read enc.json and establish directory connection."""
-    global enc, directory
+    """Tries to read enc.json"""
+    global enc
     try:
         with open(enc_path) as f:
             enc = json.load(f)
@@ -43,15 +41,13 @@ def load_enc(enc_path):
         # i.e. Vagrant. Silently ignore for now.
         return
 
-    directory = xmlrpc.client.Server(DIRECTORY_URL.format(enc=enc))
-
 
 def conditional_update(filename, data):
     """Updates JSON file on disk only if there is different content."""
     with tempfile.NamedTemporaryFile(
             mode='w', suffix='.tmp', prefix=p.basename(filename),
             dir=p.dirname(filename), delete=False) as tf:
-        json.dump(data, tf, ensure_ascii=False, indent=2, sort_keys=True)
+        json.dump(data, tf, ensure_ascii=False, indent=1, sort_keys=True)
         os.chmod(tf.fileno(), 0o640)
     if not(p.exists(filename)):
         os.rename(tf.name, filename)
@@ -102,9 +98,15 @@ def system_state():
 
 
 def update_inventory():
-    if directory is None:
-        print('No directory. Not updating inventory.')
+    if 'directory_password' not in enc['parameters']:
+        print('No directory password. Not updating inventory.')
         return
+    try:
+        directory = connect(enc, enc['parameters']['directory_ring'])
+    except socket.error:
+        print('No directory connection. Not updating inventory.')
+        return
+
     write_json([
         (lambda: directory.lookup_node(enc['name']), 'enc.json'),
         (lambda: directory.list_nodes_addresses(
