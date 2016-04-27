@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
   # had this same problem.  This links it somewhere that mysqlworkbench looks.
   postInstall = ''
+    mkdir -p $dev/lib
+    mv $out/lib/libzip $dev/lib/libzip
     ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
   '';
 
