@@ -3735,11 +3735,11 @@ let
   };
 
   terraform = buildFromGitHub {
-    rev = "v0.6.13";
+    rev = "v0.6.15";
     owner = "hashicorp";
     repo = "terraform";
     disabled = isGo14 || isGo15;
-    sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
+    sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
 
     buildInputs = [ ];
   };
