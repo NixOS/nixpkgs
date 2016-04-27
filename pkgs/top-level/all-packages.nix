@@ -8979,11 +8979,7 @@ in
 
   unicap = callPackage ../development/libraries/unicap {};
 
-  tsocks = callPackage ../development/libraries/tsocks {
-    stdenv = overrideCC stdenv (
-      wrapCCWith (callPackage ../build-support/cc-wrapper)
-      musl "" gcc.cc);
-  };
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
