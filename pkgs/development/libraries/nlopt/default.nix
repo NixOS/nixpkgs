@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     hydraPlatforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
-    broken = true;              # cannot cope with Octave 4.x
   };
 
 }
