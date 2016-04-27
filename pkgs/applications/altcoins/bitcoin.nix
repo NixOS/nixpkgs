@@ -21,7 +21,7 @@ stdenv.mkDerivation rec{
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
   meta = {

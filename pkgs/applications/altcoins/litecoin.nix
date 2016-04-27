@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
                   openssl db48 boost zlib miniupnpc glib protobuf utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
   meta = with stdenv.lib; {

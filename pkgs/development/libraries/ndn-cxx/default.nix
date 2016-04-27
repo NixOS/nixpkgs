@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     ./waf configure \
       --with-cryptopp=${cryptopp} \
       --boost-includes=${boost.dev}/include \
-      --boost-libs=${boost.lib}/lib \
+      --boost-libs=${boost.out}/lib \
       --with-examples \
       --prefix=$out
   '';

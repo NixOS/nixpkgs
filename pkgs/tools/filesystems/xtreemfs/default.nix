@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     export ANT_HOME=${ant}
 
     export BOOST_INCLUDEDIR=${boost.dev}/include
-    export BOOST_LIBRARYDIR=${boost.lib}/lib
+    export BOOST_LIBRARYDIR=${boost.out}/lib
     export OPENSSL_ROOT_DIR=${openssl}
 
     substituteInPlace cpp/cmake/FindValgrind.cmake \

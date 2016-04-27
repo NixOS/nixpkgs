@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-magic"
     "--enable-optimization"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--disable-debug"
     "--disable-profiling"
     "--disable-precompiled-headers"

@@ -53,7 +53,7 @@ let
 
   genericB2Flags = [
     "--includedir=$dev/include"
-    "--libdir=$lib/lib"
+    "--libdir=$out/lib"
     "-j$NIX_BUILD_CORES"
     "--layout=${layout}"
     "variant=${variant}"
@@ -90,10 +90,6 @@ let
 
     # Let boost install everything else
     ./b2 ${b2Args} install
-
-    # Create a derivation which encompasses everything, making buildInputs nicer
-    mkdir -p $out/nix-support
-    echo "$dev $lib" > $out/nix-support/propagated-native-build-inputs
   '';
 
   commonConfigureFlags = [
@@ -127,10 +123,9 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    NIX_LDFLAGS="$(echo $NIX_LDFLAGS | sed "s,$out,$lib,g")"
     if test -f tools/build/src/tools/clang-darwin.jam ; then
         substituteInPlace tools/build/src/tools/clang-darwin.jam \
-          --replace '@rpath/$(<[1]:D=)' "$lib/lib/\$(<[1]:D=)";
+          --replace '@rpath/$(<[1]:D=)' "$out/lib/\$(<[1]:D=)";
     fi;
   '' + optionalString (mpi != null) ''
     cat << EOF > user-config.jam
@@ -158,7 +153,7 @@ stdenv.mkDerivation {
 
   postFixup = fixup;
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [ "dev" "out" ];
   setOutputFlags = false;
 
   crossAttrs = rec {

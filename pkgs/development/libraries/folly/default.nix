@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     patchShebangs build
   '';
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   enableParallelBuilding = true;
 

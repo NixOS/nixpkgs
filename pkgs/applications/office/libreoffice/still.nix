@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "${if withHelp then "" else "--without-help"}"
     "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
