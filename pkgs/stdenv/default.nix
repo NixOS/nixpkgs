@@ -16,9 +16,7 @@ rec {
   # i.e., the stuff in /bin, /usr/bin, etc.  This environment should
   # be used with care, since many Nix packages will not build properly
   # with it (e.g., because they require GNU Make).
-  stdenvNative = (import ./native {
-    inherit system allPackages config;
-  }).stdenv;
+  inherit (import ./native { inherit system allPackages config; }) stdenvNative;
 
   stdenvNativePkgs = allPackages {
     bootStdenv = stdenvNative;
@@ -33,12 +31,12 @@ rec {
     pkgs = stdenvNativePkgs;
   };
 
-  stdenvFreeBSD = (import ./freebsd { inherit system allPackages platform config; }).stdenvFreeBSD;
+  inherit (import ./freebsd { inherit system allPackages platform config; }) stdenvFreeBSD;
 
   # Linux standard environment.
-  stdenvLinux = (import ./linux { inherit system allPackages platform config lib; }).stdenvLinux;
+  inherit (import ./linux { inherit system allPackages platform config lib; }) stdenvLinux;
 
-  stdenvDarwin = (import ./darwin { inherit system allPackages platform config;}).stdenvDarwin;
+  inherit (import ./darwin { inherit system allPackages platform config;}) stdenvDarwin;
 
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
