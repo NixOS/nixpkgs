@@ -13,7 +13,7 @@ buildPythonApplication (rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/b/buildbot/${name}.tar.gz";
+    url = "mirror://pypi/b/buildbot/${name}.tar.gz";
     sha256 = "1mn4h04sp6smr3ahqfflys15cpn13q9mfkapcs2jc4ppvxv6kdn6";
   };
 

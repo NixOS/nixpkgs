@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "hack-font-${version}";
-  version = "2.019";
+  version = "2.020";
 
   src = let
     version_ = with stdenv.lib;
       concatStringsSep "_" (splitString "." version);
   in fetchurl {
-    sha256 = "0fhrl7y5z3d5fkiycbsi621f8nzfnpz8khxpd6hkc1hrg7nzmrk4";
+    sha256 = "16kkmc3psckw1b7k07ccn1gi5ymhlg9djh43nqjzg065g6p6d184";
     url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version_}-ttf.zip";
   };
 

@@ -1,0 +1,376 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="users-guide-to-the-erlang-infrastructure">
+
+  <title>User's Guide to the Beam Infrastructure</title>
+  <section xml:id="beam-introduction">
+    <title>Beam Languages (Erlang &amp; Elixir) on Nix</title>
+    <para>
+      In this document and related Nix expressions we use the term
+      <emphasis>Beam</emphasis> to describe the environment. Beam is
+      the name of the Erlang Virtial Machine and, as far as we know,
+      from a packaging perspective all languages that run on Beam are
+      interchangable. The things that do change, like the build
+      system, are transperant to the users of the package. So we make
+      no distinction.
+    </para>
+  </section>
+<section xml:id="build-tools">
+  <title>Build Tools</title>
+  <section xml:id="build-tools-rebar3">
+    <title>Rebar3</title>
+    <para>
+      By default Rebar3 wants to manage it's own dependencies. In the
+      normal non-Nix, this is perfectly acceptable. In the Nix world it
+      is not. To support this we have created two versions of rebar3,
+      <literal>rebar3</literal> and <literal>rebar3-open</literal>. The
+      <literal>rebar3</literal> version has been patched to remove the
+      ability to download anything from it. If you are not running it a
+      nix-shell or a nix-build then its probably not going to work for
+      you. <literal>rebar3-open</literal> is the normal, un-modified
+      rebar3. It should work exactly as would any other version of
+      rebar3. Any Erlang package should rely on
+      <literal>rebar3</literal> and thats really what you should be
+      using too.
+    </para>
+  </section>
+  <section xml:id="build-tools-other">
+    <title>Mix &amp; Erlang.mk</title>
+    <para>
+      Both Mix and Erlang.mk work exactly as you would expect. There
+      is a bootstrap process that needs to be run for both of
+      them. However, that is supported by the
+      <literal>buildMix</literal> and <literal>buildErlangMk</literal> derivations.
+    </para>
+  </section>
+
+</section>
+
+<section xml:id="how-to-install-beam-packages">
+  <title>How to install Beam packages</title>
+  <para>
+    Beam packages are not registered in the top level simply because
+    they are not relevant to the vast majority of Nix users. They are
+    installable using the <literal>beamPackages</literal> attribute
+    set.
+
+    You can list the avialable packages in the
+    <literal>beamPackages</literal> with the following command:
+  </para>
+
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -qaP -A beamPackages
+beamPackages.esqlite    esqlite-0.2.1
+beamPackages.goldrush   goldrush-0.1.7
+beamPackages.ibrowse    ibrowse-4.2.2
+beamPackages.jiffy      jiffy-0.14.5
+beamPackages.lager      lager-3.0.2
+beamPackages.meck       meck-0.8.3
+beamPackages.rebar3-pc  pc-1.1.0
+  </programlisting>
+  <para>
+    To install any of those packages into your profile, refer to them by
+    their attribute path (first column):
+  </para>
+  <programlisting>
+$ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA beamPackages.ibrowse
+  </programlisting>
+  <para>
+    The attribute path of any Beam packages corresponds to the name
+    of that particular package in Hex or its OTP Application/Release name.
+  </para>
+</section>
+<section xml:id="packaging-beam-applications">
+  <title>Packaging Beam Applications</title>
+  <section  xml:id="packaging-erlang-applications">
+    <title>Erlang Applications</title>
+    <section xml:id="rebar3-packages">
+      <title>Rebar3 Packages</title>
+      <para>
+        There is a Nix functional called
+        <literal>buildRebar3</literal>. We use this function to make a
+        derivation that understands how to build the rebar3 project. For
+        example, the epression we use to build the <link
+        xlink:href="https://github.com/erlang-nix/hex2nix">hex2nix</link>
+        project follows.
+      </para>
+      <programlisting>
+        {stdenv, fetchFromGitHub, buildRebar3, ibrowse, jsx, erlware_commons }:
+
+          buildRebar3 rec {
+            name = "hex2nix";
+            version = "0.0.1";
+
+            src = fetchFromGitHub {
+              owner = "ericbmerritt";
+              repo = "hex2nix";
+              rev = "${version}";
+              sha256 = "1w7xjidz1l5yjmhlplfx7kphmnpvqm67w99hd2m7kdixwdxq0zqg";
+            };
+
+          beamDeps = [ ibrowse jsx erlware_commons ];
+        }
+      </programlisting>
+      <para>
+        The only visible difference between this derivation and
+        something like <literal>stdenv.mkDerivation</literal> is that we
+        have added <literal>erlangDeps</literal> to the derivation. If
+        you add your Beam dependencies here they will be correctly
+        handled by the system.
+      </para>
+      <para>
+        If your package needs to compile native code via Rebar's port
+        compilation mechenism. You should add <literal>compilePort =
+        true;</literal> to the derivation.
+      </para>
+    </section>
+    <section xml:id="erlang-mk-packages">
+      <title>Erlang.mk Packages</title>
+      <para>
+        Erlang.mk functions almost identically to Rebar. The only real
+        difference is that <literal>buildErlangMk</literal> is called
+        instead of <literal>buildRebar3</literal>
+      </para>
+      <programlisting>
+        { buildErlangMk, fetchHex,  cowlib, ranch }:
+          buildErlangMk {
+            name = "cowboy";
+            version = "1.0.4";
+            src = fetchHex {
+              pkg = "cowboy";
+              version = "1.0.4";
+              sha256 =
+                "6a0edee96885fae3a8dd0ac1f333538a42e807db638a9453064ccfdaa6b9fdac";
+            };
+            beamDeps  = [ cowlib ranch ];
+
+            meta = {
+              description = ''Small, fast, modular HTTP server written in
+                            Erlang.'';
+              license = stdenv.lib.licenses.isc;
+              homepage = "https://github.com/ninenines/cowboy";
+            };
+        }
+      </programlisting>
+    </section>
+    <section xml:id="mix-packages">
+      <title>Mix Packages</title>
+      <para>
+        Mix functions almost identically to Rebar. The only real
+        difference is that <literal>buildMix</literal> is called
+        instead of <literal>buildRebar3</literal>
+      </para>
+      <programlisting>
+        { buildMix, fetchHex, plug, absinthe }:
+        buildMix {
+          name = "absinthe_plug";
+          version = "1.0.0";
+          src = fetchHex {
+            pkg = "absinthe_plug";
+            version = "1.0.0";
+            sha256 =
+              "08459823fe1fd4f0325a8bf0c937a4520583a5a26d73b193040ab30a1dfc0b33";
+          };
+          beamDeps  = [ plug absinthe];
+
+          meta = {
+            description = ''A plug for Absinthe, an experimental GraphQL
+                            toolkit'';
+            license = stdenv.lib.licenses.bsd3;
+            homepage = "https://github.com/CargoSense/absinthe_plug";
+         };
+       }
+      </programlisting>
+    </section>
+  </section>
+</section>
+<section xml:id="how-to-develop">
+  <title>How to develop</title>
+  <section xml:id="accessing-an-environment">
+    <title>Accessing an Environment</title>
+    <para>
+      Often, all you want to do is be able to access a valid
+      environment that contains a specific package and its
+      dependencies. we can do that with the <literal>env</literal>
+      part of a derivation. For example, lets say we want to access an
+      erlang repl with ibrowse loaded up. We could do the following.
+    </para>
+    <programlisting>
+      ~/w/nixpkgs ❯❯❯ nix-shell -A beamPackages.ibrowse.env --run "erl"
+      Erlang/OTP 18 [erts-7.0] [source] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
+
+      Eshell V7.0  (abort with ^G)
+      1> m(ibrowse).
+      Module: ibrowse
+      MD5: 3b3e0137d0cbb28070146978a3392945
+      Compiled: January 10 2016, 23:34
+      Object file: /nix/store/g1rlf65rdgjs4abbyj4grp37ry7ywivj-ibrowse-4.2.2/lib/erlang/lib/ibrowse-4.2.2/ebin/ibrowse.beam
+      Compiler options:  [{outdir,"/tmp/nix-build-ibrowse-4.2.2.drv-0/hex-source-ibrowse-4.2.2/_build/default/lib/ibrowse/ebin"},
+      debug_info,debug_info,nowarn_shadow_vars,
+      warn_unused_import,warn_unused_vars,warnings_as_errors,
+      {i,"/tmp/nix-build-ibrowse-4.2.2.drv-0/hex-source-ibrowse-4.2.2/_build/default/lib/ibrowse/include"}]
+      Exports:
+      add_config/1                  send_req_direct/7
+      all_trace_off/0               set_dest/3
+      code_change/3                 set_max_attempts/3
+      get_config_value/1            set_max_pipeline_size/3
+      get_config_value/2            set_max_sessions/3
+      get_metrics/0                 show_dest_status/0
+      get_metrics/2                 show_dest_status/1
+      handle_call/3                 show_dest_status/2
+      handle_cast/2                 spawn_link_worker_process/1
+      handle_info/2                 spawn_link_worker_process/2
+      init/1                        spawn_worker_process/1
+      module_info/0                 spawn_worker_process/2
+      module_info/1                 start/0
+      rescan_config/0               start_link/0
+      rescan_config/1               stop/0
+      send_req/3                    stop_worker_process/1
+      send_req/4                    stream_close/1
+      send_req/5                    stream_next/1
+      send_req/6                    terminate/2
+      send_req_direct/4             trace_off/0
+      send_req_direct/5             trace_off/2
+      send_req_direct/6             trace_on/0
+      trace_on/2
+      ok
+      2>
+    </programlisting>
+    <para>
+      Notice the <literal>-A beamPackages.ibrowse.env</literal>.That
+      is the key to this functionality.
+    </para>
+  </section>
+  <section xml:id="creating-a-shell">
+    <title>Creating a Shell</title>
+    <para>
+      Getting access to an environment often isn't enough to do real
+      development. Many times we need to create a
+      <literal>shell.nix</literal> file and do our development inside
+      of the environment specified by that file. This file looks a lot
+      like the packageing described above. The main difference is that
+      <literal>src</literal> points to project root and we call the
+      package directly.
+    </para>
+    <programlisting>
+{ pkgs ? import &quot;&lt;nixpkgs&quot;&gt; {} }:
+
+with pkgs;
+
+let
+
+  f = { buildRebar3, ibrowse, jsx, erlware_commons }:
+      buildRebar3 {
+        name = "hex2nix";
+        version = "0.1.0";
+        src = ./.;
+        erlangDeps = [ ibrowse jsx erlware_commons ];
+      };
+  drv = beamPackages.callPackage f {};
+
+in
+ drv
+    </programlisting>
+    <section xml:id="building-in-a-shell">
+    <title>Building in a shell</title>
+    <para>
+      We can leveral the support of the Derivation, regardless of
+      which build Derivation is called by calling the commands themselv.s
+    </para>
+    <programlisting>
+# =============================================================================
+# Variables
+# =============================================================================
+
+NIX_TEMPLATES := "$(CURDIR)/nix-templates"
+
+TARGET := "$(PREFIX)"
+
+PROJECT_NAME := thorndyke
+
+NIXPKGS=../nixpkgs
+NIX_PATH=nixpkgs=$(NIXPKGS)
+NIX_SHELL=nix-shell -I "$(NIX_PATH)" --pure
+# =============================================================================
+# Rules
+# =============================================================================
+.PHONY= all test clean repl shell build test analyze configure install \
+        test-nix-install publish plt analyze
+
+all: build
+
+guard-%:
+        @ if [ "${${*}}" == "" ]; then \
+                echo "Environment variable $* not set"; \
+                exit 1; \
+        fi
+
+clean:
+        rm -rf _build
+        rm -rf .cache
+
+repl:
+        $(NIX_SHELL) --run "iex -pa './_build/prod/lib/*/ebin'"
+
+shell:
+        $(NIX_SHELL)
+
+configure:
+        $(NIX_SHELL) --command 'eval "$$configurePhase"'
+
+build: configure
+        $(NIX_SHELL) --command 'eval "$$buildPhase"'
+
+install:
+        $(NIX_SHELL) --command 'eval "$$installPhase"'
+
+test:
+        $(NIX_SHELL) --command 'mix test --no-start --no-deps-check'
+
+plt:
+        $(NIX_SHELL) --run "mix dialyzer.plt --no-deps-check"
+
+analyze: build plt
+        $(NIX_SHELL) --run "mix dialyzer --no-compile"
+
+    </programlisting>
+    <para>
+      If you add the <literal>shell.nix</literal> as described and
+      user rebar as follows things should simply work. Aside from the
+      <literal>test</literal>, <literal>plt</literal>, and
+      <literal>analyze</literal> the talks work just fine for all of
+      the build Derivations.
+    </para>
+  </section>
+</section>
+</section>
+<section xml:id="generating-packages-from-hex-with-hex2nix">
+  <title>Generating Packages from Hex with Hex2Nix</title>
+  <para>
+    Updating the Hex packages requires the use of the
+    <literal>hex2nix</literal> tool. Given the path to the Erlang
+    modules (usually
+    <literal>pkgs/development/erlang-modules</literal>). It will
+    happily dump a file called
+    <literal>hex-packages.nix</literal>. That file will contain all
+    the packages that use a recognized build system in Hex. However,
+    it can't know whether or not all those packages are buildable.
+    </para>
+    <para>
+      To make life easier for our users, it makes good sense to go
+      ahead and attempt to build all those packages and remove the
+      ones that don't build. To do that, simply run the command (in
+      the root of your <literal>nixpkgs</literal> repository). that follows.
+    </para>
+    <programlisting>
+$ nix-build -A beamPackages
+    </programlisting>
+    <para>
+      That will build every package in
+      <literal>beamPackages</literal>. Then you can go through and
+      manually remove the ones that fail. Hopefully, someone will
+      improve <literal>hex2nix</literal> in the future to automate
+      that.
+    </para>
+</section>
+</chapter>

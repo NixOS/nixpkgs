@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pyqt5, sip_4_16, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qtbase, icu, sqlite
+, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, pythonPackages, xz, libusb1, libmtp
 , xdg_utils
 }:
@@ -26,7 +26,14 @@ stdenv.mkDerivation rec {
       setup/build_environment.py
   '';
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  dontUseQmakeConfigure = true;
+  # hack around a build problem
+  preBuild = ''
+    mkdir -p ../tmp.*/lib
+    ln -s '${qtbase.out}/lib/libQt5PlatformSupport.a' ../tmp.*/lib/
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
 
   buildInputs =
     [ python pyqt5 sip_4_16 poppler_utils libpng imagemagick libjpeg

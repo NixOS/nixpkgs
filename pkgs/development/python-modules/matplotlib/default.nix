@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "1.5.1";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/m/matplotlib/${name}.tar.gz";
+    url = "mirror://pypi/m/matplotlib/${name}.tar.gz";
     sha256 = "3ab8d968eac602145642d0db63dd8d67c85e9a5444ce0e2ecb2a8fedc7224d40";
   };
 

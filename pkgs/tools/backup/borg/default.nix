@@ -6,7 +6,7 @@ python3Packages.buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/b/borgbackup/borgbackup-${version}.tar.gz";
+    url = "mirror://pypi/b/borgbackup/borgbackup-${version}.tar.gz";
     sha256 = "1myz10pwxnac9z59gw1w3xjhz6ghx03vngpl97ca527pj0r39shi";
   };
 

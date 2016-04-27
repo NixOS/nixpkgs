@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl, tcl, readline, sqlite, withJson ? true}:
+{stdenv, libiconv, fetchurl, zlib, openssl, tcl, readline, sqlite, withJson ? true}:
 
 stdenv.mkDerivation rec {
   name = "fossil-1.33";
@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gkzd9nj3xyznh9x8whv0phdnj11l5c8164rc3l0jvs5i61c95b2";
   };
 
-  buildInputs = [ zlib openssl readline sqlite ];
+  buildInputs = [ zlib openssl readline sqlite ]
+             ++ stdenv.lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ tcl ];
 
   doCheck = true;

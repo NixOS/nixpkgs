@@ -4409,6 +4409,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/N/NE/NEZUMI/Encode-EUCJPASCII-0.03.tar.gz;
       sha256 = "f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861";
     };
+    outputs = [ "out" ];
     meta = {
       description = "EucJP-ascii - An eucJP-open mapping";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

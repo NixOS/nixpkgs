@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/jonsterling/JonPRL.git";
     deepClone = true;
     rev = "refs/tags/v${version}";
-    sha256 = "1z0d8dq1nb4dycic58nnk617hbfgafz0vmwr8gkl0i6405gfg1zy";
+    sha256 = "09m1vb41vxvqnk78gm9inip1abknkywij30rghvym93q460cl2hm";
   };
 
   buildInputs = [ smlnj which ];

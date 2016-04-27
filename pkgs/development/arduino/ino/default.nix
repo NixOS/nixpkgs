@@ -6,7 +6,7 @@ buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://pypi.python.org/packages/source/i/ino/${name}.tar.gz";
+    url = "mirror://pypi/i/ino/${name}.tar.gz";
     sha256 = "0k6lzfcn55favbj0w4afrvnmwyskf7bgzg9javv2ycvskp35srwv";
   };
 

@@ -2263,6 +2263,8 @@ in
     inherit (perlPackages) mimeConstruct;
   };
 
+  logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
+
   logkeys = callPackage ../tools/security/logkeys { };
 
   logrotate = callPackage ../tools/system/logrotate { };
@@ -3208,6 +3210,7 @@ in
   silc_server = callPackage ../servers/silc-server { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
+  ag = self.silver-searcher;
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
@@ -5097,13 +5100,13 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+  rustcMaster = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
   rustc = callPackage ../development/compilers/rustc {};
 
   rustPlatform = rustStable;
 
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable);
+  rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
 
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
@@ -5205,13 +5208,9 @@ in
 
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
 
-  visualcpp = callPackage ../development/compilers/visual-c++ { };
-
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
   webdsl = callPackage ../development/compilers/webdsl { };
-
-  win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
@@ -5321,14 +5320,16 @@ in
   rebar = callPackage ../development/tools/build-managers/rebar { };
   rebar3-open = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = false; };
   rebar3 = callPackage ../development/tools/build-managers/rebar3 { hermeticRebar3 = true; };
-  rebar3-nix-bootstrap = callPackage ../development/tools/erlang/rebar3-nix-bootstrap { };
-  fetchHex = callPackage ../development/tools/build-managers/rebar3/fetch-hex.nix { };
+  hexRegistrySnapshot = callPackage ../development/beam-modules/hex-registry-snapshot.nix { };
+  fetchHex = callPackage ../development/beam-modules/fetch-hex.nix { };
 
-  erlangPackages = callPackage ../development/erlang-modules { };
-  cuter = erlangPackages.callPackage ../development/tools/erlang/cuter { };
-  hex2nix = erlangPackages.callPackage ../development/tools/erlang/hex2nix { };
+  beamPackages = callPackage ../development/beam-modules { };
+  hex2nix = beamPackages.callPackage ../development/tools/erlang/hex2nix { };
+  cuter = callPackage ../development/tools/erlang/cuter { };
 
-  elixir = callPackage ../development/interpreters/elixir { };
+  relxExe = callPackage ../development/tools/erlang/relx-exe {};
+
+  elixir = callPackage ../development/interpreters/elixir { debugInfo = true; };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
@@ -5676,10 +5677,8 @@ in
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
-  windowssdk = (
-    callPackage ../development/misc/windows-sdk {});
-
   xidel = callPackage ../tools/text/xidel { };
+
 
   ### DEVELOPMENT / TOOLS
 
@@ -5714,6 +5713,7 @@ in
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+  autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
@@ -5787,9 +5787,9 @@ in
     rustPlatform = rustCargoPlatform;
   };
 
-  cargoUnstable = callPackage ../development/tools/build-managers/cargo/head.nix {
+  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {
     rustPlatform = rustUnstableCargoPlatform;
-  };
+  });
 
   cargoSnapshot = rustc:
     callPackage ../development/tools/build-managers/cargo/snapshot.nix {
@@ -8973,11 +8973,7 @@ in
 
   unicap = callPackage ../development/libraries/unicap {};
 
-  tsocks = callPackage ../development/libraries/tsocks {
-    stdenv = overrideCC stdenv (
-      wrapCCWith (callPackage ../build-support/cc-wrapper)
-      musl "" gcc.cc);
-  };
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
@@ -10271,8 +10267,6 @@ in
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dietlibc = callPackage ../os-specific/linux/dietlibc { };
-
   directvnc = callPackage ../os-specific/linux/directvnc { };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
@@ -10311,8 +10305,6 @@ in
   light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
-
-  e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
@@ -10952,8 +10944,6 @@ in
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
-  pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
-
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
@@ -11001,8 +10991,6 @@ in
 
   procps = procps-ng;
 
-  procps-old = lowPrio (callPackage ../os-specific/linux/procps { });
-
   procps-ng = callPackage ../os-specific/linux/procps-ng { };
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
@@ -11026,6 +11014,8 @@ in
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
+
+  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
@@ -16147,6 +16137,8 @@ in
   dblatexFull = appendToName "full" (self.dblatex.override {
     enableAllFeatures = true;
   });
+
+  dbus-map = callPackage ../tools/misc/dbus-map { };
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 

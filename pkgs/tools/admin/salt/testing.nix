@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/S/SaltTesting/${name}.tar.gz";
+    url = "mirror://pypi/S/SaltTesting/${name}.tar.gz";
     sha256 = "0p0y8kb77pis18rcig1kf9dnns4bnfa3mr91q40lq4mw63l1b34h";
   };
 

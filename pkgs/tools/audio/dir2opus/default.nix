@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, python, mutagen, wrapPython, opusTools }:
+{ stdenv, fetchurl, python, mutagen, wrapPython, opusTools, mpg123 }:
 
-let version = "0.12.1"; in
+let version = "0.12.2"; in
 stdenv.mkDerivation rec {
   name = "dir2opus-${version}";
 
   pythonPath = [ mutagen ];
   buildInputs = [ wrapPython ];
-  propagatedBuildInputs = [ opusTools ];
+  propagatedBuildInputs = [ opusTools mpg123 ];
 
   src = fetchurl {
     url = "https://github.com/ehmry/dir2opus/archive/${version}.tar.gz";
     name = "${name}.tar.gz";
-    sha256 = "1d6x3qfcj5lfmc8gzna1vrr7fl31i86ha8l4nz5987rx57fgwf0q";
+    sha256 = "0bl8fa9zhccihnj1v3lpz5jb737frf9za06xb7j5rsjws6xky80d";
   };
 
   postPatch = "sed -i -e 's|#!/usr/bin/python|#!${python}/bin/python|' dir2opus";

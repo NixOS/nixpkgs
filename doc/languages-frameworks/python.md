@@ -108,7 +108,7 @@ toolz = buildPythonPackage rec{
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -146,7 +146,7 @@ pkgs.python35Packages.buildPythonPackage rec {
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 
@@ -175,7 +175,7 @@ with import <nixpkgs> {};
       version = "0.7.4";
 
       src = pkgs.fetchurl{
-        url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+        url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
         sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
       };
 
@@ -220,7 +220,7 @@ datashape = buildPythonPackage rec {
   version = "0.4.7";
 
   src = pkgs.fetchurl {
-    url = "https://pypi.python.org/packages/source/D/DataShape/${name}.tar.gz";
+    url = "mirror://pypi/D/DataShape/${name}.tar.gz";
     sha256 = "14b2ef766d4c9652ab813182e866f493475e65e558bed0822e38bf07bba1a278";
   };
 
@@ -251,7 +251,7 @@ lxml = buildPythonPackage rec {
   name = "lxml-3.4.4";
 
   src = pkgs.fetchurl {
-    url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+    url = "mirror://pypi/l/lxml/${name}.tar.gz";
     sha256 = "16a0fa97hym9ysdk3rmqz32xdjqmy4w34ld3rm3jf5viqjx65lxk";
   };
 
@@ -282,7 +282,7 @@ pyfftw = buildPythonPackage rec {
   version = "0.9.2";
 
   src = pkgs.fetchurl {
-    url = "https://pypi.python.org/packages/source/p/pyFFTW/pyFFTW-${version}.tar.gz";
+    url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
     sha256 = "f6bbb6afa93085409ab24885a1a3cdb8909f095a142f4d49e346f2bd1b789074";
   };
 
@@ -373,7 +373,7 @@ buildPythonPackage rec {
   version = "0.7.4";
 
   src = pkgs.fetchurl{
-    url = "https://pypi.python.org/packages/source/t/toolz/toolz-${version}.tar.gz";
+    url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
     sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
   };
 

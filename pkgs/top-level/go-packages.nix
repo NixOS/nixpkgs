@@ -244,10 +244,10 @@ let
   };
 
   asciinema = buildFromGitHub {
-    rev = "v1.1.1";
+    rev = "v1.2.0";
     owner = "asciinema";
     repo = "asciinema";
-    sha256 = "0k48k8815k433s25lh8my2swl89kczp0m2gbqzjlpy1xwmk06nxc";
+    sha256 = "0wvrq92ackhfycfs1fircs8al3ji69igqqrc55ic29wbpnvz355x";
   };
 
   asmfmt = buildFromGitHub {
@@ -3741,7 +3741,9 @@ let
     disabled = isGo14 || isGo15;
     sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
 
-    buildInputs = [ ];
+    postInstall = ''
+      for i in $bin/bin/{provider,provisioner}-*; do mv $i $bin/bin/terraform-$(basename $i); done
+    '';
   };
 
   testify = buildGoPackage rec {

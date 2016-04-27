@@ -96,7 +96,6 @@ let
       ddrescue = linux;
       dhcp = linux;
       dico = linux;
-      dietlibc = linux;
       diffutils = all;
       disnix = all;
       disnixos = linux;
