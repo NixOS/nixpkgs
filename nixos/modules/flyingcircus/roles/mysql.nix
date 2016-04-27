@@ -12,7 +12,6 @@ let
   cfg = config.flyingcircus.roles.mysql;
   fclib = import ../lib;
 
-
   current_memory = fclib.current_memory config 256;
   cores = fclib.current_cores config 1;
 
@@ -60,7 +59,6 @@ in
         in any specific section.
         '';
       };
-
 
     };
 
@@ -212,6 +210,7 @@ in
     Cmnd_Alias      MYSQL_RESTART = /run/current-system/sw/bin/systemctl restart mysql
     %service        ALL=(root) MYSQL_RESTART
     %sudo-srv       ALL=(root) MYSQL_RESTART
+    %sensuclient    ALL=(mysql) ALL
     '';
 
     services.udev.extraRules = ''
@@ -223,5 +222,12 @@ in
     pkgs.xtrabackup
     pkgs.qpress
     ];
+
+    flyingcircus.services.sensu-client.checks = {
+      mysql = {
+        notification = "MySQL alive";
+        command =  "/var/setuid-wrappers/sudo -u mysql check-mysql-alive.rb -d mysql -u root -p ${lib.readFile root_password_file}";
+      };
+    };
   };
 }
