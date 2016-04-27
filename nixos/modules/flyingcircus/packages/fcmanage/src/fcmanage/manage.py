@@ -141,9 +141,9 @@ def build_dev(build_options):
               ' '.join(build_options)))
 
 
-def ensure_reboot():
-    if os.path.exists('/reboot'):
-        os.system('systemctl reboot')
+def maintenance():
+    import fc.maintenance.reqmanager
+    fc.maintenance.reqmanager.transaction()
 
 
 def seed_enc(path):
@@ -159,7 +159,6 @@ def collect_garbage(age):
 
 
 def main():
-    logging.basicConfig()
     build_options = []
     a = argparse.ArgumentParser(description=__doc__)
     a.add_argument('-E', '--enc-path', default='/etc/nixos/enc.json',
@@ -171,8 +170,8 @@ def main():
     a.add_argument('-s', '--system-state', default=False, action='store_true',
                    help='dump local system information (like memory size) '
                    'to system_state.json')
-    a.add_argument('-r', '--reboot', default=False, action='store_true',
-                   help='reboot if necessary (if /reboot exists)')
+    a.add_argument('-m', '--maintenance', default=False, action='store_true',
+                   help='run scheduled maintenance')
     a.add_argument('-g', '--garbage', default=0, type=int,
                    help='collect garbage and remove generations older than '
                         '<INT> days')
@@ -185,7 +184,13 @@ def main():
                        action='store_const', const='build_dev',
                        help='switch machine to local checkout in '
                        '/root/nixpkgs')
+    a.add_argument('-v', '--verbose', action='store_true', default=False)
     args = a.parse_args()
+
+    logging.basicConfig(format='%(levelname)s: %(message)s',
+                        level=logging.DEBUG if args.verbose else logging.INFO)
+    # this is really annoying
+    logging.getLogger('iso8601').setLevel(logging.INFO)
 
     seed_enc(args.enc_path)
 
@@ -208,9 +213,8 @@ def main():
     if not args.build and not args.directory and not args.system_state:
         a.error('no action specified')
 
-    if args.reboot:
-        ensure_reboot()
-        return
+    if args.maintenance:
+        maintenance()
 
     # Garbage collection is run after a potential reboot.
     if args.garbage:

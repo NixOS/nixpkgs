@@ -20,7 +20,7 @@ in {
 
       steps = mkOption {
         type = types.str;
-        default = "--directory --system-state --garbage 30 --reboot --channel";
+        default = "--directory --system-state --garbage 30 --maintenance --channel";
         description = "Steps to run by the agent.";
       };
     };
@@ -53,7 +53,10 @@ in {
       };
 
       # Remove the reboot marker during a reboot.
-      systemd.tmpfiles.rules = [ "r! /reboot" ];
+      systemd.tmpfiles.rules = [
+        "r! /reboot"
+        "R /var/spool/maintenance/archive/* - - - 90d"
+      ];
 
     }
 

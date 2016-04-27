@@ -12,5 +12,6 @@ python34Packages.buildPythonPackage rec {
       multipath_tools
       utillinux
       xfsprogs
+      fcmaintenance
     ];
 }
