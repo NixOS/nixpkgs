@@ -1,5 +1,6 @@
 """Unified client access to fc.directory."""
 
+import contextlib
 import json
 import xmlrpc.client
 
@@ -33,3 +34,13 @@ def connect(enc_data=None, ring=1):
            1: DIRECTORY_URL_RING1}[ring]
     return xmlrpc.client.Server(url.format(enc=enc_data), allow_none=True,
                                 use_datetime=True)
+
+
+@contextlib.contextmanager
+def directory_connection(enc_path):
+    """Execute the associated block with a directory connection."""
+    enc_data = None
+    if enc_path:
+        with open(enc_path) as f:
+            enc_data = json.load(f)
+    yield fc.util.directory.connect(enc_data)
