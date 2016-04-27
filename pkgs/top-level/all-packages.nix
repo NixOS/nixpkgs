@@ -504,9 +504,7 @@ in
 
   arc-gtk-theme = callPackage ../misc/themes/arc { };
 
-  aria2 = callPackage ../tools/networking/aria2 {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  aria2 = callPackage ../tools/networking/aria2 { };
   aria = self.aria2;
 
   at = callPackage ../tools/system/at { };
