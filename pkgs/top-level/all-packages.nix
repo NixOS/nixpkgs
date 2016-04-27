@@ -13730,7 +13730,7 @@ in
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
-    qt4 = pkgsi686Linux.qt4_clang;
+    qt4 = pkgsi686Linux.qt4.override { xmlpatterns = false; };
   };
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
