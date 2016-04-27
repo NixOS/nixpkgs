@@ -35,7 +35,6 @@ let
       (user: {
         name = user.uid;
         value = {
-          # extraGroups = ["wheel"];
           createHome = true;
           description = user.name;
           group = get_primary_group user;
@@ -102,7 +101,7 @@ let
 
   home_dir_permissions = userdata:
     map
-      (user: "install -d -m 0755 ${user.home_directory}")
+      (user: "install -d -o ${toString user.id} -g ${get_primary_group user} -m 0755 ${user.home_directory}")
       userdata;
 
   configure_lingering = userdata:
