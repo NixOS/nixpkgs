@@ -1717,6 +1717,8 @@ in modules // {
 
     propagatedBuildInputs = [ self.requests2 ];
 
+    doCheck = false;
+
     meta = with stdenv.lib; {
       homepage = https://betamax.readthedocs.org/en/latest/;
       description = "A VCR imitation for requests";
