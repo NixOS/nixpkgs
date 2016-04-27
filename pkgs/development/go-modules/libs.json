@@ -25,5 +25,23 @@
       "rev": "a83829b6f1293c91addabc89d0571c246397bbf4",
       "sha256": "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh"
     }
+  },
+  {
+    "goPackagePath": "github.com/docopt/docopt-go",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/docopt/docopt-go",
+      "rev": "784ddc588536785e7299f7272f39101f7faccc3f",
+      "sha256": "13x00cnady5znysfwca3x59dl04m8rvnk2yprgyqqpg2y4v0xmbf"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/crypto",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/crypto",
+      "rev": "1f22c0103821b9390939b6776727195525381532",
+      "sha256": "05ahvn9g9cj7797n8ryfxv2g26v3lx1pza9d9pg97iw0rvar9i1h"
+    }
   }
 ]
