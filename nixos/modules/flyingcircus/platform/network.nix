@@ -58,7 +58,7 @@ let
     {
        priority =
         if builtins.length addresses == 0
-        then null
+        then 1000
         else lib.attrByPath [ interface_name ] 100 routing_priorities;
        network = network;
        interface = interface_name;
@@ -86,32 +86,31 @@ let
   # have an address for it.)
   policy_routing_rules = ruleset:
     let
-      address_rules = lib.concatMapStrings
+      address_rules = if (builtins.length ruleset.addresses != 0) then
+        (lib.concatMapStrings
           (address:
             ''
               ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from ${address} lookup ${ruleset.interface}
             '')
-          ruleset.addresses;
-      gateway_rule =
+          ruleset.addresses) else "";
+      gateway_rule = if (builtins.length ruleset.addresses != 0) then
         ''
           ip -${ruleset.family} route add default via ${ruleset.gateway} table ${ruleset.interface} || true
-        '';
+        '' else "";
     in
     ''
       # policy routing rules for ${ruleset.interface}/IPv${ruleset.family}
       ${address_rules}
-      ip -${ruleset.family} rule add priority ${toString (ruleset.priority)} from all to ${ruleset.network} lookup ${ruleset.interface}
+      ip -${ruleset.family} rule add priority ${toString ruleset.priority} from all to ${ruleset.network} lookup ${ruleset.interface}
       ${gateway_rule}
     '';
 
   get_policy_routing = interfaces:
     map
       policy_routing_rules
-        (filter
-          (ruleset: ruleset.priority != null)
-          (lib.concatMap
-            (get_policy_routing_for_interface interfaces)
-            (attrNames interfaces)));
+        (lib.concatMap
+          (get_policy_routing_for_interface interfaces)
+          (attrNames interfaces));
 
   rt_tables = toFile "rt_tables" ''
     # reserved values
