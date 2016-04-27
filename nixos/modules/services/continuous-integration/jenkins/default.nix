@@ -92,12 +92,11 @@ in {
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the jenkins process.
-          As a base environment, jenkins receives NIX_PATH from
-          <option>environment.sessionVariables</option>, NIX_REMOTE is set to
-          "daemon" and JENKINS_HOME is set to the value of
-          <option>services.jenkins.home</option>.
-          This option has precedence and can be used to override those
-          mentioned variables.
+          As a base environment, jenkins receives NIX_PATH, SSL_CERT_FILE and
+          GIT_SSL_CAINFO from <option>environment.sessionVariables</option>,
+          NIX_REMOTE is set to "daemon" and JENKINS_HOME is set to
+          the value of <option>services.jenkins.home</option>. This option has
+          precedence and can be used to override those mentioned variables.
         '';
       };
 
@@ -137,7 +136,11 @@ in {
       environment =
         let
           selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
+            lib.filterAttrs (n: v: builtins.elem n
+                [ "NIX_PATH"
+                  "SSL_CERT_FILE"
+                  "GIT_SSL_CAINFO"
+                ])
               config.environment.sessionVariables;
         in
           selectedSessionVars //
