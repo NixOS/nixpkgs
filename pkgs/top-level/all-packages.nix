@@ -1,5 +1,4 @@
-{ system, bootStdenv, noSysDirs, gccWithCC, gccWithProfiling
-, config, crossSystem, platform, lib
+{ system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
 , pkgsWithOverrides
 , ... }:
 self: pkgs:
@@ -46,8 +45,7 @@ in
   forceSystem = system: kernel: (import ./../..) {
     inherit system;
     platform = platform // { kernelArch = kernel; };
-    inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem;
+    inherit bootStdenv noSysDirs config crossSystem;
   };
 
   # Used by wine, firefox with debugging version of Flash, ...
@@ -3946,7 +3944,7 @@ in
       let
         pkgsCross = (import ./../..) {
           inherit system;
-          inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
+          inherit bootStdenv noSysDirs config;
           # Ben Nanonote system
           crossSystem = {
             config = "mipsel-unknown-linux";
