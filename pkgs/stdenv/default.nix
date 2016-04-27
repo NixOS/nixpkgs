@@ -40,9 +40,12 @@ rec {
 
   inherit (import ./cross { inherit system allPackages platform crossSystem config lib; }) stdenvCross;
 
+  inherit (import ./custom { inherit system allPackages platform crossSystem config lib; }) stdenvCustom;
+
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
     if crossSystem != null then stdenvCross else
+    if config ? replaceStdenv then stdenvCustom else
     if system == "i686-linux" then stdenvLinux else
     if system == "x86_64-linux" then stdenvLinux else
     if system == "armv5tel-linux" then stdenvLinux else

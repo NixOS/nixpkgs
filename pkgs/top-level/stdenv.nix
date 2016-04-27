@@ -9,16 +9,7 @@ rec {
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
 
   stdenv =
-    if bootStdenv != null then
-      (bootStdenv // { inherit platform; })
-    else if crossSystem == null && config ? replaceStdenv then
-      config.replaceStdenv {
-        # We import again all-packages to avoid recursivities.
-        pkgs = nixpkgsFun {
-          # We remove packageOverrides to avoid recursivities
-          config = removeAttrs config [ "replaceStdenv" ];
-        };
-      }
-    else
-      defaultStdenv;
+    if bootStdenv != null
+    then (bootStdenv // { inherit platform; })
+    else defaultStdenv;
 }
