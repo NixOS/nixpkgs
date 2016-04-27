@@ -23180,14 +23180,19 @@ in modules // {
   };
 
   xdot = buildPythonPackage rec {
-    name = "xdot-0.6";
+    name = "xdot-0.7";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xdot/xdot-0.6.tar.gz";
-      sha256 = "c71d82bad0fec696af36af788c2a1dbb5d9975bd70bfbdc14bda15b5c7319e6c";
+      url = "mirror://pypi/x/xdot/xdot-0.7.tar.gz";
+      sha256 = "1q0f3pskb09saw1qkd2s6vmk80rq5zjhq8l93dfr2x6r04r0q46j";
     };
 
-    propagatedBuildInputs = with self; [ pygtk pygobject pkgs.graphviz ];
+    propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pygobject3 pkgs.graphviz pkgs.gnome3.gtk ];
+
+    preFixup = ''
+        wrapProgram "$out/bin/"* \
+          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
+    '';
 
     meta = {
       description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
