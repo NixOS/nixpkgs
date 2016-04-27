@@ -35,7 +35,6 @@ let
       (user: {
         name = user.uid;
         value = {
-          # extraGroups = ["wheel"];
           createHome = true;
           description = user.name;
           group = get_primary_group user;
