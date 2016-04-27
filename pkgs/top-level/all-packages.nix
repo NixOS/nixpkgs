@@ -1574,7 +1574,7 @@ in
 
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
-  fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
+  fuse-zip = callPackage ../tools/filesystems/fuse-zip { };
 
   exfat = callPackage ../tools/filesystems/exfat { };
 
