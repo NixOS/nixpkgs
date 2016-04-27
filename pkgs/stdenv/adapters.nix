@@ -70,7 +70,6 @@ rec {
             getCrossDrv = drv: drv.crossDrv or drv;
             nativeBuildInputsDrvs = map getNativeDrv nativeBuildInputs;
             buildInputsDrvs = map getCrossDrv buildInputs;
-            buildInputsDrvsAsBuildInputs = map getNativeDrv buildInputs;
             propagatedBuildInputsDrvs = map getCrossDrv propagatedBuildInputs;
             propagatedNativeBuildInputsDrvs = map getNativeDrv propagatedNativeBuildInputs;
 
