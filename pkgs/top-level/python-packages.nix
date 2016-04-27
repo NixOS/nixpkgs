@@ -22278,12 +22278,12 @@ in modules // {
   };
 
   pyuv = buildPythonPackage rec {
-    name = "pyuv-0.11.5";
+    name = "pyuv-1.2.0";
     disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
 
     src = pkgs.fetchurl {
       url = "https://github.com/saghul/pyuv/archive/${name}.tar.gz";
-      sha256 = "c251952cb4e54c92ab0e871decd13cf73d11ca5dba9f92962de51d12e3a310a9";
+      sha256 = "19yl1l5l6dq1xr8xcv6dhx1avm350nr4v2358iggcx4ma631rycx";
     };
 
     patches = [ ../development/python-modules/pyuv-external-libuv.patch ];
