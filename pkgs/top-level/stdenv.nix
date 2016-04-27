@@ -1,4 +1,4 @@
-{ system, bootStdenv, crossSystem, config, platform, lib, nixpkgsFun, pkgs }:
+{ system, bootStdenv, crossSystem, config, platform, lib, nixpkgsFun }:
 
 rec {
   allStdenvs = import ../stdenv {

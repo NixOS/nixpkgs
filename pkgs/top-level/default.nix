@@ -84,7 +84,7 @@ let
 
   stdenvDefault = self: super:
     import ./stdenv.nix {
-      inherit system bootStdenv crossSystem config platform lib nixpkgsFun pkgs;
+      inherit system bootStdenv crossSystem config platform lib nixpkgsFun;
     };
 
   allPackages = self: super:
