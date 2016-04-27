@@ -5439,7 +5439,7 @@ let
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblasCompat;
+    openblas = openblasCompat_2_17;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     fltk = fltk13.override { cfg.xftSupport = true; };
@@ -15399,11 +15399,13 @@ let
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
   openblas_2_14 = callPackage ../development/libraries/science/math/openblas/0.2.14.nix { };
+  openblas_2_17 = callPackage ../development/libraries/science/math/openblas/0.2.17.nix { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
   openblasCompat = openblas.override { blas64 = false; };
   openblasCompat_2_14 = openblas_2_14.override { blas64 = false; };
+  openblasCompat_2_17 = openblas_2_17.override { blas64 = false; };
 
   openlibm = callPackage ../development/libraries/science/math/openlibm {};
 
