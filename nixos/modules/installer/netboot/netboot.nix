@@ -44,8 +44,6 @@ with lib;
 
     boot.initrd.availableKernelModules = [ "squashfs" ];
 
-    boot.blacklistedKernelModules = [ "nouveau" ];
-
     boot.initrd.kernelModules = [ "loop" ];
 
     # Closures to be copied to the Nix store, namely the init
