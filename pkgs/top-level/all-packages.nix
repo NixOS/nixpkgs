@@ -7726,7 +7726,6 @@ in
         else if stdenv.isDarwin then darwin.libiconv
         else libiconvReal ) // {
 	crossDrv = (if crossSystem.libc == "glibc" then libcCross.crossDrv
-      else if crossSystem.libc == "libSystem" then darwin.libiconv.crossDrv
       else libiconvReal.crossDrv); };
 
   libiconvReal = callPackage ../development/libraries/libiconv {
