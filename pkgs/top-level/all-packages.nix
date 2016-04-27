@@ -2195,7 +2195,9 @@ in
   else
     nodePackages_4_x;
 
-  npm2nix = nodePackages.npm2nix;
+  npm2nix = callPackage ../development/tools/npm2nix {
+    inherit fetchFromGitHub;
+  };
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
