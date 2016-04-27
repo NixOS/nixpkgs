@@ -75,9 +75,10 @@ in
       after         = [ "network.target" ];
 
       preStart = ''
-          test -e ${stateDir}/saves/${cfg.saveName}.zip || ${pkgs.factorio-headless}/bin/factorio \
-            --config=${cfg.configFile} \
-            --create=${cfg.saveName}
+          test -e ${stateDir}/saves/${cfg.saveName}.zip || \
+            ${pkgs.factorio-headless}/bin/factorio         \
+              --config=${cfg.configFile}                   \
+              --create=${cfg.saveName}
       '';
 
       serviceConfig = {
