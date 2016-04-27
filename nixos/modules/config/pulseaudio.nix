@@ -134,7 +134,7 @@ in {
     }
 
     (mkIf cfg.enable {
-      environment.systemPackages = [ cfg.package.out ];
+      environment.systemPackages = [ cfg.package ];
 
       environment.etc = singleton {
         target = "asound.conf";
@@ -158,7 +158,7 @@ in {
           wantedBy = [ "default.target" ];
           serviceConfig = {
             Type = "notify";
-            ExecStart = "${cfg.package}/bin/pulseaudio --daemonize=no";
+            ExecStart = "${cfg.package.out}/bin/pulseaudio --daemonize=no";
             Restart = "on-failure";
           };
         };
