@@ -112,7 +112,7 @@ let
     modemmanager-qt = callPackage ./modemmanager-qt.nix {};
     networkmanager-qt = callPackage ./networkmanager-qt.nix {};
     oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
-    plasma-framework = callPackage ./plasma-framework {};
+    plasma-framework = callPackage ./plasma-framework.nix {};
     solid = callPackage ./solid.nix {};
     sonnet = callPackage ./sonnet.nix {};
     threadweaver = callPackage ./threadweaver.nix {};
