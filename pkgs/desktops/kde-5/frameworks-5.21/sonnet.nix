@@ -5,9 +5,7 @@
 
 kdeFramework {
   name = "sonnet";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ hunspell ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
