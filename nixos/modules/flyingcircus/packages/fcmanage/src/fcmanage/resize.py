@@ -50,6 +50,7 @@ class Disk(object):
         return(int(free.group(1)))
 
     def grow_partition(self):
+        print('growing partition in the partition table')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         first_sector = partx.splitlines()[1].split()[1]
         subprocess.check_call([
@@ -58,6 +59,7 @@ class Disk(object):
             '-t', '1:8300'])
 
     def resize_partition(self):
+        print('growing XFS filesystem')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         partition_size = partx.splitlines()[1].split()[3]   # sectors
         subprocess.check_call(['resizepart', self.dev, '1', partition_size])
@@ -98,8 +100,10 @@ def set_quota(enc_path):
     if not disk:
         return
 
-    subprocess.check_call(['xfs_quota', '-xc',
-                           'limit -p bsoft={d}g bhard={d}g 0'.format(d=disk)])
+    print('setting XFS quota')
+    subprocess.check_call([
+        'xfs_quota', '-xc',
+        'limit -p bsoft={d}g bhard={d}g root'.format(d=disk), '/'])
 
 
 def main():
