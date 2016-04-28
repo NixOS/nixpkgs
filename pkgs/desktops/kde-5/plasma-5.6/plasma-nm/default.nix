@@ -20,15 +20,12 @@ plasmaPackage {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
-    kinit kitemviews knotifications kservice kwallet kwidgetsaddons
-    kxmlgui mobile_broadband_provider_info modemmanager-qt
-    networkmanager-qt openconnect qca-qt5 solid
-  ];
   propagatedBuildInputs = [
     kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
-    qtdeclarative
+    qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
+    kinit kitemviews knotifications kservice kwallet kwidgetsaddons kxmlgui
+    mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
+    qca-qt5 solid
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/kde5-nm-connection-editor"
