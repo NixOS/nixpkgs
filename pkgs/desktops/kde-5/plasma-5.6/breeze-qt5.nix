@@ -10,11 +10,9 @@ plasmaPackage {
     extra-cmake-modules
     makeQtWrapper
   ];
-  buildInputs = [
-    kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons
-  ];
   propagatedBuildInputs = [
     frameworkintegration ki18n kwindowsystem plasma-framework qtx11extras
+    kcmutils kconfigwidgets kcoreaddons kdecoration kguiaddons
   ];
   cmakeFlags = [ "-DUSE_Qt4=OFF" ];
   postInstall = ''
