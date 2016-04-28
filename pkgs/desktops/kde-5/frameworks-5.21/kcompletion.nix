@@ -6,9 +6,7 @@
 
 kdeFramework {
   name = "kcompletion";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kconfig kwidgetsaddons ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ kconfig kwidgetsaddons ];
 }
