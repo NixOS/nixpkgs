@@ -1,21 +1,16 @@
-{ stdenv, fetchurl, buildEnv, makeDesktopItem
-, xorg, alsaLib, dbus, dbus_glib, glib, gtk, atk, pango, freetype, fontconfig
-, gdk_pixbuf, cairo, zlib}:
+{ stdenv, fetchurl, makeDesktopItem
+, libXrender, libX11, libXext, libXt, alsaLib, dbus, dbus_glib, glib, gtk
+, atk, pango, freetype, fontconfig, gdk_pixbuf, cairo, zlib
+}:
+
 let
-  # isolated tor environment
-  torEnv = buildEnv {
-    name = "tor-env";
-    paths = [
-      stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
-      fontconfig gdk_pixbuf cairo xorg.libXrender xorg.libX11 xorg.libXext
-      xorg.libXt
-    ];
-    extraOutputsToInstall = [ "lib" "out" ];
-  };
+  libPath = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc zlib glib alsaLib dbus dbus_glib gtk atk pango freetype
+    fontconfig gdk_pixbuf cairo libXrender libX11 libXext libXt
+  ];
+in
 
-  ldLibraryPath = ''${torEnv}/lib${stdenv.lib.optionalString stdenv.is64bit ":${torEnv}/lib64"}'';
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
   version = "5.5.5";
 
@@ -43,12 +38,10 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    # Just do a simple test if all libraries get loaded by running help on
-    # firefox and tor
     echo "Checking firefox..."
-    LD_LIBRARY_PATH=${ldLibraryPath} Browser/firefox --help 1> /dev/null
+    LD_LIBRARY_PATH=${libPath} Browser/firefox --help 1> /dev/null
     echo "Checking tor..."
-    LD_LIBRARY_PATH=${torEnv}/lib:Browser/TorBrowser/Tor Browser/TorBrowser/Tor/tor --help 1> /dev/null
+    LD_LIBRARY_PATH=${libPath}:Browser/TorBrowser/Tor Browser/TorBrowser/Tor/tor --help 1> /dev/null
   '';
 
   installPhase = ''
@@ -64,7 +57,7 @@ in stdenv.mkDerivation rec {
       echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
-    export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
+    export LD_LIBRARY_PATH=${libPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
     $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser
@@ -75,8 +68,6 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/pixmaps
     cp Browser/browser/icons/mozicon128.png $out/share/pixmaps/torbrowser.png
   '';
-
-  buildInputs = [ stdenv ];
 
   meta = with stdenv.lib; {
     description = "Tor Browser Bundle";

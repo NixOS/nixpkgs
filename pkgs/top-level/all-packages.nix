@@ -3462,7 +3462,9 @@ in
 
   torbutton = callPackage ../tools/security/torbutton { };
 
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
+    inherit (xorg) libXrender libX11 libXext libXt;
+  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
