@@ -2136,6 +2136,8 @@ in
     lua = lua5_2_compat;
   };
 
+  ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
