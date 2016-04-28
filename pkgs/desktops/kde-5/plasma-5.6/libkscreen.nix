@@ -9,10 +9,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
   ];
-  buildInputs = [
-    kwayland libXrandr
-  ];
   propagatedBuildInputs = [
-    qtx11extras
+    kwayland libXrandr qtx11extras
   ];
 }
