@@ -82,6 +82,6 @@ in stdenv.mkDerivation rec {
     description = "Tor Browser Bundle";
     homepage    = https://www.torproject.org/;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];
   };
 }
