@@ -10,6 +10,8 @@
 
     boost159 = pkgs.callPackage ./boost-1.59.nix { };
 
+    easyrsa3 = pkgs.callPackage ./easyrsa { };
+
     fcmaintenance = pkgs.callPackage ./fcmaintenance { };
     fcmanage = pkgs.callPackage ./fcmanage { };
     fcutil = pkgs.callPackage ./fcutil { };

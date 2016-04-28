@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby_2_0, pkgs, which, defaultGemConfig, zlib, libxml2, graphicsmagick, pkgconfig, imagemagickBig }:
+{ lib, bundlerEnv, ruby_2_0, pkgs, which, defaultGemConfig, zlib, libxml2, graphicsmagick, pkgconfig, imagemagickBig, mysql }:
 
 bundlerEnv {
   name = "sensu-0.22.1";
@@ -19,6 +19,10 @@ bundlerEnv {
     rmagick = attrs: {
       buildInputs = [ which graphicsmagick pkgconfig imagemagickBig ];
     };
+    mysql = attrs: {
+      buildInputs = [ mysql ];
+    };
+
   };
 
   meta = with lib; {
