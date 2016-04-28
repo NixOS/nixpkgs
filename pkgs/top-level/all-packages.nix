@@ -7724,9 +7724,12 @@ in
   # standalone libiconv, just in case you want it
   libiconv = (if stdenv.isGlibc then stdenv.cc.libc
         else if stdenv.isDarwin then darwin.libiconv
-        else libiconvReal ) // {
-	crossDrv = (if crossSystem.libc == "glibc" then libcCross
-      else libiconvReal.crossDrv); };
+        else libiconvReal ) //
+	stdenv.lib.optionalAttrs (crossSystem != null)
+	{
+        crossDrv = (if crossSystem.libc == "glibc" then libcCross
+	            else libiconvReal.crossDrv);
+        };
 
   libiconvReal = callPackage ../development/libraries/libiconv {
     fetchurl = fetchurlBoot;
