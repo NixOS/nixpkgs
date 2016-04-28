@@ -16677,4 +16677,6 @@ in
   golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 
   tomb = callPackage ../os-specific/linux/tomb {};
+
+  imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 }
