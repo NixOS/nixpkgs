@@ -6,11 +6,9 @@
 plasmaPackage {
   name = "kde-cli-tools";
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
-  buildInputs = [
-    kcmutils kconfig kdesu kiconthemes
-  ];
   propagatedBuildInputs = [
-    kdelibs4support ki18n kwindowsystem qtsvg qtx11extras
+    kdelibs4support ki18n kwindowsystem qtsvg qtx11extras kcmutils kconfig kdesu
+    kiconthemes
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/kmimetypefinder5"
