@@ -8,10 +8,8 @@
 
 kdeFramework {
   name = "ki18n";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtdeclarative qtscript ];
+  propagatedBuildInputs = [ qtdeclarative qtscript ];
   propagatedNativeBuildInputs = [ gettext python ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
