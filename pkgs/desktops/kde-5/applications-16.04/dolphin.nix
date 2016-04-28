@@ -29,42 +29,22 @@
 
 kdeApp {
   name = "dolphin";
+  meta = {
+    license = with lib.licenses; [ gpl2 fdl12 ];
+    maintainers = [ lib.maintainers.ttuegel ];
+  };
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kinit
-    kcmutils
-    kcoreaddons
-    knewstuff
-    kdbusaddons
-    kbookmarks
-    kconfig
-    kparts
-    solid
-    kiconthemes
-    kcompletion
-    knotifications
-    phonon
-    baloo-widgets
-  ];
   propagatedBuildInputs = [
-    baloo
-    kactivities
-    kdelibs4support
-    kfilemetadata
-    ki18n
-    kio
-    ktexteditor
+    kinit kcmutils kcoreaddons knewstuff kdbusaddons kbookmarks kconfig kparts
+    solid kiconthemes kcompletion knotifications phonon baloo-widgets baloo
+    kactivities kdelibs4support kfilemetadata ki18n kio ktexteditor
     kwindowsystem
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/dolphin"
   '';
-  meta = {
-    license = with lib.licenses; [ gpl2 fdl12 ];
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
