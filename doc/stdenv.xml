@@ -846,8 +846,9 @@ following:
   subdirectories of <envar>$out</envar> to
   <filename>share/</filename>.</para></listitem>
       
-  <listitem><para>It strips libraries and executables of debug
-  information.</para></listitem>
+  <listitem><para>It strips libraries and executables of debug information.
+  This step is crucial to remove references to build inputs.  It also reduces
+  the size of binaries.</para></listitem>
 
   <listitem><para>On Linux, it applies the <command>patchelf</command>
   command to ELF executables and libraries to remove unused
@@ -869,8 +870,27 @@ following:
 
   <varlistentry>
     <term><varname>dontStrip</varname></term>
-    <listitem><para>If set, libraries and executables are not
-    stripped.  By default, they are.</para></listitem>
+    <listitem><warning><para>Stripping is required to avoid propagating build
+    inputs as run-time dependencies.  Please ensure you understand the
+    implications before disabling stripping.  To disable stripping on selected
+    files of folders, see <varname>dontStripList</varname> or
+    <varname>strip{Debug,All}List</varname>.</para></warning><para>If set,
+    libraries and executables are not stripped.  By default, they are.
+    </para></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>dontStripList</varname></term>
+    <listitem><para>List of paths that should not be stripped.  Bash patterns
+    are accepted, and are relative to the package's prefix.  For example,
+    <literal>["share" "modules/*.i" "bin/libannoying.so"]</literal> is an
+    acceptable value. By default it's empty.  Avoid trailing slashes as the
+    underlying <command>find</command> ignores such paths.</para>
+    <para>Two good reasons to add paths to this list are when
+    <command>strip</command> fails on the file, breaking the build, and when
+    the package requires the debug info. In the latter case, you should ensure
+    that the unstripped executable does not maintain reference to build inputs.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -881,11 +901,12 @@ following:
 
   <varlistentry>
     <term><varname>stripAllList</varname></term>
-    <listitem><para>List of directories to search for libraries and
-    executables from which <emphasis>all</emphasis> symbols should be
-    stripped.  By default, it’s empty.  Stripping all symbols is
-    risky, since it may remove not just debug symbols but also ELF
-    information necessary for normal execution.</para></listitem>
+    <listitem><para>List of paths to search for libraries and executables from
+    which <emphasis>all</emphasis> symbols should be stripped.  See
+    <varname>dontStripList</varname> for detailed information about accepted
+    values.  By default, it’s empty.  Stripping all symbols is risky, since it
+    may remove not just debug symbols but also ELF information necessary for
+    normal execution.</para></listitem>
   </varlistentry>
 
   <varlistentry>
@@ -898,10 +919,13 @@ following:
 
   <varlistentry>
     <term><varname>stripDebugList</varname></term>
-    <listitem><para>List of directories to search for libraries and
-    executables from which only debugging-related symbols should be
-    stripped.  It defaults to <literal>lib bin
-    sbin</literal>.</para></listitem>
+    <listitem><para>List of paths to search for libraries and executables from
+    which only debugging-related symbols should be stripped. See
+    <varname>dontStripList</varname> for detailed information about accepted
+    values. By default, everything is stripped.  The same warning as for
+    <varname>dontStrip</varname> applies here.  For most purposes,
+    <varname>dontStripList</varname> should be used in place of this option.
+    </para></listitem>
   </varlistentry>
 
   <varlistentry>
