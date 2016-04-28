@@ -8,10 +8,7 @@
 
 kdeFramework {
   name = "kemoticons";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ karchive kconfig kcoreaddons ];
-  propagatedBuildInputs = [ kservice ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ karchive kconfig kcoreaddons kservice ];
 }
