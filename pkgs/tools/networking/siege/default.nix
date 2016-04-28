@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  configureFlags = [ "--with-ssl=${openssl}" ];
+  buildInputs = [ openssl ];
+
+  configureFlags = [ "--with-ssl=${openssl.dev}" ];
 
   meta = with stdenv.lib; {
     description = "HTTP load tester";
