@@ -5,13 +5,11 @@
 
 kdeFramework {
   name = "kcmutils";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
-    kcoreaddons kiconthemes kitemviews kpackage kxmlgui
+  propagatedBuildInputs = [
+    kconfigwidgets kcoreaddons kdeclarative ki18n kiconthemes kitemviews
+    kpackage kservice kxmlgui
   ];
-  propagatedBuildInputs = [ kconfigwidgets kdeclarative ki18n kservice ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
