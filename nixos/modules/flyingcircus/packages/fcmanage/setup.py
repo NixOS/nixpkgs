@@ -6,10 +6,7 @@ hydra server or from a local nixpkgs checkout.
 """
 
 from setuptools import setup, find_packages
-from codecs import open
-from os import path
 
-here = path.abspath(path.dirname(__file__))
 
 setup(
     name='fcmanage',
@@ -39,7 +36,6 @@ setup(
             'fc-manage=fcmanage.manage:main',
             'fc-monitor=fcmanage.monitor:main',
             'fc-resize=fcmanage.resize:main',
-            'df.quota=fcmanage.quota:df'
         ],
     },
 )
