@@ -2,9 +2,7 @@
 
 kdeFramework {
   name = "kunitconversion";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ ki18n ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
