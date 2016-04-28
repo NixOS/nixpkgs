@@ -8,10 +8,8 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
   ];
-  buildInputs = [
-    qtscript kcoreaddons kservice
-  ];
   propagatedBuildInputs = [
-    kdeclarative ki18n krunner plasma-framework qtdeclarative
+    kdeclarative ki18n krunner plasma-framework qtdeclarative qtscript
+    kcoreaddons kservice
   ];
 }
