@@ -98,9 +98,9 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pulseaudioLight.out;
-        defaultText = "pkgs.pulseaudioLight.out";
-        example = literalExample "pkgs.pulseaudioFull.out";
+        default = pulseaudioLight;
+        defaultText = "pkgs.pulseaudioLight";
+        example = literalExample "pkgs.pulseaudioFull";
         description = ''
           The PulseAudio derivation to use.  This can be used to enable
           features (such as JACK support, Bluetooth) via the
@@ -130,7 +130,7 @@ in {
         source = clientConf;
       };
 
-      hardware.pulseaudio.configFile = mkDefault "${cfg.package.out}/etc/pulse/default.pa";
+      hardware.pulseaudio.configFile = mkDefault "${getBin cfg.package}/etc/pulse/default.pa";
     }
 
     (mkIf cfg.enable {
@@ -158,7 +158,7 @@ in {
           wantedBy = [ "default.target" ];
           serviceConfig = {
             Type = "notify";
-            ExecStart = "${cfg.package.out}/bin/pulseaudio --daemonize=no";
+            ExecStart = "${getBin cfg.package}/bin/pulseaudio --daemonize=no";
             Restart = "on-failure";
           };
         };
@@ -195,7 +195,7 @@ in {
         environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
           Type = "notify";
-          ExecStart = "${cfg.package.out}/bin/pulseaudio --daemonize=no --log-level=${cfg.daemon.logLevel} --system -n --file=${cfg.configFile}";
+          ExecStart = "${getBin cfg.package}/bin/pulseaudio --daemonize=no --log-level=${cfg.daemon.logLevel} --system -n --file=${cfg.configFile}";
           Restart = "on-failure";
         };
       };
