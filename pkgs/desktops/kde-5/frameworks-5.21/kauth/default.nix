@@ -6,11 +6,8 @@
 
 kdeFramework {
   name = "kauth";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ polkit-qt ];
-  propagatedBuildInputs = [ kcoreaddons ];
+  propagatedBuildInputs = [ kcoreaddons polkit-qt ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
