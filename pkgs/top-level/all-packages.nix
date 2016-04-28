@@ -2994,6 +2994,11 @@ in
 
   qastools = callPackage ../tools/audio/qastools { };
 
+  qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
+  qdigidoc = qt5.callPackage ../tools/security/qdigidoc { } ;
+  esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
+
+
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
   };
@@ -7470,6 +7475,10 @@ in
     mesa = null;
   };
 
+  libdigidoc = callPackage ../development/libraries/libdigidoc { };
+
+  libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
@@ -9167,6 +9176,8 @@ in
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  xalanc = callPackage ../development/libraries/xalanc {};
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -9179,6 +9190,8 @@ in
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
+
+  xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
   xlslib = callPackage ../development/libraries/xlslib { };
 
@@ -14581,6 +14594,8 @@ in
   xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonApplication python cython pygobject3 pycairo; };
 
   xrestop = callPackage ../tools/X11/xrestop { };
+
+  xsd = callPackage ../development/libraries/xsd { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
