@@ -6,17 +6,13 @@
 
 kdeFramework {
   name = "kdeclarative";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
-  buildInputs = [
-    epoxy kguiaddons kiconthemes kwidgetsaddons
-  ];
   propagatedBuildInputs = [
-    kconfig kglobalaccel ki18n kio kpackage kwindowsystem qtdeclarative
+    epoxy kconfig kglobalaccel kguiaddons ki18n kiconthemes kio kpackage
+    kwidgetsaddons kwindowsystem qtdeclarative
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/kpackagelauncherqml"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
