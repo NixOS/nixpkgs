@@ -5,13 +5,10 @@
 
 kdeFramework {
   name = "frameworkintegration";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
-    kbookmarks kcompletion kconfig knotifications kwidgetsaddons
-    libXcursor
+  propagatedBuildInputs = [
+    kbookmarks kcompletion kconfig kconfigwidgets knotifications ki18n kio
+    kiconthemes kwidgetsaddons libXcursor qtx11extras
   ];
-  propagatedBuildInputs = [ kconfigwidgets ki18n kio kiconthemes qtx11extras ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
