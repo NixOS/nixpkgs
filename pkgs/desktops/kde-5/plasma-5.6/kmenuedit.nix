@@ -9,10 +9,9 @@ plasmaPackage {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kxmlgui kdbusaddons kiconthemes
+  propagatedBuildInputs = [
+    kdelibs4support ki18n kio sonnet kxmlgui kdbusaddons kiconthemes
   ];
-  propagatedBuildInputs = [ kdelibs4support ki18n kio sonnet ];
   postInstall = ''
     wrapQtProgram "$out/bin/kmenuedit"
   '';
