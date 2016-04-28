@@ -772,6 +772,8 @@ in
 
   fop = callPackage ../tools/typesetting/fop { };
 
+  fsmark = callPackage ../tools/misc/fsmark { };
+
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
