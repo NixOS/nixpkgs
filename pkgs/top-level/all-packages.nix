@@ -16382,6 +16382,8 @@ in
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
   suitesparse = suitesparse_4_4;
 
+  superlu = callPackage ../development/libraries/science/math/superlu {};
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
