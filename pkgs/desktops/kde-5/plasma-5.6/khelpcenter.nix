@@ -10,10 +10,10 @@ plasmaPackage {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kconfig kcoreaddons kdbusaddons kinit kcmutils kservice
+  propagatedBuildInputs = [
+    kdelibs4support khtml ki18n kconfig kcoreaddons kdbusaddons kinit kcmutils
+    kservice
   ];
-  propagatedBuildInputs = [ kdelibs4support khtml ki18n ];
   postInstall = ''
     wrapQtProgram "$out/bin/khelpcenter"
   '';
