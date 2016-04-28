@@ -6,10 +6,7 @@
 
 kdeFramework {
   name = "kidletime";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtx11extras ];
-  propagatedBuildInputs = [ qtbase ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ qtbase qtx11extras ];
 }
