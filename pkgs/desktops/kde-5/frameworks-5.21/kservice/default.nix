@@ -4,15 +4,12 @@
 
 kdeFramework {
   name = "kservice";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   propagatedNativeBuildInputs = [ extra-cmake-modules ];
   nativeBuildInputs = [ kdoctools ];
-  buildInputs = [ kcrash kdbusaddons ];
-  propagatedBuildInputs = [ kconfig kcoreaddons ki18n kwindowsystem ];
+  propagatedBuildInputs = [ kconfig kcoreaddons kcrash kdbusaddons ki18n kwindowsystem ];
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch
     ./0002-no-canonicalize-path.patch
   ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
