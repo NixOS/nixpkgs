@@ -6,5 +6,5 @@
 kdeFramework {
   name = "breeze-icons";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtsvg ];
+  propagatedBuildInputs = [ qtsvg ];
 }
