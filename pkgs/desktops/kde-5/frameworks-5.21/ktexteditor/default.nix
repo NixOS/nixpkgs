@@ -8,15 +8,11 @@
 
 kdeFramework {
   name = "ktexteditor";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper perl ];
-  buildInputs = [
-    karchive kconfig kguiaddons kiconthemes kparts
-    libgit2
-    qtscript qtxmlpatterns
+  propagatedBuildInputs = [
+    karchive kconfig kguiaddons ki18n kiconthemes kio kparts libgit2 qtscript
+    qtxmlpatterns sonnet
   ];
-  propagatedBuildInputs = [ ki18n kio sonnet ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
