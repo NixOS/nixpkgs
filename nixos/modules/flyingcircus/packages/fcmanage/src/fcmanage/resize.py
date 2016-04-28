@@ -99,7 +99,7 @@ def set_quota(enc_path):
         return
 
     subprocess.check_call(['xfs_quota', '-xc',
-                           'limit -p bhard={d}g 0'.format(d=disk), '/'])
+                           'limit -p bsoft={d}g bhard={d}g 0'.format(d=disk)])
 
 
 def main():
