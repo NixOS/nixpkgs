@@ -253,40 +253,22 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.etc."nginx/nginx.conf".source = configFile;
-
-    systemd.services = let
-      nginxCmd = "${cfg.package}/bin/nginx -c /etc/nginx/nginx.conf -p ${cfg.stateDir}";
-    in
-    {
-      nginx-config-check = {
-        description = "Nginx Webserver Server config check";
-        wantedBy = [ "nginx.service" "multi-user.target" ];
-        restartTriggers = [ configFile ];
-        script = ''
-          ${nginxCmd} -t -q
-          systemctl reload nginx.service
+    systemd.services.nginx = {
+      description = "Nginx Web Server";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      preStart =
+        ''
+        mkdir -p ${cfg.stateDir}/logs
+        chmod 700 ${cfg.stateDir}
+        chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
         '';
-        serviceConfig.Type = "oneshot";
-      };
-
-      nginx = {
-        description = "Nginx Web Server";
-        after = [ "network.target" ];
-        requires = [ "nginx-config-check.service" ];
-        wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          mkdir -p ${cfg.stateDir}/logs
-          chmod 700 ${cfg.stateDir}
-          chown -R ${cfg.user}:${cfg.group} ${cfg.stateDir}
-        '';
-        serviceConfig = {
-          ExecStart = nginxCmd;
-          ExecReload = "${nginxCmd} -s reload";
-          Restart = "always";
-          RestartSec = "5s";
-          StartLimitInterval = "1min";
-        };
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        Restart = "always";
+        RestartSec = "10s";
+        StartLimitInterval = "1min";
       };
     };
 
