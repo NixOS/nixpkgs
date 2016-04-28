@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
     export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
-    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "$@"
+    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser
 
