@@ -8470,7 +8470,7 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt4_clang = lowPrio (self.qt4.override { stdenv = clangStdenv; });
+  qt4_clang = lowPrio (qt4.override { stdenv = clangStdenv; });
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
