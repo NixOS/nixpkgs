@@ -6,6 +6,7 @@
 with lib;
 
 let
+  syscfg = config;
   cfg = config.flyingcircus;
 
 in {
@@ -41,10 +42,13 @@ in {
         unitConfig.X-StopOnRemoval = false;
         serviceConfig.Type = "oneshot";
 
+        path = [config.system.build.nixos-rebuild];
+
         # This configuration is stolen from NixOS' own automatic updater.
         environment = config.nix.envVars // {
           inherit (config.environment.sessionVariables) NIX_PATH SSL_CERT_FILE;
           HOME = "/root";
+          PATH = "/run/current-system/sw/bin:/run/current-system/sw/sbin";
         };
         script = ''
           ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}

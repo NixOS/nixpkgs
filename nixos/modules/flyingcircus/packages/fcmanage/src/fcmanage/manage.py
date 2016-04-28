@@ -7,12 +7,15 @@ import logging
 import os
 import os.path as p
 import shutil
+import subprocess
 import tempfile
 import xmlrpc.client
+
 
 DIRECTORY_URL = (
     'https://{enc[name]}:{enc[parameters][directory_password]}@'
     'directory.fcio.net/v2/api/rg-{enc[parameters][resource_group]}')
+
 
 # TODO
 #
@@ -122,10 +125,11 @@ def build_channel(build_options):
     try:
         if enc:
             channel_url = enc['parameters']['environment_url']
-            os.system('nix-channel --add {} nixos'.format(channel_url))
-        os.system('nix-channel --update')
-        os.system('nixos-rebuild --no-build-output switch {}'.format(
-                  ' '.join(build_options)))
+            subprocess.check_call(
+                ['nix-channel', '--add', channel_url, 'nixos'])
+        subprocess.check_call(['nix-channel', '--update'])
+        subprocess.check_call(
+            ['nixos-rebuild', '--no-build-output', 'switch'] + build_options)
     except Exception:
         logging.exception('Error switching channel ')
 
@@ -133,12 +137,12 @@ def build_channel(build_options):
 def build_dev(build_options):
     print('Switching to development environment')
     try:
-        os.system(
-            'nix-channel --remove nixos')
+        subprocess.check_call(['nix-channel', '--remove', 'nixos'])
     except Exception:
         logging.exception('Error removing channel ')
-    os.system('nixos-rebuild -I nixpkgs=/root/nixpkgs switch {}'.format(
-              ' '.join(build_options)))
+    subprocess.check_call(
+        ['nixos-rebuild', '-I', 'nixpkgs=/root/nixpkgs', 'switch'] +
+        build_options)
 
 
 def maintenance():
@@ -155,7 +159,8 @@ def seed_enc(path):
 
 
 def collect_garbage(age):
-    os.system('nix-collect-garbage --delete-older-than {}d'.format(age))
+    subprocess.check_call(['nix-collect-garbage', '--delete-older-than',
+                           '{}d'.format(age)])
 
 
 def main():
