@@ -4,16 +4,13 @@
 
 kdeFramework {
   name = "kdoctools";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ karchive ];
-  propagatedBuildInputs = [ ki18n ];
+  propagatedBuildInputs = [ karchive ki18n ];
   propagatedNativeBuildInputs = [ makeQtWrapper perl perlPackages.URI ];
   cmakeFlags = [
     "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
     "-DDocBookXSL_DIR=${docbook5_xsl}/xml/xsl/docbook"
   ];
   patches = [ ./kdoctools-no-find-docbook-xml.patch ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
