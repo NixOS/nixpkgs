@@ -38,7 +38,8 @@ setup(
         'console_scripts': [
             'fc-manage=fcmanage.manage:main',
             'fc-monitor=fcmanage.monitor:main',
-            'fc-resize=fcmanage.resize:main'
+            'fc-resize=fcmanage.resize:main',
+            'df.quota=fcmanage.quota:df'
         ],
     },
 )
