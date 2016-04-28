@@ -7,15 +7,15 @@
 
 kdeApp {
   name = "ffmpegthumbs";
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    ffmpeg
-    kio
-  ];
   meta = {
     license = with lib.licenses; [ gpl2 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
+  nativeBuildInputs = [
+    extra-cmake-modules
+  ];
+  propagatedBuildInputs = [
+    ffmpeg
+    kio
+  ];
 }
