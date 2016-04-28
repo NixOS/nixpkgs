@@ -5,15 +5,10 @@
 
 kdeFramework {
   name = "kactivities";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
-    boost kcmutils kconfig kcoreaddons kdbusaddons kservice
-    kxmlgui
-  ];
   propagatedBuildInputs = [
-    kdeclarative kglobalaccel ki18n kio kwindowsystem qtdeclarative
+    boost kcmutils kconfig kcoreaddons kdbusaddons kdeclarative kglobalaccel
+    ki18n kio kservice kwindowsystem kxmlgui qtdeclarative
   ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
