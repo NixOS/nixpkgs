@@ -5,12 +5,10 @@
 
 kdeFramework {
   name = "kcoreaddons";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
-  buildInputs = [ shared_mime_info ];
+  propagatedBuildInputs = [ shared_mime_info ];
   postInstall = ''
     wrapQtProgram "$out/bin/desktoptojson"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
