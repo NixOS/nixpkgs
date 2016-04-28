@@ -770,6 +770,8 @@ in
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  filebench = callPackage ../tools/misc/filebench { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fsmark = callPackage ../tools/misc/fsmark { };
