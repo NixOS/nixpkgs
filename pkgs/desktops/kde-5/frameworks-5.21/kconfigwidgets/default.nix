@@ -4,15 +4,12 @@
 
 kdeFramework {
   name = "kconfigwidgets";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
-  buildInputs = [ kguiaddons ];
-  propagatedBuildInputs = [ kauth kconfig kcodecs ki18n kwidgetsaddons ];
+  propagatedBuildInputs = [ kauth kconfig kcodecs kguiaddons ki18n kwidgetsaddons ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   postInstall = ''
     moveToOutput "bin/preparetips5" "$dev"
     wrapQtProgram "$dev/bin/preparetips5"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
