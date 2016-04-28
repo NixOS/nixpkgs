@@ -11,10 +11,11 @@ plasmaPackage {
     makeQtWrapper
   ];
   buildInputs = [
-    kitemviews kcmutils kservice kiconthemes kxmlgui kdbusaddons
-    kconfig
   ];
-  propagatedBuildInputs = [ khtml ki18n kio kwindowsystem ];
+  propagatedBuildInputs = [
+    khtml ki18n kio kwindowsystem kitemviews kcmutils kservice kiconthemes
+    kxmlgui kdbusaddons kconfig
+  ];
   postInstall = ''
     wrapQtProgram "$out/bin/systemsettings5"
   '';
