@@ -5,8 +5,6 @@
 
 kdeFramework {
   name = "kapidox";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules python ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
