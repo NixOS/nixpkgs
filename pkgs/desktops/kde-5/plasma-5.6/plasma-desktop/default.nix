@@ -17,48 +17,14 @@ plasmaPackage rec {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    attica
-    boost
-    fontconfig
-    kcmutils
-    kdbusaddons
-    kded
-    kitemmodels
-    knewstuff
-    knotifications
-    knotifyconfig
-    kwallet
-    libcanberra_kde
-    libXcursor
-    libpulseaudio
-    libXft
-    libxkbfile
-    phonon
-    qtsvg
-    xf86inputevdev
-    xf86inputsynaptics
-    xkeyboard_config
-    xinput
-  ];
   propagatedBuildInputs = [
-    baloo
-    kactivities
-    kauth
-    kdeclarative
-    kdelibs4support
-    kemoticons
-    kglobalaccel
-    ki18n
-    kpeople
-    krunner
-    kwin
-    plasma-framework
-    plasma-workspace
-    qtdeclarative
-    qtquick1
-    qtquickcontrols
-    qtx11extras
+    attica boost fontconfig kcmutils kdbusaddons kded kitemmodels knewstuff
+    knotifications knotifyconfig kwallet libcanberra_kde libXcursor
+    libpulseaudio libXft libxkbfile phonon qtsvg xf86inputevdev
+    xf86inputsynaptics xkeyboard_config xinput baloo kactivities kauth
+    kdeclarative kdelibs4support kemoticons kglobalaccel ki18n kpeople krunner
+    kwin plasma-framework plasma-workspace qtdeclarative qtquick1
+    qtquickcontrols qtx11extras
   ];
   patches = [
     ./0001-qt-5.5-QML-import-paths.patch
