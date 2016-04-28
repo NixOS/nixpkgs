@@ -35,7 +35,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
-      hunspell libevent libstartup_notification libvpx /* cairo */
+      hunspell libevent libstartup_notification /* libvpx */ /* cairo */
       gstreamer gst_plugins_base icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
@@ -50,7 +50,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--with-system-nspr"
       "--with-system-nss"
       "--with-system-libevent"
-      "--with-system-libvpx"
+      #"--with-system-libvpx" # needs 1.5.0
       "--with-system-png" # needs APNG support
       "--with-system-icu"
       "--enable-system-ffi"
@@ -69,6 +69,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
+      "--enable-default-toolkit=cairo-gtk2"
     ]
     ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
@@ -130,8 +131,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "45.0.2";
-    sha512 = "8c0b7afb41a1a405fe499299d1a8b1138dac52b9ad67bfc8761b70a26f330581c2aa1d76d67075896ec3a0c3f5367b8b58365ebc8b3a01f801fa37071b3de526";
+    version = "46.0";
+    sha512 = "f5a652e25fa74e3cb271af04d50cc7b63ca73fde9d2ff350e84b3dda55352bac2b28b567aed12164285d992414ad475da9d2555ab972e5c5d7b8f5226591036b";
   };
 
   firefox-esr-unwrapped = common {
