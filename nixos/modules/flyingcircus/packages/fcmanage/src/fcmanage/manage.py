@@ -56,6 +56,19 @@ def conditional_update(filename, data):
         os.unlink(tf.name)
 
 
+def inplace_update(filename, data):
+    """Last-resort JSON update for added robustness.
+
+    If there is no free disk space, `conditional_update` will fail
+    because it is not able to create tempfiles. As an emergency measure,
+    we fall back to rewriting the file in-place.
+    """
+    with open(filename, 'r+') as f:
+        f.seek(0)
+        json.dump(data, f, ensure_ascii=False, indent=1, sort_keys=True)
+        f.truncate()
+
+
 def write_json(calls):
     """Writes JSON files from a list of (lambda, filename) pairs."""
     for lookup, target in calls:
@@ -65,7 +78,10 @@ def write_json(calls):
         except Exception:
             logging.exception('Error retrieving data:')
             continue
-        conditional_update('/etc/nixos/{}'.format(target), data)
+        try:
+            conditional_update('/etc/nixos/{}'.format(target), data)
+        except IOError:
+            inplace_update('/etc/nixos/{}'.format(target), data)
 
 
 def system_state():

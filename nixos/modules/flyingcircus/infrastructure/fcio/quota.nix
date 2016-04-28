@@ -6,14 +6,14 @@ let
 in
 {
   config = {
-    fileSystems."/".options = "prjquota";
+    fileSystems."/".options = "usrquota,prjquota";
 
     environment.etc.projects.text = ''
-      0:/
+      1:/
     '';
 
     environment.etc.projid.text = ''
-      root:0
+      root:1
     '';
 
     system.activationScripts.setupXFSQuota = {
@@ -22,11 +22,12 @@ in
         msg = "Reboot to activate filesystem quotas";
       in
         with pkgs; ''
-          if egrep -q ' / .*p(rj)?quota' /proc/self/mounts; then
+          if egrep -q ' / .*u(sr)?quota,.*p(rj)?quota' /proc/self/mounts; then
             if ! ${xfsprogs}/bin/xfs_quota -x -c 'state -p' / | \
                 grep -qi 'Accounting:.*ON'; then
-              ${xfsprogs}/bin/xfs_quota -x -c 'project -s 0' / 2>/dev/null
-              # see fc-resize for the actual quota setting
+              ${xfsprogs}/bin/xfs_quota -x -c 'project -s root' / 2>/dev/null
+              ${xfsprogs}/bin/xfs_quota -x -c 'timer -p 1m' / 2>/dev/null
+              # fc-resize sets the actual quota limit
             fi
           else
             if ! ${fcmaintenance}/bin/list-maintenance | fgrep -q "${msg}";
