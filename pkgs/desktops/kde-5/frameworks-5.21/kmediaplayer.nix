@@ -6,10 +6,7 @@
 
 kdeFramework {
   name = "kmediaplayer";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kxmlgui ];
-  propagatedBuildInputs = [ kparts ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ kparts kxmlgui ];
 }
