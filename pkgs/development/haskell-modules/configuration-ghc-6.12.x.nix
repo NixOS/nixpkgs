@@ -41,7 +41,7 @@ self: super: {
   unix = null;
 
   # These packages are core libraries in GHC 7.10.x, but not here.
-  binary = self.binary_0_8_2_1;
+  binary = self.binary_0_8_3_0;
   deepseq = self.deepseq_1_3_0_1;
   haskeline = self.haskeline_0_7_2_1;
   hoopl = self.hoopl_3_10_2_0;
