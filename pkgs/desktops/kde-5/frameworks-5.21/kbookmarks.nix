@@ -10,16 +10,9 @@
 
 kdeFramework {
   name = "kbookmarks";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
-    kcodecs
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kiconthemes
-    kxmlgui
+  propagatedBuildInputs = [
+    kcodecs kconfig kconfigwidgets kcoreaddons kiconthemes kxmlgui
   ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }
