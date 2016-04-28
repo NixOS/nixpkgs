@@ -12,24 +12,19 @@
 
 kdeApp {
   name = "filelight";
+  meta = {
+    license = with lib.licenses; [ gpl2 ];
+    maintainers = with lib.maintainers; [ fridh vcunat ];
+  };
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kio
-    kparts
-    qtscript
-    solid
-    kxmlgui
+  propagatedBuildInputs = [
+    kio kparts qtscript solid kxmlgui
   ];
-
   postInstall = ''
     wrapQtProgram "$out/bin/filelight"
   '';
-  meta = {
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ fridh vcunat ];
-  };
 }
