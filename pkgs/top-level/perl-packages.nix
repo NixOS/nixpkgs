@@ -5551,6 +5551,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ FileSlurp URI ];
     propagatedBuildInputs = [ DateManip DigestMD5 MailMboxMessageParser TimeDate ];
+    outputs = [ "out" ];
     meta = {
       homepage = https://github.com/coppit/grepmail;
       description = "Search mailboxes for mail matching a regular expression";
