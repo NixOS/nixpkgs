@@ -1159,6 +1159,8 @@ in
 
   crackxls = callPackage ../tools/security/crackxls { };
 
+  createrepo_c = callPackage ../tools/package-management/createrepo_c { };
+
   cromfs = callPackage ../tools/archivers/cromfs { };
 
   cron = callPackage ../tools/system/cron { };
