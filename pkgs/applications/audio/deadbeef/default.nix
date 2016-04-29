@@ -53,11 +53,11 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   name = "deadbeef-${version}";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/deadbeef/${name}.tar.bz2";
-    sha256 = "0s6qip1zs83pig75pnd30ayiv1dbbj7s72px9mr31f4m0v86kaqx";
+    sha256 = "0rwdxxn7h94vlgblbkswyvj6pm82488v8x5nrmlrcsbzjjf2pccw";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
