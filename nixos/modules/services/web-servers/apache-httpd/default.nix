@@ -406,7 +406,7 @@ let
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
     }
     ''
-      cat ${php}/etc/php-recommended.ini > $out
+      cat ${php}/etc/php.ini > $out
       echo "$options" >> $out
     '';
 

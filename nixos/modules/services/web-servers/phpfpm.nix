@@ -19,6 +19,12 @@ let
     ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
   '';
 
+  phpIni = pkgs.writeText "php.ini" ''
+    ${readFile "${cfg.phpPackage}/etc/php.ini"}
+
+    ${cfg.phpOptions}
+  '';
+
 in {
 
   options = {
@@ -44,10 +50,15 @@ in {
         '';
       };
 
-      phpIni = mkOption {
-        type = types.path;
-        default = "${cfg.phpPackage}/etc/php-recommended.ini";
-        description = "php.ini file to use.";
+      phpOptions = mkOption {
+        type = types.lines;
+        default = "";
+        example =
+          ''
+            date.timezone = "CET"
+          '';
+        description =
+          "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
       poolConfigs = mkOption {
@@ -84,7 +95,7 @@ in {
         mkdir -p "${stateDir}"
       '';
       serviceConfig = {
-        ExecStart = "${cfg.phpPackage}/sbin/php-fpm -y ${cfgFile} -c ${cfg.phpIni}";
+        ExecStart = "${cfg.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${phpIni}";
         PIDFile = pidFile;
       };
     };
