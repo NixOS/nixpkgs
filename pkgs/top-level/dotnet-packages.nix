@@ -102,6 +102,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  MaxMindDb = fetchNuGet {
+    baseName = "MaxMind.Db";
+    version = "1.1.0.0";
+    sha256 = "0lixl76f7k3ldiqzg94zh13gn82w5mm5dx72y97fcqvp8g6nj3ds";
+    outputFiles = [ "lib/*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
