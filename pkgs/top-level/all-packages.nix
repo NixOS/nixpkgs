@@ -6705,6 +6705,7 @@ in
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    libvpx = libvpx_1_4;
   };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -8081,7 +8082,9 @@ in
 
   libviper = callPackage ../development/libraries/libviper { };
 
-  libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx = libvpx_1_5;
+  libvpx_1_5 = callPackage ../development/libraries/libvpx { };
+  libvpx_1_4 = callPackage ../development/libraries/libvpx/1.4.nix { };
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
