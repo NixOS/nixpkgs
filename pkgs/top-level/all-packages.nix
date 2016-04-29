@@ -3121,6 +3121,8 @@ in
 
   rpm = callPackage ../tools/package-management/rpm { };
 
+  rpm-ostree = callPackage ../tools/misc/rpm-ostree { };
+
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
