@@ -4,20 +4,20 @@ let
 
   srcs = {
     lemon = fetchurl {
-      sha256 = "1grm95m2cnc61zim332g7z8nchmcy91ljf50k13lm421v0ygyyv6";
-      url = "http://www.sqlite.org/src/raw/tool/lemon.c?name=039f813b520b9395740c52f9cbf36c90b5d8df03";
+      sha256 = "1c5pk2hz7j9hix5mpc38rwnm8dnlr2jqswf4lan6v78ccbyqzkjx";
+      url = "http://www.sqlite.org/src/raw/tool/lemon.c?name=680980c7935bfa1edec20c804c9e5ba4b1dd96f5";
       name = "lemon.c";
     };
     lempar = fetchurl {
-      sha256 = "09nki0cwc5zrm365g6plhjxz3byhl9w117ab3yvrpds43ks1j85z";
-      url = "http://www.sqlite.org/src/raw/tool/lempar.c?name=3617143ddb9b176c3605defe6a9c798793280120";
+      sha256 = "1ba13a6yh9j2cs1aw2fh4dxqvgf399gxq1gpp4sh8q0f2w6qiw3i";
+      url = "http://www.sqlite.org/src/raw/tool/lempar.c?name=01ca97f87610d1dac6d8cd96ab109ab1130e76dc";
       name = "lempar.c";
     };
   };
 
 in stdenv.mkDerivation rec {
   name = "lemon-${version}";
-  version = "1.0";
+  version = "1.69";
 
   phases = [ "buildPhase" "installPhase" ];
 
