@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "tor-browser-${version}";
-  version = "5.5.4";
+  version = "5.5.5";
 
   src = fetchurl {
     url = "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux${if stdenv.is64bit then "64" else "32"}-${version}_en-US.tar.xz";
     sha256 = if stdenv.is64bit then
-      "0sjx2r7z7s3x1ygs9xak1phng13jcf4d5pcfyfrfsrd8kb1yn8xa" else
-      "0w9wk9hk57hyhhx7l4sr2x64ki9882fr6py2can1slr7kbb4mhpb";
+      "0k6v41j880fb4zdxk1v13kmizdaz5rwvi5lskdbdi68iml4p53gj" else
+      "04mqjmnxwa75yi8gmdwadkzrzikgxn08bkvr50zdm7id9fj4nkza";
   };
 
   desktopItem = makeDesktopItem {
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
     export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
-    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "$@"
+    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser
 
@@ -82,6 +82,6 @@ in stdenv.mkDerivation rec {
     description = "Tor Browser Bundle";
     homepage    = https://www.torproject.org/;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm ];
   };
 }

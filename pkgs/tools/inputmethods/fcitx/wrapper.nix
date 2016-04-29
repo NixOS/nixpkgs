@@ -1,4 +1,4 @@
-{ stdenv, buildEnv, fcitx, fcitx-configtool, makeWrapper, plugins, kde5 }:
+{ stdenv, symlinkJoin, fcitx, fcitx-configtool, makeWrapper, plugins, kde5 }:
 
 # This is based on the pidgin-with-plugins package.
 # Users should be able to configure what plugins are used
@@ -12,24 +12,16 @@
 #     (fcitx-with-plugins.override { plugins = [ fcitx-anthy ]; })
 # }
 
-let
-drv = buildEnv {
-  name = "fcitx-with-plugins-" + (builtins.parseDrvName fcitx.name).version;
+symlinkJoin {
+  name = "fcitx-with-plugins-${fcitx.version}";
 
   paths = [ fcitx fcitx-configtool kde5.fcitx-qt5 ] ++ plugins;
 
+  buildInputs = [ makeWrapper ];
+
   postBuild = ''
-    # TODO: This could be avoided if buildEnv could be forced to create all directories
-    if [ -L $out/bin ]; then
-      rm $out/bin
-      mkdir $out/bin
-      for i in ${fcitx}/bin/*; do
-        ln -s $i $out/bin
-      done
-    fi
     wrapProgram $out/bin/fcitx \
       --set FCITXDIR "$out/"
   '';
-  };
-in stdenv.lib.overrideDerivation drv (x : { buildInputs = x.buildInputs ++ [ makeWrapper ]; })
+}
 

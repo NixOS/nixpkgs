@@ -771,7 +771,11 @@ in
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
+  filebench = callPackage ../tools/misc/filebench { };
+
   fop = callPackage ../tools/typesetting/fop { };
+
+  fsmark = callPackage ../tools/misc/fsmark { };
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
@@ -1155,6 +1159,8 @@ in
   cpio = callPackage ../tools/archivers/cpio { };
 
   crackxls = callPackage ../tools/security/crackxls { };
+
+  createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
   cromfs = callPackage ../tools/archivers/cromfs { };
 
@@ -2135,6 +2141,8 @@ in
     lua = lua5_2_compat;
   };
 
+  ltwheelconf = callPackage ../applications/misc/ltwheelconf { };
+
   kippo = callPackage ../servers/kippo { };
 
   kzipmix = callPackage_i686 ../tools/compression/kzipmix { };
@@ -2266,6 +2274,8 @@ in
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
+
+  logmein-hamachi = callPackage ../tools/networking/logmein-hamachi { };
 
   logkeys = callPackage ../tools/security/logkeys { };
 
@@ -2988,6 +2998,11 @@ in
 
   qastools = callPackage ../tools/audio/qastools { };
 
+  qesteidutil = qt5.callPackage ../tools/security/qesteidutil { } ;
+  qdigidoc = qt5.callPackage ../tools/security/qdigidoc { } ;
+  esteidfirefoxplugin = callPackage ../applications/networking/browsers/mozilla-plugins/esteidfirefoxplugin { };
+
+
   qgifer = callPackage ../applications/video/qgifer {
     giflib = giflib_4_1;
   };
@@ -3106,6 +3121,8 @@ in
 
   rpm = callPackage ../tools/package-management/rpm { };
 
+  rpm-ostree = callPackage ../tools/misc/rpm-ostree { };
+
   rpmextract = callPackage ../tools/archivers/rpmextract { };
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
@@ -3208,6 +3225,7 @@ in
   silc_server = callPackage ../servers/silc-server { };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
+  ag = self.silver-searcher;
 
   simplescreenrecorder = callPackage ../applications/video/simplescreenrecorder { };
 
@@ -5091,8 +5109,8 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustc = callPackage ../development/compilers/rustc {};
   rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
+  rustc = callPackage ../development/compilers/rustc {};
   rustcMusl = callPackage ../development/compilers/rustc/musl.nix {};
 
   rustPlatform = rustStable;
@@ -5190,11 +5208,7 @@ in
 
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
 
-  visualcpp = callPackage ../development/compilers/visual-c++ { };
-
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
-
-  win32hello = callPackage ../development/compilers/visual-c++/test { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
@@ -5661,10 +5675,8 @@ in
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
-  windowssdk = (
-    callPackage ../development/misc/windows-sdk {});
-
   xidel = callPackage ../tools/text/xidel { };
+
 
   ### DEVELOPMENT / TOOLS
 
@@ -5699,6 +5711,7 @@ in
   autoconf-archive = callPackage ../development/tools/misc/autoconf-archive { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+  autoconf264 = callPackage ../development/tools/misc/autoconf/2.64.nix { };
 
   autocutsel = callPackage ../tools/X11/autocutsel{ };
 
@@ -5772,9 +5785,9 @@ in
     rustPlatform = rustCargoPlatform;
   };
 
-  cargoUnstable = callPackage ../development/tools/build-managers/cargo/head.nix {
+  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {
     rustPlatform = rustUnstableCargoPlatform;
-  };
+  });
 
   cargoSnapshot = rustc:
     callPackage ../development/tools/build-managers/cargo/snapshot.nix {
@@ -7449,6 +7462,10 @@ in
     mesa = null;
   };
 
+  libdigidoc = callPackage ../development/libraries/libdigidoc { };
+
+  libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
+
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
   libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
@@ -7616,6 +7633,8 @@ in
 
   libharu = callPackage ../development/libraries/libharu { };
 
+  libhif = callPackage ../tools/package-management/libhif { sphinx = python27Packages.sphinx; };
+
   libHX = callPackage ../development/libraries/libHX { };
 
   libibmad = callPackage ../development/libraries/libibmad { };
@@ -7692,6 +7711,8 @@ in
 
   librelp = callPackage ../development/libraries/librelp { };
 
+  librepo = callPackage ../tools/package-management/librepo { };
+
   libresample = callPackage ../development/libraries/libresample {};
 
   librevenge = callPackage ../development/libraries/librevenge {};
@@ -7701,6 +7722,8 @@ in
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   libsieve = callPackage ../development/libraries/libsieve { };
+
+  libsolv = callPackage ../development/libraries/libsolv { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
@@ -8028,12 +8051,9 @@ in
     then darwin.libunwind
     else callPackage ../development/libraries/libunwind { };
 
-  libuvVersions = recurseIntoAttrs (callPackage ../development/libraries/libuv {
-    automake = automake113x; # fails with 14
+  libuv = callPackage ../development/libraries/libuv {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
-  });
-
-  libuv = self.libuvVersions.v1_7_5;
+  };
 
   libv4l = lowPrio (self.v4l_utils.override {
     alsaLib = null;
@@ -8540,6 +8560,8 @@ in
 
   qt4 = self.kde4.qt4;
 
+  qt4_clang = lowPrio (self.qt4.override { stdenv = clangStdenv; });
+
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     mesa = mesa_noglu;
@@ -8962,11 +8984,7 @@ in
 
   unicap = callPackage ../development/libraries/unicap {};
 
-  tsocks = callPackage ../development/libraries/tsocks {
-    stdenv = overrideCC stdenv (
-      wrapCCWith (callPackage ../build-support/cc-wrapper)
-      musl "" gcc.cc);
-  };
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
@@ -9151,6 +9169,8 @@ in
 
   xercesc = callPackage ../development/libraries/xercesc {};
 
+  xalanc = callPackage ../development/libraries/xalanc {};
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -9163,6 +9183,8 @@ in
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
+
+  xml-security-c = callPackage ../development/libraries/xml-security-c { };
 
   xlslib = callPackage ../development/libraries/xlslib { };
 
@@ -10259,8 +10281,6 @@ in
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dietlibc = callPackage ../os-specific/linux/dietlibc { };
-
   directvnc = callPackage ../os-specific/linux/directvnc { };
 
   dmraid = callPackage ../os-specific/linux/dmraid {
@@ -10299,8 +10319,6 @@ in
   light = callPackage ../os-specific/linux/light { };
 
   lightum = callPackage ../os-specific/linux/lightum { };
-
-  e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
@@ -10942,8 +10960,6 @@ in
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
-  pam_devperm = callPackage ../os-specific/linux/pam_devperm { };
-
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
 
   pam_ldap = callPackage ../os-specific/linux/pam_ldap { };
@@ -10991,8 +11007,6 @@ in
 
   procps = procps-ng;
 
-  procps-old = lowPrio (callPackage ../os-specific/linux/procps { });
-
   procps-ng = callPackage ../os-specific/linux/procps-ng { };
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
@@ -11016,6 +11030,8 @@ in
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
+
+  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
@@ -11866,7 +11882,7 @@ in
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
-  clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
+  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (gnome3) gsettings_desktop_schemas;
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
@@ -13792,9 +13808,7 @@ in
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
-    qt4 = pkgsi686Linux.qt4.override {
-      stdenv = pkgsi686Linux.clangStdenv;
-    };
+    qt4 = pkgsi686Linux.qt4_clang;
   };
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
@@ -14575,6 +14589,8 @@ in
   xpraGtk3 = callPackage ../tools/X11/xpra/gtk3.nix { inherit (texFunctions) fontsConf; inherit (python3Packages) buildPythonApplication python cython pygobject3 pycairo; };
 
   xrestop = callPackage ../tools/X11/xrestop { };
+
+  xsd = callPackage ../development/libraries/xsd { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
@@ -16144,6 +16160,8 @@ in
     enableAllFeatures = true;
   });
 
+  dbus-map = callPackage ../tools/misc/dbus-map { };
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
@@ -16648,4 +16666,6 @@ in
   golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
 
   tomb = callPackage ../os-specific/linux/tomb {};
+
+  imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 }

@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
         "M_INSTALL_DIR=$(out)/${octave.sitePath}/m " +
         "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
 
+  preConfigure = ''
+    find octave -name '*.cc' | xargs sed -i 's|Octave_map|octave_map|g'
+  '';
+
   meta = {
     homepage = "http://ab-initio.mit.edu/nlopt/";
     description = "Free open-source library for nonlinear optimization";

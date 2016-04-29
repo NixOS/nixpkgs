@@ -1017,4 +1017,8 @@ self: super: {
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc {};
 
+  # Avoid transient build failures because the QuickCheck testsuite cannot
+  # generate enough conclusive test cases.
+  split = dontCheck super.split;
+
 }

@@ -99,34 +99,32 @@ in
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
+        partOf = optional config.networking.firewall.enable "firewall.service";
 
         restartTriggers = [ fail2banConf jailConf ];
         path = [ pkgs.fail2ban pkgs.iptables ];
 
         preStart =
           ''
-            mkdir -p /run/fail2ban -m 0755
             mkdir -p /var/lib/fail2ban
           '';
 
+        unitConfig.Documentation = "man:fail2ban(1)";
+
         serviceConfig =
-          { ExecStart = "${pkgs.fail2ban}/bin/fail2ban-server -f";
+          { Type = "forking";
+            ExecStart = "${pkgs.fail2ban}/bin/fail2ban-client -x start";
+            ExecStop = "${pkgs.fail2ban}/bin/fail2ban-client stop";
+            ExecReload = "${pkgs.fail2ban}/bin/fail2ban-client reload";
+            PIDFile = "/run/fail2ban/fail2ban.pid";
+            Restart = "always";
+
             ReadOnlyDirectories = "/";
-            ReadWriteDirectories = "/run /var/tmp /var/lib";
+            ReadWriteDirectories = "/run/fail2ban /var/tmp /var/lib";
+            PrivateTmp = "true";
+            RuntimeDirectory = "fail2ban";
             CapabilityBoundingSet = "CAP_DAC_READ_SEARCH CAP_NET_ADMIN CAP_NET_RAW";
           };
-
-        postStart =
-          ''
-            # Wait for the server to start listening.
-            for ((n = 0; n < 20; n++)); do
-              if fail2ban-client ping; then break; fi
-              sleep 0.5
-            done
-
-            # Reload its configuration.
-            fail2ban-client reload
-          '';
       };
 
     # Add some reasonable default jails.  The special "DEFAULT" jail

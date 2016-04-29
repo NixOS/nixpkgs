@@ -1,0 +1,48 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-16.09">
+
+<title>Release 16.09 (“Flounder”, 2016/09/??)</title>
+
+<para>In addition to numerous new and upgraded packages, this release
+has the following highlights: </para>
+
+<itemizedlist>
+
+  <listitem>
+    <para>PXE "netboot" media has landed in <link xlink:href="https://github.com/NixOS/nixpkgs/pull/14740" />.
+    See <xref linkend="sec-booting-from-pxe" /> for documentation.</para>
+  </listitem>
+
+</itemizedlist>
+
+<para>The following new services were added since the last release:</para>
+
+  <itemizedlist>
+    <listitem><para><literal>(this will get automatically generated at release time)</literal></para></listitem>
+  </itemizedlist>
+
+
+<para>When upgrading from a previous release, please be aware of the
+following incompatible changes:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>todo</para>
+  </listitem>
+</itemizedlist>
+
+
+<para>Other notable improvements:</para>
+
+<itemizedlist>
+  <listitem>
+    <para>todo</para>
+  </listitem>
+
+</itemizedlist>
+
+
+</section>

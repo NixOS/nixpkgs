@@ -297,4 +297,9 @@ rec {
     http://repo.steampowered.com/steamrt/
     https://abbradar.net/steamrt/
   ];
+
+  # Python PyPI mirrors
+  pypi = [
+    https://pypi.io/packages/source/
+  ];
 }

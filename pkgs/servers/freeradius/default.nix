@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, talloc
+{ stdenv, fetchurl, autoreconfHook, talloc, finger_bsd, perl
 , openssl
 , linkOpenssl? true
 , openldap
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   name = "freeradius-${version}";
   version = "3.0.11";
 
-  buildInputs = [ autoreconfHook openssl talloc ]
+  buildInputs = [ autoreconfHook openssl talloc finger_bsd perl ]
     ++ optional withLdap [ openldap ]
     ++ optional withSqlite [ sqlite ]
     ++ optional withPcap [ libpcap ]
@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
      "--sysconfdir=/etc"
      "--localstatedir=/var"
   ] ++ optional (!linkOpenssl) "--with-openssl=no";
+
+  postPatch = ''
+    substituteInPlace src/main/checkrad.in --replace "/usr/bin/finger" "${finger_bsd}/bin/finger"
+  '';
 
   installFlags = [
     "sysconfdir=\${out}/etc"

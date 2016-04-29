@@ -6,7 +6,7 @@ pythonPackages.buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/n/nix-nox/nix-nox-${version}.tar.gz";
+    url = "mirror://pypi/n/nix-nox/nix-nox-${version}.tar.gz";
     sha256 = "1wpxh5fhj8nx4yx4cvmc087cnf4iqwxf7zd7rdh2ln3pgxrjfral";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qtscript }:
+{ stdenv, fetchurl, qmakeHook, qtscript }:
 
 stdenv.mkDerivation rec {
   name = "smplayer-16.1.0";
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./basegui.cpp.patch ];
 
-  buildInputs = [ qtscript ];
+  buildInputs = [ qmakeHook qtscript ];
+
+  dontUseQmakeConfigure = true;
 
   preConfigure = ''
     makeFlags="PREFIX=$out"

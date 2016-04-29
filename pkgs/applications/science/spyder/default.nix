@@ -13,7 +13,7 @@ buildPythonApplication rec {
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/s/spyder/${name}.zip";
+    url = "mirror://pypi/s/spyder/${name}.zip";
     sha256 = "99fdae2cea325c0f2842c77bd67dd22db19fef3d9c0dde1545b1a2650eae517e";
   };
 

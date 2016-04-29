@@ -236,6 +236,7 @@
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";

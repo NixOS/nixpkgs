@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   disabled = !python3Packages.isPy3k;
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/i/${pname}/${name}.tar.gz";
+    url = "mirror://pypi/i/${pname}/${name}.tar.gz";
     sha256 = "1bpkkf9q4zqq7fh65zynbv26nq24rfznmw71jjvda7g8kjrwjdk5";
   };
 

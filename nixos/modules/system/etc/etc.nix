@@ -36,7 +36,7 @@ in
       type = types.loaOf types.optionSet;
       default = {};
       example = literalExample ''
-        { hosts =
+        { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";
               mode = "0440";
             };

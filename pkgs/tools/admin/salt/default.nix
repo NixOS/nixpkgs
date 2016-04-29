@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   disabled = pythonPackages.isPy3k;
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/s/salt/${name}.tar.gz";
+    url = "mirror://pypi/s/salt/${name}.tar.gz";
     sha256 = "1xcfcs50pyammb60myph4f8bi2r6iwkxwsnnhrjwvkv2ymxwxv5j";
   };
 
