@@ -10913,12 +10913,6 @@ in
 
   libcap = callPackage ../os-specific/linux/libcap { };
 
-  libcap_progs = libcap.out;
-
-  libcap_pam = if stdenv.isLinux then libcap.pam else null;
-
-  libcap_manpages = libcap.doc;
-
   libcap_ng = callPackage ../os-specific/linux/libcap-ng {
     swig = null; # Currently not using the python2/3 bindings
     python2 = null; # Currently not using the python2 bindings
