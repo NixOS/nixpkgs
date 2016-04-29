@@ -137,6 +137,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "tools/*" ];
   };
 
+  RestSharp = fetchNuGet {
+    baseName = "RestSharp";
+    version = "105.2.3";
+    sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
+    outputFiles = [ "lib/*" ];
+  };
+
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
     version = "3.0.1";
