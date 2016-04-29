@@ -10,25 +10,25 @@
 }:
 
 let
-  archUrl = name: arch: "https://downloads.vivaldi.com/stable/${name}_${arch}.deb";
-in
-stdenv.mkDerivation rec {
-  version    = "1.1";
-  debversion = "stable_1.1.453.47-1";
+  version = "1.1";
+  build = "453.47-1";
+  fullVersion = "stable_${version}.${build}";
+
+  info = if stdenv.is64bit then {
+      arch = "amd64";
+      sha256 = "09kadsi4ydjciq092i6linapqzjdzx915zqmz7vfq6w1yp9mqbwq";
+    } else {
+      arch = "i386";
+      sha256 = "0b5410phnkpg6sz0j345vdn0r6n89rm865bchqw8p4kx7pmy78z3";
+    };
+in stdenv.mkDerivation rec {
   product    = "vivaldi";
   name       = "${product}-${version}";
 
-  src = if stdenv.system == "x86_64-linux"
-    then fetchurl {
-      url    = archUrl "vivaldi-${debversion}" "amd64";
-      sha256 = "09kadsi4ydjciq092i6linapqzjdzx915zqmz7vfq6w1yp9mqbwq";
-    }
-    else if stdenv.system == "i686-linux"
-    then fetchurl {
-      url    = archUrl "vivaldi-${debversion}" "i386";
-      sha256 = "0b5410phnkpg6sz0j345vdn0r6n89rm865bchqw8p4kx7pmy78z3";
-    }
-    else throw "Vivaldi is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
+  src = fetchurl {
+    inherit (info) sha256;
+    url = "https://downloads.vivaldi.com/stable/${product}-${fullVersion}_${info.arch}.deb";
+  };
 
   unpackPhase = ''
     ar vx ${src}
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ];
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
-    + stdenv.lib.optionalString (stdenv.system == "x86_64-linux")
+    + stdenv.lib.optionalString (stdenv.is64bit)
       (":" + stdenv.lib.makeSearchPathOutputs "lib64" ["lib"] buildInputs);
 
   buildPhase = ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
-    maintainers = with maintainers; [ otwieracz ];
+    maintainers = with maintainers; [ otwieracz nequissimus ];
     platforms   = platforms.linux;
   };
 }
