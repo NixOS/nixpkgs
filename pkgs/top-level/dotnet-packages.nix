@@ -137,6 +137,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "bin/*" ];
   };
 
+  MonoNat = fetchNuGet {
+    baseName = "Mono.Nat";
+    version = "1.2.21";
+    sha256 = "011xhmjrx6w5h110fcp40l95k3qj1gkzz3axgbfy0s8haf5hsf7s";
+    outputFiles = [ "lib/*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
