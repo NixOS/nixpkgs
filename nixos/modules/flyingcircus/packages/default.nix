@@ -14,6 +14,7 @@
 
     fcmaintenance = pkgs.callPackage ./fcmaintenance { };
     fcmanage = pkgs.callPackage ./fcmanage { };
+    fcsensuplugins = pkgs.callPackage ./fcsensuplugins { };
     fcutil = pkgs.callPackage ./fcutil { };
 
     nagiosplugin = pkgs.callPackage ./nagiosplugin.nix { };

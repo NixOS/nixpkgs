@@ -1,22 +1,28 @@
-"""Resizes root filesystem if needed.
+"""Resizes filesystems or memory if needed.
 
 We expect the root partition to be partition 1 on its device, but we're
 looking up the device by checking the root partition by label first.
-
-Some of the tools need partition numbers, though. We hardcoded that for now.
 """
 
+import argparse
+import json
 import re
 import subprocess
 
 
 class Disk(object):
-    # This part of the resizing code does not know or care about the intended
-    # size of the disk. It only checks what size the disk has and then
-    # aligns the partition table and filesystems appropriately.
-    #
-    # The actual sizing of the disk is delegated to the KVM host management
-    # utilities and happens independently.
+    """Resizes root filesystem.
+
+    This part of the resizing code does not know or care about the
+    intended size of the disk. It only checks what size the disk has and
+    then aligns the partition table and filesystems appropriately.
+
+    The actual sizing of the disk is delegated to the KVM host
+    management utilities and happens independently.
+
+    Some of the tools need partition numbers, though. We hardcoded that
+    for now.
+    """
 
     # 5G disk size granularity -> 2.5G sampling -> 512 byte sectors
     FREE_SECTOR_THRESHOLD = (5 * (1024 * 1024 * 1024) / 2) / 512
@@ -28,6 +34,8 @@ class Disk(object):
         sgdisk_out = subprocess.check_output([
             'sgdisk', '-v', self.dev]).decode()
         if 'Problem: The secondary' in sgdisk_out:
+            print('resize: Ensuring GPT consistency')
+            print(sgdisk_out)
             subprocess.check_call(['sgdisk', '-e', self.dev])
 
     r_free = re.compile(r'\s([0-9]+) free sectors')
@@ -42,6 +50,7 @@ class Disk(object):
         return(int(free.group(1)))
 
     def grow_partition(self):
+        print('resize: Growing partition in the partition table')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         first_sector = partx.splitlines()[1].split()[1]
         subprocess.check_call([
@@ -50,11 +59,11 @@ class Disk(object):
             '-t', '1:8300'])
 
     def resize_partition(self):
+        print('resize: Growing XFS filesystem')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         partition_size = partx.splitlines()[1].split()[3]   # sectors
         subprocess.check_call(['resizepart', self.dev, '1', partition_size])
-        subprocess.check_call(['xfs_growfs', '/dev/disk/by-label/root'],
-                              stdout=subprocess.PIPE)
+        subprocess.check_call(['xfs_growfs', '/dev/disk/by-label/root'])
 
     def grow(self):
         self.ensure_gpt_consistency()
@@ -62,13 +71,12 @@ class Disk(object):
         if free > self.FREE_SECTOR_THRESHOLD:
             print('{} free sectors on {}, growing'.format(free, self.dev))
             self.grow_partition()
-        self.resize_partition()
+            self.resize_partition()
 
 
-def main():
+def resize_filesystems():
     try:
-        partition = subprocess.check_output([
-            'blkid', '-L', 'root'])
+        partition = subprocess.check_output(['blkid', '-L', 'root']).decode()
     except subprocess.CalledProcessError as e:
         if e.returncode == 2:
             # Label was not found.
@@ -81,6 +89,34 @@ def main():
     disk = partition.strip()[:-1]
     d = Disk(disk)
     d.grow()
+
+
+def set_quota(enc_path):
+    print('resize: Ensuring XFS quota')
+    with open(enc_path) as f:
+        enc = json.load(f)
+    if 'disk' not in enc['parameters']:
+        return
+    disk = int(enc['parameters']['disk'])
+    if not disk:
+        return
+
+    subprocess.check_call([
+        'xfs_quota', '-xc',
+        'limit -p bsoft={d}g bhard={d}g root'.format(d=disk), '/'])
+
+
+def main():
+    a = argparse.ArgumentParser(description=__doc__)
+    a.add_argument('-E', '--enc-path', default='/etc/nixos/enc.json',
+                   help='path to enc.json (default: %(default)s)')
+    args = a.parse_args()
+
+    resize_filesystems()
+
+    if args.enc_path:
+        set_quota(args.enc_path)
+
 
 if __name__ == '__main__':
     main()

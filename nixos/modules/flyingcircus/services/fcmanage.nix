@@ -49,8 +49,10 @@ in {
           PATH = "/run/current-system/sw/sbin:/run/current-system/sw/bin";
         };
         script = ''
-          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps}
-          ${pkgs.fcmanage}/bin/fc-resize-root
+          failed=0
+          ${pkgs.fcmanage}/bin/fc-manage -E ${cfg.enc_path} ${cfg.agent.steps} || failed=1
+          ${pkgs.fcmanage}/bin/fc-resize -E ${cfg.enc_path} || failed=1
+          exit $failed
         '';
       };
 

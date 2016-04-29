@@ -117,7 +117,6 @@ in {
   };
 
   config = mkIf cfg.enable {
-
     ids.gids.sensuclient = 207;
     ids.uids.sensuclient = 207;
 
@@ -191,9 +190,9 @@ in {
         notification = "SystemD has failed units";
         command = "check-failed-units.rb";
       };
-      disk_usage = {
+      disk = {
         notification = "Disk usage too high";
-        command = "check-disk-usage.rb";
+        command = "${pkgs.fcsensuplugins}/bin/check_disk -v -w 90 -c 95";
       };
       entropy = {
         notification = "Too little entropy available";
@@ -225,7 +224,6 @@ in {
         command = "check-mtu.rb -i ethfe -m 1500";
       };
     };
-
   };
 
 }

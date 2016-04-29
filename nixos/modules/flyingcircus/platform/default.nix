@@ -157,7 +157,6 @@ in
     sound.enable = false;
     fonts.fontconfig.enable = true;
     environment.systemPackages = with pkgs; [
-        aespipe
         apacheHttpd
         atop
         bc
@@ -174,6 +173,7 @@ in
         git
         gnupg
         go
+        gptfdisk
         graphviz
         imagemagick
         inetutils
@@ -184,9 +184,11 @@ in
         libxslt
         links
         lsof
+        lvm2
         lynx
         mercurial
         mmv
+        multipath_tools
         nano
         nc6
         ncdu
@@ -213,8 +215,10 @@ in
         traceroute
         tree
         unzip
+        utillinux
         utillinuxCurses
         vim
+        xfsprogs
         zlib
     ];
 
