@@ -192,7 +192,7 @@ in {
       };
       disk = {
         notification = "Disk usage too high";
-        command = "${pkgs.fcsensuplugins}/bin/check_disk -v";
+        command = "${pkgs.fcsensuplugins}/bin/check_disk -v -w 90 -c 95";
       };
       entropy = {
         notification = "Too little entropy available";

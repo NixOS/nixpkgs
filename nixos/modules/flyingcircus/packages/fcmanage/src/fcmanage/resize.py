@@ -34,8 +34,8 @@ class Disk(object):
         sgdisk_out = subprocess.check_output([
             'sgdisk', '-v', self.dev]).decode()
         if 'Problem: The secondary' in sgdisk_out:
+            print('resize: Ensuring GPT consistency')
             print(sgdisk_out)
-            print('ensuring GPT consistency')
             subprocess.check_call(['sgdisk', '-e', self.dev])
 
     r_free = re.compile(r'\s([0-9]+) free sectors')
@@ -50,7 +50,7 @@ class Disk(object):
         return(int(free.group(1)))
 
     def grow_partition(self):
-        print('growing partition in the partition table')
+        print('resize: Growing partition in the partition table')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         first_sector = partx.splitlines()[1].split()[1]
         subprocess.check_call([
@@ -59,7 +59,7 @@ class Disk(object):
             '-t', '1:8300'])
 
     def resize_partition(self):
-        print('growing XFS filesystem')
+        print('resize: Growing XFS filesystem')
         partx = subprocess.check_output(['partx', '-r', self.dev]).decode()
         partition_size = partx.splitlines()[1].split()[3]   # sectors
         subprocess.check_call(['resizepart', self.dev, '1', partition_size])
@@ -92,6 +92,7 @@ def resize_filesystems():
 
 
 def set_quota(enc_path):
+    print('resize: Ensuring XFS quota')
     with open(enc_path) as f:
         enc = json.load(f)
     if 'disk' not in enc['parameters']:
@@ -100,7 +101,6 @@ def set_quota(enc_path):
     if not disk:
         return
 
-    print('setting XFS quota')
     subprocess.check_call([
         'xfs_quota', '-xc',
         'limit -p bsoft={d}g bhard={d}g root'.format(d=disk), '/'])
