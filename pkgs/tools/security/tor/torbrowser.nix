@@ -50,15 +50,17 @@ stdenv.mkDerivation rec {
     cp -R * $out/share/tor-browser
 
     cat > "$out/bin/tor-browser" << EOF
-    #!${stdenv.shell}
+    #! ${stdenv.shell}
+    unset SESSION_MANAGER
     export HOME="\$HOME/.torbrowser4"
     if [ ! -d \$HOME ]; then
       mkdir -p \$HOME && cp -R $out/share/tor-browser/Browser/TorBrowser/Data \$HOME/ && chmod -R +w \$HOME
       echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
+    export FONTCONFIG_PATH=\$HOME/Data/fontconfig
     export LD_LIBRARY_PATH=${libPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
-    $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "\$@"
+    exec $out/share/tor-browser/Browser/firefox --class "Tor Browser" -no-remote -profile ~/Data/Browser/profile.default "\$@"
     EOF
     chmod +x $out/bin/tor-browser
 
