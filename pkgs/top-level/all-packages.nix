@@ -11711,7 +11711,7 @@ let
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
-  clawsMail = callPackage ../applications/networking/mailreaders/claws-mail {
+  claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (gnome3) gsettings_desktop_schemas;
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
@@ -16349,6 +16349,7 @@ aliases = with pkgs; {
   buildbotSlave = buildbot-slave;  # added 2014-12-09
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
+  clawsMail = claws-mail; # added 2016-04-29
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
