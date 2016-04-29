@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -R bin config lib $out
+    cp -R bin config lib modules $out
 
     # don't want to have binary with name plugin
     mv $out/bin/plugin $out/bin/elasticsearch-plugin
