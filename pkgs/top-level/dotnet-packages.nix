@@ -123,6 +123,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  SharpFont = fetchNuGet {
+    baseName = "SharpFont";
+    version = "3.0.1";
+    sha256 = "1g639i8mbxc6qm0xqsf4mc0shv8nwdaidllka2xxwyksbq54skhs";
+    outputFiles = [ "lib/*" "config/*" ];
+  };
+
   SmartIrc4net = fetchNuGet {
     baseName = "SmartIrc4net";
     version = "0.4.5.1";
