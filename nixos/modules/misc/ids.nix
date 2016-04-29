@@ -264,6 +264,7 @@
       taskd = 240;
       factorio = 241;
       emby = 242;
+      graylog = 243;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
