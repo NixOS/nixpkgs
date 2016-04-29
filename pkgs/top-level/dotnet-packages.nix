@@ -130,6 +130,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  FuzzyLogicLibrary = fetchNuGet {
+    baseName = "FuzzyLogicLibrary";
+    version = "1.2.0";
+    sha256 = "0x518i8d3rw9n51xwawa4sywvqd722adj7kpcgcm63r66s950r5l";
+    outputFiles = [ "bin/*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
