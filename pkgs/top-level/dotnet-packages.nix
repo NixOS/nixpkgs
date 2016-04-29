@@ -116,6 +116,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  SharpZipLib = fetchNuGet {
+    baseName = "SharpZipLib";
+    version = "0.86.0";
+    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    outputFiles = [ "lib/*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";
