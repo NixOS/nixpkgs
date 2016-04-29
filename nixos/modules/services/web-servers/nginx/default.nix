@@ -35,7 +35,7 @@ let
       ssl_session_timeout 23m;
 
       ssl_ciphers ${cfg.sslCiphers};
-      ssl_ecdh_curve secp521r1;
+      ssl_ecdh_curve secp384r1;
       ssl_prefer_server_ciphers on;
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
@@ -78,7 +78,7 @@ let
       let
         ssl = vhost.enableSSL || vhost.forceSSL;
         port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
-        listenString = toString port + optionalString ssl " ssl spdy"
+        listenString = toString port + optionalString ssl " ssl http2"
           + optionalString vhost.default " default";
         acmeLocation = optionalString vhost.enableACME ''
           location /.well-known/acme-challenge {
@@ -220,7 +220,7 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EDH+CHACHA20:EDH+AES:EECDHE+CHACHA20:ECDHE+AES:+AES128:-DSS";
+        default = "EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
         description = "Ciphers to choose from when negotiating tls handshakes.";
       };
 
