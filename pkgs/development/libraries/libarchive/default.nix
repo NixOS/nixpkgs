@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ sharutils libxml2 zlib bzip2 openssl xz lzo ] ++
     stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
 
+  # Without this, pkgconfig-based dependencies are unhappy
+  propagatedBuildInputs = stdenv.lib.optionals stdenv.isLinux [ attr acl ];
+
   preBuild = if stdenv.isCygwin then ''
     echo "#include <windows.h>" >> config.h
   '' else null;
