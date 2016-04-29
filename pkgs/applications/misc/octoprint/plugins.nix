@@ -31,8 +31,8 @@ in {
     '';
 
     meta = with stdenv.lib; {
-      homepage = https://github.com/donovan6000/M3D-Fio;
-      description = " OctoPrint plugin for the Micro 3D printer";
+      homepage = "https://github.com/donovan6000/M3D-Fio";
+      description = "OctoPrint plugin for the Micro 3D printer";
       platforms = platforms.all;
       license = licenses.gpl3;
       maintainers = with maintainers; [ abbradar ];

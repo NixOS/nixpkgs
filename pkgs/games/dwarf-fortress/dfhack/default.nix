@@ -49,7 +49,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = https://github.com/DFHack/dfhack/;
+    homepage = "https://github.com/DFHack/dfhack/";
     license = licenses.zlib;
     platforms = [ "i686-linux" ];
     maintainers = with maintainers; [ robbinch a1russell abbradar ];
