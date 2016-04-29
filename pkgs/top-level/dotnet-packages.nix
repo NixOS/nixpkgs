@@ -123,6 +123,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  StyleCopMSBuild = fetchNuGet {
+    baseName = "StyleCop.MSBuild";
+    version = "4.7.49.0";
+    sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
+    outputFiles = [ "tools/*" ];
+  };
+
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
     version = "3.0.1";
