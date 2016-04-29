@@ -16358,6 +16358,8 @@ in
     inherit (pythonPackages) pexpect paramiko;
   };
 
+  redis-desktop-manager = qt5.callPackage ../applications/misc/redis-desktop-manager { };
+
   robomongo = qt5.callPackage ../applications/misc/robomongo { };
 
   rucksack = callPackage ../development/tools/rucksack { };
