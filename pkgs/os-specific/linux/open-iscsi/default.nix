@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, nukeReferences }:
-let
-  pname = "open-iscsi-2.0-873";
-in stdenv.mkDerivation {
-  name = pname;
+{ stdenv, fetchFromGitHub, nukeReferences, automake, autoconf, libtool, gettext, utillinux, openisns, openssl, kmod }:
+stdenv.mkDerivation rec {
+  name = "open-iscsi-${version}";
+  version = "2.0-873-${stdenv.lib.substring 0 7 src.rev}";
   outputs = [ "out" "iscsistart" ];
 
-  buildInputs = [ nukeReferences ];
+  buildInputs = [ nukeReferences automake autoconf libtool gettext utillinux openisns.lib openssl kmod ];
   
-  src = fetchurl {
-    urls = [
-      "http://www.open-iscsi.org/bits/${pname}.tar.gz"
-      "http://pkgs.fedoraproject.org/repo/pkgs/iscsi-initiator-utils/${pname}.tar.gz/8b8316d7c9469149a6cc6234478347f7/${pname}.tar.gz"
-    ];
-    sha256 = "1nbwmj48xzy45h52917jbvyqpsfg9zm49nm8941mc5x4gpwz5nbx";
+  src = fetchFromGitHub {
+    owner = "open-iscsi";
+    repo = "open-iscsi";
+    rev = "4c1f2d90ef1c73e33d9f1e4ae9c206ffe015a8f9";
+    sha256 = "0h030zk4zih3l8z5662b3kcifdxlakbwwkz1afb7yf0cicds7va8";
   };
   
   DESTDIR = "$(out)";
   
+  NIX_LDFLAGS = "-lkmod";
+  NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
+
   preConfigure = ''
     sed -i 's|/usr/|/|' Makefile
   '';
@@ -30,7 +31,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";
     license = licenses.gpl2Plus;
-    homepage = http://www.open-iscsi.org;
+    homepage = http://www.open-iscsi.com;
     platforms = platforms.linux;
   };
 }
