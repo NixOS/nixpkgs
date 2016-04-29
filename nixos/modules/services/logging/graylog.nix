@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg = config.services.graylog;
-  graylogUser = "graylog";
   configBool = b: if b then "true" else "false";
 
   confFile = pkgs.writeText "graylog.conf" ''
@@ -38,6 +37,13 @@ in
         defaultText = "pkgs.graylog";
         example = literalExample "pkgs.graylog";
         description = "Graylog package to use.";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "graylog";
+        example = literalExample "graylog";
+        description = "User account under which graylog runs";
       };
 
       isMaster = mkOption {
@@ -100,7 +106,7 @@ in
       messageJournalDir = mkOption {
         type = types.str;
         default = "/var/lib/graylog/data/journal";
-        description = "The directory which will be used to store the message journal. The directory must me exclusively used by Graylog and must not contain any other files than the ones created by Graylog itself";
+        description = "The directory which will be used to store the message journal. The directory must be exclusively used by Graylog and must not contain any other files than the ones created by Graylog itself";
       };
 
       mongodbUri = mkOption {
@@ -123,11 +129,12 @@ in
 
   config = mkIf cfg.enable {
 
-    users.extraUsers = singleton
-      { name = graylogUser;
+    users.extraUsers = mkIf (cfg.user == "graylog") {
+      graylog = {
         uid = config.ids.uids.graylog;
         description = "Graylog server daemon user";
       };
+    };
 
     systemd.services.graylog = with pkgs; {
       description = "Graylog Server";
@@ -139,10 +146,13 @@ in
       path = [ pkgs.openjdk8 pkgs.which pkgs.procps ];
       preStart = ''
         mkdir -p /var/lib/graylog -m 755
-        chown -R ${graylogUser} /var/lib/graylog
+        chown -R ${cfg.user} /var/lib/graylog
+
+        mkdir -p ${cfg.messageJournalDir} -m 755
+        chown -R ${cfg.user} ${cfg.messageJournalDir}
       '';
       serviceConfig = {
-        User="${graylogUser}";
+        User="${cfg.user}";
         PermissionsStartOnly=true;
         ExecStart = "${cfg.package}/bin/graylogctl run";
       };
