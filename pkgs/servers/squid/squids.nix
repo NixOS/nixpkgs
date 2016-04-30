@@ -30,10 +30,10 @@ rec {
   };
 
   squid32 = squid30.merge rec {
-    name = "squid-3.2.13";
+    name = "squid-3.2.14";
     src = args.fetchurl {
       url = "http://www.squid-cache.org/Versions/v3/3.2/${name}.tar.bz2";
-      sha256 = "0dafqv00dr3nyrm9k47d6r7gv2r3f9hjd1ykl3kkvjca11r4n54j";
+      sha256 = "12azbnsq4gkhdaqm0swd2046hbi44max3l7kl2p1dv3mvy5csn60";
     };
     buildInputs = [openldap pam db cyrus_sasl libcap expat libxml2
       libtool openssl];
