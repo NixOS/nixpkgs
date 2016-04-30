@@ -6468,13 +6468,13 @@ in
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   beignet = callPackage ../development/libraries/beignet {
-    inherit (llvmPackages) clang-unwrapped; 
-    inherit (xlibs) libX11; 
-    inherit (xorg) libXfixes libpthreadstubs libXdmcp libXdamage libXxf86vm; 
-    inherit (python3Packages) python; 
-    inherit (purePackages) gl; 
-  }; 
-  
+    inherit (llvmPackages) clang-unwrapped;
+    inherit (xlibs) libX11;
+    inherit (xorg) libXfixes libpthreadstubs libXdmcp libXdamage libXxf86vm;
+    inherit (python3Packages) python;
+    inherit (purePackages) gl;
+  };
+
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
   bobcat = callPackage ../development/libraries/bobcat { };
@@ -16206,6 +16206,8 @@ in
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
+  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
+
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
     llvm = llvm_37;
   };
@@ -16223,6 +16225,8 @@ in
   faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+
+  faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
