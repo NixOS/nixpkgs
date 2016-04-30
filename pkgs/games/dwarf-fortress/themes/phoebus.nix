@@ -3,14 +3,15 @@
 # On upgrade check https://github.com/DFgraphics/Phoebus/blob/master/manifest.json
 # for compatibility information.
 
-stdenv.mkDerivation {
-  name = "phoebus-theme-20160128";
+stdenv.mkDerivation rec {
+  name = "phoebus-theme-${version}";
+  version = "42.06a";
 
   src = fetchFromGitHub {
     owner = "DFgraphics";
     repo = "Phoebus";
-    rev = "52b19b69c7323f9002ad195ecd68ac02ff0099a2";
-    sha256 = "1pw5l5v7l1bvxzjf4fivmagpmghffvz0wlws2ksc7d5vy48ybcmg";
+    rev = version;
+    sha256 = "1mkj882mf1lvjs2b7jxfazym9fl1y20slbfi1lgqzbp1872aaxi0";
   };
 
   installPhase = ''
