@@ -1,14 +1,9 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, ghostscript }:
 
-let version = "9.18";
-in
 stdenv.mkDerivation {
-  name = "ijs-${version}";
+  name = "ijs-${ghostscript.version}";
 
-  src = fetchurl {
-    url = "http://downloads.ghostscript.com/public/ghostscript-${version}.tar.bz2";
-    sha256 = "18ad90za28dxybajqwf3y3dld87cgkx1ljllmcnc7ysspfxzbnl3";
-  };
+  inherit (ghostscript) src;
 
   patches = [
     # http://bugs.ghostscript.com/show_bug.cgi?id=696246
