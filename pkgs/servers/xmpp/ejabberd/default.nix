@@ -1,4 +1,4 @@
-{ stdenv, writeScriptBin, lib, fetchurl, fetchFromGitHub, git, cacert
+{ stdenv, writeScriptBin, lib, fetchurl, git, cacert
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, utillinux, procps
 , withMysql ? false
 , withPgsql ? false
@@ -69,13 +69,14 @@ in stdenv.mkDerivation rec {
           rm -rf .git
         )
       done
+      rm deps/.got
 
       cp -r deps $out
     '';
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0kmk22z1r9c23j9hh91975pqh3jkh7z6i1gnmw4qxr8alcnpr75f";
+    outputHash = "0zmb7g00y5q4alf70i1chv3yim63i03sy4p8i83bzvxri59vw0zv";
   };
 
   configureFlags =
@@ -96,10 +97,6 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     cp -r $deps deps
     chmod -R +w deps
-
-    for i in deps/*; do
-      [ -x "$i/configure" ] && ( cd "$i"; ./configure ) || true
-    done
   '';
 
   postInstall = ''
