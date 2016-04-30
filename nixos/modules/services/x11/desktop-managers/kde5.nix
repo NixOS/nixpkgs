@@ -105,12 +105,6 @@ in
 
         pkgs.phonon-backend-gstreamer
         pkgs.kde5.phonon-backend-gstreamer
-        pkgs.gst_all_1.gstreamer
-        pkgs.gst_all_1.gst-plugins-base
-        pkgs.gst_all_1.gst-plugins-good
-        pkgs.gst_all_1.gst-plugins-ugly
-        pkgs.gst_all_1.gst-plugins-bad
-        pkgs.gst_all_1.gst-libav # for mp3 playback
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
@@ -138,14 +132,23 @@ in
       target = "X11/xkb";
     };
 
-    environment.profileRelativeEnvVars = {
-      GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
-    };
-
     # Enable GTK applications to load SVG icons
-    environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-    };
+    environment.variables =
+      {
+        GST_PLUGIN_SYSTEM_PATH_1_0 =
+          lib.makeSearchPath "/lib/gstreamer-1.0"
+          (builtins.map (pkg: pkg.out) (with pkgs.gst_all_1; [
+            gstreamer
+            gst-plugins-base
+            gst-plugins-good
+            gst-plugins-ugly
+            gst-plugins-bad
+            gst-libav # for mp3 playback
+          ]));
+      }
+      // (if (lib.hasAttr "breeze-icons" kde5)
+          then { GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"; }
+          else { });
 
     fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 
