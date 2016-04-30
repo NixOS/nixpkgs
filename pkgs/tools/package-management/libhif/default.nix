@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # ibhif/hif-packagedelta.h includes solv/pool.h
   propagatedBuildInputs = [ libsolv ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library that provides a high level package-manager. It uses librepo and hawkey under the hood.";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;

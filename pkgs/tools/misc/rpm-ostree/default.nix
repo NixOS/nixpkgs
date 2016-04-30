@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     env NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
     homepage    = "https://rpm-ostree.readthedocs.io/en/latest/";
     license     = licenses.lgpl2Plus;
