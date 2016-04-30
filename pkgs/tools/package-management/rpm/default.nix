@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace 'python''${PYTHON_VERSION}' ${python.executable}
   '';
 
-  configureFlags = "--with-external-db --with-lua --enable-python";
+  configureFlags = "--with-external-db --with-lua --enable-python --localstatedir=/var --sharedstatedir=/com";
 
   meta = with stdenv.lib; {
     homepage = http://www.rpm.org/;
     license = licenses.gpl2;
     description = "The RPM Package Manager";
-    maintainers = [ maintainers.mornfall ];
+    maintainers = with maintainers; [ mornfall copumpkin ];
     platforms = platforms.linux;
   };
 }
