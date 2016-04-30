@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, phantomjs2, python, nodePackages }:
+{ stdenv, fetchFromGitHub, fontsConf, phantomjs2, python, nodePackages }:
 
 let version = "1.1.1";
 
@@ -23,7 +23,11 @@ in stdenv.mkDerivation rec {
   dontBuild = true;
 
   doCheck = true;
-  checkTarget = "test";
+  checkPhase = ''
+    export FONTCONFIG_FILE=${fontsConf}
+    make test
+  '';
+
 
   installPhase = ''
     mv $PWD $out
