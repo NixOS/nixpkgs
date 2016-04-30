@@ -23,5 +23,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ cmake pkgconfig bzip2 expat glib curl libxml2 python rpm openssl sqlite file xz pcre bashCompletion ];
+
+  meta = with stdenv.lib; {
+    description = "C implementation of createrepo";
+    homepage    = "http://rpm-software-management.github.io/createrepo_c/";
+    license     = licenses.gpl2;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+  };
 }
 
