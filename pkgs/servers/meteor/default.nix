@@ -40,28 +40,28 @@ stdenv.mkDerivation rec {
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --replace "@RPATH@" "${stdenv.cc.cc}/lib:${zlib.out}/lib" \
+      --replace "@RPATH@" "${stdenv.cc.cc.lib}/lib:${zlib.out}/lib" \
       --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
     # Patch node.
     node=$devBundle/bin/node
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      --set-rpath "$(patchelf --print-rpath $node):${stdenv.cc.cc}/lib" \
+      --set-rpath "$(patchelf --print-rpath $node):${stdenv.cc.cc.lib}/lib" \
       $node
 
     # Patch mongo.
     for p in $devBundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib:${zlib.out}/lib" \
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib:${zlib.out}/lib" \
         $p
     done
 
     # Patch node dlls.
     for p in $(find $out/packages -name '*.node'); do
       patchelf \
-        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc}/lib" \
+        --set-rpath "$(patchelf --print-rpath $p):${stdenv.cc.cc.lib}/lib" \
         $p
     done
 

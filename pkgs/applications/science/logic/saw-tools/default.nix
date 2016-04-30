@@ -7,7 +7,7 @@ let
       gmp4
       ncurses
       zlib
-    ] + ":${stdenv.cc.cc}/lib64";
+    ] + ":${stdenv.cc.cc.lib}/lib64";
 
   url = "https://github.com/GaloisInc/saw-script/releases/download";
 
