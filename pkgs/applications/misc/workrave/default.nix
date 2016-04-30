@@ -1,13 +1,8 @@
-{ stdenv, fetchurl, autoconf, automake, gettext, intltool, libtool, pkgconfig,
-  libXtst, cheetah, libXScrnSaver, xorg,
-  glib, glibmm,
-  gtk, gtkmm,
-  atk,
-  pango, pangomm,
-  cairo, cairomm,
-  dbus, dbus_glib,
-  GConf, gconfmm,
-  gdome2, gstreamer, libsigcxx }:
+{ stdenv, fetchurl
+, autoconf, automake, gettext, intltool, libtool, pkgconfig
+, libICE, libSM, libXScrnSaver, libXtst, cheetah
+, glib, glibmm, gtk, gtkmm, atk, pango, pangomm, cairo, cairomm
+, dbus, dbus_glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
 
 stdenv.mkDerivation rec {
   version = "1.10.6";
@@ -22,12 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "0q2p83n33chbqzdcdm7ykfsy73frfi6drxzm4qidxwzpzsxrysgq";
   };
 
+  nativeBuildInputs = [
+    autoconf automake gettext intltool libtool pkgconfig
+  ];
   buildInputs = [
-    autoconf automake gettext intltool libtool pkgconfig libXtst cheetah
-    libXScrnSaver
-
+    libICE libSM libXScrnSaver libXtst cheetah
     glib glibmm gtk gtkmm atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx xorg.libICE xorg.libSM
+    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
   ];
 
   preConfigure = "./autogen.sh";
