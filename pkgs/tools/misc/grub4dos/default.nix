@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, unzip, nasm }:
+{ stdenv, fetchFromGitHub, nasm }:
 
 let arch =
   if stdenv.isi686 then "i386"
   else if stdenv.isx86_64 then "x86_64"
   else abort "Unknown architecture";
-in stdenv.mkDerivation {
-  name = "grub4dos-0.4.6a-2015-12-31";
+in stdenv.mkDerivation rec {
+  name = "grub4dos-${version}";
+  version = "0.4.6a-2016-04-26";
 
-  src = fetchurl {
-    url = https://github.com/chenall/grub4dos/archive/a8024743c61cc4909514b27df07b7cc4bc89d1fb.zip;
-    sha256 = "1m5d7klb12qz5sa09919z7jchfafgh84cmpwilp52qnbpi3zh2fd";
+  src = fetchFromGitHub {
+    owner = "chenall";
+    repo = "grub4dos";
+    rev = "61d8229375c679436d56376518456723b2025e1a";
+    sha256 = "1r4jmvykk5cvpf1kysykvksa9vfy7p29q20x72inw2pbhipj0f10";
   };
 
-  nativeBuildInputs = [ unzip nasm ];
+  nativeBuildInputs = [ nasm ];
 
   configureFlags = [ "--host=${arch}-pc-linux-gnu" ];
 
