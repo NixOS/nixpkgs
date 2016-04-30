@@ -9,5 +9,6 @@ kdeFramework {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.ttuegel ];
   };
+  outputs = [ "out" ];
   nativeBuildInputs = [ extra-cmake-modules ];
 }
