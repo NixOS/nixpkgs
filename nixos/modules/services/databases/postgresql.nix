@@ -20,7 +20,12 @@ let
         '';
     };
 
-  postgresql = postgresqlAndPlugins cfg.package;
+  # Note: when changing the default, make it conditional on
+  # ‘system.stateVersion’ to maintain compatibility with existing
+  # systems!
+  package = if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95 else pkgs.postgresql94;
+
+  postgresql = postgresqlAndPlugins package;
 
   flags = optional cfg.enableTCPIP "-i";
 
@@ -51,14 +56,6 @@ in
         default = false;
         description = ''
           Whether to run PostgreSQL.
-        '';
-      };
-
-      package = mkOption {
-        type = types.package;
-        example = literalExample "pkgs.postgresql92";
-        description = ''
-          PostgreSQL package to use.
         '';
       };
 
@@ -153,12 +150,6 @@ in
   ###### implementation
 
   config = mkIf config.services.postgresql.enable {
-
-    services.postgresql.package =
-      # Note: when changing the default, make it conditional on
-      # ‘system.stateVersion’ to maintain compatibility with existing
-      # systems!
-      mkDefault (if versionAtLeast config.system.stateVersion "16.03" then pkgs.postgresql95 else pkgs.postgresql94);
 
     services.postgresql.authentication = mkAfter
       ''
