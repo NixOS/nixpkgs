@@ -14676,6 +14676,8 @@ in
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
+  angband = callPackage ../games/angband { };
+
   anki = callPackage ../games/anki {
     inherit (pythonPackages) wrapPython pysqlite sqlalchemy pyaudio beautifulsoup httplib2 matplotlib;
   };
