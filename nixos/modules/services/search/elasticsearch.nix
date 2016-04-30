@@ -145,6 +145,7 @@ in {
         # Install plugins
         ln -sfT ${esPlugins}/plugins ${cfg.dataDir}/plugins
         ln -sfT ${cfg.package}/lib ${cfg.dataDir}/lib
+        ln -sfT ${cfg.package}/modules ${cfg.dataDir}/modules
         if [ "$(id -u)" = 0 ]; then chown -R elasticsearch ${cfg.dataDir}; fi
       '';
       postStart = mkBefore ''

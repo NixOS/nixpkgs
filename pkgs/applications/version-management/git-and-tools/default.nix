@@ -51,6 +51,8 @@ rec {
 
   git-extras = callPackage ./git-extras { };
 
+  git-hub = callPackage ./git-hub { };
+
   git-imerge = callPackage ./git-imerge { };
 
   git-radar = callPackage ./git-radar { };

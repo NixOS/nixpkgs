@@ -8,14 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "05m6scbdzi2fb8zzi01c11a10pr0qb1gzccz4bbxj4fcacz24342";
   };
 
-  preBuild = ''
-    makeFlagsArray=(BINDIR=$out/bin SBINDIR=$out/sbin MAN8DIR=$out/share/man/man8)
-  '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://tedfelix.com/linux/acpid-netlink.html;
     description = "A daemon for delivering ACPI events to userspace programs";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

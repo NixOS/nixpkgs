@@ -126,6 +126,8 @@ stdenv.mkDerivation rec {
     install_name_tool -change libgs.dylib.${version} $out/lib/libgs.dylib.${version} $out/bin/gs
   '';
 
+  passthru = { inherit version; };
+
   meta = {
     homepage = "http://www.ghostscript.com/";
     description = "PostScript interpreter (mainline version)";

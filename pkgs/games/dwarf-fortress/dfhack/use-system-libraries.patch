@@ -1,22 +1,8 @@
-From 1196fcb987b6aadb49075d817b3615bf8a6d7d51 Mon Sep 17 00:00:00 2001
-From: Nikolay Amiantov <ab@fmap.me>
-Date: Wed, 6 Jan 2016 03:07:20 +0300
-Subject: [PATCH 2/2] Use as much system libraries as possible
-
----
- CMakeLists.txt                    |  5 -----
- depends/CMakeLists.txt            |  3 ---
- library/CMakeLists.txt            | 10 +++++-----
- plugins/CMakeLists.txt            |  4 ++--
- plugins/mapexport/CMakeLists.txt  |  4 ++--
- plugins/stockpiles/CMakeLists.txt |  4 ++--
- 6 files changed, 11 insertions(+), 19 deletions(-)
-
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 1933390..d871df4 100644
+index 46fd565..254c3c0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -152,8 +152,6 @@ ELSEIF(MSVC)
+@@ -160,8 +160,6 @@ ELSEIF(MSVC)
    SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /Od")
  ENDIF()
  
@@ -25,9 +11,9 @@ index 1933390..d871df4 100644
  ADD_DEFINITIONS(-DLUA_BUILD_AS_DLL)
  
  if(APPLE)
-@@ -173,11 +171,8 @@ if(NOT UNIX)
+@@ -182,11 +180,8 @@ else()
+     set(ZLIB_ROOT /usr/lib/i386-linux-gnu)
  endif()
- set(ZLIB_ROOT /usr/lib/i386-linux-gnu)
  find_package(ZLIB REQUIRED)
 -include_directories(depends/protobuf)
  include_directories(depends/lua/include)
@@ -53,10 +39,10 @@ index bf0345b..2a1a852 100644
  OPTION(CLSOCKET_SHARED "Build clsocket lib as shared." OFF)
  OPTION(CLSOCKET_DEP_ONLY "Build for use inside other CMake projects as dependency." ON)
 diff --git a/library/CMakeLists.txt b/library/CMakeLists.txt
-index 5071d9e..d346d1e 100644
+index 54300ec..128bfd1 100644
 --- a/library/CMakeLists.txt
 +++ b/library/CMakeLists.txt
-@@ -203,10 +203,10 @@ LIST(APPEND PROJECT_SOURCES ${PROJECT_PROTO_SRCS})
+@@ -223,10 +223,10 @@ LIST(APPEND PROJECT_SOURCES ${PROJECT_PROTO_SRCS})
  
  ADD_CUSTOM_COMMAND(
      OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
@@ -69,7 +55,7 @@ index 5071d9e..d346d1e 100644
  )
  
  # Merge headers into sources
-@@ -249,12 +249,12 @@ IF(UNIX)
+@@ -269,12 +269,12 @@ IF(UNIX)
  ENDIF()
  
  IF(APPLE)
@@ -86,10 +72,10 @@ index 5071d9e..d346d1e 100644
  
  ADD_LIBRARY(dfhack-version STATIC DFHackVersion.cpp)
 diff --git a/plugins/CMakeLists.txt b/plugins/CMakeLists.txt
-index 9781401..ece508c 100644
+index dd1c634..7bd8c17 100644
 --- a/plugins/CMakeLists.txt
 +++ b/plugins/CMakeLists.txt
-@@ -69,11 +69,11 @@ STRING(REPLACE ".proto" ".pb.h" PROJECT_PROTO_HDRS "${PROJECT_PROTOS}")
+@@ -47,11 +47,11 @@ STRING(REPLACE ".proto" ".pb.h" PROJECT_PROTO_HDRS "${PROJECT_PROTOS}")
  
  ADD_CUSTOM_COMMAND(
      OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
@@ -103,21 +89,6 @@ index 9781401..ece508c 100644
  )
  add_custom_target(generate_proto DEPENDS ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS})
  
-diff --git a/plugins/mapexport/CMakeLists.txt b/plugins/mapexport/CMakeLists.txt
-index 429507a..7e2390a 100644
---- a/plugins/mapexport/CMakeLists.txt
-+++ b/plugins/mapexport/CMakeLists.txt
-@@ -32,8 +32,8 @@ LIST(APPEND PROJECT_SRCS ${PROJECT_HDRS})
- #Generate sources from our proto files and store them in the source tree
- ADD_CUSTOM_COMMAND(
- OUTPUT ${PROJECT_PROTO_SRCS} ${PROJECT_PROTO_HDRS}
--COMMAND protoc-bin -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
--DEPENDS protoc-bin ${PROJECT_PROTOS}
-+COMMAND protoc -I=${CMAKE_CURRENT_SOURCE_DIR}/proto/ --cpp_out=${CMAKE_CURRENT_SOURCE_DIR}/proto/ ${PROJECT_PROTOS}
-+DEPENDS ${PROJECT_PROTOS}
- )
- 
- IF(WIN32)
 diff --git a/plugins/stockpiles/CMakeLists.txt b/plugins/stockpiles/CMakeLists.txt
 index 713c3d6..dd2d4cb 100644
 --- a/plugins/stockpiles/CMakeLists.txt
@@ -133,6 +104,3 @@ index 713c3d6..dd2d4cb 100644
  )
  
  IF(WIN32)
--- 
-2.6.3
-

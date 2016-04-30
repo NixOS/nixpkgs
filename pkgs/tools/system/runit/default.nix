@@ -13,8 +13,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./Makefile.patch ];
 
-  buildPhase = ''
+  postPatch = ''
     cd ${name}
+    sed -i 's,-static,,g' src/Makefile
+  '';
+
+  buildPhase = ''
     make -C 'src'
   '';
 

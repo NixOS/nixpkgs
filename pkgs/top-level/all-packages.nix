@@ -1654,8 +1654,6 @@ in
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  git-hub = callPackage ../applications/version-management/git-and-tools/git-hub { };
-
   git-lfs = goPackages.git-lfs.bin // { outputs = [ "bin" ]; };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
@@ -3174,8 +3172,10 @@ in
   screen-message = callPackage ../tools/X11/screen-message { };
 
   screencloud = callPackage ../applications/graphics/screencloud {
-    quazip = qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
+    quazip = quazip_qt4;
   };
+
+  quazip_qt4 = self.qt5.quazip.override { qt = qt4; qmakeHook = qmake4Hook; };
 
   scrot = callPackage ../tools/graphics/scrot { };
 
@@ -3460,9 +3460,9 @@ in
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
-  torbutton = callPackage ../tools/security/torbutton { };
-
-  torbrowser = callPackage ../tools/security/tor/torbrowser.nix { };
+  torbrowser = callPackage ../tools/security/tor/torbrowser.nix {
+    inherit (xorg) libXrender libX11 libXext libXt;
+  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -3680,6 +3680,7 @@ in
   };
 
   truecrypt = callPackage ../applications/misc/truecrypt {
+    stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
     wxGUI = config.truecrypt.wxGUI or true;
   };
 
@@ -10443,6 +10444,8 @@ in
 
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
+  openisns = callPackage ../os-specific/linux/open-isns { };
+
   tgt = callPackage ../tools/networking/tgt { };
 
   # -- Linux kernel expressions ------------------------------------------------
@@ -14112,7 +14115,7 @@ in
     enableXMPP      = config.tomahawk.enableXMPP      or true;
     enableKDE       = config.tomahawk.enableKDE       or false;
     enableTelepathy = config.tomahawk.enableTelepathy or false;
-    quazip = qt5.quazip.override { qt = qt4; };
+    quazip = quazip_qt4;
   };
 
   torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {

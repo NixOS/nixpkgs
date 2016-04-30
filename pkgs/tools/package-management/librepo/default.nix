@@ -20,5 +20,12 @@ stdenv.mkDerivation rec {
 
   # librepo/fastestmirror.h includes curl/curl.h, and pkg-config specfile refers to others in here
   propagatedBuildInputs = [ curl gpgme expat ];
+
+  meta = with stdenv.lib; {
+    description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
+    license     = licenses.lgpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+  };
 }
 

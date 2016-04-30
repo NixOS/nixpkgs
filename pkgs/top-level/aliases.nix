@@ -45,6 +45,7 @@ doNotDisplayTwice rec {
   firefoxWrapper = firefox;           # 2015-09
   fuse_exfat = exfat;                   # 2015-09-11
   gettextWithExpat = gettext; # 2016-02-19
+  git-hub = gitAndTools.git-hub; # added 2016-04-29
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   htmlTidy = html-tidy;  # added 2014-12-06

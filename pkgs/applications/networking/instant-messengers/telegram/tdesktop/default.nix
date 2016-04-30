@@ -12,20 +12,20 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.9.33";
+  version = "0.9.44";
   qtVersion = lib.replaceStrings ["."] ["_"] qtbase.version;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "020vwm7h22951v9zh457d82qy5ifp746vwishkvb16h1vwr1qx4s";
+    sha256 = "0ydd5yhy2nq4n6x59ajb6c4d0blyj6gm7hkx4hfrx2a88iksc5rm";
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
-    rev = "df47a864282959b103a08b65844e9088e012fdb3";
-    sha256 = "1v1dbi8yiaf2hgghniykm5qbnda456xj3zfjnbqysn41f5cn40h4";
+    rev = "f8907d1ccaf8345c06232238342921213270e3d8";
+    sha256 = "1fsp098ykpf5gynn3lq3qcj3a47bkjfr0l96pymmmfd4a2s1690v";
   };
 
   buildInputs = [
@@ -88,6 +88,17 @@ in stdenv.mkDerivation rec {
       -e 's,-flto ,,g'
     echo "Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)" >> Telegram/SourceFiles/stdafx.cpp
 
+    ( mkdir -p Linux/DebugIntermediateStyle
+      cd Linux/DebugIntermediateStyle
+      qmake CONFIG+=debug ../../Telegram/MetaStyle.pro
+      buildPhase
+    )
+    ( mkdir -p Linux/DebugIntermediateLang
+      cd Linux/DebugIntermediateLang
+      qmake CONFIG+=debug ../../Telegram/MetaLang.pro
+      buildPhase
+    )
+
     ( mkdir -p ../Libraries
       cd ../Libraries
       for i in $qtSrcs; do
@@ -121,17 +132,6 @@ in stdenv.mkDerivation rec {
       installPhase
     )
 
-    ( mkdir -p Linux/DebugIntermediateStyle
-      cd Linux/DebugIntermediateStyle
-      qmake CONFIG+=debug ../../Telegram/MetaStyle.pro
-      buildPhase
-    )
-    ( mkdir -p Linux/DebugIntermediateLang
-      cd Linux/DebugIntermediateLang
-      qmake CONFIG+=debug ../../Telegram/MetaLang.pro
-      buildPhase
-    )
-
     ( mkdir -p Linux/ReleaseIntermediate
       cd Linux/ReleaseIntermediate
       qmake $qmakeFlags ../../Telegram/Telegram.pro
@@ -147,7 +147,7 @@ in stdenv.mkDerivation rec {
     sed "s,/usr/bin,$out/bin,g" $tgaur/telegramdesktop.desktop > $out/share/applications/telegramdesktop.desktop
     sed "s,/usr/bin,$out/bin,g" $tgaur/tg.protocol > $out/share/kde4/services/tg.protocol
     for icon_size in 16 32 48 64 128 256 512; do
-      install -Dm644 "Telegram/SourceFiles/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
+      install -Dm644 "Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
     done
 
     fixupPhase
