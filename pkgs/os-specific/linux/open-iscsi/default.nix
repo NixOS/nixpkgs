@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, nukeReferences, automake, autoconf, libtool, gettext, utillinux, openisns, openssl, kmod }:
+{ stdenv, fetchFromGitHub, automake, autoconf, libtool, gettext, utillinux, openisns, openssl, kmod }:
 stdenv.mkDerivation rec {
   name = "open-iscsi-${version}";
   version = "2.0-873-${stdenv.lib.substring 0 7 src.rev}";
-  outputs = [ "out" "iscsistart" ];
 
-  buildInputs = [ nukeReferences automake autoconf libtool gettext utillinux openisns.lib openssl kmod ];
+  buildInputs = [ automake autoconf libtool gettext utillinux openisns.lib openssl kmod ];
   
   src = fetchFromGitHub {
     owner = "open-iscsi";
@@ -19,13 +18,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
 
   preConfigure = ''
-    sed -i 's|/usr/|/|' Makefile
+    sed -i 's|/usr|/|' Makefile
   '';
   
   postInstall = ''
-    mkdir -pv $iscsistart/bin/
-    cp -v usr/iscsistart $iscsistart/bin/
-    nuke-refs $iscsistart/bin/iscsistart
+    cp usr/iscsistart $out/sbin/
+    $out/sbin/iscsistart -v
   '';
 
   meta = with stdenv.lib; {
@@ -33,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = http://www.open-iscsi.com;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ cleverca22 ];
   };
 }
