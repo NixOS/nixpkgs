@@ -1,27 +1,27 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2 }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
   name = "constant-detune-chorus-${version}";
-  version = "0.1.01";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
     repo = "constant-detune-chorus";
     rev = "v${version}";
-    sha256 = "1z8aj1a36ix9jizk9wl06b3i98hrkg47qxqp8vx930r624pc5z86";
+    sha256 = "1ks2k6pflqyi2cs26bnbypphyrrgn0xf31l31kgx1qlilyc57vln";
   };
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
-    faust2jack -t 99999 constant-detune-chorus.dsp
-    faust2lv2 -t 99999 constant-detune-chorus.dsp
+    faust2jaqt -t 99999 ConstantDetuneChorus.dsp
+    faust2lv2 -gui -t 99999 ConstantDetuneChorus.dsp
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp constant-detune-chorus $out/bin/
+    cp ConstantDetuneChorus $out/bin/
     mkdir -p $out/lib/lv2
-    cp -r constant-detune-chorus.lv2/ $out/lib/lv2
+    cp -r ConstantDetuneChorus.lv2/ $out/lib/lv2
   '';
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2 }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
   name = "RhythmDelay-${version}";
   version = "2.0";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0n938nm08mf3lz92k6v07k1469xxzmfkgclw40jgdssfcfa16bn7";
   };
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
-    faust2jack -t 99999 RhythmDelay.dsp
-    faust2lv2 -t 99999 RhythmDelay.dsp
+    faust2jaqt -t 99999 RhythmDelay.dsp
+    faust2lv2 -gui -t 99999 RhythmDelay.dsp
   '';
 
   installPhase = ''

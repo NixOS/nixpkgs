@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2 }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
   name = "CompBus-${version}";
   version = "1.1.02";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "025vi60caxk3j2vxxrgbc59xlyr88vgn7k3127s271zvpyy7apwh";
   };
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
     for f in *.dsp;
     do
-      faust2jack -t 99999 $f
-      faust2lv2 -t 99999 $f
+      faust2jaqt -t 99999 $f
+      faust2lv2 -gui -t 99999 $f
     done
   '';
 
