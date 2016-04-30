@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, phantomjs, python, nodePackages }:
 
-let version = "1.0.0-RC5";
+let version = "1.1.1";
 
 in stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
     owner = "casperjs";
     repo = "casperjs";
     rev = version;
-    sha256 = "10b25jmh9zmlp77h0p3n9d6bnl3wn4iv3h3qnsrgijfszxyh0wgw";
+    sha256 = "187prrm728xpn0nx9kxfxa4fwd7w25z78nsxfk6a6kl7c5656jpz";
   };
 
   buildInputs = [ phantomjs python nodePackages.eslint ];
@@ -21,6 +21,9 @@ in stdenv.mkDerivation rec {
   '';
 
   dontBuild = true;
+
+  doCheck = true;
+  checkTarget = "test";
 
   installPhase = ''
     mv $PWD $out
