@@ -14,4 +14,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DENABLE_RPMMD=true -DENABLE_RPMDB=true -DENABLE_PUBKEY=true -DENABLE_RPMDB_BYRPMHEADER=true";
 
   buildInputs = [ cmake zlib expat rpm db ];
+
+  meta = with stdenv.lib; {
+    description = "A free package dependency solver";
+    license     = licenses.bsd3;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+  };
 }
+
