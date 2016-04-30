@@ -32,6 +32,8 @@ let
       ++ stdenv.lib.optional perlBindings perl
       ++ stdenv.lib.optional saslSupport sasl;
 
+    patches = [ ./apr-1.patch ];
+
     configureFlags = ''
       ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
       ${if httpServer then "--with-apxs=${apacheHttpd}/bin/apxs" else "--without-apxs"}
