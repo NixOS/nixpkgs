@@ -3,16 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.windowmaker;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.windowmaker;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.windowmaker.enable = mkEnableOption "windowmaker";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "windowmaker" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "windowmaker";
       start = ''

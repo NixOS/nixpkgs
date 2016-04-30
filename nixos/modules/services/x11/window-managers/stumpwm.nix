@@ -3,15 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.stumpwm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.stumpwm;
 in
 
 {
-  options = {
-    services.xserver.windowManager.stumpwm.enable = mkEnableOption "stumpwm";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (elem "stumpwm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "stumpwm";
       start = ''

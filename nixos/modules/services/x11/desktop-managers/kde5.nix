@@ -4,8 +4,8 @@ with lib;
 
 let
 
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.kde5;
+  dmcfg = config.services.xserver.desktopManager;
+  cfg = dmcfg.kde5;
   xorg = pkgs.xorg;
 
   kde5 = pkgs.kde5;
@@ -16,12 +16,6 @@ in
   options = {
 
     services.xserver.desktopManager.kde5 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the Plasma 5 (KDE 5) desktop environment.";
-      };
-
       phonon = {
 
         gstreamer = {
@@ -47,10 +41,7 @@ in
   };
 
 
-  config = mkIf (xcfg.enable && cfg.enable) {
-
-    warnings = optional config.services.xserver.desktopManager.kde4.enable
-      "KDE 4 should not be enabled at the same time as KDE 5";
+  config = mkIf (elem "kde5" dmcfg.enable) {
 
     services.xserver.desktopManager.session = singleton {
       name = "kde5";

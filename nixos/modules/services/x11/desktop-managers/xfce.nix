@@ -4,19 +4,13 @@ with lib;
 
 let
 
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.xfce;
+  dmcfg = config.services.xserver.desktopManager;
+  cfg = dmcfg.xfce;
 
 in
 
 {
   options = {
-
-    services.xserver.desktopManager.xfce.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the Xfce desktop environment.";
-    };
 
     services.xserver.desktopManager.xfce.thunarPlugins = mkOption {
       default = [];
@@ -29,7 +23,7 @@ in
   };
 
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (elem "xfce" dmcfg.enable) {
 
     services.xserver.desktopManager.session = singleton
       { name = "xfce";

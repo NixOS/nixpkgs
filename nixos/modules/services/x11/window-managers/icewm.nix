@@ -3,16 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.icewm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.icewm;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.icewm.enable = mkEnableOption "icewm";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "icewm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton
       { name = "icewm";
         start =

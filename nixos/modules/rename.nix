@@ -93,17 +93,10 @@ with lib;
 
     (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
-    # XBMC
-    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ])
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "xbmc" ] [ "services" "xserver" "desktopManager" "kodi" ])
-
     # DNSCrypt-proxy
     (mkRenamedOptionModule [ "services" "dnscrypt-proxy" "port" ] [ "services" "dnscrypt-proxy" "localPort" ])
 
     (mkRenamedOptionModule [ "services" "hostapd" "extraCfg" ] [ "services" "hostapd" "extraConfig" ])
-
-    # Enlightenment
-    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enlightenment" "enable" ])
 
     # Iodine
     (mkRenamedOptionModule [ "services" "iodined" "enable" ] [ "services" "iodine" "server" "enable" ])
@@ -123,6 +116,49 @@ with lib;
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
     (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ])
+
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "e19" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "enlightenment" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "gnome3" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde4" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kodi" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "xfce" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "xterm" "enable" ] [ "services" "xserver" "desktopManager" "enable" ])
+
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "gdm" "enable" ] [ "services" "xserver" "displayManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "kdm" "enable" ] [ "services" "xserver" "displayManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "lighdm" "enable" ] [ "services" "xserver" "displayManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "sddm" "enable" ] [ "services" "xserver" "displayManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "slim" "enable" ] [ "services" "xserver" "displayManager" "enable" ])
+
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "afterstep" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "awesome" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "bspw" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "clfswm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "compiz" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "dwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "exwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "fluxbox" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "herbstluftwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "i3" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "icewm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "jwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "metacity" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "notion" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "openbox" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "oroborus" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "qtile" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "ratpoison" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "sawfish" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "spectrwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "stumpwm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "twm" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "windowlab" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "windowmaker" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "wmii" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
+    (mkRenamedOptionModule [ "services" "xserver" "windowManager" "xmonad" "enable" ] [ "services" "xserver" "windowManager" "enable" ])
 
   ];
 }

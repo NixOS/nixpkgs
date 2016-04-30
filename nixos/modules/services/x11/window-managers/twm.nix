@@ -4,22 +4,16 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.windowManager.twm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.twm;
 
 in
 
 {
 
-  ###### interface
-
-  options = {
-    services.xserver.windowManager.twm.enable = mkEnableOption "twm";
-  };
-
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "twm" wmcfg.enable) {
 
     services.xserver.windowManager.session = singleton
       { name = "twm";

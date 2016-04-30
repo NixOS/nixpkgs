@@ -9,12 +9,11 @@ import ./make-test.nix ({ pkgs, ...} : {
 
     { imports = [ ./common/user-account.nix ];
 
-      services.xserver.enable = true;
+      services.xserver.displayManager.enable = "slim";
+      services.xserver.displayManager.slim.autoLogin = true;
+      services.xserver.displayManager.slim.defaultUser = "alice";
 
-      services.xserver.displayManager.auto.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
-
-      services.xserver.desktopManager.xfce.enable = true;
+      services.xserver.desktopManager.enable = [ "xfce" ];
 
       environment.systemPackages = [ pkgs.xorg.xmessage ];
     };

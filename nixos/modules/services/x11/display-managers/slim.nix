@@ -47,14 +47,6 @@ in
 
     services.xserver.displayManager.slim = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = config.services.xserver.enable;
-        description = ''
-          Whether to enable SLiM as the display manager.
-        '';
-      };
-
       theme = mkOption {
         type = types.nullOr types.path;
         default = pkgs.fetchurl {
@@ -114,7 +106,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (dmcfg.enable == "slim") {
 
     services.xserver.displayManager.job =
       { preStart =

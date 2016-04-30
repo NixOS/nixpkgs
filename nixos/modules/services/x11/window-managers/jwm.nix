@@ -3,16 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.jwm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.jwm;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.jwm.enable = mkEnableOption "jwm";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "jwm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "jwm";
       start = ''

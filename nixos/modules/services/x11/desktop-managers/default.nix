@@ -11,20 +11,21 @@ let
   # the xserver is enabled, the `feh' program is used as a fallback.
   needBGCond = d: ! (d ? bgSupport && d.bgSupport) && xcfg.enable;
 
+  dms = [ "enlightenment" "gnome3" "kde4" "kde5" "kodi" "xfce" "xterm" ];
+
 in
 
 {
-  # Note: the order in which desktop manager modules are imported here
-  # determines the default: later modules (if enabled) are preferred.
-  # E.g., if KDE is enabled, it supersedes xterm.
-  imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./kde4.nix ./kde5.nix
-    ./enlightenment.nix ./gnome3.nix ./kodi.nix
-  ];
-
   options = {
 
     services.xserver.desktopManager = {
+
+      enable = mkOption {
+        type    = with types; listOf (enum dms);
+        default = [];
+        example = [ (lib.head dms) ];
+        description = "Enabled desktop manager";
+      };
 
       session = mkOption {
         internal = true;
@@ -53,32 +54,13 @@ in
         };
       };
 
-      default = mkOption {
-        type = types.str;
-        default = "";
-        example = "none";
-        description = "Default desktop manager loaded if none have been chosen.";
-        apply = defaultDM:
-          if defaultDM == "" && cfg.session.list != [] then
-            (head cfg.session.list).name
-          else if any (w: w.name == defaultDM) cfg.session.list then
-            defaultDM
-          else
-            throw ''
-              Default desktop manager (${defaultDM}) not found.
-              Probably you want to change
-                services.xserver.desktopManager.default = "${defaultDM}";
-              to one of
-                ${concatMapStringsSep "\n  " (w: "services.xserver.desktopManager.default = \"${w.name}\";") cfg.session.list}
-            '';
-      };
-
     };
 
   };
 
   config = {
     services.xserver.displayManager.session = cfg.session.list;
+    services.xserver.enable = mkIf (cfg.enable != []) true;
     environment.systemPackages =
       mkIf cfg.session.needBGPackages [ pkgs.feh ];
   };

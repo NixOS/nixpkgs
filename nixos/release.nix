@@ -296,14 +296,13 @@ in rec {
       });
 
     kde = makeClosure ({ pkgs, ... }:
-      { services.xserver.enable = true;
-        services.xserver.displayManager.kdm.enable = true;
-        services.xserver.desktopManager.kde4.enable = true;
+      { 
+        services.xserver.desktopManager.enable = "kde4";
       });
 
     xfce = makeClosure ({ pkgs, ... }:
-      { services.xserver.enable = true;
-        services.xserver.desktopManager.xfce.enable = true;
+      { 
+        services.xserver.desktopManager.enable = "xfce";
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

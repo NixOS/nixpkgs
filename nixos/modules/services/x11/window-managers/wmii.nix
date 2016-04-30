@@ -2,16 +2,12 @@
 
 with lib;
 let
-  inherit (lib) mkOption mkIf singleton;
+  wmcfg = config.services.xserver.windowManager;
   cfg = config.services.xserver.windowManager.wmii;
   wmii = pkgs.wmii_hg;
 in
 {
-  options = {
-    services.xserver.windowManager.wmii.enable = mkEnableOption "wmii";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (elem "wmii" wmcfg.enable) {
     services.xserver.windowManager.session = singleton
       # stop wmii by
       #   $wmiir xwrite /ctl quit

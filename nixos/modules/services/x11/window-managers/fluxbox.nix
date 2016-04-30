@@ -3,16 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.fluxbox;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.fluxbox;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.fluxbox.enable = mkEnableOption "fluxbox";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "fluxbox" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "fluxbox";
       start = ''

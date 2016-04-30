@@ -3,15 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.herbstluftwm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.herbstluftwm;
 in
 
 {
-  options = {
-    services.xserver.windowManager.herbstluftwm.enable = mkEnableOption "herbstluftwm";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (elem "herbstluftwm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "herbstluftwm";
       start = "

@@ -4,36 +4,47 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager;
+  wms = [
+    "afterstep"
+    "awesome"
+    "bspwm"
+    "clfswm"
+    "compiz"
+    "dwm"
+    "exwm"
+    "fluxbox"
+    "herbstluftwm"
+    "i3"
+    "icewm"
+    "jwm"
+    "metacity"
+    "notion"
+    "openbox"
+    "oroborus"
+    "qtile"
+    "ratpoison"
+    "sawfish"
+    "spectrwm"
+    "stumpwm"
+    "twm"
+    "windowlab"
+    "windowmaker"
+    "wmii"
+    "xmonad" ];
+
 in
 
 {
-  imports = [
-    ./afterstep.nix
-    ./bspwm.nix
-    ./compiz.nix
-    ./dwm.nix
-    ./exwm.nix
-    ./fluxbox.nix
-    ./herbstluftwm.nix
-    ./i3.nix
-    ./jwm.nix
-    ./metacity.nix
-    ./openbox.nix
-    ./notion.nix
-    ./ratpoison.nix
-    ./sawfish.nix
-    ./stumpwm.nix
-    ./spectrwm.nix
-    ./twm.nix
-    ./windowmaker.nix
-    ./wmii.nix
-    ./xmonad.nix
-    ./qtile.nix
-    ./none.nix ];
-
   options = {
 
     services.xserver.windowManager = {
+
+      enable = mkOption {
+        type    = with types; listOf (enum wms);
+        default = [];
+        example = [ lib.head wms ];
+        description = "Enabled window manager";
+      };
 
       session = mkOption {
         internal = true;
@@ -52,23 +63,12 @@ in
         });
       };
 
-      default = mkOption {
-        type = types.str;
-        default = "none";
-        example = "wmii";
-        description = "Default window manager loaded if none have been chosen.";
-        apply = defaultWM:
-          if any (w: w.name == defaultWM) cfg.session then
-            defaultWM
-          else
-            throw "Default window manager (${defaultWM}) not found.";
-      };
-
     };
 
   };
 
   config = {
     services.xserver.displayManager.session = cfg.session;
+    services.xserver.enable = mkIf (cfg.enable != []) true;
   };
 }

@@ -11,13 +11,10 @@ import ./make-test.nix ({ pkgs, ... }: {
 
       virtualisation.memorySize = 1024;
 
-      services.xserver.enable = true;
-
       services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
 
-      services.xserver.displayManager.kdm.enable = true;
       services.xserver.displayManager.kdm.extraConfig =
         ''
           [X-:0-Core]
@@ -26,7 +23,7 @@ import ./make-test.nix ({ pkgs, ... }: {
           AutoLoginPass=foobar
         '';
 
-      services.xserver.desktopManager.kde4.enable = true;
+      services.xserver.desktopManager.enable = [ "kde4" ];
 
       # Include most of KDE. We don't really test these here, but at
       # least they should build.

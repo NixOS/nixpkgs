@@ -2,8 +2,8 @@
 
 with lib;
 let
-  inherit (lib) mkOption mkIf optionals literalExample;
-  cfg = config.services.xserver.windowManager.xmonad;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.xmonad;
   xmonad = pkgs.xmonad-with-packages.override {
     ghcWithPackages = cfg.haskellPackages.ghcWithPackages;
     packages = self: cfg.extraPackages self ++
@@ -14,7 +14,6 @@ in
 {
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkEnableOption "xmonad";
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = "pkgs.haskellPackages";
@@ -50,7 +49,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = mkIf (elem "xmonad" wmcfg.enable) {
     services.xserver.windowManager = {
       session = [{
         name = "xmonad";

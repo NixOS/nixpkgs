@@ -2,7 +2,7 @@
 
 with lib;
 let
-    bluez-bluetooth = if config.services.xserver.desktopManager.kde4.enable then pkgs.bluez else pkgs.bluez5;
+    bluez-bluetooth = if (elem "kde4" config.services.xserver.desktopManager.enable) then pkgs.bluez else pkgs.bluez5;
 
     configBluez = {
         description = "Bluetooth Service";
@@ -36,7 +36,7 @@ let
         };
     };
 
-    bluezConfig = if config.services.xserver.desktopManager.kde4.enable then configBluez else configBluez5;
+    bluezConfig = if (elem "kde4" config.services.xserver.desktopManager.enable) then configBluez else configBluez5;
 in
 
 {

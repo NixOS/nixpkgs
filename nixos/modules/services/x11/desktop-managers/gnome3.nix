@@ -3,7 +3,8 @@
 with lib;
 
 let
-  cfg = config.services.xserver.desktopManager.gnome3;
+  dmcfg = config.services.xserver.desktopManager;
+  cfg = dmcfg.gnome3;
   gnome3 = config.environment.gnome3.packageSet;
 
   # Remove packages of ys from xs, based on their names
@@ -53,12 +54,6 @@ in {
   options = {
 
     services.xserver.desktopManager.gnome3 = {
-      enable = mkOption {
-        default = false;
-        example = true;
-        description = "Enable Gnome 3 desktop manager.";
-      };
-
       sessionPath = mkOption {
         default = [];
         example = literalExample "[ pkgs.gnome3.gpaste ]";
@@ -97,7 +92,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "gnome3" dmcfg.enable) {
 
     # Enable helpful DBus services.
     security.polkit.enable = true;

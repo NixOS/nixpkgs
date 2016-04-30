@@ -27,6 +27,22 @@ let
     Xft.hintstyle: hint${fontconfig.hinting.style}
   '';
 
+  # select a default display manager according to the desktop manager
+  selectDM = dms:
+    let default = "lightdm"; 
+        selected = head dms;
+    in
+    if dms == [] then default
+    else if elem selected [ "kde4" "kde5" ] then "kdm"
+    else default;
+
+  defaultWM =
+    if cfg.windowManager.enable == [] then "none"
+    else head cfg.windowManager.enable;
+  defaultDM =
+    if cfg.desktopManager.enable == [] then "none"
+    else head cfg.desktopManager.enable;
+
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
@@ -102,9 +118,9 @@ let
       # The session type is "<desktop-manager> + <window-manager>", so
       # extract those.
       windowManager="''${sessionType##* + }"
-      : ''${windowManager:=${cfg.windowManager.default}}
+      : ''${windowManager:=${defaultWM}}
       desktopManager="''${sessionType% + *}"
-      : ''${desktopManager:=${cfg.desktopManager.default}}
+      : ''${desktopManager:=${defaultDM}}
 
       # Start the window manager.
       case $windowManager in
@@ -151,6 +167,8 @@ let
       '') names}
     '';
 
+  dms = [ "gdm" "kdm" "lightdm" "sddm" "slim" ];
+
 in
 
 {
@@ -158,6 +176,13 @@ in
   options = {
 
     services.xserver.displayManager = {
+
+      enable = mkOption {
+        type    = types.nullOr (types.enum dms);
+        default = null;
+        example = lib.head dms;
+        description = "Enabled display manager";
+      };
 
       xauthBin = mkOption {
         internal = true;
@@ -276,6 +301,7 @@ in
 
   config = {
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+    services.xserver.displayManager.enable = mkIf config.services.xserver.enable (mkDefault (selectDM config.services.xserver.desktopManager.enable));
   };
 
   imports = [

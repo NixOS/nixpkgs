@@ -9,15 +9,14 @@ with lib;
   imports = [ ./installation-cd-base.nix ];
 
   services.xserver = {
-    enable = true;
     # GDM doesn't start in virtual machines with ISO
+    displayManager.enable = "slim";
     displayManager.slim = {
-      enable = true;
       defaultUser = "root";
       autoLogin = true;
     };
+    desktopmanager.enable = [ "gnome3" ];
     desktopManager.gnome3 = {
-      enable = true;
       extraGSettingsOverrides = ''
         [org.gnome.desktop.background]
         show-desktop-icons=true
