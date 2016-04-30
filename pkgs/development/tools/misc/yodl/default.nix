@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "yodl-${version}";
-  version = "3.06.00";
+  version = "3.07.01";
 
   buildInputs = [ perl icmake ];
 
   src = fetchFromGitHub {
-    sha256 = "03n03bxc5lh3v9yzdikqrzzdvrna8zf98mlg2dhnn5z5sb5jhyzc";
+    sha256 = "1l8igql4dw6jiv8gs4bpfxrdgr2za9a1l2k3paxsajhy6w3a9b3m";
     rev = version;
     repo = "yodl";
     owner = "fbb-git";
