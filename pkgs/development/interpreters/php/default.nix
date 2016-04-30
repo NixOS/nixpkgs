@@ -255,6 +255,8 @@ let
         calendarSupport = config.php.calendar or true;
       };
 
+      outputs = [ "dev" "out" ];
+
       configurePhase = ''
         # Don't record the configure flags since this causes unnecessary
         # runtime dependencies.
@@ -274,6 +276,9 @@ let
         unset installPhase; installPhase;
         cp php.ini-production $iniFile
       '';
+
+      # Also strip libphp5.so which resides in /modules
+      stripDebugList= [ "lib" "modules" "bin" "sbin" ];
 
       src = fetchurl {
         url = "http://www.php.net/distributions/php-${version}.tar.bz2";

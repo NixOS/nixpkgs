@@ -37,8 +37,8 @@ in {
 
       phpPackage = mkOption {
         type = types.package;
-        default = pkgs.php;
-        defaultText = "pkgs.php";
+        default = pkgs.php.out;
+        defaultText = "pkgs.php.out";
         description = ''
           The PHP package to use for running the FPM service.
         '';
