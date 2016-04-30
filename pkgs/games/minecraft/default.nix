@@ -2,6 +2,7 @@
 , jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
 , mesa, openal
 , useAlsa ? false, alsaOss ? null }:
+with stdenv.lib;
 
 assert useAlsa -> alsaOss != null;
 
@@ -39,8 +40,7 @@ in stdenv.mkDerivation {
     cat > $out/bin/minecraft << EOF
     #!${stdenv.shell}
 
-    # wrapper for minecraft
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib/:${libXext}/lib/:${libXcursor}/lib/:${libXrandr}/lib/:${libXxf86vm}/lib/:${mesa}/lib/:${openal}/lib/
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm mesa openal ]}
     ${if useAlsa then "${alsaOss}/bin/aoss" else "" } \
       ${jre}/bin/java -jar $out/minecraft.jar
     EOF
