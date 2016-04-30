@@ -37,5 +37,13 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     env NOCONFIGURE=1 ./autogen.sh
   '';
+
+  meta = {
+    description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
+    homepage    = "https://rpm-ostree.readthedocs.io/en/latest/";
+    license     = licenses.lgpl2Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ copumpkin ];
+  };
 }
 
