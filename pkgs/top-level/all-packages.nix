@@ -878,6 +878,8 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
+  
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
 
