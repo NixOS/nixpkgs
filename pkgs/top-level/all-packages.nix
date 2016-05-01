@@ -1951,6 +1951,8 @@ in
 
   i2pd = callPackage ../tools/networking/i2pd {};
 
+  i-score = qt5.callPackage ../applications/audio/i-score { };
+
   iasl = callPackage ../development/compilers/iasl { };
 
   iannix = qt5.callPackage ../applications/audio/iannix { };
@@ -2989,6 +2991,10 @@ in
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   remarshal = (callPackage ../development/tools/remarshal { }).bin // { outputs = [ "bin" ]; };
+
+  rtaudio = callPackage ../development/libraries/audio/rtaudio { };
+
+  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
@@ -6109,6 +6115,8 @@ in
   itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
+
+  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
