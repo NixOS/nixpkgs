@@ -11,10 +11,12 @@ let
     paths = [
       xorg.libX11 xorg.libXrender glib gtk atk pango cairo gdk_pixbuf
       freetype fontconfig xorg.libXcomposite alsaLib xorg.libXdamage
-      xorg.libXext xorg.libXfixes nss nspr gconf expat dbus stdenv.cc
+      xorg.libXext xorg.libXfixes nss nspr gconf expat dbus
       xorg.libXtst xorg.libXi xorg.libXcursor xorg.libXrandr libcap
       libnotify
     ];
+
+    extraOutputsToInstall = [ "lib" "out" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -39,7 +41,7 @@ in stdenv.mkDerivation rec {
 
     ln -s ${libudev.out}/lib/libudev.so $out/share/nwjs/libudev.so.0
 
-    patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nw
+    patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ]}:$out/share/nwjs" $out/share/nwjs/nw
     patchelf --set-rpath "${nwEnv}/lib:${nwEnv}/lib64:$out/share/nwjs" $out/share/nwjs/nwjc
 
     mkdir -p $out/bin
