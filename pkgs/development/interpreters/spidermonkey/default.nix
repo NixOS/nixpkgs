@@ -24,4 +24,11 @@ stdenv.mkDerivation rec {
   CFLAGS = "-DPIC -fPIC -DJS_C_STRINGS_ARE_UTF8";
 
   makeFlags = "-f ${makefile} JS_DIST=\${out} BUILD_OPT=1 JS_READLINE=1";
+
+  meta = with stdenv.lib; {
+    description = "Mozilla's JavaScript engine written in C/C++";
+    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey";
+    license = licenses.mpl20;
+    platforms = platforms.all;
+  };
 }
