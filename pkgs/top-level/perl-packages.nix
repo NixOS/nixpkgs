@@ -7380,10 +7380,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260803";
+    name = "Math-BigRat-0.260804";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "0558fab8ffe0de8751ccfa3bd129d6f34b82cf75454de82b051d4ddffd4ec99b";
+      sha256 = "f9bf5c007c0f141df7c7887d3482d47033cf7deab094a01e2863f31bacd7ef8a";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
