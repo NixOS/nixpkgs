@@ -1,6 +1,6 @@
-diff -ru -x '*~' libcxx-3.4.2.src-orig/lib/CMakeLists.txt libcxx-3.4.2.src/lib/CMakeLists.txt
---- libcxx-3.4.2.src-orig/lib/CMakeLists.txt	2013-11-15 18:18:57.000000000 +0100
-+++ libcxx-3.4.2.src/lib/CMakeLists.txt	2014-09-24 14:04:01.000000000 +0200
+diff -ru -x '*~' libcxx-3.8.0.src-orig/lib/CMakeLists.txt libcxx-3.8.0.src/lib/CMakeLists.txt
+--- libcxx-3.8.0.src-orig/lib/CMakeLists.txt	2013-11-15 18:18:57.000000000 +0100
++++ libcxx-3.8.0.src/lib/CMakeLists.txt	2014-09-24 14:04:01.000000000 +0200
 @@ -56,7 +56,7 @@
        "-compatibility_version 1"
        "-current_version ${LIBCXX_VERSION}"

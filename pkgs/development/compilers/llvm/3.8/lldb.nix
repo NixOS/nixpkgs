@@ -15,7 +15,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "008fdbyza13ym3v0xpans4z4azw4y16hcbgrrnc4rx2mxwaw62ws";
+  src = fetch "lldb" "e3f68f44147df0433e7989bf6ed1c58ff28d7c68b9c47553cb9915f744785a35";
 
   patchPhase = ''
     sed -i 's|/usr/bin/env||' \
@@ -47,3 +47,4 @@ stdenv.mkDerivation {
     platforms   = stdenv.lib.platforms.all;
   };
 }
+
