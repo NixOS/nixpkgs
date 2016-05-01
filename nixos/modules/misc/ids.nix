@@ -205,6 +205,7 @@
       ntp = 179;
       zabbix = 180;
       redis = 181;
+      sshd = 182;
       unifi = 183;
       uptimed = 184;
       zope2 = 185;
@@ -448,6 +449,7 @@
       #ntp = 179; # unused
       #zabbix = 180; # unused
       #redis = 181; # unused
+      #sshd = 182; # unused
       #unifi = 183; # unused
       #uptimed = 184; # unused
       #zope2 = 185; # unused
