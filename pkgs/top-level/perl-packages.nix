@@ -2661,10 +2661,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.030";
+    name = "CryptX-0.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "b0e26b4c4de66134f1f1ae4227fdd18cf10f95cecc64a651a8af2710ef7519e5";
+      sha256 = "7221a7a824ae07377f7e97c6daafff47524c46204c9b8ff58420a13fc2c104f1";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
