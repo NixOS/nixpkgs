@@ -16095,10 +16095,10 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.46";
+    version = "0.60";
 
     src = pkgs.fetchurl {
-      sha256 = "1yq9nis1b2rgpndi2rqh4divf6j22jjva83r5z8jf7iffywmr8hs";
+      sha256 = "0gf3vv8dmj77xv7lrpccw9k3m1bgq3m71q9s6hqp77zvyd6cqjml";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
 
