@@ -12538,22 +12538,21 @@ in modules // {
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
-    version = "2.5.8";
+    version = "3.0.0";
     disabled = !isPy27;
 
     meta = {
       description = "OpenSteno Plover stenography software";
-      maintainers = [ maintainers.twey ];
+      maintainers = with maintainers; [ twey kovirobi ];
       license = licenses.gpl2;
     };
 
     src = pkgs.fetchurl {
       url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "23f7824a715f93eb2c41d5bafd0c6f3adda92998e9321e1ee029abe7a6ab41e5";
+      sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
     };
 
-    propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
-    preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
+    propagatedBuildInputs = with self; [ wxPython30 pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
   };
 
   pygal = buildPythonPackage rec {
