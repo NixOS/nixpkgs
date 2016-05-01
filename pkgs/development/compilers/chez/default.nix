@@ -3,16 +3,15 @@
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
   version = "9.4-${dver}";
-  dver    = "20160430";
+  dver    = "20160501";
 
   src = fetchgit {
-    url    = "https://github.com/cisco/ChezScheme.git";
-    rev    = "63a97939896c2a89fcffdf16c8b783efaeb816b5";
-    sha256 = "1c58xjslgn7xnfy9j5p9b6sn0wzv2mk7zlmhflydzil7iimchjsi";
+    url    = "https://github.com/cisco/chezscheme.git";
+    rev    = "8343b7172532a00d2d19914206fcf83c93798c80";
+    sha256 = "1jq55sdk468lckccfnqh0iv868bhw6yb9ba9bakqg2pfydb8r4qf";
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
   buildInputs = [ ncurses libX11 ];
 
   /* Chez uses a strange default search path, which completely
