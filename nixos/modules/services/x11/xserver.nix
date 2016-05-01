@@ -233,6 +233,15 @@ in
         '';
       };
 
+      updateDbusEnvironment = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to update the DBus activation environment after launching the
+          desktop manager.
+        '';
+      };
+
       layout = mkOption {
         type = types.str;
         default = "us";
