@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, ncurses, libX11 }:
+{ stdenv, fetchgit, coreutils, ncurses, libX11 }:
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  enableParallelBuilding = true;
   buildInputs = [ ncurses libX11 ];
 
   /* Chez uses a strange default search path, which completely
@@ -19,14 +20,25 @@ stdenv.mkDerivation rec {
   ** defaults to {/usr,/usr/local,$HOME}/lib for finding the .boot
   ** file.
   **
-  ** Also, we patch out a very annoying 'feature' in ./configure, too.
+  ** Also, we patch out a very annoying 'feature' in ./configure, too,
+  ** which tries to use 'git' to update submodules.
+  **
+  ** Finally, we have to also fix a few occurrences to tools with
+  ** absolute paths in some helper scripts, otherwise the build will
+  ** fail on NixOS or in any chroot build.
   */
   patchPhase = ''
-    substituteInPlace c/scheme.c \
+    substituteInPlace ./c/scheme.c \
       --replace "/usr/lib/csv" "$out/lib/csv"
 
     substituteInPlace ./configure \
       --replace "git submodule init && git submodule update || exit 1" ""
+
+    substituteInPlace ./workarea \
+      --replace "/bin/ln" "${coreutils}/bin/ln"
+
+    substituteInPlace ./makefiles/installsh \
+      --replace "/usr/bin/true" "${coreutils}/bin/true"
   '';
 
   /* Don't use configureFlags, since that just implicitly appends
