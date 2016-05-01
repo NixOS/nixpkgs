@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-setuid"
-    "--sysconfdir=/etc"
+    "--sysconfdir=\${out}/etc"
     "--localstatedir=/var"
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
     "--with-eqn=${groff}/bin/eqn"
