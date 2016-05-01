@@ -38,6 +38,10 @@ let
       inherit sha1; # upstream directly provides sha1 of releases over https
     };
 
+    patches = []
+      ++ optionals (vpxSupport && version == "0.8.17" ) [ ./vpxenc-0.8.17-libvpx-1.5.patch ]
+      ++ optionals (vpxSupport && version == "11.6") [ ./vpxenc-11.6-libvpx-1.5.patch ];
+
     preConfigure = "patchShebangs doc/texi2pod.pl";
 
     configureFlags =
