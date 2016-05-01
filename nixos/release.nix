@@ -111,11 +111,11 @@ in rec {
       ];
     }).config.system.build;
   in
-    pkgs.symlinkJoin "netboot" [
+    pkgs.symlinkJoin {name="netboot"; paths=[
       build.netbootRamdisk
       build.kernel
       build.netbootIpxeScript
-    ];
+    ];};
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
