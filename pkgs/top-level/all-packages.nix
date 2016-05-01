@@ -13050,7 +13050,7 @@ let
     bs2bSupport = config.mpv.bs2bSupport or true;
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
-    vaapiSupport = config.mpv.vaapiSupport or false;
+    vaapiSupport = config.mpv.vaapiSupport or true;
   };
 
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
