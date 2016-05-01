@@ -10055,10 +10055,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodElementalPerlMunger = buildPerlPackage rec {
-    name = "Pod-Elemental-PerlMunger-0.200005";
+    name = "Pod-Elemental-PerlMunger-0.200006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "35146bdcf0d3ac271f9ba2a4d4611b98373215c43de43dd4f012f46c44004d57";
+      sha256 = "09fd3b5d53119437a01dced66b42eafdcd53895b3c32a2b0f781f36fda0f665b";
     };
     buildInputs = [ Moose PodElemental ];
     propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
