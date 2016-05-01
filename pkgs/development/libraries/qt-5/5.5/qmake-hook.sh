@@ -53,6 +53,17 @@ _qtMultioutModuleDevs() {
     # The destination directory must exist or moveToOutput will do nothing
     mkdir -p "${!outputDev}/share"
     moveToOutput "share/doc" "${!outputDev}"
+
+    # Move libtool archives and qmake project files to $dev/lib
+    if [ "z${!outputLib}" != "z${!outputDev}" ]; then
+        pushd "${!outputLib}"
+        find lib -name '*.a' -o -name '*.la' -o -name '*.prl' -print0 | \
+            while read -r -d $'\0' file; do
+                mkdir -p "${!outputDev}/$(dirname "$file")"
+                mv "${!outputLib}/$file" "${!outputDev}/$file"
+            done
+        popd
+    fi
 }
 
 qmakeConfigurePhase() {

@@ -10,12 +10,9 @@ plasmaPackage {
     extra-cmake-modules
     kdoctools
   ];
-  buildInputs = [
-    ibus kconfig kconfigwidgets kcoreaddons kcmutils
-    knewstuff kservice kunitconversion
-  ];
   propagatedBuildInputs = [
     kdelibs4support kio kross krunner plasma-framework plasma-workspace
-    qtdeclarative qtx11extras
+    qtdeclarative qtx11extras ibus kconfig kconfigwidgets kcoreaddons kcmutils
+    knewstuff kservice kunitconversion
   ];
 }

@@ -10,10 +10,10 @@ plasmaPackage {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
+  propagatedBuildInputs = [
     kconfig kcoreaddons kitemviews knewstuff kiconthemes libksysguard
+    kdelibs4support ki18n
   ];
-  propagatedBuildInputs = [ kdelibs4support ki18n ];
   postInstall = ''
     wrapQtProgram "$out/bin/ksysguardd"
   '';

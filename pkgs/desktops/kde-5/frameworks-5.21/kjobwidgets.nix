@@ -7,10 +7,7 @@
 
 kdeFramework {
   name = "kjobwidgets";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kcoreaddons kwidgetsaddons ];
-  propagatedBuildInputs = [ qtx11extras ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ kcoreaddons kwidgetsaddons qtx11extras ];
 }

@@ -4,10 +4,7 @@
 
 kdeFramework {
   name = "kdesu";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kcoreaddons kservice ];
-  propagatedBuildInputs = [ ki18n kpty ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ kcoreaddons ki18n kpty kservice ];
 }

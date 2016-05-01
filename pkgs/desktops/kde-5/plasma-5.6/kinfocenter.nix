@@ -12,12 +12,11 @@ plasmaPackage {
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    kcmutils kcompletion kconfig kconfigwidgets kcoreaddons
-    kdbusaddons kiconthemes kpackage kservice kwidgetsaddons
-    kxmlgui libraw1394 pciutils solid
+  propagatedBuildInputs = [
+    kdeclarative kdelibs4support ki18n kio kcmutils kcompletion kconfig
+    kconfigwidgets kcoreaddons kdbusaddons kiconthemes kpackage kservice
+    kwidgetsaddons kxmlgui libraw1394 pciutils solid
   ];
-  propagatedBuildInputs = [ kdeclarative kdelibs4support ki18n kio ];
   postInstall = ''
     wrapQtProgram "$out/bin/kinfocenter"
   '';

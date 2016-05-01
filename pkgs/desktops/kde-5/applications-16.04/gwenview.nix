@@ -16,29 +16,19 @@
 
 kdeApp {
   name = "gwenview";
+  meta = {
+    license = with lib.licenses; [ gpl2 fdl12 ];
+    maintainers = [ lib.maintainers.ttuegel ];
+  };
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
     makeQtWrapper
   ];
-  buildInputs = [
-    exiv2
-    lcms2
-    phonon
-    qtsvg
-  ];
   propagatedBuildInputs = [
-    baloo
-    kactivities
-    kdelibs4support
-    kio
-    qtx11extras
+    baloo kactivities kdelibs4support kio qtx11extras exiv2 lcms2 phonon qtsvg
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/gwenview"
   '';
-  meta = {
-    license = with lib.licenses; [ gpl2 fdl12 ];
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

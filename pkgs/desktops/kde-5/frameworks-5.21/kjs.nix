@@ -6,11 +6,9 @@
 
 kdeFramework {
   name = "kjs";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   postInstall = ''
     wrapQtProgram "$out/bin/kjs5"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

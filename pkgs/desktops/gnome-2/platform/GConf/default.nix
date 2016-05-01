@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "09ch709cb9fniwc4221xgkq0jf0x0lxs814sqig8p2dcll0llvzk";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "dev" "out" "doc" ];
 
   buildInputs = [ ORBit2 dbus_libs dbus_glib libxml2 ]
     # polkit requires pam, which requires shadow.h, which is not available on

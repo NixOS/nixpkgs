@@ -8,7 +8,7 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
   ];
-  buildInputs = [
+  propagatedBuildInputs = [
     wayland
   ];
 }

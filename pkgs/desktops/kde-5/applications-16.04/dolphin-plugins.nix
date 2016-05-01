@@ -11,21 +11,15 @@
 
 kdeApp {
   name = "dolphin-plugins";
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
-  buildInputs = [
-    kxmlgui
-    dolphin
-  ];
-  propagatedBuildInputs = [
-    kdelibs4support
-    ki18n
-    kio
-  ];
   meta = {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+  ];
+  propagatedBuildInputs = [
+    kdelibs4support ki18n kio kxmlgui dolphin
+  ];
 }

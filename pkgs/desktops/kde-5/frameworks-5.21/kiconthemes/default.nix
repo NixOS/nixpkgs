@@ -5,14 +5,11 @@
 
 kdeFramework {
   name = "kiconthemes";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
-  buildInputs = [ kconfigwidgets kitemviews qtsvg ];
-  propagatedBuildInputs = [ breeze-icons ki18n ];
+  propagatedBuildInputs = [ breeze-icons kconfigwidgets ki18n kitemviews qtsvg ];
   postInstall = ''
     wrapQtProgram "$out/bin/kiconfinder5"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

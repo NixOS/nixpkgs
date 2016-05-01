@@ -7,19 +7,14 @@
 
 kdeFramework {
   name = "plasma-framework";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
-  buildInputs = [
-    karchive kconfig kconfigwidgets kcoreaddons kdbusaddons kguiaddons
-    kiconthemes knotifications kxmlgui qtscript
-  ];
   propagatedBuildInputs = [
-    kactivities kdeclarative kglobalaccel ki18n kio kpackage kservice kwindowsystem
-    qtx11extras
+    kactivities karchive kconfig kconfigwidgets kcoreaddons kdbusaddons
+    kdeclarative kglobalaccel kguiaddons ki18n kiconthemes kio knotifications
+    kpackage kservice kwindowsystem kxmlgui qtscript qtx11extras
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/plasmapkg2"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

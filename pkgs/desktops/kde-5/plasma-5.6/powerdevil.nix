@@ -10,11 +10,9 @@ plasmaPackage {
     extra-cmake-modules
     kdoctools
   ];
-  buildInputs = [
-    kconfig kdbusaddons knotifyconfig solid udev
-  ];
   propagatedBuildInputs = [
-    kactivities kauth kdelibs4support kglobalaccel ki18n kio kidletime
-    kwayland libkscreen plasma-workspace qtx11extras
+    kconfig kdbusaddons knotifyconfig solid udev kactivities kauth
+    kdelibs4support kglobalaccel ki18n kio kidletime kwayland libkscreen
+    plasma-workspace qtx11extras
   ];
 }

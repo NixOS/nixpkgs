@@ -9,11 +9,8 @@ plasmaPackage {
     extra-cmake-modules
     kdoctools
   ];
-  buildInputs = [
-    kcmutils kcrash kdelibs4support kglobalaccel kidletime kwayland
-    libXcursor pam wayland
-  ];
   propagatedBuildInputs = [
-    kdeclarative plasma-framework qtdeclarative
+    kdeclarative plasma-framework qtdeclarative kcmutils kcrash kdelibs4support
+    kglobalaccel kidletime kwayland libXcursor pam wayland
   ];
 }

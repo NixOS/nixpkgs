@@ -33,7 +33,7 @@ kdeApp {
     extra-cmake-modules kdoctools
     shared_mime_info
   ];
-  buildInputs = [
+  propagatedBuildInputs = [
     exiv2 kactivities karchive kbookmarks kconfig kconfigwidgets kcoreaddons
     kdbusaddons kguiaddons kdnssd kiconthemes ki18n kio khtml kdelibs4support
     kpty libmtp libssh openexr openslp phonon qtsvg samba solid

@@ -2,9 +2,7 @@
 
 kdeFramework {
   name = "kpty";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ kcoreaddons ki18n ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

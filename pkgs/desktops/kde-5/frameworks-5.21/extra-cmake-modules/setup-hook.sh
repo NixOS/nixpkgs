@@ -10,12 +10,7 @@ _ecmPropagateSharedData() {
         "kconf_update" \
         "kservices5" \
         "kservicetypes5" \
-        "kxmlgui5" \
         "knotifications5" \
-        "icons" \
-        "sounds" \
-        "templates" \
-        "wallpapers" \
         "applications" \
         "desktop-directories" \
         "mime" \
@@ -26,7 +21,6 @@ _ecmPropagateSharedData() {
     for dir in ${sharedPaths[@]}; do
         if [ -d "$1/share/$dir" ]; then
             addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
-            propagateOnce propagatedBuildInputs "$1"
             propagateOnce propagatedUserEnvPkgs "$1"
             break
         fi

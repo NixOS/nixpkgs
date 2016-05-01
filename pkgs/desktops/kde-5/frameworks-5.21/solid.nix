@@ -6,12 +6,10 @@
 
 kdeFramework {
   name = "solid";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
-  buildInputs = [ qtdeclarative ];
+  propagatedBuildInputs = [ qtdeclarative ];
   postInstall = ''
     wrapQtProgram "$out/bin/solid-hardware5"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

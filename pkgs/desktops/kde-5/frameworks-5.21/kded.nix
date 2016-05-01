@@ -11,9 +11,7 @@
 
 kdeFramework {
   name = "kded";
-  buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons kinit kservice ];
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ kconfig kcoreaddons kcrash kdbusaddons kinit kservice ];
 }

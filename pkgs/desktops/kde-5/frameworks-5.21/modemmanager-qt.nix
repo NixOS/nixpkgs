@@ -5,9 +5,7 @@
 
 kdeFramework {
   name = "modemmanager-qt";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ modemmanager ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

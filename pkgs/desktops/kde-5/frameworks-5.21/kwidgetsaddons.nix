@@ -4,8 +4,6 @@
 
 kdeFramework {
   name = "kwidgetsaddons";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

@@ -9,12 +9,8 @@ plasmaPackage rec {
   nativeBuildInputs = [
     extra-cmake-modules
   ];
-  buildInputs = [
-    kconfig kcoreaddons kguiaddons kservice
-    qtdeclarative qtmultimedia taglib
-  ];
   propagatedBuildInputs = [
-    baloo kactivities kdeclarative kfilemetadata ki18n kio
-    plasma-framework
+    baloo kactivities kdeclarative kfilemetadata ki18n kio plasma-framework
+    kconfig kcoreaddons kguiaddons kservice qtdeclarative qtmultimedia taglib
   ];
 }

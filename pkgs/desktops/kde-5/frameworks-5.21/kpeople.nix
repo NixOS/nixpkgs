@@ -4,12 +4,9 @@
 
 kdeFramework {
   name = "kpeople";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [
-    kcoreaddons kitemviews kservice kwidgetsaddons
+  propagatedBuildInputs = [
+    kcoreaddons ki18n kitemviews kservice kwidgetsaddons qtdeclarative
   ];
-  propagatedBuildInputs = [ ki18n qtdeclarative ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

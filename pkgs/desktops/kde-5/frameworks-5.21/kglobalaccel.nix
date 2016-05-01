@@ -11,13 +11,12 @@
 
 kdeFramework {
   name = "kglobalaccel";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
-  buildInputs = [ kconfig kcoreaddons kcrash kdbusaddons ];
-  propagatedBuildInputs = [ kwindowsystem qtx11extras ];
+  propagatedBuildInputs = [
+    kconfig kcoreaddons kcrash kdbusaddons kwindowsystem qtx11extras
+  ];
   postInstall = ''
     wrapQtProgram "$out/bin/kglobalaccel5"
   '';
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

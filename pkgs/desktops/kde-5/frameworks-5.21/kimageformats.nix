@@ -5,9 +5,7 @@
 
 kdeFramework {
   name = "kimageformats";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
 }

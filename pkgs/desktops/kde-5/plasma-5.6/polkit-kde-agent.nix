@@ -17,15 +17,8 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules
   ];
-  buildInputs = [
-    kdbusaddons
-    kwidgetsaddons
-    kcoreaddons
-    kcrash
-    kconfig
-    kiconthemes
-    knotifications
-    polkit-qt
+  propagatedBuildInputs = [
+    kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes
+    knotifications kwindowsystem polkit-qt
   ];
-  propagatedBuildInputs = [ ki18n kwindowsystem ];
 }

@@ -9,14 +9,14 @@
 
 kdeApp {
   name = "libkipi";
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  buildInputs = [
-    kconfig ki18n kservice kxmlgui
-  ];
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
+  nativeBuildInputs = [
+    extra-cmake-modules
+  ];
+  propagatedBuildInputs = [
+    kconfig ki18n kservice kxmlgui
+  ];
 }

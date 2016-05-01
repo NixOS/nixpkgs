@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0h6xvswbqspdifnyh5pm2pqq55yp3kn6yrswq7ay9z49hkh7i6w5";
   };
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = [ libglade ];
   nativeBuildInputs = [ pkgconfig intltool ];
   propagatedBuildInputs = [ libart_lgpl gtk ];

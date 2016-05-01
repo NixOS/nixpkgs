@@ -5,10 +5,10 @@
 
 kdeFramework {
   name = "kross";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ kcompletion kcoreaddons kxmlgui ];
-  propagatedBuildInputs = [ ki18n kiconthemes kio kparts kwidgetsaddons qtscript ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [
+    kcompletion kcoreaddons ki18n kiconthemes kio kparts kwidgetsaddons kxmlgui
+    qtscript
+  ];
 }

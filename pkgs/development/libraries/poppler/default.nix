@@ -29,11 +29,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
   configureFlags = with lib;
     [
       "--enable-xpdf-headers"
       "--enable-libcurl"
       "--enable-zlib"
+      "--enable-build-type=release"
     ]
     ++ optionals minimal [ "--disable-poppler-glib" "--disable-poppler-cpp" ]
     ++ optional (!utils) "--disable-utils";

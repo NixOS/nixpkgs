@@ -9,12 +9,9 @@ plasmaPackage {
   nativeBuildInputs = [
     extra-cmake-modules makeQtWrapper shared_mime_info
   ];
-  buildInputs = [
-    kcoreaddons kdbusaddons kded kiconthemes knotifications
-    kwidgetsaddons
-  ];
   propagatedBuildInputs = [
-    bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative
+    bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative kcoreaddons
+    kdbusaddons kded kiconthemes knotifications kwidgetsaddons
   ];
   propagatedUserEnvPkgs = [ bluez-qt ];
   postInstall = ''

@@ -5,9 +5,7 @@
 
 kdeFramework {
   name = "kwindowsystem";
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ qtx11extras ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  propagatedBuildInputs = [ qtx11extras ];
 }

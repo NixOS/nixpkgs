@@ -31,21 +31,9 @@ kdeApp {
     extra-cmake-modules
     kdoctools
   ];
-  buildInputs = [
-    karchive
-    kconfig
-    kcrash
-    kdbusaddons
-    kiconthemes
-    kservice
-    kpty
-    kwidgetsaddons
-    libarchive
-  ];
   propagatedBuildInputs = [
-    khtml
-    ki18n
-    kio
+    khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
+    kpty kwidgetsaddons libarchive
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/ark" \
