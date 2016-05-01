@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, libpipeline, db, groff }:
- 
+
 stdenv.mkDerivation rec {
   name = "man-db-2.7.5";
-  
+
   src = fetchurl {
     url = "mirror://savannah/man-db/${name}.tar.xz";
     sha256 = "056a3il7agfazac12yggcg4gf412yq34k065im0cpfxbcw6xskaw";
   };
-  
+
   buildInputs = [ pkgconfig libpipeline db groff ];
 
   configureFlags = [
     "--disable-setuid"
-    "--sysconfdir=/etc"
+    "--sysconfdir=\${out}/etc"
     "--localstatedir=/var"
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
     "--with-eqn=${groff}/bin/eqn"
