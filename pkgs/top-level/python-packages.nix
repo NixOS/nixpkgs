@@ -22616,11 +22616,11 @@ in modules // {
 
   wcwidth = buildPythonPackage rec {
     name = "wcwidth-${version}";
-    version = "0.1.4";
+    version = "0.1.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/wcwidth/${name}.tar.gz";
-      sha256 = "0awx28xi938nv55qlmai3b5ddqd1w5c294gy95xh4xsx0hik2vch";
+      sha256 = "02wjrpf001gjdjsaxxbzcwfg19crlk2dbddayrfc2v06f53yrcyw";
     };
 
     # Checks fail due to missing tox.ini file:
