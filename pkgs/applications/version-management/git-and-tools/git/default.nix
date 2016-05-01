@@ -112,12 +112,12 @@ stdenv.mkDerivation {
 
       ''# wrap git-svn
         gitperllib=$out/lib/perl5/site_perl
-        for i in ${builtins.toString perlLibs} ${svn}; do
+        for i in ${builtins.toString perlLibs} ${svn.out}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
         wrapProgram $out/libexec/git-core/git-svn     \
                      --set GITPERLLIB "$gitperllib"   \
-                     --prefix PATH : "${svn}/bin" ''
+                     --prefix PATH : "${svn.out}/bin" ''
        else '' # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
        '')
