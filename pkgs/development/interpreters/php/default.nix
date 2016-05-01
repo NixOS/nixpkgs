@@ -154,8 +154,8 @@ let
         };
 
         openssl = {
-          configureFlags = ["--enable-openssl"];
-          buildInputs = [openssl];
+          configureFlags = ["--with-openssl"];
+          buildInputs = [openssl openssl.dev];
         };
 
         mbstring = {
