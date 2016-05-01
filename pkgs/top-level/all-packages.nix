@@ -3191,6 +3191,8 @@ in
 
   seccure = callPackage ../tools/security/seccure { };
 
+  securefs = callPackage ../tools/filesystems/securefs { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
