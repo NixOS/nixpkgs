@@ -84,4 +84,6 @@ self: super: {
 
   foldl          = doJailbreak super.foldl;
 
+  force-layout   = doJailbreak super.force-layout;
+
 }
