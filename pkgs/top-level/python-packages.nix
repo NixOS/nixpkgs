@@ -13113,7 +13113,7 @@ in modules // {
     meta = {
       homepage = http://www.nltk.org;
       description = "A leading platform for building Python programs to work with human language data";
-      license = lincenses.asl20;
+      license = licenses.asl20;
     };
   };
 
