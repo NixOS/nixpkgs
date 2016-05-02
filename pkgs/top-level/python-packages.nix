@@ -15642,6 +15642,26 @@ in modules // {
     };
   };
 
+  pgspecial = buildPythonPackage rec {
+    name = "pgspecial-${version}";
+    version = "1.3.0";
+
+    src = pkgs.fetchurl {
+      sha256 = "1nxqqkchigrznywmm73n1ksp5hhhwswz8anrlwpi9i75wq792mg1";
+      url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
+    };
+
+    propagatedBuildInputs = with self; [ click ];
+
+    meta = {
+      description = "Meta-commands handler for Postgres Database";
+      homepage = https://pypi.python.org/pypi/pgspecial;
+      licence = licenses.bsd3;
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
+
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
     version = "1.4.0";
