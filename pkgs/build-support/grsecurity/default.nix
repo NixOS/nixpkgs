@@ -121,8 +121,7 @@ let
       # additional build inputs for gcc plugins, required by some PaX/grsec features
       nativeBuildInputs = args.nativeBuildInputs ++ (with pkgs; [ gmp libmpc mpfr ]);
 
-      preConfigure = args.preConfigure or "" + ''
-        rm localversion-grsec
+      preConfigure = (args.preConfigure or "") + ''
         echo ${localver grkern} > localversion-grsec
       '';
     };
