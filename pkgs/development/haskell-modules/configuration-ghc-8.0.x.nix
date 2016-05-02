@@ -122,4 +122,13 @@ self: super: {
     };
   }));
 
+  # The essential part only in upstream git, last released upstream version 2.7.0, Dec 8
+  stm-conduit    = doJailbreak (pkgs.haskell.lib.overrideCabal super.stm-conduit (oldAttrs: {
+    src          = pkgs.fetchgit {
+            url    = https://github.com/cgaebel/stm-conduit.git;
+            rev    = "3f831d703c422239e56a9da0f42db8a7059238e0";
+            sha256 = "0bmym2ps0yjcsbyg02r8v1q8z5hpml99n72hf2pjmd31dy8iz7v9";
+    };
+  }));
+
 }
