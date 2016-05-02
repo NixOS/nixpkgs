@@ -131,4 +131,13 @@ self: super: {
     };
   }));
 
+  # The essential part only in upstream git, last released upstream version 1.6.0, Jan 27
+  th-desugar          = doJailbreak (pkgs.haskell.lib.overrideCabal super.th-desugar (oldAttrs: {
+    src = pkgs.fetchgit {
+            url    = https://github.com/goldfirere/th-desugar.git;
+            rev    = "7496de0243a12c14be1b37b89eb41cf9ef6f5229";
+            sha256 = "10awknqviq7jb738r6n9rlyra0pvkrpnk0hikz4459hny4hamn75";
+    };
+  }));
+
 }
