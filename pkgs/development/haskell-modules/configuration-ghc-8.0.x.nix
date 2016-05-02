@@ -97,4 +97,6 @@ self: super: {
     };
   });
 
+  lucid-svg      = doJailbreak super.lucid-svg;
+
 }
