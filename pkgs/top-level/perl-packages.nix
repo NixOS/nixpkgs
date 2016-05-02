@@ -2661,10 +2661,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.030";
+    name = "CryptX-0.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "b0e26b4c4de66134f1f1ae4227fdd18cf10f95cecc64a651a8af2710ef7519e5";
+      sha256 = "7221a7a824ae07377f7e97c6daafff47524c46204c9b8ff58420a13fc2c104f1";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -5242,12 +5242,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileUtil = buildPerlPackage rec {
-    name = "File-Util-4.132140";
+    name = "File-Util-4.161200";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
-      sha256 = "4233c493468da8b34f2df19b191aaa400f328d877c8c023605e43385976a99d1";
+      sha256 = "c63be030c15303796d387b290f1f6b59451fb64827e39afeb0e1d0adad72ab8e";
     };
-    buildInputs = [ TestFatal TestNoWarnings ];
+    buildInputs = [ ModuleBuild TestNoWarnings ];
     meta = {
       homepage = https://github.com/tommybutler/file-util/wiki;
       description = "Easy, versatile, portable file handling";
@@ -7144,16 +7144,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogDispatchouli = buildPerlPackage {
-    name = "Log-Dispatchouli-2.009";
+  LogDispatchouli = buildPerlPackage rec {
+    name = "Log-Dispatchouli-2.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-2.009.tar.gz;
-      sha256 = "09iw27r36gmljlm6gjfczn2sf4s1js697q8na8xw4wlnz7x4bv59";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "214eca0fe77f2dc74675f9aa542778d5d4618c5bf12283540ca1062fcb967fa0";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatch LogDispatchArray ParamsUtil StringFlogger SubExporter SubExporterGlobExporter TryTiny ];
     meta = {
-      homepage = https://github.com/rjbs/log-dispatchouli;
+      homepage = https://github.com/rjbs/Log-Dispatchouli;
       description = "A simple wrapper around Log::Dispatch";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7355,10 +7355,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999718";
+    name = "Math-BigInt-1.999722";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "3edb44123d6c03a4031057f449b41a0d05ebc48d25ad64b08a5fe2f4ae2ac240";
+      sha256 = "c76a2d5e6a996186a42a7e516b8d82217fb0cd18c7e1e55241322c4a859ccf40";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -7380,10 +7380,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260803";
+    name = "Math-BigRat-0.260804";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "0558fab8ffe0de8751ccfa3bd129d6f34b82cf75454de82b051d4ddffd4ec99b";
+      sha256 = "f9bf5c007c0f141df7c7887d3482d47033cf7deab094a01e2863f31bacd7ef8a";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
@@ -10055,10 +10055,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodElementalPerlMunger = buildPerlPackage rec {
-    name = "Pod-Elemental-PerlMunger-0.200005";
+    name = "Pod-Elemental-PerlMunger-0.200006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "35146bdcf0d3ac271f9ba2a4d4611b98373215c43de43dd4f012f46c44004d57";
+      sha256 = "09fd3b5d53119437a01dced66b42eafdcd53895b3c32a2b0f781f36fda0f665b";
     };
     buildInputs = [ Moose PodElemental ];
     propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
@@ -10242,15 +10242,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodWeaver = buildPerlPackage rec {
-    name = "Pod-Weaver-4.012";
+    name = "Pod-Weaver-4.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "d801cbfaff22d418943d0c5dcb8c145b8cc4d56741f9c33923ef891241116ad6";
+      sha256 = "5f12c5f11d313294520b0a1ab5c0775ef56e222d9181c8dac520cdc77af309e0";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
-    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise ModuleRuntime Moose ParamsUtil PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
+    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise Moose PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
     meta = {
-      homepage = https://github.com/rjbs/pod-weaver;
+      homepage = https://github.com/rjbs/Pod-Weaver;
       description = "Weave together a Pod document from an outline";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];

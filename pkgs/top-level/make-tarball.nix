@@ -18,7 +18,7 @@ releaseTools.sourceTarball rec {
   version = builtins.readFile ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
-  buildInputs = [ nix jq ];
+  buildInputs = [ nix.out jq ];
 
   configurePhase = ''
     eval "$preConfigure"

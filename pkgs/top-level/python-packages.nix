@@ -2500,13 +2500,13 @@ in modules // {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.2.2";
+    version = "1.3.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1w53lhhdzi29d31qzhflb5mcwb24mfrj4frv70w6qyn8vmqznnjy";
+      sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
     };
 
     propagatedBuildInputs = [ self.botocore
@@ -3980,6 +3980,28 @@ in modules // {
       maintainers = with maintainers; [ luispedro ];
       license = licenses.mit;
       platforms = platforms.linux;
+    };
+  };
+
+  MDP = buildPythonPackage rec {
+    version = "3.5";
+    name = "MDP-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/M/MDP/${name}.tar.gz";
+      sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ future numpy ];
+
+    doCheck = true;
+
+    meta = {
+      description = "Library for building complex data processing software by combining widely used machine learning algorithms";
+      homepage = http://mdp-toolkit.sourceforge.net;
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ nico202 ];
     };
   };
 
@@ -6861,6 +6883,25 @@ in modules // {
       license = licenses.asl20;
     };
   };
+
+  oger = buildPythonPackage rec {
+    name = "oger-${version}";
+    version = "1.1.3";
+    src = pkgs.fetchurl {
+      url = "http://organic.elis.ugent.be/sites/organic.elis.ugent.be/files/Oger-${version}.tar.gz";
+      sha256 = "1k02ys812lz0x0yymljp102amkm8bvfgqsrphnk235xbcrb0akg5";
+    };
+
+    propagatedBuildInputs = with self; [ MDP scipy numpy matplotlib ];
+
+    meta = {
+      homepage = http://organic.elis.ugent.be/organic/engine;
+      description = "Rapidly build, train, and evalue modular learning architectures";
+      maintainers = with maintainers; [ nico202 ];
+      license = licenses.lgpl3;
+    };
+  };
+		  
 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
@@ -15639,21 +15680,25 @@ in modules // {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.19.2";
+    version = "0.20.1";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "1xl3yqwksnszd2vcgzb576m56613qcl82jfqmb9fbvcqlcpks6ln";
+      sha256 = "0f1ff1a1x1qrcv4ygfh29yyknx8hgwck7rp020zz0jrq9dibhjp7";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      click configobj prompt_toolkit psycopg2 pygments sqlparse
+      click configobj prompt_toolkit psycopg2
+      pygments sqlparse pgspecial setproctitle
     ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
-      inherit version;
       description = "Command-line interface for PostgreSQL";
       longDescription = ''
         Rich command-line interface for PostgreSQL with auto-completion and
@@ -15665,19 +15710,39 @@ in modules // {
     };
   };
 
+  pgspecial = buildPythonPackage rec {
+    name = "pgspecial-${version}";
+    version = "1.3.0";
+
+    src = pkgs.fetchurl {
+      sha256 = "1nxqqkchigrznywmm73n1ksp5hhhwswz8anrlwpi9i75wq792mg1";
+      url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
+    };
+
+    propagatedBuildInputs = with self; [ click ];
+
+    meta = {
+      description = "Meta-commands handler for Postgres Database";
+      homepage = https://pypi.python.org/pypi/pgspecial;
+      licence = licenses.bsd3;
+      maintainers = with maintainers; [ nckx ];
+    };
+  };
+
+
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
-    version = "1.4.0";
+    version = "1.6.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "175jcfixjkq17fbda9kifbljfd5iwjpjisvhs5xhxsyf6n5ykv2l";
+      sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
       rev = "v${version}";
       repo = "mycli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      pymysql configobj sqlparse prompt_toolkit pygments click
+      pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
     ];
 
     meta = {
@@ -16137,10 +16202,10 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.46";
+    version = "0.60";
 
     src = pkgs.fetchurl {
-      sha256 = "1yq9nis1b2rgpndi2rqh4divf6j22jjva83r5z8jf7iffywmr8hs";
+      sha256 = "0gf3vv8dmj77xv7lrpccw9k3m1bgq3m71q9s6hqp77zvyd6cqjml";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
 
@@ -22655,11 +22720,11 @@ in modules // {
 
   wcwidth = buildPythonPackage rec {
     name = "wcwidth-${version}";
-    version = "0.1.4";
+    version = "0.1.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/wcwidth/${name}.tar.gz";
-      sha256 = "0awx28xi938nv55qlmai3b5ddqd1w5c294gy95xh4xsx0hik2vch";
+      sha256 = "02wjrpf001gjdjsaxxbzcwfg19crlk2dbddayrfc2v06f53yrcyw";
     };
 
     # Checks fail due to missing tox.ini file:
@@ -23239,6 +23304,29 @@ in modules // {
       description = "xdot.py is an interactive viewer for graphs written in Graphviz's dot";
       homepage = https://github.com/jrfonseca/xdot.py;
       license = licenses.lgpl3Plus;
+    };
+  };
+
+  you-get = buildPythonApplication rec {
+    version = "0.4.390";
+    name = "you-get-${version}";
+    disabled = !isPy3k;
+
+    # Tests aren't packaged, but they all hit the real network so
+    # probably aren't suitable for a build environment anyway.
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/you-get/${name}.tar.gz";
+      sha256 = "17hs0g9yvgvkmr7p1cz39mbbvb40q65qkc31j3ixc2f873gahagw";
+    };
+
+    meta = {
+      description = "A tiny command line utility to download media contents from the web";
+      homepage = https://you-get.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ryneeverett ];
+      platforms = platforms.all;
     };
   };
 

@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     description = "Simple and robust network communication layer on top of UDP";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

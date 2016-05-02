@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.singleton (substituteAll {
     src = ./absolute_shlib_path.patch;
     inherit nixStoreDir;
-  }) ++ optional stdenv.isDarwin (substituteAll {
-    src = ./darwin-fixups.patch;
-    inherit nixStoreDir;
   });
 
   meta = with stdenv.lib; {
