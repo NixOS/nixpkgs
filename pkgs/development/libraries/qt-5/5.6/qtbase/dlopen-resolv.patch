@@ -1,0 +1,26 @@
+Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qdnslookup_unix.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/kernel/qdnslookup_unix.cpp
++++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qdnslookup_unix.cpp
+@@ -79,7 +79,7 @@ static void resolveLibrary()
+     if (!lib.load())
+ #endif
+     {
+-        lib.setFileName(QLatin1String("resolv"));
++        lib.setFileName(QLatin1String("@glibc@/lib/resolv"));
+         if (!lib.load())
+             return;
+     }
+Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qhostinfo_unix.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/kernel/qhostinfo_unix.cpp
++++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qhostinfo_unix.cpp
+@@ -95,7 +95,7 @@ static void resolveLibrary()
+     if (!lib.load())
+ #endif
+     {
+-        lib.setFileName(QLatin1String("resolv"));
++        lib.setFileName(QLatin1String("@glibc@/lib/libresolv"));
+         if (!lib.load())
+             return;
+     }
