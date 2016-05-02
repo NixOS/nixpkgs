@@ -234,7 +234,8 @@ in
 
     systemd.services.grsec-lock = mkIf cfg.config.sysctl {
       description     = "grsecurity sysctl-lock Service";
-      requires        = [ "systemd-sysctl.service" ];
+      wants           = [ "systemd-sysctl.service" ];
+      after           = [ "systemd-sysctl.service" ];
       wantedBy        = [ "multi-user.target" ];
       serviceConfig.Type = "oneshot";
       serviceConfig.RemainAfterExit = "yes";
