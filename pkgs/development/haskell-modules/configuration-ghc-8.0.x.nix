@@ -105,4 +105,6 @@ self: super: {
 
   pointed        = super.pointed_5;
 
+  reducers       = doJailbreak super.reducers;
+
 }
