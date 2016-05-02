@@ -101,4 +101,6 @@ self: super: {
 
   monads-tf      = doJailbreak super.monads-tf;
 
+  parsers        = doJailbreak super.parsers;
+
 }
