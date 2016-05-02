@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mmhzi4483mkak47wj255a36g3v0yilxwfwlbckr1hssinri5m7q";
   };
 
-  patches = [ ./libressl.patch ./remove-mkdir-var.patch ];
+  patches = [ ./remove-mkdir-var.patch ];
 
   buildInputs = [ openssl libtool perl libxml2 ];
 
