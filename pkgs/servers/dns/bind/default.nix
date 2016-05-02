@@ -1,13 +1,13 @@
 { stdenv, fetchurl, openssl, libtool, perl, libxml2 }:
 
-let version = "9.10.3-P4"; in
+let version = "9.10.4"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0giys46ifypysf799w9v58kbaz1v3fbdzw3s212znifzzfsl9h1a";
+    sha256 = "0mmhzi4483mkak47wj255a36g3v0yilxwfwlbckr1hssinri5m7q";
   };
 
   patches = [ ./libressl.patch ./remove-mkdir-var.patch ];
