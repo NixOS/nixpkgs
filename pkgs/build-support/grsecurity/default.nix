@@ -90,6 +90,10 @@ let
         GRKERNSEC y
         ${grsecMainConfig}
 
+        # The paxmarks mechanism relies on ELF header markings, but the default
+        # grsecurity configuration only enables xattr markings
+        PAX_PT_PAX_FLAGS y
+
         ${if cfg.config.restrictProc then
             "GRKERNSEC_PROC_USER y"
           else
