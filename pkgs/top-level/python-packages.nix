@@ -13095,6 +13095,50 @@ in modules // {
     };
   };
 
+  nltkFun = { withData }: buildPythonPackage rec {
+    name = "nltk-${version}";
+    version = "3.2.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nltk/${name}.tar.gz";
+      sha256 = "0skxbhnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+    };
+
+    propagatedBuildInputs = with self; [
+      nose pyparsing
+    ] ++ optional withData nltk-data;
+
+    doCheck = withData;
+
+    meta = {
+      homepage = http://www.nltk.org;
+      description = "A leading platform for building Python programs to work with human language data";
+      license = lincenses.asl20;
+    };
+  };
+
+  nltk = self.nltkFun {
+    withData = true;
+  };
+  nltkMin = self.nltkFun {
+    withData = false;
+  };
+
+  nltk-data = stdenv.mkDerivation rec {
+    name = "nltk-data";
+    buildInputs = [
+      self.nltkMin
+    ];
+
+    outputHashAlgo = "sha256";
+    outputHash = "0skxahnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+
+    builder = pkgs.writeText "nltk-data-builder" ''
+      export PYTHONPATH="${python.sitePackages}:${self.nltkMin}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+      ${python.interpreter} -m nltk.downloader all -d $out
+    '';
+  };
+
   nose = buildPythonPackage rec {
     version = "1.3.7";
     name = "nose-${version}";
