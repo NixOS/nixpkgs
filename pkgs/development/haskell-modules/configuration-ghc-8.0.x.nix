@@ -149,4 +149,6 @@ self: super: {
     };
   }));
 
+  trifecta       = doJailbreak super.trifecta;
+
 }
