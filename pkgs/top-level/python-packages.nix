@@ -23203,6 +23203,29 @@ in modules // {
     };
   };
 
+  you-get = buildPythonApplication rec {
+    version = "0.4.390";
+    name = "you-get-${version}";
+    disabled = !isPy3k;
+
+    # Tests aren't packaged, but they all hit the real network so
+    # probably aren't suitable for a build environment anyway.
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/you-get/${name}.tar.gz";
+      sha256 = "17hs0g9yvgvkmr7p1cz39mbbvb40q65qkc31j3ixc2f873gahagw";
+    };
+
+    meta = {
+      description = "A tiny command line utility to download media contents from the web";
+      homepage = https://you-get.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ ryneeverett ];
+      platforms = platforms.all;
+    };
+  };
+
   zope_broken = buildPythonPackage rec {
     name = "zope.broken-3.6.0";
 

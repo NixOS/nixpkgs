@@ -14656,6 +14656,8 @@ in
 
   inherit (gnome3) yelp;
 
+  inherit (python3Packages) you-get;
+
   inherit (pythonPackages) youtube-dl;
 
   qgis = callPackage ../applications/gis/qgis {};
