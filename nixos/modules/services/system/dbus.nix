@@ -10,6 +10,16 @@ let
 
   homeDir = "/var/run/dbus";
 
+  systemExtraxml = concatStrings (flip concatMap cfg.packages (d: [
+    "<servicedir>${d}/share/dbus-1/system-services</servicedir>"
+    "<includedir>${d}/etc/dbus-1/system.d</includedir>"
+  ]));
+
+  sessionExtraxml = concatStrings (flip concatMap cfg.packages (d: [
+    "<servicedir>${d}/share/dbus-1/services</servicedir>"
+    "<includedir>${d}/etc/dbus-1/session.d</includedir>"
+  ]));
+
   configDir = pkgs.stdenv.mkDerivation {
     name = "dbus-conf";
 
@@ -19,46 +29,16 @@ let
     buildCommand = ''
       mkdir -p $out
 
-      cp -v ${pkgs.dbus.daemon}/etc/dbus-1/system.conf $out/system.conf
+      sed '${./dbus-system-local.conf.in}' \
+        -e 's,@servicehelper@,${config.security.wrapperDir}/dbus-daemon-launch-helper,g' \
+        -e 's,@extra@,${systemExtraxml},' \
+        > "$out/system-local.conf"
 
-      # !!! Hm, these `sed' calls are rather error-prone...
-
-      # Tell the daemon where the setuid wrapper around
-      # dbus-daemon-launch-helper lives.
-      sed -i $out/system.conf \
-          -e 's|<servicehelper>.*/libexec/dbus-daemon-launch-helper|<servicehelper>${config.security.wrapperDir}/dbus-daemon-launch-helper|'
-
-      # Add the system-services and system.d directories to the system
-      # bus search path.
-      sed -i $out/system.conf \
-          -e 's|<standard_system_servicedirs/>|${systemServiceDirs}|' \
-          -e 's|<includedir>system.d</includedir>|${systemIncludeDirs}|'
-
-      cp ${pkgs.dbus.daemon}/etc/dbus-1/session.conf $out/session.conf
-
-      # Add the services and session.d directories to the session bus
-      # search path.
-      sed -i $out/session.conf \
-          -e 's|<standard_session_servicedirs />|${sessionServiceDirs}&|' \
-          -e 's|<includedir>session.d</includedir>|${sessionIncludeDirs}|'
-    ''; # */
+      sed '${./dbus-session-local.conf.in}' \
+        -e 's,@extra@,${sessionExtraxml},' \
+        > "$out/session-local.conf"
+    '';
   };
-
-  systemServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/system-services</servicedir> ")
-    cfg.packages;
-
-  systemIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/system.d</includedir> ")
-    cfg.packages;
-
-  sessionServiceDirs = concatMapStrings
-    (d: "<servicedir>${d}/share/dbus-1/services</servicedir> ")
-    cfg.packages;
-
-  sessionIncludeDirs = concatMapStrings
-    (d: "<includedir>${d}/etc/dbus-1/session.d</includedir> ")
-    cfg.packages;
 
 in
 
@@ -72,7 +52,7 @@ in
 
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         internal = true;
         description = ''
           Whether to start the D-Bus message bus daemon, which is
@@ -82,7 +62,7 @@ in
 
       packages = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           Packages whose D-Bus configuration files should be included in
           the configuration of the D-Bus system-wide message bus.
@@ -129,10 +109,10 @@ in
         permissions = "u+rx,g+rx,o-rx";
       };
 
-    services.dbus.packages =
-      [ "/nix/var/nix/profiles/default"
-        config.system.path
-      ];
+    services.dbus.packages = [
+      pkgs.dbus
+      config.system.path
+    ];
 
     # Don't restart dbus-daemon. Bad things tend to happen if we do.
     systemd.services.dbus.reloadIfChanged = true;
