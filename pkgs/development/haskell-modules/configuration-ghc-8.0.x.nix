@@ -99,4 +99,6 @@ self: super: {
 
   lucid-svg      = doJailbreak super.lucid-svg;
 
+  monads-tf      = doJailbreak super.monads-tf;
+
 }
