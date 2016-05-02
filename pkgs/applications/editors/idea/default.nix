@@ -148,14 +148,14 @@ in
 
   android-studio = buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "2.0.0.0";
-    build = "143.2443734";
+    version = "2.0.0.20";
+    build = "143.2739321";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${build}-linux.zip";
-      sha256 = "0j6bi87hb5jxjwfhfya64s673vdkdslsqc6sqa4zl97sabvafk2w";
+      sha256 = "14bb4ha868015wm8v8vivxfylfzm7gbvf01h82w4bhzdbzgn1zpr";
     };
   };
 
@@ -233,25 +233,25 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "5.0.3";
-    build = "143.1559.1";
+    version = "2016.1.2";
+    build = "145.844";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1xb3qxhl8ln488v0hmjqkzpyypm7wh941c7syi4cs7plbdp6w4c2";
+      sha256 = "1kxwjg5l2fzpn6hr0iir0dv1n5l02jl02aff9wrj95186wxivg3a";
     };
   };
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "5.0.3";
-    build = "143.1559.1";
+    version = "2016.1.2";
+    build = "145.844";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1v2g9867nn3id1zfbg4zwj0c0z9d72rl9c1dz6vs2c4j0y4gy9xl";
+      sha256 = "1kwi9d80r2yp5ivbvslrj70iam966rv4a8diajbwpcc26m7rj3kk";
     };
   };
 

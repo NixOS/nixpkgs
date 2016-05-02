@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pkgconfig, qtbase, qtsvg, qtwebkit, sip, pythonDBus
-, lndir, makeWrapper }:
+, lndir, makeWrapper, qmakeHook }:
 
 let
   version = "5.5.1";
@@ -21,13 +21,12 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     python pkgconfig makeWrapper lndir
-    qtbase qtsvg qtwebkit
+    qtbase qtsvg qtwebkit qmakeHook
   ];
 
   propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
-    runHook preConfigure
     mkdir -p $out
     lndir ${pythonDBus} $out
 
@@ -45,7 +44,6 @@ in stdenv.mkDerivation {
       --destdir=$out/lib/${python.libPrefix}/site-packages \
       --sipdir=$out/share/sip \
       --designer-plugindir=$out/plugins/designer
-    runHook postConfigure
   '';
 
   postInstall = ''

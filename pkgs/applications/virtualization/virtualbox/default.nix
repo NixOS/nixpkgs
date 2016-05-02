@@ -33,7 +33,7 @@ let
           "$mod/Module.symvers"
       fi
       INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
-      make -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
+      make -j $NIX_BUILD_CORES -C "$MODULES_BUILD_DIR" DEPMOD=/do_not_use_depmod \
         "M=\$(PWD)/$mod" BUILD_TYPE="${buildType}" ${action}
     done
   '';
@@ -146,7 +146,7 @@ in stdenv.mkDerivation {
 
   buildPhase = ''
     source env.sh
-    kmk BUILD_TYPE="${buildType}"
+    kmk -j $NIX_BUILD_CORES BUILD_TYPE="${buildType}"
     ${forEachModule "modules"}
   '';
 

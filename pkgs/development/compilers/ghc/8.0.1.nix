@@ -7,12 +7,12 @@ let
 
 in 
 stdenv.mkDerivation rec {
-  version = "8.0.0.20160411";
+  version = "8.0.0.20160421";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.1-rc3/${name}-src.tar.xz";
-    sha256 = "0cgk0li3pwag65xcrjci8l840aphklymjfmsrq0qpdi8bpsmi97d";
+    url = "https://downloads.haskell.org/~ghc/8.0.1-rc4/${name}-src.tar.xz";
+    sha256 = "183p1ilk8rlndi1vmg2vmlx00s18q3j31kin85qpbvicsxb8j1j1";
   };
 
   patches = [

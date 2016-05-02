@@ -3,7 +3,7 @@
 { stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
 , libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
 , libsndfile, pkgconfig, libpulseaudio, makeQtWrapper, qtbase, redland
-, rubberband, serd, sord, vampSDK, fftwFloat
+, qmakeHook, rubberband, serd, sord, vampSDK, fftwFloat
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libsndfile qtbase fftw fftwFloat bzip2 librdf rubberband
+    [ libsndfile qtbase qmakeHook fftw fftwFloat bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord
@@ -32,13 +32,12 @@ stdenv.mkDerivation rec {
       libX11
     ];
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ makeQtWrapper qmakeHook ];
 
-  buildPhase = ''
+  configurePhase = ''
     for i in sonic-visualiser svapp svcore svgui;
-      do cd $i && qmake -makefile PREFIX=$out && cd ..;
+      do cd $i && qmake PREFIX=$out && cd ..;
     done
-    make
   '';
 
   installPhase = ''

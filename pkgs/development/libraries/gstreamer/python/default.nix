@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-python-1.4.0";
+  name = "gst-python-1.8.0";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "0gixsp46mv7fvhk669q60wfk9w2lc02sdb1qipq066xlrqlhrr5i";
+    sha256 = "1spn49x7yaj69df6mxh9wwcs0y3abswkfpk84njs71lzqlbzyiff";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];

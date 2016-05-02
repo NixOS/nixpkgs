@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "2.5.0";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/h/h5py/${name}.tar.gz";
+    url = "mirror://pypi/h/h5py/${name}.tar.gz";
     sha256 = "9833df8a679e108b561670b245bcf9f3a827b10ccb3a5fa1341523852cfac2f6";
   };
 

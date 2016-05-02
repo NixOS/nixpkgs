@@ -11,6 +11,7 @@
 { swingSupport ? true
 , stdenv
 , requireFile
+, makeWrapper
 , unzip
 , file
 , xorg ? null
@@ -83,6 +84,8 @@ let result = stdenv.mkDerivation rec {
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;
 
+  buildInputs = [ makeWrapper ];
+
   # See: https://github.com/NixOS/patchelf/issues/10
   dontStrip = 1;
 
@@ -118,12 +121,6 @@ let result = stdenv.mkDerivation rec {
         fi
       done
     fi
-
-    # construct the rpath
-    rpath=
-    for i in $libraries; do
-        rpath=$rpath''${rpath:+:}$i/lib:$i/lib64
-    done
 
     if test -z "$installjdk"; then
       jrePath=$out
@@ -165,6 +162,10 @@ let result = stdenv.mkDerivation rec {
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
     EOF
+
+    # Oracle Java Mission Control needs to know where libgtk-x11 and related is
+    wrapProgram "$out/bin/jmc" \
+        --suffix-each LD_LIBRARY_PATH ':' "${rpath}" \
   '';
 
   inherit installjdk pluginSupport;
@@ -175,6 +176,8 @@ let result = stdenv.mkDerivation rec {
   libraries =
     [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype gnome.pango gnome.gtk cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
+
+  rpath = stdenv.lib.strings.makeLibraryPath libraries;
 
   passthru.mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
 

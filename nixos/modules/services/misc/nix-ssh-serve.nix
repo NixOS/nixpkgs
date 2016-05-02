@@ -41,7 +41,7 @@ with lib;
         PermitTTY no
         PermitTunnel no
         X11Forwarding no
-        ForceCommand ${config.nix.package}/bin/nix-store --serve
+        ForceCommand ${config.nix.package.out}/bin/nix-store --serve
       Match All
     '';
 

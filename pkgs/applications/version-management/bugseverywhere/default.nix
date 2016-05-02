@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
     src = fetchurl {
       url =
-      "https://pypi.python.org/packages/source/b/bugs-everywhere/bugs-everywhere-${version}.tar.gz";
+      "mirror://pypi/b/bugs-everywhere/bugs-everywhere-${version}.tar.gz";
       sha256 = "1ikm3ckwpimwcvx32vy7gh5gbp7q750j3327m17nvrj99g3daz2d";
     };
 

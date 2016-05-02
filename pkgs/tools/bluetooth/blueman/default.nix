@@ -7,11 +7,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "blueman-${version}";
-  version = "2.0.3";
+  version = "2.0.4";
    
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${name}.tar.xz";
-    sha256 = "09aqlk4c2qzqpmyf7b40sic7d45c1l8fyrb9f3s22b8w83j0adi4";
+    sha256 = "03s305mbc57nl3sq5ywh9casz926k4aqnylgaidli8bmgz1djbg9";
   };
 
   nativeBuildInputs = [ intltool pkgconfig pythonPackages.wrapPython pythonPackages.cython ];

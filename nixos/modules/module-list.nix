@@ -47,7 +47,6 @@
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
   ./installer/tools/auto-upgrade.nix
-  ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
@@ -71,6 +70,7 @@
   ./programs/kbdlight.nix
   ./programs/light.nix
   ./programs/man.nix
+  ./programs/mosh.nix
   ./programs/nano.nix
   ./programs/screen.nix
   ./programs/shadow.nix
@@ -158,6 +158,7 @@
   ./services/desktops/gnome3/tracker.nix
   ./services/desktops/profile-sync-daemon.nix
   ./services/desktops/telepathy.nix
+  ./services/development/hoogle.nix
   ./services/games/factorio.nix
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
@@ -182,6 +183,7 @@
   ./services/hardware/thermald.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
+  ./services/logging/graylog.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
@@ -215,6 +217,7 @@
   ./services/misc/dictd.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
+  ./services/misc/emby.nix
   ./services/misc/etcd.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
@@ -336,6 +339,7 @@
   ./services/networking/kippo.nix
   ./services/networking/lambdabot.nix
   ./services/networking/libreswan.nix
+  ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
   ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
@@ -398,6 +402,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/xinetd.nix
+  ./services/networking/zerobin.nix
   ./services/networking/zerotierone.nix
   ./services/networking/znc.nix
   ./services/printing/cupsd.nix

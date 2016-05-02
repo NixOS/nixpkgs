@@ -1,6 +1,5 @@
 { stdenv, fetchurl
 , windows ? null, variant ? null, pcre
-, withCharSize ? 8
 }:
 
 with stdenv.lib;

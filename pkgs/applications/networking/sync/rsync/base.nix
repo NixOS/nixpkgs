@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 rec {
-  version = "3.2.1";
+  version = "3.1.2";
   src = fetchurl {
     # signed with key 0048 C8B0 26D4 C96F 0E58  9C2F 6C85 9FB1 4B96 A8C5
     url = "mirror://samba/rsync/src/rsync-${version}.tar.gz";

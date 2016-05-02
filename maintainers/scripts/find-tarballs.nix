@@ -14,7 +14,7 @@ let
     operator = const [ ];
   });
 
-  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; type = drv.outputHashAlgo; }) fetchurlDependencies;
+  urls = map (drv: { url = head (drv.urls or [ drv.url ]); hash = drv.outputHash; type = drv.outputHashAlgo; name = drv.name; }) fetchurlDependencies;
 
   fetchurlDependencies =
     filter

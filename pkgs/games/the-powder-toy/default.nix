@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, SDL, lua, fftwFloat }:
 
-let version = "90.2.322";
+let version = "91.3.328";
 in
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "simtr";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "1rlxnk8icymalnr3j4bgpklq1dhhs0rpsyjx97isqqcwm2ys03q3";
+    sha256 = "0krg4d2m8cnfabm5qq7wr1y53h21i49xjcggzg98xjd0972zvfrk";
   };
 
   patches = [ ./fix-env.patch ];

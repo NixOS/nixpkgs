@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg
 }:
 
 let
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig libtool zlib fontconfig freetype ghostscript libjpeg
-      openexr libpng librsvg libtiff libxml2
+      openexr libpng librsvg libtiff libxml2 openjpeg
     ];
 
   propagatedBuildInputs =

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, unzip, tcl }:
 
 stdenv.mkDerivation {
-  name = "sqlite3_analzer-3.8.10.1";
+  name = "sqlite3_analyzer-3.8.10.1";
 
   src = fetchurl {
     url = "https://www.sqlite.org/2015/sqlite-src-3081001.zip";

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "qwt-5.2.3";
@@ -9,16 +9,15 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
   postPatch = ''
     sed -e "s@\$\$\[QT_INSTALL_PLUGINS\]@$out/lib/qt4/plugins@" -i designer/designer.pro
     sed -e "s|INSTALLBASE.*=.*|INSTALLBASE = $out|g" -i qwtconfig.pri
   '';
 
-  configurePhase = ''
-    runHook preConfigure
-    qmake INSTALLBASE=$out -after doc.path=$out/share/doc/${name} -r
-    runHook postConfigure
+  preConfigure = ''
+    qmakeFlags="$qmakeFlags INSTALLBASE=$out -after doc.path=$out/share/doc/${name}"
   '';
 
   meta = with stdenv.lib; {

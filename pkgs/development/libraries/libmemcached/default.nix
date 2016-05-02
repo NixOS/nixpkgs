@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
       sha256 = "1nvxwdkxj2a2g39z0g8byxjwnw4pa5xlvsmdk081q63vmfywh7zb";
     });
 
-  buildInputs = [ cyrus_sasl libevent ];
+  buildInputs = [ libevent ];
+  propagatedBuildInputs = [ cyrus_sasl ];
 
   meta = with stdenv.lib; {
     homepage = http://libmemcached.org;

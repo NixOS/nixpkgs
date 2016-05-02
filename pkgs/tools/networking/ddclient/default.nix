@@ -9,6 +9,8 @@ buildPerlPackage rec {
     sha256 = "1j8zdn7fy7i0bjk3jf0hxnbnshc2yf054vxq64imxdpfd7n5zgfy";
   };
 
+  outputs = [ "out" ];
+
   buildInputs = [ perlPackages.IOSocketSSL perlPackages.DigestSHA1 ];
 
   patches = [ ./ddclient-line-buffer-stdout.patch ];

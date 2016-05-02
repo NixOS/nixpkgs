@@ -9,7 +9,8 @@ kdeFramework {
   propagatedBuildInputs = [ kauth kconfig kcodecs ki18n kwidgetsaddons ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   postInstall = ''
-    wrapQtProgram "$out/bin/preparetips5"
+    moveToOutput "bin/preparetips5" "$dev"
+    wrapQtProgram "$dev/bin/preparetips5"
   '';
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];

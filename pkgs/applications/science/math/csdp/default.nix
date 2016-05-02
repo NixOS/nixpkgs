@@ -15,6 +15,7 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
+    rm -f INSTALL
     mkdir -p $out/bin
   '';
 

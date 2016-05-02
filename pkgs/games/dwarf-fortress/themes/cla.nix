@@ -3,14 +3,15 @@
 # On upgrade check https://github.com/DFgraphics/CLA/blob/master/manifest.json
 # for compatibility information.
 
-stdenv.mkDerivation {
-  name = "cla-theme-20160128";
+stdenv.mkDerivation rec {
+  name = "cla-theme-${version}";
+  version = "42.06-v22";
 
   src = fetchFromGitHub {
     owner = "DFgraphics";
     repo = "CLA";
-    rev = "94088b778ed6f91cbddcd3e33aa1e5efa67f3101";
-    sha256 = "0rx1375x9s791k9wzvj7sxcrv4xaggibxymzirayznvavr7zcsv1";
+    rev = version;
+    sha256 = "1rr52j1wns17axc27fab0wn0338axzwkqp7cpa690kb3bl1y0pf5";
   };
 
   installPhase = ''

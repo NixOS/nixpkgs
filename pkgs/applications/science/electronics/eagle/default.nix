@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/bin
     cat > "$out"/bin/eagle << EOF
     #!${stdenv.shell}
-    export LD_LIBRARY_PATH="${stdenv.cc.cc}/lib:${libPath}"
+    export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:${libPath}"
     export LD_PRELOAD="$out/lib/eagle_fixer.so"
     export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"
     exec "$dynlinker" "$out/eagle-${version}/bin/eagle" "\$@"

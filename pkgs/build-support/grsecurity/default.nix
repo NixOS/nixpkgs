@@ -90,6 +90,10 @@ let
         GRKERNSEC y
         ${grsecMainConfig}
 
+        # The paxmarks mechanism relies on ELF header markings, but the default
+        # grsecurity configuration only enables xattr markings
+        PAX_PT_PAX_FLAGS y
+
         ${if cfg.config.restrictProc then
             "GRKERNSEC_PROC_USER y"
           else
@@ -117,8 +121,7 @@ let
       # additional build inputs for gcc plugins, required by some PaX/grsec features
       nativeBuildInputs = args.nativeBuildInputs ++ (with pkgs; [ gmp libmpc mpfr ]);
 
-      preConfigure = args.preConfigure or "" + ''
-        rm localversion-grsec
+      preConfigure = (args.preConfigure or "") + ''
         echo ${localver grkern} > localversion-grsec
       '';
     };

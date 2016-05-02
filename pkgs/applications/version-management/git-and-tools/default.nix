@@ -3,12 +3,7 @@
  */
 args @ {pkgs}: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchgit fetchurl subversion;
-
-  gitBase = lib.makeOverridable (import ./git) {
-    inherit fetchurl stdenv curl openssl zlib expat perl python gettext gnugrep
-      asciidoc xmlto docbook2x docbook_xsl docbook_xml_dtd_45 libxslt cpio tcl
-      tk makeWrapper subversionClient gzip openssh libiconv;
+  gitBase = callPackage ./git {
     texinfo = texinfo5;
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
@@ -56,6 +51,8 @@ rec {
 
   git-extras = callPackage ./git-extras { };
 
+  git-hub = callPackage ./git-hub { };
+
   git-imerge = callPackage ./git-imerge { };
 
   git-radar = callPackage ./git-radar { };
@@ -64,44 +61,28 @@ rec {
 
   git-stree = callPackage ./git-stree { };
 
-  git2cl = import ./git2cl {
-    inherit fetchgit stdenv perl;
-  };
+  git2cl = callPackage ./git2cl { };
 
-  gitFastExport = import ./fast-export {
-    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
-  };
+  gitFastExport = callPackage ./fast-export { };
 
   gitRemoteGcrypt = callPackage ./git-remote-gcrypt { };
 
   gitflow = callPackage ./gitflow { };
 
-  hub = import ./hub {
-    inherit go;
-    inherit stdenv fetchgit;
+  hub = callPackage ./hub {
     inherit (darwin) Security;
   };
 
-  qgit = import ./qgit {
-    inherit fetchurl stdenv;
-    inherit (xorg) libXext libX11;
-    qt = qt4;
-  };
+  qgit = callPackage ./qgit { };
 
-  qgitGit = import ./qgit/qgit-git.nix {
-    inherit fetchurl sourceFromHead stdenv;
-    inherit (xorg) libXext libX11;
-    qt = qt4;
-  };
+  qgitGit = callPackage ./qgit/qgit-git.nix { };
 
-  stgit = import ./stgit {
-    inherit fetchurl stdenv python git;
+  stgit = callPackage ./stgit {
   };
 
   subgit = callPackage ./subgit { };
 
-  svn2git = import ./svn2git {
-    inherit stdenv fetchurl ruby makeWrapper;
+  svn2git = callPackage ./svn2git {
     git = gitSVN;
   };
 
@@ -109,9 +90,7 @@ rec {
 
   tig = callPackage ./tig { };
 
-  topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl;
-  };
+  topGit = callPackage ./topgit { };
 
   transcrypt = callPackage ./transcrypt { };
 }

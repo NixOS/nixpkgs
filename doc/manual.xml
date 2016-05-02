@@ -21,7 +21,7 @@
   <xi:include href="coding-conventions.xml" />
   <xi:include href="submitting-changes.xml" />
   <xi:include href="haskell-users-guide.xml" />
-  <xi:include href="erlang-users-guide.xml" />
+  <xi:include href="beam-users-guide.xml" />
   <xi:include href="contributing.xml" />
 
 </book>

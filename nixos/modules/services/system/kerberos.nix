@@ -4,7 +4,7 @@ let
 
   inherit (lib) mkOption mkIf singleton;
 
-  inherit (pkgs) heimdal;
+  inherit (pkgs) heimdalFull;
 
   stateDir = "/var/heimdal";
 in
@@ -33,7 +33,7 @@ in
 
   config = mkIf config.services.kerberos_server.enable {
 
-    environment.systemPackages = [ heimdal ];
+    environment.systemPackages = [ heimdalFull ];
 
     services.xinetd.enable = true;
     services.xinetd.services = lib.singleton
@@ -42,7 +42,7 @@ in
         protocol = "tcp";
         user = "root";
         server = "${pkgs.tcp_wrappers}/sbin/tcpd";
-        serverArgs = "${pkgs.heimdal}/sbin/kadmind";
+        serverArgs = "${pkgs.heimdalFull}/sbin/kadmind";
       };
 
     systemd.services.kdc = {
@@ -51,13 +51,13 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      script = "${heimdal}/sbin/kdc";
+      script = "${heimdalFull}/sbin/kdc";
     };
 
     systemd.services.kpasswdd = {
       description = "Kerberos Password Changing daemon";
       wantedBy = [ "multi-user.target" ];
-      script = "${heimdal}/sbin/kpasswdd";
+      script = "${heimdalFull}/sbin/kpasswdd";
     };
   };
 

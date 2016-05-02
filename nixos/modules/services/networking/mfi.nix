@@ -10,6 +10,7 @@ let
     { what = "${pkgs.mfi}/dl"; where = "${stateDir}/dl"; }
     { what = "${pkgs.mfi}/lib"; where = "${stateDir}/lib"; }
     { what = "${pkgs.mongodb248}/bin"; where = "${stateDir}/bin"; }
+    { what = "${cfg.dataDir}"; where = "${stateDir}/data"; }
   ];
   systemdMountPoints = map (m: "${utils.escapeSystemdPath m.where}.mount") mountPoints;
   ports = [ 6080 6880 6443 6843 ];
@@ -22,6 +23,15 @@ in
         type = types.bool;
         default = true;
         description = "Whether to open TCP ports ${concatMapStrings (a: "${toString a} ") ports}for the services.";
+      };
+      dataDir = mkOption {
+        type = types.str;
+        default = "${stateDir}/data";
+        description = ''
+          Where to store the database and other data.
+
+          This directory will be bind-mounted to ${stateDir}/data as part of the service startup.
+        '';
       };
     };
   };

@@ -65,7 +65,7 @@ rec {
     mkdir -p $out/libexec/
     mv $out/bin $out/libexec/$(uname -m)
     mkdir -p $out/bin
-    for i in "$out/libexec/"* "$out/libexec/"*/* ; do
+    for i in "$out/libexec/"* "$out/libexec/"*"/"* ; do
         test \( \! -d "$i" \) -a \( -x "$i" -o -L "$i" \) || continue
 
       if [ -x "$i" ]; then
@@ -105,7 +105,7 @@ rec {
 
     PATH=$PATH:$out/bin mktexlsr $out/share/texmf*
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    for prog in $out/bin/*; do
+    for prog in "$out/bin/"*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${poppler.out}/lib"
     done
   '' ) [ "minInit" "defEnsureDir" "doUnpack" "doMakeInstall" "promoteLibexec" "patchShebangsInterim"];
@@ -156,5 +156,6 @@ rec {
     maintainers = with maintainers; [ lovek323 raskin jwiegley ];
     platforms   = platforms.unix;
     hydraPlatforms = [];
+    broken = true; # https://github.com/NixOS/nixpkgs/issues/14807
   };
 }

@@ -51,8 +51,10 @@ let
       let
         version = (builtins.parseDrvName breeze-qt5.name).version;
       in
-        symlinkJoin "breeze-${version}"
-        (map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ]);
+        symlinkJoin {
+          name = "breeze-${version}";
+          paths = map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ];
+        };
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
     kde-gtk-config = callPackage ./kde-gtk-config {};
     kdecoration = callPackage ./kdecoration.nix {};
@@ -81,6 +83,7 @@ let
     plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
     polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
     powerdevil = callPackage ./powerdevil.nix {};
+    startkde = callPackage ./startkde {};
     systemsettings = callPackage ./systemsettings.nix {};
   };
 

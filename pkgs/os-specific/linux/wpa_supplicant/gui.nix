@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4, inkscape, wpa_supplicant }:
+{ stdenv, fetchurl, qt4, qmake4Hook, inkscape, wpa_supplicant }:
 
 stdenv.mkDerivation {
   name = "wpa_gui-${wpa_supplicant.version}";
@@ -7,14 +7,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ qt4 ];
 
-  nativeBuildInputs = [ inkscape ];
+  nativeBuildInputs = [ inkscape qmake4Hook ];
 
   prePatch = "cd wpa_supplicant/wpa_gui-qt4";
 
-  configurePhase =
+  preConfigure =
     ''
       lrelease wpa_gui.pro
-      qmake
     '';
 
   # We do not install .xpm icons. First of all, I don't know where they should

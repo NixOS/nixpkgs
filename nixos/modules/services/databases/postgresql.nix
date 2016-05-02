@@ -242,7 +242,7 @@ in
 
             if test -e "${cfg.dataDir}/.first_startup"; then
               ${optionalString (cfg.initialScript != null) ''
-                cat "${cfg.initialScript}" | psql --port=${toString cfg.port} postgres
+                psql -f "${cfg.initialScript}" --port=${toString cfg.port} postgres
               ''}
               rm -f "${cfg.dataDir}/.first_startup"
             fi

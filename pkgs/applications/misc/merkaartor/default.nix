@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt4, boost, proj, gdal_1_11}:
+{ stdenv, fetchurl, qt4, qmake4Hook, boost, proj, gdal_1_11 }:
 
 stdenv.mkDerivation rec {
   name = "merkaartor-0.18.1";
@@ -7,11 +7,9 @@ stdenv.mkDerivation rec {
     sha256 = "17qk45pmlxqigla1915dvn9pp91y85d2bkcaap4g3m8mk1crcsix";
   };
 
-  configurePhase = ''
-    qmake -makefile PREFIX=$out
-  '';
-
   buildInputs = [ qt4 boost proj gdal_1_11 ];
+
+  nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
     description = "An openstreetmap editor";

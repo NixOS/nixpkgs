@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 stdenv.mkDerivation rec {
   name = "navipowm-0.2.4";
 
@@ -7,9 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kdih8kwpgcgfh6l6njkr9gq2j5hv39xvzmzgvhip553kn6bss7b";
   };
 
-  configurePhase = ''
+  preConfigure = ''
     cd Qt/KDevelop
-    qmake
   '';
 
   installPhase = ''
@@ -20,6 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
   meta = {
     homepage = http://navipowm.sourceforge.net/;

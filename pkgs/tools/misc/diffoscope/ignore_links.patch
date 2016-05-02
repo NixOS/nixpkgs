@@ -1,0 +1,25 @@
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+
+Nix deduplicates by hard-linking identical files, so it's normal for
+the the number of links to a file to differ.
+---
+diff --git a/diffoscope/comparators/directory.py b/diffoscope/comparators/directory.py
+index 7d1cd75..bd91eb0 100644
+--- a/diffoscope/comparators/directory.py
++++ b/diffoscope/comparators/directory.py
+@@ -47,6 +47,7 @@ class Stat(Command):
+     FILE_RE = re.compile(r'^\s*File:.*$')
+     DEVICE_RE = re.compile(r'Device: [0-9a-f]+h/[0-9]+d')
+     INODE_RE = re.compile(r'Inode: [0-9]+')
++    LINKS_RE = re.compile(r'Links: [0-9]+')
+     ACCESS_TIME_RE = re.compile(r'^Access: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
+     CHANGE_TIME_RE = re.compile(r'^Change: [0-9]{4}-[0-9]{2}-[0-9]{2}.*$')
+
+@@ -55,6 +56,7 @@ class Stat(Command):
+         line = Stat.FILE_RE.sub('', line)
+         line = Stat.DEVICE_RE.sub('', line)
+         line = Stat.INODE_RE.sub('', line)
++        line = Stat.LINKS_RE.sub('', line)
+         line = Stat.ACCESS_TIME_RE.sub('', line)
+         line = Stat.CHANGE_TIME_RE.sub('', line)
+         return line.encode('utf-8')

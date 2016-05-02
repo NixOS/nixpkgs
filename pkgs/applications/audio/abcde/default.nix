@@ -3,13 +3,13 @@
 , perl, DigestSHA, MusicBrainz, MusicBrainzDiscID
 , makeWrapper }:
 
-let version = "2.7";
+let version = "2.7.2";
 in
   stdenv.mkDerivation {
     name = "abcde-${version}";
     src = fetchurl {
       url = "http://abcde.einval.com/download/abcde-${version}.tar.gz";
-      sha256 = "0ikpffzvacadh6vj9qlary8126j1zrd2knp9gvivmp7y1656jj01";
+      sha256 = "1pakpi41k8yd780mfp0snhia6mmwjwxk9lcrq6gynimch8b8hfda";
     };
 
     # FIXME: This package does not support `distmp3', `eject', etc.
@@ -38,6 +38,8 @@ in
     dontPatchELF = true;
 
     buildInputs = [ makeWrapper ];
+
+    installFlags = [ "sysconfdir=$(out)/etc" ];
 
     postInstall = ''
     #   substituteInPlace "$out/bin/cddb-tool" \

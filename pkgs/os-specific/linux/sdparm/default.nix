@@ -1,11 +1,12 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "sdparm-1.09";
+stdenv.mkDerivation rec {
+  name = "sdparm-${version}";
+  version = "1.10";
 
   src = fetchurl {
-    url = http://sg.danny.cz/sg/p/sdparm-1.09.tar.xz;
-    sha256 = "0jakqyjwi72zqjzss04bally0xl0lc4710mx8da08vpmir1hfphg";
+    url = "http://sg.danny.cz/sg/p/${name}.tar.xz";
+    sha256 = "1jjq3lzgfy4r76rc26q02lv4wm5cb4dx5nh913h489zjrr4f3jbx";
   };
 
   meta = with stdenv.lib; {

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ];
 
-  configureFlags = "--with-python=${python}";
+  configureFlags = "--with-python=${python} --exec_prefix=$dev";
 
   enableParallelBuilding = true;
 

@@ -8,26 +8,26 @@ let
 in
 stdenv.mkDerivation rec {
   name = "geolite-legacy-${version}";
-  version = "2016-02-29";
+  version = "2016-05-02";
 
   srcGeoIP = fetchDB
     "GeoLiteCountry/GeoIP.dat.gz" "GeoIP.dat.gz"
-    "00y8j0jxk60wscm6wiz3mmmj5xfvwqnmxjm2ar8ngkl8mxzl12gm";
+    "0g34nwilhim73f0qp0yq3lfx54c42wy70ra4dkmwlfddyq3ln0xd";
   srcGeoIPv6 = fetchDB
     "GeoIPv6.dat.gz" "GeoIPv6.dat.gz"
-    "0l6wv246kzm63qqmqr9lzpbvbanfwfkvn9bj34jn2djp4rfrkjrf";
+    "12k4nmfblm9c7kj4v7cyl6sgfgdfv2jdx4fl7nxfzpk1km7yc5na";
   srcGeoLiteCity = fetchDB
     "GeoLiteCity.dat.xz" "GeoIPCity.dat.xz"
-    "1095jar3vyax0gmj7wc0w28rpjmq2j1b6wk5yfaghyl87mad5q0f";
+    "04bi7zmmm7v9gl9vhxh0fvqfhmg9ja1lan4ff0njx7qs7lz3ak88";
   srcGeoLiteCityv6 = fetchDB
     "GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz" "GeoIPCityv6.dat.gz"
-    "0fnlznn04lpkkd7sy9r9kdl3fcp8ix7msdrncwgz26dh537ml32z";
+    "1sr2yapsfmdpl4zpf8i5rl3k65dgbq7bb1615g6wf60yw9ngh76x";
   srcGeoIPASNum = fetchDB
     "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
-    "10i4c8irvh9shbl3y0s0ffkm71vf3r290fvxjx20snqa558hkvib";
+    "04gyrb5qyy3i1p9lgnls90irq3s64y5qfcqj91nx4x68r7dixnai";
   srcGeoIPASNumv6 = fetchDB
     "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
-    "1rvbjrj98pqj9w5ql5j49b3h40496g6aralpnz1gj21v6dfrd55n";
+    "1l9j97bk3mbv5b6lxva6ig590gl7097xr0vayz5mpsfx5d37r4zw";
 
   meta = with stdenv.lib; {
     description = "GeoLite Legacy IP geolocation databases";

@@ -1,11 +1,9 @@
-{ stdenv, fetchurl, qt4, unzip }:
+{ stdenv, fetchurl, qt4, qmake4Hook, unzip }:
 
 stdenv.mkDerivation rec {
   name = "herqq-1.0.0";
 
-  buildInputs = [ qt4 unzip ];
-
-  configurePhase = "qmake PREFIX=$out herqq.pro";
+  buildInputs = [ qt4 unzip qmake4Hook ];
 
   src = fetchurl {
     url = "mirror://sourceforge/hupnp/${name}.zip";

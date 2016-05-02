@@ -48,7 +48,7 @@ in rec {
         nixos.ova.x86_64-linux
 
         #(all nixos.tests.containers)
-        #(all nixos.tests.chromium.stable)
+        (all nixos.tests.chromium.stable)
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
         nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
@@ -64,6 +64,9 @@ in rec {
         (all nixos.tests.installer.btrfsSubvols)
         (all nixos.tests.installer.btrfsSubvolDefault)
         (all nixos.tests.boot.biosCdrom)
+        (all nixos.tests.boot.biosUsb)
+        (all nixos.tests.boot.uefiCdrom)
+        (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.ipv6)
         (all nixos.tests.kde4)
         #(all nixos.tests.lightdm)

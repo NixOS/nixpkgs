@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt }:
+{ stdenv, fetchurl, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   pname = "qscintilla";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "d7c32e32582f93779de861006d87467b38b9ebc06e3d0b32e981cb24369fa417";
   };
 
-  buildInputs = [ qt ];
+  buildInputs = [ qt4 ];
+  nativeBuildInputs = [ qmake4Hook ];
 
   preConfigure = ''
     cd Qt4Qt5
@@ -20,7 +21,6 @@ stdenv.mkDerivation rec {
            -e "s,\$\$\\[QT_INSTALL_TRANSLATIONS\\],$out/share/qt/translations," \
            -e "s,\$\$\\[QT_INSTALL_DATA\\],$out/share/qt," \
            qscintilla.pro
-    qmake qscintilla.pro
   '';
 
   meta = {

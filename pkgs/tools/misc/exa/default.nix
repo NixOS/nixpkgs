@@ -4,15 +4,15 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "exa-${version}";
-  version = "2016-03-22";
+  version = "2016-04-20";
 
-  depsSha256 = "18anwh235kzziq6z7md8f3rl2xl4l9d4ivsqw9grkb7yivd5j0jk";
+  depsSha256 = "1rpynsni2r3gim10xc1qkj51wpbzafwsr99y61zh41v4vh047g1k";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
-    rev = "8805ce9e3bcd4b56f8811a686dd56c47202cdbab";
-    sha256 = "0dkvk0rsf068as6zcd01p7959rdjzm26mlkpid6z0j168gp4kh4q";
+    rev = "110a1c716bfc4a7f74f74b3c4f0a881c773fcd06";
+    sha256 = "136yxi85m50vwmqinr1wnd0h29n5yjykqqqk9ibbcmmhx8sqhjzf";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libX11, libXext, libXinerama }:
 
 stdenv.mkDerivation rec {
-  name = "herbstluftwm-0.6.2";
+  name = "herbstluftwm-0.7.0";
 
   src = fetchurl {
     url = "http://herbstluftwm.org/tarballs/${name}.tar.gz";
-    sha256 = "1b7h2zi0i9j17k1z62qw5zq7j9i8gv33pmcxnfiilzzfg8wmr7x8";
+    sha256 = "09xfs213vg1dpird61wik5bqb9yf8kh63ssy18ihf54inwqgqbvy";
   };
 
   patchPhase = ''
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "http://herbstluftwm.org/";
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

@@ -37,7 +37,7 @@ in let
       for i in sublime_text plugin_host crash_reporter; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
           $i
       done
 
@@ -57,7 +57,7 @@ in let
         --set NIX_REDIRECTS ${builtins.concatStringsSep ":" redirects}
 
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation {

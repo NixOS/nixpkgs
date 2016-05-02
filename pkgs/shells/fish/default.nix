@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     sed -e "s|expr|${coreutils}/bin/expr|" \
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
         -e "s|if which unicode_start|if true|" \
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
         -e "s|unicode_start|${kbd}/bin/unicode_start|" \
   '' + ''
         -i "$out/etc/fish/config.fish"
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
       --replace "| ul" "| ${utillinux}/bin/ul" 
 
     for cur in $out/share/fish/functions/*.fish; do
-      substituteInPlace "$cur" --replace "/usr/bin/getent" "${glibc}/bin/getent" 
+      substituteInPlace "$cur" --replace "/usr/bin/getent" "${glibc.bin}/bin/getent"
     done
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s|(hostname\||(${nettools}/bin/hostname\||" "$out/share/fish/functions/fish_prompt.fish"

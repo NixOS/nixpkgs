@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mnpljmx8nxnmpbx4ja430b3y535wkz185qknsxmk27yz4dbmm8l";
   };
 
-  cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo}/lib/libturbojpeg.so" ];
+  cmakeFlags = [ "-DVGL_SYSTEMFLTK=1" "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so" ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
