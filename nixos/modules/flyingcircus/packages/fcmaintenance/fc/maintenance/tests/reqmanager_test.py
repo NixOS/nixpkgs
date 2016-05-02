@@ -141,17 +141,12 @@ def test_execute_not_due(tmpdir):
             assert len(r.attempts) == 0
 
 
-class FailingActivity(Activity):
-
-    def run(self):
-        raise RuntimeError('error in activity')
-
-
 def test_execute_logs_exception(reqmanager, caplog):
-    req = reqmanager.add(Request(FailingActivity(), 1))
+    req = reqmanager.add(Request(Activity(), 1))
     req.state = State.due
+    os.chmod(req.dir, 0o000)  # simulates I/O error
     reqmanager.execute()
-    assert 'error in activity' in caplog.text
+    assert 'Permission denied' in caplog.text
 
 
 @unittest.mock.patch('fc.util.directory.connect')
@@ -246,3 +241,11 @@ e  {id3}  2016-04-20 11:00 UTC  1m 30s    error request (duration: 1m 15s)
 *  {id2}  2016-04-20 12:00 UTC  2h        due request
 -  {id1}  --- TBA ---           14m       pending request\
 """.format(id1=r1.id[:7], id2=r2.id[:7], id3=r3.id[:7])
+
+
+def test_list_end_to_end(tmpdir, capsys):
+    with request_population(1, tmpdir) as (rm, reqs):
+        sys.argv = ['list-maintenance', '--spooldir', str(tmpdir)]
+        fc.maintenance.reqmanager.list_maintenance()
+        out, err = capsys.readouterr()
+        assert reqs[0].id[0:7] in out

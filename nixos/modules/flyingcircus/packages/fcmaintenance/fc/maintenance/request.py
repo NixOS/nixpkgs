@@ -124,10 +124,14 @@ class Request:
         """
         self.state = State.running
         self.save()
-        attempt = Attempt()
+        attempt = Attempt()  # sets start time
         with cd(self.dir):
-            self.activity.run()
-        attempt.record(self.activity)
+            try:
+                self.activity.run()
+                attempt.record(self.activity)
+            except Exception as e:
+                attempt.returncode = 70  # EX_SOFTWARE
+                attempt.stderr = str(e)
         self.attempts.append(attempt)
         self.state = evaluate_state(self.activity.returncode)
 

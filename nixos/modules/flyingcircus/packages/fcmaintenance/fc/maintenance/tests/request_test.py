@@ -72,6 +72,20 @@ def test_execute_obeys_retrylimit(tmpdir):
     assert results[-1] == State.retrylimit
 
 
+class FailingActivity(Activity):
+
+    def run(self):
+        raise RuntimeError('activity failing')
+
+
+def test_execute_catches_errors(tmpdir):
+    r = Request(FailingActivity(), 1, dir=str(tmpdir))
+    r.execute()
+    assert len(r.attempts) == 1
+    assert 'activity failing' in r.attempts[0].stderr
+    assert r.attempts[0].returncode != 0
+
+
 class ExternalStateActivity(Activity):
 
     def load(self):

@@ -20,17 +20,17 @@ class ShellScriptActivity(Activity):
 
     def __init__(self, script_fobj):
         self.script = script_fobj.read()
-        self.shebang = self.script.startswith('#!')
 
     def run(self):
+        # assumes that we are in the request scratch directory
         with open('script', 'w') as f:
+            if not self.script.startswith('#!'):
+                f.write('#!/bin/sh\n')
             f.write(self.script)
             os.fchmod(f.fileno(), 0o755)
 
-        args = ['./script'] if self.shebang else ['sh', 'script']
-
         p = subprocess.Popen(
-            args, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+            ['./script'], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         (self.stdout, self.stderr) = [s.decode() for s in p.communicate()]
         self.returncode = p.returncode

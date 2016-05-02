@@ -161,7 +161,10 @@ class ReqManager:
             except Exception:
                 LOG.exception('(req %s) error during execution', req.id)
                 req.state = State.error
-            req.save()
+            try:
+                req.save()
+            except Exception:
+                pass
             LOG.debug('(req %s) executed, state %s', req.id, req.state)
 
     @require_lock
