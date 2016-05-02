@@ -453,12 +453,12 @@ rec {
 
   };
 
-  vim-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-go-2016-04-15";
+  vim-go = buildVimPluginFrom2Nix {
+    name = "vim-go-2016-05-01";
     src = fetchgit {
       url = "git://github.com/fatih/vim-go";
-      rev = "b3fddb60fdab980d1fc339fbcbc879abd6cbf524";
-      sha256 = "1ggjisbc187kyzdizqffkicjdkz67mhgpxmqjcvzaq2wc2w44aja";
+      rev = "91ffc410832d0b027f2258c7a91dbbfa378bf71a";
+      sha256 = "00793ick6vralihvmmx8np7japxrd3jkbn5ggqzq0ymgr508gxj4";
     };
     dependencies = [];
 
