@@ -3,14 +3,14 @@
 }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "1.8";
+  version = "1.9";
   name = "buku-${version}";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
-    rev = "53d48ee56a3abfb53b94ed25fb620ee759141c96";
-    sha256 = "185d3gndw20c3l6f3mf0iq4qapm8g30bl0hn0wsqpp36vl0bpq28";
+    rev = "e99844876d0d871df80770b1bd76c161276116eb";
+    sha256 = "1qwkff61gdjd6w337a5ipfiybzqdwkxdyfa1l4zzm9dj7lsklgq2";
   };
 
   buildInputs = stdenv.lib.optional encryptionSupport pythonPackages.pycrypto;
