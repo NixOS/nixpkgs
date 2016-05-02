@@ -15668,17 +15668,17 @@ in modules // {
 
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
-    version = "1.4.0";
+    version = "1.6.0";
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "175jcfixjkq17fbda9kifbljfd5iwjpjisvhs5xhxsyf6n5ykv2l";
+      sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
       rev = "v${version}";
       repo = "mycli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      pymysql configobj sqlparse prompt_toolkit pygments click
+      pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
     ];
 
     meta = {
