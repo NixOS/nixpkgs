@@ -103,4 +103,6 @@ self: super: {
 
   parsers        = doJailbreak super.parsers;
 
+  pointed        = super.pointed_5;
+
 }
