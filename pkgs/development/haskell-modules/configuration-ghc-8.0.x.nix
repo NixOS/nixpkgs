@@ -113,4 +113,13 @@ self: super: {
   servant-client = dontCheck (doJailbreak super.servant-client_0_7);
   servant-server = dontCheck (doJailbreak super.servant-server_0_7);
 
+  # The essential part is released in 2.1 upstream (needs hackage import)
+  singletons     = (pkgs.haskell.lib.overrideCabal super.singletons (oldAttrs: {
+    src = pkgs.fetchgit {
+            url    = https://github.com/goldfirere/singletons.git;
+            rev    = "277fa943e8c260973effb2291672b166bdd951c1";
+            sha256 = "1ll9fcgs5nxqihvv5vr2bf9z6ijvn3yyk5ss3cgcfvcd95ayy1wz";
+    };
+  }));
+
 }
