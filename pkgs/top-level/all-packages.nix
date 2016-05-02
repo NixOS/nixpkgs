@@ -10003,7 +10003,7 @@ in
   };
 
   rake = callPackage ../development/tools/build-managers/rake { };
-  
+
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
@@ -13086,6 +13086,8 @@ in
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;
   };
+
+  linuxband = callPackage ../applications/audio/linuxband { };
 
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
