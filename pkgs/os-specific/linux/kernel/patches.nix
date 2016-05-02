@@ -96,14 +96,6 @@ rec {
       sha256    = "1sp1gwa7ahzflq7ayb51bg52abrn5zx1hb3pff3axpjqq7vfai6f";
     };
 
-  grsecurity_4_1 = grsecPatch
-    { kernel    = pkgs.grsecurity_base_linux_4_1;
-      patches   = [ grsecurity_fix_path_3_14 ];
-      kversion  = "4.1.7";
-      revision  = "201509201149";
-      sha256    = "1agv8c3c4vmh5algbzmrq2f6vwk72rikrlcbm4h7jbrb9js6fxk4";
-    };
-
   grsecurity_4_4 = grsecPatch
     { kernel    = pkgs.grsecurity_base_linux_4_4;
       patches   = [ grsecurity_fix_path_4_4 ];

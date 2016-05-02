@@ -10637,15 +10637,6 @@ in
       ];
   };
 
-  grsecurity_base_linux_4_1 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.1.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
   grsecurity_base_linux_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10679,10 +10670,6 @@ in
   linux_grsec_desktop_3_14    = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
   linux_grsec_server_3_14     = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server;
   linux_grsec_server_xen_3_14 = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
-
-  linux_grsec_desktop_4_1    = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
-  linux_grsec_server_4_1     = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server;
-  linux_grsec_server_xen_4_1 = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
 
   linux_grsec_desktop_4_4    = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
   linux_grsec_server_4_4     = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.server;
@@ -10854,10 +10841,6 @@ in
   linuxPackages_grsec_desktop_3_14    = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
   linuxPackages_grsec_server_3_14     = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server;
   linuxPackages_grsec_server_xen_3_14 = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
-
-  linuxPackages_grsec_desktop_4_1    = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_1     = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_1 = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
 
   linuxPackages_grsec_desktop_4_4    = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
   linuxPackages_grsec_server_4_4     = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server;
