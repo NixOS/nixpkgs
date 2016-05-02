@@ -10511,6 +10511,15 @@ let
       ];
   };
 
+  grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
+    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   grFlavors = import ../build-support/grsecurity/flavors.nix;
 
   mkGrsecurity = patch: opts:
@@ -10534,6 +10543,10 @@ let
   linux_grsec_desktop_4_4    = grKernel kernelPatches.grsecurity_4_4 grFlavors.desktop;
   linux_grsec_server_4_4     = grKernel kernelPatches.grsecurity_4_4 grFlavors.server;
   linux_grsec_server_xen_4_4 = grKernel kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+
+  linux_grsec_desktop_4_5    = grKernel kernelPatches.grsecurity_4_5 grFlavors.desktop;
+  linux_grsec_server_4_5     = grKernel kernelPatches.grsecurity_4_5 grFlavors.server;
+  linux_grsec_server_xen_4_5 = grKernel kernelPatches.grsecurity_4_5 grFlavors.server_xen;
 
   linux_grsec_desktop_latest    = grKernel kernelPatches.grsecurity_latest grFlavors.desktop;
   linux_grsec_server_latest     = grKernel kernelPatches.grsecurity_latest grFlavors.server;
@@ -10704,6 +10717,10 @@ let
   linuxPackages_grsec_desktop_4_4    = grPackage kernelPatches.grsecurity_4_4 grFlavors.desktop;
   linuxPackages_grsec_server_4_4     = grPackage kernelPatches.grsecurity_4_4 grFlavors.server;
   linuxPackages_grsec_server_xen_4_4 = grPackage kernelPatches.grsecurity_4_4 grFlavors.server_xen;
+
+  linuxPackages_grsec_desktop_4_5    = grPackage kernelPatches.grsecurity_4_5 grFlavors.desktop;
+  linuxPackages_grsec_server_4_5     = grPackage kernelPatches.grsecurity_4_5 grFlavors.server;
+  linuxPackages_grsec_server_xen_4_5 = grPackage kernelPatches.grsecurity_4_5 grFlavors.server_xen;
 
   linuxPackages_grsec_desktop_latest    = grPackage kernelPatches.grsecurity_latest grFlavors.desktop;
   linuxPackages_grsec_server_latest     = grPackage kernelPatches.grsecurity_latest grFlavors.server;

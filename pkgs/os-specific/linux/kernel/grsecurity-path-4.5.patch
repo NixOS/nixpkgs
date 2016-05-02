@@ -1,0 +1,14 @@
+diff -ru a/kernel/kmod.c b/kernel/kmod.c
+--- a/kernel/kmod.c	2016-04-21 17:06:09.882281660 +0200
++++ b/kernel/kmod.c	2016-04-21 17:08:17.458949309 +0200
+@@ -294,7 +294,9 @@
+ 	     strncmp(sub_info->path, "/lib/", 5) && strncmp(sub_info->path, "/lib64/", 7) &&
+ 	     strncmp(sub_info->path, "/usr/libexec/", 13) && strncmp(sub_info->path, "/usr/bin/", 9) &&
+ 	     strncmp(sub_info->path, "/usr/sbin/", 10) && strcmp(sub_info->path, "/bin/false") && 
+-	     strcmp(sub_info->path, "/usr/share/apport/apport")) || strstr(sub_info->path, "..")) {
++	     strcmp(sub_info->path, "/usr/share/apport/apport") &&
++       strncmp(sub_info->path, "/nix/store/", 11) &&
++       strncmp(sub_info->path, "/run/current-system/systemd/lib/", 32)) || strstr(sub_info->path, "..")) {
+ 		printk(KERN_ALERT "grsec: denied exec of usermode helper binary %.950s located outside of permitted system paths\n", sub_info->path);
+ 		retval = -EPERM;
+ 		goto out;
