@@ -6243,6 +6243,10 @@ in
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
+  redis-dump = callPackage ../development/tools/redis-dump {
+    ruby = ruby_2_0;
+  };
+
   re2c = callPackage ../development/tools/parsing/re2c { };
 
   remake = callPackage ../development/tools/build-managers/remake { };
