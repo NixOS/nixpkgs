@@ -103,7 +103,8 @@ let result = stdenv.mkDerivation rec {
       mv $sourceRoot $out
     fi
 
-    for file in $out/*
+    shopt -s extglob
+    for file in $out/!(*src.zip)
     do
       if test -f $file ; then
         rm $file
