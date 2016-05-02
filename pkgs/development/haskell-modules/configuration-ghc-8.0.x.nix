@@ -107,4 +107,6 @@ self: super: {
 
   reducers       = doJailbreak super.reducers;
 
+  sdl2           = doJailbreak super.sdl2;
+
 }
