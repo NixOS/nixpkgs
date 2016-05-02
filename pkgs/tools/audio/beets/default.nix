@@ -4,6 +4,7 @@
 , enableAcousticbrainz ? true
 , enableAcoustid       ? true
 , enableBadfiles       ? true, flac ? null, mp3val ? null
+, enableConvert        ? true, ffmpeg ? null
 , enableDiscogs        ? true
 , enableEchonest       ? true
 , enableEmbyupdate     ? true
@@ -22,6 +23,7 @@
 
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
+assert enableConvert     -> ffmpeg != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableEchonest    -> pythonPackages.pyechonest     != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
@@ -38,6 +40,7 @@ let
     acousticbrainz = enableAcousticbrainz;
     badfiles = enableBadfiles;
     chroma = enableAcoustid;
+    convert = enableConvert;
     discogs = enableDiscogs;
     echonest = enableEchonest;
     embyupdate = enableEmbyupdate;
@@ -52,7 +55,7 @@ let
   };
 
   pluginsWithoutDeps = [
-    "bench" "bpd" "bpm" "bucket" "convert" "cue" "duplicates" "edit" "embedart"
+    "bench" "bpd" "bpm" "bucket" "cue" "duplicates" "edit" "embedart"
     "filefilter" "freedesktop" "fromfilename" "ftintitle" "fuzzy" "ihate"
     "importadded" "importfeeds" "info" "inline" "ipfs" "keyfinder" "lyrics"
     "mbcollection" "mbsubmit" "mbsync" "metasync" "missing" "permissions" "play"
@@ -96,6 +99,7 @@ in buildPythonApplication rec {
               || enableEmbyupdate
               || enableAcousticbrainz)
                                    pythonPackages.requests2
+    ++ optional enableConvert      ffmpeg
     ++ optional enableDiscogs      pythonPackages.discogs_client
     ++ optional enableEchonest     pythonPackages.pyechonest
     ++ optional enableLastfm       pythonPackages.pylast
@@ -131,6 +135,8 @@ in buildPythonApplication rec {
       s,"flac","${flac.bin}/bin/flac",
       s,"mp3val","${mp3val}/bin/mp3val",
     }' beetsplug/badfiles.py
+  '' + optionalString enableConvert ''
+    sed -i -e 's,\(util\.command_output(\)\([^)]\+\)),\1[b"${ffmpeg.bin}/bin/ffmpeg" if args[0] == b"ffmpeg" else args[0]] + \2[1:]),' beetsplug/convert.py 
   '' + optionalString enableReplaygain ''
     sed -i -re '
       s!^( *cmd *= *b?['\'''"])(bs1770gain['\'''"])!\1${bs1770gain}/bin/\2!
