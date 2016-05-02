@@ -31,7 +31,7 @@ let
        (shared_memory_max * 4 / 5)];
 
   work_mem =
-    fclib.max [1 shared_buffers / 200];
+    fclib.max [1 (shared_buffers / 200)];
 
   maintenance_work_mem =
     fclib.max [16 work_mem (current_memory / 20)];
