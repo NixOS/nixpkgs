@@ -78,4 +78,8 @@ self: super: {
 
   authenticate-oauth = doJailbreak super.authenticate-oauth;
 
+  diagrams-core  = doJailbreak super.diagrams-core;
+
+  diagrams-lib   = doJailbreak super.diagrams-lib;
+
 }
