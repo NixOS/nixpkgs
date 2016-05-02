@@ -82,4 +82,6 @@ self: super: {
 
   diagrams-lib   = doJailbreak super.diagrams-lib;
 
+  foldl          = doJailbreak super.foldl;
+
 }
