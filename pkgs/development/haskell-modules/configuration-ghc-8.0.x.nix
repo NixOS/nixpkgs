@@ -86,4 +86,15 @@ self: super: {
 
   force-layout   = doJailbreak super.force-layout;
 
+  # Partial fixes released in 1.20.5 upstream, full fixes only in git
+  linear         = pkgs.haskell.lib.overrideCabal super.linear (oldAttrs: {
+    editedCabalFile = null;
+    revision        = null;
+    src = pkgs.fetchgit {
+            url    = https://github.com/ekmett/linear.git;
+            rev    = "8da21dc72714441cb34d6eabd6c224819787365c";
+            sha256 = "08l0z6zrlbals2bwc2abbh31j9gf90vgp8sy3dcrp0knc98bgaa1";
+    };
+  });
+
 }
