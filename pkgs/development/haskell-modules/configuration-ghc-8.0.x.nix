@@ -151,4 +151,5 @@ self: super: {
 
   trifecta       = doJailbreak super.trifecta;
 
+  turtle         = doJailbreak super.turtle;
 }
