@@ -74,4 +74,6 @@ self: super: {
   # https://github.com/haskell-suite/haskell-src-exts/issues/302
   haskell-src-exts = dontCheck super.haskell-src-exts;
 
+  active         = doJailbreak super.active;
+
 }
