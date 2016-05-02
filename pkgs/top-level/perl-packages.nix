@@ -9398,10 +9398,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Pango = buildPerlPackage rec {
-    name = "Pango-1.226";
+    name = "Pango-1.227";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0r4jx7d6gj6ixk2r5yr70biy1lpjxir08aywkw02g85wg6zkjw4z";
+      sha256 = "0wdcidnfnb6nm79fzfs39ivawj3x8m98a147fmcxgv1zvwia9c1l";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
     propagatedBuildInputs = [ Cairo Glib ];
