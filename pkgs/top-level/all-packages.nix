@@ -156,8 +156,6 @@ in
 
   dispad = callPackage ../tools/X11/dispad { };
 
-  scatterOutputHook = makeSetupHook {} ../build-support/setup-hooks/scatter_output.sh;
-
   vsenv = callPackage ../build-support/vsenv {
     vs = vs90wrapper;
   };
