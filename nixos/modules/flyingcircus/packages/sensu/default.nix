@@ -23,6 +23,10 @@ bundlerEnv {
       buildInputs = [ mysql ];
     };
 
+    redis = attrs: {
+      buildInputs = [ pkgs.redis ];
+    };
+
   };
 
   meta = with lib; {

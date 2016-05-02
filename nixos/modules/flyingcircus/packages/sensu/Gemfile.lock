@@ -69,6 +69,7 @@ GEM
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
+    redis (3.2.1)
     rest-client (1.8.0)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
@@ -136,6 +137,9 @@ GEM
       dentaku (= 2.0.4)
       pg (= 0.18.3)
       sensu-plugin (= 1.2.0)
+    sensu-plugins-redis (0.1.0)
+      redis (= 3.2.1)
+      sensu-plugin (~> 1.2)
     sensu-plugins-ssl (0.0.6)
       rest-client (= 1.8.0)
       sensu-plugin (= 1.2.0)
@@ -191,9 +195,10 @@ DEPENDENCIES
   sensu-plugins-mysql (= 0.0.4)
   sensu-plugins-network-checks (= 0.1.4)
   sensu-plugins-postgres (= 0.0.7)
+  sensu-plugins-redis (= 0.1.0)
   sensu-plugins-ssl (= 0.0.6)
   sensu-plugins-supervisor (= 0.0.3)
   sensu-plugins-systemd!
 
 BUNDLED WITH
-   1.10.6
+   1.10.5

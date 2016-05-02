@@ -25,6 +25,7 @@ in
      ./nginx.nix
      ./postgresql.nix
      ./powerdns.nix
+     ./redis.nix
      ./sensuserver.nix
      ./servicecheck.nix
      ./statshost.nix

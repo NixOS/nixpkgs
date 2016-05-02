@@ -8,6 +8,7 @@ gem 'sensu-plugins-mailer', "0.1.2"
 gem 'sensu-plugins-mysql', "0.0.4"
 gem 'sensu-plugins-network-checks', "0.1.4"
 gem 'sensu-plugins-postgres', "0.0.7"
+gem 'sensu-plugins-redis', "0.1.0"
 gem 'sensu-plugins-ssl', "0.0.6"
 gem 'sensu-plugins-supervisor', "0.0.3"
 gem 'sensu-plugins-systemd', :git => 'https://github.com/nyxcharon/sensu-plugins-systemd.git'
