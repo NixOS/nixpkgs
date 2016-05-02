@@ -251,6 +251,8 @@ in
     '';
 
     boot.kernel.sysctl = {
+      "net.ipv4.ip_local_port_range" = "32768 60999";
+      "net.ipv4.ip_local_reserved_ports" = "61000-61999";
       "net.ipv4.conf.all.accept_redirects" = 0;
       "net.ipv4.conf.default.accept_redirects" = 0;
       "net.ipv6.conf.all.accept_redirects" = 0;
