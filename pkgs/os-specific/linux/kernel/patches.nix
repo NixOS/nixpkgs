@@ -112,7 +112,15 @@ rec {
       sha256    = "04k4nhshl6r5n41ha5620s7cd70dmmmvyf9mnn5359jr1720kxpf";
     };
 
-  grsecurity_latest = grsecurity_4_4;
+  grsecurity_4_5 = grsecPatch
+    { kernel    = pkgs.grsecurity_base_linux_4_5;
+      patches   = [ grsecurity_fix_path_4_5 ];
+      kversion  = "4.5.2";
+      revision  = "201604290633";
+      sha256    = "0qrs4fk6lyqngq3fnsmrv0y3yp1lrbiwadfc6v7hy4lyv77wz107";
+    };
+
+  grsecurity_latest = grsecurity_4_5;
 
   grsecurity_fix_path_3_14 =
     { name = "grsecurity-fix-path-3.14";
@@ -122,6 +130,11 @@ rec {
   grsecurity_fix_path_4_4 =
     { name = "grsecurity-fix-path-4.4";
       patch = ./grsecurity-path-4.4.patch;
+    };
+
+  grsecurity_fix_path_4_5 =
+    { name = "grsecurity-fix-path-4.5";
+      patch = ./grsecurity-path-4.5.patch;
     };
 
   crc_regression =
