@@ -102,6 +102,11 @@ for type in hvm pv; do
                             mv $vhdFile.tmp $vhdFile
                         fi
 
+                        vhdFileLogicalBytes="$(qemu-img info "$vhdFile" | grep ^virtual\ size: | cut -f 2 -d \(  | cut -f 1 -d \ )"
+                        vhdFileLogicalGigaBytes=$(((vhdFileLogicalBytes-1)/1024/1024/1024+1)) # Round to the next GB
+
+                        echo "Disk size is $vhdFileLogicalBytes bytes. Will be registered as $vhdFileLogicalGigaBytes GB."
+
                         taskId=$(cat $stateDir/$region.$type.task-id 2> /dev/null || true)
                         volId=$(cat $stateDir/$region.$type.vol-id 2> /dev/null || true)
                         snapId=$(cat $stateDir/$region.$type.snap-id 2> /dev/null || true)
@@ -165,7 +170,7 @@ for type in hvm pv; do
                             rm -f $stateDir/$region.$type.vol-id
                         fi
 
-                        extraFlags="-b /dev/sda1=$snapId:20:true:gp2"
+                        extraFlags="-b /dev/sda1=$snapId:$vhdFileLogicalGigaBytes:true:gp2"
 
                         if [ $type = pv ]; then
                             extraFlags+=" --root-device-name=/dev/sda1"
