@@ -76,4 +76,6 @@ self: super: {
 
   active         = doJailbreak super.active;
 
+  authenticate-oauth = doJailbreak super.authenticate-oauth;
+
 }
