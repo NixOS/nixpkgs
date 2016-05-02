@@ -3,7 +3,10 @@
 assert readline != null;
 
 let
-  arch = if stdenv.is64bit then "x64" else "ia32";
+  arch = if stdenv.isArm
+    then (if stdenv.is64bit then "arm64" else "arm")
+    else (if stdenv.is64bit then "x64" else "ia32");
+  armHardFloat = stdenv.isArm && (stdenv.platform.gcc.float or null) == "hard";
 in
 
 stdenv.mkDerivation rec {
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
         -Dconsole=readline \
         -Dcomponent=shared_library \
         -Dv8_target_arch=${arch} \
+        ${lib.optionalString armHardFloat "-Dv8_use_arm_eabi_hardfloat=true"} \
         --depth=. -Ibuild/standalone.gypi \
         build/all.gyp
   '';
