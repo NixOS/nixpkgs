@@ -6416,6 +6416,8 @@ in
 
   afflib = callPackage ../development/libraries/afflib { };
 
+  alure = callPackage ../development/libraries/alure { };
+
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
