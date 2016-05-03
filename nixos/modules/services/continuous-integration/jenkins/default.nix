@@ -138,8 +138,8 @@ in {
       '';
 
       postStart = ''
-        until ${pkgs.curl}/bin/curl -s -L localhost:${toString cfg.port} ; do
-          sleep 10
+        until ${pkgs.curl}/bin/curl -s -L --fail --head http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} >/dev/null; do
+            sleep 2
         done
       '';
 
