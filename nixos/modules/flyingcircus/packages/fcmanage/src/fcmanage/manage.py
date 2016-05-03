@@ -118,7 +118,10 @@ def update_inventory():
         print('No directory password. Not updating inventory.')
         return
     try:
-        directory = connect(enc, enc['parameters']['directory_ring'])
+        # For fc-manage all nodes need to talk about *their* environment which
+        # is resource-group specific and requires us to always talk to the
+        # ring 1 API.
+        directory = connect(enc, 1)
     except socket.error:
         print('No directory connection. Not updating inventory.')
         return
