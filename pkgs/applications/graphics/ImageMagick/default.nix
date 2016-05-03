@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "0q19jgn1iv7zqrw8ibxp4z57iihrc9kyb09k2wnspcacs6vrvinf";
   };
 
+  patches = [ ./imagetragick.patch ];
+
   outputs = [ "out" "doc" ];
 
   enableParallelBuilding = true;
