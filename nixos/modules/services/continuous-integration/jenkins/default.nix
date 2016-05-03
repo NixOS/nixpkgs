@@ -141,14 +141,6 @@ in {
         until ${pkgs.curl}/bin/curl -s -L localhost:${toString cfg.port} ; do
           sleep 10
         done
-        while true ; do
-          index=`${pkgs.curl}/bin/curl -s -L localhost:${toString cfg.port}`
-          if [[ !("$index" =~ 'Please wait while Jenkins is restarting' ||
-                  "$index" =~ 'Please wait while Jenkins is getting ready to work') ]]; then
-            exit 0
-          fi
-          sleep 30
-        done
       '';
 
       serviceConfig = {
