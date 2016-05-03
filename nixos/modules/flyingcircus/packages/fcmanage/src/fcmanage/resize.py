@@ -91,8 +91,23 @@ def resize_filesystems():
     d.grow()
 
 
+def quota_enabled():
+    """Returns True if the root volume has quota support enabled.
+
+    Keep the expression in sync with that one in
+    infrastructure/fcio/quota.nix.
+    """
+    with open('/proc/self/mounts') as f:
+        for line in f:
+            dev, mountpoint, fstype, options, _rest = line.split(None, 4)
+            if mountpoint != '/':
+                continue
+            if 'usrquota' in options and 'prjquota' in options:
+                return True
+    return False
+
+
 def set_quota(enc_path):
-    print('resize: Ensuring XFS quota')
     with open(enc_path) as f:
         enc = json.load(f)
     if 'disk' not in enc['parameters']:
@@ -100,6 +115,7 @@ def set_quota(enc_path):
     disk = int(enc['parameters']['disk'])
     if not disk:
         return
+    print('resize: Setting XFS quota to {} GiB'.format(disk))
 
     subprocess.check_call([
         'xfs_quota', '-xc',
@@ -114,7 +130,7 @@ def main():
 
     resize_filesystems()
 
-    if args.enc_path:
+    if args.enc_path and quota_enabled():
         set_quota(args.enc_path)
 
 

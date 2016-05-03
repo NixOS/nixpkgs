@@ -21,8 +21,9 @@ in
       let
         msg = "Reboot to activate filesystem quotas";
       in
+        # keep the grep expression in sync with that one in fcmanage/resize.py
         with pkgs; ''
-          if egrep -q ' / .*u(sr)?quota,.*p(rj)?quota' /proc/self/mounts; then
+          if egrep -q ' / .*usrquota,.*prjquota' /proc/self/mounts; then
             if ! ${xfsprogs}/bin/xfs_quota -x -c 'state -p' / | \
                 grep -qi 'Accounting:.*ON'; then
               ${xfsprogs}/bin/xfs_quota -x -c 'project -s root' / 2>/dev/null
