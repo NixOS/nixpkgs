@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip
+, withStream ? false
 , modules ? []
 , hardening ? true
 }:
@@ -7,10 +8,10 @@
 with stdenv.lib;
 
 let
-  version = "1.8.1";
+  version = "1.10.0";
   mainSrc = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "1dwpyw4pvhj68vxramqxm8f79pqz9lrm8mvifbn49h3615ikqjwg";
+    sha256 = "0kdyqa5xaxvhz6y75ixs05mzygk3kszzdq5h0gnlrg35vp1lgmlf";
   };
 
 in
@@ -24,11 +25,8 @@ stdenv.mkDerivation rec {
     ++ concatMap (mod: mod.inputs or []) modules;
 
   configureFlags = [
-    "--with-select_module"
-    "--with-poll_module"
-    "--with-threads"
     "--with-http_ssl_module"
-    "--with-http_spdy_module"
+    "--with-http_v2_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -48,11 +46,11 @@ stdenv.mkDerivation rec {
     "--with-ipv6"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ optionals (elem stdenv.system (with platforms; linux ++ freebsd))
-        [ "--with-file-aio" "--with-aio_module" ]
+  ] ++ optional withStream "--with-stream"
+    ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations -Wno-error=conditional-uninitialized";
+  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules)
     + optionalString (hardening && (stdenv.cc.cc.isGNU or false)) ''
@@ -62,6 +60,10 @@ stdenv.mkDerivation rec {
       )
     ''
     ;
+
+  postInstall = ''
+    mv $out/sbin $out/bin
+  '';
 
   meta = {
     description = "A reverse proxy and lightweight webserver";
