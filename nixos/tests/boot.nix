@@ -64,11 +64,14 @@ in {
         '';
         destination = "/boot.ipxe";
       };
-      ipxeBootDir = pkgs.symlinkJoin "ipxeBootDir" [
-        config.system.build.netbootRamdisk
-        config.system.build.kernel
-        ipxeScriptDir
-      ];
+      ipxeBootDir = pkgs.symlinkJoin {
+        name = "ipxeBootDir";
+        paths = [
+          config.system.build.netbootRamdisk
+          config.system.build.kernel
+          ipxeScriptDir
+        ];
+      };
     in
       makeTest {
         name = "boot-netboot";
