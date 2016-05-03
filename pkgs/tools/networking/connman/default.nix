@@ -1,26 +1,26 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, openconnect, file,
+{ stdenv, fetchurl, pkgconfig, openconnect, file, gawk,
   openvpn, vpnc, glib, dbus, iptables, gnutls, polkit,
-  wpa_supplicant, readline6, pptp, ppp, tree }:
+  wpa_supplicant, readline6, pptp, ppp }:
 
 stdenv.mkDerivation rec {
   name = "connman-${version}";
-  version = "1.31";
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/connman/connman.git";
-    rev = "refs/tags/${version}";
-    sha256 = "90dab6b11841cb4b6400711d234b59fb4fad4e8778bed6e7ad3ac7ac135d6893";
+  version = "1.32";
+  src = fetchurl {
+    url = "mirror://kernel/linux/network/connman/${name}.tar.xz";
+    sha256 = "0k4kw2j78gwxf0rq79a099qkzl6wi4v5i7rfs4rn0si0fd68d19i";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig openconnect polkit
-                  file openvpn vpnc glib dbus iptables gnutls
-                  wpa_supplicant readline6 pptp ppp tree ];
+  buildInputs = [ openconnect polkit
+                  openvpn vpnc glib dbus iptables gnutls
+                  wpa_supplicant readline6 pptp ppp ];
+
+  nativeBuildInputs = [ pkgconfig file gawk ];
 
   preConfigure = ''
     export WPASUPPLICANT=${wpa_supplicant}/sbin/wpa_supplicant
-    ./bootstrap
+    export PPPD=${ppp}/sbin/pppd
+    export AWK=${gawk}/bin/gawk
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
-    substituteInPlace configure --replace /usr/sbin/pptp ${pptp}/sbin/pptp
-    substituteInPlace configure --replace /usr/sbin/pppd ${ppp}/sbin/pppd
   '';
 
   configureFlags = [
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     "--enable-tools"
     "--enable-datafiles"
     "--enable-pptp"
+    "--with-pptp=${pptp}/sbin/pptp"
   ];
 
   postInstall = ''
