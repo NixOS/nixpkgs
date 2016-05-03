@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     substituteInPlace $out/bin/xfce4-popup-whiskermenu \
-      --replace $out/bin/xfce4-panel ${xfce4panel}/bin/xfce4-panel
+      --replace $out/bin/xfce4-panel ${xfce4panel.out}/bin/xfce4-panel
   '';
 
   meta = {
