@@ -18,14 +18,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin;
-    mv thinkfan $out/bin/;
+    install -Dm755 {.,$out/bin}/thinkfan
+
+    cd $sourceRoot
+    install -Dm644 {.,$out/share/doc/thinkfan}/README
+    cp -R examples $out/share/doc/thinkfan
+    install -Dm644 {.,$out/share/man/man1}/thinkfan.1
   '';
 
   meta = {
-    description = "";
     license = stdenv.lib.licenses.gpl3;
-    homepage = "http://thinkfan.sourceforge.net/";
+    homepage = http://thinkfan.sourceforge.net/;
     maintainers = with stdenv.lib.maintainers; [ iElectric ];
     platforms = stdenv.lib.platforms.linux;
   };
