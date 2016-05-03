@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/share/zsh/site-functions/
+    cp zsh-navigation-tools.plugin.zsh $out/share/zsh/site-functions/
     cp n-* $out/share/zsh/site-functions/
     cp znt-* $out/share/zsh/site-functions/
+    mkdir -p $out/share/zsh/site-functions/.config/znt
+    cp .config/znt/n-* $out/share/zsh/site-functions/.config/znt
   '';
 
   meta = with stdenv.lib; {
