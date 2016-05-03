@@ -126,7 +126,7 @@ in
       { description = "NFSv3 Mount Daemon";
 
         requires = [ "rpcbind.service" ];
-        after = [ "rpcbind.service" ];
+        after = [ "rpcbind.service" "local-fs.target" ];
 
         path = [ pkgs.nfs-utils pkgs.sysvtools pkgs.utillinux ];
 
