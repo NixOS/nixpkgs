@@ -2373,6 +2373,7 @@ self: super: {
   "debug-diff" = dontDistribute super."debug-diff";
   "debug-time" = dontDistribute super."debug-time";
   "decepticons" = dontDistribute super."decepticons";
+  "decimal-arithmetic" = dontDistribute super."decimal-arithmetic";
   "decode-utf8" = dontDistribute super."decode-utf8";
   "decoder-conduit" = dontDistribute super."decoder-conduit";
   "dedukti" = dontDistribute super."dedukti";
@@ -2408,6 +2409,7 @@ self: super: {
   "dequeue" = dontDistribute super."dequeue";
   "derangement" = dontDistribute super."derangement";
   "derivation-trees" = dontDistribute super."derivation-trees";
+  "derive" = doDistribute super."derive_2_5_24";
   "derive-IG" = dontDistribute super."derive-IG";
   "derive-enumerable" = dontDistribute super."derive-enumerable";
   "derive-gadt" = dontDistribute super."derive-gadt";
@@ -3145,6 +3147,7 @@ self: super: {
   "ghci-ng" = dontDistribute super."ghci-ng";
   "ghci-pretty" = dontDistribute super."ghci-pretty";
   "ghcid" = doDistribute super."ghcid_0_5_1";
+  "ghcjs-ajax" = dontDistribute super."ghcjs-ajax";
   "ghcjs-codemirror" = dontDistribute super."ghcjs-codemirror";
   "ghcjs-dom" = dontDistribute super."ghcjs-dom";
   "ghcjs-dom-hello" = dontDistribute super."ghcjs-dom-hello";
@@ -3512,6 +3515,7 @@ self: super: {
   "hack2-interface-wai" = dontDistribute super."hack2-interface-wai";
   "hackage-diff" = dontDistribute super."hackage-diff";
   "hackage-plot" = dontDistribute super."hackage-plot";
+  "hackage-processing" = dontDistribute super."hackage-processing";
   "hackage-proxy" = dontDistribute super."hackage-proxy";
   "hackage-repo-tool" = dontDistribute super."hackage-repo-tool";
   "hackage-security" = dontDistribute super."hackage-security";
@@ -3669,6 +3673,7 @@ self: super: {
   "haskell-mpfr" = dontDistribute super."haskell-mpfr";
   "haskell-mpi" = dontDistribute super."haskell-mpi";
   "haskell-names" = dontDistribute super."haskell-names";
+  "haskell-neo4j-client" = doDistribute super."haskell-neo4j-client_0_3_2_1";
   "haskell-openflow" = dontDistribute super."haskell-openflow";
   "haskell-pdf-presenter" = dontDistribute super."haskell-pdf-presenter";
   "haskell-platform-test" = dontDistribute super."haskell-platform-test";
@@ -3678,6 +3683,7 @@ self: super: {
   "haskell-reflect" = dontDistribute super."haskell-reflect";
   "haskell-rules" = dontDistribute super."haskell-rules";
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
+  "haskell-src-meta" = doDistribute super."haskell-src-meta_0_6_0_13";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
   "haskell-tor" = dontDistribute super."haskell-tor";
@@ -4511,6 +4517,7 @@ self: super: {
   "iptables-helpers" = dontDistribute super."iptables-helpers";
   "iptadmin" = dontDistribute super."iptadmin";
   "irc-bytestring" = dontDistribute super."irc-bytestring";
+  "irc-client" = doDistribute super."irc-client_0_2_6_0";
   "irc-colors" = dontDistribute super."irc-colors";
   "irc-core" = dontDistribute super."irc-core";
   "irc-dcc" = dontDistribute super."irc-dcc";
@@ -4830,6 +4837,7 @@ self: super: {
   "lenz" = dontDistribute super."lenz";
   "lenz-template" = dontDistribute super."lenz-template";
   "level-monad" = dontDistribute super."level-monad";
+  "leveldb-haskell" = doDistribute super."leveldb-haskell_0_6_3";
   "leveldb-haskell-fork" = dontDistribute super."leveldb-haskell-fork";
   "levmar" = dontDistribute super."levmar";
   "levmar-chart" = dontDistribute super."levmar-chart";
@@ -5248,6 +5256,7 @@ self: super: {
   "monad-resumption" = dontDistribute super."monad-resumption";
   "monad-state" = dontDistribute super."monad-state";
   "monad-statevar" = dontDistribute super."monad-statevar";
+  "monad-ste" = dontDistribute super."monad-ste";
   "monad-stlike-io" = dontDistribute super."monad-stlike-io";
   "monad-stlike-stm" = dontDistribute super."monad-stlike-stm";
   "monad-supply" = dontDistribute super."monad-supply";
@@ -5455,6 +5464,7 @@ self: super: {
   "network-builder" = dontDistribute super."network-builder";
   "network-bytestring" = dontDistribute super."network-bytestring";
   "network-conduit" = dontDistribute super."network-conduit";
+  "network-conduit-tls" = doDistribute super."network-conduit-tls_1_2_0_1";
   "network-connection" = dontDistribute super."network-connection";
   "network-data" = dontDistribute super."network-data";
   "network-dbus" = dontDistribute super."network-dbus";
@@ -6140,6 +6150,7 @@ self: super: {
   "quickpull" = dontDistribute super."quickpull";
   "quickset" = dontDistribute super."quickset";
   "quickspec" = dontDistribute super."quickspec";
+  "quickterm" = dontDistribute super."quickterm";
   "quicktest" = dontDistribute super."quicktest";
   "quickwebapp" = dontDistribute super."quickwebapp";
   "quiver" = dontDistribute super."quiver";
@@ -6376,6 +6387,7 @@ self: super: {
   "resumable-exceptions" = dontDistribute super."resumable-exceptions";
   "rethinkdb-model" = dontDistribute super."rethinkdb-model";
   "rethinkdb-wereHamster" = dontDistribute super."rethinkdb-wereHamster";
+  "retry" = doDistribute super."retry_0_7_1";
   "retryer" = dontDistribute super."retryer";
   "revdectime" = dontDistribute super."revdectime";
   "reverse-apply" = dontDistribute super."reverse-apply";
@@ -6909,6 +6921,7 @@ self: super: {
   "splaytree" = dontDistribute super."splaytree";
   "spline3" = dontDistribute super."spline3";
   "splines" = dontDistribute super."splines";
+  "split" = doDistribute super."split_0_2_3";
   "split-channel" = dontDistribute super."split-channel";
   "split-record" = dontDistribute super."split-record";
   "split-tchan" = dontDistribute super."split-tchan";
@@ -6951,6 +6964,7 @@ self: super: {
   "stack-hpc-coveralls" = dontDistribute super."stack-hpc-coveralls";
   "stack-prism" = dontDistribute super."stack-prism";
   "stack-run" = dontDistribute super."stack-run";
+  "stackage-curator" = doDistribute super."stackage-curator_0_13_3";
   "standalone-derive-topdown" = dontDistribute super."standalone-derive-topdown";
   "standalone-haddock" = dontDistribute super."standalone-haddock";
   "star-to-star" = dontDistribute super."star-to-star";
