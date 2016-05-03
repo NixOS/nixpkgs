@@ -21,7 +21,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   exo             = callPackage ./core/exo.nix { };
   garcon          = callPackage ./core/garcon.nix { };
-  gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { }; # ToDo: when should be used?
+  gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { withGtk3 = true; }; # ToDo: when should be used?
   libxfce4ui      = callPackage ./core/libxfce4ui.nix { };
   libxfce4ui_gtk3 = libxfce4ui.override { withGtk3 = true; };
   libxfce4util    = callPackage ./core/libxfce4util.nix { };
