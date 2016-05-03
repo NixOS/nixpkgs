@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 }:
 
 let
@@ -39,13 +39,14 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig libtool zlib fontconfig freetype ghostscript libjpeg
-      openexr libpng librsvg libtiff libxml2 openjpeg
+      openexr libpng librsvg libtiff libxml2 openjpeg libwebp
     ];
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
 
   postInstall = ''
+
     (cd "$out/include" && ln -s ImageMagick* ImageMagick)
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do

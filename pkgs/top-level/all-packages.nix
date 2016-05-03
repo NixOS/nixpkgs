@@ -12871,6 +12871,7 @@ in
     libtiff = null;
     libxml2 = null;
     openjpeg = null;
+    libwebp = null;
   };
 
   imagemagick = self.imagemagickBig.override {
