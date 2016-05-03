@@ -1594,6 +1594,8 @@ in
 
   galen = callPackage ../development/tools/galen {};
 
+  gandi-cli = callPackage ../tools/networking/gandi-cli { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
