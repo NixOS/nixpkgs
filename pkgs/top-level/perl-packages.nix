@@ -5460,10 +5460,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.320";
+    name = "Glib-1.321";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "15mrwscqjgwpkw9n4x6rakr9rjz2ss8d90k574fs5wx9cmgg3np3";
+      sha256 = "0h4cfxrxcf1mrdab5n5kk0smsi8vcrfnmcw1k6xw87r4vbifnxdr";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -5570,10 +5570,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2497";
+    name = "Gtk2-1.2498";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0j5wm290ihpkx91gbk55qrrb0jhbh5fanbj5fjvs0d2xv6yyh921";
+      sha256 = "0gs6lr4clz86838s3klrl37lf48j24zv0p37jlsvsnr927whpq3j";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
@@ -9398,10 +9398,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Pango = buildPerlPackage rec {
-    name = "Pango-1.226";
+    name = "Pango-1.227";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0r4jx7d6gj6ixk2r5yr70biy1lpjxir08aywkw02g85wg6zkjw4z";
+      sha256 = "0wdcidnfnb6nm79fzfs39ivawj3x8m98a147fmcxgv1zvwia9c1l";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
     propagatedBuildInputs = [ Cairo Glib ];
@@ -9637,11 +9637,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PerlIOeol = buildPerlPackage {
-    name = "PerlIO-eol-0.14";
+  PerlIOeol = buildPerlPackage rec {
+    name = "PerlIO-eol-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AU/AUDREYT/PerlIO-eol-0.14.tar.gz;
-      sha256 = "1rwj0r075jfvvd0fnzgdqldc7qdb94wwsi21rs2l6yhcv0380fs2";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "159zrrf44469sjklsi0pb4c005q74d9242q7mqawvbwnxjqbh0a5";
     };
   };
 
@@ -13047,10 +13047,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   threads = buildPerlPackage rec {
-    name = "threads-2.02";
+    name = "threads-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "0vij8lagq4x6gv88x9gg23jd7i0s5fyyzs2wrxacih2ppj6kkiff";
+      sha256 = "0fgprp2ghrh1ryxmr0y9bpsjl1ifbf4lqml8k017cbl4zbn21lim";
     };
     meta = {
       description = "Perl interpreter-based threads";
@@ -13058,11 +13058,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  threadsshared = buildPerlPackage {
-    name = "threads-shared-1.48";
+  threadsshared = buildPerlPackage rec {
+    name = "threads-shared-1.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/threads-shared-1.48.tar.gz;
-      sha256 = "7378a72bae424705e354476da69995fb8f62432bca8e98eab0fb9842da5120f8";
+      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
+      sha256 = "0qsbl8rx8p09cb5vj1yhwf1h2awvimfyckw1qwrqbk7dxjldrimn";
     };
     meta = {
       description = "Perl extension for sharing data structures between threads";
@@ -13070,11 +13070,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ThreadQueue = buildPerlPackage {
-    name = "Thread-Queue-3.05";
+  ThreadQueue = buildPerlPackage rec {
+    name = "Thread-Queue-3.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Thread-Queue-3.05.tar.gz;
-      sha256 = "36bc1e50b5de47ff827fbaa1d7f028016e3ef115972cac84ed8cd73a0ef95300";
+      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
+      sha256 = "0f03v10rsasi2j4lh8xw44jac8nfbw66274qgsz5lsmfd6wqvj12";
     };
     meta = {
       description = "Thread-safe queues";

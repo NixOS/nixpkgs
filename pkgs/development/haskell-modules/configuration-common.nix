@@ -281,7 +281,6 @@ self: super: {
   filestore = dontCheck super.filestore;
   getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
-  hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
   ide-backend = dontCheck super.ide-backend;
@@ -1020,5 +1019,13 @@ self: super: {
   # Avoid transient build failures because the QuickCheck testsuite cannot
   # generate enough conclusive test cases.
   split = dontCheck super.split;
+
+  # https://github.com/NixOS/nixpkgs/issues/14967
+  yi = markBroken super.yi;
+  yi-fuzzy-open = markBroken super.yi-fuzzy-open;
+  yi-monokai = markBroken super.yi-monokai;
+  yi-snippet = markBroken super.yi-snippet;
+  yi-solarized = markBroken super.yi-solarized;
+  yi-spolsky = markBroken super.yi-spolsky;
 
 }

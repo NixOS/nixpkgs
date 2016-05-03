@@ -6399,6 +6399,8 @@ in
 
   afflib = callPackage ../development/libraries/afflib { };
 
+  alure = callPackage ../development/libraries/alure { };
+
   agg = callPackage ../development/libraries/agg { };
 
   allegro = callPackage ../development/libraries/allegro {};
@@ -9984,7 +9986,7 @@ in
   };
 
   rake = callPackage ../development/tools/build-managers/rake { };
-  
+
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
@@ -10192,6 +10194,8 @@ in
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
 
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
+
+  blktrace = callPackage ../os-specific/linux/blktrace { };
 
   bluez4 = lowPrio (callPackage ../os-specific/linux/bluez {
     pygobject = pygobject3;
@@ -10620,7 +10624,7 @@ in
       ];
   };
 
-  grsecurity_base_linux_4_1 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.1.nix {
+  grsecurity_base_linux_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -10629,7 +10633,7 @@ in
       ];
   };
 
-  grsecurity_base_linux_4_4 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.4.nix {
+  grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -10654,13 +10658,13 @@ in
   linux_grsec_server_3_14     = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server;
   linux_grsec_server_xen_3_14 = self.grKernel kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
 
-  linux_grsec_desktop_4_1    = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
-  linux_grsec_server_4_1     = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server;
-  linux_grsec_server_xen_4_1 = self.grKernel kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
-
   linux_grsec_desktop_4_4    = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
   linux_grsec_server_4_4     = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.server;
   linux_grsec_server_xen_4_4 = self.grKernel kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
+
+  linux_grsec_desktop_4_5    = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
+  linux_grsec_server_4_5     = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server;
+  linux_grsec_server_xen_4_5 = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
 
   linux_grsec_desktop_latest    = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.desktop;
   linux_grsec_server_latest     = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server;
@@ -10825,13 +10829,13 @@ in
   linuxPackages_grsec_server_3_14     = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server;
   linuxPackages_grsec_server_xen_3_14 = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
 
-  linuxPackages_grsec_desktop_4_1    = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_1     = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_1 = self.grPackage kernelPatches.grsecurity_4_1 self.grFlavors.server_xen;
-
   linuxPackages_grsec_desktop_4_4    = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
   linuxPackages_grsec_server_4_4     = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server;
   linuxPackages_grsec_server_xen_4_4 = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
+
+  linuxPackages_grsec_desktop_4_5    = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
+  linuxPackages_grsec_server_4_5     = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server;
+  linuxPackages_grsec_server_xen_4_5 = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
 
   linuxPackages_grsec_desktop_latest    = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.desktop;
   linuxPackages_grsec_server_latest     = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server;
@@ -12849,6 +12853,7 @@ in
     libtiff = null;
     libxml2 = null;
     openjpeg = null;
+    libwebp = null;
   };
 
   imagemagick = self.imagemagickBig.override {
@@ -13194,6 +13199,8 @@ in
   mjpg-streamer = callPackage ../applications/video/mjpg-streamer { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+
+  MMA = callPackage ../applications/audio/MMA { };
 
   mmex = callPackage ../applications/office/mmex { };
 
@@ -13644,7 +13651,7 @@ in
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qbittorrent = callPackage ../applications/networking/p2p/qbittorrent {
+  qbittorrent = qt5.callPackage ../applications/networking/p2p/qbittorrent {
     boost = boost;
     libtorrentRasterbar = libtorrentRasterbar;
   };
@@ -15856,6 +15863,8 @@ in
 
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
 
+    dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
+
     flocq = callPackage ../development/coq-modules/flocq {};
 
     interval = callPackage ../development/coq-modules/interval {};
@@ -16243,6 +16252,8 @@ in
   gnuk = callPackage ../misc/gnuk { };
   gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
   gnuk-git = callPackage ../misc/gnuk/git.nix { };
+
+  greybird = callPackage ../misc/themes/greybird { };
 
   gxemul = callPackage ../misc/emulators/gxemul { };
 

@@ -12602,22 +12602,21 @@ in modules // {
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
-    version = "2.5.8";
+    version = "3.0.0";
     disabled = !isPy27;
 
     meta = {
       description = "OpenSteno Plover stenography software";
-      maintainers = [ maintainers.twey ];
+      maintainers = with maintainers; [ twey kovirobi ];
       license = licenses.gpl2;
     };
 
     src = pkgs.fetchurl {
       url = "https://github.com/openstenoproject/plover/archive/v${version}.tar.gz";
-      sha256 = "23f7824a715f93eb2c41d5bafd0c6f3adda92998e9321e1ee029abe7a6ab41e5";
+      sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
     };
 
-    propagatedBuildInputs = with self; [ wxPython pyserial xlib appdirs pkgs.wmctrl ];
-    preConfigure = "substituteInPlace setup.py --replace /usr/share usr/share";
+    propagatedBuildInputs = with self; [ wxPython30 pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
   };
 
   pygal = buildPythonPackage rec {
@@ -21187,14 +21186,14 @@ in modules // {
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.16";
+    version = "0.1.18";
 
     # the source wasn't transformed with 2to3 yet
     doCheck = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
-      sha256 = "108gy82x7davjrn3jqn7yv4r5v4jrzp892ysfx8l00abr8v6r337";
+      sha256 = "1kypl9l2nkzy3pmr89mvpfl65xk1m5y4aaghhandcxkgl329dc9r";
     };
 
     meta = {

@@ -1,7 +1,8 @@
-{ stdenv, cracklib, fetchurl, python }:
+{ stdenv, fetchurl, cracklib, python }:
 
 stdenv.mkDerivation rec {
-  name = "libpwquality-1.3.0";
+  name = "libpwquality-${version}";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "https://fedorahosted.org/releases/l/i/libpwquality/${name}.tar.bz2";

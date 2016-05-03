@@ -1,11 +1,12 @@
 { stdenv, fetchurl, getopt, lua, boost, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "highlight-3.18";
+  name = "highlight-${version}";
+  version = "3.28";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "0jsq78qb75sawwggbpx5pdqxk00wgjr1a0la0w8wihmamsjzgijm";
+    sha256 = "1kg73isgz3czb1k6ccajqzifahr3zs9ci8168k0dlj31j1nlndin";
   };
 
   buildInputs = [ getopt lua boost pkgconfig ];

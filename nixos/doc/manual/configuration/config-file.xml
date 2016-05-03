@@ -106,11 +106,15 @@ networking.extraHosts =
   '';
 </programlisting>
 
-      The main difference is that preceding whitespace is
-      automatically stripped from each line, and that characters like
+      The main difference is that it strips from each line
+      a number of spaces equal to the minimal indentation of
+      the string as a whole (disregarding the indentation of
+      empty lines), and that characters like
       <literal>"</literal> and <literal>\</literal> are not special
       (making it more convenient for including things like shell
-      code).</para>
+      code).
+      See more info about this in the Nix manual <link
+      xlink:href="https://nixos.org/nix/manual/#ssec-values">here</link>.</para>
     </listitem>
   </varlistentry>
 
