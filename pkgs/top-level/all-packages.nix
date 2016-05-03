@@ -13094,6 +13094,8 @@ in
     inherit (gnome) libglade;
   };
 
+  linuxband = callPackage ../applications/audio/linuxband { };
+
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
     boost = boost155;
