@@ -16709,6 +16709,8 @@ in
 
   bullet = callPackage ../development/libraries/bullet {};
 
+  spdlog = callPackage ../development/libraries/spdlog { };
+
   dart = callPackage ../development/interpreters/dart { };
 
   httrack = callPackage ../tools/backup/httrack { };
