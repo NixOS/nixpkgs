@@ -161,8 +161,8 @@ in {
       '';
 
       postStart = ''
-        until ${pkgs.curl.bin}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} ; do
-          sleep 10
+        until ${pkgs.curl.bin}/bin/curl -s -L --fail --head http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} >/dev/null; do
+            sleep 2
         done
       '';
 
