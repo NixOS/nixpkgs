@@ -5203,8 +5203,6 @@ in
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
-  webdsl = callPackage ../development/compilers/webdsl { };
-
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
   wrapCCWith = ccWrapper: libc: extraBuildCommands: baseCC: ccWrapper {
