@@ -165,6 +165,8 @@ in {
         '';
       };
 
+    services.xserver.updateDbusEnvironment = true;
+
     environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
                                                 "${gnome3.glib_networking.out}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];

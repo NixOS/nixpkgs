@@ -449,7 +449,7 @@ in {
         };
       };
     })
-    (mkIf needToCreateCA {
+    (mkIf (cfg.enable && needToCreateCA) {
       systemd.services.taskserver-ca = {
         wantedBy = [ "taskserver.service" ];
         after = [ "taskserver-init.service" ];
@@ -533,7 +533,7 @@ in {
         '';
       };
     })
-    (mkIf (cfg.listenHost != "localhost") {
+    (mkIf (cfg.enable && cfg.listenHost != "localhost") {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
     { meta.doc = ./taskserver.xml; }

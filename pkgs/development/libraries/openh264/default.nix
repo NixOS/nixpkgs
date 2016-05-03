@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "openh264-1.4.0";
+  name = "openh264-1.5.0";
 
   src = fetchurl {
-    url = "https://github.com/cisco/openh264/archive/v1.4.0.tar.gz";
-    sha256 = "08haj0xkyjlwbpqdinxk0cmvqw89bx89ly0kqs9lf87fy6ksgfd1";
+    url = "https://github.com/cisco/openh264/archive/v1.5.0.tar.gz";
+    sha256 = "1d97dh5hzmy46jamfw03flvcz8md1hxp6y5n0b787h8ks7apn1wq";
   };
 
   buildInputs = [ nasm ];

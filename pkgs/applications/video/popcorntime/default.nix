@@ -1,24 +1,25 @@
 { lib, stdenv, fetchurl, makeWrapper, nwjs, zip }:
 
 let
-  arch = if stdenv.system == "x86_64-linux" then "64"
-    else if stdenv.system == "i686-linux"   then "32" 
+  arch = if stdenv.system == "x86_64-linux" then "l64"
+    else if stdenv.system == "i686-linux"   then "l32" 
     else throw "Unsupported system ${stdenv.system}";
 
 in stdenv.mkDerivation rec {
   name = "popcorntime-${version}";
-  version = "0.3.9";
+  version = "0.4.0";
+  build = "2";
 
   src = fetchurl {
-    url = "http://get.popcorntime.sh/build/Popcorn-Time-${version}-Linux-${arch}.tar.xz";
+    url = "http://popcorntime.ag/download.php?file=popcorn-time-community-v${version}-${build}-${arch}.tar.xz";
     sha256 =
-      if arch == "64"
-      then "0qaqdz45frgiy440jyz6hikhklx2yp08qp94z82r03dkbf4a2hvx"
-      else "0y08a42pm681s97lkczdq5dblxl2jbr850hnl85hknl3ynag9kq4";
+      if arch == "l64"
+      then "0a68d0a81d8e97c94afa0c75209056ee4b8486f400854c952bd3ad7251bd80c9"
+      else "b311c312a29d408a7c661a271d1f3a8fc83865d8a204cf026ee87e9ac173874d";
   };
 
   dontPatchELF = true;
-  sourceRoot   = "linux${arch}";
+  sourceRoot = ".";
   buildInputs  = [ zip makeWrapper ];
 
   buildPhase = ''
@@ -39,5 +40,6 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden rnhmjoj ];
+    broken = true;
   };
 }

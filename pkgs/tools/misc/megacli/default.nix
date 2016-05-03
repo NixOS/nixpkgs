@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cd $out
     unzip ${src}
     rpmextract linux/MegaCli-8.07.07-1.noarch.rpm
-    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/opt/lsi/3rdpartylibs/x86_64:$out/opt/lsi/3rdpartylibs:${stdenv.cc.cc}/lib64:${stdenv.cc.cc}/lib opt/MegaRAID/MegaCli/MegaCli64
+    ${patchelf}/bin/patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath ${libPath}:$out/opt/lsi/3rdpartylibs/x86_64:$out/opt/lsi/3rdpartylibs:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.cc.lib}/lib opt/MegaRAID/MegaCli/MegaCli64
     wrapProgram $out/opt/MegaRAID/MegaCli/MegaCli64 --set LD_LIBRARY_PATH $out/opt/lsi/3rdpartylibs/x86_64
     ln -s $out/opt/MegaRAID/MegaCli/MegaCli64 $out/bin/MegaCli64
     eval fixupPhase

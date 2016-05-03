@@ -49,7 +49,8 @@ in stdenv.mkDerivation rec {
     "--enable-preferences-extension"
     "--enable-long-usernames"
     "--enable-external-lookup"
-  ] ++ lib.optional withMySQL "--with-mysql-includes=${libmysql}/include/mysql";
+  ] ++ lib.optional withMySQL "--with-mysql-includes=${libmysql}/include/mysql"
+    ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
   # and fix directory structure manually after that.

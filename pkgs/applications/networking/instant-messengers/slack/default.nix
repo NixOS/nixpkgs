@@ -36,7 +36,7 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-  ] + ":${stdenv.cc.cc}/lib64";
+  ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
     if stdenv.system == "x86_64-linux" then

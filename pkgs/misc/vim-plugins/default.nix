@@ -1,6 +1,6 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
-, which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
+, which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages_38, zip
 , vim_configurable, vimPlugins, xkb_switch, git
 , Cocoa ? null
 }:
@@ -453,12 +453,12 @@ rec {
 
   };
 
-  vim-go = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "vim-go-2016-04-15";
+  vim-go = buildVimPluginFrom2Nix {
+    name = "vim-go-2016-05-01";
     src = fetchgit {
       url = "git://github.com/fatih/vim-go";
-      rev = "b3fddb60fdab980d1fc339fbcbc879abd6cbf524";
-      sha256 = "1ggjisbc187kyzdizqffkicjdkz67mhgpxmqjcvzaq2wc2w44aja";
+      rev = "91ffc410832d0b027f2258c7a91dbbfa378bf71a";
+      sha256 = "00793ick6vralihvmmx8np7japxrd3jkbn5ggqzq0ymgr508gxj4";
     };
     dependencies = [];
 
@@ -938,17 +938,17 @@ rec {
   };
 
   youcompleteme = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "youcompleteme-2016-04-10";
+    name = "youcompleteme-2016-04-28";
     src = fetchgit {
       url = "git://github.com/valloric/youcompleteme";
-      rev = "f67033c990ff5d37ef91ba02da94f6d7409e1c5a";
-      sha256 = "0hwpbj5hr9d26xdcjfxbssyrsl4926c8g999jzpah0sls1r3y2f0";
+      rev = "cb5756943fdd3ba062f101a5aba34acdd34d1356";
+      sha256 = "1fg85mf4x48g6jpn9idjp0k2nz1i34lrx1bxbvp0189ph1xfq7jj";
     };
     dependencies = [];
     buildInputs = [
       python go cmake
-      (if stdenv.isDarwin then llvmPackages.clang else llvmPackages.clang-unwrapped)
-      llvmPackages.llvm
+      (if stdenv.isDarwin then llvmPackages_38.clang else llvmPackages_38.clang-unwrapped)
+      llvmPackages_38.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
     buildPhase = ''

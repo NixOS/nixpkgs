@@ -270,5 +270,6 @@ $ reboot</screen>
 
 <xi:include href="installing-uefi.xml" />
 <xi:include href="installing-usb.xml" />
+<xi:include href="installing-pxe.xml" />
 
 </chapter>

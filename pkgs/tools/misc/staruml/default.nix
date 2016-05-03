@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib
 
-    ln -s ${stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
     ln -s ${libudev.out}/lib/libudev.so.1 $out/lib/libudev.so.0
 
     wrapProgram $out/bin/StarUML \

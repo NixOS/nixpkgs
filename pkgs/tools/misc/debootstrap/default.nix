@@ -30,15 +30,16 @@ let
   
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "debootstrap-1.0.67";
+  name = "debootstrap-${version}";
+  version = "1.0.80";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = mirror://debian/pool/main/d/debootstrap/debootstrap_1.0.67.tar.gz;
-    sha256 = "06x5zw6fskw37qh62hvqx006319l4wgnnw8sf53ms67zpfif04ha";
+    url = "mirror://debian/pool/main/d/debootstrap/debootstrap_${version}.tar.gz";
+    sha256 = "06gigscd2327wsvc7n7w2m8xmaixvp4kyqhayn00qrgd9i9w34x6";
   };
 
   buildInputs = [ dpkg gettext gawk perl ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-hub-${version}";
-  version = "0.9.0";
+  version = "0.10";
 
   src = fetchFromGitHub {
-    sha256 = "0c4kq4a906lr8nzway7qh0560n2ydvidh9rlffh44902rd48kp0h";
+    sha256 = "0zy1g6zzv6cw8ffj8ffm28qa922fys2826n5813p8icqypi04y0k";
     rev = "v${version}";
     repo = "git-hub";
-    owner = "sociomantic";
+    owner = "sociomantic-tsunami";
   };
 
   buildInputs = [ python ];

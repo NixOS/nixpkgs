@@ -32,7 +32,7 @@ let
         gtk2 glib fontconfig freetype unixODBC alsaLib
       ];
 
-      rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc}/lib64";
+      rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
       unpackPhase = ''
         sh $src --keep --noexec

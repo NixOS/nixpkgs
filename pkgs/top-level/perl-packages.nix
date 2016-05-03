@@ -2661,10 +2661,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.030";
+    name = "CryptX-0.031";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "b0e26b4c4de66134f1f1ae4227fdd18cf10f95cecc64a651a8af2710ef7519e5";
+      sha256 = "7221a7a824ae07377f7e97c6daafff47524c46204c9b8ff58420a13fc2c104f1";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -5242,12 +5242,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileUtil = buildPerlPackage rec {
-    name = "File-Util-4.132140";
+    name = "File-Util-4.161200";
     src = fetchurl {
       url = "mirror://cpan/authors/id/T/TO/TOMMY/${name}.tar.gz";
-      sha256 = "4233c493468da8b34f2df19b191aaa400f328d877c8c023605e43385976a99d1";
+      sha256 = "c63be030c15303796d387b290f1f6b59451fb64827e39afeb0e1d0adad72ab8e";
     };
-    buildInputs = [ TestFatal TestNoWarnings ];
+    buildInputs = [ ModuleBuild TestNoWarnings ];
     meta = {
       homepage = https://github.com/tommybutler/file-util/wiki;
       description = "Easy, versatile, portable file handling";
@@ -5460,10 +5460,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Glib = buildPerlPackage rec {
-    name = "Glib-1.320";
+    name = "Glib-1.321";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "15mrwscqjgwpkw9n4x6rakr9rjz2ss8d90k574fs5wx9cmgg3np3";
+      sha256 = "0h4cfxrxcf1mrdab5n5kk0smsi8vcrfnmcw1k6xw87r4vbifnxdr";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.glib ];
     meta = {
@@ -5551,6 +5551,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ FileSlurp URI ];
     propagatedBuildInputs = [ DateManip DigestMD5 MailMboxMessageParser TimeDate ];
+    outputs = [ "out" ];
     meta = {
       homepage = https://github.com/coppit/grepmail;
       description = "Search mailboxes for mail matching a regular expression";
@@ -5569,10 +5570,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Gtk2 = buildPerlPackage rec {
-    name = "Gtk2-1.2497";
+    name = "Gtk2-1.2498";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0j5wm290ihpkx91gbk55qrrb0jhbh5fanbj5fjvs0d2xv6yyh921";
+      sha256 = "0gs6lr4clz86838s3klrl37lf48j24zv0p37jlsvsnr927whpq3j";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Pango pkgs.gtk2 ];
     meta = {
@@ -7143,16 +7144,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogDispatchouli = buildPerlPackage {
-    name = "Log-Dispatchouli-2.009";
+  LogDispatchouli = buildPerlPackage rec {
+    name = "Log-Dispatchouli-2.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Log-Dispatchouli-2.009.tar.gz;
-      sha256 = "09iw27r36gmljlm6gjfczn2sf4s1js697q8na8xw4wlnz7x4bv59";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "214eca0fe77f2dc74675f9aa542778d5d4618c5bf12283540ca1062fcb967fa0";
     };
     buildInputs = [ TestDeep TestFatal ];
     propagatedBuildInputs = [ LogDispatch LogDispatchArray ParamsUtil StringFlogger SubExporter SubExporterGlobExporter TryTiny ];
     meta = {
-      homepage = https://github.com/rjbs/log-dispatchouli;
+      homepage = https://github.com/rjbs/Log-Dispatchouli;
       description = "A simple wrapper around Log::Dispatch";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7354,10 +7355,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999718";
+    name = "Math-BigInt-1.999722";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "3edb44123d6c03a4031057f449b41a0d05ebc48d25ad64b08a5fe2f4ae2ac240";
+      sha256 = "c76a2d5e6a996186a42a7e516b8d82217fb0cd18c7e1e55241322c4a859ccf40";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -7379,10 +7380,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigRat = buildPerlPackage rec {
-    name = "Math-BigRat-0.260803";
+    name = "Math-BigRat-0.260804";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "0558fab8ffe0de8751ccfa3bd129d6f34b82cf75454de82b051d4ddffd4ec99b";
+      sha256 = "f9bf5c007c0f141df7c7887d3482d47033cf7deab094a01e2863f31bacd7ef8a";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
@@ -9397,10 +9398,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Pango = buildPerlPackage rec {
-    name = "Pango-1.226";
+    name = "Pango-1.227";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "0r4jx7d6gj6ixk2r5yr70biy1lpjxir08aywkw02g85wg6zkjw4z";
+      sha256 = "0wdcidnfnb6nm79fzfs39ivawj3x8m98a147fmcxgv1zvwia9c1l";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig pkgs.pango ];
     propagatedBuildInputs = [ Cairo Glib ];
@@ -9636,11 +9637,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PerlIOeol = buildPerlPackage {
-    name = "PerlIO-eol-0.14";
+  PerlIOeol = buildPerlPackage rec {
+    name = "PerlIO-eol-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AU/AUDREYT/PerlIO-eol-0.14.tar.gz;
-      sha256 = "1rwj0r075jfvvd0fnzgdqldc7qdb94wwsi21rs2l6yhcv0380fs2";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "159zrrf44469sjklsi0pb4c005q74d9242q7mqawvbwnxjqbh0a5";
     };
   };
 
@@ -10054,10 +10055,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodElementalPerlMunger = buildPerlPackage rec {
-    name = "Pod-Elemental-PerlMunger-0.200005";
+    name = "Pod-Elemental-PerlMunger-0.200006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "35146bdcf0d3ac271f9ba2a4d4611b98373215c43de43dd4f012f46c44004d57";
+      sha256 = "09fd3b5d53119437a01dced66b42eafdcd53895b3c32a2b0f781f36fda0f665b";
     };
     buildInputs = [ Moose PodElemental ];
     propagatedBuildInputs = [ Moose PPI PodElemental namespaceautoclean ];
@@ -10241,15 +10242,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   PodWeaver = buildPerlPackage rec {
-    name = "Pod-Weaver-4.012";
+    name = "Pod-Weaver-4.013";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "d801cbfaff22d418943d0c5dcb8c145b8cc4d56741f9c33923ef891241116ad6";
+      sha256 = "5f12c5f11d313294520b0a1ab5c0775ef56e222d9181c8dac520cdc77af309e0";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
-    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise ModuleRuntime Moose ParamsUtil PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
+    propagatedBuildInputs = [ ConfigMVP ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli MixinLinewise Moose PodElemental StringFlogger StringFormatter StringRewritePrefix namespaceautoclean ];
     meta = {
-      homepage = https://github.com/rjbs/pod-weaver;
+      homepage = https://github.com/rjbs/Pod-Weaver;
       description = "Weave together a Pod document from an outline";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
@@ -13046,10 +13047,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   threads = buildPerlPackage rec {
-    name = "threads-2.02";
+    name = "threads-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "0vij8lagq4x6gv88x9gg23jd7i0s5fyyzs2wrxacih2ppj6kkiff";
+      sha256 = "0fgprp2ghrh1ryxmr0y9bpsjl1ifbf4lqml8k017cbl4zbn21lim";
     };
     meta = {
       description = "Perl interpreter-based threads";
@@ -13057,11 +13058,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  threadsshared = buildPerlPackage {
-    name = "threads-shared-1.48";
+  threadsshared = buildPerlPackage rec {
+    name = "threads-shared-1.51";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/threads-shared-1.48.tar.gz;
-      sha256 = "7378a72bae424705e354476da69995fb8f62432bca8e98eab0fb9842da5120f8";
+      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
+      sha256 = "0qsbl8rx8p09cb5vj1yhwf1h2awvimfyckw1qwrqbk7dxjldrimn";
     };
     meta = {
       description = "Perl extension for sharing data structures between threads";
@@ -13069,11 +13070,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ThreadQueue = buildPerlPackage {
-    name = "Thread-Queue-3.05";
+  ThreadQueue = buildPerlPackage rec {
+    name = "Thread-Queue-3.09";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JD/JDHEDDEN/Thread-Queue-3.05.tar.gz;
-      sha256 = "36bc1e50b5de47ff827fbaa1d7f028016e3ef115972cac84ed8cd73a0ef95300";
+      url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
+      sha256 = "0f03v10rsasi2j4lh8xw44jac8nfbw66274qgsz5lsmfd6wqvj12";
     };
     meta = {
       description = "Thread-safe queues";

@@ -4,20 +4,24 @@
   libXrandr, libXrender }:
 
 stdenv.mkDerivation {
-  name = "compton-git-2015-04-20";
+  name = "compton-git-2015-09-21";
 
   src = fetchFromGitHub {
     owner  = "chjj";
     repo   = "compton";
-    rev    = "b1889c1245e6f47eedfae6063100d5a16f584e2b";
-    sha256 = "0brnbidxi7wg08yiwgnijzcyqv5lnkd74xzfymvb0i7pgy465vaf";
+    rev    = "2343e4bbd298b35ea5c190c52abd2b0cb9f79a18";
+    sha256 = "1pb0ic47sfd796crwk47cya2ahbxsm6ygi6sh4fwd734kwz37h4z";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     asciidoc
-    dbus
     docbook_xml_dtd_45
     docbook_xml_xslt
+    pkgconfig
+  ];
+
+  buildInputs = [
+    dbus
     libXcomposite
     libXdamage
     libXext
@@ -31,7 +35,6 @@ stdenv.mkDerivation {
     libxslt
     mesa
     pcre
-    pkgconfig
   ];
 
   installFlags = "PREFIX=$(out)";

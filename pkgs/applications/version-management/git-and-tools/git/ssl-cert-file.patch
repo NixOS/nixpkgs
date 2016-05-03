@@ -1,0 +1,11 @@
+diff -ru git-2.7.4-orig/http.c git-2.7.4/http.c
+--- git-2.7.4-orig/http.c	2016-03-17 21:47:59.000000000 +0100
++++ git-2.7.4/http.c	2016-04-12 11:38:33.187070848 +0200
+@@ -544,6 +544,7 @@
+ #if LIBCURL_VERSION_NUM >= 0x070908
+ 	set_from_env(&ssl_capath, "GIT_SSL_CAPATH");
+ #endif
++	set_from_env(&ssl_cainfo, "SSL_CERT_FILE");
+ 	set_from_env(&ssl_cainfo, "GIT_SSL_CAINFO");
+ 
+ 	set_from_env(&user_agent, "GIT_HTTP_USER_AGENT");

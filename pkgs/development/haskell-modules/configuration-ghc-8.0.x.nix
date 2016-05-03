@@ -66,7 +66,7 @@ self: super: {
   kan-extensions = self.kan-extensions_5_0_1;
 
   # Earlier versions don't support kan-extensions 5.x.
-  lens = self.lens_4_13_2_1;
+  lens = self.lens_4_14;
 
   # https://github.com/dreixel/generic-deriving/issues/37
   generic-deriving = dontHaddock super.generic-deriving;

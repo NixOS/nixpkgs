@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
         for i in emulator64-arm emulator64-mips emulator64-x86
         do
             patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-linux-x86-64.so.2 $i
-            patchelf --set-rpath ${stdenv.cc.cc}/lib64 $i
+            patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64 $i
         done
       ''}
       

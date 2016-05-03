@@ -30,6 +30,7 @@ doNotDisplayTwice rec {
   bundler_HEAD = bundler; # added 2015-11-15
   cheetahTemplate = pythonPackages.cheetah; # 2015-06-15
   clangAnalyzer = clang-analyzer;  # added 2015-02-20
+  clawsMail = claws-mail; # added 2016-04-29
   conkerorWrapper = conkeror; # added 2015-01
   cool-old-term = cool-retro-term; # added 2015-01-31
   cupsBjnp = cups-bjnp; # added 2016-01-02
@@ -45,6 +46,7 @@ doNotDisplayTwice rec {
   fuse_exfat = exfat;                   # 2015-09-11
   fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
+  git-hub = gitAndTools.git-hub; # added 2016-04-29
   grantlee5 = qt5.grantlee;  # added 2015-12-19
   gupnptools = gupnp-tools;  # added 2015-12-19
   htmlTidy = html-tidy;  # added 2014-12-06

@@ -41,10 +41,10 @@ self: super: {
   xhtml = self.xhtml_3000_2_1;
 
   # https://github.com/haskell/cabal/issues/2322
-  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_8_2_1; };
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.override { binary = dontCheck self.binary_0_8_3_0; };
 
   # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
-  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_2_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_3_0; });
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

@@ -143,6 +143,7 @@
   garrison = "Jim Garrison <jim@garrison.cc>";
   gavin = "Gavin Rogers <gavin@praxeology.co.uk>";
   gebner = "Gabriel Ebner <gebner@gebner.org>";
+  gilligan = "Tobias Pflug <tobias.pflug@gmail.com>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
   globin = "Robin Gloster <mail@glob.in>";
@@ -236,6 +237,7 @@
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
+  moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
@@ -292,6 +294,7 @@
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   ragge = "Ragnar Dahlen <r.dahlen@gmail.com>";
+  rardiol = "Ricardo Ardissone <ricardo.ardissone@gmail.com>";
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
@@ -315,6 +318,7 @@
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
   rycee = "Robert Helgesson <robert@rycee.net>";
+  ryneeverett = "Ryne Everett <ryneeverett@gmail.com>";
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";

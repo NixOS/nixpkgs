@@ -1,13 +1,13 @@
 { stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "lzip-1.16";
+  name = "lzip-1.17";
 
   buildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "mirror://savannah/lzip/${name}.tar.gz";
-    sha256 = "0l9724rw1l3hg2ldr3n7ihqich4m9nc6y7l302bvdj4jmxdw530j";
+    sha256 = "0lh3x964jjldx3piax6c2qzlhfiir5i6rnrcn8ri44rk19g8ahwl";
   };
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";

@@ -2,14 +2,15 @@
 , docbook_xsl }:
 
 let
-  version = "1.0.60";
+  version = "1.0.63";
 in stdenv.mkDerivation rec {
   name = "tgt-${version}";
+
   src = fetchFromGitHub {
     owner = "fujita";
     repo = "tgt";
-    rev = "ab51727a361bf296b1c2036375b5e45479059921";
-    sha256 = "1bf8rn3mavjrzkp5k23akqn5ilw43g8mpfr68z1bi8s9lr2gkf37";
+    rev = "v${version}";
+    sha256 = "1x3irnbfikdqhlikhwqazg0g0hc1df5r2bp001f13sr0nvw28y1n";
   };
 
   buildInputs = [ libxslt systemd libaio docbook_xsl ];
@@ -30,6 +31,7 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
   meta = {
     description = "iSCSI Target daemon with rdma support";
     license = stdenv.lib.licenses.gpl2;

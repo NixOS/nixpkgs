@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   # In fact I think this line does not help at all to what I
   # wanted to achieve: have mono to find libgdiplus automatically
-  configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib --with-libgdiplus=${libgdiplus}/lib/libgdiplus.so ${llvmOpts}";
+  configureFlags = "--x-includes=${libX11.dev}/include --x-libraries=${libX11.out}/lib --with-libgdiplus=${libgdiplus}/lib/libgdiplus.so ${llvmOpts}";
 
   # Attempt to fix this error when running "mcs --version":
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # http://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | while read i; do
-        sed -i "s@libX11.so.6@${libX11}/lib/libX11.so.6@g" $i
+        sed -i "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g" $i
         sed -i "s@/.*libgdiplus.so@${libgdiplus}/lib/libgdiplus.so@g" $i
     done
   '';

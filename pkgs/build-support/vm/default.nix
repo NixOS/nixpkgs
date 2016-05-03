@@ -1688,6 +1688,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
     };
 
+    ubuntu1604i386 = {
+      name = "ubuntu-16.04-xenial-i386";
+      fullName = "Ubuntu 16.04 Xenial (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            sha256 = "14fid1rqm3sc0wlygcvn0yx5aljf51c2jpd4x0zxij4019316hsh";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1604x86_64 = {
+      name = "ubuntu-16.04-xenial-amd64";
+      fullName = "Ubuntu 16.04 Xenial (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
+            sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz;
+            sha256 = "0mm7gj491yi6q4v0n4qkbsm94s59bvqir6fk60j73w7y4la8rg68";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";

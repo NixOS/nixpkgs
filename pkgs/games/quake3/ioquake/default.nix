@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "ioquake3-git-${version}";
-  version = "2016-03-15";
+  version = "2016-04-05";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "f911e32bb059f714dfc49dc2296bc6f27c442e4c";
-    sha256 = "0l60snxlgvwxbpv31nwshy0rddyyxmcvqg6xqj9ifzr1gj4np5r8";
+    rev = "1f6703821f11be9c711c6ee42371ab290dd12776";
+    sha256 = "0jbn4lv85khfcmn1dc3mrx7zxldj3p4cggx85hdfpiwmnsjl4w67";
   };
 
   nativeBuildInputs = [ which pkgconfig ];

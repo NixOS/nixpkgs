@@ -76,11 +76,11 @@ stdenv.mkDerivation rec {
       cp opt/google/talkplugin/*.so $plugins
 
       for i in libnpgoogletalk.so libppgoogletalk.so libppo1d.so; do
-        patchelf --set-rpath "${makeLibraryPath [ stdenv.cc.cc xorg.libX11 ]}:${stdenv.cc.cc}/lib64" $plugins/$i
+        patchelf --set-rpath "${makeLibraryPath [ stdenv.cc.cc xorg.libX11 ]}:${stdenv.cc.cc.lib}/lib64" $plugins/$i
       done
 
       for i in libgoogletalkremoting.so libnpo1d.so; do
-        patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.cc.cc}/lib64" $plugins/$i
+        patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.cc.cc.lib}/lib64" $plugins/$i
       done
 
       mkdir -p $out/libexec/google/talkplugin
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${rpathProgram}:${stdenv.cc.cc}/lib64" \
+        --set-rpath "${rpathProgram}:${stdenv.cc.cc.lib}/lib64" \
         $out/libexec/google/talkplugin/GoogleTalkPlugin
 
       # Generate an LD_PRELOAD wrapper to redirect execvp() calls to

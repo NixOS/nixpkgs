@@ -34,7 +34,7 @@ pythonPackages.buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://octoprint.org/;
+    homepage = "http://octoprint.org/";
     description = "The snappy web interface for your 3D printer";
     platforms = platforms.all;
     license = licenses.agpl3;

@@ -67,8 +67,8 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = if stdenv.isDarwin then ''
-    install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc}/lib/libgcc_s.1.dylib $out/bin/d8
-    install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
+    install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/bin/d8
+    install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
   '' else null;
 
   meta = with stdenv.lib; {

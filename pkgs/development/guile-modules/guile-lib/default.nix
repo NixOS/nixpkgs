@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preCheck =
     # Make `libgcc_s.so' visible for `pthread_cancel'.
-    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.cc.cc}/lib*/libgcc_s.so)):$LD_LIBRARY_PATH"
+    '' export LD_LIBRARY_PATH="$(dirname $(echo ${stdenv.cc.cc.lib}/lib*/libgcc_s.so)):$LD_LIBRARY_PATH"
     '';
 
   meta = {

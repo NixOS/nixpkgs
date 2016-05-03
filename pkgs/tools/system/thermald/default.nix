@@ -1,13 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, dbus_libs, dbus_glib, libxml2 }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.3";
   name = "thermald-${version}";
+  version = "1.5.3";
+
   src = fetchFromGitHub {
     owner = "01org";
     repo = "thermal_daemon";
     rev = "v${version}";
-    sha256 = "1wrbydmw1jc5dcjawhhsa52hilzajl9n849i09d2nfilv3qcqqi9";
+    sha256 = "0k10sl262d9slrln1vkgsxlr1pnfxzd3ycs552bl7ynf0zxpl48h";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig dbus_libs dbus_glib libxml2 ];
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";
-    homepage = https://01.org/linux-thermal-daemon;
+    homepage = "https://01.org/linux-thermal-daemon";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
