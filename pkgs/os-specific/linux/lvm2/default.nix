@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, enable_dmeventd ? false }:
+{ stdenv, fetchurl, pkgconfig, systemd, libudev, utillinux, coreutils, libuuid, enable_dmeventd ? false }:
 
 let
   version = "2.02.140";
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libudev ];
+  buildInputs = [ libudev libuuid ];
 
   preConfigure =
     ''
