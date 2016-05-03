@@ -13047,10 +13047,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   threads = buildPerlPackage rec {
-    name = "threads-2.02";
+    name = "threads-2.07";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDHEDDEN/${name}.tar.gz";
-      sha256 = "0vij8lagq4x6gv88x9gg23jd7i0s5fyyzs2wrxacih2ppj6kkiff";
+      sha256 = "0fgprp2ghrh1ryxmr0y9bpsjl1ifbf4lqml8k017cbl4zbn21lim";
     };
     meta = {
       description = "Perl interpreter-based threads";
