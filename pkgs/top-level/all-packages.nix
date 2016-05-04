@@ -9833,7 +9833,9 @@ in
 
   rmilter = callPackage ../servers/mail/rmilter { };
 
-  rspamd = callPackage ../servers/mail/rspamd { };
+  rspamd = callPackage ../servers/mail/rspamd {
+    openssl = openssl_1_0_2;
+  };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
 
