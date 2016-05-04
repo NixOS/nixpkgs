@@ -266,6 +266,7 @@
       emby = 242;
       graylog = 243;
       sniproxy = 244;
+      nzbget = 245;
 
       prometheus = 999;
 
@@ -504,6 +505,7 @@
       factorio = 241;
       emby = 242;
       sniproxy = 244;
+      nzbget = 245;
 
       prometheus = 999;
 
