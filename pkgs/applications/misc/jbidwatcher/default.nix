@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   jarfile = "$out/share/java/${pname}/JBidwatcher.jar";
 
-#  unpackPhase = "true";
+  unpackPhase = "true";
 
   dontBuild = true;
 
