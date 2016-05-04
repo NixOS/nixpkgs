@@ -14805,6 +14805,8 @@ in
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
+  ckan = callPackage ../games/ckan { };
+
   cockatrice = qt5.callPackage ../games/cockatrice {  };
 
   confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
