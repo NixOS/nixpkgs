@@ -203,4 +203,7 @@ self: super: {
   # https://github.com/fpco/stackage/issues/1112
   vector-algorithms = dontCheck super.vector-algorithms;
 
+  # Trigger rebuild to mitigate broken packaes on Hydra.
+  amazonka-core = triggerRebuild super.amazonka-core 1;
+
 }
