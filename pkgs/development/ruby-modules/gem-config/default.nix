@@ -57,6 +57,12 @@ in
     buildInputs = [ gpgme ];
   };
 
+  hitimes = attrs: {
+    buildInputs =
+      stdenv.lib.optionals stdenv.isDarwin
+        [ darwin.apple_sdk.frameworks.CoreServices ];
+  };
+
   # note that you need version >= v3.16.14.8,
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
