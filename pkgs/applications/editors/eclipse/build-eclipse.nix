@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${stdenv.glibc}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${freetype}/lib:${fontconfig}/lib:${libX11}/lib:${libXrender}/lib:${zlib}/lib $libCairo
