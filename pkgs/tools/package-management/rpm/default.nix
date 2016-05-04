@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_LINK = "-L${elfutils}/lib";
 
+  patches = [ ./no_mkdir_in_chroot.patch ];
+
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
     substituteInPlace configure --replace 'python''${PYTHON_VERSION}' ${python.executable}
