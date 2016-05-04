@@ -113,6 +113,9 @@ self: super: {
   servant-client = dontCheck (doJailbreak super.servant-client_0_7);
   servant-server = dontCheck (doJailbreak super.servant-server_0_7);
 
+  # packaged shelly 1.6.6 complains: time >=1.3 && <1.6
+  shelly         = doJailbreak super.shelly;
+
   # The essential part is released in 2.1 upstream (needs hackage import)
   singletons     = (pkgs.haskell.lib.overrideCabal super.singletons (oldAttrs: {
     src = pkgs.fetchgit {
