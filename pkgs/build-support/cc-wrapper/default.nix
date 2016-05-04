@@ -113,6 +113,7 @@ stdenv.mkDerivation {
         ccCFlags+=" -B${cc_solib}/lib64"
       fi
       ccLDFlags+=" -L${cc_solib}/lib"
+      ccCFlags+=" -B${cc_solib}/lib"
 
       ${optionalString cc.langVhdl or false ''
         ccLDFlags+=" -L${zlib.out}/lib"
