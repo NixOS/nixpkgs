@@ -366,4 +366,20 @@ it. Place the resulting <filename>package.nix</filename> file into
 
 </section>
 
+<section xml:id="sec-autojump">
+
+<title>Autojump</title>
+
+<para>
+  autojump needs the shell integration to be useful but unlike other systems,
+  nix doesn't have a standard share directory location. This is why a
+  <command>autojump-share</command> script is shipped that prints the location
+  of the shared folder. This can then be used in the .bashrc like this:
+<screen>
+  source "$(autojump-share)/autojump.bash"
+</screen>
+</para>
+
+</section>
+
 </chapter>
