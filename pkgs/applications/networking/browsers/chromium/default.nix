@@ -19,9 +19,7 @@ let
   callPackage = newScope chromium;
 
   chromium = {
-    upstream-info = (import ./update.nix {
-      inherit (stdenv) system;
-    }).getChannel channel;
+    upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport
