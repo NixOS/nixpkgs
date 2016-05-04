@@ -26,13 +26,13 @@
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio ? null
 
+# Only needed for getting information about upstream binaries
+, chromium
 }:
 
 with stdenv.lib;
 
-with (import ../chromium/update.nix {
-  inherit (stdenv) system;
-}).getChannel channel;
+with chromium.upstream-info;
 
 let
   opusWithCustomModes = libopus.override {
