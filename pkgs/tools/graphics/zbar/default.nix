@@ -1,5 +1,5 @@
 { stdenv, fetchurl, imagemagickBig, pkgconfig, python, pygtk, perl
-, libX11, libv4l, qt4, lzma, gtk2
+, libX11, libv4l, qt4, lzma, gtk2, libwebp
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ imagemagickBig pkgconfig python pygtk perl libX11
-      libv4l qt4 lzma gtk2 ];
+      libv4l qt4 lzma gtk2 libwebp ];
 
   configureFlags = ["--disable-video"];
 
