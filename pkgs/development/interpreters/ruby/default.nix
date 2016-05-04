@@ -206,15 +206,14 @@ in {
     };
   };
 
-  ruby_2_3_0 = generic {
+  ruby_2_3_1 = generic {
     majorVersion = "2";
     minorVersion = "3";
-    teenyVersion = "0";
+    teenyVersion = "1";
     patchLevel = "0";
     sha256 = {
-      # src = "1ssq3c23ay57ypfis47y2n817hfmb71w0xrdzp57j6bv12jqmgrx";
-      src = "01z5cya4a7y751d4pb3aak5qcwmmvnwkbgz9z171p8hsbw7acnxs";
-      git = "0nl0pp96m0jxi422mqx09jqn9bff90pzz0xxa0ikrx7by0g00npg";
+      src = "1kbxg72las93w0y553cxv3lymy2wvij3i3pg1y9g8aq3na676z5q";
+      git = "0dv1rf5f9lj3icqs51bq7ljdcf17sdclmxm9hilwxps5l69v5q9r";
     };
   };
 }
