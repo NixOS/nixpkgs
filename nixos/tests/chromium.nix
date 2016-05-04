@@ -2,6 +2,8 @@
 , pkgs ? import ../.. { inherit system; }
 , channelMap ? {
     stable = pkgs.chromium;
+    beta   = pkgs.chromiumBeta;
+    dev    = pkgs.chromiumDev;
   }
 }:
 
