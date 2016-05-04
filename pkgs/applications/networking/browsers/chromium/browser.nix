@@ -36,5 +36,6 @@ mkChromiumDerivation (base: rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 })
