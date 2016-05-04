@@ -6,8 +6,8 @@ let
   libglnx-src = fetchFromGitHub {
     owner  = "GNOME";
     repo   = "libglnx";
-    rev    = "08ae6639e522e9b11765245fbecdbbe474ccde98";
-    sha256 = "1k7fbivi2mwb2x5bqqbqc3nbnfjjw1l911hs914197hyqpy21dab";
+    rev    = "85c9dd5c073a8c0d74c4baa2e4a94f5535984e62";
+    sha256 = "08m8wxlkymwq5hsc26k7ndwiqiw1ggaaxyi2qfhqznasgbp4g623";
   };
 in stdenv.mkDerivation rec {
   rev  = "v2016.1";
