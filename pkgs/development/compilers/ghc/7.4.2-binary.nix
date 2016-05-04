@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
-  buildPhase = "true";
+  dontBuild = true;
 
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/lib/ghc-7.4.2

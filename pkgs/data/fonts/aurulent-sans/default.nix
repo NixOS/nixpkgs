@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "01hvpvbrks40g9k1xr2f1gxnd5wd0sxidgfbwrm94pdi1a36xxrk";
   };
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     fontDir=$out/share/fonts/opentype

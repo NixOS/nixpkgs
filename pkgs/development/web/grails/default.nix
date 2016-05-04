@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out"

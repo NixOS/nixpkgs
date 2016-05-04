@@ -14,18 +14,17 @@ stdenv.mkDerivation {
 
   buildInputs = [ nix readline ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   # FIXME: unfortunate cut&paste.
-  installPhase =
-    ''
-      mkdir -p $out/bin
-      $CXX -O3 -Wall -std=c++0x \
-        -o $out/bin/nix-repl nix-repl.cc \
-        -I${nix}/include/nix \
-        -lnixformat -lnixutil -lnixstore -lnixexpr -lnixmain -lreadline -lgc \
-        -DNIX_VERSION=\"${(builtins.parseDrvName nix.name).version}\"
-    '';
+  installPhase = ''
+    mkdir -p $out/bin
+    $CXX -O3 -Wall -std=c++0x \
+      -o $out/bin/nix-repl nix-repl.cc \
+      -I${nix}/include/nix \
+      -lnixformat -lnixutil -lnixstore -lnixexpr -lnixmain -lreadline -lgc \
+      -DNIX_VERSION=\"${(builtins.parseDrvName nix.name).version}\"
+  '';
 
   meta = {
     homepage = https://github.com/edolstra/nix-repl;

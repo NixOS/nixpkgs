@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1zwmw42mpakjrzmbygshcg2qzq9mv8lx42738rz3j9hrqzg4pw";
   };
 
-  configurePhase = "true";
-  buildPhase = "true";
+  dontBuild = true;
 
   buildInputs = [bdftopcf mkfontdir mkfontscale];
 

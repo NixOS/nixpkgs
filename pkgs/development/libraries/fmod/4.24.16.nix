@@ -29,10 +29,9 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   dontPatchELF = true;
+  dontBuild = true;
 
   makeFlags = [ "DESTLIBDIR=$(out)/lib" "DESTHDRDIR=$(out)/include" ];
-
-  buildPhase = "true";
 
   preInstall = ''
     mkdir -p $out/lib

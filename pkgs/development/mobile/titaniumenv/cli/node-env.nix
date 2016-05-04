@@ -4,7 +4,7 @@ let
   # Function that generates a TGZ file from a NPM project
   buildNodeSourceDist =
     { name, version, src }:
-    
+
     stdenv.mkDerivation {
       name = "node-tarball-${name}-${version}";
       inherit src;
@@ -30,7 +30,7 @@ let
       sha1 = "77466de589cd5d3c95f138aa78bc569a3cb5d27a";
     };
   } {};
-  
+
   # Function that produces a deployed NPM package in the Nix store
   buildNodePackage =
     { name, version, src, dependencies ? {}, buildInputs ? [], production ? true, npmFlags ? "", meta ? {}, linkDependencies ? false }:
@@ -42,8 +42,8 @@ let
       #
       # It uses the semver utility to check whether a version range matches any
       # of the provided dependencies.
-  
-      analysedDependencies = 
+
+      analysedDependencies =
         if dependencies == {} then {}
         else
           import (stdenv.mkDerivation {
@@ -63,14 +63,14 @@ let
                     let
                       providedDependency = builtins.getAttr dependencyName providedDependencies;
                       versions = builtins.attrNames providedDependency;
-                      
+
                       # If there is a version range match, add the dependency to
                       # the set of shimmed dependencies.
                       # Otherwise, it is a required dependency.
                     in
                     ''
                       $(latestVersion=$(semver -r '${versionSpec}' ${stdenv.lib.concatMapStrings (version: " '${version}'") versions} | tail -1 | tr -d '\n')
-                      
+
                       if semver -r '${versionSpec}' ${stdenv.lib.concatMapStrings (version: " '${version}'") versions} >/dev/null
                       then
                           echo "shimmedDependencies.\"${dependencyName}\".\"$latestVersion\" = true;"
@@ -86,7 +86,7 @@ let
               EOF
             '';
           });
-    
+
       requiredDependencies = analysedDependencies.requiredDependencies or {};
       shimmedDependencies = analysedDependencies.shimmedDependencies or {};
 
@@ -95,11 +95,11 @@ let
         tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
         mv node-* $out
       '';
-  
+
       # Compose dependency information that this package must propagate to its
       # dependencies, so that provided dependencies are not included a second time.
       # This prevents cycles and wildcard version mismatches.
-  
+
       propagatedProvidedDependencies =
         (stdenv.lib.mapAttrs (dependencyName: dependency:
           builtins.listToAttrs (map (versionSpec:
@@ -110,20 +110,20 @@ let
         ) dependencies) //
         providedDependencies //
         { "${name}"."${version}" = true; };
-        
+
       # Create a node_modules folder containing all required dependencies of the
       # package
-      
+
       nodeDependencies = stdenv.mkDerivation {
         name = "node-dependencies-${name}-${version}";
         inherit src;
         buildCommand = ''
           mkdir -p $out/lib/node_modules
           cd $out/lib/node_modules
-          
+
           # Create copies of (or symlinks to) the dependencies that must be deployed in this package's private node_modules folder.
           # This package's private dependencies are NPM packages that have not been provided by any of the includers.
-          
+
           ${stdenv.lib.concatMapStrings (requiredDependencyName:
             stdenv.lib.concatMapStrings (versionSpec:
               let
@@ -133,7 +133,7 @@ let
               in
               ''
                 depPath=$(echo ${dependency}/lib/node_modules/*)
-                
+
                 ${if linkDependencies then ''
                   ln -s $depPath .
                 '' else ''
@@ -144,35 +144,35 @@ let
           ) (builtins.attrNames requiredDependencies)}
         '';
       };
-    
+
       # Deploy the Node package with some tricks
       self = stdenv.lib.makeOverridable stdenv.mkDerivation {
         inherit src meta;
         dontStrip = true;
-      
+
         name = "node-${name}-${version}";
         buildInputs = [ nodejs python ] ++ stdenv.lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
-        buildPhase = "true";
-    
+        dontBuild = true;
+
         installPhase = ''
           # Move the contents of the tarball into the output folder
           mkdir -p "$out/lib/node_modules/${name}"
           mv * "$out/lib/node_modules/${name}"
-          
+
           # Enter the target directory
           cd "$out/lib/node_modules/${name}"
-          
+
           # Patch the shebangs of the bundled modules. For "regular" dependencies
           # this is step is not required, because it has already been done by the generic builder.
-          
+
           if [ -d node_modules ]
           then
               patchShebangs node_modules
           fi
-          
+
           # Copy the required dependencies
           mkdir -p node_modules
-          
+
           ${stdenv.lib.optionalString (requiredDependencies != {}) ''
             for i in ${nodeDependencies}/lib/node_modules/*
             do
@@ -182,9 +182,9 @@ let
                 fi
             done
           ''}
-          
+
           # Create shims for the packages that have been provided by earlier includers to allow the NPM install operation to still succeed
-          
+
           ${stdenv.lib.concatMapStrings (shimmedDependencyName:
             stdenv.lib.concatMapStrings (versionSpec:
               ''
@@ -198,24 +198,24 @@ let
               ''
             ) (builtins.attrNames (shimmedDependencies."${shimmedDependencyName}"))
           ) (builtins.attrNames shimmedDependencies)}
-          
+
           # Ignore npm-shrinkwrap.json for now. Ideally, it should be supported as well
           rm -f npm-shrinkwrap.json
-          
+
           # Some version specifiers (latest, unstable, URLs, file paths) force NPM to make remote connections or consult paths outside the Nix store.
           # The following JavaScript replaces these by * to prevent that:
-          
+
           (
           cat <<EOF
           var fs = require('fs');
           var url = require('url');
-          
+
           /*
            * Replaces an impure version specification by *
            */
           function replaceImpureVersionSpec(versionSpec) {
               var parsedUrl = url.parse(versionSpec);
-              
+
               if(versionSpec == "latest" || versionSpec == "unstable" ||
                   versionSpec.substr(0, 2) == ".." || dependency.substr(0, 2) == "./" || dependency.substr(0, 2) == "~/" || dependency.substr(0, 1) == '/')
                   return '*';
@@ -225,9 +225,9 @@ let
               else
                   return versionSpec;
           }
-          
+
           var packageObj = JSON.parse(fs.readFileSync('./package.json'));
-          
+
           /* Replace dependencies */
           if(packageObj.dependencies !== undefined) {
               for(var dependency in packageObj.dependencies) {
@@ -235,7 +235,7 @@ let
                   packageObj.dependencies[dependency] = replaceImpureVersionSpec(versionSpec);
               }
           }
-          
+
           /* Replace development dependencies */
           if(packageObj.devDependencies !== undefined) {
               for(var dependency in packageObj.devDependencies) {
@@ -243,7 +243,7 @@ let
                   packageObj.devDependencies[dependency] = replaceImpureVersionSpec(versionSpec);
               }
           }
-          
+
           /* Replace optional dependencies */
           if(packageObj.optionalDependencies !== undefined) {
               for(var dependency in packageObj.optionalDependencies) {
@@ -251,19 +251,19 @@ let
                   packageObj.optionalDependencies[dependency] = replaceImpureVersionSpec(versionSpec);
               }
           }
-          
+
           /* Write the fixed JSON file */
           fs.writeFileSync("package.json", JSON.stringify(packageObj));
           EOF
           ) | node
-          
+
           # Deploy the Node.js package by running npm install. Since the dependencies have been symlinked, it should not attempt to install them again,
           # which is good, because we want to make it Nix's responsibility. If it needs to install any dependencies anyway (e.g. because the dependency
           # parameters are incomplete/incorrect), it fails.
-          
+
           export HOME=$TMPDIR
           npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
-          
+
           # After deployment of the NPM package, we must remove the shims again
           ${stdenv.lib.concatMapStrings (shimmedDependencyName:
             ''
@@ -271,19 +271,19 @@ let
               rmdir node_modules/${shimmedDependencyName}
             ''
           ) (builtins.attrNames shimmedDependencies)}
-          
+
           # It makes no sense to keep an empty node_modules folder around, so delete it if this is the case
           if [ -d node_modules ]
           then
               rmdir --ignore-fail-on-non-empty node_modules
           fi
-          
+
           # Create symlink to the deployed executable folder, if applicable
           if [ -d "$out/lib/node_modules/.bin" ]
           then
               ln -s $out/lib/node_modules/.bin $out/bin
           fi
-          
+
           # Create symlinks to the deployed manual page folders, if applicable
           if [ -d "$out/lib/node_modules/${name}/man" ]
           then
@@ -298,7 +298,7 @@ let
               done
           fi
         '';
-        
+
         shellHook = stdenv.lib.optionalString (requiredDependencies != {}) ''
           export NODE_PATH=${nodeDependencies}/lib/node_modules
         '';

@@ -8,7 +8,7 @@
 
     Logging
     -------
-    
+
     `/tmp/br_lpdfilter_ml1.log` when `$ENV{LPD_DEBUG} > 0` in `filter_BrGenML1`
     which is activated automatically when `DEBUG > 0` in `brother_lpdwrapper_BrGenML1`
     from the cups wrapper.
@@ -17,7 +17,7 @@
     ------
 
      -  filter_BrGenML1 ln 196 `my $GHOST_SCRIPT=`which gs`;`
-      
+
         `GHOST_SCRIPT` is empty resulting in an empty `/tmp/br_lpdfilter_ml1_gsout.dat` file.
         See `/tmp/br_lpdfilter_ml1.log` for the executed command.
 
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups perl glibc ghostscript which ];
-  
-  buildPhase = ":";
+
+  dontBuild = true;
 
   patchPhase = ''
     INFDIR=opt/brother/Printers/BrGenML1/inf

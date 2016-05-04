@@ -1,9 +1,13 @@
 { name, stdenv, perl, makeWrapper, sqitchModule, databaseModule }:
+
 stdenv.mkDerivation {
   name = "${name}-${sqitchModule.version}";
+
   buildInputs = [ perl makeWrapper sqitchModule databaseModule ];
-  unpackPhase = ":";
-  buildPhase = ":";
+
+  src = sqitchModule;
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/bin
     for d in bin/sqitch etc lib share ; do

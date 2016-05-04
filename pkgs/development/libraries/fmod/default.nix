@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   dontStrip = true;
-  buildPhase = "true";
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/lib $out/include/fmodex
 

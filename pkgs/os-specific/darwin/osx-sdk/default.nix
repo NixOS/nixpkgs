@@ -7,9 +7,8 @@ in stdenv.mkDerivation rec {
 
   src = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk";
 
-  unpackPhase    = "true";
-  configurePhase = "true";
-  buildPhase     = "true";
+  unpackPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/Developer/SDKs/

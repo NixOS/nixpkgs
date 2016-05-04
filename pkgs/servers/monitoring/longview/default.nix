@@ -11,15 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1i6va44bx2zfgbld7znf1slph0iqidlahq2xh3kd8q4lhvbrjn02";
   };
 
-  patches =
-    [ # log to systemd journal
-      ./log-stdout.patch
-    ];
+  patches = [
+    # log to systemd journal
+    ./log-stdout.patch
+  ];
 
-  postPatch =
-    ''
-      substituteInPlace Linode/Longview/Util.pm --replace /var/run/longview.pid /run/longview.pid
-    '';
+  postPatch = ''
+    substituteInPlace Linode/Longview/Util.pm --replace /var/run/longview.pid /run/longview.pid
+  '';
 
   buildInputs = [ perl makeWrapper glibc ]
     ++ (with perlPackages; [
@@ -37,7 +36,8 @@ stdenv.mkDerivation rec {
       DBDmysql
     ]);
 
-  buildPhase = "true";
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p $out/bin $out/usr
     mv Linode $out

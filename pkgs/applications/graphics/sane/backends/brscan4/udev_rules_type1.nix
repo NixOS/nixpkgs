@@ -1,8 +1,6 @@
 { stdenv, fetchurl, libsaneUDevRuleNumber ? "49"}:
 
-
 stdenv.mkDerivation rec {
-
   name = "brother-udev-rule-type1-1.0.0-1";
 
   src = fetchurl {
@@ -10,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i0x5jw135pli4jl9mgnr5n2rrdvml57nw84yq2999r4frza53xi";
   };
 
-  buildInputs = [ ];
+  dontBuild = true;
 
   unpackPhase = ''
     ar x $src
@@ -36,9 +34,6 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i -e s/SYSFS/ATTR/g opt/brother/scanner/udev-rules/type1/*.rules
   '';
-
-
-  buildPhase = ":";
 
   installPhase = ''
     mkdir -p $out/etc/udev/rules.d

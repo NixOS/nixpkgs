@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [python makeWrapper];
 
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
     python ./setup.py install --prefix=$out
     for i in bzr svn git; do

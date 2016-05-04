@@ -53,5 +53,5 @@ stdenv.mkDerivation ({
 //
 
 (if headersOnly
- then { buildPhase = ":"; installPhase = "make install-data"; }
+ then { dontBuild = true; installPhase = "make install-data"; }
  else {}))

@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
-  buildPhase = "true";
+  dontBuild = true;
 
   # The binaries for Darwin use frameworks, so fake those frameworks,
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
