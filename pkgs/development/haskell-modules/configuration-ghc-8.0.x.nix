@@ -74,4 +74,82 @@ self: super: {
   # https://github.com/haskell-suite/haskell-src-exts/issues/302
   haskell-src-exts = dontCheck super.haskell-src-exts;
 
+  active         = doJailbreak super.active;
+
+  authenticate-oauth = doJailbreak super.authenticate-oauth;
+
+  diagrams-core  = doJailbreak super.diagrams-core;
+
+  diagrams-lib   = doJailbreak super.diagrams-lib;
+
+  foldl          = doJailbreak super.foldl;
+
+  force-layout   = doJailbreak super.force-layout;
+
+  # Partial fixes released in 1.20.5 upstream, full fixes only in git
+  linear         = pkgs.haskell.lib.overrideCabal super.linear (oldAttrs: {
+    editedCabalFile = null;
+    revision        = null;
+    src = pkgs.fetchgit {
+            url    = https://github.com/ekmett/linear.git;
+            rev    = "8da21dc72714441cb34d6eabd6c224819787365c";
+            sha256 = "08l0z6zrlbals2bwc2abbh31j9gf90vgp8sy3dcrp0knc98bgaa1";
+    };
+  });
+
+  lucid-svg      = doJailbreak super.lucid-svg;
+
+  monads-tf      = doJailbreak super.monads-tf;
+
+  parsers        = doJailbreak super.parsers;
+
+  pointed        = super.pointed_5;
+
+  reducers       = doJailbreak super.reducers;
+
+  sdl2           = doJailbreak super.sdl2;
+
+  servant        = dontCheck (doJailbreak super.servant_0_7);
+  servant-client = dontCheck (doJailbreak super.servant-client_0_7);
+  servant-server = dontCheck (doJailbreak super.servant-server_0_7);
+
+  # The essential part is released in 2.1 upstream (needs hackage import)
+  singletons     = (pkgs.haskell.lib.overrideCabal super.singletons (oldAttrs: {
+    src = pkgs.fetchgit {
+            url    = https://github.com/goldfirere/singletons.git;
+            rev    = "277fa943e8c260973effb2291672b166bdd951c1";
+            sha256 = "1ll9fcgs5nxqihvv5vr2bf9z6ijvn3yyk5ss3cgcfvcd95ayy1wz";
+    };
+  }));
+
+  # The essential part only in upstream git, last released upstream version 2.7.0, Dec 8
+  stm-conduit    = doJailbreak (pkgs.haskell.lib.overrideCabal super.stm-conduit (oldAttrs: {
+    src          = pkgs.fetchgit {
+            url    = https://github.com/cgaebel/stm-conduit.git;
+            rev    = "3f831d703c422239e56a9da0f42db8a7059238e0";
+            sha256 = "0bmym2ps0yjcsbyg02r8v1q8z5hpml99n72hf2pjmd31dy8iz7v9";
+    };
+  }));
+
+  # The essential part only in upstream git, last released upstream version 1.6.0, Jan 27
+  th-desugar          = doJailbreak (pkgs.haskell.lib.overrideCabal super.th-desugar (oldAttrs: {
+    src = pkgs.fetchgit {
+            url    = https://github.com/goldfirere/th-desugar.git;
+            rev    = "7496de0243a12c14be1b37b89eb41cf9ef6f5229";
+            sha256 = "10awknqviq7jb738r6n9rlyra0pvkrpnk0hikz4459hny4hamn75";
+    };
+  }));
+
+  # The essential part is released in 0.1.4.1 upstream (needs hackage import)
+  th-reify-many          = doJailbreak (pkgs.haskell.lib.overrideCabal super.th-reify-many (oldAttrs: {
+    src = pkgs.fetchgit {
+            url    = https://github.com/mgsloan/th-reify-many.git;
+            rev    = "699eed232c2ccaf9fb109f131e80ed8d654d6f08";
+            sha256 = "001fvpq039l9wj9v8id7kfjwmp4acf53zr4z6sppdvrv6npzz5yb";
+    };
+  }));
+
+  trifecta       = doJailbreak super.trifecta;
+
+  turtle         = doJailbreak super.turtle;
 }
