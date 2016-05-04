@@ -1,0 +1,87 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    Ascii85 (1.0.2)
+    addressable (2.4.0)
+    afm (0.2.2)
+    asciidoctor (1.5.4)
+    asciidoctor-bespoke (1.0.0.alpha.1)
+      asciidoctor (>= 1.5.0)
+      slim (~> 3.0.6)
+      thread_safe (~> 0.3.5)
+    asciidoctor-diagram (1.4.0)
+      asciidoctor (~> 1.5.0)
+    asciidoctor-latex (1.5.0.6.dev)
+      asciidoctor (~> 1.5, >= 1.5.2)
+      htmlentities (~> 4.3)
+      opal (~> 0.6.3)
+    asciidoctor-pdf (1.5.0.alpha.11)
+      asciidoctor (~> 1.5.0)
+      prawn (>= 1.3.0, < 3.0.0)
+      prawn-icon (= 1.0.0)
+      prawn-svg (= 0.21.0)
+      prawn-table (= 0.2.2)
+      prawn-templates (= 0.0.3)
+      safe_yaml (~> 1.0.4)
+      thread_safe (~> 0.3.5)
+      treetop (= 1.5.3)
+    concurrent-ruby (1.0.1)
+    css_parser (1.4.1)
+      addressable
+    hashery (2.1.2)
+    htmlentities (4.3.4)
+    json (1.8.3)
+    opal (0.6.3)
+      source_map
+      sprockets
+    pdf-core (0.6.1)
+    pdf-reader (1.4.0)
+      Ascii85 (~> 1.0.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
+    polyglot (0.3.5)
+    prawn (2.1.0)
+      pdf-core (~> 0.6.1)
+      ttfunk (~> 1.4.0)
+    prawn-icon (1.0.0)
+      prawn (>= 1.1.0, < 3.0.0)
+    prawn-svg (0.21.0)
+      css_parser (~> 1.3)
+      prawn (>= 0.8.4, < 3)
+    prawn-table (0.2.2)
+      prawn (>= 1.3.0, < 3.0.0)
+    prawn-templates (0.0.3)
+      pdf-reader (~> 1.3)
+      prawn (>= 0.15.0)
+    rack (1.6.4)
+    ruby-rc4 (0.1.5)
+    safe_yaml (1.0.4)
+    slim (3.0.6)
+      temple (~> 0.7.3)
+      tilt (>= 1.3.3, < 2.1)
+    source_map (3.0.1)
+      json
+    sprockets (3.6.0)
+      concurrent-ruby (~> 1.0)
+      rack (> 1, < 3)
+    temple (0.7.6)
+    thread_safe (0.3.5)
+    tilt (2.0.2)
+    treetop (1.5.3)
+      polyglot (~> 0.3)
+    ttfunk (1.4.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  asciidoctor
+  asciidoctor-bespoke
+  asciidoctor-diagram
+  asciidoctor-latex
+  asciidoctor-pdf
+
+BUNDLED WITH
+   1.11.2
