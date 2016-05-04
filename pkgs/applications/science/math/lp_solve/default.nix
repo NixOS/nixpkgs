@@ -10,9 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "176c7f023mb6b8bfmv4rfqnrlw88lsg422ca74zjh19i2h5s69sq";
   };
 
+  patches = [ ./isnan.patch ];
+
   buildCommand = ''
     . $stdenv/setup
     tar xvfz $src
+    (
+    cd lp_solve*
+    eval patchPhase
+    )
     (
     cd lp_solve*/lpsolve55
     bash ccc
@@ -37,7 +43,6 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ smironov ];
     platforms   = platforms.unix;
-    broken      = true;
   };
 
 }
