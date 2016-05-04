@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ];
 
   propagatedBuildInputs =
-    [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 ];
+    [ bzip2 freetype libjpeg libX11 libXext libXt lcms2 libwebp ];
 
   postInstall = ''
 
