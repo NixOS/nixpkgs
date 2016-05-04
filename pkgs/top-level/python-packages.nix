@@ -25790,9 +25790,17 @@ in modules // {
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
+    version = "0.1.2";
     disabled = !isPy27;
 
-    src = self.neovim.src;
+    src = pkgs.fetchFromGitHub {
+      owner = "neovim";
+      repo = "python-gui";
+      rev = version;
+      sha256 = "0sc5apxwxgfj57q7d9cih404jgvczbp7slz5z8wqdyxpxlb42pn2";
+    };
+
+    buildInputs = with self; [ neovim ];
 
     propagatedBuildInputs = [
       self.msgpack
