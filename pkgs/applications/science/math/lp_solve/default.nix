@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "5.5.2.0";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/lpsolve/files/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
+    url = "mirror://sourceforge/project/lpsolve/lpsolve/${version}/lp_solve_${version}_source.tar.gz";
     sha256 = "176c7f023mb6b8bfmv4rfqnrlw88lsg422ca74zjh19i2h5s69sq";
   };
 
