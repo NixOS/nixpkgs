@@ -25766,12 +25766,14 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.0.38";
+    version = "0.1.7";
     name = "neovim-${version}";
+
+    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "93f475d5583a053af919ba0729b32b3fefef1dbde4717b5657d806bdc69b76b3";
+      sha256 = "0il6h9qpy9rkgz16yn2bhhg5f23w41wvm9ivlscx5l55llq9sd9q";
     };
 
     propagatedBuildInputs = with self; [ msgpack ]
@@ -25788,9 +25790,16 @@ in modules // {
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
+    version = "0.1.2";
     disabled = !isPy27;
 
-    src = self.neovim.src;
+    src = pkgs.fetchurl {
+      url = "https://github.com/neovim/python-gui/tarball/${version}";
+      name = "${name}.tar.bz";
+      sha256 = "1idi3qljd1rs8bdnhzvhs5f1i9pz1lndx7d1z048rsswl0bjg16s";
+    };
+
+    buildInputs = with self; [ neovim ];
 
     propagatedBuildInputs = [
       self.msgpack
