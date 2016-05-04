@@ -1,32 +1,78 @@
 { config, lib, pkgs, ... }:
+
 with lib;
+
 let cfg = config.services.unclutter;
+
 in {
-  options = {
-    services.unclutter.enable = mkOption {
+  options.services.unclutter = {
+
+    enable = mkOption {
+      description = "Enable unclutter to hide your mouse cursor when inactive";
       type = types.bool;
       default = false;
       example = true;
-      description = "Enable unclutter to hide your mouse cursor when inactive";
     };
 
-    services.unclutter.arguments = mkOption {
-      description = "Arguments to pass to unclutter command";
-      default = "-idle 1";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.unclutter;
+      defaultText = "pkgs.unclutter";
+      description = "unclutter derivation to use.";
+    };
+
+    keystroke = mkOption {
+      description = "Wait for a keystroke before hiding the cursor";
+      type = types.bool;
+      default = false;
+    };
+
+    timeout = mkOption {
+      description = "Number of seconds before the cursor is marked inactive";
+      type = types.int;
+      default = 1;
+    };
+
+    threeshold = mkOption {
+      description = "Minimum number of pixels considered cursor movement";
+      type = types.int;
+      default = 1;
+    };
+
+    displayName = mkOption {
+      description = "Name of the X11 display";
       type = types.str;
+      default = ":0";
+    };
+
+    excluded = mkOption {
+      description = "Names of windows where unclutter should not apply";
+      type = types.listOf types.str;
+      default = [];
+      example = [ "" ];
+    };
+
+    extraOptions = mkOption {
+      description = "More arguments to pass to the unclutter command";
+      type = types.listOf types.str;
+      default = [];
+      example = [ "noevent" "grab" ];
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.services.unclutter = {
+    systemd.user.services.unclutter = {
       description = "unclutter";
-      requires = [ "display-manager.service" ];
-      after = [ "display-manager.service" ];
-      wantedBy = [ "graphical.target" ];
+      wantedBy = [ "default.target" ];
       serviceConfig.ExecStart = ''
-        ${pkgs.unclutter}/bin/unclutter ${cfg.arguments}
+        ${cfg.package}/bin/unclutter \
+          -idle ${toString cfg.timeout} \
+          -display ${cfg.displayName} \
+          -jitter ${toString (cfg.threeshold - 1)} \
+          ${optionalString cfg.keystroke "-keystroke"} \
+          ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
+          -not ${concatStringsSep " " cfg.excluded} \
       '';
-      environment = { DISPLAY = ":0"; };
       serviceConfig.Restart = "always";
     };
   };
