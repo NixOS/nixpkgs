@@ -40,5 +40,6 @@ in stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bobvanderlinden rnhmjoj ];
+    broken = true;
   };
 }

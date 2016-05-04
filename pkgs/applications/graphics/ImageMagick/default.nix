@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
-  version = "6.9.3-8";
+  version = "6.9.3-9";
 
   src = fetchurl {
     urls = [
@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
       # the original source above removes tarballs quickly
       "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
     ];
-    sha256 = "129s4cwp6cbhgsr3xr8186q5j02zpbk6kqfk4j7ayb563zsrdb4h";
+    sha256 = "0q19jgn1iv7zqrw8ibxp4z57iihrc9kyb09k2wnspcacs6vrvinf";
   };
+
+  patches = [ ./imagetragick.patch ];
 
   outputs = [ "out" "doc" ];
 

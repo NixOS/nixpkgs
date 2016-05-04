@@ -1595,6 +1595,8 @@ in
 
   galen = callPackage ../development/tools/galen {};
 
+  gandi-cli = callPackage ../tools/networking/gandi-cli { };
+
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
   garmintools = callPackage ../development/libraries/garmintools {};
@@ -13076,6 +13078,8 @@ in
     inherit (gnome) libglade;
   };
 
+  linuxband = callPackage ../applications/audio/linuxband { };
+
   ledger2 = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger {
     boost = boost155;
@@ -14786,6 +14790,8 @@ in
   chessx = qt5.callPackage ../games/chessx { };
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
+
+  ckan = callPackage ../games/ckan { };
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
 
@@ -16684,6 +16690,8 @@ in
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+
+  spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/interpreters/dart { };
 

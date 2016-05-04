@@ -5808,25 +5808,6 @@ in modules // {
     };
   };
 
-  gandi-cli = buildPythonPackage rec {
-    name = "gandi-cli-${version}";
-    version = "0.18";
-    src = pkgs.fetchFromGitHub {
-      sha256 = "045gnz345nfbi1g7j3gcyzrxrx3hcidaxzr05cb49rcr8nmqh1s3";
-      rev = version;
-      repo = "gandi.cli";
-      owner = "Gandi";
-    };
-    propagatedBuildInputs = with self; [ click ipy pyyaml requests ];
-    doCheck = false;	# Tests try to contact the actual remote API
-    meta = {
-      homepage = http://cli.gandi.net/;
-      description = "Command-line interface to the public Gandi.net API";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
-
   gateone = buildPythonPackage rec {
     name = "gateone-1.2-0d57c3";
     disabled = ! isPy27;

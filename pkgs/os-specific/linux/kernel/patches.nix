@@ -23,9 +23,7 @@ let
     { name = "grsecurity-${grversion}-${kversion}";
       inherit grversion kernel patches kversion revision;
       patch = fetchurl {
-        url = if branch == "stable"
-              then "https://github.com/kdave/grsecurity-patches/blob/master/grsecurity_patches/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true"
-              else "https://github.com/slashbeast/grsecurity-scrape/blob/master/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch?raw=true";
+        url = "https://grsecurity.net/${branch}/grsecurity-${grversion}-${kversion}-${revision}.patch";
         inherit sha256;
       };
       features.grsecurity = true;

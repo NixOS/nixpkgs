@@ -2,20 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
-  rev = "d8ca00fe40ff4b6d87e7e64c273f536fab462356";
-  version = "1.1pre-2016-01-28-${builtins.substring 0 7 rev}";
+  version = "1.1pre14";
 
   src = fetchgit {
-    inherit rev;
+    rev = "refs/tags/release-${version}";
     url = "git://tinc-vpn.org/tinc";
-    sha256 = "0wqgzbqlafbkmj71vhfrqwmp61g95amzd43py47kq3fn5aiybcqf";
+    sha256 = "0idc4ddhz380xw26c8wwdyr0p6pibada55f0hzhnc2cz9za9x4iv";
   };
+
+  outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];
 
   prePatch = ''
     substituteInPlace configure.ac --replace UNKNOWN ${version}
+  '';
+
+  postInstall = ''
+    rm $out/bin/tinc-gui
   '';
 
   configureFlags = [

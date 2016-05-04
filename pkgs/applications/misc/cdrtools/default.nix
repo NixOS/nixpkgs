@@ -1,11 +1,12 @@
 { stdenv, fetchurl, acl, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "cdrtools-3.02a03";
+  name = "cdrtools-${version}";
+  version = "3.02a06";
 
   src = fetchurl {
     url = "mirror://sourceforge/cdrtools/${name}.tar.bz2";
-    sha256 = "02gjxib0sgzsdicnb7496x0a175w1sb34v8zc9mdi8cfw7skw996";
+    sha256 = "1cayhfbhj5g2vgmkmq5scr23k0ka5fsn0dhn0n9yllj386csnygd";
   };
 
   patches = [ ./fix-paths.patch ];
