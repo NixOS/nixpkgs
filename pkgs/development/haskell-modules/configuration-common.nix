@@ -175,9 +175,6 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # The test suite won't even start.
-  darcs = dontCheck super.darcs;
-
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
 
