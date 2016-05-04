@@ -704,10 +704,6 @@ self: super: {
     then addBuildDepend super.hmatrix pkgs.darwin.apple_sdk.frameworks.Accelerate
     else super.hmatrix;
 
-  # https://github.com/commercialhaskell/stack/issues/408
-  # https://github.com/commercialhaskell/stack/issues/409
-  stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
-
   # Hydra no longer allows building texlive packages.
   lhs2tex = dontDistribute super.lhs2tex;
 
