@@ -29,7 +29,7 @@ let
               hiDPISupport;
     };
 
-    browser = callPackage ./browser.nix { };
+    browser = callPackage ./browser.nix { inherit channel; };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;

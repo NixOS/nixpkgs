@@ -1,4 +1,4 @@
-{ stdenv, mkChromiumDerivation }:
+{ stdenv, mkChromiumDerivation, channel }:
 
 with stdenv.lib;
 
@@ -35,5 +35,6 @@ mkChromiumDerivation (base: rec {
     maintainers = with maintainers; [ chaoflow ];
     license = licenses.bsd3;
     platforms = platforms.linux;
+    hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];
   };
 })
