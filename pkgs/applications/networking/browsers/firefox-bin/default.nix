@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, config
+{ stdenv, fetchurl, config, makeWrapper
 , alsaLib
 , atk
 , cairo
@@ -13,7 +13,8 @@
 , glibc
 , gst_plugins_base
 , gstreamer
-, gtk
+, gtk2
+, gtk3
 , libX11
 , libXScrnSaver
 , libXcomposite
@@ -26,6 +27,7 @@
 , libcanberra
 , libgnome
 , libgnomeui
+, defaultIconTheme
 , mesa
 , nspr
 , nss
@@ -64,7 +66,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
-    inherit (source) sha256;
+    inherit (source) sha512;
   };
 
   phases = "unpackPhase installPhase";
@@ -85,7 +87,8 @@ stdenv.mkDerivation {
       glibc
       gst_plugins_base
       gstreamer
-      gtk
+      gtk2
+      gtk3
       libX11
       libXScrnSaver
       libXcomposite
@@ -108,6 +111,8 @@ stdenv.mkDerivation {
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
+
+  buildInputs = [ makeWrapper gtk3 defaultIconTheme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -144,6 +149,11 @@ stdenv.mkDerivation {
       GenericName=Web Browser
       Categories=Application;Network;
       EOF
+
+      wrapProgram "$out/bin/firefox" \
+        --argv0 "$out/bin/.firefox-wrapped" \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
+        --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
   meta = with stdenv.lib; {

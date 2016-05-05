@@ -26,7 +26,9 @@ in stdenv.mkDerivation rec {
 
   preConfigure = "export bin=$dev";
 
-  doCheck = true;
+  # it's hard to cross-run tests and some check programs didn't compile anyway
+  makeFlags = stdenv.lib.optional (!doCheck) "check_PROGRAMS=";
+  doCheck = ! stdenv ? cross;
 
   postInstall = ''mv "$out/bin" "$dev/bin"'';
 

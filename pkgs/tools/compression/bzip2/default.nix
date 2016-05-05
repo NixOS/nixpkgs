@@ -35,10 +35,6 @@ in stdenv.mkDerivation {
       sed -i -e '/<sys\\stat\.h>/s|\\|/|' bzip2.c
     '';
     preConfigure = "sh ./autogen.sh";
-    # clear native hooks that are not needed with autoconf
-    preBuild = "";
-    preInstall = "";
-    postInstall = "";
   };
 
   outputs = [ "dev" "bin" "static" ] ++ stdenv.lib.optional sharedLibrary "out";
@@ -47,21 +43,23 @@ in stdenv.mkDerivation {
     make -f ${if stdenv.isDarwin then "Makefile-libbz2_dylib" else "Makefile-libbz2_so"}
   '';
 
-  preInstall = stdenv.lib.optionalString sharedLibrary (if !stdenv.isDarwin then ''
-    mkdir -p $out/lib
-    mv libbz2.so* $out/lib
-    ( cd $out/lib &&
-      ln -s libbz2.so.1.0.? libbz2.so &&
-      ln -s libbz2.so.1.0.? libbz2.so.1
-    )
-  '' else ''
-    mkdir -p $out/lib
-    mv libbz2.*.dylib $out/lib
-    ( cd $out/lib &&
-      ln -s libbz2.1.0.?.dylib libbz2.dylib &&
-      ln -s libbz2.1.0.?.dylib libbz2.1.dylib
-    )
-  '');
+  preInstall = stdenv.lib.optionalString
+    (sharedLibrary && stdenv.cross.libc or null != "msvcrt")
+    (if !stdenv.isDarwin then ''
+      mkdir -p $out/lib
+      mv libbz2.so* $out/lib
+      ( cd $out/lib &&
+        ln -s libbz2.so.1.0.? libbz2.so &&
+        ln -s libbz2.so.1.0.? libbz2.so.1
+      )
+    '' else ''
+      mkdir -p $out/lib
+      mv libbz2.*.dylib $out/lib
+      ( cd $out/lib &&
+        ln -s libbz2.1.0.?.dylib libbz2.dylib &&
+        ln -s libbz2.1.0.?.dylib libbz2.1.dylib
+      )
+    '');
 
   installFlags = [ "PREFIX=$(bin)" ];
 
@@ -70,9 +68,18 @@ in stdenv.mkDerivation {
     ln -s bzip2 $bin/bin/bunzip2
     ln -s bzip2 $bin/bin/bzcat
 
-    mkdir "$static"
-    mv "$bin/lib" "$static/"
-  '';
+  ''
+    + (if stdenv.cross.libc or null != "msvcrt" # mingw TODO: avoided rebuilds for now
+      then ''
+        mkdir "$static"
+        mv "$bin/lib" "$static/"
+      ''
+      else ''
+        moveToOutput "lib/*.a" "$static"
+        moveToOutput "lib/*.dll.a" "$out"
+        mkdir -p "$static" # empty for now, but we want to avoid failure
+      '')
+    ;
 
   postPatch = ''
     substituteInPlace Makefile --replace CC=gcc CC=cc

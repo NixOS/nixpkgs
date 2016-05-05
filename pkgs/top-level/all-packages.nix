@@ -876,6 +876,8 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
+  
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
 
@@ -5595,7 +5597,7 @@ in
     ruby_2_0_0
     ruby_2_1_7
     ruby_2_2_3
-    ruby_2_3_0;
+    ruby_2_3_1;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -5603,7 +5605,7 @@ in
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_7;
   ruby_2_2 = ruby_2_2_3;
-  ruby_2_3 = ruby_2_3_0;
+  ruby_2_3 = ruby_2_3_1;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -12500,6 +12502,7 @@ in
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
   };
 
   firefox-bin = self.wrapFirefox firefox-bin-unwrapped {
@@ -14799,6 +14802,8 @@ in
 
   chocolateDoom = callPackage ../games/chocolate-doom { };
 
+  ckan = callPackage ../games/ckan { };
+
   cockatrice = qt5.callPackage ../games/cockatrice {  };
 
   confd = goPackages.confd.bin // { outputs = [ "bin" ]; };
@@ -16691,6 +16696,8 @@ in
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+
+  spdlog = callPackage ../development/libraries/spdlog { };
 
   dart = callPackage ../development/interpreters/dart { };
 

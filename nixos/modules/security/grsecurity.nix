@@ -194,6 +194,23 @@ in
           '';
         };
 
+        disableSimultConnect = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Disable TCP simultaneous connect.  The TCP simultaneous connect
+            feature allows two clients to connect without either of them
+            entering the listening state.  This feature of the TCP specification
+            is claimed to enable an attacker to deny the target access to a given
+            server by guessing the source port the target would use to make the
+            connection.
+
+            This option is OFF by default because TCP simultaneous connect has
+            some legitimate uses.  Enable this option if you know what this TCP
+            feature is for and know that you do not need it.
+          '';
+        };
+
         verboseVersion = mkOption {
           type = types.bool;
           default = false;

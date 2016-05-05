@@ -1,11 +1,11 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames
+{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? true
-, enableStatic ? false
+, enableShared ? !(stdenv.cross.libc or null == "msvcrt") # problems for now
+, enableStatic ? !enableShared
 , enablePIC ? false
 , enableExceptions ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
@@ -76,8 +76,14 @@ let
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
     "--without-python"
+  ] ++ optionals (stdenv.cross.libc == "msvcrt") [
+    "target-os=windows"
+    "threadapi=win32"
+    "binary-format=pe"
+    "address-model=${if hasPrefix "x86_64-" stdenv.cross.config then "64" else "32"}"
+    "architecture=x86"
   ];
-  crossB2Args = concatMapStringsSep " " (genericB2Flags ++ crossB2Flags);
+  crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
 
   builder = b2Args: ''
     ./b2 ${b2Args}
@@ -104,6 +110,8 @@ let
       find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
+  '' + optionalString (stdenv.cross.libc or null == "msvcrt") ''
+    ${stdenv.cross.config}-ranlib "$lib"/lib/*.a
   '';
 
 in
@@ -138,14 +146,15 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ icu expat zlib bzip2 python ]
+  buildInputs = [ expat zlib bzip2 libiconv ]
+    ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   configureScript = "./bootstrap.sh";
-  configureFlags = commonConfigureFlags ++ [
-    "--with-icu=${icu.dev}"
-    "--with-python=${python.interpreter}"
-  ] ++ optional (toolset != null) "--with-toolset=${toolset}";
+  configureFlags = commonConfigureFlags
+    ++ [ "--with-python=${python.interpreter}" ]
+    ++ optional (! stdenv ? cross) "--with-icu=${icu.dev}"
+    ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = builder nativeB2Args;
 
@@ -157,15 +166,10 @@ stdenv.mkDerivation {
   setOutputFlags = false;
 
   crossAttrs = rec {
-    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
-    # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
-    # override them.
-    propagatedBuildInputs = buildInputs;
     # We want to substitute the contents of configureFlags, removing thus the
     # usual --build and --host added on cross building.
     preConfigure = ''
       export configureFlags="--without-icu ${concatStringsSep " " commonConfigureFlags}"
-      set -x
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
@@ -173,5 +177,13 @@ stdenv.mkDerivation {
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
     postFixup = fixup;
+  } // optionalAttrs (stdenv.cross.libc == "msvcrt") {
+    patches = fetchurl {
+      url = "https://svn.boost.org/trac/boost/raw-attachment/ticket/7262/"
+          + "boost-mingw.patch";
+      sha256 = "0s32kwll66k50w6r5np1y5g907b7lcpsjhfgr7rsw7q5syhzddyj";
+    };
+
+    patchFlags = "-p0";
   };
 }
