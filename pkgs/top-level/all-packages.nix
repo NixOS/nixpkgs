@@ -1514,6 +1514,8 @@ in
 
   fio = callPackage ../tools/system/fio { };
 
+  flamerobin = callPackage ../applications/misc/flamerobin { };
+
   flashtool = callPackage_i686 ../development/mobile/flashtool {
     platformTools = androidenv.platformTools;
   };
