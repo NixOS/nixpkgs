@@ -5,15 +5,15 @@ let
     else if stdenv.system == "i686-linux" then "i386"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
-  sha256 = if stdenv.system == "x86_64-linux" then "01yrligi61gxcixh7z6gi427ga0sx97wnmkv08p9ykd4b90hvj7s"
-    else if stdenv.system == "i686-linux" then     "119dll7f4w7h8nrrafmrj1d0lddjzwg5l8hnf74xdjg6g7rhrmd7"
+  sha256 = if stdenv.system == "x86_64-linux" then "1hnw6bv60xrnc733gm1ilywc0y93k2g6bmwgnww9qk7ivbvi6pd1"
+    else if stdenv.system == "i686-linux" then     "0hj8nbq6mava15m1hxaqq371fqk0whdx5iqsbnppyci0jjnr4qv1"
     else throw "Bittorrent Sync for: ${stdenv.system} not supported!";
 
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 in
 stdenv.mkDerivation rec {
   name = "btsync-${version}";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src  = fetchurl {
     url  = "https://download-cdn.getsync.com/${version}/linux-${arch}/BitTorrent-Sync_${arch}.tar.gz";
