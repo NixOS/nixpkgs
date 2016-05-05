@@ -40,7 +40,6 @@
     version = "1.0.0.alpha.1";
   };
   asciidoctor-diagram = {
-    dependencies = ["asciidoctor"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0yb2gqzzbvgf5im0bhv26s3h09m9m6a0pjlq3swqcvwi1szc64k5";
@@ -51,10 +50,10 @@
   asciidoctor-latex = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0kzql61w4phr45w771lvmlmvg22h2wd11n9frrzk3k7psqqd7k61";
+      sha256 = "0wdrhcxz0sz9kx2zxn3qbqm5p664n9gzvv3lmg3214pj3si5wxnn";
       type = "gem";
     };
-    version = "1.5.0.6.dev";
+    version = "1.5.0.8.dev";
   };
   asciidoctor-pdf = {
     source = {
@@ -67,10 +66,10 @@
   concurrent-ruby = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13igpwgbsq701vzh1lrxs9dlqdgs58kflw8vw35644amwnj1cmjn";
+      sha256 = "1kb4sav7yli12pjr8lscv8z49g52a5xzpfg3z9h8clzw6z74qjsw";
       type = "gem";
     };
-    version = "1.0.1";
+    version = "1.0.2";
   };
   css_parser = {
     source = {
