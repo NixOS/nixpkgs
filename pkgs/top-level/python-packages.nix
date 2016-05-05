@@ -10500,7 +10500,6 @@ in modules // {
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
-    disabled = isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
@@ -10522,6 +10521,10 @@ in modules // {
       --- 566 ----
       !                 'content-length': str(len(self.body))
       DIFF
+
+      # Explicit encoding flag is required with python3, unless locale is set.
+      ${if !self.isPy3k then "" else
+        "patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}"}
     '';
 
     meta = {
