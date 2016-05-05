@@ -28,8 +28,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  # Make sure we don't strip the libraries in lib/gcc/avr.
-  stripDebugList= [ "bin" "avr/bin" "libexec" ];
+  dontStripList = [
+    "lib/gcc/avr"   # Stripping here makes the whole toolchain unstable
+    "avr/lib"       # Avr binaries need to be stripped with avr-strip; see below.
+  ];
 
   installPhase = ''
     # important, without this gcc won't find the binutils executables
@@ -65,6 +67,12 @@ stdenv.mkDerivation {
     make $MAKE_FLAGS
     make install
     popd
+  '';
+
+  postFixup = ''
+    # Strip avr/lib with avr-strip
+    alias strip=$out/bin/avr-strip
+    dontStripList= stripDirs "avr/strip" "''${stripDebugFlags:--S}"
   '';
 
   meta = with stdenv.lib; {

@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
     substituteInPlace utils/ppmtolss16 gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
   '';
 
-  stripDebugList = "bin sbin share/syslinux/com32";
-
   makeFlags = [
     "BINDIR=$(out)/bin"
     "SBINDIR=$(out)/sbin"
