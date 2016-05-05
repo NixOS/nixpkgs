@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
+  # Some files in share look like malformed executables.
+  dontStripList = [ "share/swig" ];
+
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
 

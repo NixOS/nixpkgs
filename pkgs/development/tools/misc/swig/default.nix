@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-ccache";
 
+  # Some files in share look like malformed executables.
+  dontStripList = [ "share/swig" ];
+
   meta = {
     description = "Interface compiler that connects C/C++ code to higher-level languages";
 
