@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ dbus glib ];
 
+  preConfigure = ''
+    configureFlagsArray+=("--exec-prefix=$dev")
+  '';
+
   doCheck = true;
 
   passthru = { inherit dbus glib; };
