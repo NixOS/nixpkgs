@@ -8743,8 +8743,6 @@ in
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
 
-    signon = callPackage ../development/libraries/signon { };
-
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
     vlc = lowPrio (callPackage ../applications/video/vlc {
