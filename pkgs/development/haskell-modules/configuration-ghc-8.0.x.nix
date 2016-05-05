@@ -86,6 +86,9 @@ self: super: {
 
   force-layout   = doJailbreak super.force-layout;
 
+  # packaged 0.2.2.6 is missing: base >=4.7 && <4.9
+  freer          = doJailbreak super.freer;
+
   # Partial fixes released in 1.20.5 upstream, full fixes only in git
   linear         = pkgs.haskell.lib.overrideCabal super.linear (oldAttrs: {
     editedCabalFile = null;
@@ -112,6 +115,9 @@ self: super: {
   servant        = dontCheck (doJailbreak super.servant_0_7);
   servant-client = dontCheck (doJailbreak super.servant-client_0_7);
   servant-server = dontCheck (doJailbreak super.servant-server_0_7);
+
+  # packaged shelly 1.6.6 complains: time >=1.3 && <1.6
+  shelly         = doJailbreak super.shelly;
 
   # The essential part is released in 2.1 upstream (needs hackage import)
   singletons     = (pkgs.haskell.lib.overrideCabal super.singletons (oldAttrs: {
