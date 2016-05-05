@@ -146,15 +146,6 @@ self: super: {
     };
   }));
 
-  # The essential part is released in 0.1.4.1 upstream (needs hackage import)
-  th-reify-many          = doJailbreak (pkgs.haskell.lib.overrideCabal super.th-reify-many (oldAttrs: {
-    src = pkgs.fetchgit {
-            url    = https://github.com/mgsloan/th-reify-many.git;
-            rev    = "699eed232c2ccaf9fb109f131e80ed8d654d6f08";
-            sha256 = "001fvpq039l9wj9v8id7kfjwmp4acf53zr4z6sppdvrv6npzz5yb";
-    };
-  }));
-
   trifecta       = doJailbreak super.trifecta;
 
   turtle         = doJailbreak super.turtle;
