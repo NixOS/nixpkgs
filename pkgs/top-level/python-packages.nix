@@ -11122,12 +11122,12 @@ in modules // {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "4.2.2";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "ff1ef5c6c3031a62db46ec6329867b4cb1595e6102a7819b3b5252b0c524bdb8";
+      sha256 = "052a02p38byp3n95k8cwidid05gc5cx44qinzsdzs605zw757z1z";
     };
 
     buildInputs = with self; [ nose ];
