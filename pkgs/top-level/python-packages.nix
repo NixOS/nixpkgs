@@ -13203,12 +13203,12 @@ in modules // {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.2.0";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "b597437ba33538221008e21fea71cd01eda9da1515ca3963d7c74e44f4b03d90";
+      sha256 = "113d0548ky0fwa7h950ijkwi1cnpc46l9cdmjr3kjj3vqwb4j371";
     };
 
     LC_ALL = "en_US.UTF-8";
