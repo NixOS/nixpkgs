@@ -118,6 +118,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  dontStripList = [ "share/go/src/debug/elf/testdata" ];
+
   meta = with stdenv.lib; {
     branch = "1.4";
     homepage = http://golang.org/;
