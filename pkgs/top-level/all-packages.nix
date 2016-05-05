@@ -16269,6 +16269,8 @@ in
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
+  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
+
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
     llvm = llvm_37;
   };
@@ -16286,6 +16288,8 @@ in
   faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+
+  faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
