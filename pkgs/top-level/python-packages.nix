@@ -21682,12 +21682,12 @@ in modules // {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.2.1";
     name = "traitlets-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "440e38dfa5d2a26c086d4b427cfb7aed17d0a2dca78bce90c33354da2592af5b";
+      sha256 = "1h0aryjiqz2f3ykcjb34k5wz6bmzyp5cll7r4k08yfvji4ya7svn";
     };
 
     buildInputs = with self; [ nose mock ];
