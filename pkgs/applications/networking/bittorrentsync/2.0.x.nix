@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "2.3.3";
 
   src  = fetchurl {
-    url  = "https://download-cdn.getsyncapp.com/${version}/linux-${arch}/BitTorrent-Sync_${arch}.tar.gz";
+    url  = "https://download-cdn.getsync.com/${version}/linux-${arch}/BitTorrent-Sync_${arch}.tar.gz";
     inherit sha256;
   };
 
