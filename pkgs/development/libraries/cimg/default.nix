@@ -4,21 +4,22 @@
 stdenv.mkDerivation rec {
 
   name = "cimg-${version}";
-  version = "1.5.9";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/cimg/CImg-${version}.zip";
-    sha256 = "1xn20643gcbl76kvy9ajhwbyjjb73mg65q32ma8mdkwn1qhn7f7c";
+    url = "http://cimg.eu/files/CImg_${version}.zip";
+    sha256 = "06j3n7gvgxzvprqwf56nnca195y38dcbdlszrxyn5p9w9al437zj";
   };
 
-  buildInputs = with stdenv.lib;
-  [ unzip ];
+  buildInputs = [ unzip ];
 
   builder = ./builder.sh;
-  
+
+  outputs = [ "out" "doc" ];
+
   meta = with stdenv.lib; {
     description = "A small, open source, C++ toolkit for image processing";
-    homepage = http://cimg.sourceforge.net/;
+    homepage = http://cimg.eu/;
     license = licenses.cecill-c;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

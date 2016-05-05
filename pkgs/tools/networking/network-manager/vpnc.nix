@@ -1,5 +1,5 @@
 { stdenv, fetchurl, vpnc, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, procps, module_init_tools }:
+, withGnome ? true, gnome3, procps, kmod }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
        --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-vpnc-service.c" \
        --replace "/sbin/vpnc" "${vpnc}/sbin/vpnc" \
-       --replace "/sbin/modprobe" "${module_init_tools}/sbin/modprobe"
+       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
   '';
 
   postConfigure = ''

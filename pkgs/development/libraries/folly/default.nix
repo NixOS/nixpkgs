@@ -2,23 +2,15 @@
 , google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  version = "0.57.0";
   name = "folly-${version}";
+  version = "2016-04-29";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "v${version}";
-    sha256 = "12b9bkwmndfwmsknc209kpplxn9wqmwr3p2h0l2szrppq4qqyfq9";
+    rev = "b31eb722e444ab0293a73fe9de3f94e657ca6de9";
+    sha256 = "0s95y0wnz4xbrkzbiksnb0n0d0qrkcsbssznng57kwlq8jlfka24";
   };
-
-  patches = [
-    # Fix compatibility with Boost 1.59
-    (fetchpatch {
-      url = "https://github.com/facebook/folly/commit/29193aca605bb93d82a3c92acd95bb342115f3a4.patch";
-      sha256 = "1ixpgq1wjr3i7madx4faw72n17ilc9cr435k5w1x95jr954m9j7b";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook python ];
   buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];

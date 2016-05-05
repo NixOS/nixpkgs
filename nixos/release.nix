@@ -103,6 +103,19 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
+  netboot.x86_64-linux = let build = (import lib/eval-config.nix {
+      system = "x86_64-linux";
+      modules = [
+        ./modules/installer/netboot/netboot-minimal.nix
+        versionModule
+      ];
+    }).config.system.build;
+  in
+    pkgs.symlinkJoin {name="netboot"; paths=[
+      build.netbootRamdisk
+      build.kernel
+      build.netbootIpxeScript
+    ];};
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -197,9 +210,12 @@ in rec {
   tests.blivet = callTest tests/blivet.nix {};
   tests.boot = callSubTests tests/boot.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
-  tests.chromium = callSubTests tests/chromium.nix {};
+  tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
   tests.cjdns = callTest tests/cjdns.nix {};
-  tests.containers = callTest tests/containers.nix {};
+  tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
+  tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
+  tests.containers-bridge = callTest tests/containers-bridge.nix {};
+  tests.containers-imperative = callTest tests/containers-imperative.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };

@@ -496,6 +496,9 @@ with stdenv.lib;
     BINFMT_SCRIPT y
   ''}
 
+  # For systemd-binfmt
+  BINFMT_MISC? y
+
   # Enable the 9P cache to speed up NixOS VM tests.
   9P_FSCACHE? y
   9P_FS_POSIX_ACL? y

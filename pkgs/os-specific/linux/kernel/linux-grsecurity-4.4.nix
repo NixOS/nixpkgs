@@ -1,5 +1,7 @@
 { stdenv, fetchurl, perl, buildLinux, ... } @ args:
 
+throw "grsecurity stable is no longer supported; please update your configuration"
+
 import ./generic.nix (args // rec {
   version = "4.4.5";
   extraMeta.branch = "4.4";

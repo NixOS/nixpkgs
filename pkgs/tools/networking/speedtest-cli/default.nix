@@ -5,7 +5,7 @@ pythonPackages.buildPythonApplication rec {
   version = "0.3.4";
   
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/s/speedtest-cli/speedtest-cli-${version}.tar.gz";
+    url = "mirror://pypi/s/speedtest-cli/speedtest-cli-${version}.tar.gz";
     sha256 = "19i671cd815fcv0x7h2m0a493slzwkzn7r926g8myx1srkss0q6d";
   };
 

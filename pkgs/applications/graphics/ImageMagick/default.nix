@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, pkgconfig, libtool
 , bzip2, zlib, libX11, libXext, libXt, fontconfig, freetype, ghostscript, libjpeg
-, lcms2, openexr, libpng, librsvg, libtiff, libxml2
+, lcms2, openexr, libpng, librsvg, libtiff, libxml2, openjpeg, libwebp
 }:
 
 let
@@ -11,8 +11,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.3-8";
-    sha256 = "129s4cwp6cbhgsr3xr8186q5j02zpbk6kqfk4j7ayb563zsrdb4h";
+    version = "6.9.3-9";
+    sha256 = "0q19jgn1iv7zqrw8ibxp4z57iihrc9kyb09k2wnspcacs6vrvinf";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     ];
     inherit (cfg) sha256;
   };
-  inherit (cfg) patches;
+
+  patches = [ ./imagetragick.patch ] ++ cfg.patches;
 
   outputs = [ "out" "doc" ];
 
@@ -65,16 +66,17 @@ stdenv.mkDerivation rec {
       libpng libtiff libxml2
     ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
-      [ openexr librsvg ]
+      [ openexr librsvg openjpeg ]
     ;
 
   propagatedBuildInputs =
     [ bzip2 freetype libjpeg lcms2 ]
     ++ lib.optionals (stdenv.cross.libc or null != "msvcrt")
-      [ libX11 libXext libXt ]
+      [ libX11 libXext libXt libwebp ]
     ;
 
   postInstall = ''
+
     (cd "$out/include" && ln -s ImageMagick* ImageMagick)
   '' + lib.optionalString (ghostscript != null) ''
     for la in $out/lib/*.la; do

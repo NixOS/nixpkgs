@@ -329,14 +329,14 @@ rec {
       buildInputs = [ utillinux ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/bin/modprobe loop
-        ${module_init_tools}/bin/modprobe ext4
-        ${module_init_tools}/bin/modprobe hfs
-        ${module_init_tools}/bin/modprobe hfsplus
-        ${module_init_tools}/bin/modprobe squashfs
-        ${module_init_tools}/bin/modprobe iso9660
-        ${module_init_tools}/bin/modprobe ufs
-        ${module_init_tools}/bin/modprobe cramfs
+        ${kmod}/bin/modprobe loop
+        ${kmod}/bin/modprobe ext4
+        ${kmod}/bin/modprobe hfs
+        ${kmod}/bin/modprobe hfsplus
+        ${kmod}/bin/modprobe squashfs
+        ${kmod}/bin/modprobe iso9660
+        ${kmod}/bin/modprobe ufs
+        ${kmod}/bin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
         mkdir -p $out
@@ -355,12 +355,12 @@ rec {
       buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
-        ${module_init_tools}/bin/modprobe mtd
-        ${module_init_tools}/bin/modprobe mtdram total_size=131072
-        ${module_init_tools}/bin/modprobe mtdchar
-        ${module_init_tools}/bin/modprobe mtdblock
-        ${module_init_tools}/bin/modprobe jffs2
-        ${module_init_tools}/bin/modprobe zlib
+        ${kmod}/bin/modprobe mtd
+        ${kmod}/bin/modprobe mtdram total_size=131072
+        ${kmod}/bin/modprobe mtdchar
+        ${kmod}/bin/modprobe mtdblock
+        ${kmod}/bin/modprobe jffs2
+        ${kmod}/bin/modprobe zlib
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
@@ -1682,6 +1682,40 @@ rec {
           (fetchurl {
             url = mirror://ubuntu/dists/wily/universe/binary-amd64/Packages.bz2;
             sha256 = "714be7a2fd33b8bb577901c9223039dcc12c130c9244122648ee21a625e2a66d";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1604i386 = {
+      name = "ubuntu-16.04-xenial-i386";
+      fullName = "Ubuntu 16.04 Xenial (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
+            sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-i386/Packages.xz;
+            sha256 = "14fid1rqm3sc0wlygcvn0yx5aljf51c2jpd4x0zxij4019316hsh";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1604x86_64 = {
+      name = "ubuntu-16.04-xenial-amd64";
+      fullName = "Ubuntu 16.04 Xenial (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
+            sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/xenial/universe/binary-amd64/Packages.xz;
+            sha256 = "0mm7gj491yi6q4v0n4qkbsm94s59bvqir6fk60j73w7y4la8rg68";
           })
         ];
       urlPrefix = mirror://ubuntu;

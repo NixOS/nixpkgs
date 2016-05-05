@@ -4,22 +4,22 @@
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
 , libudev }:
 
-let version = "0.0.1"; in
+let version = "0.0.3"; in
 
 stdenv.mkDerivation {
 
     name = "discord-${version}";
 
     src = fetchurl {
-        url = "https://storage.googleapis.com/discord-developer/test/discord-canary-${version}.tar.gz";
-        sha256 = "1skmwc84s4xqyc167qrplhy5ah06kwfa3d3rxiwi4c8rc55vdd0g";
+        url = "https://cdn-canary.discordapp.com/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        sha256 = "1k1mnfkcx7183qbdc4qx1anngddqim969cribg9gzc7mixvj17ca";
     };
 
     libPath = stdenv.lib.makeLibraryPath [
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
         gdk_pixbuf glib gnome.GConf gtk libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss pango libudev
+        libXtst nspr nss pango libudev.out
      ];
 
     installPhase = ''
@@ -35,12 +35,13 @@ stdenv.mkDerivation {
         ln -s $out/DiscordCanary $out/bin/
 
         # Putting udev in the path won't work :(
-        ln -s ${libudev}/lib/libudev.so.1 $out
+        ln -s ${libudev.out}/lib/libudev.so.1 $out
         '';
 
     meta = with stdenv.lib; {
         description = "All-in-one voice and text chat for gamers that’s free, secure, and works on both your desktop and phone";
         homepage = "https://discordapp.com/";
+        downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
         license = licenses.unfree;
         maintainers = [ maintainers.ldesgoui ];
         platforms = [ "x86_64-linux" ];

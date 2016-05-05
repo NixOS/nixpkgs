@@ -31,8 +31,8 @@
   meta = with stdenv.lib; {
     homepage = http://crates.io;
     description = "Downloads your Rust project's dependencies and builds your project";
-    maintainers = with maintainers; [ wizeman ];
+    maintainers = with maintainers; [ wizeman retrry ];
     license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

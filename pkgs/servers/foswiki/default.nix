@@ -9,6 +9,8 @@ perlPackages.buildPerlPackage rec {
     sha256 = "03286pb966h99zgickm2f20rgnqwp9wga5wfkdvirv084kjdh8vp";
   };
 
+  outputs = [ "out" ];
+
   buildInputs = with perlPackages; [
     # minimum requirements from INSTALL.html#System_Requirements
     AlgorithmDiff ArchiveTar AuthenSASL CGI CGISession CryptPasswdMD5
@@ -30,7 +32,7 @@ perlPackages.buildPerlPackage rec {
 
   # there's even no makefile
   doCheck = false;
-  installPhase = ''cp -r . "$out" ''; # TODO: some fixups will be needed for running it
+  installPhase = ''cp -r . "$out" '';
 
   meta = with stdenv.lib; {
     description = "An open, programmable collaboration platform";

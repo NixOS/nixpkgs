@@ -36,7 +36,7 @@ let
     xcbutilkeysyms
     systemd
     mesa_noglu
-  ] + ":${stdenv.cc.cc}/lib64";
+  ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
     if stdenv.system == "x86_64-linux" then

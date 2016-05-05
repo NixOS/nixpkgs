@@ -147,11 +147,11 @@ let
   };
 
   tools = buildFromGitHub {
-    rev = "b48dc8da98ae78c3d11f220e7d327304c84e623a";
-    version = "2015-08-24";
+    rev = "c887be1b2ebd11663d4bf2fbca508c449172339e";
+    version = "2016-02-04";
     owner = "golang";
     repo = "tools";
-    sha256 = "187p3jjxrw2qjnzqwwrq7f9w10zh6vcnwnfl3q7ms8rbiffpjy5c";
+    sha256 = "15cm7wmab5na4hphvriazlz639882z0ipb466xmp7500rn6f5kzf";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
@@ -243,11 +243,18 @@ let
     sha256 = "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p";
   };
 
+  archiver = buildFromGitHub {
+    rev = "85f054813ed511646b0ce5e047697e0651b8e1a4";
+    owner = "mholt";
+    repo = "archiver";
+    sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
+  };
+  
   asciinema = buildFromGitHub {
-    rev = "v1.1.1";
+    rev = "v1.2.0";
     owner = "asciinema";
     repo = "asciinema";
-    sha256 = "0k48k8815k433s25lh8my2swl89kczp0m2gbqzjlpy1xwmk06nxc";
+    sha256 = "0wvrq92ackhfycfs1fircs8al3ji69igqqrc55ic29wbpnvz355x";
   };
 
   asmfmt = buildFromGitHub {
@@ -412,13 +419,13 @@ let
   };
 
   caddy = buildFromGitHub {
-    rev     = "9099375b11b7b5e62b831627c2927d1c4c666071";
-    version = "v0.8.2";
+    rev     = "e2234497b79603388b58ba226abb157aa4aaf065";
+    version = "v0.8.3";
     owner   = "mholt";
     repo    = "caddy";
-    sha256  = "1zdy2sxir21ngh2ird01sv4fgj6sy3wl4s6k4piklri8ps1zw0k0";
+    sha256  = "1snijkbz02yr7wij7bcmrj4257709sbklb3nhb5qmy95b9ssffm6";
     buildInputs = [
-      acme blackfriday crypto go-humanize go-shlex go-syslog
+      acme archiver blackfriday crypto go-humanize go-shlex go-syslog
       http-authentication lumberjack-v2 toml websocket yaml-v2
     ];
     disabled = isGo14 || isGo15;
@@ -3735,13 +3742,15 @@ let
   };
 
   terraform = buildFromGitHub {
-    rev = "v0.6.13";
+    rev = "v0.6.15";
     owner = "hashicorp";
     repo = "terraform";
     disabled = isGo14 || isGo15;
-    sha256 = "1f1xm5pyz1hxqm2k74psanirpydf71pmxixplyc2x2w68hgjzi2l";
+    sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
 
-    buildInputs = [ ];
+    postInstall = ''
+      for i in $bin/bin/{provider,provisioner}-*; do mv $i $bin/bin/terraform-$(basename $i); done
+    '';
   };
 
   testify = buildGoPackage rec {

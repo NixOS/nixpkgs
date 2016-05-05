@@ -248,9 +248,6 @@ self: super: {
   webkitgtk3-javascriptcore = super.webkitgtk3-javascriptcore.override { webkit = pkgs.webkitgtk24x; };
   websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
 
-  # While waiting for https://github.com/jwiegley/gitlib/pull/53 to be merged
-  hlibgit2 = addBuildTool super.hlibgit2 pkgs.git;
-
   # https://github.com/mvoidex/hsdev/issues/11
   hsdev = dontHaddock super.hsdev;
 
@@ -263,9 +260,6 @@ self: super: {
   # Upstream notified by e-mail.
   permutation = dontCheck super.permutation;
 
-  # https://github.com/vincenthz/hs-tls/issues/102
-  tls = dontCheck super.tls;
-
   # https://github.com/jputcu/serialport/issues/25
   serialport = dontCheck super.serialport;
 
@@ -275,9 +269,6 @@ self: super: {
   # Fails no apparent reason. Upstream has been notified by e-mail.
   assertions = dontCheck super.assertions;
 
-  # https://github.com/vincenthz/tasty-kat/issues/1
-  tasty-kat = dontCheck super.tasty-kat;
-
   # These packages try to execute non-existent external programs.
   cmaes = dontCheck super.cmaes;                        # http://hydra.cryp.to/build/498725/log/raw
   dbmigrations = dontCheck super.dbmigrations;
@@ -285,7 +276,6 @@ self: super: {
   filestore = dontCheck super.filestore;
   getopt-generics = dontCheck super.getopt-generics;
   graceful = dontCheck super.graceful;
-  hakyll = dontCheck super.hakyll;
   Hclip = dontCheck super.Hclip;
   HList = dontCheck super.HList;
   ide-backend = dontCheck super.ide-backend;
@@ -302,7 +292,6 @@ self: super: {
   test-sandbox = dontCheck super.test-sandbox;
   users-postgresql-simple = dontCheck super.users-postgresql-simple;
   wai-middleware-hmac = dontCheck super.wai-middleware-hmac;
-  wai-middleware-throttle = dontCheck super.wai-middleware-throttle; # https://github.com/creichert/wai-middleware-throttle/issues/1
   xkbcommon = dontCheck super.xkbcommon;
   xmlgen = dontCheck super.xmlgen;
   hapistrano = dontCheck super.hapistrano;
@@ -1016,4 +1005,20 @@ self: super: {
   c2hs_0_27_1 = if pkgs.stdenv.isDarwin
                 then dontCheck super.c2hs_0_27_1
                 else super.c2hs_0_27_1;
+
+  # tinc is a new build driver a la Stack that's not yet available from Hackage.
+  tinc = self.callPackage ../tools/haskell/tinc {};
+
+  # Avoid transient build failures because the QuickCheck testsuite cannot
+  # generate enough conclusive test cases.
+  split = dontCheck super.split;
+
+  # https://github.com/NixOS/nixpkgs/issues/14967
+  yi = markBroken super.yi;
+  yi-fuzzy-open = markBroken super.yi-fuzzy-open;
+  yi-monokai = markBroken super.yi-monokai;
+  yi-snippet = markBroken super.yi-snippet;
+  yi-solarized = markBroken super.yi-solarized;
+  yi-spolsky = markBroken super.yi-spolsky;
+
 }

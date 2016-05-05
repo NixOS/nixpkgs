@@ -18,42 +18,42 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "76";
-  build = "00";
+  update = "92";
+  build = "14";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "1bzwrm18vdd531xxin7pzsc5dx2ybkdgdxz6jp2ki19ka6pmk1l7";
+             sha256 = "05ly2v3b6vr3sxa27m7ahlp8w4w1q68rki2dfczrklcdq4l61g0r";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "044gyb7hgrahlr78vah9r3wfv6w569ihqzwqplwzr6m0l1s52994";
+             sha256 = "1zb7gvj1b1q3pvq5x7ac98k5dk83m7849ngcy1swfwj18g8i4k9p";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "1if70s9wjsvmrdj92ky88ngpmigi9c5gfpkilpydzdibs38f05f8";
+             sha256 = "057qrhm9gbz672qgb85al9p3qvgvbviadppf5a9b8hp5sg322f35";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "0fl852x25cjzz3lrhjnhj59qbb4m3ywwc2f9vbj6mqdnpzl7cg83";
+             sha256 = "0s9h61jw42nbvrw24qaizp7pp063ala37sjgl547zfglhk1dlzi8";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "11ql3p5fsizrn1fiylfkgrw0lgf6snwyich18hggsmd00bhvv3ah";
+             sha256 = "0sgyjdmxsrdj8b8y2ri3c70x9l9m777v559cq8rmaz1jpc9lld4s";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "1d2q4bbvlz557caqciwpd5ms9f14bjk8jl5zlfflqnww9b097qy4";
+             sha256 = "12aajlswn5nkm4nbrdh3jff2sz81wdczrgliwd5lnqfnh73sbbkp";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "0nrd4c77ggxkyv2271k30afbjjcp0kybc8gcypmhy8by54w4ap0j";
+             sha256 = "133r5wicgva6mklrlnvb09p9izyw0fj281s51kndf3ba3zzggvv3";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "11idvkzk4nqhhw4xq5pl03g4gwnaiq021xxj2yx54rixr59zl0q6";
+             sha256 = "1rmk868qg7kgv7f5lhj1b7wdnql0bj2bfqd2lg9ci64418j8x8bn";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";

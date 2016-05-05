@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
       ln -s $path/lib/*.so* $out/lib/
     done
 
-    ln -s ${stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
 
     mkdir $out/bin
     ln -s $out/renoise $out/bin/renoise

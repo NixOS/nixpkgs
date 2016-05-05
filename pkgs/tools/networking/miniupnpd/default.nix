@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "miniupnpd-1.9.20160222";
+  name = "miniupnpd-2.0";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0q694dla4v36qsc0x50xqg2jjhwdi9pl7r2gl10yvhkahxqx1ng7";
+    sha256 = "1dxzhvkylrnbkd5srb9rb2g4f9ydd1zbjg5sdf190m0g1sha6snr";
     name = "${name}.tar.gz";
   };
 
@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
 
   makefile = "Makefile.linux";
 
-  buildFlags = "miniupnpd genuuid";
+  buildFlags = [ "miniupnpd" "genuuid" ];
 
-  installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://miniupnp.free.fr/;
     description = "A daemon that implements the UPnP Internet Gateway Device (IGD) specification";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nckx ];
   };
 }

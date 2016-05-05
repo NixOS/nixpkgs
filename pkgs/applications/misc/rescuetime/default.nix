@@ -5,18 +5,18 @@ let
     if stdenv.system == "i686-linux" then fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_i386.deb";
-      sha256 = "15x3nvhxk4f0rga0i99c6lhaa1rwdi446kxnx1l4jprhbl788sx6";
+      sha256 = "1wi9ikwmc9jfilj8adad3rcb7rmmxkpkfcp2gkfxvdyw6n0mzcnf";
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "0ibdlx8fdlmh81908d1syb7c5lf88pqp49fl7r43cj6bybpdx411";
+      sha256 = "074yivz7rz1ac1962dix0aahpyqvsrkizh32kk5hyw5az0vqpcjs";
     };
 
 in
 
 stdenv.mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.8.9.1170";
+  name = "rescuetime-2.9.10.1255";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   unpackPhase = ''
@@ -24,7 +24,11 @@ stdenv.mkDerivation {
     dpkg-deb -x $src pkg
     sourceRoot=pkg
   '';
-  installPhase = ''
+  installPhase = let
+
+    lib = p: stdenv.lib.makeLibraryPath [ p ];
+
+  in ''
     mkdir -p $out/bin
     cp usr/bin/rescuetime $out/bin
 
@@ -33,7 +37,7 @@ stdenv.mkDerivation {
       $out/bin/rescuetime
 
     wrapProgram $out/bin/rescuetime \
-      --prefix LD_PRELOAD : ${qt4}/lib/libQtGui.so.4:${qt4}/lib/libQtCore.so.4:${libXtst}/lib/libXtst.so.6:${libXext}/lib/libXext.so.6:${libX11}/lib/libX11.so.6:${libXScrnSaver}/lib/libXss.so.1
+      --prefix LD_PRELOAD : ${lib qt4}/libQtGui.so.4:${lib qt4}/libQtCore.so.4:${lib libXtst}/libXtst.so.6:${lib libXext}/libXext.so.6:${lib libX11}/libX11.so.6:${lib libXScrnSaver}/libXss.so.1
   '';
   meta = with lib; {
     description = "Helps you understand your daily habits so you can focus and be more productive";

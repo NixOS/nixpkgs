@@ -1,4 +1,4 @@
-{ stdenv, curl
+{ stdenv, curl, cacert
 # Begin download parameters
 , username ? ""
 , password ? ""
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ curl ];
 
-  inherit url loginUrl username password;
+  inherit url loginUrl username password cacert;
 
   builder = ./fetch.sh;
 

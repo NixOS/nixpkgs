@@ -6,7 +6,7 @@ buildPythonApplication rec {
   version = "0.4.4";
 
   src = fetchurl {
-    url = "https://pypi.python.org/packages/source/c/cli53/${name}.tar.gz";
+    url = "mirror://pypi/c/cli53/${name}.tar.gz";
     sha256 = "0s9jzigq6a16m2c3qklssx2lz16cf13g5zh80vh24kxazaxqzbig";
   };
 

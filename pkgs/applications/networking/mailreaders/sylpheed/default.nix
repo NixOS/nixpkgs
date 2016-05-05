@@ -11,14 +11,13 @@ with stdenv.lib;
 assert sslSupport -> openssl != null;
 assert gpgSupport -> gpgme != null;
 
-let version = "3.4.1"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "sylpheed-${version}";
+  version = "3.5.0";
 
   src = fetchurl {
-    url = "http://sylpheed.sraoss.jp/sylpheed/v3.4/sylpheed-${version}.tar.bz2";
-    sha256 = "11wpifvn8a0p4dqmvi7r61imqkgm6rjjp3h057c344vny37livbx";
+    url = "http://sylpheed.sraoss.jp/sylpheed/v3.5/${name}.tar.bz2";
+    sha256 = "0p50cr9h8b7cv1ayxhqxpj3kv0b7k9dga7lmmfb1lvyagg8n42sa";
   };
 
   buildInputs =

@@ -43,5 +43,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.publicDomain ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }

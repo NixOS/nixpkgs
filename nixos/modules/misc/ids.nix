@@ -263,6 +263,8 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
+      emby = 242;
+      graylog = 243;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -497,6 +499,7 @@
       caddy = 239;
       taskd = 240;
       factorio = 241;
+      emby = 242;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

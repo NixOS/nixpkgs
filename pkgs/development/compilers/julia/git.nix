@@ -42,7 +42,7 @@ let
   
   virtualenvVersion = "1.11.6";
   virtualenv = fetchurl {
-    url = "https://pypi.python.org/packages/source/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
+    url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
     sha256 = "1xq4prmg25n9cz5zcvbqx68lmc3kl39by582vd8pzs9f3qalqyiy";
   };
 in
@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "http://julialang.org/";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

@@ -1,17 +1,15 @@
-{ stdenv, fetchurl, cmake, gengetopt, imlib2, libXrandr, libXfixes
-, cppcheck}:
+{ stdenv, fetchurl, cmake, gengetopt, imlib2, libXrandr, libXfixes }:
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "3.4.46";
+  version = "3.4.47";
 
   src = fetchurl {
     url = "https://github.com/naelstrof/maim/archive/v${version}.tar.gz";
-    sha256 = "04gb858g0rrvdiva2dxwsfd7dmq62r67irnc8cpd0r02hr92dr6n";
+    sha256 = "0kfp7k55bxc5h6h0wv8bwmsc5ny66h9ra2z4dzs4yzszq16544pv";
   };
 
-  buildInputs = [ cmake gengetopt imlib2 libXrandr libXfixes ]
-                ++ stdenv.lib.optional doCheck cppcheck;
+  buildInputs = [ cmake gengetopt imlib2 libXrandr libXfixes ];
 
   doCheck = false;
 

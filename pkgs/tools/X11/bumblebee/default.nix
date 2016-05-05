@@ -18,7 +18,7 @@
 
 { stdenv, lib, fetchurl, pkgconfig, help2man, makeWrapper
 , glib, libbsd
-, libX11, libXext, xorgserver, xkbcomp, module_init_tools, xkeyboard_config, xf86videonouveau
+, libX11, libXext, xorgserver, xkbcomp, kmod, xkeyboard_config, xf86videonouveau
 , nvidia_x11, virtualgl, primusLib
 # The below should only be non-null in a x86_64 system. On a i686
 # system the above nvidia_x11 and virtualgl will be the i686 packages.
@@ -43,10 +43,10 @@ let
 
   nvidiaLibs = lib.makeLibraryPath nvidia_x11s;
 
-  bbdPath = lib.makeBinPath [ module_init_tools xorgserver ];
+  bbdPath = lib.makeBinPath [ kmod xorgserver ];
   bbdLibs = lib.makeLibraryPath [ libX11 libXext ];
 
-  xmodules = lib.concatStringsSep "," (map (x: "${x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
+  xmodules = lib.concatStringsSep "," (map (x: "${x.out or x}/lib/xorg/modules") ([ xorgserver ] ++ lib.optional (!useNvidia) xf86videonouveau));
 
 in stdenv.mkDerivation rec {
   name = "bumblebee-${version}";
@@ -80,7 +80,7 @@ in stdenv.mkDerivation rec {
     # be in PATH, and thus no action for them is required.
 
     substituteInPlace src/module.c \
-      --replace "/sbin/modinfo" "${module_init_tools}/sbin/modinfo"
+      --replace "/sbin/modinfo" "${kmod}/sbin/modinfo"
 
     # Don't use a special group, just reuse wheel.
     substituteInPlace configure \

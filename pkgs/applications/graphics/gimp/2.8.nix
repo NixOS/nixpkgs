@@ -4,7 +4,8 @@
 , python, pygtk, libart_lgpl, libexif, gettext, xorg, wrapPython }:
 
 stdenv.mkDerivation rec {
-  name = "gimp-2.8.16";
+  name = "gimp-${version}";
+  version = "2.8.16";
 
   # This declarations for `gimp-with-plugins` wrapper,
   # (used for determining $out/lib/gimp/${majorVersion}/ paths)

@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     description = "High-level performance-oriented dynamical language for technical computing";
     homepage = "http://julialang.org/";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ raskin ttuegel ];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

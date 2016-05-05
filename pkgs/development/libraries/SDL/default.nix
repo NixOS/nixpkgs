@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, audiofile, libcap
-, openglSupport ? false, mesa ? null
+, openglSupport ? false, mesa_noglu ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, xlibsWrapper ? null, libXrandr ? null
 , pulseaudioSupport ? true, libpulseaudio ? null
@@ -10,7 +10,7 @@
 # PulseAudio.
 assert (stdenv.isLinux && !(stdenv ? cross)) -> alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (mesa != null && x11Support);
+assert openglSupport -> (mesa_noglu != null && x11Support);
 assert x11Support -> (xlibsWrapper != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     optionals x11Support [ xlibsWrapper libXrandr ] ++
     optional alsaSupport alsaLib ++
     optional stdenv.isLinux libcap ++
-    optional openglSupport mesa ++
+    optional openglSupport mesa_noglu ++
     optional pulseaudioSupport libpulseaudio ++
     optional stdenv.isDarwin Cocoa;
 

@@ -80,10 +80,9 @@ let
       "CONFIG+=no-server"
     ];
 
-    installPhase = ''
-      cp scripts/mumble-overlay $out/bin
-      sed -i "s,/usr/lib,$out/lib,g" $out/bin/mumble-overlay
+    NIX_CFLAGS_COMPILE = optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
+    installPhase = ''
       mkdir -p $out/share/applications
       cp scripts/mumble.desktop $out/share/applications
 
@@ -108,44 +107,25 @@ let
   };
 
   stableSource = rec {
-    version = "1.2.10";
+    version = "1.2.15";
     qtVersion = 4;
 
     src = fetchurl {
       url = "https://github.com/mumble-voip/mumble/releases/download/${version}/mumble-${version}.tar.gz";
-      sha256 = "012vm0xf84x13414jlsx964c5a1nwnbn41jnspkciajlxxipldn6";
+      sha256 = "1yjywzybgq23ry5s2yihggs13ffrphhwl6rlp6lq79rkwvafa9v5";
     };
   };
 
   gitSource = rec {
-    version = "1.3.0-git-2015-11-08";
+    version = "1.3.0-git-2016-04-10";
     qtVersion = 5;
 
+    # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "72038f6aa038f5964e2bba5a09d3d391d4680e5f";
-      sha256 = "03978b85f7y0bffl8vwkmakjnxxjqapfz3pn0b8zf3b1ppwjy9g4";
+      rev = "0502fa67b036bae9f07a586d9f05a8bf74c24291";
+      sha256 = "073v8nway17j1n1lm70x508722b1q3vb6h4fvmcbbma3d22y1h45";
     };
-
-    # TODO: Remove fetchgit as it requires git
-    /*src = fetchFromGitHub {
-      owner = "mumble-voip";
-      repo = "mumble";
-      rev = "13e494c60beb20748eeb8be126b27e1226d168c8";
-      sha256 = "024my6wzahq16w7fjwrbksgnq98z4jjbdyy615kfyd9yk2qnpl80";
-    };
-
-    theme = fetchFromGitHub {
-      owner = "mumble-voip";
-      repo = "mumble-theme";
-      rev = "16b61d958f131ca85ab0f601d7331601b63d8f30";
-      sha256 = "0rbh825mwlh38j6nv2sran2clkiwvzj430mhvkdvzli9ysjxgsl3";
-    };
-
-    prePatch = ''
-      rmdir themes/Mumble
-      ln -s ${theme} themes/Mumble
-    '';*/
   };
 in {
   mumble     = client stableSource;

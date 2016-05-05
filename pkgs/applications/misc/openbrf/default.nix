@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A tool to edit resource files (BRF)";
-    homepage = https://github.com/cfcohen/openbrf;
+    homepage = "https://github.com/cfcohen/openbrf";
     maintainers = with stdenv.lib.maintainers; [ abbradar ];
     license = licenses.free;
     platforms = platforms.linux;

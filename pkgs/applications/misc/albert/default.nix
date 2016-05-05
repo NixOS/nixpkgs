@@ -2,16 +2,20 @@
 
 stdenv.mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.8.7.2";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner  = "manuelschneid3r";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "04k6cawil6kqkmsilq5mpjy8lwgk0g08s0v23d5a83calpq3ljpc";
+    sha256 = "1mqxy5xbvgzykg2vvr2d1p9kr2viga1pqxslkg9y1x05kdhr2zal";
   };
 
-  buildInputs = [ cmake qtbase qtsvg qtx11extras muparser makeQtWrapper ];
+  nativeBuildInputs = [ cmake makeQtWrapper ];
+
+  buildInputs = [ qtbase qtsvg qtx11extras muparser ];
+
+  enableParallelBuilding = true;
 
   fixupPhase = ''
     wrapQtProgram $out/bin/albert

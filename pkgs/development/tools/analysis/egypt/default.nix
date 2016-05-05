@@ -9,6 +9,8 @@ buildPerlPackage rec {
     url = "http://www.gson.org/egypt/download/${name}.tar.gz";
   };
 
+  outputs = [ "out" ];
+
   enableParallelBuilding = true;
 
   doCheck = true;

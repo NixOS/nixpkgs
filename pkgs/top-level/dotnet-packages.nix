@@ -102,6 +102,76 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/*" ];
   };
 
+  MaxMindDb = fetchNuGet {
+    baseName = "MaxMind.Db";
+    version = "1.1.0.0";
+    sha256 = "0lixl76f7k3ldiqzg94zh13gn82w5mm5dx72y97fcqvp8g6nj3ds";
+    outputFiles = [ "lib/*" ];
+  };
+
+  MaxMindGeoIP2 = fetchNuGet {
+    baseName = "MaxMind.GeoIP2";
+    version = "2.3.1";
+    sha256 = "1s44dvjnmj1aimbrgkmpj6h5dn1w6acgqjch1axc76yz6hwknqgf";
+    outputFiles = [ "lib/*" ];
+  };
+
+  SharpZipLib = fetchNuGet {
+    baseName = "SharpZipLib";
+    version = "0.86.0";
+    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    outputFiles = [ "lib/*" ];
+  };
+
+  StyleCopMSBuild = fetchNuGet {
+    baseName = "StyleCop.MSBuild";
+    version = "4.7.49.0";
+    sha256 = "0rpfyvcggm881ynvgr17kbx5hvj7ivlms0bmskmb2zyjlpddx036";
+    outputFiles = [ "tools/*" ];
+  };
+
+  StyleCopPlusMSBuild = fetchNuGet {
+    baseName = "StyleCopPlus.MSBuild";
+    version = "4.7.49.5";
+    sha256 = "1hv4lfxw72aql8siyqc4n954vzdz8p6jx9f2wrgzz0jy1k98x2mr";
+    outputFiles = [ "tools/*" ];
+  };
+
+  RestSharp = fetchNuGet {
+    baseName = "RestSharp";
+    version = "105.2.3";
+    sha256 = "1br48124ppz80x92m84sfyil1gn23hxg2ml9i9hsd0lp86vlaa1m";
+    outputFiles = [ "lib/*" ];
+  };
+
+  SharpFont = fetchNuGet {
+    baseName = "SharpFont";
+    version = "3.0.1";
+    sha256 = "1g639i8mbxc6qm0xqsf4mc0shv8nwdaidllka2xxwyksbq54skhs";
+    outputFiles = [ "lib/*" "config/*" ];
+  };
+
+  SmartIrc4net = fetchNuGet {
+    baseName = "SmartIrc4net";
+    version = "0.4.5.1";
+    sha256 = "1k6zc6xsqfzj7nc9479d32akj6d37jq6i1qirmz1i66p52zb5hm1";
+    outputFiles = [ "lib/*" ];
+  };
+
+  FuzzyLogicLibrary = fetchNuGet {
+    baseName = "FuzzyLogicLibrary";
+    version = "1.2.0";
+    sha256 = "0x518i8d3rw9n51xwawa4sywvqd722adj7kpcgcm63r66s950r5l";
+    outputFiles = [ "bin/*" ];
+  };
+
+  MonoNat = fetchNuGet {
+    baseName = "Mono.Nat";
+    version = "1.2.21";
+    sha256 = "011xhmjrx6w5h110fcp40l95k3qj1gkzz3axgbfy0s8haf5hsf7s";
+    outputFiles = [ "lib/*" ];
+  };
+
   NUnitRunners = fetchNuGet {
     baseName = "NUnit.Runners";
     version = "2.6.4";

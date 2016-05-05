@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchurl {
-    sha256 = "1vaxn4kwdwx6p03n88k4pnbd2l6lb0cbxpcs88kjack1jml17c3l";
+    sha256 = "0sn38b80c6jx9d9r329ji9bg4m4gj6gnl04rv8fkmincj61qf7ag";
     url = "http://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
   };
 
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
     "--disable-connman"
     "--disable-systemd"
     "--disable-bash-completion"
-    "--disable-browser-plugin"
     "--disable-gstreamer-plugin"
     "--disable-gtk-module"
     "--disable-command-not-found"

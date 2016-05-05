@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, SDL, makeDesktopItem }:
+{ stdenv, fetchurl, SDL, makeDesktopItem, mesa }:
 
 stdenv.mkDerivation rec { 
   name = "dosbox-0.74";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
   
-  buildInputs = [ SDL ];
+  buildInputs = [ SDL mesa ];
     
   desktopItem = makeDesktopItem {
     name = "dosbox";
