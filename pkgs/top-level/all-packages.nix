@@ -2571,6 +2571,8 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
+  milu = callPackage ../applications/misc/milu { };
+
   mpack = callPackage ../tools/networking/mpack { };
 
   pa_applet = callPackage ../tools/audio/pa-applet { };
