@@ -6284,6 +6284,10 @@ in
 
   premake = premake4;
 
+  qtcreator = qt5.callPackage ../development/qtcreator {
+    withDocumentation = true;
+  };
+
   racerRust = callPackage ../development/tools/rust/racer { };
 
   radare = callPackage ../development/tools/analysis/radare {
@@ -8732,10 +8736,6 @@ in
     };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
-
-    qtcreator = callPackage ../development/qtcreator {
-      withDocumentation = true;
-    };
 
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
