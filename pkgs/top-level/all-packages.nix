@@ -8696,7 +8696,12 @@ in
 
   qt55 =
     let imported = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
-    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+        # Libraries that cannot be built with newer versions of Qt 5
+        qt55Only = self: with self; {
+          # Requires Qt Quick (deprecated in Qt 5.5, removed from Qt 5.6)
+          qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+        };
+    in recurseIntoAttrs (imported.override (super: self: qt5LibsFun self // qt55Only self));
 
   qt56 =
     let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
@@ -8727,8 +8732,6 @@ in
     };
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
-
-    qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
     qtcreator = callPackage ../development/qtcreator {
       withDocumentation = true;
