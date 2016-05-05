@@ -11,6 +11,7 @@ with lib;
     services.dictd = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable the DICT.org dictionary server.
@@ -18,8 +19,9 @@ with lib;
       };
 
       DBs = mkOption {
+        type = types.listOf types.package;
         default = [];
-        # example = [ pkgs.dictDBs.nld2eng ];
+        example = [ pkgs.dictdDBs.nld2eng ];
         description = ''List of databases to make available.'';
       };
 
