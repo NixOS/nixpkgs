@@ -6981,13 +6981,13 @@ let
   };
 
   hypothesis = pythonPackages.buildPythonPackage rec {
-    name = "hypothesis-0.7.0";
+    name = "hypothesis-1.14.0";
 
     doCheck = false;
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/h/hypothesis/hypothesis-0.7.0.tar.gz";
-      md5 = "0c4112bab04b71979286387b033921b5";
+      url = "https://pypi.python.org/packages/source/h/hypothesis/${name}.tar.gz";
+      sha256 = "12dxrvn108q2j20brrk6zcb8w00kn3af1c07c0fv572nf2ngyaxy";
     };
 
     meta = {
