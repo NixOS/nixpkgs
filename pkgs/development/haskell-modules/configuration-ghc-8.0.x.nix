@@ -86,6 +86,9 @@ self: super: {
 
   force-layout   = doJailbreak super.force-layout;
 
+  # packaged 0.2.2.6 is missing: base >=4.7 && <4.9
+  freer          = doJailbreak super.freer;
+
   # Partial fixes released in 1.20.5 upstream, full fixes only in git
   linear         = pkgs.haskell.lib.overrideCabal super.linear (oldAttrs: {
     editedCabalFile = null;
