@@ -1,5 +1,5 @@
 { stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig
-, Carbon
+, Carbon, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig flac libogg libvorbis ]
-    ++ stdenv.lib.optional stdenv.isDarwin Carbon;
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
 
