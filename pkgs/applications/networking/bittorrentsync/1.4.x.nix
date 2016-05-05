@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.4.111";
 
   src  = fetchurl {
-    url  = "http://syncapp.bittorrent.com/${version}/btsync_${arch}-${version}.tar.gz";
+    url  = "http://archive.yeasoft.net/btsync/${version}/btsync_${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
