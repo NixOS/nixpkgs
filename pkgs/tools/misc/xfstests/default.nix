@@ -1,5 +1,5 @@
 { stdenv, acl, attr, autoreconfHook, bash, bc, coreutils, e2fsprogs, fetchgit, fio, gawk
-, lib, libaio, libcap_progs, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
+, lib, libaio, libcap, libuuid, libxfs, lvm2, openssl, perl, procps, psmisc, su
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
       ln -s @out@/lib/xfstests/$f $f
     done
 
-    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap_progs lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
+    export PATH=${lib.makeBinPath [acl attr bc e2fsprogs fio gawk libcap lvm2 perl procps psmisc su utillinux which xfsprogs]}:$PATH
     exec ./check "$@"
   '';
 
