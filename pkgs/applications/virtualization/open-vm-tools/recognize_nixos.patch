@@ -1,18 +1,7 @@
-From d1b753212ee5151db941de0e2b826dcf9722f2f3 Mon Sep 17 00:00:00 2001
-From: Arseniy Seroka <ars.seroka@gmail.com>
-Date: Fri, 21 Aug 2015 20:20:16 +0300
-Subject: [PATCH] [PATCH]: recognize NixOS Linux
-
----
- open-vm-tools/lib/include/guest_os.h   | 1 +
- open-vm-tools/lib/misc/hostinfoPosix.c | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/open-vm-tools/lib/include/guest_os.h b/open-vm-tools/lib/include/guest_os.h
-index 4fc9ea7..f5104fd 100644
---- a/open-vm-tools/lib/include/guest_os.h
-+++ b/open-vm-tools/lib/include/guest_os.h
-@@ -215,6 +215,7 @@ Bool Gos_InSetArray(uint32 gos, const uint32 *set);
+diff -ruN open-vm-tools.orig/lib/include/guest_os.h open-vm-tools/lib/include/guest_os.h
+--- open-vm-tools.orig/lib/include/guest_os.h	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/include/guest_os.h	2016-04-18 20:07:41.677251511 +0000
+@@ -222,6 +222,7 @@
  #define STR_OS_MANDRAKE_FULL      "Mandrake Linux"
  #define STR_OS_MANDRIVA           "mandriva"
  #define STR_OS_MKLINUX            "MkLinux"
@@ -20,19 +9,30 @@ index 4fc9ea7..f5104fd 100644
  #define STR_OS_NOVELL             "nld9"
  #define STR_OS_NOVELL_FULL        "Novell Linux Desktop 9"
  #define STR_OS_ORACLE             "oraclelinux"
-diff --git a/open-vm-tools/lib/misc/hostinfoPosix.c b/open-vm-tools/lib/misc/hostinfoPosix.c
-index 6c13fe3..5b82983 100644
---- a/open-vm-tools/lib/misc/hostinfoPosix.c
-+++ b/open-vm-tools/lib/misc/hostinfoPosix.c
-@@ -184,6 +184,7 @@ static const DistroInfo distroArray[] = {
+diff -ruN open-vm-tools.orig/lib/include/vmblock.h open-vm-tools/lib/include/vmblock.h
+--- open-vm-tools.orig/lib/include/vmblock.h	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/include/vmblock.h	2016-04-18 21:51:15.651235848 +0000
+@@ -145,7 +145,7 @@
+ # define VMBLOCK_DEVICE_MODE           VMBLOCK_FUSE_DEVICE_MODE
+ # define VMBLOCK_MOUNT_POINT           VMBLOCK_FUSE_MOUNT_POINT
+ 
+-#elif defined(linux)
++#elif defined(__linux__)
+ # define VMBLOCK_ADD_FILEBLOCK         98
+ # define VMBLOCK_DEL_FILEBLOCK         99
+ # ifdef VMX86_DEVEL
+diff -ruN open-vm-tools.orig/lib/misc/hostinfoPosix.c open-vm-tools/lib/misc/hostinfoPosix.c
+--- open-vm-tools.orig/lib/misc/hostinfoPosix.c	2016-02-12 00:50:33.000000000 +0000
++++ open-vm-tools/lib/misc/hostinfoPosix.c	2016-04-18 20:09:45.841668252 +0000
+@@ -195,6 +195,7 @@
     {"Mandrake",           "/etc/mandrake-release"},
     {"Mandriva",           "/etc/mandriva-release"},
-    {"Mandrake",           "/etc/mandrakelinux-release"},
+    {"MkLinux",            "/etc/mklinux-release"},
 +   {"NixOS",              "/etc/os-release"},
-    {"TurboLinux",         "/etc/turbolinux-release"},
-    {"Fedora Core",        "/etc/fedora-release"},
-    {"Gentoo",             "/etc/gentoo-release"},
-@@ -613,6 +614,8 @@ HostinfoGetOSShortName(char *distro,         // IN: full distro name
+    {"Novell",             "/etc/nld-release"},
+    {"OracleLinux",        "/etc/oracle-release"},
+    {"Photon",             "/etc/lsb-release"},
+@@ -619,6 +620,8 @@
        Str_Strcpy(distroShort, STR_OS_MANDRIVA, distroShortSize);
     } else if (strstr(distroLower, "mklinux")) {
        Str_Strcpy(distroShort, STR_OS_MKLINUX, distroShortSize);
@@ -41,6 +41,3 @@ index 6c13fe3..5b82983 100644
     } else if (strstr(distroLower, "pld")) {
        Str_Strcpy(distroShort, STR_OS_PLD, distroShortSize);
     } else if (strstr(distroLower, "slackware")) {
--- 
-2.5.0
-

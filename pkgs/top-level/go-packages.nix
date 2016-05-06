@@ -243,6 +243,13 @@ let
     sha256 = "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p";
   };
 
+  archiver = buildFromGitHub {
+    rev = "85f054813ed511646b0ce5e047697e0651b8e1a4";
+    owner = "mholt";
+    repo = "archiver";
+    sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
+  };
+  
   asciinema = buildFromGitHub {
     rev = "v1.2.0";
     owner = "asciinema";
@@ -412,13 +419,13 @@ let
   };
 
   caddy = buildFromGitHub {
-    rev     = "9099375b11b7b5e62b831627c2927d1c4c666071";
-    version = "v0.8.2";
+    rev     = "e2234497b79603388b58ba226abb157aa4aaf065";
+    version = "v0.8.3";
     owner   = "mholt";
     repo    = "caddy";
-    sha256  = "1zdy2sxir21ngh2ird01sv4fgj6sy3wl4s6k4piklri8ps1zw0k0";
+    sha256  = "1snijkbz02yr7wij7bcmrj4257709sbklb3nhb5qmy95b9ssffm6";
     buildInputs = [
-      acme blackfriday crypto go-humanize go-shlex go-syslog
+      acme archiver blackfriday crypto go-humanize go-shlex go-syslog
       http-authentication lumberjack-v2 toml websocket yaml-v2
     ];
     disabled = isGo14 || isGo15;

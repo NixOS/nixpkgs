@@ -4,15 +4,20 @@ libffi, pam, alsaLib, luajit, bzip2, libuuid, libpthreadstubs, gdbm, libcap, mes
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.20.6";
+  version = "0.20.7";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "11ahll68nlci214ka05whp5l32hy9lznmcdfqx3hxsmq2p7bl7zj";
+    sha256 = "10g1mn1myspdrxl7jcjx6v52g3pmmb0k2bxjgaqdx2s851cyipkw";
   };
-  buildInputs = [ pkgconfig efl elementary libXdmcp libxcb
+
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ efl elementary libXdmcp libxcb
     xcbutilkeysyms libXrandr libffi pam alsaLib luajit bzip2 libuuid
     libpthreadstubs gdbm ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
+
   NIX_CFLAGS_COMPILE = [ "-I${efl}/include/eo-1" "-I${efl}/include/emile-1" "-I${libuuid}/include/uuid" ];
+
   preConfigure = ''
     export USER_SESSION_DIR=$prefix/lib/systemd/user
 

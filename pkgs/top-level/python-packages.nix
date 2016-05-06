@@ -1738,6 +1738,8 @@ in modules // {
 
     propagatedBuildInputs = [ self.requests2 ];
 
+    doCheck = false;
+
     meta = with stdenv.lib; {
       homepage = https://betamax.readthedocs.org/en/latest/;
       description = "A VCR imitation for requests";
@@ -2509,16 +2511,17 @@ in modules // {
       sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
     };
 
-    propagatedBuildInputs = [ self.botocore
-                              self.jmespath
-                            ] ++ (if isPy3k then [] else [self.futures_2_2]);
+    propagatedBuildInputs = [ self.botocore self.jmespath ] ++
+                            (if isPy3k then [] else [self.futures_2_2]);
     buildInputs = [ self.docutils self.nose self.mock ];
-
-    # Tests are failing with `botocore.exceptions.NoCredentialsError:
-    # Unable to locate credentials`. There also seems to be some mock
-    # issues (`assert_called_once` doesn't exist in mock but boto
-    # seems to think it is?).
-    doCheck = false;
+    checkPhase = ''
+      runHook preCheck
+      # This method is not in mock. It might have appeared in some versions.
+      sed -i 's/action.assert_called_once()/self.assertEqual(action.call_count, 1)/' \
+        tests/unit/resources/test_factory.py
+      nosetests -d tests/unit --verbose
+      runHook postCheck
+    '';
 
     meta = {
       homepage = https://github.com/boto3/boto;
@@ -10521,7 +10524,6 @@ in modules // {
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
-    disabled = isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
@@ -10543,6 +10545,10 @@ in modules // {
       --- 566 ----
       !                 'content-length': str(len(self.body))
       DIFF
+
+      # Explicit encoding flag is required with python3, unless locale is set.
+      ${if !self.isPy3k then "" else
+        "patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}"}
     '';
 
     meta = {
@@ -25849,12 +25855,14 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.0.38";
+    version = "0.1.7";
     name = "neovim-${version}";
+
+    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "93f475d5583a053af919ba0729b32b3fefef1dbde4717b5657d806bdc69b76b3";
+      sha256 = "0il6h9qpy9rkgz16yn2bhhg5f23w41wvm9ivlscx5l55llq9sd9q";
     };
 
     propagatedBuildInputs = with self; [ msgpack ]
@@ -25871,9 +25879,17 @@ in modules // {
 
   neovim_gui = buildPythonPackage rec {
     name = "neovim-pygui-${self.neovim.version}";
+    version = "0.1.2";
     disabled = !isPy27;
 
-    src = self.neovim.src;
+    src = pkgs.fetchFromGitHub {
+      owner = "neovim";
+      repo = "python-gui";
+      rev = version;
+      sha256 = "0sc5apxwxgfj57q7d9cih404jgvczbp7slz5z8wqdyxpxlb42pn2";
+    };
+
+    buildInputs = with self; [ neovim ];
 
     propagatedBuildInputs = [
       self.msgpack

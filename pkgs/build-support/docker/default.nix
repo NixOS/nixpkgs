@@ -286,17 +286,20 @@ EOF
         cp ${layer}/* temp/
         chmod ug+w temp/*
 
-        # FIXME: might not be /nix/store
-        echo '/nix' >> layerFiles
-        echo '/nix/store' >> layerFiles
         for dep in $(cat $layerClosure); do
-          find $dep >> layerFiles
+          find $dep -path "${layer}" -prune -o -print >> layerFiles
         done
+
+        if [ -s layerFiles ]; then
+          # FIXME: might not be /nix/store
+          echo '/nix' >> layerFiles
+          echo '/nix/store' >> layerFiles
+        fi
 
         echo Adding layer
         tar -tf temp/layer.tar >> baseFiles
         sed 's/^\.//' -i baseFiles
-        comm <(sort -n baseFiles|uniq) <(sort -n layerFiles|uniq|grep -v ${layer}) -1 -3 > newFiles
+        comm <(sort -u baseFiles) <(sort -u layerFiles) -1 -3 > newFiles
         tar -rpf temp/layer.tar --mtime=0 --no-recursion --files-from newFiles 2>/dev/null || true
 
         echo Adding meta

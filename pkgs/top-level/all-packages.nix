@@ -221,39 +221,54 @@ in
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
-  fetchFromGitHub = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromGitHub = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     meta.homepage = "https://github.com/${owner}/${repo}/";
-  } // { inherit rev; };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
-  fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromBitbucket = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
     meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
     extraPostFetch = ''rm -f "$out"/.hg_archival.txt''; # impure file; see #12002
-  };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
   # cgit example, snapshot support is optional in cgit
-  fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromSavannah = {
+    repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
     meta.homepage = "http://git.savannah.gnu.org/cgit/${repo}.git/";
-  };
+  } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   # gitlab example
-  fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromGitLab = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
     meta.homepage = "https://gitlab.com/${owner}/${repo}/";
-  };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
   # gitweb example, snapshot support is optional in gitweb
-  fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromRepoOrCz = {
+    repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
     meta.homepage = "http://repo.or.cz/${repo}.git/";
-  };
+  } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
@@ -877,6 +892,8 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
+  
+  asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
 
@@ -1498,6 +1515,8 @@ in
 
   fio = callPackage ../tools/system/fio { };
 
+  flamerobin = callPackage ../applications/misc/flamerobin { };
+
   flashtool = callPackage_i686 ../development/mobile/flashtool {
     platformTools = androidenv.platformTools;
   };
@@ -1949,6 +1968,8 @@ in
   i2p = callPackage ../tools/networking/i2p {};
 
   i2pd = callPackage ../tools/networking/i2pd {};
+
+  i-score = qt5.callPackage ../applications/audio/i-score { };
 
   iasl = callPackage ../development/compilers/iasl { };
 
@@ -2916,8 +2937,6 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
-  popcorntime = callPackage ../applications/video/popcorntime { nwjs = nwjs_0_12; };
-
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
@@ -2985,6 +3004,10 @@ in
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   remarshal = (callPackage ../development/tools/remarshal { }).bin // { outputs = [ "bin" ]; };
+
+  rtaudio = callPackage ../development/libraries/audio/rtaudio { };
+
+  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
@@ -4366,11 +4389,20 @@ in
   haskellPackages = haskell.packages.ghc7103.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
-  inherit (self.haskellPackages) ghc cabal-install stack;
+
+  inherit (self.haskellPackages) ghc cabal-install;
+
+  stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  });
 
   haxe = callPackage ../development/compilers/haxe {
     inherit (ocamlPackages) camlp4;
   };
+
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm { };
@@ -5207,6 +5239,8 @@ in
      async_extra sexplib async_shell core_extended async_find cohttp uri;
     ocaml = ocaml_4_02;
   };
+
+  bupc = callPackage ../development/compilers/bupc { };
 
   urweb = callPackage ../development/compilers/urweb { };
 
@@ -6080,6 +6114,8 @@ in
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
@@ -6227,6 +6263,10 @@ in
   };
 
   hammer = callPackage ../development/tools/parsing/hammer { };
+
+  redis-dump = callPackage ../development/tools/redis-dump {
+    ruby = ruby_2_0;
+  };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 
@@ -9795,10 +9835,8 @@ in
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
-
-  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
-    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
-  };
+  # nginxUnstable currently points to stable because that's newest:
+  nginxUnstable = nginx;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
@@ -10421,11 +10459,6 @@ in
   };
 
   iptables = callPackage ../os-specific/linux/iptables { };
-  # The freshest version — possibly crashing connmand?
-  # https://github.com/NixOS/nixpkgs/commit/fe00c8a83f696e3430ee4aa3fc850f171da52450
-  iptables_16 = callPackage ../os-specific/linux/iptables/1.6.nix {
-    flex = flex_2_5_35;
-  };
 
   ipset = callPackage ../os-specific/linux/ipset { };
 
@@ -10434,6 +10467,9 @@ in
   iw = callPackage ../os-specific/linux/iw { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbpdf = callPackage ../os-specific/linux/jfbview {
+    imageSupport = false;
+  };
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
@@ -10570,7 +10606,7 @@ in
   };
 
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10897,12 +10933,6 @@ in
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };
-
-  libcap_progs = callPackage ../os-specific/linux/libcap/progs.nix { };
-
-  libcap_pam = callPackage ../os-specific/linux/libcap/pam.nix { };
-
-  libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
   libcap_ng = callPackage ../os-specific/linux/libcap-ng {
     swig = null; # Currently not using the python2/3 bindings
@@ -12490,6 +12520,7 @@ in
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
   };
 
   firefox-bin = self.wrapFirefox firefox-bin-unwrapped {
@@ -15296,7 +15327,14 @@ in
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
 
-  gnome3 = self.gnome3_18;
+  gnome3 = self.gnome3_18 // {
+    shellExtensions = {
+      impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix {};
+      system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor.nix {};
+      volume-mixer = callPackage ../desktops/gnome-3/extensions/volume-mixer.nix {};
+      workspace-grid = callPackage ../desktops/gnome-3/extensions/workspace-grid.nix {};
+    };
+  };
 
   gnome = recurseIntoAttrs self.gnome2;
 
@@ -16212,6 +16250,8 @@ in
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
+  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
+
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
     llvm = llvm_37;
   };
@@ -16229,6 +16269,8 @@ in
   faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+
+  faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 

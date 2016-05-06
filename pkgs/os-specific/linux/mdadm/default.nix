@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   preConfigure = ''
-    sed -e 's@/lib/udev@''${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile
+    sed -e 's@/lib/udev@''${out}/lib/udev@' \
+        -e 's@ -Werror @ @' \
+        -e 's@/usr/sbin/sendmail@/var/setuid-wrappers/sendmail@' -i Makefile
   '';
 
   meta = {

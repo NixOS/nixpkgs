@@ -1,9 +1,16 @@
-{ system ? builtins.currentSystem }:
+let maybePkgs = import ../../../../../. {}; in
+
+{ stdenv     ? maybePkgs.stdenv
+, runCommand ? maybePkgs.runCommand
+, fetchurl   ? maybePkgs.fetchurl
+, writeText  ? maybePkgs.writeText
+, curl       ? maybePkgs.curl
+, cacert     ? maybePkgs.cacert
+, nix        ? maybePkgs.nix
+}:
 
 let
-  inherit (import ../../../../../. {
-    inherit system;
-  }) lib runCommand fetchurl writeText stdenv curl cacert nix;
+  inherit (stdenv) lib;
 
   sources = if builtins.pathExists ./upstream-info.nix
             then import ./upstream-info.nix

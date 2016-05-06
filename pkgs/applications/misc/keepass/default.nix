@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, gtk2, plugins ? [] }:
 
 # KeePass looks for plugins in under directory in which KeePass.exe is
 # located. It follows symlinks where looking for that directory, so
@@ -77,6 +77,8 @@ with builtins; buildDotnetPackage rec {
   # is found and does not pollute output path.
   binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
 
+  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+
   postInstall = 
   let
     extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
@@ -86,7 +88,9 @@ with builtins; buildDotnetPackage rec {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir "$out/lib/dotnet/keepass/plugins"
     cp ${httpPlugin} "$out/lib/dotnet/keepass/plugins/KeePassHttp.plgx"
-    wrapProgram $out/bin/keepass --prefix PATH : "$binPaths"
+    wrapProgram $out/bin/keepass \
+      --prefix PATH : "$binPaths" \
+      --prefix LD_LIBRARY_PATH : "$dynlibPath"
 
     ${extractFDeskIcons} \
       "./Translation/TrlUtil/Resources/KeePass.ico" \

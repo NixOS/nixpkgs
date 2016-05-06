@@ -19,9 +19,7 @@ let
   callPackage = newScope chromium;
 
   chromium = {
-    upstream-info = (import ./update.nix {
-      inherit (stdenv) system;
-    }).getChannel channel;
+    upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
       inherit enableSELinux enableNaCl enableHotwording gnomeSupport
@@ -29,7 +27,7 @@ let
               hiDPISupport;
     };
 
-    browser = callPackage ./browser.nix { };
+    browser = callPackage ./browser.nix { inherit channel; };
 
     plugins = callPackage ./plugins.nix {
       inherit enablePepperFlash enableWideVine;
@@ -86,6 +84,7 @@ in stdenv.mkDerivation {
   inherit (chromium.browser) meta packageName;
 
   passthru = {
+    inherit (chromium) upstream-info;
     mkDerivation = chromium.mkChromiumDerivation;
   };
 }

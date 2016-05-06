@@ -22,9 +22,13 @@ in
       mkdir -p "$out/etc/bash_completion.d"
       cp -v $out/share/autojump/autojump.bash "$out/etc/bash_completion.d"
 
-      # FIXME: What's the right place for `autojump.zsh'?
-      # This can be used as a workaround in .zshrc:
-      # . $HOME/.nix-profile/share/autojump/autojump.zsh
+      cat <<SCRIPT > $out/bin/autojump-share
+      #!/bin/sh
+      # Run this script to find the autojump shared folder where all the shell
+      # integration scripts are living.
+      echo $out/share/autojump
+      SCRIPT
+      chmod +x $out/bin/autojump-share
     '';
 
     meta = {

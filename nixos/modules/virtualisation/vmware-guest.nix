@@ -25,6 +25,8 @@ in
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
       };
 
+    environment.etc."vmware-tools".source = "${pkgs.open-vm-tools}/etc/vmware-tools/*";
+
     services.xserver = {
       videoDrivers = mkOverride 50 [ "vmware" ];
 

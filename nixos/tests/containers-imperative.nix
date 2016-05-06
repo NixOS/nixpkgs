@@ -7,11 +7,20 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine =
-    { config, pkgs, ... }:
+    { config, pkgs, lib, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      # Make sure we always have all the required dependencies for creating a
+      # container available within the VM, because we don't have network access.
+      virtualisation.pathsInNixDB = let
+        emptyContainer = import ../lib/eval-config.nix {
+          inherit (config.nixpkgs) system;
+          modules = lib.singleton {
+            containers.foo.config = {};
+          };
+        };
+      in [ pkgs.stdenv emptyContainer.config.containers.foo.path ];
     };
 
   testScript =

@@ -1,17 +1,14 @@
 { stdenv, callPackage, fetchurl, makeWrapper
-# Begin libraries
 , alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, mesa_noglu
-# Begin download parameters
-, username ? ""
-, password ? ""
 , releaseType
+, username ? "" , password ? ""
 }:
 
 assert releaseType == "alpha" || releaseType == "headless";
 
 with stdenv.lib;
 let
-  version = "0.12.29";
+  version = "0.12.33";
   isHeadless = releaseType == "headless";
 
   arch = if stdenv.system == "x86_64-linux" then {
@@ -28,12 +25,12 @@ let
     url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
     name = "factorio_${releaseType}_${arch.inTar}-${version}.tar.gz"; # TODO take this from 302 redirection somehow? fetchurl doesn't help.
     x64 = {
-      headless = fetchurl        { inherit name url; sha256 = "1hr5dhpfagknjjd47qw3fa3ap8ikjc9hvxavrg4mpslbr0iqww8v"; };
-      alpha = authenticatedFetch { inherit      url; sha256 = "0vngfrjjib99k6czhg32rikfi36i3p3adx4mxc1z8bi5n70dbwqb"; };
+      headless = fetchurl        { inherit name url; sha256 = "073bwkpw2bwhbr3m8k3imlns89x5035xl4b7yq1c6npm4m7qcdnp"; };
+      alpha = authenticatedFetch { inherit      url; sha256 = "0dmq0kvzz885gcvj57h22icqhx0nvyfav4dvwsvpi15833208ca3"; };
     };
     i386 = {
       headless = abort "Factorio 32-bit headless binaries are not available for download.";
-      alpha = authenticatedFetch { inherit      url; sha256 = "10135rd9103x79i89p6fh5ssmw612012yyx3yyhb3nzl554zqzbm"; };
+      alpha = authenticatedFetch { inherit      url; sha256 = "1yxv6kr89iavpfsg21fx3q12m97ls0m9h3x33m4xnqp8px55851v"; };
     };
   };
 
@@ -55,15 +52,51 @@ let
     fi
   '';
 
-in
+  base = {
+    name = "factorio-${releaseType}-${version}";
 
-stdenv.mkDerivation rec {
-  name = "factorio-${releaseType}-${version}";
+    src = fetch.${arch.inTar}.${releaseType};
 
-  src = fetch.${arch.inTar}.${releaseType};
+    dontBuild = true;
 
-  libPath = stdenv.lib.makeLibraryPath (
-    optionals (! isHeadless) [
+    # TODO detangle headless/normal mode wrapping, libs, etc.  test all urls 32/64/headless/gfx
+    installPhase = ''
+      mkdir -p $out/{bin,share/factorio}
+      cp -a data $out/share/factorio
+      cp -a bin/${arch.inTar}/factorio $out/bin/factorio
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        $out/bin/factorio
+    '';
+
+    preferLocalBuild = true;
+
+    meta = {
+      description = "A game in which you build and maintain factories";
+      longDescription = ''
+        Factorio is a game in which you build and maintain factories.
+
+        You will be mining resources, researching technologies, building
+        infrastructure, automating production and fighting enemies. Use your
+        imagination to design your factory, combine simple elements into
+        ingenious structures, apply management skills to keep it working and
+        finally protect it from the creatures who don't really like you.
+
+        Factorio has been in development since spring of 2012 and it is
+        currently in late alpha.
+      '';
+      homepage = https://www.factorio.com/;
+      license = stdenv.lib.licenses.unfree;
+      maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
+      platforms = [ "i686-linux" "x86_64-linux" ];
+    };
+  };
+  headless = base;
+  alpha = base // {
+
+    buildInputs = [ makeWrapper ];
+
+    libPath = stdenv.lib.makeLibraryPath [
       alsaLib
       libX11
       libXcursor
@@ -71,61 +104,25 @@ stdenv.mkDerivation rec {
       libXrandr
       libXi
       mesa_noglu
-    ]
-  );
+    ];
 
-  buildInputs = [ makeWrapper ];
+    installPhase = base.installPhase + ''
+      wrapProgram $out/bin/factorio                                \
+        --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
+        --run "$out/share/factorio/update-config.sh"               \
+        --add-flags "-c \$HOME/.factorio/config.cfg"
 
-  dontBuild = true;
+      install -m0644 <(cat << EOF
+      ${configBaseCfg}
+      EOF
+      ) $out/share/factorio/config-base.cfg
 
-  # TODO detangle headless/normal mode wrapping, libs, etc.  test all urls 32/64/headless/gfx
-  installPhase = ''
-    mkdir -p $out/{bin,share/factorio}
-    cp -a data $out/share/factorio
-    cp -a bin/${arch.inTar}/factorio $out/bin/factorio
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/bin/factorio
+      install -m0755 <(cat << EOF
+      ${updateConfigSh}
+      EOF
+      ) $out/share/factorio/update-config.sh
 
-  '' + optionalString (! isHeadless) (''
-    mv $out/bin/factorio $out/bin/factorio.${arch.inTar}
-    makeWrapper $out/bin/factorio.${arch.inTar} $out/bin/factorio \
-      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
-      --run "$out/share/factorio/update-config.sh" \
-      --add-flags "-c \$HOME/.factorio/config.cfg"
-    # Fortunately, Factorio already supports system-wide installs.
-    # Unfortunately it's a bit inconvenient to set the paths.
-    install -m0644 <(cat << EOF
-  '' + configBaseCfg + ''
-    EOF
-    ) $out/share/factorio/config-base.cfg
-
-    install -m0755 <(cat << EOF
-  '' + updateConfigSh + ''
-    EOF
-    ) $out/share/factorio/update-config.sh
-    cp -a doc-html $out/share/factorio
-  '');
-
-  preferLocalBuild = true;
-
-  meta = {
-    description = "A game in which you build and maintain factories";
-    longDescription = ''
-      Factorio is a game in which you build and maintain factories.
-
-      You will be mining resources, researching technologies, building
-      infrastructure, automating production and fighting enemies. Use your
-      imagination to design your factory, combine simple elements into
-      ingenious structures, apply management skills to keep it working and
-      finally protect it from the creatures who don't really like you.
-
-      Factorio has been in development since spring of 2012 and it is
-      currently in late alpha.
+      cp -a doc-html $out/share/factorio
     '';
-    homepage = https://www.factorio.com/;
-    license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ Baughn elitak ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
   };
-}
+in stdenv.mkDerivation (if isHeadless then headless else alpha)
