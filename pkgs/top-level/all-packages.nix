@@ -3453,7 +3453,9 @@ in
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  thc-hydra = callPackage ../tools/security/thc-hydra { };
+  thc-hydra = callPackage ../tools/security/thc-hydra {
+    openssl = openssl_1_0_2;
+  };
 
   tiled = qt5.callPackage ../applications/editors/tiled { };
 
