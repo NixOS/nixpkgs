@@ -110,6 +110,8 @@
   ./services/audio/mopidy.nix
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
+  ./services/backup/burp-client.nix
+  ./services/backup/burp-server.nix
   ./services/backup/crashplan.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
