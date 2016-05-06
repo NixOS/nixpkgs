@@ -7,18 +7,14 @@
 
 with stdenv.lib;
 
-let
+stdenv.mkDerivation rec {
+  name = "nginx-${version}";
   version = "1.9.14";
-  mainSrc = fetchurl {
+
+  src = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
     sha256 = "1ljpyigqb6sbm4f8mi4fyvwfcvfapzg4z35s9cwb9ri8dl3r6j1b";
   };
-
-in
-
-stdenv.mkDerivation rec {
-  name = "nginx-${version}";
-  src = mainSrc;
 
   buildInputs =
     [ openssl zlib pcre libxml2 libxslt gd geoip ]
