@@ -16,12 +16,12 @@ rec {
   };
 
   pharo-spur = pharo-vm-build rec {
-    version = "2016.04.04";
+    version = "2016.05.04";
     name = "pharo-vm-spur-i386-${version}";
     binary-basename = "pharo-spur-vm";
     src = fetchurl {
       url = "${base-url}/pharo-vm-spur-${version}.tar.bz2";
-      sha256 = "1kmf782vdk9xbzi2yn1vpzksv8m04ry8n2ih16jhcihibxzcmz23";
+      sha256 = "01xvpcp9mslxmfjpi43jhgf8jnx20dqngwrfyi838il61128hwq2";
     };
   };
 }
