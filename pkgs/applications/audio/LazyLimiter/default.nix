@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2 }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
   name = "LazyLimiter-${version}";
   version = "0.3.01";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1yx9d5cakmqbiwb1j9v2af9h5lqzahl3kaamnyk71cf4i8g7zp3l";
   };
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
-    faust2jack -t 99999 LazyLimiter.dsp
-    faust2lv2 -t 99999 LazyLimiter.dsp
+    faust2jaqt -t 99999 LazyLimiter.dsp
+    faust2lv2 -gui -t 99999 LazyLimiter.dsp
   '';
 
   installPhase = ''

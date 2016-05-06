@@ -891,7 +891,7 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
-  
+
   asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
@@ -16291,6 +16291,8 @@ in
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
 
   faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
+
+  faustCompressors =  callPackage ../applications/audio/faustCompressors { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
