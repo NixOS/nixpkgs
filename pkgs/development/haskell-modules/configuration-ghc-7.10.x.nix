@@ -36,6 +36,9 @@ self: super: {
   # Our core version of Cabal is good enough for this build.
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
+  # Enable latest version of cabal-install.
+  cabal-install_1_24_0_0 = (doDistribute (dontJailbreak (dontCheck (super.cabal-install_1_24_0_0)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+
   # Jailbreaking is required for the test suite only (which we don't run).
   Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
 
@@ -186,5 +189,12 @@ self: super: {
 
   # Trigger rebuild to mitigate broken packaes on Hydra.
   amazonka-core = triggerRebuild super.amazonka-core 1;
+
+  # https://github.com/thoughtpolice/hs-ed25519/issues/13
+  ed25519 = dontCheck super.ed25519;
+
+  # https://github.com/well-typed/hackage-security/issues/157
+  # https://github.com/well-typed/hackage-security/issues/158
+  hackage-security = dontHaddock (dontCheck super.hackage-security);
 
 }
