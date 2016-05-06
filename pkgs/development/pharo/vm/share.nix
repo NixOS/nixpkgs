@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     sha256 = "1xq1721ql19hpgr8ir372h92q7g8zwd6k921b21dap4wf8djqnpd";
   };
 
+  sources50Zip = fetchurl {
+    url = http://files.pharo.org/sources/PharoV50.sources.zip;
+    sha256 = "0ykl1y0a4yy5qn8fwz0wkl8fcn4pqv9q0w0r2llhzdz3jdg1k69g";
+  };
+
   buildInputs = [ unzip ];
 
   installPhase = ''
@@ -37,6 +42,7 @@ stdenv.mkDerivation rec {
     unzip ${sources20Zip} -d $prefix/lib/
     unzip ${sources30Zip} -d $prefix/lib/
     unzip ${sources40Zip} -d $prefix/lib/
+    unzip ${sources50Zip} -d $prefix/lib/
   '';
 
   meta = {
