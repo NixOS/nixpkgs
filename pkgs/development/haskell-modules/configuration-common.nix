@@ -941,9 +941,6 @@ self: super: {
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
 
-  # https://github.com/danidiaz/pipes-transduce/issues/2
-  pipes-transduce = super.pipes-transduce.override { foldl = self.foldl_1_1_6; };
-
   # Haste stuff
   haste-Cabal         = self.callPackage ../tools/haskell/haste/haste-Cabal.nix {};
   haste-cabal-install = self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; HTTP = self.HTTP_4000_2_23; };
