@@ -2945,6 +2945,27 @@ in modules // {
     };
   };
 
+  catkin_pkg = buildPythonPackage rec {
+    name = "catkin_pkg-${version}";
+    version = "0.2.8";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/c/catkin_pkg/catkin_pkg-${version}.tar.gz";
+      sha256 = "034kbkmiicg82mzhp684v2vr64z7w758ddf84z308ndiz20x7ljg";
+    };
+
+    propagatedBuildInputs = with self; [ argparse dateutil docutils ];
+
+    # There are no tests
+    doCheck = false;
+
+    meta = {
+      homepage = http://wiki.ros.org/catkin_pkg;
+      description = "Library for retrieving information about catkin packages.";
+      license = licenses.bsd3;
+    };
+  };
+
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
 
@@ -8063,6 +8084,23 @@ in modules // {
       license = licenses.mit;
     };
   });
+
+  distribute = buildPythonPackage rec {
+    version = "0.7.3";
+    name = "distribute-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/distribute/distribute-${version}.zip";
+      sha256 = "0plc2dkmfd6p8lsqqvl1rryz03pf4i5198igml72zxywb78aiirx";
+    };
+
+    propagatedBuildInputs = with self; [ ];
+
+    meta = {
+      description = "distribute legacy wrapper";
+      homepage = http://packages.python.org/distribute;
+    };
+  };
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-${version}";
@@ -19355,7 +19393,112 @@ in modules // {
      };
   };
 
+  rosdep = buildPythonPackage rec {
+    version = "0.11.4";
+    name = "rosdep-${version}";
 
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosdep/rosdep-${version}.tar.gz";
+      sha256 = "1f4br1sq9shg5lh2s7vvzgchi8vf8l8s25pvqldqnya5096ivwz4";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    propagatedBuildInputs = with self; [ rosdistro ];
+
+    # Some tests require network access
+    doCheck = false;
+
+    meta = {
+      description = "rosdep package manager abstrction tool for ROS";
+      homepage = http://wiki.ros.org/rosdep;
+      license = licenses.bsd3;
+    };
+  };
+
+  rosdistro = buildPythonPackage rec {
+    version = "0.4.7";
+    name = "rosdistro-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosdistro/rosdistro-${version}.tar.gz";
+      sha256 = "1i7d3qv3bgfqc2pdcf2jzvmrxq64wx404mvddyghir6fdcrmfizl";
+    };
+
+    propagatedBuildInputs = with self; [ catkin_pkg rospkg ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "A tool to work with rosdistro files";
+      homepage = http://wiki.ros.org/rosdistro;
+      license = licenses.bsd3;
+    };
+  };
+
+  rosinstall = buildPythonPackage rec {
+    version = "0.7.7";
+    name = "rosinstall-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosinstall/rosinstall-${version}.tar.gz";
+      sha256 = "1b91bcsrdv5vydbpibmddm835v5g7m3hn886fzraj6bpqqipkym0";
+    };
+
+    propagatedBuildInputs = with self; [ catkin_pkg rosdistro vcstools wstool ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "The installer for ROS";
+      homepage = http://wiki.ros.org/rosinstall;
+      license = licenses.bsd3;
+    };
+  };
+
+  rosinstall_generator = buildPythonPackage rec {
+    version = "0.1.11";
+    name = "rosinstall_generator-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rosinstall_generator/rosinstall_generator-${version}.tar.gz";
+      sha256 = "0qgigpy7r81rfcwg7qb2fkwxxkijcclrzjhfwc84dw1x8p589dz6";
+    };
+
+    propagatedBuildInputs = with self; [ argparse catkin_pkg distribute rosdistro rospkg ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "A tool to generator rosinstall files";
+      homepage = http://wiki.ros.org/rosinstall_generator;
+      license = licenses.bsd3;
+    };
+  };
+
+  rospkg = buildPythonPackage rec {
+    version = "1.0.38";
+    name = "rospkg-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/r/rospkg/rospkg-${version}.tar.gz";
+      sha256 = "0clc7c8y0l8kjn1006pg72w9iy2sg2pj1ha07mrlkzmjny7lfjvp";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    # No test suite
+    doCheck = false;
+
+    meta = {
+      description = "ROS package library";
+      homepage = http://wiki.ros.org/rospkg;
+      license = licenses.bsd3;
+    };
+  };
 
   routes = buildPythonPackage rec {
     name = "routes-1.12.3";
@@ -22437,6 +22580,27 @@ in modules // {
     };
   };
 
+  vcstools = buildPythonPackage rec {
+    name = "vcstools-${version}";
+    version = "0.1.38";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/v/vcstools/vcstools-${version}.tar.gz";
+      sha256 = "0wmgnrbb0kw3dm1xa0rqlxh5c6lg09s6qqwk3rg97iscx8vvz0lw";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil pyyaml ];
+
+    # No test suite.
+    doCheck = false;
+
+    meta = {
+      description = "VCS/SCM source control library for svn, git, hg, and bzr";
+      homepage = "http://wiki.ros.org/vcstools";
+      license = licenses.bsd3;
+    };
+  };
+
   virtual-display = buildPythonPackage rec {
     name = "PyVirtualDisplay-0.1.5";
 
@@ -22877,6 +23041,27 @@ in modules // {
 
     meta = {
       maintainers = with maintainers; [ garbas iElectric ];
+    };
+  };
+
+  wstool = buildPythonPackage rec {
+    name = "wstool-${version}";
+    version = "0.1.12";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/w/wstool/wstool-${version}.tar.gz";
+      sha256 = "0vrf3sfkadmzb3kz2p8nvq7sa2bbwwczldprfm1x5hifv93w21r5";
+    };
+
+    propagatedBuildInputs = with self; [ vcstools ];
+
+    # No test suite.
+    doCheck = false;
+
+    meta = {
+      description = "workspace multi-SCM commands";
+      homepage = http://wiki.ros.org/wstool;
+      license = licenses.bsd3;
     };
   };
 
