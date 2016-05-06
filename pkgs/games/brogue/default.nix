@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     sed -i Makefile -e 's,LIBTCODDIR=.*,LIBTCODDIR=${libtcod},g' \
                     -e 's,sdl-config,${SDL}/bin/sdl-config,g'
-    sed -i src/platform/tcod-platform.c -e "s,fonts/font,$out/bin/fonts/font,g"
+    sed -i src/platform/tcod-platform.c -e "s,fonts/font,$out/share/brogue/fonts/font,g"
     make clean
     rm -rf src/libtcod*
   '';
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL ncurses binutils libtcod ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r bin/* $out/bin/
+    install -m 555 -D bin/brogue $out/bin/brogue
+    mkdir -p $out/share/brogue
+    cp -r bin/fonts $out/share/brogue/
   '';
 
   meta = with stdenv.lib; {
