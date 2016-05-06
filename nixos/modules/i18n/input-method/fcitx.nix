@@ -35,7 +35,7 @@ in
     environment.systemPackages = [ fcitxPackage ];
 
     environment.variables = {
-      GTK_IM_MODULE = "fcitx";
+      GTK_IM_MODULE = "xim";
       QT_IM_MODULE  = "fcitx";
       XMODIFIERS    = "@im=fcitx";
     };
