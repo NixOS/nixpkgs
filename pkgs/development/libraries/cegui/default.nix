@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "cegui-${version}";
-  version = "0.8.4";
+  version = "0.8.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/crayzedsgui/${name}.tar.bz2";
-    sha256 = "1253aywv610rbs96hwqiw2z7xrrv24l3jhfsqj95w143idabvz5m";
+    sha256 = "067562s71kfsnbp2zb2bmq8zj3jk96g5a4rcc5qc3n8nfyayhldk";
   };
 
 
