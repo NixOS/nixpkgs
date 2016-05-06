@@ -2490,16 +2490,17 @@ in modules // {
       sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
     };
 
-    propagatedBuildInputs = [ self.botocore
-                              self.jmespath
-                            ] ++ (if isPy3k then [] else [self.futures_2_2]);
+    propagatedBuildInputs = [ self.botocore self.jmespath ] ++
+                            (if isPy3k then [] else [self.futures_2_2]);
     buildInputs = [ self.docutils self.nose self.mock ];
-
-    # Tests are failing with `botocore.exceptions.NoCredentialsError:
-    # Unable to locate credentials`. There also seems to be some mock
-    # issues (`assert_called_once` doesn't exist in mock but boto
-    # seems to think it is?).
-    doCheck = false;
+    checkPhase = ''
+      runHook preCheck
+      # This method is not in mock. It might have appeared in some versions.
+      sed -i 's/action.assert_called_once()/self.assertEqual(action.call_count, 1)/' \
+        tests/unit/resources/test_factory.py
+      nosetests -d tests/unit --verbose
+      runHook postCheck
+    '';
 
     meta = {
       homepage = https://github.com/boto3/boto;
