@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1j2cs2mvaj6bjjicabq6lh97nx0v4b2k6pj4cmywki7hf3i1p8yy";
     rev = "v${version}";
     repo = "dub";
-    owner = "D-Programming-Language";
+    owner = "dlang";
   };
 
   buildInputs = [ curl ];
