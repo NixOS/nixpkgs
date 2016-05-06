@@ -439,8 +439,18 @@ eval "exec $logOutFd>&- $logErrFd>&-"
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2. But keep storage daemons like unionfs-fuse.
-pkill -9 -v -f '@'
-
+#
+# Storage daemons are distinguished by an @ in front of their command line:
+# https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
+local pidsToKill="$(pgrep -v -f '^@')"
+for pid in $pidsToKill; do
+    # Make sure we don't kill kernel processes, see #15226 and:
+    # http://stackoverflow.com/questions/12213445/identifying-kernel-threads
+    readlink "/proc/$pid/exe" &> /dev/null || continue
+    # Try to avoid killing ourselves.
+    [ $pid -eq $$ ] && continue
+    kill -9 "$pid"
+done
 
 if test -n "$debug1mounts"; then fail; fi
 
