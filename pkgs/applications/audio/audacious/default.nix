@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk3, libmowgli, libmcs
 , gettext, dbus_glib, libxml2, libmad, xorg, alsaLib, libogg
 , libvorbis, libcdio, libcddb, flac, ffmpeg, makeWrapper
-, mpg123, neon, faad2
+, mpg123, neon, faad2, gnome3
 }:
 
 let version = "3.5.2"; in
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   buildInputs =
     [ gettext pkgconfig glib gtk3 libmowgli libmcs libxml2 dbus_glib
       libmad xorg.libXcomposite libogg libvorbis flac alsaLib libcdio
-      libcddb ffmpeg makeWrapper mpg123 neon faad2
+      libcddb ffmpeg makeWrapper mpg123 neon faad2 gnome3.defaultIconTheme
     ];
 
   # Here we build bouth audacious and audacious-plugins in one
@@ -48,8 +48,11 @@ stdenv.mkDerivation {
       (
         source $stdenv/setup
         # gsettings schemas for file dialogues
+        # XDG_ICON_DIRS is set by hook for gnome3.defaultIconTheme
         for file in "$out/bin/"*; do
-          wrapProgram "$file" --prefix XDG_DATA_DIRS : "$XDG_ADD:$GSETTINGS_SCHEMAS_PATH"
+          wrapProgram "$file" \
+            --prefix XDG_DATA_DIRS : "$XDG_ADD:$GSETTINGS_SCHEMAS_PATH" \
+            --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
         done
       )
     '';
