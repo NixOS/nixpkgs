@@ -3,6 +3,7 @@
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysql
 , withSQLite ? false, sqlite
+, withLdap ? false, openldap
 }:
 
 let
@@ -11,12 +12,14 @@ let
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysql}/include/mysql" ]
-     ++ lib.optional withSQLite "-DHAS_SQLITE");
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optional withLdap "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
      ++ lib.optional withMySQL "-lmysqlclient"
      ++ lib.optional withSQLite "-lsqlite3");
+   auxlibsLdap = "" + lib.optionalString withLdap "-lldap -llber";
 
 in stdenv.mkDerivation rec {
 
@@ -32,7 +35,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL libmysql
-                ++ lib.optional withSQLite sqlite;
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLdap openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -64,7 +68,7 @@ in stdenv.mkDerivation rec {
     export readme_directory=$out/share/postfix/doc
     export sendmail_path=$out/bin/sendmail
 
-    make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}'
+    make makefiles CCARGS='${ccargs}' AUXLIBS='${auxlibs}' AUXLIBS_LDAP='${auxlibsLdap}'
   '';
 
   installTargets = [ "non-interactive-package" ];
