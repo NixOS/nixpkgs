@@ -9854,10 +9854,8 @@ in
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
-
-  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
-    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
-  };
+  # nginxUnstable currently points to stable because that's newest:
+  nginxUnstable = nginx;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
