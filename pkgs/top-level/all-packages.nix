@@ -10482,6 +10482,9 @@ in
   iw = callPackage ../os-specific/linux/iw { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbpdf = callPackage ../os-specific/linux/jfbview {
+    imageSupport = false;
+  };
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 

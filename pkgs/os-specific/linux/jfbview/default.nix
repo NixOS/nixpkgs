@@ -1,12 +1,20 @@
 { stdenv, fetchFromGitHub
-, freetype, harfbuzz, imlib2, jbig2dec, libjpeg, libX11, mujs, mupdf
-, ncurses, openjpeg, openssl }:
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mujs, mupdf, ncurses, openjpeg
+, openssl
+
+, imageSupport ? true, imlib2 ? null }:
 
 let
-  binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
+  package = if imageSupport
+    then "jfbview"
+    else "jfbpdf";
+  binaries = if imageSupport
+    then [ "jfbview" "jpdfcat" "jpdfgrep" ]	# all require imlib2
+    else [ "jfbpdf" ];	       		  	# does not
 in
+
 stdenv.mkDerivation rec {
-  name = "jfbview-${version}";
+  name = "${package}-${version}";
   version = "0.5.2";
 
   src = fetchFromGitHub {
@@ -16,12 +24,16 @@ stdenv.mkDerivation rec {
     owner = "jichu4n";
   };
 
-  buildInputs = [ freetype harfbuzz imlib2 jbig2dec libjpeg libX11 mujs mupdf
-    ncurses openjpeg openssl ];
+  buildInputs = [
+    freetype harfbuzz jbig2dec libjpeg libX11 mujs mupdf ncurses openjpeg
+    openssl
+  ] ++ stdenv.lib.optionals imageSupport [
+    imlib2
+  ];
 
   configurePhase = ''
-    # Hack. Probing (with `ldconfig -p`) fails with ‘cannot execute binary file’.
-    # Overriding `OPENJP2 = ...` later works, but makes build output misleading:
+    # Hack. Probing (`ldconfig -p`) fails with ‘cannot execute binary file’.
+    # Overriding `OPENJP2 =` later works, but makes build output misleading:
     substituteInPlace Makefile --replace "ldconfig -p" "echo libopenjp2"
 
     make config.mk
