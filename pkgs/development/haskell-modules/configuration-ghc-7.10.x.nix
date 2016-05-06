@@ -33,11 +33,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # ekmett/linear#74
-  linear = overrideCabal super.linear (drv: {
-    prePatch = "sed -i 's/-Werror//g' linear.cabal";
-  });
-
   # Our core version of Cabal is good enough for this build.
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
