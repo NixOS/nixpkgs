@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jack, faust2lv2 }:
+{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
   name = "CharacterCompressor-${version}";
   version = "0.2";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0fvi8m4nshcxypn4jgxhnh7pxp68wshhav3k8wn3il7qpw71pdxi";
   };
 
-  buildInputs = [ faust2jack faust2lv2 ];
+  buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
-    faust2jack -t 99999 CharacterCompressor.dsp
-    faust2lv2 -t 99999 CharacterCompressor.dsp
+    faust2jaqt -t 99999 CharacterCompressor.dsp
+    faust2lv2 -gui -t 99999 CharacterCompressor.dsp
   '';
 
   installPhase = ''

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2gui }:
 stdenv.mkDerivation rec {
-  name = "CompBus-${version}";
-  version = "1.1.02";
+  name = "faustCompressors-${version}";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "magnetophon";
-    repo = "CompBus";
+    repo = "faustCompressors";
     rev = "v${version}";
-    sha256 = "025vi60caxk3j2vxxrgbc59xlyr88vgn7k3127s271zvpyy7apwh";
+    sha256 = "0x5nd2cjhknb4aclhkkjaywx75bi2wj22prgv8n47czi09jcj0jb";
   };
 
   buildInputs = [ faust2jaqt faust2lv2gui ];
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     for f in *.dsp;
     do
-      faust2jaqt -t 99999 $f
-      faust2lv2 -gui -t 99999 $f
+      faust2jaqt -double -t 99999 $f
+      faust2lv2 -double -gui -t 99999 $f
     done
   '';
 
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A group of compressors mixed into a bus, sidechained from that mix bus. For jack and lv2";
-    homepage = https://github.com/magnetophon/CompBus;
+    description = "A collection of bread and butter compressors";
+    homepage = https://github.com/magnetophon/faustCompressors;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.magnetophon ];
   };
