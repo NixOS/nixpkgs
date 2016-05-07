@@ -58,13 +58,8 @@ stdenv.mkDerivation {
      ''}
 
     configureFlagsArray=( --enable-shared --with-threads
-<<<<<<< Updated upstream
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${p.dev or p}/include") buildInputs)}"
                           LDFLAGS="${concatStringsSep " " (map (p: "-L${p.lib or (p.out or p)}/lib") buildInputs)}"
-=======
-                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
-                          LDFLAGS="${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}"
->>>>>>> Stashed changes
                           LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';

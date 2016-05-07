@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    cat > Resources/downloadpak.sh
     unzip -u -o $devPack -d Resources/DevPak
   '';
 
