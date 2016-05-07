@@ -151,5 +151,6 @@ in stdenv.mkDerivation {
     description = "Online stored folders (daemon version)";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    licenses = stdenv.lib.licenses.unfree;
   };
 }
