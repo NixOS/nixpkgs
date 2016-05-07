@@ -59,6 +59,10 @@ let
     inherit lib;
   };
 
+  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
+
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
     inherit lib lndir makeWrapper stdenv;
   };
@@ -1299,19 +1303,6 @@ let
     };
   };
 
-  org-plus-contrib = elpaBuild rec {
-    pname   = "org-plus-contrib";
-    version = "20150406";
-    src = fetchurl {
-      url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
-      sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
-    };
-    meta = {
-      description = "Notes, TODO lists, projects, and authoring in plain-text with Emacs";
-      license = gpl3Plus;
-    };
-  };
-
   org-trello = melpaBuild rec {
     pname = "org-trello";
     version = "0.7.5";
@@ -1843,5 +1834,6 @@ in
     // melpaPackages self
     // elpaPackages self
     // melpaStablePackages self
+    // orgPackages self
     // packagesFun self
   )
