@@ -165,7 +165,7 @@ in
         ${pkgs.xz.out}/lib/liblzma.so.* mr,
         ${pkgs.libgcrypt.out}/lib/libgcrypt.so.* mr,
         ${pkgs.libgpgerror.out}/lib/libgpg-error.so.* mr,
-        ${pkgs.libcap.out}/lib/libcap.so.* mr,
+        ${pkgs.libcap.lib}/lib/libcap.so.* mr,
         ${pkgs.lz4}/lib/liblz4.so.* mr,
         ${pkgs.attr.out}/lib/libattr.so.* mr,
 
