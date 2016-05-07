@@ -20427,15 +20427,16 @@ in modules // {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.6.1";
-    disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
+    name = "sympy-1.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/s/sympy/${name}.tar.gz";
-      sha256 = "1fc272b51091aabe7d07f1bf9f0a47f3e28657fb2bec52bf3ef0e8f159f5f564";
+      sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
+
+    propagatedBuildInputs = with self; [ mpmath ];
 
     preCheck = ''
       export LANG="en_US.UTF-8"
