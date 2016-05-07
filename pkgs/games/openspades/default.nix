@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
     ++ lib.optional withOpenal openal;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" "-DOPENSPADES_RESOURCES=NO" ];
 
   enableParallelBuilding = true;
 
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = ''
-    cp $devPack Resources/DevPaks27.zip
-    unzip -u -o Resources/DevPaks27.zip -d Resources/DevPak
+    unzip -u -o $devPack -d Resources/DevPak
   '';
 
   NIX_CFLAGS_LINK = lib.optional withOpenal "-lopenal";
