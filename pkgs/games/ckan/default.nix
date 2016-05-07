@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perl, mono, gtk }:
+{ stdenv, fetchFromGitHub, makeWrapper, perl, mono, gtk, curl }:
 
 stdenv.mkDerivation rec {
   name = "ckan-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lfvl8w09lakz35szp5grfvhq8xx486f5igvj1m6azsql4n929lg";
   };
 
-  buildInputs = [ makeWrapper perl mono gtk ];
+  buildInputs = [ makeWrapper perl mono ];
 
   postPatch = ''
     substituteInPlace bin/build \
@@ -22,13 +22,15 @@ stdenv.mkDerivation rec {
   doCheck = false;
   checkTarget = "test";
 
+  libraries = stdenv.lib.makeLibraryPath [ gtk curl ];
+
   installPhase = ''
     mkdir -p $out/bin
     for exe in *.exe; do
       install -m 0644 $exe $out/bin
       makeWrapper ${mono}/bin/mono $out/bin/$(basename $exe .exe) \
         --add-flags $out/bin/$exe \
-        --set LD_LIBRARY_PATH ${gtk.out}/lib
+        --set LD_LIBRARY_PATH $libraries
     done
   '';
 

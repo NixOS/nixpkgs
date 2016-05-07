@@ -1,35 +1,31 @@
-{ stdenv, lib, fetchurl, cmake, curl, glew, makeWrapper, mesa, SDL2,
+{ stdenv, lib, fetchurl, fetchFromGitHub, cmake, curl, glew, makeWrapper, mesa, SDL2,
   SDL2_image, unzip, wget, zlib, withOpenal ? true, openal ? null }:
 
 assert withOpenal -> openal != null;
 
 stdenv.mkDerivation rec {
   name = "openspades-${version}";
-  version = "0.0.12";
+  version = "2016-04-17";
 
-  src = fetchurl {
-    url = "https://github.com/yvt/openspades/archive/v${version}.tar.gz";
-    sha256 = "1aa848cck8qrp67ha9vrkzm3k24r2aiv1v4dxla6pi22rw98yxzm";
+  src = fetchFromGitHub {
+    owner = "yvt";
+    repo = "openspades";
+    rev = "cadc0b6a57fbee05abcaf42d15664502c94b58cf";
+    sha256 = "0vyvmgim03q8pcmfa1i0njr4w1lpjq5g3b47f67v9b5c5jcjycwn";
   };
 
-  # https://github.com/yvt/openspades/issues/354
-  postPatch = ''
-    substituteInPlace Sources/Client/Client_Input.cpp --replace "isnan(" "std::isnan("
-    substituteInPlace Sources/Client/Corpse.cpp --replace "isnan(" "std::isnan("
-    substituteInPlace Sources/Draw/SWMapRenderer.cpp --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
-  '';
-
   nativeBuildInputs = 
+    with stdenv.lib;
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
     ++ lib.optional withOpenal openal;
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" "-DOPENSPADES_RESOURCES=NO" ];
 
-  enableParallelBuilding = true;
+  #enableParallelBuilding = true;
 
   devPack = fetchurl {
-    url = "http://yvt.jp/files/programs/osppaks/DevPaks27.zip";
-    sha256 = "05y7wldg70v5ys41fm0c8kipyspn524z4pglwr3p8h0gfz9n52v6";
+    url = "http://yvt.jp/files/programs/osppaks/DevPaks29.zip";
+    sha256 = "1fhwxm6wifg0l3ykmiiqa1h4ch5ika2kw2j0v9xnrz24cabsi6cc";
   };
 
   preBuild = ''

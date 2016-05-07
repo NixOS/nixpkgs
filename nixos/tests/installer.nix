@@ -407,6 +407,10 @@ in {
               "mdadm --verbose -W /dev/md1",
           );
         '';
+      preBootCommands = ''
+        $machine->start;
+        $machine->fail("dmesg | grep 'immediate safe mode'");
+      '';
     };
 
   # Test a basic install using GRUB 1.

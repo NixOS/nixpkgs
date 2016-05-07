@@ -892,7 +892,7 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
-  
+
   asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
@@ -2218,6 +2218,8 @@ in
     nodejs-0_10
   else
     nodejs-4_x;
+
+  nodePackages_6_x = callPackage ./node-packages.nix { self = nodePackages_6_x; nodejs = nodejs-6_x; };
 
   nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
 
@@ -4270,6 +4272,21 @@ in
     isl = isl_0_14;
   }));
 
+  gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+
+    isl = isl_0_14;
+  }));
+
   gfortran = if !stdenv.isDarwin then gfortran5
              else callPackage ../development/compilers/gcc/gfortran-darwin.nix {
     inherit (darwin) Libsystem;
@@ -4292,6 +4309,14 @@ in
   });
 
   gfortran5 = wrapCC (gcc5.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran6 = wrapCC (gcc6.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -5576,7 +5601,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
 
-  pypi2nix = python27Packages.pypi2nix;
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python27; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -8002,7 +8027,7 @@ in
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
   libsndfile = callPackage ../development/libraries/libsndfile {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
+    inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
 
   libsodium = callPackage ../development/libraries/libsodium { };
@@ -8030,6 +8055,8 @@ in
   libtar = callPackage ../development/libraries/libtar { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
+
+  libtcod = callPackage ../development/libraries/libtcod { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
@@ -14251,7 +14278,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
+  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; ruby = ruby_2_2; };
 
   vimHugeX = vim_configurable;
 
@@ -14810,6 +14837,8 @@ in
 
   blobby = callPackage ../games/blobby { };
 
+  brogue = callPackage ../games/brogue { };
+
   bsdgames = callPackage ../games/bsdgames { };
 
   btanks = callPackage ../games/btanks { };
@@ -15034,6 +15063,8 @@ in
   openra = callPackage ../games/openra { lua = lua5_1; };
 
   openspades = callPackage ../games/openspades {};
+
+  openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -16273,6 +16304,8 @@ in
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
 
   faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
+
+  faustCompressors =  callPackage ../applications/audio/faustCompressors { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
