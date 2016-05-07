@@ -15047,6 +15047,8 @@ in
 
   openspades = callPackage ../games/openspades {};
 
+  openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
+
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
   };
