@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
-    rev = "1.2.0-beta1+android7";
-    sha256 = "08nn18jydblrif1qs92pakzd3ww7inr0i378ssn1bjp09lm1bkk0";
+    rev = "f8285956097451f829d7da3455c45e3de39092e6";
+    sha256 = "0iz3a2y6sj4w433259widchrc1bld5wkkpb040gpiz0avdm4nw89";
   };
 
   patches = [
