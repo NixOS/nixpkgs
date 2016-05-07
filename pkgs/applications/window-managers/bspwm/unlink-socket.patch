@@ -1,0 +1,61 @@
+diff --git a/bspwm.c b/bspwm.c
+index 344e1f4..425000c 100644
+--- a/bspwm.c
++++ b/bspwm.c
+@@ -77,24 +77,6 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	if (config_path[0] == '\0') {
+-		char *config_home = getenv(CONFIG_HOME_ENV);
+-		if (config_home != NULL)
+-			snprintf(config_path, sizeof(config_path), "%s/%s/%s", config_home, WM_NAME, CONFIG_NAME);
+-		else
+-			snprintf(config_path, sizeof(config_path), "%s/%s/%s/%s", getenv("HOME"), ".config", WM_NAME, CONFIG_NAME);
+-	}
+-
+-	dpy = xcb_connect(NULL, &default_screen);
+-
+-	if (!check_connection(dpy))
+-		exit(EXIT_FAILURE);
+-
+-	load_settings();
+-	setup();
+-
+-	dpy_fd = xcb_get_file_descriptor(dpy);
+-
+ 	char *sp = getenv(SOCKET_ENV_VAR);
+ 	if (sp != NULL) {
+ 		snprintf(socket_path, sizeof(socket_path), "%s", sp);
+@@ -114,12 +96,31 @@ int main(int argc, char *argv[])
+ 	if (sock_fd == -1)
+ 		err("Couldn't create the socket.\n");
+ 
++	unlink(socket_path);
+ 	if (bind(sock_fd, (struct sockaddr *) &sock_address, sizeof(sock_address)) == -1)
+ 		err("Couldn't bind a name to the socket.\n");
+ 
+ 	if (listen(sock_fd, SOMAXCONN) == -1)
+ 		err("Couldn't listen to the socket.\n");
+ 
++	if (config_path[0] == '\0') {
++		char *config_home = getenv(CONFIG_HOME_ENV);
++		if (config_home != NULL)
++			snprintf(config_path, sizeof(config_path), "%s/%s/%s", config_home, WM_NAME, CONFIG_NAME);
++		else
++			snprintf(config_path, sizeof(config_path), "%s/%s/%s/%s", getenv("HOME"), ".config", WM_NAME, CONFIG_NAME);
++	}
++
++	dpy = xcb_connect(NULL, &default_screen);
++
++	if (!check_connection(dpy))
++		exit(EXIT_FAILURE);
++
++	load_settings();
++	setup();
++
++	dpy_fd = xcb_get_file_descriptor(dpy);
++
+ 	signal(SIGINT, sig_handler);
+ 	signal(SIGHUP, sig_handler);
+ 	signal(SIGTERM, sig_handler);

@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1efb2db7b8a251bcc006d66a050cf66e9d311761c94890bebf91a32905042fde";
   };
 
+  patches = [ ./unlink-socket.patch ];
+
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];
 
   buildPhase = ''
     make PREFIX=$out
   '';
- 
+
   installPhase = ''
     make PREFIX=$out install
   '';
