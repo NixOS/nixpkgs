@@ -11800,17 +11800,15 @@ in modules // {
 
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
-    version = "0.8";
+    version = "0.9";
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
       repo = "Mathics";
       rev = "v${version}";
-      sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
+      sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
     };
 
-    disabled = isPy3k;
-
-    patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
+    disabled = isPy26;
 
     buildInputs = with self; [ pexpect ];
 
@@ -11819,17 +11817,17 @@ in modules // {
     '';
 
     propagatedBuildInputs = with self; [
-      argparse
       cython
-      colorama
-      dateutil
-      django_1_6
-      mpmath
-      readline
-      interruptingcow
-      ply
-      sqlite3
       sympy
+      django_1_8
+      ply
+      mpmath
+      dateutil
+      colorama
+      six
+
+      readline
+      sqlite3
     ];
 
     meta = {
