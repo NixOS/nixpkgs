@@ -4,4 +4,4 @@ sudo: required
 dist: trusty
 before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
 install: ./maintainers/scripts/travis-nox-review-pr.sh nox
-script: ./maintainers/scripts/travis-nox-review-pr.sh build
+script: travis_wait 119 ./maintainers/scripts/travis-nox-review-pr.sh build
