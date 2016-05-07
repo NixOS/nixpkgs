@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here
-    substituteInPlace configure --replace 'python''${PYTHON_VERSION}' ${python.executable}
+    substituteInPlace configure.ac --replace 'python''${PYTHON_VERSION}' ${python.executable}
 
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
   '';
