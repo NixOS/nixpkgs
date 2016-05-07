@@ -25060,26 +25060,6 @@ in modules // {
                                          retry_decorator pkgs.pyopenssl socksipy-branch crcmod ];
   };
 
-  pypi2nix = self.buildPythonPackage rec {
-    rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
-    name = "pypi2nix-1.0_${rev}";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "1fv85x2bz442iyxsvka2g75zibjcq48gp2fc7szaqcfqxq42syy9";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/garbas/pypi2nix;
-      description = "";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
-
   svg2tikz = self.buildPythonPackage {
     name = "svg2tikz-1.0.0";
     disabled = ! isPy27;

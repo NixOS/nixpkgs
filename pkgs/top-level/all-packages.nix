@@ -5593,7 +5593,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
 
-  pypi2nix = python27Packages.pypi2nix;
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python27; };
 
   svg2tikz = python27Packages.svg2tikz;
 
