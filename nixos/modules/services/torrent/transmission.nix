@@ -126,7 +126,7 @@ in
           ${pkgs.libgpgerror.out}/lib/libgpg-error*.so* mr,
           ${pkgs.nghttp2.lib}/lib/libnghttp2*.so*       mr,
           ${pkgs.c-ares.out}/lib/libcares*.so*          mr,
-          ${pkgs.libcap.out}/lib/libcap*.so*            mr,
+          ${pkgs.libcap.lib}/lib/libcap*.so*            mr,
           ${pkgs.attr.out}/lib/libattr*.so*             mr,
           ${pkgs.lz4}/lib/liblz4*.so*               mr,
 
