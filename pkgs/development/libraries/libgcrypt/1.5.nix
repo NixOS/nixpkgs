@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i 's,#include <gpg-error.h>,#include "${libgpgerror.dev}/include/gpg-error.h",g' $out/include/gcrypt.h
   '' + stdenv.lib.optionalString enableCapabilities ''
-    sed -i 's,\(-lcap\),-L${libcap.out}/lib \1,' $out/lib/libgcrypt.la
+    sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
   '';
 
   doCheck = true;
