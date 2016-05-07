@@ -71,16 +71,10 @@ let
        export HOME="$TMPDIR";
        # disable shutils because it assumes gid 0 exists
        # disable socket because it has two actual network tests that fail
-       # disable test_mhlib because it fails for unknown reason
-       # disable sqlite3 due to https://bugs.pypy.org/issue1740
-       # disable test_multiprocessing due to transient errors
-       # disable test_os because test_urandom_failure fails
        # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
-       # disable test_zipfile64 because it randomly timeouts
-       # disable test_cpickle because timeouts
        # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
        # disable test_epoll because of invalid arg, should be fixed in as of version 5.1.2
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not (test_ssl or test_cpickle or test_sqlite or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_os or test_shutil or test_mhlib or test_multiprocessing or test_zipfile64 or test_epoll)' lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_ssl or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil or test_epoll )' lib-python
     '';
 
     installPhase = ''
