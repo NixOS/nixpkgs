@@ -11787,17 +11787,15 @@ in modules // {
 
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
-    version = "0.8";
+    version = "0.9";
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
       repo = "Mathics";
       rev = "v${version}";
-      sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
+      sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
     };
 
-    disabled = isPy3k;
-
-    patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
+    disabled = isPy26;
 
     buildInputs = with self; [ pexpect ];
 
@@ -11806,17 +11804,17 @@ in modules // {
     '';
 
     propagatedBuildInputs = with self; [
-      argparse
       cython
-      colorama
-      dateutil
-      django_1_6
-      mpmath
-      readline
-      interruptingcow
-      ply
-      sqlite3
       sympy
+      django_1_8
+      ply
+      mpmath
+      dateutil
+      colorama
+      six
+
+      readline
+      sqlite3
     ];
 
     meta = {
@@ -20414,15 +20412,16 @@ in modules // {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.6.1";
-    disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
+    name = "sympy-1.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/s/sympy/${name}.tar.gz";
-      sha256 = "1fc272b51091aabe7d07f1bf9f0a47f3e28657fb2bec52bf3ef0e8f159f5f564";
+      sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
+
+    propagatedBuildInputs = with self; [ mpmath ];
 
     preCheck = ''
       export LANG="en_US.UTF-8"
