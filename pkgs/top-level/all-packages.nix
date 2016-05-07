@@ -8072,6 +8072,8 @@ in
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
 
+  libtcod = callPackage ../development/libraries/libtcod { };
+
   libtheora = callPackage ../development/libraries/libtheora { };
 
   libtiff = callPackage ../development/libraries/libtiff { };
@@ -14844,6 +14846,8 @@ in
   blackshadeselite = callPackage ../games/blackshadeselite { };
 
   blobby = callPackage ../games/blobby { };
+
+  brogue = callPackage ../games/brogue { };
 
   bsdgames = callPackage ../games/bsdgames { };
 
