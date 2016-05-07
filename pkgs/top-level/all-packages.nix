@@ -12268,8 +12268,6 @@ in
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
-    gitModes = callPackage ../applications/editors/emacs-modes/git-modes { };
-
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
     hsc3Mode = callPackage ../applications/editors/emacs-modes/hsc3 { };
@@ -12297,8 +12295,6 @@ in
     logito = callPackage ../applications/editors/emacs-modes/logito { };
 
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
-
-    magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     markdownMode = callPackage ../applications/editors/emacs-modes/markdown-mode { };
 
