@@ -586,6 +586,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  bins = callPackage ../tools/graphics/bins { };
+
   binwalk = callPackage ../tools/misc/binwalk {
     python = pythonFull;
     wrapPython = pythonPackages.wrapPython;
