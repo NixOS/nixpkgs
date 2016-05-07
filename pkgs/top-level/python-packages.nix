@@ -15706,6 +15706,10 @@ in modules // {
       pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
     ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       inherit version;
       description = "Command-line interface for MySQL";
@@ -16144,12 +16148,14 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.60";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      sha256 = "0gf3vv8dmj77xv7lrpccw9k3m1bgq3m71q9s6hqp77zvyd6cqjml";
+      sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
+
+    disabled = isPy35;
 
     buildInputs = with self; [ jedi ipython pygments ];
     propagatedBuildInputs = with self; [ docopt six wcwidth ];
