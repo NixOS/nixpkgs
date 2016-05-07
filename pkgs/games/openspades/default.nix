@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, curl, glew, makeWrapper, mesa, SDL2,
+{ stdenv, lib, fetchurl, cmake, curl, glew, makeWrapper, mesa, SDL2,
   SDL2_image, unzip, wget, zlib, withOpenal ? true, openal ? null }:
 
 assert withOpenal -> openal != null;
@@ -20,9 +20,8 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = 
-    with stdenv.lib;
     [ cmake curl glew makeWrapper mesa SDL2 SDL2_image unzip wget zlib ]
-    ++ optional withOpenal openal;
+    ++ lib.optional withOpenal openal;
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DOPENSPADES_INSTALL_BINARY=bin" ];
 
@@ -38,13 +37,7 @@ stdenv.mkDerivation rec {
     unzip -u -o Resources/DevPaks27.zip -d Resources/DevPak
   '';
 
-  # OpenAL is loaded dynamicly
-  postInstall = 
-    if withOpenal then ''
-      wrapProgram "$out/bin/openspades" \
-        --prefix LD_LIBRARY_PATH : "${openal}/lib"
-    '' 
-    else null;
+  NIX_CFLAGS_LINK = lib.optional withOpenal "-lopenal";
 
   meta = with stdenv.lib; {
     description = "A compatible client of Ace of Spades 0.75";
