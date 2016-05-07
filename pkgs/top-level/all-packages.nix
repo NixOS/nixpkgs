@@ -12371,8 +12371,6 @@ in
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
-    xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
-
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
