@@ -138,6 +138,9 @@ stdenv.mkDerivation {
         patchelf --set-rpath "$libPath" \
           "$out/usr/lib/firefox-bin-${version}/{}" \;
 
+      # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
+      ln -s "$out/usr/lib" "$out/lib"
+
       # Create a desktop item.
       mkdir -p $out/share/applications
       cat > $out/share/applications/firefox.desktop <<EOF
