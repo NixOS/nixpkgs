@@ -8998,6 +8998,8 @@ in
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  udns = callPackage ../development/libraries/udns { };
+
   uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
 
   unibilium = callPackage ../development/libraries/unibilium { };
