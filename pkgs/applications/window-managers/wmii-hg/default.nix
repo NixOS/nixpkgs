@@ -1,4 +1,4 @@
-{ stdenv, fetchhg, pkgconfig, libixp_hg, txt2tags, dash, python
+{ stdenv, fetchhg, pkgconfig, libixp_hg, txt2tags, dash, python, which
 , libX11 , libXrender, libXext, libXinerama, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   # for dlopen-ing
   patchPhase = ''
     substituteInPlace lib/libstuff/x11/xft.c --replace "libXft.so" "${libXft}/lib/libXft.so"
+    substituteInPlace cmd/wmii.sh.sh --replace "\$(which which)" "${which}/bin/which"
   '';
 
   configurePhase = ''
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildInputs = [ pkgconfig libixp_hg txt2tags dash python
+  buildInputs = [ pkgconfig libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
