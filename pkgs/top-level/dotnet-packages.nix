@@ -183,8 +183,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   MonoNat = fetchNuGet {
     baseName = "Mono.Nat";
-    version = "1.2.21";
-    sha256 = "011xhmjrx6w5h110fcp40l95k3qj1gkzz3axgbfy0s8haf5hsf7s";
+    version = "1.2.24";
+    sha256 = "0vfkach11kkcd9rcqz3s38m70d5spyb21gl99iqnkljxj5555wjs";
     outputFiles = [ "lib/*" ];
   };
 
