@@ -15199,7 +15199,12 @@ in
 
   stepmania = callPackage ../games/stepmania { };
 
-  stuntrally = callPackage ../games/stuntrally { };
+  stuntrally = callPackage ../games/stuntrally {
+    bullet = bullet283;
+    mygui = mygui.override {
+      withOgre = true;
+    };
+  };
 
   superTux = callPackage ../games/super-tux { };
 
@@ -16787,6 +16792,7 @@ in
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+  bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
   spdlog = callPackage ../development/libraries/spdlog { };
 
