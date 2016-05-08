@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ json_c hidapi ];
 
+  doCheck = true;
+
   postInstall = ''
-    mkdir -p $out/lib/udev/rules.d/
-    cp -v *.rules $out/lib/udev/rules.d/
+    install -D -t $out/lib/udev/rules.d 70-u2f.rules
   '';
 
   meta = with stdenv.lib; {
