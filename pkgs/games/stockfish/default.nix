@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
   postUnpack = "sourceRoot+=/src";
-  makeFlags = [ "PREFIX=$out" "ARCH=${arch}" ];
-  buildFlags = "build";
+  makeFlags = [ "PREFIX=$(out)" "ARCH=${arch}" ];
+  buildFlags = "build ";
 
   enableParallelBuilding = true;
 
