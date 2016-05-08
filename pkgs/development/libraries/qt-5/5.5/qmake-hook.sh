@@ -58,7 +58,7 @@ _qtMultioutModuleDevs() {
     if [ "z${!outputLib}" != "z${!outputDev}" ]; then
         pushd "${!outputLib}"
         if [ -d "lib" ]; then
-            find lib -name '*.a' -o -name '*.la' -o -name '*.prl' -print0 | \
+            find lib \( -name '*.a' -o -name '*.la' -o -name '*.prl' -print0 \) | \
                 while read -r -d $'\0' file; do
                     mkdir -p "${!outputDev}/$(dirname "$file")"
                     mv "${!outputLib}/$file" "${!outputDev}/$file"
