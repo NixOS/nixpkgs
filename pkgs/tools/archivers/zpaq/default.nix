@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, unzip }:
 stdenv.mkDerivation rec {
   name = "zpaq-${version}";
-  version = "7.12";
+  version = "7.13";
 
   src = let
     mungedVersion = with stdenv.lib; concatStrings (splitString "." version);
   in fetchurl {
-    sha256 = "1lgkxiinam80pqqyvs3x845k6kf0wgw121vz0gr8za4blb756n30";
+    sha256 = "06fry12c92nxds2m5cd69h0cpxvp0mxhssagmjiwxpmgn57wy84i";
     url = "http://mattmahoney.net/dc/zpaq${mungedVersion}.zip";
   };
 

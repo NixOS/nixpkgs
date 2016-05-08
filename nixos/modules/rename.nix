@@ -123,6 +123,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ])
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ])
     (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ])
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ])
+    (mkRemovedOptionModule [ "services" "dovecot2" "package" ])
 
   ];
 }

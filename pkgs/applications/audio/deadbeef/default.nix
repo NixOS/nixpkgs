@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, fetchpatch, jansson
 # deadbeef can use either gtk2 or gtk3
 , gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings_desktop_schemas ? null, makeWrapper ? null
+, gtk3Support ? true, gtk3 ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
 # input plugins
 , vorbisSupport ? true, libvorbis ? null
 , mp123Support ? true, libmad ? null
@@ -30,7 +30,7 @@
 
 assert gtk2Support || gtk3Support;
 assert gtk2Support -> gtk2 != null;
-assert gtk3Support -> gtk3 != null && gsettings_desktop_schemas != null && makeWrapper != null;
+assert gtk3Support -> gtk3 != null && gsettings_desktop_schemas != null && wrapGAppsHook != null;
 assert vorbisSupport -> libvorbis != null;
 assert mp123Support -> libmad != null;
 assert flacSupport -> flac != null;
@@ -85,14 +85,9 @@ stdenv.mkDerivation rec {
     ;
 
   nativeBuildInputs = with stdenv.lib; [ intltool pkgconfig ]
-    ++ optional gtk3Support makeWrapper;
+    ++ optional gtk3Support wrapGAppsHook;
 
   enableParallelBuilding = true;
-
-  postInstall = if !gtk3Support then "" else ''
-    wrapProgram "$out/bin/deadbeef" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
 
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";

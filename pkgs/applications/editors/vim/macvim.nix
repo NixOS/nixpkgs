@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, ncurses, gettext
 , pkgconfig, cscope, python, ruby, tcl, perl, luajit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -70,6 +71,10 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=(
       "--with-developer-dir=$DEV_DIR"
     )
+  '';
+
+  postConfigure = ''
+    substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
   '';
 
   postInstall = ''

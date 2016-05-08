@@ -3659,11 +3659,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.22";
+    version = "0.12.23";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "1pycmb5cwkp21p11rj6lbrqr66yiffi23zk5laas3p581ljdg5vj";
+    sha256 = "0v8343k670ncjfd25hzhyfi87cz46k57rmv6pf30v7iclfhpmy1s";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
@@ -4159,4 +4159,22 @@ let
     sha256  = "14p3hvv82bsxqnbnzz8hjv75i39kzg154a132n6cdxx3vgw76gck";
     propagatedBuildInputs = [ go-colorable mattn.go-runewidth ingo ];
   };
+
+  textql = buildFromGitHub rec {
+    rev     = "1785cd353c68aa34f97627143b9c2908dfd4ea04";
+    version = "2.0.3";
+    owner   = "dinedal";
+    repo    = "textql";
+    sha256 = "1b61w4pc5gl7m12mphricihzq7ifnzwn0yyw3ypv0d0fj26h5hc3";
+    propagatedBuildInputs = [ go-sqlite3 ];
+
+    meta = with stdenv.lib; {
+      description = "Execute SQL against structured text like CSV or TSV";
+      homepage = https://github.com/dinedal/textql;
+      license = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+  };
+
 }; in self

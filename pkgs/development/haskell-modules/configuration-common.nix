@@ -175,9 +175,6 @@ self: super: {
   wai-test = dontHaddock super.wai-test;
   zlib-conduit = dontHaddock super.zlib-conduit;
 
-  # The test suite won't even start.
-  darcs = dontCheck super.darcs;
-
   # https://github.com/massysett/rainbox/issues/1
   rainbox = dontCheck super.rainbox;
 
@@ -704,10 +701,6 @@ self: super: {
     then addBuildDepend super.hmatrix pkgs.darwin.apple_sdk.frameworks.Accelerate
     else super.hmatrix;
 
-  # https://github.com/commercialhaskell/stack/issues/408
-  # https://github.com/commercialhaskell/stack/issues/409
-  stack = overrideCabal super.stack (drv: { preCheck = "export HOME=$TMPDIR"; doCheck = false; });
-
   # Hydra no longer allows building texlive packages.
   lhs2tex = dontDistribute super.lhs2tex;
 
@@ -1008,10 +1001,6 @@ self: super: {
 
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc {};
-
-  # Avoid transient build failures because the QuickCheck testsuite cannot
-  # generate enough conclusive test cases.
-  split = dontCheck super.split;
 
   # https://github.com/NixOS/nixpkgs/issues/14967
   yi = markBroken super.yi;

@@ -15,6 +15,7 @@ let
       unrestrictProcGid = 121; # Ugh, an awful hack. See grsecurity NixOS gid
       disableRBAC = false;
       disableSimultConnect = false;
+      redistKernel = true;
       verboseVersion = false;
       kernelExtraConfig = "";
     } // grsecOptions.config;
@@ -90,6 +91,12 @@ let
       in ''
         GRKERNSEC y
         ${grsecMainConfig}
+
+        # Disable features rendered useless by redistributing the kernel
+        ${optionalString cfg.config.redistKernel ''
+          GRKERNSEC_RANDSTRUCT n
+          GRKERNSEC_HIDESYM n
+          ''}
 
         # The paxmarks mechanism relies on ELF header markings, but the default
         # grsecurity configuration only enables xattr markings

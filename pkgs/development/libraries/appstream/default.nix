@@ -4,7 +4,20 @@
 }:
 
 stdenv.mkDerivation {
-  name = "appstream-0.8.0";
+  name = "appstream-0.9.5";
+
+  src = fetchurl {
+    url = "https://github.com/ximion/appstream/archive/APPSTREAM_0_8_0.tar.gz";
+    sha256 = "16a3b38avrwyl1pp8jdgfjv6cd5mccbmk4asni92l40y5r0xfycr";
+  };
+
+  nativeBuildInputs = [
+    cmake pkgconfig gettext intltool
+    xmlto docbook_xsl docbook_xml_dtd_45
+    gobjectIntrospection
+  ];
+
+  buildInputs = [ glib xapian libxml2 libyaml ];
 
   meta = with stdenv.lib; {
     description = "Software metadata handling library";
@@ -19,17 +32,4 @@ stdenv.mkDerivation {
     license     = licenses.lgpl21Plus;
     platforms   = platforms.linux;
  };
-
-  src = fetchurl {
-    url = "https://github.com/ximion/appstream/archive/APPSTREAM_0_8_0.tar.gz";
-    sha256 = "16a3b38avrwyl1pp8jdgfjv6cd5mccbmk4asni92l40y5r0xfycr";
-  };
-
-  nativeBuildInputs = [
-    cmake pkgconfig gettext intltool
-    xmlto docbook_xsl docbook_xml_dtd_45
-    gobjectIntrospection
-  ];
-
-  buildInputs = [ glib xapian libxml2 libyaml ];
 }

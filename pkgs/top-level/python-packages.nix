@@ -1717,6 +1717,8 @@ in modules // {
 
     propagatedBuildInputs = [ self.requests2 ];
 
+    doCheck = false;
+
     meta = with stdenv.lib; {
       homepage = https://betamax.readthedocs.org/en/latest/;
       description = "A VCR imitation for requests";
@@ -2488,16 +2490,17 @@ in modules // {
       sha256 = "1rbwcslk9dgayrg3vy3m0bqj767hdy1aphy5wjgz925bsydgxdg6";
     };
 
-    propagatedBuildInputs = [ self.botocore
-                              self.jmespath
-                            ] ++ (if isPy3k then [] else [self.futures_2_2]);
+    propagatedBuildInputs = [ self.botocore self.jmespath ] ++
+                            (if isPy3k then [] else [self.futures_2_2]);
     buildInputs = [ self.docutils self.nose self.mock ];
-
-    # Tests are failing with `botocore.exceptions.NoCredentialsError:
-    # Unable to locate credentials`. There also seems to be some mock
-    # issues (`assert_called_once` doesn't exist in mock but boto
-    # seems to think it is?).
-    doCheck = false;
+    checkPhase = ''
+      runHook preCheck
+      # This method is not in mock. It might have appeared in some versions.
+      sed -i 's/action.assert_called_once()/self.assertEqual(action.call_count, 1)/' \
+        tests/unit/resources/test_factory.py
+      nosetests -d tests/unit --verbose
+      runHook postCheck
+    '';
 
     meta = {
       homepage = https://github.com/boto3/boto;
@@ -10498,7 +10501,6 @@ in modules // {
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
     version = "0.8.6";
-    disabled = isPy3k;
     doCheck = false;
 
     src = pkgs.fetchurl {
@@ -10520,6 +10522,10 @@ in modules // {
       --- 566 ----
       !                 'content-length': str(len(self.body))
       DIFF
+
+      # Explicit encoding flag is required with python3, unless locale is set.
+      ${if !self.isPy3k then "" else
+        "patch -p0 -i ${../development/python-modules/httpretty/setup.py.patch}"}
     '';
 
     meta = {
@@ -11781,17 +11787,15 @@ in modules // {
 
   mathics = buildPythonPackage rec {
     name = "mathics-${version}";
-    version = "0.8";
+    version = "0.9";
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
       repo = "Mathics";
       rev = "v${version}";
-      sha256 = "1hyrxnhxw35vn00k55hp9bkg8vg4dsphrpfg1yg4cn53y78rk1im";
+      sha256 = "0xzz7j8xskj5y6as178mjmm0i2xbhd4q4mwmdnvghpd2aqq3qx1c";
     };
 
-    disabled = isPy3k;
-
-    patches = [ ../development/python-modules/mathics/disable_console_tests.patch ];
+    disabled = isPy26;
 
     buildInputs = with self; [ pexpect ];
 
@@ -11800,17 +11804,17 @@ in modules // {
     '';
 
     propagatedBuildInputs = with self; [
-      argparse
       cython
-      colorama
-      dateutil
-      django_1_6
-      mpmath
-      readline
-      interruptingcow
-      ply
-      sqlite3
       sympy
+      django_1_8
+      ply
+      mpmath
+      dateutil
+      colorama
+      six
+
+      readline
+      sqlite3
     ];
 
     meta = {
@@ -15702,6 +15706,10 @@ in modules // {
       pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
     ];
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "==" ">="
+    '';
+
     meta = {
       inherit version;
       description = "Command-line interface for MySQL";
@@ -16140,12 +16148,14 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "0.60";
+    version = "1.0.0";
 
     src = pkgs.fetchurl {
-      sha256 = "0gf3vv8dmj77xv7lrpccw9k3m1bgq3m71q9s6hqp77zvyd6cqjml";
+      sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
+
+    disabled = isPy35;
 
     buildInputs = with self; [ jedi ipython pygments ];
     propagatedBuildInputs = with self; [ docopt six wcwidth ];
@@ -20408,15 +20418,16 @@ in modules // {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-0.7.6.1";
-    disabled = isPy34 || isPy35 || isPyPy;  # some tests fail
+    name = "sympy-1.0";
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/s/sympy/${name}.tar.gz";
-      sha256 = "1fc272b51091aabe7d07f1bf9f0a47f3e28657fb2bec52bf3ef0e8f159f5f564";
+      sha256 = "1bpzjwr9hrr7w88v4vgnj9lr6vxcldc94si13n8xpr1rv08d5b1y";
     };
 
     buildInputs = [ pkgs.glibcLocales ];
+
+    propagatedBuildInputs = with self; [ mpmath ];
 
     preCheck = ''
       export LANG="en_US.UTF-8"
@@ -25052,26 +25063,6 @@ in modules // {
 
     propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
                                          retry_decorator pkgs.pyopenssl socksipy-branch crcmod ];
-  };
-
-  pypi2nix = self.buildPythonPackage rec {
-    rev = "04a68d8577acbceb88bdf51b1231a9dbdead7003";
-    name = "pypi2nix-1.0_${rev}";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/garbas/pypi2nix/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "1fv85x2bz442iyxsvka2g75zibjcq48gp2fc7szaqcfqxq42syy9";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/garbas/pypi2nix;
-      description = "";
-      maintainers = with maintainers; [ garbas ];
-    };
   };
 
   svg2tikz = self.buildPythonPackage {

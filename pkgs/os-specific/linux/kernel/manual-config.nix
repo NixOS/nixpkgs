@@ -109,6 +109,7 @@ let
       buildFlags = [
         "KBUILD_BUILD_VERSION=1-NixOS"
         platform.kernelTarget
+        "vmlinux"  # for "perf" and things like that
       ] ++ optional isModular "modules";
 
       installFlags = [
@@ -122,7 +123,10 @@ let
                           if platform.kernelTarget == "zImage" then "zinstall" else
                           "install") ];
 
-      postInstall = (optionalString installsFirmware ''
+      postInstall = ''
+        mkdir -p $dev
+        cp $buildRoot/vmlinux $dev/
+      '' + (optionalString installsFirmware ''
         mkdir -p $out/lib/firmware
       '') + (if (platform ? kernelDTB && platform.kernelDTB) then ''
         make $makeFlags "''${makeFlagsArray[@]}" dtbs

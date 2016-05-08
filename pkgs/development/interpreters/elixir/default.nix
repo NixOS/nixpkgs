@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, erlang, rebar, makeWrapper, coreutils, curl, bash,
+{ stdenv, fetchFromGitHub, erlang, rebar, makeWrapper, coreutils, curl, bash,
   debugInfo ? false }:
 
 stdenv.mkDerivation rec {
   name = "elixir-${version}";
-  version = "1.2.4";
+  version = "1.2.5";
 
-  src = fetchurl {
-    url = "https://github.com/elixir-lang/elixir/archive/v${version}.tar.gz";
-    sha256 = "16759ff84d08b480b7e5499716e663b2fffd26e20cf2863de5613bc7bb05c817";
+  src = fetchFromGitHub {
+    owner = "elixir-lang";
+    repo = "elixir";
+    rev = "v${version}";
+    sha256 = "0qnmsmzmr431y1chkzk2aq501fk734mncdbn7nsiq98bnqgb6php";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];

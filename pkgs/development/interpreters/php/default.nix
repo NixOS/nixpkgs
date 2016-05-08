@@ -265,14 +265,12 @@ let
             --replace '@PHP_LDFLAGS@' ""
         done
 
-        iniFile=$out/etc/php-recommended.ini
         [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
         ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
       '';
 
-      installPhase = ''
-        unset installPhase; installPhase;
-        cp php.ini-production $iniFile
+      postInstall = ''
+        cp php.ini-production $out/etc/php.ini
       '';
 
       src = fetchurl {

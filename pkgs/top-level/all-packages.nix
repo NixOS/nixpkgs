@@ -221,39 +221,54 @@ in
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
-  fetchFromGitHub = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromGitHub = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://github.com/${owner}/${repo}/archive/${rev}.tar.gz";
     meta.homepage = "https://github.com/${owner}/${repo}/";
-  } // { inherit rev; };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
-  fetchFromBitbucket = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromBitbucket = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://bitbucket.org/${owner}/${repo}/get/${rev}.tar.gz";
     meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
     extraPostFetch = ''rm -f "$out"/.hg_archival.txt''; # impure file; see #12002
-  };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
   # cgit example, snapshot support is optional in cgit
-  fetchFromSavannah = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromSavannah = {
+    repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "http://git.savannah.gnu.org/cgit/${repo}.git/snapshot/${repo}-${rev}.tar.gz";
     meta.homepage = "http://git.savannah.gnu.org/cgit/${repo}.git/";
-  };
+  } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   # gitlab example
-  fetchFromGitLab = { owner, repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromGitLab = {
+    owner, repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "https://gitlab.com/${owner}/${repo}/repository/archive.tar.gz?ref=${rev}";
     meta.homepage = "https://gitlab.com/${owner}/${repo}/";
-  };
+  } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; };
 
   # gitweb example, snapshot support is optional in gitweb
-  fetchFromRepoOrCz = { repo, rev, sha256, name ? "${repo}-${rev}-src" }: fetchzip {
-    inherit name sha256;
+  fetchFromRepoOrCz = {
+    repo, rev, name ? "${repo}-${rev}-src",
+    ... # For hash agility
+  }@args: fetchzip ({
+    inherit name;
     url = "http://repo.or.cz/${repo}.git/snapshot/${rev}.tar.gz";
     meta.homepage = "http://repo.or.cz/${repo}.git/";
-  };
+  } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; };
 
   fetchNuGet = callPackage ../build-support/fetchnuget { };
   buildDotnetPackage = callPackage ../build-support/build-dotnet-package { };
@@ -876,7 +891,7 @@ in
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   });
-  
+
   asciidoctor = callPackage ../tools/typesetting/asciidoctor { };
 
   autossh = callPackage ../tools/networking/autossh { };
@@ -1499,6 +1514,8 @@ in
 
   fio = callPackage ../tools/system/fio { };
 
+  flamerobin = callPackage ../applications/misc/flamerobin { };
+
   flashtool = callPackage_i686 ../development/mobile/flashtool {
     platformTools = androidenv.platformTools;
   };
@@ -1951,6 +1968,8 @@ in
 
   i2pd = callPackage ../tools/networking/i2pd {};
 
+  i-score = qt5.callPackage ../applications/audio/i-score { };
+
   iasl = callPackage ../development/compilers/iasl { };
 
   iannix = qt5.callPackage ../applications/audio/iannix { };
@@ -2197,6 +2216,8 @@ in
     nodejs-0_10
   else
     nodejs-4_x;
+
+  nodePackages_6_x = callPackage ./node-packages.nix { self = nodePackages_6_x; nodejs = nodejs-6_x; };
 
   nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
 
@@ -2920,8 +2941,6 @@ in
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
 
-  popcorntime = callPackage ../applications/video/popcorntime { nwjs = nwjs_0_12; };
-
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
@@ -2989,6 +3008,10 @@ in
   pytrainer = callPackage ../applications/misc/pytrainer { };
 
   remarshal = (callPackage ../development/tools/remarshal { }).bin // { outputs = [ "bin" ]; };
+
+  rtaudio = callPackage ../development/libraries/audio/rtaudio { };
+
+  rtmidi = callPackage ../development/libraries/audio/rtmidi { };
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
@@ -3616,6 +3639,8 @@ in
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  wakatime = callPackage ../tools/misc/wakatime { };
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
@@ -3643,6 +3668,8 @@ in
   xe = callPackage ../tools/system/xe { };
 
   testdisk = callPackage ../tools/misc/testdisk { };
+
+  textql = goPackages.textql.bin // { outputs = [ "bin" ]; };
 
   html2text = callPackage ../tools/text/html2text { };
 
@@ -4250,6 +4277,21 @@ in
     isl = isl_0_14;
   }));
 
+  gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
+    inherit noSysDirs;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+
+    isl = isl_0_14;
+  }));
+
   gfortran = if !stdenv.isDarwin then gfortran5
              else callPackage ../development/compilers/gcc/gfortran-darwin.nix {
     inherit (darwin) Libsystem;
@@ -4272,6 +4314,14 @@ in
   });
 
   gfortran5 = wrapCC (gcc5.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran6 = wrapCC (gcc6.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -4371,11 +4421,20 @@ in
   haskellPackages = haskell.packages.ghc7103.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
-  inherit (self.haskellPackages) ghc cabal-install stack;
+
+  inherit (self.haskellPackages) ghc cabal-install;
+
+  stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
+    enableSharedExecutables = false;
+    isLibrary = false;
+    doHaddock = false;
+    postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  });
 
   haxe = callPackage ../development/compilers/haxe {
     inherit (ocamlPackages) camlp4;
   };
+
   hxcpp = callPackage ../development/compilers/haxe/hxcpp.nix { };
 
   hhvm = callPackage ../development/compilers/hhvm { };
@@ -5227,6 +5286,8 @@ in
     ocaml = ocaml_4_02;
   };
 
+  bupc = callPackage ../development/compilers/bupc { };
+
   urweb = callPackage ../development/compilers/urweb { };
 
   vala = callPackage ../development/compilers/vala/default.nix { };
@@ -5561,7 +5622,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
 
-  pypi2nix = python27Packages.pypi2nix;
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python27; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6101,6 +6162,8 @@ in
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
+  jamomacore = callPackage ../development/libraries/audio/jamomacore { };
+
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   jenkins = callPackage ../development/tools/continuous-integration/jenkins { };
@@ -6246,6 +6309,10 @@ in
   };
 
   hammer = callPackage ../development/tools/parsing/hammer { };
+
+  redis-dump = callPackage ../development/tools/redis-dump {
+    ruby = ruby_2_0;
+  };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 
@@ -7982,7 +8049,7 @@ in
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
   libsndfile = callPackage ../development/libraries/libsndfile {
-    inherit (darwin.apple_sdk.frameworks) Carbon;
+    inherit (darwin.apple_sdk.frameworks) Carbon AudioToolbox;
   };
 
   libsodium = callPackage ../development/libraries/libsodium { };
@@ -8010,6 +8077,8 @@ in
   libtar = callPackage ../development/libraries/libtar { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
+
+  libtcod = callPackage ../development/libraries/libtcod { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
@@ -8102,7 +8171,9 @@ in
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
-  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl {
+    libva = libva-full; # also wants libva-{x11}
+  };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
@@ -9810,10 +9881,8 @@ in
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
-
-  nginxUnstable = callPackage ../servers/http/nginx/unstable.nix {
-    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
-  };
+  # nginxUnstable currently points to stable because that's newest:
+  nginxUnstable = nginx;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
@@ -10432,11 +10501,6 @@ in
   };
 
   iptables = callPackage ../os-specific/linux/iptables { };
-  # The freshest version — possibly crashing connmand?
-  # https://github.com/NixOS/nixpkgs/commit/fe00c8a83f696e3430ee4aa3fc850f171da52450
-  iptables_16 = callPackage ../os-specific/linux/iptables/1.6.nix {
-    flex = flex_2_5_35;
-  };
 
   ipset = callPackage ../os-specific/linux/ipset { };
 
@@ -10445,6 +10509,9 @@ in
   iw = callPackage ../os-specific/linux/iw { };
 
   jfbview = callPackage ../os-specific/linux/jfbview { };
+  jfbpdf = callPackage ../os-specific/linux/jfbview {
+    imageSupport = false;
+  };
 
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
@@ -10581,7 +10648,7 @@ in
   };
 
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10908,12 +10975,6 @@ in
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };
-
-  libcap_progs = callPackage ../os-specific/linux/libcap/progs.nix { };
-
-  libcap_pam = callPackage ../os-specific/linux/libcap/pam.nix { };
-
-  libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
   libcap_ng = callPackage ../os-specific/linux/libcap-ng {
     swig = null; # Currently not using the python2/3 bindings
@@ -12797,9 +12858,7 @@ in
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin {
-    boost = boost155;
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -14229,7 +14288,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
-  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; };
+  macvim = callPackage ../applications/editors/vim/macvim.nix { stdenv = clangStdenv; ruby = ruby_2_2; };
 
   vimHugeX = vim_configurable;
 
@@ -14788,6 +14847,8 @@ in
 
   blobby = callPackage ../games/blobby { };
 
+  brogue = callPackage ../games/brogue { };
+
   bsdgames = callPackage ../games/bsdgames { };
 
   btanks = callPackage ../games/btanks { };
@@ -15013,6 +15074,8 @@ in
 
   openspades = callPackage ../games/openspades {};
 
+  openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
+
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
   };
@@ -15132,7 +15195,12 @@ in
 
   stepmania = callPackage ../games/stepmania { };
 
-  stuntrally = callPackage ../games/stuntrally { };
+  stuntrally = callPackage ../games/stuntrally {
+    bullet = bullet283;
+    mygui = mygui.override {
+      withOgre = true;
+    };
+  };
 
   superTux = callPackage ../games/super-tux { };
 
@@ -15312,7 +15380,14 @@ in
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
 
-  gnome3 = self.gnome3_18;
+  gnome3 = self.gnome3_18 // {
+    shellExtensions = {
+      impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix {};
+      system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor.nix {};
+      volume-mixer = callPackage ../desktops/gnome-3/extensions/volume-mixer.nix {};
+      workspace-grid = callPackage ../desktops/gnome-3/extensions/workspace-grid.nix {};
+    };
+  };
 
   gnome = recurseIntoAttrs self.gnome2;
 
@@ -16218,6 +16293,8 @@ in
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
+  faust1git = callPackage ../applications/audio/faust/faust1git.nix { };
+
   faust2 = callPackage ../applications/audio/faust/faust2.nix {
     llvm = llvm_37;
   };
@@ -16235,6 +16312,10 @@ in
   faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+
+  faust2lv2gui = callPackage ../applications/audio/faust/faust2lv2gui.nix { };
+
+  faustCompressors =  callPackage ../applications/audio/faustCompressors { };
 
   fceux = callPackage ../misc/emulators/fceux { };
 
@@ -16696,6 +16777,7 @@ in
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+  bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
   spdlog = callPackage ../development/libraries/spdlog { };
 

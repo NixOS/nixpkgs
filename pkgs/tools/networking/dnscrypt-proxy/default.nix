@@ -11,9 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "16lif3qhyfjpgg54vjlwpslxk90akmbhlpnn1szxm628bmpw6nl9";
   };
 
-  configureFlags = ''
-    ${optionalString stdenv.isLinux "--with-systemd"}
-  '';
+  configureFlags = optional stdenv.isLinux "--with-systemd";
 
   nativeBuildInputs = [ pkgconfig ];
 

@@ -86,6 +86,9 @@ self: super: {
 
   force-layout   = doJailbreak super.force-layout;
 
+  # packaged 0.2.2.6 is missing: base >=4.7 && <4.9
+  freer          = doJailbreak super.freer;
+
   # Partial fixes released in 1.20.5 upstream, full fixes only in git
   linear         = pkgs.haskell.lib.overrideCabal super.linear (oldAttrs: {
     editedCabalFile = null;
@@ -113,6 +116,9 @@ self: super: {
   servant-client = dontCheck (doJailbreak super.servant-client_0_7);
   servant-server = dontCheck (doJailbreak super.servant-server_0_7);
 
+  # packaged shelly 1.6.6 complains: time >=1.3 && <1.6
+  shelly         = doJailbreak super.shelly;
+
   # The essential part is released in 2.1 upstream (needs hackage import)
   singletons     = (pkgs.haskell.lib.overrideCabal super.singletons (oldAttrs: {
     src = pkgs.fetchgit {
@@ -137,15 +143,6 @@ self: super: {
             url    = https://github.com/goldfirere/th-desugar.git;
             rev    = "7496de0243a12c14be1b37b89eb41cf9ef6f5229";
             sha256 = "10awknqviq7jb738r6n9rlyra0pvkrpnk0hikz4459hny4hamn75";
-    };
-  }));
-
-  # The essential part is released in 0.1.4.1 upstream (needs hackage import)
-  th-reify-many          = doJailbreak (pkgs.haskell.lib.overrideCabal super.th-reify-many (oldAttrs: {
-    src = pkgs.fetchgit {
-            url    = https://github.com/mgsloan/th-reify-many.git;
-            rev    = "699eed232c2ccaf9fb109f131e80ed8d654d6f08";
-            sha256 = "001fvpq039l9wj9v8id7kfjwmp4acf53zr4z6sppdvrv6npzz5yb";
     };
   }));
 

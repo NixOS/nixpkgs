@@ -7428,10 +7428,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathPlanePath = buildPerlPackage rec {
-    name = "Math-PlanePath-114";
+    name = "Math-PlanePath-123";
     src = fetchurl {
       url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
-      sha256 = "11808k6aqf7gfkv0k0r8586zk8dm0jg5idkdb839gzlr97ns2y61";
+      sha256 = "13by23pzwfa2f3rxiws7blqxb8lr3mfczdfq6jsi1kb3ml2wnxyc";
     };
     propagatedBuildInputs = [ MathLibm constant-defer ];
   };
@@ -11354,10 +11354,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   SysSyslog = buildPerlPackage {
-    name = "Sys-Syslog-0.33";
+    name = "Sys-Syslog-0.34";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/Sys-Syslog-0.33.tar.gz;
-      sha256 = "d5d901d9d9333a66db95fb1c7692ff457f7c7ad17287b51a87e40734f7c2741d";
+      url = mirror://cpan/authors/id/S/SA/SAPER/Sys-Syslog-0.34.tar.gz;
+      sha256 = "09cnzk0fpj2i8asi4ba5wzs3i5pmbins87xpgmxcw4ipmn66s7ld";
     };
     meta = {
       description = "Perl interface to the UNIX syslog(3) calls";
@@ -13988,10 +13988,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   XSLoader = buildPerlPackage {
-    name = "XSLoader-0.16";
+    name = "XSLoader-0.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.16.tar.gz;
-      sha256 = "96de61bad187919bf632cfa657f1b9957ad47defcc90dad8ee1f50c955eedb86";
+      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.20.tar.gz;
+      sha256 = "020fyjhfp385nlkp217fm511sbjz768vqk1lmxz99k4bah740y7i";
     };
     meta = {
       homepage = https://metacpan.org/module/Math::BigInt;
