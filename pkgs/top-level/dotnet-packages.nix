@@ -162,8 +162,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpFont = fetchNuGet {
     baseName = "SharpFont";
-    version = "3.0.1";
-    sha256 = "1g639i8mbxc6qm0xqsf4mc0shv8nwdaidllka2xxwyksbq54skhs";
+    version = "3.1.0";
+    sha256 = "137y514i4zi0i0qsx7nv4ibl4kifbr8xr23rqdkwf7yxf88jjmh2";
     outputFiles = [ "lib/*" "config/*" ];
   };
 
