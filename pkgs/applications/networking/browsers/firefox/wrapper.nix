@@ -129,7 +129,7 @@ stdenv.mkDerivation {
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.
   plugins = map (x: x + x.mozillaPlugin) plugins;
-  libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutputs "lib64" ["lib"] libs;
+  libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
   gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
   passthru = { unwrapped = browser; };
