@@ -5,12 +5,12 @@ let
 #  qtEnv = with qt5; env "qt-${qtbase.version}" [ qtbase qttools ];
 in stdenv.mkDerivation rec {
   name = "tiled-${version}";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/bjorn/tiled/archive/v${version}.tar.gz";
-    sha256 = "1vlhfkgl126irp53xw94jw1xnj96l1hwnbxmm1s5az60460gfbf0";
+    sha256 = "0s1i6yhm1z9ayzjh8cprcc9jvj5m87l9snyqg6w7zlj3q9zn4rn6";
   };
 
   nativeBuildInputs = [ pkgconfig qmakeHook ];
