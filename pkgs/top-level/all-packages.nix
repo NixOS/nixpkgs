@@ -3639,6 +3639,8 @@ in
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  wakatime = callPackage ../tools/misc/wakatime { };
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
