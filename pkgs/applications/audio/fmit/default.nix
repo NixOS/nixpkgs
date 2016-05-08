@@ -11,19 +11,23 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "fmit-${version}";
-  version = "1.0.14";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
-    sha256 = "1f8raqpqqyr02lnpxxpg69a2if1nbw0za71x62kcp3pms1qc0mbh";
+    sha256 = "0bakqwgl7xx6khs8993w10a8kvlbr7sbqdaljbsmy8y8mjd6inqb";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw freeglut mesa_glu qtbase qtmultimedia qmakeHook ]
+  buildInputs = [ fftw qtbase qtmultimedia qmakeHook ]
     ++ optionals alsaSupport [ alsaLib ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals portaudioSupport [ portaudio ];
+
+  postPatch = ''
+    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
+  '';
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags \
