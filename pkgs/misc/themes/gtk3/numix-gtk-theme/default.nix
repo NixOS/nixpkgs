@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.3";
+  version = "2.5.1";
   name = "numix-gtk-theme-${version}";
   
   src = fetchurl {
-    url = "https://github.com/shimmerproject/Numix/archive/v${version}.tar.gz";
-    sha256 = "b0acc2d81300b898403766456d3406304553cc7016677381f3179dbeb1192a2d";
+    url = "https://github.com/numixproject/Numix/archive/v${version}.tar.gz";
+    sha256 = "0y6c4xr2n9sygxhgviwd97l02n17n53bkpfp62srkm05cq0jy87k";
   };
 
   dontBuild = true;
