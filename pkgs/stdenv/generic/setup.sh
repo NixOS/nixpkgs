@@ -398,7 +398,7 @@ substitute() {
     content="${content%X}"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
-        p=${params[$n]}
+        p="${params[$n]}"
 
         if [ "$p" = --replace ]; then
             pattern="${params[$((n + 1))]}"
@@ -448,13 +448,18 @@ substituteAll() {
     local -a args=()
 
     # We need to be careful due to vars with multi-line contents or weird names.
-    while IFS= read -r -d '' varName; do
+    local IFS==
+    local varNames="$(env -0 | cut -z -d= -f1 | grep -z -v '^[_A-Z]' | tr '\000' '=')"
+    local varName
+    for varName in $varNames; do
         if [ "$NIX_DEBUG" = "1" ]; then
-            echo "@varName@ -> '${varName}'"
+            echo "@${varName}@ -> '${!varName}'"
         fi
         args+=("--subst-var" "$varName")
-    done < <(env -0 | cut -z -d= -f1 | grep -z -v '^[_A-Z]')
+    done
 
+    # restore default $IFS for the child
+    IFS=$' \t\n'
     substitute "$input" "$output" "${args[@]}"
 }
 
