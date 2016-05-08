@@ -126,6 +126,19 @@ in
           '';
         };
 
+        denyChrootCaps = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to lower capabilities of all processes within a chroot,
+            preventing commands that require <literal>CAP_SYS_ADMIN</literal>.
+
+            This protection is disabled by default because it breaks
+            <literal>nixos-rebuild</literal>. Whenever possible, it is
+            highly recommended to enable this protection.
+          '';
+        };
+
         denyUSB = mkOption {
           type = types.bool;
           default = false;

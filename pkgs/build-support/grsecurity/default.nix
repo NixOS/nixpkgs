@@ -8,6 +8,7 @@ let
     config = {
       mode = "auto";
       sysctl = false;
+      denyChrootCaps = false;
       denyChrootChmod = false;
       denyUSB = false;
       restrictProc = false;
@@ -112,6 +113,7 @@ let
         }
 
         GRKERNSEC_SYSCTL ${boolToKernOpt cfg.config.sysctl}
+        GRKERNSEC_CHROOT_CAPS ${boolToKernOpt cfg.config.denyChrootCaps}
         GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
         GRKERNSEC_DENYUSB ${boolToKernOpt cfg.config.denyUSB}
         GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
