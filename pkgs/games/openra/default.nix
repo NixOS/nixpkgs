@@ -30,6 +30,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ mono makeWrapper lua pkgconfig ];
 
   patchPhase = ''
+    mkdir Support
     sed -i 's/^VERSION.*/VERSION = release-${version}/g' Makefile
     substituteInPlace thirdparty/configure-native-deps.sh --replace "locations=\"" "locations=\"${lua}/lib "
     substituteInPlace Makefile --replace "@./thirdparty/fetch-geoip-db.sh" ""
@@ -96,10 +97,9 @@ in stdenv.mkDerivation rec {
     make dependencies
   '';
 
-  #todo: man-page
-  buildFlags = [ "DEBUG=false" "default" ];
+  buildFlags = [ "DEBUG=false" "default" "man-page" ];
 
-  installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" ];
+  installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" "install-man-page" ];
 
   postInstall = with stdenv.lib; let
     runtime = makeLibraryPath [ SDL2 freetype openal systemd lua ];
