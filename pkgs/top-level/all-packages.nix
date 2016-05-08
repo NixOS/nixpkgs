@@ -14815,7 +14815,9 @@ let
 
   stepmania = callPackage ../games/stepmania { };
 
-  stuntrally = callPackage ../games/stuntrally { };
+  stuntrally = callPackage ../games/stuntrally {
+    bullet = bullet283;
+  };
 
   superTux = callPackage ../games/super-tux { };
 
@@ -16338,6 +16340,7 @@ let
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+  bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
   dart = callPackage ../development/interpreters/dart { };
 

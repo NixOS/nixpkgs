@@ -1,36 +1,40 @@
-{ fetchgit, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
-, makeWrapper, enet, libXcursor }:
+{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
+, makeWrapper, enet, libXcursor, bullet, openal }:
 
 stdenv.mkDerivation rec {
   name = "stunt-rally-${version}";
-  version = "2.5";
+  version = "2.6";
 
-  src = fetchgit {
-    url = git://github.com/stuntrally/stuntrally.git;
-    rev = "refs/tags/${version}";
-    sha256 = "1lsh7z7sjfwpdybg6vbwqx1zxsgbfp2n60n7xl33v225p32qh1qf";
+  src = fetchurl {
+    url = "https://github.com/stuntrally/stuntrally/archive/${version}.tar.gz";
+    sha256 = "1jmsxd2isq9q5paz43c3xw11vr5md1ym8h34b768vxr6gp90khwc";
   };
 
-  tracks = fetchgit {
-    url = git://github.com/stuntrally/tracks.git;
-    rev = "refs/tags/${version}";
-    sha256 = "1614j6q1d2f69l58kkqndndvf6svcghhw8pzc2s1plf6k87h67mg";
+  tracks = fetchurl {
+    url = "https://github.com/stuntrally/tracks/archive/${version}.tar.gz";
+    sha256 = "0yv88l9s03kp1xkkwnigh0jj593vi3r7vgyg0jn7i8d22q2p1kjb";
   };
+
+  # include/OGRE/OgreException.h:265:126: error: invalid conversion from
+  # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
+  NIX_CFLAGS_COMPILE="-fpermissive";
 
   preConfigure = ''
-    cp -R ${tracks} data/tracks
-    chmod u+rwX -R data
+    pushd data
+    tar xf ${tracks}
+    mv tracks-2.6 tracks
+    popd
   '';
 
   buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
-    makeWrapper enet libXcursor
+    makeWrapper enet libXcursor bullet openal
   ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
-    homepage = http://code.google.com/p/vdrift-ogre/;
+    homepage = http://stuntrally.tuxfamily.org/;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
