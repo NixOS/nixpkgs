@@ -99,6 +99,11 @@ in stdenv.mkDerivation rec {
 
   buildFlags = [ "DEBUG=false" "default" "man-page" ];
 
+  doCheck = true;
+
+  #TODO: check
+  checkTarget = "nunit test";
+
   installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" "install-man-page" ];
 
   postInstall = with stdenv.lib; let
