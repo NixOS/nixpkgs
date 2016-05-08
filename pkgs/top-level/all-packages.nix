@@ -13843,6 +13843,8 @@ in
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+  sniproxy = callPackage ../applications/networking/sniproxy { };
+
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
   sorcer = callPackage ../applications/audio/sorcer { };
