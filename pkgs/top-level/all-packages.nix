@@ -13402,7 +13402,7 @@ in
       else null;
   };
 
-  musescore = qt5.callPackage ../applications/audio/musescore { };
+  musescore = qt55.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
