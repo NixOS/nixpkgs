@@ -85,6 +85,25 @@ in modules // {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  agate = buildPythonPackage rec {
+    name = "agate-1.2.2";
+    disabled = isPy3k;
+
+    meta = {
+      description = "A Python data analysis library that is optimized for humans instead of machines";
+      homepage    = "https://github.com/wireservice/agate";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate/${name}.tar.gz";
+      sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
+    };
+  };
+
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
