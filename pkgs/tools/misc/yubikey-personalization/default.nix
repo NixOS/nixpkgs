@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Don't use 70-yubikey.rules because it depends on ConsoleKit
-    install -D -t $out/lib/udev/rules.d 69-yukikey.rules
+    install -D -t $out/lib/udev/rules.d 69-yubikey.rules
   '';
 
   meta = with stdenv.lib; {
