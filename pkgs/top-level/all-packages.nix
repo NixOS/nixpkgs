@@ -7512,8 +7512,6 @@ in
 
   libcm = callPackage ../development/libraries/libcm { };
 
-  libcommuni = qt5.callPackage ../development/libraries/libcommuni { };
-
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   inherit (gnome3) libcroco;
@@ -8718,6 +8716,8 @@ in
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
+
+    libcommuni = callPackage ../development/libraries/libcommuni { };
 
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
