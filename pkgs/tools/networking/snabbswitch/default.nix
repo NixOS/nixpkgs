@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/snabb --prefix PATH : "${ lib.makeBinPath [ git mariadb diffutils ]}"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/SnabbCo/snabbswitch;
     description = "Simple and fast packet networking toolkit";
