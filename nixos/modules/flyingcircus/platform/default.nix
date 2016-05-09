@@ -290,5 +290,10 @@ in
       "x /tmp/fc-data/*"
       "D /var/tmp - - - 7d"];
 
-    };
+    time.timeZone =
+      if lib.hasAttrByPath ["parameters" "timezone"] cfg.enc
+      then cfg.enc.parameters.timezone
+      else "UTC";
+  };
+
 }
