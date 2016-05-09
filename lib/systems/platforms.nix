@@ -21,6 +21,39 @@ rec {
     kernelAutoModules = false;
   };
 
+  pogoplug4 = {
+    name = "pogoplug4";
+
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+    };
+
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v5_defconfig";
+    kernelBaseConfig = "multi_v5_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig =
+      ''
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
+      '';
+    kernelMakeFlags = [ "LOADADDR=0x8000" ];
+    kernelTarget = "uImage";
+    # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
+    #kernelDTB = true;
+
+    # XXX can be anything non-null, pkgs actually only cares if it is set or not
+    uboot = "pogoplug4";
+  };
+
   sheevaplug = {
     name = "sheevaplug";
     kernelMajor = "2.6";
