@@ -73,6 +73,7 @@ in {
           ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
           -not ${concatStringsSep " " cfg.excluded} \
       '';
+      serviceConfig.RestartSec = 3;
       serviceConfig.Restart = "always";
     };
   };
