@@ -12835,17 +12835,17 @@ in modules // {
   };
 
   nbconvert = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.2.0";
     name = "nbconvert-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nbconvert/${name}.tar.gz";
-      sha256 = "e0296e45293dd127d028f678e3b6aba3f1db3283a134178bdb49eea402d4cf1c";
+      sha256 = "1ik3k1s8dnqcc6hcrzi1wwy6f5kxfz8rnyahvpy984kl49snv52m";
     };
 
     buildInputs = with self; [nose ipykernel ];
 
-    propagatedBuildInputs = with self; [mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
+    propagatedBuildInputs = with self; [ entrypoints mistune jinja2 pygments traitlets jupyter_core nbformat ipykernel tornado jupyter_client];
 
     checkPhase = ''
       nosetests -v
