@@ -534,6 +534,7 @@ in {
     (mkIf (cfg.enable && cfg.listenHost != "localhost") {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
-    { meta.doc = ./doc.xml; }
   ];
+
+  meta.doc = ./doc.xml;
 }

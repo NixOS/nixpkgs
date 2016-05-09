@@ -105,8 +105,12 @@ rec {
   /* Massage a module into canonical form, that is, a set consisting
      of ‘options’, ‘config’ and ‘imports’ attributes. */
   unifyModuleSyntax = file: key: m:
+    let metaSet = if m ? meta 
+      then { meta = m.meta; }
+      else {};
+    in
     if m ? config || m ? options then
-      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file"]; in
+      let badAttrs = removeAttrs m ["imports" "options" "config" "key" "_file" "meta"]; in
       if badAttrs != {} then
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by assignments to the top-level attributes `config' or `options'."
       else
@@ -114,14 +118,14 @@ rec {
           key = toString m.key or key;
           imports = m.imports or [];
           options = m.options or {};
-          config = m.config or {};
+          config = mkMerge [ (m.config or {}) metaSet ];
         }
     else
       { file = m._file or file;
         key = toString m.key or key;
         imports = m.require or [] ++ m.imports or [];
         options = {};
-        config = removeAttrs m ["key" "_file" "require" "imports"];
+        config = mkMerge [ (removeAttrs m ["key" "_file" "require" "imports"]) metaSet ];
       };
 
   applyIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
