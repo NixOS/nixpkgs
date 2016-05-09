@@ -16455,7 +16455,7 @@ in
     inherit (pythonPackages) pexpect paramiko;
   };
 
-  redis-desktop-manager = qt5.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 
   robomongo = qt5.callPackage ../applications/misc/robomongo { };
 
