@@ -12446,6 +12446,8 @@ in
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
+  flacon = callPackage ../applications/audio/flacon { };
+
   fldigi = callPackage ../applications/audio/fldigi { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
