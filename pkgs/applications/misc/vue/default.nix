@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "vue-${version}";
   version = "3.3.0";
   src = fetchurl {
-    url = "releases.atech.tufts.edu/jenkins/job/VUE/116/deployedArtifacts/download/artifact.1";
+    url = "http://releases.atech.tufts.edu/jenkins/job/VUE/116/deployedArtifacts/download/artifact.1";
     sha256 = "0yfzr80pw632lkayg4qfmwzrqk02y30yz8br7isyhmgkswyp5rnx";
   };
 
