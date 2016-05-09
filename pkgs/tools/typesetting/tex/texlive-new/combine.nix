@@ -60,21 +60,37 @@ in buildEnv {
     +
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
-    export TEXMFCNF="$out/share/texmf/web2c"
-    export TEXMFDIST="$out/share/texmf"
-    export TEXMFSYSCONFIG="$out/share/texmf-config"
-    export TEXMFSYSVAR="$out/share/texmf-var"
     export PERL5LIB="$out/share/texmf/scripts/texlive"
   '' +
-    # patch texmf-dist -> texmf to be sure
-    # TODO: cleanup the search paths incl. SELFAUTOLOC, and perhaps do lua actions?
+    # patch texmf-{dist,local} -> texmf to be sure
+    # TODO: perhaps do lua actions?
     # tried inspiration from install-tl, sub do_texmf_cnf
   ''
     (
       cd ./share/texmf/web2c/
       local cnfOrig="$(realpath ./texmf.cnf)"
       rm ./texmf.cnf
-      cat "$cnfOrig" | sed 's/texmf-dist/texmf/g' > ./texmf.cnf
+      sed \
+        -e 's,texmf-dist,texmf,g' \
+        -e 's,texmf-local,texmf,g' \
+        -e "s,\$SELFAUTOLOC,$out,g" \
+        -e "s,\$SELFAUTODIR,$out/share,g" \
+        -e "s,\$SELFAUTOPARENT,$out/share,g" \
+        -e "s,\$SELFAUTOGRANDPARENT,$out/share,g" \
+        "$cnfOrig" > ./texmf.cnf
+
+      local cnfLuaOrig="$(realpath ./texmfcnf.lua)"
+      rm ./texmfcnf.lua
+      sed \
+        -e 's,texmf-dist,texmf,g' \
+        -e 's,texmf-local,texmf,g' \
+        -e "s,\(TEXMFLOCAL[ ]*=[ ]*\)[^\,]*,\1\"$out/share/texmf\",g" \
+        -e "s,\$SELFAUTOLOC,$out,g" \
+        -e "s,selfautodir:/,$out/share/,g" \
+        -e "s,selfautodir:,$out/share/,g" \
+        -e "s,selfautoparent:/,$out/share/,g" \
+        -e "s,selfautoparent:,$out/share/,g" \
+        "$cnfLuaOrig" > ./texmfcnf.lua
 
       rm updmap.cfg
     )
@@ -112,10 +128,6 @@ in buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "$out/bin:${perl}/bin" \
-        --set TEXMFCNF "$out/share/texmf/web2c" \
-        --set TEXMFDIST "$out/share/texmf" \
-        --set TEXMFSYSCONFIG "$out/share/texmf-config" \
-        --set TEXMFSYSVAR "$out/share/texmf-var" \
         --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
 
       # avoid using non-nix shebang in $target by calling interpreter
