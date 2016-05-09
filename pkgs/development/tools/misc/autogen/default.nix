@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "5.18.7";
 
   src = fetchurl {
-    url = "mirror://gnu/autogen/rel${version}/autogen-${version}.tar.xz";
-    sha256 = "0ncgdhy3cp7bj8p3ipbcmqwq1zrxwy5vmfx76lxy08zypan8zkq0";
+    url = "mirror://gnu/autogen/autogen-${version}.tar.xz";
+    sha256 = "01d4m8ckww12sy50vgyxlnz83z9dxqpyqp153cscncc9w6jq19d7";
   };
 
   outputs = [ "dev" "bin" "lib" "out" "man" "info" ];
