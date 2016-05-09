@@ -434,7 +434,7 @@ in
     withGui = false;
   };
 
-  apitrace = qt5.callPackage ../applications/graphics/apitrace {};
+  apitrace = qt55.callPackage ../applications/graphics/apitrace {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
@@ -1160,7 +1160,7 @@ in
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  cool-retro-term = qt5.callPackage ../applications/misc/cool-retro-term { };
+  cool-retro-term = qt55.callPackage ../applications/misc/cool-retro-term { };
 
   coreutils = callPackage ../tools/misc/coreutils {
     aclSupport = stdenv.isLinux;
@@ -3248,7 +3248,7 @@ in
 
   siege = callPackage ../tools/networking/siege {};
 
-  sigil = qt5.callPackage ../applications/editors/sigil { };
+  sigil = qt55.callPackage ../applications/editors/sigil { };
 
   # aka., gpg-tools
   signing-party = callPackage ../tools/security/signing-party { };
@@ -6284,6 +6284,10 @@ in
 
   premake = premake4;
 
+  qtcreator = qt5.callPackage ../development/qtcreator {
+    withDocumentation = true;
+  };
+
   racerRust = callPackage ../development/tools/rust/racer { };
 
   radare = callPackage ../development/tools/analysis/radare {
@@ -7508,8 +7512,6 @@ in
 
   libcm = callPackage ../development/libraries/libcm { };
 
-  libcommuni = qt5.callPackage ../development/libraries/libcommuni { };
-
   libconfuse = callPackage ../development/libraries/libconfuse { };
 
   inherit (gnome3) libcroco;
@@ -8694,21 +8696,28 @@ in
     developerBuild = true;
   });
 
-  qt54 =
-    let imported = import ../development/libraries/qt-5/5.4 { inherit pkgs; };
-    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
-
   qt55 =
     let imported = import ../development/libraries/qt-5/5.5 { inherit pkgs; };
+        # Libraries that cannot be built with newer versions of Qt 5
+        qt55Only = self: with self; {
+          # Requires Qt Quick (deprecated in Qt 5.5, removed from Qt 5.6)
+          qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
+        };
+    in recurseIntoAttrs (imported.override (super: self: qt5LibsFun self // qt55Only self));
+
+  qt56 =
+    let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
-  qt5 = self.qt54;
+  qt5 = self.qt56;
 
   qt5LibsFun = self: with self; {
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
+
+    libcommuni = callPackage ../development/libraries/libcommuni { };
 
     libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
@@ -8728,19 +8737,11 @@ in
 
     qca-qt5 = callPackage ../development/libraries/qca-qt5 { };
 
-    qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
-
-    qtcreator = callPackage ../development/qtcreator {
-      withDocumentation = true;
-    };
-
     quazip = callPackage ../development/libraries/quazip {
       qt = qtbase;
     };
 
     qwt = callPackage ../development/libraries/qwt/6.nix { };
-
-    signon = callPackage ../development/libraries/signon { };
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
@@ -11663,7 +11664,7 @@ in
 
   xlsx2csv = pythonPackages.xlsx2csv;
 
-  zeal = qt5.callPackage ../data/documentation/zeal { };
+  zeal = qt55.callPackage ../data/documentation/zeal { };
 
 
   ### APPLICATIONS
@@ -13028,7 +13029,7 @@ in
 
   kermit = callPackage ../tools/misc/kermit { };
 
-  keyfinder = qt55.callPackage ../applications/audio/keyfinder { };
+  keyfinder = qt5.callPackage ../applications/audio/keyfinder { };
 
   keyfinder-cli = qt5.callPackage ../applications/audio/keyfinder-cli { };
 
@@ -13186,7 +13187,7 @@ in
       webkit = webkitgtk2;
   };
 
-  luminanceHDR = qt5.callPackage ../applications/graphics/luminance-hdr { };
+  luminanceHDR = qt55.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
@@ -13401,7 +13402,7 @@ in
       else null;
   };
 
-  musescore = qt5.callPackage ../applications/audio/musescore { };
+  musescore = qt55.callPackage ../applications/audio/musescore { };
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
   mutt-with-sidebar = callPackage ../applications/networking/mailreaders/mutt {
@@ -13443,7 +13444,7 @@ in
 
   smplayer = qt5.callPackage ../applications/video/smplayer { };
 
-  smtube = qt5.callPackage ../applications/video/smtube {};
+  smtube = qt55.callPackage ../applications/video/smtube {};
 
   sup = callPackage ../applications/networking/mailreaders/sup {
     ruby = ruby_2_3.override { cursesSupport = true; };
@@ -13792,7 +13793,7 @@ in
     demo = false;
   };
 
-  rapcad = qt5.callPackage ../applications/graphics/rapcad { boost = boost159; };
+  rapcad = qt55.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
@@ -13820,7 +13821,7 @@ in
 
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
-  ricochet = qt5.callPackage ../applications/networking/instant-messengers/ricochet { };
+  ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
@@ -16454,7 +16455,7 @@ in
     inherit (pythonPackages) pexpect paramiko;
   };
 
-  redis-desktop-manager = qt5.callPackage ../applications/misc/redis-desktop-manager { };
+  redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
 
   robomongo = qt5.callPackage ../applications/misc/robomongo { };
 
@@ -16793,7 +16794,7 @@ in
 
   discord = callPackage ../applications/networking/instant-messengers/discord { };
 
-  golden-cheetah = qt5.callPackage ../applications/misc/golden-cheetah {};
+  golden-cheetah = qt55.callPackage ../applications/misc/golden-cheetah {};
 
   tomb = callPackage ../os-specific/linux/tomb {};
 
