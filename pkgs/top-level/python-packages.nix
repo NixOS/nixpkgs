@@ -4278,7 +4278,7 @@ in modules // {
       description = "pytest plugin with mechanisms for caching across test runs";
     };
   };
-  
+
   pytestdjango = buildPythonPackage rec {
     name = "pytest-django-${version}";
     version = "2.9.1";
@@ -4287,7 +4287,7 @@ in modules // {
       url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
       sha256 = "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb";
     };
-    
+
     # doing this to allow depending packages to find
     # pytest's binaries
     pytest = self.pytest;
@@ -6921,7 +6921,7 @@ in modules // {
       license = licenses.lgpl3;
     };
   };
-		  
+
 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
@@ -16246,6 +16246,7 @@ in modules // {
   });
 
   protobuf = self.protobuf2_6;
+  protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
@@ -19915,7 +19916,7 @@ in modules // {
   setuptools_scm_18 = self.setuptools_scm.override rec {
     name = "setuptools_scm-${version}";
     version = "1.8.0";
-    
+
     # tests fail: ImportError: cannot import name 'find_files'
     disabled = isPy35;
 
@@ -26941,6 +26942,39 @@ in modules // {
       description = "A client side encrypted pastebin";
       homepage = "http://0bin.net/";
       license = licenses.wtfpl;
+    };
+  };
+
+  # tensorflow is built from a downloaded wheel, because the upstream
+  # project's build system is an arcane beast based on
+  # bazel. Untangling it and building the wheel from source is an open
+  # problem.
+
+  tensorflow = self.tensorflowNoGpuSupport;
+
+  tensorflowNoGpuSupport = buildPythonPackage rec {
+    name = "tensorflow";
+    version = "0.8.0";
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
+      sha256 = "07lb6rknngq9bicd7z1q9caiqxlqn4fdx8q24s3rqvv9wi79szws";
+    };
+
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.swig ];
+
+    preFixup = ''
+      RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
+      find $out -name '*.so' -exec patchelf --set-rpath "$RPATH" {} \;
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "TensorFlow helps the tensors flow (no gpu support)";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
     };
   };
 }
