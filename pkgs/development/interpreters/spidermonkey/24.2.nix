@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "spidermonkey-${version}";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/js/mozjs-${version}.tar.bz2";
+    url = "mirror://mozilla/js/mozjs-${version}.tar.bz2";
     sha256 = "1n1phk8r3l8icqrrap4czplnylawa0ddc2cc4cgdz46x3lrkybz6";
   };
 
