@@ -4202,7 +4202,7 @@ in modules // {
     version = "2.9.1";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pytest-django/${name}.tar.gz";
+      url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
       sha256 = "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb";
     };
     
