@@ -28,14 +28,6 @@ with lib;
       '';
     };
 
-    php = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether or not to enable fastcgi passing to php-fpm or not.
-      '';
-    };
-
     extraConfig = mkOption {
       type = types.lines;
       default = "";
