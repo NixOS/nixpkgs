@@ -21,7 +21,7 @@ with lib;
       type = types.nullOr types.int;
       default = null;
       description = ''
-        Port for the server. 80 for http
+        Port for the server. Defaults to 80 for http
         and 443 for https (i.e. when enableSSL is set).
       '';
     };
@@ -109,7 +109,17 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      description = "user = password";
+      example = literalExample ''
+        {
+          user = "password";
+        };
+      '';
+      description = ''
+        Basic Auth protection for a vhost.
+
+        WARNING: This is implemented to store the password in plain text in the
+        nix store.
+      '';
     };
 
     locations = mkOption {
@@ -117,9 +127,14 @@ with lib;
         inherit lib;
       }));
       default = {};
-      example = {};
-      description = ''
+      example = literalExample ''
+        {
+          "/" = {
+            proxyPass = "http://localhost:3000";
+          };
+        };
       '';
+      description = "Declarative location config";
     };
   };
 }
