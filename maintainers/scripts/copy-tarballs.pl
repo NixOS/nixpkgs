@@ -5,7 +5,7 @@
 # content-addressed cache used by fetchurl as a fallback for when
 # upstream tarballs disappear or change. Usage:
 #
-# 1) To upload a single file:
+# 1) To upload one or more files:
 #
 #    $ copy-tarballs.pl --file /path/to/tarball.tar.gz
 #
@@ -22,12 +22,38 @@ use JSON;
 use Net::Amazon::S3;
 use Nix::Store;
 
-isValidPath("/nix/store/foo"); # FIXME: forces Nix::Store initialisation
+isValidPath("/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-foo"); # FIXME: forces Nix::Store initialisation
+
+sub usage {
+    die "Syntax: $0 [--dry-run] [--exclude REGEXP] [--expr EXPR | --file FILES...]\n";
+}
+
+my $dryRun = 0;
+my $expr;
+my @fileNames;
+my $exclude;
+
+while (@ARGV) {
+    my $flag = shift @ARGV;
+
+    if ($flag eq "--expr") {
+        $expr = shift @ARGV or die "--expr requires an argument";
+    } elsif ($flag eq "--file") {
+        @fileNames = @ARGV;
+        last;
+    } elsif ($flag eq "--dry-run") {
+        $dryRun = 1;
+    } elsif ($flag eq "--exclude") {
+        $exclude = shift @ARGV or die "--exclude requires an argument";
+    } else {
+        usage();
+    }
+}
 
 
 # S3 setup.
-my $aws_access_key_id = $ENV{'AWS_ACCESS_KEY_ID'} or die;
-my $aws_secret_access_key = $ENV{'AWS_SECRET_ACCESS_KEY'} or die;
+my $aws_access_key_id = $ENV{'AWS_ACCESS_KEY_ID'} or die "AWS_ACCESS_KEY_ID not set\n";
+my $aws_secret_access_key = $ENV{'AWS_SECRET_ACCESS_KEY'} or die "AWS_SECRET_ACCESS_KEY not set\n";
 
 my $s3 = Net::Amazon::S3->new(
     { aws_access_key_id     => $aws_access_key_id,
@@ -37,12 +63,15 @@ my $s3 = Net::Amazon::S3->new(
 
 my $bucket = $s3->bucket("nixpkgs-tarballs") or die;
 
-my $cacheFile = "/tmp/copy-tarballs-cache";
+my $doWrite = 0;
+my $cacheFile = ($ENV{"HOME"} or die "\$HOME is not set") . "/.cache/nix/copy-tarballs";
 my %cache;
 $cache{$_} = 1 foreach read_file($cacheFile, err_mode => 'quiet', chomp => 1);
+$doWrite = 1;
 
 END() {
-    write_file($cacheFile, map { "$_\n" } keys %cache);
+    File::Path::mkpath(dirname($cacheFile), 0, 0755);
+    write_file($cacheFile, map { "$_\n" } keys %cache) if $doWrite;
 }
 
 sub alreadyMirrored {
@@ -87,11 +116,9 @@ sub uploadFile {
     $cache{$mainKey} = 1;
 }
 
-my $op = shift @ARGV;
-
-if ($op eq "--file") {
+if (scalar @fileNames) {
     my $res = 0;
-    foreach my $fn (@ARGV) {
+    foreach my $fn (@fileNames) {
         eval {
             if (alreadyMirrored("sha512", hashFile("sha512", 0, $fn))) {
                 print STDERR "$fn is already mirrored\n";
@@ -100,17 +127,16 @@ if ($op eq "--file") {
             }
         };
         if ($@) {
-            warn "$@\n";
+            warn "$@";
             $res = 1;
         }
     }
     exit $res;
 }
 
-elsif ($op eq "--expr") {
+elsif (defined $expr) {
 
     # Evaluate find-tarballs.nix.
-    my $expr = $ARGV[0] // die "$0: --expr requires a Nix expression\n";
     my $pid = open(JSON, "-|", "nix-instantiate", "--eval", "--json", "--strict",
                    "<nixpkgs/maintainers/scripts/find-tarballs.nix>",
                    "--arg", "expr", $expr);
@@ -126,7 +152,7 @@ elsif ($op eq "--expr") {
     # Check every fetchurl call discovered by find-tarballs.nix.
     my $mirrored = 0;
     my $have = 0;
-    foreach my $fetch (@{$fetches}) {
+    foreach my $fetch (sort { $a->{url} cmp $b->{url} } @{$fetches}) {
         my $url = $fetch->{url};
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
@@ -142,6 +168,8 @@ elsif ($op eq "--expr") {
             next;
         }
 
+        next if defined $exclude && $url =~ /$exclude/;
+
         if (alreadyMirrored($algo, $hash)) {
             $have++;
             next;
@@ -151,7 +179,10 @@ elsif ($op eq "--expr") {
 
         print STDERR "mirroring $url ($storePath)...\n";
 
-        next if $ENV{DRY_RUN};
+        if ($dryRun) {
+            $mirrored++;
+            next;
+        }
 
         # Substitute the output.
         if (!isValidPath($storePath)) {
@@ -184,5 +215,5 @@ elsif ($op eq "--expr") {
 }
 
 else {
-    die "Syntax: $0 --file FILENAMES... | --expr EXPR\n";
+    usage();
 }
