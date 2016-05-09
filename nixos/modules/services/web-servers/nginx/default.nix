@@ -235,7 +235,7 @@ in
       sslDhparam = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = literalExample "/path/to/dhparams.pem";
+        example = "/path/to/dhparams.pem";
         description = "Path to DH parameters file.";
       };
 
@@ -246,9 +246,18 @@ in
         default = {
           localhost = {};
         };
-        example = [];
-        description = ''
+        example = literalExample ''
+          {
+            "hydra.example.com" = {
+              forceSSL = true;
+              enableACME = true;
+              locations."/" = {
+                proxyPass = "http://localhost:3000";
+              };
+            };
+          };
         '';
+        description = "Declarative vhost config";
       };
     };
   };
