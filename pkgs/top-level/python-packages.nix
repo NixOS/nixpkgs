@@ -109,6 +109,25 @@ in modules // {
   };
 
 
+  dbfread = buildPythonPackage rec {
+    name = "dbfread-2.0.5";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Read DBF Files with Python";
+      homepage    = "http://dbfread.readthedocs.org/";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/dbfread/${name}.tar.gz";
+      sha256 = "0r5axq9ax0czyapm7b69krcv22r1nyb4vci7c5x8mx8pq1axim93";
+    };
+  };
+
+
+
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
