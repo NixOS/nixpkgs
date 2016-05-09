@@ -11202,7 +11202,6 @@ in
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
-    linuxHeaders = linuxHeaders_3_18;
     utillinux = utillinuxMinimal; # break the cyclic dependency
   }
     // {
