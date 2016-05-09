@@ -1941,6 +1941,30 @@ in modules // {
     doCheck = false; # lazy packager
   };
 
+  cx_Freeze = buildPythonPackage rec {
+    name = "cx_freeze-${version}";
+    version = "4.3.4";
+
+    # build failures
+    disabled = isPyPy || isPy35;
+
+    # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
+    prePatch = ''
+      substituteInPlace cx_Freeze/freezer.py --replace "os.stat(module.file).st_mtime" "time.time()"
+    '';
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/cx_Freeze/cx_Freeze-${version}.tar.gz";
+      sha256 = "1qhv0gq3ggr06k8cvzphma29zfqdajkx2yfzbw89s4vy23xbpis0";
+    };
+
+    meta = {
+      description = "A set of scripts and modules for freezing Python scripts into executables";
+      homepage = "http://cx-freeze.sourceforge.net/";
+      license = licenses.psfl;
+    };
+  };
+
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "cvxopt";
