@@ -5231,6 +5231,8 @@ in
   scala_2_11 = callPackage ../development/compilers/scala { };
   scala = scala_2_11;
 
+  scalafmt = callPackage ../development/tools/scalafmt { };
+
   sdcc = callPackage ../development/compilers/sdcc { boost = boost159; };
 
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
