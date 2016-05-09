@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, python, buildPythonApplication, qtmultimedia, pyqt5
+{ stdenv, fetchFromGitHub, python, buildPythonApplication, qtmultimedia, pyqt5
 , jinja2, pygments, pyyaml, pypeg2, gst-plugins-base, gst-plugins-good
 , gst-plugins-bad, gst-libav, wrapGAppsHook, glib_networking }:
 
-let version = "0.6.1"; in
+let version = "0.6.2"; in
 
 buildPythonApplication rec {
   name = "qutebrowser-${version}";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1xb95yjc390h7f75l1jk252qiwcamgz2bls2978mmjkhf5hm3jm0";
+  src = fetchFromGitHub {
+    owner = "The-Compiler";
+    repo = "qutebrowser";
+    rev = "v${version}";
+    sha256 = "1qs45plyrf7m32vfh9apnzssf5nwz32skf3hvqxisqyspj8fz5n2";
   };
 
   # Needs tox
@@ -32,6 +34,6 @@ buildPythonApplication rec {
     homepage = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+    maintainers = with stdenv.lib.maintainers; [ jagajaga fpletz ];
   };
 }
