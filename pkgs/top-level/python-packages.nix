@@ -2056,6 +2056,26 @@ in modules // {
     doCheck = false; # lazy packager
   };
 
+  csvkit = buildPythonPackage rec {
+    name = "csvkit-${version}";
+    version = "0.9.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/csvkit/${name}.tar.gz";
+      sha256 = "0fprr4wgp0bq8kl5qims88np11af7ahr5bxkrhfwpdgcgdjbiy4j";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil_2_2 dbf xlrd sqlalchemy openpyxl_2_2_0_b1 ];
+
+    meta = {
+      description = "A library of utilities for working with CSV, the king of tabular file formats";
+      maintainers = with maintainers; [ vrthra ];
+      license = licenses.mit;
+      homepage = "https://github.com/wireservice/csvkit";
+    };
+  };
+
   cx_Freeze = buildPythonPackage rec {
     name = "cx_freeze-${version}";
     version = "4.3.4";
