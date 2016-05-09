@@ -12201,9 +12201,11 @@ in modules // {
     name = "${baseName}-${version}";
     version = "0.14";
 
-    src = pkgs.fetchurl {
-      url ="https://github.com/mitmproxy/mitmproxy/archive/v${version}.tar.gz";
-      sha256 = "072yihnrv78lffk2r12jk7phs4c8mc1gs4y96cp9rg63vw6w1fry";
+    src = pkgs.fetchFromGitHub {
+      owner = "mitmproxy";
+      repo = "mitmproxy";
+      rev = "v${version}";
+      sha256 = "1zxw4yviryy0v53vhccgqb7f5d3fga16dy9kp1xwp6b59w0fcc2g";
     };
 
     propagatedBuildInputs = with self; [
