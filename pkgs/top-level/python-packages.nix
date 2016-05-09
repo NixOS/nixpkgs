@@ -267,8 +267,7 @@ in modules // {
     ];
 
     buildInputs = with self; [ nose ];
-
-    sourceRoot = "letsencrypt-v${version}-src/acme";
+    postUnpack = "sourceRoot=\${sourceRoot}/acme";
   };
 
   # Maintained for simp_le compatibility
