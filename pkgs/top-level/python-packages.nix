@@ -21002,6 +21002,27 @@ in modules // {
     };
   });
 
+  Pweave = buildPythonPackage (rec {
+    name = "Pweave-0.25";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/f6/2f/e9735b04747ae5ef29d64e0b215fb0e11f1c89826097ac17342efebbbb84/Pweave-0.25.tar.gz";
+      sha256 = "1isqjz66c7vxdaqfwpkspki9p4054dsfx7pznwz28ik634hnj3qw";
+    };
+
+    buildInputs = with self; [ mock pkgs.glibcLocales ];
+
+    propagatedBuildInputs = with self; [
+      matplotlib
+    ];
+
+    meta = {
+      description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
+      homepage = http://mpastell.com/pweave/ ;
+      license = licenses.bsd3;
+    };
+  });
+
   spyder = callPackage ../applications/science/spyder {
     rope = if isPy3k then null else self.rope;
   };
