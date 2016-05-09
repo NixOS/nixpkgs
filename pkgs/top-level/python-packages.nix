@@ -5477,6 +5477,19 @@ in modules // {
     };
   });
 
+  entrypoints = buildPythonPackage rec {
+    name = "entrypoints";
+    version = "0.2.1";
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/a5/2d/26548d66d58f7775cb332fcf3f864987c05f5e3f800b0b22b9919dacf653/entrypoints-0.2.1-py2.py3-none-any.whl";
+      sha256 = "112n36dllmls19j5k6bwcnsm6y2789lxzkjl1n9yir7gkm0dmzzw";
+    };
+
+    propagatedBuildInputs = with self; [ configparser ];
+  };
+
 
   evdev = buildPythonPackage rec {
     version = "0.4.7";

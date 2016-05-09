@@ -21,9 +21,6 @@
 # https://github.com/pypa/pip/issues/881
 , setupPyBuildFlags ? []
 
-# enable tests by default
-, doCheck ? true
-
 # DEPRECATED: use propagatedBuildInputs
 , pythonPath ? []
 
@@ -45,6 +42,8 @@
 # Additional flags to pass to "pip install".
 , installFlags ? []
 
+, format ? "setup"
+
 , ... } @ attrs:
 
 
@@ -57,8 +56,51 @@ let
   # use setuptools shim (so that setuptools is imported before distutils)
   # pip does the same thing: https://github.com/pypa/pip/pull/3265
   setuppy = ./run_setup.py;
-  # For backwards compatibility, let's use an alias
-  doInstallCheck = doCheck;
+
+  formatspecific =
+    if format == "wheel" then
+      {
+        unpackPhase = ''
+          mkdir dist
+          cp $src dist/"''${src#*-}"
+        '';
+
+        # Wheels are pre-compiled
+        buildPhase = attrs.buildPhase or ":";
+        installCheckPhase = attrs.checkPhase or ":";
+
+        # Wheels don't have any checks to run
+        doInstallCheck = attrs.doCheck or false;
+      }
+    else if format == "setup" then
+      {
+        # propagate python/setuptools to active setup-hook in nix-shell
+        propagatedBuildInputs =
+          propagatedBuildInputs ++ [ python setuptools ];
+
+        # we copy nix_run_setup.py over so it's executed relative to the root of the source
+        # many project make that assumption
+        buildPhase = attrs.buildPhase or ''
+          runHook preBuild
+          cp ${setuppy} nix_run_setup.py
+          ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
+          runHook postBuild
+        '';
+
+        installCheckPhase = attrs.checkPhase or ''
+          runHook preCheck
+          ${python.interpreter} nix_run_setup.py test
+          runHook postCheck
+        '';
+
+        # We run all tests after software has been installed since that is
+        # a common idiom in Python
+        #
+        # For backwards compatibility, let's use an alias
+        doInstallCheck = attrs.doCheck or false;
+      }
+    else
+      throw "Unsupported format ${format}";
 in
 python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] // {
   name = namePrefix + name;
@@ -66,9 +108,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   buildInputs = [ wrapPython bootstrapped-pip ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip);
-
-  # propagate python/setuptools to active setup-hook in nix-shell
-  propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   pythonPath = pythonPath;
 
@@ -82,14 +121,8 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook postConfigure
   '';
 
-  # we copy nix_run_setup.py over so it's executed relative to the root of the source
-  # many project make that assumption
-  buildPhase = attrs.buildPhase or ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup.py
-    ${python.interpreter} nix_run_setup.py ${lib.optionalString (setupPyBuildFlags != []) ("build_ext " + (lib.concatStringsSep " " setupPyBuildFlags))} bdist_wheel
-    runHook postBuild
-  '';
+  # Python packages don't have a checkPhase, only a installCheckPhase
+  doCheck = false;
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
@@ -102,16 +135,6 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     popd
 
     runHook postInstall
-  '';
-
-  # We run all tests after software has been installed since that is
-  # a common idiom in Python
-  doInstallCheck = doInstallCheck;
-
-  installCheckPhase = attrs.checkPhase or ''
-    runHook preCheck
-    ${python.interpreter} nix_run_setup.py test
-    runHook postCheck
   '';
 
   postFixup = attrs.postFixup or ''
@@ -143,4 +166,4 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };
-})
+} // formatspecific)
