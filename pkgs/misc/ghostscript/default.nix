@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   name = "ghostscript-${version}";
 
   src = fetchurl {
-    url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs918/${name}.tar.bz2";
     inherit sha256;
   };
 
