@@ -195,6 +195,18 @@ in
     };
   };
 
+  idea14-ultimate = buildIdea rec {
+    name = "idea-ultimate-${version}";
+    version = "14.1.7";
+    build = "IU-141.3058.30";
+    description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
+    license = stdenv.lib.licenses.unfree;
+    src = fetchurl {
+      url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
+      sha256 = "a2259249f6e7bf14ba17b0af90a18d24d9b4670af60d24f0bb51af2f62500fc2";
+    };
+  };
+
   idea15-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
     version = "15.0.6";
