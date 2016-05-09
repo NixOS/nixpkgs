@@ -12199,11 +12199,11 @@ in modules // {
   mitmproxy = buildPythonPackage rec {
     baseName = "mitmproxy";
     name = "${baseName}-${version}";
-    version = "0.14.0";
+    version = "0.14";
 
     src = pkgs.fetchurl {
-      url = "${meta.homepage}/download/${name}.tar.gz";
-      sha256 = "0mbd3m8x9a5v9skvzayjwaccn5kpgjb5p7hal5rrrcj69d8xrz6f";
+      url ="https://github.com/mitmproxy/mitmproxy/archive/v${version}.tar.gz";
+      sha256 = "072yihnrv78lffk2r12jk7phs4c8mc1gs4y96cp9rg63vw6w1fry";
     };
 
     propagatedBuildInputs = with self; [
