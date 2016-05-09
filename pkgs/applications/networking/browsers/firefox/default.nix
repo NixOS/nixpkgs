@@ -137,8 +137,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.0.2esr";
-    sha512 = "a1e9e9371ee47181b01252d60166c405a7835063dffb4928dfb8abb9f151edd8db1dd2b59f35d7898f1660a0fcd8e41f91a3e799c25b6dd43b6ab056bc5ad6bf";
+    version = "45.1.1esr";
+    sha512 = "ee6bccdf01450c5b371e31c35f5bb084ad49f796fcc9cf3a346646972044ad85ce198cc34b697c32e2d3ad1e25955ef5b91b68790704ecaa4de9d3a412914fc7";
   };
 
 }
