@@ -123,6 +123,25 @@ in modules // {
     };
   };
 
+  agate-excel = buildPythonPackage rec {
+    name = "agate-excel-0.1.0";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Adds read support for excel files to agate";
+      homepage    = "https://github.com/wireservice/agate-excel";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
+      sha256 = "08zvj3pwqw8zhd58iyymiwblrk92y4gl6yyrb2svb0k8za7v0hak";
+    };
+  };
+
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
