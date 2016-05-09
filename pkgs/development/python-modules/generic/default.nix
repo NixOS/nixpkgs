@@ -93,11 +93,13 @@ let
           runHook postCheck
         '';
 
-        # We run all tests after software has been installed since that is
-        # a common idiom in Python
-        #
+        # Python packages that are installed with setuptools
+        # are typically distributed with tests.
+        # With Python it's a common idiom to run the tests
+        # after the software has been installed.
+
         # For backwards compatibility, let's use an alias
-        doInstallCheck = attrs.doCheck or false;
+        doInstallCheck = attrs.doCheck or true;
       }
     else
       throw "Unsupported format ${format}";
@@ -121,7 +123,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     runHook postConfigure
   '';
 
-  # Python packages don't have a checkPhase, only a installCheckPhase
+  # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
 
   installPhase = attrs.installPhase or ''
