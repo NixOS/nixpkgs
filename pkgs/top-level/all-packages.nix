@@ -759,9 +759,7 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  duperemove = callPackage ../tools/filesystems/duperemove {
-    linuxHeaders = linuxHeaders_3_18;
-  };
+  duperemove = callPackage ../tools/filesystems/duperemove { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
