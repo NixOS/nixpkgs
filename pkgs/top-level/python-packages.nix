@@ -4861,11 +4861,11 @@ in modules // {
 
   decorator = buildPythonPackage rec {
     name = "decorator-${version}";
-    version = "4.0.6";
+    version = "4.0.9";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/decorator/${name}.tar.gz";
-      sha256 = "1c6254597777fd003da2e8fb503c3dbf3d9e8f8d55f054709c0e65be3467209c";
+      sha256 = "1a5vwhflfd9sh3rfb40xlyipldgdzfff6brman57hqv3661jw0lh";
     };
 
     meta = {
@@ -10789,12 +10789,12 @@ in modules // {
   };
 
   ipykernel = buildPythonPackage rec {
-    version = "4.3.0";
+    version = "4.3.1";
     name = "ipykernel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipykernel/${name}.tar.gz";
-      sha256 = "1av769gbzfm1zy9p94wicwwwxmyc7s7zk1ginq16x0wc69hwc57j";
+      sha256 = "0gycnxzq3nnmh6xlc24n3b4qc28gli0lw4a9yg2yzm74lgmd66c2";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
@@ -10819,12 +10819,12 @@ in modules // {
   };
 
   ipyparallel = buildPythonPackage rec {
-    version = "5.0.0";
+    version = "5.0.1";
     name = "ipyparallel-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipyparallel/${name}.tar.gz";
-      sha256 = "ffa7e2e29fdc4844b3c1721f46b42eee5a1abe5cbb851ccf79d0f4f89b9fe21a";
+      sha256 = "1cpydbm1k02y5m4grp0c1z5lbgkpp5f4xp3j5v49g9lmd70ikqs8";
     };
 
     buildInputs = with self; [ nose ];
@@ -11182,12 +11182,12 @@ in modules // {
   };
 
   jupyter_client = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "4.2.2";
     name = "jupyter_client-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_client/${name}.tar.gz";
-      sha256 = "ff1ef5c6c3031a62db46ec6329867b4cb1595e6102a7819b3b5252b0c524bdb8";
+      sha256 = "052a02p38byp3n95k8cwidid05gc5cx44qinzsdzs605zw757z1z";
     };
 
     buildInputs = with self; [ nose ];
@@ -11209,12 +11209,12 @@ in modules // {
   };
 
   jupyter_core = buildPythonPackage rec {
-    version = "4.0.6";
+    version = "4.1.0";
     name = "jupyter_core-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "96a68a3b1d018ff7776270b26b7cb0cfd7a18a53ef2061421daff435707d198c";
+      sha256 = "04xxqa2m8yjpzxb2szbym6ngycyrmhymyy2vp2s6vi9kkikz0shl";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -13261,12 +13261,12 @@ in modules // {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.2.0";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "b597437ba33538221008e21fea71cd01eda9da1515ca3963d7c74e44f4b03d90";
+      sha256 = "113d0548ky0fwa7h950ijkwi1cnpc46l9cdmjr3kjj3vqwb4j371";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -21760,12 +21760,12 @@ in modules // {
   };
 
   traitlets = buildPythonPackage rec {
-    version = "4.1.0";
+    version = "4.2.1";
     name = "traitlets-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traitlets/${name}.tar.gz";
-      sha256 = "440e38dfa5d2a26c086d4b427cfb7aed17d0a2dca78bce90c33354da2592af5b";
+      sha256 = "1h0aryjiqz2f3ykcjb34k5wz6bmzyp5cll7r4k08yfvji4ya7svn";
     };
 
     buildInputs = with self; [ nose mock ];
