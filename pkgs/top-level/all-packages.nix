@@ -3641,6 +3641,8 @@ in
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  wakatime = callPackage ../tools/misc/wakatime { };
+
   weather = callPackage ../applications/misc/weather { };
 
   wego = goPackages.wego.bin // { outputs = [ "bin" ]; };
@@ -3668,6 +3670,8 @@ in
   xe = callPackage ../tools/system/xe { };
 
   testdisk = callPackage ../tools/misc/testdisk { };
+
+  textql = goPackages.textql.bin // { outputs = [ "bin" ]; };
 
   html2text = callPackage ../tools/text/html2text { };
 
@@ -5225,6 +5229,8 @@ in
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala { };
   scala = scala_2_11;
+
+  scalafmt = callPackage ../development/tools/scalafmt { };
 
   sdcc = callPackage ../development/compilers/sdcc { boost = boost159; };
 
@@ -8149,7 +8155,9 @@ in
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
-  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl { };
+  libvdpau-va-gl = callPackage ../development/libraries/libvdpau-va-gl {
+    libva = libva-full; # also wants libva-{x11}
+  };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
@@ -9046,6 +9054,8 @@ in
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
   tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
+
+  tivodecode = callPackage ../applications/video/tivodecode { };
 
   tk = tk-8_6;
 
@@ -12227,8 +12237,6 @@ in
 
     darcsum = callPackage ../applications/editors/emacs-modes/darcsum { };
 
-    dash = callPackage ../applications/editors/emacs-modes/dash { };
-
     # ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
     emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
@@ -12245,8 +12253,6 @@ in
 
     ess = callPackage ../applications/editors/emacs-modes/ess { };
 
-    flycheck = callPackage ../applications/editors/emacs-modes/flycheck { };
-
     flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
@@ -12254,8 +12260,6 @@ in
     graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
-
-    gitModes = callPackage ../applications/editors/emacs-modes/git-modes { };
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
@@ -12285,8 +12289,6 @@ in
 
     loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
 
-    magit = callPackage ../applications/editors/emacs-modes/magit { };
-
     markdownMode = callPackage ../applications/editors/emacs-modes/markdown-mode { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
@@ -12308,8 +12310,6 @@ in
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
 
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
-
-    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
 
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
@@ -12339,8 +12339,6 @@ in
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
-    s = callPackage ../applications/editors/emacs-modes/s { };
-
     sbtMode = callPackage ../applications/editors/emacs-modes/sbt-mode { };
 
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
@@ -12355,8 +12353,6 @@ in
     tuaregMode = callPackage ../applications/editors/emacs-modes/tuareg { };
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
-
-    xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
 
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
@@ -12438,6 +12434,8 @@ in
   fbreader = callPackage ../applications/misc/fbreader { };
 
   fetchmail = callPackage ../applications/misc/fetchmail { };
+
+  flacon = callPackage ../applications/audio/flacon { };
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
@@ -12844,9 +12842,7 @@ in
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin {
-    boost = boost155;
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -15185,7 +15181,12 @@ in
 
   stepmania = callPackage ../games/stepmania { };
 
-  stuntrally = callPackage ../games/stuntrally { };
+  stuntrally = callPackage ../games/stuntrally {
+    bullet = bullet283;
+    mygui = mygui.override {
+      withOgre = true;
+    };
+  };
 
   superTux = callPackage ../games/super-tux { };
 
@@ -16767,6 +16768,7 @@ in
   misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
+  bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
   spdlog = callPackage ../development/libraries/spdlog { };
 

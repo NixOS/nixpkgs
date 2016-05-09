@@ -14,15 +14,15 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "code coverage tester for compiled programs, Python scripts and shell scripts";
 
-    longDescription =
-      '' Kcov is a code coverage tester for compiled programs, Python
+    longDescription = ''
+      Kcov is a code coverage tester for compiled programs, Python
       scripts and shell scripts. It allows collecting code coverage
       information from executables without special command-line
       arguments, and continuosly produces output from long-running
       applications.
-      '';
+    '';
 
-    homePage = http://simonkagstrom.github.io/kcov/index.html;
+    homepage = http://simonkagstrom.github.io/kcov/index.html;
     license = licenses.gpl2;
 
     maintainers = [ maintainers.gal_bolle ];

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
-  version = "0.06.00";
+  version = "0.06.01";
 
   src = fetchurl {
-    sha256 = "14al13vscbbmfl8hr0naimswx48i7lgxv36zj23979y5ady1wy5n";
+    sha256 = "1bk3sj6gyrgp5qfxiz6k7zml28m01iljgvxhp4yq391xzfyvrlg9";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
