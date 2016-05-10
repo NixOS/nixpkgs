@@ -11251,7 +11251,7 @@ in modules // {
     meta = {
       description = "Kerberos high-level interface";
       homepage = https://pypi.python.org/pypi/kerberos;
-      license = licenses.apache;
+      license = licenses.asl20;
     };
   };
 
