@@ -249,7 +249,7 @@ let
     repo = "archiver";
     sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
   };
-  
+
   asciinema = buildFromGitHub {
     rev = "v1.2.0";
     owner = "asciinema";
@@ -4175,6 +4175,15 @@ let
       maintainers = with maintainers; [ vrthra ];
     };
 
+  };
+
+  gopsutil = buildFromGitHub rec {
+    version = "1.0.0";
+    rev = "37d89088411de59a4ef9fc340afa0e89dfcb4ea9";
+    owner = "shirou";
+    repo = "gopsutil";
+    sha256 = "13bi1d9hw8vr6qjpblryhglm0ikzpijbwhpp6rx7f5yd7sxsswhm";
+    propagatedBuildInputs = [ ];
   };
 
 }; in self
