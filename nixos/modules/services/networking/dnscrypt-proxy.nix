@@ -6,12 +6,6 @@ let
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
 
-  # last updated: 2016-05-04
-  resolverListFile = pkgs.fetchurl {
-    url = "https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv";
-    sha256 = "07kbbisrvrqdxif3061hxj3whin3llg4nh50ln7prisi2vbd76xd";
-  };
-
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
   daemonArgs =
@@ -28,7 +22,7 @@ let
         "--provider-key=${cfg.customResolver.key}"
       ]
     else
-      [ "--resolvers-list=${resolverListFile}"
+      [ "--resolvers-list=${cfg.resolverList}"
         "--resolver-name=${toString cfg.resolverName}"
       ];
 in
@@ -82,11 +76,23 @@ in
         default = "dnscrypt.eu-nl";
         type = types.nullOr types.string;
         description = ''
-          The name of the upstream DNSCrypt resolver to use. See
-          <filename>${resolverListFile}</filename> for alternative resolvers.
+          The name of the upstream DNSCrypt resolver to use, taken from the
+          list named in the <literal>resolverList</literal> option.
           The default resolver is located in Holland, supports DNS security
           extensions, and claims to not keep logs.
         '';
+      };
+      resolverList = mkOption {
+        description = ''
+          The list of upstream DNSCrypt resolvers. By default, we use the most
+          recent list published by upstream.
+        '';
+        example = literalExample "${pkgs.dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
+        default = pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv";
+          sha256 = "07kbbisrvrqdxif3061hxj3whin3llg4nh50ln7prisi2vbd76xd";
+        };
+        defaultText = "pkgs.fetchurl { url = ...; sha256 = ...; }";
       };
       customResolver = mkOption {
         default = null;
@@ -174,7 +180,7 @@ in
         ${pkgs.lz4}/lib/liblz4.so.* mr,
         ${pkgs.attr.out}/lib/libattr.so.* mr,
 
-        ${resolverListFile} r,
+        ${cfg.resolverList} r,
       }
     ''));
 
