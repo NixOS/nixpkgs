@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/dosfstools/dosfstools/releases/download/v${version}/${name}.tar.xz";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  configureFlags = [ "--enable-compat-symlinks" ];
 
   meta = with stdenv.lib; {
     description = "Utilities for creating and checking FAT and VFAT file systems";
