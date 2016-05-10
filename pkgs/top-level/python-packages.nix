@@ -1786,10 +1786,10 @@ in modules // {
   };
 
   buttersink = buildPythonPackage rec {
-    name = "buttersink-0.6.7";
+    name = "buttersink-0.6.8";
 
     src = pkgs.fetchurl {
-      sha256 = "1azd0g0p9qk9wp344jmvqp4wk5f3wpsz3lb750xvnmd7qzf6v377";
+      sha256 = "04gc63kfcqkw4qba5rijqk01xiphf04yk7hky9180ii64v2ip0j3";
       url = "mirror://pypi/b/buttersink/${name}.tar.gz";
     };
 
