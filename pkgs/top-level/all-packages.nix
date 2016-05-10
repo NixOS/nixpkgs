@@ -7411,7 +7411,7 @@ in
     libpng = libpng12;
   };
 
-  letsencrypt = callPackage ../tools/admin/letsencrypt { };
+  certbot = callPackage ../tools/admin/certbot { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 

@@ -1,7 +1,8 @@
 { stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "letsencrypt-${version}";
+  name = "certbot-${version}";
+  # when the renamed version is released update patchPhase
   version = "0.5.0";
 
   src = fetchFromGitHub {
