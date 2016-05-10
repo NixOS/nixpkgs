@@ -27743,4 +27743,31 @@ in modules // {
       homepage = "https://github.com/kevin1024/vcrpy";
     };
   };
+
+  pyvmomi = buildPythonPackage rec {
+    name = "pyvmomi-${version}";
+    version = "6.0.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "vmware";
+      repo = "pyvmomi";
+      rev = "51a54c0ca3c07aa7c3d4314d962efbce2d5b81f4";
+      sha256 = "1qxrbrrfy82dl6yqg6mffwvyzv0xwxfqpp61p1mf7ngy0cxsac50";
+    };
+
+    buildInputs = with self; [
+      testtools
+      vcrpy
+    ];
+
+    propagatedBuildInputs = with self; [
+      six
+      requests2
+    ];
+
+    meta = {
+      description = "VMware vSphere API Python Bindings";
+      homepage = "https://github.com/vmware/pyvmomi";
+    };
+  };
 }
