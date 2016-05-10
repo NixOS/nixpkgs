@@ -4186,4 +4186,12 @@ let
     propagatedBuildInputs = [ ];
   };
 
+  gohai = buildFromGitHub rec {
+    rev = "94685629c66fe481bfb499175b448fb401a41781";
+    version = "2016-04-14";
+    owner = "DataDog";
+    repo = "gohai";
+    sha256 = "0dvrv7skc0k8zd83gbwml8c02wjwldhxhhgzmwdfvvaqc00qz2c0";
+    propagatedBuildInputs = [ seelog gopsutil ];
+  };
 }; in self
