@@ -27706,4 +27706,41 @@ in modules // {
       homepage = "https://github.com/kevin1024/pytest-httpbin";
     };
   };
+
+  vcrpy = buildPythonPackage rec {
+    name = "vcrpy-${version}";
+    version = "1.7.4";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "kevin1024";
+      repo = "vcrpy";
+      rev = "v${version}";
+      sha256 = "1inm22xlnlb4xxcrrmrm3j73kffksb2838ypgykjbsjid8xvqdsd";
+    };
+
+    # https://github.com/kevin1024/vcrpy/commit/4e36997e1af248a96b1424b6975f5022baa9352f
+    # test_urllib2 fails with SSL_VERIFICATION_ERROR. Above commit (unreleased)
+    # sets the correct cacert path
+    doCheck = false;
+
+    buildInputs = with self; [
+      pytest
+      mock
+      pytestHttpbin
+      pytest-localserver
+    ];
+
+    propagatedBuildInputs = with self; [
+      pyyaml
+      six
+      wrapt
+      contextlib2
+      mock
+    ];
+
+    meta = {
+      description = "Automatically mock your HTTP interactions to simplify and speed up testing";
+      homepage = "https://github.com/kevin1024/vcrpy";
+    };
+  };
 }
