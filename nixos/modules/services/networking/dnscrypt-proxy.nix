@@ -6,7 +6,12 @@ let
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
 
-  resolverListFile = "${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
+  # last updated: 2016-05-04
+  resolverListFile = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv";
+    sha256 = "07kbbisrvrqdxif3061hxj3whin3llg4nh50ln7prisi2vbd76xd";
+  };
+
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
   daemonArgs =
