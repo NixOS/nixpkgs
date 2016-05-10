@@ -27678,4 +27678,32 @@ in modules // {
       homepage = "https://github.com/Cairnarvon/uptime";
     };
   };
+
+  pytestHttpbin = buildPythonPackage rec {
+    name = "pytest-httpbin-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "kevin1024";
+      repo = "pytest-httpbin";
+      rev = "ae314b2a18eecac2a9d3b2034bfede9805ce7907";
+      sha256 = "0j5rcqlh59sqcv6csnk0i73xi5p43h32ynnz550q8pv9q68lzqa2";
+    };
+
+    buildInputs = with self; [
+      pytest
+    ];
+
+    propagatedBuildInputs = with self; [
+      flask
+      decorator
+      httpbin
+      six
+    ];
+
+    meta = {
+      description = "Easily test your HTTP library against a local copy of httpbin.org";
+      homepage = "https://github.com/kevin1024/pytest-httpbin";
+    };
+  };
 }
