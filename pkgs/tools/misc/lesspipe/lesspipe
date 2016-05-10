@@ -1,0 +1,313 @@
+#!/bin/sh
+#
+# lessfile/lesspipe
+# $Id: lessopen,v 1.4 1998/05/12 09:37:46 torin Exp $
+# Plus POSIX sh changes by Y.Dirson
+#
+# Less filter for viewing non text files.
+#
+# Written by: Behan Webster <behanw@pobox.com>
+# Many Modifications by Darren Stalder
+# Further Modifications by Thomas Schoepf <schoepf@debian.org>
+#
+# combined lessfile and lesspipe to avoid duplication of decode stage
+# shell is sure icky.  I'm real tempted to rewrite the whole thing in Perl
+#
+# Unfortunately, this means that I have filename dependencies sprinkled
+# throughout the code.  If you don't want lessfile to be called that,
+# you'll need to change the LESSFILE envar below.
+#
+# Usage: eval `lessfile`  or eval `lesspipe`
+#
+# less passes in:
+#    $1  filename to be viewed with less  (used by LESSOPEN)
+# and possibly (if used by lessfile)
+#    $2  filename that was created during LESSOPEN
+
+TMPDIR=${TMPDIR:-/tmp}
+BASENAME=`basename $0`
+LESSFILE=lessfile
+
+# Helper function to list contents of ISO files (CD images)
+iso_list() {
+	isoinfo -d -i "$1"
+	isoinfo -d -i "$1" | grep -q ^Rock\.Ridge && iiopts="$iiopts -R"
+	isoinfo -d -i "$1" | grep -q ^Joliet && iiopts="$iiopts -J"
+	echo
+	isoinfo -f $iiopts -i "$1"
+}
+
+if [ $# -eq 1 ] ; then
+	# we were called as LESSOPEN
+
+	# if the file doesn't exist, we don't do anything
+	if [ ! -r "$1" ]; then
+		exit 0
+	fi
+
+	# generate filename for possible use by lesspipe
+	umask 077
+	if [ $BASENAME = $LESSFILE ]; then
+		TMPFILE=`@coreutils@/bin/mktemp -p $TMPDIR -suffix .lessf`
+		if [ -z "$TMPFILE" ]; then
+			echo >&2 "Could not find essential program 'tempfile'. Exiting"
+      exit 1
+		fi
+	fi
+
+	(
+		# possibly redirect stdout to a file for lessfile
+		if [ $BASENAME = $LESSFILE ]; then exec > $TMPFILE; fi
+
+		# Allow for user defined filters
+		#if [ -x ~/.lessfilter -a -O ~/.lessfilter ]; then
+		if [ -x ~/.lessfilter ]; then
+			~/.lessfilter "$1"
+			if [ $? -eq 0 ]; then
+				if [ $BASENAME = $LESSFILE ]; then
+					if [ -s $TMPFILE ]; then
+						echo $TMPFILE
+					else
+						rm -f $TMPFILE
+					fi
+				fi
+				exit 0
+			fi
+		fi
+
+		# Decode file for less
+		case `echo "$1" | tr '[:upper:]' '[:lower:]'` in
+			*.a)
+				if [ -x "`@which@/bin/which ar`" ]; then ar tv "$1"
+				else echo "No ar available"; fi ;;
+
+			*.arj)
+				if [ -x "`@which@/bin/which unarj`" ]; then unarj l "$1"
+				else echo "No unarj available"; fi ;;
+
+			*.tar.bz2)
+				if [ -x "`@coreutils@/bin/which bunzip2`" ]; then
+					bunzip2 -dc "$1" | tar tvvf -
+				else echo "No bunzip2 available"; fi ;;
+
+			*.bz)
+				if [ -x "`@coreutils@/bin/which bunzip`" ]; then bunzip -c "$1"
+				else echo "No bunzip available"; fi ;;
+
+			*.bz2)
+				if [ -x "`@coreutils@/bin/which bunzip2`" ]; then bunzip2 -dc "$1"
+				else echo "No bunzip2 available"; fi ;;
+
+			*.deb|*.udeb|*.ddeb)
+				echo "$1:"; dpkg --info "$1"
+				echo
+				echo '*** Contents:'; dpkg-deb --contents "$1"
+				;;
+
+			*.doc)
+				if [ -x "`@coreutils@/bin/which catdoc`" ]; then
+					catdoc "$1"
+				else
+					# no catdoc, read normally if file is text.
+					if ( file "$1" | grep ASCII 2>/dev/null >/dev/null); then
+						cat "$1"
+					else
+						echo "No catdoc available";
+					fi
+				fi
+				;;
+
+			*.gif|*.jpeg|*.jpg|*.pcd|*.png|*.tga|*.tiff|*.tif)
+				if [ -x "`@coreutils@/bin/which identify`" ]; then
+					identify "$1"
+				else
+					echo "No identify available"
+					echo "Install ImageMagick to browse images"
+				fi
+				;;
+
+			*.iso)
+				if [ -x "`@coreutils@/bin/which isoinfo`" ]; then iso_list "$1"
+				else
+					echo "No isoinfo available"
+					echo "Install mkisofs to view ISO images"
+				fi
+				;;
+
+			*.bin|*.raw)
+				if [ -x "`@coreutils@/bin/which isoinfo`" ]; then
+					file "$1" | grep -q ISO\.9660 && iso_list "$1"
+				else
+					echo "No isoinfo available"
+					echo "Install mkisofs to view ISO images"
+				fi
+				;;
+
+			*.lha|*.lzh)
+				if [ -x "`@coreutils@/bin/which lha`" ]; then lha v "$1"
+				else echo "No lha available"; fi ;;
+
+			*.tar.lz|*.tlz)
+				if [ -x "`@coreutils@/bin/which lzip`" ]; then
+					lzip -dc "$1" | tar tvvf -
+				elif [ -x "`@coreutils@/bin/which lunzip`" ]; then
+					lunzip -dc "$1" | tar tvvf -
+				else echo "No lzip or lunzip available"; fi ;;
+
+			*.lz)
+				if [ -x "`@coreutils@/bin/which lzip`" ]; then lzip -dc "$1"
+				elif [ -x "`@coreutils@/bin/which lunzip`" ]; then lunzip -dc "$1"
+				else echo "No lzip or lunzip available"; fi ;;
+
+			*.tar.lzma)
+				if [ -x "`@coreutils@/bin/which lzma`" ]; then
+					lzma -dc "$1" | tar tfvv -
+				else
+					echo "No lzma available"
+				fi
+				;;
+
+			*.lzma)
+				if [ -x "`@coreutils@/bin/which lzma`" ]; then
+					lzma -dc "$1"
+				else
+					echo "No lzma available"
+				fi
+				;;
+
+			*.pdf)
+				if [ -x "`@coreutils@/bin/which pdftotext`" ]; then pdftotext -layout "$1" -
+				else echo "No pdftotext available"; fi ;;
+
+			*.rar|*.r[0-9][0-9])
+				if [ -x "`@coreutils@/bin/which rar`" ]; then rar v "$1"
+				elif [ -x "`@coreutils@/bin/which unrar`" ]; then unrar v "$1"
+				else echo "No rar or unrar available"; fi ;;
+
+			*.rpm)
+				if [ -x "`@coreutils@/bin/which rpm`" ]; then
+					echo "$1:"; rpm -q -i -p "$1"
+					echo
+					echo '*** Contents:'
+					rpm -q -l -p "$1"
+				else echo "rpm isn't available, no query on rpm package possible"; fi ;;
+
+			*.tar.gz|*.tgz|*.tar.z|*.tar.dz)
+				tar tzvf "$1" --force-local
+				;;
+
+			*.tar.xz|*.txz)
+				if [ -x "`@coreutils@/bin/which xz`" ]; then
+					xz -dc "$1" | tar tfvv -
+				else
+					echo "No xz available"
+				fi
+				;;
+
+			*.xz)
+				if [ -x "`@coreutils@/bin/which xz`" ]; then
+					xz -dc "$1"
+				else
+					echo "No xz available"
+				fi
+				;;
+
+			# Note that this is out of alpha order so that we don't catch
+			# the gzipped tar files.
+			*.gz|*.z|*.dz)
+				gzip -dc "$1" ;;
+
+			*.tar)
+				tar tvf "$1" --force-local
+				;;
+
+			*.jar|*.war|*.ear|*.xpi|*.zip)
+				if [ -x "`@coreutils@/bin/which unzip`" ]; then unzip -v "$1";
+				elif [ -x "`@coreutils@/bin/which miniunzip`" ]; then miniunzip -l "$1";
+				elif [ -x "`@coreutils@/bin/which miniunz`" ]; then miniunz -l "$1";
+				else echo "No unzip, miniunzip or miniunz available"; fi ;;
+
+			*.7z)
+				if [ -x "`@coreutils@/bin/which 7za`" ]; then 7za l "$1";
+                                elif [ -x "`@coreutils@/bin/which 7zr`" ]; then 7zr l "$1";
+				else echo "No 7za or 7zr available"; fi ;;
+
+			*.zoo)
+				if [ -x "`@coreutils@/bin/which zoo`" ]; then zoo v "$1";
+				elif [ -x "`@coreutils@/bin/which unzoo`" ]; then unzoo -l "$1";
+				else echo "No unzoo or zoo available"; fi ;;
+
+		esac
+	) 2>/dev/null
+
+	if [ $BASENAME = $LESSFILE ]; then
+		if [ -s $TMPFILE ]; then
+			echo $TMPFILE
+		else
+			rm -f $TMPFILE
+		fi
+	fi
+
+elif [ $# -eq 2 ] ; then
+	#
+	# we were called as LESSCLOSE
+	# delete the file created if we were lessfile
+	#
+	if [ $BASENAME = $LESSFILE ]; then
+		if [ -n "$BASH" ]; then
+			if [ ! -O "$2" ]; then
+				echo "Error in deleting $2" > /dev/tty
+			fi
+		fi
+
+		if [ -f "$2" ]; then
+			rm -f "$2"
+		else
+			echo "Error in deleting $2" > /dev/tty
+		fi
+	fi
+
+elif [ $# -eq 0 ] ; then
+	#
+	# must setup shell to use LESSOPEN/LESSCLOSE
+	#
+	# I have no idea how some of the more esoteric shells (es, rc) do
+	# things. If they don't do things in a Bourne manner, send me a patch
+	# and I'll incorporate it.
+	#
+
+	# first determine the full path of lessfile/lesspipe
+	# if you can determine a better way to do this, send me a patch, I've
+	# not shell-scripted for many a year.
+	FULLPATH=`cd \`@coreutils@/bin/dirname $0\`;pwd`/$BASENAME
+
+	case "$SHELL" in
+		*csh)
+			if [ $BASENAME = $LESSFILE ]; then
+				echo "setenv LESSOPEN \"$FULLPATH %s\";"
+				echo "setenv LESSCLOSE \"$FULLPATH %s %s\";"
+			else
+				echo "setenv LESSOPEN \"| $FULLPATH %s\";"
+				echo "setenv LESSCLOSE \"$FULLPATH %s %s\";"
+			fi
+			;;
+		*)
+			if [ $BASENAME = $LESSFILE ]; then
+				echo "export LESSOPEN=\"$FULLPATH %s\";"
+				echo "export LESSCLOSE=\"$FULLPATH %s %s\";"
+			else
+				echo "export LESSOPEN=\"| $FULLPATH %s\";"
+				echo "export LESSCLOSE=\"$FULLPATH %s %s\";"
+			fi
+			;;
+	esac
+
+	#echo "# If you tried to view a file with a name that starts with '#', you"
+	#echo "# might see this message instead of the file's contents."
+	#echo "# To view the contents, try to put './' ahead of the filename when"
+	#echo "# calling less."
+
+else
+	echo "Usage: eval \`$BASENAME\`"
+	exit
+fi
