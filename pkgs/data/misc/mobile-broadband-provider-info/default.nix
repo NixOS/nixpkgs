@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let
-  version = "20120614";
+  version = "20151214";
   pname = "mobile-broadband-provider-info";
   name = "${pname}-${version}";
 in
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${version}/${name}.tar.xz";
-    sha256 = "72507a732e0cd16cf27424bb094b1c7a03e2206c119ad124722a283e587755f1";
+    sha256 = "1905nab1h8p4hx0m1w0rn4mkg9209x680dcr4l77bngy21pmvr4a";
   };
 
   meta = {
