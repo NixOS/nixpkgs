@@ -60,6 +60,10 @@ in buildEnv {
     +
   ''
     export PATH="$out/bin:$out/share/texmf/scripts/texlive:${perl}/bin:$PATH"
+    export TEXMFCNF="$out/share/texmf/web2c"
+    export TEXMFDIST="$out/share/texmf"
+    export TEXMFSYSCONFIG="$out/share/texmf-config"
+    export TEXMFSYSVAR="$out/share/texmf-var"
     export PERL5LIB="$out/share/texmf/scripts/texlive"
   '' +
     # patch texmf-{dist,local} -> texmf to be sure
