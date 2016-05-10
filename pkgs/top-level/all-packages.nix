@@ -2693,6 +2693,10 @@ let
     inherit (pythonPackages) sqlite3;
   };
 
+  offlineimap_6_7 = callPackage ../tools/networking/offlineimap/6.7.nix {
+    inherit (pythonPackages) sqlite3;
+  };
+
   opencryptoki = callPackage ../tools/security/opencryptoki { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
