@@ -259,7 +259,9 @@ let
 
       perlPackages = { };
 
-      pythonPackages = { };
+      pythonPackages = {
+        pandas = unix;
+      };
       python2Packages = { };
       python27Packages = { };
       python3Packages = { };
