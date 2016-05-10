@@ -11238,6 +11238,22 @@ in modules // {
     };
   };
 
+  kerberos = buildPythonPackage rec {
+    name = "kerberos-1.2.4";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/k/kerberos/${name}.tar.gz";
+      sha256 = "11q9jhzdl88jh8jgn7cycq034m36g2ncxds7mr3vqkngpcirkx6n";
+    };
+
+    buildInputs = [ pkgs.kerberos ];
+
+    meta = {
+      description = "Kerberos high-level interface";
+      homepage = https://pypi.python.org/pypi/kerberos;
+      license = licenses.apache;
+    };
+  };
 
   keyring = buildPythonPackage rec {
     name = "keyring-8.4.1";
