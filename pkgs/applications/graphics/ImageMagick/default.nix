@@ -19,12 +19,12 @@ let
     // lib.optionalAttrs (stdenv.cross.libc or null == "msvcrt") {
         version = "6.9.2-0";
         sha256 = "17ir8bw1j7g7srqmsz3rx780sgnc21zfn0kwyj78iazrywldx8h7";
-        patches = (fetchpatch {
+        patches = [(fetchpatch {
           name = "mingw-build.patch";
           url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
             + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
           sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
-        });
+        })];
       };
 in
 
