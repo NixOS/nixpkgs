@@ -270,29 +270,6 @@ in modules // {
     postUnpack = "sourceRoot=\${sourceRoot}/acme";
   };
 
-  # Maintained for simp_le compatibility
-  acme_0_1 = buildPythonPackage rec {
-    version = "0.1.0";
-
-    name = "acme-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "letsencrypt";
-      repo = "letsencrypt";
-      rev = "v${version}";
-      sha256 = "1f7406nnybsdbwxf7r9qjf6hzkfd7cg6qp8l9l7hrzwscsq5hicj";
-    };
-
-    propagatedBuildInputs = with self; [
-      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
-      ndg-httpsclient
-    ];
-
-    buildInputs = with self; [ nose ];
-
-    sourceRoot = "letsencrypt-v${version}-src/acme";
-  };
-
   acme-tiny = buildPythonPackage rec {
     name = "acme-tiny-${version}";
     version = "20151229";
