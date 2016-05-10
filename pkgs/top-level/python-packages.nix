@@ -13029,7 +13029,7 @@ in modules // {
     disabled = !isPy27;
 
     propagatedBuildInputs = with self; [ numpy matplotlib scipy ];
-   
+
     meta = {
       description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
       maintainers = [ maintainers.nico202 ];
@@ -27452,7 +27452,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      numpy 
+      numpy
       Theano
     ];
 
@@ -27662,4 +27662,20 @@ in modules // {
     };
   };
 
+  uptime = buildPythonPackage rec {
+    name = "uptime-${version}";
+    version = "3.0.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "Cairnarvon";
+      repo = "uptime";
+      rev = "1ddfd06bb300c00e6dc4bd2a9ddf9bf1aa27b1bb";
+      sha256 = "148rqj0asw65c3z4whnqphfmkhlm181p296b7pxc1x79n97gn1pf";
+    };
+
+    meta = {
+      description = "Cross-platform uptime library for the Python";
+      homepage = "https://github.com/Cairnarvon/uptime";
+    };
+  };
 }
