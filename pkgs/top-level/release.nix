@@ -263,6 +263,7 @@ let
 
       pythonPackages = {
         pandas = unix;
+        scikitlearn = unix;
       };
       python2Packages = { };
       python27Packages = { };
