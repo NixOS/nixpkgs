@@ -5,7 +5,7 @@
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz, poppler_min
 , makeWrapper, perl, python, ruby
-, useFixedHashes ? true
+, useFixedHashes ? false
 , recurseIntoAttrs
 }:
 let
