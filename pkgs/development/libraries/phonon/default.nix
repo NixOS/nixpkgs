@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, cmake, mesa, pkgconfig, libpulseaudio
-, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qtquick1 ? null, qttools ? null
+, qt4 ? null, extra-cmake-modules ? null, qtbase ? null, qttools ? null
 , debug ? false }:
 
 with lib;
@@ -10,7 +10,6 @@ let
 in
 
 assert withQt5 -> qtbase != null;
-assert withQt5 -> qtquick1 != null;
 assert withQt5 -> qttools != null;
 
 stdenv.mkDerivation rec {
@@ -31,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ mesa libpulseaudio ]
-    ++ (if withQt5 then [ qtbase qtquick1 qttools ] else [ qt4 ]);
+    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ]);
 
   nativeBuildInputs = [ cmake pkgconfig ] ++ optional withQt5 extra-cmake-modules;
 
