@@ -20,6 +20,12 @@ in
   options = {
     services.rsnapshot = {
       enable = mkEnableOption "rsnapshot backups";
+      enableManualRsnapshot = mkOption {
+        description = "Whether to enable manual usage of the rsnapshot command with this module.";
+        default = true;
+        example = false;
+        type = types.bool;
+      };
 
       extraConfig = mkOption {
         default = "";
@@ -54,8 +60,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.cron.systemCronJobs =
-      mapAttrsToList (interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}") cfg.cronIntervals;
-  };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      services.cron.systemCronJobs =
+        mapAttrsToList (interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}") cfg.cronIntervals;
+    }
+    (mkIf cfg.enableManualRsnapshot {
+      environment.systemPackages = [ pkgs.rsnapshot ];
+      environment.etc."rsnapshot.conf".source = cfgfile;
+    })
+  ]);
 }
