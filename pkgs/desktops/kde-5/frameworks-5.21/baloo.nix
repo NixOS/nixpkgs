@@ -1,6 +1,6 @@
 { kdeFramework, lib, extra-cmake-modules, kauth, kconfig
 , kcoreaddons, kcrash, kdbusaddons, kfilemetadata, ki18n, kidletime
-, kio, lmdb, makeQtWrapper, qtbase, qtquick1, solid
+, kio, lmdb, makeQtWrapper, qtbase, solid
 }:
 
 kdeFramework {
@@ -8,7 +8,7 @@ kdeFramework {
   nativeBuildInputs = [ extra-cmake-modules makeQtWrapper ];
   propagatedBuildInputs = [
     kauth kconfig kcoreaddons kcrash kdbusaddons kfilemetadata ki18n kio
-    kidletime lmdb qtbase qtquick1 solid
+    kidletime lmdb qtbase solid
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/baloo_file"
