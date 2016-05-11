@@ -11676,6 +11676,8 @@ in
 
   xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
 
+  xits-math = callPackage ../data/fonts/xits-math { };
+
   xkeyboard_config = xorg.xkeyboardconfig;
 
   xlsx2csv = pythonPackages.xlsx2csv;
