@@ -36,7 +36,9 @@ let
     USERS_AUTO_ASSIGN_ORG = b2s cfg.users.autoAssignOrg;
     USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
-    AUTH_ANONYMOUS_ENABLE = b2s cfg.auth.anonymous.enable;
+    AUTH_ANONYMOUS_ENABLED = b2s cfg.auth.anonymous.enable;
+
+    ANALYTICS_REPORTING_ENABLED = b2s cfg.analytics.reporting.enable;
   } // cfg.extraOptions;
 
 in {
@@ -192,6 +194,14 @@ in {
       enable = mkOption {
         description = "Whether to allow anonymous access";
         default = false;
+        type = types.bool;
+      };
+    };
+
+    analytics.reporting = {
+      enable = mkOption {
+        description = "Whether to allow anonymous usage reporting to stats.grafana.net";
+        default = true;
         type = types.bool;
       };
     };
