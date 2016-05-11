@@ -2142,6 +2142,8 @@ in
 
   less = callPackage ../tools/misc/less { };
 
+  lesspipe = callPackage ../tools/misc/lesspipe { };
+
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
 
   lnav = callPackage ../tools/misc/lnav { };
