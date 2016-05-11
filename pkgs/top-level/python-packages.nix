@@ -25974,6 +25974,26 @@ in modules // {
     };
   };
 
+  pylongecity = buildPythonPackage rec {
+    pname = "pylongecity";
+    name = pname + "-" + version;
+    version = "0.1.1";
+    disabled = !(isPy35);
+    src = pkgs.fetchFromGitHub {
+      owner = "cyrbon";
+      repo = pname;
+      rev = version;
+      sha256 = "1dgg810x9vyfdn932h0im866m4az70hqjk5xpn3v1qn9l798bbxq";
+    };
+    doCheck = false;
+    propagatedBuildInputs = with self; [requests2 pyquery joblib]; 
+    meta = {
+      homepage = "http://github.com/cyrbon/pylongecity/";
+      description = "Simple script to search longecity threads for relevant information";
+      license = licenses.asl20; 
+    };
+  };
+
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-1.4.0";
     disabled = ! (isPy26 || isPy27);
