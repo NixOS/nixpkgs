@@ -53,7 +53,10 @@ in {
   options = {
     services.gammu-smsd = {
 
-      enable = mkEnableOption "gammu-smsd daemon";
+      enable = mkEnableOption' {
+        name = "gammu-smsd daemon";
+        package = literalPackage pkgs "pkgs.gammu";
+      };
 
       user = mkOption {
         type = types.str;

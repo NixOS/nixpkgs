@@ -16,7 +16,10 @@ in
 
     services.calibre-server = {
 
-      enable = mkEnableOption "calibre-server";
+      enable = mkEnableOption' {
+        name = "calibre-server";
+        package = literalPackage pkgs "pkgs.calibre";
+      };
 
       libraryDir = mkOption {
         description = ''

@@ -7,7 +7,11 @@ in
 {
   options = {
     services.rsnapshot = {
-      enable = mkEnableOption "rsnapshot backups";
+
+      enable = mkWheneverToPkgOption {
+        what = "enable backups with rsnapshot";
+        package = literalPackage pkgs "pkgs.rsnapshot";
+      };
 
       extraConfig = mkOption {
         default = "";

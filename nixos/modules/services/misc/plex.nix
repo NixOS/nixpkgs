@@ -9,7 +9,10 @@ in
 {
   options = {
     services.plex = {
-      enable = mkEnableOption "Plex Media Server";
+      enable = mkEnableOption' {
+        name = "Plex Media Server";
+        #unfree #package = literalPackage pkgs "pkgs.plex";
+      };
 
       # FIXME: In order for this config option to work, symlinks in the Plex
       # package in the Nix store have to be changed to point to this directory.

@@ -7,13 +7,12 @@ in {
 
   options = {
     programs.cdemu = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          <command>cdemu</command> for members of
-          <option>programs.cdemu.group</option>.
-        '';
+
+      enable = mkWheneverToPkgOption {
+        what = "globally configure cdemu";
+        package = literalPackage pkgs "pkgs.cdemu-daemon";
       };
+
       group = mkOption {
         default = "cdrom";
         description = ''

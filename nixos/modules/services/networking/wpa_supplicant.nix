@@ -23,7 +23,10 @@ let
 in {
   options = {
     networking.wireless = {
-      enable = mkEnableOption "wpa_supplicant";
+      enable = mkEnableOption' {
+        name = "wpa_supplicant";
+        package = literalPackage pkgs "pkgs.wpa_supplicant";
+      };
 
       interfaces = mkOption {
         type = types.listOf types.str;

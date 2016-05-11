@@ -15,6 +15,7 @@ rec {
     , defaultText ? null # Textual representation of the default, for in the manual.
     , example ? null # Example value used in the manual.
     , description ? null # String describing the option.
+    , packages ? [] # Related packages to be specified with `literalPackages*' functions
     , type ? null # Option type, providing type-checking and value merging.
     , apply ? null # Function that converts the option value to something else.
     , internal ? null # Whether the option is for NixOS developers only.
@@ -24,12 +25,55 @@ rec {
     } @ attrs:
     attrs // { _type = "option"; };
 
-  mkEnableOption = name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
+  # A boolean which determines whenever to do (or not to do) something.
+  mkWheneverToOption =
+    { default ? false
+    , what
+    , description ? null
+    , ...
+    } @ attrs:
+    mkOption ((removeAttrs attrs [ "what" ]) // {
+      inherit default;
+      example = !default;
+      type = lib.types.bool;
+      description = ''
+        Whether to ${what}.
+
+        ${optionalString (description != null) description}
+      '';
+    });
+
+  mkWheneverToPkgOption =
+    { description ? null
+    , broken ? false
+    , package ? null
+    , packages ? []
+    , ...
+    } @ attrs: let
+      pkgs = optional (package != null) package
+          ++ packages;
+    in
+    mkWheneverToOption (removeAttrs attrs [ "broken" "package" ] // {
+      description = ''
+        ${optionalString (description != null) description}
+
+        ${if broken then "THIS IS BROKEN."
+          else if (length pkgs > 1) then "Related packages:"
+          else if (length pkgs == 1) then "The package is:"
+          else ""}
+      '';
+      # Don't evaluate when marked as broken
+      packages = optional (!broken && package != null) package;
+    });
+
+  mkEnableOption = name: mkWheneverToPkgOption {
+    what = "enable ${name}";
   };
+
+  mkEnableOption' = { name ? null, ... } @ attrs:
+    mkWheneverToPkgOption (removeAttrs attrs [ "name" ] // {
+      what = "enable ${name}";
+    });
 
   # This option accept anything, but it does not produce any result.  This
   # is useful for sharing a module across different module sets without
@@ -77,6 +121,16 @@ rec {
   getValues = map (x: x.value);
   getFiles = map (x: x.file);
 
+  # Generate DocBook documentation for a list of packages
+  packageListToDocString = packages:
+    let
+      describePkg = n: p:
+          "<listitem>"
+        + "<para><option>${n}</option> (${p.name}): ${p.meta.description or "???"}.</para>"
+        # Lots of `longDescription's break DocBook, so we just wrap them into <programlisting>
+        + optionalString (p.meta ? longDescription) "\n<programlisting>${p.meta.longDescription}</programlisting>"
+        + "</listitem>";
+    in "<itemizedlist>${concatStringsSep "\n" (map ({name, value}: describePkg name value) packages)}</itemizedlist>";
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
@@ -87,16 +141,17 @@ rec {
       let
         docOption = rec {
           name = showOption opt.loc;
-          description = opt.description or (throw "Option `${name}' has no description.");
+          description = (opt.description or (throw "Option `${name}' has no description."))
+                      + optionalString (opt ? packages && opt.packages != []) "\n\n${packageListToDocString opt.packages}";
           declarations = filter (x: x != unknownModule) opt.declarations;
           internal = opt.internal or false;
           visible = opt.visible or true;
           readOnly = opt.readOnly or false;
           type = opt.type.name or null;
         }
-        // (if opt ? example then { example = scrubOptionValue opt.example; } else {})
-        // (if opt ? default then { default = scrubOptionValue opt.default; } else {})
-        // (if opt ? defaultText then { default = opt.defaultText; } else {});
+        // (optionalAttrs (opt ? example)     { example = scrubOptionValue opt.example; })
+        // (optionalAttrs (opt ? default)     { default = scrubOptionValue opt.default; })
+        // (optionalAttrs (opt ? defaultText) { default = opt.defaultText; });
 
         subOptions =
           let ss = opt.type.getSubOptions opt.loc;
@@ -124,6 +179,14 @@ rec {
      functions. */
   literalExample = text: { _type = "literalExample"; inherit text; };
 
+  /* For use in the ‘packages’ option attribute. */
+  literalPackage' = pkgs: n: p: nameValuePair "${optionalString (n != "") (n + ".")}${p}" (getAttrFromPath (splitString "." p) pkgs);
+
+  literalPackages' = pkgs: n: l: map (literalPackage' pkgs n) l;
+
+  literalPackage = pkgs: n: literalPackage' { inherit pkgs; } "" n;
+
+  literalPackages = pkgs: l: literalPackages' { inherit pkgs; } "" l;
 
   /* Helper functions. */
   showOption = concatStringsSep ".";

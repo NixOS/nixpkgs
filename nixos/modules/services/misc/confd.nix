@@ -17,7 +17,10 @@ let
 
 in {
   options.services.confd = {
-    enable = mkEnableOption "confd service";
+    enable = mkEnableOption' {
+      name = "confd service";
+      package = literalPackage pkgs "pkgs.confd";
+    };
 
     backend = mkOption {
       description = "Confd config storage backend to use.";

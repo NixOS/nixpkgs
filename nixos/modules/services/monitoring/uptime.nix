@@ -1,7 +1,8 @@
 { config, pkgs, lib, ... }:
-let
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types optionalAttrs optional;
 
+with lib;
+
+let
   cfg = config.services.uptime;
 
   configDir = pkgs.runCommand "config" {} (if cfg.configFile != null then ''
@@ -49,9 +50,15 @@ in {
       type = types.bool;
     };
 
-    enableWebService = mkEnableOption "the uptime monitoring program web service";
+    enableWebService = mkEnableOption' {
+      name = "the uptime monitoring program web service";
+      package = literalPackage pkgs "pkgs.nodePackages.node-uptime";
+    };
 
-    enableSeparateMonitoringService = mkEnableOption "the uptime monitoring service" // { default = cfg.enableWebService; };
+    enableSeparateMonitoringService = mkEnableOption' {
+      name = "the uptime monitoring service";
+      default = cfg.enableWebService;
+    };
 
     nodeEnv = mkOption {
       description = "The node environment to run in (development, production, etc.)";

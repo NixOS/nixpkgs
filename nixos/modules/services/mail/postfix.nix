@@ -191,10 +191,9 @@ in
 
     services.postfix = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether to run the Postfix mail server.";
+      enable = mkEnableOption' {
+        name = "Postfix mail server";
+        package = literalPackage pkgs "pkgs.postfix";
       };
 
       enableSmtp = mkOption {

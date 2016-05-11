@@ -330,7 +330,10 @@ in
   # options are ordered alphanumerically
   options.services.nsd = {
 
-    enable = mkEnableOption "NSD authoritative DNS server";
+    enable = mkEnableOption' {
+      name = "NSD authoritative DNS server";
+      package = literalPackage pkgs "pkgs.nsd";
+    };
 
     bind8Stats = mkEnableOption "BIND8 like statistics";
 
