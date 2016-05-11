@@ -1,6 +1,5 @@
 { fetchurl, stdenv, lib }:
 
-assert (!stdenv.isLinux);
 
 stdenv.mkDerivation rec {
   name = "libiconv-1.14";

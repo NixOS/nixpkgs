@@ -7843,13 +7843,14 @@ in
   # glibc provides libiconv so systems with glibc don't need to build libiconv
   # separately, but we also provide libiconvReal, which will always be a
   # standalone libiconv, just in case you want it
-  libiconv = if crossSystem != null then
-    (if crossSystem.libc == "glibc" then libcCross
-      else if crossSystem.libc == "libSystem" then darwin.libiconv
-      else libiconvReal)
-    else if stdenv.isGlibc then stdenv.cc.libc
-    else if stdenv.isDarwin then darwin.libiconv
-    else libiconvReal;
+  libiconv = (if stdenv.isGlibc then stdenv.cc.libc
+        else if stdenv.isDarwin then darwin.libiconv
+        else libiconvReal ) //
+	stdenv.lib.optionalAttrs (crossSystem != null)
+	{
+        crossDrv = (if crossSystem.libc == "glibc" then libcCross
+	            else libiconvReal.crossDrv);
+        };
 
   libiconvReal = callPackage ../development/libraries/libiconv {
     fetchurl = fetchurlBoot;
