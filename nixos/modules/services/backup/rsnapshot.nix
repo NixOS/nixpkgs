@@ -2,7 +2,19 @@
 
 with lib;
 
-let cfg = config.services.rsnapshot;
+let 
+  cfg = config.services.rsnapshot;
+  cfgfile = pkgs.writeText "rsnapshot.conf" ''
+    config_version	1.2
+    cmd_cp	${pkgs.coreutils}/bin/cp
+    cmd_rsync	${pkgs.rsync}/bin/rsync
+    cmd_ssh	${pkgs.openssh}/bin/ssh
+    cmd_logger	${pkgs.inetutils}/bin/logger
+    cmd_du	${pkgs.coreutils}/bin/du
+    lockfile	/run/rsnapshot.pid
+
+    ${cfg.extraConfig}
+  '';
 in
 {
   options = {
@@ -39,37 +51,11 @@ in
           as retain options.
         '';
       };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.rsnapshot;
-        defaultText = "pkgs.rsnapshot";
-        example = literalExample "pkgs.rsnapshotGit";
-        description = ''
-          RSnapshot package to use.
-        '';
-      };
     };
   };
 
-  config = mkIf cfg.enable (let
-    myRsnapshot = cfg.package.override { configFile = rsnapshotCfg; };
-    rsnapshotCfg = with pkgs; writeText "gen-rsnapshot.conf" (''
-        config_version	1.2
-        cmd_cp	${coreutils}/bin/cp
-        cmd_rsync	${rsync}/bin/rsync
-        cmd_ssh	${openssh}/bin/ssh
-        cmd_logger	${inetutils}/bin/logger
-        cmd_du	${coreutils}/bin/du
-        lockfile	/run/rsnapshot.pid
-
-        ${cfg.extraConfig}
-      '');
-    in {
-      environment.systemPackages = [ myRsnapshot ];
-
-      services.cron.systemCronJobs =
-        mapAttrsToList (interval: time: "${time} root ${myRsnapshot}/bin/rsnapshot ${interval}") cfg.cronIntervals;
-    }
-  );
+  config = mkIf cfg.enable {
+    services.cron.systemCronJobs =
+      mapAttrsToList (interval: time: "${time} root ${pkgs.rsnapshot}/bin/rsnapshot -c ${cfgfile} ${interval}") cfg.cronIntervals;
+  };
 }
