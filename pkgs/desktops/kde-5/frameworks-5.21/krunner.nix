@@ -1,5 +1,5 @@
 { kdeFramework, lib, extra-cmake-modules, kconfig, kcoreaddons
-, ki18n, kio, kservice, plasma-framework, qtquick1, solid
+, ki18n, kio, kservice, plasma-framework, solid
 , threadweaver
 }:
 
@@ -8,7 +8,7 @@ kdeFramework {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
-    kconfig kcoreaddons ki18n kio kservice plasma-framework qtquick1 solid
+    kconfig kcoreaddons ki18n kio kservice plasma-framework solid
     threadweaver
   ];
 }
