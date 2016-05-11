@@ -3,7 +3,6 @@
 , fetchurl
 , extra-cmake-modules
 , makeQtWrapper
-, qtquick1
 , kcmutils
 , kconfigwidgets
 , kdbusaddons
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
     kconfigwidgets
     kdbusaddons
     qca-qt5
-    qtquick1
     ki18n
     kiconthemes
     knotifications
