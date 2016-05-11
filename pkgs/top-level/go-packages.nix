@@ -745,6 +745,22 @@ let
     sha256 = "1rmm1ky7irqypqjkk6qcd2n0xkzpaggdxql9dp9i9qci5rvvwwd4";
   };
 
+  ethereum = buildFromGitHub rec {
+    name = "ethereum";
+    rev = "v1.4.1";
+    goPackagePath = "github.com/ethereum/go-ethereum";
+    owner = "ethereum";
+    repo = "go-ethereum";
+    sha256 = "0z6yzkk72g41dzqa52fizxqxqh349y1m9s3byfh9ixq5xy5fnjn3";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    postBuild = "rm $NIX_BUILD_TOP/go/bin/*test";
+    meta = with stdenv.lib; {
+      homepage = "https://ethereum.github.io/go-ethereum/";
+      description = "Official golang implementation of the Ethereum protocol";
+      license = with licenses; [ lgpl3 gpl3 ];
+    };
+  };
+
   exercism = buildFromGitHub {
     rev = "v2.2.1";
     name = "exercism";
