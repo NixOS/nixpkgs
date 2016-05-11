@@ -149,4 +149,16 @@ self: super: {
   trifecta       = doJailbreak super.trifecta;
 
   turtle         = doJailbreak super.turtle;
+
+  ghcjs-prim = self.callPackage ({ mkDerivation, fetchgit, primitive }: mkDerivation {
+    pname = "ghcjs-prim";
+    version = "0.1.0.0";
+    src = fetchgit {
+      url = git://github.com/ghcjs/ghcjs-prim.git;
+      rev = "dfeaab2aafdfefe46bf12960d069f28d2e5f1454"; # ghc-7.10 branch
+      sha256 = "19kyb26nv1hdpp0kc2gaxkq5drw5ib4za0641py5i4bbf1g58yvy";
+    };
+    buildDepends = [ primitive ];
+    license = pkgs.stdenv.lib.licenses.bsd3;
+  }) {};
 }
