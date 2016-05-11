@@ -9,8 +9,4 @@ qtSubmodule {
     pkgconfig alsaLib gstreamer gst-plugins-base libpulseaudio
   ];
   qmakeFlags = [ "GST_VERSION=1.0" ];
-  postFixup = ''
-    fixQtModuleCMakeConfig "Multimedia"
-    fixQtModuleCMakeConfig "MultimediaWidgets"
-  '';
 }

@@ -6,11 +6,5 @@ qtSubmodule {
   postFixup = ''
     moveToOutput "bin/qdbus" "$out"
     moveToOutput "bin/qtpaths" "$out"
-
-    fixQtModuleCMakeConfig "Designer"
-    fixQtModuleCMakeConfig "Help"
-    fixQtModuleCMakeConfig "LinguistTools"
-    fixQtModuleCMakeConfig "UiPlugin"
-    fixQtModuleCMakeConfig "UiTools"
   '';
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, copyPathsToStore, fixQtModuleCMakeConfig
+{ stdenv, lib, fetchgit, copyPathsToStore
 , srcs
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
@@ -206,7 +206,7 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql
     ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
 
-  nativeBuildInputs = [ fixQtModuleCMakeConfig lndir patchelf perl pkgconfig python ];
+  nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
@@ -221,17 +221,6 @@ stdenv.mkDerivation {
     # The destination directory must exist or moveToOutput will do nothing
     mkdir -p "$dev/share"
     moveToOutput "share/doc" "$dev"
-
-    # Move libtool archives and qmake projects
-    if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
-        pushd "''${!outputLib}"
-        find lib -name '*.a' -o -name '*.la' -o -name '*.prl' | \
-            while read -r file; do
-                mkdir -p "''${!outputDev}/$(dirname "$file")"
-                mv "''${!outputLib}/$file" "''${!outputDev}/$file"
-            done
-        popd
-    fi
 
     # Move the QGtkStyle plugin to the gtk output
     mkdir -p "$gtk/lib/qt5/plugins/platformthemes"
@@ -255,18 +244,19 @@ stdenv.mkDerivation {
       # Don't retain build-time dependencies like gdb and ruby.
       sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
 
-      fixQtModuleCMakeConfig "Concurrent"
-      fixQtModuleCMakeConfig "Core"
-      fixQtModuleCMakeConfig "DBus"
-      fixQtModuleCMakeConfig "Gui"
-      fixQtModuleCMakeConfig "Network"
-      fixQtModuleCMakeConfig "OpenGL"
-      fixQtModuleCMakeConfig "OpenGLExtensions"
-      fixQtModuleCMakeConfig "PrintSupport"
-      fixQtModuleCMakeConfig "Sql"
-      fixQtModuleCMakeConfig "Test"
-      fixQtModuleCMakeConfig "Widgets"
-      fixQtModuleCMakeConfig "Xml"
+      # Move libtool archives and qmake projects
+      if [ "z''${!outputLib}" != "z''${!outputDev}" ]; then
+          pushd "''${!outputLib}"
+          find lib -name '*.a' -o -name '*.la' -o -name '*.prl' | \
+              while read -r file; do
+                  mkdir -p "''${!outputDev}/$(dirname "$file")"
+                  mv "''${!outputLib}/$file" "''${!outputDev}/$file"
+              done
+          popd
+
+          # Ensure that CMake can find the shared libraries
+          lndir -silent "''${!outputLib}/lib" "''${!outputDev}/lib"
+      fi
     '';
 
   setupHook = ./setup-hook.sh;

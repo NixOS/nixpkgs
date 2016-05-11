@@ -44,7 +44,7 @@ _qtSetQmakePath() {
     export PATH="$qtOut/bin${PATH:+:}$PATH"
 }
 
-_qtMultioutModuleDevs() {
+_qtModuleMultioutDevsPre() {
     # We cannot simply set these paths in configureFlags because libQtCore retains
     # references to the paths it was built with.
     moveToOutput "bin" "${!outputDev}"
@@ -53,7 +53,9 @@ _qtMultioutModuleDevs() {
     # The destination directory must exist or moveToOutput will do nothing
     mkdir -p "${!outputDev}/share"
     moveToOutput "share/doc" "${!outputDev}"
+}
 
+_qtModuleMultioutDevsPost() {
     # Move libtool archives and qmake project files to $dev/lib
     if [ "z${!outputLib}" != "z${!outputDev}" ]; then
         pushd "${!outputLib}"
@@ -63,6 +65,10 @@ _qtMultioutModuleDevs() {
                     mkdir -p "${!outputDev}/$(dirname "$file")"
                     mv "${!outputLib}/$file" "${!outputDev}/$file"
                 done
+
+            # Ensure that CMake can find the shared libraries
+            mkdir -p "${!outputDev}/lib"
+            @lndir@/bin/lndir -silent "${!outputLib}/lib" "${!outputDev}/lib"
         fi
         popd
     fi
@@ -108,7 +114,8 @@ fi
 
 if [ -n "$NIX_QT_SUBMODULE" ]; then
     postInstallHooks+=(_qtRmQmake _qtRmModules)
-    preFixupHooks+=(_qtMultioutModuleDevs)
+    preFixupHooks+=(_qtModuleMultioutDevsPre)
+    postFixupHooks+=(_qtModuleMultioutDevsPost)
 fi
 
 fi
