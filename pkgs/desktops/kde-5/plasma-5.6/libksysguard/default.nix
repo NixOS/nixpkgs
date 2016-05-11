@@ -1,6 +1,6 @@
 { fetchpatch, plasmaPackage, extra-cmake-modules, kauth, kcompletion
 , kconfigwidgets, kcoreaddons, kservice, kwidgetsaddons
-, kwindowsystem, plasma-framework, qtscript, qtwebkit, qtx11extras
+, kwindowsystem, plasma-framework, qtscript, qtx11extras
 , kconfig, ki18n, kiconthemes
 }:
 
@@ -15,6 +15,5 @@ plasmaPackage {
   propagatedBuildInputs = [
     kauth kconfig ki18n kiconthemes kwindowsystem plasma-framework qtx11extras
     kcompletion kconfigwidgets kcoreaddons kservice kwidgetsaddons qtscript
-    qtwebkit
   ];
 }
