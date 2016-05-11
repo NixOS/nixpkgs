@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, python3Packages}:
+{stdenv, fetchurl, python3Packages}:
 
 python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
-  version = "0.1.3";
+  version = "0.2.7";
 
   # The logo xonsh prints during build contains unicode characters, and this
   # fails because locales have not been set up in the build environment.
@@ -16,11 +16,9 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python3Packages.ply ];
 
-  src = fetchFromGitHub {
-    owner = "scopatz";
-    repo = "xonsh";
-    rev = version;
-    sha256 = "04qnjqpz5y38g22irpph13j2a4hy7mk9pqvqz1mfimaf8zgmyh1n";
+  src = fetchurl {
+    url = "mirror://pypi/x/xonsh/${name}.tar.gz";
+    sha256= "10pglgmzj6l0l8mb3r2rxnbigqigcqn9njcgdcrg7s1b409cq4md";
   };
 
   meta = with stdenv.lib; {
