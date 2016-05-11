@@ -41,6 +41,9 @@ in with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Prevent ``undefined reference to `qt_version_tag''' in SSL check
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_VERSION_TAGGING=1" ];
+
   buildInputs =
        [ cmake makeWrapper qtbase ]
     ++ lib.optionals buildCore [qtscript qca-qt5]
