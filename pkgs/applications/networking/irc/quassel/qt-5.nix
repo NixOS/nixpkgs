@@ -1,12 +1,11 @@
 { monolithic ? true # build monolithic Quassel
 , daemon ? false # build Quassel daemon
 , client ? false # build Quassel client
-, previews ? false # enable webpage previews on hovering over URLs
 , tag ? "" # tag added to the package name
 , static ? false # link statically
 
 , stdenv, fetchurl, cmake, makeWrapper, dconf
-, qtbase, qtscript, qtwebkit
+, qtbase, qtscript
 , phonon, libdbusmenu, qca-qt5
 
 , withKDE ? stdenv.isLinux # enable KDE integration
@@ -46,7 +45,6 @@ in with stdenv; mkDerivation rec {
        [ cmake makeWrapper qtbase ]
     ++ lib.optionals buildCore [qtscript qca-qt5]
     ++ lib.optionals buildClient [libdbusmenu phonon]
-    ++ lib.optionals (buildClient && previews) [qtwebkit]
     ++ lib.optionals (buildClient && withKDE) [
       extra-cmake-modules kconfigwidgets kcoreaddons
       knotifications knotifyconfig ktextwidgets kwidgetsaddons
@@ -61,8 +59,7 @@ in with stdenv; mkDerivation rec {
     ++ edf monolithic "WANT_MONO"
     ++ edf daemon "WANT_CORE"
     ++ edf client "WANT_QTCLIENT"
-    ++ edf withKDE "WITH_KDE"
-    ++ edf previews "WITH_WEBKIT";
+    ++ edf withKDE "WITH_KDE";
 
   preFixup =
     lib.optionalString buildClient ''
