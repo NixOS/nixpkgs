@@ -4,7 +4,6 @@
 , kconfig
 , kconfigwidgets
 , kcoreaddons
-, kdewebkit
 , kdoctools
 , kiconthemes
 , kio
@@ -21,7 +20,7 @@ kdeFramework {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
-    kcompletion kconfig kconfigwidgets kcoreaddons kdewebkit kiconthemes kio
+    kcompletion kconfig kconfigwidgets kcoreaddons kiconthemes kio
     kitemviews kplotting ktextwidgets kwidgetsaddons kxmlgui sonnet
   ];
   postInstall = ''
