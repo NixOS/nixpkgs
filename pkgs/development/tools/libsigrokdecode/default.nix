@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, python3, libsigrok, check }:
 
 stdenv.mkDerivation rec {
-  name = "libsigrokdecode-0.3.0";
+  name = "libsigrokdecode-0.4.0";
 
   src = fetchurl {
     url = "http://sigrok.org/download/source/libsigrokdecode/${name}.tar.gz";
-    sha256 = "13s7ss52dqj7fccjgrkx10zkj41ygxn8ml1l0bs1vgczz4fvnkpf";
+    sha256 = "0drmxjc2xavccjl2i6vcjipijrn7459nv8cpmm788pi4fcdrszpx";
   };
 
   buildInputs = [ pkgconfig glib python3 libsigrok check ];

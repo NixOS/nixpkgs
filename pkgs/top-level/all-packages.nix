@@ -1052,6 +1052,7 @@ in
   collectd = callPackage ../tools/system/collectd {
     rabbitmq-c = rabbitmq-c_0_4;
     libmysql = mysql.lib;
+    libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
@@ -5999,6 +6000,11 @@ in
   libcxxabi = llvmPackages.libcxxabi;
 
   libsigrok = callPackage ../development/tools/libsigrok { };
+  # old version:
+  libsigrok-0-3-0 = libsigrok.override {
+    version = "0.3.0";
+    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
+  };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
