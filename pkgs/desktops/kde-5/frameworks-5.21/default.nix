@@ -70,7 +70,6 @@ let
     kdelibs4support = callPackage ./kdelibs4support {};
     kdesignerplugin = callPackage ./kdesignerplugin.nix {};
     kdesu = callPackage ./kdesu.nix {};
-    kdewebkit = callPackage ./kdewebkit.nix {};
     kdnssd = callPackage ./kdnssd.nix {};
     kdoctools = callPackage ./kdoctools {};
     kemoticons = callPackage ./kemoticons.nix {};
