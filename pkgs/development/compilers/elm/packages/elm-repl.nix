@@ -5,11 +5,11 @@
 }:
 mkDerivation {
   pname = "elm-repl";
-  version = "0.16";
+  version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-repl";
-    sha256 = "36d50cf1f86815900afd4b75da6e5cd15008b2652e97ffed0f321a28e6442874";
-    rev = "265de7283488964f44f0257a8b4a055ad8af984d";
+    sha256 = "1mxg99w36b8i43kl1nxp7fd86igi5wyj08m9mraiq58vpcgyqnzq";
+    rev = "95b4555cff6b6e2a55a4ea3dab00bfb39dfebf0d";
   };
   isLibrary = false;
   isExecutable = true;
