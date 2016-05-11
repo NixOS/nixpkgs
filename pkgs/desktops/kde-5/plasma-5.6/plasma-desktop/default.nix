@@ -7,7 +7,7 @@
 , qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
 , xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
 , libcanberra_kde, libpulseaudio, makeQtWrapper, utillinux
-, qtquick1, qtquickcontrols
+, qtquickcontrols
 }:
 
 plasmaPackage rec {
@@ -23,7 +23,7 @@ plasmaPackage rec {
     libpulseaudio libXft libxkbfile phonon qtsvg xf86inputevdev
     xf86inputsynaptics xkeyboard_config xinput baloo kactivities kauth
     kdeclarative kdelibs4support kemoticons kglobalaccel ki18n kpeople krunner
-    kwin plasma-framework plasma-workspace qtdeclarative qtquick1
+    kwin plasma-framework plasma-workspace qtdeclarative
     qtquickcontrols qtx11extras
   ];
   patches = [
