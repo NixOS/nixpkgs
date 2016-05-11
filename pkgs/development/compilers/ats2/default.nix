@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
-    license     = stdenv.lib.licenses.gpl3Plus;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.gpl3Plus;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice ttuegel ];
   };
 }
