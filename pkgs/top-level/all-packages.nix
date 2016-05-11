@@ -15713,7 +15713,7 @@ in
         // applications self
         // kde5PackagesFun self;
     in
-      recurseIntoAttrs (lib.makeScope qt55.newScope merged);
+      recurseIntoAttrs (lib.makeScope qt5.newScope merged);
 
   theme-vertex = callPackage ../misc/themes/vertex { };
 
