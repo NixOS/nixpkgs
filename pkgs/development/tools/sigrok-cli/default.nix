@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libsigrok, libsigrokdecode }:
 
 stdenv.mkDerivation rec {
-  name = "sigrok-cli-0.5.0";
+  name = "sigrok-cli-0.6.0";
 
   src = fetchurl {
     url = "http://sigrok.org/download/source/sigrok-cli/${name}.tar.gz";
-    sha256 = "0g3jzspq9iwz2szzxil9ilim1and85qd605f4jbc04sva80hb8vk";
+    sha256 = "0g3jhi7azm256gnryka70wn7j3af42yk19c9kbhqffaz4i7dwbmb";
   };
 
   buildInputs = [ pkgconfig glib libsigrok libsigrokdecode ];
