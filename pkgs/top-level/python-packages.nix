@@ -4632,6 +4632,31 @@ in modules // {
     };
   };
 
+  s3fs = buildPythonPackage rec {
+    name = "s3fs-${version}";
+    version = "0.0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/s3fs/${name}.tar.gz";
+      sha256 = "0gxs9zf0j97liby038i89k5njfrpvdgw0jw34ghzvlp1nzbwxwzl";
+    };
+
+    buildInputs = with self; [ docutils ];
+    propagatedBuildInputs = with self; [ boto3 ];
+
+    # Depends on `moto` which has a long dependency chain with exact
+    # version requirements that can't be made to work with current
+    # pythonPackages.
+    doCheck = false;
+
+    meta = {
+      description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
+      homepage = "http://github.com/dask/s3fs/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
     version = "0.5.1";
