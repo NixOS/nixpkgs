@@ -85,11 +85,105 @@ in modules // {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+  agate = buildPythonPackage rec {
+    name = "agate-1.2.2";
+    disabled = isPy3k;
+
+    meta = {
+      description = "A Python data analysis library that is optimized for humans instead of machines";
+      homepage    = "https://github.com/wireservice/agate";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ discid six parsedatetime isodate Babel pytimeparse ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate/${name}.tar.gz";
+      sha256 = "0h2w30a0zhylivz86d823a05hvg8w8p61lmm855z1wwkgml9l9d4";
+    };
+  };
+
+  agate-dbf = buildPythonPackage rec {
+    name = "agate-dbf-0.1.0";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Adds read support for dbf files to agate";
+      homepage    = "https://github.com/wireservice/agate-dbf";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ agate dbf dbfread ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate-dbf/${name}.tar.gz";
+      sha256 = "0xzz834lh4xbl342c6wmxqy7ynmsrjp42bsjahfcxhsgq33vzngz";
+    };
+  };
+
+  agate-excel = buildPythonPackage rec {
+    name = "agate-excel-0.1.0";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Adds read support for excel files to agate";
+      homepage    = "https://github.com/wireservice/agate-excel";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ agate openpyxl xlrd ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/agate-excel/${name}.tar.gz";
+      sha256 = "08zvj3pwqw8zhd58iyymiwblrk92y4gl6yyrb2svb0k8za7v0hak";
+    };
+  };
+
   # packages defined elsewhere
 
   blivet = callPackage ../development/python-modules/blivet { };
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+
+  dbf = buildPythonPackage rec {
+    name = "dbf-0.94.003";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Pure python package for reading/writing dBase, FoxPro, and Visual FoxPro .dbf files";
+      homepage    = "https://pypi.python.org/pypi/dbf";
+      license     = licenses.bsd2;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/dbf/${name}.tar.gz";
+      sha256 = "0i2454hwg67079jb56x663wqmmwr55pcr6c76q2415185y6nhny9";
+    };
+  };
+
+
+  dbfread = buildPythonPackage rec {
+    name = "dbfread-2.0.5";
+    disabled = isPy3k;
+
+    meta = {
+      description = "Read DBF Files with Python";
+      homepage    = "http://dbfread.readthedocs.org/";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/dbfread/${name}.tar.gz";
+      sha256 = "0r5axq9ax0czyapm7b69krcv22r1nyb4vci7c5x8mx8pq1axim93";
+    };
+  };
+
+
 
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
@@ -184,6 +278,25 @@ in modules // {
   pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
 
   pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+
+  pytimeparse = buildPythonPackage rec {
+    name = "pytimeparse-1.1.5";
+    disabled = isPy3k;
+
+    meta = {
+      description = "A small Python library to parse various kinds of time expressions";
+      homepage    = "https://github.com/wroberts/pytimeparse";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+    propagatedBuildInputs = with self; [ nose ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytimeparse/${name}.tar.gz";
+      sha256 = "01xj31m5brydm4gvc6lwx26r74903wvm1jx3g05633k3mqlvvpcs";
+    };
+  };
 
   pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
 
