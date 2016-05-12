@@ -2032,6 +2032,26 @@ in modules // {
     doCheck = false; # lazy packager
   };
 
+  csvkit = buildPythonPackage rec {
+    name = "csvkit-${version}";
+    version = "0.9.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/csvkit/${name}.tar.gz";
+      sha256 = "0fprr4wgp0bq8kl5qims88np11af7ahr5bxkrhfwpdgcgdjbiy4j";
+    };
+
+    propagatedBuildInputs = with self; [ dateutil_2_2 dbf xlrd sqlalchemy openpyxl_2_2_0_b1 ];
+
+    meta = {
+      description = "A library of utilities for working with CSV, the king of tabular file formats";
+      maintainers = with maintainers; [ vrthra ];
+      license = licenses.mit;
+      homepage = "https://github.com/wireservice/csvkit";
+    };
+  };
+
   cx_Freeze = buildPythonPackage rec {
     name = "cx_freeze-${version}";
     version = "4.3.4";
@@ -4885,6 +4905,27 @@ in modules // {
     };
   });
 
+  # csvkit 0.9.1 needs dateutil==2.2
+  dateutil_2_2 = buildPythonPackage (rec {
+    name = "dateutil-2.2";
+    disabled = isPy3k;
+
+    propagatedBuildInputs = with self; [ self.six ];
+
+    buildInputs = [ pkgs.glibcLocales ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
+      sha256 = "0s74ad6r789810s10dxgvaf48ni6adac2icrdad34zxygqq6bj7f";
+    };
+
+    meta = {
+      description = "Powerful extensions to the standard datetime module";
+      homepage = http://pypi.python.org/pypi/python-dateutil;
+      license = "BSD-style";
+    };
+  });
+
   # Buildbot 0.8.7p1 needs dateutil==1.5
   dateutil_1_5 = buildPythonPackage (rec {
     name = "dateutil-1.5";
@@ -7010,7 +7051,7 @@ in modules // {
       license = licenses.lgpl3;
     };
   };
-		  
+
 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
@@ -13856,6 +13897,31 @@ in modules // {
       sha256 = "06vd010pa1z7lyfj1na30iqzffr4kzj2k2sba09spik7drlvvl56";
     };
     doCheck = false;
+  };
+
+  openpyxl_2_2_0_b1 = buildPythonPackage rec {
+    version = "2.2.0-b1";
+    name = "openpyxl-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/o/openpyxl/${name}.tar.gz";
+      sha256 = "0n10pawp2558jrrmppyhkrv7889k3g4mifqj3fp68qbr20ldk51k";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ jdcal et_xmlfile lxml ];
+
+    # Tests are not included in archive.
+    # https://bitbucket.org/openpyxl/openpyxl/issues/610
+    doCheck = false;
+
+    meta = {
+      description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
+      homepage = https://openpyxl.readthedocs.org;
+      license = licenses.mit;
+      maintainers = with maintainers; [ lihop sjourdois ];
+      platforms = platforms.all;
+    };
   };
 
   openpyxl = buildPythonPackage rec {
