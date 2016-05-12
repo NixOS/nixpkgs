@@ -16471,12 +16471,7 @@ in modules // {
     # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
     doCheck = false;
 
-    checkPhase = ''
-      ${python.interpreter} test/test_psutil.py
-    '';
-
-    # Test suite needs `free`, therefore we have pkgs.busybox
-    buildInputs = with self; [ mock pkgs.busybox] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
+    buildInputs = with self; [ mock ] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
 
     meta = {
       description = "Process and system utilization information interface for python";
