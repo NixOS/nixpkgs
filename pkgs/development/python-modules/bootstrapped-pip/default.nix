@@ -15,11 +15,11 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "python-${python.version}-bootstrapped-pip-${version}";
-  version = "8.1.1";
+  version = "8.1.2";
 
   src = fetchurl {
     url = "https://pypi.python.org/packages/py2.py3/p/pip/pip-${version}-py2.py3-none-any.whl";
-    sha256 = "0p62v87lm595kwmxrnqxc81dr7h6maaxj1y28b00bf9ag11c7fa4";
+    sha256 = "18cjrd66mn4a0gwa99zzs89lrb0xn4xmajdzya6zqd7v16cdsr34";
   };
 
   unpackPhase = ''
