@@ -4609,6 +4609,34 @@ in modules // {
     };
   };
 
+  distributed = buildPythonPackage rec {
+
+    name = "distributed-${version}";
+    version = "1.10.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/distributed/${name}.tar.gz";
+      sha256 = "11bp2rs52fhcqlgyrlh3cf31ck07mys38mrkf98vjl380lyjj357";
+    };
+
+    buildInputs = with self; [ pytest docutils ];
+    propagatedBuildInputs = with self; [
+      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      psutil botocore
+    ] ++ (if !isPy3k then [ singledispatch ] else []);
+
+    checkPhase = ''
+      py.test -m "not avoid_travis" distributed --verbose
+    '';
+
+    meta = {
+      description = "Distributed computation in Python.";
+      homepage = "http://distributed.readthedocs.io/en/latest/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
   locket = buildPythonPackage rec {
     name = "locket-${version}";
     version = "0.2.0";
