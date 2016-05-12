@@ -15993,12 +15993,12 @@ in modules // {
   };
 
   pip = buildPythonPackage rec {
-    version = "8.1.1";
+    version = "8.1.2";
     name = "pip-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pip/pip-${version}.tar.gz";
-      sha256 = "160pa7xg0vybidhszd1n0ik2xah0yz6gsym5hp8k7dmfd83d6y1y";
+      sha256 = "0cmpsy9lr9diskkypswm9s8glgr7w3crzh1im4zqlqv7z8zv092d";
     };
 
     # pip detects that we already have bootstrapped_pip "installed", so we need
