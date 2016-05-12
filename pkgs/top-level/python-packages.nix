@@ -4584,15 +4584,15 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.7.6";
+    version = "0.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ff27419e059715907afefe6cbcc1f8c748855c7a93be25be211dabcb689cee3b";
+      sha256 = "1jm6riz6fbbd554i0dg0w1xfcmx3f9ryp4jrlavsy4zambilm6b3";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
 
     checkPhase = ''
       py.test dask
