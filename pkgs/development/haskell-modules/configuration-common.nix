@@ -615,8 +615,20 @@ self: super: {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
+  llvm-general-darwin = overrideCabal (super.llvm-general.override { llvm-config = pkgs.llvm_35; }) (drv: {
+      preConfigure = ''
+        sed -i llvm-general.cabal \
+            -e 's,extra-libraries: stdc++,extra-libraries: c++,'
+      '';
+      configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
+      librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
+    });
+
   # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
-  llvm-general = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
+  llvm-general =
+    if pkgs.stdenv.isDarwin
+    then self.llvm-general-darwin
+    else super.llvm-general.override { llvm-config = pkgs.llvm_35; };
 
   # Needs help finding LLVM.
   spaceprobe = addBuildTool super.spaceprobe self.llvmPackages.llvm;
