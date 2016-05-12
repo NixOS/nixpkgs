@@ -5,6 +5,7 @@
 , harfbuzzSupport ? true, harfbuzz ? null # harfbuzz support
 , rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
+, libiconv
 }:
 
 assert encaSupport -> enca != null;
@@ -38,7 +39,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype fribidi ]
     ++ optional encaSupport enca
     ++ optional fontconfigSupport fontconfig
-    ++ optional harfbuzzSupport harfbuzz;
+    ++ optional harfbuzzSupport harfbuzz
+    ++ optional stdenv.isDarwin libiconv;
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";
