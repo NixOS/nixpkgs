@@ -1,21 +1,22 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "dosfstools-${version}";
-  version = "4.0";
+  version = "3.0.28";
 
-  src = fetchurl {
-    sha256 = "1bvxbv1w6vhbx0nx7ygp700wq5k2hjv0hm7w0kz1x7amaf4p6dwh";
-    url = "https://github.com/dosfstools/dosfstools/releases/download/v${version}/${name}.tar.xz";
+  src = fetchFromGitHub {
+    owner = "dosfstools";
+    repo = "dosfstools";
+    rev = "v${version}";
+    sha256 = "0lqirpxcn8ml0anq8aqmaljfsji9h6mdzz0jrs0yqqfhgg90bkg2";
   };
 
-  configureFlags = [ "--enable-compat-symlinks" ];
+  makeFlags = "PREFIX=$(out)";
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Utilities for creating and checking FAT and VFAT file systems";
+    repositories.git = git://daniel-baumann.ch/git/software/dosfstools.git;
     homepage = http://www.daniel-baumann.ch/software/dosfstools/;
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nckx ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
