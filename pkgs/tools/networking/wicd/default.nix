@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./fix-app-icon.patch
     ./fix-gtk-issues.patch
     ./urwid-api-update.patch
+    ./fix-curses.patch
     ];
 
   # Should I be using pygtk's propogated build inputs?
