@@ -34,7 +34,7 @@
 
 { overrides
 
-, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
+, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -64,7 +64,7 @@ let
   };
 
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper stdenv;
+    inherit lib lndir makeWrapper stdenv runCommand;
   };
 
   packagesFun = self: with self; {
