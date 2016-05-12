@@ -45,7 +45,7 @@ let
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
       iptables -w -t nat -A nixos-nat-post \
-        -s '${range}' \! -d '${range}'
+        -s '${range}' \! -d '${range}' \
         ${externalInterfaceFilter "-o"} ${dest}
     '') cfg.internalIPs}
 
