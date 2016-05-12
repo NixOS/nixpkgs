@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sslh-${version}";
-  version = "1.17";
+  version = "1.18";
 
   src = fetchurl {
-    url = "https://github.com/yrutschle/sslh/archive/v${version}.tar.gz";
-    sha256 = "1l8ssm47f0hwiisgfj0ca5j2z8j98pir4pf2acrj1798fnzw6mxm";
+    url = "http://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
+    sha256 = "1ba5fxd2s6jh9n3wbp2a782q7syc4m6qvfrggnscdbywfyrsa08n";
   };
 
   postPatch = "patchShebangs *.sh";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
     license = licenses.gpl2Plus;
     homepage = http://www.rutschle.net/tech/sslh.shtml;
-    maintainers = [ maintainers.koral ];
+    maintainers = with maintainers; [ koral fpletz ];
     platforms = platforms.all;
   };
 }
