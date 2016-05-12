@@ -13,14 +13,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake qt4 pkgconfig qtkeychain sqlite];
 
-  #configurePhase = ''
-  #  mkdir build
-  #  cd build
-  #  cmake -DBUILD_WITH_QT4=on \
-  #        -DCMAKE_INSTALL_PREFIX=$out \
-  #        -DCMAKE_BUILD_TYPE=Release \
-  #        ..
-  #'';
+  cmakeFlags = [
+  "-UCMAKE_INSTALL_LIBDIR"
+  ];
 
   enableParallelBuilding = true;
 
