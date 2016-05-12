@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ lvm2 libaio readline ];
+  buildInputs = [ lvm2 libaio readline gzip ];
 
   preBuild =
     ''
-      makeFlagsArray=(GZIP="${gzip}/bin/gzip -9 -c" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
+      makeFlagsArray=(GZIP="-9" prefix=$out mandir=$out/share/man/man8 man5dir=$out/share/man/man5 LIB=lib)
       
       substituteInPlace multipath/Makefile --replace /etc $out/etc
       substituteInPlace kpartx/Makefile --replace /etc $out/etc
