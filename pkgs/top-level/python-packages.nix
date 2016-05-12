@@ -3428,11 +3428,11 @@ in modules // {
 
   cloudpickle = buildPythonPackage rec {
     name = "cloudpickle-${version}";
-    version = "0.1.1";
+    version = "0.2.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cloudpickle/${name}.tar.gz";
-      sha256 = "3418303f44c6c4daa184f1dc36c8c0b7ff8261c56d1f922ffd8d09e79caa4b74";
+      sha256 = "0fsw28nmzrpk0g02y84d7pigkqr64a3x2jhhkfixplxfwravd97f";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -4693,15 +4693,15 @@ in modules // {
 
   dask = buildPythonPackage rec {
     name = "dask-${version}";
-    version = "0.7.6";
+    version = "0.9.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dask/${name}.tar.gz";
-      sha256 = "ff27419e059715907afefe6cbcc1f8c748855c7a93be25be211dabcb689cee3b";
+      sha256 = "1jm6riz6fbbd554i0dg0w1xfcmx3f9ryp4jrlavsy4zambilm6b3";
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
 
     checkPhase = ''
       py.test dask
@@ -4715,6 +4715,99 @@ in modules // {
       homepage = "http://github.com/ContinuumIO/dask/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
+    };
+  };
+
+  distributed = buildPythonPackage rec {
+
+    name = "distributed-${version}";
+    version = "1.10.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/distributed/${name}.tar.gz";
+      sha256 = "11bp2rs52fhcqlgyrlh3cf31ck07mys38mrkf98vjl380lyjj357";
+    };
+
+    buildInputs = with self; [ pytest docutils ];
+    propagatedBuildInputs = with self; [
+      dask six boto3 s3fs tblib locket msgpack click cloudpickle tornado
+      psutil botocore
+    ] ++ (if !isPy3k then [ singledispatch ] else []);
+
+    checkPhase = ''
+      py.test -m "not avoid_travis" distributed --verbose
+    '';
+
+    meta = {
+      description = "Distributed computation in Python.";
+      homepage = "http://distributed.readthedocs.io/en/latest/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  locket = buildPythonPackage rec {
+    name = "locket-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/locket/${name}.tar.gz";
+      sha256 = "1d4z2zngrpqkrfhnd4yhysh66kjn4mblys2l06sh5dix2p0n7vhz";
+    };
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [  ];
+
+    # weird test requirements (spur.local>=0.3.7,<0.4)
+    doCheck = false;
+
+    meta = {
+      description = "Locket implements a lock that can be used by multiple processes provided they use the same path.";
+      homepage = "https://github.com/mwilliamson/locket.py";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  tblib = buildPythonPackage rec {
+    name = "tblib-${version}";
+    version = "1.3.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tblib/${name}.tar.gz";
+      sha256 = "02iahfkfa927hb4jq2bak36ldihwapzacfiq5lyxg8llwn98a1yi";
+    };
+
+    meta = {
+      description = "Traceback fiddling library. Allows you to pickle tracebacks.";
+      homepage = "https://github.com/ionelmc/python-tblib";
+      license = licenses.bsd2;
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  s3fs = buildPythonPackage rec {
+    name = "s3fs-${version}";
+    version = "0.0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/s3fs/${name}.tar.gz";
+      sha256 = "0gxs9zf0j97liby038i89k5njfrpvdgw0jw34ghzvlp1nzbwxwzl";
+    };
+
+    buildInputs = with self; [ docutils ];
+    propagatedBuildInputs = with self; [ boto3 ];
+
+    # Depends on `moto` which has a long dependency chain with exact
+    # version requirements that can't be made to work with current
+    # pythonPackages.
+    doCheck = false;
+
+    meta = {
+      description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
+      homepage = "http://github.com/dask/s3fs/";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ teh ];
     };
   };
 
@@ -24061,6 +24154,10 @@ in modules // {
 
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
 
+    # Tests fail:
+    # ValueError: _type_ 'v' not supported
+    # See https://github.com/NixOS/nixpkgs/issues/14634
+    doCheck = false;
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tornado/${name}.tar.gz";
       sha256 = "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969";
