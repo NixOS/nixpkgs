@@ -1049,6 +1049,7 @@ in
   collectd = callPackage ../tools/system/collectd {
     rabbitmq-c = rabbitmq-c_0_4;
     libmysql = mysql.lib;
+    libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
   collectdMinimal = callPackage ../tools/system/collectd {
@@ -1069,7 +1070,8 @@ in
 
   "unionfs-fuse" = callPackage ../tools/filesystems/unionfs-fuse { };
 
-  usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
+  usb-modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
+  usb-modeswitch-data = callPackage ../development/tools/misc/usb-modeswitch/data.nix { };
 
   anthy = callPackage ../tools/inputmethods/anthy { };
 
@@ -1892,6 +1894,8 @@ in
 
   pixz = callPackage ../tools/compression/pixz { };
 
+  pxattr = callPackage ../tools/archivers/pxattr { };
+
   pxz = callPackage ../tools/compression/pxz { };
 
   hans = callPackage ../tools/networking/hans { };
@@ -2139,6 +2143,8 @@ in
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
+
+  lesspipe = callPackage ../tools/misc/lesspipe { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
 
@@ -2566,6 +2572,8 @@ in
   ngrok = goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
+
+  milu = callPackage ../applications/misc/milu { };
 
   mpack = callPackage ../tools/networking/mpack { };
 
@@ -4421,8 +4429,10 @@ in
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
-  inherit (self.haskellPackages) ghc cabal-install;
+  inherit (self.haskellPackages) ghc;
 
+  cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
+   
   stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
@@ -5973,6 +5983,11 @@ in
   libcxxabi = llvmPackages.libcxxabi;
 
   libsigrok = callPackage ../development/tools/libsigrok { };
+  # old version:
+  libsigrok-0-3-0 = libsigrok.override {
+    version = "0.3.0";
+    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
+  };
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
@@ -6262,6 +6277,8 @@ in
     fetchurl = fetchurlBoot;
   });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
+
+  postiats-utilities = callPackage ../development/tools/postiats-utilities {};
 
   prelink = callPackage ../development/tools/misc/prelink { };
 
@@ -9072,6 +9089,8 @@ in
 
   tremor = callPackage ../development/libraries/tremor { };
 
+  udns = callPackage ../development/libraries/udns { };
+
   uid_wrapper = callPackage ../development/libraries/uid_wrapper { };
 
   unibilium = callPackage ../development/libraries/unibilium { };
@@ -11656,6 +11675,8 @@ in
 
   xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
 
+  xits-math = callPackage ../data/fonts/xits-math { };
+
   xkeyboard_config = xorg.xkeyboardconfig;
 
   xlsx2csv = pythonPackages.xlsx2csv;
@@ -13904,6 +13925,8 @@ in
   slop = callPackage ../tools/misc/slop {};
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
+
+  sniproxy = callPackage ../applications/networking/sniproxy { };
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 

@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd steam-mobile";
   postInstall = ''
-    mkdir -p $out/lib/pidgin/
+    mkdir -p $out/lib/purple-2
     mkdir -p $out/share/pixmaps/pidgin/protocols/
-    cp libsteam.so $out/lib/pidgin/
+    cp libsteam.so $out/lib/purple-2/
     unzip releases/icons.zip -d $out/share/pixmaps/pidgin/protocols/
   '';
 

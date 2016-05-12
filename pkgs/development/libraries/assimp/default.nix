@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, unzip, cmake, boost, zlib }:
+{ stdenv, fetchFromGitHub, unzip, cmake, boost, zlib }:
 
 let
-  major = "3";
-  minor = "1";
-  revision = "1";
-  version = "${major}.${minor}.${revision}";
+  version = "3.2";
 in
 stdenv.mkDerivation {
   name = "assimp-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/assimp/assimp-${major}.${minor}/assimp-${version}_no_test_models.zip";
-    sha256 = "17nyzsqzqpafamhi779f1bkh5mfgj8rpas034x3v9a0hdy3jg66s";
+  src = fetchFromGitHub{
+    owner = "assimp";
+    repo = "assimp";
+    rev = "v${version}";
+    sha256 = "09fsksbq9a8gykwmw6gaicwh2ladrln1jc1xc5yk7w6x180cbb1x";
   };
 
   buildInputs = [ unzip cmake boost zlib ];

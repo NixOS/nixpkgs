@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "20151224";
+  version = "20160508";
 in stdenv.mkDerivation rec {
   name = "openra-${version}";
 
@@ -19,17 +19,18 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/OpenRA/OpenRA/archive/release-${version}.tar.gz";
-    sha256 = "0dgaxy1my5r3sr3l3gw79v89dsc7179pasj2bibswlv03wsjgqbi";
+    sha256 = "1vr5bvdkh0n5569ga2h7ggj43vnzr37hfqkfnsis1sg4vgwrnzr7";
   };
 
   dontStrip = true;
 
   buildInputs = with dotnetPackages;
-     [ NUnit NewtonsoftJson MonoNat FuzzyLogicLibrary SmartIrc4net SharpZipLib MaxMindGeoIP2 MaxMindDb SharpFont StyleCopMSBuild StyleCopPlusMSBuild RestSharp ]
+     [ NUnit3 NewtonsoftJson MonoNat FuzzyLogicLibrary SmartIrc4net SharpZipLib MaxMindGeoIP2 MaxMindDb SharpFont StyleCopMSBuild StyleCopPlusMSBuild RestSharp NUnitConsole ]
      ++ [ lua gnome3.zenity ];
   nativeBuildInputs = [ mono makeWrapper lua pkgconfig ];
 
   patchPhase = ''
+    mkdir Support
     sed -i 's/^VERSION.*/VERSION = release-${version}/g' Makefile
     substituteInPlace thirdparty/configure-native-deps.sh --replace "locations=\"" "locations=\"${lua}/lib "
     substituteInPlace Makefile --replace "@./thirdparty/fetch-geoip-db.sh" ""
@@ -53,37 +54,57 @@ in stdenv.mkDerivation rec {
     "${StyleCopPlusMSBuild}/lib/dotnet/StyleCopPlus.MSBuild/StyleCopPlus.dll"
     "${RestSharp}/lib/dotnet/RestSharp/net4-client/RestSharp.dll"
     "${NUnit}/lib/dotnet/NUnit/nunit.framework.*"
+    "${NUnitConsole}/lib/dotnet/NUnit.Console/*"
     "${NewtonsoftJson}/lib/dotnet/Newtonsoft.Json/Newtonsoft.Json.dll"
     ];
     movePackages = [
       ( let filename = "Eluant.dll"; in { origin = fetchurl {
-          url = "https://github.com/OpenRA/Eluant/releases/download/20140425/${filename}";
+          url = "https://github.com/OpenRA/Eluant/releases/download/20160124/${filename}";
           sha256 = "1c20whz7dzfhg3szd62rvb79745x5iwrd5pp62j3bbj1q9wpddmb";
         }; target = filename; })
 
       ( let filename = "SDL2-CS.dll"; in { origin = fetchurl {
-          url = "https://github.com/OpenRA/SDL2-CS/releases/download/20150709/${filename}";
-          sha256 = "0ms75w9w0x3dzpg5g1ym5nb1id7pmagbzqx0am7h8fq4m0cqddmc";
+          url = "https://github.com/OpenRA/SDL2-CS/releases/download/20151227/${filename}";
+          sha256 = "0gqw2wg37cqhhlc2a9lfc4ndkyfi4m8bkv7ckxbawgydjlknq83n";
+        }; target = filename; })
+
+      ( let filename = "SDL2-CS.dll.config"; in { origin = fetchurl {
+          url = "https://github.com/OpenRA/SDL2-CS/releases/download/20151227/${filename}";
+          sha256 = "15709iscdg44wd33szw5y0fdxwvqfjw8v3xjq6a0mm46gr7mkw7g";
+        }; target = filename; })
+
+      ( let filename = "OpenAL-CS.dll"; in { origin = fetchurl {
+          url = "https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/${filename}";
+          sha256 = "0lvyjkn7fqys97wym8rwlcp6ay2z059iabfvlcxhlrscjpyr2cyk";
+        }; target = filename; })
+
+      ( let filename = "OpenAL-CS.dll.config"; in { origin = fetchurl {
+          url = "https://github.com/OpenRA/OpenAL-CS/releases/download/20151227/${filename}";
+          sha256 = "0wcmk3dw26s93598ck5jism5609v0y233i0f1b76yilyfimg9sjq";
         }; target = filename; })
 
       ( let filename = "GeoLite2-Country.mmdb.gz"; in { origin = fetchurl {
           url = "http://geolite.maxmind.com/download/geoip/database/${filename}";
-          sha256 = "0lr978pipk5q2z3x011ps4fx5nfc3hsal7jb77fc60aa6iscr05m";
+          sha256 = "0a82v0sj4zf5vigrn1pd6mnbqz6zl3rgk9nidqqzy836as2kxk9v";
         }; target = filename; })
     ];
   in ''
     mkdir thirdparty/download/
 
-    ${stdenv.lib.concatMapStringsSep "\n" (from: "cp ${from} thirdparty/download") dotnetPackagesDlls}
+    ${stdenv.lib.concatMapStringsSep "\n" (from: "cp -r ${from} thirdparty/download") dotnetPackagesDlls}
     ${stdenv.lib.concatMapStringsSep "\n" ({origin, target}: "cp ${origin} thirdparty/download/${target}") movePackages}
 
     make dependencies
   '';
 
-  #todo: man-page
-  buildFlags = [ "DEBUG=false" "default" ];
+  buildFlags = [ "DEBUG=false" "default" "man-page" ];
 
-  installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" ];
+  doCheck = true;
+
+  #TODO: check
+  checkTarget = "nunit test";
+
+  installTargets = [ "install" "install-linux-icons" "install-linux-desktop" "install-linux-appdata" "install-linux-mime" "install-man-page" ];
 
   postInstall = with stdenv.lib; let
     runtime = makeLibraryPath [ SDL2 freetype openal systemd lua ];

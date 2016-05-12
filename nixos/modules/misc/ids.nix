@@ -265,6 +265,7 @@
       factorio = 241;
       emby = 242;
       graylog = 243;
+      sniproxy = 244;
 
       prometheus = 999;
 
@@ -502,6 +503,7 @@
       taskd = 240;
       factorio = 241;
       emby = 242;
+      sniproxy = 244;
 
       prometheus = 999;
 

@@ -45,7 +45,6 @@ extra-packages:
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock-api < 2.16                  # required on GHC 7.8.x
   - haskell-src-exts < 1.16             # required for structured-haskell-mode-1.0.8
-  - hjsonpointer == 0.2.0.4             # required for hjsonschema-0.8.0.1
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
   - parallel == 3.2.0.3                 # newer versions don't work with GHC 6.12.3

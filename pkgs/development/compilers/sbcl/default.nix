@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-    sha256 = "0zx6z43xfnw1b6v5d3bpjrwgqs14wxlji22nl0lr4wmzbfbzvqli";
+    sha256 = "0p3f9bvwdcl84n1l6imww547bdbfsbkvad8iad43jcb2hrpy3wf8";
   };
 
   patchPhase = ''

@@ -11,10 +11,6 @@ assert (!libsOnly) -> kernel != null;
 
 with stdenv.lib;
 
-let
-  version = "15.7";
-in
-
 # This derivation requires a maximum of gcc49, Linux kernel 4.1 and xorg.xserver 1.17
 # and will not build or run using versions newer
 
@@ -31,11 +27,14 @@ in
 
 # http://wiki.cchtml.com/index.php/Main_Page
 
-# 
 # /usr/lib/dri/fglrx_dri.so must point to /run/opengl-driver/lib/fglrx_dri.so
 # This is done in the builder script.
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+
+  version = "15.12";
+  pname = "ati-drivers";
+  build = "15.302";
 
   linuxonly =
     if stdenv.system == "i686-linux" then
@@ -44,7 +43,7 @@ stdenv.mkDerivation {
       true
     else throw "ati-drivers are Linux only. Sorry. The build was stopped.";
 
-  name = "ati-drivers-${version}" + (optionalString (!libsOnly) "-${kernel.version}");
+  name = pname + "-" + version + (optionalString (!libsOnly) "-${kernelDir.version}");
 
   builder = ./builder.sh;
   gcc = stdenv.cc.cc;
@@ -57,15 +56,16 @@ stdenv.mkDerivation {
   libICE = xorg.libICE;
   libfreetype = freetype;
   libfontconfig = fontconfig;
+  libStdCxx = stdenv.cc.cc.lib;
 
   src = fetchurl {
-    url = "http://www2.ati.com/drivers/linux/amd-driver-installer-15.20.1046-x86.x86_64.zip";
-    sha256 = "ffde64203f49d9288eaa25f4d744187b6f4f14a87a444bab6a001d822b327a9d";
-    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux%20x86_64";
+    url =
+    "https://www2.ati.com/drivers/linux/radeon-crimson-15.12-15.302-151217a-297685e.zip";
+    sha256 = "0n0ynqmjkjp5dl5q07as7ps3rlyyn63hq4mlwgd7c7v82ky2skvh";
+    curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
   };
 
   patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
-  patchPhase1 = "patch -p1 < ${./kernel-api-fixes.patch}";
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
@@ -81,28 +81,28 @@ stdenv.mkDerivation {
 
   inherit libsOnly;
 
-  kernel = if libsOnly then null else kernel.dev;
+  kernelDir = if libsOnly then null else kernel.dev;
 
-  inherit glibc /* glibc only used for setting interpreter */;
+  # glibc only used for setting the binaries interpreter
+  glibcDir = glibc.out;
 
   # outputs TODO: probably many fixes are needed;
-  # this in particular would be much better by lib.makeLibraryPath
-  LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
-    [ "${xorg.libXrandr.out}/lib/"
-      "${xorg.libXrender.out}/lib/"
-      "${xorg.libXext.out}/lib/"
-      "${xorg.libX11.out}/lib/"
-      "${xorg.libXinerama.out}/lib/"
-      "${xorg.libSM.out}/lib/"
-      "${xorg.libICE.out}/lib/"
-      "${stdenv.cc.cc.out}/lib/"
+  LD_LIBRARY_PATH = makeLibraryPath
+    [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
+      xorg.libXrandr xorg.libXxf86vm xorg.xf86vidmodeproto xorg.imake xorg.libICE
+      mesa
+      fontconfig
+      freetype
+      stdenv.cc.cc
     ];
 
   # without this some applications like blender don't start, but they start
   # with nvidia. This causes them to be symlinked to $out/lib so that they
   # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
 
-  extraDRIlibs = [ xorg.libXrandr xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM xorg.libICE ];
+  extraDRIlibs = [ xorg.libXrandr.out xorg.libXrender.out xorg.libXext.out
+                   xorg.libX11.out xorg.libXinerama.out xorg.libSM.out 
+                   xorg.libICE.out ];
 
   inherit mesa; # only required to build the examples
 
@@ -118,7 +118,5 @@ stdenv.mkDerivation {
     # Copied from the nvidia default.nix to prevent a store collision.
     priority = 4;
   };
-
-
 
 }

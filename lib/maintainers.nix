@@ -221,6 +221,7 @@
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   markus1189 = "Markus Hauck <markus1189@gmail.com>";
   markWot = "Markus Wotringer <markus@wotringer.de>";
+  martijnvermaat = "Martijn Vermaat <martijn@vermaat.name>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
@@ -236,6 +237,7 @@
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
+  mirrexagon = "Andrew Abbott <mirrexagon@mirrexagon.com>";
   modulistic = "Pablo Costa <modulistic@gmail.com>";
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
@@ -353,6 +355,7 @@
   tailhook = "Paul Colomiets <paul@colomiets.name>";
   taktoa = "Remy Goldschmidt <taktoa@gmail.com>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
+  teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";

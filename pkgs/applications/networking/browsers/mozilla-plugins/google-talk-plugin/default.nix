@@ -32,6 +32,7 @@ let
       xorg.libXfixes
       xorg.libXrender
       xorg.libXrandr
+      xorg.libXext
       stdenv.cc.cc
       alsaLib
       libpulseaudio
@@ -50,18 +51,18 @@ stdenv.mkDerivation rec {
   # You can get the upstream version and SHA-1 hash from the following URLs:
   # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'
   # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA1'
-  version = "5.4.2.0";
+  version = "5.41.0.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
-        sha1 = "d75fad757750b4830c4e401ade92b4993e2a4ab2";
+        sha1 = "1c3cc0411444587b56178de4868eb5d0ff742ec0";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha1 = "410872377b0bdac06b580c5e1755a3a3c712144b";
+        sha1 = "0d31d726c5e9a49917e2749e73386b1c0fdcb376";
       }
     else throw "Google Talk does not support your platform.";
 

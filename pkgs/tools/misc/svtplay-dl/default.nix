@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    sha256 = "1chvljmhj7waq3dfyciiyk3i18hmrczc70qfyhn2ycq0k0nbn0jj";
+    sha256 = "0wzh86zjly2r03qpjb5z0ddy79qkbw7k04qfawj22nf2w629r0dk";
   };
 
   pythonPaths = [ pycrypto requests2 ];

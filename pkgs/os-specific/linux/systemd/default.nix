@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
-, kexectools, libmicrohttpd, linuxHeaders, libseccomp
+, kexectools, libmicrohttpd, linuxHeaders, libseccomp, iptables
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
 }:
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
+      iptables
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */

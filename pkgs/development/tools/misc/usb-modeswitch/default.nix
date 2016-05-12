@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libusb1 }:
 
 let
-   version = "2.2.1";
+   version = "2.3.0";
 in
 
 stdenv.mkDerivation rec {
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libusb1 ];
 
   meta = {
+    description = "a mode switching tool for controlling 'multi-mode' USB devices";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
