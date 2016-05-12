@@ -81,10 +81,10 @@
     aggressive-indent = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "aggressive-indent";
-        version = "1.6";
+        version = "1.7";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/aggressive-indent-1.6.el";
-          sha256 = "1xnxc2x1hbhkbqhp9p3c9azrdm6mr6czqc9pl63phjp9dbslny7i";
+          url = "https://elpa.gnu.org/packages/aggressive-indent-1.7.el";
+          sha256 = "0z2zsw0qnzcabsz2frfsjhfg7qa4nbmprrd41yjfxq62d12wg70m";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -135,10 +135,10 @@
     arbitools = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "arbitools";
-        version = "0.70";
+        version = "0.71";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/arbitools-0.70.el";
-          sha256 = "129ykqhx26adw0x26wzb4biyr5pnjgqmycsabsag2hzxjd7c92gl";
+          url = "https://elpa.gnu.org/packages/arbitools-0.71.el";
+          sha256 = "1ghf5yla126n7xpn2sc2vg7q8arp7iv2z5f9r9l38vxm6dvnxp50";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -228,10 +228,10 @@
       }) {};
     beacon = callPackage ({ elpaBuild, fetchurl, lib, seq }: elpaBuild {
         pname = "beacon";
-        version = "1.2.1";
+        version = "1.3.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/beacon-1.2.1.el";
-          sha256 = "00i0p7azkkk4jpz6dnbkc4rhcvm1q7dg953874ph50fjihwqi1m6";
+          url = "https://elpa.gnu.org/packages/beacon-1.3.0.el";
+          sha256 = "00hab8w01p43iscpr0hh1s2w80ara2y8d5ccz37i2nl54gj8lpw3";
         };
         packageRequires = [ seq ];
         meta = {
@@ -242,10 +242,10 @@
     bug-hunter = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, seq }:
     elpaBuild {
         pname = "bug-hunter";
-        version = "1.3";
+        version = "1.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/bug-hunter-1.3.el";
-          sha256 = "1j1d9nml2wl3yj7llykq5k1a81kzb3r4rbn695c0853fk036gk5x";
+          url = "https://elpa.gnu.org/packages/bug-hunter-1.3.1.el";
+          sha256 = "0xplsnmj144r90vxxkmpdxlaq6gyx4ca6iklq60wd0w05fw9q02x";
         };
         packageRequires = [ cl-lib seq ];
         meta = {
@@ -442,15 +442,15 @@
           license = lib.licenses.free;
         };
       }) {};
-    debbugs = callPackage ({ elpaBuild, fetchurl, lib, soap-client }:
+    debbugs = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib, soap-client }:
     elpaBuild {
         pname = "debbugs";
-        version = "0.9.3";
+        version = "0.9.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/debbugs-0.9.3.tar";
-          sha256 = "0qj1b5ax80bi5kz6jfi4f5kpirkkc2li8zf18fj86q5ayh3rsgnz";
+          url = "https://elpa.gnu.org/packages/debbugs-0.9.5.tar";
+          sha256 = "1m23rghdykx1fvji6in0xp0bxhjcf7ynm14nl4fhiki2nhhwczxh";
         };
-        packageRequires = [ soap-client ];
+        packageRequires = [ cl-lib soap-client ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/debbugs.html";
           license = lib.licenses.free;
@@ -1257,10 +1257,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160425";
+        version = "20160502";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20160425.tar";
-          sha256 = "1slrmy8kpapp36lwk9md7rakl1fw8gi377rfff0ma8n7k5xy7b2a";
+          url = "https://elpa.gnu.org/packages/org-20160502.tar";
+          sha256 = "0li067na4p0k9r4nr6a2vfqygvlmzsdgm5kgg2p60lsvydh43fvw";
         };
         packageRequires = [];
         meta = {
@@ -1754,6 +1754,20 @@
         packageRequires = [ cl-lib ntlm ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/url-http-ntlm.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    validate = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
+    elpaBuild {
+        pname = "validate";
+        version = "0.3";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/validate-0.3.el";
+          sha256 = "0nq917217ax5zykzaybv7diz1vgl3y6r8vi7hmz3lzm5dl90jy3m";
+        };
+        packageRequires = [ cl-lib emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/validate.html";
           license = lib.licenses.free;
         };
       }) {};

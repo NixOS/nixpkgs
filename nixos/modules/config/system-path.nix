@@ -40,6 +40,7 @@ let
       pkgs.time
       pkgs.texinfoInteractive
       pkgs.utillinux
+      pkgs.which # 88K size
     ];
 
 in

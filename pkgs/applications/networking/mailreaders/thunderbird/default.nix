@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   name = "thunderbird-${verName}";
 
   src = fetchurl {
-    url = "http://archive.mozilla.org/pub/thunderbird/releases/"
-      + "${verName}/source/thunderbird-${verName}.source.tar.xz";
+    url = "mirror://mozilla/thunderbird/releases/${verName}/source/thunderbird-${verName}.source.tar.xz";
     sha256 = "0rynfyxgpvfla17zniaq84slc02kg848qawkjmdbnv74y6bkhs8m";
   };
 

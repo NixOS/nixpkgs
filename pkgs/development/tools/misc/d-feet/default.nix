@@ -2,7 +2,7 @@
 , pep8, python, makeWrapper, gnome3, pygobject3, libwnck3 }:
 
 let
-  version = "${major}.10";
+  version = "${major}.11";
   major = "0.3";
 in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "88f0df5fcb862387ff3d1793873c5eb368c3e4db0bbd82ea65f748cbf70a6359";
+    sha256 = "a3dc940c66f84b996c328531e3034d475ec690d7ff639445ff7ca746aa8cb9c2";
   };
 
   buildInputs = [

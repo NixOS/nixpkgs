@@ -3,7 +3,7 @@
   variant ? "jit", buildWithPypy ? false }:
 
 let
-  commit-count = "1333";
+  commit-count = "1352";
   common-flags = "--thread --gcrootfinder=shadowstack --continuation";
   variants = {
     jit = { flags = "--opt=jit"; target = "target.py"; };
@@ -13,8 +13,8 @@ let
   };
   pixie-src = fetchgit {
     url = "https://github.com/pixie-lang/pixie.git";
-    rev = "36ce07e1cd85ca82eedadf366bef3bb57a627a2a";
-    sha256 = "1b3v99c0is33w029r15qvd0mkrc5n1mrvjjmfpcd9yvhvqb2vcjs";
+    rev = "dd754fe9f329e9e176eeaedae1095c85cde65028";
+    sha256 = "1jf3nkd1jzvxrw9ql2r74drsirrxfihc125x0wmk45jyl5q24vdd";
   };
   pypy-tag = "81254";
   pypy-src = fetchurl {

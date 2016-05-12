@@ -306,7 +306,7 @@ self: super: {
   github-types = dontCheck super.github-types;          # http://hydra.cryp.to/build/1114046/nixlog/1/raw
   hadoop-rpc = dontCheck super.hadoop-rpc;              # http://hydra.cryp.to/build/527461/nixlog/2/raw
   hasql = dontCheck super.hasql;                        # http://hydra.cryp.to/build/502489/nixlog/4/raw
-  hjsonschema = overrideCabal (super.hjsonschema.override { hjsonpointer = self.hjsonpointer_0_2_0_4; }) (drv: { testTarget = "local"; });
+  hjsonschema = overrideCabal super.hjsonschema (drv: { testTarget = "local"; });
   hoogle = overrideCabal super.hoogle (drv: { testTarget = "--test-option=--no-net"; });
   marmalade-upload = dontCheck super.marmalade-upload;  # http://hydra.cryp.to/build/501904/nixlog/1/raw
   network-transport-tcp = dontCheck super.network-transport-tcp;
@@ -786,8 +786,6 @@ self: super: {
 
   # Byte-compile elisp code for Emacs.
   hindent = overrideCabal super.hindent (drv: {
-    # https://github.com/chrisdone/hindent/issues/166
-    doCheck = false;
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
       local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
@@ -940,9 +938,6 @@ self: super: {
 
   # Looks like Avahi provides the missing library
   dnssd = super.dnssd.override { dns_sd = pkgs.avahi.override { withLibdnssdCompat = true; }; };
-
-  # https://github.com/danidiaz/pipes-transduce/issues/2
-  pipes-transduce = super.pipes-transduce.override { foldl = self.foldl_1_1_6; };
 
   # Haste stuff
   haste-Cabal         = self.callPackage ../tools/haskell/haste/haste-Cabal.nix {};

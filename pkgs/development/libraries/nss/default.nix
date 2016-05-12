@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
   version = "3.23";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_23_RTM/src/${name}.tar.gz";
+    url = "mirror://mozilla/security/nss/releases/NSS_3_23_RTM/src/${name}.tar.gz";
     sha256 = "1kqidv91icq96m9m8zx50n7px08km2l88458rkgyjwcn3kiq7cwl";
   };
 

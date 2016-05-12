@@ -16,9 +16,11 @@ stdenv.mkDerivation rec {
     "--with-backend=libusb-1.0"
   ];
 
+  doCheck = true;
+
   postInstall = ''
-    mkdir -p $out/lib/udev/rules.d/
-    cp -v *.rules $out/lib/udev/rules.d/
+    # Don't use 70-yubikey.rules because it depends on ConsoleKit
+    install -D -t $out/lib/udev/rules.d 69-yubikey.rules
   '';
 
   meta = with stdenv.lib; {

@@ -13,7 +13,7 @@ let
     baseName="leo2";
     version = "1.6.2";
     name="${baseName}_v${version}";
-    url="page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
+    url = "http://page.mi.fu-berlin.de/cbenzmueller/leo/leo2_v${version}.tgz";
     hash="d46a94f5991623386eb9061cfb0d748e258359a8c690fded173d35303e0e9e3a";
   };
 in

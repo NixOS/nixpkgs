@@ -12,6 +12,9 @@ let
 
   dest = if cfg.externalIP == null then "-j MASQUERADE" else "-j SNAT --to-source ${cfg.externalIP}";
 
+  externalInterfaceFilter = param:
+    optionalString (cfg.externalInterface != null) "${param} ${cfg.externalInterface}";
+
   flushNat = ''
     iptables -w -t nat -D PREROUTING -j nixos-nat-pre 2>/dev/null|| true
     iptables -w -t nat -F nixos-nat-pre 2>/dev/null || true
@@ -36,19 +39,20 @@ let
     # NAT the marked packets.
     ${optionalString (cfg.internalInterfaces != []) ''
       iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
-        -o ${cfg.externalInterface} ${dest}
+        ${externalInterfaceFilter "-o"} ${dest}
     ''}
 
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
       iptables -w -t nat -A nixos-nat-post \
-        -s '${range}' -o ${cfg.externalInterface} ${dest}
+        -s '${range}' \! -d '${range}'
+        ${externalInterfaceFilter "-o"} ${dest}
     '') cfg.internalIPs}
 
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p tcp \
+        ${externalInterfaceFilter "-i"} -p tcp \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
     '') cfg.forwardPorts}
@@ -100,7 +104,8 @@ in
     };
 
     networking.nat.externalInterface = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       example = "eth1";
       description =
         ''

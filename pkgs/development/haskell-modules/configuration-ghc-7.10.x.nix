@@ -33,33 +33,17 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # ekmett/linear#74
-  linear = overrideCabal super.linear (drv: {
-    prePatch = "sed -i 's/-Werror//g' linear.cabal";
-  });
-
-  # Cabal_1_22_1_1 requires filepath >=1 && <1.4
+  # Our core version of Cabal is good enough for this build.
   cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
 
-  # Don't compile jailbreak-cabal with Cabal 1.22.x because of https://github.com/peti/jailbreak-cabal/issues/9.
-  Cabal_1_23_0_0 = overrideCabal super.Cabal_1_22_4_0 (drv: {
-    version = "1.23.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "haskell";
-      repo = "cabal";
-      rev = "fe7b8784ac0a5848974066bdab76ce376ba67277";
-      sha256 = "1d70ryz1l49pkr70g8r9ysqyg1rnx84wwzx8hsg6vwnmg0l5am7s";
-    };
-    jailbreak = false;
-    doHaddock = false;
-    postUnpack = "sourceRoot+=/Cabal";
-  });
-  jailbreak-cabal = super.jailbreak-cabal.override {
-    Cabal = self.Cabal_1_23_0_0;
-    mkDerivation = drv: self.mkDerivation (drv // {
-      preConfigure = "sed -i -e 's/Cabal == 1.20\\.\\*/Cabal >= 1.23/' jailbreak-cabal.cabal";
-    });
-  };
+  # Enable latest version of cabal-install.
+  cabal-install_1_24_0_0 = (doDistribute (dontJailbreak (dontCheck (super.cabal-install_1_24_0_0)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+
+  # Jailbreaking is required for the test suite only (which we don't run).
+  Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
+
+  # Build jailbreak-cabal with the latest version of Cabal.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_0_0; };
 
   idris = overrideCabal super.idris (drv: {
     # "idris" binary cannot find Idris library otherwise while building.
@@ -205,5 +189,12 @@ self: super: {
 
   # Trigger rebuild to mitigate broken packaes on Hydra.
   amazonka-core = triggerRebuild super.amazonka-core 1;
+
+  # https://github.com/thoughtpolice/hs-ed25519/issues/13
+  ed25519 = dontCheck super.ed25519;
+
+  # https://github.com/well-typed/hackage-security/issues/157
+  # https://github.com/well-typed/hackage-security/issues/158
+  hackage-security = dontHaddock (dontCheck super.hackage-security);
 
 }
