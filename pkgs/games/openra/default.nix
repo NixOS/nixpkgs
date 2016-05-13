@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
     movePackages = [
       ( let filename = "Eluant.dll"; in { origin = fetchurl {
           url = "https://github.com/OpenRA/Eluant/releases/download/20160124/${filename}";
-          sha256 = "1c20whz7dzfhg3szd62rvb79745x5iwrd5pp62j3bbj1q9wpddmb";
+          sha256 = "0cfzb0dhgvczskgnf6bkv4pnbg7f7c966d9lnm3dfi2b8ajlx311";
         }; target = filename; })
 
       ( let filename = "SDL2-CS.dll"; in { origin = fetchurl {
