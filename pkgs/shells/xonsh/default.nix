@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python3Packages}:
+{stdenv, fetchurl, python3Packages, which}:
 
 python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
