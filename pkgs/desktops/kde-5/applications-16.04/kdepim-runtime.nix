@@ -20,7 +20,7 @@ kdeApp {
     kdoctools
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     akonadi
     shared_mime_info
     qtxmlpatterns

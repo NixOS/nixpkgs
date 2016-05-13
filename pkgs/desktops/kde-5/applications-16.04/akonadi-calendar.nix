@@ -16,7 +16,7 @@ kdeApp {
     makeQtWrapper
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     kio
     kwallet
 

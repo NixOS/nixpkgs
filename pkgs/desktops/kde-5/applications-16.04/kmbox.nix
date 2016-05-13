@@ -13,7 +13,7 @@ kdeApp {
     kdoctools
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     kmime
   ];
 

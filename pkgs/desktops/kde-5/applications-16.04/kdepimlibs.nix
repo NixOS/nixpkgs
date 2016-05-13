@@ -34,7 +34,7 @@ kdeApp {
     makeQtWrapper
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     akonadi
     kcontacts
     kitemviews

@@ -4,6 +4,7 @@
 , kdoctools
 , makeQtWrapper
 , shared_mime_info
+, kitemviews
 }:
 
 kdeApp {
@@ -15,7 +16,8 @@ kdeApp {
     makeQtWrapper
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
+    kitemviews
     shared_mime_info
   ];
 

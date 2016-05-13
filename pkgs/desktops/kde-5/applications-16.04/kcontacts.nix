@@ -17,7 +17,7 @@ kdeApp {
     makeQtWrapper
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     kcodecs
     kcoreaddons
     kconfig

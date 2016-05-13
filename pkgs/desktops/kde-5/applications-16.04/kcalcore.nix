@@ -14,7 +14,7 @@ kdeApp {
     kdoctools
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     kdelibs4support
     libical
   ];

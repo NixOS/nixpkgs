@@ -29,7 +29,7 @@ kdeApp {
     kdoctools
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     akonadi
     grantlee
     qtwebkit

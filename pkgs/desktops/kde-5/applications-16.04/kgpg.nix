@@ -21,7 +21,7 @@ kdeApp {
     perl
     pkgconfig
   ];
-  buildInputs = [
+  propagatedbuildInputs = [
     boost
     gpgme
     kdelibs

@@ -20,7 +20,7 @@ kdeApp {
     kdoctools
   ];
 
-  buildInputs = [
+  propagatedbuildInputs = [
     grantlee
     kcoreaddons
     kemoticons
