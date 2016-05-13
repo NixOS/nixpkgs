@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kczdvqxvl8kxiy2d7czv16jp73hv9k3nykh47ckihnv8x6i6362";
   };
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig python ];
 
   buildInputs = [
@@ -39,6 +41,11 @@ stdenv.mkDerivation rec {
   ]
   ++ libintlOrEmpty
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
+
+  preFixup = ''
+    mkdir -p "$dev/lib/gstreamer-1.0"
+    mv "$out/lib/gstreamer-1.0/"*.la "$dev/lib/gstreamer-1.0"
+  '';
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 }

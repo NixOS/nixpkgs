@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ajg8jb8k3snxc7rrgczlh8daxkjidmcv3zr9w809sq4p2sn9pk2";
   };
 
+  outputs = [ "dev" "out" ];
+
   buildInputs =
     [ pkgconfig libxml2 bzip2 openssl samba dbus_glib fam cdparanoia
       intltool gnome_mime_data avahi acl

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     python ./setup.py install --prefix="$out" --use-python-path --verbose

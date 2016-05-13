@@ -32,7 +32,7 @@ in
   };
 
   config = mkIf (config.i18n.inputMethod.enabled == "fcitx") {
-    environment.systemPackages = [ fcitxPackage ];
+    i18n.inputMethod.package = fcitxPackage;
 
     environment.variables = {
       GTK_IM_MODULE = "fcitx";

@@ -3,23 +3,24 @@ which isn't valid on NixOS (and a compatibility link on most other modern
 distros anyway).
 
   -- nckx <tobias.geerinckx.rice@gmail.com>
-
-diff -ru util-linux-2.27-orig/include/pathnames.h util-linux-2.27/include/pathnames.h
---- util-linux-2.27-orig/include/pathnames.h	2015-06-29 13:13:14.669847478 +0200
-+++ util-linux-2.27/include/pathnames.h	2015-10-07 20:09:17.401022602 +0200
-@@ -54,7 +54,7 @@
- #define _PATH_INITTAB		"/etc/inittab"
- #define _PATH_RC		"/etc/rc"
- #define _PATH_REBOOT		"/sbin/reboot"
+diff --git a/include/pathnames.h b/include/pathnames.h
+index de6a13c..0c1aeb9 100644
+--- a/include/pathnames.h
++++ b/include/pathnames.h
+@@ -50,7 +50,7 @@
+ #define	_PATH_VAR_NOLOGIN	"/var/run/nologin"
+ 
+ #define _PATH_LOGIN		"/bin/login"
 -#define _PATH_SHUTDOWN		"/sbin/shutdown"
 +#define _PATH_SHUTDOWN		"shutdown"
- #define _PATH_SINGLE		"/etc/singleboot"
- #define _PATH_SHUTDOWN_CONF	"/etc/shutdown.conf"
  
-diff -ru util-linux-2.27-orig/sys-utils/rtcwake.c util-linux-2.27/sys-utils/rtcwake.c
---- util-linux-2.27-orig/sys-utils/rtcwake.c	2015-08-05 11:32:44.453821232 +0200
-+++ util-linux-2.27/sys-utils/rtcwake.c	2015-10-07 20:09:37.834032536 +0200
-@@ -576,7 +576,7 @@
+ #define _PATH_TERMCOLORS_DIRNAME "terminal-colors.d"
+ #define _PATH_TERMCOLORS_DIR	"/etc/" _PATH_TERMCOLORS_DIRNAME
+diff --git a/sys-utils/rtcwake.c b/sys-utils/rtcwake.c
+index 7c748dc..9a99a7c 100644
+--- a/sys-utils/rtcwake.c
++++ b/sys-utils/rtcwake.c
+@@ -575,7 +575,7 @@ int main(int argc, char **argv)
  		arg[i++] = "now";
  		arg[i]   = NULL;
  		if (!ctl.dryrun) {

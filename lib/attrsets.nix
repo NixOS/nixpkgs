@@ -438,23 +438,21 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] old.${attr} new)) (attrNames old));
 
-  /* Try given attributes in order. If no attributes are found, return
-     attribute list itself.
+  /* Get a package output.
+     If no output is found, fallback to `.out` and then to the default.
 
      Example:
-       tryAttrs ["a" "b"] { a = 1; b = 2; }
-       => 1
-       tryAttrs ["a" "b"] { c = 3; }
-       => { c = 3; }
+       getOutput "dev" pkgs.openssl
+       => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
   */
-  tryAttrs = allAttrs: set:
-    let tryAttrs_ = attrs:
-      if attrs == [] then set
-      else
-        (let h = head attrs; in
-         if hasAttr h set then getAttr h set
-         else tryAttrs_ (tail attrs));
-    in tryAttrs_ allAttrs;
+  getOutput = output: pkg:
+    if pkg.outputUnspecified or false
+      then pkg.${output} or pkg.out or pkg
+      else pkg;
+
+  getBin = getOutput "bin";
+  getLib = getOutput "lib";
+  getDev = getOutput "dev";
 
 
   /*** deprecated stuff ***/

@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0swp4kk6x7hy1rvd1f9jba31lvfc6qvafkvbpg9h0r34fzrd8q4i";
   };
 
+  outputs = [ "dev" "out" ];
+
   preConfigure = # still using stuff deprecated in new glib versions
     "sed 's/-DG_DISABLE_DEPRECATED//g' -i configure activation-server/Makefile.in";
 

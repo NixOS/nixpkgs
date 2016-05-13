@@ -4,7 +4,7 @@ rec {
   gradleGen = {name, src} : stdenv.mkDerivation rec {
     inherit name src;
 
-    buildPhase = ":";
+    dontBuild = true;
 
     installPhase = ''
       mkdir -pv $out/lib/gradle/

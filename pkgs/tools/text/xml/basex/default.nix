@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
     mimeType = "text/xml";
   };
 
-  # We're using a pre-built package
-  configurePhase = "true";
-  buildPhase = "true";
+  dontBuild = true;
+
   installPhase = ''
     mkdir -p "$out"
     cp -r * "$out"

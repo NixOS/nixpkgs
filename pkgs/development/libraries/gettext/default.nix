@@ -54,13 +54,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    buildInputs = lib.optional (stdenv ? ccCross && stdenv.ccCross.libc ? libiconv)
-      stdenv.ccCross.libc.libiconv.crossDrv;
-    # Gettext fails to guess the cross compiler
-    configureFlags = "CXX=${stdenv.cross.config}-g++";
-  };
-
   meta = {
     description = "Well integrated set of translation tools and documentation";
 

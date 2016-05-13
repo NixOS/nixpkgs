@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     "--with-libgeoip=system"
     "--with-libiconv=yes"
     "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-libiconv=yes"
   ];
 

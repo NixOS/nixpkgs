@@ -98,9 +98,13 @@ let
   };
 in stdenv.mkDerivation {
   name = "xquartz";
+
   buildInputs = [ ruby makeWrapper ];
+
   unpackPhase = "sourceRoot=.";
-  buildPhase = ":";
+
+  dontBuild = true;
+
   installPhase = ''
     cp -rT ${xorg.xinit} $out
     chmod -R u+w $out
@@ -179,6 +183,7 @@ in stdenv.mkDerivation {
       --replace "@DEFAULT_CLIENT@"  "${xterm}/bin/xterm" \
       --replace "@FONTCONFIG_FILE@" "$fontsConfPath"
   '';
+
   meta = with lib; {
     platforms   = platforms.darwin;
     maintainers = with maintainers; [ cstrahan ];

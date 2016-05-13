@@ -22,23 +22,34 @@ stdenv.mkDerivation rec {
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
-    [ zlib freetype fontconfig libjpeg lcms curl openjpeg ]
-    ++ optional (!minimal) cairo
+    [ zlib freetype fontconfig libjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl openjpeg ]
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
   configureFlags = with lib;
     [
       "--enable-xpdf-headers"
       "--enable-libcurl"
       "--enable-zlib"
+      "--enable-build-type=release"
     ]
-    ++ optionals minimal [ "--disable-poppler-glib" "--disable-poppler-cpp" ]
-    ++ optional (!utils) "--disable-utils";
+    ++ optionals minimal [
+      "--disable-poppler-glib" "--disable-poppler-cpp"
+      "--disable-libopenjpeg" "--disable-libcurl"
+    ]
+    ++ optional (!utils) "--disable-utils" ;
 
   enableParallelBuilding = true;
+
+  crossAttrs.postPatch =
+    # there are tests using `strXXX_s` functions that are missing apparently
+    stdenv.lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+      "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
 
   meta = with lib; {
     homepage = http://poppler.freedesktop.org/;

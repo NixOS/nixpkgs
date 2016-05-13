@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig autoreconfHook glib openssl db48 yasm
                   boost zlib miniupnpc protobuf qt4 qrencode utillinux ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ];
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];
 
   meta = with stdenv.lib; {
     version = "0.12.0.55";

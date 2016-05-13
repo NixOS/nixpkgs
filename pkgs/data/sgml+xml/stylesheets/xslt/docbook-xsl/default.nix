@@ -10,19 +10,18 @@ let
       inherit sha256;
     };
 
-    buildPhase = "true";
+    dontBuild = true;
 
-    installPhase =
-      ''
-        dst=$out/share/xml/${pname}
-        mkdir -p $dst
-        rm -rf RELEASE* README* INSTALL TODO NEWS* BUGS install.sh svn* tools log Makefile tests extensions webhelp
-        mv * $dst/
+    installPhase = ''
+      dst=$out/share/xml/${pname}
+      mkdir -p $dst
+      rm -rf RELEASE* README* INSTALL TODO NEWS* BUGS install.sh svn* tools log Makefile tests extensions webhelp
+      mv * $dst/
 
-        # Backwards compatibility. Will remove eventually.
-        mkdir -p $out/xml/xsl
-        ln -s $dst $out/xml/xsl/docbook
-      '';
+      # Backwards compatibility. Will remove eventually.
+      mkdir -p $out/xml/xsl
+      ln -s $dst $out/xml/xsl/docbook
+    '';
 
     meta = {
       homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;

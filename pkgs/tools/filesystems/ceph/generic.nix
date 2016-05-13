@@ -267,7 +267,7 @@ stdenv.mkDerivation {
 
     # Fix .la file link dependencies
     find "$lib/lib" -name \*.la | xargs sed -i \
-      -e 's,-lboost_[a-z]*,-L${boost.lib}/lib \0,g' \
+      -e 's,-lboost_[a-z]*,-L${boost.out}/lib \0,g' \
   '' + optionalString (cryptoStr == "cryptopp") ''
       -e 's,-lcryptopp,-L${optCryptopp}/lib \0,g' \
   '' + optionalString (cryptoStr == "nss") ''

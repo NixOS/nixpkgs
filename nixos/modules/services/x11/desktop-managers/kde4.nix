@@ -29,7 +29,7 @@ let
 
   phononBackends = {
     gstreamer = [
-      pkgs.phonon_backend_gstreamer
+      pkgs.phonon-backend-gstreamer
       pkgs.gst_all.gstPluginsBase
       pkgs.gst_all.gstPluginsGood
       pkgs.gst_all.gstPluginsUgly
@@ -38,7 +38,7 @@ let
       pkgs.gst_all.gstreamer # needed?
     ];
 
-    vlc = [pkgs.phonon_backend_vlc];
+    vlc = [pkgs.phonon-backend-vlc];
   };
 
   phononBackendPackages = flip concatMap cfg.phononBackends
@@ -111,7 +111,7 @@ in
             # Load PulseAudio module for routing support.
             # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
             ${optionalString config.hardware.pulseaudio.enable ''
-              ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+              ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
             ''}
 
             # Start KDE.

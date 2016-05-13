@@ -1,0 +1,13 @@
+Index: kservice-5.21.0/src/sycoca/kbuildsycoca.cpp
+===================================================================
+--- kservice-5.21.0.orig/src/sycoca/kbuildsycoca.cpp
++++ kservice-5.21.0/src/sycoca/kbuildsycoca.cpp
+@@ -203,7 +203,7 @@ bool KBuildSycoca::build()
+         QSet<QString> relFiles;
+         const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, m_resourceSubdir, QStandardPaths::LocateDirectory);
+         Q_FOREACH (const QString &dir, dirs) {
+-            QDirIterator it(dir, QDirIterator::Subdirectories);
++            QDirIterator it(dir, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+             while (it.hasNext()) {
+                 const QString filePath = it.next();
+                 Q_ASSERT(filePath.startsWith(dir)); // due to the line below...

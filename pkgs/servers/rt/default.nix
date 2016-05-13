@@ -7,7 +7,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.bestpractical.com/pub/rt/release/${name}.tar.gz";
-
     sha256 = "1hgz50fxv9zdcngww083aqh8vzyk148lm7mcivxflpnsqfw3696x";
   };
 
@@ -15,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir $out

@@ -1,12 +1,6 @@
 { stdenv, fetchurl, callPackage, patchelf, makeWrapper, coreutils, libusb }:
 
-/*
-
-
-*/
-
 let
-
   myPatchElf = file: with stdenv.lib; ''
     patchelf --set-interpreter \
       ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
@@ -15,10 +9,7 @@ let
 
   udevRules = callPackage ./udev_rules_type1.nix {};
 
-in
-
-stdenv.mkDerivation rec {
-
+in stdenv.mkDerivation rec {
   name = "brscan4-0.4.3-3";
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
@@ -32,8 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper patchelf coreutils udevRules ];
   buildInputs = [ libusb ];
-  buildPhase = ":";
-
+  dontBuild = true;
 
   patchPhase = ''
     ${myPatchElf "opt/brother/scanner/brscan4/brsaneconfig4"}
@@ -47,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-
     PATH_TO_BRSCAN4="opt/brother/scanner/brscan4"
     mkdir -p $out/$PATH_TO_BRSCAN4
     cp -rp $PATH_TO_BRSCAN4/* $out/$PATH_TO_BRSCAN4

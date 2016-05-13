@@ -12,19 +12,19 @@ stdenv.mkDerivation {
 
   buildInputs = [ python ];
 
-  patchPhase =
-    '' sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg2|g'
-    '';
+  patchPhase = ''
+    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg2|g'
+  '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
-  installPhase =
-    '' mkdir -p "$out/bin"
-       cp -v pius "$out/bin"
+  installPhase = ''
+    mkdir -p "$out/bin"
+    cp -v pius "$out/bin"
 
-       mkdir -p "$out/doc/pius-${version}"
-       cp -v README "$out/doc/pius-${version}"
-    '';
+    mkdir -p "$out/doc/pius-${version}"
+    cp -v README "$out/doc/pius-${version}"
+  '';
 
   meta = {
     homepage = http://www.phildev.net/pius/;

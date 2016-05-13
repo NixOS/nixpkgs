@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "035z3cs5ignywgh4wqxx358a2nhn3lj0x1ifij6vj0yyyhah3wgj";
   };
 
-  buildPhase = ":";
+  dontBuild = false;
 
   buildInputs = stdenv.lib.optional doCheck perl;
 

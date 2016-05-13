@@ -51,7 +51,7 @@ mkDerivation rec {
         [ out git bazaar cvs darcs fossil mercurial
           monotone rcs src subversion cvs_fast_export ]
       );
-      pythonpath = makeSearchPathOutputs python27.sitePackages ["lib"] (
+      pythonpath = makeSearchPathOutput "lib" python27.sitePackages (
         filter (x: x != null)
         [ python27Packages.readline or null python27Packages.hglib or null ]
       );

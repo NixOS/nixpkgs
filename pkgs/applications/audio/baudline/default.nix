@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   # Prebuilt binary distribution.
   # "patchelf --set-rpath" seems to break the application (cannot start), using
   # LD_LIBRARY_PATH wrapper script instead.
-  buildPhase = "true";
+  dontBuild = true;
   installPhase = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/libexec/baudline"

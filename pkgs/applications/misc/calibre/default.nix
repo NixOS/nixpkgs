@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
   # hack around a build problem
   preBuild = ''
     mkdir -p ../tmp.*/lib
-    ln -s '${qtbase.out}/lib/libQt5PlatformSupport.a' ../tmp.*/lib/
   '';
 
   nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];

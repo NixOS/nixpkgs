@@ -27,13 +27,13 @@ let
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
-  libc_bin = if nativeLibc then null else libc.bin or libc;
-  libc_dev = if nativeLibc then null else libc.dev or libc;
-  libc_lib = if nativeLibc then null else libc.out or libc;
-  cc_solib = cc.lib or cc;
-  binutils_bin = if nativeTools then "" else binutils.bin or binutils;
+  libc_bin = if nativeLibc then null else getBin libc;
+  libc_dev = if nativeLibc then null else getDev libc;
+  libc_lib = if nativeLibc then null else getLib libc;
+  cc_solib = getLib cc;
+  binutils_bin = if nativeTools then "" else getBin binutils;
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = if nativeTools then "" else coreutils.bin or coreutils;
+  coreutils_bin = if nativeTools then "" else getBin coreutils;
 in
 
 stdenv.mkDerivation {
@@ -113,6 +113,7 @@ stdenv.mkDerivation {
         ccCFlags+=" -B${cc_solib}/lib64"
       fi
       ccLDFlags+=" -L${cc_solib}/lib"
+      ccCFlags+=" -B${cc_solib}/lib"
 
       ${optionalString cc.langVhdl or false ''
         ccLDFlags+=" -L${zlib.out}/lib"
