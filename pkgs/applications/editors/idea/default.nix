@@ -245,13 +245,13 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2016.1.2";
-    build = "145.844";
+    version = "2016.1.3";
+    build = "PY-145.971.25";
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1kwi9d80r2yp5ivbvslrj70iam966rv4a8diajbwpcc26m7rj3kk";
+      sha256 = "1rn0i5qbvfjbl4v571ngmyslispibcq5ab0fb7xjl38vr1y417f2";
     };
   };
 
