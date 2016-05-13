@@ -12399,7 +12399,7 @@ in
 
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
-    inherit emacs texinfo makeWrapper;
+    inherit emacs texinfo makeWrapper runCommand;
     inherit (xorg) lndir;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
