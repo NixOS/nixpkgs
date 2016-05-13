@@ -6,7 +6,7 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
 
 let
-  build = "3103";
+  build = "3114";
   libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo pango];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
@@ -20,13 +20,13 @@ in let
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x32.tar.bz2";
-          sha256 = "1qidnczndyhyp9rfzmpqah00lrx7z1a0fy7a13lzwqq3gslhwf1l";
+          sha256 = "0xrfx76ilw5hlx26hv9zx1kw8q9qf76646yyjmn36p6mq9vs6y0d";
         }
       else
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x64.tar.bz2";
-          sha256 = "1x8kb3prs6wa5s5rj0gfq96zx6k5q3s168yhfsa36x2szi6x6y4x";
+          sha256 = "0nmi2gkpz56a47a0f56nx6nl3sl7gif035517gx2v82113y9nh66";
         };
 
     dontStrip = true;
@@ -76,7 +76,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = https://www.sublimetext.com/;
-    maintainers = with maintainers; [ wmertens demin-dmitriy ];
+    maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
     license = licenses.unfree;
     platforms = platforms.linux;
   };
