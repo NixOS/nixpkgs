@@ -6,16 +6,6 @@ let
 
   cfg = config.services.confluence;
 
-  isrgRoot = pkgs.fetchurl {
-    url = "https://letsencrypt.org/certs/isrgrootx1.pem";
-    sha256 = "0zhd1ps7sz4w1x52xk3v7ng6d0rcyi7y7rcrplwkmilnq5hzjv1y";
-  };
-
-  letsEncryptX1Root = pkgs.fetchurl {
-    url = "https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem";
-    sha256 = "0bbsismg893h7wxa012w7zixyswxpf2j1sl6i5mxds83p15k42kc";
-  };
-
   pkg = pkgs.stdenv.mkDerivation rec {
     name = "atlassian-confluence-${version}";
     version = "5.9.7";
