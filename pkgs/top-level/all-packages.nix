@@ -16711,8 +16711,8 @@ in
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
   };
   wineStable = wine.override { wineRelease = "stable"; };
-  wineUnstable = lowPrio (wine.override { wineRelease = "unstable"; });
-  wineStaging = lowPrio (wine.override { wineRelease = "staging"; });
+  wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
+  wineStaging = lowPrio (self.wine.override { wineRelease = "staging"; });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
