@@ -209,13 +209,13 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2016.1.1";
-    build = "IU-145.597";
+    version = "2016.1.2";
+    build = "IU-145.971.21";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
-      sha256 = "d5a7d2d657fe2ad170716054c6ccd164e509cf50ee6eee8b61fe3490071940df";
+      sha256 = "0dxpx4nx845vgqxl5qz029d3w3kn3hi98wgzympidplxrphgalgy";
     };
   };
 
