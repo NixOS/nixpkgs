@@ -3,16 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.oroborus;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.oroborus;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.oroborus.enable = mkEnableOption "oroborus";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "oroborus" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "oroborus";
       start = ''

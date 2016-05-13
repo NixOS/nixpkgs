@@ -5,9 +5,7 @@
 
 {
   services.xserver = {
-    enable = true;
-    displayManager.kdm.enable = true;
-    desktopManager.kde4.enable = true;
+    desktopManager.enable = [ "kde4" ];
     synaptics.enable = true; # for touchpad support on many laptops
   };
 

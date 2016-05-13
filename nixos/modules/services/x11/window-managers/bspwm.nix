@@ -3,13 +3,13 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.bspwm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.bspwm;
 in
 
 {
   options = {
     services.xserver.windowManager.bspwm = {
-        enable = mkEnableOption "bspwm";
         startThroughSession = mkOption {
             type = with types; bool;
             default = false;
@@ -32,7 +32,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "bspwm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "bspwm";
       start = if cfg.startThroughSession

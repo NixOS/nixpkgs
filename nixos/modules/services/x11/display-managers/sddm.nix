@@ -67,8 +67,12 @@ let
 
   defaultSessionName =
     let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
+      dms = xcfg.desktopManager.enable;
+      dm = if dms == [] then "none"
+           else head dms;
+      wms = xcfg.windowManager.enable;
+      wm = if wms == [] then "none"
+           else head wms;
     in dm + optionalString (wm != "none") (" + " + wm);
 
 in
@@ -76,13 +80,6 @@ in
   options = {
 
     services.xserver.displayManager.sddm = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable sddm as the display manager.
-        '';
-      };
 
       extraConfig = mkOption {
         type = types.str;
@@ -182,7 +179,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (dmcfg.enable == "sddm") {
 
     assertions = [
       { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
@@ -198,8 +195,6 @@ in
         '';
       }
     ];
-
-    services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
       logsXsession = true;

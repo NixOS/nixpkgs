@@ -4,7 +4,8 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.windowManager.awesome;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = emcfg.awesome;
   awesome = cfg.package;
 
 in
@@ -16,8 +17,6 @@ in
   options = {
 
     services.xserver.windowManager.awesome = {
-
-      enable = mkEnableOption "Awesome window manager";
 
       luaModules = mkOption {
         default = [];
@@ -40,7 +39,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "awesome" wmcfg.enable) {
 
     services.xserver.windowManager.session = singleton
       { name = "awesome";

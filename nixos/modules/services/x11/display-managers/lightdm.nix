@@ -46,11 +46,9 @@ let
       greeter-session = ${cfg.greeter.name}
       ${cfg.extraSeatDefaults}
     '';
+  gts = [ "gtk" ];
 in
 {
-  # Note: the order in which lightdm greeter modules are imported
-  # here determines the default: later modules (if enable) are
-  # preferred.
   imports = [
     ./lightdm-greeters/gtk.nix
   ];
@@ -60,11 +58,10 @@ in
     services.xserver.displayManager.lightdm = {
 
       enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable lightdm as the display manager.
-        '';
+        type    = with types; nullOr (enum gts);
+        default = "gtk";
+        example = lib.head gts;
+        description = "Enabled greeter";
       };
 
       greeter =  {
@@ -105,8 +102,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    services.xserver.displayManager.slim.enable = false;
+  config = mkIf (dmcfg.enable == "lightdm") {
 
     services.xserver.displayManager.job = {
       logsXsession = true;

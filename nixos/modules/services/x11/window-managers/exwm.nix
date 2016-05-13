@@ -3,7 +3,8 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.exwm;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.exwm;
   loadScript = pkgs.writeText "emacs-exwm-load" ''
     (require 'exwm)
     ${optionalString cfg.enableDefaultConfig ''
@@ -18,7 +19,6 @@ in
 {
   options = {
     services.xserver.windowManager.exwm = {
-      enable = mkEnableOption "exwm";
       enableDefaultConfig = mkOption {
         default = true;
         example = false;
@@ -43,7 +43,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (elem "exwm" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "exwm";
       start = ''

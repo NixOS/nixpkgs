@@ -4,8 +4,7 @@ with lib;
 
 let
 
-  dmcfg = config.services.xserver.displayManager;
-  ldmcfg = dmcfg.lightdm;
+  ldmcfg = config.services.xserver.displayManager.lightdm;
   cfg = ldmcfg.greeters.gtk;
 
   inherit (pkgs) stdenv lightdm writeScript writeText;
@@ -56,14 +55,6 @@ in
 
     services.xserver.displayManager.lightdm.greeters.gtk = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to enable lightdm-gtk-greeter as the lightdm greeter.
-        '';
-      };
-
       theme = {
 
         package = mkOption {
@@ -110,9 +101,9 @@ in
 
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf (ldmcfg.enable == "gtk") {
 
-    services.xserver.displayManager.lightdm.greeter = mkDefault {
+    services.xserver.displayManager.lightdm.greeter =  {
       package = wrappedGtkGreeter;
       name = "lightdm-gtk-greeter";
     };

@@ -78,14 +78,6 @@ in
 
     services.xserver.displayManager.kdm = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Whether to enable the KDE display manager.
-        '';
-      };
-
       enableXDMCP = mkOption {
         type = types.bool;
         default = false;
@@ -129,9 +121,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
-    services.xserver.displayManager.slim.enable = false;
+  config = mkIf (dmcfg.enable == "kdm") {
 
     services.xserver.displayManager.job =
       { execCmd =

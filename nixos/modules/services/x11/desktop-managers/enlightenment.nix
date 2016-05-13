@@ -5,8 +5,7 @@ with lib;
 let
 
   e = pkgs.enlightenment;
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.enlightenment;
+  dmcfg = config.services.xserver.desktopManager;
   GST_PLUGIN_PATH = lib.makeSearchPathOutputs "lib/gstreamer-1.0" ["lib"] [
     pkgs.gst_all_1.gst-plugins-base
     pkgs.gst_all_1.gst-plugins-good
@@ -16,17 +15,7 @@ let
 in
 
 {
-  options = {
-
-    services.xserver.desktopManager.enlightenment.enable = mkOption {
-      default = false;
-      example = true;
-      description = "Enable the Enlightenment desktop environment.";
-    };
-
-  };
-
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (elem "enlightenment" dmcfg.enable) {
 
     environment.systemPackages = [
       e.efl e.evas e.emotion e.elementary e.enlightenment

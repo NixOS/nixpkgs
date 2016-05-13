@@ -3,16 +3,11 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.afterstep;
+  wmcfg = config.services.xserver.windowManager;
 in
 {
-  ###### interface
-  options = {
-    services.xserver.windowManager.afterstep.enable = mkEnableOption "afterstep";
-  };
-
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkIf (elem "afterstep" wmcfg.enable) {
     services.xserver.windowManager.session = singleton {
       name = "afterstep";
       start = ''

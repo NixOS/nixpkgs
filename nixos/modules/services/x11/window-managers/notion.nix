@@ -3,15 +3,12 @@
 with lib;
 
 let
-  cfg = config.services.xserver.windowManager.notion;
+  wmcfg = config.services.xserver.windowManager;
+  cfg = wmcfg.notion;
 in
 
 {
-  options = {
-    services.xserver.windowManager.notion.enable = mkEnableOption "notion";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf (elem "notion" wmcfg.enable) {
     services.xserver.windowManager = {
       session = [{
         name = "notion";

@@ -6,18 +6,13 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine = { lib, ... }: {
     imports = [ ./common/user-account.nix ];
-    services.xserver.enable = true;
-    services.xserver.displayManager.sddm = {
+    services.xserver.displayManager.enable = "sddm";
+    services.xserver.displayManager.sddm.autoLogin = {
       enable = true;
-      autoLogin = {
-        enable = true;
-        user = "alice";
-      };
+      user = "alice";
     };
-    services.xserver.windowManager.default = "icewm";
-    services.xserver.windowManager.icewm.enable = true;
-    services.xserver.desktopManager.default = "none";
-    services.xserver.desktopManager.kde5.enable = true;
+    services.xserver.windowManager.enable = [ "icewm" ];
+    services.xserver.desktopManager.enable = [ "kde5" ];
   };
 
   enableOCR = true;

@@ -17,7 +17,7 @@ with lib;
     services.xserver.videoDrivers = [];
 
     # Enable KDM.  Any display manager will do as long as it supports XDMCP.
-    services.xserver.displayManager.kdm.enable = true;
+    services.xserver.displayManager.enable = "kdm";
     services.xserver.displayManager.kdm.enableXDMCP = true;
     services.xserver.displayManager.kdm.extraConfig =
       ''

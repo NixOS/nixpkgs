@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  cfg = config.services.xserver.displayManager;
+  dmcfg = config.services.xserver.displayManager;
   gnome3 = config.environment.gnome3.packageSet;
   gdm = gnome3.gdm;
 
@@ -17,13 +17,6 @@ in
   options = {
 
     services.xserver.displayManager.gdm = {
-
-      enable = mkEnableOption ''
-        GDM as the display manager.
-        <emphasis>GDM in NixOS is not well-tested with desktops other
-        than GNOME, so use with caution, as it could render the
-        system unusable.</emphasis>
-      '';
 
       debug = mkEnableOption ''
         debugging messages in GDM
@@ -72,15 +65,13 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.gdm.enable {
+  config = mkIf (dmcfg.enable == "gdm") {
 
     assertions = [
       { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
         message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
       }
     ];
-
-    services.xserver.displayManager.slim.enable = false;
 
     users.extraUsers.gdm =
       { name = "gdm";

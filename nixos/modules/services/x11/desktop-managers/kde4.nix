@@ -4,8 +4,8 @@ with lib;
 
 let
 
-  xcfg = config.services.xserver;
-  cfg = xcfg.desktopManager.kde4;
+  dmcfg = config.services.xserver.desktopManager;
+  cfg = dmcfg.kde4;
   xorg = pkgs.xorg;
   kde_workspace = config.services.xserver.desktopManager.kde4.kdeWorkspacePackage;
 
@@ -50,12 +50,6 @@ in
   options = {
 
     services.xserver.desktopManager.kde4 = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Enable the KDE 4 desktop environment.";
-      };
-
       phononBackends = mkOption {
         type = types.listOf types.str;
         default = ["gstreamer"];
@@ -74,7 +68,7 @@ in
   };
 
 
-  config = mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (elem "kde4" dmcfg.enable) {
 
     # If KDE 4 is enabled, make it the default desktop manager (unless
     # overridden by the user's configuration).

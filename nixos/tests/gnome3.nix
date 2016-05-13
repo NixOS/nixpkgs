@@ -11,9 +11,9 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager.auto.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
-      services.xserver.desktopManager.gnome3.enable = true;
+      services.xserver.displayManager.slim.autoLogin = true;
+      services.xserver.displayManager.slim.defaultUser = "alice";
+      services.xserver.desktopManager.enable = [ "gnome3" ];
 
       virtualisation.memorySize = 512;
     };

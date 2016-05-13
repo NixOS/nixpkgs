@@ -460,7 +460,14 @@
   ./services/x11/colord.nix
   ./services/x11/unclutter.nix
   ./services/x11/desktop-managers/default.nix
-  ./services/x11/display-managers/auto.nix
+  ./services/x11/desktop-managers/enlightenment.nix
+  ./services/x11/desktop-managers/gnome3.nix
+  ./services/x11/desktop-managers/kde4.nix
+  ./services/x11/desktop-managers/kde5.nix
+  ./services/x11/desktop-managers/kodi.nix
+  ./services/x11/desktop-managers/none.nix
+  ./services/x11/desktop-managers/xfce.nix
+  ./services/x11/desktop-managers/xterm.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/kdm.nix
@@ -472,16 +479,32 @@
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/redshift.nix
+  ./services/x11/window-managers/afterstep.nix
   ./services/x11/window-managers/awesome.nix
+  ./services/x11/window-managers/bspwm.nix
+  ./services/x11/window-managers/clfswm.nix
   #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
+  ./services/x11/window-managers/dwm.nix
+  ./services/x11/window-managers/exwm.nix
   ./services/x11/window-managers/fluxbox.nix
+  ./services/x11/window-managers/herbstluftwm.nix
+  ./services/x11/window-managers/i3.nix
   ./services/x11/window-managers/icewm.nix
-  ./services/x11/window-managers/bspwm.nix
+  ./services/x11/window-managers/jwm.nix
   ./services/x11/window-managers/metacity.nix
   ./services/x11/window-managers/none.nix
+  ./services/x11/window-managers/notion.nix
+  ./services/x11/window-managers/openbox.nix
+  ./services/x11/window-managers/oroborus.nix
+  ./services/x11/window-managers/qtile.nix
+  ./services/x11/window-managers/ratpoison.nix
+  ./services/x11/window-managers/sawfish.nix
+  ./services/x11/window-managers/spectrwm.nix
+  ./services/x11/window-managers/stumpwm.nix
   ./services/x11/window-managers/twm.nix
   ./services/x11/window-managers/windowlab.nix
+  ./services/x11/window-managers/windowmaker.nix
   ./services/x11/window-managers/wmii.nix
   ./services/x11/window-managers/xmonad.nix
   ./services/x11/xfs.nix
