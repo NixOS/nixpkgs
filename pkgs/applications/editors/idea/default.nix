@@ -146,16 +146,16 @@ in
 
 {
 
-  android-studio = buildAndroidStudio rec {
+  android-studio = let buildNumber = "143.2821654"; in buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "2.0.0.0";
-    build = "143.2443734";
+    version = "2.1.1.0";
+    build = "AI-${buildNumber}";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
-            "/android-studio-ide-${build}-linux.zip";
-      sha256 = "0j6bi87hb5jxjwfhfya64s673vdkdslsqc6sqa4zl97sabvafk2w";
+            "/android-studio-ide-${buildNumber}-linux.zip";
+      sha256 = "1zxxzyhny7j4vzlydrhwz3g8l8zcml84mhkcf5ckx8xr50j3m101";
     };
   };
 
