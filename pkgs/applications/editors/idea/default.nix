@@ -233,13 +233,13 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2016.1.2";
-    build = "145.844";
+    version = "2016.1.3";
+    build = "PC-145.971.25";
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1kxwjg5l2fzpn6hr0iir0dv1n5l02jl02aff9wrj95186wxivg3a";
+      sha256 = "1ks7crrfnhzkdxban2hh2pnr986vqwmac5zybmb1ighcyamhdi4q";
     };
   };
 
