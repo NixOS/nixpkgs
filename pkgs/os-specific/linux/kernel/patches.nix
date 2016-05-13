@@ -106,8 +106,8 @@ rec {
     { kernel    = pkgs.grsecurity_base_linux_4_5;
       patches   = [ grsecurity_fix_path_4_5 ];
       kversion  = "4.5.4";
-      revision  = "201605112030";
-      sha256    = "06asa9v7hqbbxzg3v47qr0axjgdbc5dzkkrkh1xsbb21bwx700q4";
+      revision  = "201605122039";
+      sha256    = "10jcwz9lxb4w2p0g6mjsq515s3p0m81rr1a9mw0hqwvm23dba3fs";
     };
 
   grsecurity_latest = grsecurity_4_5;
