@@ -2624,7 +2624,7 @@ in modules // {
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath ] ++
-                            (if isPy3k then [] else [self.futures_2_2]);
+                            (if isPy3k then [] else [self.futures]);
     buildInputs = [ self.docutils self.nose self.mock ];
     checkPhase = ''
       runHook preCheck
