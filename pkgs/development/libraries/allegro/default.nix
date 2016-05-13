@@ -1,7 +1,9 @@
 { stdenv, fetchurl, texinfo, libXext, xextproto, libX11, xproto
-, libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
+, libXpm, libXt, libXcursor, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
-, xf86vidmodeproto, libXxf86vm, openal, mesa }:
+, xf86vidmodeproto, libXxf86vm, openal, mesa
+, alsaLib ? null
+, AppKit ? null }:
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
@@ -14,8 +16,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
-    alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc
+    cmake zlib libpng libvorbis libXxf86dga libXxf86misc
     xf86dgaproto xf86miscproto xf86vidmodeproto libXxf86vm openal mesa
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    alsaLib
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    AppKit
   ];
 
   cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];

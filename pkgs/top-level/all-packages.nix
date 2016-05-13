@@ -6514,7 +6514,9 @@ in
 
   agg = callPackage ../development/libraries/agg { };
 
-  allegro = callPackage ../development/libraries/allegro {};
+  allegro = callPackage ../development/libraries/allegro {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
   allegro5 = callPackage ../development/libraries/allegro/5.nix {};
   allegro5unstable = callPackage
     ../development/libraries/allegro/5-unstable.nix {};
@@ -13374,6 +13376,8 @@ in
   mplayer = callPackage ../applications/video/mplayer ({
     pulseSupport = config.pulseaudio or false;
     libdvdnav = libdvdnav_4_2_1;
+    inherit (darwin) IOKit;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   } // (config.mplayer or {}));
 
   MPlayerPlugin = browser:

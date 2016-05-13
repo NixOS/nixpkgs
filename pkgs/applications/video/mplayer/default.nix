@@ -5,11 +5,11 @@
 , x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
-, alsaSupport ? true, alsaLib ? null
+, alsaSupport ? stdenv.isLinux, alsaLib ? null
 , screenSaverSupport ? true, libXScrnSaver ? null
 , vdpauSupport ? false, libvdpau ? null
-, cddaSupport ? true, cdparanoia ? null
-, dvdnavSupport ? true, libdvdnav ? null
+, cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
+, dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -20,6 +20,9 @@
 , jackaudioSupport ? false, libjack2 ? null
 , pulseSupport ? false, libpulseaudio ? null
 , bs2bSupport ? false, libbs2b ? null
+, fbdevSupport ? stdenv.isLinux
+, vidixSupport ? !stdenv.isDarwin
+, IOKit ? null, Carbon ? null, Cocoa ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , libjpegSupport ? true, libjpeg ? null
@@ -83,7 +86,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-1.1.1";
+  name = "mplayer-${version}";
+  version = "1.3.0";
 
   src = fetchurl {
     # Old kind of URL:
@@ -94,8 +98,8 @@ stdenv.mkDerivation rec {
     #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
     #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
 
-    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.1.tar.xz";
-    sha256 = "ce8fc7c3179e6a57eb3a58cb7d1604388756b8a61764cc93e095e7aff3798c76";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${version}.tar.xz";
+    sha256 = "0hwqn04bdknb2ic88xd75smffxx63scvz0zvwvjb56nqj9n89l1s";
   };
 
   prePatch = ''
@@ -127,6 +131,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ++ optional libjpegSupport libjpeg
     ++ optional bs2bSupport libbs2b
+    ++ optional stdenv.isDarwin [ IOKit Carbon Cocoa ]
     ;
 
   nativeBuildInputs = [ yasm ];
@@ -159,11 +164,11 @@ stdenv.mkDerivation rec {
       ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
       ${optionalString fribidiSupport "--enable-fribidi"}
+      ${optionalString fbdevSupport "--enable-fbdev"}
+      ${optionalString vidixSupport "--enable-vidix"}
       --disable-xanim
       --disable-ivtv
       --disable-xvid --disable-xvid-lavc
-      --enable-vidix
-      --enable-fbdev
       --disable-ossaudio
     '';
 
