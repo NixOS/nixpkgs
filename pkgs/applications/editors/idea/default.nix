@@ -161,13 +161,13 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "1.2.4";
-    build = "143.1186";
+    version = "1.2.5";
+    build = "CL-143.2370.46";
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
-      sha256 = "0asjgfshbximjk6i57fz3d2ykby5qw5x6nhw91cpzrzszc59dmm2";
+      sha256 = "0ll1rcnnbd1if6x5rp3qw35lvp5zdzmvyg9n1lha89i34xiw36jp";
     };
   };
 
