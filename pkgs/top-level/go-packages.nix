@@ -1792,6 +1792,21 @@ let
     sha256 = "00ani7fhydcmlsm3n93nmj1hcqp2wmzvihnb1gdzynif1hw0530y";
   };
 
+  go-quickfix = buildFromGitHub {
+    rev = "a5d4c82f7428280897ef403a87aa78b9c5924a47";
+    sha256 = "0m1vclhqygnylfyhzpw5myi3f4qz30a3h9mbssxdsgn67s7l666y";
+    owner = "motemen";
+    repo = "go-quickfix";
+    buildInputs = [ tools ];
+    excludedPackages = "testdata";
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/motemen/go-quickfix";
+      description = ''Quick fix non-compiling well-typed Go source code e.g. "x declared and not used."'';
+      license = licenses.mit;
+    };
+  };
+
   go-radix = buildFromGitHub {
     rev    = "fbd82e84e2b13651f3abc5ffd26b65ba71bc8f93";
     owner  = "armon";
