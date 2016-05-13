@@ -445,6 +445,7 @@
   ./services/web-apps/pump.io.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
+  ./services/web-servers/confluence.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix
