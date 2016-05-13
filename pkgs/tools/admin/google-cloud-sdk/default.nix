@@ -3,13 +3,20 @@
 with python27Packages;
 
 stdenv.mkDerivation rec {
-  version = "106.0.0";
   name = "google-cloud-sdk-${version}";
+  version = "109.0.0";
 
-  src = fetchurl {
-    url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-106.0.0-linux-x86_64.tar.gz";
-    sha256 = "00jhpx32sfxcgl404plmb8122bs0ijl2rv25h17mnjn067nhz7nn";
-  };
+  src =
+    if stdenv.system == "i686-linux" then
+      fetchurl {
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
+        sha256 = "0jcg4pzqmkmpcp86rdi9hcqvvm61rqvl8spl2r1n4658w48h61x7";
+      }
+    else
+      fetchurl {
+        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
+        sha256 = "1ii2ivh2na9933fhqrzsicihs6mpr10jgmml1fkdjmhmmp92zshd";
+      };
 
   buildInputs = [python27 makeWrapper];
 
@@ -40,14 +47,14 @@ stdenv.mkDerivation rec {
     rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
     version = version;
     # This package contains vendored dependencies. All have free licenses.
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with stdenv.lib.maintainers; [stephenmw];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [stephenmw zimbatm];
+    platforms = platforms.linux;
   };
 }
