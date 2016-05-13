@@ -1,17 +1,17 @@
 { stdenv, fetchurl, libsysfs, gnutls, openssl, libcap, sp, docbook_sgml_dtd_31
-, SGMLSpm }:
+, SGMLSpm, libgcrypt }:
 
 assert stdenv ? glibc;
 
 let
-  time = "20121221";
+  time = "20151218";
 in
 stdenv.mkDerivation rec {
   name = "iputils-${time}";
 
   src = fetchurl {
     url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
-    sha256 = "17riqp8dh8dvx32zv3hyrghpxz6xnxa6vai9b4yc485nqngm83s5";
+    sha256 = "189592jlkhxdgy8jc07m4bsl41ik9r6i6aaqb532prai37bmi7sl";
   };
 
   prePatch = ''
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = "USE_GNUTLS=no";
 
-  buildInputs = [ libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm ];
+  buildInputs = [
+    libsysfs openssl libcap sp docbook_sgml_dtd_31 SGMLSpm libgcrypt
+  ];
 
   buildFlags = "man all ninfod";
 
