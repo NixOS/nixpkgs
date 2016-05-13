@@ -1866,7 +1866,7 @@ let
 
     RVowpalWabbit = old.RVowpalWabbit.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.lib}/lib"
+        "--with-boost=${pkgs.boost.dev}" "--with-boost-libdir=${pkgs.boost.out}/lib"
       ];
     });
 

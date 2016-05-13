@@ -13,7 +13,7 @@ let
   ];
 
   libPathNative = lib.makeLibraryPath packages;
-  libPath64 = lib.makeSearchPathOutputs "lib64" ["lib"] packages;
+  libPath64 = lib.makeSearchPathOutput "lib" "lib64" packages;
   libPath = "${libPathNative}:${libPath64}";
 
 in { inherit packages libPath; }

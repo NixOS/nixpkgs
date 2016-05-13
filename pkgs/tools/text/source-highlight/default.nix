@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ boost ];
 
-  configureFlags = [ "--with-boost=${boost.lib}" ];
+  configureFlags = [ "--with-boost=${boost.out}" ];
 
   enableParallelBuilding = false;
 

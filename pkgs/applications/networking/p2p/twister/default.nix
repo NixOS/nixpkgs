@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
     "--disable-deprecated-functions"
     "--enable-tests"
     "--enable-python-binding"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
   ];
 
   buildInputs = [

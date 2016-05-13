@@ -57,20 +57,20 @@ let
           rm "$out/lib/"*.a
       fi
 
-    mkdir -p $bin
-    mv $out/bin $bin/
+      mkdir -p $bin
+      mv $out/bin $bin/
 
-    mkdir $dev
-    mv $out/include $dev/
+      mkdir $dev
+      mv $out/include $dev/
 
       # remove dependency on Perl at runtime
-    rm -r $out/etc/ssl/misc
+      rm -r $out/etc/ssl/misc
 
       rmdir $out/etc/ssl/{certs,private}
     '';
 
     postFixup = ''
-    # Check to make sure the main output doesn't depend on perl
+      # Check to make sure the main output doesn't depend on perl
       if grep -r '${perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
         exit 1

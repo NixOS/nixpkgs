@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
-  buildPhase = "true";
+  dontBuild = true;
 
   postInstall =
       ''

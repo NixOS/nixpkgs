@@ -15,21 +15,20 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl nix ]
     ++ (with perlPackages; [ DBI DBDSQLite Plack Starman ]);
 
-  buildPhase = "true";
+  dontBuild = false;
 
   # FIXME: unfortunate cut&paste.
-  installPhase =
-    ''
-      mkdir -p $out/libexec/nix-serve
-      cp nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
+  installPhase = ''
+    mkdir -p $out/libexec/nix-serve
+    cp nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
-      mkdir -p $out/bin
-      cat > $out/bin/nix-serve <<EOF
-      #! ${stdenv.shell}
-      PERL5LIB=$PERL5LIB exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
-      EOF
-      chmod +x $out/bin/nix-serve
-    '';
+    mkdir -p $out/bin
+    cat > $out/bin/nix-serve <<EOF
+    #! ${stdenv.shell}
+    PERL5LIB=$PERL5LIB exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
+    EOF
+    chmod +x $out/bin/nix-serve
+  '';
 
   meta = {
     homepage = https://github.com/edolstra/nix-serve;

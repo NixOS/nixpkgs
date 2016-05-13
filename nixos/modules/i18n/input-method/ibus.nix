@@ -41,9 +41,11 @@ in
   };
 
   config = mkIf (config.i18n.inputMethod.enabled == "ibus") {
+    i18n.inputMethod.package = ibusPackage;
+
     # Without dconf enabled it is impossible to use IBus
     environment.systemPackages = with pkgs; [
-      ibusPackage ibus-qt gnome3.dconf ibusAutostart
+      ibus-qt gnome3.dconf ibusAutostart
     ];
 
     environment.variables = {

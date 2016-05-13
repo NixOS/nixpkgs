@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wp937sn2dzqhrbl2bhapqb0pvybc80z8ynw7yfkm5ycl39skch9";
   };
 
+  outputs = [ "dev" "out" ];
+
   configureFlags = [
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "event-gui")

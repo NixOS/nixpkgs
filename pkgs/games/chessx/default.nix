@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "ChessX allows you to browse and analyse chess games";
     license = licenses.gpl2;
     maintainers = [maintainers.luispedro];
+    broken = true;
   };
 }

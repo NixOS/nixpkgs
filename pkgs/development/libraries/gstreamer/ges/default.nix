@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gisdfa91kq89bsmbvb47alaxh8lpqmr6f3dzlwmf389nkandw2h";
   };
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig python gobjectIntrospection flex perl ];
 
   propagatedBuildInputs = [ gnonlin libxml2 ];

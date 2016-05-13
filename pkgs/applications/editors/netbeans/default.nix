@@ -13,10 +13,10 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "netbeans-8.0.2";
+  name = "netbeans-8.1";
   src = fetchurl {
-    url = http://download.netbeans.org/netbeans/8.0.2/final/zip/netbeans-8.0.2-201411181905.zip;
-    sha256 = "1h9cqpwsnrhcnn4fqz3rr4s5jln8cfwki8af9zikq9j6aza337xv";
+    url = http://download.netbeans.org/netbeans/8.1/final/zip/netbeans-8.1-201510222201.zip;
+    sha256 = "1aaf132mndpgfbd5v8izqzp37hjs5gwqwd6zrb519fx0viz9aq5r";
   };
 
   buildCommand = ''

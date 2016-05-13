@@ -28,8 +28,10 @@ wrapPythonProgramsIn() {
     # Find all regular files in the output directory that are executable.
     for f in $(find "$dir" -type f -perm -0100); do
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
+        # Strip suffix, like "3" or "2.7m" -- we don't have any choice on which
+        # Python to use besides one in $python anyway.
         if head -n1 "$f" | grep -q '#!.*/env.*\(python\|pypy\)'; then
-            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)^#! $python^"
+            sed -i "$f" -e "1 s^.*/env[ ]*\(python\|pypy\)[^ ]*^#! $python^"
         fi
 
         # catch /python and /.python-wrapped

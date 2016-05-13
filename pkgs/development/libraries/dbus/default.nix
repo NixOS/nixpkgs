@@ -6,8 +6,8 @@ assert x11Support -> libX11 != null
                   && libSM != null;
 
 let
-  version = "1.8.20";
-  sha256 = "0fkh3d5r57a659hw9lqnw4v0bc5556vx54fsf7l9c732ci6byksw";
+  version = "1.10.8";
+  sha256 = "0560y3hxpgh346w6avcrcz79c8ansmn771y5xpcvvlr6m8mx5wxs";
 
 self =  stdenv.mkDerivation {
     name = "dbus-${version}";
@@ -17,8 +17,7 @@ self =  stdenv.mkDerivation {
       inherit sha256;
     };
 
-    patches = [ ./ignore-missing-includedirs.patch ]
-      ++ lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+    patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
     postPatch = ''
       substituteInPlace tools/Makefile.in \
         --replace 'install-localstatelibDATA:' 'disabled:' \

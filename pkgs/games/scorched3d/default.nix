@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ mesa glew openalSoft freealut wxGTK libogg freetype libvorbis
-      SDL SDL_net expat libjpeg libpng
+      SDL SDL_net expat libjpeg libpng fftwSinglePrec
     ];
 
   nativeBuildInputs = [ pkgconfig ];

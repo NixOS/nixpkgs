@@ -11,12 +11,11 @@ python2Packages.buildPythonApplication rec {
 
   pythonPath = [ python2Packages.pygments python2Packages.chardet ];
 
-  buildPhase = ":";
-  
+  dontBuild = true;
+
   doCheck = false;
-  
+
   installPhase = ''
-  
     mkdir -p $out/bin
     cp -a pygmentex.py $out/bin
   '';

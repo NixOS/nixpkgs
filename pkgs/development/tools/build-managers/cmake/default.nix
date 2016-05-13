@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     optional (stdenv ? glibc) ./search-path-3.2.patch
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     ''
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
-        --subst-var-by glibc_bin ${glibc.bin or glibc} \
-        --subst-var-by glibc_dev ${glibc.dev or glibc} \
-        --subst-var-by glibc_lib ${glibc.out or glibc}
+        --subst-var-by glibc_bin ${getBin glibc} \
+        --subst-var-by glibc_dev ${getDev glibc} \
+        --subst-var-by glibc_lib ${getLib glibc}
     '';
   configureFlags =
-    [ "--docdir=/share/doc/${name}"
+    [ "--docdir=share/doc/${name}"
       "--no-system-jsoncpp"
     ]
     ++ optional (!stdenv.isCygwin) "--system-libs"
@@ -63,10 +63,6 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   enableParallelBuilding = true;
-
-  preInstall = ''mkdir "$doc" '';
-
-  postInstall = ''moveToOutput "share/cmake-*/Help" "$doc" '';
 
   meta = with stdenv.lib; {
     homepage = http://www.cmake.org/;

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bashInteractive, autoconf, automake, libtool, pkgconfig
+{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig
 , git, xorg, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux ++ platforms.darwin;
   };
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = [
     autoconf
     automake
@@ -34,6 +36,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     sed -i '15 i\
       LT_INIT' configure.ac
-    ${bashInteractive}/bin/bash autogen.sh --prefix="$out"
+    ${stdenv.shell} autogen.sh --prefix="$out"
   '';
 }

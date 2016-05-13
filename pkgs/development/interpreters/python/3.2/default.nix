@@ -44,8 +44,8 @@ stdenv.mkDerivation {
     ${optionalString stdenv.isDarwin ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
 
     configureFlagsArray=( --enable-shared --with-threads --with-wide-unicode
-                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${p.dev or p}/include") buildInputs)}"
-                          LDFLAGS="${concatStringsSep " " (map (p: "-L${p.lib or (p.out or p)}/lib") buildInputs)}"
+                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
+                          LDFLAGS="${concatStringsSep " " (map (p: "-L${getLib p}/lib") buildInputs)}"
                           LIBS="${optionalString (!stdenv.isDarwin) "-lcrypt"} ${optionalString (ncurses != null) "-lncurses"}"
                         )
   '';

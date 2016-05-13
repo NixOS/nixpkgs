@@ -25,7 +25,6 @@ let
   };
 
   faust = stdenv.mkDerivation {
-
     name = "faust-${version}";
 
     inherit src;
@@ -107,9 +106,7 @@ let
 
       inherit src;
 
-      configurePhase = ":";
-
-      buildPhase = ":";
+      dontBuild = true;
 
       installPhase = ''
         runHook preInstall

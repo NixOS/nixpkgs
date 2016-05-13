@@ -17,12 +17,13 @@ stdenv.mkDerivation {
     unzip $src
   '';
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = "
     mkdir -p $out/share/texmf-nix
     cp -prd * $out/share/texmf-nix
   ";
+
   meta = {
     branch = "3";
   };

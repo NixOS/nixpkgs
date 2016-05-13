@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0k46z5gqjzg702m2vs4sv6sxynq1sj14m0pgwvl2gkgg3dfbyjhn";
   };
 
+  outputs = [ "dev" "out" ];
+
   configureFlags = [
     "--enable-libv4l"
   ] ++ (if (alsaLib != null && libX11 != null && (qt4 != null || qt5 != null)) then [
@@ -36,15 +38,15 @@ stdenv.mkDerivation rec {
     "--disable-qv4l2"
   ]);
 
-  postInstall = ''
+  postFixup = ''
     # Create symlink for V4l1 compatibility
-    ln -s $out/include/libv4l1-videodev.h $out/include/videodev.h
+    ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ alsaLib libX11 qt4 qt5 ];
-  
+
   propagatedBuildInputs = [ libjpeg ];
 
   meta = with stdenv.lib; {

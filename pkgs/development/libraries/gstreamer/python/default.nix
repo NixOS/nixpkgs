@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./different-path-with-pygobject.patch ];
 
+  outputs = [ "dev" "out" ];
+
   nativeBuildInputs = [ pkgconfig python ];
 
   # XXX: in the Libs.private field of python3.pc

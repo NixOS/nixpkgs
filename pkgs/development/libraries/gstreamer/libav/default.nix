@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0719njp8aarhvn038pijq6dmsnli0zlg146hyfs3rsdffs4f472s";
   };
 
+  outputs = [ "dev" "out" ];
+
   configureFlags = stdenv.lib.optionalString withSystemLibav
     "--with-system-libav";
 

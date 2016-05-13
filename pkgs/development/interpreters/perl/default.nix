@@ -17,8 +17,8 @@ assert enableThreading -> (stdenv ? glibc);
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
-  libcInc = libc.dev or libc;
-  libcLib = libc.out or libc;
+  libcInc = lib.getDev libc;
+  libcLib = lib.getLib libc;
   common = { version, sha256 }: stdenv.mkDerivation rec {
     name = "perl-${version}";
 

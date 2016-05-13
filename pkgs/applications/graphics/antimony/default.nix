@@ -48,5 +48,6 @@ in
       homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       platforms   = platforms.linux;
+      broken = true;
     };
   }

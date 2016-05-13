@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with stdenv.lib;
   [ pkgconfig intltool libX11 wxGTK fontconfig freetype mesa
-    libass fftw ffms ffmpeg zlib icu boost boost.lib libiconv
+    libass fftw ffms ffmpeg zlib icu boost boost.out libiconv
   ]
     ++ optional spellcheckSupport hunspell
     ++ optional automationSupport lua

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     python waf configure --prefix=$out \
       --boost-includes="${boost.dev}/include" \
-      --boost-libs="${boost.lib}/lib"
+      --boost-libs="${boost.out}/lib"
   '';
 
   buildPhase = "python waf";
