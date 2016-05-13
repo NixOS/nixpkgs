@@ -12,11 +12,15 @@
 stdenv.mkDerivation rec {
   name = "gd-${version}";
   version = "2.1.1";
-  
+
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
     sha256 = "11djy9flzxczphigqgp7fbbblbq35gqwwhn9xfcckawlapa1xnls";
   };
+
+  patches = [
+    ./CVE-2016-3074.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib fontconfig freetype libjpeg libpng libtiff libXpm ];
