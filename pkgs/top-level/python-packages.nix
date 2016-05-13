@@ -26610,6 +26610,28 @@ in modules // {
     };
   };
 
+  xgboost = buildPythonPackage rec {
+    name = "xgboost-${version}";
+
+    inherit (pkgs.xgboost) version src meta;
+
+    propagatedBuildInputs = with self; [ scipy ];
+    buildInputs = with self; [ nose ];
+
+    postPatch = ''
+      cd python-package
+
+      cat <<EOF >xgboost/libpath.py
+      def find_lib_path():
+        return ["${pkgs.xgboost}/lib/libxgboost.so"]
+      EOF
+    '';
+
+    postInstall = ''
+      rm -rf $out/xgboost
+    '';
+  };
+
   xkcdpass = buildPythonPackage rec {
     name = "xkcdpass-${version}";
     version = "1.4.2";
