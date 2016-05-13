@@ -3765,7 +3765,12 @@ let
     sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
 
     postInstall = ''
-      for i in $bin/bin/{provider,provisioner}-*; do mv $i $bin/bin/terraform-$(basename $i); done
+      # prefix all the plugins with "terraform-"
+      for i in $bin/bin/*; do
+        if [[ ! $(basename $i) =~ terraform* ]]; then
+          mv -v $i $bin/bin/terraform-$(basename $i);
+        fi
+      done
     '';
   };
 
