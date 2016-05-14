@@ -2,19 +2,14 @@
 
 with lib;
 
-let
-  cfg = config.services.subsonic;
-  homeDir = "/var/subsonic";
-
-in
-{
+let cfg = config.services.subsonic; in {
   options = {
     services.subsonic = {
       enable = mkEnableOption "Subsonic daemon";
 
       home = mkOption {
         type = types.path;
-        default = "${homeDir}";
+        default = "/var/lib/subsonic";
         description = ''
           The directory where Subsonic will create files.
           Make sure it is writable.
@@ -146,7 +141,7 @@ in
 
     users.extraUsers.subsonic = {
       description = "Subsonic daemon user";
-      home = homeDir;
+      home = cfg.home;
       createHome = true;
       group = "subsonic";
       uid = config.ids.uids.subsonic;
