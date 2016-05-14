@@ -179,6 +179,7 @@
   joelteon = "Joel Taylor <me@joelt.io>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
+  juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
   jwiegley = "John Wiegley <johnw@newartisans.com>";
   jwilberding = "Jordan Wilberding <jwilberding@afiniate.com>";
   jzellner = "Jeff Zellner <jeffz@eml.cc>";

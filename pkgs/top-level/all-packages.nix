@@ -6723,6 +6723,8 @@ in
 
   cppunit = callPackage ../development/libraries/cppunit { };
 
+  cpputest = callPackage ../development/libraries/cpputest { };
+
   cracklib = callPackage ../development/libraries/cracklib { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
