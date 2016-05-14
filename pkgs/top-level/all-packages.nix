@@ -16539,7 +16539,7 @@ in
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
-  sails = callPackage ../misc/sails { };
+  sailsd = callPackage ../misc/sailsd { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
