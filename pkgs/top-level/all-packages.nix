@@ -13486,6 +13486,10 @@ in
 
   sxhkd = callPackage ../applications/window-managers/sxhkd { };
 
+  mpop = callPackage ../applications/networking/mpop {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   msmtp = callPackage ../applications/networking/msmtp {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
