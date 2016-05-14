@@ -87,4 +87,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ ocharles ];
   };
+
+  passthru = {
+    shellPath = "/bin/fish";
+  };
 }
