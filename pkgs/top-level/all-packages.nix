@@ -6307,6 +6307,8 @@ in
 
   racerRust = callPackage ../development/tools/rust/racer { };
 
+  racerdRust = callPackage ../development/tools/rust/racerd { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
