@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, xfce4panel, libxfce4util, gtk, libsoup
-, exo}:
+, exo, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-screenshooter";
@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
+  nativeBuildInputs = [
+    pkgconfig intltool
+  ];
+
   buildInputs = [
-    pkgconfig intltool xfce4panel libxfce4util gtk libsoup exo
+    xfce4panel libxfce4util gtk libsoup exo hicolor_icon_theme
   ];
 
   meta = {
