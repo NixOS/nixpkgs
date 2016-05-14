@@ -64,6 +64,11 @@ stdenv.mkDerivation ({
       ./cve-2015-7547.patch
 
       ./glibc-locale-incompatibility.patch
+
+      ./cve-2016-3075.patch
+      ./glob-simplify-interface.patch
+      ./cve-2016-1234.patch
+      ./cve-2016-3706.patch
     ];
 
   postPatch =
