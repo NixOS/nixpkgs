@@ -95,7 +95,6 @@ stdenv.mkDerivation rec {
         -no-xshape
         -no-xsync
         -opensource
-        -openssl
         -release
         -static
         -system-libjpeg
