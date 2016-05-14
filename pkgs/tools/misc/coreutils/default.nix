@@ -68,7 +68,8 @@ let
     # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
     # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
     # and {Open,Free}BSD.
-    doCheck = stdenv ? glibc;
+    # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
+    doCheck = stdenv ? glibc && builtins.storeDir == "/nix/store";
 
     # Saw random failures like ‘help2man: can't get '--help' info from
     # man/sha512sum.td/sha512sum’.

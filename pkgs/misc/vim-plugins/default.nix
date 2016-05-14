@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages_38, zip
-, vim_configurable, vimPlugins, xkb_switch, git
+, vim_configurable, vimPlugins, xkb_switch, git, racerdRust
 , Cocoa ? null
 }:
 
@@ -952,6 +952,10 @@ rec {
       (if stdenv.isDarwin then llvmPackages_38.clang else llvmPackages_38.clang-unwrapped)
       llvmPackages_38.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+
+    propogatedBuildInputs = [
+      racerdRust
+    ];
 
     buildPhase = ''
       patchShebangs .

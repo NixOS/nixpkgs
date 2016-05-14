@@ -1,26 +1,22 @@
 { stdenv, fetchFromGitHub
+, cmake
 , fuse }:
 
 stdenv.mkDerivation rec {
   name = "securefs-${version}";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
-    sha256 = "1n9kgrvc600lfclrk8cj2zy8md1brqhs8kvzdwfxgxavdh0wakkc";
+    sha256 = "1drksvwfgfpgcn2mzb65ljqlg2kgn6nald9fnz60hliw8f1wiqvh";
     rev = version;
     repo = "securefs";
     owner = "netheril96";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];
 
   enableParallelBuilding = true;
-
-  doCheck = false; # tests require the fuse module to be loaded
-
-  installPhase = ''
-    install -D -m0755 {.,$out/bin}/securefs
-  '';
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

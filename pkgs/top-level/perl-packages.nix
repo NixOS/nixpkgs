@@ -13524,11 +13524,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  URIFind = buildPerlModule {
-    name = "URI-Find-20111103";
+  URIFind = buildPerlModule rec {
+    name = "URI-Find-20140709";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20111103.tar.gz;
-      sha256 = "1igbbj14j5fssdqrbr60mg3w95wldfxdikplqdmqgf2zn5j65ibr";
+      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/${name}.tar.gz";
+      sha256 = "0czc4h182s7sx3k123m7qlg7yybnwxgh369hap3c3b6xgrglrhy0";
     };
     propagatedBuildInputs = [ URI ];
     meta = {

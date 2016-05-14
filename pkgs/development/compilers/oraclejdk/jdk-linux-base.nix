@@ -165,8 +165,10 @@ let result = stdenv.mkDerivation rec {
     EOF
 
     # Oracle Java Mission Control needs to know where libgtk-x11 and related is
-    wrapProgram "$out/bin/jmc" \
-        --suffix-each LD_LIBRARY_PATH ':' "${rpath}" \
+    if test -n "$installjdk"; then
+      wrapProgram "$out/bin/jmc" \
+          --suffix-each LD_LIBRARY_PATH ':' "${rpath}"
+    fi
   '';
 
   inherit installjdk pluginSupport;

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python pkgconfig glib gobjectIntrospection ];
   propagatedBuildInputs = [ pycairo cairo ];
 
+  passthru.pythonPath = [];
+
   meta = {
     homepage = http://live.gnome.org/PyGObject;
     description = "Python bindings for Glib";

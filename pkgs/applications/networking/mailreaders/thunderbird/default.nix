@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  requiredSystemFeatures = [ "big-parallel" ];
 
   buildPhase =  "../mozilla/mach build";
 

@@ -23,19 +23,20 @@
 , icuSupport ? true, icu
 , clientSupport ? true, mpd_clientlib
 , opusSupport ? true, libopus
+, soundcloudSupport ? true, yajl
 }:
 
 let
   opt = stdenv.lib.optional;
   mkFlag = c: f: if c then "--enable-${f}" else "--disable-${f}";
   major = "0.19";
-  minor = "12";
+  minor = "15";
 
 in stdenv.mkDerivation rec {
   name = "mpd-${major}.${minor}";
   src = fetchurl {
     url    = "http://www.musicpd.org/download/mpd/${major}/${name}.tar.xz";
-    sha256 = "0xg8w5vn6xd0yfw55qj6wnav7v14nmr00s3d4w5gixbjrv3ycvvv";
+    sha256 = "12wvqb5r3q77x78wigmrsz3vv8rykcfnavffcvlqq0sbi4is5f8c";
   };
 
   buildInputs = [ pkgconfig glib boost ]
@@ -65,7 +66,8 @@ in stdenv.mkDerivation rec {
     ++ opt gmeSupport game-music-emu
     ++ opt icuSupport icu
     ++ opt clientSupport mpd_clientlib
-    ++ opt opusSupport libopus;
+    ++ opt opusSupport libopus
+    ++ opt soundcloudSupport yajl;
 
   configureFlags =
     [ (mkFlag (!stdenv.isDarwin && alsaSupport) "alsa")
@@ -94,6 +96,7 @@ in stdenv.mkDerivation rec {
       (mkFlag gmeSupport "gme")
       (mkFlag clientSupport "libmpdclient")
       (mkFlag opusSupport "opus")
+      (mkFlag soundcloudSupport "soundcloud")
       "--enable-debug"
     ]
     ++ opt stdenv.isLinux

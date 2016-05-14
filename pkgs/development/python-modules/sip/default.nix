@@ -19,6 +19,8 @@ if isPyPy then throw "sip not supported for interpreter ${python.executable}" el
 
   buildInputs = [ python ];
 
+  passthru.pythonPath = [];
+
   meta = with stdenv.lib; {
     description = "Creates C++ bindings for Python modules";
     homepage    = "http://www.riverbankcomputing.co.uk/";

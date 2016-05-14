@@ -759,9 +759,7 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  duperemove = callPackage ../tools/filesystems/duperemove {
-    linuxHeaders = linuxHeaders_3_18;
-  };
+  duperemove = callPackage ../tools/filesystems/duperemove { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
@@ -6293,6 +6291,8 @@ in
   });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
+  postiats-utilities = callPackage ../development/tools/postiats-utilities {};
+
   prelink = callPackage ../development/tools/misc/prelink { };
 
   premake3 = callPackage ../development/tools/misc/premake/3.nix { };
@@ -6306,6 +6306,8 @@ in
   };
 
   racerRust = callPackage ../development/tools/rust/racer { };
+
+  racerdRust = callPackage ../development/tools/rust/racerd { };
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
@@ -9295,6 +9297,8 @@ in
 
   xalanc = callPackage ../development/libraries/xalanc {};
 
+  xgboost = callPackage ../development/libraries/xgboost { };
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -11200,7 +11204,6 @@ in
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
-    linuxHeaders = linuxHeaders_3_18;
     utillinux = utillinuxMinimal; # break the cyclic dependency
   }
     // {
@@ -12338,6 +12341,8 @@ in
 
     org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
 
+    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
+
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
@@ -12366,6 +12371,8 @@ in
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
+    s = callPackage ../applications/editors/emacs-modes/s { };
+
     sbtMode = callPackage ../applications/editors/emacs-modes/sbt-mode { };
 
     scalaMode1 = callPackage ../applications/editors/emacs-modes/scala-mode/v1.nix { };
@@ -12381,6 +12388,8 @@ in
 
     writeGood = callPackage ../applications/editors/emacs-modes/writegood { };
 
+    xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
+
     cask = callPackage ../applications/editors/emacs-modes/cask { };
   };
 
@@ -12391,7 +12400,7 @@ in
 
     inherit lib newScope stdenv;
     inherit fetchFromGitHub fetchgit fetchhg fetchurl;
-    inherit emacs texinfo makeWrapper;
+    inherit emacs texinfo makeWrapper runCommand;
     inherit (xorg) lndir;
 
     trivialBuild = callPackage ../build-support/emacs/trivial.nix {
@@ -16530,7 +16539,7 @@ in
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
 
-  sails = callPackage ../misc/sails { };
+  sailsd = callPackage ../misc/sailsd { };
 
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
