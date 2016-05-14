@@ -267,6 +267,7 @@ in modules // {
   pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = self.sip_4_16;
     pythonDBus = self.dbus;
+    python = self.python;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
@@ -16667,26 +16668,20 @@ in modules // {
   });
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.5.4";
+    name = "psycopg2-2.6.1";
     disabled = isPyPy;
-
-    # error: invalid command 'test'
-    doCheck = false;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psycopg2/${name}.tar.gz";
-      sha256 = "07ivzl7bq8bjcq5n90w4bsl29gjfm5l8yamw0paxh25si8r3zfi4";
+      sha256 = "0k4hshvrwsh8yagydyxgmd0pjm29lwdxkngcq9fzfzkmpsxrmkva";
     };
-
     buildInputs = optional stdenv.isDarwin pkgs.openssl;
     propagatedBuildInputs = with self; [ pkgs.postgresql ];
-
+    doCheck = false;
     meta = {
       description = "PostgreSQL database adapter for the Python programming language";
       license = with licenses; [ gpl2 zpt20 ];
     };
   };
-
 
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
@@ -26691,6 +26686,28 @@ in modules // {
       license = licenses.mit;
       maintainers = [ maintainers.makefu ];
     };
+  };
+
+  xgboost = buildPythonPackage rec {
+    name = "xgboost-${version}";
+
+    inherit (pkgs.xgboost) version src meta;
+
+    propagatedBuildInputs = with self; [ scipy ];
+    buildInputs = with self; [ nose ];
+
+    postPatch = ''
+      cd python-package
+
+      cat <<EOF >xgboost/libpath.py
+      def find_lib_path():
+        return ["${pkgs.xgboost}/lib/libxgboost.so"]
+      EOF
+    '';
+
+    postInstall = ''
+      rm -rf $out/xgboost
+    '';
   };
 
   xkcdpass = buildPythonPackage rec {

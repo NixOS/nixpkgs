@@ -12,20 +12,29 @@ in
 {
   options = {
 
-    services.xserver.desktopManager.xfce.enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Enable the Xfce desktop environment.";
+    services.xserver.desktopManager.xfce = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the Xfce desktop environment.";
+      };
+
+      thunarPlugins = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
+        description = ''
+          A list of plugin that should be installed with Thunar.
+        '';
+      };
+
+      noDesktop = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Don't install XFCE desktop components (xfdesktop, panel and notification daemon).";
+      };
     };
 
-    services.xserver.desktopManager.xfce.thunarPlugins = mkOption {
-      default = [];
-      type = types.listOf types.package;
-      example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
-      description = ''
-        A list of plugin that should be installed with Thunar.
-      '';
-    };
   };
 
 
@@ -62,14 +71,12 @@ in
         pkgs.xfce.terminal
        (pkgs.xfce.thunar.override { thunarPlugins = cfg.thunarPlugins; })
         pkgs.xfce.xfce4icontheme
-        pkgs.xfce.xfce4panel
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
         pkgs.xfce.xfce4mixer
         pkgs.xfce.xfce4volumed
         pkgs.xfce.xfce4screenshooter
         pkgs.xfce.xfconf
-        pkgs.xfce.xfdesktop
         pkgs.xfce.xfwm4
         # This supplies some "abstract" icons such as
         # "utilities-terminal" and "accessories-text-editor".
@@ -81,9 +88,13 @@ in
         pkgs.xfce.gvfs
         pkgs.xfce.xfce4_appfinder
         pkgs.xfce.tumbler       # found via dbus
-        pkgs.xfce.xfce4notifyd  # found via dbus
       ]
-      ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
+      ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager
+      ++ optionals (!cfg.noDesktop)
+         [ pkgs.xfce.xfce4panel
+           pkgs.xfce.xfdesktop
+	   pkgs.xfce.xfce4notifyd  # found via dbus
+         ];
 
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];

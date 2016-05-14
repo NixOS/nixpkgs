@@ -1,13 +1,13 @@
 { stdenv, fetchurl, python, exiv2, scons, boost }:
 
-let version = "0.3.0"; in
+let version = "0.3.2"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pyexiv2-${version}";
   
   src = fetchurl {
-    url = "http://launchpad.net/pyexiv2/0.3.x/0.3/+download/pyexiv2-0.3.0.tar.bz2";
-    sha256 = "1y7r2z0ja166cx8fmykq7gaif02drknqqbxaf18fhv9nmgz4jrg9";
+    url = "http://launchpad.net/pyexiv2/0.3.x/0.3.2/+download/${name}.tar.bz2";
+    sha256 = "09r1ga6kj5cnmrldpkqzvdhh7xi7aad9g4fbcr1gawgsd9y13g0a";
   };
 
   buildPhase = ''

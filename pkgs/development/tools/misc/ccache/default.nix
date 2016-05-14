@@ -20,9 +20,14 @@ let ccache = stdenv.mkDerivation rec {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = extraConfig: (runCommand "ccache-links"
-      { passthru.gcc = gcc; passthru.isGNU = true; }
-      ''
+    links = extraConfig: stdenv.mkDerivation rec {
+      name = "ccache-links";
+      passthru = {
+        inherit gcc;
+        isGNU = true;
+      };
+      inherit (gcc.cc) lib;
+      buildCommand = ''
         mkdir -p $out/bin
         if [ -x "${gcc.cc}/bin/gcc" ]; then
           cat > $out/bin/gcc << EOF
@@ -48,7 +53,8 @@ let ccache = stdenv.mkDerivation rec {
         for file in $(ls ${gcc.cc} | grep -vw bin); do
           ln -s ${gcc.cc}/$file $out/$file
         done
-      '');
+      '';
+    };
   };
 
   meta = with stdenv.lib; {

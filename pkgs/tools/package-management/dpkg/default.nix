@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.18.6";
+  version = "1.18.7";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "18nywp0gs8bnywll9qrcg8g1fli4p5xd6h8sazhsmrxgp8iw62yx";
+    sha256 = "0yxqv7b5a1qhhas9dzxr5gwj22jqxisrwzvrmwms8l67dlx6vqxc";
   };
 
   postPatch = ''
