@@ -267,6 +267,7 @@ in modules // {
   pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
     sip = self.sip_4_16;
     pythonDBus = self.dbus;
+    python = self.python;
   };
 
   pyside = callPackage ../development/python-modules/pyside { };
