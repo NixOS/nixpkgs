@@ -49,6 +49,11 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
+
+      ./cve-2016-3075.patch
+      ./glob-simplify-interface.patch
+      ./cve-2016-1234.patch
+      ./cve-2016-3706.patch
     ];
 
   postPatch =
