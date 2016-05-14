@@ -10571,17 +10571,19 @@ in
 
   # -- Linux kernel expressions ------------------------------------------------
 
-  linuxHeaders = self.linuxHeaders_3_18;
+  linuxHeaders = self.linuxHeaders_4_4;
 
   linuxHeaders24Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/2.4.nix {
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders26Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/3.18.nix {
+  linuxHeaders26Cross = forceNativeDrv (callPackage ../os-specific/linux/kernel-headers/4.4.nix {
     cross = assert crossSystem != null; crossSystem;
   });
 
   linuxHeaders_3_18 = callPackage ../os-specific/linux/kernel-headers/3.18.nix { };
+
+  linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix { };
 
   # We can choose:
   linuxHeadersCrossChooser = ver : if ver == "2.4" then self.linuxHeaders24Cross
