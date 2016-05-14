@@ -1,7 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
-, kexectools, libmicrohttpd, linuxHeaders, libseccomp, iptables
+, kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
+, iptables
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
 }:

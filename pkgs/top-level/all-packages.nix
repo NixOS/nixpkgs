@@ -759,9 +759,7 @@ in
 
   dtrx = callPackage ../tools/compression/dtrx { };
 
-  duperemove = callPackage ../tools/filesystems/duperemove {
-    linuxHeaders = linuxHeaders_3_18;
-  };
+  duperemove = callPackage ../tools/filesystems/duperemove { };
 
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
@@ -11204,7 +11202,6 @@ in
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd {
-    linuxHeaders = linuxHeaders_3_18;
     utillinux = utillinuxMinimal; # break the cyclic dependency
   }
     // {
