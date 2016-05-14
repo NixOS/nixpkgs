@@ -40,6 +40,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  passthru.pythonPath = [];
+
   meta = {
     description = "Python bindings for Qt";
     license = "GPL";

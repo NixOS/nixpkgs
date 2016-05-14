@@ -53,4 +53,6 @@ in stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.pythonPath = [];
 }
