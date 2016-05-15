@@ -13911,24 +13911,31 @@ in
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
-  # = urxvt
+  # urxvt
   rxvt_unicode = callPackage ../applications/misc/rxvt_unicode {
     perlSupport = true;
     gdkPixbufSupport = true;
     unicode3Support = true;
   };
 
-  udevil = callPackage ../applications/misc/udevil {};
+  rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
+    plugins = [
+      urxvt_perl
+      urxvt_perls
+      urxvt_tabbedex
+      urxvt_font_size
+      urxvt_theme_switch
+    ];
+  };
 
   # urxvt plugins
   urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
   urxvt_font_size = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-font-size { };
+  urxvt_theme_switch = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-theme-switch { };
 
-  rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
-    plugins = [ urxvt_perl urxvt_perls urxvt_tabbedex urxvt_font_size ];
-  };
+  udevil = callPackage ../applications/misc/udevil {};
 
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte_290;
