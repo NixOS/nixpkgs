@@ -9354,16 +9354,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PackageDeprecationManager = buildPerlPackage {
-    name = "Package-DeprecationManager-0.13";
+  PackageDeprecationManager = buildPerlPackage rec {
+    name = "Package-DeprecationManager-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Package-DeprecationManager-0.13.tar.gz;
-      sha256 = "0fkvq3xxwc3l5hg64dr9sj3l12dl59i44cg407qx9sd6r51j3qfi";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "4018a06f7a3ba252c9eccc3fdcad9490cd003dfa6baf261545e96b5a82e784a7";
     };
-    buildInputs = [ TestRequires TestFatal ];
-    propagatedBuildInputs = [ ParamsUtil SubInstall ListMoreUtils ];
+    buildInputs = [ TestFatal TestWarnings ];
+    propagatedBuildInputs = [ PackageStash ParamsUtil SubInstall SubName namespaceautoclean ];
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      homepage = http://metacpan.org/release/Package-DeprecationManager;
       description = "Manage deprecation warnings for your distribution";
       license = stdenv.lib.licenses.artistic2;
     };
