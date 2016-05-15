@@ -1398,9 +1398,7 @@ in
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
-  efivar = callPackage ../tools/system/efivar {
-    linuxHeaders = linuxHeaders_3_18;
-  };
+  efivar = callPackage ../tools/system/efivar { };
 
   evemu = callPackage ../tools/system/evemu { };
 

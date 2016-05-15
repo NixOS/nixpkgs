@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, popt, linuxHeaders }:
+{ stdenv, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ popt linuxHeaders ];
+  buildInputs = [ popt ];
 
   postPatch = ''
      substituteInPlace src/Makefile --replace "-static" ""
