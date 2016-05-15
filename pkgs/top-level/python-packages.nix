@@ -19234,12 +19234,12 @@ in modules // {
   };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.6.0";
+    version = "0.6.2";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "192pz6i1fp8vc1qasg6ccxpdsmpbqi3fqf5bgx3vpadp5x0rrz4f";
+      sha256 = "0ds1b2qx0nx9bqj1sqgr4lmanb4hpchmylp1hml1l0p71qi5ha0r";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
