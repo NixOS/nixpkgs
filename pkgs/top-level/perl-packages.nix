@@ -8908,19 +8908,8 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NamespaceClean = buildPerlPackage {
-    name = "namespace-clean-0.25";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/namespace-clean-0.25.tar.gz;
-      sha256 = "946a2b7b8219562818867ad915cd493637e2639f901db050b835500c8e6ecd04";
-    };
-    propagatedBuildInputs = [ BHooksEndOfScope PackageStash ];
-    meta = {
-      homepage = http://search.cpan.org/dist/namespace-clean;
-      description = "Keep imports and functions out of your namespace";
-      license = "perl";
-    };
-  };
+  # Deprecated.
+  NamespaceClean = self.namespaceclean;
 
   NetAddrIP = buildPerlPackage rec {
     name = "NetAddr-IP-4.079";
