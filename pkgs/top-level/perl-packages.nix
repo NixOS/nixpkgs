@@ -8647,16 +8647,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesDateTime = buildPerlPackage {
-    name = "MooseX-Types-DateTime-0.08";
+  MooseXTypesDateTime = buildPerlPackage rec {
+    name = "MooseX-Types-DateTime-0.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-0.08.tar.gz;
-      sha256 = "0q0d1dd8737rc3k3jb22wvybf03hg3lp1iyda0ivkd8020cib996";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "b89fa26636f6a17eaa3868b4514340472b68bbdc2161a1d79a22a1bf5b1d39c6";
     };
-    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean TestException Testuseok ];
+    buildInputs = [ ModuleBuildTiny Moose TestFatal TestSimple ];
+    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone Moose MooseXTypes namespaceclean self."if" ];
     meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      homepage = https://github.com/moose/MooseX-Types-DateTime;
+      description = "DateTime related constraints and coercions for Moose";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
