@@ -9583,11 +9583,6 @@ in
     self = python27Packages;
   }));
 
-  python32Packages = callPackage ./python-packages.nix {
-    python = python32;
-    self = python32Packages;
-  };
-
   python33Packages = callPackage ./python-packages.nix {
     python = python33;
     self = python33Packages;
