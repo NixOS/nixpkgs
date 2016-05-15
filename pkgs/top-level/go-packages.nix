@@ -1310,6 +1310,33 @@ let
     buildInputs = [ net ];
   };
 
+  gore = buildFromGitHub {
+    rev = "v0.2.5";
+    owner = "motemen";
+    repo = "gore";
+    sha256 = "1kg14ps6yw0715rlbcfk1bmrszzgsqgb0r2p3ra1qwxbhj1jd44y";
+    buildInputs = [ go-homedir go-quickfix liner tools pkgs.makeWrapper ];
+
+    # Gore is a Go REPL, so it needs to be able to use the Go compiler.
+    allowGoReference = true;
+
+    # Gore seems to only work with Go 1.5. Not sure if it doesn't support
+    # other versions or if I just haven't figured out how to get them working.
+    disabled = !isGo15;
+
+    postInstall = ''
+      mkdir -p $out/bin
+      cp $NIX_BUILD_TOP/go/bin/gore $out/bin
+      wrapProgram $out/bin/gore --set GOROOT ${self.go}/share/go
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/motemen/gore";
+      description = "Yet another Go REPL that works nicely. Featured with line editing, code completion, and more.";
+      license = licenses.mit;
+    };
+  };
+
   goreturns = buildFromGitHub {
     rev = "b368f1f77f2950c753e05a6a29acfc487fa7a959";
     owner = "sqs";
@@ -1790,6 +1817,21 @@ let
     owner  = "google";
     repo   = "go-querystring";
     sha256 = "00ani7fhydcmlsm3n93nmj1hcqp2wmzvihnb1gdzynif1hw0530y";
+  };
+
+  go-quickfix = buildFromGitHub {
+    rev = "a5d4c82f7428280897ef403a87aa78b9c5924a47";
+    sha256 = "0m1vclhqygnylfyhzpw5myi3f4qz30a3h9mbssxdsgn67s7l666y";
+    owner = "motemen";
+    repo = "go-quickfix";
+    buildInputs = [ tools ];
+    excludedPackages = "testdata";
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/motemen/go-quickfix";
+      description = ''Quick fix non-compiling well-typed Go source code e.g. "x declared and not used."'';
+      license = licenses.mit;
+    };
   };
 
   go-radix = buildFromGitHub {
