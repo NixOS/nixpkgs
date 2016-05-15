@@ -12943,6 +12943,8 @@ in
 
   i3lock-color = callPackage ../applications/window-managers/i3/lock-color.nix { };
 
+  i3lock-fancy = callPackage ../applications/window-managers/i3/lock-fancy.nix { };
+
   i3minator = callPackage ../tools/misc/i3minator { };
 
   i3pystatus = callPackage ../applications/window-managers/i3/pystatus.nix { };
