@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "fantasque-sans-mono-${version}";
-  version = "1.6.5";
+  version = "1.7.1";
 
   src = fetchurl {
     url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono.zip";
-    sha256 = "19a82xlbcnd7dxqmpp03b62gjvi33bh635r0bjw2l09lgir6alym";
+    sha256 = "0lkky7mmpq6igpjh7lsv30xjx62mwlx27gd9zwcyv3mp2d2b5cvb";
   };
 
   buildInputs = [unzip];
