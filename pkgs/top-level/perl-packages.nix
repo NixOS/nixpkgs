@@ -8331,7 +8331,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "111f391221d00f8b09cdcc6c806ab114324cf7f529d12f627fb97d054da42225";
     };
     buildInputs = [ DevelCheckOS ModuleBuildTiny Moose TestFatal ];
-    propagatedBuildInputs = [ Moose MooseXGetopt MooseXTypesPathClass namespaceautoclean ];
+    propagatedBuildInputs = [ Moose MooseXGetopt MooseXTypesPathClass SubExporter namespaceautoclean ];
     meta = {
       homepage = https://github.com/moose/MooseX-Daemonize;
       description = "Role for daemonizing your Moose based application";
