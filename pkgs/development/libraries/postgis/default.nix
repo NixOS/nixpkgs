@@ -91,7 +91,7 @@ in rec {
     builtInputs = [gdal json_c pkgconfig];
 
     # postgis config directory assumes /include /lib from the same root for json-c library
-    NIX_LDFLAGS="-L${json_c.out}/lib";
+    NIX_LDFLAGS = "-L${stdenv.lib.makeLibraryPath [json_c]}";
 
     dontDisableStatic = true;
     preConfigure = ''
