@@ -471,6 +471,7 @@ in
         cups = {};
         ftp = {};
         i3lock = {};
+        i3lock-color = {};
         screen = {};
         vlock = {};
         xlock = {};
