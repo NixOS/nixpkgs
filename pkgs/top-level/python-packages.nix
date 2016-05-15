@@ -7911,14 +7911,25 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    name = "py3status-2.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/py3status/${name}.tar.gz";
-      sha256 = "1aq4l1lj6j54a8mh9y3yscbxv41bbhz89fiwnydj2gx0md5sq5v5";
+    version = "2.9";
+    name = "py3status-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "ultrabug";
+      repo = "py3status";
+      rev = version;
+      sha256 = "1nvdqwhgk0zff5kspgrh5c5vg1vdnz6gpjplbqi3nz41qws48f1y";
     };
     propagatedBuildInputs = with self; [ requests2 ];
     prePatch = ''
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
+      sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
+      sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
+      sed -i -e "s|'amixer|'${pkgs.alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
+      sed -i -e "s|'i3-nagbar|'${pkgs.i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
+      sed -i -e "s|'free|'${pkgs.procps}/bin/free|" py3status/modules/sysdata.py
+      sed -i -e "s|'sensors|'${pkgs.lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
+      sed -i -e "s|'setxkbmap|'${pkgs.xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
+      sed -i -e "s|'xset|'${pkgs.xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
     '';
     meta = {
       maintainers = with maintainers; [ garbas ];
