@@ -2512,6 +2512,8 @@ in
 
   ndjbdns = callPackage ../tools/networking/ndjbdns { };
 
+  nerdfonts = callPackage ../data/fonts/nerdfonts { };
+
   nestopia = callPackage ../misc/emulators/nestopia { };
 
   netatalk = callPackage ../tools/filesystems/netatalk { };
