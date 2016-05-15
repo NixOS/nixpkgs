@@ -35,14 +35,23 @@
 , libheimdal
 , libpulseaudio
 , systemd
+, channel ? "stable"
 }:
 
 assert stdenv.isLinux;
 
-# imports `version` and `sources`
-with (import ./sources.nix);
-
 let
+
+  generated = if channel == "stable" then (import ./sources.nix)
+         else if channel == "beta"   then (import ./beta_sources.nix)
+         else if channel == "developer"   then { version = "48.0a2"; sources = [
+            { locale = "en-US"; arch = "linux-i686"; sha512 = "3xa9lmq4phx7vfd74ha1bq108la96m4jyq11h2m070rbcjv5pg6ck2pxphr2im55lym7h6saw2l4lpzcr5xvnfmj1a7fdhszswjl3s4"; }
+            { locale = "en-US"; arch = "linux-x86_64"; sha512 = "1vndwja68xbn3rfq15ffksagr7fm2ns84cib4bhx654425hp5ghfpiszl7qwyxg8s28srqdfsl9w8hp7qxsz5gmmiznf05zxfv487w7"; }
+          ]; }
+         else builtins.abort "Wrong channel! Channel must be one of `stable`, `beta` or `developer`";
+
+  inherit (generated) version sources;
+
   arch = if stdenv.system == "i686-linux"
     then "linux-i686"
     else "linux-x86_64";
@@ -65,7 +74,9 @@ stdenv.mkDerivation {
   name = "firefox-bin-unwrapped-${version}";
 
   src = fetchurl {
-    url = "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
+    url = if channel == "developer"
+            then "http://download-installer.cdn.mozilla.net/pub/firefox/nightly/latest-mozilla-aurora/firefox-${version}.${source.locale}.${source.arch}.tar.bz2"
+            else "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
     inherit (source) sha512;
   };
 
@@ -130,8 +141,10 @@ stdenv.mkDerivation {
         firefox firefox-bin plugin-container \
         updater crashreporter webapprt-stub
       do
-        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          "$out/usr/lib/firefox-bin-${version}/$executable"
+        if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
+          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+            "$out/usr/lib/firefox-bin-${version}/$executable"
+        fi
       done
 
       find . -executable -type f -exec \
@@ -167,5 +180,6 @@ stdenv.mkDerivation {
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ garbas ];
   };
 }

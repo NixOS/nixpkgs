@@ -12594,6 +12594,34 @@ in
     desktopName = "Firefox";
   };
 
+  firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "beta";
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
+  };
+
+  firefox-beta-bin = self.wrapFirefox firefox-beta-bin-unwrapped {
+    browserName = "firefox";
+    name = "firefox-beta-bin-" +
+      (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
+    desktopName = "Firefox Beta";
+  };
+
+  firefox-developer-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
+    channel = "developer";
+    gconf = pkgs.gnome.GConf;
+    inherit (pkgs.gnome) libgnome libgnomeui;
+    inherit (pkgs.gnome3) defaultIconTheme;
+  };
+
+  firefox-developer-bin = self.wrapFirefox firefox-developer-bin-unwrapped {
+    browserName = "firefox";
+    name = "firefox-developer-bin-" +
+      (builtins.parseDrvName firefox-developer-bin-unwrapped.name).version;
+    desktopName = "Firefox Developer Edition";
+  };
+
   firestr = qt5.callPackage ../applications/networking/p2p/firestr
     { boost = boost155;
     };
