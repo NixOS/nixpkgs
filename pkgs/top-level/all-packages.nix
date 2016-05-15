@@ -5607,9 +5607,6 @@ in
     self = python27;
     inherit (darwin) CF configd;
   };
-  python32 = callPackage ../development/interpreters/python/3.2 {
-    self = python32;
-  };
   python33 = callPackage ../development/interpreters/python/3.3 {
     self = python33;
   };
