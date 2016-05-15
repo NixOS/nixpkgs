@@ -239,6 +239,7 @@
   ./services/misc/nix-gc.nix
   ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
+  ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
