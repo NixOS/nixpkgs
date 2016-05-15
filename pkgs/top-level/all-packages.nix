@@ -554,6 +554,8 @@ in
 
   backup = callPackage ../tools/backup/backup { };
 
+  base16 = callPackage ../misc/base16 { };
+
   basex = callPackage ../tools/text/xml/basex { };
 
   babeld = callPackage ../tools/networking/babeld { };
