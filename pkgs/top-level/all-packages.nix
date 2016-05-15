@@ -4029,6 +4029,8 @@ in
 
   nix-zsh-completions = callPackage ../shells/nix-zsh-completions { };
 
+  zsh-prezto = callPackage ../shells/zsh-prezto { };
+
   grml-zsh-config = callPackage ../shells/grml-zsh-config { };
 
 
