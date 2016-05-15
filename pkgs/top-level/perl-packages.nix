@@ -3276,15 +3276,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   DateTimeLocale = buildPerlPackage rec {
-    name = "DateTime-Locale-0.92";
+    name = "DateTime-Locale-1.03";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "1fq2wbpfvi5gy3jaild4974sz02vdvfkb98aahni9par4sgn469z";
+      sha256 = "3100568a62a91ca1c09c0aac8e1e4ba34e6f82047ec64f714733a647c040f511";
     };
-    buildInputs = [ DistCheckConflicts ];
-    propagatedBuildInputs = [ ListMoreUtils ParamsValidate ];
+    buildInputs = [ DistCheckConflicts TestFatal TestRequires TestWarnings ];
+    propagatedBuildInputs = [ DistCheckConflicts ListMoreUtils ParamsValidate ];
     meta = {
-      homepage = http://datetime.perl.org/;
+      homepage = http://metacpan.org/release/DateTime-Locale;
       description = "Localization support for DateTime.pm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
