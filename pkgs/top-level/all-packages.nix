@@ -5770,6 +5770,8 @@ in
 
   guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
 
+  guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
+
   guile-xcb = callPackage ../development/guile-modules/guile-xcb { };
 
   pharo-vms = callPackage_i686 ../development/pharo/vm { };
