@@ -2282,6 +2282,8 @@ in
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
+  libmpack = callPackage ../development/libraries/libmpack { };
+
   libiberty = callPackage ../development/libraries/libiberty { };
 
   libiberty_static = callPackage ../development/libraries/libiberty { staticBuild = true; };
@@ -14404,6 +14406,7 @@ in
     gtkvnc = gtkvnc.override { enableGTK3 = true; };
     spice_gtk = spice_gtk.override { enableGTK3 = true; };
   };
+
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     inherit (gnome) gnome_python;
     vte = gnome3.vte;
