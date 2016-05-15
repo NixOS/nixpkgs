@@ -215,20 +215,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [LocaleMaketextSimple];
   };
 
-  AppCmd = buildPerlPackage {
-    name = "App-Cmd-0.326";
+  AppCmd = buildPerlPackage rec {
+    name = "App-Cmd-0.330";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/App-Cmd-0.326.tar.gz;
-      sha256 = "1z6vp1am170fczc0srj63rdvrdbrjk3acmj6ka5v5n6qim4xsv9b";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "7a7bfd7196f7551a07509b03ea7abddc1fa9aee19a84e3dd5ba939c619cb6011";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ CaptureTiny ClassLoad DataOptList GetoptLongDescriptive IOTieCombine StringRewritePrefix SubExporter ModulePluggable SubInstall ];
+    propagatedBuildInputs = [ CaptureTiny ClassLoad DataOptList GetoptLongDescriptive IOTieCombine ModulePluggable StringRewritePrefix SubExporter SubInstall ];
     meta = {
-      homepage = https://github.com/rjbs/app-cmd;
+      homepage = https://github.com/rjbs/App-Cmd;
       description = "Write command line apps with less suffering";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
