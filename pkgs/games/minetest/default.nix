@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit, freetype
-, gettext, doxygen
+, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, freetype, gettext, doxygen, ncurses
 }:
 
 let
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
-    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen
+    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen ncurses
   ];
 
   postInstall = ''
