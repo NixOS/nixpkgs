@@ -6549,12 +6549,12 @@ in modules // {
   };
 
   httpauth = buildPythonPackage rec {
-    version = "0.2";
+    version = "0.3";
     name = "httpauth-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpauth/${name}.tar.gz";
-      sha256 = "294029b5dfed27bca5746a31e3ffb5ed99268761536705e8bbd44231b7ca15ec";
+      sha256 = "0qas7876igyz978pgldp5r7n7pis8n4vf0v87gxr9l7p7if5lr3l";
     };
 
     doCheck = false;
