@@ -8590,13 +8590,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXTraits = buildPerlPackage rec {
-    name = "MooseX-Traits-0.11";
+    name = "MooseX-Traits-0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
-      sha256 = "0sqmpf2kw25847fwrrwpcfhrq694bgs8jbix7qxp9qyjm769np6n";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "74afe0c4faf4e3b97c57f289437caa60becca34cd5821f489dd4cc9da4fbe29a";
     };
-    buildInputs = [ TestException Testuseok ];
-    propagatedBuildInputs = [ ClassMOP Moose namespaceautoclean ];
+    buildInputs = [ ModuleBuildTiny Moose MooseXRoleParameterized TestFatal TestRequires TestSimple ];
+    propagatedBuildInputs = [ ClassLoad Moose SubExporter namespaceautoclean ];
+    meta = {
+      homepage = https://github.com/moose/MooseX-Traits;
+      description = "Automatically apply roles at object creation time";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MooseXTraitsPluggable = buildPerlPackage rec {
