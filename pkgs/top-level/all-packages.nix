@@ -6971,7 +6971,10 @@ in
 
   gettext = callPackage ../development/libraries/gettext { };
 
-  gd = callPackage ../development/libraries/gd { };
+  gd = callPackage ../development/libraries/gd {
+    libtiff = null;
+    libXpm = null;
+  };
 
   gdal = callPackage ../development/libraries/gdal { };
 

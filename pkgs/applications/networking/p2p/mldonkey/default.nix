@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng }:
+{stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
 
 stdenv.mkDerivation (rec {
   name = "mldonkey-3.1.5";
@@ -14,7 +14,7 @@ stdenv.mkDerivation (rec {
     license = stdenv.lib.licenses.gpl2;
   };
 
-  buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng ];
+  buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng libjpeg ];
   configureFlags = [ "--disable-gui" ];
 } // (if !ocaml.nativeCompilers then
 {
