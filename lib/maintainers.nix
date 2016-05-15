@@ -328,6 +328,7 @@
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
+  seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   sheenobu = "Sheena Artrip <sheena.artrip@gmail.com>";
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
