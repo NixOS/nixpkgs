@@ -8893,20 +8893,8 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  NamespaceAutoclean = buildPerlPackage {
-    name = "namespace-autoclean-0.26";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/namespace-autoclean-0.26.tar.gz;
-      sha256 = "c0f805acd3b565c611324b7bde20d32f6ffc31afefc5b8e52f54994802594d43";
-    };
-    buildInputs = [ ModuleBuildTiny TestRequires ];
-    propagatedBuildInputs = [ BHooksEndOfScope SubIdentify NamespaceClean ];
-    meta = {
-      homepage = https://github.com/moose/namespace-autoclean;
-      description = "Keep imports out of your namespace";
-      license = "perl";
-    };
-  };
+  # Deprecated.
+  NamespaceAutoclean = self.namespaceautoclean;
 
   # Deprecated.
   NamespaceClean = self.namespaceclean;
