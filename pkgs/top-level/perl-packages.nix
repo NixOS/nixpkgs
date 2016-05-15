@@ -8148,20 +8148,20 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Moose ];
   };
 
-  MooseXAppCmd = buildPerlPackage {
-    name = "MooseX-App-Cmd-0.27";
+  MooseXAppCmd = buildPerlPackage rec {
+    name = "MooseX-App-Cmd-0.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MJ/MJGARDNER/MooseX-App-Cmd-0.27.tar.gz;
-      sha256 = "18wf8xmp0b8g76rlkmzw9m026w0l5k972w3z9xcskwqmg9p0wg3k";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "2e3bbf7283a4bee72d91d26eb204436030992bbe55cbd35ec33a546f16f973ff";
     };
-    buildInputs = [ MooseXConfigFromFile TestOutput YAML MouseXGetOpt ];
-    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose AnyMoose MooseXConfigFromFile MooseXGetopt MooseXHasOptions MooseXMarkAsMethods Testuseok ];
+    buildInputs = [ ModuleBuildTiny MooseXConfigFromFile TestOutput YAML ];
+    propagatedBuildInputs = [ AppCmd GetoptLongDescriptive Moose MooseXGetopt MooseXNonMoose namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/MooseX-App-Cmd;
+      homepage = https://github.com/moose/MooseX-App-Cmd;
       description = "Mashes up MooseX::Getopt and App::Cmd";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
