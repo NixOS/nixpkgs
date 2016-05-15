@@ -8662,15 +8662,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesDateTimeMoreCoercions = buildPerlPackage {
-    name = "MooseX-Types-DateTime-MoreCoercions-0.11";
+  MooseXTypesDateTimeMoreCoercions = buildPerlPackage rec {
+    name = "MooseX-Types-DateTime-MoreCoercions-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILMARI/MooseX-Types-DateTime-MoreCoercions-0.11.tar.gz;
-      sha256 = "c746a9284b7db49ce9acb2fbce26629fa816e6636e883d2ed6c62e336cfc52cb";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "21bb3a597719888edb6ceaa132418d5cf92ecb92a50cce37b94259a55e0e3796";
     };
-    buildInputs = [ TestException Testuseok ];
-    propagatedBuildInputs = [ DateTime DateTimeXEasy Moose MooseXTypes MooseXTypesDateTime TimeDurationParse namespaceclean ];
+    buildInputs = [ ModuleBuildTiny TestFatal TestSimple ];
+    propagatedBuildInputs = [ DateTime DateTimeXEasy Moose MooseXTypes MooseXTypesDateTime TimeDurationParse namespaceclean self."if" ];
     meta = {
+      homepage = https://github.com/moose/MooseX-Types-DateTime-MoreCoercions;
       description = "Extensions to MooseX::Types::DateTime";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
