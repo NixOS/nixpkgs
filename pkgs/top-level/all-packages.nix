@@ -16303,6 +16303,8 @@ in
 
   beep = callPackage ../misc/beep { };
 
+  blackbird = callPackage ../misc/themes/blackbird { };
+
   brgenml1lpr = callPackage_i686 ../misc/cups/drivers/brgenml1lpr {};
 
   brgenml1cupswrapper = callPackage ../misc/cups/drivers/brgenml1cupswrapper {};
