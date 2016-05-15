@@ -13891,6 +13891,8 @@ in
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
 
+  rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
+
   rstudio = callPackage ../applications/editors/rstudio { };
 
   rsync = callPackage ../applications/networking/sync/rsync {
