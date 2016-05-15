@@ -3236,14 +3236,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DateTimeFormatStrptime = buildPerlPackage {
-    name = "DateTime-Format-Strptime-1.56";
+  DateTimeFormatStrptime = buildPerlPackage rec {
+    name = "DateTime-Format-Strptime-1.68";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.56.tar.gz;
-      sha256 = "2ff69d0f5a0359aab04e7276db5bee3be10040da24fbf09de1d904e7ead78b28";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
+      sha256 = "d0f97e282b4de61390b5c3a498d3b9ee553f728c169c0845c6de02102d823929";
     };
-    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone ParamsValidate ];
+    buildInputs = [ TestFatal TestWarnings ];
+    propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone PackageDeprecationManager ParamsValidate TryTiny ];
     meta = {
+      homepage = http://metacpan.org/release/DateTime-Format-Strptime;
       description = "Parse and format strp and strf time patterns";
       license = stdenv.lib.licenses.artistic2;
     };
