@@ -1742,4 +1742,15 @@ rec {
     dependencies = [];
 
   };
+
+  vim-closetag = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-closetag-2016-04-21";
+    src = fetchgit {
+      url = "git://github.com/alvan/vim-closetag";
+      rev = "26e41a5b0c3752d5300506a49120d9dff19d8323";
+      sha256 = "0c8x25hb912jmhf5jpfll08937wr2yls28i9divldm9jkmxvcx2k";
+    };
+    dependencies = [];
+
+  };
 }
