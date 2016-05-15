@@ -3592,11 +3592,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DBIxConnector = buildPerlModule {
-    name = "DBIx-Connector-0.53";
+  DBIxConnector = buildPerlModule rec {
+    name = "DBIx-Connector-0.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/DBIx-Connector-0.53.tar.gz;
-      sha256 = "198qbi97rnq6zbh5vgy437vlca8hns1b995fm4w896m0v7zgjjiw";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
+      sha256 = "57c08d2c1951486cb95cfb83f518f462a3dbf20d353f3eee4f46af44fa19c359";
     };
     buildInputs = [ TestMockModule ];
     propagatedBuildInputs = [ DBI ];
@@ -3605,7 +3605,7 @@ let self = _self // overrides; _self = with self; {
       description = "Fast, safe DBI connection and transaction management";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
