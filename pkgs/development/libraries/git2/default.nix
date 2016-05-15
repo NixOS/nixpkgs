@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, cmake, zlib, python, libssh2, openssl, http-parser, libiconv }:
 
 stdenv.mkDerivation (rec {
-  version = "0.23.2";
+  version = "0.24.1";
   name = "libgit2-${version}";
 
   src = fetchurl {
     name = "${name}.tar.gz";
     url = "https://github.com/libgit2/libgit2/tarball/v${version}";
-    sha256 = "1d3901bmgvdnmzrx21afi1d0llsqmca3ckj942p0i2wpdpr1kbcp";
+    sha256 = "0rw80480dx2f6a2wbb1bwixygg1iwq3r7vwhxdmkkf4lpxd35jhd";
   };
 
   cmakeFlags = "-DTHREADSAFE=ON";
