@@ -3,14 +3,13 @@
   unicode3Support }:
 
 let
-  name = "rxvt-unicode";
+  pname = "rxvt-unicode";
   version = "9.22";
-  n = "${name}-${version}";
 in
 
 stdenv.mkDerivation (rec {
 
-  name = "${n}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}";
+  name = "${pname}${if perlSupport then "-with-perl" else ""}${if unicode3Support then "-with-unicode3" else ""}-${version}";
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
