@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub }:
+{ stdenv, fetchurl, fetchgit, fetchFromGitHub }:
 
 let
   # https://github.com/spwhitt/nix-zsh-completions/pull/2
@@ -9,13 +9,13 @@ let
     sha256 = "1pvmfcqdvdi3nc1jm72f54mwf06yrmlq31pqw6b5fczawcz02jrz";
   };
 in stdenv.mkDerivation rec {
-  rev = "7227c4f0bef5f8ae787c65150d7a7403394fff48";
+  rev = "4f19700919c8ebbaf75755fc0d03716d13183f49";
   name = "zsh-prezto-2015-03-03_rev${builtins.substring 0 7 rev}";
-  src = fetchFromGitHub {
-    owner = "sorin-ionescu";
-    repo = "prezto";
-    sha256 = "12w5v5fy9zilmmpn65r631p97kdi7dbxsx9574r9zj5qxs49hrsm";
+  src = fetchgit {
+    url = "https://github.com/sorin-ionescu/prezto";
     inherit rev;
+    sha256 = "1q137r2vv16cq962n0f2hyn8m04d3phvh72gz737zv99jcrqg821";
+    fetchSubmodules = true;
   };
   patches = [
     (fetchurl {
