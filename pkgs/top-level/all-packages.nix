@@ -6169,7 +6169,7 @@ in
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_37;
+    llvmPackages = llvmPackages_38;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
