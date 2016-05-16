@@ -6660,6 +6660,31 @@ in modules // {
     };
   };
 
+  jug = buildPythonPackage rec {
+    version = "1.2.1";
+    name = "jug-${version}";
+    buildInputs = with self; [ nose numpy ];
+    propagatedBuildInputs = with self; [
+      pyyaml
+      redis
+      six
+      modules.sqlite3
+      pkgs.zlib
+    ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
+      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+    };
+
+    meta = {
+      description = "A Task-Based Parallelization Framework";
+      license = licenses.mit;
+      url = https://jug.readthedocs.org/;
+      maintainers = with maintainers; [ luispedro ];
+    };
+  };
+
   jsonpatch = buildPythonPackage rec {
     name = "jsonpatch-1.11";
 
@@ -11469,7 +11494,6 @@ in modules // {
       maintainers = with maintainers; [ fridh ];
     };
   };
-
 
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
