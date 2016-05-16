@@ -386,13 +386,13 @@ in modules // {
 
   acme-tiny = buildPythonPackage rec {
     name = "acme-tiny-${version}";
-    version = "20151229";
-    rev = "f61f72c212cea27f388eb4a26ede0d65035bdb53";
+    version = "2016-03-26";
 
-    src = pkgs.fetchgit {
-      inherit rev;
-      url = "https://github.com/diafygi/acme-tiny.git";
-      sha256 = "dde59354e483bdff3dfd06717c094889ae673efb568e40b150b4695b0c539649";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "0ngmr3kxcvlqa9mrv3gx0rg4r67xvdjplqfminxliri3ipak853g";
+      rev = "7a5a2558c8d6e5ab2a59b9fec9633d9e63127971";
+      repo = "acme-tiny";
+      owner = "diafygi";
     };
 
     # source doesn't have any python "packaging" as such
@@ -403,7 +403,6 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
-      substituteInPlace letsencrypt/le_util.py --replace '"sw_vers"' '"/usr/bin/sw_vers"'
     '';
 
     installPhase = ''
