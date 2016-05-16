@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     description = "viewer for Portable Document Format (PDF) files";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

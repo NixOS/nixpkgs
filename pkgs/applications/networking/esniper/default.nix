@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Simple, lightweight tool for sniping eBay auctions";
     homepage    = http://esniper.sourceforge.net;
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 simons ];
+    maintainers = with maintainers; [ lovek323 peti ];
     platforms   = platforms.all;
   };
 }

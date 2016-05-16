@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "a minimalistic high-performance web server";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

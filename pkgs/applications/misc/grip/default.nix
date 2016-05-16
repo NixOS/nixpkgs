@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     homepage = "http://nostatic.org/grip";
     license = stdenv.lib.licenses.gpl2;
 
-    maintainers = [ stdenv.lib.maintainers.marcweber stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber peti ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Domain name server";
     license = stdenv.lib.licenses.isc;
 
-    maintainers = with stdenv.lib.maintainers; [viric simons];
+    maintainers = with stdenv.lib.maintainers; [viric peti];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

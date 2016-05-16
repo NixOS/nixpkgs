@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       declarativity of logic programming.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }

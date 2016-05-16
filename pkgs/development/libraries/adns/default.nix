@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl2;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

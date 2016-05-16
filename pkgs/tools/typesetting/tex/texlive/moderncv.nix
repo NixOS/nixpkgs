@@ -18,8 +18,6 @@ rec {
 
   meta = {
     description = "the moderncv class for TeXLive";
-    maintainers = [ args.lib.maintainers.simons ];
-
     # Actually, arch-independent..
     hydraPlatforms = [];
   };

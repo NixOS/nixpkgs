@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Scanner Access Now Easy";
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

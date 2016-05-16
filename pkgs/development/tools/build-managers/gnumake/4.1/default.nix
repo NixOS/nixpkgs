@@ -40,7 +40,6 @@ stdenv.mkDerivation {
       to build and install the program.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ simons ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.boost;
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons wkennington ];
+    maintainers = with maintainers; [ peti wkennington ];
   };
 
   preConfigure = ''

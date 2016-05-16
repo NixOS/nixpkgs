@@ -104,6 +104,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow cstrahan ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow cstrahan ];
   };
 }

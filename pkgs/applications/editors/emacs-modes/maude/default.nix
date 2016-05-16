@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     description = "Emacs mode for the programming language Maude";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -96,7 +96,7 @@ stdenv.mkDerivation {
     homepage = https://cups.org/;
     description = "A standards-based printing system for UNIX";
     license = licenses.gpl2; # actually LGPL for the library and GPL for the rest
-    maintainers = with maintainers; [ urkud simons jgeerds ];
+    maintainers = with maintainers; [ urkud jgeerds ];
     platforms = platforms.linux;
   };
 }
