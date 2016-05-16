@@ -13239,6 +13239,14 @@ let
     sphinx = pythonPackages.sphinx;
   };
 
+  notmuch_0_22 = callPackage ../applications/networking/mailreaders/notmuch/0.22.nix {
+    # No need to build Emacs - notmuch.el works just fine without
+    # byte-compilation. Use emacs24Packages.notmuch if you want to
+    # byte-compiled files
+    emacs = null;
+    sphinx = pythonPackages.sphinx;
+  };
+
   # Open Stack
   nova = callPackage ../applications/virtualization/openstack/nova.nix { };
   keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
