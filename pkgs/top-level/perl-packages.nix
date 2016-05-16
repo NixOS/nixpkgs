@@ -8529,17 +8529,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXRunnable = buildPerlPackage {
-    name = "MooseX-Runnable-0.03";
+  MooseXRunnable = buildPerlPackage rec {
+    name = "MooseX-Runnable-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JR/JROCKWAY/MooseX-Runnable-0.03.tar.gz;
-      sha256 = "1hl3pnldjlbyj6gm3bzwj827qp54di14hp4zhypmrmbg1lscfdwc";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "40d8fd1b5524ae965965a1f144d7a0a0c850594c524402b2319b24d5c4af1199";
     };
-    buildInputs = [ Testuseok TestTableDriven ];
-    propagatedBuildInputs = [ ListMoreUtils Moose MooseXGetopt MooseXTypes MooseXTypesPathClass namespaceautoclean ParamsUtil ];
+    buildInputs = [ ModuleBuildTiny MooseXGetopt TestFatal TestSimple TestTableDriven ];
+    propagatedBuildInputs = [ ClassLoad ListSomeUtils Moose MooseXTypes MooseXTypesPathTiny ParamsUtil PathTiny namespaceautoclean ];
     meta = {
+      homepage = https://github.com/moose/MooseX-Runnable;
+      description = "Tag a class as a runnable application";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
