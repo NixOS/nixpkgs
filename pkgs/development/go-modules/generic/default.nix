@@ -155,6 +155,13 @@ go.stdenv.mkDerivation (
     done < <(find $bin/bin -type f 2>/dev/null)
   '';
 
+  shellHook = ''
+    d=$(mktemp -d "--suffix=-$name")
+    mkdir -p "$d/src/$(dirname "$goPackagePath")"
+    ln -s "$src" "$d/src/$goPackagePath"
+    export GOPATH="$d:$GOPATH"
+  '';
+
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
