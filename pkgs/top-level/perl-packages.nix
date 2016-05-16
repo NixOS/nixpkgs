@@ -8774,16 +8774,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MooseXTypesURI = buildPerlPackage {
-    name = "MooseX-Types-URI-0.05";
+  MooseXTypesURI = buildPerlPackage rec {
+    name = "MooseX-Types-URI-0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.05.tar.gz;
-      sha256 = "08acqm23ff22hicb3l4wc7szvdhlxpan7qmpgl15ilawrmz60p82";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "d310d20fa361fe2dff758236df87949cc7bf98e5cf3a7c79115365eccde6ccc1";
     };
-    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass namespaceclean Testuseok URI URIFromHash ];
+    buildInputs = [ ModuleBuildTiny Moose TestSimple ];
+    propagatedBuildInputs = [ Moose MooseXTypes MooseXTypesPathClass URI URIFromHash namespaceautoclean self."if" ];
     meta = {
+      homepage = https://github.com/moose/MooseX-Types-URI;
+      description = "URI related types and coercions for Moose";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
