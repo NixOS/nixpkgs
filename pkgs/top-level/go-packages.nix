@@ -1052,10 +1052,10 @@ let
   };
 
   glide = buildFromGitHub {
-    rev    = "0.6.1";
+    rev    = "0.10.2";
     owner  = "Masterminds";
     repo   = "glide";
-    sha256 = "1v66c2igm8lmljqrrsyq3cl416162yc5l597582bqsnhshj2kk4m";
+    sha256 = "1qb2n5i04gabb2snnwfr8wv4ypcp1pdzvgga62m9xkhk4p2w6pwl";
     buildInputs = [ cookoo cli-go go-gypsy vcs ];
   };
 
