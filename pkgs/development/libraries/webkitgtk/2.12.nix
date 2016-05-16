@@ -40,14 +40,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake perl python ruby bison gperf sqlite
     pkgconfig gettext gobjectIntrospection
-  ] ++ (with xlibs; [ libXdmcp ]);
+  ];
 
   buildInputs = [
     gtk2 wayland libwebp enchant libnotify
     libxml2 libsecret libxslt harfbuzz libpthreadstubs
     gst-plugins-base libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
-    ++ (with xlibs; [ libXt libXtst ]);
+    ++ (with xlibs; [ libXdmcp libXt libXtst ]);
 
   propagatedBuildInputs = [
     libsoup gtk3
