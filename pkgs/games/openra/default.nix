@@ -9,8 +9,8 @@ in stdenv.mkDerivation rec {
   name = "openra-${version}";
 
   meta = with stdenv.lib; {
-    description = "Real Time Strategy game engine recreates the C&C titles";
-    homepage    = "http://www.open-ra.org/";
+    description = "Real Time Strategy game engine recreating the C&C titles";
+    homepage    = "http://www.openra.net/";
     maintainers = [ maintainers.rardiol ];
     license     = licenses.gpl3;
     platforms   = platforms.linux;
