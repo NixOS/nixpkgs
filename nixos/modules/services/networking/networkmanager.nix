@@ -27,6 +27,7 @@ let
 
     [logging]
     level=${cfg.logLevel}
+    audit=${lib.boolToString config.security.audit.enable}
 
     [connection]
     ipv6.ip6-privacy=2
@@ -508,8 +509,9 @@ in {
 
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages =
-      optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
+    services.dbus.packages = cfg.packages
+      ++ optional cfg.enableStrongSwan pkgs.strongswanNM
+      ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
     services.udev.packages = cfg.packages;
   };
