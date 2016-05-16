@@ -913,8 +913,15 @@ let
       crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
     ];
 
+    patchPhase = ''
+      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
+      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
+    '';
+
     postInstall= ''
       cp $src/bin/fzf-tmux $bin/bin
+      mkdir -p $out/share/vim-plugins
+      ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${(builtins.parseDrvName fzf.name).name}
     '';
   };
 
