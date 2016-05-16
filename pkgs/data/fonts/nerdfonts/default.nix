@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ which ];
   patchPhase = ''
     sed -i -e 's|/bin/bash|${bash}/bin/bash|g' install.sh
-    sed -i -e 's|font_dir="\$HOME/.local|font_dir="$out|g' install.sh
+    sed -i -e 's|font_dir="\$HOME/.local/share/fonts|font_dir="$out/share/fonts/truetype|g' install.sh
   '';
   installPhase = ''
-    mkdir -p $out/share/fonts
+    mkdir -p $out/share/fonts/truetype
     ./install.sh
   '';
   meta = with stdenv.lib; {
