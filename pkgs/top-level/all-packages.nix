@@ -6824,7 +6824,6 @@ in
 
   ffmpeg_0_10 = callPackage ../development/libraries/ffmpeg/0.10.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
-    libvpx = libvpx_1_4;
   };
   ffmpeg_1_2 = callPackage ../development/libraries/ffmpeg/1.2.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;

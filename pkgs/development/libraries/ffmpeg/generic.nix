@@ -15,7 +15,7 @@
 # Darwin frameworks
 , Cocoa
 # Inherit generics
-, branch, sha256, version, ...
+, branch, sha256, version, patches ? [], ...
 }:
 
 /* Maintainer notes:
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  patchPhase = ''patchShebangs .'';
+  postPatch = ''patchShebangs .'';
+  inherit patches;
 
   outputs = [ "dev" "out" "bin" ]
     ++ optional (reqMin "1.0") "doc" ; # just dev-doc
