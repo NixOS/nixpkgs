@@ -3,7 +3,7 @@
 import ./generic.nix (args // rec {
   version = "4.6";
   modDirVersion = "4.6.0";
-  extraMeta.branch = "4.5";
+  extraMeta.branch = "4.6";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
