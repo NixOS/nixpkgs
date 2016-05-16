@@ -6683,6 +6683,31 @@ in modules // {
     };
   };
 
+  jug = buildPythonPackage rec {
+    version = "1.2.1";
+    name = "jug-${version}";
+    buildInputs = with self; [ nose numpy ];
+    propagatedBuildInputs = with self; [
+      pyyaml
+      redis
+      six
+      modules.sqlite3
+      pkgs.zlib
+    ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
+      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+    };
+
+    meta = {
+      description = "A Task-Based Parallelization Framework";
+      license = licenses.mit;
+      url = https://jug.readthedocs.org/;
+      maintainers = with maintainers; [ luispedro ];
+    };
+  };
+
   jsonpatch = buildPythonPackage rec {
     name = "jsonpatch-1.11";
 
@@ -8984,11 +9009,11 @@ in modules // {
 
   SPARQLWrapper = buildPythonPackage rec {
     name = "SPARQLWrapper-${version}";
-    version = "1.7.4";
+    version = "1.7.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SPARQLWrapper/SPARQLWrapper-${version}.tar.gz";
-      sha256 = "1dpwwlcdk4m8wr3d9lb24g1xcvs202c0ir4q3jcijy88is3bvgmp";
+      sha256 = "1y12hpsfjd779yi29bhvl6g4vszadjvd8jw38z5rg77b034vxjnw";
     };
 
     # break circular dependency loop
@@ -11492,7 +11517,6 @@ in modules // {
       maintainers = with maintainers; [ fridh ];
     };
   };
-
 
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
