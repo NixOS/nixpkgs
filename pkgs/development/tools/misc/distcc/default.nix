@@ -75,7 +75,7 @@ let
       license = "GPL";
 
       platforms = stdenv.lib.platforms.linux;
-      maintainers = with stdenv.lib.maintainers; [ simons anderspapitto ];
+      maintainers = with stdenv.lib.maintainers; [ anderspapitto ];
     };
   };
 in

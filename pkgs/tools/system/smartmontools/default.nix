@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://smartmontools.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti ];
   };
 }

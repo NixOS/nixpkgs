@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://tcpcrypt.org/";
     description = "enable opportunistic encryption of all TCP traffic";
-
-    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

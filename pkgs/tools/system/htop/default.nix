@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://hisham.hm/htop/;
     license = licenses.gpl2Plus;
     platforms = with platforms; linux ++ freebsd ++ openbsd ++ darwin;
-    maintainers = with maintainers; [ rob simons relrod nckx ];
+    maintainers = with maintainers; [ rob relrod nckx ];
   };
 }

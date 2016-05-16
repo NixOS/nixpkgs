@@ -119,7 +119,7 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
+      maintainers = with stdenv.lib.maintainers; [ chaoflow iElectric ];
       # If you want to use Python 2.6, remove "broken = true;" at your own
       # risk.  Python 2.6 has known security vulnerabilities is not receiving
       # security updates as of October 2013.

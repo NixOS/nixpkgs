@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://cppcheck.sourceforge.net/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons joachifm ];
+    maintainers = with maintainers; [ joachifm ];
   };
 }

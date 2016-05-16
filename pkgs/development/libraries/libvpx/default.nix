@@ -154,6 +154,7 @@ stdenv.mkDerivation rec {
     dontSetConfigureCross = true;
     configureFlags = configureFlags ++ [
       #"--extra-cflags="
+      #"--extra-cxxflags="
       #"--prefix="
       #"--libc="
       #"--libdir="

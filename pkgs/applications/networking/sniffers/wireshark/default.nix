@@ -69,6 +69,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ simons bjornfor fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor fpletz ];
   };
 }

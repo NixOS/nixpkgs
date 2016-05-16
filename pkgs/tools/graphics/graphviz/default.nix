@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     '';
 
     hydraPlatforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons bjornfor raskin ];
+    maintainers = with stdenv.lib.maintainers; [ bjornfor raskin ];
     downloadPage = "http://www.graphviz.org/pub/graphviz/ARCHIVE/";
     inherit version;
     updateWalker = true;

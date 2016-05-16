@@ -29,5 +29,5 @@ mkDerivation rec {
   homepage = "https://github.com/nixos/cabal2nix#readme";
   description = "Data types and functions to manipulate the Nixpkgs distribution";
   license = stdenv.lib.licenses.bsd3;
-  maintainers = with stdenv.lib.maintainers; [ simons ];
+  maintainers = with stdenv.lib.maintainers; [ peti ];
 }

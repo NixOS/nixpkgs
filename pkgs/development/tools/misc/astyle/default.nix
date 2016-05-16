@@ -28,6 +28,5 @@ stdenv.mkDerivation {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

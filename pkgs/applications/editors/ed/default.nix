@@ -1,7 +1,7 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.12";
+  name = "ed-1.13";
 
   src = fetchurl {
     # gnu only provides *.lz tarball, which is unfriendly for stdenv bootstrapping
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     # When updating, please make sure the sources pulled match those upstream by
     # Unpacking both tarballs and running `find . -type f -exec sha256sum \{\} \; | sha256sum`
     # in the resulting directory
-    url = "http://fossies.org/linux/privat/${name}.tar.gz";
-    sha256 = "111ci6x43bcmylqhrzr32l0q8pplmpb4kiq5pb6cyp0yxkb2dhgj";
+    url = "http://fossies.org/linux/privat/${name}.tar.bz2";
+    sha256 = "1iym2fsamxr886l3sz8lqzgf00bip5cr0aly8jp04f89kf5mvl0j";
   };
 
   /* FIXME: Tests currently fail on Darwin:

@@ -19,6 +19,5 @@ stdenv.mkDerivation rec {
     description = "a dynamic resource editor for X Toolkit applications";
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

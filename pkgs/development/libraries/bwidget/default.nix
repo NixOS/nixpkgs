@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "bwidget-${version}";
-  version = "1.9.8";
+  version = "1.9.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/tcllib/bwidget-${version}.tar.gz";
-    sha256 = "055kpl3ghznk028jnhzsa3p48qgipckfzn2liwq932crxviicl2l";
+    sha256 = "025lmriaq4qqy99lh826wx2cnqqgxn7srz4m3q06bl6r9ch15hr6";
   };
 
   dontBuild = true;

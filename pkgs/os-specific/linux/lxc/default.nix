@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ simons wkennington globin fpletz ];
+    maintainers = with maintainers; [ wkennington globin fpletz ];
   };
 }

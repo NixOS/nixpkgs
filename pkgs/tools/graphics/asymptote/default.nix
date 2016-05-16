@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     inherit (s) version;
     description =  "A tool for programming graphics intended to replace Metapost";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.peti];
     platforms = stdenv.lib.platforms.linux;
   };
 }

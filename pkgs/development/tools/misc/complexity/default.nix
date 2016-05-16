@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "complexity-${version}";
-  version = "1.3";
+  version = "1.10";
 
   src = fetchurl {
     url = "mirror://gnu/complexity/${name}.tar.gz";
-    sha256 = "19bc64sxpqd5rqylqaa7dijz2x7qp2b0dg3ah3fb3qbcvd8b4wgy";
+    sha256 = "1vfns9xm7w0wrz12a3w15slrqnrfh6qxk15nv7qkj3irll3ff522";
   };
 
   buildInputs = [ autogen ];
