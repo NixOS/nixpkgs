@@ -35,7 +35,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
-      hunspell libevent libstartup_notification /* libvpx */ /* cairo */
+      hunspell libevent libstartup_notification libvpx /* cairo */
       icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
@@ -50,7 +50,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--with-system-nspr"
       "--with-system-nss"
       "--with-system-libevent"
-      #"--with-system-libvpx" # needs 1.5.0
+      "--with-system-libvpx"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
       "--enable-system-ffi"
