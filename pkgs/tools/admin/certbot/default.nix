@@ -1,14 +1,14 @@
 { stdenv, pythonPackages, fetchFromGitHub, dialog }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "letsencrypt-${version}";
-  version = "0.5.0";
+  name = "certbot-${version}";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "v${version}";
-    sha256 = "0x098cdyfgqvh7x5d3sz56qjpjyg5b4fl82086sm43d8mbz0h5rm";
+    sha256 = "1x0prlldkgg0hxmya4m5h3k3c872wr0jylmzpr3m04mk339yiw0c";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -29,8 +29,8 @@ pythonPackages.buildPythonApplication rec {
   buildInputs = [ dialog ] ++ (with pythonPackages; [ nose mock gnureadline ]);
 
   patchPhase = ''
-    substituteInPlace letsencrypt/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
-    substituteInPlace letsencrypt/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
+    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/var/setuid-wrappers/sendmail"
+    substituteInPlace certbot/le_util.py --replace "sw_vers" "/usr/bin/sw_vers"
   '';
 
   postInstall = ''

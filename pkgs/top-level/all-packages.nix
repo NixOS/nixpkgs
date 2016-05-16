@@ -6652,6 +6652,8 @@ in
 
   cegui = callPackage ../development/libraries/cegui {};
 
+  certbot = callPackage ../tools/admin/certbot { };
+
   cgal = callPackage ../development/libraries/CGAL {};
 
   cgui = callPackage ../development/libraries/cgui {};
@@ -7451,8 +7453,6 @@ in
   leptonica = callPackage ../development/libraries/leptonica {
     libpng = libpng12;
   };
-
-  letsencrypt = callPackage ../tools/admin/letsencrypt { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
