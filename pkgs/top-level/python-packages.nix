@@ -8986,11 +8986,11 @@ in modules // {
 
   SPARQLWrapper = buildPythonPackage rec {
     name = "SPARQLWrapper-${version}";
-    version = "1.7.4";
+    version = "1.7.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SPARQLWrapper/SPARQLWrapper-${version}.tar.gz";
-      sha256 = "1dpwwlcdk4m8wr3d9lb24g1xcvs202c0ir4q3jcijy88is3bvgmp";
+      sha256 = "1y12hpsfjd779yi29bhvl6g4vszadjvd8jw38z5rg77b034vxjnw";
     };
 
     # break circular dependency loop
