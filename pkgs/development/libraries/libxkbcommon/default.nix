@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, yacc, flex, xkeyboard_config, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "libxkbcommon-0.5.0";
+  name = "libxkbcommon-0.6.1";
 
   src = fetchurl {
     url = "http://xkbcommon.org/download/${name}.tar.xz";
-    sha256 = "176ii5dn2wh74q48sd8ac37ljlvgvp5f506glr96z6ibfhj7igch";
+    sha256 = "0q47xa1szlxwgvwmhv4b7xwawnykz1hnc431d84nj8dlh2q8f22v";
   };
 
   outputs = [ "dev" "out" ];
@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
     sed -i 's/,--version-script=.*$//' Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A library to handle keyboard descriptions";
     homepage = http://xkbcommon.org;
+    license = licenses.mit;
+    maintainers = with maintainers; [ garbas ];
   };
 }

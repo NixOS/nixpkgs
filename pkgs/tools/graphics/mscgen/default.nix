@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, gd, libpng, freetype, zlib }:
+{ stdenv, fetchurl, flex, bison, gd, libpng, libjpeg, freetype, zlib }:
 
 let
   version = "0.20";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "3c3481ae0599e1c2d30b7ed54ab45249127533ab2f20e768a0ae58d8551ddc23";
   };
 
-  buildInputs = [ flex bison gd libpng freetype zlib ];
+  buildInputs = [ flex bison gd libjpeg libpng freetype zlib ];
 
   doCheck = true;
   preCheck = ''

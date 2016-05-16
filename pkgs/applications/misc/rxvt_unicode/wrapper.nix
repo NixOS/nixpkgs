@@ -4,9 +4,10 @@ let
   rxvt = rxvt_unicode.override {
     perlSupport = true;
   };
+  rxvt_name = builtins.parseDrvName rxvt.name;
 
 in symlinkJoin {
-  name = "${rxvt.name}-with-plugins";
+  name = "${rxvt_name.name}-with-plugins-${rxvt_name.version}";
 
   paths = [ rxvt ] ++ plugins;
 

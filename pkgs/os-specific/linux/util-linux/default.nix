@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${version}/${name}.tar.xz";
-    sha512 = "251zv6lk6b8ip38w2h0w2rpnly38nzh96945mbpssvwjv8fgr5bnhj3207aingyybik79761zngk981wl0rblq5f7l5v655znyi3yd1";
+    sha256 = "1fql204qn3098j34yd358l85ffp7a4kqjf7jf1qk2b4al7i4fn1r";
   };
 
   patches = [

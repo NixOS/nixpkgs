@@ -46,7 +46,8 @@ stdenv.mkDerivation rec {
     gtk2 wayland libwebp enchant libnotify
     libxml2 libsecret libxslt harfbuzz libpthreadstubs
     gst-plugins-base libxkbcommon epoxy at_spi2_core
-  ] ++ optional enableGeoLocation geoclue2;
+  ] ++ optional enableGeoLocation geoclue2
+    ++ (with xlibs; [ libXt libXtst ]);
 
   propagatedBuildInputs = [
     libsoup gtk3

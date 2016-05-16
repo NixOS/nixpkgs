@@ -32,11 +32,18 @@ let
     patches =
       [ (if lib.versionAtLeast version "9.4" then ./disable-resolve_symlinks-94.patch else ./disable-resolve_symlinks.patch)
         ./less-is-more.patch
+        ./hardcode-pgxs-path.patch
       ];
 
     installTargets = [ "install-world" ];
 
     LC_ALL = "C";
+
+    postConfigure =
+      ''
+        # Hardcode the path to pgxs so pg_config returns the path in $out
+        substituteInPlace "src/bin/pg_config/pg_config.c" --replace HARDCODED_PGXS_PATH $out/lib
+      '';
 
     postInstall =
       ''

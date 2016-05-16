@@ -1,19 +1,23 @@
 { stdenv, fetchurl, pkgconfig, intltool, xfce4panel, libxfce4util, gtk, libsoup
-, exo}:
+, exo, hicolor_icon_theme }:
 
 stdenv.mkDerivation rec {
   p_name  = "xfce4-screenshooter";
   ver_maj = "1.8";
-  ver_min = "1";
+  ver_min = "2";
 
   src = fetchurl {
     url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "40419892bd28989315eed053c159bba0f4264ed8c6c6738806024e481eab9492";
+    sha256 = "9dce2ddfaa87f703e870e29bae13f3fc82a1b3f06b44f8386640e45a135f5f69";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
+  nativeBuildInputs = [
+    pkgconfig intltool
+  ];
+
   buildInputs = [
-    pkgconfig intltool xfce4panel libxfce4util gtk libsoup exo
+    xfce4panel libxfce4util gtk libsoup exo hicolor_icon_theme
   ];
 
   meta = {

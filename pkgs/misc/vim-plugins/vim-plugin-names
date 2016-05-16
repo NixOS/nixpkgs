@@ -136,3 +136,4 @@
 "vimwiki"
 "vinegar"
 "vundle"
+"github:alvan/vim-closetag"
