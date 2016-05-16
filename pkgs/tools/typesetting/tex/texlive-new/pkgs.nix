@@ -14558,6 +14558,14 @@ tl: { # no indentation
   hasRunfiles = true;
   version = "1.00";
 };
+"mathpartir" = {
+  stripPrefix = 0;
+  md5.run = "5a3d37f8f396818f546a6cacd74a9786";
+  md5.doc = "838dabc769b9609af5948f3a7207f44d";
+  md5.source = "1f7473004a4367f5acf57b2820c89f2f";
+  hasRunfiles = true;
+  version = "1.3.2";
+};
 "mathpazo" = {
   stripPrefix = 0;
   md5.run = "c6f4e8ae7ffda23ce9360f533d12a2ba";
