@@ -107,30 +107,31 @@ let cfg = config.services.subsonic; in {
       description = "Personal media streamer";
       after = [ "local-fs.target" "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
-            -Dsubsonic.home=${cfg.home} \
-            -Dsubsonic.host=${cfg.listenAddress} \
-            -Dsubsonic.port=${toString cfg.port} \
-            -Dsubsonic.httpsPort=${toString cfg.httpsPort} \
-            -Dsubsonic.contextPath=${cfg.contextPath} \
-            -Dsubsonic.defaultMusicFolder=${cfg.defaultMusicFolder} \
-            -Dsubsonic.defaultPodcastFolder=${cfg.defaultPodcastFolder} \
-            -Dsubsonic.defaultPlaylistFolder=${cfg.defaultPlaylistFolder} \
-            -Djava.awt.headless=true \
-            -verbose:gc \
-            -jar ${pkgs.subsonic}/subsonic-booter-jar-with-dependencies.jar
-        '';
+      script = ''
+        ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          -Dsubsonic.home=${cfg.home} \
+          -Dsubsonic.host=${cfg.listenAddress} \
+          -Dsubsonic.port=${toString cfg.port} \
+          -Dsubsonic.httpsPort=${toString cfg.httpsPort} \
+          -Dsubsonic.contextPath=${cfg.contextPath} \
+          -Dsubsonic.defaultMusicFolder=${cfg.defaultMusicFolder} \
+          -Dsubsonic.defaultPodcastFolder=${cfg.defaultPodcastFolder} \
+          -Dsubsonic.defaultPlaylistFolder=${cfg.defaultPlaylistFolder} \
+          -Djava.awt.headless=true \
+          -verbose:gc \
+          -jar ${pkgs.subsonic}/subsonic-booter-jar-with-dependencies.jar
+      '';
+
+      preStart = ''
         # Install transcoders.
-        ExecStartPre = ''
-          ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
-          ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
-          ${pkgs.bash}/bin/bash -c ' \
-            for exe in "$@"; do \
-              ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode; \
-            done' IGNORED_FIRST_ARG ${toString cfg.transcoders}
-        '';
+        ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
+        ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
+        ${pkgs.bash}/bin/bash -c ' \
+          for exe in "$@"; do \
+            ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode; \
+          done' IGNORED_FIRST_ARG ${toString cfg.transcoders}
+      '';
+      serviceConfig = {
         # Needed for Subsonic to find subsonic.war.
         WorkingDirectory = "${pkgs.subsonic}";
         Restart = "always";
