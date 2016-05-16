@@ -1,12 +1,12 @@
 { stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  version = "4.1";
+  version = "4.2";
   name = "joe-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/joe-editor/${name}.tar.gz";
-    sha256 = "1nznzr9h0rh8g15c56yxzwpn2labx9sgsak0wcnpj7wmpnr12ql1";
+    sha256 = "0x39x0qrwdbhl45wd8r8cpzigsip6m5j2crajsrbffk8qm5scpdw";
   };
 
   meta = with stdenv.lib; {
