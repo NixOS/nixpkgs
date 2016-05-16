@@ -123,6 +123,18 @@ let cfg = config.services.subsonic; in {
       '';
 
       preStart = ''
+        # Formerly this module set cfg.home to /var/subsonic. Try to move
+        # /var/subsonic to cfg.home.
+        oldHome="/var/subsonic"
+        if [ "${cfg.home}" != "$oldHome" ] &&
+                ! [ -e "${cfg.home}" ] &&
+                [ -d "$oldHome" ] &&
+                [ $(${pkgs.coreutils}/bin/stat -c %u "$oldHome") -eq \
+                    ${toString config.users.extraUsers.subsonic.uid} ]; then
+            logger Moving "$oldHome" to "${cfg.home}"
+            ${pkgs.coreutils}/bin/mv -T "$oldHome" "${cfg.home}"
+        fi
+
         # Install transcoders.
         ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
