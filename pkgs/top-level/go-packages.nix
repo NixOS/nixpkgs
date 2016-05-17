@@ -549,10 +549,10 @@ let
   };
 
   consul = buildFromGitHub {
-    rev = "v0.5.2";
+    rev = "v0.6.4";
     owner = "hashicorp";
     repo = "consul";
-    sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
+    sha256 = "0p6m2rl0d30w418n4fzc4vymqs3vzfa468czmy4znkjmxdl5vp5a";
 
     buildInputs = [
       circbuf armon.go-metrics go-radix gomdb bolt consul-migrate go-checkpoint
@@ -571,11 +571,10 @@ let
   };
 
   consul-alerts = buildFromGitHub {
-    rev = "6eb4bc556d5f926dbf15d86170664d35d504ae54";
-    version = "2015-08-09";
+    rev = "v0.3.3";
     owner = "AcalephStorage";
     repo = "consul-alerts";
-    sha256 = "191bmxix3nl4pr26hcdfxa9qpv5dzggjvi86h2slajgyd2rzn23b";
+    sha256 = "1w0mb20w1yazyh84sa30bsw271c5nm7lsx2qg0g3gf6mxdb63lpq";
 
     renameImports = ''
       # Remove all references to included dependency store
@@ -601,7 +600,7 @@ let
   };
 
   consul-template = buildGoPackage rec {
-    rev = "v0.9.0";
+    rev = "v0.14.0";
     name = "consul-template-${rev}";
     goPackagePath = "github.com/hashicorp/consul-template";
 
@@ -609,7 +608,7 @@ let
       inherit rev;
       owner = "hashicorp";
       repo = "consul-template";
-      sha256 = "1k64rjskzn7cxn7rxab978847jq8gr4zj4cnzgznhn44nzasgymj";
+      sha256 = "15zsax44g3dwjmmm4fpb54mvsjvjf3b6g3ijskgipvhcy0d3j938";
     };
 
     # We just want the consul api not all of consul and vault
@@ -618,7 +617,7 @@ let
       { inherit (vault) src goPackagePath; }
     ];
 
-    buildInputs = [ go-multierror go-syslog hcl logutils mapstructure ];
+    buildInputs = [ go-multierror go-syslog hcl logutils mapstructure pkgs.zip ];
   };
 
   context = buildGoPackage rec {
@@ -3918,10 +3917,10 @@ let
   };
 
   vault = buildFromGitHub {
-    rev = "v0.2.0";
+    rev = "v0.5.2";
     owner = "hashicorp";
     repo = "vault";
-    sha256 = "133fwhzk8z3xb6mf6scmn5rbl6g4vqg4g4n6zw620fsn9wy1b9ni";
+    sha256 = "085rk5i480wdlkn2p14yxi8zgsc11595nkkda1i77c4vjkllbkdy";
 
     #postPatch = ''
     #  grep -r '/gen/' | awk -F: '{print $1}' | xargs sed -i 's,/gen/,/apis/,g'
