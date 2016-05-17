@@ -6085,6 +6085,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTTPHeadersFast = buildPerlModule rec {
+    name = "HTTP-Headers-Fast-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "d2f4c9724618e74f300fc746498fb5849692ef0cfc4af47fe499c4063969e520";
+    };
+    buildInputs = [ ModuleBuild TestRequires ];
+    propagatedBuildInputs = [ HTTPDate ];
+    meta = {
+      homepage = https://github.com/tokuhirom/HTTP-Headers-Fast;
+      description = "Faster implementation of HTTP::Headers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTTPLite = buildPerlPackage rec {
     name = "HTTP-Lite-2.43";
     src = fetchurl {
