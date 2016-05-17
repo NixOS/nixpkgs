@@ -13585,6 +13585,7 @@ in
   };
 
   obs-studio = qt5.callPackage ../applications/video/obs-studio {
+    alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
   };
 
