@@ -174,8 +174,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/${name}.tar.gz";
       sha256 = "17blk3zhp05azgypn25ydxf3d7fyfgr9bxyiv7xkchhqma96vwqv";
     };
-    buildInputs = [ HTTPMessage TestRequires TryTiny URI TestMockTime
-      POSIXstrftimeCompiler ];
+    buildInputs = [ HTTPMessage ModuleBuild TestMockTime TestRequires TryTiny URI ];
+    propagatedBuildInputs = [ POSIXstrftimeCompiler ];
     # We cannot change the timezone on the fly.
     prePatch = "rm t/04_tz.t";
     meta = {
