@@ -153,6 +153,7 @@ stdenv.mkDerivation {
      '');
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   meta = {
     homepage = http://git-scm.com/;

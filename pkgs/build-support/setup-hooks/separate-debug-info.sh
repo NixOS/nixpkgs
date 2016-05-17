@@ -1,19 +1,19 @@
 export NIX_SET_BUILD_ID=1
-export NIX_LDFLAGS+=" --compress-debug-sections=zlib"
-export NIX_CFLAGS_COMPILE+=" -ggdb -Wa,--compress-debug-sections"
+export NIX_CFLAGS_COMPILE+=' -ggdb'
 dontStrip=1
 
 fixupOutputHooks+=(_separateDebugInfo)
 
 _separateDebugInfo() {
-    local dst="${debug:-$out}"
-    if [ "$prefix" = "$dst" ]; then return; fi
+    local debugout="${debug:-$out}"
+    if [ "$prefix" = "$debugout" ]; then return; fi
 
-    dst="$dst/lib/debug/.build-id"
+    local hashandname="$(basename "$debugout")"
+    local debugpath="$(dirname "$debugout")/${hashandname:0:2} ${hashandname:2}"
 
     # Find executables and dynamic libraries.
     local i magic
-    while IFS= read -r -d $'\0' i; do
+    while read -r -d $'\0' i; do
         if ! isELF "$i"; then continue; fi
 
         # Extract the Build ID. FIXME: there's probably a cleaner way.
@@ -25,11 +25,18 @@ _separateDebugInfo() {
 
         # Extract the debug info.
         header "separating debug info from $i (build ID $id)"
-        mkdir -p "$dst/${id:0:2}"
-        objcopy --only-keep-debug "$i" "$dst/${id:0:2}/${id:2}.debug"
-        strip --strip-debug "$i"
-
+        local relpath="lib/debug/.build-id/${id:0:2}/${id:2}.debug"
+        local debugfile="$debugout/$relpath"
+        mkdir -p $(dirname "$debugfile")
+        objcopy --only-keep-debug --compress-debug-sections "$i" "$debugfile"
         # Also a create a symlink <original-name>.debug.
-        ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$dst/../$(basename "$i")"
+        ln -sfn ".build-id/${id:0:2}/${id:2}.debug" "$debugout/lib/debug/$(basename "$i").debug"
+
+        if ! objdump -sj .nix_debug "$i" &> /dev/null; then
+            # The space is to prevent a reference.
+            objcopy --add-section=.nix_debug=<(echo "$debugpath/$relpath") "$i"
+        fi
+        strip $commonStripFlags "$i"
+
     done < <(find "$prefix" -type f -print0)
 }

@@ -26,6 +26,7 @@ stdenv.mkDerivation ({
   inherit (stdenv) is64bit;
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   patches =
     [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */

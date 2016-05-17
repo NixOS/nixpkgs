@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "bin" "man" "doc" ];
 
+  enableParallelBuilding = true;
+  separateDebugInfo = true;
   doCheck = true;
 
   # In stdenv-linux, prevent a dependency on bootstrap-tools.

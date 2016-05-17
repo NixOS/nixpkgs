@@ -1,5 +1,5 @@
 { fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo, zlib
-, dejagnu, perl, pkgconfig
+, dejagnu, perl, pkgconfig, binutils, nix
 , python ? null
 , guile ? null
 , target ? null
@@ -20,6 +20,8 @@ let
   isGNU =
       stdenv.system == "i686-gnu"
       || (stdenv ? cross && stdenv.cross.config == "i586-pc-gnu");
+
+  nixExtension = ./nix.py;
 
 in
 
@@ -42,6 +44,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional doCheck dejagnu;
 
   enableParallelBuilding = true;
+  separateDebugInfo = true;
 
   configureFlags = with stdenv.lib;
     [ "--with-gmp=${gmp}" "--with-mpfr=${mpfr}" "--with-system-readline"
@@ -64,6 +67,9 @@ stdenv.mkDerivation rec {
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
+       sed '-es|"objcopy"|"${binutils}/bin/objcopy"|' \
+           '-es|"nix-store"|"${nix.out}/bin/nix-store"|' \
+           '${nixExtension}' > "$out/share/gdb/python/gdb/command/nix.py"
        rm -v $out/share/info/bfd.info
     '';
 
