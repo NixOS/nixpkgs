@@ -73,7 +73,7 @@ let self = stdenv.mkDerivation rec {
       '';
 
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
+    maintainers = [ maintainers.peti ];
   };
 };
   in self

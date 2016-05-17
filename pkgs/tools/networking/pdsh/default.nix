@@ -48,6 +48,6 @@ stdenv.mkDerivation {
     '';
 
     hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -2,7 +2,7 @@
 
 ## various stuff that can be plugged in
 , gnash, flashplayer, hal-flash
-, MPlayerPlugin, gecko_mediaplayer, gst_all, xorg, libpulseaudio, libcanberra
+, MPlayerPlugin, gecko_mediaplayer, ffmpeg, xorg, libpulseaudio, libcanberra
 , supportsJDK, jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
@@ -45,12 +45,11 @@ let
       ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
       ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
      );
-  libs = [ gst_all.gstreamer gst_all.gst-plugins-base ]
+  libs = [ ffmpeg ]
          ++ lib.optionals (cfg.enableQuakeLive or false)
          (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
          ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
          ++ lib.optional (config.pulseaudio or false) libpulseaudio;
-  gst-plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ];
   gtk_modules = [ libcanberra ];
 
 in
@@ -76,7 +75,7 @@ stdenv.mkDerivation {
     ];
   };
 
-  buildInputs = [makeWrapper] ++ gst-plugins;
+  buildInputs = [makeWrapper];
 
   buildCommand = ''
     if [ ! -x "${browser}/bin/${browserName}" ]
@@ -91,7 +90,6 @@ stdenv.mkDerivation {
         --suffix LD_LIBRARY_PATH ':' "$libs" \
         --suffix-each GTK_PATH ':' "$gtk_modules" \
         --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
-        --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
         --set MOZ_OBJDIR "$(ls -d "${browser}/lib/${browserName}"*)"
 

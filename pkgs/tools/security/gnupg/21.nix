@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = http://gnupg.org;
     description = "a complete and free implementation of the OpenPGP standard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wkennington simons fpletz ];
+    maintainers = with maintainers; [ wkennington peti fpletz ];
     platforms = platforms.all;
   };
 }

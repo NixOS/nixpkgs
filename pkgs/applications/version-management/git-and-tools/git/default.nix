@@ -165,6 +165,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny wmertens ];
+    maintainers = with stdenv.lib.maintainers; [ peti the-kenny wmertens ];
   };
 }

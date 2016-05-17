@@ -11,8 +11,7 @@ let version = "2.6.3"; in
 
 buildPythonApplication {
   # call the package quodlibet and just quodlibet
-  name = "quodlibet-${version}"
-         + stdenv.lib.optionalString withGstPlugins "-with-gst-plugins";
+  name = "quodlibet${stdenv.lib.optionalString withGstPlugins "-with-gst-plugins"}-${version}";
   namePrefix = "";
 
   # XXX, tests fail

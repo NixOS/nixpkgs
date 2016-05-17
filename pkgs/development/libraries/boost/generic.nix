@@ -111,7 +111,7 @@ let
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
   '' + optionalString (stdenv.cross.libc or null == "msvcrt") ''
-    ${stdenv.cross.config}-ranlib "$out"/lib/*.a
+    ${stdenv.cross.config}-ranlib "$out/lib/"*.a
   '';
 
 in
@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.boost;
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ simons wkennington ];
+    maintainers = with maintainers; [ peti wkennington ];
   };
 
   preConfigure = ''

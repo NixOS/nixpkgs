@@ -89,6 +89,10 @@ in rec {
     sha256 = "02gsi1cm63kf0r7881444lrkzdjqhhpz9a5zav3al0q24nq01r8g";
     sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
     builtInputs = [gdal json_c pkgconfig];
+
+    # postgis config directory assumes /include /lib from the same root for json-c library
+    NIX_LDFLAGS = "-L${stdenv.lib.getLib json_c}/lib";
+
     dontDisableStatic = true;
     preConfigure = ''
       sed -i 's@/usr/bin/file@${file}/bin/file@' configure

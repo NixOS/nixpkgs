@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk
-, libxml2, libglade, intltool
+, libxml2, libglade, intltool, xorg, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig bc perl libjpeg mesa gtk libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
-      libXxf86misc intltool
+      libXxf86misc intltool xorg.appres makeWrapper
     ];
 
   preConfigure =
@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       "--with-xshm-ext" "--with-xdbe-ext" "--without-readdisplay"
       "--with-x-app-defaults=\${out}/share/xscreensaver/app-defaults"
     ];
+
+  postInstall = ''
+      wrapProgram $out/bin/xscreensaver-text \
+        --prefix PATH : ${stdenv.lib.makeBinPath [xorg.appres]}
+  '';
 
   meta = {
     homepage = "http://www.jwz.org/xscreensaver/";

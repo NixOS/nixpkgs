@@ -27,8 +27,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
-
     hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

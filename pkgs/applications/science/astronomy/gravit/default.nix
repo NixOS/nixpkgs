@@ -28,6 +28,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.mesaPlatforms;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

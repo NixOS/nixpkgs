@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     license = "as-is";
 
     hydraPlatforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

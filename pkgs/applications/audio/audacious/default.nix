@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Audio player";
     homepage = http://audacious-media-player.org/;
-    maintainers = with stdenv.lib.maintainers; [ eelco simons ];
+    maintainers = with stdenv.lib.maintainers; [ eelco ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

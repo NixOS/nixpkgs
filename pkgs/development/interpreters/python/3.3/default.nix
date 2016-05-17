@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
+  inherit buildInputs;
+
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
     sha256 = "0gsxpgd5p4mwd01gw501vsyahncyw3h9836ypkr3y32kgazy89jj";
@@ -102,6 +104,6 @@ stdenv.mkDerivation {
     '';
     license = stdenv.lib.licenses.psfl;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ simons chaoflow cstrahan ];
+    maintainers = with stdenv.lib.maintainers; [ chaoflow cstrahan ];
   };
 }

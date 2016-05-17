@@ -68,8 +68,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    # Note: Maintainer of prev. erlang version was simons. If he wants
-    # to continue maintaining erlang I'm totally ok with that.
     maintainers = [ maintainers.the-kenny ];
   };
 }

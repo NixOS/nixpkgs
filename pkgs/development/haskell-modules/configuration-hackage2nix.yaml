@@ -59,7 +59,7 @@ extra-packages:
   - zlib < 0.6                          # newer versions break cabal-install
 
 package-maintainers:
-  simons:
+  peti:
     - cabal2nix
     - cabal-install
     - funcmp

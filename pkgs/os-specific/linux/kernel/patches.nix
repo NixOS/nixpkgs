@@ -88,22 +88,9 @@ rec {
     sha256 = "00b1rqgd4yr206dxp4mcymr56ymbjcjfa4m82pxw73khj032qw3j";
   };
 
-  grsecurity_3_14 = grsecPatch
-    { kernel    = pkgs.grsecurity_base_linux_3_14;
-      patches   = [ grsecurity_fix_path_3_14 ];
-      kversion  = "3.14.51";
-      revision  = "201508181951";
-      branch    = "stable";
-      sha256    = "1sp1gwa7ahzflq7ayb51bg52abrn5zx1hb3pff3axpjqq7vfai6f";
-    };
+  grsecurity_3_14 = throw "grsecurity stable is no longer supported";
 
-  grsecurity_4_4 = grsecPatch
-    { kernel    = pkgs.grsecurity_base_linux_4_4;
-      patches   = [ grsecurity_fix_path_4_4 ];
-      kversion  = "4.4.5";
-      revision  = "201603131305";
-      sha256    = "04k4nhshl6r5n41ha5620s7cd70dmmmvyf9mnn5359jr1720kxpf";
-    };
+  grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
   grsecurity_4_5 = grsecPatch
     { kernel    = pkgs.grsecurity_base_linux_4_5;
@@ -114,16 +101,6 @@ rec {
     };
 
   grsecurity_latest = grsecurity_4_5;
-
-  grsecurity_fix_path_3_14 =
-    { name = "grsecurity-fix-path-3.14";
-      patch = ./grsecurity-path-3.14.patch;
-    };
-
-  grsecurity_fix_path_4_4 =
-    { name = "grsecurity-fix-path-4.4";
-      patch = ./grsecurity-path-4.4.patch;
-    };
 
   grsecurity_fix_path_4_5 =
     { name = "grsecurity-fix-path-4.5";

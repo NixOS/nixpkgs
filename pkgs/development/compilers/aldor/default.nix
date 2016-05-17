@@ -45,7 +45,6 @@ stdenv.mkDerivation {
       and powerful properties of functional, object-oriented and aspect-oriented styles.
     '';
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

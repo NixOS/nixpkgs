@@ -515,7 +515,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ viric simons ];
+    maintainers = with stdenv.lib.maintainers; [ viric peti ];
 
     # gnatboot is not available out of linux platforms, so we disable the darwin build
     # for the gnat (ada compiler).

@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
+, cairo, icu, libpng, jemalloc, libpulseaudio
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -35,8 +35,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
-      hunspell libevent libstartup_notification /* libvpx */ /* cairo */
-      gstreamer gst_plugins_base icu libpng jemalloc
+      hunspell libevent libstartup_notification libvpx /* cairo */
+      icu libpng jemalloc
       libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3;
@@ -50,7 +50,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--with-system-nspr"
       "--with-system-nss"
       "--with-system-libevent"
-      #"--with-system-libvpx" # needs 1.5.0
+      "--with-system-libvpx"
       "--with-system-png" # needs APNG support
       "--with-system-icu"
       "--enable-system-ffi"
@@ -58,7 +58,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--enable-system-pixman"
       "--enable-system-sqlite"
       #"--enable-system-cairo"
-      "--enable-gstreamer"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
       "--disable-content-sandbox-reporter"  # keeping disabled for now

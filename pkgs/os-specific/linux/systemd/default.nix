@@ -208,7 +208,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.freedesktop.org/wiki/Software/systemd";
     description = "A system and service manager for Linux";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
-

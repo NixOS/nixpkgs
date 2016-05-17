@@ -27,15 +27,27 @@ let
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
-  ];
+    zlib
+    bzip2
+    lzma
+    gdbm
+    sqlite
+    db
+    readline
+    ncurses
+    openssl
+    tcl
+    tk
+    libX11
+    xproto
+  ] ++ optionals stdenv.isDarwin [ CF configd ];
 in
 stdenv.mkDerivation {
   name = "python3-${fullVersion}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
-  buildInputs = optionals stdenv.isDarwin [ CF configd ];
+  inherit buildInputs;
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
@@ -115,6 +127,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ simons chaoflow iElectric cstrahan ];
+    maintainers = with maintainers; [ chaoflow iElectric cstrahan ];
   };
 }

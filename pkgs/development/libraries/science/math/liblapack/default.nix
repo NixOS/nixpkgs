@@ -59,8 +59,6 @@ stdenv.mkDerivation rec {
     description = "Linear Algebra PACKage";
     homepage = "http://www.netlib.org/lapack/";
     license = licenses.bsd3;
-
     platforms = platforms.all;
-    maintainers = [ maintainers.simons ];
   };
 }

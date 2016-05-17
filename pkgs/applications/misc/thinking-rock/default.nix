@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "thinkingrock-2.2.1-binary";
+  name = "thinkingrock-binary-2.2.1";
 
   src = fetchurl {
     url = mirror://sourceforge/thinkingrock/ThinkingRock/TR%202.2.1/tr-2.2.1.tar.gz;

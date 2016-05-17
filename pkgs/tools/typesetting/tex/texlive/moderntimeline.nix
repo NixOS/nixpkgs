@@ -18,8 +18,6 @@ rec {
 
   meta = {
     description = "the moderntimeline extensions for moderncv";
-    maintainers = [ args.lib.maintainers.simons ];
-
     # Actually, arch-independent..
     hydraPlatforms = [];
   };

@@ -386,13 +386,13 @@ in modules // {
 
   acme-tiny = buildPythonPackage rec {
     name = "acme-tiny-${version}";
-    version = "20151229";
-    rev = "f61f72c212cea27f388eb4a26ede0d65035bdb53";
+    version = "2016-03-26";
 
-    src = pkgs.fetchgit {
-      inherit rev;
-      url = "https://github.com/diafygi/acme-tiny.git";
-      sha256 = "dde59354e483bdff3dfd06717c094889ae673efb568e40b150b4695b0c539649";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "0ngmr3kxcvlqa9mrv3gx0rg4r67xvdjplqfminxliri3ipak853g";
+      rev = "7a5a2558c8d6e5ab2a59b9fec9633d9e63127971";
+      repo = "acme-tiny";
+      owner = "diafygi";
     };
 
     # source doesn't have any python "packaging" as such
@@ -403,7 +403,6 @@ in modules // {
 
     patchPhase = ''
       substituteInPlace acme_tiny.py --replace "openssl" "${pkgs.openssl.bin}/bin/openssl"
-      substituteInPlace letsencrypt/le_util.py --replace '"sw_vers"' '"/usr/bin/sw_vers"'
     '';
 
     installPhase = ''
@@ -4388,7 +4387,7 @@ in modules // {
       description = "pytest plugin with mechanisms for caching across test runs";
     };
   };
-  
+
   pytestdjango = buildPythonPackage rec {
     name = "pytest-django-${version}";
     version = "2.9.1";
@@ -4397,7 +4396,7 @@ in modules // {
       url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
       sha256 = "1mmc7zsz3dlhs6sx4sppkj1vgshabi362r1a8b8wpj1qfximpqcb";
     };
-    
+
     # doing this to allow depending packages to find
     # pytest's binaries
     pytest = self.pytest;
@@ -6660,6 +6659,31 @@ in modules // {
     };
   };
 
+  jug = buildPythonPackage rec {
+    version = "1.2.1";
+    name = "jug-${version}";
+    buildInputs = with self; [ nose numpy ];
+    propagatedBuildInputs = with self; [
+      pyyaml
+      redis
+      six
+      modules.sqlite3
+      pkgs.zlib
+    ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
+      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+    };
+
+    meta = {
+      description = "A Task-Based Parallelization Framework";
+      license = licenses.mit;
+      url = https://jug.readthedocs.org/;
+      maintainers = with maintainers; [ luispedro ];
+    };
+  };
+
   jsonpatch = buildPythonPackage rec {
     name = "jsonpatch-1.11";
 
@@ -7911,14 +7935,25 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    name = "py3status-2.8";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/py3status/${name}.tar.gz";
-      sha256 = "1aq4l1lj6j54a8mh9y3yscbxv41bbhz89fiwnydj2gx0md5sq5v5";
+    version = "2.9";
+    name = "py3status-${version}";
+    src = pkgs.fetchFromGitHub {
+      owner = "ultrabug";
+      repo = "py3status";
+      rev = version;
+      sha256 = "1nvdqwhgk0zff5kspgrh5c5vg1vdnz6gpjplbqi3nz41qws48f1y";
     };
     propagatedBuildInputs = with self; [ requests2 ];
     prePatch = ''
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
+      sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
+      sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
+      sed -i -e "s|'amixer|'${pkgs.alsaUtils}/bin/amixer|" py3status/modules/volume_status.py
+      sed -i -e "s|'i3-nagbar|'${pkgs.i3}/bin/i3-nagbar|" py3status/modules/pomodoro.py
+      sed -i -e "s|'free|'${pkgs.procps}/bin/free|" py3status/modules/sysdata.py
+      sed -i -e "s|'sensors|'${pkgs.lm_sensors}/bin/sensors|" py3status/modules/sysdata.py
+      sed -i -e "s|'setxkbmap|'${pkgs.xorg.setxkbmap}/bin/setxkbmap|" py3status/modules/keyboard_layout.py
+      sed -i -e "s|'xset|'${pkgs.xorg.xset}/bin/xset|" py3status/modules/keyboard_layout.py
     '';
     meta = {
       maintainers = with maintainers; [ garbas ];
@@ -8950,11 +8985,11 @@ in modules // {
 
   SPARQLWrapper = buildPythonPackage rec {
     name = "SPARQLWrapper-${version}";
-    version = "1.7.4";
+    version = "1.7.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SPARQLWrapper/SPARQLWrapper-${version}.tar.gz";
-      sha256 = "1dpwwlcdk4m8wr3d9lb24g1xcvs202c0ir4q3jcijy88is3bvgmp";
+      sha256 = "1y12hpsfjd779yi29bhvl6g4vszadjvd8jw38z5rg77b034vxjnw";
     };
 
     # break circular dependency loop
@@ -11459,7 +11494,6 @@ in modules // {
     };
   };
 
-
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
     version = "1.4.0";
@@ -13828,6 +13862,25 @@ in modules // {
       '';
       license = licenses.bsd2;
       maintainers = with maintainers; [ fuuzetsu ];
+    };
+  };
+
+  livestreamer-curses = buildPythonPackage rec {
+    version = "1.5.2";
+    name = "livestreamer-curses-${version}";
+    disabled = isPyPy;
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/gapato/livestreamer-curses/archive/v${version}.tar.gz";
+      sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
+    };
+
+    propagatedBuildInputs = with self; [ curses livestreamer ];
+
+    meta = {
+      homepage = https://github.com/gapato/livestreamer-curses;
+      description = "Curses frontend for livestreamer";
+      license = licenses.mit;
     };
   };
 
@@ -16513,6 +16566,7 @@ in modules // {
   });
 
   protobuf = self.protobuf2_6;
+  protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
@@ -20171,7 +20225,7 @@ in modules // {
   setuptools_scm_18 = self.setuptools_scm.override rec {
     name = "setuptools_scm-${version}";
     version = "1.8.0";
-    
+
     # tests fail: ImportError: cannot import name 'find_files'
     disabled = isPy35;
 
@@ -27223,6 +27277,39 @@ in modules // {
       description = "A client side encrypted pastebin";
       homepage = "http://0bin.net/";
       license = licenses.wtfpl;
+    };
+  };
+
+  # tensorflow is built from a downloaded wheel, because the upstream
+  # project's build system is an arcane beast based on
+  # bazel. Untangling it and building the wheel from source is an open
+  # problem.
+
+  tensorflow = self.tensorflowNoGpuSupport;
+
+  tensorflowNoGpuSupport = buildPythonPackage rec {
+    name = "tensorflow";
+    version = "0.8.0";
+    format = "wheel";
+
+    src = pkgs.fetchurl {
+      url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
+      sha256 = "07lb6rknngq9bicd7z1q9caiqxlqn4fdx8q24s3rqvv9wi79szws";
+    };
+
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.swig ];
+
+    preFixup = ''
+      RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
+      find $out -name '*.so' -exec patchelf --set-rpath "$RPATH" {} \;
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "TensorFlow helps the tensors flow (no gpu support)";
+      homepage = http://tensorflow.org;
+      license = licenses.asl20;
     };
   };
 }

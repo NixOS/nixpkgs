@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

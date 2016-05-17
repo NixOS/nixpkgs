@@ -49,7 +49,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "atlas-${version}" + optionalString withLapack "-with-lapack";
+  name = "atlas${optionalString withLapack "-with-lapack"}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/math-atlas/atlas${version}.tar.bz2";

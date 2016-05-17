@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     description = "Convert MS Word documents to plain text or PostScript";
     license = stdenv.lib.licenses.gpl2;
 
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, boost, cairo, fontsConf, gettext, glibmm, gtk3, gtkmm3
 , libjack2, libsigcxx, libtool, libxmlxx, makeWrapper, mlt-qt5, pango, pkgconfig
-, imagemagick, intltool, autoreconfHook, which
+, imagemagick, intltool, autoreconfHook, which, defaultIconTheme
 }:
 
 let
@@ -56,12 +56,53 @@ stdenv.mkDerivation rec {
 
   postUnpack = "sourceRoot=\${sourceRoot}/synfig-studio/";
 
+  postPatch = ''
+    for i in \
+      brushlib/brushlib.hpp \
+      gui/canvasview.cpp \
+      gui/compview.cpp \
+      gui/docks/dock_canvasspecific.cpp \
+      gui/docks/dock_children.cpp \
+      gui/docks/dock_curves.cpp \
+      gui/docks/dock_history.cpp \
+      gui/docks/dock_keyframes.cpp \
+      gui/docks/dock_layergroups.cpp \
+      gui/docks/dock_layers.cpp \
+      gui/docks/dock_metadata.cpp \
+      gui/docks/dock_params.cpp \
+      gui/docks/dock_timetrack.cpp \
+      gui/docks/dock_toolbox.cpp \
+      gui/docks/dockable.cpp \
+      gui/docks/dockdialog.cpp \
+      gui/docks/dockmanager.h \
+      gui/duck.h \
+      gui/duckmatic.cpp \
+      gui/duckmatic.h \
+      gui/instance.cpp \
+      gui/instance.h \
+      gui/states/state_stroke.h \
+      gui/states/state_zoom.cpp \
+      gui/widgets/widget_curves.cpp \
+      gui/workarea.cpp \
+      gui/workarearenderer/workarearenderer.h \
+      synfigapp/action_system.h \
+      synfigapp/canvasinterface.h \
+      synfigapp/instance.h \
+      synfigapp/main.h \
+      synfigapp/uimanager.h
+    do
+      substituteInPlace src/"$i" --replace '#include <sigc++/object.h>' '#include <sigc++/sigc++.h>'
+      substituteInPlace src/"$i" --replace '#include <sigc++/hide.h>' '#include <sigc++/adaptors/hide.h>'
+      substituteInPlace src/"$i" --replace '#include <sigc++/retype.h>' '#include <sigc++/adaptors/retype.h>'
+    done
+  '';
+
   preConfigure = "./bootstrap.sh";
 
   buildInputs = [
     ETL boost cairo gettext glibmm gtk3 gtkmm3 imagemagick intltool
     libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5 pkgconfig
-    synfig autoreconfHook which
+    synfig autoreconfHook which defaultIconTheme
   ];
 
   postInstall = ''

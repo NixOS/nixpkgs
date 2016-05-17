@@ -1,20 +1,22 @@
-{ stdenv, fetchgit, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit, freetype
-, gettext, doxygen
+{ stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+, libjpeg, libXxf86vm, mesa, openal, libvorbis, xlibsWrapper, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, leveldb
 }:
 
 let
-  version = "0.4.13";
+  version = "0.4.14";
   sources = {
-    src = fetchgit {
-      url = "https://github.com/minetest/minetest.git";
-      rev = "d44fceac7e1237b00c6431ee1bb5805b602d0dcd";
-      sha256 = "034w9nv23ncdwbs4arzxfph60cfgvalh27hxprjassmz8p7ixnra";
+    src = fetchFromGitHub {
+      owner = "minetest";
+      repo = "minetest";
+      rev = "${version}";
+      sha256 = "1f74wsiqj8x1m8wqmxijb00df5ljlvy4ac0ahbh325vfzi0bjla3";
     };
-    data = fetchgit {
-      url = "https://github.com/minetest/minetest_game.git";
-      rev = "2392842948b114670334eabbb593b66e1427747c";
-      sha256 = "0wb8rdqc2ghi66k8bm8w2db0w7k5rsbdld0dyj1wdr3d6x0bpkcr";
+    data = fetchFromGitHub {
+      owner = "minetest";
+      repo = "minetest_game";
+      rev = "${version}";
+      sha256 = "1dc9zfbp603h2nlk39bw37kjbswrfmpd9yg3v72z1jb89pcxzsqs";
     };
   };
 in stdenv.mkDerivation {
@@ -32,7 +34,8 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     cmake irrlicht libpng bzip2 libjpeg curl libogg jsoncpp libXxf86vm mesa
-    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen
+    openal libvorbis xlibsWrapper sqlite luajit freetype gettext doxygen ncurses
+    leveldb
   ];
 
   postInstall = ''

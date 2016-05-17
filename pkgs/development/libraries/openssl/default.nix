@@ -97,7 +97,7 @@ let
       homepage = http://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
       platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      maintainers = [ stdenv.lib.maintainers.peti ];
       priority = 10; # resolves collision with ‘man-pages’
     };
   };
