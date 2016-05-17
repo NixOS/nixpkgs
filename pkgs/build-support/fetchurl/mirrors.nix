@@ -54,9 +54,9 @@ rec {
     https://gnupg.org/ftp/gcrypt/
     http://www.ring.gr.jp/pub/net/
     http://gd.tuwien.ac.at/privacy/
-    http://mirrors.dotsrc.org/
-    http://ftp.heanet.ie/mirrors/ftp.gnupg.org/
-    http://www.mirrorservice.org/sites/ftp.gnupg.org/
+    http://mirrors.dotsrc.org/gcrypt/
+    http://ftp.heanet.ie/mirrors/ftp.gnupg.org/gcrypt/
+    http://www.mirrorservice.org/sites/ftp.gnupg.org/gcrypt/
   ];
 
   # kernel.org's /pub (/pub/{linux,software}) tree.
