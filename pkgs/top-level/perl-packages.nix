@@ -12464,6 +12464,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestTime = buildPerlPackage rec {
+    name = "Test-Time-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SATOH/${name}.tar.gz";
+      sha256 = "d8c1bc57f9767ae8122fc4ab873bd991cb9ea8e9422c66399acb66770fa5c2ea";
+    };
+    buildInputs = [ FileSlurp ];
+    meta = {
+      description = "Overrides the time() and sleep() core functions for testing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestUnitLite = buildPerlPackage {
     name = "Test-Unit-Lite-0.1202";
     src = fetchurl {
