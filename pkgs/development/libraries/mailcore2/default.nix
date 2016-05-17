@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
        --replace "/usr/include/libxml2" "${libxml2.dev}/include/libxml2"
     substituteInPlace src/core/basetypes/MCHTMLCleaner.cpp \
       --replace buffio.h tidybuffio.h
->>>>>>> master
   '';
 
   cmakeFlags = [
