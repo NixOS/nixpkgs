@@ -31,7 +31,7 @@ let
       description = "A simple VTE-based terminal";
       license = licenses.lgpl2Plus;
       homepage = https://github.com/thestinger/termite/;
-      maintainers = with matinainers; [ koral garbas ];
+      maintainers = with maintainers; [ koral garbas ];
       platforms = platforms.all;
     };
   };
