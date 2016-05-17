@@ -29,6 +29,8 @@ mkChromiumDerivation (base: rec {
     done
   '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "An open source web browser from Google";
     homepage = http://www.chromium.org/;
@@ -36,6 +38,5 @@ mkChromiumDerivation (base: rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["x86_64-linux"] else [];
-    requiredSystemFeatures = [ "big-parallel" ];
   };
 })

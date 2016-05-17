@@ -245,6 +245,8 @@ in stdenv.mkDerivation rec {
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = http://libreoffice.org/;

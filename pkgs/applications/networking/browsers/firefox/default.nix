@@ -108,6 +108,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "$out/bin/firefox" --version
     '';
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";
     homepage = http://www.mozilla.com/en-US/firefox/;
