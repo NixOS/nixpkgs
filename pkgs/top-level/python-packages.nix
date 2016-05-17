@@ -6251,12 +6251,12 @@ in modules // {
   };
 
   GitPython = buildPythonPackage rec {
-    version = "1.0.1";
+    version = "2.0.2";
     name = "GitPython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/G/GitPython/GitPython-${version}.tar.gz";
-      sha256 = "0q7plxnbbkp5dd0k73736l7gf932a89yy920yrgl8amfpixw324w";
+      sha256 = "18842123a88rihgh84rmjabmbn3zq1jv0227ypcpsxc5smxzws6i";
     };
 
     buildInputs = with self; [ mock nose ];
