@@ -6025,13 +6025,13 @@ let self = _self // overrides; _self = with self; {
     ];
   };
 
-  HTTPBody = buildPerlPackage {
-    name = "HTTP-Body-1.19";
+  HTTPBody = buildPerlPackage rec {
+    name = "HTTP-Body-1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.19.tar.gz;
-      sha256 = "0ahhksj0zg6wq6glpjkxdr3byd5riwvq2f5aw21n1jcsl71nll01";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
+      sha256 = "fc0d2c585b3bd1532d92609965d589e0c87cd380e7cca42fb9ad0a1311227297";
     };
-    buildInputs = [ TestDeep ];
+    buildInputs = [ HTTPMessage TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "HTTP Body Parser";
