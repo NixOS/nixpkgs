@@ -16408,6 +16408,8 @@ in
     inherit (pkgs.gnome) GConf;
   };
 
+  moltengamepad = callPackage ../misc/drivers/moltengamepad { };
+
   mongoc = callPackage ../development/libraries/mongoc { };
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus {
