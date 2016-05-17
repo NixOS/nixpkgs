@@ -16468,6 +16468,8 @@ in
     nixStable
     nixUnstable;
 
+  nix-cmd = callPackage ../tools/package-management/nix-cmd { };
+
   nixops = callPackage ../tools/package-management/nixops { };
 
   nixopsUnstable = nixops;# callPackage ../tools/package-management/nixops/unstable.nix { };
