@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Gitg;
     description = "GNOME GUI client to view git repositories";
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

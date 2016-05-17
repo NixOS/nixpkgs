@@ -48,6 +48,6 @@ stdenv.mkDerivation {
     description = "next-generation RTS that takes the genre to a planetary scale";
     license = stdenv.lib.licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

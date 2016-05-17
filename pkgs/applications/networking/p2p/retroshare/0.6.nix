@@ -56,6 +56,6 @@ stdenv.mkDerivation {
     homepage = http://retroshare.sourceforge.net/;
     #license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.linux;
   };
 }

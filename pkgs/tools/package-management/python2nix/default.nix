@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ requests pip setuptools ];
 
   meta = with stdenv.lib; {
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
     platforms = platforms.all;
   };
 }

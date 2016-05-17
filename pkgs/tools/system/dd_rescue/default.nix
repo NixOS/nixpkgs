@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       
   meta = with stdenv.lib; {
     description = "A tool to copy data from a damaged block device";
-    maintainers = with maintainers; [ raskin iElectric ];
+    maintainers = with maintainers; [ raskin domenkozar ];
     platforms = platforms.linux;
     downloadPage = "http://www.garloff.de/kurt/linux/ddrescue/";
     inherit version;

@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://extundelete.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

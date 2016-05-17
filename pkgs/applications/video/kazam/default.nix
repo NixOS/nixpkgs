@@ -46,6 +46,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://code.launchpad.net/kazam;
     #license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

@@ -25,7 +25,7 @@ in
 {
   name = "bittorrent";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow rob wkennington ];
+    maintainers = [ domenkozar eelco chaoflow rob wkennington ];
   };
 
   nodes =

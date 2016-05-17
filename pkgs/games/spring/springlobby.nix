@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/springlobby/springlobby.git;
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom qknight iElectric ];
+    maintainers = with maintainers; [ phreedom qknight domenkozar ];
     platforms = platforms.linux;
   };
 }

@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.iElectric ];
+    maintainers = [ stdenv.lib.maintainers.domenkozar ];
   };
 }

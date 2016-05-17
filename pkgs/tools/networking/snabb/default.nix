@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.iElectric ];
+    maintainers = [ maintainers.lukego maintainers.domenkozar ];
   };
 }
 

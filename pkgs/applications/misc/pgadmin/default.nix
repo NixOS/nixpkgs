@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "PostgreSQL administration GUI tool";
     homepage = http://www.pgadmin.org;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ iElectric wmertens ];
+    maintainers = with maintainers; [ domenkozar wmertens ];
     platforms = platforms.unix;
   };
 }

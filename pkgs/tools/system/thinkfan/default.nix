@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = stdenv.lib.licenses.gpl3;
     homepage = http://thinkfan.sourceforge.net/;
-    maintainers = with stdenv.lib.maintainers; [ iElectric nckx ];
+    maintainers = with stdenv.lib.maintainers; [ domenkozar nckx ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
