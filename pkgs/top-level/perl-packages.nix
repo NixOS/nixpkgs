@@ -1070,13 +1070,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystRuntime = buildPerlPackage {
-    name = "Catalyst-Runtime-5.90075";
+    name = "Catalyst-Runtime-5.90085";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90075.tar.gz;
-      sha256 = "a80ed1b1600a8ababda34bc024756a6fb0275b0fff3fa1bb17104813e3ce8752";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90085.tar.gz;
+      sha256 = "17wfcawvj8nxs2wq7r094m6dff37s6i2d2z49lxz2n8c489d9nk1";
     };
     buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI namespaceautoclean namespaceclean ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
@@ -9812,17 +9812,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Plack = buildPerlPackage {
-    name = "Plack-1.0031";
+  Plack = buildPerlPackage rec {
+    name = "Plack-1.0039";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0031.tar.gz;
-      sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "d24a572e88644c7d39c7e6ff1af005b728dec94a878cf06d9027ab7d1a2fd0a9";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
-    propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace
-      DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody
-      HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI
-      POSIXstrftimeCompiler ];
+    propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPHeadersFast HTTPMessage HashMultiValue StreamBuffered TestTCP TryTiny URI ];
     meta = {
       homepage = https://github.com/plack/Plack;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
@@ -9830,27 +9827,26 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackMiddlewareDebug = buildPerlPackage {
-    name = "Plack-Middleware-Debug-0.14";
+  PlackMiddlewareDebug = buildPerlModule rec {
+    name = "Plack-Middleware-Debug-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.14.tar.gz;
-      sha256 = "0349563ic6fw4kwx3k3l4v9gq59b5cpymmn1k8bkxsw9n7s10rb9";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "e1e4ff6e9b246fe67547ebac8a3e83d4ae77873f889d1f63411c21c8c6bf96d5";
     };
-    buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir ModuleVersions Plack TextMicroTemplate ];
+    buildInputs = [ ModuleBuildTiny TestRequires ];
+    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir Plack TextMicroTemplate ];
     meta = {
+      homepage = https://github.com/miyagawa/Plack-Middleware-Debug;
       description = "Display information about the current request/response";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
-  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage {
-    name = "Plack-Middleware-FixMissingBodyInRedirect-0.11";
+  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage rec {
+    name = "Plack-Middleware-FixMissingBodyInRedirect-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-FixMissingBodyInRedirect-0.11.tar.gz;
-      sha256 = "eb4d4232344e7da3217347b847736ea55df962d11b870a225315d9241e8fbefb";
+      url = "mirror://cpan/authors/id/S/SW/SWEETKID/${name}.tar.gz";
+      sha256 = "6c22d069f5a57ac206d4659b28b8869bb9270640bb955efddd451dcc58cdb391";
     };
     buildInputs = [ HTTPMessage Plack ];
     propagatedBuildInputs = [ HTMLParser Plack ];
@@ -9861,15 +9857,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackMiddlewareMethodOverride = buildPerlModule {
-    name = "Plack-Middleware-MethodOverride-0.10";
+  PlackMiddlewareMethodOverride = buildPerlPackage rec {
+    name = "Plack-Middleware-MethodOverride-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Plack-Middleware-MethodOverride-0.10.tar.gz;
-      sha256 = "f8d6a33b56d69dddd5db289f855e100d86ff39099abe31ef40e2672d0dc5568d";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
+      sha256 = "2b4a6e67006f97a2b4cf7980900f6a8ababb1cf97d6597319f9897ada3c555bc";
     };
-    propagatedBuildInputs = [ Plack URI ];
+    buildInputs = [ Plack URI ];
+    propagatedBuildInputs = [ Plack ];
     meta = {
-      homepage = http://search.cpan.org/dist/Plack-Middleware-MethodOverride/;
       description = "Override REST methods to Plack apps via POST";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9903,14 +9899,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackTestExternalServer = buildPerlPackage {
-    name = "Plack-Test-ExternalServer-0.01";
+  PlackTestExternalServer = buildPerlPackage rec {
+    name = "Plack-Test-ExternalServer-0.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Plack-Test-ExternalServer-0.01.tar.gz;
-      sha256 = "1dbg1p3rgvvbkkpvca5jlc2mzx8iqyiybk88al93pvbca65h1g7h";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "5baf5c57fe0c06412deec9c5abe7952ab8a04f8c47b4bbd8e9e9982268903ed0";
     };
-    propagatedBuildInputs = [ HTTPMessage LWPUserAgent Plack TestTCP URI ];
+    buildInputs = [ HTTPMessage Plack TestTCP ];
+    propagatedBuildInputs = [ LWP URI ];
     meta = {
+      homepage = https://github.com/perl-catalyst/Plack-Test-ExternalServer;
       description = "Run HTTP tests on external live servers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
