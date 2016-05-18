@@ -4,7 +4,7 @@
 
 let
 
-  version = "4.0.1631";
+  version = "4.0.1637";
 
   rpath = stdenv.lib.makeLibraryPath [
     xdg_utils
@@ -43,7 +43,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";
-        sha256 = "1ip79zq7j7842sf254296wvvd236w7c764r8wgjdyxzqyvfjfd81";
+        sha256 = "043qcylqzkzgmlhhxnhm5wy3gvh2cyhjmxnnrrz7y183ji6rw6nd";
       }
     else
       throw "HipChat is not supported on ${stdenv.system}";
