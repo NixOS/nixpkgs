@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/8.0.1/${name}-src.tar.xz";
-    sha256 = "0riyry246a6km4mw1q9iiw6p75ww2f8s81i34g151zwwdygk7qpf";
+    sha256 = "1lniqy29djhjkddnailpaqhlqh4ld2mqvb1fxgxw1qqjhz6j1ywh";
   };
 
   patches = [
