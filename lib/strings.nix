@@ -346,7 +346,7 @@ rec {
   */
   versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
 
-  /* Return true iff string v1 denotes a version equal to or newer than v2.
+  /* Return true if string v1 denotes a version equal to or newer than v2.
 
      Example:
        versionAtLeast "1.1" "1.0"
