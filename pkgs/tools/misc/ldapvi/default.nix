@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.lichteblau.com/ldapvi/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

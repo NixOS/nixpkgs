@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk, withGtk3 ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
   p_name  = "gtk-xfce-engine";
-  ver_maj = "2.10";
-  ver_min = "1";
+  ver_maj = "3.2";
+  ver_min = "0";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "4a92910205881f707f2cc8d3c9b00a95feb58eb9084d932c841f3ed027f7063d";
+    sha256 = "1va71f3gpl8gikfkmqsd5ikgp7qj8b64jii2l98g1ylnv8xrqp47";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool gtk ];
+  buildInputs = [ pkgconfig intltool gtk ] ++ stdenv.lib.optional withGtk3 gtk3;
+  
+  configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
 
   meta = {
     homepage = http://www.xfce.org/;

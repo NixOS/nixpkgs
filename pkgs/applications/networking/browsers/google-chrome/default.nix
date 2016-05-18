@@ -26,13 +26,13 @@
 # Necessary for USB audio devices.
 , pulseSupport ? true, libpulseaudio ? null
 
+# Only needed for getting information about upstream binaries
+, chromium
 }:
 
 with stdenv.lib;
 
-with (import ../chromium/update.nix {
-  inherit (stdenv) system;
-}).getChannel channel;
+with chromium.upstream-info;
 
 let
   opusWithCustomModes = libopus.override {
@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     tar xf data.tar.xz
   '';
 
-  rpath = makeLibraryPath deps + ":" + makeSearchPathOutputs "lib64" ["lib"] deps;
+  rpath = makeLibraryPath deps + ":" + makeSearchPathOutput "lib" "lib64" deps;
   binpath = makeBinPath deps;
 
   installPhase = ''

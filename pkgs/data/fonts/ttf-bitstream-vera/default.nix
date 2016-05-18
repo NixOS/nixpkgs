@@ -8,11 +8,11 @@ stdenv.mkDerivation {
     sha256 = "1p3qs51x5327gnk71yq8cvmxc6wgx79sqxfvxcv80cdvgggjfnyv";
   };
 
-  buildPhase = "true";
+  dontBuild = true;
 
-  installPhase = "
+  installPhase = ''
     fontDir=$out/share/fonts/truetype
     mkdir -p $fontDir
     cp *.ttf $fontDir
-  ";
+  '';
 }

@@ -22,26 +22,6 @@ in
         description = "Enable the Plasma 5 (KDE 5) desktop environment.";
       };
 
-      phonon = {
-
-        gstreamer = {
-          enable = mkOption {
-            type = types.bool;
-            default = true;
-            description = "Enable the GStreamer Phonon backend (recommended).";
-          };
-        };
-
-        vlc = {
-          enable = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Enable the VLC Phonon backend.";
-          };
-        };
-
-      };
-
     };
 
   };
@@ -59,7 +39,7 @@ in
         # Load PulseAudio module for routing support.
         # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
         ${optionalString config.hardware.pulseaudio.enable ''
-          ${config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
+          ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
         ''}
 
         exec "${kde5.startkde}"
@@ -122,6 +102,9 @@ in
         pkgs.hicolor_icon_theme
 
         kde5.kde-gtk-config
+
+        pkgs.phonon-backend-gstreamer
+        pkgs.kde5.phonon-backend-gstreamer
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
@@ -131,37 +114,16 @@ in
       # Install Breeze icons if available
       ++ lib.optional (lib.hasAttr "breeze-icons" kde5) kde5.breeze-icons
 
+      # Install activity manager if available
+      ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
+
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable kde5.plasma-pa
       ++ lib.optional config.powerManagement.enable kde5.powerdevil
       ++ lib.optional config.services.colord.enable kde5.colord-kde
-      ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ]
-
-      ++ lib.optionals cfg.phonon.gstreamer.enable
-        [
-          pkgs.phonon_backend_gstreamer
-          pkgs.gst_all.gstreamer
-          pkgs.gst_all.gstPluginsBase
-          pkgs.gst_all.gstPluginsGood
-          pkgs.gst_all.gstPluginsUgly
-          pkgs.gst_all.gstPluginsBad
-          pkgs.gst_all.gstFfmpeg # for mp3 playback
-          pkgs.qt55.phonon-backend-gstreamer
-          pkgs.gst_all_1.gstreamer
-          pkgs.gst_all_1.gst-plugins-base
-          pkgs.gst_all_1.gst-plugins-good
-          pkgs.gst_all_1.gst-plugins-ugly
-          pkgs.gst_all_1.gst-plugins-bad
-          pkgs.gst_all_1.gst-libav # for mp3 playback
-        ]
-
-      ++ lib.optionals cfg.phonon.vlc.enable
-        [
-          pkgs.phonon_qt5_backend_vlc
-          pkgs.qt55.phonon-backend-vlc
-        ];
+      ++ lib.optionals config.services.samba.enable [ kde5.kdenetwork-filesharing pkgs.samba ];
 
     environment.pathsToLink = [ "/share" ];
 
@@ -170,17 +132,23 @@ in
       target = "X11/xkb";
     };
 
-    environment.profileRelativeEnvVars =
-      mkIf cfg.phonon.gstreamer.enable
-      {
-        GST_PLUGIN_SYSTEM_PATH = [ "/lib/gstreamer-0.10" ];
-        GST_PLUGIN_SYSTEM_PATH_1_0 = [ "/lib/gstreamer-1.0" ];
-      };
-
     # Enable GTK applications to load SVG icons
-    environment.variables = mkIf (lib.hasAttr "breeze-icons" kde5) {
-      GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
-    };
+    environment.variables =
+      {
+        GST_PLUGIN_SYSTEM_PATH_1_0 =
+          lib.makeSearchPath "/lib/gstreamer-1.0"
+          (builtins.map (pkg: pkg.out) (with pkgs.gst_all_1; [
+            gstreamer
+            gst-plugins-base
+            gst-plugins-good
+            gst-plugins-ugly
+            gst-plugins-bad
+            gst-libav # for mp3 playback
+          ]));
+      }
+      // (if (lib.hasAttr "breeze-icons" kde5)
+          then { GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"; }
+          else { });
 
     fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 

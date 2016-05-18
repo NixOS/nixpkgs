@@ -1,0 +1,33 @@
+From 81494e67eccba04fc3fe554d76a9ca6fe7f2250e Mon Sep 17 00:00:00 2001
+From: hasufell <hasufell@gentoo.org>
+Date: Sat, 10 Oct 2015 01:15:01 +0200
+Subject: [PATCH] Fix compilation with libressl
+
+By additionally checking for defined(SSL_CTRL_SET_CURVES), which
+is defined in openssl, but not in libressl.
+---
+ src/network/ssl/qsslcontext_openssl.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslcontext_openssl.cpp
+===================================================================
+--- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/ssl/qsslcontext_openssl.cpp
++++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslcontext_openssl.cpp
+@@ -340,7 +340,7 @@ init_context:
+ 
+     const QVector<QSslEllipticCurve> qcurves = sslContext->sslConfiguration.ellipticCurves();
+     if (!qcurves.isEmpty()) {
+-#if OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
++#if OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
+         // Set the curves to be used
+         if (q_SSLeay() >= 0x10002000L) {
+             // SSL_CTX_ctrl wants a non-const pointer as last argument,
+@@ -354,7 +354,7 @@ init_context:
+                 return sslContext;
+             }
+         } else
+-#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && !defined(OPENSSL_NO_EC)
++#endif // OPENSSL_VERSION_NUMBER >= 0x10002000L && defined(SSL_CTRL_SET_CURVES) && !defined(OPENSSL_NO_EC)
+         {
+             // specific curves requested, but not possible to set -> error
+             sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));

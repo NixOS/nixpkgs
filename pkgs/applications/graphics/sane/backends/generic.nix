@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     homepage = "http://www.sane-project.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ nckx simons ];
+    maintainers = with maintainers; [ nckx peti ];
     platforms = platforms.linux;
   };
 }

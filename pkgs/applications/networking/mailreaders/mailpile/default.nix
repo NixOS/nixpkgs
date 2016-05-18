@@ -29,6 +29,6 @@ pythonPackages.buildPythonApplication rec {
     homepage = https://www.mailpile.is/;
     license = [ licenses.asl20 licenses.agpl3 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

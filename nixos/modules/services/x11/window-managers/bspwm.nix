@@ -38,6 +38,7 @@ in
       start = if cfg.startThroughSession
         then cfg.sessionScript
         else ''
+            export _JAVA_AWT_WM_NONREPARENTING=1
             SXHKD_SHELL=/bin/sh ${pkgs.sxhkd}/bin/sxhkd -f 100 &
             ${pkgs.bspwm}/bin/bspwm
         '';

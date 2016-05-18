@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf
+{ stdenv, fetchurl, makeDesktopItem, patchelf
 , dbus_libs, gcc, glib, libdrm, libffi, libICE, libSM
 , libX11, libXmu, ncurses, popt, qt5, zlib
-, qtbase, qtdeclarative, qtwebkit
+, qtbase, qtdeclarative, qtwebkit, makeQtWrapper
 }:
 
 # this package contains the daemon version of dropbox
@@ -62,7 +62,7 @@ in stdenv.mkDerivation {
 
   sourceRoot = ".dropbox-dist";
 
-  buildInputs = [ makeWrapper patchelf ];
+  nativeBuildInputs = [ makeQtWrapper patchelf ];
   dontPatchELF = true; # patchelf invoked explicitly below
   dontStrip = true; # already done
 
@@ -102,7 +102,7 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
-    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+    makeQtWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
   '';
 
@@ -151,5 +151,6 @@ in stdenv.mkDerivation {
     description = "Online stored folders (daemon version)";
     maintainers = with stdenv.lib.maintainers; [ ttuegel ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    license = stdenv.lib.licenses.unfree;
   };
 }

@@ -96,8 +96,12 @@ rec {
                     name = name + "-" + cross.config;
                     nativeBuildInputs = nativeBuildInputsDrvs
                       ++ nativeInputsFromBuildInputs
-                      ++ [ gccCross binutilsCross ] ++
-                      stdenv.lib.optional selfNativeBuildInput nativeDrv;
+                      ++ [ gccCross binutilsCross ]
+                      ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
+                        # without proper `file` command, libtool sometimes fails
+                        # to recognize 64-bit DLLs
+                      ++ stdenv.lib.optional (cross.config  == "x86_64-w64-mingw32") pkgs.file
+                      ;
 
                     # Cross-linking dynamic libraries, every buildInput should
                     # be propagated because ld needs the -rpath-link to find

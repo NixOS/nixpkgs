@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "17jan0g5jzp8mrpklyacwdgnnw016m1c5pc4az5im6qhc260yirs";
   };
 
+  outputs = [ "dev" "out" ];
+
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
@@ -88,7 +90,7 @@ stdenv.mkDerivation rec {
     homepage = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom urkud rickynils iElectric ];
+    maintainers = with maintainers; [ phreedom urkud rickynils domenkozar ];
     platforms = platforms.linux;
   };
 }

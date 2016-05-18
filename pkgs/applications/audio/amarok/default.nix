@@ -2,7 +2,7 @@
 , qtscriptgenerator, gettext, curl , libxml2, mysql, taglib
 , taglib_extras, loudmouth , kdelibs , qca2, libmtp, liblastfm, libgpod
 , phonon , strigi, soprano, qjson, ffmpeg, libofa, nepomuk_core ? null
-, lz4, lzo, snappy, libaio
+, lz4, lzo, snappy, libaio, pcre
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.lib
     taglib taglib_extras loudmouth kdelibs phonon strigi soprano qca2
     libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
-    lz4 lzo snappy libaio
+    lz4 lzo snappy libaio pcre
   ];
 
   # This is already fixed upstream, will be release in 2.9

@@ -102,7 +102,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = [ pluginsEnv ];
-      environment.PYTHONPATH = makeSearchPathOutputs pkgs.python.sitePackages ["lib"] [ pluginsEnv ];
+      environment.PYTHONPATH = makeSearchPathOutput "lib" pkgs.python.sitePackages [ pluginsEnv ];
 
       preStart = ''
         mkdir -p "${cfg.stateDir}"

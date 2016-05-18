@@ -1,11 +1,11 @@
 {stdenv, fetchurl, openal, libvorbis, mesa_glu, premake4, SDL2, SDL2_image, SDL2_ttf}:
 
 stdenv.mkDerivation rec {
-  version = "1.3.3";
+  version = "1.4.6";
   name = "tome4-${version}";
   src = fetchurl {
     url = "http://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "d4c6d6aa0cb73b28172cebf89e4271b0a51c6e7dea744ce9c6d6042dd076e9cd";
+    sha256 = "12pi2lw1k6l3p209nnkh4nfv3ppp8kpd6mkh1324c81z6mh6w4wg";
   };
   buildInputs = [ mesa_glu openal libvorbis SDL2 SDL2_ttf SDL2_image premake4 ];
   preConfigure = ''

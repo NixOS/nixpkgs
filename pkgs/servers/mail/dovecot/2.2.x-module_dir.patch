@@ -1,7 +1,8 @@
-diff -ur dovecot-2.2.12-orig/src/auth/main.c dovecot-2.2.12/src/auth/main.c
---- dovecot-2.2.12-orig/src/auth/main.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/auth/main.c	2014-03-14 09:28:17.642334838 +0100
-@@ -193,7 +193,7 @@
+diff --git a/src/auth/main.c b/src/auth/main.c
+index 5a87c57..74bff52 100644
+--- a/src/auth/main.c
++++ b/src/auth/main.c
+@@ -194,7 +194,7 @@ static void main_preinit(void)
  	mod_set.debug = global_auth_settings->debug;
  	mod_set.filter_callback = auth_module_filter;
  
@@ -10,7 +11,7 @@ diff -ur dovecot-2.2.12-orig/src/auth/main.c dovecot-2.2.12/src/auth/main.c
  	module_dir_init(modules);
  
  	if (!worker)
-@@ -223,7 +223,7 @@
+@@ -225,7 +225,7 @@ void auth_module_load(const char *names)
  	mod_set.debug = global_auth_settings->debug;
  	mod_set.ignore_missing = TRUE;
  
@@ -19,10 +20,11 @@ diff -ur dovecot-2.2.12-orig/src/auth/main.c dovecot-2.2.12/src/auth/main.c
  					  &mod_set);
  	module_dir_init(modules);
  }
-diff -ur dovecot-2.2.12-orig/src/config/all-settings.c dovecot-2.2.12/src/config/all-settings.c
---- dovecot-2.2.12-orig/src/config/all-settings.c	2014-02-11 23:31:37.000000000 +0100
-+++ dovecot-2.2.12/src/config/all-settings.c	2014-03-14 09:32:08.907608311 +0100
-@@ -773,7 +773,7 @@
+diff --git a/src/config/all-settings.c b/src/config/all-settings.c
+index de223a5..2df2d21 100644
+--- a/src/config/all-settings.c
++++ b/src/config/all-settings.c
+@@ -836,7 +836,7 @@ static const struct mail_user_settings mail_user_default_settings = {
  	.last_valid_gid = 0,
  
  	.mail_plugins = "",
@@ -31,20 +33,20 @@ diff -ur dovecot-2.2.12-orig/src/config/all-settings.c dovecot-2.2.12/src/config
  
  	.mail_log_prefix = "%s(%u): ",
  
-@@ -3304,7 +3304,7 @@
+@@ -3545,7 +3545,7 @@ const struct doveadm_settings doveadm_default_settings = {
  	.base_dir = PKG_RUNDIR,
  	.libexec_dir = PKG_LIBEXECDIR,
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
 +	.mail_plugin_dir = "/etc/dovecot/modules",
+ 	.auth_debug = FALSE,
  	.auth_socket_path = "auth-userdb",
  	.doveadm_socket_path = "doveadm-server",
- 	.doveadm_worker_count = 0,
-Only in dovecot-2.2.12/src/config: all-settings.c.orig
-diff -ur dovecot-2.2.12-orig/src/config/config-parser.c dovecot-2.2.12/src/config/config-parser.c
---- dovecot-2.2.12-orig/src/config/config-parser.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/config/config-parser.c	2014-03-14 09:28:17.645334840 +0100
-@@ -990,7 +990,7 @@
+diff --git a/src/config/config-parser.c b/src/config/config-parser.c
+index 2a5009a..134f92b 100644
+--- a/src/config/config-parser.c
++++ b/src/config/config-parser.c
+@@ -1047,7 +1047,7 @@ void config_parse_load_modules(void)
  
  	memset(&mod_set, 0, sizeof(mod_set));
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
@@ -53,10 +55,11 @@ diff -ur dovecot-2.2.12-orig/src/config/config-parser.c dovecot-2.2.12/src/confi
  	module_dir_init(modules);
  
  	i_array_init(&new_roots, 64);
-diff -ur dovecot-2.2.12-orig/src/dict/main.c dovecot-2.2.12/src/dict/main.c
---- dovecot-2.2.12-orig/src/dict/main.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/dict/main.c	2014-03-14 09:28:17.645334840 +0100
-@@ -61,7 +61,7 @@
+diff --git a/src/dict/main.c b/src/dict/main.c
+index e6c945e..06ad6c5 100644
+--- a/src/dict/main.c
++++ b/src/dict/main.c
+@@ -62,7 +62,7 @@ static void main_init(void)
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
  	mod_set.require_init_funcs = TRUE;
  
@@ -65,23 +68,24 @@ diff -ur dovecot-2.2.12-orig/src/dict/main.c dovecot-2.2.12/src/dict/main.c
  	module_dir_init(modules);
  
  	/* Register only after loading modules. They may contain SQL drivers,
-diff -ur dovecot-2.2.12-orig/src/doveadm/doveadm-settings.c dovecot-2.2.12/src/doveadm/doveadm-settings.c
---- dovecot-2.2.12-orig/src/doveadm/doveadm-settings.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/doveadm/doveadm-settings.c	2014-03-14 09:32:56.540087069 +0100
-@@ -77,7 +77,7 @@
+diff --git a/src/doveadm/doveadm-settings.c b/src/doveadm/doveadm-settings.c
+index df12284..19c18da 100644
+--- a/src/doveadm/doveadm-settings.c
++++ b/src/doveadm/doveadm-settings.c
+@@ -81,7 +81,7 @@ const struct doveadm_settings doveadm_default_settings = {
  	.base_dir = PKG_RUNDIR,
  	.libexec_dir = PKG_LIBEXECDIR,
  	.mail_plugins = "",
 -	.mail_plugin_dir = MODULEDIR,
 +	.mail_plugin_dir = "/etc/dovecot/modules",
+ 	.auth_debug = FALSE,
  	.auth_socket_path = "auth-userdb",
  	.doveadm_socket_path = "doveadm-server",
- 	.doveadm_worker_count = 0,
-Only in dovecot-2.2.12/src/doveadm: doveadm-settings.c.orig
-diff -ur dovecot-2.2.12-orig/src/lib-fs/fs-api.c dovecot-2.2.12/src/lib-fs/fs-api.c
---- dovecot-2.2.12-orig/src/lib-fs/fs-api.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/lib-fs/fs-api.c	2014-03-14 09:28:17.646334843 +0100
-@@ -89,7 +89,7 @@
+diff --git a/src/lib-fs/fs-api.c b/src/lib-fs/fs-api.c
+index b50fbe0..ace3aff 100644
+--- a/src/lib-fs/fs-api.c
++++ b/src/lib-fs/fs-api.c
+@@ -114,7 +114,7 @@ static void fs_class_try_load_plugin(const char *driver)
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
  	mod_set.ignore_missing = TRUE;
  
@@ -90,11 +94,11 @@ diff -ur dovecot-2.2.12-orig/src/lib-fs/fs-api.c dovecot-2.2.12/src/lib-fs/fs-ap
  					     module_name, &mod_set);
  	module_dir_init(fs_modules);
  
-Only in dovecot-2.2.12/src/lib-fs: fs-api.c.orig
-diff -ur dovecot-2.2.12-orig/src/lib-ssl-iostream/iostream-ssl.c dovecot-2.2.12/src/lib-ssl-iostream/iostream-ssl.c
---- dovecot-2.2.12-orig/src/lib-ssl-iostream/iostream-ssl.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/lib-ssl-iostream/iostream-ssl.c	2014-03-14 09:28:17.646334843 +0100
-@@ -30,7 +30,7 @@
+diff --git a/src/lib-ssl-iostream/iostream-ssl.c b/src/lib-ssl-iostream/iostream-ssl.c
+index a0659ab..dba3729 100644
+--- a/src/lib-ssl-iostream/iostream-ssl.c
++++ b/src/lib-ssl-iostream/iostream-ssl.c
+@@ -29,7 +29,7 @@ static int ssl_module_load(const char **error_r)
  	memset(&mod_set, 0, sizeof(mod_set));
  	mod_set.abi_version = DOVECOT_ABI_VERSION;
  	mod_set.setting_name = "<built-in lib-ssl-iostream lookup>";
@@ -103,11 +107,11 @@ diff -ur dovecot-2.2.12-orig/src/lib-ssl-iostream/iostream-ssl.c dovecot-2.2.12/
  
  	ssl_vfuncs = module_get_symbol(ssl_module, "ssl_vfuncs");
  	if (ssl_vfuncs == NULL) {
-Only in dovecot-2.2.12/src/lib-ssl-iostream: iostream-ssl.c.orig
-diff -ur dovecot-2.2.12-orig/src/lib-storage/mail-storage-settings.c dovecot-2.2.12/src/lib-storage/mail-storage-settings.c
---- dovecot-2.2.12-orig/src/lib-storage/mail-storage-settings.c	2014-02-11 23:23:37.000000000 +0100
-+++ dovecot-2.2.12/src/lib-storage/mail-storage-settings.c	2014-03-14 09:28:17.646334843 +0100
-@@ -262,7 +262,7 @@
+diff --git a/src/lib-storage/mail-storage-settings.c b/src/lib-storage/mail-storage-settings.c
+index e2233bf..bbf981e 100644
+--- a/src/lib-storage/mail-storage-settings.c
++++ b/src/lib-storage/mail-storage-settings.c
+@@ -274,7 +274,7 @@ static const struct mail_user_settings mail_user_default_settings = {
  	.last_valid_gid = 0,
  
  	.mail_plugins = "",
@@ -116,4 +120,3 @@ diff -ur dovecot-2.2.12-orig/src/lib-storage/mail-storage-settings.c dovecot-2.2
  
  	.mail_log_prefix = "%s(%u): ",
  
-Only in dovecot-2.2.12/src/lib-storage: mail-storage-settings.c.orig

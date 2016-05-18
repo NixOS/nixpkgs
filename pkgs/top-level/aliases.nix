@@ -44,6 +44,7 @@ doNotDisplayTwice rec {
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
   fuse_exfat = exfat;                   # 2015-09-11
+  fuse_zip = fuse-zip; # added 2016-04-27
   gettextWithExpat = gettext; # 2016-02-19
   git-hub = gitAndTools.git-hub; # added 2016-04-29
   grantlee5 = qt5.grantlee;  # added 2015-12-19
@@ -54,6 +55,9 @@ doNotDisplayTwice rec {
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
+  libcap_manpages = libcap.doc; # added 2016-04-29
+  libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
+  libcap_progs = libcap.out; # added 2016-04-29
   libtidy = html-tidy;  # added 2014-12-21
   links = links2; # added 2016-01-31
   lttngTools = lttng-tools;  # added 2014-07-31
@@ -67,12 +71,9 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
-  phonon_qt5 = qt5.phonon;  # added 2015-12-19
-  phonon_qt5_backend_gstreamer = qt5.phonon-backend-gstreamer;  # added 2015-12-19
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
-  qtcreator = qt5.qtcreator;  # added 2015-12-19
   quake3game = ioquake3; # added 2016-01-14
   quassel_kf5 = kde5.quassel; # added 2015-09-30
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30
@@ -90,12 +91,12 @@ doNotDisplayTwice rec {
   saneBackendsGit = sane-backends-git; # added 2016-01-02
   saneFrontends = sane-frontends; # added 2016-01-02
   scim = sc-im; # added 2016-01-22
-  signon = qt5.signon;  # added 2015-12-19
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
   system_config_printer = system-config-printer;  # added 2016-01-03
   telepathy_qt5 = qt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
   virtviewer = virt-viewer; # added 2015-12-24

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, cmake, glib, qt4, boost, libsigrok
-, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi
+, libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi, glibmm
 }:
 
 stdenv.mkDerivation rec {
-  name = "pulseview-0.2.0";
+  name = "pulseview-0.3.0";
 
   src = fetchurl {
     url = "http://sigrok.org/download/source/pulseview/${name}.tar.gz";
-    sha256 = "1pf1dgwd9j586nqmni6gqf3qxrsmawcmi9wzqfzqkjci18xd7dgy";
+    sha256 = "03jk5xpsird5ssbnwkxw57jnqvnnpivhqh1xjdhdrz02lsvjrzjz";
   };
 
   buildInputs = [ pkgconfig cmake glib qt4 boost libsigrok
-    libsigrokdecode libserialport libzip udev libusb1 libftdi
+    libsigrokdecode libserialport libzip udev libusb1 libftdi glibmm
   ];
 
   meta = with stdenv.lib; {

@@ -1,15 +1,16 @@
 { stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
 
-let version = "0.9.7"; in
+let version = "0.9.9"; in
 stdenv.mkDerivation rec {
   name = "flashrom-${version}";
 
   src = fetchurl {
     url = "http://download.flashrom.org/releases/${name}.tar.bz2";
-    sha256 = "5a55212d00791981a9a1cb0cdca9d9e58bea6d399864251e7b410b4d3d6137e9";
+    sha256 = "0i9wg1lyfg99bld7d00zqjm9f0lk6m0q3h3n9c195c9yysq5ccfb";
   };
 
-  buildInputs = [ pkgconfig libftdi pciutils ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libftdi pciutils ];
 
   preConfigure = "export PREFIX=$out";
 

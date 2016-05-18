@@ -243,6 +243,13 @@ let
     sha256 = "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p";
   };
 
+  archiver = buildFromGitHub {
+    rev = "85f054813ed511646b0ce5e047697e0651b8e1a4";
+    owner = "mholt";
+    repo = "archiver";
+    sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
+  };
+
   asciinema = buildFromGitHub {
     rev = "v1.2.0";
     owner = "asciinema";
@@ -412,13 +419,13 @@ let
   };
 
   caddy = buildFromGitHub {
-    rev     = "9099375b11b7b5e62b831627c2927d1c4c666071";
-    version = "v0.8.2";
+    rev     = "e2234497b79603388b58ba226abb157aa4aaf065";
+    version = "v0.8.3";
     owner   = "mholt";
     repo    = "caddy";
-    sha256  = "1zdy2sxir21ngh2ird01sv4fgj6sy3wl4s6k4piklri8ps1zw0k0";
+    sha256  = "1snijkbz02yr7wij7bcmrj4257709sbklb3nhb5qmy95b9ssffm6";
     buildInputs = [
-      acme blackfriday crypto go-humanize go-shlex go-syslog
+      acme archiver blackfriday crypto go-humanize go-shlex go-syslog
       http-authentication lumberjack-v2 toml websocket yaml-v2
     ];
     disabled = isGo14 || isGo15;
@@ -542,10 +549,10 @@ let
   };
 
   consul = buildFromGitHub {
-    rev = "v0.5.2";
+    rev = "v0.6.4";
     owner = "hashicorp";
     repo = "consul";
-    sha256 = "0p3lc1p346a5ipvkf15l94gn1ml3m7zz6bx0viark3hsv0a7iij7";
+    sha256 = "0p6m2rl0d30w418n4fzc4vymqs3vzfa468czmy4znkjmxdl5vp5a";
 
     buildInputs = [
       circbuf armon.go-metrics go-radix gomdb bolt consul-migrate go-checkpoint
@@ -564,11 +571,10 @@ let
   };
 
   consul-alerts = buildFromGitHub {
-    rev = "6eb4bc556d5f926dbf15d86170664d35d504ae54";
-    version = "2015-08-09";
+    rev = "v0.3.3";
     owner = "AcalephStorage";
     repo = "consul-alerts";
-    sha256 = "191bmxix3nl4pr26hcdfxa9qpv5dzggjvi86h2slajgyd2rzn23b";
+    sha256 = "1w0mb20w1yazyh84sa30bsw271c5nm7lsx2qg0g3gf6mxdb63lpq";
 
     renameImports = ''
       # Remove all references to included dependency store
@@ -594,7 +600,7 @@ let
   };
 
   consul-template = buildGoPackage rec {
-    rev = "v0.9.0";
+    rev = "v0.14.0";
     name = "consul-template-${rev}";
     goPackagePath = "github.com/hashicorp/consul-template";
 
@@ -602,7 +608,7 @@ let
       inherit rev;
       owner = "hashicorp";
       repo = "consul-template";
-      sha256 = "1k64rjskzn7cxn7rxab978847jq8gr4zj4cnzgznhn44nzasgymj";
+      sha256 = "15zsax44g3dwjmmm4fpb54mvsjvjf3b6g3ijskgipvhcy0d3j938";
     };
 
     # We just want the consul api not all of consul and vault
@@ -611,7 +617,7 @@ let
       { inherit (vault) src goPackagePath; }
     ];
 
-    buildInputs = [ go-multierror go-syslog hcl logutils mapstructure ];
+    buildInputs = [ go-multierror go-syslog hcl logutils mapstructure pkgs.zip ];
   };
 
   context = buildGoPackage rec {
@@ -736,6 +742,22 @@ let
     owner = "odeke-em";
     repo = "cache";
     sha256 = "1rmm1ky7irqypqjkk6qcd2n0xkzpaggdxql9dp9i9qci5rvvwwd4";
+  };
+
+  ethereum = buildFromGitHub rec {
+    name = "ethereum";
+    rev = "v1.4.1";
+    goPackagePath = "github.com/ethereum/go-ethereum";
+    owner = "ethereum";
+    repo = "go-ethereum";
+    sha256 = "0z6yzkk72g41dzqa52fizxqxqh349y1m9s3byfh9ixq5xy5fnjn3";
+    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
+    postBuild = "rm $NIX_BUILD_TOP/go/bin/*test";
+    meta = with stdenv.lib; {
+      homepage = "https://ethereum.github.io/go-ethereum/";
+      description = "Official golang implementation of the Ethereum protocol";
+      license = with licenses; [ lgpl3 gpl3 ];
+    };
   };
 
   exercism = buildFromGitHub {
@@ -890,8 +912,15 @@ let
       crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
     ];
 
+    patchPhase = ''
+      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
+      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
+    '';
+
     postInstall= ''
       cp $src/bin/fzf-tmux $bin/bin
+      mkdir -p $out/share/vim-plugins
+      ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${(builtins.parseDrvName fzf.name).name}
     '';
   };
 
@@ -1029,10 +1058,10 @@ let
   };
 
   glide = buildFromGitHub {
-    rev    = "0.6.1";
+    rev    = "0.10.2";
     owner  = "Masterminds";
     repo   = "glide";
-    sha256 = "1v66c2igm8lmljqrrsyq3cl416162yc5l597582bqsnhshj2kk4m";
+    sha256 = "1qb2n5i04gabb2snnwfr8wv4ypcp1pdzvgga62m9xkhk4p2w6pwl";
     buildInputs = [ cookoo cli-go go-gypsy vcs ];
   };
 
@@ -1285,6 +1314,33 @@ let
     goPackagePath = "google.golang.org/api";
     goPackageAliases = [ "github.com/google/google-api-client" ];
     buildInputs = [ net ];
+  };
+
+  gore = buildFromGitHub {
+    rev = "v0.2.5";
+    owner = "motemen";
+    repo = "gore";
+    sha256 = "1kg14ps6yw0715rlbcfk1bmrszzgsqgb0r2p3ra1qwxbhj1jd44y";
+    buildInputs = [ go-homedir go-quickfix liner tools pkgs.makeWrapper ];
+
+    # Gore is a Go REPL, so it needs to be able to use the Go compiler.
+    allowGoReference = true;
+
+    # Gore seems to only work with Go 1.5. Not sure if it doesn't support
+    # other versions or if I just haven't figured out how to get them working.
+    disabled = !isGo15;
+
+    postInstall = ''
+      mkdir -p $out/bin
+      cp $NIX_BUILD_TOP/go/bin/gore $out/bin
+      wrapProgram $out/bin/gore --set GOROOT ${self.go}/share/go
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/motemen/gore";
+      description = "Yet another Go REPL that works nicely. Featured with line editing, code completion, and more.";
+      license = licenses.mit;
+    };
   };
 
   goreturns = buildFromGitHub {
@@ -1767,6 +1823,21 @@ let
     owner  = "google";
     repo   = "go-querystring";
     sha256 = "00ani7fhydcmlsm3n93nmj1hcqp2wmzvihnb1gdzynif1hw0530y";
+  };
+
+  go-quickfix = buildFromGitHub {
+    rev = "a5d4c82f7428280897ef403a87aa78b9c5924a47";
+    sha256 = "0m1vclhqygnylfyhzpw5myi3f4qz30a3h9mbssxdsgn67s7l666y";
+    owner = "motemen";
+    repo = "go-quickfix";
+    buildInputs = [ tools ];
+    excludedPackages = "testdata";
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/motemen/go-quickfix";
+      description = ''Quick fix non-compiling well-typed Go source code e.g. "x declared and not used."'';
+      license = licenses.mit;
+    };
   };
 
   go-radix = buildFromGitHub {
@@ -3652,11 +3723,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.22";
+    version = "0.12.23";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "1pycmb5cwkp21p11rj6lbrqr66yiffi23zk5laas3p581ljdg5vj";
+    sha256 = "0v8343k670ncjfd25hzhyfi87cz46k57rmv6pf30v7iclfhpmy1s";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
@@ -3742,7 +3813,12 @@ let
     sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
 
     postInstall = ''
-      for i in $bin/bin/{provider,provisioner}-*; do mv $i $bin/bin/terraform-$(basename $i); done
+      # prefix all the plugins with "terraform-"
+      for i in $bin/bin/*; do
+        if [[ ! $(basename $i) =~ terraform* ]]; then
+          mv -v $i $bin/bin/terraform-$(basename $i);
+        fi
+      done
     '';
   };
 
@@ -3841,10 +3917,10 @@ let
   };
 
   vault = buildFromGitHub {
-    rev = "v0.2.0";
+    rev = "v0.5.2";
     owner = "hashicorp";
     repo = "vault";
-    sha256 = "133fwhzk8z3xb6mf6scmn5rbl6g4vqg4g4n6zw620fsn9wy1b9ni";
+    sha256 = "085rk5i480wdlkn2p14yxi8zgsc11595nkkda1i77c4vjkllbkdy";
 
     #postPatch = ''
     #  grep -r '/gen/' | awk -F: '{print $1}' | xargs sed -i 's,/gen/,/apis/,g'
@@ -4151,5 +4227,40 @@ let
     repo    = "wego";
     sha256  = "14p3hvv82bsxqnbnzz8hjv75i39kzg154a132n6cdxx3vgw76gck";
     propagatedBuildInputs = [ go-colorable mattn.go-runewidth ingo ];
+  };
+
+  textql = buildFromGitHub rec {
+    rev     = "1785cd353c68aa34f97627143b9c2908dfd4ea04";
+    version = "2.0.3";
+    owner   = "dinedal";
+    repo    = "textql";
+    sha256 = "1b61w4pc5gl7m12mphricihzq7ifnzwn0yyw3ypv0d0fj26h5hc3";
+    propagatedBuildInputs = [ go-sqlite3 ];
+
+    meta = with stdenv.lib; {
+      description = "Execute SQL against structured text like CSV or TSV";
+      homepage = https://github.com/dinedal/textql;
+      license = licenses.mit;
+      maintainers = with maintainers; [ vrthra ];
+    };
+
+  };
+
+  gopsutil = buildFromGitHub rec {
+    version = "1.0.0";
+    rev = "37d89088411de59a4ef9fc340afa0e89dfcb4ea9";
+    owner = "shirou";
+    repo = "gopsutil";
+    sha256 = "13bi1d9hw8vr6qjpblryhglm0ikzpijbwhpp6rx7f5yd7sxsswhm";
+    propagatedBuildInputs = [ ];
+  };
+
+  gohai = buildFromGitHub rec {
+    rev = "94685629c66fe481bfb499175b448fb401a41781";
+    version = "2016-04-14";
+    owner = "DataDog";
+    repo = "gohai";
+    sha256 = "0dvrv7skc0k8zd83gbwml8c02wjwldhxhhgzmwdfvvaqc00qz2c0";
+    propagatedBuildInputs = [ seelog gopsutil ];
   };
 }; in self

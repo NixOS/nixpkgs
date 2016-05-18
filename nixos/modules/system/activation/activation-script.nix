@@ -12,8 +12,7 @@ let
     '';
   });
 
-  path = map # outputs TODO?
-    (pkg: (pkg.bin or (pkg.out or pkg)))
+  path = map getBin
     [ pkgs.coreutils pkgs.gnugrep pkgs.findutils
       pkgs.glibc # needed for getent
       pkgs.shadow

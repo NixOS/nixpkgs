@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ git nettools perl ];
-  buildPhase = "true";
+
+  dontBuild = true;
 
   patchPhase = ''
     substituteInPlace ./install --replace " 2>/dev/null" ""

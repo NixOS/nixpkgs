@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://splix.sourceforge.net;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -6,7 +6,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "jenkins";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ bjornfor coconnor iElectric eelco chaoflow ];
+    maintainers = [ bjornfor coconnor domenkozar eelco chaoflow ];
   };
 
   nodes = {

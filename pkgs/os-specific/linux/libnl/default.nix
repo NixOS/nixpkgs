@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub, autoreconfHook, bison, flex, pkgconfig }:
 
-let version = "3.2.26"; in
+let version = "3.2.27"; in
 stdenv.mkDerivation {
   name = "libnl-${version}";
 
   src = fetchFromGitHub {
-    sha256 = "1cbqdhirn6hxmv8xkm8xp3n6ayyxw7sbi15fym167rdz0h9rkhmm";
-    rev = "libnl3_2_26";
+    sha256 = "1rc8plgl2ijq2pwlzinpfr06kiggjyx71r3lw505m6rvxvdac82r";
+    rev = "libnl3_2_27";
     repo = "libnl";
     owner = "thom311";
   };

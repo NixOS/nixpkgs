@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = "GPL";
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

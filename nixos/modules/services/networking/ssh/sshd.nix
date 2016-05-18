@@ -195,7 +195,7 @@ in
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Files from with authorized keys are read.";
+        description = "Files from which authorized keys are read.";
       };
 
       extraConfig = mkOption {

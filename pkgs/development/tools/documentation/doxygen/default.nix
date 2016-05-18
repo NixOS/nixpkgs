@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
       manual (in LaTeX) from a set of documented source files.
     '';
 
-    maintainers = [stdenv.lib.maintainers.simons];
     platforms = if qt4 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }

@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Free software for managing electronic mail discussion and e-newsletter lists";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

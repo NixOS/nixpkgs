@@ -58,7 +58,7 @@ let
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
         pkgs.utillinux ] ++ (if cfg.efiSupport && (cfg.version == 2) then [pkgs.efibootmgr ] else [])
-      )) + ":" + (makeSearchPathOutputs "sbin" ["bin"] [
+      )) + ":" + (makeSearchPathOutput "bin" "sbin" [
         pkgs.mdadm pkgs.utillinux
       ]);
     });

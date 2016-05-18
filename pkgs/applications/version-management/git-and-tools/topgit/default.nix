@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "TopGit manages large amount of interdependent topic branches";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ marcweber simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber ];
   };
 }

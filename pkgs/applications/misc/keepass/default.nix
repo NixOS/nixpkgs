@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, plugins ? [] }:
+{ stdenv, lib, fetchurl, buildDotnetPackage, makeWrapper, unzip, makeDesktopItem, icoutils, gtk2, plugins ? [] }:
 
 # KeePass looks for plugins in under directory in which KeePass.exe is
 # located. It follows symlinks where looking for that directory, so
@@ -8,11 +8,11 @@
 # plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.32";
+  version = "2.33";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "11bkflmqrpfk95v2j7pjcm78nilx2s611mn2x7kxwn77ilnbcjbw";
+    sha256 = "0n4rkx2awyq1gbqiby1lkf2zw82brji96s4fkjsahmci528a882i";
   };
 
   sourceRoot = ".";
@@ -72,6 +72,8 @@ with builtins; buildDotnetPackage rec {
   # is found and does not pollute output path.
   binPaths = lib.concatStrings (lib.intersperse ":" (map (x: x + "/bin") plugins));
 
+  dynlibPath = stdenv.lib.makeLibraryPath [ gtk2 ];
+
   postInstall = 
   let
     extractFDeskIcons = ./extractWinRscIconsToStdFreeDesktopDir.sh;
@@ -79,7 +81,9 @@ with builtins; buildDotnetPackage rec {
   ''
     mkdir -p "$out/share/applications"
     cp ${desktopItem}/share/applications/* $out/share/applications
-    wrapProgram $out/bin/keepass --prefix PATH : "$binPaths"
+    wrapProgram $out/bin/keepass \
+      --prefix PATH : "$binPaths" \
+      --prefix LD_LIBRARY_PATH : "$dynlibPath"
 
     ${extractFDeskIcons} \
       "./Translation/TrlUtil/Resources/KeePass.ico" \

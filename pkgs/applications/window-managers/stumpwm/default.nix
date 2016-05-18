@@ -6,8 +6,8 @@ let
   version = "0.9.9";
   contrib = (fetchgit {
     url = "https://github.com/stumpwm/stumpwm-contrib.git";
-    rev = "e139885fffcedaeba4b263e4575daae4364cad52";
-    sha256 = "fe75bb27538a56f2d213fb21e06a8983699e129a10da7014ddcf6eed5cd965f8";
+    rev = "9bebe3622b2b6c31a6bada9055ef3862fa79b86f";
+    sha256 = "1ml6mjk2fsfv4sf65fdbji3q5x0qiq99g1k8w7a99gsl2i8h60gc";
   });
 in
 stdenv.mkDerivation rec {

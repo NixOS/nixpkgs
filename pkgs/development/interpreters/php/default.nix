@@ -154,8 +154,8 @@ let
         };
 
         openssl = {
-          configureFlags = ["--enable-openssl"];
-          buildInputs = [openssl];
+          configureFlags = ["--with-openssl"];
+          buildInputs = [openssl openssl.dev];
         };
 
         mbstring = {
@@ -267,14 +267,12 @@ let
             --replace '@PHP_LDFLAGS@' ""
         done
 
-        iniFile=$out/etc/php-recommended.ini
         [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
         ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
       '';
 
-      installPhase = ''
-        unset installPhase; installPhase;
-        cp php.ini-production $iniFile
+      postInstall = ''
+        cp php.ini-production $out/etc/php.ini
       '';
 
       src = fetchurl {
@@ -306,8 +304,8 @@ in {
   };
 
   php70 = generic {
-    version = "7.0.5";
-    sha256 = "1s8xnnxwq5big2rnbp3w7zw7wh5d5ra9p2q9bxwylds5wrzsy29c";
+    version = "7.0.6";
+    sha256 = "1dr9cglqvw3n1ln1fmkmp16lmwz2dd2n2akl3s68ap4nm69g3p8l";
   };
 
 }

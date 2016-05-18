@@ -23,13 +23,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "emacs-25.0.93";
+  name = "emacs-25.0.94";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.xz";
-    sha256 = "1wbr2n723ycg16rlg81v9x17w9ciy7qyckxplnwghlyfj6j9k4dk";
+    sha256 = "19kd9iwj4rz7llihs7a4gmag98n3asrxn3jh6mdmyn24w2kmxi69";
   };
 
   patches = lib.optionals stdenv.isDarwin [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     description = "GNU Emacs 25 (pre), the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 simons the-kenny jwiegley ];
+    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''

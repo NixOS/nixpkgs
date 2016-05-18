@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ iElectric jgeerds ];
+    maintainers = with maintainers; [ domenkozar jgeerds ];
     platforms = platforms.all;
   };
 }

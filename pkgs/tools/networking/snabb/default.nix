@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://github.com/SnabbCo/snabbswitch;
     description = "Simple and fast packet networking toolkit";
@@ -44,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     platforms = [ "x86_64-linux" ];
     license = licenses.asl20;
-    maintainers = [ maintainers.lukego maintainers.iElectric ];
+    maintainers = [ maintainers.lukego maintainers.domenkozar ];
   };
 }
 

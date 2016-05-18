@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 
+  outputs = [ "dev" "out" ];
+
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 

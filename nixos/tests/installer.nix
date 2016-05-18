@@ -7,7 +7,7 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { grubVersion, grubDevice, grubIdentifier
+  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier
                , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
@@ -18,15 +18,21 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
-        boot.loader.grub.version = ${toString grubVersion};
-        ${optionalString (grubVersion == 1) ''
-          boot.loader.grub.splashImage = null;
-        ''}
-        boot.loader.grub.device = "${grubDevice}";
-        boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-        boot.loader.grub.fsIdentifier = "${grubIdentifier}";
+        ${optionalString (bootLoader == "grub") ''
+          boot.loader.grub.version = ${toString grubVersion};
+          ${optionalString (grubVersion == 1) ''
+            boot.loader.grub.splashImage = null;
+          ''}
+          boot.loader.grub.device = "${grubDevice}";
+          boot.loader.grub.extraConfig = "serial; terminal_output.serial";
+          boot.loader.grub.fsIdentifier = "${grubIdentifier}";
 
-        boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+          boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
+        ''}
+
+        ${optionalString (bootLoader == "gummiboot") ''
+          boot.loader.gummiboot.enable = true;
+        ''}
 
         hardware.enableAllFirmware = lib.mkForce false;
 
@@ -42,7 +48,7 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { createPartitions, grubVersion, grubDevice
+  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice
                   , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
@@ -50,7 +56,8 @@ let
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
-      hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", '';
+      hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
+        + optionalString (bootLoader == "gummiboot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;
@@ -73,7 +80,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -97,7 +104,11 @@ let
       # Did /boot get mounted?
       $machine->waitForUnit("local-fs.target");
 
-      $machine->succeed("test -e /boot/grub");
+      ${if bootLoader == "grub" then
+          ''$machine->succeed("test -e /boot/grub");''
+        else
+          ''$machine->succeed("test -e /boot/loader/loader.conf");''
+      }
 
       # Check whether /root has correct permissions.
       $machine->succeed("stat -c '%a' /root") =~ /700/ or die;
@@ -114,7 +125,7 @@ let
 
       # We need to a writable nix-store on next boot.
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -132,7 +143,7 @@ let
       ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -148,8 +159,9 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , grubVersion ? 2, grubDevice ? "/dev/vda"
-    , grubIdentifier ? "uuid", enableOCR ? false, meta ? {}
+    , bootLoader ? "grub" # either "grub" or "gummiboot"
+    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
+    , enableOCR ? false, meta ? {}
     }:
     makeTest {
       inherit enableOCR;
@@ -183,6 +195,8 @@ let
             virtualisation.qemu.diskInterface =
               if grubVersion == 1 then "scsi" else "virtio";
 
+            boot.loader.gummiboot.enable = mkIf (bootLoader == "gummiboot") true;
+
             hardware.enableAllFirmware = mkForce false;
 
             # The test cannot access the network, so any packages we
@@ -198,8 +212,8 @@ let
                 pkgs.perlPackages.XMLLibXML
                 pkgs.perlPackages.ListCompare
               ]
-              ++ optional (grubVersion == 1) pkgs.grub
-              ++ optionals (grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
+              ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
+              ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
 
             nix.binaryCaches = mkForce [ ];
           };
@@ -207,8 +221,8 @@ let
       };
 
       testScript = testScriptFun {
-        inherit createPartitions preBootCommands grubVersion
-                grubDevice grubIdentifier extraConfig;
+        inherit bootLoader createPartitions preBootCommands
+                grubVersion grubDevice grubIdentifier extraConfig;
       };
     };
 
@@ -234,6 +248,29 @@ in {
               "mount LABEL=nixos /mnt",
           );
         '';
+    };
+
+  # Simple GPT/UEFI configuration using Gummiboot with 3 partitions: ESP, swap & root filesystem
+  simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "parted /dev/vda mklabel gpt",
+              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted -s /dev/vda -- set 1 boot on",
+              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "gummiboot";
     };
 
   # Same as the previous, but now with a separate /boot partition.
@@ -370,6 +407,10 @@ in {
               "mdadm --verbose -W /dev/md1",
           );
         '';
+      preBootCommands = ''
+        $machine->start;
+        $machine->fail("dmesg | grep 'immediate safe mode'");
+      '';
     };
 
   # Test a basic install using GRUB 1.

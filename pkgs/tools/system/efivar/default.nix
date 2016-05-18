@@ -1,21 +1,29 @@
-{ stdenv, fetchFromGitHub, popt }:
+{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
   name = "efivar-${version}";
-  version = "0.21";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "efivar";
     rev = version;
-    sha256 = "0iakv8prvl61mb2wnll02sxlg3kfzh3d4qb41d0bklmnljjkqr8p";
+    sha256 = "1fdqi053v335pjwj1i3yi9f1kasdzg3agfcp36bxsbhqjp4imlid";
   };
 
+  patches = [
+    # fix problem with linux 4.4 headers https://github.com/rhinstaller/efivar/issues/37
+    (fetchurl {
+      url = https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/efivar/files/0.21-nvme_ioctl.h.patch;
+      sha256 = "1rjjpd4s1xdsnhq974j5wnwav8pfvd0jbvhk8a9wc2w029fvj7zp";
+    })
+  ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];
 
-  # 0.21 Has build warnings so disable -Werror
   postPatch = ''
-    sed -i 's,-Werror,,g' Make.defaults
+     substituteInPlace src/Makefile --replace "-static" ""
   '';
 
   installFlags = [
@@ -26,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/vathpela/efivar;
+    inherit (src.meta) homepage;
     description = "Tools and library to manipulate EFI variables";
     platforms = platforms.linux;
     license = licenses.lgpl21;

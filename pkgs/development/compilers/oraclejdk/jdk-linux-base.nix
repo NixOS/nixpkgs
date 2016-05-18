@@ -106,7 +106,8 @@ let result = stdenv.mkDerivation rec {
       mv $sourceRoot $out
     fi
 
-    for file in $out/*
+    shopt -s extglob
+    for file in $out/!(*src.zip)
     do
       if test -f $file ; then
         rm $file
@@ -164,8 +165,10 @@ let result = stdenv.mkDerivation rec {
     EOF
 
     # Oracle Java Mission Control needs to know where libgtk-x11 and related is
-    wrapProgram "$out/bin/jmc" \
-        --suffix-each LD_LIBRARY_PATH ':' "${rpath}" \
+    if test -n "$installjdk"; then
+      wrapProgram "$out/bin/jmc" \
+          --suffix-each LD_LIBRARY_PATH ':' "${rpath}"
+    fi
   '';
 
   inherit installjdk pluginSupport;

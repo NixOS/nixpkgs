@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, zfs, mbuffer, perl, perlPackages, wget, autoconf, automake }:
 
 let
-  version = "0.15.3";
-  checksum = "1xk0lgb23kv1cl0wc2rav75hjrjigd0cp3hjw9gxab835vsvnkq0";
+  version = "0.15.5";
+  checksum = "09cf9n5i1wxlkhq8ky9npg1a6qiz4blizhbb9390gy0m0wl9l7zw";
 in
 stdenv.mkDerivation rec {
   name = "znapzend-${version}";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "oetiker";
     repo = "znapzend";
     rev = "v${version}";
@@ -60,7 +60,6 @@ stdenv.mkDerivation rec {
       -I${perlPackages.IOPipely}/${perl.libPrefix} \
       "
   '';
-
 
   meta = with stdenv.lib; {
     description = "High performance open source ZFS backup with mbuffer and ssh support";

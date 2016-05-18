@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
-, gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring, makeWrapper }:
+{ stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
+, libpng, libX11, gettext, bash, gawk, boost, libnotify, gtk, doxygen, spring
+, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.195";
+  version = "0.247";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "0hxxm97c74rvm78vlfn2byn0zjlrhankxdrs2hz73rdq6451h10b";
+    sha256 = "0sx14k4xsyjkmphhxfn9q341lv32c53g6wl1cbdx2sknzs3qasxs";
   };
 
   buildInputs = [
-    cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar
-    boost libpng libX11 libnotify gtk doxygen makeWrapper
+    cmake wxGTK30 openal pkgconfig curl gettext libtorrentRasterbar pcre jsoncpp
+    boost libpng libX11 libnotify gtk doxygen makeWrapper glib minizip alure
   ];
 
   prePatch = ''
@@ -20,9 +21,6 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/test-susynclib.awk --replace "#!/usr/bin/awk" "#!${gawk}/bin/awk"
     substituteInPlace CMakeLists.txt --replace "boost_system-mt" "boost_system"
   '';
-
-  # for now sound is disabled as it causes a linker error with alure i can't resolve (qknight)
-  cmakeFlags = "-DOPTION_SOUND:BOOL=OFF"; 
 
   enableParallelBuilding = true;
 
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/springlobby/springlobby.git;
     description = "Cross-platform lobby client for the Spring RTS project";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ phreedom qknight iElectric ];
+    maintainers = with maintainers; [ phreedom qknight domenkozar ];
     platforms = platforms.linux;
   };
 }

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchurl {
-    sha256 = "0sn38b80c6jx9d9r329ji9bg4m4gj6gnl04rv8fkmincj61qf7ag";
+    sha256 = "1i6an483vmm6y39szr2alq5vf6kfxhk3j5ca79qrshcj9jjlhcs8";
     url = "http://www.freedesktop.org/software/PackageKit/releases/PackageKit-${version}.tar.xz";
   };
 

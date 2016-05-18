@@ -161,16 +161,8 @@ in {
       '';
 
       postStart = ''
-        until ${pkgs.curl.bin}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} ; do
-          sleep 10
-        done
-        while true ; do
-          index=`${pkgs.curl.bin}/bin/curl -s -L ${cfg.listenAddress}:${toString cfg.port}${cfg.prefix}`
-          if [[ !("$index" =~ 'Please wait while Jenkins is restarting' ||
-                  "$index" =~ 'Please wait while Jenkins is getting ready to work') ]]; then
-            exit 0
-          fi
-          sleep 30
+        until [[ $(${pkgs.curl.bin}/bin/curl -s --head -w '\n%{http_code}' http://${cfg.listenAddress}:${toString cfg.port}${cfg.prefix} | tail -n1) =~ ^(200|403)$ ]]; do
+          sleep 1
         done
       '';
 

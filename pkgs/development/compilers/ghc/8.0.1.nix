@@ -7,12 +7,12 @@ let
 
 in 
 stdenv.mkDerivation rec {
-  version = "8.0.0.20160421";
+  version = "8.0.1";
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.0.1-rc4/${name}-src.tar.xz";
-    sha256 = "183p1ilk8rlndi1vmg2vmlx00s18q3j31kin85qpbvicsxb8j1j1";
+    url = "https://downloads.haskell.org/~ghc/8.0.1/${name}-src.tar.xz";
+    sha256 = "1lniqy29djhjkddnailpaqhlqh4ld2mqvb1fxgxw1qqjhz6j1ywh";
   };
 
   patches = [
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
-    maintainers = with stdenv.lib.maintainers; [ marcweber andres simons ];
+    maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
   };
 

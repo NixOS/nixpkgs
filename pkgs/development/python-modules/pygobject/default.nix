@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python pkgconfig glib ];
 
+  passthru.pythonPath = [];
+
   # in a "normal" setup, pygobject and pygtk are installed into the
   # same site-packages: we need a pth file for both. pygtk.py would be
   # used to select a specific version, in our setup it should have no

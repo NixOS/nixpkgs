@@ -3,7 +3,7 @@
   variant ? "jit", buildWithPypy ? false }:
 
 let
-  commit-count = "1333";
+  commit-count = "1352";
   common-flags = "--thread --gcrootfinder=shadowstack --continuation";
   variants = {
     jit = { flags = "--opt=jit"; target = "target.py"; };
@@ -13,8 +13,8 @@ let
   };
   pixie-src = fetchgit {
     url = "https://github.com/pixie-lang/pixie.git";
-    rev = "36ce07e1cd85ca82eedadf366bef3bb57a627a2a";
-    sha256 = "1b3v99c0is33w029r15qvd0mkrc5n1mrvjjmfpcd9yvhvqb2vcjs";
+    rev = "dd754fe9f329e9e176eeaedae1095c85cde65028";
+    sha256 = "1jf3nkd1jzvxrw9ql2r74drsirrxfihc125x0wmk45jyl5q24vdd";
   };
   pypy-tag = "81254";
   pypy-src = fetchurl {
@@ -22,7 +22,7 @@ let
     url = "https://bitbucket.org/pypy/pypy/get/${pypy-tag}.tar.bz2";
     sha256 = "1cs9xqs1rmzdcnwxxkbvy064s5cbp6vvzhn2jmyzh5kg4di1r3bn";
   };
-  libs = [ libffi libedit libuv boost.dev boost.lib zlib ];
+  libs = [ libffi libedit libuv boost.dev boost.out zlib ];
   include-path = stdenv.lib.concatStringsSep ":"
                    (map (p: "${p}/include") libs);
   library-path = stdenv.lib.concatStringsSep ":"
@@ -47,7 +47,7 @@ let
     patchPhase = ''
       (cd pixie-src
        patch -p1 < ${./load_paths.patch}
-       libraryPaths='["${libuv}" "${libedit}" "${libffi}" "${boost.dev}" "${boost.lib}" "${zlib}"]'
+       libraryPaths='["${libuv}" "${libedit}" "${libffi}" "${boost.dev}" "${boost.out}" "${zlib}"]'
        export libraryPaths
        substituteAllInPlace ./pixie/ffi-infer.pxi)
     '';

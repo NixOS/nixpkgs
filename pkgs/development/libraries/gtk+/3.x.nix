@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext gobjectIntrospection perl ];
 
+  patches = [ ./3.0-immodules.cache.patch ];
+
   buildInputs = [ libxkbcommon epoxy json_glib ];
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk
@@ -57,13 +59,6 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/lib/gtk-3.0/3.0.0/printbackends/libprintbackend-cups.la" \
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
   '';
-
-  passthru = {
-    gtkExeEnvPostBuild = ''
-      rm $out/lib/gtk-3.0/3.0.0/immodules.cache
-      $out/bin/gtk-query-immodules-3.0 $out/lib/gtk-3.0/3.0.0/immodules/*.so > $out/lib/gtk-3.0/3.0.0/immodules.cache
-    ''; # workaround for bug of nix-mode for Emacs */ '';
-  };
 
   meta = with stdenv.lib; {
     description = "A multi-platform toolkit for creating graphical user interfaces";

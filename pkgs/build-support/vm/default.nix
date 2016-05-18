@@ -572,10 +572,11 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS }:
+    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     runInLinuxVM (stdenv.mkDerivation {
-      inherit name postInstall;
+      inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
 
@@ -734,7 +735,8 @@ rec {
   makeImageFromDebDist =
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? [], postInstall ? "" }:
+    , packages, extraPackages ? [], postInstall ? ""
+    , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
       expr = debClosureGenerator {
@@ -743,7 +745,7 @@ rec {
       };
     in
       (fillDiskWithDebs {
-        inherit name fullName size postInstall;
+        inherit name fullName size postInstall QEMU_OPTS memSize;
         debs = import expr {inherit fetchurl;};
       }) // {inherit expr;};
 

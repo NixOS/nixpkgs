@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   patches = [ ./blitz-gcc47.patch ./blitz-testsuite-stencil-et.patch ];
 
   buildInputs = [ pkgconfig gfortran texinfo ]
-    ++ optional (boost != null) [ boost.lib ];
+    ++ optional (boost != null) [ boost.out ];
 
   configureFlags =
     [ "--enable-shared"
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ optional enablePadding "--enable-array-length-padding"
     ++ optional enableSerialization "--enable-serialization"
     ++ optionals (boost != null) [ "--with-boost=${boost.dev}"
-                                   "--with-boost-libdir=${boost.lib}/lib" ]
+                                   "--with-boost-libdir=${boost.out}/lib" ]
     ++ optional stdenv.is64bit "--enable-64bit"
     ;
 

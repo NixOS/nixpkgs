@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "true";
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

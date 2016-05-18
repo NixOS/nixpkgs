@@ -6,7 +6,6 @@ let
   dnscrypt-proxy = pkgs.dnscrypt-proxy;
   cfg = config.services.dnscrypt-proxy;
 
-  resolverListFile = "${dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
   localAddress = "${cfg.localAddress}:${toString cfg.localPort}";
 
   daemonArgs =
@@ -23,7 +22,7 @@ let
         "--provider-key=${cfg.customResolver.key}"
       ]
     else
-      [ "--resolvers-list=${resolverListFile}"
+      [ "--resolvers-list=${cfg.resolverList}"
         "--resolver-name=${toString cfg.resolverName}"
       ];
 in
@@ -77,11 +76,23 @@ in
         default = "dnscrypt.eu-nl";
         type = types.nullOr types.string;
         description = ''
-          The name of the upstream DNSCrypt resolver to use. See
-          <filename>${resolverListFile}</filename> for alternative resolvers.
+          The name of the upstream DNSCrypt resolver to use, taken from the
+          list named in the <literal>resolverList</literal> option.
           The default resolver is located in Holland, supports DNS security
           extensions, and claims to not keep logs.
         '';
+      };
+      resolverList = mkOption {
+        description = ''
+          The list of upstream DNSCrypt resolvers. By default, we use the most
+          recent list published by upstream.
+        '';
+        example = literalExample "${pkgs.dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
+        default = pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv";
+          sha256 = "07kbbisrvrqdxif3061hxj3whin3llg4nh50ln7prisi2vbd76xd";
+        };
+        defaultText = "pkgs.fetchurl { url = ...; sha256 = ...; }";
       };
       customResolver = mkOption {
         default = null;
@@ -151,7 +162,7 @@ in
         /etc/group r,
         ${config.environment.etc."nsswitch.conf".source} r,
 
-        ${pkgs.glibc.out}/lib/*.so mr,
+        ${getLib pkgs.glibc}/lib/*.so mr,
         ${pkgs.tzdata}/share/zoneinfo/** r,
 
         network inet stream,
@@ -159,17 +170,17 @@ in
         network inet dgram,
         network inet6 dgram,
 
-        ${pkgs.gcc.cc.lib}/lib/libssp.so.* mr,
-        ${pkgs.libsodium.out}/lib/libsodium.so.* mr,
-        ${pkgs.systemd}/lib/libsystemd.so.* mr,
-        ${pkgs.xz.out}/lib/liblzma.so.* mr,
-        ${pkgs.libgcrypt.out}/lib/libgcrypt.so.* mr,
-        ${pkgs.libgpgerror.out}/lib/libgpg-error.so.* mr,
-        ${pkgs.libcap.out}/lib/libcap.so.* mr,
-        ${pkgs.lz4}/lib/liblz4.so.* mr,
-        ${pkgs.attr.out}/lib/libattr.so.* mr,
+        ${getLib pkgs.gcc.cc}/lib/libssp.so.* mr,
+        ${getLib pkgs.libsodium}/lib/libsodium.so.* mr,
+        ${getLib pkgs.systemd}/lib/libsystemd.so.* mr,
+        ${getLib pkgs.xz}/lib/liblzma.so.* mr,
+        ${getLib pkgs.libgcrypt}/lib/libgcrypt.so.* mr,
+        ${getLib pkgs.libgpgerror}/lib/libgpg-error.so.* mr,
+        ${getLib pkgs.libcap}/lib/libcap.so.* mr,
+        ${getLib pkgs.lz4}/lib/liblz4.so.* mr,
+        ${getLib pkgs.attr}/lib/libattr.so.* mr,
 
-        ${resolverListFile} r,
+        ${cfg.resolverList} r,
       }
     ''));
 

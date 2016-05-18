@@ -10,11 +10,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="asymptote";
-    version="2.37";
+    version="2.38";
     name="${baseName}-${version}";
-    hash="16nh02m52mk9a53i8wc6l9vg710gnzr3lfbypcbvamghvaj0458i";
-    url="mirror://sourceforge/project/asymptote/2.37/asymptote-2.37.src.tgz";
-    sha256="16nh02m52mk9a53i8wc6l9vg710gnzr3lfbypcbvamghvaj0458i";
+    hash="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
+    url="mirror://sourceforge/project/asymptote/2.38/asymptote-2.38.src.tgz";
+    sha256="1dxwvq0xighqckkjkjva8s0igxfgy1j25z81pbwvlz6jzsrxpip9";
   };
   buildInputs = [
    freeglut ghostscriptX imagemagick fftw 
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     inherit (s) version;
     description =  "A tool for programming graphics intended to replace Metapost";
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.simons];
+    maintainers = [stdenv.lib.maintainers.raskin stdenv.lib.maintainers.peti];
     platforms = stdenv.lib.platforms.linux;
   };
 }

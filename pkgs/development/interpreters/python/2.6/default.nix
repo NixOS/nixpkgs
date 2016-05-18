@@ -53,8 +53,8 @@ let
     ++ optional zlibSupport zlib;
 
   mkPaths = paths: {
-    C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p.dev or p}/include") paths);
-    LIBRARY_PATH = concatStringsSep ":" (map (p: "${p.lib or (p.out or p)}/lib") paths);
+    C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
+    LIBRARY_PATH = makeLibraryPath paths;
   };
 
   # Build the basic Python interpreter without modules that have
@@ -119,7 +119,7 @@ let
       '';
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = with stdenv.lib.maintainers; [ simons chaoflow iElectric ];
+      maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
       # If you want to use Python 2.6, remove "broken = true;" at your own
       # risk.  Python 2.6 has known security vulnerabilities is not receiving
       # security updates as of October 2013.

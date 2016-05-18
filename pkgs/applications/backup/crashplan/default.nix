@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    maintainers = with maintainers; [ sztupi iElectric ];
+    maintainers = with maintainers; [ sztupi domenkozar ];
   };
 
   buildInputs = [ makeWrapper cpio ];
@@ -81,6 +81,6 @@ in stdenv.mkDerivation rec {
       --replace crashplan/skin skin \
       --replace bin/CrashPlanDesktop CrashPlanDesktop
 
-    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${gtk2}/lib:${glib}/lib:${libXtst}/lib"
+    wrapProgram $out/bin/CrashPlanDesktop --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk2 glib libXtst ]}"
   '';
 }

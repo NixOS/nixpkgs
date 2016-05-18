@@ -34,7 +34,7 @@
 
 { overrides
 
-, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg
+, lib, newScope, stdenv, fetchurl, fetchgit, fetchFromGitHub, fetchhg, runCommand
 
 , emacs, texinfo, lndir, makeWrapper
 , trivialBuild
@@ -59,8 +59,12 @@ let
     inherit lib;
   };
 
+  orgPackages = import ../applications/editors/emacs-modes/org-packages.nix {
+    inherit fetchurl lib stdenv texinfo;
+  };
+
   emacsWithPackages = import ../build-support/emacs/wrapper.nix {
-    inherit lib lndir makeWrapper stdenv;
+    inherit lib lndir makeWrapper stdenv runCommand;
   };
 
   packagesFun = self: with self; {
@@ -761,20 +765,6 @@ let
     };
   };
 
-  # Deprecated in favor of git-commit
-  git-commit-mode = melpaBuild rec {
-    pname = "git-commit-mode";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "git-modes";
-      rev    = version;
-      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
-    };
-    files = [ "git-commit-mode.el" ];
-    meta = git-commit.meta;
-  };
-
   git-gutter = melpaBuild rec {
     pname = "git-gutter";
     version = "20150930";
@@ -792,20 +782,6 @@ let
   };
 
   #TODO git-gutter-fringe
-
-  # Deprecated in favor of git-rebase
-  git-rebase-mode = melpaBuild rec {
-    pname = "git-rebase-mode";
-    version = "1.0.0";
-    src = fetchFromGitHub {
-      owner  = "magit";
-      repo   = "git-modes";
-      rev    = version;
-      sha256 = "12a1xs3w2dp1a55qhc01dwjkavklgfqnn3yw85dhi4jdz8r8j7m0";
-    };
-    files = [ "git-rebase-mode.el" ];
-    meta = git-rebase.meta;
-  };
 
   git-timemachine = melpaBuild rec {
     pname = "git-timemachine";
@@ -1134,85 +1110,6 @@ let
     };
   };
 
-  magit = melpaBuild rec {
-    pname   = "magit";
-    version = "2.3.1";
-    src = fetchFromGitHub {
-      owner  = pname;
-      repo   = pname;
-      rev    = version;
-      sha256 = "01x9kahr3szzc00wlfrihl4x28yrq065fq4rpzx9dxiksayk24pd";
-    };
-    packageRequires = [ dash git-commit magit-popup with-editor ];
-    fileSpecs = [ "lisp/magit-utils.el"
-                  "lisp/magit-section.el"
-                  "lisp/magit-git.el"
-                  "lisp/magit-mode.el"
-                  "lisp/magit-process.el"
-                  "lisp/magit-core.el"
-                  "lisp/magit-diff.el"
-                  "lisp/magit-wip.el"
-                  "lisp/magit-apply.el"
-                  "lisp/magit-log.el"
-                  "lisp/magit.el"
-                  "lisp/magit-sequence.el"
-                  "lisp/magit-commit.el"
-                  "lisp/magit-remote.el"
-                  "lisp/magit-bisect.el"
-                  "lisp/magit-stash.el"
-                  "lisp/magit-blame.el"
-                  "lisp/magit-ediff.el"
-                  "lisp/magit-extras.el"
-                  "Documentation/magit.texi"
-                  "Documentation/AUTHORS.md"
-                  "COPYING"
-                ];
-    meta = {
-      description = "Emacs interface for Git that aspires to be a complete Git porcelain";
-      license = gpl3Plus;
-    };
-  };
-  git-commit = melpaBuild rec {
-    pname = "git-commit";
-    version = magit.version;
-    src = magit.src;
-    packageRequires = [ dash with-editor ];
-    fileSpecs = [ "lisp/git-commit.el" ];
-    meta = magit.meta // {
-      description = "Emacs mode for editig Git commit messages";
-    };
-  };
-  git-rebase = melpaBuild rec {
-    pname = "git-rebase";
-    version = magit.version;
-    src = magit.src;
-    packageRequires = [ dash with-editor magit ];
-    fileSpecs = [ "lisp/git-rebase.el" ];
-    meta = magit.meta // {
-      description = "Emacs major-mode which makes editing rebase scripts more fun";
-    };
-  };
-  magit-popup = melpaBuild rec {
-    pname = "magit-popup";
-    version = magit.version;
-    src = magit.src;
-    packageRequires = [ dash with-editor ];
-    fileSpecs = [ "Documentation/magit-popup.texi" "lisp/magit-popup.el" ];
-    meta = magit.meta // {
-      description = "Infix arguments with feedback in a buffer library for Emacs";
-    };
-  };
-  with-editor = melpaBuild rec {
-    pname = "with-editor";
-    version = magit.version;
-    src = magit.src;
-    packageRequires = [ async dash ];
-    fileSpecs = [ "Documentation/with-editor.texi" "lisp/with-editor.el" ];
-    meta = magit.meta // {
-      description = "Use the Emacsclient as EDITOR of child processes library for Emacs";
-    };
-  };
-
   markdown-toc = melpaBuild rec {
     pname = "markdown-toc";
     version = "0.0.8";
@@ -1295,19 +1192,6 @@ let
     files = [ "${pname}.el" ];
     meta = {
       description = "Blogging with org-mode and jekyll without alien yaml headers";
-      license = gpl3Plus;
-    };
-  };
-
-  org-plus-contrib = elpaBuild rec {
-    pname   = "org-plus-contrib";
-    version = "20150406";
-    src = fetchurl {
-      url    = "http://orgmode.org/elpa/${pname}-${version}.tar";
-      sha256 = "1ny2myg4rm75ab2gl5rqrwy7h53q0vv18df8gk3zv13kljj76c6i";
-    };
-    meta = {
-      description = "Notes, TODO lists, projects, and authoring in plain-text with Emacs";
       license = gpl3Plus;
     };
   };
@@ -1843,5 +1727,6 @@ in
     // melpaPackages self
     // elpaPackages self
     // melpaStablePackages self
+    // orgPackages self
     // packagesFun self
   )

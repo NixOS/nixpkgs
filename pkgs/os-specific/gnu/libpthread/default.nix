@@ -46,7 +46,7 @@ stdenv.mkDerivation ({
        "ac_cv_lib_ihash_hurd_ihash_create=yes"
      ];
 
-   buildPhase = ":";
+   dontBuild = true;
    installPhase = "make install-data-local-headers";
  }
  else { })

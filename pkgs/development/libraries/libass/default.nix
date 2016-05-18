@@ -5,6 +5,7 @@
 , harfbuzzSupport ? true, harfbuzz ? null # harfbuzz support
 , rasterizerSupport ? false # Internal rasterizer
 , largeTilesSupport ? false # Use larger tiles in the rasterizer
+, libiconv
 }:
 
 assert encaSupport -> enca != null;
@@ -18,11 +19,11 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "libass-${version}";
-  version = "0.12.2";
+  version = "0.13.2";
 
   src = fetchurl {
     url = "https://github.com/libass/libass/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1qzibgqmnnqk2r116lpk1br764g0v74f2zp12y5id0p1plaing37";
+    sha256 = "1kpsw4zw95v4cjvild9wpk73dzavn1khsm3bm32kcz6amnkd166n";
   };
 
   configureFlags = [
@@ -38,7 +39,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ freetype fribidi ]
     ++ optional encaSupport enca
     ++ optional fontconfigSupport fontconfig
-    ++ optional harfbuzzSupport harfbuzz;
+    ++ optional harfbuzzSupport harfbuzz
+    ++ optional stdenv.isDarwin libiconv;
 
   meta = {
     description = "Portable ASS/SSA subtitle renderer";

@@ -10,6 +10,8 @@
 , x264
 , curl
 
+, alsaSupport ? false
+, alsaLib
 , pulseaudioSupport ? false
 , libpulseaudio
 }:
@@ -18,13 +20,13 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "0.13.1";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "00dx8lksj10n0qhyar41y5q0bdrz7jdjwmhj8bdyz7jfkijjr44i";
+    sha256 = "05yjm58d6daya1x6v8d73gx8fb20l0icay74nx0v4si2c898vm1j";
   };
 
   nativeBuildInputs = [ cmake
@@ -39,6 +41,7 @@ in stdenv.mkDerivation rec {
                   qtx11extras
                   x264
                 ]
+                ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure

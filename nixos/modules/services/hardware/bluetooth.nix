@@ -9,7 +9,7 @@ let
         serviceConfig = {
           Type = "dbus";
           BusName = "org.bluez";
-          ExecStart = "${bluez-bluetooth}/sbin/bluetoothd -n";
+          ExecStart = "${getBin bluez-bluetooth}/bin/bluetoothd -n";
         };
         wantedBy = [ "bluetooth.target" ];
     };
@@ -19,7 +19,7 @@ let
         serviceConfig = {
           Type = "dbus";
           BusName = "org.bluez";
-          ExecStart = "${bluez-bluetooth}/sbin/bluetoothd -n";
+          ExecStart = "${getBin bluez-bluetooth}/bin/bluetoothd -n";
           NotifyAccess="main";
           CapabilityBoundingSet="CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
           LimitNPROC=1;
@@ -32,7 +32,7 @@ let
         serviceConfig = {
           Type = "dbus";
           BusName = "org.bluez.obex";
-          ExecStart = "${bluez-bluetooth}/sbin/obexd";
+          ExecStart = "${getBin bluez-bluetooth}/bin/obexd";
         };
     };
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [mercurial.python mercurial makeWrapper subversion];
 
-  buildPhase="true"; # skip svn for now
+  dontBuild = true; # skip svn for now
 
   # TODO also support svn stuff
   # moving .py files into lib directory so that you can't pick the wrong file from PATH.

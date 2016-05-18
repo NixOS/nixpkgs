@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://fedoraproject.org/wiki/Features/numad;
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

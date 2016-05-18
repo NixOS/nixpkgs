@@ -5,8 +5,8 @@
 }:
 
 let # beware: updates often break cups_filters build
-  version = "0.36.0"; # even major numbers are stable
-  sha256 = "13i440kv873wgmw50rs4d1v05cj0r7bqnghd70hp9vy44dxhdk4k";
+  version = "0.43.0"; # even major numbers are stable
+  sha256 = "0mi4zf0pz3x3fx3ir7szz1n57nywgbpd4mp2r7mvf47f4rmf4867";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
@@ -22,23 +22,34 @@ stdenv.mkDerivation rec {
 
   # TODO: reduce propagation to necessary libs
   propagatedBuildInputs = with lib;
-    [ zlib freetype fontconfig libjpeg lcms curl openjpeg ]
-    ++ optional (!minimal) cairo
+    [ zlib freetype fontconfig libjpeg ]
+    ++ optionals (!minimal) [ cairo lcms curl openjpeg ]
     ++ optional qt4Support qt4
     ++ optional qt5Support qtbase;
 
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
+
+  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
 
   configureFlags = with lib;
     [
       "--enable-xpdf-headers"
       "--enable-libcurl"
       "--enable-zlib"
+      "--enable-build-type=release"
     ]
-    ++ optionals minimal [ "--disable-poppler-glib" "--disable-poppler-cpp" ]
-    ++ optional (!utils) "--disable-utils";
+    ++ optionals minimal [
+      "--disable-poppler-glib" "--disable-poppler-cpp"
+      "--disable-libopenjpeg" "--disable-libcurl"
+    ]
+    ++ optional (!utils) "--disable-utils" ;
 
   enableParallelBuilding = true;
+
+  crossAttrs.postPatch =
+    # there are tests using `strXXX_s` functions that are missing apparently
+    stdenv.lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+      "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
 
   meta = with lib; {
     homepage = http://poppler.freedesktop.org/;

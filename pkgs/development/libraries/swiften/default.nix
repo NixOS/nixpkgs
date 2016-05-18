@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./scons
     ./scons openssl=${openssl} \
             boost_includedir=${boost.dev}/include \
-            boost_libdir=${boost.lib}/lib \
+            boost_libdir=${boost.out}/lib \
             boost_bundled_enable=false \
             SWIFTEN_INSTALLDIR=$out $out
   '';

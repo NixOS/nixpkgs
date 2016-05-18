@@ -8,12 +8,15 @@ let
     config = {
       mode = "auto";
       sysctl = false;
+      denyChrootCaps = false;
       denyChrootChmod = false;
       denyUSB = false;
       restrictProc = false;
       restrictProcWithGroup = true;
       unrestrictProcGid = 121; # Ugh, an awful hack. See grsecurity NixOS gid
       disableRBAC = false;
+      disableSimultConnect = false;
+      redistKernel = true;
       verboseVersion = false;
       kernelExtraConfig = "";
     } // grsecOptions.config;
@@ -90,6 +93,12 @@ let
         GRKERNSEC y
         ${grsecMainConfig}
 
+        # Disable features rendered useless by redistributing the kernel
+        ${optionalString cfg.config.redistKernel ''
+          GRKERNSEC_RANDSTRUCT n
+          GRKERNSEC_HIDESYM n
+          ''}
+
         # The paxmarks mechanism relies on ELF header markings, but the default
         # grsecurity configuration only enables xattr markings
         PAX_PT_PAX_FLAGS y
@@ -104,9 +113,11 @@ let
         }
 
         GRKERNSEC_SYSCTL ${boolToKernOpt cfg.config.sysctl}
+        GRKERNSEC_CHROOT_CAPS ${boolToKernOpt cfg.config.denyChrootCaps}
         GRKERNSEC_CHROOT_CHMOD ${boolToKernOpt cfg.config.denyChrootChmod}
         GRKERNSEC_DENYUSB ${boolToKernOpt cfg.config.denyUSB}
         GRKERNSEC_NO_RBAC ${boolToKernOpt cfg.config.disableRBAC}
+        GRKERNSEC_NO_SIMULT_CONNECT ${boolToKernOpt cfg.config.disableSimultConnect}
 
         ${cfg.config.kernelExtraConfig}
       '';

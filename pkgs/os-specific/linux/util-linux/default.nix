@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, zlib, ncurses ? null, perl ? null, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.27.1";
+  name = "util-linux-${version}";
+  version = "2.28";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v2.27/${name}.tar.xz";
-    sha256 = "1452hz5zx56a3mad8yrg5wb0vy5zi19mpjp6zx1yr6p9xp6qz08a";
+    url = "mirror://kernel/linux/utils/util-linux/v${version}/${name}.tar.xz";
+    sha256 = "1fql204qn3098j34yd358l85ffp7a4kqjf7jf1qk2b4al7i4fn1r";
   };
 
   patches = [
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
+    homepage = https://www.kernel.org/pub/linux/utils/util-linux/;
     description = "A set of system utilities for Linux";
     license = licenses.gpl2; # also contains parts under more permissive licenses
     platforms = platforms.linux;

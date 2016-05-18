@@ -5,7 +5,7 @@
 # stdenv.mkDerivation provides a wrapper that sets up the right environment
 # variables so that the compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, nativeLibc, nativePrefix ? ""
+{ name ? "", stdenv, lib, nativeTools, nativeLibc, nativePrefix ? ""
 , gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
 , zlib ? null
 }:
@@ -41,13 +41,13 @@ stdenv.mkDerivation {
   addFlags = ./add-flags;
 
   inherit nativeTools nativeLibc nativePrefix gcc;
-  gcc_lib = gcc.lib or gcc;
+  gcc_lib = lib.getLib gcc;
   libc = if nativeLibc then null else libc;
-  libc_dev = if nativeLibc then null else libc.dev or libc;
-  libc_bin = if nativeLibc then null else libc.bin or libc;
-  binutils = if nativeTools then null else binutils;
+  libc_dev = if nativeLibc then null else lib.getDev libc;
+  libc_bin = if nativeLibc then null else lib.getBin libc;
+  binutils = if nativeTools then null else lib.getBin binutils;
   # The wrapper scripts use 'cat', so we may need coreutils
-  coreutils = if nativeTools then null else coreutils;
+  coreutils = if nativeTools then null else lib.getBin coreutils;
 
   langC = if nativeTools then true else gcc.langC;
   langCC = if nativeTools then true else gcc.langCC;

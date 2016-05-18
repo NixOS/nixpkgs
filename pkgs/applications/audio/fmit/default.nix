@@ -7,33 +7,39 @@ assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "fmit-${version}";
-  version = "1.0.13";
+  version = "1.0.15";
 
   src = fetchFromGitHub {
-    sha256 = "04cj70q60sqns68nvw4zfy6078x4cc2q1y2y13z3rs5n80jw27by";
+    sha256 = "0bakqwgl7xx6khs8993w10a8kvlbr7sbqdaljbsmy8y8mjd6inqb";
     rev = "v${version}";
     repo = "fmit";
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw freeglut mesa_glu qtbase qtmultimedia qmakeHook ]
-    ++ stdenv.lib.optionals alsaSupport [ alsaLib ]
-    ++ stdenv.lib.optionals jackSupport [ libjack2 ]
-    ++ stdenv.lib.optionals portaudioSupport [ portaudio ];
+  buildInputs = [ fftw qtbase qtmultimedia qmakeHook ]
+    ++ optionals alsaSupport [ alsaLib ]
+    ++ optionals jackSupport [ libjack2 ]
+    ++ optionals portaudioSupport [ portaudio ];
+
+  postPatch = ''
+    substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'
+  '';
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags \
-      CONFIG+=${stdenv.lib.optionalString alsaSupport "acs_alsa"} \
-      CONFIG+=${stdenv.lib.optionalString jackSupport "acs_jack"} \
-      CONFIG+=${stdenv.lib.optionalString portaudioSupport "acs_portaudio"} \
+      CONFIG+=${optionalString alsaSupport "acs_alsa"} \
+      CONFIG+=${optionalString jackSupport "acs_jack"} \
+      CONFIG+=${optionalString portaudioSupport "acs_portaudio"} \
       PREFIXSHORTCUT=$out"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Free Musical Instrument Tuner";
     longDescription = ''
       FMIT is a graphical utility for tuning musical instruments, with error

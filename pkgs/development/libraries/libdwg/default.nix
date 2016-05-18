@@ -1,12 +1,14 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, indent}:
 
 stdenv.mkDerivation {
-  name = "libdwg-0.3";
+  name = "libdwg-0.6";
 
   src = fetchurl {
-    url = mirror://sourceforge/libdwg/libdwg-0.3.tar.bz2;
-    sha256 = "0lx7ih00m11qw9wsc5ksmwvi3d80l0yfwnbrn5qfz182w4d3fpc9";
+    url = mirror://sourceforge/libdwg/libdwg-0.6.tar.bz2;
+    sha256 = "0l8ks1x70mkna1q7mzy1fxplinz141bd24qhrm1zkdil74mcsryc";
   };
+
+  nativeBuildInputs = [ indent ];
 
   meta = {
     description = "library reading dwg files";

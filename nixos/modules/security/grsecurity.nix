@@ -126,6 +126,19 @@ in
           '';
         };
 
+        denyChrootCaps = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to lower capabilities of all processes within a chroot,
+            preventing commands that require <literal>CAP_SYS_ADMIN</literal>.
+
+            This protection is disabled by default because it breaks
+            <literal>nixos-rebuild</literal>. Whenever possible, it is
+            highly recommended to enable this protection.
+          '';
+        };
+
         denyUSB = mkOption {
           type = types.bool;
           default = false;
@@ -191,6 +204,23 @@ in
             y</literal>. This disables the
             <literal>/dev/grsec</literal> device, which in turn
             disables the RBAC system (and <literal>gradm</literal>).
+          '';
+        };
+
+        disableSimultConnect = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Disable TCP simultaneous connect.  The TCP simultaneous connect
+            feature allows two clients to connect without either of them
+            entering the listening state.  This feature of the TCP specification
+            is claimed to enable an attacker to deny the target access to a given
+            server by guessing the source port the target would use to make the
+            connection.
+
+            This option is OFF by default because TCP simultaneous connect has
+            some legitimate uses.  Enable this option if you know what this TCP
+            feature is for and know that you do not need it.
           '';
         };
 

@@ -169,6 +169,6 @@ stdenv.mkDerivation {
     homepage = http://www.mesa3d.org/;
     license = licenses.mit; # X11 variant, in most files
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ eduarrrd simons vcunat ];
+    maintainers = with maintainers; [ eduarrrd vcunat ];
   };
 }

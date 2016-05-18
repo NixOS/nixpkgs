@@ -1,16 +1,18 @@
 { stdenv, fetchurl, xlibsWrapper, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "imlib2-1.4.8";
+  name = "imlib2-1.4.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
-    sha256 = "0xxhgkd1axlcmf3kp1d7naiygparpg8l3sg3d263rhl2z0gm7aw9";
+    sha256 = "08809xxk2555yj6glixzw9a0x3x8cx55imd89kj3r0h152bn8a3x";
   };
 
   buildInputs = [ xlibsWrapper libjpeg libtiff giflib libpng bzip2 ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     substituteInPlace imlib2-config.in \

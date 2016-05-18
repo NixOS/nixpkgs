@@ -286,7 +286,7 @@ _clone_user_rev() {
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
     if test -z "$leaveDotGit"; then
         echo "removing \`.git'..." >&2
-        find "$dir" -name .git\* -print0 | xargs -0 rm -rf
+        find "$dir" -name .git -print0 | xargs -0 rm -rf
     else
         find "$dir" -name .git | while read gitdir; do
             make_deterministic_repo "$(readlink -f "$gitdir/..")"
@@ -343,7 +343,7 @@ fi
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
-    mkdir $out
+    mkdir -p $out
     clone_user_rev "$out" "$url" "$rev"
 else
     if test -z "$hashType"; then
@@ -368,7 +368,7 @@ else
         trap "rm -rf \"$tmpPath\"" EXIT
 
         tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
-        mkdir "$tmpFile"
+        mkdir -p "$tmpFile"
 
         # Perform the checkout.
         clone_user_rev "$tmpFile" "$url" "$rev"

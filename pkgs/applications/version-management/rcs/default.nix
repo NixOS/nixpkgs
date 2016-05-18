@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ eelco simons ];
+    maintainers = with stdenv.lib.maintainers; [ eelco ];
     platforms = stdenv.lib.platforms.all;
   };
 }

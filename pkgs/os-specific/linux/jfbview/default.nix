@@ -1,22 +1,43 @@
-{ stdenv, fetchFromGitHub, freetype, imlib2, jbig2dec, libjpeg, libX11
-, mujs, mupdf, ncurses, openjpeg, openssl }:
+{ stdenv, fetchFromGitHub
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mujs, mupdf, ncurses, openjpeg
+, openssl
+
+, imageSupport ? true, imlib2 ? null }:
 
 let
-  binaries = [ "jfbpdf" "jfbview" "jpdfcat" "jpdfgrep" ];
+  package = if imageSupport
+    then "jfbview"
+    else "jfbpdf";
+  binaries = if imageSupport
+    then [ "jfbview" "jpdfcat" "jpdfgrep" ]	# all require imlib2
+    else [ "jfbpdf" ];	       		  	# does not
 in
+
 stdenv.mkDerivation rec {
-  name = "jfbview-${version}";
-  version = "0.5.1";
+  name = "${package}-${version}";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
-    sha256 = "113bkf49q04k9rjps5l28ychmzsfjajp9cjhr433s9ld0972z01m";
+    sha256 = "1vd2ndl4ar2bzqf0k11qid6gvma59qg62imsa81mgczsqw7kvbx6";
     rev = version;
     repo = "JFBView";
     owner = "jichu4n";
   };
 
-  buildInputs = [ freetype imlib2 jbig2dec libjpeg libX11 mujs mupdf
-    ncurses openjpeg openssl ];
+  buildInputs = [
+    freetype harfbuzz jbig2dec libjpeg libX11 mujs mupdf ncurses openjpeg
+    openssl
+  ] ++ stdenv.lib.optionals imageSupport [
+    imlib2
+  ];
+
+  configurePhase = ''
+    # Hack. Probing (`ldconfig -p`) fails with ‘cannot execute binary file’.
+    # Overriding `OPENJP2 =` later works, but makes build output misleading:
+    substituteInPlace Makefile --replace "ldconfig -p" "echo libopenjp2"
+
+    make config.mk
+  '';
 
   buildFlags = binaries;
   enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, lib }:
 
-assert (!stdenv.isLinux);
+assert !stdenv.isLinux || stdenv ? cross; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
   name = "libiconv-1.14";
@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
     ./libiconv-1.14-reloc.patch
     ./libiconv-1.14-wchar.patch
   ];
+
+  postPatch =
+    lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+      ''
+        sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
+      '';
 
   configureFlags =
   # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL

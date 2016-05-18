@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.5.2'
 gem 'rails-deprecated_sanitizer', '~> 1.0.3'
 
 # Responders respond_to and respond_with

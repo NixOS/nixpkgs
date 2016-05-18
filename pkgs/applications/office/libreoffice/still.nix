@@ -23,8 +23,8 @@ let
   langsSpaces = lib.concatStringsSep " " langs;
   major = "5";
   minor = "0";
-  patch = "5";
-  tweak = "2";
+  patch = "6";
+  tweak = "3";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
@@ -50,14 +50,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "13cbfiqaycy8cxji5jfwfbgar8l4fzhg3aaggavsrwsmbvrqpbb7";
+      sha256 = "0ir97k91p3dxxs85ld1vyxcx7s63w678h9njbmw4y3mpp9f28y8c";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0an081aj63hfhxv0k8h92vly0rnglbcpqax2pinybryk4dnljr36";
+      sha256 = "06qwdmdb086852qs6fzb3mm1wixkkkkg39njpvqsrfbdrr2amdjc";
     };
 
   };
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "120vcxpxzs0za76fyfry281ysv6d1ianb37d1yq8py8chkdjkrqy";
+    sha256 = "1izc1ynfzg36jyi1ms5lmz9rl5lhlxa8qfa4bg7j2qlf65wdf0a6";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "${if withHelp then "" else "--without-help"}"
     "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
@@ -251,5 +251,6 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
+    hydraPlatforms = [];
   };
 }

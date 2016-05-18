@@ -8,12 +8,13 @@ stdenv.mkDerivation {
     sha256 = "0j57niag4jb2k0iyrvjsannxljc3vkx0iag7zd35ilhiy4dh6264";
   };
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = "
     mkdir -p $out/share/texmf-nix
     cp -prd * $out/share/texmf-nix
   ";
+
   meta = {
     branch = "2";
   };

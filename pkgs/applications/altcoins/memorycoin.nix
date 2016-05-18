@@ -17,7 +17,7 @@ stdenv.mkDerivation rec{
                   miniupnpc utillinux protobuf ]
                   ++ optionals withGui [ qt4 qmake4Hook qrencode ];
 
-  configureFlags = [ "--with-boost-libdir=${boost.lib}/lib" ]
+  configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
   preBuild = optional (!withGui) "cd src; cp makefile.unix Makefile";

@@ -121,6 +121,6 @@ in stdenv.mkDerivation rec {
       description = "Media center";
       license = stdenv.lib.licenses.gpl2;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ iElectric titanous edwtjo ];
+      maintainers = with maintainers; [ domenkozar titanous edwtjo ];
     };
 }

@@ -40,6 +40,7 @@ let
       pkgs.time
       pkgs.texinfoInteractive
       pkgs.utillinux
+      pkgs.which # 88K size
     ];
 
 in
@@ -102,6 +103,8 @@ in
     environment.pathsToLink =
       [ "/bin"
         "/etc/xdg"
+        "/etc/gtk-2.0"
+        "/etc/gtk-3.0"
         "/info"
         "/lib" # FIXME: remove and update debug-info.nix
         "/sbin"

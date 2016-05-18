@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-boost-libdir=${boost.lib}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
     "--with-boost=${boost.dev}"
     (if guiSupport then "" else "--disable-gui")
     (if webuiSupport then "" else "--disable-webui")

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [ "--with-incompatible-bdb"
-                     "--with-boost-libdir=${boost.lib}/lib" ]
+                     "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui" ];
 
   meta = {

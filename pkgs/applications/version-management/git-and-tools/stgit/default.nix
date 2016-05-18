@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "A patch manager implemented on top of Git";
     license = "GPL";
 
-    maintainers = with stdenv.lib.maintainers; [ simons the-kenny ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

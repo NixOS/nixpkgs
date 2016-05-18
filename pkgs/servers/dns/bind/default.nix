@@ -1,16 +1,19 @@
 { stdenv, fetchurl, openssl, libtool, perl, libxml2 }:
 
-let version = "9.10.3-P4"; in
+let version = "9.10.4"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0giys46ifypysf799w9v58kbaz1v3fbdzw3s212znifzzfsl9h1a";
+    sha256 = "0mmhzi4483mkak47wj255a36g3v0yilxwfwlbckr1hssinri5m7q";
   };
 
-  patches = [ ./libressl.patch ./remove-mkdir-var.patch ];
+  outputs = [ "dev" "bin" "out" "man" ];
+
+  patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
+    stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   buildInputs = [ openssl libtool perl libxml2 ];
 
@@ -30,12 +33,17 @@ stdenv.mkDerivation rec {
     "--without-python"
   ];
 
+  postInstall = ''
+    moveToOutput bin/bind9-config $dev
+    moveToOutput bin/isc-config.sh $dev
+  '';
+
   meta = {
     homepage = "http://www.isc.org/software/bind";
     description = "Domain name server";
     license = stdenv.lib.licenses.isc;
 
-    maintainers = with stdenv.lib.maintainers; [viric simons];
+    maintainers = with stdenv.lib.maintainers; [viric peti];
     platforms = with stdenv.lib.platforms; unix;
   };
 }

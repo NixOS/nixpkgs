@@ -30,6 +30,7 @@
       "colorator"
       "jekyll-sass-converter"
       "jekyll-watch"
+      "jekyll-paginate"
       "kramdown"
       "liquid"
       "mercenary"
@@ -56,6 +57,13 @@
     dependencies = [
       "listen"
     ];
+  };
+  "jekyll-paginate" = {
+    version = "1.1.0";
+    source = {
+      type = "gem";
+      sha256 = "0r7bcs8fq98zldih4787zk5i9w24nz5wa26m84ssja95n3sas2l8";
+    };
   };
   "kramdown" = {
     version = "1.9.0";
