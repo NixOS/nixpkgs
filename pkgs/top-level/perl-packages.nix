@@ -4394,11 +4394,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  EmailValid = buildPerlPackage {
-    name = "Email-Valid-1.192";
+  EmailValid = buildPerlPackage rec {
+    name = "Email-Valid-1.200";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.192.tar.gz;
-      sha256 = "0vpqgbr5bj4bvrd7c2fh9hs1mz0m6nfybl2rdn5yb4h67bmxfkbp";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "0nnvbqz0ls451b5p0w6lgqm6kklm115db2p2xf89lw0r5pvmkw54";
     };
     propagatedBuildInputs = [MailTools NetDNS];
     doCheck = false;
