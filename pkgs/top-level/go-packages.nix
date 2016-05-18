@@ -4262,5 +4262,26 @@ let
     repo = "gohai";
     sha256 = "0dvrv7skc0k8zd83gbwml8c02wjwldhxhhgzmwdfvvaqc00qz2c0";
     propagatedBuildInputs = [ seelog gopsutil ];
+
+  go-gelf = buildFromGitHub rec {
+    rev = "4bc6123df0946a1c23fd54e0c1d0ed68b44fd99f";
+    version = "2014-06-04";
+    owner = "DECK36";
+    repo = "go-gelf";
+    sha256 = "071zdwcl8ld05gv88yym1p7xq72igd6jj05n5d7v01hn6rvj48ay";
+  };
+
+  SystemdJournal2Gelf = buildFromGitHub rec {
+    rev = "aba2f24e59f190ab8830bf40f92f890e62a9ec9f";
+    version = "2016-04-16";
+    owner = "parse-nl";
+    repo = "SystemdJournal2Gelf";
+    sha256 = "012fmnb44681dgz21n1dlb6vh923bpk5lkqir1q40kfz6pacq64n";
+    propagatedBuildInputs = [ go-gelf ];
+    postBuild = "go build $src/SystemdJournal2Gelf.go";
+    postInstall = ''
+      mkdir -p $bin/bin
+      mv SystemdJournal2Gelf $bin/bin
+    '';
   };
 }; in self
