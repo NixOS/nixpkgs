@@ -22,5 +22,6 @@ in nodePackages.buildNodePackage rec {
     homepage = https://github.com/ripple/ripple-rest;
     maintainers = with maintainers; [ offline ];
     license = [ licenses.mit ];
+    broken = true;
   };
 }
