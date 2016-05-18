@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig, makeWrapper }:
 
 let
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
-  buildInputs = [ ncurses libevent ];
+  buildInputs = [ ncurses libevent makeWrapper ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -32,8 +32,11 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    cp -v ${bashCompletion}/completions/tmux $out/etc/bash_completion.d/tmux
+    mkdir -p $out/share/bash-completion/completions
+    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
+
+    wrapProgram $out/bin/tmux \
+      --set TMUX_TMPDIR \''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}
   '';
 
   meta = {
