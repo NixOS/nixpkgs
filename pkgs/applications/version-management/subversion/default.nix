@@ -17,13 +17,13 @@ assert javahlBindings -> jdk != null && perl != null;
 
 let
 
-  common = { version, sha1 }: stdenv.mkDerivation (rec {
+  common = { version, sha256 }: stdenv.mkDerivation (rec {
     inherit version;
     name = "subversion-${version}";
 
     src = fetchurl {
       url = "mirror://apache/subversion/${name}.tar.bz2";
-      inherit sha1;
+      inherit sha256;
     };
 
     buildInputs = [ zlib apr aprutil sqlite ]
