@@ -14083,6 +14083,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  XMLHandlerYAWriter = buildPerlPackage rec {
+    name = "XML-Handler-YAWriter-0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRAEHE/${name}.tar.gz";
+      sha256 = "11d45a1sz862va9rry3p2m77pwvq3kpsvgwhc5ramh9mbszbnk77";
+    };
+    propagatedBuildInputs = [ libxml_perl ];
+    meta = {
+      description = "Yet another Perl SAX XML Writer";
+    };
+  };
+
   XMLLibXML = buildPerlPackage rec {
     name = "XML-LibXML-2.0122";
     src = fetchurl {
