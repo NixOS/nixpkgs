@@ -4262,6 +4262,7 @@ let
     repo = "gohai";
     sha256 = "0dvrv7skc0k8zd83gbwml8c02wjwldhxhhgzmwdfvvaqc00qz2c0";
     propagatedBuildInputs = [ seelog gopsutil ];
+  };
 
   go-gelf = buildFromGitHub rec {
     rev = "4bc6123df0946a1c23fd54e0c1d0ed68b44fd99f";
