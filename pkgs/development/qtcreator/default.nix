@@ -7,7 +7,7 @@ with stdenv.lib;
 
 let
   baseVersion = "3.6";
-  revision = "0";
+  revision = "1";
   version = "${baseVersion}.${revision}";
 in
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "1v0x5asx9fj331jshial97gk7bwlb1a0k05h4zr22gh5cd4i0c5i";
+    sha256 = "1qjxy5l76dij3wqakd66prn1i0k1gd3gi4cv38bivk9j0gw12dp5";
   };
 
   buildInputs = [ makeWrapper qtbase qtscript qtquickcontrols qtdeclarative ];
