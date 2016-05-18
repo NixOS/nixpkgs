@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "tint2-${version}";
-  version = "0.12.10";
+  version = "0.12.11";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "tint2";
     rev = version;
-    sha256 = "0da28ykid84i4pw0cvgaxw0wq2yn03i68g54dzmajgsl1wvkqb0z";
+    sha256 = "0gfxbxslc8h95q7cq84a69yd7qdhyks978l3rmk48jhwwixdp0hr";
   };
 
   enableParallelBuilding = true;
@@ -39,8 +39,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://gitlab.com/o9000/tint2;
+    description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = stdenv.lib.licenses.gpl2;
-    description = "Simple panel/taskbar unintrusive and light (memory / cpu / aestetic)";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }
