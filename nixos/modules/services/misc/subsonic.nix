@@ -2,19 +2,14 @@
 
 with lib;
 
-let
-  cfg = config.services.subsonic;
-  homeDir = "/var/subsonic";
-
-in
-{
+let cfg = config.services.subsonic; in {
   options = {
     services.subsonic = {
       enable = mkEnableOption "Subsonic daemon";
 
       home = mkOption {
         type = types.path;
-        default = "${homeDir}";
+        default = "/var/lib/subsonic";
         description = ''
           The directory where Subsonic will create files.
           Make sure it is writable.
@@ -112,30 +107,43 @@ in
       description = "Personal media streamer";
       after = [ "local-fs.target" "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = ''
-          ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
-            -Dsubsonic.home=${cfg.home} \
-            -Dsubsonic.host=${cfg.listenAddress} \
-            -Dsubsonic.port=${toString cfg.port} \
-            -Dsubsonic.httpsPort=${toString cfg.httpsPort} \
-            -Dsubsonic.contextPath=${cfg.contextPath} \
-            -Dsubsonic.defaultMusicFolder=${cfg.defaultMusicFolder} \
-            -Dsubsonic.defaultPodcastFolder=${cfg.defaultPodcastFolder} \
-            -Dsubsonic.defaultPlaylistFolder=${cfg.defaultPlaylistFolder} \
-            -Djava.awt.headless=true \
-            -verbose:gc \
-            -jar ${pkgs.subsonic}/subsonic-booter-jar-with-dependencies.jar
-        '';
+      script = ''
+        ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          -Dsubsonic.home=${cfg.home} \
+          -Dsubsonic.host=${cfg.listenAddress} \
+          -Dsubsonic.port=${toString cfg.port} \
+          -Dsubsonic.httpsPort=${toString cfg.httpsPort} \
+          -Dsubsonic.contextPath=${cfg.contextPath} \
+          -Dsubsonic.defaultMusicFolder=${cfg.defaultMusicFolder} \
+          -Dsubsonic.defaultPodcastFolder=${cfg.defaultPodcastFolder} \
+          -Dsubsonic.defaultPlaylistFolder=${cfg.defaultPlaylistFolder} \
+          -Djava.awt.headless=true \
+          -verbose:gc \
+          -jar ${pkgs.subsonic}/subsonic-booter-jar-with-dependencies.jar
+      '';
+
+      preStart = ''
+        # Formerly this module set cfg.home to /var/subsonic. Try to move
+        # /var/subsonic to cfg.home.
+        oldHome="/var/subsonic"
+        if [ "${cfg.home}" != "$oldHome" ] &&
+                ! [ -e "${cfg.home}" ] &&
+                [ -d "$oldHome" ] &&
+                [ $(${pkgs.coreutils}/bin/stat -c %u "$oldHome") -eq \
+                    ${toString config.users.extraUsers.subsonic.uid} ]; then
+            logger Moving "$oldHome" to "${cfg.home}"
+            ${pkgs.coreutils}/bin/mv -T "$oldHome" "${cfg.home}"
+        fi
+
         # Install transcoders.
-        ExecStartPre = ''
-          ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
-          ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
-          ${pkgs.bash}/bin/bash -c ' \
-            for exe in "$@"; do \
-              ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode; \
-            done' IGNORED_FIRST_ARG ${toString cfg.transcoders}
-        '';
+        ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode ; \
+        ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode ; \
+        ${pkgs.bash}/bin/bash -c ' \
+          for exe in "$@"; do \
+            ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode; \
+          done' IGNORED_FIRST_ARG ${toString cfg.transcoders}
+      '';
+      serviceConfig = {
         # Needed for Subsonic to find subsonic.war.
         WorkingDirectory = "${pkgs.subsonic}";
         Restart = "always";
@@ -146,7 +154,7 @@ in
 
     users.extraUsers.subsonic = {
       description = "Subsonic daemon user";
-      home = homeDir;
+      home = cfg.home;
       createHome = true;
       group = "subsonic";
       uid = config.ids.uids.subsonic;
