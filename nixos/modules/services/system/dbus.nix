@@ -110,7 +110,7 @@ in
       };
 
     services.dbus.packages = [
-      pkgs.dbus
+      pkgs.dbus.out
       config.system.path
     ];
 
