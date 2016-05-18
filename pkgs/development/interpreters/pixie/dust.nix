@@ -1,11 +1,12 @@
-{ stdenv, pixie, fetchgit }:
+{ stdenv, pixie, fetchFromGitHub }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "dust-0-91";
-  src = fetchgit {
-    url = "https://github.com/pixie-lang/dust.git";
+  src = fetchFromGitHub {
+    owner = "pixie-lang";
+    repo = "dust";
     rev = "efe469661e749a71e86858fd006f61464810575a";
-    sha256 = "0krh7ynald3gqv9f17a4kfx7sx8i31l6j1fhd5k8b6m8cid7f9c1";
+    sha256 = "09n57b6haxwask9m8vimv42ikczf7lgfc7m9izjrcqgs0padvfzc";
   };
   buildInputs = [ pixie ];
   patches = [ ./make-paths-configurable.patch ];
@@ -24,4 +25,10 @@ stdenv.mkDerivation {
     cp -a src/ run.pxi $out/share/dust
     mv dust $out/bin/dust
   '';
+
+  meta = {
+    description = "Provides tooling around pixie, e.g. a nicer repl, running tests and fetching dependencies";
+    homepage = src.meta.homepage;
+    license = stdenv.lib.licenses.lgpl3;
+  };
 }
