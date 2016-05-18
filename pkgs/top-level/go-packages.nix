@@ -249,7 +249,7 @@ let
     repo = "archiver";
     sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
   };
-  
+
   asciinema = buildFromGitHub {
     rev = "v1.2.0";
     owner = "asciinema";
@@ -4246,4 +4246,21 @@ let
 
   };
 
+  gopsutil = buildFromGitHub rec {
+    version = "1.0.0";
+    rev = "37d89088411de59a4ef9fc340afa0e89dfcb4ea9";
+    owner = "shirou";
+    repo = "gopsutil";
+    sha256 = "13bi1d9hw8vr6qjpblryhglm0ikzpijbwhpp6rx7f5yd7sxsswhm";
+    propagatedBuildInputs = [ ];
+  };
+
+  gohai = buildFromGitHub rec {
+    rev = "94685629c66fe481bfb499175b448fb401a41781";
+    version = "2016-04-14";
+    owner = "DataDog";
+    repo = "gohai";
+    sha256 = "0dvrv7skc0k8zd83gbwml8c02wjwldhxhhgzmwdfvvaqc00qz2c0";
+    propagatedBuildInputs = [ seelog gopsutil ];
+  };
 }; in self
