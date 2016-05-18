@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
 # Take those from https://github.com/elm-lang/elm-platform/blob/master/installers/BuildFromSource.hs
-$elm_version = "0.16.0"
-$elm_packages = { "elm-compiler" => "0.16",
-                  "elm-package" => "0.16",
-                  "elm-make" => "0.16",
-                  "elm-reactor" => "0.16",
-                  "elm-repl" => "0.16"
+$elm_version = "0.17"
+$elm_packages = { "elm-compiler" => "0.17",
+                  "elm-package" => "0.17",
+                  "elm-make" => "0.17",
+                  "elm-reactor" => "0.17",
+                  "elm-repl" => "0.17"
                 }
 
 for pkg, ver in $elm_packages

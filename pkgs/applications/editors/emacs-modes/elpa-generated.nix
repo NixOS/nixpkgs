@@ -1257,10 +1257,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20160502";
+        version = "20160516";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20160502.tar";
-          sha256 = "0li067na4p0k9r4nr6a2vfqygvlmzsdgm5kgg2p60lsvydh43fvw";
+          url = "https://elpa.gnu.org/packages/org-20160516.tar";
+          sha256 = "164v1zddgyfy9v1qhl1fqz2vcgm5w4dhfmra5ngpgnjh1402l0pm";
         };
         packageRequires = [];
         meta = {
@@ -1760,10 +1760,10 @@
     validate = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "validate";
-        version = "0.3";
+        version = "0.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/validate-0.3.el";
-          sha256 = "0nq917217ax5zykzaybv7diz1vgl3y6r8vi7hmz3lzm5dl90jy3m";
+          url = "https://elpa.gnu.org/packages/validate-0.5.el";
+          sha256 = "1gzphvcqih5zz80mmnc2wx2kgc13g9hv98kqsfpndbdd3bw3blph";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1838,10 +1838,10 @@
       }) {};
     websocket = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "websocket";
-        version = "1.5";
+        version = "1.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/websocket-1.5.tar";
-          sha256 = "0plgc8an229cqbghrxd6wh73b081dc17fx1r940dqhgi284pcjsy";
+          url = "https://elpa.gnu.org/packages/websocket-1.6.tar";
+          sha256 = "09im218c1gkq1lg356rcqqpkydnpxs5qzdqkwk95pwndswb40a5a";
         };
         packageRequires = [];
         meta = {

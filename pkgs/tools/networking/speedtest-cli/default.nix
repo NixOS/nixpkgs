@@ -14,6 +14,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Command line interface for testing internet bandwidth using speedtest.net";
     platforms = platforms.all;
     license = licenses.asl20;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

@@ -1,7 +1,7 @@
 import ./make-test.nix ({ pkgs, ... }: {
   name = "kde4";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric eelco chaoflow ];
+    maintainers = [ domenkozar eelco chaoflow ];
   };
 
   machine =

@@ -174,8 +174,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/K/KA/KAZEBURO/${name}.tar.gz";
       sha256 = "17blk3zhp05azgypn25ydxf3d7fyfgr9bxyiv7xkchhqma96vwqv";
     };
-    buildInputs = [ HTTPMessage TestRequires TryTiny URI TestMockTime
-      POSIXstrftimeCompiler ];
+    buildInputs = [ HTTPMessage ModuleBuild TestMockTime TestRequires TryTiny URI ];
+    propagatedBuildInputs = [ POSIXstrftimeCompiler ];
     # We cannot change the timezone on the fly.
     prePatch = "rm t/04_tz.t";
     meta = {
@@ -1070,13 +1070,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CatalystRuntime = buildPerlPackage {
-    name = "Catalyst-Runtime-5.90075";
+    name = "Catalyst-Runtime-5.90085";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90075.tar.gz;
-      sha256 = "a80ed1b1600a8ababda34bc024756a6fb0275b0fff3fa1bb17104813e3ce8752";
+      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90085.tar.gz;
+      sha256 = "17wfcawvj8nxs2wq7r094m6dff37s6i2d2z49lxz2n8c489d9nk1";
     };
     buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI namespaceautoclean namespaceclean ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
@@ -2272,6 +2272,21 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0gssillawjknqks81x7fg7w2x94bnyklgd8ry2pr1k6ifkjhwz46";
     };
     buildInputs = [ TestException Testuseok ];
+  };
+
+  CookieBaker = buildPerlModule rec {
+    name = "Cookie-Baker-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KA/KAZEBURO/${name}.tar.gz";
+      sha256 = "4b1fb173d6977af902fa018242a0b28099e5612a2fa43e0160380781f5d76ea0";
+    };
+    buildInputs = [ ModuleBuild TestTime ];
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      homepage = https://github.com/kazeburo/Cookie-Baker;
+      description = "Cookie string generator / parser";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CookieXS = buildPerlPackage rec {
@@ -6010,13 +6025,13 @@ let self = _self // overrides; _self = with self; {
     ];
   };
 
-  HTTPBody = buildPerlPackage {
-    name = "HTTP-Body-1.19";
+  HTTPBody = buildPerlPackage rec {
+    name = "HTTP-Body-1.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GE/GETTY/HTTP-Body-1.19.tar.gz;
-      sha256 = "0ahhksj0zg6wq6glpjkxdr3byd5riwvq2f5aw21n1jcsl71nll01";
+      url = "mirror://cpan/authors/id/G/GE/GETTY/${name}.tar.gz";
+      sha256 = "fc0d2c585b3bd1532d92609965d589e0c87cd380e7cca42fb9ad0a1311227297";
     };
-    buildInputs = [ TestDeep ];
+    buildInputs = [ HTTPMessage TestDeep ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
       description = "HTTP Body Parser";
@@ -6067,6 +6082,21 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSMITH/${name}.tar.gz";
       sha256 = "1vs6sw431nnlnbdy6jii9vqlz30ndlfwdpdgm8a1m6fqngzhzq59";
+    };
+  };
+
+  HTTPHeadersFast = buildPerlModule rec {
+    name = "HTTP-Headers-Fast-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/${name}.tar.gz";
+      sha256 = "d2f4c9724618e74f300fc746498fb5849692ef0cfc4af47fe499c4063969e520";
+    };
+    buildInputs = [ ModuleBuild TestRequires ];
+    propagatedBuildInputs = [ HTTPDate ];
+    meta = {
+      homepage = https://github.com/tokuhirom/HTTP-Headers-Fast;
+      description = "Faster implementation of HTTP::Headers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -9782,17 +9812,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Plack = buildPerlPackage {
-    name = "Plack-1.0031";
+  Plack = buildPerlPackage rec {
+    name = "Plack-1.0039";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0031.tar.gz;
-      sha256 = "0vvppxs36729lggrx4s1gn37lzsm794wfkm3k386bwhkmk7sr31i";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "d24a572e88644c7d39c7e6ff1af005b728dec94a878cf06d9027ab7d1a2fd0a9";
     };
     buildInputs = [ FileShareDirInstall TestRequires ];
-    propagatedBuildInputs = [ ApacheLogFormatCompiler DevelStackTrace
-      DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody
-      HTTPMessage HashMultiValue LWP StreamBuffered TestTCP TryTiny URI
-      POSIXstrftimeCompiler ];
+    propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTrace DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPBody HTTPHeadersFast HTTPMessage HashMultiValue StreamBuffered TestTCP TryTiny URI ];
     meta = {
       homepage = https://github.com/plack/Plack;
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
@@ -9800,27 +9827,26 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackMiddlewareDebug = buildPerlPackage {
-    name = "Plack-Middleware-Debug-0.14";
+  PlackMiddlewareDebug = buildPerlModule rec {
+    name = "Plack-Middleware-Debug-0.16";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-Middleware-Debug-0.14.tar.gz;
-      sha256 = "0349563ic6fw4kwx3k3l4v9gq59b5cpymmn1k8bkxsw9n7s10rb9";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/${name}.tar.gz";
+      sha256 = "e1e4ff6e9b246fe67547ebac8a3e83d4ae77873f889d1f63411c21c8c6bf96d5";
     };
-    buildInputs = [ TestRequires ];
-    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir ModuleVersions Plack TextMicroTemplate ];
+    buildInputs = [ ModuleBuildTiny TestRequires ];
+    propagatedBuildInputs = [ ClassMethodModifiers DataDump FileShareDir Plack TextMicroTemplate ];
     meta = {
+      homepage = https://github.com/miyagawa/Plack-Middleware-Debug;
       description = "Display information about the current request/response";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
-  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage {
-    name = "Plack-Middleware-FixMissingBodyInRedirect-0.11";
+  PlackMiddlewareFixMissingBodyInRedirect = buildPerlPackage rec {
+    name = "Plack-Middleware-FixMissingBodyInRedirect-0.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SW/SWEETKID/Plack-Middleware-FixMissingBodyInRedirect-0.11.tar.gz;
-      sha256 = "eb4d4232344e7da3217347b847736ea55df962d11b870a225315d9241e8fbefb";
+      url = "mirror://cpan/authors/id/S/SW/SWEETKID/${name}.tar.gz";
+      sha256 = "6c22d069f5a57ac206d4659b28b8869bb9270640bb955efddd451dcc58cdb391";
     };
     buildInputs = [ HTTPMessage Plack ];
     propagatedBuildInputs = [ HTMLParser Plack ];
@@ -9831,15 +9857,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackMiddlewareMethodOverride = buildPerlModule {
-    name = "Plack-Middleware-MethodOverride-0.10";
+  PlackMiddlewareMethodOverride = buildPerlPackage rec {
+    name = "Plack-Middleware-MethodOverride-0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/Plack-Middleware-MethodOverride-0.10.tar.gz;
-      sha256 = "f8d6a33b56d69dddd5db289f855e100d86ff39099abe31ef40e2672d0dc5568d";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
+      sha256 = "2b4a6e67006f97a2b4cf7980900f6a8ababb1cf97d6597319f9897ada3c555bc";
     };
-    propagatedBuildInputs = [ Plack URI ];
+    buildInputs = [ Plack URI ];
+    propagatedBuildInputs = [ Plack ];
     meta = {
-      homepage = http://search.cpan.org/dist/Plack-Middleware-MethodOverride/;
       description = "Override REST methods to Plack apps via POST";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9873,14 +9899,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  PlackTestExternalServer = buildPerlPackage {
-    name = "Plack-Test-ExternalServer-0.01";
+  PlackTestExternalServer = buildPerlPackage rec {
+    name = "Plack-Test-ExternalServer-0.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FL/FLORA/Plack-Test-ExternalServer-0.01.tar.gz;
-      sha256 = "1dbg1p3rgvvbkkpvca5jlc2mzx8iqyiybk88al93pvbca65h1g7h";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "5baf5c57fe0c06412deec9c5abe7952ab8a04f8c47b4bbd8e9e9982268903ed0";
     };
-    propagatedBuildInputs = [ HTTPMessage LWPUserAgent Plack TestTCP URI ];
+    buildInputs = [ HTTPMessage Plack TestTCP ];
+    propagatedBuildInputs = [ LWP URI ];
     meta = {
+      homepage = https://github.com/perl-catalyst/Plack-Test-ExternalServer;
       description = "Run HTTP tests on external live servers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10193,17 +10221,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  podlinkcheck = buildPerlPackage {
-    name = "podlinkcheck-12";
+  podlinkcheck = buildPerlPackage rec {
+    name = "podlinkcheck-14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KR/KRYDE/podlinkcheck-12.tar.gz;
-      sha256 = "c5da0e390b58655934e1df57937d29d7de13b99f5638fe44833832a5b39c8aa5";
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
+      sha256 = "8ad152bdffbb7f5080616c0c0ae142f75b4c1255ed82b9cd80a5f4e3172fed3d";
     };
-    propagatedBuildInputs = [ FileFindIterator IPCRun constantdefer libintlperl ];
-    meta = with stdenv.lib; {
+    propagatedBuildInputs = [ FileFindIterator FileHomeDir IPCRun constantdefer libintlperl ];
+    meta = {
       homepage = http://user42.tuxfamily.org/podlinkcheck/index.html;
       description = "Check POD L<> link references";
-      license = licenses.gpl3Plus;
+      license = stdenv.lib.licenses.gpl3Plus;
     };
   };
 
@@ -12434,6 +12462,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestTime = buildPerlPackage rec {
+    name = "Test-Time-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SATOH/${name}.tar.gz";
+      sha256 = "d8c1bc57f9767ae8122fc4ab873bd991cb9ea8e9422c66399acb66770fa5c2ea";
+    };
+    buildInputs = [ FileSlurp ];
+    meta = {
+      description = "Overrides the time() and sleep() core functions for testing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestUnitLite = buildPerlPackage {
     name = "Test-Unit-Lite-0.1202";
     src = fetchurl {
@@ -13595,6 +13636,21 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  URIws = buildPerlPackage rec {
+    name = "URI-ws-0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "6e6b0e4172acb6a53c222639c000608c2dd61d50848647482ac8600d50e541ef";
+    };
+    buildInputs = [ URI ];
+    propagatedBuildInputs = [ URI ];
+    meta = {
+      homepage = http://perl.wdlabs.com/URI-ws/;
+      description = "WebSocket support for URI package";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   VariableMagic = buildPerlPackage rec {
     name = "Variable-Magic-0.58";
     src = fetchurl {
@@ -13964,7 +14020,7 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = https://github.com/perigrin/xml-sax-writer;
       description = "SAX2 XML Writer";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

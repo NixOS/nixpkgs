@@ -28,7 +28,7 @@ stdenv.mkDerivation {
 
           unclutter -idle 1 &
     '';
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 }

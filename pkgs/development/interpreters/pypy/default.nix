@@ -118,7 +118,7 @@ let
       description = "Fast, compliant alternative implementation of the Python language (2.7.8)";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 

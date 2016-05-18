@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A simple screen locker like slock";
     homepage = http://i3wm.org/i3lock/;
-    maintainers = with maintainers; [ garbas malyn iElectric ];
+    maintainers = with maintainers; [ garbas malyn ];
     license = licenses.bsd3;
     platforms = platforms.all;
   };

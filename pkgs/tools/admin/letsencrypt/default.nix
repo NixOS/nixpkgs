@@ -44,7 +44,7 @@ pythonPackages.buildPythonApplication rec {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
     license = licenses.asl20;
   };
 }

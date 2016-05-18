@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.datadoghq.com;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice iElectric ];
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice domenkozar ];
   };
 }

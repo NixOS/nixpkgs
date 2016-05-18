@@ -697,13 +697,13 @@ in
 
   clib = callPackage ../tools/package-management/clib { };
 
-  consul = goPackages.consul.bin // { outputs = [ "bin" ]; };
+  consul = go16Packages.consul.bin // { outputs = [ "bin" ]; };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = goPackages.consul-alerts.bin // { outputs = [ "bin" ]; };
+  consul-alerts = go16Packages.consul-alerts.bin // { outputs = [ "bin" ]; };
 
-  consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
+  consul-template = go16Packages.consul-template.bin // { outputs = [ "bin" ]; };
 
   corosync = callPackage ../servers/corosync { };
 
@@ -799,6 +799,8 @@ in
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
   gist = callPackage ../tools/text/gist { };
+
+  glide = go16Packages.glide.bin // { outputs = [ "bin" ]; };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
@@ -6343,9 +6345,7 @@ in
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
-  rr = callPackage ../development/tools/analysis/rr {
-    stdenv = stdenv_32bit;
-  };
+  rr = callPackage ../development/tools/analysis/rr { };
 
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
@@ -13572,6 +13572,7 @@ in
   };
 
   obs-studio = qt5.callPackage ../applications/video/obs-studio {
+    alsaSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or true;
   };
 
@@ -16433,6 +16434,8 @@ in
     inherit (pkgs.gnome) GConf;
   };
 
+  moltengamepad = callPackage ../misc/drivers/moltengamepad { };
+
   mongoc = callPackage ../development/libraries/mongoc { };
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus {
@@ -16685,7 +16688,7 @@ in
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
-  vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
+  vault = go16Packages.vault.bin // { outputs = [ "bin" ]; };
 
   vbam = callPackage ../misc/emulators/vbam {};
 
@@ -16700,6 +16703,7 @@ in
 
   vimPlugins = recurseIntoAttrs (callPackage ../misc/vim-plugins {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    llvmPackages = llvmPackages_38;
   });
 
   vimprobable2-unwrapped = callPackage ../applications/networking/browsers/vimprobable2 {
@@ -16729,8 +16733,8 @@ in
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
   };
   wineStable = wine.override { wineRelease = "stable"; };
-  wineUnstable = lowPrio (wine.override { wineRelease = "unstable"; });
-  wineStaging = lowPrio (wine.override { wineRelease = "staging"; });
+  wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
+  wineStaging = lowPrio (self.wine.override { wineRelease = "staging"; });
 
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
