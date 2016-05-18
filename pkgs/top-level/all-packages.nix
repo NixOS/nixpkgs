@@ -799,6 +799,8 @@ in
 
   gist = callPackage ../tools/text/gist { };
 
+  glide = go16Packages.glide.bin // { outputs = [ "bin" ]; };
+
   gmic = callPackage ../tools/graphics/gmic { };
 
   gti = callPackage ../tools/misc/gti { };
