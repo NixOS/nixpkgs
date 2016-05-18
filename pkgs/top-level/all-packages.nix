@@ -13739,6 +13739,8 @@ in
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
 
+  pmenu = callPackage ../applications/misc/pmenu { };
+
   poezio = python3Packages.poezio;
 
   pommed = callPackage ../os-specific/linux/pommed {};
