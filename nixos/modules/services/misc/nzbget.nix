@@ -66,6 +66,8 @@ in
         PermissionsStartOnly = "true";
         ExecStart = "${cfg.package}/bin/nzbget --daemon --configfile /var/lib/nzbget/nzbget.conf";
         Restart = "on-failure";
+        PrivateTmp = "true";
+        PrivateDevices = "true";
       };
     };
 
