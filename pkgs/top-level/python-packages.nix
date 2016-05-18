@@ -5901,17 +5901,43 @@ in modules // {
   };
 
   fake_factory = buildPythonPackage rec {
-    name = "fake-factory-0.2";
+    name = "fake-factory-${version}";
+    version = "0.5.7";
+
     src = pkgs.fetchurl {
-      url = mirror://pypi/f/fake-factory/fake-factory-0.2.tar.gz;
-      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+      url = "mirror://pypi/f/fake-factory/${name}.tar.gz";
+      sha256 = "1chmarnrdzn4r017n8qlic0m0bbnhw04s3hkwribjvm3mqpb6pa0";
     };
+
+    propagatedBuildInputs = with self; [ six dateutil ipaddress mock ];
+    checkPhase = ''
+      ${python.interpreter} -m unittest faker.tests
+    '';
+
     meta = {
       description = "A Python package that generates fake data for you";
       homepage    = https://pypi.python.org/pypi/fake-factory;
       license     = licenses.mit;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
+    };
+  };
+
+  factory_boy = buildPythonPackage rec {
+    name = "factory_boy-${version}";
+    version = "2.6.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/factory_boy/${name}.tar.gz";
+      sha256 = "0a21f8kq917fj8xgmyp6gy8vcrlzzgwn80qas0d76h3vjbdy0bdq";
+    };
+
+    propagatedBuildInputs = with self; [ fake_factory ];
+
+    meta = {
+      description = "A Python package to create factories for complex objects";
+      homepage    = https://github.com/rbarrois/factory_boy;
+      license     = licenses.mit;
     };
   };
 
