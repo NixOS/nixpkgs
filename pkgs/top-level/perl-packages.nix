@@ -9793,10 +9793,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   PerlTidy = buildPerlPackage rec {
-    name = "Perl-Tidy-20150815";
+    name = "Perl-Tidy-20160302";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHANCOCK/${name}.tar.gz";
-      sha256 = "1mzb2df3bhxcgm7i9vx29bz5581cr8bbfrmajjrzla04djg9v5ha";
+      sha256 = "6dd04ed8c315bcfea8fe713de8f9de68955795b6864f3be6c177e802fd30dca7";
+    };
+    meta = {
+      description = "Indent and reformat perl scripts";
+      license = stdenv.lib.licenses.gpl2Plus;
     };
   };
 
