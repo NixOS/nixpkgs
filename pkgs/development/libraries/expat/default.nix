@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  patches = [ ./CVE-2015-1283-refix.patch ./CVE-2016-0718-v2-2-1.patch ];
+
   doCheck = true;
 
   meta = with stdenv.lib; {
