@@ -8862,11 +8862,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MozillaCA = buildPerlPackage {
-    name = "Mozilla-CA-20130114";
+  MozillaCA = buildPerlPackage rec {
+    name = "Mozilla-CA-20160104";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20130114.tar.gz;
-      sha256 = "82342614add1dbca8a00daa1ee55af3e0036245aed7d445537918c045008ccd7";
+      url = "mirror://cpan/authors/id/A/AB/ABH/${name}.tar.gz";
+      sha256 = "27a7069a243162b65ada4194ff9d21b6ebc304af723eb5d3972fb74c11b03f2a";
     };
     meta = {
       description = "Mozilla's CA cert bundle in PEM format";
