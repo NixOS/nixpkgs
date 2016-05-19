@@ -199,7 +199,7 @@ in buildPythonApplication rec {
     description = "Music tagger and library organizer";
     homepage = http://beets.radbox.org;
     license = licenses.mit;
-    maintainers = with maintainers; [ aszlig iElectric pjones profpatsch ];
+    maintainers = with maintainers; [ aszlig domenkozar pjones profpatsch ];
     platforms = platforms.linux;
   };
 }

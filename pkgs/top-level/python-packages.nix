@@ -671,7 +671,7 @@ in modules // {
     '';
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -1740,7 +1740,7 @@ in modules // {
       homepage = http://crummy.com/software/BeautifulSoup/bs4/;
       description = "HTML and XML parser";
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -1757,7 +1757,7 @@ in modules // {
       homepage = http://crummy.com/software/BeautifulSoup/bs4/;
       description = "HTML and XML parser";
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
 
     disabled = isPy3k;
@@ -1791,7 +1791,7 @@ in modules // {
 
     meta = {
       description = "A Session and Caching library with WSGI Middleware";
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -2509,7 +2509,7 @@ in modules // {
      meta = {
        description = "UNKNOWN";
        homepage = "UNKNOWN";
-       maintainers = with maintainers; [ iElectric ];
+       maintainers = with maintainers; [ domenkozar ];
      };
    };
 
@@ -3558,7 +3558,7 @@ in modules // {
     propagatedBuildInputs = with self; [ self.translationstring self.iso8601 ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -3853,7 +3853,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -4230,7 +4230,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -4245,7 +4245,7 @@ in modules // {
     buildInputs = with self; [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       description = "Modern password hashing for your software and your servers";
       license = licenses.asl20;
       homepage = https://github.com/pyca/bcrypt/;
@@ -4268,7 +4268,7 @@ in modules // {
     '';
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       homepage = https://cffi.readthedocs.org/;
       license = with licenses; [ mit ];
       description = "Foreign Function Interface for Python calling C code";
@@ -4334,7 +4334,7 @@ in modules // {
       description = "C parser in Python";
       homepage = https://github.com/eliben/pycparser;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -4358,7 +4358,7 @@ in modules // {
         self.selenium;
 
     meta = {
-      maintainers = with maintainers; [ iElectric lovek323 madjar ];
+      maintainers = with maintainers; [ domenkozar lovek323 madjar ];
       platforms = platforms.unix;
     };
   };
@@ -5120,7 +5120,7 @@ in modules // {
       ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -5147,7 +5147,7 @@ in modules // {
       ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -5170,7 +5170,7 @@ in modules // {
     '';
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -5901,17 +5901,43 @@ in modules // {
   };
 
   fake_factory = buildPythonPackage rec {
-    name = "fake-factory-0.2";
+    name = "fake-factory-${version}";
+    version = "0.5.7";
+
     src = pkgs.fetchurl {
-      url = mirror://pypi/f/fake-factory/fake-factory-0.2.tar.gz;
-      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+      url = "mirror://pypi/f/fake-factory/${name}.tar.gz";
+      sha256 = "1chmarnrdzn4r017n8qlic0m0bbnhw04s3hkwribjvm3mqpb6pa0";
     };
+
+    propagatedBuildInputs = with self; [ six dateutil ipaddress mock ];
+    checkPhase = ''
+      ${python.interpreter} -m unittest faker.tests
+    '';
+
     meta = {
       description = "A Python package that generates fake data for you";
       homepage    = https://pypi.python.org/pypi/fake-factory;
       license     = licenses.mit;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
+    };
+  };
+
+  factory_boy = buildPythonPackage rec {
+    name = "factory_boy-${version}";
+    version = "2.6.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/factory_boy/${name}.tar.gz";
+      sha256 = "0a21f8kq917fj8xgmyp6gy8vcrlzzgwn80qas0d76h3vjbdy0bdq";
+    };
+
+    propagatedBuildInputs = with self; [ fake_factory ];
+
+    meta = {
+      description = "A Python package to create factories for complex objects";
+      homepage    = https://github.com/rbarrois/factory_boy;
+      license     = licenses.mit;
     };
   };
 
@@ -6251,12 +6277,12 @@ in modules // {
   };
 
   GitPython = buildPythonPackage rec {
-    version = "1.0.1";
+    version = "2.0.2";
     name = "GitPython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/G/GitPython/GitPython-${version}.tar.gz";
-      sha256 = "0q7plxnbbkp5dd0k73736l7gf932a89yy920yrgl8amfpixw324w";
+      sha256 = "18842123a88rihgh84rmjabmbn3zq1jv0227ypcpsxc5smxzws6i";
     };
 
     buildInputs = with self; [ mock nose ];
@@ -7259,7 +7285,7 @@ in modules // {
     };
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -7530,7 +7556,7 @@ in modules // {
     ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
 
@@ -7552,7 +7578,7 @@ in modules // {
     propagatedBuildInputs = with self; [ beaker pyramid ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
       broken = true;
     };
@@ -7575,7 +7601,7 @@ in modules // {
     ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -7593,7 +7619,7 @@ in modules // {
     propagatedBuildInputs = with self; [ jinja2 pyramid ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -7636,7 +7662,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pyramid ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -7652,7 +7678,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ transaction pyramid ];
     meta = {
-      maintainers = with maintainers; [ garbas iElectric matejc ];
+      maintainers = with maintainers; [ garbas domenkozar matejc ];
       platforms = platforms.all;
     };
   };
@@ -7751,7 +7777,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -7873,7 +7899,7 @@ in modules // {
     buildInputs = with self; [ zope_interface zodb ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -7889,7 +7915,7 @@ in modules // {
     buildInputs = with self; [ zope_interface zope_location zope_schema ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -7919,7 +7945,7 @@ in modules // {
     buildInputs = with self; [ nose mock ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       description = "A simple statsd client";
       license = licenses.mit;
       homepage = https://github.com/jsocol/pystatsd;
@@ -7990,7 +8016,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pyramid zodb zodburi ZEO ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8007,7 +8033,7 @@ in modules // {
     propagatedBuildInputs = with self; [ repoze_sendmail ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8044,7 +8070,7 @@ in modules // {
     buildInputs = with self; [ transaction ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8060,7 +8086,7 @@ in modules // {
     buildInputs = with self; [ zodb mock ZEO ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8129,7 +8155,7 @@ in modules // {
     ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8178,7 +8204,7 @@ in modules // {
     };
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -8196,7 +8222,7 @@ in modules // {
     propagatedBuildInputs = with self; [ zope_interface sphinx ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -8306,7 +8332,7 @@ in modules // {
     buildInputs = with self; [ zope_testing ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -8340,7 +8366,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -8360,7 +8386,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-       maintainers = with maintainers; [ garbas iElectric ];
+       maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -8423,7 +8449,7 @@ in modules // {
       homepage = http://deluge-torrent.org;
       description = "Torrent client";
       license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ iElectric ebzzry ];
+      maintainers = with maintainers; [ domenkozar ebzzry ];
       platforms = platforms.all;
     };
   };
@@ -8443,7 +8469,7 @@ in modules // {
       homepage = http://freedesktop.org/wiki/Software/pyxdg;
       description = "Contains implementations of freedesktop.org standards";
       license = licenses.lgpl2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -8459,7 +8485,7 @@ in modules // {
       homepage = https://github.com/chardet/chardet;
       description = "Universal encoding detector";
       license = licenses.lgpl2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -9307,7 +9333,7 @@ in modules // {
       homepage = http://code.google.com/p/feedparser/;
       description = "Universal feed parser";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -9677,7 +9703,7 @@ in modules // {
       homepage = http://flexget.com/;
       description = "Multipurpose automation tool for content like torrents";
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -9730,7 +9756,7 @@ in modules // {
       homepage = https://github.com/ckreutzer/python-tvrage;
       description = "Client interface for tvrage.com's XML-based api feeds";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -9813,7 +9839,7 @@ in modules // {
       homepage = https://github.com/Julian/jsonschema;
       description = "An implementation of JSON Schema validation for Python";
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -10680,7 +10706,7 @@ in modules // {
         major web browsers.
       '';
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric prikhi ];
+      maintainers = with maintainers; [ domenkozar prikhi ];
     };
   });
 
@@ -12060,7 +12086,7 @@ in modules // {
       description = "Super-fast templating language";
       homepage = http://www.makotemplates.org;
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -12078,7 +12104,7 @@ in modules // {
       description = "Implements a XML/HTML/XHTML Markup safe string";
       homepage = http://dev.pocoo.org;
       license = licenses.bsd3;
-      maintainers = with maintainers; [ iElectric garbas ];
+      maintainers = with maintainers; [ domenkozar garbas ];
     };
   };
 
@@ -12723,7 +12749,7 @@ in modules // {
                             (optionals isPy26 [ importlib ordereddict ]);
 
     meta = {
-      homepage = https://github.com/iElectric/mr.bob.git;
+      homepage = https://github.com/domenkozar/mr.bob.git;
       description = "A tool to generate code skeletons from templates";
     };
   };
@@ -12786,7 +12812,7 @@ in modules // {
       homepage = http://bmc.github.com/munkres/;
       description = "Munkres algorithm for the Assignment Problem";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -12807,7 +12833,7 @@ in modules // {
       homepage = http://alastair/python-musicbrainz-ngs;
       description = "Python bindings for musicbrainz NGS webservice";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -13046,7 +13072,7 @@ in modules // {
     };
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.linux;
     };
   };
@@ -16013,7 +16039,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pytz ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.linux;
     };
   };
@@ -18056,7 +18082,7 @@ in modules // {
       homepage = http://www.dalkescientific.om/Python/PyRSS2Gen.html;
       description = "Library for generating RSS 2.0 feeds";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -18186,7 +18212,7 @@ in modules // {
       homepage = http://github.com/ericflo/pynzb;
       description = "Unified API for parsing NZB files";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -18205,7 +18231,7 @@ in modules // {
       homepage = http://code.google.com/p/python-progressbar/;
       description = "Text progressbar library for python";
       license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   });
 
@@ -18953,7 +18979,7 @@ in modules // {
     disabled = isPy3k;
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20429,7 +20455,7 @@ in modules // {
       description = "Yet another simple static gallery generator";
       homepage = http://sigal.saimon.org/en/latest/index.html;
       license = licenses.mit;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20842,7 +20868,7 @@ in modules // {
     buildInputs = with self; [ pillow nose_progressive nose mock blessings ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20865,7 +20891,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pillow blessings args ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20885,7 +20911,7 @@ in modules // {
     buildInputs = with self; [ pytest py mock pkgs.glibcLocales ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20904,7 +20930,7 @@ in modules // {
     doCheck = !isPy3k;
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -20922,7 +20948,7 @@ in modules // {
     propagatedBuildInputs = with self; [ modules.curses ];
 
     meta = {
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 
@@ -23010,7 +23036,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-       maintainers = with maintainers; [ garbas iElectric ];
+       maintainers = with maintainers; [ garbas domenkozar ];
        platforms = platforms.all;
     };
   };
@@ -23284,7 +23310,7 @@ in modules // {
     propagatedBuildInputs = with self; [ six webob ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
     };
   };
 
@@ -24051,7 +24077,7 @@ in modules // {
     propagatedBuildInputs = with self; [ sqlalchemy transaction ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -24432,7 +24458,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pep8 ];
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -24468,7 +24494,7 @@ in modules // {
     };
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -24551,7 +24577,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ garbas iElectric ];
+      maintainers = with maintainers; [ garbas domenkozar ];
       platforms = platforms.all;
     };
   };
@@ -24646,7 +24672,7 @@ in modules // {
       homepage = http://pypi.python.org/pypi/Unidecode/;
       description = "ASCII transliterations of Unicode text";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ iElectric ];
+      maintainers = with maintainers; [ domenkozar ];
     };
   };
 

@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Comprehensive e-book software";
     homepage = http://calibre-ebook.com;
     license = with licenses; if unrarSupport then unfreeRedistributable else gpl3;
-    maintainers = with maintainers; [ viric iElectric pSub AndersonTorres ];
+    maintainers = with maintainers; [ viric domenkozar pSub AndersonTorres ];
     platforms = platforms.linux;
     inherit version;
   };

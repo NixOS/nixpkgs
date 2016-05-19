@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.poedit.net/;
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

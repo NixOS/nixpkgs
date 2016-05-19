@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "gitlab";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ iElectric offline ];
+    maintainers = [ domenkozar offline ];
   };
 
   nodes = {

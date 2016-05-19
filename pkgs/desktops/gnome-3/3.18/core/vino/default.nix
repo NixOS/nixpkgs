@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Vino;
     description = "GNOME desktop sharing server";
-    maintainers = with maintainers; [ lethalman iElectric ];
+    maintainers = with maintainers; [ lethalman domenkozar ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

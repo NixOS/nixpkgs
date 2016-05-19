@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
     description = "An online/offline backup solution";
     homepage = "http://www.crashplan.org";
     license = licenses.unfree;
-    maintainers = with maintainers; [ sztupi iElectric ];
+    maintainers = with maintainers; [ sztupi domenkozar ];
   };
 
   buildInputs = [ makeWrapper cpio ];

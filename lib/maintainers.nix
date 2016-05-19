@@ -76,6 +76,7 @@
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
+  cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
@@ -160,7 +161,7 @@
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
-  iElectric = "Domen Kozar <domen@dev.si>";
+  domenkozar = "Domen Kozar <domen@dev.si>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";

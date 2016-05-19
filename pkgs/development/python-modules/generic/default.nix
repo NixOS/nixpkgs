@@ -164,7 +164,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
     platforms = python.meta.platforms;
   } // meta // {
     # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow iElectric ];
+    maintainers = (meta.maintainers or []) ++ [ chaoflow domenkozar ];
     # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
   };

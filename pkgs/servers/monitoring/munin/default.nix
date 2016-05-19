@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://munin-monitoring.org/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.iElectric maintainers.bjornfor ];
+    maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

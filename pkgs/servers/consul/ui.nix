@@ -1,4 +1,4 @@
-{ stdenv, goPackages, ruby, bundlerEnv }:
+{ stdenv, go16Packages, ruby, bundlerEnv, zip }:
 
 let
   # `sass` et al
@@ -11,11 +11,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "consul-ui-${goPackages.consul.rev}";
+  name = "consul-ui-${go16Packages.consul.rev}";
 
-  src = goPackages.consul.src;
+  src = go16Packages.consul.src;
 
-  buildInputs = [ ruby gems ];
+  buildInputs = [ ruby gems zip ];
 
   buildPhase = ''
     # Build ui static files
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   installPhase = ''
     # Install ui static files
     mkdir -p $out
-    mv dist/* $out
+    mv ../pkg/web_ui/* $out
   '';
 
   meta = with stdenv.lib; {

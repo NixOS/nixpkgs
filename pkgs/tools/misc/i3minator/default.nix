@@ -20,7 +20,7 @@ buildPythonApplication rec {
     '';
     homepage = https://github.com/carlesso/i3minator;
     license = stdenv.lib.licenses.wtfpl;
-    maintainers = with maintainers; [ iElectric ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = stdenv.lib.platforms.linux;
   };
 
