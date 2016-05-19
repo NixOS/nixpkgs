@@ -13686,6 +13686,8 @@ in
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
+  pcsxr = callPackage ../misc/emulators/pcsxr { };
+
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
   pencil = callPackage ../applications/graphics/pencil { };
