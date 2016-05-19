@@ -6,7 +6,7 @@
 import ./nodejs.nix (args // rec {
   version = "6.2.0";
   src = fetchurl {
-    url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.gz";
-    sha256 = "1fcldsnkk6px5fms405j9z2yv6mmscin5x7sma8bdavqgn283zgw";
+    url = "https://nodejs.org/download/release/v${version}/node-v${version}.tar.xz";
+    sha256 = "14p4ah9gsgifj25g2akp7kyqhnqvq726n74h4rfj7wnidxhgwcw6";
   };
 })
