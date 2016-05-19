@@ -86,7 +86,7 @@
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cransom = "Casey Ransom <cransom@hubns.net>";
   CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
-  cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
+  cstrahan = "Charles Strahan <charles@cstrahan.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
