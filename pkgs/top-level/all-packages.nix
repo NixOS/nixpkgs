@@ -1958,6 +1958,8 @@ in
 
   hping = callPackage ../tools/networking/hping { };
 
+  http-prompt = callPackage ../tools/networking/http-prompt { };
+
   httpie = callPackage ../tools/networking/httpie { };
 
   httping = callPackage ../tools/networking/httping {};
