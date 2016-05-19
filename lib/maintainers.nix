@@ -76,6 +76,7 @@
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
+  cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";

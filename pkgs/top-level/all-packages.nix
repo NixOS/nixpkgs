@@ -3535,6 +3535,10 @@ in
 
   tracebox = callPackage ../tools/networking/tracebox { };
 
+  tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
+
+  tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
+
   trash-cli = callPackage ../tools/misc/trash-cli { };
 
   trickle = callPackage ../tools/networking/trickle {};
