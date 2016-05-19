@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gnutar-${version}";
-  version = "1.28";
+  version = "1.29";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.bz2";
-    sha256 = "0qkm2k9w8z91hwj8rffpjj9v1vhpiriwz4cdj36k9vrgc3hbzr30";
+    url = "mirror://gnu/tar/tar-${version}.tar.xz";
+    sha256 = "097hx7sbzp8qirl4m930lw84kn0wmxhmq7v1qpra3mrg0b8cyba0";
   };
 
   patches = stdenv.lib.optional stdenv.isDarwin ./gnutar-1.28-darwin.patch;
