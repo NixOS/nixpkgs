@@ -267,6 +267,7 @@ rec {
       name = "yankring_190.zip";
       sha256 = "0nnxpsfjp2p9jvs3y5ynnd5s56snz9927zdp9bgmay2jgxfmp0si";
     };
+    sourceRoot = ".";
     buildInputs = [ unzip ];
     dependencies = [];
     meta = {
