@@ -1322,6 +1322,8 @@ in
 
   dmd = callPackage ../development/compilers/dmd { };
 
+  ldc = callPackage ../development/compilers/ldc { };
+
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
