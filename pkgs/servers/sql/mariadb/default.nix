@@ -2,6 +2,7 @@
 , openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
+, makeWrapper
 }:
 
 with stdenv.lib;
@@ -19,6 +20,7 @@ stdenv.mkDerivation rec {
     # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
     (if stdenv.is64bit then snappy else null)
     pcre libxml2 boost judy bison libevent cracklib
+    makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
     ++ stdenv.lib.optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
@@ -91,6 +93,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/bin/mysql_install_db \
       --replace basedir=\"\" basedir=\"$out\"
+
+    # Wrap mysqld with --basedir, but as last flag
+    wrapProgram $out/bin/mysqld 
+    sed -i "s,\(^exec.*$\),\1 --basedir=$out,g" $out/bin/mysqld
 
     # Remove superfluous files
     rm -r $out/mysql-test $out/sql-bench $out/data # Don't need testing data

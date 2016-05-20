@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, icu, libpng, jemalloc, libpulseaudio
+, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -38,7 +38,9 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       hunspell libevent libstartup_notification libvpx /* cairo */
       icu libpng jemalloc
       libpulseaudio # only headers are needed
-    ];
+    ]
+    ++ lib.optional enableGTK3 gtk3
+    ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst_plugins_base ];
 
   configureFlags =
     [ "--enable-application=browser"
@@ -120,7 +122,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   passthru = {
     inherit gtk nspr version;
     isFirefox3Like = true;
-    browserName = pname;
+    browserName = "firefox";
+    ffmpegSupport = lib.versionAtLeast version "46.0";
   };
 };
 

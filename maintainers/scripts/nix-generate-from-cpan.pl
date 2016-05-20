@@ -278,13 +278,13 @@ sub get_deps {
     foreach my $n ( $deps->required_modules ) {
         next if $n eq "perl";
 
-        # Hacky way to figure out if this module is part of Perl.
-        if ( $n !~ /^JSON/ && $n !~ /^YAML/ && $n !~ /^Module::Pluggable/  && $n !~ /^if$/ ) {
-            eval "use $n;";
-            if ( !$@ ) {
-                DEBUG("skipping Perl-builtin module $n");
-                next;
-            }
+        # Figure out whether the module is a core module by attempting
+        # to `use` the module in a pure Perl interpreter and checking
+        # whether it succeeded. Note, $^X is a magic variable holding
+        # the path to the running Perl interpreter.
+        if ( system("env -i $^X -M$n -e1 >/dev/null 2>&1") == 0 ) {
+            DEBUG("skipping Perl-builtin module $n");
+            next;
         }
 
         my $pkg = module_to_pkg( $cb, $n );

@@ -76,6 +76,7 @@
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   cleverca22 = "Michael Bishop <cleverca22@gmail.com>";
+  cmcdragonkai = "Roger Qiu <roger.qiu@matrix.ai>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   codsl = "codsl <codsl@riseup.net>";
   codyopel = "Cody Opel <codyopel@gmail.com>";
@@ -85,7 +86,7 @@
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cransom = "Casey Ransom <cransom@hubns.net>";
   CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
-  cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
+  cstrahan = "Charles Strahan <charles@cstrahan.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
