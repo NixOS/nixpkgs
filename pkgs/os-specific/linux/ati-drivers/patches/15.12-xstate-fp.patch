@@ -1,0 +1,26 @@
+From: Krzysztof Kolasa <kkolasa@winsoft.pl>
+Date: Thu, 26 Nov 2015 14:28:46 +0100
+Subject: [PATCH] Patch for kernel 4.4.0-rc2
+
+constant change of name XSTATE_XP to name XFEATURE_MASK_FP
+---
+ firegl_public.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/common/lib/modules/fglrx/build_mod/firegl_public.c b/common/lib/modules/fglrx/build_mod/firegl_public.c
+index 3626c7b..f071d42 100644
+--- a/common/lib/modules/fglrx/build_mod/firegl_public.c
++++ b/common/lib/modules/fglrx/build_mod//firegl_public.c
+@@ -6463,7 +6463,11 @@ static int KCL_fpu_save_init(struct task_struct *tsk)
+       if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+ #else
+ 	  copy_xregs_to_kernel(&fpu->state.xsave);
+-      if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,4,0)
++      if (!(fpu->state.xsave.header.xfeatures & XFEATURE_MASK_FP))
++#else
++      if (!(fpu->state.xsave.header.xfeatures & XSTATE_FP))
++#endif
+ #endif
+          return 1;
+    } else if (static_cpu_has(X86_FEATURE_FXSR)) {
