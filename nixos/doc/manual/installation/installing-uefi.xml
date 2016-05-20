@@ -5,7 +5,7 @@
          xml:id="sec-uefi-installation">
 
 <title>UEFI Installation</title>
-    
+
 <para>NixOS can also be installed on UEFI systems.  The procedure
 is by and large the same as a BIOS installation, with the following
 changes:

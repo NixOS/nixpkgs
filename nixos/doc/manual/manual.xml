@@ -3,7 +3,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       version="5.0"
       xml:id="book-nixos-manual">
-  
+
   <info>
     <title>NixOS Manual</title>
     <subtitle>Version <xi:include href="version" parse="text" /></subtitle>

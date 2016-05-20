@@ -66,9 +66,9 @@ messages from the service.
 <para>Units can be stopped, started or restarted:
 
 <screen>
-$ systemctl stop postgresql.service
-$ systemctl start postgresql.service
-$ systemctl restart postgresql.service
+# systemctl stop postgresql.service
+# systemctl start postgresql.service
+# systemctl restart postgresql.service
 </screen>
 
 These operations are synchronous: they wait until the service has
