@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/ldc-developers/ldc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1jbvl4iv7r50lxrdiqpdgp5b0kv3igy9sz12cyr3nkjs0fkr54sx";
+    sha256 = "12xbzc9b0hhgda8n0125yn4g545qpazhfpv8hjr26pc8qjg9rlq4";
     fetchSubmodules = true;
   };
 
