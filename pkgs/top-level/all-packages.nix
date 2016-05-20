@@ -12881,6 +12881,8 @@ in
 
   hackrf = callPackage ../applications/misc/hackrf { };
 
+  hakuneko = callPackage ../tools/misc/hakuneko { };
+
   hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
     inherit (pythonPackages) pyxdg pygtk dbus sqlite3;
     inherit (gnome) gnome_python;
