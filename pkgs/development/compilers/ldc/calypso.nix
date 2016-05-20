@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "LDC fork to experiment direct interfacing with C++.";
+    description = "Fork of LDC to experiment direct interfacing with C++";
     hompage = https://github.com/Syniurge/Calypso;
     priority = 10;
     platforms = stdenv.lib.platforms.unix;
