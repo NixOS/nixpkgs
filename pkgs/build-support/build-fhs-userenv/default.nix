@@ -32,7 +32,7 @@ in runCommand name {
     env = runCommand "${name}-shell-env" {
       shellHook = ''
         export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"
-        exec ${chroot-user}/bin/chroot-user ${env} bash -l ${init "bash"} "$(pwd)"
+        exec ${chroot-user}/bin/chroot-user ${env} bash ${init "bash"} "$(pwd)"
       '';
     } ''
       echo >&2 ""
