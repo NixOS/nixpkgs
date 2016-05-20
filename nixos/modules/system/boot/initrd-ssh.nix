@@ -85,6 +85,10 @@ in
   };
 
   config = mkIf (config.boot.initrd.network.enable && cfg.enable) {
+    assertions = [ {
+      assertion = cfg.hostRSAKey != null || cfg.hostDSSKey != null || cfg.hostECDSAKey != null;
+      message = "You should specify at least one host key for initrd SSH";
+    } ];
 
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.dropbear}/bin/dropbear
