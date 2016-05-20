@@ -18,6 +18,8 @@ in
 
   config = mkIf enabled {
 
+    nixpkgs.config.packageOverrides = self: with self; { xorg = xorgFglrxCompat; };
+
     services.xserver.drivers = singleton
       { name = "fglrx"; modules = [ ati_x11 ]; libPath = [ "${ati_x11}/lib" ]; };
 
