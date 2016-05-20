@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "The LLVM-based D compiler.";
+    description = "The LLVM-based D compiler";
     hompage = https://wiki.dlang.org/LDC;
     downloadPage = https://github.com/ldc-developers/ldc;
     platforms = stdenv.lib.platforms.unix;
