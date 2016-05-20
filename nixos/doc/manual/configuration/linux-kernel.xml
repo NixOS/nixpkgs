@@ -66,4 +66,25 @@ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
 sets the kernel’s TCP keepalive time to 120 seconds.  To see the
 available parameters, run <command>sysctl -a</command>.</para>
 
+<section>
+  <title>Developing kernel modules</title>
+
+  <para>When developing kernel modules it's often convenient to run
+  edit-compile-run loop as quickly as possible.
+
+  See below snippet as an example of developing <literal>mellanix</literal>
+  drivers.
+  </para>
+
+  <screen><![CDATA[
+$ nix-build '<nixpkgs>' -A linuxPackages.kernel.dev
+$ nix-shell '<nixpkgs>' -A linuxPackages.kernel
+$ unpackPhase
+$ cd linux-*
+$ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
+$ sudo insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
+]]></screen>
+
+</section>
+
 </chapter>
