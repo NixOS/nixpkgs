@@ -18,6 +18,15 @@ stdenv.mkDerivation {
     cp gamedesc.txt LICENCE README "$out/share/doc/sgtpuzzles"
     cp LICENCE "$out/share/doc/sgtpuzzles/LICENSE"
   '';
+  # SGT Puzzles use generic names like net, map, etc.
+  # Create symlinks with sgt-puzzle- prefix for possibility of
+  # disambiguation
+  postInstall = ''
+    (
+      cd "$out"/bin ;
+      for i in *; do ln -s "$i" "sgt-puzzle-$i"; done
+    )
+  '';
   preConfigure = ''
     perl mkfiles.pl
     export NIX_LDFLAGS="$NIX_LDFLAGS -lX11"
