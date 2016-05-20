@@ -11158,6 +11158,8 @@ in
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
+  sass = callPackage ../development/tools/sass { };
+
   sassc = callPackage ../development/tools/sassc { };
 
   scanmem = callPackage ../tools/misc/scanmem { };
