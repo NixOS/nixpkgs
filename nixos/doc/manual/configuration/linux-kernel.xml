@@ -72,7 +72,7 @@ available parameters, run <command>sysctl -a</command>.</para>
   <para>When developing kernel modules it's often convenient to run
   edit-compile-run loop as quickly as possible.
 
-  See below snippet as an example of developing <literal>mellanix</literal>
+  See below snippet as an example of developing <literal>mellanox</literal>
   drivers.
   </para>
 
