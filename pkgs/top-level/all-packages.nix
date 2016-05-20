@@ -455,7 +455,9 @@ in
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
 
-  attic = callPackage ../tools/backup/attic { };
+  attic = callPackage ../tools/backup/attic {
+    python3Packages = python34Packages;
+  };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
