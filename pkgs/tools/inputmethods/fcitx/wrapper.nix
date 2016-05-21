@@ -1,9 +1,9 @@
-{ stdenv, symlinkJoin, fcitx, fcitx-configtool, makeWrapper, plugins, kde5 }:
+{ stdenv, symlinkJoin, fcitx, fcitx-configtool, makeWrapper, plugins, qt55 }:
 
 symlinkJoin {
   name = "fcitx-with-plugins-${fcitx.version}";
 
-  paths = [ fcitx fcitx-configtool kde5.fcitx-qt5 ] ++ plugins;
+  paths = [ fcitx fcitx-configtool qt55.fcitx-qt5 ] ++ plugins;
 
   buildInputs = [ makeWrapper ];
 

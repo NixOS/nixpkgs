@@ -8760,6 +8760,8 @@ in
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
+    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
+
     grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
@@ -15727,8 +15729,6 @@ in
     colord-kde = callPackage ../tools/misc/colord-kde/0.5.nix {};
 
     dfilemanager = callPackage ../applications/misc/dfilemanager { };
-
-    fcitx-qt5 = callPackage ../tools/inputmethods/fcitx/fcitx-qt5.nix { };
 
     k9copy = callPackage ../applications/video/k9copy {};
 
