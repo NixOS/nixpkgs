@@ -114,12 +114,10 @@ in {
       # Ugly hack for using the correct gnome3 packageSet
       basePackages = mkOption {
         type = types.attrsOf types.package;
-        default = { inherit modemmanager wpa_supplicant
+        default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
                             networkmanager_openconnect
-                            networkmanager_pptp networkmanager_l2tp;
-                    networkmanager = networkmanager.out;
-                  };
+                            networkmanager_pptp networkmanager_l2tp; };
         internal = true;
       };
 
