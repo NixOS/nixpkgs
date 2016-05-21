@@ -61,9 +61,6 @@ self:
       connection = markBroken super.connection;
 
       # upstream issue: missing file header
-      crux = markBroken super.crux;
-
-      # upstream issue: missing file header
       dictionary = markBroken super.dictionary;
 
       easy-kill-extras = super.easy-kill-extras.override {
