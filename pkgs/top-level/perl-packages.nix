@@ -9115,14 +9115,18 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.dbus XMLTwig ];
   };
 
-  NetDNS = buildPerlPackage {
-    name = "Net-DNS-0.74";
+  NetDNS = buildPerlPackage rec {
+    name = "Net-DNS-1.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NL/NLNETLABS/Net-DNS-0.74.tar.gz;
-      sha256 = "0clwl4nqzg23d6l9d9gc8ijl1lbghhfrbavjlvhd1wll5r8ayr7g";
+      url = "mirror://cpan/authors/id/N/NL/NLNETLABS/${name}.tar.gz";
+      sha256 = "900198014110af96ebac34af019612dd2ddd6af30178600028c3c940d089d5c8";
     };
-    propagatedBuildInputs = [NetIP DigestHMAC];
-    doCheck = false;
+    propagatedBuildInputs = [ DigestHMAC ];
+    makeMakerFlags = "--noonline-tests";
+    meta = {
+      description = "Perl Interface to the Domain Name System";
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   NetDomainTLD = buildPerlPackage rec {
