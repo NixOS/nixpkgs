@@ -2101,7 +2101,9 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
-  john = callPackage ../tools/security/john { };
+  john = callPackage ../tools/security/john {
+    gcc = gcc49; # doesn't build with gcc5
+  };
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
