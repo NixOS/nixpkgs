@@ -12750,11 +12750,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TextCSV_XS = buildPerlPackage {
-    name = "Text-CSV_XS-1.19.tgz";
+  TextCSV_XS = buildPerlPackage rec {
+    name = "Text-CSV_XS-1.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HM/HMBRAND/Text-CSV_XS-1.19.tgz;
-      sha256 = "bcde887f613c6a50b0ce8f714cd2463570f5809f26581615690cfb424d2a7c16";
+      url = "mirror://cpan/authors/id/H/HM/HMBRAND/${name}.tgz";
+      sha256 = "5714e1c275e7715aee44f820f8ca26c976fbb563668de7eba42a4419a05a4b5a";
     };
     meta = {
       homepage = https://metacpan.org/pod/Text::CSV_XS;
