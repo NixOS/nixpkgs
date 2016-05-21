@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://anongit.freedesktop.org/evtest";
     rev = "refs/tags/evtest-1.33";
-    sha256 = "168gdhzj11f4nk94a6z696sm8v1njzwww69bn6wr97l17897913g";
+    sha256 = "02znrf3y1gwrcm2l8w3063zi2vp05vschhv4cxd4j3ygndvcqxiz";
   };
 
   meta = with stdenv.lib; {
