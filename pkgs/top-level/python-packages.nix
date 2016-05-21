@@ -8433,7 +8433,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
+      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
     ];
 
     nativeBuildInputs = [ pkgs.intltool ];
