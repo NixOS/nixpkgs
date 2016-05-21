@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.1.5";
+  version = "3.1.6";
   src = fetchurl {
     url = "https://downloads.puppetlabs.com/facter/${name}.tar.gz";
-    sha256 = "0k2k92y42zb6vf542zwkhvg15kv32yb4zvw6nlcqlgmyg19c5qmv";
+    sha256 = "1kv4k9zqpsiw362kk1rw1a4sixd0pmnh57ghd4k4pffr2dkmdfsv";
   };
 
   libyamlcpp_ = libyamlcpp.override { makePIC = true; };
