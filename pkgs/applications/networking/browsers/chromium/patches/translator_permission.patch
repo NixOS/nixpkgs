@@ -1,0 +1,20 @@
+--- a/ppapi/native_client/src/untrusted/pnacl_support_extension/pnacl_component_crx_gen.py	2016-06-12 13:12:11.263974789 +0200
++++ b/ppapi/native_client/src/untrusted/pnacl_support_extension/pnacl_component_crx_gen.py	2016-06-12 13:12:27.216043175 +0200
+@@ -229,7 +229,7 @@
+       assert (f == os.path.basename(f))
+       full_name = J(root, f)
+       target_name = UseWhitelistedChars(f, arch)
+-      shutil.copy(full_name, J(dest_dir, target_name))
++      shutil.copyfile(full_name, J(dest_dir, target_name))
+ 
+ 
+ def BuildArchForInstaller(version_quad, arch, lib_overrides):
+@@ -253,7 +253,7 @@
+   if arch in lib_overrides:
+     for (override_lib, desired_name) in lib_overrides[arch]:
+       target_name = UseWhitelistedChars(desired_name, arch)
+-      shutil.copy(override_lib, J(target_dir, target_name))
++      shutil.copyfile(override_lib, J(target_dir, target_name))
+ 
+ 
+ def BuildInstallerStyle(version_quad, lib_overrides, arches):

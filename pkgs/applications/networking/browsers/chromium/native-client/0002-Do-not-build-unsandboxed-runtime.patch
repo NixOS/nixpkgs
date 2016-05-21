@@ -1,0 +1,49 @@
+From 8ad16768970867de7d1a0080844f7afbb6967c8d Mon Sep 17 00:00:00 2001
+From: Sivert Berg <code@trev.is>
+Date: Tue, 24 May 2016 16:41:16 +0200
+Subject: [PATCH 2/4] Do not build unsandboxed runtime
+
+---
+ toolchain_build/toolchain_build_pnacl.py | 19 -------------------
+ 1 file changed, 19 deletions(-)
+
+diff --git a/toolchain_build/toolchain_build_pnacl.py b/toolchain_build/toolchain_build_pnacl.py
+index 89f7567..c4acd5d 100755
+--- a/toolchain_build/toolchain_build_pnacl.py
++++ b/toolchain_build/toolchain_build_pnacl.py
+@@ -1270,17 +1270,6 @@ def GetUploadPackageTargets():
+     if os_name != 'win':
+       host_packages[os_name].append('libcxx_%s' % legal_triple)
+ 
+-  # Unsandboxed target IRT libraries
+-  for os_name in ['linux', 'mac']:
+-    legal_triple = pynacl.gsd_storage.LegalizeName('x86-32-' + os_name)
+-    host_packages[os_name].append('unsandboxed_runtime_%s' % legal_triple)
+-  for os_name in ['linux']:
+-    legal_triple = pynacl.gsd_storage.LegalizeName('arm-' + os_name)
+-    host_packages[os_name].append('unsandboxed_runtime_%s' % legal_triple)
+-  for os_name in ['linux']:
+-    legal_triple = pynacl.gsd_storage.LegalizeName('x86-64-' + os_name)
+-    host_packages[os_name].append('unsandboxed_runtime_%s' % legal_triple)
+-
+   for os_name, os_packages in host_packages.iteritems():
+     package_target = '%s_x86' % pynacl.platform.GetOS(os_name)
+     package_targets[package_target] = {}
+@@ -1422,14 +1411,6 @@ def main():
+                     ['le32'] + DIRECT_TO_NACL_ARCHES))
+     packages.update(pnacl_targetlibs.SDKLibs('le32', is_canonical,
+         ['pnacl_native_clang_driver=1'] if args.native_clang_driver else []))
+-    unsandboxed_runtime_canonical = is_canonical or pynacl.platform.IsMac()
+-    packages.update(pnacl_targetlibs.UnsandboxedRuntime(
+-        'x86-32-%s' % pynacl.platform.GetOS(), unsandboxed_runtime_canonical))
+-    if pynacl.platform.IsLinux():
+-      packages.update(pnacl_targetlibs.UnsandboxedRuntime(
+-          'arm-%s' % pynacl.platform.GetOS(), unsandboxed_runtime_canonical))
+-      packages.update(pnacl_targetlibs.UnsandboxedRuntime(
+-          'x86-64-%s' % pynacl.platform.GetOS(), unsandboxed_runtime_canonical))
+ 
+   if args.build_sbtc and not args.pnacl_in_pnacl:
+     packages.update(pnacl_sandboxed_translator.SandboxedTranslators(
+-- 
+2.4.0
+

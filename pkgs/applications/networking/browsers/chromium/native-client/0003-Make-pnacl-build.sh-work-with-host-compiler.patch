@@ -1,0 +1,119 @@
+From 5990e31bd232ae7da9dbe2bb8dc0357907362105 Mon Sep 17 00:00:00 2001
+From: Sivert Berg <code@trev.is>
+Date: Tue, 24 May 2016 16:45:17 +0200
+Subject: [PATCH 3/4] Make pnacl/build.sh work with host compiler
+
+---
+ pnacl/build.sh | 29 ++++++++++++-----------------
+ 1 file changed, 12 insertions(+), 17 deletions(-)
+
+diff --git a/pnacl/build.sh b/pnacl/build.sh
+index fecf1f8..634b0a8 100755
+--- a/pnacl/build.sh
++++ b/pnacl/build.sh
+@@ -111,12 +111,12 @@ readonly PNACL_CXXFILT="${BINUTILS_INSTALL_DIR}/bin/${REAL_CROSS_TARGET}-c++filt
+ readonly ILLEGAL_TOOL="${INSTALL_BIN}"/pnacl-illegal
+ 
+ # Tools for building the LLVM BuildTools in the translator build
+-readonly HOST_CLANG_PATH="${GCLIENT_ROOT}/third_party/llvm-build/Release+Asserts/bin"
+-readonly HOST_CLANG="${HOST_CLANG_PATH}/clang"
++readonly HOST_CLANG_PATH="${NIX_CC}/bin"
++readonly HOST_CLANG="${HOST_CLANG_PATH}/gcc"
+ # Use toolchain_build's libcxx install directory instead of ${INSTALL_ROOT}/lib
+ # because the latter also has the LLVM shared libs in it, and given how stupid
+ # the LLVM BuildTools build is, who knows what would happen if it found those.
+-readonly HOST_LIBCXX="${NACL_ROOT}/toolchain_build/out/libcxx_x86_64_linux_install"
++readonly HOST_LIBCXX="${NACL_ROOT}/toolchain_build/out/libcxx_x86_64_install"
+ 
+ # For a production (release) build, we want the sandboxed
+ # translator to only contain the code needed to handle
+@@ -253,7 +253,7 @@ llvm-sb-setup() {
+     NM="${PNACL_NM}" \
+     RANLIB="${PNACL_RANLIB}" \
+     BUILD_CC="${HOST_CLANG}" \
+-    BUILD_CXX="${HOST_CLANG}++")
++    BUILD_CXX="${HOST_CLANG_PATH}/g++")
+ }
+ 
+ #+-------------------------------------------------------------------------
+@@ -335,8 +335,6 @@ llvm-sb-configure() {
+   # Similar with getrlimit/setrlimit where struct rlimit isn't defined.
+   RunWithLog \
+       ${LLVM_SB_LOG_PREFIX}.configure \
+-      env -i \
+-      PATH="/usr/bin:/bin" \
+       ${srcdir}/configure \
+         "${LLVM_SB_CONFIGURE_ENV[@]}" \
+         --prefix=${installdir} \
+@@ -350,7 +348,7 @@ llvm-sb-configure() {
+         --enable-shared=no \
+         --disable-jit \
+         --enable-optimized \
+-        --enable-libcpp \
++        --disable-compiler-version-checks \
+         --target=${CROSS_TARGET_ARM} \
+         llvm_cv_link_use_export_dynamic=no \
+         ac_cv_func_getrusage=no \
+@@ -374,7 +372,7 @@ llvm-sb-make() {
+   # The LLVM sandboxed build uses the normally-disallowed external
+   # function __nacl_get_arch().  Allow that for now.
+   RunWithLog ${LLVM_SB_LOG_PREFIX}.make \
+-      env -i PATH="/usr/bin:/bin:${HOST_CLANG_PATH}" \
++      env \
+       LDFLAGS="-Wl,-plugin-opt=no-finalize -Wl,-plugin-opt=no-abi-verify" \
+       LD_LIBRARY_PATH="${HOST_LIBCXX}/lib" \
+       ONLY_TOOLS="${tools_to_build}" \
+@@ -383,9 +381,10 @@ llvm-sb-make() {
+       NO_DEAD_STRIP=1 \
+       VERBOSE=1 \
+       SUBZERO_SRC_ROOT="${TC_SRC_SUBZERO}" \
++      CXXFLAGS="-I${INSTALL_ROOT}/le32-nacl/include/c++/v1" \
+       BUILD_CC="${HOST_CLANG}" \
+-      BUILD_CXX="${HOST_CLANG}++" \
+-      BUILD_CXXFLAGS="-stdlib=libc++ -I${HOST_LIBCXX}/include/c++/v1" \
++      BUILD_CXX="${HOST_CLANG_PATH}/g++" \
++      BUILD_CXXFLAGS="" \
+       BUILD_LDFLAGS="-L${HOST_LIBCXX}/lib" \
+       ${export_dyn_env} \
+       make ${MAKE_OPTS} tools-only
+@@ -605,8 +604,7 @@ binutils-gold-sb-configure() {
+   StepBanner "GOLD-NATIVE-SB" "Dir [$(pwd)]"
+   local log_prefix="binutils-gold.sb.${arch}"
+   RunWithLog "${log_prefix}".configure \
+-    env -i \
+-    PATH="/usr/bin:/bin" \
++    env \
+     "${configure_env[@]}" \
+     ${srcdir}/libiberty/configure --prefix="${installbin}" \
+     --host=${target} \
+@@ -623,10 +621,9 @@ binutils-gold-sb-configure() {
+   # Disable readv. We have a stub for it, but not the accompanying headers
+   # in newlib, like sys/uio.h to actually compile with it.
+   RunWithLog "${log_prefix}".configure \
+-    env -i \
+-    PATH="/usr/bin:/bin" \
++    env \
+     "${configure_env[@]}" \
+-    CXXFLAGS="" \
++    CXXFLAGS="-I${INSTALL_ROOT}/le32-nacl/include/c++/v1" \
+     CFLAGS="" \
+     LDFLAGS="-Wl,-plugin-opt=no-finalize -Wl,-plugin-opt=no-abi-verify" \
+     ac_cv_search_zlibVersion=no \
+@@ -671,14 +668,12 @@ binutils-gold-sb-make() {
+   spushd "${objdir}/libiberty"
+ 
+   RunWithLog "binutils-gold.liberty.sb.${arch}".make \
+-      env -i PATH="/usr/bin:/bin" \
+       make ${MAKE_OPTS}
+   spopd
+ 
+   StepBanner "GOLD-NATIVE-SB" "Make (gold) ${arch}"
+   spushd "${objdir}/gold"
+   RunWithLog "binutils-gold.sb.${arch}".make \
+-      env -i PATH="/usr/bin:/bin" \
+       make ${MAKE_OPTS} ld-new
+   spopd
+ 
+-- 
+2.4.0
+

@@ -1,0 +1,10 @@
+--- old/native_client/build/untrusted.gypi	2016-07-30 15:46:50.491990752 +0200
++++ new/native_client/build/untrusted.gypi	2016-07-30 15:46:57.740069142 +0200
+@@ -1538,7 +1538,6 @@
+         '-lc',
+         '-lnacl',
+         '-lgcc',
+-        '-lgcc_eh',
+         '-Wl,--end-group'
+       ],
+     },

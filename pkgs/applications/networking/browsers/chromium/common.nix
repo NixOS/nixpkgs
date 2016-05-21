@@ -31,6 +31,7 @@
 , hiDPISupport ? false
 
 , upstream-info
+, nacl-toolchain
 }:
 
 buildFun:
@@ -128,6 +129,8 @@ let
 
     patches = [
       ./patches/widevine.patch
+      ./patches/translator_permission.patch
+      ./patches/remove_libgcc_eh.patch
       (if versionOlder version "52.0.0.0"
        then ./patches/nix_plugin_paths_50.patch
        else ./patches/nix_plugin_paths_52.patch)
@@ -151,6 +154,8 @@ let
     '' + optionalString (versionAtLeast version "52.0.0.0") ''
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         third_party/pdfium/xfa/fxbarcode/utils.h
+    '' + optionalString enableNaCl ''
+      ln -s ${nacl-toolchain} native_client/toolchain
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -192,6 +197,8 @@ let
     } // optionalAttrs (stdenv.system == "i686-linux") {
       target_arch = "ia32";
       python_arch = "ia32";
+    } // optionalAttrs enableNaCl {
+      disable_glibc = true;
     } // (extraAttrs.gypFlags or {}));
 
     configurePhase = ''
