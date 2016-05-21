@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2015.12.29";
+  version = "2016.05.21";
 
   srcs = [
     (fetchFromGitHub {
       owner = "cliffordwolf";
       repo = "yosys";
-      rev = "1d62f8710f04fec405ef79b9e9a4a031afcf7d42";
-      sha256 = "0q1dk9in3gmrihb58pjckncx56lj7y4b6y34jgb68f0fh91fdvfx";
+      rev = "8e9e793126a2772eed4b041bc60415943c71d5ee";
+      sha256 = "1s0x7n7qh2qbfc0d7p4q10fvkr61jdqgyqzijr422rabh9zl4val";
       name = "yosys";
     })
     (fetchFromBitbucket {
       owner = "alanmi";
       repo = "abc";
-      rev = "c3698e053a7a";
-      sha256 = "05p0fvbr7xvb6w3d7j2r6gynr3ljb6r5q6jvn2zs3ysn2b003qwd";
+      rev = "d9559ab";
+      sha256 = "08far669khb65kfpqvjqmqln473j949ak07xibfdjdmiikcy533i";
       name = "abc";
     })
   ];
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
       Yosys is a framework for RTL synthesis tools. It currently has
       extensive Verilog-2005 support and provides a basic set of
       synthesis algorithms for various application domains.
-
       Yosys can be adapted to perform any synthesis job by combining
       the existing passes (algorithms) using synthesis scripts and
       adding additional passes as needed by extending the yosys C++
