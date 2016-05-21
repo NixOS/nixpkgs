@@ -2,9 +2,9 @@
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
 , glib, gnome, gtk, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, pango
-, libudev }:
+, libudev, libXScrnSaver }:
 
-let version = "0.0.3"; in
+let version = "0.0.8"; in
 
 stdenv.mkDerivation {
 
@@ -12,14 +12,14 @@ stdenv.mkDerivation {
 
     src = fetchurl {
         url = "https://cdn-canary.discordapp.com/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        sha256 = "1k1mnfkcx7183qbdc4qx1anngddqim969cribg9gzc7mixvj17ca";
+        sha256 = "1g48jxiswpfvbgjs4dyywmzj9kncvrgpajhixk3acizdmfmsyqkk";
     };
 
     libPath = stdenv.lib.makeLibraryPath [
         stdenv.cc.cc alsaLib atk cairo cups dbus expat fontconfig freetype
         gdk_pixbuf glib gnome.GConf gtk libnotify libX11 libXcomposite
         libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss pango libudev.out
+        libXtst nspr nss pango libudev.out libXScrnSaver
      ];
 
     installPhase = ''
