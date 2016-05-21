@@ -279,7 +279,7 @@ fileSystems."/example" = {
 
   <listitem>
     <para><literal>services.xserver.vaapiDrivers</literal> has been removed. Use
-    <literal>services.hardware.opengl.extraPackages{,32}</literal> instead. You can
+    <literal>hardware.opengl.extraPackages{,32}</literal> instead. You can
     also specify VDPAU drivers there.</para>
   </listitem>
 
