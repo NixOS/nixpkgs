@@ -9107,12 +9107,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetDBus = buildPerlPackage rec {
-    name = "Net-DBus-1.0.0";
+    name = "Net-DBus-1.1.0";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
-      sha256 = "03srw98nn7r4k6fmnr5bhwsxbhgrsmzdja98jl8b8a72iayg7l5z";
+      sha256 = "8391696db9e96c374b72984c0bad9c7d1c9f3b4efe68f9ddf429a77548e0e269";
     };
+    buildInputs = [ TestPod TestPodCoverage ];
     propagatedBuildInputs = [ pkgs.pkgconfig pkgs.dbus XMLTwig ];
+    meta = {
+      homepage = http://www.freedesktop.org/wiki/Software/dbus;
+      description = "Extension for the DBus bindings";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   NetDNS = buildPerlPackage rec {
