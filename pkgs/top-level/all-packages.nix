@@ -12159,7 +12159,7 @@ in
 
   docker = callPackage ../applications/virtualization/docker {
     btrfs-progs = btrfs-progs_4_4_1;
-    go = go_1_4;
+    md2man = goPackages.go-md2man;
   };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
