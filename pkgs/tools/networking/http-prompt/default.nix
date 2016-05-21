@@ -1,17 +1,19 @@
-{ pkgs, stdenv, fetchurl, buildPythonApplication, pythonPackages }:
+{ stdenv, fetchFromGitHub, pythonPackages, httpie }:
 
-buildPythonApplication rec {
-  version = "0.1.1";
+pythonPackages.buildPythonApplication rec {
+  version = "0.2.0";
   name = "http-prompt";
 
-  src = fetchurl {
-    url = "https://github.com/eliangcs/http-prompt/archive/v${version}.tar.gz";
-    sha256 = "1kzrg357vplfz5hk47inzfpqckf77jzbd2qlqakil8x5n7gz19mm";
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    repo = "http-prompt";
+    owner = "eliangcs";
+    sha256 = "0hgw3kx9rfdg394darms3vqcjm6xw6qrm8gnz54nahmyxnhrxnpp";
   };
 
   propagatedBuildInputs = with pythonPackages; [
     click
-    pkgs.httpie
+    httpie
     parsimonious
     prompt_toolkit
     pygments
@@ -19,7 +21,7 @@ buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    description = "an interactive command-line HTTP client featuring autocomplete and syntax highlighting";
+    description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = "https://github.com/eliangcs/http-prompt";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
