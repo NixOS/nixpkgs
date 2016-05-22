@@ -1,29 +1,31 @@
-{ stdenv, fetchFromGitHub, gtk }:
+{ stdenv, fetchFromGitHub, autoreconfHook, gtk_engines }:
 
 stdenv.mkDerivation rec {
-  version = "6a5f14cfe697b0a829456a1fd560acdcddc6043f";
+  version = "2016-05-18";
   name = "paper-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     owner = "snwh";
     repo = "paper-gtk-theme";
-    sha256 = "0kyn3a6sq0z22vds6szl630jv20pjskjbdg0wc8abxzwg0vwxc5m";
-    rev = version;
+    rev = "5113d58dc64de70fcc75ad2d6d05c8c8dae2de7f";
+    sha256 = "1j9l50iyvadpqsq5v14zgml24jgraajr5kl9ji0ar62nlak2bi8s";
   };
 
-  dontBuild = true;
+  nativeBuildInputs = [ autoreconfHook ];
+
+  buildInputs = [ gtk_engines ];
+
   installPhase = ''
-    mkdir -p $out/share/themes/Paper/
-    cp -r ./Paper/ $out/share/themes/
+    make install DESTDIR="$out"
   '';
 
   preferLocalBuild = true;
 
   meta = with stdenv.lib; {
     description = "A modern desktop theme suite featuring a mostly flat with a minimal use of shadows for depth";
-    homepage = "http://snwh.org/paper/";
+    homepage = "http://snwh.org/paper";
     license = licenses.gpl3;
-    maintainers = [ maintainers.simonvandel ];
+    maintainers = [ maintainers.simonvandel maintainers.romildo ];
     platforms = platforms.linux;
   };
 }
