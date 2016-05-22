@@ -19,7 +19,7 @@ kernel.</para>
 
 <para>The default Linux kernel configuration should be fine for most users. You can see the configuration of your current kernel with the following command:
 <programlisting>
-cat /proc/config.gz | gunzip
+zcat /proc/config.gz
 </programlisting>
 If you want to change the kernel configuration, you can use the
 <option>packageOverrides</option> feature (see <xref
