@@ -797,6 +797,8 @@ in
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
+  fzy = callPackage ../tools/misc/fzy { };
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
