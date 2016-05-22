@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "17jan0g5jzp8mrpklyacwdgnnw016m1c5pc4az5im6qhc260yirs";
   };
 
-  outputs = [ "dev" "out" ];
-
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
     substituteInPlace configure --replace /usr/bin/file ${file}/bin/file

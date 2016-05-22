@@ -1,13 +1,13 @@
 {stdenv, fetchurl, libpcap, pcre, libdnet, daq, zlib, flex, bison, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  version = "2.9.7.2";
+  version = "2.9.8.2";
   name = "snort-${version}";
   
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "mirror://sourceforge/snort/${name}.tar.gz";
-    sha256 = "1gmlrh9ygpd5h6nnrr4090wk5n2yq2yrvwi7q6xbm6lxj4rcamyv";
+    url = "https://snort.org/downloads/archive/snort/${name}.tar.gz";
+    sha256 = "0cwk02jan0vw6r3jl3vrf31vfp7i4c1r4yhb42h4gyhd6lnh2xa0";
   };
   
   buildInputs = [ makeWrapper libpcap pcre libdnet daq zlib flex bison ];
