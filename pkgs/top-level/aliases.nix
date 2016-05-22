@@ -75,6 +75,7 @@ doNotDisplayTwice rec {
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
+  QmidiNet = qmidinet;  # added 2016-05-22
   quake3game = ioquake3; # added 2016-01-14
   quassel_kf5 = kde5.quassel; # added 2015-09-30
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30

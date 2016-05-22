@@ -13817,7 +13817,7 @@ in
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
-  QmidiNet = callPackage ../applications/audio/QmidiNet { };
+  qmidinet = callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
