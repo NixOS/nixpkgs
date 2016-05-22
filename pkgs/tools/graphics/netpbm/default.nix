@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff}/include"
+        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include"
   '';
 
   preBuild = ''

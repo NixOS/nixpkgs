@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE \
-      -I$(echo "${libnl}"/include/libnl*/) \
+      -I$(echo "${libnl.dev}"/include/libnl*/) \
       -I${pcsclite}/include/PCSC/"
   '';
 

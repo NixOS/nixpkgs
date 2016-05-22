@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-libtool"
     "--with-libxml2=${libxml2}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--without-atf"
     "--without-dlopen"
     "--without-docbook-xsl"

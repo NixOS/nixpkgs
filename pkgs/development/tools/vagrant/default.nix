@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # curl: curl, curl-config
     rm opt/vagrant/embedded/bin/{curl,curl-config}
     ln -s ${curl.bin}/bin/curl opt/vagrant/embedded/bin
-    ln -s ${curl}/bin/curl-config opt/vagrant/embedded/bin
+    ln -s ${curl.dev}/bin/curl-config opt/vagrant/embedded/bin
 
     # libarchive: bsdtar, bsdcpio
     rm opt/vagrant/embedded/bin/{bsdtar,bsdcpio}

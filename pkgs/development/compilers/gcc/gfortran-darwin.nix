@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
     --enable-checking=release
     --enable-languages=fortran
     --with-cloog=${cloog}
-    --with-gmp=${gmp}
+    --with-gmp=${gmp.dev}
     --with-isl=${isl_0_14}
     --with-mpc=${libmpc}
-    --with-mpfr=${mpfr}
+    --with-mpfr=${mpfr.dev}
     --with-native-system-header-dir=${Libsystem}/include
     --with-system-zlib
   '';

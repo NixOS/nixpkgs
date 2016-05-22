@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     ./boost_regex.patch # modified not to use "-mt" suffix
   ];
 
-  configureFlags = "--with-extra-includes=${libjpeg}/include";
+  configureFlags = "--with-extra-includes=${libjpeg.dev}/include";
 
   buildInputs =
     [ pkgconfig autoreconfHook commoncpp2 openssl boost libsndfile

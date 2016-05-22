@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool openssl expat libgcrypt ];
 
   configureFlags = [
-    "--with-ssl-dir=${openssl}/"
+    "--with-ssl-dir=${openssl.dev}/"
     "--with-tls"
   ];
 

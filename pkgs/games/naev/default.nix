@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  NIX_CFLAGS_COMPILE="-include ${zlib}/include/zlib.h";
+  NIX_CFLAGS_COMPILE="-include ${zlib.dev}/include/zlib.h";
 
   postInstall = ''
     mkdir -p $out/share/naev

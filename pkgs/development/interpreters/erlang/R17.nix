@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags= [
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
   ] ++ optional enableHipe "--enable-hipe"
     ++ optional wxSupport "--enable-wx"
     ++ optional odbcSupport "--with-odbc=${unixODBC}"

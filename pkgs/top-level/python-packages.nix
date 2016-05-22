@@ -7148,8 +7148,8 @@ in modules // {
     USE_NCCONFIG="0";
     HDF5_DIR="${pkgs.hdf5}";
     NETCDF4_DIR="${pkgs.netcdf}";
-    CURL_DIR="${pkgs.curl}";
-    JPEG_DIR="${pkgs.libjpeg}";
+    CURL_DIR="${pkgs.curl.dev}";
+    JPEG_DIR="${pkgs.libjpeg.dev}";
 
     meta = {
       description = "interface to netCDF library (versions 3 and 4)";
@@ -7406,9 +7406,9 @@ in modules // {
     propagatedBuildInputs = [ pkgs.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4}/include/poppler/";
+               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
 
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4}/include/poppler/";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
 
     meta = {
       description = "A Python binding to Poppler-Qt4";
@@ -7844,7 +7844,7 @@ in modules // {
        cat > site.cfg << END
        [samplerate]
        library_dirs=${pkgs.libsamplerate.out}/lib
-       include_dirs=${pkgs.libsamplerate}/include
+       include_dirs=${pkgs.libsamplerate.dev}/include
        END
     '';
 
@@ -12057,7 +12057,7 @@ in modules // {
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
     preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl}'"
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
     '';
 
     doCheck = false; # another test that depends on the network.
@@ -17433,7 +17433,7 @@ in modules // {
 
     preConfigure = ''
       export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
     '';
     #+ optionalString isDarwin ''
     #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
@@ -18244,7 +18244,7 @@ in modules // {
       sha256 = "0j5hzaar4d0vhnrlpmkczgwm7ci2wibr99a7zx04xddzrhxdpz82";
     };
 
-    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl.dev}/include/sasl";
     propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
@@ -18685,7 +18685,7 @@ in modules // {
       ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
-    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
+    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil.dev}/include/apr-1";
 
     preConfigure = ''
       cd Source
@@ -18696,7 +18696,7 @@ in modules // {
         --apr-lib-dir=${pkgs.apr.out}/lib \
         --svn-lib-dir=${pkgs.subversion.out}/lib \
         --svn-bin-dir=${pkgs.subversion.out}/bin \
-        --svn-root-dir=${pkgs.subversion}
+        --svn-root-dir=${pkgs.subversion.dev}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
     '');
@@ -26889,7 +26889,7 @@ in modules // {
 
     # Fix the USB backend library lookup
     postPatch = ''
-      libusb=${pkgs.libusb1}/include/libusb-1.0
+      libusb=${pkgs.libusb1.dev}/include/libusb-1.0
       test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
     '';

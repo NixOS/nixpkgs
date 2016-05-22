@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     substitute ${./META} META --subst-var-by VERSION "${version}"
     substituteInPlace Makefile \
       --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
-      --subst-var-by ZLIB_INCLUDE "${zlib}/include"
+      --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
   '';
 
   buildFlags = "all allopt";

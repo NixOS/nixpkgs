@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];
 
-  configureFlags = "--with-openssl=${openssl} --enable-modules --enable-otr";
+  configureFlags = "--with-openssl=${openssl.dev} --enable-modules --enable-otr";
 
   doCheck = true;
   

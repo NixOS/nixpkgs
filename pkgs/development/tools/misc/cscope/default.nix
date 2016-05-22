@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
         -"es|\"cscope-indexer\"|\"$out/libexec/cscope/cscope-indexer\"|g";
   '';
 
-  configureFlags = "--with-ncurses=${ncurses}";
+  configureFlags = "--with-ncurses=${ncurses.dev}";
 
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ pkgconfig emacs ];

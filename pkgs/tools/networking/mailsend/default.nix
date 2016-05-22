@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
   ];
   meta = {
     inherit (s) version;

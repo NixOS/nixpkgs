@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
-  configureFlags = [ "--with-ssl=${openssl}" "--with-drill" ];
+  configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill" ];
 
   meta = with stdenv.lib; {
     description = "Library with the aim of simplifying DNS programming in C";

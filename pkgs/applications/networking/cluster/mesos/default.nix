@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isLinux ''
 
     substituteInPlace configure.ac             \
-      --replace /usr/include/libnl3 ${libnl}/include/libnl3
+      --replace /usr/include/libnl3 ${libnl.dev}/include/libnl3
 
     substituteInPlace src/linux/perf.cpp       \
       --replace '"perf ' '"${perf}/bin/perf '
@@ -94,17 +94,17 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sbindir=\${out}/bin"
-    "--with-apr=${apr}"
-    "--with-svn=${subversion}"
+    "--with-apr=${apr.dev}"
+    "--with-svn=${subversion.dev}"
     "--with-leveldb=${leveldb}"
     "--with-glog=${glog}"
     "--with-glog=${glog}"
     "--enable-optimize"
     "--disable-python-dependency-install"
     "--enable-ssl"
-    "--with-ssl=${openssl}"
+    "--with-ssl=${openssl.dev}"
     "--enable-libevent"
-    "--with-libevent=${libevent}"
+    "--with-libevent=${libevent.dev}"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-network-isolator"
   ];

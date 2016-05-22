@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   dontDisableStatic = true;
 
-  configureFlags = "--with-ncurses=${ncurses}";
+  configureFlags = "--with-ncurses=${ncurses.dev}";
 
   preConfigure = stdenv.lib.optionalString enablePlugin ''
     configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-privsep-user=smtpd"
-    "--with-libevent-dir=${libevent}"
+    "--with-libevent-dir=${libevent.dev}"
 
     "--with-filter-clamav"
     "--with-filter-dkim-signer"

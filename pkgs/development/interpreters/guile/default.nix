@@ -97,10 +97,10 @@
       # /usr/include/mp.h from OpenSolaris.  See
       # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
       # for details.
-      "--with-libgmp-prefix=${gmp}"
+      "--with-libgmp-prefix=${gmp.dev}"
 
       # Same for these (?).
-      "--with-libreadline-prefix=${readline}"
+      "--with-libreadline-prefix=${readline.dev}"
       "--with-libunistring-prefix=${libunistring}"
 
       # See below.

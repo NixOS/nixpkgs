@@ -39,7 +39,7 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-    ${glib}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
+    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
   '';
 
   # Failed tests
