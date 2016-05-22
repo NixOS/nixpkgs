@@ -370,6 +370,27 @@ in modules // {
     };
   };
 
+  acme_0_5_0 = buildPythonPackage rec {
+    version = "0.5.0";
+    name = "acme-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "letsencrypt";
+      repo = "letsencrypt";
+      rev = "v${version}";
+      sha256 = "0x098cdyfgqvh7x5d3sz56qjpjyg5b4fl82086sm43d8mbz0h5rm";
+    };
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-v${version}-src/acme";
+  };
+
   acme = buildPythonPackage rec {
     inherit (pkgs.certbot) src version;
 
