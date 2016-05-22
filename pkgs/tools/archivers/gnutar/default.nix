@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "097hx7sbzp8qirl4m930lw84kn0wmxhmq7v1qpra3mrg0b8cyba0";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./gnutar-1.28-darwin.patch;
+  patches = [ ]; # FIXME: remove on another stdenv rebuild
 
   # avoid retaining reference to CF during stdenv bootstrap
   configureFlags = stdenv.lib.optionals stdenv.isDarwin [
