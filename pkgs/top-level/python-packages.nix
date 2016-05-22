@@ -370,15 +370,15 @@ in modules // {
     };
   };
 
-  acme_0_1_0 = buildPythonPackage rec {
-    version = "0.1.0";
+  acme_0_5_0 = buildPythonPackage rec {
+    version = "0.5.0";
     name = "acme-${version}";
 
     src = pkgs.fetchFromGitHub {
       owner = "letsencrypt";
       repo = "letsencrypt";
       rev = "v${version}";
-      sha256 = "1f7406nnybsdbwxf7r9qjf6hzkfd7cg6qp8l9l7hrzwscsq5hicj";
+      sha256 = "0x098cdyfgqvh7x5d3sz56qjpjyg5b4fl82086sm43d8mbz0h5rm";
     };
 
     propagatedBuildInputs = with self; [
