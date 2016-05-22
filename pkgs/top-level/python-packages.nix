@@ -8456,7 +8456,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
+      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
     ];
 
     nativeBuildInputs = [ pkgs.intltool ];
@@ -27309,6 +27309,28 @@ in modules // {
       description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
       homepage = "https://github.com/epsy/repeated_test";
       license = licenses.mit;
+    };
+  };
+
+  Keras = buildPythonPackage rec {
+    name = "Keras-${version}";
+    version = "1.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/keras/${name}.tar.gz";
+      sha256 = "0wi826bvifvy12w490ghj1g45z5xb83q2cadqh425sg56p98khaq";
+    };
+
+    propagatedBuildInputs = with self; [
+      six Theano pyyaml
+    ];
+
+    meta = {
+      description = "Deep Learning library for Theano and TensorFlow";
+      homepage = "https://keras.io";
+      license = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
     };
   };
 

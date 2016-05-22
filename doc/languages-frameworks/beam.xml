@@ -1,10 +1,10 @@
-<chapter xmlns="http://docbook.org/ns/docbook"
+<section xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xml:id="users-guide-to-the-erlang-infrastructure">
+         xml:id="sec-beam">
 
-  <title>User's Guide to the Beam Infrastructure</title>
+  <title>Beam Languages (Erlang &amp; Elixir)</title>
   <section xml:id="beam-introduction">
-    <title>Beam Languages (Erlang &amp; Elixir) on Nix</title>
+    <title>Introduction</title>
     <para>
       In this document and related Nix expressions we use the term
       <emphasis>Beam</emphasis> to describe the environment. Beam is
@@ -373,4 +373,4 @@ $ nix-build -A beamPackages
       that.
     </para>
 </section>
-</chapter>
+</section>

@@ -52,9 +52,8 @@ stdenv.mkDerivation {
       outputFile = "./languages-frameworks/python.xml";
     }
   + toDocbook {
-      inputFile = ./haskell-users-guide.md;
-      outputFile = "haskell-users-guide.xml";
-      useChapters = true;
+      inputFile = ./languages-frameworks/haskell.md;
+      outputFile = "./languages-frameworks/haskell.xml";
     }
   + toDocbook {
       inputFile = ./../pkgs/development/idris-modules/README.md;

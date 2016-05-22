@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.flameeyes.eu/projects/unpaper;
     description = "Post-processing tool for scanned sheets of paper";
     license = licenses.gpl2;
+    platforms = platforms.all;
     maintainers = [ maintainers.rycee ];
   };
 }

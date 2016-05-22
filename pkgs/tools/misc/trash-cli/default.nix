@@ -35,6 +35,7 @@ python2Packages.buildPythonApplication rec {
     homepage = https://github.com/andreafrancia/trash-cli;
     description = "Command line tool for the desktop trash can";
     maintainers = [ maintainers.rycee ];
+    platforms = platforms.all;
     license = licenses.gpl2;
   };
 }

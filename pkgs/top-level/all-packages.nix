@@ -798,6 +798,8 @@ in
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
 
+  fzy = callPackage ../tools/misc/fzy { };
+
   gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
@@ -2799,7 +2801,7 @@ in
 
   pamtester = callPackage ../tools/security/pamtester { };
 
-  paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
+  paper-gtk-theme = callPackage ../misc/themes/paper-gtk-theme { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -11578,6 +11580,8 @@ in
 
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
 
+  paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
+
   pecita = callPackage ../data/fonts/pecita {};
 
   paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix {};
@@ -12556,7 +12560,7 @@ in
   };
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
-  wireshark = wireshark-gtk;
+  wireshark = wireshark-qt;
 
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
@@ -13654,6 +13658,8 @@ in
 
   paraview = callPackage ../applications/graphics/paraview { };
 
+  pbrt = callPackage ../applications/graphics/pbrt { };
+
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
   pencil = callPackage ../applications/graphics/pencil { };
@@ -13804,7 +13810,7 @@ in
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
-  QmidiNet = callPackage ../applications/audio/QmidiNet { };
+  qmidinet = callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
