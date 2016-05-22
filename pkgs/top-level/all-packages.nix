@@ -6905,9 +6905,8 @@ in
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk/fltk13.nix { };
-
-  fltk20 = callPackage ../development/libraries/fltk { };
+  fltk13 = callPackage ../development/libraries/fltk { };
+  fltk = callPackage ../development/libraries/fltk { };
 
   fmod = callPackage ../development/libraries/fmod { };
 
@@ -12477,7 +12476,7 @@ in
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
-    fltk = fltk20;
+    fltk = fltk13.override { cfg.xftSupport = true; };
   };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };

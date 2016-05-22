@@ -1,19 +1,34 @@
-{ composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
-, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng }:
+{ stdenv, composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
+, freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
+, cfg ? {}
+, automake, autoconf, libtool
+}:
 
 let inherit (composableDerivation) edf; in
 
-composableDerivation.composableDerivation {} rec {
-  name = "fltk-2.0.x-alpha-r9296";
+let version = "1.3.3"; in
+composableDerivation.composableDerivation {} {
+  name = "fltk-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.easysw.com/pub/fltk/snapshots/${name}.tar.bz2";
-    sha256 = "0353ngb7gpyklc9mdz8629big2na3c73akfwhis8fhqp7jkbs9ih";
+    url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
   };
+
+  # http://www.fltk.org/str.php?L3156
+  patchPhase = ''
+    substituteInPlace FL/x.H \
+      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
+  '';
 
   propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
 
-  buildInputs = [ pkgconfig ];
+  enableParallelBilding = true;
+
+  nativeBuildInputs = [
+    pkgconfig
+    automake autoconf libtool # only required because of patch
+  ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
@@ -39,10 +54,14 @@ composableDerivation.composableDerivation {} rec {
     localpngSupport = false;
     sharedSupport = true;
     threadsSupport = true;
-  };
+  } // cfg;
 
   meta = {
-    description = "a C++ cross platform lightweight gui library binding";
+    description = "A C++ cross-platform lightweight GUI library";
     homepage = http://www.fltk.org;
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl2;
   };
+
 }
+
