@@ -3,7 +3,7 @@ title: User's Guide for Haskell in Nixpkgs
 author: Peter Simons
 date: 2015-06-01
 ---
-# Haskell
+# User's Guide to the Haskell Infrastructure
 
 
 ## How to install Haskell packages
