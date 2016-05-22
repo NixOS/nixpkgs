@@ -3920,6 +3920,13 @@ in
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
   xflux = callPackage ../tools/misc/xflux { };
+  xflux-gui = callPackage ../tools/misc/xflux/gui.nix {
+    pexpect = pythonPackages.pexpect;
+    pyGtkGlade = pythonPackages.pyGtkGlade;
+    pygobject = pythonPackages.pygobject;
+    pyxdg = pythonPackages.pyxdg;
+    gnome_python = gnome.gnome_python;
+  };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = self.xfsprogs.dev; # outputs TODO
