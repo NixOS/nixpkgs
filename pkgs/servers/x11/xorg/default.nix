@@ -1842,17 +1842,6 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
-  xf86videomodesetting = (mkDerivation "xf86videomodesetting" {
-    name = "xf86-video-modesetting-0.9.0";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-modesetting-0.9.0.tar.bz2;
-      sha256 = "0p6pjn5bnd2wr3lmas4b12zcq12d9ilvssga93fzlg90fdahikwh";
-    };
-    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ];
-    meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto libdrm udev libpciaccess randrproto libX11 xextproto xorgserver xproto ;};
-
   xf86videoneomagic = (mkDerivation "xf86videoneomagic" {
     name = "xf86-video-neomagic-1.2.9";
     builder = ./builder.sh;
