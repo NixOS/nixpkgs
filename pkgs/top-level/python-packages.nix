@@ -27229,6 +27229,28 @@ in modules // {
     };
   };
 
+  Keras = buildPythonPackage rec {
+    name = "Keras-${version}";
+    version = "1.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/keras/${name}.tar.gz";
+      sha256 = "0wi826bvifvy12w490ghj1g45z5xb83q2cadqh425sg56p98khaq";
+    };
+
+    propagatedBuildInputs = with self; [
+      six Theano pyyaml
+    ];
+
+    meta = {
+      description = "Deep Learning library for Theano and TensorFlow";
+      homepage = "https://keras.io";
+      license = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+  };
+
   sigtools = buildPythonPackage rec {
     name = "sigtools-${version}";
     version = "1.1a3";
