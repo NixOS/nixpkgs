@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|dirname|${coreutils}/bin/dirname|" lock
     sed -i -e "s|rm |${coreutils}/bin/rm |" lock
     sed -i -e "s|scrot |${scrot}/bin/scrot |" lock
-    sed -i -e "s|convert |${imagemagick}/bin/convert |" lock
+    sed -i -e "s|convert |${imagemagick.out}/bin/convert |" lock
     sed -i -e "s|awk |${gawk}/bin/awk|" lock
     sed -i -e "s|i3lock |${i3lock-color}/bin/i3lock-color |" lock
   '';
