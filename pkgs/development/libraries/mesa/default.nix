@@ -45,6 +45,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./glx_ro_text_segm.patch # fix for grsecurity/PaX
+    ./symlink-drivers.patch
    # TODO: revive ./dricore-gallium.patch when it gets ported (from Ubuntu),
    #  as it saved ~35 MB in $drivers; watch https://launchpad.net/ubuntu/+source/mesa/+changelog
   ] ++ optional stdenv.isLinux
