@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib fontconfig freetype libjpeg libpng libtiff libXpm ];
 
+  outputs = [ "dev" "out" "bin" ];
+
+  postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
+
   meta = with stdenv.lib; {
     homepage = https://libgd.github.io/;
     description = "A dynamic image creation library";
