@@ -247,6 +247,8 @@ in modules // {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
+  pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
+
   pygobject = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
