@@ -107,7 +107,16 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
       after = [ "network.target" ];
-      preStart = "mkdir -p /var/spool";
+      preStart = ''
+        mkdir -p /var/spool/smtpd
+
+        mkdir -p /var/spool/smtpd/offline
+        chown root.smtpq /var/spool/smtpd/offline
+        chmod 770 /var/spool/smtpd/offline
+
+        mkdir -p /var/spool/smtpd/purge
+        chmod 700 /var/spool/smtpd/purge
+      '';
       serviceConfig.ExecStart = "${opensmtpd}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
