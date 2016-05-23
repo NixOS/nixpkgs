@@ -36,7 +36,7 @@ plasmaPackage rec {
   ];
   NIX_CFLAGS_COMPILE = [ "-I${xorgserver}/include/xorg" ];
   cmakeFlags = [
-    "-DEvdev_INCLUDE_DIRS=${xf86inputevdev}/include/xorg"
+    "-DEvdev_INCLUDE_DIRS=${xf86inputevdev.dev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include/xorg"
   ];
   postInstall = ''

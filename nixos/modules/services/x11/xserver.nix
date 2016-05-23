@@ -535,7 +535,7 @@ in
     services.xserver.modules =
       concatLists (catAttrs "modules" cfg.drivers) ++
       [ xorg.xorgserver.out
-        xorg.xf86inputevdev
+        xorg.xf86inputevdev.out
       ];
 
     services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";

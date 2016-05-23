@@ -286,6 +286,7 @@ in
   };
 
   xf86inputevdev = attrs: attrs // {
+    outputs = [ "dev" "out" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     installFlags = "sdkdir=\${out}/include/xorg";
     buildInputs = attrs.buildInputs ++ [ args.mtdev args.libevdev ];
