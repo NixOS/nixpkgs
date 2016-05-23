@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
-, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, ncurses, perl
-, pkgconfig, unibilium, makeWrapper, vimUtils
+, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, man, ncurses
+, perl, pkgconfig, unibilium, makeWrapper, vimUtils
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -98,7 +98,10 @@ let
     LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
     LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
 
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = ''
+      substituteInPlace runtime/autoload/man.vim \
+        --replace /usr/bin/man ${man}/bin/man
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';

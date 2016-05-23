@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchgit, qtbase, qtimageformats
 , breakpad, ffmpeg, openalSoft, openssl, zlib, libexif, lzma, libopus
 , gtk2, glib, cairo, pango, gdk_pixbuf, atk, libappindicator-gtk2
-, libunity, dee, libdbusmenu-glib, libva, qmakeHook
+, libwebp, libunity, dee, libdbusmenu-glib, libva
 
 , pkgconfig, libxcb, xcbutilwm, xcbutilimage, xcbutilkeysyms
 , libxkbcommon, libpng, libjpeg, freetype, harfbuzz, pcre16
@@ -12,14 +12,14 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.9.44";
+  version = "0.9.48";
   qtVersion = lib.replaceStrings ["."] ["_"] qtbase.version;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "0ydd5yhy2nq4n6x59ajb6c4d0blyj6gm7hkx4hfrx2a88iksc5rm";
+    sha256 = "1i1f7a9mikq8n08cnwcyywxj7sh1jc6yfj0zd3n7fgfhl0srzvlb";
   };
 
   tgaur = fetchgit {
@@ -31,11 +31,11 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     breakpad ffmpeg openalSoft openssl zlib libexif lzma libopus
     gtk2 glib libappindicator-gtk2 libunity cairo pango gdk_pixbuf atk
-    dee libdbusmenu-glib libva qtbase qmakeHook
+    dee libdbusmenu-glib libva
     # Qt dependencies
     libxcb xcbutilwm xcbutilimage xcbutilkeysyms libxkbcommon
     libpng libjpeg freetype harfbuzz pcre16 xproto libX11
-    inputproto sqlite dbus
+    inputproto sqlite dbus libwebp
   ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -61,44 +61,27 @@ in stdenv.mkDerivation rec {
     "INCLUDEPATH+=${breakpad}/include/breakpad"
     "LIBS+=-lcrypto"
     "LIBS+=-lssl"
-    "LIBS+=-lz"
-    "LIBS+=-lgobject-2.0"
-    "LIBS+=-lxkbcommon"
-    "LIBS+=-lX11"
-    "LIBS+=${breakpad}/lib/libbreakpad_client.a"
-    "LIBS+=./../../../Libraries/QtStatic/qtbase/plugins/platforms/libqxcb.a"
-    "LIBS+=./../../../Libraries/QtStatic/qtimageformats/plugins/imageformats/libqwebp.a"
   ];
 
   qtSrcs = qtbase.srcs ++ [ qtimageformats.src ];
   qtPatches = qtbase.patches;
 
-  dontUseQmakeConfigure = true;
-
   buildCommand = ''
     unpackPhase
     cd "$sourceRoot"
+
     patchPhase
     sed -i 'Telegram/Telegram.pro' \
-      -e 's/CUSTOM_API_ID//g' \
+      -e 's,CUSTOM_API_ID,,g' \
+      -e "s,/usr/local/tdesktop/Qt-[^/]*,$PWD/../qt,g" \
       -e 's,/usr,/does-not-exist,g' \
       -e '/LIBS += .*libxkbcommon.a/d' \
-      -e '/LIBS += .*libz.a/d' \
-      -e '/LIBS += .*libbreakpad_client.a/d' \
-      -e 's,-flto ,,g'
-    echo "Q_IMPORT_PLUGIN(QXcbIntegrationPlugin)" >> Telegram/SourceFiles/stdafx.cpp
+      -e 's,LIBS += .*libz.a,LIBS += -lz,' \
+      -e 's,LIBS += .*libbreakpad_client.a,LIBS += ${breakpad}/lib/libbreakpad_client.a,' \
+      -e 's, -flto,,g' \
+      -e 's, -static-libstdc++,,g'
 
-    ( mkdir -p Linux/DebugIntermediateStyle
-      cd Linux/DebugIntermediateStyle
-      qmake CONFIG+=debug ../../Telegram/MetaStyle.pro
-      buildPhase
-    )
-    ( mkdir -p Linux/DebugIntermediateLang
-      cd Linux/DebugIntermediateLang
-      qmake CONFIG+=debug ../../Telegram/MetaLang.pro
-      buildPhase
-    )
-
+    export QMAKE=$PWD/../qt/bin/qmake
     ( mkdir -p ../Libraries
       cd ../Libraries
       for i in $qtSrcs; do
@@ -108,37 +91,56 @@ in stdenv.mkDerivation rec {
       mv qtbase-opensource-src-* ./QtStatic/qtbase
       mv qtimageformats-opensource-src-* ./QtStatic/qtimageformats
       cd QtStatic/qtbase
-      patch -p1 < ../../../$sourceRoot/Telegram/_qtbase_${qtVersion}_patch.diff
+      patch -p1 < ../../../$sourceRoot/Telegram/Patches/qtbase_${qtVersion}.diff
       cd ..
       for i in $qtPatches; do
         patch -p1 < $i
       done
       ${qtbase.postPatch}
 
-      export configureFlags="-prefix "../../qt" -release -opensource -confirm-license -system-zlib \
+      export configureFlags="-prefix "$PWD/../../qt" -release -opensource -confirm-license -system-zlib \
         -system-libpng -system-libjpeg -system-freetype -system-harfbuzz -system-pcre -system-xcb \
         -system-xkbcommon-x11 -no-opengl -static -nomake examples -nomake tests \
         -openssl-linked -dbus-linked -system-sqlite -verbose \
         ${lib.optionalString (!system-x86_64) "-no-sse2"} -no-sse3 -no-ssse3 \
         -no-sse4.1 -no-sse4.2 -no-avx -no-avx2 -no-mips_dsp -no-mips_dspr2"
       export dontAddPrefix=1
-      export buildFlags="module-qtbase module-qtimageformats"
-      export installFlags="module-qtbase-install_subtargets module-qtimageformats-install_subtargets"
+      export MAKEFLAGS=-j$NIX_BUILD_CORES
 
-      ( export MAKEFLAGS=-j$NIX_BUILD_CORES
+      ( cd qtbase
         configurePhase
+        buildPhase
+        make install
       )
+
+      ( cd qtimageformats
+        $QMAKE
+        buildPhase
+        make install
+      )
+    )
+
+    ( mkdir -p Linux/obj/codegen_style/Debug
+      cd Linux/obj/codegen_style/Debug
+      $QMAKE CONFIG+=debug ../../../../Telegram/build/qmake/codegen_style/codegen_style.pro
       buildPhase
-      installPhase
+    )
+    ( mkdir -p Linux/obj/codegen_numbers/Debug
+      cd Linux/obj/codegen_numbers/Debug
+      $QMAKE CONFIG+=debug ../../../../Telegram/build/qmake/codegen_numbers/codegen_numbers.pro
+      buildPhase
+    )
+    ( mkdir -p Linux/DebugIntermediateLang
+      cd Linux/DebugIntermediateLang
+      $QMAKE CONFIG+=debug ../../Telegram/MetaLang.pro
+      buildPhase
     )
 
     ( mkdir -p Linux/ReleaseIntermediate
       cd Linux/ReleaseIntermediate
-      qmake $qmakeFlags ../../Telegram/Telegram.pro
+      $QMAKE $qmakeFlags ../../Telegram/Telegram.pro
       pattern="^PRE_TARGETDEPS +="
       grep "$pattern" "../../Telegram/Telegram.pro" | sed "s/$pattern//g" | xargs make
-
-      qmake $qmakeFlags ../../Telegram/Telegram.pro
       buildPhase
     )
 

@@ -86,7 +86,7 @@
   couchemar = "Andrey Pavlov <couchemar@yandex.ru>";
   cransom = "Casey Ransom <cransom@hubns.net>";
   CrystalGamma = "Jona Stubbe <nixos@crystalgamma.de>";
-  cstrahan = "Charles Strahan <charles.c.strahan@gmail.com>";
+  cstrahan = "Charles Strahan <charles@cstrahan.com>";
   cwoac = "Oliver Matthews <oliver@codersoffortune.net>";
   DamienCassou = "Damien Cassou <damien@cassou.me>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
@@ -260,6 +260,7 @@
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
   nico202 = "Nicolò Balzarotti <anothersms@gmail.com>";
   notthemessiah = "Brian Cohen <brian.cohen.88@gmail.com>";
+  NikolaMandic = "Ratko Mladic <nikola@mandic.email>";
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
   nslqqq = "Nikita Mikhailov <nslqqq@gmail.com>";
   obadz = "obadz <obadz-nixos@obadz.com>";

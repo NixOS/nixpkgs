@@ -6,9 +6,9 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/editorconfig/editorconfig-core-c.git";
-    rev = "99d09270c58b817ea218979d513a90099ade6277";
+    rev = "d1c2c881158dfb9faa4498a0b19593dcd105d6b8";
     fetchSubmodules = true;
-    sha256 = "0s35dzf2180205xq2xpfmmlfw112j3h87swnisza85qwwz8bf2k9";
+    sha256 = "0awpb63ci85kal3pnlj2b54bay8igj1rbc13d8gqkvidlb51nnx4";
     inherit name;
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/editorconfig/editorconfig-core-c";
     license = with licenses; [ bsd2 bsd3 ];
-    version = "0.12.0";
+    version = "0.12.1";
     maintainers = [ maintainers.dochang ];
   };
 

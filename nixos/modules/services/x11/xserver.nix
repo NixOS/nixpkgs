@@ -16,6 +16,7 @@ let
     virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
     ati = { modules = with pkgs.xorg; [ xf86videoati glamoregl ]; };
     intel = { modules = with pkgs.xorg; [ xf86videointel glamoregl ]; };
+    modesetting = { modules = []; };
   };
 
   fontsForXServer =

@@ -37,6 +37,10 @@ let
 
     patches = [ ./apr-1.patch ];
 
+    # SVN build seems broken on gcc5:
+    # https://gcc.gnu.org/gcc-5/porting_to.html
+    CPPFLAGS = "-P";
+
     configureFlags = ''
       ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
       ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}

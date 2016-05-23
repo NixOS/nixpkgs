@@ -247,6 +247,8 @@ in modules // {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
+  pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
+
   pygobject = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
@@ -370,8 +372,29 @@ in modules // {
     };
   };
 
+  acme_0_5_0 = buildPythonPackage rec {
+    version = "0.5.0";
+    name = "acme-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "letsencrypt";
+      repo = "letsencrypt";
+      rev = "v${version}";
+      sha256 = "0x098cdyfgqvh7x5d3sz56qjpjyg5b4fl82086sm43d8mbz0h5rm";
+    };
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-v${version}-src/acme";
+  };
+
   acme = buildPythonPackage rec {
-    inherit (pkgs.letsencrypt) src version;
+    inherit (pkgs.certbot) src version;
 
     name = "acme-${version}";
 
@@ -8433,7 +8456,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
+      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
     ];
 
     nativeBuildInputs = [ pkgs.intltool ];
@@ -27226,6 +27249,28 @@ in modules // {
       description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
       homepage = "https://github.com/epsy/repeated_test";
       license = licenses.mit;
+    };
+  };
+
+  Keras = buildPythonPackage rec {
+    name = "Keras-${version}";
+    version = "1.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/keras/${name}.tar.gz";
+      sha256 = "0wi826bvifvy12w490ghj1g45z5xb83q2cadqh425sg56p98khaq";
+    };
+
+    propagatedBuildInputs = with self; [
+      six Theano pyyaml
+    ];
+
+    meta = {
+      description = "Deep Learning library for Theano and TensorFlow";
+      homepage = "https://keras.io";
+      license = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
     };
   };
 

@@ -9,6 +9,10 @@ unzip $src
 run_file=fglrx-$build/amd-driver-installer-$build-x86.x86_64.run
 sh $run_file --extract .
 
+for patch in $patches;do
+    patch -p1 < $patch
+done
+
 case "$system" in
   x86_64-linux)
     arch=x86_64
@@ -238,6 +242,7 @@ if test -z "$libsOnly"; then
   tar xfz ../common/usr/src/ati/fglrx_sample_source.tgz
   eval "$patchPhaseSamples"
 
+
   ( # build and install fgl_glxgears
     cd fgl_glxgears;
     gcc -DGL_ARB_texture_multisample=1 -g \
@@ -258,10 +263,10 @@ if test -z "$libsOnly"; then
 
     cd programs/fglrx_gamma
     gcc -fPIC -I${libXxf86vm.dev}/include \
-	    -I${xf86vidmodeproto}/include \
-	    -I$out/X11R6/include \
-	    -L$out/lib \
-	    -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c
+      -I${xf86vidmodeproto}/include \
+      -I$out/X11R6/include \
+      -L$out/lib \
+      -Wall -lm -lfglrx_gamma -lX11 -lXext -o $out/bin/fglrx_xgamma fglrx_xgamma.c
   )
 
   {

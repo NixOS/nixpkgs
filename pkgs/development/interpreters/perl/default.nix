@@ -102,7 +102,9 @@ let
       # TODO: removing those paths would be cleaner than overwriting with nonsense.
       substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
         --replace "${libcInc}" /no-such-path \
-        --replace "${stdenv.cc.cc or "/no-such-path"}" /no-such-path \
+        --replace "${
+            if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+          }" /no-such-path \
         --replace "$man" /no-such-path
     ''; # */
 

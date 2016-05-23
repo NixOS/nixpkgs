@@ -8,12 +8,12 @@ stdenv.mkDerivation rec {
     owner = "mptre";
     repo = "yank";
     rev = "v${meta.version}";
-    sha256 = "0v1imwjp851gz86p9m3x1dd8bi649gr8j99xz6ask1pbkxvji73c";
+    sha256 = "0iv3ilyjcq6cd429qkg8mfpwagkb30617z0kdjlhk2s74chyaghm";
     inherit name;
   };
 
   installPhase = ''
-    PREFIX=$out make install
+    make PREFIX=$out install
   '';
 
   meta = with stdenv.lib; {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/mptre/yank/releases";
     license = licenses.mit;
-    version = "0.6.0";
+    version = "0.7.0";
     maintainers = [ maintainers.dochang ];
   };
 

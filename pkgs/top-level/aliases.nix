@@ -54,6 +54,7 @@ doNotDisplayTwice rec {
   inotifyTools = inotify-tools;
   joseki = apache-jena-fuseki; # added 2016-02-28
   jquery_ui = jquery-ui;  # added 2014-09-07
+  letsencrypt = certbot; # added 2016-05-16
   libdbusmenu_qt5 = qt5.libdbusmenu;  # added 2015-12-19
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
@@ -74,6 +75,7 @@ doNotDisplayTwice rec {
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19
+  QmidiNet = qmidinet;  # added 2016-05-22
   quake3game = ioquake3; # added 2016-01-14
   quassel_kf5 = kde5.quassel; # added 2015-09-30
   quassel_qt5 = kde5.quassel_qt5; # added 2015-09-30

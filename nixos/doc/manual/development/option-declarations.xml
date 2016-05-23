@@ -7,8 +7,8 @@
 <title>Option Declarations</title>
 
 <para>An option declaration specifies the name, type and description
-of a NixOS configuration option.  It is illegal to define an option
-that hasn’t been declared in any module.  A option declaration
+of a NixOS configuration option.  It is invalid to define an option
+that hasn’t been declared in any module.  An option declaration
 generally looks like this:
 
 <programlisting>
@@ -42,7 +42,7 @@ options = {
     <listitem>
       <para>The default value used if no value is defined by any
       module.  A default is not required; in that case, if the option
-      value is ever used, an error will be thrown.</para>
+      value is never used, an error will be thrown.</para>
     </listitem>
   </varlistentry>
 

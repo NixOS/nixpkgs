@@ -455,7 +455,9 @@ in
 
   atomicparsley = callPackage ../tools/video/atomicparsley { };
 
-  attic = callPackage ../tools/backup/attic { };
+  attic = callPackage ../tools/backup/attic {
+    python3Packages = python34Packages;
+  };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
@@ -614,7 +616,9 @@ in
 
   bochs = callPackage ../applications/virtualization/bochs { };
 
-  borgbackup = callPackage ../tools/backup/borg { };
+  borgbackup = callPackage ../tools/backup/borg {
+    python3Packages = python34Packages;
+  };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
@@ -792,6 +796,8 @@ in
   fsmark = callPackage ../tools/misc/fsmark { };
 
   fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
+
+  fzy = callPackage ../tools/misc/fzy { };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
 
@@ -2097,7 +2103,9 @@ in
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
-  john = callPackage ../tools/security/john { };
+  john = callPackage ../tools/security/john {
+    gcc = gcc49; # doesn't build with gcc5
+  };
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
@@ -2795,7 +2803,7 @@ in
 
   pamtester = callPackage ../tools/security/pamtester { };
 
-  paper-gtk-theme = callPackage ../misc/themes/gtk3/paper-gtk-theme { };
+  paper-gtk-theme = callPackage ../misc/themes/paper-gtk-theme { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -6648,6 +6656,8 @@ in
 
   cegui = callPackage ../development/libraries/cegui {};
 
+  certbot = callPackage ../tools/admin/certbot { };
+
   cgal = callPackage ../development/libraries/CGAL {};
 
   cgui = callPackage ../development/libraries/cgui {};
@@ -7447,8 +7457,6 @@ in
   leptonica = callPackage ../development/libraries/leptonica {
     libpng = libpng12;
   };
-
-  letsencrypt = callPackage ../tools/admin/letsencrypt { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
@@ -8607,6 +8615,8 @@ in
 
   pcl = callPackage ../development/libraries/pcl {
     vtk = vtkWithQt4;
+    inherit (darwin) cf-private;
+    inherit (darwin.apple_sdk.frameworks) Cocoa AGL;
   };
 
   pcre = callPackage ../development/libraries/pcre { };
@@ -11158,6 +11168,8 @@ in
 
   s3ql = callPackage ../tools/backup/s3ql { };
 
+  sass = callPackage ../development/tools/sass { };
+
   sassc = callPackage ../development/tools/sassc { };
 
   scanmem = callPackage ../tools/misc/scanmem { };
@@ -11581,6 +11593,8 @@ in
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
 
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
+
+  paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
   pecita = callPackage ../data/fonts/pecita {};
 
@@ -12560,7 +12574,7 @@ in
   };
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
-  wireshark = wireshark-gtk;
+  wireshark = wireshark-qt;
 
   wvdial = callPackage ../os-specific/linux/wvdial { };
 
@@ -12876,6 +12890,8 @@ in
   gxmessage = callPackage ../applications/misc/gxmessage { };
 
   hackrf = callPackage ../applications/misc/hackrf { };
+
+  hakuneko = callPackage ../tools/misc/hakuneko { };
 
   hamster-time-tracker = callPackage ../applications/misc/hamster-time-tracker {
     inherit (pythonPackages) pyxdg pygtk dbus sqlite3;
@@ -13655,6 +13671,8 @@ in
 
   paraview = callPackage ../applications/graphics/paraview { };
 
+  pbrt = callPackage ../applications/graphics/pbrt { };
+
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
   pencil = callPackage ../applications/graphics/pencil { };
@@ -13805,7 +13823,7 @@ in
 
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
-  QmidiNet = callPackage ../applications/audio/QmidiNet { };
+  qmidinet = callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
@@ -14203,7 +14221,7 @@ in
 
   taskserver = callPackage ../servers/misc/taskserver { };
 
-  tdesktop = qt55.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
+  tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
 
@@ -14396,6 +14414,7 @@ in
 
   neovim = callPackage ../applications/editors/neovim {
     inherit (lua52Packages) lpeg luaMessagePack luabitop;
+    python3Packages = python34Packages;
   };
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
@@ -15705,7 +15724,7 @@ in
 
   mate-themes = callPackage ../misc/themes/mate-themes { };
 
-  numix-gtk-theme = callPackage ../misc/themes/gtk3/numix-gtk-theme { };
+  numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
   kde5PackagesFun = self: with self; {
 
@@ -16528,6 +16547,8 @@ in
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
   m3d-linux = callPackage ../misc/drivers/m3d-linux { };
+
+  mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;

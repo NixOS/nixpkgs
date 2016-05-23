@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0x8gqazn09m30bn1l7xnf8snhbb7yz7sb09imciqmm4jqdvn797z";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ acme ];
+  propagatedBuildInputs = with pythonPackages; [ acme_0_5_0 ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
