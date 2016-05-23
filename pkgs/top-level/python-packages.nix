@@ -27160,6 +27160,36 @@ in modules // {
     };
   };
 
+
+  Quandl = buildPythonPackage rec {
+     version = "3.0.0";
+     name = "Quandl-${version}";
+
+     src = pkgs.fetchurl {
+       url= "mirror://pypi/q/quandl/${name}.tar.gz";
+       sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
+     };
+
+     propagatedBuildInputs = with self; [
+	numpy
+	ndg-httpsclient
+	dateutil
+	inflection
+	moreItertools
+	requests2
+	pandas
+     ];
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/quandl/quandl-python;
+       description = "A Python library for Quandl’s RESTful API";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
+  };
+
   queuelib = buildPythonPackage rec {
     name = "queuelib-${version}";
     version = "1.4.2";
