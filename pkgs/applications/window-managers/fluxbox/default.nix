@@ -10,13 +10,22 @@ stdenv.mkDerivation rec {
   name = "fluxbox-${version}";
   version = "1.3.7";
 
-  buildInputs = [ pkgconfig freetype fribidi libXext libXft libXpm libXrandr libXrender xextproto libXinerama imlib2 ];
-
   src = fetchurl {
     url = "mirror://sourceforge/fluxbox/${name}.tar.xz";
     sha256 = "1h1f70y40qd225dqx937vzb4k2cz219agm1zvnjxakn5jkz7b37w";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ freetype fribidi libXext libXft libXpm libXrandr libXrender xextproto libXinerama imlib2 ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    substituteInPlace util/fluxbox-generate_menu.in \
+      --subst-var-by PREFIX "$out"
+  '';
+  
   meta = {
     description = "Full-featured, light-resource X window manager";
     longDescription = ''
