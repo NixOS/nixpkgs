@@ -13245,7 +13245,7 @@ in modules // {
     name = "slixmpp-${version}";
     version = "1.1";
 
-    disabled = (!isPy34);
+    disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
@@ -26408,7 +26408,7 @@ in modules // {
     version = "0.9";
 
     namePrefix = "";
-    disabled = (!isPy34);
+    disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
