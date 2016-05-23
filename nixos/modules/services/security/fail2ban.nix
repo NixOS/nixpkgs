@@ -101,7 +101,7 @@ in
         after = [ "network.target" ];
 
         restartTriggers = [ fail2banConf jailConf ];
-        path = [ pkgs.fail2ban pkgs.iptables ];
+        path = [ pkgs.fail2ban pkgs.iptables pkgs.iproute ];
 
         preStart =
           ''
