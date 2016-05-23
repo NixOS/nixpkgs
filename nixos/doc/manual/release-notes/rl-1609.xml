@@ -16,6 +16,10 @@ has the following highlights: </para>
     See <xref linkend="sec-booting-from-pxe" /> for documentation.</para>
   </listitem>
 
+  <listitem>
+    <para>Xorg-server-1.18.*. If you choose <literal>"ati_unfree"</literal> driver,
+    1.17.* is still used due to ABI incompatibility.</para>
+  </listitem>
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
