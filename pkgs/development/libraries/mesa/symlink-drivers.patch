@@ -1,0 +1,72 @@
+diff -ru -x '*~' mesa-11.1.4-orig/src/gallium/targets/dri/Makefile.am mesa-11.1.4/src/gallium/targets/dri/Makefile.am
+--- mesa-11.1.4-orig/src/gallium/targets/dri/Makefile.am	2016-05-09 14:20:52.000000000 +0200
++++ mesa-11.1.4/src/gallium/targets/dri/Makefile.am	2016-05-22 17:56:03.396185082 +0200
+@@ -126,14 +126,13 @@
+ 	done;
+ endif
+ 
+-# hardlink each megadriver instance, but don't actually have
+-# gallium_dri.so in the set of final installed files.
++# symlink each megadriver instance.
+ install-data-hook:
+ 	for i in $(TARGET_DRIVERS); do                                  \
+-		ln -f $(DESTDIR)$(dridir)/gallium_dri.so                \
++		ln -sf $(DESTDIR)$(dridir)/gallium_dri.so               \
+ 		      $(DESTDIR)$(dridir)/$${i}_dri.so;                 \
+ 	done;                                                           \
+-	$(RM) $(DESTDIR)$(dridir)/gallium_dri.*
++	$(RM) $(DESTDIR)$(dridir)/gallium_dri.la
+ 
+ uninstall-hook:
+ 	for i in $(TARGET_DRIVERS); do                                  \
+diff -ru -x '*~' mesa-11.1.4-orig/src/gallium/targets/vdpau/Makefile.am mesa-11.1.4/src/gallium/targets/vdpau/Makefile.am
+--- mesa-11.1.4-orig/src/gallium/targets/vdpau/Makefile.am	2016-01-29 13:21:30.000000000 +0100
++++ mesa-11.1.4/src/gallium/targets/vdpau/Makefile.am	2016-05-22 20:54:12.722358242 +0200
+@@ -103,15 +103,14 @@
+ 	done;
+ endif
+ 
+-# hardlink each megadriver instance, but don't actually have
+-# libvdpau_gallium.so in the set of final installed files.
++# symlink each megadriver instance.
+ install-data-hook:
+ 	$(AM_V_GEN)dest_dir=$(DESTDIR)/$(vdpaudir);			\
+ 	for i in $(TARGET_DRIVERS); do					\
+ 		j=libvdpau_gallium.$(LIB_EXT);				\
+ 		k=libvdpau_$${i}.$(LIB_EXT);				\
+ 		l=$${k}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0;		\
+-		ln -f $${dest_dir}/$${j}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0 \
++		ln -sf $${dest_dir}/$${j}.$(VDPAU_MAJOR).$(VDPAU_MINOR).0 \
+ 		      $${dest_dir}/$${l};				\
+ 		ln -sf $${l}						\
+ 		       $${dest_dir}/$${k}.$(VDPAU_MAJOR).$(VDPAU_MINOR); \
+@@ -120,7 +119,7 @@
+ 		ln -sf $${l}						\
+ 		       $${dest_dir}/$${k};				\
+ 	done;								\
+-	$(RM) $${dest_dir}/libvdpau_gallium.*
++	$(RM) $${dest_dir}/libvdpau_gallium.la
+ 
+ uninstall-hook:
+ 	for i in $(TARGET_DRIVERS); do					\
+diff -ru -x '*~' mesa-11.1.4-orig/src/mesa/drivers/dri/Makefile.am mesa-11.1.4/src/mesa/drivers/dri/Makefile.am
+--- mesa-11.1.4-orig/src/mesa/drivers/dri/Makefile.am	2016-01-18 08:39:26.000000000 +0100
++++ mesa-11.1.4/src/mesa/drivers/dri/Makefile.am	2016-05-22 17:55:46.251244940 +0200
+@@ -86,14 +86,13 @@
+ 	done;
+ endif
+ 
+-# hardlink each megadriver instance, but don't actually have
+-# mesa_dri_drivers.so in the set of final installed files.
++# symink each megadriver instance.
+ install-data-hook:
+ 	for i in $(MEGADRIVERS); do \
+-		ln -f $(DESTDIR)$(dridir)/mesa_dri_drivers.so \
++		ln -sf $(DESTDIR)$(dridir)/mesa_dri_drivers.so \
+ 		      $(DESTDIR)$(dridir)/$$i; \
+ 	done;
+-	$(RM) $(DESTDIR)$(dridir)/mesa_dri_drivers.*
++	$(RM) $(DESTDIR)$(dridir)/mesa_dri_drivers.la
+ 
+ uninstall-hook:
+ 	for i in $(MEGADRIVERS); do \

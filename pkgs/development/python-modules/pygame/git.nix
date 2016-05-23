@@ -1,14 +1,16 @@
-{ stdenv, lib, fetchurl, buildPythonPackage, python, smpeg, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, isPy3k,
+{ stdenv, lib, fetchFromBitbucket, buildPythonPackage, python, smpeg, libX11
+, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi
 }:
 
 buildPythonPackage rec {
   name = "pygame-${version}";
-  version = "1.9.1";
+  version = "2016-05-17";
 
-  src = fetchurl {
-    url = "http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz";
-    sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
+  src = fetchFromBitbucket {
+    owner = "pygame";
+    repo = "pygame";
+    rev = "575c7a74d85a37db7c645421c02cf0b6b78a889f";
+    sha256 = "1i5xqmw93kfidcji2wacgkm5y4mcnbksy8iimih0729k19rbhznc";
   };
 
   buildInputs = [
@@ -16,19 +18,13 @@ buildPythonPackage rec {
     smpeg portmidi libX11
   ];
 
-  # http://ubuntuforums.org/showthread.php?t=1960262
-  disabled = isPy3k;
-
   # Tests fail because of no audio device and display.
   doCheck = false;
-
-  patches = [ ./pygame-v4l.patch ];
 
   preConfigure = ''
     sed \
       -e "s/^origincdirs = .*/origincdirs = []/" \
       -e "s/^origlibdirs = .*/origlibdirs = []/" \
-      -e "/\/include\/smpeg/d" \
       -i config_unix.py
     ${lib.concatMapStrings (dep: ''
       sed \

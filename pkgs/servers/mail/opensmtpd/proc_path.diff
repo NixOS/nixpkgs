@@ -1,11 +1,12 @@
-diff -Naur opensmtpd-5.7.1p1/smtpd/parse.y opensmtpd-5.7.1p1.patched/smtpd/parse.y
---- opensmtpd-5.7.1p1/smtpd/parse.y	2015-06-30 10:13:34.000000000 +0200
-+++ opensmtpd-5.7.1p1.patched/smtpd/parse.y	2015-09-26 08:41:17.012472516 +0200
-@@ -2519,13 +2519,19 @@
+diff --git a/smtpd/parse.y b/smtpd/parse.y
+index ab02719..c1c77d9 100644
+--- a/smtpd/parse.y
++++ b/smtpd/parse.y
+@@ -2534,13 +2534,19 @@ create_filter_proc(char *name, char *prog)
  {
  	struct filter_conf	*f;
  	char			*path;
-+        const char              *proc_path;
++	const char		*proc_path;
  
  	if (dict_get(&conf->sc_filters, name)) {
  		yyerror("filter \"%s\" already defined", name);
@@ -13,64 +14,71 @@ diff -Naur opensmtpd-5.7.1p1/smtpd/parse.y opensmtpd-5.7.1p1.patched/smtpd/parse
  	}
  
 -	if (asprintf(&path, "%s/filter-%s", PATH_LIBEXEC, prog) == -1) {
-+        proc_path = getenv("OPENSMTPD_PROC_PATH");
-+        if (proc_path == NULL) {
-+                proc_path = PATH_LIBEXEC;
-+        }
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
 +
 +	if (asprintf(&path, "%s/filter-%s", proc_path, prog) == -1) {
  		yyerror("filter \"%s\" asprintf failed", name);
  		return (0);
  	}
-diff -Naur opensmtpd-5.7.1p1/smtpd/smtpd.c opensmtpd-5.7.1p1.patched/smtpd/smtpd.c
---- opensmtpd-5.7.1p1/smtpd/smtpd.c	2015-06-30 10:13:34.000000000 +0200
-+++ opensmtpd-5.7.1p1.patched/smtpd/smtpd.c	2015-09-26 08:41:16.998472557 +0200
-@@ -854,6 +854,7 @@
+diff --git a/smtpd/smtpd.c b/smtpd/smtpd.c
+index afc8891..9b0a80f 100644
+--- a/smtpd/smtpd.c
++++ b/smtpd/smtpd.c
+@@ -795,6 +795,7 @@ fork_proc_backend(const char *key, const char *conf, const char *procname)
  	char		path[PATH_MAX];
  	char		name[PATH_MAX];
  	char		*arg;
-+        char            *proc_path;
++	char		*proc_path;
  
  	if (strlcpy(name, conf, sizeof(name)) >= sizeof(name)) {
  		log_warnx("warn: %s-proc: conf too long", key);
-@@ -864,7 +865,12 @@
+@@ -805,7 +806,12 @@ fork_proc_backend(const char *key, const char *conf, const char *procname)
  	if (arg)
  		*arg++ = '\0';
  
 -	if (snprintf(path, sizeof(path), PATH_LIBEXEC "/%s-%s", key, name) >=
-+        proc_path = getenv("OPENSMTPD_PROC_PATH");
-+        if (proc_path == NULL) {
-+                proc_path = PATH_LIBEXEC;
-+        }
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
 +
 +	if (snprintf(path, sizeof(path), "%s/%s-%s", proc_path, key, name) >=
  	    (ssize_t)sizeof(path)) {
  		log_warn("warn: %s-proc: exec path too long", key);
  		return (-1);
-diff -Naur opensmtpd-5.7.1p1/smtpd/table.c opensmtpd-5.7.1p1.patched/smtpd/table.c
---- opensmtpd-5.7.1p1/smtpd/table.c	2015-06-30 10:13:34.000000000 +0200
-+++ opensmtpd-5.7.1p1.patched/smtpd/table.c	2015-09-26 08:41:17.005472536 +0200
-@@ -201,6 +201,7 @@
+diff --git a/smtpd/table.c b/smtpd/table.c
+index 21ee237..95b5164 100644
+--- a/smtpd/table.c
++++ b/smtpd/table.c
+@@ -193,6 +193,7 @@ table_create(const char *backend, const char *name, const char *tag,
  	struct table_backend	*tb;
  	char			 buf[LINE_MAX];
  	char			 path[LINE_MAX];
-+        const char              *proc_path;
++	const char		*proc_path;
  	size_t			 n;
  	struct stat		 sb;
  
-@@ -215,8 +216,14 @@
+@@ -207,11 +208,16 @@ table_create(const char *backend, const char *name, const char *tag,
  	if (name && table_find(name, NULL))
  		fatalx("table_create: table \"%s\" already defined", name);
  
-+        proc_path = getenv("OPENSMTPD_PROC_PATH");
-+        if (proc_path == NULL) {
-+                proc_path = PATH_LIBEXEC;
-+        }
++	proc_path = getenv("OPENSMTPD_PROC_PATH");
++	if (proc_path == NULL) {
++		proc_path = PATH_LIBEXEC;
++	}
 +
  	if ((tb = table_backend_lookup(backend)) == NULL) {
--		if ((size_t)snprintf(path, sizeof(path), PATH_LIBEXEC "/table-%s",
+-		if ((size_t)snprintf(path, sizeof(path), PATH_LIBEXEC"/table-%s",
+-			backend) >= sizeof(path)) {
+-			fatalx("table_create: path too long \""
+-			    PATH_LIBEXEC"/table-%s\"", backend);
 +		if ((size_t)snprintf(path, sizeof(path), "%s/table-%s",
-+                    proc_path,
- 		    backend) >= sizeof(path)) {
- 			fatalx("table_create: path too long \""
- 			    PATH_LIBEXEC "/table-%s\"", backend);
++			proc_path, backend) >= sizeof(path)) {
++			fatalx("table_create: path too long \"%s/table-%s\"",
++				proc_path, backend);
+ 		}
+ 		if (stat(path, &sb) == 0) {
+ 			tb = table_backend_lookup("proc");
