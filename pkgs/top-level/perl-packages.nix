@@ -11489,24 +11489,14 @@ let self = _self // overrides; _self = with self; {
     name = "Task-Catalyst-Tutorial-0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
-      sha256 = "07nn8a30n3qylpnf7s4ma6w462g31pywwikib117hr2mc7cv5cbm";
+      sha256 = "75b1b2d96155647842587146cefd0de30943b85195e8e3eca51e0f0b8642d61e";
     };
-    propagatedBuildInputs = [
-      CatalystManual CatalystRuntime CatalystDevel
-      CatalystPluginSession CatalystPluginAuthentication
-      CatalystAuthenticationStoreDBIxClass
-      CatalystPluginAuthorizationRoles
-      CatalystPluginSessionStateCookie
-      CatalystPluginAuthorizationACL
-      CatalystPluginHTMLWidget
-      CatalystPluginSessionStoreFastMmap
-      CatalystPluginStackTrace
-      CatalystViewTT
-      DBIxClass DBIxClassHTMLWidget
-      CatalystControllerHTMLFormFu
-    ];
     buildInputs = [TestPodCoverage];
-    meta.platforms = stdenv.lib.platforms.linux;
+    propagatedBuildInputs = [ CatalystAuthenticationStoreDBIxClass CatalystControllerHTMLFormFu CatalystDevel CatalystManual CatalystModelDBICSchema CatalystPluginAuthentication CatalystPluginAuthorizationACL CatalystPluginAuthorizationRoles CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFastMmap CatalystPluginStackTrace CatalystRuntime CatalystViewTT DBIxClass ];
+    meta = {
+      description = "Everything you need to follow the Catalyst Tutorial";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   TaskPlack = buildPerlModule rec {
