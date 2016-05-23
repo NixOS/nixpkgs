@@ -18,5 +18,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    broken = true;  # largely replaced by HoTT-Agda
   };
 })
