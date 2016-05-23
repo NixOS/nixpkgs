@@ -7693,11 +7693,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MIMETypes = buildPerlPackage {
-    name = "MIME-Types-2.04";
+  MIMETypes = buildPerlPackage rec {
+    name = "MIME-Types-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.04.tar.gz;
-      sha256 = "13yci99n8kl8p4ac5n5f1j968p7va2phlvfc5qgpnn1d6yfhddi2";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1y3vnxk4wv4a00lxcp39hw9650cdl455d3y7nv42rqmvaxikghwr";
     };
     meta = {
       description = "Definition of MIME types";
