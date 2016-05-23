@@ -27383,4 +27383,28 @@ in modules // {
       license = licenses.asl20;
     };
   };
+
+  simpleai = buildPythonPackage rec {
+     version = "0.7.11";
+     name = "simpleai-${version}";
+
+     src = pkgs.fetchurl {
+       url= "https://pypi.python.org/packages/source/s/simpleai/${name}.tar.gz";
+       sha256 = "03frjc5jxsz9xm24jz7qa4hcp0dicgazrxkdsa2rsnir672lwkwz";
+     };
+
+     propagatedBuildInputs = with self; [ numpy ];
+
+     disabled = isPy3k;
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/simpleai-team/simpleai;
+       description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
+  };
+
 }
