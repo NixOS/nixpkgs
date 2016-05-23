@@ -298,7 +298,6 @@ let
         xf86videonv = linux;
         xf86videovesa = linux;
         xf86videovmware = linux;
-        xf86videomodesetting = linux;
         xfs = linux ++ darwin;
         xinput = linux ++ darwin;
         xkbcomp = linux ++ darwin;
