@@ -887,11 +887,15 @@ let self = _self // overrides; _self = with self; {
   CatalystActionRenderView = buildPerlPackage rec {
     name = "Catalyst-Action-RenderView-0.16";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "0j1rrld13cjk7ks92b5hv3xw4rfm2lvmksb4rlzd8mx0a0wj0rc5";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "8565203950a057d43ecd64e9593715d565c2fbd8b02c91f43c53b2111acd3948";
     };
-    propagatedBuildInputs =
-      [ CatalystRuntime HTTPRequestAsCGI DataVisitor MROCompat ];
+    buildInputs = [ HTTPRequestAsCGI ];
+    propagatedBuildInputs = [ CatalystRuntime DataVisitor MROCompat ];
+    meta = {
+      description = "Sensible default end action";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CatalystActionREST = buildPerlPackage rec {
