@@ -462,7 +462,14 @@ in
           { source = "${cfg.xkbDir}";
             target = "X11/xkb";
           }
-        ]);
+        ])
+      # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
+      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+        [{
+          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
+          target = cfgPath;
+        }]
+      );
 
     environment.systemPackages =
       [ xorg.xorgserver.out
@@ -478,6 +485,7 @@ in
         xorg.xauth
         pkgs.xterm
         pkgs.xdg_utils
+        xorg.xf86inputevdev.out # get evdev.4 man page
       ]
       ++ optional (elem "virtualbox" cfg.videoDrivers) xorg.xrefresh;
 
