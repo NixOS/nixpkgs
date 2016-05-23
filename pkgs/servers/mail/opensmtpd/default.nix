@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, bison
+{ stdenv, lib, fetchurl, autoconf, automake, libtool, bison
 , libasr, libevent, zlib, openssl, db, pam
+
+# opensmtpd requires root for no reason to encrypt passwords, this patch fixes it
+# see also https://github.com/OpenSMTPD/OpenSMTPD/issues/678
+, unpriviledged_smtpctl_encrypt ? true
+
+# This enables you to override the '+' character which typically separates the user from the tag in user+tag@domain.tld
+, tag_char ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +22,16 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./proc_path.diff ];
+
+  postPatch = with builtins; with lib;
+    optionalString (isString tag_char) ''
+      sed -i -e "s,TAG_CHAR.*'+',TAG_CHAR '${tag_char}'," smtpd/smtpd-defines.h
+    '' +
+    optionalString unpriviledged_smtpctl_encrypt ''
+      substituteInPlace smtpd/smtpctl.c --replace \
+        'if (geteuid())' \
+        'if (geteuid() != 0 && !(argc > 1 && !strcmp(argv[1], "encrypt")))'
+    '';
 
   configureFlags = [
     "--sysconfdir=/etc"
