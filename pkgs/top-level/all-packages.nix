@@ -2379,9 +2379,9 @@ in
 
   makemkv = callPackage ../applications/video/makemkv { };
 
-  man = callPackage ../tools/misc/man { };
+  man-old = callPackage ../tools/misc/man { };
 
-  man_db = callPackage ../tools/misc/man-db { };
+  man-db = callPackage ../tools/misc/man-db { };
 
   mawk = callPackage ../tools/text/mawk { };
 
