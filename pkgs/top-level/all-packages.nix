@@ -1490,6 +1490,7 @@ in
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
 
+    cloudpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-cloudpinyin { };
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
