@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen
+, curl, libiconv, gmp, xen, zfs
 }:
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
-    libnl numad numactl xen
+    libnl numad numactl xen zfs
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
     "--with-macvtap"
     "--with-virtualport"
     "--with-init-script=redhat"
+    "--with-storage-zfs"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
