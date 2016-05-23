@@ -1085,18 +1085,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginAccessLog = buildPerlPackage {
-    name = "Catalyst-Plugin-AccessLog-1.05";
+  CatalystPluginAccessLog = buildPerlPackage rec {
+    name = "Catalyst-Plugin-AccessLog-1.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AR/ARODLAND/Catalyst-Plugin-AccessLog-1.05.tar.gz;
-      sha256 = "0hqvckaw91q5yc25a33bp0d4qqxlgkp7rxlvi8n8svxd1406r55s";
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
+      sha256 = "873db8e4e72a994e3e17aeb53d2b837e6d524b4b8b0f3539f262135c88cc2120";
     };
     propagatedBuildInputs = [ CatalystRuntime DateTime Moose namespaceautoclean ];
-    doCheck = false;
     meta = {
+      homepage = http://metacpan.org/release/Catalyst-Plugin-AccessLog;
       description = "Request logging from within Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
