@@ -12488,7 +12488,7 @@ in
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
-    fltk = fltk20;
+    fltk = fltk13.override { cfg.xftSupport = true; };
   };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
