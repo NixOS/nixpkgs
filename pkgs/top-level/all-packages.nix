@@ -14013,6 +14013,8 @@ in
     gtk = gtk3;
   };
 
+  shutter = callPackage ../applications/graphics/shutter { };
+
   simple-scan = callPackage ../applications/graphics/simple-scan { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
