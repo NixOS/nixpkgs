@@ -1182,6 +1182,30 @@ rec {
       packages = commonOpenSUSEPackages;
     };
 
+    opensuse132i386 = {
+      name = "opensuse-13.2-i586";
+      fullName = "openSUSE 13.2 (i586)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "i586"];
+      packages = commonOpenSUSEPackages;
+    };
+
+    opensuse132x86_64 = {
+      name = "opensuse-13.2-x86_64";
+      fullName = "openSUSE 13.2 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://opensuse/13.2/repo/oss/suse/repodata/485e4f44e3c3ef3133accb589480933c2fe48dedfc44a7e5f9d5437cd9122a99-primary.xml.gz;
+        sha256 = "0klzmk680as4sb6h1wl0ynj0dds3m70qim66wwbiqlnnp6xkf83y";
+      };
+      urlPrefix = mirror://opensuse/13.2/repo/oss/suse/;
+      archs = ["noarch" "x86_64"];
+      packages = commonOpenSUSEPackages;
+    };
+
     centos65i386 = {
       name = "centos-6.5-i386";
       fullName = "CentOS 6.5 (i386)";
