@@ -2,13 +2,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rtl8723bs-${kernel.version}-${rev}";
-  rev = "6918e9b2ff297b1cc7fde193e72452c33c10e1c8";
+  rev = "b0ef98fff09bc091da3fb4157f3118427ecd6dea";
 
   src = fetchFromGitHub {
     owner = "hadess";
     repo = "rtl8723bs";
     inherit rev;
-    sha256 = "07srd457wnz29nvvq02wz66s387bhjbydnmbs3qr7ljprabhsgmi";
+    sha256 = "0la1r7vh2klirh1lqq8spyq8wpq3qk25pn2zpr4czdh2lml366x0";
   };
 
   hardeningDisable = [ "pic" ];
