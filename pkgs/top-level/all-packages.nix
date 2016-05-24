@@ -12070,6 +12070,8 @@ in
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
   conkeror = self.wrapFirefox conkeror-unwrapped { };
 
+  containerd = callPackage ../applications/virtualization/containerd { };
+
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
   };
@@ -12162,7 +12164,7 @@ in
 
   docker = callPackage ../applications/virtualization/docker {
     btrfs-progs = btrfs-progs_4_4_1;
-    go = go_1_4;
+    md2man = goPackages.go-md2man;
   };
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
@@ -13925,6 +13927,10 @@ in
   rtv = callPackage ../applications/misc/rtv { };
 
   rubyripper = callPackage ../applications/audio/rubyripper {};
+
+  runc = callPackage ../applications/virtualization/runc {
+    md2man = goPackages.go-md2man;
+  };
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
