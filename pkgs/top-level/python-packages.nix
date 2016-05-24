@@ -27433,4 +27433,46 @@ in modules // {
      };
   };
 
+  tvdb_api = buildPythonPackage rec {
+    name = "tvdb_api-${version}";
+    version = "1.10";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvdb_api/${name}.tar.gz";
+      sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
+    };
+
+    disabled = isPy3k;
+
+    meta = {
+      description = "Simple to use TVDB (thetvdb.com) API in Python.";
+      homepage = "https://github.com/dbr/tvdb_api";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  tvnamer = buildPythonPackage rec {
+    name = "tvnamer-${version}";
+    version = "2.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
+      sha256 = "15i6qvhwhcx08c96xx3s2841yc7k8gxrqqvhw908c11g0045c2r3";
+    };
+
+    propagatedBuildInputs = with self; [
+      tvdb_api
+    ];
+
+    # tvdb_api isn't working with Python 3
+    disabled = isPy3k;
+
+    meta = {
+      description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+      homepage = "https://github.com/dbr/tvnamer";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
 }
