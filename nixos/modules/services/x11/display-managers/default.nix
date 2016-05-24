@@ -32,6 +32,12 @@ let
     ''
       #! ${pkgs.bash}/bin/bash
 
+      ${optionalString cfg.displayManager.logToJournal ''
+        if [ -z "$_DID_SYSTEMD_CAT" ]; then
+          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$sessionType"
+        fi
+      ''}
+
       . /etc/profile
       cd "$HOME"
 
@@ -39,7 +45,7 @@ let
       sessionType="$1"
       if [ "$sessionType" = default ]; then sessionType=""; fi
 
-      ${optionalString (!cfg.displayManager.job.logsXsession) ''
+      ${optionalString (!cfg.displayManager.job.logsXsession && !cfg.displayManager.logToJournal) ''
         exec > ~/.xsession-errors 2>&1
       ''}
 
@@ -82,6 +88,8 @@ let
       # Work around KDE errors when a user first logs in and
       # .local/share doesn't exist yet.
       mkdir -p $HOME/.local/share
+
+      unset _DID_SYSTEMD_CAT
 
       ${cfg.displayManager.sessionCommands}
 
@@ -276,6 +284,16 @@ in
           '';
         };
 
+      };
+
+      logToJournal = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          By default, the stdout/stderr of sessions is written
+          to <filename>~/.xsession-errors</filename>. When this option
+          is enabled, it will instead be written to the journal.
+        '';
       };
 
     };
