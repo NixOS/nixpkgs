@@ -14580,6 +14580,8 @@ in
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
+  wp-cli = callPackage ../development/tools/wp-cli { };
+
   retroArchCores =
     let
       cfg = config.retroarch or {};
