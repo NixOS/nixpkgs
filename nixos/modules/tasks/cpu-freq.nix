@@ -38,7 +38,7 @@ in
       description = "CPU Frequency Governor Setup";
       after = [ "systemd-modules-load.service" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ cpupower ];
+      path = [ cpupower config.system.sbin.modprobe ];
       unitConfig.ConditionVirtualization = false;
       serviceConfig = {
         Type = "oneshot";
