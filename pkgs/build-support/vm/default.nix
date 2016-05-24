@@ -1215,7 +1215,7 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/i386;
       archs = ["noarch" "i386"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
     };
 
     centos65x86_64 = {
@@ -1227,7 +1227,20 @@ rec {
       };
       urlPrefix = http://vault.centos.org/6.5/os/x86_64/;
       archs = ["noarch" "x86_64"];
-      packages = commonCentOSPackages;
+      packages = commonCentOSPackages ++ [ "procps" ];
+    };
+
+    # Note: no i386 release for 7.x
+    centos71x86_64 = {
+      name = "centos-7.1-x86_64";
+      fullName = "CentOS 7.1 (x86_64)";
+      packagesList = fetchurl {
+        url = http://vault.centos.org/7.1.1503/os/x86_64/repodata/1386c5af55bda40669bb5ed91e0a22796c3ed7325367506109b09ea2657f22bd-primary.xml.gz;
+        sha256 = "1g92gxjs57mh15hm0rsk6bbkwv3r4851xnaypdlhd95xanpwb1hk";
+      };
+      urlPrefix = http://vault.centos.org/7.1.1503/os/x86_64;
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
 
   };
@@ -1903,7 +1916,6 @@ rec {
     "patch"
     "perl"
     "pkgconfig"
-    "procps"
     "rpm"
     "rpm-build"
     "tar"
