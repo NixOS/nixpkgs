@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper ];
 
-  patchPhase = ''
+  prePatch = ''
     patchShebangs .
 
     # some hardcodeism
