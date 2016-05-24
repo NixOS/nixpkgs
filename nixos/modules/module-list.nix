@@ -347,6 +347,7 @@
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
+  ./services/networking/mosquitto.nix
   ./services/networking/mstpd.nix
   ./services/networking/murmur.nix
   ./services/networking/namecoind.nix
