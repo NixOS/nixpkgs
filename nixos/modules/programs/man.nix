@@ -19,7 +19,7 @@ with lib;
 
   config = mkIf config.programs.man.enable {
 
-    environment.systemPackages = [ pkgs.man ];
+    environment.systemPackages = [ pkgs.man-db ];
 
     environment.pathsToLink = [ "/share/man" ];
 

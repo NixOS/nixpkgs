@@ -64,6 +64,8 @@ doNotDisplayTwice rec {
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   manpages = man-pages; # added 2015-12-06
+  man_db = man-db; # added 2016-05
+  man = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   module_init_tools = kmod; # added 2016-04-22
