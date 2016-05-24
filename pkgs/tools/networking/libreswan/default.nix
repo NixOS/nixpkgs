@@ -1,15 +1,15 @@
 { stdenv, fetchurl, makeWrapper,
   pkgconfig, systemd, gmp, unbound, bison, flex, pam, libevent, libcap_ng, curl, nspr,
-  bash, iproute, iptables, procps, coreutils, gnused, gawk, nssTools, which, python,
+  bash, iproute, iptables, procps, coreutils, gnused, gawk, nss, which, python,
   docs ? false, xmlto
   }:
 
 let
   optional = stdenv.lib.optional;
-  version = "3.16";
+  version = "3.17";
   name = "libreswan-${version}";
   binPath = stdenv.lib.makeBinPath [
-    bash iproute iptables procps coreutils gnused gawk nssTools which python
+    bash iproute iptables procps coreutils gnused gawk nss.tools which python
   ];
 in
 
@@ -21,12 +21,12 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.libreswan.org/${name}.tar.gz";
-    sha256 = "15qv4101p1jw591l04gsfscb3farzd278mgi8yph015vmifyjxrd";
+    sha256 = "00qd1n6f5w4xr06yanfpnbnn7y7rq2m878ifa3hh13bdgzsqdhi8";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ pkgconfig bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
-                  libcap_ng curl nspr nssTools python ]
+                  libcap_ng curl nspr nss python ]
                 ++ optional docs xmlto;
 
   prePatch = ''
