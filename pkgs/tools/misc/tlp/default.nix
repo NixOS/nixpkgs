@@ -1,11 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils
+{ stdenv, lib, fetchFromGitHub, perl, systemd, iw, rfkill, hdparm, ethtool, inetutils
 , kmod, pciutils, smartmontools, x86_energy_perf_policy, gawk, gnugrep, coreutils
 , enableRDW ? false, networkmanager
 }:
 
-let version = "0.8";
-in stdenv.mkDerivation {
+let
+  paths = lib.makeBinPath
+          ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools
+             x86_energy_perf_policy gawk gnugrep coreutils
+           ]
+           ++ lib.optional enableRDW networkmanager
+          );
+
+in stdenv.mkDerivation rec {
   name = "tlp-${version}";
+  version = "0.8";
 
   src = fetchFromGitHub {
         owner = "linrunner";
@@ -22,24 +30,16 @@ in stdenv.mkDerivation {
                 "TLP_NO_PMUTILS=1"
               ];
 
-  nativeBuildInputs = [ makeWrapper ];
-
   buildInputs = [ perl ];
-
-  paths = lib.makeBinPath
-          ([ iw rfkill hdparm ethtool inetutils systemd kmod pciutils smartmontools
-             x86_energy_perf_policy gawk gnugrep coreutils
-           ]
-           ++ lib.optional enableRDW networkmanager
-          );
 
   installTargets = [ "install-tlp" ] ++ stdenv.lib.optional enableRDW "install-rdw";
 
   postInstall = ''
     for i in $out/bin/* $out/lib/udev/tlp-*; do
-      sed -i "s,/usr/lib/,$out/lib/,g" "$i"
-      wrapProgram "$i" \
-        --prefix PATH : "$paths"
+      sed -i \
+        -e "s,/usr/lib/,$out/lib/,g" \
+        -e '2iexport PATH=${paths}:$PATH' \
+        "$i"
     done
 
     for i in $out/lib/udev/rules.d/*; do
@@ -51,9 +51,10 @@ in stdenv.mkDerivation {
     done
   '' + lib.optionalString enableRDW ''
     for i in $out/etc/NetworkManager/dispatcher.d/*; do
-      sed -i "s,/usr/lib/,$out/lib/,g" "$i"
-      wrapProgram "$i" \
-        --prefix PATH : "$paths"
+      sed -i \
+        -e "s,/usr/lib/,$out/lib/,g" \
+        -e '2iexport PATH=${paths}:$PATH' \
+        "$i"
     done
   '';
 
