@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man1
   '';
   installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc MANDIR=\${out}/share/man";
+  postInstall = ''
+    mv $out/bin/i3lock $out/bin/i3lock-color
+  '';
   meta = with stdenv.lib; {
     description = "A simple screen locker like slock";
     homepage = http://i3wm.org/i3lock/;

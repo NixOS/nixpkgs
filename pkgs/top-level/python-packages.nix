@@ -27336,6 +27336,32 @@ in modules // {
     };
   };
 
+  Lasagne = buildPythonPackage rec {
+    name = "Lasagne-${version}";
+    version = "0.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lasagne/${name}.tar.gz";
+      sha256 = "0cqj86rdm6c7y5vq3i13qy76fg5xi3yjp4r0hpqy8hvynv54wqrw";
+    };
+
+    propagatedBuildInputs = with self; [
+      numpy 
+      Theano
+    ];
+
+    # there are no tests
+    doCheck = false;
+
+    meta = {
+      description = "Lightweight library to build and train neural networks in Theano";
+      homepage = "https://github.com/Lasagne/Lasagne";
+      maintainers = with maintainers; [ NikolaMandic ];
+      license = licenses.mit;
+    };
+  };
+
   sigtools = buildPythonPackage rec {
     name = "sigtools-${version}";
     version = "1.1a3";
@@ -27443,6 +27469,72 @@ in modules // {
       description = "TensorFlow helps the tensors flow (no gpu support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
+    };
+  };
+
+  simpleai = buildPythonPackage rec {
+     version = "0.7.11";
+     name = "simpleai-${version}";
+
+     src = pkgs.fetchurl {
+       url= "https://pypi.python.org/packages/source/s/simpleai/${name}.tar.gz";
+       sha256 = "03frjc5jxsz9xm24jz7qa4hcp0dicgazrxkdsa2rsnir672lwkwz";
+     };
+
+     propagatedBuildInputs = with self; [ numpy ];
+
+     disabled = isPy3k;
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/simpleai-team/simpleai;
+       description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
+  };
+
+  tvdb_api = buildPythonPackage rec {
+    name = "tvdb_api-${version}";
+    version = "1.10";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvdb_api/${name}.tar.gz";
+      sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
+    };
+
+    disabled = isPy3k;
+
+    meta = {
+      description = "Simple to use TVDB (thetvdb.com) API in Python.";
+      homepage = "https://github.com/dbr/tvdb_api";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  tvnamer = buildPythonPackage rec {
+    name = "tvnamer-${version}";
+    version = "2.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
+      sha256 = "15i6qvhwhcx08c96xx3s2841yc7k8gxrqqvhw908c11g0045c2r3";
+    };
+
+    propagatedBuildInputs = with self; [
+      tvdb_api
+    ];
+
+    # tvdb_api isn't working with Python 3
+    disabled = isPy3k;
+
+    meta = {
+      description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+      homepage = "https://github.com/dbr/tvnamer";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
     };
   };
 }

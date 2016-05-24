@@ -1491,6 +1491,7 @@ in
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
 
+    cloudpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-cloudpinyin { };
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
@@ -2377,9 +2378,9 @@ in
 
   makemkv = callPackage ../applications/video/makemkv { };
 
-  man = callPackage ../tools/misc/man { };
+  man-old = callPackage ../tools/misc/man { };
 
-  man_db = callPackage ../tools/misc/man-db { };
+  man-db = callPackage ../tools/misc/man-db { };
 
   mawk = callPackage ../tools/text/mawk { };
 
@@ -2759,7 +2760,7 @@ in
     libpng = libpng12;
   };
 
-  oslrd = callPackage ../tools/networking/oslrd { };
+  olsrd = callPackage ../tools/networking/olsrd { };
 
   ossec = callPackage ../tools/security/ossec {};
 
@@ -3924,6 +3925,13 @@ in
   xe-guest-utilities = callPackage ../tools/virtualization/xe-guest-utilities { };
 
   xflux = callPackage ../tools/misc/xflux { };
+  xflux-gui = callPackage ../tools/misc/xflux/gui.nix {
+    pexpect = pythonPackages.pexpect;
+    pyGtkGlade = pythonPackages.pyGtkGlade;
+    pygobject = pythonPackages.pygobject;
+    pyxdg = pythonPackages.pyxdg;
+    gnome_python = gnome.gnome_python;
+  };
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = self.xfsprogs.dev; # outputs TODO
@@ -6129,6 +6137,7 @@ in
   gnumake3 = self.gnumake382;
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
+  gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake41;
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
@@ -12831,6 +12840,8 @@ in
     inherit (gnome) GConf;
   };
 
+  gnome-mpv = callPackage ../applications/video/gnome-mpv { };
+
   gollum = callPackage ../applications/misc/gollum { };
 
   google-chrome = callPackage ../applications/networking/browsers/google-chrome { gconf = gnome.GConf; };
@@ -14556,6 +14567,8 @@ in
 
   wrapFirefox = callPackage ../applications/networking/browsers/firefox/wrapper.nix { };
 
+  wp-cli = callPackage ../development/tools/wp-cli { };
+
   retroArchCores =
     let
       cfg = config.retroarch or {};
@@ -14825,7 +14838,7 @@ in
 
   pahole = callPackage ../development/tools/misc/pahole {};
 
-  yarp = callPackage ../applications/science/misc/yarp {};
+  yarp = callPackage ../applications/science/robotics/yarp {};
 
   yed = callPackage ../applications/graphics/yed {};
 
@@ -15255,7 +15268,7 @@ in
   };
 
   # You still can override by passing more arguments.
-  spaceOrbit = callPackage ../games/orbit { };
+  space-orbit = callPackage ../games/space-orbit { };
 
   spring = callPackage ../games/spring {
     boost = boost155;

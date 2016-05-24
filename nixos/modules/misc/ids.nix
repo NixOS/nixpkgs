@@ -267,6 +267,7 @@
       graylog = 243;
       sniproxy = 244;
       nzbget = 245;
+      mosquitto = 246;
 
       prometheus = 999;
 
@@ -506,6 +507,7 @@
       emby = 242;
       sniproxy = 244;
       nzbget = 245;
+      mosquitto = 246;
 
       prometheus = 999;
 

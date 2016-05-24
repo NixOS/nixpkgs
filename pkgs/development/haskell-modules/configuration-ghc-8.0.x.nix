@@ -161,4 +161,6 @@ self: super: {
     buildDepends = [ primitive ];
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
+
+  MonadCatchIO-transformers = doJailbreak super.MonadCatchIO-transformers;
 }

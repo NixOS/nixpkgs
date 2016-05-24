@@ -887,11 +887,15 @@ let self = _self // overrides; _self = with self; {
   CatalystActionRenderView = buildPerlPackage rec {
     name = "Catalyst-Action-RenderView-0.16";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "0j1rrld13cjk7ks92b5hv3xw4rfm2lvmksb4rlzd8mx0a0wj0rc5";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "8565203950a057d43ecd64e9593715d565c2fbd8b02c91f43c53b2111acd3948";
     };
-    propagatedBuildInputs =
-      [ CatalystRuntime HTTPRequestAsCGI DataVisitor MROCompat ];
+    buildInputs = [ HTTPRequestAsCGI ];
+    propagatedBuildInputs = [ CatalystRuntime DataVisitor MROCompat ];
+    meta = {
+      description = "Sensible default end action";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CatalystActionREST = buildPerlPackage rec {
@@ -989,19 +993,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystDevel = buildPerlPackage {
+  CatalystDevel = buildPerlPackage rec {
     name = "Catalyst-Devel-1.39";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IL/ILMARI/Catalyst-Devel-1.39.tar.gz;
-      sha256 = "12m50bbkggjmpxihv3wnvr0g2qng0zwhlzi5ygppjz8wh2x73qxw";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/${name}.tar.gz";
+      sha256 = "bce371ba801c7d79eff3257e0af907cf62f140de968f0d63bf55be37d702a58a";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ CatalystRuntime CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple ConfigGeneral FileChangeNotify FileCopyRecursive FileShareDir ModuleInstall Moose MooseXDaemonize MooseXEmulateClassAccessorFast namespaceautoclean namespaceclean PathClass Starman TemplateToolkit ];
+    propagatedBuildInputs = [ CatalystActionRenderView CatalystPluginConfigLoader CatalystPluginStaticSimple CatalystRuntime ConfigGeneral FileChangeNotify FileCopyRecursive FileShareDir ModuleInstall Moose MooseXDaemonize MooseXEmulateClassAccessorFast PathClass TemplateToolkit Starman namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "Catalyst Development Tools";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -1069,34 +1073,33 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystRuntime = buildPerlPackage {
-    name = "Catalyst-Runtime-5.90085";
+  CatalystRuntime = buildPerlPackage rec {
+    name = "Catalyst-Runtime-5.90104";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90085.tar.gz;
-      sha256 = "17wfcawvj8nxs2wq7r094m6dff37s6i2d2z49lxz2n8c489d9nk1";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/${name}.tar.gz";
+      sha256 = "91d551944beb3a0ae8635c78d5f2e1583ef1e7873d5c8ee407e2f64380ad870b";
     };
-    buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal ];
-    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList Encode HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TermSizeAny TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
+    buildInputs = [ DataDump HTTPMessage IOstringy JSONMaybeXS TestFatal TypeTiny ];
+    propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT ClassDataInheritable ClassLoad DataDump DataOptList HTMLParser HTTPBody HTTPMessage HTTPRequestAsCGI HashMultiValue JSONMaybeXS LWP ListMoreUtils MROCompat ModulePluggable Moose MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass Plack PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StreamBuffered StringRewritePrefix SubExporter TaskWeaken TextSimpleTable TreeSimple TreeSimpleVisitorFactory TryTiny URI URIws namespaceautoclean namespaceclean ];
     meta = {
       homepage = http://dev.catalyst.perl.org/;
       description = "The Catalyst Framework Runtime";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
-  CatalystPluginAccessLog = buildPerlPackage {
-    name = "Catalyst-Plugin-AccessLog-1.05";
+  CatalystPluginAccessLog = buildPerlPackage rec {
+    name = "Catalyst-Plugin-AccessLog-1.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AR/ARODLAND/Catalyst-Plugin-AccessLog-1.05.tar.gz;
-      sha256 = "0hqvckaw91q5yc25a33bp0d4qqxlgkp7rxlvi8n8svxd1406r55s";
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
+      sha256 = "873db8e4e72a994e3e17aeb53d2b837e6d524b4b8b0f3539f262135c88cc2120";
     };
     propagatedBuildInputs = [ CatalystRuntime DateTime Moose namespaceautoclean ];
-    doCheck = false;
     meta = {
+      homepage = http://metacpan.org/release/Catalyst-Plugin-AccessLog;
       description = "Request logging from within Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -7690,11 +7693,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  MIMETypes = buildPerlPackage {
-    name = "MIME-Types-2.04";
+  MIMETypes = buildPerlPackage rec {
+    name = "MIME-Types-2.13";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/MIME-Types-2.04.tar.gz;
-      sha256 = "13yci99n8kl8p4ac5n5f1j968p7va2phlvfc5qgpnn1d6yfhddi2";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/${name}.tar.gz";
+      sha256 = "1y3vnxk4wv4a00lxcp39hw9650cdl455d3y7nv42rqmvaxikghwr";
     };
     meta = {
       description = "Definition of MIME types";
@@ -11486,24 +11489,14 @@ let self = _self // overrides; _self = with self; {
     name = "Task-Catalyst-Tutorial-0.06";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRAMBERG/${name}.tar.gz";
-      sha256 = "07nn8a30n3qylpnf7s4ma6w462g31pywwikib117hr2mc7cv5cbm";
+      sha256 = "75b1b2d96155647842587146cefd0de30943b85195e8e3eca51e0f0b8642d61e";
     };
-    propagatedBuildInputs = [
-      CatalystManual CatalystRuntime CatalystDevel
-      CatalystPluginSession CatalystPluginAuthentication
-      CatalystAuthenticationStoreDBIxClass
-      CatalystPluginAuthorizationRoles
-      CatalystPluginSessionStateCookie
-      CatalystPluginAuthorizationACL
-      CatalystPluginHTMLWidget
-      CatalystPluginSessionStoreFastMmap
-      CatalystPluginStackTrace
-      CatalystViewTT
-      DBIxClass DBIxClassHTMLWidget
-      CatalystControllerHTMLFormFu
-    ];
     buildInputs = [TestPodCoverage];
-    meta.platforms = stdenv.lib.platforms.linux;
+    propagatedBuildInputs = [ CatalystAuthenticationStoreDBIxClass CatalystControllerHTMLFormFu CatalystDevel CatalystManual CatalystModelDBICSchema CatalystPluginAuthentication CatalystPluginAuthorizationACL CatalystPluginAuthorizationRoles CatalystPluginSession CatalystPluginSessionStateCookie CatalystPluginSessionStoreFastMmap CatalystPluginStackTrace CatalystRuntime CatalystViewTT DBIxClass ];
+    meta = {
+      description = "Everything you need to follow the Catalyst Tutorial";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   TaskPlack = buildPerlModule rec {
@@ -13770,11 +13763,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Want = buildPerlPackage {
-    name = "Want-0.26";
+  Want = buildPerlPackage rec {
+    name = "Want-0.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RO/ROBIN/Want-0.26.tar.gz;
-      sha256 = "4951675e13de2b0b9792be2827b8ef46ef25a0b9a2d3e9132143444dac28e17c";
+      url = "mirror://cpan/authors/id/R/RO/ROBIN/${name}.tar.gz";
+      sha256 = "1xsjylbxxcbkjazqms49ipi94j1hd2ykdikk29cq7dscil5p9r5l";
     };
   };
 
