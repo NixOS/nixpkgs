@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "A lean and mean Atmel AVR simulator for Linux";
     homepage    = https://github.com/buserror/simavr;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ goodrone ];
   };
 
 }
