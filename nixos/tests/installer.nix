@@ -363,8 +363,7 @@ in {
       # XXX: Currently, generate-config doesn't detect LUKS yet.
       extraConfig = ''
         boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-        boot.initrd.luks.devices = lib.singleton {
-          name = "cryptroot";
+        boot.initrd.luks.devices.cryptroot = {
           device = "/dev/vda3";
           preLVM = true;
         };
