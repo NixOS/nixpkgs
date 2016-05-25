@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib, dbus_tools, isPyPy }:
+{ stdenv, fetchurl, python, pkgconfig, dbus, dbus_glib, dbus_tools, isPyPy
+, ncurses }:
 
 if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else stdenv.mkDerivation rec {
   name = "dbus-python-1.2.4";
@@ -11,9 +12,12 @@ if isPyPy then throw "dbus-python not supported for interpreter ${python.executa
   postPatch = "patchShebangs .";
 
   buildInputs = [ python pkgconfig dbus dbus_glib ]
-    ++ stdenv.lib.optional doCheck dbus_tools;
+    ++ stdenv.lib.optional doCheck dbus_tools
+    # My guess why it's sometimes trying to -lncurses.
+    # It seems not to retain the dependency anyway.
+    ++ stdenv.lib.optional (! python ? modules) ncurses;
 
-  doCheck = false; # https://bugs.freedesktop.org/show_bug.cgi?id=57140
+  doCheck = true;
 
   # Set empty pythonPath, so that the package is recognized as a python package
   # for python.buildEnv
