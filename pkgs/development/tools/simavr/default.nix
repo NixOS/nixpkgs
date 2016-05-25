@@ -5,6 +5,10 @@ stdenv.mkDerivation rec {
   version = "1.3";
   enableParallelBuilding = true;
 
+  libPath = stdenv.lib.makeLibraryPath [
+    libelf
+  ];
+
   src = fetchurl {
     url = "https://github.com/buserror/simavr/archive/v${version}.tar.gz";
     sha1 = "b1a875fb23ad819545bcb1889e5fb5470deb09c5";
@@ -17,6 +21,10 @@ stdenv.mkDerivation rec {
 
   buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
   installFlags = buildFlags + " DESTDIR=$(out)";
+
+  postFixup = ''
+    patchelf --set-rpath "$libPath:$out/lib" "$out/bin/simavr"
+  '';
 
   buildInputs = [ makeWrapper which git avrgcclibc libelf pkgconfig freeglut mesa ];
 
