@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="mailsend";
-    version="1.18";
+    version="1.19";
     name="${baseName}-${version}";
-    hash="1fjrb6q7y2dxx0qz7r0wlhqfkjqq1vfh7yb7jl77h5qi5kd5rm46";
-    url="https://github.com/muquit/mailsend/archive/1.18.tar.gz";
-    sha256="1fjrb6q7y2dxx0qz7r0wlhqfkjqq1vfh7yb7jl77h5qi5kd5rm46";
+    hash="1xwk6jvl5li8ddlik1lj88qswnyminp9wlf5cm8gg3n54szgcpjn";
+    url="https://github.com/muquit/mailsend/archive/1.19.tar.gz";
+    sha256="1xwk6jvl5li8ddlik1lj88qswnyminp9wlf5cm8gg3n54szgcpjn";
   };
   buildInputs = [
     openssl
