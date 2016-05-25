@@ -13848,6 +13848,10 @@ in
 
   qsampler = callPackage ../applications/audio/qsampler { };
 
+  qscreenshot = callPackage ../applications/graphics/qscreenshot {
+    qt = qt4;
+  };
+
   qsynth = callPackage ../applications/audio/qsynth { };
 
   qtox = qt5.callPackage ../applications/networking/instant-messengers/qtox { };
