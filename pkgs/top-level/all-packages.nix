@@ -15925,6 +15925,8 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
+  magma = callPackage ../development/libraries/science/math/magma { };  
+
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
 
