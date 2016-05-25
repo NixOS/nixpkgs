@@ -1,5 +1,6 @@
 #! @perl@
 
+use strict;
 use Cwd 'abs_path';
 use File::Spec;
 use File::Path;
@@ -69,6 +70,7 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
 my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
+my @initrdAvailableKernelModules = ();
 my @modulePackages = ();
 my @imports;
 
@@ -379,7 +381,7 @@ EOF
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
         my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0 || join("", @msg) =~ /ERROR:/) {
+        if ($status != 0 || join("", @id_info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
         my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
@@ -440,7 +442,7 @@ sub toNixList {
 sub multiLineList {
     my $indent = shift;
     return " [ ]" if !@_;
-    $res = "\n${indent}[ ";
+    my $res = "\n${indent}[ ";
     my $first = 1;
     foreach my $s (@_) {
         $res .= "$indent  " if !$first;
@@ -494,7 +496,7 @@ if ($showHardwareConfig) {
     if ($force || ! -e $fn) {
         print STDERR "writing $fn...\n";
 
-        my $bootloaderConfig = "";
+        my $bootLoaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
   # Use the gummiboot efi boot loader.
@@ -568,7 +570,7 @@ $bootLoaderConfig
   # };
 
   # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "@nixosRelease@";
+  system.stateVersion = "${\(qw(@nixosRelease@))}";
 
 }
 EOF
