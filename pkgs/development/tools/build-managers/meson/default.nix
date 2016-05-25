@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ninja python3 ];
 
   installPhase = ''
-    ./install_meson.py --prefix=$out --destdir="$pkgdir/"
+    python3 ./install_meson.py --prefix=$out --destdir="$pkgdir/"
   '';
 
   meta = {
