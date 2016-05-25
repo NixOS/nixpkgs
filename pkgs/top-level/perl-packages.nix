@@ -957,9 +957,13 @@ let self = _self // overrides; _self = with self; {
     name = "Catalyst-Component-InstancePerContext-0.001001";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GR/GRODITI/${name}.tar.gz";
-      sha256 = "0wfj4vnn2cvk6jh62amwlg050p37fcwdgrn9amcz24z6w4qgjqvz";
+      sha256 = "7f63f930e1e613f15955c9e6d73873675c50c0a3bc2a61a034733361ed26d271";
     };
-    propagatedBuildInputs = [CatalystRuntime Moose];
+    propagatedBuildInputs = [ CatalystRuntime Moose ];
+    meta = {
+      description = "Moose role to create only one instance of component per context";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   CatalystControllerHTMLFormFu = buildPerlPackage rec {
