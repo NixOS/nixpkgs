@@ -9870,6 +9870,8 @@ in
 
   gatling = callPackage ../servers/http/gatling { };
 
+  geth = goPackages.ethereum.bin // { outputs = [ "bin" ]; };
+
   glabels = callPackage ../applications/graphics/glabels { };
 
   grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
