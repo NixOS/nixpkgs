@@ -94,7 +94,7 @@ in
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 0;
+  boot.loader.timeout = 0;
 
   # Don't put old configurations in the GRUB menu.  The user has no
   # way to select them anyway.
