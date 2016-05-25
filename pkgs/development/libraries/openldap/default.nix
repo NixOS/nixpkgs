@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  dontPatchELF = 1; # !!!
+
   # Fixup broken libtool
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
