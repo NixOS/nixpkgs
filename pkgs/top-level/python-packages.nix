@@ -26213,14 +26213,14 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.7";
+    version = "0.1.8";
     name = "neovim-${version}";
 
     disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "0il6h9qpy9rkgz16yn2bhhg5f23w41wvm9ivlscx5l55llq9sd9q";
+      sha256 = "06g84f0l208jrc1iqa4vk9kgwr77z1ya8cq39cygpq88yjj28whi";
     };
 
     propagatedBuildInputs = with self; [ msgpack ]
