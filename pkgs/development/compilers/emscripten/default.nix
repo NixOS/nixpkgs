@@ -1,7 +1,7 @@
 { stdenv, fetchgit, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
 
 let
-  tag = "1.35.4";
+  tag = "1.36.4";
   appdir = "share/emscripten";
 in
 
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/kripken/emscripten;
     rev = "refs/tags/${tag}";
-    sha256 = "466500356c8c0fbcee495b2dbd2ccf0bf9d7eaf303d274ebaf491122759dd233";
+    sha256 = "02m85xh9qx29kb6v11y072gk8fvyc23964wclr70c69j2gal2qpr";
   };
 
-  buildCommand = ''
+  buildCommand = '' 
     mkdir -p $out/${appdir}
     cp -r $src/* $out/${appdir}
     chmod -R +w $out/${appdir}
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/kripken/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ bosu ];
+    maintainers = with maintainers; [ qknight ];
     license = licenses.ncsa;
   };
 }
