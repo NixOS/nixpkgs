@@ -1201,6 +1201,8 @@ in
 
   cudatoolkit = self.cudatoolkit7;
 
+  cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
+
   curlFull = self.curl.override {
     idnSupport = true;
     ldapSupport = true;
