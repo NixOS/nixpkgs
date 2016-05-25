@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  postInstall = optionalString (elem stdenv.system platforms.linux) ''
-    wrapProgram $out/bin/bup --prefix PYTHONPATH : \
+  postInstall = ''wrapProgram $out/bin/bup --prefix PATH : ${git}/bin ''
+   + optionalString (elem stdenv.system platforms.linux) '' --prefix PYTHONPATH : \
       ${stdenv.lib.concatStringsSep ":"
           (map (path: "$(toPythonPath ${path})") [ pyxattr pylibacl setuptools fuse ])}
   '';
