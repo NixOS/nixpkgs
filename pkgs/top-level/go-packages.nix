@@ -206,11 +206,11 @@ let
   };
 
   adapted = buildFromGitHub {
-    rev = "eaea06aaff855227a71b1c58b18bc6de822e3e77";
-    version = "2015-06-03";
+    rev = "0dd5fa34d6f9d74c7c0deed1fc224f9a87e02978";
+    version = "2016-04-10";
     owner = "michaelmacinnis";
     repo = "adapted";
-    sha256 = "0f28sn5mj48087zhjdrph2sjcznff1i1lwnwplx32bc5ax8nx5xm";
+    sha256 = "16n3a87m33pqx4qih713q3gw2j6ksj1q3ngjax6bpn5b11rqvikv";
     propagatedBuildInputs = [ sys ];
   };
 
