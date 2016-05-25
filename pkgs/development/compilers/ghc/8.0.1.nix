@@ -5,7 +5,7 @@
 let
   inherit (bootPkgs) ghc;
 
-in 
+in
 stdenv.mkDerivation rec {
   version = "8.0.1";
   name = "ghc-${version}";
