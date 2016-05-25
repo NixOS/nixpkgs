@@ -6373,6 +6373,8 @@ in
     ruby = ruby_2_0;
   };
 
+  redo = callPackage ../development/tools/build-managers/redo { };
+
   re2c = callPackage ../development/tools/parsing/re2c { };
 
   remake = callPackage ../development/tools/build-managers/remake { };
