@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
     cd simavr-$version
   '';
 
-  buildFlags = "LINUX_AVR_ROOTS=${avrgcclibc} SIMAVR_VERSION=${version}";
+  buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
   installFlags = buildFlags + " DESTDIR=$(out)";
-
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildInputs = [ makeWrapper which git avrgcclibc libelf pkgconfig freeglut mesa ];
 
