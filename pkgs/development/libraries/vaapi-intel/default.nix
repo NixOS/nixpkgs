@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-intel-driver-1.6.2";
+  name = "libva-intel-driver-1.7.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
-    sha256 = "1zl51mdxfmnn33r4b0y5qxwlkqfw919aqphsq60d50pwrvdmk1xz";
+    sha256 = "032w8d0whymi5ac8fk7c5d8nnxxsjgwymw644g7gp959i73xc6cx";
   };
 
   patchPhase = ''
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "Intel driver for the VAAPI library";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ garbas ];
   };
 }
