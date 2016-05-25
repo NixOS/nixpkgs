@@ -410,7 +410,7 @@ EOF
 EOF
 
     if (scalar @extraOptions > 0) {
-      $fileSystems .= <<EOF;
+        $fileSystems .= <<EOF;
       options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
 EOF
     }
@@ -419,6 +419,25 @@ EOF
     };
 
 EOF
+
+    # If this filesystem is on a LUKS device, then add a
+    # boot.initrd.luks.devices entry.
+    if (-e $device) {
+        my $deviceName = basename(abs_path($device));
+        if (-e "/sys/class/block/$deviceName"
+            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        {
+            my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
+            if (scalar @slaves == 1) {
+                my $slave = "/dev/" . basename($slaves[0]);
+                if (-e $slave) {
+                    my $dmName = read_file("/sys/class/block/$deviceName/dm/name");
+                    chomp $dmName;
+                    $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".device = \"${\(findStableDevPath $slave)}\";\n\n";
+                }
+            }
+        }
+    }
 }
 
 
@@ -459,7 +478,7 @@ my $modulePackages = toNixList(uniq @modulePackages);
 
 my $fsAndSwap = "";
 if (!$noFilesystems) {
-    $fsAndSwap = "\n${fileSystems}  ";
+    $fsAndSwap = "\n$fileSystems  ";
     $fsAndSwap .= "swapDevices =" . multiLineList("    ", @swapDevices) . ";\n";
 }
 
