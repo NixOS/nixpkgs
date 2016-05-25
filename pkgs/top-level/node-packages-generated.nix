@@ -35809,7 +35809,7 @@
     src = fetchgit {
       url = "https://github.com/tstarling/pegjs";
       rev = "9162b1e114e41992dd0fdafa24d2574a0b8a836a";
-      sha256 = "11f0b6b159709bc7c9223c0c8013b3e307b87ea6bbfcf615b804b2d67fe3813a";
+      sha256 = "1aj0vgdwyir7z4aals6njrd92as27bflhlm5bp0fgi0lvvlwinnh";
     };
     deps = {
     };

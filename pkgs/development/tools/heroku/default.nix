@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, postgresql, ruby, makeWrapper, nodejs-5_x }:
+{ stdenv, fetchurl, postgresql, ruby, makeWrapper, nodejs-6_x }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  version = "3.42.20";
+  version = "3.43.2";
   name = "heroku-${version}";
 
   meta = {
@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/assets.heroku.com/heroku-client/heroku-client-${version}.tgz";
-    sha256 = "1d472vm37lx5nyyaymjglavisb1mkyzbjglzjp5im7wjfifvsd29";
+    sha256 = "1sapbxg7pzi89c95k0vsp8k5bysggkjf58jwck2xs0y4ly36wbnc";
   };
 
   installPhase = ''
     mkdir -p $out
     cp -R * $out/
-    wrapProgram $out/bin/heroku --set HEROKU_NODE_PATH ${nodejs-5_x}/bin/node
+    wrapProgram $out/bin/heroku --set HEROKU_NODE_PATH ${nodejs-6_x}/bin/node
   '';
 
   buildInputs = [ ruby postgresql makeWrapper ];

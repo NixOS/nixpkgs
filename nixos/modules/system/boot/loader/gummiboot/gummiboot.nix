@@ -16,7 +16,7 @@ let
 
     nix = config.nix.package.out;
 
-    timeout = if cfg.timeout != null then cfg.timeout else "";
+    timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else "";
 
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
@@ -28,20 +28,6 @@ in {
       type = types.bool;
 
       description = "Whether to enable the gummiboot UEFI boot manager";
-    };
-
-    timeout = mkOption {
-      default = if config.boot.loader.timeout == null then 10000 else config.boot.loader.timeout;
-
-      example = 4;
-
-      type = types.nullOr types.int;
-
-      description = ''
-        Timeout (in seconds) for how long to show the menu (null if none).
-        Note that even with no timeout the menu can be forced if the space
-        key is pressed during bootup
-      '';
     };
   };
 

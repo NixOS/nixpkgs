@@ -96,7 +96,7 @@ self: super: {
     src = pkgs.fetchgit {
             url    = https://github.com/ekmett/linear.git;
             rev    = "8da21dc72714441cb34d6eabd6c224819787365c";
-            sha256 = "08l0z6zrlbals2bwc2abbh31j9gf90vgp8sy3dcrp0knc98bgaa1";
+            sha256 = "0f4r7ww8aygxv0mqdsn9d7fjvrvr66f04v004kh2v5d01dp8d7f9";
     };
   });
 

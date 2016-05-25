@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "pcre2-10.20";
+stdenv.mkDerivation rec {
+  name = "pcre2-10.21";
   src = fetchurl {
-    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre2-10.20.tar.bz2";
-    sha256 = "0yj8mm9ll9zj3v47rvmmqmr1ybxk72rr2lym3rymdsf905qjhbik";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
+    sha256 = "1q6lrj9b08l1q39vxipb0fi88x6ybvkr6439h8bjb9r8jd81fsn6";
   };
 
   configureFlags = [
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "Perl Compatible Regular Expressions";
+	description = "Perl Compatible Regular Expressions";
     homepage = "http://www.pcre.org/";
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.ttuegel ];

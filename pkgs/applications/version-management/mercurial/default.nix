@@ -4,7 +4,7 @@
 
 let
   # if you bump version, update pkgs.tortoisehg too or ping maintainer
-  version = "3.8.1";
+  version = "3.8.2";
   name = "mercurial-${version}";
 in
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "156m6269xdqq7mpw01c6b065k29xnb8b9lyzn1b0nlz5il2izkps";
+    sha256 = "1zdz42znd6i7c3nf31j0k6frcs68qyniyvcad8k2a1hlarlv2y6b";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git

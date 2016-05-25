@@ -1,14 +1,13 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dtach-0.8";
+  name = "dtach-${version}";
+  version = "0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/0.8/dtach-0.8.tar.gz";
-    sha256 = "16614ebddf8ab2811d3dc0e7f329c7de88929ac6a9632d4cb4aef7fe11b8f2a9";
+    url = "mirror://sourceforge/project/dtach/dtach/${version}/${name}.tar.gz";
+    sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
-
-  patches = [ ./fix-CVE-2012-3368.patch ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,12 +18,14 @@ stdenv.mkDerivation rec {
     homepage = http://dtach.sourceforge.net/;
     description = "A program that emulates the detach feature of screen";
 
-    longDescription = ''dtach is a tiny program that emulates the
-      detach feature of screen, allowing you to run a program in an
-      environment that is protected from the controlling terminal and
-      attach to it later. dtach does not keep track of the contents of
-      the screen, and thus works best with programs that know how to
-      redraw themselves.'';
+    longDescription = ''
+      dtach is a tiny program that emulates the detach feature of
+      screen, allowing you to run a program in an environment that is
+      protected from the controlling terminal and attach to it later.
+      dtach does not keep track of the contents of the screen, and
+      thus works best with programs that know how to redraw
+      themselves.
+    '';
 
     license = stdenv.lib.licenses.gpl2Plus;
 

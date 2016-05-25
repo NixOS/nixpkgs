@@ -382,9 +382,17 @@ sub waitForUnit {
             my $state = $info->{ActiveState};
             die "unit ‘$unit’ reached state ‘$state’\n" if $state eq "failed";
             if ($state eq "inactive") {
+                # If there are no pending jobs, then assume this unit
+                # will never reach active state.
                 my ($status, $jobs) = $self->execute("systemctl list-jobs --full 2>&1");
-                die "unit ‘$unit’ is inactive and there are no pending jobs\n"
-                    if $jobs =~ /No jobs/; # FIXME: fragile
+                if ($jobs =~ /No jobs/) {  # FIXME: fragile
+                    # Handle the case where the unit may have started
+                    # between the previous getUnitInfo() and
+                    # list-jobs.
+                    my $info2 = $self->getUnitInfo($unit);
+                    die "unit ‘$unit’ is inactive and there are no pending jobs\n"
+                        if $info2->{ActiveState} eq $state;
+                }
             }
             return 1 if $state eq "active";
         };

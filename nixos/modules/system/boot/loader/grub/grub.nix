@@ -48,12 +48,13 @@ let
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "NixOS${efiSysMountPoint'}" else args.efiBootloaderId;
+      timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
         version extraConfig extraPerEntryConfig extraEntries
-        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
+        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport gfxmodeEfi gfxmodeBios;
       path = (makeBinPath ([
         pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.findutils pkgs.diffutils pkgs.btrfs-progs
@@ -310,14 +311,6 @@ in
           Whether the GRUB menu builder should copy kernels and initial
           ramdisks to /boot.  This is done automatically if /boot is
           on a different partition than /.
-        '';
-      };
-
-      timeout = mkOption {
-        default = if (config.boot.loader.timeout != null) then config.boot.loader.timeout else -1;
-        type = types.int;
-        description = ''
-          Timeout (in seconds) until GRUB boots the default menu item.
         '';
       };
 
