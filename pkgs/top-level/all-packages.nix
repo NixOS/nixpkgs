@@ -2423,6 +2423,8 @@ let
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
+ 
+  netcdf-mpi = callPackage ../development/libraries/netcdf { mpiEnabled = true; };
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 

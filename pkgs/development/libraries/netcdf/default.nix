@@ -1,6 +1,8 @@
 { stdenv, fetchurl,
   zlib, hdf5, m4,
-  curl # for DAP
+  curl, # for DAP
+  mpiEnabled ? false,
+  openmpi, hdf5-mpi # For parallel I/O
 }:
     
 stdenv.mkDerivation rec {
@@ -11,12 +13,15 @@ stdenv.mkDerivation rec {
     };
 
     buildInputs = [
-        zlib hdf5 m4 curl
-    ];
+        ( if mpiEnabled == true then hdf5-mpi else hdf5 )
+        zlib m4 curl
+    ]
+    ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
     configureFlags = [
         "--enable-netcdf-4"
         "--enable-dap"
         "--enable-shared"
-    ];
+    ]
+    ++ (stdenv.lib.optionals mpiEnabled [ "--enable-parallel-tests" ]);
 }
