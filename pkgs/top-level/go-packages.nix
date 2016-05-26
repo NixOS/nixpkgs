@@ -3723,11 +3723,11 @@ let
   };
 
   syncthing = buildFromGitHub rec {
-    version = "0.12.23";
+    version = "0.13.2";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0v8343k670ncjfd25hzhyfi87cz46k57rmv6pf30v7iclfhpmy1s";
+    sha256 = "1n56a92r1sny5ilcwcvcid5wdlr0wzryppfz1isqn38gs9zplip7";
     buildFlags = [ "-tags noupgrade,release" ];
     disabled = isGo14;
     buildInputs = [
@@ -3740,14 +3740,14 @@ let
     '';
   };
 
-  syncthing011 = buildFromGitHub rec {
-    version = "0.11.26";
+  syncthing012 = buildFromGitHub rec {
+    version = "0.12.25";
     rev = "v${version}";
     owner = "syncthing";
     repo = "syncthing";
-    sha256 = "0c0dcvxrvjc84dvrsv90790aawkmavsj9bwp8c6cd6wrwj3cp9lq";
+    sha256 = "108w7gvm3nbbsgp3h5p84fj4ba0siaz932i7yyryly486gzvpm43";
     buildInputs = [
-      go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol011
+      go-lz4 du luhn xdr snappy ratelimit osext
       goleveldb suture qart crypto net text
     ];
     postPatch = ''
