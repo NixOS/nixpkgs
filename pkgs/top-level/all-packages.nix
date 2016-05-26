@@ -16749,7 +16749,11 @@ in
 
   ums = callPackage ../servers/ums { };
 
-  unity3d = callPackage ../development/tools/unity3d { inherit (gnome) GConf; };
+  unity3d = callPackage ../development/tools/unity3d {
+    stdenv = stdenv_32bit;
+    gcc_32bit = pkgsi686Linux.gcc;
+    inherit (gnome2) GConf libgnomeui gnome_vfs;
+  };
 
   urbit = callPackage ../misc/urbit { };
 
