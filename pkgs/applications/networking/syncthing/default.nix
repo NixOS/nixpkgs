@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     # Syncthing's build.go script expects this working directory
     cd src/github.com/syncthing/syncthing
 
-    go run build.go -no-upgrade install
+    go run build.go -no-upgrade -version v${version} install all
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp bin/syncthing $out/bin
+    cp bin/* $out/bin
   '';
 
   meta = {
