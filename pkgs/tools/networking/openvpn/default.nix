@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lsystemd-daemon"; # hacky
-
   meta = {
     description = "A robust and highly flexible tunneling application";
     homepage = http://openvpn.net/;
