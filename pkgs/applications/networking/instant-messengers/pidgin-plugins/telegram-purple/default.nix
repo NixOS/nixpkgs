@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/majn/telegram-purple";
     rev = "ee2a6fb740fe9580336e4af9a153b845bc715927";
-    sha256 = "10y99rclxbpbmmyiapn4vk1d7yjwmg7v1wb4jlz678qkvcni3nv7";
+    sha256 = "0pxaj95b6nzy73dckpr3v4nljyijkx71vmnp9dcj48d22pvy0nyf";
   };
 
   nativeBuildInputs = [ pkgconfig ];
