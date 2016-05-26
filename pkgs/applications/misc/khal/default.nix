@@ -27,6 +27,10 @@ python3Packages.buildPythonApplication rec {
   ];
   buildInputs = with python3Packages; [ setuptools_scm ];
 
+  checkPhase = ''
+    py.test
+  '';
+
   meta = with stdenv.lib; {
     homepage = http://lostpackets.de/khal/;
     description = "CLI calendar application";
