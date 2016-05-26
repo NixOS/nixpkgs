@@ -364,7 +364,9 @@ in mapAttrs mkVBoxTest {
   simple-gui = ''
     createVM_simple;
     $machine->succeed(ru "VirtualBox &");
-    $machine->waitForWindow(qr/Oracle VM VirtualBox Manager/);
+    $machine->waitUntilSucceeds(
+      ru "xprop -name 'Oracle VM VirtualBox Manager'"
+    );
     $machine->sleep(5);
     $machine->screenshot("gui_manager_started");
     $machine->sendKeys("ret");
