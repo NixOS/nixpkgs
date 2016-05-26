@@ -465,7 +465,7 @@ in
       });
 
     swapDevices = mkVMOverride [ ];
-    boot.initrd.luks.devices = mkVMOverride [];
+    boot.initrd.luks.devices = mkVMOverride {};
 
     # Don't run ntpd in the guest.  It should get the correct time from KVM.
     services.ntp.enable = false;

@@ -69,6 +69,7 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         (all nixos.tests.ipv6)
+        (all nixos.tests.i3wm)
         (all nixos.tests.kde4)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)

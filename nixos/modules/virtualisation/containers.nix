@@ -338,7 +338,7 @@ in
             fi
           ''}
 
-
+          rm -f $root/var/lib/private/host-notify
 
           # Run systemd-nspawn without startup notification (we'll
           # wait for the container systemd to signal readiness).

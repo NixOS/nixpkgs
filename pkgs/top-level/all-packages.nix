@@ -1202,6 +1202,8 @@ in
 
   cudatoolkit = self.cudatoolkit7;
 
+  cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
+
   curlFull = self.curl.override {
     idnSupport = true;
     ldapSupport = true;
@@ -5545,7 +5547,6 @@ in
   };
 
   octave = callPackage ../development/interpreters/octave {
-    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = null;
     ghostscript = null;
     llvm = null;
@@ -5556,7 +5557,6 @@ in
     openblas = openblasCompat;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
-    fltk = fltk13.override { cfg.xftSupport = true; };
     qt = qt4;
   }));
 
@@ -6358,6 +6358,8 @@ in
     ruby = ruby_2_0;
   };
 
+  redo = callPackage ../development/tools/build-managers/redo { };
+
   re2c = callPackage ../development/tools/parsing/re2c { };
 
   remake = callPackage ../development/tools/build-managers/remake { };
@@ -6895,9 +6897,8 @@ in
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk13 = callPackage ../development/libraries/fltk/fltk13.nix { };
-
-  fltk20 = callPackage ../development/libraries/fltk { };
+  fltk13 = callPackage ../development/libraries/fltk { };
+  fltk = self.fltk13;
 
   fmod = callPackage ../development/libraries/fmod { };
 
@@ -10746,12 +10747,7 @@ in
   # grsecurity configuration
 
   grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    inherit (linux_4_5) kernelPatches;
   };
 
   grFlavors = import ../build-support/grsecurity/flavors.nix;
@@ -12475,9 +12471,7 @@ in
 
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
-  exrdisplay = callPackage ../applications/graphics/exrdisplay {
-    fltk = fltk13.override { cfg.xftSupport = true; };
-  };
+  exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
@@ -13837,6 +13831,10 @@ in
 
   qsampler = callPackage ../applications/audio/qsampler { };
 
+  qscreenshot = callPackage ../applications/graphics/qscreenshot {
+    qt = qt4;
+  };
+
   qsynth = callPackage ../applications/audio/qsynth { };
 
   qtox = qt5.callPackage ../applications/networking/instant-messengers/qtox { };
@@ -13997,6 +13995,8 @@ in
   sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
     gtk = gtk3;
   };
+
+  shutter = callPackage ../applications/graphics/shutter { };
 
   simple-scan = callPackage ../applications/graphics/simple-scan { };
 
@@ -14850,9 +14850,7 @@ in
 
   ykpers = callPackage ../applications/misc/ykpers {};
 
-  yoshimi = callPackage ../applications/audio/yoshimi {
-    fltk = fltk13.override { cfg.xftSupport = true; };
-  };
+  yoshimi = callPackage ../applications/audio/yoshimi { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
@@ -15033,9 +15031,7 @@ in
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
-  flightgear = qt5.callPackage ../games/flightgear {
-    fltk13 = fltk13.override { cfg.xftSupport = true; };
-  };
+  flightgear = qt5.callPackage ../games/flightgear { };
 
   freecell-solver = callPackage ../games/freecell-solver { };
 
@@ -15906,6 +15902,8 @@ in
   openlibm = callPackage ../development/libraries/science/math/openlibm {};
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
+
+  magma = callPackage ../development/libraries/science/math/magma { };  
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };

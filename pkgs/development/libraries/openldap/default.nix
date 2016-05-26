@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
       --replace /bin/bash ${stdenv.shell}
   '';
 
+  # openldap binaries depend on openldap libs, patchelf removes the rpath to its own libraries
+  dontPatchELF = 1; # !!!
+
   # Fixup broken libtool
   preFixup = ''
     sed -e 's,-lsasl2,-L${cyrus_sasl.out}/lib -lsasl2,' \
         -e 's,-lssl,-L${openssl.out}/lib -lssl,' \
         -i $out/lib/libldap.la -i $out/lib/libldap_r.la
   '';
-
-  # openldap binaries depend on openldap libs, patchelf removes the rpath to its own libraries
-  dontPatchELF = 1;
 
   meta = with stdenv.lib; {
     homepage    = http://www.openldap.org/;

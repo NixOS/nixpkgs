@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: ''
+  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: assert name' == name; ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -192,9 +192,8 @@ let
     ''}
   '';
 
-  isPreLVM = f: f.preLVM;
-  preLVM = filter isPreLVM luks.devices;
-  postLVM = filter (f: !(isPreLVM f)) luks.devices;
+  preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
+  postLVM = filterAttrs (n: v: !v.preLVM) luks.devices;
 
 in
 {
@@ -228,31 +227,31 @@ in
     };
 
     boot.initrd.luks.devices = mkOption {
-      default = [ ];
-      example = literalExample ''[ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ]'';
+      default = { };
+      example = { "luksroot".device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
       description = ''
-        The list of devices that should be decrypted using LUKS before trying to mount the
-        root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
-
-        The devices are decrypted to the device mapper names defined.
-
-        Make sure that initrd has the crypto modules needed for decryption.
+        The encrypted disk that should be opened before the root
+        filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
+        setups are sypported. The unencrypted devices can be accessed as
+        <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
-      type = types.listOf types.optionSet;
+      type = types.loaOf types.optionSet;
 
-      options = {
+      options = { name, ... }: { options = {
 
         name = mkOption {
+          visible = false;
+          default = name;
           example = "luksroot";
           type = types.str;
-          description = "Named to be used for the generated device in /dev/mapper.";
+          description = "Name of the unencrypted device in <filename>/dev/mapper</filename>.";
         };
 
         device = mkOption {
-          example = "/dev/sda2";
+          example = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08";
           type = types.str;
-          description = "Path of the underlying block device.";
+          description = "Path of the underlying encrypted block device.";
         };
 
         header = mkOption {
@@ -289,6 +288,7 @@ in
           '';
         };
 
+        # FIXME: get rid of this option.
         preLVM = mkOption {
           default = true;
           type = types.bool;
@@ -394,7 +394,7 @@ in
           };
         };
 
-      };
+      }; };
     };
 
     boot.initrd.luks.yubikeySupport = mkOption {
@@ -408,7 +408,7 @@ in
     };
   };
 
-  config = mkIf (luks.devices != []) {
+  config = mkIf (luks.devices != {}) {
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
@@ -463,8 +463,8 @@ in
       ''}
     '';
 
-    boot.initrd.preLVMCommands = concatMapStrings openCommand preLVM;
-    boot.initrd.postDeviceCommands = concatMapStrings openCommand postLVM;
+    boot.initrd.preLVMCommands = concatStrings (mapAttrsToList openCommand preLVM);
+    boot.initrd.postDeviceCommands = concatStrings (mapAttrsToList openCommand postLVM);
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };

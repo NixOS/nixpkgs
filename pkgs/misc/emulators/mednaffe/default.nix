@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    substituteInPlace src/mednaffe.c --replace "binpath = NULL" "binpath = \"${mednafen}/bin/mednafen\""
+    substituteInPlace src/mednaffe.c --replace "binpath = NULL" "binpath = g_strdup( \"${mednafen}/bin/mednafen\" )"
   '';
 
   buildInputs = [ pkgconfig gtk2 mednafen ];

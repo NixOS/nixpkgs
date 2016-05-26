@@ -34,7 +34,7 @@ let
 
       ${optionalString cfg.displayManager.logToJournal ''
         if [ -z "$_DID_SYSTEMD_CAT" ]; then
-          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$sessionType"
+          _DID_SYSTEMD_CAT=1 exec ${config.systemd.package}/bin/systemd-cat -t xsession -- "$0" "$1"
         fi
       ''}
 
