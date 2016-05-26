@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzo openssl pkgconfig ]
                   ++ optionals stdenv.isLinux [ pam systemd iproute ];
 
-  configureFlags = ''
-    --enable-password-save
-  '' + optionalString stdenv.isLinux ''
+  configureFlags = optionalString stdenv.isLinux ''
     --enable-systemd
     --enable-iproute2
     IPROUTE=${iproute}/sbin/ip
