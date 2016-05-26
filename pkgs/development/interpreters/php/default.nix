@@ -288,8 +288,8 @@ let
 in {
 
   php55 = generic {
-    version = "5.5.35";
-    sha256 = "1msqh8ii0qwzzcwlwn8f493x2r3hy2djzrrwd5jgs87893b8sr1d";
+    version = "5.5.36";
+    sha256 = "1fvipg3p8m61kym2ir589vi1l6zm0r95rd97z5s6sq6ylgxfv114";
   };
 
   php56 = generic {
@@ -298,8 +298,8 @@ in {
   };
 
   php70 = generic {
-    version = "7.0.5";
-    sha256 = "1s8xnnxwq5big2rnbp3w7zw7wh5d5ra9p2q9bxwylds5wrzsy29c";
+    version = "7.0.7";
+    sha256 = "06ixiaqqndvancqy5xmnzpscd77z2ixv3yrsdq0r8avqqhjjjks7";
   };
 
 }
