@@ -49,6 +49,7 @@ composableDerivation.composableDerivation {} {
     localpngSupport = false;
     sharedSupport = true;
     threadsSupport = true;
+    xftSupport = true;
   } // cfg;
 
   meta = {
