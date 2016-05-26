@@ -11,7 +11,6 @@
       copy_bin_and_libs ${pkgs.gnused}/bin/sed
       copy_bin_and_libs ${pkgs.utillinux}/sbin/sfdisk
       cp -v ${pkgs.cloud-utils}/bin/growpart $out/bin/growpart
-      ln -s sed $out/bin/gnused
     '';
 
     boot.initrd.postDeviceCommands = ''
