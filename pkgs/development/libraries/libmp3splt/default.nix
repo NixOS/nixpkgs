@@ -1,20 +1,22 @@
 { stdenv, fetchurl, libtool, libmad, libid3tag }:
 
 stdenv.mkDerivation rec {
-  name = "libmp3splt-0.9.1";
+  name = "libmp3splt-0.9.2";
 
   src = fetchurl {
-    url = "http://prdownloads.sourceforge.net/mp3splt/${name}.tar.gz";
-    sha256 = "17ar9d669cnirkz1kdrim687wzi36y8inapnj4svlsvr00vdzfxa";
+    url = "mirror://sourceforge/mp3splt/${name}.tar.gz";
+    sha256 = "1p1mn2hsmj5cp40fnc8g1yfvk72p8pjxi866gjdkgjsqrr7xdvih";
   };
 
-  buildInputs = [ libtool libmad libid3tag ];
+  outputs = [ "dev" "out" ];
+  nativeBuildInputs = [ libtool ];
+  buildInputs = [ libmad libid3tag ];
 
   configureFlags = "--disable-pcre";
 
   meta = with stdenv.lib; {
     homepage    = http://sourceforge.net/projects/mp3splt/;
-    description = "utility to split mp3, ogg vorbis and FLAC files without decoding";
+    description = "Utility to split mp3, ogg vorbis and FLAC files without decoding";
     maintainers = with maintainers; [ bosu ];
     platforms   = platforms.unix;
   };
