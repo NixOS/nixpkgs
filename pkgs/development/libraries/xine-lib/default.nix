@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     libcaca libpulseaudio libmng libcdio libv4l vcdimager libmpcdec
   ];
 
-  NIX_LDFLAGS = "-rpath ${libdvdcss}/lib -L${libdvdcss}/lib -ldvdcss -lxcb-shm";
+  NIX_LDFLAGS = "-lxcb-shm";
 
   propagatedBuildInputs = [zlib];
 
