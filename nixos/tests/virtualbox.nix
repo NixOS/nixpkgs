@@ -11,7 +11,7 @@ let
       #!${pkgs.stdenv.shell} -xe
       export PATH="${pkgs.coreutils}/bin:${pkgs.utillinux}/bin"
 
-      mkdir -p /etc/dbus-1 /var/run/dbus
+      mkdir -p /var/run/dbus
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
       messagebus:x:1:1::/var/run/dbus:/bin/false
@@ -20,9 +20,9 @@ let
       root:x:0:
       messagebus:x:1:
       EOF
-      cp -v "${pkgs.dbus.daemon}/etc/dbus-1/system.conf" \
-        /etc/dbus-1/system.conf
-      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork --system
+
+      "${pkgs.dbus.daemon}/bin/dbus-daemon" --fork \
+        --config-file="${pkgs.dbus.daemon}/share/dbus-1/system.conf"
 
       ${guestAdditions}/bin/VBoxService
       ${(attrs.vmScript or (const "")) pkgs}
