@@ -962,4 +962,7 @@ self: super: {
     hint = self.hint_0_4_3;
   };
 
+  # Avoid spurious (harmless) test suite errors.
+  split = dontCheck super.split;
+
 }
