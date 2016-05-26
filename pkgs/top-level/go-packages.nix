@@ -4064,11 +4064,11 @@ let
   };
 
   godep = buildFromGitHub rec {
-    version = "70";
+    version = "71";
     rev    = "v${version}";
     owner  = "tools";
     repo   = "godep";
-    sha256 = "0xr2277nr7xbgc8lnz70r10z53aq1kww6wpi1bnsyrvn3wm7c36c";
+    sha256 = "08dndq9lakw7civz4h44mwmmnc6qflsfhp8c7c21l95zvmavbly7";
   };
 
   color = buildFromGitHub {
