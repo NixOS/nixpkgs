@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  buildInputs = with python3Packages; [ setuptools_scm ];
+  buildInputs = with python3Packages; [ setuptools_scm pytest ];
 
   checkPhase = ''
     py.test
