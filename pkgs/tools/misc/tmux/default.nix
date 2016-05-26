@@ -35,8 +35,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
 
-    wrapProgram $out/bin/tmux \
-      --set TMUX_TMPDIR \''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}
+    mv $out/bin/tmux $out/bin/.tmux-wrapped
+
+    cat > $out/bin/tmux <<_EOF_
+    #! ${stdenv.shell} -e
+
+    for d in \$TMUX_TMPDIR \$XDG_RUNTIME_DIR /run/user/\$(id -u) \$TMP /tmp ; do
+      if [ -d \$d ] ; then
+        export TMUX_TMPDIR=\$d
+        break
+      fi
+    done
+
+    exec -a "\$0" $out/bin/.tmux-wrapped "\$@"
+    _EOF_
+    chmod 755 $out/bin/tmux
   '';
 
   meta = {
@@ -60,6 +73,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thammers fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ thammers fpletz peterhoeg ];
   };
 }
