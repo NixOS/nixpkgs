@@ -360,14 +360,8 @@ in {
           "mount LABEL=boot /mnt/boot",
         );
       '';
-      # XXX: Currently, generate-config doesn't detect LUKS yet.
       extraConfig = ''
         boot.kernelParams = lib.mkAfter [ "console=tty0" ];
-        boot.initrd.luks.devices = lib.singleton {
-          name = "cryptroot";
-          device = "/dev/vda3";
-          preLVM = true;
-        };
       '';
       enableOCR = true;
       preBootCommands = ''
@@ -403,8 +397,6 @@ in {
               "mkdir /mnt/boot",
               "mount LABEL=boot /mnt/boot",
               "udevadm settle",
-              "mdadm --verbose -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
-              "mdadm --verbose -W /dev/md1",
           );
         '';
       preBootCommands = ''

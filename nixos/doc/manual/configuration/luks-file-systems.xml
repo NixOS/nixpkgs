@@ -9,21 +9,21 @@
 <para>NixOS supports file systems that are encrypted using
 <emphasis>LUKS</emphasis> (Linux Unified Key Setup).  For example,
 here is how you create an encrypted Ext4 file system on the device
-<filename>/dev/sda2</filename>:
+<filename>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</filename>:
 
 <screen>
-$ cryptsetup luksFormat /dev/sda2
+$ cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
 
 WARNING!
 ========
-This will overwrite data on /dev/sda2 irrevocably.
+This will overwrite data on /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d irrevocably.
 
 Are you sure? (Type uppercase yes): YES
 Enter LUKS passphrase: ***
 Verify passphrase: ***
 
-$ cryptsetup luksOpen /dev/sda2 crypted
-Enter passphrase for /dev/sda2: ***
+$ cryptsetup luksOpen /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d crypted
+Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
 $ mkfs.ext4 /dev/mapper/crypted
 </screen>
@@ -33,7 +33,7 @@ as <filename>/</filename>, add the following to
 <filename>configuration.nix</filename>:
 
 <programlisting>
-boot.initrd.luks.devices = [ { device = "/dev/sda2"; name = "crypted"; } ];
+boot.initrd.luks.devices.crypted.device = "/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d";
 fileSystems."/".device = "/dev/mapper/crypted";
 </programlisting>
 

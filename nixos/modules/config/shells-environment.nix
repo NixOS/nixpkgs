@@ -150,10 +150,6 @@ in
 
     system.build.binsh = pkgs.bashInteractive;
 
-    # Ensure TERMINFO is set appropriately *before* user shells are run,
-    # as they may depend on it
-    environment.sessionVariables.TERMINFO = "/run/current-system/sw/share/terminfo";
-
     # Set session variables in the shell as well. This is usually
     # unnecessary, but it allows changes to session variables to take
     # effect without restarting the session (e.g. by opening a new

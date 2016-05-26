@@ -30,7 +30,10 @@ following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
-    <para>todo</para>
+    <para>Shell aliases for systemd sub-commands
+    <link xlink:href="https://github.com/NixOS/nixpkgs/pull/15598">were dropped</link>:
+    <command>start</command>, <command>stop</command>,
+    <command>restart</command>, <command>status</command>.</para>
   </listitem>
 </itemizedlist>
 

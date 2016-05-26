@@ -10,10 +10,10 @@ with lib;
   boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
 
-  # Generate a GRUB menu. 
+  # Generate a GRUB menu.
   boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.version = 2;
-  boot.loader.grub.timeout = 0;
+  boot.loader.timeout = 0;
 
   # Don't put old configurations in the GRUB menu.  The user has no
   # way to select them anyway.

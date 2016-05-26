@@ -1,11 +1,12 @@
 {stdenv, fetchurl, kernel}:
 
-stdenv.mkDerivation {
-  name = "tp_smapi-0.41-${kernel.version}";
+stdenv.mkDerivation rec {
+  version = "0.42";
+  name = "tp_smapi-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "https://github.com/downloads/evgeni/tp_smapi/tp_smapi-0.41.tar.gz";
-    sha256 = "6aef02b92d10360ac9be0db29ae390636be55017990063a092a285c70b54e666";
+    url = "https://github.com/evgeni/tp_smapi/releases/download/tp-smapi%2F0.42/tp_smapi-${version}.tgz";
+    sha256 = "09rdg7fm423x6sbbw3lvnvmk4nyc33az8ar93xgq0n9qii49z3bv";
   };
 
   makeFlags = [

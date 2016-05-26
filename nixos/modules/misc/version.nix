@@ -5,9 +5,11 @@ with lib;
 let
   cfg = config.system;
 
-  releaseFile = "${toString pkgs.path}/.version";
-  suffixFile = "${toString pkgs.path}/.version-suffix";
+  releaseFile  = "${toString pkgs.path}/.version";
+  suffixFile   = "${toString pkgs.path}/.version-suffix";
   revisionFile = "${toString pkgs.path}/.git-revision";
+  gitRepo      = "${toString pkgs.path}/.git";
+  gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
 
 {
@@ -102,6 +104,8 @@ in
       # changing them would not rebuild the manual
       nixosLabel   = mkDefault (maybeEnv "NIXOS_LABEL" cfg.nixosVersion);
       nixosVersion = mkDefault (maybeEnv "NIXOS_VERSION" (cfg.nixosRelease + cfg.nixosVersionSuffix));
+      nixosRevision      = mkIf (pathExists gitRepo) (mkDefault            gitCommitId);
+      nixosVersionSuffix = mkIf (pathExists gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: code names must only increase in alphabetical order.
       nixosCodeName = "Flounder";

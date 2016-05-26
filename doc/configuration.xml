@@ -46,10 +46,10 @@ $ export NIXPKGS_ALLOW_UNFREE=1
 allowUnfreePredicate = (pkg: ...);
 </programlisting>
 
-    Example to allow flash player only:
+    Example to allow flash player and visual studio code only:
 
 <programlisting>
-allowUnfreePredicate = (pkg: pkgs.lib.hasPrefix "flashplayer-" pkg.name);
+allowUnfreePredicate = with builtins; (pkg: elem (parseDrvName pkg.name).name [ "flashplayer" "vscode" ]);
 </programlisting>
 
     </para>

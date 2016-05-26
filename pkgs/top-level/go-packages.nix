@@ -206,11 +206,11 @@ let
   };
 
   adapted = buildFromGitHub {
-    rev = "eaea06aaff855227a71b1c58b18bc6de822e3e77";
-    version = "2015-06-03";
+    rev = "0dd5fa34d6f9d74c7c0deed1fc224f9a87e02978";
+    version = "2016-04-10";
     owner = "michaelmacinnis";
     repo = "adapted";
-    sha256 = "0f28sn5mj48087zhjdrph2sjcznff1i1lwnwplx32bc5ax8nx5xm";
+    sha256 = "16n3a87m33pqx4qih713q3gw2j6ksj1q3ngjax6bpn5b11rqvikv";
     propagatedBuildInputs = [ sys ];
   };
 
@@ -2795,11 +2795,11 @@ let
   };
 
   oh = buildFromGitHub {
-    rev = "22d91b0ea97f817cd5cccd90549f74923a57daa4";
-    version = "2016-03-28";
+    rev = "0daaf4081475fb9d6b3801c85019bdd57b2ee9b4";
+    version = "2016-05-23";
     owner = "michaelmacinnis";
     repo = "oh";
-    sha256 = "1dkw3c0d640g7ciw0mmbdq94zyykdcfada05m5amnqymknphmdvl";
+    sha256 = "0ajidzs0aisbw74nri9ks6sx6644nmwkisc9mvxm3f89zmnlsgwr";
     goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
     buildInputs = [ adapted liner ];
     disabled = isGo14;

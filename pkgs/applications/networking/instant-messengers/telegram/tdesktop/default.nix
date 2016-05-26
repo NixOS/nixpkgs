@@ -12,20 +12,20 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "0.9.48";
+  version = "0.9.49";
   qtVersion = lib.replaceStrings ["."] ["_"] qtbase.version;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
-    sha256 = "1i1f7a9mikq8n08cnwcyywxj7sh1jc6yfj0zd3n7fgfhl0srzvlb";
+    sha256 = "1smz0d07xcpv7kv5v739b5a8wrgv5fx0wy15d3zzm3s69418a6nc";
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop.git";
     rev = "f8907d1ccaf8345c06232238342921213270e3d8";
-    sha256 = "1fsp098ykpf5gynn3lq3qcj3a47bkjfr0l96pymmmfd4a2s1690v";
+    sha256 = "04jh0fsrh4iwg188d20z15qkxv05wa5lpd8h21yxx3jxqljpdkws";
   };
 
   buildInputs = [
@@ -160,6 +160,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar garbas ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchzip, which, cryptopp, ocaml, findlib, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, ocaml_text, glib, camlp4, ppx_tools }:
 
 let
-  version = "2.5.0";
+  version = "2.5.2";
   inherit (stdenv.lib) optional getVersion versionAtLeast;
   ocaml_version = getVersion ocaml;
 in
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/ocsigen/lwt/archive/${version}.tar.gz";
-    sha256 = "0jgg51aqbnia33l7bhgirnfpqybjwzpd85qzzd9znnc1a27gv8vr";
+    sha256 = "0gmhm282r8yi0gwcv0g2s7qchkfjmhqbqf4j9frlyv665ink9kxl";
   };
 
   buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib glib ncurses camlp4 ppx_tools ];

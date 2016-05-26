@@ -102,7 +102,7 @@ in
         partOf = optional config.networking.firewall.enable "firewall.service";
 
         restartTriggers = [ fail2banConf jailConf ];
-        path = [ pkgs.fail2ban pkgs.iptables ];
+        path = [ pkgs.fail2ban pkgs.iptables pkgs.iproute ];
 
         preStart =
           ''

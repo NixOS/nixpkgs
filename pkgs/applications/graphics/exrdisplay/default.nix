@@ -1,27 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, fltk, openexr, mesa, which, openexr_ctl }:
+{ stdenv, fetchurl, pkgconfig, fltk, openexr, mesa, openexr_ctl }:
 
 assert fltk.glSupport;
 
 stdenv.mkDerivation {
-  name ="openexr_viewers-1.0.1";
+  name ="openexr_viewers-2.2.0";
 
   src = fetchurl {
-    url =  "mirror://savannah/openexr/openexr_viewers-1.0.1.tar.gz";
-    sha256 = "1w5qbcdp7sw48z1wk2v07f7p14vqqb1m2ncxyxnbkm9f4ab0ymg6";
+    url =  "mirror://savannah/openexr/openexr_viewers-2.2.0.tar.gz";
+    sha256 = "1s84vnas12ybx8zz0jcmpfbk9m4ab5bg2d3cglqwk3wys7jf4gzp";
   };
 
-  configurePhase =
-    ''
-      # don't know why.. adding these flags it works
-      #export CXXFLAGS=`fltk-config --use-gl --cxxflags --ldflags`
-      ./configure --prefix=$out --with-fltk-config=${fltk}/bin/fltk-config
-    '';
+  configurePhase = ''
+    ./configure --prefix=$out --with-fltk-config=${fltk}/bin/fltk-config
+  '';
 
-  buildInputs = [ openexr fltk pkgconfig mesa which openexr_ctl ];
+  buildPahse = ''
+    make LDFLAGS="`fltk-config --ldflags` -lGL -lfltk_gl"
+  '';
+
+  buildInputs = [ openexr fltk pkgconfig mesa openexr_ctl ];
 
   meta = { 
-    description = "Tool to view OpenEXR images";
-    homepage = http://openexr.com;
-    license = "BSD-like";
+    description = "Application for viewing OpenEXR images on a display at various exposure settings";
+    homepage = "http://openexr.com";
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.bsd3;
   };
 }

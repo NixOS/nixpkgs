@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ninja python3 ];
 
   installPhase = ''
-    ./install_meson.py --prefix=$out --destdir="$pkgdir/"
+    python3 ./install_meson.py --prefix=$out --destdir="$pkgdir/"
   '';
 
   meta = {
@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.mbe ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

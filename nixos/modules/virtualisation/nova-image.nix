@@ -27,7 +27,7 @@ with lib;
 
   boot.kernelParams = [ "console=ttyS0" ];
   boot.loader.grub.device = "/dev/vda";
-  boot.loader.grub.timeout = 0;
+  boot.loader.timeout = 0;
 
   # Allow root logins
   services.openssh.enable = true;

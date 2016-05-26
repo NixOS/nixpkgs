@@ -90,7 +90,7 @@ in
         example = literalExample "${pkgs.dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
         default = pkgs.fetchurl {
           url = "https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv";
-          sha256 = "07kbbisrvrqdxif3061hxj3whin3llg4nh50ln7prisi2vbd76xd";
+          sha256 = "0lac20qhcgjxxiiz8jzcn3hkqj4ywl58hahp5n2i6vf9akfyqp7c";
         };
         defaultText = "pkgs.fetchurl { url = ...; sha256 = ...; }";
       };
