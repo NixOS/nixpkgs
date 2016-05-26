@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+
   crossAttrs = lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
     # creating the DLL is broken ATM
     dontDisableStatic = true;
