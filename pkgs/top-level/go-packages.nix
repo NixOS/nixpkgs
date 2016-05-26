@@ -3722,7 +3722,7 @@ let
     sha256 = "094ksr2nlxhvxr58nbnzzk0prjskb21r86jmxqjr3rwg4rkwn6d4";
   };
 
-  syncthing = buildFromGitHub rec {
+  syncthing012 = buildFromGitHub rec {
     version = "0.12.25";
     rev = "v${version}";
     owner = "syncthing";
