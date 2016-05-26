@@ -24,7 +24,7 @@ rec {
      Example:
        concat = fold (a: b: a + b) "z"
        concat [ "a" "b" "c" ]
-       => "abcnul"
+       => "abcz"
   */
   fold = op: nul: list:
     let
