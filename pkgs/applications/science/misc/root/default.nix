@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
   ]
   ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include";
 
-  enableParallelBuilding = true;
-
   meta = {
     homepage = "https://root.cern.ch/";
     description = "A data analysis framework";
