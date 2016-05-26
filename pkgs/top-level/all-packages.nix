@@ -2548,6 +2548,10 @@ in
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
+ 
+  netcdf-mpi = appendToName "mpi" (netcdf.override {
+    hdf5 = hdf5-mpi;
+  });
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
