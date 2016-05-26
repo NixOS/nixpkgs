@@ -13699,7 +13699,7 @@ let
 
   copy-com = callPackage ../applications/networking/copy-com { };
 
-  dropbox = qt5.callPackage ../applications/networking/dropbox { };
+  dropbox = qt55.callPackage ../applications/networking/dropbox { };
 
   dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
