@@ -1,7 +1,6 @@
 { stdenv, composableDerivation, fetchurl, pkgconfig, xlibsWrapper, inputproto, libXi
 , freeglut, mesa, libjpeg, zlib, libXinerama, libXft, libpng
 , cfg ? {}
-, automake, autoconf, libtool
 }:
 
 let inherit (composableDerivation) edf; in
@@ -16,19 +15,15 @@ composableDerivation.composableDerivation {} {
   };
 
   # http://www.fltk.org/str.php?L3156
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace FL/x.H \
       --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ xlibsWrapper inputproto libXi freeglut ];
 
-  enableParallelBilding = true;
-
-  nativeBuildInputs = [
-    pkgconfig
-    automake autoconf libtool # only required because of patch
-  ];
+  enableParallelBuilding = true;
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?
