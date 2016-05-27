@@ -3,6 +3,7 @@
 , documentationSupport ? false, doxygen ? null, graphviz ? null # Documentation
 , eventGUISupport ? false, cairo ? null, glib ? null, gtk3 ? null # GUI event viewer support
 , testsSupport ? false, check ? null, valgrind ? null
+, autoconf, automake
 }:
 
 assert documentationSupport -> doxygen != null && graphviz != null;
@@ -32,12 +33,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libevdev mtdev libwacom ]
+  buildInputs = [ libevdev mtdev libwacom autoconf automake ]
     ++ optionals eventGUISupport [ cairo glib gtk3 ]
     ++ optionals documentationSupport [ doxygen graphviz ]
     ++ optionals testsSupport [ check valgrind ];
 
   propagatedBuildInputs = [ udev ];
+
+  patches = [ ./udev-absolute-path.patch ];
+  patchFlags = [ "-p0" ];
 
   meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
