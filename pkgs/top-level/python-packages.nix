@@ -10471,14 +10471,17 @@ in modules // {
 
 
   google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-1.2";
+    version = "1.5.1";
+    name = "google-api-python-client-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
-      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+      url = "https://github.com/google/google-api-python-client/archive/v${version}.tar.gz";
+      sha256 = "132v1rqlpzp396jr0xkaym0vw1i8kjnjy6yv9v0220jhvmwm1xaj";
     };
 
-    propagatedBuildInputs = with self; [ httplib2 ];
+    propagatedBuildInputs = with self; [ httplib2 uritemplate oauth2client simplejson ];
+
+    buildInputs = with self; [ unittest2 mock google ];
 
     meta = {
       description = "The core Python library for accessing Google APIs";
