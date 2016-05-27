@@ -71,7 +71,7 @@ let
     # Help digiKam find libusb, otherwise gphoto2 support is disabled
     cmakeFlags = [
       "-DLIBUSB_LIBRARIES=${libusb1.out}/lib"
-      "-DLIBUSB_INCLUDE_DIR=${libusb1}/include/libusb-1.0"
+      "-DLIBUSB_INCLUDE_DIR=${libusb1.dev}/include/libusb-1.0"
       "-DENABLE_BALOOSUPPORT=ON"
       "-DENABLE_KDEPIMLIBSSUPPORT=ON"
       "-DENABLE_LCMS2=ON" ] 

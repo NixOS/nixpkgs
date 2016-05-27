@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "acbuild-${version}";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "appc";
     repo = "acbuild";
     rev = "v${version}";
-    sha256 = "0sajmjg655irwy5fywk88cmwhc1q186dg5w8589pab2jhwpavdx4";
+    sha256 = "19f2fybz4m7d5sp1v8zkl26ig4dacr27qan9h5lxyn2v7a5z34rc";
   };
 
   buildInputs = [ go ];
 
   patchPhase = ''
-    sed -i -e 's|\$(git describe --dirty)|"${version}"|' build
+    sed -i -e 's|\git describe --dirty|echo "${version}"|' build
   '';
 
   buildPhase = ''

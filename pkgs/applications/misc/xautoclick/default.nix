@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals gtkSupport [ gtk ]
     ++ stdenv.lib.optionals qtSupport [ qt4 ];
   patchPhase = ''
-    substituteInPlace configure --replace /usr/X11R6 ${xorg.libX11}
+    substituteInPlace configure --replace /usr/X11R6 ${xorg.libX11.dev}
   '';
   preConfigure = stdenv.lib.optional qtSupport ''
     mkdir .bin

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "scorched";
 
-  configureFlags = [ "--with-fftw=${fftwSinglePrec}" ];
+  configureFlags = [ "--with-fftw=${fftwSinglePrec.dev}" ];
 
   NIX_LDFLAGS = [ "-lopenal" ];
 

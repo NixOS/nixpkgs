@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-munge=${munge}"
-      "--with-ssl=${openssl}"
+      "--with-ssl=${openssl.dev}"
     ] ++ stdenv.lib.optional (gtk == null)  "--disable-gtktest";
 
   preConfigure = ''

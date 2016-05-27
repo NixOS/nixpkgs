@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     configureFlags="$configureFlags --with-latex=$out/share/texmf/tex/latex --with-context=$out/share/texmf/tex/context/third"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-I${boehmgc}/include/gc" ];
+  NIX_CFLAGS_COMPILE = [ "-I${boehmgc.dev}/include/gc" ];
 
   postInstall = ''
     mv -v "$out/share/info/asymptote/"*.info $out/share/info/

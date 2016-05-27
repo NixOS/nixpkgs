@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   makeFlags = [
     "PREFIX=$(out)"

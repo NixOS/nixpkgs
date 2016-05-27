@@ -151,6 +151,7 @@
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   Gonzih = "Max Gonzih <gonzih@gmail.com>";
   gpyh = "Yacine Hmito <yacine.hmito@gmail.com>";
+  grahamc = "Graham Christensen <graham@grahamc.com>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
@@ -229,7 +230,7 @@
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
   mbakke = "Marius Bakke <ymse@tuta.io>";
-  mbauer = "Matthew Bauer <mjbauer95@gmail.com>";
+  matthewbauer = "Matthew Bauer <mjbauer95@gmail.com>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";

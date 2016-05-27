@@ -1860,7 +1860,7 @@ let
 
     Rmpfr = old.Rmpfr.overrideDerivation (attrs: {
       configureFlags = [
-        "--with-mpfr-include=${pkgs.mpfr}/include"
+        "--with-mpfr-include=${pkgs.mpfr.dev}/include"
       ];
     });
 
@@ -1922,7 +1922,7 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl}/include";
+      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {

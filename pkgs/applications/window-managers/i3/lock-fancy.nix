@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s|(mktemp)|(${coreutils}/bin/mktemp)|" lock
     sed -i -e "s|'rm -f |'${coreutils}/bin/rm -f |" lock
     sed -i -e "s|scrot -z |${scrot}/bin/scrot -z |" lock
-    sed -i -e "s|convert |${imagemagick}/bin/convert |" lock
+    sed -i -e "s|convert |${imagemagick.out}/bin/convert |" lock
     sed -i -e "s|awk -F|${gawk}/bin/awk -F|" lock
     sed -i -e "s| awk | ${gawk}/bin/awk |" lock
     sed -i -e "s|i3lock -n |${i3lock-color}/bin/i3lock-color -n |" lock

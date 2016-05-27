@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     [ cython msgpack openssl acl llfuse ];
 
   preConfigure = ''
-    export ATTIC_OPENSSL_PREFIX="${openssl}"
+    export ATTIC_OPENSSL_PREFIX="${openssl.dev}"
     substituteInPlace setup.py --replace "version=versioneer.get_version()" "version='${version}'"
   '';
 

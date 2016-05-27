@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   prePatch = ''
-    sed -i -e "s|/usr|${subversion}|g" src/svnqt/cmakemodules/FindSubversion.cmake
+    sed -i -e "s|/usr|${subversion.dev}|g" src/svnqt/cmakemodules/FindSubversion.cmake
   '';
 
   buildInputs = [ apr aprutil subversion db kdelibs expat ];

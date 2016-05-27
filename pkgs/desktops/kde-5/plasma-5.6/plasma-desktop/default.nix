@@ -34,7 +34,7 @@ plasmaPackage rec {
     })
     ./0003-tzdir.patch
   ];
-  NIX_CFLAGS_COMPILE = [ "-I${xorgserver}/include/xorg" ];
+  NIX_CFLAGS_COMPILE = [ "-I${xorgserver.dev}/include/xorg" ];
   cmakeFlags = [
     "-DEvdev_INCLUDE_DIRS=${xf86inputevdev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include/xorg"

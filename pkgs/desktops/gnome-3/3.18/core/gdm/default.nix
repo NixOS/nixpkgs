@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, xorg, dbus
-, intltool, accountsservice, libX11, gnome3, systemd, gnome_session
+, intltool, accountsservice, libX11, gnome3, systemd, gnome_session, autoreconfHook
 , gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
                      "--with-systemd=yes"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  buildInputs = [ pkgconfig glib itstool libxml2 intltool
+  buildInputs = [ pkgconfig glib itstool libxml2 intltool autoreconfHook
                   accountsservice gnome3.dconf systemd
                   gobjectIntrospection libX11 gtk
                   libcanberra_gtk3 pam libtool ];
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
 
   # Disable Access Control because our X does not support FamilyServerInterpreted yet
   patches = [ ./xserver_path.patch ./sessions_dir.patch
-              ./disable_x_access_control.patch ./no-dbus-launch.patch ];
+              ./disable_x_access_control.patch ./no-dbus-launch.patch
+              ./libsystemd.patch ];
 
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 

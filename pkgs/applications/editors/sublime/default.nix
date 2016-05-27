@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, xorg, cairo, gtk}:
+{ fetchurl, stdenv, glib, xorg, cairo, gtk, makeDesktopItem }:
 let
   libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk cairo];
 in
@@ -31,7 +31,26 @@ stdenv.mkDerivation rec {
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
       $out/sublime/sublime_text
+
+    mkdir -p $out/share/icons
+
+    for x in $(ls $out/sublime/Icon); do
+      mkdir -p $out/share/icons/hicolor/$x/apps
+      cp -v $out/sublime/Icon/$x/* $out/share/icons/hicolor/$x/apps
+    done
+
+    ln -sv "${desktopItem}/share/applications" $out/share
   '';
+
+  desktopItem = makeDesktopItem {
+    name = "sublime2";
+    exec = "sublime2 %F";
+    comment = meta.description;
+    desktopName = "Sublime Text";
+    genericName = "Text Editor";
+    categories = "TextEditor;Development;";
+    icon = "sublime_text";
+  };
 
   meta = {
     description = "Sophisticated text editor for code, markup and prose";

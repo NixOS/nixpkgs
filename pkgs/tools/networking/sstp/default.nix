@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--with-runtime-dir=/run/sstpc"
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];

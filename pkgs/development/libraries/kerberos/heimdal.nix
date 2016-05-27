@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--enable-hdb-openldap-module"
-    "--with-sqlite3=${sqlite}"
+    "--with-sqlite3=${sqlite.dev}"
     "--with-libedit=${libedit}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--without-x"
     "--with-berkeley-db=${db}"
   ] ++ optionals (!libOnly) [
-    "--with-openldap=${openldap}"
+    "--with-openldap=${openldap.dev}"
   ] ++ optionals (!stdenv.isFreeBSD) [
     "--with-capng"
   ];

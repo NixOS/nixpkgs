@@ -6,8 +6,10 @@ dontStrip=1
 fixupOutputHooks+=(_separateDebugInfo)
 
 _separateDebugInfo() {
+    [ -e "$prefix" ] || return 0
+
     local dst="${debug:-$out}"
-    if [ "$prefix" = "$dst" ]; then return; fi
+    if [ "$prefix" = "$dst" ]; then return 0; fi
 
     dst="$dst/lib/debug/.build-id"
 

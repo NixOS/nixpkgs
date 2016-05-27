@@ -115,6 +115,14 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     services.xserver.displayManager.logToJournal = true;
 
+    # Bump kdm's X server start timeout to account for heavily loaded
+    # VM host systems.
+    services.xserver.displayManager.kdm.extraConfig =
+      ''
+        [X-:*-Core]
+        ServerTimeout=240
+      '';
+
   };
 
 }

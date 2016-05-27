@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
+  configureFlags = "--with-ssl=${openssl.dev} --with-gc=${boehmgc.dev}"
     + optionalString graphicsSupport " --enable-image=${optionalString x11Support "x11,"}fb";
 
   preConfigure = ''

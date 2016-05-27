@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
-      ( if sslSupport then "--with-ssl=${openssl}" else "--without-ssl" )
-      ( if scpSupport then "--with-libssh2=${libssh2}" else "--without-libssh2" )
+      ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}"

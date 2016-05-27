@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-epoll"
     "--enable-ipv6"
-    "--enable-openssl=${openssl}"
+    "--enable-openssl=${openssl.dev}"
     "--with-program-prefix=charybdis-"
   ];
 

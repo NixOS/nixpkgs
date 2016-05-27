@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-mantype=doc"
-    "--with-pam"
-    "--without-bsd-auth"
-    "--with-sock-dir=/run"
+    "--with-auth-pam"
+    "--without-auth-bsdauth"
+    "--with-path-socket=/run"
     "--with-user-smtpd=smtpd"
     "--with-user-queue=smtpq"
     "--with-group-queue=smtpq"
-    "--with-ca-file=/etc/ssl/certs/ca-certificates.crt"
-    "--with-libevent-dir=${libevent.dev}"
-    "--enable-table-db"
+    "--with-path-CAfile=/etc/ssl/certs/ca-certificates.crt"
+    "--with-libevent=${libevent.dev}"
+    "--with-table-db"
   ];
 
   installFlags = [

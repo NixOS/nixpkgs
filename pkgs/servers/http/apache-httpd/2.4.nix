@@ -46,10 +46,10 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
   configureFlags = ''
-    --with-apr=${apr}
-    --with-apr-util=${aprutil}
-    --with-z=${zlib}
-    --with-pcre=${pcre}
+    --with-apr=${apr.dev}
+    --with-apr-util=${aprutil.dev}
+    --with-z=${zlib.dev}
+    --with-pcre=${pcre.dev}
     --disable-maintainer-mode
     --disable-debugger-mode
     --enable-mods-shared=all

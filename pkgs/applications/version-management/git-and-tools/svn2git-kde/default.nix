@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "818673fe751b00a42b6ed3e78a783549fb09b5245a01dee47b3dded667bfc582";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-I${apr}/include/apr-1" "-I${subversion.dev}/include/subversion-1" "-DVER=\"${src.rev}\"" ];
+  NIX_CFLAGS_COMPILE = [ "-I${apr.dev}/include/apr-1" "-I${subversion.dev}/include/subversion-1" "-DVER=\"${src.rev}\"" ];
 
   patchPhase = ''
     sed -i 's|/bin/cat|cat|' ./src/repository.cpp

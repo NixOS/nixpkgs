@@ -14,7 +14,7 @@ stdenv.mkDerivation rec{
 
   configureFlags = [
     "--with-bdb=${db}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--with-lockfile=/run/lock/netatalk"
     "--localstatedir=/var/lib"
   ];

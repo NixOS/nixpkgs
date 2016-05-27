@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--with-libelf=${libelf}"
-      "--with-libevent=${libevent}"
+      "--with-libevent=${libevent.dev}"
       "--with-libconfig=${libconfig}"
       "--with-opencl-icd-path=$out/etc/OpenCL/vendors"
       "--enable-user-install"

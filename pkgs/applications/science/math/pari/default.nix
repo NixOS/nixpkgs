@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   configureScript = "./Configure";
   configureFlags =
-    "--with-gmp=${gmp} " +
-    "--with-readline=${readline}";
+    "--with-gmp=${gmp.dev} " +
+    "--with-readline=${readline.dev}";
 
   meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
