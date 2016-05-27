@@ -16,4 +16,6 @@ in symlinkJoin {
     wrapProgram $out/bin/urxvtd \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
   '';
+
+  passthru.plugins = plugins;
 }
