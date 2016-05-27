@@ -4,7 +4,7 @@ let
   rev = "1.36.4";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "emscripten-fastcomp-${rev}";
 
   srcFC = fetchFromGitHub {
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/kripken/emscripten-fastcomp;
     description = "emscripten llvm";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight matthewbauer ];
+    maintainers = with maintainers; [ qknight /*matthewbauer (undefined) */ ];
     license = stdenv.lib.licenses.ncsa;
   };
 }
