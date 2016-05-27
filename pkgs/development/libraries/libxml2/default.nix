@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "libxml2-${version}";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "0bd17g6znn2r98gzpjppsqjg33iraky4px923j3k8kdl8qgy7sad";
+    sha256 = "0g336cr0bw6dax1q48bblphmchgihx9p1pjmxdnrd6sh3qci3fgz";
   };
 
   outputs = [ "dev" "out" "bin" "doc" ]
