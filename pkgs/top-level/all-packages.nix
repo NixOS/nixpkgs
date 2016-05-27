@@ -5219,6 +5219,10 @@ in
 
   ocamlnat = newScope pkgs.ocamlPackages_3_12_1 ../development/ocaml-modules/ocamlnat { };
 
+  picat = callPackage ../development/compilers/picat {
+    stdenv = overrideCC stdenv gcc49;
+  };
+
   ponyc = callPackage ../development/compilers/ponyc {
     llvm = llvm_36;
   };
