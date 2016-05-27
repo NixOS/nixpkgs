@@ -799,6 +799,7 @@ in modules // {
   ansible = buildPythonPackage rec {
     version = "1.9.4";
     name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
@@ -831,6 +832,7 @@ in modules // {
   ansible2 = buildPythonPackage rec {
     version = "2.1.0.0";
     name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
