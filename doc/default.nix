@@ -27,6 +27,7 @@ stdenv.mkDerivation {
     in ''
       {
         pandoc '${inputFile}' -w docbook ${optionalString useChapters "--chapters"} \
+          --smart \
           | sed -e 's|<ulink url=|<link xlink:href=|' \
               -e 's|</ulink>|</link>|' \
               -e 's|<sect. id=|<section xml:id=|' \
