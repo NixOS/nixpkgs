@@ -156,8 +156,13 @@ in {
 
   config = mkIf cfg.enable {
     environment = {
-      systemPackages = [ pkgs.tmux ];
       etc."tmux.conf".text = tmuxConf;
+
+      systemPackages = [ pkgs.tmux ];
+
+      variables = {
+        TMUX_TMPDIR = ''''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}'';
+      };
     };
   };
 }

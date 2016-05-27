@@ -34,9 +34,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-
-    wrapProgram $out/bin/tmux \
-      --set TMUX_TMPDIR \''${XDG_RUNTIME_DIR:-"/run/user/\$(id -u)"}
   '';
 
   meta = {
