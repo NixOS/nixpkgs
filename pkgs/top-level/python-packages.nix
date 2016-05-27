@@ -10450,6 +10450,26 @@ in modules // {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
+  google = buildPythonPackage rec {
+    version = "1.9.1";
+    name = "google-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/google/${name}.tar.gz";
+      sha256 = "0vyz8n8jpgq9hk9nrini0vsikqmi6h3xlvhfi7h6x2hjsf0kkp5d";
+    };
+
+    buildInputs = with self; [ beautifulsoup4 ];
+
+    meta = {
+      description = "Python bindings to the Google search engine";
+      homepage = "http://breakingcode.wordpress.com/";
+      license = licenses.bsd;
+      platforms = platforms.unix;
+    };
+  };
+
+
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-1.2";
 
