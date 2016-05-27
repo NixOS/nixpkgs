@@ -181,6 +181,9 @@ self: super: {
   # https://github.com/haskell/haddock/issues/427
   haddock = dontCheck super.haddock;
 
+  # haddock-api >= 2.17 is GHC 8.0 only
+  haddock-api = self.haddock-api_2_16_1;
+
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
