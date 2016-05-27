@@ -40,7 +40,7 @@ in
         defaultText = "pkgs.slurm-llnl";
         example = literalExample "pkgs.slurm-llnl-full";
         description = ''
-          The packge to use for slurm binaries.
+          The package to use for slurm binaries.
         '';
       };
 
