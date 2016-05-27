@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
     ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
     ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
 
+  # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
+  postPatch = ''
+    substituteInPlace ./hack/make.sh                   --replace libsystemd-journal libsystemd
+    substituteInPlace ./daemon/logger/journald/read.go --replace libsystemd-journal libsystemd
+  '';
+
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
