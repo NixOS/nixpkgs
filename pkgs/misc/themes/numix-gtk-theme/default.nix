@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk-engine-murrine ];
 
-  installPhase = ''
-    make install DESTDIR="$out"
+  postPatch = ''
+    substituteInPlace Makefile --replace '$(DESTDIR)'/usr $out
   '';
 
   meta = {
