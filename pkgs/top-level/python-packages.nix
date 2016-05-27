@@ -23337,7 +23337,7 @@ in modules // {
     };
   };
 
-  wxPython = self.wxPython28;
+  wxPython = self.wxPython30;
 
   wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
     wxGTK = pkgs.wxGTK28;
