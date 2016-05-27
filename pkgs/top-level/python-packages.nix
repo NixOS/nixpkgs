@@ -22750,6 +22750,25 @@ in modules // {
     };
   };
 
+  uritemplate = buildPythonPackage rec {
+    name = "uritemplate-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirrorr//pypi/u/uritemplate/${name}.tar.gz";
+      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    };
+
+		buildInputs = with self; [ simplejson ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+	};
+
   traceback2 = buildPythonPackage rec {
     version = "1.4.0";
     name = "traceback2-${version}";
