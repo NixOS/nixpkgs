@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk_engines ];
 
-  installPhase = ''
-    make install DESTDIR="$out"
+  postPatch = ''
+    substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
   '';
 
   preferLocalBuild = true;
