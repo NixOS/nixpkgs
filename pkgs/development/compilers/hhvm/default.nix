@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   MYSQL_DIR=mariadb;
 
   # work around broken build system
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
+  NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 
   prePatch = ''
     substituteInPlace hphp/util/generate-buildinfo.sh \

@@ -43,14 +43,14 @@ let
 
     configureFlags = ''
       ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
-      ${if httpServer then "--with-apxs=${apacheHttpd}/bin/apxs" else "--without-apxs"}
+      ${if httpServer then "--with-apxs=${apacheHttpd.dev}/bin/apxs" else "--without-apxs"}
       ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
       ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
       --disable-keychain
       ${if saslSupport then "--with-sasl=${sasl}" else "--without-sasl"}
       ${if httpSupport then "--with-serf=${serf}" else "--without-serf"}
-      --with-zlib=${zlib}
-      --with-sqlite=${sqlite}
+      --with-zlib=${zlib.dev}
+      --with-sqlite=${sqlite.dev}
     '';
 
     preBuild = ''

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
             -e 's|cmd = "inkscape|cmd = "${inkscape}/bin/inkscape|g' \
             -e 's|cmd = "fig2dev|cmd = "${transfig}/bin/fig2dev|g' \
             -e 's|cmd = \["ps2pdf|cmd = ["${ghostscript}/bin/ps2pdf|g' \
-            -e 's|cmd = "convert|cmd = "${imagemagick}/bin/convert|g' \
+            -e 's|cmd = "convert|cmd = "${imagemagick.out}/bin/convert|g' \
             -i "$file"
     done
   '';

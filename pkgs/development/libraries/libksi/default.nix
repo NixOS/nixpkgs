@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl curl ];
 
   configureFlags = [
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--with-cafile=/etc/ssl/certs/ca-certificates.crt"
   ];
 

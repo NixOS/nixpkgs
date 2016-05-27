@@ -96,7 +96,7 @@ in rec {
     dontDisableStatic = true;
     preConfigure = ''
       sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c}"
+      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
     '';
     postConfigure = ''
       sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;

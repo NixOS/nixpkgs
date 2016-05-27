@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [pkgconfig xlibsWrapper libpng libjpeg expat libXaw yacc libtool fontconfig pango gd];
   
   configureFlags =
-    [ "--with-pngincludedir=${libpng}/include"
+    [ "--with-pngincludedir=${libpng.dev}/include"
       "--with-pnglibdir=${libpng.out}/lib"
-      "--with-jpegincludedir=${libjpeg}/include"
+      "--with-jpegincludedir=${libjpeg.dev}/include"
       "--with-jpeglibdir=${libjpeg.out}/lib"
-      "--with-expatincludedir=${expat}/include"
+      "--with-expatincludedir=${expat.dev}/include"
       "--with-expatlibdir=${expat.out}/lib"
     ]
     ++ stdenv.lib.optional (xlibsWrapper == null) "--without-x";

@@ -262,7 +262,7 @@ if test -z "$libsOnly"; then
     # a symlink named libfglrx_gamma.so.1 linking to libfglrx_gamma.so.1.0 in $out/lib/
 
     cd programs/fglrx_gamma
-    gcc -fPIC -I${libXxf86vm}/include \
+    gcc -fPIC -I${libXxf86vm.dev}/include \
       -I${xf86vidmodeproto}/include \
       -I$out/X11R6/include \
       -L$out/lib \

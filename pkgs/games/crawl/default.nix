@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "prefix=$(out)" "FORCE_CC=gcc" "FORCE_CXX=g++" "HOSTCXX=g++"
-                "SAVEDIR=~/.crawl" "sqlite=${sqlite}" ]
+                "SAVEDIR=~/.crawl" "sqlite=${sqlite.dev}" ]
            ++ stdenv.lib.optionals tileMode [ "TILES=y" "dejavu_fonts=${dejavu_fonts}" ];
 
   postInstall = if tileMode then "mv $out/bin/crawl $out/bin/crawl-tiles" else "";

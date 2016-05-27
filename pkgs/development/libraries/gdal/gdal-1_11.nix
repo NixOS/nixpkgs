@@ -24,10 +24,10 @@ composableDerivation.composableDerivation {} (fixed: rec {
   preConfigure = "export CFLAGS=-O0 CXXFLAGS=-O0; unset CC CXX";
 
   configureFlags = [
-    "--with-jpeg=${libjpeg}"
-    "--with-libtiff=${libtiff}" # optional (without largetiff support)
-    "--with-libpng=${libpng}"   # optional
-    "--with-libz=${zlib}"       # optional
+    "--with-jpeg=${libjpeg.dev}"
+    "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
+    "--with-libpng=${libpng.dev}"   # optional
+    "--with-libz=${zlib.dev}"       # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql.lib}/bin/mysql_config"

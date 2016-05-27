@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   CPP = "${stdenv.cc}/bin/gcc -E";
 
   configureFlags = "
-    --enable-shared --disable-all-vads --with-readline=${readline}
+    --enable-shared --disable-all-vads --with-readline=${readline.dev}
     --disable-hslookup --disable-wbxml2 --without-iodbc
-    --enable-openssl=${openssl}
+    --enable-openssl=${openssl.dev}
     ";
 
   postInstall=''

@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     cp -R . $out
     cp -R ${modulesSrc}/* $out/modules/
     wrapProgram "$out/prey.sh" \
-      --prefix PATH ":" "${xawtv}/bin:${imagemagick}/bin:${curl.bin}/bin:${scrot}/bin:${inetutils}/bin:${coreutils}/bin" \
+      --prefix PATH ":" "${xawtv}/bin:${imagemagick.out}/bin:${curl.bin}/bin:${scrot}/bin:${inetutils}/bin:${coreutils}/bin" \
       --set CURL_CA_BUNDLE "/etc/ssl/certs/ca-certificates.crt"
   '';
 

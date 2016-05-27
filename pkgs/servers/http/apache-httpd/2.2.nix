@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
   configureFlags = ''
-    --with-z=${zlib}
-    --with-pcre=${pcre}
+    --with-z=${zlib.dev}
+    --with-pcre=${pcre.dev}
     --enable-mods-shared=all
     --enable-authn-alias
     ${if proxySupport then "--enable-proxy" else ""}
-    ${if sslSupport then "--enable-ssl --with-ssl=${openssl}" else ""}
+    ${if sslSupport then "--enable-ssl --with-ssl=${openssl.dev}" else ""}
     ${if ldapSupport then "--enable-ldap --enable-authnz-ldap" else ""}
     --with-mpm=${mpm}
     --enable-cache

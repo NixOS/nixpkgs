@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   ];
 
   preConfigure = ''
-    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2";
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype.dev}/include/freetype2";
   '';
 
   src = fetchurl {

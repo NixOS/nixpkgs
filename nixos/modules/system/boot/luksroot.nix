@@ -438,7 +438,7 @@ in
         copy_bin_and_libs ${pkgs.ykpers}/bin/ykinfo
         copy_bin_and_libs ${pkgs.openssl.bin}/bin/openssl
 
-        cc -O3 -I${pkgs.openssl}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
+        cc -O3 -I${pkgs.openssl.dev}/include -L${pkgs.openssl.out}/lib ${./pbkdf2-sha512.c} -o pbkdf2-sha512 -lcrypto
         strip -s pbkdf2-sha512
         copy_bin_and_libs pbkdf2-sha512
 

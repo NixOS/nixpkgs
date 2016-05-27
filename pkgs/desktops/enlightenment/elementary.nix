@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "0avb0d6nk4d88l81c2j6py13vdfnvg080ycw2y3qvawyjf1mhska";
   };
   buildInputs = [ pkgconfig efl libdrm gdbm automake autoconf ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap ];
-  NIX_CFLAGS_COMPILE = [ "-I${libdrm}/include/libdrm" ];
+  NIX_CFLAGS_COMPILE = [ "-I${libdrm.dev}/include/libdrm" ];
   patches = [ ./elementary.patch ];
   enableParallelBuilding = true;
   meta = {

@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl}"
+    export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4}"
   '';
 

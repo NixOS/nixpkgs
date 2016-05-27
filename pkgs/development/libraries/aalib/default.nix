@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses ];
 
-  configureFlags = "--without-x --with-ncurses=${ncurses}";
+  configureFlags = "--without-x --with-ncurses=${ncurses.dev}";
 
   postInstall = ''
     mkdir -p $dev/bin

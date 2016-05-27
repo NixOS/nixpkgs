@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
   configureFlags = [
-    "--with-ssl-include-dir=${openssl}/include/openssl"
+    "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
     ];
   preConfigure = ''

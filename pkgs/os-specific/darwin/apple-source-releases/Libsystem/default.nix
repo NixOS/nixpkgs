@@ -53,7 +53,7 @@ appleDerivation rec {
     cp ${xnu}/Library/Frameworks/Kernel.framework/Versions/A/Headers/stdarg.h        $out/include
 
     for dep in ${Libc} ${Libm} ${Libinfo} ${dyld} ${architecture} ${libclosure} ${CarbonHeaders} \
-               ${libdispatch} ${ncurses} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
+               ${libdispatch} ${ncurses.dev} ${CommonCrypto} ${copyfile} ${removefile} ${libresolv} \
                ${Libnotify} ${mDNSResponder} ${launchd} ${libutil}; do
       (cd $dep/include && find . -name '*.h' | cpio -pdm $out/include)
     done
