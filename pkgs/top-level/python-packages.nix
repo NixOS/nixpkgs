@@ -19948,7 +19948,7 @@ in modules // {
       sha256 = "61d03a13f1dcb3c1829f5a146da1fe0cc0e27947558a51e848b6d469902815ef";
     };
 
-    propagatedBuildInputs = [ self.squaremap self.wxPython28 ];
+    propagatedBuildInputs = with self; [ squaremap wxPython ];
 
     meta = {
       description = "GUI Viewer for Python profiling runs";
