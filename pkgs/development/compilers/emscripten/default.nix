@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     homepage = https://github.com/kripken/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight /*matthewbauer (undefined) */ ];
+    maintainers = with maintainers; [ qknight matthewbauer ];
     license = licenses.ncsa;
   };
 }

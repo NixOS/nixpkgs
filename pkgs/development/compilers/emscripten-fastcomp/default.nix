@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/kripken/emscripten-fastcomp;
     description = "emscripten llvm";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight /*matthewbauer (undefined) */ ];
+    maintainers = with maintainers; [ qknight matthewbauer ];
     license = stdenv.lib.licenses.ncsa;
   };
 }
