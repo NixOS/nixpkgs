@@ -28,9 +28,9 @@ in stdenv.mkDerivation rec {
     make test
   '';
 
-
   installPhase = ''
-    mv $PWD $out
+    mkdir $out
+    find -maxdepth 1 ! -path . -exec mv {} $out \;
   '';
 
   meta = {
