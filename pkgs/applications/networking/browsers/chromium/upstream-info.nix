@@ -2,7 +2,7 @@
 {
   beta = {
     sha256 = "1sgfwh2b0aw6l5v4ggk7frcy306x3ygxk81p3h6zdy5s1rpf8hxj";
-    sha256bin64 = "1kjnxxf2ak8v1akzxz46r7a7r6bhxjb2y9fhr1fqvks3m4jc5zqw";
+    sha256bin64 = "14qj8l5dapha87ndyzcs3spaxp3s9sapcjcplkisbivis09a29cb";
     version = "51.0.2704.63";
   };
   dev = {
