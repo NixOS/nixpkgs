@@ -23341,10 +23341,6 @@ in modules // {
 
   wxPython = self.wxPython30;
 
-  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
-    wxGTK = pkgs.wxGTK28;
-  };
-
   wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
