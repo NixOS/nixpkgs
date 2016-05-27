@@ -33,11 +33,8 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Our core version of Cabal is good enough for this build.
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
-
   # Enable latest version of cabal-install.
-  cabal-install_1_24_0_0 = (doDistribute (dontJailbreak (dontCheck (super.cabal-install_1_24_0_0)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  cabal-install = (doDistribute (dontJailbreak (dontCheck (super.cabal-install)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
   # Jailbreaking is required for the test suite only (which we don't run).
   Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
