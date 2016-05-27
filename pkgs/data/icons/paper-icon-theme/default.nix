@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  installPhase = ''
-    make install DESTDIR="$out"
+  postPatch = ''
+    substituteInPlace Makefile.am --replace '$(DESTDIR)'/usr $out
   '';
 
   meta = with stdenv.lib; {
