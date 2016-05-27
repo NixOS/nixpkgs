@@ -1,11 +1,11 @@
 { stdenv, callPackage }:
 
 callPackage ./generic.nix {
-  shortVersion = "1.8.0";
+  shortVersion = "1.9.0";
   isRelease = true;
   forceBundledLLVM = false;
   configureFlags = [ "--release-channel=stable" ];
-  srcSha = "1s03aymmhhrndq29sv9cs8s4p1sg8qvq8ds6lyp6s4ny8nyvdpzy";
+  srcSha = "0yg5admbypqld0gmxbhrh2yag5kxjklpjgldrp3pd5vczkl13aml";
 
   /* Rust is bootstrapped from an earlier built version. We need
   to fetch these earlier versions, which vary per platform.
@@ -15,12 +15,12 @@ callPackage ./generic.nix {
   for the tagged release and not a snapshot in the current HEAD.
   */
 
-  snapshotHashLinux686 = "5f194aa7628c0703f0fd48adc4ec7f3cc64b98c7";
-  snapshotHashLinux64 = "d29b7607d13d64078b6324aec82926fb493f59ba";
-  snapshotHashDarwin686 = "4c8e42dd649e247f3576bf9dfa273327b4907f9c";
-  snapshotHashDarwin64 = "411a41363f922d1d93fa62ff2fedf5c35e9cccb2";
-  snapshotDate = "2016-02-17";
-  snapshotRev = "4d3eebf";
+  snapshotHashLinux686 = "0e0e4448b80d0a12b75485795244bb3857a0a7ef";
+  snapshotHashLinux64 = "1273b6b6aed421c9e40c59f366d0df6092ec0397";
+  snapshotHashDarwin686 = "9f9c0b4a2db09acbce54b792fb8839a735585565";
+  snapshotHashDarwin64 = "52570f6fd915b0210a9be98cfc933148e16a75f8";
+  snapshotDate = "2016-03-18";
+  snapshotRev = "235d774";
 
   patches = [ ./patches/remove-uneeded-git.patch ]
     ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
