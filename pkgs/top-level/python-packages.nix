@@ -829,12 +829,12 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version    = "v2.0.0.2";
-    name       = "ansible-${version}";
+    version = "2.1.0.0";
+    name = "ansible-${version}";
 
     src = pkgs.fetchurl {
-      url    = "http://releases.ansible.com/ansible/ansible-2.0.0.2.tar.gz";
-      sha256 = "0a2qgshbpbg2c8rz36jcc5f7zam0j1viqdhc8fqqbarz26chpnr7";
+      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
+      sha256 = "1bfc2xiplpad6f2nwi48y0kps7xqnsll85dlz63cy8k5bysl6d20";
     };
 
     prePatch = ''
@@ -852,11 +852,11 @@ in modules // {
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
-      homepage    = "http://www.ansible.com";
+      homepage = "http://www.ansible.com";
       description = "A simple automation tool";
-      license     = with licenses; [ gpl3 ];
+      license = with licenses; [ gpl3 ];
       maintainers = with maintainers; [ copumpkin ];
-      platforms   = with platforms; linux ++ darwin;
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
