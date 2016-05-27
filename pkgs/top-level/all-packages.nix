@@ -6338,7 +6338,7 @@ in
   premake = premake4;
 
   qtcreator = qt5.callPackage ../development/qtcreator {
-    withDocumentation = true;
+    withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
 
   racerRust = callPackage ../development/tools/rust/racer { };
