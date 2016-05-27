@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
   patches = [ ./xserver_path.patch ./sessions_dir.patch
               ./disable_x_access_control.patch ./no-dbus-launch.patch ];
 
+  postPatch = ''
+    substituteInPlace configure --replace 'libsystemd-login >= 186 libsystemd-daemon' 'libsystemd'
+    substituteInPlace configure --replace 'libsystemd-journal' 'libsystemd'
+  '';
+
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 
   meta = with stdenv.lib; {
