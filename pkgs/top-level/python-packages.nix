@@ -23339,13 +23339,11 @@ in modules // {
 
   wxPython = self.wxPython28;
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit callPackage;
+  wxPython28 = callPackage ../development/python-modules/wxPython/2.8.nix {
     wxGTK = pkgs.wxGTK28;
   };
 
-  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
-    inherit callPackage;
+  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
 
