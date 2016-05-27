@@ -70,6 +70,6 @@ stdenv.mkDerivation {
     # I've tried compiling the packages separately.. too much hassle. This just works. Fine.
     license =  ["GPL" "LGPL"]; # see single packages ..
     homepage = []; # dito
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
