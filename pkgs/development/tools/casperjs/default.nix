@@ -28,9 +28,8 @@ in stdenv.mkDerivation rec {
     make test
   '';
 
-
   installPhase = ''
-    mv $PWD $out
+    cp -r . $out
   '';
 
   meta = {
