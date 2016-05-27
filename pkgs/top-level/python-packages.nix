@@ -3162,11 +3162,11 @@ in modules // {
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
-    version = "2015.9.6.2";
+    version = "2015.11.20.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/certifi/${name}.tar.gz";
-      sha256 = "19mfly763c6bzya9dwm6qgc48z4x3gk6ldl6fprdncqhklnjnfnw";
+      sha256 = "05lgwf9rz1kn465azy2bpb3zmpnsn9gkypbhnjlclchv98ssgc1h";
     };
 
     meta = {
@@ -12002,8 +12002,6 @@ in modules // {
 
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.4.4";
-    # Warning : as of nov. 9th, 2015, version 3.5.0b1 breaks a lot of things,
-    # more work is needed before upgrading
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
@@ -12020,6 +12018,22 @@ in modules // {
     };
   });
 
+  lxml_3_5 = buildPythonPackage ( rec {
+    name = "lxml-3.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lxml/${name}.tar.gz";
+      sha256 = "0y7m2s8ci6q642zl85y5axkj8z827l0vhjl532acb75hlkir77rl";
+    };
+
+    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://lxml.de;
+      license = licenses.bsd3;
+    };
+  });
 
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
@@ -16781,12 +16795,12 @@ in modules // {
   };
 
 
-  pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.1.8";
+  pyasn1 = buildPythonPackage rec {
+    name = "pyasn1-0.1.9";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pyasn1/0.1.8/pyasn1-0.1.8.tar.gz";
-      sha256 = "0iw31d9l0zwx35szkzq72hiw002wnqrlrsi9dpbrfngcl1ybwcsx";
+      url = "mirror://pypi/p/pyasn1/${name}.tar.gz";
+      sha256 = "0zraxni14bqi20kr4bi6nwsh32aibz0fq0xaczfisw0zdpcsqg45";
     };
 
     meta = {
@@ -16795,16 +16809,16 @@ in modules // {
       license = "mBSD";
       platforms = platforms.unix;  # arbitrary choice
     };
-  });
+  };
 
   pyasn1-modules = buildPythonPackage rec {
     name = "pyasn1-modules-${version}";
-    version = "0.0.5";
+    version = "0.0.8";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyasn1-modules/${name}.tar.gz";
-      sha256 = "0hcr6klrzmw4d9j9s5wrhqva5014735pg4zk3rppac4fs87g0rdy";
+      sha256 = "0drqgw81xd3fxdlg89kgd79zzrabvfncvkbybi2wr6w2y4s1jmhh";
     };
 
     propagatedBuildInputs = with self; [ pyasn1 ];
@@ -25136,16 +25150,19 @@ in modules // {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-0.8.1";
+    name = "searx-${version}";
+    version = "0.9.0";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/asciimoo/searx/archive/v0.8.1.tar.gz";
-      sha256 = "0z0s9n8iblrw7y5xrh2apzsazkgm4vzmxn0ckw4yfiya9am8zk32";
+    src = pkgs.fetchFromGitHub {
+      owner = "asciimoo";
+      repo = "searx";
+      rev = "v${version}";
+      sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
     };
 
     propagatedBuildInputs = with self; [
-      pyyaml lxml grequests flaskbabel flask requests2
-      gevent speaklater Babel pytz dateutil pygments
+      pyyaml lxml_3_5 grequests flaskbabel flask requests2
+      gevent speaklater Babel pytz dateutil pygments_2_0
       pyasn1 pyasn1-modules ndg-httpsclient certifi
     ];
 
