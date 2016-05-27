@@ -35,11 +35,12 @@ stdenv.mkDerivation {
     echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/compiler.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
   '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/kripken/emscripten;
     description = "An LLVM-to-JavaScript Compiler";
     platforms = platforms.all;
-    maintainers = with maintainers; [ qknight ];
+    maintainers = with maintainers; [ qknight matthewbauer ];
     license = licenses.ncsa;
   };
 }
