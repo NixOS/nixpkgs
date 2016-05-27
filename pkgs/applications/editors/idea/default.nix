@@ -10,9 +10,9 @@ let
   bnumber = with stdenv.lib; build: last (splitString "-" build);
   mkIdeaProduct = callPackage ./common.nix { };
 
-  buildAndroidStudio = { name, version, build, src, license, description }:
+  buildAndroidStudio = { name, version, build, src, license, description, wmClass }:
     let drv = (mkIdeaProduct rec {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "Studio";
       meta = with stdenv.lib; {
         homepage = https://developer.android.com/sdk/installing/studio.html;
@@ -35,9 +35,9 @@ let
       '';
     });
 
-  buildClion = { name, version, build, src, license, description }:
+  buildClion = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "CLion";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -51,9 +51,9 @@ let
       };
     });
 
-  buildIdea = { name, version, build, src, license, description }:
+  buildIdea = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "IDEA";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -68,9 +68,9 @@ let
       };
     });
 
-  buildRubyMine = { name, version, build, src, license, description }:
+  buildRubyMine = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "RubyMine";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -81,9 +81,9 @@ let
       };
     });
 
-  buildPhpStorm = { name, version, build, src, license, description }:
+  buildPhpStorm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "PhpStorm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
@@ -98,9 +98,9 @@ let
       };
     });
 
-  buildWebStorm = { name, version, build, src, license, description }:
+  buildWebStorm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "WebStorm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
@@ -115,9 +115,9 @@ let
       };
     });
 
-  buildPycharm = { name, version, build, src, license, description }:
+  buildPycharm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src;
+      inherit name version build src wmClass;
       product = "PyCharm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
@@ -157,6 +157,7 @@ in
             "/android-studio-ide-${buildNumber}-linux.zip";
       sha256 = "1zxxzyhny7j4vzlydrhwz3g8l8zcml84mhkcf5ckx8xr50j3m101";
     };
+    wmClass = "jetbrains-studio";
   };
 
   clion = buildClion rec {
@@ -169,6 +170,7 @@ in
       url = "https://download.jetbrains.com/cpp/${name}.tar.gz";
       sha256 = "0ll1rcnnbd1if6x5rp3qw35lvp5zdzmvyg9n1lha89i34xiw36jp";
     };
+    wmClass = "jetbrains-clion";
   };
 
   idea14-community = buildIdea rec {
@@ -181,6 +183,7 @@ in
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
       sha256 = "1i4mdjm9dd6zvxlpdgd3bqg45ir0cfc9hl55cdc0hg5qwbz683fz";
     };
+    wmClass = "jetbrains-idea-ce";
   };
 
   idea-community = buildIdea rec {
@@ -193,6 +196,7 @@ in
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
       sha256 = "15c92wsfw16j48k12x4vw78886yf9yjx7hwwjamgf28lmzvc37iz";
     };
+    wmClass = "jetbrains-idea-ce";
   };
 
   idea14-ultimate = buildIdea rec {
@@ -205,6 +209,7 @@ in
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
       sha256 = "a2259249f6e7bf14ba17b0af90a18d24d9b4670af60d24f0bb51af2f62500fc2";
     };
+    wmClass = "jetbrains-idea";
   };
 
   idea15-ultimate = buildIdea rec {
@@ -217,6 +222,7 @@ in
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
       sha256 = "012aap2qn0jx4x34bdv9ivrsr86vvf683srb5vpj27hc4l6rw6ll";
     };
+    wmClass = "jetbrains-idea";
   };
 
   idea-ultimate = buildIdea rec {
@@ -229,6 +235,7 @@ in
       url = "https://download.jetbrains.com/idea/ideaIU-${version}.tar.gz";
       sha256 = "0dxpx4nx845vgqxl5qz029d3w3kn3hi98wgzympidplxrphgalgy";
     };
+    wmClass = "jetbrains-idea";
   };
 
   ruby-mine = buildRubyMine rec {
@@ -241,6 +248,7 @@ in
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
       sha256 = "04fcxj1xlap9mxmwf051s926p2darlj5kwl4lms2gy5d8b2lhd5l";
     };
+    wmClass = "jetbrains-rubymine";
   };
 
   pycharm-community = buildPycharm rec {
@@ -253,6 +261,7 @@ in
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "1ks7crrfnhzkdxban2hh2pnr986vqwmac5zybmb1ighcyamhdi4q";
     };
+    wmClass = "jetbrains-pycharm-ce";
   };
 
   pycharm-professional = buildPycharm rec {
@@ -265,6 +274,7 @@ in
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
       sha256 = "1rn0i5qbvfjbl4v571ngmyslispibcq5ab0fb7xjl38vr1y417f2";
     };
+    wmClass = "jetbrains-pycharm";
   };
 
   phpstorm = buildPhpStorm rec {
@@ -277,6 +287,7 @@ in
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
       sha256 = "0fi042zvjpg5pn2mnhj3bbrdkl1b9vmhpf2l6ca4nr0rhjjv7dsm";
     };
+    wmClass = "jetbrains-phpstorm";
   };
 
   webstorm = buildWebStorm rec {
@@ -289,6 +300,7 @@ in
       url = "https://download.jetbrains.com/webstorm/WebStorm-${version}.tar.gz";
       sha256 = "0a5s6f99wyql5pgjl94pf4ljdbviik3b8dbr1s6b7c6jn1gk62ic";
     };
+    wmClass = "jetbrains-webstorm";
   };
 
 }
