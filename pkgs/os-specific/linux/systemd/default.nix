@@ -10,14 +10,14 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "229";
+  version = "230";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "4936f6e6c05162516a685ebd227b55816cf2b670";
-    sha256 = "1q0pyrljmq73qcan9rfqsiw66l1g159m5in5qgb8zwlwhl928670";
+    rev = "4ccee551f2ba8383c8b9bd06590a3cd1dfdf690f";
+    sha256 = "1i4my5z7f8g5bykv1vxyw1az66s087lfqrck79kdm4hgvb4lsk6y";
   };
 
   patches = [ ./hwdb-location.diff ];
