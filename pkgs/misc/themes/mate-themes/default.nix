@@ -1,19 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, gtk2 }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, gtk_engines,
+gtk-engine-murrine, gdk_pixbuf, librsvg }:
 
-stdenv.mkDerivation {
-  name = "mate-themes-1.6.3";
+stdenv.mkDerivation rec {
+  name = "mate-themes-${version}";
+  version = "${major-ver}.${minor-ver}";
+  major-ver = "3.18";
+  minor-ver = "1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/1.6/mate-themes-1.6.3.tar.xz";
-    sha256 = "1wakr9z3byw1yvnbaxg8cpfhp1bp1fmnaz742738m0fx6bzznj9i";
+    url = "http://pub.mate-desktop.org/releases/themes/${major-ver}/${name}.tar.xz";
+    sha256 = "0lkp6jqvnxp6jly35iw89paqs279nvhqg01ig92n1xcfp8yrqq9c";
   };
 
-  buildInputs = [ pkgconfig intltool iconnamingutils gtk2 ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+
+  buildInputs = [ gtk2 gtk_engines gtk-engine-murrine gdk_pixbuf librsvg ];
 
   meta = {
     description = "A set of themes from MATE";
     homepage = "http://mate-desktop.org";
     license = stdenv.lib.licenses.lgpl21;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }
