@@ -14036,6 +14036,9 @@ in modules // {
       sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
     };
 
+    # No tests included in archive
+    doCheck = false;
+
     meta = {
       homepage = http://code.google.com/p/oauth;
       description = "Library for OAuth version 1.0a";
