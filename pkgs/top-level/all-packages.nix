@@ -793,6 +793,8 @@ in
 
   fop = callPackage ../tools/typesetting/fop { };
 
+  fondu = callPackage ../tools/misc/fondu { };
+
   fpp = callPackage ../tools/misc/fpp { };
 
   fsmark = callPackage ../tools/misc/fsmark { };
