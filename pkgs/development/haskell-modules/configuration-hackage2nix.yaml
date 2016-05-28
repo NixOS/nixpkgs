@@ -128,9 +128,6 @@ dont-distribute-packages:
   # Depens on shine, which is a ghcjs project.
   shine-varying:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
 
-  # The build succeeds, but takes insanely long (> 2 hours).
-  sharc-timbre:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
-
   # these packages depend on software with an unfree license
   accelerate-cublas:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cuda:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
@@ -150,3 +147,16 @@ dont-distribute-packages:
   yices-painless:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
 
   # soft restrictions because of build errors
+  clang-pure:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  fltkhs-demos:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
+  fltkhs-fluid-demos:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  fltkhs-hello-world:                           [ i686-linux, x86_64-linux, x86_64-darwin ]
+  haste-gapi:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  haste-perch:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  hplayground:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
+  leksah:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
+  sneathlane-haste:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
+  treersec:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  yi-contrib:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
+  temporal-csound:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
+  csound-catalog:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
