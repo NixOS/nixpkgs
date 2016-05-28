@@ -63,9 +63,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  # We have time 1.5
-  aeson = disableCabalFlag super.aeson "old-locale";
-
   # requires filepath >=1.1 && <1.4
   Glob = doJailbreak super.Glob;
 
@@ -198,6 +195,7 @@ self: super: {
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
   # GHC versions prior to 8.x require additional build inputs.
+  aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
 
