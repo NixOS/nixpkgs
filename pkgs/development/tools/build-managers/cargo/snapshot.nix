@@ -2,7 +2,7 @@
 
 /* Cargo binary snapshot */
 
-let snapshotDate = "2016-01-31";
+let snapshotDate = "2016-05-24";
 in
 
 with ((import ./common.nix) {

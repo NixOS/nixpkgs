@@ -7,7 +7,7 @@ with rustPlatform;
 
 with ((import ./common.nix) {
   inherit stdenv rustc;
-  version = "0.9.0";
+  version = "homu-tmp";
 });
 
 buildRustPackage rec {
