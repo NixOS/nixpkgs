@@ -3,13 +3,15 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.17.0";
+  version = "1.17.1";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "1zisnz4x54mn9sm46kcr571faqnazkcglyf0lbz19l34syx40df1";
+    sha256 = "0d58bhvwg7c5hp07wywlwnqi01k4jhmpgac7gkx9lil1x6kmahqs";
   };
 
-  buildInputs = [ pkgconfig openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ openssl zlib freetype fontconfig fribidi SDL2 SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
     xorg.libX11 udev utillinux systemd ];
