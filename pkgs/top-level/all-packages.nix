@@ -13704,7 +13704,9 @@ in
 
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
-  pencil = callPackage ../applications/graphics/pencil { };
+  pencil = callPackage ../applications/graphics/pencil {
+    xulrunner = firefox-unwrapped;
+  };
 
   perseus = callPackage ../applications/science/math/perseus {};
 
