@@ -2507,6 +2507,8 @@ in
 
   mtx = callPackage ../tools/backup/mtx {};
 
+  mt-st = callPackage ../tools/backup/mt-st {};
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
