@@ -1,8 +1,8 @@
 { stdenv, fetchurl, jre, makeWrapper, bash }:
 
 let
-  kafkaVersion = "0.8.2.1";
-  scalaVersion = "2.10";
+  kafkaVersion = "0.9.0.1";
+  scalaVersion = "2.11";
 
 in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
-    sha256 = "1klri23fjxbzv7rmi05vcqqfpy7dzi1spn2084y1dxsi1ypfkvc9";
+    sha256 = "0ykcjv5dz9i5bws9my2d60pww1g9v2p2nqr67h0i2xrjm7az8a6v";
   };
 
   buildInputs = [ jre makeWrapper bash ];
