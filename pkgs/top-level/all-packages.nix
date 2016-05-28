@@ -5847,7 +5847,9 @@ in
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
-  apacheKafka = callPackage ../servers/apache-kafka { };
+  apacheKafka = apacheKafka_0_9;
+  apacheKafka_0_8 = callPackage ../servers/apache-kafka { majorVersion = "0.8"; };
+  apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
