@@ -112,10 +112,6 @@ self: super: {
 
   sdl2           = doJailbreak super.sdl2;
 
-  servant        = dontCheck (doJailbreak super.servant_0_7);
-  servant-client = dontCheck (doJailbreak super.servant-client_0_7);
-  servant-server = dontCheck (doJailbreak super.servant-server_0_7);
-
   # packaged shelly 1.6.6 complains: time >=1.3 && <1.6
   shelly         = doJailbreak super.shelly;
 
