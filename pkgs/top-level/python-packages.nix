@@ -9078,6 +9078,9 @@ in modules // {
       sed -i '/rdflib/d' requirements.txt
     '';
 
+    # Doesn't actually run tests
+    doCheck = False;
+
     propagatedBuildInputs = with self; [
       six isodate pyparsing html5lib keepalive
     ];
