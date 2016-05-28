@@ -959,8 +959,7 @@ in
   };
 
   bup = callPackage ../tools/backup/bup {
-    inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
-    par2Support = (config.bup.par2Support or false);
+    par2Support = config.bup.par2Support or false;
   };
 
   burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
