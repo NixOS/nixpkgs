@@ -147,11 +147,11 @@ let
   };
 
   tools = buildFromGitHub {
-    rev = "c887be1b2ebd11663d4bf2fbca508c449172339e";
-    version = "2016-02-04";
+    rev = "9ae4729fba20b3533d829a9c6ba8195b068f2abc";
+    version = "2016-05-19";
     owner = "golang";
     repo = "tools";
-    sha256 = "15cm7wmab5na4hphvriazlz639882z0ipb466xmp7500rn6f5kzf";
+    sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
     goPackagePath = "golang.org/x/tools";
     goPackageAliases = [ "code.google.com/p/go.tools" ];
 
@@ -831,16 +831,10 @@ let
   };
 
   errcheck = buildFromGitHub {
-    rev = "f76568f8d87e48ccbbd17a827c2eaf31805bf58c";
+    rev = "8e25ad9d46f6c5d4e994edf82c57eb773a9aa73d";
     owner = "kisielk";
     repo = "errcheck";
-    sha256 = "1y1cqd0ibgr03zf96q6aagk65yhv6vcnq9xa8nqhjpnz7jhfndhs";
-    postPatch = ''
-      for f in $(find -name "*.go"); do
-        substituteInPlace $f \
-          --replace '"go/types"' '"golang.org/x/tools/go/types"'
-      done
-    '';
+    sha256 = "1089qf05q8db8h6ayn1c1iaq4fcpv18z3k94dr27v31k6f73dzhg";
     excludedPackages = [ "testdata" ];
     buildInputs = [ gotool tools ];
   };
@@ -4039,11 +4033,11 @@ let
   };
 
   godep = buildFromGitHub rec {
-    version = "60";
+    version = "71";
     rev    = "v${version}";
     owner  = "tools";
     repo   = "godep";
-    sha256 = "1v05185ikfcb3sz9ygcwm9x8la77i27ml1bg9fs6vvahjzyr0rif";
+    sha256 = "08dndq9lakw7civz4h44mwmmnc6qflsfhp8c7c21l95zvmavbly7";
   };
 
   color = buildFromGitHub {

@@ -21,8 +21,10 @@ stdenv.mkDerivation rec {
     ++ optionals enableGTK3 [ gtk3 wrapGAppsHook hicolor_icon_theme ]
     ++ optional stdenv.isLinux systemd;
 
-  preConfigure = ''
-    sed -i -e 's|/usr/bin/file|${file}/bin/file|g' configure
+  postPatch = ''
+    substituteInPlace ./configure \
+      --replace "libsystemd-daemon" "libsystemd" \
+      --replace "/usr/bin/file"     "${file}/bin/file"
   '';
 
   configureFlags = [ "--with-systemd-daemon" ]

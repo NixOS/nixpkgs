@@ -782,7 +782,9 @@ in
 
   ent = callPackage ../tools/misc/ent { };
 
-  facter = callPackage ../tools/system/facter {};
+  facter = callPackage ../tools/system/facter {
+    ruby = ruby_2_1;
+  };
 
   fasd = callPackage ../tools/misc/fasd { };
 
@@ -1968,6 +1970,8 @@ in
 
   hping = callPackage ../tools/networking/hping { };
 
+  http-prompt = callPackage ../tools/networking/http-prompt { };
+
   httpie = callPackage ../tools/networking/httpie { };
 
   httping = callPackage ../tools/networking/httping {};
@@ -2498,6 +2502,8 @@ in
   mtools = callPackage ../tools/filesystems/mtools { };
 
   mtr = callPackage ../tools/networking/mtr {};
+
+  mtx = callPackage ../tools/backup/mtx {};
 
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
@@ -3047,6 +3053,8 @@ in
   qarte = callPackage ../applications/video/qarte {
     sip = pythonPackages.sip_4_16;
   };
+
+  qnial = callPackage ../development/interpreters/qnial {};
 
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
@@ -13441,6 +13449,10 @@ in
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
+  mpvScripts = {
+    convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+  };
+
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
@@ -16900,6 +16912,8 @@ in
   discord = callPackage ../applications/networking/instant-messengers/discord { };
 
   golden-cheetah = qt55.callPackage ../applications/misc/golden-cheetah {};
+
+  linkchecker = callPackage ../tools/networking/linkchecker { };
 
   tomb = callPackage ../os-specific/linux/tomb {};
 

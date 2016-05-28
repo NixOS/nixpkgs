@@ -743,7 +743,9 @@ in modules // {
 
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.3";
-    disabled = isPy3k;
+
+    # The tests are written in a python2 syntax but anyjson is python3 valid
+    doCheck = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/anyjson/${name}.tar.gz";
@@ -799,6 +801,7 @@ in modules // {
   ansible = buildPythonPackage rec {
     version = "1.9.4";
     name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
@@ -829,12 +832,13 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version    = "v2.0.0.2";
-    name       = "ansible-${version}";
+    version = "2.1.0.0";
+    name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url    = "http://releases.ansible.com/ansible/ansible-2.0.0.2.tar.gz";
-      sha256 = "0a2qgshbpbg2c8rz36jcc5f7zam0j1viqdhc8fqqbarz26chpnr7";
+      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
+      sha256 = "1bfc2xiplpad6f2nwi48y0kps7xqnsll85dlz63cy8k5bysl6d20";
     };
 
     prePatch = ''
@@ -848,15 +852,15 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six
+      paramiko jinja2 pyyaml httplib2 boto six readline
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
-      homepage    = "http://www.ansible.com";
+      homepage = "http://www.ansible.com";
       description = "A simple automation tool";
-      license     = with licenses; [ gpl3 ];
+      license = with licenses; [ gpl3 ];
       maintainers = with maintainers; [ copumpkin ];
-      platforms   = with platforms; linux ++ darwin;
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
@@ -8664,6 +8668,34 @@ in modules // {
     };
   };
 
+  django_colorful = buildPythonPackage rec {
+    name = "django-colorful-${version}";
+    version = "1.2";
+
+    disabled = isPy35;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
+      sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
+    };
+
+    # variable used during test
+    DJANGO_SETTINGS_MODULE="colorful.tests.settings";
+    # remove one assertion failing because of un-initialized i18n infrastructure
+    #patchPhase = ''
+    #  sed -i -e '26,31d' colorful/tests/tests.py
+    #'';
+
+    # Requires Django >= 1.8
+    buildInputs = with self ; [ sqlite3 django ];
+
+    meta = {
+      description = "Django extension that provides database and form color fields";
+      homepage = https://github.com/charettes/django-colorful;
+      license = licenses.mit;
+    };
+  };
+
   django_compressor = buildPythonPackage rec {
     name = "django-compressor-${version}";
     version = "1.5";
@@ -9047,6 +9079,9 @@ in modules // {
     patchPhase = ''
       sed -i '/rdflib/d' requirements.txt
     '';
+
+    # Doesn't actually run tests
+    doCheck = false;
 
     propagatedBuildInputs = with self; [
       six isodate pyparsing html5lib keepalive
@@ -10453,14 +10488,18 @@ in modules // {
   };
 
   google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-1.2";
+    name = "google-api-python-client-${version}";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
-      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
-      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+      url = "mirror://pypi/g/${name}.tar.gz";
+      sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
     };
 
-    propagatedBuildInputs = with self; [ httplib2 ];
+    # No tests included in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ httplib2 six oauth2client uritemplate ];
 
     meta = {
       description = "The core Python library for accessing Google APIs";
@@ -10935,6 +10974,25 @@ in modules // {
       url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
       sha256 = "131jvp6ahllcqblszjg6fxrzh4k50w8g60sq924b4nb8lxm9dl14";
     };
+  };
+
+
+  inflection = buildPythonPackage rec {
+     version = "0.3.1";
+     name = "inflection-${version}";
+
+     src = pkgs.fetchurl {
+       url= "mirror://pypi/i/inflection/${name}.tar.gz";
+       sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
+     };
+
+     disabled = isPy3k;
+
+     meta = {
+       homepage = https://github.com/jpvanhal/inflection;
+       description = "A port of Ruby on Rails inflector to Python";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
   };
 
   influxdb = buildPythonPackage rec {
@@ -12802,6 +12860,11 @@ in modules // {
       sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
     };
 
+    checkPhase = ''
+      py.test
+    '';
+
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ ];
   };
 
@@ -12961,6 +13024,29 @@ in modules // {
       maintainers = with maintainers; [ skeidel ];
     };
   };
+
+  neuronpy = buildPythonPackage rec {
+    name = "neuronpy-${version}";
+    version = "0.1.6";
+    disabled = !isPy27;
+
+    propagatedBuildInputs = with self; [ numpy matplotlib scipy ];
+   
+    meta = {
+      description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
+      maintainers = [ maintainers.nico202 ];
+      license = licenses.mit;
+    };
+
+    #No tests included
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/neuronpy/neuronpy-${version}.tar.gz";
+      sha256 = "1clhc2b5fy2l8nfrji4dagmj9419nj6kam090yqxhq5c28sngk25";
+    };
+  };
+
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
@@ -14000,6 +14086,9 @@ in modules // {
       url = "mirror://pypi/o/oauth/oauth-1.0.1.tar.gz";
       sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
     };
+
+    # No tests included in archive
+    doCheck = false;
 
     meta = {
       homepage = http://code.google.com/p/oauth;
@@ -15971,6 +16060,9 @@ in modules // {
     };
 
     patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
+
+    # There's still some failing tests due to pygments 2.1.3
+    doCheck = false;
 
     buildInputs = with self; [
       pkgs.glibcLocales
@@ -22886,6 +22978,28 @@ in modules // {
     };
   };
 
+  uritemplate = buildPythonPackage rec {
+    name = "uritemplate-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
+      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    };
+
+    # No tests in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ simplejson ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
   urlgrabber =  buildPythonPackage rec {
     name = "urlgrabber-3.9.1";
     disabled = isPy3k;
@@ -25969,11 +26083,14 @@ in modules // {
   };
 
   parsimonious = buildPythonPackage rec {
-    name = "parsimonious-0.6.0";
+    version = "0.6.2";
+    name = "parsimonious-${version}";
     disabled = ! isPy27;
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/parsimonious/archive/0.6.tar.gz";
-      sha256 = "7ad992448b69a3f3d943bac0be132bced3f13937c8ca150ba2fd1d7b6534f846";
+    src = pkgs.fetchFromGitHub {
+      repo = "parsimonious";
+      owner = "erikrose";
+      rev = version;
+      sha256 = "1wf12adzhqjibbhy2m9abfqdgbb6z97s7wydhasir70307rqf9rj";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -26581,6 +26698,9 @@ in modules // {
       url = "mirror://pypi/p/pafy/${name}.tar.gz";
       sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
+
+    # No tests included in archive
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ youtube-dl ];
 
@@ -27218,6 +27338,36 @@ in modules // {
       license = licenses.bsd3;
       maintainers = with maintainers; [ drewkett ];
     };
+  };
+
+
+  Quandl = buildPythonPackage rec {
+     version = "3.0.0";
+     name = "Quandl-${version}";
+
+     src = pkgs.fetchurl {
+       url= "mirror://pypi/q/quandl/${name}.tar.gz";
+       sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
+     };
+
+     propagatedBuildInputs = with self; [
+	numpy
+	ndg-httpsclient
+	dateutil
+	inflection
+	moreItertools
+	requests2
+	pandas
+     ];
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/quandl/quandl-python;
+       description = "A Python library for Quandl’s RESTful API";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
   };
 
   queuelib = buildPythonPackage rec {

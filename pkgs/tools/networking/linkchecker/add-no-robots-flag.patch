@@ -1,0 +1,60 @@
+diff --git a/linkcheck/checker/httpurl.py b/linkcheck/checker/httpurl.py
+index 6f207b6..161619c 100644
+--- a/linkcheck/checker/httpurl.py
++++ b/linkcheck/checker/httpurl.py
+@@ -75,7 +75,7 @@ def allows_robots (self, url):
+         @return: True if access is granted, otherwise False
+         @rtype: bool
+         """
+-        return self.aggregate.robots_txt.allows_url(self)
++        return not self.aggregate.config['robotstxt'] or self.aggregate.robots_txt.allows_url(self)
+ 
+     def content_allows_robots (self):
+         """
+diff --git a/linkcheck/configuration/__init__.py b/linkcheck/configuration/__init__.py
+index fc2c148..234fa05 100644
+--- a/linkcheck/configuration/__init__.py
++++ b/linkcheck/configuration/__init__.py
+@@ -163,6 +163,7 @@ def __init__ (self):
+         ## checking options
+         self["allowedschemes"] = []
+         self['cookiefile'] = None
++        self['robotstxt'] = True
+         self["debugmemory"] = False
+         self["localwebroot"] = None
+         self["maxfilesizeparse"] = 1*1024*1024
+diff --git a/linkcheck/configuration/confparse.py b/linkcheck/configuration/confparse.py
+index 67751ed..845fa95 100644
+--- a/linkcheck/configuration/confparse.py
++++ b/linkcheck/configuration/confparse.py
+@@ -149,6 +149,7 @@ def read_checking_config (self):
+                  self.get(section, 'allowedschemes').split(',')]
+         self.read_boolean_option(section, "debugmemory")
+         self.read_string_option(section, "cookiefile")
++        self.read_boolean_option(section, "robotstxt")
+         self.read_string_option(section, "localwebroot")
+         try:
+             self.read_boolean_option(section, "sslverify")
+diff --git a/linkchecker b/linkchecker
+index 199532c..9e91fa5 100755
+--- a/linkchecker
++++ b/linkchecker
+@@ -321,6 +321,9 @@ group.add_argument("--cookiefile", dest="cookiefile", metavar="FILENAME",
+                  help=_(
+ """Read a file with initial cookie data. The cookie data format is
+ explained below."""))
++# const because store_false doesn't detect absent flags
++group.add_argument("--no-robots", action="store_const", const=False,
++                   dest="norobotstxt", help=_("Disable robots.txt checks"))
+ group.add_argument("--check-extern", action="store_true",
+                  dest="checkextern", help=_("""Check external URLs."""))
+ group.add_argument("--ignore-url", action="append", metavar="REGEX",
+@@ -431,6 +434,8 @@ if options.externstrict:
+ if options.extern:
+     pats = [linkcheck.get_link_pat(arg) for arg in options.extern]
+     config["externlinks"].extend(pats)
++if options.norobotstxt is not None:
++    config['robotstxt'] = options.norobotstxt
+ if options.checkextern:
+     config["checkextern"] = True
+ elif not config["checkextern"]:

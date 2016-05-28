@@ -23,6 +23,8 @@
 , cacaSupport ? true, libcaca ? null
 , vaapiSupport ? false, libva ? null
 , waylandSupport ? false, wayland ? null, libxkbcommon ? null
+# scripts you want to be loaded by default
+, scripts ? []
 }:
 
 assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
@@ -46,7 +48,7 @@ assert cacaSupport -> libcaca != null;
 assert waylandSupport -> (wayland != null && libxkbcommon != null);
 
 let
-  inherit (stdenv.lib) optional optionals optionalString;
+  inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
 
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
@@ -126,7 +128,9 @@ stdenv.mkDerivation rec {
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
   '' + optionalString youtubeSupport ''
     # Ensure youtube-dl is available in $PATH for MPV
-    wrapProgram $out/bin/mpv --prefix PATH : "${youtube-dl}/bin"
+    wrapProgram $out/bin/mpv \
+      --prefix PATH : "${youtube-dl}/bin" \
+      --add-flags "--script=${concatStringsSep "," scripts}"
   '';
 
   meta = with stdenv.lib; {

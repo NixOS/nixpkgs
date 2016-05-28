@@ -1,14 +1,19 @@
-{ stdenv, fetchurl, boost, cmake, curl, leatherman, libyamlcpp, openssl, utillinux }:
+{ stdenv, fetchurl, boost, cmake, curl, leatherman, libyamlcpp, openssl, ruby, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.1.5";
+  version = "3.1.6";
   src = fetchurl {
     url = "https://downloads.puppetlabs.com/facter/${name}.tar.gz";
-    sha256 = "0k2k92y42zb6vf542zwkhvg15kv32yb4zvw6nlcqlgmyg19c5qmv";
+    sha256 = "1kv4k9zqpsiw362kk1rw1a4sixd0pmnh57ghd4k4pffr2dkmdfsv";
   };
 
-  buildInputs = [ boost cmake curl leatherman libyamlcpp openssl utillinux ];
+  cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];
+
+  # since we cant expand $out in cmakeFlags
+  preConfigure = "cmakeFlags+=\" -DRUBY_LIB_INSTALL=$out/lib/ruby\"";
+
+  buildInputs = [ boost cmake curl leatherman libyamlcpp openssl ruby utillinux ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/facter;
