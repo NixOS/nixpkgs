@@ -56,7 +56,8 @@ let
     use_system_flac = true;
     use_system_libevent = true;
     use_system_libexpat = true;
-    use_system_libjpeg = true;
+    # XXX: System libjpeg fails to link for version 52.0.2743.10
+    use_system_libjpeg = upstream-info.version != "52.0.2743.10";
     use_system_libpng = false;
     use_system_libwebp = true;
     use_system_libxml = true;
@@ -127,7 +128,9 @@ let
 
     patches = [
       ./patches/widevine.patch
-      ./patches/nix_plugin_paths_50.patch
+      (if versionOlder version "52.0.0.0"
+       then ./patches/nix_plugin_paths_50.patch
+       else ./patches/nix_plugin_paths_52.patch)
     ];
 
     postPatch = ''
@@ -145,6 +148,9 @@ let
 
       sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
         chrome/browser/ui/webui/engagement/site_engagement_ui.cc
+    '' + optionalString (versionAtLeast version "52.0.0.0") ''
+      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
+        third_party/pdfium/xfa/fxbarcode/utils.h
     '';
 
     gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
