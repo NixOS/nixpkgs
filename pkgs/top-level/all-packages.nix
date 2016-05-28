@@ -14940,7 +14940,7 @@ in
   bastet = callPackage ../games/bastet {};
 
   beancount = callPackage ../applications/office/beancount {
-      pythonPackages = python3Packages;
+      pythonPackages = python34Packages;
   };
 
   beret = callPackage ../games/beret { };
