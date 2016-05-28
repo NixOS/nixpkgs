@@ -3,7 +3,7 @@
 , src ? null
 , srcs ? null
 , sourceRoot ? null
-, logLevel ? "warn"
+, logLevel ? ""
 , buildInputs ? []
 , cargoUpdateHook ? ""
 , ... } @ args:
