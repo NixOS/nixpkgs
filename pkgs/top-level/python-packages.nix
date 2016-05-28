@@ -26629,6 +26629,9 @@ in modules // {
       sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
 
+    # No tests included in archive
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ youtube-dl ];
 
     meta = with stdenv.lib; {
