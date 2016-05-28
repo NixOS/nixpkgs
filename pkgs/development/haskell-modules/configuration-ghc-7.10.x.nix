@@ -197,4 +197,8 @@ self: super: {
   # https://github.com/well-typed/hackage-security/issues/158
   hackage-security = dontHaddock (dontCheck super.hackage-security);
 
+  # GHC versions prior to 8.x require additional build inputs.
+  case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+
 }
