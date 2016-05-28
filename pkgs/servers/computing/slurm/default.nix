@@ -11,9 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "05si1cn7zivggan25brsqfdw0ilvrlnhj96pwv16dh6vfkggzjr1";
   };
 
+  outputs = [ "dev" "out" ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig curl python munge perl pam openssl mysql.lib ncurses gtk lua
-    hwloc numactl
+    curl python munge perl pam openssl mysql.lib ncurses gtk lua hwloc numactl
   ];
 
   configureFlags =
