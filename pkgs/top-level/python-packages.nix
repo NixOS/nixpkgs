@@ -22762,7 +22762,7 @@ in modules // {
       sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
     };
 
-		buildInputs = with self; [ simplejson ];
+    buildInputs = with self; [ simplejson ];
 
     meta = with stdenv.lib; {
       homepage = https://github.com/uri-templates/uritemplate-py;
@@ -22770,7 +22770,7 @@ in modules // {
       license = licenses.asl20;
       maintainers = with maintainers; [ matthiasbeyer ];
     };
-	};
+  };
 
   traceback2 = buildPythonPackage rec {
     version = "1.4.0";
