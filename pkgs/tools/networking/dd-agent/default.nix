@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, python, pythonPackages, sysstat, unzip, tornado
 , makeWrapper, rsync }:
 
-#TODO: update
 stdenv.mkDerivation rec {
   version = "5.7.4";
   name = "dd-agent-${version}";

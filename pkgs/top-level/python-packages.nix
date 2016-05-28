@@ -27666,11 +27666,9 @@ in modules // {
     name = "uptime-${version}";
     version = "3.0.1";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "Cairnarvon";
-      repo = "uptime";
-      rev = "1ddfd06bb300c00e6dc4bd2a9ddf9bf1aa27b1bb";
-      sha256 = "148rqj0asw65c3z4whnqphfmkhlm181p296b7pxc1x79n97gn1pf";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uptime/${name}.tar.gz";
+      sha256 = "0wr9jkixprlywz0plyn5p42a5fd31aiwvjrxdvj7r02vfxa04c3w";
     };
 
     meta = {
@@ -27683,11 +27681,9 @@ in modules // {
     name = "pytest-httpbin-${version}";
     version = "0.2.0";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "kevin1024";
-      repo = "pytest-httpbin";
-      rev = "ae314b2a18eecac2a9d3b2034bfede9805ce7907";
-      sha256 = "0j5rcqlh59sqcv6csnk0i73xi5p43h32ynnz550q8pv9q68lzqa2";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-httpbin/${name}.tar.gz";
+      sha256 = "1vffjs34mjcbg9dwx3i11s9ibjqqf6558f6bw4sb6c06i7kxi9k7";
     };
 
     buildInputs = with self; [
@@ -27711,11 +27707,9 @@ in modules // {
     name = "vcrpy-${version}";
     version = "1.7.4";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "kevin1024";
-      repo = "vcrpy";
-      rev = "v${version}";
-      sha256 = "1inm22xlnlb4xxcrrmrm3j73kffksb2838ypgykjbsjid8xvqdsd";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vcrpy/${name}.tar.gz";
+      sha256 = "0vjfwia86ycq3xzqwakgfdczkpqq2mqfkh3ibmfkwypc406gan65";
     };
 
     # https://github.com/kevin1024/vcrpy/commit/4e36997e1af248a96b1424b6975f5022baa9352f
@@ -27748,11 +27742,9 @@ in modules // {
     name = "pyvmomi-${version}";
     version = "6.0.0";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "vmware";
-      repo = "pyvmomi";
-      rev = "51a54c0ca3c07aa7c3d4314d962efbce2d5b81f4";
-      sha256 = "1qxrbrrfy82dl6yqg6mffwvyzv0xwxfqpp61p1mf7ngy0cxsac50";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyvmomi/${name}.tar.gz";
+      sha256 = "1p2wshs4zz954w02g974jxv70w3d1l86wj0jwanc3l44hp9y91xw";
     };
 
     buildInputs = with self; [
