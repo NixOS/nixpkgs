@@ -10491,6 +10491,46 @@ in modules // {
     };
   };
 
+  google_appengine =
+  let
+      webob = buildPythonPackage rec {
+        version = "0.9";
+        name = "webob-${version}";
+
+        src = pkgs.fetchurl {
+          url = "mirror://pypi/W/WebOb/WebOb-${version}.tar.gz";
+          sha256 = "0ihwv8qk8sj2awwwj8i75ngzwfi1vgcrbmz5vkyjxsfjalnjqqgv";
+        };
+
+        propagatedBuildInputs = with self; [ nose ];
+
+        meta = {
+          description = "WSGI request and response object";
+          homepage = http://pythonpaste.org/webob/;
+          platforms = platforms.all;
+        };
+      };
+  in
+  buildPythonPackage rec {
+    name = "google-appengine-1.5.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/google-appengine/${name}.tar.gz";
+      sha256 = "000bpjzjidfcrkyzxy50mcga6nhm9zjavqk7vcv6n0q01rfj1s6l";
+    };
+
+    buildInputs = with self; [ pyyaml ipaddr webob antlr3 ];
+
+    preConfigure = ''
+      sed -i '/ez_setup/d' setup.py
+    '';
+
+    meta = {
+      description = "Google AppEngine (unofficial easy-installable version of AppEngine SDK)";
+      homepage = https://github.com/worrp/gae-sdk;
+    };
+  };
+
   google_apputils = buildPythonPackage rec {
     name = "google-apputils-0.4.1";
     disabled = isPy3k;
