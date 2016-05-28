@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.benley ];
     license = lib.licenses.asl20;
     homepage = https://github.com/google/jsonnet;
+    platforms = lib.platforms.unix;
   };
 }
