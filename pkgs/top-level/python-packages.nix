@@ -26350,12 +26350,20 @@ in modules // {
     version = "0.1.8";
     name = "neovim-${version}";
 
-    disabled = isPy35;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
       sha256 = "06g84f0l208jrc1iqa4vk9kgwr77z1ya8cq39cygpq88yjj28whi";
     };
+
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    # Tests require pkgs.neovim,
+    # which we cannot add because of circular dependency.
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ msgpack ]
       ++ optional (!isPyPy) greenlet
