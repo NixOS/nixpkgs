@@ -10482,21 +10482,84 @@ in modules // {
     propagatedBuildInputs = with self; [ oauth2client gdata simplejson httplib2 keyring six rsa ];
   };
 
-  google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-1.2";
+  google = buildPythonPackage rec {
+    version = "1.9.1";
+    name = "google-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
-      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+      url = "mirror://pypi/g/google/${name}.tar.gz";
+      sha256 = "0vyz8n8jpgq9hk9nrini0vsikqmi6h3xlvhfi7h6x2hjsf0kkp5d";
     };
 
-    propagatedBuildInputs = with self; [ httplib2 ];
+    buildInputs = with self; [ beautifulsoup4 ];
+
+    meta = {
+      description = "Python bindings to the Google search engine";
+      homepage = "http://breakingcode.wordpress.com/";
+      license = licenses.bsd;
+      platforms = platforms.unix;
+    };
+  };
+
+
+  google_api_python_client = buildPythonPackage rec {
+    version = "1.5.1";
+    name = "google-api-python-client-${version}";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/google/google-api-python-client/archive/v${version}.tar.gz";
+      sha256 = "132v1rqlpzp396jr0xkaym0vw1i8kjnjy6yv9v0220jhvmwm1xaj";
+    };
+
+    propagatedBuildInputs = with self; [ httplib2 uritemplate oauth2client simplejson ];
+
+    buildInputs = with self; [ unittest2 mock google_appengine ];
 
     meta = {
       description = "The core Python library for accessing Google APIs";
       homepage = "https://code.google.com/p/google-api-python-client/";
       license = licenses.asl20;
       platforms = platforms.unix;
+    };
+  };
+
+  google_appengine =
+  let
+      webob = buildPythonPackage rec {
+        version = "0.9";
+        name = "webob-${version}";
+
+        src = pkgs.fetchurl {
+          url = "mirror://pypi/W/WebOb/WebOb-${version}.tar.gz";
+          sha256 = "0ihwv8qk8sj2awwwj8i75ngzwfi1vgcrbmz5vkyjxsfjalnjqqgv";
+        };
+
+        propagatedBuildInputs = with self; [ nose ];
+
+        meta = {
+          description = "WSGI request and response object";
+          homepage = http://pythonpaste.org/webob/;
+          platforms = platforms.all;
+        };
+      };
+  in
+  buildPythonPackage rec {
+    name = "google-appengine-1.5.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/google-appengine/${name}.tar.gz";
+      sha256 = "000bpjzjidfcrkyzxy50mcga6nhm9zjavqk7vcv6n0q01rfj1s6l";
+    };
+
+    buildInputs = with self; [ pyyaml ipaddr webob antlr3 ];
+
+    preConfigure = ''
+      sed -i '/ez_setup/d' setup.py
+    '';
+
+    meta = {
+      description = "Google AppEngine (unofficial easy-installable version of AppEngine SDK)";
+      homepage = https://github.com/worrp/gae-sdk;
     };
   };
 
@@ -22815,6 +22878,25 @@ in modules // {
       description = "Python implementation of URI Template";
       license = licenses.asl20;
       maintainers = with maintainers; [ pSub ];
+    };
+  };
+
+  uritemplate = buildPythonPackage rec {
+    name = "uritemplate-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirrorr//pypi/u/uritemplate/${name}.tar.gz";
+      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    };
+
+    buildInputs = with self; [ simplejson ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ matthiasbeyer ];
     };
   };
 
