@@ -22898,6 +22898,28 @@ in modules // {
     };
   };
 
+  uritemplate = buildPythonPackage rec {
+    name = "uritemplate-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
+      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    };
+
+    # No tests in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ simplejson ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
   urlgrabber =  buildPythonPackage rec {
     name = "urlgrabber-3.9.1";
     disabled = isPy3k;
