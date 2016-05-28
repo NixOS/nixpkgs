@@ -24829,11 +24829,11 @@ in modules // {
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0rc1";
+    name = "pyusb-1.0.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyusb/${name}.tar.gz";
-      sha256 = "07cjq11qhngzjd746k7688s6y2x7lpj669fxqfsiy985rg0jsn7j";
+      url = "https://pypi.python.org/packages/8a/19/66fb48a4905e472f5dfeda3a1bafac369fbf6d6fc5cf55b780864962652d/PyUSB-1.0.0.tar.gz";
+      sha256 = "0s2k4z06fapd5vp1gnrlf8a9sjpc03p9974lzw5k6ky39akzyd2v";
     };
 
     # Fix the USB backend library lookup
