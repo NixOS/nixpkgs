@@ -12858,6 +12858,11 @@ in modules // {
       sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
     };
 
+    checkPhase = ''
+      py.test
+    '';
+
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ ];
   };
 
