@@ -14440,7 +14440,6 @@ in
 
   neovim = callPackage ../applications/editors/neovim {
     inherit (lua52Packages) lpeg luaMessagePack luabitop;
-    python3Packages = python34Packages;
   };
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
