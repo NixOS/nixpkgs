@@ -10481,7 +10481,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ httplib2 uritemplate oauth2client simplejson ];
 
-    buildInputs = with self; [ unittest2 mock google ];
+    buildInputs = with self; [ unittest2 mock google_appengine ];
 
     meta = {
       description = "The core Python library for accessing Google APIs";
