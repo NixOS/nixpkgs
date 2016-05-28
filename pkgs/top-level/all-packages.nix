@@ -16912,6 +16912,8 @@ in
 
   golden-cheetah = qt55.callPackage ../applications/misc/golden-cheetah {};
 
+  linkchecker = callPackage ../tools/networking/linkchecker { };
+
   tomb = callPackage ../os-specific/linux/tomb {};
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
