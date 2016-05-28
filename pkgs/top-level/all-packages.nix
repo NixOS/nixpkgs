@@ -15192,6 +15192,8 @@ in
 
   fairymax = callPackage ../games/fairymax {};
 
+  fava = callPackage ../applications/office/fava {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = qt5.callPackage ../games/flightgear { };
