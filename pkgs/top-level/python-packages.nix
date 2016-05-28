@@ -9079,7 +9079,7 @@ in modules // {
     '';
 
     # Doesn't actually run tests
-    doCheck = False;
+    doCheck = false;
 
     propagatedBuildInputs = with self; [
       six isodate pyparsing html5lib keepalive
