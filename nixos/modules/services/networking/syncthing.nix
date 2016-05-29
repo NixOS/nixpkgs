@@ -121,7 +121,7 @@ in
           User = cfg.user;
           Group = cfg.group;
           PermissionsStartOnly = true;
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser -home=${cfg.dataDir}";
+          ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
         };
       };
     };
@@ -129,7 +129,7 @@ in
     systemd.user.services =  {
       syncthing = header // {
         serviceConfig = service // {
-          ExecStart = "${pkgs.syncthing}/bin/syncthing -no-browser";
+          ExecStart = "${cfg.package}/bin/syncthing -no-browser";
         };
       };
     };
