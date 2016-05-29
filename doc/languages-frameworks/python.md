@@ -545,7 +545,7 @@ Python environments can be created using the low-level `pkgs.buildEnv` function.
 This example shows how to create an environment that has the Pyramid Web Framework.
 Saving the following as `default.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     python.buildEnv.override {
       extraLibs = [ pkgs.pythonPackages.pyramid ];
@@ -562,7 +562,7 @@ You can also use the `env` attribute to create local environments with needed
 packages installed. This is somewhat comparable to `virtualenv`. For example,
 running `nix-shell` with the following `shell.nix`
 
-    with import {};
+    with import <nixpkgs> {};
 
     (python3.buildEnv.override {
       extraLibs = with python3Packages; [ numpy requests ];
@@ -585,7 +585,7 @@ It takes a function as an argument that is passed the set of python packages and
 of the packages to be included in the environment. Using the `withPackages` function, the previous
 example for the Pyramid Web Framework environment can be written like this:
 
-    with import {};
+    with import <nixpkgs> {};
 
     python.withPackages (ps: [ps.pyramid])
 
@@ -593,7 +593,7 @@ example for the Pyramid Web Framework environment can be written like this:
 argument to the function. In the above example, `ps` equals `pythonPackages`.
 But you can also easily switch to using python3:
     
-    with import {};
+    with import <nixpkgs> {};
 
     python3.withPackages (ps: [ps.pyramid])
 
@@ -602,7 +602,7 @@ Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
 As `python.withPackages` simply uses `python.buildEnv` under the hood, it also supports the `env`
 attribute. The `shell.nix` file from the previous section can thus be also written like this:
 
-    with import {};
+    with import <nixpkgs> {};
 
     (python33.withPackages (ps: [ps.numpy ps.requests])).env
 
@@ -619,7 +619,7 @@ Warning: `shellPhase` is executed only if `setup.py` exists.
 
 Given a `default.nix`:
 
-    with import {};
+    with import <nixpkgs> {};
 
     buildPythonPackage { name = "myproject";
 
