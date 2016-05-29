@@ -1,4 +1,4 @@
-{ stdenv, lib, kernel, fetchurl, libvirt }:
+{ stdenv, lib, kernel, fetchurl, pkgconfig, libvirt }:
 
 assert lib.versionAtLeast kernel.version "3.18";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yrz3nnhv65v2jzz726bjswkn8ffqc1sr699qypc9m78qrdljcfn";
   };
 
-  buildInputs = [ libvirt ];
+  buildInputs = [ pkgconfig libvirt ];
 
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
