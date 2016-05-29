@@ -645,7 +645,7 @@ self: super: {
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = self.callPackage ../tools/haskell/cabal2nix/cabal2nix.nix {};
   hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix {};
-  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix {};
+  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix { deepseq-generics = self.deepseq-generics_0_1_1_2; };
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
