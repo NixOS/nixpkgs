@@ -581,6 +581,37 @@ specified packages in its path.
 * `postBuild`: Shell command executed after the build of environment.
 * `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
 
+#### python.withPackages function
+
+The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
+It takes a function as an argument that is passed the set of python packages and returns the list 
+of the packages to be included in the environment. Using the `withPackages` function, the previous
+example for the Pyramid Web Framework environment can be written like this:
+
+    with import {};
+
+    python.withPackages (ps: [ps.pyramid])
+
+`withPackages` passes the correct package set for the specific interpreter version as an 
+argument to the function. In the above example, `ps` equals `pythonPackages`.
+But you can also easily switch to using python3:
+    
+    with import {};
+
+    python3.withPackages (ps: [ps.pyramid])
+
+Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
+
+As `python.withPackages` simply uses `python.buildEnv` under the hood, it also supports the `env`
+attribute. The `shell.nix` file from the previous section can thus be also written like this:
+
+    with import {};
+
+    (python33.withPackages (ps: [ps.numpy ps.requests])).env
+
+In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
+such as `ignoreCollisions = true` or `postBuild`. If you need them, you have to use `python.buildEnv`.
+
 ### Development mode
 
 Development or editable mode is supported. To develop Python packages
