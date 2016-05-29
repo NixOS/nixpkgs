@@ -586,7 +586,7 @@ self: super: {
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
   # https://github.com/jgm/pandoc/issues/2709
-  pandoc = disableSharedExecutables super.pandoc;
+  pandoc = doJailbreak (disableSharedExecutables super.pandoc);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
