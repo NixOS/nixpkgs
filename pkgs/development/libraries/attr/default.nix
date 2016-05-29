@@ -12,7 +12,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
-  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
+  configureFlags = [
+    "MAKE=make"
+    "MSGFMT=msgfmt"
+    "MSGMERGE=msgmerge"
+    "XGETTEXT=xgettext"
+    "ECHO=echo"
+    "SED=sed"
+    "AWK=gawk"
+  ];
 
   installTargets = "install install-lib install-dev";
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # package. To avoid this issue, X11 support is explicitly disabled.
   # Note: If we ever want to *enable* X11 support, then we'll probably
   # have to pass "--with-appresdir", too.
-  configureFlags = "--without-x";
+  configureFlags = [ "--without-x" ];
 
   doCheck = true;
 

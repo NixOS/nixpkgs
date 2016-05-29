@@ -641,6 +641,10 @@ fixLibtool() {
 
 
 configurePhase() {
+    # Convert configureFlags into an array first
+    # so it can safely be modified by preConfigure
+    IFS="$(printf "\t")" read -a configureFlags <<< "$configureFlags"
+
     runHook preConfigure
 
     if [ -z "$configureScript" -a -x ./configure ]; then
@@ -655,26 +659,26 @@ configurePhase() {
     fi
 
     if [ -z "$dontAddPrefix" -a -n "$prefix" ]; then
-        configureFlags="${prefixKey:---prefix=}$prefix $configureFlags"
+        configureFlags+=("${prefixKey:---prefix=}$prefix")
     fi
 
     # Add --disable-dependency-tracking to speed up some builds.
     if [ -z "$dontAddDisableDepTrack" ]; then
         if [ -f "$configureScript" ] && grep -q dependency-tracking "$configureScript"; then
-            configureFlags="--disable-dependency-tracking $configureFlags"
+            configureFlags+=("--disable-dependency-tracking")
         fi
     fi
 
     # By default, disable static builds.
     if [ -z "$dontDisableStatic" ]; then
         if [ -f "$configureScript" ] && grep -q enable-static "$configureScript"; then
-            configureFlags="--disable-static $configureFlags"
+            configureFlags+=("--disable-static")
         fi
     fi
 
     if [ -n "$configureScript" ]; then
-        echo "configure flags: $configureFlags ${configureFlagsArray[@]}"
-        $configureScript $configureFlags "${configureFlagsArray[@]}"
+        echo "configure flags: ${configureFlags[@]} ${configureFlagsArray[@]}"
+        $configureScript ${configureFlags[@]} "${configureFlagsArray[@]}"
     else
         echo "no configure script, doing nothing"
     fi

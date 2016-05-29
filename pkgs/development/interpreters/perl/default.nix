@@ -50,8 +50,8 @@ let
     # $out/lib/perl5 - this is the general default, but because $out
     # contains the string "perl", Configure would select $out/lib.
     # Miniperl needs -lm. perl needs -lrt.
-    configureFlags =
-      [ "-de"
+    configureFlags = [
+        "-de"
         "-Dcc=cc"
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
@@ -68,9 +68,10 @@ let
 
     enableParallelBuilding = true;
 
-    preConfigure =
-      ''
-        configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
+    preConfigure = ''
+        configureFlags+=("-Dprefix=$out")
+        configureFlags+=("-Dman1dir=$out/share/man/man1")
+        configureFlags+=("-Dman3dir=$out/share/man/man3")
     '' + optionalString stdenv.isArm ''
       configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''

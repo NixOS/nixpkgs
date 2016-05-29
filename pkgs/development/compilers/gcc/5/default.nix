@@ -105,19 +105,14 @@ let version = "5.3.0";
         gccFpu = stdenv.platform.gcc.fpu or null;
         gccFloat = stdenv.platform.gcc.float or null;
         gccMode = stdenv.platform.gcc.mode or null;
-        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
-      in
-        withArch +
-        withCpu +
-        withAbi +
-        withFpu +
-        withFloat +
-        withMode;
+      in []
+        ++ optional (gccArch != null) "--with-arch=${gccArch}"
+        ++ optional (gccCpu != null) "--with-cpu=${gccCpu}"
+        ++ optional (gccAbi != null) "--with-abi=${gccAbi}"
+        ++ optional (gccFpu != null) "--with-fpu=${gccFpu}"
+        ++ optional (gccFloat != null) "--with-float=${gccFloat}"
+        ++ optional (gccMode != null) "--with-mode=${gccMode}"
+      ;
 
     /* Cross-gcc settings */
     crossMingw = cross != null && cross.libc == "msvcrt";
@@ -129,71 +124,69 @@ let version = "5.3.0";
         gccFpu = stdenv.cross.gcc.fpu or null;
         gccFloat = stdenv.cross.gcc.float or null;
         gccMode = stdenv.cross.gcc.mode or null;
-        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
-      in
-        "--target=${cross.config}" +
-        withArch +
-        withCpu +
-        withAbi +
-        withFpu +
-        withFloat +
-        withMode +
-        (if crossMingw && crossStageStatic then
-          " --with-headers=${libcCross}/include" +
-          " --with-gcc" +
-          " --with-gnu-as" +
-          " --with-gnu-ld" +
-          " --with-gnu-ld" +
-          " --disable-shared" +
-          " --disable-nls" +
-          " --disable-debug" +
-          " --enable-sjlj-exceptions" +
-          " --enable-threads=win32" +
-          " --disable-win32-registry"
-          else if crossStageStatic then
-          " --disable-libssp --disable-nls" +
-          " --without-headers" +
-          " --disable-threads " +
-          " --disable-libgomp " +
-          " --disable-libquadmath" +
-          " --disable-shared" +
-          " --disable-libatomic " +  # libatomic requires libc
-          " --disable-decimal-float" # libdecnumber requires libc
-          else
-          (if crossDarwin then " --with-sysroot=${libcCross}/share/sysroot"
-           else                " --with-headers=${libcCross}/include") +
-          # Ensure that -print-prog-name is able to find the correct programs.
-          (stdenv.lib.optionalString (crossMingw || crossDarwin) (
-            " --with-as=${binutilsCross}/bin/${cross.config}-as" +
-            " --with-ld=${binutilsCross}/bin/${cross.config}-ld"
-          )) +
-          " --enable-__cxa_atexit" +
-          " --enable-long-long" +
-          (if crossMingw then
-            " --enable-threads=win32" +
-            " --enable-sjlj-exceptions" +
-            " --enable-hash-synchronization" +
-            " --disable-libssp" +
-            " --disable-nls" +
-            " --with-dwarf2" +
-            # I think noone uses shared gcc libs in mingw, so we better do the same.
-            # In any case, mingw32 g++ linking is broken by default with shared libs,
-            # unless adding "-lsupc++" to any linking command. I don't know why.
-            " --disable-shared" +
-            # To keep ABI compatibility with upstream mingw-w64
-            " --enable-fully-dynamic-string"
-            else (if cross.libc == "uclibc" then
-              # In uclibc cases, libgomp needs an additional '-ldl'
-              # and as I don't know how to pass it, I disable libgomp.
-              " --disable-libgomp" else "") +
-            " --enable-threads=posix" +
-            " --enable-nls" +
-            " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
+      in [
+        "--target=${cross.config}"
+      ] ++ optional (gccArch != null) "--with-arch=${gccArch}"
+        ++ optional (gccCpu != null) "--with-cpu=${gccCpu}"
+        ++ optional (gccAbi != null) "--with-abi=${gccAbi}"
+        ++ optional (gccFpu != null) "--with-fpu=${gccFpu}"
+        ++ optional (gccFloat != null) "--with-float=${gccFloat}"
+        ++ optional (gccMode != null) "--with-mode=${gccMode}"
+        ++ (if crossMingw && crossStageStatic then [
+            "--with-headers=${libcCross}/include"
+            "--with-gcc"
+            "--with-gnu-as"
+            "--with-gnu-ld"
+            "--with-gnu-ld"
+            "--disable-shared"
+            "--disable-nls"
+            "--disable-debug"
+            "--enable-sjlj-exceptions"
+            "--enable-threads=win32"
+            "--disable-win32-registry"
+          ] else if crossStageStatic then [
+            "--disable-libssp"
+            "--disable-nls"
+            "--without-headers"
+            "--disable-threads "
+            "--disable-libgomp "
+            "--disable-libquadmath"
+            "--disable-shared"
+            "--disable-libatomic" # libatomic requires libc
+            "--disable-decimal-float" # libdecnumber requires libc
+          ] else [
+              "--enable-__cxa_atexit"
+              "--enable-long-long"
+            ] ++ (optionals (crossMingw || crossDarwin) [
+              "--with-as=${binutilsCross}/bin/${cross.config}-as"
+              "--with-ld=${binutilsCross}/bin/${cross.config}-ld"
+            ]) ++ (if crossDarwin
+              then [ "--with-sysroot=${libcCross}/share/sysroot" ]
+              else [ "--with-headers=${libcCross}/include" ]
+              # Ensure that -print-prog-name is able to find the correct programs.
+            ) ++ (if crossMingw then [
+                "--enable-threads=win32"
+                "--enable-sjlj-exceptions"
+                "--enable-hash-synchronization"
+                "--disable-libssp"
+                "--disable-nls"
+                "--with-dwarf2"
+                # I think noone uses shared gcc libs in mingw, so we better do the same.
+                # In any case, mingw32 g++ linking is broken by default with shared libs,
+                # unless adding "-lsupc++" to any linking command. I don't know why.
+                "--disable-shared"
+                # To keep ABI compatibility with upstream mingw-w64
+                "--enable-fully-dynamic-string"
+              ] else ([
+                "--enable-threads=posix"
+                "--enable-nls"
+                "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+              ] ++ (
+                # In uclibc cases, libgomp needs an additional '-ldl'
+                # and as I don't know how to pass it, I disable libgomp.
+                optional (cross.libc == "uclibc") "--disable-libgomp"
+              ))
+            )
           );
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
@@ -319,37 +312,18 @@ stdenv.mkDerivation ({
 
   dontDisableStatic = true;
 
-  configureFlags = "
-    ${if stdenv.isSunOS then
-      " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
-      # On Illumos/Solaris GNU as is preferred
-      " --with-gnu-as --without-gnu-ld "
-      else ""}
-    --enable-lto
-    ${if enableMultilib then "--enable-multilib --disable-libquadmath" else "--disable-multilib"}
-    ${if enableShared then "" else "--disable-shared"}
-    ${if enablePlugin then "--enable-plugin" else "--disable-plugin"}
-    ${optionalString (isl != null) "--with-isl=${isl}"}
-    ${if langJava then
-      "--with-ecj-jar=${javaEcj} " +
-
-      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
-      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
-      else ""}
-    ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-    ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
-    --with-gmp=${gmp.dev}
-    --with-mpfr=${mpfr.dev}
-    --with-mpc=${libmpc}
-    ${if libelf != null then "--with-libelf=${libelf}" else ""}
-    --disable-libstdcxx-pch
-    --without-included-gettext
-    --with-system-zlib
-    --enable-static
-    --enable-languages=${
-      concatStrings (intersperse ","
-        (  optional langC        "c"
+  configureFlags = [
+    "--with-gmp=${gmp.dev}"
+    "--with-mpfr=${mpfr.dev}"
+    "--with-mpc=${libmpc}"
+    "--disable-libstdcxx-pch"
+    "--without-included-gettext"
+    "--with-system-zlib"
+    "--enable-static"
+    "--enable-lto"
+    (stdenv.lib.enableFeature enablePlugin "plugin")
+    "--enable-languages=${builtins.concatStringsSep "," ([]
+        ++ optional langC        "c"
         ++ optional langCC       "c++"
         ++ optional langFortran  "fortran"
         ++ optional langJava     "java"
@@ -359,18 +333,37 @@ stdenv.mkDerivation ({
         ++ optional langObjC     "objc"
         ++ optional langObjCpp   "obj-c++"
         ++ optionals crossDarwin [ "objc" "obj-c++" ]
-        )
-      )
-    }
-    ${if (stdenv ? glibc && cross == null)
-      then " --with-native-system-header-dir=${stdenv.glibc.dev}/include"
-      else ""}
-    ${if langAda then " --enable-libada" else ""}
-    ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
-    ${if cross != null then crossConfigureFlags else ""}
-    ${if !bootstrap then "--disable-bootstrap" else ""}
-    ${if cross == null then platformFlags else ""}
-  ";
+    )}"
+  ] ++ optional (!enableShared) "--disable-shared"
+    ++ optional (isl != null) "--with-isl=${isl}"
+    ++ optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
+    ++ optional (libelf != null) "--with-libelf=${libelf}"
+    ++ optional (stdenv ? glibc && cross == null) "--with-native-system-header-dir=${stdenv.glibc.dev}/include"
+    ++ optional langAda "--enable-libada"
+    ++ optional (cross == null && stdenv.isi686) "--with-arch=i686"
+    ++ optional (!bootstrap) "--disable-bootstrap"
+    ++ optional javaAwtGtk "--enable-java-awt=gtk"
+    ++ (optionals (cross != null) crossConfigureFlags)
+    ++ (optionals (cross == null) platformFlags)
+    ++ (if enableMultilib
+    then [ "--enable-multilib" "--disable-libquadmath" ]
+    else [ "--disable-multilib" ]
+  ) ++ (optionals langJava [
+      "--with-ecj-jar=${javaEcj}"
+      # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
+      # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
+      "--enable-java-home"
+      "--with-java-home=\${prefix}/lib/jvm/jre"
+  ]) ++ (optionals stdenv.isSunOS [
+      "--enable-long-long"
+      "--enable-libssp"
+      "--enable-threads=posix"
+      "--disable-nls"
+      "--enable-__cxa_atexit"
+      # On Illumos/Solaris GNU as is preferred
+      "--with-gnu-as"
+      "--without-gnu-ld"
+  ]);
 
   targetConfig = if cross != null then cross.config else null;
 
@@ -389,11 +382,6 @@ stdenv.mkDerivation ({
     xgccAbi = stdenv.cross.gcc.abi or null;
     xgccFpu = stdenv.cross.gcc.fpu or null;
     xgccFloat = stdenv.cross.gcc.float or null;
-    xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
-    xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
-    xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
-    xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
-    xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
   in {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
@@ -407,20 +395,15 @@ stdenv.mkDerivation ({
     # If we are making a cross compiler, cross != null
     NIX_CC_CROSS = if cross == null then "${stdenv.ccCross}" else "";
     dontStrip = true;
-    configureFlags = ''
-      ${if enableMultilib then "" else "--disable-multilib"}
-      ${if enableShared then "" else "--disable-shared"}
-      ${if langJava then "--with-ecj-jar=${javaEcj.crossDrv}" else ""}
-      ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
-      --with-gmp=${gmp.crossDrv}
-      --with-mpfr=${mpfr.crossDrv}
-      --disable-libstdcxx-pch
-      --without-included-gettext
-      --with-system-zlib
-      --enable-languages=${
-        concatStrings (intersperse ","
-          (  optional langC        "c"
+    configureFlags = [
+      "--with-gmp=${gmp.crossDrv}"
+      "--with-mpfr=${mpfr.crossDrv}"
+      "--disable-libstdcxx-pch"
+      "--without-included-gettext"
+      "--with-system-zlib"
+      "--target=${stdenv.cross.config}"
+      "--enable-languages=${concatStringsSep "," (
+             optional langC        "c"
           ++ optional langCC       "c++"
           ++ optional langFortran  "fortran"
           ++ optional langJava     "java"
@@ -428,16 +411,19 @@ stdenv.mkDerivation ({
           ++ optional langVhdl     "vhdl"
           ++ optional langGo       "go"
           )
-        )
-      }
-      ${if langAda then " --enable-libada" else ""}
-      --target=${stdenv.cross.config}
-      ${xwithArch}
-      ${xwithCpu}
-      ${xwithAbi}
-      ${xwithFpu}
-      ${xwithFloat}
-    '';
+        }"
+    ] ++ optional (xgccArch != null) "--with-arch=${xgccArch}"
+      ++ optional (xgccCpu != null) "--with-cpu=${xgccCpu}"
+      ++ optional (xgccAbi != null) "--with-abi=${xgccAbi}"
+      ++ optional (xgccFpu != null) "--with-fpu=${xgccFpu}"
+      ++ optional (xgccFloat != null) "--with-float=${xgccFloat}"
+      ++ optional (!enableMultilib) "--disable-multilib"
+      ++ optional (!enableShared) "--disable-shared"
+      ++ optional langJava "--with-ecj-jar=${javaEcj.crossDrv}"
+      ++ optional javaAwtGtk "--enable-java-awt=gtk"
+      ++ optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr.crossDrv}"
+      ++ optional (langAda) "--enable-libada"
+    ;
     buildFlags = "";
   };
 

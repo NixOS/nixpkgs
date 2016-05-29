@@ -7,7 +7,7 @@ let
   version = "4.3";
   realName = "bash-${version}";
   shortName = "bash43";
-  baseConfigureFlags = if interactive then "--with-installed-readline" else "--disable-readline";
+  baseConfigureFlags = if interactive then [ "--with-installed-readline" ] else [ "--disable-readline" ];
   sha256 = "1m14s1f61mf6bijfibcjm9y6pkyvz6gibyl8p4hxq90fisi8gimg";
 
   inherit (stdenv.lib) optional optionalString;
@@ -49,15 +49,17 @@ stdenv.mkDerivation rec {
       ++ optional stdenv.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
 
   crossAttrs = {
-    configureFlags = baseConfigureFlags +
-      " bash_cv_job_control_missing=nomissing bash_cv_sys_named_pipes=nomissing" +
-      optionalString stdenv.isCygwin ''
-        --without-libintl-prefix --without-libiconv-prefix
-        --with-installed-readline
-        bash_cv_dev_stdin=present
-        bash_cv_dev_fd=standard
-        bash_cv_termcap_lib=libncurses
-      '';
+    configureFlags = baseConfigureFlags ++ [
+      "bash_cv_job_control_missing=nomissing"
+      "bash_cv_sys_named_pipes=nomissing"
+    ] ++ stdenv.lib.optionals stdenv.isCygwin [
+      "--without-libintl-prefix"
+      "--without-libiconv-prefix"
+      "--with-installed-readline"
+      "bash_cv_dev_stdin=present"
+      "bash_cv_dev_fd=standard"
+      "bash_cv_termcap_lib=libncurses"
+    ];
   };
 
   configureFlags = baseConfigureFlags;

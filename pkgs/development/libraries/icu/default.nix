@@ -32,8 +32,8 @@ stdenv.mkDerivation ({
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
   '';
 
-  configureFlags = "--disable-debug" +
-    stdenv.lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) " --enable-rpath";
+  configureFlags = [ "--disable-debug" ]
+    ++ stdenv.lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath";
 
   # remove dependency on bootstrap-tools in early stdenv build
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''

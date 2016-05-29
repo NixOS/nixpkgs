@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ optional (!stdenv.isLinux) gnumake;
 
-  configureFlags = "--disable-static --bindir=$(dev)/bin";
+  configureFlags = [ "--disable-static" "--bindir=$(dev)/bin" ];
 
   # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
   NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";

@@ -20,7 +20,16 @@ stdenv.mkDerivation rec {
     sed -e '/^\/\//d' -i include/acl.h
   '';
 
-  configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ZIP=gzip ECHO=echo SED=sed AWK=gawk";
+  configureFlags = [
+    "MAKE=make"
+    "MSGFMT=msgfmt"
+    "MSGMERGE=msgmerge"
+    "XGETTEXT=xgettext"
+    "ZIP=gzip"
+    "ECHO=echo"
+    "SED=sed"
+    "AWK=gawk"
+  ];
 
   installTargets = "install install-lib install-dev";
 

@@ -173,8 +173,18 @@ let
         (removeAttrs attrs
           ["meta" "passthru" "crossAttrs" "pos"
            "__impureHostDeps" "__propagatedImpureHostDeps"
-           "sandboxProfile" "propagatedSandboxProfile"])
-        // (let
+           "sandboxProfile" "propagatedSandboxProfile"
+           "configureFlags"])
+        // (if builtins.hasAttr "configureFlags" attrs then {
+          configureFlags = if builtins.isList attrs.configureFlags
+            then builtins.concatStringsSep "\t" attrs.configureFlags
+            else (if lib.versionAtLeast lib.nixpkgsVersion "17.03"
+              then abort "${attrs.name}: configureFlags must be a list (since 17.03)."
+              else builtins.trace ''
+                ${attrs.name}: Passing a string for configureFlags is deprecated; use a list instead.
+                This will become a hard error in 17.03.
+              '' attrs.configureFlags);
+        } else {}) // (let
           computedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (extraBuildInputs ++ buildInputs ++ nativeBuildInputs);
           computedPropagatedSandboxProfile =
