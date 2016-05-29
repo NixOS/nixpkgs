@@ -44,7 +44,8 @@ stdenv.mkDerivation {
   ldWrapper = ./ld-wrapper.sh;
   utils = ./utils.sh;
   addFlags = ./add-flags;
-  inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
+  inherit nativeTools nativeLibc nativePrefix gcc binutils;
+  libc = if libc ? out then libc.out else libc;
   crossConfig = if cross != null then cross.config else null;
   osxMinVersion = cross.osxMinVersion or null;
   gccLibs = if gcc != null then gccLibs else null;
