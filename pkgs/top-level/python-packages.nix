@@ -18946,23 +18946,23 @@ in modules // {
     };
   };
 
-  pywinrm = buildPythonPackage (rec {
-    name = "pywinrm";
+  pywinrm = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "pywinrm-${version}";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/diyan/pywinrm.git;
-      rev = "c9ce62d500007561ab31a8d0a5d417e779fb69d9";
-      sha256 = "0n0qlcgin2g5lpby07qbdlnpq5v2qc2yns9zc4zm5prwh2mhs5za";
+    src = pkgs.fetchurl {
+      url = "https://github.com/diyan/pywinrm/archive/v${version}.tar.gz";
+      sha256 = "1pc0987f6q5sxcgm50a1k1xz2pk45ny9xxnyapaf60662rcavvfb";
     };
 
-    propagatedBuildInputs = with self; [ xmltodict isodate ];
+    propagatedBuildInputs = with self; [ isodate kerberos xmltodict ];
 
     meta = {
       homepage = "http://github.com/diyan/pywinrm/";
       description = "Python library for Windows Remote Management";
       license = licenses.mit;
     };
-  });
+  };
 
   PyXAPI = stdenv.mkDerivation rec {
     name = "PyXAPI-0.1";
