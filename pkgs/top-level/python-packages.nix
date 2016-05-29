@@ -10490,7 +10490,7 @@ in modules // {
     version = "1.5.1";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/g/${name}.tar.gz";
+      url = "mirror://pypi/g/google-api-python-client/${name}.tar.gz";
       sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
     };
 
