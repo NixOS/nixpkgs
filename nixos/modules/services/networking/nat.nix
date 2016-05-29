@@ -170,7 +170,7 @@ in
 
     systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
       description = "Network Address Translation";
-      wantedBy = [ "network.target" ];
+      wantedBy = [ "network.target" "default.target" ];
       after = [ "network-interfaces.target" "systemd-modules-load.service" ];
       path = [ pkgs.iptables ];
       unitConfig.ConditionCapability = "CAP_NET_ADMIN";
