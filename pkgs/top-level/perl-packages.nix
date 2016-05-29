@@ -13981,10 +13981,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   X11XCB = buildPerlPackage rec {
-    name = "X11-XCB-0.14";
+    name = "X11-XCB-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
-      sha256 = "11ff0a4nqbdj68mxdvyqdqvi573ha10vy67wpi7mklpxvlm011bn";
+      sha256 = "14mnvr1001py2z1n43l18yaw0plwvjg5pcsyc7k81sa0amw8ahzw";
     };
     AUTOMATED_TESTING = false;
     buildInputs = [
