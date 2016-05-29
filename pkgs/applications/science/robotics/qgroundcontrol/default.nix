@@ -28,7 +28,15 @@ stdenv.mkDerivation rec {
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
 
+  configurePhase = ''
+    mkdir build
+    cd build
+    qmake ../qgroundcontrol.pro
+  '';
+
   installPhase = ''
+    cd ..
+
     mkdir -p $out/share/applications
     cp -v qgroundcontrol.desktop $out/share/applications
     
