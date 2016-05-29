@@ -1,0 +1,85 @@
+commit ff5514864e10a8a5642c476d32895fc36f6d6ab6
+Author: Guillaume Maudoux <layus.on@gmail.com>
+Date:   Wed May 25 23:25:51 2016 +0200
+
+    Propagate curse variables before input init
+
+diff --git a/src/env.cpp b/src/env.cpp
+index 56c9deb..3b0de62 100644
+--- a/src/env.cpp
++++ b/src/env.cpp
+@@ -811,6 +811,20 @@ int env_set(const wcstring &key, const wchar_t *val, env_mode_flags_t var_mode)
+     return 0;
+ }
+ 
++int env_sync_env(const wcstring &key)
++{
++    const env_var_t var = env_get_string(key, ENV_GLOBAL | ENV_EXPORT);
++    const char * name = const_cast<char *>(wcs2string(key).c_str());
++    if (var.missing())
++    {
++        return unsetenv(name);
++    }
++    else
++    {
++        const char * value = const_cast<char *>(wcs2string(var).c_str());
++        return setenv(name, value, 1);
++    }
++}
+ 
+ /**
+    Attempt to remove/free the specified key/value pair from the
+diff --git a/src/env.h b/src/env.h
+index 3eb6313..81419e6 100644
+--- a/src/env.h
++++ b/src/env.h
+@@ -86,6 +86,17 @@ void env_init(const struct config_paths_t *paths = NULL);
+ 
+ int env_set(const wcstring &key, const wchar_t *val, env_mode_flags_t mode);
+ 
++/**
++  Reflect the state of the variable whose name matches key in this process environment.
++
++  The return values reflect the ones returned by (un)setenv.
++  See setenv man pages for details.
++
++  \param key The name of the variable to sync
++
++  \returns 0 on success, -1 on failure; sets errno to indicate error cause.
++*/
++int env_sync_env(const wcstring &key);
+ 
+ /**
+   Return the value of the variable with the specified name.  Returns 0
+diff --git a/src/input.cpp b/src/input.cpp
+index b427772..454f7e3 100644
+--- a/src/input.cpp
++++ b/src/input.cpp
+@@ -466,9 +466,14 @@ int input_init()
+ 
+     input_common_init(&interrupt_handler);
+ 
+-    const env_var_t term = env_get_string(L"TERM");
++    // Export variables used by curses into our own environment.
++    env_sync_env(L"TERM");
++    env_sync_env(L"TERMINFO");
++    env_sync_env(L"TERMINFO_DIRS");
++
++    const env_var_t term = env_get_string(L"TERM", ENV_GLOBAL | ENV_EXPORT);
+     int errret;
+-    if (setupterm(const_cast<char *>(wcs2string(term).c_str()), STDOUT_FILENO, &errret) == ERR)
++    if (setupterm(NULL, STDOUT_FILENO, &errret) == ERR)
+     {
+         debug(0, _(L"Could not set up terminal"));
+         if (errret == 0)
+@@ -477,8 +482,8 @@ int input_init()
+                   term.c_str());
+             debug(0, _(L"Attempting to use '%ls' instead"), DEFAULT_TERM);
+             env_set(L"TERM", DEFAULT_TERM, ENV_GLOBAL | ENV_EXPORT);
+-            const std::string default_term = wcs2string(DEFAULT_TERM);
+-            if (setupterm(const_cast<char *>(default_term.c_str()), STDOUT_FILENO, &errret) == ERR)
++            env_sync_env(L"TERM");
++            if (setupterm(NULL, STDOUT_FILENO, &errret) == ERR)
+             {
+                 debug(0, _(L"Could not set up terminal"));
+                 exit_without_destructors(1);
