@@ -398,6 +398,7 @@
   ./services/networking/tftpd.nix
   ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
+  ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix

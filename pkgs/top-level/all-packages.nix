@@ -3545,6 +3545,8 @@ in
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  toxvpn = callPackage ../tools/networking/toxvpn { };
+
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
