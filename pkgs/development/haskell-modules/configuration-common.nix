@@ -1005,4 +1005,6 @@ self: super: {
   yi-solarized = markBroken super.yi-solarized;
   yi-spolsky = markBroken super.yi-spolsky;
 
+  # gtk2hs-buildtools must have Cabal 1.24
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
 }
