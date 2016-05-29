@@ -2832,7 +2832,11 @@ in
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1 //
       { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
-          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ]; });
+          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ];
+                    # Fix this build error in ./tests/examples/waylandsink:
+                    #   main.c:28:2: error: #error "Wayland is not supported in GTK+"
+                    configureFlags = attrs.configureFlags or "" + "--enable-wayland=no";
+                  });
       };
   };
 
