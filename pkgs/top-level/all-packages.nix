@@ -16081,6 +16081,8 @@ let
 
   rucksack = callPackage ../development/tools/rucksack { };
 
+  sam-ba = callPackage ../tools/misc/sam-ba { };
+
   opkg = callPackage ../tools/package-management/opkg { };
 
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
