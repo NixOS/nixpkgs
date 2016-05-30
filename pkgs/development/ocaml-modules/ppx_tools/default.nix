@@ -1,10 +1,10 @@
 { stdenv, fetchzip, ocaml, findlib }:
 
 stdenv.mkDerivation {
-  name = "ocaml-ppx_tools-4.02.3";
+  name = "ocaml-ppx_tools-5.0+4.02";
   src = fetchzip {
-    url = https://github.com/alainfrisch/ppx_tools/archive/v4.02.3.tar.gz;
-    sha256 = "0varkd93hgrarwwkrjp2yy735q7jqzba75sskyanmvkb576wpcxv";
+    url = https://github.com/alainfrisch/ppx_tools/archive/5.0+4.02.0.tar.gz;
+    sha256 = "16drjk0qafjls8blng69qiv35a84wlafpk16grrg2i3x19p8dlj8";
   };
 
   buildInputs = [ ocaml findlib ];
