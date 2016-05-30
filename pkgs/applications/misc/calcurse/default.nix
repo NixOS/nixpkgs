@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses, gettext}:
 
 stdenv.mkDerivation {
-  name = "calcurse-4.0.0";
+  name = "calcurse-4.1.0";
 
   src = fetchurl {
-    url = http://calcurse.org/files/calcurse-4.0.0.tar.gz;
-    sha256 = "0d33cpkbhyidvm3xx6iw9ljqdvl6477c2kcwix3bs63nj0ch06v2";
+    url = http://calcurse.org/files/calcurse-4.1.0.tar.gz;
+    sha256 = "1i22kdhzgzw4flqqd7pfzjpac2997ji5yc416bb2rfgvin63yhna";
   };
 
   buildInputs = [ncurses gettext];
