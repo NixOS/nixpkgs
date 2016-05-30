@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
+  CXXFLAGS = "-Wno-shift-negative-value";
+
   cmakeFlags = [
     "-DJSONCPP_LIB_BUILD_SHARED=ON"
     "-DJSONCPP_LIB_BUILD_STATIC=OFF"
