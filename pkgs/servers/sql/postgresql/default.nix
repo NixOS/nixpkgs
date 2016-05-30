@@ -98,9 +98,9 @@ in {
   };
 
   postgresql95 = common {
-    version = "9.5.1";
+    version = "9.5.3";
     psqlSchema = "9.5";
-    sha256 = "1ljvijaja5zy4i5b1450drbj8m3fcm3ly1zzaakp75x30s2rsc3b";
+    sha256 = "1d500d2qsdzysnis6qi84xchnz5xh8kx8sjfmkbsijwaqlfw11bk";
   };
 
 
