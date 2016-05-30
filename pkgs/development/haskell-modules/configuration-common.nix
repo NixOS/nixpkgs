@@ -229,13 +229,14 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = addPkgconfigDepend super.gio pkgs.glib;
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = addPkgconfigDepend super.glib pkgs.glib;
+  # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
+  gio = addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib;
+  glib = addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib;
   gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addPkgconfigDepend super.gtk pkgs.gtk;
+  gtk = addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk;
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
@@ -1007,4 +1008,8 @@ self: super: {
 
   # gtk2hs-buildtools must have Cabal 1.24
   gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
+
+  # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
+  cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
+  pango = addBuildTool super.pango self.gtk2hs-buildtools;
 }
