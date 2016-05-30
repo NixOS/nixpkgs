@@ -131,6 +131,7 @@
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
+  fmthoma = "Franz Thoma <f.m.thoma@googlemail.com>";
   forkk = "Andrew Okin <forkk@forkk.net>";
   fornever = "Friedrich von Never <friedrich@fornever.me>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
