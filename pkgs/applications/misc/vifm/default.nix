@@ -2,14 +2,14 @@
 
 let
   name = "vifm-${version}";
-  version = "0.8";
+  version = "0.8.1";
 
 in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
-    sha256 = "1syyvdcgwnvjxzmpf9f4gfi0ipwmlavg11zr7wiz8qplvi86psv9";
+    sha256 = "0yf3xc4czdrcbvmhq7d4xkck5phrmxwybmnv1zdb56qg56baq64r";
   };
 
   buildInputs = [ utillinux ncurses file libX11 which groff ];
