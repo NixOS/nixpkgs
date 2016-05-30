@@ -1,19 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, iconnamingutils }:
+{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, hicolor_icon_theme }:
 
-stdenv.mkDerivation {
-  name = "mate-icon-theme-1.6.3";
+stdenv.mkDerivation rec {
+  name = "mate-icon-theme-${version}";
+  version = "${major-ver}.${minor-ver}";
+  major-ver = "1.14";
+  minor-ver = "0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/1.6/mate-icon-theme-1.6.3.tar.xz";
-    sha256 = "1r3qkx4k9svmxdg453r9d3hs47cgagxsngzi8rp6yry0c9bw5r5w";
+    url = "http://pub.mate-desktop.org/releases/${major-ver}/${name}.tar.xz";
+    sha256 = "1d8y4vlna8higz05mc01srrgspxmzw04vh3hyzcd9ms603njpfqm";
   };
 
-  buildInputs = [ pkgconfig intltool gtk2 iconnamingutils ];
+  nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
+
+  buildInputs = [ hicolor_icon_theme ];
 
   meta = {
     description = "Icon themes from MATE";
     homepage = "http://mate-desktop.org";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.lgpl3;
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.romildo ];
   };
 }
