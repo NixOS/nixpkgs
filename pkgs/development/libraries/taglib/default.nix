@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "taglib-1.10";
+  name = "taglib-1.11";
 
   src = fetchurl {
     url = "http://taglib.github.io/releases/${name}.tar.gz";
-    sha256 = "1alv6vp72p0x9i9yscmz2a71anjwqy53y9pbcbqxvc1c0i82vhr4";
+    sha256 = "1272xj07ky86prnm8qzw8izk9i2ln3172032n8q9mzvhv6rsnk7d";
   };
 
   cmakeFlags = "-DWITH_ASF=ON -DWITH_MP4=ON";
