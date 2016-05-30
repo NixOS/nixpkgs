@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ncurses-5.9";
+  name = "ncurses-6.0";
 
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
+    sha256 = "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
   };
 
   # gcc-5.patch should be removed after 5.9
