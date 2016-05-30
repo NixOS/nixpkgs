@@ -43,9 +43,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp qtox $out/bin
     wrapQtProgram $out/bin/qtox
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
