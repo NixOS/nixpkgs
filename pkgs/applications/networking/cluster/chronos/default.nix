@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/airbnb/chronos";
     rev = version;
-    sha256 = "6c463c30530dc82276d30087e7ab08d6964b884232c0a93f691cef9fa1ff2651";
+    sha256 = "0hrln3ad2g2cq2xqmy5mq32cdxxb9vb6v6jp6kcq03f8km6v3g9c";
   };
 
   buildInputs = [ makeWrapper curl jdk maven nodejs mesos ];

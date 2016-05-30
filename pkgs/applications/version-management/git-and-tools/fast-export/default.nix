@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://repo.or.cz/fast-export.git;
     rev = "d202200fd9daa75cdb37d4cf067d4ca00e269535";
-    sha256 = "1ci0jbprs7hqqzq4mqi5b9vlc43lmk2bn2kjx49bdjkqajvlicd7";
+    sha256 = "0m4llsg9rx4sza1kf39kxsdvhi6y87a18wm5k19c5r2h3vpylwcc";
   };
 
   buildInputs = [mercurial.python mercurial makeWrapper subversion];
