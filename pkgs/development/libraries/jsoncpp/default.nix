@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A simple API to manipulate JSON data in C++";
     maintainers = with stdenv.lib.maintainers; [ ttuegel page ];
+    platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.mit;
     branch = "1.6";
   };
