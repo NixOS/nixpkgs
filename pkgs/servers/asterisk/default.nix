@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "asterisk-${version}";
-  version = "13.6.0";
+  version = "13.9.1";
 
   src = fetchurl {
     url = "http://downloads.asterisk.org/pub/telephony/asterisk/asterisk-${version}.tar.gz";
-    sha256 = "0nh0fnqx84as92kk9d73s0386cndd17l06y1c72jl2bdjhyba0ca";
+    sha256 = "0dm2jvg79p86afrcmbn25kd68gbz15jbwpmv1rhlxdbpy3m1mr80";
   };
 
   # Note that these sounds are included with the release tarball. They are
