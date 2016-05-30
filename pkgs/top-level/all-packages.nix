@@ -15730,6 +15730,10 @@ in
 
     in makeOverridable makePackages extra;
 
+  mate = recurseIntoAttrs (callPackage ../desktops/mate {
+    callPackage = newScope pkgs.mate;
+  });
+
   pantheon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.pantheon;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
