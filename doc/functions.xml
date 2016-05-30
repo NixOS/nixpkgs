@@ -92,7 +92,14 @@ in ...</programlisting>
     <para>Do not use this function in Nixpkgs. Because it breaks
     package abstraction and doesn’t provide error checking for
     function arguments, it is only intended for ad-hoc customisation
-    (such as in <filename>~/.nixpkgs/config.nix</filename>).</para>
+    (such as in <filename>~/.nixpkgs/config.nix</filename>).
+   </para>
+
+   <para>
+    Additionally, <varname>overrideDerivation</varname> forces an evaluation
+    of the Derivation which can be quite a performance penalty if there are many
+    overrides used.
+   </para>
   </warning>
 
   <para>
