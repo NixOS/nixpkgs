@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "lmodern-2.004.4";
+  name = "lmodern-2.004.5";
   
   src = fetchurl {
-    url = mirror://debian/pool/main/l/lmodern/lmodern_2.004.4.orig.tar.gz;
-    sha256 = "1g1fmi9asw6x9arm5sy3r4jwz7zrrbcw6q4waj3iqs0iq525i1rw";
+    url = mirror://debian/pool/main/l/lmodern/lmodern_2.004.5.orig.tar.gz;
+    sha256 = "1xd8bhlpqin0javx4210vh9vpzz2kmckvzsllhq824mfdl30s8mf";
   };
 
   installPhase = ''
