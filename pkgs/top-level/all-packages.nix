@@ -13784,7 +13784,7 @@ in
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
 
   pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python34Packages;
+    pythonPackages = python3Packages;
   };
 
   pinfo = callPackage ../applications/misc/pinfo { };
