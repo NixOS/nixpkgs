@@ -192,7 +192,7 @@ in
     system.activationScripts = mkIf insertLdapPassword {
       ldap = stringAfter [ "etc" "groups" "users" ] ''
         if test -f "${cfg.bind.password}" ; then
-          echo "bindpw "$(cat ${cfg.bind.password})"" | cat ${ldapConfig} - > /etc/ldap.conf.bindpw
+          echo "bindpw "$(cat ${cfg.bind.password})"" | cat ${ldapConfig.source} - > /etc/ldap.conf.bindpw
           mv -fT /etc/ldap.conf.bindpw /etc/ldap.conf
           chmod 600 /etc/ldap.conf
         fi

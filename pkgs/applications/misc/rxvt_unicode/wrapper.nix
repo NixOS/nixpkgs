@@ -1,15 +1,12 @@
 { stdenv, symlinkJoin, rxvt_unicode, makeWrapper, plugins }:
 
 let
-  rxvt = rxvt_unicode.override {
-    perlSupport = true;
-  };
-  rxvt_name = builtins.parseDrvName rxvt.name;
+  rxvt_name = builtins.parseDrvName rxvt_unicode.name;
 
 in symlinkJoin {
   name = "${rxvt_name.name}-with-plugins-${rxvt_name.version}";
 
-  paths = [ rxvt ] ++ plugins;
+  paths = [ rxvt_unicode ] ++ plugins;
 
   buildInputs = [ makeWrapper ];
 
@@ -19,4 +16,6 @@ in symlinkJoin {
     wrapProgram $out/bin/urxvtd \
       --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
   '';
+
+  passthru.plugins = plugins;
 }

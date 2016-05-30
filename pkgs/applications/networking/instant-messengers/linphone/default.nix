@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-ldap"
-    "--with-ffmpeg=${ffmpeg}"
+    "--with-ffmpeg=${ffmpeg.dev}"
     "--with-polarssl=${polarssl}"
     "--enable-lime"
     "--enable-external-ortp"

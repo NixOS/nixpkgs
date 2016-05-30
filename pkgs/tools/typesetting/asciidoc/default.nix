@@ -223,7 +223,7 @@ stdenv.mkDerivation rec {
 
     sed -e "s|run('abc2ly|run('${lilypond}/bin/abc2ly|g" \
         -e "s|run('lilypond|run('${lilypond}/bin/lilypond|g" \
-        -e "s|run('convert|run('${imagemagick}/bin/convert|g" \
+        -e "s|run('convert|run('${imagemagick.out}/bin/convert|g" \
         -i "filters/music/music2png.py"
 
     sed -e 's|filter="source-highlight|filter="${sourceHighlight}/bin/source-highlight|' \

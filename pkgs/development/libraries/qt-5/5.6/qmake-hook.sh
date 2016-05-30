@@ -74,6 +74,10 @@ _qtModuleMultioutDevsPost() {
     fi
 }
 
+_qtRmQtOut() {
+    rm -fr "$qtOut"
+}
+
 qmakeConfigurePhase() {
     runHook preConfigure
 
@@ -116,6 +120,8 @@ if [ -n "$NIX_QT_SUBMODULE" ]; then
     postInstallHooks+=(_qtRmQmake _qtRmModules)
     preFixupHooks+=(_qtModuleMultioutDevsPre)
     postFixupHooks+=(_qtModuleMultioutDevsPost)
+else
+    postInstallHooks+=(_qtRmQtOut)
 fi
 
 fi

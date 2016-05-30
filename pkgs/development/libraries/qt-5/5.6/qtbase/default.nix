@@ -87,7 +87,7 @@ stdenv.mkDerivation {
         --replace "@mesa_lib@" "${mesa.out}"
       substituteInPlace qtbase/mkspecs/common/linux.conf \
         --replace "@mesa_lib@" "${mesa.out}" \
-        --replace "@mesa_inc@" "${mesa.dev}"
+        --replace "@mesa_inc@" "${mesa.dev or mesa}"
     '';
 
 

@@ -20,11 +20,11 @@ assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "1dazxbmzx2g5570pkg519a7fsj07rdr155kjsw7b9y8npql33lls";
+    sha256 = "0nxzspnyzlm17imlggi8ypnwiizi0f5wrj3436c3qg7i6mymimxr";
   };
 
   # Comment-out the Qt 5.5 version check, as we do apply the relevant patch.

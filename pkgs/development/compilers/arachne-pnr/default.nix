@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "arachne-pnr-${version}";
-  version = "2015.12.29";
+  version = "2016.05.21";
 
   src = fetchFromGitHub {
     owner = "cseed";
     repo = "arachne-pnr";
-    rev = "1a4fdf96a7fd08806c032d41a2443c8e17c72c80";
-    sha256 = "1dj7ycffwkmlsh12117fbybkdfnlhxbbxkbfgwfyvcgmg3cacgl1";
+    rev = "6b8336497800782f2f69572d40702b60423ec67f";
+    sha256 = "11hg17f4lp8azc0ir0i473fz9c0dra82r4fn45cr3amd57v00qbf";
   };
 
   preBuild = ''

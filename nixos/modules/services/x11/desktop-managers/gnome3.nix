@@ -44,7 +44,7 @@ let
        ${cfg.extraGSettingsOverrides}
      EOF
 
-     ${pkgs.glib}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
+     ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/
     '';
   };
 

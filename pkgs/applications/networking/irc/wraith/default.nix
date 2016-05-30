@@ -16,7 +16,7 @@ mkDerivation rec {
     substituteInPlace src/libssl.cc    --subst-var-by openssl ${openssl}
     substituteInPlace src/libcrypto.cc --subst-var-by openssl ${openssl}
   '';
-  configureFlags = "--with-openssl=${openssl}";
+  configureFlags = "--with-openssl=${openssl.dev}";
   installPhase = ''
     mkdir -p $out/bin
     cp -a wraith $out/bin/wraith

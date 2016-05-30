@@ -258,7 +258,11 @@ let
       python2Packages = { };
       python27Packages = { };
       python3Packages = { };
-      python35Packages = { };
+      python35Packages = {
+        blaze = unix;
+        pandas = unix;
+        scikitlearn = unix;
+      };
 
       xorg = {
         fontadobe100dpi = linux ++ darwin;
@@ -286,7 +290,6 @@ let
         xf86videonv = linux;
         xf86videovesa = linux;
         xf86videovmware = linux;
-        xf86videomodesetting = linux;
         xfs = linux ++ darwin;
         xinput = linux ++ darwin;
         xkbcomp = linux ++ darwin;

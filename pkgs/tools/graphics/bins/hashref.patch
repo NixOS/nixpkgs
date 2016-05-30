@@ -1,0 +1,13 @@
+--- a/bins	2016-05-18 20:45:49.513330005 -0400
++++ b/bins	2016-05-18 20:58:58.957830874 -0400
+@@ -3643,8 +3643,8 @@
+ 
+     my @descTable;
+     foreach my $tagName (@mainFields) {
+-        if (${%$hashref}{$tagName}) {
+-            my $value=${%$hashref}{$tagName};
++        if (${$hashref}{$tagName}) {
++            my $value=${$hashref}{$tagName};
+             $value =~ s/'/&#39;/g  ; # in case it's used in javascript code
+             push @descTable, {DESC_FIELD_NAME => getFields($configHash)->{$tagName}->{'Name'},
+                               DESC_FIELD_VALUE => $value,

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   buildInputs = with gnome3;
     [ intltool pkgconfig ibus gtk glib gsettings_desktop_schemas networkmanager

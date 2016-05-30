@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-1.6.2";
+  name = "libva-1.7.0";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva/${name}.tar.bz2";
-    sha256 = "1l4bij21shqbfllbxicmqgmay4v509v9hpxyyia9wm7gvsfg05y4";
+    sha256 = "0py9igf4kicj7ji22bjawkpd6my013qpg0s4ir2np9l1rk5vr2d6";
   };
 
   outputs = [ "dev" "out" "bin" ];
@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     description = "VAAPI library: Video Acceleration API";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ garbas ];
   };
 }

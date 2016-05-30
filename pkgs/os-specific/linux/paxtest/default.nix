@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, paxctl }:
 
 stdenv.mkDerivation rec {
   name    = "paxtest-${version}";
@@ -9,20 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "0j40h3x42k5mr5gc5np4wvr9cdf9szk2f46swf42zny8rlgxiskx";
   };
 
-  buildPhase = ''
-    make $makeFlags RUNDIR=$out/bin/ linux
-  '';
+  enableParallelBuilding = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    find . -executable -exec cp {} $out/bin \;
-  '';
+  makefile     = "Makefile.psm";
+  makeFlags    = [ "PAXBIN=${paxctl}/bin/paxctl" "BINDIR=$(out)/bin" "RUNDIR=$(out)/lib/paxtest" ];
+  installFlags = ''DESTDIR=""'';
 
   meta = with stdenv.lib; {
     description = "Test various memory protection measures";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
-    maintainer  = [ maintainers.copumpkin ];
+    maintainer  = with maintainers; [ copumpkin joachifm ];
   };
 }
-

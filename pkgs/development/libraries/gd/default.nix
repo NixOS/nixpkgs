@@ -3,6 +3,7 @@
 , zlib
 , libjpeg
 , libpng
+, libwebp
 , libtiff ? null
 , libXpm ? null
 , fontconfig
@@ -11,21 +12,21 @@
 
 stdenv.mkDerivation rec {
   name = "gd-${version}";
-  version = "2.1.1";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
-    sha256 = "11djy9flzxczphigqgp7fbbblbq35gqwwhn9xfcckawlapa1xnls";
+    sha256 = "0xmrqka1ggqgml84xbmkw1y0r0lg7qn657v5b1my8pry92p651vh";
   };
-
-  patches = [
-    ./CVE-2016-3074.patch
-  ];
 
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib fontconfig freetype libjpeg libpng libtiff libXpm ];
+  buildInputs = [ zlib fontconfig freetype libjpeg libpng libwebp libtiff libXpm ];
+
+  outputs = [ "dev" "out" "bin" ];
+
+  postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
 
   meta = with stdenv.lib; {
     homepage = https://libgd.github.io/;

@@ -12,7 +12,7 @@ with stdenv.lib;
 
 let
   ver_maj = "3.20";
-  ver_min = "3";
+  ver_min = "5";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "3834f3bf23b260b3e5ebfea41102e2026a8af29e36c3620edf4a5cf05e82f694";
+    sha256 = "9790b0267384904ad8a08e7f16e5f9ff1c4037de57788d48d1eaf528355b1564";
   };
 
   outputs = [ "dev" "out" ];

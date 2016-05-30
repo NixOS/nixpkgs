@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     schemas_dir="$share_dir/gsettings-schemas/${name}/glib-2.0/schemas"
     mkdir -p "$schemas_dir"
     mv schemas/* "$schemas_dir" # fix Emacs syntax highlighting: */
-    ${glib}/bin/glib-compile-schemas "$schemas_dir"
+    ${glib.dev}/bin/glib-compile-schemas "$schemas_dir"
 
     locale_dir="$share_dir/locale"
     mkdir -p "$locale_dir"

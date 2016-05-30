@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
-, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, ncurses, perl
-, pkgconfig, unibilium, makeWrapper, vimUtils
+, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, man, ncurses
+, perl, pkgconfig, unibilium, makeWrapper, vimUtils, xsel
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -101,7 +101,10 @@ let
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
 
-    preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    preConfigure = ''
+      substituteInPlace runtime/autoload/man.vim \
+        --replace /usr/bin/man ${man}/bin/man
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
       export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
@@ -111,6 +114,7 @@ let
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" share/nvim/runtime/autoload/provider/clipboard.vim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPyGUI ''

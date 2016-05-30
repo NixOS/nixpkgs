@@ -1,19 +1,20 @@
 { fetchurl, stdenv, glib, pkgconfig, udev, libgudev }:
 
 stdenv.mkDerivation rec {
-  name = "libwacom-0.15";
+  name = "libwacom-${version}";
+  version = "0.19";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxwacom/libwacom/${name}.tar.bz2";
-    sha256 = "04vppdj99cc0ya44n8p7zjk9yyw03v6fksw0a9n1gpnnsn4wardb";
+    sha256 = "1zsmp2l53fbfy6jykh4c0i127baf503lq2fvd5y1066ihp6qh3b2";
   };
 
-  buildInputs = [ glib pkgconfig udev libgudev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib udev libgudev ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     homepage = http://sourceforge.net/projects/linuxwacom/;
     description = "libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
   };
-
 }

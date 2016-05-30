@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   configureFlags = [
-    "--with-ssl-include-dir=${openssl}/include/openssl"
+    "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
   ];
 

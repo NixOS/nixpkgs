@@ -2,7 +2,6 @@
 , go, sqlite, iproute, bridge-utils, devicemapper
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux
 , systemd, pkgconfig
-, enableLxc ? false, lxc
 }:
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md
@@ -31,6 +30,12 @@ stdenv.mkDerivation rec {
     ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
     ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
 
+  # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
+  postPatch = ''
+    substituteInPlace ./hack/make.sh                   --replace libsystemd-journal libsystemd
+    substituteInPlace ./daemon/logger/journald/read.go --replace libsystemd-journal libsystemd
+  '';
+
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
@@ -42,7 +47,7 @@ stdenv.mkDerivation rec {
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
     install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service

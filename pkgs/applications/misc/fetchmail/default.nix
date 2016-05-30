@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl ];
 
-  configureFlags = "--with-ssl=${openssl}";
+  configureFlags = "--with-ssl=${openssl.dev}";
 
   meta = {
     homepage = "http://www.fetchmail.info/";

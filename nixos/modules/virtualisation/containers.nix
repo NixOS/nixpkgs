@@ -309,6 +309,10 @@ in
             touch "$root/etc/os-release"
           fi
 
+          if ! [ -e "$root/etc/machine-id" ]; then
+            touch "$root/etc/machine-id"
+          fi
+
           mkdir -p -m 0755 \
             "/nix/var/nix/profiles/per-container/$INSTANCE" \
             "/nix/var/nix/gcroots/per-container/$INSTANCE"
@@ -338,7 +342,7 @@ in
             fi
           ''}
 
-
+          rm -f $root/var/lib/private/host-notify
 
           # Run systemd-nspawn without startup notification (we'll
           # wait for the container systemd to signal readiness).

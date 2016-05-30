@@ -5,13 +5,23 @@ assert stdenv.lib.versionAtLeast kernel.version "3.19";
 
 stdenv.mkDerivation rec {
   name = "facetimehd-${version}-${kernel.version}";
-  version = "git-20160127";
+  version = "git-20160503";
 
   src = fetchFromGitHub {
     owner = "patjak";
     repo = "bcwc_pcie";
-    rev = "186e9f9101ed9bbd7cc8d470f840d4a74c585ca7";
-    sha256 = "1frsf6z6v94cz9fww9rbnk926jzl36fp3w2d1aw6djhzwm80a5gs";
+    # Note: When updating this revision:
+    # 1. Also update pkgs/os-specific/linux/firmware/facetimehd-firmware/
+    # 2. Test the module and firmware change via:
+    #    a. Give some applications a try (Skype, Hangouts, Cheese, etc.)
+    #    b. Run: journalctl -f
+    #    c. Then close the lid
+    #    d. Then open the lid (and maybe press a key to wake it up)
+    #    e. see if the module loads back (apps using the camera won't
+    #       recover and will have to be restarted) and the camera
+    #       still works.
+    rev = "5a7083bd98b38ef3bd223f7ee531d58f4fb0fe7c";
+    sha256 = "0d455kajvn5xav9iilqy7s1qvsy4yb8vzjjxx7bvcgp7aj9ljvdp";
   };
 
   preConfigure = ''
@@ -28,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/patjak/bcwc_pcie;
     description = "Linux driver for the Facetime HD (Broadcom 1570) PCIe webcam";
     license = licenses.gpl2;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = with maintainers; [ womfoo grahamc ];
     platforms = platforms.linux;
   };
 }

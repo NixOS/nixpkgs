@@ -1,11 +1,13 @@
 { stdenv, fetchurl, gtk, cairo, glib, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "goocanvas-0.10";
+stdenv.mkDerivation rec {
+  majVersion = "1.0";
+  version = "${majVersion}.0";
+  name = "goocanvas-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/goocanvas/goocanvas-0.10.tar.gz;
-    sha256 = "0b49szbr3n7vpavly9w17ipa8q3ydicdcd177vxbdvbsnvg7aqp9";
+    url = "mirror://gnome/sources/goocanvas/${majVersion}/${name}.tar.bz2";
+    sha256 = "07kicpcacbqm3inp7zq32ldp95mxx4kfxpaazd0x5jk7hpw2w1qw";
   };
 
   buildInputs = [ gtk cairo glib pkgconfig ];

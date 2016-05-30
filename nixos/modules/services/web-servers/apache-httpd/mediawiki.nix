@@ -43,7 +43,7 @@ let
         # Paths to external programs.
         $wgDiff3 = "${pkgs.diffutils}/bin/diff3";
         $wgDiff = "${pkgs.diffutils}/bin/diff";
-        $wgImageMagickConvertCommand = "${pkgs.imagemagick}/bin/convert";
+        $wgImageMagickConvertCommand = "${pkgs.imagemagick.out}/bin/convert";
 
         #$wgDebugLogFile = "/tmp/mediawiki_debug_log.txt";
 

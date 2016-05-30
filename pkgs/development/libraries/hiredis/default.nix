@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "hiredis-${version}";
-  version = "0.13.1";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "hiredis";
     rev = "v${version}";
-    sha256 = "15rzq7n7z9h143smrnd34f9gh24swwal6r9z9xlxsl0jxabiv71l";
+    sha256 = "1qxiv61bsp6s847hhkxqj7vnbdlac089r2qdp3zgxhhckaflhb7r";
   };
 
   PREFIX = "\${out}";

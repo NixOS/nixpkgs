@@ -65,7 +65,14 @@ stdenv.mkDerivation rec {
     curlOpts = "--referer http://support.amd.com/en-us/download/desktop?os=Linux+x86_64";
   };
 
-  patchPhaseSamples = "patch -p2 < ${./patch-samples.patch}";
+  patchPhaseSamples = "patch -p2 < ${./patches/patch-samples.patch}";
+  patches = [
+    ./patches/15.12-xstate-fp.patch
+    ./patches/15.9-kcl_str.patch
+    ./patches/15.9-mtrr.patch
+    ./patches/15.9-preempt.patch
+    ./patches/15.9-sep_printf.patch
+  ];
 
   buildInputs =
     [ xorg.libXrender xorg.libXext xorg.libX11 xorg.libXinerama xorg.libSM
@@ -101,7 +108,7 @@ stdenv.mkDerivation rec {
   # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
 
   extraDRIlibs = [ xorg.libXrandr.out xorg.libXrender.out xorg.libXext.out
-                   xorg.libX11.out xorg.libXinerama.out xorg.libSM.out 
+                   xorg.libX11.out xorg.libXinerama.out xorg.libSM.out
                    xorg.libICE.out ];
 
   inherit mesa; # only required to build the examples

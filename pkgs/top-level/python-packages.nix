@@ -247,6 +247,8 @@ in modules // {
 
   pygame = callPackage ../development/python-modules/pygame { };
 
+  pygame-git = callPackage ../development/python-modules/pygame/git.nix { };
+
   pygobject = callPackage ../development/python-modules/pygobject { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix { };
@@ -370,8 +372,29 @@ in modules // {
     };
   };
 
+  acme_0_5_0 = buildPythonPackage rec {
+    version = "0.5.0";
+    name = "acme-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "letsencrypt";
+      repo = "letsencrypt";
+      rev = "v${version}";
+      sha256 = "0x098cdyfgqvh7x5d3sz56qjpjyg5b4fl82086sm43d8mbz0h5rm";
+    };
+
+    propagatedBuildInputs = with self; [
+      cryptography pyasn1 pyopenssl pyRFC3339 pytz requests2 six werkzeug mock
+      ndg-httpsclient
+    ];
+
+    buildInputs = with self; [ nose ];
+
+    sourceRoot = "letsencrypt-v${version}-src/acme";
+  };
+
   acme = buildPythonPackage rec {
-    inherit (pkgs.letsencrypt) src version;
+    inherit (pkgs.certbot) src version;
 
     name = "acme-${version}";
 
@@ -720,7 +743,9 @@ in modules // {
 
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.3";
-    disabled = isPy3k;
+
+    # The tests are written in a python2 syntax but anyjson is python3 valid
+    doCheck = !isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/anyjson/${name}.tar.gz";
@@ -776,6 +801,7 @@ in modules // {
   ansible = buildPythonPackage rec {
     version = "1.9.4";
     name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
@@ -806,12 +832,13 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version    = "v2.0.0.2";
-    name       = "ansible-${version}";
+    version = "2.1.0.0";
+    name = "ansible-${version}";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url    = "http://releases.ansible.com/ansible/ansible-2.0.0.2.tar.gz";
-      sha256 = "0a2qgshbpbg2c8rz36jcc5f7zam0j1viqdhc8fqqbarz26chpnr7";
+      url = "http://releases.ansible.com/ansible/${name}.tar.gz";
+      sha256 = "1bfc2xiplpad6f2nwi48y0kps7xqnsll85dlz63cy8k5bysl6d20";
     };
 
     prePatch = ''
@@ -825,15 +852,15 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six
+      paramiko jinja2 pyyaml httplib2 boto six readline
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
-      homepage    = "http://www.ansible.com";
+      homepage = "http://www.ansible.com";
       description = "A simple automation tool";
-      license     = with licenses; [ gpl3 ];
+      license = with licenses; [ gpl3 ];
       maintainers = with maintainers; [ copumpkin ];
-      platforms   = with platforms; linux ++ darwin;
+      platforms = with platforms; linux ++ darwin;
     };
   };
 
@@ -3139,11 +3166,11 @@ in modules // {
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
-    version = "2015.9.6.2";
+    version = "2015.11.20.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/certifi/${name}.tar.gz";
-      sha256 = "19mfly763c6bzya9dwm6qgc48z4x3gk6ldl6fprdncqhklnjnfnw";
+      sha256 = "05lgwf9rz1kn465azy2bpb3zmpnsn9gkypbhnjlclchv98ssgc1h";
     };
 
     meta = {
@@ -5901,17 +5928,43 @@ in modules // {
   };
 
   fake_factory = buildPythonPackage rec {
-    name = "fake-factory-0.2";
+    name = "fake-factory-${version}";
+    version = "0.5.7";
+
     src = pkgs.fetchurl {
-      url = mirror://pypi/f/fake-factory/fake-factory-0.2.tar.gz;
-      sha256 = "0qdmk8p4anrj9mf95dh9v7bkhv1pz69hvhlw380kj4iz7b44b6zn";
+      url = "mirror://pypi/f/fake-factory/${name}.tar.gz";
+      sha256 = "1chmarnrdzn4r017n8qlic0m0bbnhw04s3hkwribjvm3mqpb6pa0";
     };
+
+    propagatedBuildInputs = with self; [ six dateutil ipaddress mock ];
+    checkPhase = ''
+      ${python.interpreter} -m unittest faker.tests
+    '';
+
     meta = {
       description = "A Python package that generates fake data for you";
       homepage    = https://pypi.python.org/pypi/fake-factory;
       license     = licenses.mit;
       maintainers = with maintainers; [ lovek323 ];
       platforms   = platforms.unix;
+    };
+  };
+
+  factory_boy = buildPythonPackage rec {
+    name = "factory_boy-${version}";
+    version = "2.6.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/factory_boy/${name}.tar.gz";
+      sha256 = "0a21f8kq917fj8xgmyp6gy8vcrlzzgwn80qas0d76h3vjbdy0bdq";
+    };
+
+    propagatedBuildInputs = with self; [ fake_factory ];
+
+    meta = {
+      description = "A Python package to create factories for complex objects";
+      homepage    = https://github.com/rbarrois/factory_boy;
+      license     = licenses.mit;
     };
   };
 
@@ -7122,8 +7175,8 @@ in modules // {
     USE_NCCONFIG="0";
     HDF5_DIR="${pkgs.hdf5}";
     NETCDF4_DIR="${pkgs.netcdf}";
-    CURL_DIR="${pkgs.curl}";
-    JPEG_DIR="${pkgs.libjpeg}";
+    CURL_DIR="${pkgs.curl.dev}";
+    JPEG_DIR="${pkgs.libjpeg.dev}";
 
     meta = {
       description = "interface to netCDF library (versions 3 and 4)";
@@ -7380,9 +7433,9 @@ in modules // {
     propagatedBuildInputs = [ pkgs.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
-               " --include-dirs=${pkgs.poppler_qt4}/include/poppler/";
+               " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
 
-    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4}/include/poppler/";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.poppler_qt4.dev}/include/poppler/";
 
     meta = {
       description = "A Python binding to Poppler-Qt4";
@@ -7818,7 +7871,7 @@ in modules // {
        cat > site.cfg << END
        [samplerate]
        library_dirs=${pkgs.libsamplerate.out}/lib
-       include_dirs=${pkgs.libsamplerate}/include
+       include_dirs=${pkgs.libsamplerate.dev}/include
        END
     '';
 
@@ -8407,7 +8460,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses
+      pyGtkGlade pkgs.libtorrentRasterbar twisted Mako chardet pyxdg self.pyopenssl modules.curses service-identity
     ];
 
     nativeBuildInputs = [ pkgs.intltool ];
@@ -8463,7 +8516,7 @@ in modules // {
     };
   };
 
-  django = self.django_1_7;
+  django = self.django_1_9;
 
   django_gis = self.django.override rec {
     patches = [
@@ -8603,6 +8656,9 @@ in modules // {
       sha256 = "0q3fg17qi4vwpipbj075zn4wk58p6a946kah8wayks1423xpa4xs";
     };
 
+    # No tests in archive
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ six ];
 
     meta = {
@@ -8610,6 +8666,30 @@ in modules // {
       homepage = http://django-appconf.readthedocs.org/;
       license = licenses.bsd2;
       maintainers = with maintainers; [ desiderius ];
+    };
+  };
+
+  django_colorful = buildPythonPackage rec {
+    name = "django-colorful-${version}";
+    version = "1.2";
+
+    disabled = isPy35;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
+      sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
+    };
+
+    # Tests aren't run
+    doCheck = false;
+
+    # Requires Django >= 1.8
+    buildInputs = with self ; [ sqlite3 django ];
+
+    meta = {
+      description = "Django extension that provides database and form color fields";
+      homepage = https://github.com/charettes/django-colorful;
+      license = licenses.mit;
     };
   };
 
@@ -8621,6 +8701,9 @@ in modules // {
       url = "mirror://pypi/d/django_compressor/django_compressor-${version}.tar.gz";
       sha256 = "0bp2acagc6b1mmcajlmjf5vvp6zj429bq7p2wks05n47pwfzv281";
     };
+
+    # Need to setup django testing
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ django_appconf ];
 
@@ -8761,6 +8844,8 @@ in modules // {
       sha256 = "1plsdi44dvsj2sfx79lsrccjfg0ymajcsf5n0mln4cwd4qi5mwpx";
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ pytz six ];
 
     meta = {
@@ -8780,6 +8865,8 @@ in modules // {
       sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ django ];
 
     meta = {
@@ -8798,6 +8885,8 @@ in modules // {
       url = "mirror://pypi/d/django-redis/${name}.tar.gz";
       sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
     };
+
+    doCheck = false;
 
     buildInputs = [ self.mock ];
 
@@ -8842,6 +8931,8 @@ in modules // {
       sha256 = "845abc688738858ce06e993c4b7dbbcfcecf33029e828f143463ff96f9a78947";
     };
 
+    doCheck = false;
+
     buildInputs = [ self.mock ];
 
     propagatedBuildInputs = with self; [
@@ -8873,6 +8964,8 @@ in modules // {
       url = "mirror://pypi/d/django-taggit/django-taggit-${version}.tar.gz";
       sha256 = "1xy4mm1y6z6bpakw907859wz7fiw7jfm586dj89w0ggdqlb0767b";
     };
+
+    doCheck = false;
 
     meta = {
       description = "django-taggit is a reusable Django application for simple tagging";
@@ -8996,6 +9089,9 @@ in modules // {
     patchPhase = ''
       sed -i '/rdflib/d' requirements.txt
     '';
+
+    # Doesn't actually run tests
+    doCheck = false;
 
     propagatedBuildInputs = with self; [
       six isodate pyparsing html5lib keepalive
@@ -10402,14 +10498,18 @@ in modules // {
   };
 
   google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-1.2";
+    name = "google-api-python-client-${version}";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
-      url = "https://google-api-python-client.googlecode.com/files/google-api-python-client-1.2.tar.gz";
-      sha256 = "0xd619w71xk4ldmikxqhaaqn985rc2hy4ljgwfp50jb39afg7crw";
+      url = "mirror://pypi/g/google-api-python-client/${name}.tar.gz";
+      sha256 = "1ggxk094vqr4ia6yq7qcpa74b4x5cjd5mj74rq0xx9wp2jkrxmig";
     };
 
-    propagatedBuildInputs = with self; [ httplib2 ];
+    # No tests included in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ httplib2 six oauth2client uritemplate ];
 
     meta = {
       description = "The core Python library for accessing Google APIs";
@@ -10884,6 +10984,25 @@ in modules // {
       url = "mirror://pypi/i/importlib/importlib-1.0.2.tar.gz";
       sha256 = "131jvp6ahllcqblszjg6fxrzh4k50w8g60sq924b4nb8lxm9dl14";
     };
+  };
+
+
+  inflection = buildPythonPackage rec {
+     version = "0.3.1";
+     name = "inflection-${version}";
+
+     src = pkgs.fetchurl {
+       url= "mirror://pypi/i/inflection/${name}.tar.gz";
+       sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
+     };
+
+     disabled = isPy3k;
+
+     meta = {
+       homepage = https://github.com/jpvanhal/inflection;
+       description = "A port of Ruby on Rails inflector to Python";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
   };
 
   influxdb = buildPythonPackage rec {
@@ -11953,8 +12072,6 @@ in modules // {
 
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.4.4";
-    # Warning : as of nov. 9th, 2015, version 3.5.0b1 breaks a lot of things,
-    # more work is needed before upgrading
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
@@ -11971,6 +12088,22 @@ in modules // {
     };
   });
 
+  lxml_3_5 = buildPythonPackage ( rec {
+    name = "lxml-3.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lxml/${name}.tar.gz";
+      sha256 = "0y7m2s8ci6q642zl85y5axkj8z827l0vhjl532acb75hlkir77rl";
+    };
+
+    buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];
+
+    meta = {
+      description = "Pythonic binding for the libxml2 and libxslt libraries";
+      homepage = http://lxml.de;
+      license = licenses.bsd3;
+    };
+  });
 
   python_magic = buildPythonPackage rec {
     name = "python-magic-0.4.10";
@@ -12031,7 +12164,7 @@ in modules // {
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
 
     preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl}'"
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
     '';
 
     doCheck = false; # another test that depends on the network.
@@ -12737,6 +12870,11 @@ in modules // {
       sha256 = "0syd7bs83qs9qmxw540jbgsildbqk4yb57fmrlns1021llli402y";
     };
 
+    checkPhase = ''
+      py.test
+    '';
+
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ ];
   };
 
@@ -12896,6 +13034,29 @@ in modules // {
       maintainers = with maintainers; [ skeidel ];
     };
   };
+
+  neuronpy = buildPythonPackage rec {
+    name = "neuronpy-${version}";
+    version = "0.1.6";
+    disabled = !isPy27;
+
+    propagatedBuildInputs = with self; [ numpy matplotlib scipy ];
+   
+    meta = {
+      description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
+      maintainers = [ maintainers.nico202 ];
+      license = licenses.mit;
+    };
+
+    #No tests included
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/n/neuronpy/neuronpy-${version}.tar.gz";
+      sha256 = "1clhc2b5fy2l8nfrji4dagmj9419nj6kam090yqxhq5c28sngk25";
+    };
+  };
+
 
   plover = buildPythonPackage rec {
     name = "plover-${version}";
@@ -13196,7 +13357,7 @@ in modules // {
     name = "slixmpp-${version}";
     version = "1.1";
 
-    disabled = (!isPy34);
+    disabled = pythonOlder "3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/slixmpp/${name}.tar.gz";
@@ -13891,6 +14052,9 @@ in modules // {
       url = "mirror://pypi/o/oauth/oauth-1.0.1.tar.gz";
       sha256 = "0pdgi35hczsslil4890xqawnbpdazkgf2v1443847h5hy2gq2sg7";
     };
+
+    # No tests included in archive
+    doCheck = false;
 
     meta = {
       homepage = http://code.google.com/p/oauth;
@@ -15863,6 +16027,9 @@ in modules // {
 
     patches = [ ../development/python-modules/pelican-fix-tests-with-pygments-2.1.patch ];
 
+    # There's still some failing tests due to pygments 2.1.3
+    doCheck = false;
+
     buildInputs = with self; [
       pkgs.glibcLocales
       pkgs.pandoc
@@ -16732,12 +16899,12 @@ in modules // {
   };
 
 
-  pyasn1 = buildPythonPackage ({
-    name = "pyasn1-0.1.8";
+  pyasn1 = buildPythonPackage rec {
+    name = "pyasn1-0.1.9";
 
     src = pkgs.fetchurl {
-      url = "mirror://sourceforge/pyasn1/0.1.8/pyasn1-0.1.8.tar.gz";
-      sha256 = "0iw31d9l0zwx35szkzq72hiw002wnqrlrsi9dpbrfngcl1ybwcsx";
+      url = "mirror://pypi/p/pyasn1/${name}.tar.gz";
+      sha256 = "0zraxni14bqi20kr4bi6nwsh32aibz0fq0xaczfisw0zdpcsqg45";
     };
 
     meta = {
@@ -16746,16 +16913,16 @@ in modules // {
       license = "mBSD";
       platforms = platforms.unix;  # arbitrary choice
     };
-  });
+  };
 
   pyasn1-modules = buildPythonPackage rec {
     name = "pyasn1-modules-${version}";
-    version = "0.0.5";
+    version = "0.0.8";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyasn1-modules/${name}.tar.gz";
-      sha256 = "0hcr6klrzmw4d9j9s5wrhqva5014735pg4zk3rppac4fs87g0rdy";
+      sha256 = "0drqgw81xd3fxdlg89kgd79zzrabvfncvkbybi2wr6w2y4s1jmhh";
     };
 
     propagatedBuildInputs = with self; [ pyasn1 ];
@@ -17407,7 +17574,7 @@ in modules // {
 
     preConfigure = ''
       export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw}/include -I${pkgs.fftwFloat}/include -I${pkgs.fftwLongDouble}/include"
+      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
     '';
     #+ optionalString isDarwin ''
     #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
@@ -18218,7 +18385,7 @@ in modules // {
       sha256 = "0j5hzaar4d0vhnrlpmkczgwm7ci2wibr99a7zx04xddzrhxdpz82";
     };
 
-    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl.dev}/include/sasl";
     propagatedBuildInputs = with self; [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
@@ -18659,7 +18826,7 @@ in modules // {
       ++ (if stdenv.isLinux then [pkgs.e2fsprogs] else []);
 
     # There seems to be no way to pass that path to configure.
-    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
+    NIX_CFLAGS_COMPILE="-I${pkgs.aprutil.dev}/include/apr-1";
 
     preConfigure = ''
       cd Source
@@ -18670,7 +18837,7 @@ in modules // {
         --apr-lib-dir=${pkgs.apr.out}/lib \
         --svn-lib-dir=${pkgs.subversion.out}/lib \
         --svn-bin-dir=${pkgs.subversion.out}/bin \
-        --svn-root-dir=${pkgs.subversion}
+        --svn-root-dir=${pkgs.subversion.dev}
     '' + (if !stdenv.isDarwin then "" else ''
       sed -i -e 's|libpython2.7.dylib|lib/libpython2.7.dylib|' Makefile
     '');
@@ -18791,23 +18958,23 @@ in modules // {
     };
   };
 
-  pywinrm = buildPythonPackage (rec {
-    name = "pywinrm";
+  pywinrm = buildPythonPackage rec {
+    version = "0.1.1";
+    name = "pywinrm-${version}";
 
-    src = pkgs.fetchgit {
-      url = https://github.com/diyan/pywinrm.git;
-      rev = "c9ce62d500007561ab31a8d0a5d417e779fb69d9";
-      sha256 = "0n0qlcgin2g5lpby07qbdlnpq5v2qc2yns9zc4zm5prwh2mhs5za";
+    src = pkgs.fetchurl {
+      url = "https://github.com/diyan/pywinrm/archive/v${version}.tar.gz";
+      sha256 = "1pc0987f6q5sxcgm50a1k1xz2pk45ny9xxnyapaf60662rcavvfb";
     };
 
-    propagatedBuildInputs = with self; [ xmltodict isodate ];
+    propagatedBuildInputs = with self; [ isodate kerberos xmltodict ];
 
     meta = {
       homepage = "http://github.com/diyan/pywinrm/";
       description = "Python library for Windows Remote Management";
       license = licenses.mit;
     };
-  });
+  };
 
   PyXAPI = stdenv.mkDerivation rec {
     name = "PyXAPI-0.1";
@@ -22761,6 +22928,28 @@ in modules // {
     };
   };
 
+  uritemplate = buildPythonPackage rec {
+    name = "uritemplate-${version}";
+    version = "0.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uritemplate/${name}.tar.gz";
+      sha256 = "1zapwg406vkwsirnzc6mwq9fac4az8brm6d9bp5xpgkyxc5263m3";
+    };
+
+    # No tests in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ simplejson ];
+
+    meta = with stdenv.lib; {
+      homepage = https://github.com/uri-templates/uritemplate-py;
+      description = "Python implementation of URI Template";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ matthiasbeyer ];
+    };
+  };
+
   urlgrabber =  buildPythonPackage rec {
     name = "urlgrabber-3.9.1";
     disabled = isPy3k;
@@ -24652,11 +24841,11 @@ in modules // {
 
 
   pyusb = buildPythonPackage rec {
-    name = "pyusb-1.0.0rc1";
+    name = "pyusb-1.0.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyusb/${name}.tar.gz";
-      sha256 = "07cjq11qhngzjd746k7688s6y2x7lpj669fxqfsiy985rg0jsn7j";
+      url = "https://pypi.python.org/packages/8a/19/66fb48a4905e472f5dfeda3a1bafac369fbf6d6fc5cf55b780864962652d/PyUSB-1.0.0.tar.gz";
+      sha256 = "0s2k4z06fapd5vp1gnrlf8a9sjpc03p9974lzw5k6ky39akzyd2v";
     };
 
     # Fix the USB backend library lookup
@@ -25087,16 +25276,19 @@ in modules // {
   };
 
   searx = buildPythonPackage rec {
-    name = "searx-0.8.1";
+    name = "searx-${version}";
+    version = "0.9.0";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/asciimoo/searx/archive/v0.8.1.tar.gz";
-      sha256 = "0z0s9n8iblrw7y5xrh2apzsazkgm4vzmxn0ckw4yfiya9am8zk32";
+    src = pkgs.fetchFromGitHub {
+      owner = "asciimoo";
+      repo = "searx";
+      rev = "v${version}";
+      sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
     };
 
     propagatedBuildInputs = with self; [
-      pyyaml lxml grequests flaskbabel flask requests2
-      gevent speaklater Babel pytz dateutil pygments
+      pyyaml lxml_3_5 grequests flaskbabel flask requests2
+      gevent speaklater Babel pytz dateutil pygments_2_0
       pyasn1 pyasn1-modules ndg-httpsclient certifi
     ];
 
@@ -25841,11 +26033,14 @@ in modules // {
   };
 
   parsimonious = buildPythonPackage rec {
-    name = "parsimonious-0.6.0";
+    version = "0.6.2";
+    name = "parsimonious-${version}";
     disabled = ! isPy27;
-    src = pkgs.fetchurl {
-      url = "https://github.com/erikrose/parsimonious/archive/0.6.tar.gz";
-      sha256 = "7ad992448b69a3f3d943bac0be132bced3f13937c8ca150ba2fd1d7b6534f846";
+    src = pkgs.fetchFromGitHub {
+      repo = "parsimonious";
+      owner = "erikrose";
+      rev = version;
+      sha256 = "1wf12adzhqjibbhy2m9abfqdgbb6z97s7wydhasir70307rqf9rj";
     };
 
     propagatedBuildInputs = with self; [ nose ];
@@ -26164,15 +26359,23 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.7";
+    version = "0.1.8";
     name = "neovim-${version}";
-
-    disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "0il6h9qpy9rkgz16yn2bhhg5f23w41wvm9ivlscx5l55llq9sd9q";
+      sha256 = "06g84f0l208jrc1iqa4vk9kgwr77z1ya8cq39cygpq88yjj28whi";
     };
+
+    buildInputs = with self; [ nose ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    # Tests require pkgs.neovim,
+    # which we cannot add because of circular dependency.
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ msgpack ]
       ++ optional (!isPyPy) greenlet
@@ -26359,7 +26562,7 @@ in modules // {
     version = "0.9";
 
     namePrefix = "";
-    disabled = (!isPy34);
+    disabled = pythonOlder "3.4";
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr ];
@@ -26453,6 +26656,9 @@ in modules // {
       url = "mirror://pypi/p/pafy/${name}.tar.gz";
       sha256 = "1q699dcnq34nfgm0bg8mp5krhzk9cyirqdcadhs9al4fa5410igw";
     };
+
+    # No tests included in archive
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ youtube-dl ];
 
@@ -26863,7 +27069,7 @@ in modules // {
 
     # Fix the USB backend library lookup
     postPatch = ''
-      libusb=${pkgs.libusb1}/include/libusb-1.0
+      libusb=${pkgs.libusb1.dev}/include/libusb-1.0
       test -d $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
       sed -i -e "s|/usr/include/libusb-1.0|$libusb|" setup.py
     '';
@@ -27092,6 +27298,36 @@ in modules // {
     };
   };
 
+
+  Quandl = buildPythonPackage rec {
+     version = "3.0.0";
+     name = "Quandl-${version}";
+
+     src = pkgs.fetchurl {
+       url= "mirror://pypi/q/quandl/${name}.tar.gz";
+       sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
+     };
+
+     propagatedBuildInputs = with self; [
+	numpy
+	ndg-httpsclient
+	dateutil
+	inflection
+	moreItertools
+	requests2
+	pandas
+     ];
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/quandl/quandl-python;
+       description = "A Python library for Quandl’s RESTful API";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
+  };
+
   queuelib = buildPythonPackage rec {
     name = "queuelib-${version}";
     version = "1.4.2";
@@ -27199,6 +27435,54 @@ in modules // {
     meta = {
       description = "A quick unittest-compatible framework for repeating a test function over many fixtures";
       homepage = "https://github.com/epsy/repeated_test";
+      license = licenses.mit;
+    };
+  };
+
+  Keras = buildPythonPackage rec {
+    name = "Keras-${version}";
+    version = "1.0.3";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/keras/${name}.tar.gz";
+      sha256 = "0wi826bvifvy12w490ghj1g45z5xb83q2cadqh425sg56p98khaq";
+    };
+
+    propagatedBuildInputs = with self; [
+      six Theano pyyaml
+    ];
+
+    meta = {
+      description = "Deep Learning library for Theano and TensorFlow";
+      homepage = "https://keras.io";
+      license = licenses.mit;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+  };
+
+  Lasagne = buildPythonPackage rec {
+    name = "Lasagne-${version}";
+    version = "0.1";
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/lasagne/${name}.tar.gz";
+      sha256 = "0cqj86rdm6c7y5vq3i13qy76fg5xi3yjp4r0hpqy8hvynv54wqrw";
+    };
+
+    propagatedBuildInputs = with self; [
+      numpy 
+      Theano
+    ];
+
+    # there are no tests
+    doCheck = false;
+
+    meta = {
+      description = "Lightweight library to build and train neural networks in Theano";
+      homepage = "https://github.com/Lasagne/Lasagne";
+      maintainers = with maintainers; [ NikolaMandic ];
       license = licenses.mit;
     };
   };
@@ -27312,4 +27596,90 @@ in modules // {
       license = licenses.asl20;
     };
   };
+
+  simpleai = buildPythonPackage rec {
+     version = "0.7.11";
+     name = "simpleai-${version}";
+
+     src = pkgs.fetchurl {
+       url= "https://pypi.python.org/packages/source/s/simpleai/${name}.tar.gz";
+       sha256 = "03frjc5jxsz9xm24jz7qa4hcp0dicgazrxkdsa2rsnir672lwkwz";
+     };
+
+     propagatedBuildInputs = with self; [ numpy ];
+
+     disabled = isPy3k;
+
+     #No tests in archive
+     doCheck = false;
+
+     meta = {
+       homepage = https://github.com/simpleai-team/simpleai;
+       description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
+       maintainers = with maintainers; [ NikolaMandic ];
+     };
+  };
+
+  tvdb_api = buildPythonPackage rec {
+    name = "tvdb_api-${version}";
+    version = "1.10";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvdb_api/${name}.tar.gz";
+      sha256 = "0hq887yb3rwc0rcw32lh7xdkk9bbrqy274aspzqkd6f7dyhp73ih";
+    };
+
+    disabled = isPy3k;
+
+    meta = {
+      description = "Simple to use TVDB (thetvdb.com) API in Python.";
+      homepage = "https://github.com/dbr/tvdb_api";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  tvnamer = buildPythonPackage rec {
+    name = "tvnamer-${version}";
+    version = "2.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tvnamer/${name}.tar.gz";
+      sha256 = "15i6qvhwhcx08c96xx3s2841yc7k8gxrqqvhw908c11g0045c2r3";
+    };
+
+    propagatedBuildInputs = with self; [
+      tvdb_api
+    ];
+
+    # tvdb_api isn't working with Python 3
+    disabled = isPy3k;
+
+    meta = {
+      description = "Automatic TV episode file renamer, uses data from thetvdb.com via tvdb_api.";
+      homepage = "https://github.com/dbr/tvnamer";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
+  pybrain = buildPythonPackage rec {
+    name = "pybrain-${version}";
+    version = "0.3.3";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/pybrain/pybrain/archive/${version}.tar.gz";
+      sha256 = "114m99vsrps2gjqfm3i3kxx4nibjhjdzphsy2bhrxa5q3h2q14dz";
+    };
+
+    propagatedBuildInputs = with self; [ scipy ];
+
+    meta = {
+      homepage = "http://pybrain.org/";
+      description = "Modular Machine Learning Library for Python";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+  };
+
 }

@@ -13,19 +13,20 @@ in Nixpkgs to easily build packages for other programming languages,
 such as Perl or Haskell.  These are described in this chapter.</para>
 
 
-<xi:include href="perl.xml" />
-<xi:include href="python.xml" />
-<xi:include href="ruby.xml" />
+<xi:include href="beam.xml" />
+<xi:include href="bower.xml" />
+<xi:include href="coq.xml" />
 <xi:include href="go.xml" />
+<xi:include href="haskell.xml" />
+<xi:include href="idris.xml" /> <!-- generated from ../../pkgs/development/idris-modules/README.md  -->
 <xi:include href="java.xml" />
 <xi:include href="lua.xml" />
-<xi:include href="coq.xml" />
-<xi:include href="idris.xml" /> <!-- generated from ../../pkgs/development/idris-modules/README.md  -->
-<xi:include href="r.xml" /> <!-- generated from ../../pkgs/development/r-modules/README.md  -->
+<xi:include href="perl.xml" />
+<xi:include href="python.xml" />
 <xi:include href="qt.xml" />
+<xi:include href="r.xml" /> <!-- generated from ../../pkgs/development/r-modules/README.md  -->
+<xi:include href="ruby.xml" />
 <xi:include href="texlive.xml" />
-<xi:include href="bower.xml" />
 
 
 </chapter>
-

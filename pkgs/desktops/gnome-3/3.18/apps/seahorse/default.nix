@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gcr
                   gnome3.gsettings_desktop_schemas makeWrapper gnupg

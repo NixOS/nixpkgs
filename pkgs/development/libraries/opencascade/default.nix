@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   preUnpack = ''
     sourceRoot=`pwd`/ros/adm/cmake
-    cmakeFlags="$cmakeFlags -DINSTALL_DIR=$out -D3RDPARTY_TCL_DIR=${tcl} -D3RDPARTY_FREETYPE_DIR=${freetype}"
+    cmakeFlags="$cmakeFlags -DINSTALL_DIR=$out -D3RDPARTY_TCL_DIR=${tcl} -D3RDPARTY_FREETYPE_DIR=${freetype.dev}"
   '';
 
   # https://bugs.freedesktop.org/show_bug.cgi?id=83631

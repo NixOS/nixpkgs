@@ -5,12 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.56.0";
+  version = "2.57.1";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "http://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "0xv5s664l72idqbi7ymapj1k3gr47r9fbx41fqplsih0ckcg3njj";
+    sha256 = "0bgkm2cf1icx73v7r6njkx31jdm3l7psnfwd9kjqc21p7ii70h11";
   };
 
   inherit python;
@@ -45,10 +45,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler_utils}/include/poppler
+    export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
-    export MAGICK_INC=${imagemagick}/include/ImageMagick
-    export MAGICK_LIB=${imagemagick}/lib
+    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
+    export MAGICK_LIB=${imagemagick.out}/lib
     export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
     export FC_LIB_DIR=${fontconfig.lib}/lib
     export PODOFO_INC_DIR=${podofo}/include/podofo

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       gettext intltool libtool perl
     ];
 
-  configureFlagsArray = ("CFLAGS=-include ${zlib}/include/zlib.h");
+  configureFlagsArray = ("CFLAGS=-include ${zlib.dev}/include/zlib.h");
 
   patches = [ ./gcc-fix.patch ];
 

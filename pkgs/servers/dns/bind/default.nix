@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-libtool"
     "--with-libxml2=${libxml2}"
-    "--with-openssl=${openssl}"
+    "--with-openssl=${openssl.dev}"
     "--without-atf"
     "--without-dlopen"
     "--without-docbook-xsl"
@@ -36,6 +36,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin/bind9-config $dev
     moveToOutput bin/isc-config.sh $dev
+
+    for f in $out/lib/*.la; do
+      sed -i $f -e 's|-L${openssl.dev}|-L${openssl.out}|g'
+    done
   '';
 
   meta = {

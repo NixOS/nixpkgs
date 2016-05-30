@@ -3,14 +3,14 @@
 , ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.9.0";
+  version = "1.9.1";
   name = "libuv-${version}";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${version}";
-    sha256 = "0sq8c8n7xixn2xxp35crprvh35ry18i5mcxgwh12lydwv9ks0d4k";
+    sha256 = "1kc386gkkkymgz9diz1z4r8impcsmki5k88dsiasd6v9bfvq04cc";
   };
 
   buildInputs = [ automake autoconf libtool pkgconfig ]

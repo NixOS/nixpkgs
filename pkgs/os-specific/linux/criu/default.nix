@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
     substituteInPlace ./Documentation/Makefile --replace "--skip-validation" "--skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl}/include/libnl3"
+    substituteInPlace ./criu/Makefile --replace "-I/usr/include/libnl3" "-I${libnl.dev}/include/libnl3"
     substituteInPlace ./Makefile --replace "tar-name := $(shell git tag -l v$(CRIU_VERSION))" "tar-name = 2.0" # --replace "-Werror" ""
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';

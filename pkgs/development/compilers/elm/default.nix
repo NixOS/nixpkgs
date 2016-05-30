@@ -63,6 +63,16 @@ let
                 '';
             });
 
+            /*
+            This is not a core Elm package, and it's hosted on GitHub.
+            To update, run:
+
+                cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
+
+            where foo is a tag for a new version, for example "0.3.1-alpha".
+            */
+            elm-format = self.callPackage ./packages/elm-format.nix { };
+
           };
       in elmPkgs // {
         inherit elmPkgs;

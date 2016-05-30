@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
-    "--with-libexpat=${expat}"
+    "--with-libexpat=${expat.dev}"
     "--with-libevent=${libevent.dev}"
     "--localstatedir=/var"
     "--sysconfdir=/etc"

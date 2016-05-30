@@ -11,6 +11,9 @@ let
                    config.services.dnsmasq.resolveLocalQueries;
   hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
 
+  resolvconfOptions = cfg.resolvconfOptions
+    ++ optional cfg.dnsSingleRequest "single-request"
+    ++ optional cfg.dnsExtensionMechanism "ends0";
 in
 
 {
@@ -59,6 +62,14 @@ in
       '';
     };
 
+    networking.resolvconfOptions = lib.mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "ndots:1" "rotate" ];
+      description = ''
+        Set the options in <filename>/etc/resolv.conf</filename>.
+      '';
+    };
 
     networking.proxy = {
 
@@ -171,12 +182,9 @@ in
               # Invalidate the nscd cache whenever resolv.conf is
               # regenerated.
               libc_restart='${pkgs.systemd}/bin/systemctl try-restart --no-block nscd.service 2> /dev/null'
-            '' + optionalString cfg.dnsSingleRequest ''
-              # only send one DNS request at a time
-              resolv_conf_options+=' single-request'
-            '' + optionalString cfg.dnsExtensionMechanism ''
-              # enable extension mechanisms for DNS
-              resolv_conf_options+=' edns0'
+            '' + optionalString (length resolvconfOptions > 0) ''
+              # Options as described in resolv.conf(5)
+              resolv_conf_options='${concatStringsSep " " resolvconfOptions}'
             '' + optionalString hasLocalResolver ''
               # This hosts runs a full-blown DNS resolver.
               name_servers='127.0.0.1'

@@ -106,8 +106,10 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
+        ${optionalString cfg.enableRootTrustAnchor ''
         ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
         chown unbound ${stateDir} ${rootTrustAnchorFile}
+        ''}
         touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/random ${stateDir}/dev/random
       '';

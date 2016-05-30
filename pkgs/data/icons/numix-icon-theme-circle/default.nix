@@ -1,19 +1,17 @@
-{ stdenv, fetchFromGitHub, unzip }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "e7008b488edfe37379ba9c4b8d5245dfd6125fc3";
+  version = "2016-05-25";
 
   package-name = "numix-icon-theme-circle";
   
-  name = "${package-name}-20160121-${version}";
+  name = "${package-name}-${version}";
 
-  buildInputs = [ unzip ];
-  
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = package-name;
-    rev = version;
-    sha256 = "0pfcz50b9g7zzskws94m6wvd8zm3sjvhpbzq9vjqi1q02nzflap6";
+    rev = "e2d2fe68e34e1650584f798c3cdb7e91ef62e6d3";
+    sha256 = "0fah812ymc6kczjhjsz0ai57ih6d8r6pknhvc54i7r3xqxshryc8";
   };
 
   dontBuild = true;

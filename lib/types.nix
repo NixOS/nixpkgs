@@ -114,13 +114,17 @@ rec {
       name = "list of ${elemType.name}s";
       check = isList;
       merge = loc: defs:
-        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def: imap (m: def':
-            (mergeDefinitions
-              (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
-              elemType
-              [{ inherit (def) file; value = def'; }]
-            ).optionalValue
-          ) def.value) defs)));
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def:
+          if isList def.value then
+            imap (m: def':
+              (mergeDefinitions
+                (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
+                elemType
+                [{ inherit (def) file; value = def'; }]
+              ).optionalValue
+            ) def.value
+          else
+            throw "The option value `${showOption loc}' in `${def.file}' is not a list.") defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);

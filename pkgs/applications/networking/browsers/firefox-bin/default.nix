@@ -172,6 +172,8 @@ stdenv.mkDerivation {
         --suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
     '';
 
+  passthru.ffmpegSupport = true;
+
   meta = with stdenv.lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = http://www.mozilla.org/firefox/;

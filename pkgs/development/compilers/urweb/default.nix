@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
   '';
 
-  configureFlags = "--with-openssl=${openssl}";
+  configureFlags = "--with-openssl=${openssl.dev}";
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";

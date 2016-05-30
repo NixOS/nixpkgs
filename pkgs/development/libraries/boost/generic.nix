@@ -100,7 +100,7 @@ let
 
   commonConfigureFlags = [
     "--includedir=$(dev)/include"
-    "--libdir=$(lib)/lib"
+    "--libdir=$(out)/lib"
   ];
 
   fixup = ''
@@ -111,7 +111,7 @@ let
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
   '' + optionalString (stdenv.cross.libc or null == "msvcrt") ''
-    ${stdenv.cross.config}-ranlib "$lib/lib/"*.a
+    ${stdenv.cross.config}-ranlib "$out/lib/"*.a
   '';
 
 in

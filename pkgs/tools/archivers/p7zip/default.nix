@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(DEST_HOME=$out)
     buildFlags=all3
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    cp makefile.macosx_64bits makefile.machine
+    cp makefile.macosx_llvm_64bits makefile.machine
   '';
 
   enableParallelBuilding = true;

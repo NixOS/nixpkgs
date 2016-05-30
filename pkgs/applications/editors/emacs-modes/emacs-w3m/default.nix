@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -i "w3m.el" \
         -e 's|defcustom w3m-command nil|defcustom w3m-command "${w3m}/bin/w3m"|g ;
-            s|(w3m-which-command "display")|"${imagemagick}/bin/display"|g'
+            s|(w3m-which-command "display")|"${imagemagick.out}/bin/display"|g'
 
     sed -i "w3m-image.el" \
-        -e 's|(w3m-which-command "convert")|"${imagemagick}/bin/convert"|g ;
-            s|(w3m-which-command "identify")|"${imagemagick}/bin/identify"|g'
+        -e 's|(w3m-which-command "convert")|"${imagemagick.out}/bin/convert"|g ;
+            s|(w3m-which-command "identify")|"${imagemagick.out}/bin/identify"|g'
   '';
 
   configureFlags = [
