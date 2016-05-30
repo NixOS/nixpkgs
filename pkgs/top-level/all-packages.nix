@@ -2989,6 +2989,8 @@ in
 
   popfile = callPackage ../tools/text/popfile { };
 
+  postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
+
   povray = callPackage ../tools/graphics/povray {
     automake = automake113x; # fails with 14
   };
@@ -4488,7 +4490,7 @@ in
   inherit (self.haskellPackages) ghc;
 
   cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
-   
+
   stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
@@ -10824,7 +10826,7 @@ in
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc { };
-    
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
@@ -15947,7 +15949,7 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
-  magma = callPackage ../development/libraries/science/math/magma { };  
+  magma = callPackage ../development/libraries/science/math/magma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
