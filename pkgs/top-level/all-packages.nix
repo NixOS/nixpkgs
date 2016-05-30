@@ -12841,10 +12841,6 @@ in
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
 
-  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix {
-    libpng = libpng12;
-  };
-
   gtkpod = callPackage ../applications/audio/gtkpod {
     gnome = gnome3;
     inherit (gnome) libglade;
