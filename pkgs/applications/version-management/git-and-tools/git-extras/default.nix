@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "git-extras-${version}";
-  version = "3.0.0";
+  version = "4.1.0";
 
   src = fetchurl {
     url = "https://github.com/tj/git-extras/archive/${version}.tar.gz";
-    sha256 = "01x8n9i5sgl1s53sgglg9sd9lyp35dhvdhwlx03yimi4i11441s9";
+    sha256 = "119zasiqpziffwidwkc9ha6v53ri67s702v47s7xxavqzvi2ih6l";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
