@@ -269,6 +269,7 @@
   prikhi = "Pavan Rikhi <pavan.rikhi@gmail.com>";
   profpatsch = "Profpatsch <mail@profpatsch.de>";
   proglodyte = "Proglodyte <proglodyte23@gmail.com>";
+  pshendry = "Paul Hendry <paul@pshendry.com>";
   psibi = "Sibi <sibi@psibi.in>";
   pSub = "Pascal Wittmann <mail@pascal-wittmann.de>";
   puffnfresh = "Brian McKenna <brian@brianmckenna.org>";

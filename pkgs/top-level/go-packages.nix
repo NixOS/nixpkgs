@@ -3378,7 +3378,7 @@ let
     sha256 = "094ksr2nlxhvxr58nbnzzk0prjskb21r86jmxqjr3rwg4rkwn6d4";
   };
 
-  syncthing = buildFromGitHub rec {
+  syncthing012 = buildFromGitHub rec {
     version = "0.12.25";
     rev = "v${version}";
     owner = "syncthing";
@@ -3396,30 +3396,14 @@ let
     '';
   };
 
-  syncthing011 = buildFromGitHub rec {
-    version = "0.11.26";
-    rev = "v${version}";
-    owner = "syncthing";
-    repo = "syncthing";
-    sha256 = "0c0dcvxrvjc84dvrsv90790aawkmavsj9bwp8c6cd6wrwj3cp9lq";
-    buildInputs = [
-      go-lz4 du luhn xdr snappy ratelimit osext syncthing-protocol011
-      goleveldb suture qart crypto net text
-    ];
-    postPatch = ''
-      # Mostly a cosmetic change
-      sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
-    '';
-  };
-
   syncthing-lib = buildFromGitHub {
-    inherit (syncthing) rev owner repo sha256;
+    inherit (syncthing012) rev owner repo sha256;
     subPackages = [ "lib/sync" ];
-    propagatedBuildInputs = syncthing.buildInputs;
+    propagatedBuildInputs = syncthing012.buildInputs;
   };
 
   syncthing-protocol = buildFromGitHub {
-    inherit (syncthing) rev owner repo sha256;
+    inherit (syncthing012) rev owner repo sha256;
     subPackages = [ "lib/protocol" ];
     propagatedBuildInputs = [
       go-lz4
@@ -3427,15 +3411,6 @@ let
       luhn
       xdr
       text ];
-  };
-
-  syncthing-protocol011 = buildFromGitHub {
-    rev = "84365882de255d2204d0eeda8dee288082a27f98";
-    date = "2015-08-28";
-    owner = "syncthing";
-    repo = "protocol";
-    sha256 = "07xjs43lpd51pc339f8x487yhs39riysj3ifbjxsx329kljbflwx";
-    propagatedBuildInputs = [ go-lz4 logger luhn xdr text ];
   };
 
   tablewriter = buildFromGitHub {
