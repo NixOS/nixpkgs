@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     mkdir -pv $out/share/icons
     cp ${desktopItem}/share/applications/* $out/share/applications
     cp -r $out/share/remmina/icons/* $out/share/icons
-    wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11}/lib"
+    wrapProgram $out/bin/remmina --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
   '';
 
   meta = with stdenv.lib; {

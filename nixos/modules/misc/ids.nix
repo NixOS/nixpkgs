@@ -268,6 +268,7 @@
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
+      toxvpn = 247;
 
       prometheus = 999;
 
@@ -508,6 +509,7 @@
       sniproxy = 244;
       nzbget = 245;
       mosquitto = 246;
+      #toxvpn = 247; # unused
 
       prometheus = 999;
 
