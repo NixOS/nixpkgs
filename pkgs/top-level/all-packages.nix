@@ -15439,6 +15439,8 @@ in
 
   wesnoth = callPackage ../games/wesnoth { };
 
+  wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
+
   widelands = callPackage ../games/widelands {
     lua = lua5_1;
   };
