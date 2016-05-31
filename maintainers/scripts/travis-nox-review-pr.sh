@@ -23,13 +23,13 @@ elif [[ $1 == nox ]]; then
 elif [[ $1 == build ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
-    echo "=== Checking NixOS options"
-    nix-build nixos/release.nix -A options
-
-    echo "=== Checking tarball creation"
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
-        echo "Skipped, as not working on darwin"
+        echo "Skipping NixOS things on darwin"
     else
+        echo "=== Checking NixOS options"
+        nix-build nixos/release.nix -A options
+
+        echo "=== Checking tarball creation"
         nix-build pkgs/top-level/release.nix -A tarball
     fi
 
