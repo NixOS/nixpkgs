@@ -20249,10 +20249,10 @@ in modules // {
   };
 
   scipy_0_17 = self.buildScipyPackage rec {
-    version = "0.17.0";
+    version = "0.17.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "f600b755fb69437d0f70361f9e560ab4d304b1b66987ed5a28bdd9dd7793e089";
+      sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
     };
     numpy = self.numpy;
   };
