@@ -246,8 +246,12 @@ self: super: {
   glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
     hardeningDisable = [ "fortify" ];
   });
-  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addPkgconfigDepend super.gtk pkgs.gtk;
+  gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gtk pkgs.gtk) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
