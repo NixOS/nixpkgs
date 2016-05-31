@@ -62,6 +62,10 @@ in stdenv.mkDerivation rec {
       mkdir -p \$HOME && cp -R $out/share/tor-browser/Browser/TorBrowser/Data \$HOME/ && chmod -R +w \$HOME
       echo "pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/Data/Tor/\");" >> \
         ~/Data/Browser/profile.default/preferences/extension-overrides.js
+      echo "pref(\"extensions.torlauncher.torrc-defaults_path\", \"\$HOME/Data/Tor/torrc-defaults\");" >> \
+        ~/Data/Browser/profile.default/preferences/extension-overrides.js
+      echo "pref(\"extensions.torlauncher.tor_path\", \"$out/share/tor-browser/Browser/TorBrowser/Tor/tor\");" >> \
+        ~/Data/Browser/profile.default/preferences/extension-overrides.js
     fi
     export LD_LIBRARY_PATH=${ldLibraryPath}:$out/share/tor-browser/Browser/TorBrowser/Tor
     $out/share/tor-browser/Browser/firefox -no-remote -profile ~/Data/Browser/profile.default "\$@"
