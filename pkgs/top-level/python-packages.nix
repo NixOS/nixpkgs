@@ -4728,7 +4728,7 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ numpy toolz dill pandas cloudpickle ];
 
     checkPhase = ''
       py.test dask
