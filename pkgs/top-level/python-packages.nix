@@ -3472,11 +3472,12 @@ in modules // {
 
     buildInputs = with self; [ pytest mock ];
 
+    # See README for tests invocation
     checkPhase = ''
-      py.test tests
+      PYTHONPATH=$PYTHONPATH:'.:tests' py.test
     '';
 
-    # ImportError of test suite
+    # TypeError: cannot serialize '_io.FileIO' object
     doCheck = false;
 
     meta = {
@@ -4748,13 +4749,13 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
 
     checkPhase = ''
       py.test dask
     '';
 
-    # Segfault, likely in numpy
+    # URLError
     doCheck = false;
 
     meta = {
