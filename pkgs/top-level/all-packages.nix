@@ -15768,8 +15768,6 @@ in
 
   gnome_themes_standard = gnome3.gnome_themes_standard;
 
-  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
-
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
   kde5PackagesFun = self: with self; {
