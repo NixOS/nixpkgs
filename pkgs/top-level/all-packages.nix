@@ -3206,6 +3206,8 @@ in
 
   rubber = callPackage ../tools/typesetting/rubber { };
 
+  runningx = callPackage ../tools/X11/runningx { };
+
   runzip = callPackage ../tools/archivers/runzip { };
 
   rxp = callPackage ../tools/text/xml/rxp { };
