@@ -1,22 +1,22 @@
-{ stdenv, fetchurl, cmake, pkgconfig, SDL, SDL_image, SDL_mixer, SDL_net, SDL_ttf
+{ stdenv, fetchurl, cmake, pkgconfig, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
 , pango, gettext, boost, freetype, libvorbis, fribidi, dbus, libpng, pcre
 , enableTools ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.12.6";
+  version = "1.13.4";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "0kifp6g1dsr16m6ngjq2hx19h851fqg326ps3krnhpyix963h3x5";
+    sha256 = "1ys25ijwphld11002cad9iz5mc5rqazmjn8866l8gcdfrrhk943s";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext boost
+  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre ];
 
   cmakeFlags = [ "-DENABLE_TOOLS=${if enableTools then "ON" else "OFF"}" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.wesnoth.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ kkallio abbradar ];
+    maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
   };
 }

@@ -27,10 +27,11 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [ "-DSYSTEMD=1" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage    = https://github.com/cleverca22/toxvpn;
     license     = licenses.gpl3;
+    maintainers = with maintainers; [ cleverca22 obadz ];
     platforms   = platforms.linux;
   };
 }

@@ -253,12 +253,10 @@ stdenv.mkDerivation {
                   mv "''${!outputLib}/$file" "''${!outputDev}/$file"
               done
           popd
-
-          # Ensure that CMake can find the shared libraries
-          lndir -silent "''${!outputLib}/lib" "''${!outputDev}/lib"
       fi
     '';
 
+  inherit lndir;
   setupHook = ./setup-hook.sh;
 
   enableParallelBuilding = true;
