@@ -4908,10 +4908,7 @@ in
 
     eff = callPackage ../development/interpreters/eff { };
 
-    eliom =
-       if lib.versionAtLeast ocaml_version "4.02"
-       then callPackage ../development/ocaml-modules/eliom { }
-       else null;
+    eliom = callPackage ../development/ocaml-modules/eliom { };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 

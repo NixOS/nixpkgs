@@ -3,7 +3,11 @@
   ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
   reactivedata, opam, ppx_tools, camlp4}:
 
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4";
+let ocamlVersion = (stdenv.lib.getVersion ocaml);
+  in
+
+(
+assert stdenv.lib.versionAtLeast ocamlVersion "4";
 
 stdenv.mkDerivation rec
 {
@@ -25,9 +29,11 @@ stdenv.mkDerivation rec
                             calendar cryptokit ocamlnet ocaml_react ocaml_ssl
                             ocaml_pcre ];
 
+  preConfigure = stdenv.lib.optionalString (!stdenv.lib.versionAtLeast ocamlVersion "4.02") ''
+      export PPX=false
+    '';
+
   installPhase =
-  let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
-  in
   ''opam-installer --script --prefix=$out ${pname}.install > install.sh
     sh install.sh
     ln -s $out/lib/${pname} $out/lib/ocaml/${ocamlVersion}/site-lib/
@@ -55,4 +61,4 @@ stdenv.mkDerivation rec
 
     maintainers = [ stdenv.lib.maintainers.gal_bolle ];
   };
-}
+})
