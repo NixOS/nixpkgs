@@ -1,4 +1,4 @@
-{ stdenv, requireFile }:
+{ stdenv, requireFile, cudatoolkit }:
 
 stdenv.mkDerivation rec {
   version = "4.0";
@@ -18,17 +18,13 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase installPhase fixupPhase";
 
+  propagatedBuildInputs = [ cudatoolkit ];
+
   installPhase = ''
     mkdir -p $out
     cp -a include $out/include
     cp -a lib64 $out/lib64
   '';
-
-  # all binaries are already stripped
-  #dontStrip = true;
-
-  # we did this in prefixup already
-  #dontPatchELF = true;
 
   meta = {
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
