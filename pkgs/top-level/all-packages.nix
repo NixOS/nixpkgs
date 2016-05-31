@@ -15770,8 +15770,6 @@ in
 
   mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
 
-  mate-themes = callPackage ../misc/themes/mate-themes { };
-
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
   kde5PackagesFun = self: with self; {
