@@ -19328,12 +19328,12 @@ in modules // {
   };
 
   qtconsole = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "4.2.1";
     name = "qtconsole-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/q/qtconsole/${name}.tar.gz";
-      sha256 = "741906acae9e02c0df9138ac88b621ef22e438565aa96d783a9ef88faec3de46";
+      sha256 = "1vqqx9hdvrg2d336wjyw0vr5b5v97kflkqqvr7ryicr8als7vv15";
     };
 
     buildInputs = with self; [ nose ] ++ optionals isPy27 [mock];
