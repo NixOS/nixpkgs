@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   outputs = [ "out" "examples" ];
 
+  hardeningDisable = [ "pic" ];
+
   buildPhase = ''
     make T=x86_64-native-linuxapp-gcc config
     make T=x86_64-native-linuxapp-gcc install
