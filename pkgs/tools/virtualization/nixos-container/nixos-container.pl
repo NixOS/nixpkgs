@@ -18,13 +18,13 @@ umask 0022;
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--system-path <path>] [--config <string>] [--ensure-unique-name] [--auto-start]
+       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config <string>] [--ensure-unique-name] [--auto-start]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container kill <container-name> [--signal <signal-specifier>]
        nixos-container status <container-name>
-       nixos-container update <container-name> [--config <string>]
+       nixos-container update <container-name> [--config <string>] [--nixos-path <path>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -35,6 +35,7 @@ EOF
 }
 
 my $systemPath;
+my $nixosPath;
 my $ensureUniqueName = 0;
 my $autoStart = 0;
 my $extraConfig;
@@ -45,8 +46,9 @@ GetOptions(
     "ensure-unique-name" => \$ensureUniqueName,
     "auto-start" => \$autoStart,
     "system-path=s" => \$systemPath,
-    "config=s" => \$extraConfig,
     "signal=s" => \$signal
+    "nixos-path=s" => \$nixosPath,
+    "config=s" => \$extraConfig
     ) or exit 1;
 
 my $action = $ARGV[0] or die "$0: no action specified\n";
@@ -158,11 +160,12 @@ if ($action eq "create") {
     } else {
         mkpath("$root/etc/nixos", 0, 0755);
 
+        my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
         my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
         writeNixOSConfig $nixosConfigFile;
 
         system("nix-env", "-p", "$profileDir/system",
-               "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+               "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
                "--set", "-A", "system") == 0
             or die "$0: failed to build initial container configuration\n";
     }
@@ -272,8 +275,9 @@ elsif ($action eq "update") {
     # configuration.nix.
     writeNixOSConfig $nixosConfigFile if (defined $extraConfig && $extraConfig ne "");
 
+    my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
     system("nix-env", "-p", "$profileDir/system",
-           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+           "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
            "--set", "-A", "system") == 0
         or die "$0: failed to build container configuration\n";
 
