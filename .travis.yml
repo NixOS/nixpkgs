@@ -1,7 +1,16 @@
-language: python
-python: "3.4"
-sudo: required
-dist: trusty
-before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
+matrix:
+    include:
+        - os: linux
+          language: python
+          python: "3.4"
+          sudo: required
+          dist: trusty
+          before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
+        - os: osx
+          language: generic
+          osx_image: xcode7.3
+          before_install:
+              - brew upgrade && brew install python
+              - ./maintainers/scripts/travis-nox-review-pr.sh nix
 install: ./maintainers/scripts/travis-nox-review-pr.sh nox
 script: ./maintainers/scripts/travis-nox-review-pr.sh build

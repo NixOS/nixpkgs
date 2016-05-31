@@ -27,7 +27,11 @@ elif [[ $1 == build ]]; then
     nix-build nixos/release.nix -A options
 
     echo "=== Checking tarball creation"
-    nix-build pkgs/top-level/release.nix -A tarball
+    if [[ $TRAVIS_OS_NAME == "osx" ]]; then
+        echo "Skipped, as not working on darwin"
+    else
+        nix-build pkgs/top-level/release.nix -A tarball
+    fi
 
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then
         echo "=== Not a pull request"
