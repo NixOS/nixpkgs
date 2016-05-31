@@ -111,7 +111,7 @@ let
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" share/nvim/runtime/autoload/provider/clipboard.vim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPyGUI ''
