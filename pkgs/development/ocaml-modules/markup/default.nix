@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, uutf, lwt }:
 
 stdenv.mkDerivation rec {
-  pname = "markup";
+  pname = "ocaml-markup";
   version = "0.7.2";
   name = "${pname}-${version}";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/aantron/markup.ml/;
     description = "A pair of best-effort parsers implementing the HTML5 and XML specifications";
-    license = licenses.bsd3;
+    license = licenses.bsd2;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
       gal_bolle
