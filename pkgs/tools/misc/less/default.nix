@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, ncurses, lessSecure ? false }:
 
 stdenv.mkDerivation rec {
   name = "less-483";
@@ -8,10 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07z43kwbmba2wh3q1gps09l72p8izfagygmqq1izi50s2h51mfvy";
   };
 
-  # Look for ‘sysless’ in /etc.
-  configureFlags = "--sysconfdir=/etc";
-
-  preConfigure = "chmod +x ./configure";
+  configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
+    ++ stdenv.lib.optional lessSecure [ "--with-secure" ];
 
   buildInputs = [ ncurses ];
 
