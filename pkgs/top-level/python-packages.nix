@@ -6549,12 +6549,12 @@ in modules // {
   };
 
   httpauth = buildPythonPackage rec {
-    version = "0.2";
+    version = "0.3";
     name = "httpauth-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpauth/${name}.tar.gz";
-      sha256 = "294029b5dfed27bca5746a31e3ffb5ed99268761536705e8bbd44231b7ca15ec";
+      sha256 = "0qas7876igyz978pgldp5r7n7pis8n4vf0v87gxr9l7p7if5lr3l";
     };
 
     doCheck = false;
@@ -19236,12 +19236,12 @@ in modules // {
   };
 
   requests_toolbelt = buildPythonPackage rec {
-    version = "0.6.0";
+    version = "0.6.2";
     name = "requests-toolbelt-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "192pz6i1fp8vc1qasg6ccxpdsmpbqi3fqf5bgx3vpadp5x0rrz4f";
+      sha256 = "0ds1b2qx0nx9bqj1sqgr4lmanb4hpchmylp1hml1l0p71qi5ha0r";
     };
 
     propagatedBuildInputs = with self; [ requests2 ];
