@@ -13067,6 +13067,7 @@ in modules // {
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license = licenses.gpl2;
+      broken = true;
     };
 
     src = pkgs.fetchurl {
@@ -13074,7 +13075,8 @@ in modules // {
       sha256 = "1jja37nhiypdx1z6cazp8ffsf0z3yqmpdbprpdzf668lcb422rl0";
     };
 
-    propagatedBuildInputs = with self; [ wxPython30 pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self; [ wxPython pyserial hidapi xlib appdirs pkgs.wmctrl mock ];
   };
 
   pygal = buildPythonPackage rec {
@@ -20064,7 +20066,7 @@ in modules // {
       sha256 = "61d03a13f1dcb3c1829f5a146da1fe0cc0e27947558a51e848b6d469902815ef";
     };
 
-    propagatedBuildInputs = [ self.squaremap self.wxPython28 ];
+    propagatedBuildInputs = with self; [ squaremap wxPython ];
 
     meta = {
       description = "GUI Viewer for Python profiling runs";
@@ -23477,15 +23479,9 @@ in modules // {
     };
   };
 
-  wxPython = self.wxPython28;
+  wxPython = self.wxPython30;
 
-  wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
-    inherit callPackage;
-    wxGTK = pkgs.wxGTK28;
-  };
-
-  wxPython30 = import ../development/python-modules/wxPython/3.0.nix {
-    inherit callPackage;
+  wxPython30 = callPackage ../development/python-modules/wxPython/3.0.nix {
     wxGTK = pkgs.wxGTK30;
   };
 

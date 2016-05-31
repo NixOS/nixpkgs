@@ -939,8 +939,6 @@ in
     inherit (strategoPackages016) strategoxt sdf;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
-
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (gnome3) dconf gsettings_desktop_schemas;
     withPulseAudio = config.pulseaudio or true;
@@ -6549,7 +6547,9 @@ in
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  winpdb = callPackage ../development/tools/winpdb { };
+  winpdb = callPackage ../development/tools/winpdb {
+      inherit (pythonPackages) wxPython;
+  };
 
   grabserial = callPackage ../development/tools/grabserial { };
 
@@ -9715,9 +9715,6 @@ in
 
   twisted = pythonPackages.twisted;
 
-  wxPython = pythonPackages.wxPython;
-  wxPython28 = pythonPackages.wxPython28;
-
   yolk = callPackage ../development/python-modules/yolk {};
 
   ZopeInterface = pythonPackages.zope_interface;
@@ -12552,7 +12549,7 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl;
+    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl wxPython;
     fftw = fftwFloat;
   };
 
@@ -14353,7 +14350,7 @@ in
   torch-repl = lib.setName "torch-repl" torchPackages.trepl;
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
-    wrapPython = pythonPackages.wrapPython;
+    inherit (pythonPackages) wrapPython wxPython;
   };
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
