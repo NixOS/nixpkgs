@@ -52,6 +52,8 @@ let
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = args.setOutputFlags or false;
 
+      setupHook = ./setup-hook.sh;
+
       enableParallelBuilding = args.enableParallelBuilding or true;
 
       meta = self.qtbase.meta // (args.meta or {});
@@ -111,7 +113,7 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
+      qmakeHook = makeSetupHook { deps = [ self.qtbase ]; } ./qmake-hook.sh;
 
     };
 
