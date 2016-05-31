@@ -13879,12 +13879,12 @@ in modules // {
   };
 
   numexpr = buildPythonPackage rec {
-    version = "2.5";
+    version = "2.5.2";
     name = "numexpr-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numexpr/${name}.tar.gz";
-      sha256 = "319cdf4e402177a1c8ed4972cffd09f523446f186d347b7c1974787cdabf0294";
+      sha256 = "0kb6549fwfxpc4qy3l5liad2mx99dys77c6w1y2rm32wyrf5k1by";
     };
 
     # Tests fail with python 3. https://github.com/pydata/numexpr/issues/177
