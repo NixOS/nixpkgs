@@ -727,16 +727,6 @@ in
 
     systemd.targets.network-online.after = [ "ip-up.target" ];
 
-    systemd.targets.network-pre = {
-      wantedBy = [ "network.target" ];
-      before = [ "network.target" ];
-    };
-
-    systemd.targets.remote-fs-pre = {
-      wantedBy = [ "remote-fs.target" ];
-      before = [ "remote-fs.target" ];
-    };
-
     systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
