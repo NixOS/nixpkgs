@@ -1,0 +1,18 @@
+diff --git a/gnulib/lib/error.c b/gnulib/lib/error.c
+index 31109df..5f2282a 100644
+--- a/gnulib/lib/error.c
++++ b/gnulib/lib/error.c
+@@ -110,9 +110,13 @@ int strerror_r ();
+ #  endif
+ # endif
+ 
++# if defined __APPLE__ && defined __MACH__
++# define program_name (((char **)*_NSGetArgv())[0])
++# else
+ /* The calling program should define program_name and set it to the
+    name of the executing program.  */
+ extern char *program_name;
++# endif
+ 
+ # if HAVE_STRERROR_R || defined strerror_r
+ #  define __strerror_r strerror_r

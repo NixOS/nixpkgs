@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "056a3il7agfazac12yggcg4gf412yq34k065im0cpfxbcw6xskaw";
   };
 
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    ../../../os-specific/darwin/gnulib/program-name.patch
+  ];
+
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
