@@ -1877,8 +1877,6 @@ in
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
-  gummiboot = callPackage ../tools/misc/gummiboot { };
-
   gup = callPackage ../development/tools/build-managers/gup {};
 
   gupnp = callPackage ../development/libraries/gupnp {
