@@ -5,11 +5,7 @@ with lib;
 {
   options = {
     services.toxvpn = {
-      enable = mkOption {
-        type        = types.bool;
-        default     = false;
-        description = "enable toxvpn running on startup";
-      };
+      enable = mkEnableOption "enable toxvpn running on startup";
 
       localip = mkOption {
         type        = types.string;
@@ -43,6 +39,8 @@ with lib;
         Restart   = "on-success";
         Type      = "notify";
       };
+
+      restartIfChanged = false; # Likely to be used for remote admin
     };
 
     users.extraUsers = {

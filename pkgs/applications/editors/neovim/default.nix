@@ -98,6 +98,9 @@ let
     LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
     LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
 
+    # triggers on buffer overflow bug while running tests
+    hardeningDisable = [ "fortify" ];
+
     preConfigure = ''
       substituteInPlace runtime/autoload/man.vim \
         --replace /usr/bin/man ${man}/bin/man

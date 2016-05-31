@@ -3,8 +3,7 @@
 stdenv.mkDerivation rec {
   name = "qgit-2.5";
 
-  src = fetchurl
-  {
+  src = fetchurl {
     url = "http://libre.tibirna.org/attachments/download/9/${name}.tar.gz";
     sha256 = "25f1ca2860d840d87b9919d34fc3a1b05d4163671ed87d29c3e4a8a09e0b2499";
   };

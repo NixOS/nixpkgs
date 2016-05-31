@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xmrqka1ggqgml84xbmkw1y0r0lg7qn657v5b1my8pry92p651vh";
   };
 
+  hardeningDisable = [ "format" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib fontconfig freetype libjpeg libpng libwebp libtiff libXpm ];
 

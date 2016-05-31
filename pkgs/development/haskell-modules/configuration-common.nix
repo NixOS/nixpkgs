@@ -43,8 +43,13 @@ self: super: {
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   c2hs = dontCheck super.c2hs;
+
+  # fix errors caused by hardening flags
   epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
     hardeningDisable = [ "format" ];
+  });
+  pango = super.pango.overrideDerivation (drv: {
+    hardeningDisable = [ "fortify" ];
   });
 
   # Use the default version of mysql to build this package (which is actually mariadb).
@@ -232,15 +237,21 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = addPkgconfigDepend super.gio pkgs.glib;
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gio pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
   glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
     hardeningDisable = [ "fortify" ];
   });
-  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addPkgconfigDepend super.gtk pkgs.gtk;
+  gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gtk pkgs.gtk) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 

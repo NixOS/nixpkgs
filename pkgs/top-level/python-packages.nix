@@ -8518,7 +8518,7 @@ in modules // {
     };
   };
 
-  django = self.django_1_7;
+  django = self.django_1_9;
 
   django_gis = self.django.override rec {
     patches = [
@@ -8658,6 +8658,9 @@ in modules // {
       sha256 = "0q3fg17qi4vwpipbj075zn4wk58p6a946kah8wayks1423xpa4xs";
     };
 
+    # No tests in archive
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ six ];
 
     meta = {
@@ -8679,12 +8682,8 @@ in modules // {
       sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
     };
 
-    # variable used during test
-    DJANGO_SETTINGS_MODULE="colorful.tests.settings";
-    # remove one assertion failing because of un-initialized i18n infrastructure
-    #patchPhase = ''
-    #  sed -i -e '26,31d' colorful/tests/tests.py
-    #'';
+    # Tests aren't run
+    doCheck = false;
 
     # Requires Django >= 1.8
     buildInputs = with self ; [ sqlite3 django ];
@@ -8704,6 +8703,9 @@ in modules // {
       url = "mirror://pypi/d/django_compressor/django_compressor-${version}.tar.gz";
       sha256 = "0bp2acagc6b1mmcajlmjf5vvp6zj429bq7p2wks05n47pwfzv281";
     };
+
+    # Need to setup django testing
+    doCheck = false;
 
     propagatedBuildInputs = with self; [ django_appconf ];
 
@@ -8844,6 +8846,8 @@ in modules // {
       sha256 = "1plsdi44dvsj2sfx79lsrccjfg0ymajcsf5n0mln4cwd4qi5mwpx";
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ pytz six ];
 
     meta = {
@@ -8863,6 +8867,8 @@ in modules // {
       sha256 = "06kp4hg3y4bqy2ixlb1q6bw81gwgsb86l4lanbav7bp1grrbbnj1";
     };
 
+    doCheck = false;
+
     propagatedBuildInputs = with self; [ django ];
 
     meta = {
@@ -8881,6 +8887,8 @@ in modules // {
       url = "mirror://pypi/d/django-redis/${name}.tar.gz";
       sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
     };
+
+    doCheck = false;
 
     buildInputs = [ self.mock ];
 
@@ -8925,6 +8933,8 @@ in modules // {
       sha256 = "845abc688738858ce06e993c4b7dbbcfcecf33029e828f143463ff96f9a78947";
     };
 
+    doCheck = false;
+
     buildInputs = [ self.mock ];
 
     propagatedBuildInputs = with self; [
@@ -8956,6 +8966,8 @@ in modules // {
       url = "mirror://pypi/d/django-taggit/django-taggit-${version}.tar.gz";
       sha256 = "1xy4mm1y6z6bpakw907859wz7fiw7jfm586dj89w0ggdqlb0767b";
     };
+
+    doCheck = false;
 
     meta = {
       description = "django-taggit is a reusable Django application for simple tagging";

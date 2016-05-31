@@ -329,7 +329,7 @@ workarounds.
 
 ### How to build a Haskell project using Stack
 
-[Stack][http://haskellstack.org] is a popular build tool for Haskell projects.
+[Stack](http://haskellstack.org) is a popular build tool for Haskell projects.
 It has first-class support for Nix. Stack can optionally use Nix to
 automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
