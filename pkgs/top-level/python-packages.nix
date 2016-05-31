@@ -20326,10 +20326,10 @@ in modules // {
   };
 
   seaborn = buildPythonPackage rec {
-    name = "seaborn-0.6.0";
+    name = "seaborn-0.7.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/seaborn/${name}.tar.gz";
-      sha256 = "e078399b56ed0d53a4aa8bd4d6bd4a9a9deebc0b4acad259d0ef81830affdb68";
+      sha256 = "0ibi3xsfm2kysph61mnfy0pf8d5rkgxgrdb0z9nbizgcgdsb5a0m";
     };
 
     buildInputs = with self; [ nose ];
