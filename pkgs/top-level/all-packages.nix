@@ -5260,17 +5260,19 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustcMaster = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
-  rustc = callPackage ../development/compilers/rustc {};
+  rustc = rustcStable;
+  rustcStable = callPackage ../development/compilers/rustc/stable.nix {};
+  rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
+  rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
 
   rustPlatform = rustStable;
-
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
+  rustBeta = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustBeta));
   rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
+  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
 
   makeRustPlatform = cargo: self:
     let
