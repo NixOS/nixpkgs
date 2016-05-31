@@ -2,18 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "sslscan-${version}";
-  version = "1.11.0";
+  version = "1.11.5";
 
   src = fetchurl {
     url = "https://github.com/rbsec/sslscan/archive/${version}-rbsec.tar.gz";
-    sha256 = "19d6vpcihfqs35hni4vigcpqabbnd3sndr5wyvfsladgp40vz3b9";
+    sha256 = "0mcg8hyx1r9sq716bw1r554fcsf512khgcms2ixxb1c31ng6lhq6";
   };
 
   buildInputs = [ openssl ];
 
   installFlags = [
-    "BINPATH=$(out)/bin"
-    "MANPATH=$(out)/share/man"
+    "PREFIX=$(out)"
   ];
 
   meta = with stdenv.lib; {
