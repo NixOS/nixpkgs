@@ -88,16 +88,16 @@ def remove_old_entries(gens):
         if not path in known_paths:
             os.unlink(path)
 
-parser = argparse.ArgumentParser(description='Update NixOS-related gummiboot files')
+parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
 parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
 args = parser.parse_args()
 
 # We deserve our own env var!
 if os.getenv("NIXOS_INSTALL_GRUB") == "1":
     if "@canTouchEfiVariables@" == "1":
-        subprocess.check_call(["@gummiboot@/bin/gummiboot", "--path=@efiSysMountPoint@", "install"])
+        subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "install"])
     else:
-        subprocess.check_call(["@gummiboot@/bin/gummiboot", "--path=@efiSysMountPoint@", "--no-variables", "install"])
+        subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "--no-variables", "install"])
 
 mkdir_p("@efiSysMountPoint@/efi/nixos")
 mkdir_p("@efiSysMountPoint@/loader/entries")

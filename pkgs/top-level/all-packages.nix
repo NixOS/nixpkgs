@@ -1884,8 +1884,6 @@ in
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
-  gummiboot = callPackage ../tools/misc/gummiboot { };
-
   gup = callPackage ../development/tools/build-managers/gup {};
 
   gupnp = callPackage ../development/libraries/gupnp {
@@ -2390,6 +2388,11 @@ in
   mairix = callPackage ../tools/text/mairix { };
 
   makemkv = callPackage ../applications/video/makemkv { };
+
+  # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
+  # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
+  # trouble on bsd and/or cygwin as well.
+  man = if stdenv.isLinux then man-db else man-old;
 
   man-old = callPackage ../tools/misc/man { };
 
@@ -3209,6 +3212,8 @@ in
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
+
+  runningx = callPackage ../tools/X11/runningx { };
 
   runzip = callPackage ../tools/archivers/runzip { };
 
@@ -15730,6 +15735,10 @@ in
 
     in makeOverridable makePackages extra;
 
+  mate = recurseIntoAttrs (callPackage ../desktops/mate {
+    callPackage = newScope pkgs.mate;
+  });
+
   pantheon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.pantheon;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
@@ -16938,4 +16947,6 @@ in
   tomb = callPackage ../os-specific/linux/tomb {};
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
+
+  iterm2 = callPackage ../applications/misc/iterm2 {};
 }

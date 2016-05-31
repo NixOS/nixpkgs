@@ -208,7 +208,6 @@ let
                 pkgs.unionfs-fuse
                 pkgs.ntp
                 pkgs.nixos-artwork
-                pkgs.gummiboot
                 pkgs.perlPackages.XMLLibXML
                 pkgs.perlPackages.ListCompare
               ]

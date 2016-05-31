@@ -12,7 +12,9 @@ let
 
     isExecutable = true;
 
-    inherit (pkgs) python gummiboot;
+    inherit (pkgs) python;
+
+    systemd = config.systemd.package;
 
     nix = config.nix.package.out;
 
@@ -27,7 +29,7 @@ in {
 
       type = types.bool;
 
-      description = "Whether to enable the gummiboot UEFI boot manager";
+      description = "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
     };
   };
 
