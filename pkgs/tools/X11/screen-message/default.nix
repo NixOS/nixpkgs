@@ -1,12 +1,12 @@
 { stdenv, fetchgit, autoreconfHook, pkgconfig, gtk3 }:
 
 stdenv.mkDerivation {
-  name = "screen-message-0.23";
+  name = "screen-message-0.24";
 
   srcs = fetchgit {
     url = "git://git.nomeata.de/darcs-mirror-screen-message.debian.git";
-    rev = "refs/tags/0_23-1";
-    sha256 = "fddddd28703676b2908af71cca7225e6c7bdb15b2fdfd67679cac129028a431c";
+    rev = "refs/tags/0_24-1";
+    sha256 = "fddddd28703677b2908af71cca7225e6c7bdb15b2fdfd67679cac129028a431c";
   };
 
   buildInputs = [ autoreconfHook pkgconfig gtk3 ];
