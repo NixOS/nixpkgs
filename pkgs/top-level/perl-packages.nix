@@ -12046,6 +12046,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestCommand = buildPerlPackage {
+    name = "Test-Command-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANBOO/Test-Command-0.11.tar.gz;
+      sha256 = "0cwm3c4d49mdrbm6vgh78b3x8mk730l0zg8i7xb9z8bkx9pzr8r8";
+    };
+    meta = {
+      homepage = https://github.com/danboo/perl-test-command;
+      description = "Test routines for external commands ";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1 ];
+    };
+  };
+
   TestCPANMeta = buildPerlPackage {
     name = "Test-CPAN-Meta-0.23";
     src = fetchurl {
