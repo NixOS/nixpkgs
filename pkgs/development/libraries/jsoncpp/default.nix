@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake python ];
 
+  CXXFLAGS = "-Wno-shift-negative-value";
+
   cmakeFlags = [
     "-DJSONCPP_LIB_BUILD_SHARED=ON"
     "-DJSONCPP_LIB_BUILD_STATIC=OFF"
@@ -39,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/open-source-parsers/jsoncpp;
     description = "A simple API to manipulate JSON data in C++";
     maintainers = with stdenv.lib.maintainers; [ ttuegel page ];
+    platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.mit;
     branch = "1.6";
   };
