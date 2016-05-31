@@ -13023,6 +13023,31 @@ in modules // {
     };
   };
 
+  mwclient = buildPythonPackage rec {
+    version = "0.8.1";
+    basename = "mwclient";
+    name = "${basename}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/${basename}/${name}.tar.gz";
+      sha256 = "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az";
+    };
+
+    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
+
+    propagatedBuildInputs = with self; [ six requests2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Python client library to the MediaWiki API";
+      maintainers = with maintainers; [ DamienCassou ];
+      license = licenses.mit;
+    };
+  };
+
   neuronpy = buildPythonPackage rec {
     name = "neuronpy-${version}";
     version = "0.1.6";
