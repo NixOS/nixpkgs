@@ -17,9 +17,9 @@ if [[ $1 == nix ]]; then
     echo "=== Verifying that nixpkgs evaluates..."
     nix-env -f. -qa --json >/dev/null
 elif [[ $1 == nox ]]; then
+    source $HOME/.nix-profile/etc/profile.d/nix.sh
     echo "=== Installing nox..."
-    git clone -q https://github.com/madjar/nox
-    pip --quiet install -e nox
+    nix-build -A nox '<nixpkgs>'
 elif [[ $1 == build ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
@@ -38,7 +38,7 @@ elif [[ $1 == build ]]; then
     else
         echo "=== Checking PR"
 
-        if ! nox-review pr ${TRAVIS_PULL_REQUEST}; then
+        if ! nix-shell -p nox --run "nox-review pr ${TRAVIS_PULL_REQUEST}"; then
             if sudo dmesg | egrep 'Out of memory|Killed process' > /tmp/oom-log; then
                 echo "=== The build failed due to running out of memory:"
                 cat /tmp/oom-log
