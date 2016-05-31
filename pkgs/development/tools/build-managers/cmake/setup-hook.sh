@@ -47,9 +47,15 @@ cmakeConfigurePhase() {
     cmakeFlags="-DCMAKE_INSTALL_LIBDIR=${!outputLib}/lib $cmakeFlags"
     cmakeFlags="-DCMAKE_INSTALL_INCLUDEDIR=${!outputDev}/include $cmakeFlags"
 
-    # Avoid cmake resetting the rpath of binaries, on make install
-    # And build always Release, to ensure optimisation flags
-    cmakeFlags="-DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+    # Always build Release, to ensure optimisation flags.
+    cmakeFlags="-DCMAKE_BUILD_TYPE=Release $cmakeFlags"
+    # Do not change the RPATH between build and install, simply
+    # build with the correct RPATH in the first place.
+    cmakeFlags="-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE $cmakeFlags"
+    # Do not try to guess the correct RPATH based on linker flags.
+    cmakeFlags="-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE $cmakeFlags"
+    # Just use exactly our RPATH.
+    cmakeFlags="-DCMAKE_INSTALL_RPATH=$CMAKE_INSTALL_RPATH $cmakeFlags"
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
@@ -77,6 +83,7 @@ makeCmakeFindLibs(){
         ;;
       -L*)
         export CMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH${CMAKE_LIBRARY_PATH:+:}${flag:2}"
+        export CMAKE_INSTALL_RPATH="$CMAKE_INSTALL_RPATH${CMAKE_INSTALL_RPATH:+:}${flag:2}"
         ;;
     esac
   done

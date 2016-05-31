@@ -112,7 +112,7 @@ EOF
 
     # Set PATH to find qmake first in a preConfigure hook
     # It must run after all the envHooks!
-    postHooks+=(_qtSetQmakePath)
+    preConfigureHooks+=(_qtSetQmakePath)
 fi
 
 qt5LinkModuleDir() {
@@ -122,10 +122,23 @@ qt5LinkModuleDir() {
     fi
 }
 
-qt5LinkModuleDir @out@ "lib"
+NIX_QT5_MODULES="${NIX_QT5_MODULES}${NIX_QT5_MODULES:+:}@out@"
+NIX_QT5_MODULES_DEV="${NIX_QT5_MODULES_DEV}${NIX_QT5_MODULES_DEV:+:}@dev@"
 
-qt5LinkModuleDir @dev@ "bin"
-qt5LinkModuleDir @dev@ "include"
-qt5LinkModuleDir @dev@ "lib"
-qt5LinkModuleDir @dev@ "mkspecs"
-qt5LinkModuleDir @dev@ "share"
+_qtLinkAllModules() {
+    IFS=: read -a modules <<< $NIX_QT5_MODULES
+    for module in ${modules[@]}; do
+        qt5LinkModuleDir "$module" "lib"
+    done
+
+    IFS=: read -a modules <<< $NIX_QT5_MODULES_DEV
+    for module in ${modules[@]}; do
+        qt5LinkModuleDir "$module" "bin"
+        qt5LinkModuleDir "$module" "include"
+        qt5LinkModuleDir "$module" "lib"
+        qt5LinkModuleDir "$module" "mkspecs"
+        qt5LinkModuleDir "$module" "share"
+    done
+}
+
+preConfigureHooks+=(_qtLinkAllModules)

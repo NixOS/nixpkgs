@@ -109,7 +109,7 @@ let
       buildEnv = callPackage ../python/wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
       sitePackages = "site-packages";
-      withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
+      withPackages = import ../python/with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM
