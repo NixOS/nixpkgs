@@ -141,4 +141,17 @@ _qtLinkAllModules() {
     done
 }
 
-preConfigureHooks+=(_qtLinkAllModules)
+_qtFixCMake() {
+    for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
+        case $flag in
+            -L*)
+                CMAKE_INSTALL_RPATH="$CMAKE_INSTALL_RPATH${CMAKE_INSTALL_RPATH:+:}${flag:2}"
+                ;;
+        esac
+    done
+    cmakeFlags="-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE $cmakeFlags"
+    cmakeFlags="-DCMAKE_INSTALL_RPATH=$CMAKE_INSTALL_RPATH $cmakeFlags"
+}
+
+preConfigureHooks+=(_qtLinkAllModules _qtFixCMake)
