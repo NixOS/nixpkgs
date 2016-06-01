@@ -2406,6 +2406,14 @@ let
     sha256 = "07z4is00ridjp8c6cn68lkg1fz6ksj1q7f26g7ir7qx8mx10fj72";
   };
 
+  go-ipfs-util = buildFromGitHub rec {
+    rev    = "6b4d6f2f4f5d429d011ba3133de8fee75b27584a";
+    owner  = "ipfs";
+    repo   = "go-ipfs-util";
+    sha256 = "0dcrzd7xf8h3516q43v0pkkz97x6kfz3b7cpcy49h2abqsqicyz8";
+    propagatedBuildInputs = [ go-base58 go-multihash ];
+  };
+
   stump = buildFromGitHub rec {
     rev    = "bdc01b1f13fc5bed17ffbf4e0ed7ea17fd220ee6";
     owner  = "whyrusleeping";
