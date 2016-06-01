@@ -3265,6 +3265,9 @@ in
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  seafile = callPackage ../servers/seafile { };
+  libevhtp-seafile = callPackage ../servers/seafile/libevhtp.nix { };
+
   sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
