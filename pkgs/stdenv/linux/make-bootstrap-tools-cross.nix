@@ -164,15 +164,15 @@ rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.crossDrv.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc}/bin/gcc $out/bin
-        cp -d ${gcc}/bin/cpp $out/bin
-        cp -d ${gcc}/bin/g++ $out/bin
-        cp -d ${gcc}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc}/lib*/libstdc++.so* $out/lib
-        cp -rd ${gcc}/lib/gcc $out/lib
+        cp -d ${gcc.out}/bin/gcc $out/bin
+        cp -d ${gcc.out}/bin/cpp $out/bin
+        cp -d ${gcc.out}/bin/g++ $out/bin
+        cp -d ${gcc.lib}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gcc.lib}/lib*/libstdc++.so* $out/lib
+        cp -rd ${gcc.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -180,18 +180,18 @@ rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc}/libexec/* $out/libexec
+        cp -rd ${gcc.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir $out/include
-        cp -rd ${gcc}/include/c++ $out/include
+        cp -rd ${gcc.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
 
-        cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
+        cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
@@ -201,11 +201,11 @@ rec {
         cp -d ${isl}/lib/libisl*.so* $out/lib
         # Also this is needed since bzip2 uses a custom build system
         # for native builds but autoconf (via a patch) for cross builds
-        cp -d ${bzip2}/lib/libbz2.so* $out/lib
+        cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils}/bin/$i $out/bin
+          cp ${binutils.out}/bin/$i $out/bin
         done
         cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
