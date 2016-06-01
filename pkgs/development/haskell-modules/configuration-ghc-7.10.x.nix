@@ -206,6 +206,7 @@ self: super: {
   # GHC versions prior to 8.x require additional build inputs.
   aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
   case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  bytes = addBuildDepend super.bytes self.doctest;
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
 
