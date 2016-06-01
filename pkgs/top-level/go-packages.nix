@@ -2391,6 +2391,13 @@ let
     propagatedBuildInputs = [ go-multihash ];
   };
 
+  tar-utils = buildFromGitHub rec {
+    rev    = "beab27159606f5a7c978268dd1c3b12a0f1de8a7";
+    owner  = "whyrusleeping";
+    repo   = "tar-utils";
+    sha256 = "07z4is00ridjp8c6cn68lkg1fz6ksj1q7f26g7ir7qx8mx10fj72";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
