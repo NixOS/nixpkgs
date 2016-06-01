@@ -2351,6 +2351,14 @@ let
     sha256 = "0cnq8k3aiq3i4038g1z7rfxbfw6awcz2nig69fmfd9y76czzd81c";
   };
 
+  go-random = buildFromGitHub rec {
+    rev    = "384f606e91f542a98e779e652eed88051618f0f7";
+    owner  = "jbenet";
+    repo   = "go-random";
+    sha256 = "0gcshzl9n3apzc0jaxqrjsc038yfrzfyhpdqgbpcnajin83l2msa";
+    propagatedBuildInputs = [ go-humanize ];
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
