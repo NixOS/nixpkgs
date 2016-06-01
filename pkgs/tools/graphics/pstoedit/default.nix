@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ghostscript, gd, libjpeg, zlib, plotutils }:
+{ stdenv, fetchurl, pkgconfig, ghostscript, gd, libjpeg, zlib, plotutils, libwebp }:
 
 stdenv.mkDerivation rec {
   name = "pstoedit-3.62";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j410dm9nqwa7n03yiyz0jwvln0jlqc3n9iv4nls33yl6x3c8x40";
   };
 
-  buildInputs = [ pkgconfig ghostscript gd libjpeg zlib plotutils ];
+  buildInputs = [ pkgconfig ghostscript gd libjpeg zlib plotutils libwebp ];
 
   meta = { 
     description = "Translates PostScript and PDF graphics into other vector formats";
