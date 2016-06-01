@@ -20,8 +20,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/user.c --replace '"/usr/sbin/' '"/run/current-system/sw/sbin/' --replace '"/usr/bin/' '"/run/current-system/sw/bin' --replace '"/bin/cat"' '"/run/current-system/sw/bin/cat"'
   '';
 
-  patches = [ ./no-create-dirs.patch ];
-  
+  patches = [
+    ./no-create-dirs.patch
+    ./Add-nixbld-to-user-blacklist.patch
+  ];
+
   preFixup = ''
     wrapProgram "$out/libexec/accounts-daemon" \
       --run "${coreutils}/bin/mkdir -p /var/lib/AccountsService/users" \
