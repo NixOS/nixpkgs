@@ -11,7 +11,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.12.0";
+  version = "2.12.3";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "19jyvyw8ss4bacq3f7ybdb0r16r84q12j2bpciyj9jqvzpw091m6";
+    sha256 = "01y34v62khf03w25fnzgd42rrai5mf1m95lr5vjyw8ya5sdbng0p";
   };
 
   patches = [ ./finding-harfbuzz-icu.patch ];
