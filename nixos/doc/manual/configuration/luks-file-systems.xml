@@ -12,7 +12,7 @@ here is how you create an encrypted Ext4 file system on the device
 <filename>/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d</filename>:
 
 <screen>
-$ cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
+# cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
 
 WARNING!
 ========
@@ -22,10 +22,10 @@ Are you sure? (Type uppercase yes): YES
 Enter LUKS passphrase: ***
 Verify passphrase: ***
 
-$ cryptsetup luksOpen /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d crypted
+# cryptsetup luksOpen /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d crypted
 Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
-$ mkfs.ext4 /dev/mapper/crypted
+# mkfs.ext4 /dev/mapper/crypted
 </screen>
 
 To ensure that this file system is automatically mounted at boot time
