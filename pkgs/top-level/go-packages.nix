@@ -2314,6 +2314,13 @@ let
     sha256 = "0f79mdzn1p9x1yfr1psy5jpbayb12wfwwzsa4g98rnxlp6q7znsv";
   };
 
+  envpprof = buildFromGitHub rec {
+    rev    = "0383bfe017e02efb418ffd595fc54777a35e48b0";
+    owner  = "anacrolix";
+    repo   = "envpprof";
+    sha256 = "0cnq8k3aiq3i4038g1z7rfxbfw6awcz2nig69fmfd9y76czzd81c";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
