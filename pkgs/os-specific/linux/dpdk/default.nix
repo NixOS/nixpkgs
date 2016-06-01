@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     mkdir $out
     cp -pr x86_64-native-linuxapp-gcc/{app,lib,include,kmod} $out/
 
-    mkdir $examples
-    cp -pr examples/* $examples/
+    mkdir -p $examples/bin
+    find examples -type f -executable -exec cp {} $examples/bin \;
   '';
 
   meta = with stdenv.lib; {
