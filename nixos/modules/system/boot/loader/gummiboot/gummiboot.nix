@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.boot.loader.gummiboot;
+  cfg = config.boot.loader.systemd-boot;
 
   efi = config.boot.loader.efi;
 
@@ -23,7 +23,12 @@ let
     inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
 in {
-  options.boot.loader.gummiboot = {
+
+  imports =
+    [ (mkRenamedOptionModule [ "boot" "loader" "gummiboot" "enable" ] [ "boot" "loader" "systemd-boot" "enable" ])
+    ];
+
+  options.boot.loader.systemd-boot = {
     enable = mkOption {
       default = false;
 
@@ -47,7 +52,7 @@ in {
     system = {
       build.installBootLoader = gummibootBuilder;
 
-      boot.loader.id = "gummiboot";
+      boot.loader.id = "systemd-boot";
 
       requiredKernelConfig = with config.lib.kernelConfig; [
         (isYes "EFI_STUB")
