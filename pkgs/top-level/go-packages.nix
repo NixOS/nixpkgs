@@ -2307,6 +2307,13 @@ let
     sha256 = "0f1jyd80grpr88gwhljx2x0xgsyzw07807n4z4axxxlybh5f0nh1";
   };
 
+  roaring = buildFromGitHub rec {
+    rev    = "db18267a1ca5d1d4c9a91c23d585b1ce8e255e45";
+    owner  = "RoaringBitmap";
+    repo   = "roaring";
+    sha256 = "0f79mdzn1p9x1yfr1psy5jpbayb12wfwwzsa4g98rnxlp6q7znsv";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
