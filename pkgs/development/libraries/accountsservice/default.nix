@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
                      "--localstatedir=/var" ];
+  prePatch = ''
+    substituteInPlace src/daemon.c --replace '"/usr/sbin/' '"/run/current-system/sw/sbin/'
+    substituteInPlace src/user.c --replace '"/usr/sbin/' '"/run/current-system/sw/sbin/' --replace '"/usr/bin/' '"/run/current-system/sw/bin' --replace '"/bin/cat"' '"/run/current-system/sw/bin/cat"'
+  '';
 
   patches = [ ./no-create-dirs.patch ];
   
