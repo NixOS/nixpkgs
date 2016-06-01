@@ -12,6 +12,7 @@
 , zlib
 , callPackage
 , self
+, python35Packages
 
 , CF, configd
 }:
@@ -104,6 +105,7 @@ stdenv.mkDerivation {
     libPrefix = "python${majorVersion}";
     executable = "python${majorVersion}m";
     buildEnv = callPackage ../wrapper.nix { python = self; };
+    withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python35Packages; };
     isPy3 = true;
     isPy35 = true;
     is_py3k = true;  # deprecated

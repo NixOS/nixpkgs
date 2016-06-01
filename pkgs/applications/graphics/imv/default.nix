@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "imv-${version}";
-  version = "2.0.0";
+  version = "2.1.2";
 
   src = fetchgit {
     url = "https://github.com/eXeC64/imv.git";
-    rev = "bc90a0adcc5b22d2bf0158333eb6dfb34c402d48";
-    sha256 = "1bzx57d9mcxw9s72pdbdbwq9pns946jl6p2g881z43w68gimlpw7";
+    rev = "3e6402456b00e29f659baf26ced10f3d7205cf63";
+    sha256 = "0fhc944g7b61jrkd4wn1piq6dkpabsbxpm80pifx9dqmj16sf0pf";
   };
 
   buildInputs = [ SDL2 SDL2_ttf freeimage ];

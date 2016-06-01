@@ -488,7 +488,7 @@ in
         }
         {
           assertion = if args.efiSysMountPoint == null then true else hasPrefix "/" args.efiSysMountPoint;
-          message = "Efi paths must be absolute, not ${args.efiSysMountPoint}";
+          message = "EFI paths must be absolute, not ${args.efiSysMountPoint}";
         }
       ] ++ flip map args.devices (device: {
         assertion = device == "nodev" || hasPrefix "/" device;

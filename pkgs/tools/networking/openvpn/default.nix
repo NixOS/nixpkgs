@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ lzo openssl pkgconfig ]
                   ++ optionals stdenv.isLinux [ pam systemd iproute ];
 
-  configureFlags = ''
-    --enable-password-save
-  '' + optionalString stdenv.isLinux ''
+  configureFlags = optionalString stdenv.isLinux ''
     --enable-systemd
     --enable-iproute2
     IPROUTE=${iproute}/sbin/ip
@@ -31,8 +29,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lsystemd-daemon"; # hacky
 
   meta = {
     description = "A robust and highly flexible tunneling application";

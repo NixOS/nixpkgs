@@ -81,10 +81,10 @@
     aggressive-indent = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "aggressive-indent";
-        version = "1.7";
+        version = "1.8.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/aggressive-indent-1.7.el";
-          sha256 = "0z2zsw0qnzcabsz2frfsjhfg7qa4nbmprrd41yjfxq62d12wg70m";
+          url = "https://elpa.gnu.org/packages/aggressive-indent-1.8.1.el";
+          sha256 = "07d311dwg6rpzydh9bw9dn1djf4x4f00ma41jmsl35mcd2m0bpz8";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -95,10 +95,10 @@
     ahungry-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ahungry-theme";
-        version = "1.1.0";
+        version = "1.2.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ahungry-theme-1.1.0.tar";
-          sha256 = "1jy2h4r72fr26yavs0s8dy1xnkxvaf2hsrlm63f6sng81njj9dgx";
+          url = "https://elpa.gnu.org/packages/ahungry-theme-1.2.0.tar";
+          sha256 = "04z9d8xszgsl6p02gf3yixgj8kwwb6rfc6bq1b3sz95n3v9wmg9d";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -162,10 +162,10 @@
       }) {};
     async = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "async";
-        version = "1.6";
+        version = "1.9";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/async-1.6.tar";
-          sha256 = "17psvz75n42x33my967wkgi7r0blx46n3jdv510j0z5jswv66039";
+          url = "https://elpa.gnu.org/packages/async-1.9.tar";
+          sha256 = "1ip5nc8xyln5szvqwp6wqva9xr84pn8ssn3nnphrszr19y4js2bm";
         };
         packageRequires = [];
         meta = {
@@ -566,10 +566,10 @@
       }) {};
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "el-search";
-        version = "0.1.3";
+        version = "0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-0.1.3.el";
-          sha256 = "1iwglpzs78zy07k3ijbwgv9781bs5cpf088giyz6bn5amfpp1jks";
+          url = "https://elpa.gnu.org/packages/el-search-0.2.el";
+          sha256 = "1ps4p79xrvsdys9yh1wyk4zdly6c55agbqa6f8q3xkwc9sva9lw9";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -850,8 +850,8 @@
         pname = "javaimp";
         version = "0.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/javaimp-0.6.el";
-          sha256 = "00a37jv9wbzy521a15vk7a66rsf463zzr57adc8ii2m4kcyldpqh";
+          url = "https://elpa.gnu.org/packages/javaimp-0.6.tar";
+          sha256 = "015kchx6brsjk7q6lz9y44a18n5imapd95czx50hqdscjczmj2ff";
         };
         packageRequires = [];
         meta = {
@@ -1505,6 +1505,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    smart-yank = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "smart-yank";
+        version = "0.1.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/smart-yank-0.1.1.el";
+          sha256 = "1v7hbn8pl4bzal31m132dn04rgsgjjcc7k2knd1jqzk1wq6azpdn";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/smart-yank.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     sml-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "sml-mode";
         version = "6.7";
@@ -1905,10 +1918,10 @@
     xelb = callPackage ({ cl-generic, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "xelb";
-        version = "0.6";
+        version = "0.7";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/xelb-0.6.tar";
-          sha256 = "1m91af5srxq8zs9w4gb44kl4bgka8fq7k33h7f2yn213h23kvvvh";
+          url = "https://elpa.gnu.org/packages/xelb-0.7.tar";
+          sha256 = "0i4336a8xns6zp82dj77w5gjgv3mfngcjsw7ghyf7bb7flh8ipw1";
         };
         packageRequires = [ cl-generic emacs ];
         meta = {

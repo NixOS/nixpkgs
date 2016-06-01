@@ -79,6 +79,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/tmux.nix
+  ./programs/unity3d.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
@@ -398,6 +399,7 @@
   ./services/networking/tftpd.nix
   ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
+  ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix
   ./services/networking/unbound.nix
   ./services/networking/unifi.nix
@@ -503,10 +505,10 @@
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/ipxe.nix
   ./system/boot/loader/grub/memtest.nix
-  ./system/boot/loader/gummiboot/gummiboot.nix
   ./system/boot/loader/init-script/init-script.nix
   ./system/boot/loader/loader.nix
   ./system/boot/loader/raspberrypi/raspberrypi.nix
+  ./system/boot/loader/systemd-boot/systemd-boot.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix

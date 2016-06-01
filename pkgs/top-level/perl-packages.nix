@@ -5848,6 +5848,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTMLClean = buildPerlPackage rec {
+    name = "HTML-Clean-0.8";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LI/LINDNER/${name}.tar.gz";
+      sha256 = "1h0dzxx034hpshxlpsxhxh051d1p79cjgp4q5kg68kgx7aian85c";
+    };
+    meta = {
+      description = "Cleans up HTML code for web browsers, not humans";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLElementExtended = buildPerlPackage {
     name = "HTML-Element-Extended-1.18";
     src = fetchurl {
@@ -6334,6 +6346,19 @@ let self = _self // overrides; _self = with self; {
 
   # For backwards compatibility.
   if_ = self."if";
+
+  ImageInfo = buildPerlPackage rec {
+    name = "Image-Info-1.38";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SREZIC/${name}.tar.gz";
+      sha256 = "b8a68b5661555feaf767956fe9ff14c917a63bedb3e30454d5598d992eb7e919";
+    };
+    propagatedBuildInputs = [ IOstringy ];
+    meta = {
+      description = "Extract meta information from image files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
 
   ImageSize = buildPerlPackage rec {
     name = "Image-Size-3.232";
@@ -12021,6 +12046,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TestCommand = buildPerlPackage {
+    name = "Test-Command-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANBOO/Test-Command-0.11.tar.gz;
+      sha256 = "0cwm3c4d49mdrbm6vgh78b3x8mk730l0zg8i7xb9z8bkx9pzr8r8";
+    };
+    meta = {
+      homepage = https://github.com/danboo/perl-test-command;
+      description = "Test routines for external commands ";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1 ];
+    };
+  };
+
   TestCPANMeta = buildPerlPackage {
     name = "Test-CPAN-Meta-0.23";
     src = fetchurl {
@@ -13981,10 +14019,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   X11XCB = buildPerlPackage rec {
-    name = "X11-XCB-0.14";
+    name = "X11-XCB-0.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
-      sha256 = "11ff0a4nqbdj68mxdvyqdqvi573ha10vy67wpi7mklpxvlm011bn";
+      sha256 = "14mnvr1001py2z1n43l18yaw0plwvjg5pcsyc7k81sa0amw8ahzw";
     };
     AUTOMATED_TESTING = false;
     buildInputs = [
@@ -14040,6 +14078,34 @@ let self = _self // overrides; _self = with self; {
       sha256 = "98746f3c1f6f049491fec203d455bb8f8c9c6e250f041904dda5d78e21187f93";
     };
     doCheck = false;
+  };
+
+  XMLGrove = buildPerlPackage rec {
+    name = "XML-Grove-0.46alpha";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KM/KMACLEOD/${name}.tar.gz";
+      sha256 = "05yis1ms7cgwjh57k57whrmalb3ha0bjr9hyvh7cnadcyiynvdpw";
+    };
+    buildInputs = [ pkgs.libxml2 ];
+    propagatedBuildInputs = [ libxml_perl ];
+
+    #patch from https://bugzilla.redhat.com/show_bug.cgi?id=226285
+    patches = [ ../development/perl-modules/xml-grove-utf8.patch ];
+    meta = {
+      description = "Perl-style XML objects";
+    };
+  };
+
+  XMLHandlerYAWriter = buildPerlPackage rec {
+    name = "XML-Handler-YAWriter-0.23";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRAEHE/${name}.tar.gz";
+      sha256 = "11d45a1sz862va9rry3p2m77pwvq3kpsvgwhc5ramh9mbszbnk77";
+    };
+    propagatedBuildInputs = [ libxml_perl ];
+    meta = {
+      description = "Yet another Perl SAX XML Writer";
+    };
   };
 
   XMLLibXML = buildPerlPackage rec {

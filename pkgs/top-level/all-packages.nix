@@ -586,6 +586,8 @@ in
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
+  bins = callPackage ../tools/graphics/bins { };
+
   binwalk = callPackage ../tools/misc/binwalk {
     python = pythonFull;
     wrapPython = pythonPackages.wrapPython;
@@ -781,7 +783,9 @@ in
 
   ent = callPackage ../tools/misc/ent { };
 
-  facter = callPackage ../tools/system/facter {};
+  facter = callPackage ../tools/system/facter {
+    ruby = ruby_2_1;
+  };
 
   fasd = callPackage ../tools/misc/fasd { };
 
@@ -790,6 +794,8 @@ in
   filebench = callPackage ../tools/misc/filebench { };
 
   fop = callPackage ../tools/typesetting/fop { };
+
+  fondu = callPackage ../tools/misc/fondu { };
 
   fpp = callPackage ../tools/misc/fpp { };
 
@@ -933,8 +939,6 @@ in
     inherit (strategoPackages016) strategoxt sdf;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
-
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (gnome3) dconf gsettings_desktop_schemas;
     withPulseAudio = config.pulseaudio or true;
@@ -955,8 +959,7 @@ in
   };
 
   bup = callPackage ../tools/backup/bup {
-    inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
-    par2Support = (config.bup.par2Support or false);
+    par2Support = config.bup.par2Support or false;
   };
 
   burp_1_3 = callPackage ../tools/backup/burp/1.3.48.nix { };
@@ -1874,8 +1877,6 @@ in
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
-  gummiboot = callPackage ../tools/misc/gummiboot { };
-
   gup = callPackage ../development/tools/build-managers/gup {};
 
   gupnp = callPackage ../development/libraries/gupnp {
@@ -1966,6 +1967,8 @@ in
   host = callPackage ../tools/networking/host { };
 
   hping = callPackage ../tools/networking/hping { };
+
+  http-prompt = callPackage ../tools/networking/http-prompt { };
 
   httpie = callPackage ../tools/networking/httpie { };
 
@@ -2382,6 +2385,11 @@ in
 
   makemkv = callPackage ../applications/video/makemkv { };
 
+  # See https://github.com/NixOS/nixpkgs/issues/15849. I'm switching on isLinux because
+  # it looks like gnulib is broken on non-linux, so it seems likely that this would cause
+  # trouble on bsd and/or cygwin as well.
+  man = if stdenv.isLinux then man-db else man-old;
+
   man-old = callPackage ../tools/misc/man { };
 
   man-db = callPackage ../tools/misc/man-db { };
@@ -2500,6 +2508,10 @@ in
   mtools = callPackage ../tools/filesystems/mtools { };
 
   mtr = callPackage ../tools/networking/mtr {};
+
+  mtx = callPackage ../tools/backup/mtx {};
+
+  mt-st = callPackage ../tools/backup/mt-st {};
 
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in rec {
     multitrandata = callPackage ../tools/text/multitran/data { };
@@ -2823,7 +2835,11 @@ in
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1 //
       { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
-          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ]; });
+          (attrs: { nativeBuildInputs = attrs.nativeBuildInputs ++ [ gtk3 ];
+                    # Fix this build error in ./tests/examples/waylandsink:
+                    #   main.c:28:2: error: #error "Wayland is not supported in GTK+"
+                    configureFlags = attrs.configureFlags or "" + "--enable-wayland=no";
+                  });
       };
   };
 
@@ -3050,6 +3066,8 @@ in
     sip = pythonPackages.sip_4_16;
   };
 
+  qnial = callPackage ../development/interpreters/qnial {};
+
   ocz-ssd-guru = callPackage ../tools/misc/ocz-ssd-guru { };
 
   qalculate-gtk = callPackage ../applications/science/math/qalculate-gtk { };
@@ -3190,6 +3208,8 @@ in
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
   rubber = callPackage ../tools/typesetting/rubber { };
+
+  runningx = callPackage ../tools/X11/runningx { };
 
   runzip = callPackage ../tools/archivers/runzip { };
 
@@ -3490,6 +3510,8 @@ in
 
   timemachine = callPackage ../applications/audio/timemachine { };
 
+  timetrap = callPackage ../applications/office/timetrap { };
+
   tinc = callPackage ../tools/networking/tinc { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
@@ -3527,6 +3549,8 @@ in
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
+
+  toxvpn = callPackage ../tools/networking/toxvpn { };
 
   tpmmanager = callPackage ../applications/misc/tpmmanager { };
 
@@ -4462,7 +4486,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc7103.override {
+  haskellPackages = haskell.packages.ghc801.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
@@ -5219,6 +5243,10 @@ in
 
   ocamlnat = newScope pkgs.ocamlPackages_3_12_1 ../development/ocaml-modules/ocamlnat { };
 
+  picat = callPackage ../development/compilers/picat {
+    stdenv = overrideCC stdenv gcc49;
+  };
+
   ponyc = callPackage ../development/compilers/ponyc {
     llvm = llvm_36;
   };
@@ -5566,6 +5594,7 @@ in
   octave = callPackage ../development/interpreters/octave {
     qt = null;
     ghostscript = null;
+    graphicsmagick = null;
     llvm = null;
     hdf5 = null;
     glpk = null;
@@ -5833,7 +5862,9 @@ in
 
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
-  apacheKafka = callPackage ../servers/apache-kafka { };
+  apacheKafka = apacheKafka_0_9;
+  apacheKafka_0_8 = callPackage ../servers/apache-kafka { majorVersion = "0.8"; };
+  apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
 
   astyle = callPackage ../development/tools/misc/astyle { };
 
@@ -6338,7 +6369,7 @@ in
   premake = premake4;
 
   qtcreator = qt5.callPackage ../development/qtcreator {
-    withDocumentation = true;
+    withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
 
   racerRust = callPackage ../development/tools/rust/racer { };
@@ -6521,7 +6552,9 @@ in
 
   yodl = callPackage ../development/tools/misc/yodl { };
 
-  winpdb = callPackage ../development/tools/winpdb { };
+  winpdb = callPackage ../development/tools/winpdb {
+      inherit (pythonPackages) wxPython;
+  };
 
   grabserial = callPackage ../development/tools/grabserial { };
 
@@ -6633,7 +6666,6 @@ in
   botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
-  box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
   breakpad = callPackage ../development/libraries/breakpad { };
 
@@ -9688,9 +9720,6 @@ in
 
   twisted = pythonPackages.twisted;
 
-  wxPython = pythonPackages.wxPython;
-  wxPython28 = pythonPackages.wxPython28;
-
   yolk = callPackage ../development/python-modules/yolk {};
 
   ZopeInterface = pythonPackages.zope_interface;
@@ -10761,12 +10790,7 @@ in
   # grsecurity configuration
 
   grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
+    inherit (linux_4_5) kernelPatches;
   };
 
   grFlavors = import ../build-support/grsecurity/flavors.nix;
@@ -12530,7 +12554,7 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl;
+    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl wxPython;
     fftw = fftwFloat;
   };
 
@@ -12821,10 +12845,6 @@ in
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
-
-  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix {
-    libpng = libpng12;
-  };
 
   gtkpod = callPackage ../applications/audio/gtkpod {
     gnome = gnome3;
@@ -13454,6 +13474,10 @@ in
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
+  mpvScripts = {
+    convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
+  };
+
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mrxvt = callPackage ../applications/misc/mrxvt { };
@@ -13685,9 +13709,13 @@ in
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
+  pcsxr = callPackage ../misc/emulators/pcsxr { };
+
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
-  pencil = callPackage ../applications/graphics/pencil { };
+  pencil = callPackage ../applications/graphics/pencil {
+    xulrunner = firefox-unwrapped;
+  };
 
   perseus = callPackage ../applications/science/math/perseus {};
 
@@ -13761,7 +13789,7 @@ in
   pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
 
   pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python34Packages;
+    pythonPackages = python3Packages;
   };
 
   pinfo = callPackage ../applications/misc/pinfo { };
@@ -14202,8 +14230,9 @@ in
 
   symlinks = callPackage ../tools/system/symlinks { };
 
-  syncthing = go15Packages.syncthing.bin // { outputs = [ "bin" ]; };
-  syncthing011 = go15Packages.syncthing011.bin // { outputs = [ "bin" ]; };
+  syncthing = callPackage ../applications/networking/syncthing { };
+
+  syncthing012 = go15Packages.syncthing012.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -14326,7 +14355,7 @@ in
   torch-repl = lib.setName "torch-repl" torchPackages.trepl;
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
-    wrapPython = pythonPackages.wrapPython;
+    inherit (pythonPackages) wrapPython wxPython;
   };
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
@@ -14432,7 +14461,6 @@ in
 
   neovim = callPackage ../applications/editors/neovim {
     inherit (lua52Packages) lpeg luaMessagePack luabitop;
-    python3Packages = python34Packages;
   };
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
@@ -15411,9 +15439,9 @@ in
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
-  wesnoth = callPackage ../games/wesnoth {
-    lua = lua5;
-  };
+  wesnoth = callPackage ../games/wesnoth { };
+
+  wesnoth-dev = callPackage ../games/wesnoth/dev.nix { };
 
   widelands = callPackage ../games/widelands {
     lua = lua5_1;
@@ -15711,6 +15739,10 @@ in
 
     in makeOverridable makePackages extra;
 
+  mate = recurseIntoAttrs (callPackage ../desktops/mate {
+    callPackage = newScope pkgs.mate;
+  });
+
   pantheon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.pantheon;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
@@ -15735,10 +15767,6 @@ in
   gtk-engine-murrine = callPackage ../misc/themes/gtk2/gtk-engine-murrine { };
 
   gnome_themes_standard = gnome3.gnome_themes_standard;
-
-  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
-
-  mate-themes = callPackage ../misc/themes/mate-themes { };
 
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
@@ -16751,6 +16779,12 @@ in
 
   ums = callPackage ../servers/ums { };
 
+  unity3d = callPackage ../development/tools/unity3d {
+    stdenv = stdenv_32bit;
+    gcc_32bit = pkgsi686Linux.gcc;
+    inherit (gnome2) GConf libgnomeui gnome_vfs;
+  };
+
   urbit = callPackage ../misc/urbit { };
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
@@ -16914,7 +16948,11 @@ in
 
   golden-cheetah = qt55.callPackage ../applications/misc/golden-cheetah {};
 
+  linkchecker = callPackage ../tools/networking/linkchecker { };
+
   tomb = callPackage ../os-specific/linux/tomb {};
 
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
+
+  iterm2 = callPackage ../applications/misc/iterm2 {};
 }

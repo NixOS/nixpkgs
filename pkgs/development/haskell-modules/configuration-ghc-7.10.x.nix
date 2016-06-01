@@ -18,7 +18,10 @@ self: super: {
   deepseq = null;
   directory = null;
   filepath = null;
+  ghc-boot = null;
+  ghc-boot-th = null;
   ghc-prim = null;
+  ghci = null;
   haskeline = null;
   hoopl = null;
   hpc = null;
@@ -33,11 +36,8 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Our core version of Cabal is good enough for this build.
-  cabal-install = dontCheck (super.cabal-install.override { Cabal = null; });
-
   # Enable latest version of cabal-install.
-  cabal-install_1_24_0_0 = (doDistribute (dontJailbreak (dontCheck (super.cabal-install_1_24_0_0)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  cabal-install = (doDistribute (dontJailbreak (dontCheck (super.cabal-install)))).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
 
   # Jailbreaking is required for the test suite only (which we don't run).
   Cabal_1_24_0_0 = dontJailbreak (dontCheck super.Cabal_1_24_0_0);
@@ -62,9 +62,6 @@ self: super: {
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
-
-  # We have time 1.5
-  aeson = disableCabalFlag super.aeson "old-locale";
 
   # requires filepath >=1.1 && <1.4
   Glob = doJailbreak super.Glob;
@@ -181,6 +178,15 @@ self: super: {
   # https://github.com/haskell/haddock/issues/427
   haddock = dontCheck super.haddock;
 
+  # haddock-api >= 2.17 is GHC 8.0 only
+  haddock-api = self.haddock-api_2_16_1;
+
+  # lens-family-th >= 0.5.0.0 is GHC 8.0 only
+  lens-family-th = self.lens-family-th_0_4_1_0;
+
+  # cereal must have `fail` in pre-ghc-8.0.x versions
+  cereal = addBuildDepend super.cereal self.fail;
+
   # The tests in vty-ui do not build, but vty-ui itself builds.
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
@@ -196,5 +202,11 @@ self: super: {
   # https://github.com/well-typed/hackage-security/issues/157
   # https://github.com/well-typed/hackage-security/issues/158
   hackage-security = dontHaddock (dontCheck super.hackage-security);
+
+  # GHC versions prior to 8.x require additional build inputs.
+  aeson = disableCabalFlag (addBuildDepend super.aeson self.semigroups) "old-locale";
+  case-insensitive = addBuildDepend super.case-insensitive self.semigroups;
+  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
 
 }

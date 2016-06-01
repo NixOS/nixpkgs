@@ -66,4 +66,32 @@ options for the <literal>security.acme</literal> module.</para>
 
 </section>
 
+<section><title>Using ACME certificates in Nginx</title>
+<para>In practice ACME is mostly used for retrieval and renewal of
+  certificates that will be used in a webserver like Nginx. A configuration for
+  Nginx that uses the certificates from ACME for
+  <literal>foo.example.com</literal> will look similar to:
+</para>
+
+<programlisting>
+services.nginx.httpConfig = ''
+  server {
+    server_name foo.example.com;
+    listen 443 ssl;
+    ssl_certificate     ${config.security.acme.directory}/foo.example.com/fullchain.pem;
+    ssl_certificate_key ${config.security.acme.directory}/foo.example.com/key.pem;
+    root /var/www/foo.example.com/;
+  }
+'';
+</programlisting>
+
+<para>Now Nginx will try to use the certificates that will be retrieved by ACME.
+  ACME needs Nginx (or any other webserver) to function and Nginx needs
+  the certificates to actually start. For this reason the ACME module
+  automatically generates self-signed certificates that will be used by Nginx to
+  start. After that Nginx is used by ACME to retrieve the actual ACME
+  certificates. <literal>security.acme.preliminarySelfsigned</literal> can be
+  used to control whether to generate the self-signed certificates.
+</para>
+</section>
 </chapter>

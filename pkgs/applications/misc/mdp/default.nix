@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.5";
+  version = "1.0.6";
   name = "mdp-${version}";
 
   src = fetchurl {
     url = "https://github.com/visit1985/mdp/archive/${version}.tar.gz";
-    sha256 = "0ckd9k5571zc7pzxdx84gv8k103d5qp49f2i477a395fy2pnq4m8";
+    sha256 = "1m6qbqr9kfj27qf27gkgqr1jpf7z0xym71w61pnjwsmcryp0db19";
   };
 
   makeFlags = "PREFIX=$(out)";

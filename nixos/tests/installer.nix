@@ -30,8 +30,8 @@ let
           boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
         ''}
 
-        ${optionalString (bootLoader == "gummiboot") ''
-          boot.loader.gummiboot.enable = true;
+        ${optionalString (bootLoader == "systemd-boot") ''
+          boot.loader.systemd-boot.enable = true;
         ''}
 
         hardware.enableAllFirmware = lib.mkForce false;
@@ -57,7 +57,7 @@ let
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString (bootLoader == "gummiboot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
+        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;
@@ -159,7 +159,7 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
-    , bootLoader ? "grub" # either "grub" or "gummiboot"
+    , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
     , enableOCR ? false, meta ? {}
     }:
@@ -195,7 +195,7 @@ let
             virtualisation.qemu.diskInterface =
               if grubVersion == 1 then "scsi" else "virtio";
 
-            boot.loader.gummiboot.enable = mkIf (bootLoader == "gummiboot") true;
+            boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
 
             hardware.enableAllFirmware = mkForce false;
 
@@ -208,7 +208,6 @@ let
                 pkgs.unionfs-fuse
                 pkgs.ntp
                 pkgs.nixos-artwork
-                pkgs.gummiboot
                 pkgs.perlPackages.XMLLibXML
                 pkgs.perlPackages.ListCompare
               ]
@@ -250,7 +249,7 @@ in {
         '';
     };
 
-  # Simple GPT/UEFI configuration using Gummiboot with 3 partitions: ESP, swap & root filesystem
+  # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
   simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
     { createPartitions =
         ''
@@ -270,7 +269,7 @@ in {
               "mount LABEL=BOOT /mnt/boot",
           );
         '';
-        bootLoader = "gummiboot";
+        bootLoader = "systemd-boot";
     };
 
   # Same as the previous, but now with a separate /boot partition.

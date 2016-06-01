@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeDesktopItem, makeWrapper, patchelf, p7zip
 , coreutils, gnugrep, which, git, python, unzip, jdk }:
 
-{ name, product, version, build, src, meta } @ attrs:
+{ name, product, version, build, src, wmClass, meta } @ attrs:
 
 with stdenv.lib;
 
@@ -20,6 +20,9 @@ with stdenv; lib.makeOverridable mkDerivation rec {
     genericName = meta.description;
     categories = "Application;Development;";
     icon = execName;
+    extraEntries = ''
+      StartupWMClass=${wmClass}
+    '';
   };
 
   buildInputs = [ makeWrapper patchelf p7zip unzip ];

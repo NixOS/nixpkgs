@@ -37,20 +37,19 @@ let
 
   # list of packages which are installed for both x86 and x86_64 on x86_64
   # systems
-  multiPaths = if isMultiBuild
-                  then multiPkgs nixpkgs_i686
-                  else [];
+  multiPaths = multiPkgs nixpkgs_i686;
 
   # base packages of the chroot
-  # these match the host's architecture, gcc/glibc_multi are used for multilib
+  # these match the host's architecture, glibc_multi is used for multilib
   # builds.
-  chosenGcc = if isMultiBuild then nixpkgs.gcc_multi else nixpkgs.gcc;
   basePkgs = with nixpkgs;
     [ (if isMultiBuild then glibc_multi else glibc)
-      chosenGcc
-      bashInteractive coreutils less shadow su
+      gcc.cc.lib bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz glibcLocales
+    ];
+  baseMultiPkgs = with nixpkgs_i686;
+    [ gcc.cc.lib
     ];
 
   etcProfile = nixpkgs.writeText "profile" ''
@@ -125,8 +124,8 @@ let
   };
 
   staticUsrProfileMulti = nixpkgs.buildEnv {
-    name = "system-profile-multi";
-    paths = multiPaths;
+    name = "${name}-usr-multi";
+    paths = baseMultiPkgs ++ multiPaths;
     extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
@@ -154,18 +153,8 @@ let
     # copy content of targetPaths (64bit libs)
     cp -rsHf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
 
-    # most 64bit only libs put their stuff into /lib
-    # some pkgs (like gcc_multi) put 32bit libs into /lib and 64bit libs into /lib64
-    # by overwriting these we will hopefully catch all these cases
-    # in the end /lib32 should only contain 32bit and /lib64 only 64bit libs
-    cp -rsHf ${staticUsrProfileTarget}/lib64/* lib64/ && chmod u+w -R lib64/
-
-    # copy gcc libs
-    cp -rsHf ${chosenGcc.cc.lib}/lib/*   lib32/
-    cp -rsHf ${chosenGcc.cc.lib}/lib64/* lib64/
-
     # symlink 32-bit ld-linux.so
-    ln -s ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
+    ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
   setupLibDirs = if isTargetBuild then setupLibDirs_target

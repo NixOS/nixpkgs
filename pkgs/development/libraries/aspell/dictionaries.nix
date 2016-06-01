@@ -203,5 +203,13 @@ in {
     };
   };
 
+  uk = buildDict {
+    shortName = "uk-1.4.0-0";
+    fullName = "Ukrainian";
+    src = fetchurl {
+      url = mirror://gnu/aspell/dict/uk/aspell6-uk-1.4.0-0.tar.bz2;
+      sha256 = "137i4njvnslab6l4s291s11xijr5jsy75lbdph32f9y183lagy9m";
+    };
+  };
 
 }
