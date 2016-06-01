@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, makeWrapper, ruby, bundler, bundlerEnv, git, postgresql, libpcap, sqlite, zlib }:
+{ stdenv, fetchurl, makeWrapper, ruby, bundler, bundlerEnv, git, postgresql, libpcap, sqlite, zlib }:
 
 stdenv.mkDerivation rec {
   name = "metasploit-framework-${version}";
   version = "4.12.5";
 
 
-  src = fetchgit {
-    url = "https://github.com/rapid7/metasploit-framework.git";
-    sha256 = "0rzn2lax3nvhgmfivr7jdifir9j8f1f7mk2ypksr8lvqk4hr54kw";
+  src = fetchurl {
+    url = "https://github.com/rapid7/metasploit-framework/archive/4.12.5.tar.gz";
+    sha256 = "0xwkshxprpjssda6lwys0f12dp0q3sgxvdzwciyhsgxkcf672cwv";
   };
 
 
@@ -21,10 +21,9 @@ stdenv.mkDerivation rec {
 
     bundle install --path=$out/.gem
 
-
-    # !!! Must manually set bundler gem path !!!! 
-    export GEM_HOME=$out/.gem
-    export HOME=$out/.gem/bin:$PATH
+    # !!! This needs to be tweeked.
+    export GEM_HOME=~/gem/ruby/2.3.0/cache
+    export GEM_PATH=${GEM_PATH}:$out/.gem/ruby/2.3.0
 
     for i in $out/share/msf/msf*; do
         makeWrapper $i $out/bin/$(basename $i) --prefix RUBYLIB : $out/share/msf/lib

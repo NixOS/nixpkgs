@@ -1,1 +1,3 @@
-export GEM_PATH=/nix/store/zckis32mx991gsk25xsrnig8c9r87rkk-metasploit-framework-4.12.5/.gem/ruby/2.3.0:/nix/store/rn1qcfnc65n519x02cf3ck0mpr92cv5i-user-environment/lib/ruby/gems/2.3.1
+GEM_HOME=/home/matt/.gem/ruby/2.3.0/cache/
+GEM_PATH=/nix/store/7j49lcxbbcyn5lf2w9da8xm0kgn0b2ss-metasploit-framework-4.12.5/.gem/ruby/2.3.0
+
