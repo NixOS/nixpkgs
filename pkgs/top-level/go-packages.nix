@@ -2391,6 +2391,14 @@ let
     propagatedBuildInputs = [ go-multihash ];
   };
 
+  go-multiaddr-net = buildFromGitHub rec {
+    rev    = "d4cfd691db9f50e430528f682ca603237b0eaae0";
+    owner  = "jbenet";
+    repo   = "go-multiaddr-net";
+    sha256 = "031xb8j5nysw052cm36rjn19c5wkjf8dh8x21vrbyb7220h5zp90";
+    propagatedBuildInputs = [ go-multiaddr utp ];
+  };
+
   tar-utils = buildFromGitHub rec {
     rev    = "beab27159606f5a7c978268dd1c3b12a0f1de8a7";
     owner  = "whyrusleeping";
