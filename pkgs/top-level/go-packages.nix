@@ -2307,6 +2307,14 @@ let
     sha256 = "0f1jyd80grpr88gwhljx2x0xgsyzw07807n4z4axxxlybh5f0nh1";
   };
 
+  tagflag = buildFromGitHub rec {
+    rev    = "b4e0d6bdcd327e72ac967a672213c45c36fa9735";
+    owner  = "anacrolix";
+    repo   = "tagflag";
+    sha256 = "1cmbmza3b35ds4k3zk86q66vd2jj4b704f4r27x280wf5q3fwkrd";
+    propagatedBuildInputs = [ iter go-humanize xstrings missinggo-nofilesystem ];
+  };
+
   roaring = buildFromGitHub rec {
     rev    = "db18267a1ca5d1d4c9a91c23d585b1ce8e255e45";
     owner  = "RoaringBitmap";
