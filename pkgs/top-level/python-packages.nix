@@ -13846,12 +13846,12 @@ in modules // {
   };
 
   numba = buildPythonPackage rec {
-    version = "0.23.1";
+    version = "0.26.0";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numba/${name}.tar.gz";
-      sha256 = "80ce9968591db7c93e36258cc5e6734eb1e42826332799746dc6c073a6d5d317";
+      sha256 = "1ai06ks2ly6wcw2fpljmmyr41y9jidds8qingyih8cbq37fpym44";
     };
 
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
