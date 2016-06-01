@@ -2336,6 +2336,14 @@ let
     ];
   };
 
+  sync = buildFromGitHub rec {
+    rev    = "812602587b72df6a2a4f6e30536adc75394a374b";
+    owner  = "anacrolix";
+    repo   = "sync";
+    sha256 = "0pc38wanzws3vzqj0l5pakg3gn2hacqrb4n7pd0sqz083rss5k0l";
+    propagatedBuildInputs = [ missinggo-nofilesystem ];
+  };
+
   envpprof = buildFromGitHub rec {
     rev    = "0383bfe017e02efb418ffd595fc54777a35e48b0";
     owner  = "anacrolix";
