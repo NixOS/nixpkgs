@@ -2300,6 +2300,13 @@ let
     sha256 = "1c1hsy5s2pfawg3l9954jmqmy4yc2zp3f7i87m00km2yqgb8xpd0";
   };
 
+  xstrings = buildFromGitHub rec {
+    rev    = "3959339b333561bf62a38b424fd41517c2c90f40";
+    owner  = "huandu";
+    repo   = "xstrings";
+    sha256 = "0f1jyd80grpr88gwhljx2x0xgsyzw07807n4z4axxxlybh5f0nh1";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
