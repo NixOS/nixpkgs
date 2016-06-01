@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
                      "--localstatedir=/var" ];
 
   patches = [ ./no-create-dirs.patch ];
-  patchFlags = "-p0";
   
   preFixup = ''
     wrapProgram "$out/libexec/accounts-daemon" \
