@@ -1,13 +1,11 @@
-{ lib, stdenv, fetchurl, fetchgit, cmake, pkgconfig
+{ lib, stdenv, fetchurl, fetchgit, cmake, pkgconfig, fetchFromGitHub
 , glibc, wayland, pixman, libxkbcommon, libinput, libxcb, xcbutilwm, xcbutilimage, mesa, libdrm, udev, systemd, dbus_libs
 , libpthreadstubs, libX11, libXau, libXdmcp, libXext, libXdamage, libxshmfence, libXxf86vm
 }:
 
 stdenv.mkDerivation rec {
   name = "wlc-${version}";
-  version = "git-2016-01-31";
-  repo = "https://github.com/Cloudef/wlc";
-  rev = "faa4d3cba670576c202b0844e087b13538f772c5";
+  version = "v0.0.3";
 
   chck_repo = "https://github.com/Cloudef/chck";
   chck_rev = "fe5e2606b7242aa5d89af2ea9fd048821128d2bc";
@@ -17,9 +15,11 @@ stdenv.mkDerivation rec {
   wl_protos_rev_short = "0b05b70";
 
   srcs = [
-   (fetchurl {
-     url = "${repo}/archive/${rev}.tar.gz";
-     sha256 = "cdf6a772dc90060d57aa1a915a4daff0f79802c141fec92ef2710245d727af67";
+   (fetchFromGitHub {
+     owner = "Cloudef";
+     repo = "wlc";
+     rev = version;
+     sha256 = "0l29axg4y7qjd5hf3kgf38hkjykb4mcsjkba0zdm583kkjzdzkb2";
    })
    (fetchurl {
      url = "${chck_repo}/archive/${chck_rev}.tar.gz";
@@ -31,20 +31,13 @@ stdenv.mkDerivation rec {
      sha256 = "9c1cfbb570142b2109ecef4d11b17f25e94ed2e0569f522ea56f244c60465224";
    })
   ];
+ 
+  sourceRoot = "wlc-${version}-src";
 
-  sourceRoot = "wlc-${rev}";
   postUnpack = ''
-    rm -rf wlc-${rev}/lib/chck wlc-${rev}/protos/wayland-protocols
-    ln -s ../../chck-${chck_rev} wlc-${rev}/lib/chck
-    ln -s ../../wayland-protocols-${wl_protos_rev_short} wlc-${rev}/protos/wayland-protocols
-  '';
-
-  patchPhase = ''
-    ( echo '#include <stdlib.h>';
-      echo '#include <libdrm/drm.h>';
-      cat src/platform/backend/drm.c
-    ) >src/platform/backend/drm.c-fix;
-    mv src/platform/backend/drm.c-fix src/platform/backend/drm.c;
+    rm -rf wlc-*/lib/chck ${sourceRoot}/protos/wayland-protocols
+    ln -s ../../chck-${chck_rev} ${sourceRoot}/lib/chck
+    ln -s ../../wayland-protocols-${wl_protos_rev_short} ${sourceRoot}/protos/wayland-protocols
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -60,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for making a simple Wayland compositor";
-    homepage    = repo;
+    homepage    = https://github.com/Cloudef/wlc;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
