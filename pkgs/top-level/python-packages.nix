@@ -3724,11 +3724,12 @@ in modules // {
 
 
   contextlib2 = buildPythonPackage rec {
-    name = "contextlib2-0.4.0";
+    name = "contextlib2-${version}";
+    version = "0.5.3";
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/c/contextlib2/${name}.tar.gz";
-      sha256 = "55a5dc78f7a742a0e756645134ffb39bbe11da0fea2bc0f7070d40dac208b732";
+      sha256 = "01k2921labkbn28kw60jmqzvr4nxzfnx4vcsyjb3rir177qh1r9h";
     };
   };
 
