@@ -2293,6 +2293,13 @@ let
     sha256 = "1sdn73xv1l9hdiy57dhjlyrqs8xibb95lnm5jjycn5f9izjv5mba";
   };
 
+  btree = buildFromGitHub rec {
+    rev    = "7d79101e329e5a3adf994758c578dab82b90c017";
+    owner  = "google";
+    repo   = "btree";
+    sha256 = "1c1hsy5s2pfawg3l9954jmqmy4yc2zp3f7i87m00km2yqgb8xpd0";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
