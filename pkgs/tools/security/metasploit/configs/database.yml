@@ -1,0 +1,21 @@
+cat <<EOF> $HOME/.msf4/database.yml
+# Development Database
+development: &pgsql
+  adapter: postgresql
+  database: msf_dev_db
+  username: msf
+  password: msf
+  host: localhost
+  port: 5432
+  pool: 5
+  timeout: 5
+
+# Production database -- same as dev
+production: &production
+  <<: *pgsql
+
+# Test database -- not the same, since it gets dropped all the time
+test:
+  <<: *pgsql
+  database: msf_test_db
+EOF
