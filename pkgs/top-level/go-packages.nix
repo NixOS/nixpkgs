@@ -2272,6 +2272,13 @@ let
     sha256 = "11yp7yg62bhw6jqdrlf2144bffk12jmb1nvqkm172pdhxfwrp3bf";
   };
 
+  iter = buildFromGitHub rec {
+    rev    = "454541ec3da2a73fc34fd049b19ee5777bf19345";
+    owner  = "bradfitz";
+    repo   = "iter";
+    sha256 = "0v07zlq2h2rjz5mdvh0rgizyzcj68qa235gci6hvlrai7igyi57i";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
