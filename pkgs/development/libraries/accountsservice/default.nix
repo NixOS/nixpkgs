@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./no-create-dirs.patch
     ./Add-nixbld-to-user-blacklist.patch
+    ./Disable-methods-that-change-files-in-etc.patch
   ];
 
   preFixup = ''
