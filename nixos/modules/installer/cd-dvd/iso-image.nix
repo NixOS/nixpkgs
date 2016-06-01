@@ -64,7 +64,7 @@ let
   # The EFI boot image.
   efiDir = pkgs.runCommand "efi-directory" {} ''
     mkdir -p $out/EFI/boot
-    cp -v ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
+    cp -v ${pkgs.systemd}/lib/systemd/boot/efi/systemd-boot${targetArch}.efi $out/EFI/boot/boot${targetArch}.efi
     mkdir -p $out/loader/entries
 
     echo "title NixOS Live CD" > $out/loader/entries/nixos-livecd.conf
