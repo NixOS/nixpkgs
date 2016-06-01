@@ -2359,6 +2359,14 @@ let
     propagatedBuildInputs = [ missinggo-nofilesystem sync envpprof ];
   };
 
+  go-multihash = buildFromGitHub rec {
+    rev    = "e8d2374934f16a971d1e94a864514a21ac74bf7f";
+    owner  = "jbenet";
+    repo   = "go-multihash";
+    sha256 = "1hlzgmjszn8mfvn848jbnpsvccm9g3m42saavgbh48qdryraqscp";
+    propagatedBuildInputs = [ crypto go-base58 ];
+  };
+
   go-random = buildFromGitHub rec {
     rev    = "384f606e91f542a98e779e652eed88051618f0f7";
     owner  = "jbenet";
