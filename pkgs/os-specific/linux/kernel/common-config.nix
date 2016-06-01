@@ -254,6 +254,9 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.19") ''
     SQUASHFS_LZ4 y
   ''}
+  ${optionalString (versionAtLeast version "3.18") ''
+    OVERLAY_FS y
+  ''}
 
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
