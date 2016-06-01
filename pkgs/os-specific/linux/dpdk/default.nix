@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
   enableParallelBuilding = true;
-  outputs = [ "out" "examples" ];
+  outputs = [ "out" "kmod" "examples" ];
 
   # we need ssse3 instructions to build
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    cp -pr x86_64-native-linuxapp-gcc/{lib,include,kmod} $out/
+    cp -pr x86_64-native-linuxapp-gcc/{lib,include} $out/
+
+    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
+    cp ${RTE_TARGET}/kmod/*.ko $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
 
     mkdir -p $examples/bin
     find examples ${RTE_TARGET}/app -type f -executable -exec cp {} $examples/bin \;
