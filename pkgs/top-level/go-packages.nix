@@ -2279,6 +2279,13 @@ let
     sha256 = "0v07zlq2h2rjz5mdvh0rgizyzcj68qa235gci6hvlrai7igyi57i";
   };
 
+  goskiplist = buildFromGitHub rec {
+    rev    = "2dfbae5fcf46374f166f8969cb07e167f1be6273";
+    owner  = "ryszard";
+    repo   = "goskiplist";
+    sha256 = "1135gmvcwnmk36zryxq554fmikrmg5c6y5ml00arqpagn5xhnmnl";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
