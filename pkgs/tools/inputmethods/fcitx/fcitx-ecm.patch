@@ -1,0 +1,25 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fd54ad8..ebb33d0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,8 +5,7 @@ project(fcitx)
+ set(version 4.2.9)
+ 
+ 
+-find_package(ECM 0.0.11 REQUIRED NO_MODULE)
+-set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
++set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+ set(CMAKE_AUTOMOC_RELAXED_MODE TRUE)
+ 
+ set_property(GLOBAL PROPERTY "__FCITX_INTERNAL_BUILD" On)
+--- a/cmake/FindXKBCommon.cmake
++++ b/cmake/FindXKBCommon.cmake
+@@ -1,5 +1,5 @@
+ 
+-include(ECMFindModuleHelpersStub)
++include(ECMFindModuleHelpers)
+ 
+ ecm_find_package_version_check(XKBCommon)
+ 
+-- 
+2.8.0
