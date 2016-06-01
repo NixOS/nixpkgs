@@ -26,9 +26,9 @@
     xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’ GitHub
     issue tracker</link>.</para>
 
-    <note>Commands prefixed with <literal>#</literal> have to be run as
+    <note><para>Commands prefixed with <literal>#</literal> have to be run as
     root, either requiring to login as root user or temporarily switching
-    to it using <literal>sudo</literal> for example.</note>
+    to it using <literal>sudo</literal> for example.</para></note>
   </preface>
 
   <xi:include href="installation/installation.xml" />
