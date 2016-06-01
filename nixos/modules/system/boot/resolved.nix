@@ -16,15 +16,6 @@ in
       '';
     };
 
-    services.resolved.dns = mkOption {
-      default = config.networking.nameservers;
-      example = [ "8.8.8.8" "2001:4860:4860::8844" ];
-      type = types.listOf types.str;
-      description = ''
-        A list of IPv4 and IPv6 addresses to use as system DNS servers.
-      '';
-    };
-
     services.resolved.fallbackDns = mkOption {
       default = [ ];
       example = [ "8.8.8.8" "2001:4860:4860::8844" ];
@@ -89,7 +80,8 @@ in
 
     environment.etc."systemd/resolved.conf".text = ''
       [Resolve]
-      ${optionalString (cfg.dns != []) "DNS=${concatStringsSep " " cfg.dns}"}
+      ${optionalString (config.networking.nameservers != [])
+        "DNS=${concatStringsSep " " config.networking.nameservers}"}
       ${optionalString (cfg.fallbackDns != [])
         "FallbackDNS=${concatStringsSep " " cfg.fallbackDns}"}
       ${optionalString (cfg.domains != [])
