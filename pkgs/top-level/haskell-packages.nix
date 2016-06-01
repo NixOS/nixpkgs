@@ -406,7 +406,10 @@ rec {
     lts-6_0 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.0.nix { };
     };
-    lts-6 = packages.lts-6_0;
+    lts-6_1 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.1.nix { };
+    };
+    lts-6 = packages.lts-6_1;
 
     lts = packages.lts-6;
   };
