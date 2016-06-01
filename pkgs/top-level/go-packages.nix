@@ -2414,6 +2414,13 @@ let
     propagatedBuildInputs = [ go-base58 go-multihash ];
   };
 
+  go-multipart-files = buildFromGitHub rec {
+    rev    = "3be93d9f6b618f2b8564bfb1d22f1e744eabbae2";
+    owner  = "whyrusleeping";
+    repo   = "go-multipart-files";
+    sha256 = "0lf58q5nrxp10v7mj4b0lz01jz8is1xysxwdwkhhs88qxha8vm2f";
+  };
+
   go-git-ignore = buildFromGitHub rec {
     rev    = "228fcfa2a06e870a3ef238d54c45ea847f492a37";
     owner  = "sabhiram";
