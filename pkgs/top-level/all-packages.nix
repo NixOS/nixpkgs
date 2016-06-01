@@ -15790,6 +15790,11 @@ in
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
 
+    krita = callPackage ../applications/graphics/krita {
+      vc = vc_0_7;
+      openjpeg = openjpeg_1;
+    };
+
     phonon = callPackage ../development/libraries/phonon { };
 
     phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
