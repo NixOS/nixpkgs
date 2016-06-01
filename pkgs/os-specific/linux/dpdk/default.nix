@@ -29,8 +29,25 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -pr x86_64-native-linuxapp-gcc/{lib,include} $out/
+    install -m 0755 -d $out/lib
+    install -m 0644 ${RTE_TARGET}/lib/*.a $out/lib
+
+    install -m 0755 -d $out/include
+    install -m 0644 ${RTE_TARGET}/include/*.h $out/include
+
+    install -m 0755 -d $out/include/generic
+    install -m 0644 ${RTE_TARGET}/include/generic/*.h $out/include/generic
+
+    install -m 0755 -d $out/include/exec-env
+    install -m 0644 ${RTE_TARGET}/include/exec-env/*.h $out/include/exec-env
+
+    install -m 0755 -d $out/${RTE_TARGET}
+    install -m 0644 ${RTE_TARGET}/.config $out/${RTE_TARGET}
+
+    install -m 0755 -d $out/${RTE_TARGET}/include
+    install -m 0644 ${RTE_TARGET}/include/rte_config.h $out/${RTE_TARGET}/include
+
+    cp -pr mk scripts $out/
 
     mkdir -p $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
     cp ${RTE_TARGET}/kmod/*.ko $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
