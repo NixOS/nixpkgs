@@ -2265,6 +2265,13 @@ let
     sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
   };
 
+  go-base58 = buildFromGitHub rec {
+    rev    = "6237cf65f3a6f7111cd8a42be3590df99a66bc7d";
+    owner  = "jbenet";
+    repo   = "go-base58";
+    sha256 = "11yp7yg62bhw6jqdrlf2144bffk12jmb1nvqkm172pdhxfwrp3bf";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
