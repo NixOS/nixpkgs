@@ -2375,6 +2375,14 @@ let
     propagatedBuildInputs = [ go-humanize ];
   };
 
+  go-random-files = buildFromGitHub rec {
+    rev    = "737479700b40b4b50e914e963ce8d9d44603e3c8";
+    owner  = "jbenet";
+    repo   = "go-random-files";
+    sha256 = "1klpdc4qkrfy31r7qh00fcz42blswzabmcnry9byd5adhszxj9bw";
+    propagatedBuildInputs = [ go-random ];
+  };
+
   go-multiaddr = buildFromGitHub rec {
     rev    = "f3dff105e44513821be8fbe91c89ef15eff1b4d4";
     owner  = "jbenet";
