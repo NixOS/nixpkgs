@@ -3267,6 +3267,7 @@ in
 
   seafile = callPackage ../servers/seafile { };
   libevhtp-seafile = callPackage ../servers/seafile/libevhtp.nix { };
+  seafile-seahub = callPackage ../servers/seafile/seahub.nix { };
 
   sec = callPackage ../tools/admin/sec { };
 
