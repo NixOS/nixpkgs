@@ -2351,6 +2351,14 @@ let
     sha256 = "0cnq8k3aiq3i4038g1z7rfxbfw6awcz2nig69fmfd9y76czzd81c";
   };
 
+  utp = buildFromGitHub rec {
+    rev    = "d7ad5aff2b8a5fa415d1c1ed00b71cfd8b4c69e0";
+    owner  = "anacrolix";
+    repo   = "utp";
+    sha256 = "07piwfny3b4prxf2shc512ai0qmrmrj839lbza9clhgcmj1a75d7";
+    propagatedBuildInputs = [ missinggo-nofilesystem sync envpprof ];
+  };
+
   go-random = buildFromGitHub rec {
     rev    = "384f606e91f542a98e779e652eed88051618f0f7";
     owner  = "jbenet";
