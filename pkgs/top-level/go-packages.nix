@@ -2406,6 +2406,13 @@ let
     sha256 = "07z4is00ridjp8c6cn68lkg1fz6ksj1q7f26g7ir7qx8mx10fj72";
   };
 
+  stump = buildFromGitHub rec {
+    rev    = "bdc01b1f13fc5bed17ffbf4e0ed7ea17fd220ee6";
+    owner  = "whyrusleeping";
+    repo   = "stump";
+    sha256 = "010pgp6bd6dnl2cqg9nmxif30dgpaz07frhfk0hwl58yxv3a3vjh";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
