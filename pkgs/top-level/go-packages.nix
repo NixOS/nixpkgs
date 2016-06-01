@@ -2314,6 +2314,20 @@ let
     sha256 = "0f79mdzn1p9x1yfr1psy5jpbayb12wfwwzsa4g98rnxlp6q7znsv";
   };
 
+  # filesystem removed because it causes a circular dependency with tagflag
+  missinggo-nofilesystem = buildFromGitHub rec {
+    rev    = "e40875155efce3d98562ca9e265e152c364ada3e";
+    owner  = "anacrolix";
+    repo   = "missinggo";
+    sha256 = "1p1qgnb430dz84d2395i6417jqnlvrx9zwg9rq1ri8d5v7dif4fg";
+    postPatch = ''
+      rm -rf cmd/filecache
+    '';
+    propagatedBuildInputs = [
+      roaring iter btree docopt-go envpprof go-humanize b goskiplist
+    ];
+  };
+
   envpprof = buildFromGitHub rec {
     rev    = "0383bfe017e02efb418ffd595fc54777a35e48b0";
     owner  = "anacrolix";
