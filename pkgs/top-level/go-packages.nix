@@ -2445,6 +2445,23 @@ let
     ];
   };
 
+  gx = buildFromGitHub rec {
+    rev    = "v${version}";
+    version = "0.7.0";
+    owner  = "whyrusleeping";
+    repo   = "gx";
+    sha256 = "04skha3zdhyp5i5xg8ap0vnhxgzp32jf9iy9b3lfjpz6h8nbiby8";
+    prePatch = ''
+      substituteInPlace tests/lib/random-dep.go \
+        --replace "github.com/ipfs/go-ipfs/Godeps/_workspace/src/github.com/jbenet/go-random" \
+                  "github.com/jbenet/go-random"
+    '';
+    buildInputs = [
+      go-homedir semver cli-go go-git-ignore stump go-random
+      go-multiaddr go-multiaddr-net go-ipfs-api go-random-files
+    ];
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
