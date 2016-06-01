@@ -2286,6 +2286,13 @@ let
     sha256 = "1135gmvcwnmk36zryxq554fmikrmg5c6y5ml00arqpagn5xhnmnl";
   };
 
+  b = buildFromGitHub rec {
+    rev    = "47184dd8c1d2c7e7f87dae8448ee2007cdf0c6c4";
+    owner  = "cznic";
+    repo   = "b";
+    sha256 = "1sdn73xv1l9hdiy57dhjlyrqs8xibb95lnm5jjycn5f9izjv5mba";
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
