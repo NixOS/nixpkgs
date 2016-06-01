@@ -5097,6 +5097,8 @@ in
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
