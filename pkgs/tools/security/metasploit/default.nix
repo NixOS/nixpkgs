@@ -21,12 +21,11 @@ stdenv.mkDerivation rec {
 
     bundle install --path=$out/.gem
 
-    # !!! This needs to be tweeked.
-    export GEM_HOME=~/gem/ruby/2.3.0/cache
-    export GEM_PATH=${GEM_PATH}:$out/.gem/ruby/2.3.0
-
     for i in $out/share/msf/msf*; do
-        makeWrapper $i $out/bin/$(basename $i) --prefix RUBYLIB : $out/share/msf/lib
+        makeWrapper $i $out/bin/$(basename $i) \
+	  --prefix RUBYLIB : "$out/share/msf/lib" \
+          --prefix GEM_PATH : "$out/.gem/ruby/2.3.0" \
+          --prefix GEM_PATH : "~/.gem/ruby/2.3.0/cache"
     done
   '';
 
