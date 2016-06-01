@@ -26058,7 +26058,7 @@ in modules // {
   };
 
   networkx = buildPythonPackage rec {
-    version = "1.10";
+    version = "1.11";
     name = "networkx-${version}";
 
     # Currently broken on PyPy.
@@ -26067,10 +26067,11 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/networkx/${name}.tar.gz";
-      sha256 = "ced4095ab83b7451cec1172183eff419ed32e21397ea4e1971d92a5808ed6fb8";
+      sha256 = "1f74s56xb4ggixiq0vxyfxsfk8p20c7a099lpcf60izv1php03hd";
     };
 
-    propagatedBuildInputs = with self; [ nose decorator ];
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ decorator ];
 
     meta = {
       homepage = "https://networkx.github.io/";
