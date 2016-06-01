@@ -2435,6 +2435,16 @@ let
     sha256 = "010pgp6bd6dnl2cqg9nmxif30dgpaz07frhfk0hwl58yxv3a3vjh";
   };
 
+  go-ipfs-api = buildFromGitHub rec {
+    rev    = "7c354892da3abdaafb6ac576c100b259b1a73dac";
+    owner  = "ipfs";
+    repo   = "go-ipfs-api";
+    sha256 = "0n8k9ydn2l362vq0bpbjkciw08div3hpc22qygp6zsrlammizcvc";
+    propagatedBuildInputs = [
+      go-multiaddr go-multiaddr-net go-multipart-files tar-utils go-ipfs-util
+    ];
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
