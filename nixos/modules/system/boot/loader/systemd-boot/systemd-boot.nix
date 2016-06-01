@@ -8,7 +8,7 @@ let
   efi = config.boot.loader.efi;
 
   gummibootBuilder = pkgs.substituteAll {
-    src = ./gummiboot-builder.py;
+    src = ./systemd-boot-builder.py;
 
     isExecutable = true;
 
