@@ -4374,7 +4374,7 @@ in modules // {
     };
   };
 
-  pytest = self.pytest_27;
+  pytest = self.pytest_29;
 
   pytest_27 = buildPythonPackage rec {
     name = "pytest-2.7.3";
