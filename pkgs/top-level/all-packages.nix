@@ -16692,8 +16692,6 @@ in
 
   sct = callPackage ../tools/X11/sct {};
 
-  seafile-shared = callPackage ../misc/seafile-shared { };
-
   slock = callPackage ../misc/screensavers/slock { };
 
   snapraid = callPackage ../tools/filesystems/snapraid { };
