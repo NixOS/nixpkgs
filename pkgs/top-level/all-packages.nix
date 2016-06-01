@@ -4916,6 +4916,8 @@ in
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    estring = callPackage ../development/ocaml-modules/estring { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
