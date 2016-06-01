@@ -2375,6 +2375,14 @@ let
     propagatedBuildInputs = [ go-humanize ];
   };
 
+  go-multiaddr = buildFromGitHub rec {
+    rev    = "f3dff105e44513821be8fbe91c89ef15eff1b4d4";
+    owner  = "jbenet";
+    repo   = "go-multiaddr";
+    sha256 = "0rz17cvhslspp2z8jbxah22kndqiq9zl8nlf14ng8hfxdfm1x4n7";
+    propagatedBuildInputs = [ go-multihash ];
+  };
+
   ipfs = buildFromGitHub{
     rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
     version = "2016-01-12";
