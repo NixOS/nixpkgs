@@ -10,6 +10,7 @@ let
     buildMix = callPackage ./build-mix.nix {};
 
     ## Non hex packages
+    comeonin = callPackage ./comeonin {};
     hex = callPackage ./hex {};
     webdriver = callPackage ./webdriver {};
   };
