@@ -8,7 +8,7 @@ self: super: {
   Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
   Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
   Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; });
+  cabal-install_ = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
