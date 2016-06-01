@@ -554,12 +554,10 @@ rec {
           apply = x: use (toOf config);
         });
         config = {
-        /*
           warnings =
             let opt = getAttrFromPath from options; in
             optional (warn && opt.isDefined)
               "The option `${showOption from}' defined in ${showFiles opt.files} has been renamed to `${showOption to}'.";
-              */
         } // setAttrByPath to (mkAliasDefinitions (getAttrFromPath from options));
       };
 
