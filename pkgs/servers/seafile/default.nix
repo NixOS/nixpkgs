@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, libarchive, libevhtp-seafile, vala, python, intltool, fuse, ccnet, acl, attr, lzma, bzip2}:
+{stdenv, fetchurl, which, automake, autoconf, pkgconfig, curl, libtool, libarchive, libevhtp-seafile, vala, python, intltool, fuse, ccnet, acl, attr, lzma, bzip2, makeWrapper}:
 
 stdenv.mkDerivation rec
 {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec
     sha256 = "0kj6af695b9mrdfnvgw5zkkslncrqs035q3pna08anpa203vw4xq";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool libarchive libevhtp-seafile vala python intltool fuse ccnet curl acl attr lzma bzip2 ];
+  buildInputs = [ which automake autoconf pkgconfig libtool libarchive libevhtp-seafile vala python intltool fuse ccnet curl acl attr lzma bzip2 makeWrapper];
   propagatedBuildInputs = [ ccnet ];
 
   preConfigure = ''
@@ -19,6 +19,16 @@ stdenv.mkDerivation rec
   '';
 
   configureFlags = "--enable-client --enable-server";
+
+  postInstall = ''
+    wrapProgram $out/bin/seaf-cli \
+      --set PYTHONPATH "$PYTHONPATH:$(toPythonPath $out)" \
+      --set PATH "${ccnet}/bin:$out/bin"
+    wrapProgram $out/bin/seafile-admin \
+      --set PATH "${ccnet}/bin:$out/bin"
+    wrapProgram $out/bin/seafile-controller \
+      --set PATH "${ccnet}/bin:$out/bin"
+  '';
 
   meta = {
     description = "File syncing and sharing software with file encryption and group sharing, emphasis on reliability and high performance";

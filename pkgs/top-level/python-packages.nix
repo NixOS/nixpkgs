@@ -9055,6 +9055,9 @@ in modules // {
 
     propagatedBuildInputs = with self; [ django sqlite3 ];
 
+    # missing util package
+    doCheck = false;
+
     meta = {
       description = "A reusable Django field that allows you to store validated JSON in your model";
       homepage = "https://github.com/bradjasper/django-jsonfield";
