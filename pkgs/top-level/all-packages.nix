@@ -801,7 +801,7 @@ in
 
   fsmark = callPackage ../tools/misc/fsmark { };
 
-  fzf = goPackages.fzf.bin // { outputs = [ "bin" ]; };
+  fzf = (callPackage ../tools/misc/fzf {}).bin;
 
   fzy = callPackage ../tools/misc/fzy { };
 

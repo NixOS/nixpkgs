@@ -884,28 +884,6 @@ let
     buildInputs = [ afero ];
   };
 
-  fzf = buildFromGitHub {
-    rev = "0.12.0";
-    owner = "junegunn";
-    repo = "fzf";
-    sha256 = "0lxh8nf5xc5qnmx18h0q43iy3hy818firkz4rfkr3b0b5gd3aan1";
-
-    buildInputs = [
-      crypto ginkgo gomega junegunn.go-runewidth go-shellwords pkgs.ncurses text
-    ];
-
-    patchPhase = ''
-      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim
-      sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
-    '';
-
-    postInstall= ''
-      cp $src/bin/fzf-tmux $bin/bin
-      mkdir -p $out/share/vim-plugins
-      ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${(builtins.parseDrvName fzf.name).name}
-    '';
-  };
-
   g2s = buildFromGitHub {
     rev    = "ec76db4c1ac16400ac0e17ca9c4840e1d23da5dc";
     owner  = "peterbourgon";
@@ -1843,18 +1821,6 @@ let
     sha256 = "16y64r1v054c2ln0bi5mrqq1cmvy6d6pnxk1glb8lw2g31ksa80c";
   };
 
-  junegunn.go-runewidth = buildGoPackage rec {
-    rev = "travisish";
-    name = "go-runewidth-${rev}";
-    goPackagePath = "github.com/junegunn/go-runewidth";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "junegunn";
-      repo = "go-runewidth";
-      sha256 = "07d612val59sibqly5d6znfkp4h4gjd77783jxvmiq6h2fwb964k";
-    };
-  };
-
   jp = buildFromGitHub {
     rev = "0.1.2";
     owner = "jmespath";
@@ -1875,18 +1841,6 @@ let
     owner  = "mattn";
     repo   = "go-runewidth";
     sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
-  };
-
-  go-shellwords = buildGoPackage rec {
-    rev = "35d512af75e283aae4ca1fc3d44b159ed66189a4";
-    name = "go-shellwords-${rev}";
-    goPackagePath = "github.com/junegunn/go-shellwords";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "junegunn";
-      repo = "go-shellwords";
-      sha256 = "c792abe5fda48d0dfbdc32a84edb86d884a0ccbd9ed49ad48a30cda5ba028a22";
-    };
   };
 
   go-restful = buildFromGitHub {
