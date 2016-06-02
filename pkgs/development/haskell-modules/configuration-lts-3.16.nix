@@ -1234,6 +1234,7 @@ self: super: {
   "amazon-products" = dontDistribute super."amazon-products";
   "amazonka" = doDistribute super."amazonka_0_3_6";
   "amazonka-apigateway" = dontDistribute super."amazonka-apigateway";
+  "amazonka-application-autoscaling" = dontDistribute super."amazonka-application-autoscaling";
   "amazonka-autoscaling" = doDistribute super."amazonka-autoscaling_0_3_6";
   "amazonka-certificatemanager" = dontDistribute super."amazonka-certificatemanager";
   "amazonka-cloudformation" = doDistribute super."amazonka-cloudformation_0_3_6";
@@ -1256,6 +1257,7 @@ self: super: {
   "amazonka-datapipeline" = doDistribute super."amazonka-datapipeline_0_3_6";
   "amazonka-devicefarm" = dontDistribute super."amazonka-devicefarm";
   "amazonka-directconnect" = doDistribute super."amazonka-directconnect_0_3_6";
+  "amazonka-discovery" = dontDistribute super."amazonka-discovery";
   "amazonka-dms" = dontDistribute super."amazonka-dms";
   "amazonka-ds" = dontDistribute super."amazonka-ds";
   "amazonka-dynamodb" = doDistribute super."amazonka-dynamodb_0_3_6";
@@ -7220,6 +7222,7 @@ self: super: {
   "satchmo-minisat" = dontDistribute super."satchmo-minisat";
   "satchmo-toysat" = dontDistribute super."satchmo-toysat";
   "sbp" = dontDistribute super."sbp";
+  "sbp2udp" = dontDistribute super."sbp2udp";
   "sbv" = doDistribute super."sbv_4_4";
   "sbvPlugin" = dontDistribute super."sbvPlugin";
   "sc3-rdu" = dontDistribute super."sc3-rdu";
@@ -7684,6 +7687,7 @@ self: super: {
   "spreadsheet" = dontDistribute super."spreadsheet";
   "spritz" = dontDistribute super."spritz";
   "sproxy" = dontDistribute super."sproxy";
+  "sproxy-web" = dontDistribute super."sproxy-web";
   "spsa" = dontDistribute super."spsa";
   "spy" = dontDistribute super."spy";
   "sql-simple" = dontDistribute super."sql-simple";
@@ -7738,6 +7742,7 @@ self: super: {
   "static-hash" = dontDistribute super."static-hash";
   "static-resources" = dontDistribute super."static-resources";
   "staticanalysis" = dontDistribute super."staticanalysis";
+  "statistics" = doDistribute super."statistics_0_13_2_3";
   "statistics-dirichlet" = dontDistribute super."statistics-dirichlet";
   "statistics-fusion" = dontDistribute super."statistics-fusion";
   "statistics-hypergeometric-genvar" = dontDistribute super."statistics-hypergeometric-genvar";
@@ -8060,6 +8065,7 @@ self: super: {
   "texmath" = doDistribute super."texmath_0_8_4";
   "texrunner" = dontDistribute super."texrunner";
   "text" = doDistribute super."text_1_2_1_3";
+  "text-all" = dontDistribute super."text-all";
   "text-and-plots" = dontDistribute super."text-and-plots";
   "text-conversions" = dontDistribute super."text-conversions";
   "text-format-simple" = dontDistribute super."text-format-simple";
@@ -8457,6 +8463,7 @@ self: super: {
   "universe-reverse-instances" = dontDistribute super."universe-reverse-instances";
   "universe-th" = dontDistribute super."universe-th";
   "unix-bytestring" = dontDistribute super."unix-bytestring";
+  "unix-compat" = doDistribute super."unix-compat_0_4_1_4";
   "unix-fcntl" = dontDistribute super."unix-fcntl";
   "unix-handle" = dontDistribute super."unix-handle";
   "unix-io-extra" = dontDistribute super."unix-io-extra";
