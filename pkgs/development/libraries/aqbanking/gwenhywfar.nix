@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, gettext, qt4 }:
+{ stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, gettext, qt4
+
+, pluginSearchPaths ? [
+    "/run/current-system/sw/lib/gwenhywfar/plugins"
+    ".nix-profile/lib/gwenhywfar/plugins"
+  ]
+}:
 
 stdenv.mkDerivation rec {
   name = "gwenhywfar-${version}";
@@ -15,10 +21,6 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = let
-    pluginSearchPaths = [
-      "/run/current-system/sw/lib/gwenhywfar/plugins"
-      ".nix-profile/lib/gwenhywfar/plugins"
-    ];
     isRelative = path: builtins.substring 0 1 path != "/";
     mkSearchPath = path: ''
       p; g; s,\<PLUGINDIR\>,"${path}",g;
