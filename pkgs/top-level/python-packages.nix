@@ -16220,6 +16220,25 @@ in modules // {
     };
   };
 
+  pdfkit = buildPythonPackage rec {
+    name = "pdfkit-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pdfkit/${name}.zip";
+      sha256 = "1p1m6gp51ql3wzjs2iwds8sc3hg1i48yysii9inrky6qc3s6q5vf";
+    };
+
+    buildInputs = with self; [ ];
+    # tests are not distributed
+    doCheck = false;
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pdfkit;
+      description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
+      license = licenses.mit;
+    };
+  };
 
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
