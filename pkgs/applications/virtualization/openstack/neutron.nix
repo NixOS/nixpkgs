@@ -31,6 +31,9 @@ python2Packages.buildPythonApplication rec {
   prePatch = ''
     echo "graft neutron" >> MANIFEST.in
     substituteInPlace etc/neutron/rootwrap.d/dhcp.filters --replace "/sbin/dnsmasq" "${dnsmasq}/bin/dnsmasq"
+    mkdir $PWD/tmp
+    substituteInPlace neutron/tests/unit/agent/l3/test_dvr_local_router.py --replace "/tmp" "$PWD/tmp"
+    substituteInPlace neutron/tests/unit/agent/l3/test_dvr_fip_ns.py --replace "/tmp" "$PWD/tmp"
   '';
   patches = [ ./neutron-iproute-4.patch ];
 
