@@ -7597,6 +7597,8 @@ in
 
   libchewing = callPackage ../development/libraries/libchewing { };
 
+  libchipcard = callPackage ../development/libraries/libchipcard { };
+
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
   libcrossguid = callPackage ../development/libraries/libcrossguid { };
