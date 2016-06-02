@@ -1,4 +1,4 @@
-{ stdenv, lib, kernel, fetchurl }:
+{ stdenv, lib, kernel, fetchurl, pkgconfig, libvirt }:
 
 assert lib.versionAtLeast kernel.version "3.18";
 
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yrz3nnhv65v2jzz726bjswkn8ffqc1sr699qypc9m78qrdljcfn";
   };
 
+  buildInputs = [ pkgconfig libvirt ];
+
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
   enableParallelBuilding = true;
-  outputs = [ "out" "examples" ];
+  outputs = [ "out" "kmod" "examples" ];
 
   buildPhase = ''
     make T=x86_64-native-linuxapp-gcc config
@@ -27,11 +29,31 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir $out
-    cp -pr x86_64-native-linuxapp-gcc/{app,lib,include,kmod} $out/
+    install -m 0755 -d $out/lib
+    install -m 0644 ${RTE_TARGET}/lib/*.a $out/lib
 
-    mkdir $examples
-    cp -pr examples/* $examples/
+    install -m 0755 -d $out/include
+    install -m 0644 ${RTE_TARGET}/include/*.h $out/include
+
+    install -m 0755 -d $out/include/generic
+    install -m 0644 ${RTE_TARGET}/include/generic/*.h $out/include/generic
+
+    install -m 0755 -d $out/include/exec-env
+    install -m 0644 ${RTE_TARGET}/include/exec-env/*.h $out/include/exec-env
+
+    install -m 0755 -d $out/${RTE_TARGET}
+    install -m 0644 ${RTE_TARGET}/.config $out/${RTE_TARGET}
+
+    install -m 0755 -d $out/${RTE_TARGET}/include
+    install -m 0644 ${RTE_TARGET}/include/rte_config.h $out/${RTE_TARGET}/include
+
+    cp -pr mk scripts $out/
+
+    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
+    cp ${RTE_TARGET}/kmod/*.ko $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
+
+    mkdir -p $examples/bin
+    find examples ${RTE_TARGET}/app -type f -executable -exec cp {} $examples/bin \;
   '';
 
   meta = with stdenv.lib; {
