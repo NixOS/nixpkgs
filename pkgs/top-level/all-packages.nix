@@ -13482,6 +13482,8 @@ in
     vaapiSupport = config.mpv.vaapiSupport or false;
   };
 
+  mpvWithScripts = callPackage ../applications/video/mpv/scripts {};
+
   mpvScripts = {
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
   };

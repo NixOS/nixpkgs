@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "13m7l4sy2r8jv2sfrb3vvqvnim4a9ilnv28q5drlg09v298z3mck";
   };
 
+  passthru.features = { encodingSupport = true; };
+
   patches = [ ./convert.patch ];
 
   postPatch =

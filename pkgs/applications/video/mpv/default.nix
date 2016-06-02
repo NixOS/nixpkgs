@@ -21,9 +21,12 @@
 # for Youtube support
 , youtubeSupport ? true, youtube-dl ? null
 , cacaSupport ? true, libcaca ? null
+, encodingSupport ? true
 , vaapiSupport ? false, libva ? null
 , waylandSupport ? false, wayland ? null, libxkbcommon ? null
 # scripts you want to be loaded by default
+# USE mpvWithScripts INSTEAD
+# TODO patch out
 , scripts ? []
 }:
 
@@ -82,8 +85,9 @@ stdenv.mkDerivation rec {
     "--enable-manpage-build"
     "--disable-build-date" # Purity
     "--enable-zsh-comp"
-  ] ++ optional vaapiSupport "--enable-vaapi"
-  ++ optional waylandSupport "--enable-wayland";
+  ] ++ optional vaapiSupport  "--enable-vaapi"
+  ++ optional waylandSupport  "--enable-wayland"
+  ++ optional encodingSupport "--enable-encoding";
 
   configurePhase = ''
     python ${waf} configure --prefix=$out $configureFlags
@@ -92,6 +96,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python which ];
 
   buildInputs = [
+    # TODO: Make sure ffmpeg definitely compiles with the right flags.
+    # From the readme:
+    #   - libx264/libmp3lame/libfdk-aac if you want to use encoding (has to be
+    #     explicitly enabled when compiling ffmpeg)
+    # See also https://github.com/NixOS/nixpkgs/issues/15930
     ffmpeg freetype libass libpthreadstubs lua lua5_sockets libuchardet rubberband
   ] ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
