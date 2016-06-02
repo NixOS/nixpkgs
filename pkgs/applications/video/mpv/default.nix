@@ -25,136 +25,159 @@
 , vaapiSupport ? false, libva ? null
 , waylandSupport ? false, wayland ? null, libxkbcommon ? null
 # scripts you want to be loaded by default
-# USE mpvWithScripts INSTEAD
-# TODO patch out
+# A script is a derivation that evaluates to derivation
+# which is a lua file with a name ending on .lua
+# (otherwise it is ignored by mpv, see
+# https://github.com/mpv-player/mpv/issues/3211)
+# Additionally, a script can specify that it needs options
+# of the mpv package enabled by declaring them in
+# passthru.features, e.g.
+# passthru.features = { youtubeSupport = true; };
 , scripts ? []
 }:
 
-assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
-assert xineramaSupport -> (libXinerama != null && x11Support);
-assert xvSupport -> (libXv != null && x11Support);
-assert sdl2Support -> SDL2 != null;
-assert alsaSupport -> alsaLib != null;
-assert screenSaverSupport -> libXScrnSaver != null;
-assert vdpauSupport -> libvdpau != null;
-assert dvdreadSupport -> libdvdread != null;
-assert dvdnavSupport -> libdvdnav != null;
-assert bluraySupport -> libbluray != null;
-assert speexSupport -> speex != null;
-assert theoraSupport -> libtheora != null;
-assert jackaudioSupport -> libjack2 != null;
-assert pulseSupport -> libpulseaudio != null;
-assert bs2bSupport -> libbs2b != null;
-assert libpngSupport -> libpng != null;
-assert youtubeSupport -> youtube-dl != null;
-assert cacaSupport -> libcaca != null;
-assert waylandSupport -> (wayland != null && libxkbcommon != null);
-
 let
-  inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
-
-  # Purity: Waf is normally downloaded by bootstrap.py, but
-  # for purity reasons this behavior should be avoided.
-  wafVersion = "1.8.12";
-  waf = fetchurl {
-    urls = [ "http://ftp.waf.io/pub/release/waf-${wafVersion}"
-             "http://waf.io/waf-${wafVersion}" ];
-    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
+  availableFeatures = {
+    inherit x11Support xineramaSupport xvSupport sdl2Support alsaSupport
+    screenSaverSupport vdpauSupport dvdreadSupport dvdnavSupport bluraySupport
+    speexSupport theoraSupport jackaudioSupport pulseSupport bs2bSupport
+    libpngSupport youtubeSupport cacaSupport encodingSupport vaapiSupport
+    waylandSupport;
   };
+  allFeatures = map (s: s.features or {}) scripts ++ [ availableFeatures ];
+  features = with stdenv.lib; zipAttrsWith
+    (feature: if availableFeatures ? feature
+               then any id
+               else throw "There is no feature flag ${feature} for mpv.")
+    allFeatures;
+
 in
 
-stdenv.mkDerivation rec {
-  name = "mpv-${version}";
-  version = "0.17.0";
+  assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
+  assert xineramaSupport -> (libXinerama != null && x11Support);
+  assert xvSupport -> (libXv != null && x11Support);
+  assert sdl2Support -> SDL2 != null;
+  assert alsaSupport -> alsaLib != null;
+  assert screenSaverSupport -> libXScrnSaver != null;
+  assert vdpauSupport -> libvdpau != null;
+  assert dvdreadSupport -> libdvdread != null;
+  assert dvdnavSupport -> libdvdnav != null;
+  assert bluraySupport -> libbluray != null;
+  assert speexSupport -> speex != null;
+  assert theoraSupport -> libtheora != null;
+  assert jackaudioSupport -> libjack2 != null;
+  assert pulseSupport -> libpulseaudio != null;
+  assert bs2bSupport -> libbs2b != null;
+  assert libpngSupport -> libpng != null;
+  assert youtubeSupport -> youtube-dl != null;
+  assert cacaSupport -> libcaca != null;
+  assert waylandSupport -> (wayland != null && libxkbcommon != null);
 
-  src = fetchurl {
-    url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
-    sha256 = "0vms3viwqcwl1mrgmf2yy4c69fvv7xpbkyrl693l6zpwynqd4b30";
-  };
+  let
+    inherit (stdenv.lib) optional optionals optionalString concatStringsSep;
 
-  patchPhase = ''
-    patchShebangs ./TOOLS/
-  '';
+    # Purity: Waf is normally downloaded by bootstrap.py, but
+    # for purity reasons this behavior should be avoided.
+    wafVersion = "1.8.12";
+    waf = fetchurl {
+      urls = [ "http://ftp.waf.io/pub/release/waf-${wafVersion}"
+              "http://waf.io/waf-${wafVersion}" ];
+      sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
+    };
+  in
 
-  NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext";
+  stdenv.mkDerivation rec {
+    name = "mpv-${version}";
+    version = "0.17.0";
 
-  configureFlags = [
-    "--enable-libmpv-shared"
-    "--disable-libmpv-static"
-    "--disable-static-build"
-    "--enable-manpage-build"
-    "--disable-build-date" # Purity
-    "--enable-zsh-comp"
-  ] ++ optional vaapiSupport  "--enable-vaapi"
-  ++ optional waylandSupport  "--enable-wayland"
-  ++ optional encodingSupport "--enable-encoding";
+    src = fetchurl {
+      url = "https://github.com/mpv-player/mpv/archive/v${version}.tar.gz";
+      sha256 = "0vms3viwqcwl1mrgmf2yy4c69fvv7xpbkyrl693l6zpwynqd4b30";
+    };
 
-  configurePhase = ''
-    python ${waf} configure --prefix=$out $configureFlags
-  '';
-
-  nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python which ];
-
-  buildInputs = [
-    # TODO: Make sure ffmpeg definitely compiles with the right flags.
-    # From the readme:
-    #   - libx264/libmp3lame/libfdk-aac if you want to use encoding (has to be
-    #     explicitly enabled when compiling ffmpeg)
-    # See also https://github.com/NixOS/nixpkgs/issues/15930
-    ffmpeg freetype libass libpthreadstubs lua lua5_sockets libuchardet rubberband
-  ] ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
-    ++ optional alsaSupport alsaLib
-    ++ optional xvSupport libXv
-    ++ optional theoraSupport libtheora
-    ++ optional xineramaSupport libXinerama
-    ++ optional dvdreadSupport libdvdread
-    ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
-    ++ optional bluraySupport libbluray
-    ++ optional jackaudioSupport libjack2
-    ++ optional pulseSupport libpulseaudio
-    ++ optional screenSaverSupport libXScrnSaver
-    ++ optional vdpauSupport libvdpau
-    ++ optional speexSupport speex
-    ++ optional bs2bSupport libbs2b
-    ++ optional libpngSupport libpng
-    ++ optional youtubeSupport youtube-dl
-    ++ optional sdl2Support SDL2
-    ++ optional cacaSupport libcaca
-    ++ optional vaapiSupport libva
-    ++ optionals waylandSupport [ wayland libxkbcommon ];
-
-  enableParallelBuilding = true;
-
-  buildPhase = ''
-    python ${waf} build
-  '';
-
-  installPhase = ''
-    python ${waf} install
-
-    # Use a standard font
-    mkdir -p $out/share/mpv
-    ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
-  '' + optionalString youtubeSupport ''
-    # Ensure youtube-dl is available in $PATH for MPV
-    wrapProgram $out/bin/mpv \
-      --prefix PATH : "${youtube-dl}/bin" \
-      --add-flags "--script=${concatStringsSep "," scripts}"
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
-    homepage = http://mpv.io;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
-    platforms = platforms.linux;
-
-    longDescription = ''
-      mpv is a free and open-source general-purpose video player,
-      based on the MPlayer and mplayer2 projects, with great
-      improvements above both.
+    patchPhase = ''
+      patchShebangs ./TOOLS/
     '';
-  };
-}
-# TODO: investigate caca support
-# TODO: investigate lua5_sockets bug
+
+    NIX_LDFLAGS = optionalString x11Support "-lX11 -lXext";
+
+    configureFlags = [
+      "--enable-libmpv-shared"
+      "--disable-libmpv-static"
+      "--disable-static-build"
+      "--enable-manpage-build"
+      "--disable-build-date" # Purity
+      "--enable-zsh-comp"
+    ] ++ optional vaapiSupport  "--enable-vaapi"
+    ++ optional waylandSupport  "--enable-wayland"
+    ++ optional encodingSupport "--enable-encoding";
+
+    configurePhase = ''
+      python ${waf} configure --prefix=$out $configureFlags
+    '';
+
+    nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python which ];
+
+    buildInputs = [
+      # TODO: Make sure ffmpeg definitely compiles with the right flags.
+      # From the readme:
+      #   - libx264/libmp3lame/libfdk-aac if you want to use encoding (has to be
+      #     explicitly enabled when compiling ffmpeg)
+      # See also https://github.com/NixOS/nixpkgs/issues/15930
+      ffmpeg freetype libass libpthreadstubs lua lua5_sockets libuchardet rubberband
+    ] ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
+      ++ optional alsaSupport alsaLib
+      ++ optional xvSupport libXv
+      ++ optional theoraSupport libtheora
+      ++ optional xineramaSupport libXinerama
+      ++ optional dvdreadSupport libdvdread
+      ++ optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
+      ++ optional bluraySupport libbluray
+      ++ optional jackaudioSupport libjack2
+      ++ optional pulseSupport libpulseaudio
+      ++ optional screenSaverSupport libXScrnSaver
+      ++ optional vdpauSupport libvdpau
+      ++ optional speexSupport speex
+      ++ optional bs2bSupport libbs2b
+      ++ optional libpngSupport libpng
+      ++ optional youtubeSupport youtube-dl
+      ++ optional sdl2Support SDL2
+      ++ optional cacaSupport libcaca
+      ++ optional vaapiSupport libva
+      ++ optionals waylandSupport [ wayland libxkbcommon ];
+
+    enableParallelBuilding = true;
+
+    buildPhase = ''
+      python ${waf} build
+    '';
+
+    installPhase = ''
+      python ${waf} install
+
+      # Use a standard font
+      mkdir -p $out/share/mpv
+      ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
+    '' + optionalString youtubeSupport ''
+      # Ensure youtube-dl is available in $PATH for MPV
+      wrapProgram $out/bin/mpv \
+        --prefix PATH : "${youtube-dl}/bin" \
+        --add-flags "--script=${concatStringsSep "," scripts}"
+    '';
+
+    meta = with stdenv.lib; {
+      description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
+      homepage = http://mpv.io;
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ AndersonTorres fuuzetsu ];
+      platforms = platforms.linux;
+
+      longDescription = ''
+        mpv is a free and open-source general-purpose video player,
+        based on the MPlayer and mplayer2 projects, with great
+        improvements above both.
+      '';
+    };
+  }
+  # TODO: investigate caca support
+  # TODO: investigate lua5_sockets bug
