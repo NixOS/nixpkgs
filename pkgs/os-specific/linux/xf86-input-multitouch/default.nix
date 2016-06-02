@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = http://bitmath.org/git/multitouch.git;
     rev = "4d87c041f6a232aa30528d70d4b9946d1824b4ed";
-    sha256 = "79397c8f99deb2a415e8c9008a2847d973ad19ea004e732613baed707df46fc9";
+    sha256 = "1jh52d3lkmchn5xdbz4qn50d30nild1zxvfbvwwl2rbmphs5ww6y";
   };
 
   # Configuration from http://bitmath.org/code/multitouch/

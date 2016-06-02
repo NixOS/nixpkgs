@@ -8,7 +8,7 @@ buildPerlPackage {
   src = fetchgit {
     url = "https://github.com/openxpki/openxpki";
     rev = "5cb76c553b6b1a81ede380857700628a7521f6e3";
-    sha256 = "7c93bdce7a205c58b08c91c249e566e885ed08f9d43cc2ac652c705c1f7e4490";
+    sha256 = "05bmhani2c7ays488xv3hx5xbxb612bnwq5rdjwmsj51xpaz454p";
   };
 
   buildInputs = [ perl openssl gettext python34Packages.sphinx ];

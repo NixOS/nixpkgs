@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/execline";
     rev = "refs/tags/v${version}";
-    sha256 = "1k4db9iyskrqf6wbc4dkiqgpn0wb43qc9rf1br7kvy9rrzq3yrj0";
+    sha256 = "01hfh2gmap3qd9qc5ncp1sxagrsi8q6cdjxxspwpmrc4d4cmzcr0";
   };
 
   dontDisableStatic = true;

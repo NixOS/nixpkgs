@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://dthompson.us/guile-sdl2.git";
     rev = "048f80ddb5c6b03b87bba199a99a6f22d911bfff";
-    sha256 = "1wbx157xd8lsv4vs8igqy3qw8yym5r5s7z94an18kwbf89npmf5d";
+    sha256 = "1v7bc2bsddb46qdzq7cyzlw5i2y175kh66mbzbjky85sjfypb084";
   };
   preConfigurePhases = [ "bootstrapPhase" ];
   bootstrapPhase = ''

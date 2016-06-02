@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/shimmerproject/Orion.git";
     rev = "refs/tags/v1.5";
-    sha256 = "995671990514a68192dc82ed51eaa6ab17c396950e1d8b7768c262027be6b05f";
+    sha256 = "1116yawv3fspkiq1ykk2wj0gza3l04b5nhldy0bayzjaj0y6fd89";
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

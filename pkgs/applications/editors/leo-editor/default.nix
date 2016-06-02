@@ -8,7 +8,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchgit {
     url = "https://github.com/leo-editor/leo-editor";
     rev = "refs/tags/Leo-${version}-final";
-    sha256 = "3cc5259609890bbde9cfee71f4f60b959b3f5b740f7d403c99ea2d9796b4758e";
+    sha256 = "0km5mvzfpfbxxhcjr4if24qhgk2c7dsvmfinz0zrbfriip848vcp";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pyqt4 sqlite3 ];

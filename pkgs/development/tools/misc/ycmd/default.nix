@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/Valloric/ycmd.git";
     rev = "f982f6251c5ff85e3abe6e862aad8bcd19e85ece";
-    sha256 = "1qp3ip6ab34610rfy0x85xsjg7blfkiy025vskwk9zw6gqglf3b3";
+    sha256 = "1g0hivv3wla7z5dgnkcn3ny38p089pjfj36nx6k29zmprgmjinyr";
   };
 
   buildInputs = [ python cmake llvmPackages.clang boost makeWrapper ];

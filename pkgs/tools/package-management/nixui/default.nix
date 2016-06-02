@@ -5,7 +5,7 @@ let
   src = fetchgit {
     url = "git://github.com/matejc/nixui.git";
     rev = "845a5f4a33f1d0c509c727c130d0792a5b450a38";
-    sha256 = "15nypa4wm2ypfzy1nascxig9lj7l7p4vkrpbn1c807mil3k7xrs7";
+    sha256 = "1ay3i4lgzs3axbby06l4vvspxi0aa9pwiil84qj0dqq1jb6isara";
   };
   nixui = (import ./node-default.nix { nixui = src; inherit pkgs; }).build;
   script = writeScript "nixui" ''

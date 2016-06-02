@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/chrisamaphone/interactive-lp;
     rev = "b3d21489d4994f03d2982de273eea90bc7fba5d0";
-    sha256 = "01f72q435kmf3mkgnn47hlnv6k3i5kjb26pbjrwvysc6am33jlcb";
+    sha256 = "1qpyasr3jg4i2x547yq1dzksvjagvnrmkdd00s108wvw9npc2jj1";
   };
 
   nativeBuildInputs = [ mlton ];

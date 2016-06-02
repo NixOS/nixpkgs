@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://oss.sgi.com/xfs/cmds/xfstests.git";
     rev = "dfe582dd396f16ddce1909baab7376e00af07792";
-    sha256 = "0hbgccmhcxn5nm87nq13kpi3rcbjadlj65kd03bfjqxhm4gx732q";
+    sha256 = "1pvqzw4f0r63lzhcw2lii72bp4dwqd50xshv8ch7v529z0f5icwa";
   };
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];

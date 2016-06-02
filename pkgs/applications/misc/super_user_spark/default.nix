@@ -8,7 +8,7 @@ mkDerivation {
   version = "0.2.0.3";
   src = fetchgit {
     url = "https://github.com/NorfairKing/super-user-spark";
-    sha256 = "718b6760e76377aa37b145d0dff690b293325b510ce05d239c4fa28538420931";
+    sha256 = "1w9c2b1fxqxp2q5jxsvnrfqvyvpk8q70qqsgzshmghx0yylx9cns";
     rev = "a7d132f7631649c3a093ede286e66f78e9793fba";
   };
   isLibrary = false;

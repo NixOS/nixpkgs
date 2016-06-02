@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://github.com/shlevy/nix-plugins.git;
     rev = "refs/tags/1.0.0";
-    sha256 = "e624de55cabc9014e77f21978d657089ae94ce161584b3d9dc3c9763658421b3";
+    sha256 = "1w7l4mdwgf5w1g48mbng4lcg2nihixvp835mg2j7gghnya309fxl";
   };
 
   buildInputs = [ nix ];

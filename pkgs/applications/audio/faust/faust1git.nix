@@ -14,7 +14,7 @@ let
   src = fetchgit {
     url = "git://git.code.sf.net/p/faudiostream/code";
     rev = "931fca3e649f99ef09025d37bd6a7dc70a03e6f6";
-    sha256 = "05yam8jfdnziysvpxa5w118k5bbl103vamyqgka6vyhjjizp1nx7";
+    sha256 = "1h2qfwxqf9406v0w6kqyxlzn88zw3xmwgxg9f01n4jvd72zxll78";
   };
 
   meta = with stdenv.lib; {

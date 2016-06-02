@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/communi/libcommuni.git";
     rev = "779b0c774428669235d44d2db8e762558e2f4b79";
-    sha256 = "15sb7vinaaz1v5nclxpnp5p9a0kmfmlgiqibkipnyydizclidpfx";
+    sha256 = "1zqdl5why66rg3pksxmxsmrwxs4042fq9jhc394qvk0s36aryqsj";
   };
 
   buildInputs = [ qtbase ];

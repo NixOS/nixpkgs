@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/mbunkus/mkvtoolnix.git";
     rev = "54e6b52b3dde07f89da4542997ef059e18802128";
-    sha256 = "1hm9f9q60c0axmmlsalazsiil8gk3v8q6cl5qxsfa95m51i39878";
+    sha256 = "1gipydk1xisqy110rr38dgjzpxl8zxbm12kf7b2f4xh4iw17j0k2";
   };
 
   nativeBuildInputs = [ gettext ruby ];

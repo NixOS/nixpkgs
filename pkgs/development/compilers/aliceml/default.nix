@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/aliceml/aliceml";
     rev = "7d44dc8e4097c6f85888bbf4ff86d51fe05b0a08";
-    sha256 = "ab2d5bf05c40905b02cb1ec975d4980ae4437757856eeb1f587ede2c45a1917f";
+    sha256 = "1xpvia00cpig0i7qvz29sx7xjic6kd472ng722x4rapz8mjnf8bk";
     fetchSubmodules = true;
   };
 

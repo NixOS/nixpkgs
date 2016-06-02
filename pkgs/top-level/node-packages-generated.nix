@@ -32838,7 +32838,7 @@
     src = fetchgit {
       url = "git://github.com/NixOS/npm2nix.git";
       rev = "0c06be7d278a7f64fc853a5fd42d2031d14496d5";
-      sha256 = "fb79dccb5ca4bfa0c8cc4490be37313367eb98e216d8eb97cb00f9e492e8e7a7";
+      sha256 = "1x8bsmli0s1l3vshw5ylmak9z1pvnc1ps5cbc72cbn1zi36m5cp1";
     };
     deps = {
       "semver-4.3.6" = self.by-version."semver"."4.3.6";

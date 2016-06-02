@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/GilesBathgate/RapCAD.git";
     rev = "refs/tags/v${version}";
-    sha256 = "15c18jvgbwyrfhv7r35ih0gzx35vjlsbi984h1sckgh2z17hjq8l";
+    sha256 = "1i5h4sw7mdbpdbssmbjccwgidndrsc606zz4wy9pjsg2wzrabw7x";
   };
 
   buildInputs = [ qtbase qmakeHook cgal boost gmp mpfr flex bison dxflib readline mesa_glu ];

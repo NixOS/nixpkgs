@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/matijapretnar/eff.git";
     rev = "90f884a790fddddb51d4d1d3b7c2edf1e8aabb64";
-    sha256 = "28e389b35e6959072c245c2e79fe305885b1b2d44ff540a02a097e09e9f9698f";
+    sha256 = "0cqqrpvfw0nrk5d28mkzfvc8yzqxcss0k46bkmqhqjkqq886n2mm";
   };
 
   buildInputs = [ ocaml findlib menhir which ];

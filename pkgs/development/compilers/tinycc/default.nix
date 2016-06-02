@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://repo.or.cz/tinycc.git";
     rev = "80343ab7d829c21c65f8f9a14dd20158d028549f";
-    sha256 = "1bz75aj93ivb2d8hfk2bczsrwa56lv7vprvdi8c1r5phjvawbshy";
+    sha256 = "0l2qhlvwya2djjbwxgwvhfa11bscqcw1x8w5dzy7klzns773pv7d";
   };
 
   nativeBuildInputs = [ perl texinfo ];

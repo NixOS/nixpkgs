@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = https://github.com/poliva/lightum;
     rev = "123e6babe0669b23d4c1dfa5511088608ff2baa8";
-    sha256 = "1r8c9mb82qgs8i7dczqx8fc7xrbn413b59xkqgjh4z1pfy75sl79";
+    sha256 = "01x24rcrkgksyvqpgkr9zafg3jgs8nqng8yf0hx0kbmcimar8dbp";
   };
 
   buildInputs = [
