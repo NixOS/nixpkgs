@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, qt4 }:
+{ stdenv, fetchurl, gnutls, gtk, libgcrypt, pkgconfig, gettext, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "gwenhywfar-${version}";
@@ -41,11 +41,9 @@ stdenv.mkDerivation rec {
       configure
   '';
 
-  propagatedBuildInputs = [ gnutls libgcrypt ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
-  buildInputs = [ gtk qt4 ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk qt4 gnutls libgcrypt ];
 
   QTDIR = qt4;
 
