@@ -16,11 +16,17 @@ stdenv.mkDerivation rec {
     sha256 = "1x0isvpk43rq2zlyyb9p0kgjmqv7yq07vgkiprw3f5sjkykvxw6d";
   };
 
+  postPatch = ''
+    sed -i -e '/^aqbanking_plugindir=/ {
+      c aqbanking_plugindir="\''${libdir}/gwenhywfar/plugins"
+    }' configure
+  '';
+
   buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  configureFlags = "--with-gwen-dir=${gwenhywfar}";
+  configureFlags = [ "--with-gwen-dir=${gwenhywfar}" ];
 
   meta = with stdenv.lib; {
     description = "An interface to banking tasks, file formats and country information";
