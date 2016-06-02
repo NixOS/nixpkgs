@@ -4487,7 +4487,7 @@ in
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc7103.override {
+  haskellPackages = haskell.packages.ghc801.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
@@ -7355,6 +7355,8 @@ in
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
+
+  hydra = callPackage ../development/tools/misc/hydra {};
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -15760,10 +15762,6 @@ in
 
   gnome_themes_standard = gnome3.gnome_themes_standard;
 
-  mate-icon-theme = callPackage ../misc/themes/mate-icon-theme { };
-
-  mate-themes = callPackage ../misc/themes/mate-themes { };
-
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
   kde5PackagesFun = self: with self; {
@@ -16774,6 +16772,12 @@ in
   tvheadend = callPackage ../servers/tvheadend { };
 
   ums = callPackage ../servers/ums { };
+
+  unity3d = callPackage ../development/tools/unity3d {
+    stdenv = stdenv_32bit;
+    gcc_32bit = pkgsi686Linux.gcc;
+    inherit (gnome2) GConf libgnomeui gnome_vfs;
+  };
 
   urbit = callPackage ../misc/urbit { };
 

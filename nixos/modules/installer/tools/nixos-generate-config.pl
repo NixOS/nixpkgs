@@ -518,8 +518,8 @@ if ($showHardwareConfig) {
         my $bootLoaderConfig = "";
         if (-e "/sys/firmware/efi/efivars") {
             $bootLoaderConfig = <<EOF;
-  # Use the gummiboot efi boot loader.
-  boot.loader.gummiboot.enable = true;
+  # Use the systemd-boot EFI boot loader.
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 EOF
         } elsif ($virt ne "systemd-nspawn") {

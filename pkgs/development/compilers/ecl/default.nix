@@ -10,7 +10,7 @@ let
     version="16.1.2";
     name="${baseName}-${version}";
     hash="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
-    url="https://common-lisp.net/project/ecl/files/release/16.1.2/ecl-16.1.2.tgz";
+    url="https://common-lisp.net/project/ecl/static/files/release/ecl-16.1.2.tgz";
     sha256="16ab8qs3awvdxy8xs8jy82v8r04x4wr70l9l2j45vgag18d2nj1d";
   };
   buildInputs = [

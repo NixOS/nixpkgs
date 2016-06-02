@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "AR=ar"
     "RANLIB=ranlib"
     "OBJCOPY=objcopy"
-  ];
+  ] ++ stdenv.lib.optional stdenv.isArm "ARCH=arm";
 
   meta = with stdenv.lib; {
     description = "GNU EFI development toolchain";

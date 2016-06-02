@@ -10,7 +10,7 @@
 doing:
 
 <screen>
-$ shutdown
+# shutdown
 </screen>
 
 This is equivalent to running <command>systemctl
@@ -19,7 +19,7 @@ poweroff</command>.</para>
 <para>To reboot the system, run
 
 <screen>
-$ reboot
+# reboot
 </screen>
 
 which is equivalent to <command>systemctl reboot</command>.
@@ -28,7 +28,7 @@ Alternatively, you can quickly reboot the system using
 the new kernel into memory:
 
 <screen>
-$ systemctl kexec
+# systemctl kexec
 </screen>
 
 </para>

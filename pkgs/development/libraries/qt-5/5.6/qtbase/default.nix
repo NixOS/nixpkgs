@@ -211,6 +211,14 @@ stdenv.mkDerivation {
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
 
+  postInstall = ''
+    find "$out" -name "*.cmake" | while read file; do
+        substituteInPlace "$file" \
+            --subst-var-by NIX_OUT "$out" \
+            --subst-var-by NIX_DEV "$dev"
+    done
+  '';
+
   preFixup = ''
     # We cannot simply set these paths in configureFlags because libQtCore retains
     # references to the paths it was built with.

@@ -1,7 +1,7 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
-  
+
 <refmeta>
   <refentrytitle><filename>configuration.nix</filename></refentrytitle>
   <manvolnum>5</manvolnum>
@@ -34,5 +34,5 @@ therein.</para>
 <xi:include href="options-db.xml" />
 
 </refsection>
-  
+
 </refentry>

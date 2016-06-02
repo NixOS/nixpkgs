@@ -29,7 +29,6 @@ _ecmPropagateSharedData() {
 
 _ecmConfig() {
     # Because we need to use absolute paths here, we must set *all* the paths.
-    cmakeFlags+=" -DKDE_SKIP_RPATH_SETTINGS=TRUE"
     cmakeFlags+=" -DKDE_INSTALL_EXECROOTDIR=${!outputBin}"
     cmakeFlags+=" -DKDE_INSTALL_BINDIR=${!outputBin}/bin"
     cmakeFlags+=" -DKDE_INSTALL_SBINDIR=${!outputBin}/sbin"

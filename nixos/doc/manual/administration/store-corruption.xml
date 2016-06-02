@@ -18,7 +18,7 @@ you may be able to fix it automatically.</para>
 system configuration, you can fix it by doing
 
 <screen>
-$ nixos-rebuild switch --repair
+# nixos-rebuild switch --repair
 </screen>
 
 This will cause Nix to check every path in the closure, and if its
@@ -28,7 +28,7 @@ the path is rebuilt or redownloaded.</para>
 <para>You can also scan the entire Nix store for corrupt paths:
 
 <screen>
-$ nix-store --verify --check-contents --repair
+# nix-store --verify --check-contents --repair
 </screen>
 
 Any corrupt paths will be redownloaded if they’re available in a

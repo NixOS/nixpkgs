@@ -7,8 +7,8 @@ self: super: {
   # Some packages need a non-core version of Cabal.
   Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
   Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
-  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; });
+  Cabal_1_22_4_0 = (dontCheck super.Cabal_1_22_4_0).overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
@@ -237,19 +237,20 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gio pkgs.glib) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
+  # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
     hardeningDisable = [ "fortify" ];
   });
-  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gtk pkgs.gtk) (drv: {
+  gtk = addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
@@ -604,7 +605,7 @@ self: super: {
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
   # https://github.com/jgm/pandoc/issues/2709
-  pandoc = disableSharedExecutables super.pandoc;
+  pandoc = doJailbreak (disableSharedExecutables super.pandoc);
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -662,8 +663,8 @@ self: super: {
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = self.callPackage ../tools/haskell/cabal2nix/cabal2nix.nix {};
-  hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix {};
-  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix {};
+  hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix { deepseq-generics = self.deepseq-generics_0_1_1_2; };
+  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix { deepseq-generics = self.deepseq-generics_0_1_1_2; };
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
@@ -772,7 +773,7 @@ self: super: {
   lens-aeson = dontCheck super.lens-aeson;
 
   # Byte-compile elisp code for Emacs.
-  ghc-mod = overrideCabal super.ghc-mod (drv: {
+  ghc-mod = overrideCabal (super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; }) (drv: {
     preCheck = "export HOME=$TMPDIR";
     testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
@@ -1023,4 +1024,19 @@ self: super: {
   yi-solarized = markBroken super.yi-solarized;
   yi-spolsky = markBroken super.yi-spolsky;
 
+  # gtk2hs-buildtools must have Cabal 1.24
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
+
+  # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
+  cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
+  pango = addBuildTool super.pango self.gtk2hs-buildtools;
+
+  # esqueleto requires an older version of the persistent library, and
+  # corresponding versions of -template and -sqlite for for its test
+  # suite.
+  esqueleto = super.esqueleto.overrideScope (self: super: {
+    persistent-template = super.persistent-template_2_1_8_1;
+    persistent-sqlite = super.persistent-sqlite_2_2_1;
+    persistent = super.persistent_2_2_4_1;
+  });
 }
