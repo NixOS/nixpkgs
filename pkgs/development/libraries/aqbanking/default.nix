@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   version = "5.6.10";
 
   src = let
-    releaseNum = 206; # Change this on update
-    qstring = "package=03&release=${toString releaseNum}&file=01";
+    inherit ((import ./sources.nix).aqbanking) sha256 releaseId;
+    qstring = "package=03&release=${releaseId}&file=01";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
-    sha256 = "1x0isvpk43rq2zlyyb9p0kgjmqv7yq07vgkiprw3f5sjkykvxw6d";
+    inherit sha256;
   };
 
   postPatch = ''

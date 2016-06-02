@@ -5,13 +5,13 @@ stdenv.mkDerivation rec {
   version = "4.15.3";
 
   src = let
-    releaseNum = 201; # Change this on update
-    qstring = "package=01&release=${toString releaseNum}&file=01";
+    inherit ((import ./sources.nix).gwenhywfar) sha256 releaseId;
+    qstring = "package=01&release=${releaseId}&file=01";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
     name = "${name}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
-    sha256 = "0fp67s932x66xfljb26zbrn8ambbc5y5c3hllr6l284nr63qf3ka";
+    inherit sha256;
   };
 
   postPatch = let
