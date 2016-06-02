@@ -11407,7 +11407,6 @@ in
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3
-    ubootVersatileExpressCA9
     ubootWandboard
     ;
 

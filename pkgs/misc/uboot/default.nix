@@ -104,14 +104,6 @@ in rec {
     filesToInstall = ["u-boot.bin"];
   };
 
-  # Intended only for QEMU's vexpress-a9 emulation target!
-  ubootVersatileExpressCA9 = buildUBoot rec {
-    defconfig = "vexpress_ca9x4_defconfig";
-    targetPlatforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot"];
-    patches = [ ./vexpress-Use-config_distro_bootcmd.patch ];
-  };
-
   ubootWandboard = buildUBoot rec {
     defconfig = "wandboard_defconfig";
     targetPlatforms = ["armv7l-linux"];
