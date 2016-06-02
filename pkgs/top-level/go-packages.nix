@@ -4080,31 +4080,6 @@ let
     disabled = isGo14;
   };
 
-  interlock = buildFromGitHub rec {
-    version = "2016.01.14";
-    rev = "v${version}";
-    owner = "inversepath";
-    repo = "interlock";
-    sha256 = "0wabx6vqdxh2aprsm2rd9mh71q7c2xm6xk9a6r1bn53r9dh5wrsb";
-    buildInputs = [ crypto textsecure ];
-    nativeBuildInputs = [ pkgs.sudo ];
-    buildFlags = [ "-tags textsecure" ];
-    subPackages = [ "./cmd/interlock" ];
-    postPatch = ''
-      grep -lr '/s\?bin/' | xargs sed -i \
-        -e 's|/bin/mount|${pkgs.utillinux}/bin/mount|' \
-        -e 's|/bin/umount|${pkgs.utillinux}/bin/umount|' \
-        -e 's|/bin/cp|${pkgs.coreutils}/bin/cp|' \
-        -e 's|/bin/mv|${pkgs.coreutils}/bin/mv|' \
-        -e 's|/bin/chown|${pkgs.coreutils}/bin/chown|' \
-        -e 's|/bin/date|${pkgs.coreutils}/bin/date|' \
-        -e 's|/sbin/poweroff|${pkgs.systemd}/sbin/poweroff|' \
-        -e 's|/usr/bin/sudo|/var/setuid-wrappers/sudo|' \
-        -e 's|/sbin/cryptsetup|${pkgs.cryptsetup}/bin/cryptsetup|'
-    '';
-    disabled = isGo14;
-  };
-
   template = buildFromGitHub {
     rev = "14fd436dd20c3cc65242a9f396b61bfc8a3926fc";
     owner = "alecthomas";

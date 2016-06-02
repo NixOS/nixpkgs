@@ -43,5 +43,50 @@
       "rev": "1f22c0103821b9390939b6776727195525381532",
       "sha256": "05ahvn9g9cj7797n8ryfxv2g26v3lx1pza9d9pg97iw0rvar9i1h"
     }
+  },
+  {
+    "goPackagePath": "github.com/Sirupsen/logrus",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/Sirupsen/logrus",
+      "rev": "a26f43589d737684363ff856c5a0f9f24b946510",
+      "sha256": "13vprfbrsrqky145k26vayl9209gldh2v79614m0qxpx0ln1w2bs"
+    }
+  },
+  {
+    "goPackagePath": "github.com/agl/ed25519",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/agl/ed25519",
+      "rev": "278e1ec8e8a6e017cd07577924d6766039146ced",
+      "sha256": "165d89cc6dl28j4hkn86pny0jz3sa6hamzdvpvwdj4iha3x6lzc9"
+    }
+  },
+  {
+    "goPackagePath": "github.com/golang/protobuf",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/golang/protobuf",
+      "rev": "dda510ac0fd43b39770f22ac6260eb91d377bce3",
+      "sha256": "0bmz87is9zvxvzycp3135l61ippjw6vmpjz0b9pq8gpxx6sj2vj4"
+    }
+  },
+  {
+    "goPackagePath": "github.com/janimo/textsecure",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/janimo/textsecure",
+      "rev": "c38f429e48d6b2776d17b4171f216f132185b0f6",
+      "sha256": "191pwgfgphr0x04dwpvniax4wilpv52l25bw7d3igvnw302y7i94"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/net",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/net",
+      "rev": "ef00b378c73f107bf44d5c9b69875255ce89b79a",
+      "sha256": "168dhvl0wqiac8xmy8mqkvspd7cq6vfjpj80zdnriwy169nykcyz"
+    }
   }
 ]

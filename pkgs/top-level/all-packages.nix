@@ -819,7 +819,7 @@ in
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
-  interlock = goPackages.interlock.bin // { outputs = [ "bin" ]; };
+  interlock = (callPackage ../servers/interlock {}).bin;
 
   mathics = pythonPackages.mathics;
 
