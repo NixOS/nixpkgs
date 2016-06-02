@@ -19,7 +19,7 @@
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
-, gtkStyle ? true, libgnomeui, GConf, gnome_vfs, gtk
+, libgnomeui, GConf, gnome_vfs, gtk
 , decryptSslTraffic ? false
 }:
 
@@ -28,7 +28,7 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 
   # Search path for Gtk plugin
-  gtkLibPath = lib.makeLibraryPath [ gtk.out gnome_vfs.out libgnomeui.out GConf.out ];
+  gtkLibPath = lib.makeLibraryPath [ gtk gnome_vfs libgnomeui GConf ];
 
   dontInvalidateBacking = fetchurl {
     url = "https://codereview.qt-project.org/gitweb?p=qt/qtbase.git;a=patch;h=0f68f8920573cdce1729a285a92ac8582df32841;hp=24c50f8dcf7fa61ac3c3d4d6295c259a104a2b8c";
@@ -147,7 +147,7 @@ stdenv.mkDerivation {
     -xcb
     -qpa xcb
     -${lib.optionalString (cups == null) "no-"}cups
-    -${lib.optionalString (!gtkStyle) "no-"}gtkstyle
+    -gtkstyle
 
     -no-eglfs
     -no-directfb
@@ -210,7 +210,8 @@ stdenv.mkDerivation {
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql
-    ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
+    # FIXME: move to the main list on rebuild.
+    ++ [gnome_vfs.out libgnomeui.out gtk GConf];
 
   nativeBuildInputs = [ fixQtModuleCMakeConfig lndir patchelf perl pkgconfig python ];
 
