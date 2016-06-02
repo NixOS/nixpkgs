@@ -48,9 +48,6 @@ self: super: {
   epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
     hardeningDisable = [ "format" ];
   });
-  pango = super.pango.overrideDerivation (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -1029,7 +1026,9 @@ self: super: {
 
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
-  pango = addBuildTool super.pango self.gtk2hs-buildtools;
+  pango = pkgs.lib.overrideDerivation (addBuildTool super.pango self.gtk2hs-buildtools) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
 
   # esqueleto requires an older version of the persistent library, and
   # corresponding versions of -template and -sqlite for for its test
