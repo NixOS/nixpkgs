@@ -446,7 +446,7 @@ in
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = goPackages.asciinema.bin // { outputs = [ "bin" ]; };
+  asciinema = (callPackage ../tools/misc/asciinema {}).bin;
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };

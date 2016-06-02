@@ -250,13 +250,6 @@ let
     sha256 = "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly";
   };
 
-  asciinema = buildFromGitHub {
-    rev = "v1.2.0";
-    owner = "asciinema";
-    repo = "asciinema";
-    sha256 = "0wvrq92ackhfycfs1fircs8al3ji69igqqrc55ic29wbpnvz355x";
-  };
-
   asmfmt = buildFromGitHub {
     rev = "7971758b0c6584f67d745c62d006814ae7b44e9d";
     owner = "klauspost";
