@@ -3,12 +3,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aqbanking-5.5.1";
+  name = "aqbanking-${version}";
+  version = "5.6.10";
 
-  src = fetchurl {
-    url = "http://www2.aquamaniac.de/sites/download/download.php?package=03&release=118&file=01&dummy=${name}.tar.gz";
+  src = let
+    releaseNum = 206; # Change this on update
+    qstring = "package=03&release=${toString releaseNum}&file=01";
+    mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
+  in fetchurl {
     name = "${name}.tar.gz";
-    sha256 = "1pxd5xv2xls1hyizr1vbknzgb66babhlp72777rcxq46gp91g3r3";
+    urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
+    sha256 = "1x0isvpk43rq2zlyyb9p0kgjmqv7yq07vgkiprw3f5sjkykvxw6d";
   };
 
   buildInputs = [ gmp gwenhywfar libtool libxml2 libxslt xmlsec zlib ];
