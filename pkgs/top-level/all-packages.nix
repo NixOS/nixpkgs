@@ -4107,6 +4107,10 @@ in
 
   avra = callPackage ../development/compilers/avra { };
 
+  avian = callPackage ../development/compilers/avian {
+    stdenv = overrideCC stdenv gcc49;
+  };
+
   bigloo = callPackage ../development/compilers/bigloo {
     stdenv = overrideCC stdenv gcc49;
   };
