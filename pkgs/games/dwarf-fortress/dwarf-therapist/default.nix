@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     mkdir -p $layouts
     mv $out/share/dwarftherapist/memory_layouts/* $layouts
     rmdir $out/share/dwarftherapist/memory_layouts
+    # Useless symlink
+    rm $out/bin/dwarftherapist
   '';
 
   meta = {
