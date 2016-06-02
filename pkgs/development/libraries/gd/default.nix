@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://libgd.github.io/;
     description = "A dynamic image creation library";
