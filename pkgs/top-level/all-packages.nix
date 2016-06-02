@@ -14906,6 +14906,8 @@ in
 
   xzgv = callPackage ../applications/graphics/xzgv { };
 
+  yabar = callPackage ../applications/window-managers/yabar { };
+
   yate = callPackage ../applications/misc/yate { };
 
   inherit (gnome3) yelp;
