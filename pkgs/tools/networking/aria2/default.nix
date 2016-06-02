@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, cacert
 , openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, Security
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ];
 
-  configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
+  configureFlags = [ "--with-ca-bundle=${cacert}/etc/ssl/certs/ca-bundle.crt" ] ++
+    stdenv.lib.optional stdenv.isDarwin [ "--with-openssl" "--without-appletls" ];
 
   enableParallelBuilding = true;
 
@@ -25,6 +24,6 @@ stdenv.mkDerivation rec {
     description = "A lightweight, multi-protocol, multi-source, command-line download utility";
     maintainers = with maintainers; [ koral jgeerds ];
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
