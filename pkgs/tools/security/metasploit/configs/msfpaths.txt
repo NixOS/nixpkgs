@@ -1,3 +1,0 @@
-GEM_HOME=/home/matt/.gem/ruby/2.3.0/cache/
-GEM_PATH=/nix/store/7j49lcxbbcyn5lf2w9da8xm0kgn0b2ss-metasploit-framework-4.12.5/.gem/ruby/2.3.0
-
