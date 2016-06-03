@@ -5607,7 +5607,7 @@ in
     perf = linuxPackages.perf;
   };
 
-  mesos-dns = goPackages.mesos-dns.bin // { outputs = [ "bin" ]; };
+  mesos-dns = (callPackage ../servers/mesos-dns { }).bin;
 
   mujs = callPackage ../development/interpreters/mujs { };
 

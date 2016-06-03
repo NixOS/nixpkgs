@@ -2370,27 +2370,6 @@ let
     propagatedBuildInputs = [ ugorji.go armon.go-metrics ];
   };
 
-  mesos-dns = buildFromGitHub {
-    rev = "v0.1.2";
-    owner = "mesosphere";
-    repo = "mesos-dns";
-    sha256 = "0zs6lcgk43j7jp370qnii7n55cd9pa8gl56r8hy4nagfvlvrcm02";
-
-    # Avoid including the benchmarking test helper in the output:
-    subPackages = [ "." ];
-
-    buildInputs = [ glog mesos-go dns go-restful ];
-  };
-
-  mesos-go = buildFromGitHub {
-    rev = "d98afa618cc9a9251758916f49ce87f9051b69a4";
-    owner = "mesos";
-    repo = "mesos-go";
-    sha256 = "01ab0jf3cfb1rdwwb21r38rcfr5vp86pkfk28mws8298mlzbpri7";
-    propagatedBuildInputs = [ gogo.protobuf glog net testify go-zookeeper objx uuid ];
-    excludedPackages = "test";
-  };
-
   mesos-stats = buildGoPackage rec {
     rev = "0c6ea494c19bedc67ebb85ce3d187ec21050e920";
     name = "mesos-stats-${stdenv.lib.strings.substring 0 7 rev}";
