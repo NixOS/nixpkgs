@@ -11716,6 +11716,22 @@ in modules // {
     };
   };
 
+  klein = buildPythonPackage rec {
+    name = "klein-15.3.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/klein/${name}.tar.gz";
+      sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
+    };
+
+    propagatedBuildInputs = with self; [ werkzeug twisted ];
+
+    meta = {
+      description = "Klein Web Micro-Framework";
+      homepage    = "https://github.com/twisted/klein";
+      license     = licenses.mit;
+    };
+   };
+
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
     version = "3.0.35";
