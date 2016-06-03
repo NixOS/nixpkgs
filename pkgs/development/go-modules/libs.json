@@ -99,15 +99,6 @@
     }
   },
   {
-    "goPackagePath": "github.com/jessevdk/go-flags",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/jessevdk/go-flags",
-      "rev": "97448c91aac742cbca3d020b3e769013a420a06f",
-      "sha256": "0fv3yxvq8m3639a279hq4pf0c52ngqfl5n1vklcfympndrb7zjzj"
-    }
-  },
-  {
     "goPackagePath": "gopkg.in/mgo.v2",
     "fetch": {
       "type": "git",
@@ -375,6 +366,15 @@
       "url": "https://github.com/kr/binarydist",
       "rev": "9955b0ab8708602d411341e55fffd7e0700f86bd",
       "sha256": "11wncbbbrdcxl5ff3h6w8vqfg4bxsf8709mh6vda0cv236flkyn3"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jessevdk/go-flags",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jessevdk/go-flags",
+      "rev": "1b89bf73cd2c3a911d7b2a279ab085c4a18cf539",
+      "sha256": "027nglc5xx1cm03z9sisg0iqrhwcj6gh5z254rrpl8p4fwrxx680"
     }
   }
 ]

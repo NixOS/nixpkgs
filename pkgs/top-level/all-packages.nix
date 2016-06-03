@@ -3237,7 +3237,7 @@ in
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
-  s3gof3r = goPackages.s3gof3r.bin // { outputs = [ "bin" ]; };
+  s3gof3r = (callPackage ../tools/networking/s3gof3r { }).bin;
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
