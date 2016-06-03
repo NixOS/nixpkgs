@@ -971,27 +971,6 @@ let
     sha256 = "124hci9whsvlcywsfz5y20kkj3nhy176a1d5s1lkvsga09yxq6wm";
   };
 
-  git-lfs = buildFromGitHub {
-    version = "1.1.1";
-    rev = "v1.1.1";
-    owner = "github";
-    repo = "git-lfs";
-    sha256 = "1m7kii57jrsb22m5x9v8xa3s1qmipfkpk6cscgxrbrj7g0a75fnc";
-
-    # Tests fail with 'lfstest-gitserver.go:46: main redeclared in this block'
-    excludedPackages = [ "test" ];
-
-    preBuild = ''
-      pushd go/src/github.com/github/git-lfs
-        go generate ./commands
-      popd
-    '';
-
-    postInstall = ''
-      rm -v $bin/bin/{man,script}
-    '';
-  };
-
   glide = buildFromGitHub {
     rev    = "0.10.2";
     owner  = "Masterminds";

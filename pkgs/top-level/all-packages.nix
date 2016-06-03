@@ -1690,7 +1690,7 @@ in
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  git-lfs = goPackages.git-lfs.bin // { outputs = [ "bin" ]; };
+  git-lfs = (callPackage ../applications/version-management/git-lfs {}).bin;
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
