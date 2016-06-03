@@ -15865,6 +15865,32 @@ in modules // {
     };
   };
 
+  partd = buildPythonPackage rec {
+    name = "partd-${version}";
+    version = "0.3.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/partd/${name}.tar.gz";
+      sha256 = "0fgrkfhgpm0hf5gs6wvgv7p9ls2kvgk0mc5hkmjw5slfbkn3fz8v";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Appendable key-value storage";
+      license = with licenses; [ bsd3 ];
+      homepage = http://github.com/dask/partd/;
+    };
+
+
+  };
+
   patsy = buildPythonPackage rec {
     name = "patsy-${version}";
     version = "0.3.0";
