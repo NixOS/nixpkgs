@@ -41,6 +41,8 @@ if [ ! -e /proc/1 ]; then
     mount -n -t proc proc /proc
     mkdir -m 0755 -p /dev
     mount -t devtmpfs devtmpfs /dev
+    mkdir -m 0755 -p /sys
+    mount -t sysfs sysfs /sys
 fi
 
 
