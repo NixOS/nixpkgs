@@ -2643,17 +2643,6 @@ let
     doCheck = false; # check this again
   };
 
-  oh = buildFromGitHub {
-    rev = "0daaf4081475fb9d6b3801c85019bdd57b2ee9b4";
-    version = "2016-05-23";
-    owner = "michaelmacinnis";
-    repo = "oh";
-    sha256 = "0ajidzs0aisbw74nri9ks6sx6644nmwkisc9mvxm3f89zmnlsgwr";
-    goPackageAliases = [ "github.com/michaelmacinnis/oh" ];
-    buildInputs = [ adapted liner ];
-    disabled = isGo14;
-  };
-
   openssl = buildFromGitHub {
     rev = "4c6dbafa5ec35b3ffc6a1b1e1fe29c3eba2053ec";
     owner = "10gen";

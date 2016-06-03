@@ -4085,7 +4085,7 @@ in
 
   mksh = callPackage ../shells/mksh { };
 
-  oh = goPackages.oh.bin // { outputs = [ "bin" ]; };
+  oh = (callPackage ../shells/oh { }).bin;
 
   pash = callPackage ../shells/pash { };
 
