@@ -19,5 +19,6 @@ agda.mkDerivation (self: rec {
     license = stdenv.lib.licenses.cc-by-40;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    broken = true;  # replaced by constructive-sheaf-semantics
   };
 })

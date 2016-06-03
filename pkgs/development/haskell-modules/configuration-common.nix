@@ -926,10 +926,22 @@ self: super: {
     unordered-containers = self.unordered-containers_0_2_5_1;
     cpphs = self.cpphs_1_19_3;
   };
-  Agda = super.Agda.override {
+  Agda = overrideCabal (super.Agda.override {
     unordered-containers = self.unordered-containers_0_2_5_1;
     cpphs = self.cpphs_1_19_3;
-  };
+  }) (drv: {
+    postInstall = ''
+      # Separate loops to avoid internal error
+      files=($out/share/*-ghc-*/Agda-*/lib/prim/Agda/{Primitive.agda,Builtin/*.agda})
+      for f in "''${files[@]}" ; do
+        $out/bin/agda $f
+      done
+      for f in "''${files[@]}" ; do
+        $out/bin/agda -c --no-main $f
+      done
+      $out/bin/agda-mode compile
+    '';
+  });
 
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
