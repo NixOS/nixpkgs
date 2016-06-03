@@ -142,5 +142,14 @@
       "rev": "9c7d514efdb561775030eaf8f1a9ae6bddb3a2ca",
       "sha256": "024sc7g55v4s54irssm5wsn74sr2k2ynsm6z16w47q66cxhgvby1"
     }
+  },
+  {
+    "goPackagePath": "github.com/godbus/dbus",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/godbus/dbus",
+      "rev": "32c6cc29c14570de4cf6d7e7737d68fb2d01ad15",
+      "sha256": "0v401f761l88yapiaw23pxvxviqrwl2r2vfd6lq02044i7x4i5r3"
+    }
   }
 ]

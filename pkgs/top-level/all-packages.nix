@@ -1764,7 +1764,8 @@ in
 
   go-sct = (callPackage ../tools/X11/go-sct { }).bin;
 
-  go-upower-notify = goPackages.upower-notify.bin // { outputs = [ "bin" ]; };
+  # rename to upower-notify?
+  go-upower-notify = (callPackage ../tools/misc/upower-notify { }).bin;
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
