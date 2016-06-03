@@ -30,6 +30,8 @@ let
 
     kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
+    akonadi = callPackage ./akonadi.nix {};
+    akonadi-calendar = callPackage ./akonadi-calendar.nix {};
     ark = callPackage ./ark.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
@@ -40,12 +42,22 @@ let
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
     kcalc = callPackage ./kcalc.nix {};
+    kcalcore = callPackage ./kcalcore.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
+    kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
+    kdepim = callPackage ./kdepim.nix {};
+    kdepimlibs = callPackage ./kdepimlibs.nix {};
+    kdepim-runtime = callPackage ./kdepim-runtime.nix {};
+    kmailtransport = callPackage ./kmailtransport.nix {};
+    kmbox = callPackage ./kmbox.nix {};
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     kio-extras = callPackage ./kio-extras.nix {};
+    kldap = callPackage ./kldap.nix {};
+    kmime = callPackage ./kmime.nix {};
     konsole = callPackage ./konsole.nix {};
+    kpimtextedit = callPackage ./kpimtextedit.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
