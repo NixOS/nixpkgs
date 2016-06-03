@@ -74,6 +74,7 @@ package-maintainers:
     - hsyslog
     - jailbreak-cabal
     - language-nix
+    - pandoc
     - stack
     - streamproc
   gebner:
@@ -3347,7 +3348,6 @@ dont-distribute-packages:
   pandoc-japanese-filters:                      [ i686-linux, x86_64-darwin, x86_64-linux ]
   pandoc-plantuml-diagrams:                     [ i686-linux, x86_64-linux ]
   pandoc-unlit:                                 [ i686-linux, x86_64-darwin, x86_64-linux ]
-  pandoc:                                       [ i686-linux, x86_64-darwin, x86_64-linux ]
   PandocAgda:                                   [ i686-linux, x86_64-darwin, x86_64-linux ]
   papillon:                                     [ i686-linux, x86_64-linux ]
   pappy:                                        [ i686-linux, x86_64-linux ]
