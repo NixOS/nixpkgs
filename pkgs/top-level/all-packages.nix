@@ -16497,8 +16497,8 @@ in
   });
 
   gnuk = callPackage ../misc/gnuk { };
-  gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
-  gnuk-git = callPackage ../misc/gnuk/git.nix { };
+  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
+  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
 
   greybird = callPackage ../misc/themes/greybird { };
 
