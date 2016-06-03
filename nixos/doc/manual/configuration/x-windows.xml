@@ -115,7 +115,7 @@ services.xserver.synaptics.twoFingerScroll = true;
 
 </simplesect>
 
-<simplesect><title>GTK/Qt themes</title></simplesect>
+<simplesect><title>GTK/Qt themes</title>
 
 <para>GTK themes can be installed either to user profile or system-wide (via
 <literal>system.environmentPackages</literal>). To make Qt 5 applications look similar
