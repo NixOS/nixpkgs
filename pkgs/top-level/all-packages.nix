@@ -1514,7 +1514,7 @@ in
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = goPackages.flannel.bin // { outputs = [ "bin" ]; };
+  flannel = (callPackage ../tools/networking/flannel {}).bin;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
