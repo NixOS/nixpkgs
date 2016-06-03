@@ -1758,7 +1758,7 @@ in
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = goPackages.mtpfs.bin // { outputs = [ "bin" ]; };
+  go-mtpfs = (callPackage ../tools/filesystems/go-mtpfs { }).bin;
 
   go-pup = goPackages.pup.bin // { outputs = [ "bin" ]; };
 

@@ -124,5 +124,14 @@
       "rev": "14b3d72120e8d10ea6e6b7f87f7175734b1faab8",
       "sha256": "1nza31jvkpka5431c4bdbirvjdy36b1b55sbzljqhqih25jrcjx5"
     }
+  },
+  {
+    "goPackagePath": "github.com/hanwen/go-fuse",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/hanwen/go-fuse",
+      "rev": "bd746dd8bcc8c059a9d953a786a6156eb83f398e",
+      "sha256": "1dvvclp418j3d02v9717sfqhl6fw6yyddr9r3j8gsiv8nb62ib56"
+    }
   }
 ]
