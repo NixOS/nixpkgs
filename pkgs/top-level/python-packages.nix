@@ -15708,6 +15708,7 @@ in modules // {
       modules.sqlite3
       beautifulsoup4
       openpyxl
+      tables
       xlwt
     ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
 
