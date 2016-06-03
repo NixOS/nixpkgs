@@ -3740,7 +3740,7 @@ in
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
-  textql = goPackages.textql.bin // { outputs = [ "bin" ]; };
+  textql = (callPackage ../development/tools/textql { }).bin;
 
   html2text = callPackage ../tools/text/html2text { };
 
