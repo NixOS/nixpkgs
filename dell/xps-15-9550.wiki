@@ -27,7 +27,7 @@ These settings are needed both for booting the final install, and installer itse
 
 === After installation ===
 
-* ''Add gummiboot to UEFI boot list.'' The (uneditable anyways) settings mapping drive UUIDs to HD* work fine.
+* ''Add systemd-boot to UEFI boot list.'' The (uneditable anyways) settings mapping drive UUIDs to HD* work fine.
 
 === Optional ===
 
