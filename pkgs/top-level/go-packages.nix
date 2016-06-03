@@ -2462,7 +2462,7 @@ let
     ];
   };
 
-  gx = buildFromGitHub rec {
+  gx = {gxHelpers ? [ ] , ... }: buildFromGitHub rec {
     rev    = "v${version}";
     version = "0.7.0";
     owner  = "whyrusleeping";
@@ -2473,10 +2473,13 @@ let
         --replace "github.com/ipfs/go-ipfs/Godeps/_workspace/src/github.com/jbenet/go-random" \
                   "github.com/jbenet/go-random"
     '';
+    buildInputs = [ pkgs.makeWrapper ];
     propagatedBuildInputs = [
       go-homedir semver cli-go go-git-ignore stump go-random
       go-multiaddr go-multiaddr-net go-ipfs-api go-random-files
     ];
+    gxHelpersPaths = stdenv.lib.concatMapStringsSep ":" (from: from) gxHelpers;
+    postInstall = "wrapProgram $bin/bin/gx --prefix PATH ${gxHelpersPaths}";
   };
 
   ipfs = buildFromGitHub{
