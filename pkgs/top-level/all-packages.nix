@@ -881,7 +881,7 @@ in
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = goPackages.mongo-tools.bin // { outputs = [ "bin" ]; };
+  mongodb-tools = (callPackage ../tools/misc/mongodb-tools { }).bin;
 
   mstflint = callPackage ../tools/misc/mstflint { };
 

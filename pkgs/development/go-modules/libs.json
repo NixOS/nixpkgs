@@ -88,5 +88,41 @@
       "rev": "ef00b378c73f107bf44d5c9b69875255ce89b79a",
       "sha256": "168dhvl0wqiac8xmy8mqkvspd7cq6vfjpj80zdnriwy169nykcyz"
     }
+  },
+  {
+    "goPackagePath": "github.com/howeyc/gopass",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/howeyc/gopass",
+      "rev": "2c70fa70727c953c51695f800f25d6b44abb368e",
+      "sha256": "152lrkfxk205rlxiign0w5wb0fmfh910yz4jhlv4f4l1qr1h2lx8"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jessevdk/go-flags",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jessevdk/go-flags",
+      "rev": "97448c91aac742cbca3d020b3e769013a420a06f",
+      "sha256": "0fv3yxvq8m3639a279hq4pf0c52ngqfl5n1vklcfympndrb7zjzj"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/mgo.v2",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/mgo.v2",
+      "rev": "c6a7dce14133ccac2dcac3793f1d6e2ef048503a",
+      "sha256": "0rg232q1bkq3y3kd5816hgk1jpf7i38aha5q5ia7j6p9xashz7vj"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/tomb.v2",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/tomb.v2",
+      "rev": "14b3d72120e8d10ea6e6b7f87f7175734b1faab8",
+      "sha256": "1nza31jvkpka5431c4bdbirvjdy36b1b55sbzljqhqih25jrcjx5"
+    }
   }
 ]

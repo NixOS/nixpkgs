@@ -2536,27 +2536,6 @@ let
     buildInputs = [ toml ];
   };
 
-  mongo-tools = buildFromGitHub {
-    rev    = "4fcfd3e57415de95c0c016def07b95bca63cccb4";
-    owner  = "mongodb";
-    repo   = "mongo-tools";
-    sha256 = "0rm7bnb81hr0byxhvagwv8an1bky882nz68cmm2kbznzyprvhyaa";
-    buildInputs = [ gopass go-flags mgo openssl tomb ];
-    excludedPackages = "vendor";
-
-    # Mongodb incorrectly names all of their binaries main
-    # Let's work around this with our own installer
-    preInstall = ''
-      mkdir -p $bin/bin
-      while read b; do
-        rm -f go/bin/main
-        go install $goPackagePath/$b/main
-        cp go/bin/main $bin/bin/$b
-      done < <(find go/src/$goPackagePath -name main | xargs dirname | xargs basename -a)
-      rm -r go/bin
-    '';
-  };
-
   motion = buildFromGitHub {
     rev = "e09baac69ad86bff1de868e8d6c4327eb0a918d7";
     owner = "fatih";
