@@ -1336,19 +1336,6 @@ let
     buildInputs = [ opencontainers.runc ];
   };
 
-  gox = buildGoPackage rec {
-    rev = "e8e6fd4fe12510cc46893dff18c5188a6a6dc549";
-    name = "gox-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/mitchellh/gox";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner  = "mitchellh";
-      repo   = "gox";
-      sha256 = "14jb2vgfr6dv7zlw8i3ilmp125m5l28ljv41a66c9b8gijhm48k1";
-    };
-    buildInputs = [ iochan ];
-  };
-
   gozim = buildFromGitHub {
     rev    = "ea9b7c39cb1d13bd8bf19ba4dc4e2a16bab52f14";
     version = "2016-01-15";
@@ -2150,13 +2137,6 @@ let
     owner  = "spacemonkeygo";
     repo   = "flagfile";
     sha256 = "1y6wf1s51c90qc1aki8qikkw1wqapzjzr690xrmnrngsfpdyvkrc";
-  };
-
-  iochan = buildFromGitHub {
-    rev    = "b584a329b193e206025682ae6c10cdbe03b0cd77";
-    owner  = "mitchellh";
-    repo   = "iochan";
-    sha256 = "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b";
   };
 
   ipfs = buildFromGitHub{

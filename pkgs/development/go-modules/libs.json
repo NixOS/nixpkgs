@@ -493,5 +493,14 @@
       "rev": "ad1edfd30321d8f006ccf05f1e0524adeb943060",
       "sha256": "0c24d9j1gnq7r982h1l2isp3d37379qw155hr8ihx9i2mhpfz317"
     }
+  },
+  {
+    "goPackagePath": "github.com/mitchellh/iochan",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/mitchellh/iochan",
+      "rev": "b584a329b193e206025682ae6c10cdbe03b0cd77",
+      "sha256": "1fcwdhfci41ibpng2j4c1bqfng578cwzb3c00yw1lnbwwhaq9r6b"
+    }
   }
 ]

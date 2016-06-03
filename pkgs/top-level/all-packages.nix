@@ -4553,7 +4553,7 @@ in
 
   go-repo-root = (callPackage ../development/tools/go-repo-root { }).bin;
 
-  gox = goPackages.gox.bin // { outputs = [ "bin" ]; };
+  gox = (callPackage ../development/tools/gox { }).bin;
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
