@@ -1804,15 +1804,6 @@ let
     sha256 = "0gr9f53vayc6501a1kaw4p3h9pgf376cgxsfnr3f2dvp0xacvw8x";
   };
 
-  go-repo-root = buildFromGitHub {
-    rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
-    version = "2014-09-11";
-    owner = "cstrahan";
-    repo = "go-repo-root";
-    sha256 = "1rlzp8kjv0a3dnfhyqcggny0ad648j5csr2x0siq5prahlp48mg4";
-    buildInputs = [ tools ];
-  };
-
   go-rice = buildFromGitHub {
     rev    = "4f3c5af2322e393f305d9674845bc36cd1dea589";
     version = "2016-01-04";

@@ -4551,7 +4551,7 @@ in
 
   go = self.go_1_5;
 
-  go-repo-root = goPackages.go-repo-root.bin // { outputs = [ "bin" ]; };
+  go-repo-root = (callPackage ../development/tools/go-repo-root { }).bin;
 
   gox = goPackages.gox.bin // { outputs = [ "bin" ]; };
 
