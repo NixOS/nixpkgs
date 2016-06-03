@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
-    for i in logfile perm record save; do
+    for i in xlogfile logfile perm record save; do
       mv $out/games/lib/nethackdir/$i $out/games/lib/nethackuserdir
     done
 
