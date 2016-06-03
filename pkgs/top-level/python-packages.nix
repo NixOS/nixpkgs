@@ -1208,6 +1208,27 @@ in modules // {
     };
   });
 
+  attrs = buildPythonPackage (rec {
+    pname = "attrs";
+    version = "16.0.0";
+    name = "attrs-16.0.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/attrs/${name}.tar.gz";
+      sha256 = "1g4asv3hbx5aqz7hjzq3q6ss2cpv1rdv66sp5d21cdyjajj2fs6y";
+    };
+
+    # Mac OS X needs clang for testing
+    buildInputs = with self; [ pytest hypothesis zope_interface
+    pympler coverage ]
+     ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
+
+    meta = {
+      description = "Python attributes without boilerplate";
+      homepage = https://github.com/hynek/attrs;
+      license = licenses.mit;
+    };
+   });
+
   audioread = buildPythonPackage rec {
     name = "audioread-${version}";
     version = "2.1.1";
