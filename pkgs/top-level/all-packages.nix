@@ -1760,7 +1760,7 @@ in
 
   go-mtpfs = (callPackage ../tools/filesystems/go-mtpfs { }).bin;
 
-  go-pup = goPackages.pup.bin // { outputs = [ "bin" ]; };
+  go-pup = (callPackage ../development/tools/pup { }).bin;
 
   go-sct = goPackages.go-sct.bin // { outputs = [ "bin" ]; };
 
