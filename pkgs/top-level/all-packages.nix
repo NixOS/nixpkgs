@@ -5278,6 +5278,7 @@ in
   # rust platform to build cargo itself (with cargoSnapshot)
   rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
   rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
+  rustMuslCargoPlatform = makeRustPlatform (cargoSnapshot rustcMusl) rustMuslCargoPlatform;
 
   makeRustPlatform = cargo: self:
     let
