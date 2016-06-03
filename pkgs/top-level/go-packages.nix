@@ -1134,22 +1134,6 @@ let
     sha256  = "1l1w4mczqmah0c154vb1daw5l3cc7vn5gmy5s67p3ad1lnz5l79x";
   };
 
-  gotty = buildFromGitHub {
-    rev     = "v0.0.10";
-    owner   = "yudai";
-    repo    = "gotty";
-    sha256  = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
-
-    buildInputs = [ cli-go go manners go-bindata-assetfs go-multierror structs websocket hcl pty ];
-
-    meta = with stdenv.lib; {
-      description = "Share your terminal as a web application";
-      homepage = "https://github.com/yudai/gotty";
-      maintainers = with maintainers; [ matthiasbeyer ];
-      license = licenses.mit;
-    };
-  };
-
   govers = buildFromGitHub {
     rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
     version = "2015-01-09";

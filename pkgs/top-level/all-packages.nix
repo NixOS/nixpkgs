@@ -6216,7 +6216,7 @@ in
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
-  gotty = goPackages.gotty.bin // { outputs = [ "bin" ]; };
+  gotty = (callPackage ../servers/gotty { }).bin;
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradleLatest;
