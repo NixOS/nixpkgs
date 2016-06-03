@@ -586,8 +586,10 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2709
-  pandoc = doJailbreak (disableSharedExecutables super.pandoc);
+  # Relax overspecified constraints. Unfortunately, jailbreak won't work.
+  pandoc = overrideCabal super.pandoc (drv: {
+    preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
+  });
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
