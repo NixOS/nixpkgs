@@ -4917,6 +4917,8 @@ in
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    estring = callPackage ../development/ocaml-modules/estring { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
@@ -5096,6 +5098,8 @@ in
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -5256,22 +5260,24 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustcMaster = callPackage ../development/compilers/rustc/head.nix {};
-  rustc = callPackage ../development/compilers/rustc {};
+  rustc = rustcStable;
+  rustcStable = callPackage ../development/compilers/rustc/stable.nix {};
+  rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
+  rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
+
   rustcMusl = callPackage ../development/compilers/rustc/musl.nix {};
 
   rustPlatform = rustStable;
-
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustUnstable = recurseIntoAttrs (makeRustPlatform
-    (cargo.override { rustPlatform = rustUnstableCargoPlatform; }) rustUnstable);
+  rustBeta = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustBeta));
+  rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
+
   rustMusl = recurseIntoAttrs (makeRustPlatform
     (cargo.override { rustPlatform = rustMuslCargoPlatform; }) rustMusl);
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
-  rustMuslCargoPlatform = makeRustPlatform (cargoSnapshot rustcMusl) rustMuslCargoPlatform;
+  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
 
   makeRustPlatform = cargo: self:
     let
@@ -10831,6 +10837,8 @@ in
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
+
+    pktgen = callPackage ../os-specific/linux/pktgen { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -16481,8 +16489,8 @@ in
   });
 
   gnuk = callPackage ../misc/gnuk { };
-  gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
-  gnuk-git = callPackage ../misc/gnuk/git.nix { };
+  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
+  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
 
   greybird = callPackage ../misc/themes/greybird { };
 
@@ -16599,6 +16607,8 @@ in
   robomongo = qt5.callPackage ../applications/misc/robomongo { };
 
   rucksack = callPackage ../development/tools/rucksack { };
+
+  sam-ba = callPackage ../tools/misc/sam-ba { };
 
   opkg = callPackage ../tools/package-management/opkg { };
 

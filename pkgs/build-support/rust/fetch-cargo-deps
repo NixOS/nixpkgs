@@ -147,7 +147,7 @@ EOF
             done
 
             # Create ad-hoc branches for the revs we need
-            echo "$revs" | while read rev; do
+            echo "$revs" | tr " " "\n" | while read -d " " rev; do
                 echo "Creating git branch b_$rev $rev"
                 git branch b_$rev $rev
             done

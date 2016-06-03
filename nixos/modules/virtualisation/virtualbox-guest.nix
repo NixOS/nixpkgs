@@ -77,7 +77,7 @@ in
         KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
 
         # Allow systemd dependencies on vboxguest.
-        KERNEL=="vboxguest", TAG+="systemd"
+        SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
       '';
   };
 

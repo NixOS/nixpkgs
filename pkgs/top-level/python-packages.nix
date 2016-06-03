@@ -3472,11 +3472,12 @@ in modules // {
 
     buildInputs = with self; [ pytest mock ];
 
+    # See README for tests invocation
     checkPhase = ''
-      py.test tests
+      PYTHONPATH=$PYTHONPATH:'.:tests' py.test
     '';
 
-    # ImportError of test suite
+    # TypeError: cannot serialize '_io.FileIO' object
     doCheck = false;
 
     meta = {
@@ -4748,13 +4749,13 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
 
     checkPhase = ''
       py.test dask
     '';
 
-    # Segfault, likely in numpy
+    # URLError
     doCheck = false;
 
     meta = {
@@ -4781,9 +4782,9 @@ in modules // {
       psutil botocore
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
-    checkPhase = ''
-      py.test -m "not avoid_travis" distributed --verbose
-    '';
+    # py.test not picking up local config file, even when running
+    # manually: E ValueError: no option named '--runslow'
+    doCheck = false;
 
     meta = {
       description = "Distributed computation in Python.";
@@ -15754,6 +15755,7 @@ in modules // {
       modules.sqlite3
       beautifulsoup4
       openpyxl
+      tables
       xlwt
     ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
 
@@ -15908,6 +15910,32 @@ in modules // {
         are supported. SFTP client and server mode are both supported too.
       '';
     };
+  };
+
+  partd = buildPythonPackage rec {
+    name = "partd-${version}";
+    version = "0.3.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/partd/${name}.tar.gz";
+      sha256 = "0fgrkfhgpm0hf5gs6wvgv7p9ls2kvgk0mc5hkmjw5slfbkn3fz8v";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Appendable key-value storage";
+      license = with licenses; [ bsd3 ];
+      homepage = http://github.com/dask/partd/;
+    };
+
+
   };
 
   patsy = buildPythonPackage rec {
@@ -16238,6 +16266,25 @@ in modules // {
     };
   };
 
+  pdfkit = buildPythonPackage rec {
+    name = "pdfkit-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pdfkit/${name}.zip";
+      sha256 = "1p1m6gp51ql3wzjs2iwds8sc3hg1i48yysii9inrky6qc3s6q5vf";
+    };
+
+    buildInputs = with self; [ ];
+    # tests are not distributed
+    doCheck = false;
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pdfkit;
+      description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
+      license = licenses.mit;
+    };
+  };
 
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
