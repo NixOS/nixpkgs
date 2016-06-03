@@ -2445,6 +2445,13 @@ let
     ];
   };
 
+  fs = buildFromGitHub rec {
+    rev    = "2788f0dbd16903de03cb8186e5c7d97b69ad387b";
+    owner  = "kr";
+    repo   = "fs";
+    sha256 = "1c0fipl4rsh0v5liq1ska1dl83v3llab4k6lm8mvrx9c4dyp71ly";
+  };
+
   gx = buildFromGitHub rec {
     rev    = "v${version}";
     version = "0.7.0";
