@@ -3483,17 +3483,6 @@ let
     sha256 = "0ybz1w3hndma8myq3pxan36533hy9f4w598hsv4hnj21l4br8jpx";
   };
 
-  skydns = buildFromGitHub {
-    rev = "2.5.3a";
-    owner = "skynetservices";
-    repo = "skydns";
-    sha256 = "0i1iaif79cwnwm7pc8nxfa261cgl4zhm3p2a5a3smhy1ibgccpq7";
-
-    buildInputs = [
-      go-etcd rcrowley.go-metrics dns go-systemd prometheus.client_golang
-    ];
-  };
-
   slices = buildGoPackage rec {
     rev = "bb44bb2e4817fe71ba7082d351fd582e7d40e3ea";
     name = "slices-${stdenv.lib.strings.substring 0 7 rev}";
