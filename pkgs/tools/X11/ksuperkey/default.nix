@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/hanschen/ksuperkey";
     rev = "e75a31a0e3e80b14341e92799a7ce3232ac37639";
-    sha256 = "00be6b93daf78bae0223f002e782e30a650dded3c5a83b1adfe9439e20e398fb";
+    sha256 = "0y4wkak9dvcm14g54ll1ln9aks2az63hx8fv7b8d3nscxjbkxl6g";
   };
 
   preConfigure = ''

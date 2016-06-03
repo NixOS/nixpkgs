@@ -19,7 +19,7 @@ if [[ $1 == nix ]]; then
 elif [[ $1 == nox ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
     echo "=== Installing nox..."
-    nix-build -A nox '<nixpkgs>'
+    nix-build -A nox '<nixpkgs>' --show-trace
 elif [[ $1 == build ]]; then
     source $HOME/.nix-profile/etc/profile.d/nix.sh
 
@@ -27,10 +27,10 @@ elif [[ $1 == build ]]; then
         echo "Skipping NixOS things on darwin"
     else
         echo "=== Checking NixOS options"
-        nix-build nixos/release.nix -A options
+        nix-build nixos/release.nix -A options --show-trace
 
         echo "=== Checking tarball creation"
-        nix-build pkgs/top-level/release.nix -A tarball
+        nix-build pkgs/top-level/release.nix -A tarball --show-trace
     fi
 
     if [[ $TRAVIS_PULL_REQUEST == false ]]; then

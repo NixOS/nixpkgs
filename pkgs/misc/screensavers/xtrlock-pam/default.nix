@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/aanatoly/xtrlock-pam";
     rev = "6f4920fcfff54791c0779057e9efacbbbbc05df6";
-    sha256 = "fa8aeedfa2a4e1d813f8cad562bafdd4e2c5130df0a7cde7b2f956a32044e9f8";
+    sha256 = "1z2wlhi5d05b18pvwz146kp0lkcc6z2mnilk01mk19hzbziyqmsc";
   };
 
   buildInputs = [ python pkgconfig xlibsWrapper pam ];

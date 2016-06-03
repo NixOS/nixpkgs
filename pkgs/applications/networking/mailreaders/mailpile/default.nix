@@ -7,7 +7,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchgit {
     url = "git://github.com/pagekite/Mailpile";
     rev = "refs/tags/${version}";
-    sha256 = "0h84cc9kwb0m4admqjkpg4pllxlh095rmzvrql45kz71fpnxs780";
+    sha256 = "118b5zwfwmzj38p0mkj3r1s09jxg8x38y0a42b21imzpmli5vpb5";
   };
 
   patchPhase = ''

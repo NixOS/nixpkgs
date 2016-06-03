@@ -1,27 +1,34 @@
-{ fetchurl, stdenv, autoconf, automake, libtool, autoreconfHook
-, openssl, libcap, libnfnetlink, libnetfilter_queue
+{ stdenv, fetchFromGitHub, autoreconfHook
+, openssl
+, libcap, libpcap, libnfnetlink, libnetfilter_conntrack, libnetfilter_queue
 }:
 
-stdenv.mkDerivation rec {
-  name = "tcpcrypt-0.3-rc1";
+with stdenv.lib;
 
-  src = fetchurl {
-    url = "https://github.com/scslab/tcpcrypt/archive/v0.3-rc1.tar.gz";
-    sha256 = "1k79xfip95kyy91b6rnmsgl66g52zrnm92ln4jms133nm2k9s4sa";
-    name = "${name}.tar.gz";
+stdenv.mkDerivation rec {
+  name = "tcpcrypt-${version}";
+  version = "0.4";
+
+  src = fetchFromGitHub {
+    repo = "tcpcrypt";
+    owner = "scslab";
+    rev = "v${version}";
+    sha256 = "04n1qpf4x8x289xa7jndmx99xp0lbxjzjw013kf64i1n70i9wbnp";
   };
 
-  dontStrip = true;
+  postUnpack = ''mkdir -vp $sourceRoot/m4'';
 
-  buildInputs = [ autoreconfHook autoconf automake libtool openssl libcap libnfnetlink libnetfilter_queue ];
+  outputs = [ "dev" "out" "bin" ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl ]
+    ++ optionals stdenv.isLinux [ libcap libpcap libnfnetlink libnetfilter_conntrack libnetfilter_queue ];
 
-  postUnpack = ''
-    mkdir $sourceRoot/m4
-  '';
+  enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://tcpcrypt.org/";
-    description = "enable opportunistic encryption of all TCP traffic";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://tcpcrypt.org/;
+    description = "Fast TCP encryption";
+    platforms = platforms.all;
+    license = licenses.bsd2;
   };
 }

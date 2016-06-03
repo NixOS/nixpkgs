@@ -456,7 +456,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://github.com/go-check/check.git";
-      sha256 = "0i83qjmd4ri9mrfddhsbpj9nb43rf2j9803k030fj155j31klwcx";
+      sha256 = "1qhji81yxz3map937bf8lyp8j2qpwlbnag5pr5pf0qw3li2nciah";
     };
   };
 
@@ -2804,7 +2804,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "4075ede31601adf8c4e92739693aebffa3718c641dfca75b09cf6b4bd6c26cc0";
+      sha256 = "1jjvss4cmcd505aqhsyag15lmzjycgwwml9mfdigprxv3v8f3pnq";
     };
     #goTestInputs = [ ogletest ];
     doCheck = false; # infinite recursion
@@ -2817,7 +2817,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "685e7fc4308d118ae25467ba84c64754692a7772c77c197f38d8c1b63ea81da2";
+      sha256 = "1sn6hj34c54x0svr68vcgm2l725x03ccpq6h3ypi3hrvzg349ykw";
     };
     buildInputs = [ oglematchers ];
     #goTestInputs = [ ogletest ];
@@ -2831,7 +2831,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "0cfc43646d59dcea5772320f968aef2f565fb5c46068d8def412b8f635365361";
+      sha256 = "0y4y20a84rhmp66x9d7nzlygiabky98wlbvx56h1hknm08gpskiz";
     };
     buildInputs = [ oglemock oglematchers ];
     doCheck = false; # check this again

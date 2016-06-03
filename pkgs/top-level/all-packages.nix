@@ -4916,6 +4916,8 @@ in
 
     erm_xmpp = callPackage ../development/ocaml-modules/erm_xmpp { };
 
+    estring = callPackage ../development/ocaml-modules/estring { };
+
     ezjsonm = callPackage ../development/ocaml-modules/ezjsonm {
       lwt = ocaml_lwt;
     };
@@ -5095,6 +5097,8 @@ in
 
     sequence = callPackage ../development/ocaml-modules/sequence { };
 
+    sqlexpr = callPackage ../development/ocaml-modules/sqlexpr { };
+
     tuntap = callPackage ../development/ocaml-modules/tuntap { };
 
     tyxml = callPackage ../development/ocaml-modules/tyxml { };
@@ -5260,17 +5264,19 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustcMaster = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
-  rustc = callPackage ../development/compilers/rustc {};
+  rustc = rustcStable;
+  rustcStable = callPackage ../development/compilers/rustc/stable.nix {};
+  rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
+  rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
 
   rustPlatform = rustStable;
-
   rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
+  rustBeta = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustBeta));
   rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
 
   # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustc) rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcMaster) rustUnstableCargoPlatform;
+  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
+  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
 
   makeRustPlatform = cargo: self:
     let
@@ -7372,6 +7378,8 @@ in
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
+
+  hydra = callPackage ../development/tools/misc/hydra {};
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -10841,6 +10849,8 @@ in
     cpupower = callPackage ../os-specific/linux/cpupower { };
 
     dpdk = callPackage ../os-specific/linux/dpdk { };
+
+    pktgen = callPackage ../os-specific/linux/pktgen { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -16487,8 +16497,8 @@ in
   });
 
   gnuk = callPackage ../misc/gnuk { };
-  gnuk-unstable = callPackage ../misc/gnuk/unstable.nix { };
-  gnuk-git = callPackage ../misc/gnuk/git.nix { };
+  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
+  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
 
   greybird = callPackage ../misc/themes/greybird { };
 
@@ -16605,6 +16615,8 @@ in
   robomongo = qt5.callPackage ../applications/misc/robomongo { };
 
   rucksack = callPackage ../development/tools/rucksack { };
+
+  sam-ba = callPackage ../tools/misc/sam-ba { };
 
   opkg = callPackage ../tools/package-management/opkg { };
 

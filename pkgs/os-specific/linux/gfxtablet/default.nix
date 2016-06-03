@@ -5,7 +5,7 @@ let
     version="git-2013-10-21";
     name = "gfxtablet-uinput-driver-${version}";
     rev = "c4e337ae0b53a8ccdfe11b904ff129714bd25ec4";
-    sha256 = "19d96r2vw9xv82fnfwdyyyf0fja6n06mgg14va996knsn2x5l4la";
+    sha256 = "14ll9rls2mamllmpwjiv2dc6165plazv7ny9cliylafrwgb55l7p";
     url = "https://github.com/rfc2822/GfxTablet.git";
   };
   buildInputs = [

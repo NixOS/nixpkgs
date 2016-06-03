@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/calamares/calamares.git";
     rev = "dabfb68a68cb012a90cd7b94a22e1ea08f7dd8ad";
-    sha256 = "2851ce487aaac61d2df342a47f91ec87fe52ff036227ef697caa7056fe5f188c";
+    sha256 = "12n161fmzybi20pxcjikqnckhzh175ni5da122p74bx7fzv7q41p";
   };
 
   buildInputs = [

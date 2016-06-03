@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/lucy/tewi-font";
     rev = "ff930e66ae471da4fdc226ffe65fd1ccd13d4a69";
-    sha256 = "d641b911cc2132a00c311e3d978c1ca454b0fb3bc3ff4b4742b9f765b765a94b";
+    sha256 = "0c7k847cp68w20frzsdknpss2cwv3lp970asyybv65jxyl2jz3iq";
   };
 
   buildInputs = [ bdftopcf mkfontdir mkfontscale ];

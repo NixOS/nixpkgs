@@ -9444,6 +9444,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetStatsd = buildPerlPackage {
+    name = "Net-Statsd-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/COSIMO/Net-Statsd-0.11.tar.gz;
+      sha256 = "0f56c95846c7e65e6d32cec13ab9df65716429141f106d2dc587f1de1e09e163";
+    };
+    meta = {
+      description = "Sends statistics to the stats daemon over UDP";
+      license = "perl";
+    };
+  };
+
   NetTwitterLite = buildPerlPackage {
     name = "Net-Twitter-Lite-0.11002";
     src = fetchurl {

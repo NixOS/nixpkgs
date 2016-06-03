@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       "--disable-ldconfig"
       "--disable-smack"
 
-      "--enable-gnuefi"
+      (if stdenv.isArm then "--disable-gnuefi" else "--enable-gnuefi")
       "--with-efi-libdir=${gnu-efi}/lib"
       "--with-efi-includedir=${gnu-efi}/include"
       "--with-efi-ldsdir=${gnu-efi}/lib"

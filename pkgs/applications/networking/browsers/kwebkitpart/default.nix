@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://anongit.kde.org/kwebkitpart;
     rev = "refs/tags/v${version}";
-    sha256 = "0kszffgg3zpf319lmzlmdba5gq8kdr5xwb69xwy4s2abc9nvwvbi";
+    sha256 = "13vfv88njml7x67a37ymmlv9qs30fkmvkq0278lp7llmvp5qnxcj";
   };
 
   patches = [ ./CVE-2014-8600.diff ];

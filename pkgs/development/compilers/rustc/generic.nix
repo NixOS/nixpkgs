@@ -1,14 +1,11 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils
+, llvm, jemalloc, ncurses, darwin, binutils, rustc
 
-, shortVersion, isRelease
+, isRelease ? false
+, shortVersion
 , forceBundledLLVM ? false
-, srcSha, srcRev ? ""
-, snapshotHashLinux686, snapshotHashLinux64
-, snapshotHashDarwin686, snapshotHashDarwin64
-, snapshotDate, snapshotRev
+, srcSha, srcRev
 , configureFlags ? []
-
 , patches
 } @ args:
 
@@ -26,9 +23,8 @@ sure those derivations still compile. (racer, for example).
 
 */
 
-assert (if isRelease then srcRev == "" else srcRev != "");
-
-let version = if isRelease then
+let
+    version = if isRelease then
         "${shortVersion}"
       else
         "${shortVersion}-g${builtins.substring 0 7 srcRev}";
@@ -38,16 +34,6 @@ let version = if isRelease then
     procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
     llvmShared = llvm.override { enableSharedLibraries = true; };
-
-    platform = if stdenv.system == "i686-linux"
-      then "linux-i386"
-      else if stdenv.system == "x86_64-linux"
-      then "linux-x86_64"
-      else if stdenv.system == "i686-darwin"
-      then "macos-i386"
-      else if stdenv.system == "x86_64-darwin"
-      then "macos-x86_64"
-      else abort "no snapshot to bootstrap for this platform (missing platform url suffix)";
 
     target = if stdenv.system == "i686-linux"
       then "i686-unknown-linux-gnu"
@@ -66,20 +52,9 @@ let version = if isRelease then
       license = [ licenses.mit licenses.asl20 ];
       platforms = platforms.linux ++ platforms.darwin;
     };
-
-    snapshotHash = if stdenv.system == "i686-linux"
-      then snapshotHashLinux686
-      else if stdenv.system == "x86_64-linux"
-      then snapshotHashLinux64
-      else if stdenv.system == "i686-darwin"
-      then snapshotHashDarwin686
-      else if stdenv.system == "x86_64-darwin"
-      then snapshotHashDarwin64
-      else abort "no snapshot for platform ${stdenv.system}";
-    snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
 in
 
-with stdenv.lib; stdenv.mkDerivation {
+stdenv.mkDerivation {
   inherit name;
   inherit version;
   inherit meta;
@@ -88,42 +63,19 @@ with stdenv.lib; stdenv.mkDerivation {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
-  src = if isRelease then
-      fetchzip {
-        url = "http://static.rust-lang.org/dist/rustc-${version}-src.tar.gz";
-        sha256 = srcSha;
-      }
-    else
-      fetchgit {
-        url = https://github.com/rust-lang/rust;
-        rev = srcRev;
-        sha256 = srcSha;
-      };
-
-  # We need rust to build rust. If we don't provide it, configure will try to download it.
-  snapshot = stdenv.mkDerivation {
-    name = "rust-stage0";
-    src = fetchurl {
-      url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-      sha1 = snapshotHash;
-    };
-    dontStrip = true;
-    installPhase = ''
-      mkdir -p "$out"
-      cp -r bin "$out/bin"
-    '' + optionalString stdenv.isLinux ''
-      patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
-               --set-rpath "${stdenv.cc.cc.lib}/lib/:${stdenv.cc.cc.lib}/lib64/" \
-               "$out/bin/rustc"
-    '';
+  src = fetchgit {
+    url = https://github.com/rust-lang/rust;
+    rev = srcRev;
+    sha256 = srcSha;
   };
 
+  # We need rust to build rust. If we don't provide it, configure will try to download it.
   configureFlags = configureFlags
-                ++ [ "--enable-local-rust" "--local-rust-root=$snapshot" "--enable-rpath" ]
+                ++ [ "--enable-local-rust" "--local-rust-root=${rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
-                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
-                ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+                ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang"
+                ++ stdenv.lib.optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   inherit patches;
 
@@ -138,7 +90,7 @@ with stdenv.lib; stdenv.mkDerivation {
       --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
 
     # Fix dynamic linking against llvm
-    ${optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
+    ${stdenv.lib.optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
@@ -160,9 +112,9 @@ with stdenv.lib; stdenv.mkDerivation {
   '';
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps ];
+  nativeBuildInputs = [ file python2 procps rustc ];
   buildInputs = [ ncurses ]
-    ++ optional (!forceBundledLLVM) llvmShared;
+    ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
 
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false; # missing files during linking, occasionally

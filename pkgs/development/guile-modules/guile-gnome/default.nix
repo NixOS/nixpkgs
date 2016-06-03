@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.sv.gnu.org/guile-gnome.git";
     rev = "0fcbe69797b9501b8f1283a78eb92bf43b08d080";
-    sha256 = "1vqlzb356ggmp8jh833gksg59c53vbmmhycbcf52qj0fdz09mpb5";
+    sha256 = "19nsxwhrmrs9n16sb99pgy6zp6zpvmsd285kcjb54y362li7yc83";
   };
 
   buildInputs = [

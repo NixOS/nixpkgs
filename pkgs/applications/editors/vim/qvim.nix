@@ -4,7 +4,7 @@ args@{ fetchgit, stdenv, ncurses, pkgconfig, gettext
 , libICE, ... }: with args;
 
 let tag = "20140827";
-    sha256 = "02adf2212872db3c5d133642d2c12fbfc28b506e4c0c42552e3d079756f63f65";
+    sha256 = "0ncgbcm23z25naicxqkblz0mcl1zar2qwgi37y5ar8q8884w9ml2";
 in
 
 let inherit (args.composableDerivation) composableDerivation edf; in

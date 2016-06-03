@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://git.pwmt.org/pwmt/jumanji.git;
     rev = "f8e04e5b5a9fec47d49ca63a096e5d35be281151";
-    sha256 = "1xq06iabr4y76faf4w1cx6fhwdksfsxggz1ndny7icniwjzk98h9";
+    sha256 = "1dsbyz489fx7dp07i29q1rjkl7nhrfscc8ks8an2rdyhx3457asg";
   };
 
   buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper gsettings_desktop_schemas ];

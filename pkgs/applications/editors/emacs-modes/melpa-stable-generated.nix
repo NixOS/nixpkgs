@@ -1277,7 +1277,7 @@
         src = fetchgit {
           url = "http://repo.or.cz/r/anything-config.git";
           rev = "6b9718fba257e6c2912ba70f9895251ab1926928";
-          sha256 = "08f7qxwnvykmxwrii3nv1fnai4mqs2ir5419k0llj6mkrik0gfc6";
+          sha256 = "040znq4qv6rqjw05klriasysvsx6s6xn00ssc3acbqdqjgjk8l2a";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/anything";
@@ -5055,7 +5055,7 @@
         src = fetchgit {
           url = "git://jblevins.org/git/deft.git";
           rev = "4001a55cf5f79cdbfa00f1405e8a4645af4acd40";
-          sha256 = "1s71xk5c1hck7lh780lpa1q1c8qdpf2wdahl2406mgf06y1ifp7b";
+          sha256 = "157c6ck6gb59i7dikbdnaq7cwlh3nnk0vqgil4v1294s2xbpp46n";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/deft";
@@ -7796,7 +7796,7 @@
         src = fetchgit {
           url = "https://bitbucket.org/olanilsson/ert-junit";
           rev = "341c755e7b60f8d2081303951377968b1d1a6c23";
-          sha256 = "1hsp0jp9gyfr6rhfsjgi55x4lqjlh1w13y90rrlnbxb0499zpa33";
+          sha256 = "0y06i97bbim6lmvk8l3adifwzhkjyrgyxv02ksshk4npr0b627gx";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/ert-junit";
@@ -10488,7 +10488,7 @@
         src = fetchgit {
           url = "git://factorcode.org/git/factor.git";
           rev = "905ec06d864537fb6be9c46ad98f1b6d101dfbf0";
-          sha256 = "146iqy3rjr5yv19wbaq5dqm3kjxyjly7i27qjvk0yj1yja2y4j5k";
+          sha256 = "0ip7azxi5nvp8vvi15ds46mgs0fmi7gq97f2iz1c7m67ml5wi2g7";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/fuel";
@@ -15386,7 +15386,7 @@
         src = fetchgit {
           url = "git://git.code.sf.net/p/emacs-jabber/git";
           rev = "2999f58619dd9c20cc6cac8060c4c850a504cbbd";
-          sha256 = "0d6dwj45rrvh3dlrhdmqkxjmd439a1x3h88czdg7np2m5q2xg2dg";
+          sha256 = "03x93wkd8syj2ybf5ymwcm6khx0h5nhrl8pyync1520294pq6i1i";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/jabber";
@@ -19090,7 +19090,7 @@
         src = fetchgit {
           url = "git://git.notmuchmail.org/git/notmuch";
           rev = "ea5caecec5c50833a6f5a422e217a71eee6324af";
-          sha256 = "0n471pjj433jivmwbifzw8x6ya09v52yvgdjfkxcp2a6mn23k6xm";
+          sha256 = "0883vwwcir5w3b4831y46bcm80z7chqri4wsx7qxc2ynw0a4qfx3";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/notmuch";
@@ -19896,7 +19896,7 @@
         src = fetchgit {
           url = "git://orgmode.org/org-mode.git";
           rev = "592dc2ee7e4c80b9b61efb77117c8dc22d6cefd1";
-          sha256 = "055ahg27z4y0r4nhgqdik10x91dpmfmrv1mbr7hc7xzk9cy4rf2w";
+          sha256 = "0rvsn085r1sgvv0gwvjlfgn7371bjd254hdzamc97m122pqr7cxr";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/org-mac-iCal";
@@ -21181,7 +21181,7 @@
         src = fetchgit {
           url = "http://git.zx2c4.com/password-store";
           rev = "1aac79d9617431bbaf218f9a9d270929762d2816";
-          sha256 = "0c5yjjvvlrcny13sg5kaadbqnc2wdcc2qrxn11gc70q9awv0n7gp";
+          sha256 = "0zlhiqhx19dpmxvcczhif5c8acj911p61plsp0gdmamkpbxmkbjv";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/password-store";
@@ -25818,7 +25818,7 @@
         src = fetchgit {
           url = "git://repo.or.cz/stgit.git";
           rev = "48e5cef14cea5c810833d119900cd484c2a6ca85";
-          sha256 = "05jy51g2krmj1c3rq8k7lihml1m4x6j73lkf8z1qwg35kmadzi8j";
+          sha256 = "0hgqxhqnc93pnh6j3hyi92hfx1cbdjylzqb2nl6ldsz1g2wdcw9r";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/stgit";
@@ -25901,7 +25901,7 @@
         src = fetchgit {
           url = "git://git.savannah.nongnu.org/stumpwm.git";
           rev = "4d0603e52b5bab993b3be63e3654c74f641e677d";
-          sha256 = "0a0lwwlly4hlmb30bk6dmi6bsdsy37g4crvv1z24gixippyv1qzm";
+          sha256 = "0pn3xjz433b0djcys25a8fv775yqmj3qgg0hyghgxjpzsh6k2a4f";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/stumpwm-mode";

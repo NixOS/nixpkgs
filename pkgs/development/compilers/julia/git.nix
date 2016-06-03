@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/JuliaLang/${pname}";
     rev = "cb93e6b70b4b1313b4de8c54e55e85c8eb43daa3";
-    sha256 = "11dmbjqiidlbh8sj5s09zsbfslm3zs0kw7iq40281hl5dfsr7zm6";
+    sha256 = "1xihq66il4wlxfm5fsgcirh76dq936fm887v2ynqkm3kz7ahhssw";
   };
 
   prePatch = ''

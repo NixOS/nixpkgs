@@ -19,7 +19,7 @@
 , buildExamples ? false
 , buildTests ? false
 , developerBuild ? false
-, gtkStyle ? true, libgnomeui, GConf, gnome_vfs, gtk
+, libgnomeui, GConf, gnome_vfs, gtk
 , decryptSslTraffic ? false
 }:
 
@@ -28,7 +28,7 @@ let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 
   # Search path for Gtk plugin
-  gtkLibPath = lib.makeLibraryPath [ gtk.out gnome_vfs.out libgnomeui.out GConf.out ];
+  gtkLibPath = lib.makeLibraryPath [ gtk gnome_vfs libgnomeui GConf ];
 in
 
 stdenv.mkDerivation {
@@ -141,7 +141,7 @@ stdenv.mkDerivation {
     -xcb
     -qpa xcb
     -${lib.optionalString (cups == null) "no-"}cups
-    -${lib.optionalString (!gtkStyle) "no-"}gtkstyle
+    -gtkstyle
 
     -no-eglfs
     -no-directfb
@@ -204,12 +204,21 @@ stdenv.mkDerivation {
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
     ++ lib.optional (postgresql != null) postgresql
-    ++ lib.optionals gtkStyle [gnome_vfs.out libgnomeui.out gtk GConf];
+    # FIXME: move to the main list on rebuild.
+    ++ [gnome_vfs.out libgnomeui.out gtk GConf];
 
   nativeBuildInputs = [ lndir patchelf perl pkgconfig python ];
 
   # freetype-2.5.4 changed signedness of some struct fields
   NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare";
+
+  postInstall = ''
+    find "$out" -name "*.cmake" | while read file; do
+        substituteInPlace "$file" \
+            --subst-var-by NIX_OUT "$out" \
+            --subst-var-by NIX_DEV "$dev"
+    done
+  '';
 
   preFixup = ''
     # We cannot simply set these paths in configureFlags because libQtCore retains

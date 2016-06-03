@@ -53,7 +53,7 @@ let lispPackages = rec {
     deps = [];
     src = pkgs.fetchgit {
       url = "https://gitlab.common-lisp.net/alexandria/alexandria.git";
-      sha256 = "1d981a243f9d4d3c9fd86cc47698050507ff615b87b9a710449abdb4234e501b";
+      sha256 = "1gx642w00cnnkbkcsnzmg1w147r6yvc0ayns7ha4k0qcvfnb1zvs";
       rev = ''2b1eb4067fb34bc501e527de75d09166a8ba9ceb'';
     };
   };
@@ -77,7 +77,7 @@ let lispPackages = rec {
     deps = [];
     src = pkgs.fetchgit {
       url = "https://gitlab.common-lisp.net/cl-unification/cl-unification.git";
-      sha256 = "01k2k7n98flnzm6mipk4xq2rqmjkjg8rcv4dsgifyxhqjwqf0l24";
+      sha256 = "0b7yik1ma7ciwscald624325dl6265fbq52iwy6jh46nvv085dqk";
       rev = ''283c94d38d11c806a1fc9db022f0b54dced93bab'';
     };
   };
@@ -89,7 +89,7 @@ let lispPackages = rec {
     deps = [alexandria];
     src = pkgs.fetchgit {
       url = "https://github.com/scymtym/esrap.git";
-      sha256 = "c56616ac01be0f69e72902f9fd830a8af2c2fa9018b66747a5da3988ae38817f";
+      sha256 = "175jsv309yir0yi03aa2995xg84zjgk34kgnbql5l4vy4as5x665";
       rev = ''c71933b84e220f21e8a509ec26afe3e3871e2e26'';
     };
   };
@@ -102,7 +102,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/filonenko-mikhail/clx-truetype'';
-      sha256 = "fe3d3923909a8f0a19298bfa366bb265c5155eed43d4dd315920535d15424d65";
+      sha256 = "14wx9s1fd56l25ms2ns1w9a5rxgqr00vgw6jdarfkqk7mfrxxzs1";
       rev = ''6f72905c6886a656e5a1c8167097f12375c6da7d'';
     };
     overrides = x:{
@@ -199,7 +199,7 @@ let lispPackages = rec {
         #''http://git.kpe.io/clsql.git''
 	"http://repo.or.cz/r/clsql.git"
 	;
-      sha256 = "1wzc7qsnq8hk0j0h9jmj4xczmh7h6njafwab2zylh8wxmfzwp2nw";
+      sha256 = "073rh2zxwkcd417qfcflv14j273d1j174slsbzidxvy4zgq5r3n6";
       rev = ''a646f558b54191eda1d64f2926eee7b4fa763f89'';
     };
     overrides = x:{
@@ -218,7 +218,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''http://git.kpe.io/uffi.git'';
-      sha256 = "219e4cfebfac251c922bcb9d517980b0988d765bd18b7f5cc765a43913aaacc6";
+      sha256 = "1hqszvz0a3wk4s9faa83sc3vjxcb5rxmjclyr17yzwg55z733kry";
       rev = ''a63da5b764b6fa30e32fcda4ddac88de385c9d5b'';
     };
   };
@@ -350,7 +350,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''http://common-lisp.net/project/qitab/git/command-line-arguments.git'';
-      sha256 = "91bb321e201034c35121860cb6ec05e39c6392d5906a52b9a2d33d0f76b06123";
+      sha256 = "1jgx8k706wz2qjdnqnralvnhwlzxd0nx22r6rncgs2kw7p4wll9d";
       rev = ''121f303bbef9c9cdf37a7a12d8adb1ad4be5a6ae'';
     };
   };
@@ -363,7 +363,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''http://common-lisp.net/project/trivial-backtrace/trivial-backtrace.git'';
-      sha256 = "1ql80z0igsng32rbp24h81pj5c4l87c1ana6c9lx3dlqpixzl4kj";
+      sha256 = "0bclk05lqijpp72yfzrz0wmw142z0mwnpfl4gqv6gl4fpz1qr56s";
       rev = ''48a6b081e00b0d85f1e001c7258393ed34d06bc9'';
     };
   };
@@ -389,7 +389,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/froydnj/chipz'';
-      sha256 = "73ae22d58b6db5b2c86af4a465260e48a5aca19827d2b7329e2870c1148da8e2";
+      sha256 = "0963nyg8173q0svqhk0ggbvfr4i57jk3swkf0r87jh3yi2l983sl";
       rev = ''3402c94df1d0af7742df08d3ffa23fd5c04c9bf2'';
     };
   };
@@ -455,7 +455,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/trivial-garbage/trivial-garbage'';
-      sha256 = "69f6c910921de436393ff5f93bee36443534756965fa34e43e04d9e8919212df";
+      sha256 = "0r029lfl5srmhanmmh7bb692pdwb32cnbq2navx6cm3iqda9q87i";
       rev = ''2721d36d71748d9736a82fe5afe333c52bae3084'';
     };
   };
@@ -468,7 +468,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''http://git.kpe.io/cl-base64.git'';
-      sha256 = "a34196544cc67d54aef74e31eff2cee62a7861a5675d010fcd925f1c61c23e81";
+      sha256 = "0cq3dxac3l0z2xp3c3gkgj893hvaz4vvxdz0nsc8c9q28q3nwf4p";
       rev = ''f375d1fc3a6616e95ae88bb33493bb99f920ba13'';
     };
   };
@@ -481,7 +481,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''http://git.kpe.io/puri.git'';
-      sha256 = "71804698e7f3009fb7f570656af5d952465bfe77f72e9c41f7e2dda8a5b45c5e";
+      sha256 = "1l7d8i9615kyi7n69l07a6ri0d1k13cya0kbg3fmfqanwn5kzv2i";
       rev = ''68260dbf320c01089c8cee54ef32c800eefcde7f'';
     };
   };
@@ -506,7 +506,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/gwkkwg/cl-html-parse'';
-      sha256 = "0153d4962493f106849fc7cbfe03c5ff874adae8d307ea2e1ceebbb009e2f89f";
+      sha256 = "0s8jjn3s55m59nihc8qiw2s71gn09sxsaii343rzfwdrkdwk9vzh";
       rev = ''b21e8757210a1eb2a47104a563f58bf82ba9a579'';
     };
   };
@@ -519,7 +519,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/froydnj/nibbles'';
-      sha256 = "39ad95be2b9f9ea80dbccd205a0ed6f9c5ef175a10da6eec55b7ba09a8f1a76a";
+      sha256 = "0p0swss7xjx74sr95wqak5hfhfw13bwkzncy4l4hbfy130gncv8b";
       rev = ''ace095d85e48b18bf9cf9e21249ba7fb57e3efe2'';
     };
   };
@@ -544,7 +544,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = "https://gitlab.common-lisp.net/cl-smtp/cl-smtp.git";
-      sha256 = "1i66x351cj114r2i8j6bhif5fcysfq5ia91hv7ksjqa4q7rfmpw2";
+      sha256 = "0kvb34jzb3hgvzqlwwwmnyaqj0ghlgmi1x2zll5qw5089gbhfv10";
       rev = ''2bf946c1d561c0085dba6d6337e3e53d9711a5d2'';
     };
   };
@@ -557,7 +557,7 @@ let lispPackages = rec {
     # Source type: git
     src = pkgs.fetchgit {
       url = ''https://github.com/pmai/md5'';
-      sha256 = "f64d7e36c54da649bb1d574b92cdb907291224fb3d8565b3708703a81820367b";
+      sha256 = "18k6k04cqx9zx0q8x3hk5icvjhihra1za7k2jx82xb19jfnjli1y";
       rev = ''9d6f82f7121c87fb7e3b314987ba93900d300dc6'';
     };
   };
@@ -583,7 +583,7 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "0a6zjsd5c8zg2x26lc027538xfl182xvg7ps81pyvi4k5qd42xhd";
+      sha256 = "007r1ydbhrkh6ywqgpvzp0xg0yypgrfai3n4mn16gj5w2zz013lx";
     };
     overrides = x: rec {
       inherit clwrapper;

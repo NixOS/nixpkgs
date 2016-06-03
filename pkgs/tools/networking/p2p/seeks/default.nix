@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/beniz/seeks.git";
     rev = "1168b3a2f3111c3fca31dd961135194c3e8df5fd";
-    sha256 = "159k9fk1ry8cybrq38jxm1qyxks9hlkfz624hzwxlzah6xb2j8a4";
+    sha256 = "18s2pxal9a2aayv63hc19vnkx5a5y9rhbipdpvkinbni5283iiar";
   };
 
   buildInputs =

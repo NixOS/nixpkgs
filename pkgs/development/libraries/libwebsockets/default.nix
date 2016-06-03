@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.libwebsockets.org/libwebsockets";
     rev = "16fb0132cec0fcced29bce6d86eaf94a9beb9785";
-    sha256 = "fa4c81f86dfc39211b78c53c804efc19e15b81ccb05e72699220bbed27204c7d";
+    sha256 = "0gk4dgx125nz7wl59bx0kgxxg261r9kyxvdff5ld98slr9f08d0l";
   };
 
   buildInputs = [ cmake openssl zlib ];

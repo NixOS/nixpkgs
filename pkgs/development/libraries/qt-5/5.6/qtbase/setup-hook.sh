@@ -141,17 +141,16 @@ _qtLinkAllModules() {
     done
 }
 
-_qtFixCMake() {
-    for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
-        case $flag in
-            -L*)
-                CMAKE_INSTALL_RPATH="$CMAKE_INSTALL_RPATH${CMAKE_INSTALL_RPATH:+:}${flag:2}"
-                ;;
-        esac
+preConfigureHooks+=(_qtLinkAllModules)
+
+_qtFixCMakePaths() {
+    find "${!outputLib}" -name "*.cmake" | while read file; do
+        substituteInPlace "$file" \
+            --subst-var-by NIX_OUT "${!outputLib}" \
+            --subst-var-by NIX_DEV "${!outputDev}"
     done
-    cmakeFlags="-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE $cmakeFlags"
-    cmakeFlags="-DCMAKE_INSTALL_RPATH_USE_LINK_PATH=FALSE $cmakeFlags"
-    cmakeFlags="-DCMAKE_INSTALL_RPATH=$CMAKE_INSTALL_RPATH $cmakeFlags"
 }
 
-preConfigureHooks+=(_qtLinkAllModules _qtFixCMake)
+if [ -n "$NIX_QT_SUBMODULE" ]; then
+    postInstallHooks+=(_qtFixCMakePaths)
+fi

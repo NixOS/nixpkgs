@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/masroore/opentracker.git";
     rev = "9a26b3d203755577879315ecc2b515d0e22793cb";
-    sha256 = "74a7a6cbe80932fefb1698524809ce89be696f0fe3afd38fcb2b99fa59c9c891";
+    sha256 = "1ayj3j9jv6h26jfhw93wcw7lvhwyfnc20kkicvskalwzw51mpsz8";
   };
   
   buildInputs = [ libowfat zlib ];

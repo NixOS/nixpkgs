@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git";
     rev = "44f94b925894577f9ffcf2c418dd013a5e582648";
-    sha256 = "1c1g9jpyhykhmidz7mjzrf63w3xlzqkijrqz1g6j4dz6p9pv1gax";
+    sha256 = "0hkdzc71pdnscbpdpgwljcchiyancarldjyd0w609sy18bky833x";
   };
 
   installPhase = ''

@@ -104,8 +104,8 @@ in
       # changing them would not rebuild the manual
       nixosLabel   = mkDefault (maybeEnv "NIXOS_LABEL" cfg.nixosVersion);
       nixosVersion = mkDefault (maybeEnv "NIXOS_VERSION" (cfg.nixosRelease + cfg.nixosVersionSuffix));
-      nixosRevision      = mkIf (pathExists gitRepo) (mkDefault            gitCommitId);
-      nixosVersionSuffix = mkIf (pathExists gitRepo) (mkDefault (".git." + gitCommitId));
+      nixosRevision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
+      nixosVersionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
 
       # Note: code names must only increase in alphabetical order.
       nixosCodeName = "Flounder";

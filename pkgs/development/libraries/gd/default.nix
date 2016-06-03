@@ -1,9 +1,9 @@
 { stdenv, fetchurl
 , pkgconfig
 , zlib
-, libjpeg
 , libpng
-, libwebp
+, libjpeg ? null
+, libwebp ? null
 , libtiff ? null
 , libXpm ? null
 , fontconfig
@@ -20,11 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib fontconfig freetype libjpeg libpng libwebp libtiff libXpm ];
+  buildInputs = [ zlib fontconfig freetype ];
+  propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
   outputs = [ "dev" "out" "bin" ];
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://libgd.github.io/;

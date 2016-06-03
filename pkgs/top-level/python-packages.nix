@@ -1869,7 +1869,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/skarra/CalDAVClientLibrary.git";
       rev = "06699b08190d50cc2636b921a654d67db0a967d1";
-      sha256 = "1i6is7lv4v9by4panrd9w63m4xsmhwlp3rq4jjj3azwg5jm10940";
+      sha256 = "157q32251ac9x3gdshgrjwsy48nq74vrzviswvph56h9wa8ksnnk";
     };
 
     disabled = isPy3k;
@@ -1897,7 +1897,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/g2p/bedup.git";
       rev = "598fd4b";
-      sha256 = "0s11dpf4k26n8qxrx6wcsr78vp98rx3yibzkh6ifmsyaqcmpm7wy";
+      sha256 = "0cwnifv5mk5rgil0rcibqchz7y8nzpdpi3k2s9wbqcynjl7l49ln";
     };
 
     buildInputs = with self; [ pkgs.btrfs-progs ];
@@ -2051,7 +2051,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/cornice.git;
       rev = "refs/tags/${version}";
-      sha256 = "12yrcsv1sdl5w308y1cc939ppq7pi2490s54zfcbs481cvsyr1lg";
+      sha256 = "11xgf7mddq9gm3yag61zj8hj2kgsgabrnzwn2zpfj37xp1p0pky7";
     };
 
     propagatedBuildInputs = with self; [ pyramid simplejson ];
@@ -3472,11 +3472,12 @@ in modules // {
 
     buildInputs = with self; [ pytest mock ];
 
+    # See README for tests invocation
     checkPhase = ''
-      py.test tests
+      PYTHONPATH=$PYTHONPATH:'.:tests' py.test
     '';
 
-    # ImportError of test suite
+    # TypeError: cannot serialize '_io.FileIO' object
     doCheck = false;
 
     meta = {
@@ -4374,7 +4375,9 @@ in modules // {
     };
   };
 
-  pytest = buildPythonPackage rec {
+  pytest = self.pytest_29;
+
+  pytest_27 = buildPythonPackage rec {
     name = "pytest-2.7.3";
 
     src = pkgs.fetchurl {
@@ -4399,12 +4402,21 @@ in modules // {
     };
   };
 
-  pytest_28 = self.pytest.override rec {
+  pytest_28 = self.pytest_27.override rec {
     name = "pytest-2.8.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
       sha256 = "ed38a3725b8e4478555dfdb549a4219ca3ba57955751141a1aaa45b706d84194";
+    };
+  };
+
+  pytest_29 = self.pytest_27.override rec {
+    name = "pytest-2.9.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest/${name}.tar.gz";
+      sha256 = "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j";
     };
   };
 
@@ -4737,13 +4749,13 @@ in modules // {
     };
 
     buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ numpy toolz dill pandas ];
+    propagatedBuildInputs = with self; [ cloudpickle  numpy toolz dill pandas partd ];
 
     checkPhase = ''
       py.test dask
     '';
 
-    # Segfault, likely in numpy
+    # URLError
     doCheck = false;
 
     meta = {
@@ -4770,9 +4782,9 @@ in modules // {
       psutil botocore
     ] ++ (if !isPy3k then [ singledispatch ] else []);
 
-    checkPhase = ''
-      py.test -m "not avoid_travis" distributed --verbose
-    '';
+    # py.test not picking up local config file, even when running
+    # manually: E ValueError: no option named '--runslow'
+    doCheck = false;
 
     meta = {
       description = "Distributed computation in Python.";
@@ -4996,7 +5008,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/scrapinghub/dateparser.git";
       rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
-      sha256 = "f04f75d013ba2896681ffeb3669d78e4c496236121da751b89ff0b4a4053f771";
+      sha256 = "0na7b4hvf7vykrk48482gxiq5xny67rvs8ilamxcxw3y9gfgdjfd";
     };
 
     # Does not seem to work on Python 3 because of relative import.
@@ -7014,7 +7026,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mapnik/python-mapnik.git;
       rev = "fae63881ed0945829e73f711d52740240b740936";
-      sha256 = "13i9zsy0dk9pa947vfq26a3nrn1ddknqliyb0ljcmi5w5x0z758k";
+      sha256 = "04k78l0xxb9cy8dbvmgldg8fgzz701gks14199h8zs2xvyi4gqd2";
     };
 
     disabled = isPyPy;
@@ -7132,7 +7144,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = git://github.com/etsy/logster;
       rev = "7475c53822";
-      sha256 = "1ls007qmziwb50c5iikxhqin0xbn673gbd25m5k09861435cknvr";
+      sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
     };
   };
 
@@ -7743,7 +7755,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/pyramid_hawkauth.git;
       rev = "refs/tags/v${version}";
-      sha256 = "1ic7xl72qnz382xaqhcy9ql17gx7pxbs78znp8xr66sp3dcx2s3c";
+      sha256 = "038ign7qlavlmvrhb2y8bygbxvy4j7bx2k1zg0i3wblg2ja50w7h";
     };
 
     propagatedBuildInputs = with self; [ pyramid hawkauthlib tokenlib webtest ];
@@ -8161,7 +8173,7 @@ in modules // {
     src = pkgs.fetchgit {
       inherit rev;
       url = "https://github.com/Pylons/substanced.git";
-      sha256 = "17s7sdvydw9a9d2d36c70lq962ryny3dv9nzdxqpfvwiry9iy3jx";
+      sha256 = "1fb8m5aylw8kig13fvldchgkxi4s2xlvwralrzinyma3imbznd3q";
     };
 
     buildInputs = with self; [ mock ];
@@ -10628,7 +10640,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://chromium.googlesource.com/external/gyp.git";
       rev = "fdc7b812f99e48c00e9a487bd56751bbeae07043";
-      sha256 = "176sdxkva2irr1v645nn4q6rwc6grbb1wxj82n7x9hh09q4bxqcz";
+      sha256 = "1imgxsl4mr1662vsj2mlnpvvrbz71yk00w8p85vi5bkgmc6awgiz";
     };
 
     patches = optionals pkgs.stdenv.isDarwin [
@@ -10690,7 +10702,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/hawkauthlib.git;
       rev = "refs/tags/v${version}";
-      sha256 = "0b3xydii50ifs8qkgbpdlidfs2rzw63f807ahrq9flz90ahf582h";
+      sha256 = "0mr1mpx4j9q7sch9arwfvpysnpf2p7ijy7072wilxm8pnj0bwvsi";
     };
 
     propagatedBuildInputs = with self; [ requests webob ];
@@ -11748,7 +11760,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/konfig.git;
       rev = "refs/tags/${version}";
-      sha256 = "1v9pjb9idapjlc75p6h06kx7bi8zxhfgj93yxq1bn337kmyk1xdf";
+      sha256 = "1kc5iy61ckbmf65d9ssyqiyb25lnxjvr7c2vcsdl9wx4n6fhwzx3";
     };
 
     propagatedBuildInputs = with self; [ configparser argparse ];
@@ -11991,16 +12003,16 @@ in modules // {
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.8.0";
+    version = "0.11.0";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/llvmlite/${name}.tar.gz";
-      sha256 = "a10d8d5e597c6a54ec418baddd31a51a0b7937a895d75b240d890aead946081c";
+      sha256 = "1gc2yd4j855fb16nb341lm4z3hd4j40lhswqv116xlg4p5dyxkwk";
     };
 
-    llvm = pkgs.llvm_36;
+    llvm = pkgs.llvm_37;
 
     propagatedBuildInputs = with self; [ llvm ] ++ optional (pythonOlder "3.4") enum34;
 
@@ -12008,6 +12020,8 @@ in modules // {
     # https://github.com/numba/llvmlite/issues/93
     patchPhase = ''
       substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
+
+      substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
     '';
     # Set directory containing llvm-config binary
     preConfigure = ''
@@ -12747,7 +12761,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/mozservices.git;
       rev = "refs/tags/${version}";
-      sha256 = "0k1d7v8aa4xd3f9h8m5crl647136ba15i9nzdrpxg5aqmv2n0i0p";
+      sha256 = "1zci2ikk83mf7va88c83dr6snfh4ddjqw0lsg3y29qk5nxf80vx2";
     };
 
     patches = singleton (pkgs.fetchurl {
@@ -12963,7 +12977,7 @@ in modules // {
     name = "mutag-0.0.2-2ffa0258ca";
     src = pkgs.fetchgit {
       url = "https://github.com/aroig/mutag.git";
-      sha256 = "0azq2sb32mv6wyjlw1hk01c23isl4x1hya52lqnhknak299s5fml";
+      sha256 = "0axdnwdypfd74a9dnw0g25m16xx1yygyl828xy0kpj8gyqdc6gb1";
       rev = "2ffa0258cadaf79313241f43bf2c1caaf197d9c2";
     };
 
@@ -13137,7 +13151,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
       rev = "refs/tags/pymysql-${version}";
-      sha256 = "12v8bw7pp455zqkwraxk69qycz2ngk18bbz60v72kdbp6kssnqhz";
+      sha256 = "0kpw11rxpyyhs9b139hxhbnx9n5kzjjw10wgwvhnf9m3mv7j4n71";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -13844,12 +13858,12 @@ in modules // {
   };
 
   numba = buildPythonPackage rec {
-    version = "0.23.1";
+    version = "0.26.0";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numba/${name}.tar.gz";
-      sha256 = "80ce9968591db7c93e36258cc5e6734eb1e42826332799746dc6c073a6d5d317";
+      sha256 = "1ai06ks2ly6wcw2fpljmmyr41y9jidds8qingyih8cbq37fpym44";
     };
 
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
@@ -14147,7 +14161,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = meta.repositories.git;
       rev = "refs/tags/${name}";
-      sha256 = "16jb8x5hbs3g4dq10y6rqc1005bnffwnlws8x7j1d96n7k9mjn8h";
+      sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
     };
 
     patchPhase = ''
@@ -14382,7 +14396,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/openSUSE/osc;
       rev = "6cd541967ee2fca0b89e81470f18b97a3ffc23ce";
-      sha256 = "a39ce0e321e40e9758bf7b9128d316c71b35b80eabc84f13df492083bb6f1cc6";
+      sha256 = "0bf0yc4y1q87k7hq40xnr687lyw3ma93b3zprjlgn9pr8s1cn9xw";
     };
 
     doCheck = false;
@@ -15695,6 +15709,7 @@ in modules // {
       modules.sqlite3
       beautifulsoup4
       openpyxl
+      tables
       xlwt
     ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
 
@@ -15849,6 +15864,32 @@ in modules // {
         are supported. SFTP client and server mode are both supported too.
       '';
     };
+  };
+
+  partd = buildPythonPackage rec {
+    name = "partd-${version}";
+    version = "0.3.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/partd/${name}.tar.gz";
+      sha256 = "0fgrkfhgpm0hf5gs6wvgv7p9ls2kvgk0mc5hkmjw5slfbkn3fz8v";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [ locket numpy pandas pyzmq toolz ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Appendable key-value storage";
+      license = with licenses; [ bsd3 ];
+      homepage = http://github.com/dask/partd/;
+    };
+
+
   };
 
   patsy = buildPythonPackage rec {
@@ -16179,6 +16220,25 @@ in modules // {
     };
   };
 
+  pdfkit = buildPythonPackage rec {
+    name = "pdfkit-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pdfkit/${name}.zip";
+      sha256 = "1p1m6gp51ql3wzjs2iwds8sc3hg1i48yysii9inrky6qc3s6q5vf";
+    };
+
+    buildInputs = with self; [ ];
+    # tests are not distributed
+    doCheck = false;
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pdfkit;
+      description = "Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt";
+      license = licenses.mit;
+    };
+  };
 
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
@@ -16331,6 +16391,8 @@ in modules // {
     installFlags = [ "--ignore-installed" ];
 
     buildInputs = with self; [ mock scripttest virtualenv pretend pytest ];
+    # Pip wants pytest, but tests are not distributed
+    doCheck = false;
   };
 
 
@@ -17396,7 +17458,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/Lispython/pycurl.git";
       rev = "0f00109950b883d680bd85dc6e8a9c731a7d0d13";
-      sha256 = "0mhg7f9y5zl0m2xgz3rf1yqjd6l8n0qhfk7bpf36r44jfnhj75ld";
+      sha256 = "1qmw3cm93kxj94s71a8db9lwv2cxmr2wjv7kp1r8zildwdzhaw7j";
     };
 
     # error: (6, "Couldn't resolve host 'h.wrttn.me'")
@@ -22022,7 +22084,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/miracle2k/tarsnapper.git;
       rev = "620439bca68892f2ffaba1079a34b18496cc6596";
-      sha256 = "06pp499qm2dxpja2jgmmq2jrcx3m4nq52x5hhil9r1jxvyiq962p";
+      sha256 = "1n2k2r9x11r1ph9jcjhlk44hsghfnl1pl3aakbx121qc5dg7b0yn";
     };
 
     propagatedBuildInputs = with self; [ argparse pyyaml ];
@@ -24426,7 +24488,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/tokenlib.git;
       rev = "refs/tags/${version}";
-      sha256 = "0dmq41sy64jmkj7n49jgbpii5n5d41ci263lyhqbff5slr289m51";
+      sha256 = "0bq6dqyfwh29pg8ngmrm4mx4q27an9lsj0p9l79p9snn4g2rxzc8";
     };
 
     propagatedBuildInputs = with self; [ requests webob ];
@@ -24473,7 +24535,7 @@ in modules // {
     src = pkgs.fetchgit {
         url = https://github.com/scs3jb/screenkey.git;
         rev = "b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-        sha256 = "eb754917e98e03cb9d528eb5f57a08c88fa7a8172f92325a9fe796b2daf14db0";
+        sha256 = "1535mpm5x6v85d4ghxhdiianhjrsz280dwvs61ss0yyjx4kivx3s";
     };
 
     meta = {
@@ -24541,7 +24603,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla/PyBrowserID.git;
       rev = "refs/tags/${version}";
-      sha256 = "0nyqb0v8yrkqnrqsh1hlhvzr2pyvkxvkw701p3gpsvk29c0gb5n6";
+      sha256 = "0zsljr45gm8a4c0lxh6mgfc60a5fijhs4pwijb9fdkq16zw0pmf0";
     };
 
     doCheck = false;  # some tests use networking
@@ -24579,7 +24641,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/tokenserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "1pjrw7xhhqx7h4s08h1lsaa499r2ymc41zdknjimn6zlqdjdk1fb";
+      sha256 = "1cvkvxcday1qc3zyarasj3l7322w8afhrcxcsvb5wac1ryh1w6y2";
     };
 
     doCheck = false;
@@ -25004,7 +25066,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/brutasse/graphite-api.git";
       rev = "b6f75e8a08fae695c094fece6de611b893fc65fb";
-      sha256 = "41b90d5f35e99a020a6b1b77938690652521d1841b3165574fcfcee807ce4e6a";
+      sha256 = "1n8h5krhv7hzmn336y9vjrmv6b6009lz5hj0d9wz7v1k2500ws5k";
     };
 
     checkPhase = "nosetests";
@@ -25062,7 +25124,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/vimeo/graphite-influxdb.git";
       rev = "2273d12a24e1d804685a36debfd4224b7416b62f";
-      sha256 = "e386eaf190793d3ad0a42a74b9e137a968a51fc3806f602ff756e09c0c0648a8";
+      sha256 = "1v00fgrnmsd9c0ahggyw9sia5m7dyzz16i5pa4vy6w2sbfyrmm4v";
     };
 
     propagatedBuildInputs = with self; [ influxdb graphite_api ];
@@ -25082,7 +25144,7 @@ in modules // {
 
     src = pkgs.fetchgit {
       url = "https://github.com/offlinehacker/graphite-pager.git";
-      sha256 = "aa932f941efe4ed89971fe7572218b020d1a144259739ef78db6397b968eef62";
+      sha256 = "0ylal0vkc2yrjvssfz1gls84yk9vkvvkx3pyv4lx15jm2qqzdmxd";
       rev = version;
     };
 
@@ -25151,7 +25213,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/jodal/pykka.git";
       rev = "refs/tags/v${version}";
-      sha256 = "17vv2q636zp2fvxrp7ckgnz1ifaffcj5vdxvfb4isd1d32c49amb";
+      sha256 = "0qlfw1054ap0cha1m6dbnq51kjxqxaf338g7jwnwy33b3gr8x0hg";
     };
 
     # There are no tests
@@ -25172,7 +25234,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/Lawouach/WebSocket-for-Python.git";
       rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
-      sha256 = "04m4m3ncn7g4rb81xg5n28imns7rsq8d2w98gjpaib6vlmyly3g1";
+      sha256 = "1g7nmhjjxjf6vx75dyzns8bpid3b5i02kakk2lh1i297b5rw2rjq";
     };
 
     # python zip complains about old timestamps
@@ -25698,7 +25760,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/syncserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "002if8wk3bhz70zycggvp5qfvr1n2c6i27wnzj317wlkkjmcknx7";
+      sha256 = "1pk4rvwvsd1vxbpzg39hxqi8pi9v6b4s6m0mqbpg88s6s7i6ks3m";
     };
 
     buildInputs = with self; [ unittest2 ];
@@ -25721,7 +25783,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
-      sha256 = "06ss88j2gkgqchwd51fwynf2i41ssazs2xwiin8g7p8bc517ywmq";
+      sha256 = "0m14v7n105y06w3mdp35pyxyzjj5vqwbznzdbixhkms3df6md2lq";
     };
 
     propagatedBuildInputs = with self; [
@@ -25770,7 +25832,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-canonicaljson.git";
       rev = "refs/tags/v${version}";
-      sha256 = "29802d0effacd26ca1d6eccc8d4c7e4f543a194754ba89263861e87f44a83f0c";
+      sha256 = "0r82zlip93y169ijkn8xpbp0yr22mf92pni6dw420vb53l27sprq";
     };
 
     propagatedBuildInputs = with self; [
@@ -25808,7 +25870,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/pymacaroons.git";
       rev = "refs/tags/v${version}";
-      sha256 = "481a486520f5a3ad2761c3cd3954d2b08f456a94fb080aaa4ad1e68ddc705b52";
+      sha256 = "0bykjk01zdndp6gjr30x46blsn0cvxa7j0zh5g8raxwaawchjhii";
     };
 
     propagatedBuildInputs = with self; [ pynacl six ];
@@ -25851,7 +25913,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-signedjson.git";
       rev = "refs/tags/v${version}";
-      sha256 = "4ef1c89ea85846632d711a37a2e6aae1348c62b9d62ed0e80428b4a00642e9df";
+      sha256 = "0b8xxhc3npd4567kqapfp4gs7m0h057xam3an7424az262ind82n";
     };
 
     propagatedBuildInputs = with self; [
@@ -25866,7 +25928,7 @@ in modules // {
     src = pkgs.fetchgit {
       url = "https://github.com/matrix-org/python-unpaddedbase64.git";
       rev = "refs/tags/v${version}";
-      sha256 = "2dad07b53cf816a5c2fc14a1a193b0df63ab5aacaccffb328753e7d3027d434e";
+      sha256 = "0if3fjfxga0bwdq47v77fs9hrcqpmwdxry2i2a7pdqsp95258nxd";
     };
   };
 

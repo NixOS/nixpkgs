@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/GNOME/byzanz;
     rev = "1875a7f6a3903b83f6b1d666965800f47db9286a";
-    sha256 = "1b7hyilwj9wf2ri5zq63889bvskagdnqjc91hvyjmx1aj7vdkzd4";
+    sha256 = "0a72fw2mxl8vdcdnzy0bwis4jk28pd7nc8qgr4vhyw5pd48dynvh";
   };
 
   patches = [ ./add-amflags.patch ];

@@ -63,14 +63,14 @@ commands such as <command>useradd</command>,
 account named <literal>alice</literal>:
 
 <screen>
-$ useradd -m alice</screen>
+# useradd -m alice</screen>
 
 To make all nix tools available to this new user use `su - USER` which 
 opens a login shell (==shell that loads the profile) for given user. 
 This will create the ~/.nix-defexpr symlink. So run:
 
 <screen>
-$ su - alice -c "true"</screen>
+# su - alice -c "true"</screen>
 
 
 The flag <option>-m</option> causes the creation of a home directory
@@ -79,7 +79,7 @@ have an initial password and therefore cannot log in.  A password can
 be set using the <command>passwd</command> utility:
 
 <screen>
-$ passwd alice
+# passwd alice
 Enter new UNIX password: ***
 Retype new UNIX password: ***
 </screen>
@@ -87,7 +87,7 @@ Retype new UNIX password: ***
 A user can be deleted using <command>userdel</command>:
 
 <screen>
-$ userdel -r alice</screen>
+# userdel -r alice</screen>
 
 The flag <option>-r</option> deletes the user’s home directory.
 Accounts can be modified using <command>usermod</command>.  Unix

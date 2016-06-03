@@ -3,7 +3,7 @@
       xmlns:xi="http://www.w3.org/2001/XInclude"
       version="5.0"
       xml:id="book-nixos-manual">
-  
+
   <info>
     <title>NixOS Manual</title>
     <subtitle>Version <xi:include href="version" parse="text" /></subtitle>
@@ -26,6 +26,9 @@
     xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’ GitHub
     issue tracker</link>.</para>
 
+    <note><para>Commands prefixed with <literal>#</literal> have to be run as
+    root, either requiring to login as root user or temporarily switching
+    to it using <literal>sudo</literal> for example.</para></note>
   </preface>
 
   <xi:include href="installation/installation.xml" />

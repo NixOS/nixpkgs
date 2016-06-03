@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/ThomasHabets/simple-tpm-pk11";
     rev = "f26f10e11344560ff6e1479e6795dc0e5dc49a26";
-    sha256 = "8c9501ceed0557113ce3facf7b22b8baf6f32ebb092008c089b80334ed03cec9";
+    sha256 = "0546lhxssngpkrhg5kmrvn4bm1s2kyd20kvhz3rfavfrvr72cs9k";
   };
 
   buildInputs = [ trousers openssl opencryptoki automake autoconf libtool ];

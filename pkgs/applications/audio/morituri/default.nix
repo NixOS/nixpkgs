@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     url = "https://github.com/thomasvs/morituri.git";
     fetchSubmodules = true;
     rev = "135b2f7bf27721177e3aeb1d26403f1b29116599";
-    sha256 = "1ccxq1spny6xgd7nqwn13n9nqa00ay0nhflg3vbdkvbirh8fgxwq";
+    sha256 = "1sl5y5j3gdbynf2v0gf9dwd2hzawj8lm8ywadid7qm34yn8lx12k";
   };
 
   pythonPath = [

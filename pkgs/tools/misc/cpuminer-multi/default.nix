@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     inherit rev;
     url = https://github.com/wolf9466/cpuminer-multi.git;
-    sha256 = "9c438c6cd9f40273822f3d3103a370e43e8a40368695ed5e01ae87297dce7843";
+    sha256 = "1lzaiwy2wk9awpzpfnp3d6dymnb4bvgw1vg2433plfqhi9jfdrqj";
   };
 
   buildInputs = [ autoconf automake curl jansson ];

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "1jzmpbkx1z8dnpr0ndclb6c3dxnf90ifr8j1nzz4j8cvzdpc3lzc";
+    sha256 = "10j1s7kvnd5823p1kgx3hyca9jz9j27y6xk0q208p095wf8hk105";
   };
 
   meta = {

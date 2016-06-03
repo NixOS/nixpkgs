@@ -1,12 +1,12 @@
 {stdenv, fetchurl, gnupg, perl, automake111x, autoconf}:
 
 stdenv.mkDerivation rec {
-  version = "2.1";
+  version = "2.2";
   basename = "signing-party";
   name = "${basename}-${version}";
   src = fetchurl {
     url = "mirror://debian/pool/main/s/${basename}/${basename}_${version}.orig.tar.gz";
-    sha256 = "0pcni3mf92503bqknwlsvv1f5gz23dmzwas2j8g2fk7afjd891ya";
+    sha256 = "13qncdyadw1cnslc2xss9s2rpkalm7rz572b23p7mqcdqp30cpdd";
   };
 
   sourceRoot = ".";

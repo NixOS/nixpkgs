@@ -124,7 +124,7 @@ let
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
       rev = "0502fa67b036bae9f07a586d9f05a8bf74c24291";
-      sha256 = "073v8nway17j1n1lm70x508722b1q3vb6h4fvmcbbma3d22y1h45";
+      sha256 = "07c1r26i0b5z7i787nr4mc60799skdzsh764ckk3gdi76agp2r2z";
     };
   };
 in {

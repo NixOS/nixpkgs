@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/pstavirs/ostinato.git";
     rev = "414d89860de0987843295d149bcabeac7c6fd9e5";
-    sha256 = "0hb78bq51r93p0yr4l1z5xlf1i666v5pa3zkdj7jmpb879kj05dx";
+    sha256 = "1yif8z8ih027jdsgnxd82z9914wrqpkpi4xgxqv9lygnb2jjjrdx";
   };
 
   ostinato_png = fetchurl {

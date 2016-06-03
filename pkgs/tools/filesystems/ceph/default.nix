@@ -6,7 +6,7 @@ callPackage ./generic.nix (args // rec {
   src = fetchgit {
     url = "https://github.com/ceph/ceph.git";
     rev = "refs/tags/v${version}";
-    sha256 = "1lcal0jbpnm6y91s2v0g2zdnq7q0i5ql4bky294cz7g011di12vc";
+    sha256 = "0a2v3bgkrbkzardcw7ymlhhyjlwi08qmcm7g34y2sjsxk9bd78an";
   };
 
   patches = [ ./fix-pythonpath.patch ];

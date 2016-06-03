@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/OSSIA/i-score.git";
     rev = "ede2453b139346ae46702b5e2643c5488f8c89fb";
-    sha256 = "04li771nj0k8gym7vg6rnawjkp2f6d5m5mby26h0k6ksf7hg7h70";
+    sha256 = "0mk0zsqhx9z7ry1amjki89h6yp5ysi1qgy2j3kzhrm5sfazvf0x3";
     leaveDotGit = true;
     deepClone = true;
   };

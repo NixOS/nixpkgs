@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.osmocom.org/rtl-sdr.git";
     rev = "refs/tags/v${version}";
-    sha256 = "00r5d08r12zzkd0xggd7l7p4r2278rzdhqdaihwjlajmr9qd3hs1";
+    sha256 = "1dh52xcvxkjb3mj80wlm20grz8cqf5wipx2ksi91ascz12b5pym6";
   };
 
   buildInputs = [ cmake pkgconfig libusb1 ];

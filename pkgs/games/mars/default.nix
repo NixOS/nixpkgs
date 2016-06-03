@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/thelaui/M.A.R.S..git";
     inherit rev;
-    sha256 = "70fc4b5823f2efb03e0bcd3fe82dee88ee93ddfd81d53de0d7eb3fe02793d65e";
+    sha256 = "1r4c5gap1z2zsv4yjd34qriqkxaq4lb4rykapyzkkdf4g36lc3nh";
   };
   buildInputs = [ cmake mesa sfml fribidi taglib ];
   patches = [ ./unbind_fix.patch ];

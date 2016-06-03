@@ -1,7 +1,7 @@
 <refentry xmlns="http://docbook.org/ns/docbook"
           xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xi="http://www.w3.org/2001/XInclude">
-  
+
 <refmeta>
   <refentrytitle><command>nixos-option</command></refentrytitle>
   <manvolnum>8</manvolnum>
@@ -64,7 +64,7 @@ $ nixos-option boot.loader.grub.enable
 Value:
 true
 
-Default: 
+Default:
 true
 
 Description:

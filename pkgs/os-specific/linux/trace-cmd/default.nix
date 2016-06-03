@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/trace-cmd.git";
     rev    = "refs/tags/trace-cmd-v${version}";
-    sha256 = "42286440a45d1b24552a1d3cdb656dc648ad346fc426b5798bacdbffd3c4b226";
+    sha256 = "15d6b7l766h2mamqgphx6l6a33b1zn0yar2h7i6b24ph6kz3idxn";
   };
 
   buildInputs = [ asciidoc libxslt ];
