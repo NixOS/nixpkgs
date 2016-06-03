@@ -466,5 +466,14 @@
       "rev": "406e5b7bfd8201a36e2bb5f7bdae0b03380c2ce8",
       "sha256": "0yla9hz15pg63394ygs9iiwzsqyv29labl8p424hijwsc9z9nka8"
     }
+  },
+  {
+    "goPackagePath": "github.com/schachmat/ingo",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/schachmat/ingo",
+      "rev": "fab41e4e62cbef5d92998746ec25f7e195100f38",
+      "sha256": "04yfnch7pdabjjqfl2qxjmsaknvp4m1rbjlv8qrpmnqwjkxzx0hb"
+    }
   }
 ]

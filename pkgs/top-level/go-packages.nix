@@ -4008,15 +4008,6 @@ let
     propagatedBuildInputs = [ ];
   };
 
-  wego = buildFromGitHub rec {
-    rev     = "81d72ffd761f032fbd73dba4f94bd94c8c2d53d5";
-    version = "2016-04-07";
-    owner   = "schachmat";
-    repo    = "wego";
-    sha256  = "14p3hvv82bsxqnbnzz8hjv75i39kzg154a132n6cdxx3vgw76gck";
-    propagatedBuildInputs = [ go-colorable mattn.go-runewidth ingo ];
-  };
-
   textql = buildFromGitHub rec {
     rev     = "1785cd353c68aa34f97627143b9c2908dfd4ea04";
     version = "2.0.3";
