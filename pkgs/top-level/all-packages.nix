@@ -1762,7 +1762,7 @@ in
 
   go-pup = (callPackage ../development/tools/pup { }).bin;
 
-  go-sct = goPackages.go-sct.bin // { outputs = [ "bin" ]; };
+  go-sct = (callPackage ../tools/X11/go-sct { }).bin;
 
   go-upower-notify = goPackages.upower-notify.bin // { outputs = [ "bin" ]; };
 

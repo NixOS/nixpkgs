@@ -133,5 +133,14 @@
       "rev": "bd746dd8bcc8c059a9d953a786a6156eb83f398e",
       "sha256": "1dvvclp418j3d02v9717sfqhl6fw6yyddr9r3j8gsiv8nb62ib56"
     }
+  },
+  {
+    "goPackagePath": "github.com/cpucycle/astrotime",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/cpucycle/astrotime",
+      "rev": "9c7d514efdb561775030eaf8f1a9ae6bddb3a2ca",
+      "sha256": "024sc7g55v4s54irssm5wsn74sr2k2ynsm6z16w47q66cxhgvby1"
+    }
   }
 ]
