@@ -2,14 +2,16 @@
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
-  coreosImageRelease = "991.0.0";
-  coreosImageSystemdVersion = "225";
+  # Always get the information from 
+  # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
+  coreosImageRelease = "1032.0.0";
+  coreosImageSystemdVersion = "229";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" "host" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.5.1";
+  version = "1.7.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -17,12 +19,12 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1y99m0ay9qj5a0rb657abdjmwjvqi9dh3k6xr0npmx6vnvwpxs58";
+      sha256 = "1ds063q205p5fbahl2qqawhav1fkcvs9ynh80j8g0h9ls0bbv8j7";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "1vaimrbynhjh4f30rq92bv1h3c1lxnf8isx5c2qvnn3lghypss9k";
+    sha256 = "1lmyhncvw5cby4nbpw6ryiki05wra90fsr6xnsdgi9yqqs6v2d1f";
   };
 
   buildInputs = [
