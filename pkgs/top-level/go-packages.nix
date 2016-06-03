@@ -2452,6 +2452,16 @@ let
     sha256 = "1c0fipl4rsh0v5liq1ska1dl83v3llab4k6lm8mvrx9c4dyp71ly";
   };
 
+  gx-go = buildFromGitHub {
+    rev    = "fec2c1aeb76a08e2c77609190547c13b1438a372";
+    owner  = "whyrusleeping";
+    repo   = "gx-go";
+    sha256 = "0kpf8rh41yg6rrq6w1556hnq0f7l8nv5j0rpqmcgvdnkg8fxrymv";
+    propagatedBuildInputs = [
+      cli-go fs gx stump
+    ];
+  };
+
   gx = buildFromGitHub rec {
     rev    = "v${version}";
     version = "0.7.0";
