@@ -498,10 +498,10 @@ let
   };
 
   cli-go = buildFromGitHub {
-    rev    = "71f57d300dd6a780ac1856c005c4b518cfd498ec";
+    rev    = "bebbcf6d41ebde6db3940e63426b8ebcefca23c8";
     owner  = "codegangsta";
     repo   = "cli";
-    sha256 = "1fxznirkvank5461789dm5aw5z8aqi0jvwligvz44659rfl376p3";
+    sha256 = "00i83bvbcxyahpl3mrp1sipv2kwz8yn16lya0ffqn643aly61d97";
     propagatedBuildInputs = [ yaml-v2 ];
   };
 
