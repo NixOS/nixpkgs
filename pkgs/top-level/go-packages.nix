@@ -2473,7 +2473,7 @@ let
         --replace "github.com/ipfs/go-ipfs/Godeps/_workspace/src/github.com/jbenet/go-random" \
                   "github.com/jbenet/go-random"
     '';
-    buildInputs = [
+    propagatedBuildInputs = [
       go-homedir semver cli-go go-git-ignore stump go-random
       go-multiaddr go-multiaddr-net go-ipfs-api go-random-files
     ];
