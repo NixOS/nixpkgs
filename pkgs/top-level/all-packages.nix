@@ -2350,7 +2350,7 @@ in
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
-  lxd = goPackages.lxd.bin // { outputs = [ "bin" ]; };
+  lxd = (callPackage ../tools/admin/lxd { }).bin;
 
   lzip = callPackage ../tools/compression/lzip { };
 

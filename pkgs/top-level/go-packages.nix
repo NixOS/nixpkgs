@@ -1666,17 +1666,6 @@ let
     propagatedBuildInputs = [ osext go-systemd ];
   };
 
-  go-lxc = buildFromGitHub {
-    rev    = "d89df0ad9dc13a7ce491eedaa771b076cf32db16";
-    version = "2016-02-12";
-    owner  = "lxc";
-    repo   = "go-lxc";
-    sha256 = "051kqvvclfcinqcbi4zch694llvnxa5vvbw6cbdxbkzhr5zxm36q";
-    goPackagePath = "gopkg.in/lxc/go-lxc.v2";
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = [ pkgs.lxc ];
-  };
-
   go-lz4 = buildFromGitHub {
     rev    = "74ddf82598bc4745b965729e9c6a463bedd33049";
     owner  = "bkaradzic";
@@ -2342,31 +2331,6 @@ let
     sha256 = "1v92v8vkip36l2fs6l5dpp655151hrijjc781cif658r8nf7xr82";
     goPackagePath = "gopkg.in/natefinch/lumberjack.v2";
     goPackageAliases = [ "github.com/natefinch/lumberjack" ];
-  };
-
-
-  lxd = buildFromGitHub {
-    rev    = "lxd-2.0.0.rc4";
-    owner  = "lxc";
-    repo   = "lxd";
-    sha256 = "1rpyyj6d38d9kmb47dcmy1x41fiacj384yx01yslsrj2l6qxcdjn";
-    excludedPackages = "test"; # Don't build the binary called test which causes conflicts
-    buildInputs = [
-      gosexy.gettext websocket crypto log15 go-lxc yaml-v2 tomb protobuf pongo2
-      go-uuid tablewriter golang-petname mux go-sqlite3 goproxy
-      pkgs.python3 go-systemd uuid gocapability
-    ];
-    postInstall = ''
-      cp go/src/$goPackagePath/scripts/lxd-images $bin/bin
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Daemon based on liblxc offering a REST API to manage containers";
-      homepage = https://github.com/lxc/lxd;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ globin fpletz ];
-      platforms = platforms.linux;
-    };
   };
 
   manners = buildFromGitHub {
