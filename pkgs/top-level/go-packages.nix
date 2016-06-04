@@ -3494,29 +3494,6 @@ let
     sha256 = "0hswk9ihv3js5blp9pk2bpig64zkmyp5p1zhmgydfhb0dr2w8iad";
   };
 
-  vault = buildFromGitHub {
-    rev = "v0.5.2";
-    owner = "hashicorp";
-    repo = "vault";
-    sha256 = "085rk5i480wdlkn2p14yxi8zgsc11595nkkda1i77c4vjkllbkdy";
-
-    #postPatch = ''
-    #  grep -r '/gen/' | awk -F: '{print $1}' | xargs sed -i 's,/gen/,/apis/,g'
-    #'';
-
-    # We just want the consul api not all of consul
-    extraSrcs = [
-      { inherit (consul) src goPackagePath; }
-    ];
-
-    buildInputs = [
-      armon.go-metrics go-radix aws-sdk-go go-etcd structs ldap mysql gocql
-      golang-lru go-github hashicorp.aws-sdk-go errwrap go-multierror go-syslog
-      hcl logutils osext pq cli copystructure go-homedir mapstructure
-      reflectwalk columnize go-zookeeper crypto net oauth2
-    ];
-  };
-
   vcs = buildFromGitHub {
     rev    = "1.4.0";
     owner  = "Masterminds";
