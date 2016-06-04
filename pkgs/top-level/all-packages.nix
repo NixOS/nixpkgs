@@ -11151,7 +11151,7 @@ in
     inherit (gnome) gtk gtkmm;
   };
 
-  gocode = goPackages.gocode.bin // { outputs = [ "bin" ]; };
+  gocode = callPackage ../development/tools/gocode { };
 
   kgocode = callPackage ../applications/misc/kgocode {
     inherit (pkgs.kde4) kdelibs;
