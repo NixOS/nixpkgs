@@ -11157,7 +11157,7 @@ in
     inherit (pkgs.kde4) kdelibs;
   };
 
-  gotags = goPackages.gotags.bin // { outputs = [ "bin" ]; };
+  gotags = callPackage ../development/tools/gotags { };
 
   golint = goPackages.lint.bin // { outputs = [ "bin" ]; };
 
