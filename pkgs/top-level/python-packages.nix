@@ -16969,6 +16969,7 @@ in modules // {
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
     '' else "" );
 
+    buildInputs = with self; [ six ];
     propagatedBuildInputs = with self; [ pkgs.libgit2 ] ++ optionals (!isPyPy) [ cffi ];
 
     preCheck = ''
