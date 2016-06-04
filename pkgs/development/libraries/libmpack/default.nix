@@ -2,12 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "libmpack-${version}";
-  version = "1.0.2";
+  version = "1.0.3-rev${rev}";
+  rev = "071d944c9ff7b7fbd2c3c19d1fd1a231363ddeea";
   src = fetchFromGitHub {
     owner = "tarruda";
     repo = "libmpack";
-    rev = version;
-    sha256 = "0s391vyz1gv4j95zdyvxspw7c0xq7d7b4fh0yxrgqqqp5js1rlj0";
+    inherit rev;
+    sha256 = "1h3pbmykm69gfyi0wz647gz5836a6f3jc4azzll7i3mkpc11gcrd";
   };
   buildInputs = [ libtool ];
   installPhase = ''
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "Simple implementation of msgpack in C";
     homepage = "https://github.com/tarruda/libmpack/";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 garbas ];
     platforms = platforms.linux;
   };
 }
