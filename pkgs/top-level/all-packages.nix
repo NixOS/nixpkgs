@@ -5319,6 +5319,8 @@ in
 
   sdcc = callPackage ../development/compilers/sdcc { boost = boost159; };
 
+  serpent = callPackage ../development/compilers/serpent { };
+
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
