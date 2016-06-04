@@ -1631,11 +1631,11 @@ let
   };
 
   go-fuse = buildFromGitHub rec {
-    rev = "324ea173d0a4d90e0e97c464a6ad33f80c9587a8";
-    version = "2015-07-27";
+    rev = "bd746dd8bcc8c059a9d953a786a6156eb83f398e";
+    version = "2016-05-29";
     owner = "hanwen";
     repo = "go-fuse";
-    sha256 = "0r5amgnpb4g7b6kpz42vnj01w515by4yhy64s5lqf3snzjygaycf";
+    sha256 = "1dvvclp418j3d02v9717sfqhl6fw6yyddr9r3j8gsiv8nb62ib56";
   };
 
   go-github = buildFromGitHub {
@@ -2671,12 +2671,11 @@ let
   };
 
   mtpfs = buildFromGitHub {
-    rev = "3ef47f91c38cf1da3e965e37debfc81738e9cd94";
-    version = "2015-08-01";
+    rev = "bc7c0f716e3b4ed5610069a55fc00828ebba890b";
+    date = "2015-09-17";
     owner = "hanwen";
     repo = "go-mtpfs";
-    sha256 = "1f7lcialkpkwk01f7yxw77qln291sqjkspb09mh0yacmrhl231g8";
-
+    sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
     buildInputs = [ go-fuse usb ];
   };
 
