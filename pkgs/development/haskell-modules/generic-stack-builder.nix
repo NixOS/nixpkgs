@@ -5,6 +5,7 @@ with stdenv.lib;
 { buildInputs ? []
 , extraArgs ? []
 , LD_LIBRARY_PATH ? ""
+, ghc ? ghc
 , ...
 }@args:
 
