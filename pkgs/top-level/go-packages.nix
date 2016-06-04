@@ -513,26 +513,6 @@ let
     sha256 = "0xmxy8ay0wzd307x7xba3rmigvr6rjlpfk9fmn6ir2nc97ifv3i0";
   };
 
-  consul-alerts = buildFromGitHub {
-    rev = "v0.3.3";
-    owner = "AcalephStorage";
-    repo = "consul-alerts";
-    sha256 = "1w0mb20w1yazyh84sa30bsw271c5nm7lsx2qg0g3gf6mxdb63lpq";
-
-    renameImports = ''
-      # Remove all references to included dependency store
-      rm -rf go/src/github.com/AcalephStorage/consul-alerts/Godeps
-      govers -d -m github.com/AcalephStorage/consul-alerts/Godeps/_workspace/src/ ""
-    '';
-
-    # Temporary fix for name change
-    postPatch = ''
-      sed -i 's,SetApiKey,SetAPIKey,' notifier/opsgenie-notifier.go
-    '';
-
-    buildInputs = [ logrus docopt-go hipchat-go gopherduty consul-api opsgenie-go-sdk influxdb8-client ];
-  };
-
   consul-migrate = buildFromGitHub {
     rev    = "678fb10cdeae25ab309e99e655148f0bf65f9710";
     version = "2015-05-19";

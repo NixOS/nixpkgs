@@ -706,7 +706,7 @@ in
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = goPackages.consul-alerts.bin // { outputs = [ "bin" ]; };
+  consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
   consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
 
