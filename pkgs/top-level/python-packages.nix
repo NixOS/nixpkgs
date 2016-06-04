@@ -16958,11 +16958,11 @@ in modules // {
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.23.1";
+    name = "pygit2-0.24.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pygit2/${name}.tar.gz";
-      sha256 = "04201vcal7jq8lbpk9ylscrhjxdcf2aihiw25k4imjjqgfmvldf7";
+      sha256 = "01c155ls0h5pvpdkrk8ld6fscshmz4fchcwxrg488dbij1zdjxms";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
