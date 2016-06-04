@@ -3339,19 +3339,6 @@ let
     sha256 = "19ifi0na4cj23q3h8xv89mx7p48y0ciymhmlrq9milm0xz80wk10";
   };
 
-  serf = buildFromGitHub {
-    rev = "668982d8f90f5eff4a766583c1286393c1d27f68";
-    version = "2015-05-15";
-    owner  = "hashicorp";
-    repo   = "serf";
-    sha256 = "1h05h5xhaj27r1mh5zshnykax29lqjhfc0bx4v9swiwb873c24qk";
-
-    buildInputs = [
-      circbuf armon.go-metrics ugorji.go go-syslog logutils mdns memberlist
-      cli mapstructure columnize
-    ];
-  };
-
   sets = buildGoPackage rec {
     rev = "6c54cb57ea406ff6354256a4847e37298194478f";
     name = "sets-${stdenv.lib.strings.substring 0 7 rev}";
