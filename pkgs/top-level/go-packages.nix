@@ -2496,21 +2496,6 @@ let
     sha256 = "03fvgbjf2aprjj1s6wdc35wwa7k1w5phkixzvp5n1j21sf6w4h24";
   };
 
-  oauth2_proxy = buildGoPackage {
-    name = "oauth2_proxy";
-    goPackagePath = "github.com/bitly/oauth2_proxy";
-    src = fetchFromGitHub {
-      rev = "10f47e325b782a60b8689653fa45360dee7fbf34";
-      owner = "bitly";
-      repo = "oauth2_proxy";
-      sha256 = "13f6kaq15f6ial9gqzrsx7i94jhd5j70js2k93qwxcw1vkh1b6si";
-    };
-    buildInputs = [
-      go-assert go-options go-simplejson toml fsnotify.v1 oauth2
-      google-api-go-client hmacauth
-    ];
-  };
-
   objx = buildFromGitHub {
     rev    = "cbeaeb16a013161a98496fad62933b1d21786672";
     owner  = "stretchr";
