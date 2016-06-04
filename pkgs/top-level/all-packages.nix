@@ -708,7 +708,7 @@ in
 
   consul-alerts = callPackage ../servers/monitoring/consul-alerts { };
 
-  consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
+  consul-template = callPackage ../tools/system/consul-template { };
 
   corosync = callPackage ../servers/corosync { };
 
