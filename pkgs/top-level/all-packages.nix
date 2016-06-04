@@ -16180,7 +16180,7 @@ in
     camlp5 = ocamlPackages.camlp5_strict;
   };
 
-  hologram = goPackages.hologram.bin // { outputs = [ "bin" ]; };
+  hologram = callPackage ../tools/security/hologram { };
 
   tini = callPackage ../applications/virtualization/tini {};
 
