@@ -16773,8 +16773,9 @@ in modules // {
       sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
-
-    disabled = isPy35;
+    checkPhase = ''
+      rm prompt_toolkit/win32_types.py
+    '';
 
     buildInputs = with self; [ jedi ipython pygments ];
     propagatedBuildInputs = with self; [ docopt six wcwidth ];
