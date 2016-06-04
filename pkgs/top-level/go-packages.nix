@@ -2489,17 +2489,6 @@ let
     subPackages = [ "." ];
   };
 
-  nsq = buildFromGitHub {
-    rev = "v0.3.5";
-    owner = "bitly";
-    repo = "nsq";
-    sha256 = "1r7jgplzn6bgwhd4vn8045n6cmm4iqbzssbjgj7j1c28zbficy2f";
-
-    excludedPackages = "bench";
-
-    buildInputs = [ go-nsq go-options semver perks toml go-hostpool timer_metrics ];
-  };
-
   ntp = buildFromGitHub {
     rev    = "0a5264e2563429030eb922f258229ae3fee5b5dc";
     owner  = "beevik";

@@ -10031,7 +10031,7 @@ in
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
-  nsq = goPackages.nsq.bin // { outputs = [ "bin" ]; };
+  nsq = callPackage ../servers/nsq { };
 
   oauth2_proxy = goPackages.oauth2_proxy.bin // { outputs = [ "bin" ]; };
 
