@@ -1,0 +1,8 @@
+[
+  {
+    "include": "pkgs/development/go-modules/libs.json",
+    "packages": [
+      "golang.org/x/tools"
+    ]
+  }
+]

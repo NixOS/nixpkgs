@@ -11159,7 +11159,7 @@ in
 
   gotags = callPackage ../development/tools/gotags { };
 
-  golint = goPackages.lint.bin // { outputs = [ "bin" ]; };
+  golint = callPackage ../development/tools/golint { };
 
   godep = callPackage ../development/tools/godep { };
 

@@ -889,5 +889,14 @@
       "rev": "104dcad90073cd8d1e6828b2af19185b60cf3e29",
       "sha256": "0pfi09h4q6w2x833qxr8r609ml4kw1flqm265j752sb08sbf3zwf"
     }
+  },
+  {
+    "goPackagePath": "golang.org/x/tools",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/tools",
+      "rev": "9ae4729fba20b3533d829a9c6ba8195b068f2abc",
+      "sha256": "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1"
+    }
   }
 ]
