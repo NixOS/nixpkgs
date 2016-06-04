@@ -49,8 +49,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/Sirupsen/logrus",
-      "rev": "a26f43589d737684363ff856c5a0f9f24b946510",
-      "sha256": "13vprfbrsrqky145k26vayl9209gldh2v79614m0qxpx0ln1w2bs"
+      "rev": "be52937128b38f1d99787bb476c789e2af1147f1",
+      "sha256": "1m6vvd4pg4lwglhk54lv5mf6cc8h7bi0d9zb3gar4crz531r66y4"
     }
   },
   {
@@ -409,8 +409,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/coreos/go-etcd",
-      "rev": "003851be7bb0694fe3cc457a49529a19388ee7cf",
-      "sha256": "0n78m4lwsjiaqhjizcsp25paj2l2d4fdr7c4i671ldvpggq76lrl"
+      "rev": "9847b93751a5fbaf227b893d172cee0104ac6427",
+      "sha256": "1ihq01ayqzxvn6hca5j00vl189vi5lm78f0fy2wpk5mrm3xi01l4"
     }
   },
   {
@@ -445,8 +445,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/ugorji/go",
-      "rev": "c062049c1793b01a3cc3fe786108edabbaf7756b",
-      "sha256": "00cy7flxlm52ahxmqsznv87im5hx6xa9qg09i7cvrm70r74zh58q"
+      "rev": "03e33114d4d60a1f37150325e15f51b0fa6fc4f6",
+      "sha256": "01kdzgx23cgb4k867m1pvsw14hhdr9jf2frqy6i4j4221055m57v"
     }
   },
   {
@@ -867,9 +867,9 @@
     "goPackagePath": "github.com/hashicorp/go-msgpack",
     "fetch": {
       "type": "git",
-      "url": "https://github.com/hashicorp/go-msgpack",
-      "rev": "fa3f63826f7c23912c15263591e65d54d080b458",
-      "sha256": "1f6rd6bm2dm2rk46x8cqrxh5nks1gpk6dvvsag7s5pdjgdxy951k"
+      "url": "https://github.com/ugorji/go",
+      "rev": "03e33114d4d60a1f37150325e15f51b0fa6fc4f6",
+      "sha256": "01kdzgx23cgb4k867m1pvsw14hhdr9jf2frqy6i4j4221055m57v"
     }
   },
   {
@@ -978,6 +978,33 @@
       "url": "https://github.com/go-ldap/ldap",
       "rev": "83e65426fd1c06626e88aa8a085e5bfed0208e29",
       "sha256": "179lwaf0hvczl8g4xzkpcpzq25p1b23f7399bx5zl55iin62d8yz"
+    }
+  },
+  {
+    "goPackagePath": "github.com/kelseyhightower/memkv",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/kelseyhightower/memkv",
+      "rev": "7f9c7f36f45ba80c62fe22779ee78d9b4ca36580",
+      "sha256": "090x65kr3gqh8fc8z4rm9hc2r0v0k7rfm5vsbmhdh21f48ixw540"
+    }
+  },
+  {
+    "goPackagePath": "github.com/armon/consul-api",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/armon/consul-api",
+      "rev": "f79efe463cdbb62f6d5a55f879a63ec554eb13e5",
+      "sha256": "1rkmzfhsazj9p2b6ywvs8yramzvxfxyvplzxi0ldvhcv04887gcp"
+    }
+  },
+  {
+    "goPackagePath": "github.com/garyburd/redigo",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/garyburd/redigo",
+      "rev": "535138d7bcd717d6531c701ef5933d98b1866257",
+      "sha256": "1m7nc1gvv5yqnq8ii75f33485il6y6prf8gxl97dimsw94qccc5v"
     }
   }
 ]

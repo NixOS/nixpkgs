@@ -506,20 +506,6 @@ let
     buildInputs = [ reflectwalk ];
   };
 
-  confd = buildGoPackage rec {
-    rev = "v0.9.0";
-    name = "confd-${rev}";
-    goPackagePath = "github.com/kelseyhightower/confd";
-    preBuild = "export GOPATH=$GOPATH:$NIX_BUILD_TOP/go/src/${goPackagePath}/Godeps/_workspace";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "kelseyhightower";
-      repo = "confd";
-      sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
-    };
-    subPackages = [ "./" ];
-  };
-
   config = buildFromGitHub {
     rev    = "0f78529c8c7e3e9a25f15876532ecbc07c7d99e6";
     owner  = "robfig";
