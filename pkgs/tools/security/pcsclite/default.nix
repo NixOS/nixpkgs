@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     # The OS should care on preparing the drivers into this location
     "--enable-usbdropdir=/var/lib/pcsc/drivers"
     "--enable-confdir=/etc"
+    "--enable-ipcdir=/run/pcscd"
   ] ++ stdenv.lib.optional stdenv.isLinux
          "--with-systemdsystemunitdir=\${out}/etc/systemd/system";
 
