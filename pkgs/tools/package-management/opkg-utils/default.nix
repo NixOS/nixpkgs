@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.yoctoproject.org/opkg-utils";
     rev = "762d9dadce548108d4204c2113461a7dd6f57e60";
-    sha256 = "a450643fa1353b872166a3d462297fb2eb240554eed7a9186645ffd72b353417";
+    sha256 = "09jfkq2p5wv0ifxkw62f4m7pkvpaalh74j2skymi8lh4268krfwz";
   };
 
   preBuild = ''

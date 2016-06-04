@@ -12,7 +12,7 @@ stdenv.mkDerivation ({
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/gnumach.git";
-    sha256 = "6db17d091d410fb573e15ae5d59d860a17d78b2073f605c1dc1473f6f2c25ccc";
+    sha256 = "1q8zk8xzbiwpnvvmfgkylj4gwkvkn5n2ydy9j054qv5plnaczj1c";
     inherit rev;
   };
 

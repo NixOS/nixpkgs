@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://github.com/cisco/chezscheme.git";
     rev    = "65df1d1f7c37f5b5a93cd7e5b475dda9dbafe03c";
-    sha256 = "024x79xcdqp665xjyccpn02w6dmdvnhw0h0vdc42g9s5wv5ry92m";
+    sha256 = "1b273il3njnn04z55w1hnygvcqllc6p5qg9mcwh10w39fwsd8fbs";
     fetchSubmodules = true;
   };
 

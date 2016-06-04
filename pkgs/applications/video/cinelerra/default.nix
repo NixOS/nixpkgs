@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://git.cinelerra-cv.org/j6t/cinelerra.git";
     rev = "01dc4375a0fb65d10dd95151473d0e195239175f";
-    sha256 = "afb406a5637e4d0afad94e62ffd3af5b61e39f75aba9c08521523d00a0a5fec5";
+    sha256 = "0grz644vrnajhxn96x05a3rlwrbd20yq40sw3y5yg7bvi96900gf";
   };
 
   # touch config.rpath: work around bug in automake 1.10 ?

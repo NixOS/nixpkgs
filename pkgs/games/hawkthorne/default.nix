@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/hawkthorne/hawkthorne-journey.git";
     rev = "610b9b3907b2a1b21da2ae926e4c7c4c9e19959b";
-    sha256 = "0n2fkk34wr3kyzfhz2mbrzn94vjivblqk2xaid5mj7ls0ymxbmgd";
+    sha256 = "013smhdf9sh91153fpk2bwhhnpg6pn7kfrpw77jmf0v48i3q44h2";
   };
 
   buildInputs = [

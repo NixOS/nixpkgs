@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/dolphin-emu/dolphin.git;
     rev = "5097a22844b850b429872f4de390bd958b11a616";
-    sha256 = "1qizkahbimpmgjs51av1cdmnnyvbz0j0gknmi5vdc38vrzxvwkrf";
+    sha256 = "09jx61cxvfimnq1snkv6w3m9qidrgp0j0w81c7pbkpmcwysz8xya";
     fetchSubmodules = false;
   };
 

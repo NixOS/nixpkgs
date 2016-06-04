@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/momiji/tpm-luks";
     rev = "c9c5b7fdddbcdac1cd4d2ea6baddd0617cc88ffa";
-    sha256 = "fdd451caddb4e51ede3f2406245e1ace57389596e85aa402c9f2606303707539";
+    sha256 = "1ms2v57f13r9km6mvf9rha5ndmlmjvrz3mcikai6nzhpj0nrjz0w";
   };
 
   buildInputs = [ autoreconfHook gawk trousers cryptsetup openssl ];

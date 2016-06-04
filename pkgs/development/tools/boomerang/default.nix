@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/nemerle/boomerang.git";
     rev = "78c6b9dd33790be43dcb07edc549161398904006";
-    sha256 = "1hh8v0kcnipwrfz4d45d6pm5bzbm9wgbrdgg0ir2l7wyshbkff6i";
+    sha256 = "1n49wx2v9r40mh5kdkspqvc8rccpb4s004qxqvn4fwc59dm0pqbs";
   };
 
   buildInputs = [ cmake expat ];

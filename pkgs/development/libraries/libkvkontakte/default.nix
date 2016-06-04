@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://anongit.kde.org/libkvkontakte;
     rev = "4024f69cf54625dbe5dc2e2d811a996774a669ff";
-    sha256 = "0ryvjfrsws845k9s76715xid48y01h0ynb5wdx6ln8cm5z5wqj61";
+    sha256 = "1ly95bc72a4zjqhr03liciqpi2hp8x4gqzm4gzr8alfysv2jvxbb";
   };
 
   nativeBuildInputs = [ automoc4 cmake pkgconfig ];

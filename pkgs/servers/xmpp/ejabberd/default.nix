@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0zmb7g00y5q4alf70i1chv3yim63i03sy4p8i83bzvxri59vw0zv";
+    outputHash = "0nf2fgfiapxg26c7bxl985pszpgnzyan4j4jiaf5zvflza67h777";
   };
 
   configureFlags =

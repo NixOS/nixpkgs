@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/wg/wrk.git";
     rev = "7cdede916a53da253c995767a92eec36a245a2cc";
-    sha256 = "0m8i5pk2rj40v28bzrskkzw54v9jqdby52dwfcypannhlhgqnhy2";
+    sha256 = "1zk7mx27875wkbwcjpbl9zmpyyfic9177wmkif9a16mvj7mvlw9v";
   };
 
   buildInputs = [ openssl ];

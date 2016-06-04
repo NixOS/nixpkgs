@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/cask/cask.git";
     rev = "717b64a9ba7640ec366e8573da0c01f9c4d57b0c";
-    sha256 = "0j18rzgpibisfcci6kcgjs8nlkfi1dw33dxp6ab6zaiarydwgcs5";
+    sha256 = "0bq24hac1z77g1bybwlk991dcc3pss2gjpwq0a6vvrqg5hw02lsf";
   };
 
   buildInputs = [ emacs python ];

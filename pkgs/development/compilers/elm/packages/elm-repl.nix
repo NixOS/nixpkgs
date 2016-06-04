@@ -8,7 +8,7 @@ mkDerivation {
   version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-repl";
-    sha256 = "1mxg99w36b8i43kl1nxp7fd86igi5wyj08m9mraiq58vpcgyqnzq";
+    sha256 = "0bpmkm7q3a0h4hwlbwcnzaqgf6n5p1qw65z8kw84f52s5bndc0wc";
     rev = "95b4555cff6b6e2a55a4ea3dab00bfb39dfebf0d";
   };
   isLibrary = false;

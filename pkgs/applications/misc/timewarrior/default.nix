@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://git.tasktools.org/scm/tm/timew.git";
     rev = "2175849a81ddd03707dca7b4c9d69d8fa11e35f7";
-    sha256 = "1c55a5jsm9n2zcyskklhqiclnlb2pz2h7klbzx481nsn62xd6bbg";
+    sha256 = "0clhbm6093wnvpq0ypvx95095amvlzab0sz9kiflasw9mgnwisrv";
   };
 
   nativeBuildInputs = [ cmake ];

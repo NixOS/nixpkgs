@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/MLstate/opalang.git;
     rev = "047f58bfd4be35ee30176156b3718c707a6c0f76";
-    sha256 = "1jbxfrmpbjjk7qvaxdn47044w5m8wr96q9yx65ib3wlapmjbvdvf";
+    sha256 = "1laynwf64713q2vhdkxw679dah6hl3bvmrj8cj836a9k9z7jcc1r";
   };
 
   # Paths so the opa compiler code generation will use the same programs as were

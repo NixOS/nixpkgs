@@ -70,7 +70,7 @@ let
     src = fetchgit {
       url = "https://github.com/php-memcached-dev/php-memcached";
       rev = "e573a6e8fc815f12153d2afd561fc84f74811e2f";
-      sha256 = "f7acfdae04ef2ef9ece67b6d009aaf6604db64735fc7619f7169929aabb9c58f";
+      sha256 = "0asfi6rsspbwbxhwmkxxnapd8w01xvfmwr1n9qsr2pryfk0w6y07";
     };
 
     configureFlags = [
@@ -203,7 +203,7 @@ let
     src = fetchgit {
       url = "https://github.com/phpredis/phpredis";
       rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
-      sha256 = "ac5894d168e22ae4a770ce252cfbd07d0f9f1a5b48b084c0559b67fe4d3e51cb";
+      sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
     };
   };
 

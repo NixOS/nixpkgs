@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     rev = "refs/tags/${version}";
     url = "https://github.com/ariya/phantomjs.git";
-    sha256 = "16x104cw5f1dyhf7fg12vlpcywvc9c43r9afhl0dvssgxklrn0q7";
+    sha256 = "1gyc8qxn8v4vm4lgd9njrprz46fg1j5ziq0mm888q8ms0p7jy2pi";
   };
 
   buildInputs = [ bison2 flex fontconfig freetype gperf icu openssl libjpeg libpng perl python ruby sqlite ]

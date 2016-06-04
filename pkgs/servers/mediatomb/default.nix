@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = meta.repositories.git;
     rev = "7ab761696354868bd5d67ff4f2d849994e4c98e2";
-    sha256 = "7b51d488ac0b93c7720f8f8373970884a55b0879b1f6941873e916f41177d062";
+    sha256 = "1mimslr4q6mky865y6561rr64cbn4gf0qc2dhgb31hxp4rc1kmzd";
   };
 
   buildInputs = [ sqlite expat spidermonkey taglib libexif curl ffmpeg file mp4v2 flac

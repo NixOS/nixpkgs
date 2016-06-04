@@ -10,7 +10,7 @@ let
     src = fetchgit {
       url = "https://github.com/thestinger/termite";
       rev = "refs/tags/v${version}";
-      sha256 = "1k91nw19c0p5ghqhs00mn9npa91idfkyiwik3ng6hb4jbnblp5ph";
+      sha256 = "1cw4yw7n9m2si8b7zcfyz9pyihncabxm5g39v1mxslfajxgwzmd8";
     };
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];

@@ -456,7 +456,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://github.com/go-check/check.git";
-      sha256 = "0i83qjmd4ri9mrfddhsbpj9nb43rf2j9803k030fj155j31klwcx";
+      sha256 = "1qhji81yxz3map937bf8lyp8j2qpwlbnag5pr5pf0qw3li2nciah";
     };
   };
 
@@ -1631,11 +1631,11 @@ let
   };
 
   go-fuse = buildFromGitHub rec {
-    rev = "324ea173d0a4d90e0e97c464a6ad33f80c9587a8";
-    version = "2015-07-27";
+    rev = "bd746dd8bcc8c059a9d953a786a6156eb83f398e";
+    version = "2016-05-29";
     owner = "hanwen";
     repo = "go-fuse";
-    sha256 = "0r5amgnpb4g7b6kpz42vnj01w515by4yhy64s5lqf3snzjygaycf";
+    sha256 = "1dvvclp418j3d02v9717sfqhl6fw6yyddr9r3j8gsiv8nb62ib56";
   };
 
   go-github = buildFromGitHub {
@@ -2671,12 +2671,11 @@ let
   };
 
   mtpfs = buildFromGitHub {
-    rev = "3ef47f91c38cf1da3e965e37debfc81738e9cd94";
-    version = "2015-08-01";
+    rev = "bc7c0f716e3b4ed5610069a55fc00828ebba890b";
+    date = "2015-09-17";
     owner = "hanwen";
     repo = "go-mtpfs";
-    sha256 = "1f7lcialkpkwk01f7yxw77qln291sqjkspb09mh0yacmrhl231g8";
-
+    sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
     buildInputs = [ go-fuse usb ];
   };
 
@@ -2804,7 +2803,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "4075ede31601adf8c4e92739693aebffa3718c641dfca75b09cf6b4bd6c26cc0";
+      sha256 = "1jjvss4cmcd505aqhsyag15lmzjycgwwml9mfdigprxv3v8f3pnq";
     };
     #goTestInputs = [ ogletest ];
     doCheck = false; # infinite recursion
@@ -2817,7 +2816,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "685e7fc4308d118ae25467ba84c64754692a7772c77c197f38d8c1b63ea81da2";
+      sha256 = "1sn6hj34c54x0svr68vcgm2l725x03ccpq6h3ypi3hrvzg349ykw";
     };
     buildInputs = [ oglematchers ];
     #goTestInputs = [ ogletest ];
@@ -2831,7 +2830,7 @@ let
     src = fetchgit {
       inherit rev;
       url = "https://${goPackagePath}.git";
-      sha256 = "0cfc43646d59dcea5772320f968aef2f565fb5c46068d8def412b8f635365361";
+      sha256 = "0y4y20a84rhmp66x9d7nzlygiabky98wlbvx56h1hknm08gpskiz";
     };
     buildInputs = [ oglemock oglematchers ];
     doCheck = false; # check this again

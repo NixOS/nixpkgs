@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/raphael/linux-samus";
     rev = "995de6c2093797905fbcd79f1a3625dd3f50be37";
-    sha256 = "6e59f7ce24122eb9474e7863e63729de632e4c7afcb8f08534cb2102007f8381";
+    sha256 = "0a6lz9wadm47cmva136q6wd0lw03bmymf9ispnzb091a7skwacry";
   };
 
 

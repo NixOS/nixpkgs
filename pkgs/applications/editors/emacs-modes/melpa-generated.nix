@@ -2397,7 +2397,7 @@
         src = fetchgit {
           url = "https://bitbucket.org/ukaszg/aria2.git";
           rev = "3c54254e424c6c8b4eb0d8e7c4907b094c27a3f0";
-          sha256 = "1z6smlc5cpf6kswbibhwwx3h5khsbj38a371lsjjhgmharg7a4r7";
+          sha256 = "1xkgz3l7idw5bk1xlffdaddf5v1q6fm3grbryl4xvssrbwgnyisf";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/aria2";
@@ -3977,7 +3977,7 @@
         src = fetchgit {
           url = "git://git.savannah.nongnu.org/bbdb.git";
           rev = "8fce6df3ab09250d545a2ed373ae64e68d12ff4c";
-          sha256 = "09ib71b669sccp0x5lf2ic4gzdqcmmdx918n870lhabqhn0gw3g2";
+          sha256 = "1nglakzpcy2pizg80ny1w972vq74v5jgzdvgqp69jkb7312cqzvd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/bbdb";
@@ -15800,7 +15800,7 @@
         src = fetchgit {
           url = "git://git.sv.gnu.org/emms.git";
           rev = "ac15f46e19d259e5d49acdac877d0793be1c1ebe";
-          sha256 = "1y6l74sr553vygwpyf7di8cdg98hqpzccz81n24vj11a8g9qly1q";
+          sha256 = "03vvqp08vkgqqrfcnxfnx0z1dl0wpljgkjkavfyjsd1h7npxs7ik";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/emms";
@@ -24342,7 +24342,7 @@
         src = fetchgit {
           url = "https://go.googlesource.com/tools";
           rev = "9ae4729fba20b3533d829a9c6ba8195b068f2abc";
-          sha256 = "1sg01rgccb8f7793m987y8avz8gixqag5hgxs184m61hr5brrak4";
+          sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/go-guru";
@@ -24467,7 +24467,7 @@
         src = fetchgit {
           url = "https://go.googlesource.com/tools";
           rev = "9ae4729fba20b3533d829a9c6ba8195b068f2abc";
-          sha256 = "1sg01rgccb8f7793m987y8avz8gixqag5hgxs184m61hr5brrak4";
+          sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/go-rename";
@@ -29707,7 +29707,7 @@
         src = fetchgit {
           url = "https://gitlab.lrde.epita.fr/spot/emacs-modes.git";
           rev = "3c608e15b655d2375c5f81323ac561c7848dc029";
-          sha256 = "1s3wgsgl1min2zbfr6wacb7wnff95r8kgmfzlma8b02440cmch5z";
+          sha256 = "19360wx1i7lkr8igddm7zl9yh5hlm3r013rkd512cs18iz1y753x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/hoa-mode";
@@ -29853,7 +29853,7 @@
         src = fetchgit {
           url = "git://git.osdn.jp/gitroot/howm/howm.git";
           rev = "6d6b4ca60e5c164a3e284ba82156b8ae33e83b7a";
-          sha256 = "0q9rjy8i263d6fcyj0s1l95s7vajf15i2fkbkbmhh4rp63nd04g3";
+          sha256 = "1ib97y2vm8whd2rqb8kgh0fk54mk3qjmij05bzmz4njz0k9crwgd";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/howm";
@@ -29956,7 +29956,7 @@
         src = fetchgit {
           url = "http://fly.srk.fer.hr/~hniksic/emacs/htmlize.git";
           rev = "aa6e2f6dba6fdfa200c7c55efe29ff63380eac8f";
-          sha256 = "0lc2j0zifjwzab2khwmd769i5497ddx28rb96y6zv2k261xziyla";
+          sha256 = "1vkqxgirc82vc44g7xhhr041arf93yirjin3h144kjyfkgkplnkp";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/htmlize";
@@ -35798,7 +35798,7 @@
         src = fetchgit {
           url = "http://llvm.org/git/llvm";
           rev = "5afdcbe0c7cd2abeff450f66487800052a2df423";
-          sha256 = "152im9nwy1rssd8rfh9rfk0pcw558g7m8cfmn83hy2sdicgyn3d7";
+          sha256 = "0xah53a68ikdq38racgsp5cp4fz5v32l4rj9s0risyy7fdyp01b1";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/llvm-mode";
@@ -43091,7 +43091,7 @@
         src = fetchgit {
           url = "git://orgmode.org/org-mode.git";
           rev = "9a7bf6d6496a4415ca33b92941e4dbc2c4676855";
-          sha256 = "0zbfgzhqbb1bcx23i3xn5r4q414w1drqqs6zfxcha65v6mijkgkc";
+          sha256 = "1m0d0xknl18vg7hnryahll3izhcspp8wzk7j0yrh2piwhbipp0l8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/org-mac-iCal";
@@ -43111,7 +43111,7 @@
         src = fetchgit {
           url = "git://orgmode.org/org-mode.git";
           rev = "9a7bf6d6496a4415ca33b92941e4dbc2c4676855";
-          sha256 = "0zbfgzhqbb1bcx23i3xn5r4q414w1drqqs6zfxcha65v6mijkgkc";
+          sha256 = "1m0d0xknl18vg7hnryahll3izhcspp8wzk7j0yrh2piwhbipp0l8";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/org-mac-link";
@@ -50614,7 +50614,7 @@
         src = fetchgit {
           url = "http://www.foldr.org/~michaelw/projects/redshank.git";
           rev = "f98e68f532e622bcd464292ca4a9cf5fbea14ebb";
-          sha256 = "14p39gl4bvicqxf6rjzsyixv8ac6ib2vk680zbi7l55a1kdwaism";
+          sha256 = "1jdkgvd5xy9hl5q611jwah2n05abjp7qcy9sj4k1z11x0ii62b6p";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/redshank";
@@ -55909,7 +55909,7 @@
         src = fetchgit {
           url = "git://git.freebsoft.org/git/speechd-el";
           rev = "3d729817296b2ed8ad414a6aa044a8aa762259eb";
-          sha256 = "0cjw47ziv50b3i95i9y0r8rvgchawzkknv5sqr882aqqb8zgy6rc";
+          sha256 = "044fmr2053vkd8s7kzd2v9qlz6lr8k88kfnxpiwpcbn7pb198iir";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/speechd-el";
@@ -64566,7 +64566,7 @@
         src = fetchgit {
           url = "https://bitbucket.org/Soft/zenity-color-picker.el.git";
           rev = "4f4f46676a461ebc881487fb70c8c181e323db5e";
-          sha256 = "1abm0wmfkhbwdnqnvjd9r0pm7ahkcj7ip7jcz6rm49qam815g7rk";
+          sha256 = "14i2k52qz77dv04w39fyp9hfq983fwa3803anqragk608xgwpf4s";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/50e8d089f4e163eb459fc602cb90440b110b489f/recipes/zenity-color-picker";

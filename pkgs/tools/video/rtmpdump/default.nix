@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     url = git://git.ffmpeg.org/rtmpdump;
     # Currently the latest commit is used (a release has not been made since 2011, i.e. '2.4')
     rev = "a107cef9b392616dff54fabfd37f985ee2190a6f";
-    sha256 = "178h5j7w20g2h9mn6cb7dfr3fa4g4850hpl1lzxmi0nk3blzcsvl";
+    sha256 = "03x7dy111dk8b23cq2wb5h8ljcv58fzhp0xm0d1myfvzhr9amqqs";
   };
 
   makeFlags = [ ''prefix=$(out)'' ]

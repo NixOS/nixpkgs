@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/google/nsjail;
     rev = "8b951e6c2827386786cde4a124cd1846d25b9404";
-    sha256 = "b3b863423cc676111d2d1afbac524eee6fa824588cafccb7c42ff470508a13b1";
+    sha256 = "02bmwd48l6ngp0nc65flw395mpj66brx3808d5xd19qn5524lnni";
   };
 
   installPhase = ''

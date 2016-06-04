@@ -11,7 +11,7 @@ let
     name="${baseName}-${version}";
     url="https://github.com/GNUFreetalk/freetalk";
     rev = "refs/tags/v${version}";
-    sha256="0vh6snkd66gdzimdiyy9idhsip60d5xc7qh4w48k7n8h93ydrb2b";
+    sha256="1wr3q40f4gwmr0vm6w07d5vzr65q6llk9xxq75klpcj83va5l3xv";
   };
   buildInputs = [
     guile pkgconfig glib loudmouth gmp libidn readline libtool

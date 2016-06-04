@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   # This project uses git submodules, which fetchFromGitHub doesn't support:
   src = fetchgit {
-    sha256 = "0ngdmici2vgi2z02brzc3f78j1g1y9myzfxn46zlm1skg94fp692";
+    sha256 = "1nj53f24qjp0d87fzrz0y72rmv6lhxyiaqrsbd9v423h5zpmkrnj";
     rev = "9f59a3a0b494b758aa91d7d8fa04e21b5e6463c0";
     url = "https://github.com/pfactum/uksmtools.git";
   };

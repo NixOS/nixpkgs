@@ -7,7 +7,7 @@ agda.mkDerivation (self: rec {
   src = fetchgit {
     url = "https://github.com/UlfNorell/agda-prelude.git";
     rev = version;
-    sha256 = "bdcffb675d0ad1bafa2b47f581b6a9b90347ae739b6218f89f365fda2cc4f8c8";
+    sha256 = "10n8bsbn0c3hmyqdis7gvawn2ylzmzl8rkbscvh0bj03fbbna4d9";
   };
 
   topSourceDirectories = [ "src" ];

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/Arkq/alock;
     rev = "69b547602d965733d415f877eb59d05966bd158d";
-    sha256 = "c1f00bf90c966b2b76e00061cc4b54a3c0bc6547e788731ab694b43f55a216ab";
+    sha256 = "0lv2ng5qxzcq0vwbl61dbwigv79sin4zg90y9cgsz6ydvm4ncpas";
   };
 
   configureFlags = [

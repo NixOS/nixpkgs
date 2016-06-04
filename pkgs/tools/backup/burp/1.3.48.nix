@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/grke/burp.git";
     rev = "3636ce0a992904a374234d68170fc1c265bff357";
-    sha256 = "708e06b758e8f918aaf7cc8f7517a7eadd456263fe34618e32330e5ad69438c0";
+    sha256 = "1vycivml5r87y4fmcpi9q82nhiydrq3zqvkr2gsp9d1plwsbgizz";
   };
 
   patches = [ ./burp_1.3.48.patch ];

@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/DFHack/dfhack";
     inherit rev;
-    sha256 = "0h9y9z4d9lirgpcvj5r2znmfi2avdrgrffi9p63gxp1a3mv9fdm1";
+    sha256 = "1p234m8r84cdr4bx622hcd13mshnjc5bw7hdxhv18waaxvdpv6jh";
   };
 
   patches = [ ./use-system-libraries.patch ];
