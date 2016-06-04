@@ -513,28 +513,6 @@ let
     sha256 = "0xmxy8ay0wzd307x7xba3rmigvr6rjlpfk9fmn6ir2nc97ifv3i0";
   };
 
-  consul = buildFromGitHub {
-    rev = "v0.6.4";
-    owner = "hashicorp";
-    repo = "consul";
-    sha256 = "0p6m2rl0d30w418n4fzc4vymqs3vzfa468czmy4znkjmxdl5vp5a";
-
-    buildInputs = [
-      circbuf armon.go-metrics go-radix gomdb bolt consul-migrate go-checkpoint
-      ugorji.go go-multierror go-syslog golang-lru hcl logutils memberlist
-      net-rpc-msgpackrpc raft raft-boltdb raft-mdb scada-client serf yamux
-      muxado dns cli mapstructure columnize crypto
-    ];
-
-    # Keep consul.ui for backward compatability
-    passthru.ui = pkgs.consul-ui;
-  };
-
-  consul-api = buildFromGitHub {
-    inherit (consul) rev owner repo sha256;
-    subPackages = [ "api" ];
-  };
-
   consul-alerts = buildFromGitHub {
     rev = "v0.3.3";
     owner = "AcalephStorage";

@@ -1,4 +1,4 @@
-{ stdenv, goPackages, ruby, bundlerEnv, zip }:
+{ stdenv, consul, ruby, bundlerEnv, zip }:
 
 let
   # `sass` et al
@@ -11,11 +11,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "consul-ui-${goPackages.consul.rev}";
+  name = "consul-ui-${consul.version}";
 
-  src = goPackages.consul.src;
+  src = consul.src;
 
   buildInputs = [ ruby gems zip ];
+
+  patchPhase = "patchShebangs ./ui/scripts/dist.sh";
 
   buildPhase = ''
     # Build ui static files
