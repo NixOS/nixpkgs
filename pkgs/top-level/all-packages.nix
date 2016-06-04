@@ -13026,7 +13026,7 @@ in
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
-  i3cat = goPackages.i3cat.bin // { outputs = [ "bin" ]; };
+  i3cat = callPackage ../tools/misc/i3cat { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
     cairo = cairo.override { xcbSupport = true; };

@@ -2026,15 +2026,6 @@ let
     ];
   };
 
-  i3cat = buildFromGitHub {
-    rev    = "b9ba886a7c769994ccd8d4627978ef4b51fcf576";
-    version = "2015-03-21";
-    owner  = "vincent-petithory";
-    repo   = "i3cat";
-    sha256 = "1xlm5c9ajdb71985nq7hcsaraq2z06przbl6r4ykvzi8w2lwgv72";
-    buildInputs = [ structfield ];
-  };
-
   inf = buildFromGitHub {
     rev    = "c85f1217d51339c0fa3a498cc8b2075de695dae6";
     owner  = "go-inf";
