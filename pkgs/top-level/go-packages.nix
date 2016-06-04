@@ -827,14 +827,6 @@ let
     sha256 = "0kmv0p605di6jc8i1778qzass18m0mv9ks9vxxrfsiwcp4la82jf";
   };
 
-  etcd = buildFromGitHub {
-    rev    = "v2.3.0";
-    owner  = "coreos";
-    repo   = "etcd";
-    sha256 = "1cchlhsdbbqal145cvdiq7rzqqi131iq7z0r2hmzwx414k04wyn7";
-    buildInputs = [ pkgs.libpcap tablewriter ];
-  };
-
   fsnotify.v0 = buildGoPackage rec {
     rev = "v0.9.3";
     name = "fsnotify.v0-${rev}";
