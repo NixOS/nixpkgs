@@ -801,7 +801,7 @@ in
 
   fsmark = callPackage ../tools/misc/fsmark { };
 
-  fzf = (callPackage ../tools/misc/fzf {}).bin;
+  fzf = callPackage ../tools/misc/fzf { };
 
   fzy = callPackage ../tools/misc/fzy { };
 

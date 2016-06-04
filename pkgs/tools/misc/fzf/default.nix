@@ -28,6 +28,6 @@ buildGoPackage rec {
   postInstall= ''
     cp $src/bin/fzf-tmux $bin/bin
     mkdir -p $out/share/vim-plugins
-    ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${(builtins.parseDrvName fzf.name).name}
+    ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
   '';
 }
