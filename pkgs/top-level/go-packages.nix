@@ -2588,21 +2588,6 @@ let
     buildInputs = [ protobuf ];
   };
 
-  prometheus.collectd-exporter = buildFromGitHub {
-    rev = "0.1.0";
-    owner = "prometheus";
-    repo = "collectd_exporter";
-    sha256 = "165zsdn0lffb6fvxz75szmm152a6wmia5skb96k1mv59qbmn9fi1";
-    buildInputs = [ prometheus.client_golang ];
-    meta = with stdenv.lib; {
-      description = "Relay server for exporting metrics from collectd to Prometheus";
-      homepage = https://github.com/prometheus/alertmanager;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
-  };
-
   prometheus.haproxy-exporter = buildFromGitHub {
     rev = "0.4.0";
     owner = "prometheus";

@@ -400,8 +400,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/beorn7/perks",
-      "rev": "3ac7bf7a47d159a033b107610db8a1b6575507a4",
-      "sha256": "1qc3l4r818xpvrhshh1sisc5lvl9479qspcfcdbivdyh0apah83r"
+      "rev": "b965b613227fddccbfffe13eae360ed3fa822f8d",
+      "sha256": "1p8zsj4r0g61q922khfxpwxhdma2dx4xad1m5qx43mfn28kxngqk"
     }
   },
   {
@@ -418,8 +418,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/matttproud/golang_protobuf_extensions",
-      "rev": "d0c3fe89de86839aecf2e0579c40ba3bb336a453",
-      "sha256": "0jkjgpi1s8l9bdbf14fh8050757jqy36kn1l1hxxlb2fjn1pcg0r"
+      "rev": "fc2b8d3a73c4867e51861bbdd5ae3c1f0869dd6a",
+      "sha256": "0ajg41h6402big484drvm72wvid1af2sffw0qkzbmpy04lq68ahj"
     }
   },
   {
@@ -463,8 +463,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/prometheus/procfs",
-      "rev": "406e5b7bfd8201a36e2bb5f7bdae0b03380c2ce8",
-      "sha256": "0yla9hz15pg63394ygs9iiwzsqyv29labl8p424hijwsc9z9nka8"
+      "rev": "c91d8eefde16bd047416409eb56353ea84a186e4",
+      "sha256": "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r"
     }
   },
   {
@@ -1185,6 +1185,15 @@
       "url": "https://github.com/agl/go-gtk",
       "rev": "91c1edb38c241d73129e6b098ca1c9fa83abfc15",
       "sha256": "156ixlhakpqgyp35rsvmndrqz8aggv5bcmzg9ynpri3b9j6kim4d"
+    }
+  },
+  {
+    "goPackagePath": "bitbucket.org/ww/goautoneg",
+    "fetch": {
+      "type": "hg",
+      "url": "bitbucket.org/ww/goautoneg",
+      "rev": "75cd24fc2f2c2a2088577d12123ddee5f54e0675",
+      "sha256": "19khhn5xhqv1yp7d6k987gh5w5rhrjnp4p0c6fyrd8z6lzz5h9qi"
     }
   }
 ]

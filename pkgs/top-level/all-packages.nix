@@ -10181,7 +10181,7 @@ in
   prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-cli = callPackage ../servers/monitoring/prometheus/cli.nix { };
-  prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin // { outputs = [ "bin" ]; };
   prometheus-mesos-exporter = goPackages.prometheus.mesos-exporter.bin // { outputs = [ "bin" ]; };
   prometheus-mysqld-exporter = goPackages.prometheus.mysqld-exporter.bin // { outputs = [ "bin" ]; };
