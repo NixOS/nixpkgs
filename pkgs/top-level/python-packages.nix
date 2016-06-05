@@ -2717,12 +2717,12 @@ in modules // {
   };
 
   bottle = buildPythonPackage rec {
-    version = "0.12.8";
+    version = "0.12.9";
     name = "bottle-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bottle/${name}.tar.gz";
-      sha256 = "1b2hq0l4nwh75s2w6wgiqlkj4q1qvyx6a94axl2k4lsym1aifpfd";
+      sha256 = "0l80a1qkg7zbi8s077brfgm5w4ypwxgq9rvsvw16snc5jfsj82py";
     };
 
     propagatedBuildInputs = with self; [ setuptools ];
