@@ -3241,25 +3241,6 @@ let
     goPackageAliases = [ "gopkg.in/alecthomas/kingpin.v2" ];
   };
 
-  go2nix = buildFromGitHub rec {
-    rev = "4c552dadd855e3694ed3499feb46dca9cd855f60";
-    owner = "kamilchm";
-    repo = "go2nix";
-    sha256 = "1pwnm1vrjxvgl17pk9n1k5chmhgwxkrwp2s1bzi64xf12anibj63";
-
-    buildInputs = [ pkgs.makeWrapper go-bindata.bin tools.bin vcs go-spew gls go-difflib assertions goconvey testify kingpin ];
-
-    preBuild = ''go generate ./...'';
-
-    postInstall = ''
-      wrapProgram $bin/bin/go2nix \
-        --prefix PATH : ${pkgs.nix-prefetch-git}/bin \
-        --prefix PATH : ${pkgs.git}/bin
-    '';
-
-    allowGoReference = true;
-  };
-
   godotenv = buildFromGitHub rec {
     rev    = "4ed13390c0acd2ff4e371e64d8b97c8954138243";
     version = "2015-09-07";
