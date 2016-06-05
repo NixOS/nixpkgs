@@ -52,11 +52,12 @@ in
         description = "
           sldapd.conf configuration
         ";
-        example = ''
-            include ''${pkgs.openldap}/etc/openldap/schema/core.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/cosine.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/inetorgperson.schema
-            include ''${pkgs.openldap}/etc/openldap/schema/nis.schema
+        example = literalExample ''
+            '''
+            include ${pkgs.openldap.out}/etc/openldap/schema/core.schema
+            include ${pkgs.openldap.out}/etc/openldap/schema/cosine.schema
+            include ${pkgs.openldap.out}/etc/openldap/schema/inetorgperson.schema
+            include ${pkgs.openldap.out}/etc/openldap/schema/nis.schema
 
             database bdb 
             suffix dc=example,dc=org 
@@ -64,6 +65,7 @@ in
             # NOTE: change after first start
             rootpw secret
             directory /var/db/openldap
+            '''
           '';
       };
     };
