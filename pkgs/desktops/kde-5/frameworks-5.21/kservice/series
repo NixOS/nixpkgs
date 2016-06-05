@@ -1,0 +1,3 @@
+qdiriterator-follow-symlinks.patch
+no-canonicalize-path.patch
+ksycoca-buffer-size.patch
