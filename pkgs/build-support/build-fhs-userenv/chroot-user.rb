@@ -2,16 +2,15 @@
 
 # Bind mounts hierarchy: from => to (relative)
 # If 'to' is nil, path will be the same
-mounts = { '/nix/store' => nil,
-           '/dev' => nil,
+mounts = { '/' => 'host',
            '/proc' => nil,
            '/sys' => nil,
-           '/etc' => 'host-etc',
-           '/tmp' => 'host-tmp',
-           '/home' => nil,
+           '/nix' => nil,
+           '/tmp' => nil,
            '/var' => nil,
            '/run' => nil,
-           '/root' => nil,
+           '/dev' => nil,
+           '/home' => nil,
          }
 
 # Propagate environment variables
@@ -62,9 +61,8 @@ $mount = make_fcall 'mount', [Fiddle::TYPE_VOIDP,
                     Fiddle::TYPE_INT
 
 # Read command line args
-abort "Usage: chrootenv swdir program args..." unless ARGV.length >= 2
-swdir = Pathname.new ARGV[0]
-execp = ARGV.drop 1
+abort "Usage: chrootenv program args..." unless ARGV.length >= 1
+execp = ARGV
 
 # Populate extra mounts
 if not ENV["CHROOTENV_EXTRA_BINDS"].nil?
@@ -131,24 +129,6 @@ if $cpid == 0
   # Chroot!
   Dir.chroot root
   Dir.chdir '/'
-
-  # Symlink swdir hierarchy
-  mount_dirs = Set.new mounts.map { |_, v| Pathname.new v }
-  link_swdir = lambda do |swdir, prefix|
-    swdir.find do |path|
-      rel = prefix.join path.relative_path_from(swdir)
-      # Don't symlink anything in binded or symlinked directories
-      Find.prune if mount_dirs.include? rel or rel.symlink?
-      if not rel.directory?
-        # File does not exist; make a symlink and bail out
-        rel.make_symlink path
-        Find.prune
-      end
-      # Recursively follow symlinks
-      link_swdir.call path.readlink, rel if path.symlink?
-    end
-  end
-  link_swdir.call swdir, Pathname.new('')
 
   # New environment
   new_env = Hash[ envvars.map { |x| [x, ENV[x]] } ]
