@@ -3084,14 +3084,6 @@ let
     sha256 = "1m7nc1gvv5yqnq8ii75f33485il6y6prf8gxl97dimsw94qccc5v";
   };
 
-  relaysrv = buildFromGitHub rec {
-    rev    = "7fe1fdd8c751df165ea825bc8d3e895f118bb236";
-    owner  = "syncthing";
-    repo   = "relaysrv";
-    sha256 = "0qy14pa0z2dq5mix5ylv2raabwxqwj31g5kkz905wzki6d4j5lnp";
-    buildInputs = [ xdr syncthing-protocol011 ratelimit syncthing-lib ];
-  };
-
   reflectwalk = buildFromGitHub {
     rev    = "eecf4c70c626c7cfbb95c90195bc34d386c74ac6";
     owner  = "mitchellh";
@@ -3309,41 +3301,6 @@ let
     owner  = "thejerf";
     repo   = "suture";
     sha256 = "094ksr2nlxhvxr58nbnzzk0prjskb21r86jmxqjr3rwg4rkwn6d4";
-  };
-
-  syncthing012 = buildFromGitHub rec {
-    version = "0.12.25";
-    rev = "v${version}";
-    owner = "syncthing";
-    repo = "syncthing";
-    sha256 = "108w7gvm3nbbsgp3h5p84fj4ba0siaz932i7yyryly486gzvpm43";
-    buildFlags = [ "-tags noupgrade,release" ];
-    disabled = isGo14;
-    buildInputs = [
-      go-lz4 du luhn xdr snappy ratelimit osext
-      goleveldb suture qart crypto net text rcrowley.go-metrics
-    ];
-    postPatch = ''
-      # Mostly a cosmetic change
-      sed -i 's,unknown-dev,${version},g' cmd/syncthing/main.go
-    '';
-  };
-
-  syncthing-lib = buildFromGitHub {
-    inherit (syncthing012) rev owner repo sha256;
-    subPackages = [ "lib/sync" ];
-    propagatedBuildInputs = syncthing012.buildInputs;
-  };
-
-  syncthing-protocol = buildFromGitHub {
-    inherit (syncthing012) rev owner repo sha256;
-    subPackages = [ "lib/protocol" ];
-    propagatedBuildInputs = [
-      go-lz4
-      logger
-      luhn
-      xdr
-      text ];
   };
 
   syncthing-protocol011 = buildFromGitHub {

@@ -14282,7 +14282,7 @@ in
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
-  syncthing012 = goPackages.syncthing012.bin // { outputs = [ "bin" ]; };
+  syncthing012 = callPackage ../applications/networking/syncthing012 { };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
