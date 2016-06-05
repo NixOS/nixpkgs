@@ -10187,7 +10187,7 @@ in
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
-  prometheus-pushgateway = goPackages.prometheus.pushgateway.bin // { outputs = [ "bin" ]; };
+  prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin // { outputs = [ "bin" ]; };
 
   psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
@@ -11150,6 +11150,8 @@ in
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools {
     inherit (gnome) gtk gtkmm;
   };
+
+  go-bindata = callPackage ../development/tools/go-bindata { };
 
   gocode = callPackage ../development/tools/gocode { };
 

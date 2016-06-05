@@ -1264,30 +1264,6 @@ let
     };
   };
 
-  go-bindata = buildGoPackage rec {
-    rev = "a0ff2567cfb70903282db057e799fd826784d41d";
-    date = "2015-10-23";
-    version = "${date}-${stdenv.lib.strings.substring 0 7 rev}";
-    name = "go-bindata-${version}";
-    goPackagePath = "github.com/jteeuwen/go-bindata";
-    src = fetchFromGitHub {
-      inherit rev;
-      repo = "go-bindata";
-      owner = "jteeuwen";
-      sha256 = "0d6zxv0hgh938rf59p1k5lj0ymrb8kcps2vfrb9kaarxsvg7y69v";
-    };
-
-    subPackages = [ "./" "go-bindata" ]; # don't build testdata
-
-    meta = with stdenv.lib; {
-      homepage    = "https://github.com/jteeuwen/go-bindata";
-      description = "A small utility which generates Go code from any file, useful for embedding binary data in a Go program";
-      maintainers = with maintainers; [ cstrahan ];
-      license     = licenses.cc0 ;
-      platforms   = platforms.all;
-    };
-  };
-
   go-bindata-assetfs = buildFromGitHub {
     rev     = "d5cac425555ca5cf00694df246e04f05e6a55150";
     owner   = "elazarl";
@@ -2617,46 +2593,6 @@ let
     owner  = "prometheus";
     repo   = "procfs";
     sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
-  };
-
-  prometheus.pushgateway = buildFromGitHub rec {
-    rev = "0.1.1";
-    owner = "prometheus";
-    repo = "pushgateway";
-    sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
-
-    buildInputs = [
-      protobuf
-      httprouter
-      golang_protobuf_extensions
-      prometheus.client_golang
-    ];
-
-    nativeBuildInputs = [ go-bindata.bin ];
-    preBuild = ''
-    (
-      cd "go/src/$goPackagePath"
-      go-bindata ./resources/
-    )
-    '';
-
-    buildFlagsArray = ''
-      -ldflags=
-          -X main.buildVersion=${rev}
-          -X main.buildRev=${rev}
-          -X main.buildBranch=master
-          -X main.buildUser=nix@nixpkgs
-          -X main.buildDate=20150101-00:00:00
-          -X main.goVersion=${stdenv.lib.getVersion go}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
-      homepage = https://github.com/prometheus/pushgateway;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
   };
 
   prometheus.statsd-bridge = buildFromGitHub {

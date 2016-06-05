@@ -1240,5 +1240,14 @@
       "rev": "0a5264e2563429030eb922f258229ae3fee5b5dc",
       "sha256": "03fvgbjf2aprjj1s6wdc35wwa7k1w5phkixzvp5n1j21sf6w4h24"
     }
+  },
+  {
+    "goPackagePath": "github.com/julienschmidt/httprouter",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/julienschmidt/httprouter",
+      "rev": "6aacfd5ab513e34f7e64ea9627ab9670371b34e7",
+      "sha256": "00rrjysmq898qcrf2hfwfh9s70vwvmjx2kp5w03nz1krxa4zhrkl"
+    }
   }
 ]
