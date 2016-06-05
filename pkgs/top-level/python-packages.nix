@@ -19536,11 +19536,11 @@ in modules // {
 
   restview = buildPythonPackage rec {
     name = "restview-${version}";
-    version = "2.5.0";
+    version = "2.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "18diqmh6vwz6imcmvwa7s2v4562y73n072d5d7az2r2ks0g2bzdb";
+      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
     };
 
     propagatedBuildInputs = with self; [ docutils readme pygments ];
