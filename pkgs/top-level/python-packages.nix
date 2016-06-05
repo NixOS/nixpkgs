@@ -9126,15 +9126,17 @@ in modules // {
 
   dulwich = buildPythonPackage rec {
     name = "dulwich-${version}";
-    version = "0.10.1a";
+    version = "0.12.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-      sha256 = "02rknqarwy7p50693cqswbibqwgxzrfzdq4yhwqxbdmhbsmh0rk6";
+      sha256 = "1ihc1bdgxj7i068mhhmkzar56r2vdcj68w0dnsm7aqgcgvrp144g";
     };
 
+    LC_ALL = "en_US.UTF-8";
+
     # Only test dependencies
-    buildInputs = with self; [ pkgs.git gevent geventhttpclient mock fastimport ];
+    buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
 
     meta = {
       description = "Simple Python implementation of the Git file formats and protocols";
