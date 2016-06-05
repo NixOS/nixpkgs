@@ -9147,11 +9147,11 @@ in modules // {
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.8.2";
+    version = "0.8.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hg-git/${name}.tar.gz";
-      sha256 = "0hz0i6qgcn3ic292sny86mdl1psj1bnczcai1b1kzvwcla6z99py";
+      sha256 = "10j7l1p2wx7s5nb6s35z1f3mcz2svz9ilcm26f3la9h9c76b7jpm";
     };
 
     propagatedBuildInputs = with self; [ dulwich ];
