@@ -3330,23 +3330,6 @@ let
     subPackages = [ "./" ]; # prevent building _demos
   };
 
-  terraform = buildFromGitHub {
-    rev = "v0.6.15";
-    owner = "hashicorp";
-    repo = "terraform";
-    disabled = isGo14 || isGo15;
-    sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
-
-    postInstall = ''
-      # prefix all the plugins with "terraform-"
-      for i in $bin/bin/*; do
-        if [[ ! $(basename $i) =~ terraform* ]]; then
-          mv -v $i $bin/bin/terraform-$(basename $i);
-        fi
-      done
-    '';
-  };
-
   testify = buildGoPackage rec {
     rev = "089c7181b8c728499929ff09b62d3fdd8df8adff";
     name = "testify-${stdenv.lib.strings.substring 0 7 rev}";
