@@ -598,20 +598,6 @@ let
     sha256 = "0hn8xdbaykp046inc4d2mwig5ir89ighma8hk18dfkm8rh1vvr8i";
   };
 
-  drive = buildFromGitHub {
-    rev = "6dc2f1e83032ea3911fa6147b846ee93f18dc544";
-    owner = "odeke-em";
-    repo = "drive";
-    sha256 = "07s4nhfcr6vznf1amvl3a4wq2hn9zq871rcppfi4i6zs7iw2ay1v";
-    subPackages = [ "cmd/drive" ];
-    buildInputs = [
-      pb go-isatty command dts odeke-em.log statos xon odeke-em.google-api-go-client
-      cli-spinner oauth2 text net pretty-words meddler open-golang extractor
-      exponential-backoff cache bolt
-    ];
-    disabled = !isGo14;
-  };
-
   dropbox = buildFromGitHub {
     rev    = "58f839b21094d5e0af7caf613599830589233d20";
     owner  = "stacktic";

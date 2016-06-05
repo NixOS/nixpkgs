@@ -1294,5 +1294,122 @@
       "rev": "9c0db6583837118d5df7c2ae38ab1c194e434b35",
       "sha256": "0590ww2av4407y7zy3bcmnr8i74fv00k9zzcxcpjxivl6qszna0d"
     }
+  },
+  {
+    "goPackagePath": "github.com/boltdb/bolt",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/boltdb/bolt",
+      "rev": "957d850b5158a4eebf915476058e720f43459584",
+      "sha256": "193adhhsqdy0kyq1l1fi8pg2n6pwyrw4h607qm78qyi26f8i7vzf"
+    }
+  },
+  {
+    "goPackagePath": "github.com/cheggaaa/pb",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/cheggaaa/pb",
+      "rev": "e648e12b78cedf14ebb2fc1855033f07b034cfbb",
+      "sha256": "03k4cars7hcqqgdsd0minfls2p7gjpm8q6y8vknh1s68kvxd4xam"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/cli-spinner",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/cli-spinner",
+      "rev": "610063bb4aeef25f7645b3e6080456655ec0fb33",
+      "sha256": "13wzs2qrxd72ah32ym0ppswhvyimjw5cqaq3q153y68vlvxd048c"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/statos",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/statos",
+      "rev": "f27d6ab69b62abd9d9fe80d355e23a3e45d347d6",
+      "sha256": "17cpks8bi9i7p8j38x0wy60jb9g39wbzszcmhx4hlq6yzxr04jvs"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/exponential-backoff",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/exponential-backoff",
+      "rev": "96e25d36ae36ad09ac02cbfe653b44c4043a8e09",
+      "sha256": "1as21p2jj8xpahvdxqwsw2i1s3fll14dlc9j192iq7xl1ybwpqs6"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/extractor",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/extractor",
+      "rev": "801861aedb854c7ac5e1329e9713023e9dc2b4d4",
+      "sha256": "036zmnqxy48h6mxiwywgxix2p4fqvl4svlmcp734ri2rbq3cmxs1"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/meddler",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/meddler",
+      "rev": "d2b51d2b40e786ab5f810d85e65b96404cf33570",
+      "sha256": "0m0fqrn3kxy4swyk4ja1y42dn1i35rq9j85y11wb222qppy2342x"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/xon",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/xon",
+      "rev": "d580be739d723da4f6378083128f93017b8ab295",
+      "sha256": "07a7zj01d4a23xqp01m48jp2v5mw49islf4nbq2rj13sd5w4s6sc"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/cache",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/cache",
+      "rev": "b51b08cb6cf889deda6c941a5205baecfd16f3eb",
+      "sha256": "1rmm1ky7irqypqjkk6qcd2n0xkzpaggdxql9dp9i9qci5rvvwwd4"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/command",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/command",
+      "rev": "91ca5ec5e9a1bc2668b1ccbe0967e04a349e3561",
+      "sha256": "1ghckzr8h99ckagpmb15p61xazdjmf9mjmlym634hsr9vcj84v62"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/log",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/log",
+      "rev": "cad53c4565a0b0304577bd13f3862350bdc5f907",
+      "sha256": "059c933qjikxlvaywzpzljqnab19svymbv6x32pc7khw156fh48w"
+    }
+  },
+  {
+    "goPackagePath": "github.com/odeke-em/pretty-words",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/odeke-em/pretty-words",
+      "rev": "9d37a7fcb4ae6f94b288d371938482994458cecb",
+      "sha256": "1466wjhrg9lhqmzil1vf8qj16fxk32b5kxlcccyw2x6dybqa6pkl"
+    }
+  },
+  {
+    "goPackagePath": "github.com/skratchdot/open-golang",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/skratchdot/open-golang",
+      "rev": "c8748311a7528d0ba7330d302adbc5a677ef9c9e",
+      "sha256": "0qhn2d00v3m9fiqk9z7swdm599clc6j7rnli983s8s1byyp0x3ac"
+    }
   }
 ]
