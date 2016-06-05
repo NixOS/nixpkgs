@@ -11469,12 +11469,12 @@ in modules // {
   });
 
   jellyfish = buildPythonPackage rec {
-    version = "0.5.0";
+    version = "0.5.2";
     name = "jellyfish-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "04p80gwwlhxjp8zpjf70a62x69l9rlvnz1pwi5ar52gyajn8z6z1";
+      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
     };
 
     buildInputs = with self; [ pytest unicodecsv ];
