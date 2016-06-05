@@ -5,10 +5,8 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
-  Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
-  Cabal_1_22_4_0 = (dontCheck super.Cabal_1_22_4_0).overrideScope (self: super: { binary = self.binary_0_7_6_1; });
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
