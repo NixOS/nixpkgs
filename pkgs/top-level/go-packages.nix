@@ -1400,21 +1400,6 @@ let
     propagatedBuildInputs = [ go-querystring ];
   };
 
-  go-gtk-agl = buildFromGitHub {
-    rev = "6937b8d28cf70d583346220b966074cfd3a2e233";
-    owner = "agl";
-    repo = "go-gtk";
-    sha256 = "0jnhsv7ypyhprpy0fndah22v2pbbavr3db6f9wxl1vf34qkns3p4";
-    # Examples require many go libs, and gtksourceview seems ready only for
-    # gtk2
-    preConfigure = ''
-      rm -R example gtksourceview
-    '';
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    propagatedBuildInputs = [ pkgs.gtk3 ];
-    buildInputs = [ pkgs.gtkspell3 ];
-  };
-
   go-gypsy = buildFromGitHub {
     rev    = "42fc2c7ee9b8bd0ff636cd2d7a8c0a49491044c5";
     owner  = "kylelemons";
@@ -2535,27 +2520,6 @@ let
     owner  = "spf13";
     repo   = "pflag";
     sha256 = "139d08cq06jia0arc6cikdnhnaqms07xfay87pzq5ym86fv0agiq";
-  };
-
-  pond = let
-      isx86_64 = stdenv.lib.any (n: n == stdenv.system) stdenv.lib.platforms.x86_64;
-      gui = true; # Might be implemented with nixpkgs config.
-  in buildFromGitHub {
-    rev = "bce6e0dc61803c23699c749e29a83f81da3c41b2";
-    owner = "agl";
-    repo = "pond";
-    sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
-
-    buildInputs = [ net crypto protobuf ed25519 pkgs.trousers ]
-      ++ stdenv.lib.optional isx86_64 pkgs.dclxvi
-      ++ stdenv.lib.optionals gui [ go-gtk-agl pkgs.wrapGAppsHook ];
-    buildFlags = stdenv.lib.optionalString (!gui) "-tags nogui";
-    excludedPackages = "\\(appengine\\|bn256cgo\\)";
-    postPatch = stdenv.lib.optionalString isx86_64 ''
-      grep -r 'bn256' | awk -F: '{print $1}' | xargs sed -i \
-        -e "s,golang.org/x/crypto/bn256,github.com/agl/pond/bn256cgo,g" \
-        -e "s,bn256\.,bn256cgo.,g"
-    '';
   };
 
   pongo2 = buildFromGitHub {

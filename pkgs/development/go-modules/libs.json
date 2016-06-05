@@ -1177,5 +1177,14 @@
       "rev": "d18b67ae0afd61dae240896eae1785f00709aa31",
       "sha256": "1l78hz8k1ixry5fjw29834jz1q5ysjcpf6kx2ggjj1s6xh0bfzvf"
     }
+  },
+  {
+    "goPackagePath": "github.com/agl/go-gtk",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/agl/go-gtk",
+      "rev": "91c1edb38c241d73129e6b098ca1c9fa83abfc15",
+      "sha256": "156ixlhakpqgyp35rsvmndrqz8aggv5bcmzg9ynpri3b9j6kim4d"
+    }
   }
 ]
