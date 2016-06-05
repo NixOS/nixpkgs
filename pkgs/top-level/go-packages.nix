@@ -2184,18 +2184,6 @@ let
     propagatedBuildInputs = [ ugorji.go armon.go-metrics ];
   };
 
-  mesos-stats = buildGoPackage rec {
-    rev = "0c6ea494c19bedc67ebb85ce3d187ec21050e920";
-    name = "mesos-stats-${stdenv.lib.strings.substring 0 7 rev}";
-    goPackagePath = "github.com/antonlindstrom/mesos_stats";
-    src = fetchFromGitHub {
-      inherit rev;
-      owner = "antonlindstrom";
-      repo = "mesos_stats";
-      sha256 = "18ggyjf4nyn77gkn16wg9krp4dsphgzdgcr3mdflv6mvbr482ar4";
-    };
-  };
-
   mgo = buildFromGitHub {
     rev = "r2015.06.03";
     owner = "go-mgo";
@@ -2595,21 +2583,6 @@ let
     repo   = "log";
     sha256 = "1fl23gsw2hn3c1y91qckr661sybqcw2gqnd1gllxn3hp6p2w6hxv";
     propagatedBuildInputs = [ logrus ];
-  };
-
-  prometheus.mesos-exporter = buildFromGitHub {
-    rev = "0.1.0";
-    owner = "prometheus";
-    repo = "mesos_exporter";
-    sha256 = "059az73j717gd960g4jigrxnvqrjh9jw1c324xpwaafa0bf10llm";
-    buildInputs = [ mesos-stats prometheus.client_golang glog ];
-    meta = with stdenv.lib; {
-      description = "Export Mesos metrics to Prometheus";
-      homepage = https://github.com/prometheus/mesos_exporter;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
   };
 
   prometheus.mysqld-exporter = buildFromGitHub {

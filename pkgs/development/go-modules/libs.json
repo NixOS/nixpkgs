@@ -1195,5 +1195,14 @@
       "rev": "75cd24fc2f2c2a2088577d12123ddee5f54e0675",
       "sha256": "19khhn5xhqv1yp7d6k987gh5w5rhrjnp4p0c6fyrd8z6lzz5h9qi"
     }
+  },
+  {
+    "goPackagePath": "github.com/antonlindstrom/mesos_stats",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/antonlindstrom/mesos_stats",
+      "rev": "0c6ea494c19bedc67ebb85ce3d187ec21050e920",
+      "sha256": "18ggyjf4nyn77gkn16wg9krp4dsphgzdgcr3mdflv6mvbr482ar4"
+    }
   }
 ]
