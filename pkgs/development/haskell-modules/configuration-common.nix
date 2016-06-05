@@ -1013,12 +1013,4 @@ self: super: {
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = addBuildTool super.pango self.gtk2hs-buildtools;
 
-  # esqueleto requires an older version of the persistent library, and
-  # corresponding versions of -template and -sqlite for for its test
-  # suite.
-  esqueleto = super.esqueleto.overrideScope (self: super: {
-    persistent-template = super.persistent-template_2_1_8_1;
-    persistent-sqlite = super.persistent-sqlite_2_2_1;
-    persistent = super.persistent_2_2_4_1;
-  });
 }
