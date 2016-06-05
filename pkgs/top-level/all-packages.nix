@@ -588,20 +588,6 @@ in
 
   bins = callPackage ../tools/graphics/bins { };
 
-  binwalk = callPackage ../tools/misc/binwalk {
-    python = pythonFull;
-    wrapPython = pythonPackages.wrapPython;
-    curses = pythonPackages.curses;
-  };
-
-  binwalk-full = callPackage ../tools/misc/binwalk {
-    python = pythonFull;
-    wrapPython = pythonPackages.wrapPython;
-    curses = pythonPackages.curses;
-    visualizationSupport = true;
-    pyqtgraph = pythonPackages.pyqtgraph;
-  };
-
   bitbucket-cli = pythonPackages.bitbucket-cli;
 
   blink = callPackage ../applications/networking/instant-messengers/blink {
