@@ -15945,6 +15945,15 @@ in
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
+  clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (linuxPackages) nvidia_x11;
+    python = pkgs.python34Packages.python;
+    boost = pkgs.boost159.override {
+      inherit python;
+    };
+  };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
