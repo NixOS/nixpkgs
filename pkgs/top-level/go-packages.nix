@@ -1020,15 +1020,6 @@ let
     sha256  = "1l1w4mczqmah0c154vb1daw5l3cc7vn5gmy5s67p3ad1lnz5l79x";
   };
 
-  govers = buildFromGitHub {
-    rev = "3b5f175f65d601d06f48d78fcbdb0add633565b9";
-    version = "2015-01-09";
-    owner = "rogpeppe";
-    repo = "govers";
-    sha256 = "0din5a7nff6hpc4wg0yad2nwbgy4q1qaazxl8ni49lkkr4hyp8pc";
-    dontRenameImports = true;
-  };
-
   golang-lru = buildFromGitHub {
     rev    = "7f9ef20a0256f494e24126014135cf893ab71e9e";
     owner  = "hashicorp";

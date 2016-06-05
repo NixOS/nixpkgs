@@ -9603,7 +9603,6 @@ in
     go = go_1_4;
     buildGoPackage = callPackage ../development/go-modules/generic {
       go = go_1_4;
-      govers = go14Packages.govers.bin;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
@@ -9612,7 +9611,6 @@ in
     go = go_1_5;
     buildGoPackage = callPackage ../development/go-modules/generic {
       go = go_1_5;
-      govers = go15Packages.govers.bin;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
@@ -9621,7 +9619,6 @@ in
     go = go_1_6;
     buildGoPackage = callPackage ../development/go-modules/generic {
       go = go_1_6;
-      govers = go16Packages.govers.bin;
     };
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
@@ -11166,6 +11163,8 @@ in
   godep = callPackage ../development/tools/godep { };
 
   goimports = callPackage ../development/tools/goimports { };
+
+  govers = callPackage ../development/tools/govers { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
