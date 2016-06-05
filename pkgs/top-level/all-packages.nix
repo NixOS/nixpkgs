@@ -10186,7 +10186,7 @@ in
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
-  prometheus-node-exporter = goPackages.prometheus.node-exporter.bin // { outputs = [ "bin" ]; };
+  prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };
   prometheus-pushgateway = goPackages.prometheus.pushgateway.bin // { outputs = [ "bin" ]; };
   prometheus-statsd-bridge = goPackages.prometheus.statsd-bridge.bin // { outputs = [ "bin" ]; };
 

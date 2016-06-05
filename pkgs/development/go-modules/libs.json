@@ -1222,5 +1222,23 @@
       "rev": "439e5db48fbb50ebbaf2c816030473a62f505f55",
       "sha256": "1fl23gsw2hn3c1y91qckr661sybqcw2gqnd1gllxn3hp6p2w6hxv"
     }
+  },
+  {
+    "goPackagePath": "github.com/soundcloud/go-runit",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/soundcloud/go-runit",
+      "rev": "a9148323a615e2e1c93b7a9893914a360b4945c8",
+      "sha256": "00f2rfhsaqj2wjanh5qp73phx7x12a5pwd7lc0rjfv68l6sgpg2v"
+    }
+  },
+  {
+    "goPackagePath": "github.com/beevik/ntp",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/beevik/ntp",
+      "rev": "0a5264e2563429030eb922f258229ae3fee5b5dc",
+      "sha256": "03fvgbjf2aprjj1s6wdc35wwa7k1w5phkixzvp5n1j21sf6w4h24"
+    }
   }
 ]
