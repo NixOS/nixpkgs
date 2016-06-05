@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit }:
+{ go, govers, parallel, lib, fetchgit, fetchhg }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -48,7 +48,11 @@ let
         fetchgit {
           inherit (goDep.fetch) url rev sha256;
         }
-        else {};
+      else if goDep.fetch.type == "hg" then
+        fetchhg {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else {};
     };
 
   importGodeps = { depsFile, filterPackages ? [] }:
