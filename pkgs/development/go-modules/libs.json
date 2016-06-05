@@ -1213,5 +1213,14 @@
       "rev": "fb7299726d2e68745a8805b14f2ff44b5c2cfa84",
       "sha256": "185af0x475hq2wmm2zdvxjyslkplf8zzqijdxa937zqxq63qiw4w"
     }
+  },
+  {
+    "goPackagePath": "github.com/prometheus/log",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/prometheus/log",
+      "rev": "439e5db48fbb50ebbaf2c816030473a62f505f55",
+      "sha256": "1fl23gsw2hn3c1y91qckr661sybqcw2gqnd1gllxn3hp6p2w6hxv"
+    }
   }
 ]
