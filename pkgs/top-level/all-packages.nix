@@ -1550,6 +1550,8 @@ in
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
+  libgpuarray-cuda = python34Packages.libgpuarray-cuda;
+
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   lprof = callPackage ../tools/graphics/lprof { };
