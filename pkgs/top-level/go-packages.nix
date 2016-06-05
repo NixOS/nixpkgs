@@ -2585,21 +2585,6 @@ let
     propagatedBuildInputs = [ logrus ];
   };
 
-  prometheus.mysqld-exporter = buildFromGitHub {
-    rev = "0.1.0";
-    owner = "prometheus";
-    repo = "mysqld_exporter";
-    sha256 = "10xnyxyb6saz8pq3ijp424hxy59cvm1b5c9zcbw7ddzzkh1f6jd9";
-    buildInputs = [ mysql prometheus.client_golang ];
-    meta = with stdenv.lib; {
-      description = "Prometheus exporter for MySQL server metrics";
-      homepage = https://github.com/prometheus/mysqld_exporter;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
-  };
-
   prometheus.nginx-exporter = buildFromGitHub {
     rev = "2cf16441591f6b6e58a8c0439dcaf344057aea2b";
     version = "2015-06-01";
