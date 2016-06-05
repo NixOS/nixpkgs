@@ -10178,7 +10178,7 @@ in
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   prom2json = goPackages.prometheus.prom2json.bin // { outputs = [ "bin" ]; };
-  prometheus = goPackages.prometheus.prometheus.bin // { outputs = [ "bin" ]; };
+  prometheus = callPackage ../servers/monitoring/prometheus { };
   prometheus-alertmanager = goPackages.prometheus.alertmanager.bin // { outputs = [ "bin" ]; };
   prometheus-cli = goPackages.prometheus.cli.bin // { outputs = [ "bin" ]; };
   prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin // { outputs = [ "bin" ]; };
