@@ -5,21 +5,21 @@ stdenv.mkDerivation {
 
   srcs = [
     (fetchurl {
-        url = "mirror://gnu/binutils/binutils-2.25.tar.bz2";
-        sha256 = "08r9i26b05zcwb9zxb6zllpfdiiicdfsgbpsjlrjmvx3rxjzrpi2";
+        url = "mirror://gnu/binutils/binutils-2.26.tar.bz2";
+        sha256 = "1ngc2h3knhiw8s22l8y6afycfaxr5grviqy7mwvm4bsl14cf9b62";
     })
 
     (fetchurl {
-        url = "mirror://gcc/releases/gcc-4.8.4/gcc-4.8.4.tar.bz2";
-        sha256 = "4a80aa23798b8e9b5793494b8c976b39b8d9aa2e53cd5ed5534aff662a7f8695";
+          url = "mirror://gcc/releases/gcc-5.3.0/gcc-5.3.0.tar.bz2";
+          sha256 = "1ny4smkp5bzs3cp8ss7pl6lk8yss0d9m4av1mvdp72r1x695akxq";
     })
 
     (fetchurl {
-        url = http://download.savannah.gnu.org/releases/avr-libc/avr-libc-1.8.1.tar.bz2;
-        sha256 = "0sd9qkvhmk9av4g1f8dsjwc309hf1g0731bhvicnjb3b3d42l1n3";
+        url = http://download.savannah.gnu.org/releases/avr-libc/avr-libc-2.0.0.tar.bz2;
+        sha256 = "15svr2fx8j6prql2il2fc0ppwlv50rpmyckaxx38d3gxxv97zpdj";
     })
   ];
-  
+
   sourceRoot = ".";
 
   nativeBuildInputs = [ texinfo ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   
   # Make sure we don't strip the libraries in lib/gcc/avr.
   stripDebugList= [ "bin" "avr/bin" "libexec" ];
-  
+ 
   installPhase = ''
     # important, without this gcc won't find the binutils executables
     export PATH=$PATH:$out/bin
