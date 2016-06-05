@@ -2564,46 +2564,6 @@ let
     propagatedBuildInputs = [ kr.text ];
   };
 
-  prometheus.alertmanager = buildFromGitHub rec {
-    rev = "0.1.0";
-    owner = "prometheus";
-    repo = "alertmanager";
-    sha256 = "1ya465bns6cj2lqbipmfm13wz8kxii5h9mm7lc0ba1xv26xx5zs7";
-
-    buildInputs = [
-      # fsnotify.v0
-      # httprouter
-      # prometheus.client_golang
-      # prometheus.log
-      # pushover
-    ];
-
-    # Tests exist, but seem to clash with the firewall.
-    doCheck = false;
-
-    preBuild = ''
-      export GO15VENDOREXPERIMENT=1
-    '';
-
-    buildFlagsArray = let t = "github.com/${owner}/${repo}/version"; in ''
-      -ldflags=
-         -X ${t}.Version=${rev}
-         -X ${t}.Revision=unknown
-         -X ${t}.Branch=unknown
-         -X ${t}.BuildUser=nix@nixpkgs
-         -X ${t}.BuildDate=unknown
-         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Alert dispatcher for the Prometheus monitoring system";
-      homepage = https://github.com/prometheus/alertmanager;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
-  };
-
   prometheus.client_golang = buildFromGitHub {
     rev = "0.7.0";
     owner = "prometheus";

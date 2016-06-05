@@ -10179,7 +10179,7 @@ in
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
-  prometheus-alertmanager = goPackages.prometheus.alertmanager.bin // { outputs = [ "bin" ]; };
+  prometheus-alertmanager = callPackage ../servers/monitoring/prometheus/alertmanager.nix { };
   prometheus-cli = goPackages.prometheus.cli.bin // { outputs = [ "bin" ]; };
   prometheus-collectd-exporter = goPackages.prometheus.collectd-exporter.bin // { outputs = [ "bin" ]; };
   prometheus-haproxy-exporter = goPackages.prometheus.haproxy-exporter.bin // { outputs = [ "bin" ]; };
