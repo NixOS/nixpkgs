@@ -2595,21 +2595,6 @@ let
     sha256 = "0pj3gzw9b58l72w0rkpn03ayssglmqfmyxghhfad6mh0b49dvj3r";
   };
 
-  prometheus.statsd-bridge = buildFromGitHub {
-    rev = "0.1.0";
-    owner = "prometheus";
-    repo = "statsd_bridge";
-    sha256 = "1fndpmd1k0a3ar6f7zpisijzc60f2dng5399nld1i1cbmd8jybjr";
-    buildInputs = [ fsnotify.v0 prometheus.client_golang ];
-    meta = with stdenv.lib; {
-      description = "Receives StatsD-style metrics and exports them to Prometheus";
-      homepage = https://github.com/prometheus/statsd_bridge;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ benley ];
-      platforms = platforms.unix;
-    };
-  };
-
   properties = buildFromGitHub {
     rev    = "v1.5.6";
     owner  = "magiconair";

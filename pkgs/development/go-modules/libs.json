@@ -1249,5 +1249,14 @@
       "rev": "6aacfd5ab513e34f7e64ea9627ab9670371b34e7",
       "sha256": "00rrjysmq898qcrf2hfwfh9s70vwvmjx2kp5w03nz1krxa4zhrkl"
     }
+  },
+  {
+    "goPackagePath": "github.com/howeyc/fsnotify",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/fsnotify/fsnotify",
+      "rev": "ea925a0a47d225b2ca7f9932b01d2ed4f3ec74f6",
+      "sha256": "15wqjpkfzsxnaxbz6y4r91hw6812g3sc4ipagxw1bya9klbnkdc9"
+    }
   }
 ]
