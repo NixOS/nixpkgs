@@ -1096,5 +1096,86 @@
       "rev": "1a9d62f03ea92815b46fcaab357cfd4df264b1a0",
       "sha256": "04ywbif36fiah4fw0x2abr5q3p4fdhi6q57d5icc2mz03q889vhb"
     }
+  },
+  {
+    "goPackagePath": "github.com/flynn/go-shlex",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/flynn/go-shlex",
+      "rev": "3f9db97f856818214da2e1057f8ad84803971cff",
+      "sha256": "1j743lysygkpa2s2gii2xr32j7bxgc15zv4113b0q9jhn676ysia"
+    }
+  },
+  {
+    "goPackagePath": "github.com/xenolf/lego",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/xenolf/lego",
+      "rev": "ca19a90028e242e878585941c2a27c8f3b3efc25",
+      "sha256": "1zkcsbdzbmfzk3kqmcj9l13li8sz228xhrw2wj3ab4a0w6drbw3x"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/natefinch/lumberjack.v2",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/natefinch/lumberjack.v2",
+      "rev": "514cbda263a734ae8caac038dadf05f8f3f9f738",
+      "sha256": "1v92v8vkip36l2fs6l5dpp655151hrijjc781cif658r8nf7xr82"
+    }
+  },
+  {
+    "goPackagePath": "github.com/shurcooL/sanitized_anchor_name",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/shurcooL/sanitized_anchor_name",
+      "rev": "10ef21a441db47d8b13ebcc5fd2310f636973c77",
+      "sha256": "1cnbzcf47cn796rcjpph1s64qrabhkv5dn9sbynsy7m9zdwr5f01"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/square/go-jose.v1",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/square/go-jose.v1",
+      "rev": "40d457b439244b546f023d056628e5184136899b",
+      "sha256": "0asa1kl1qbx0cyayk44jhxxff0awpkwiw6va7yzrzjzhfc5kvg7p"
+    }
+  },
+  {
+    "goPackagePath": "github.com/mholt/archiver",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/mholt/archiver",
+      "rev": "85f054813ed511646b0ce5e047697e0651b8e1a4",
+      "sha256": "0b38mrfm3rwgdi7hrp4gjhf0y0f6bw73qjkfrkafxjrdpdg7nyly"
+    }
+  },
+  {
+    "goPackagePath": "github.com/dustin/go-humanize",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/dustin/go-humanize",
+      "rev": "8929fe90cee4b2cb9deb468b51fb34eba64d1bf0",
+      "sha256": "1g155kxjh6hd3ibx41nbpj6f7h5bh54zgl9dr53xzg2xlxljgjy0"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jimstudt/http-authentication",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jimstudt/http-authentication",
+      "rev": "3eca13d6893afd7ecabe15f4445f5d2872a1b012",
+      "sha256": "1drw3bhrxpjzwryqz9nq5s0yyjqyd42iym3bh1zjs5qsh401cq08"
+    }
+  },
+  {
+    "goPackagePath": "github.com/russross/blackfriday",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/russross/blackfriday",
+      "rev": "d18b67ae0afd61dae240896eae1785f00709aa31",
+      "sha256": "1l78hz8k1ixry5fjw29834jz1q5ysjcpf6kx2ggjj1s6xh0bfzvf"
+    }
   }
 ]

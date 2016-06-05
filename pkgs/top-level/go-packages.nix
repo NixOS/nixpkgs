@@ -397,19 +397,6 @@ let
     propagatedBuildInputs = [ panicwrap revel ];
   };
 
-  caddy = buildFromGitHub {
-    rev     = "e2234497b79603388b58ba226abb157aa4aaf065";
-    version = "v0.8.3";
-    owner   = "mholt";
-    repo    = "caddy";
-    sha256  = "1snijkbz02yr7wij7bcmrj4257709sbklb3nhb5qmy95b9ssffm6";
-    buildInputs = [
-      acme archiver blackfriday crypto go-humanize go-shlex go-syslog
-      http-authentication lumberjack-v2 toml websocket yaml-v2
-    ];
-    disabled = isGo14 || isGo15;
-  };
-
   cascadia = buildGoPackage rec {
     rev = "54abbbf07a45a3ef346ebe903e0715d9a3c19352"; #master
     name = "cascadia-${stdenv.lib.strings.substring 0 7 rev}";

@@ -666,7 +666,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = callPackage ../servers/caddy { };
 
   capstone = callPackage ../development/libraries/capstone { };
 
