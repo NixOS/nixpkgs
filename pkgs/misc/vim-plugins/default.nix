@@ -1301,6 +1301,28 @@ rec {
 
   };
 
+  psc-ide-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "psc-ide-vim-2016-06-04";
+    src = fetchgit {
+      url = "git://github.com/frigoeu/psc-ide-vim";
+      rev = "27c000f0f27c7a4d05f001320ddcf1ae15b22eb7";
+      sha256 = "1vgxf5kziv00mi346zw3b2dnxygxk0jyxg41y6w1j22yrp9id1k2";
+    };
+    dependencies = [ ];
+
+  };
+
+  purescript-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "purescript-vim-2016-06-04";
+    src = fetchgit {
+      url = "git://github.com/raichoo/purescript-vim";
+      rev = "92dd6bc647b45444e9d5e0550bdc3c56928f9762";
+      sha256 = "090vpff58lzzhqp28p27am5s8s6ngjxw6j4y46zaixcxxx7wqzha";
+    };
+    dependencies = [ ];
+
+  };
+
   quickfixstatus = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "quickfixstatus-2011-09-02";
     src = fetchgit {
