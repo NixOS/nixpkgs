@@ -866,14 +866,6 @@ let
     sha256 = "124hci9whsvlcywsfz5y20kkj3nhy176a1d5s1lkvsga09yxq6wm";
   };
 
-  glide = buildFromGitHub {
-    rev    = "0.10.2";
-    owner  = "Masterminds";
-    repo   = "glide";
-    sha256 = "1qb2n5i04gabb2snnwfr8wv4ypcp1pdzvgga62m9xkhk4p2w6pwl";
-    buildInputs = [ cookoo cli-go go-gypsy vcs ];
-  };
-
   gls = buildFromGitHub {
     rev    = "9a4a02dbe491bef4bab3c24fd9f3087d6c4c6690";
     owner  = "jtolds";
