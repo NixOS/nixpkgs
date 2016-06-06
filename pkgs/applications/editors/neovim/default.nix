@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
 , libtool, libuv, lua, luajit, luaPackages, man, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel
-, pkgs
+
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
 , withJemalloc ? true, jemalloc
