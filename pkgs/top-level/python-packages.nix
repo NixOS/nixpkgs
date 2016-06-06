@@ -17871,6 +17871,27 @@ in modules // {
     };
   };
 
+  pyexcelerator = buildPythonPackage rec {
+    name = "pyexcelerator-${version}";
+    version = "0.6.4.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyexcelerator/${name}.tar.bz2";
+      sha256 = "18rcnc9f71lj06h8nppnv6idzb7xfmh2rp1zfqayskcg686lilrb";
+    };
+
+    disabled = isPy3k;
+
+    # No tests are included in archive
+    doCheck = false;
+
+    meta = {
+      description = "library for generating Excel 97/2000/XP/2003 and OpenOffice Calc compatible spreadsheets.";
+      homepage = "https://sourceforge.net/projects/pyexcelerator";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ womfoo ];
+    };
+  };
 
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
