@@ -7131,6 +7131,8 @@ in
     camlimages = ocamlPackages.camlimages_4_0;
   };
 
+  glui = callPackage ../development/libraries/glui {};
+
   gmime = callPackage ../development/libraries/gmime { };
 
   gmm = callPackage ../development/libraries/gmm { };
