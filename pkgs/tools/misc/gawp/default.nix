@@ -12,7 +12,7 @@ buildGoPackage rec {
   src = fetchgit {
     inherit rev;
     url = "https://github.com/martingallagher/gawp";
-    sha256 = "0r4bp4w3s9rkmg3cz9jb7d6ngh7vfj31p9kbim6mhilxvmgjk4ly";
+    sha256 = "0bbmbb1xxdgvqvg1ssn9d4j213li7bbbx3y42iz4fs10xv7x4r0c";
   };
 
   goDeps = ./deps.json;

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "deis-${version}";
@@ -14,10 +14,11 @@ buildGoPackage rec {
     fi
   '';
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/deis/deis";
-    sha256 = "1fblg3gf7dh5hhm4ajq7yl7iy6gw8p5xlh4z8kvfy542m1fzr0dc";
+    owner = "deis";
+    repo = "deis";
+    sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
   };
 
   goDeps = ./deps.json;
