@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "alertmanager-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/prometheus/alertmanager";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/prometheus/alertmanager";
+    owner = "prometheus";
+    repo = "alertmanager";
     sha256 = "1ya465bns6cj2lqbipmfm13wz8kxii5h9mm7lc0ba1xv26xx5zs7";
   };
 
