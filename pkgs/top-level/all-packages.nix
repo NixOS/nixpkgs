@@ -7086,8 +7086,6 @@ in
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
-  icon-lang = callPackage ../development/interpreters/icon-lang { };
-
   libgit2 = callPackage ../development/libraries/git2 (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
@@ -9418,8 +9416,6 @@ in
 
   xgboost = callPackage ../development/libraries/xgboost { };
 
-  xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
-
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -9599,31 +9595,19 @@ in
 
   ### DEVELOPMENT / GO MODULES
 
-  go14Packages = callPackage ./go-packages.nix {
+  buildGo14Package = callPackage ../development/go-modules/generic {
     go = go_1_4;
-    buildGoPackage = callPackage ../development/go-modules/generic {
-      go = go_1_4;
-    };
-    overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
 
-  go15Packages = callPackage ./go-packages.nix {
+  buildGo15Package = callPackage ../development/go-modules/generic {
     go = go_1_5;
-    buildGoPackage = callPackage ../development/go-modules/generic {
-      go = go_1_5;
-    };
-    overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
 
-  go16Packages = callPackage ./go-packages.nix {
+  buildGo16Package = callPackage ../development/go-modules/generic {
     go = go_1_6;
-    buildGoPackage = callPackage ../development/go-modules/generic {
-      go = go_1_6;
-    };
-    overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
 
-  goPackages = go16Packages;
+  buildGoPackage = buildGo15Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
@@ -11165,6 +11149,8 @@ in
   goimports = callPackage ../development/tools/goimports { };
 
   govers = callPackage ../development/tools/govers { };
+
+  gotools = callPackage ../development/tools/gotools { };
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 

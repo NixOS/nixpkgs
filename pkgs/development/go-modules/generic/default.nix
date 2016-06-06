@@ -52,7 +52,7 @@ let
         fetchhg {
           inherit (goDep.fetch) url rev sha256;
         }
-      else {};
+      else abort "Unrecognized package fetch type";
     };
 
   importGodeps = { depsFile, filterPackages ? [] }:

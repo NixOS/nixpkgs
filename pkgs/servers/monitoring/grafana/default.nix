@@ -1,6 +1,6 @@
-{ lib, goPackages, fetchurl, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchurl, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+buildGoPackage rec {
   version = "3.0.1";
   name = "grafana-v${version}";
   goPackagePath = "github.com/grafana/grafana";

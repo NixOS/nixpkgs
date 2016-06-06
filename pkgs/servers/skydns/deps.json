@@ -5,6 +5,7 @@
       "github.com/miekg/dns",
       "github.com/prometheus/client_golang",
       "github.com/prometheus/client_model",
+      "bitbucket.org/ww/goautoneg",
       "github.com/prometheus/common",
       "github.com/prometheus/procfs",
       "github.com/coreos/go-systemd",

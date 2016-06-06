@@ -32,7 +32,7 @@
       "type": "git",
       "url": "https://github.com/docopt/docopt-go",
       "rev": "784ddc588536785e7299f7272f39101f7faccc3f",
-      "sha256": "13x00cnady5znysfwca3x59dl04m8rvnk2yprgyqqpg2y4v0xmbf"
+      "sha256": "0wwz48jl9fvl1iknvn9dqr4gfy1qs03gxaikrxxp9gry6773v3sj"
     }
   },
   {
@@ -1410,6 +1410,123 @@
       "url": "https://github.com/skratchdot/open-golang",
       "rev": "c8748311a7528d0ba7330d302adbc5a677ef9c9e",
       "sha256": "0qhn2d00v3m9fiqk9z7swdm599clc6j7rnli983s8s1byyp0x3ac"
+    }
+  },
+  {
+    "goPackagePath": "github.com/hashicorp/raft",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/hashicorp/raft",
+      "rev": "a8065f298505708bf60f518c09178149f3c06f21",
+      "sha256": "122mjijphas7ybbvssxv1r36sb8i907gdr9kvplnx6yg9w52j3mn"
+    }
+  },
+  {
+    "goPackagePath": "github.com/hashicorp/raft-boltdb",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/hashicorp/raft-boltdb",
+      "rev": "d1e82c1ec3f15ee991f7cc7ffd5b67ff6f5bbaee",
+      "sha256": "0p609w6x0h6bapx4b0d91dxnp2kj7dv0534q4blyxp79shv2a8ia"
+    }
+  },
+  {
+    "goPackagePath": "github.com/rakyll/statik",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/rakyll/statik",
+      "rev": "274df120e9065bdd08eb1120e0375e3dc1ae8465",
+      "sha256": "0llk7bxmk66wdiy42h32vj1jfk8zg351xq21hwhrq7gkfljghffp"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/fatih/pool.v2",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/fatih/pool.v2",
+      "rev": "cba550ebf9bce999a02e963296d4bc7a486cb715",
+      "sha256": "1jlrakgnpvhi2ny87yrsj1gyrcncfzdhypa9i2mlvvzqlj4r0dn0"
+    }
+  },
+  {
+    "goPackagePath": "github.com/bmizerany/pat",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/bmizerany/pat",
+      "rev": "b8a35001b773c267eb260a691f4e5499a3531600",
+      "sha256": "11zxd45rvjm6cn3wzbi18wy9j4vr1r1hgg6gzlqnxffiizkycxmz"
+    }
+  },
+  {
+    "goPackagePath": "github.com/kimor79/gollectd",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/kimor79/gollectd",
+      "rev": "cf6dec97343244b5d8a5485463675d42f574aa2d",
+      "sha256": "1f3ml406cprzjc192csyr2af4wcadkc74kg8n4c0zdzglxxfsqxa"
+    }
+  },
+  {
+    "goPackagePath": "github.com/monochromegane/conflag",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/monochromegane/conflag",
+      "rev": "6d68c9aa4183844ddc1655481798fe4d90d483e9",
+      "sha256": "0csfr5c8d3kbna9sqhzfp2z06wq6mc6ijja1zj2i82kzsq8534wa"
+    }
+  },
+  {
+    "goPackagePath": "github.com/monochromegane/go-home",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/monochromegane/go-home",
+      "rev": "25d9dda593924a11ea52e4ffbc8abdb0dbe96401",
+      "sha256": "172chakrj22xfm0bcda4qj5zqf7lwr53pzwc3xj6wz8vd2bcxkww"
+    }
+  },
+  {
+    "goPackagePath": "github.com/monochromegane/terminal",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/monochromegane/terminal",
+      "rev": "2da212063ce19aed90ee5bbb00ad1ad7393d7f48",
+      "sha256": "1rddaq9pk5q57ildms35iihghqk505gb349pb0f6k3svchay38nh"
+    }
+  },
+  {
+    "goPackagePath": "github.com/monochromegane/go-gitignore",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/monochromegane/go-gitignore",
+      "rev": "38717d0a108ca0e5af632cd6845ca77d45b50729",
+      "sha256": "0r1inabpgg6sn6i47b02hcmd2p4dc1ab1mcy20mn1b2k3mpdj4b7"
+    }
+  },
+  {
+    "goPackagePath": "github.com/shiena/ansicolor",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/shiena/ansicolor",
+      "rev": "a5e2b567a4dd6cc74545b8a4f27c9d63b9e7735b",
+      "sha256": "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p"
+    }
+  },
+  {
+    "goPackagePath": "github.com/pquerna/ffjson",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/pquerna/ffjson",
+      "rev": "674bc015b5b3f50f9bb2561179778586b9af68c5",
+      "sha256": "0l53q7b1g25hfjm1iyynfs413rpav4c51yvdr244ivw1x3hksa7a"
+    }
+  },
+  {
+    "goPackagePath": "gopkg.in/kothar/go-backblaze.v0",
+    "fetch": {
+      "type": "git",
+      "url": "https://gopkg.in/kothar/go-backblaze.v0",
+      "rev": "373819725fc560fa962c6cd883b533d2ebec4844",
+      "sha256": "1kmlwfnnfd4h46bb9pz2gw1hxqm1pzkwvidfmnc0zkrilaywk6fx"
     }
   }
 ]
