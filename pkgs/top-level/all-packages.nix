@@ -2063,7 +2063,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = self.iperf3;
 
-  ipfs = self.goPackages.ipfs.bin // { outputs = [ "bin" ]; };
+  ipfs = callPackage ../applications/networking/ipfs { };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
