@@ -52,7 +52,7 @@ in
          --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${which}/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbis-tools}/bin:${id3v2}/bin:${eyeD3}/bin:${lame}/bin:${flac.bin}/bin"
+        ${stdenv.lib.makeBinPath [ "$out" which libcdio cddiscid wget vorbis-tools id3v2 eyeD3 lame flac ]}
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"
