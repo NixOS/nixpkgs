@@ -52,7 +52,7 @@ in
          --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
 
       wrapProgram "$out/bin/abcde" --prefix PATH ":" \
-        "$out/bin:${which}/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbis-tools}/bin:${id3v2}/bin:${eyeD3}/bin:${lame}/bin:${flac}/bin"
+        "$out/bin:${which}/bin:${libcdio}/bin:${cddiscid}/bin:${wget}/bin:${vorbis-tools}/bin:${id3v2}/bin:${eyeD3}/bin:${lame}/bin:${flac.bin}/bin"
 
       wrapProgram "$out/bin/cddb-tool" --prefix PATH ":" \
         "${wget}/bin"
