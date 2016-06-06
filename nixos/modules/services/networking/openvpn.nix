@@ -29,21 +29,27 @@ let
         done
 
         ${cfg.up}
+        ${optionalString cfg.updateResolvConf
+           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
       '';
 
       downScript = ''
         #! /bin/sh
         export PATH=${path}
+        ${optionalString cfg.updateResolvConf
+           "${pkgs.update-resolv-conf}/libexec/openvpn/update-resolv-conf"}
         ${cfg.down}
       '';
 
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           errors-to-stderr
-          ${optionalString (cfg.up != "" || cfg.down != "") "script-security 2"}
+          ${optionalString (cfg.up != "" || cfg.down != "" || cfg.updateResolvConf) "script-security 2"}
           ${cfg.config}
-          ${optionalString (cfg.up != "") "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
-          ${optionalString (cfg.down != "") "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
+          ${optionalString (cfg.up != "" || cfg.updateResolvConf)
+              "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
+          ${optionalString (cfg.down != "" || cfg.updateResolvConf)
+              "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
         '';
 
     in {
@@ -143,6 +149,16 @@ in
           default = true;
           type = types.bool;
           description = "Whether this OpenVPN instance should be started automatically.";
+        };
+
+        updateResolvConf = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Use the script from the update-resolv-conf package to automatically
+            update resolv.conf with the DNS information provided by openvpn. The
+            script will be run after the "up" commands and before the "down" commands.
+          '';
         };
 
       };
