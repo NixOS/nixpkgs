@@ -8,6 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "056a3il7agfazac12yggcg4gf412yq34k065im0cpfxbcw6xskaw";
   };
 
+  preConfigure = stdenv.lib.optional stdenv.isDarwin ''
+    export CFLAGS="-Wl,-flat_namespace,-undefined,suppress -Iwindows.h"
+  '';
+
+  postConfigure = stdenv.lib.optional stdenv.isDarwin ''
+    # Check for posix_fadvise might return false positive.
+    sed -e 's|#define HAVE_POSIX_FADVISE 1|/* #undef HAVE_POSIX_FADVISE */|' -i config.h
+  '';
+
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-add-windows-include.patch;
+
   outputs = [ "out" "doc" ];
   outputMan = "out"; # users will want `man man` to work
 
@@ -30,7 +41,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = ! stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     homepage = "http://man-db.nongnu.org";
