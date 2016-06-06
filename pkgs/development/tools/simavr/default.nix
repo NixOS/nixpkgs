@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, avrgcclibc, libelf, which, git, pkgconfig, freeglut
-, mesa }:
+, mesa, OpenGL, GLUT }:
 
 stdenv.mkDerivation rec {
   name = "simavr-${version}";
@@ -16,12 +16,13 @@ stdenv.mkDerivation rec {
   buildFlags = "AVR_ROOT=${avrgcclibc}/avr SIMAVR_VERSION=${version}";
   installFlags = buildFlags + " DESTDIR=$(out)";
 
-  postFixup = ''
+  postFixup = stdenv.lib.optional (!stdenv.isDarwin) ''
     target="$out/bin/simavr"
     patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
   '';
 
-  buildInputs = [ which git avrgcclibc libelf pkgconfig freeglut mesa ];
+  buildInputs = [ which git avrgcclibc libelf pkgconfig mesa OpenGL ]
+    ++ (if stdenv.isDarwin then [ GLUT ] else [ freeglut ]);
 
   meta = with stdenv.lib; {
     description = "A lean and mean Atmel AVR simulator for Linux";

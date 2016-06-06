@@ -9014,7 +9014,9 @@ in
   silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
-  simavr = callPackage ../development/tools/simavr { };
+  simavr = callPackage ../development/tools/simavr {
+    inherit (darwin.apple_sdk.frameworks) OpenGL GLUT;
+  };
 
   simgear = callPackage ../development/libraries/simgear { };
 
