@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGo16Package, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
 
 buildGo16Package rec {
   name = "vault-${version}";
@@ -7,9 +7,10 @@ buildGo16Package rec {
 
   goPackagePath = "github.com/hashicorp/vault";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/hashicorp/vault";
+    owner = "hashicorp";
+    repo = "vault";
     sha256 = "085rk5i480wdlkn2p14yxi8zgsc11595nkkda1i77c4vjkllbkdy";
   };
 }

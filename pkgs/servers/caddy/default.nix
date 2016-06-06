@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGo16Package, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
 
 buildGo16Package rec {
   name = "caddy-${version}";
@@ -7,9 +7,10 @@ buildGo16Package rec {
 
   goPackagePath = "github.com/mholt/caddy";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/mholt/caddy";
+    owner = "mholt";
+    repo = "caddy";
     sha256 = "1snijkbz02yr7wij7bcmrj4257709sbklb3nhb5qmy95b9ssffm6";
   };
 

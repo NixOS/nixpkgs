@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGo16Package, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
 
 buildGo16Package rec {
   name = "consul-template-${version}";
@@ -7,9 +7,10 @@ buildGo16Package rec {
 
   goPackagePath = "github.com/hashicorp/consul-template";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/hashicorp/consul-template";
+    owner = "hashicorp";
+    repo = "consul-template";
     sha256 = "15zsax44g3dwjmmm4fpb54mvsjvjf3b6g3ijskgipvhcy0d3j938";
   };
 }

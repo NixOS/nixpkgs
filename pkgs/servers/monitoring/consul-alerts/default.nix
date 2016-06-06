@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGo16Package, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
 
 buildGo16Package rec {
   name = "consul-alerts-${version}";
@@ -7,9 +7,10 @@ buildGo16Package rec {
 
   goPackagePath = "github.com/AcalephStorage/consul-alerts";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/AcalephStorage/consul-alerts";
+    owner = "AcalephStorage";
+    repo = "consul-alerts";
     sha256 = "1w0mb20w1yazyh84sa30bsw271c5nm7lsx2qg0g3gf6mxdb63lpq";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGo16Package, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
 
 buildGo16Package rec {
   name = "terraform-${version}";
@@ -7,9 +7,10 @@ buildGo16Package rec {
   
   goPackagePath = "github.com/hashicorp/terraform";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/hashicorp/terraform";
+    owner = "hashicorp";
+    repo = "terraform";
     sha256 = "1mf98hagb0yp40g2mbar7aw7hmpq01clnil6y9khvykrb33vy0nb";
   };
 
