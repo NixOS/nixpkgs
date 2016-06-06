@@ -1,4 +1,4 @@
-{ stdenv, lib, libpcap, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, libpcap, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "etcd-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/coreos/etcd";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/coreos/etcd";
+    owner = "coreos";
+    repo = "etcd";
     sha256 = "1cchlhsdbbqal145cvdiq7rzqqi131iq7z0r2hmzwx414k04wyn7";
   };
 

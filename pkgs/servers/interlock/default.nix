@@ -1,5 +1,5 @@
 { stdenv, lib, sudo, utillinux, coreutils, systemd, cryptsetup,
-  buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+  buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "interlock-${version}";
@@ -10,10 +10,11 @@ buildGoPackage rec {
 
   subPackages = [ "./cmd/interlock" ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/inversepath/interlock";
-    sha256 = "1lnaz0vdg0k21wipc6w8h580cbpymiyasah98yzyzrmwraclb2bb";
+    owner = "inversepath";
+    repo = "interlock";
+    sha256 = "06aqx3jy744yx29xyg8ips0dw16186hfqbxdv3hfrmwxmaxhl4lz";
   };
 
   goDeps = ./deps.json;

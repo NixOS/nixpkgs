@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "syncthing-${version}";
@@ -9,10 +9,11 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/syncthing/syncthing";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/syncthing/syncthing";
-    sha256 = "108w7gvm3nbbsgp3h5p84fj4ba0siaz932i7yyryly486gzvpm43";
+    owner = "syncthing";
+    repo = "syncthing";
+    sha256 = "0g4sj509h45iq6g7b0pl88rbbn7c7s01774yjc6bl376x1xrl6a1";
   };
 
   goDeps = ./deps.json;

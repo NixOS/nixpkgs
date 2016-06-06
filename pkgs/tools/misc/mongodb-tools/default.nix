@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 let
   tools = [
@@ -14,9 +14,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/mongodb/mongo-tools";
   subPackages = map (t: t + "/main") tools;
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/mongodb/mongo-tools";
+    owner = "mongodb";
+    repo = "mongo-tools";
     sha256 = "142vxgniri1mfy2xmfgxhbdp6k6h8c5milv454krv1b51v43hsbm";
   };
 

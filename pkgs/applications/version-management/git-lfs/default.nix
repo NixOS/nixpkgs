@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "git-lfs-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/github/git-lfs";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/github/git-lfs";
+    owner = "github";
+    repo = "git-lfs";
     sha256 = "0z8giavcvfpzmhnxxsqvsgabjfq5gpka8jy4qvadf60yibxds9fp";
   };
 

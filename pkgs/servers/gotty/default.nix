@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "gotty-${version}";
@@ -7,10 +7,11 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/yudai/gotty";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/yudai/gotty";
-    sha256 = "1jc620j4y2r8706r6qn7g2nghiidaaj7f8m2vjgq2gwv288qjafd";
+    owner = "yudai";
+    repo = "gotty";
+    sha256 = "0gvnbr61d5si06ik2j075jg00r9b94ryfgg06nqxkf10dp8lgi09";
   };
 
   goDeps = ./deps.json;

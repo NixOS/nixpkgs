@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "collectd-exporter-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/prometheus/collectd_exporter";
 
-  src= fetchgit {
+  src= fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/prometheus/collectd_exporter";
+    owner = "prometheus";
+    repo = "collectd_exporter";
     sha256 = "165zsdn0lffb6fvxz75szmm152a6wmia5skb96k1mv59qbmn9fi1";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/junegunn/fzf";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/junegunn/fzf";
+    owner = "junegunn";
+    repo = "fzf";
     sha256 = "02qqcnijv8z3736iczbx082yizpqk02g5k746k7sdgfkgyxydppk";
   };
 

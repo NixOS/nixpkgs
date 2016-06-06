@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "skydns-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/skynetservices/skydns";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/skynetservices/skydns";
+    owner = "skynetservices";
+    repo = "skydns";
     sha256 = "0i1iaif79cwnwm7pc8nxfa261cgl4zhm3p2a5a3smhy1ibgccpq7";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "flannel-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/coreos/flannel";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/coreos/flannel";
+    owner = "coreos";
+    repo = "flannel";
     sha256 = "19nrilcc41411rag2qm22vdna4kpqm933ry9m82wkd7sqzb50fpw";
   };
 }

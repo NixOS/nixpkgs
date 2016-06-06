@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "node_exporter-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/prometheus/node_exporter";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/prometheus/node_exporter";
+    owner = "prometheus";
+    repo = "node_exporter";
     sha256 = "149fs9yxnbiyd4ww7bxsv730mcskblpzb3cs4v12jnq2v84a4kk4";
   };
 

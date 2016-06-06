@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "textql-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/dinedal/textql";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/dinedal/textql";
+    owner = "dinedal";
+    repo = "textql";
     sha256 = "1b61w4pc5gl7m12mphricihzq7ifnzwn0yyw3ypv0d0fj26h5hc3";
   };
 

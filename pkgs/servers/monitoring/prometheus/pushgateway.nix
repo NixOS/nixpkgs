@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, go-bindata, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, go, buildGoPackage, go-bindata, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "pushgateway-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
   
   goPackagePath = "github.com/prometheus/pushgateway";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/prometheus/pushgateway";
+    owner = "prometheus";
+    repo = "pushgateway";
     sha256 = "17q5z9msip46wh3vxcsq9lvvhbxg75akjjcr2b29zrky8bp2m230";
   };
 

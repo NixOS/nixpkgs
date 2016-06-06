@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "prometheus-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/prometheus/prometheus";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/prometheus/prometheus";
+    owner = "prometheus";
+    repo = "prometheus";
     sha256 = "176198krna2i37dfhwsqi7m36sqn175yiny6n52vj27mc9s8ggzx";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "mesos-dns-${version}";
@@ -10,9 +10,10 @@ buildGoPackage rec {
   # Avoid including the benchmarking test helper in the output:
   subPackages = [ "." ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/mesosphere/mesos-dns";
+    owner = "mesosphere";
+    repo = "mesos-dns";
     sha256 = "0zs6lcgk43j7jp370qnii7n55cd9pa8gl56r8hy4nagfvlvrcm02";
   };
 

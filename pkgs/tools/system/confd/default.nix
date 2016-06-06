@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "confd-${version}";
@@ -8,9 +8,10 @@ buildGoPackage rec {
   goPackagePath = "github.com/kelseyhightower/confd";
   subPackages = [ "./" ];
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/kelseyhightower/confd";
+    owner = "kelseyhightower";
+    repo = "confd";
     sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
   };
 
