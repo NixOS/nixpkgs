@@ -65,7 +65,21 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  git-annex-with-assistant = super.git-annex.override {
+  # Joey Hess is nuts. The release tarball uploaded to Hackage deliberately
+  # lacks files to break in the installation procedure, because ... you know
+  # ... because! He feels people shouldn't use the tarballs he publishes and
+  # instead use the git repository instead. Which makes me seriously wonder why
+  # the f*ck I'm spending my spare time packaging this crap when I could just
+  # as well install Syncthing in the time I routinely waste adding kludges to
+  # work around this guy's crazy ideas of how to express his individuality.
+  git-annex-with-assistant = (overrideCabal super.git-annex (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyh";
+      repo = "git-annex";
+      sha256 = "1cmyf94jvfjwiibmhkkbrplq63g1yvy5kn65993zs10zgcfip3jb";
+      rev = drv.version;
+    };
+  })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
