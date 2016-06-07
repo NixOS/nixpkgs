@@ -4062,6 +4062,16 @@ in modules // {
     };
   };
 
+  opencv = pkgs.opencv.override {
+    enablePython = true;
+    pythonPackages = self;
+  };
+
+  opencv3 = pkgs.opencv3.override {
+    enablePython = true;
+    pythonPackages = self;
+  };
+
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
     version = "1.7.1";
@@ -25954,13 +25964,7 @@ in modules // {
       # thumborPexif
       pexif
       libthumbor
-      (pkgs.opencv.override {
-        gtk = null;
-        glib = null;
-        xineLib = null;
-        gstreamer = null;
-        ffmpeg = null;
-      })
+      opencv
     ] ++ optionals (!isPy3k) [ futures ];
 
     src = pkgs.fetchurl {
