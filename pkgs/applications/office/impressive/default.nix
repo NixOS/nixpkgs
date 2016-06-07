@@ -45,7 +45,7 @@ in
                      (map (path:
                             path + "/lib/${python.libPrefix}/site-packages")
                           [ pillow pyopengl pygame setuptools ])} \
-         --prefix LIBRARY_PATH ":" "${mesa}/lib:${freeglut}/lib"
+         --prefix LIBRARY_PATH ":" "${lib.makeLibraryPath [ mesa freeglut ]}"
     '';
 
     meta = {
