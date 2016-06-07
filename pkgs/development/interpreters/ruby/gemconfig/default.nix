@@ -105,7 +105,7 @@ in
   };
 
   rmagick = attrs: {
-    buildInputs = [ imagemagick pkgconfig ];
+    buildInputs = [ imagemagick pkgconfig which ];
   };
 
   rugged = attrs: {
