@@ -9473,7 +9473,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Sends statistics to the stats daemon over UDP";
-      license = "perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
