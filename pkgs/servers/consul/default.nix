@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, consul-ui, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, consul-ui, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "consul-${version}";
   version = "0.6.4";
   rev = "v${version}";

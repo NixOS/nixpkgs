@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "terraform-${version}";
   version = "0.6.15";
   rev = "v${version}";

@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "consul-alerts-${version}";
   version = "0.3.3";
   rev = "v${version}";

@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "vault-${version}";
   version = "0.5.2";
   rev = "v${version}";

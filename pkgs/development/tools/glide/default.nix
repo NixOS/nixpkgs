@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "glide-${version}";
   version = "0.10.2";
   rev = "${version}";

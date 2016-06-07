@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGo16Package, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-buildGo16Package rec {
+buildGoPackage rec {
   name = "caddy-${version}";
   version = "0.8.3";
   rev = "e2234497b79603388b58ba226abb157aa4aaf065";

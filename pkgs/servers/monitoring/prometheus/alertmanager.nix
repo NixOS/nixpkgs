@@ -17,10 +17,6 @@ buildGoPackage rec {
   # Tests exist, but seem to clash with the firewall.
   doCheck = false;
 
-  preBuild = ''
-    export GO15VENDOREXPERIMENT=1
-  '';
-
   buildFlagsArray = let t = "${goPackagePath}/version"; in ''
     -ldflags=
        -X ${t}.Version=${version}

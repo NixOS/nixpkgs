@@ -9607,7 +9607,7 @@ in
     go = go_1_6;
   };
 
-  buildGoPackage = buildGo15Package;
+  buildGoPackage = buildGo16Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 

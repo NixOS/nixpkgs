@@ -16,10 +16,6 @@ buildGoPackage rec {
 
   docheck = true;
 
-  preBuild = ''
-    export GO15VENDOREXPERIMENT=1
-  '';
-
   buildFlagsArray = let t = "${goPackagePath}/version"; in ''
     -ldflags=
        -X ${t}.Version=${version}
