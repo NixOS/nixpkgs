@@ -7739,11 +7739,11 @@ in modules // {
 
   pyramid_multiauth = buildPythonPackage rec {
     name = "pyramid_multiauth-${version}";
-    version = "0.3.2";
+    version = "0.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_multiauth/${name}.tar.gz";
-      sha256 = "c33f357e0a216cd6ef7d143d40d4679c9fb0796a1eabaf1249aeef63ed000828";
+      sha256 = "1lq292qakrm4ixi4vaif8dqywzj08pn6qy0wi4gw28blh39p0msk";
     };
 
     propagatedBuildInputs = with self; [ pyramid ];
