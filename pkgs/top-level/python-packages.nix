@@ -7582,17 +7582,12 @@ in modules // {
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.7";
+    name = "pyramid-1.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid/${name}.tar.gz";
-      sha256 = "1d29fj86724z68zcj9ximl2nrn34pflrlr6v9mwyhcv8rdf2sc61";
+      sha256 = "161qacv7qqln3q02kcqll0q2mmaypm701hn1llwdwnkaywkb3xi6";
     };
-
-    preCheck = ''
-      # this will be fixed for 1.6 release, see https://github.com/Pylons/pyramid/issues/1405
-      rm pyramid/tests/test_response.py
-    '';
 
     buildInputs = with self; [
       docutils
