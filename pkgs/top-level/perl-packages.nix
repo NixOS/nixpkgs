@@ -12598,6 +12598,19 @@ let self = _self // overrides; _self = with self; {
 
   TestSimple = null;
 
+  TestSimple13 = buildPerlPackage rec {
+    name = "Test-Simple-1.302022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "dfaa1bbbb57737de76ebe79ac6ee57b5fa3e901b57e56007ac99ec54d2e24326";
+    };
+    meta = {
+      description = "Basic utilities for writing tests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   TestSpec = buildPerlPackage rec {
     name = "Test-Spec-0.51";
     src = fetchurl {
