@@ -153,8 +153,7 @@ in
           then { GDK_PIXBUF_MODULE_FILE = "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"; }
           else { });
 
-    # Plasma uses Noto Sans and Oxygen Mono by default
-    fonts.fonts = [ kde5.oxygen-fonts pkgs.noto-fonts ];
+    fonts.fonts = [ (kde5.oxygen-fonts or pkgs.noto-fonts) ];
 
     programs.ssh.askPassword = "${kde5.ksshaskpass.out}/bin/ksshaskpass";
 
