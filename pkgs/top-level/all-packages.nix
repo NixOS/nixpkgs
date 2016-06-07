@@ -2527,7 +2527,7 @@ in
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
- 
+
   netcdf-mpi = appendToName "mpi" (netcdf.override {
     hdf5 = hdf5-mpi;
   });
@@ -4491,7 +4491,7 @@ in
   inherit (self.haskellPackages) ghc;
 
   cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
-   
+
   stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
@@ -5262,18 +5262,14 @@ in
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
   rustc = rustcStable;
-  rustcStable = callPackage ../development/compilers/rustc/stable.nix {};
+  rustcStable = callPackage ../development/compilers/rustc {};
   rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
   rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
 
-  rustPlatform = rustStable;
-  rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustBeta = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustBeta));
-  rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
+  cargo = callPackage ../development/tools/build-managers/cargo {};
+  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {});
 
-  # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
+  rustPlatform = recurseIntoAttrs (makeRustPlatform cargo rustPlatform);
 
   makeRustPlatform = cargo: self:
     let
@@ -5954,20 +5950,6 @@ in
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
   byacc = callPackage ../development/tools/parsing/byacc { };
-
-  cargo = callPackage ../development/tools/build-managers/cargo {
-    # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
-    rustPlatform = rustCargoPlatform;
-  };
-
-  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {
-    rustPlatform = rustUnstableCargoPlatform;
-  });
-
-  cargoSnapshot = rustc:
-    callPackage ../development/tools/build-managers/cargo/snapshot.nix {
-      inherit rustc;
-    };
 
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
@@ -10840,7 +10822,7 @@ in
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc { };
-    
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
@@ -16015,7 +15997,7 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
-  magma = callPackage ../development/libraries/science/math/magma { };  
+  magma = callPackage ../development/libraries/science/math/magma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustc
+, llvm, jemalloc, ncurses, darwin, binutils, rustc, git
 
 , isRelease ? false
 , shortVersion
@@ -112,8 +112,8 @@ stdenv.mkDerivation {
   '';
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustc ];
-  buildInputs = [ ncurses ]
+  nativeBuildInputs = [ file python2 procps rustc git ];
+  buildInputs = [ ncurses ] ++ targetToolchains
     ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
 
   # https://github.com/rust-lang/rust/issues/30181
