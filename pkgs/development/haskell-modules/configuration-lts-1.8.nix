@@ -1977,6 +1977,7 @@ self: super: {
   "cabalvchk" = dontDistribute super."cabalvchk";
   "cabin" = dontDistribute super."cabin";
   "cabocha" = dontDistribute super."cabocha";
+  "cache" = dontDistribute super."cache";
   "cached-io" = dontDistribute super."cached-io";
   "cached-traversable" = dontDistribute super."cached-traversable";
   "cacophony" = dontDistribute super."cacophony";
@@ -2879,6 +2880,7 @@ self: super: {
   "doctest-discover" = dontDistribute super."doctest-discover";
   "doctest-discover-configurator" = dontDistribute super."doctest-discover-configurator";
   "doctest-prop" = dontDistribute super."doctest-prop";
+  "docvim" = dontDistribute super."docvim";
   "dom-lt" = dontDistribute super."dom-lt";
   "dom-parser" = dontDistribute super."dom-parser";
   "dom-selector" = dontDistribute super."dom-selector";
@@ -2916,6 +2918,7 @@ self: super: {
   "dresdner-verkehrsbetriebe" = dontDistribute super."dresdner-verkehrsbetriebe";
   "drifter" = dontDistribute super."drifter";
   "drifter-postgresql" = dontDistribute super."drifter-postgresql";
+  "drmaa" = dontDistribute super."drmaa";
   "dropbox-sdk" = dontDistribute super."dropbox-sdk";
   "dropsolve" = dontDistribute super."dropsolve";
   "ds-kanren" = dontDistribute super."ds-kanren";
@@ -3217,6 +3220,7 @@ self: super: {
   "fay-ref" = dontDistribute super."fay-ref";
   "fb" = doDistribute super."fb_1_0_8";
   "fb-persistent" = doDistribute super."fb-persistent_0_3_4";
+  "fbmessenger-api" = dontDistribute super."fbmessenger-api";
   "fca" = dontDistribute super."fca";
   "fcache" = dontDistribute super."fcache";
   "fcd" = dontDistribute super."fcd";
@@ -4173,6 +4177,7 @@ self: super: {
   "haskell-course-preludes" = dontDistribute super."haskell-course-preludes";
   "haskell-docs" = dontDistribute super."haskell-docs";
   "haskell-exp-parser" = dontDistribute super."haskell-exp-parser";
+  "haskell-fake-user-agent" = dontDistribute super."haskell-fake-user-agent";
   "haskell-formatter" = dontDistribute super."haskell-formatter";
   "haskell-ftp" = dontDistribute super."haskell-ftp";
   "haskell-generate" = dontDistribute super."haskell-generate";
@@ -6079,6 +6084,7 @@ self: super: {
   "monadloc-pp" = dontDistribute super."monadloc-pp";
   "monadplus" = dontDistribute super."monadplus";
   "monads-fd" = dontDistribute super."monads-fd";
+  "monads-tf" = doDistribute super."monads-tf_0_1_0_2";
   "monadtransform" = dontDistribute super."monadtransform";
   "monarch" = dontDistribute super."monarch";
   "mondo" = dontDistribute super."mondo";
@@ -7745,6 +7751,7 @@ self: super: {
   "shell-pipe" = dontDistribute super."shell-pipe";
   "shellish" = dontDistribute super."shellish";
   "shellmate" = dontDistribute super."shellmate";
+  "shellmate-extras" = dontDistribute super."shellmate-extras";
   "shelltestrunner" = dontDistribute super."shelltestrunner";
   "shelly" = doDistribute super."shelly_1_5_7";
   "shelly-extra" = dontDistribute super."shelly-extra";
@@ -8144,6 +8151,7 @@ self: super: {
   "stratosphere" = dontDistribute super."stratosphere";
   "stratum-tool" = dontDistribute super."stratum-tool";
   "stratux" = dontDistribute super."stratux";
+  "stratux-http" = dontDistribute super."stratux-http";
   "stratux-types" = dontDistribute super."stratux-types";
   "stratux-websockets" = dontDistribute super."stratux-websockets";
   "stream" = dontDistribute super."stream";
@@ -8323,6 +8331,8 @@ self: super: {
   "tagsoup-ht" = dontDistribute super."tagsoup-ht";
   "tagsoup-parsec" = dontDistribute super."tagsoup-parsec";
   "tai64" = dontDistribute super."tai64";
+  "tak" = dontDistribute super."tak";
+  "tak-ai" = dontDistribute super."tak-ai";
   "takahashi" = dontDistribute super."takahashi";
   "takusen-oracle" = dontDistribute super."takusen-oracle";
   "tamarin-prover" = dontDistribute super."tamarin-prover";
