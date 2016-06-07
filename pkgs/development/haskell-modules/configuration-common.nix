@@ -1013,4 +1013,6 @@ self: super: {
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = addBuildTool super.pango self.gtk2hs-buildtools;
 
+  # Tests fail with "Couldn't launch intero process."
+  intero = dontCheck super.intero;
 }
