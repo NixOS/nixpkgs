@@ -1,5 +1,5 @@
 # Please make sure to check if rustfmt still builds when updating nightly
-{ stdenv, callPackage, rustcStable }:
+{ stdenv, callPackage, rustcStable, targets ? [], targetToolchains ? [] }:
 
 callPackage ./generic.nix {
   shortVersion = "master-1.11.0";
@@ -10,4 +10,6 @@ callPackage ./generic.nix {
               ./patches/use-rustc-1.9.0.patch ] ++
     stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
   rustc = rustcStable;
+  inherit targets;
+  inherit targetToolchains;
 }

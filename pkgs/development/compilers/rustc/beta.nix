@@ -1,4 +1,4 @@
-{ stdenv, callPackage, rustcStable }:
+{ stdenv, callPackage, rustcStable, targets ? [], targetToolchains ? [] }:
 
 callPackage ./generic.nix {
   shortVersion = "beta-1.10.0";
@@ -9,4 +9,6 @@ callPackage ./generic.nix {
   patches = [ ./patches/disable-lockfile-check.patch ] ++
     stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
   rustc = rustcStable;
+  inherit targets;
+  inherit targetToolchains;
 }
