@@ -21928,16 +21928,18 @@ in modules // {
   };
 
   structlog = buildPythonPackage rec {
-    name = "structlog-15.3.0";
+    name = "structlog-16.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/structlog/${name}.tar.gz";
-      sha256 = "1h9qz4fsd7ph8rf80rqmlyj2q54xapgrmkpnyca01w1z8ww6f9w7";
+      sha256 = "00dywyg3bqlkrmbrfrql21hpjjjkc4zjd6xxjyxyd15brfnzlkdl";
     };
 
     buildInputs = with self; [ pytest pretend freezegun ];
+    propagatedBuildInputs = with self; [ simplejson ];
 
     checkPhase = ''
+      rm tests/test_twisted.py*
       py.test
     '';
 
