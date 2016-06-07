@@ -4,7 +4,7 @@
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.kde.org/stable/frameworks/5.21/"
+RELEASE_URL="http://download.kde.org/stable/frameworks/5.22/"
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp
