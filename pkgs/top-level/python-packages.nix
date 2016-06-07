@@ -24880,13 +24880,13 @@ in modules // {
 
 
   ujson = buildPythonPackage rec {
-    name = "ujson-1.33";
+    name = "ujson-1.35";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/u/ujson/${name}.zip";
-      sha256 = "68cf825f227c82e1ac61e423cfcad923ff734c27b5bdd7174495d162c42c602b";
+      url = "mirror://pypi/u/ujson/${name}.tar.gz";
+      sha256 = "11jz5wi7mbgqcsz52iqhpyykiaasila4lq8cmc2d54bfa3jp6q7n";
     };
 
     meta = {
