@@ -1,58 +1,47 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper }:
 
 let
-  platform = if stdenv.system == "i686-linux"
-    then "linux-i386"
+  platform =
+    if stdenv.system == "i686-linux"
+    then "i686-unknown-linux-gnu"
     else if stdenv.system == "x86_64-linux"
-    then "linux-x86_64"
+    then "x86_64-unknown-linux-gnu"
     else if stdenv.system == "i686-darwin"
-    then "macos-i386"
+    then "i686-apple-darwin"
     else if stdenv.system == "x86_64-darwin"
-    then "macos-x86_64"
-    else abort "no snapshot to bootstrap for this platform (missing platform url suffix)";
+    then "x86_64-apple-darwin"
+    else abort "missing boostrap url for platform ${stdenv.system}";
 
-  /* Rust is bootstrapped from an earlier built version. We need
-    to fetch these earlier versions, which vary per platform.
-    The shapshot info you want can be found at
-    https://github.com/rust-lang/rust/blob/{$shortVersion}/src/snapshots.txt
-    with the set you want at the top. Make sure this is the latest snapshot
-    for the tagged release and not a snapshot in the current HEAD.
-    NOTE: Rust 1.9.0 is the last version that uses snapshots
-  */
-
-  snapshotHashLinux686 = "0e0e4448b80d0a12b75485795244bb3857a0a7ef";
-  snapshotHashLinux64 = "1273b6b6aed421c9e40c59f366d0df6092ec0397";
-  snapshotHashDarwin686 = "9f9c0b4a2db09acbce54b792fb8839a735585565";
-  snapshotHashDarwin64 = "52570f6fd915b0210a9be98cfc933148e16a75f8";
-  snapshotDate = "2016-03-18";
-  snapshotRev = "235d774";
-
-  snapshotHash = if stdenv.system == "i686-linux"
-    then snapshotHashLinux686
+  # fetch hashes by running `print-hashes.sh 1.9.0`
+  bootstrapHash =
+    if stdenv.system == "i686-linux"
+    then "2951dec835827974d03c7aafbf2c969f39bb530e1c200fd46f90bc01772fae39"
     else if stdenv.system == "x86_64-linux"
-    then snapshotHashLinux64
+    then "d0704d10237c66c3efafa6f7e5570c59a1d3fe5c6d99487540f90ebb37cd84c4"
     else if stdenv.system == "i686-darwin"
-    then snapshotHashDarwin686
+    then "c7aa93e2475aa8e65259f606ca70e98da41cf5d2b20f91703b98f9572a84f7e6"
     else if stdenv.system == "x86_64-darwin"
-    then snapshotHashDarwin64
-    else abort "no snapshot for platform ${stdenv.system}";
-
-  snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
+    then "7204226b42e9c380d44e722efd4a886178a1867a064c90f12e0553a21a4184c6"
+    else throw "missing boostrap hash for platform ${stdenv.system}";
 in
-
-stdenv.mkDerivation {
-  name = "rust-bootstrap";
+stdenv.mkDerivation rec {
+  name = "rustc-bootstrap-${version}";
+  version = "1.9.0";
   src = fetchurl {
-    url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-    sha1 = snapshotHash;
+     url = "https://static.rust-lang.org/dist/rustc-${version}-${platform}.tar.gz";
+     sha256 = bootstrapHash;
   };
-  dontStrip = true;
+  buildInputs = [makeWrapper];
+  phases = ["unpackPhase" "installPhase"];
+
   installPhase = ''
     mkdir -p "$out"
-    cp -r bin "$out/bin"
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
-             --set-rpath "${stdenv.cc.cc.lib}/lib/:${stdenv.cc.cc.lib}/lib64/" \
-             "$out/bin/rustc"
+    ./install.sh "--prefix=$out"
+
+    patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      "$out/bin/rustc"
+
+    wrapProgram "$out/bin/rustc"
   '';
 }
