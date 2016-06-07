@@ -15951,6 +15951,7 @@ in
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
+  bwa = callPackage ../applications/science/biology/bwa/default.nix { };
 
   ### SCIENCE/MATH
 
