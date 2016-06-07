@@ -66,6 +66,10 @@ execp = ARGV
 
 # Populate extra mounts
 if not ENV["CHROOTENV_EXTRA_BINDS"].nil?
+  $stderr.puts "CHROOTENV_EXTRA_BINDS is discussed for deprecation."
+  $stderr.puts "If you have a usecase, please drop a note in issue #16030."
+  $stderr.puts "Notice that we now bind-mount host FS to '/host' and symlink all directories from it to '/' by default."
+
   for extra in ENV["CHROOTENV_EXTRA_BINDS"].split(':')
     paths = extra.split('=')
     if not paths.empty?
