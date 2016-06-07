@@ -9051,6 +9051,88 @@ in modules // {
     };
   });
 
+  django_statici18n = buildPythonPackage rec {
+    name = "django-statici18n-1.1.5";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-statici18n/${name}.tar.gz";
+      sha256 = "12w06cjzsps5hrbr2b893a72w7l2x6ynv7rmikg3b9lgv8ivbmzq";
+    };
+
+    propagatedBuildInputs = with self; [ django django_appconf ];
+
+    meta = {
+      description = "Helper for generating Javascript catalog to static files";
+      homepage = "https://github.com/zyegfryed/django-statici18n";
+    };
+  };
+
+  django_jsonfield = buildPythonPackage rec {
+    name = "jsonfield-1.0.3";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/j/jsonfield/${name}.tar.gz";
+      sha256 = "19x4lak0hg9c20r7mvf27w7i8r6i4sg2g0ypmlmp2665fnk76zvy";
+    };
+
+    propagatedBuildInputs = with self; [ django sqlite3 ];
+
+    # missing util package
+    doCheck = false;
+
+    meta = {
+      description = "A reusable Django field that allows you to store validated JSON in your model";
+      homepage = "https://github.com/bradjasper/django-jsonfield";
+    };
+  };
+
+  django_constance = buildPythonPackage rec {
+    name = "django-constance-1.1.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-constance/${name}.tar.gz";
+      sha256 = "0wh8dfp7jw3diw1bcc83h1n94dhi12s7y0gdj6774ck1fykzqzkv";
+    };
+
+    propagatedBuildInputs = with self; [ django ];
+
+    meta = {
+      description = "Django live settings with pluggable backends, including Redis";
+      homepage = "https://github.com/jazzband/django-constance";
+    };
+  };
+
+  django_post_office = buildPythonPackage rec {
+    name = "django-post_office-2.0.7";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-post_office/${name}.tar.gz";
+      sha256 = "00s824wvlv8j5gw2p9mqhzhjdpd7ailnblm6a2syhi5azsbaacjz";
+    };
+
+    propagatedBuildInputs = with self; [ django django_jsonfield ];
+
+    meta = {
+      description = "A Django app to monitor and send mail asynchronously";
+      homepage = "https://github.com/ui/django-post_office";
+    };
+  };
+
+  django_picklefield = buildPythonPackage rec {
+    name = "django-picklefield-0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/d/django-picklefield/${name}.tar.gz";
+      sha256 = "1qlsbp3798ii68ny9zlz2ppkna00jf7i4hmjal3p8433gi18md7s";
+    };
+
+    propagatedBuildInputs = with self; [ django ];
+
+    meta = {
+      description = "Provides an implementation of a pickled object field";
+      homepage = "https://github.com/shrubberysoft/django-picklefield";
+    };
+  };
 
   djblets = buildPythonPackage rec {
     name = "Djblets-0.9";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, writeScript, pkgconfig, cmake, qt4, seafile-shared, ccnet, makeWrapper}:
+{stdenv, fetchurl, writeScript, pkgconfig, cmake, qt4, seafile, ccnet, makeWrapper}:
 
 stdenv.mkDerivation rec
 {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec
     sha256 = "ae6975bc1adf45d09cf9f6332ceac7cf285f8191f6cf50c6291ed45f8cf4ffa5";
   };
 
-  buildInputs = [ pkgconfig cmake qt4 seafile-shared makeWrapper ];
+  buildInputs = [ pkgconfig cmake qt4 seafile makeWrapper ];
 
   builder = writeScript "${name}-builder.sh" ''
     source $stdenv/setup
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec
     make install
 
     wrapProgram $out/bin/seafile-applet \
-      --suffix PATH : ${ccnet}/bin:${seafile-shared}/bin
+      --suffix PATH : ${ccnet}/bin:${seafile}/bin
     '';
 
   meta =

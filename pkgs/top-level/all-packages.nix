@@ -3271,6 +3271,10 @@ in
 
   sdl-jstest = callPackage ../tools/misc/sdl-jstest { };
 
+  seafile = callPackage ../servers/seafile { };
+  libevhtp-seafile = callPackage ../servers/seafile/libevhtp.nix { };
+  seafile-seahub = callPackage ../servers/seafile/seahub.nix { };
+
   sec = callPackage ../tools/admin/sec { };
 
   seccure = callPackage ../tools/security/seccure { };
@@ -16729,8 +16733,6 @@ in
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   sct = callPackage ../tools/X11/sct {};
-
-  seafile-shared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
 

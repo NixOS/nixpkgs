@@ -163,6 +163,7 @@
   hiberno = "Christian Lask <hiberno@hiberno.net>";
   hinton = "Tom Hinton <t@larkery.com>";
   hrdinka = "Christoph Hrdinka <c.nix@hrdinka.at>";
+  hhhorn = "Hans-Harro Horn <h.h.horn@gmail.com>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
   domenkozar = "Domen Kozar <domen@dev.si>";
