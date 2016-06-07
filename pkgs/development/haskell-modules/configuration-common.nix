@@ -755,7 +755,7 @@ self: super: {
   lens-aeson = dontCheck super.lens-aeson;
 
   # Byte-compile elisp code for Emacs.
-  ghc-mod = overrideCabal (super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; }) (drv: {
+  ghc-mod = overrideCabal super.ghc-mod (drv: {
     preCheck = "export HOME=$TMPDIR";
     testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335

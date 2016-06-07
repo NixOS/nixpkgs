@@ -53,4 +53,13 @@ self: super: {
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
 
+  # ghc-mod has a ghc-8 branch that has not yet been merged
+  ghc-mod = super."ghc-mod".overrideDerivation (attrs: rec {
+    src = pkgs.fetchFromGitHub {
+      owner  = "DanielG";
+      repo   = "ghc-mod";
+      rev    = "f2c7b01e372dd8c516b1ccbe5a1025cc7814347c";
+      sha256 = "1i45196qrzlhgbisnvkzni4n54saky0i1kyla162xcb5cg3kf2ji";
+    };
+  });
 }
