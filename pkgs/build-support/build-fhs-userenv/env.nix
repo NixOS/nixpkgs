@@ -114,14 +114,14 @@ let
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
-    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
   staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
     paths = baseMultiPkgs ++ multiPaths;
-    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
