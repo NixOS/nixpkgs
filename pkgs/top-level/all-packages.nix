@@ -666,7 +666,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = go16Packages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -702,13 +702,13 @@ in
 
   clib = callPackage ../tools/package-management/clib { };
 
-  consul = go16Packages.consul.bin // { outputs = [ "bin" ]; };
+  consul = goPackages.consul.bin // { outputs = [ "bin" ]; };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = go16Packages.consul-alerts.bin // { outputs = [ "bin" ]; };
+  consul-alerts = goPackages.consul-alerts.bin // { outputs = [ "bin" ]; };
 
-  consul-template = go16Packages.consul-template.bin // { outputs = [ "bin" ]; };
+  consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
 
   corosync = callPackage ../servers/corosync { };
 
@@ -811,7 +811,7 @@ in
 
   gist = callPackage ../tools/text/gist { };
 
-  glide = go16Packages.glide.bin // { outputs = [ "bin" ]; };
+  glide = goPackages.glide.bin // { outputs = [ "bin" ]; };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
@@ -9618,7 +9618,7 @@ in
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
 
-  goPackages = go15Packages;
+  goPackages = go16Packages;
 
   go2nix = goPackages.go2nix.bin // { outputs = [ "bin" ]; };
 
@@ -14272,7 +14272,7 @@ in
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
-  syncthing012 = go15Packages.syncthing012.bin // { outputs = [ "bin" ]; };
+  syncthing012 = goPackages.syncthing012.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -14857,7 +14857,7 @@ in
     GConf2 = gnome2.GConf;
   };
 
-  xmpp-client = go15Packages.xmpp-client.bin // { outputs = [ "bin" ]; };
+  xmpp-client = goPackages.xmpp-client.bin // { outputs = [ "bin" ]; };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
@@ -16748,7 +16748,7 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = go16Packages.terraform.bin // { outputs = [ "bin" ]; };
+  terraform = goPackages.terraform.bin // { outputs = [ "bin" ]; };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
@@ -16830,7 +16830,7 @@ in
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
-  vault = go16Packages.vault.bin // { outputs = [ "bin" ]; };
+  vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
 
   vbam = callPackage ../misc/emulators/vbam {};
 
