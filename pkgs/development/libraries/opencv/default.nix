@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
        [ zlib ]
+    ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ;
+
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
