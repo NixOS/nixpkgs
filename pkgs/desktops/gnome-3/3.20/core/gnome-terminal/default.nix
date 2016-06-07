@@ -11,8 +11,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2
                         desktop_file_utils wrapGAppsHook ];
 
+  # Silly ./configure, it looks for dbus file from gnome-shell in the
+  # installation tree of the package it is configuring.
+  preConfigure = ''
+    mkdir -p "$out/share/dbus-1/interfaces"
+    cp "${gnome3.gnome_shell}/share/dbus-1/interfaces/org.gnome.ShellSearchProvider2.xml" "$out/share/dbus-1/interfaces"
+  '';
+
   # FIXME: enable for gnome3
-  configureFlags = [ "--disable-search-provider" "--disable-migration" ];
+  configureFlags = [ "--disable-migration" ];
 
   meta = with stdenv.lib; {
     description = "The GNOME Terminal Emulator";
