@@ -1036,4 +1036,6 @@ self: super: {
       substituteInPlace ./libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
     '';
   }));
+
+  timezone-series = appendPatch super.timezone-series ./patches/timezone-series.patch;
 }
