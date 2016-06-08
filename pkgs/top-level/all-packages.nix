@@ -15663,6 +15663,8 @@ in
             taglib = taglib_1_9;
           };
 
+          krita = callPackage ../applications/graphics/krita { };
+
           krusader = callPackage ../applications/misc/krusader { };
 
           ksshaskpass = callPackage ../tools/security/ksshaskpass {};
