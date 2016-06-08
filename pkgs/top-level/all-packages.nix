@@ -2610,6 +2610,8 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
+  nomad = goPackages.nomad.bin // { outputs = [ "bin" ]; };
+
   milu = callPackage ../applications/misc/milu { };
 
   mpack = callPackage ../tools/networking/mpack { };
