@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = [ "-march=core2" ];
+
   patchPhase = ''
     sed -i -e s:/usr/local:$out:g lib/lua/src/luaconf.h
     sed -i -e s:/usr/bin/lscpu:${utillinux}/bin/lscpu:g lib/common/wr_lscpu.h
