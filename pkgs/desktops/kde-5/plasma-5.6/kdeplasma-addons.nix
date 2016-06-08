@@ -2,6 +2,7 @@
 , kconfigwidgets, kcoreaddons, kcmutils, kdelibs4support, ki18n
 , kio, knewstuff, kross, krunner, kservice, kunitconversion
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
+, libksysguard
 }:
 
 plasmaPackage {
@@ -13,6 +14,6 @@ plasmaPackage {
   propagatedBuildInputs = [
     kdelibs4support kio kross krunner plasma-framework plasma-workspace
     qtdeclarative qtx11extras ibus kconfig kconfigwidgets kcoreaddons kcmutils
-    knewstuff kservice kunitconversion
+    knewstuff kservice kunitconversion libksysguard
   ];
 }
