@@ -1,23 +1,24 @@
 {stdenv, fetchurl, ocaml, findlib, lambdaTerm, ocaml_lwt, makeWrapper,
- ocaml_react, camomile, zed, cppo, camlp4
+ ocaml_react, camomile, zed, cppo, camlp4, ppx_tools
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.17";
+  version = "1.19.2";
   name = "utop-${version}";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0l9lz2nypl2ls3kqzmp738m02yvscabhsfpj70ckp0p98pimnnfd";
+    sha256 = "0hxybkqmrh0sz1yyyrgzdmxp46gda4vk22pv07s0qpfg2dpv56jh";
   };
 
-  buildInputs = [ ocaml findlib makeWrapper cppo camlp4 ];
+  buildInputs = [ ocaml findlib makeWrapper cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
 
   createFindlibDestdir = true;
 
-  configureFlags = "--enable-camlp4";
+  configureFlags = [ "--enable-camlp4" ]
+  ++ stdenv.lib.optional (ppx_tools != null) "--enable-interact";
 
   buildPhase = ''
     make
