@@ -1,7 +1,8 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, ibus, kconfig
-, kconfigwidgets, kcoreaddons, kcmutils, kdelibs4support, ki18n
-, kio, knewstuff, kross, krunner, kservice, kunitconversion
+{ plasmaPackage, extra-cmake-modules, kdoctools
+, kconfig, kconfigwidgets, kcoreaddons, kcmutils, kdelibs4support, ki18n
+, kio, knewstuff, kross, krunner, kservice, ksysguard, kunitconversion
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
+, ibus
 }:
 
 plasmaPackage {
@@ -11,8 +12,9 @@ plasmaPackage {
     kdoctools
   ];
   propagatedBuildInputs = [
-    kdelibs4support kio kross krunner plasma-framework plasma-workspace
-    qtdeclarative qtx11extras ibus kconfig kconfigwidgets kcoreaddons kcmutils
-    knewstuff kservice kunitconversion
+    kconfig kconfigwidgets kcoreaddons kcmutils kdelibs4support kio knewstuff
+    kross krunner kservice ksysguard kunitconversion plasma-framework
+    plasma-workspace qtdeclarative qtx11extras
+    ibus
   ];
 }
