@@ -57,7 +57,7 @@ let
     use_system_libevent = true;
     use_system_libexpat = true;
     # XXX: System libjpeg fails to link for version 52.0.2743.10
-    use_system_libjpeg = upstream-info.version != "52.0.2743.10";
+    use_system_libjpeg = versionOlder upstream-info.version "52.0.2743.10";
     use_system_libpng = false;
     use_system_libwebp = true;
     use_system_libxml = true;
