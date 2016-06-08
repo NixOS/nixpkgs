@@ -1029,4 +1029,11 @@ self: super: {
 
   # Tests fail with "Couldn't launch intero process."
   intero = dontCheck super.intero;
+
+  # libmpd has an upper-bound on time which doesn't seem to be a real build req
+  libmpd = dontCheck (overrideCabal super.libmpd (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace ./libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
+    '';
+  }));
 }
