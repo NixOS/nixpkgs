@@ -6921,6 +6921,10 @@ in
 
   faad2 = callPackage ../development/libraries/faad2 { };
 
+  factor-lang = callPackage ../development/compilers/factor-lang {
+    inherit (pkgs.gnome) gtkglext;
+  };
+
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
