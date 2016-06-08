@@ -4,6 +4,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, icu, libpng, jemalloc, libpulseaudio
+, autoconf213, which
 , enableGTK3 ? false
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -40,6 +41,8 @@ common = { pname, version, sha256 }: stdenv.mkDerivation rec {
       libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3;
+
+  nativeBuildInputs = [autoconf213 which];
 
   configureFlags =
     [ "--enable-application=browser"
@@ -130,9 +133,9 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "46.0.1";
-    sha256 = "1ycb35x40ssmmvgppljdyvf3iax6sbzf2k90yckf9qxp64m2kf4q";
-  };
+    version = "47.0";
+    sha256 = "04hx6d3zjw0xw2mcihxx5sfwk882i9jhfz9pvmzlxy65hv7nz4si";
+};
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
