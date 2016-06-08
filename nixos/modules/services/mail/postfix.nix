@@ -127,11 +127,14 @@ let
     #               (yes)   (yes)   (no)    (never) (100)
     # ==========================================================================
     smtp      inet  n       -       n       -       -       smtpd
-    #submission inet n       -       n       -       -       smtpd
-    #  -o smtpd_tls_security_level=encrypt
-    #  -o smtpd_sasl_auth_enable=yes
-    #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
-    #  -o milter_macro_daemon_name=ORIGINATING
+  '' + optionalString cfg.enableSubmission ''
+    submission inet n       -       n       -       -       smtpd
+      -o smtpd_tls_security_level=encrypt
+      -o smtpd_sasl_auth_enable=yes
+      -o smtpd_client_restrictions=permit_sasl_authenticated,reject
+      ${cfg.extraSubmissionOptions}
+  ''
+  + ''
     pickup    unix  n       -       n       60      1       pickup
     cleanup   unix  n       -       n       -       0       cleanup
     qmgr      unix  n       -       n       300     1       qmgr
@@ -200,6 +203,19 @@ in
       enableSmtp = mkOption {
         default = true;
         description = "Whether to enable smtp in master.cf.";
+      };
+      
+      enableSubmission = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable smtp submission in master.cf.";
+      };
+
+      extraSubmissionOptions = mkOption {
+        type = types.str;
+        default = "";
+        description = "Extra options for the submission config in master.cf.";
+        example = "-o milter_macro_daemon_name=ORIGINATING";
       };
 
       setSendmail = mkOption {
