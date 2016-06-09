@@ -395,7 +395,7 @@ in
       type = types.str;
       default = "127.0.0.1:4180";
       description = ''
-        [http://]<addr>:<port> or unix://<path> to listen on for HTTP clients.
+        [http://]&lt;addr&gt;:&lt;port&gt; or unix://&lt;path&gt; to listen on for HTTP clients.
 
         This module does *not* expose the port by default. If you want this URL
         to be accessible to other machines, please add the port to
@@ -434,7 +434,7 @@ in
       type = types.str;
       default = "/oauth2";
       description = ''
-        The url root path that this proxy should be nested under (e.g. /<oauth2>/sign_in);
+        The url root path that this proxy should be nested under (e.g. /&lt;oauth2&gt;/sign_in);
       '';
     };
 
@@ -465,9 +465,9 @@ in
         type = types.str;
         default = ":443";
         description = ''
-          <addr>:<port> to listen on for HTTPS clients.
+          &lt;addr&gt;:&lt;port&gt; to listen on for HTTPS clients.
 
-          Remember to add <port> to allowedTCPPorts if you want other machines
+          Remember to add &lt;port&gt; to allowedTCPPorts if you want other machines
           to be able to connect to it.
         '';
       };
