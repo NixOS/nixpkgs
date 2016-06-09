@@ -32,9 +32,8 @@ let
   '';
   ml2PluginConf = pkgs.writeText "ml2.conf" ''
     [ml2]
-    type_drivers = flat,vlan,zone
-    tenant_network_types =
-    mechanism_drivers = linuxbridge,snabb
+    type_drivers = local, flat
+    mechanism_drivers = linuxbridge
     extension_drivers = port_security
 
     [ml2_type_flat]
@@ -45,7 +44,7 @@ let
 
     [linux_bridge]
     # TODO: changeme
-    physical_interface_mappings = public:eth1
+    physical_interface_mappings = public:enp0s2
 
     [vxlan]
     enable_vxlan = False
@@ -63,20 +62,21 @@ let
     [DEFAULT]
     policy_file=${package_set}/etc/neutron/policy.json
     core_plugin = ml2
-    service_plugins =
+    # TODO: try without
+    service_plugins = router
     auth_strategy = keystone
-    allow_overlapping_ips = True
+    allow_overlapping_ips = False
     dhcp_agents_per_network = 1
     interface_driver = neutron.agent.linux.interface.BridgeInterfaceDriver
     dhcp_driver = neutron.agent.linux.dhcp.Dnsmasq
     enable_isolated_metadata = True
+    external_network_bridge =
 
     # TODO: changeme
     metadata_proxy_shared_secret = METADATA_SECRET
 
     notify_nova_on_port_status_changes = True
     notify_nova_on_port_data_changes = True
-    nova_metadata_ip = controller
     nova_url = http://localhost:8774/v2
     nova_admin_username = nova
     nova_admin_password = asdasd
@@ -248,7 +248,17 @@ in {
       };
     };
 
-
+    systemd.services.neutron-l3-agent = {
+      description = "OpenStack Neutron L3 Agent";
+      after = [ "rabbitmq.service" "neutron-server.service" "mysql.service" "network.target"];
+      path = [ utils_env ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        User = "neutron";
+        Group = "neutron";
+        ExecStart = "${package_set}/bin/neutron-l3-agent --config-file=${neutronConf} --config-file=${ml2PluginConf}";
+      };
+    };
   };
 
 }

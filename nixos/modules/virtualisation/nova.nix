@@ -89,7 +89,7 @@ let
     lock_path = /var/lock/nova
 
     [libvirt]
-    virt_type = kvm
+    virt_type = qemu
 
     [oslo_messaging_rabbit]
     rabbit_host = localhost
