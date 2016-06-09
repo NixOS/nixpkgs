@@ -238,6 +238,7 @@
   meisternu = "Matt Miemiec <meister@krutt.org>";
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
   mingchuan = "Ming Chuan <ming@culpring.com>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
   mirrexagon = "Andrew Abbott <mirrexagon@mirrexagon.com>";
