@@ -1027,13 +1027,17 @@ self: super: {
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = addBuildTool super.pango self.gtk2hs-buildtools;
 
-  # Tests fail with "Couldn't launch intero process."
-  intero = dontCheck super.intero;
+  # Fix tests which would otherwise fail with "Couldn't launch intero process."
+  intero = overrideCabal super.intero (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace src/test/Main.hs --replace "\"intero\"" "\"$PWD/dist/build/intero/intero\""
+    '';
+  });
 
   # libmpd has an upper-bound on time which doesn't seem to be a real build req
   libmpd = dontCheck (overrideCabal super.libmpd (drv: {
     postPatch = (drv.postPatch or "") + ''
-      substituteInPlace ./libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
+      substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
     '';
   }));
 }
