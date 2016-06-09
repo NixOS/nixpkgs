@@ -14,6 +14,7 @@ let
   upstreamSystemUnits =
     [ # Targets.
       "basic.target"
+      "busnames.target"
       "sysinit.target"
       "sockets.target"
       "graphical.target"
@@ -140,6 +141,7 @@ let
       "user.slice"
       "machine.slice"
       "systemd-machined.service"
+      "systemd-nspawn@.service"
 
       # Temporary file creation / cleanup.
       "systemd-tmpfiles-clean.service"
