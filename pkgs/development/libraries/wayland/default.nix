@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, pkgconfig
-, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto
+, libffi, docbook_xsl, doxygen, graphviz, libxslt, xmlto, libxml2
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat ];
+  buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat libxml2 ];
 
   meta = {
     description = "Reference implementation of the wayland protocol";
