@@ -1041,8 +1041,4 @@ self: super: {
     '';
   }));
 
-  timezone-series = appendPatch super.timezone-series (pkgs.fetchpatch {
-    url = "https://github.com/ryantrinkle/timezone-series/commit/f8dece8c016db6476e2bb0d4f972769a76f6ff40.patch";
-    sha256 = "02sgciica2pzaal7wwp36v6iybr1hjypda0zljxylnq0qs8bizhy";
-  });
 }
