@@ -137,6 +137,7 @@ in {
     extraPackages = mkOption {
       type = types.listOf types.package;
       example = literalExample "pkgs.snabb-neutron";
+      default = [ ];
       description = ''
         List of extra Python packages to be installed in all
         Neutron services. Useful for adding additional Neutron drivers.
