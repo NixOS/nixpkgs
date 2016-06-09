@@ -6952,19 +6952,22 @@ in modules // {
     };
   };
 
-  lti = buildPythonPackage rec {
-    version = "0.4.0";
+  lti = let self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
+  in buildPythonPackage rec {
+    version = "0.4.1";
     name = "PyLTI-${version}";
 
+    disabled = !isPy27;
+
     propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
-    buildInputs = with self; [
+    buildInputs = with self'; [
       flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
       pytestflakes pytestpep8 sphinx mock
     ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyLTI/${name}.tar.gz";
-      sha256 = "1lkk6qx8yfx1h0rhi4abnd44x0wakggi6zs0nvi572lajf6ydmdh";
+      sha256 = "076llj10j85zw3zq2gygx2pcfqi9rgcld5m4vq1iai1fk15x60fz";
     };
 
     meta = {
