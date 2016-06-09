@@ -77,17 +77,12 @@ let
 in
 {
   options.services.oauth2_proxy = {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to run oauth2_proxy.
-      '';
-    };
+    enable = mkEnableOption "oauth2_proxy";
 
     package = mkOption {
       type = types.package;
       default = pkgs.oauth2_proxy;
+      defaultText = "pkgs.oauth2_proxy";
       description = ''
         The package that provides oauth2_proxy.
       '';
@@ -137,8 +132,8 @@ in
      type = types.listOf types.str;
      default = [];
      description = ''
-       List of regular expressions which will bypass authentication when
-       requests path's match.
+       Skip authentication for requests matching any of these regular
+       expressions.
      '';
     };
 
@@ -148,7 +143,8 @@ in
         type = types.listOf types.str;
         default = [];
         description = ''
-          Authenticate emails with the specified domains. Use * to authenticate any email.
+          Authenticate emails with the specified domains. Use
+          <literal>*</literal> to authenticate any email.
         '';
       };
 
@@ -178,7 +174,7 @@ in
       type = types.nullOr types.str;
       default = null;
       description = ''
-     	Token redemption endpoint.
+        Token redemption endpoint.
 
         You only need to set this if you are using a self-hosted provider (e.g.
         Github Enterprise). If you're using a publicly hosted provider
@@ -238,7 +234,7 @@ in
           Directory API, thus the service account needs to impersonate one of
           those users to access the Admin SDK Directory API.
 
-          See <link xlink="https://developers.google.com/admin-sdk/directory/v1/guides/delegation#delegate_domain-wide_authority_to_your_service_account" />
+          See <link xlink:href="https://developers.google.com/admin-sdk/directory/v1/guides/delegation#delegate_domain-wide_authority_to_your_service_account" />.
         '';
       };
 
@@ -282,8 +278,8 @@ in
     upstream = mkOption {
       type = types.commas;
       description = ''
-        The http url(s) of the upstream endpoint or file:// paths for static
-        files. Routing is based on the path.
+        The http url(s) of the upstream endpoint or <literal>file://</literal>
+        paths for static files. Routing is based on the path.
       '';
     };
 
@@ -395,11 +391,9 @@ in
       type = types.str;
       default = "127.0.0.1:4180";
       description = ''
-        [http://]<addr>:<port> or unix://<path> to listen on for HTTP clients.
-
-        This module does *not* expose the port by default. If you want this URL
-        to be accessible to other machines, please add the port to
-        networking.firewall.allowedTCPPorts.
+        HTTPS listening address.  This module does not expose the port by
+        default. If you want this URL to be accessible to other machines, please
+        add the port to <literal>networking.firewall.allowedTCPPorts</literal>.
       '';
     };
 
@@ -409,7 +403,7 @@ in
         default = null;
         description = ''
           Additionally authenticate against a htpasswd file. Entries must be
-          created with "htpasswd -s" for SHA encryption.
+          created with <literal>htpasswd -s</literal> for SHA encryption.
         '';
       };
 
@@ -434,7 +428,7 @@ in
       type = types.str;
       default = "/oauth2";
       description = ''
-        The url root path that this proxy should be nested under (e.g. /<oauth2>/sign_in);
+        The url root path that this proxy should be nested under.
       '';
     };
 
@@ -465,10 +459,11 @@ in
         type = types.str;
         default = ":443";
         description = ''
-          <addr>:<port> to listen on for HTTPS clients.
+          <literal>addr:port</literal> to listen on for HTTPS clients.
 
-          Remember to add <port> to allowedTCPPorts if you want other machines
-          to be able to connect to it.
+          Remember to add <literal>port</literal> to
+          <literal>allowedTCPPorts</literal> if you want other machines to be
+          able to connect to it.
         '';
       };
     };
