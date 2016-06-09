@@ -1,4 +1,4 @@
-{ stdenv, lib, go, gox, gotools, buildGoPackage, fetchFromGitHub
+{ stdenv, lib, gox, gotools, buildGoPackage, fetchFromGitHub
 , fetchgit, fetchhg, fetchbzr, fetchsvn }:
 
 stdenv.mkDerivation rec {
@@ -6,10 +6,10 @@ stdenv.mkDerivation rec {
   version = "0.10.1";
 
   src = import ./deps.nix {
-    inherit stdenv lib go gox gotools buildGoPackage fetchgit fetchhg fetchbzr fetchsvn;
+    inherit stdenv lib gox gotools buildGoPackage fetchgit fetchhg fetchbzr fetchsvn;
   };
 
-  buildInputs = [ go gox gotools ];
+  buildInputs = [ src.go gox gotools ];
 
   configurePhase = ''
     export GOPATH=$PWD/share/go
