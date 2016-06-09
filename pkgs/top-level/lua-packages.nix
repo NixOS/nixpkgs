@@ -101,7 +101,7 @@ let
 
     preBuild = ''
       makeFlagsArray=(
-        lua_ldir="$out/share/lua/${lua.luaversion}"
+        LUA_LDIR="$out/share/lua/${lua.luaversion}"
         LUA_INC="-I${lua}/include" LUA_CDIR="$out/lib/lua/${lua.luaversion}"
         EXPAT_INC="-I${expat.dev}/include");
     '';
