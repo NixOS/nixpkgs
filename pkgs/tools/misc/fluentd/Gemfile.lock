@@ -1,45 +1,48 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    cool.io (1.3.0)
-    elasticsearch (1.0.8)
-      elasticsearch-api (= 1.0.7)
-      elasticsearch-transport (= 1.0.7)
-    elasticsearch-api (1.0.7)
+    cool.io (1.4.4)
+    elasticsearch (1.0.17)
+      elasticsearch-api (= 1.0.17)
+      elasticsearch-transport (= 1.0.17)
+    elasticsearch-api (1.0.17)
       multi_json
-    elasticsearch-transport (1.0.7)
+    elasticsearch-transport (1.0.17)
       faraday
       multi_json
-    faraday (0.9.1)
+    excon (0.49.0)
+    faraday (0.9.2)
       multipart-post (>= 1.2, < 3)
-    fluent-plugin-elasticsearch (0.7.0)
+    fluent-plugin-elasticsearch (1.5.0)
       elasticsearch
+      excon
       fluentd (>= 0.10.43)
-      patron (~> 0)
-    fluent-plugin-record-reformer (0.6.0)
+    fluent-plugin-record-reformer (0.8.1)
       fluentd
-    fluentd (0.12.6)
-      cool.io (>= 1.2.2, < 2.0.0)
+    fluentd (0.14.0)
+      cool.io (>= 1.4.3, < 2.0.0)
       http_parser.rb (>= 0.5.1, < 0.7.0)
       json (>= 1.4.3)
-      msgpack (>= 0.5.11, < 0.6.0)
+      msgpack (>= 0.7.0)
+      serverengine (>= 1.6.4)
       sigdump (~> 0.2.2)
-      string-scrub (>= 0.0.3)
+      strptime (>= 0.1.7)
       tzinfo (>= 1.0.0)
       tzinfo-data (>= 1.0.0)
       yajl-ruby (~> 1.0)
     http_parser.rb (0.6.0)
-    json (1.8.2)
-    msgpack (0.5.11)
-    multi_json (1.11.0)
+    json (1.8.3)
+    msgpack (0.7.6)
+    multi_json (1.12.1)
     multipart-post (2.0.0)
-    patron (0.4.20)
-    sigdump (0.2.2)
-    string-scrub (0.0.5)
+    serverengine (1.6.4)
+      sigdump (~> 0.2.2)
+    sigdump (0.2.4)
+    strptime (0.1.8)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    tzinfo-data (1.2015.1)
+    tzinfo-data (1.2016.4)
       tzinfo (>= 1.0.0)
     yajl-ruby (1.2.1)
 
@@ -50,3 +53,6 @@ DEPENDENCIES
   fluent-plugin-elasticsearch
   fluent-plugin-record-reformer
   fluentd
+
+BUNDLED WITH
+   1.11.2
