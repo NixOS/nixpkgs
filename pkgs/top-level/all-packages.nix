@@ -9233,6 +9233,8 @@ in
 
   unicap = callPackage ../development/libraries/unicap {};
 
+  unicon-lang = callPackage ../development/interpreters/unicon-lang {};
+
   tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
