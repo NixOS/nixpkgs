@@ -188,7 +188,9 @@ go.stdenv.mkDerivation (
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
-  passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
+  passthru = passthru //
+    { inherit go; } //
+    lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
   enableParallelBuilding = enableParallelBuilding;
 
