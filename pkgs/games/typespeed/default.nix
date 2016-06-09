@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./typespeed-config-in-home.patch ];
 
   configureFlags = "--datadir=\${out}/share/";
+  makeFlags = ["CC=cc"];
 
   meta = with stdenv.lib; {
     description = "A curses based typing game";
