@@ -2260,14 +2260,6 @@ let
     sha256 = "143sbpx0jdgf8f8ayv51x6l4jg6cnv6nps6n60qxhx4vd90s6mib";
   };
 
-  nomad = buildFromGitHub {
-    rev    = "v0.3.2";
-    owner  = "hashicorp";
-    repo   = "nomad";
-    sha256 = "1m2pdragpzrq0xbmnba039iiyhb16wirj3n1s52z5r8r0mr7drai";
-    subPackages = [ "." ];
-  };
-
   ntp = buildFromGitHub {
     rev    = "0a5264e2563429030eb922f258229ae3fee5b5dc";
     owner  = "beevik";

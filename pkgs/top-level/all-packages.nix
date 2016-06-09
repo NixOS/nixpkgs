@@ -2611,7 +2611,7 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
-  nomad = goPackages.nomad.bin // { outputs = [ "bin" ]; };
+  nomad = callPackage ../applications/networking/cluster/nomad { };
 
   milu = callPackage ../applications/misc/milu { };
 
