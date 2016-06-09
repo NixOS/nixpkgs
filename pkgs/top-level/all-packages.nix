@@ -9746,6 +9746,8 @@ in
 
   rbtools = pythonPackages.rbtools;
 
+  rebol =  callPackage ../development/interpreters/rebol { };
+
   setuptools = pythonPackages.setuptools;
 
   slowaes = pythonPackages.slowaes;
