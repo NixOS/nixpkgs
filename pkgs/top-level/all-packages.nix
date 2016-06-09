@@ -666,7 +666,7 @@ in
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
-  caddy = go16Packages.caddy.bin // { outputs = [ "bin" ]; };
+  caddy = goPackages.caddy.bin // { outputs = [ "bin" ]; };
 
   capstone = callPackage ../development/libraries/capstone { };
 
@@ -702,13 +702,13 @@ in
 
   clib = callPackage ../tools/package-management/clib { };
 
-  consul = go16Packages.consul.bin // { outputs = [ "bin" ]; };
+  consul = goPackages.consul.bin // { outputs = [ "bin" ]; };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
 
-  consul-alerts = go16Packages.consul-alerts.bin // { outputs = [ "bin" ]; };
+  consul-alerts = goPackages.consul-alerts.bin // { outputs = [ "bin" ]; };
 
-  consul-template = go16Packages.consul-template.bin // { outputs = [ "bin" ]; };
+  consul-template = goPackages.consul-template.bin // { outputs = [ "bin" ]; };
 
   corosync = callPackage ../servers/corosync { };
 
@@ -811,7 +811,7 @@ in
 
   gist = callPackage ../tools/text/gist { };
 
-  glide = go16Packages.glide.bin // { outputs = [ "bin" ]; };
+  glide = goPackages.glide.bin // { outputs = [ "bin" ]; };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
@@ -2548,6 +2548,10 @@ in
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
+ 
+  netcdf-mpi = appendToName "mpi" (netcdf.override {
+    hdf5 = hdf5-mpi;
+  });
 
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
@@ -2605,6 +2609,8 @@ in
   ngrok = goPackages.ngrok.bin // { outputs = [ "bin" ]; };
 
   noip = callPackage ../tools/networking/noip { };
+
+  nomad = goPackages.nomad.bin // { outputs = [ "bin" ]; };
 
   milu = callPackage ../applications/misc/milu { };
 
@@ -2883,6 +2889,8 @@ in
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
   };
 
+  pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
+
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
@@ -3094,6 +3102,11 @@ in
   qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
+
+  qtikz = callPackage ../applications/graphics/ktikz {
+    withKDE = false;
+    kdelibs = null;
+  };
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
@@ -3779,6 +3792,8 @@ in
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
   udunits = callPackage ../development/libraries/udunits { };
+
+  uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
     inherit (pkgs.kde4) kdelibs;
@@ -4954,8 +4969,6 @@ in
 
     dypgen = callPackage ../development/ocaml-modules/dypgen { };
 
-    patoline = callPackage ../tools/typesetting/patoline { };
-
     gapi_ocaml = callPackage ../development/ocaml-modules/gapi-ocaml { };
 
     gg = callPackage ../development/ocaml-modules/gg { };
@@ -5008,6 +5021,8 @@ in
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
     magick = callPackage ../development/ocaml-modules/magick { };
+
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -5315,6 +5330,8 @@ in
 
   sdcc = callPackage ../development/compilers/sdcc { boost = boost159; };
 
+  serpent = callPackage ../development/compilers/serpent { };
+
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
@@ -5377,6 +5394,8 @@ in
   vala_0_26 = callPackage ../development/compilers/vala/0.26.nix { };
 
   vala_0_28 = callPackage ../development/compilers/vala/0.28.nix { };
+
+  vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
 
@@ -6442,6 +6461,8 @@ in
   sbt = callPackage ../development/tools/build-managers/sbt { };
   simpleBuildTool = sbt;
 
+  shellcheck = self.haskellPackages.ShellCheck;
+
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
   simpleTpmPk11 = callPackage ../tools/security/simple-tpm-pk11 { };
@@ -6757,6 +6778,10 @@ in
     cogl = cogl_1_22;
   };
 
+  clutter_1_26 = callPackage ../development/libraries/clutter/1.26.nix {
+    cogl = cogl_1_22;
+  };
+
   clutter-gst = callPackage ../development/libraries/clutter-gst { };
 
   clutter-gst_3_0 = callPackage ../development/libraries/clutter-gst/3.0.nix {
@@ -6767,6 +6792,9 @@ in
   clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
   clutter_gtk_1_6 = callPackage ../development/libraries/clutter-gtk/1.6.nix {
     clutter = clutter_1_22;
+  };
+  clutter_gtk_1_8 = callPackage ../development/libraries/clutter-gtk/1.8.nix {
+    clutter = clutter_1_26;
   };
 
   cminpack = callPackage ../development/libraries/cminpack { };
@@ -6892,6 +6920,10 @@ in
   faac = callPackage ../development/libraries/faac { };
 
   faad2 = callPackage ../development/libraries/faad2 { };
+
+  factor-lang = callPackage ../development/compilers/factor-lang {
+    inherit (pkgs.gnome) gtkglext;
+  };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
@@ -7057,6 +7089,8 @@ in
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
+  icon-lang = callPackage ../development/interpreters/icon-lang { };
+
   libgit2 = callPackage ../development/libraries/git2 (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
@@ -7120,6 +7154,8 @@ in
     giflib = giflib_4_1;
     camlimages = ocamlPackages.camlimages_4_0;
   };
+
+  glui = callPackage ../development/libraries/glui {};
 
   gmime = callPackage ../development/libraries/gmime { };
 
@@ -7324,7 +7360,7 @@ in
 
   gvfs = callPackage ../development/libraries/gvfs { gconf = gnome.GConf; };
 
-  gwenhywfar = callPackage ../development/libraries/gwenhywfar { gnutls = gnutls33; };
+  gwenhywfar = callPackage ../development/libraries/aqbanking/gwenhywfar.nix { };
 
   hamlib = callPackage ../development/libraries/hamlib { };
 
@@ -7592,6 +7628,8 @@ in
   libchardet = callPackage ../development/libraries/libchardet { };
 
   libchewing = callPackage ../development/libraries/libchewing { };
+
+  libchipcard = callPackage ../development/libraries/aqbanking/libchipcard.nix { };
 
   libcrafter = callPackage ../development/libraries/libcrafter { };
 
@@ -9383,6 +9421,8 @@ in
 
   xgboost = callPackage ../development/libraries/xgboost { };
 
+  xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
+
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
     packages = [
@@ -9589,7 +9629,7 @@ in
     overrides = (config.goPackageOverrides or (p: {})) pkgs;
   };
 
-  goPackages = go15Packages;
+  goPackages = go16Packages;
 
   go2nix = goPackages.go2nix.bin // { outputs = [ "bin" ]; };
 
@@ -10319,6 +10359,7 @@ in
     mesa = mesa_noglu;
     udev = if stdenv.isLinux then udev else null;
     libdrm = if stdenv.isLinux then libdrm else null;
+    fglrxCompat = config.xorg.fglrxCompat or false; # `config` because we have no `xorg.override`
   } // { inherit xlibsWrapper; } );
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
@@ -12484,7 +12525,7 @@ in
   emacs24WithPackages = emacs24PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
-  inherit (gnome3) empathy;
+  # inherit (gnome3) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
@@ -13165,7 +13206,7 @@ in
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = go_1_4;
+    go = go_1_6;
   };
 
   lame = callPackage ../development/libraries/lame { };
@@ -13545,6 +13586,8 @@ in
 
   pcmanfm = callPackage ../applications/misc/pcmanfm { };
 
+  pcmanfm-qt = callPackage ../applications/misc/pcmanfm-qt { };
+
   pcmanx-gtk2 = callPackage ../applications/misc/pcmanx-gtk2 { };
 
   pig = callPackage ../applications/networking/cluster/pig { };
@@ -13766,9 +13809,6 @@ in
     gnutls = if config.pidgin.gnutls or false then gnutls else null;
     libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
     startupnotification = libstartup_notification;
-  };
-
-  pidgin-with-plugins = callPackage ../applications/networking/instant-messengers/pidgin/wrapper.nix {
     plugins = [];
   };
 
@@ -14242,7 +14282,7 @@ in
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
-  syncthing012 = go15Packages.syncthing012.bin // { outputs = [ "bin" ]; };
+  syncthing012 = goPackages.syncthing012.bin // { outputs = [ "bin" ]; };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -14469,9 +14509,7 @@ in
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
-  neovim = callPackage ../applications/editors/neovim {
-    inherit (lua52Packages) lpeg luaMessagePack luabitop;
-  };
+  neovim = callPackage ../applications/editors/neovim { };
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
     qt5 = qt55;
@@ -14829,7 +14867,7 @@ in
     GConf2 = gnome2.GConf;
   };
 
-  xmpp-client = go15Packages.xmpp-client.bin // { outputs = [ "bin" ]; };
+  xmpp-client = goPackages.xmpp-client.bin // { outputs = [ "bin" ]; };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
@@ -14877,6 +14915,8 @@ in
   };
 
   xzgv = callPackage ../applications/graphics/xzgv { };
+
+  yabar = callPackage ../applications/window-managers/yabar { };
 
   yate = callPackage ../applications/misc/yate { };
 
@@ -15529,6 +15569,7 @@ in
   };
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
+  gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = self.gnome3_18 // {
     shellExtensions = {
@@ -15627,6 +15668,8 @@ in
           kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
           konversation = callPackage ../applications/networking/irc/konversation { };
+
+          ktikz = callPackage ../applications/graphics/ktikz { };
 
           kvirc = callPackage ../applications/networking/irc/kvirc { };
 
@@ -15913,6 +15956,7 @@ in
 
   samtools = callPackage ../applications/science/biology/samtools/default.nix { };
 
+  bwa = callPackage ../applications/science/biology/bwa/default.nix { };
 
   ### SCIENCE/MATH
 
@@ -16719,7 +16763,7 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = go16Packages.terraform.bin // { outputs = [ "bin" ]; };
+  terraform = goPackages.terraform.bin // { outputs = [ "bin" ]; };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
@@ -16801,7 +16845,7 @@ in
 
   utf8proc = callPackage ../development/libraries/utf8proc { };
 
-  vault = go16Packages.vault.bin // { outputs = [ "bin" ]; };
+  vault = goPackages.vault.bin // { outputs = [ "bin" ]; };
 
   vbam = callPackage ../misc/emulators/vbam {};
 
@@ -16902,28 +16946,6 @@ in
   myEnvFun = callPackage ../misc/my-env {
     inherit (stdenv) mkDerivation;
   };
-
-  # patoline requires a rather large ocaml compilation environment.
-  # this is why it is build as an environment and not just a normal package.
-  # remark : the emacs mode is also installed, but you have to adjust your load-path.
-  PatolineEnv = pack: myEnvFun {
-      name = "patoline";
-      buildInputs = [ stdenv ncurses mesa freeglut libzip gcc
-                                   pack.ocaml pack.findlib pack.camomile
-                                   pack.dypgen pack.ocaml_sqlite3 pack.camlzip
-                                   pack.lablgtk pack.camlimages pack.ocaml_cairo
-                                   pack.lablgl pack.ocamlnet pack.cryptokit
-                                   pack.ocaml_pcre pack.patoline
-                                   ];
-    # this is to circumvent the bug with libgcc_s.so.1 which is
-    # not found when using thread
-    extraCmds = ''
-       LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${gcc.cc}/lib
-       export LD_LIBRARY_PATH
-    '';
-  };
-
-  patoline = PatolineEnv ocamlPackages_4_00_1;
 
   znc = callPackage ../applications/networking/znc { };
 

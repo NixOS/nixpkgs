@@ -1,11 +1,13 @@
 { fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl }:
 
 stdenv.mkDerivation rec {
-  name = "clutter-gst-3.0.4";
+  major = "3.0";
+  minor = "18";
+  name = "clutter-gst-${major}.${minor}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/clutter-gst/3.0/${name}.tar.xz";
-    sha256 = "0ahn6m9ca78cgf7xad16sb50x4dx0fcn5ircllilkir84iri2466";
+    url = "mirror://gnome/sources/clutter-gst/${major}/${name}.tar.xz";
+    sha256 = "14w0pi9myvcn1yxzmk9sk8dghj17m5ji3aqdpfjikk90c060vv0a";
   };
 
   propagatedBuildInputs = [ clutter gtk3 glib cogl ];

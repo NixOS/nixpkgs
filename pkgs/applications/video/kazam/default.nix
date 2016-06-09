@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     wrapProgram $out/bin/kazam \
       --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH ":" "${gtk3.out}/lib:${gst_all_1.gstreamer}/lib:${keybinder}/lib" \
+      --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk3 gst_all_1.gstreamer keybinder ]}" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
       --prefix XDG_DATA_DIRS : "${gtk3.out}/share" \
       --set GST_REGISTRY "/tmp/kazam.gstreamer.registry";

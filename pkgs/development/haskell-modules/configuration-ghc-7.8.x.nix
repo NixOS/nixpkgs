@@ -139,7 +139,7 @@ self: super: {
   conduit = addBuildDepend super.conduit self.void;
   conduit_1_2_5 = addBuildDepend super.conduit_1_2_5 self.void;
 
-  # Needs nats on pre 7.10.x compilers.
-  semigroups = addBuildDepend super.semigroups self.nats;
+  # Needs additional inputs on pre 7.10.x compilers.
+  semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
 
 }

@@ -5,10 +5,8 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
-  Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
-  Cabal_1_22_4_0 = (dontCheck super.Cabal_1_22_4_0).overrideScope (self: super: { binary = self.binary_0_7_6_1; });
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
@@ -67,7 +65,21 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  git-annex-with-assistant = super.git-annex.override {
+  # Joey Hess is nuts. The release tarball uploaded to Hackage deliberately
+  # lacks files to break in the installation procedure, because ... you know
+  # ... because! He feels people shouldn't use the tarballs he publishes and
+  # instead use the git repository instead. Which makes me seriously wonder why
+  # the f*ck I'm spending my spare time packaging this crap when I could just
+  # as well install Syncthing in the time I routinely waste adding kludges to
+  # work around this guy's crazy ideas of how to express his individuality.
+  git-annex-with-assistant = (overrideCabal super.git-annex (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyh";
+      repo = "git-annex";
+      sha256 = "1cmyf94jvfjwiibmhkkbrplq63g1yvy5kn65993zs10zgcfip3jb";
+      rev = drv.version;
+    };
+  })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -757,7 +769,7 @@ self: super: {
   lens-aeson = dontCheck super.lens-aeson;
 
   # Byte-compile elisp code for Emacs.
-  ghc-mod = overrideCabal (super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; }) (drv: {
+  ghc-mod = overrideCabal super.ghc-mod (drv: {
     preCheck = "export HOME=$TMPDIR";
     testToolDepends = drv.testToolDepends or [] ++ [self.cabal-install];
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
@@ -1015,12 +1027,22 @@ self: super: {
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
   pango = addBuildTool super.pango self.gtk2hs-buildtools;
 
-  # esqueleto requires an older version of the persistent library, and
-  # corresponding versions of -template and -sqlite for for its test
-  # suite.
-  esqueleto = super.esqueleto.overrideScope (self: super: {
-    persistent-template = super.persistent-template_2_1_8_1;
-    persistent-sqlite = super.persistent-sqlite_2_2_1;
-    persistent = super.persistent_2_2_4_1;
+  # Fix tests which would otherwise fail with "Couldn't launch intero process."
+  intero = overrideCabal super.intero (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace src/test/Main.hs --replace "\"intero\"" "\"$PWD/dist/build/intero/intero\""
+    '';
+  });
+
+  # libmpd has an upper-bound on time which doesn't seem to be a real build req
+  libmpd = dontCheck (overrideCabal super.libmpd (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
+    '';
+  }));
+
+  timezone-series = appendPatch super.timezone-series (pkgs.fetchpatch {
+    url = "https://github.com/ryantrinkle/timezone-series/commit/f8dece8c016db6476e2bb0d4f972769a76f6ff40.patch";
+    sha256 = "02sgciica2pzaal7wwp36v6iybr1hjypda0zljxylnq0qs8bizhy";
   });
 }

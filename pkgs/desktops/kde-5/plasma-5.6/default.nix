@@ -77,6 +77,7 @@ let
     milou = callPackage ./milou.nix {};
     oxygen = callPackage ./oxygen.nix {};
     plasma-desktop = callPackage ./plasma-desktop {};
+    plasma-integration = callPackage ./plasma-integration.nix {};
     plasma-mediacenter = callPackage ./plasma-mediacenter.nix {};
     plasma-nm = callPackage ./plasma-nm {};
     plasma-pa = callPackage ./plasma-pa.nix {};

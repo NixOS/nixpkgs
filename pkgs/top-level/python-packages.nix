@@ -2717,12 +2717,12 @@ in modules // {
   };
 
   bottle = buildPythonPackage rec {
-    version = "0.12.8";
+    version = "0.12.9";
     name = "bottle-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bottle/${name}.tar.gz";
-      sha256 = "1b2hq0l4nwh75s2w6wgiqlkj4q1qvyx6a94axl2k4lsym1aifpfd";
+      sha256 = "0l80a1qkg7zbi8s077brfgm5w4ypwxgq9rvsvw16snc5jfsj82py";
     };
 
     propagatedBuildInputs = with self; [ setuptools ];
@@ -4060,6 +4060,16 @@ in modules // {
     meta = with stdenv.lib; {
       homepage = "https://github.com/dreamhost/cliff-tablib";
     };
+  };
+
+  opencv = pkgs.opencv.override {
+    enablePython = true;
+    pythonPackages = self;
+  };
+
+  opencv3 = pkgs.opencv3.override {
+    enablePython = true;
+    pythonPackages = self;
   };
 
   openstackclient = buildPythonPackage rec {
@@ -9127,15 +9137,17 @@ in modules // {
 
   dulwich = buildPythonPackage rec {
     name = "dulwich-${version}";
-    version = "0.10.1a";
+    version = "0.12.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-      sha256 = "02rknqarwy7p50693cqswbibqwgxzrfzdq4yhwqxbdmhbsmh0rk6";
+      sha256 = "1ihc1bdgxj7i068mhhmkzar56r2vdcj68w0dnsm7aqgcgvrp144g";
     };
 
+    LC_ALL = "en_US.UTF-8";
+
     # Only test dependencies
-    buildInputs = with self; [ pkgs.git gevent geventhttpclient mock fastimport ];
+    buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
 
     meta = {
       description = "Simple Python implementation of the Git file formats and protocols";
@@ -9148,11 +9160,11 @@ in modules // {
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.8.2";
+    version = "0.8.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hg-git/${name}.tar.gz";
-      sha256 = "0hz0i6qgcn3ic292sny86mdl1psj1bnczcai1b1kzvwcla6z99py";
+      sha256 = "10j7l1p2wx7s5nb6s35z1f3mcz2svz9ilcm26f3la9h9c76b7jpm";
     };
 
     propagatedBuildInputs = with self; [ dulwich ];
@@ -11470,12 +11482,12 @@ in modules // {
   });
 
   jellyfish = buildPythonPackage rec {
-    version = "0.5.0";
+    version = "0.5.2";
     name = "jellyfish-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
-      sha256 = "04p80gwwlhxjp8zpjf70a62x69l9rlvnz1pwi5ar52gyajn8z6z1";
+      sha256 = "15xk0kbr1gig9r1mp22lk9mk3jyi886h8ywn9diixhnyl4q6dacn";
     };
 
     buildInputs = with self; [ pytest unicodecsv ];
@@ -16773,8 +16785,9 @@ in modules // {
       sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
-
-    disabled = isPy35;
+    checkPhase = ''
+      rm prompt_toolkit/win32_types.py
+    '';
 
     buildInputs = with self; [ jedi ipython pygments ];
     propagatedBuildInputs = with self; [ docopt six wcwidth ];
@@ -19535,11 +19548,11 @@ in modules // {
 
   restview = buildPythonPackage rec {
     name = "restview-${version}";
-    version = "2.5.0";
+    version = "2.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "18diqmh6vwz6imcmvwa7s2v4562y73n072d5d7az2r2ks0g2bzdb";
+      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
     };
 
     propagatedBuildInputs = with self; [ docutils readme pygments ];
@@ -25951,13 +25964,7 @@ in modules // {
       # thumborPexif
       pexif
       libthumbor
-      (pkgs.opencv.override {
-        gtk = null;
-        glib = null;
-        xineLib = null;
-        gstreamer = null;
-        ffmpeg = null;
-      })
+      opencv
     ] ++ optionals (!isPy3k) [ futures ];
 
     src = pkgs.fetchurl {

@@ -81,8 +81,8 @@
     src = fetchFromGitHub {
       owner = "openresty";
       repo = "lua-nginx-module";
-      rev = "v0.10.0";
-      sha256 = "0isdqrnjhfy4zlydj4csf91i9184ykazyah3i63jfrmmarxr5li1";
+      rev = "v0.10.5";
+      sha256 = "0wz5j4kqa6hk7ar42bkxp0hd74psjy6sfsldh1a6p93z349iz4v5";
     };
     inputs = [ pkgs.luajit ];
     preConfigure = ''

@@ -1,0 +1,15 @@
+--- a/daemon/gdm-server.c	2014-07-30 23:00:17.786841724 +0200
++++ b/daemon/gdm-server.c	2014-07-30 23:02:10.491239180 +0200
+@@ -322,7 +322,11 @@
+ fallback:
+ #endif
+ 
+-        server->priv->command = g_strdup_printf (X_SERVER X_SERVER_ARG_FORMAT, verbosity, debug_options);
++        if (g_getenv("GDM_X_SERVER") != NULL) {
++            server->priv->command = g_strdup (g_getenv("GDM_X_SERVER"));
++        } else {
++            server->priv->command = g_strdup_printf (X_SERVER X_SERVER_ARG_FORMAT, verbosity, debug_options);
++        }
+ }
+ 
+ static gboolean

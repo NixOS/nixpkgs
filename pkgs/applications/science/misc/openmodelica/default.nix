@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     for e in $(cd $out/bin && ls); do
       wrapProgram $out/bin/$e \
         --prefix PATH : "${gnumake}/bin" \
-        --prefix LIBRARY_PATH : "${liblapack}/lib:${blas}/lib"
+        --prefix LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ liblapack blas ]}"
     done
   '';
 

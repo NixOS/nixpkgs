@@ -37,7 +37,7 @@ self:
 
     overrides = {
       ac-php = super.ac-php.override {
-        inherit (self.melpaPackages) company popup;
+        inherit (self.melpaPackages) popup;
       };
 
       # upstream issue: mismatched filename
