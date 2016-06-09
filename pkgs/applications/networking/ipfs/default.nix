@@ -1,6 +1,6 @@
-{ stdenv, lib, buildGoPackage, consul-ui, fetchFromGitHub }:
+{ stdenv, buildGo15Package, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGo15Package rec {
   name = "ipfs-${version}";
   version = "i20160112--${stdenv.lib.strings.substring 0 7 rev}";
   rev = "7070b4d878baad57dcc8da80080dd293aa46cabd";
