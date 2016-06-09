@@ -1,0 +1,8 @@
+[
+  {
+    "include": "../../../go-modules/libs.json",
+    "packages": [
+      "github.com/jessevdk/go-flags"
+    ]
+  }
+]

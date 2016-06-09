@@ -1,6 +1,6 @@
-{ lib, goPackages, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+buildGoPackage rec {
   name = "remarshal-${rev}";
   rev = "0.3.0";
   goPackagePath = "github.com/dbohdan/remarshal";
@@ -12,7 +12,7 @@ goPackages.buildGoPackage rec {
     sha256 = "0lhsqca3lq3xvdwsmrngv4p6b7k2lkbfnxnk5qj6jdd5y7f4b496";
   };
 
-  buildInputs = with goPackages; [ toml yaml-v2 ];
+  goDeps = ./deps.json;
 
   meta = with lib; {
     description = "Convert between TOML, YAML and JSON";

@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, goPackages }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
-goPackages.buildGoPackage rec {
+buildGoPackage rec {
   name = "bosun";
   rev = "0.5.0-alpha";
 
