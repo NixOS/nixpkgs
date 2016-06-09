@@ -16009,6 +16009,8 @@ in
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
+  gmsh = callPackage ../applications/science/math/gmsh { };
+
   ### SCIENCE/MOLECULAR-DYNAMICS
 
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
