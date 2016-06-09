@@ -24,7 +24,7 @@ propagateOnce() {
     addToSearchPathOnceWithCustomDelimiter ' ' "$@"
 }
 
-_qtPropagateRuntimeDependencies() {
+_qtPropagate() {
     for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
         if [ -d "$1/$dir" ]; then
             propagateOnce propagatedBuildInputs "$1"
@@ -37,7 +37,26 @@ _qtPropagateRuntimeDependencies() {
     addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
 }
 
-envHooks+=(_qtPropagateRuntimeDependencies)
+crossEnvHooks+=(_qtPropagate)
+
+_qtPropagateNative() {
+    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+        if [ -d "$1/$dir" ]; then
+            propagateOnce propagatedNativeBuildInputs "$1"
+            if [ -z "$crossConfig" ]; then
+                propagateOnce propagatedUserEnvPkgs "$1"
+            fi
+            break
+        fi
+    done
+    if [ -z "$crossConfig" ]; then
+        addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
+        addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
+        addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
+    fi
+}
+
+envHooks+=(_qtPropagateNative)
 
 _qtMultioutDevs() {
     # This is necessary whether the package is a Qt module or not
