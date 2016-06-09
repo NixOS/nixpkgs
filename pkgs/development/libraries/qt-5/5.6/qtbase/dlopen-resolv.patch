@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qdnslookup_unix.cpp
+Index: qtbase-opensource-src-5.6.0/src/network/kernel/qdnslookup_unix.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/kernel/qdnslookup_unix.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qdnslookup_unix.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/network/kernel/qdnslookup_unix.cpp
++++ qtbase-opensource-src-5.6.0/src/network/kernel/qdnslookup_unix.cpp
 @@ -79,7 +79,7 @@ static void resolveLibrary()
      if (!lib.load())
  #endif
@@ -11,10 +11,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qdnslookup_u
          if (!lib.load())
              return;
      }
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qhostinfo_unix.cpp
+Index: qtbase-opensource-src-5.6.0/src/network/kernel/qhostinfo_unix.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/kernel/qhostinfo_unix.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/kernel/qhostinfo_unix.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/network/kernel/qhostinfo_unix.cpp
++++ qtbase-opensource-src-5.6.0/src/network/kernel/qhostinfo_unix.cpp
 @@ -95,7 +95,7 @@ static void resolveLibrary()
      if (!lib.load())
  #endif

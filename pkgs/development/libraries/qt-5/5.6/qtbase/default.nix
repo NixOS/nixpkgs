@@ -24,7 +24,6 @@
 }:
 
 let
-  inherit (srcs.qt5) version;
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
 
   # Search path for Gtk plugin
@@ -33,18 +32,10 @@ in
 
 stdenv.mkDerivation {
 
-  name = "qtbase-${version}";
-  inherit version;
-
-  srcs = with srcs; [ qt5.src qtbase.src ];
-
-  sourceRoot = "qt-everywhere-opensource-src-${version}";
+  name = "qtbase-${srcs.qtbase.version}";
+  inherit (srcs.qtbase) src version;
 
   outputs = [ "dev" "out" "gtk" ];
-
-  postUnpack = ''
-    mv qtbase-opensource-src-${version} $sourceRoot/qtbase
-  '';
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
@@ -54,38 +45,37 @@ stdenv.mkDerivation {
   postPatch =
     ''
       substituteInPlace configure --replace /bin/pwd pwd
-      substituteInPlace qtbase/configure --replace /bin/pwd pwd
-      substituteInPlace qtbase/src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i qtbase/mkspecs/*/*.conf
+      substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
 
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5Config.cmake.in"
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/src/corelib/Qt5CoreMacros.cmake"
-      sed -i 's/NO_DEFAULT_PATH//' "qtbase/src/gui/Qt5GuiConfigExtras.cmake.in"
-      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5Config.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "src/corelib/Qt5CoreMacros.cmake"
+      sed -i 's/NO_DEFAULT_PATH//' "src/gui/Qt5GuiConfigExtras.cmake.in"
+      sed -i 's/PATHS.*NO_DEFAULT_PATH//' "mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in"
 
-      substituteInPlace qtbase/src/network/kernel/qdnslookup_unix.cpp \
+      substituteInPlace src/network/kernel/qdnslookup_unix.cpp \
         --replace "@glibc@" "${stdenv.cc.libc.out}"
-      substituteInPlace qtbase/src/network/kernel/qhostinfo_unix.cpp \
+      substituteInPlace src/network/kernel/qhostinfo_unix.cpp \
         --replace "@glibc@" "${stdenv.cc.libc.out}"
 
-      substituteInPlace qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp \
+      substituteInPlace src/plugins/platforms/xcb/qxcbcursor.cpp \
         --replace "@libXcursor@" "${libXcursor.out}"
 
-      substituteInPlace qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp \
+      substituteInPlace src/network/ssl/qsslsocket_openssl_symbols.cpp \
         --replace "@openssl@" "${openssl.out}"
 
-      substituteInPlace qtbase/src/dbus/qdbus_symbols.cpp \
+      substituteInPlace src/dbus/qdbus_symbols.cpp \
         --replace "@dbus_libs@" "${dbus.lib}"
 
       substituteInPlace \
-        qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
+        src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp \
         --replace "@libX11@" "${libX11.out}"
     ''
     + lib.optionalString mesaSupported ''
       substituteInPlace \
-        qtbase/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
+        src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp \
         --replace "@mesa_lib@" "${mesa.out}"
-      substituteInPlace qtbase/mkspecs/common/linux.conf \
+      substituteInPlace mkspecs/common/linux.conf \
         --replace "@mesa_lib@" "${mesa.out}" \
         --replace "@mesa_inc@" "${mesa.dev or mesa}"
     '';
@@ -93,7 +83,7 @@ stdenv.mkDerivation {
 
   setOutputFlags = false;
   preConfigure = ''
-    export LD_LIBRARY_PATH="$PWD/qtbase/lib:$PWD/qtbase/plugins/platforms:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
 
     configureFlags+="\
@@ -101,10 +91,6 @@ stdenv.mkDerivation {
         -importdir $out/lib/qt5/imports \
         -qmldir $out/lib/qt5/qml \
         -docdir $out/share/doc/qt5"
-  ''
-  # QMake expects to extract the list of available modules from .gitmodules
-  + ''
-    echo '[submodule "qtbase"]' >.gitmodules
   '';
 
   prefixKey = "-prefix ";

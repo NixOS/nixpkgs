@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/network/ssl/qsslsocket_openssl.cpp
+Index: qtbase-opensource-src-5.5.1/src/network/ssl/qsslsocket_openssl.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/network/ssl/qsslsocket_openssl.cpp
-+++ qt-everywhere-opensource-src-5.5.1/qtbase/src/network/ssl/qsslsocket_openssl.cpp
+--- qtbase-opensource-src-5.5.1.orig/src/network/ssl/qsslsocket_openssl.cpp
++++ qtbase-opensource-src-5.5.1/src/network/ssl/qsslsocket_openssl.cpp
 @@ -48,7 +48,7 @@
  ****************************************************************************/
  

@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+Index: qtbase-opensource-src-5.6.0/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ qtbase-opensource-src-5.6.0/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
 @@ -9,30 +9,6 @@ if (CMAKE_VERSION VERSION_LESS 3.0.0)
  endif()
  !!ENDIF
@@ -182,10 +182,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/mkspecs/features/data/cmake/Qt5
  !!ELSE
          set(imported_location \"$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/gui/Qt5GuiConfigExtras.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/gui/Qt5GuiConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/src/gui/Qt5GuiConfigExtras.cmake.in
 @@ -2,7 +2,7 @@
  !!IF !isEmpty(CMAKE_ANGLE_EGL_DLL_RELEASE)
  
@@ -211,10 +211,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/gui/Qt5GuiConfigExtras.cmak
  !!ELSE
      set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/widgets/Qt5WidgetsConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/src/widgets/Qt5WidgetsConfigExtras.cmake.in
 @@ -3,7 +3,7 @@ if (NOT TARGET Qt5::uic)
      add_executable(Qt5::uic IMPORTED)
  
@@ -224,10 +224,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/widgets/Qt5WidgetsConfigExt
  !!ELSE
      set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtras.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/corelib/Qt5CoreConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtras.cmake.in
 @@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qmake)
      add_executable(Qt5::qmake IMPORTED)
  
@@ -273,10 +273,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras
  !!ELSE
      set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
++++ qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
 @@ -1,6 +1,6 @@
  
  !!IF isEmpty(CMAKE_INSTALL_DATA_DIR_IS_ABSOLUTE)
@@ -285,10 +285,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras
  !!ELSE
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
++++ qtbase-opensource-src-5.6.0/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
 @@ -1,6 +1,6 @@
  
  !!IF isEmpty(CMAKE_HOST_DATA_DIR_IS_ABSOLUTE)
@@ -297,10 +297,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras
  !!ELSE
  set(_qt5_corelib_extra_includes \"$${CMAKE_HOST_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/dbus/Qt5DBusConfigExtras.cmake.in
+Index: qtbase-opensource-src-5.6.0/src/dbus/Qt5DBusConfigExtras.cmake.in
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/dbus/Qt5DBusConfigExtras.cmake.in
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/dbus/Qt5DBusConfigExtras.cmake.in
+--- qtbase-opensource-src-5.6.0.orig/src/dbus/Qt5DBusConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/src/dbus/Qt5DBusConfigExtras.cmake.in
 @@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qdbuscpp2xml)
      add_executable(Qt5::qdbuscpp2xml IMPORTED)
  
