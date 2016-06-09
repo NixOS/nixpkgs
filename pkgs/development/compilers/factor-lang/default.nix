@@ -89,6 +89,6 @@ stdenv.mkDerivation rec {
     description = "A concatenative, stack-based programming language";
 
     maintainers = [ maintainers.vrthra ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
