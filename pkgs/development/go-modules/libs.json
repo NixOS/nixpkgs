@@ -1291,8 +1291,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/Masterminds/vcs",
-      "rev": "9c0db6583837118d5df7c2ae38ab1c194e434b35",
-      "sha256": "0590ww2av4407y7zy3bcmnr8i74fv00k9zzcxcpjxivl6qszna0d"
+      "rev": "7af28b64c5ec41b1558f5514fd938379822c237c",
+      "sha256": "127pamr5lkym3iq6z747bm4y4gyc02glrqb61yv82z1rdyv1dcf6"
     }
   },
   {
@@ -1527,6 +1527,15 @@
       "url": "https://gopkg.in/kothar/go-backblaze.v0",
       "rev": "373819725fc560fa962c6cd883b533d2ebec4844",
       "sha256": "1kmlwfnnfd4h46bb9pz2gw1hxqm1pzkwvidfmnc0zkrilaywk6fx"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jawher/mow.cli",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jawher/mow.cli",
+      "rev": "772320464101e904cd51198160eb4d489be9cc49",
+      "sha256": "1a8hnh2k3vc3prjhnz4rjbiwhqq6r3mi18h9cdb6fc6s6yzjc19j"
     }
   }
 ]
