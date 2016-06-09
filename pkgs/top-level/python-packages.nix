@@ -18278,15 +18278,15 @@ in modules // {
   };
 
   pysnmp = buildPythonPackage rec {
-    version = "4.2.5";
+    version = "4.3.2";
     name = "pysnmp-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
-      sha256 = "0zq7yx8732ad9dxpxqgpqyixj7kfwbvf402q7l5njkv0kbcnavn4";
+      sha256 = "0xw925f3p02vdpb3f0ls60qj59w44aiyfs3s0nhdr9vsy4fxhavw";
     };
 
-    propagatedBuildInputs = with self; [ pyasn1 pycrypto ];
+    propagatedBuildInputs = with self; [ pyasn1 pycrypto pysmi ];
 
     meta = {
       homepage = http://pysnmp.sf.net;
