@@ -10,10 +10,11 @@
 
 let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
+  packagedQt = "5.6.0";
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";
   version = "0.9.49";
-  qtVersion = lib.replaceStrings ["."] ["_"] qtbase.version;
+  qtVersion = lib.replaceStrings ["."] ["_"] packagedQt;
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
@@ -63,7 +64,7 @@ in stdenv.mkDerivation rec {
     "LIBS+=-lssl"
   ];
 
-  qtSrcs = qtbase.srcs ++ [ qtimageformats.src ];
+  qtSrcs = [ qtbase.src qtimageformats.src ];
   qtPatches = qtbase.patches;
 
   buildCommand = ''
@@ -79,7 +80,8 @@ in stdenv.mkDerivation rec {
       -e 's,LIBS += .*libz.a,LIBS += -lz,' \
       -e 's,LIBS += .*libbreakpad_client.a,LIBS += ${breakpad}/lib/libbreakpad_client.a,' \
       -e 's, -flto,,g' \
-      -e 's, -static-libstdc++,,g'
+      -e 's, -static-libstdc++,,g' \
+      -e 's,${packagedQt},${qtbase.version},g'
 
     export QMAKE=$PWD/../qt/bin/qmake
     ( mkdir -p ../Libraries
@@ -87,18 +89,15 @@ in stdenv.mkDerivation rec {
       for i in $qtSrcs; do
         tar -xaf $i
       done
-      mv qt-everywhere-opensource-src-* QtStatic
-      mv qtbase-opensource-src-* ./QtStatic/qtbase
-      mv qtimageformats-opensource-src-* ./QtStatic/qtimageformats
-      cd QtStatic/qtbase
-      patch -p1 < ../../../$sourceRoot/Telegram/Patches/qtbase_${qtVersion}.diff
-      cd ..
+      cd qtbase-*
+      patch -p1 < ../../$sourceRoot/Telegram/Patches/qtbase_${qtVersion}.diff
       for i in $qtPatches; do
         patch -p1 < $i
       done
       ${qtbase.postPatch}
+      cd ..
 
-      export configureFlags="-prefix "$PWD/../../qt" -release -opensource -confirm-license -system-zlib \
+      export configureFlags="-prefix "$PWD/../qt" -release -opensource -confirm-license -system-zlib \
         -system-libpng -system-libjpeg -system-freetype -system-harfbuzz -system-pcre -system-xcb \
         -system-xkbcommon-x11 -no-opengl -static -nomake examples -nomake tests \
         -openssl-linked -dbus-linked -system-sqlite -verbose \
@@ -107,13 +106,13 @@ in stdenv.mkDerivation rec {
       export dontAddPrefix=1
       export MAKEFLAGS=-j$NIX_BUILD_CORES
 
-      ( cd qtbase
+      ( cd qtbase-*
         configurePhase
         buildPhase
         make install
       )
 
-      ( cd qtimageformats
+      ( cd qtimageformats-*
         $QMAKE
         buildPhase
         make install
