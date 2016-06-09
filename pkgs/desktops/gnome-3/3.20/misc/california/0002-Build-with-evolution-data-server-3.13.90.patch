@@ -1,0 +1,39 @@
+diff --git a/configure.ac b/configure.ac
+index 8a94642..1ca6426 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -27,7 +27,7 @@ AC_SUBST(LDFLAGS)
+ GLIB_REQUIRED=2.38.0
+ GTK_REQUIRED=3.12.2
+ GEE_REQUIRED=0.10.5
+-ECAL_REQUIRED=3.8.5
++ECAL_REQUIRED=3.13.90
+ LIBSOUP_REQUIRED=2.44
+ GDATA_REQUIRED=0.14.0
+ GOA_REQUIRED=3.8.3
+diff --git a/src/backing/eds/backing-eds-calendar-source.vala b/src/backing/eds/backing-eds-calendar-source.vala
+index ee6a572..5009b5d 100644
+--- a/src/backing/eds/backing-eds-calendar-source.vala
++++ b/src/backing/eds/backing-eds-calendar-source.vala
+@@ -256,7 +256,7 @@ internal class EdsCalendarSource : CalendarSource {
+
+     // Invoked by EdsStore prior to making it available outside of unit
+     internal async void open_async(Cancellable? cancellable) throws Error {
+-        client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS,
++        client = (E.CalClient) yield E.CalClient.connect(eds_source, E.CalClientSourceType.EVENTS, 1,
+             cancellable);
+
+         client.bind_property("readonly", this, PROP_READONLY, BindingFlags.SYNC_CREATE);
+diff --git a/vapi/libecal-1.2.vapi b/vapi/libecal-1.2.vapi
+index 6ead3ec..46fd711 100644
+--- a/vapi/libecal-1.2.vapi
++++ b/vapi/libecal-1.2.vapi
+@@ -23,7 +23,7 @@ namespace E {
+		public bool check_save_schedules ();
+		public static bool check_timezones (iCal.icalcomponent comp, GLib.List comps, GLib.Callback tzlookup, void* ecalclient, GLib.Cancellable cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_connect_finish")]
+-		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
++		public static async unowned E.Client connect (E.Source source, E.CalClientSourceType source_type, uint32 wait_for_connected_seconds, GLib.Cancellable cancellable) throws GLib.Error;
+		public static unowned E.Client connect_sync (E.Source source, E.CalClientSourceType source_type, GLib.Cancellable cancellable) throws GLib.Error;
+		[CCode (finish_name = "e_cal_client_create_object_finish")]
+		public async void create_object (iCal.icalcomponent icalcomp, GLib.Cancellable? cancellable, out string out_uid) throws GLib.Error;

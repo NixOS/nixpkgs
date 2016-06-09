@@ -1531,6 +1531,7 @@ let
     src = external.structured-haskell-mode.src;
     packageRequires = [ haskell-mode ];
     fileSpecs = [ "elisp/*.el" ];
+    propagatedUserEnvPkgs = [ external.structured-haskell-mode ];
 
     meta = {
       description = "Structured editing Emacs mode for Haskell";

@@ -13,6 +13,10 @@ if [[ $1 == nix ]]; then
     sudo mkdir /etc/nix
     sudo sh -c 'echo "build-max-jobs = 4" > /etc/nix/nix.conf'
 
+    # Nix builds in /tmp and we need exec support
+    sudo mount
+    sudo mount -o remount,exec /run
+
     # Verify evaluation
     echo "=== Verifying that nixpkgs evaluates..."
     nix-env -f. -qa --json >/dev/null

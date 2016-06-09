@@ -236,6 +236,11 @@ BASH="$SHELL"
 export CONFIG_SHELL="$SHELL"
 
 
+# Dummy implementation of the paxmark function. On Linux, this is
+# overwritten by paxctl's setup hook.
+paxmark() { true; }
+
+
 # Execute the pre-hook.
 if [ -z "$shell" ]; then export shell=$SHELL; fi
 runHook preHook
@@ -367,11 +372,6 @@ elif [ "$NIX_BUILD_CORES" -le 0 ]; then
   fi
 fi
 export NIX_BUILD_CORES
-
-
-# Dummy implementation of the paxmark function. On Linux, this is
-# overwritten by paxctl's setup hook.
-paxmark() { true; }
 
 
 # Prevent OpenSSL-based applications from using certificates in

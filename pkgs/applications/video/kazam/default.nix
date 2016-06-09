@@ -33,8 +33,8 @@ python3Packages.buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH ":" "${gtk3}/lib:${gst_all_1.gstreamer}/lib:${keybinder}/lib"
-      --prefix XDG_DATA_DIRS : "${gtk3}/share"
+      --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk3 gst_all_1.gstreamer keybinder ]}"
+      --prefix XDG_DATA_DIRS : "${gtk3.out}/share"
       --set GST_REGISTRY "/tmp/kazam.gstreamer.registry"
     )
   '';

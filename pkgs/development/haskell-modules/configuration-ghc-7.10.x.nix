@@ -210,4 +210,6 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
 
+  # Moved out from common as no longer the case for GHC8
+  ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 }

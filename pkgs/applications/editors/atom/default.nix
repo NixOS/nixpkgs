@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}" \
       $out/share/atom/resources/app/apm/bin/node
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      $out/share/atom/resources/app.asar.unpacked/node_modules/symbols-view/vendor/ctags-linux
   '';
 
   meta = with stdenv.lib; {

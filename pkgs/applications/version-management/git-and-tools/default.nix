@@ -37,7 +37,7 @@ rec {
     svnSupport = true;
   }));
 
-  git-annex = pkgs.haskellPackages.git-annex-with-assistant;
+  git-annex = pkgs.haskell.packages.lts.git-annex-with-assistant;
   gitAnnex = git-annex;
 
   git-annex-remote-b2 = pkgs.goPackages.git-annex-remote-b2;

@@ -1,4 +1,4 @@
-{ stdenv, go16Packages, ruby, bundlerEnv, zip }:
+{ stdenv, goPackages, ruby, bundlerEnv, zip }:
 
 let
   # `sass` et al
@@ -11,9 +11,9 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "consul-ui-${go16Packages.consul.rev}";
+  name = "consul-ui-${goPackages.consul.rev}";
 
-  src = go16Packages.consul.src;
+  src = goPackages.consul.src;
 
   buildInputs = [ ruby gems zip ];
 

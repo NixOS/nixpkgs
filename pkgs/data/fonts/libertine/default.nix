@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   setSourceRoot = "sourceRoot=`pwd`";
 
-  buildInputs = [ fontforge ];
+  nativeBuildInputs = [ fontforge ];
 
   buildPhase = ''
     for i in *.sfd; do
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Linux Libertine Fonts";
     homepage = http://linuxlibertine.sf.net;
+    platforms = stdenv.lib.platforms.all;
   };
 }
