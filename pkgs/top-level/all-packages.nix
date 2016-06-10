@@ -11648,6 +11648,8 @@ in
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
+  mononoki = callPackage ../data/fonts/mononoki { };
+
   montserrat = callPackage ../data/fonts/montserrat { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
