@@ -4677,7 +4677,6 @@ in
 
   julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
     gmp = gmp6;
-    llvm = llvm_37;
     openblas = openblasCompat;
   });
 
