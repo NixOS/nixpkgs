@@ -10005,6 +10005,11 @@ in modules // {
     };
   });
 
+  fontforge = pkgs.fontforge.override {
+    withPython = true;
+    inherit python;
+  };
+
   fonttools = buildPythonPackage (rec {
     version = "3.0";
     name = "fonttools-${version}";
