@@ -7094,6 +7094,8 @@ in
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
+  icon-lang = callPackage ../development/interpreters/icon-lang { };
+
   libgit2 = callPackage ../development/libraries/git2 (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
