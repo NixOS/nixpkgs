@@ -183,7 +183,19 @@ in modules // {
     };
   };
 
-
+  emcee = buildPythonPackage {
+    name = "emcee-2.1.0";
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/de/00/2358f12c98fa74ab58d78e6a4a4f9a8152fadf6ade2d809d98d771dcc31b/emcee-2.1.0.tar.gz";
+      md5 = "c6b6fad05c824d40671d4a4fc58dfff7";
+    };
+    propagatedBuildInputs = [ self.numpy ];
+    meta = {
+      homepage = "http://dan.iel.fm/emcee";
+      license = "MIT";
+      description = "Kick ass affine-invariant ensemble MCMC sampling";
+    };
+  };
 
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
