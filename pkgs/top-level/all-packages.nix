@@ -11566,6 +11566,8 @@ in
 
   faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
 
+  faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
