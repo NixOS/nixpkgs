@@ -8530,7 +8530,9 @@ in
     texinfo = texinfo4;
   };
 
-  mueval = callPackage ../development/tools/haskell/mueval { };
+  mueval = callPackage ../development/tools/haskell/mueval {
+    haskellPackages = haskell.packages.lts;
+  };
 
   muparser = callPackage ../development/libraries/muparser { };
 
