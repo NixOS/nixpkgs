@@ -11631,6 +11631,11 @@ in
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
+  emojione = callPackage ../data/fonts/emojione {
+    inherit (nodePackages) svgo;
+    inherit (pythonPackages) scfbuild;
+  };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
