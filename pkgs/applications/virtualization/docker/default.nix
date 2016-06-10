@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, makeWrapper
 , go, sqlite, iproute, bridge-utils, devicemapper
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux
-, xfsprogs, containerd, runc
-, systemd, pkgconfig, md2man
+, systemd, pkgconfig
+, enableLxc ? false, lxc
 }:
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md
@@ -11,18 +11,18 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "docker-${version}";
-  version = "1.11.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "docker";
     rev = "v${version}";
-    sha256 = "0anpxhgxz64fd2062a0s63qhp1h5bgydghc91xqyib271da2szi8";
+    sha256 = "0bmrafi0p3fm681y165ps97jki0a8ihl9f0bmpvi22nmc1v0sv6l";
   };
 
   buildInputs = [
     makeWrapper go sqlite iproute bridge-utils devicemapper btrfs-progs
-    iptables e2fsprogs systemd pkgconfig md2man
+    iptables e2fsprogs systemd pkgconfig stdenv.glibc stdenv.glibc.static
   ];
 
   dontStrip = true;
@@ -40,21 +40,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="5604cbed"
+    export DOCKER_GITCOMMIT="a34a1d59"
     ./hack/make.sh dynbinary
   '';
 
-  outputs = ["out" "man"];
-
   installPhase = ''
     install -Dm755 ./bundles/${version}/dynbinary/docker-${version} $out/libexec/docker/docker
+    install -Dm755 ./bundles/${version}/dynbinary/dockerinit-${version} $out/libexec/docker/dockerinit
     makeWrapper $out/libexec/docker/docker $out/bin/docker \
-      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${xfsprogs}/bin:${utillinux}/bin:$out/libexec/docker/"
-
-    # docker uses containerd now
-    ln -s ${containerd}/bin/containerd $out/libexec/docker/docker-containerd
-    ln -s ${containerd}/bin/containerd-shim $out/libexec/docker/docker-containerd-shim
-    ln -s ${runc}/bin/runc $out/libexec/docker/docker-runc
+      --prefix PATH : "${iproute}/sbin:sbin:${iptables}/sbin:${e2fsprogs}/sbin:${xz.bin}/bin:${utillinux}/bin:${optionalString enableLxc "${lxc}/bin"}"
 
     # systemd
     install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
@@ -62,19 +56,6 @@ stdenv.mkDerivation rec {
     # completion
     install -Dm644 ./contrib/completion/bash/docker $out/share/bash-completion/completions/docker
     install -Dm644 ./contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
-
-    # Include contributed man pages
-    man/md2man-all.sh -q
-    manRoot="$man/share/man"
-    mkdir -p "$manRoot"
-    for manDir in man/man?; do
-      manBase="$(basename "$manDir")" # "man1"
-      for manFile in "$manDir"/*; do
-        manName="$(basename "$manFile")" # "docker-build.1"
-        mkdir -p "$manRoot/$manBase"
-        gzip -c "$manFile" > "$manRoot/$manBase/$manName.gz"
-      done
-    done
   '';
 
   meta = with stdenv.lib; {
