@@ -20,7 +20,9 @@ rec {
       lib.hasSuffix "~" baseName ||
       # Filter out generates files.
       lib.hasSuffix ".o" baseName ||
-      lib.hasSuffix ".so" baseName
+      lib.hasSuffix ".so" baseName ||
+      # Filter out nix-build result symlinks
+      (type == "symlink" && lib.hasPrefix "result" baseName)
     );
     in src: builtins.filterSource filter src;
 
