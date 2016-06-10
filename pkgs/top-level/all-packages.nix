@@ -11652,6 +11652,8 @@ in
 
   mononoki = callPackage ../data/fonts/mononoki { };
 
+  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
+
   montserrat = callPackage ../data/fonts/montserrat { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
