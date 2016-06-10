@@ -14008,10 +14008,6 @@ in
 
   rubyripper = callPackage ../applications/audio/rubyripper {};
 
-  runc = callPackage ../applications/virtualization/runc {
-    md2man = goPackages.go-md2man;
-  };
-
   rxvt = callPackage ../applications/misc/rxvt { };
 
   # urxvt
