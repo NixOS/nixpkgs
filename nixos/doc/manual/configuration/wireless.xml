@@ -41,13 +41,13 @@ If you are using WPA2 the <command>wpa_passphrase</command> tool might be useful
 to generate the <literal>wpa_supplicant.conf</literal>.
 
 <screen>
-$ wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
+# wpa_passphrase ESSID PSK > /etc/wpa_supplicant.conf</screen>
 
 After you have edited the <literal>wpa_supplicant.conf</literal>,
 you need to restart the wpa_supplicant service.
 
 <screen>
-$ systemctl restart wpa_supplicant.service</screen>
+# systemctl restart wpa_supplicant.service</screen>
 </para>
 
 </section>

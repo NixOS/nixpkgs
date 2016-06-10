@@ -65,7 +65,6 @@ doNotDisplayTwice rec {
   lttngUst = lttng-ust;  # added 2014-07-31
   manpages = man-pages; # added 2015-12-06
   man_db = man-db; # added 2016-05
-  man = man-db; # added 2016-05
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = qt5.mlt;  # added 2015-12-19
   module_init_tools = kmod; # added 2016-04-22
@@ -74,6 +73,7 @@ doNotDisplayTwice rec {
   mupen64plus1_5 = mupen64plus; # added 2016-02-12
   ncat = nmap;  # added 2016-01-26
   nfsUtils = nfs-utils;  # added 2014-12-06
+  pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = qt5.poppler;  # added 2015-12-19
   qca-qt5 = qt5.qca-qt5;  # added 2015-12-19

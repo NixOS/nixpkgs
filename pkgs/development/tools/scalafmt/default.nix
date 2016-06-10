@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip, jre }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.3";
+  version = "0.2.5";
   baseName = "scalafmt";
   name = "${baseName}-${version}";
 
   src = fetchurl {
     url = "https://github.com/olafurpg/scalafmt/releases/download/v${version}/${baseName}.tar.gz";
-    sha256 = "0klzm86771wl6d8cq5cf4a4mfz8idcis6wrg0x2ix5rcc5zi0d4d";
+    sha256 = "07l95xdwgdbdfa91pg1sds82aw3c60gxzdcvdhhhk6a7zwrl73cp";
   };
 
   unpackPhase = "tar xvzf $src";

@@ -376,10 +376,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ArchiveTar = buildPerlPackage rec {
-    name = "Archive-Tar-2.04";
+    name = "Archive-Tar-2.08";
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BI/BINGOS/${name}.tar.gz";
-      sha256 = "c3741bba06a468a5a4db6a79d772c55cf2f6673cf33241a6e6a758707a71d293";
+      sha256 = "62e34feffd51e21b24f2ba5b15adf3ca3bd084163bfec40fe30f8f8e8963066b";
     };
     meta = {
       description = "Manipulates TAR archives";
@@ -415,6 +415,10 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ ScalarString DataInteger DigestCRC ];
+    meta = {
+      description = "DEC VMS password hashing";
+      license = stdenv.lib.licenses.gpl1Plus;
+    };
   };
 
   AuthenHtpasswd = buildPerlPackage rec {
@@ -424,6 +428,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+    meta = {
+      description = "Interface to read and modify Apache .htpasswd files";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AuthenPassphrase = buildPerlPackage rec {
@@ -435,6 +443,10 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
       DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
+    meta = {
+      description = "Hashed passwords/passphrases as objects";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   AuthenSASL = buildPerlPackage rec {
@@ -444,6 +456,10 @@ let self = _self // overrides; _self = with self; {
       sha256 = "02afhlrdq5hh5g8b32fa79fqq5i76qzwfqqvfi9zi57h31szl536";
     };
     propagatedBuildInputs = [ DigestHMAC ];
+    meta = {
+      description = "SASL Authentication framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   autobox = pkgs.perlPackages.Autobox;
@@ -2682,10 +2698,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.034";
+    name = "CryptX-0.035";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "fad93a560f43ace09de734924f247c4da9d79db7d42fb61954441f5f854225b1";
+      sha256 = "1ec6c000862d60d3d12eda5d0eed3f08e759d4140775b6c76da538a8be3857fe";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -2977,11 +2993,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateDomain = buildPerlPackage rec {
-    name = "Data-Validate-Domain-0.11";
+    name = "Data-Validate-Domain-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "f2ae0830f423a46080b185ffc2428c9a37278167a8d19bfdeec26d977b43822c";
+      sha256 = "6bd39c71d232fa341ad1324158bf1edf5df9add2bcac87996aa4b584445cdec5";
     };
+    buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ NetDomainTLD ];
     meta = {
       homepage = http://metacpan.org/release/Data-Validate-Domain;
@@ -2992,10 +3009,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataValidateIP = buildPerlPackage rec {
-    name = "Data-Validate-IP-0.25";
+    name = "Data-Validate-IP-0.26";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "b0386bb8aa31ed1b9b58760745eaab4d29edb0c7bdc7dc16dd5479d21f26ee3b";
+      sha256 = "d03190483f3ecec728c8e1b2e24989b7aed78ce3c989bea7dc6be0285d374690";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
@@ -3822,10 +3839,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   DigestCRC = buildPerlPackage rec {
-    name = "Digest-CRC-0.18";
+    name = "Digest-CRC-0.21";
     src = fetchurl {
       url = "mirror://cpan/authors/id/O/OL/OLIMAUL/${name}.tar.gz";
-      sha256 = "5c5329f37c46eb79835169508583da8767d9839350b69bb2b48ac6f594f70374";
+      sha256 = "79a0ef8081767c324edb9da39f80835910ed7c5b0539ed106caf7f2467d1958f";
+    };
+    meta = {
+      description = "Module that calculates CRC sums of all sorts";
+      license = stdenv.lib.licenses.publicDomain;
     };
   };
 
@@ -9444,6 +9465,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetStatsd = buildPerlPackage {
+    name = "Net-Statsd-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/C/CO/COSIMO/Net-Statsd-0.11.tar.gz;
+      sha256 = "0f56c95846c7e65e6d32cec13ab9df65716429141f106d2dc587f1de1e09e163";
+    };
+    meta = {
+      description = "Sends statistics to the stats daemon over UDP";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetTwitterLite = buildPerlPackage {
     name = "Net-Twitter-Lite-0.11002";
     src = fetchurl {
@@ -11955,6 +11988,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Test2Suite = buildPerlPackage rec {
+    name = "Test2-Suite-0.000030";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "03f2411a8b1a85be8560c25d57f465c812174bc1c062ee79aeb194b018e6b751";
+    };
+    propagatedBuildInputs = [ TestSimple13 ];
+    meta = {
+      description = "Distribution with a rich set of tools built upon the Test2 framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   TestAssert = buildPerlPackage {
     name = "Test-Assert-0.0504";
     src = fetchurl {
@@ -12043,6 +12090,19 @@ let self = _self // overrides; _self = with self; {
       homepage = https://github.com/karenetheridge/Test-CleanNamespaces;
       description = "Check for uncleaned imports";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestCommand = buildPerlPackage {
+    name = "Test-Command-0.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DANBOO/Test-Command-0.11.tar.gz;
+      sha256 = "0cwm3c4d49mdrbm6vgh78b3x8mk730l0zg8i7xb9z8bkx9pzr8r8";
+    };
+    meta = {
+      homepage = https://github.com/danboo/perl-test-command;
+      description = "Test routines for external commands ";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1 ];
     };
   };
 
@@ -12572,6 +12632,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   TestSimple = null;
+
+  TestSimple13 = buildPerlPackage rec {
+    name = "Test-Simple-1.302022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "dfaa1bbbb57737de76ebe79ac6ee57b5fa3e901b57e56007ac99ec54d2e24326";
+    };
+    meta = {
+      description = "Basic utilities for writing tests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
 
   TestSpec = buildPerlPackage rec {
     name = "Test-Spec-0.51";

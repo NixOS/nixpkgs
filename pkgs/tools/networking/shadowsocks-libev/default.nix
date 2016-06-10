@@ -1,18 +1,23 @@
 { withPolarSSL ? false
+, enableSystemSharedLib ? true
 , stdenv, fetchurl, zlib
 , openssl ? null
 , polarssl ? null
+, libev ? null
+, libsodium ? null
+, udns ? null
 }:
 
 let
 
-  version = "2.4.6";
-  sha256 = "c87781bc280d7a7180cf82b17ad4e8f38242c73431d5b4b6cd4ccd0c29e1fe93";
+  version = "2.4.7";
+  sha256 = "957265cc5339e020d8c8bb7414ab14936e3939dc7355f334aec896ec9b03c6ed";
 
 in
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  inherit version;
   name = "shadowsocks-libev-${version}";
   src = fetchurl {
     url = "https://github.com/shadowsocks/shadowsocks-libev/archive/v${version}.tar.gz";
@@ -20,13 +25,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ]
-                ++ stdenv.lib.optional (!withPolarSSL) openssl
-                ++ stdenv.lib.optional withPolarSSL polarssl;
+                ++ optional (!withPolarSSL) openssl
+                ++ optional withPolarSSL polarssl
+                ++ optional enableSystemSharedLib [libev libsodium udns];
 
-  configureFlags = stdenv.lib.optional (withPolarSSL)
+  configureFlags = optional withPolarSSL
                      [ "--with-crypto-library=polarssl"
                        "--with-polarssl=${polarssl}"
-                     ];
+                     ]
+                   ++ optional enableSystemSharedLib "--enable-system-shared-lib";
 
   meta = {
     description = "A lightweight secured SOCKS5 proxy";
@@ -35,8 +42,8 @@ stdenv.mkDerivation rec {
       It is a port of Shadowsocks created by @clowwindy, which is maintained by @madeye and @linusyang.
     '';
     homepage = https://github.com/shadowsocks/shadowsocks-libev;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [ stdenv.lib.maintainers.nfjinjing ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.nfjinjing ];
+    platforms = platforms.all;
   };
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/dmlc/xgboost";
     rev = "9c26566eb09733423f821f139938ff4105c3775d";
-    sha256 = "0nmhgl70mnc2igkfppdw2in66zdczzsqxrlsb4bknrglpp3axnm1";
+    sha256 = "1d7lnbwxwakclqqfjwyk9w3wd2clkihdr6ljs5z08ydiaspri093";
   };
 
   enableParallelBuilding = true;

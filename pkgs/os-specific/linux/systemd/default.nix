@@ -2,7 +2,7 @@
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
-, iptables
+, iptables, gnu-efi
 , autoreconfHook, gettext, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_45
 , enableKDbus ? false
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
       /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
       libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
-      iptables
+      iptables gnu-efi
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
@@ -71,6 +71,11 @@ stdenv.mkDerivation rec {
       "--disable-quotacheck"
       "--disable-ldconfig"
       "--disable-smack"
+
+      (if stdenv.isArm then "--disable-gnuefi" else "--enable-gnuefi")
+      "--with-efi-libdir=${gnu-efi}/lib"
+      "--with-efi-includedir=${gnu-efi}/include"
+      "--with-efi-ldsdir=${gnu-efi}/lib"
 
       "--with-sysvinit-path="
       "--with-sysvrcnd-path="

@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, libev, ocaml, findlib, ocaml_lwt, ocaml_react, zed, camlp4 }:
+{ stdenv, fetchurl, libev, ocaml, findlib, ocaml_lwt, ocaml_react, zed }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01";
 
 stdenv.mkDerivation rec {
-  version = "1.8";
+  version = "1.10";
   name = "lambda-term-${version}";
 
   src = fetchurl {
-    url = https://github.com/diml/lambda-term/archive/1.8.tar.gz;
-    sha256 = "0hy11x48q5bbh9czjp0w756cyxzr2c6qcnfm5n9f0i1l4qljwpgc";
+    url = "https://github.com/diml/lambda-term/archive/${version}.tar.gz";
+    sha256 = "1kwpsqds51xmy3z3ddkam92hkl7arlzy9awhzsq62ysxcl91fb8m";
   };
 
   buildInputs = [ libev ocaml findlib ocaml_react ];
 
-  propagatedBuildInputs = [ camlp4 zed ocaml_lwt ];
+  propagatedBuildInputs = [ zed ocaml_lwt ];
 
   createFindlibDestdir = true;
 

@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/sionescu/libfixposix";
     rev = "30b75609d858588ea00b427015940351896867e9";
-    sha256 = "44553c90d67f839cdd57d14d37d9faa25b1b766f607408896137f3013c1c9424";
+    sha256 = "17spjz9vbgqllzlkws2abvqi0a71smhi4vgq3913aw0kq206mfxz";
   };
 
   buildInputs = [ autoreconfHook libtool ];

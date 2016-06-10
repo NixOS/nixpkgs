@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/cth103/plugin-torture";
     rev = "9ee06016982bdfbaa215cd0468cc6ada6367462a";
-    sha256 = "bfe9213fd2c1451d7acc1381d63301c4e6ff69ce86d31a886ece5159ba850706";
+    sha256 = "0ynzfs3z95lbw4l1w276as2a37zxp0cw6pi3lbikr0qk0r7j5j10";
   };
 
   buildInputs = [ boost ladspaH lilv lv2 pkgconfig serd sord sratom ];

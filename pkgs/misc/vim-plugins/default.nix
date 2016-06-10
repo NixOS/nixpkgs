@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
-, vim_configurable, vimPlugins, xkb_switch, git, racerdRust, goPackages
+, vim_configurable, vimPlugins, xkb_switch, git, racerdRust, fzf
 , Cocoa ? null
 }:
 
@@ -98,9 +98,9 @@ rec {
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
 
-  fzf = buildVimPluginFrom2Nix {
-    name = goPackages.fzf.name;
-    src = "${goPackages.fzf}/share/go/src/github.com/junegunn/fzf";
+  fzfWrapper = buildVimPluginFrom2Nix {
+    name = fzf.name;
+    src = "${fzf}/share/go/src/github.com/junegunn/fzf";
     dependencies = [];
   };
 
@@ -1298,6 +1298,28 @@ rec {
       sha256 = "17d1903spczg2rk0qzg94vvq41dwhmnxwajqgzcx4lmf606cfspi";
     };
     dependencies = [];
+
+  };
+
+  psc-ide-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "psc-ide-vim-2016-06-04";
+    src = fetchgit {
+      url = "git://github.com/frigoeu/psc-ide-vim";
+      rev = "27c000f0f27c7a4d05f001320ddcf1ae15b22eb7";
+      sha256 = "1vgxf5kziv00mi346zw3b2dnxygxk0jyxg41y6w1j22yrp9id1k2";
+    };
+    dependencies = [ ];
+
+  };
+
+  purescript-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "purescript-vim-2016-06-04";
+    src = fetchgit {
+      url = "git://github.com/raichoo/purescript-vim";
+      rev = "92dd6bc647b45444e9d5e0550bdc3c56928f9762";
+      sha256 = "090vpff58lzzhqp28p27am5s8s6ngjxw6j4y46zaixcxxx7wqzha";
+    };
+    dependencies = [ ];
 
   };
 

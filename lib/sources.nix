@@ -4,6 +4,11 @@ let lib = import ./default.nix; in
 
 rec {
 
+  # Returns the type of a path: regular (for file), symlink, or directory
+  pathType = p: with builtins; getAttr (baseNameOf p) (readDir (dirOf p));
+
+  # Returns true if the path exists and is a directory, false otherwise
+  pathIsDirectory = p: if builtins.pathExists p then (pathType p) == "directory" else false;
 
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
@@ -28,6 +33,7 @@ rec {
       let base = baseNameOf (toString name);
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in builtins.filterSource filter path;
+
 
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>

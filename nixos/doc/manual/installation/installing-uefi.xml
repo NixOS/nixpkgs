@@ -5,7 +5,7 @@
          xml:id="sec-uefi-installation">
 
 <title>UEFI Installation</title>
-    
+
 <para>NixOS can also be installed on UEFI systems.  The procedure
 is by and large the same as a BIOS installation, with the following
 changes:
@@ -26,7 +26,7 @@ changes:
     <literal>vfat</literal> filesystem.</para>
   </listitem>
   <listitem>
-    <para>You must set <option>boot.loader.gummiboot.enable</option> to
+    <para>You must set <option>boot.loader.systemd-boot.enable</option> to
     <literal>true</literal>. <command>nixos-generate-config</command>
     should do this automatically for new configurations when booted in
     UEFI mode.</para>
@@ -38,7 +38,7 @@ changes:
   </listitem>
   <listitem>
     <para>You may want to look at the options starting with
-    <option>boot.loader.efi</option> and <option>boot.loader.gummiboot</option>
+    <option>boot.loader.efi</option> and <option>boot.loader.systemd-boot</option>
     as well.</para>
   </listitem>
 </itemizedlist>

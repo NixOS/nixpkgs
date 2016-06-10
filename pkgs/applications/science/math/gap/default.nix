@@ -1,36 +1,34 @@
-{ stdenv, fetchurl, pari ? null }:
+{ stdenv, fetchurl, m4, gmp }:
 
 let
   baseName = "gap";
-  version = "4r4p12";
+  version = "4r8p3";
 
-  pkgVer = "2012_01_12-10_47_UTC";
-  pkgSrc = fetchurl {
-    url = "ftp://ftp.gap-system.org/pub/gap/gap4/tar.bz2/packages-${pkgVer}.tar.bz2";
-    sha256 = "0z9ncy1m5gvv4llkclxd1vpcgpb0b81a2pfmnhzvw8x708frhmnb";
-  };
+  pkgVer = "2016_03_19-22_17";
 in
 
 stdenv.mkDerivation rec {
   name = "${baseName}-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/${baseName}${version}.tar.gz";
-    sha256 = "0flap5lbkvpms3zznq1zwxyxyj0ax3fk7m24f3bvhvr37vyxnf40";
+    url = "ftp://ftp.gap-system.org/pub/gap/gap48/tar.gz/${baseName}${version}_${pkgVer}.tar.gz";
+    sha256 = "1rmb0lj43avv456sjwb7ia3y0wwk5shlqylpkdwnnqpjnvjbnzv6";
   };
 
-  buildInputs = [ pari ];
-
+  configureFlags = [ "--with-gmp=system" ];
+  buildInputs = [ m4 gmp ];
+  
+  postBuild = ''
+    pushd pkg
+    bash ../bin/BuildPackages.sh
+    popd
+  '';
+  
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/gap/"
 
     cp -r . "$out/share/gap/build-dir"
 
-    tar xf "${pkgSrc}" -C "$out/share/gap/build-dir/pkg"
-
-    ${if pari != null then
-      ''sed -e '2iexport PATH=$PATH:${pari}/bin' -i "$out/share/gap/build-dir/bin/gap.sh" ''
-    else ""}
     sed -e "/GAP_DIR=/aGAP_DIR='$out/share/gap/build-dir/'" -i "$out/share/gap/build-dir/bin/gap.sh"
 
     ln -s "$out/share/gap/build-dir/bin/gap.sh" "$out/bin"
@@ -41,10 +39,10 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers;
     [
       raskin
+      chrisjefferson
     ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl2;
     homepage = http://gap-system.org/;
-    broken = true;
   };
 }

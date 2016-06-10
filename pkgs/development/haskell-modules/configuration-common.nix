@@ -5,10 +5,8 @@ with import ./lib.nix { inherit pkgs; };
 self: super: {
 
   # Some packages need a non-core version of Cabal.
-  Cabal_1_18_1_7 = dontCheck super.Cabal_1_18_1_7;
-  Cabal_1_20_0_4 = dontCheck super.Cabal_1_20_0_4;
-  Cabal_1_22_4_0 = dontCheck super.Cabal_1_22_4_0;
-  cabal-install = (dontCheck super.cabal-install).overrideScope (self: super: { Cabal = self.Cabal_1_22_4_0; });
+  Cabal_1_22_4_0 = super.Cabal_1_22_4_0.overrideScope (self: super: { binary = self.binary_0_7_6_1; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_0_0; });
   cabal-install_1_18_1_0 = (dontCheck super.cabal-install_1_18_1_0).overrideScope (self: super: { Cabal = self.Cabal_1_18_1_7; });
 
   # Link statically to avoid runtime dependency on GHC.
@@ -48,9 +46,6 @@ self: super: {
   epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
     hardeningDisable = [ "format" ];
   });
-  pango = super.pango.overrideDerivation (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -75,7 +70,21 @@ self: super: {
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
-  git-annex-with-assistant = super.git-annex.override {
+  # Joey Hess is nuts. The release tarball uploaded to Hackage deliberately
+  # lacks files to break in the installation procedure, because ... you know
+  # ... because! He feels people shouldn't use the tarballs he publishes and
+  # instead use the git repository instead. Which makes me seriously wonder why
+  # the f*ck I'm spending my spare time packaging this crap when I could just
+  # as well install Syncthing in the time I routinely waste adding kludges to
+  # work around this guy's crazy ideas of how to express his individuality.
+  git-annex-with-assistant = (overrideCabal super.git-annex (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "joeyh";
+      repo = "git-annex";
+      sha256 = "1cmyf94jvfjwiibmhkkbrplq63g1yvy5kn65993zs10zgcfip3jb";
+      rev = drv.version;
+    };
+  })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
     fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
@@ -237,19 +246,26 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136
-  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gio pkgs.glib) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
   gio_0_13_0_3 = addPkgconfigDepend super.gio_0_13_0_3 pkgs.glib;
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
-  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend super.glib pkgs.glib) (drv: {
+  # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.gio self.gtk2hs-buildtools
+  ) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.glib self.gtk2hs-buildtools
+  ) pkgs.glib) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
     hardeningDisable = [ "fortify" ];
   });
-  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend super.gtk pkgs.gtk) (drv: {
+  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
+    addBuildTool super.gtk self.gtk2hs-buildtools
+  ) pkgs.gtk) (drv: {
     hardeningDisable = [ "fortify" ];
   });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
@@ -603,8 +619,10 @@ self: super: {
   # https://github.com/junjihashimoto/test-sandbox-compose/issues/2
   test-sandbox-compose = dontCheck super.test-sandbox-compose;
 
-  # https://github.com/jgm/pandoc/issues/2709
-  pandoc = disableSharedExecutables super.pandoc;
+  # Relax overspecified constraints. Unfortunately, jailbreak won't work.
+  pandoc = overrideCabal super.pandoc (drv: {
+    preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
+  });
 
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
@@ -662,8 +680,8 @@ self: super: {
 
   # Override the obsolete version from Hackage with our more up-to-date copy.
   cabal2nix = self.callPackage ../tools/haskell/cabal2nix/cabal2nix.nix {};
-  hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix {};
-  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix {};
+  hackage2nix = self.callPackage ../tools/haskell/cabal2nix/hackage2nix.nix { deepseq-generics = self.deepseq-generics_0_1_1_2; };
+  distribution-nixpkgs = self.callPackage ../tools/haskell/cabal2nix/distribution-nixpkgs.nix { deepseq-generics = self.deepseq-generics_0_1_1_2; };
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
@@ -1022,5 +1040,28 @@ self: super: {
   yi-snippet = markBroken super.yi-snippet;
   yi-solarized = markBroken super.yi-solarized;
   yi-spolsky = markBroken super.yi-spolsky;
+
+  # gtk2hs-buildtools must have Cabal 1.24
+  gtk2hs-buildtools = super.gtk2hs-buildtools.override { Cabal = self.Cabal_1_24_0_0; };
+
+  # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
+  cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
+  pango = (addBuildTool super.pango self.gtk2hs-buildtools).overrideDerivation (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+
+  # Fix tests which would otherwise fail with "Couldn't launch intero process."
+  intero = overrideCabal super.intero (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace src/test/Main.hs --replace "\"intero\"" "\"$PWD/dist/build/intero/intero\""
+    '';
+  });
+
+  # libmpd has an upper-bound on time which doesn't seem to be a real build req
+  libmpd = dontCheck (overrideCabal super.libmpd (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
+    '';
+  }));
 
 }

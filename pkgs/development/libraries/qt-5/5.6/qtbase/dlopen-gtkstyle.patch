@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/widgets/styles/qgtk2painter.cpp
+Index: qtbase-opensource-src-5.5.1/src/widgets/styles/qgtk2painter.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/widgets/styles/qgtk2painter.cpp
-+++ qt-everywhere-opensource-src-5.5.1/qtbase/src/widgets/styles/qgtk2painter.cpp
+--- qtbase-opensource-src-5.5.1.orig/src/widgets/styles/qgtk2painter.cpp
++++ qtbase-opensource-src-5.5.1/src/widgets/styles/qgtk2painter.cpp
 @@ -96,7 +96,7 @@ static void initGtk()
      static bool initialized = false;
      if (!initialized) {
@@ -11,10 +11,10 @@ Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/widgets/styles/qgtk2painter
  
          QGtk2PainterPrivate::gdk_pixmap_new = (Ptr_gdk_pixmap_new)libgtk.resolve("gdk_pixmap_new");
          QGtk2PainterPrivate::gdk_pixbuf_get_from_drawable = (Ptr_gdk_pixbuf_get_from_drawable)libgtk.resolve("gdk_pixbuf_get_from_drawable");
-Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/widgets/styles/qgtkstyle_p.cpp
+Index: qtbase-opensource-src-5.5.1/src/widgets/styles/qgtkstyle_p.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/widgets/styles/qgtkstyle_p.cpp
-+++ qt-everywhere-opensource-src-5.5.1/qtbase/src/widgets/styles/qgtkstyle_p.cpp
+--- qtbase-opensource-src-5.5.1.orig/src/widgets/styles/qgtkstyle_p.cpp
++++ qtbase-opensource-src-5.5.1/src/widgets/styles/qgtkstyle_p.cpp
 @@ -327,7 +327,7 @@ void QGtkStylePrivate::gtkWidgetSetFocus
  void QGtkStylePrivate::resolveGtk() const
  {

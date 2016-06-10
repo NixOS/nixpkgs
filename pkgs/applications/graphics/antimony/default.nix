@@ -12,7 +12,7 @@ in
     src  = fetchgit {
       url         = "git://github.com/mkeeter/antimony.git";
       rev         = gitRev;
-      sha256      = "19ir3y5ipmfyygcn8mbxika4j3af6dfrv54dvhn6maz7dy8h30f4";
+      sha256      = "0azjdkbixz2pyk2yy7a0ya5xk60xgw3l2pd4pj4ijyqxx5jmh0sy";
     };
 
     patches = [ ./paths-fix.patch ];

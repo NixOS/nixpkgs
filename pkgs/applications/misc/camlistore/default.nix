@@ -1,15 +1,17 @@
-{ stdenv, lib, go, fetchurl }:
+{ stdenv, lib, go, fetchgit, git }:
 
 stdenv.mkDerivation rec {
-  version = "0.8";
+  version = "0.9";
   name = "camlistore-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/bradfitz/camlistore/archive/${version}.tar.gz";
-    sha256 = "03y5zs4i9lx93apqqqfgmbxamk06z3w1q763qp0lvb15mq45gdv1";
+  src = fetchgit {
+    url = "https://github.com/camlistore/camlistore";
+    rev = "7b78c50007780643798adf3fee4c84f3a10154c9";
+    sha256 = "1vc4ca2rn8da0z0viv3vv2p8z211zdvq83jh2x2izdckdz204n17";
+    leaveDotGit = true;
   };
 
-  buildInputs = [ go ];
+  buildInputs = [ go git ];
 
   buildPhase = ''
     go run make.go

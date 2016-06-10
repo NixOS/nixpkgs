@@ -8,7 +8,7 @@ let
     name = "${baseName}-${version}";
     url = "https://github.com/dlbeer/quirc";
     rev = "3a3df0d1d6adc59fdc2cadecfaed91650b84cacb";
-    sha256 = "0wk2lmnw1k6m12dxs5a684mrm05x362h5kr3dwkfj8pyvdw3am18";
+    sha256 = "1r7jzxl4j93dmky8p5szpcxq7i5f7p1kfrklnzhazlizjc7a2844";
   };
   buildInputs = [
     SDL SDL_gfx libjpeg pkgconfig

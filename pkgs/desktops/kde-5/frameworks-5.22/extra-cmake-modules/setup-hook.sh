@@ -4,28 +4,47 @@ _ecmSetXdgDirs() {
     addToSearchPathOnce NIX_WRAP_XDG_CONFIG_DIRS "$1/etc/xdg"
 }
 
-_ecmPropagateSharedData() {
-    local sharedPaths=( \
-        "config.cfg" \
-        "kconf_update" \
-        "kservices5" \
-        "kservicetypes5" \
-        "knotifications5" \
-        "applications" \
-        "desktop-directories" \
-        "mime" \
-        "dbus-1" \
-        "interfaces" \
-        "services" \
-        "system-services" )
-    for dir in ${sharedPaths[@]}; do
+_ecmSharePaths=( \
+    "config.cfg" \
+    "kconf_update" \
+    "kservices5" \
+    "kservicetypes5" \
+    "knotifications5" \
+    "applications" \
+    "desktop-directories" \
+    "mime" \
+    "dbus-1" \
+    "interfaces" \
+    "services" \
+    "system-services" )
+
+_ecmPropagateNative() {
+    for dir in ${_ecmSharePaths[@]}; do
         if [ -d "$1/share/$dir" ]; then
-            addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
-            propagateOnce propagatedUserEnvPkgs "$1"
+            propagateOnce propagatedNativeBuildInputs "$1"
+            if [ -z "$crossConfig" ]; then
+                propagateOnce propagatedUserEnvPkgs "$1"
+                addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+            fi
             break
         fi
     done
 }
+
+envHooks+=(_ecmSetXdgDirs _ecmPropagate)
+
+_ecmPropagate() {
+    for dir in ${_ecmSharePaths[@]}; do
+        if [ -d "$1/share/$dir" ]; then
+            propagateOnce propagatedBuildInputs "$1"
+            propagateOnce propagatedUserEnvPkgs "$1"
+            addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+            break
+        fi
+    done
+}
+
+crossEnvHooks+=(_ecmPropagate)
 
 _ecmConfig() {
     # Because we need to use absolute paths here, we must set *all* the paths.
@@ -70,5 +89,4 @@ _ecmConfig() {
     cmakeFlags+=" -DKDE_INSTALL_AUTOSTARTDIR=${!outputLib}/etc/xdg/autostart"
 }
 
-envHooks+=(_ecmSetXdgDirs _ecmPropagateSharedData)
 preConfigureHooks+=(_ecmConfig)

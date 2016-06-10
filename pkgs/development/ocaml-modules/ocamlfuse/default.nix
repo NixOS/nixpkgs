@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/astrada/ocamlfuse";
     rev = "c436c16dbf458bc69b1166b08baf9ec0d6f9042d";
-    sha256 = "4a72097cbcb375c2be92a5c9a44f3511670fac0815d6d00f38dc7c6879e9825d";
+    sha256 = "0br9x3vsbg87sar5g6yi3xfszn5icy4fv71waarccc2dr79pvakz";
   };
 
   buildInputs = [ocaml findlib];

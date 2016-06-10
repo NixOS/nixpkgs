@@ -4,7 +4,7 @@
 set -x
 
 # The trailing slash at the end is necessary!
-RELEASE_URL="http://download.qt.io/official_releases/qt/5.6/5.6.0/submodules/"
+RELEASE_URL="http://download.qt.io/official_releases/qt/5.6/5.6.1/submodules/"
 EXTRA_WGET_ARGS='-A *.tar.xz'
 
 mkdir tmp; cd tmp
@@ -12,7 +12,7 @@ mkdir tmp; cd tmp
 wget -nH -r -c --no-parent $RELEASE_URL $EXTRA_WGET_ARGS
 
 cat >../srcs.nix <<EOF
-# DO NOT EDIT! This file is generated automatically by manifest.sh
+# DO NOT EDIT! This file is generated automatically by fetchsrcs.sh
 { fetchurl, mirror }:
 
 {

@@ -1,7 +1,14 @@
-language: python
-python: "3.4"
-sudo: required
-dist: trusty
+matrix:
+    allow_failures:
+        - os: osx
+    include:
+        - os: linux
+          language: generic
+          sudo: required
+          dist: trusty
+        - os: osx
+          language: generic
+          osx_image: xcode7.3
 before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
 install: ./maintainers/scripts/travis-nox-review-pr.sh nox
 script: ./maintainers/scripts/travis-nox-review-pr.sh build

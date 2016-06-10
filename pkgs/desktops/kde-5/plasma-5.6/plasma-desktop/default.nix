@@ -7,7 +7,7 @@
 , qtsvg, libXcursor, libXft, libxkbfile, xf86inputevdev
 , xf86inputsynaptics, xinput, xkeyboard_config, xorgserver
 , libcanberra_kde, libpulseaudio, makeQtWrapper, utillinux
-, qtquickcontrols
+, qtquickcontrols, ksysguard
 }:
 
 plasmaPackage rec {
@@ -17,14 +17,14 @@ plasmaPackage rec {
     kdoctools
     makeQtWrapper
   ];
-  propagatedBuildInputs = [
+  buildInputs = [
     attica boost fontconfig kcmutils kdbusaddons kded kitemmodels knewstuff
     knotifications knotifyconfig kwallet libcanberra_kde libXcursor
     libpulseaudio libXft libxkbfile phonon qtsvg xf86inputevdev
     xf86inputsynaptics xkeyboard_config xinput baloo kactivities kauth
     kdeclarative kdelibs4support kemoticons kglobalaccel ki18n kpeople krunner
     kwin plasma-framework plasma-workspace qtdeclarative
-    qtquickcontrols qtx11extras
+    qtquickcontrols qtx11extras ksysguard
   ];
   patches = [
     ./0001-qt-5.5-QML-import-paths.patch
@@ -36,7 +36,7 @@ plasmaPackage rec {
   ];
   NIX_CFLAGS_COMPILE = [ "-I${xorgserver.dev}/include/xorg" ];
   cmakeFlags = [
-    "-DEvdev_INCLUDE_DIRS=${xf86inputevdev}/include/xorg"
+    "-DEvdev_INCLUDE_DIRS=${xf86inputevdev.dev}/include/xorg"
     "-DSynaptics_INCLUDE_DIRS=${xf86inputsynaptics}/include/xorg"
   ];
   postInstall = ''

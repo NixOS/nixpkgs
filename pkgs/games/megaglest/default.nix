@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/MegaGlest/megaglest-source";
     rev = "refs/tags/${version}";
-    sha256 = "0jdgcpsv16vdxkwym7pw764pggifn4g98f3dzg615xl9h4wkymm0";
+    sha256 = "1406ns1533x5678d91s2xxxv19q7r238zsaxr37c6mv5jrx7s5jv";
   };
 
   buildInputs = [ cmake git curl SDL xercesc openal lua libjpeg wxGTK

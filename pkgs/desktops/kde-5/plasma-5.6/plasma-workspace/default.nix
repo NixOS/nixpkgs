@@ -3,9 +3,9 @@
 , baloo, kactivities, kcmutils, kconfig, kcrash, kdbusaddons, kdeclarative
 , kdelibs4support, kdesu, kglobalaccel, kidletime, kjsembed, knewstuff
 , knotifyconfig, kpackage, krunner, ktexteditor, ktextwidgets, kwallet, kwayland
-, kwin, kxmlrpcclient, libdbusmenu, libkscreen, libksysguard, libSM, libXcursor
-, networkmanager-qt, pam, phonon, plasma-framework, qtquickcontrols
-, qtscript, qtx11extras, solid, wayland
+, kwin, kxmlrpcclient, libkscreen, libksysguard, networkmanager-qt, phonon
+, plasma-framework, qtquickcontrols, qtscript, qtx11extras, solid
+, isocodes, libdbusmenu, libSM, libXcursor, pam, wayland
 }:
 
 plasmaPackage {
@@ -15,13 +15,13 @@ plasmaPackage {
     extra-cmake-modules
     kdoctools
   ];
-  propagatedBuildInputs = [
+  buildInputs = [
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner ktexteditor ktextwidgets kwallet kwayland
-    kwin kxmlrpcclient libdbusmenu libkscreen libksysguard libSM libXcursor
-    networkmanager-qt pam phonon plasma-framework qtquickcontrols
-    qtscript qtx11extras solid wayland
+    kwin kxmlrpcclient libkscreen libksysguard networkmanager-qt phonon
+    plasma-framework qtquickcontrols qtscript qtx11extras solid
+    isocodes libdbusmenu libSM libXcursor pam wayland
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

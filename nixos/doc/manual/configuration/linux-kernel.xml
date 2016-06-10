@@ -82,7 +82,7 @@ $ nix-shell '<nixpkgs>' -A linuxPackages.kernel
 $ unpackPhase
 $ cd linux-*
 $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox modules
-$ sudo insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
+# insmod ./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko
 ]]></screen>
 
 </section>

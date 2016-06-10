@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/bo0ts/ddate";
     rev = "refs/tags/v0.2.2";
-    sha256 = "1mv7x8g6ddzspcxghzz5dsxrj0x7bw5hc9yvqbl9va9z7nahwv80";
+    sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
   };
 
   buildInputs = [ cmake ];

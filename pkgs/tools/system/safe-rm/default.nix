@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://gitorious.org/safe-rm/mainline.git";
     rev = "refs/tags/${name}";
-    sha256 = "1n8ir96rwsg9r47lp3avl5sw548gvyh12zk5riflmmdvq907yi0s";
+    sha256 = "0zkmwxyl1870ar6jr9h537vmqgkckqs9jd1yv6m4qqzdsmg5gdbq";
   };
 
   propagatedBuildInputs = [ perl coreutils ];

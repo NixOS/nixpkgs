@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, tzdata, iana_etc, go_1_4, runCommand
+{ stdenv, lib, fetchFromGitHub, tzdata, iana_etc, go_1_4, runCommand
 , perl, which, pkgconfig, patch
 , pcre
 , Security, Foundation }:
@@ -15,11 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "go-${version}";
-  version = "1.5.3";
+  version = "1.5.4";
 
-  src = fetchurl {
-    url = "https://github.com/golang/go/archive/go${version}.tar.gz";
-    sha256 = "1n2niq0147pqflqh8j1s5wv8aq3vlh58ni3bp9add261z5q1g50k";
+  src = fetchFromGitHub {
+    owner = "golang";
+    repo = "go";
+    rev = "go${version}";
+    sha256 = "1lvk9awmkjbz5z4snv3q3b3r7ijfz97kig2wkqz6jmr7b0lp1fcy";
   };
 
   # perl is used for testing go vet

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = https://github.com/msteveb/jimtcl.git;
     rev = "c4d4bf8bc104733db1f5992a27d88fbfca9ba882";
-    sha256 = "0vnl2k5sj250l08bplqd61zj6261v7kp202pss66g01rhp42fj3r";
+    sha256 = "1dm1qmb35hlp0d4i15c78n8jmbv7nhz2cgbrjyn6fjy6cy67sq0r";
   };
 
   buildInputs = [

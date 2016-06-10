@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub
+, fetchFromGitHub, libmpack
 }:
 
 let
@@ -363,22 +363,6 @@ let
     };
   };
 
-  luaMessagePack = buildLuaPackage rec {
-    name = "lua-MessagePack-${version}";
-    version = "0.3.1";
-    src = fetchzip {
-      url = "https://github.com/fperrad/lua-MessagePack/archive/${version}.tar.gz";
-      sha256 = "1xlif8fkwd8bb78wrvf2z309p7apms350lbg6qavylsvz57lkjm6";
-    };
-    buildInputs = [ unzip ];
-
-    meta = {
-      homepage = "http://fperrad.github.io/lua-MessagePack/index.html";
-      hydraPlatforms = stdenv.lib.platforms.linux;
-      license = stdenv.lib.licenses.mit;
-    };
-  };
-
   lgi = stdenv.mkDerivation rec {
     name = "lgi-${version}";
     version = "0.7.2";
@@ -403,6 +387,28 @@ let
     preBuild = ''
       sed -i "s|/usr/local|$out|" lgi/Makefile
     '';
+  };
+
+  mpack = buildLuaPackage rec {
+    name = "lua-mpack-${libmpack.version}";
+    src = libmpack.src;
+    sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
+    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+    dontBuild = true;
+    preInstall = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+    '';
+    installFlags = [
+      "USE_SYSTEM_LUA=yes"
+      "LUA_VERSION_MAJ_MIN="
+      "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
+    ];
+    meta = {
+      description = "Simple implementation of msgpack in C Lua 5.1";
+      homepage = "https://github.com/tarruda/libmpack";
+      hydraPlatforms = stdenv.lib.platforms.linux;
+      license = stdenv.lib.licenses.mit;
+    };
   };
 
   vicious = stdenv.mkDerivation rec {

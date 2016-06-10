@@ -4,28 +4,28 @@ with lib;
 
 let
   libtoxcoreLocked = stdenv.lib.overrideDerivation libtoxcore (oldAttrs: {
-    name = "libtoxcore-20151110";
+    name = "libtoxcore-20160319";
     src = fetchFromGitHub {
       owner  = "irungentoo";
       repo   = "toxcore";
-      rev    = "22634a4b93dda5b17cb357cd84ac46fcfdc22519";
-      sha256 = "01i92wm5lg2p7k71qn23sfh01xi8acdrwn23rk52n54h424l1fgy";
+      rev = "532629d486e3361c7d8d95b38293cc7d61dc4ee5";
+      sha256 = "0x8mjrjiafgia9vy7w4zhfzicr2fljx8xgm2ppi4kva2r2z1wm2f";
     };
   });
 
 in stdenv.mkDerivation {
-  name = "toxvpn-20151111";
+  name = "toxvpn-20160606";
 
   src = fetchFromGitHub {
     owner  = "cleverca22";
     repo   = "toxvpn";
-    rev    = "1d06bb7da277d46abb8595cf152210c4ccf0ba7d";
-    sha256 = "1himrbdgsbkfha1d87ysj2hwyz4a6z9yxqbai286imkya84q7r15";
+    rev    = "50a0a439a6b11579bab7cc0744a18a9addc5eb5c";
+    sha256 = "12dkvsqs4fljwa1367jzqaynf6i8c98y9fs2lm2mqp3wkw0r3rg9";
   };
 
-  buildInputs = [ cmake libtoxcoreLocked jsoncpp libsodium systemd libcap ];
+  buildInputs = [ cmake libtoxcoreLocked jsoncpp libsodium libcap ] ++ optional (systemd != null) systemd;
 
-  cmakeFlags = [ "-DSYSTEMD=1" ];
+  cmakeFlags = optional (systemd != null) [ "-DSYSTEMD=1" ];
 
   meta = with stdenv.lib; {
     description = "A powerful tool that allows one to make tunneled point to point connections over Tox";

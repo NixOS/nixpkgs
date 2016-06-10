@@ -14,11 +14,11 @@ buildRustPackage rec {
   # Needs to use fetchgit instead of fetchFromGitHub to fetch submodules
   src = fetchgit {
     url = "git://github.com/rust-lang/cargo";
-    rev = "132b82d75f607dcb1116b8d44fe60f202f1eb110";
-    sha256 = "0kx2m0p45zr0ils2ax19sr32cibjppgwj8xvsgrfvzvlnc540xpl";
+    rev = "7d79da08238e3d47e0bc4406155bdcc45ccb8c82";
+    sha256 = "190qdii53s4vk940yzs2iizhfs22y2v8bzw051bl6bk9bs3y4fdd";
   };
 
-  depsSha256 = "19d2fl5p92108a0yjpix0qxdc23jy122xc87k69hk0pwwxa92l3a";
+  depsSha256 = "1xbb33aqnf5yyws6gjys9w8kznbh9rh6hw8mpg1hhq1ahipc2j1f";
 
   buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ];
 

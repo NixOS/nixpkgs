@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/ocsigen/ojquery.git;
     rev = "refs/tags/${version}";
-    sha256 = "1x3cidxxjyw0g7afvczdy6chw3nxb0dcz2psgxchqgv34dcwf0l0";
+    sha256 = "1n01bsk4car40p94fk1ssvww0inqapwwhdylmrb7vv40drsdldp1";
   };
 
   buildInputs = [ ocaml findlib ];

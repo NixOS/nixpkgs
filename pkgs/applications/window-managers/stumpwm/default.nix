@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/stumpwm/stumpwm";
     rev = "refs/tags/${version}";
-    sha256 = "05fkng2wlmhy3kb9zhrrv9zpa16g2p91p5y0wvmwkppy04cw04ps";
+    sha256 = "0hmvbdk2yr5wrkiwn9dfzf65s4xc2qifj0sn6w2mghzp96cph79k";
   };
 
   buildInputs = [

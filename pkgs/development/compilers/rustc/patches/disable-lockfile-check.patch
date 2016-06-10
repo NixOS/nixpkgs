@@ -1,0 +1,25 @@
+From e7378e267bba203bd593b49705c24303b0a46cb7 Mon Sep 17 00:00:00 2001
+From: David Craven <david@craven.ch>
+Date: Wed, 1 Jun 2016 01:41:35 +0200
+Subject: [PATCH] disable-lockfile-check
+
+---
+ src/tools/tidy/src/main.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/tools/tidy/src/main.rs b/src/tools/tidy/src/main.rs
+index 2839bbd..50142ff 100644
+--- a/src/tools/tidy/src/main.rs
++++ b/src/tools/tidy/src/main.rs
+@@ -47,7 +47,7 @@ fn main() {
+     errors::check(&path, &mut bad);
+     cargo::check(&path, &mut bad);
+     features::check(&path, &mut bad);
+-    cargo_lock::check(&path, &mut bad);
++    //cargo_lock::check(&path, &mut bad);
+ 
+     if bad {
+         panic!("some tidy checks failed");
+-- 
+2.8.3
+

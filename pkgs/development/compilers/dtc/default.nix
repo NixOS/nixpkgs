@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/utils/dtc/dtc.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0z7yrv0sdhsh5wwy7yd1fvs4pqaq0n9m5i8w65lyibg77ahkasdg";
+    sha256 = "0wcn9x2vynwlfxk5c6jrf8lz7qvm1sbb9gh27drk1mx8msdh5hd5";
   };
 
   nativeBuildInputs = [ flex bison ];

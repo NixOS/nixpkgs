@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/Tinkerforge/brickd.git";
     rev = "refs/tags/v${version}";
-    sha256 = "08g587bgx628g5vykh482wxiw0z98fmq4lf5ka6aw0v8l9gim9yf";
+    sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
   };
 
   buildInputs = [ libusb pkgconfig pmutils udev ];

@@ -15,9 +15,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    sed -i '/OptimizeForArchitecture()/d' cmake/VcMacros.cmake
+    sed -i '/AutodetectHostArchitecture()/d' print_target_architecture.cmake
+  '';
+
   meta = with stdenv.lib; {
     description = "Library for multiprecision complex arithmetic with exact rounding";
-    homepage = https://github.com/VcDevel/Vc;
+    homepage = "https://github.com/VcDevel/Vc";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ abbradar ];

@@ -10,7 +10,7 @@ import ./generic.nix (args // rec {
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/third_party/kernel";
     rev = "63a768b40c91c6f3518ea1f20d0cb664ed4e6a57";
-    sha256 = "613527a032699be32c18d3f5d8d4c215d7718279a1c372c9f371d4e6c0b9cc34";
+    sha256 = "1gysrjanvnkbvgml7ipjr119bmlqfqn2zz5ca5kjkapwrfm3cb69";
   };
 
   features.iwlwifi = true;

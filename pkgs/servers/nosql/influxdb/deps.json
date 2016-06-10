@@ -1,0 +1,21 @@
+[
+  {
+    "include": "../../libs.json",
+    "packages": [
+      "github.com/peterh/liner",
+      "github.com/BurntSushi/toml",
+      "github.com/kimor79/gollectd",
+      "github.com/bmizerany/pat",
+      "gopkg.in/fatih/pool.v2",
+      "github.com/rakyll/statik",
+      "github.com/armon/go-metrics",
+      "github.com/boltdb/bolt",
+      "github.com/golang/snappy",
+      "github.com/hashicorp/go-msgpack",
+      "github.com/hashicorp/raft-boltdb",
+      "golang.org/x/crypto",
+      "github.com/gogo/protobuf",
+      "github.com/hashicorp/raft"
+    ]
+  }
+]

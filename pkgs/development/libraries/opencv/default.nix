@@ -1,26 +1,66 @@
-{ lib, stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
-, fetchpatch, pkgconfig, gstreamer, xineLib, glib, python27, python27Packages, unzip
-, enableBloat ? false }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkgconfig, unzip
+, zlib
+, enablePython ? false, pythonPackages
+, enableGtk2 ? false, gtk2
+, enableJPEG ? true, libjpeg
+, enablePNG ? true, libpng
+, enableTIFF ? true, libtiff
+, enableEXR ? true, openexr, ilmbase
+, enableJPEG2K ? true, jasper
+, enableFfmpeg ? false, ffmpeg
+, enableGStreamer ? false, gst_all
+, enableEigen ? false, eigen
+}:
 
-let v = "2.4.11"; in
+let
+  opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
+
+in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${v}";
+  name = "opencv-${version}";
+  version = "2.4.13";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/opencvlibrary/opencv-${v}.zip";
-    sha256 = "1shz5g7ahvbb41gprxzvavllf235qhx0fpkjd7iwa3gv83ym46dg";
+  src = fetchFromGitHub {
+    owner = "Itseez";
+    repo = "opencv";
+    rev = version;
+    sha256 = "1k29rxlvrhgc5hadg2nc50wa3d2ls9ndp373257p756a0aividxh";
   };
 
   buildInputs =
-    [ unzip libjpeg libpng libtiff ]
-    ++ lib.optionals enableBloat [ gtk glib jasper ffmpeg xineLib gstreamer python27 python27Packages.numpy ];
+       [ zlib ]
+    ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional enableGtk2 gtk2
+    ++ lib.optional enableJPEG libjpeg
+    ++ lib.optional enablePNG libpng
+    ++ lib.optional enableTIFF libtiff
+    ++ lib.optionals enableEXR [ openexr ilmbase ]
+    ++ lib.optional enableJPEG2K jasper
+    ++ lib.optional enableFfmpeg ffmpeg
+    ++ lib.optionals enableGStreamer (with gst_all; [ gstreamer gst-plugins-base ])
+    ++ lib.optional enableEigen eigen
+    ;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+
+  nativeBuildInputs = [ cmake pkgconfig unzip ];
+
+  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase}/include/OpenEXR";
+
+  cmakeFlags = [
+    (opencvFlag "TIFF" enableTIFF)
+    (opencvFlag "JASPER" enableJPEG2K)
+    (opencvFlag "JPEG" enableJPEG)
+    (opencvFlag "PNG" enablePNG)
+    (opencvFlag "OPENEXR" enableEXR)
+  ];
 
   enableParallelBuilding = true;
 
   hardeningDisable = [ "bindnow" "relro" ];
+
+  passthru = lib.optionalAttrs enablePython { pythonPath = []; };
 
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";

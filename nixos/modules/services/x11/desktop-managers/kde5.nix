@@ -117,6 +117,9 @@ in
       # Install activity manager if available
       ++ lib.optional (lib.hasAttr "kactivitymanagerd" kde5) kde5.kactivitymanagerd
 
+      # frameworkintegration was split with plasma-integration in Plasma 5.6
+      ++ lib.optional (lib.hasAttr "plasma-integration" kde5) kde5.plasma-integration
+
       # Optional hardware support features
       ++ lib.optional config.hardware.bluetooth.enable kde5.bluedevil
       ++ lib.optional config.networking.networkmanager.enable kde5.plasma-nm
@@ -167,7 +170,9 @@ in
     services.xserver.displayManager.sddm = {
       theme = "breeze";
       themes = [
+        kde5.extra-cmake-modules # for the setup-hook
         kde5.plasma-workspace
+        kde5.breeze-icons
         (kde5.oxygen-icons or kde5.oxygen-icons5)
       ];
     };

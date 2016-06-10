@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, tokyocabinet, cairo, pango, ncurses }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, tokyocabinet, cairo, pango, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "duc-${version}";
-  version = "1.3.3";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "http://duc.zevv.nl/release/${name}.tar.gz";
-    sha256 = "09mp8cq6s43sfhvms4mwhx3lw51vkaxgg34fbfbimafyjh4jdx3k";
+  src = fetchFromGitHub {
+    owner = "zevv";
+    repo = "duc";
+    rev = "${version}";
+    sha256 = "0rnar2zacsb9rvdmp1a62xixhy69s5vh0nwgrklqxhb19qkzhdp7";
   };
 
-  buildInputs = [ pkgconfig tokyocabinet cairo pango ncurses ];
+  buildInputs = [ autoreconfHook pkgconfig tokyocabinet cairo pango ncurses ];
 
   meta = with stdenv.lib; {
     homepage = http://duc.zevv.nl/;

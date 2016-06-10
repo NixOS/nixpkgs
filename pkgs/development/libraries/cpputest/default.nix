@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "3.7.2";
+  version = "3.8";
   name = "cpputest-${version}";
 
   src = fetchurl {
-    url = "https://github.com/cpputest/cpputest/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0lwn226d8mrppdyzcvr08vsnnp6h0mpy5kz5a475ish87az00pcc";
+    url = "https://github.com/cpputest/cpputest/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "0mk48xd3klyqi7wf3f4wn4zqxxzmvrhhl32r25jzrixzl72wq7f8";
   };
 
   meta = {

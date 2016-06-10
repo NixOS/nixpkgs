@@ -8,7 +8,7 @@ buildRustPackage rec {
   src = fetchgit {
     url = "git://github.com/jwilm/racerd.git";
     rev = "dcbb7885e84eb5e2fbb2072e185701ad1abbd93a";
-    sha256 = "18c6a1x0li5yxif9qqnsnyas6if0m6srbqh0h0nywgx0lm8bpgly";
+    sha256 = "0qm0hpvxba632av355mj1wqd616zjvi0qy045np7mi746m0bbqwh";
   };
 
   doCheck = false;

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     # make fish pick up completions from nix profile
     if status --is-interactive
       set -l profiles (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')
-      set fish_complete_path $profiles"/share/fish/vendor_completions.d" $fish_complete_path
+      set fish_complete_path \$profiles"/share/fish/vendor_completions.d" \$fish_complete_path
     end
     EOF
   '';

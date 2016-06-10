@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://github.com/fernandotcl/pa-applet.git";
     rev = "005f192df9ba6d2e6491f9aac650be42906b135a";
-    sha256 = "1rqnp6nzgb3z7c6pvd5qzsxprwrzif8cfx6i7xp3f0x5s7n2dqkb";
+    sha256 = "1242sdri67wnm1cd0hr40mxarkh7qs7mb9n2m0g9dbz0f4axj6wa";
   };
 
   buildInputs = [

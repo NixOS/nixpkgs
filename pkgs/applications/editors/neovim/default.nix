@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
-, libtool, libuv, lpeg, lua, luajit, luaMessagePack, luabitop, man, ncurses
-, perl, pkgconfig, unibilium, makeWrapper, vimUtils, xsel
+, libtool, libuv, lua, luajit, luaPackages, man, ncurses, perl, pkgconfig
+, unibilium, makeWrapper, vimUtils, xsel
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -21,10 +21,10 @@ let
     version = "2015-11-06";
 
     src = fetchFromGitHub {
-      sha256 = "090pyf1n5asaw1m2l9bsbdv3zd753aq1plb0w0drbc2k43ds7k3g";
-      rev = "a9c7c6fd20fa35e0ad3e0e98901ca12dfca9c25c";
-      repo = "libvterm";
       owner = "neovim";
+      repo = "libvterm";
+      rev = "a9c7c6fd20fa35e0ad3e0e98901ca12dfca9c25c";
+      sha256 = "090pyf1n5asaw1m2l9bsbdv3zd753aq1plb0w0drbc2k43ds7k3g";
     };
 
     buildInputs = [ perl ];
@@ -39,7 +39,7 @@ let
       description = "VT220/xterm/ECMA-48 terminal emulator library";
       homepage = http://www.leonerd.org.uk/code/libvterm/;
       license = licenses.mit;
-      maintainers = with maintainers; [ nckx ];
+      maintainers = with maintainers; [ nckx garbas ];
       platforms = platforms.unix;
     };
   };
@@ -60,13 +60,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.1.3";
+    version = "0.1.4";
 
     src = fetchFromGitHub {
-      sha256 = "1bkyfxsgb7894848nphsi6shr8bvi9z6ch0zvh2df7vkkzji8chr";
-      rev = "v${version}";
-      repo = "neovim";
       owner = "neovim";
+      repo = "neovim";
+      rev = "v${version}";
+      sha256 = "14c4gydkm2mz22i616190yif1k0i6d7h5hyxa1mf5cmcyqmp3kkp";
     };
 
     enableParallelBuilding = true;
@@ -79,13 +79,15 @@ let
       # https://github.com/NixOS/nixpkgs/issues/14442
       lua
       luajit
-      lpeg
-      luaMessagePack
-      luabitop
       libmsgpack
       ncurses
       neovimLibvterm
       unibilium
+
+      luaPackages.lpeg
+      luaPackages.mpack
+      luaPackages.luabitop
+
     ] ++ optional withJemalloc jemalloc;
 
     nativeBuildInputs = [
@@ -95,8 +97,12 @@ let
       pkgconfig
     ];
 
-    LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;${luabitop}/lib/lua/5.2/?.so";
-    LUA_PATH="${luaMessagePack}/share/lua/5.1/?.lua";
+    LUA_CPATH = "${luaPackages.lpeg}/lib/lua/${lua.luaversion}/?.so;${luaPackages.mpack}/lib/lua/${lua.luaversion}/?.so;${luaPackages.luabitop}/lib/lua/${lua.luaversion}/?.so";
+
+    configureFlags = [
+      "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+      "-DENABLE_JEMALLOC=ON"
+    ];
 
     # triggers on buffer overflow bug while running tests
     hardeningDisable = [ "fortify" ];
@@ -114,7 +120,7 @@ let
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" share/nvim/runtime/autoload/provider/clipboard.vim
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPyGUI ''

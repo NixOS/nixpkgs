@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/openshift/origin.git;
     rev = "1b601951daa44964c9bc7e4a2264d65489e3a58c";
-    sha256 = "0nwyj3cgajmbd356w0362zxkd3p3pply58an2bmi3d3bswp3k89g";
+    sha256 = "0hvipgnkpph81jx6h6bar49j5zkrxzi6h71b4y75c0l7af129wdi";
     leaveDotGit = true;
     deepClone = true;
   };

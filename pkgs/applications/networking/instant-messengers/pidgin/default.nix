@@ -6,11 +6,12 @@
 , openssl ? null
 , gnutls ? null
 , libgcrypt ? null
+, plugins, symlinkJoin
 }:
 
 # FIXME: clean the mess around choosing the SSL library (nss by default)
 
-stdenv.mkDerivation rec {
+let unwrapped = stdenv.mkDerivation rec {
   name = "pidgin-${version}";
   majorVersion = "2";
   version = "${majorVersion}.10.11";
@@ -68,4 +69,11 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];
   };
-}
+};
+
+in if plugins == [] then unwrapped
+    else import ./wrapper.nix {
+      inherit stdenv makeWrapper symlinkJoin plugins;
+      pidgin = unwrapped;
+    }
+

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = git://github.com/QuickChick/QuickChick.git;
     rev = revision;
-    sha256 = "1yql40x1zbrc6wzfafvfaxzhw57v1n468lxdv1rvsjd7gyyf74y7";
+    sha256 = "1prlihkgi2yvgzd62x80fsnxp5w1n0wyk7zrd6zwa8dbqx9pbr09";
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 ];

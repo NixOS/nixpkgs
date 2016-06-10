@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://kernel.ubuntu.com/jk/sbsigntool";
     rev = "951ee95a301674c046f55330cd7460e1314deff2";
-    sha256 = "09k8by0qq8j7ff812l1l9z9frsx5c4cmhj5in3g1sgyz3v55nfy7";
+    sha256 = "1skqrfhvsaay01l94m57sxxqp909rvn07xwmzc6vzzfcnsh6f2yk";
   };
 
   patches = [ ./autoconf.patch ];

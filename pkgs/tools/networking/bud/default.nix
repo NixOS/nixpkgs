@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/indutny/bud.git";
     rev = "b112852c9667632f692d2ce3dcd9a8312b61155a";
-    sha256 = "1acvsx71fmmqhqf00ria3rbq453476x1jx0x8rp6nds5nx2mi0np";
+    sha256 = "08yr6l4lc2m6rng06253fcaznf6sq0v053wfr8bbym42c32z0xdh";
   };
 
   buildInputs = [

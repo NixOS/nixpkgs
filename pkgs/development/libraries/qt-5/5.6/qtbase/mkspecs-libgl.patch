@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.5.1/qtbase/mkspecs/common/linux.conf
+Index: qtbase-opensource-src-5.5.1/mkspecs/common/linux.conf
 ===================================================================
---- qt-everywhere-opensource-src-5.5.1.orig/qtbase/mkspecs/common/linux.conf
-+++ qt-everywhere-opensource-src-5.5.1/qtbase/mkspecs/common/linux.conf
+--- qtbase-opensource-src-5.5.1.orig/mkspecs/common/linux.conf
++++ qtbase-opensource-src-5.5.1/mkspecs/common/linux.conf
 @@ -12,8 +12,8 @@ QMAKE_INCDIR            =
  QMAKE_LIBDIR            =
  QMAKE_INCDIR_X11        =

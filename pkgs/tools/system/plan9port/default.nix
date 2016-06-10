@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     # Latest, same as on github, google code is old
     url = "https://plan9port.googlesource.com/plan9";
     rev = "71de840";
-    sha256 = "1ffece7c0a5775a8bde6a0618c7ae3da4048449008a19e6623e8e5553f133b4c";
+    sha256 = "002ma7h7z3wii520dhijikwdc679hpwn0jv5a0c8g299drvzq2wx";
   };
 
   patches = [ ./fontsrv.patch ];

@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.0.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
-    owner = "GoogleCloudPlatform";
+    owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "12wqw9agiz07wlw1sd0n41fn6xf74zn5sv37hslfa77w2d4ri5yb";
+    sha256 = "1a3y0f1l008ywkwwygg9vn2rb722c54i3pbgqks38gw1yyvgbiih";
   };
 
   buildInputs = [ makeWrapper which go iptables rsync ];
 
   buildPhase = ''
     GOPATH=$(pwd):$(pwd)/Godeps/_workspace
-    mkdir -p $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform
-    ln -s $(pwd) $(pwd)/Godeps/_workspace/src/github.com/GoogleCloudPlatform/kubernetes
+    mkdir -p $(pwd)/Godeps/_workspace/src/k8s.io
+    ln -s $(pwd) $(pwd)/Godeps/_workspace/src/k8s.io/kubernetes
 
     substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
     patchShebangs ./hack
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Open source implementation of container cluster management";
+    description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
-    homepage = https://github.com/GoogleCloudPlatform;
+    homepage = http://kubernetes.io;
     maintainers = with maintainers; [offline];
     platforms = [ "x86_64-linux" ];
   };

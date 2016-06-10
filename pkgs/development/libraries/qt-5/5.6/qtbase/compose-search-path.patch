@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
+Index: qtbase-opensource-src-5.6.0/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
++++ qtbase-opensource-src-5.6.0/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 @@ -251,10 +251,7 @@ void TableGenerator::initPossibleLocatio
      // the QTCOMPOSE environment variable
      if (qEnvironmentVariableIsSet("QTCOMPOSE"))

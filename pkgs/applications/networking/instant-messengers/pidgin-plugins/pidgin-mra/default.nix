@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/dreadatour/pidgin-mra";
     rev = "${version}";
-    sha256 = "1nhfx9gi5lhh2xjr9rw600bb53ly2nwiqq422vc0f297qkm1q9y0";
+    sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
   };
 
   nativeBuildInputs = [ pkgconfig ];

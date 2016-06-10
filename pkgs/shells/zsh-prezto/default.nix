@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://github.com/sorin-ionescu/prezto";
     inherit rev;
-    sha256 = "1q137r2vv16cq962n0f2hyn8m04d3phvh72gz737zv99jcrqg821";
+    sha256 = "17mql9mb7zbf8q1nvnci60yrmz5bl9q964i8dv4shz8b42861cdg";
     fetchSubmodules = true;
   };
   patches = [

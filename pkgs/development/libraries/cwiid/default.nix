@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   name = "cwiid-2010-02-21-git";
 
   src = fetchgit {
-    url = https://github.com/abstrakraft/cwiid;
-    sha256 = "6f5355d036dab017da713c49d3042011fa24fb732ed0d5ee338ab6f5ff400f06";
-    rev = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
+      url = https://github.com/abstrakraft/cwiid;
+      sha256 = "0qdb0x757k76nfj32xc2nrrdqd9jlwgg63vfn02l2iznnzahxp0h";
+      rev = "fadf11e89b579bcc0336a0692ac15c93785f3f82";
   };
 
   hardeningDisable = [ "format" ];

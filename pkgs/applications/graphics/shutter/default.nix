@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/shutter \
       --set PERL5LIB "${stdenv.lib.makePerlPath perlModules}" \
-      --prefix PATH : "${imagemagick}/bin" \
+      --prefix PATH : "${imagemagick.out}/bin" \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
   '';
 

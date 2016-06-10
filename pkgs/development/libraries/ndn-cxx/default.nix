@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/named-data/ndn-cxx.git";
     rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
-    sha256 = "18s18inf14wmkfh1z6w087w7l3bqszd0nkhr09j73hqpz90b06hz";
+    sha256 = "18szs3j3ig8wlcqngran0daxaj7j2qsmch0212ids6fymj1hgax4";
   };
   buildInputs = [ openssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
   preConfigure = ''

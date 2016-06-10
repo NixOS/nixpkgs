@@ -9,7 +9,7 @@ mkDerivation {
   version = "0.17";
   src = fetchgit {
     url = "https://github.com/elm-lang/elm-package";
-    sha256 = "1x9jczby38ax3rbjq6hbyr593dhxazm39gy9jv00k6508dzvfg2l";
+    sha256 = "0z86560a2f7w3ywqvzqghgz100z0yn8zsiixkw4lp5168krp4axg";
     rev = "fc0924210fe5a7c0af543769b1353dbb2ddf2f0c";
   };
   isLibrary = true;

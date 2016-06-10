@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = https://github.com/libretro/RetroArch.git;
     rev = "09dda14549fc13231311fd522a07a75e923889aa";
-    sha256 = "1f7w4i0idc4n0sqc5pcrsxsljk3f614sfdqhdgjb1l4xj16g37cg";
+    sha256 = "0yrisl61iaa70ahswzgb505bvm5cxq8ndnv2bw7gqrlm5qrh54qy";
   };
 
   buildInputs = [ pkgconfig ffmpeg mesa nvidia_cg_toolkit freetype libxml2 libv4l coreutils

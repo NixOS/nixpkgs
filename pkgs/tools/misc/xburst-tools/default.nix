@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
     rev = "c71ce8e15db25fe49ce8702917cb17720882e341";
-    sha256 = "abe4c4591183f2bc5ca6363451d1cd7d966c080b4f5bfb0fedf7e9a4f70267a4";
+    sha256 = "1hzdngs1l5ivvwnxjwzc246am6w1mj1aidcf0awh9yw0crzcjnjr";
   };
 
   preConfigure = ''
