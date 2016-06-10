@@ -11562,6 +11562,8 @@ in
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
 
+  faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
