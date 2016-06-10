@@ -11492,6 +11492,8 @@ in
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
+  arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
+
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
