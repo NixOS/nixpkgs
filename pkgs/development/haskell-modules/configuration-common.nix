@@ -563,9 +563,6 @@ self: super: {
   HaVSA = super.HaVSA.override { QuickCheck = self.QuickCheck_1_2_0_1; };
   test-framework-quickcheck = super.test-framework-quickcheck.override { QuickCheck = self.QuickCheck_1_2_0_1; };
 
-  # Doesn't support "this system". Linux? Needs investigation.
-  lhc = markBroken (super.lhc.override { QuickCheck = self.QuickCheck_1_2_0_1; });
-
   # Depends on broken test-framework-quickcheck.
   apiary = dontCheck super.apiary;
   apiary-authenticate = dontCheck super.apiary-authenticate;
