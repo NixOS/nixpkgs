@@ -1057,4 +1057,5 @@ self: super: {
       substituteInPlace libmpd.cabal --replace "time >=1.5 && <1.6" "time >=1.5"
     '';
   }));
+
 }

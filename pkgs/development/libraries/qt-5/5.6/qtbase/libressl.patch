@@ -9,10 +9,10 @@ is defined in openssl, but not in libressl.
  src/network/ssl/qsslcontext_openssl.cpp | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslcontext_openssl.cpp
+Index: qtbase-opensource-src-5.6.0/src/network/ssl/qsslcontext_openssl.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/ssl/qsslcontext_openssl.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslcontext_openssl.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/network/ssl/qsslcontext_openssl.cpp
++++ qtbase-opensource-src-5.6.0/src/network/ssl/qsslcontext_openssl.cpp
 @@ -340,7 +340,7 @@ init_context:
  
      const QVector<QSslEllipticCurve> qcurves = sslContext->sslConfiguration.ellipticCurves();

@@ -1,14 +1,14 @@
-{ lib, fetchFromGitHub, goPackages }:
+{ lib, fetchFromGitHub, buildGoPackage }:
 
-goPackages.buildGoPackage rec {
+buildGoPackage rec {
   name = "bosun";
-  rev = "0.5.0-alpha";
+  rev = "0.5.0-rc4";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "bosun-monitor";
     repo = "bosun";
-    sha256 = "0nkphzkwx5r974skn269nnsqr4gllws5z4z6n53sslj2x9rz57ml";
+    sha256 = "0cybhy5nshg3z2h5i6r8p9d0qihcnz8s8wh5cqf17ix17k31qans";
   };
 
   subPackages = [ "cmd/bosun" "cmd/scollector" ];

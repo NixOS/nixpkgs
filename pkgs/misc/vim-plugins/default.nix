@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
-, vim_configurable, vimPlugins, xkb_switch, git, racerdRust, goPackages
+, vim_configurable, vimPlugins, xkb_switch, git, racerdRust, fzf
 , Cocoa ? null
 }:
 
@@ -98,9 +98,9 @@ rec {
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing;
 
-  fzf = buildVimPluginFrom2Nix {
-    name = goPackages.fzf.name;
-    src = "${goPackages.fzf}/share/go/src/github.com/junegunn/fzf";
+  fzfWrapper = buildVimPluginFrom2Nix {
+    name = fzf.name;
+    src = "${fzf}/share/go/src/github.com/junegunn/fzf";
     dependencies = [];
   };
 

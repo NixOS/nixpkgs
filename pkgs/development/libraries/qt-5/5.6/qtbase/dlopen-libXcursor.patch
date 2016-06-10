@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp
+Index: qtbase-opensource-src-5.6.0/src/plugins/platforms/xcb/qxcbcursor.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/plugins/platforms/xcb/qxcbcursor.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/plugins/platforms/xcb/qxcbcursor.cpp
++++ qtbase-opensource-src-5.6.0/src/plugins/platforms/xcb/qxcbcursor.cpp
 @@ -303,10 +303,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *c
  #if defined(XCB_USE_XLIB) && !defined(QT_NO_LIBRARY)
      static bool function_ptrs_not_initialized = true;

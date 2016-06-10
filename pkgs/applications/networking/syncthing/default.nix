@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     mkdir -p src/github.com/syncthing
     ln -s $(pwd) src/github.com/syncthing/syncthing
     export GOPATH=$(pwd)
-    # Required for Go 1.5, can be removed for Go 1.6+
-    export GO15VENDOREXPERIMENT=1
 
     # Syncthing's build.go script expects this working directory
     cd src/github.com/syncthing/syncthing
