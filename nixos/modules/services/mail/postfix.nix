@@ -210,10 +210,15 @@ in
 
       submissionOptions = mkOption {
         type = types.attrs;
-        default = {};
+        default = { "smtpd_tls_security_level" = "encrypt";
+                    "smtpd_sasl_auth_enable" = "yes";
+                    "smtpd_client_restrictions" = "permit_sasl_authenticated,reject";
+                    "milter_macro_daemon_name" = "ORIGINATING";
+                  };
         description = "Options for the submission config in master.cf";
         example = { "smtpd_tls_security_level" = "encrypt";
                     "smtpd_sasl_auth_enable" = "yes";
+                    "smtpd_sasl_type" = "dovecot";
                     "smtpd_client_restrictions" = "permit_sasl_authenticated,reject";
                     "milter_macro_daemon_name" = "ORIGINATING";
                   };
