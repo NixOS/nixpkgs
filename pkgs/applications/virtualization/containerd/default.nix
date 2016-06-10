@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, makeWrapper, go, runc, criu }:
+{ stdenv, fetchFromGitHub
+, go, libapparmor, apparmor-parser, libseccomp }:
 
 with stdenv.lib;
 
@@ -13,16 +14,19 @@ stdenv.mkDerivation rec {
     sha256 = "07axhrvy45zwnsrvr2618227bzrnqdcjdl7j0mnrhvlryypiic0l";
   };
 
-  buildInputs = [ makeWrapper go ];
+  buildInputs = [ go libapparmor libseccomp ];
+
+  makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 
   preBuild = ''
     ln -s $(pwd) vendor/src/github.com/docker/containerd
+    substituteInPlace vendor/src/github.com/opencontainers/runc/libcontainer/apparmor/apparmor.go \
+        --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp bin/* $out/bin
-    wrapProgram $out/bin/containerd --prefix PATH : "${runc}/bin:${criu}/bin:$out/bin"
   '';
 
   meta = with stdenv.lib; {
