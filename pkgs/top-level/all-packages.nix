@@ -7078,6 +7078,8 @@ in
 
   gio-sharp = callPackage ../development/libraries/gio-sharp { };
 
+  icon-lang = callPackage ../development/interpreters/icon-lang { };
+
   libgit2 = callPackage ../development/libraries/git2 (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
@@ -7085,6 +7087,8 @@ in
   );
 
   libgit2_0_21 = callPackage ../development/libraries/git2/0.21.nix { };
+
+  gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
   glew110 = callPackage ../development/libraries/glew/1.10.nix { };
@@ -8606,6 +8610,8 @@ in
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
+  opencl-icd = callPackage ../development/libraries/opencl-icd { };
+
   opencollada = callPackage ../development/libraries/opencollada { };
 
   opencsg = callPackage ../development/libraries/opencsg { };
@@ -9407,6 +9413,8 @@ in
   xalanc = callPackage ../development/libraries/xalanc {};
 
   xgboost = callPackage ../development/libraries/xgboost { };
+
+  xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
   xlibsWrapper = callPackage ../development/libraries/xlibs-wrapper {
@@ -11632,6 +11640,8 @@ in
   media-player-info = callPackage ../data/misc/media-player-info {};
 
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
+
+  mononoki = callPackage ../data/fonts/mononoki { };
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
@@ -16874,8 +16884,52 @@ in
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    pngSupport = true;
+    jpegSupport = true;
+    tiffSupport = true;
+    gettextSupport = true;
+    fontconfigSupport = true;
+    alsaSupport = true;
+    openglSupport = true;
+    tlsSupport = true;
+    cursesSupport = true;
   };
-  wineStable = wine.override { wineRelease = "stable"; };
+  wineMinimal = lowPrio (self.wine.override {
+    pulseaudioSupport = false;
+    pngSupport = false;
+    jpegSupport = false;
+    tiffSupport = false;
+    gettextSupport = false;
+    fontconfigSupport = false;
+    alsaSupport = false;
+    openglSupport = false;
+    tlsSupport = false;
+    cursesSupport = false;
+  });
+  wineFull = lowPrio (self.wine.override {
+    gtkSupport = true;
+    gstreamerSupport = true;
+    cupsSupport = true;
+    colorManagementSupport = true;
+    dbusSupport = true;
+    mpg123Support = true;
+    openalSupport = true;
+    openclSupport = true;
+    cairoSupport = true;
+    odbcSupport = true;
+    netapiSupport = true;
+    vaSupport = true;
+    pcapSupport = true;
+    v4lSupport = true;
+    saneSupport = true;
+    gsmSupport = true;
+    gphoto2Support = true;
+    ldapSupport = true;
+    pulseaudioSupport = true;
+    xineramaSupport = true;
+    xmlSupport = true;
+  });
+  wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
   wineStaging = lowPrio (self.wine.override { wineRelease = "staging"; });
 
