@@ -1041,4 +1041,10 @@ self: super: {
     '';
   }));
 
+  # https://github.com/commercialhaskell/stack/issues/2263
+  stack = appendPatch super.stack (pkgs.fetchpatch {
+    url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
+    sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
+  });
+
 }
