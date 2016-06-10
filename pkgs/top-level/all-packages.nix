@@ -8939,6 +8939,7 @@ in
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskell-lib = haskell.lib;
+    haskellPackages = haskell.packages.lts;
   };
 
   leksah = callPackage ../development/tools/haskell/leksah {
