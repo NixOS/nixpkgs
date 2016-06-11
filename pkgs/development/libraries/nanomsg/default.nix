@@ -1,18 +1,17 @@
-{ stdenv, fetchurl }:
+{ stdenv, cmake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.8-beta";
+  version = "1.0.0";
   name = "nanomsg-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/nanomsg/nanomsg/releases/download/0.8-beta/${name}.tar.gz";
-    sha256 = "0ix9yd6shqmgm1mxig8ww2jpbgg2n5dms0wrv1q81ihclml0rkkm";
+  src = fetchFromGitHub {
+    owner = "nanomsg";
+    repo = "nanomsg";
+    rev = version;
+    sha256 = "1iqlmvz5k8m4srb120g3kfkmm1w2p16hyxmx2asvihd21j285fmw";
   };
 
-  installPhase = ''
-    mkdir -p "$out"
-    make install PREFIX="$out"
-  '';
+  buildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description= "Socket library that provides several common communication patterns";
