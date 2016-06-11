@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "hackage2nix";
-  version = "20160406";
+  version = "20160611";
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "cabal2nix";
     rev = "v${version}";
-    sha256 = "02dn2zllanf3rl16ny17j80h7p6gcdqkhadh3ypkr38gd9w16pc6";
+    sha256 = "1zmrqs09zfnwy9cclp78p5nfpg5520p0lnz1myg5q4p6i2251mp3";
   };
   postUnpack = "sourceRoot+=/${pname}";
   isLibrary = false;
