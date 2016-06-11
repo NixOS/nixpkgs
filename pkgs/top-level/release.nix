@@ -332,11 +332,6 @@ let
         xfwm4 = linux;
       };
 
-      linuxPackages_testing = { };
-      linuxPackages_grsec_testing_desktop = { };
-      linuxPackages_grsec_testing_server = { };
-      linuxPackages_grsec_testing_server_xen = { };
-
     } ));
 
 in jobs
