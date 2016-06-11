@@ -32,6 +32,7 @@
 "github:ctrlpvim/ctrlp.vim"
 "github:digitaltoad/vim-jade"
 "github:eagletmt/neco-ghc"
+"github:embear/vim-localvimrc"
 "github:enomsg/vim-haskellConcealPlus"
 "github:esneider/YUNOcommit.vim"
 "github:fatih/vim-go"
