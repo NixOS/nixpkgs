@@ -420,7 +420,6 @@ self: super: {
   HTF_0_13_0_0 = dontCheck super.HTF_0_13_0_0;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
-  http2 = dontCheck super.http2;
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
