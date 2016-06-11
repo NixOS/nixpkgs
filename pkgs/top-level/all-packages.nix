@@ -8792,6 +8792,7 @@ in
     });
 
   };
+  qlcplus = callPackage ../applications/misc/qlcplus { };
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
