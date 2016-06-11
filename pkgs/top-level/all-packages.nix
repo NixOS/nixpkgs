@@ -16719,6 +16719,8 @@ in
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
 
+  lhapdf = callPackage ../development/libraries/physics/lhapdf { };
+
   rivet = callPackage ../development/libraries/physics/rivet { };
 
   yoda = callPackage ../development/libraries/physics/yoda { };
