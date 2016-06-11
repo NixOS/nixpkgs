@@ -424,7 +424,7 @@ in
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = (callPackage ../tools/misc/asciinema {}).bin;
+  asciinema = callPackage ../tools/misc/asciinema {};
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
@@ -708,7 +708,7 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
-  deis = (callPackage ../development/tools/deis {}).bin;
+  deis = callPackage ../development/tools/deis {};
 
   dfilemanager = self.kde5.dfilemanager;
 
@@ -797,7 +797,7 @@ in
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
-  interlock = (callPackage ../servers/interlock {}).bin;
+  interlock = callPackage ../servers/interlock {};
 
   mathics = pythonPackages.mathics;
 
@@ -859,7 +859,7 @@ in
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = (callPackage ../tools/misc/mongodb-tools { }).bin;
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
@@ -1492,7 +1492,7 @@ in
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = (callPackage ../tools/networking/flannel {}).bin;
+  flannel = callPackage ../tools/networking/flannel { };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
@@ -1622,7 +1622,7 @@ in
   gawkInteractive = appendToName "interactive"
     (gawk.override { interactive = true; });
 
-  gawp = (callPackage ../tools/misc/gawp {}).bin;
+  gawp = callPackage ../tools/misc/gawp { };
 
   gazeboSimulator = recurseIntoAttrs {
     sdformat = gazeboSimulator.sdformat4;
@@ -1668,7 +1668,7 @@ in
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  git-lfs = (callPackage ../applications/version-management/git-lfs {}).bin;
+  git-lfs = callPackage ../applications/version-management/git-lfs { };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
@@ -1736,14 +1736,14 @@ in
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = (callPackage ../tools/filesystems/go-mtpfs { }).bin;
+  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  go-pup = (callPackage ../development/tools/pup { }).bin;
+  go-pup = callPackage ../development/tools/pup { };
 
-  go-sct = (callPackage ../tools/X11/go-sct { }).bin;
+  go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
-  go-upower-notify = (callPackage ../tools/misc/upower-notify { }).bin;
+  go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -2328,7 +2328,7 @@ in
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
-  lxd = (callPackage ../tools/admin/lxd { }).bin;
+  lxd = callPackage ../tools/admin/lxd { };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -2585,7 +2585,7 @@ in
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  ngrok = (callPackage ../tools/networking/ngrok { }).bin;
+  ngrok = callPackage ../tools/networking/ngrok { };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -3215,7 +3215,7 @@ in
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
-  s3gof3r = (callPackage ../tools/networking/s3gof3r { }).bin;
+  s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
@@ -3307,7 +3307,7 @@ in
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  skydns = (callPackage ../servers/skydns { }).bin;
+  skydns = callPackage ../servers/skydns { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -3692,7 +3692,7 @@ in
 
   weather = callPackage ../applications/misc/weather { };
 
-  wego = (callPackage ../applications/misc/wego { }).bin;
+  wego = callPackage ../applications/misc/wego { };
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
@@ -3718,7 +3718,7 @@ in
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
-  textql = (callPackage ../development/tools/textql { }).bin;
+  textql = callPackage ../development/tools/textql { };
 
   html2text = callPackage ../tools/text/html2text { };
 
@@ -4063,7 +4063,7 @@ in
 
   mksh = callPackage ../shells/mksh { };
 
-  oh = (callPackage ../shells/oh { }).bin;
+  oh = callPackage ../shells/oh { };
 
   pash = callPackage ../shells/pash { };
 
@@ -4529,9 +4529,9 @@ in
 
   go = self.go_1_6;
 
-  go-repo-root = (callPackage ../development/tools/go-repo-root { }).bin;
+  go-repo-root = callPackage ../development/tools/go-repo-root { };
 
-  gox = (callPackage ../development/tools/gox { }).bin;
+  gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -5584,7 +5584,7 @@ in
     perf = linuxPackages.perf;
   };
 
-  mesos-dns = (callPackage ../servers/mesos-dns { }).bin;
+  mesos-dns = callPackage ../servers/mesos-dns { };
 
   mujs = callPackage ../development/interpreters/mujs { };
 
@@ -6193,7 +6193,7 @@ in
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
-  gotty = (callPackage ../servers/gotty { }).bin;
+  gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradleLatest;
@@ -9605,7 +9605,7 @@ in
 
   buildGoPackage = buildGo16Package;
 
-  go2nix = (callPackage ../development/tools/go2nix { }).bin;
+  go2nix = callPackage ../development/tools/go2nix { };
 
   ### DEVELOPMENT / LISP MODULES
 
