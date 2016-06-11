@@ -78,6 +78,8 @@ in {
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
+
+      debug = mkEnableOption "gnome-session debug messages";
     };  
 
     environment.gnome3.packageSet = mkOption {
@@ -159,7 +161,7 @@ in {
           # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
-          ${gnome3.gnome_session}/bin/gnome-session&
+          ${gnome3.gnome_session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &
           waitPID=$!
         '';
       };
