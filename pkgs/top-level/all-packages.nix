@@ -935,8 +935,6 @@ in
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
-
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
     inherit (strategoPackages016) strategoxt sdf;
   };
