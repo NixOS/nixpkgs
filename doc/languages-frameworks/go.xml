@@ -141,6 +141,25 @@ the following arguments are of special significance to the function:
 </para>
 
 <para>
+  <varname>buildGoPackage</varname> produces <xref linkend='chap-multiple-output' xrefstyle="select: title" />
+  where <varname>bin</varname> includes program binaries. You can test build a Go binary as follows:
+
+  <screen>
+    $ nix-build -A deis.bin
+  </screen>
+
+  or build all outputs with:
+
+  <screen>
+    $ nix-build -A deis.all
+  </screen>
+
+  <varname>bin</varname> output will be installed by default with <varname>nix-env -i</varname>
+  or <varname>systemPackages</varname>.
+
+</para>
+
+<para>
 You may use Go packages installed into the active Nix profiles by adding
 the following to your ~/.bashrc:
 
