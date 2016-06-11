@@ -8,6 +8,8 @@ let
 
   inherit (stdenv.lib) fix' extends;
 
+  inherit (import ./lib.nix { inherit pkgs; }) hackage2nix;
+
   haskellPackages = self:
     let
 
@@ -56,6 +58,8 @@ let
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
         inherit mkDerivation callPackage;
+
+        callHackage = name: version: self.callPackage (hackage2nix name version);
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 
