@@ -16719,6 +16719,8 @@ in
 
   hepmc = callPackage ../development/libraries/physics/hepmc { };
 
+  rivet = callPackage ../development/libraries/physics/rivet { };
+
   yoda = callPackage ../development/libraries/physics/yoda { };
 
   ### MISC
