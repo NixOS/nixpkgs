@@ -166,8 +166,8 @@ let version = "5.4.0";
           " --disable-libatomic " +  # libatomic requires libc
           " --disable-decimal-float" # libdecnumber requires libc
           else
-          (if crossDarwin then " --with-sysroot=${libcCross.out}/share/sysroot"
-           else                " --with-headers=${libcCross.dev}/include") +
+          (if crossDarwin then " --with-sysroot=${getLib libcCross}/share/sysroot"
+           else                " --with-headers=${getDev libcCross}/include") +
           # Ensure that -print-prog-name is able to find the correct programs.
           (stdenv.lib.optionalString (crossMingw || crossDarwin) (
             " --with-as=${binutilsCross}/bin/${cross.config}-as" +
@@ -485,7 +485,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if cross != null && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"
