@@ -35,9 +35,9 @@ buildPythonApplication rec {
 
   postInstall = ''
     wrapProgram $out/bin/qtile \
-      --set QTILE_WRAPPER '"$0"' \
-      --set QTILE_SAVED_PYTHONPATH '"$PYTHONPATH"' \
-      --set QTILE_SAVED_PATH '"$PATH"'
+      --set QTILE_WRAPPER '$0' \
+      --set QTILE_SAVED_PYTHONPATH '$PYTHONPATH' \
+      --set QTILE_SAVED_PATH '$PATH'
   '';
 
   meta = with stdenv.lib; {
