@@ -7506,6 +7506,8 @@ in
   };
   libkrb5 = self.krb5Full.override { type = "lib"; };
 
+  lasso = callPackage ../development/libraries/lasso { };  
+
   LASzip = callPackage ../development/libraries/LASzip { };
 
   lcms = self.lcms1;
@@ -9799,6 +9801,8 @@ in
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
+
+    mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
 
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
