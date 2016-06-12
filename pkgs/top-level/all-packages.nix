@@ -2233,6 +2233,9 @@ in
   else
     nodePackages_4_x;
 
+  # Can be used as a user shell
+  nologin = shadow;
+
   npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
