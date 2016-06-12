@@ -1,9 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, utils, pkgs, ... }:
 
 with lib;
 
 let
-
   ids = config.ids;
   cfg = config.users;
 
@@ -103,7 +102,7 @@ let
       };
 
       home = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
@@ -118,8 +117,10 @@ let
       };
 
       shell = mkOption {
-        type = types.str;
-        default = "/run/current-system/sw/bin/nologin";
+        type = types.either types.shellPackage types.path;
+        default = pkgs.nologin;
+        defaultText = "pkgs.nologin";
+        example = literalExample "pkgs.bashInteractive";
         description = "The path to the user's shell.";
       };
 
@@ -359,11 +360,12 @@ let
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
-    users = mapAttrsToList (n: u:
+    users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home shell createHome isSystemUser
+          name uid group description home createHome isSystemUser
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
+        shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = mapAttrsToList (n: g:
       { inherit (g) name gid;
@@ -372,6 +374,12 @@ let
         ));
       }) cfg.groups;
   });
+
+  systemShells =
+    let
+      shells = mapAttrsToList (_: u: u.shell) cfg.users;
+    in
+      filter types.shellPackage.check shells;
 
 in {
 
@@ -477,6 +485,9 @@ in {
         group = "nogroup";
       };
     };
+
+    # Install all the user shells
+    environment.systemPackages = systemShells;
 
     users.groups = {
       root.gid = ids.gids.root;
