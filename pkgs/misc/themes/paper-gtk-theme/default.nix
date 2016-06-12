@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, gtk_engines }:
 
 stdenv.mkDerivation rec {
-  version = "2016-05-25";
+  version = "2016-05-27";
   name = "paper-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     owner = "snwh";
     repo = "paper-gtk-theme";
-    rev = "dea5f97b12e4f41dddbd01a1529760761aa3784e";
-    sha256 = "0fln555827hrn554qcil3rwl9x4x3vdfbh2vplkc8r46a3bn8yng";
+    rev = "06fb8b41743dd99410c08a9beabc323e6631d009";
+    sha256 = "1gffjsgs43rvxs8ryd5c3yfrp3a69d5wvjmiixwwp1qn1fr46dni";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
