@@ -14874,6 +14874,8 @@ in
 
   xterm = callPackage ../applications/misc/xterm { };
 
+  mlterm = callPackage ../applications/misc/mlterm { };
+
   finalterm = callPackage ../applications/misc/finalterm { };
 
   roxterm = callPackage ../applications/misc/roxterm {
