@@ -10873,6 +10873,8 @@ let
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
+  bgnet = callPackage ../data/documentation/bgnet { };
+
   cacert = callPackage ../data/misc/cacert { };
 
   caladea = callPackage ../data/fonts/caladea {};
