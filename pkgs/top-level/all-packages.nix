@@ -6610,6 +6610,8 @@ in
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
+  armadillo = callPackage ../development/libraries/armadillo {};
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio = callPackage ../development/libraries/asio { };
