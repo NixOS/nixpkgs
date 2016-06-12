@@ -19,6 +19,11 @@ let
   inherit lua;
   inherit (stdenv.lib) maintainers;
 
+  # helper functions for dealing with LUA_PATH and LUA_CPATH
+  getPath       = lib : type : "${lib}/lib/lua/${lua.luaversion}/?.${type};${lib}/share/lua/${lua.luaversion}/?.${type}";
+  getLuaPath    = lib : getPath lib "lua";
+  getLuaCPath   = lib : getPath lib "so";
+
   #define build lua package function
   buildLuaPackage = callPackage ../development/lua-modules/generic lua;
 
