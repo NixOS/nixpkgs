@@ -13,7 +13,7 @@ let
 
   ectl = ''${cfg.package}/bin/ejabberdctl ${if cfg.configFile == null then "" else "--config ${cfg.configFile}"} --ctl-config "${ctlcfg}" --spool "${cfg.spoolDir}" --logs "${cfg.logsDir}"'';
 
-  dumps = lib.concatMapStringsSep " " lib.escapeShellArg cfg.loadDumps;
+  dumps = lib.escapeShellArgs cfg.loadDumps;
 
 in {
 

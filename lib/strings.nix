@@ -213,7 +213,16 @@ rec {
        escapeShellArg "so([<>])me"
        => "so\\(\\[\\<\\>\\]\\)me"
   */
-  escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
+  escapeShellArg = arg:
+    lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]") (toString arg);
+
+  /* Escape all arguments to be passed to the Bourne shell.
+
+     Example:
+       escapeShellArgs ["one" "two three"]
+       => "one two\\ three"
+  */
+  escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
   /* Obsolete - use replaceStrings instead. */
   replaceChars = builtins.replaceStrings or (
