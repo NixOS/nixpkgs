@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  outputs = [ "out" "doc" ];
+
   preConfigure = ''
     echo >mk/build.mk "${buildMK}"
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-gcc=${stdenv.cc}/bin/cc"
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
+    "--datadir=$doc/share/doc/ghc"
   ];
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
