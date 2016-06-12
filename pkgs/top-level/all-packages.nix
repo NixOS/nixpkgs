@@ -16386,6 +16386,8 @@ in
     inherit (pkgs.gnome) gtkglext;
   };
 
+  cytoscape = callPackage ../applications/science/misc/cytoscape { };
+
   fityk = callPackage ../applications/science/misc/fityk { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
