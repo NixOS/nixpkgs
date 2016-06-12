@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, makeWrapper, gtk, gnome3, libgksu,
-  intltool, libstartup_notification, gtk_doc
+{ stdenv, fetchurl, pkgconfig, gtk, gnome3, libgksu,
+  intltool, libstartup_notification, gtk_doc, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,18 @@ stdenv.mkDerivation rec {
     sha256 = "0npfanlh28daapkg25q4fncxd89rjhvid5fwzjaw324x0g53vpm1";
   };
 
+  nativeBuildInputs = [
+    pkgconfig intltool gtk_doc wrapGAppsHook
+  ];
+
+  buildInputs = [
+    gtk gnome3.gconf libstartup_notification gnome3.libgnome_keyring
+  ];
+
+  propagatedBuildInputs = [
+    libgksu
+  ];
+
   patches = [
     # https://savannah.nongnu.org/bugs/index.php?36127
     ./gksu-2.0.2-glib-2.31.patch
@@ -22,15 +34,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-nautilus-extension";
-
-  buildInputs = [
-    pkgconfig makeWrapper gtk gnome3.gconf intltool
-    libstartup_notification gnome3.libgnome_keyring gtk_doc
-  ];
-
-  propagatedBuildInputs = [
-    libgksu
-  ];
 
   meta = {
     description = "A graphical frontend for libgksu";
