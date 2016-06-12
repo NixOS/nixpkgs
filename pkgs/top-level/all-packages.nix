@@ -3608,6 +3608,8 @@ in
 
   uget = callPackage ../tools/networking/uget { };
 
+  uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
