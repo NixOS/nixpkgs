@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, bind, perl, bluez5, substituteAll, readline
+, libgcrypt, dnsmasq, bind, perl, bluez5, substituteAll, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils }:
 
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin/ethtool ${ethtool}/sbin/ethtool \
       --replace /bin/sed ${gnused}/bin/sed
     # to enable link-local connections
-    substituteInPlace src/devices/nm-device.c --replace '("avahi-autoipd", NULL, NULL)' '("avahi-autoipd", &"${avahi}/sbin/avahi-autoipd", NULL)'
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
   '';
 
