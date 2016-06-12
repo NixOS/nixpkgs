@@ -7952,6 +7952,8 @@ in
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
+  libsixel = callPackage ../development/libraries/libsixel { };
+
   libsolv = callPackage ../development/libraries/libsolv { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
