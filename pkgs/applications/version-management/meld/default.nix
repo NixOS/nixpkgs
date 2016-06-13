@@ -4,7 +4,7 @@
 
 
 let
-  minor = "3.14";
+  minor = "3.16";
   version = "${minor}.0";
 in
 
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "0g0h9wdr6nqdalqkz4r037569apw253cklwr17x0zjc7nwv2j3j3";
+    sha256 = "02kcnlavlxlk8df456zppmin9xzdvgkw151nskb6f0bwmi9zs6rl";
   };
 
   buildInputs = [
