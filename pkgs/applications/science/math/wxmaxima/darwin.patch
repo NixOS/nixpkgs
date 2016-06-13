@@ -1,0 +1,24 @@
+diff --git a/src/Dirstructure.cpp b/src/Dirstructure.cpp
+index 25df904..cf348be 100644
+--- a/src/Dirstructure.cpp
++++ b/src/Dirstructure.cpp
+@@ -35,10 +35,6 @@ wxString Dirstructure::ResourcesDir()
+   else
+     exe = exe.Left(lastSlash + 1);
+   return exe;
+-#elif defined __WXMAC__
+-  wxString exe = wxStandardPaths::Get().GetExecutablePath();
+-  exe.Replace(wxT("MacOS/wxmaxima"), wxT("Resources/"));
+-  return exe;
+ #else
+   return Prefix()+wxT("/share/wxMaxima/");
+ #endif
+@@ -66,8 +62,6 @@ wxString Dirstructure::MaximaDefaultLocation()
+   wxFileName maxima(maximapath);
+   maxima.MakeAbsolute();
+   return maxima.GetFullPath();
+-#elif defined __WXMAC__
+-  return wxT("/Applications/Maxima.app");
+ #else
+   return wxT("maxima");
+ #endif

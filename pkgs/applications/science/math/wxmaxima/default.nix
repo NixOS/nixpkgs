@@ -18,6 +18,11 @@ stdenv.mkDerivation {
     ./bootstrap
   '';
 
+  patches = [
+    # needed to run wxmaxima outside of an app bundle
+    ./darwin.patch
+  ];
+
   nativeBuildInputs = [ autoconf automake texinfo gettext ];
 
   buildInputs = [wxGTK maxima makeWrapper];
