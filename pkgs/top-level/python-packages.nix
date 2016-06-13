@@ -3836,7 +3836,7 @@ in modules // {
     version = "0.24";
 
     src = pkgs.fetchurl {
-      url = "http://www.cython.org/release/${name}.tar.gz";
+      url = "mirror://pypi/C/Cython/${name}.tar.gz";
       sha256 = "1wd3q97gia3zhsgcdlvxh26hkrf3m53i6r1l4g0yya119264vr3d";
     };
 
