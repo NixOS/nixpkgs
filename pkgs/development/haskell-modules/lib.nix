@@ -85,25 +85,4 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  allCabalFiles = pkgs.fetchFromGitHub {
-     owner = "commercialhaskell";
-     repo = "all-cabal-hashes";
-     rev = "461610ab6f0cf581e186643c037f1981755792d9";
-     sha256 = "0x2577lfd5cbbaivl72273kw93gcmxvbjybk7w4h2ic3zvs1fnvm";
-   };
-
-   hackage2nix = name: version: pkgs.stdenv.mkDerivation {
-     name = "cabal2nix-${name}-${version}";
-     buildInputs = [ pkgs.cabal2nix ];
-     phases = ["installPhase"];
-     LANG = "en_US.UTF-8";
-     LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
-     installPhase = ''
-       export HOME="$TMP"
-       mkdir $out
-       hash=$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' ${allCabalFiles}/${name}/${version}/${name}.json)
-       cabal2nix --sha256=$hash ${allCabalFiles}/${name}/${version}/${name}.cabal >$out/default.nix
-     '';
-   };
-
 }
