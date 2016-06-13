@@ -1,16 +1,24 @@
-{ stdenv, fetchurl, maxima, wxGTK, makeWrapper }:
+{ stdenv, fetchFromGitHub, maxima, wxGTK, makeWrapper, autoconf, automake, texinfo, gettext }:
 
 let
   name    = "wxmaxima";
-  version = "15.04.0";
+  version = "16.04.2";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${name}/wxMaxima/${version}/wxmaxima-${version}.tar.gz";
-    sha256 = "1fm47ah4aw5qdjqhkz67w5fwhy8yfffa5z896crp0d3hk2bh4180";
+  src = fetchFromGitHub {
+    owner = "andrejv";
+    repo = "wxmaxima";
+    rev = "Version-${version}";
+    sha256 = "1sx1q4xgiz3v33s3960ki2d6c0daskxh6v2s26ihxqbf1awvhsgi";
   };
+
+  preConfigure = ''
+    ./bootstrap
+  '';
+
+  nativeBuildInputs = [ autoconf automake texinfo gettext ];
 
   buildInputs = [wxGTK maxima makeWrapper];
 
