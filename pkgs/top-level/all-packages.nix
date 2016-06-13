@@ -475,6 +475,10 @@ in
 
   grc = callPackage ../tools/misc/grc { };
 
+  green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
+   SDL = SDL_sixel;
+  };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
