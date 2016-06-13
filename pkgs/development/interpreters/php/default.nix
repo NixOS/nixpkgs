@@ -23,8 +23,7 @@ let
 
       configureFlags = [
         "EXTENSION_DIR=$(out)/lib/php/extensions"
-        "--with-iconv=${libiconv}"
-      ];
+      ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}";
 
       flags = {
 
