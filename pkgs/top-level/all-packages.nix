@@ -6961,6 +6961,8 @@ in
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
+  ffmpeg-sixel = callPackage ../development/libraries/ffmpeg-sixel { };
+
   ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw { };
