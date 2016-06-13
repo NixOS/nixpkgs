@@ -389,10 +389,10 @@ in `stack.yaml` (only works with Stack >= 1.1.3):
 
     let R = pkgs.R.override { enableStrictBarrier = true; };
     in
-	haskell.lib.buildStackProject {
+    haskell.lib.buildStackProject {
       name = "HaskellR";
-	  buildInputs = [ R zeromq zlib ];
-	  inherit ghc;
+      buildInputs = [ R zeromq zlib ];
+      inherit ghc;
     }
 
 [stack-nix-doc]: http://docs.haskellstack.org/en/stable/nix_integration.html
