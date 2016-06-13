@@ -1,10 +1,10 @@
 { stdenv, lib, fetchurl
-, config
+, texlive
 , zlib, bzip2, ncurses, libpng, flex, bison, libX11, libICE, xproto
 , freetype, t1lib, gd, libXaw, icu, ghostscript, ed, libXt, libXpm, libXmu, libXext
 , xextproto, perl, libSM, ruby, expat, curl, libjpeg, python, fontconfig, pkgconfig
 , poppler, libpaper, graphite2, lesstif, zziplib, harfbuzz, texinfo, potrace, gmp, mpfr
-, xpdf, cairo, pixman, xorg
+, xpdf, cairo, pixman, xorg, clisp
 , makeWrapper
 }:
 
@@ -243,6 +243,36 @@ xdvi = stdenv.mkDerivation {
       --replace "exec xdvi-xaw" "exec '$out/bin/xdvi-xaw'"
   '';
   # TODO: it's suspicious that mktexpk generates fonts into ~/.texlive2014
+};
+
+
+xindy = stdenv.mkDerivation {
+  name = "texlive-xindy.bin-${version}";
+
+  inherit (common) src;
+  prePatch = "cd utils/xindy";
+  # hardcode clisp location
+  postPatch = ''
+    substituteInPlace xindy-?.?.?/user-commands/xindy.in \
+      --replace "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
+                "our \$clisp = '$(type -P clisp)';"
+  '';
+
+  nativeBuildInputs = [
+    pkgconfig perl
+    (texlive.combine { inherit (texlive) scheme-basic cyrillic ec; })
+  ];
+  buildInputs = [ clisp ];
+
+  configureFlags = [ "--with-clisp-runtime=system" "--disable-xindy-docs" ];
+
+  preInstall = ''mkdir -p "$out/bin" '';
+  # fixup various file-location errors of: lib/xindy/{xindy.mem,modules/}
+  postInstall = ''
+    mkdir -p "$out/lib/xindy"
+    mv "$out"/{bin/xindy.mem,lib/xindy/}
+    ln -s ../../share/texmf-dist/xindy/modules "$out/lib/xindy/"
+  '';
 };
 
 
