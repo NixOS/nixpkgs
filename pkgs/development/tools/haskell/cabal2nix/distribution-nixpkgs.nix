@@ -11,8 +11,8 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "cabal2nix";
-    rev = "v20160611";
-    sha256 = "1zmrqs09zfnwy9cclp78p5nfpg5520p0lnz1myg5q4p6i2251mp3";
+    rev = "v20160613";
+    sha256 = "0cnc037qsmwwddws138z7w1aww0l9z5bg89dgh4vfxck29z84is9";
   };
   postUnpack = "sourceRoot+=/${pname}";
   libraryHaskellDepends = [
