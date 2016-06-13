@@ -10987,6 +10987,19 @@ in
     let self = linuxPackagesFor linux_grsec_nixos self;
     in recurseIntoAttrs self;
 
+  # An unsupported grsec xen guest kernel
+  linux_grsec_server_xen = linux_grsec_nixos.override {
+    extraConfig = ''
+      GRKERNSEC y
+      PAX y
+      GRKERNSEC_CONFIG_AUTO y
+      GRKERNSEC_CONFIG_PRIORITY_SECURITY y
+      GRKERNSEC_CONFIG_SERVER y
+      GRKERNSEC_CONFIG_VIRT_GUEST y
+      GRKERNSEC_CONFIG_VIRT_XEN y
+    '';
+  };
+
   # grsecurity: legacy
 
   grsecurity_base_linux_3_14 = throw "grsecurity stable is no longer supported";
