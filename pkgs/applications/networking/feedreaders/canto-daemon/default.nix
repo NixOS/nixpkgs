@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python34Packages, }:
 
 python34Packages.buildPythonApplication rec {
-  version = "0.9.5";
+  version = "0.9.6";
   name = "canto-daemon-${version}";
   namePrefix = "";
 
@@ -9,7 +9,7 @@ python34Packages.buildPythonApplication rec {
     owner = "themoken";
     repo = "canto-next";
     rev = "v${version}";
-    sha256 = "1ycwrg5n2il833mdxgzz07r0vb4rxz89rk5c6l9g5x33ifinykdq";
+    sha256 = "0ibakwmsbpk10bvxsr5vvka0pks89arric428y5cmfgcpr72sqzw";
   };
 
   propagatedBuildInputs = with python34Packages; [ feedparser ];

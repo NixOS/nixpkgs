@@ -433,7 +433,6 @@ self: super: {
   HTF_0_13_0_0 = dontCheck super.HTF_0_13_0_0;
   htsn = dontCheck super.htsn;
   htsn-import = dontCheck super.htsn-import;
-  http2 = dontCheck super.http2;
   http-client-openssl = dontCheck super.http-client-openssl;
   http-client-tls = dontCheck super.http-client-tls;
   ihaskell = dontCheck super.ihaskell;
@@ -577,9 +576,6 @@ self: super: {
   # Depends on QuickCheck 1.x.
   HaVSA = super.HaVSA.override { QuickCheck = self.QuickCheck_1_2_0_1; };
   test-framework-quickcheck = super.test-framework-quickcheck.override { QuickCheck = self.QuickCheck_1_2_0_1; };
-
-  # Doesn't support "this system". Linux? Needs investigation.
-  lhc = markBroken (super.lhc.override { QuickCheck = self.QuickCheck_1_2_0_1; });
 
   # Depends on broken test-framework-quickcheck.
   apiary = dontCheck super.apiary;

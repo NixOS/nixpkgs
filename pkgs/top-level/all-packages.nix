@@ -118,29 +118,7 @@ in
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
-  buildFHSEnv = callPackage ../build-support/build-fhs-chrootenv/env.nix {
-    nixpkgs      = pkgs;
-    nixpkgs_i686 = pkgsi686Linux;
-  };
-
-  chrootFHSEnv = callPackage ../build-support/build-fhs-chrootenv { };
-  userFHSEnv = callPackage ../build-support/build-fhs-userenv {
-   ruby = ruby_2_1;
-  };
-
-  buildFHSChrootEnv = args: chrootFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "extraInstallCommands" ]);
-    extraInstallCommands = args.extraInstallCommands or "";
-  };
-
-  buildFHSUserEnv = args: userFHSEnv {
-    env = buildFHSEnv (removeAttrs args [ "runScript" "extraBindMounts" "extraInstallCommands" "meta" "passthru" ]);
-    runScript = args.runScript or "bash";
-    extraBindMounts = args.extraBindMounts or [];
-    extraInstallCommands = args.extraInstallCommands or "";
-    meta = args.meta or {};
-    passthru = args.passthru or {};
-  };
+  buildFHSUserEnv = callPackage ../build-support/build-fhs-userenv { };
 
   buildMaven = callPackage ../build-support/build-maven.nix {};
 
@@ -447,7 +425,7 @@ in
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = (callPackage ../tools/misc/asciinema {}).bin;
+  asciinema = callPackage ../tools/misc/asciinema {};
 
   asymptote = callPackage ../tools/graphics/asymptote {
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super; };
@@ -731,7 +709,7 @@ in
 
   ddate = callPackage ../tools/misc/ddate { };
 
-  deis = (callPackage ../development/tools/deis {}).bin;
+  deis = callPackage ../development/tools/deis {};
 
   dfilemanager = self.kde5.dfilemanager;
 
@@ -820,7 +798,7 @@ in
 
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
-  interlock = (callPackage ../servers/interlock {}).bin;
+  interlock = callPackage ../servers/interlock {};
 
   mathics = pythonPackages.mathics;
 
@@ -882,7 +860,7 @@ in
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
 
-  mongodb-tools = (callPackage ../tools/misc/mongodb-tools { }).bin;
+  mongodb-tools = callPackage ../tools/misc/mongodb-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
@@ -1515,7 +1493,7 @@ in
     inherit (perlPackages) ImageExifTool JSON;
   };
 
-  flannel = (callPackage ../tools/networking/flannel {}).bin;
+  flannel = callPackage ../tools/networking/flannel { };
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
@@ -1645,7 +1623,7 @@ in
   gawkInteractive = appendToName "interactive"
     (gawk.override { interactive = true; });
 
-  gawp = (callPackage ../tools/misc/gawp {}).bin;
+  gawp = callPackage ../tools/misc/gawp { };
 
   gazeboSimulator = recurseIntoAttrs {
     sdformat = gazeboSimulator.sdformat4;
@@ -1691,7 +1669,7 @@ in
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  git-lfs = (callPackage ../applications/version-management/git-lfs {}).bin;
+  git-lfs = callPackage ../applications/version-management/git-lfs { };
 
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
@@ -1759,14 +1737,14 @@ in
 
   goaccess = callPackage ../tools/misc/goaccess { };
 
-  go-mtpfs = (callPackage ../tools/filesystems/go-mtpfs { }).bin;
+  go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  go-pup = (callPackage ../development/tools/pup { }).bin;
+  go-pup = callPackage ../development/tools/pup { };
 
-  go-sct = (callPackage ../tools/X11/go-sct { }).bin;
+  go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
-  go-upower-notify = (callPackage ../tools/misc/upower-notify { }).bin;
+  go-upower-notify = callPackage ../tools/misc/upower-notify { };
 
   googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
 
@@ -2348,7 +2326,7 @@ in
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../os-specific/linux/lxc { };
-  lxd = (callPackage ../tools/admin/lxd { }).bin;
+  lxd = callPackage ../tools/admin/lxd { };
 
   lzip = callPackage ../tools/compression/lzip { };
 
@@ -2605,7 +2583,7 @@ in
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  ngrok = (callPackage ../tools/networking/ngrok { }).bin;
+  ngrok = callPackage ../tools/networking/ngrok { };
 
   noip = callPackage ../tools/networking/noip { };
 
@@ -2973,7 +2951,9 @@ in
 
   plowshare = callPackage ../tools/misc/plowshare { };
 
-  pngcheck = callPackage ../tools/graphics/pngcheck { };
+  pngcheck = callPackage ../tools/graphics/pngcheck {
+    zlib = zlibStatic;
+  };
 
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
@@ -3235,7 +3215,7 @@ in
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
-  s3gof3r = (callPackage ../tools/networking/s3gof3r { }).bin;
+  s3gof3r = callPackage ../tools/networking/s3gof3r { };
 
   s6Dns = callPackage ../tools/networking/s6-dns { };
 
@@ -3327,7 +3307,7 @@ in
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  skydns = (callPackage ../servers/skydns { }).bin;
+  skydns = callPackage ../servers/skydns { };
 
   sipcalc = callPackage ../tools/networking/sipcalc { };
 
@@ -3634,6 +3614,8 @@ in
 
   uget = callPackage ../tools/networking/uget { };
 
+  uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
+
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
@@ -3718,7 +3700,7 @@ in
 
   weather = callPackage ../applications/misc/weather { };
 
-  wego = (callPackage ../applications/misc/wego { }).bin;
+  wego = callPackage ../applications/misc/wego { };
 
   wal_e = callPackage ../tools/backup/wal-e { };
 
@@ -3744,7 +3726,7 @@ in
 
   testdisk = callPackage ../tools/misc/testdisk { };
 
-  textql = (callPackage ../development/tools/textql { }).bin;
+  textql = callPackage ../development/tools/textql { };
 
   html2text = callPackage ../tools/text/html2text { };
 
@@ -4089,7 +4071,7 @@ in
 
   mksh = callPackage ../shells/mksh { };
 
-  oh = (callPackage ../shells/oh { }).bin;
+  oh = callPackage ../shells/oh { };
 
   pash = callPackage ../shells/pash { };
 
@@ -4552,9 +4534,9 @@ in
 
   go = self.go_1_6;
 
-  go-repo-root = (callPackage ../development/tools/go-repo-root { }).bin;
+  go-repo-root = callPackage ../development/tools/go-repo-root { };
 
-  gox = (callPackage ../development/tools/gox { }).bin;
+  gox = callPackage ../development/tools/gox { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -4678,7 +4660,6 @@ in
 
   julia-git = lowPrio (callPackage ../development/compilers/julia/git.nix {
     gmp = gmp6;
-    llvm = llvm_37;
     openblas = openblasCompat;
   });
 
@@ -5593,7 +5574,7 @@ in
     perf = linuxPackages.perf;
   };
 
-  mesos-dns = (callPackage ../servers/mesos-dns { }).bin;
+  mesos-dns = callPackage ../servers/mesos-dns { };
 
   mujs = callPackage ../development/interpreters/mujs { };
 
@@ -5956,6 +5937,8 @@ in
     inherit (pythonPackages) twisted;
   };
 
+  buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
+
   byacc = callPackage ../development/tools/parsing/byacc { };
 
   cargo = callPackage ../development/tools/build-managers/cargo {
@@ -6202,7 +6185,7 @@ in
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
-  gotty = (callPackage ../servers/gotty { }).bin;
+  gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
   gradle = self.gradleGen.gradleLatest;
@@ -6621,6 +6604,8 @@ in
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
   };
 
+  armadillo = callPackage ../development/libraries/armadillo {};
+
   assimp = callPackage ../development/libraries/assimp { };
 
   asio = callPackage ../development/libraries/asio { };
@@ -6961,6 +6946,8 @@ in
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
+
+  ffmpeg-sixel = callPackage ../development/libraries/ffmpeg-sixel { };
 
   ffms = callPackage ../development/libraries/ffms { };
 
@@ -7509,6 +7496,8 @@ in
   };
   libkrb5 = self.krb5Full.override { type = "lib"; };
 
+  lasso = callPackage ../development/libraries/lasso { };  
+
   LASzip = callPackage ../development/libraries/LASzip { };
 
   lcms = self.lcms1;
@@ -7954,6 +7943,8 @@ in
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   libsieve = callPackage ../development/libraries/libsieve { };
+
+  libsixel = callPackage ../development/libraries/libsixel { };
 
   libsolv = callPackage ../development/libraries/libsolv { };
 
@@ -8517,7 +8508,9 @@ in
     texinfo = texinfo4;
   };
 
-  mueval = callPackage ../development/tools/haskell/mueval { };
+  mueval = callPackage ../development/tools/haskell/mueval {
+    haskellPackages = haskell.packages.lts;
+  };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -8924,6 +8917,7 @@ in
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskell-lib = haskell.lib;
+    haskellPackages = haskell.packages.lts;
   };
 
   leksah = callPackage ../development/tools/haskell/leksah {
@@ -9797,6 +9791,8 @@ in
 
   apacheHttpdPackagesFor = apacheHttpd: self: let callPackage = newScope self; in {
     inherit apacheHttpd;
+
+    mod_auth_mellon = callPackage ../servers/http/apache-modules/mod_auth_mellon { };
 
     mod_dnssd = callPackage ../servers/http/apache-modules/mod_dnssd { };
 
@@ -11481,6 +11477,8 @@ in
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
+  arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
+
   arkpandora_ttf = callPackage ../data/fonts/arkpandora { };
 
   aurulent-sans = callPackage ../data/fonts/aurulent-sans { };
@@ -11488,6 +11486,8 @@ in
   baekmuk-ttf = callPackage ../data/fonts/baekmuk-ttf { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
+
+  bgnet = callPackage ../data/documentation/bgnet { };
 
   cacert = callPackage ../data/misc/cacert { };
 
@@ -11554,6 +11554,10 @@ in
   dosemu_fonts = callPackage ../data/fonts/dosemu-fonts { };
 
   eb-garamond = callPackage ../data/fonts/eb-garamond { };
+
+  faba-icon-theme = callPackage ../data/icons/faba-icon-theme { };
+
+  faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
@@ -11642,6 +11646,8 @@ in
   mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mononoki = callPackage ../data/fonts/mononoki { };
+
+  moka-icon-theme = callPackage ../data/icons/moka-icon-theme { };
 
   montserrat = callPackage ../data/fonts/montserrat { };
 
@@ -12035,7 +12041,7 @@ in
   carddav-util = callPackage ../tools/networking/carddav-util { };
 
   catfish = callPackage ../applications/search/catfish {
-    pythonPackages = python3Packages;
+    pythonPackages = python2Packages;
   };
 
   cava = callPackage ../applications/audio/cava { };
@@ -14877,6 +14883,8 @@ in
   xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
+
+  mlterm = callPackage ../applications/misc/mlterm { };
 
   finalterm = callPackage ../applications/misc/finalterm { };
 

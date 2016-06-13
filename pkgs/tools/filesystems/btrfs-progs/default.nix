@@ -2,14 +2,14 @@
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
-let version = "4.5.3"; in
+let version = "4.6"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "1lzbw275xgv69v4z8hmsf3jnip38116hxhkpv0madk8wv049drz6";
+    sha256 = "1wjd1017k0jsdcjdmcj540qg2gpjiw3vq6bhg3wd7n4dk5d5cryq";
   };
 
   buildInputs = [

@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 
+  postInstall = ''
+    mv $out/share/gdm/greeter/applications/gnome-shell.desktop $out/share/gdm/greeter/applications/org.gnome.Shell.desktop
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GDM;
     description = "A program that manages graphical display servers and handles graphical user logins";

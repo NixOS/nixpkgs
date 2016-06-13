@@ -33,11 +33,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "uwsgi-${version}";
-  version = "2.0.12";
+  version = "2.0.13.1";
 
   src = fetchurl {
     url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "02g46dnw5j1iw8fsq392bxbk8d21b9pdgb3ypcinv3b4jzdm2srh";
+    sha256 = "0zwdljaljzshrdcqsrr2l2ak2zcmsps4glac2lrg0xmb28phrjif";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];
@@ -73,10 +73,13 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install) needed}
   '';
 
+  NIX_CFLAGS_LINK = [ "-lsystemd" ];
+
   meta = with stdenv.lib; {
     homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

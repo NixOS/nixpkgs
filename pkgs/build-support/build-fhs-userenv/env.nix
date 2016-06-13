@@ -1,7 +1,7 @@
-{ nixpkgs, nixpkgs_i686, system
-} :
+{ stdenv, buildEnv, writeText, pkgs, pkgsi686Linux, system }:
+
 { name, profile ? ""
-, pkgs ? null, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
+, targetPkgs ? pkgs: [], multiPkgs ? pkgs: []
 , extraBuildCommands ? "", extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
 }:
@@ -22,37 +22,32 @@
 # /lib will link to /lib32
 
 let
-  isMultiBuild  = pkgs == null && multiPkgs != null && system == "x86_64-linux";
+  is64Bit = system == "x86_64-linux";
+  isMultiBuild  = multiPkgs != null && is64Bit;
   isTargetBuild = !isMultiBuild;
-
-  # support deprecated "pkgs" option.
-  targetPkgs' =
-    if pkgs != null
-      then builtins.trace "buildFHSEnv: 'pkgs' option is deprecated, use 'targetPkgs'" (pkgs': pkgs)
-      else targetPkgs;
 
   # list of packages (usually programs) which are only be installed for the
   # host's architecture
-  targetPaths = targetPkgs' nixpkgs ++ (if multiPkgs == null then [] else multiPkgs nixpkgs);
+  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [] else multiPkgs pkgs);
 
   # list of packages which are installed for both x86 and x86_64 on x86_64
   # systems
-  multiPaths = multiPkgs nixpkgs_i686;
+  multiPaths = multiPkgs pkgsi686Linux;
 
   # base packages of the chroot
   # these match the host's architecture, glibc_multi is used for multilib
   # builds.
-  basePkgs = with nixpkgs;
+  basePkgs = with pkgs;
     [ (if isMultiBuild then glibc_multi else glibc)
-      gcc.cc.lib bashInteractive coreutils less shadow su
+      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz glibcLocales
     ];
-  baseMultiPkgs = with nixpkgs_i686;
-    [ gcc.cc.lib
+  baseMultiPkgs = with pkgsi686Linux;
+    [ (toString gcc.cc.lib)
     ];
 
-  etcProfile = nixpkgs.writeText "profile" ''
+  etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH='/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32'
@@ -67,7 +62,7 @@ let
   '';
 
   # Compose /etc for the chroot environment
-  etcPkg = nixpkgs.stdenv.mkDerivation {
+  etcPkg = stdenv.mkDerivation {
     name         = "${name}-chrootenv-etc";
     buildCommand = ''
       mkdir -p $out/etc
@@ -77,38 +72,38 @@ let
       ln -s ${etcProfile} profile
 
       # compatibility with NixOS
-      ln -s /host-etc/static static
+      ln -s /host/etc/static static
 
       # symlink some NSS stuff
-      ln -s /host-etc/passwd passwd
-      ln -s /host-etc/group group
-      ln -s /host-etc/shadow shadow
-      ln -s /host-etc/hosts hosts
-      ln -s /host-etc/resolv.conf resolv.conf
-      ln -s /host-etc/nsswitch.conf nsswitch.conf
+      ln -s /host/etc/passwd passwd
+      ln -s /host/etc/group group
+      ln -s /host/etc/shadow shadow
+      ln -s /host/etc/hosts hosts
+      ln -s /host/etc/resolv.conf resolv.conf
+      ln -s /host/etc/nsswitch.conf nsswitch.conf
 
       # symlink sudo and su stuff
-      ln -s /host-etc/login.defs login.defs
-      ln -s /host-etc/sudoers sudoers
-      ln -s /host-etc/sudoers.d sudoers.d
+      ln -s /host/etc/login.defs login.defs
+      ln -s /host/etc/sudoers sudoers
+      ln -s /host/etc/sudoers.d sudoers.d
 
       # symlink other core stuff
-      ln -s /host-etc/localtime localtime
-      ln -s /host-etc/machine-id machine-id
-      ln -s /host-etc/os-release os-release
+      ln -s /host/etc/localtime localtime
+      ln -s /host/etc/machine-id machine-id
+      ln -s /host/etc/os-release os-release
 
       # symlink PAM stuff
-      ln -s /host-etc/pam.d pam.d
+      ln -s /host/etc/pam.d pam.d
 
       # symlink fonts stuff
-      ln -s /host-etc/fonts fonts
+      ln -s /host/etc/fonts fonts
 
       # symlink ALSA stuff
-      ln -s /host-etc/asound.conf asound.conf
+      ln -s /host/etc/asound.conf asound.conf
 
       # symlink SSL certs
       mkdir -p ssl
-      ln -s /host-etc/ssl/certs ssl/certs
+      ln -s /host/etc/ssl/certs ssl/certs
 
       # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
       ln -s /proc/mounts mtab
@@ -116,26 +111,25 @@ let
   };
 
   # Composes a /usr-like directory structure
-  staticUsrProfileTarget = nixpkgs.buildEnv {
+  staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
-    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
-  staticUsrProfileMulti = nixpkgs.buildEnv {
+  staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
     paths = baseMultiPkgs ++ multiPaths;
-    extraOutputsToInstall = [ "lib" "out" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
   # setup library paths only for the targeted architecture
   setupLibDirs_target = ''
-    mkdir -m0755 lib
-
-    # copy content of targetPaths
-    cp -rsHf ${staticUsrProfileTarget}/lib/* lib/
+    # link content of targetPaths
+    cp -rsHf ${staticUsrProfileTarget}/lib lib
+    ln -s lib lib${if is64Bit then "64" else "32"}
   '';
 
   # setup /lib, /lib32 and /lib64
@@ -184,7 +178,7 @@ let
     done
   '';
 
-in nixpkgs.stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name         = "${name}-fhs";
   buildCommand = ''
     mkdir -p $out
@@ -196,7 +190,4 @@ in nixpkgs.stdenv.mkDerivation {
     ${if isMultiBuild then extraBuildCommandsMulti else ""}
   '';
   preferLocalBuild = true;
-  passthru = {
-    pname = name;
-  };
 }

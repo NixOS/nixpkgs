@@ -12,7 +12,6 @@ buildPythonApplication rec {
     owner = "The-Compiler";
     repo = "qutebrowser";
     rev = "v${version}";
-    sha256 = "1qs45plyrf7m32vfh9apnzssf5nwz32skf3hvqxisqyspj8fz5n2";
   };
 
   # Needs tox

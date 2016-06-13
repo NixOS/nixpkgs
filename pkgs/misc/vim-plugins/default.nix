@@ -638,6 +638,17 @@ rec {
     dependencies = [];
 
   };
+  
+  vim-localvimrc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-localvimrc-2016-06-06";
+    src = fetchgit {
+      url = "git://github.com/embear/vim-localvimrc";
+      rev = "f104384cd9127b5a75ed889b551fd7f46faeb74a";
+      sha256 = "0k1ava8nhshkm7llhmagpsmvgwy8xcc0mn3chdk6hz8gzz9755py";
+    };
+    dependencies = [];
+
+  };
 
   tslime-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "tslime-vim-2015-08-14";
