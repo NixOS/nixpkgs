@@ -83,7 +83,7 @@ in {
         SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
       };
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/skydns";
+        ExecStart = "${cfg.package.bin}/bin/skydns";
       };
     };
 

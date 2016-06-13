@@ -515,7 +515,7 @@ in
       serviceConfig = {
         User = "oauth2_proxy";
         Restart = "always";
-        ExecStart = "${cfg.package}/bin/oauth2_proxy ${mkCommandLine cfg}";
+        ExecStart = "${cfg.package.bin}/bin/oauth2_proxy ${mkCommandLine cfg}";
       };
     };
 
