@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "023qdnsb6i18yrrawlhckm47q8x0sl7chpvvw3gssfyw3j2pv5cj";
   };
 
+  patches = stdenv.lib.optionals stdenv.cc.isClang [ ./clang.diff ];
+
   buildInputs = [ zlib ];
 
-  sourceRoot = "minisat/simp";
+  preBuild = "cd simp";
   makeFlags = [ "r" "MROOT=.." ];
   installPhase = ''
     mkdir -p $out/bin
