@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tarruda/libmpack/";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 garbas ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
