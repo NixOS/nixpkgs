@@ -190,7 +190,10 @@ let version = "6.1.0";
             else (if cross.libc == "uclibc" then
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
-              " --disable-libgomp" else "") +
+              " --disable-libgomp"
+            else if cross.libc == "musl" then
+              " --disable-libsanitizer"
+            else "") +
             " --enable-threads=posix" +
             " --enable-nls" +
             " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
