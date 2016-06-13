@@ -10822,32 +10822,6 @@ in
 
   linux_chromiumos_latest = self.linux_chromiumos_3_18;
 
-  # grsecurity configuration
-
-  grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
-    inherit (linux_4_5) kernelPatches;
-  };
-
-  grFlavors = import ../build-support/grsecurity/flavors.nix;
-
-  mkGrsecurity = patch: opts:
-    (callPackage ../build-support/grsecurity {
-      grsecOptions = { kernelPatch = patch; } // opts;
-    });
-
-  grKernel  = patch: opts: (self.mkGrsecurity patch opts).grsecKernel;
-  grPackage = patch: opts: recurseIntoAttrs (self.mkGrsecurity patch opts).grsecPackage;
-
-  # grsecurity kernels (see also linuxPackages_grsec_*)
-
-  linux_grsec_desktop_4_5    = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
-  linux_grsec_server_4_5     = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server;
-  linux_grsec_server_xen_4_5 = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
-
-  linux_grsec_desktop_latest    = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.desktop;
-  linux_grsec_server_latest     = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server;
-  linux_grsec_server_xen_latest = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server_xen;
-
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -10997,52 +10971,65 @@ in
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (self.linuxPackagesFor (self.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
 
-  # grsecurity packages
+  # Grsecurity packages
 
-  linuxPackages_grsec_desktop_4_5    = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_5     = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_5 = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
+  linux_grsec_nixos = callPackage ../build-support/grsecurity {
+    inherit (lib) overrideDerivation;
+    kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
+      inherit (self.linux_4_5) kernelPatches;
+    };
+    grsecPatch = self.kernelPatches.grsecurity_testing;
+    kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
+    extraConfig = callPackage ../os-specific/linux/kernel/grsecurity-nixos-config.nix { };
+  };
 
-  linuxPackages_grsec_desktop_latest    = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.desktop;
-  linuxPackages_grsec_server_latest     = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server;
-  linuxPackages_grsec_server_xen_latest = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server_xen;
+  linuxPackages_grsec_nixos =
+    let self = linuxPackagesFor linux_grsec_nixos self;
+    in recurseIntoAttrs self;
 
   # grsecurity: legacy
 
   grsecurity_base_linux_3_14 = throw "grsecurity stable is no longer supported";
   grsecurity_base_linux_4_4  = throw "grsecurity stable is no longer supported";
 
+  linuxPackages_grsec_desktop_3_14    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_4_4    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_4_5    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_latest    = throw "linuxPackages_grsec_desktop has been removed";
+
+  linuxPackages_grsec_server_3_14     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_4_4     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_4_5     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_latest     = throw "linuxPackages_grsec_server has been removed";
+
+  linuxPackages_grsec_server_xen_3_14 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_4_4 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_4_5 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_latest = throw "linuxPackages_grsec_server_xen has been removed";
+
   linux_grsec_desktop_3_14    = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
-
   linux_grsec_desktop_4_4    = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
+  linux_grsec_desktop_4_5    = throw "linux_grsec_desktop has been removed";
+  linux_grsec_desktop_latest    = throw "linux_grsec_desktop has been removed";
 
-  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
-  linux_grsec_testing_server     = self.linux_grsec_server_latest;
-  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
+  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_4_5     = throw "linux_grsec_server has been removed";
+  linux_grsec_server_latest     = throw "linux_grsec_server_latest has been removed";
+
+  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_xen_4_5 = throw "linux_grsec_server_xen has been removed";
+  linux_grsec_server_xen_latest = throw "linux_grsec_server_xen has been removed";
 
   linux_grsec_stable_desktop    = self.linux_grsec_desktop_3_14;
   linux_grsec_stable_server     = self.linux_grsec_server_3_14;
   linux_grsec_stable_server_xen = self.linux_grsec_server_xen_3_14;
 
-  linuxPackages_grsec_desktop_3_14    = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
-  linuxPackages_grsec_server_3_14     = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_3_14 = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
+  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
+  linux_grsec_testing_server     = self.linux_grsec_server_latest;
+  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
 
-  linuxPackages_grsec_desktop_4_4    = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_4     = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_4 = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
-
-  linuxPackages_grsec_testing_desktop    = self.linuxPackages_grsec_desktop_latest;
-  linuxPackages_grsec_testing_server     = self.linuxPackages_grsec_server_latest;
-  linuxPackages_grsec_testing_server_xen = self.linuxPackages_grsec_server_xen_latest;
-
-  linuxPackages_grsec_stable_desktop    = self.linuxPackages_grsec_desktop_3_14;
-  linuxPackages_grsec_stable_server     = self.linuxPackages_grsec_server_3_14;
-  linuxPackages_grsec_stable_server_xen = self.linuxPackages_grsec_server_xen_3_14;
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
