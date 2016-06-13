@@ -2,7 +2,6 @@
   bzip2,
   fetchFromGitHub,
   lib,
-  makeWrapper,
   nix,
   perl,
   perlPackages,
@@ -20,8 +19,6 @@ stdenv.mkDerivation rec {
     inherit rev;
     sha256 = "0mjzsiknln3isdri9004wwjjjpak5fj8ncizyncf5jv7g4m4q1pj";
   };
-
-  buildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [
     nix
@@ -41,14 +38,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/nix-serve <<EOF
     #! ${stdenv.shell}
+    export PATH=${nix.out}/bin:\$PATH
+    export PATH=${bzip2.out}/bin:\$PATH
+    export PERL5LIB=$PERL5LIB
     exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
     EOF
     chmod +x $out/bin/nix-serve
-
-    wrapProgram $out/bin/nix-serve \
-      --prefix PATH : "${nix.out}/bin:${bzip2.out}/bin" \
-      --prefix PERL5LIB : $PERL5LIB
-    '';
+  '';
 
   meta = {
     homepage = https://github.com/edolstra/nix-serve;
