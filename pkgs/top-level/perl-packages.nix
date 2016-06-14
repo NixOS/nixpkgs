@@ -2500,11 +2500,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ClassMix];
   };
 
-  CryptJWT = buildPerlPackage {
-    name = "Crypt-JWT-0.011";
+  CryptJWT = buildPerlPackage rec {
+    name = "Crypt-JWT-0.017";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.011.tar.gz;
-      sha256 = "0eb02328aa2949adbf91c760bcdc9a5f6e206db8533023847fd7f76783f71e09";
+      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
+      sha256 = "811857ca0be3155ebb2f5ce006772f7463165678f6aa2c959f3009aa54d2f4f7";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
