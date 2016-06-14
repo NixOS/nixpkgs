@@ -99,7 +99,7 @@
 , libxcbshapeExtlib ? true # X11 grabbing shape rendering
 , libXv ? null # Xlib support
 , lzma ? null # xz-utils
-#, nvenc ? null # NVIDIA NVENC support
+, nvenc ? false, nvidia-video-sdk ? null # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 #, opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -232,6 +232,7 @@ assert libxcbshapeExtlib -> libxcb != null;
 assert openglExtlib -> mesa != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 assert x11grabExtlib -> libX11 != null && libXv != null;
+assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
@@ -356,7 +357,7 @@ stdenv.mkDerivation rec {
     (enableFeature libxcbxfixesExtlib "libxcb-xfixes")
     (enableFeature libxcbshapeExtlib "libxcb-shape")
     (enableFeature (lzma != null) "lzma")
-    #(enableFeature nvenc "nvenc")
+    (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
     #(enableFeature opencl "opencl")
     #(enableFeature (opencore-amr != null && version3Licensing) "libopencore-amrnb")
@@ -410,6 +411,7 @@ stdenv.mkDerivation rec {
     ++ optionals nonfreeLicensing [ faac fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
+    ++ optionals nvenc [ nvidia-video-sdk ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices AVFoundation MediaToolbox
                                    VideoDecodeAcceleration ];
 

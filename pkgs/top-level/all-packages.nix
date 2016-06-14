@@ -8586,6 +8586,8 @@ in
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
+  nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
+
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
   ode = callPackage ../development/libraries/ode { };
