@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [
+    bzip2
     nix
     perl
     perlPackages.DBDSQLite
@@ -38,8 +39,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cat > $out/bin/nix-serve <<EOF
     #! ${stdenv.shell}
-    export PATH=${nix.out}/bin:\$PATH
-    export PATH=${bzip2.out}/bin:\$PATH
+    export PATH=${lib.makeBinPath [nix bzip2]}:\$PATH
     export PERL5LIB=$PERL5LIB
     exec ${perlPackages.Starman}/bin/starman $out/libexec/nix-serve/nix-serve.psgi "\$@"
     EOF
