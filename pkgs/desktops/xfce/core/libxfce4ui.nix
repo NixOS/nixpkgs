@@ -18,8 +18,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "docdev" ];
 
+  nativeBuildInputs = [ pkgconfig intltool ];
+
   buildInputs =
-    [ pkgconfig intltool gtk libxfce4util xfconf libglade
+    [ gtk libxfce4util xfconf libglade
       libstartup_notification hicolor_icon_theme
     ] ++ optional withGtk3 gtk3;
 
