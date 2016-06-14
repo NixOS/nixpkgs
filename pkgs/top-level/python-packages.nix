@@ -7508,6 +7508,11 @@ in modules // {
     };
   };
 
+  pycuda = callPackage ../development/python-modules/pycuda rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (pkgs.stdenv) mkDerivation;
+  };
+
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
     version = "0.1.7";
