@@ -5261,32 +5261,31 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustc = rustcStable;
-  rustcStable = callPackage ../development/compilers/rustc {};
-  rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
-  rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
+  rust = rustStable;
+  rustStable = callPackage ../development/compilers/rust {};
+  rustBeta = lowPrio (callPackage ../development/compilers/rust/beta.nix {});
+  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {});
 
-  cargo = callPackage ../development/tools/build-managers/cargo {};
-  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {});
+  cargo = rust.cargo;
+  rustc = rust.rustc;
+  rustPlatform = recurseIntoAttrs (makeRustPlatform rust rustPlatform);
 
-  rustPlatform = recurseIntoAttrs (makeRustPlatform cargo rustPlatform);
-
-  makeRustPlatform = cargo: self:
+  makeRustPlatform = rust: self:
     let
       callPackage = newScope self;
     in {
-      inherit cargo;
-
-      rustc = cargo.rustc;
+      inherit rust;
 
       rustRegistry = callPackage ./rust-packages.nix { };
 
       buildRustPackage = callPackage ../build-support/rust {
-        inherit cargo;
+        inherit rust;
       };
     };
 
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
+  rustracer = callPackage ../development/tools/rust/racer { };
+  rustracerd = callPackage ../development/tools/rust/racerd { };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
@@ -6362,10 +6361,6 @@ in
   qtcreator = qt5.callPackage ../development/qtcreator {
     withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
-
-  racerRust = callPackage ../development/tools/rust/racer { };
-
-  racerdRust = callPackage ../development/tools/rust/racerd { };
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
@@ -7494,7 +7489,7 @@ in
   };
   libkrb5 = self.krb5Full.override { type = "lib"; };
 
-  lasso = callPackage ../development/libraries/lasso { };  
+  lasso = callPackage ../development/libraries/lasso { };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 

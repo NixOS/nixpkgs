@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, rustc }:
+{ stdenv, fetchurl, makeWrapper, cacert, zlib }:
 
 let
   platform =
@@ -23,28 +23,56 @@ let
     else if stdenv.system == "x86_64-darwin"
     then "d59b5509e69c1cace20a57072e3b3ecefdbfd8c7e95657b0ff2ac10aa1dfebe6"
     else throw "missing boostrap hash for platform ${stdenv.system}";
-in
-stdenv.mkDerivation rec {
-  name = "cargo-bootstrap-${version}";
-  version = "1.9.0";
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
      sha256 = bootstrapHash;
   };
 
-  passthru.rustc = rustc;
-  buildInputs = [makeWrapper zlib];
-  phases = ["unpackPhase" "installPhase"];
+  version = "1.9.0";
+in
 
-  installPhase = ''
-    cp -r cargo "$out"
+rec {
+  rustc = stdenv.mkDerivation rec {
+    name = "rustc-bootstrap-${version}";
 
-    patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      "$out/bin/cargo"
+    inherit version;
+    inherit src;
 
-    wrapProgram "$out/bin/cargo" \
-      --suffix PATH : "${rustc}/bin"
-  '';
+    buildInputs = [ makeWrapper ];
+    phases = ["unpackPhase" "installPhase"];
+
+    installPhase = ''
+      ./install.sh --prefix=$out \
+        --components=rustc,rust-std-${platform},rust-docs
+
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/rustc"
+
+      wrapProgram "$out/bin/rustc"
+    '';
+  };
+
+  cargo = stdenv.mkDerivation rec {
+    name = "cargo-bootstrap-${version}";
+
+    inherit version;
+    inherit src;
+
+    buildInputs = [ makeWrapper zlib rustc ];
+    phases = ["unpackPhase" "installPhase"];
+
+    installPhase = ''
+      ./install.sh --prefix=$out \
+        --components=cargo
+
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/cargo"
+
+      wrapProgram "$out/bin/cargo" \
+        --suffix PATH : "${rustc}/bin"
+    '';
+  };
 }

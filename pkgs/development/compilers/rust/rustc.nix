@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustc, git
+, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git
 
 , isRelease ? false
 , shortVersion
@@ -8,6 +8,7 @@
 , configureFlags ? []
 , patches
 , targets
+, targetPatches
 , targetToolchains
 } @ args:
 
@@ -51,14 +52,14 @@ stdenv.mkDerivation {
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   configureFlags = configureFlags
-                ++ [ "--enable-local-rust" "--local-rust-root=${rustc}" "--enable-rpath" ]
+                ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
                 ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ stdenv.lib.optional (targets != []) "--target=${target}"
                 ++ stdenv.lib.optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
-  inherit patches;
+  patches = patches ++ targetPatches;
   passthru.target = target;
 
   postPatch = ''
@@ -94,7 +95,7 @@ stdenv.mkDerivation {
   '';
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustc git ];
+  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git ];
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
 

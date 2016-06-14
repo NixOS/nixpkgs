@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   configurePhase = ''
-    ./configure --enable-optimize --prefix=$out --local-cargo=${rustPlatform.cargo}/bin/cargo
+    ./configure --enable-optimize --prefix=$out --local-cargo=${rustPlatform.rust.cargo}/bin/cargo
   '';
 
   buildPhase = "make";

@@ -2,7 +2,7 @@
          This file can be deleted after the 1.10.0 release and bootstrap.nix
          can be used instead
 */
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, callPackage }:
 
 let
   platform = if stdenv.system == "i686-linux"
@@ -43,19 +43,23 @@ let
   snapshotName = "rust-stage0-${snapshotDate}-${snapshotRev}-${platform}-${snapshotHash}.tar.bz2";
 in
 
-stdenv.mkDerivation {
-  name = "rust-bootstrap";
-  src = fetchurl {
-    url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
-    sha1 = snapshotHash;
+rec {
+  rustc = stdenv.mkDerivation {
+    name = "rustc-snapshot";
+    src = fetchurl {
+      url = "http://static.rust-lang.org/stage0-snapshots/${snapshotName}";
+      sha1 = snapshotHash;
+    };
+    dontStrip = true;
+    installPhase = ''
+      mkdir -p "$out"
+      cp -r bin "$out/bin"
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
+      patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
+               --set-rpath "${stdenv.cc.cc.lib}/lib/:${stdenv.cc.cc.lib}/lib64/" \
+               "$out/bin/rustc"
+    '';
   };
-  dontStrip = true;
-  installPhase = ''
-    mkdir -p "$out"
-    cp -r bin "$out/bin"
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
-    patchelf --interpreter "${stdenv.glibc.out}/lib/${stdenv.cc.dynamicLinker}" \
-             --set-rpath "${stdenv.cc.cc.lib}/lib/:${stdenv.cc.cc.lib}/lib64/" \
-             "$out/bin/rustc"
-  '';
+
+  cargo = null;
 }
