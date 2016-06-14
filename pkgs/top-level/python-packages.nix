@@ -7779,6 +7779,33 @@ in modules // {
     };
   };
 
+  pytools = buildPythonPackage rec { 
+    name = "pytools-${version}"; 
+    version = "2016.2.1"; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "inducer";
+      repo = "pytools";
+      rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
+      sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
+    };
+
+    buildInputs = with self; [
+      decorator
+      appdirs
+      six
+      numpy
+    ];
+
+    meta = {
+      homepage = https://github.com/inducer/pytools/; 
+      description = "Miscellaneous Python lifesavers.";
+      license = licenses.mit;
+      maintainers = with maintainers; [ artuuge ];
+    };
+
+  };
+
   radicale = buildPythonPackage rec {
     name = "radicale-${version}";
     namePrefix = "";
