@@ -10559,18 +10559,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Readonly = buildPerlModule rec {
-    name = "Readonly-2.04";
+    name = "Readonly-2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SANKO/${name}.tar.gz";
-      sha256 = "2221243758afde3b3238d1325b9c32bf1b4d0b4d11065920c03408b2645c93b6";
+      sha256 = "4b23542491af010d44a5c7c861244738acc74ababae6b8838d354dfb19462b5e";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
       homepage = https://github.com/sanko/readonly;
       description = "Facility for creating read-only scalars, arrays, hashes";
-      platforms = stdenv.lib.platforms.unix;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ rycee ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
