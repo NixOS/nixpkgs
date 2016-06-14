@@ -147,7 +147,6 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
-      #grsecurity = 121; # unused
       hydra = 122;
       spiped = 123;
       teamspeak = 124;
@@ -396,7 +395,6 @@
       foundationdb = 118;
       newrelic = 119;
       starbound = 120;
-      grsecurity = 121;
       hydra = 122;
       spiped = 123;
       teamspeak = 124;

@@ -468,7 +468,6 @@ in {
         home = "/root";
         shell = mkDefault cfg.defaultUserShell;
         group = "root";
-        extraGroups = [ "grsecurity" ];
         initialHashedPassword = mkDefault config.security.initialRootPassword;
       };
       nobody = {
@@ -497,7 +496,6 @@ in {
       nixbld.gid = ids.gids.nixbld;
       utmp.gid = ids.gids.utmp;
       adm.gid = ids.gids.adm;
-      grsecurity.gid = ids.gids.grsecurity;
       input.gid = ids.gids.input;
     };
 
