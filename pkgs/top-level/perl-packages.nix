@@ -9850,10 +9850,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PDFAPI2 = buildPerlPackage rec {
-    name = "PDF-API2-2.027";
+    name = "PDF-API2-2.028";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
-      sha256 = "d24db02d902198406270551857830633b289ad39f5a9ba5431246f8cd60e7599";
+      sha256 = "a642b41362884b7005e421ec93c7d3a54f7adef7657540331e0d4ca89d106b04";
     };
     propagatedBuildInputs = [ FontTTF ];
     meta = {
