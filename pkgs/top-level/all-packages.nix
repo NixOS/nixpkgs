@@ -4672,6 +4672,8 @@ in
 
   liquibase = callPackage ../development/tools/database/liquibase { };
 
+  lizardfs = callPackage ../tools/filesystems/lizardfs { };
+
   llvm = self.llvmPackages.llvm;
 
   llvm_38 = self.llvmPackages_38.llvm;
