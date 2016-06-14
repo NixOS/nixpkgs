@@ -11892,14 +11892,7 @@ in modules // {
 
   libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
     numpy = self.numpy_1_10;
-    scipy = self.buildScipyPackage rec {
-      version = "0.17.1";
-      src = pkgs.fetchurl {
-        url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-        sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
-      };
-      inherit numpy;
-    };
+    inherit (self) scipy;
     inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit75;
     clblas = pkgs.clblas-cuda;

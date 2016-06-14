@@ -1550,8 +1550,6 @@ in
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
-  libgpuarray-cuda = python34Packages.libgpuarray-cuda;
-
   lp_solve = callPackage ../applications/science/math/lp_solve { };
 
   lprof = callPackage ../tools/graphics/lprof { };
@@ -15950,10 +15948,6 @@ in
   clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (linuxPackages) nvidia_x11;
-    python = pkgs.python34Packages.python;
-    boost = pkgs.boost159.override {
-      inherit python;
-    };
   };
 
   jags = callPackage ../applications/science/math/jags { };

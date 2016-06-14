@@ -18,8 +18,14 @@
 , python
 , cudatoolkit
 , nvidia_x11
+, setuptools
 }: 
-
+let
+  scipy_numpy = scipy.override (let inherit numpy; in {
+    passthru = { blas = numpy.blas; };
+    propagatedBuildInputs = [ numpy.blas numpy ] ++ [ python setuptools ];
+  });
+in
 buildPythonPackage rec {
   name = "libgpuarray-cuda-${version}";
   version = "-9998.0"; 
@@ -98,7 +104,7 @@ EOF
 
   propagatedBuildInputs = [
     numpy
-    scipy
+    scipy_numpy
     nose
     six
     Mako
