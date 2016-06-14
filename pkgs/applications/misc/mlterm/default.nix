@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/mlterm/;
     license = licenses.bsd2;
     maintainers = [ maintainers.vrthra ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; linux;
   };
 }
