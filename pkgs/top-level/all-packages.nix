@@ -16563,6 +16563,8 @@ in
     x11Support = true;
   });
 
+  gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
+
   gnuk = callPackage ../misc/gnuk { };
   gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
   gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
