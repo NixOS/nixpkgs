@@ -1830,6 +1830,7 @@ in
   };
 
   gx = callPackage ../tools/package-management/gx { };
+  gx-go = callPackage ../tools/package-management/gx/go { };
 
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
