@@ -7511,6 +7511,7 @@ in modules // {
   pycuda = callPackage ../development/python-modules/pycuda rec {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (pkgs.stdenv) mkDerivation;
+    inherit pythonOlder;
   };
 
   python-axolotl = buildPythonPackage rec {
@@ -7794,6 +7795,8 @@ in modules // {
       rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
       sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
     };
+
+    doCheck = pythonOlder "3.5";
 
     buildInputs = with self; [
       decorator

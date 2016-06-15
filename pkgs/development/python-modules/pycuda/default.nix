@@ -11,6 +11,7 @@
 , python
 , mkDerivation
 , stdenv
+, pythonOlder
 }:
 let
   compyte = import ./compyte.nix {
@@ -43,6 +44,8 @@ buildPythonPackage rec {
   postInstall = ''
     ln -s ${compyte} $out/${python.sitePackages}/pycuda/compyte 
   '';
+
+  doCheck = pythonOlder "3.5";
 
   propagatedBuildInputs = [
     numpy
