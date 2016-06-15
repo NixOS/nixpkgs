@@ -1,4 +1,4 @@
-{ pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
+{ lib, pkgs, stdenv, buildPythonApplication, pythonPackages, fetchurl, fetchFromGitHub }:
 let
   matrix-angular-sdk = buildPythonApplication rec {
     name = "matrix-angular-sdk-${version}";
@@ -12,13 +12,13 @@ let
 in
 buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
-    rev = "5fbdf2bcec40bf2f24fc0698440ee384595ff027";
-    sha256 = "1f9flb68l0bb5fkggxz1pghv72snsx6yia3s58f85z13f9vh84cb";
+    rev = "v${version}";
+    sha256 = "046lh9s7lpi19akqxfvr361fp8bwcz48w3sqz1vsy2z59iim9xy3";
   };
 
   patches = [ ./matrix-synapse.patch ];
@@ -27,7 +27,7 @@ buildPythonApplication rec {
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
     service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
-    matrix-angular-sdk
+    matrix-angular-sdk bleach netaddr jinja2 psycopg2
   ];
 
   # Checks fail because of Tox.
