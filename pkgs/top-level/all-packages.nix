@@ -1369,6 +1369,8 @@ in
 
   dvtm = callPackage ../tools/misc/dvtm { };
 
+  e2tools = callPackage ../tools/filesystems/e2tools { };
+
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
