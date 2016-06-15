@@ -6269,11 +6269,11 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
   };
 
-  HTTPMessage = buildPerlPackage {
-    name = "HTTP-Message-6.06";
+  HTTPMessage = buildPerlPackage rec {
+    name = "HTTP-Message-6.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Message-6.06.tar.gz;
-      sha256 = "0qxdrcak97azjvqyx1anpb2ky6vp6vc37x0wcfjdqfajkh09fzh8";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "e7b368077ae6a188d99920411d8f52a8e5acfb39574d4f5c24f46fd22533d81b";
     };
     propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
     meta = {
