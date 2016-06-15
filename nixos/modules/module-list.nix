@@ -130,6 +130,8 @@
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
+  ./services/continuous-integration/gocd-agent/default.nix
+  ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
   ./services/continuous-integration/jenkins/slave.nix
