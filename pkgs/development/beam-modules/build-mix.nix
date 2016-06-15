@@ -1,4 +1,4 @@
-{ stdenv, writeText, elixir, erlang, hexRegistrySnapshot, hex }:
+{ stdenv, writeText, elixir, erlang, hexRegistrySnapshot, hex, lib }:
 
 { name
 , version
@@ -12,11 +12,15 @@
 , buildPhase ? null
 , configurePhase ? null
 , meta ? {}
+, enableDebugInfo ? false
 , ... }@attrs:
 
 with stdenv.lib;
 
 let
+
+  debugInfoFlag = lib.optionalString (enableDebugInfo || elixir.debugInfo) "--debug-info";
+
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
           buildInputs = [ drv ];
@@ -58,7 +62,7 @@ let
         export HEX_HOME=`pwd`
         export MIX_ENV=prod
 
-        MIX_ENV=prod mix compile --debug-info --no-deps-check
+        MIX_ENV=prod mix compile ${debugInfoFlag} --no-deps-check
 
         runHook postBuild
     ''

@@ -1,5 +1,5 @@
 { stdenv, writeText, erlang, rebar3, openssl, libyaml,
-  pc, buildEnv }:
+  pc, buildEnv, lib }:
 
 { name, version
 , src
@@ -11,11 +11,14 @@
 , buildPhase ? null
 , configurePhase ? null
 , meta ? {}
+, enableDebugInfo ? false
 , ... }@attrs:
 
 with stdenv.lib;
 
 let
+  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
+
   ownPlugins = buildPlugins ++ (if compilePorts then [pc] else []);
 
   shell = drv: stdenv.mkDerivation {
@@ -51,7 +54,7 @@ let
     configurePhase = if configurePhase == null
     then ''
       runHook preConfigure
-      ${erlang}/bin/escript ${rebar3.bootstrapper}
+      ${erlang}/bin/escript ${rebar3.bootstrapper} ${debugInfoFlag}
       runHook postConfigure
     ''
     else configurePhase;

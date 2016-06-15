@@ -1,4 +1,4 @@
-{ stdenv, writeText, erlang, perl, which, gitMinimal, wget }:
+{ stdenv, writeText, erlang, perl, which, gitMinimal, wget, lib }:
 
 { name, version
 , src
@@ -11,11 +11,14 @@
 , buildPhase ? null
 , configurePhase ? null
 , meta ? {}
+, enableDebugInfo ? false
 , ... }@attrs:
 
 with stdenv.lib;
 
 let
+  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
+
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
           buildInputs = [ drv ];
@@ -55,7 +58,7 @@ let
     then ''
         runHook preBuild
 
-        make SKIP_DEPS=1
+        make SKIP_DEPS=1 ERL_OPTS="$ERL_OPTS ${debugInfoFlag}"
 
         runHook postBuild
     ''
