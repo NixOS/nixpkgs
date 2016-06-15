@@ -12594,7 +12594,7 @@ in
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
   font-manager = callPackage ../applications/misc/font-manager {
-    vala = vala_0_28;
+    vala = vala_0_32;
   };
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
