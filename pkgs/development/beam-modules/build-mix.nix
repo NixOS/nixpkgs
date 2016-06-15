@@ -8,6 +8,9 @@
 , beamDeps ? []
 , postPatch ? ""
 , compilePorts ? false
+, installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
 , meta ? {}
 , ... }@attrs:
 
@@ -38,13 +41,17 @@ let
     inherit buildInputs;
     propagatedBuildInputs = [ hexRegistrySnapshot hex elixir ] ++ beamDeps;
 
-    configurePhase = ''
+    configurePhase = if configurePhase == null
+    then ''
       runHook preConfigure
       ${erlang}/bin/escript ${bootstrapper}
       runHook postConfigure
-    '';
+    ''
+    else configurePhase ;
 
-    buildPhase = ''
+
+    buildPhase = if buildPhase == null
+    then ''
         runHook preBuild
 
         export HEX_OFFLINE=1
@@ -54,9 +61,11 @@ let
         MIX_ENV=prod mix compile --debug-info --no-deps-check
 
         runHook postBuild
-    '';
+    ''
+    else buildPhase;
 
-    installPhase = ''
+    installPhase = if installPhase == null
+    then ''
         runHook preInstall
 
         MIXENV=prod
@@ -74,7 +83,8 @@ let
         done
 
         runHook postInstall
-    '';
+    ''
+    else installPhase;
 
     passthru = {
       packageName = name;

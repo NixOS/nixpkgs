@@ -8,6 +8,8 @@
 , postPatch ? ""
 , compilePorts ? false
 , installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
 , meta ? {}
 , ... }@attrs:
 
@@ -46,20 +48,24 @@ let
       rm -f rebar rebar3
     '';
 
-    configurePhase = ''
+    configurePhase = if configurePhase == null
+    then ''
       runHook preConfigure
       ${erlang}/bin/escript ${rebar3.bootstrapper}
       runHook postConfigure
-    '';
+    ''
+    else configurePhase;
 
-    buildPhase = ''
+    buildPhase = if buildPhase == null
+    then ''
       runHook preBuild
       HOME=. rebar3 compile
       ${if compilePorts then ''
         HOME=. rebar3 pc compile
       '' else ''''}
       runHook postBuild
-    '';
+    ''
+    else installPhase;
 
     installPhase = if installPhase == null
     then ''

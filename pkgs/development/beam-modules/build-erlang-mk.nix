@@ -8,6 +8,8 @@
 , postPatch ? ""
 , compilePorts ? false
 , installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
 , meta ? {}
 , ... }@attrs:
 
@@ -37,7 +39,8 @@ let
     buildInputs = [ erlang perl which gitMinimal wget ];
     propagatedBuildInputs = beamDeps;
 
-    configurePhase = ''
+    configurePhase = if configurePhase == null
+    then ''
       runHook preConfigure
 
       # We shouldnt need to do this, but it seems at times there is a *.app in
@@ -45,17 +48,21 @@ let
       make SKIP_DEPS=1 clean
 
       runHook postConfigure
-    '';
+    ''
+    else configurePhase;
 
-    buildPhase = ''
+    buildPhase = if buildPhase == null
+    then ''
         runHook preBuild
 
         make SKIP_DEPS=1
 
         runHook postBuild
-    '';
+    ''
+    else buildPhase;
 
-    installPhase = ''
+    installPhase =  if installPhase == null
+    then ''
         runHook preInstall
 
         mkdir -p $out/lib/erlang/lib/${name}
@@ -75,7 +82,8 @@ let
         fi
 
         runHook postInstall
-    '';
+    ''
+    else installPhase;
 
     passthru = {
       packageName = name;
