@@ -11891,8 +11891,7 @@ in modules // {
   });
 
   libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
-    numpy = self.numpy_1_10;
-    inherit (self) scipy;
+    inherit (self) numpy scipy;
     inherit (pkgs.linuxPackages) nvidia_x11;
     cudatoolkit = pkgs.cudatoolkit75;
     clblas = pkgs.clblas-cuda;
