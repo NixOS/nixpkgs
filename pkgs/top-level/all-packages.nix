@@ -1416,6 +1416,8 @@ in
 
   entr = callPackage ../tools/misc/entr { };
 
+  eot_utilities = callPackage ../tools/misc/eot-utilities { };
+
   eplot = callPackage ../tools/graphics/eplot { };
 
   ethtool = callPackage ../tools/misc/ethtool { };
