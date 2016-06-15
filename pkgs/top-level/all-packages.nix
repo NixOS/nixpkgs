@@ -710,6 +710,8 @@ in
 
   contacts = callPackage ../tools/misc/contacts { };
 
+  coturn = callPackage ../servers/coturn { };
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   datamash = callPackage ../tools/misc/datamash { };
