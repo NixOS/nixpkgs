@@ -23,14 +23,18 @@
 , decryptSslTraffic ? false
 }:
 
-let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
+let inherit (pkgs) fetchurl makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
 let
 
   mirror = "http://download.qt.io";
-  srcs = import ./srcs.nix { inherit mirror; inherit (pkgs) fetchurl; };
+  remotesrcs = fetchurl {
+    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/1fd3645b9d718623998fa114797630d94461f55f/qt-srcs.nix";
+    sha256 = "1idkhkjnyz8x6nczksjcccmmmgg01zclamcxxdv2lwxhsrws2m2l";
+  };
+  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
 
   qtSubmodule = args:
     let
