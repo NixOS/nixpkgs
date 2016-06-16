@@ -3,7 +3,7 @@
 let
 
   pkgsFun = overrides:
-    let 
+    let
       self = self_ // overrides;
       self_ = with self; {
 
@@ -35,7 +35,7 @@ let
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
-    gnome-getting-started-docs gnome-software
+    gnome-getting-started-docs gnome-software gnome-packagekit
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -79,7 +79,7 @@ let
   dconf = callPackage ./core/dconf { };
   dconf-editor = callPackage ./core/dconf-editor { };
 
-  empathy = callPackage ./core/empathy { 
+  empathy = callPackage ./core/empathy {
     webkitgtk = webkitgtk24x;
     clutter-gst = pkgs.clutter-gst;
   };
@@ -360,13 +360,13 @@ let
 
   california = callPackage ./misc/california { };
 
-  geary = callPackage ./misc/geary { 
+  geary = callPackage ./misc/geary {
     webkitgtk = webkitgtk24x;
   };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 
-  gitg = callPackage ./misc/gitg { 
+  gitg = callPackage ./misc/gitg {
     webkitgtk = webkitgtk24x;
   };
 
@@ -383,7 +383,7 @@ let
   gpaste = callPackage ./misc/gpaste { };
 
   pidgin-im-gnome-shell-extension = callPackage ./misc/pidgin { };
-  
+
   gtkhtml = callPackage ./misc/gtkhtml { };
 
   pomodoro = callPackage ./misc/pomodoro { };
@@ -391,6 +391,8 @@ let
   gnome-video-effects = callPackage ./misc/gnome-video-effects { };
 
   gnome-software = callPackage ./misc/gnome-software { };
+
+  gnome-packagekit = callPackage ./misc/gnome-packagekit { };
 
     };
   in self; # pkgsFun
