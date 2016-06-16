@@ -23607,6 +23607,8 @@ in modules // {
 
     propagatedBuildInputs = with self; [ jsonschema ];
 
+    installFlags = [ "--ignore-installed" ];
+
     meta = {
       description = "A built-package format for Python";
       license = with licenses; [ mit ];
