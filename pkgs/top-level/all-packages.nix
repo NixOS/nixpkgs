@@ -1933,6 +1933,8 @@ in
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
+  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
+
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
   highlight = callPackage ../tools/text/highlight {
