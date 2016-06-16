@@ -16,10 +16,14 @@
 
 let
 
-  inherit (pkgs) lib stdenv;
+  inherit (pkgs) fetchurl lib stdenv;
 
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
+  remotesrcs = fetchurl {
+    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/580915a460b11820c0b671236255180af5264c0c/applications-srcs.nix";
+    sha256 = "19lwhn468p9v8p97vyy23q5mv0yxs394lsfl41ij3glrxd92s8kf";
+  };
+  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
 
