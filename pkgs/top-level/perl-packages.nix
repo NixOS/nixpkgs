@@ -6556,13 +6556,13 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
-  IOSocketSSL = buildPerlPackage {
-    name = "IO-Socket-SSL-2.020";
+  IOSocketSSL = buildPerlPackage rec {
+    name = "IO-Socket-SSL-2.027";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SU/SULLR/IO-Socket-SSL-2.020.tar.gz;
-      sha256 = "1nqjwnyd8iy0whisa352a97ihxw2zc78cmbxa0ccs4547bljr3js";
+      url = "mirror://cpan/authors/id/S/SU/SULLR/${name}.tar.gz";
+      sha256 = "723517ea71f90105579e7db7a1a2e053bf5c8142a187df8bc1fe3881c3383f67";
     };
-    propagatedBuildInputs = [ URI NetSSLeay ];
+    propagatedBuildInputs = [ NetSSLeay URI ];
     meta = {
       homepage = https://github.com/noxxi/p5-io-socket-ssl;
       description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
