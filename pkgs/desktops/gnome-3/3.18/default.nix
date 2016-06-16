@@ -35,7 +35,7 @@ let
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
     gnome-maps gnome-characters gnome-calendar accerciser gnome-nettool
-    gnome-getting-started-docs
+    gnome-getting-started-docs gnome-software
   ];
 
   gamesPackages = with gnome3; [ swell-foop lightsoff iagno
@@ -389,6 +389,8 @@ let
   pomodoro = callPackage ./misc/pomodoro { };
 
   gnome-video-effects = callPackage ./misc/gnome-video-effects { };
+
+  gnome-software = callPackage ./misc/gnome-software { };
 
     };
   in self; # pkgsFun
