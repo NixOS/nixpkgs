@@ -1499,13 +1499,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGI = buildPerlPackage rec {
-    name = "CGI-4.28";
+    name = "CGI-4.31";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/${name}.tar.gz";
-      sha256 = "1297d3ed6616cacb4eb57860e3e743f3890111e7a63ca08849930f42f1360532";
+      sha256 = "dee34f45525efb698d02c56ba2458a72acc34c4dcb05344706b587840b4e8c99";
     };
     buildInputs = [ TestDeep TestWarn ];
-    propagatedBuildInputs = [ HTMLParser ];
+    propagatedBuildInputs = [ HTMLParser self."if" ];
     meta = {
       homepage = https://metacpan.org/module/CGI;
       description = "Handle Common Gateway Interface requests and responses";
@@ -2500,11 +2500,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ClassMix];
   };
 
-  CryptJWT = buildPerlPackage {
-    name = "Crypt-JWT-0.011";
+  CryptJWT = buildPerlPackage rec {
+    name = "Crypt-JWT-0.017";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.011.tar.gz;
-      sha256 = "0eb02328aa2949adbf91c760bcdc9a5f6e206db8533023847fd7f76783f71e09";
+      url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
+      sha256 = "811857ca0be3155ebb2f5ce006772f7463165678f6aa2c959f3009aa54d2f4f7";
     };
     propagatedBuildInputs = [ CryptX JSONMaybeXS ];
     meta = {
@@ -2698,10 +2698,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.035";
+    name = "CryptX-0.036";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "1ec6c000862d60d3d12eda5d0eed3f08e759d4140775b6c76da538a8be3857fe";
+      sha256 = "9b740a592843c48a437f5e2b434cee38382e93a9112d2331a76ed7b865d0d520";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -6269,11 +6269,11 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
   };
 
-  HTTPMessage = buildPerlPackage {
-    name = "HTTP-Message-6.06";
+  HTTPMessage = buildPerlPackage rec {
+    name = "HTTP-Message-6.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Message-6.06.tar.gz;
-      sha256 = "0qxdrcak97azjvqyx1anpb2ky6vp6vc37x0wcfjdqfajkh09fzh8";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "e7b368077ae6a188d99920411d8f52a8e5acfb39574d4f5c24f46fd22533d81b";
     };
     propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
     meta = {
@@ -7605,10 +7605,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999722";
+    name = "Math-BigInt-1.999723";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "c76a2d5e6a996186a42a7e516b8d82217fb0cd18c7e1e55241322c4a859ccf40";
+      sha256 = "c67da3fdc18f6f6127b13d10f0b2d482c431b0c10d9239ace8481cdf7136f0c9";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -9850,10 +9850,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   PDFAPI2 = buildPerlPackage rec {
-    name = "PDF-API2-2.027";
+    name = "PDF-API2-2.028";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SS/SSIMMS/${name}.tar.gz";
-      sha256 = "d24db02d902198406270551857830633b289ad39f5a9ba5431246f8cd60e7599";
+      sha256 = "a642b41362884b7005e421ec93c7d3a54f7adef7657540331e0d4ca89d106b04";
     };
     propagatedBuildInputs = [ FontTTF ];
     meta = {
@@ -10559,18 +10559,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Readonly = buildPerlModule rec {
-    name = "Readonly-2.04";
+    name = "Readonly-2.05";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SA/SANKO/${name}.tar.gz";
-      sha256 = "2221243758afde3b3238d1325b9c32bf1b4d0b4d11065920c03408b2645c93b6";
+      sha256 = "4b23542491af010d44a5c7c861244738acc74ababae6b8838d354dfb19462b5e";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
       homepage = https://github.com/sanko/readonly;
       description = "Facility for creating read-only scalars, arrays, hashes";
-      platforms = stdenv.lib.platforms.unix;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ rycee ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
@@ -13925,14 +13924,14 @@ let self = _self // overrides; _self = with self; {
     name = "W3C-LinkChecker-4.81";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SC/SCOP/${name}.tar.gz";
-      sha256 = "0rbaqvv8ql0db4am1nh7ybig3a4kmckgdm7445xww7fr40dzcfb2";
+      sha256 = "6239f61b20d91dce7b21e4d4f626ab93a8f1e2f207da5015590d508cf6c66a65";
     };
-    propagatedBuildInputs = [
-      LWP ConfigGeneral NetIP TermReadKey Perl5lib
-      CryptSSLeay CSSDOM LWPProtocolHttps ];
+    outputs = [ "out" ];
+    propagatedBuildInputs = [ CGI CSSDOM ConfigGeneral CryptSSLeay EncodeLocale HTMLParser HTTPCookies HTTPMessage LWP LWPProtocolHttps NetHTTP NetIP TermReadKey URI ];
     meta = {
       homepage = http://validator.w3.org/checklink;
       description = "A tool to check links and anchors in Web pages or full Web sites";
+      license = stdenv.lib.licenses.w3c;
     };
   };
 

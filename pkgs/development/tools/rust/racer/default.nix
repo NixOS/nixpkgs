@@ -17,13 +17,13 @@ buildRustPackage rec {
   buildInputs = [ makeWrapper ];
 
   preCheck = ''
-    export RUST_SRC;_PATH="${rustc.src}/src"
+    export RUST_SRC;_PATH="${rustPlatform.rust.rustc.src}/src"
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp -p target/release/racer $out/bin/
-    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustc.src}/src"
+    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rust.rustc.src}/src"
   '';
 
   meta = with stdenv.lib; {

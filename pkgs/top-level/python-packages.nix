@@ -7533,6 +7533,12 @@ in modules // {
     };
   };
 
+  pycuda = callPackage ../development/python-modules/pycuda rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (pkgs.stdenv) mkDerivation;
+    inherit pythonOlder;
+  };
+
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
     version = "0.1.7";
@@ -7802,6 +7808,35 @@ in modules // {
       license = licenses.gpl2;
       platform = platforms.all;
     };
+  };
+
+  pytools = buildPythonPackage rec { 
+    name = "pytools-${version}"; 
+    version = "2016.2.1"; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "inducer";
+      repo = "pytools";
+      rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
+      sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
+    };
+
+    doCheck = pythonOlder "3.5";
+
+    buildInputs = with self; [
+      decorator
+      appdirs
+      six
+      numpy
+    ];
+
+    meta = {
+      homepage = https://github.com/inducer/pytools/; 
+      description = "Miscellaneous Python lifesavers.";
+      license = licenses.mit;
+      maintainers = with maintainers; [ artuuge ];
+    };
+
   };
 
   radicale = buildPythonPackage rec {
@@ -11965,6 +12000,12 @@ in modules // {
     };
   });
 
+  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
+    inherit (self) numpy scipy;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit75;
+    clblas = pkgs.clblas-cuda;
+  };
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -23627,6 +23668,9 @@ in modules // {
     buildInputs = with self; [ pytest pytestcov coverage ];
 
     propagatedBuildInputs = with self; [ jsonschema ];
+
+    # We add this flag to ignore the copy installed by bootstrapped-pip
+    installFlags = [ "--ignore-installed" ];
 
     meta = {
       description = "A built-package format for Python";

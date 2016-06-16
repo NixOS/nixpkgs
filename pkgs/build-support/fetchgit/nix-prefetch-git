@@ -68,7 +68,7 @@ for arg; do
             --builder) builder=true;;
             --help) usage; exit;;
             *)
-                argi=$((argi++))
+                : $((++argi))
                 case $argi in
                     1) url=$arg;;
                     2) rev=$arg;;

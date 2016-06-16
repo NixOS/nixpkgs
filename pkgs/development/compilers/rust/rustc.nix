@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustc
+, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git
 
 , isRelease ? false
 , shortVersion
@@ -7,21 +7,10 @@
 , srcSha, srcRev
 , configureFlags ? []
 , patches
+, targets
+, targetPatches
+, targetToolchains
 } @ args:
-
-/* Rust's build process has a few quirks :
-
-- The Rust compiler is written is Rust, so it requires a bootstrap
-  compiler, which is downloaded during the build. To make the build
-  pure, we download it ourself before and put it where it is
-  expected. Once the language is stable (1.0) , we might want to
-  switch it to use nix's packaged rust compiler. This might not be possible
-  as the compiler is highly coupled to the bootstrap.
-
-NOTE : some derivation depend on rust. When updating this, please make
-sure those derivations still compile. (racer, for example).
-
-*/
 
 let
     version = if isRelease then
@@ -35,15 +24,7 @@ let
 
     llvmShared = llvm.override { enableSharedLibraries = true; };
 
-    target = if stdenv.system == "i686-linux"
-      then "i686-unknown-linux-gnu"
-      else if stdenv.system == "x86_64-linux"
-      then "x86_64-unknown-linux-gnu"
-      else if stdenv.system == "i686-darwin"
-      then "i686-apple-darwin"
-      else if stdenv.system == "x86_64-darwin"
-      then "x86_64-apple-darwin"
-      else abort "no snapshot to bootstrap for this platform (missing target triple)";
+    target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
 
     meta = with stdenv.lib; {
       homepage = http://www.rust-lang.org/;
@@ -71,13 +52,15 @@ stdenv.mkDerivation {
 
   # We need rust to build rust. If we don't provide it, configure will try to download it.
   configureFlags = configureFlags
-                ++ [ "--enable-local-rust" "--local-rust-root=${rustc}" "--enable-rpath" ]
+                ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
                 ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang"
+                ++ stdenv.lib.optional (targets != []) "--target=${target}"
                 ++ stdenv.lib.optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
-  inherit patches;
+  patches = patches ++ targetPatches;
+  passthru.target = target;
 
   postPatch = ''
     substituteInPlace src/rust-installer/gen-install-script.sh \
@@ -112,8 +95,8 @@ stdenv.mkDerivation {
   '';
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustc ];
-  buildInputs = [ ncurses ]
+  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git ];
+  buildInputs = [ ncurses ] ++ targetToolchains
     ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
 
   # https://github.com/rust-lang/rust/issues/30181
@@ -125,4 +108,5 @@ stdenv.mkDerivation {
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
   doCheck = true;
+  dontSetConfigureCross = true;
 }

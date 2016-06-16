@@ -129,7 +129,7 @@ in {
       in {
         description = "WPA Supplicant";
 
-        after = [ "network-interfaces.target" ];
+        after = [ "network-interfaces.target" ] ++ lib.concatMap deviceUnit ifaces;
         requires = lib.concatMap deviceUnit ifaces;
         wantedBy = [ "network.target" ];
 

@@ -1370,6 +1370,8 @@ in
 
   dvtm = callPackage ../tools/misc/dvtm { };
 
+  e2tools = callPackage ../tools/filesystems/e2tools { };
+
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
 
   easyrsa = callPackage ../tools/networking/easyrsa { };
@@ -1416,6 +1418,8 @@ in
   enscript = callPackage ../tools/text/enscript { };
 
   entr = callPackage ../tools/misc/entr { };
+
+  eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };
 
@@ -1931,6 +1935,8 @@ in
   heimdall = callPackage ../tools/misc/heimdall { };
 
   hevea = callPackage ../tools/typesetting/hevea { };
+
+  hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
@@ -2525,7 +2531,7 @@ in
   netatalk = callPackage ../tools/filesystems/netatalk { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
- 
+
   netcdf-mpi = appendToName "mpi" (netcdf.override {
     hdf5 = hdf5-mpi;
   });
@@ -4492,7 +4498,7 @@ in
   inherit (self.haskellPackages) ghc;
 
   cabal-install = haskell.lib.disableSharedExecutables haskellPackages.cabal-install;
-   
+
   stack = haskell.lib.overrideCabal haskellPackages.stack (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
@@ -4672,6 +4678,8 @@ in
   lessc = callPackage ../development/compilers/lessc { };
 
   liquibase = callPackage ../development/tools/database/liquibase { };
+
+  lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
   llvm = self.llvmPackages.llvm;
 
@@ -5257,42 +5265,31 @@ in
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
 
-  rustc = rustcStable;
-  rustcStable = callPackage ../development/compilers/rustc/stable.nix {};
-  rustcBeta = lowPrio (callPackage ../development/compilers/rustc/beta.nix {});
-  rustcUnstable = lowPrio (callPackage ../development/compilers/rustc/head.nix {});
+  rust = rustStable;
+  rustStable = callPackage ../development/compilers/rust {};
+  rustBeta = lowPrio (callPackage ../development/compilers/rust/beta.nix {});
+  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {});
 
-  rustcMusl = callPackage ../development/compilers/rustc/musl.nix {};
+  cargo = rust.cargo;
+  rustc = rust.rustc;
+  rustPlatform = recurseIntoAttrs (makeRustPlatform rust rustPlatform);
 
-  rustPlatform = rustStable;
-  rustStable = recurseIntoAttrs (makeRustPlatform cargo rustStable);
-  rustBeta = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustBeta));
-  rustUnstable = lowPrio (recurseIntoAttrs (makeRustPlatform cargoUnstable rustUnstable));
-
-  rustMusl = recurseIntoAttrs (makeRustPlatform
-    (cargo.override { rustPlatform = rustMuslCargoPlatform; }) rustMusl);
-
-  # rust platform to build cargo itself (with cargoSnapshot)
-  rustCargoPlatform = makeRustPlatform (cargoSnapshot rustcStable) rustCargoPlatform;
-  rustUnstableCargoPlatform = makeRustPlatform (cargoSnapshot rustcUnstable) rustUnstableCargoPlatform;
-  rustMuslCargoPlatform = makeRustPlatform (cargoSnapshot rustcMusl) rustMuslCargoPlatform;
-
-  makeRustPlatform = cargo: self:
+  makeRustPlatform = rust: self:
     let
       callPackage = newScope self;
     in {
-      inherit cargo;
-
-      rustc = cargo.rustc;
+      inherit rust;
 
       rustRegistry = callPackage ./rust-packages.nix { };
 
       buildRustPackage = callPackage ../build-support/rust {
-        inherit cargo;
+        inherit rust;
       };
     };
 
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
+  rustracer = callPackage ../development/tools/rust/racer { };
+  rustracerd = callPackage ../development/tools/rust/racerd { };
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
@@ -5941,20 +5938,6 @@ in
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
-  cargo = callPackage ../development/tools/build-managers/cargo {
-    # cargo needs to be built with rustCargoPlatform, which uses cargoSnapshot
-    rustPlatform = rustCargoPlatform;
-  };
-
-  cargoUnstable = lowPrio (callPackage ../development/tools/build-managers/cargo/head.nix {
-    rustPlatform = rustUnstableCargoPlatform;
-  });
-
-  cargoSnapshot = rustc:
-    callPackage ../development/tools/build-managers/cargo/snapshot.nix {
-      inherit rustc;
-    };
-
   casperjs = callPackage ../development/tools/casperjs {
     inherit (texFunctions) fontsConf;
   };
@@ -6368,10 +6351,6 @@ in
   qtcreator = qt5.callPackage ../development/qtcreator {
     withDocumentation = false; # 'true' is currently broken with qt>=5.5
   };
-
-  racerRust = callPackage ../development/tools/rust/racer { };
-
-  racerdRust = callPackage ../development/tools/rust/racerd { };
 
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
@@ -6802,6 +6781,8 @@ in
   cracklib = callPackage ../development/libraries/cracklib { };
 
   cryptopp = callPackage ../development/libraries/crypto++ { };
+
+  cutee = callPackage ../development/libraries/cutee { };
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
@@ -7496,7 +7477,7 @@ in
   };
   libkrb5 = self.krb5Full.override { type = "lib"; };
 
-  lasso = callPackage ../development/libraries/lasso { };  
+  lasso = callPackage ../development/libraries/lasso { };
 
   LASzip = callPackage ../development/libraries/LASzip { };
 
@@ -8572,6 +8553,8 @@ in
 
   nvidia-texture-tools = callPackage ../development/libraries/nvidia-texture-tools { };
 
+  nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
+
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
   ode = callPackage ../development/libraries/ode { };
@@ -9219,6 +9202,8 @@ in
 
   unicap = callPackage ../development/libraries/unicap {};
 
+  unicon-lang = callPackage ../development/interpreters/unicon-lang {};
+
   tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
@@ -9733,6 +9718,8 @@ in
   pyxml = pythonPackages.pyxml;
 
   rbtools = pythonPackages.rbtools;
+
+  rebol =  callPackage ../development/interpreters/rebol { };
 
   setuptools = pythonPackages.setuptools;
 
@@ -10811,32 +10798,6 @@ in
 
   linux_chromiumos_latest = self.linux_chromiumos_3_18;
 
-  # grsecurity configuration
-
-  grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
-    inherit (linux_4_5) kernelPatches;
-  };
-
-  grFlavors = import ../build-support/grsecurity/flavors.nix;
-
-  mkGrsecurity = patch: opts:
-    (callPackage ../build-support/grsecurity {
-      grsecOptions = { kernelPatch = patch; } // opts;
-    });
-
-  grKernel  = patch: opts: (self.mkGrsecurity patch opts).grsecKernel;
-  grPackage = patch: opts: recurseIntoAttrs (self.mkGrsecurity patch opts).grsecPackage;
-
-  # grsecurity kernels (see also linuxPackages_grsec_*)
-
-  linux_grsec_desktop_4_5    = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
-  linux_grsec_server_4_5     = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server;
-  linux_grsec_server_xen_4_5 = self.grKernel kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
-
-  linux_grsec_desktop_latest    = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.desktop;
-  linux_grsec_server_latest     = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server;
-  linux_grsec_server_xen_latest = self.grKernel kernelPatches.grsecurity_latest self.grFlavors.server_xen;
-
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -10853,7 +10814,7 @@ in
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bcc = callPackage ../os-specific/linux/bcc { };
-    
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
@@ -10986,52 +10947,78 @@ in
   # Build a kernel for Xen dom0
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (self.linuxPackagesFor (self.linux_latest.override { features.xen_dom0=true; }) linuxPackages_latest);
 
-  # grsecurity packages
+  # Grsecurity packages
 
-  linuxPackages_grsec_desktop_4_5    = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_5     = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_5 = self.grPackage kernelPatches.grsecurity_4_5 self.grFlavors.server_xen;
+  linux_grsec_nixos = callPackage ../build-support/grsecurity {
+    inherit (lib) overrideDerivation;
+    kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
+      inherit (self.linux_4_5) kernelPatches;
+    };
+    grsecPatch = self.kernelPatches.grsecurity_testing;
+    kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
+    extraConfig = callPackage ../os-specific/linux/kernel/grsecurity-nixos-config.nix { };
+  };
 
-  linuxPackages_grsec_desktop_latest    = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.desktop;
-  linuxPackages_grsec_server_latest     = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server;
-  linuxPackages_grsec_server_xen_latest = self.grPackage kernelPatches.grsecurity_latest self.grFlavors.server_xen;
+  linuxPackages_grsec_nixos =
+    let self = linuxPackagesFor linux_grsec_nixos self;
+    in recurseIntoAttrs self;
+
+  # An unsupported grsec xen guest kernel
+  linux_grsec_server_xen = linux_grsec_nixos.override {
+    extraConfig = ''
+      GRKERNSEC y
+      PAX y
+      GRKERNSEC_CONFIG_AUTO y
+      GRKERNSEC_CONFIG_PRIORITY_SECURITY y
+      GRKERNSEC_CONFIG_SERVER y
+      GRKERNSEC_CONFIG_VIRT_GUEST y
+      GRKERNSEC_CONFIG_VIRT_XEN y
+    '';
+  };
 
   # grsecurity: legacy
 
   grsecurity_base_linux_3_14 = throw "grsecurity stable is no longer supported";
   grsecurity_base_linux_4_4  = throw "grsecurity stable is no longer supported";
 
+  linuxPackages_grsec_desktop_3_14    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_4_4    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_4_5    = throw "linuxPackages_grsec_desktop has been removed";
+  linuxPackages_grsec_desktop_latest    = throw "linuxPackages_grsec_desktop has been removed";
+
+  linuxPackages_grsec_server_3_14     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_4_4     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_4_5     = throw "linuxPackages_grsec_server has been removed";
+  linuxPackages_grsec_server_latest     = throw "linuxPackages_grsec_server has been removed";
+
+  linuxPackages_grsec_server_xen_3_14 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_4_4 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_4_5 = throw "linuxPackages_grsec_server_xen has been removed";
+  linuxPackages_grsec_server_xen_latest = throw "linuxPackages_grsec_server_xen has been removed";
+
   linux_grsec_desktop_3_14    = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
-
   linux_grsec_desktop_4_4    = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
-  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
+  linux_grsec_desktop_4_5    = throw "linux_grsec_desktop has been removed";
+  linux_grsec_desktop_latest    = throw "linux_grsec_desktop has been removed";
 
-  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
-  linux_grsec_testing_server     = self.linux_grsec_server_latest;
-  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
+  linux_grsec_server_3_14     = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_4_4     = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_4_5     = throw "linux_grsec_server has been removed";
+  linux_grsec_server_latest     = throw "linux_grsec_server_latest has been removed";
+
+  linux_grsec_server_xen_3_14 = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_xen_4_4 = throw "grsecurity stable is no longer supported";
+  linux_grsec_server_xen_4_5 = throw "linux_grsec_server_xen has been removed";
+  linux_grsec_server_xen_latest = throw "linux_grsec_server_xen has been removed";
 
   linux_grsec_stable_desktop    = self.linux_grsec_desktop_3_14;
   linux_grsec_stable_server     = self.linux_grsec_server_3_14;
   linux_grsec_stable_server_xen = self.linux_grsec_server_xen_3_14;
 
-  linuxPackages_grsec_desktop_3_14    = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.desktop;
-  linuxPackages_grsec_server_3_14     = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_3_14 = self.grPackage kernelPatches.grsecurity_3_14 self.grFlavors.server_xen;
+  linux_grsec_testing_desktop    = self.linux_grsec_desktop_latest;
+  linux_grsec_testing_server     = self.linux_grsec_server_latest;
+  linux_grsec_testing_server_xen = self.linux_grsec_server_xen_latest;
 
-  linuxPackages_grsec_desktop_4_4    = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.desktop;
-  linuxPackages_grsec_server_4_4     = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server;
-  linuxPackages_grsec_server_xen_4_4 = self.grPackage kernelPatches.grsecurity_4_4 self.grFlavors.server_xen;
-
-  linuxPackages_grsec_testing_desktop    = self.linuxPackages_grsec_desktop_latest;
-  linuxPackages_grsec_testing_server     = self.linuxPackages_grsec_server_latest;
-  linuxPackages_grsec_testing_server_xen = self.linuxPackages_grsec_server_xen_latest;
-
-  linuxPackages_grsec_stable_desktop    = self.linuxPackages_grsec_desktop_3_14;
-  linuxPackages_grsec_stable_server     = self.linuxPackages_grsec_server_3_14;
-  linuxPackages_grsec_stable_server_xen = self.linuxPackages_grsec_server_xen_3_14;
 
   # ChromiumOS kernels
   linuxPackages_chromiumos_3_14 = recurseIntoAttrs (self.linuxPackagesFor self.linux_chromiumos_3_14 linuxPackages_chromiumos_3_14);
@@ -12577,7 +12564,7 @@ in
   focuswriter = callPackage ../applications/editors/focuswriter { };
 
   font-manager = callPackage ../applications/misc/font-manager {
-    vala = vala_0_28;
+    vala = vala_0_32;
   };
 
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
@@ -14079,6 +14066,8 @@ in
   sflphone = callPackage ../applications/networking/instant-messengers/sflphone {
     gtk = gtk3;
   };
+
+  shfmt = callPackage ../tools/text/shfmt { };
 
   shutter = callPackage ../applications/graphics/shutter { };
 
@@ -15974,6 +15963,11 @@ in
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
+  clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (linuxPackages) nvidia_x11;
+  };
+
   jags = callPackage ../applications/science/math/jags { };
 
 
@@ -16000,7 +15994,7 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
-  magma = callPackage ../development/libraries/science/math/magma { };  
+  magma = callPackage ../development/libraries/science/math/magma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
   mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
@@ -16014,6 +16008,8 @@ in
   suitesparse = suitesparse_4_4;
 
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
+
+  gmsh = callPackage ../applications/science/math/gmsh { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
@@ -16537,6 +16533,8 @@ in
   ghostscriptX = appendToName "with-X" (self.ghostscript.override {
     x11Support = true;
   });
+
+  gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
 
   gnuk = callPackage ../misc/gnuk { };
   gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
