@@ -9,12 +9,14 @@
 
 let
 
-  inherit (pkgs) lib stdenv symlinkJoin;
+  inherit (pkgs) fetchurl lib stdenv symlinkJoin;
 
-  kdeApps = pkgs.kdeApps_15_12;
-
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
+  remotesrcs = fetchurl {
+    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/7bb0608eb5b147fb302f7c37411f9cad32cb6283/plasma-srcs.nix";
+    sha256 = "1zw9s87fj4qqz5dhqm5l1mb0d6r6f6p50q8n6qi7x8i5rd4p4fyl";
+  };
+  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
     plasmaPackage = args:
