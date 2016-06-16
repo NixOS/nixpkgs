@@ -14104,6 +14104,8 @@ in
     gtk = gtk3;
   };
 
+  shfmt = callPackage ../tools/text/shfmt { };
+
   shutter = callPackage ../applications/graphics/shutter { };
 
   simple-scan = callPackage ../applications/graphics/simple-scan { };
