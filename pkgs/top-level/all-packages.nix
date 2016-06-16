@@ -2987,6 +2987,8 @@ in
 
   popfile = callPackage ../tools/text/popfile { };
 
+  postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
+
   povray = callPackage ../tools/graphics/povray {
     automake = automake113x; # fails with 14
   };
