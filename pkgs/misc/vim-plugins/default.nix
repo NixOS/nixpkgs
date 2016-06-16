@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
-, vim_configurable, vimPlugins, xkb_switch, git, racerdRust, fzf
+, vim_configurable, vimPlugins, xkb_switch, git, rustracerd, fzf
 , Cocoa ? null
 }:
 
@@ -1116,7 +1116,7 @@ rec {
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
     propogatedBuildInputs = [
-      racerdRust
+      rustracerd
     ];
 
     buildPhase = ''
