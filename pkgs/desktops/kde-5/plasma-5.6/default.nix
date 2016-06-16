@@ -61,7 +61,6 @@ let
     kdecoration = callPackage ./kdecoration.nix {};
     kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
     kgamma5 = callPackage ./kgamma5.nix {};
-    khelpcenter = callPackage ./khelpcenter.nix {};
     khotkeys = callPackage ./khotkeys.nix {};
     kinfocenter = callPackage ./kinfocenter.nix {};
     kmenuedit = callPackage ./kmenuedit.nix {};
