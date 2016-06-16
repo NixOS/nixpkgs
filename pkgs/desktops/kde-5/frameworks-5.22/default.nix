@@ -15,10 +15,14 @@
 
 let
 
-  inherit (pkgs) lib makeSetupHook stdenv;
+  inherit (pkgs) fetchurl lib makeSetupHook stdenv;
 
   mirror = "mirror://kde";
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
+  remotesrcs = fetchurl {
+    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/32d38b54ac86ef22ea3e77c2bb5b5adb8438b189/frameworks-srcs.nix";
+    sha256 = "05h21hc5pzj2z3lcmzmihnrc1x3ia3g8gka4aks2jxg6f7dyq0br";
+  };
+  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
     kdeFramework = args:
