@@ -15273,6 +15273,8 @@ in
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
+  openrw = callPackage ../games/openrw { };
+
   openspades = callPackage ../games/openspades {};
 
   openspades-git = lowPrio (callPackage ../games/openspades/git.nix {});
