@@ -23607,6 +23607,9 @@ in modules // {
 
     propagatedBuildInputs = with self; [ jsonschema ];
 
+    # We add this flag to ignore the copy installed by bootstrapped-pip
+    installFlags = [ "--ignore-installed" ];
+
     meta = {
       description = "A built-package format for Python";
       license = with licenses; [ mit ];
