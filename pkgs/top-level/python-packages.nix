@@ -11963,6 +11963,12 @@ in modules // {
     };
   });
 
+  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
+    inherit (self) numpy scipy;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit75;
+    clblas = pkgs.clblas-cuda;
+  };
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
