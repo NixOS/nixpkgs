@@ -8,7 +8,8 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share
+    cp -r ${xmonadEnv}/share/man $out/share/man
     makeWrapper ${xmonadEnv}/bin/xmonad $out/bin/xmonad \
       --set NIX_GHC "${xmonadEnv}/bin/ghc" \
       --set XMONAD_XMESSAGE "${xmessage}/bin/xmessage"
