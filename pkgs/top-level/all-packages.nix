@@ -3003,6 +3003,8 @@ in
 
   pptp = callPackage ../tools/networking/pptp {};
 
+  pptpd = callPackage ../tools/networking/pptpd {};
+
   prey-bash-client = callPackage ../tools/security/prey { };
 
   profile-cleaner = callPackage ../tools/misc/profile-cleaner { };
