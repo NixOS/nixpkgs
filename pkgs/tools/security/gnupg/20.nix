@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     patch gl/stdint_.h < ${./clang.patch}
   '';
 
-  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
+  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
 

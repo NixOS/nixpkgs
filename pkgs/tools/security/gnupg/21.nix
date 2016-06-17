@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
-  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/bin/pinentry";
+  pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
+  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;
