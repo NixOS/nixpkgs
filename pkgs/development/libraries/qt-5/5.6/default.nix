@@ -4,11 +4,11 @@
 
 Before a major version update, make a copy of this directory. (We like to
 keep the old version around for a short time after major updates.) Add a
-top-level attribute to <nixpkgs/top-level/all-packages.nix>.
+top-level attribute to `top-level/all-packages.nix`.
 
-1. Update the URL in <nixpkgs/maintainers/scripts/generate-qt.sh>.
+1. Update the URL in `maintainers/scripts/generate-qt.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix'.
+   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 

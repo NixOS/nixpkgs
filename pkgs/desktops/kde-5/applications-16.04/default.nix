@@ -5,9 +5,9 @@
 Before a major version update, make a copy of this directory. (We like to
 keep the old version around for a short time after major updates.)
 
-1. Update the URL in <nixpkgs/maintainers/scripts/generate-kde-applications.sh>.
+1. Update the URL in `maintainers/scripts/generate-kde-applications.sh`.
 2. From the top of the Nixpkgs tree, run
-   `./maintainers/scripts/generate-kde-applications.sh > pkgs/desktops/kde-5/applications-$VERSION/srcs.nix'.
+   `./maintainers/scripts/generate-kde-applications.sh > pkgs/desktops/kde-5/applications-$VERSION/srcs.nix`.
 3. Check that the new packages build correctly.
 4. Commit the changes and open a pull request.
 
