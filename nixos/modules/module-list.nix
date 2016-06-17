@@ -209,6 +209,7 @@
   ./services/misc/confd.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
+  ./services/misc/dysnomia.nix
   ./services/misc/disnix.nix
   ./services/misc/docker-registry.nix
   ./services/misc/etcd.nix
