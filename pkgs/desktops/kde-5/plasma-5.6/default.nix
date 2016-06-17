@@ -1,22 +1,26 @@
-# Maintainer's Notes:
-#
-# How To Update
-#  1. Edit the URL in ./manifest.sh
-#  2. Run ./manifest.sh
-#  3. Fix build errors.
+/*
+
+# Updates
+
+Before a major version update, make a copy of this directory. (We like to
+keep the old version around for a short time after major updates.)
+
+1. Update the URL in <nixpkgs/maintainers/scripts/generate-kde-plasma.sh>.
+2. From the top of the Nixpkgs tree, run
+   `./maintainers/scripts/generate-kde-plasma.sh > pkgs/desktops/kde-5/plasma-$VERSION/srcs.nix'.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
+
+*/
 
 { pkgs, debug ? false }:
 
 let
 
-  inherit (pkgs) fetchurl lib stdenv symlinkJoin;
+  inherit (pkgs) lib stdenv symlinkJoin;
 
   mirror = "mirror://kde";
-  remotesrcs = fetchurl {
-    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/7bb0608eb5b147fb302f7c37411f9cad32cb6283/plasma-srcs.nix";
-    sha256 = "1zw9s87fj4qqz5dhqm5l1mb0d6r6f6p50q8n6qi7x8i5rd4p4fyl";
-  };
-  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
     plasmaPackage = args:

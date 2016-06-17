@@ -1,18 +1,16 @@
 /*
 
-# Minor Updates
+# Updates
 
-1. Edit ./fetchsrcs.sh to point to the updated URL.
-2. Run ./fetchsrcs.sh.
-3. Build and enjoy.
+Before a major version update, make a copy of this directory. (We like to
+keep the old version around for a short time after major updates.) Add a
+top-level attribute to <nixpkgs/top-level/all-packages.nix>.
 
-# Major Updates
-
-1. Make a copy of this directory. (We like to keep the old version around
-   for a short time after major updates.)
-2. Delete the tmp/ subdirectory of the copy.
-3. Follow the minor update instructions above.
-4. Package any new Qt modules, if necessary.
+1. Update the URL in <nixpkgs/maintainers/scripts/generate-qt.sh>.
+2. From the top of the Nixpkgs tree, run
+   `./maintainers/scripts/generate-qt.sh > pkgs/development/libraries/qt-5/$VERSION/srcs.nix'.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
 
 */
 
@@ -23,18 +21,14 @@
 , decryptSslTraffic ? false
 }:
 
-let inherit (pkgs) fetchurl makeSetupHook makeWrapper stdenv; in
+let inherit (pkgs) makeSetupHook makeWrapper stdenv; in
 
 with stdenv.lib;
 
 let
 
   mirror = "http://download.qt.io";
-  remotesrcs = fetchurl {
-    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/1fd3645b9d718623998fa114797630d94461f55f/qt-srcs.nix";
-    sha256 = "1idkhkjnyz8x6nczksjcccmmmgg01zclamcxxdv2lwxhsrws2m2l";
-  };
-  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   qtSubmodule = args:
     let

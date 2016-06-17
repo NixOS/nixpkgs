@@ -1,28 +1,26 @@
-# Maintainer's Notes:
-#
-# Minor updates:
-#  1. Edit ./fetchsrcs.sh to point to the updated URL.
-#  2. Run ./fetchsrcs.sh.
-#  3. Build and enjoy.
-#
-# Major updates:
-#  We prefer not to immediately overwrite older versions with major updates, so
-#  make a copy of this directory first. After copying, be sure to delete ./tmp
-#  if it exists. Then follow the minor update instructions. Be sure to check if
-#  any new components have been added and package them as necessary.
+/*
+
+# Updates
+
+Before a major version update, make a copy of this directory. (We like to
+keep the old version around for a short time after major updates.)
+
+1. Update the URL in <nixpkgs/maintainers/scripts/generate-kde-frameworks.sh>.
+2. From the top of the Nixpkgs tree, run
+   `./maintainers/scripts/generate-kde-frameworks.sh > pkgs/desktops/kde-5/frameworks-$VERSION/srcs.nix'.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
+
+*/
 
 { pkgs, debug ? false }:
 
 let
 
-  inherit (pkgs) fetchurl lib makeSetupHook stdenv;
+  inherit (pkgs) lib makeSetupHook stdenv;
 
   mirror = "mirror://kde";
-  remotesrcs = fetchurl {
-    url = "https://raw.githubusercontent.com/ttuegel/nixpkgs-kde-qt/32d38b54ac86ef22ea3e77c2bb5b5adb8438b189/frameworks-srcs.nix";
-    sha256 = "05h21hc5pzj2z3lcmzmihnrc1x3ia3g8gka4aks2jxg6f7dyq0br";
-  };
-  srcs = import remotesrcs { inherit (pkgs) fetchurl; inherit mirror; };
+  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
     kdeFramework = args:
