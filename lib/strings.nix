@@ -16,11 +16,7 @@ rec {
        concatStrings ["foo" "bar"]
        => "foobar"
   */
-  concatStrings =
-    if builtins ? concatStringsSep then
-      builtins.concatStringsSep ""
-    else
-      lib.foldl' (x: y: x + y) "";
+  concatStrings = builtins.concatStringsSep "";
 
   /* Map a function over a list and concatenate the resulting strings.
 
