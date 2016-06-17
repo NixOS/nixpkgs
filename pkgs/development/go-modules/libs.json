@@ -1564,5 +1564,212 @@
       "rev": "7cef48da76dca6a496faa7fe63e39ed665cbd219",
       "sha256": "0hw11jj5r3f6qwydg41nc3c6aadlbkhc1qpxra2609lis0qa9h4r"
     }
+  },
+  {
+    "goPackagePath": "github.com/yosssi/ace",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/yosssi/ace",
+      "rev": "71afeb714739f9d5f7e1849bcd4a0a5938e1a70d",
+      "sha256": "15k7ji8m3nqbwhnsvp82j4qa45sgvwv2giliw2xkdwi2g7mfrn8k"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/viper",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/viper",
+      "rev": "c1ccc378a054ea8d4e38d8c67f6938d4760b53dd",
+      "sha256": "0lpdzalqhqp9pwsg63inkxwjji7m0pp42ryw1499bqbjp97hriq0"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/pflag",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/pflag",
+      "rev": "367864438f1b1a3c7db4da06a2f55b144e6784e0",
+      "sha256": "03c6654hv4v1fj79i5sri3p9q2afqgicka4nicb6fr4kcfkkgbfp"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/jwalterweatherman",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/jwalterweatherman",
+      "rev": "33c24e77fb80341fe7130ee7c594256ff08ccc46",
+      "sha256": "1knvzspqzc2bh58q16zggzc8gcabjp5gr7zk4k7nx5ij4092cg0z"
+    }
+  },
+  {
+    "goPackagePath": "github.com/fsnotify/fsnotify",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/fsnotify/fsnotify",
+      "rev": "30411dbcefb7a1da7e84f75530ad3abe4011b4f8",
+      "sha256": "0kbpvyi6p9942k0vmcw5z13mja47f7hq7nqd332pn2zydss6kddm"
+    }
+  },
+  {
+    "goPackagePath": "github.com/magiconair/properties",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/magiconair/properties",
+      "rev": "c265cfa48dda6474e208715ca93e987829f572f8",
+      "sha256": "1ab9ywwsrdq5mvrcwl7m3276y1q4dfwinbv88vgpqwcqai9wkpp3"
+    }
+  },
+  {
+    "goPackagePath": "github.com/bep/inflect",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/bep/inflect",
+      "rev": "b896c45f5af983b1f416bdf3bb89c4f1f0926f69",
+      "sha256": "0drv6in94n7lmap4ajvgqlvdcbpn8alinfdzywzpihvzbx21b3h3"
+    }
+  },
+  {
+    "goPackagePath": "github.com/eknkc/amber",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/eknkc/amber",
+      "rev": "91774f050c1453128146169b626489e60108ec03",
+      "sha256": "1rb8bm35h8a77q4py6r3818cpwh7kpq1kh2ib2rb4i5s7z75ciis"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/afero",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/afero",
+      "rev": "1a8ecf8b9da1fb5306e149e83128fc447957d2a8",
+      "sha256": "1nrg0gmqnl4h6zjmi4mdhrwnl3l34nzxpq2hsr3nizfvrx5gqbzw"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/spf13/cast",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/cast",
+      "rev": "27b586b42e29bec072fe7379259cc719e1289da6",
+      "sha256": "1y73pfxdvm1bfpghwsfxj8gl4miv6fpzi9azxcknp6rcjn1gmq0x"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/cobra",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/cobra",
+      "rev": "bc81c21bd0d8be5ba2d6630a505d79d4467566e7",
+      "sha256": "1sp8gl25cjx0yibh6q1i8d5rbxpwaal3z8vz372wfmbz002say8r"
+    }
+  },
+  {
+    "goPackagePath": "github.com/dchest/cssmin",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/dchest/cssmin",
+      "rev": "fb8d9b44afdc258bfff6052d3667521babcb2239",
+      "sha256": "09sdijfx5d05z4cd5k6lhl7k3kbpdf2amzlngv15h5v0fff9qw4s"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/spf13/fsync",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/fsync",
+      "rev": "eefee59ad7de621617d4ff085cf768aab4b919b1",
+      "sha256": "0d56xdczawikyczc12i661qc79dbv4q8ihlj4p20zsjkyxxym59p"
+    }
+  },
+  {
+    "goPackagePath": "github.com/cpuguy83/go-md2man",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/cpuguy83/go-md2man",
+      "rev": "2724a9c9051aa62e9cca11304e7dd518e9e41599",
+      "sha256": "1j2bigs7ixy20cdqd246nxr417md2qcyvkfk3x94992cr88d0vyj"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/miekg/mmark",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/miekg/mmark",
+      "rev": "adb5c3e2e9f3e7da9bd25291edda8e66c0045a2a",
+      "sha256": "0fycz17fj37fh95lfshdrfwrgkzi3hl1kgnily0cxc9zwfbap3qa"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/spf13/nitro",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/nitro",
+      "rev": "24d7ef30a12da0bdc5e2eb370a79c659ddccf0e8",
+      "sha256": "143sbpx0jdgf8f8ayv51x6l4jg6cnv6nps6n60qxhx4vd90s6mib"
+    }
+  },
+  {
+    "goPackagePath": "github.com/PuerkitoBio/purell",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/PuerkitoBio/purell",
+      "rev": "1d5d1cfad45d42ec5f81fa8ef23de09cebc6dcc3",
+      "sha256": "12k82576ka21c6572yy2v81kxpjrgf9mffjlz469g3vs0g3nkwlb"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/opennota/urlesc",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/opennota/urlesc",
+      "rev": "5fa9ff0392746aeae1c4b37fcc42c65afa7a9587",
+      "sha256": "0dppkmfs0hb5vcqli191x9yss5vvlx29qxjcywhdfirc89rn0sni"
+    }      
+  },
+  {
+    "goPackagePath": "github.com/pkg/sftp",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/pkg/sftp",
+      "rev": "d4c18e7ffdc496a38de67dde6e29b2f364afc472",
+      "sha256": "0cnl83k317gxskayfj3xwr4bl0vcbjvlwi3q0vjwvircynb6xscj"
+    }
+  },
+  {
+    "goPackagePath": "github.com/kr/fs",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/kr/fs",
+      "rev": "2788f0dbd16903de03cb8186e5c7d97b69ad387b",
+      "sha256": "1c0fipl4rsh0v5liq1ska1dl83v3llab4k6lm8mvrx9c4dyp71ly"
+    }
+  },
+  {
+    "goPackagePath": "github.com/kyokomi/emoji",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/kyokomi/emoji",
+      "rev": "17c5e7085c9d59630aa578df67f4469481fbe7a9",
+      "sha256": "0qs4mi7z1lghiyiw7s2bz5y959wj9ifmhyqh39xwqk69d690jwlp"
+    }
+  },
+  {
+    "goPackagePath": "github.com/pkg/errors",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/pkg/errors",
+      "rev": "494e70f7620561491c2ca11e185bbef4b70060da",
+      "sha256": "0a0961ixl67vryhnzyzhai357c9n9a7v3vpkpqrh32spn033gjd9"
+    }
+  },
+  {
+    "goPackagePath": "github.com/PuerkitoBio/urlesc",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/PuerkitoBio/urlesc",
+      "rev": "5fa9ff0392746aeae1c4b37fcc42c65afa7a9587",
+      "sha256": "0dppkmfs0hb5vcqli191x9yss5vvlx29qxjcywhdfirc89rn0sni"
+    }      
   }
 ]
