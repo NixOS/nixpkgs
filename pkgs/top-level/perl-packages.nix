@@ -6227,6 +6227,11 @@ let self = _self // overrides; _self = with self; {
       sha256 = "723517ea71f90105579e7db7a1a2e053bf5c8142a187df8bc1fe3881c3383f67";
     };
     propagatedBuildInputs = [ NetSSLeay URI ];
+    # Fix path to default certificate store.
+    postPatch = ''
+      substituteInPlace lib/IO/Socket/SSL.pm \
+        --replace "\$openssldir/cert.pem" "/etc/ssl/certs/ca-certificates.crt"
+    '';
     meta = {
       homepage = https://github.com/noxxi/p5-io-socket-ssl;
       description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
