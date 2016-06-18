@@ -1537,59 +1537,5 @@
       "rev": "772320464101e904cd51198160eb4d489be9cc49",
       "sha256": "1a8hnh2k3vc3prjhnz4rjbiwhqq6r3mi18h9cdb6fc6s6yzjc19j"
     }
-  },
-  {
-    "goPackagePath": "github.com/influxdata/usage-client",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/influxdata/usage-client.git",
-      "rev": "475977e68d79883d9c8d67131c84e4241523f452",
-      "sha256": "0yhywablqqpd2x70rax1kf7yaw1jpvrc2gks8360cwisda57d3qy"
-    }
-  },
-  {
-    "goPackagePath": "github.com/jwilder/encoding",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/jwilder/encoding.git",
-      "rev": "b421ab402545ef5a119f4f827784c6551d9bfc37",
-      "sha256": "0sjz2cl8kpni0mh0y4269k417dj06gn2y0ppi25i3wh9p4j4i4fq"
-    }
-  },
-  {
-    "goPackagePath": "collectd.org",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/collectd/go-collectd.git",
-      "rev": "9fc824c70f713ea0f058a07b49a4c563ef2a3b98",
-      "sha256": "0kjal6bsjpnppfnlqbg7g56xwssaj2ani499yykyj817zq56hi0w"
-    }
-  },
-  {
-    "goPackagePath": "github.com/dgryski/go-bits",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/dgryski/go-bits.git",
-      "rev": "86c69b3c986f9d40065df5bd8f765796549eef2e",
-      "sha256": "08i3p8lcisr88gmwvi8qdc8bgksxh5ydjspgfbi4aba9msybp78b"
-    }
-  },
-  {
-    "goPackagePath": "github.com/dgryski/go-bitstream",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/dgryski/go-bitstream.git",
-      "rev": "27cd5973303fde7d914860be1ea4b927a6be0c92",
-      "sha256": "12ji4vcfy0cz12yq43cz0w1f1k4c1kg0vwpsk1iy47kc38kzdkc6"
-    }
-  },
-  {
-    "goPackagePath": "github.com/paulbellamy/ratecounter",
-    "fetch": {
-      "type": "git",
-      "url": "https://github.com/paulbellamy/ratecounter.git",
-      "rev": "5a11f585a31379765c190c033b6ad39956584447",
-      "sha256": "137p62imi91zhkjcjigdd64n7f9z6djjpsxcyifgrcxs41jj9ra0"
-    }
   }
 ]
