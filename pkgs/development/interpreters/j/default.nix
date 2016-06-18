@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "J programming language, an ASCII-based APL successor";
     maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     license = licenses.gpl3Plus;
     homepage = http://jsoftware.com/;
   };
