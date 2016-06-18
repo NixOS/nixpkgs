@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
                   gnome3.gnome_desktop gnome3.adwaita-icon-theme
                   gnome3.gsettings_desktop_schemas gnome3.dconf libnotify tracker libselinux ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./extension_dir.patch ];
 
   meta = with stdenv.lib; {
