@@ -359,6 +359,7 @@
   spinus = "Tomasz Czyż <tomasz.czyz@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
   spwhitt = "Spencer Whitt <sw@swhitt.me>";
+  SShrike = "Severen Redwood <severen@shrike.me>";
   stephenmw = "Stephen Weinberg <stephen@q5comm.com>";
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   swistak35 = "Rafał Łasocha <me@swistak35.com>";

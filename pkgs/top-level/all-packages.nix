@@ -501,6 +501,8 @@ in
 
   arc-gtk-theme = callPackage ../misc/themes/arc { };
 
+  adapta-gtk-theme = callPackage ../misc/themes/adapta { };
+
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
