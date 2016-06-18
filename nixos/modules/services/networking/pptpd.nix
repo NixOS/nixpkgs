@@ -5,35 +5,35 @@ with lib;
 {
   options = {
     services.pptpd = {
-      enable = mkEnableOption "enable pptpd running on startup";
+      enable = mkEnableOption "Whether pptpd should be run on startup.";
 
       serverIp = mkOption {
         type        = types.string;
-        description = "server ip";
+        description = "The server-side IP address.";
         default     = "10.124.124.1";
       };
 
       clientIpRange = mkOption {
         type        = types.string;
-        description = "client ip range";
+        description = "The range from which client IPs are drawn.";
         default     = "10.124.142.2-11";
       };
 
       maxClients = mkOption {
         type        = types.int;
-        description = "maximum number of simultaneous connections";
+        description = "The maximum number of simultaneous connections.";
         default     = 10;
       };
 
       extraPptpdOptions = mkOption {
         type        = types.lines;
-        description = "extra lines for the pptpd configuration files";
+        description = "Adds extra lines to the pptpd configuration file.";
         default     = "";
       };
 
       extraPppdOptions = mkOption {
         type        = types.lines;
-        description = "extra lines for the pppd options files";
+        description = "Adds extra lines to the pppd options file.";
         default     = "";
         example     = ''
           ms-dns 8.8.8.8
