@@ -19,7 +19,7 @@ let
     "git" = {
         name = "git-20160617";
         rev = "7d5b5eb76aa656baf5a8713f514937765f66b10a";
-	sha256 = "1b7lr9rj29qrazzx4xwr69fw6a89pnkycpy9jn81k84k0v22n1q0";
+	sha256 = "1jpj978r54086hypjxqxi0r3zacqpkr61dp6dbi0lykgx7m5bjfb";
 	patches = [];
     };
   }.${version};
