@@ -2817,7 +2817,7 @@ in
 
   pamtester = callPackage ../tools/security/pamtester { };
 
-  paper-gtk-theme = callPackage ../misc/themes/paper-gtk-theme { };
+  paper-gtk-theme = callPackage ../misc/themes/paper { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -15843,7 +15843,7 @@ in
 
   gnome_themes_standard = gnome3.gnome_themes_standard;
 
-  numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
+  numix-gtk-theme = callPackage ../misc/themes/numix { };
 
   kde5PackagesFun = self: with self; {
 
