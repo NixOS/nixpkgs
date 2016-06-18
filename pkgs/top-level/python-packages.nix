@@ -16881,10 +16881,10 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "1.0.1";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      sha256 = "1r0l5gfxbrxvqgqhybz6vg4zhhzm51888q3xpbajs5l1k04kmmi9";
+      sha256 = "00cc0lr8hj3pgn2jy9z7b4hrrfj53axa8yfbyds86xqbsvw0w3jj";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
     checkPhase = ''
