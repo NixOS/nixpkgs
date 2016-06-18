@@ -4069,13 +4069,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestCPANChanges = buildPerlPackage {
-    name = "Dist-Zilla-Plugin-Test-CPAN-Changes-0.008";
+  DistZillaPluginTestCPANChanges = buildPerlPackage rec {
+    name = "Dist-Zilla-Plugin-Test-CPAN-Changes-0.012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-CPAN-Changes-0.008.tar.gz;
-      sha256 = "e8e49a23fb6fa021dec4fc4ab0a05a2ad50ac26195536c109a96b681ba4decd2";
+      url = "mirror://cpan/authors/id/D/DO/DOHERTY/${name}.tar.gz";
+      sha256 = "215b3a5c3c58c8bab0ea27130441bbdaec737eecc00f0670937f608bdbf64806";
     };
-    buildInputs = [ CPANChanges DistZilla MooseAutobox ];
+    buildInputs = [ CPANChanges DistZilla ];
     propagatedBuildInputs = [ CPANChanges DataSection DistZilla Moose ];
     meta = {
       homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-CPAN-Changes/;
@@ -4099,17 +4099,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  DistZillaPluginTestCompile = buildPerlModule {
-    name = "Dist-Zilla-Plugin-Test-Compile-2.021";
+  DistZillaPluginTestCompile = buildPerlPackage rec {
+    name = "Dist-Zilla-Plugin-Test-Compile-2.054";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Compile-2.021.tar.gz;
-      sha256 = "665c48de1c7c33e9b00e8ddc0204d02b45009e60b9b65033fa4a832dfe9fc808";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "363fc251785a36a0b2028fda3b38d71d30c7048b09145362bbfac13fc41eab7e";
     };
-    buildInputs = [ DistCheckConflicts DistZilla JSON ModuleBuildTiny PathClass TestCheckDeps TestWarnings ModuleMetadata ];
-    propagatedBuildInputs = [ DataSection DistCheckConflicts DistZilla Moose PathTiny SubExporterForMethods namespaceautoclean ModuleCoreList ];
+    buildInputs = [ CPANMetaCheck DistZilla Filepushd ModuleBuildTiny PerlPrereqScanner TestDeep TestMinimumVersion TestWarnings self."if" ];
+    propagatedBuildInputs = [ DataSection DistZilla Moose PathTiny SubExporterForMethods namespaceautoclean ];
     meta = {
-      homepage = http://search.cpan.org/dist/Dist-Zilla-Plugin-Test-Compile/;
-      description = "Common tests to check syntax of your modules";
+      homepage = https://github.com/karenetheridge/Dist-Zilla-Plugin-Test-Compile;
+      description = "Common tests to check syntax of your modules, only using core modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5317,12 +5317,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   FileWhich = buildPerlPackage rec {
-    name = "File-Which-1.09";
+    name = "File-Which-1.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-      sha256 = "b72fec6590160737cba97293c094962adf4f7d44d9e68dde7062ecec13f4b2c3";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/${name}.tar.gz";
+      sha256 = "9def5f10316bfd944e56b7f8a2501be1d44c288325309462aa9345e340854bcc";
     };
-    propagatedBuildInputs = [ TestScript ];
+    meta = {
+      homepage = http://perl.wdlabs.com/File-Which;
+      description = "Perl implementation of the which utility as an API";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   Filter = buildPerlPackage {
@@ -8085,14 +8089,15 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ version ];
   };
 
-  ModulePath = buildPerlPackage {
-    name = "Module-Path-0.13";
+  ModulePath = buildPerlPackage rec {
+    name = "Module-Path-0.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/Module-Path-0.13.tar.gz;
-      sha256 = "1kzsi0z142gcspyyp81za29bq0y74l57a8i2q7gz4zcchf2xm23g";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "b33179ce4dd73dfcde7d46808804b9ffbb11db0245fe455a7d001747562feaca";
     };
     buildInputs = [ DevelFindPerl ];
     meta = {
+      homepage = https://github.com/neilbowers/Module-Path;
       description = "Get the full path to a locally installed module";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -11598,14 +11603,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SyntaxKeywordJunction = buildPerlPackage {
-    name = "Syntax-Keyword-Junction-0.003007";
+  SyntaxKeywordJunction = buildPerlPackage rec {
+    name = "Syntax-Keyword-Junction-0.003008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Syntax-Keyword-Junction-0.003007.tar.gz;
-      sha256 = "0c8jvy5lkshw5gyl037gmkh7c51k3sdvpywq0zwlw4ikvrcgsglj";
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "8b4975f21b1992a7e6c2df5dcc92b254c61925595eddcdfaf0b1498717aa95ef";
     };
-    propagatedBuildInputs = [ SubExporterProgressive TestRequires syntax ];
+    buildInputs = [ TestRequires ];
+    propagatedBuildInputs = [ SubExporterProgressive syntax ];
     meta = {
+      homepage = https://github.com/frioux/Syntax-Keyword-Junction;
       description = "Perl6 style Junction operators in Perl5";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
