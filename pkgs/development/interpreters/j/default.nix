@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   bits = if stdenv.is64bit then "64" else "32";
 
   buildPhase = ''
+    set -e
+
     sed -i bin/jconfig -e '
         s@bits=32@bits=${bits}@g;
         s@readline=0@readline=1@;
@@ -19,20 +21,27 @@ stdenv.mkDerivation rec {
         '
     sed -i bin/build_libj -e 's@>& make.txt@ 2>\&1 | tee make.txt@'
 
+    sed -i f2.c -e 's/_isnan(\*wv)/_isnan(y)/'
+
     touch *.c *.h
     sh -o errexit bin/build_jconsole
+    [ -e j/bin/jconsole ]
     sh -o errexit bin/build_libj
+    [ -e j/bin/libj.so ]
     sh -o errexit bin/build_defs
+    [ -e defs/hostdefs.ijs ] && [ -e defs/netdefs.ijs ]
     sh -o errexit bin/build_tsdll
+    [ -x libtsdll.so ]
 
     sed -i j/bin/profile.ijs -e "
         s@userx=[.] *'.j'@userx=. '/.j'@;
         s@bin,'/profilex.ijs'@user,'/profilex.ijs'@ ;
-	/install=./ainstall=. install,'/share/j'
+        /install=./ainstall=. install,'/share/j'
         "
   '';
 
   installPhase = ''
+    ls -R
     mkdir -p "$out"
     cp -r j/bin "$out/bin"
     rm "$out/bin/profilex_template.ijs"
