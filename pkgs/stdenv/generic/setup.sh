@@ -2,6 +2,7 @@
 # vim: sw=4 et
 set -e
 set -o pipefail
+set -o errtrace
 
 : ${outputs:=out}
 
@@ -106,6 +107,44 @@ closeNest() {
 ######################################################################
 # Error handling.
 
+# Shows the backtrace from the caller or caller <distance>
+#
+# Needs the `set -o errtrace` setting to work properly.
+#
+# Usage: printBacktrace [distance]
+printBacktrace() {
+    local i=${1:-0}
+    while ((i++)); do
+        local src=${BASH_SOURCE[$i]}
+        local lineno=${BASH_LINENO[(( i - 1 ))]}
+        local func=${FUNCNAME[$i]}
+
+        # Done
+        [[ -z $src ]] && return
+
+        echo "$src:$lineno $func()"
+    done
+}
+
+# Is invoked whenever the script exits with a status > 0
+#
+# This can't be handled by exitHandler because the backtrace gets messed-up.
+errorHandler() {
+    local exitCode=$?
+    trap - ERR
+
+    # Only show the backtrace if we don't ignore the errors
+    if [ -z "$succeedOnFailure" ]; then
+        echo "---------[ backtrace ]---------"
+        printBacktrace 1
+        echo "-------------------------------"
+    fi
+
+    exit $exitCode
+}
+trap errorHandler ERR
+
+# Is invoked whenever the script exits
 exitHandler() {
     exitCode=$?
     set +e
