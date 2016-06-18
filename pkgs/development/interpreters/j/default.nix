@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
   bits = if stdenv.is64bit then "64" else "32";
 
-  buildPhase = ''
-    set -e
+  doCheck = true;
 
+  buildPhase = ''
     sed -i bin/jconfig -e '
         s@bits=32@bits=${bits}@g;
         s@readline=0@readline=1@;
@@ -40,8 +40,11 @@ stdenv.mkDerivation rec {
         "
   '';
 
+  checkPhase = ''
+    echo 'i. 5' | j/bin/jconsole | fgrep "0 1 2 3 4"
+  '';
+
   installPhase = ''
-    ls -R
     mkdir -p "$out"
     cp -r j/bin "$out/bin"
     rm "$out/bin/profilex_template.ijs"
