@@ -53,6 +53,9 @@ in stdenv.mkDerivation rec {
       ( cd $out/share/system-config-printer/troubleshoot
         mv .__init__.py-wrapped __init__.py
       )
+
+      # The below line will be unneeded when the next upstream release arrives.
+      sed -i -e "s|/usr/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
     '';
 
   meta = {
