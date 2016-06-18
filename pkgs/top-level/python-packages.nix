@@ -5786,18 +5786,17 @@ in modules // {
 
 
   evdev = buildPythonPackage rec {
-    version = "0.4.7";
+    version = "0.6.1";
     name = "evdev-${version}";
-    disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/evdev/${name}.tar.gz";
-      sha256 = "1mz8cfncpxc1wbk2nj7apl0ssqc0vfndysxchq3wabd9vzx5p71k";
+      sha256 = "0fwaffw1ga7vqa28zy8kc1pycn9xddzw2knd6hd1kkp5c4acgcv7";
     };
 
     buildInputs = with self; [ pkgs.linuxHeaders ];
 
-    patchPhase = "sed -e 's#/usr/include/linux/input.h#${pkgs.linuxHeaders}/include/linux/input.h#' -i setup.py";
+    setupPyBuildFlags = ["--evdev-headers ${pkgs.linuxHeaders}/include/linux/input.h:${pkgs.linuxHeaders}/include/linux/input-event-codes.h"];
 
     doCheck = false;
 
