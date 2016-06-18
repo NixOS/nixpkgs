@@ -2207,6 +2207,10 @@ in
 
   netdata = callPackage ../tools/system/netdata { };
 
+  netsurf = callPackage ../applications/misc/netsurf {
+    ui = "gtk";
+  };
+
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
