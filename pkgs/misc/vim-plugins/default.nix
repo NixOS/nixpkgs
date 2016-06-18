@@ -375,6 +375,17 @@ rec {
 
   };
 
+  deoplete-jedi = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "deoplete-jedi-2016-06-5";
+    src = fetchgit {
+      url = "git://github.com/zchee/deoplete-jedi";
+      rev = "36aec0d7166f9e18e05b45468e161f01909d77ec";
+      sha256 = "0h8vn7r5fkwvbxhqx6xh95iq1klz9ppbax9l3rxlfkp3w67kkj2k";
+    };
+    dependencies = [];
+
+  };
+
   Spacegray-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "Spacegray-vim-2016-06-04";
     src = fetchgit {
