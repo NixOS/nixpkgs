@@ -5664,10 +5664,14 @@ in modules // {
 
   ds4drv = buildPythonPackage rec {
     name = "ds4drv-${version}";
-    version = "0.5.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/ds4drv/${name}.tar.gz";
-      sha256 = "0dq2z1z09zxa6rn3v94vwqaaz29jwiydkss8hbjglixf20krmw3b";
+    version = "0.5.1";
+
+    # PyPi only carries py3 wheel
+    src = pkgs.fetchFromGitHub {
+      owner = "chrippa";
+      repo = "ds4drv";
+      rev = "v${version}";
+      sha256 = "0vinpla0apizzykcyfis79mrm1i6fhns83nkzw85svypdhkx2g8v";
     };
 
     propagatedBuildInputs = with self; [ evdev pyudev ];
