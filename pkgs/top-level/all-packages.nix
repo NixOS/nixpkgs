@@ -9876,6 +9876,7 @@ in
   bind = callPackage ../servers/dns/bind { };
 
   bird = callPackage ../servers/bird { };
+  bird6 = bird.override { enableIPv6 = true; };
 
   bosun = (callPackage ../servers/monitoring/bosun { }).bin // { outputs = [ "bin" ]; };
   scollector = bosun;
