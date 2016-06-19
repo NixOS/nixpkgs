@@ -31,7 +31,8 @@ let
       buildInputs = x.buildInputs ++ [ makeWrapper ];
       installPhase = x.installPhase +  ''
         wrapProgram "$out/bin/android-studio" \
-          --set ANDROID_HOME "${androidsdk}/libexec/android-sdk-linux/"
+          --set ANDROID_HOME "${androidsdk}/libexec/android-sdk-linux/" \
+          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib" # Gradle installs libnative-platform.so in ~/.gradle, that requires libstdc++.so.6
       '';
     });
 
@@ -146,16 +147,16 @@ in
 
 {
 
-  android-studio = let buildNumber = "143.2821654"; in buildAndroidStudio rec {
+  android-studio = let buildNumber = "143.2915827"; in buildAndroidStudio rec {
     name = "android-studio-${version}";
-    version = "2.1.1.0";
+    version = "2.1.2.0";
     build = "AI-${buildNumber}";
     description = "Android development environment based on IntelliJ IDEA";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
             "/android-studio-ide-${buildNumber}-linux.zip";
-      sha256 = "1zxxzyhny7j4vzlydrhwz3g8l8zcml84mhkcf5ckx8xr50j3m101";
+      sha256 = "0q61m8yln77valg7y6lyxlml53z387zh6fyfgc22sm3br5ahbams";
     };
     wmClass = "jetbrains-studio";
   };
