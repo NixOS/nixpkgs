@@ -866,6 +866,21 @@ showPhaseHeader() {
     esac
 }
 
+# Evaluate the variable named $name if it exists, otherwise the
+# function named $name.
+evalPhase() {
+    local name=$1
+    local source=$NIX_BUILD_TOP/eval/$name
+
+    # source exists?
+    if [ -n "${!name}" ]; then
+        mkdir -p "$(dirname "$source")"
+        echo "${!name}" > "$source"
+        source "$source"
+    else # call the function
+        "$name"
+    fi
+}
 
 genericBuild() {
     if [ -n "$buildCommand" ]; then
@@ -896,9 +911,7 @@ genericBuild() {
         showPhaseHeader "$curPhase"
         dumpVars
 
-        # Evaluate the variable named $curPhase if it exists, otherwise the
-        # function named $curPhase.
-        eval "${!curPhase:-$curPhase}"
+        evalPhase "$curPhase"
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
