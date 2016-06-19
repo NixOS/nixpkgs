@@ -268,6 +268,7 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
+      squeezelite = 248;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -506,6 +507,7 @@
       nzbget = 245;
       mosquitto = 246;
       #toxvpn = 247; # unused
+      #squeezelite = 248; #unused
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

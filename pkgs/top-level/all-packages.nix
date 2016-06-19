@@ -14253,6 +14253,8 @@ in
     apiKey = config.libspotify.apiKey or null;
   };
 
+  squeezelite = callPackage ../applications/audio/squeezelite { };
+
   ltunify = callPackage ../tools/misc/ltunify { };
 
   src = callPackage ../applications/version-management/src/default.nix {
