@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR nosetests -x
   '';
 
-  buildInputs = with python3Packages; [ glibcLocales nose pygments ];
+  buildInputs = with python3Packages; [ glibcLocales nose ];
   propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit ];
 
   meta = with stdenv.lib; {
