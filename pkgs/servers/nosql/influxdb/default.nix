@@ -1,6 +1,6 @@
-{ lib, goPackages, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
-goPackages.buildGoPackage rec {
+buildGoPackage rec {
   name = "influxdb-${rev}";
   rev = "v0.9.4";
   goPackagePath = "github.com/influxdb/influxdb";
@@ -14,10 +14,7 @@ goPackages.buildGoPackage rec {
 
   excludedPackages = "test";
 
-  propagatedBuildInputs = with goPackages; [
-    raft raft-boltdb snappy crypto gogo.protobuf pool pat toml
-    gollectd statik liner
-  ];
+  goDeps = ./deps.json;
 
   meta = with lib; {
     description = "An open-source distributed time series database";

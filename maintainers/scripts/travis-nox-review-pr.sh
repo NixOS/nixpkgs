@@ -13,10 +13,6 @@ if [[ $1 == nix ]]; then
     sudo mkdir /etc/nix
     sudo sh -c 'echo "build-max-jobs = 4" > /etc/nix/nix.conf'
 
-    # Nix builds in /tmp and we need exec support
-    sudo mount
-    sudo mount -o remount,exec /run
-
     # Verify evaluation
     echo "=== Verifying that nixpkgs evaluates..."
     nix-env -f. -qa --json >/dev/null
@@ -30,6 +26,11 @@ elif [[ $1 == build ]]; then
     if [[ $TRAVIS_OS_NAME == "osx" ]]; then
         echo "Skipping NixOS things on darwin"
     else
+        # Nix builds in /tmp and we need exec support
+        sudo mount -o remount,exec /run
+        sudo mount -o remount,exec /run/user
+        sudo mount
+
         echo "=== Checking NixOS options"
         nix-build nixos/release.nix -A options --show-trace
 

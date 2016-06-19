@@ -45,9 +45,9 @@ let
   config =
     let
       toPath = builtins.toPath;
-      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
+      getEnv = builtins.getEnv;
       pathExists = name:
-        builtins ? pathExists && builtins.pathExists (toPath name);
+        builtins.pathExists (toPath name);
 
       configFile = getEnv "NIXPKGS_CONFIG";
       homeDir = getEnv "HOME";

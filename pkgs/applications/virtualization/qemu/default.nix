@@ -60,6 +60,13 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio";
 
+  postFixup =
+    ''
+      for exe in $out/bin/qemu-system-* ; do
+        paxmark m $exe
+      done
+    '';
+
   postInstall =
     ''
       # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.

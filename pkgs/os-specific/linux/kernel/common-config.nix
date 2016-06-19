@@ -261,9 +261,7 @@ with stdenv.lib;
   # Security related features.
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
-  ${optionalString (!(features.grsecurity or false)) ''
-    DEVKMEM n # Disable /dev/kmem
-  ''}
+  DEVKMEM n # Disable /dev/kmem
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
@@ -422,13 +420,11 @@ with stdenv.lib;
 
   # Virtualisation.
   PARAVIRT? y
-  ${optionalString (!(features.grsecurity or false))
-    (if versionAtLeast version "3.10" then ''
-      HYPERVISOR_GUEST y
-    '' else ''
-      PARAVIRT_GUEST? y
-    '')
-  }
+  ${if versionAtLeast version "3.10" then ''
+    HYPERVISOR_GUEST y
+  '' else ''
+    PARAVIRT_GUEST? y
+  ''}
   KVM_APIC_ARCHITECTURE y
   KVM_ASYNC_PF y
   ${optionalString (versionOlder version "3.7") ''
@@ -443,9 +439,7 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
-  ${optionalString (!features.grsecurity or true) ''
-    KVM_GUEST y
-  ''}
+  KVM_GUEST y
   KVM_MMIO y
   ${optionalString (versionAtLeast version "3.13") ''
     KVM_VFIO y

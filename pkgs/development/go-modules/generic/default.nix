@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib }:
+{ go, govers, parallel, lib, fetchgit, fetchhg }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -17,6 +17,9 @@
 # Extra sources to include in the gopath
 , extraSrcs ? [ ]
 
+# go2nix dependency file
+, goDeps ? null
+
 , dontRenameImports ? false
 
 # Do not enable this without good reason
@@ -27,6 +30,8 @@
 
 if disabled then throw "${name} not supported for go ${go.meta.branch}" else
 
+with builtins;
+
 let
   args = lib.filterAttrs (name: _: name != "extraSrcs") args';
 
@@ -35,6 +40,31 @@ let
   removeExpr = refs: lib.flip lib.concatMapStrings refs (ref: ''
     | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
   '');
+
+  dep2src = goDep:
+    {
+      inherit (goDep) goPackagePath;
+      src = if goDep.fetch.type == "git" then
+        fetchgit {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else if goDep.fetch.type == "hg" then
+        fetchhg {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else abort "Unrecognized package fetch type";
+    };
+
+  importGodeps = { depsFile, filterPackages ? [] }:
+  let
+    deps = lib.importJSON depsFile;
+    external = filter (d: d ? include) deps;
+    direct = filter (d: d ? goPackagePath && (length filterPackages == 0 || elem d.goPackagePath filterPackages)) deps;
+  in
+    concatLists (map importGodeps (map (d: { depsFile = ./. + d.include; filterPackages = d.packages; }) external)) ++ (map dep2src direct);
+
+  goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
+                             else extraSrcs;
 in
 
 go.stdenv.mkDerivation (
@@ -53,13 +83,13 @@ go.stdenv.mkDerivation (
     mkdir -p "go/src/$(dirname "$goPackagePath")"
     mv "$sourceRoot" "go/src/$goPackagePath"
 
-  '' + lib.flip lib.concatMapStrings extraSrcs ({ src, goPackagePath }: ''
-    mkdir extraSrc
-    (cd extraSrc; unpackFile "${src}")
+  '' + lib.flip lib.concatMapStrings goPath ({ src, goPackagePath }: ''
+    mkdir goPath
+    (cd goPath; unpackFile "${src}")
     mkdir -p "go/src/$(dirname "${goPackagePath}")"
-    chmod -R u+w extraSrc/*
-    mv extraSrc/* "go/src/${goPackagePath}"
-    rmdir extraSrc
+    chmod -R u+w goPath/*
+    mv goPath/* "go/src/${goPackagePath}"
+    rmdir goPath
 
   '') + ''
     export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
@@ -158,7 +188,9 @@ go.stdenv.mkDerivation (
   disallowedReferences = lib.optional (!allowGoReference) go
     ++ lib.optional (!dontRenameImports) govers;
 
-  passthru = passthru // lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
+  passthru = passthru //
+    { inherit go; } //
+    lib.optionalAttrs (goPackageAliases != []) { inherit goPackageAliases; };
 
   enableParallelBuilding = enableParallelBuilding;
 

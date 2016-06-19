@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.5.1/qtbase/src/dbus/qdbus_symbols.cpp
+Index: qtbase-opensource-src-5.5.1/src/dbus/qdbus_symbols.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.5.1.orig/qtbase/src/dbus/qdbus_symbols.cpp
-+++ qt-everywhere-opensource-src-5.5.1/qtbase/src/dbus/qdbus_symbols.cpp
+--- qtbase-opensource-src-5.5.1.orig/src/dbus/qdbus_symbols.cpp
++++ qtbase-opensource-src-5.5.1/src/dbus/qdbus_symbols.cpp
 @@ -89,7 +89,7 @@ bool qdbus_loadLibDBus()
  #ifdef Q_OS_WIN
          QLatin1String("dbus-1"),

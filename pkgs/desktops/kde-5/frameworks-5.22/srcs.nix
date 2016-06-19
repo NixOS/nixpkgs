@@ -267,11 +267,11 @@
     };
   };
   ki18n = {
-    version = "5.22.0";
+    version = "5.22.1";
     src = fetchurl {
-      url = "${mirror}/stable/frameworks/5.22/ki18n-5.22.0.tar.xz";
-      sha256 = "0881y42h5k8ik6lf7pfsylch1ldksc5m4qm3gvshp8aazic8iyzd";
-      name = "ki18n-5.22.0.tar.xz";
+      url = "${mirror}/stable/frameworks/5.22/ki18n-5.22.1.tar.xz";
+      sha256 = "0fasp8akj6wysn4acf9vyivcgb8x9dlnhkqmw7j0g7z1qgvjn4pv";
+      name = "ki18n-5.22.1.tar.xz";
     };
   };
   kiconthemes = {

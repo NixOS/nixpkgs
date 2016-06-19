@@ -68,14 +68,19 @@ in
 
 stdenv.mkDerivation {
   name = "sddm-${version}";
-  phases = "installPhase";
 
   nativeBuildInputs = [ lndir makeQtWrapper ];
   buildInputs = [ unwrapped ] ++ themes;
   themes = map (pkg: pkg.out or pkg) themes;
   inherit unwrapped;
 
+  unpackPhase = "true";
+  configurePhase = "runHook preConfigure; runHook postConfigure";
+  buildPhase = "runHook preBuild; runHook postBuild";
+
   installPhase = ''
+    runHook preInstall
+
     makeQtWrapper "$unwrapped/bin/sddm" "$out/bin/sddm"
 
     mkdir -p "$out/share/sddm"
@@ -85,6 +90,8 @@ stdenv.mkDerivation {
             lndir -silent "$sddmDir" "$out/share/sddm"
         fi
     done
+
+    runHook postInstall
   '';
 
   inherit (unwrapped) meta;

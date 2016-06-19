@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # '';
 
   makefile = "Makefile.unx";
-  makeFlags = "ZPATH=${zlib.out}/lib";
+  makeFlags = "ZPATH=${zlib.static}/lib";
 
   buildInputs = [ zlib ];
 

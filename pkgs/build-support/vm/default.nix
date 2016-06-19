@@ -1869,7 +1869,7 @@ rec {
       fullName = "Debian 8.4 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "0kipisyjkhczghzqj4a8y1n4az9c4c8lsj8sw7js13b053lpj6ga";
+        sha256 = "1vvl4k1c3wqvh4gj64vxj2iwb6s9ys5xrskwdpffhyjlslaylsnz";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

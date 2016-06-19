@@ -1,5 +1,5 @@
 { stdenv, lib, callPackage, runCommand, writeReferencesToFile, writeText, vmTools, writeScript
-, docker, shadow, utillinux, coreutils, jshon, e2fsprogs, goPackages, pigz }:
+, docker, shadow, utillinux, coreutils, jshon, e2fsprogs, go, pigz }:
 
 # WARNING: this API is unstable and may be subject to backwards-incompatible changes in the future.
   
@@ -10,7 +10,7 @@ rec {
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
   tarsum = runCommand "tarsum" {
-    buildInputs = [ goPackages.go ];
+    buildInputs = [ go ];
   } ''
     mkdir tarsum
     cd tarsum

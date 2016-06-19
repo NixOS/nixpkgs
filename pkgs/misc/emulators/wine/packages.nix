@@ -1,14 +1,14 @@
 { system, stdenv, stdenv_32bit, lib, pkgs, pkgsi686Linux, callPackage, callPackage_i686,
   overrideCC, wrapCCMulti, gcc49,
-  pulseaudioSupport,
-  wineRelease ? "stable"
+  wineRelease ? "stable",
+  supportFlags
 }:
 
 let src = lib.getAttr wineRelease (callPackage ./sources.nix {});
 in with src; {
   wine32 = callPackage_i686 ./base.nix {
     name = "wine-${version}";
-    inherit src version pulseaudioSupport;
+    inherit src version supportFlags;
     pkgArches = [ pkgsi686Linux ];
     geckos = [ gecko32 ];
     monos =  [ mono ];
@@ -16,7 +16,7 @@ in with src; {
   };
   wine64 = callPackage ./base.nix {
     name = "wine64-${version}";
-    inherit src version pulseaudioSupport;
+    inherit src version supportFlags;
     # FIXME: drop this when GCC is updated to >5.3.
     # Corresponding bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=69140
     stdenv = overrideCC stdenv gcc49;
@@ -28,7 +28,7 @@ in with src; {
   };
   wineWow = callPackage ./base.nix {
     name = "wine-wow-${version}";
-    inherit src version pulseaudioSupport;
+    inherit src version supportFlags;
     # FIXME: see above.
     stdenv = overrideCC stdenv_32bit (wrapCCMulti gcc49);
     pkgArches = [ pkgs pkgsi686Linux ];

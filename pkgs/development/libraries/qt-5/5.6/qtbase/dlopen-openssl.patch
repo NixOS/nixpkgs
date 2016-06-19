@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
+Index: qtbase-opensource-src-5.6.0/src/network/ssl/qsslsocket_openssl_symbols.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/network/ssl/qsslsocket_openssl_symbols.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/network/ssl/qsslsocket_openssl_symbols.cpp
++++ qtbase-opensource-src-5.6.0/src/network/ssl/qsslsocket_openssl_symbols.cpp
 @@ -652,8 +652,8 @@ static QPair<QLibrary*, QLibrary*> loadO
  #endif
  #if defined(SHLIB_VERSION_NUMBER) && !defined(Q_OS_QNX) // on QNX, the libs are always libssl.so and libcrypto.so

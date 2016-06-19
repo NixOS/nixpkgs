@@ -2,7 +2,7 @@
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 # libjulia dependencies
-, libunwind, llvm, readline, utf8proc, zlib
+, libunwind, readline, utf8proc, zlib
 # standard library dependencies
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
@@ -22,16 +22,22 @@ let
 in
 
 let
+  llvmVersion = "3.7.1";
+  llvm = fetchurl {
+    url = "http://llvm.org/releases/${llvmVersion}/llvm-${llvmVersion}.src.tar.xz";
+    sha256 = "1masakdp9g2dan1yrazg7md5am2vacbkb3nahb3dchpc1knr8xxy";
+  };
+
   dsfmtVersion = "2.2.3";
   dsfmt = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmtVersion}.tar.gz";
     sha256 = "03kaqbjbi6viz0n33dk5jlf6ayxqlsq4804n7kwkndiga9s4hd42";
   };
 
-  libuvVersion = "07730c4bd595b4d45a498a8ee0bcd53878ff7c10";
+  libuvVersion = "a1d9166a440e4a0664c0e6de6ebe25350de56a42";
   libuv = fetchurl {
     url = "https://api.github.com/repos/JuliaLang/libuv/tarball/${libuvVersion}";
-    sha256 = "19nk8vdvx2mxyrwpndb7888c3b237ja5xvxr3jk5ah77ix3srr3h";
+    sha256 = "1sjvly4ylfyj8kxnx0gsjj2f70cg17h302h1i08gfndrqam68za5";
   };
 
   rmathVersion = "0.1";
@@ -40,26 +46,27 @@ let
     sha256 = "0ai5dhjc43zcvangz123ryxmlbm51s21rg13bllwyn98w67arhb4";
   };
   
-  virtualenvVersion = "1.11.6";
+  virtualenvVersion = "15.0.0";
   virtualenv = fetchurl {
     url = "mirror://pypi/v/virtualenv/virtualenv-${virtualenvVersion}.tar.gz";
-    sha256 = "1xq4prmg25n9cz5zcvbqx68lmc3kl39by582vd8pzs9f3qalqyiy";
+    sha256 = "06fw4liazpx5vf3am45q2pdiwrv0id7ckv7n6zmpml29x6vkzmkh";
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.4.4-pre-2016-02-08";
+  version = "0.5.0-dev-2016-06-10";
   name = "${pname}-${version}";
 
   src = fetchgit {
     url = "https://github.com/JuliaLang/${pname}";
-    rev = "cb93e6b70b4b1313b4de8c54e55e85c8eb43daa3";
-    sha256 = "1xihq66il4wlxfm5fsgcirh76dq936fm887v2ynqkm3kz7ahhssw";
+    rev = "56d7d6672c7db717dacb5e34f485180c2eba83b2";
+    sha256 = "1wbrzdrxp94i7yxdgf3qgrjshmqxi0c4bqz7wy0c0c0kjlg6flmx";
   };
 
   prePatch = ''
     mkdir deps/srccache
+    cp "${llvm}" "./deps/srccache/llvm-${llvmVersion}.src.tar.xz"
     cp "${dsfmt}" "./deps/srccache/dsfmt-${dsfmtVersion}.tar.gz"
     cp "${rmath-julia}" "./deps/srccache/Rmath-julia-${rmathVersion}.tar.gz"
     cp "${libuv}" "./deps/srccache/libuv-${libuvVersion}.tar.gz"
@@ -76,7 +83,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind llvm mpfr
+    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
     pcre2 openblas openlibm openspecfun readline suitesparse utf8proc
     zlib
   ];
@@ -117,7 +124,8 @@ stdenv.mkDerivation rec {
       "USE_SYSTEM_GMP=1"
       "USE_SYSTEM_LIBGIT2=1"
       "USE_SYSTEM_LIBUNWIND=1"
-      "USE_SYSTEM_LLVM=1"
+      # 'replutil' test failure with LLVM 3.8.0, invalid libraries with 3.7.1
+      "USE_SYSTEM_LLVM=0"
       "USE_SYSTEM_MPFR=1"
       "USE_SYSTEM_OPENLIBM=1"
       "USE_SYSTEM_OPENSPECFUN=1"
@@ -155,7 +163,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in "$out/bin/julia" "$out/bin/julia-debug"; do
         wrapProgram "$prog" \
-            --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH" \
+            --prefix LD_LIBRARY_PATH : "$out/lib/julia:$LD_LIBRARY_PATH" \
             --prefix PATH : "${curl}/bin"
     done
   '';

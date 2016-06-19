@@ -23,6 +23,8 @@ rec {
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  diff-so-fancy = callPackage ./diff-so-fancy { };
+
   git = appendToName "minimal" gitBase;
 
   # The full-featured Git.
@@ -40,7 +42,7 @@ rec {
   git-annex = pkgs.haskell.packages.lts.git-annex-with-assistant;
   gitAnnex = git-annex;
 
-  git-annex-remote-b2 = pkgs.goPackages.git-annex-remote-b2;
+  git-annex-remote-b2 = callPackage ./git-annex-remote-b2 { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   postFixup = ''
-    paxmark m $out/bin/tcc
+    paxmark m $bin/bin/tcc
   '';
 
   meta = {

@@ -85,6 +85,4 @@ rec {
 
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  #FIXME: throw this away sometime in the future. added 2015-08-18
-  withHoogle = throw "withHoogle is no longer supported, use ghcWithHoogle instead";
 }

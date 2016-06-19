@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk
-, libxml2, libglade, intltool, xorg, makeWrapper
+, libxml2, libglade, intltool, xorg, makeWrapper, gle
+, forceInstallAllHacks ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -15,15 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig bc perl libjpeg mesa gtk libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
-      libXxf86misc intltool xorg.appres makeWrapper
+      libXxf86misc intltool xorg.appres makeWrapper gle
     ];
 
   preConfigure =
     ''
-      # Fix build error in version 5.18. Remove this patch when updating
-      # to a later version.
-      #sed -i -e '/AF_LINK/d' hacks/glx/sonar-icmp.c
-
       # Fix installation paths for GTK resources.
       sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
           -i driver/Makefile.in po/Makefile.in.in
@@ -33,14 +30,21 @@ stdenv.mkDerivation rec {
     [ "--with-gl" "--with-pam" "--with-pixbuf" "--with-proc-interrupts"
       "--with-dpms-ext" "--with-randr-ext" "--with-xinerama-ext"
       "--with-xf86vmode-ext" "--with-xf86gamma-ext" "--with-randr-ext"
-      "--with-xshm-ext" "--with-xdbe-ext" "--without-readdisplay"
+      "--with-xshm-ext" "--with-xdbe-ext"
       "--with-x-app-defaults=\${out}/share/xscreensaver/app-defaults"
     ];
 
   postInstall = ''
       wrapProgram $out/bin/xscreensaver-text \
         --prefix PATH : ${stdenv.lib.makeBinPath [xorg.appres]}
-  '';
+  ''
+  + stdenv.lib.optionalString forceInstallAllHacks ''
+    make -C hacks/glx dnalogo
+    cat hacks/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks
+    cat hacks/glx/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks/glx
+    cp -f $(find hacks -type f -perm -111 "!" -name "*.*" )  "$out/libexec/xscreensaver"
+  ''
+  ;
 
   meta = {
     homepage = "http://www.jwz.org/xscreensaver/";

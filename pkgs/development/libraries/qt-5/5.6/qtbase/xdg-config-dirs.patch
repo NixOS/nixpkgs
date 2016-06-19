@@ -1,7 +1,7 @@
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/io/qsettings.cpp
+Index: qtbase-opensource-src-5.6.0/src/corelib/io/qsettings.cpp
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/corelib/io/qsettings.cpp
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/io/qsettings.cpp
+--- qtbase-opensource-src-5.6.0.orig/src/corelib/io/qsettings.cpp
++++ qtbase-opensource-src-5.6.0/src/corelib/io/qsettings.cpp
 @@ -1155,6 +1155,24 @@ QConfFileSettingsPrivate::QConfFileSetti
      if (!application.isEmpty())
          confFiles[F_System | F_Application].reset(QConfFile::fromName(systemPath + appFile, false));
@@ -27,10 +27,10 @@ Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/io/qsettings.cpp
  #else
      QString confName = getPath(format, QSettings::UserScope) + org;
      if (!application.isEmpty())
-Index: qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/io/qsettings_p.h
+Index: qtbase-opensource-src-5.6.0/src/corelib/io/qsettings_p.h
 ===================================================================
---- qt-everywhere-opensource-src-5.6.0.orig/qtbase/src/corelib/io/qsettings_p.h
-+++ qt-everywhere-opensource-src-5.6.0/qtbase/src/corelib/io/qsettings_p.h
+--- qtbase-opensource-src-5.6.0.orig/src/corelib/io/qsettings_p.h
++++ qtbase-opensource-src-5.6.0/src/corelib/io/qsettings_p.h
 @@ -241,7 +241,7 @@ public:
          F_Organization = 0x1,
          F_User = 0x0,

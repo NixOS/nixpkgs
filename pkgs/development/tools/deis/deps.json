@@ -1,0 +1,10 @@
+[
+    {
+        "include": "../../../go-modules/libs.json",
+        "packages": [
+            "github.com/docopt/docopt-go",
+            "golang.org/x/crypto",
+            "gopkg.in/yaml.v2"
+        ]
+    }
+]
