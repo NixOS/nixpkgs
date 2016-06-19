@@ -1192,6 +1192,10 @@ in
 
   cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
 
+  cudnn5_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-5.0 {
+    cudatoolkit = self.cudatoolkit75;
+  };
+
   curlFull = self.curl.override {
     idnSupport = true;
     ldapSupport = true;
