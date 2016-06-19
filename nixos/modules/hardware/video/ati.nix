@@ -18,7 +18,9 @@ in
 
   config = mkIf enabled {
 
-    nixpkgs.config.xorg.fglrxCompat = true;
+    nixpkgs.config.xorg = mkBefore {
+      fglrxCompat = true;
+    };
 
     services.xserver.drivers = singleton
       { name = "fglrx"; modules = [ ati_x11 ]; libPath = [ "${ati_x11}/lib" ]; };
