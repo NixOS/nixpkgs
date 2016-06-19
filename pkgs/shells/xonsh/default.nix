@@ -41,4 +41,8 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ spwhitt garbas ];
     platforms = platforms.all;
   };
+
+  passthru = {
+    shellPath = "/bin/xonsh";
+  };
 }
