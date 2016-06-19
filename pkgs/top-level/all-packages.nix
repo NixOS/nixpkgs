@@ -499,6 +499,8 @@ in
 
   androidsdk = self.androidenv.androidsdk_6_0;
 
+  androidsdk_extras = self.androidenv.androidsdk_6_0_extras;
+
   arc-gtk-theme = callPackage ../misc/themes/arc { };
 
   adapta-gtk-theme = callPackage ../misc/themes/adapta { };
@@ -12865,7 +12867,7 @@ in
     libart = pkgs.gnome2.libart_lgpl;
   };
 
-  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_4_4; });
+  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_extras; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
