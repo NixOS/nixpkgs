@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "viewnior-${version}";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "xsisqox";
     repo = "Viewnior";
     rev = name;
-    sha256 = "0y352hkkwmzb13a87vqgj1dpdn81qk94acby1a93xkqr1qs626lw";
+    sha256 = "06ppv3r85l3id4ij6h4y5fgm3nib2587fdrdv9fccyi75zk7fs0p";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
