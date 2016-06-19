@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1cs4q9qiakfd2m1lvfsvfgf8yvhxzmc06glng5d80piwyn6ymzxg";
   };
 
+  postPatch = "sed '1i#include <vector>' -i src/model/World.h";
+
   buildInputs = [ qt4 box2d which cmake ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     make DESTDIR=.. install
