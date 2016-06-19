@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+# vim: sw=4 et
 set -e
 set -o pipefail
 
