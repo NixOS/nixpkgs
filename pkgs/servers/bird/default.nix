@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, flex, bison, readline }:
+{ stdenv, fetchurl, flex, bison, readline
+, enableIPv6 ? false }:
 
 stdenv.mkDerivation rec {
   name = "bird-1.6.0";
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir /var"
-  ];
+  ] ++ stdenv.lib.optional enableIPv6 "--enable-ipv6";
 
   meta = {
     description = "BIRD Internet Routing Daemon";
