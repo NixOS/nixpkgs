@@ -11991,6 +11991,8 @@ in
   bitcoin = self.altcoins.bitcoin;
   bitcoin-xt = self.altcoins.bitcoin-xt;
 
+  go-ethereum = self.altcoins.go-ethereum;
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
