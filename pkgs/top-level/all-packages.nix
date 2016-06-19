@@ -3507,6 +3507,8 @@ in
 
   tcpflow = callPackage ../tools/networking/tcpflow { };
 
+  tcplay = callPackage ../tools/security/tcplay { };
+
   teamviewer = callPackage ../applications/networking/remote/teamviewer {
     stdenv = stdenv_32bit;
   };
