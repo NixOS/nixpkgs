@@ -12645,7 +12645,7 @@ in
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
-  goldendict = callPackage ../applications/misc/goldendict { };
+  goldendict = qt55.callPackage ../applications/misc/goldendict { };
 
   google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
