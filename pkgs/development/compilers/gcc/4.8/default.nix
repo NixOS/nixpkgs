@@ -70,7 +70,8 @@ let version = "4.8.5";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
-      ++ optional langFortran ../gfortran-driving.patch;
+      ++ optional langFortran ../gfortran-driving.patch
+      ++ optional stdenv.isDarwin ../gfortran-darwin-NXConstStr.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -197,7 +198,7 @@ let version = "4.8.5";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
-    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+    bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips && !stdenv.isDarwin;
 
 in
 
@@ -304,15 +305,6 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    if SDKROOT=$(/usr/bin/xcrun --show-sdk-path); then
-      configureFlagsArray+=(--with-native-system-header-dir=$SDKROOT/usr/include)
-      makeFlagsArray+=( \
-       CFLAGS_FOR_BUILD=-F$SDKROOT/System/Library/Frameworks \
-       CFLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
-       FLAGS_FOR_TARGET=-F$SDKROOT/System/Library/Frameworks \
-      )
-    fi
   '';
 
   dontDisableStatic = true;
