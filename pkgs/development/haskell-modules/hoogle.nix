@@ -47,7 +47,7 @@ let
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
     if !isGhcjs
-    then "${ghc}/${docLibGlob}/prologue.txt"
+    then "${ghc.doc}/${docLibGlob}/prologue.txt"
     else writeText "ghcjs-prologue.txt" ''
       This index includes documentation for many Haskell modules.
     '';
