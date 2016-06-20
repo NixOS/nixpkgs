@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jcpvl5sxb2ag8yahpy370c5jlfb097a21k2mhsidh4wxdhrnmgy";
   };
 
-  patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];
+  patches = [ ./remove-runtime-dep-on-openssl-headers.patch
+              ./cve-2016-4971.patch ];
 
   preConfigure = ''
     for i in "doc/texi2pod.pl" "util/rmold.pl"; do
