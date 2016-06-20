@@ -38,6 +38,8 @@ let
     use-system-read-write-data-directories=false
     [path]
     read-data=$out/share/factorio/data/
+    [other]
+    check_updates=false
   '';
 
   updateConfigSh = ''
