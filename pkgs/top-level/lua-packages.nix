@@ -427,7 +427,7 @@ let
     };
 
     meta = with stdenv.lib; {
-      description = "vicious widgets for window managers";
+      description = "Vicious widgets for window managers";
       homepage    = http://git.sysphere.org/vicious/;
       license     = licenses.gpl2;
       maintainers = with maintainers; [ makefu ];

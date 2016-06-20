@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs ];
   meta = {
-    description = "a multimedia player with the focus on simplicity";
+    description = "A multimedia player with the focus on simplicity";
   };
 }

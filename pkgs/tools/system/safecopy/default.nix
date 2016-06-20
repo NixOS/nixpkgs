@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "data recovery tool for damaged hardware";
+    description = "Data recovery tool for damaged hardware";
 
     longDescription =
       '' Safecopy is a data recovery tool which tries to extract as much data as possible from a

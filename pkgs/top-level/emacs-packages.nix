@@ -395,7 +395,7 @@ let
     };
     packageRequires = [ company ghc-mod ];
     meta = {
-      description = "company-mode completion backend for haskell-mode via ghc-mod";
+      description = "Company-mode completion backend for haskell-mode via ghc-mod";
       license = gpl3Plus;
     };
   };

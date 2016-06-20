@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://intgat.tigress.co.uk/rmy/uml/index.html;
-    description = "zero free blocks from ext2, ext3 and ext4 file-systems";
+    description = "Zero free blocks from ext2, ext3 and ext4 file-systems";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.theuni ];
   };
