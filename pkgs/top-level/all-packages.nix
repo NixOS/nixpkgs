@@ -3421,6 +3421,8 @@ in
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
+  ssh-ident = callPackage ../tools/networking/ssh-ident { };
+
   sshpass = callPackage ../tools/networking/sshpass { };
 
   sslscan = callPackage ../tools/security/sslscan { };
