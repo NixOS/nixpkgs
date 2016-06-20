@@ -7254,6 +7254,10 @@ in
     guileBindings = config.gnutls.guile or false;
   };
 
+  gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
+    guileBindings = config.gnutls.guile or false;
+  };
+
   gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme {
