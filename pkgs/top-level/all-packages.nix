@@ -13284,7 +13284,9 @@ in
   librecad = callPackage ../applications/misc/librecad { };
   librecad2 = self.librecad;  # backwards compatibility alias, added 2015-10
 
-  libreoffice = callPackage ../applications/office/libreoffice {
+  libreoffice = hiPrio libreoffice-still;
+
+  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
@@ -13301,7 +13303,7 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-  };
+  });
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
