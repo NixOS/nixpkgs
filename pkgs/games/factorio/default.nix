@@ -8,7 +8,7 @@ assert releaseType == "alpha" || releaseType == "headless";
 
 with stdenv.lib;
 let
-  version = "0.12.33";
+  version = "0.12.35";
   isHeadless = releaseType == "headless";
 
   arch = if stdenv.system == "x86_64-linux" then {
@@ -25,12 +25,12 @@ let
     url = "https://www.factorio.com/get-download/${version}/${releaseType}/${arch.inUrl}";
     name = "factorio_${releaseType}_${arch.inTar}-${version}.tar.gz"; # TODO take this from 302 redirection somehow? fetchurl doesn't help.
     x64 = {
-      headless = fetchurl        { inherit name url; sha256 = "073bwkpw2bwhbr3m8k3imlns89x5035xl4b7yq1c6npm4m7qcdnp"; };
-      alpha = authenticatedFetch { inherit      url; sha256 = "0dmq0kvzz885gcvj57h22icqhx0nvyfav4dvwsvpi15833208ca3"; };
+      headless = fetchurl        { inherit name url; sha256 = "1pdfd6qpzdzxsz1pvf1qasw5p6mzidi2q5d5m8x0gqyxaqdg175b"; };
+      alpha = authenticatedFetch { inherit      url; sha256 = "1r2q5hvx8248vfl7jg9jr0sk9kxhh5lg4qlv828j44dmgsxyhn1y"; };
     };
     i386 = {
       headless = abort "Factorio 32-bit headless binaries are not available for download.";
-      alpha = authenticatedFetch { inherit      url; sha256 = "1yxv6kr89iavpfsg21fx3q12m97ls0m9h3x33m4xnqp8px55851v"; };
+      alpha = authenticatedFetch { inherit      url; sha256 = "1f3hl6m59zvmjrph0kj7fh1axdahgan1v5v3y4rdc6idamvr7rrf"; };
     };
   };
 
