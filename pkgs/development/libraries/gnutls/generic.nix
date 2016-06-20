@@ -1,6 +1,6 @@
 { lib, fetchurl, stdenv, zlib, lzo, libtasn1, nettle, pkgconfig, lzip
 , guileBindings, guile, perl, gmp, autogen, libidn, p11_kit, unbound, libiconv
-, tpmSupport ? false, trousers
+, tpmSupport ? false, trousers, nettools, bash
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools bash ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
@@ -37,6 +37,10 @@ stdenv.mkDerivation {
   # AutoreconfHook is temporary until the patch lands upstream to fix
   # header file generation with parallel building
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+
+  patchPhase = ''
+    patchShebangs .
+    '';
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
