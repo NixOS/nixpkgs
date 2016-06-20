@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
       "http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz"
       "http://www.cs.miami.edu/~tptp/TPTP/Archive/TPTP-v${version}/TPTP-v${version}.tgz"
     ];
-    sha256 = "17wl80mnm91jp3npdjzfbb8ds45f2gni250jlfw0d91i1476wcl3";
+    sha256 = "0xy4cqniyx9fv8r9mc5q5b7xl163pkr9hcmpq6gkls2a0pvg07w9";
   };
 
   buildInputs = [ tcsh yap perl patchelf ];
