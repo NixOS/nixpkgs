@@ -10268,6 +10268,8 @@ in
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
 
+  systemd-journal2gelf = (callPackage ../servers/monitoring/systemd-journal2gelf { }).bin // { outputs = ["bin"]; };
+
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
