@@ -6965,7 +6965,16 @@ in modules // {
     };
   };
 
-  lti = let self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
+  lti = let
+    self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
+    mock_1_0_1 = self'.mock.overrideDerivation (_: rec {
+      name = "mock-1.0.1";
+      propagatedBuildInputs = null;
+      src = pkgs.fetchurl {
+        url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
+        sha256 = "0kzlsbki6q0awf89rc287f3aj8x431lrajf160a70z0ikhnxsfdq";
+      };
+    });
   in buildPythonPackage rec {
     version = "0.4.1";
     name = "PyLTI-${version}";
@@ -6975,7 +6984,7 @@ in modules // {
     propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
     buildInputs = with self'; [
       flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
-      pytestflakes pytestpep8 sphinx mock
+      pytestflakes pytestpep8 sphinx mock_1_0_1
     ];
 
     src = pkgs.fetchurl {
