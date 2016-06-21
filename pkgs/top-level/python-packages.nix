@@ -21031,6 +21031,21 @@ in modules // {
     };
   };
 
+  Theano-cuda = callPackage ../development/python-modules/theano/cuda (
+  let
+    boost = pkgs.boost159.override {
+      inherit (self) python numpy scipy;
+    };
+  in rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    cudnn = pkgs.cudnn5_cudatoolkit75;
+    inherit (self) numpy scipy;
+    pycuda = self.pycuda.override { inherit boost; };
+    libgpuarray = self.libgpuarray-cuda.override {
+      clblas = pkgs.clblas-cuda.override { inherit boost; };
+    };
+  });
+
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
     name = "pytidylib-${version}";
