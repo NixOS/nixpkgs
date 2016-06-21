@@ -115,11 +115,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
-    export GOBIN="$out/bin"
+    export GOBIN="$(pwd)/bin"
     export PATH="$GOBIN:$PATH"
     cd ./src
     echo Building
     ./all.bash
+    cd ../
+    cp $(pwd)/bin/* "$out/bin"
   '';
 
   preFixup = ''
