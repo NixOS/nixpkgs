@@ -203,20 +203,19 @@ rec {
   */
   escape = list: replaceChars list (map (c: "\\${c}") list);
 
-  /* Escape all characters that have special meaning in the Bourne shell.
+  /* Quote string to be used safely within the Bourne shell.
 
      Example:
-       escapeShellArg "so([<>])me"
-       => "so\\(\\[\\<\\>\\]\\)me"
+       escapeShellArg "esc'ape\nme"
+       => "'esc'\\''ape\nme'"
   */
-  escapeShellArg = arg:
-    lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]") (toString arg);
+  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
 
-  /* Escape all arguments to be passed to the Bourne shell.
+  /* Quote all arguments to be safely passed to the Bourne shell.
 
      Example:
-       escapeShellArgs ["one" "two three"]
-       => "one two\\ three"
+       escapeShellArgs ["one" "two three" "four'five"]
+       => "'one' 'two three' 'four'\\''five'"
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
