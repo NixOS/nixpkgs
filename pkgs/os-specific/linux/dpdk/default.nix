@@ -22,8 +22,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   outputs = [ "out" "kmod" "examples" ];
 
-  buildPhase = ''
+  configurePhase = ''
     make T=x86_64-native-linuxapp-gcc config
+  '';
+
+  buildPhase = ''
     make T=x86_64-native-linuxapp-gcc install
     make T=x86_64-native-linuxapp-gcc examples
   '';
