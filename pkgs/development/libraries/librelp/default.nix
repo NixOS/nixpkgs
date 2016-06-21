@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://www.librelp.com/;
-    description = "a reliable logging library";
+    description = "A reliable logging library";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

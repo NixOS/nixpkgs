@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    description = "free implementation of the OpenPGP standard for encrypting and signing data";
+    description = "Free implementation of the OpenPGP standard for encrypting and signing data";
     homepage = http://www.gnupg.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.gnu; # arbitrary choice

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, wxGTK, openssl, curl }:
+{ stdenv, fetchurl, wxGTK30, openssl, curl }:
 
 stdenv.mkDerivation rec {
   name = "hakuneko-${version}";
-  version = "1.3.12";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/hakuneko/hakuneko_${version}_src.tar.gz";
-    sha256 = "24e7281a7f68b24e5260ee17ecfa1c5a3ffec408c8ea6e0121ae6c161898b698";
+    sha256 = "d7e066e3157445f273ccf14172c05077759da036ffe700a28a409fde862b69a7";
   };
 
   preConfigure = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
        --replace /bin/bash $shell
     '';
 
-  buildInputs = [ wxGTK openssl curl ];
+  buildInputs = [ wxGTK30 openssl curl ];
 
   meta = {
     description = "Manga downloader";

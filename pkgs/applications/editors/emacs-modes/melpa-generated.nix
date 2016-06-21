@@ -28303,12 +28303,12 @@
     helm-projectile = callPackage ({ cl-lib ? null, dash, fetchFromGitHub, fetchurl, helm, lib, melpaBuild, projectile }:
     melpaBuild {
         pname = "helm-projectile";
-        version = "20160603.611";
+        version = "20160614.832";
         src = fetchFromGitHub {
           owner = "bbatsov";
           repo = "helm-projectile";
-          rev = "3db706c9147a54a618bdb6e5de827d931d8ae9a6";
-          sha256 = "0b9nd668p5lya214hyc0lv9pbmxjfy4ls1yhljr6j71qsfl0mjva";
+          rev = "f41141a93aa6c03ffb9fdb294b3caa19803b1d72";
+          sha256 = "0z7vhidjb3fzy28kjg6v73sxd7fgdhxcmqx5qypv3czdjcl5911x";
         };
         recipeFile = fetchurl {
           url = "https://raw.githubusercontent.com/milkypostman/melpa/4976446a8ae40980d502186615902fc05c15ec7c/recipes/helm-projectile";

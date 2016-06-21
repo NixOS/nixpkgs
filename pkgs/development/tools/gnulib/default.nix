@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.gnu.org/software/gnulib/";
-    description = "central location for code to be shared among GNU packages";
+    description = "Central location for code to be shared among GNU packages";
     license = stdenv.lib.licenses.gpl3Plus;
   };
 }

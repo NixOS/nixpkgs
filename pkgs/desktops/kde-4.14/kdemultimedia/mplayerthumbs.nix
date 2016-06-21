@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs ];
   meta = {
-    description = "a video thumbnail generator for KDE";
+    description = "A video thumbnail generator for KDE";
   };
 }

@@ -268,6 +268,8 @@
       nzbget = 245;
       mosquitto = 246;
       toxvpn = 247;
+      squeezelite = 248;
+      turnserver = 249;
 
       prometheus = 999;
 
@@ -508,6 +510,8 @@
       nzbget = 245;
       mosquitto = 246;
       #toxvpn = 247; # unused
+      #squeezelite = 248; #unused
+      turnserver = 249;
 
       prometheus = 999;
 

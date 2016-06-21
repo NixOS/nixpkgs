@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.jbidwatcher.com/";
-    description = "monitor and snipe Ebay auctions";
+    description = "Monitor and snipe Ebay auctions";
     license = "LGPL";
 
     longDescription = ''

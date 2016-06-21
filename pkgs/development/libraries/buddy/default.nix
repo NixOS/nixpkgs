@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://sourceforge.net/projects/buddy/";
-    description = "binary decision diagram package";
+    description = "Binary decision diagram package";
     license = "as-is";
 
     platforms = with stdenv.lib.platforms; allBut cygwin;

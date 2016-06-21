@@ -13,4 +13,10 @@ rec {
    optionalString (!config.boot.isContainer)
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
+  # Returns a system path for a given shell package
+  toShellPath = shell:
+    if types.shellPackage.check shell then
+      "/run/current-system/sw${shell.shellPath}"
+    else
+      shell;
 }

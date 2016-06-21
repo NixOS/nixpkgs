@@ -9,7 +9,7 @@ bundlerEnv {
   gemset = ./gemset.nix;
 
   meta = {
-    description = "a simple command line time tracker written in ruby";
+    description = "A simple command line time tracker written in ruby";
     homepage = https://github.com/samg/timetrap;
     license = lib.licenses.mit;
   };

@@ -476,6 +476,10 @@ in
 
   grc = callPackage ../tools/misc/grc { };
 
+  green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
+   SDL = SDL_sixel;
+  };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   pass = callPackage ../tools/security/pass { };
@@ -496,7 +500,11 @@ in
 
   androidsdk = self.androidenv.androidsdk_6_0;
 
+  androidsdk_extras = self.androidenv.androidsdk_6_0_extras;
+
   arc-gtk-theme = callPackage ../misc/themes/arc { };
+
+  adapta-gtk-theme = callPackage ../misc/themes/adapta { };
 
   aria2 = callPackage ../tools/networking/aria2 {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -702,6 +710,8 @@ in
   cpulimit = callPackage ../tools/misc/cpulimit { };
 
   contacts = callPackage ../tools/misc/contacts { };
+
+  coturn = callPackage ../servers/coturn { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
@@ -1184,6 +1194,10 @@ in
   cudatoolkit = self.cudatoolkit7;
 
   cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
+
+  cudnn5_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-5.0 {
+    cudatoolkit = self.cudatoolkit75;
+  };
 
   curlFull = self.curl.override {
     idnSupport = true;
@@ -1834,6 +1848,9 @@ in
     stdenv = stdenv_32bit;
   };
 
+  gx = callPackage ../tools/package-management/gx { };
+  gx-go = callPackage ../tools/package-management/gx/go { };
+
   sbsigntool = callPackage ../tools/security/sbsigntool { };
 
   gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
@@ -2241,6 +2258,9 @@ in
   else
     nodePackages_4_x;
 
+  # Can be used as a user shell
+  nologin = shadow;
+
   npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
@@ -2426,6 +2446,8 @@ in
   mgba = qt5.callPackage ../misc/emulators/mgba { };
 
   mimeo = callPackage ../tools/misc/mimeo { };
+
+  mimetic = callPackage ../development/libraries/mimetic { };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
@@ -2983,6 +3005,8 @@ in
 
   popfile = callPackage ../tools/text/popfile { };
 
+  postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
+
   povray = callPackage ../tools/graphics/povray {
     automake = automake113x; # fails with 14
   };
@@ -2992,6 +3016,8 @@ in
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
+
+  pptpd = callPackage ../tools/networking/pptpd {};
 
   prey-bash-client = callPackage ../tools/security/prey { };
 
@@ -3400,6 +3426,8 @@ in
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
+
+  ssh-ident = callPackage ../tools/networking/ssh-ident { };
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
@@ -4114,6 +4142,10 @@ in
   ats2 = callPackage ../development/compilers/ats2 { };
 
   avra = callPackage ../development/compilers/avra { };
+
+  avian = callPackage ../development/compilers/avian {
+    stdenv = overrideCC stdenv gcc49;
+  };
 
   bigloo = callPackage ../development/compilers/bigloo {
     stdenv = overrideCC stdenv gcc49;
@@ -5331,8 +5363,7 @@ in
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvm = llvmPackages_35.llvm.override { enableSharedLibraries = false; };
-    clang = clang_35;
+    llvmPackages = llvmPackages_38;
     lua = lua5_1;
   };
 
@@ -8963,6 +8994,8 @@ in
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa;
   };
 
+  SDL_sixel = callPackage ../development/libraries/SDL_sixel { };
+
   SDL_gfx = callPackage ../development/libraries/SDL_gfx { };
 
   SDL_image = callPackage ../development/libraries/SDL_image { };
@@ -9807,7 +9840,8 @@ in
   cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
   cassandra_2_0 = callPackage ../servers/nosql/cassandra/2.0.nix { };
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
-  cassandra = self.cassandra_2_1;
+  cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix { };
+  cassandra = self.cassandra_3_0;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jdk;
@@ -9828,6 +9862,7 @@ in
   bind = callPackage ../servers/dns/bind { };
 
   bird = callPackage ../servers/bird { };
+  bird6 = bird.override { enableIPv6 = true; };
 
   bosun = (callPackage ../servers/monitoring/bosun { }).bin // { outputs = [ "bin" ]; };
   scollector = bosun;
@@ -10830,6 +10865,8 @@ in
     dpdk = callPackage ../os-specific/linux/dpdk { };
 
     pktgen = callPackage ../os-specific/linux/pktgen { };
+
+    odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -12581,6 +12618,8 @@ in
 
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
+  ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
+
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
@@ -12599,7 +12638,7 @@ in
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
-  goldendict = callPackage ../applications/misc/goldendict { };
+  goldendict = qt55.callPackage ../applications/misc/goldendict { };
 
   google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
@@ -12826,7 +12865,7 @@ in
     libart = pkgs.gnome2.libart_lgpl;
   };
 
-  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_4_4; });
+  idea = recurseIntoAttrs (callPackages ../applications/editors/idea { androidsdk = androidsdk_extras; });
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -13007,6 +13046,8 @@ in
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
   };
+
+  i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
@@ -13237,7 +13278,9 @@ in
   librecad = callPackage ../applications/misc/librecad { };
   librecad2 = self.librecad;  # backwards compatibility alias, added 2015-10
 
-  libreoffice = callPackage ../applications/office/libreoffice {
+  libreoffice = hiPrio libreoffice-still;
+
+  libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
@@ -13254,7 +13297,7 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
-  };
+  });
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
@@ -14213,6 +14256,8 @@ in
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
   };
+
+  squeezelite = callPackage ../applications/audio/squeezelite { };
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
@@ -16064,6 +16109,8 @@ in
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
+  aspino = callPackage ../applications/science/logic/aspino {};
+
   coq = callPackage ../applications/science/logic/coq {
     inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
     camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
@@ -16169,6 +16216,9 @@ in
   gappa = callPackage ../applications/science/logic/gappa { };
 
   ginac = callPackage ../applications/science/math/ginac { };
+
+  glucose = callPackage ../applications/science/logic/glucose { };
+  glucose-syrup = callPackage ../applications/science/logic/glucose/syrup.nix { };
 
   hol = callPackage ../applications/science/logic/hol { };
 
@@ -16358,6 +16408,8 @@ in
     lua = lua5_1;
     inherit (pkgs.gnome) gtkglext;
   };
+
+  cytoscape = callPackage ../applications/science/misc/cytoscape { };
 
   fityk = callPackage ../applications/science/misc/fityk { };
 

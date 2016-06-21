@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Seagate/kinetic-cpp-client;
-    description = "code for producing C and C++ kinetic clients";
+    description = "Code for producing C and C++ kinetic clients";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

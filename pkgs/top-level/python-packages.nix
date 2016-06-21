@@ -597,7 +597,7 @@ in modules // {
 
     meta = {
       homepage = https://github.com/bitprophet/alabaster;
-      description = "a Sphinx theme";
+      description = "A Sphinx theme";
       license = licenses.bsd3;
     };
   };
@@ -887,7 +887,7 @@ in modules // {
     buildInputs = with self; [ pytest ];
 
     meta = {
-      description = "namespace control and lazy-import mechanism";
+      description = "Namespace control and lazy-import mechanism";
       homepage = "http://bitbucket.org/hpk42/apipkg";
       license = licenses.mit;
     };
@@ -971,7 +971,7 @@ in modules // {
     };
 
     meta = {
-      description = "reference implementation of PEP 3156";
+      description = "Reference implementation of PEP 3156";
       homepage = http://www.python.org/dev/peps/pep-3156;
       license = licenses.free;
     };
@@ -2465,12 +2465,12 @@ in modules // {
   };
 
   bleach = buildPythonPackage rec {
-    version = "v1.4";
+    version = "v1.4.3";
     name = "bleach-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
-      sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
+      sha256 = "0mk8780ilip0m890rapbckngw8k42gca3551kri297pyylr06l5m";
     };
 
     buildInputs = with self; [ nose ];
@@ -3396,12 +3396,12 @@ in modules // {
   };
 
   click-threading = buildPythonPackage rec {
-    version = "0.1.2";
+    version = "0.4.0";
     name = "click-threading-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "0jmrv4334lfxa2ss53c06dafdwqbk1pb3ihd26izn5igw1bm8145";
+      sha256 = "1lrn2inlzz5lr8ay36dz9gmlnqqvdnh14rcm2nmhaxvbbz0gl8qq";
     };
 
     propagatedBuildInputs = with self; [ click ];
@@ -3813,7 +3813,7 @@ in modules // {
       sha256 = "4a14c67d520fda9d42b0da6134638578caae1d374b9bb462d8de00587dba764c";
     };
     meta = {
-      description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
+      description = "Plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
     propagatedBuildInputs = with self; [ self.coverage ];
   };
@@ -4606,7 +4606,7 @@ in modules // {
    buildInputs = with self; [ covCore pytest ];
 
     meta = {
-      description = "plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
+      description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
       homepage = https://github.com/schlamar/pytest-cov;
       license = licenses.mit;
     };
@@ -4694,7 +4694,7 @@ in modules // {
     TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
 
     meta = {
-      description = "complete yet simple CSS parser for Python";
+      description = "Complete yet simple CSS parser for Python";
       license = licenses.bsd3;
       homepage = http://pythonhosted.org/tinycss/;
     };
@@ -5315,7 +5315,7 @@ in modules // {
     '';
 
     meta = {
-      description = "integrates an Android device into a desktop";
+      description = "Integrates an Android device into a desktop";
       homepage = https://github.com/screenfreeze/deskcon-desktop;
       license = licenses.gpl3;
     };
@@ -5840,7 +5840,7 @@ in modules // {
 
     meta = {
       homepage = "http://python-eve.org/";
-      description = "open source Python REST API framework designed for human beings";
+      description = "Open source Python REST API framework designed for human beings";
       license = licenses.bsd3;
     };
   };
@@ -5934,7 +5934,7 @@ in modules // {
     doCheck = !isPy3k;  # failures..
 
     meta = {
-      description = "rapid multi-Python deployment";
+      description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
     };
   };
@@ -6561,7 +6561,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "python humanize utilities";
+      description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
       maintainers = with maintainers; [ matthiasbeyer ];
@@ -6667,7 +6667,7 @@ in modules // {
     };
 
     meta = {
-      description = "helpers to pass trusted data to untrusted environments and back";
+      description = "Helpers to pass trusted data to untrusted environments and back";
       homepage = "https://pypi.python.org/pypi/itsdangerous/";
     };
   };
@@ -6709,7 +6709,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "tools for i3 users and developers";
+      description = "Tools for i3 users and developers";
       homepage =  "https://github.com/ziberna/i3-py";
       license = licenses.gpl3;
       platforms = platforms.linux;
@@ -7111,7 +7111,7 @@ in modules // {
     };
 
     meta = {
-      description = "dependencies for mwlib markup";
+      description = "Dependencies for mwlib markup";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
     };
@@ -7134,7 +7134,7 @@ in modules // {
       ];
 
     meta = {
-      description = "generate pdfs from mediawiki markup";
+      description = "Generate pdfs from mediawiki markup";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
     };
@@ -7225,7 +7225,7 @@ in modules // {
     JPEG_DIR="${pkgs.libjpeg.dev}";
 
     meta = {
-      description = "interface to netCDF library (versions 3 and 4)";
+      description = "Interface to netCDF library (versions 3 and 4)";
       homepage = https://pypi.python.org/pypi/netCDF4;
       license = licenses.free;  # Mix of license (all MIT* like)
     };
@@ -10480,7 +10480,7 @@ in modules // {
     buildInputs = with self; [ pkgs.setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
-      description = "automatically generated zsh completion function for Python's option parser modules";
+      description = "Automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
     };
   };
@@ -14267,7 +14267,7 @@ in modules // {
 
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";
-      description = "library for OAuth version 1.0";
+      description = "Library for OAuth version 1.0";
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
       platforms = platforms.linux;
@@ -14332,7 +14332,7 @@ in modules // {
       [ pyptlib argparse twisted pycrypto pyyaml ];
 
     meta = {
-      description = "a pluggable transport proxy";
+      description = "A pluggable transport proxy";
       homepage = https://www.torproject.org/projects/obfsproxy;
       repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
       maintainers = with maintainers; [ phreedom thoughtpolice ];
@@ -16419,6 +16419,7 @@ in modules // {
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
     version = "0.20.1";
+    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "0f1ff1a1x1qrcv4ygfh29yyknx8hgwck7rp020zz0jrq9dibhjp7";
@@ -16471,6 +16472,7 @@ in modules // {
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
     version = "1.6.0";
+    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
@@ -16570,13 +16572,13 @@ in modules // {
 
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
-    version="2.8.6";
+    version="2.10.3";
 
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/platformio/platformio-${version}.tar.gz";
-      sha256 = "1l8jcwf8flmx8xcsvly2my8al8nzjr67h3mg5c9wvdr7a42q7dil";
+      url = "https://pypi.python.org/packages/b7/a3/1d3a9d7bae91df1b607e0f31549ec3e0006f29484cc6a1431b3fe3c5b02e/platformio-2.10.3.tar.gz";
+      sha256 = "f3a646871f9baed05f336a32576edaab90abf0737d8adb54f2acb7bcad42a65f";
      };
 
      propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
@@ -16946,18 +16948,18 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "1.0.0";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
+      sha256 = "00cc0lr8hj3pgn2jy9z7b4hrrfj53axa8yfbyds86xqbsvw0w3jj";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
     checkPhase = ''
       rm prompt_toolkit/win32_types.py
     '';
 
-    buildInputs = with self; [ jedi ipython pygments ];
-    propagatedBuildInputs = with self; [ docopt six wcwidth ];
+    buildInputs = with self; [ jedi ipython ];
+    propagatedBuildInputs = with self; [ docopt six wcwidth pygments ];
 
     meta = {
       description = "Python library for building powerful interactive command lines";
@@ -18992,7 +18994,7 @@ in modules // {
     meta = {
       homepage = "https://github.com/asweigart/pyperclip";
       license = licenses.bsdOriginal;
-      description = "cross-platform clipboard module";
+      description = "Cross-platform clipboard module";
     };
   };
 
@@ -19564,7 +19566,7 @@ in modules // {
     buildInputs = with self; [ ];
 
     meta = {
-      description = "job queue server";
+      description = "Job queue server";
       homepage = "https://github.com/pediapress/qserve";
       license = licenses.bsd3;
     };
@@ -19761,7 +19763,7 @@ in modules // {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      description = "readme";
+      description = "Readme";
       homepage = "https://github.com/pypa/readme";
     };
   };
@@ -20104,7 +20106,7 @@ in modules // {
     };
 
     meta = {
-      description = "python refactoring library";
+      description = "Python refactoring library";
       homepage = http://rope.sf.net;
       maintainers = with maintainers; [ goibhniu ];
       license = licenses.gpl2;
@@ -20123,7 +20125,7 @@ in modules // {
     propagatedBuildInputs = with self; [ ropemode ];
 
      meta = {
-       description = "a plugin for performing python refactorings in emacs";
+       description = "A plugin for performing python refactorings in emacs";
        homepage = http://rope.sf.net/ropemacs.html;
        maintainers = with maintainers; [ goibhniu ];
        license = licenses.gpl2;
@@ -20142,7 +20144,7 @@ in modules // {
     propagatedBuildInputs = with self; [ rope ];
 
      meta = {
-       description = "a plugin for performing python refactorings in emacs";
+       description = "A plugin for performing python refactorings in emacs";
        homepage = http://rope.sf.net;
        maintainers = with maintainers; [ goibhniu ];
        license = licenses.gpl2;
@@ -20268,7 +20270,7 @@ in modules // {
     };
 
     meta = {
-      description = "common routines for ruamel packages";
+      description = "Common routines for ruamel packages";
       homepage = https://bitbucket.org/ruamel/base;
       license = licenses.mit;
     };
@@ -20285,7 +20287,7 @@ in modules // {
     };
 
     meta = {
-      description = "a version of dict that keeps keys in insertion resp. sorted order";
+      description = "A version of dict that keeps keys in insertion resp. sorted order";
       homepage = https://bitbucket.org/ruamel/ordereddict;
       license = licenses.mit;
     };
@@ -20586,7 +20588,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "statisitical data visualization";
+      description = "Statisitical data visualization";
       homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
       license     = "BSD";
       maintainers = with maintainers; [ fridh ];
@@ -20693,7 +20695,7 @@ in modules // {
     propagatedBuildInputs = with self; [ twisted ];
 
     meta = {
-      description = "setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
+      description = "Setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
 
       homepage = http://allmydata.org/trac/setuptools_trial;
 
@@ -21094,6 +21096,21 @@ in modules // {
     };
   };
 
+  Theano-cuda = callPackage ../development/python-modules/theano/cuda (
+  let
+    boost = pkgs.boost159.override {
+      inherit (self) python numpy scipy;
+    };
+  in rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    cudnn = pkgs.cudnn5_cudatoolkit75;
+    inherit (self) numpy scipy;
+    pycuda = self.pycuda.override { inherit boost; };
+    libgpuarray = self.libgpuarray-cuda.override {
+      clblas = pkgs.clblas-cuda.override { inherit boost; };
+    };
+  });
+
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
     name = "pytidylib-${version}";
@@ -21158,7 +21175,7 @@ in modules // {
     buildInputs = with self; [ ];
 
     meta = {
-      description = "parse english textual date descriptions";
+      description = "Parse english textual date descriptions";
       homepage = "https://github.com/pediapress/timelib/";
       license = licenses.zlib;
     };
@@ -22440,7 +22457,7 @@ in modules // {
     propagatedBuildInputs = with self; [ testtools ];
 
     meta = {
-      description = "a pyunit extension for dependency injection";
+      description = "A pyunit extension for dependency injection";
       homepage = https://pypi.python.org/pypi/testscenarios;
       license = licenses.asl20;
     };
@@ -22760,7 +22777,7 @@ in modules // {
     propagatedBuildInputs = with self; [ numpy ];
 
     meta = {
-      description = "explicitly typed attributes for Python";
+      description = "Explicitly typed attributes for Python";
       homepage = http://pypi.python.org/pypi/traits;
       license = "BSD";
     };
@@ -23296,7 +23313,7 @@ in modules // {
     };
 
     meta = {
-      description = "python wrapper for Xvfb, Xephyr and Xvnc";
+      description = "Python wrapper for Xvfb, Xephyr and Xvnc";
       homepage = "https://github.com/ponty/pyvirtualdisplay";
       license = licenses.bsdOriginal;
       maintainers = with maintainers; [ layus ];
@@ -23321,7 +23338,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "a tool to create isolated Python environments";
+      description = "A tool to create isolated Python environments";
       homepage = http://www.virtualenv.org;
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu ];
@@ -24055,7 +24072,7 @@ in modules // {
     patches = [ ../development/python-modules/btrees-py35.patch ];
 
     meta = {
-      description = "scalable persistent components";
+      description = "Scalable persistent components";
       homepage = http://packages.python.org/BTrees;
     };
   };
@@ -24072,7 +24089,7 @@ in modules // {
     };
 
     meta = {
-      description = "automatic persistence for Python objects";
+      description = "Automatic persistence for Python objects";
       homepage = http://www.zope.org/Products/ZODB;
     };
   };
@@ -24630,7 +24647,7 @@ in modules // {
 
     meta = {
       homepage = http://liw.fi/cmdtest/;
-      description = "black box tests Unix command line tools";
+      description = "Black box tests Unix command line tools";
     };
   };
 
@@ -25609,7 +25626,7 @@ in modules // {
     };
 
     meta = {
-      description = "implements a lazy string for python useful for use with gettext";
+      description = "Implements a lazy string for python useful for use with gettext";
       homepage = https://github.com/mitsuhiko/speaklater;
       license = "bsd";
       maintainers = with maintainers; [ matejc ];
@@ -27102,7 +27119,7 @@ in modules // {
 
     meta = {
       homepage = http://github.com/bepasty/bepasty-server;
-      description = "binary pastebin server";
+      description = "Binary pastebin server";
       license = licenses.mit;
       maintainers = [ maintainers.makefu ];
     };
@@ -27159,7 +27176,7 @@ in modules // {
     };
     meta = {
       homepage = http://bitbucket.org/thomaswaldmann/xstatic;
-      description = "base packaged static files for python";
+      description = "Base packaged static files for python";
       license = licenses.mit;
       maintainers = [ maintainers.makefu ];
     };
@@ -27174,7 +27191,7 @@ in modules // {
     };
     meta = {
       homepage = https://github.com/bitprophet/alabaster;
-      description = "convert xlsx to csv";
+      description = "Convert xlsx to csv";
       license = licenses.bsd3;
       maintainers = with maintainers; [ jb55 ];
     };
@@ -27473,7 +27490,7 @@ in modules // {
     };
 
     meta = {
-      description = "console colouring for python";
+      description = "Console colouring for python";
       homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
       license = licenses.bsdOriginal;
     };
@@ -27492,7 +27509,7 @@ in modules // {
     buildInputs = with self; [ mock ];
 
     meta = {
-      description = "python test runner";
+      description = "Python test runner";
       homepage = "https://github.com/CleanCut/green";
       licence = licenses.mit;
     };

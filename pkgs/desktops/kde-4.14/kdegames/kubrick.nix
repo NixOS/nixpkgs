@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "a game based on the Rubik's Cube™ puzzle";
+    description = "A game based on the Rubik's Cube™ puzzle";
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
     libpng libsamplerate libsndfile zlib ];
 
   meta = with stdenv.lib; {
-    description = "multi-effects processor emulating a guitar effects pedalboard";
+    description = "Multi-effects processor emulating a guitar effects pedalboard";
     homepage = http://rakarrack.sourceforge.net;
     license = licenses.gpl2;
     platforms = platforms.linux;

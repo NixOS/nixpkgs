@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://pokersource.org/poker-eval/;
-    description = "poker hand evaluator";
+    description = "Poker hand evaluator";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.mtreskin];
     platforms = stdenv.lib.platforms.all;

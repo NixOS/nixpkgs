@@ -675,6 +675,7 @@ in
 
       "systemd/logind.conf".text = ''
         [Login]
+        KillUserProcesses=no
         ${config.services.logind.extraConfig}
       '';
 
