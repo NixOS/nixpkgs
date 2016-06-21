@@ -2465,12 +2465,12 @@ in modules // {
   };
 
   bleach = buildPythonPackage rec {
-    version = "v1.4";
+    version = "v1.4.3";
     name = "bleach-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
-      sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
+      sha256 = "0mk8780ilip0m890rapbckngw8k42gca3551kri297pyylr06l5m";
     };
 
     buildInputs = with self; [ nose ];
