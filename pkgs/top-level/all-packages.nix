@@ -16124,6 +16124,8 @@ in
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
+  aspino = callPackage ../applications/science/logic/aspino {};
+
   coq = callPackage ../applications/science/logic/coq {
     inherit (ocamlPackages_4_01_0) ocaml findlib lablgtk;
     camlp5 = ocamlPackages_4_01_0.camlp5_transitional;
