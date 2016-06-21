@@ -14,13 +14,14 @@
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
 
-  year = "2015";
+  year = "2016";
   version = year; # keep names simple for now
 
   common = rec {
     src = fetchurl {
-      url = "ftp://tug.org/historic/systems/texlive/${year}/texlive-20150521-source.tar.xz";
-      sha256 = "ed9bcd7bdce899c3c27c16a8c5c3017c4f09e1d7fd097038351b72497e9d4669";
+      url = "ftp://tug.org/historic/systems/texlive/${year}/texlive-${year}0523-source.tar.xz";
+      sha512 = "9fdd69d237238385240e918456f54791a38e57b573edf5df839c57e56a00090"
+        + "12b68b7b92298c3e137181325e2be84d7a84e9c7cf41ae9739bb3329d84194564";
     };
 
     configureFlags = [
@@ -67,8 +68,8 @@ core = stdenv.mkDerivation rec {
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
       libs/{mpfr,pixman,poppler,potrace,xpdf,zlib,zziplib}
-    mkdir Work
-    cd Work
+    mkdir WorkDir
+    cd WorkDir
   '';
   configureScript = "../configure";
 
@@ -77,7 +78,7 @@ core = stdenv.mkDerivation rec {
     ++ map (what: "--disable-${what}") [
       "dvisvgm" "dvipng" # ghostscript dependency
       "luatex" "luajittex" "mp" "pmp" "upmp" "mf" # cairo would bring in X and more
-      "xetex" "bibtexu" "bibtex8" "bibtex-x" # ICU isn't small
+      "xetex" "bibtexu" "bibtex8" "bibtex-x" "upmendex" # ICU isn't small
     ]
     ++ [ "--without-system-harfbuzz" "--without-system-icu" ] # bogus configure
     ;
@@ -117,7 +118,7 @@ core = stdenv.mkDerivation rec {
 
 
 inherit (core-big) metafont metapost luatex xetex;
-core-big = stdenv.mkDerivation {
+core-big = stdenv.mkDerivation { #TODO: upmendex
   name = "texlive-core-big.bin-${version}";
 
   inherit (common) src;
@@ -128,7 +129,7 @@ core-big = stdenv.mkDerivation {
     ++ withSystemLibs [ "kpathsea" "ptexenc" "cairo" "harfbuzz" "icu" "graphite2" ]
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
-        "web-progs" "synctex" "luajittex" # luajittex is mostly not needed, see:
+        "web-progs" "synctex" "luajittex" "mfluajit" # luajittex is mostly not needed, see:
         # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
@@ -136,7 +137,7 @@ core-big = stdenv.mkDerivation {
 
   # we use static libtexlua, because it's only used by a single binary
   postConfigure = ''
-    mkdir ./Work && cd ./Work
+    mkdir ./WorkDir && cd ./WorkDir
     for path in libs/{teckit,lua52} texk/web2c; do
       (
         if [[ "$path" == "libs/lua52" ]]; then

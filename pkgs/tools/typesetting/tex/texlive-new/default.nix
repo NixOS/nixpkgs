@@ -21,7 +21,7 @@ let
   # map: name -> fixed-output hash
   # sha1 in base32 was chosen as a compromise between security and length
   # warning: the following generator command takes lots of resources
-  # nix-build -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes.nix
+  # nix-build ../../../../.. -Q -A texlive.scheme-full.pkgs | ./fixHashes.sh > ./fixedHashes.nix
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixedHashes.nix);
 
   # function for creating a working environment from a set of TL packages
@@ -32,21 +32,12 @@ let
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
   tl = let
-    /* curl ftp://tug.ctan.org/pub/tex/historic/systems/texlive/2015/tlnet-final/tlpkg/texlive.tlpdb.xz \
+    /* # beware: the URL below changes contents continuously
+      curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
-    orig = import ./pkgs.nix tl;
+    orig = import ./pkgs.nix tl; # XXX XXX XXX FIXME: the file is probably too big now XXX XXX XXX XXX XXX XXX
     clean = orig // {
       # overrides of texlive.tlpdb
-
-      tetex = orig.tetex // { # 2015.08.27 as we need version with mktexlsr.pl
-        # TODO: official hashed mirror
-        urlPrefix = "http://lipa.ms.mff.cuni.cz/~cunav5am/nix";
-        md5.run = "4b4c0208124dfc9c8244c24421946d36";
-        md5.doc = "983f5e5b5f4e407760b4ec176cf6a58f";
-        version = "3.0"; # it's the same
-        postUnpack = "cd $out && patch -p2 < ${./texlinks.patch} || true";
-        # TODO: postUnpack per tlType instead of these hacks
-      };
 
       dvidvi = orig.dvidvi // {
         hasRunfiles = false; # only contains docs that's in bin.core.doc already
@@ -78,7 +69,7 @@ let
       version = attrs.version or bin.texliveYear;
       mkPkgV = tlType: let
         pkg = attrs // {
-          md5 = attrs.md5.${tlType};
+          sha512 = attrs.sha512.${tlType};
           inherit pname tlType version;
         };
         in mkPkgs {
@@ -93,8 +84,8 @@ let
             # the fake derivations are used for filtering of hyphenation patterns
           else { inherit pname version; tlType = "run"; }
         )]
-        ++ lib.optional (attrs.md5 ? "doc") (mkPkgV "doc")
-        ++ lib.optional (attrs.md5 ? "source") (mkPkgV "source")
+        ++ lib.optional (attrs.sha512 ? "doc") (mkPkgV "doc")
+        ++ lib.optional (attrs.sha512 ? "source") (mkPkgV "source")
         ++ lib.optional (bin ? ${pname})
             ( bin.${pname} // { inherit pname; tlType = "bin"; } )
         ++ combinePkgs (attrs.deps or {});
@@ -107,16 +98,18 @@ let
   # command to unpack a single TL package
   unpackPkg =
     { # url ? null, urlPrefix ? null
-      md5, pname, tlType, postUnpack ? "", stripPrefix ? 1, ...
+      sha512, pname, tlType, postUnpack ? "", stripPrefix ? 1, ...
     }@args: let
       url = args.url or "${urlPrefix}/${mkUrlName args}.tar.xz";
       urlPrefix = args.urlPrefix or
-        ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
+      # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
+      #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
+        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive;
       # beware: standard mirrors http://mirror.ctan.org/ don't have releases
-      mirror = "http://ftp.math.utah.edu"; # ftp://tug.ctan.org no longer works, although same IP
+      #mirror = "http://ftp.math.utah.edu"; # ftp://tug.ctan.org no longer works, although same IP
     in
       rec {
-        src = fetchurl { inherit url md5; };
+        src = fetchurl { inherit url sha512; };
         unpackCmd =  ''
           tar -xf '${src}' \
             '--strip-components=${toString stripPrefix}' \
@@ -133,7 +126,7 @@ let
     let
       tlName = "${mkUrlName args}-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
-      pkgs = map unpackPkg (fastUnique (a: b: a.md5 < b.md5) pkgList);
+      pkgs = map unpackPkg (fastUnique (a: b: a.sha512 < b.sha512) pkgList);
     in runCommand "texlive-${tlName}"
       ( { # lots of derivations, not meant to be cached
           preferLocalBuild = true; allowSubstitutes = false;
