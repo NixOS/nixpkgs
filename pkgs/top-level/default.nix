@@ -44,10 +44,7 @@ let
   # for NIXOS (nixos-rebuild): use nixpkgs.config option
   config =
     let
-      toPath = builtins.toPath;
-      getEnv = builtins.getEnv;
-      pathExists = name:
-        builtins.pathExists (toPath name);
+      inherit (builtins) getEnv pathExists;
 
       configFile = getEnv "NIXPKGS_CONFIG";
       homeDir = getEnv "HOME";
@@ -55,8 +52,8 @@ let
 
       configExpr =
         if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
+        else if configFile != "" && pathExists configFile then import configFile
+        else if homeDir != "" && pathExists configFile2 then import configFile2
         else {};
 
     in
