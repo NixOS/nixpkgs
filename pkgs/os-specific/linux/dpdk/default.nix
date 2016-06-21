@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
-  # we need ssse3 instructions to build
+  # we need sse3 instructions to build
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
   enableParallelBuilding = true;
