@@ -30,7 +30,8 @@ let
     outputs = [ "out" "info" ];
 
     nativeBuildInputs = [ perl xz.bin ];
-    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
+    configureFlags = [ "--enable-single-binary" ]
+      ++ optional stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
     buildInputs = [ gmp ]
       ++ optional aclSupport acl
