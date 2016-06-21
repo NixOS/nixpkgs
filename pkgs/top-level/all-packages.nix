@@ -6419,6 +6419,8 @@ in
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
+  minify = callPackage ../development/web/minify { };
+
   mk = callPackage ../development/tools/build-managers/mk { };
 
   msitools = callPackage ../development/tools/misc/msitools { };
