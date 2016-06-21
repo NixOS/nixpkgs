@@ -15875,6 +15875,9 @@ in
 
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
+  # We need QtWebkit which was deprecated in Qt 5.6 although it can still be build
+  trojita = with qt55; callPackage ../applications/networking/mailreaders/trojita { };
+
   kde5PackagesFun = self: with self; {
 
     calamares = callPackage ../tools/misc/calamares rec {
