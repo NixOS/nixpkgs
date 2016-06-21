@@ -469,6 +469,8 @@ in
 
   apg = callPackage ../tools/security/apg { };
 
+  autorevision = callPackage ../tools/misc/autorevision { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
