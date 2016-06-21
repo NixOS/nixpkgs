@@ -3,17 +3,18 @@
 , EncodeEUCJPASCII, EncodeHanExtra, EncodeJIS2K, ExtUtilsLibBuilder
 , FileSlurp, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
 , ModuleBuild, MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
-, UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter }:
+, UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter, ClassAccessor
+, TextRoman, DataUniqid }:
 
 let
-  version = "1.9";
+  version = "2.4";
   pn = "biblatex-biber";
 in
 buildPerlPackage {
   name = "biber-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/project/${pn}/${pn}/${version}/${pn}.tar.gz";
-    sha256 = "1a3iq7l9i54f8nfzjmp1qdb6aqm7977q1g4san470010fkfbvjdc";
+    sha256 = "1gccbs5vzs3fca41d9dwl6nrdljnh29yls8xzfw04hd57yrfn5w4";
   };
 
   buildInputs = [
@@ -22,6 +23,7 @@ buildPerlPackage {
     ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
     ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
     UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+    ClassAccessor TextRoman DataUniqid
   ];
   preConfigure = "touch Makefile.PL";
   buildPhase = "perl Build.PL --prefix=$out; ./Build build";

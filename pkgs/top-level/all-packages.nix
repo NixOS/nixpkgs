@@ -922,7 +922,8 @@ in
       DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter;
+      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+      ClassAccessor TextRoman DataUniqid;
   };
 
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
