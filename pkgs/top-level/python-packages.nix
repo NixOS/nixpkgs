@@ -2059,11 +2059,11 @@ in modules // {
 
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
-    version = "0.17.0";
+    version = "1.2.1";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/cornice.git;
       rev = "refs/tags/${version}";
-      sha256 = "11xgf7mddq9gm3yag61zj8hj2kgsgabrnzwn2zpfj37xp1p0pky7";
+      sha256 = "0688vrkl324jmpi8jkjh1s8nsyjinw149g3x8qlis8vz6j6a01wv";
     };
 
     propagatedBuildInputs = with self; [ pyramid simplejson ];
@@ -7601,17 +7601,12 @@ in modules // {
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.7";
+    name = "pyramid-1.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid/${name}.tar.gz";
-      sha256 = "1d29fj86724z68zcj9ximl2nrn34pflrlr6v9mwyhcv8rdf2sc61";
+      sha256 = "161qacv7qqln3q02kcqll0q2mmaypm701hn1llwdwnkaywkb3xi6";
     };
-
-    preCheck = ''
-      # this will be fixed for 1.6 release, see https://github.com/Pylons/pyramid/issues/1405
-      rm pyramid/tests/test_response.py
-    '';
 
     buildInputs = with self; [
       docutils
@@ -7763,11 +7758,11 @@ in modules // {
 
   pyramid_multiauth = buildPythonPackage rec {
     name = "pyramid_multiauth-${version}";
-    version = "0.3.2";
+    version = "0.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_multiauth/${name}.tar.gz";
-      sha256 = "c33f357e0a216cd6ef7d143d40d4679c9fb0796a1eabaf1249aeef63ed000828";
+      sha256 = "1lq292qakrm4ixi4vaif8dqywzj08pn6qy0wi4gw28blh39p0msk";
     };
 
     propagatedBuildInputs = with self; [ pyramid ];
@@ -22052,16 +22047,18 @@ in modules // {
   };
 
   structlog = buildPythonPackage rec {
-    name = "structlog-15.3.0";
+    name = "structlog-16.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/structlog/${name}.tar.gz";
-      sha256 = "1h9qz4fsd7ph8rf80rqmlyj2q54xapgrmkpnyca01w1z8ww6f9w7";
+      sha256 = "00dywyg3bqlkrmbrfrql21hpjjjkc4zjd6xxjyxyd15brfnzlkdl";
     };
 
     buildInputs = with self; [ pytest pretend freezegun ];
+    propagatedBuildInputs = with self; [ simplejson ];
 
     checkPhase = ''
+      rm tests/test_twisted.py*
       py.test
     '';
 
@@ -25005,13 +25002,13 @@ in modules // {
 
 
   ujson = buildPythonPackage rec {
-    name = "ujson-1.33";
+    name = "ujson-1.35";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/u/ujson/${name}.zip";
-      sha256 = "68cf825f227c82e1ac61e423cfcad923ff734c27b5bdd7174495d162c42c602b";
+      url = "mirror://pypi/u/ujson/${name}.tar.gz";
+      sha256 = "11jz5wi7mbgqcsz52iqhpyykiaasila4lq8cmc2d54bfa3jp6q7n";
     };
 
     meta = {
