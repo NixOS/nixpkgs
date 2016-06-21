@@ -6,6 +6,15 @@ let
 
   cfg = config.services.emacs;
 
+  editorScript = pkgs.writeScriptBin "emacseditor" ''
+    #!${pkgs.stdenv.shell}
+    if [ -z "$1" ]; then
+      exec ${cfg.package}/bin/emacsclient --create-frame --alternate-editor ${cfg.package}/bin/emacs
+    else
+      exec ${cfg.package}/bin/emacsclient --alternate-editor ${cfg.package}/bin/emacs "$@"
+    fi
+  '';
+
 in {
 
   options.services.emacs = {
@@ -45,6 +54,15 @@ in {
       '';
     };
 
+    defaultEditor = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        When enabled, configures emacsclient to be the default editor
+        using the EDITOR environment variable.
+      '';
+    };
   };
 
   config = mkIf (cfg.enable || cfg.install) {
@@ -59,7 +77,10 @@ in {
       };
     } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
 
-    environment.systemPackages = [ cfg.package ];
-  };
+    environment.systemPackages = [ cfg.package editorScript ];
 
+    environment.variables = if cfg.defaultEditor then {
+      EDITOR = mkOverride 900 "${editorScript}/bin/emacseditor";
+    } else {};
+  };
 }
