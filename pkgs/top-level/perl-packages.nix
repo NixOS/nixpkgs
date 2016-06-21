@@ -13199,6 +13199,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TextRoman = buildPerlPackage rec {
+    name = "Text-Roman-3.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EC/ECALDER/${name}.tar.gz";
+      sha256 = "1ris38kdj15l8l7cl5whdpyyvb0rz8dh9p0w36wgydi3b2pxsa25";
+    };
+    meta = {
+      description = "Allows conversion between Roman and Arabic algarisms";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   TextSimpleTable = buildPerlPackage {
     name = "Text-SimpleTable-2.03";
     src = fetchurl {
