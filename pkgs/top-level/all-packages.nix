@@ -13140,6 +13140,8 @@ in
 
   inferno = callPackage_i686 ../applications/inferno { };
 
+  inginious = callPackage ../servers/inginious {};
+
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
