@@ -1,4 +1,16 @@
-{ stdenv, fetchgit, autoreconfHook, gtk-engine-murrine }:
+{
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkgconfig,
+  bundler,
+  sass,
+  glib,
+  libxml2,
+  inkscape,
+  gtk,
+  gtk-engine-murrine
+}:
 
 stdenv.mkDerivation rec {
   name = "adapta-gtk-theme-${version}";
@@ -19,8 +31,8 @@ stdenv.mkDerivation rec {
   };
 
   preferLocalBuild = true;
-  buildInputs = [ gtk-engine-murrine ];
-  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gtk gtk-engine-murrine ];
+  nativeBuildInputs = [ autoreconfHook bundler sass glib libxml2 inkscape ];
 
   configureFlags = "--enable-chrome --disable-unity";
 }
