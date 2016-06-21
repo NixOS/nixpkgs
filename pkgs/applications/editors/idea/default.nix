@@ -12,7 +12,7 @@ let
 
   buildAndroidStudio = { name, version, build, src, license, description, wmClass }:
     let drv = (mkIdeaProduct rec {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "Studio";
       meta = with stdenv.lib; {
         homepage = https://developer.android.com/sdk/installing/studio.html;
@@ -38,7 +38,7 @@ let
 
   buildClion = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -54,7 +54,7 @@ let
 
   buildIdea = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "IDEA";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/idea/";
@@ -71,7 +71,7 @@ let
 
   buildRubyMine = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "RubyMine";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/ruby/";
@@ -84,7 +84,7 @@ let
 
   buildPhpStorm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "PhpStorm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
@@ -101,7 +101,7 @@ let
 
   buildWebStorm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "WebStorm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
@@ -118,7 +118,7 @@ let
 
   buildPycharm = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
-      inherit name version build src wmClass;
+      inherit name version build src wmClass jdk;
       product = "PyCharm";
       meta = with stdenv.lib; {
         homepage = "https://www.jetbrains.com/pycharm/";
