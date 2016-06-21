@@ -99,6 +99,7 @@ in {
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
+    services.dbus.packages = mkIf config.services.printing.enable [ pkgs.system-config-printer ];
     hardware.bluetooth.enable = mkDefault true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
