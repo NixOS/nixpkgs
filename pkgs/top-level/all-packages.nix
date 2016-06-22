@@ -14295,10 +14295,9 @@ in
     sbcl = sbcl_1_2_5;
     lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
   };
-  stumpwm-git = callPackage ../applications/window-managers/stumpwm {
+
+  stumpwm-git = stumpwm.override {
     version = "git";
-    sbcl = sbcl_1_2_5;
-    lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
   };
 
   sublime = callPackage ../applications/editors/sublime { };
