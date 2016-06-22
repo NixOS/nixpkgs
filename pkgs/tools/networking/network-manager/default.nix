@@ -5,12 +5,14 @@
 , ethtool, gnused, coreutils, file, inetutils }:
 
 stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
-  version = "1.0.12";
+  name    = "network-manager-${version}";
+  pname   = "NetworkManager";
+  major   = "1.2";
+  version = "${major}.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/1.0/NetworkManager-${version}.tar.xz";
-    sha256 = "17jan0g5jzp8mrpklyacwdgnnw016m1c5pc4az5im6qhc260yirs";
+    url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
+    sha256 = "41d8082e027f58bb5fa4181f93742606ab99c659794a18e2823eff22df0eecd9";
   };
 
   preConfigure = ''
@@ -61,34 +63,30 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
-  patches = [ ./nm-platform.patch ];
+  preInstall = ''
+    installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
+  '';
 
-  preInstall =
-    ''
-      installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
-    '';
+  postInstall = ''
+    mkdir -p $out/lib/NetworkManager
 
-  postInstall =
-    ''
-      mkdir -p $out/lib/NetworkManager
+    # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
+    substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
 
-      # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
-      substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
+    # rename to network-manager to be in style
+    mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service 
 
-      # rename to network-manager to be in style
-      mv $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service 
-
-      # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-      # aliases ourselves.
-      ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-      ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
-    '';
+    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
+    # aliases ourselves.
+    ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+    ln -s $out/etc/systemd/system/network-manager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/NetworkManager/;
+    homepage    = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management tool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom urkud rickynils domenkozar ];
-    platforms = platforms.linux;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ phreedom urkud rickynils domenkozar obadz ];
+    platforms   = platforms.linux;
   };
 }
