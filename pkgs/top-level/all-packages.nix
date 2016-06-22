@@ -2228,6 +2228,8 @@ in
 
     libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
 
+    libcss = callPackage ../applications/misc/netsurf/libcss { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
