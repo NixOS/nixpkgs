@@ -2224,6 +2224,8 @@ in
 
     libwapcaplet = callPackage ../applications/misc/netsurf/libwapcaplet { };
 
+    nsgenbind = callPackage ../applications/misc/netsurf/nsgenbind { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
