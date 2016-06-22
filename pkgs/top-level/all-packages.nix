@@ -2240,6 +2240,8 @@ in
 
     libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
 
+    libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
