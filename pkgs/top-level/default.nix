@@ -19,10 +19,6 @@
                && system != "x86_64-solaris"
                && system != "x86_64-kfreebsd-gnu")
 
-  # More flags for the bootstrapping of stdenv.
-, gccWithCC ? true
-, gccWithProfiling ? true
-
 , # Allow a configuration attribute set to be passed in as an
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
@@ -81,8 +77,7 @@ let
     else config.platform or platformAuto;
 
   topLevelArguments = {
-    inherit system bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform lib;
+    inherit system bootStdenv noSysDirs config crossSystem platform lib;
   };
 
   # Allow packages to be overridden globally via the `packageOverrides'
