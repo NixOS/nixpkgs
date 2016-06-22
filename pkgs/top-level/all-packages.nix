@@ -2236,6 +2236,8 @@ in
 
     libnsbmp = callPackage ../applications/misc/netsurf/libnsbmp { };
 
+    libnsgif = callPackage ../applications/misc/netsurf/libnsgif { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
