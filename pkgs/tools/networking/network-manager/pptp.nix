@@ -2,13 +2,13 @@
 , libsecret, withGnome ? true, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
-  pname = "NetworkManager-pptp";
+  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  pname   = "NetworkManager-pptp";
   version = networkmanager.version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/1.0/${pname}-${version}.tar.xz";
-    sha256 = "1gn1f8r32wznk4rsn2lg2slw1ccli00svz0fi4bx0qiylimlbyln";
+    url    = "mirror://gnome/sources/${pname}/${networkmanager.major}/${pname}-${version}.tar.xz";
+    sha256 = "a72cb88ecc0a9edec836e8042c592d68b8b290c0d78082e6b25cf08b46c6be5d";
   };
 
   buildInputs = [ networkmanager pptp ppp libsecret ]
