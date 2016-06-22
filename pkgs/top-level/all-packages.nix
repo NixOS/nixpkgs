@@ -43,7 +43,7 @@ in
   overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: (import ./../..) {
+  forceSystem = system: kernel: (import ../..) {
     inherit system;
     platform = platform // { kernelArch = kernel; };
     inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
@@ -3945,7 +3945,7 @@ in
     # load into the Ben Nanonote
     gccCross =
       let
-        pkgsCross = (import ./../..) {
+        pkgsCross = (import ../..) {
           inherit system;
           inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
           # Ben Nanonote system
