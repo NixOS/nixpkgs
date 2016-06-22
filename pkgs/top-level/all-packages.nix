@@ -2238,6 +2238,8 @@ in
 
     libnsgif = callPackage ../applications/misc/netsurf/libnsgif { };
 
+    libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
