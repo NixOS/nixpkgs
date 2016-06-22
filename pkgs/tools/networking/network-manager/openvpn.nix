@@ -33,15 +33,6 @@ stdenv.mkDerivation rec {
        --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn"
   '';
 
-  postConfigure = ''
-     substituteInPlace "./auth-dialog/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
-     substituteInPlace "properties/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
-  '';
-
   meta = {
     description = "NetworkManager's OpenVPN plugin";
     inherit (networkmanager.meta) maintainers platforms;

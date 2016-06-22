@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     if withGnome then "--with-gnome" else "--without-gnome";
 
-  postConfigure = "sed 's/-Werror//g' -i Makefile */Makefile";
-
   meta = with stdenv.lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;

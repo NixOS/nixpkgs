@@ -28,8 +28,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome";
 
-  postConfigure = "sed 's/-Werror//g' -i Makefile */Makefile";
-
   meta = {
     description = "PPtP plugin for NetworkManager";
     inherit (networkmanager.meta) maintainers platforms;

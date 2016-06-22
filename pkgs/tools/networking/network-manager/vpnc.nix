@@ -30,15 +30,6 @@ stdenv.mkDerivation rec {
        --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
   '';
 
-  postConfigure = ''
-     substituteInPlace "./auth-dialog/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
-     substituteInPlace "properties/Makefile" \
-       --replace "-Wstrict-prototypes" "" \
-       --replace "-Werror" ""
-  '';
-
   meta = {
     description = "NetworkManager's VPNC plugin";
     inherit (networkmanager.meta) maintainers platforms;
