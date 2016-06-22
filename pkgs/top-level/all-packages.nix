@@ -2232,6 +2232,8 @@ in
 
     libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
 
+    libdom = callPackage ../applications/misc/netsurf/libdom { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
