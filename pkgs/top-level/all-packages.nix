@@ -2242,6 +2242,8 @@ in
 
     libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
 
+    libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
