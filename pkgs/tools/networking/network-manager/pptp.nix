@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig, substituteAll
+{ stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig
 , libsecret, withGnome ? true, gnome3 }:
 
 stdenv.mkDerivation rec {
@@ -17,17 +17,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ intltool pkgconfig ];
 
+  postPatch = ''
+    sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-pptp-service.c
+
+    substituteInPlace ./src/nm-pptp-service.c \
+      --replace /sbin/pptp ${pptp}/bin/pptp \
+      --replace /sbin/pppd ${ppp}/bin/pppd
+  '';
+
   configureFlags =
     if withGnome then "--with-gnome --with-gtkver=3" else "--without-gnome";
 
   postConfigure = "sed 's/-Werror//g' -i Makefile */Makefile";
-
-  patches =
-    [ ( substituteAll {
-        src = ./pptp-purity.patch;
-        inherit ppp pptp;
-      })
-    ];
 
   meta = {
     description = "PPtP plugin for NetworkManager";
