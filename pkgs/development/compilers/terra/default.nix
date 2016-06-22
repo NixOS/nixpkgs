@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, which, llvmPackages, ncurses, lua }:
+{ stdenv, fetchFromGitHub, fetchurl, llvmPackages, ncurses, lua }:
 
 let
   luajitArchive = "LuaJIT-2.0.4.tar.gz";
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+    cat >Makefile.inc<<EOF
+    CLANG = ${stdenv.lib.getBin llvmPackages.clang-unwrapped}/bin/clang
+    LLVM_CONFIG = ${stdenv.lib.getBin llvmPackages.llvm}/bin/llvm-config
+    EOF
+
     mkdir -p build
     cp ${luajitSrc} build/${luajitArchive}
   '';
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
     paxmark m $bin/bin/terra
   '';
 
-  buildInputs = with llvmPackages; [ which lua llvm clang-unwrapped ncurses ];
+  buildInputs = with llvmPackages; [ lua llvm clang-unwrapped ncurses ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
