@@ -2244,6 +2244,8 @@ in
 
     libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
 
+    browser = callPackage ../applications/misc/netsurf/browser { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
