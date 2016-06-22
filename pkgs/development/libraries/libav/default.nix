@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-with { inherit (stdenv.lib) optional optionals; };
+with { inherit (stdenv.lib) optional optionals hasPrefix; };
 
 /* ToDo:
     - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
@@ -39,8 +39,8 @@ let
     };
 
     patches = []
-      ++ optionals (vpxSupport && version == "0.8.17" ) [ ./vpxenc-0.8.17-libvpx-1.5.patch ]
-      ++ optionals (vpxSupport && version == "11.6") [ ./vpxenc-11.6-libvpx-1.5.patch ];
+      ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 
