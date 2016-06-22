@@ -2226,6 +2226,8 @@ in
 
     nsgenbind = callPackage ../applications/misc/netsurf/nsgenbind { };
 
+    libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
