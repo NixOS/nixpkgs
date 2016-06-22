@@ -2234,6 +2234,8 @@ in
 
     libdom = callPackage ../applications/misc/netsurf/libdom { };
 
+    libnsbmp = callPackage ../applications/misc/netsurf/libnsbmp { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
