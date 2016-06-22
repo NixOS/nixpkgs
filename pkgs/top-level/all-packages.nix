@@ -2230,6 +2230,8 @@ in
 
     libcss = callPackage ../applications/misc/netsurf/libcss { };
 
+    libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
