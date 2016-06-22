@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
-, systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, bind, perl, bluez5, substituteAll, readline
+{ stdenv, fetchurl, intltool, pkgconfig, dbus_glib
+, systemd, libgudev, libnl, libuuid, polkit, gnutls, ppp, dhcp, iptables
+, libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, gnused, coreutils, file, inetutils }:
 
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
     "--with-dhclient=${dhcp}/bin/dhclient"
     "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    #"--with-dhcpcd=${dhcpcd}/sbin/dhcpcd"
     "--with-dhcpcd=no"
     "--with-pppd=${ppp}/bin/pppd"
     "--with-iptables=${iptables}/bin/iptables"
@@ -55,8 +54,8 @@ stdenv.mkDerivation rec {
     "--with-libsoup=yes"
   ];
 
-  buildInputs = [ wirelesstools systemd libgudev libnl libuuid polkit ppp libndp
-                  xz bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
+  buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp
+                  bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
