@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./0001-change-flags.diff ];
+  postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
   [ p7zip pkgconfig libX11 libXv udev mesa SDL libao openal libpulseaudio gtk gtksourceview ];

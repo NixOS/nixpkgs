@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1d89ncspjd8c4mckf0nb6y3hrxpv4rjpbj868pznhvfmdgr5nvql";
   };
 
+  postPatch = "sed '1i#include <random>' -i src/Benchmark.cpp";
+
   buildInputs = [
     alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa pkgconfig
     libpulseaudio qt4
   ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A screen recorder for Linux";

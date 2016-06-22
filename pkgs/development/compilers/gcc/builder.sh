@@ -70,10 +70,6 @@ if test "$noSysDirs" = "1"; then
         # gcj in.
         unset LIBRARY_PATH
         unset CPATH
-        if test -z "$crossStageStatic"; then
-            EXTRA_TARGET_CFLAGS="-B${libcCross}/lib -idirafter ${libcCross}/include"
-            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib -Wl,-rpath,${libcCross}/lib -Wl,-rpath-link,${libcCross}/lib"
-        fi
     else
         if test -z "$NIX_CC_CROSS"; then
             EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
@@ -90,15 +86,16 @@ if test "$noSysDirs" = "1"; then
             extraFlags="$(cat $NIX_CC_CROSS/nix-support/libc-cflags)"
             extraLDFlags="$(cat $NIX_CC_CROSS/nix-support/libc-ldflags) $(cat $NIX_CC_CROSS/nix-support/libc-ldflags-before)"
 
-            # Use *real* header files, otherwise a limits.h is generated
-            # that does not include Glibc's limits.h (notably missing
-            # SSIZE_MAX, which breaks the build).
-            NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_CC_CROSS/nix-support/orig-libc)/include
-
             # The path to the Glibc binaries such as `crti.o'.
             glibc_dir="$(cat $NIX_CC_CROSS/nix-support/orig-libc)"
             glibc_libdir="$glibc_dir/lib"
-            configureFlags="$configureFlags --with-native-system-header-dir=$glibc_dir/include"
+            glibc_devdir="$(cat $NIX_CC_CROSS/nix-support/orig-libc-dev)"
+            configureFlags="$configureFlags --with-native-system-header-dir=$glibc_devdir/include"
+
+            # Use *real* header files, otherwise a limits.h is generated
+            # that does not include Glibc's limits.h (notably missing
+            # SSIZE_MAX, which breaks the build).
+            NIX_FIXINC_DUMMY_CROSS="$glibc_devdir/include"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
             extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
+  patches = [ ./path_char_fix.patch ];
+
   preConfigure = "cd ./src";
 
   buildPhase = optionalString libOnly ''
