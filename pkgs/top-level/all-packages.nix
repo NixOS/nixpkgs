@@ -2218,6 +2218,36 @@ in
 
   netdata = callPackage ../tools/system/netdata { };
 
+  netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
+
+    buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
+
+    libwapcaplet = callPackage ../applications/misc/netsurf/libwapcaplet { };
+
+    nsgenbind = callPackage ../applications/misc/netsurf/nsgenbind { };
+
+    libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
+
+    libcss = callPackage ../applications/misc/netsurf/libcss { };
+
+    libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
+
+    libdom = callPackage ../applications/misc/netsurf/libdom { };
+
+    libnsbmp = callPackage ../applications/misc/netsurf/libnsbmp { };
+
+    libnsgif = callPackage ../applications/misc/netsurf/libnsgif { };
+
+    libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
+
+    libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
+
+    libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
+
+    browser = callPackage ../applications/misc/netsurf/browser { };
+
+  });
+
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
