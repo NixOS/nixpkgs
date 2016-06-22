@@ -2222,6 +2222,8 @@ in
 
     buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
 
+    libwapcaplet = callPackage ../applications/misc/netsurf/libwapcaplet { };
+
   });
 
   netperf = callPackage ../applications/networking/netperf { };
