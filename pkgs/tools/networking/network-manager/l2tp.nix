@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/nm-l2tp-service.c \
       --replace /sbin/ipsec  ${strongswan}/bin/ipsec \
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
+
+    # Remove when https://github.com/nm-l2tp/network-manager-l2tp/issues/9 gets fixed
+    # per http://stackoverflow.com/questions/9225567/how-to-print-a-int64-t-type-in-c
+    sed -i -e 's,^\(#include <string.h>\)$,\1\n#include <inttypes.h>,' ./properties/import-export.c
+    substituteInPlace ./properties/import-export.c \
+      --replace '%ld' '%" PRId64 "'
   '';
 
   preConfigure = "./autogen.sh";
