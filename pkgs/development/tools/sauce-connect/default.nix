@@ -4,23 +4,25 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "sauce-connect-${version}";
-  version = "4.3.14";
+  version = "4.3.16";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux.tar.gz";
-      sha256 = "0j900dijhq8rpjaf2hgqvz5gy3dgal6l1f7q6353m2v14jbwb786";
+      sha256 = "0i4nvb1yd9qnbgbfc8wbl7ghpmba2jr98hj4y4j4sbjfk65by3xw";
     } else if stdenv.system == "i686-linux" then {
       url = "https://saucelabs.com/downloads/sc-${version}-linux32.tar.gz";
-      sha256 = "0nkgd1pyh21p0yg1zs0nzki0w4wsl1yy964lbz6mf6nrsjzqg54k";
+      sha256 = "1w9b1584kh1n4fw0wxbyslxp6w09if53fv4p9zz7vn4smm79ndfz";
     } else {
       url = "https://saucelabs.com/downloads/sc-${version}-osx.zip";
-      sha256 = "1mcvxvqvfikkn19mjwws55x2abjp09jvjjg6b15x8w075bd9ql8g";
+      sha256 = "1vhz2j30p285blspg7prr9bsah6f922p0mv7mhmk6xzgf6fgn764";
     }
   );
 
   buildInputs = [ unzip ];
-  phases = "unpackPhase installPhase " + (if stdenv.system == "x86_64-darwin" then "" else "patchPhase");
+  phases = [ "unpackPhase" ]
+   ++ (lib.optionals (stdenv.system != "x86_64-darwin") [ "patchPhase" ])
+   ++ [ "installPhase " ];
 
   patchPhase = ''
     patchelf \

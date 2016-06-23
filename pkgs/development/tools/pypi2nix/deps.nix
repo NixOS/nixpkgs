@@ -1,7 +1,4 @@
-{ fetchurl
-#, pypi_url ? "https://files.pythonhosted.org/packages"
-, pypi_url ? "https://pypi.io/packages/source/packages"
-}:
+{ fetchurl }:
 
 rec {
 
@@ -36,32 +33,32 @@ rec {
   };
 
   pip = fetchurl {
-    url = "${pypi_url}/source/p/pip/pip-${pipVersion}.tar.gz";
+    url = "mirror://pypi/p/pip/pip-${pipVersion}.tar.gz";
     md5 = pipHash;
   };
 
   setuptools = fetchurl {
-    url = "${pypi_url}/source/s/setuptools/setuptools-${setuptoolsVersion}.tar.gz";
+    url = "mirror://pypi/s/setuptools/setuptools-${setuptoolsVersion}.tar.gz";
     md5 = setuptoolsHash;
   };
 
   zcbuildout = fetchurl {
-    url = "${pypi_url}/source/z/zc.buildout/zc.buildout-${zcbuildoutVersion}.tar.gz";
+    url = "mirror://pypi/z/zc.buildout/zc.buildout-${zcbuildoutVersion}.tar.gz";
     md5 = zcbuildoutHash;
   };
 
   zcrecipeegg = fetchurl {
-    url = "${pypi_url}/source/z/zc.recipe.egg/zc.recipe.egg-${zcrecipeeggVersion}.tar.gz";
+    url = "mirror://pypi/z/zc.recipe.egg/zc.recipe.egg-${zcrecipeeggVersion}.tar.gz";
     md5 = zcrecipeeggHash;
   };
 
   wheel = fetchurl {
-    url = "${pypi_url}/source/w/wheel/wheel-${wheelVersion}.tar.gz";
+    url = "mirror://pypi/w/wheel/wheel-${wheelVersion}.tar.gz";
     md5 = wheelHash;
   };
 
   click = fetchurl {
-    url = "${pypi_url}/source/c/click/click-${clickVersion}.tar.gz";
+    url = "mirror://pypi/c/click/click-${clickVersion}.tar.gz";
     md5 = clickHash;
   };
 

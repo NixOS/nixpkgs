@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       cp -r $communityModules/* $modules
 
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH '"${luaPath};"' \
-        --set LUA_CPATH '"${luaCPath};"'
+        --set LUA_PATH '${luaPath};' \
+        --set LUA_CPATH '${luaCPath};'
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '"${luaPath};"' \
-        --set LUA_CPATH '"${luaCPath};"'
+        --set LUA_PATH '${luaPath};' \
+        --set LUA_CPATH '${luaCPath};'
     '';
 
   outputs = [ "out" "modules" ];

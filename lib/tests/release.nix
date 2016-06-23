@@ -1,6 +1,6 @@
 { nixpkgs }:
 
-with import ./../.. { };
+with import ../.. { };
 with lib;
 
 stdenv.mkDerivation {

@@ -4,6 +4,7 @@
 , pam, withPAM ? false
 , systemd, withSystemd ? false
 , python2, python3, ncurses
+, ruby
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
@@ -20,6 +21,10 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
     available = lib.listToAttrs [
                   (pythonPlugin python2)
                   (pythonPlugin python3)
+                  (lib.nameValuePair "rack" {
+                    path = "plugins/rack";
+                    inputs = [ ruby ];
+                  })
                 ];
 
     getPlugin = name:
@@ -65,12 +70,12 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $pluginDir
     python3 uwsgiconfig.py --build nixos
-    ${lib.concatMapStringsSep ";" (x: "${x.interpreter} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
+    ${lib.concatMapStringsSep ";" (x: "${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
   '';
 
   installPhase = ''
     install -Dm755 uwsgi $out/bin/uwsgi
-    ${lib.concatMapStringsSep "\n" (x: x.install) needed}
+    ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
   NIX_CFLAGS_LINK = [ "-lsystemd" ];
