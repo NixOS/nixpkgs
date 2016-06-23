@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   buildInputs = [ python librsync gnused ];
 
   meta = {
-    description = "backup system trying to combine best a mirror and an incremental backup system";
+    description = "Backup system trying to combine best a mirror and an incremental backup system";
     homepage = http://rdiff-backup.nongnu.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;

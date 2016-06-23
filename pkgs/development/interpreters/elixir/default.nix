@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  inherit debugInfo;
+
   buildFlags = if debugInfo
    then "ERL_COMPILER_OPTIONS=debug_info"
    else "";

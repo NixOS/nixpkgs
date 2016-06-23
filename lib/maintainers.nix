@@ -131,6 +131,7 @@
   falsifian = "James Cook <james.cook@utoronto.ca>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
+  fmthoma = "Franz Thoma <f.m.thoma@googlemail.com>";
   forkk = "Andrew Okin <forkk@forkk.net>";
   fornever = "Friedrich von Never <friedrich@fornever.me>";
   fpletz = "Franz Pletz <fpletz@fnordicwalking.de>";
@@ -282,6 +283,7 @@
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
+  pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
   peti = "Peter Simons <simons@cryp.to>";
@@ -307,6 +309,7 @@
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   ragge = "Ragnar Dahlen <r.dahlen@gmail.com>";
+  ralith = "Benjamin Saunders <ben.e.saunders@gmail.com>";
   rardiol = "Ricardo Ardissone <ricardo.ardissone@gmail.com>";
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
@@ -357,6 +360,7 @@
   spinus = "Tomasz Czyż <tomasz.czyz@gmail.com>";
   sprock = "Roger Mason <rmason@mun.ca>";
   spwhitt = "Spencer Whitt <sw@swhitt.me>";
+  SShrike = "Severen Redwood <severen@shrike.me>";
   stephenmw = "Stephen Weinberg <stephen@q5comm.com>";
   steveej = "Stefan Junker <mail@stefanjunker.de>";
   swistak35 = "Rafał Łasocha <me@swistak35.com>";

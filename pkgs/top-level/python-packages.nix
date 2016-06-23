@@ -183,7 +183,19 @@ in modules // {
     };
   };
 
-
+  emcee = buildPythonPackage {
+    name = "emcee-2.1.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/e/emcee/emcee-2.1.0.tar.gz";
+      sha256 = "0qyafp9jfya0mkxgqfvljf0rkic5fm8nimzwadyrxyvq7nd07qaw";
+    };
+    propagatedBuildInputs = [ self.numpy ];
+    meta = {
+      homepage = http://dan.iel.fm/emcee;
+      license = "MIT";
+      description = "Kick ass affine-invariant ensemble MCMC sampling";
+    };
+  };
 
   dbus = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
@@ -585,7 +597,7 @@ in modules // {
 
     meta = {
       homepage = https://github.com/bitprophet/alabaster;
-      description = "a Sphinx theme";
+      description = "A Sphinx theme";
       license = licenses.bsd3;
     };
   };
@@ -875,7 +887,7 @@ in modules // {
     buildInputs = with self; [ pytest ];
 
     meta = {
-      description = "namespace control and lazy-import mechanism";
+      description = "Namespace control and lazy-import mechanism";
       homepage = "http://bitbucket.org/hpk42/apipkg";
       license = licenses.mit;
     };
@@ -959,7 +971,7 @@ in modules // {
     };
 
     meta = {
-      description = "reference implementation of PEP 3156";
+      description = "Reference implementation of PEP 3156";
       homepage = http://www.python.org/dev/peps/pep-3156;
       license = licenses.free;
     };
@@ -2453,12 +2465,12 @@ in modules // {
   };
 
   bleach = buildPythonPackage rec {
-    version = "v1.4";
+    version = "v1.4.3";
     name = "bleach-${version}";
 
     src = pkgs.fetchurl {
       url = "http://github.com/jsocol/bleach/archive/${version}.tar.gz";
-      sha256 = "19v0zhvchz89w179rwkc4ah3cj2gbcng9alwa2yla89691g8b0b0";
+      sha256 = "0mk8780ilip0m890rapbckngw8k42gca3551kri297pyylr06l5m";
     };
 
     buildInputs = with self; [ nose ];
@@ -2764,17 +2776,17 @@ in modules // {
 
   bugwarrior = buildPythonPackage rec {
     name = "bugwarrior-${version}";
-    version = "1.0.2";
+    version = "1.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bugwarrior/${name}.tar.gz";
-      sha256 = "efe41756c152789f39006f157add9bedfa2b85d2cac15c067e635e37c70cb8f8";
+      sha256 = "1jkz5vzbwspi1jcb3qsgcl619yip77khb696pc3ryk0pdhjhgs5w";
     };
 
     buildInputs = with self; [ mock unittest2 nose /* jira megaplan */ ];
     propagatedBuildInputs = with self; [
       twiggy requests2 offtrac bugzilla taskw dateutil pytz keyring six
-      jinja2 pycurl dogpile_cache lockfile click
+      jinja2 pycurl dogpile_cache lockfile click pyxdg
     ];
 
     # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
@@ -3384,12 +3396,12 @@ in modules // {
   };
 
   click-threading = buildPythonPackage rec {
-    version = "0.1.2";
+    version = "0.4.0";
     name = "click-threading-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
-      sha256 = "0jmrv4334lfxa2ss53c06dafdwqbk1pb3ihd26izn5igw1bm8145";
+      sha256 = "1lrn2inlzz5lr8ay36dz9gmlnqqvdnh14rcm2nmhaxvbbz0gl8qq";
     };
 
     propagatedBuildInputs = with self; [ click ];
@@ -3801,7 +3813,7 @@ in modules // {
       sha256 = "4a14c67d520fda9d42b0da6134638578caae1d374b9bb462d8de00587dba764c";
     };
     meta = {
-      description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
+      description = "Plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
     propagatedBuildInputs = with self; [ self.coverage ];
   };
@@ -3821,20 +3833,21 @@ in modules // {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.23.4";
+    version = "0.24";
 
     src = pkgs.fetchurl {
-      url = "http://www.cython.org/release/${name}.tar.gz";
-      sha256 = "13hdffhd37mx3gjby018xl179jaj957fy7kzi01crmimxvn2zi7y";
+      url = "mirror://pypi/C/Cython/${name}.tar.gz";
+      sha256 = "1wd3q97gia3zhsgcdlvxh26hkrf3m53i6r1l4g0yya119264vr3d";
     };
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
+    # For testing
+    nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
 
     checkPhase = ''
+      export HOME="$NIX_BUILD_TOP"
       ${python.interpreter} runtests.py
     '';
-
-    doCheck = false; # Lots of weird compiler errors
 
     meta = {
       description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
@@ -4593,7 +4606,7 @@ in modules // {
    buildInputs = with self; [ covCore pytest ];
 
     meta = {
-      description = "plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
+      description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
       homepage = https://github.com/schlamar/pytest-cov;
       license = licenses.mit;
     };
@@ -4681,7 +4694,7 @@ in modules // {
     TINYCSS_SKIP_SPEEDUPS_TESTS = optional isPyPy true;
 
     meta = {
-      description = "complete yet simple CSS parser for Python";
+      description = "Complete yet simple CSS parser for Python";
       license = licenses.bsd3;
       homepage = http://pythonhosted.org/tinycss/;
     };
@@ -5302,7 +5315,7 @@ in modules // {
     '';
 
     meta = {
-      description = "integrates an Android device into a desktop";
+      description = "Integrates an Android device into a desktop";
       homepage = https://github.com/screenfreeze/deskcon-desktop;
       license = licenses.gpl3;
     };
@@ -5827,7 +5840,7 @@ in modules // {
 
     meta = {
       homepage = "http://python-eve.org/";
-      description = "open source Python REST API framework designed for human beings";
+      description = "Open source Python REST API framework designed for human beings";
       license = licenses.bsd3;
     };
   };
@@ -5921,7 +5934,7 @@ in modules // {
     doCheck = !isPy3k;  # failures..
 
     meta = {
-      description = "rapid multi-Python deployment";
+      description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
     };
   };
@@ -6548,7 +6561,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "python humanize utilities";
+      description = "Python humanize utilities";
       homepage = https://github.com/jmoiron/humanize;
       license = licenses.mit;
       maintainers = with maintainers; [ matthiasbeyer ];
@@ -6654,7 +6667,7 @@ in modules // {
     };
 
     meta = {
-      description = "helpers to pass trusted data to untrusted environments and back";
+      description = "Helpers to pass trusted data to untrusted environments and back";
       homepage = "https://pypi.python.org/pypi/itsdangerous/";
     };
   };
@@ -6696,7 +6709,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "tools for i3 users and developers";
+      description = "Tools for i3 users and developers";
       homepage =  "https://github.com/ziberna/i3-py";
       license = licenses.gpl3;
       platforms = platforms.linux;
@@ -7098,7 +7111,7 @@ in modules // {
     };
 
     meta = {
-      description = "dependencies for mwlib markup";
+      description = "Dependencies for mwlib markup";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
     };
@@ -7121,7 +7134,7 @@ in modules // {
       ];
 
     meta = {
-      description = "generate pdfs from mediawiki markup";
+      description = "Generate pdfs from mediawiki markup";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
     };
@@ -7212,7 +7225,7 @@ in modules // {
     JPEG_DIR="${pkgs.libjpeg.dev}";
 
     meta = {
-      description = "interface to netCDF library (versions 3 and 4)";
+      description = "Interface to netCDF library (versions 3 and 4)";
       homepage = https://pypi.python.org/pypi/netCDF4;
       license = licenses.free;  # Mix of license (all MIT* like)
     };
@@ -7520,6 +7533,12 @@ in modules // {
     };
   };
 
+  pycuda = callPackage ../development/python-modules/pycuda rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    inherit (pkgs.stdenv) mkDerivation;
+    inherit pythonOlder;
+  };
+
   python-axolotl = buildPythonPackage rec {
     name = "python-axolotl-${version}";
     version = "0.1.7";
@@ -7789,6 +7808,35 @@ in modules // {
       license = licenses.gpl2;
       platform = platforms.all;
     };
+  };
+
+  pytools = buildPythonPackage rec { 
+    name = "pytools-${version}"; 
+    version = "2016.2.1"; 
+
+    src = pkgs.fetchFromGitHub {
+      owner = "inducer";
+      repo = "pytools";
+      rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
+      sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
+    };
+
+    doCheck = pythonOlder "3.5";
+
+    buildInputs = with self; [
+      decorator
+      appdirs
+      six
+      numpy
+    ];
+
+    meta = {
+      homepage = https://github.com/inducer/pytools/; 
+      description = "Miscellaneous Python lifesavers.";
+      license = licenses.mit;
+      maintainers = with maintainers; [ artuuge ];
+    };
+
   };
 
   radicale = buildPythonPackage rec {
@@ -8176,6 +8224,49 @@ in modules // {
     };
   };
 
+  scfbuild = self.buildPythonPackage rec {
+    name = "scfbuild-${version}";
+    version = "1.0.3";
+
+    disabled = isPy3k;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "eosrei";
+      repo = "scfbuild";
+      rev = "c179c8d279b7cc0a9a3536a713ac880ac6010318";
+      sha256 = "1bsi7k4kkj914pycp1g92050hjxscyvc9qflqb3cv5yz3c93cs46";
+    };
+
+    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+
+    propagatedBuildInputs = with self; [ pyyaml fonttools fontforge ];
+
+    installPhase = ''
+      mkdir -p $out/${python.sitePackages}
+      cp -r scfbuild $out/${python.sitePackages}
+      # Workaround for #16133
+      mkdir -p $out/bin
+
+      cat >$out/bin/scfbuild <<EOF
+      #!/usr/bin/env python2
+
+      import sys
+      from scfbuild.main import main
+
+      if __name__ == '__main__':
+        sys.exit(main())
+      EOF
+
+      chmod +x $out/bin/scfbuild
+    '';
+
+    meta = with stdenv.lib; {
+      description = "SVGinOT color font builder";
+      homepage = "https://github.com/eosrei/scfbuild";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ abbradar ];
+    };
+  };
 
   substanced = buildPythonPackage rec {
     # no release yet
@@ -10007,6 +10098,11 @@ in modules // {
     };
   });
 
+  fontforge = pkgs.fontforge.override {
+    withPython = true;
+    inherit python;
+  };
+
   fonttools = buildPythonPackage (rec {
     version = "3.0";
     name = "fonttools-${version}";
@@ -10384,7 +10480,7 @@ in modules // {
     buildInputs = with self; [ pkgs.setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
-      description = "automatically generated zsh completion function for Python's option parser modules";
+      description = "Automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
     };
   };
@@ -11716,12 +11812,12 @@ in modules // {
   };
 
   klaus = buildPythonPackage rec {
-    version = "0.6.0";
+    version = "0.9.1";
     name = "klaus-${version}";
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
-      sha256 = "0ab3lxbysnvsx7irlxhiy78clbk4d0gzv2241pqkkvlmqq3968p4";
+      sha256 = "0k3v3p56hq8alm083grrp98znxkz1zqx0pczm2lah8qddbyrdkgm";
     };
 
     propagatedBuildInputs = with self;
@@ -11904,6 +12000,12 @@ in modules // {
     };
   });
 
+  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
+    inherit (self) numpy scipy;
+    inherit (pkgs.linuxPackages) nvidia_x11;
+    cudatoolkit = pkgs.cudatoolkit75;
+    clblas = pkgs.clblas-cuda;
+  };
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -14165,7 +14267,7 @@ in modules // {
 
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";
-      description = "library for OAuth version 1.0";
+      description = "Library for OAuth version 1.0";
       license = licenses.mit;
       maintainers = with maintainers; [ garbas ];
       platforms = platforms.linux;
@@ -14230,7 +14332,7 @@ in modules // {
       [ pyptlib argparse twisted pycrypto pyyaml ];
 
     meta = {
-      description = "a pluggable transport proxy";
+      description = "A pluggable transport proxy";
       homepage = https://www.torproject.org/projects/obfsproxy;
       repositories.git = https://git.torproject.org/pluggable-transports/obfsproxy.git;
       maintainers = with maintainers; [ phreedom thoughtpolice ];
@@ -16317,6 +16419,7 @@ in modules // {
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
     version = "0.20.1";
+    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "0f1ff1a1x1qrcv4ygfh29yyknx8hgwck7rp020zz0jrq9dibhjp7";
@@ -16369,6 +16472,7 @@ in modules // {
   mycli = buildPythonPackage rec {
     name = "mycli-${version}";
     version = "1.6.0";
+    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
@@ -16468,13 +16572,13 @@ in modules // {
 
   platformio =  buildPythonPackage rec {
     name = "platformio-${version}";
-    version="2.8.6";
+    version="2.10.3";
 
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/platformio/platformio-${version}.tar.gz";
-      sha256 = "1l8jcwf8flmx8xcsvly2my8al8nzjr67h3mg5c9wvdr7a42q7dil";
+      url = "https://pypi.python.org/packages/b7/a3/1d3a9d7bae91df1b607e0f31549ec3e0006f29484cc6a1431b3fe3c5b02e/platformio-2.10.3.tar.gz";
+      sha256 = "f3a646871f9baed05f336a32576edaab90abf0737d8adb54f2acb7bcad42a65f";
      };
 
      propagatedBuildInputs = with self; [ click_5 requests2 bottle pyserial lockfile colorama];
@@ -16844,18 +16948,18 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "1.0.0";
+    version = "1.0.2";
 
     src = pkgs.fetchurl {
-      sha256 = "192fyzs0hyq0k7wxxl00jwl334l5hwwmdflhvjqqrlj0dsgfs22i";
+      sha256 = "00cc0lr8hj3pgn2jy9z7b4hrrfj53axa8yfbyds86xqbsvw0w3jj";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
     checkPhase = ''
       rm prompt_toolkit/win32_types.py
     '';
 
-    buildInputs = with self; [ jedi ipython pygments ];
-    propagatedBuildInputs = with self; [ docopt six wcwidth ];
+    buildInputs = with self; [ jedi ipython ];
+    propagatedBuildInputs = with self; [ docopt six wcwidth pygments ];
 
     meta = {
       description = "Python library for building powerful interactive command lines";
@@ -18890,7 +18994,7 @@ in modules // {
     meta = {
       homepage = "https://github.com/asweigart/pyperclip";
       license = licenses.bsdOriginal;
-      description = "cross-platform clipboard module";
+      description = "Cross-platform clipboard module";
     };
   };
 
@@ -19462,7 +19566,7 @@ in modules // {
     buildInputs = with self; [ ];
 
     meta = {
-      description = "job queue server";
+      description = "Job queue server";
       homepage = "https://github.com/pediapress/qserve";
       license = licenses.bsd3;
     };
@@ -19659,7 +19763,7 @@ in modules // {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      description = "readme";
+      description = "Readme";
       homepage = "https://github.com/pypa/readme";
     };
   };
@@ -20002,7 +20106,7 @@ in modules // {
     };
 
     meta = {
-      description = "python refactoring library";
+      description = "Python refactoring library";
       homepage = http://rope.sf.net;
       maintainers = with maintainers; [ goibhniu ];
       license = licenses.gpl2;
@@ -20021,7 +20125,7 @@ in modules // {
     propagatedBuildInputs = with self; [ ropemode ];
 
      meta = {
-       description = "a plugin for performing python refactorings in emacs";
+       description = "A plugin for performing python refactorings in emacs";
        homepage = http://rope.sf.net/ropemacs.html;
        maintainers = with maintainers; [ goibhniu ];
        license = licenses.gpl2;
@@ -20040,7 +20144,7 @@ in modules // {
     propagatedBuildInputs = with self; [ rope ];
 
      meta = {
-       description = "a plugin for performing python refactorings in emacs";
+       description = "A plugin for performing python refactorings in emacs";
        homepage = http://rope.sf.net;
        maintainers = with maintainers; [ goibhniu ];
        license = licenses.gpl2;
@@ -20166,7 +20270,7 @@ in modules // {
     };
 
     meta = {
-      description = "common routines for ruamel packages";
+      description = "Common routines for ruamel packages";
       homepage = https://bitbucket.org/ruamel/base;
       license = licenses.mit;
     };
@@ -20183,7 +20287,7 @@ in modules // {
     };
 
     meta = {
-      description = "a version of dict that keeps keys in insertion resp. sorted order";
+      description = "A version of dict that keeps keys in insertion resp. sorted order";
       homepage = https://bitbucket.org/ruamel/ordereddict;
       license = licenses.mit;
     };
@@ -20467,10 +20571,10 @@ in modules // {
   };
 
   seaborn = buildPythonPackage rec {
-    name = "seaborn-0.7.0";
+    name = "seaborn-0.7.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/seaborn/${name}.tar.gz";
-      sha256 = "0ibi3xsfm2kysph61mnfy0pf8d5rkgxgrdb0z9nbizgcgdsb5a0m";
+      sha256 = "0pawrqc3mxpwd5g9pvi9gba02637bh5c8ldpp8izfwpfn52469zs";
     };
 
     buildInputs = with self; [ nose ];
@@ -20484,7 +20588,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "statisitical data visualization";
+      description = "Statisitical data visualization";
       homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
       license     = "BSD";
       maintainers = with maintainers; [ fridh ];
@@ -20591,7 +20695,7 @@ in modules // {
     propagatedBuildInputs = with self; [ twisted ];
 
     meta = {
-      description = "setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
+      description = "Setuptools plug-in that helps run unit tests built with the \"Trial\" framework (from Twisted)";
 
       homepage = http://allmydata.org/trac/setuptools_trial;
 
@@ -20992,6 +21096,21 @@ in modules // {
     };
   };
 
+  Theano-cuda = callPackage ../development/python-modules/theano/cuda (
+  let
+    boost = pkgs.boost159.override {
+      inherit (self) python numpy scipy;
+    };
+  in rec {
+    cudatoolkit = pkgs.cudatoolkit75;
+    cudnn = pkgs.cudnn5_cudatoolkit75;
+    inherit (self) numpy scipy;
+    pycuda = self.pycuda.override { inherit boost; };
+    libgpuarray = self.libgpuarray-cuda.override {
+      clblas = pkgs.clblas-cuda.override { inherit boost; };
+    };
+  });
+
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
     name = "pytidylib-${version}";
@@ -21056,7 +21175,7 @@ in modules // {
     buildInputs = with self; [ ];
 
     meta = {
-      description = "parse english textual date descriptions";
+      description = "Parse english textual date descriptions";
       homepage = "https://github.com/pediapress/timelib/";
       license = licenses.zlib;
     };
@@ -22338,7 +22457,7 @@ in modules // {
     propagatedBuildInputs = with self; [ testtools ];
 
     meta = {
-      description = "a pyunit extension for dependency injection";
+      description = "A pyunit extension for dependency injection";
       homepage = https://pypi.python.org/pypi/testscenarios;
       license = licenses.asl20;
     };
@@ -22658,7 +22777,7 @@ in modules // {
     propagatedBuildInputs = with self; [ numpy ];
 
     meta = {
-      description = "explicitly typed attributes for Python";
+      description = "Explicitly typed attributes for Python";
       homepage = http://pypi.python.org/pypi/traits;
       license = "BSD";
     };
@@ -23194,7 +23313,7 @@ in modules // {
     };
 
     meta = {
-      description = "python wrapper for Xvfb, Xephyr and Xvnc";
+      description = "Python wrapper for Xvfb, Xephyr and Xvnc";
       homepage = "https://github.com/ponty/pyvirtualdisplay";
       license = licenses.bsdOriginal;
       maintainers = with maintainers; [ layus ];
@@ -23219,7 +23338,7 @@ in modules // {
     doCheck = false;
 
     meta = {
-      description = "a tool to create isolated Python environments";
+      description = "A tool to create isolated Python environments";
       homepage = http://www.virtualenv.org;
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu ];
@@ -23566,6 +23685,9 @@ in modules // {
     buildInputs = with self; [ pytest pytestcov coverage ];
 
     propagatedBuildInputs = with self; [ jsonschema ];
+
+    # We add this flag to ignore the copy installed by bootstrapped-pip
+    installFlags = [ "--ignore-installed" ];
 
     meta = {
       description = "A built-package format for Python";
@@ -23950,7 +24072,7 @@ in modules // {
     patches = [ ../development/python-modules/btrees-py35.patch ];
 
     meta = {
-      description = "scalable persistent components";
+      description = "Scalable persistent components";
       homepage = http://packages.python.org/BTrees;
     };
   };
@@ -23967,7 +24089,7 @@ in modules // {
     };
 
     meta = {
-      description = "automatic persistence for Python objects";
+      description = "Automatic persistence for Python objects";
       homepage = http://www.zope.org/Products/ZODB;
     };
   };
@@ -24525,7 +24647,7 @@ in modules // {
 
     meta = {
       homepage = http://liw.fi/cmdtest/;
-      description = "black box tests Unix command line tools";
+      description = "Black box tests Unix command line tools";
     };
   };
 
@@ -25504,7 +25626,7 @@ in modules // {
     };
 
     meta = {
-      description = "implements a lazy string for python useful for use with gettext";
+      description = "Implements a lazy string for python useful for use with gettext";
       homepage = https://github.com/mitsuhiko/speaklater;
       license = "bsd";
       maintainers = with maintainers; [ matejc ];
@@ -26997,7 +27119,7 @@ in modules // {
 
     meta = {
       homepage = http://github.com/bepasty/bepasty-server;
-      description = "binary pastebin server";
+      description = "Binary pastebin server";
       license = licenses.mit;
       maintainers = [ maintainers.makefu ];
     };
@@ -27054,7 +27176,7 @@ in modules // {
     };
     meta = {
       homepage = http://bitbucket.org/thomaswaldmann/xstatic;
-      description = "base packaged static files for python";
+      description = "Base packaged static files for python";
       license = licenses.mit;
       maintainers = [ maintainers.makefu ];
     };
@@ -27069,7 +27191,7 @@ in modules // {
     };
     meta = {
       homepage = https://github.com/bitprophet/alabaster;
-      description = "convert xlsx to csv";
+      description = "Convert xlsx to csv";
       license = licenses.bsd3;
       maintainers = with maintainers; [ jb55 ];
     };
@@ -27368,7 +27490,7 @@ in modules // {
     };
 
     meta = {
-      description = "console colouring for python";
+      description = "Console colouring for python";
       homepage = "https://pypi.python.org/pypi/python-termstyle/0.1.10";
       license = licenses.bsdOriginal;
     };
@@ -27387,7 +27509,7 @@ in modules // {
     buildInputs = with self; [ mock ];
 
     meta = {
-      description = "python test runner";
+      description = "Python test runner";
       homepage = "https://github.com/CleanCut/green";
       licence = licenses.mit;
     };

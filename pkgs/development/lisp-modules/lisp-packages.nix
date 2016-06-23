@@ -345,7 +345,7 @@ let lispPackages = rec {
   command-line-arguments = buildLispPackage rec {
     baseName = "command-line-arguments";
     version = "git-20141113";
-    description = "small library to deal with command-line arguments";
+    description = "Small library to deal with command-line arguments";
     deps = [];
     # Source type: git
     src = pkgs.fetchgit {

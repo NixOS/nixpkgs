@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.foolabs.com/xpdf/";
-    description = "viewer for Portable Document Format (PDF) files";
+    description = "Viewer for Portable Document Format (PDF) files";
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];

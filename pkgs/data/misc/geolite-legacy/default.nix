@@ -8,7 +8,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "geolite-legacy-${version}";
-  version = "2016-06-08";
+  version = "2016-06-20";
 
   srcGeoIP = fetchDB
     "GeoLiteCountry/GeoIP.dat.gz" "GeoIP.dat.gz"
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     "0dq5rh08xgwsrmkniww001b2dpd1d7db4sd385p70hkbbry496l3";
   srcGeoIPASNum = fetchDB
     "asnum/GeoIPASNum.dat.gz" "GeoIPASNum.dat.gz"
-    "0isimfb0as6hblsbi0zlpj0zyyr6g3y7n1q7sic748hdf7a1zphn";
+    "1q49v1bxmlbd3y0rfimlcbw6jfp8jbh4hyvy3vdaf0lf82nhfs88";
   srcGeoIPASNumv6 = fetchDB
     "asnum/GeoIPASNumv6.dat.gz" "GeoIPASNumv6.dat.gz"
-    "1klh5s7z0z1mipi92q1kf5k9zznvxs9ma69q704vpblfah3km3cc";
+    "0xqhvf2yyi2fq0bjch9fys22hqakhdhzrhsq9m4d2spmd2pjrp0x";
 
   meta = with stdenv.lib; {
     description = "GeoLite Legacy IP geolocation databases";

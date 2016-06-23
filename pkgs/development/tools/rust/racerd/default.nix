@@ -17,7 +17,7 @@ buildRustPackage rec {
 
   buildInputs = [ makeWrapper ];
 
-  RUST_SRC_PATH = ''${rustc.src}/src'';
+  RUST_SRC_PATH = ''${rustPlatform.rust.rustc.src}/src'';
 
   installPhase = ''
     mkdir -p $out/bin

@@ -16,11 +16,7 @@ rec {
        concatStrings ["foo" "bar"]
        => "foobar"
   */
-  concatStrings =
-    if builtins ? concatStringsSep then
-      builtins.concatStringsSep ""
-    else
-      lib.foldl' (x: y: x + y) "";
+  concatStrings = builtins.concatStringsSep "";
 
   /* Map a function over a list and concatenate the resulting strings.
 
@@ -213,7 +209,16 @@ rec {
        escapeShellArg "so([<>])me"
        => "so\\(\\[\\<\\>\\]\\)me"
   */
-  escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
+  escapeShellArg = arg:
+    lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]") (toString arg);
+
+  /* Escape all arguments to be passed to the Bourne shell.
+
+     Example:
+       escapeShellArgs ["one" "two three"]
+       => "one two\\ three"
+  */
+  escapeShellArgs = concatMapStringsSep " " escapeShellArg;
 
   /* Obsolete - use replaceStrings instead. */
   replaceChars = builtins.replaceStrings or (

@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     homepage = http://furius.ca/beancount/;
-    description = "double-entry bookkeeping computer language";
+    description = "Double-entry bookkeeping computer language";
     longDescription = ''
         A double-entry bookkeeping computer language that lets you define
         financial transaction records in a text file, read them in memory,

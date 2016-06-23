@@ -1,6 +1,0 @@
-#! @shell@ -e
-
-chrootenvDest=/run/chrootenv/@name@
-
-# Unmount all (r)bind mounts
-umount -l $chrootenvDest/{dev/pts,dev/shm,dev,nix/store,proc,sys,host-etc,host-tmp,home,var,tmp,run}

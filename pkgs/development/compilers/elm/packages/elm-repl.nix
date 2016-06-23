@@ -24,6 +24,6 @@ mkDerivation {
   ];
   jailbreak = true;
   homepage = "https://github.com/elm-lang/elm-repl";
-  description = "a REPL for Elm";
+  description = "A REPL for Elm";
   license = stdenv.lib.licenses.bsd3;
 }

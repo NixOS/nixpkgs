@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  # Workaround https://github.com/xelerance/xl2tpd/issues/108
+  postPatch = ''
+    substituteInPlace ./src/nm-l2tp-service.c --replace 'write_config_option (pppopt_fd, "lock\n");' ""
+  '';
+
   meta = with stdenv.lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;

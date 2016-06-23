@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, pam, libXext, libXScrnSaver, libX11
 , libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, mesa, gtk
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
+, forceInstallAllHacks ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
       wrapProgram $out/bin/xscreensaver-text \
         --prefix PATH : ${stdenv.lib.makeBinPath [xorg.appres]}
-  '';
+  ''
+  + stdenv.lib.optionalString forceInstallAllHacks ''
+    make -C hacks/glx dnalogo
+    cat hacks/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks
+    cat hacks/glx/Makefile.in | grep -E '([a-z0-9]+):[[:space:]]*\1[.]o' | cut -d : -f 1  | xargs make -C hacks/glx
+    cp -f $(find hacks -type f -perm -111 "!" -name "*.*" )  "$out/libexec/xscreensaver"
+  ''
+  ;
 
   meta = {
     homepage = "http://www.jwz.org/xscreensaver/";

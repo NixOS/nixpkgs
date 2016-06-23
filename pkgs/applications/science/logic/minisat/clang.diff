@@ -1,0 +1,45 @@
+diff -aur minisat/core/SolverTypes.h minisat.clang/core/SolverTypes.h
+--- minisat/core/SolverTypes.h	2010-07-10 18:07:36.000000000 +0200
++++ minisat.clang/core/SolverTypes.h	2016-05-13 12:14:50.759671959 +0200
+@@ -47,7 +47,7 @@
+     int     x;
+ 
+     // Use this as a constructor:
+-    friend Lit mkLit(Var var, bool sign = false);
++    //friend Lit mkLit(Var var, bool sign = false);
+ 
+     bool operator == (Lit p) const { return x == p.x; }
+     bool operator != (Lit p) const { return x != p.x; }
+@@ -55,7 +55,7 @@
+ };
+ 
+ 
+-inline  Lit  mkLit     (Var var, bool sign) { Lit p; p.x = var + var + (int)sign; return p; }
++inline  Lit  mkLit     (Var var, bool sign = false) { Lit p; p.x = var + var + (int)sign; return p; }
+ inline  Lit  operator ~(Lit p)              { Lit q; q.x = p.x ^ 1; return q; }
+ inline  Lit  operator ^(Lit p, bool b)      { Lit q; q.x = p.x ^ (unsigned int)b; return q; }
+ inline  bool sign      (Lit p)              { return p.x & 1; }
+diff -aur minisat/utils/Options.h minisat.clang/utils/Options.h
+--- minisat/utils/Options.h	2010-07-10 18:07:36.000000000 +0200
++++ minisat.clang/utils/Options.h	2016-05-13 12:14:50.759671959 +0200
+@@ -282,15 +282,15 @@
+         if (range.begin == INT64_MIN)
+             fprintf(stderr, "imin");
+         else
+-            fprintf(stderr, "%4"PRIi64, range.begin);
++            fprintf(stderr, "%4" PRIi64, range.begin);
+ 
+         fprintf(stderr, " .. ");
+         if (range.end == INT64_MAX)
+             fprintf(stderr, "imax");
+         else
+-            fprintf(stderr, "%4"PRIi64, range.end);
++            fprintf(stderr, "%4" PRIi64, range.end);
+ 
+-        fprintf(stderr, "] (default: %"PRIi64")\n", value);
++        fprintf(stderr, "] (default: %" PRIi64 ")\n", value);
+         if (verbose){
+             fprintf(stderr, "\n        %s\n", description);
+             fprintf(stderr, "\n");
+Only in minisat.clang/utils: Options.o
+Only in minisat.clang/utils: System.o

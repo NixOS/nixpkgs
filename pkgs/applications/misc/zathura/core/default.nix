@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite, glib }:
+{ stdenv, lib, fetchurl, pkgconfig, gtk, girara, ncurses, gettext, docutils, file, makeWrapper, zathura_icon, sqlite, glib
+, synctexSupport ? true, texlive ? null
+}:
+
+assert synctexSupport -> texlive != null;
 
 stdenv.mkDerivation rec {
   version = "0.3.6";
@@ -9,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fyb5hak0knqvg90rmdavwcmilhnrwgg1s5ykx9wd3skbpi8nsh8";
   };
 
-  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib ];
+  buildInputs = [ pkgconfig file gtk girara gettext makeWrapper sqlite glib
+  ] ++ lib.optional synctexSupport texlive.bin.core;
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
@@ -18,7 +23,7 @@ stdenv.mkDerivation rec {
     "RSTTOMAN=${docutils}/bin/rst2man.py"
     "VERBOSE=1"
     "TPUT=${ncurses.out}/bin/tput"
-  ];
+  ] ++ lib.optional synctexSupport "WITH_SYNCTEX=1";
 
   postInstall = ''
     wrapProgram "$out/bin/zathura" \

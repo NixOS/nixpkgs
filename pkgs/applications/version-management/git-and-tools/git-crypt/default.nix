@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "https://www.agwa.name/projects/git-crypt";
-    description = "transparent file encryption in git";
+    description = "Transparent file encryption in git";
     longDescription = ''
       git-crypt enables transparent encryption and decryption of files in a git
       repository. Files which you choose to protect are encrypted when

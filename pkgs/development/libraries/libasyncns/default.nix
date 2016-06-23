@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://0pointer.de/lennart/projects/libasyncns/;
-    description = "a C library for Linux/Unix for executing name service queries asynchronously";
+    description = "A C library for Linux/Unix for executing name service queries asynchronously";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];
