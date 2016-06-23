@@ -429,7 +429,7 @@ with lib;
             description = "Dunst Daemon";
             wantedBy    = [ "multi-user.target" ];
 
-            serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst -config ${dunstConf}";
+            serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst -config ${dunstConf} ";
         };
 
     };
