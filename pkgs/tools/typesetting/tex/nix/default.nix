@@ -185,7 +185,7 @@ rec {
         if test -d $postscript; then
           input=$(ls $postscript/*.ps)
         else
-          input=$(stripHash $postscript; echo $strippedName)
+          input=$(baseHash $postscript)
           ln -s $postscript $input
         fi
 
