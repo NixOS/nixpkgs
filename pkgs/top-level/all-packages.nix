@@ -12232,6 +12232,7 @@ with pkgs;
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
+    ubootUtilite
     ubootWandboard
     ;
 

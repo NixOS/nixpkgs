@@ -348,6 +348,35 @@ rec {
     };
   };
 
+  utilite = {
+    name = "utilite";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
+    kernelBaseConfig = "multi_v7_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig =
+      ''
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
+      '';
+    kernelMakeFlags = [ "LOADADDR=0x10800000" ];
+    kernelTarget = "uImage";
+    kernelDTB = true;
+    uboot = true; #XXX: any non-null value here is needed so that mkimage is present to build kernelTarget uImage
+    gcc = {
+      cpu = "cortex-a9";
+      fpu = "neon";
+      float = "hard";
+    };
+  };
+
   guruplug = sheevaplug // {
     # Define `CONFIG_MACH_GURUPLUG' (see
     # <http://kerneltrap.org/mailarchive/git-commits-head/2010/5/19/33618>)
