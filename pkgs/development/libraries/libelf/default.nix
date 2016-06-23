@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = true;
-
+  
   # For cross-compiling, native glibc is needed for the "gencat" program.
   crossAttrs = {
-    nativeBuildInputs = [ gettext glibc ];
+    nativeBuildInputs = [ glibc ];
   };
 
   # Libelf's custom NLS macros fail to determine the catalog file extension on
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # FIXME: Eventually make Gettext a build input on all platforms.
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-nls";
 
-  nativeBuildInputs = [ gettext ];
+  buildInputs = [ gettext ];
 
   meta = {
     description = "ELF object file access library";

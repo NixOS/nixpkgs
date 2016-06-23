@@ -54,7 +54,6 @@ stdenv.mkDerivation ({
       ./glob-simplify-interface.patch
       ./cve-2016-1234.patch
       ./cve-2016-3706.patch
-      ./fix_warnings.patch
     ];
 
   postPatch =

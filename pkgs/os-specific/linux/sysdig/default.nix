@@ -18,9 +18,6 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit (s) url sha256;
   };
-  postPatch = ''
-    sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp
-  '';
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"

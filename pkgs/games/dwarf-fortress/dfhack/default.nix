@@ -39,7 +39,6 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [ ./use-system-libraries.patch ];
-  postPatch = "sed '1i#include <math.h>' -i plugins/3dveins.cpp";
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # we can't use native Lua; upstream uses private headers

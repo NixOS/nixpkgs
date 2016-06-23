@@ -8,7 +8,6 @@ rec {
   runCommand = name: env: buildCommand:
     stdenv.mkDerivation ({
       inherit name buildCommand;
-      passAsFile = [ "buildCommand" ];
     } // env);
 
 

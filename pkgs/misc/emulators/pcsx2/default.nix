@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
     sha256 = "0s7mxq2cgzwjfsq0vhpz6ljk7wr725nxg48128iyirf85585l691";
   };
 
-  postPatch = "sed '1i#include \"x86intrin.h\"' -i common/src/x86emitter/cpudetect.cpp";
-
   configurePhase = ''
     mkdir -p build
     cd build
@@ -51,8 +49,6 @@ stdenv.mkDerivation rec {
     alsaLib glib gettext gtk2 libaio libpng makeWrapper portaudio SDL2
     soundtouch wxGTK30 zlib
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Playstation 2 emulator";

@@ -2,7 +2,6 @@
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , extraConfigureFlags ? ""
-, postPatch ? null
 , ...
 }:
 
@@ -18,7 +17,6 @@ stdenv.mkDerivation rec {
     ];
     inherit sha256;
   };
-  inherit postPatch;
 
   buildInputs = [ python bzip2 zlib gmp openssl boost ];
 
