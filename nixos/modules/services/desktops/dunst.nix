@@ -106,12 +106,12 @@ with lib;
                     default = false;
                     description = ''
                         Allow a small subset of html markup:
-                          <b>bold</b>
-                          <i>italic</i>
-                          <s>strikethrough</s>
-                          <u>underline</u>
+                          <literal><b>bold</b></literal>
+                          <literal><i>italic</i></literal>
+                          <literal><s>strikethrough</s></literal>
+                          <literal><u>underline</u></literal>
                         For a complete reference see
-                        <http://developer.gnome.org/pango/stable/PangoMarkupFormat.html>.
+                        <link xlink:href="http://developer.gnome.org/pango/stable/PangoMarkupFormat.html"/>.
                         If markup is not allowed, those tags will be stripped
                         out of the message.
                     '';
@@ -122,12 +122,12 @@ with lib;
                     default = ''<b>%s</b>\n%b'';
                     description = ''
                         The format of the message.  Possible variables are:
-                          %a  appname
-                          %s  summary
-                          %b  body
-                          %i  iconname (including its path)
-                          %I  iconname (without its path)
-                          %p  progress value if set ([  0%] to [100%]) or nothing
+                          <literal>%a</literal> appname
+                          <literal>%s</literal> summary
+                          <literal>%b</literal> body
+                          <literal>%i</literal> iconname (including its path)
+                          <literal>%I</literal> iconname (without its path)
+                          <literal>%p</literal> progress value if set ([  0%] to [100%]) or nothing
                         Markup is allowed
                     '';
                 };
@@ -154,7 +154,10 @@ with lib;
                     default = "right";
                     description = ''
                         Alignment of message text.
-                        Possible values are "left", "center" and "right".
+                        Possible values are
+                        <literal>"left"</literal>,
+                        <literal>"center</literal>" and
+                        <literal>"right</literal>".
                     '';
                 };
 
@@ -164,7 +167,8 @@ with lib;
                     description = ''
                         The frequency with wich text that is longer than the
                         notification window allows bounces back and forth.
-                        This option conflicts with "word_wrap".
+                        This option conflicts with
+                        <literal>"word_wrap"</literal>.
                         Set to 0 to disable.
                     '';
                 };
@@ -192,7 +196,8 @@ with lib;
                     type = types.bool;
                     default = false;
                     description = ''
-                        Ignore newlines '\n' in notifications.
+                        Ignore newlines <literal>'\n'</literal> in
+                        notifications.
                     '';
                 };
 
