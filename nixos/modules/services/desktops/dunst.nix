@@ -6,6 +6,21 @@ let
     cfg = config.services.dunst;
     mkBoolStr = b: if b then "yes" else "false";
 
+    dmenuConfig = if cfg.global.dmenu != null then
+          '' dmenu = ${cfg.global.dmenu}''
+      else
+          "";
+
+    browserConfig = if cfg.global.browser != null then
+          '' browser = ${cfg.global.browser}''
+      else
+          "";
+
+    iconFoldersConfig = if cfg.global.iconFolders != null then
+          '' icon_folders = ${cfg.global.iconFolders}''
+      else
+          "";
+
     dunstConf = builtins.toFile "dunstrc" ''
 [global]
     font                = ${cfg.global.font}
@@ -33,26 +48,11 @@ let
     horizontal_padding  = ${toString cfg.global.horizontalPadding}
     separator_color     = ${cfg.global.separatorColor}
     startup_notification= ${mkBoolStr cfg.global.startupNotification}
-'' +
-    (if cfg.global.dmenu != null then
-        '' dmenu = ${cfg.global.dmenu}''
-    else
-        ""
-    ) +
-    (if cfg.global.browser != null then
-        '' browser = ${cfg.global.browser}''
-    else
-        ""
-    ) +
-''
     icon_position       = ${cfg.global.iconPosition}
-'' +
-    (if cfg.global.iconFolders != null then
-        '' icon_folders = ${cfg.global.iconFolders}''
-    else
-        ""
-    ) +
-''
+
+    ${dmenuConfig}
+    ${browserConfig}
+    ${iconFoldersConfig}
 
 [frame]
     width = ${toString cfg.frame.width}
