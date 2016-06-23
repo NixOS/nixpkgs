@@ -80,12 +80,6 @@ let
     timeout     = ${toString cfg.urgency.critical.timeout}
 '';
 
-    dunstStartScript = builtins.toFile "dunst-start-script" ''
-      #!/usr/bin/env bash
-
-      ${pkgs.dunst}/bin/dunst -config ${dunstConf}
-    '';
-
 in
 with lib;
 {
@@ -435,7 +429,7 @@ with lib;
             description = "Dunst Daemon";
             wantedBy    = [ "multi-user.target" ];
 
-            serviceConfig.ExecStart = "${dunstStartScript}";
+            serviceConfig.ExecStart = "${pkgs.dunst}/bin/dunst -config ${dunstConf} ";
         };
 
     };
