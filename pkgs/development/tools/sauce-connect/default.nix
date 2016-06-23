@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
   );
 
   buildInputs = [ unzip ];
-  phases = "unpackPhase installPhase " + (if stdenv.system == "x86_64-darwin" then "" else "patchPhase");
+  phases = [ "unpackPhase" ]
+   ++ (lib.optionals (stdenv.system != "x86_64-darwin") [ "patchPhase" ])
+   ++ [ "installPhase " ];
 
   patchPhase = ''
     patchelf \
