@@ -427,7 +427,7 @@ with lib;
 
         systemd.services.dunst = {
             description = "Dunst Daemon";
-            wantedBy    = [ "multi-user.target" ];
+            wants       = [ "graphical.target" ];
 
             serviceConfig = {
               ExecStart = "${pkgs.dunst}/bin/dunst -config ${dunstConf} ";
