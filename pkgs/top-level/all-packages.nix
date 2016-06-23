@@ -16999,10 +16999,11 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wine = callPackage ../misc/emulators/wine {
+  wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+  };
+  wine = lowPrio (self.wineMinimal.override {
     pngSupport = true;
     jpegSupport = true;
     tiffSupport = true;
@@ -17011,30 +17012,21 @@ in
     alsaSupport = true;
     openglSupport = true;
     tlsSupport = true;
-    cursesSupport = true;
-  };
-  wineMinimal = lowPrio (self.wine.override {
-    pulseaudioSupport = false;
-    pngSupport = false;
-    jpegSupport = false;
-    tiffSupport = false;
-    gettextSupport = false;
-    fontconfigSupport = false;
-    alsaSupport = false;
-    openglSupport = false;
-    tlsSupport = false;
-    cursesSupport = false;
-  });
-  wineFull = lowPrio (self.wine.override {
-    gtkSupport = true;
-    gstreamerSupport = true;
     cupsSupport = true;
     colorManagementSupport = true;
     dbusSupport = true;
     mpg123Support = true;
     openalSupport = true;
-    openclSupport = true;
     cairoSupport = true;
+    cursesSupport = true;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    xineramaSupport = true;
+    xmlSupport = true;
+  });
+  wineFull = lowPrio (self.wine.override {
+    gtkSupport = true;
+    gstreamerSupport = true;
+    openclSupport = true;
     odbcSupport = true;
     netapiSupport = true;
     vaSupport = true;
@@ -17045,8 +17037,6 @@ in
     gphoto2Support = true;
     ldapSupport = true;
     pulseaudioSupport = true;
-    xineramaSupport = true;
-    xmlSupport = true;
   });
   wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
