@@ -37,7 +37,6 @@
 # that point into the user's profile.
 
 let
-  shellEscape = x: "'${lib.replaceChars ["'"] [("'\\'" + "'")] x}'";
   installer = writeScript "xquartz-install" ''
     NIX_LINK=$HOME/.nix-profile
 
@@ -138,7 +137,7 @@ in stdenv.mkDerivation {
     defaultStartX="$out/bin/startx -- $out/bin/Xquartz"
 
     ruby ${./patch_plist.rb} \
-      ${shellEscape (builtins.toXML {
+      ${lib.escapeShellArg (builtins.toXML {
         XQUARTZ_DEFAULT_CLIENT = "${xterm}/bin/xterm";
         XQUARTZ_DEFAULT_SHELL  = "${shell}";
         XQUARTZ_DEFAULT_STARTX = "@STARTX@";

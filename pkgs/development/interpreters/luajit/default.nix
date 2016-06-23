@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "high-performance JIT compiler for Lua 5.1";
+    description = "High-performance JIT compiler for Lua 5.1";
     homepage    = http://luajit.org;
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;

@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "scopatz";
     repo = "xonsh";
     rev = version;
-    sha256= "0cqfrpvkgzk0q3dykavqxwfqrx61y8rbzixmwcv8pfa9r2sya24q";
+    sha256= "13inkj0vs8nqdghp3j19dardawfsdmcsfzsp77hlwavmw7sqjxzi";
   };
 
   ## The logo xonsh prints during build contains unicode characters, and this
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR nosetests -x
   '';
 
-  buildInputs = with python3Packages; [ glibcLocales nose pygments ];
+  buildInputs = with python3Packages; [ glibcLocales nose ];
   propagatedBuildInputs = with python3Packages; [ ply prompt_toolkit ];
 
   meta = with stdenv.lib; {
@@ -40,5 +40,9 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ spwhitt garbas ];
     platforms = platforms.all;
+  };
+
+  passthru = {
+    shellPath = "/bin/xonsh";
   };
 }

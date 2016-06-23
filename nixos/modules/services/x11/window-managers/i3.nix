@@ -15,12 +15,21 @@ let
         If left at the default value, $HOME/.i3/config will be used.
       '';
     };
+    extraSessionCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Shell commands executed just before i3 is started.
+      '';
+    };
   };
 
   i3config = name: pkg: cfg: {
     services.xserver.windowManager.session = [{
       inherit name;
       start = ''
+        ${cfg.extraSessionCommands}
+
         ${pkg}/bin/i3 ${optionalString (cfg.configFile != null)
           "-c \"${cfg.configFile}\""
         } &

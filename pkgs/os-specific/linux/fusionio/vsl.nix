@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://fusionio.com;
-    description = "kernel driver for accessing fusion-io cards";
+    description = "Kernel driver for accessing fusion-io cards";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     broken = stdenv.system != "x86_64-linux";

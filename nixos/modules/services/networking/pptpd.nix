@@ -16,7 +16,7 @@ with lib;
       clientIpRange = mkOption {
         type        = types.string;
         description = "The range from which client IPs are drawn.";
-        default     = "10.124.142.2-11";
+        default     = "10.124.124.2-11";
       };
 
       maxClients = mkOption {

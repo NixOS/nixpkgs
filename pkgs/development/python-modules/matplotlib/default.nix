@@ -55,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "python plotting library, making publication quality plots";
+    description = "Python plotting library, making publication quality plots";
     homepage    = "http://matplotlib.sourceforge.net/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ yasm ];
 
   meta = with stdenv.lib; {
-    description = "library for encoding H264/AVC video streams";
+    description = "Library for encoding H264/AVC video streams";
     homepage    = http://www.videolan.org/developers/x264.html;
     license     = licenses.gpl2;
     platforms   = platforms.unix;

@@ -17,7 +17,7 @@ rec {
   '') ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
 
   meta = {
-    description = "the moderncv class for TeXLive";
+    description = "The moderncv class for TeXLive";
     # Actually, arch-independent..
     hydraPlatforms = [];
   };

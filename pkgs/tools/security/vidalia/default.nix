@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/projects/vidalia.html.en;
     repositories.git = https://git.torproject.org/vidalia;
-    description = "a cross-platform graphical controller for the Tor software, built using the Qt framework";
+    description = "A cross-platform graphical controller for the Tor software, built using the Qt framework";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.phreedom ];
     platforms = platforms.all;

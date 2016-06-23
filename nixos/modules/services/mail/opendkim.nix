@@ -101,7 +101,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.opendkim}/bin/opendkim ${concatMapStringsSep " " escapeShellArg args}";
+        ExecStart = "${pkgs.opendkim}/bin/opendkim ${escapeShellArgs args}";
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";

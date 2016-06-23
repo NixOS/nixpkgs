@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       --replace "isnan(" "std::isnan(" --replace "isinf(" "std::isinf("
     sed '1i#include <cmath>' -i Sources/Client/{Player,Client_Input,Corpse}.cpp \
       -i Sources/Draw/SWMapRenderer.cpp
+    sed '1i#include <math.h>' -i Sources/Draw/SWFeatureLevel.h
   '';
 
   nativeBuildInputs = 

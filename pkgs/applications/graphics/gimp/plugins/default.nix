@@ -174,7 +174,7 @@ rec {
       installPhase = "installPlugins gmic_gimp";
 
       meta = {
-        description = "script language for image processing which comes with its open-source interpreter";
+        description = "Script language for image processing which comes with its open-source interpreter";
         homepage = http://gmic.eu/gimp.shtml;
         license = stdenv.lib.licenses.cecill20;
         /*

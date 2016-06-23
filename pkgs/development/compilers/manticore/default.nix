@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   inherit stdenv coreutils autoconf automake smlnj;
 
   meta = {
-    description = "a parallel, pure variant of Standard ML";
+    description = "A parallel, pure variant of Standard ML";
 
     longDescription = '' 
       Manticore is a high-level parallel programming language aimed at

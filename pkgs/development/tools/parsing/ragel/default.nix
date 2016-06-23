@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.complang.org/ragel;
     description = "State machine compiler";
     license = licenses.gpl2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };
 }

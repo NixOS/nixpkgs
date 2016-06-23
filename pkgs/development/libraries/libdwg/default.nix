@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ indent ];
 
   meta = {
-    description = "library reading dwg files";
+    description = "Library reading dwg files";
     homepage = http://libdwg.sourceforge.net/en/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [stdenv.lib.maintainers.marcweber];

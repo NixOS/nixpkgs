@@ -111,15 +111,17 @@ in
 
     fileSystems = mkOption {
       default = {};
-      example = {
-        "/".device = "/dev/hda1";
-        "/data" = {
-          device = "/dev/hda2";
-          fsType = "ext3";
-          options = [ "data=journal" ];
-        };
-        "/bigdisk".label = "bigdisk";
-      };
+      example = literalExample ''
+        {
+          "/".device = "/dev/hda1";
+          "/data" = {
+            device = "/dev/hda2";
+            fsType = "ext3";
+            options = [ "data=journal" ];
+          };
+          "/bigdisk".label = "bigdisk";
+        }
+      '';
       type = types.loaOf types.optionSet;
       options = [ fileSystemOpts ];
       description = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "multi-use cryptographic tool based on the STRIBOB algorithm";
+    description = "Multi-use cryptographic tool based on the STRIBOB algorithm";
     homepage    = "https://www.stribob.com/stricat/";
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.unix;
