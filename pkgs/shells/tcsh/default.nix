@@ -6,10 +6,15 @@ stdenv.mkDerivation rec {
   version = "6.19.00";
   
   src = fetchurl {
-    urls = [ "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${name}.tar.gz"
-             "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${name}.tar.gz" ];
+    urls = [ 
+             "http://ftp.funet.fi/pub/mirrors/ftp.astron.com/pub/tcsh/${name}.tar.gz" 
+             "ftp://ftp.astron.com/pub/tcsh/${name}.tar.gz" 
+             "ftp://ftp.funet.fi/pub/unix/shells/tcsh/${name}.tar.gz"
+             ];
     sha256 = "0jaw51382pqyb6d1kgfg8ir0wd3p5qr2bmg8svcmjhlyp3h73qhj";
   };
+
+  patches = [ ./avoid-gcc5-wrong-optimisation.patch ];
   
   buildInputs = [ ncurses ];
 
