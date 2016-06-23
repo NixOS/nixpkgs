@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "datamash-${version}";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/datamash/${name}.tar.gz";
-    sha256 = "0y49zaadzirghy4xfajvsv1f5x805cjp61z212ggipx5243302qs";
+    url = "mirror://gnu/datamash/${name}.tar.gz";
+    sha256 = "1c2bj0jrm4fxkf0ykxkzgyk1l9s0idqm8rbzmk3n9pgldb4arrd9";
   };
 
   meta = with stdenv.lib; {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/datamash/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub vrthra ];
   };
 
 }
