@@ -1,11 +1,11 @@
 { callPackage, fetchurl, autoreconfHook, ... } @ args:
 
 callPackage ./generic.nix (args // rec {
-  version = "3.4.13";
+  version = "3.5.1";
 
   src = fetchurl {
-    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.4/gnutls-${version}.tar.xz";
-    sha256 = "0naqs9g5b577j1j7q55ma1vcn78jl2d98h3zrl5rh997wzl8cczx";
+    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/gnutls-${version}.tar.xz";
+    sha256 = "1gdxr1p1sigigwvangqf3v31i8fda07d6ngawykarhr7ls00yjmw";
   };
 
   # This fixes some broken parallel dependencies
