@@ -97,7 +97,6 @@ with lib;
                     type = types.str;
                     default = "Monospace 8";
                     description = ''
-                        Font
                     '';
                 };
 
@@ -105,15 +104,6 @@ with lib;
                     type = types.bool;
                     default = false;
                     description = ''
-                        Allow a small subset of html markup:
-                          <literal><b>bold</b></literal>
-                          <literal><i>italic</i></literal>
-                          <literal><s>strikethrough</s></literal>
-                          <literal><u>underline</u></literal>
-                        For a complete reference see
-                        <link xlink:href="http://developer.gnome.org/pango/stable/PangoMarkupFormat.html"/>.
-                        If markup is not allowed, those tags will be stripped
-                        out of the message.
                     '';
                 };
 
@@ -121,14 +111,6 @@ with lib;
                     type = types.str;
                     default = ''<b>%s</b>\n%b'';
                     description = ''
-                        The format of the message.  Possible variables are:
-                          <literal>%a</literal> appname
-                          <literal>%s</literal> summary
-                          <literal>%b</literal> body
-                          <literal>%i</literal> iconname (including its path)
-                          <literal>%I</literal> iconname (without its path)
-                          <literal>%p</literal> progress value if set ([  0%] to [100%]) or nothing
-                        Markup is allowed
                     '';
                 };
 
@@ -136,7 +118,6 @@ with lib;
                     type = types.bool;
                     default = true;
                     description = ''
-                        Sort messages by urgency.
                     '';
                 };
 
@@ -144,8 +125,6 @@ with lib;
                     type = types.bool;
                     default = true;
                     description = ''
-                        Show how many messages are currently hidden (because of
-                        geometry).
                     '';
                 };
 
@@ -153,11 +132,6 @@ with lib;
                     type = types.str;
                     default = "right";
                     description = ''
-                        Alignment of message text.
-                        Possible values are
-                        <literal>"left"</literal>,
-                        <literal>"center</literal>" and
-                        <literal>"right</literal>".
                     '';
                 };
 
@@ -165,11 +139,6 @@ with lib;
                     type = types.int;
                     default = 0;
                     description = ''
-                        The frequency with wich text that is longer than the
-                        notification window allows bounces back and forth.
-                        This option conflicts with
-                        <literal>"word_wrap"</literal>.
-                        Set to 0 to disable.
                     '';
                 };
 
@@ -177,9 +146,6 @@ with lib;
                     type = types.int;
                     default = 0;
                     description = ''
-                        Show age of message if message is older than
-                        show_age_threshold seconds.
-                        Set to -1 to disable.
                     '';
                 };
 
@@ -187,8 +153,6 @@ with lib;
                     type = types.bool;
                     default = true;
                     description = ''
-                        Split notifications into multiple lines if they don't
-                        fit into geometry.
                     '';
                 };
 
@@ -196,8 +160,6 @@ with lib;
                     type = types.bool;
                     default = false;
                     description = ''
-                        Ignore newlines <literal>'\n'</literal> in
-                        notifications.
                     '';
                 };
 
@@ -205,20 +167,6 @@ with lib;
                     type = types.str;
                     default = "320x5-3+19";
                     description = ''
-                        The geometry of the window:
-                          [{width}]x{height}[+/-{x}+/-{y}]
-                        The geometry of the message window.
-                        The height is measured in number of notifications
-                        everything else in pixels. If the width is omitted but
-                        the height is given ("-geometry x2"), the message window
-                        expands over the whole screen (dmenu-like). If width is
-                        0, the window expands to the longest message displayed.
-                        A positive x is measured from the left, a negative from
-                        the right side of the screen. Y is measured from the top
-                        and down respectevly.
-                        The width can be negative. In this case the actual width
-                        is the screen width minus the width defined in within
-                        the geometry option.
                     '';
                 };
 
@@ -226,8 +174,6 @@ with lib;
                     type = types.bool;
                     default = false;
                     description = ''
-                        Shrink window if it's smaller than the width.  Will be
-                        ignored if width is 0.
                     '';
                 };
 
@@ -235,9 +181,6 @@ with lib;
                     type = types.int;
                     default = 0;
                     description = ''
-                        The transparency of the window.  Range: [0; 100].
-                        This option will only work if a compositing
-                        windowmanager is present (e.g. xcompmgr, compiz, etc.).
                     '';
                 };
 
@@ -245,9 +188,6 @@ with lib;
                     type = types.int;
                     default = 120;
                     description = ''
-                        Don't remove messages, if the user is idle (no mouse or
-                        keyboard input) for longer than idle_threshold seconds.
-                        Set to 0 to disable.
                     '';
                 };
 
@@ -255,7 +195,6 @@ with lib;
                     type = types.int;
                     default = 0;
                     description = ''
-                        Which monitor should the notifications be displayed on.
                     '';
                 };
 
@@ -263,19 +202,6 @@ with lib;
                     type = types.str;
                     default = "mouse";
                     description = ''
-                        Display notification on focused monitor.  Possible modes
-                        are:
-                          mouse: follow mouse pointer
-                          keyboard: follow window with keyboard focus
-                          none: don't follow anything
-
-                        "keyboard" needs a windowmanager that exports the
-                        _NET_ACTIVE_WINDOW property.
-                        This should be the case for almost all modern
-                        windowmanagers.
-
-                        If this option is set to mouse or keyboard, the monitor
-                        option will be ignored.
                     '';
                 };
 
@@ -283,8 +209,6 @@ with lib;
                     type = types.bool;
                     default = true;
                     description = ''
-                        Should a notification popped up from history be sticky
-                        or timeout as if it would normally do.
                     '';
                 };
 
@@ -292,7 +216,6 @@ with lib;
                     type = types.int;
                     default = 20;
                     description = ''
-                        Maximum amount of notifications kept in history
                     '';
                 };
 
@@ -300,7 +223,6 @@ with lib;
                     type = types.bool;
                     default = true;
                     description = ''
-                        Display indicators for URLs (U) and actions (A).
                     '';
                 };
 
@@ -308,10 +230,6 @@ with lib;
                     type = types.int;
                     default = 0;
                     description = ''
-                        The height of a single line.  If the height is smaller
-                        than the font height, it will get raised to the font
-                        height.
-                        This adds empty space above and under the text.
                     '';
                 };
 
@@ -319,9 +237,6 @@ with lib;
                     type = types.int;
                     default = 2;
                     description = ''
-                        Draw a line of "separatpr_height" pixel height between
-                        two notifications.
-                        Set to 0 to disable.
                     '';
                 };
 
@@ -329,7 +244,6 @@ with lib;
                     type = types.int;
                     default = 8;
                     description = ''
-                        Padding between text and separator.
                     '';
                 };
 
@@ -337,7 +251,6 @@ with lib;
                     type = types.int;
                     default = 8;
                     description = ''
-                        Horizontal padding.
                     '';
                 };
 
@@ -345,12 +258,6 @@ with lib;
                     type = types.str;
                     default = "frame";
                     description = ''
-                        Define a color for the separator.
-                        possible values are:
-                         * auto: dunst tries to find a color fitting to the background;
-                         * foreground: use the same color as the foreground;
-                         * frame: use the same color as the frame;
-                         * anything else will be interpreted as a X color.
                     '';
                 };
 
@@ -358,9 +265,6 @@ with lib;
                     type = types.bool;
                     default = false;
                     description = ''
-                        Print a notification on startup.
-                        This is mainly for error detection, since dbus
-                        (re-)starts dunst automatically after a crash.
                     '';
                 };
 
@@ -368,7 +272,6 @@ with lib;
                     type = types.nullOr types.str;
                     default = null;
                     description = ''
-                        dmenu path.
                     '';
                 };
 
@@ -376,7 +279,6 @@ with lib;
                     type = types.nullOr types.str;
                     default = null;
                     description = ''
-                        Browser for opening urls in context menu.
                     '';
                 };
 
@@ -384,7 +286,6 @@ with lib;
                     type = types.str;
                     default = "off";
                     description = ''
-                        Align icons left/right/off
                     '';
                 };
 
@@ -392,7 +293,6 @@ with lib;
                     type = types.nullOr types.path;
                     default = null;
                     description = ''
-                        Paths to default icons.
                     '';
                 };
 
@@ -421,7 +321,6 @@ with lib;
                     type = types.str;
                     default = "ctrl+space";
                     description = ''
-                        Close notification.
                     '';
                 };
 
@@ -436,9 +335,6 @@ with lib;
                     type = types.str;
                     default = "ctrl+Escape";
                     description = ''
-                        Redisplay last message(s).
-                        On the US keyboard layout "grave" is normally above TAB
-                        and left of "1".
                     '';
                 };
 
@@ -446,7 +342,6 @@ with lib;
                     type = types.str;
                     default = "ctrl+shift+period";
                     description = ''
-                        Context menu.
                     '';
                 };
 
