@@ -24753,14 +24753,8 @@ in {
     };
   };
 
-  toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.8.0";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "e8451af61face57b7c5d09e71c0d27b8005f001ead56e9fdf470417e5cc6d479";
-    };
+  toolz = buildPyPIPackage rec{
+    name = "toolz";
 
     buildInputs = with self; [ nose ];
 
