@@ -29,7 +29,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject
+    pillow pygtk pygobject rencode
   ];
 
   preBuild = ''
