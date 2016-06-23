@@ -739,6 +739,8 @@ in
     asciidoc = asciidoc-full;
   };
 
+  dislocker = callPackage ../tools/filesystems/dislocker { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
