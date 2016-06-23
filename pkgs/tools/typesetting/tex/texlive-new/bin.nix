@@ -64,6 +64,12 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
+  postPatch = ''
+    for i in texk/kpathsea/mktex*; do
+      sed -i '/^mydir=/d' "$i"
+    done
+  '';
+
   preConfigure = ''
     rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
       libs/{mpfr,pixman,poppler,potrace,xpdf,zlib,zziplib}
