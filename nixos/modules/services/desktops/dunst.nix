@@ -427,6 +427,7 @@ with lib;
 
         systemd.services.dunst = {
             description = "Dunst Daemon";
+            after       = [ "multi-user.target" ];
             wants       = [ "graphical.target" ];
 
             serviceConfig = {
