@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "./";
 
   unpackCmd = ''
-    ttfName=$(basename $(stripHash $curSrc; echo $strippedName))
+    ttfName=$(baseHash $curSrc)
     cp $curSrc ./$ttfName
   '';
 

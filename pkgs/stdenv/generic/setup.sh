@@ -484,8 +484,7 @@ dumpVars() {
 }
 
 
-# Utility function: return the base name of the given path, with the
-# prefix `HASH-' removed, if present.
+# DEPRECATED, use baseHash - 2016-06-23
 stripHash() {
     strippedName=$(basename $1);
     if echo "$strippedName" | grep -q '^[a-z0-9]\{32\}-'; then
@@ -493,6 +492,14 @@ stripHash() {
     fi
 }
 
+# Print NAME with any leading directory components and hash removed. 
+# If specified, also remove a trailing SUFFIX.
+#
+# Usage: baseHash NAME [SUFFIX]
+# Usage: baseName -a [-s SUFFIX] NAME...
+baseHash() {
+  basename "$@" | sed -s 's/^[a-z0-9]\{32\}-//g'
+}
 
 unpackCmdHooks+=(_defaultUnpack)
 _defaultUnpack() {
