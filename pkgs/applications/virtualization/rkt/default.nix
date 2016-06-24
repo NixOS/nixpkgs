@@ -8,7 +8,7 @@ let
   coreosImageSystemdVersion = "229";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
-  stage1Flavours = [ "coreos" "fly" "host" ];
+  stage1Flavours = [ "coreos" "fly" ];
 
 in stdenv.mkDerivation rec {
   version = "1.9.1";
