@@ -1,5 +1,4 @@
-{ system, bootStdenv, noSysDirs, gccWithCC, gccWithProfiling
-, config, crossSystem, platform, lib
+{ system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
 , pkgsWithOverrides
 , ... }:
 self: pkgs:
@@ -43,11 +42,10 @@ in
   overridePackages = f: pkgsWithOverrides f;
 
   # Override system. This is useful to build i686 packages on x86_64-linux.
-  forceSystem = system: kernel: (import ./../..) {
+  forceSystem = system: kernel: (import ../..) {
     inherit system;
     platform = platform // { kernelArch = kernel; };
-    inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem;
+    inherit bootStdenv noSysDirs config crossSystem;
   };
 
   # Used by wine, firefox with debugging version of Flash, ...
@@ -470,6 +468,8 @@ in
 
   apg = callPackage ../tools/security/apg { };
 
+  autorevision = callPackage ../tools/misc/autorevision { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -670,8 +670,6 @@ in
   };
 
   gcdemu = callPackage ../misc/emulators/cdemu/gui.nix { };
-
-  certificate-transparency = callPackage ../servers/certificate-transparency { };
 
   image-analyzer = callPackage ../misc/emulators/cdemu/analyzer.nix { };
 
@@ -921,7 +919,8 @@ in
       DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
-      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter;
+      UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
+      ClassAccessor TextRoman DataUniqid;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -2216,6 +2215,36 @@ in
 
   netdata = callPackage ../tools/system/netdata { };
 
+  netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
+
+    buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
+
+    libwapcaplet = callPackage ../applications/misc/netsurf/libwapcaplet { };
+
+    nsgenbind = callPackage ../applications/misc/netsurf/nsgenbind { };
+
+    libparserutils = callPackage ../applications/misc/netsurf/libparserutils { };
+
+    libcss = callPackage ../applications/misc/netsurf/libcss { };
+
+    libhubbub = callPackage ../applications/misc/netsurf/libhubbub { };
+
+    libdom = callPackage ../applications/misc/netsurf/libdom { };
+
+    libnsbmp = callPackage ../applications/misc/netsurf/libnsbmp { };
+
+    libnsgif = callPackage ../applications/misc/netsurf/libnsgif { };
+
+    libnsfb = callPackage ../applications/misc/netsurf/libnsfb { };
+
+    libnsutils = callPackage ../applications/misc/netsurf/libnsutils { };
+
+    libutf8proc = callPackage ../applications/misc/netsurf/libutf8proc { };
+
+    browser = callPackage ../applications/misc/netsurf/browser { };
+
+  });
+
   netperf = callPackage ../applications/networking/netperf { };
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
@@ -2589,7 +2618,7 @@ in
   netselect = callPackage ../tools/networking/netselect { };
 
   # stripped down, needed by steam
-  networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8.nix { };
+  networkmanager098 = callPackage ../tools/networking/network-manager/0.9.8 { };
 
   networkmanager = callPackage ../tools/networking/network-manager { };
 
@@ -3946,9 +3975,9 @@ in
     # load into the Ben Nanonote
     gccCross =
       let
-        pkgsCross = (import ./../..) {
+        pkgsCross = (import ../..) {
           inherit system;
-          inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
+          inherit bootStdenv noSysDirs config;
           # Ben Nanonote system
           crossSystem = {
             config = "mipsel-unknown-linux";
@@ -10025,6 +10054,8 @@ in
 
   nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};
 
+  nix-tour = callPackage ../applications/misc/nix-tour {};
+
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
 
   nsq = callPackage ../servers/nsq { };
@@ -11585,6 +11616,11 @@ in
 
   faba-mono-icons = callPackage ../data/icons/faba-mono-icons { };
 
+  emojione = callPackage ../data/fonts/emojione {
+    inherit (nodePackages) svgo;
+    inherit (pythonPackages) scfbuild;
+  };
+
   fantasque-sans-mono = callPackage ../data/fonts/fantasque-sans-mono {};
 
   fira = callPackage ../data/fonts/fira { };
@@ -13122,6 +13158,8 @@ in
 
   inferno = callPackage_i686 ../applications/inferno { };
 
+  inginious = callPackage ../servers/inginious {};
+
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) python pyxml lxml numpy;
     lcms = lcms2;
@@ -14270,8 +14308,13 @@ in
   stp = callPackage ../applications/science/logic/stp {};
 
   stumpwm = callPackage ../applications/window-managers/stumpwm {
+    version = "latest";
     sbcl = sbcl_1_2_5;
     lispPackages = lispPackagesFor (wrapLisp sbcl_1_2_5);
+  };
+
+  stumpwm-git = stumpwm.override {
+    version = "git";
   };
 
   sublime = callPackage ../applications/editors/sublime { };
@@ -15852,6 +15895,9 @@ in
 
   numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
 
+  # We need QtWebkit which was deprecated in Qt 5.6 although it can still be build
+  trojita = with qt55; callPackage ../applications/networking/mailreaders/trojita { };
+
   kde5PackagesFun = self: with self; {
 
     calamares = callPackage ../tools/misc/calamares rec {
@@ -16934,10 +16980,11 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wine = callPackage ../misc/emulators/wine {
+  wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
-    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+  };
+  wine = lowPrio (self.wineMinimal.override {
     pngSupport = true;
     jpegSupport = true;
     tiffSupport = true;
@@ -16946,30 +16993,21 @@ in
     alsaSupport = true;
     openglSupport = true;
     tlsSupport = true;
-    cursesSupport = true;
-  };
-  wineMinimal = lowPrio (self.wine.override {
-    pulseaudioSupport = false;
-    pngSupport = false;
-    jpegSupport = false;
-    tiffSupport = false;
-    gettextSupport = false;
-    fontconfigSupport = false;
-    alsaSupport = false;
-    openglSupport = false;
-    tlsSupport = false;
-    cursesSupport = false;
-  });
-  wineFull = lowPrio (self.wine.override {
-    gtkSupport = true;
-    gstreamerSupport = true;
     cupsSupport = true;
     colorManagementSupport = true;
     dbusSupport = true;
     mpg123Support = true;
     openalSupport = true;
-    openclSupport = true;
     cairoSupport = true;
+    cursesSupport = true;
+    pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
+    xineramaSupport = true;
+    xmlSupport = true;
+  });
+  wineFull = lowPrio (self.wine.override {
+    gtkSupport = true;
+    gstreamerSupport = true;
+    openclSupport = true;
     odbcSupport = true;
     netapiSupport = true;
     vaSupport = true;
@@ -16980,8 +17018,6 @@ in
     gphoto2Support = true;
     ldapSupport = true;
     pulseaudioSupport = true;
-    xineramaSupport = true;
-    xmlSupport = true;
   });
   wineStable = self.wine.override { wineRelease = "stable"; };
   wineUnstable = lowPrio (self.wine.override { wineRelease = "unstable"; });
@@ -17083,4 +17119,6 @@ in
   imatix_gsl = callPackage ../development/tools/imatix_gsl {};
 
   iterm2 = callPackage ../applications/misc/iterm2 {};
+
+  sequelpro = callPackage ../applications/misc/sequelpro {};
 }

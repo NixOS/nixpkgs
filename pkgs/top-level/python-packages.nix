@@ -2059,11 +2059,11 @@ in modules // {
 
   cornice = buildPythonPackage rec {
     name = "cornice-${version}";
-    version = "0.17.0";
+    version = "1.2.1";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/cornice.git;
       rev = "refs/tags/${version}";
-      sha256 = "11xgf7mddq9gm3yag61zj8hj2kgsgabrnzwn2zpfj37xp1p0pky7";
+      sha256 = "0688vrkl324jmpi8jkjh1s8nsyjinw149g3x8qlis8vz6j6a01wv";
     };
 
     propagatedBuildInputs = with self; [ pyramid simplejson ];
@@ -4313,11 +4313,11 @@ in modules // {
   };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-1.5.2";
+    name = "cffi-1.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cffi/${name}.tar.gz";
-      sha256 = "1p91p1n8n46y0k3q7ddgxxjnfh08rjqsjh7zbjxzfiifhycxx6ys";
+      sha256 = "1pv0pf38h375r581zyckb1d2phcgkszsx2n6354g6qc3zmmdvmbf";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -6967,19 +6967,31 @@ in modules // {
     };
   };
 
-  lti = buildPythonPackage rec {
-    version = "0.4.0";
+  lti = let
+    self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
+    mock_1_0_1 = self'.mock.overrideDerivation (_: rec {
+      name = "mock-1.0.1";
+      propagatedBuildInputs = null;
+      src = pkgs.fetchurl {
+        url = "http://pypi.python.org/packages/source/m/mock/${name}.tar.gz";
+        sha256 = "0kzlsbki6q0awf89rc287f3aj8x431lrajf160a70z0ikhnxsfdq";
+      };
+    });
+  in buildPythonPackage rec {
+    version = "0.4.1";
     name = "PyLTI-${version}";
 
+    disabled = !isPy27;
+
     propagatedBuildInputs = with self; [ httplib2 oauth oauth2 semantic-version ];
-    buildInputs = with self; [
+    buildInputs = with self'; [
       flask httpretty oauthlib pyflakes pytest pytestcache pytestcov covCore
-      pytestflakes pytestpep8 sphinx mock
+      pytestflakes pytestpep8 sphinx mock_1_0_1
     ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyLTI/${name}.tar.gz";
-      sha256 = "1lkk6qx8yfx1h0rhi4abnd44x0wakggi6zs0nvi572lajf6ydmdh";
+      sha256 = "076llj10j85zw3zq2gygx2pcfqi9rgcld5m4vq1iai1fk15x60fz";
     };
 
     meta = {
@@ -7603,17 +7615,12 @@ in modules // {
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.5.7";
+    name = "pyramid-1.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid/${name}.tar.gz";
-      sha256 = "1d29fj86724z68zcj9ximl2nrn34pflrlr6v9mwyhcv8rdf2sc61";
+      sha256 = "161qacv7qqln3q02kcqll0q2mmaypm701hn1llwdwnkaywkb3xi6";
     };
-
-    preCheck = ''
-      # this will be fixed for 1.6 release, see https://github.com/Pylons/pyramid/issues/1405
-      rm pyramid/tests/test_response.py
-    '';
 
     buildInputs = with self; [
       docutils
@@ -7765,11 +7772,11 @@ in modules // {
 
   pyramid_multiauth = buildPythonPackage rec {
     name = "pyramid_multiauth-${version}";
-    version = "0.3.2";
+    version = "0.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_multiauth/${name}.tar.gz";
-      sha256 = "c33f357e0a216cd6ef7d143d40d4679c9fb0796a1eabaf1249aeef63ed000828";
+      sha256 = "1lq292qakrm4ixi4vaif8dqywzj08pn6qy0wi4gw28blh39p0msk";
     };
 
     propagatedBuildInputs = with self; [ pyramid ];
@@ -11179,70 +11186,6 @@ in modules // {
     };
   };
 
-  inginious = let
-    # patched version of docker bindings.
-    docker-custom = self.docker.override {
-      name = "docker-1.3.0-dirty";
-      src = pkgs.fetchFromGitHub {
-        owner = "GuillaumeDerval";
-        repo = "docker-py";
-        # tip of branch "master"
-        rev = "966becd0af514e67de5afbf885257a5005e49626";
-        sha256 = "09k41dh86cbb7z4b8926fi5b2qq670mm6agl5py3giacakrap66c";
-      };
-    };
-
-    webpy-custom = self.web.override {
-      name = "web.py-INGI";
-      src = pkgs.fetchFromGitHub {
-        owner = "UCL-INGI";
-        repo = "webpy-INGI";
-        # tip of branch "ingi"
-        rev = "f487e78d65d6569eb70003e588d5c6ace54c384f";
-        sha256 = "159vwmb8554xk98rw380p3ah170r6gm861r1nqf2l452vvdfxscd";
-      };
-    };
-   in buildPythonPackage rec {
-    version = "0.3a2.dev0";
-    name = "inginious-${version}";
-
-    disabled = isPy3k;
-
-    patchPhase = ''
-      # transient failures
-      substituteInPlace inginious/backend/tests/TestRemoteAgent.py \
-        --replace "test_update_task_directory" "noop"
-    '';
-
-    propagatedBuildInputs = with self; [
-      requests2
-      cgroup-utils docker-custom docutils lti mock pygments
-      pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
-      websocket_client watchdog webpy-custom
-    ];
-
-    buildInputs = with self; [ nose selenium virtual-display ];
-
-    /* Hydra fix exists only on github for now.
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/I/INGInious/INGInious-${version}.tar.gz";
-      md5 = "40474dd6b6d4fc26e47a1d9c77bcf943";
-    };
-    */
-    src = pkgs.fetchFromGitHub {
-      owner = "UCL-INGI";
-      repo = "INGInious";
-      rev = "e019a0e28c442b4201ec4a0be2a816c4ab639683";
-      sha256 = "1pwbm7f7xn50rxzwrqpji58n2ami5r3lgbdpb61q0w3dwkxvvvfk";
-    };
-
-    meta = {
-      description = "An intelligent grader that allows secured and automated testing of code made by students";
-      homepage = "https://github.com/UCL-INGI/INGInious";
-      license = licenses.agpl3;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
 
   interruptingcow = buildPythonPackage rec {
     name = "interruptingcow-${version}";
@@ -16948,10 +16891,10 @@ in modules // {
 
   prompt_toolkit = buildPythonPackage rec {
     name = "prompt_toolkit-${version}";
-    version = "1.0.2";
+    version = "1.0.3";
 
     src = pkgs.fetchurl {
-      sha256 = "00cc0lr8hj3pgn2jy9z7b4hrrfj53axa8yfbyds86xqbsvw0w3jj";
+      sha256 = "18lbmmkyjf509klc3217lq0x863pfzix779zx5kp9lms1iph4pl0";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
     checkPhase = ''
@@ -22117,16 +22060,18 @@ in modules // {
   };
 
   structlog = buildPythonPackage rec {
-    name = "structlog-15.3.0";
+    name = "structlog-16.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/structlog/${name}.tar.gz";
-      sha256 = "1h9qz4fsd7ph8rf80rqmlyj2q54xapgrmkpnyca01w1z8ww6f9w7";
+      sha256 = "00dywyg3bqlkrmbrfrql21hpjjjkc4zjd6xxjyxyd15brfnzlkdl";
     };
 
     buildInputs = with self; [ pytest pretend freezegun ];
+    propagatedBuildInputs = with self; [ simplejson ];
 
     checkPhase = ''
+      rm tests/test_twisted.py*
       py.test
     '';
 
@@ -25067,13 +25012,13 @@ in modules // {
 
 
   ujson = buildPythonPackage rec {
-    name = "ujson-1.33";
+    name = "ujson-1.35";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/u/ujson/${name}.zip";
-      sha256 = "68cf825f227c82e1ac61e423cfcad923ff734c27b5bdd7174495d162c42c602b";
+      url = "mirror://pypi/u/ujson/${name}.tar.gz";
+      sha256 = "11jz5wi7mbgqcsz52iqhpyykiaasila4lq8cmc2d54bfa3jp6q7n";
     };
 
     meta = {
@@ -25517,13 +25462,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.3.3";
+    version = "1.3.5";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0jhf1h4zdysxf5mj769l5ddcbs5j3mzj4sdy8gp4kbj4imwaws5a";
+      sha256 = "1hm5dzrv03m77026xccxiiq6abqpzci277gvhhsqmlbzcdbqll50";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

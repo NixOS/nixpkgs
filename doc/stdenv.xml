@@ -1196,10 +1196,24 @@ echo @foo@
     <term><function>stripHash</function>
     <replaceable>path</replaceable></term>
     <listitem><para>Strips the directory and hash part of a store
-    path, and prints (on standard output) only the name part.  For
-    instance, <literal>stripHash
-    /nix/store/68afga4khv0w...-coreutils-6.12</literal> print
-    <literal>coreutils-6.12</literal>.</para></listitem>
+    path, storing the name part in the environment variable
+    <literal>strippedName</literal>. For example:
+    
+<programlisting>
+stripHash "/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
+# prints coreutils-8.24
+echo $strippedName
+</programlisting>
+
+    If you wish to store the result in another variable, then the
+    following idiom may be useful:
+    
+<programlisting>
+name="/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
+someVar=$(stripHash $name; echo $strippedName)
+</programlisting>
+
+    </para></listitem>
   </varlistentry>
 
   

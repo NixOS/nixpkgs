@@ -285,8 +285,9 @@ let
       meta = with stdenv.lib; {
         description = "An HTML-embedded scripting language";
         homepage = http://www.php.net/;
-        license = stdenv.lib.licenses.php301;
+        license = licenses.php301;
         maintainers = with maintainers; [ globin ];
+        platforms = platforms.all;
       };
 
       patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
@@ -310,8 +311,8 @@ in {
   };
 
   php70 = generic {
-    version = "7.0.7";
-    sha256 = "06ixiaqqndvancqy5xmnzpscd77z2ixv3yrsdq0r8avqqhjjjks7";
+    version = "7.0.8";
+    sha256 = "13bww8qz35crj3s2kzl50lqy28m83xms1qrz66qhf3j9i2ippp36";
   };
 
 }

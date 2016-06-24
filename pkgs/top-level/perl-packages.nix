@@ -2698,10 +2698,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   CryptX = buildPerlPackage rec {
-    name = "CryptX-0.036";
+    name = "CryptX-0.037";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIK/${name}.tar.gz";
-      sha256 = "9b740a592843c48a437f5e2b434cee38382e93a9112d2331a76ed7b865d0d520";
+      sha256 = "ae09e6449efb2a9bc661ffeba613c7452367bdcb13c1ee346af0f72c9803404d";
     };
     propagatedBuildInputs = [ JSONMaybeXS ];
     meta = {
@@ -3539,10 +3539,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   DBIxClass = buildPerlPackage rec {
-    name = "DBIx-Class-0.082821";
+    name = "DBIx-Class-0.082840";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RI/RIBASUSHI/${name}.tar.gz";
-      sha256 = "1picibywz5sdpaa1pmbv7xfw52nbz6fh32afb1p2qwsgzbkhqvnw";
+      sha256 = "4049afd175e315ebcab945b19030aec40bcec46cc5611b0286a5a267ca7181ef";
     };
     buildInputs = [ DBDSQLite PackageStash SQLTranslator TestDeep TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction HashMerge MROCompat ModuleFind Moo PathClass SQLAbstract ScopeGuard SubName TryTiny namespaceclean ];
@@ -7614,10 +7614,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999723";
+    name = "Math-BigInt-1.999724";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "c67da3fdc18f6f6127b13d10f0b2d482c431b0c10d9239ace8481cdf7136f0c9";
+      sha256 = "3e0c6e1c58fb89987a20da5ec8027d078a4e1d47211b86db4b75c2e1293d96f7";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -8289,10 +8289,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Moo = buildPerlPackage rec {
-    name = "Moo-2.001001";
+    name = "Moo-2.002002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "a68155b642f389cb1cc40139e2663d0c5d15eb71d9ecb0961623a73c10dd8ec0";
+      sha256 = "5e684e216ebd4531f5fa69d97fa4911344abcb5e2f7f8c240240ec03fa2c5eff";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny ];
@@ -8588,10 +8588,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MooseXGetopt = buildPerlPackage rec {
-    name = "MooseX-Getopt-0.70";
+    name = "MooseX-Getopt-0.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/${name}.tar.gz";
-      sha256 = "b9a95b01db3a6abf5e9a1cdbb6e283411649c8d279819cbe903bf4a662106194";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "de18f8ea0a5650cbbdebecb8f4c028f5f951fc5698332f7b8e20c7874902c259";
     };
     buildInputs = [ ModuleBuildTiny ModuleRuntime Moose PathTiny TestDeep TestFatal TestRequires TestTrap TestWarnings self."if" ];
     propagatedBuildInputs = [ GetoptLongDescriptive Moose MooseXRoleParameterized TryTiny namespaceautoclean ];
@@ -12000,10 +12000,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000030";
+    name = "Test2-Suite-0.000032";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "03f2411a8b1a85be8560c25d57f465c812174bc1c062ee79aeb194b018e6b751";
+      sha256 = "96be3607c018a3774acac99b0a47678322ef271e7152cddac7b5a0e9a3de5da3";
     };
     propagatedBuildInputs = [ TestSimple13 ];
     meta = {
@@ -13196,6 +13196,18 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Manual text wrapping and reformatting";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TextRoman = buildPerlPackage rec {
+    name = "Text-Roman-3.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EC/ECALDER/${name}.tar.gz";
+      sha256 = "1ris38kdj15l8l7cl5whdpyyvb0rz8dh9p0w36wgydi3b2pxsa25";
+    };
+    meta = {
+      description = "Allows conversion between Roman and Arabic algarisms";
+      license = stdenv.lib.licenses.bsd3;
     };
   };
 

@@ -12,13 +12,13 @@ let
 in
 buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "046lh9s7lpi19akqxfvr361fp8bwcz48w3sqz1vsy2z59iim9xy3";
+    sha256 = "166y1f74wjkrpks88cp67w33rcs02b4dk815yj93lfla1k9ypg6b";
   };
 
   patches = [ ./matrix-synapse.patch ];
@@ -37,9 +37,10 @@ buildPythonApplication rec {
     mock setuptoolsTrial
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
+    maintainers = [ maintainers.ralith ];
   };
 }
