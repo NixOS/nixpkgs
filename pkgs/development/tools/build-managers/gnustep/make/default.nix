@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace GNUmakefile.in \
       --replace which type \
+      --replace 'override GNUSTEP_CONFIG_FILE = ' 'GNUSTEP_CONFIG_FILE = ' \
       --replace 'tooldir = $(DESTDIR)' 'tooldir = ' \
       --replace 'makedir = $(DESTDIR)' 'makedir = ' \
       --replace 'mandir  = $(DESTDIR)' 'mandir  = '
@@ -23,12 +24,13 @@ stdenv.mkDerivation rec {
       --replace /Library/GNUstep "$out"
   '';
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = "DESTDIR=$(out) GNUSTEP_CONFIG_FILE=$(out)/etc/GNUstep/GNUstep.conf";
 
   postInstall = ''
     mkdir -p $out/nix-support
     cat >$out/nix-support/setup-hook <<EOF
-      . $out/Library/GNUstep/Makefiles/GNUstep.sh
+      export GNUSTEP_CONFIG_FILE=$out/etc/GNUstep/GNUstep.conf
+      . $out/share/GNUstep/Makefiles/GNUstep.sh
     EOF
   '';
 }

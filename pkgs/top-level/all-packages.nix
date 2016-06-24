@@ -4466,6 +4466,15 @@ in
     profiledCompiler = false;
   });
 
+  gobjc = wrapCC (gcc.cc.override {
+    name = "gobjc";
+    langObjC = true;
+    langObjCpp = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
   gcj = gcj49;
   gcj49 = wrapCC (gcc49.cc.override {
     name = "gcj";
@@ -10570,10 +10579,8 @@ in
   };
 
   gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
-  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-    inherit (darwin) libobjc;
-  };
+  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {};
+  gnustep-base = callPackage ../development/tools/build-managers/gnustep/base {};
 
   devicemapper = self.lvm2;
 
