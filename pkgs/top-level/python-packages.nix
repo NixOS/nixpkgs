@@ -12041,6 +12041,30 @@ in modules // {
     };
   };
 
+  # Old version needed for attic (backup program) due to breaking change in
+  # llfuse >= 0.42.
+  llfuse-0-41 = buildPythonPackage rec {
+    name = "llfuse-0.41.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
+      sha256 = "1imlqw9b73086y97izr036f58pgc5akv4ihc2rrf8j5h75jbrlaa";
+    };
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    propagatedBuildInputs = with self; [ contextlib2 ];
+    checkPhase = ''
+      py.test
+    '';
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
+    meta = {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ bjornfor ];
+    };
+  };
+
   locustio = buildPythonPackage rec {
     name = "locustio-0.7.2";
 
