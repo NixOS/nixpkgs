@@ -13654,6 +13654,37 @@ in modules // {
     };
   };
 
+  nilearn = buildPythonPackage rec {
+    version = "0.2.5";
+    name = "nilearn-${version}";
+
+    # package seems to attempt Python 3 compatibility, but throws UnicodeDecodeError when building:
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nilearn/${name}.tar.gz";
+      sha256 = "1lmkrzr5x2yp129v2fvckrbdzf2kpcivdg9cacl519l3mb0acdv9";
+    };
+
+    checkPhase = "nosetests --exclude with_expand_user nilearn/tests";
+
+    buildInputs = with self; [ nose ];
+
+    propagatedBuildInputs = with self; [
+      matplotlib
+      nibabel
+      numpy
+      scikitlearn
+      scipy
+    ];
+
+    meta = {
+      homepage = http://nilearn.github.io;
+      description = "A module for statistical learning on neuroimaging data";
+      license = licenses.bsd3;
+    };
+  };
+
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
