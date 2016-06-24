@@ -35,7 +35,9 @@ buildPythonPackage rec {
     ++ stdenv.lib.optional enableGtk2 pygtk
     ++ stdenv.lib.optionals enableGtk3 [ cairo pycairo gtk3 gobjectIntrospection pygobject3 ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
+  patches =
+    [ ./basedirlist.patch ] ++
+    stdenv.lib.optionals stdenv.isDarwin [ ./darwin-stdenv.patch ];
 
   checkPhase = ''
     ${python.interpreter} tests.py
