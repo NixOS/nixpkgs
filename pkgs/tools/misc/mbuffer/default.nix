@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description  = "mbuffer is a tool for buffering data streams with a large set of unique features";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ tokudan ];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; allBut darwin;
   };
 }
