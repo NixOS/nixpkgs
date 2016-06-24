@@ -15885,6 +15885,8 @@ in
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  htslib = callPackage ../development/libraries/science/biology/htslib { };
+
   neuron = callPackage ../applications/science/biology/neuron { };
 
   neuron-mpi = appendToName "mpi" (neuron.override {
