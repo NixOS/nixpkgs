@@ -16278,6 +16278,8 @@ in
   coqPackages = mkCoqPackages_8_4 coqPackages;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
 
+  cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
+
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
   };
