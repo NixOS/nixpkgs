@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, zlib, htslib,  ncurses ? null }:
+{ stdenv, fetchurl, zlib, htslib }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  pname = "samtools";
+  pname = "bcftools";
   version = "1.3.1";
 
   src = fetchurl {
     url = "https://github.com/samtools/${pname}/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "0znnnxc467jbf1as2dpskrjhfh8mbll760j6w6rdkwlwbqsp8gbc";
+    sha256 = "095ry68vmz9q5s1scjsa698dhgyvgw5aicz24c19iwfbai07mhqj";
   };
 
-  buildInputs = [ zlib ncurses htslib ];
+  buildInputs = [ zlib ];
 
-  configureFlags = [ "--with-htslib=${htslib}" ]
-    ++ stdenv.lib.optional (ncurses == null) "--without-curses";
+  preBuild = ''
+    makeFlagsArray=("HSTDIR=${htslib}" "prefix=$out")
+  '';
 
   meta = with stdenv.lib; {
-    description = "Tools for manipulating SAM/BAM/CRAM format";
+    description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
     license = licenses.mit;
     homepage = http://www.htslib.org/;
     platforms = platforms.unix;
