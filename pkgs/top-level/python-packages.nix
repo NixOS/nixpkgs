@@ -13631,6 +13631,7 @@ in modules // {
     buildInputs = stdenv.lib.optional doCheck [ self.nose ];
 
     propagatedBuildInputs = with self; [
+      matplotlib
       nibabel
       numpy
       scipy
