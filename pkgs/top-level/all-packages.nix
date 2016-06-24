@@ -16359,6 +16359,8 @@ in
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
+  proverif = callPackage ../applications/science/logic/proverif { };
+
   satallax = callPackage ../applications/science/logic/satallax {};
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
