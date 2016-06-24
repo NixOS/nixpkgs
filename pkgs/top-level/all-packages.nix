@@ -16367,6 +16367,8 @@ in
 
   spass = callPackage ../applications/science/logic/spass {};
 
+  statverif = callPackage ../applications/science/logic/statverif { };
+
   tptp = callPackage ../applications/science/logic/tptp {};
 
   twelf = callPackage ../applications/science/logic/twelf {
