@@ -1,0 +1,8 @@
+diff --git a/setup.cfg b/setup.cfg
+new file mode 100644
+index 0000000..6f81985
+--- /dev/null
++++ b/setup.cfg
+@@ -0,0 +1,2 @@
++[directories]
++basedirlist = .
