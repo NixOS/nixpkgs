@@ -1,4 +1,4 @@
-{ fetchurl, python3Packages }:
+{ stdenv, fetchurl, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   name = "errbot-${version}";
@@ -23,6 +23,12 @@ python3Packages.buildPythonPackage rec {
     daemonize pygments-markdown-lexer telegram irc slackclient
     pyside sleekxmpp hypchat
   ];
+
+  meta = with stdenv.lib; {
+    description = "Chatbot designed to be simple to extend with plugins written in Python";
+    homepage = http://errbot.io/;
+    maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl3;
+    platforms = platforms.unix;
+  };
 }
-
-
