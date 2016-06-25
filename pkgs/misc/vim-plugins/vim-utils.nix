@@ -366,6 +366,8 @@ rec {
       '';
     }));
 
+  vim_with_vim2nix = vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; };
+
   buildVimPluginFrom2Nix = a: buildVimPlugin ({
     buildPhase = ":";
     configurePhase =":";

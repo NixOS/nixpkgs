@@ -64,6 +64,10 @@ stdenv.mkDerivation {
       inputFile = ./../pkgs/development/r-modules/README.md;
       outputFile = "languages-frameworks/r.xml";
     }
+  + toDocbook {
+      inputFile = ./languages-frameworks/vim.md;
+      outputFile = "./languages-frameworks/vim.xml";
+    }
   + ''
     echo ${nixpkgsVersion} > .version
 
