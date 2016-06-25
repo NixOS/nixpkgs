@@ -60,6 +60,7 @@ let
       cp ${../../modules/services/misc/taskserver/doc.xml} configuration/taskserver.xml
       cp ${../../modules/security/acme.xml} configuration/acme.xml
       cp ${../../modules/i18n/input-method/default.xml} configuration/input-methods.xml
+      cp ${../../modules/services/editors/emacs.xml} configuration/emacs.xml
       ln -s ${optionsDocBook} options-db.xml
       echo "${version}" > version
     '';
