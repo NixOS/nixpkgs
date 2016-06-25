@@ -13027,6 +13027,8 @@ in
 
   gpsprune = callPackage ../applications/misc/gpsprune { };
 
+  gpxsee = qt5.callPackage ../applications/misc/gpxsee { };
+
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel {
     inherit (gnome2) gtk;
   };
