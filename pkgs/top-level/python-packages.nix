@@ -11978,11 +11978,11 @@ in modules // {
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
-    version = "2015.10.04";
+    version = "2016.05.06";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/limnoria/${name}.tar.gz";
-      sha256 = "1hwwwr0z2vsirgwd92z17nbhnhsz0m25bpxn5sanqlbcjbwhyk9z";
+      sha256 = "09kbii5559d09jjb6cryj8rva1050r54dvb67hlcvxhy8g3gr1y3";
     };
 
     patchPhase = ''
