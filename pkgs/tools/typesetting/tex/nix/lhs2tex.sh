@@ -10,7 +10,7 @@ cd $startDir
 
 lhstex() {
     sourceFile=$1
-    targetName=$out/$(baseHash $sourceFile .lhs).tex
+    targetName=$out/$(basename $(stripHash $sourceFile; echo $strippedName) .lhs).tex
     echo "converting $sourceFile to $targetName..."
     lhs2TeX -o "$targetName" $flags "$sourceFile"
 }
