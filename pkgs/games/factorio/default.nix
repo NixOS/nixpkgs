@@ -1,6 +1,6 @@
 { stdenv, callPackage, fetchurl, makeWrapper
 , alsaLib, libX11, libXcursor, libXinerama, libXrandr, libXi, mesa_noglu
-, releaseType
+, releaseType, mods ? []
 , username ? "" , password ? ""
 }:
 
@@ -59,9 +59,11 @@ let
 
     src = fetch.${arch.inTar}.${releaseType};
 
+    inherit mods;
+
+    preferLocalBuild = true;
     dontBuild = true;
 
-    # TODO detangle headless/normal mode wrapping, libs, etc.  test all urls 32/64/headless/gfx
     installPhase = ''
       mkdir -p $out/{bin,share/factorio}
       cp -a data $out/share/factorio
@@ -69,9 +71,24 @@ let
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         $out/bin/factorio
-    '';
 
-    preferLocalBuild = true;
+      # Symlink mods into data dir to install them, since AFAICT, the mods dir
+      # cannot be relocated into the store via a config setting. If it could,
+      # we would be able to rebuild the top-level set of mods independently of
+      # the game as its own derivation. Then, we could combine these two
+      # derivations via a nixos module that changes only a conf file in the
+      # store. That way, each combination of modset-to-gamerelease would take
+      # up the space of only a new config file in the store.
+      # XXX This is messy because dependencies clobber each other, but works.
+      for mod in $mods; do
+        for zip in $mod/*.zip; do
+          modBase=$(basename $zip)
+	  # I'm tempted to use $(readlink -f $zip) here as dest to canonicalize
+	  # it, but that circumvents the store's deptree.
+          ln -sf $zip $out/share/factorio/data/''${modBase#*-}
+        done
+      done
+    '';
 
     meta = {
       description = "A game in which you build and maintain factories";
