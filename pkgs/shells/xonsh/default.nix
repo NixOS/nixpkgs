@@ -27,10 +27,11 @@ python3Packages.buildPythonApplication rec {
     sed -ie 's|test_ipconfig|_test_ipconfig|g' tests/test_execer.py
     rm tests/test_main.py
     rm tests/test_man.py
+    rm tests/test_replay.py
   '';
 
   checkPhase = ''
-    HOME=$TMPDIR nosetests -x
+    HOME=$TMPDIR XONSH_INTERACTIVE=0 nosetests -x
   '';
 
   buildInputs = with python3Packages; [ glibcLocales nose pytest ];
