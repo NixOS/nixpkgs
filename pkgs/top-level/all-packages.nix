@@ -12584,6 +12584,8 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
+  errbot = callPackage ../applications/networking/errbot { };
+
   espeak = callPackage ../applications/audio/espeak { };
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
