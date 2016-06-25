@@ -19,6 +19,10 @@ rec {
   traceXMLVal = x: trace (builtins.toXML x) x;
   traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
+  # strict trace functions (traced structure is fully evaluated and printed)
+  traceSeq = x: y: trace (builtins.deepSeq x x) y;
+  traceValSeq = v: traceVal (builtins.deepSeq v v);
+
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x : trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
