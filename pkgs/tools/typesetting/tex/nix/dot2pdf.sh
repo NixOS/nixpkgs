@@ -4,7 +4,7 @@ mkdir -p $out
 
 dot2pdf() {
     sourceFile=$1
-    targetName=$out/$(baseHash $sourceFile .dot).pdf
+    targetName=$out/$(basename $(stripHash $sourceFile; echo $strippedName) .dot).pdf
     echo "converting $sourceFile to $targetName..."
     export FONTCONFIG_FILE=$fontsConf
     dot -Tpdf $sourceFile > $targetName
