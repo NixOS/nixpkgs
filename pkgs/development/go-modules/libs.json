@@ -1,5 +1,14 @@
 [
   {
+    "goPackagePath": "github.com/elves/getopt",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/elves/getopt",
+      "rev": "f91a7bf920995832d55a1182f26657bc975b9c24",
+      "sha256": "0wz5dz0iq1b1c2w30mmcgll9xidsrnlvs2906jw9szy0h67310za"
+    }
+  },
+  {
     "goPackagePath": "golang.org/x/sys",
     "fetch": {
       "type": "git",
