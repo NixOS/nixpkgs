@@ -12043,6 +12043,30 @@ in modules // {
     };
   };
 
+  # Old version needed for attic (backup program) due to breaking change in
+  # llfuse >= 0.42.
+  llfuse-0-41 = buildPythonPackage rec {
+    name = "llfuse-0.41.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
+      sha256 = "1imlqw9b73086y97izr036f58pgc5akv4ihc2rrf8j5h75jbrlaa";
+    };
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    propagatedBuildInputs = with self; [ contextlib2 ];
+    checkPhase = ''
+      py.test
+    '';
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
+    meta = {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ bjornfor ];
+    };
+  };
+
   locustio = buildPythonPackage rec {
     name = "locustio-0.7.2";
 
@@ -13601,6 +13625,48 @@ in modules // {
       homepage = http://nipy.org/nibabel/;
       description = "Access a multitude of neuroimaging data formats";
       license = licenses.mit;
+    };
+  };
+
+  nipy = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "nipy-${version}";
+ 
+    disabled = pythonOlder "2.6";
+
+    checkPhase = ''    # wants to be run in a different directory
+      mkdir nosetests
+      cd nosetests
+      ${python.interpreter} -c "import nipy; nipy.test()"
+      rm -rf .
+    '';
+    # failing test:
+    # nipy.algorithms.statistics.models.tests.test_olsR.test_results(11.593139639404727, 11.593140144880794, 6)  # disagrees by 1 at 6th decimal place
+    # erroring tests:
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_altprotocol
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_agreement
+    # nipy.tests.test_scripts.test_nipy_4d_realign   # because `nipy_4d_realign` script isn't found at test time; works from nix-shell, so could be patched
+    # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nipy/${name}.tar.gz";
+      sha256 = "1hnbn2i4fjxflaaz082s2c57hfp59jfra1zayz1iras5p2dy21nr";
+    };
+
+    buildInputs = stdenv.lib.optional doCheck [ self.nose ];
+
+    propagatedBuildInputs = with self; [
+      nibabel
+      numpy
+      scipy
+      sympy
+    ];
+
+    meta = {
+      homepage = http://nipy.org/nipy/;
+      description = "Software for structural and functional neuroimaging analysis";
+      license = licenses.bsd3;
     };
   };
 
@@ -27823,6 +27889,30 @@ in modules // {
        description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
        maintainers = with maintainers; [ NikolaMandic ];
      };
+  };
+
+  word2vec = buildPythonPackage rec {
+    name = "word2vec-${version}";
+    version = "0.9.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/w/word2vec/${name}.tar.gz";
+      sha256 = "a811e3e98a8e6dfe7bc851ebbbc2d6e5ab5142f2a134dd3c03daac997b546faa";
+    };
+
+    propagatedBuildInputs = with self; [ cython numpy ];
+
+    checkPhase = ''
+     cd word2vec/tests;
+      ${python.interpreter} test_word2vec.py
+    '';
+
+    meta = {
+      description = "Tool for computing continuous distributed representations of words";
+      homepage = "https://github.com/danielfrg/word2vec";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
   };
 
   tvdb_api = buildPythonPackage rec {

@@ -740,6 +740,8 @@ in
     asciidoc = asciidoc-full;
   };
 
+  dislocker = callPackage ../tools/filesystems/dislocker { };
+
   ditaa = callPackage ../tools/graphics/ditaa { };
 
   dlx = callPackage ../misc/emulators/dlx { };
@@ -9482,6 +9484,8 @@ in
 
   yubico-piv-tool = callPackage ../tools/misc/yubico-piv-tool { };
 
+  yubikey-neo-manager = callPackage ../tools/misc/yubikey-neo-manager { };
+
   yubikey-personalization = callPackage ../tools/misc/yubikey-personalization {
     libusb = libusb1;
   };
@@ -16004,7 +16008,11 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
+  bcftools = callPackage ../applications/science/biology/bcftools { };
+
   emboss = callPackage ../applications/science/biology/emboss { };
+
+  htslib = callPackage ../development/libraries/science/biology/htslib { };
 
   neuron = callPackage ../applications/science/biology/neuron { };
 

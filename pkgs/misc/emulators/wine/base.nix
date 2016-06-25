@@ -45,7 +45,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional alsaSupport            pkgs.alsaLib
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional xineramaSupport        pkgs.xorg.libXinerama
-  ++ lib.optional gstreamerSupport       pkgs.gst_plugins_base
+  ++ lib.optionals gstreamerSupport      (with pkgs.gst_all; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-ffmpeg ])
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.gnome.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.opencl-icd ]
   ++ lib.optionals xmlSupport    [ pkgs.libxml2 pkgs.libxslt ]
@@ -88,6 +88,10 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
     ${lib.strings.concatStringsSep "\n"
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
+  '' + lib.optionalString supportFlags.gstreamerSupport ''
+    wrapProgram "$out/bin/wine" \
+      --argv0 "" \
+      --prefix GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"
   '';
   
   enableParallelBuilding = true;
