@@ -1,6 +1,6 @@
-From 752dff853186dc334c519a86fa92f087795fea02 Mon Sep 17 00:00:00 2001
-From: Moritz Heidkamp <moritz.heidkamp@bevuta.com>
-Date: Wed, 1 Oct 2014 22:41:30 +0200
+From 2877f33747e3871c3a682b3a0c812b8ba2e4da5a Mon Sep 17 00:00:00 2001
+From: Caolan McMahon <caolan@caolanmcmahon.com>
+Date: Sat, 25 Jun 2016 11:52:28 +0100
 Subject: [PATCH] Introduce CHICKEN_REPOSITORY_EXTRA
 
 This environment variable works like CHICKEN_REPOSITORY but supports
@@ -8,47 +8,74 @@ multiple paths separated by `:'. Those paths are searched after
 CHICKEN_REPOSITORY when loading extensions via `require-library' and
 friends. It can be accessed and changed at runtime via the new procedure
 `repository-extra-paths' which is analog to `repository-path'.
+
+Original patch by Moritz Heidkamp.
+Updated by Caolan McMahon for CHICKEN 4.11.0
 ---
- chicken-install.scm | 11 +++++++----
+ chicken-install.scm | 29 ++++++++++++++++++++++++-----
  chicken.import.scm  |  1 +
  eval.scm            | 37 +++++++++++++++++++++++++++++++------
- 3 files changed, 39 insertions(+), 10 deletions(-)
+ 3 files changed, 56 insertions(+), 11 deletions(-)
 
 diff --git a/chicken-install.scm b/chicken-install.scm
-index 2ef6ef4..b5c6bf8 100644
+index 7bc6041..f557793 100644
 --- a/chicken-install.scm
 +++ b/chicken-install.scm
-@@ -109,10 +109,10 @@
-   (define *show-foreign-depends* #f)
-   (define *hacks* '())
+@@ -120,6 +120,19 @@
+ 		 (sprintf "lib/chicken/~a" (##sys#fudge 42)))
+ 		(repository-path)))))
  
--  (define (repo-path)
 +  (define (repo-paths)
-     (if (and *cross-chicken* (not *host-extension*))
--	(make-pathname C_TARGET_LIB_HOME (sprintf "chicken/~a" C_BINARY_VERSION))
--	(repository-path)))
-+	(list (make-pathname C_TARGET_LIB_HOME (sprintf "chicken/~a" C_BINARY_VERSION)))
-+	(cons (repository-path) (repository-extra-paths))))
- 
++    (if *deploy*
++	*prefix*
++	(if (and *cross-chicken* (not *host-extension*))
++	    (list (make-pathname C_TARGET_LIB_HOME (sprintf "chicken/~a" C_BINARY_VERSION)))
++	    (cons
++	     (if *prefix*
++		 (make-pathname
++			*prefix*
++			(sprintf "lib/chicken/~a" (##sys#fudge 42)))
++		 (repository-path))
++	     (repository-extra-paths)))))
++
    (define (get-prefix #!optional runtime)
      (cond ((and *cross-chicken*
-@@ -757,7 +757,10 @@
+ 		(not *host-extension*))
+@@ -226,10 +239,13 @@
+            (chicken-version) )
+ 	  ;; Duplication of (extension-information) to get custom
+ 	  ;; prefix.  This should be fixed.
+-          ((let* ((ep (##sys#canonicalize-extension-path x 'ext-version))
+-		  (sf (make-pathname (repo-path) ep "setup-info")))
+-	     (and (file-exists? sf)
+-		  (with-input-from-file sf read))) =>
++      ((let ((ep (##sys#canonicalize-extension-path x 'ext-version)))
++         (let loop ((paths (repo-paths)))
++           (cond ((null? paths) #f)
++                 ((let ((sf (make-pathname (car paths) ep "setup-info")))
++                    (and (file-exists? sf)
++                         (with-input-from-file sf read))))
++                 (else (loop (cdr paths)))))) =>
+            (lambda (info)
+              (let ((a (assq 'version info)))
+                (if a
+@@ -776,7 +792,10 @@
  		  "installed extension has no information about which egg it belongs to"
  		  (pathname-file sf))
  		 #f))))
 -      (glob (make-pathname (repo-path) "*" "setup-info")))
 +      (append-map
 +       (lambda (path)
-+	 (glob (make-pathname path "*" "setup-info")))
++       (glob (make-pathname path "*" "setup-info")))
 +       (repo-paths)))
       equal?))
  
    (define (list-available-extensions trans locn)
 diff --git a/chicken.import.scm b/chicken.import.scm
-index baa7316..2839b16 100644
+index f6e3a19..be1637c 100644
 --- a/chicken.import.scm
 +++ b/chicken.import.scm
-@@ -201,6 +201,7 @@
+@@ -200,6 +200,7 @@
     repl
     repl-prompt
     repository-path
@@ -57,7 +84,7 @@ index baa7316..2839b16 100644
     reset
     reset-handler
 diff --git a/eval.scm b/eval.scm
-index bbcd86c..838588d 100644
+index 6242f62..f7d76d4 100644
 --- a/eval.scm
 +++ b/eval.scm
 @@ -81,6 +81,7 @@
@@ -68,9 +95,9 @@ index bbcd86c..838588d 100644
  (define-constant prefix-environment-variable "CHICKEN_PREFIX")
  
  ; these are actually in unit extras, but that is used by default
-@@ -1180,6 +1181,25 @@
+@@ -1176,6 +1177,25 @@
  
- (define repository-path ##sys#repository-path)
+ (define ##sys#repository-path repository-path)
  
 +(define ##sys#repository-extra-paths
 +  (let* ((repaths (get-environment-variable repository-extra-environment-variable))
@@ -94,7 +121,7 @@ index bbcd86c..838588d 100644
  (define ##sys#setup-mode #f)
  
  (define ##sys#find-extension
-@@ -1197,6 +1217,7 @@
+@@ -1193,6 +1213,7 @@
  	(let loop ((paths (##sys#append
  			   (if ##sys#setup-mode '(".") '())
  			   (if rp (list rp) '())
@@ -102,7 +129,7 @@ index bbcd86c..838588d 100644
  			   (if inc? ##sys#include-pathnames '())
  			   (if ##sys#setup-mode '() '("."))) ))
  	  (and (pair? paths)
-@@ -1256,12 +1277,16 @@
+@@ -1252,12 +1273,16 @@
  	[string-append string-append]
  	[read read] )
      (lambda (id loc)
@@ -126,5 +153,5 @@ index bbcd86c..838588d 100644
  (define (extension-information ext)
    (##sys#extension-information ext 'extension-information) )
 -- 
-2.1.0
+2.1.4
 
