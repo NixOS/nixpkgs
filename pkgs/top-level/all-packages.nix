@@ -16800,6 +16800,8 @@ in
 
   spectrojack = callPackage ../applications/audio/spectrojack { };
 
+  sift = callPackage ../tools/text/sift { };
+
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
   xtrlock-pam = callPackage ../misc/screensavers/xtrlock-pam { };
