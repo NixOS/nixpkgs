@@ -16539,7 +16539,7 @@ in modules // {
       sha256 = "0cmpsy9lr9diskkypswm9s8glgr7w3crzh1im4zqlqv7z8zv092d";
     };
 
-    # pip detects that we already have bootstrapped_pip "installed", so we need
+    # pip detects that we already have bootstrapped-pip "installed", so we need
     # to force it a little.
     installFlags = [ "--ignore-installed" ];
 
@@ -23662,6 +23662,10 @@ in modules // {
     buildInputs = with self; [ pytest pytestcov coverage ];
 
     propagatedBuildInputs = with self; [ jsonschema ];
+    # pip detects that we already have wheel "installed" in bootstrapped-pip, so we need
+    # to force it a little.
+    installFlags = [ "--ignore-installed" ];
+    catchConflicts = false;
 
     # We add this flag to ignore the copy installed by bootstrapped-pip
     installFlags = [ "--ignore-installed" ];
