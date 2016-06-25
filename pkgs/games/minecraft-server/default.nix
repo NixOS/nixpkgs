@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name    = "minecraft-server-${version}";
-  version = "1.10";
+  version = "1.10.2";
 
   src  = fetchurl {
     url    = "http://s3.amazonaws.com/Minecraft.Download/versions/${version}/minecraft_server.${version}.jar";
-    sha256 = "00a204450qy0dkzl47rf0p3di7aa5xj76yshazgxw08aj8pafi6x";
+    sha256 = "08bss3laa265aavdgivzsv7asd5s2sdqnlqr767j3yf54y14cpqr";
   };
 
   preferLocalBuild = true;
