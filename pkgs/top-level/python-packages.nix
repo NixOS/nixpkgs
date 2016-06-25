@@ -5362,19 +5362,17 @@ in modules // {
 
   dns = buildPythonPackage rec {
     name = "dnspython-${version}";
-    version = "1.12.0";
+    version = "1.14.0";
 
-    src = if isPy3k then pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython3/dnspython3-${version}.zip";
-      sha256 = "138wxj702vx6zni9g2y8dbgbpin95v6hk23rh2kwfr3q4130jqz9";
-    } else pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython/${name}.tar.gz";
-      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
+    src = pkgs.fetchFromGitHub {
+      owner = "rthalley";
+      repo = "dnspython";
+      rev = "v${version}";
+      sha256 = "1kxmqrn0rx0ayc17hrc3zigl9wdlsana55ijfw2hjy5g77yjmzyh";
     };
 
-    # Not supported.
-    # See instead https://pypi.python.org/pypi/dnspython3/1.12.0
-    disabled = isPy3k;
+    # needs networking for some tests
+    doCheck = false;
 
     meta = {
       description = "A DNS toolkit for Python 3.x";
