@@ -6785,7 +6785,7 @@ in modules // {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.2.2";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -6798,7 +6798,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+      sha256 = "1riski56b93i8fddgixmmrh6cbprwv44r5wnzcqg9khky1wkg4ls";
     };
 
     meta = {
