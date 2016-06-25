@@ -1906,6 +1906,8 @@ in
 
   haveged = callPackage ../tools/security/haveged { };
 
+  habitat = callPackage ../applications/networking/cluster/habitat { };
+
   hardlink = callPackage ../tools/system/hardlink { };
 
   hashcat = callPackage ../tools/security/hashcat { };
