@@ -105,7 +105,7 @@ in
             prune {
               whitelist_names => [
                 "type", "@timestamp", "@version",
-                "MESSAGE", "PRIORITY", "SYSLOG_FACILITY",
+                "MESSAGE", "PRIORITY", "SYSLOG_FACILITY"
               ]
             }
           }
