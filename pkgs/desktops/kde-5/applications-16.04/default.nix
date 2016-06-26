@@ -60,8 +60,9 @@ let
     kidentitymanagement = callPackage ./kidentitymanagement.nix {};
     kimap = callPackage ./kimap.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
-    kompare = callPackage ./kompare.nix {};
+    kldap = callPackage ./kldap.nix {};
     kmime = callPackage ./kmime.nix {};
+    kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     kpimtextedit = callPackage ./kpimtextedit.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
