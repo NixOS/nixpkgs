@@ -40,6 +40,7 @@ let
       ffmpeg = pkgs.ffmpeg_2;
     };
     filelight = callPackage ./filelight.nix {};
+    grantleetheme = callPackage ./grantleetheme.nix {};
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
