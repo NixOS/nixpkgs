@@ -12629,6 +12629,8 @@ in
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
+  gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
+
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
 
