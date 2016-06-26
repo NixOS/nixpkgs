@@ -6430,7 +6430,10 @@ in
 
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
-  xcbuild  = callPackage ../development/tools/xcbuild { inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO; };
+  xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
+    inherit (darwin) cctools bootstrap_cmds;
+  };
 
   xmlindent = callPackage ../development/web/xmlindent {};
 
