@@ -289,7 +289,7 @@ let
 in {
 
   php55 = generic {
-    version = "5.5.36";
+    version = "5.5.37";
     sha256 = "1fvipg3p8m61kym2ir589vi1l6zm0r95rd97z5s6sq6ylgxfv114";
   };
 
