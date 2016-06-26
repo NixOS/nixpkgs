@@ -12,14 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   installPhase= ''
-    targetDir=$out/share/zsh/site-functions
     install -D --target-directory=$out/share/zsh/site-functions src/*
   '';
 
   meta = {
     description = "Additional completion definitions for zsh";
     homepage = "https://github.com/zsh-users/zsh-completions";
-    license = "various";
+    license = stdenv.lib.licenses.free;
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.olejorgenb ];
