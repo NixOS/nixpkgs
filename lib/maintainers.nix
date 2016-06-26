@@ -276,6 +276,7 @@
   odi = "Oliver Dunkl <oliver.dunkl@gmail.com>";
   offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   olcai = "Erik Timan <dev@timan.info>";
+  olejorgenb = "Ole Jørgen Brønner <olejorgenb@yahoo.no>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   osener = "Ozan Sener <ozan@ozansener.com>";
   otwieracz = "Slawomir Gonet <slawek@otwiera.cz>";
