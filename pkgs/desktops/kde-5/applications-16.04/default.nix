@@ -66,6 +66,7 @@ let
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     kpimtextedit = callPackage ./kpimtextedit.nix {};
+    ktnef = callPackage ./ktnef.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
