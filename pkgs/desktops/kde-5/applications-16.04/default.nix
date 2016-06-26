@@ -65,6 +65,7 @@ let
     kmime = callPackage ./kmime.nix {};
     kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
+    kontactinterface = callPackage ./kontactinterface.nix {};
     kpimtextedit = callPackage ./kpimtextedit.nix {};
     ktnef = callPackage ./ktnef.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
