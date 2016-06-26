@@ -35,9 +35,6 @@ let
 
   lib = import ../../lib;
 
-  # The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
-  # for NIXOS (nixos-rebuild): use nixpkgs.config option
   config =
     let
       inherit (builtins) getEnv pathExists;
@@ -46,19 +43,16 @@ let
       homeDir = getEnv "HOME";
       configFile2 = homeDir + "/.nixpkgs/config.nix";
 
-      configExpr =
+      rootModule =
         if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import configFile
-        else if homeDir != "" && pathExists configFile2 then import configFile2
-        else {};
+        else if configFile != "" && pathExists configFile then [ configFile ]
+        else if homeDir != "" && pathExists configFile2 then [ configFile2 ]
+        else [];
 
     in
-      # allow both:
-      # { /* the config */ } and
-      # { pkgs, ... } : { /* the config */ }
-      if builtins.isFunction configExpr
-        then configExpr { inherit pkgs; }
-        else configExpr;
+    (lib.evalModules {
+      modules = rootModule ++ import ../modules/module-list.nix;
+    }).config;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
 
