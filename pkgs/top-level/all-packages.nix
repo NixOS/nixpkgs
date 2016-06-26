@@ -7080,6 +7080,8 @@ in
   gecode_4 = callPackage ../development/libraries/gecode { };
   gecode = self.gecode_4;
 
+  gephi = callPackage ../applications/science/misc/gephi { };
+
   gegl = callPackage ../development/libraries/gegl { };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
