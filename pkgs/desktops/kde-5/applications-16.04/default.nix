@@ -50,7 +50,7 @@ let
     kcalcore = callPackage ./kcalcore.nix {};
     kcalutils = callPackage ./kcalutils.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
-    kcontacts = callPackage ./kcontacts {};
+    kcontacts = callPackage ./kcontacts.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
     kdgantt2 = callPackage ./kdgantt2.nix {};
