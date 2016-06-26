@@ -48,6 +48,7 @@ let
     kblog = callPackage ./kblog.nix {};
     kcalc = callPackage ./kcalc.nix {};
     kcalcore = callPackage ./kcalcore.nix {};
+    kcalutils = callPackage ./kcalutils.nix {};
     kcolorchooser = callPackage ./kcolorchooser.nix {};
     kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
     kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
