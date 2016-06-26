@@ -95,7 +95,7 @@ let
       qttools = callPackage ./qttools.nix {};
       qttranslations = callPackage ./qttranslations.nix {};
       /* qtwayland = not packaged */
-      /* qtwebchannel = not packaged */
+      qtwebchannel = callPackage ./qtwebchannel.nix {};
       /* qtwebengine = not packaged */
       qtwebsockets = callPackage ./qtwebsockets.nix {};
       /* qtwinextras = not packaged */
