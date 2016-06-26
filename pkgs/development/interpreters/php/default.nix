@@ -301,12 +301,12 @@ let
 in {
 
   php55 = generic {
-    version = "5.5.36";
+    version = "5.5.37";
     sha256 = "1fvipg3p8m61kym2ir589vi1l6zm0r95rd97z5s6sq6ylgxfv114";
   };
 
   php56 = generic {
-    version = "5.6.22";
+    version = "5.6.23";
     sha256 = "1il8kwg3pak06i4fz09br7vjsxvwfgxcd95zyaf6kyjjrj08mnlh";
   };
 
