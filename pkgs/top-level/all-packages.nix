@@ -8716,6 +8716,9 @@ in
   libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
     fetchurl = fetchurlBoot;
   };
+  libressl_2_4 = callPackage ../development/libraries/libressl/2.4.nix {
+    fetchurl = fetchurlBoot;
+  };
 
   boringssl = callPackage ../development/libraries/boringssl { };
 
