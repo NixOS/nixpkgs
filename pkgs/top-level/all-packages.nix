@@ -2426,6 +2426,16 @@ in
 
   mbuffer = callPackage ../tools/misc/mbuffer { };
 
+  mecab =
+    let
+      mecab-nodic = callPackage ../tools/text/mecab/nodic.nix { };
+    in
+    callPackage ../tools/text/mecab {
+      mecab-ipadic = callPackage ../tools/text/mecab/ipadic.nix {
+        inherit mecab-nodic;
+      };
+    };
+
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
   memtest86plus = callPackage ../tools/misc/memtest86+ { };
