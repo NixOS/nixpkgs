@@ -1,27 +1,30 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "unifdef-2.6";
+  name = "unifdef-${version}";
+  version = "2.11";
 
-  src = fetchurl {
-    url    = "https://github.com/fanf2/unifdef/archive/${name}.tar.gz";
-    sha256 = "1p5wr5ms9w8kijy9h7qs1mz36dlavdj6ngz2bks588w7a20kcqxj";
+  src = fetchFromGitHub {
+    owner = "fanf2";
+    repo = "unifdef";
+    rev = "8697cc11a1bb67c1153ecc556b880d1fdc4b4e00";
+    sha256 = "0d842m4zqbl5h8qiga1bp3vdirs01wd878rz0dkf32illkimmg0y";
   };
 
-  postUnpack = ''
-    substituteInPlace $sourceRoot/unifdef.c \
-      --replace '#include "version.h"' ""
-
-    substituteInPlace $sourceRoot/Makefile \
-      --replace "unifdef.c: version.h" "unifdef.c:"
-  '';
+  makeFlags = [
+    "prefix=$(out)"
+    "DESTDIR="
+  ];
 
   preBuild = ''
-    unset HOME
-    export DESTDIR=$out
+  echo 'V="${name}"' > version.sh
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = "http://dotat.at/prog/unifdef/";
     description = "Selectively remove C preprocessor conditionals";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.vrthra ];
   };
 }
