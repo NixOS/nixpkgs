@@ -44,6 +44,7 @@ let
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
     kate = callPackage ./kate.nix {};
+    kalarmcal = callPackage ./kalarmcal.nix {};
     kblog = callPackage ./kblog.nix {};
     kcalc = callPackage ./kcalc.nix {};
     kcalcore = callPackage ./kcalcore.nix {};
