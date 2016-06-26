@@ -71,6 +71,7 @@ let
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
+    libkleo = callPackage ./libkleo.nix {};
     libkomparediff2 = callPackage ./libkomparediff2.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
