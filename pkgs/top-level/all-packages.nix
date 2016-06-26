@@ -16035,6 +16035,8 @@ in
 
   htslib = callPackage ../development/libraries/science/biology/htslib { };
 
+  igv = callPackage ../applications/science/biology/igv { };
+
   neuron = callPackage ../applications/science/biology/neuron { };
 
   neuron-mpi = appendToName "mpi" (neuron.override {
