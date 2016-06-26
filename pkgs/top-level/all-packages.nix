@@ -8019,6 +8019,9 @@ in
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
+  libspnav = callPackage ../development/libraries/libspnav { };
+  spacenavd = callPackage ../misc/drivers/spacenavd { };
+
   libgsf = callPackage ../development/libraries/libgsf { };
 
   # glibc provides libiconv so systems with glibc don't need to build libiconv
