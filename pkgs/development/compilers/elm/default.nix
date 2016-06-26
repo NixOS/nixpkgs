@@ -1,4 +1,5 @@
-{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, fetchpatch, makeWrapper }:
+{ lib, stdenv, buildEnv, haskell, nodejs, fetchurl, fetchpatch, makeWrapper,
+callPackage }:
 
 # To update:
 # 1) Update versions in ./update-elm.rb and run it.
@@ -62,6 +63,16 @@ let
                     --prefix PATH ':' ${bins}
                 '';
             });
+            
+            /*
+            This is not a core Elm package, and it's hosted on GitHub.
+            To update, run:
+
+                cabal2nix --jailbreak --revision refs/tags/foo http://github.com/avh4/elm-format > packages/elm-format.nix
+                    
+            where foo is a tag for a new version, for example "0.3.1-alpha". 
+            */
+            elm-format = self.callPackage ./packages/elm-format.nix { };
 
             /*
             This is not a core Elm package, and it's hosted on GitHub.
