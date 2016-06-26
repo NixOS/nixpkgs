@@ -58,6 +58,7 @@ let
     khelpcenter = callPackage ./khelpcenter.nix {};
     kholidays = callPackage ./kholidays.nix {};
     kidentitymanagement = callPackage ./kidentitymanagement.nix {};
+    kimap = callPackage ./kimap.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
     kompare = callPackage ./kompare.nix {};
     kmime = callPackage ./kmime.nix {};
