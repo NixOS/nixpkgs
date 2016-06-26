@@ -9,11 +9,11 @@
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "13w56fhspf7ygr3v0jhh44g25xbcx5vmrprzcy9cajsppa6knq4r";
+    sha256 = "1j2ar5gb6xcyw1mlpm0mfpiri6www9k5myaqjina87a3xd23r8lk";
   };
 
   patches = [ ./build-on-bsd.patch ];
