@@ -9157,6 +9157,10 @@ in
     libpcap = if stdenv.isLinux then libpcap else null;
   };
 
+  srtp2 = callPackage ../development/libraries/srtp/2.nix {
+    libpcap = if stdenv.isLinux then libpcap else null;
+  };
+
   stxxl = callPackage ../development/libraries/stxxl { parallel = true; };
 
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
@@ -10003,6 +10007,8 @@ in
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
+  janus  = callPackage ../servers/janus { };
+
   jboss = callPackage ../servers/http/jboss { };
 
   jboss_mysql_jdbc = callPackage ../servers/http/jboss/jdbc/mysql { };
@@ -10346,6 +10352,8 @@ in
   slurm-llnl = callPackage ../servers/computing/slurm { gtk = null; };
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
+
+  sylkserver = callPackage ../servers/sylkserver { };
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
