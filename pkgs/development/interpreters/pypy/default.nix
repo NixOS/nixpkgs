@@ -21,6 +21,17 @@ let
       sha256 = "1dmckvffanmh0b50pq34shnw05r55gjxn43kgvnkz5kkvvsbxdg1";
     };
 
+   # http://bugs.python.org/issue27369
+    postPatch = let
+      expatch = fetchurl {
+        name = "tests-expat-2.2.0.patch";
+        url = "http://bugs.python.org/file43514/0001-Fix-Python-2.7.11-tests-for-Expat-2.2.0.patch";
+        sha256 = "1j3pa7ly9xrhp8jjwg5l77z7i3y68gx8f8jchqk6zc39d9glq3il";
+      };
+      in ''
+      patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
+    '';
+
     buildInputs = [ bzip2 openssl pkgconfig pythonFull libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
