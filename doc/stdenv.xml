@@ -1191,17 +1191,34 @@ echo @foo@
     <replaceable>file</replaceable>.</para></listitem>
   </varlistentry>
 
+  <varlistentry xml:id='fun-baseHash'>
+    <term>
+      <function>baseHash</function>
+      <replaceable>path</replaceable>
+      <replaceable>suffix</replaceable>
+    </term>
+    <listitem><para>Strips the directory and hash part of a store
+    path and outputs the result on stdout. If <literal>suffix</literal> is also
+    provided, the suffix will also be removed. For example:</para>
+    
+<programlisting>
+baseHash "/nix/store/9s9r019176g7cvn2nvcw41gsp862y6b4-coreutils-8.24"
+# prints coreutils-8.24
+</programlisting>
+
+<programlisting>
+baseHash "/nix/store/0016702zbydafsr20n9l1dcw7x2bf6jj-arraysugar-0.1.0.gem" .gem
+# prints arraysugar-0.1.0
+</programlisting>
+    </listitem>
+
+  </varlistentry>
 
   <varlistentry xml:id='fun-stripHash'>
     <term><function>stripHash</function>
     <replaceable>path</replaceable></term>
-    <listitem><para>Strips the directory and hash part of a store
-    path, and prints (on standard output) only the name part.  For
-    instance, <literal>stripHash
-    /nix/store/68afga4khv0w...-coreutils-6.12</literal> print
-    <literal>coreutils-6.12</literal>.</para></listitem>
+    <listitem><para>Deprecated. Use baseHash instead.</para></listitem>
   </varlistentry>
-
   
 </variablelist>
 
