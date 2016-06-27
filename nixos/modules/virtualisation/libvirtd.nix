@@ -155,8 +155,29 @@ in
         };
       };
 
+    systemd.sockets.virtlogd = {
+      description = "Virtual machine log manager socket";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ "/run/libvirt/virtlogd-sock" ];
+    };
+
+    systemd.services.virtlogd = {
+      description = "Virtual machine log manager";
+      serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlogd virtlogd";
+    };
+
+    systemd.sockets.virtlockd = {
+      description = "Virtual machine lock manager socket";
+      wantedBy = [ "sockets.target" ];
+      listenStreams = [ "/run/libvirt/virtlockd-sock" ];
+    };
+
+    systemd.services.virtlockd = {
+      description = "Virtual machine lock manager";
+      serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
+    };
+
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
 
   };
-
 }
