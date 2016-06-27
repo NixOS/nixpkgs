@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gnustep-make, gobjc }:
+{ stdenv, fetchFromGitHub, make, libobjc, libffi }:
 
 stdenv.mkDerivation rec {
   name = "gnustep-base-${version}";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-importing-config" ];
 
-  buildInputs = [ gobjc gnustep-make ];
+  buildInputs = [ libobjc make libffi ];
 
   src = fetchFromGitHub {
     owner = "gnustep";

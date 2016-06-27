@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, gobjc, cmake}:
+{stdenv, fetchFromGitHub, cmake, libffi}:
 
 stdenv.mkDerivation rec {
   name = "libobjc2-${version}";
@@ -9,5 +9,5 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "12v9pjg97h56mb114cqd22q1pdwhmxrgdw5hal74ddlrhiq1nzvi";
   };
-  buildInputs = [gobjc cmake];
+  buildInputs = [cmake libffi];
 }

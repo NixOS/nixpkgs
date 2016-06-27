@@ -10576,10 +10576,7 @@ in
     stubs = callPackages ../os-specific/darwin/stubs {};
   };
 
-  gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
-  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {};
-  gnustep-base = callPackage ../development/tools/build-managers/gnustep/base {};
-  gnustep-libobjc2 = callPackage ../development/tools/build-managers/gnustep/libobjc2 {};
+  gnustep = recurseIntoAttrs (callPackage ../development/tools/build-managers/gnustep {});
 
   devicemapper = self.lvm2;
 
