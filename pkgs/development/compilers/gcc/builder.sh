@@ -229,19 +229,21 @@ postInstall() {
     # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
     rm -rf $out/bin/gccbug
 
-    # Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
-    for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
-        PREV_RPATH=`patchelf --print-rpath "$i"`
-        NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-    done
+    if type "patchelf"; then
+	# Take out the bootstrap-tools from the rpath, as it's not needed at all having $out
+	for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+	done
 
-    # For some reason the libs retain RPATH to $out
-    for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-        PREV_RPATH=`patchelf --print-rpath "$i"`
-        NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
-        patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-    done
+	# For some reason the libs retain RPATH to $out
+	for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
+            PREV_RPATH=`patchelf --print-rpath "$i"`
+            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
+            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
+	done
+    fi
 
     # Get rid of some "fixed" header files
     rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux}
