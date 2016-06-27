@@ -4466,13 +4466,6 @@ in
     profiledCompiler = false;
   });
 
-  gobjc = wrapCC (gcc.cc.override {
-    name = "gobjc";
-    langObjC = true;
-    langObjCpp = true;
-    profiledCompiler = false;
-  });
-
   gcj = gcj49;
   gcj49 = wrapCC (gcc49.cc.override {
     name = "gcj";
