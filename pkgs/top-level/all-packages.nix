@@ -4470,8 +4470,6 @@ in
     name = "gobjc";
     langObjC = true;
     langObjCpp = true;
-    langCC = false;
-    langC = false;
     profiledCompiler = false;
   });
 
@@ -10581,6 +10579,7 @@ in
   gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
   gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {};
   gnustep-base = callPackage ../development/tools/build-managers/gnustep/base {};
+  gnustep-libobjc2 = callPackage ../development/tools/build-managers/gnustep/libobjc2 {};
 
   devicemapper = self.lvm2;
 
