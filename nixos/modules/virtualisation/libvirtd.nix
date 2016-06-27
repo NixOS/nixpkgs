@@ -147,19 +147,12 @@ in
             done
           ''; # */
 
-        serviceConfig.ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon ${concatStringsSep " " cfg.extraOptions}'';
-        serviceConfig.Type = "forking";
-        serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
-
-        # Wait until libvirtd is ready to accept requests.
-        postStart =
-          ''
-            for ((i = 0; i < 60; i++)); do
-                if ${pkgs.libvirt}/bin/virsh list > /dev/null; then exit 0; fi
-                sleep 1
-            done
-            exit 1 # !!! seems to be ignored
-          '';
+        serviceConfig = {
+          ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon ${concatStringsSep " " cfg.extraOptions}'';
+          Type = "notify";
+          KillMode = "process"; # when stopping, leave the VMs alone
+          Restart = "on-failure";
+        };
       };
 
     users.extraGroups.libvirtd.gid = config.ids.gids.libvirtd;
