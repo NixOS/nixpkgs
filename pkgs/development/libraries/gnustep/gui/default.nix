@@ -1,6 +1,6 @@
 { gsmakeDerivation
 , fetchurl
-, gnustep_base
+, base
 , stdenv }:
 let
   version = "0.24.0";
@@ -11,7 +11,7 @@ gsmakeDerivation {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-0.24.0.tar.gz";
     sha256 = "0d6jzfcyacxjzrr2p398ysvs1akv1fcmngfzxxbfxa947miydjxg";
   };
-  buildInputs = [ gnustep_base ];
+  buildInputs = [ base ];
 #  propagatedBuildInputs = [ gnustep_base ];
 #  patches = [ ./fixup-gui-makefile-installdir.patch ];
   # DEBUG!

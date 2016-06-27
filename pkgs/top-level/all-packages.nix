@@ -6444,14 +6444,8 @@ in
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake42;
 
-  gnustep_back = callPackage ../development/libraries/gnustep-back { stdenv = clangStdenv; };
-  gnustep_base = callPackage ../development/libraries/gnustep-base { stdenv = clangStdenv; giflib = giflib_4_1; };
-
-  gnustep_make = callPackage ../development/tools/build-managers/gnustep-make { stdenv = clangStdenv; };
-  gsmakeDerivation = callPackage ../development/tools/build-managers/gnustep-make/gsmakeDerivation.nix { stdenv = clangStdenv; };
+  gnustep = recurseIntoAttrs (callPackage ../development/libraries/gnustep {});
   
-  gnustep_gui = callPackage ../development/libraries/gnustep-gui { stdenv = clangStdenv; };
-
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
@@ -6474,7 +6468,6 @@ in
 
   guileLint = callPackage ../development/tools/guile/guile-lint { };
 
-  gworkspace = callPackage ../applications/misc/gworkspace { stdenv = clangStdenv; };
   gwrap = callPackage ../development/tools/guile/g-wrap { };
 
   help2man = callPackage ../development/tools/misc/help2man {
@@ -7595,13 +7588,6 @@ in
 
   gnome-sharp = callPackage ../development/libraries/gnome-sharp {};
 
-  gorm = callPackage ../applications/editors/gorm/default.nix {
-    stdenv = clangStdenv;
-  };
-  projectcenter = callPackage ../applications/editors/projectcenter/default.nix {
-    stdenv = clangStdenv;
-  };
-
   granite = callPackage ../development/libraries/granite { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix {
@@ -8403,8 +8389,6 @@ in
   libnova = callPackage ../development/libraries/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
-
-  libobjc2 = callPackage ../development/libraries/libobjc2 { stdenv = clangStdenv; };
 
   libodfgen = callPackage ../development/libraries/libodfgen { };
 
@@ -9503,8 +9487,6 @@ in
   sword = callPackage ../development/libraries/sword { };
 
   biblesync = callPackage ../development/libraries/biblesync { };
-
-  system_preferences = callPackage ../applications/misc/systempreferences { stdenv = clangStdenv; };
 
   szip = callPackage ../development/libraries/szip { };
 
@@ -10874,12 +10856,6 @@ in
     libobjc = apple-source-releases.objc4;
 
     stubs = callPackages ../os-specific/darwin/stubs {};
-  };
-
-  gnustep-make = callPackage ../development/tools/build-managers/gnustep/make {};
-  gnustep-xcode = callPackage ../development/tools/build-managers/gnustep/xcode {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-    inherit (darwin) libobjc;
   };
 
   devicemapper = self.lvm2;

@@ -1,4 +1,4 @@
-{ gnustep_back, gnustep_base, gnustep_gui, gsmakeDerivation
+{ back, base, gui, gsmakeDerivation
 , fetchurl
 , stdenv
 }:
@@ -12,7 +12,7 @@ gsmakeDerivation {
     sha256 = "1q68bs8rlq0dxkar01qs5wfyas4iivddnama371jd7ll6cxzmpy7";
   };
 #  GNUSTEP_MAKEFILES = "${gnustep_make}/share/GNUstep/Makefiles";
-  buildInputs = [ gnustep_back gnustep_base gnustep_gui ];
+  buildInputs = [ back base gui ];
 #  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui ];
   meta = {
     description = "System Preferences allows to manage the settings of many aspects of the GNUstep environment and its applications";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, gnustep_base, gnustep_back, gsmakeDerivation, gnustep_gui, gorm
+, base, back, gsmakeDerivation, gui, gorm
 , gnumake, gdb
 }:
 let
@@ -15,8 +15,7 @@ gsmakeDerivation {
   # NOTE: need a patch for ProjectCenter to help it locate some necessary tools:
   # 1. Framework/PCProjectLauncher.m, locate gdb (say among NIX_GNUSTEP_SYSTEM_TOOLS)
   # 2. Framework/PCProjectBuilder.m, locate gmake (similar)
-  buildInputs = [ gnustep_base gnustep_back gnustep_gui ];
-  propagatedBuildInputs = [ gnustep_base gnustep_back gnustep_gui gnumake gdb gorm ];
+  propagatedBuildInputs = [ base back gui gnumake gdb gorm ];
   
   meta = {
     description = "ProjectCenter is GNUstep's integrated development environment (IDE) and allows a rapid development and easy managment of ProjectCenter running on GNUstep applications, tools and frameworks.";

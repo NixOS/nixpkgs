@@ -1,4 +1,4 @@
-{ gnustep_back, gnustep_base, gnustep_gui, gsmakeDerivation
+{ back, base, gui, gsmakeDerivation
 , fetchurl
 , sqlite
 , stdenv
@@ -16,7 +16,7 @@ gsmakeDerivation {
   # additional dependencies:
   # - PDFKit framework from http://gap.nongnu.org/
   # - TODO: to --enable-gwmetadata, need libDBKit as well as sqlite!
-  buildInputs = [ gnustep_back gnustep_base gnustep_gui system_preferences ];
+  buildInputs = [ back base gui system_preferences ];
 #  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui system_preferences ];
   configureFlags = [ "--with-inotify" ];
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnustep_base, gnustep_back, gsmakeDerivation, gnustep_gui
+{ stdenv, fetchurl, base, back, gsmakeDerivation, gui
 }:
 let
   version = "1.2.18";
@@ -11,7 +11,7 @@ gsmakeDerivation {
     sha256 = "1vpzvmsnynlq5dv6rw9vbk1zzsim6z7b2kprrlm8dknyq0r1sdrq";
   };
 #  patches = [ ./fix-gs-makefiles.patch ];
-  buildInputs = [ gnustep_base gnustep_back gnustep_gui ];
+  buildInputs = [ base back gui ];
 #  propagatedBuildInputs = [ gnustep_base gnustep_back gnustep_gui ];
 
   meta = {

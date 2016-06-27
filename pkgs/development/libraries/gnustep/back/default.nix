@@ -1,7 +1,7 @@
 { gsmakeDerivation
 , cairo
 , fetchurl
-, gnustep_base, gnustep_gui
+, base, gui
 , xlibs
 , x11
 , freetype
@@ -17,7 +17,7 @@ gsmakeDerivation {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-0.24.0.tar.gz";
     sha256 = "0qixbilkkrqxrhhj9hnp7ygd5gs23b3qbbgk3gaxj73d0xqfvhjz";
   };
-  buildInputs = [ cairo gnustep_base gnustep_gui freetype pkgconfig x11 ];
+  buildInputs = [ cairo base gui freetype pkgconfig x11 ];
   meta = {
     description = "GNUstep-back is a generic backend for GNUstep.";
     
