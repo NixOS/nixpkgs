@@ -131,6 +131,22 @@ rec {
     let found = filter pred list;
     in if found == [] then default else head found;
 
+  /* Find the index of the first element in the list matching the specified
+     predicate or returns null if no such element exists.
+
+     Example:
+       findFirstIndex (x: x > 3) [ 1 6 4 ]
+       => 1
+  */
+  findFirstIndex = pred: list:
+    # Poor man's Either via a list.
+    let searchFun = old: curr:
+          if isList old then old
+            else if pred curr then [old]
+            else old + 1;
+        res = foldl searchFun 0 list;
+    in if isList res then elemAt res 0 else null;
+
   /* Return true iff function `pred' returns true for at least element
      of `list'.
 
