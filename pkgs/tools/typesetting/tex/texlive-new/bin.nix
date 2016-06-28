@@ -255,7 +255,7 @@ xindy = stdenv.mkDerivation {
   prePatch = "cd utils/xindy";
   # hardcode clisp location
   postPatch = ''
-    substituteInPlace xindy-?.?.?/user-commands/xindy.in \
+    substituteInPlace xindy-*/user-commands/xindy.in \
       --replace "our \$clisp = ( \$is_windows ? 'clisp.exe' : 'clisp' ) ;" \
                 "our \$clisp = '$(type -P clisp)';"
   '';
