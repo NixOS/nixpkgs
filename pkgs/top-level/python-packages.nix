@@ -16742,11 +16742,11 @@ in modules // {
   };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.9.0";
+    name = "Pillow-3.2.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pillow/${name}.zip";
-      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
+      url = "mirror://pypi/P/Pillow/${name}.tar.gz";
+      sha256 = "0jkqjnqj3bz3cwrvbw6q1zy6dn0c328r6v20k7m0lj0c45bs1c34";
     };
 
     # Check is disabled because of assertion errors, see
