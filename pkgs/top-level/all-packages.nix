@@ -17079,6 +17079,13 @@ in
     libpng = libpng12;
   };
 
+  xsw = callPackage ../applications/misc/xsw {
+   # Enable the next line to use this in terminal.
+   # Note that it requires sixel capable terminals such as mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
+  };
+
   xwiimote = callPackage ../misc/drivers/xwiimote {
     bluez = pkgs.bluez5.override {
       enableWiimote = true;
