@@ -13775,6 +13775,10 @@ let
     git = gitMinimal;
   };
 
+  src_1_11 = callPackage ../applications/version-management/src/1.11.nix {
+    git = gitMinimal;
+  };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stp = callPackage ../applications/science/logic/stp {};
