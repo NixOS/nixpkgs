@@ -104,7 +104,8 @@ let
       urlPrefix = args.urlPrefix or
       # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
       #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
-        http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive;
+      #  http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/archive;
+        http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016;
       # beware: standard mirrors http://mirror.ctan.org/ don't have releases
       #mirror = "http://ftp.math.utah.edu"; # ftp://tug.ctan.org no longer works, although same IP
     in
