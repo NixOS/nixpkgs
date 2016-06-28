@@ -87,9 +87,11 @@ in
 
 rec {
 
-  # We want coreutils without ACL support.
   coreutilsMinimal = (pkgs.coreutils.override (args: {
+    # We want coreutils without ACL support.
     aclSupport = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
   })).crossDrv;
 
   curlMinimal = (pkgs.curl.override {
