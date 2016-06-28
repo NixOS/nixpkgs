@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, dpdk, libpcap, utillinux }:
+{ stdenv, fetchurl, dpdk, libpcap, utillinux
+, pkgconfig
+, gtk, withGtk ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "pktgen-${version}";
@@ -9,10 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "0vrmbpl8zaal5zjwyzlx0y3d6jydfxdmf0psdj7ic37h5yh2iv2q";
   };
 
-  buildInputs = [ dpdk libpcap ];
+  nativeBuildInputs = stdenv.lib.optionals withGtk [ pkgconfig ];
+
+  buildInputs =
+    [ dpdk libpcap ]
+    ++ stdenv.lib.optionals withGtk [gtk];
 
   RTE_SDK = "${dpdk}";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
+  GUI = stdenv.lib.optionalString withGtk "true";
 
   enableParallelBuilding = true;
 
