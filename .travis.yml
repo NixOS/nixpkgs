@@ -18,3 +18,7 @@ matrix:
           osx_image: xcode7.3
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
 install: ./maintainers/scripts/travis-nox-review-pr.sh install
+cache:
+    directories:
+        - $HOME/nix-1.11.2-x86_64-linux/
+        - $HOME/nix-1.11.2-x86_64-darwin/
