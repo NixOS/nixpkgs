@@ -2661,6 +2661,7 @@ self: super: {
   "dbus-th-introspection" = dontDistribute super."dbus-th-introspection";
   "dclabel" = dontDistribute super."dclabel";
   "dclabel-eci11" = dontDistribute super."dclabel-eci11";
+  "ddate" = dontDistribute super."ddate";
   "ddc-base" = dontDistribute super."ddc-base";
   "ddc-build" = dontDistribute super."ddc-build";
   "ddc-code" = dontDistribute super."ddc-code";
@@ -2975,6 +2976,7 @@ self: super: {
   "ebeats" = dontDistribute super."ebeats";
   "ebnf-bff" = dontDistribute super."ebnf-bff";
   "ec2-signature" = dontDistribute super."ec2-signature";
+  "ec2-unikernel" = dontDistribute super."ec2-unikernel";
   "eccrypto" = dontDistribute super."eccrypto";
   "ecdsa" = dontDistribute super."ecdsa";
   "ecma262" = dontDistribute super."ecma262";
@@ -3375,6 +3377,7 @@ self: super: {
   "foma" = dontDistribute super."foma";
   "font-opengl-basic4x6" = dontDistribute super."font-opengl-basic4x6";
   "foo" = dontDistribute super."foo";
+  "foobar" = dontDistribute super."foobar";
   "for-free" = dontDistribute super."for-free";
   "forbidden-fruit" = dontDistribute super."forbidden-fruit";
   "force-layout" = doDistribute super."force-layout_0_3_0_11";
@@ -4628,6 +4631,7 @@ self: super: {
   "hopfield" = dontDistribute super."hopfield";
   "hopfield-networks" = dontDistribute super."hopfield-networks";
   "hopfli" = dontDistribute super."hopfli";
+  "hoppy-docs" = dontDistribute super."hoppy-docs";
   "hoppy-generator" = dontDistribute super."hoppy-generator";
   "hoppy-runtime" = dontDistribute super."hoppy-runtime";
   "hoppy-std" = dontDistribute super."hoppy-std";
@@ -6055,6 +6059,7 @@ self: super: {
   "monad-levels" = dontDistribute super."monad-levels";
   "monad-log" = dontDistribute super."monad-log";
   "monad-logger" = doDistribute super."monad-logger_0_3_13_1";
+  "monad-logger-prefix" = dontDistribute super."monad-logger-prefix";
   "monad-loops" = doDistribute super."monad-loops_0_4_2_1";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
@@ -8585,6 +8590,7 @@ self: super: {
   "timecalc" = dontDistribute super."timecalc";
   "timeconsole" = dontDistribute super."timeconsole";
   "timeit" = dontDistribute super."timeit";
+  "timelens" = dontDistribute super."timelens";
   "timeless" = dontDistribute super."timeless";
   "timelike" = dontDistribute super."timelike";
   "timelike-clock" = dontDistribute super."timelike-clock";
@@ -9515,6 +9521,7 @@ self: super: {
   "yuuko" = dontDistribute super."yuuko";
   "yxdb-utils" = dontDistribute super."yxdb-utils";
   "z3" = dontDistribute super."z3";
+  "z3-encoding" = dontDistribute super."z3-encoding";
   "zalgo" = dontDistribute super."zalgo";
   "zampolit" = dontDistribute super."zampolit";
   "zasni-gerna" = dontDistribute super."zasni-gerna";
