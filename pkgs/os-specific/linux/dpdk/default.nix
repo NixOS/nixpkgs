@@ -16,20 +16,19 @@ stdenv.mkDerivation rec {
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
 
-  enableParallelBuilding = true;
-  outputs = [ "out" "kmod" "examples" ];
-
   # we need ssse3 instructions to build
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
-  patchPhase = ''
-    sed -i 's/CONFIG_RTE_BUILD_COMBINE_LIBS=n/CONFIG_RTE_BUILD_COMBINE_LIBS=y/' config/common_linuxapp
+  enableParallelBuilding = true;
+  outputs = [ "out" "kmod" "examples" ];
+
+  configurePhase = ''
+    make T=x86_64-native-linuxapp-gcc config
   '';
 
   buildPhase = ''
-    make T=x86_64-native-linuxapp-gcc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES config
-    make T=x86_64-native-linuxapp-gcc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES install
-    make T=x86_64-native-linuxapp-gcc -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES examples
+    make T=x86_64-native-linuxapp-gcc install
+    make T=x86_64-native-linuxapp-gcc examples
   '';
 
   installPhase = ''
@@ -65,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = http://dpdk.org/;
     license = with licenses; [ lgpl21 gpl2 bsd2 ];
     platforms =  [ "x86_64-linux" ];
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.domenkozar ];
   };
 }

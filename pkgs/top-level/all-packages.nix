@@ -10599,6 +10599,8 @@ let
 
     pktgen = callPackage ../os-specific/linux/pktgen { };
 
+    odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
+
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
