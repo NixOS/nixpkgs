@@ -139,8 +139,8 @@ in {
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.1.1esr";
-    sha256 = "0qj5s006m68d1fq2k0759dj3a7m615dz3xqkl7jxzgff3jm3czm2";
+    version = "45.2.0esr";
+    sha256 = "0jw0firs0rsg1a6msxbw6kar49rlscbnwmasvhcwjca20ds9fwhs";
   };
 
 }
