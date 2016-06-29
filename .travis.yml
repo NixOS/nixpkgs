@@ -18,3 +18,5 @@ matrix:
           osx_image: xcode7.3
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
 install: ./maintainers/scripts/travis-nox-review-pr.sh install
+git:
+    depth: 1
