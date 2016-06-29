@@ -2207,6 +2207,14 @@ in
   netdata = callPackage ../tools/system/netdata { };
 
   netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
+    # ui could be gtk, sixel or framebuffer. Note that console display (sixel)
+    # requires a terminal that supports `sixel` capabilities such as mlterm
+    # or xterm -ti 340
+    ui = "sixel";
+
+    uilib = if ui == "gtk" then "gtk" else "framebuffer";
+
+    SDL = if ui == "gtk" then null else if ui == "sixel" then SDL_sixel else SDL;
 
     buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
 
