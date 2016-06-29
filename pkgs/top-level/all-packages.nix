@@ -702,6 +702,8 @@ in
 
   datamash = callPackage ../tools/misc/datamash { };
 
+  datefudge = callPackage ../tools/system/datefudge { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   deis = callPackage ../development/tools/deis {};
