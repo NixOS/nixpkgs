@@ -14384,6 +14384,9 @@ in
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     enableXft = true;
+    # if you prefer a custom config, write the config.h in tabbed.config.h
+    # and enable
+    # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
   taffybar = callPackage ../applications/window-managers/taffybar {

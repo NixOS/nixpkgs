@@ -1,4 +1,4 @@
-{stdenv, fetchgit, xproto, libX11, enableXft, libXft}:
+{stdenv, fetchgit, xproto, libX11, enableXft, libXft, customConfig ? null }:
 
 with stdenv.lib;
 
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = optional enableXft ./xft.patch;
 
+  postPatch = stdenv.lib.optionalString (customConfig != null) ''
+    cp ${builtins.toFile "config.h" customConfig} ./config.h
+  '';
+
   buildInputs = [ xproto libX11 ] ++ optional enableXft libXft;
 
   preInstall = ''
@@ -23,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = http://tools.suckless.org/tabbed;
     description = "Simple generic tabbed fronted to xembed aware applications";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric vrthra ];
     platforms = platforms.linux;
   };
 }
