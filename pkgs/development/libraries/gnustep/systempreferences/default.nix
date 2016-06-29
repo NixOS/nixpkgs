@@ -1,7 +1,4 @@
-{ back, base, gui, gsmakeDerivation
-, fetchurl
-, stdenv
-}:
+{ back, base, gui, gsmakeDerivation, fetchurl }:
 let
   version = "1.1.0";
 in
@@ -16,12 +13,5 @@ gsmakeDerivation {
 #  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui ];
   meta = {
     description = "System Preferences allows to manage the settings of many aspects of the GNUstep environment and its applications";
-
-    homepage = http://www.gnustep.org/experience/systempreferences.html;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

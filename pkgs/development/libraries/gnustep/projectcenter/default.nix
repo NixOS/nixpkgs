@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ fetchurl
 , base, back, gsmakeDerivation, gui, gorm
 , gnumake, gdb
 }:
@@ -19,12 +19,5 @@ gsmakeDerivation {
   
   meta = {
     description = "ProjectCenter is GNUstep's integrated development environment (IDE) and allows a rapid development and easy managment of ProjectCenter running on GNUstep applications, tools and frameworks.";
-
-    homepage = http://www.gnustep.org/experience/ProjectCenter.html;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-  
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

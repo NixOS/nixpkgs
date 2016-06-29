@@ -1,7 +1,4 @@
-{ stdenv, fetchurl,
-  clang,
-  cmake
-}:
+{ stdenv, fetchurl, cmake }:
 
 let
   version = "1.7";
@@ -12,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://download.gna.org/gnustep/libobjc2-1.7.tar.bz2";
     sha256 = "1h9wkm1x9wrzd3alm99bx710lrs9nb8h2x5jpxbqwgbgzzv4l6rs";
   };
-  buildInputs = [ clang cmake ];
+  buildInputs = [ cmake ];
 
   # since we don't support Objective-C++, we don't interoperate
   # with C++ either
@@ -43,7 +40,7 @@ stdenv.mkDerivation rec {
   
     license = stdenv.lib.licenses.mit;
   
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
+    maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = stdenv.lib.platforms.all;
   };
 }

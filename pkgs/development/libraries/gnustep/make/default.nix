@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
+    maintainers = with stdenv.lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

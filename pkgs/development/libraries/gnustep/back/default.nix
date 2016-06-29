@@ -6,7 +6,6 @@
 , x11
 , freetype
 , pkgconfig
-, stdenv
 }:
 let
   version = "0.24.0";
@@ -20,12 +19,5 @@ gsmakeDerivation {
   buildInputs = [ cairo base gui freetype pkgconfig x11 ];
   meta = {
     description = "GNUstep-back is a generic backend for GNUstep.";
-    
-    homepage = http://gnustep.org/;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

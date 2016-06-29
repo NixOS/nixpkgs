@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, make, libobjc2, base }:
+{ gsmakeDerivation, fetchFromGitHub, make, libobjc2, base }:
 
-stdenv.mkDerivation rec {
+gsmakeDerivation rec {
   name = "xcode-${version}";
   version = "1.0";
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   installFlags = "DESTDIR=$(out)";
 
-  buildInputs = [ make libobjc2 base ];
+  buildInputs = [ libobjc2 base ];
 
   src = fetchFromGitHub {
     owner = "gnustep";

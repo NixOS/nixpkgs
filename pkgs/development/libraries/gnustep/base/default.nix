@@ -9,7 +9,6 @@
 , libobjc2, libgcrypt
 , icu
 , pkgconfig, portaudio
-, stdenv
 }:
 let
   version = "1.24.7";
@@ -35,12 +34,5 @@ gsmakeDerivation {
   patches = [ ./fixup-paths.patch ];
   meta = {
     description = "GNUstep-base is an implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa.";
-
-    homepage = http://gnustep.org/;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

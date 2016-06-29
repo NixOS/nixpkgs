@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, base, back, gsmakeDerivation, gui
-}:
+{ fetchurl, base, back, gsmakeDerivation, gui }:
 let
   version = "1.2.18";
 in
@@ -16,12 +15,5 @@ gsmakeDerivation {
 
   meta = {
     description = "Gorm stands for Graphical Object Relationship Modeller and is an easy-to-use interface designer for GNUstep";
-
-    homepage = http://www.gnustep.org/experience/Gorm.html;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

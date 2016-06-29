@@ -1,7 +1,4 @@
-{ gsmakeDerivation
-, fetchurl
-, base
-, stdenv }:
+{ gsmakeDerivation, fetchurl, base }:
 let
   version = "0.24.0";
 in
@@ -18,12 +15,5 @@ gsmakeDerivation {
   patches = [ ./fixup-all.patch ];
   meta = {
     description = "GNUstep-gui is a GUI class library of GNUstep.";
-    
-    homepage = http://gnustep.org/;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }

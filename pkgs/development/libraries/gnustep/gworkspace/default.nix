@@ -21,12 +21,5 @@ gsmakeDerivation {
   configureFlags = [ "--with-inotify" ];
   meta = {
     description = "GWorkspace is a workspace manager for GNUstep";
-
-    homepage = http://www.gnustep.org/experience/GWorkspace.html;
-
-    license = stdenv.lib.licenses.lgpl2Plus;
-
-    maintainers = with stdenv.lib.maintainers; [ ashalkhakov ];
-    platforms = stdenv.lib.platforms.linux;
   };
 }
