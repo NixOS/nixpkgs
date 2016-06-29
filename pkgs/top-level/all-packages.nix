@@ -15062,6 +15062,13 @@ in
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
+  zgv = callPackage ../applications/graphics/zgv {
+   # Enable the below line for terminal display. Note
+   # that it requires sixel graphics compatible terminals like mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
+  };
+
   zim = callPackage ../applications/office/zim {
     pygtk = pyGtkGlade;
   };
