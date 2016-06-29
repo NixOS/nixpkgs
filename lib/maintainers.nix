@@ -255,6 +255,7 @@
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
+  mpscholten = "Marc Scholten <marc@mpscholten.de>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
   mschristiansen = "Mikkel Christiansen <mikkel@rheosystems.com>";
   msteen = "Matthijs Steen <emailmatthijs@gmail.com>";
