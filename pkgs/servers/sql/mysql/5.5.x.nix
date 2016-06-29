@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "5.5.48";
 
   src = fetchurl {
-    url = "mirror://mysql/MySQL-5.5/${name}.tar.gz";
+    url = "http://downloads.mysql.com/archives/get/file/${name}.tar.gz";
     sha256 = "10fpzvf6hxvqgaq8paiz8fvhcbbs4qnzqw0svq40bvlyhx2qfgyc";
   };
 
