@@ -22,3 +22,5 @@ cache:
     directories:
         - $HOME/nix-1.11.2-x86_64-linux/
         - $HOME/nix-1.11.2-x86_64-darwin/
+git:
+    depth: 1
