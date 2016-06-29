@@ -5,7 +5,7 @@ let buildFor = toolsArch: (
 let
   pkgsFun = import ../../..;
   pkgsNoParams = pkgsFun {};
-  
+
   sheevaplugCrossSystem = {
     crossSystem = rec {
       config = "armv5tel-unknown-linux-gnueabi";
@@ -18,10 +18,10 @@ let
       openssl.system = "linux-generic32";
     };
   };
-  
+
   raspberrypiCrossSystem = {
     crossSystem = rec {
-      config = "armv6l-unknown-linux-gnueabi";  
+      config = "armv6l-unknown-linux-gnueabi";
       bigEndian = false;
       arch = "arm";
       float = "hard";
@@ -33,10 +33,10 @@ let
       inherit (platform) gcc;
     };
   };
-  
+
   armv7l-hf-multiplatform-crossSystem = {
     crossSystem = rec {
-      config = "armv7l-unknown-linux-gnueabi";  
+      config = "armv7l-unknown-linux-gnueabi";
       bigEndian = false;
       arch = "arm";
       float = "hard";
@@ -48,7 +48,7 @@ let
       inherit (platform) gcc;
     };
   };
-  
+
   selectedCrossSystem =
     if toolsArch == "armv5tel" then sheevaplugCrossSystem else
     if toolsArch == "armv6l" then raspberrypiCrossSystem else
@@ -87,17 +87,19 @@ in
 
 rec {
 
-  # We want coreutils without ACL support.
   coreutilsMinimal = (pkgs.coreutils.override (args: {
+    # We want coreutils without ACL support.
     aclSupport = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
   })).crossDrv;
-  
+
   curlMinimal = (pkgs.curl.override {
     zlibSupport = false;
     sslSupport = false;
     scpSupport = false;
   }).crossDrv;
-  
+
   busyboxMinimal = (pkgs.busybox.override {
     # TBD: uClibc is broken.
     # useUclibc = true;
@@ -113,10 +115,10 @@ rec {
       CONFIG_UNXZ y
     '';
   }).crossDrv;
-  
+
   inherit pkgs;
 
-  build = 
+  build =
 
     stdenv.mkDerivation {
       name = "build";
@@ -126,7 +128,7 @@ rec {
       crossConfig = stdenv.cross.config;
 
       buildCommand = ''
-	set -x
+	      set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
@@ -142,20 +144,20 @@ rec {
         cp -d ${glibc.out}/lib/libnss*.so* $out/lib
         cp -d ${glibc.out}/lib/libresolv*.so* $out/lib
         cp -d ${glibc.out}/lib/crt?.o $out/lib
-        
+
         cp -rL ${glibc.dev}/include $out
         chmod -R u+w $out/include
-        
+
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
         find $out/include -name .install -exec rm {} \;
         find $out/include -name ..install.cmd -exec rm {} \;
         mv $out/include $out/include-glibc
-        
+
         # Copy coreutils, bash, etc.
         cp ${coreutilsMinimal}/bin/* $out/bin
         (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
-        
+
         cp ${bash}/bin/bash $out/bin
         cp ${findutils}/bin/find $out/bin
         cp ${findutils}/bin/xargs $out/bin
@@ -174,7 +176,7 @@ rec {
         cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
         cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
-        
+
         # Copy what we need of GCC.
         cp -d ${gcc}/bin/gcc $out/bin
         cp -d ${gcc}/bin/cpp $out/bin
@@ -203,12 +205,12 @@ rec {
         cp -d ${libmpc}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
-        
+
         # TBD: Why are these needed for cross but not native tools?
         cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
         cp -d ${cloog}/lib/libcloog*.so* $out/lib
         cp -d ${isl}/lib/libisl*.so* $out/lib
-        
+
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
           cp ${binutils}/bin/$i $out/bin
@@ -216,7 +218,7 @@ rec {
         cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
         chmod -R u+w $out
-        
+
         # Strip executables even further.
         for i in $out/bin/* $out/libexec/gcc/*/*/*; do
             if test -x $i -a ! -L $i; then
