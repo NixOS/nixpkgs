@@ -1,4 +1,4 @@
-{stdenv, fetchgit, xproto, libX11, enableXft, libXft, customConfig ? null }:
+{stdenv, fetchgit, xproto, libX11, libXft, customConfig ? null, patches ? [] }:
 
 with stdenv.lib;
 
@@ -11,15 +11,17 @@ stdenv.mkDerivation rec {
     sha256 = "1fiv57g3jnlhnb6zrzl3n6lnpn2s9s0sd7bcv7r1nb3grwy7icri";
   };
 
+  inherit patches;
+
   postPatch = stdenv.lib.optionalString (customConfig != null) ''
     cp ${builtins.toFile "config.h" customConfig} ./config.h
   '';
 
   buildInputs = [ xproto libX11 libXft ];
 
-  preInstall = ''
-    export makeFlags="PREFIX=$out"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
   meta = {
     homepage = http://tools.suckless.org/tabbed;
