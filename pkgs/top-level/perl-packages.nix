@@ -7092,6 +7092,15 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  LinguaTranslit = buildPerlPackage rec {
+    name = "Lingua-Translit-0.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AL/ALINKE/${name}.tar.gz";
+      sha256 = "2430b5c84927f15570533eb68c56958c580f16044fc413d48bf44f0460422598";
+    };
+    doCheck = false;
+  };
+
   LinuxDistribution = buildPerlPackage {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
