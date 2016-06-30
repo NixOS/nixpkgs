@@ -16459,18 +16459,18 @@ in modules // {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.20.1";
+    version = "1.0.0";
     disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "0f1ff1a1x1qrcv4ygfh29yyknx8hgwck7rp020zz0jrq9dibhjp7";
+      sha256 = "19jdnrz2qzlmxyhf0gyrj0dg0jfk1zar0jvm1vigswgmq2m6mm4v";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      click configobj prompt_toolkit psycopg2
+      click configobj humanize prompt_toolkit psycopg2
       pygments sqlparse pgspecial setproctitle
     ];
 
