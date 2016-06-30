@@ -1,0 +1,200 @@
+[
+  {
+    "goPackagePath": "github.com/Unknwon/goconfig",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/Unknwon/goconfig",
+      "rev": "5f601ca6ef4d5cea8d52be2f8b3a420ee4b574a5",
+      "sha256": "0kgmxvkkb8qa63k6wlm13c6dq203gb3lx1klhswx6cg0nfjp9z9j"
+    }
+  },
+  {
+    "goPackagePath": "github.com/VividCortex/ewma",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/VividCortex/ewma",
+      "rev": "8b9f1311551e712ea8a06b494238b8a2351e1c33",
+      "sha256": "1w8gf6310dxl57jdq1b04wbh4ssb0nvck3926bbd86mnw78z0byl"
+    }
+  },
+  {
+    "goPackagePath": "github.com/aws/aws-sdk-go",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/aws/aws-sdk-go",
+      "rev": "101d2e228fea0ab462a7e0180c607290c4850f15",
+      "sha256": "0jcc57f3c5jsq4yk4yc01famvx2m50l1drw11mmfyv2p1qq29bpf"
+    }
+  },
+  {
+    "goPackagePath": "github.com/go-ini/ini",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/go-ini/ini",
+      "rev": "e0f460c8b6dcaf8672f302d1c804e4b76e6567dc",
+      "sha256": "09qx8y4asivxxgnf9j5ikl9b30cbipcxm0xy6l0w5zvwxqlgaq2q"
+    }
+  },
+  {
+    "goPackagePath": "github.com/google/go-querystring",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/google/go-querystring",
+      "rev": "9235644dd9e52eeae6fa48efd539fdc351a0af53",
+      "sha256": "0q398679fwp7vlnpd2rlzz452a7a4qvpcspak81psfl3xwimpzgq"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jmespath/go-jmespath",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jmespath/go-jmespath",
+      "rev": "0b12d6b521d83fc7f755e7cfc1b1fbdd35a01a74",
+      "sha256": "1vv6hph8j6xgv7gwl9vvhlsaaqsm22sxxqmgmldi4v11783pc1ld"
+    }
+  },
+  {
+    "goPackagePath": "github.com/mreiferson/go-httpclient",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/mreiferson/go-httpclient",
+      "rev": "63fe23f7434723dc904c901043af07931f293c47",
+      "sha256": "1xp8n4dkvpdphzjj3f547kgpclf5nzci9w09m95bci7pa7nax0hf"
+    }
+  },
+  {
+    "goPackagePath": "github.com/ncw/go-acd",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/ncw/go-acd",
+      "rev": "0bd73ce86fffd8afeafe4e46f419f1a8ce6324b9",
+      "sha256": "1vgcglk2pf325hs1319fk73akzi9hd75kwhjq0j4s6l1p7ybj0l7"
+    }
+  },
+  {
+    "goPackagePath": "github.com/ncw/rclone",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/ncw/rclone",
+      "rev": "5a3b109e25a8ad942eebc15251a67629acd647f7",
+      "sha256": "0np3k95zbhbaqnv251rz5j7nlpn8clbsnbiswmj55vxvsybk471x"
+    }
+  },
+  {
+    "goPackagePath": "github.com/ncw/swift",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/ncw/swift",
+      "rev": "b964f2ca856aac39885e258ad25aec08d5f64ee6",
+      "sha256": "0c86ap1zb56r6g96cnbn5j3i3r96c5l8rl98h3sxlqi5agwp3km4"
+    }
+  },
+  {
+    "goPackagePath": "github.com/pkg/errors",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/pkg/errors",
+      "rev": "a2d6902c6d2a2f194eb3fb474981ab7867c81505",
+      "sha256": "1h5jy922c5npazznkaxsxjcm07vh887188s6k212c25wckn2f04v"
+    }
+  },
+  {
+    "goPackagePath": "github.com/skratchdot/open-golang",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/skratchdot/open-golang",
+      "rev": "75fb7ed4208cf72d323d7d02fd1a5964a7a9073c",
+      "sha256": "1b67imqbsdvg19vif1q1dfmapxy3v2anagacbql95fwnnw0v8jga"
+    }
+  },
+  {
+    "goPackagePath": "github.com/spf13/pflag",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/spf13/pflag",
+      "rev": "367864438f1b1a3c7db4da06a2f55b144e6784e0",
+      "sha256": "03c6654hv4v1fj79i5sri3p9q2afqgicka4nicb6fr4kcfkkgbfp"
+    }
+  },
+  {
+    "goPackagePath": "github.com/stacktic/dropbox",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/stacktic/dropbox",
+      "rev": "58f839b21094d5e0af7caf613599830589233d20",
+      "sha256": "1psmxpnn40ri9bgjvivljnd4p977f635mh3w7m5mglxxgc9392pi"
+    }
+  },
+  {
+    "goPackagePath": "github.com/tsenart/tb",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/tsenart/tb",
+      "rev": "19f4c3d79d2bd67d0911b2e310b999eeea4454c1",
+      "sha256": "148vy4xij5qm8dq5plyczx2wbpi4gpg8ksr5r3b4m8j0z1kjws8y"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/crypto",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/crypto",
+      "rev": "811831de4c4dd03a0b8737233af3b36852386373",
+      "sha256": "16ssjhrsjb9h31gvmj2r8r0aidlw9p7yp5fdwm80b2ws9ivqfwfb"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/net",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/net",
+      "rev": "ef2e00e88c5e0a3569f0bb9df697e9cbc6215fea",
+      "sha256": "0vyj5nsy4z3wnjids97n1c4wrdbvankf0hi1ihkhqacnr1h824cm"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/oauth2",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/oauth2",
+      "rev": "65a8d08c6292395d47053be10b3c5e91960def76",
+      "sha256": "108xdnbnb20g0hbzw2a3iir5mdgf48kpldlq6xv8nsj0gyzhd6z3"
+    }
+  },
+  {
+    "goPackagePath": "golang.org/x/text",
+    "fetch": {
+      "type": "git",
+      "url": "https://go.googlesource.com/text",
+      "rev": "4440cd4f4c2ea31e1872e00de675a86d0c19006c",
+      "sha256": "1maxpp1zd2zb5jg3hvgd8p1k2yhnjmm8pn5bg376kdjpp3r05s3z"
+    }
+  },
+  {
+    "goPackagePath": "google.golang.org/api",
+    "fetch": {
+      "type": "git",
+      "url": "https://code.googlesource.com/google-api-go-client",
+      "rev": "7a1b48a03240285fcdb91f7890f647cd90358f84",
+      "sha256": "14b7vfs1bjix875w35m8caagy3ma7xia6r7hbzmbh23wakrj0bwh"
+    }
+  },
+  {
+    "goPackagePath": "google.golang.org/cloud",
+    "fetch": {
+      "type": "git",
+      "url": "https://code.googlesource.com/gocloud",
+      "rev": "177eb6aa499a0f004654ab4a191c30edc2d0ce3a",
+      "sha256": "1pjv0fngamvr2h1nd6cgijhh9vm8rjh9kca45m6r84ahk2fk244h"
+    }
+  },
+  {
+    "goPackagePath": "github.com/stretchr/testify",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/stretchr/testify",
+      "rev": "089c7181b8c728499929ff09b62d3fdd8df8adff",
+      "sha256": "03dzxkxbs298pvfsjz4kdadfaf9jkzsdhshqmg4p12wbyaj09s4p"
+    }
+  }
+]
