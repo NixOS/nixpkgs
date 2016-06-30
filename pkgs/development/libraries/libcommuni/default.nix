@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sed -i -e 's|/bin/pwd|pwd|g' configure
   '';
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "A cross-platform IRC framework written with Qt";
     homepage = https://communi.github.io;
