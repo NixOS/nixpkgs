@@ -16122,6 +16122,8 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
+  LiE = callPackage ../applications/science/math/LiE { };
+
   magma = callPackage ../development/libraries/science/math/magma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
