@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl
 , expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, gobjectIntrospection
-, xorg, wayland, epoxy, json_glib, libxkbcommon, gmp
+, xorg, epoxy, json_glib, libxkbcommon, gmp
+, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux, cups ? null
 , darwin
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with xorg; with stdenv.lib;
     [ expat glib cairo pango gdk_pixbuf atk at_spi2_atk
       libXrandr libXrender libXcomposite libXi libXcursor libSM libICE ]
-    ++ optionals stdenv.isLinux [ wayland ]
+    ++ optionals waylandSupport [ wayland wayland-protocols ]
     ++ optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa ])
     ++ optional xineramaSupport libXinerama
     ++ optional cupsSupport cups;
@@ -53,6 +54,10 @@ stdenv.mkDerivation rec {
     "--disable-glibtest"
     "--with-gdktarget=quartz"
     "--enable-quartz-backend"
+  ] ++ optional stdenv.isLinux [
+    "--enable-x11-backend"
+  ] ++ optional waylandSupport [
+    "--enable-wayland-backend"
   ];
 
   postInstall = ''
