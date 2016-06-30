@@ -2270,6 +2270,8 @@ in
 
   makebootfat = callPackage ../tools/misc/makebootfat { };
 
+  matrix-appservice-irc = callPackage ../servers/matrix-appservice-irc { };
+
   matrix-synapse = callPackage ../servers/matrix-synapse { };
 
   memtester = callPackage ../tools/system/memtester { };

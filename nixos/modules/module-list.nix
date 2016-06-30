@@ -358,6 +358,7 @@
   ./services/networking/libreswan.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
+  ./services/networking/matrix-appservice-irc.nix
   ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
