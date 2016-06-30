@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   name = "zstd-${version}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
-    sha256 = "10n54lv33r90qbwvdvj4hx82g454pg1fhca3phkyh9mncbdvaqma";
+    sha256 = "0h922kw6q0nsbigv86k7xqpfh4rj7rjxp60pgjmp5vlb2bma03sm";
     rev = "v${version}";
     repo = "zstd";
     owner = "Cyan4973";
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     # The licence of the CLI programme is GPLv2+, that of the library BSD-2.
     license = with licenses; [ gpl2Plus bsd2 ];
 
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];
   };
 }

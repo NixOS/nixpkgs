@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.9.4";
+  version = "2.11.0";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "1smmc4xqs8x8qzp6iqj2wr4xarfnxxxp6rq6chx1kb256w75jwfw";
+    sha256 = "170e6d68952251e8c64589b0d147cb7692005e135cc6fc14579c6fd593f54307";
   };
 
   buildInputs = [ qt4 qmake4Hook poppler_qt4 zlib pkgconfig ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "TeX and LaTeX editor";
     longDescription=''
-	Fork of TeXMaker, this editor is a full fledged IDE for 
+	Fork of TeXMaker, this editor is a full fledged IDE for
 	LaTeX editing with completion, structure viewer, preview,
 	spell checking and support of any compilation chain.
 	'';

@@ -1357,11 +1357,13 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.18";
+    version = "1.10.38";
+
+    namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0vdj7p4cwsbzhanhp5f2c0b0qr2gh76dyanji73avvj4jvdb5d4g";
+      sha256 = "01d14snp3h4dkbwyviyprhcl8qcngc6nyzwy3k3nxvm1ia9hvz2n";
     };
 
     # No tests included
@@ -1873,6 +1875,34 @@ in modules // {
       maintainers = with maintainers; [ pSub ];
     };
   };
+
+  binwalk_fun = { visualizationSupport ? false, pyqtgraph ? null }:
+    assert visualizationSupport -> pyqtgraph != null;
+
+    buildPythonPackage rec {
+    name = "binwalk-${version}";
+    version = "2.1.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "devttys0";
+      repo = "binwalk";
+      rev = "291a03595d17f848c73b74cb6ca508da782cd8f7";
+      sha256 = "0grid93yz6i6jb2zggrqncp5awdf7qi88j5y2k7dq0k9r6b8zydw";
+    };
+
+    propagatedBuildInputs = with stdenv.lib; with pkgs; [ modules.curses zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
+      ++ optional visualizationSupport [ pyqtgraph ];
+
+    meta = with stdenv.lib; {
+      homepage = "http://binwalk.org";
+      description = "A tool for searching a given binary image for embedded files";
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+
+  binwalk = self.binwalk_fun { };
+  binwalk-full = self.binwalk_fun { visualizationSupport = true; pyqtgraph = self.pyqtgraph; };
 
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
@@ -2698,12 +2728,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.9"; # This version is required by awscli
+    version = "1.4.28"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "07rp24lnpjlk0c889g0d8y2ykc711gi04w715nkm9mv734ndsman";
+      sha256 = "1qfvcb7japa3y1j4b86af9ph8q8mbq2mrx6xfhlqcf2x399l2phl";
     };
 
     propagatedBuildInputs =
@@ -4313,11 +4343,11 @@ in modules // {
   };
 
   cffi = if isPyPy then null else buildPythonPackage rec {
-    name = "cffi-1.5.2";
+    name = "cffi-1.7.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cffi/${name}.tar.gz";
-      sha256 = "1p91p1n8n46y0k3q7ddgxxjnfh08rjqsjh7zbjxzfiifhycxx6ys";
+      sha256 = "1pv0pf38h375r581zyckb1d2phcgkszsx2n6354g6qc3zmmdvmbf";
     };
 
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
@@ -5362,19 +5392,15 @@ in modules // {
 
   dns = buildPythonPackage rec {
     name = "dnspython-${version}";
-    version = "1.12.0";
+    version = "1.14.0";
 
-    src = if isPy3k then pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython3/dnspython3-${version}.zip";
-      sha256 = "138wxj702vx6zni9g2y8dbgbpin95v6hk23rh2kwfr3q4130jqz9";
-    } else pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython/${name}.tar.gz";
-      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/dnspython/${name}.zip";
+      sha256 = "1p1i46fyhxfic8mfh3gfckpn2pn7282xqabhihiqymrp4sa8ni91";
     };
 
-    # Not supported.
-    # See instead https://pypi.python.org/pypi/dnspython3/1.12.0
-    disabled = isPy3k;
+    # needs networking for some tests
+    doCheck = false;
 
     meta = {
       description = "A DNS toolkit for Python 3.x";
@@ -6757,7 +6783,7 @@ in modules // {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.2.2";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -6770,7 +6796,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+      sha256 = "1riski56b93i8fddgixmmrh6cbprwv44r5wnzcqg9khky1wkg4ls";
     };
 
     meta = {
@@ -11950,11 +11976,11 @@ in modules // {
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
-    version = "2015.10.04";
+    version = "2016.05.06";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/limnoria/${name}.tar.gz";
-      sha256 = "1hwwwr0z2vsirgwd92z17nbhnhsz0m25bpxn5sanqlbcjbwhyk9z";
+      sha256 = "09kbii5559d09jjb6cryj8rva1050r54dvb67hlcvxhy8g3gr1y3";
     };
 
     patchPhase = ''
@@ -12032,6 +12058,30 @@ in modules // {
     # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
     doCheck = false;
 
+    meta = {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ bjornfor ];
+    };
+  };
+
+  # Old version needed for attic (backup program) due to breaking change in
+  # llfuse >= 0.42.
+  llfuse-0-41 = buildPythonPackage rec {
+    name = "llfuse-0.41.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
+      sha256 = "1imlqw9b73086y97izr036f58pgc5akv4ihc2rrf8j5h75jbrlaa";
+    };
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    propagatedBuildInputs = with self; [ contextlib2 ];
+    checkPhase = ''
+      py.test
+    '';
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
     meta = {
       description = "Python bindings for the low-level FUSE API";
       homepage = https://code.google.com/p/python-llfuse/;
@@ -13602,6 +13652,80 @@ in modules // {
     };
   };
 
+  nilearn = buildPythonPackage rec {
+    version = "0.2.5";
+    name = "nilearn-${version}";
+
+    # package seems to attempt Python 3 compatibility, but throws UnicodeDecodeError when building:
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nilearn/${name}.tar.gz";
+      sha256 = "1lmkrzr5x2yp129v2fvckrbdzf2kpcivdg9cacl519l3mb0acdv9";
+    };
+
+    checkPhase = "nosetests --exclude with_expand_user nilearn/tests";
+
+    buildInputs = with self; [ nose ];
+
+    propagatedBuildInputs = with self; [
+      matplotlib
+      nibabel
+      numpy
+      scikitlearn
+      scipy
+    ];
+
+    meta = {
+      homepage = http://nilearn.github.io;
+      description = "A module for statistical learning on neuroimaging data";
+      license = licenses.bsd3;
+    };
+  };
+
+  nipy = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "nipy-${version}";
+ 
+    disabled = pythonOlder "2.6";
+
+    checkPhase = ''    # wants to be run in a different directory
+      mkdir nosetests
+      cd nosetests
+      ${python.interpreter} -c "import nipy; nipy.test()"
+      rm -rf .
+    '';
+    # failing test:
+    # nipy.algorithms.statistics.models.tests.test_olsR.test_results(11.593139639404727, 11.593140144880794, 6)  # disagrees by 1 at 6th decimal place
+    # erroring tests:
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_altprotocol
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_agreement
+    # nipy.tests.test_scripts.test_nipy_4d_realign   # because `nipy_4d_realign` script isn't found at test time; works from nix-shell, so could be patched
+    # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nipy/${name}.tar.gz";
+      sha256 = "1hnbn2i4fjxflaaz082s2c57hfp59jfra1zayz1iras5p2dy21nr";
+    };
+
+    buildInputs = stdenv.lib.optional doCheck [ self.nose ];
+
+    propagatedBuildInputs = with self; [
+      matplotlib
+      nibabel
+      numpy
+      scipy
+      sympy
+    ];
+
+    meta = {
+      homepage = http://nipy.org/nipy/;
+      description = "Software for structural and functional neuroimaging analysis";
+      license = licenses.bsd3;
+    };
+  };
+
   nipype = buildPythonPackage rec {
     version = "0.10.0";
     name = "nipype-${version}";
@@ -13780,12 +13904,12 @@ in modules // {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.2.1";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "113d0548ky0fwa7h950ijkwi1cnpc46l9cdmjr3kjj3vqwb4j371";
+      sha256 = "15z1j821iywjcjf6d8r338jm09l9qwk8z9gjplag56dvv8jfb7d4";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -14006,10 +14130,10 @@ in modules // {
   };
 
   numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.0";
+    version = "1.11.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "0gml1ng7iqk4xcrvspjd5vnfqdwfinvjfyksfawvy5h8426jdld1";
+      sha256 = "1kbpsnqfabpbczh3ly2d4jrwq2d1gqlshlpk5dm8bk3r77284h6w";
     };
   };
 
@@ -16618,11 +16742,11 @@ in modules // {
   };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.9.0";
+    name = "Pillow-3.2.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pillow/${name}.zip";
-      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
+      url = "mirror://pypi/P/Pillow/${name}.tar.gz";
+      sha256 = "0jkqjnqj3bz3cwrvbw6q1zy6dn0c328r6v20k7m0lj0c45bs1c34";
     };
 
     # Check is disabled because of assertion errors, see
@@ -25400,13 +25524,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.3.3";
+    version = "1.3.5";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "0jhf1h4zdysxf5mj769l5ddcbs5j3mzj4sdy8gp4kbj4imwaws5a";
+      sha256 = "1hm5dzrv03m77026xccxiiq6abqpzci277gvhhsqmlbzcdbqll50";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
@@ -27761,6 +27885,30 @@ in modules // {
        description = "This lib implements many of the artificial intelligence algorithms described on the book 'Artificial Intelligence, a Modern Approach'";
        maintainers = with maintainers; [ NikolaMandic ];
      };
+  };
+
+  word2vec = buildPythonPackage rec {
+    name = "word2vec-${version}";
+    version = "0.9.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/w/word2vec/${name}.tar.gz";
+      sha256 = "a811e3e98a8e6dfe7bc851ebbbc2d6e5ab5142f2a134dd3c03daac997b546faa";
+    };
+
+    propagatedBuildInputs = with self; [ cython numpy ];
+
+    checkPhase = ''
+     cd word2vec/tests;
+      ${python.interpreter} test_word2vec.py
+    '';
+
+    meta = {
+      description = "Tool for computing continuous distributed representations of words";
+      homepage = "https://github.com/danielfrg/word2vec";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
   };
 
   tvdb_api = buildPythonPackage rec {

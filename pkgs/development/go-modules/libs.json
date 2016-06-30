@@ -1,5 +1,14 @@
 [
   {
+    "goPackagePath": "github.com/elves/getopt",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/elves/getopt",
+      "rev": "f91a7bf920995832d55a1182f26657bc975b9c24",
+      "sha256": "0wz5dz0iq1b1c2w30mmcgll9xidsrnlvs2906jw9szy0h67310za"
+    }
+  },
+  {
     "goPackagePath": "golang.org/x/sys",
     "fetch": {
       "type": "git",
@@ -1536,6 +1545,24 @@
       "url": "https://github.com/jawher/mow.cli",
       "rev": "772320464101e904cd51198160eb4d489be9cc49",
       "sha256": "1a8hnh2k3vc3prjhnz4rjbiwhqq6r3mi18h9cdb6fc6s6yzjc19j"
+    }
+  },
+  {
+    "goPackagePath": "github.com/svent/go-flags",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/svent/go-flags",
+      "rev": "4bcbad344f0318adaf7aabc16929701459009aa3",
+      "sha256": "1gb416fgxl9gq4q6wsv3i2grq1mzbi7lvfvmfdqbxqbv9vizzh34"
+    }
+  },
+  {
+    "goPackagePath": "github.com/svent/go-nbreader",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/svent/go-nbreader",
+      "rev": "7cef48da76dca6a496faa7fe63e39ed665cbd219",
+      "sha256": "0hw11jj5r3f6qwydg41nc3c6aadlbkhc1qpxra2609lis0qa9h4r"
     }
   }
 ]

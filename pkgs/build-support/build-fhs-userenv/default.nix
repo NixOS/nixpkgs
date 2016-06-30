@@ -32,7 +32,7 @@ in runCommand name {
   passthru = passthru // {
     env = runCommand "${name}-shell-env" {
       shellHook = ''
-        export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"
+        ${lib.optionalString (extraBindMounts != []) ''export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"''}
         exec ${chroot-user} ${init "bash"} "$(pwd)"
       '';
     } ''
@@ -46,7 +46,7 @@ in runCommand name {
   mkdir -p $out/bin
   cat <<EOF >$out/bin/${name}
   #! ${stdenv.shell}
-  export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:\$CHROOTENV_EXTRA_BINDS"
+  ${lib.optionalString (extraBindMounts != []) ''export CHROOTENV_EXTRA_BINDS="${lib.concatStringsSep ":" extraBindMounts}:$CHROOTENV_EXTRA_BINDS"''}
   exec ${chroot-user} ${init runScript} "\$(pwd)" "\$@"
   EOF
   chmod +x $out/bin/${name}

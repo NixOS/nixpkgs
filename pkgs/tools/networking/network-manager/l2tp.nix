@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "nm-l2tp";
     repo   = "network-manager-l2tp";
-    rev    = version;
-    sha256 = "1zqdhm7pzhaq6q8pddj9ki25qs9m6qwqgzc5x07a0qffla2rq5j1";
+    rev    = "c0cedda5e2a0ded695b497c361eaf577068520cb";
+    sha256 = "01f39ghc37vw4n4i7whyikgqz8vzxf41q9fsv2gfw1g501cny1j2";
   };
 
   buildInputs = [ networkmanager ppp networkmanagerapplet libsecret ]
