@@ -961,7 +961,9 @@ in
 
   davix = callPackage ../tools/networking/davix { };
 
-  cantata = qt5.callPackage ../applications/audio/cantata { };
+  cantata = qt5.callPackage ../applications/audio/cantata {
+    ffmpeg = ffmpeg_2;
+  };
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
@@ -984,7 +986,9 @@ in
   ceph-dev = self.ceph;
   #ceph-dev = lowPrio (callPackage ../tools/filesystems/ceph/dev.nix { });
 
-  cfdg = callPackage ../tools/graphics/cfdg { };
+  cfdg = callPackage ../tools/graphics/cfdg {
+    ffmpeg = ffmpeg_2;
+  };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
@@ -2156,7 +2160,9 @@ in
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
-  liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix { };
+  liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
+    ffmpeg = ffmpeg_2;
+  };
 
   lnav = callPackage ../tools/misc/lnav { };
 
@@ -5789,6 +5795,7 @@ in
 
   renpy = callPackage ../development/interpreters/renpy {
     wrapPython = pythonPackages.wrapPython;
+    ffmpeg = ffmpeg_2;
   };
 
   pixie = callPackage ../development/interpreters/pixie { };
@@ -6993,7 +7000,7 @@ in
   ffmpeg_1 = self.ffmpeg_1_2;
   ffmpeg_2 = self.ffmpeg_2_8;
   ffmpeg_3 = self.ffmpeg_3_0;
-  ffmpeg = self.ffmpeg_2;
+  ffmpeg = self.ffmpeg_3;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
     # The following need to be fixed on Darwin
@@ -7013,11 +7020,15 @@ in
                                           MediaToolbox VideoDecodeAcceleration;
   };
 
-  ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
+  ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer {
+    ffmpeg = ffmpeg_2;
+  };
 
   ffmpeg-sixel = callPackage ../development/libraries/ffmpeg-sixel { };
 
-  ffms = callPackage ../development/libraries/ffms { };
+  ffms = callPackage ../development/libraries/ffms {
+    ffmpeg = ffmpeg_2;
+  };
 
   fftw = callPackage ../development/libraries/fftw { };
   fftwSinglePrec = self.fftw.override { precision = "single"; };
@@ -8536,6 +8547,7 @@ in
     avahi = avahi.override {
       withLibdnssdCompat = true;
     };
+    ffmpeg = ffmpeg_2;
   };
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
@@ -8545,6 +8557,7 @@ in
   };
 
   mlt-qt4 = callPackage ../development/libraries/mlt {
+    ffmpeg = ffmpeg_2;
     qt = qt4;
   };
 
@@ -8685,7 +8698,9 @@ in
 
   openct = callPackage ../development/libraries/openct { };
 
-  opencv = callPackage ../development/libraries/opencv { };
+  opencv = callPackage ../development/libraries/opencv {
+    ffmpeg = ffmpeg_2;
+  };
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix { };
 
@@ -8700,7 +8715,9 @@ in
 
   ois = callPackage ../development/libraries/ois {};
 
-  opal = callPackage ../development/libraries/opal {};
+  opal = callPackage ../development/libraries/opal {
+    ffmpeg = ffmpeg_2;
+  };
 
   openh264 = callPackage ../development/libraries/openh264 { };
 
@@ -8929,7 +8946,9 @@ in
 
     libkeyfinder = callPackage ../development/libraries/libkeyfinder { };
 
-    mlt = callPackage ../development/libraries/mlt/qt-5.nix {};
+    mlt = callPackage ../development/libraries/mlt/qt-5.nix {
+      ffmpeg = ffmpeg_2;
+    };
 
     openbr = callPackage ../development/libraries/openbr { };
 
@@ -9481,7 +9500,9 @@ in
 
   xdo = callPackage ../tools/misc/xdo { };
 
-  xineLib = callPackage ../development/libraries/xine-lib { };
+  xineLib = callPackage ../development/libraries/xine-lib {
+    ffmpeg = ffmpeg_2;
+  };
 
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
@@ -12013,6 +12034,7 @@ in
 
   avxsynth = callPackage ../applications/video/avxsynth {
     libjpeg = libjpeg_original; # error: 'JCOPYRIGHT_SHORT' was not declared in this scope
+    ffmpeg = ffmpeg_2;
   };
 
   awesome-3-4 = callPackage ../applications/window-managers/awesome/3.4.nix {
@@ -12097,7 +12119,9 @@ in
 
   bristol = callPackage ../applications/audio/bristol { };
 
-  bs1770gain = callPackage ../applications/audio/bs1770gain { };
+  bs1770gain = callPackage ../applications/audio/bs1770gain {
+    ffmpeg = ffmpeg_2;
+  };
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
@@ -12198,6 +12222,7 @@ in
   cmus = callPackage ../applications/audio/cmus {
     libjack = libjack2;
     libcdio = libcdio082;
+    ffmpeg = ffmpeg_2;
 
     pulseaudioSupport = config.pulseaudio or false;
   };
@@ -12842,6 +12867,7 @@ in
   };
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix {
+    ffmpeg = ffmpeg_2;
     cmake = cmake-2_8;
   };
 
@@ -13048,6 +13074,7 @@ in
 
   guvcview = callPackage ../os-specific/linux/guvcview {
     pulseaudioSupport = config.pulseaudio or true;
+    ffmpeg = ffmpeg_2;
   };
 
   gxmessage = callPackage ../applications/misc/gxmessage { };
@@ -13281,6 +13308,7 @@ in
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
+    ffmpeg = ffmpeg_2;
   };
 
   kiwix = callPackage ../applications/misc/kiwix { };
@@ -13401,7 +13429,9 @@ in
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
-  linphone = callPackage ../applications/networking/instant-messengers/linphone rec { };
+  linphone = callPackage ../applications/networking/instant-messengers/linphone rec {
+    ffmpeg = ffmpeg_2;
+  };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler {
     bison = bison2;
@@ -13431,6 +13461,7 @@ in
 
   handbrake = callPackage ../applications/video/handbrake {
     webkitgtk = webkitgtk24x;
+    ffmpeg = ffmpeg_2;
   };
 
   lilyterm = callPackage ../applications/misc/lilyterm {
@@ -13521,7 +13552,9 @@ in
 
   mmex = callPackage ../applications/office/mmex { };
 
-  moc = callPackage ../applications/audio/moc { };
+  moc = callPackage ../applications/audio/moc {
+    ffmpeg = ffmpeg_2;
+  };
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
@@ -13848,7 +13881,9 @@ in
 
   pbrt = callPackage ../applications/graphics/pbrt { };
 
-  pcsxr = callPackage ../misc/emulators/pcsxr { };
+  pcsxr = callPackage ../misc/emulators/pcsxr {
+    ffmpeg = ffmpeg_2;
+  };
 
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
@@ -14305,7 +14340,9 @@ in
 
   soxr = callPackage ../applications/misc/audio/soxr { };
 
-  spek = callPackage ../applications/audio/spek { };
+  spek = callPackage ../applications/audio/spek {
+    ffmpeg = ffmpeg_2;
+  };
 
   spotify = callPackage ../applications/audio/spotify {
     inherit (gnome) GConf;
@@ -15484,7 +15521,9 @@ in
 
   steam-run = steam.run;
 
-  stepmania = callPackage ../games/stepmania { };
+  stepmania = callPackage ../games/stepmania {
+    ffmpeg = ffmpeg_2;
+  };
 
   stuntrally = callPackage ../games/stuntrally {
     bullet = bullet283;
@@ -15712,7 +15751,9 @@ in
       # the real work in this function is done below this list
       extraPackages = callPackage:
         rec {
-          amarok = callPackage ../applications/audio/amarok { };
+          amarok = callPackage ../applications/audio/amarok {
+            ffmpeg = ffmpeg_2;
+          };
 
           bangarang = callPackage ../applications/video/bangarang { };
 
@@ -16986,7 +17027,9 @@ in
 
   vault = callPackage ../tools/security/vault { };
 
-  vbam = callPackage ../misc/emulators/vbam {};
+  vbam = callPackage ../misc/emulators/vbam {
+    ffmpeg = ffmpeg_2;
+  };
 
   vice = callPackage ../misc/emulators/vice {
     libX11 = xorg.libX11;
