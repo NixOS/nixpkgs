@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, lzo, zlib, gcc, iproute, ronn }:
+{ stdenv, fetchurl, openssl, lzo, zlib, iproute, which, ronn }:
 
 stdenv.mkDerivation rec {
   version = "1.1.6";
@@ -10,10 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-      substituteInPlace ./make-linux.mk \
-        --replace 'CC=$(shell which clang gcc cc 2>/dev/null | head -n 1)' "CC=${gcc}/bin/gcc";
-      substituteInPlace ./make-linux.mk \
-        --replace 'CXX=$(shell which clang++ g++ c++ 2>/dev/null | head -n 1)' "CC=${gcc}/bin/g++";
       substituteInPlace ./osdep/LinuxEthernetTap.cpp \
         --replace 'execlp("ip",' 'execlp("${iproute}/bin/ip",'
 
@@ -23,7 +19,7 @@ stdenv.mkDerivation rec {
         --replace 'ronn -r' '${ronn}/bin/ronn -r'
   '';
 
-  buildInputs = [ openssl lzo zlib gcc iproute ronn ];
+  buildInputs = [ openssl lzo zlib iproute which ronn ];
 
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one
