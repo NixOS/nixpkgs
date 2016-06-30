@@ -16492,14 +16492,15 @@ in modules // {
 
   pgspecial = buildPythonPackage rec {
     name = "pgspecial-${version}";
-    version = "1.3.0";
+    version = "1.4.0";
 
     src = pkgs.fetchurl {
-      sha256 = "1nxqqkchigrznywmm73n1ksp5hhhwswz8anrlwpi9i75wq792mg1";
+      sha256 = "136z7nxnx322nv65aqw3nq420j4ibf4pkfn7y9d7zwn9kc4jxz14";
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
 
     propagatedBuildInputs = with self; [ click ];
+    buildInputs = with self; [ sqlparse ];
 
     meta = {
       description = "Meta-commands handler for Postgres Database";
