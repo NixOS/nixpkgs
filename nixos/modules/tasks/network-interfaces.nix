@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, stdenv, ... }:
 
 with lib;
 with utils;
@@ -889,7 +889,26 @@ in
         (i: flip map [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${i.name}.proxy_arp" true))
       ));
 
-    security.setuidPrograms = [ "ping" "ping6" ];
+    # Capabilities won't work unless we have at-least a 4.3 Linux
+    # kernel because we need the ambient capability
+    security.setcapCapabilities = mkIf (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") (
+      [
+        { program = "ping";
+          setcap  = true;
+          capabilities = "cap_net_raw+p";
+        }
+
+        { program = "ping6";
+          setcap  = true;
+          capabilities = "cap_net_raw+p";
+        }
+      ]
+    );
+
+    # If our linux kernel IS older than 4.3, let's setuid ping and ping6
+    security.setuidPrograms = mkIf (versionOlder (getVersion config.boot.kernelPackages.kernel) "4.3") (
+      [ "ping" "ping6" ]
+    );
 
     # Set the host and domain names in the activation script.  Don't
     # clear it if it's not configured in the NixOS configuration,
