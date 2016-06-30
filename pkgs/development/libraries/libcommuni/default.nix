@@ -1,4 +1,4 @@
-{ fetchgit, qtbase, qmakeHook, stdenv
+{ fetchgit, qtbase, qmakeHook, which, stdenv
 }:
 
 stdenv.mkDerivation rec {
@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmakeHook which ];
 
   enableParallelBuild = true;
 
-  configurePhase = ''
+  dontUseQmakeConfigure = true;
+  configureFlags = "-config release";
+  preConfigure = ''
     sed -i -e 's|/bin/pwd|pwd|g' configure
-    ./configure -config release -prefix $out -qmake $QMAKE
   '';
 
   meta = with stdenv.lib; {
