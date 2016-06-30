@@ -4257,6 +4257,8 @@ in
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
+  drumstick = callPackage ../development/libraries/drumstick { };
+
   ecl = callPackage ../development/compilers/ecl { };
 
   eql = callPackage ../development/compilers/eql {};
