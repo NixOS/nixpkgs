@@ -1,40 +1,42 @@
-{ stdenv, fetchurl, gmp }:
+{ stdenv, lib, fetchFromGitHub
+, coreutils, gmp, opencl-headers, opencl-icd, makeWrapper
+}:
 
-assert stdenv.isLinux;
-
-let
-  bits = if stdenv.system == "x86_64-linux" then "64" else "32";
-in
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "2.00";
+  version = "3.00";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://codeload.github.com/hashcat/hashcat/tar.gz/${version}";
-    sha256 = "0i2l4i1jkdhj9bkvycgd2nf809kki3jp83y0vrd4iwsdbbbyc9b3";
+  src = fetchFromGitHub {
+    owner  = "hashcat";
+    repo   = "hashcat";
+    rev    = "v${version}";
+    sha256 = "1rjy5p41g3l51s4aiv94ks7ghrhdh2209dw8gyv9cv3zii0ki545";
   };
 
-  buildInputs = [ gmp ];
+  buildInputs = [ coreutils gmp opencl-headers opencl-icd makeWrapper ];
 
-  buildFlags = [ "posix${bits}" ]
-    ++ stdenv.lib.optionals (bits == "64") [ "posixXOP" "posixAVX" ];
-
-  # Upstream Makefile doesn't have 'install' target
-  installPhase = ''
-    mkdir -p $out/bin $out/libexec
-    cp -R * $out/libexec
-
-    ln -s $out/libexec/hashcat-cli${bits}.bin $out/bin/hashcat
-    ln -s $out/libexec/hashcat-cliXOP.bin $out/bin/hashcat-xop
-    ln -s $out/libexec/hashcat-cliAVX.bin $out/bin/hashcat-avx
+  buildPhase = ''
+    # Set the PREFIX here to work around a bug in hashcat.
+    # See https://github.com/hashcat/hashcat/issues/399
+    make PREFIX=$out
   '';
 
-  meta = {
+  installPhase = ''
+    make install PREFIX=$out
+    wrapProgram $out/bin/hashcat \
+      --prefix LD_LIBRARY_PATH : "${opencl-icd}/lib"
+
+    mkdir -p $doc/share
+    mv $out/share/doc $doc/share
+  '';
+
+  outputs = [ "out" "doc" ];
+
+  meta = with lib; {
     description = "Fast password cracker";
-    homepage    = "http://hashcat.net/hashcat/";
-    license     = stdenv.lib.licenses.mit;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage    = http://hashcat.net/hashcat/;
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice zimbatm ];
   };
 }
