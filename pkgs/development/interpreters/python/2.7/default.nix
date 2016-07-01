@@ -189,6 +189,9 @@ let
       C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
       LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
 
+      # We need to set this for python.buildEnv
+      pythonPath = [];
+
       # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
       buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
           sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
