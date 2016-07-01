@@ -103,8 +103,6 @@ in
     export PATH="${config.security.setcapWrapperDir}:$PATH"
     '';
 
-
-
     system.activationScripts.setcap =
       let
         setcapPrograms = cfg;
