@@ -29,6 +29,7 @@
 , udev ? null
 , varnish ? null
 , yajl ? null
+, net_snmp ? null
 }:
 stdenv.mkDerivation rec {
   version = "5.5.1";
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optionals minimal [ libatasmart libcredis libdbi libgcrypt libmemcached
     cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libsigrok libvirt
     lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
-    varnish yajl jdk udev
+    varnish yajl jdk libtool python udev net_snmp
   ];
 
   # for some reason libsigrok isn't auto-detected

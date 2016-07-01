@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner  = "nm-l2tp";
     repo   = "network-manager-l2tp";
-    rev    = version;
-    sha256 = "1zqdhm7pzhaq6q8pddj9ki25qs9m6qwqgzc5x07a0qffla2rq5j1";
+    rev    = "c0cedda5e2a0ded695b497c361eaf577068520cb";
+    sha256 = "01f39ghc37vw4n4i7whyikgqz8vzxf41q9fsv2gfw1g501cny1j2";
   };
 
   buildInputs = [ networkmanager ppp networkmanagerapplet libsecret ]
@@ -25,12 +25,6 @@ stdenv.mkDerivation rec {
     substituteInPlace ./src/nm-l2tp-service.c \
       --replace /sbin/ipsec  ${strongswan}/bin/ipsec \
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
-
-    # Remove when https://github.com/nm-l2tp/network-manager-l2tp/issues/9 gets fixed
-    # per http://stackoverflow.com/questions/9225567/how-to-print-a-int64-t-type-in-c
-    sed -i -e 's,^\(#include <string.h>\)$,\1\n#include <inttypes.h>,' ./properties/import-export.c
-    substituteInPlace ./properties/import-export.c \
-      --replace '%ld' '%" PRId64 "'
   '';
 
   preConfigure = "./autogen.sh";

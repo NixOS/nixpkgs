@@ -1874,6 +1874,34 @@ in modules // {
     };
   };
 
+  binwalk_fun = { visualizationSupport ? false, pyqtgraph ? null }:
+    assert visualizationSupport -> pyqtgraph != null;
+
+    buildPythonPackage rec {
+    name = "binwalk-${version}";
+    version = "2.1.1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "devttys0";
+      repo = "binwalk";
+      rev = "291a03595d17f848c73b74cb6ca508da782cd8f7";
+      sha256 = "0grid93yz6i6jb2zggrqncp5awdf7qi88j5y2k7dq0k9r6b8zydw";
+    };
+
+    propagatedBuildInputs = with stdenv.lib; with pkgs; [ modules.curses zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
+      ++ optional visualizationSupport [ pyqtgraph ];
+
+    meta = with stdenv.lib; {
+      homepage = "http://binwalk.org";
+      description = "A tool for searching a given binary image for embedded files";
+      platforms = platforms.all;
+      maintainers = [ maintainers.koral ];
+    };
+  };
+
+  binwalk = self.binwalk_fun { };
+  binwalk-full = self.binwalk_fun { visualizationSupport = true; pyqtgraph = self.pyqtgraph; };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
@@ -5362,19 +5390,17 @@ in modules // {
 
   dns = buildPythonPackage rec {
     name = "dnspython-${version}";
-    version = "1.12.0";
+    version = "1.14.0";
 
-    src = if isPy3k then pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython3/dnspython3-${version}.zip";
-      sha256 = "138wxj702vx6zni9g2y8dbgbpin95v6hk23rh2kwfr3q4130jqz9";
-    } else pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython/${name}.tar.gz";
-      sha256 = "0kvjlkp96qzh3j31szpjlzqbp02brixh4j4clnpw80b0hspq5yq3";
+    src = pkgs.fetchFromGitHub {
+      owner = "rthalley";
+      repo = "dnspython";
+      rev = "v${version}";
+      sha256 = "1kxmqrn0rx0ayc17hrc3zigl9wdlsana55ijfw2hjy5g77yjmzyh";
     };
 
-    # Not supported.
-    # See instead https://pypi.python.org/pypi/dnspython3/1.12.0
-    disabled = isPy3k;
+    # needs networking for some tests
+    doCheck = false;
 
     meta = {
       description = "A DNS toolkit for Python 3.x";
@@ -6759,7 +6785,7 @@ in modules // {
   };
 
   jug = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.2.2";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -6772,7 +6798,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "0sg3arfsmf1g4cqfdah3g6lqxj10v5780grlsaln6wj3yclp5gyx";
+      sha256 = "1riski56b93i8fddgixmmrh6cbprwv44r5wnzcqg9khky1wkg4ls";
     };
 
     meta = {
@@ -11952,11 +11978,11 @@ in modules // {
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
-    version = "2015.10.04";
+    version = "2016.05.06";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/limnoria/${name}.tar.gz";
-      sha256 = "1hwwwr0z2vsirgwd92z17nbhnhsz0m25bpxn5sanqlbcjbwhyk9z";
+      sha256 = "09kbii5559d09jjb6cryj8rva1050r54dvb67hlcvxhy8g3gr1y3";
     };
 
     patchPhase = ''
@@ -12034,6 +12060,30 @@ in modules // {
     # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
     doCheck = false;
 
+    meta = {
+      description = "Python bindings for the low-level FUSE API";
+      homepage = https://code.google.com/p/python-llfuse/;
+      license = licenses.lgpl2Plus;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ bjornfor ];
+    };
+  };
+
+  # Old version needed for attic (backup program) due to breaking change in
+  # llfuse >= 0.42.
+  llfuse-0-41 = buildPythonPackage rec {
+    name = "llfuse-0.41.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
+      sha256 = "1imlqw9b73086y97izr036f58pgc5akv4ihc2rrf8j5h75jbrlaa";
+    };
+    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    propagatedBuildInputs = with self; [ contextlib2 ];
+    checkPhase = ''
+      py.test
+    '';
+    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
+    doCheck = false;
     meta = {
       description = "Python bindings for the low-level FUSE API";
       homepage = https://code.google.com/p/python-llfuse/;
@@ -13601,6 +13651,79 @@ in modules // {
       homepage = http://nipy.org/nibabel/;
       description = "Access a multitude of neuroimaging data formats";
       license = licenses.mit;
+    };
+  };
+
+  nilearn = buildPythonPackage rec {
+    version = "0.2.5";
+    name = "nilearn-${version}";
+
+    # package seems to attempt Python 3 compatibility, but throws UnicodeDecodeError when building:
+    disabled = isPy3k;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nilearn/${name}.tar.gz";
+      sha256 = "1lmkrzr5x2yp129v2fvckrbdzf2kpcivdg9cacl519l3mb0acdv9";
+    };
+
+    checkPhase = "nosetests --exclude with_expand_user nilearn/tests";
+
+    buildInputs = with self; [ nose ];
+
+    propagatedBuildInputs = with self; [
+      matplotlib
+      nibabel
+      numpy
+      scikitlearn
+      scipy
+    ];
+
+    meta = {
+      homepage = http://nilearn.github.io;
+      description = "A module for statistical learning on neuroimaging data";
+      license = licenses.bsd3;
+    };
+  };
+
+  nipy = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "nipy-${version}";
+ 
+    disabled = pythonOlder "2.6";
+
+    checkPhase = ''    # wants to be run in a different directory
+      mkdir nosetests
+      cd nosetests
+      ${python.interpreter} -c "import nipy; nipy.test()"
+      rm -rf .
+    '';
+    # failing test:
+    # nipy.algorithms.statistics.models.tests.test_olsR.test_results(11.593139639404727, 11.593140144880794, 6)  # disagrees by 1 at 6th decimal place
+    # erroring tests:
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_altprotocol
+    # nipy.modalities.fmri.fmristat.tests.test_FIAC.test_agreement
+    # nipy.tests.test_scripts.test_nipy_4d_realign   # because `nipy_4d_realign` script isn't found at test time; works from nix-shell, so could be patched
+    # nipy.tests.test_scripts.test_nipy_3_4d         # ditto re.: `nipy_3_4d` script
+    doCheck = false;
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/n/nipy/${name}.tar.gz";
+      sha256 = "1hnbn2i4fjxflaaz082s2c57hfp59jfra1zayz1iras5p2dy21nr";
+    };
+
+    buildInputs = stdenv.lib.optional doCheck [ self.nose ];
+
+    propagatedBuildInputs = with self; [
+      nibabel
+      numpy
+      scipy
+      sympy
+    ];
+
+    meta = {
+      homepage = http://nipy.org/nipy/;
+      description = "Software for structural and functional neuroimaging analysis";
+      license = licenses.bsd3;
     };
   };
 
@@ -27825,6 +27948,30 @@ in modules // {
      };
   };
 
+  word2vec = buildPythonPackage rec {
+    name = "word2vec-${version}";
+    version = "0.9.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/w/word2vec/${name}.tar.gz";
+      sha256 = "a811e3e98a8e6dfe7bc851ebbbc2d6e5ab5142f2a134dd3c03daac997b546faa";
+    };
+
+    propagatedBuildInputs = with self; [ cython numpy ];
+
+    checkPhase = ''
+     cd word2vec/tests;
+      ${python.interpreter} test_word2vec.py
+    '';
+
+    meta = {
+      description = "Tool for computing continuous distributed representations of words";
+      homepage = "https://github.com/danielfrg/word2vec";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ NikolaMandic ];
+    };
+  };
+
   tvdb_api = buildPythonPackage rec {
     name = "tvdb_api-${version}";
     version = "1.10";
@@ -27887,4 +28034,262 @@ in modules // {
     };
   };
 
+  threadpool = buildPythonPackage rec {
+    name = "threadpool-${version}";
+    version = "1.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/threadpool/${name}.tar.bz2";
+      sha256 = "197gzrxn9lbk0q1v079814c6s05cr4rwzyl6c1m6inkyif4yzr6c";
+    };
+  };
+
+  rocket-errbot = buildPythonPackage rec {
+    name = "rocket-errbot-${version}";
+    version = "1.2.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/r/rocket-errbot/${name}.tar.gz";
+      sha256 = "181y1wqjvlry5xdzbliajvrxvswzh3myh795jnj1pm92r5grqzda";
+    };
+  };
+
+  Yapsy = buildPythonPackage rec {
+    name = "Yapsy-${version}";
+    version = "1.11.223";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/yapsy/${name}.tar.gz";
+      sha256 = "19pjsnqizswnczhlav4lb7zlzs0n73ijrsgksy4374b14jkkkfs5";
+    };
+
+    doCheck = false;
+  };
+
+  ansi = buildPythonPackage rec {
+    name = "ansi-${version}";
+    version = "0.1.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/ansi/${name}.tar.gz";
+      sha256 = "06y6470bzvlqys3zi2vc68rmk9n05v1ibral14gbfpgfa8fzy7pg";
+    };
+  };
+
+  pygments-markdown-lexer = buildPythonPackage rec {
+    name = "pygments-markdown-lexer-${version}";
+    version = "0.1.0.dev39";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pygments-markdown-lexer/${name}.zip";
+      sha256 = "1pzb5wy23q3fhs0rqzasjnw6hdzwjngpakb73i98cn0b8lk8q4jc";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ pygments ];
+  };
+
+  telegram = buildPythonPackage rec {
+    name = "telegram-${version}";
+    version = "0.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/telegram/${name}.tar.gz";
+      sha256 = "1495l2ml8mg120wfvqhikqkfczhwwaby40vdmsz8v2l69jps01fl";
+    };
+  };
+
+  irc = buildPythonPackage rec {
+    name = "irc-${version}";
+    version = "14.2.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/irc/${name}.tar.gz";
+      sha256 = "0a6qjl4fjj98wxc8gaf5rxg94v7a0ydjdiw6pcka5fy814xl2i28";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [
+      six jaraco_logging jaraco_text jaraco_stream jaraco_stream pytz
+      jaraco_itertools
+    ];
+  };
+
+  jaraco_logging = buildPythonPackage rec {
+    name = "jaraco.logging-${version}";
+    version = "1.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.logging/${name}.tar.gz";
+      sha256 = "1lvw9zphiymiiar47kd0x0dbc9x2jks8w1kirg3ff8nd80k95j05";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [ tempora six ];
+  };
+
+  jaraco_text = buildPythonPackage rec {
+    name = "jaraco.text-${version}";
+    version = "1.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.text/${name}.tar.gz";
+      sha256 = "07ccc0zc28sb1kyfyviw3n8f581qynrshqvqg1xsp4gkf1m2ibhh";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [ jaraco_functools jaraco_collections ];
+  };
+
+  jaraco_collections = buildPythonPackage rec {
+    name = "jaraco.collections-${version}";
+    version = "1.3.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.collections/${name}.tar.gz";
+      sha256 = "0mvyn9d4bs5zw9z84wwsbgff6s28vg6h4i8qhyb667fqi7xgr1w5";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [ six jaraco_classes ];
+
+    patchPhase = ''
+      sed -i "/'jaraco.text',/d" setup.py
+    '';
+  };
+
+  jaraco_itertools = buildPythonPackage rec {
+    name = "jaraco.itertools-${version}";
+    version = "1.7.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.itertools/${name}.tar.gz";
+      sha256 = "0yvxp5nwhy4wc4naq5v152vbnxqcn5k031g089chq2lk5kr7np5z";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [ inflect more-itertools six ];
+  };
+
+  inflect = buildPythonPackage rec {
+    name = "inflect-${version}";
+    version = "0.2.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/inflect/${name}.tar.gz";
+      sha256 = "065866j9msrivbr74yrag53ch0lav7xz18qvjkiblkhinbfch510";
+    };
+  };
+
+  more-itertools = buildPythonPackage rec {
+    name = "more-itertools-${version}";
+    version = "2.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/more-itertools/${name}.tar.gz";
+      sha256 = "1q3wqsg44z01g7i5z6j1wc0nf5c5h8g77xny6fia2gddqw2jxrlk";
+    };
+
+    doCheck = false;
+  };
+
+  jaraco_functools = buildPythonPackage rec {
+    name = "jaraco.functools-${version}";
+    version = "1.11";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.functools/${name}.tar.gz";
+      sha256 = "08n7vxdbsl0637b1ap2x3rg698d2as0wzvvpx05dzkrdgsgxrx3g";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+  };
+
+  jaraco_classes = buildPythonPackage rec {
+    name = "jaraco.classes-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.classes/${name}.tar.gz";
+      sha256 = "1yn1wa6m5rdhk4grmnycx3i5pzzdlwfx83h944c9g5rqggmg612h";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+  };
+
+  jaraco_stream = buildPythonPackage rec {
+    name = "jaraco.stream-${version}";
+    version = "1.1.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jaraco.stream/${name}.tar.gz";
+      sha256 = "0iwg5ljc2z8wwyl2wv7lldwviwd0q4rsccascyqvqqs0l2rcn4gi";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    propagatedBuildInputs = with self; [ six ];
+  };
+
+  slackclient = buildPythonPackage rec {
+    name = "slackclient-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/slackclient/${name}.tar.gz";
+      sha256 = "063cbzp1fbdipv53gb0hnban1pg80pls0lbld98lhnykzkcb6vf0";
+    };
+
+    propagatedBuildInputs = with self; [ websocket_client requests2 ];
+  };
+
+  tempora = buildPythonPackage rec {
+    name = "tempora-${version}";
+    version = "1.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tempora/${name}.tar.gz";
+      sha256 = "0ysvns22i5hzhl5ln4n86bq10j8xwvd09z8qw1zjr3s0fj3lynza";
+    };
+
+    doCheck = false;
+
+    buildInputs = with self; [ setuptools_scm pytestrunner ];
+
+    propagatedBuildInputs = with self; [ six ];
+  };
+
+  hypchat = buildPythonPackage rec {
+    name = "hypchat-${version}";
+    version = "0.21";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/h/hypchat/${name}.tar.gz";
+      sha256 = "1sd8f3gihagaqd848dqy6xw457fa4f9bla1bfyni7fq3h76sjdzg";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 six dateutil ];
+  };
 }

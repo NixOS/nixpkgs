@@ -1,0 +1,10 @@
+[
+  {
+    "include": "../../libs.json",
+    "packages": [
+        "github.com/svent/go-flags",
+        "github.com/svent/go-nbreader",
+        "golang.org/x/crypto"
+    ]
+  }
+]
