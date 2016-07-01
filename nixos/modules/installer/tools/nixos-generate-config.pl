@@ -329,6 +329,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     # Skip special filesystems.
     next if in($mountPoint, "/proc") || in($mountPoint, "/dev") || in($mountPoint, "/sys") || in($mountPoint, "/run") || $mountPoint eq "/var/lib/nfs/rpc_pipefs";
     next if $mountPoint eq "/var/setuid-wrappers";
+    next if $mountPoint eq "/var/setcap-wrappers";
 
     # Skip the optional fields.
     my $n = 6; $n++ while $fields[$n] ne "-"; $n++;
