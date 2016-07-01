@@ -5396,17 +5396,9 @@ in modules // {
     name = "dnspython-${version}";
     version = "1.14.0";
 
-<<<<<<< HEAD
-    src = pkgs.fetchFromGitHub {
-      owner = "rthalley";
-      repo = "dnspython";
-      rev = "v${version}";
-      sha256 = "1kxmqrn0rx0ayc17hrc3zigl9wdlsana55ijfw2hjy5g77yjmzyh";
-=======
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dnspython/${name}.zip";
       sha256 = "1p1i46fyhxfic8mfh3gfckpn2pn7282xqabhihiqymrp4sa8ni91";
->>>>>>> origin/master
     };
 
     # needs networking for some tests
