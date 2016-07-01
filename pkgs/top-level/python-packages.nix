@@ -9612,6 +9612,29 @@ in modules // {
     };
   };
 
+  fdroidserver = buildPythonPackage rec {
+    version = "2016-05-31";
+    name = "fdroidserver-git-${version}";
+
+    disabled = ! isPy3k;
+
+    src = pkgs.fetchFromGitLab {
+      owner = "fdroid";
+      repo = "fdroidserver";
+      rev = "401649e0365e6e365fc48ae8a3af94768af865f3";
+      sha256 = "1mmi2ffpym1qw694yj938kc7b4xhq0blri7wkjaqddcyykjyr94d";
+    };
+
+    propagatedBuildInputs = with self; [ libcloud pyyaml paramiko pyasn1 pyasn1-modules pillow mwclient GitPython ];
+
+    meta = {
+      homepage = https://f-droid.org;
+      description = "Server and tools for F-Droid, the Free Software repository system for Android";
+      maintainers = with maintainers; [ DamienCassou ];
+      license = licenses.agpl3;
+    };
+  };
+
   filebrowser_safe = buildPythonPackage rec {
     version = "0.3.6";
     name = "filebrowser_safe-${version}";
@@ -13164,6 +13187,31 @@ in modules // {
       license = with licenses; [ gpl3 ];
       platforms = with platforms; linux ++ darwin;
       maintainers = with maintainers; [ skeidel ];
+    };
+  };
+
+  mwclient = buildPythonPackage rec {
+    version = "0.8.1";
+    basename = "mwclient";
+    name = "${basename}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/${basename}/${name}.tar.gz";
+      sha256 = "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az";
+    };
+
+    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
+
+    propagatedBuildInputs = with self; [ six requests2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Python client library to the MediaWiki API";
+      maintainers = with maintainers; [ DamienCassou ];
+      license = licenses.mit;
     };
   };
 
