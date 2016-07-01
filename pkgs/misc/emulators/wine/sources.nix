@@ -6,9 +6,9 @@ let fetchurl = args@{url, sha256, ...}:
 in rec {
 
   stable = fetchurl rec {
-    version = "1.8.2";
+    version = "1.8.3";
     url = "mirror://sourceforge/wine/wine-${version}.tar.bz2";
-    sha256 = "0vsswlnaa9ndg1pais63c39xks519r9fhz0yq3q8fphly2nlyqji";
+    sha256 = "0v3sq5zzj3z5pw1aicn7i03pgf41cr9fr0vg1sazwfxrmbvwvknp";
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
