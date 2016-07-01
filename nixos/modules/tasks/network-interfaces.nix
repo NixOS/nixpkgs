@@ -894,11 +894,13 @@ in
     security.setcapCapabilities = mkIf (versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.3") (
       [
         { program = "ping";
+          source  = "${pkgs.iputils.out}/bin/ping";
           setcap  = true;
           capabilities = "cap_net_raw+p";
         }
 
         { program = "ping6";
+          source  = "${pkgs.iputils.out}/bin/ping6";
           setcap  = true;
           capabilities = "cap_net_raw+p";
         }
