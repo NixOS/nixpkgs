@@ -25600,13 +25600,13 @@ in modules // {
   };
 
   libvirt = let
-    version = "1.3.5";
+    version = "2.0.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1hm5dzrv03m77026xccxiiq6abqpzci277gvhhsqmlbzcdbqll50";
+      sha256 = "0h0x5lpsx97bvw20pzfcsdmmivximddq4qmn8fk0n55dqv0wn5kq";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

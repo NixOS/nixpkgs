@@ -9,11 +9,11 @@
 # if you update, also bump pythonPackages.libvirt or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "1.3.5";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "http://libvirt.org/sources/${name}.tar.gz";
-    sha256 = "1j2ar5gb6xcyw1mlpm0mfpiri6www9k5myaqjina87a3xd23r8lk";
+    url = "http://libvirt.org/sources/${name}.tar.xz";
+    sha256 = "1jwszhpjn09zkqji8w1x97rw0wqcl71ll2y6vp056fb1bvshms8h";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
-    libnl numad numactl xen zfs systemd
+    libnl numad numactl xen zfs
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
@@ -33,8 +33,7 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
     PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/bin:$PATH
     substituteInPlace configure \
-      --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"' \
-      --replace libsystemd-daemon libsystemd
+      --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
     PATH=${dnsmasq}/bin:$PATH
     patchShebangs . # fixes /usr/bin/python references
@@ -55,7 +54,6 @@ stdenv.mkDerivation rec {
     "--with-virtualport"
     "--with-init-script=redhat"
     "--with-storage-zfs"
-    "--with-systemd-daemon"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
