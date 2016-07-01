@@ -28354,11 +28354,7 @@ in modules // {
 
     doCheck = false;
 
-<<<<<<< HEAD
-    buildInputs = with self; [ setuptools_scm pytestrunner ];
-=======
     buildInputs = with self; [ setuptools_scm ];
->>>>>>> origin/master
 
     propagatedBuildInputs = with self; [ six ];
   };
