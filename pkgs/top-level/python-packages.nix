@@ -28049,4 +28049,104 @@ in modules // {
     };
   };
 
+  uptime = buildPythonPackage rec {
+    name = "uptime-${version}";
+    version = "3.0.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/u/uptime/${name}.tar.gz";
+      sha256 = "0wr9jkixprlywz0plyn5p42a5fd31aiwvjrxdvj7r02vfxa04c3w";
+    };
+
+    meta = {
+      description = "Cross-platform uptime library for the Python";
+      homepage = "https://github.com/Cairnarvon/uptime";
+    };
+  };
+
+  pytestHttpbin = buildPythonPackage rec {
+    name = "pytest-httpbin-${version}";
+    version = "0.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pytest-httpbin/${name}.tar.gz";
+      sha256 = "1vffjs34mjcbg9dwx3i11s9ibjqqf6558f6bw4sb6c06i7kxi9k7";
+    };
+
+    buildInputs = with self; [
+      pytest
+    ];
+
+    propagatedBuildInputs = with self; [
+      flask
+      decorator
+      httpbin
+      six
+    ];
+
+    meta = {
+      description = "Easily test your HTTP library against a local copy of httpbin.org";
+      homepage = "https://github.com/kevin1024/pytest-httpbin";
+    };
+  };
+
+  vcrpy = buildPythonPackage rec {
+    name = "vcrpy-${version}";
+    version = "1.7.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/v/vcrpy/${name}.tar.gz";
+      sha256 = "0vjfwia86ycq3xzqwakgfdczkpqq2mqfkh3ibmfkwypc406gan65";
+    };
+
+    # https://github.com/kevin1024/vcrpy/commit/4e36997e1af248a96b1424b6975f5022baa9352f
+    # test_urllib2 fails with SSL_VERIFICATION_ERROR. Above commit (unreleased)
+    # sets the correct cacert path
+    doCheck = false;
+
+    buildInputs = with self; [
+      pytest
+      mock
+      pytestHttpbin
+      pytest-localserver
+    ];
+
+    propagatedBuildInputs = with self; [
+      pyyaml
+      six
+      wrapt
+      contextlib2
+      mock
+    ];
+
+    meta = {
+      description = "Automatically mock your HTTP interactions to simplify and speed up testing";
+      homepage = "https://github.com/kevin1024/vcrpy";
+    };
+  };
+
+  pyvmomi = buildPythonPackage rec {
+    name = "pyvmomi-${version}";
+    version = "6.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyvmomi/${name}.tar.gz";
+      sha256 = "1p2wshs4zz954w02g974jxv70w3d1l86wj0jwanc3l44hp9y91xw";
+    };
+
+    buildInputs = with self; [
+      testtools
+      vcrpy
+    ];
+
+    propagatedBuildInputs = with self; [
+      six
+      requests2
+    ];
+
+    meta = {
+      description = "VMware vSphere API Python Bindings";
+      homepage = "https://github.com/vmware/pyvmomi";
+    };
+  };
 }

@@ -1,21 +1,22 @@
 { stdenv, fetchFromGitHub, python, pythonPackages, sysstat, unzip, tornado
-, makeWrapper }:
+, makeWrapper, rsync }:
 
 stdenv.mkDerivation rec {
-  version = "5.5.2";
+  version = "5.7.4";
   name = "dd-agent-${version}";
 
   src = fetchFromGitHub {
     owner  = "datadog";
     repo   = "dd-agent";
     rev    = version;
-    sha256 = "0ga7h3rdg6q2pi4dxxkird5nf6s6hc13mj1xd9awwpli48gyvxn7";
+    sha256 = "1shjc6d68m725fmpy2fjn4vam23g1wq8z9a0kxsk746ivvnd32fb";
   };
 
   buildInputs = [
     python
     unzip
     makeWrapper
+    rsync
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
@@ -24,17 +25,24 @@ stdenv.mkDerivation rec {
     pythonPackages.requests
     pythonPackages.pymongo
     pythonPackages.docker
+    pythonPackages.dns
+    pythonPackages.pyvmomi
+    pythonPackages.boto
   ];
   propagatedBuildInputs = [ python tornado ];
 
   buildCommand = ''
     mkdir -p $out/bin
-    cp -R $src $out/agent
+    # https://github.com/DataDog/dd-agent/pull/2013
+    rsync -rv --exclude=conf.d $src/ $out/agent/
     chmod u+w -R $out
     PYTHONPATH=$out/agent:$PYTHONPATH
     ln -s $out/agent/agent.py $out/bin/dd-agent
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
+    (echo '#!/usr/bin/env python'; cat $out/agent/jmxfetch.py) > $out/agent/jmxfetch
+    chmod 755 $out/agent/jmxfetch
+    ln -s $out/agent/jmxfetch $out/bin/jmxfetch
 
     wrapProgram $out/bin/dd-forwarder \
       --prefix PYTHONPATH : $PYTHONPATH
@@ -42,6 +50,9 @@ stdenv.mkDerivation rec {
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/bin/dogstatsd \
       --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/bin/jmxfetch \
+      --prefix PYTHONPATH : $PYTHONPATH \
+      --prefix CLASSPATH : $out/agent
 
     patchShebangs $out
   '';
