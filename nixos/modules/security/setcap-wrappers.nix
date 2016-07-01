@@ -32,7 +32,7 @@ let
     pkgs.stdenv.mkDerivation {
       name         = "setcap-wrapper";
       unpackPhase  = "true";
-      buildInputs  = [ linuxHeaders_4_4 libcap libcap_ng ];
+      buildInputs  = [ linuxHeaders libcap libcap_ng ];
       installPhase = ''
         mkdir -p $out/bin
 
