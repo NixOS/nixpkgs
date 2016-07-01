@@ -48,10 +48,9 @@ in
       type    = types.listOf types.attrs;
       default = [];
       example =
-        [ { program = "sendmail";
-            source  = "${pkgs.sendmail.bin}/bin/sendmail";
+        [ { program = "ping";
             owner   = "nobody";
-            group   = "postdrop";
+            group   = "nogroup";
             setcap  = true;
             capabilities = "cap_net_raw+ep";
           }
