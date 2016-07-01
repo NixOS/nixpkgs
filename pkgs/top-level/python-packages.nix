@@ -1357,11 +1357,13 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.18";
+    version = "1.10.38";
+
+    namePrefix = "";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/awscli/${name}.tar.gz";
-      sha256 = "0vdj7p4cwsbzhanhp5f2c0b0qr2gh76dyanji73avvj4jvdb5d4g";
+      sha256 = "01d14snp3h4dkbwyviyprhcl8qcngc6nyzwy3k3nxvm1ia9hvz2n";
     };
 
     # No tests included
@@ -2726,12 +2728,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.9"; # This version is required by awscli
+    version = "1.4.28"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/botocore/${name}.tar.gz";
-      sha256 = "07rp24lnpjlk0c889g0d8y2ykc711gi04w715nkm9mv734ndsman";
+      sha256 = "1qfvcb7japa3y1j4b86af9ph8q8mbq2mrx6xfhlqcf2x399l2phl";
     };
 
     propagatedBuildInputs =
@@ -4323,14 +4325,16 @@ in modules // {
   };
 
   bcrypt = buildPythonPackage rec {
-    name = "bcrypt-2.0.0";
+    name = "bcrypt-${version}";
+    version = "2.0.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bcrypt/${name}.tar.gz";
-      sha256 = "8b2d197ef220d10eb74625dde7af3b10daa973ae9a1eadd6366f763fad4387fa";
+      url = "https://api.github.com/repos/pyca/bcrypt/tarball/${version}";
+      name = "bcrypt-${version}.tar.gz";
+      sha256 = "14i1yp4qkjklx82jl61cjjcw367lc0pkvnix3gaz451ijdcmz3x8";
     };
-
-    buildInputs = with self; [ pycparser mock pytest py ] ++ optionals (!isPyPy) [ cffi ];
+    buildInputs = with self; [ pycparser mock pytest py ];
+    propagatedBuildInputs = with self; optional (!isPyPy) cffi;
 
     meta = {
       maintainers = with maintainers; [ domenkozar ];
@@ -5392,11 +5396,17 @@ in modules // {
     name = "dnspython-${version}";
     version = "1.14.0";
 
+<<<<<<< HEAD
     src = pkgs.fetchFromGitHub {
       owner = "rthalley";
       repo = "dnspython";
       rev = "v${version}";
       sha256 = "1kxmqrn0rx0ayc17hrc3zigl9wdlsana55ijfw2hjy5g77yjmzyh";
+=======
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/dnspython/${name}.zip";
+      sha256 = "1p1i46fyhxfic8mfh3gfckpn2pn7282xqabhihiqymrp4sa8ni91";
+>>>>>>> origin/master
     };
 
     # needs networking for some tests
@@ -9612,6 +9622,29 @@ in modules // {
     };
   };
 
+  fdroidserver = buildPythonPackage rec {
+    version = "2016-05-31";
+    name = "fdroidserver-git-${version}";
+
+    disabled = ! isPy3k;
+
+    src = pkgs.fetchFromGitLab {
+      owner = "fdroid";
+      repo = "fdroidserver";
+      rev = "401649e0365e6e365fc48ae8a3af94768af865f3";
+      sha256 = "1mmi2ffpym1qw694yj938kc7b4xhq0blri7wkjaqddcyykjyr94d";
+    };
+
+    propagatedBuildInputs = with self; [ libcloud pyyaml paramiko pyasn1 pyasn1-modules pillow mwclient GitPython ];
+
+    meta = {
+      homepage = https://f-droid.org;
+      description = "Server and tools for F-Droid, the Free Software repository system for Android";
+      maintainers = with maintainers; [ DamienCassou ];
+      license = licenses.agpl3;
+    };
+  };
+
   filebrowser_safe = buildPythonPackage rec {
     version = "0.3.6";
     name = "filebrowser_safe-${version}";
@@ -13167,13 +13200,38 @@ in modules // {
     };
   };
 
+  mwclient = buildPythonPackage rec {
+    version = "0.8.1";
+    basename = "mwclient";
+    name = "${basename}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/${basename}/${name}.tar.gz";
+      sha256 = "1r322v6i6xps9xh861rbr4ggshydcgp8cycbdlmgy8qbrh8jg2az";
+    };
+
+    buildInputs = with self; [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
+
+    propagatedBuildInputs = with self; [ six requests2 ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Python client library to the MediaWiki API";
+      maintainers = with maintainers; [ DamienCassou ];
+      license = licenses.mit;
+    };
+  };
+
   neuronpy = buildPythonPackage rec {
     name = "neuronpy-${version}";
     version = "0.1.6";
     disabled = !isPy27;
 
     propagatedBuildInputs = with self; [ numpy matplotlib scipy ];
-   
+
     meta = {
       description = "Interfaces and utilities for the NEURON simulator and analysis of neural data";
       maintainers = [ maintainers.nico202 ];
@@ -13714,6 +13772,7 @@ in modules // {
     buildInputs = stdenv.lib.optional doCheck [ self.nose ];
 
     propagatedBuildInputs = with self; [
+      matplotlib
       nibabel
       numpy
       scipy
@@ -13949,12 +14008,12 @@ in modules // {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.2.0";
+    version = "4.2.1";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "113d0548ky0fwa7h950ijkwi1cnpc46l9cdmjr3kjj3vqwb4j371";
+      sha256 = "15z1j821iywjcjf6d8r338jm09l9qwk8z9gjplag56dvv8jfb7d4";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -14175,10 +14234,10 @@ in modules // {
   };
 
   numpy_1_11 = self.buildNumpyPackage rec {
-    version = "1.11.0";
+    version = "1.11.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numpy/numpy-${version}.tar.gz";
-      sha256 = "0gml1ng7iqk4xcrvspjd5vnfqdwfinvjfyksfawvy5h8426jdld1";
+      sha256 = "1kbpsnqfabpbczh3ly2d4jrwq2d1gqlshlpk5dm8bk3r77284h6w";
     };
   };
 
@@ -15614,6 +15673,24 @@ in modules // {
   };
 
 
+  lz4 = buildPythonPackage rec {
+    name = "lz4-0.8.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/b5/f0/e1de2bb7feb54011f3c4dcf35b7cca3536e19526764db051b50ea26b58e7/lz4-0.8.2.tar.gz";
+      sha256 = "1irad4sq4hdr30fr53smvv3zzk4rddcf9b4jx19w8s9xsxhr1x3b";
+    };
+
+    buildInputs= with self; [ nose ];
+
+    meta = with stdenv.lib; {
+      description = "Compression library";
+      homepage = https://github.com/python-lz4/python-lz4;
+      license = licenses.bsd3;
+    };
+  };
+
+
   oslo-concurrency = buildPythonPackage rec {
    name = "oslo-concurrency-${version}";
    version = "2.7.0";
@@ -16484,18 +16561,18 @@ in modules // {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "0.20.1";
+    version = "1.0.0";
     disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "0f1ff1a1x1qrcv4ygfh29yyknx8hgwck7rp020zz0jrq9dibhjp7";
+      sha256 = "19jdnrz2qzlmxyhf0gyrj0dg0jfk1zar0jvm1vigswgmq2m6mm4v";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
     };
 
     propagatedBuildInputs = with self; [
-      click configobj prompt_toolkit psycopg2
+      click configobj humanize prompt_toolkit psycopg2
       pygments sqlparse pgspecial setproctitle
     ];
 
@@ -16517,14 +16594,15 @@ in modules // {
 
   pgspecial = buildPythonPackage rec {
     name = "pgspecial-${version}";
-    version = "1.3.0";
+    version = "1.4.0";
 
     src = pkgs.fetchurl {
-      sha256 = "1nxqqkchigrznywmm73n1ksp5hhhwswz8anrlwpi9i75wq792mg1";
+      sha256 = "136z7nxnx322nv65aqw3nq420j4ibf4pkfn7y9d7zwn9kc4jxz14";
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
 
     propagatedBuildInputs = with self; [ click ];
+    buildInputs = with self; [ sqlparse ];
 
     meta = {
       description = "Meta-commands handler for Postgres Database";
@@ -16624,16 +16702,25 @@ in modules // {
   };
 
 
-  pika = buildPythonPackage {
-    name = "pika-0.9.12";
-    disabled = isPy3k;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/p/pika/pika-0.9.12.tar.gz;
-      sha256 = "670787ee6ade47cadd1ec8220876b9b7ae4df7bc4b9dd1d808261a6b47e9ce5d";
-    };
-    buildInputs = with self; [ nose mock pyyaml ];
+  pika = buildPythonPackage rec {
+    name = "pika-${version}";
+    version = "0.10.0";
 
-    propagatedBuildInputs = with self; [ unittest2 ];
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pika/${name}.tar.gz";
+      sha256 = "0nb4h08di432lv7dy2v9kpwgk0w92f24sqc2hw2s9vwr5b8v8xvj";
+    };
+
+    # Tests require twisted which is only availalble for python-2.x
+    doCheck = !isPy3k;
+
+    buildInputs = with self; [ nose mock pyyaml unittest2 pyev ] ++ optionals (!isPy3k) [ twisted tornado ];
+
+    meta = {
+      description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
+      homepage = https://pika.readthedocs.org;
+      license = licenses.bsd3;
+    };
   };
 
   platformio =  buildPythonPackage rec {
@@ -16806,11 +16893,11 @@ in modules // {
   };
 
   pillow = buildPythonPackage rec {
-    name = "Pillow-2.9.0";
+    name = "Pillow-3.2.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pillow/${name}.zip";
-      sha256 = "1mal92cwh85z6zqx7lrmg0dbqb2gw2cbb2fm6xh0fivmszz8vnyi";
+      url = "mirror://pypi/P/Pillow/${name}.tar.gz";
+      sha256 = "0jkqjnqj3bz3cwrvbw6q1zy6dn0c328r6v20k7m0lj0c45bs1c34";
     };
 
     # Check is disabled because of assertion errors, see
@@ -21999,14 +22086,11 @@ in modules // {
 
   sqlparse = buildPythonPackage rec {
     name = "sqlparse-${version}";
-    version = "0.1.18";
-
-    # the source wasn't transformed with 2to3 yet
-    doCheck = !isPy3k;
+    version = "0.1.19";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
-      sha256 = "1kypl9l2nkzy3pmr89mvpfl65xk1m5y4aaghhandcxkgl329dc9r";
+      sha256 = "1s2fvaxgh9kqzrd6iwy5h7i61ckn05plx9np13zby93z3hdbx5nq";
     };
 
     meta = {
@@ -23036,10 +23120,11 @@ in modules // {
   twisted = buildPythonPackage rec {
     disabled = isPy3k;
 
-    name = "Twisted-15.5.0";
+    name = "Twisted-${version}";
+    version = "16.2.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-      sha256 = "0zy18lcrris4aaslil5k12i13k56c32hzfdv6h10kbnzl026h158";
+      sha256 = "0ydxrp9myw1mvsz3qfzx5579y5llmqa82pxvqchgp5syczffi450";
     };
 
     propagatedBuildInputs = with self; [ zope_interface ];
@@ -27800,7 +27885,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [
-      numpy 
+      numpy
       Theano
     ];
 
@@ -28166,6 +28251,7 @@ in modules // {
 
     propagatedBuildInputs = with self; [ six jaraco_classes ];
 
+    # break dependency cycle
     patchPhase = ''
       sed -i "/'jaraco.text',/d" setup.py
     '';
@@ -28276,7 +28362,11 @@ in modules // {
 
     doCheck = false;
 
+<<<<<<< HEAD
     buildInputs = with self; [ setuptools_scm pytestrunner ];
+=======
+    buildInputs = with self; [ setuptools_scm ];
+>>>>>>> origin/master
 
     propagatedBuildInputs = with self; [ six ];
   };

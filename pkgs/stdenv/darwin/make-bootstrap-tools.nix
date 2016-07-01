@@ -3,9 +3,11 @@
 with import ../../.. { inherit system; };
 
 rec {
-  # We want coreutils without ACL support.
-  coreutils_ = coreutils.override (orig: {
+  coreutils_ = coreutils.override (args: {
+    # We want coreutils without ACL support.
     aclSupport = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
   });
 
   build = stdenv.mkDerivation {

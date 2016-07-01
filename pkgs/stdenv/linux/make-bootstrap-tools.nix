@@ -5,9 +5,11 @@ with import ../../.. {inherit system;};
 rec {
 
 
-  # We want coreutils without ACL support.
   coreutilsMinimal = coreutils.override (args: {
+    # We want coreutils without ACL support.
     aclSupport = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
   });
 
   tarMinimal = gnutar.override { acl = null; };

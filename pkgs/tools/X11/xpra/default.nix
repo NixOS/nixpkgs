@@ -6,11 +6,11 @@
 , libfakeXinerama }:
 
 buildPythonApplication rec {
-  name = "xpra-0.17.3";
+  name = "xpra-0.17.4";
   namePrefix = "";
   src = fetchurl {
     url = "http://xpra.org/src/${name}.tar.xz";
-    sha256 = "0ffa8yljj7rkn0pvpagg1dhnwkqjiv9n4c75yilqnnjhma67pl4w";
+    sha256 = "0v9xiy1d1izjnpy4d4l5zwfhb6z7x35nn8nzzn7a5mnsim5qb9wj";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pillow pygtk pygobject rencode
+    pillow pygtk pygobject rencode pycrypto cryptography pycups lz4 dbus
   ];
 
   preBuild = ''
@@ -47,6 +47,8 @@ buildPythonApplication rec {
     wrapProgram $out/bin/xpra \
       --set XKB_BINDIR "${xkbcomp}/bin" \
       --set FONTCONFIG_FILE "${fontsConf}" \
+      --set XPRA_LOG_DIR "\$HOME/.xpra" \
+      --set XPRA_INSTALL_PREFIX "$out" \
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib \
       --prefix PATH : ${getopt}/bin:${xorgserver.out}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
   '';

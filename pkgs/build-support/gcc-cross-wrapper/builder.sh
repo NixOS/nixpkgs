@@ -111,6 +111,7 @@ chmod +x "$out/bin/$crossConfig-ld"
 # Glibc.
 test -n "$gcc" && echo $gcc > $out/nix-support/orig-cc
 test -n "$libc" && echo $libc > $out/nix-support/orig-libc
+test -n "$libc_dev" && echo $libc_dev > $out/nix-support/orig-libc-dev
 
 doSubstitute "$addFlags" "$out/nix-support/add-flags"
 

@@ -637,7 +637,9 @@ in
     sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
   };
 
-  btfs = callPackage ../os-specific/linux/btfs { };
+  btfs = callPackage ../os-specific/linux/btfs {
+    libtorrentRasterbar = libtorrentRasterbar_1_09;
+  };
 
   cabal2nix = self.haskellPackages.cabal2nix;
 
@@ -2860,7 +2862,7 @@ in
 
   pamtester = callPackage ../tools/security/pamtester { };
 
-  paper-gtk-theme = callPackage ../misc/themes/paper-gtk-theme { };
+  paper-gtk-theme = callPackage ../misc/themes/paper { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -3514,6 +3516,7 @@ in
 
   system-config-printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
+    pythonPackages = python3Packages;
    };
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
@@ -4256,6 +4259,8 @@ in
   cython3 = python3Packages.cython;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
+
+  drumstick = callPackage ../development/libraries/drumstick { };
 
   ecl = callPackage ../development/compilers/ecl { };
 
@@ -7275,6 +7280,10 @@ in
     guileBindings = config.gnutls.guile or false;
   };
 
+  gnutls35 = callPackage ../development/libraries/gnutls/3.5.nix {
+    guileBindings = config.gnutls.guile or false;
+  };
+
   gpac = callPackage ../applications/video/gpac { };
 
   gpgme = callPackage ../development/libraries/gpgme {
@@ -8259,6 +8268,8 @@ in
   libtomcrypt = callPackage ../development/libraries/libtomcrypt { };
 
   libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { };
+
+  libtorrentRasterbar_1_09 = callPackage ../development/libraries/libtorrent-rasterbar/1.09.nix { };
 
   libtorrentRasterbar_0_16 = callPackage ../development/libraries/libtorrent-rasterbar/0.16.nix {
     # fix "unrecognized option -arch" error
@@ -12591,7 +12602,9 @@ in
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = callPackage ../applications/networking/errbot { };
+  errbot = callPackage ../applications/networking/errbot {
+    pythonPackages = python3Packages;
+  };
 
   espeak = callPackage ../applications/audio/espeak { };
 
@@ -14366,7 +14379,9 @@ in
   synergy = callPackage ../applications/misc/synergy { };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
-    enableXft = true;
+    # if you prefer a custom config, write the config.h in tabbed.config.h
+    # and enable
+    # customConfig = builtins.readFile ./tabbed.config.h;
   };
 
   taffybar = callPackage ../applications/window-managers/taffybar {
@@ -14465,6 +14480,8 @@ in
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
+  tnef = callPackage ../applications/misc/tnef { };
+
   todo-txt-cli = callPackage ../applications/office/todo.txt-cli { };
 
   tomahawk = callPackage ../applications/audio/tomahawk {
@@ -14497,6 +14514,8 @@ in
 
   transmission-remote-cli = callPackage ../applications/networking/p2p/transmission-remote-cli {};
   transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
+
+  transgui = callPackage ../applications/networking/p2p/transgui { };
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
@@ -15900,7 +15919,7 @@ in
 
   gnome_themes_standard = gnome3.gnome_themes_standard;
 
-  numix-gtk-theme = callPackage ../misc/themes/numix-gtk-theme { };
+  numix-gtk-theme = callPackage ../misc/themes/numix { };
 
   # We need QtWebkit which was deprecated in Qt 5.6 although it can still be build
   trojita = with qt55; callPackage ../applications/networking/mailreaders/trojita { };
@@ -16263,6 +16282,8 @@ in
   coqPackages = mkCoqPackages_8_4 coqPackages;
   coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
 
+  cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
+
   cvc3 = callPackage ../applications/science/logic/cvc3 {
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
   };
@@ -16344,11 +16365,15 @@ in
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
+  proverif = callPackage ../applications/science/logic/proverif { };
+
   satallax = callPackage ../applications/science/logic/satallax {};
 
   saw-tools = callPackage ../applications/science/logic/saw-tools {};
 
   spass = callPackage ../applications/science/logic/spass {};
+
+  statverif = callPackage ../applications/science/logic/statverif { };
 
   tptp = callPackage ../applications/science/logic/tptp {};
 

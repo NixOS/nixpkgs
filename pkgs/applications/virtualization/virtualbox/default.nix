@@ -99,7 +99,14 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch;
+  patches = optional enableHardening ./hardened.patch
+    ++ [
+      (fetchurl rec {
+        name = "fix-detect-gcc-5.4.patch";
+        url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=827193;filename=${name};msg=5";
+        sha256 = "0y6v5dc6fqj9iv27cl8q2g87v1kxg19129mpas4vjg7g0529v4g9";
+      })
+    ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
