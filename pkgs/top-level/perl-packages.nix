@@ -12000,10 +12000,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000032";
+    name = "Test2-Suite-0.000042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "96be3607c018a3774acac99b0a47678322ef271e7152cddac7b5a0e9a3de5da3";
+      sha256 = "aade2e730a5ef5753a4757c6d72ae68cd9f91bbe74c121734a32a072d1f08fd0";
     };
     propagatedBuildInputs = [ TestSimple13 ];
     meta = {
