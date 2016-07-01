@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, check, pam }:
+{ stdenv, fetchurl, autoreconfHook, gzip, bzip2, pkgconfig, flex, check, pam }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-2.0.3";
+  name = "kbd-${version}";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kbd/${name}.tar.xz";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
-  patches = [ ./console-fix.patch ];
+  patches = [ ./console-fix.patch ./search-paths.patch ];
 
   postPatch =
     ''
@@ -49,13 +50,15 @@ stdenv.mkDerivation rec {
       ''}
     '';
 
-  buildInputs = [ autoreconfHook pkgconfig check pam ];
+  buildInputs = [ check pam ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig flex ];
 
-  makeFlags = "setowner= ";
+  makeFlags = [ "setowner=" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = ftp://ftp.altlinux.org/pub/people/legion/kbd/;
     description = "Linux keyboard utilities and keyboard maps";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    licenses = licenses.gpl2Plus;
   };
 }
