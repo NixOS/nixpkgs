@@ -84,7 +84,7 @@ in
 
     security.setcapWrapperDir = mkOption {
       type        = types.path;
-      default     = "/nix/var/setcap-wrappers";
+      default     = "/var/setcap-wrappers";
       internal    = true;
       description = ''
         This option defines the path to the setcap wrappers. It
