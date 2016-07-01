@@ -12251,8 +12251,7 @@ in
   conkeror = self.wrapFirefox conkeror-unwrapped { };
 
   cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
-    # withCUDA = true;
-    # inherit (linuxPackages) nvidia_x11;
+    withOpenCL = true;
 
     # withEVMJIT = true;
     # inherit (pkgs.llvmPackages_38) llvm;

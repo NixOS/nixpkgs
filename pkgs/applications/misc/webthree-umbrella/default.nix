@@ -13,16 +13,9 @@
 , libmicrohttpd
 , mesa
 
+, withOpenCL ? false
 , opencl-headers ? null
-
-, withAMD ? false
-, amdappsdk ? null
-
-, withBeignet ? false
-, beignet ? null
-
-, withCUDA ? false
-, nvidia_x11 ? null
+, ocl-icd ? null
 
 , withGUI ? false
 , qtwebengine ? null
@@ -40,20 +33,10 @@
 , extraCmakeFlags ? []
 }:
 
-assert withAMD -> (amdappsdk != null);
-assert withBeignet -> (beignet != null);
-assert withCUDA -> (nvidia_x11 != null);
-assert stdenv.lib.findSingle (x: x) true false [ withAMD withBeignet withCUDA ];
-
+assert withOpenCL -> (opencl-headers != null) && (ocl-icd != null);
 assert withGUI -> (qtwebengine != null) && (qtbase != null) && (qtdeclarative != null);
 assert withProfiling -> (gperftools != null);
 assert withEVMJIT -> (llvm != null) && (zlib != null) && (ncurses != null);
-
-let
-  withOpenCL = (stdenv.lib.any (x: x) [ withAMD withBeignet withCUDA ]);
-in
-
-assert withOpenCL -> (opencl-headers != null);
 
 stdenv.mkDerivation rec {
   name = "cpp-ethereum-${version}";
@@ -65,20 +48,16 @@ stdenv.mkDerivation rec {
     sha256 = "0k8w8gqzy71x77p0p85r38gfdnzrlzk2yvb3ablml9ppg4qb4ch5";
   };
 
-  patchPhase = stdenv.lib.optional withBeignet ''
-    sed -i -re 's#NAMES\ (OpenCL.*)#NAMES\ libcl.so\ \1#g' webthree-helpers/cmake/FindOpenCL.cmake
-  '';
-
   cmakeFlags = with stdenv.lib; concatStringsSep " " (flatten [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DGUI=${toString withGUI}"
     "-DETHASHCL=${toString withOpenCL}"
     "-DPROFILING=${toString withProfiling}"
     "-DEVMJIT=${toString withEVMJIT}"
-    (optional withOpenCL "-DCMAKE_INCLUDE_PATH=${opencl-headers}/include")
-    (optional withAMD "-DCMAKE_LIBRARY_PATH=${amdappsdk}/lib")
-    (optional withBeignet "-DCMAKE_LIBRARY_PATH=${beignet}/lib/beignet")
-    (optional withCUDA "-DCMAKE_LIBRARY_PATH=${nvidia_x11}/lib")
+    (optional withOpenCL [
+      "-DCMAKE_INCLUDE_PATH=${opencl-headers}/include"
+      "-DCMAKE_LIBRARY_PATH=${ocl-icd}/lib"
+    ])
     (optional withEVMJIT "-DCMAKE_PREFIX_PATH=${llvm}")
     extraCmakeFlags
   ]);
@@ -106,10 +85,10 @@ stdenv.mkDerivation rec {
     curl
     libmicrohttpd
     mesa
-    (optional withOpenCL opencl-headers)
-    (optional withAMD amdappsdk)
-    (optional withBeignet beignet)
-    (optional withCUDA nvidia_x11)
+    (optional withOpenCL [
+      opencl-headers
+      ocl-icd
+    ])
     (optional withGUI [
       qtwebengine
       qtbase
@@ -123,10 +102,7 @@ stdenv.mkDerivation rec {
     ])
   ];
 
-  runPath = with stdenv.lib; concatStringsSep ":" (flatten [
-    (makeLibraryPath (flatten [ stdenv.cc.cc buildInputs ]))
-    (optional withBeignet "${beignet}/lib/beignet")
-  ]);
+  runPath = with stdenv.lib; (makeLibraryPath (flatten [ stdenv.cc.cc buildInputs ]));
 
   installPhase = ''
     make install
