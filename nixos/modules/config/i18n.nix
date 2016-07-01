@@ -43,7 +43,7 @@ in
 
       consolePackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = with pkgs.kbdKeymaps; [ dvp neo ];
         description = ''
 	  List of additional packages that provide console fonts, keymaps and
           other resources.
