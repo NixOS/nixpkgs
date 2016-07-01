@@ -25,14 +25,16 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
-    libnl numad numactl xen zfs
+    libnl numad numactl xen zfs systemd
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
     PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/bin:$PATH
-    substituteInPlace configure --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
+    substituteInPlace configure \
+      --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"' \
+      --replace libsystemd-daemon libsystemd
   '' + ''
     PATH=${dnsmasq}/bin:$PATH
     patchShebangs . # fixes /usr/bin/python references
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     "--with-virtualport"
     "--with-init-script=redhat"
     "--with-storage-zfs"
+    "--with-systemd-daemon"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "--with-init-script=none"
   ];
