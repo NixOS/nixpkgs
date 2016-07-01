@@ -171,6 +171,7 @@ self: super: {
   "Chart-diagrams" = dontDistribute super."Chart-diagrams";
   "Chart-gtk" = dontDistribute super."Chart-gtk";
   "Chart-simple" = dontDistribute super."Chart-simple";
+  "ChasingBottoms" = doDistribute super."ChasingBottoms_1_3_0_14";
   "CheatSheet" = dontDistribute super."CheatSheet";
   "Checked" = dontDistribute super."Checked";
   "Chitra" = dontDistribute super."Chitra";
@@ -1093,6 +1094,7 @@ self: super: {
   "acme-timemachine" = dontDistribute super."acme-timemachine";
   "acme-year" = dontDistribute super."acme-year";
   "acme-zero" = dontDistribute super."acme-zero";
+  "active" = doDistribute super."active_0_2_0_9";
   "activehs" = dontDistribute super."activehs";
   "activehs-base" = dontDistribute super."activehs-base";
   "activitystreams-aeson" = dontDistribute super."activitystreams-aeson";
@@ -3054,6 +3056,7 @@ self: super: {
   "fixpoint" = dontDistribute super."fixpoint";
   "fixtime" = dontDistribute super."fixtime";
   "fizz-buzz" = dontDistribute super."fizz-buzz";
+  "fizzbuzz" = dontDistribute super."fizzbuzz";
   "flaccuraterip" = dontDistribute super."flaccuraterip";
   "flamethrower" = dontDistribute super."flamethrower";
   "flamingra" = dontDistribute super."flamingra";
@@ -3908,6 +3911,12 @@ self: super: {
   "haskell-src-exts-qq" = dontDistribute super."haskell-src-exts-qq";
   "haskell-src-meta-mwotton" = dontDistribute super."haskell-src-meta-mwotton";
   "haskell-token-utils" = dontDistribute super."haskell-token-utils";
+  "haskell-tools-ast" = dontDistribute super."haskell-tools-ast";
+  "haskell-tools-ast-fromghc" = dontDistribute super."haskell-tools-ast-fromghc";
+  "haskell-tools-ast-gen" = dontDistribute super."haskell-tools-ast-gen";
+  "haskell-tools-ast-trf" = dontDistribute super."haskell-tools-ast-trf";
+  "haskell-tools-prettyprint" = dontDistribute super."haskell-tools-prettyprint";
+  "haskell-tools-refactor" = dontDistribute super."haskell-tools-refactor";
   "haskell-tor" = dontDistribute super."haskell-tor";
   "haskell-type-exts" = dontDistribute super."haskell-type-exts";
   "haskell-typescript" = dontDistribute super."haskell-typescript";
@@ -4543,6 +4552,7 @@ self: super: {
   "http-client-session" = dontDistribute super."http-client-session";
   "http-client-streams" = dontDistribute super."http-client-streams";
   "http-client-tls" = doDistribute super."http-client-tls_0_2_4";
+  "http-conduit" = doDistribute super."http-conduit_2_1_10_1";
   "http-conduit-browser" = dontDistribute super."http-conduit-browser";
   "http-conduit-downloader" = dontDistribute super."http-conduit-downloader";
   "http-dispatch" = dontDistribute super."http-dispatch";
@@ -5109,6 +5119,7 @@ self: super: {
   "learn-physics-examples" = dontDistribute super."learn-physics-examples";
   "learning-hmm" = dontDistribute super."learning-hmm";
   "leetify" = dontDistribute super."leetify";
+  "legion" = dontDistribute super."legion";
   "leksah" = dontDistribute super."leksah";
   "leksah-server" = dontDistribute super."leksah-server";
   "lendingclub" = dontDistribute super."lendingclub";
@@ -7175,6 +7186,7 @@ self: super: {
   "simple-sql-parser" = dontDistribute super."simple-sql-parser";
   "simple-stacked-vm" = dontDistribute super."simple-stacked-vm";
   "simple-tabular" = dontDistribute super."simple-tabular";
+  "simple-tar" = dontDistribute super."simple-tar";
   "simple-vec3" = dontDistribute super."simple-vec3";
   "simpleargs" = dontDistribute super."simpleargs";
   "simpleirc" = dontDistribute super."simpleirc";
