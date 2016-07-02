@@ -20,5 +20,6 @@ buildGoPackage rec {
     homepage = https://github.com/elves/elvish;
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; [ linux ];
   };
 }
