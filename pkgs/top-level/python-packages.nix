@@ -1289,7 +1289,7 @@ in modules // {
 
     buildInputs
       =  (with self; [ nose pillow numpy ])
-      ++ (with pkgs; [ ffmpeg git libav pkgconfig ]);
+      ++ (with pkgs; [ ffmpeg_2 git libav pkgconfig ]);
 
     # Because of https://github.com/mikeboers/PyAV/issues/152
     doCheck = false;
