@@ -2884,6 +2884,8 @@ in
 
   pell = callPackage ../applications/misc/pell { };
 
+  pick = callPackage ../tools/misc/pick { };
+
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1 //
       { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
