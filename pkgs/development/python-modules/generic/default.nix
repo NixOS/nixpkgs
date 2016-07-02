@@ -129,6 +129,11 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   # Python packages don't have a checkPhase, only an installCheckPhase
   doCheck = false;
 
+  passthru = {
+      name = name;
+      python = python;
+  };
+
   installPhase = attrs.installPhase or ''
     runHook preInstall
 
@@ -143,7 +148,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
   '';
 
   postFixup = attrs.postFixup or ''
-    wrapPythonPrograms
+#wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
     # check if we have two packages with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
