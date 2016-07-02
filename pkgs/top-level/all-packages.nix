@@ -16812,6 +16812,8 @@ in
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
+  norwester-font = callPackage ../data/fonts/norwester  {};
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
