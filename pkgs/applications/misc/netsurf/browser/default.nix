@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, libpng, openssl, curl, gtk2, check
+{ stdenv, fetchurl, pkgconfig, libpng, openssl, curl, gtk2, check, SDL
 , libxml2, libidn, perl, nettools, perlPackages
 , libXcursor, libXrandr, makeWrapper
+, uilib ? "framebuffer"
 , buildsystem
 , nsgenbind
 , libnsfb
@@ -20,11 +21,7 @@ stdenv.mkDerivation rec {
   name = "netsurf-${version}";
   version = "3.5";
 
-  # UIS incldue Framebuffer, and gtk, but
-  # Framebuffer is buggy. To enable, make sure
-  # to also build netsurf-libnsfb with ui=framebuffer
-  # and switch the ui here to framebuffer
-  ui = "gtk";
+  # UI libs incldue Framebuffer, and gtk
 
   src = fetchurl {
     url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${version}-src.tar.gz";
@@ -32,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig libpng openssl curl gtk2 check libxml2 libidn perl
-    nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper
+    nettools perlPackages.HTMLParser libXcursor libXrandr makeWrapper SDL
     buildsystem
     nsgenbind
     libnsfb
@@ -49,7 +46,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     cat <<EOF > Makefile.conf
-    override NETSURF_GTK_RESOURCES := $out/share/Netsurf/${ui}/res
+    override NETSURF_GTK_RESOURCES := $out/share/Netsurf/${uilib}/res
     override NETSURF_USE_GRESOURCE := YES
     EOF
   '';
@@ -57,15 +54,15 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
-    "TARGET=${ui}"
+    "TARGET=${uilib}"
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/Netsurf/${ui}
-    cmd=$(case "${ui}" in framebuffer) echo nsfb;; gtk) echo nsgtk;; esac)
+    mkdir -p $out/bin $out/share/Netsurf/${uilib}
+    cmd=$(case "${uilib}" in framebuffer) echo nsfb;; gtk) echo nsgtk;; esac)
     cp $cmd $out/bin/netsurf
-    wrapProgram $out/bin/netsurf --set NETSURFRES $out/share/Netsurf/${ui}/res
-    tar -hcf - ${ui}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
+    wrapProgram $out/bin/netsurf --set NETSURFRES $out/share/Netsurf/${uilib}/res
+    tar -hcf - ${uilib}/res | (cd $out/share/Netsurf/ && tar -xvpf -)
   '';
 
   meta = with stdenv.lib; {

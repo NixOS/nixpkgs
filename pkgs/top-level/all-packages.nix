@@ -1377,7 +1377,11 @@ in
 
   dvgrab = callPackage ../tools/video/dvgrab { };
 
-  dvtm = callPackage ../tools/misc/dvtm { };
+  dvtm = callPackage ../tools/misc/dvtm {
+    # if you prefer a custom config, write the config.h in dvtm.config.h
+    # and enable
+    # customConfig = builtins.readFile ./dvtm.config.h;
+  };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
 
@@ -2216,6 +2220,14 @@ in
   netdata = callPackage ../tools/system/netdata { };
 
   netsurf = recurseIntoAttrs (let callPackage = newScope pkgs.netsurf; in rec {
+    # ui could be gtk, sixel or framebuffer. Note that console display (sixel)
+    # requires a terminal that supports `sixel` capabilities such as mlterm
+    # or xterm -ti 340
+    ui = "sixel";
+
+    uilib = if ui == "gtk" then "gtk" else "framebuffer";
+
+    SDL = if ui == "gtk" then null else if ui == "sixel" then SDL_sixel else SDL;
 
     buildsystem = callPackage ../applications/misc/netsurf/buildsystem { };
 
@@ -2882,6 +2894,8 @@ in
 
   pell = callPackage ../applications/misc/pell { };
 
+  pick = callPackage ../tools/misc/pick { };
+
   pitivi = callPackage ../applications/video/pitivi {
     gst = gst_all_1 //
       { gst-plugins-bad = gst_all_1.gst-plugins-bad.overrideDerivation
@@ -3202,6 +3216,8 @@ in
   };
 
   remarkjs = callPackage ../development/web/remarkjs { };
+
+  alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
 
   remind = callPackage ../tools/misc/remind { };
 
@@ -3756,6 +3772,13 @@ in
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
+
+  vp = callPackage ../applications/misc/vp {
+    # Enable next line for console graphics. Note that
+    # it requires `sixel` enabled terminals such as mlterm
+    # or xterm -ti 340
+    SDL = SDL_sixel;
+  };
 
   openconnect = openconnect_openssl;
 
@@ -12101,9 +12124,10 @@ in
 
   bluejeans = callPackage ../applications/networking/browsers/mozilla-plugins/bluejeans { };
 
-  bomi = qt55.callPackage ../applications/video/bomi {
+  bomi = qt5.callPackage ../applications/video/bomi {
     youtube-dl = pythonPackages.youtube-dl;
     pulseSupport = config.pulseaudio or true;
+    ffmpeg = ffmpeg_2;
   };
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
@@ -16162,6 +16186,8 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
+  LiE = callPackage ../applications/science/math/LiE { };
+
   magma = callPackage ../development/libraries/science/math/magma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
@@ -16797,6 +16823,8 @@ in
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
+  norwester-font = callPackage ../data/fonts/norwester  {};
+
   nut = callPackage ../applications/misc/nut { };
 
   solfege = callPackage ../misc/solfege {
@@ -17206,4 +17234,8 @@ in
   iterm2 = callPackage ../applications/misc/iterm2 {};
 
   sequelpro = callPackage ../applications/misc/sequelpro {};
+
+  maphosts = callPackage ../tools/networking/maphosts {};
+
+  zuki-themes = callPackage ../misc/themes/zuki { };
 }

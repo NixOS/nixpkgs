@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, fetchFromGitHub, pkgconfig, perl, python, which, makeQtWrapper
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, perl, python, which, makeQtWrapper
 , libX11, libxcb, mesa
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmakeHook
-, ffmpeg
 , libchardet
+, ffmpeg
+
 , mpg123
 , libass
 , libdvdread
@@ -38,11 +39,30 @@ stdenv.mkDerivation rec {
     sha256 = "0a7n46gn3n5098lxxvl3s29s8jlkzss6by9074jx94ncn9cayf2h";
   };
 
+  patches = [
+    (fetchpatch rec {
+      name = "bomi-compilation-fix.patch";
+      url = "https://svnweb.mageia.org/packages/cauldron/bomi/current/SOURCES/${name}?revision=995725&view=co&pathrev=995725";
+      sha256 = "1dwryya5ljx35dbx6ag9d3rjjazni2mfn3vwirjdijdy6yz22jm6";
+    })
+    (fetchpatch rec {
+      name = "bomi-fix-expected-unqualified-id-before-numeric-constant-unix.patch";
+      url = "https://svnweb.mageia.org/packages/cauldron/bomi/current/SOURCES/${name}?revision=995725&view=co&pathrev=995725";
+      sha256 = "0n3xsrdrggimzw30gxlnrr088ndbdjqlqr46dzmfv8zan79lv5ri";
+    })
+  ];
+
   buildInputs = with stdenv.lib;
-                [ libX11 libxcb mesa
-                  qtbase qtx11extras
+                [ libX11
+                  libxcb
+                  mesa
+                  qtbase
+                  qtx11extras
+                  qtdeclarative
+                  qtquickcontrols
                   ffmpeg
                   libchardet
+
                   mpg123
                   libass
                   libdvdread
@@ -53,8 +73,6 @@ stdenv.mkDerivation rec {
                   libvdpau
                   libva
                   libbluray
-                  qtdeclarative
-                  qtquickcontrols
                 ]
                 ++ optional jackSupport jack
                 ++ optional portaudioSupport portaudio
