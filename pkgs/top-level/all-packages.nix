@@ -15363,6 +15363,8 @@ in
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
+  openrct2 = callPackage_i686 ../games/openrct2 { };
+
   openrw = callPackage ../games/openrw { };
 
   openspades = callPackage ../games/openspades {};
