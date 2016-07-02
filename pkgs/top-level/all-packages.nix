@@ -1376,7 +1376,11 @@ in
 
   dvgrab = callPackage ../tools/video/dvgrab { };
 
-  dvtm = callPackage ../tools/misc/dvtm { };
+  dvtm = callPackage ../tools/misc/dvtm {
+    # if you prefer a custom config, write the config.h in dvtm.config.h
+    # and enable
+    # customConfig = builtins.readFile ./dvtm.config.h;
+  };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
 
