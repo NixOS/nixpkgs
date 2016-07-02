@@ -8289,10 +8289,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Moo = buildPerlPackage rec {
-    name = "Moo-2.002002";
+    name = "Moo-2.002003";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "5e684e216ebd4531f5fa69d97fa4911344abcb5e2f7f8c240240ec03fa2c5eff";
+      sha256 = "a18f287d7ddda1e9862bc31c44394f42db077e2d9b93ca71785ccfacbc2f2bcd";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny ];
@@ -12000,10 +12000,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000032";
+    name = "Test2-Suite-0.000042";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "96be3607c018a3774acac99b0a47678322ef271e7152cddac7b5a0e9a3de5da3";
+      sha256 = "aade2e730a5ef5753a4757c6d72ae68cd9f91bbe74c121734a32a072d1f08fd0";
     };
     propagatedBuildInputs = [ TestSimple13 ];
     meta = {
