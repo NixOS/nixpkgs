@@ -17251,4 +17251,6 @@ in
   sequelpro = callPackage ../applications/misc/sequelpro {};
 
   maphosts = callPackage ../tools/networking/maphosts {};
+
+  zuki-themes = callPackage ../misc/themes/zuki { };
 }
