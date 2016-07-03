@@ -61,6 +61,7 @@ in
         after = [ "multi-user.target" ];
         wantedBy = [ "multi-user.target" ];
         before = [ "shutdown.target" ];
+        restartTriggers = [ confFile ];
 
         serviceConfig = {
           Type = "oneshot";
