@@ -13,6 +13,12 @@ let
     ${colors}
   '';
 
+  kbdEnv = pkgs.buildEnv {
+    name = "kbd-env";
+    paths = [ pkgs.kbd ] ++ config.i18n.consolePackages;
+    pathsToLink = [ "/share/consolefonts" "/share/consoletrans" "/share/keymaps" "/share/unimaps" ];
+  };
+
   setVconsole = !config.boot.isContainer;
 in
 
@@ -53,10 +59,9 @@ in
 
       # Let systemd-vconsole-setup.service do the work of setting up the
       # virtual consoles.
-      environment.etc = [ {
-        target = "vconsole.conf";
-        source = vconsoleConf;
-      } ];
+      environment.etc."vconsole.conf".source = vconsoleConf;
+      # Provide kbd with additional packages.
+      environment.etc."kbd".source = "${kbdEnv}/share";
 
       # This is identical to the systemd-vconsole-setup.service unit
       # shipped with systemd, except that it uses /dev/tty1 instead of
@@ -66,7 +71,7 @@ in
         { wantedBy = [ "multi-user.target" ];
           before = [ "display-manager.service" ];
           after = [ "systemd-udev-settle.service" ];
-          restartTriggers = [ vconsoleConf ];
+          restartTriggers = [ vconsoleConf kbdEnv ];
         };
     })
   ];
