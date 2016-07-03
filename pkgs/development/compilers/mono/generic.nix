@@ -1,9 +1,7 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256 }:
 
 let
   llvm     = callPackage ./llvm.nix { };
-  sha256 = "1ydw9l89apc9p7xr5mdzy0h97g2q6v243g82mxswfc2rrqhfs4gd";
-  version = "4.0.4.1";
 in
 stdenv.mkDerivation rec {
   name = "mono-${version}";
