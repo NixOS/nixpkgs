@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
   preConfigure = ''
+    export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
   '';
 
