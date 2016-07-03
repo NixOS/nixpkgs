@@ -1529,7 +1529,7 @@ in
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
-  flashtool = callPackage ../development/mobile/flashtool {
+  flashtool = callPackage_i686 ../development/mobile/flashtool {
     platformTools = androidenv.platformTools;
   };
 
