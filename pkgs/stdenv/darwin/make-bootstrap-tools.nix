@@ -6,8 +6,8 @@ rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
-    # Problems otherwise, unlike Linux even with "symlinks".
-    singleBinary = false;
+    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
+    singleBinary = "symlinks";
   });
 
   build = stdenv.mkDerivation {
