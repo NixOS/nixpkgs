@@ -3,9 +3,9 @@
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, x11Support ? true
-, adns ? null, gnutls ? null, libusb ? null, openldap ? null
-, readline ? null, zlib ? null, bzip2 ? null
+, pinentry ? null, adns ? null, gnutls ? null, libusb ? null
+, openldap ? null, readline ? null, zlib ? null, bzip2 ? null
+, x11Support ? true
 }:
 
 with stdenv.lib;
@@ -23,9 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
-    readline libusb gnutls adns openldap zlib bzip2
-  ];
+    pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo ]
+      ++ optional (adns     != null) adns
+      ++ optional (bzip2    != null) bzip2
+      ++ optional (gnutls   != null) gnutls
+      ++ optional (libusb   != null) libusb
+      ++ optional (openldap != null) openldap
+      ++ optional (readline != null) readline
+      ++ optional (zlib     != null) zlib;
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
