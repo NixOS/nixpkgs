@@ -41,6 +41,15 @@ in
         '';
       };
 
+      consolePackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = ''
+	  List of additional packages that provide console fonts, keymaps and
+          other resources.
+        '';
+      };
+
       consoleFont = mkOption {
         type = types.str;
         default = "Lat2-Terminus16";
