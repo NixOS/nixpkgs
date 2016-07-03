@@ -3598,6 +3598,8 @@ in
 
   tinc = callPackage ../tools/networking/tinc { };
 
+  tie = callPackage ../development/tools/misc/tie { };
+
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
