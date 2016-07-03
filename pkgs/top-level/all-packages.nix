@@ -5895,10 +5895,10 @@ in
 
   spark = callPackage ../applications/networking/cluster/spark { };
 
-  spidermonkey = callPackage ../development/interpreters/spidermonkey { };
+  spidermonkey = callPackage ../development/interpreters/spidermonkey { stdenv = overrideCC stdenv gcc49; };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
-  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { };
+  spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.0.nix { stdenv = overrideCC stdenv gcc49; };
   spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.2.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.5.nix { };
 
