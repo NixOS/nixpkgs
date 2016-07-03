@@ -54,6 +54,9 @@ in
 
   config = mkIf cfg.enable {
 
+    powerManagement.scsiLinkPolicy = null;
+    powerManagement.cpuFreqGovernor = null;
+
     systemd.services = {
       tlp = {
         description = "TLP system startup/shutdown";
