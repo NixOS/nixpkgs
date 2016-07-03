@@ -26701,12 +26701,12 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.8";
+    version = "0.1.9";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "06g84f0l208jrc1iqa4vk9kgwr77z1ya8cq39cygpq88yjj28whi";
+      sha256 = "09q7yz0v9i90grp4cmb1w8dps58q9xny7sb12kgmd8gcr8xwk4dx";
     };
 
     buildInputs = with self; [ nose ];
