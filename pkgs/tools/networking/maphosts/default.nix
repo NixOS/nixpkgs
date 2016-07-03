@@ -1,12 +1,22 @@
 { stdenv, lib, bundlerEnv, ruby }:
 
-bundlerEnv {
-  name = "maphosts-1.1.1";
+stdenv.mkDerivation rec {
+  name = "maphosts-${env.gems.maphosts.version}";
 
-  inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  env = bundlerEnv {
+    name = "maphosts-gems";
+    inherit ruby;
+    gemfile = ./Gemfile;
+    lockfile = ./Gemfile.lock;
+    gemset = ./gemset.nix;
+  };
+
+  phases = ["installPhase"];
+
+  installPhase = ''
+    mkdir -p "$out/bin"
+    ln -s "${env}/bin/maphosts" "$out/bin/maphosts"
+  '';
 
   meta = with lib; {
     description = "Small command line application for keeping your project hostnames in sync with /etc/hosts";
