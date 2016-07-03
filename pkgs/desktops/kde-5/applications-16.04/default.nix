@@ -35,7 +35,9 @@ let
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
     dolphin-plugins = callPackage ./dolphin-plugins.nix {};
-    ffmpegthumbs = callPackage ./ffmpegthumbs.nix {};
+    ffmpegthumbs = callPackage ./ffmpegthumbs.nix {
+      ffmpeg = pkgs.ffmpeg_2;
+    };
     filelight = callPackage ./filelight.nix {};
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
