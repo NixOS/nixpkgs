@@ -52,8 +52,7 @@ in
       environment.systemPackages = [ pkgs.kbd ];
 
       # Let systemd-vconsole-setup.service do the work of setting up the
-      # virtual consoles.  FIXME: trigger a restart of
-      # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
+      # virtual consoles.
       environment.etc = [ {
         target = "vconsole.conf";
         source = vconsoleConf;
