@@ -132,10 +132,6 @@ self:
       # upstream issue: missing file header
       qiita = markBroken super.qiita;
 
-      spaceline = super.spaceline.override {
-        inherit (self.melpaPackages) powerline;
-      };
-
       # upstream issue: missing file header
       speech-tagger = markBroken super.speech-tagger;
 
