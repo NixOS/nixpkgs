@@ -288,12 +288,12 @@ _clone_user_rev() {
             fi;;
     esac
 
-    pushd "$dir"
+    pushd "$dir" >/dev/null
     fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
     humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
     commitDate=$(git show --no-patch --pretty=%ci "$fullRev")
     commitDateStrict8601=$(git show --no-patch --pretty=%cI "$fullRev")
-    popd
+    popd >/dev/null
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
