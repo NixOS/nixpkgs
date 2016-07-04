@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "texinfo-6.0";
+  name = "texinfo-6.1";
 
   src = fetchurl {
     url = "mirror://gnu/texinfo/${name}.tar.xz";
-    sha256 = "1r3i6jyynn6ab45fxw5bms8mflk9ry4qpj6gqyry72vfd5c47fhi";
+    sha256 = "1ll3d0l8izygdxqz96wfr2631kxahifwdknpgsx2090vw963js5c";
   };
 
   buildInputs = [ perl xz ]
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    maintainers = [ maintainers.vrthra ];
 
     longDescription = ''
       Texinfo is the official documentation format of the GNU project.
