@@ -8095,6 +8095,8 @@ in
 
   libisofs = callPackage ../development/libraries/libisofs { };
 
+  libisoburn = callPackage ../development/libraries/libisoburn { };
+
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
