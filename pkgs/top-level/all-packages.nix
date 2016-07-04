@@ -11465,10 +11465,12 @@ in
     buildUBoot
     ubootTools
     ubootBananaPi
+    ubootBeagleboneBlack
     ubootJetsonTK1
     ubootPcduino3Nano
     ubootRaspberryPi
-    ubootVersatileExpressCA9
+    ubootRaspberryPi2
+    ubootRaspberryPi3
     ubootWandboard
     ;
 
