@@ -14826,6 +14826,8 @@ in
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
+  wily = callPackage ../applications/editors/wily { };
+
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
   wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
