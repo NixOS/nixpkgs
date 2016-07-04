@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     # Ensure NSS installation works fine
     configureFlags="$configureFlags --with-nssdir=$out/lib"
     patchShebangs src/gns/nss/install-nss-plugin.sh
+
+    sed -ie 's|@LDFLAGS@|@LDFLAGS@ $(Z_LIBS)|g' \
+      src/regex/Makefile.in \
+      src/fs/Makefile.in
   '';
 
   doCheck = false;
@@ -75,7 +79,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ viric ];
+    maintainers = with stdenv.lib.maintainers; [ viric vrthra ];
     platforms = stdenv.lib.platforms.gnu;
   };
 }
