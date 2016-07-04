@@ -1220,6 +1220,8 @@ in
 
   cutter = callPackage ../tools/networking/cutter { };
 
+  cwebbin = callPackage ../development/tools/misc/cwebbin { };
+
   cvs_fast_export = callPackage ../applications/version-management/cvs-fast-export { };
 
   dadadodo = callPackage ../tools/text/dadadodo { };
@@ -3606,6 +3608,8 @@ in
   timetrap = callPackage ../applications/office/timetrap { };
 
   tinc = callPackage ../tools/networking/tinc { };
+
+  tie = callPackage ../development/tools/misc/tie { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
