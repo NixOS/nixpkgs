@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "MACROSDIR=$(out)/share/texmf/tex/generic/cweb"
     "CWEBINPUTS=$(out)/lib/cweb"
-    "DESTDIR=$(out)/bin"
+    "DESTDIR=$(out)/bin/"
     "MANDIR=$(out)/share/man/man1"
     "EMACSDIR=$(out)/share/emacs/site-lisp"
     "CP=cp"
