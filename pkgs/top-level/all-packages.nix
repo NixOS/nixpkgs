@@ -1398,6 +1398,8 @@ in
 
   editres = callPackage ../tools/graphics/editres { };
 
+  edit = callPackage ../applications/editors/edit { };
+
   edk2 = callPackage ../development/compilers/edk2 { };
 
   eid-mw = callPackage ../tools/security/eid-mw { };
