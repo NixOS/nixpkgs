@@ -13809,12 +13809,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   UnicodeNormalize = buildPerlPackage {
-    name = "Unicode-Normalize-1.19";
+    name = "Unicode-Normalize-1.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SADAHIRO/Unicode-Normalize-1.19.tar.gz;
-      sha256 = "ab16467692cb78ced706fb7bee4145ac09d9f14d9eed92be4a305de3172ce6c4";
+      url = mirror://cpan/authors/id/K/KH/KHW/Unicode-Normalize-1.25.tar.gz;
+      sha256 = "0v04bcyjfcfap4kfpc8q3ikq3j7s68nym4ckw3iasmmksdskmcq0";
     };
     meta = {
+      maintainers = [ maintainers.vrthra ];
       description = "Unicode Normalization Forms";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
