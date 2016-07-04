@@ -16507,11 +16507,11 @@ in modules // {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "1.0.0";
+    version = "1.1.0";
     disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "19jdnrz2qzlmxyhf0gyrj0dg0jfk1zar0jvm1vigswgmq2m6mm4v";
+      sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
