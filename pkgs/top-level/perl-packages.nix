@@ -13795,6 +13795,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LinguaTranslit = buildPerlPackage {
+    name = "Lingua-Translit-1.26";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.26.tar.gz;
+      sha256 = "161589h08kzliga17i2g0hb0yn4cjmb8rdiyadq5bw97974bac14";
+    };
+    meta = {
+      maintainers = [ maintainers.vrthra ];
+      description = "Transliterates text between writing systems";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   UnicodeNormalize = buildPerlPackage {
     name = "Unicode-Normalize-1.19";
     src = fetchurl {
