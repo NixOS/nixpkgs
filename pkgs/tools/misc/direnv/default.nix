@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ go ];
 
   buildPhase = ''
-    make BASH_PATH=${bash}
+    make BASH_PATH=${bash}/bin/bash
   '';
 
   installPhase = ''
