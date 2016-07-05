@@ -76,6 +76,7 @@
   ./programs/screen.nix
   ./programs/shadow.nix
   ./programs/shell.nix
+  ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/tmux.nix
