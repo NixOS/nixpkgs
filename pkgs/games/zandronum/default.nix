@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     ln -s ${sqlite-amalgamation}/* sqlite/
+    sed -ie 's| restrict| _restrict|g' dumb/include/dumb.h \
+                                       dumb/src/it/*.c
   '';
 
   cmakeFlags =
