@@ -3,7 +3,7 @@
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
 , withPrefix ? false
-, singleBinary ? true # you can also pass "symlinks", for example
+, singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
 
 assert aclSupport -> acl != null;
