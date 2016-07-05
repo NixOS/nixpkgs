@@ -12950,15 +12950,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextBibTeX = buildPerlModule rec {
-    name = "Text-BibTeX-0.71";
+    name = "Text-BibTeX-0.72";
     buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
-      sha256 = "1jwi4yc4l1sf9pyc6qifcm493lwf8iggdjli7f9a9aqin1swh36d";
+      sha256 = "0vfnj9ygdjympc8hsf38nc4a1lq45qbq7v6z6mrnfgr3k198b6gw";
     };
     meta = {
       description = "Interface to read and parse BibTeX files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.vrthra ];
     };
   };
 
@@ -13794,13 +13795,27 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  UnicodeNormalize = buildPerlPackage {
-    name = "Unicode-Normalize-1.19";
+  LinguaTranslit = buildPerlPackage {
+    name = "Lingua-Translit-1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SADAHIRO/Unicode-Normalize-1.19.tar.gz;
-      sha256 = "ab16467692cb78ced706fb7bee4145ac09d9f14d9eed92be4a305de3172ce6c4";
+      url = mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.26.tar.gz;
+      sha256 = "161589h08kzliga17i2g0hb0yn4cjmb8rdiyadq5bw97974bac14";
     };
     meta = {
+      maintainers = [ maintainers.vrthra ];
+      description = "Transliterates text between writing systems";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  UnicodeNormalize = buildPerlPackage {
+    name = "Unicode-Normalize-1.25";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/K/KH/KHW/Unicode-Normalize-1.25.tar.gz;
+      sha256 = "0v04bcyjfcfap4kfpc8q3ikq3j7s68nym4ckw3iasmmksdskmcq0";
+    };
+    meta = {
+      maintainers = [ maintainers.vrthra ];
       description = "Unicode Normalization Forms";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
