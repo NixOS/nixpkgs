@@ -1,11 +1,12 @@
 { stdenv, fetchurl, gettext, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "sysstat-11.0.7";
+  name = "sysstat-${version}";
+  version = "11.2.5";
 
   src = fetchurl {
     url = "http://perso.orange.fr/sebastien.godard/${name}.tar.xz";
-    sha256 = "12j55rdx1hyhsc5qm0anx9h9siaa58lhh9dchp40q4ag2wxamp1r";
+    sha256 = "4d5c9cd9122aa933ac477f369eb40c66236365a88516577c9655516f6f32e8e4";
   };
 
   buildInputs = [ gettext ];
@@ -17,7 +18,8 @@ stdenv.mkDerivation rec {
     export SYSTEMCTL=systemctl
   '';
 
-  makeFlags = "SYSCONFIG_DIR=$(out)/etc IGNORE_MAN_GROUP=y CHOWN=true";
+  configureFlags = "--disable-file-attr";
+  makeFlags = "SYSCONFIG_DIR=$(out)/etc CHOWN=true";
   installTargets = "install_base install_nls install_man";
 
   patches = [ ./install.patch ];
