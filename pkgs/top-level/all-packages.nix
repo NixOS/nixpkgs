@@ -13655,6 +13655,8 @@ in
     inherit (gnome) libgnomecanvas glib;
   };
 
+  mop = callPackage ../applications/misc/mop { };
+
   mopidy = callPackage ../applications/audio/mopidy { };
 
   mopidy-gmusic = callPackage ../applications/audio/mopidy-gmusic { };
