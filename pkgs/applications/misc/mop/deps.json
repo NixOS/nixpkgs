@@ -1,0 +1,8 @@
+[
+  {
+    "include": "../../libs.json",
+    "packages": [
+      "github.com/nsf/termbox-go"
+    ]
+  }
+]
