@@ -17204,6 +17204,10 @@ in
     wxGTK = wxGTK30;
   };
 
+  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
+    wxGTK = wxGTK30;
+  };
+
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
