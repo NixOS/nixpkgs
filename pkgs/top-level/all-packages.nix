@@ -640,7 +640,19 @@ in
     libtorrentRasterbar = libtorrentRasterbar_1_09;
   };
 
-  cabal2nix = self.haskellPackages.cabal2nix;
+  cabal2nix = self.haskell.lib.overrideCabal self.haskellPackages.cabal2nix (drv: {
+    isLibrary = false;
+    enableSharedExecutables = false;
+    executableToolDepends = [ self.makeWrapper ];
+    postInstall = ''
+      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
+      install -D $out/bin/${drv.pname} $exe
+      rm -rf $out/{bin,lib,share}
+      makeWrapper $exe $out/bin/${drv.pname} --prefix PATH ":" "${self.nix-prefetch-scripts}/bin"
+      mkdir -p $out/share/bash-completion/completions
+      $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
+    '';
+  });
 
   caddy = callPackage ../servers/caddy { };
 
