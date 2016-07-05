@@ -202,6 +202,9 @@ let
 
       buildInputs = [ python ] ++ deps;
 
+      # We need to set this for python.buildEnv
+      pythonPath = [];
+
       inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
       # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin

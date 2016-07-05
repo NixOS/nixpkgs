@@ -135,7 +135,7 @@ in {
       ''; # */
 
       serviceConfig = {
-        ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" --daemon ${concatStringsSep " " cfg.extraOptions}'';
+        ExecStart = ''@${pkgs.libvirt}/sbin/libvirtd libvirtd --config "${configFile}" ${concatStringsSep " " cfg.extraOptions}'';
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
         Restart = "on-failure";

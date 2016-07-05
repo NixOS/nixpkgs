@@ -380,7 +380,7 @@ with stdenv.lib;
     CGROUP_MEM_RES_CTLR y
     CGROUP_MEM_RES_CTLR_SWAP y
   ''}
-  DEVPTS_MULTIPLE_INSTANCES y
+  ${optionalString (versionOlder version "4.7") "DEVPTS_MULTIPLE_INSTANCES y"}
   BLK_DEV_THROTTLING y
   CFQ_GROUP_IOSCHED y
 

@@ -136,6 +136,7 @@ rec {
     kernelMajor = "2.6";
     kernelHeadersBaseConfig = "bcm2835_defconfig";
     kernelBaseConfig = "bcmrpi_defconfig";
+    kernelDTB = true;
     kernelArch = "arm";
     kernelAutoModules = false;
     kernelExtraConfig =
