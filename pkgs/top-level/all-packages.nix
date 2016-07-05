@@ -17200,6 +17200,10 @@ in
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
+  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
+    wxGTK = wxGTK30;
+  };
+
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
