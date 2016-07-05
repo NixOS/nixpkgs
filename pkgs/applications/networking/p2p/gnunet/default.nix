@@ -20,21 +20,13 @@ stdenv.mkDerivation rec {
     # Brute force: since nix-worker chroots don't provide
     # /etc/{resolv.conf,hosts}, replace all references to `localhost'
     # by their IPv4 equivalent.
-    for i in $(find . \( -name \*.c -or -name \*.conf \) \
-                    -exec grep -l '\<localhost\>' {} \;)
-    do
-      echo "$i: substituting \`127.0.0.1' to \`localhost'..."
-      sed -i "$i" -e's/\<localhost\>/127.0.0.1/g'
-    done
+    find . \( -name \*.c -or -name \*.conf \) | \
+      xargs sed -ie 's|\<localhost\>|127.0.0.1|g'
 
     # Make sure the tests don't rely on `/tmp', for the sake of chroot
     # builds.
-    for i in $(find . \( -iname \*test\*.c -or -name \*.conf \) \
-                    -exec grep -l /tmp {} \;)
-    do
-      echo "$i: replacing references to \`/tmp' by \`$TMPDIR'..."
-      substituteInPlace "$i" --replace "/tmp" "$TMPDIR"
-    done
+    find . \( -iname \*test\*.c -or -name \*.conf \) | \
+      xargs sed -ie "s|/tmp|$TMPDIR|g"
 
     # Ensure NSS installation works fine
     configureFlags="$configureFlags --with-nssdir=$out/lib"
@@ -57,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
   */
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -77,9 +69,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://gnunet.org/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ viric vrthra ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with maintainers; [ viric vrthra ];
+    platforms = platforms.gnu;
   };
 }
