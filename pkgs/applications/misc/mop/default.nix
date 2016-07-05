@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   src = fetchgit {
     inherit rev;
-    url = "https://github.com/michaeldv/mop";
+    url = "https://github.com/mop-tracker/mop";
     sha256 = "0zp51g9i8rw6acs4vnrxclbxa5z1v0a0m1xx27szszp0rphcczkx";
   };
 
