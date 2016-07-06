@@ -12,8 +12,6 @@ diff -ru gnustep-make-2.6.6/common.make gnustep-make-2.6.6.patched/common.make
  
  #
  # Determine target specific settings
-Only in gnustep-make-2.6.6.patched/: common.make~
-Only in gnustep-make-2.6.6.patched/: configure.ac~
 diff -ru gnustep-make-2.6.6/GNUmakefile.in gnustep-make-2.6.6.patched/GNUmakefile.in
 --- gnustep-make-2.6.6/GNUmakefile.in	2013-09-20 12:13:15.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUmakefile.in	2014-12-07 20:35:27.000000000 +0600
@@ -62,7 +60,6 @@ diff -ru gnustep-make-2.6.6/gnustep-config.in gnustep-make-2.6.6.patched/gnustep
    --variable=GNUMAKE) echo "@GNUMAKE@"
                exit 0;;
    --debug-flags) @GNUMAKE@ -s -f "$GNUSTEP_MAKEFILES/empty.make" print-gnustep-make-objc-flags quiet=yes debug=yes 2>/dev/null
-Only in gnustep-make-2.6.6.patched/: gnustep-config.in~
 diff -ru gnustep-make-2.6.6/GNUstep.csh.in gnustep-make-2.6.6.patched/GNUstep.csh.in
 --- gnustep-make-2.6.6/GNUstep.csh.in	2011-05-03 13:40:10.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUstep.csh.in	2014-12-09 20:14:05.000000000 +0600
@@ -77,7 +74,6 @@ diff -ru gnustep-make-2.6.6/GNUstep.csh.in gnustep-make-2.6.6.patched/GNUstep.cs
  if ( "${GNUSTEP_MAKE_STRICT_V2_MODE}" == "yes" ) then
    unsetenv GNUSTEP_USER_DIR
    unsetenv GNUSTEP_USER_ROOT
-Only in gnustep-make-2.6.6.patched/: GNUstep.csh.in~
 diff -ru gnustep-make-2.6.6/GNUstep.sh.in gnustep-make-2.6.6.patched/GNUstep.sh.in
 --- gnustep-make-2.6.6/GNUstep.sh.in	2012-02-21 20:21:38.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUstep.sh.in	2014-12-09 20:14:19.000000000 +0600
@@ -92,7 +88,6 @@ diff -ru gnustep-make-2.6.6/GNUstep.sh.in gnustep-make-2.6.6.patched/GNUstep.sh.
  
  if [ "$GNUSTEP_MAKE_STRICT_V2_MODE" = "yes" ]; then
    # Make sure this is never set in gnustep-make v2 strict mode; it
-Only in gnustep-make-2.6.6.patched/: GNUstep.sh.in~
 diff -ru gnustep-make-2.6.6/GNUstep-strict-v2.conf.in gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in
 --- gnustep-make-2.6.6/GNUstep-strict-v2.conf.in	2008-01-15 20:35:36.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in	2014-12-07 22:04:56.000000000 +0600
@@ -104,7 +99,6 @@ diff -ru gnustep-make-2.6.6/GNUstep-strict-v2.conf.in gnustep-make-2.6.6.patched
  # This is where the user home directories are.  Only used to provide
  # NSUserDirectory in gnustep-base.  Never used anywhere else.
  GNUSTEP_SYSTEM_USERS_DIR=@GNUSTEP_SYSTEM_USERS_DIR@
-Only in gnustep-make-2.6.6.patched/: GNUstep-strict-v2.conf.in~
 diff -ru gnustep-make-2.6.6/library-combo.make gnustep-make-2.6.6.patched/library-combo.make
 --- gnustep-make-2.6.6/library-combo.make	2012-02-21 19:53:02.000000000 +0600
 +++ gnustep-make-2.6.6.patched/library-combo.make	2014-12-09 20:15:05.000000000 +0600
@@ -135,8 +129,6 @@ diff -ru gnustep-make-2.6.6/library-combo.make gnustep-make-2.6.6.patched/librar
  #
  ifeq ($(GUI_LIB), nx)
    GUI_DEFINE = -DNeXT_GUI_LIBRARY=1
-Only in gnustep-make-2.6.6.patched/: library-combo.make~
-Only in gnustep-make-2.6.6.patched/: result
 diff -ru gnustep-make-2.6.6/rules.make gnustep-make-2.6.6.patched/rules.make
 --- gnustep-make-2.6.6/rules.make	2013-07-04 16:05:44.000000000 +0600
 +++ gnustep-make-2.6.6.patched/rules.make	2014-12-09 21:31:04.000000000 +0600
@@ -151,4 +143,3 @@ diff -ru gnustep-make-2.6.6/rules.make gnustep-make-2.6.6.patched/rules.make
  
  $(GNUSTEP_MAKEFILES)/Master/*.make: ;
  
-Only in gnustep-make-2.6.6.patched/: rules.make~

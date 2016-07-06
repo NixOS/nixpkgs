@@ -16,5 +16,3 @@ diff -c libobjc2-1.7/Test/CMakeLists.txt libobjc2-1.7-patched/Test/CMakeLists.tx
 ! #addtest_flags(CXXExceptions "-O0" "CXXException.m;CXXException.cc")
 ! #addtest_flags(CXXExceptions_optimised "-O3" "CXXException.m;CXXException.cc")
   
-Only in libobjc2-1.7-patched/Test: CMakeLists.txt~
-Common subdirectories: libobjc2-1.7/Test/RuntimeTest.xcodeproj and libobjc2-1.7-patched/Test/RuntimeTest.xcodeproj

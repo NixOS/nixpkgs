@@ -25,4 +25,3 @@ diff -ru gorm-1.2.20/GNUmakefile gorm-1.2.20.patched/GNUmakefile
  PACKAGE_NAME = gorm
  export PACKAGE_NAME
  include $(GNUSTEP_MAKEFILES)/common.make
-Only in gorm-1.2.20.patched/: GNUmakefile~

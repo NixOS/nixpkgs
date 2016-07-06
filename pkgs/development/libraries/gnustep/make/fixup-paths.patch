@@ -12,8 +12,6 @@ diff -r -u gnustep-make-2.6.6/common.make gnustep-make-2.6.6.patched/common.make
  
  #
  # Determine target specific settings
-Only in gnustep-make-2.6.6.patched: common.make~
-Only in gnustep-make-2.6.6.patched: configure.ac~
 diff -r -u gnustep-make-2.6.6/GNUmakefile.in gnustep-make-2.6.6.patched/GNUmakefile.in
 --- gnustep-make-2.6.6/GNUmakefile.in	2013-09-20 12:13:15.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUmakefile.in	2014-12-07 20:35:27.000000000 +0600
@@ -142,7 +140,6 @@ diff -r -u gnustep-make-2.6.6/GNUstep.sh.in gnustep-make-2.6.6.patched/GNUstep.s
    export GNUSTEP_CONFIG_FILE GNUSTEP_USER_CONFIG_FILE
  
    export GNUSTEP_USER_DEFAULTS_DIR
-Only in gnustep-make-2.6.6.patched: GNUstep.sh.in~
 diff -r -u gnustep-make-2.6.6/GNUstep-strict-v2.conf.in gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in
 --- gnustep-make-2.6.6/GNUstep-strict-v2.conf.in	2008-01-15 20:35:36.000000000 +0600
 +++ gnustep-make-2.6.6.patched/GNUstep-strict-v2.conf.in	2014-12-07 22:04:56.000000000 +0600
@@ -154,7 +151,6 @@ diff -r -u gnustep-make-2.6.6/GNUstep-strict-v2.conf.in gnustep-make-2.6.6.patch
  # This is where the user home directories are.  Only used to provide
  # NSUserDirectory in gnustep-base.  Never used anywhere else.
  GNUSTEP_SYSTEM_USERS_DIR=@GNUSTEP_SYSTEM_USERS_DIR@
-Only in gnustep-make-2.6.6.patched: GNUstep-strict-v2.conf.in~
 diff -r -u gnustep-make-2.6.6/library-combo.make gnustep-make-2.6.6.patched/library-combo.make
 --- gnustep-make-2.6.6/library-combo.make	2012-02-21 19:53:02.000000000 +0600
 +++ gnustep-make-2.6.6.patched/library-combo.make	2014-12-09 20:15:05.000000000 +0600
@@ -185,8 +181,6 @@ diff -r -u gnustep-make-2.6.6/library-combo.make gnustep-make-2.6.6.patched/libr
  #
  ifeq ($(GUI_LIB), nx)
    GUI_DEFINE = -DNeXT_GUI_LIBRARY=1
-Only in gnustep-make-2.6.6.patched: library-combo.make~
-Only in gnustep-make-2.6.6.patched: result
 diff -r -u gnustep-make-2.6.6/rules.make gnustep-make-2.6.6.patched/rules.make
 --- gnustep-make-2.6.6/rules.make	2013-07-04 16:05:44.000000000 +0600
 +++ gnustep-make-2.6.6.patched/rules.make	2014-12-09 21:31:04.000000000 +0600
@@ -201,4 +195,3 @@ diff -r -u gnustep-make-2.6.6/rules.make gnustep-make-2.6.6.patched/rules.make
  
  $(GNUSTEP_MAKEFILES)/Master/*.make: ;
  
-Only in gnustep-make-2.6.6.patched: rules.make~

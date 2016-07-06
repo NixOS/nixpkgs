@@ -1,8 +1,3 @@
-Only in gnustep-base-1.24.7: base.make
-Only in gnustep-base-1.24.7: config.mak
-Only in gnustep-base-1.24.7: config.status
-Only in gnustep-base-1.24.7/Headers/GNUstepBase: config.h
-Only in gnustep-base-1.24.7/Headers/GNUstepBase: GSConfig.h
 diff -r -u gnustep-base-1.24.7/Makefile.postamble gnustep-base-1.24.7.patched/Makefile.postamble
 --- gnustep-base-1.24.7/Makefile.postamble	2011-07-15 19:53:45.000000000 +0600
 +++ gnustep-base-1.24.7.patched/Makefile.postamble	2014-11-29 22:25:07.000000000 +0600
@@ -33,10 +28,6 @@ diff -r -u gnustep-base-1.24.7/Makefile.postamble gnustep-base-1.24.7.patched/Ma
  
  # Things to do before cleaning
  # before-clean::
-Only in gnustep-base-1.24.7.patched: Makefile.postamble~
-Only in gnustep-base-1.24.7: result
-Only in gnustep-base-1.24.7.patched/Source: .#dfdf
-Only in gnustep-base-1.24.7.patched/Source: #dfdf#
 diff -r -u gnustep-base-1.24.7/Source/NSPathUtilities.m gnustep-base-1.24.7.patched/Source/NSPathUtilities.m
 --- gnustep-base-1.24.7/Source/NSPathUtilities.m	2014-01-14 13:21:10.000000000 +0600
 +++ gnustep-base-1.24.7.patched/Source/NSPathUtilities.m	2015-01-25 13:59:37.000000000 +0600
@@ -380,5 +371,3 @@ diff -r -u gnustep-base-1.24.7/Source/NSPathUtilities.m gnustep-base-1.24.7.patc
  
    count = [paths count];
    for (i = 0; i < count; i++)
-Only in gnustep-base-1.24.7.patched/Source: NSPathUtilities.m~
-Only in gnustep-base-1.24.7.patched/Tests/base/NSInvocationOperation: GNUmakefile
