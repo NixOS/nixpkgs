@@ -1,16 +1,16 @@
 { lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
 , bzip2, libcroco, libintlOrEmpty
 , withGTK ? false, gtk3 ? null
-, gobjectIntrospection ? null, enableIntrospection ? false }:
+, gobjectIntrospection ? null, enableIntrospection ? false, version, sha256 }:
 
 # no introspection by default, it's too big
 
 stdenv.mkDerivation rec {
-  name = "librsvg-2.40.9";
+  name = "librsvg-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/librsvg/2.40/${name}.tar.xz";
-    sha256 = "0fplymmqqr28y24vcnb01szn62pfbqhk8p1ngns54x9m6mflr5hk";
+    inherit sha256;
+    url = "mirror://gnome/sources/librsvg/2.40/${name}.tar.xz";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintlOrEmpty ]
     ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
 
-  propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
+  propagatedBuildInputs = [ glib gdk_pixbuf cairo ]
+    ++ lib.optional withGTK gtk3;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -52,4 +53,12 @@ stdenv.mkDerivation rec {
     cat ${gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
     rm $GDK_PIXBUF/loaders.cache.tmp
   '';
+
+  meta = with stdenv.lib; {
+    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    license = licenses.lgpl2Plus;
+    description = "A library to render SVG files using cairo";
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ vrthra ];
+  };
 }
