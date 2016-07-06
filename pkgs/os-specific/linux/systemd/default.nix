@@ -97,7 +97,8 @@ stdenv.mkDerivation rec {
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
           --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
-          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
+          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
+          --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
       done
 
       substituteInPlace src/journal/catalog.c \
