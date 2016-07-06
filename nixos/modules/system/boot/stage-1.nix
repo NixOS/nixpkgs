@@ -142,6 +142,7 @@ let
 
   udevRules = pkgs.stdenv.mkDerivation {
     name = "udev-rules";
+    allowedReferences = [ extraUtils ];
     buildCommand = ''
       mkdir -p $out
 
