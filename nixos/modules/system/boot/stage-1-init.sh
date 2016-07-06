@@ -14,6 +14,8 @@ export LVM_SUPPRESS_FD_WARNINGS=true
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
 
+    @preFailCommands@
+
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
     cat <<EOF
