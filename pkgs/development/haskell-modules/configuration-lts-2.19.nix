@@ -5013,6 +5013,7 @@ self: super: {
   "hyperdrive" = dontDistribute super."hyperdrive";
   "hyperfunctions" = dontDistribute super."hyperfunctions";
   "hyperloglog" = dontDistribute super."hyperloglog";
+  "hyperloglogplus" = dontDistribute super."hyperloglogplus";
   "hyperpublic" = dontDistribute super."hyperpublic";
   "hyphenate" = dontDistribute super."hyphenate";
   "hyphenation" = doDistribute super."hyphenation_0_4_2_1";
@@ -5292,6 +5293,7 @@ self: super: {
   "jsaddle-hello" = dontDistribute super."jsaddle-hello";
   "jsc" = dontDistribute super."jsc";
   "jsmw" = dontDistribute super."jsmw";
+  "json-api" = dontDistribute super."json-api";
   "json-assertions" = dontDistribute super."json-assertions";
   "json-ast" = dontDistribute super."json-ast";
   "json-ast-json-encoder" = dontDistribute super."json-ast-json-encoder";
@@ -6989,6 +6991,7 @@ self: super: {
   "process-qq" = dontDistribute super."process-qq";
   "process-streaming" = dontDistribute super."process-streaming";
   "processing" = dontDistribute super."processing";
+  "processing-for-haskell" = dontDistribute super."processing-for-haskell";
   "processor-creative-kit" = dontDistribute super."processor-creative-kit";
   "procrastinating-structure" = dontDistribute super."procrastinating-structure";
   "procrastinating-variable" = dontDistribute super."procrastinating-variable";
@@ -8288,6 +8291,7 @@ self: super: {
   "system-argv0" = dontDistribute super."system-argv0";
   "system-command" = dontDistribute super."system-command";
   "system-gpio" = dontDistribute super."system-gpio";
+  "system-info" = dontDistribute super."system-info";
   "system-inotify" = dontDistribute super."system-inotify";
   "system-lifted" = dontDistribute super."system-lifted";
   "system-random-effect" = dontDistribute super."system-random-effect";

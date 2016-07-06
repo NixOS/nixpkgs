@@ -617,6 +617,7 @@ self: super: {
   "LinearSplit" = dontDistribute super."LinearSplit";
   "LinguisticsTypes" = dontDistribute super."LinguisticsTypes";
   "LinkChecker" = dontDistribute super."LinkChecker";
+  "ListLike" = doDistribute super."ListLike_4_2_1";
   "ListTree" = dontDistribute super."ListTree";
   "ListWriter" = dontDistribute super."ListWriter";
   "ListZipper" = dontDistribute super."ListZipper";
@@ -2331,6 +2332,7 @@ self: super: {
   "cryptohash-md5" = dontDistribute super."cryptohash-md5";
   "cryptohash-sha1" = dontDistribute super."cryptohash-sha1";
   "cryptohash-sha256" = dontDistribute super."cryptohash-sha256";
+  "cryptol" = doDistribute super."cryptol_2_3_0";
   "cryptonite" = doDistribute super."cryptonite_0_10";
   "cryptonite-conduit" = dontDistribute super."cryptonite-conduit";
   "cryptonite-openssl" = dontDistribute super."cryptonite-openssl";
@@ -2646,6 +2648,7 @@ self: super: {
   "digestive-functors-snap" = dontDistribute super."digestive-functors-snap";
   "digit" = dontDistribute super."digit";
   "digitalocean-kzs" = dontDistribute super."digitalocean-kzs";
+  "digits" = doDistribute super."digits_0_2";
   "dimensional" = doDistribute super."dimensional_1_0_1_1";
   "dimensional-codata" = dontDistribute super."dimensional-codata";
   "dimensional-tf" = dontDistribute super."dimensional-tf";
@@ -4727,6 +4730,7 @@ self: super: {
   "hyloutils" = dontDistribute super."hyloutils";
   "hyperdrive" = dontDistribute super."hyperdrive";
   "hyperfunctions" = dontDistribute super."hyperfunctions";
+  "hyperloglogplus" = dontDistribute super."hyperloglogplus";
   "hyperpublic" = dontDistribute super."hyperpublic";
   "hyphenate" = dontDistribute super."hyphenate";
   "hypher" = dontDistribute super."hypher";
@@ -4972,6 +4976,7 @@ self: super: {
   "jsaddle-hello" = dontDistribute super."jsaddle-hello";
   "jsc" = dontDistribute super."jsc";
   "jsmw" = dontDistribute super."jsmw";
+  "json-api" = dontDistribute super."json-api";
   "json-assertions" = dontDistribute super."json-assertions";
   "json-ast" = dontDistribute super."json-ast";
   "json-ast-json-encoder" = dontDistribute super."json-ast-json-encoder";
@@ -5644,6 +5649,7 @@ self: super: {
   "mockery" = doDistribute super."mockery_0_3_2";
   "modbus-tcp" = dontDistribute super."modbus-tcp";
   "modelicaparser" = dontDistribute super."modelicaparser";
+  "modify-fasta" = doDistribute super."modify-fasta_0_8_1_3";
   "modsplit" = dontDistribute super."modsplit";
   "modular-arithmetic" = dontDistribute super."modular-arithmetic";
   "modular-prelude" = dontDistribute super."modular-prelude";
@@ -6541,6 +6547,7 @@ self: super: {
   "process-qq" = dontDistribute super."process-qq";
   "process-streaming" = dontDistribute super."process-streaming";
   "processing" = dontDistribute super."processing";
+  "processing-for-haskell" = dontDistribute super."processing-for-haskell";
   "processor-creative-kit" = dontDistribute super."processor-creative-kit";
   "procrastinating-structure" = dontDistribute super."procrastinating-structure";
   "procrastinating-variable" = dontDistribute super."procrastinating-variable";
@@ -6913,6 +6920,7 @@ self: super: {
   "resource-simple" = dontDistribute super."resource-simple";
   "resourcet" = doDistribute super."resourcet_1_1_7_2";
   "respond" = dontDistribute super."respond";
+  "rest-client" = doDistribute super."rest-client_0_5_1_0";
   "rest-core" = doDistribute super."rest-core_0_37";
   "rest-example" = dontDistribute super."rest-example";
   "rest-gen" = doDistribute super."rest-gen_0_19_0_1";
@@ -7759,6 +7767,7 @@ self: super: {
   "system-canonicalpath" = dontDistribute super."system-canonicalpath";
   "system-command" = dontDistribute super."system-command";
   "system-gpio" = dontDistribute super."system-gpio";
+  "system-info" = dontDistribute super."system-info";
   "system-inotify" = dontDistribute super."system-inotify";
   "system-lifted" = dontDistribute super."system-lifted";
   "system-random-effect" = dontDistribute super."system-random-effect";
@@ -8023,6 +8032,7 @@ self: super: {
   "timeparsers" = dontDistribute super."timeparsers";
   "timeplot" = dontDistribute super."timeplot";
   "timeprint" = dontDistribute super."timeprint";
+  "timerep" = doDistribute super."timerep_2_0_0_1";
   "timers" = dontDistribute super."timers";
   "timers-updatable" = dontDistribute super."timers-updatable";
   "timestamp-subprocess-lines" = dontDistribute super."timestamp-subprocess-lines";

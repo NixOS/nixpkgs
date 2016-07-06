@@ -2735,6 +2735,7 @@ self: super: {
   "digestive-functors-snap" = dontDistribute super."digestive-functors-snap";
   "digit" = dontDistribute super."digit";
   "digitalocean-kzs" = dontDistribute super."digitalocean-kzs";
+  "digits" = doDistribute super."digits_0_2";
   "dimensional" = doDistribute super."dimensional_0_13_0_2";
   "dimensional-codata" = dontDistribute super."dimensional-codata";
   "dimensional-tf" = dontDistribute super."dimensional-tf";
@@ -4910,6 +4911,7 @@ self: super: {
   "hyperdrive" = dontDistribute super."hyperdrive";
   "hyperfunctions" = dontDistribute super."hyperfunctions";
   "hyperloglog" = doDistribute super."hyperloglog_0_3_4";
+  "hyperloglogplus" = dontDistribute super."hyperloglogplus";
   "hyperpublic" = dontDistribute super."hyperpublic";
   "hyphenate" = dontDistribute super."hyphenate";
   "hypher" = dontDistribute super."hypher";
@@ -5176,6 +5178,7 @@ self: super: {
   "jsaddle-hello" = dontDistribute super."jsaddle-hello";
   "jsc" = dontDistribute super."jsc";
   "jsmw" = dontDistribute super."jsmw";
+  "json-api" = dontDistribute super."json-api";
   "json-assertions" = dontDistribute super."json-assertions";
   "json-ast" = dontDistribute super."json-ast";
   "json-ast-json-encoder" = dontDistribute super."json-ast-json-encoder";
@@ -6831,6 +6834,7 @@ self: super: {
   "process-qq" = dontDistribute super."process-qq";
   "process-streaming" = dontDistribute super."process-streaming";
   "processing" = dontDistribute super."processing";
+  "processing-for-haskell" = dontDistribute super."processing-for-haskell";
   "processor-creative-kit" = dontDistribute super."processor-creative-kit";
   "procrastinating-structure" = dontDistribute super."procrastinating-structure";
   "procrastinating-variable" = dontDistribute super."procrastinating-variable";
@@ -8110,6 +8114,7 @@ self: super: {
   "system-canonicalpath" = dontDistribute super."system-canonicalpath";
   "system-command" = dontDistribute super."system-command";
   "system-gpio" = dontDistribute super."system-gpio";
+  "system-info" = dontDistribute super."system-info";
   "system-inotify" = dontDistribute super."system-inotify";
   "system-lifted" = dontDistribute super."system-lifted";
   "system-random-effect" = dontDistribute super."system-random-effect";
@@ -8390,6 +8395,7 @@ self: super: {
   "timeparsers" = dontDistribute super."timeparsers";
   "timeplot" = dontDistribute super."timeplot";
   "timeprint" = dontDistribute super."timeprint";
+  "timerep" = doDistribute super."timerep_2_0_0_1";
   "timers" = dontDistribute super."timers";
   "timers-updatable" = dontDistribute super."timers-updatable";
   "timestamp-subprocess-lines" = dontDistribute super."timestamp-subprocess-lines";
