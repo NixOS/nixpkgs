@@ -144,3 +144,10 @@ int execv(const char *path, char *const argv[])
     char buf[PATH_MAX];
     return execv_real(rewrite(path, buf), argv);
 }
+
+int execve(const char *path, char *const argv[], char *const envp[])
+{
+    int (*execve_real) (const char *path, char *const argv[], char *const envp[]) = dlsym(RTLD_NEXT, "execve");
+    char buf[PATH_MAX];
+    return execve_real(rewrite(path, buf), argv, envp);
+}

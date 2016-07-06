@@ -34,6 +34,31 @@ with lib;
           ms-dns 8.8.4.4
         '';
       };
+
+      up = mkOption {
+        type        = types.lines;
+        description = "Contents of up script.";
+        default     = "";
+        example     = literalExample ''
+          ''${pkgs.nettools}/bin/route add -net 192.168.1.0 netmask 255.255.255.0 gw 192.168.100.1 dev ppp0
+          ''${pkgs.coreutils}/bin/cat /etc/xl2tpd/ppp/resolv.conf | ''${pkgs.openresolv}/sbin/resolvconf -m 0 -a ppp0
+        '';
+      };
+
+      down = mkOption {
+        type        = types.lines;
+        description = "Contents of down script.";
+        default     = "";
+        example     = literalExample ''
+          ''${pkgs.openresolv}/sbin/resolvconf -d ppp0
+        '';
+      };
+
+      autoStart = mkOption {
+        type        = types.bool;
+        description = "Whether launch xl2tpd automatically.";
+        default     = false;
+      };
     };
   };
 
@@ -97,11 +122,15 @@ with lib;
             --set NIX_REDIRECTS "${pkgs.ppp}/sbin/pppd=$out/bin/pppd"
         '';
       };
+
+      path = (getAttr "xl2tpd" config.systemd.services).path;
+
     in {
       description = "xl2tpd server";
 
       requires = [ "network-online.target" ];
-      wantedBy = [ "multi-user.target" ];
+      after = [ "network-interfaces.target" ];
+      wantedBy = optional cfg.autoStart "multi-user.target";
 
       preStart = ''
         mkdir -p -m 700 /etc/xl2tpd
@@ -124,11 +153,29 @@ with lib;
         chown root.root l2tp-secrets
         chmod 600 l2tp-secrets
 
+        cat > ppp/ip-up << EOF
+        #!/bin/sh
+        export PATH=${path}
+        ${cfg.up}
+        EOF
+
+        cat > ppp/ip-down << EOF
+        #!/bin/sh
+        export PATH=${path}
+        ${cfg.down}
+        EOF
+
+        chmod 700 ppp/ip-up ppp/ip-down
+
         popd > /dev/null
 
         mkdir -p /run/xl2tpd
         chown root.root /run/xl2tpd
         chmod 700       /run/xl2tpd
+      '';
+
+      postStop = ''
+        ${pkgs.psmisc}/bin/killall pppd
       '';
 
       serviceConfig = {
