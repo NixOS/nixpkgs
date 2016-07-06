@@ -15581,6 +15581,8 @@ in
   soi = callPackage ../games/soi {
     lua = lua5_1;
   };
+  
+  solarus = callPackage ../games/solarus { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
