@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
     sha256 = "1ig7jwmvaa1r4qlngjpnvvvvxhmzbxr171d257q4ryf87l93g1an";
   };
 
-  patches = [ ./hwdb-location.diff ];
-
   /* gave up for now!
   outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
   # note: there are many references to ${systemd}/...
