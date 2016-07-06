@@ -2,19 +2,18 @@
 , cairo
 , fetchurl
 , base, gui
-, xlibs
 , x11
 , freetype
 , pkgconfig
 }:
 let
-  version = "0.24.0";
+  version = "0.25.0";
 in
 gsmakeDerivation {
   name = "gnustep-back-${version}";
   src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-0.24.0.tar.gz";
-    sha256 = "0qixbilkkrqxrhhj9hnp7ygd5gs23b3qbbgk3gaxj73d0xqfvhjz";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-back-${version}.tar.gz";
+    sha256 = "14gs1b32ahnihd7mwpjrws2b8hl11rl1wl24a7651d3z2l7f6xj2";
   };
   buildInputs = [ cairo base gui freetype pkgconfig x11 ];
   meta = {

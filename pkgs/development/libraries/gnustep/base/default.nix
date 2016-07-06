@@ -11,13 +11,13 @@
 , pkgconfig, portaudio
 }:
 let
-  version = "1.24.7";
+  version = "1.24.9";
 in
 gsmakeDerivation {
   name = "gnustep-base-${version}";
   src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-1.24.7.tar.gz";
-    sha256 = "0qhphw61ksyzf04a4apmvx8000alws6d92x8ila1mi5bapcpv41s";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${version}.tar.gz";
+    sha256 = "1vvjlbqmlwr82b4pf8c62rxjgz475bmg0x2yd0bbkia6yvwhk585";
   };
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [

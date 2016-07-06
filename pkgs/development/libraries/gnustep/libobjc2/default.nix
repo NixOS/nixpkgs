@@ -15,23 +15,7 @@ stdenv.mkDerivation rec {
   # with C++ either
   patches = [ ./removeCXXtests.patch ];
   
-  # build phase:
-  # mkdir Build
-  # cd Build
-  # cmake ..
-  # make -j8
-  # make install
-  #
-  # probably useful:
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
-  #
-  # cmakeDir = "../src"; # Build?
-#  postInstall = ''
-#    mkdir Build
-#    cd Build
-#    cmake -DCMAKE_INSTALL_PREFIX=$out -DGNUSTEP_INSTALL_TYPE=NONE ..
-#    make install
-#  '';
 
   meta = {
     description = "Objective-C runtime for use with GNUstep";

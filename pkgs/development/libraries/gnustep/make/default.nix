@@ -1,12 +1,12 @@
 { stdenv, fetchurl, clang, which, libobjc2 }:
 let
-  version = "2.6.6";
+  version = "2.6.8";
 in
 stdenv.mkDerivation rec {
   name = "gnustep-make-${version}";
   src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-2.6.6.tar.gz";
-    sha256 = "07cqr8x17bia9w6clbmiv7ay6r9nplrjz2cyzinv4w7zfpc19vxw";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-make-${version}.tar.gz";
+    sha256 = "0r00439f7vrggdwv60n8p626gnyymhq968i5x9ad2i4v6g8x4gk0";
   };
   configureFlags = "--with-installation-domain=SYSTEM";
   buildInputs = [ clang which libobjc2 ];

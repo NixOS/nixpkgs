@@ -1,17 +1,14 @@
 { gsmakeDerivation, fetchurl, base }:
 let
-  version = "0.24.0";
+  version = "0.25.0";
 in
 gsmakeDerivation {
   name = "gnustep-gui-${version}";
   src = fetchurl {
-    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-0.24.0.tar.gz";
-    sha256 = "0d6jzfcyacxjzrr2p398ysvs1akv1fcmngfzxxbfxa947miydjxg";
+    url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-gui-${version}.tar.gz";
+    sha256 = "10jf3xir59qzbhhl0bvs9wdw40fsmvv6mdv5akdkia1rnck60xf5";
   };
   buildInputs = [ base ];
-#  propagatedBuildInputs = [ gnustep_base ];
-#  patches = [ ./fixup-gui-makefile-installdir.patch ];
-  # DEBUG!
   patches = [ ./fixup-all.patch ];
   meta = {
     description = "GNUstep-gui is a GUI class library of GNUstep.";
