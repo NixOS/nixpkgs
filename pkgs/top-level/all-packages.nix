@@ -15768,6 +15768,8 @@ in
   zandronum-bin = hiPrio (callPackage ../games/zandronum/bin.nix { });
 
   zangband = callPackage ../games/zangband { };
+  
+  zelda_roth_se = callPackage ../games/zelda_roth_se { };
 
   zdoom = callPackage ../games/zdoom { };
 
