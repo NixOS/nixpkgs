@@ -14,6 +14,9 @@ export LVM_SUPPRESS_FD_WARNINGS=true
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
 
+    # If we have a splash screen started, quit it.
+    command -v plymouth >/dev/null 2>&1 && plymouth quit
+
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
     cat <<EOF
