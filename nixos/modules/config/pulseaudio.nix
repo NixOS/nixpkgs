@@ -161,6 +161,7 @@ in {
             ExecStart = "${getBin cfg.package}/bin/pulseaudio --daemonize=no";
             Restart = "on-failure";
           };
+          environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
         };
 
         sockets.pulseaudio = {
