@@ -11,22 +11,10 @@ in
   #
   options = {
     services.gdomap = {
-      enable = mkOption {
-        default = false;
-	description = "
-	  Whether to enable gdomap, the GNUstep distributed objects daemon.
-
-	  Note that gdomap runs as root.
-        ";
-      };
-
-      pidfile = mkOption {
-        type = types.path;
-        default = "/tmp/gdomap.pid";
-	description = "Location of the pid file for gdomap daemon";
-      };
+      enable = mkEnableOption "Whether to enable gdomap, the GNUstep distributed objects daemon";
     };
   };
+
   #
   # implementation
   #
@@ -37,10 +25,10 @@ in
       description = "gdomap server";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path  = [ pkgs.gnustep_base ];
+      path  = [ pkgs.gnustep.base ];
       serviceConfig = {
         PIDFile = cfg.pidfile;
-        ExecStart = "@${pkgs.gnustep_base}/bin/gdomap"
+        ExecStart = "@${pkgs.gnustep.base}/bin/gdomap"
 	  + " -d -p"
 	  + " -I ${cfg.pidfile}";
 	Restart = "always";
