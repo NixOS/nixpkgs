@@ -81,9 +81,9 @@ let
       # Copy ld manually since it isn't detected correctly
       cp -pv ${pkgs.glibc.out}/lib/ld*.so.? $out/lib
 
-      # Copy all of the needed libraries for the binaries
-      for BIN in $(find $out/{bin,sbin} -type f); do
-        echo "Copying libs for bin $BIN"
+      # Copy all of the needed libraries
+      find $out/bin $out/lib -type f | while read BIN; do
+        echo "Copying libs for executable $BIN"
         LDD="$(ldd $BIN)" || continue
         LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
         for LIB in $LIBS; do
@@ -104,13 +104,17 @@ let
       stripDirs "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
-      for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs -e $out $i; fi; done
+      find $out/bin $out/lib -type f | while read i; do
+        if ! test -L $i; then
+          nuke-refs -e $out $i
+        fi
+      done
 
-      for i in $out/bin/*; do
-          if ! test -L $i; then
-              echo "patching $i..."
-              patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-          fi
+      find $out/bin -type f | while read i; do
+        if ! test -L $i; then
+          echo "patching $i..."
+          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+        fi
       done
 
       # Make sure that the patchelf'ed binaries still work.
