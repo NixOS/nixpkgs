@@ -15778,6 +15778,8 @@ in
   keen4 = callPackage ../games/keen4 { };
 
   zeroad = callPackage ../games/0ad { };
+  
+  zsdx = callPackage ../games/zsdx { };
 
   ### DESKTOP ENVIRONMENTS
 
