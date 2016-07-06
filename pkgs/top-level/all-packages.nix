@@ -2145,6 +2145,8 @@ in
 
   jpegoptim = callPackage ../applications/graphics/jpegoptim { };
 
+  jpegrescan = callPackage ../applications/graphics/jpegrescan { };
+
   jq = callPackage ../development/tools/jq { };
 
   jo = callPackage ../development/tools/jo { };
