@@ -97,8 +97,6 @@ let
       inherit zlibSupport;
       isPy2 = true;
       isPy26 = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";

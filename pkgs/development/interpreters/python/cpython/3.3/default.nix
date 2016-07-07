@@ -12,7 +12,6 @@
 , zlib
 , callPackage
 , self
-, python33Packages
 }:
 
 assert readline != null -> ncurses != null;
@@ -81,8 +80,6 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.3m";
-    buildEnv = callPackage ../../wrapper.nix { python = self; };
-    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python33Packages; };
     isPy3 = true;
     isPy33 = true;
     is_py3k = true;  # deprecated

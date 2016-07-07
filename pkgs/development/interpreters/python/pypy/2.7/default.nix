@@ -117,10 +117,8 @@ let
       inherit zlibSupport libPrefix;
       executable = "pypy";
       isPypy = true;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
       sitePackages = "site-packages";
-      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = pypyPackages; };
     };
 
     enableParallelBuilding = true;  # almost no parallelization without STM
