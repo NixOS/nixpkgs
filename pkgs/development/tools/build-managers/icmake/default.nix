@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gcc5 }:
+{ stdenv, fetchFromGitHub, gcc }:
 
 stdenv.mkDerivation rec {
   name = "icmake-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "icmake-${version}-src/icmake";
 
-  buildInputs = [ gcc5 ];
+  buildInputs = [ gcc ];
 
   preConfigure = ''
     patchShebangs ./
