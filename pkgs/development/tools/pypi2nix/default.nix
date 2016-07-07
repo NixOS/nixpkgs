@@ -3,10 +3,10 @@
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
-  version = "1.1.0";
+  version = "1.2.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "0la4f0cqq089hjzwa509snkqhxvwszp5zglmb0yy1m7ins3yhg2m";
+    sha256 = "13ffr2iabl5lyqqdcrs8z37lfqw1n102bkxwfx0540hj6brvkm2v";
     
   };
 in stdenv.mkDerivation rec {
