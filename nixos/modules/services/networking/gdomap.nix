@@ -11,8 +11,8 @@ in
   #
   options = {
     services.gdomap = {
-      enable = mkEnableOption "Whether to enable gdomap, the GNUstep distributed objects daemon";
-    };
+      enable = mkEnableOption "GNUstep Distributed Objects name server";
+   };
   };
 
   #
@@ -26,16 +26,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path  = [ pkgs.gnustep.base ];
-      serviceConfig = {
-        PIDFile = cfg.pidfile;
-        ExecStart = "@${pkgs.gnustep.base}/bin/gdomap"
-	  + " -d -p"
-	  + " -I ${cfg.pidfile}";
-	Restart = "always";
-	RestartSec = 2;
-	TimeoutStartSec = "30";
-	Type = "forking";
-      };
+      serviceConfig.ExecStart = "${pkgs.gnustep.base}/bin/gdomap -f";
     };
   };
 }
