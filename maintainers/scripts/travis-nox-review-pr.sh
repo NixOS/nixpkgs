@@ -38,6 +38,12 @@ while test -n "$1"; do
             nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr tarball --show-trace
             ;;
 
+        nixpkgs-lint)
+            echo "=== Checking nixpkgs lint"
+
+            nix-shell --packages nixpkgs-lint --run "nixpkgs-lint -f $TRAVIS_BUILD_DIR"
+            ;;
+
         pr)
             if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
                 echo "=== No pull request found"
