@@ -1,5 +1,4 @@
 { stdenv, fetchurl
-, glibc
 , bzip2
 , db
 , gdbm
@@ -14,7 +13,7 @@
 , zlib
 , callPackage
 , self
-, python36Packages
+, python35Packages
 
 , CF, configd
 }:
@@ -24,13 +23,12 @@ assert readline != null -> ncurses != null;
 with stdenv.lib;
 
 let
-  majorVersion = "3.6";
+  majorVersion = "3.5";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.0a3";
+  version = "${majorVersion}.2";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
-    glibc
     zlib
     bzip2
     lzma
@@ -60,8 +58,8 @@ stdenv.mkDerivation {
   inherit propagatedBuildInputs;
 
   src = fetchurl {
-    url = "https://www.python.org/ftp/python/${majorVersion}.0/Python-${fullVersion}.tar.xz";
-    sha256 = "08c3598bwihibwca9lwxq923sjq9shvgv3wxv4vkga2n6hf63l1c";
+    url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
+    sha256 = "0h6a5fr7ram2s483lh0pnmc4ncijb8llnpfdxdcl5dxr01hza400";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -78,8 +76,6 @@ stdenv.mkDerivation {
        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
        export MACOSX_DEPLOYMENT_TARGET=10.6
      ''}
-
-    substituteInPlace ./Lib/plat-generic/regen --replace "/usr/include" ${glibc}/include
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
@@ -115,8 +111,8 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python${majorVersion}m";
-    buildEnv = callPackage ../wrapper.nix { python = self; };
-    withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python36Packages; };
+    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python35Packages; };
     isPy3 = true;
     isPy35 = true;
     is_py3k = true;  # deprecated
@@ -140,6 +136,6 @@ stdenv.mkDerivation {
     '';
     license = licenses.psfl;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan kragniz ];
+    maintainers = with maintainers; [ chaoflow domenkozar cstrahan ];
   };
 }
