@@ -10,33 +10,6 @@ let
   bnumber = with stdenv.lib; build: last (splitString "-" build);
   mkIdeaProduct = callPackage ./common.nix { };
 
-  buildAndroidStudio = { name, version, build, src, license, description, wmClass }:
-    let drv = (mkIdeaProduct rec {
-      inherit name version build src wmClass jdk;
-      product = "Studio";
-      meta = with stdenv.lib; {
-        homepage = https://developer.android.com/sdk/installing/studio.html;
-        inherit description license;
-        longDescription = ''
-          Android development environment based on IntelliJ
-          IDEA providing new features and improvements over
-          Eclipse ADT and will be the official Android IDE
-          once it's ready.
-        '';
-        platforms = platforms.linux;
-        hydraPlatforms = []; # Depends on androidsdk, which hits Hydra's output limits
-        maintainers = with maintainers; [ edwtjo ];
-      };
-    });
-    in stdenv.lib.overrideDerivation drv (x : {
-      buildInputs = x.buildInputs ++ [ makeWrapper ];
-      installPhase = x.installPhase +  ''
-        wrapProgram "$out/bin/android-studio" \
-          --set ANDROID_HOME "${androidsdk}/libexec/" \
-          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib" # Gradle installs libnative-platform.so in ~/.gradle, that requires libstdc++.so.6
-      '';
-    });
-
   buildClion = { name, version, build, src, license, description, wmClass }:
     (mkIdeaProduct rec {
       inherit name version build src wmClass jdk;
@@ -147,20 +120,6 @@ let
 in
 
 {
-
-  android-studio = let buildNumber = "143.2915827"; in buildAndroidStudio rec {
-    name = "android-studio-${version}";
-    version = "2.1.2.0";
-    build = "AI-${buildNumber}";
-    description = "Android development environment based on IntelliJ IDEA";
-    license = stdenv.lib.licenses.asl20;
-    src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}" +
-            "/android-studio-ide-${buildNumber}-linux.zip";
-      sha256 = "0q61m8yln77valg7y6lyxlml53z387zh6fyfgc22sm3br5ahbams";
-    };
-    wmClass = "jetbrains-studio";
-  };
 
   clion = buildClion rec {
     name = "clion-${version}";
