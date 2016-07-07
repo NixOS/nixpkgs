@@ -12,7 +12,7 @@
 , zlib
 , callPackage
 , self
-, python34Packages
+, python35Packages
 
 , CF, configd
 }:
@@ -22,9 +22,9 @@ assert readline != null -> ncurses != null;
 with stdenv.lib;
 
 let
-  majorVersion = "3.4";
+  majorVersion = "3.5";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.4";
+  version = "${majorVersion}.1";
   fullVersion = "${version}";
 
   buildInputs = filter (p: p != null) [
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "18kb5c29w04rj4gyz3jngm72sy8izfnbjlm6ajv6rv2m061d75x7";
+    sha256 = "1j95yx32ggqx8jf13h3c8qfp34ixpyg8ipqcdjmn143d6q67rmf6";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -103,11 +103,11 @@ stdenv.mkDerivation {
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
-    executable = "python3.4m";
-    buildEnv = callPackage ../wrapper.nix { python = self; };
-    withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
+    executable = "python${majorVersion}m";
+    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python35Packages; };
     isPy3 = true;
-    isPy34 = true;
+    isPy35 = true;
     is_py3k = true;  # deprecated
     sitePackages = "lib/${libPrefix}/site-packages";
     interpreter = "${self}/bin/${executable}";

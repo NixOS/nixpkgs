@@ -12,9 +12,7 @@
 , zlib
 , callPackage
 , self
-, python35Packages
-
-, CF, configd
+, python33Packages
 }:
 
 assert readline != null -> ncurses != null;
@@ -22,53 +20,33 @@ assert readline != null -> ncurses != null;
 with stdenv.lib;
 
 let
-  majorVersion = "3.5";
+  majorVersion = "3.3";
   pythonVersion = majorVersion;
-  version = "${majorVersion}.1";
-  fullVersion = "${version}";
+  version = "${majorVersion}.6";
 
   buildInputs = filter (p: p != null) [
-    zlib
-    bzip2
-    lzma
-    gdbm
-    sqlite
-    db
-    readline
-    ncurses
-    openssl
-    tcl
-    tk
-    libX11
-    xproto
-  ] ++ optionals stdenv.isDarwin [ CF configd ];
+    zlib bzip2 lzma gdbm sqlite db readline ncurses openssl tcl tk libX11 xproto
+  ];
 in
 stdenv.mkDerivation {
-  name = "python3-${fullVersion}";
+  name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
   inherit buildInputs;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${fullVersion}.tar.xz";
-    sha256 = "1j95yx32ggqx8jf13h3c8qfp34ixpyg8ipqcdjmn143d6q67rmf6";
+    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
+    sha256 = "0gsxpgd5p4mwd01gw501vsyahncyw3h9836ypkr3y32kgazy89jj";
   };
 
-  NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
-
-  prePatch = optionalString stdenv.isDarwin ''
-    substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-  '';
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-    ${optionalString stdenv.isDarwin ''
-       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"
-       export MACOSX_DEPLOYMENT_TARGET=10.6
-     ''}
+    ${optionalString stdenv.isDarwin ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
 
     configureFlagsArray=( --enable-shared --with-threads
                           CPPFLAGS="${concatStringsSep " " (map (p: "-I${getDev p}/include") buildInputs)}"
@@ -90,7 +68,6 @@ stdenv.mkDerivation {
       fi
     done
     touch $out/lib/python${majorVersion}/test/__init__.py
-
     ln -s "$out/include/python${majorVersion}m" "$out/include/python${majorVersion}"
     paxmark E $out/bin/python${majorVersion}
   '';
@@ -103,11 +80,11 @@ stdenv.mkDerivation {
     opensslSupport = openssl != null;
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
-    executable = "python${majorVersion}m";
-    buildEnv = callPackage ../wrapper.nix { python = self; };
-    withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python35Packages; };
+    executable = "python3.3m";
+    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python33Packages; };
     isPy3 = true;
-    isPy35 = true;
+    isPy33 = true;
     is_py3k = true;  # deprecated
     sitePackages = "lib/${libPrefix}/site-packages";
     interpreter = "${self}/bin/${executable}";
@@ -127,8 +104,8 @@ stdenv.mkDerivation {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = licenses.psfl;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ chaoflow domenkozar cstrahan ];
+    license = stdenv.lib.licenses.psfl;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with stdenv.lib.maintainers; [ chaoflow cstrahan ];
   };
 }
