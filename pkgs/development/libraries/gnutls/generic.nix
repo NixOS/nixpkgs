@@ -35,11 +35,12 @@ stdenv.mkDerivation {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
-    ++ lib.optional guileBindings guile;
+    ++ lib.optional guileBindings guile
+    ++ lib.optional stdenv.isLinux nettools;
 
   nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
