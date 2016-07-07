@@ -13,28 +13,25 @@ stdenv.mkDerivation {
     sha256 = "0ll2kd72zy8vf29sy0nnx3awk7nywpwpv21rvninjjaqkygrc0qw";
   };
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
   buildInputs = [
-    cmake zlib sqlite gmp libffi cairo ncurses freetype
+    zlib sqlite gmp libffi cairo ncurses freetype
     mesa libpng libtiff libjpeg readline libsndfile libxml2
     freeglut libsamplerate pcre libevent libedit yajl
     pkgconfig glfw openssl libpthreadstubs libXdmcp
     libmemcached python3
   ];
 
-  configurePhase=''
-  # The Addon generation (AsyncRequest and a others checked) seems to have
-  # trouble with building on Virtual machines. Disabling them until it
-  # can be fully investigated.
-  sed -ie \
-        "s/add_subdirectory(addons)/#add_subdirectory(addons)/g" \
-        CMakeLists.txt
-  mkdir build
-  cd build
-  cmake  -DCMAKE_INSTALL_PREFIX="$out" ..
-  '';
-
-  installPhase=''
-  make install
+  preConfigure = ''
+    # The Addon generation (AsyncRequest and a others checked) seems to have
+    # trouble with building on Virtual machines. Disabling them until it
+    # can be fully investigated.
+    sed -ie \
+          "s/add_subdirectory(addons)/#add_subdirectory(addons)/g" \
+          CMakeLists.txt
   '';
 
   # for gcc5; c11 inline semantics breaks the build
@@ -42,6 +39,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Io programming language";
+    homepage = http://iolanguage.org/;
+    license = licenses.bsd3;
+
     maintainers = with maintainers; [
       raskin
       z77z
