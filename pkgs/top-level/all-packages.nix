@@ -3073,6 +3073,8 @@ in
     libpng = libpng12;
   };
 
+  pngpp = callPackage ../development/libraries/png++ { };
+
   pngquant = callPackage ../tools/graphics/pngquant { };
 
   podiff = callPackage ../tools/text/podiff { };
