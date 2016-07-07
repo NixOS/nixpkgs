@@ -8,20 +8,32 @@ while test -n "$1"; do
 
     case $1 in
 
-        verify)
+        nixpkgs-verify)
             echo "=== Verifying that nixpkgs evaluates..."
 
             nix-env --file $TRAVIS_BUILD_DIR --query --available --json > /dev/null
             ;;
 
-        check)
+        nixos-options)
             echo "=== Checking NixOS options"
 
             nix-build $TRAVIS_BUILD_DIR/nixos/release.nix --attr options --show-trace
             ;;
 
-	tarball)
-            echo "=== Checking tarball creation"
+        nixos-manual)
+            echo "=== Checking NixOS manuals"
+
+            nix-build $TRAVIS_BUILD_DIR/nixos/release.nix --attr manual --show-trace
+            ;;
+
+        nixpkgs-manual)
+            echo "=== Checking nixpkgs manuals"
+
+            nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr manpages --show-trace
+            ;;
+
+        nixpkgs-tarball)
+            echo "=== Checking nixpkgs tarball creation"
 
             nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr tarball --show-trace
             ;;

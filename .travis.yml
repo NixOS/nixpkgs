@@ -4,9 +4,8 @@ matrix:
         - os: linux
           sudo: false
           script:
-              - ./maintainers/scripts/travis-nox-review-pr.sh verify
-              - ./maintainers/scripts/travis-nox-review-pr.sh check
-              - ./maintainers/scripts/travis-nox-review-pr.sh tarball
+              - ./maintainers/scripts/travis-nox-review-pr.sh nixpkgs-verify nixpkgs-manual nixpkgs-tarball
+              - ./maintainers/scripts/travis-nox-review-pr.sh nixos-options nixos-manual
         - os: linux
           sudo: required
           dist: trusty
