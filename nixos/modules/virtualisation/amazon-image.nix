@@ -20,7 +20,8 @@ let cfg = config.ec2; in
       autoResize = true;
     };
 
-    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.ixgbevf ];
+    boot.initrd.kernelModules = [ "xen-blkfront" "xen-netfront" "ixgbevf" ];
     boot.kernelParams = mkIf cfg.hvm [ "console=ttyS0" ];
 
     # Prevent the nouveau kernel module from being loaded, as it

@@ -48,7 +48,7 @@ diff -Nuar camlzip-1.04/Makefile camlzip-1.04.nixpkgs/Makefile
 -
 -installopt:
 -	cp zip.cmxa zip.a zip.cmx gzip.cmx $(INSTALLDIR)
-+	$(OCAMLFIND) install camlzip META $(LIBINSTALL_FILES)
++	$(OCAMLFIND) install zip META $(LIBINSTALL_FILES)
  
  depend:
  	gcc -MM -I$(ZLIB_INCLUDE) *.c > .depend

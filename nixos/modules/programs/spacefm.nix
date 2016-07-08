@@ -18,7 +18,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to install SpaceFM and create <filename>/etc/spacefm/spacefm.conf<filename>.
+          Whether to install SpaceFM and create <filename>/etc/spacefm/spacefm.conf</filename>.
         '';
       };
 

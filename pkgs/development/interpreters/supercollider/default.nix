@@ -3,10 +3,12 @@
 , libXt, qt, readline
 , useSCEL ? false, emacs
 }:
-  
-let optional = stdenv.lib.optional; in
 
-stdenv.mkDerivation rec {  
+let optional = stdenv.lib.optional;
+ljack2 = libjack2.override { gcc = gcc; };
+in
+
+stdenv.mkDerivation rec {
   name = "supercollider-3.6.6";
 
   meta = {
@@ -29,12 +31,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = ''
     -DSC_WII=OFF
-    -DSC_EL=${if useSCEL then "ON" else "OFF"} 
+    -DSC_EL=${if useSCEL then "ON" else "OFF"}
   '';
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ 
-    gcc libjack2 libsndfile fftw curl libXt qt readline ]
+  buildInputs = [
+    gcc ljack2 libsndfile fftw curl libXt qt readline ]
     ++ optional useSCEL emacs;
 }

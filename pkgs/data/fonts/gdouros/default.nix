@@ -5,7 +5,7 @@ let
                description = "Scripts and symbols of the Aegean world"; };
     textfonts = { version = "6.00"; file = "Textfonts.zip"; sha256 = "06igp3hdql0yfaj9h2ahh5n7yvj2ni7rj2jdmz534f9618l8qi6r";
                   description = "Fonts based on early Greek editions"; };
-    symbola = { version = "8.00"; file = "Symbola.zip"; sha256 = "1lfs2j816332ysvpb5ibj2gwpmyqyispqdl7skkshf2gra18hmhd";
+    symbola = { version = "9.00"; file = "Symbola.zip"; sha256 = "0d9zrlvzh8inhr17p99banr0dmrvkwxbk3q7zhqqx2z4gf2yavc5";
                 description = "Basic Latin, Greek, Cyrillic and many Symbol blocks of Unicode"; };
     aegyptus = { version = "6.00"; file = "Aegyptus.zip"; sha256 = "10mr54ja9b169fhqfkrw510jybghrpjx7a8a7m38k5v39ck8wz6v";
                  description = "Egyptian Hieroglyphs, Coptic, Meroitic"; };

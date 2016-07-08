@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xniw4y90hbk9fa548pa9pfclibw7amr2f458lfh16jdzq7gw5cz";
   };
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.libsoup}/include/libsoup-gnome-2.4/ -I${gnome3.gcr}/include/gcr-3 -I${gnome3.gcr}/include/gck-1";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.libsoup.dev}/include/libsoup-gnome-2.4/ -I${gnome3.gcr}/include/gcr-3 -I${gnome3.gcr}/include/gck-1";
 
   buildInputs = with gnome3;
     [ pkgconfig libsoup intltool libxml2 glib gobjectIntrospection

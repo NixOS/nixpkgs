@@ -1,29 +1,18 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "lcov-1.10";
+  name = "lcov-1.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/ltp/${name}.tar.gz";
-    sha256 = "13xq2ln4jjasslqzzhr5g11q1c19gwpng1jphzbzmylmrjz62ila";
+    sha256 = "19wfifdpxxivhq9adbphanjfga9bg9spms9v7c3589wndjff8x5l";
   };
 
-  patches =
-    [ ./lcov-except-unreach.patch ./no-warn-missing.patch ]
-    ++ stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch;
+  buildInputs = [ perl ];
 
   preBuild = ''
+    patchShebangs bin/
     makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)
-  '';
-
-  preInstall = ''
-    substituteInPlace bin/install.sh --replace /bin/bash $shell
-  '';
-
-  postInstall = ''
-    for i in "$out/bin/"*; do
-      substituteInPlace $i --replace /usr/bin/perl ${perl}/bin/perl
-    done
   '';
 
   meta = with stdenv.lib; {
@@ -41,7 +30,7 @@ stdenv.mkDerivation rec {
     homepage = http://ltp.sourceforge.net/coverage/lcov.php;
     license = stdenv.lib.licenses.gpl2Plus;
 
-    maintainers = [ maintainers.mornfall ];
+    maintainers = with maintainers; [ dezgeg mornfall ];
     platforms = platforms.all;
   };
 }
