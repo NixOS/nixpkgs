@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, file, intltool, glib
-, libxml2, gnome3, gobjectIntrospection, libsoup }:
+, libxml2, gnome3, gobjectIntrospection, libsoup, python3Packages }:
 
 stdenv.mkDerivation rec {
-  major = "0.3";
-  minor = "0";
+  major = "0.3"; # if you change this, also change ./setup-hook.sh
+  minor = "1";
   name = "grilo-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo/${major}/${name}.tar.xz";
-    sha256 = "0q5wcvnckpfks48hy0gvlfdmvqm67vnblm3912rssmkgc1ysil8z";
+    sha256 = "0k6d8drgh7inbpxqfa9m9dm4vrhfb9ifi5b88fn8q2ljqwfwdggb";
   };
 
   setupHook = ./setup-hook.sh;
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ pkgconfig file intltool glib libxml2 libsoup
-                  gnome3.totem-pl-parser gobjectIntrospection ];
+                  gnome3.totem-pl-parser ];
+
+  propagatedBuildInputs = [ python3Packages.pygobject3 gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Projects/Grilo;
