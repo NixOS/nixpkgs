@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "iterm2-${version}";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "gnachman";
     repo = "iTerm2";
     rev = "v${version}";
-    sha256 = "121g759i814y1g1g1jwhsmxgg4wrzv08vq7a7qwc7b85a17zbd3h";
+    sha256 = "0ffg9l2jvv503h13nd5rjkn5xrahswcqqwmm052qzd6d0lmqjm93";
   };
 
   patches = [ ./disable_updates.patch ];
