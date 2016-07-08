@@ -2424,6 +2424,8 @@ in
   lxc = callPackage ../os-specific/linux/lxc { };
   lxd = callPackage ../tools/admin/lxd { };
 
+  lzfse = callPackage ../tools/compression/lzfse { };
+
   lzip = callPackage ../tools/compression/lzip { };
 
   lzma = xz;
