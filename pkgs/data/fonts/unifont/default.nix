@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "unifont-${version}";
-  version = "8.0.01";
+  version = "9.0.01";
 
   ttf = fetchurl {
     url = "http://fossies.org/linux/unifont/font/precompiled/${name}.ttf";
-    sha256 = "0g4g2n024072cdrs2wjp7xmkr3i9dm52a5g9hiafxjgj5a45c8kl";
+    sha256 = "0n2vdzrp86bjxfyqgmryrqckmjiiz4jvsfz9amgg3dv2p42y0dhd";
   };
 
   pcf = fetchurl {
     url = "http://fossies.org/linux/unifont/font/precompiled/${name}.pcf.gz";
-    sha256 = "0mpdy2k7z9s60x8i6sbv64p9wrihfwgrw81x5yj13rl6x7zzghr8";
+    sha256 = "1n3zff46pk6s2x5y7h76aq7h9wfq2acv77gpmxkhz5iwvbpxgb4z";
   };
 
   buildInputs = [ mkfontscale mkfontdir ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     # Basically GPL2+ with font exception.
     license = http://unifoundry.com/LICENSE.txt;
-    maintainers = [ maintainers.rycee ];
+    maintainers = [ maintainers.rycee maintainers.vrthra ];
     platforms = platforms.all;
   };
 }

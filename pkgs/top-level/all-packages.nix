@@ -641,7 +641,19 @@ in
     libtorrentRasterbar = libtorrentRasterbar_1_09;
   };
 
-  cabal2nix = self.haskellPackages.cabal2nix;
+  cabal2nix = self.haskell.lib.overrideCabal self.haskellPackages.cabal2nix (drv: {
+    isLibrary = false;
+    enableSharedExecutables = false;
+    executableToolDepends = [ self.makeWrapper ];
+    postInstall = ''
+      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
+      install -D $out/bin/${drv.pname} $exe
+      rm -rf $out/{bin,lib,share}
+      makeWrapper $exe $out/bin/${drv.pname} --prefix PATH ":" "${self.nix-prefetch-scripts}/bin"
+      mkdir -p $out/share/bash-completion/completions
+      $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
+    '';
+  });
 
   caddy = callPackage ../servers/caddy { };
 
@@ -1221,6 +1233,8 @@ in
 
   cutter = callPackage ../tools/networking/cutter { };
 
+  cwebbin = callPackage ../development/tools/misc/cwebbin { };
+
   cvs_fast_export = callPackage ../applications/version-management/cvs-fast-export { };
 
   dadadodo = callPackage ../tools/text/dadadodo { };
@@ -1397,15 +1411,26 @@ in
 
   editres = callPackage ../tools/graphics/editres { };
 
+  edit = callPackage ../applications/editors/edit { };
+
   edk2 = callPackage ../development/compilers/edk2 { };
 
   eid-mw = callPackage ../tools/security/eid-mw { };
 
   eid-viewer = callPackage ../tools/security/eid-viewer { };
 
+  ### DEVELOPMENT / EMSCRIPTEN
+
+  buildEmscriptenPackage = callPackage ../development/em-modules/generic { };
+
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcomp = callPackage ../development/compilers/emscripten-fastcomp { };
+
+  emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
+
+  emscriptenStdenv = stdenv // { mkDerivation = buildEmscriptenPackage; };
+
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
@@ -2121,6 +2146,8 @@ in
 
   jpegoptim = callPackage ../applications/graphics/jpegoptim { };
 
+  jpegrescan = callPackage ../applications/graphics/jpegrescan { };
+
   jq = callPackage ../development/tools/jq { };
 
   jo = callPackage ../development/tools/jo { };
@@ -2418,7 +2445,7 @@ in
   mailpile = callPackage ../applications/networking/mailreaders/mailpile { };
 
   mailutils = callPackage ../tools/networking/mailutils {
-    guile = guile_1_8;
+    sasl = gsasl;
   };
 
   email = callPackage ../tools/networking/email { };
@@ -3601,6 +3628,8 @@ in
   timetrap = callPackage ../applications/office/timetrap { };
 
   tinc = callPackage ../tools/networking/tinc { };
+
+  tie = callPackage ../development/tools/misc/tie { };
 
   tinc_pre = callPackage ../tools/networking/tinc/pre.nix { };
 
@@ -4830,10 +4859,17 @@ in
 
   mlton = callPackage ../development/compilers/mlton { };
 
-  mono = callPackage ../development/compilers/mono {
+  mono = mono40;
+
+  mono40 = callPackage ../development/compilers/mono/4.0.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
+
+  mono44 = lowPrio (callPackage ../development/compilers/mono/4.4.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  });
 
   monoDLLFixer = callPackage ../build-support/mono-dll-fixer { };
 
@@ -6248,7 +6284,9 @@ in
 
   m4 = gnum4;
 
-  geis = callPackage ../development/libraries/geis { };
+  geis = callPackage ../development/libraries/geis {
+    inherit (xorg) libX11 libXext libXi libXtst;
+  };
 
   global = callPackage ../development/tools/misc/global { };
 
@@ -7344,11 +7382,6 @@ in
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = {
-    inherit (pkgs) glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtk
-      gtkmm;
-  };
-
   glib = callPackage ../development/libraries/glib { };
   glib-tested = self.glib.override { # checked version separate to break cycles
     doCheck = true;
@@ -8077,6 +8110,8 @@ in
   };
 
   libisofs = callPackage ../development/libraries/libisofs { };
+
+  libisoburn = callPackage ../development/libraries/libisoburn { };
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
@@ -8982,6 +9017,7 @@ in
     vlc = lowPrio (callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
+      ffmpeg = ffmpeg_2;
     });
 
   };
@@ -10958,6 +10994,8 @@ in
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
+    ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
+
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
@@ -11438,10 +11476,12 @@ in
     buildUBoot
     ubootTools
     ubootBananaPi
+    ubootBeagleboneBlack
     ubootJetsonTK1
     ubootPcduino3Nano
     ubootRaspberryPi
-    ubootVersatileExpressCA9
+    ubootRaspberryPi2
+    ubootRaspberryPi3
     ubootWandboard
     ;
 
@@ -11791,6 +11831,8 @@ in
   open-dyslexic = callPackage ../data/fonts/open-dyslexic { };
 
   opensans-ttf = callPackage ../data/fonts/opensans-ttf { };
+
+  orbitron = callPackage ../data/fonts/orbitron { };
 
   paper-icon-theme = callPackage ../data/icons/paper-icon-theme { };
 
@@ -12868,7 +12910,7 @@ in
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost155;
     opencascade = opencascade_oce;
-    inherit (pythonPackages) matplotlib pycollada;
+    inherit (pythonPackages) matplotlib pycollada pivy;
   };
 
   freemind = callPackage ../applications/misc/freemind { };
@@ -14790,6 +14832,8 @@ in
 
   windowmaker = callPackage ../applications/window-managers/windowmaker { };
 
+  wily = callPackage ../applications/editors/wily { };
+
   alsamixer.app = callPackage ../applications/window-managers/windowmaker/dockapps/alsamixer.app.nix { };
 
   wmcalclock = callPackage ../applications/window-managers/windowmaker/dockapps/wmcalclock.nix { };
@@ -15129,6 +15173,13 @@ in
   };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
+
+  zgv = callPackage ../applications/graphics/zgv {
+   # Enable the below line for terminal display. Note
+   # that it requires sixel graphics compatible terminals like mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
+  };
 
   zim = callPackage ../applications/office/zim {
     pygtk = pyGtkGlade;
@@ -15524,6 +15575,8 @@ in
   soi = callPackage ../games/soi {
     lua = lua5_1;
   };
+  
+  solarus = callPackage ../games/solarus { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
@@ -15726,9 +15779,13 @@ in
   gnome2 = callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
     self = pkgs.gnome2;
-  }  // pkgs.gtkLibs // {
-    # Backwards compatibility;
-    inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
+  } // {
+    inherit (pkgs)
+      # GTK Libs
+      glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtk gtkmm
+
+      # Included for backwards compatibility
+      libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
@@ -17146,6 +17203,14 @@ in
 
   wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
+  wxsqlite3 = callPackage ../development/libraries/wxsqlite3 {
+    wxGTK = wxGTK30;
+  };
+
+  wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
+    wxGTK = wxGTK30;
+  };
+
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
@@ -17160,6 +17225,13 @@ in
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
+  };
+
+  xsw = callPackage ../applications/misc/xsw {
+   # Enable the next line to use this in terminal.
+   # Note that it requires sixel capable terminals such as mlterm
+   # or xterm -ti 340
+   SDL = SDL_sixel;
   };
 
   xwiimote = callPackage ../misc/drivers/xwiimote {

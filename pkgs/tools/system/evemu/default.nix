@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "evemu-${version}";
-  version = "2.0.0";
+  version = "2.4.0";
 
   # We could have downloaded a release tarball from cgit, but it changes hash
   # each time it is downloaded :/
   src = fetchgit {
     url = git://git.freedesktop.org/git/evemu;
     rev = "refs/tags/v${version}";
-    sha256 = "0qv2ib3rb0wp881sfkzmhpkfc3nbrswdmll3087pmzpwd701g42l";
+    sha256 = "07iha13xrpf4z59rzl9cm2h1zkc5xhyipbd3ajd3c1d4hhpn9w9s";
   };
 
   buildInputs = [
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://git.freedesktop.org/git/evemu;
     license = licenses.gpl2;
     maintainers = [ maintainers.amorsillo ];
+    platforms = platforms.linux;
   };
 }

@@ -4,7 +4,9 @@
 , useSCEL ? false, emacs
 }:
 
-let optional = stdenv.lib.optional; in
+let optional = stdenv.lib.optional;
+ljack2 = libjack2.override { gcc = gcc; };
+in
 
 stdenv.mkDerivation rec {
   name = "supercollider-3.6.6";
@@ -37,6 +39,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    gcc libjack2 libsndfile fftw curl libXt qt readline ]
-    ++ optional useSCEL emacs;
+    gcc ljack2 libsndfile fftw curl libXt qt readline ]
+      ++ optional useSCEL emacs;
 }

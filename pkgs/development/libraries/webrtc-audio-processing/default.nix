@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "webrtc-audio-processing-0.1";
+  name = "webrtc-audio-processing-0.3";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/${name}.tar.xz";
-    sha256 = "1p7yg8n39wwdfr52br2dq3bh8iypfx9md99mh1i9g2v8qbwm4jzd";
+    sha256 = "1yl0187xjh1j2zkb7v9cs9i868zcaj23pzn4a36qhzam9wfjjvkm";
   };
 
   meta = with stdenv.lib; {

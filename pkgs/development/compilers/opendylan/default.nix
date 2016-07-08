@@ -1,5 +1,5 @@
 # Build Open Dylan from source using the binary builds to bootstrap.
-{stdenv, fetchgit, patchelf, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
+{stdenv, fetchgit, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
 
 stdenv.mkDerivation {
   name = "opendylan-2013.2";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     ./autogen.sh
   '';
 
-  configureFlags = if stdenv.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.dev}";
+  configureFlags = if stdenv.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}";
   buildPhase = "make 3-stage-bootstrap";
 
   postInstall = "wrapProgram $out/bin/dylan-compiler --suffix PATH : ${gcc}/bin";
@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     homepage = http://opendylan.org;
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

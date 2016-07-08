@@ -3,6 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
+, qtbase, qtdeclarative, qtquick1, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -20,7 +21,8 @@
 # them with our own.
 
 let
-  # NOTE: When updating, please also update in current stable, as older versions stop working
+  # NOTE: When updating, please also update in current stable,
+  # as older versions stop working
   version = "4.4.29";
   sha256 =
     {
@@ -42,6 +44,8 @@ let
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
+
+      qtbase qtdeclarative qtquick1 qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
@@ -76,6 +80,19 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
+
+    rm "$out/${appdir}/libQt5Core.so.5"
+    rm "$out/${appdir}/libQt5DBus.so.5"
+    rm "$out/${appdir}/libQt5Gui.so.5"
+    rm "$out/${appdir}/libQt5Network.so.5"
+    rm "$out/${appdir}/libQt5OpenGL.so.5"
+    rm "$out/${appdir}/libQt5PrintSupport.so.5"
+    rm "$out/${appdir}/libQt5Qml.so.5"
+    rm "$out/${appdir}/libQt5Quick.so.5"
+    rm "$out/${appdir}/libQt5Sql.so.5"
+    rm "$out/${appdir}/libQt5WebKit.so.5"
+    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
+    rm "$out/${appdir}/libQt5XcbQpa.so.5"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications

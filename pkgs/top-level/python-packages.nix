@@ -2660,11 +2660,11 @@ in modules // {
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
-    version = "2.38.0";
+    version = "2.41.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/boto/boto/archive/${version}.tar.gz";
-      sha256 = "0l7m3lmxmnknnz9svzc7z26rklwckzwqgz6hgackl62gkndryrgj";
+      sha256 = "1n33bfbkpijyy6awjq7a8lrw4hw2lmwv5l7j0am6d34gpa8my75l";
     };
 
     checkPhase = ''
@@ -16553,11 +16553,11 @@ in modules // {
 
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
-    version = "1.0.0";
+    version = "1.1.0";
     disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
-      sha256 = "19jdnrz2qzlmxyhf0gyrj0dg0jfk1zar0jvm1vigswgmq2m6mm4v";
+      sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
       rev = "v${version}";
       repo = "pgcli";
       owner = "dbcli";
@@ -17936,6 +17936,27 @@ in modules // {
     };
   };
 
+  pyexcelerator = buildPythonPackage rec {
+    name = "pyexcelerator-${version}";
+    version = "0.6.4.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pyexcelerator/${name}.tar.bz2";
+      sha256 = "18rcnc9f71lj06h8nppnv6idzb7xfmh2rp1zfqayskcg686lilrb";
+    };
+
+    disabled = isPy3k;
+
+    # No tests are included in archive
+    doCheck = false;
+
+    meta = {
+      description = "library for generating Excel 97/2000/XP/2003 and OpenOffice Calc compatible spreadsheets.";
+      homepage = "https://sourceforge.net/projects/pyexcelerator";
+      license = licenses.bsdOriginal;
+      maintainers = with maintainers; [ womfoo ];
+    };
+  };
 
   pyfeed = buildPythonPackage rec {
     url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
@@ -18927,22 +18948,21 @@ in modules // {
 
   pypdf2 = buildPythonPackage rec {
     name = "PyPDF2-${version}";
-    version = "1.25.1";
+    version = "1.26.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyPDF2/${name}.tar.gz";
-      sha256 = "1sw225j9fgsvg1zm7lrij96fihfmq8pc1vg611dc55491zvj9ls3";
+      sha256 = "11a3aqljg4sawjijkvzhs3irpw0y67zivqpbjpm065ha5wpr13z2";
     };
 
     LC_ALL = "en_US.UTF-8";
     buildInputs = [ pkgs.glibcLocales ];
 
     meta = {
-      broken = true; # 2 tests, both fail
       description = "A Pure-Python library built as a PDF toolkit";
       homepage = "http://mstamy2.github.com/PyPDF2/";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ desiderius ];
+      maintainers = with maintainers; [ desiderius vrthra ];
     };
   };
 
@@ -24801,10 +24821,12 @@ in modules // {
 
     propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
 
-    # Tests fail:
-    # ValueError: _type_ 'v' not supported
-    # See https://github.com/NixOS/nixpkgs/issues/14634
-    doCheck = false;
+    # We specify the name of the test files to prevent
+    # https://github.com/NixOS/nixpkgs/issues/14634
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover *_test.py
+    '';
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tornado/${name}.tar.gz";
       sha256 = "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969";
@@ -26763,12 +26785,12 @@ in modules // {
   };
 
   neovim = buildPythonPackage rec {
-    version = "0.1.8";
+    version = "0.1.9";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "06g84f0l208jrc1iqa4vk9kgwr77z1ya8cq39cygpq88yjj28whi";
+      sha256 = "09q7yz0v9i90grp4cmb1w8dps58q9xny7sb12kgmd8gcr8xwk4dx";
     };
 
     buildInputs = with self; [ nose ];
@@ -28368,5 +28390,16 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ requests2 six dateutil ];
+  };
+
+  pivy = buildPythonPackage rec {
+    version = "20101207";
+    name = "pivy-${version}";
+    src = pkgs.fetchhg {
+      url = "https://bitbucket.org/Coin3D/pivy";
+      rev = "8eab90908f2a3adcc414347566f4434636202344";
+      sha256 = "18n14ha2d3j3ghg2f2aqnf2mks94nn7ma9ii7vkiwcay93zm82cf";
+    };
+    buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 }

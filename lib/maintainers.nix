@@ -264,6 +264,7 @@
   muflax = "Stefan Dorn <mail@muflax.com>";
   myrl = "Myrl Hex <myrl.0xf@gmail.com>";
   nathan-gs = "Nathan Bijnens <nathan@nathan.gs>";
+  Nate-Devv = "Nathan Moore <natedevv@gmail.com>";
   nckx = "Tobias Geerinckx-Rice <tobias.geerinckx.rice@gmail.com>";
   nequissimus = "Tim Steinbach <tim@nequissimus.com>";
   nfjinjing = "Jinjing Wang <nfjinjing@gmail.com>";
