@@ -13,6 +13,12 @@ let
     ${colors}
   '';
 
+  kbdEnv = pkgs.buildEnv {
+    name = "kbd-env";
+    paths = [ pkgs.kbd ] ++ config.i18n.consolePackages;
+    pathsToLink = [ "/share/consolefonts" "/share/consoletrans" "/share/keymaps" "/share/unimaps" ];
+  };
+
   setVconsole = !config.boot.isContainer;
 in
 
@@ -52,12 +58,10 @@ in
       environment.systemPackages = [ pkgs.kbd ];
 
       # Let systemd-vconsole-setup.service do the work of setting up the
-      # virtual consoles.  FIXME: trigger a restart of
-      # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
-      environment.etc = [ {
-        target = "vconsole.conf";
-        source = vconsoleConf;
-      } ];
+      # virtual consoles.
+      environment.etc."vconsole.conf".source = vconsoleConf;
+      # Provide kbd with additional packages.
+      environment.etc."kbd".source = "${kbdEnv}/share";
 
       # This is identical to the systemd-vconsole-setup.service unit
       # shipped with systemd, except that it uses /dev/tty1 instead of
@@ -67,7 +71,7 @@ in
         { wantedBy = [ "multi-user.target" ];
           before = [ "display-manager.service" ];
           after = [ "systemd-udev-settle.service" ];
-          restartTriggers = [ vconsoleConf ];
+          restartTriggers = [ vconsoleConf kbdEnv ];
         };
     })
   ];
