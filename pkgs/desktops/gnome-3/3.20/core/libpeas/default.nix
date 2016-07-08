@@ -1,14 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, glib, gtk3, gobjectIntrospection, python, pygobject3
+, glib, gtk3, gobjectIntrospection, python3Packages, ncurses
 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs =  [
-   intltool pkgconfig glib gtk3 gobjectIntrospection python pygobject3
-   gnome3.defaultIconTheme
-  ];
+  configureFlags = [ "--enable-python3" ];
+
+  buildInputs =  [ intltool pkgconfig glib gtk3 gnome3.defaultIconTheme ncurses python3Packages.python python3Packages.pygobject3 gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     description = "A GObject-based plugins engine";

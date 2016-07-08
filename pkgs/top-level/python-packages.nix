@@ -146,6 +146,8 @@ in modules // {
 
   blivet = callPackage ../development/python-modules/blivet { };
 
+  breathe = callPackage ../development/python-modules/breathe { };
+
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
   dbf = buildPythonPackage rec {
@@ -6972,12 +6974,12 @@ in modules // {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "5.0.0";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_console/${name}.tar.gz";
-      sha256 = "1qsa9h7db8qzd4hg9l5mfl8299y4i7jkd6p3vpksk3r5ip8wym6p";
+      sha256 = "7ddfc8cc49921b0ed852500928922e637f9188358c94b5c76339a5a8f9ac4c11";
     };
 
     buildInputs = with self; [ nose ];
@@ -11348,12 +11350,12 @@ in modules // {
   };
 
   ipython = buildPythonPackage rec {
-    version = "4.1.2";
+    version = "5.0.0";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "14hnf3m087z39ndn5irj1ficc6l197bmdj6fpvz8bwi7la99cbq5";
+      sha256 = "7ec0737169c74056c7fc8298246db5478a2d6c90cfd19c3253222112357545df";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -11363,8 +11365,8 @@ in modules // {
     buildInputs = with self; [ nose pkgs.glibcLocales pygments ] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
-      [decorator pickleshare simplegeneric traitlets readline requests2 pexpect sqlite3]
-      ++ optionals stdenv.isDarwin [appnope gnureadline];
+      [decorator pickleshare prompt_toolkit simplegeneric traitlets requests2 pexpect sqlite3]
+      ++ optionals stdenv.isDarwin [appnope];
 
     LC_ALL="en_US.UTF-8";
 
@@ -17100,9 +17102,10 @@ in modules // {
     };
     checkPhase = ''
       rm prompt_toolkit/win32_types.py
+      py.test -k 'not test_pathcompleter_can_expanduser'
     '';
 
-    buildInputs = with self; [ jedi ipython ];
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ docopt six wcwidth pygments ];
 
     meta = {
