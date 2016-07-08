@@ -5791,6 +5791,8 @@ in
   };
   purePackages = recurseIntoAttrs (callPackage ./pure-packages.nix {});
 
+  pythonNew = callPackage ./python-packages.nix {};
+
   python = python2;
   python2 = python27;
   python3 = python35;
@@ -5804,24 +5806,11 @@ in
     db = db47;
     self = python26;
   };
-  python27 = callPackage ../development/interpreters/python/2.7 {
-    self = python27;
-    inherit (darwin) CF configd;
-  };
-  python33 = callPackage ../development/interpreters/python/3.3 {
-    self = python33;
-  };
-  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
-    inherit (darwin) CF configd;
-    self = python34;
-  });
-  python35 = hiPrio (callPackage ../development/interpreters/python/3.5 {
-    inherit (darwin) CF configd;
-    self = python35;
-  });
-  pypy = callPackage ../development/interpreters/pypy {
-    self = pypy;
-  };
+  python27 = pythonNew.cpython27.interpreter;
+  python33 = pythonNew.cpython33.interpreter;
+  python34 = pythonNew.cpython34.interpreter;
+  python35 = pythonNew.cpython35.interpreter;
+  pypy = pythonNew.pypy27.interpreter;
 
   pythonFull = python2Full;
   python2Full = python27Full;
@@ -9832,30 +9821,11 @@ in
     self = python26Packages;
   };
 
-  python27Packages = lib.hiPrioSet (recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python27;
-    self = python27Packages;
-  }));
-
-  python33Packages = callPackage ./python-packages.nix {
-    python = python33;
-    self = python33Packages;
-  };
-
-  python34Packages = callPackage ./python-packages.nix {
-    python = python34;
-    self = python34Packages;
-  };
-
-  python35Packages = recurseIntoAttrs (callPackage ./python-packages.nix {
-    python = python35;
-    self = python35Packages;
-  });
-
-  pypyPackages = callPackage ./python-packages.nix {
-    python = pypy;
-    self = pypyPackages;
-  };
+  python27Packages = pythonNew.cpython27.pkgs;
+  python33Packages = pythonNew.cpython33.pkgs;
+  python34Packages = pythonNew.cpython34.pkgs;
+  python35Packages = pythonNew.cpython35.pkgs;
+  pypyPackages = pythonNew.pypy27.pkgs;
 
   bsddb3 = pythonPackages.bsddb3;
 
