@@ -28,10 +28,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A code-completion and comprehension server";
-    homepage = "https://github.com/Valloric/ycmd";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    homepage = https://github.com/Valloric/ycmd;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ rasendubi ];
+    platforms = platforms.all;
   };
 }
