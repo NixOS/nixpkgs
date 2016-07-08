@@ -17037,9 +17037,10 @@ in modules // {
     };
     checkPhase = ''
       rm prompt_toolkit/win32_types.py
+      py.test -k 'not test_pathcompleter_can_expanduser'
     '';
 
-    buildInputs = with self; [ jedi ipython ];
+    buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ docopt six wcwidth pygments ];
 
     meta = {
