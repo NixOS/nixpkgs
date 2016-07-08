@@ -1657,6 +1657,8 @@ in modules // {
     };
   };
 
+  breathe = callPackage ../development/python-modules/breathe { };
+
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
     name = "caldavclientlibrary-asynk-${version}";
