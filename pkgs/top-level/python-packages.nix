@@ -6972,12 +6972,12 @@ in modules // {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "4.1.1";
+    version = "5.0.0";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_console/${name}.tar.gz";
-      sha256 = "1qsa9h7db8qzd4hg9l5mfl8299y4i7jkd6p3vpksk3r5ip8wym6p";
+      sha256 = "7ddfc8cc49921b0ed852500928922e637f9188358c94b5c76339a5a8f9ac4c11";
     };
 
     buildInputs = with self; [ nose ];
