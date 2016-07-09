@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "1j2ar5gb6xcyw1mlpm0mfpiri6www9k5myaqjina87a3xd23r8lk";
   };
 
-  patches = [ ./build-on-bsd.patch ];
+  patches = [
+    ./build-on-bsd.patch
+    (fetchpatch {  # see http://security.libvirt.org/2016/0001.html
+      name = "libvirt-CVE-2016-5008";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=46d27cde24b495320dc28bbf79134e0ce48c11b8";
+      sha256 = "19f6f8df57cr0sn6a1xf9ixa6vgjqmmzjf617pdj5gxy18aqn2pg";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
