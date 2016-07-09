@@ -22,43 +22,37 @@
 , # Allow a configuration attribute set to be passed in as an
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
-  config ? null
+  #
+  # [For NixOS (nixos-rebuild), use nixpkgs.config option to set.]
+  config ? let
+      inherit (builtins) getEnv pathExists;
+
+      configFile = getEnv "NIXPKGS_CONFIG";
+      homeDir = getEnv "HOME";
+      configFile2 = homeDir + "/.nixpkgs/config.nix";
+    in
+      if configFile != "" && pathExists configFile then import configFile
+      else if homeDir != "" && pathExists configFile2 then import configFile2
+      else {}
 
 , crossSystem ? null
 , platform ? null
 }:
 
 
-let config_ = config; platform_ = platform; in # rename the function arguments
+let configExpr = config; platform_ = platform; in # rename the function arguments
 
 let
 
   lib = import ../../lib;
 
-  # The contents of the configuration file found at $NIXPKGS_CONFIG or
-  # $HOME/.nixpkgs/config.nix.
-  # for NIXOS (nixos-rebuild): use nixpkgs.config option
+  # Allow both:
+  # { /* the config */ } and
+  # { pkgs, ... } : { /* the config */ }
   config =
-    let
-      inherit (builtins) getEnv pathExists;
-
-      configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
-
-      configExpr =
-        if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import configFile
-        else if homeDir != "" && pathExists configFile2 then import configFile2
-        else {};
-
-    in
-      # allow both:
-      # { /* the config */ } and
-      # { pkgs, ... } : { /* the config */ }
-      if builtins.isFunction configExpr
-        then configExpr { inherit pkgs; }
-        else configExpr;
+    if builtins.isFunction configExpr
+    then configExpr { inherit pkgs; }
+    else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
 
