@@ -2,8 +2,8 @@
   targets ? [], targetToolchains ? [], targetPatches ? [] }:
 
 let
-  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}) rustPlatform);
-  rustSnapshotPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./snapshot.nix {}) rustPlatform);
+  rustPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./bootstrap.nix {}));
+  rustSnapshotPlatform = recurseIntoAttrs (makeRustPlatform (callPackage ./snapshot.nix {}));
 in
 
 rec {
