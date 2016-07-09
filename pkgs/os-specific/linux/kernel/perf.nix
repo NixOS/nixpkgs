@@ -39,7 +39,11 @@ stdenv.mkDerivation {
     /* I don't want cross-python or cross-perl -
        I don't know if cross-python even works */
     propagatedBuildInputs = [ elfutils.crossDrv newt.crossDrv ];
-    makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
+    makeFlags = [
+      "CROSS_COMPILE=${stdenv.cross.config}-"
+      "tipdir=$out/share/doc/perf-tip"
+    ];
+
     elfutils = elfutils.crossDrv;
     inherit (kernel.crossDrv) src patches;
   };
