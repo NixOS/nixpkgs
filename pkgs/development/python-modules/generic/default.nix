@@ -42,6 +42,9 @@
 # Additional flags to pass to "pip install".
 , installFlags ? []
 
+# Raise an error if two packages are installed with the same name
+, catchConflicts ? true
+
 , format ? "setup"
 
 , ... } @ attrs:
@@ -141,7 +144,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "doCheck"] //
 
   postFixup = attrs.postFixup or ''
     wrapPythonPrograms
-
+  '' + lib.optionalString catchConflicts ''
     # check if we have two packages with the same name in closure and fail
     # this shouldn't happen, something went wrong with dependencies specs
     ${python.interpreter} ${./catch_conflicts.py}

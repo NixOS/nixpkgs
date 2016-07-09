@@ -8,6 +8,6 @@ kde {
   buildInputs = [ kdelibs libkdegames ];
 
   meta = {
-    description = "a single-player jigsaw puzzle game";
+    description = "A single-player jigsaw puzzle game";
   };
 }

@@ -33,6 +33,14 @@ in
         default = false;
         description = "Don't install XFCE desktop components (xfdesktop, panel and notification daemon).";
       };
+
+      extraSessionCommands = mkOption {
+        default = "";
+        type = types.lines;
+        description = ''
+          Shell commands executed just before XFCE is started.
+        '';
+      };
     };
 
   };
@@ -45,6 +53,8 @@ in
         bgSupport = true;
         start =
           ''
+            ${cfg.extraSessionCommands}
+
             # Set GTK_PATH so that GTK+ can find the theme engines.
             export GTK_PATH="${config.system.path}/lib/gtk-2.0:${config.system.path}/lib/gtk-3.0"
 

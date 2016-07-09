@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "clipgrab-${version}";
-  version = "3.5.6";
+  version = "3.6.1";
 
   src = fetchurl {
-    sha256 = "0wm6hqaq6ydbvvd0fqkfydxd5h7gf4di7lvq63xgxl4z40jqc25n";
+    sha256 = "1pmsnb9yfyadp8kzxldw09wmv2r0wmg9yza9ariqc27jz1j3kpsc";
     # The .tar.bz2 "Download" link is a binary blob, the source is the .tar.gz!
-    url = "http://download.clipgrab.de/${name}.tar.gz";
+    url = "https://download.clipgrab.org/${name}.tar.gz";
   };
 
   buildInputs = [ ffmpeg qt4 ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     exec = name;
     icon = name;
     desktopName = "ClipGrab";
-    comment = "A friendly downloader for YouTube and other sites";
+    comment = meta.description;
     genericName = "Web video downloader";
     categories = "Qt;AudioVideo;Audio;Video";
   };
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       Dailymotion and many other online video sites. It converts downloaded
       videos to MPEG4, MP3 or other formats in just one easy step.
     '';
-    homepage = http://clipgrab.org/;
+    homepage = https://clipgrab.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];

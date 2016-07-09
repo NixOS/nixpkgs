@@ -1,9 +1,17 @@
-# Maintainer's Notes:
-#
-# How To Update
-#  1. Edit the URL in ./manifest.sh
-#  2. Run ./manifest.sh
-#  3. Fix build errors.
+/*
+
+# Updates
+
+Before a major version update, make a copy of this directory. (We like to
+keep the old version around for a short time after major updates.)
+
+1. Update the URL in `maintainers/scripts/generate-kde-plasma.sh`.
+2. From the top of the Nixpkgs tree, run
+   `./maintainers/scripts/generate-kde-plasma.sh > pkgs/desktops/kde-5/plasma-$VERSION/srcs.nix'.
+3. Check that the new packages build correctly.
+4. Commit the changes and open a pull request.
+
+*/
 
 { pkgs, debug ? false }:
 
@@ -11,10 +19,8 @@ let
 
   inherit (pkgs) lib stdenv symlinkJoin;
 
-  kdeApps = pkgs.kdeApps_15_12;
-
-  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
   mirror = "mirror://kde";
+  srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
     plasmaPackage = args:
@@ -61,7 +67,6 @@ let
     kdecoration = callPackage ./kdecoration.nix {};
     kdeplasma-addons = callPackage ./kdeplasma-addons.nix {};
     kgamma5 = callPackage ./kgamma5.nix {};
-    khelpcenter = callPackage ./khelpcenter.nix {};
     khotkeys = callPackage ./khotkeys.nix {};
     kinfocenter = callPackage ./kinfocenter.nix {};
     kmenuedit = callPackage ./kmenuedit.nix {};

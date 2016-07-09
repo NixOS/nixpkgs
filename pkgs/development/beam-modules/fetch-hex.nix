@@ -10,7 +10,7 @@ stdenv.mkDerivation ({
   name = "hex-source-${pkg}-${version}";
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/s3.hex.pm/tarballs/${pkg}-${version}.tar";
+    url = "https://repo.hex.pm/tarballs/${pkg}-${version}.tar";
     inherit sha256;
   };
 

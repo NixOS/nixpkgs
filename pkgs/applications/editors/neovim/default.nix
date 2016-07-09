@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
-, libtool, libuv, lua, luajit, luaPackages, man, ncurses, perl, pkgconfig
+, libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
@@ -75,20 +75,14 @@ let
       glib
       libtermkey
       libuv
-      # For some reason, `luajit` has to be listed after `lua`. See
-      # https://github.com/NixOS/nixpkgs/issues/14442
-      lua
-      luajit
       libmsgpack
       ncurses
       neovimLibvterm
       unibilium
-
-      luaPackages.lpeg
-      luaPackages.mpack
-      luaPackages.luabitop
-
-    ] ++ optional withJemalloc jemalloc;
+      luajit
+      luaPackages.lua
+    ] ++ optional withJemalloc jemalloc
+      ++ lualibs;
 
     nativeBuildInputs = [
       cmake
@@ -97,11 +91,13 @@ let
       pkgconfig
     ];
 
-    LUA_CPATH = "${luaPackages.lpeg}/lib/lua/${lua.luaversion}/?.so;${luaPackages.mpack}/lib/lua/${lua.luaversion}/?.so;${luaPackages.luabitop}/lib/lua/${lua.luaversion}/?.so";
+    LUA_PATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaPath lualibs);
+    LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
-    configureFlags = [
-      "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-      "-DENABLE_JEMALLOC=ON"
+    lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
+
+    cmakeFlags = [
+      "-DLUA_PRG=${luaPackages.lua}/bin/lua"
     ];
 
     # triggers on buffer overflow bug while running tests

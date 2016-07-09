@@ -1,33 +1,36 @@
 { stdenv, makeWrapper, fetchgit, pkgconfig, ninja, ocaml, findlib, mupdf, lablgl
-, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl }:
+, gtk3, openjpeg, jbig2dec, mujs, xsel, openssl, freetype, ncurses }:
 
 let ocamlVersion = (builtins.parseDrvName (ocaml.name)).version;
 in stdenv.mkDerivation rec {
   name = "llpp-${version}";
-  version = "21-git-2015-07-30";
+  version = "21-git-2016-05-07";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
-    rev = "e9fe06d684b145a104cc319673076e069e853cac";
-    sha256 = "0w6kdjmh6jp5j88m213r0dg66ma42nxl6j4hjy4xnhkf52mg0iwx";
+    rev = "1beb003ca0f4ed90fda2823cb07c2eb674fc3ca4";
+    sha256 = "1r59yfm81zmiij401d3wc3zb1zc873ss02gkplbwi4lad2l0chba";
     fetchSubmodules = false;
   };
 
   buildInputs = [ pkgconfig ninja makeWrapper ocaml findlib mupdf lablgl
-                  gtk3 jbig2dec openjpeg mujs openssl ];
+                  gtk3 jbig2dec openjpeg mujs openssl freetype ncurses ];
+
+  dontStrip = true;
 
   configurePhase = ''
-      sh configure.sh -O -F ${mupdf}
-      sed -i 's;-lopenjpeg;-lopenjp2;g' .config
-      sed -i 's;$builddir/link\.so;link.so;g' build.ninja
+    sed -i -e 's+-I \$srcdir/mupdf/include -I \$srcdir/mupdf/thirdparty/freetype/include+-I ${freetype}/include+' build.sh
+    sed -i -e 's+-lmupdf +-lfreetype -lz -lharfbuzz -ljbig2dec -lopenjp2 -ljpeg -lmupdf +' build.sh
+    sed -i -e 's+-L\$srcdir/mupdf/build/native ++' build.sh
   '';
 
-  buildPhase = "${ninja}/bin/ninja";
+  buildPhase = ''
+    sh ./build.sh build
+  '';
 
   installPhase = ''
     install -d $out/bin $out/lib
     install build/llpp $out/bin
-    install link.so $out/lib
     wrapProgram $out/bin/llpp \
         --prefix CAML_LD_LIBRARY_PATH ":" "${lablgl}/lib/ocaml/${ocamlVersion}/site-lib/lablgl" \
         --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \

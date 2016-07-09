@@ -1,5 +1,14 @@
 [
   {
+    "goPackagePath": "github.com/elves/getopt",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/elves/getopt",
+      "rev": "f91a7bf920995832d55a1182f26657bc975b9c24",
+      "sha256": "0wz5dz0iq1b1c2w30mmcgll9xidsrnlvs2906jw9szy0h67310za"
+    }
+  },
+  {
     "goPackagePath": "golang.org/x/sys",
     "fetch": {
       "type": "git",
@@ -1291,8 +1300,8 @@
     "fetch": {
       "type": "git",
       "url": "https://github.com/Masterminds/vcs",
-      "rev": "9c0db6583837118d5df7c2ae38ab1c194e434b35",
-      "sha256": "0590ww2av4407y7zy3bcmnr8i74fv00k9zzcxcpjxivl6qszna0d"
+      "rev": "7af28b64c5ec41b1558f5514fd938379822c237c",
+      "sha256": "127pamr5lkym3iq6z747bm4y4gyc02glrqb61yv82z1rdyv1dcf6"
     }
   },
   {
@@ -1527,6 +1536,33 @@
       "url": "https://gopkg.in/kothar/go-backblaze.v0",
       "rev": "373819725fc560fa962c6cd883b533d2ebec4844",
       "sha256": "1kmlwfnnfd4h46bb9pz2gw1hxqm1pzkwvidfmnc0zkrilaywk6fx"
+    }
+  },
+  {
+    "goPackagePath": "github.com/jawher/mow.cli",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/jawher/mow.cli",
+      "rev": "772320464101e904cd51198160eb4d489be9cc49",
+      "sha256": "1a8hnh2k3vc3prjhnz4rjbiwhqq6r3mi18h9cdb6fc6s6yzjc19j"
+    }
+  },
+  {
+    "goPackagePath": "github.com/svent/go-flags",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/svent/go-flags",
+      "rev": "4bcbad344f0318adaf7aabc16929701459009aa3",
+      "sha256": "1gb416fgxl9gq4q6wsv3i2grq1mzbi7lvfvmfdqbxqbv9vizzh34"
+    }
+  },
+  {
+    "goPackagePath": "github.com/svent/go-nbreader",
+    "fetch": {
+      "type": "git",
+      "url": "https://github.com/svent/go-nbreader",
+      "rev": "7cef48da76dca6a496faa7fe63e39ed665cbd219",
+      "sha256": "0hw11jj5r3f6qwydg41nc3c6aadlbkhc1qpxra2609lis0qa9h4r"
     }
   }
 ]

@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   meta = {
-    description = "a scalable, high-performance, open source NoSQL database";
+    description = "A scalable, high-performance, open source NoSQL database";
     homepage = http://www.mongodb.org;
     license = licenses.agpl3;
 

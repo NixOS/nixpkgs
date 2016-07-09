@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     export DESTDIR=$out
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
+    homepage = "http://dotat.at/prog/unifdef/";
     description = "Selectively remove C preprocessor conditionals";
+    license = licenses.bsd2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.vrthra ];
   };
 }

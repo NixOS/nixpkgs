@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
  ] ++ qtInputs;
 
   patches = [ ./0001-fix-gcc-cmath-namespace-issues.patch ];
+  postPatch = ''
+    sed '1i#include <cmath>' -i src/Vehicle/Vehicle.cc \
+      -i src/comm/{QGCFlightGearLink,QGCJSBSimLink}.cc \
+      -i src/{uas/UAS,ui/QGCDataPlot2D}.cc
+  '';
 
   preConfigure = ''
     mkdir build
@@ -79,7 +84,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "provides full ground station support and configuration for the PX4 and APM Flight Stacks";
+    description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = http://qgroundcontrol.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = with stdenv.lib.platforms; linux;

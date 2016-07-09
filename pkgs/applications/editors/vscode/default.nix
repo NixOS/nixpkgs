@@ -1,12 +1,12 @@
 { stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem }:
 
 let
-  version = "1.0.0";
-  rev = "fa6d0f03813dfb9df4589c30121e9fcffa8a8ec8";
+  version = "1.2.1";
+  rev = "fe7f407b95b7f78405846188259504b34ef72761";
 
-  sha256 = if stdenv.system == "i686-linux"    then "1nnsvr51k8cmq8rccksylam4ww40pdn9dnhnp9096z5ccrf4qa1b"
-      else if stdenv.system == "x86_64-linux"  then "0p408pp2il6kawfsql8n5dvl75kmf2n2p0r266mjnww6vprmq4gw"
-      else if stdenv.system == "x86_64-darwin" then "06k41ljfvgyxbl364jlkdjk8lkwr6bpq2r051vin93cnqfxridkq"
+  sha256 = if stdenv.system == "i686-linux"    then "10jm92i88ds6q5rybm19z0z3g35gqhp6jqr2ldxcryijl17gj1n5"
+      else if stdenv.system == "x86_64-linux"  then "0jg40gbz3s9vxqpnkg267ck8kbwvgiqhw8hsn26r42wyxmj8773v"
+      else if stdenv.system == "x86_64-darwin" then "1b241wfzp8m0nvycjprwv39l4pax9lyqzngj4ghkkdnb8ai2hd2z"
       else throw "Unsupported system: ${stdenv.system}";
 
   urlMod = if stdenv.system == "i686-linux" then "linux-ia32"

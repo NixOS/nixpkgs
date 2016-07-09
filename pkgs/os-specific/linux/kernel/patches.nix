@@ -18,20 +18,20 @@ let
       };
     };
 
-  grsecPatch = { grversion ? "3.1", kernel, patches, kversion, revision, branch ? "test", sha256 }:
-    assert kversion == kernel.version;
-    { name = "grsecurity-${grversion}-${kversion}";
-      inherit grversion kernel patches kversion revision;
+  grsecPatch = { grbranch ? "test", grver ? "3.1", kver, grrev, sha256 }: rec {
+    name = "grsecurity-${grver}-${kver}-${grrev}";
+
+    # Pass these along to allow the caller to determine compatibility
+    inherit grver kver grrev;
+
+    patch = fetchurl {
       # When updating versions/hashes, ALWAYS use the official version; we use
       # this mirror only because upstream removes sources files immediately upon
       # releasing a new version ...
-      patch = fetchurl {
-        url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/test/grsecurity-${grversion}-${kversion}-${revision}.patch";
-        inherit sha256;
-      };
-      features.grsecurity = true;
+      url = "https://raw.githubusercontent.com/slashbeast/grsecurity-scrape/master/${grbranch}/${name}.patch";
+      inherit sha256;
     };
-
+  };
 in
 
 rec {
@@ -92,19 +92,18 @@ rec {
 
   grsecurity_4_4 = throw "grsecurity stable is no longer supported";
 
-  grsecurity_4_5 = grsecPatch
-    { kernel    = pkgs.grsecurity_base_linux_4_5;
-      patches   = [ grsecurity_fix_path_4_5 ];
-      kversion  = "4.5.7";
-      revision  = "201606080852";
-      sha256    = "1vgc314nh6bd7zw9r927lnbjq29z32g0s02jgvf635y9zz550nsh";
+  grsecurity_testing = grsecPatch
+    { kver   = "4.6.3";
+      grrev  = "201607070721";
+      sha256 = "1858zc77x1qbwwfhjlmffd21w4adsw9f3sycg6bksw2jxrhlzww5";
     };
 
-  grsecurity_latest = grsecurity_4_5;
-
-  grsecurity_fix_path_4_5 =
-    { name = "grsecurity-fix-path-4.5";
-      patch = ./grsecurity-path-4.5.patch;
+  # This patch relaxes grsec constraints on the location of usermode helpers,
+  # e.g., modprobe, to allow calling into the Nix store.
+  grsecurity_nixos_kmod =
+    {
+      name  = "grsecurity-nixos-kmod";
+      patch = ./grsecurity-nixos-kmod.patch;
     };
 
   crc_regression =

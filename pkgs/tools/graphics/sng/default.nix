@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sng-${version}";
-  version = "1.0.6";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sng/sng-${version}.tar.gz";
-    sha256 = "04ym62qh8blsqigm3kr1shj9pn62y373wdaavk74rzwjzlhwhmq6";
+    sha256 = "06a6ydvx9xb3vxvrzdrg3hq0rjwwj9ibr7fyyxjxq6qx1j3mb70i";
   };
 
   buildInputs = [ libpng ];

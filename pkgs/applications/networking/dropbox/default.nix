@@ -3,6 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
+, qtbase, qtdeclarative, qtquick1, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -20,12 +21,13 @@
 # them with our own.
 
 let
-  # NOTE: When updating, please also update in current stable, as older versions stop working
-  version = "3.20.1";
+  # NOTE: When updating, please also update in current stable,
+  # as older versions stop working
+  version = "4.4.29";
   sha256 =
     {
-      "x86_64-linux" = "170xnrxlsadl5iw96276f8l3w687l6n5j5m8z4djsfqqr3lqjxvg";
-      "i686-linux" = "0a7k56ib2qp5560wmbk7b30pqf7h9h7rjnq850993gn9lfwz81q2";
+      "x86_64-linux" = "1ff01vqi9jiwhkqm81rh321bsz4brl11xal2xzm9gll7s2m8lz06";
+      "i686-linux" = "0lwvvyxy5xyxh0b2g8a9bdy0y2hgpbak4n6q6b30167fvpj1ad1i";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -42,6 +44,8 @@ let
       dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
+
+      qtbase qtdeclarative qtquick1 qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
@@ -76,6 +80,19 @@ in stdenv.mkDerivation {
     rm "$out/${appdir}/libffi.so.6"
     rm "$out/${appdir}/libGL.so.1"
     rm "$out/${appdir}/libX11-xcb.so.1"
+
+    rm "$out/${appdir}/libQt5Core.so.5"
+    rm "$out/${appdir}/libQt5DBus.so.5"
+    rm "$out/${appdir}/libQt5Gui.so.5"
+    rm "$out/${appdir}/libQt5Network.so.5"
+    rm "$out/${appdir}/libQt5OpenGL.so.5"
+    rm "$out/${appdir}/libQt5PrintSupport.so.5"
+    rm "$out/${appdir}/libQt5Qml.so.5"
+    rm "$out/${appdir}/libQt5Quick.so.5"
+    rm "$out/${appdir}/libQt5Sql.so.5"
+    rm "$out/${appdir}/libQt5WebKit.so.5"
+    rm "$out/${appdir}/libQt5WebKitWidgets.so.5"
+    rm "$out/${appdir}/libQt5XcbQpa.so.5"
 
     mkdir -p "$out/share/applications"
     cp "${desktopItem}/share/applications/"* $out/share/applications

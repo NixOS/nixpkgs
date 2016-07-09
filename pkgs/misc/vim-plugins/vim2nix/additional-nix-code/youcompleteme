@@ -5,7 +5,7 @@
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
     propogatedBuildInputs = [
-      racerdRust
+      rustracerd
     ];
 
     buildPhase = ''

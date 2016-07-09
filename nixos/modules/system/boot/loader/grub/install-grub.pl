@@ -501,7 +501,7 @@ sub getEfiTarget {
 my @deviceTargets = getDeviceTargets();
 my $efiTarget = getEfiTarget();
 my $prevGrubState = readGrubState();
-my @prevDeviceTargets = split/:/, $prevGrubState->devices;
+my @prevDeviceTargets = split/,/, $prevGrubState->devices;
 
 my $devicesDiffer = scalar (List::Compare->new( '-u', '-a', \@deviceTargets, \@prevDeviceTargets)->get_symmetric_difference());
 my $nameDiffer = get("fullName") ne $prevGrubState->name;
@@ -549,7 +549,7 @@ if ($requireNewInstall != 0) {
     print FILE get("fullName"), "\n" or die;
     print FILE get("fullVersion"), "\n" or die;
     print FILE $efiTarget, "\n" or die;
-    print FILE join( ":", @deviceTargets ), "\n" or die;
+    print FILE join( ",", @deviceTargets ), "\n" or die;
     print FILE $efiSysMountPoint, "\n" or die;
     close FILE or die;
 }

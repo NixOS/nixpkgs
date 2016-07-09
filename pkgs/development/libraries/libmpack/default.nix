@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     inherit rev;
     sha256 = "1h3pbmykm69gfyi0wz647gz5836a6f3jc4azzll7i3mkpc11gcrd";
   };
+  LIBTOOL = "libtool";
   buildInputs = [ libtool ];
   installPhase = ''
     mkdir -p $out/lib/libmpack
@@ -21,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tarruda/libmpack/";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 garbas ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

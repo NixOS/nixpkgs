@@ -3,10 +3,10 @@
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
-  version = "1.0.0";
+  version = "1.2.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "1rbwkmsllg8wxv45xyvc3vh97na0zxxydcfqrvig496xkylvw2rn";
+    sha256 = "13ffr2iabl5lyqqdcrs8z37lfqw1n102bkxwfx0540hj6brvkm2v";
     
   };
 in stdenv.mkDerivation rec {
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   commonPhase = ''
     mkdir -p $out/bin
 
-    echo "#!${python}/bin/python"  >  $out/bin/pypi2nix
+    echo "#!${python}/bin/python3"       >  $out/bin/pypi2nix
     echo "import pypi2nix.cli"          >> $out/bin/pypi2nix
     echo "pypi2nix.cli.main()"          >> $out/bin/pypi2nix
 
@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
     export PATH=$out/bin:$PATH
     export PYTHONPATH=`pwd`/src:$PYTHONPATH
   '';
+
   meta = {
     homepage = https://github.com/garbas/pypi2nix;
     description = "A tool that generates nix expressions for your python packages, so you don't have to.";

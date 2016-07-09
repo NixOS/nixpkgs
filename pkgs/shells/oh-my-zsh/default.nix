@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation rec {
   name = "oh-my-zsh-git-${version}";
-  version = "2016-04-20";
+  version = "2016-06-18";
 
   src = fetchgit {
     url = "https://github.com/robbyrussell/oh-my-zsh";
-    rev = "1b1315a777328095cd8b5f364fd4345eeae7c4bf";
-    sha256 = "1bdh6k46kwggihw6iblm1q60x4hjxpbkhaqap0nfpapqvlba4nv6";
+    rev = "d012402dada1ec7d8796f2f4b04744d817137b4d";
+    sha256 = "1965k91jdhjpy2dkklzwcxmq6qqjc7cnwl8x670g51jr4ihawkx1";
   };
 
   phases = "installPhase";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   cp -r $src/* $outdir
   cd $outdir
 
-  rm MIT-LICENSE.txt
+  rm LICENSE.txt
   rm -rf .git*
 
   chmod -R +w templates

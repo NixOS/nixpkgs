@@ -412,7 +412,19 @@ rec {
     lts-6_2 = packages.ghc7103.override {
       packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.2.nix { };
     };
-    lts-6 = packages.lts-6_2;
+    lts-6_3 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.3.nix { };
+    };
+    lts-6_4 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.4.nix { };
+    };
+    lts-6_5 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.5.nix { };
+    };
+    lts-6_6 = packages.ghc7103.override {
+      packageSetConfig = callPackage ../development/haskell-modules/configuration-lts-6.6.nix { };
+    };
+    lts-6 = packages.lts-6_6;
 
     lts = packages.lts-6;
   };

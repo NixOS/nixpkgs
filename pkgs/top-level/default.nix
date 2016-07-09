@@ -19,10 +19,6 @@
                && system != "x86_64-solaris"
                && system != "x86_64-kfreebsd-gnu")
 
-  # More flags for the bootstrapping of stdenv.
-, gccWithCC ? true
-, gccWithProfiling ? true
-
 , # Allow a configuration attribute set to be passed in as an
   # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
   # ~/.nixpkgs/config.nix.
@@ -44,10 +40,7 @@ let
   # for NIXOS (nixos-rebuild): use nixpkgs.config option
   config =
     let
-      toPath = builtins.toPath;
-      getEnv = x: if builtins ? getEnv then builtins.getEnv x else "";
-      pathExists = name:
-        builtins ? pathExists && builtins.pathExists (toPath name);
+      inherit (builtins) getEnv pathExists;
 
       configFile = getEnv "NIXPKGS_CONFIG";
       homeDir = getEnv "HOME";
@@ -55,8 +48,8 @@ let
 
       configExpr =
         if config_ != null then config_
-        else if configFile != "" && pathExists configFile then import (toPath configFile)
-        else if homeDir != "" && pathExists configFile2 then import (toPath configFile2)
+        else if configFile != "" && pathExists configFile then import configFile
+        else if homeDir != "" && pathExists configFile2 then import configFile2
         else {};
 
     in
@@ -84,8 +77,7 @@ let
     else config.platform or platformAuto;
 
   topLevelArguments = {
-    inherit system bootStdenv noSysDirs gccWithCC gccWithProfiling config
-      crossSystem platform lib;
+    inherit system bootStdenv noSysDirs config crossSystem platform lib;
   };
 
   # Allow packages to be overridden globally via the `packageOverrides'

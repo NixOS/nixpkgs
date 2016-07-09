@@ -4,10 +4,10 @@ libffi, pam, alsaLib, luajit, bzip2, libuuid, libpthreadstubs, gdbm, libcap, mes
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.20.9";
+  version = "0.21.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1gniy7i3mg3q9cgqf004lvnv397yncdr2b7w1gzj69bvv7a2lyfv";
+    sha256 = "0p85dmk9ysbf9y7vlc92z7495mh9l860xj3s8pspy9mscv3dnwg9";
   };
 
   nativeBuildInputs = [ pkgconfig ];

@@ -17,7 +17,7 @@
 
 assert faacSupport -> enableUnfree;
 
-with { inherit (stdenv.lib) optional optionals; };
+with { inherit (stdenv.lib) optional optionals hasPrefix; };
 
 /* ToDo:
     - more deps, inspiration: http://packages.ubuntu.com/raring/libav-tools
@@ -27,7 +27,7 @@ with { inherit (stdenv.lib) optional optionals; };
 let
   result = {
     libav_0_8 = libavFun "0.8.17" "31ace2daeb8c105deed9cd3476df47318d417714";
-    libav_11  = libavFun  "11.6"  "2296cbd7afe98591eb164cebe436dcb5582efc9d";
+    libav_11  = libavFun  "11.7"  "9f36d136ea353fc6e3826180fe126f52eca7fec4";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -39,8 +39,8 @@ let
     };
 
     patches = []
-      ++ optionals (vpxSupport && version == "0.8.17" ) [ ./vpxenc-0.8.17-libvpx-1.5.patch ]
-      ++ optionals (vpxSupport && version == "11.6") [ ./vpxenc-11.6-libvpx-1.5.patch ];
+      ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
+      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 

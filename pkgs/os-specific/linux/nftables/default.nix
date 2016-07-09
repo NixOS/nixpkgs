@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig docbook2x flex bison libmnl libnftnl gmp readline ];
 
   meta = with stdenv.lib; {
-    description = "the project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
+    description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = http://netfilter.org/projects/nftables;
     license = licenses.gpl2;
     platforms = platforms.linux;

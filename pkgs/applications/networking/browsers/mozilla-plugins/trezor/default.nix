@@ -39,6 +39,9 @@ stdenv.mkDerivation {
       homepage = https://mytrezor.com;
       license = licenses.unfree;
       maintainers = with maintainers; [ ehmry ];
+      # Download URL, .deb content & hash (yikes) changed, not version.
+      # New archive doesn't contain any Mozilla plugin at all.
+      broken = true;
     };
 
 }

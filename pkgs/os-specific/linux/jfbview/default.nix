@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     imlib2
   ];
 
+  patches = [
+    ./mupdf-1.9.patch
+  ];
+
   configurePhase = ''
     # Hack. Probing (`ldconfig -p`) fails with ‘cannot execute binary file’.
     # Overriding `OPENJP2 =` later works, but makes build output misleading:

@@ -1,0 +1,13 @@
+diff --git a/setup.py b/setup.py
+index d57d4e8..9d036fc 100755
+--- a/setup.py
++++ b/setup.py
+@@ -58,7 +58,7 @@ if PY2:
+              'backports.functools_lru_cache',
+              'configparser>=3.5.0b2']  # This is a backport from Python 3
+ else:
+-    deps += ['dnspython3', ]  # dnspython3 for SRV records
++    deps += ['dnspython', ]  # dnspython for SRV records
+ 
+ if not PY35_OR_GREATER:
+     deps += ['typing', ]  # backward compatibility for 3.3 and 3.4

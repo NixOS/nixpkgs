@@ -17,6 +17,7 @@
 , ncursesSupport      ? true      , ncurses       ? null
 , x11Support          ? true      , xlibsWrapper           ? null
 , xdamageSupport      ? x11Support, libXdamage    ? null
+, doubleBufferSupport ? x11Support
 , imlib2Support       ? x11Support, imlib2        ? null
 
 , luaSupport          ? true      , lua           ? null
@@ -113,6 +114,7 @@ stdenv.mkDerivation rec {
     ++ optional rssSupport          "-DBUILD_RSS=ON"
     ++ optional (!x11Support)       "-DBUILD_X11=OFF"
     ++ optional xdamageSupport      "-DBUILD_XDAMAGE=ON"
+    ++ optional doubleBufferSupport "-DBUILD_XDBE=ON"
     ++ optional weatherMetarSupport "-DBUILD_WEATHER_METAR=ON"
     ++ optional weatherXoapSupport  "-DBUILD_WEATHER_XOAP=ON"
     ++ optional wirelessSupport     "-DBUILD_WLAN=ON"

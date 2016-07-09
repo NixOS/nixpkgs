@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
         cd ${version}
         
         # Patch the interpreter
-        for i in aapt aidl bcc_compat dexdump llvm-rs-cc
+        for i in aidl bcc_compat dexdump llvm-rs-cc
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
         done
@@ -52,16 +52,16 @@ stdenv.mkDerivation rec {
         done
 
         # These binaries also need zlib in addition to libstdc++
-        for i in arm-linux-androideabi-ld i686-linux-android-ld mipsel-linux-android-ld split-select zipalign
+        for i in arm-linux-androideabi-ld i686-linux-android-ld mipsel-linux-android-ld split-select aapt zipalign
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc.out}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
         done
         
         # These binaries need to find libstdc++, libgcc_s, and zlib
         for i in aapt dexdump
         do
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
         done
       ''}
       
