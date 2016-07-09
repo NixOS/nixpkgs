@@ -17064,6 +17064,9 @@ in modules // {
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
 
+    # No tests included in archive
+    doCheck = false;
+
     #Only <3.4 expressly supported.
     disabled = isPy35;
 
