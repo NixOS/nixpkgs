@@ -1,13 +1,14 @@
 {stdenv, fetchurl, zlib, libpng, freetype, libjpeg, fontconfig}:
 
-stdenv.mkDerivation {
-  name = "gd-2.0.35";
-  
+stdenv.mkDerivation rec {
+  name = "gd-${version}";
+  version = "2.2.2";
+
   src = fetchurl {
-    url = http://www.libgd.org/releases/gd-2.0.35.tar.bz2;
-    sha256 = "1y80lcmb8qbzf0a28841zxhq9ndfapmh2fsrqfd9lalxfj8288mz";
+    url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
+    sha256 = "1311g5mva2xlzqv3rjqjc4jjkn5lzls4skvr395h633zw1n7b7s8";
   };
-  
+
   buildInputs = [zlib libpng freetype];
 
   propagatedBuildInputs = [libjpeg fontconfig]; # urgh
