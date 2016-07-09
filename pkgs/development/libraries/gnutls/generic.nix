@@ -4,11 +4,11 @@
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
-, ...}:
+, ...}@args:
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "gnutls-${version}";
 
   inherit src patches;
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
       -i tests/cert-tests/name-constraints
-  '' + postPatch;
+  '' + args.postPatch;
 
   preConfigure = "patchShebangs .";
   configureFlags =
@@ -35,13 +35,14 @@ stdenv.mkDerivation {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
+    ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
+  nativeBuildInputs = [ perl pkgconfig ] ++ args.nativeBuildInputs;
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
