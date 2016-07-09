@@ -17329,4 +17329,6 @@ in
   maphosts = callPackage ../tools/networking/maphosts {};
 
   zuki-themes = callPackage ../misc/themes/zuki { };
+
+  mop = callPackage ../applications/misc/mop { };
 }
