@@ -2,6 +2,7 @@
 , stdenv
 , enableXRandr ? true, xrandr ? null
 , enableDisper ? true, disper ? null
+, python
 , xdpyinfo }:
 
 assert enableXRandr -> xrandr != null;
@@ -27,7 +28,9 @@ in
       substituteInPlace "autorandr" \
         --replace "/usr/bin/xrandr" "${if enableXRandr then xrandr else "/nowhere"}/bin/xrandr" \
         --replace "/usr/bin/disper" "${if enableDisper then disper else "/nowhere"}/bin/disper" \
-        --replace "/usr/bin/xdpyinfo" "${xdpyinfo}/bin/xdpyinfo"
+        --replace "/usr/bin/xdpyinfo" "${xdpyinfo}/bin/xdpyinfo" \
+        --replace "which xxd" "false" \
+        --replace "python" "${python}/bin/python"
     '';
 
     installPhase = ''
