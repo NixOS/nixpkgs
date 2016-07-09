@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, scons, pythonFull, pkgconfig, dbus, dbus_glib
-, ncurses, libX11, libXt, libXpm, libXaw, libXext, makeWrapper
+{ fetchurl, stdenv, scons, pkgconfig, dbus, dbus_glib
+, ncurses, libX11, libXt, libXpm, libXaw, libXext
 , libusb1, docbook_xml_dtd_412, docbook_xsl, bc
 , libxslt, xmlto, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+, pythonPackages
 }:
 
-# TODO: the 'xgps' program doesn't work: "ImportError: No module named gobject"
 # TODO: put the X11 deps behind a guiSupport parameter for headless support
 
 stdenv.mkDerivation rec {
@@ -16,13 +16,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
-    pythonFull
+    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    pythonPackages.python
+    pythonPackages.wrapPython
   ];
 
   buildInputs = [
-    pythonFull dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
+    pythonPackages.python dbus dbus_glib ncurses libX11 libXt libXpm libXaw libXext
     libxslt libusb1
+  ];
+
+  pythonPath = [
+    pythonPackages.pygobject
+    pythonPackages.pygtk
   ];
 
   patches = [
@@ -37,13 +43,10 @@ stdenv.mkDerivation rec {
   #   we use $LD_LIBRARY_PATH instead.
   buildPhase = ''
     patchShebangs .
-    mkdir -p "$out"
-    sed -e "s|python_lib_dir = .*|python_lib_dir = \"$out/lib/${pythonFull.libPrefix}/site-packages\"|" -i SConstruct
+    sed -e "s|python_lib_dir = .*|python_lib_dir = \"$out/lib/${pythonPackages.python.libPrefix}/site-packages\"|" -i SConstruct
     scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
         systemd=yes udevdir="$out/lib/udev" chrpath=no
   '';
-
-  doCheck = false;
 
   checkPhase = ''
     export LD_LIBRARY_PATH="$PWD"
@@ -52,12 +55,13 @@ stdenv.mkDerivation rec {
 
   # TODO: the udev rules file and the hotplug script need fixes to work on NixOS
   installPhase = ''
-    scons install
     mkdir -p "$out/lib/udev/rules.d"
-    scons udev-install
+    scons install udev-install
   '';
 
-  postInstall = "wrapPythonPrograms";
+  postFixup = ''
+    wrapPythonProgramsIn $out/bin "$out $pythonPath"
+  '';
 
   meta = with stdenv.lib; {
     description = "GPS service daemon";
@@ -82,6 +86,6 @@ stdenv.mkDerivation rec {
     homepage = http://catb.org/gpsd/;
     license = "BSD-style";
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor rasendubi ];
   };
 }
