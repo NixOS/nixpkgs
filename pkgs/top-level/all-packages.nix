@@ -167,6 +167,8 @@ in
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
+  fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
+
   packer = callPackage ../development/tools/packer { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
@@ -15591,7 +15593,7 @@ in
   soi = callPackage ../games/soi {
     lua = lua5_1;
   };
-  
+
   solarus = callPackage ../games/solarus { };
 
   # You still can override by passing more arguments.
