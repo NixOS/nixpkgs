@@ -6323,7 +6323,7 @@ in
   gnumake40 = callPackage ../development/tools/build-managers/gnumake/4.0 { };
   gnumake41 = callPackage ../development/tools/build-managers/gnumake/4.1 { };
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
-  gnumake = self.gnumake41;
+  gnumake = self.gnumake42;
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
