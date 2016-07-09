@@ -273,6 +273,7 @@
   pxc = "Patrick Callahan <patrick.callahan@latitudeengineering.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   ragge = "Ragnar Dahlen <r.dahlen@gmail.com>";
+  ralith = "Benjamin Saunders <ben.e.saunders@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   refnil = "Martin Lavoie <broemartino@gmail.com>";
