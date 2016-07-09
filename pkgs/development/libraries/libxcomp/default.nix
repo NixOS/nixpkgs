@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, libjpeg, libpng12, libX11, zlib }:
+{ stdenv, fetchurl, autoreconfHook, libjpeg, libpng, libX11, zlib }:
 
 stdenv.mkDerivation rec {
   name = "libxcomp-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     url = "http://code.x2go.org/releases/source/nx-libs/nx-libs-${version}-lite.tar.gz";
   };
 
-  buildInputs = [ libjpeg libpng12 libX11 zlib ];
+  buildInputs = [ libjpeg libpng libX11 zlib ];
   nativeBuildInputs = [ autoreconfHook ];
 
   preAutoreconf = ''
