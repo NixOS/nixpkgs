@@ -47,7 +47,7 @@ patchShebangs() {
         fi
 
         # Strip trailing whitespace introduced when no arguments are present
-        newInterpreterLine=$(echo "$newPath $args" | sed 's/[[:space:]]*$//')
+        newInterpreterLine="$(echo "$newPath $args" | sed 's/[[:space:]]*$//')"
 
         if [ -n "$oldPath" -a "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then
             if [ -n "$newPath" -a "$newPath" != "$oldPath" ]; then
