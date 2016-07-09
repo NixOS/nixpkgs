@@ -3,11 +3,11 @@
 assert zlib != null;
 
 let
-  version = "1.6.21";
-  sha256 = "10r0xqasm8fi0dx95bpca63ab4myb8g600ypyndj2r4jxd4ii3vc";
+  version = "1.6.23";
+  sha256 = "1wb2j8sba6g2h4vmv4pwsp93q74qw4gyqqs4b7vfjmpcv9xix4kd";
   patch_src = fetchurl {
     url = "mirror://sourceforge/libpng-apng/libpng-${version}-apng.patch.gz";
-    sha256 = "0wwcc52yzjaxvpfkicz20j7yzpy02hpnsm4jjlvw74gy4qjhx9vd";
+    sha256 = "1lvsn1kmarzpn269zgykjfmxq16zrdhpd1a75nzgclx97436x408";
   };
   whenPatched = stdenv.lib.optionalString apngSupport;
 
