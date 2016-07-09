@@ -16253,6 +16253,25 @@ in modules // {
     };
   };
 
+  pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
+    name = "pathlib2-${version}";
+    version = "2.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pathlib2/${name}.tar.gz";
+      sha256 = "deb3a960c1d55868dfbcac98432358b92ba89d95029cddd4040db1f27405055c";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
+      homepage = https://pypi.python.org/pypi/pathlib2/;
+      license = with licenses; [ mit ];
+    };
+
+  };
+
   pathpy = buildPythonPackage rec {
     version = "8.1.2";
     name = "path.py-${version}";
