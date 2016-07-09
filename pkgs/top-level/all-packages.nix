@@ -10443,6 +10443,8 @@ in
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
+  smcroute = callPackage ../servers/smcroute { };
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   squid = callPackage ../servers/squid { };
@@ -13654,6 +13656,8 @@ in
     inherit (ocamlPackages_4_01_0) lablgtk ocaml camlp4;
     inherit (gnome) libgnomecanvas glib;
   };
+
+  mop = callPackage ../applications/misc/mop { };
 
   mopidy = callPackage ../applications/audio/mopidy { };
 
