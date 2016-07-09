@@ -6100,6 +6100,29 @@ in modules // {
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  flowlogs_reader = buildPythonPackage rec {
+    name = "flowlogs_reader-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flowlogs_reader/${name}.tar.gz";
+      sha256 = "0158aki6m3pkf98hpd60088qyhrfxkmybdf8hv3qfl8nb61vaiwf";
+    };
+
+    propagatedBuildInputs = with self; [
+      botocore boto3 docutils
+    ];
+    buildInputs = with self; [
+      unittest2 mock
+    ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
+      homepage = "https://github.com/obsrvbl/flowlogs-reader";
+      maintainers = with maintainers; [ cransom ];
+      license = licenses.asl20;
+    };
+  };
+
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
 
