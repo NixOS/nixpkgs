@@ -1638,6 +1638,22 @@ in modules // {
     };
   };
 
+  backports_shutil_get_terminal_size = if !(pythonOlder "3.3") then null else buildPythonPackage rec {
+    name = "backports.shutil_get_terminal_size-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports.shutil_get_terminal_size/${name}.tar.gz";
+      sha256 = "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80";
+    };
+
+    meta = {
+      description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
+      homepage = https://github.com/chrippa/backports.shutil_get_terminal_size;
+      license = with licenses; [ mit ];
+    };
+  };
+
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
