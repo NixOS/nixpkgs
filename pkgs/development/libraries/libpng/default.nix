@@ -21,16 +21,13 @@ in stdenv.mkDerivation rec {
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1";
 
   outputs = [ "dev" "out" "man" ];
+  outputBin = "dev";
 
   propagatedBuildInputs = [ zlib ];
-
-  preConfigure = "export bin=$dev";
 
   # it's hard to cross-run tests and some check programs didn't compile anyway
   makeFlags = stdenv.lib.optional (!doCheck) "check_PROGRAMS=";
   doCheck = ! stdenv ? cross;
-
-  postInstall = ''mv "$out/bin" "$dev/bin"'';
 
   passthru = { inherit zlib; };
 
