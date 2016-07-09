@@ -182,8 +182,12 @@ foreach my $relName (sort keys %symlinks) {
     my $abs = "$out" . "$extraPrefix" . "/$relName";
     next unless isInPathsToLink $relName;
     if ($target eq "") {
-        #print "creating directory $relName\n";
-        mkpath $abs or die "cannot create directory `$abs': $!";
+        if (!-d $abs) {
+            #print "creating directory $relName\n";
+            mkpath $abs or die "cannot create directory `$abs': $!";
+        } else {
+            #print "$relName exists, skipping\n";
+        }
     } else {
         #print "creating symlink $relName to $target\n";
         symlink $target, $abs ||
