@@ -6,7 +6,7 @@ rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
-    # Problems otherwise, unlike Linux even with "symlinks".
+    # Cannot use a single binary build, or it gets dynamically linked against gmp.
     singleBinary = false;
   });
 
