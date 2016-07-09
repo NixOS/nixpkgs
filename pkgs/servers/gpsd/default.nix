@@ -8,11 +8,11 @@
 # TODO: put the X11 deps behind a guiSupport parameter for headless support
 
 stdenv.mkDerivation rec {
-  name = "gpsd-3.10";
+  name = "gpsd-3.16";
 
   src = fetchurl {
     url = "http://download-mirror.savannah.gnu.org/releases/gpsd/${name}.tar.gz";
-    sha256 = "0823hl5zgwnbgm0fq3i4z34lv76cpj0k6m0zjiygiyrxrz0w4vvh";
+    sha256 = "0a90ph4qrlz5kkcz2mwkfk3cmwy9fmglp94znz2y0gsd7bqrlmq3";
   };
 
   nativeBuildInputs = [
@@ -34,18 +34,19 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-Import-LD_LIBRARY_PATH-to-allow-running-scons-check-.patch
     ./0002-Import-XML_CATALOG_FILES-to-be-able-to-validate-the-.patch
+
+    # TODO: remove the patch with the next release
+    ./0001-Use-pkgconfig-for-dbus-library.patch
   ];
 
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
-  # - chrpath=no stops the build from using 'chrpath' (which we don't have).
-  #   'chrpath' is used to be able to run the tests from the source tree, but
-  #   we use $LD_LIBRARY_PATH instead.
   buildPhase = ''
     patchShebangs .
-    sed -e "s|python_lib_dir = .*|python_lib_dir = \"$out/lib/${pythonPackages.python.libPrefix}/site-packages\"|" -i SConstruct
+    sed -e "s|systemd_dir = .*|systemd_dir = '$out/lib/systemd/system'|" -i SConstruct
     scons prefix="$out" leapfetch=no gpsd_user=${gpsdUser} gpsd_group=${gpsdGroup} \
-        systemd=yes udevdir="$out/lib/udev" chrpath=no
+        systemd=yes udevdir="$out/lib/udev" \
+        python_libdir="$out/lib/${pythonPackages.python.libPrefix}/site-packages"
   '';
 
   checkPhase = ''
