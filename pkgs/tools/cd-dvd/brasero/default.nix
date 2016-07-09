@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk3, itstool, gst_all_1, libxml2, libnotify
 , libcanberra_gtk3, intltool, makeWrapper, dvdauthor, cdrdao
-, dvdplusrwtools, cdrtools, libdvdcss, wrapGAppsHook }:
+, dvdplusrwtools, cdrtools, libdvdcss, wrapGAppsHook, hicolor_icon_theme }:
 
 let
   major = "3.12";
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook ];
 
-  buildInputs = [ gtk3 libxml2 libnotify libcanberra_gtk3 libdvdcss
+  buildInputs = [ gtk3 libxml2 libnotify libcanberra_gtk3 libdvdcss hicolor_icon_theme
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
                   gst_all_1.gst-plugins-ugly gst_all_1.gst-libav ];
