@@ -11,11 +11,11 @@ let
   ]);
 in
 stdenv.mkDerivation rec {
-  name = "dnsmasq-2.75";
+  name = "dnsmasq-2.76";
 
   src = fetchurl {
     url = "http://www.thekelleys.org.uk/dnsmasq/${name}.tar.xz";
-    sha256 = "1wa1d4if9q6k3hklv8xi06a59k3aqb7pik8rhi2l53i99hflw334";
+    sha256 = "15lzih6671gh9knzpl8mxchiml7z5lfqzr7jm2r0rjhrxs6nk4jb";
   };
 
   preBuild = ''
