@@ -1,13 +1,20 @@
-{stdenv, fetchurl, zlib, libpng, freetype, libjpeg, fontconfig}:
+{stdenv, fetchgit, zlib, libpng, freetype, libjpeg, fontconfig}:
 
 stdenv.mkDerivation {
-  name = "gd-2.0.35";
-  
-  src = fetchurl {
-    url = http://www.libgd.org/releases/gd-2.0.35.tar.bz2;
-    sha256 = "1y80lcmb8qbzf0a28841zxhq9ndfapmh2fsrqfd9lalxfj8288mz";
+  name = "gd-2.0.36pre";
+
+  src = fetchgit {
+    url = git://anonscm.debian.org/collab-maint/libgd2.git;
+    rev = "787b93feeea519d7cac40d59a264280e31c0b01c"; # master-wheezy "now"
+    sha256 = "003wm1av6l8bmcrl7w5bs1az1mw325bp5a8hxdq99l0ypw0f3xd2";
   };
-  
+  prePatch = ''
+    for p in $(cat debian/patches/series); do
+      echo "Applying '$p':"
+      patch -p1 < "debian/patches/$p"
+    done
+  '';
+
   buildInputs = [zlib libpng freetype];
 
   propagatedBuildInputs = [libjpeg fontconfig]; # urgh
