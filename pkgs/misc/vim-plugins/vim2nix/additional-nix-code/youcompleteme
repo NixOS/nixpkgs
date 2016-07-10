@@ -4,8 +4,13 @@
       llvmPackages.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
-    propogatedBuildInputs = [
+    propagatedBuildInputs = [
       rustracerd
+    ];
+
+    patches = [
+      ./patches/youcompleteme/1-top-cmake.patch
+      ./patches/youcompleteme/2-ycm-cmake.patch
     ];
 
     buildPhase = ''
