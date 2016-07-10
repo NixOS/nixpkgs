@@ -2,14 +2,14 @@
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz
 , libX11, quantumdepth ? 8}:
 
-let version = "1.3.21"; in
+let version = "1.3.24"; in
 
 stdenv.mkDerivation {
   name = "graphicsmagick-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "07rwpxy62r9m4r2cg6yll2nr698mxyvbji8vgsivcxhpk56k0ich";
+    sha256 = "1q40w5hcl8rcpszm0r7rpr3a9lj390p39zfvavkvlgxyyk7bmgsj";
   };
 
   configureFlags = "--enable-shared --with-quantum-depth=" + toString quantumdepth;
