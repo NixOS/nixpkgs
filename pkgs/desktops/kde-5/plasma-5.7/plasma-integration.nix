@@ -1,5 +1,5 @@
 { plasmaPackage, extra-cmake-modules
-, kconfig, kconfigwidgets, kiconthemes, kio, kwayland
+, breeze-qt5, kconfig, kconfigwidgets, kiconthemes, kio, kwayland
 , libXcursor
 }:
 
@@ -11,7 +11,7 @@ plasmaPackage {
     extra-cmake-modules
   ];
   buildInputs = [
-    kconfig kconfigwidgets kiconthemes kio kwayland
+    breeze-qt5 kconfig kconfigwidgets kiconthemes kio kwayland
     libXcursor
   ];
 }
