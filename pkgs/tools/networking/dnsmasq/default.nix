@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   postBuild = optionalString stdenv.isLinux ''
-    make -C contrib/wrt
+    make -C contrib/lease-tools
   '';
 
   # XXX: Does the systemd service definition really belong here when our NixOS
@@ -41,8 +41,9 @@ stdenv.mkDerivation rec {
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
   '' + optionalString stdenv.isLinux ''
     install -Dm644 dbus/dnsmasq.conf $out/etc/dbus-1/system.d/dnsmasq.conf
-    install -Dm755 contrib/wrt/dhcp_lease_time $out/bin/dhcp_lease_time
-    install -Dm755 contrib/wrt/dhcp_release $out/bin/dhcp_release
+    install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
+    install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release
+    install -Dm755 contrib/lease-tools/dhcp_release6 $out/bin/dhcp_release6
 
     mkdir -p $out/share/dbus-1/system-services
     cat <<END > $out/share/dbus-1/system-services/uk.org.thekelleys.dnsmasq.service
@@ -63,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.thekelleys.org.uk/dnsmasq/doc.html;
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ eelco ];
+    maintainers = with maintainers; [ eelco fpletz ];
   };
 }
