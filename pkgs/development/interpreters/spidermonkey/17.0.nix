@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isArm; # fails on v7 with "Alignment trap: not handling instruction" in kernel log
+  doCheck = true;
   preCheck = ''
     rm jit-test/tests/sunspider/check-date-format-tofte.js    # https://bugzil.la/600522
 
