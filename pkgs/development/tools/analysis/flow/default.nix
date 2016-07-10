@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices }:
+{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices, git, mercurial }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.22.1";
+  version = "0.28.0";
   name = "flow-${version}";
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "11d04g8rvjv2q79pmrjjx8lmmm1ix8kih7wc0adln0ap5123ph46";
+    sha256 = "1xryv1366zc385r82r6n832xkaqcm63zs1baizl02qchfzfa3am2";
   };
 
   installPhase = ''
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     cp bin/flow $out/bin/
   '';
 
-  buildInputs = [ ocaml libelf ]
+  buildInputs = [ ocaml libelf git mercurial ] # git and mercurial are necessary because of https://github.com/facebook/flow/issues/1981
     ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
 
   meta = with stdenv.lib; {
