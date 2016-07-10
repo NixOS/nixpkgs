@@ -6,7 +6,7 @@ Index: kiconthemes-5.17.0/src/kicontheme.cpp
  // static
  QString KIconTheme::defaultThemeName()
  {
--    return QStringLiteral("oxygen");
+-    return QStringLiteral("hicolor");
 +    return QStringLiteral("breeze");
  }
  
