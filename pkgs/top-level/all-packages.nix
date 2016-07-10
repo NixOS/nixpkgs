@@ -13502,6 +13502,8 @@ in
   };
   ledger = self.ledger3;
 
+  lighthouse = callPackage ../applications/misc/lighthouse { };
+
   lighttable = callPackage ../applications/editors/lighttable {};
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
