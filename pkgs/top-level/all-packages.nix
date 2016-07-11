@@ -10596,6 +10596,8 @@ let
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
+    ena = callPackage ../os-specific/linux/ena {};
+
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
