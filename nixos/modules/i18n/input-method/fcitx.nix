@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.i18n.inputMethod.fcitx;
-  fcitxPackage = pkgs.fcitx-with-plugins.override { plugins = cfg.engines; };
+  fcitxPackage = pkgs.fcitx.override { plugins = cfg.engines; };
   fcitxEngine = types.package // {
     name  = "fcitx-engine";
     check = x: (lib.types.package.check x) && (attrByPath ["meta" "isFcitxEngine"] false x);

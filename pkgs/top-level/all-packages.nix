@@ -1496,7 +1496,9 @@ in
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
-  fcitx = callPackage ../tools/inputmethods/fcitx { };
+  fcitx = callPackage ../tools/inputmethods/fcitx {
+    plugins = [];
+  };
 
   fcitx-engines = recurseIntoAttrs {
 
@@ -1519,10 +1521,6 @@ in
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
-
-  fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
-    plugins = [ ];
-  };
 
   fcppt = callPackage ../development/libraries/fcppt/default.nix { };
 
