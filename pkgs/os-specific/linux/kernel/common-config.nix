@@ -424,6 +424,7 @@ with stdenv.lib;
       PARAVIRT_GUEST? y
     '')
   }
+  PARAVIRT_SPINLOCKS? y
   KVM_APIC_ARCHITECTURE y
   KVM_ASYNC_PF y
   ${optionalString (versionOlder version "3.7") ''
