@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
+    maintainers = [ maintainers.adolfogc ];
     platforms = platforms.unix;
   };
 }
