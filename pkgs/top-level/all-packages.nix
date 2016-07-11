@@ -11091,6 +11091,8 @@ in
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
+    wireguard = callPackage ../os-specific/linux/wireguard {};
+
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
     zfs = callPackage ../os-specific/linux/zfs {
