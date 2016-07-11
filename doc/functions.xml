@@ -104,7 +104,7 @@ in ...</programlisting>
     based on an existing one by overriding the original's attributes with
     the attribute set produced by the specified function.
     This function is available on all
-    derivations defined using the <varname>makeOverridable<varname> function.
+    derivations defined using the <varname>makeOverridable</varname> function.
     Most standard derivation-producing functions, such as
     <varname>stdenv.mkDerivation</varname>, are defined using this
     function, which means most packages in the nixpkgs expression,
@@ -134,18 +134,20 @@ in ...</programlisting>
     The argument <varname>oldAttrs</varname> is used to refer to the attribute set of
     the original derivation.
   </para>
-  
-  <para>
-    If a package's attributes use antiquotation, like <varname>name</varname> in
-    <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>,
-    the attribute's value is evaluated to
-    <varname>"mirror://gnu/hello/hello-2.10.tar.gz</varname> *before* it is
-    overridden by the <varname>overrideDerivation</varname> function. This means
-    that overriding the <varname>name</varname> attribute, in this example,
-    *will not* change the value of the <varname>url</varname> attribute.
-    Instead, we need to override both the <varname>name</varname> *and*
-    <varname>url</varname> attributes.
-  </para>
+
+  <note>
+    <para>
+      A package's attributes are evaluated *before* being modified by
+      the <varname>overrideDerivation</varname> function.
+      For example, the <varname>name</varname> attribute reference
+      in <varname>url = "mirror://gnu/hello/${name}.tar.gz";</varname>
+      is filled-in *before* the <varname>overrideDerivation</varname> function
+      modifies the attribute set. This means that overriding the
+      <varname>name</varname> attribute, in this example, *will not* change the
+      value of the <varname>url</varname> attribute. Instead, we need to override
+      both the <varname>name</varname> *and* <varname>url</varname> attributes.
+    </para>
+  </note>
 
 </section>
 
