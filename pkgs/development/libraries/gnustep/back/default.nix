@@ -17,6 +17,6 @@ gsmakeDerivation {
   };
   buildInputs = [ cairo base gui freetype pkgconfig x11 ];
   meta = {
-    description = "GNUstep-back is a generic backend for GNUstep.";
+    description = "A generic backend for GNUstep";
   };
 }

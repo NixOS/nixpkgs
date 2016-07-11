@@ -12,6 +12,6 @@ gsmakeDerivation {
   buildInputs = [ back base gui ];
 #  propagatedBuildInputs = [ gnustep_back gnustep_base gnustep_gui ];
   meta = {
-    description = "System Preferences allows to manage the settings of many aspects of the GNUstep environment and its applications";
+    description = "The settings manager for the GNUstep environment and its applications";
   };
 }

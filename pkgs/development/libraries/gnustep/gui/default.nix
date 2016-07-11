@@ -11,6 +11,6 @@ gsmakeDerivation {
   buildInputs = [ base ];
   patches = [ ./fixup-all.patch ];
   meta = {
-    description = "GNUstep-gui is a GUI class library of GNUstep.";
+    description = "A GUI class library of GNUstep";
   };
 }

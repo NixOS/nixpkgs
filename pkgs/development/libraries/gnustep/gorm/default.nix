@@ -12,6 +12,6 @@ gsmakeDerivation {
   buildInputs = [ base back gui ];
 
   meta = {
-    description = "Gorm stands for Graphical Object Relationship Modeller and is an easy-to-use interface designer for GNUstep";
+    description = "Graphical Object Relationship Modeller is an easy-to-use interface designer for GNUstep";
   };
 }

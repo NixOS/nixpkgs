@@ -33,6 +33,6 @@ gsmakeDerivation {
   ];
   patches = [ ./fixup-paths.patch ];
   meta = {
-    description = "GNUstep-base is an implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa.";
+    description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
   };
 }

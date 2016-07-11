@@ -18,6 +18,6 @@ gsmakeDerivation {
   propagatedBuildInputs = [ base back gui gnumake gdb gorm ];
   
   meta = {
-    description = "ProjectCenter is GNUstep's integrated development environment (IDE) and allows a rapid development and easy managment of ProjectCenter running on GNUstep applications, tools and frameworks.";
+    description = "GNUstep's integrated development environment";
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fixup-paths.patch ];
   setupHook = ./setup-hook.sh;
   meta = {
-    description = "GNUstep-make is a build manager for GNUstep.";
+    description = "A build manager for GNUstep";
 
     homepage = http://gnustep.org/;
 

@@ -19,6 +19,6 @@ gsmakeDerivation {
   buildInputs = [ back base gui system_preferences ];
   configureFlags = [ "--with-inotify" ];
   meta = {
-    description = "GWorkspace is a workspace manager for GNUstep";
+    description = "A workspace manager for GNUstep";
   };
 }
