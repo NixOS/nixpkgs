@@ -102,6 +102,6 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
     homepage = "http://www.winehq.org/";
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = with stdenv.lib.maintainers; [ avnik raskin ];
   };
 })
