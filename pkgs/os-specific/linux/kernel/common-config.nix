@@ -10,7 +10,7 @@
     `versionAtLeast`.
 
   Then do test your change by building all the kernels (or at least
-  their configs) in nixpkgs or else you will guarantee lots and lots
+  their configs) in Nixpkgs or else you will guarantee lots and lots
   of pain to users trying to switch to an older kernel because of some
   hardware problems with a new one.
 
@@ -294,8 +294,6 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.4") ''
     B43_PCMCIA? y
   ''}
-  BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
-  BLK_DEV_IDEACPI y # IDE ACPI support
   BLK_DEV_INTEGRITY y
   BSD_PROCESS_ACCT_V3 y
   BT_HCIUART_BCSP? y
@@ -309,7 +307,7 @@ with stdenv.lib;
   FHANDLE y # used by systemd
   FRONTSWAP y
   FUSION y # Fusion MPT device support
-  IDE_GD_ATAPI y # ATAPI floppy support
+  IDE n # deprecated IDE support
   ${optionalString (versionAtLeast version "4.3") ''
     IDLE_PAGE_TRACKING y
   ''}
@@ -321,7 +319,6 @@ with stdenv.lib;
   KEXEC_FILE y
   KEXEC_JUMP y
   LDM_PARTITION y # Windows Logical Disk Manager (Dynamic Disk) support
-  LEDS_TRIGGER_IDE_DISK y # LED IDE Disk Trigger
   LOGIRUMBLEPAD2_FF y # Logitech Rumblepad 2 force feedback
   LOGO n # not needed
   MEDIA_ATTACH y
