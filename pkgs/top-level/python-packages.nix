@@ -1638,6 +1638,22 @@ in modules // {
     };
   };
 
+  backports_shutil_get_terminal_size = if !(pythonOlder "3.3") then null else buildPythonPackage rec {
+    name = "backports.shutil_get_terminal_size-${version}";
+    version = "1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports.shutil_get_terminal_size/${name}.tar.gz";
+      sha256 = "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80";
+    };
+
+    meta = {
+      description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
+      homepage = https://github.com/chrippa/backports.shutil_get_terminal_size;
+      license = with licenses; [ mit ];
+    };
+  };
+
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
 
@@ -6086,6 +6102,45 @@ in modules // {
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  Flootty = buildPythonPackage rec {
+    name = "Flootty-3.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flootty/${name}.tar.gz";
+      sha256 = "14n2q2k388xbmp5rda5ss879bg5cbibk4zzz7c8mrjsmxhgagmmg";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Floobits collaborative terminal";
+      homepage = "https://github.com/Floobits/flootty/";
+      maintainers = with maintainers; [ garbas ];
+      license = licenses.asl20;
+    };
+  };
+
+  flowlogs_reader = buildPythonPackage rec {
+    name = "flowlogs_reader-1.0.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/f/flowlogs_reader/${name}.tar.gz";
+      sha256 = "0158aki6m3pkf98hpd60088qyhrfxkmybdf8hv3qfl8nb61vaiwf";
+    };
+
+    propagatedBuildInputs = with self; [
+      botocore boto3 docutils
+    ];
+    buildInputs = with self; [
+      unittest2 mock
+    ];
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";
+      homepage = "https://github.com/obsrvbl/flowlogs-reader";
+      maintainers = with maintainers; [ cransom ];
+      license = licenses.asl20;
+    };
+  };
+
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
 
@@ -9506,6 +9561,22 @@ in modules // {
     };
   };
 
+  exifread = buildPythonPackage rec {
+    name = "ExifRead-2.1.2";
+
+    meta = {
+      description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";
+      homepage    = "https://github.com/ianare/exif-py";
+      license     = "BSD";
+      maintainers = with maintainers; [ vozz ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/E/ExifRead/${name}.tar.gz";
+      sha256 = "1b90jf6m9vxh9nanhpyvqdq7hmfx5iggw1l8kq10jrs6xgr49qkr";
+    };
+  };
+
   fastimport = buildPythonPackage rec {
     name = "fastimport-${version}";
     version = "0.9.4";
@@ -11239,6 +11310,21 @@ in modules // {
     };
   };
 
+  inifile = buildPythonPackage rec {
+    name = "inifile-0.3";
+
+    meta = {
+      description = "A small INI library for Python";
+      homepage    = "https://github.com/mitsuhiko/python-inifile";
+      license     = "BSD";
+      maintainers = with maintainers; [ vozz ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/i/inifile/${name}.tar.gz";
+      sha256 = "0zgd53czc1irwx6b5zip8xlmyfr40hz2pd498d8yv61znj6lm16h";
+    };
+  };
 
   interruptingcow = buildPythonPackage rec {
     name = "interruptingcow-${version}";
@@ -11365,7 +11451,8 @@ in modules // {
     buildInputs = with self; [ nose pkgs.glibcLocales pygments ] ++ optionals isPy27 [mock];
 
     propagatedBuildInputs = with self;
-      [decorator pickleshare prompt_toolkit simplegeneric traitlets requests2 pexpect sqlite3]
+      [ backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
+      simplegeneric traitlets requests2 pathlib2 pexpect sqlite3 ]
       ++ optionals stdenv.isDarwin [appnope];
 
     LC_ALL="en_US.UTF-8";
@@ -11973,6 +12060,34 @@ in modules // {
     };
   };
 
+  lektor = buildPythonPackage rec {
+    name = "lektor-${version}";
+
+    version = "2.3";
+
+    src = pkgs.fetchgit {
+      url = "https://github.com/lektor/lektor";
+      rev = "refs/tags/${version}";
+      sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
+    };
+
+    LC_ALL="en_US.UTF-8";
+
+    meta = {
+      description = "A static content management system";
+      homepage    = "https://www.getlektor.com/";
+      license     = "BSD";
+      maintainers = with maintainers; [ vozz ];
+    };
+
+    # No tests included in archive
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [
+      click watchdog exifread requests2 mistune inifile Babel jinja2
+      flask pyopenssl ndg-httpsclient pkgs.glibcLocales
+    ];
+  };
 
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.18.0";
@@ -16283,6 +16398,25 @@ in modules // {
     };
   };
 
+  pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
+    name = "pathlib2-${version}";
+    version = "2.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pathlib2/${name}.tar.gz";
+      sha256 = "deb3a960c1d55868dfbcac98432358b92ba89d95029cddd4040db1f27405055c";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
+      homepage = https://pypi.python.org/pypi/pathlib2/;
+      license = with licenses; [ mit ];
+    };
+
+  };
+
   pathpy = buildPythonPackage rec {
     version = "8.1.2";
     name = "path.py-${version}";
@@ -17128,6 +17262,9 @@ in modules // {
       sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
       url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
+
+    # No tests included in archive
+    doCheck = false;
 
     #Only <3.4 expressly supported.
     disabled = isPy35;
@@ -28405,4 +28542,5 @@ in modules // {
     };
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
+
 }

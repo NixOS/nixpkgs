@@ -8,6 +8,7 @@
 , libunique
 , intltool
 , gst_plugins ? with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ]
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -35,16 +36,12 @@ stdenv.mkDerivation rec {
     libxml2
     libunique
     intltool
+    wrapGAppsHook
   ];
 
   propagatedUserEnvPkgs = [ gnome.GConf.out ];
 
   enableParallelBuilding = true;
-
-  preFixup = ''
-    wrapProgram $out/bin/alarm-clock-applet \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://alarm-clock.pseudoberries.com/;

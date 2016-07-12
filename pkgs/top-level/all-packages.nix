@@ -1497,7 +1497,9 @@ in
 
   fatsort = callPackage ../tools/filesystems/fatsort { };
 
-  fcitx = callPackage ../tools/inputmethods/fcitx { };
+  fcitx = callPackage ../tools/inputmethods/fcitx {
+    plugins = [];
+  };
 
   fcitx-engines = recurseIntoAttrs {
 
@@ -1520,10 +1522,6 @@ in
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
-
-  fcitx-with-plugins = callPackage ../tools/inputmethods/fcitx/wrapper.nix {
-    plugins = [ ];
-  };
 
   fcppt = callPackage ../development/libraries/fcppt/default.nix { };
 
@@ -2369,6 +2367,8 @@ in
 
   libqmi = callPackage ../development/libraries/libqmi { };
 
+  libqrencode = callPackage ../development/libraries/libqrencode { };
+  
   libmbim = callPackage ../development/libraries/libmbim { };
 
   libmongo-client = callPackage ../development/libraries/libmongo-client { };
@@ -3073,6 +3073,8 @@ in
     libpng = libpng12;
   };
 
+  pngpp = callPackage ../development/libraries/png++ { };
+
   pngquant = callPackage ../tools/graphics/pngquant { };
 
   podiff = callPackage ../tools/text/podiff { };
@@ -3231,6 +3233,14 @@ in
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   recordmydesktop = callPackage ../applications/video/recordmydesktop { };
+
+  gtk-recordmydesktop = callPackage ../applications/video/recordmydesktop/gtk.nix {
+    jack2 = jack2Full;
+  };
+
+  qt-recordmydesktop = callPackage ../applications/video/recordmydesktop/qt.nix {
+    jack2 = jack2Full;
+  };
 
   recutils = callPackage ../tools/misc/recutils { };
 
@@ -5966,6 +5976,8 @@ in
 
   srecord = callPackage ../development/tools/misc/srecord { };
 
+  srelay = callPackage ../tools/networking/srelay { };
+
   xidel = callPackage ../tools/text/xidel { };
 
 
@@ -6674,6 +6686,8 @@ in
   };
 
   grabserial = callPackage ../development/tools/grabserial { };
+
+  mypy-lang = callPackage ../development/tools/mypy-lang { };
 
 
   ### DEVELOPMENT / LIBRARIES
@@ -10424,6 +10438,8 @@ in
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
+  smcroute = callPackage ../servers/smcroute { };
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   squid = callPackage ../servers/squid { };
@@ -11013,6 +11029,8 @@ in
 
     ixgbevf = callPackage ../os-specific/linux/ixgbevf {};
 
+    ena = callPackage ../os-specific/linux/ena {};
+
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
@@ -11088,6 +11106,8 @@ in
     });
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
+
+    wireguard = callPackage ../os-specific/linux/wireguard {};
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
@@ -13654,6 +13674,8 @@ in
     inherit (gnome) libgnomecanvas glib;
   };
 
+  mop = callPackage ../applications/misc/mop { };
+
   mopidy = callPackage ../applications/audio/mopidy { };
 
   mopidy-gmusic = callPackage ../applications/audio/mopidy-gmusic { };
@@ -15594,7 +15616,7 @@ in
   soi = callPackage ../games/soi {
     lua = lua5_1;
   };
-  
+
   solarus = callPackage ../games/solarus { };
 
   # You still can override by passing more arguments.
@@ -15810,14 +15832,7 @@ in
   gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
-  gnome3 = self.gnome3_18 // {
-    shellExtensions = {
-      impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix {};
-      system-monitor = callPackage ../desktops/gnome-3/extensions/system-monitor.nix {};
-      volume-mixer = callPackage ../desktops/gnome-3/extensions/volume-mixer.nix {};
-      workspace-grid = callPackage ../desktops/gnome-3/extensions/workspace-grid.nix {};
-    };
-  };
+  gnome3 = self.gnome3_20;
 
   gnome = recurseIntoAttrs self.gnome2;
 

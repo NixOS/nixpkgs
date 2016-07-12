@@ -6,8 +6,8 @@ rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
-    # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
-    singleBinary = "symlinks";
+    # Cannot use a single binary build, or it gets dynamically linked against gmp.
+    singleBinary = false;
   });
 
   # Avoid debugging larger changes for now.

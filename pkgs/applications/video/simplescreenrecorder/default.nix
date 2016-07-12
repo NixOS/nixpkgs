@@ -11,7 +11,18 @@ stdenv.mkDerivation rec {
     sha256 = "1d89ncspjd8c4mckf0nb6y3hrxpv4rjpbj868pznhvfmdgr5nvql";
   };
 
-  postPatch = "sed '1i#include <random>' -i src/Benchmark.cpp";
+  patches = [ ./fix-paths.patch ];
+
+  postPatch = ''
+    # #455
+    sed '1i#include <random>' -i src/Benchmark.cpp
+
+    for i in scripts/ssr-glinject src/AV/Input/GLInjectInput.cpp; do
+      substituteInPlace $i \
+        --subst-var out \
+        --subst-var-by sh ${stdenv.shell}
+    done
+  '';
 
   buildInputs = [
     alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa pkgconfig
