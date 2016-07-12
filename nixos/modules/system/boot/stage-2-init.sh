@@ -2,6 +2,8 @@
 
 systemConfig=@systemConfig@
 
+initDaemon=systemd
+
 export HOME=/root
 
 
@@ -82,6 +84,9 @@ for o in $(cat /proc/cmdline); do
             set -- $(IFS==; echo $o)
             resumeDevice=$2
             ;;
+        init2=*)
+            set -- $(IFS==; echo $o)
+            initDaemon=$2
     esac
 done
 
@@ -209,4 +214,4 @@ echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd \
     MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
-    exec systemd
+    exec $initDaemon
