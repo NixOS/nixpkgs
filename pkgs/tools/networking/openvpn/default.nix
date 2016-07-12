@@ -10,13 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qv1flcz4q4mb7zpkxsnlmpvrv3s9gw7xvprjk7n2pnk9x1s85wi";
   };
 
-  patches = [
-    # included in next release
-    (fetchpatch {
-      url = https://github.com/OpenVPN/openvpn/commit/9dfc2309c6b4143892137844197f5f84755f6580.patch;
-      sha256 = "1mmqx5zjcb0kjaknzzklb8n07f4spx534bl07abnigvivvs4hca9";
-    })
-  ] ++ optional stdenv.isLinux ./systemd-notify.patch;
+  patches = optional stdenv.isLinux ./systemd-notify.patch;
 
   buildInputs = [ lzo openssl pkgconfig ]
                   ++ optionals stdenv.isLinux [ pam systemd iproute ];
