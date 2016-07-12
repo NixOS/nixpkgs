@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.1.6";
+  version = "3.1.8";
   src = fetchurl {
     url = "https://downloads.puppetlabs.com/facter/${name}.tar.gz";
-    sha256 = "1kv4k9zqpsiw362kk1rw1a4sixd0pmnh57ghd4k4pffr2dkmdfsv";
+    sha256 = "1fhfjf5bm5kyjiady14fxhpp7hdrkgx56vsvdbqj82km0xqcxpj9";
   };
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];
