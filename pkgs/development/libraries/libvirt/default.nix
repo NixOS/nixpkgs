@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    libpciaccess devicemapper lvm2 utillinux systemd.udev.lib libcap_ng
+    libpciaccess devicemapper lvm2 utillinux systemd libcap_ng
     libnl numad numactl xen zfs
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
      libiconv gmp
   ];
 
   preConfigure = stdenv.lib.optionalString stdenv.isLinux ''
-    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd.udev.bin}/bin:$PATH
+    PATH=${iproute}/sbin:${iptables}/sbin:${ebtables}/sbin:${lvm2}/sbin:${systemd}/bin:$PATH
     substituteInPlace configure \
       --replace 'as_dummy="/bin:/usr/bin:/usr/sbin"' 'as_dummy="${numad}/bin"'
   '' + ''
