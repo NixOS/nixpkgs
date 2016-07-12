@@ -20,7 +20,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) devShmSize runSize;
+    inherit (config.boot) devShmSize runSize stage2Init;
     inherit (config.nix) readOnlyStore;
     inherit (config.networking) useHostResolvConf;
     ttyGid = config.ids.gids.tty;
@@ -79,6 +79,15 @@ in
         description = ''
           Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
+        '';
+      };
+
+      stage2Init = mkOption {
+        default = "/run/current-system/systemd/lib/systemd/systemd";
+        type = types.str;
+        internal = true;
+        description = ''
+          Init daemon which is executed at the end of stage 2 init.
         '';
       };
 
