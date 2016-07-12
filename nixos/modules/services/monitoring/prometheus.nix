@@ -396,7 +396,7 @@ in {
       after    = [ "network.target" ];
       script = ''
         #!/bin/sh
-        exec ${pkgs.prometheus}/bin/prometheus \
+        exec ${pkgs.prometheus.bin}/bin/prometheus \
           ${concatStringsSep " \\\n  " cmdlineArgs}
       '';
       serviceConfig = {
