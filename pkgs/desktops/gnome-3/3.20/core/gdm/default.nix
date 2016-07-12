@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--sysconfdir=/etc"
                      "--localstatedir=/var"
                      "--with-systemd=yes"
-                     "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
+                     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+                     "--without-playmouth" ];
 
   buildInputs = [ pkgconfig glib itstool libxml2 intltool autoreconfHook
                   accountsservice gnome3.dconf systemd
@@ -25,11 +26,6 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace daemon/gdm-simple-slave.c --replace 'BINDIR "/gnome-session' '"${gnome_session}/bin/gnome-session'
   '';
-
-  # Disable Access Control because our X does not support FamilyServerInterpreted yet
-  patches = [ ./xserver_path.patch ./sessions_dir.patch
-              ./disable_x_access_control.patch ./no-dbus-launch.patch
-              ./libsystemd.patch ];
 
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
 
