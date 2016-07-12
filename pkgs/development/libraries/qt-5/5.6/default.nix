@@ -97,6 +97,7 @@ let
       /* qtwayland = not packaged */
       qtwebchannel = callPackage ./qtwebchannel.nix {};
       qtwebengine = callPackage ./qtwebengine.nix {};
+      qtwebkit = callPackage ./qtwebkit/default.nix {};
       qtwebsockets = callPackage ./qtwebsockets.nix {};
       /* qtwinextras = not packaged */
       qtx11extras = callPackage ./qtx11extras.nix {};
