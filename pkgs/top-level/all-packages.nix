@@ -11369,6 +11369,8 @@ in
       udev.lib = libudev.out; # ${systemd.udev.lib}/lib/libudev.*
     };
 
+  systemd-bootchart = callPackage ../os-specific/linux/systemd/bootchart.nix { };
+
   # standalone cryptsetup generator for systemd
   systemd-cryptsetup-generator = callPackage ../os-specific/linux/systemd/cryptsetup-generator.nix { };
 
