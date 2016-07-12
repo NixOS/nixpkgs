@@ -10938,7 +10938,10 @@ in
   };
 
   linux_4_1 = callPackage ../os-specific/linux/kernel/linux-4.1.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10947,7 +10950,11 @@ in
   };
 
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10956,7 +10963,11 @@ in
   };
 
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10965,7 +10976,11 @@ in
   };
 
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
