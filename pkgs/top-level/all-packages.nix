@@ -13217,6 +13217,8 @@ in
 
   hugin = callPackage ../applications/graphics/hugin { };
 
+  hugo = callPackage ../applications/misc/hugo { };
+
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
