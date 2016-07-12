@@ -6100,6 +6100,22 @@ in modules // {
     propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
   });
 
+  Flootty = buildPythonPackage rec {
+    name = "Flootty-3.2.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/F/Flootty/${name}.tar.gz";
+      sha256 = "14n2q2k388xbmp5rda5ss879bg5cbibk4zzz7c8mrjsmxhgagmmg";
+    };
+
+    meta = with pkgs.stdenv.lib; {
+      description = "Floobits collaborative terminal";
+      homepage = "https://github.com/Floobits/flootty/";
+      maintainers = with maintainers; [ garbas ];
+      license = licenses.asl20;
+    };
+  };
+
   flowlogs_reader = buildPythonPackage rec {
     name = "flowlogs_reader-1.0.0";
 
