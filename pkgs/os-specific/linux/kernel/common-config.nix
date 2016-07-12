@@ -39,7 +39,8 @@ with stdenv.lib;
     DEBUG_STACKOVERFLOW n
   ''}
   RCU_TORTURE_TEST n
-  SCHEDSTATS n
+  SCHEDSTATS y
+  SCHED_DEBUG y
   DETECT_HUNG_TASK y
 
   # Unix domain sockets.
