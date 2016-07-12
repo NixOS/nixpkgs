@@ -13,8 +13,11 @@ echo "NixOS version is $version ($major)"
 
 rm -f ec2-amis.nix
 
+types="hvm pv"
+stores="ebs s3"
+regions="eu-west-1 eu-central-1 us-east-1 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 sa-east-1"
 
-for type in hvm pv; do
+for type in $types; do
     link=$stateDir/$type
     imageFile=$link/nixos.qcow2
     system=x86_64-linux
@@ -31,7 +34,7 @@ for type in hvm pv; do
             --arg configuration "{ imports = [ <nixpkgs/nixos/maintainers/scripts/ec2/amazon-image.nix> ]; ec2.hvm = $hvmFlag; }"
     fi
 
-    for store in ebs s3; do
+    for store in $stores; do
 
         bucket=nixos-amis
         bucketDir="$version-$type-$store"
@@ -39,7 +42,7 @@ for type in hvm pv; do
         prevAmi=
         prevRegion=
 
-        for region in eu-west-1 eu-central-1 us-east-1 us-west-1 us-west-2 ap-southeast-1 ap-southeast-2 ap-northeast-1 sa-east-1; do
+        for region in $regions; do
 
             name=nixos-$version-$arch-$type-$store
             description="NixOS $system $version ($type-$store)"
@@ -226,25 +229,43 @@ for type in hvm pv; do
 
             echo "region = $region, type = $type, store = $store, ami = $ami"
 
-            if [ -z "$NO_WAIT" -o -z "$prevAmi" ]; then
-                echo -n "waiting for AMI..."
-                while true; do
-                    status=$(aws ec2 describe-images --image-ids "$ami" --region "$region" | jq -r .Images[0].State)
-                    if [ "$status" = available ]; then break; fi
-                    sleep 10
-                    echo -n '.'
-                done
-                echo
-
-                # Make the image public.
-                aws ec2 modify-image-attribute \
-                    --image-id "$ami" --region "$region" --launch-permission 'Add={Group=all}'
-            fi
-
             if [ -z "$prevAmi" ]; then
                 prevAmi="$ami"
                 prevRegion="$region"
             fi
+        done
+
+    done
+
+done
+
+for type in $types; do
+    link=$stateDir/$type
+    system=x86_64-linux
+    arch=x86_64
+
+    for store in $stores; do
+
+        for region in $regions; do
+
+            name=nixos-$version-$arch-$type-$store
+            amiFile=$stateDir/$region.$type.$store.ami-id
+            ami=$(cat $amiFile)
+
+            echo "region = $region, type = $type, store = $store, ami = $ami"
+
+            echo -n "waiting for AMI..."
+            while true; do
+                status=$(aws ec2 describe-images --image-ids "$ami" --region "$region" | jq -r .Images[0].State)
+                if [ "$status" = available ]; then break; fi
+                sleep 10
+                echo -n '.'
+            done
+            echo
+
+            # Make the image public.
+            aws ec2 modify-image-attribute \
+                --image-id "$ami" --region "$region" --launch-permission 'Add={Group=all}'
 
             echo "  \"$major\".$region.$type-$store = \"$ami\";" >> ec2-amis.nix
         done
