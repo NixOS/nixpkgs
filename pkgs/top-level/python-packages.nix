@@ -1151,11 +1151,13 @@ in modules // {
 
   awscli = buildPythonPackage rec {
     name = "awscli-${version}";
-    version = "1.10.18";
+    version = "1.10.46";
+
+    namePrefix = "";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/a/awscli/${name}.tar.gz";
-      sha256 = "0vdj7p4cwsbzhanhp5f2c0b0qr2gh76dyanji73avvj4jvdb5d4g";
+      url = "mirror://pypi/a/awscli/${name}.tar.gz";
+      sha256 = "1d2xjhdmjna9zxa4ybk7cjypib5yq2gd3w5fgpb4lfs6bh3mr554";
     };
 
     # No tests included
@@ -2382,12 +2384,12 @@ in modules // {
   };
 
   botocore = buildPythonPackage rec {
-    version = "1.4.9"; # This version is required by awscli
+    version = "1.4.36"; # This version is required by awscli
     name = "botocore-${version}";
 
     src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/b/botocore/${name}.tar.gz";
-      sha256 = "07rp24lnpjlk0c889g0d8y2ykc711gi04w715nkm9mv734ndsman";
+      url = "mirror://pypi/b/botocore/${name}.tar.gz";
+      sha256 = "0mkydnbbn0x97nfzwqia68zw2y5j7i9yzpq5kasvc80n2z999h39";
     };
 
     propagatedBuildInputs =
