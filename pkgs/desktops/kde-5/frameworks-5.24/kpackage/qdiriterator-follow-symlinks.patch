@@ -1,0 +1,26 @@
+Index: kpackage-5.18.0/src/kpackage/packageloader.cpp
+===================================================================
+--- kpackage-5.18.0.orig/src/kpackage/packageloader.cpp
++++ kpackage-5.18.0/src/kpackage/packageloader.cpp
+@@ -241,7 +241,7 @@ QList<KPluginMetaData> PackageLoader::li
+         } else {
+             //qDebug() << "Not cached";
+             // If there's no cache file, fall back to listing the directory
+-            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories;
++            const QDirIterator::IteratorFlags flags = QDirIterator::Subdirectories | QDirIterator::FollowSymlinks;
+             const QStringList nameFilters = QStringList(QStringLiteral("metadata.desktop")) << QStringLiteral("metadata.json");
+ 
+             QDirIterator it(plugindir, nameFilters, QDir::Files, flags);
+Index: kpackage-5.18.0/src/kpackage/private/packagejobthread.cpp
+===================================================================
+--- kpackage-5.18.0.orig/src/kpackage/private/packagejobthread.cpp
++++ kpackage-5.18.0/src/kpackage/private/packagejobthread.cpp
+@@ -146,7 +146,7 @@ bool indexDirectory(const QString& dir,
+ 
+     QJsonArray plugins;
+ 
+-    QDirIterator it(dir, *metaDataFiles, QDir::Files, QDirIterator::Subdirectories);
++    QDirIterator it(dir, *metaDataFiles, QDir::Files, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+     while (it.hasNext()) {
+         it.next();
+         const QString path = it.fileInfo().absoluteFilePath();
