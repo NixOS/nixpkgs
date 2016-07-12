@@ -1,0 +1,13 @@
+diff --git a/plugins/kdecorations/aurorae/src/aurorae.cpp b/plugins/kdecorations/aurorae/src/aurorae.cpp
+index bb74f19..70737a6 100644
+--- a/plugins/kdecorations/aurorae/src/aurorae.cpp
++++ b/plugins/kdecorations/aurorae/src/aurorae.cpp
+@@ -211,7 +211,7 @@ void Helper::init()
+     // so let's try to locate our plugin:
+     QString pluginPath;
+     for (const QString &path : m_engine->importPathList()) {
+-        QDirIterator it(path, QDirIterator::Subdirectories);
++        QDirIterator it(path, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+         while (it.hasNext()) {
+             it.next();
+             QFileInfo fileInfo = it.fileInfo();

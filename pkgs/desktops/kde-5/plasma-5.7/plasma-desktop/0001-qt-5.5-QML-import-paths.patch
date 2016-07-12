@@ -1,0 +1,69 @@
+From a91568d7c6635f4d66bb4e8ebaf2666c24980312 Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Sat, 14 May 2016 12:54:27 +0200
+Subject: [PATCH] qml import paths
+
+---
+ applets/pager/package/contents/ui/main.qml              | 2 +-
+ containments/desktop/package/contents/ui/FolderView.qml | 2 +-
+ containments/desktop/package/contents/ui/main.qml       | 4 ++--
+ containments/panel/contents/ui/main.qml                 | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/applets/pager/package/contents/ui/main.qml b/applets/pager/package/contents/ui/main.qml
+index b8eb8a6..fad3f69 100644
+--- a/applets/pager/package/contents/ui/main.qml
++++ b/applets/pager/package/contents/ui/main.qml
+@@ -23,7 +23,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
+ import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddonsComponents
+ import org.kde.draganddrop 2.0
+ import org.kde.plasma.private.pager 2.0
+-import "utils.js" as Utils
++import "../code/utils.js" as Utils
+ 
+ MouseArea {
+     id: root
+diff --git a/containments/desktop/package/contents/ui/FolderView.qml b/containments/desktop/package/contents/ui/FolderView.qml
+index ced3507..6073545 100644
+--- a/containments/desktop/package/contents/ui/FolderView.qml
++++ b/containments/desktop/package/contents/ui/FolderView.qml
+@@ -27,7 +27,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
+ import org.kde.kquickcontrolsaddons 2.0
+ 
+ import org.kde.private.desktopcontainment.folder 0.1 as Folder
+-import "FolderTools.js" as FolderTools
++import "../code/FolderTools.js" as FolderTools
+ 
+ Item {
+     id: main
+diff --git a/containments/desktop/package/contents/ui/main.qml b/containments/desktop/package/contents/ui/main.qml
+index a438b74..b907a36 100644
+--- a/containments/desktop/package/contents/ui/main.qml
++++ b/containments/desktop/package/contents/ui/main.qml
+@@ -30,8 +30,8 @@ import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+ 
+ import org.kde.private.desktopcontainment.desktop 0.1 as Desktop
+ 
+-import "LayoutManager.js" as LayoutManager
+-import "FolderTools.js" as FolderTools
++import "../code/LayoutManager.js" as LayoutManager
++import "../code/FolderTools.js" as FolderTools
+ 
+ DragDrop.DropArea {
+     id: root
+diff --git a/containments/panel/contents/ui/main.qml b/containments/panel/contents/ui/main.qml
+index 4d71c6e..337c356 100644
+--- a/containments/panel/contents/ui/main.qml
++++ b/containments/panel/contents/ui/main.qml
+@@ -25,7 +25,7 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
+ import org.kde.kquickcontrolsaddons 2.0
+ import org.kde.draganddrop 2.0 as DragDrop
+ 
+-import "LayoutManager.js" as LayoutManager
++import "../code/LayoutManager.js" as LayoutManager
+ 
+ DragDrop.DropArea {
+     id: root
+-- 
+2.8.0
+

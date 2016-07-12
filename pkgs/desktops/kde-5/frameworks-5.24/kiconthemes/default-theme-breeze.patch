@@ -1,0 +1,13 @@
+diff --git a/src/kicontheme.cpp b/src/kicontheme.cpp
+index 9626233..ba7d14b 100644
+--- a/src/kicontheme.cpp
++++ b/src/kicontheme.cpp
+@@ -616,7 +616,7 @@ void KIconTheme::reconfigure()
+ // static
+ QString KIconTheme::defaultThemeName()
+ {
+-    return QStringLiteral("hicolor");
++    return QStringLiteral("breeze");
+ }
+ 
+ void KIconTheme::assignIconsToContextMenu(ContextMenus type,
