@@ -4,17 +4,21 @@
 , unicode ? true
 
 , gpm
-
-# Extra Options
-, abiVersion ? "6"
 }:
-
+let
+  inherit (stdenv) isDarwin;
+  abiVersion = if isDarwin then "5" else "6";
+  version = if isDarwin then "5.9" else "6.0";
+  sha256 = if isDarwin
+    then "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh"
+    else "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+in
 stdenv.mkDerivation rec {
-  name = "ncurses-6.0";
+  name = "ncurses-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/ncurses/${name}.tar.gz";
-    sha256 = "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
+    inherit sha256;
   };
 
   patches = [ ./clang.patch ];
