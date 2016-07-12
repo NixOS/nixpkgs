@@ -74,7 +74,7 @@ let
     kscreenlocker = callPackage ./kscreenlocker.nix {};
     ksshaskpass = callPackage ./ksshaskpass.nix {};
     ksysguard = callPackage ./ksysguard.nix {};
-    kwayland = callPackage ./kwayland.nix {};
+    kwayland-integration = callPackage ./kwayland-integration.nix {};
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};
     libkscreen = callPackage ./libkscreen.nix {};

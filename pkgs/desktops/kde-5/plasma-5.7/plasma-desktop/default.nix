@@ -1,6 +1,6 @@
 { plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
-, attica, baloo, boost, fontconfig, kactivities, kauth, kcmutils
-, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons
+, attica, baloo, boost, fontconfig, kactivities, kactivities-stats
+, kauth, kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons
 , kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications
 , knotifyconfig, kpeople, krunner, kwallet, kwin, phonon
 , plasma-framework, plasma-workspace, qtdeclarative, qtx11extras
@@ -21,9 +21,9 @@ plasmaPackage rec {
     attica boost fontconfig kcmutils kdbusaddons kded kitemmodels knewstuff
     knotifications knotifyconfig kwallet libcanberra_kde libXcursor
     libpulseaudio libXft libxkbfile phonon qtsvg xf86inputevdev
-    xf86inputsynaptics xkeyboard_config xinput baloo kactivities kauth
-    kdeclarative kdelibs4support kemoticons kglobalaccel ki18n kpeople krunner
-    kwin plasma-framework plasma-workspace qtdeclarative
+    xf86inputsynaptics xkeyboard_config xinput baloo kactivities
+    kactivities-stats kauth kdeclarative kdelibs4support kemoticons kglobalaccel
+    ki18n kpeople krunner kwin plasma-framework plasma-workspace qtdeclarative
     qtquickcontrols qtx11extras ksysguard
   ];
   patches = [
