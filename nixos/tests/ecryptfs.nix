@@ -73,6 +73,9 @@ import ./make-test.nix ({ pkgs, ... }:
     $machine->succeed("su alice -c 'test -f ~alice/b'");
     $machine->succeed(qq%test "\$(cat ~alice/b)" = "c"%);
 
+    # Catch https://github.com/NixOS/nixpkgs/issues/16766
+    $machine->succeed("su alice -c 'ls -lh ~alice/'");
+
     $machine->sendChars("logout\n");
   '';
 })
