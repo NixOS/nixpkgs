@@ -5228,6 +5228,12 @@ in
 
     core = callPackage ../development/ocaml-modules/core { };
 
+    ocamlbuild =
+    if lib.versionOlder "4.03" ocaml_version then
+    callPackage ../development/tools/ocaml/ocamlbuild { }
+    else
+    null;
+
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
