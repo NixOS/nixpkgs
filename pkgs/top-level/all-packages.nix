@@ -5015,7 +5015,9 @@ in
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
     camlp4 =
-      if lib.versionOlder "4.02" ocaml_version
+      if lib.versionOlder "4.03" ocaml_version
+      then callPackage ../development/tools/ocaml/camlp4/4_03.nix { }
+      else if lib.versionOlder "4.02" ocaml_version
       then callPackage ../development/tools/ocaml/camlp4 { }
       else null;
 
