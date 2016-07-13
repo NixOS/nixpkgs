@@ -1,3 +1,5 @@
 #!/bin/sh
 
-./fetch-kde-qt.sh http://download.kde.org/stable/plasma/5.7.0/ -A '*.tar.xz'
+./maintainers/scripts/fetch-kde-qt.sh \
+    http://download.kde.org/stable/plasma/5.7.1/ -A '*.tar.xz' \
+    >pkgs/desktops/kde-5/plasma/srcs.nix
