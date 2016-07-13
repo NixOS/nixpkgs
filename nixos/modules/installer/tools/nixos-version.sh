@@ -1,9 +1,10 @@
 #! @shell@
 
 case "$1" in
-  --help)
+  -h|--help)
     exec man nixos-version
     exit 1
+    ;;
   --hash|--revision)
     echo "@nixosRevision@"
     ;;
