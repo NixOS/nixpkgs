@@ -16182,7 +16182,7 @@ in
     let
       frameworks = import ../desktops/kde-5/frameworks-5.24 { inherit pkgs; };
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
-      applications = import ../desktops/kde-5/applications-16.04 { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
         { plasma = plasma self;
           frameworks = frameworks self;
