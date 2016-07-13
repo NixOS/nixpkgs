@@ -9,8 +9,8 @@ Subject: [PATCH] qdiriterator follow symlinks
 
 diff --git a/clients/aurorae/src/aurorae.cpp b/clients/aurorae/src/aurorae.cpp
 index 781c960..ad5f420 100644
---- a/clients/aurorae/src/aurorae.cpp
-+++ b/clients/aurorae/src/aurorae.cpp
+--- a/plugins/kdecorations/aurorae/src/aurorae.cpp
++++ b/plugins/kdecorations/aurorae/src/aurorae.cpp
 @@ -211,7 +211,7 @@ void Helper::init()
      // so let's try to locate our plugin:
      QString pluginPath;

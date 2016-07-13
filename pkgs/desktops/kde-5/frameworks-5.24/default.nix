@@ -106,6 +106,7 @@ let
     ktextwidgets = callPackage ./ktextwidgets.nix {};
     kunitconversion = callPackage ./kunitconversion.nix {};
     kwallet = callPackage ./kwallet.nix {};
+    kwayland = callPackage ./kwayland.nix {};
     kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
     kwindowsystem = callPackage ./kwindowsystem.nix {};
     kxmlgui = callPackage ./kxmlgui.nix {};
