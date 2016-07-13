@@ -31,7 +31,7 @@ let
 
     kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
 
-    ark = callPackage ./ark.nix {};
+    ark = callPackage ./ark/default.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
     dolphin-plugins = callPackage ./dolphin-plugins.nix {};

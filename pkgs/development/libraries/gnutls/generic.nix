@@ -4,11 +4,15 @@
 
 # Version dependent args
 , version, src, patches ? [], postPatch ? "", nativeBuildInputs ? []
-, ...}@args:
+, ...}:
 
 assert guileBindings -> guile != null;
-
-stdenv.mkDerivation rec {
+let
+  # XXX: Gnulib's `test-select' fails on FreeBSD:
+  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+in
+stdenv.mkDerivation {
   name = "gnutls-${version}";
 
   inherit src patches;
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
       -i tests/cert-tests/name-constraints
-  '' + args.postPatch;
+  '' + postPatch;
 
   preConfigure = "patchShebangs .";
   configureFlags =
@@ -35,18 +39,15 @@ stdenv.mkDerivation rec {
   # for the actual fix.
   enableParallelBuilding = !guileBindings;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
-    ++ lib.optional doCheck nettools
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools ]
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]
     ++ lib.optional guileBindings guile;
 
-  nativeBuildInputs = [ perl pkgconfig ] ++ args.nativeBuildInputs;
+  nativeBuildInputs = [ perl pkgconfig ] ++ nativeBuildInputs;
 
-  # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  inherit doCheck;
 
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''

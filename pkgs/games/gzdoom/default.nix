@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/coelckers/gzdoom;
     description = "A Doom source port based on ZDoom. It features an OpenGL renderer and lots of new features";
+    license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.lassulus ];
   };
 }

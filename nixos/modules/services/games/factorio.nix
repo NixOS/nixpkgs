@@ -78,7 +78,7 @@ in
           test -e ${stateDir}/saves/${cfg.saveName}.zip || \
             ${pkgs.factorio-headless}/bin/factorio         \
               --config=${cfg.configFile}                   \
-              --create=${cfg.saveName}
+              --create=${stateDir}/saves/${cfg.saveName}.zip
       '';
 
       serviceConfig = {
@@ -93,7 +93,7 @@ in
           "${pkgs.factorio-headless}/bin/factorio"
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
-          "--start-server=${cfg.saveName}"
+          "--start-server=${stateDir}/saves/${cfg.saveName}.zip"
         ];
       };
     };

@@ -1,8 +1,8 @@
-{ withPolarSSL ? false
+{ withMbedTLS ? true
 , enableSystemSharedLib ? true
 , stdenv, fetchurl, zlib
 , openssl ? null
-, polarssl ? null
+, mbedtls ? null
 , libev ? null
 , libsodium ? null
 , udns ? null
@@ -25,13 +25,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ]
-                ++ optional (!withPolarSSL) openssl
-                ++ optional withPolarSSL polarssl
+                ++ optional (!withMbedTLS) openssl
+                ++ optional withMbedTLS mbedtls
                 ++ optional enableSystemSharedLib [libev libsodium udns];
 
-  configureFlags = optional withPolarSSL
-                     [ "--with-crypto-library=polarssl"
-                       "--with-polarssl=${polarssl}"
+  configureFlags = optional withMbedTLS
+                     [ "--with-crypto-library=mbedtls"
+                       "--with-mbedtls=${mbedtls}"
                      ]
                    ++ optional enableSystemSharedLib "--enable-system-shared-lib";
 

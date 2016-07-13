@@ -42,12 +42,9 @@ assert stdenv.isLinux;
 
 let
 
-  generated = if channel == "stable" then (import ./sources.nix)
-         else if channel == "beta"   then (import ./beta_sources.nix)
-         else if channel == "developer"   then { version = "49.0a2"; sources = [
-            { locale = "en-US"; arch = "linux-i686"; sha512 = "45dad182bf7a4e753c1be6b8f966393a06531e7b5530238d20cb67b26324e8f5d0eeec983a0855418f31187d3ae508c28810ab86269848b4e48ab2ca3b5d21e7"; }
-            { locale = "en-US"; arch = "linux-x86_64"; sha512 = "cfcbfc633b51612a62267c8a1afc25af212eb832d1fa876a1ffd82421e9378f96b3ac1488446f804518290abd99c21c9f10e4d0e0f699432aeb74b63305d7edc"; }
-          ]; }
+  generated = if channel == "stable"    then (import ./sources.nix)
+         else if channel == "beta"      then (import ./beta_sources.nix)
+         else if channel == "developer" then (import ./dev_sources.nix)
          else builtins.abort "Wrong channel! Channel must be one of `stable`, `beta` or `developer`";
 
   inherit (generated) version sources;

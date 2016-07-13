@@ -1,0 +1,102 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<refmeta>
+  <refentrytitle><command>nixos-version</command></refentrytitle>
+  <manvolnum>8</manvolnum>
+  <refmiscinfo class="source">NixOS</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname><command>nixos-version</command></refname>
+  <refpurpose>show the version of nixpkgs NixOS was built from</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+  <cmdsynopsis>
+    <command>nixos-version</command>
+    <arg><option>--hash</option></arg>
+    <arg><option>--revision</option></arg>
+  </cmdsynopsis>
+</refsynopsisdiv>
+
+<refsection><title>Description</title>
+
+<para>This command describes the version of nixpkgs used to build
+NixOS.</para>
+
+<para>By default the output includes:</para>
+
+<itemizedlist>
+  <listitem><para>The NixOS release</para></listitem>
+  <listitem><para>Number of commits since the release</para></listitem>
+  <listitem><para>Git SHA of the released commit</para></listitem>
+  <listitem><para>Codename of the NixOS release</para></listitem>
+</itemizedlist>
+</refsection>
+
+<refsection><title>Example</title>
+
+<para>Here is an example output, and corresponding information:
+<screen>$ nixos-version
+16.03.1011.6317da4 (Emu)
+</screen>
+</para>
+
+<informaltable>
+  <tgroup cols="2">
+    <thead>
+      <row>
+        <entry>Attribute</entry>
+        <entry>Value</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row>
+        <entry>NixOS Release</entry>
+        <entry><literal>16.03</literal></entry>
+      </row>
+      <row>
+        <entry>Commit Count</entry>
+        <entry><literal>1011</literal></entry>
+      </row>
+      <row>
+        <entry>Commit SHA</entry>
+        <entry><literal>6317da4</literal></entry>
+      </row>
+      <row>
+        <entry>Release Codename</entry>
+        <entry><literal>Emu</literal></entry>
+      </row>
+    </tbody>
+  </tgroup>
+</informaltable>
+<para>
+</para>
+
+
+</refsection>
+
+
+<refsection><title>Options</title>
+
+<para>This command accepts the following options:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><option>--hash</option></term>
+    <term><option>--revision</option></term>
+    <listitem>
+      <para>The output will be the full hash of the git commit
+<screen>$ nixos-version --hash
+6317da40006f6bc2480c6781999c52d88dde2acf
+</screen>
+      </para>
+    </listitem>
+  </varlistentry>
+</variablelist>
+
+</refsection>
+</refentry>

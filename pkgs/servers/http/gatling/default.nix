@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libowfat, zlib, openssl, polarssl }:
+{ stdenv, fetchurl, libowfat, zlib, openssl }:
 
 let
   version = "0.13";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0icjx20ws8gqxgpm77dx7p9zcwi1fv162in6igx04rmnyzyla8dl";
   };
 
-  buildInputs = [  libowfat zlib openssl polarssl ];
+  buildInputs = [  libowfat zlib openssl.dev ];
 
   configurePhase = ''
     substituteInPlace Makefile --replace "/usr/local" "$out"
