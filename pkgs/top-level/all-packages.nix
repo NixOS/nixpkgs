@@ -10954,6 +10954,7 @@ in
       [ kernelPatches.bridge_stp_helper
         kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
+        kernelPatches.ecryptfs_fix_mmap_bug
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
