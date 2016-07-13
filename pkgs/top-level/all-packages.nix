@@ -53,6 +53,8 @@ in
 
   callPackage_i686 = lib.callPackageWith (pkgsi686Linux // pkgsi686Linux.xorg);
 
+  callPackages_i686 = lib.callPackagesWith (pkgsi686Linux // pkgsi686Linux.xorg);
+
   forceNativeDrv = drv : if crossSystem == null then drv else
     (drv // { crossDrv = drv.nativeDrv; });
 
@@ -15533,6 +15535,12 @@ in
   openlierox = callPackage ../games/openlierox { };
 
   openmw = callPackage ../games/openmw { };
+
+  inherit (callPackages_i686 ../games/openrct2 {
+      stdenv = stdenv_32bit;
+    })
+    openrct2
+    openrct2-engine;
 
   openra = callPackage ../games/openra { lua = lua5_1; };
 
