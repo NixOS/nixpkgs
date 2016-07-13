@@ -85,7 +85,7 @@ stdenv.mkDerivation {
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
 
     # Useful debugging parameter
-    #export VERBOSE=1
+    export VERBOSE=1
   '';
 
   preConfigure = ''
