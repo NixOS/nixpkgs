@@ -13,6 +13,8 @@ let
       sha256 = "1cw4yw7n9m2si8b7zcfyz9pyihncabxm5g39v1mxslfajxgwzmd8";
     };
 
+    postPatch = "sed '1i#include <math.h>' -i termite.cc";
+
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
     buildInputs = [ pkgconfig vte gtk3 ncurses ];

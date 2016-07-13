@@ -1,0 +1,36 @@
+--- a/stdlib/setenv.c	2016-05-30 11:09:14.487180254 +0000
++++ b/stdlib/setenv.c	2016-05-30 11:08:25.560390748 +0000
+@@ -277,6 +277,7 @@
+ 
+   ep = __environ;
+   if (ep != NULL)
++    {
+     while (*ep != NULL)
+       if (!strncmp (*ep, name, len) && (*ep)[len] == '=')
+ 	{
+@@ -290,6 +291,7 @@
+ 	}
+       else
+ 	++ep;
++    }
+ 
+   UNLOCK;
+ 
+--- a/nis/nis_call.c	2016-05-30 08:05:59.359855696 -0700
++++ b/nis/nis_call.c	2016-05-30 08:05:55.679873221 -0700
+@@ -680,6 +680,7 @@
+   /* Choose which entry should be evicted from the cache.  */
+   loc = &nis_server_cache[0];
+   if (*loc != NULL)
++    {
+     for (i = 1; i < 16; ++i)
+       if (nis_server_cache[i] == NULL)
+ 	{
+@@ -690,6 +691,7 @@
+ 	       || ((*loc)->uses == nis_server_cache[i]->uses
+ 		   && (*loc)->expires > nis_server_cache[i]->expires))
+ 	loc = &nis_server_cache[i];
++    }
+   old = *loc;
+   *loc = new;
+ 

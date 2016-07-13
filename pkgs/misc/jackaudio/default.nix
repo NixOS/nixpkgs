@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, python, makeWrapper
-, bash, libsamplerate, libsndfile, readline
+, bash, libsamplerate, libsndfile, readline, gcc
 
 # Optional Dependencies
 , dbus ? null, pythonDBus ? null, libffado ? null, alsaLib ? null
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
-  buildInputs = [
+  buildInputs = [ gcc
     python
 
     libsamplerate libsndfile readline

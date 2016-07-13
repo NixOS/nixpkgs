@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ui? "gtk"
+{ stdenv, fetchurl, pkgconfig, uilib? "framebuffer", SDL
 , buildsystem
 }:
 
@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "176f8why9gzbaca9nnxjqasl02qzc6g507z5w3dzkcjifnkz4mzl";
   };
 
-  buildInputs = [ pkgconfig buildsystem ];
+  buildInputs = [ pkgconfig buildsystem SDL ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
-    "TARGET=${ui}"
+    "TARGET=${uilib}"
   ];
 
   meta = with stdenv.lib; {

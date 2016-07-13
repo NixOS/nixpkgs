@@ -372,7 +372,7 @@
       quassel = 89;
       amule = 90;
       minidlna = 91;
-      #elasticsearch = 92; # unused
+      elasticsearch = 92;
       #tcpcryptd = 93; # unused
       connman = 94;
       firebird = 95;

@@ -44,6 +44,15 @@ let
       ./deterministic-build.patch
 
       ./properly-detect-curses.patch
+    ] ++ optionals stdenv.isLinux [
+
+      # Disable the use of ldconfig in ctypes.util.find_library (since
+      # ldconfig doesn't work on NixOS), and don't use
+      # ctypes.util.find_library during the loading of the uuid module
+      # (since it will do a futile invocation of gcc (!) to find
+      # libuuid, slowing down program startup a lot).
+      ./no-ldconfig.patch
+
     ] ++ optionals stdenv.isCygwin [
       ./2.5.2-ctypes-util-find_library.patch
       ./2.5.2-tkinter-x11.patch
@@ -192,6 +201,9 @@ let
       inherit src patches preConfigure postConfigure configureFlags;
 
       buildInputs = [ python ] ++ deps;
+
+      # We need to set this for python.buildEnv
+      pythonPath = [];
 
       inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 

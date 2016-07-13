@@ -1,0 +1,31 @@
+From b4ed6e9e89e3b7d57e5de9f2c1987a489bb5628c Mon Sep 17 00:00:00 2001
+From: Alexey Shmalko <rasen.dubi@gmail.com>
+Date: Sat, 9 Jul 2016 20:54:05 +0300
+Subject: [PATCH] Use pkgconfig for dbus library
+
+Without this, gcc can't find library path for the dbus.
+
+This is already fixed upstream, so the patch shouldn't be necessary with
+the next version of gpsd.
+---
+ SConstruct | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/SConstruct b/SConstruct
+index 0d4b29d..d8624b0 100644
+--- a/SConstruct
++++ b/SConstruct
+@@ -586,8 +586,8 @@ else:
+ 
+     if env['dbus_export'] and config.CheckPKG('dbus-1'):
+         confdefs.append("#define HAVE_DBUS 1\n")
+-        dbusflags = ["-ldbus-1"]
+-        env.MergeFlags(pkg_config("dbus-1"))
++        dbusflags = pkg_config("dbus-1")
++        env.MergeFlags(dbusflags)
+     else:
+         confdefs.append("/* #undef HAVE_DBUS */\n")
+         dbusflags = []
+-- 
+2.9.0
+

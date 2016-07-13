@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d7lnbwxwakclqqfjwyk9w3wd2clkihdr6ljs5z08ydiaspri093";
   };
 
+  postPatch = "sed '1i#include <cmath>' -i src/tree/param.h";
+
   enableParallelBuilding = true;
 
   installPhase = ''

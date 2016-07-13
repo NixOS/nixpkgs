@@ -21,6 +21,6 @@ buildGoPackage rec {
     homepage = "https://sift-tool.org";
     maintainers = [ maintainers.carlsverre ];
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

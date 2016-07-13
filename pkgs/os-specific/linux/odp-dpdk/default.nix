@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "odp-dpdk-${version}";
-  version = "1.8.0.0";
+  version = "1.10.1.0";
 
   src = fetchgit {
     url = "https://git.linaro.org/lng/odp-dpdk.git";
-    rev = "438a207a39bad213cdc03929452a8199caef5d8c";
-    sha256 = "0k4g5zbirbfdcgqz0nbn9san66y178qnigyvrr2apj3apzjjy7zv";
+    rev = "0ed1ced007d98980f90604675083bf30c354e867";
+    sha256 = "1kf090bizr0p0cxn525qpmypb5j86imvxrfpmwbl7vqqfh74j5ax";
   };
 
   nativeBuildInputs = [ autoreconfHook bash ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace scripts/git_hash.sh --replace /bin/bash /bin/sh
+    substituteInPlace scripts/get_impl_str.sh --replace /bin/bash /bin/sh
     echo -n ${version} > .scmversion
   '';
 
@@ -26,7 +27,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-platform=linux-dpdk"
     "--disable-shared"
-    "--disable-shared-dpdk"
     "--with-sdk-install-path=${dpdk}/${RTE_TARGET}"
   ];
 

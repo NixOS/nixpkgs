@@ -78,5 +78,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];
+    broken = true;
   };
 }

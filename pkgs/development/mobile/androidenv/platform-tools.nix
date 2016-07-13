@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
         for i in etc1tool
         do
             patchelf --set-interpreter ${stdenv_32bit.cc.libc}/lib/ld-linux.so.2 $i
-            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit}/lib:`pwd`/lib $i
+            patchelf --set-rpath ${stdenv_32bit.cc.cc}/lib:${zlib_32bit.out}/lib:`pwd`/lib $i
         done
     ''}
 

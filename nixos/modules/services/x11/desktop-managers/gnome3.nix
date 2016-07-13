@@ -120,6 +120,7 @@ in {
     networking.networkmanager.enable = mkDefault true;
     services.upower.enable = config.powerManagement.enable;
     services.dbus.packages = mkIf config.services.printing.enable [ pkgs.system-config-printer ];
+    services.colord.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];

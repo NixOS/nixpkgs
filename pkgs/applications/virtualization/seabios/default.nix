@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "seabios-${version}";
-  version = "1.7.5.2";
+  version = "1.9.2";
 
   src = fetchurl {
     url = "http://code.coreboot.org/p/seabios/downloads/get/${name}.tar.gz";
-    sha256 = "1syd3gi5gq0gj2pjvmdis64xc3j1xf0jgy49ngymap0pdpm0cmh0";
+    sha256 = "1rdvbqb374jimxbkk9yvk9rnzhkn0w0sbvi1l3gnz6ah1sdla7gh";
   };
 
   buildInputs = [ iasl python ];

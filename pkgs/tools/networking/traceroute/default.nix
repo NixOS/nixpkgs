@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "traceroute-${version}";
-  version = "2.0.21";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/traceroute/${name}.tar.gz";
-    sha256 = "1q4n9s42nfcc4fmnwmrsiabvqrcaagiagmmqj9r5hfmi63pr7b7p";
+    sha256 = "3669d22a34d3f38ed50caba18cd525ba55c5c00d5465f2d20d7472e5d81603b6";
   };
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = "prefix=$(out) LDFLAGS=-lm";
 
   preConfigure = ''
     sed -i 's@LIBS := \(.*\) -lm \(.*\)@LIBS := \1 \2@' Make.rules

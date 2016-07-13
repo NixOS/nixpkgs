@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   name = "kile-${version}";
-  version = "2016-02-14";
+  version = "2016-07-02";
 
   src = fetchgit {
     url = git://anongit.kde.org/kile.git;
-    rev = "7b238c42580abc936816d4ea0df61d0cbbefecc4";
-    sha256 = "f37d531489a84911b47664697bb3bddc0ba5591854749c17fb0c6b1e71dbc6ee";
+    rev = "d38bc7069667119cc891b351188484ca6fb88973";
+    sha256 = "1nha71i16fs7nq2812b5565nbmbsbs3ak5czas6xg1dg5bsvdqh8";
 
   };
 

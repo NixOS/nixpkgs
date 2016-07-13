@@ -30,6 +30,8 @@ let inputs = [ dbus gtk2 gconf python2 libutempter vte keybinder gnome3.gnome_co
 
   buildInputs = inputs ++ (with python2Packages; [ pyGtkGlade pyxdg ]);
 
+  propagatedUserEnvPkgs = [ gconf.out ];
+
   patchPhase = ''
     patchShebangs .
   '';

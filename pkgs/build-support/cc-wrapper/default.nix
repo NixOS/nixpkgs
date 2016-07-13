@@ -96,6 +96,7 @@ stdenv.mkDerivation {
       echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
+      echo "${libc_dev}" > $out/nix-support/orig-libc-dev
     ''
 
     + (if nativeTools then ''

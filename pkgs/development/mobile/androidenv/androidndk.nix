@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
         \( -type f -a -name "*.so*" \) -o \
         \( -type f -a -perm -0100 \) \
         \) -exec patchelf --set-interpreter ${stdenv.cc.libc.out}/lib/ld-*so.? \
-                          --set-rpath ${stdenv.lib.makeLibraryPath [ zlib ncurses ]} {} \;
+                          --set-rpath ${stdenv.lib.makeLibraryPath [ zlib.out ncurses ]} {} \;
     # fix ineffective PROGDIR / MYNDKDIR determination
     for i in ndk-build ndk-gdb ndk-gdb-py
     do

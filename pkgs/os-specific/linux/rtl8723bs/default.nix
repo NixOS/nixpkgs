@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Realtek SDIO Wi-Fi driver";
     homepage = "https://github.com/hadess/rtl8723bs";
     license = stdenv.lib.licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" "armv7l-linux" ];
+    platforms = stdenv.lib.platforms.linux;
     broken = ! versionAtLeast kernel.version "3.19";
     maintainers = with maintainers; [ elitak ];
   };

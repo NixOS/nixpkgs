@@ -35,7 +35,9 @@ let
     baloo-widgets = callPackage ./baloo-widgets.nix {};
     dolphin = callPackage ./dolphin.nix {};
     dolphin-plugins = callPackage ./dolphin-plugins.nix {};
-    ffmpegthumbs = callPackage ./ffmpegthumbs.nix {};
+    ffmpegthumbs = callPackage ./ffmpegthumbs.nix {
+      ffmpeg = pkgs.ffmpeg_2;
+    };
     filelight = callPackage ./filelight.nix {};
     gpgmepp = callPackage ./gpgmepp.nix {};
     gwenview = callPackage ./gwenview.nix {};
@@ -47,10 +49,12 @@ let
     kgpg = callPackage ./kgpg.nix { inherit (pkgs.kde4) kdepimlibs; };
     khelpcenter = callPackage ./khelpcenter.nix {};
     kio-extras = callPackage ./kio-extras.nix {};
+    kompare = callPackage ./kompare.nix {};
     konsole = callPackage ./konsole.nix {};
     libkdcraw = callPackage ./libkdcraw.nix {};
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
+    libkomparediff2 = callPackage ./libkomparediff2.nix {};
     okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, coreutils, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "dbvisualizer-9.2.5";
+  name = "dbvisualizer-9.5";
 
   src = fetchurl {
-    url = https://www.dbvis.com/product_download/dbvis-9.2.5/media/dbvis_unix_9_2_5.tar.gz;
-    sha256 = "e9d3374e96cf63903ebd9dae498c6b69403813eb8723187ed70f285dd7119327";
+    url = https://www.dbvis.com/product_download/dbvis-9.5/media/dbvis_unix_9_5.tar.gz;
+    sha256 = "1bdc03039b50807206fd72ecf8ba0b940f5bb0386f483e10b7c0b2fa75cac021";
   };
 
   buildInputs = [ makeWrapper ];

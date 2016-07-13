@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, openldap, mysql, postgresql
 }:
 
 let
@@ -155,13 +155,60 @@ let
     '';
   };
 
+  luadbi = buildLuaPackage rec {
+    name = "dbi-2015-02-25";
+    src = fetchFromGitHub {
+      owner = "snatchev";
+      repo = "Luadbi";
+      rev = "661ea54c750957852bd66f27ee970c95bf07b2d9";
+      sha256 = "0wl6bg3h1kqkb138gqqjlv6iqsx1wrhhw3218jzqs4fh17iikdk6";
+    };
+
+    NIX_CFLAGS_COMPILE = "-I ${sqlite}/include -I ${mysql.lib}/include/mysql -I ${postgresql}/include -I ${postgresql}/include/server";
+    NIX_CFLAGS_LINK = "-L ${mysql.lib}/lib -L ${postgresql.lib}/lib";
+
+    buildInputs = [ sqlite ];
+
+    installPhase = ''
+      LUA_LIBDIR=$out/lib/lua/${lua.luaversion}
+      mkdir -p $LUA_LIBDIR
+      cp DBI.lua dbdmysql.so dbdpostgresql.so dbdsqlite3.so $LUA_LIBDIR
+    '';
+  };
+
+  lualdap = buildLuaPackage rec {
+    name = "ldap-1.1.0";
+    src = fetchFromGitHub {
+      owner = "luaforge";
+      repo = "lualdap";
+      rev = "v1_1_0";
+      sha256 = "0ymv66fgb4wp5ncqwf3jvb1qhh8rxg93sm4sffaqizdjsygvbd3h";
+    };
+
+    buildInputs = [ openldap ];
+
+    sourceRoot = "lualdap-v1_1_0-src/lualdap";
+
+    buildPhase = ''
+      gcc -O2 -fPIC -I${openldap}/include -c -o src/lualdap.o src/lualdap.c
+      gcc -O2 -Wall -fPIC -L${openldap}/lib -shared -o src/lualdap.so.1.1.0 src/lualdap.o -lldap
+    '';
+
+    installPhase = ''
+      LUA_LIBDIR=$out/lib/lua/${lua.luaversion}
+      mkdir -p $LUA_LIBDIR
+      cp src/lualdap.so.1.1.0 $LUA_LIBDIR
+      cd $LUA_LIBDIR; ln -sf lualdap.so.1.1.0 lualdap.so
+    '';
+  };
+
   luasec = buildLuaPackage rec {
-    name = "sec-0.6pre-2016-02-16";
+    name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
-      rev = "f09ce9fb4476cdefb266c52e8cdf3f94fc877c25";
-      sha256 = "19d9jgb522sng0kb3m5ncvhcj0iafcy37m3pmh2bnldd2i9wpgbh";
+      rev = "lua${name}";
+      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
     buildInputs = [ openssl ];

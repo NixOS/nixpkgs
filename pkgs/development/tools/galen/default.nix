@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ unzip ];
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
   buildPhase = ''
   mkdir -p $out/bin

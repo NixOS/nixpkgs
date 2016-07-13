@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, python3Packages }:
+{ stdenv, fetchurl, pythonPackages }:
 
-python3Packages.buildPythonPackage rec {
+pythonPackages.buildPythonPackage rec {
   name = "errbot-${version}";
   version = "4.2.2";
 
@@ -9,15 +9,17 @@ python3Packages.buildPythonPackage rec {
     sha256 = "1f1nw4m58dvmw0a37gbnihgdxxr3sz0l39653jigq9ysh3nznifv";
   };
 
+  disabled = !pythonPackages.isPy3k;
+
   patches = [
     ./fix-dnspython.patch
   ];
 
-  buildInputs = with python3Packages; [
+  buildInputs = with pythonPackages; [
     pep8 mock pytest pytest_xdist
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with pythonPackages; [
     webtest bottle threadpool rocket-errbot requests2 jinja2
     pyopenssl colorlog Yapsy markdown ansi pygments dns pep8
     daemonize pygments-markdown-lexer telegram irc slackclient

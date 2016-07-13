@@ -24,6 +24,8 @@ in stdenv.mkDerivation {
 
   preConfigure = ''
     ln -s ${sqlite-amalgamation}/* sqlite/
+    sed -ie 's| restrict| _restrict|g' dumb/include/dumb.h \
+                                       dumb/src/it/*.c
   '';
 
   cmakeFlags =
@@ -57,7 +59,7 @@ in stdenv.mkDerivation {
     homepage = http://zandronum.com/;
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     maintainers = with maintainers; [ lassulus ];
+    license = stdenv.lib.licenses.unfree;
     platforms = platforms.linux;
-    license = licenses.bsdOriginal;
   };
 }

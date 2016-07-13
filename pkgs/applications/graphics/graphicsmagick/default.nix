@@ -2,14 +2,14 @@
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz
 , libX11, libwebp, quantumdepth ? 8}:
 
-let version = "1.3.23"; in
+let version = "1.3.24"; in
 
 stdenv.mkDerivation {
   name = "graphicsmagick-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "03g6l2h8cmf231y1vma0z7x85070jm1ysgs9ppqcd3jj56jka9gx";
+    sha256 = "1q40w5hcl8rcpszm0r7rpr3a9lj390p39zfvavkvlgxyyk7bmgsj";
   };
 
   patches = [ ./disable-popen.patch ];

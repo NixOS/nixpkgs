@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   major = "0.3";
-  minor = "1";
+  minor = "2";
   name = "grilo-plugins-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo-plugins/${major}/${name}.tar.xz";
-    sha256 = "1akd7q6pqnkcnayrdfjb0qx5w5yyl06kxzwhqp2gxm4y1b208pb0";
+    sha256 = "1z8s62a29zidm35ajf708r7d36glb27im4s52l02q9w1jwl8j6vr";
   };
 
   installFlags = [ "GRL_PLUGINS_DIR=$(out)/lib/grilo-${major}" ];

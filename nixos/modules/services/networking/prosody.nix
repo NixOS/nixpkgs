@@ -160,6 +160,12 @@ in
         default = [];
       };
 
+      extraPluginPaths = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        description = "Addtional path in which to look find plugins/modules";
+      };
+
       virtualHosts = mkOption {
 
         description = "Define the virtual hosts";
@@ -217,7 +223,10 @@ in
       log = "*syslog"
 
       data_path = "/var/lib/prosody"
-      plugin_paths = { "${pkgs.prosody.modules}" }
+      plugin_paths = {
+        "${pkgs.prosody.modules}", "${pkgs.prosody.modules}/mod_lib_ldap",
+        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
+      }
 
       allow_registration = ${ if cfg.allowRegistration then "true" else "false" };
 

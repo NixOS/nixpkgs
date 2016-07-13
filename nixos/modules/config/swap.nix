@@ -30,8 +30,7 @@ let
         description = ''
           If this option is set, ‘device’ is interpreted as the
           path of a swapfile that will be created automatically
-          with the indicated size (in megabytes) if it doesn't
-          exist.
+          with the indicated size (in megabytes).
         '';
       };
 
@@ -132,9 +131,13 @@ in
             script =
               ''
                 ${optionalString (sw.size != null) ''
-                  if [ ! -e "${sw.device}" ]; then
+                  currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
+                  if [ "${toString sw.size}" != "$currentSize" ]; then
                     fallocate -l ${toString sw.size}M "${sw.device}" ||
                       dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                    if [ "${toString sw.size}" -lt "$currentSize" ]; then
+                      truncate --size "${toString sw.size}M" "${sw.device}"
+                    fi
                     chmod 0600 ${sw.device}
                     ${optionalString (!sw.randomEncryption) "mkswap ${sw.realDevice}"}
                   fi

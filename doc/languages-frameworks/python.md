@@ -649,6 +649,56 @@ community to help save time. No tool is preferred at the moment.
 
 ## FAQ
 
+### How can I install a working Python environment?
+
+As explained in the user's guide installing individual Python packages
+imperatively with `nix-env -i` or declaratively in `environment.systemPackages`
+is not supported. However, it is possible to install a Python environment with packages (`python.buildEnv`).
+
+In the following examples we create an environment with Python 3.5, `numpy` and `ipython`.
+As you might imagine there is one limitation here, and that's you can install
+only one environment at a time. You will notice the complaints about collisions
+when you try to install a second environment.
+
+#### Environment defined in separate `.nix` file
+
+Create a file, e.g. `build.nix`, with the following expression
+```nix
+with import <nixpkgs> {};
+with python35Packages;
+
+python.withPackages (ps: with ps; [ numpy ipython ])
+```
+and install it in your profile with
+```
+nix-env -if build.nix
+```
+Now you can use the Python interpreter, as well as the extra packages that you added to the environment.
+
+#### Environment defined in `~/.nixpkgs/config.nix`
+
+If you prefer to, you could also add the environment as a package override to the Nixpkgs set.
+```
+  packageOverrides = pkgs: with pkgs; with python35Packages; {
+    myEnv = python.withPackages (ps: with ps; [ numpy ipython ]);
+  };
+```
+and install it in your profile with
+```
+nix-env -iA nixos.blogEnv
+```
+Note that I'm using the attribute path here.
+
+#### Environment defined in `/etc/nixos/configuration.nix`
+
+For the sake of completeness, here's another example how to install the environment system-wide.
+
+```nix
+environment.systemPackages = with pkgs; [
+  (python35Packages.python.withPackages (ps: callPackage ../packages/common-python-packages.nix { pythonPackages = ps; }))
+];
+```
+
 ### How to solve circular dependencies?
 
 Consider the packages `A` and `B` that depend on each other. When packaging `B`,
