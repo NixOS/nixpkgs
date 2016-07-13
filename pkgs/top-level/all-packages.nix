@@ -16180,7 +16180,7 @@ in
 
   kde5 =
     let
-      frameworks = import ../desktops/kde-5/frameworks-5.24 { inherit pkgs; };
+      frameworks = import ../desktops/kde-5/frameworks { inherit pkgs; };
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
