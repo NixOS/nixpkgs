@@ -2,14 +2,14 @@
  pkgconfig, libXft, fontconfig, pcre, libtomcrypt, libtommath, lz4, zlib}:
 
 stdenv.mkDerivation rec {
-  name = "bitkeeper-7.3ce";
-  base = "bk-7.3ce";
+  version = "7.3ce";
+  name = "bitkeeper-${version}";
   enableParallelBuilding = true;
   src = fetchurl {
-    url = "https://www.bitkeeper.org/downloads/7.3ce/${base}.tar.gz";
+    url = "https://www.bitkeeper.org/downloads/${version}/bk-${version}.tar.gz";
     sha256 = "13249636f4b5b39f1d64b9f6bf682ee2dce53db17cdd8aa4cd9019e65252cabb";
   };
-  sourceRoot = "${base}/src";
+  sourceRoot = "bk-${version}/src";
 
   buildInputs = [ perl gperf bison groff libXft pkgconfig
 	      pcre libtomcrypt libtommath lz4];
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "BitKeeper";
+    description = "A distributed version control system";
     longDescription = ''
-BitKeeper is a fast, enterprise-ready, distributed SCM that scales up to very large projects and down to tiny ones.
+	BitKeeper is a fast, enterprise-ready, distributed SCM that scales up to very large projects and down to tiny ones.
     '';
     homepage = http://www.bitkeeper.org/;
     license = stdenv.lib.licenses.asl20;
