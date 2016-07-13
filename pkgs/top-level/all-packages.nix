@@ -2780,6 +2780,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  ocproxy = callPackage ../tools/networking/ocproxy { };
+
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   obexfs = callPackage ../tools/bluetooth/obexfs { };
