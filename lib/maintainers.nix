@@ -163,6 +163,7 @@
   guibert = "David Guibert <david.guibert@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
+  hce = "Hans-Christian Esperer <hc@hcesperer.org>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hiberno = "Christian Lask <hiberno@hiberno.net>";
   hinton = "Tom Hinton <t@larkery.com>";
