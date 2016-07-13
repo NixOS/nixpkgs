@@ -17222,6 +17222,8 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
+  wikicurses = callPackages ../applications/misc/wikicurses { };
+
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
     wineBuild = config.wine.build or "wine32";
