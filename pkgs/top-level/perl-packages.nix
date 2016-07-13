@@ -5512,18 +5512,18 @@ let self = _self // overrides; _self = with self; {
   };
 
   GetoptLongDescriptive = buildPerlPackage rec {
-    name = "Getopt-Long-Descriptive-0.099";
+    name = "Getopt-Long-Descriptive-0.100";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "1sf5r3vy7880ynsn2aqmb5p6rzmhq5v072x33g8c7aqjpz81wkgw";
+      sha256 = "1451e79310d1630de37690e3aba5c38ea5f01a486c5a43f0cd95bef2a02dffb6";
     };
-    buildInputs = [ TestFatal TestWarnings ];
-    propagatedBuildInputs = [ ParamsValidate SubExporter SubExporterUtil ];
+    buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
+    propagatedBuildInputs = [ ParamsValidate SubExporter ];
     meta = {
       homepage = https://github.com/rjbs/Getopt-Long-Descriptive;
       description = "Getopt::Long, but simpler and more powerful";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ rycee ];
+      maintainers = [ maintainers.rycee ];
     };
   };
 
