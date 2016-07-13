@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ systemd ];
 
+  patches = [
+    # https://github.com/systemd/systemd-bootchart/pull/10
+    ./bootchart-fix-processes-graph.patch
+    # https://github.com/systemd/systemd-bootchart/pull/11
+    ./bootchart-fix-height.patch
+  ];
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"

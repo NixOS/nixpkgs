@@ -1,0 +1,95 @@
+diff --git a/src/store.c b/src/store.c
+index 42cb804..e9bd24b 100644
+--- a/src/store.c
++++ b/src/store.c
+@@ -252,48 +252,49 @@ schedstat_next:
+                         ps->sample->runtime = atoll(rt);
+                         ps->sample->waittime = atoll(wt);
+ 
+-                        /* get name, start time */
++                        /* get name, start time; requires CONFIG_SCHED_DEBUG in kernel */
+                         if (ps->sched < 0) {
+                                 sprintf(filename, "%d/sched", pid);
+                                 ps->sched = openat(procfd, filename, O_RDONLY|O_CLOEXEC);
+                                 if (ps->sched < 0)
+-                                        continue;
++                                        goto no_sched;
+                         }
+ 
+                         s = pread(ps->sched, buf, sizeof(buf) - 1, 0);
+                         if (s <= 0) {
+                                 ps->sched = safe_close(ps->sched);
+-                                continue;
++                                goto no_sched;
+                         }
+                         buf[s] = '\0';
+ 
+                         if (!sscanf(buf, "%s %*s %*s", key))
+-                                continue;
++                                goto no_sched;
+ 
+                         strscpy(ps->name, sizeof(ps->name), key);
+ 
+-                        /* cmdline */
+-                        if (arg_show_cmdline)
+-                                pid_cmdline_strscpy(procfd, ps->name, sizeof(ps->name), pid);
+-
+                         /* discard line 2 */
+                         m = bufgetline(buf);
+                         if (!m)
+-                                continue;
++                                goto no_sched;
+ 
+                         m = bufgetline(m);
+                         if (!m)
+-                                continue;
++                                goto no_sched;
+ 
+                         if (!sscanf(m, "%*s %*s %s", t))
+-                                continue;
++                                goto no_sched;
+ 
+                         r = safe_atod(t, &ps->starttime);
+                         if (r < 0)
+-                                continue;
++                                goto no_sched;
+ 
+                         ps->starttime /= 1000.0;
+ 
++no_sched:
++                        /* cmdline */
++                        if (arg_show_cmdline)
++                                pid_cmdline_strscpy(procfd, ps->name, sizeof(ps->name), pid);
++
+                         if (arg_show_cgroup)
+                                 /* if this fails, that's OK */
+                                 cg_pid_get_path(SYSTEMD_CGROUP_CONTROLLER,
+@@ -527,7 +528,7 @@ catch_rename:
+                                 sprintf(filename, "%d/sched", pid);
+                                 ps->sched = openat(procfd, filename, O_RDONLY|O_CLOEXEC);
+                                 if (ps->sched < 0)
+-                                        continue;
++                                        goto no_sched2;
+                         }
+ 
+                         s = pread(ps->sched, buf, sizeof(buf) - 1, 0);
+@@ -535,16 +536,17 @@ catch_rename:
+                                 /* clean up file descriptors */
+                                 ps->sched = safe_close(ps->sched);
+                                 ps->schedstat = safe_close(ps->schedstat);
+-                                continue;
++                                goto no_sched2;
+                         }
+ 
+                         buf[s] = '\0';
+ 
+                         if (!sscanf(buf, "%s %*s %*s", key))
+-                                continue;
++                                goto no_sched2;
+ 
+                         strscpy(ps->name, sizeof(ps->name), key);
+ 
++no_sched2:
+                         /* cmdline */
+                         if (arg_show_cmdline)
+                                 pid_cmdline_strscpy(procfd, ps->name, sizeof(ps->name), pid);
