@@ -12206,6 +12206,8 @@ in
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  bitkeeper = callPackage ../applications/version-management/bitkeeper { };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 
