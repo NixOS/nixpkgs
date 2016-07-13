@@ -8507,12 +8507,12 @@ let self = _self // overrides; _self = with self; {
   MouseXGetOpt = self.MouseXGetopt;
 
   MouseXGetopt = buildPerlModule rec {
-    name = "MouseX-Getopt-0.36";
+    name = "MouseX-Getopt-0.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
-      sha256 = "172ab0609f1638c6d8800d2dff1bdaa044e305aaa2e9b1fbb8a9dc722a3bf430";
+      sha256 = "a6221043e7be3217ce56d2a6425a413d9cd28e2f52053995a6ceb118e8e963bc";
     };
-    buildInputs = [ ModuleBuild Mouse MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
+    buildInputs = [ ModuleBuildTiny Mouse MouseXConfigFromFile MouseXSimpleConfig TestException TestWarn ];
     propagatedBuildInputs = [ GetoptLongDescriptive Mouse ];
     meta = {
       homepage = https://github.com/gfx/mousex-getopt;
