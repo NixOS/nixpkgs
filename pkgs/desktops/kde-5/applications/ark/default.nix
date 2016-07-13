@@ -35,9 +35,6 @@ kdeApp {
     khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice
     kpty kwidgetsaddons libarchive
   ];
-  patches = [
-    ./0001-fix-start-from-plasma.patch
-  ];
   postInstall = ''
     wrapQtProgram "$out/bin/ark" \
         --prefix PATH : "${PATH}"
