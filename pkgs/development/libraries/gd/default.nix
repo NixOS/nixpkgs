@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchFromGitHub
 , pkgconfig
 , zlib
 , libpng
@@ -8,18 +9,26 @@
 , libXpm ? null
 , fontconfig
 , freetype
+, autoreconfHook
+, perl
 }:
 
 stdenv.mkDerivation rec {
   name = "gd-${version}";
-  version = "2.2.1";
+  version = "2016-06-10";
 
-  src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
-    sha256 = "0xmrqka1ggqgml84xbmkw1y0r0lg7qn657v5b1my8pry92p651vh";
+  # TODO: Remove this and use normal release when
+  # next version is released (> 2.2.1).
+  # This is required for below issue: 
+  #   https://github.com/libgd/libgd/issues/214
+  src = fetchFromGitHub {
+      owner = "libgd";
+      repo = "libgd";
+      rev = "502e4cd873c3b37b307b9f450ef827d40916c3d6";
+      sha256 = "14yihsas81r0bh1y4gcxiad4s22w8npr84hp56b7b2a9qazb4d9p";
   };
-
-  nativeBuildInputs = [ pkgconfig ];
+ 
+  nativeBuildInputs = [ pkgconfig autoreconfHook perl ];
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
