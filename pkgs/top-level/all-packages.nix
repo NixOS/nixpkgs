@@ -10759,6 +10759,8 @@ in
 
   fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
 
+  forkstat = callPackage ../os-specific/linux/forkstat { };
+
   freefall = callPackage ../os-specific/linux/freefall {
     inherit (linuxPackages) kernel;
   };
