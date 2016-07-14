@@ -48,10 +48,6 @@ in
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
       ];
 
-    # Crashing on an overflow in kernel land is user unfriendly and may prevent
-    # the system from booting, which is too severe for our use case.
-    boot.kernelParams = [ "pax_size_overflow_report_only" ];
-
     # Install PaX related utillities into the system profile.  Eventually, we
     # also want to include gradm here.
     environment.systemPackages = with pkgs; [ paxctl pax-utils ];
