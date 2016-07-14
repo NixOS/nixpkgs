@@ -22,5 +22,6 @@ buildRustPackage rec {
     homepage = https://github.com/Aaronepower/tokei;
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
+    platforms = platforms.all;
   };
 }
