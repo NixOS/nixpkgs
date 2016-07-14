@@ -10757,6 +10757,8 @@ in
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
+
   freefall = callPackage ../os-specific/linux/freefall {
     inherit (linuxPackages) kernel;
   };
