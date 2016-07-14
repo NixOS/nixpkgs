@@ -4,7 +4,7 @@
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
 let
-  version = "1.8.1";
+  version = "1.8.3";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_x86_64.deb";
-        sha256 = "0gb999ql4kfxd9473cx3xn6a11094dm4iyrx1dzd9v2sygh1l3pd";
+        sha256 = "5ce61010be0984e05302043c0bea5fb2832bb510977b04ce7b54b503774a4267";
       }
     else
       fetchurl {
         url    = "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_i686.deb";
-        sha256 = "1nzg6i9i270xgaih381q096lb23rwxkif4ba9j62y3zjmj6az4xf";
+        sha256 = "2973176ef08dc5ba15fbfd239a5f248ed07174c47d732dcc1b7e7b07c775699e";
       };
 
   meta = with stdenv.lib; {
@@ -97,12 +97,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.6/lib/bundler/templates/Executable
+    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.12.0/lib/bundler/templates/Executable
     chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.10.6/lib/bundler/templates/Executable
+    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.12.0/lib/bundler/templates/Executable
     chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 }
