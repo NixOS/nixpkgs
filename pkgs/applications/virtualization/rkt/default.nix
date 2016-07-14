@@ -11,7 +11,7 @@ let
   stage1Flavours = [ "coreos" "fly" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.9.1";
+  version = "1.10.1";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "094pqxcn91g1s3f0ly3z2lb11s4q3dn99h8cr7lqalkd0gj9l4xg";
+      sha256 = "0hy6b0lyjsh0m1ca7hga31nybrbi9wpf8c59wbzvm1wlnqzsjkqi";
   };
 
   stage1BaseImage = fetchurl {
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -Rv $BUILDDIR/bin/* $out/bin
+    cp -Rv $BUILDDIR/target/bin/* $out/bin
     wrapProgram $out/bin/rkt \
       --prefix LD_LIBRARY_PATH : ${systemd}/lib \
       --prefix PATH : ${iptables}/bin
