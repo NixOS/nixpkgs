@@ -13,6 +13,10 @@ let
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
     (attrValues config.fileSystems) != [];
+
+  # Ascertain whether NixOS container support is required
+  containerSupportRequired =
+    config.boot.enableContainers && config.containers != {};
 in
 
 {
@@ -101,7 +105,7 @@ in
       "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
-    } // optionalAttrs config.boot.enableContainers {
+    } // optionalAttrs containerSupportRequired {
       # chroot(2) restrictions that conflict with NixOS lightweight containers
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
