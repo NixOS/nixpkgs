@@ -813,13 +813,13 @@ in modules // {
   };
 
   ansible = buildPythonPackage rec {
-    version = "1.9.4";
+    version = "1.9.6";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "1qvgzb66nlyc2ncmgmqhzdk0x0p2px09967p1yypf5czwjn2yb4p";
+      sha256 = "0pgfh5z4w44sjgd77q6k769a5ipigjlm28zbpf2jhvz7n60kfxsh";
     };
 
     prePatch = ''
