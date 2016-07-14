@@ -16683,6 +16683,12 @@ in modules // {
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
 
+    buildInputs = with self; [ pytest psycopg2 ];
+
+    checkPhase = ''
+      py.test tests
+    '';
+
     propagatedBuildInputs = with self; [ click sqlparse ];
 
     meta = {
