@@ -31,9 +31,9 @@ in
       description = ''
         Whether to automatically lock grsecurity tunables
         (<option>boot.kernel.sysctl."kernel.grsecurity.*"</option>).  Disable
-        this to allow configuration of grsecurity features while the system is
-        running.  The lock can be manually engaged by activating the
-        <literal>grsec-lock</literal> service unit.
+        this to allow runtime configuration of grsecurity features.  Activate
+        the <literal>grsec-lock</literal> service unit to prevent further
+        configuration until the next reboot.
       '';
     };
 
