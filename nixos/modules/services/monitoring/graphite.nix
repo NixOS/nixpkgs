@@ -50,7 +50,7 @@ let
     chown -R graphite:graphite /run/${name}
   '';
 
-  carbonEnv = {
+  carbonEnvironment = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
         extraLibs = [ pkgs.python27Packages.carbon ];
@@ -61,6 +61,10 @@ let
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
+  };
+
+  carbonEnv = with pkgs; python.buildEnv.override {
+    extraLibs = with pythonPackages; [ twisted carbon whisper ];
   };
 
   graphiteWebEnv = with pkgs; python.buildEnv.override {
@@ -454,7 +458,7 @@ in {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.target" ];
-        path = [ graphiteWebEnv ];
+        path = [ graphiteWebEnv pkgs.perl ];
         environment = {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
