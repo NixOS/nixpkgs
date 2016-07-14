@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
-  version = "0.19.7";
+  version = "0.19.8";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "0gy2b2aydj8r0sapadnjw8cmb8j2rynj28d5qs1mfa800njd51jk";
+    sha256 = "13ylc6n3hsk919c7xl0yyibc3pfddzb53avdykn4hmk8g6yzd91x";
   };
   patches = [ ./absolute-paths.diff ];
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/gettext/;
 
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [ zimbatm vrthra ];
     platforms = lib.platforms.all;
   };
 }

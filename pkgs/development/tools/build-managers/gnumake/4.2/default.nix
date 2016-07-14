@@ -3,14 +3,14 @@
 assert guileSupport -> ( pkgconfig != null && guile != null );
 
 let
-  version = "4.2";
+  version = "4.2.1";
 in
 stdenv.mkDerivation {
   name = "gnumake-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";
-    sha256 = "0pv5rvz5pp4njxiz3syf786d2xp4j7gzddwjvgw5zmz55yvf6p2f";
+    sha256 = "12f5zzyq2w56g95nni65hc0g5p7154033y2f3qmjvd016szn5qnn";
   };
 
   patchFlags = "-p0";

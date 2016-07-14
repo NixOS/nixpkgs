@@ -2,6 +2,121 @@
 
 with lib;
 
+let cfg = config.fonts.fontconfig;
+    fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
+    renderConf = pkgs.writeText "render-conf" ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <fontconfig>
+
+        <!-- Default rendering settings -->
+        <match target="font">
+          <edit mode="assign" name="hinting">
+            ${fcBool cfg.hinting.enable}
+          </edit>
+          <edit mode="assign" name="autohint">
+            ${fcBool cfg.hinting.autohint}
+          </edit>
+          <edit mode="assign" name="hintstyle">
+            <const>hint${cfg.hinting.style}</const>
+          </edit>
+          <edit mode="assign" name="antialias">
+            ${fcBool cfg.antialias}
+          </edit>
+          <edit mode="assign" name="rgba">
+            <const>${cfg.subpixel.rgba}</const>
+          </edit>
+          <edit mode="assign" name="lcdfilter">
+            <const>lcd${cfg.subpixel.lcdfilter}</const>
+          </edit>
+        </match>
+
+        ${optionalString (cfg.dpi != 0) ''
+        <match target="pattern">
+          <edit name="dpi" mode="assign">
+            <double>${toString cfg.dpi}</double>
+          </edit>
+        </match>
+        ''}
+
+      </fontconfig>
+    '';
+    genericAliasConf = 
+      let genDefault = fonts: name:
+        optionalString (fonts != []) ''
+          <alias>
+            <family>${name}</family>
+            <prefer>
+            ${concatStringsSep ""
+            (map (font: ''
+              <family>${font}</family>
+            '') fonts)}
+            </prefer>
+          </alias>
+        '';
+      in
+      pkgs.writeText "generic-alias-conf" ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <fontconfig>
+
+        <!-- Default fonts -->
+        ${genDefault cfg.defaultFonts.sansSerif "sans-serif"}
+
+        ${genDefault cfg.defaultFonts.serif     "serif"}
+
+        ${genDefault cfg.defaultFonts.monospace "monospace"}
+
+      </fontconfig>
+    '';
+    cacheConf = let
+      cache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
+    in
+    pkgs.writeText "cache-conf" ''
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+      <fontconfig>
+        <!-- Font directories -->
+        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+        <!-- Pre-generated font caches -->
+        <cachedir>${cache pkgs.fontconfig}</cachedir>
+        ${optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
+          <cachedir>${cache pkgs.pkgsi686Linux.fontconfig}</cachedir>
+        ''}
+      </fontconfig>
+    '';
+    userConf = pkgs.writeText "user-conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+        <include ignore_missing="yes" prefix="xdg">fontconfig/conf.d</include>
+        <include ignore_missing="yes" prefix="xdg">fontconfig/fonts.conf</include>
+      </fontconfig>
+    '';
+    fontsConf = pkgs.makeFontsConf { fontconfig = pkgs.fontconfig_210; fontDirectories = config.fonts.fonts; };
+    confPkg = 
+      let version = pkgs.fontconfig.configVersion;
+      in pkgs.runCommand "fontconfig-conf" {} ''
+      mkdir -p $out/etc/fonts/{,${version}/}conf.d
+
+      ln -s ${fontsConf}        $out/etc/fonts/fonts.conf
+
+      ln -s ${pkgs.fontconfig.out}/etc/fonts/fonts.conf $out/etc/fonts/${version}/fonts.conf
+      ln -s ${pkgs.fontconfig.out}/etc/fonts/conf.d/*   $out/etc/fonts/${version}/conf.d/
+
+      ln -s ${renderConf}       $out/etc/fonts/conf.d/10-nixos-rendering.conf
+      ln -s ${genericAliasConf} $out/etc/fonts/conf.d/60-nixos-generic-alias.conf
+
+      ln -s ${cacheConf}        $out/etc/fonts/${version}/conf.d/00-nixos.conf
+
+      ln -s ${renderConf}       $out/etc/fonts/${version}/conf.d/10-nixos-rendering.conf
+      ln -s ${genericAliasConf} $out/etc/fonts/${version}/conf.d/30-nixos-generic-alias.conf
+
+      ${optionalString cfg.includeUserConf
+      "ln -s ${userConf}        $out/etc/fonts/${version}/conf.d/99-user.conf"}
+      
+    '';
+in
 {
 
   options = {
@@ -18,6 +133,15 @@ with lib;
             running X11 applications or any other program that uses
             Fontconfig, you can turn this option off and prevent a
             dependency on all those fonts.
+          '';
+        };
+
+        confPkgs = mkOption {
+          internal = true;
+          type     = with types; listOf path;
+          default  = [ ];
+          description = ''
+            Fontconfig configuration packages.
           '';
         };
 
@@ -143,135 +267,17 @@ with lib;
 
   };
 
-  config =
-    let fontconfig = config.fonts.fontconfig;
-        fcBool = x: "<bool>" + (if x then "true" else "false") + "</bool>";
-        renderConf = ''
-          <?xml version='1.0'?>
-          <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-          <fontconfig>
+  config = mkIf cfg.enable {
+    fonts.fontconfig.confPkgs = [ confPkg ];
 
-            <!-- Default rendering settings -->
-            <match target="font">
-              <edit mode="assign" name="hinting">
-                ${fcBool fontconfig.hinting.enable}
-              </edit>
-              <edit mode="assign" name="autohint">
-                ${fcBool fontconfig.hinting.autohint}
-              </edit>
-              <edit mode="assign" name="hintstyle">
-                <const>hint${fontconfig.hinting.style}</const>
-              </edit>
-              <edit mode="assign" name="antialias">
-                ${fcBool fontconfig.antialias}
-              </edit>
-              <edit mode="assign" name="rgba">
-                <const>${fontconfig.subpixel.rgba}</const>
-              </edit>
-              <edit mode="assign" name="lcdfilter">
-                <const>lcd${fontconfig.subpixel.lcdfilter}</const>
-              </edit>
-            </match>
+    environment.etc.fonts.source = 
+      let fontConf = pkgs.symlinkJoin {
+            name  = "fontconfig-etc";
+            paths = cfg.confPkgs;
+          };
+      in "${fontConf}/etc/fonts/";
 
-            ${optionalString (fontconfig.dpi != 0) ''
-            <match target="pattern">
-              <edit name="dpi" mode="assign">
-                <double>${toString fontconfig.dpi}</double>
-              </edit>
-            </match>
-            ''}
-
-          </fontconfig>
-        '';
-        genericAliasConf = ''
-          <?xml version='1.0'?>
-          <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-          <fontconfig>
-
-            <!-- Default fonts -->
-            ${optionalString (fontconfig.defaultFonts.sansSerif != []) ''
-            <alias>
-              <family>sans-serif</family>
-              <prefer>
-                ${concatStringsSep "\n"
-                  (map (font: "<family>${font}</family>")
-                    fontconfig.defaultFonts.sansSerif)}
-              </prefer>
-            </alias>
-            ''}
-            ${optionalString (fontconfig.defaultFonts.serif != []) ''
-            <alias>
-              <family>serif</family>
-              <prefer>
-                ${concatStringsSep "\n"
-                  (map (font: "<family>${font}</family>")
-                    fontconfig.defaultFonts.serif)}
-              </prefer>
-            </alias>
-            ''}
-            ${optionalString (fontconfig.defaultFonts.monospace != []) ''
-            <alias>
-              <family>monospace</family>
-              <prefer>
-                ${concatStringsSep "\n"
-                  (map (font: "<family>${font}</family>")
-                    fontconfig.defaultFonts.monospace)}
-              </prefer>
-            </alias>
-            ''}
-
-          </fontconfig>
-        '';
-    in mkIf fontconfig.enable {
-
-      # Fontconfig 2.10 backward compatibility
-
-      # Bring in the default (upstream) fontconfig configuration, only for fontconfig 2.10
-      environment.etc."fonts/fonts.conf".source =
-        pkgs.makeFontsConf { fontconfig = pkgs.fontconfig_210; fontDirectories = config.fonts.fonts; };
-
-      environment.etc."fonts/conf.d/10-nixos-rendering.conf".text = renderConf;
-      environment.etc."fonts/conf.d/60-nixos-generic-alias.conf".text = genericAliasConf;
-
-      # Versioned fontconfig > 2.10. Take shared fonts.conf from fontconfig.
-      # Otherwise specify only font directories.
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/fonts.conf".source =
-        "${pkgs.fontconfig.out}/etc/fonts/fonts.conf";
-
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/00-nixos.conf".text =
-        let
-          cache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
-        in ''
-          <?xml version='1.0'?>
-          <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
-          <fontconfig>
-            <!-- Font directories -->
-            ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
-            <!-- Pre-generated font caches -->
-            <cachedir>${cache pkgs.fontconfig}</cachedir>
-            ${optionalString (pkgs.stdenv.isx86_64 && config.fonts.fontconfig.cache32Bit) ''
-              <cachedir>${cache pkgs.pkgsi686Linux.fontconfig}</cachedir>
-            ''}
-          </fontconfig>
-        '';
-
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/10-nixos-rendering.conf".text = renderConf;
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/60-nixos-generic-alias.conf".text = genericAliasConf;
-
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/99-user.conf" = {
-        enable = fontconfig.includeUserConf;
-        text = ''
-          <?xml version="1.0"?>
-          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-          <fontconfig>
-            <include ignore_missing="yes" prefix="xdg">fontconfig/conf.d</include>
-            <include ignore_missing="yes" prefix="xdg">fontconfig/fonts.conf</include>
-          </fontconfig>
-        '';
-      };
-
-      environment.systemPackages = [ pkgs.fontconfig ];
-
-    };
+    environment.systemPackages = [ pkgs.fontconfig ];
+  };
 
 }
