@@ -3666,6 +3666,8 @@ in
 
   toilet = callPackage ../tools/misc/toilet { };
 
+  tokei = callPackage ../development/tools/misc/tokei { };
+
   tor = callPackage ../tools/security/tor { };
 
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
