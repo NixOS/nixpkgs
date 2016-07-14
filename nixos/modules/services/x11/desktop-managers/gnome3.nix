@@ -122,6 +122,7 @@ in {
     services.dbus.packages = mkIf config.services.printing.enable [ pkgs.system-config-printer ];
     services.colord.enable = mkDefault true;
     hardware.bluetooth.enable = mkDefault true;
+    services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
     fonts.fonts = [ pkgs.dejavu_fonts pkgs.cantarell_fonts ];
 
