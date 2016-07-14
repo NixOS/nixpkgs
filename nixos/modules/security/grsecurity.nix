@@ -22,7 +22,7 @@ in
 {
   options.security.grsecurity = {
 
-    enable = mkEnableOption "Grsecurity/PaX";
+    enable = mkEnableOption "grsecurity/PaX";
 
     lockTunables = mkOption {
       type = types.bool;
@@ -59,7 +59,7 @@ in
     # Install rules for the grsec device node
     services.udev.packages = [ pkgs.gradm ];
 
-    # This service unit is responsible for locking the Grsecurity tunables.  The
+    # This service unit is responsible for locking the grsecurity tunables.  The
     # unit is always defined, but only activated on bootup if lockTunables is
     # toggled.  When lockTunables is toggled, failure to activate the unit will
     # enter emergency mode.  The intent is to make it difficult to silently
