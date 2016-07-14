@@ -3,7 +3,7 @@
 { habitat, libsodium, libarchive, openssl, buildFHSUserEnv }:
 
 buildFHSUserEnv {
-    name = "hab";
+    name = "habitat-sh";
     targetPkgs = pkgs: [ habitat libsodium libarchive openssl ];
     runScript = "bash";
 }
