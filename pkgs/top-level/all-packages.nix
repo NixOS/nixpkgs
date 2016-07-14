@@ -16949,6 +16949,8 @@ in
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
+  nixos-container = callPackage ../tools/virtualization/nixos-container { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };

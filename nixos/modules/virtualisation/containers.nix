@@ -4,22 +4,6 @@ with lib;
 
 let
 
-  nixos-container = pkgs.substituteAll {
-    name = "nixos-container";
-    dir = "bin";
-    isExecutable = true;
-    src = ./nixos-container.pl;
-    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
-    su = "${pkgs.shadow.su}/bin/su";
-    inherit (pkgs) utillinux;
-
-    postInstall = ''
-      t=$out/etc/bash_completion.d
-      mkdir -p $t
-      cp ${./nixos-container-completion.sh} $t/nixos-container
-    '';
-  };
-
   # The container's init script, a small wrapper around the regular
   # NixOS stage-2 init script.
   containerInit = pkgs.writeScript "container-init"
@@ -410,7 +394,7 @@ in
         ExecReload = pkgs.writeScript "reload-container"
           ''
             #! ${pkgs.stdenv.shell} -e
-            ${nixos-container}/bin/nixos-container run "$INSTANCE" -- \
+            ${pkgs.nixos-container}/bin/nixos-container run "$INSTANCE" -- \
               bash --login -c "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/bin/switch-to-configuration test"
           '';
 
@@ -498,6 +482,6 @@ in
 
     networking.dhcpcd.denyInterfaces = [ "ve-*" ];
 
-    environment.systemPackages = [ nixos-container ];
+    environment.systemPackages = [ pkgs.nixos-container ];
   });
 }
