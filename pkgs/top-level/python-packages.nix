@@ -16644,7 +16644,6 @@ in modules // {
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
     version = "1.1.0";
-    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
@@ -16653,6 +16652,11 @@ in modules // {
       owner = "dbcli";
     };
 
+    buildInputs = with self; [ pytest mock ];
+    checkPhase = ''
+      py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
+    '';
+
     propagatedBuildInputs = with self; [
       click configobj humanize prompt_toolkit psycopg2
       pygments sqlparse pgspecial setproctitle
@@ -16660,6 +16664,7 @@ in modules // {
 
     postPatch = ''
       substituteInPlace setup.py --replace "==" ">="
+      rm tests/test_rowlimit.py
     '';
 
     meta = {
