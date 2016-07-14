@@ -10860,6 +10860,8 @@ in
 
   openisns = callPackage ../os-specific/linux/open-isns { };
 
+  powerstat = callPackage ../os-specific/linux/powerstat { };
+
   tgt = callPackage ../tools/networking/tgt { };
 
   # -- Linux kernel expressions ------------------------------------------------
