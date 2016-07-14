@@ -10862,6 +10862,8 @@ in
 
   powerstat = callPackage ../os-specific/linux/powerstat { };
 
+  smemstat = callPackage ../os-specific/linux/smemstat { };
+
   tgt = callPackage ../tools/networking/tgt { };
 
   # -- Linux kernel expressions ------------------------------------------------
