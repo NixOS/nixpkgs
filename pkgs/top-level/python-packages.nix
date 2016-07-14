@@ -22179,6 +22179,14 @@ in modules // {
       sha256 = "1s2fvaxgh9kqzrd6iwy5h7i61ckn05plx9np13zby93z3hdbx5nq";
     };
 
+    buildInputs = with self; [ pytest ];
+    checkPhase = ''
+      py.test
+    '';
+
+    # Package supports 3.x, but tests are clearly 2.x only.
+    doCheck = !isPy3k;
+
     meta = {
       description = "Non-validating SQL parser for Python";
       longDescription = ''
