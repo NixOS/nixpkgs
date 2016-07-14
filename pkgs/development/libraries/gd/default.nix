@@ -20,12 +20,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
+  patches = [
+    # TODO: remove once dd6615fd138e53656a7883015d4a6b2d02292b26
+    #       is included in a release
+    ./libtool.patch
+  ];
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
   outputs = [ "dev" "out" "bin" ];
 
   postFixup = ''moveToOutput "bin/gdlib-config" $dev'';
+
+  configureFlags = [
+    # necessary to prevent clang from erroring
+    "CFLAGS='-Wno-error=unused-command-line-argument'"
+  ];
 
   enableParallelBuilding = true;
 
