@@ -1,4 +1,4 @@
-{ stdenv, lib, libobjc2, clang, make, makeWrapper, which }:
+{ stdenv, lib, make, makeWrapper, which }:
 { buildInputs ? [], ...} @ args:
 stdenv.mkDerivation (args // {
   buildInputs = [ makeWrapper make which ] ++ buildInputs;

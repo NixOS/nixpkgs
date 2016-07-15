@@ -6,7 +6,7 @@
 , libffi
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
-, libobjc2, libgcrypt
+, libobjc, libgcrypt
 , icu
 , pkgconfig, portaudio
 }:
@@ -27,7 +27,7 @@ gsmakeDerivation {
     libffi
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
-    libobjc2 libgcrypt
+    libobjc libgcrypt
     icu
     portaudio
   ];
