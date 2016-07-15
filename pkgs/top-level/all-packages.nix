@@ -11739,8 +11739,6 @@ in
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  wrapFonts = paths : (callPackage ../data/fonts/fontWrap { inherit paths; });
-
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
