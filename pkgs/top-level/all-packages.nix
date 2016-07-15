@@ -17222,7 +17222,7 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackages ../applications/misc/wikicurses {
+  wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
   };
 
