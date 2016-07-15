@@ -3474,6 +3474,8 @@ in
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
+  sonarr = callPackage ../servers/sonarr { };
+
   sonata = callPackage ../applications/audio/sonata {
     inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
   };
