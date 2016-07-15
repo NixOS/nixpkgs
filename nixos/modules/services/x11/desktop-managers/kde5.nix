@@ -50,13 +50,13 @@ in
     security.setuidOwners = [
       {
         program = "kcheckpass";
-        source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
+        source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
         owner = "root";
         setuid = true;
       }
       {
         program = "start_kdeinit_wrapper";
-        source = "${kde5.plasma-workspace}/lib/libexec/kf5/start_kdeinit_wrapper";
+        source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit_wrapper";
         owner = "root";
         setuid = true;
       }
