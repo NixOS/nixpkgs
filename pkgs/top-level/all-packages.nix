@@ -11996,7 +11996,7 @@ in
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
-  ucsFonts = callPackage ../data/fonts/ucs-fonts { };
+  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
 
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
