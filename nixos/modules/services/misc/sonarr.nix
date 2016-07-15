@@ -31,7 +31,7 @@ in
         User = "sonarr";
         Group = "nogroup";
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.mono}/bin/mono ${pkgs.sonarr}/bin/NzbDrone.exe";
+        ExecStart = "${pkgs.sonarr}/bin/NzbDrone";
         Restart = "on-failure";
       };
     };
