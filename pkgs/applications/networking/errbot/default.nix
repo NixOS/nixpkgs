@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
     webtest bottle threadpool rocket-errbot requests2 jinja2
     pyopenssl colorlog Yapsy markdown ansi pygments dns pep8
     daemonize pygments-markdown-lexer telegram irc slackclient
-    pyside sleekxmpp hypchat
+    pyside sleekxmpp hypchat pytest
   ];
 
   meta = with stdenv.lib; {
