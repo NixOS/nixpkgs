@@ -3,6 +3,7 @@
 , version
 , src
 , preBuild ? ""
+, extraConfigFlags ? []
 , ...
 }:
 
@@ -30,7 +31,7 @@ in stdenv.mkDerivation {
 
   name = "nodejs-${version}";
 
-  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ];
+  configureFlags = concatMap sharedConfigureFlags (builtins.attrNames deps) ++ [ "--without-dtrace" ] ++ [ extraConfigFlags ];
   dontDisableStatic = true;
   prePatch = ''
     patchShebangs .
