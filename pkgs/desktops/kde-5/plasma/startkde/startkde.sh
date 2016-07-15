@@ -1,6 +1,10 @@
 #!@shell@
 
-PATH="@prefix_PATH@:$PATH"
+PATH="$PATH${PATH:+:}@suffixPATH@"
+
+export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}@QT_PLUGIN_PATH@"
+export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}@QML_IMPORT_PATH@"
+export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}@QML2_IMPORT_PATH@"
 
 # The KDE icon cache is supposed to update itself
 # automatically, but it uses the timestamp on the icon
