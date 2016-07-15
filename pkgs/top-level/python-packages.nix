@@ -813,13 +813,13 @@ in modules // {
   };
 
   ansible = buildPythonPackage rec {
-    version = "1.9.4";
+    version = "1.9.6";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "https://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "1qvgzb66nlyc2ncmgmqhzdk0x0p2px09967p1yypf5czwjn2yb4p";
+      sha256 = "0pgfh5z4w44sjgd77q6k769a5ipigjlm28zbpf2jhvz7n60kfxsh";
     };
 
     prePatch = ''
@@ -4476,11 +4476,11 @@ in modules // {
   };
 
   pytest_28 = self.pytest_27.override rec {
-    name = "pytest-2.8.6";
+    name = "pytest-2.8.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest/${name}.tar.gz";
-      sha256 = "ed38a3725b8e4478555dfdb549a4219ca3ba57955751141a1aaa45b706d84194";
+      sha256 = "1bwb06g64x2gky8x5hcrfpg6r351xwvafimnhm5qxq7wajz8ck7w";
     };
   };
 
@@ -10678,14 +10678,14 @@ in modules // {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.4.2";
+    version = "2.6.2";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1ghx62z63yyf8wv4bcvfxwxs5mc7b4nrcss6lc1i5s0yjvzvyi6h";
+      sha256 = "0gysvx1yai303gb9ks5z3jy1qk7ilnwwy30l7gp3kyfbv2cifbb1";
     };
 
     doCheck = false;
@@ -10700,6 +10700,8 @@ in modules // {
     meta = {
       homepage = "http://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
+      license = licenses.lgpl2;
+      maintainers = with maintainers; [ koral ];
     };
   };
 
@@ -16690,7 +16692,6 @@ in modules // {
   pgcli = buildPythonPackage rec {
     name = "pgcli-${version}";
     version = "1.1.0";
-    disabled = isPy35;
 
     src = pkgs.fetchFromGitHub {
       sha256 = "155avdckg93w3rmx0mz17wi6vcaba3lcppv9qwa6xlxfds9yzvlq";
@@ -16699,6 +16700,11 @@ in modules // {
       owner = "dbcli";
     };
 
+    buildInputs = with self; [ pytest mock ];
+    checkPhase = ''
+      py.test tests -k 'not test_missing_rc_dir and not test_quoted_db_uri and not test_port_db_uri'
+    '';
+
     propagatedBuildInputs = with self; [
       click configobj humanize prompt_toolkit psycopg2
       pygments sqlparse pgspecial setproctitle
@@ -16706,6 +16712,7 @@ in modules // {
 
     postPatch = ''
       substituteInPlace setup.py --replace "==" ">="
+      rm tests/test_rowlimit.py
     '';
 
     meta = {
@@ -16728,6 +16735,12 @@ in modules // {
       sha256 = "14bqlwcnbyn3ikzg5wr7iqrlfwbcy5vaa5n1mmgg305yal34lk6d";
       url = "mirror://pypi/p/pgspecial/${name}.tar.gz";
     };
+
+    buildInputs = with self; [ pytest psycopg2 ];
+
+    checkPhase = ''
+      py.test tests
+    '';
 
     propagatedBuildInputs = with self; [ click sqlparse ];
 
@@ -18788,16 +18801,42 @@ in modules // {
     };
   });
 
+  pysmi = buildPythonPackage rec {
+    version = "0.0.7";
+    name = "pysmi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pysmi/${name}.tar.gz";
+      sha256 = "05h1lv2a687b9qjc399w6728ildx7majbn338a0c4k3gw6wnv7wr";
+    };
+
+    # Tests require pysnmp, which in turn requires pysmi => infinite recursion
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ ply ];
+
+    meta = {
+      homepage = http://pysmi.sf.net;
+      description = "SNMP SMI/MIB Parser";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   pysnmp = buildPythonPackage rec {
-    version = "4.2.5";
+    version = "4.3.2";
     name = "pysnmp-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
-      sha256 = "0zq7yx8732ad9dxpxqgpqyixj7kfwbvf402q7l5njkv0kbcnavn4";
+      sha256 = "0xw925f3p02vdpb3f0ls60qj59w44aiyfs3s0nhdr9vsy4fxhavw";
     };
 
-    propagatedBuildInputs = with self; [ pyasn1 pycrypto ];
+    # NameError: name 'mibBuilder' is not defined
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ pyasn1 pycrypto pysmi ];
 
     meta = {
       homepage = http://pysnmp.sf.net;
@@ -21714,6 +21753,40 @@ in modules // {
     };
   };
 
+  secp256k1 = buildPythonPackage rec {
+    name = "secp256k1-${version}";
+    version = "0.12.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/secp256k1/${name}.tar.gz";
+      sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
+    };
+
+    buildInputs = [ pkgs.pkgconfig self.pytest_28 self.pytestrunner ];
+    propagatedBuildInputs = [ self.cffi pkgs.secp256k1 ];
+
+    # Tests are not included in archive
+    doCheck = false;
+
+    preConfigure = ''
+      cp -r ${pkgs.secp256k1.src} libsecp256k1
+      touch libsecp256k1/autogen.sh
+      export INCLUDE_DIR=${pkgs.secp256k1}/include
+      export LIB_DIR=${pkgs.secp256k1}/lib
+    '';
+
+    checkPhase = ''
+      py.test tests
+    '';
+
+    meta = {
+      homepage = https://github.com/ludbb/secp256k1-py;
+      description = "Python FFI bindings for secp256k1";
+      license = with licenses; [ mit ];
+      maintainers = with maintainers; [ chris-martin ];
+    };
+  };
+
   semantic-version = buildPythonPackage rec {
     name = "semantic_version-2.4.2";
     src = pkgs.fetchurl {
@@ -22243,6 +22316,14 @@ in modules // {
       url = "mirror://pypi/s/sqlparse/${name}.tar.gz";
       sha256 = "1s2fvaxgh9kqzrd6iwy5h7i61ckn05plx9np13zby93z3hdbx5nq";
     };
+
+    buildInputs = with self; [ pytest ];
+    checkPhase = ''
+      py.test
+    '';
+
+    # Package supports 3.x, but tests are clearly 2.x only.
+    doCheck = !isPy3k;
 
     meta = {
       description = "Non-validating SQL parser for Python";

@@ -58,6 +58,9 @@ stdenv.mkDerivation rec {
     CONFIG_FEATURE_MOUNT_CIFS n
     CONFIG_FEATURE_MOUNT_HELPERS y
 
+    # Set paths for console fonts.
+    CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
+
     ${extraConfig}
     $extraCrossConfig
     EOF

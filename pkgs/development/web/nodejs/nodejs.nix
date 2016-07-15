@@ -2,6 +2,7 @@
 , pkgconfig, runCommand, which, libtool
 , version
 , src
+, preBuild ? ""
 , ...
 }:
 
@@ -25,9 +26,7 @@ let
 
 in stdenv.mkDerivation {
 
-  inherit version;
-
-  inherit src;
+  inherit version src preBuild;
 
   name = "nodejs-${version}";
 

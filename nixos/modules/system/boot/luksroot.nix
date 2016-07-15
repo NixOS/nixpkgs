@@ -36,7 +36,7 @@ let
           ${optionalString (header != null) "--header=${header}"} \
           ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"} \
           > /.luksopen_args
-        cryptsetup-askpass
+        get_password "Enter LUKS Passphrase" cryptsetup-askpass
         rm /.luksopen_args
     }
 
@@ -78,9 +78,7 @@ let
         for try in $(seq 3); do
 
             ${optionalString yubikey.twoFactor ''
-            echo -n "Enter two-factor passphrase: "
-            read -s k_user
-            echo
+            k_user="$(get_password "Enter two-factor passphrase" cat)"
             ''}
 
             if [ ! -z "$k_user" ]; then
@@ -461,6 +459,26 @@ in
         $out/bin/ykinfo -V
         $out/bin/openssl-wrap version
       ''}
+    '';
+
+    boot.initrd.preDeviceCommands = ''
+      get_password() {
+        local ret
+        local reply
+        local tty_stat
+
+        tty_stat="$(stty -g)"
+        stty -echo
+        for i in `seq 1 3`; do
+          echo -n "$1: "
+          read reply
+          echo "$reply" | "$2"
+          if [ "$?" = "0" ]; then
+            break
+          fi
+        done
+        stty "$tty_stat"
+      }
     '';
 
     boot.initrd.preLVMCommands = concatStrings (mapAttrsToList openCommand preLVM);

@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.1.6";
+  version = "1.1.12";
   name = "zerotierone";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "1bl8dppaqydsd1qf9pk3bp16amkwjxyqh1gvm62ys2a0m4c529ks";
+    sha256 = "0mji6bmxjvxy2mhvzfz4vpdz62n1wv6a02rapzbiad8zr2c869cm";
   };
 
   preConfigure = ''
