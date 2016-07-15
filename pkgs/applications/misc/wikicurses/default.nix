@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1yxgafk1sczg1xi2p6nhrvr3hchp7ydw98n48lp3qzwnryn1kxv8";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ urwid beautifulsoup lxml ];
+  propagatedBuildInputs = with pythonPackages; [ urwid beautifulsoup4 lxml ];
 
   meta = {
     description = "A simple curses interface for MediaWiki sites such as Wikipedia";
