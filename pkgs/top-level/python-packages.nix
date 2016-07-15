@@ -10676,14 +10676,14 @@ in modules // {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.4.2";
+    version = "2.6.2";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "1ghx62z63yyf8wv4bcvfxwxs5mc7b4nrcss6lc1i5s0yjvzvyi6h";
+      sha256 = "0gysvx1yai303gb9ks5z3jy1qk7ilnwwy30l7gp3kyfbv2cifbb1";
     };
 
     doCheck = false;
@@ -10698,6 +10698,8 @@ in modules // {
     meta = {
       homepage = "http://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
+      license = licenses.lgpl2;
+      maintainers = with maintainers; [ koral ];
     };
   };
 
@@ -18734,16 +18736,42 @@ in modules // {
     };
   });
 
+  pysmi = buildPythonPackage rec {
+    version = "0.0.7";
+    name = "pysmi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pysmi/${name}.tar.gz";
+      sha256 = "05h1lv2a687b9qjc399w6728ildx7majbn338a0c4k3gw6wnv7wr";
+    };
+
+    # Tests require pysnmp, which in turn requires pysmi => infinite recursion
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ ply ];
+
+    meta = {
+      homepage = http://pysmi.sf.net;
+      description = "SNMP SMI/MIB Parser";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   pysnmp = buildPythonPackage rec {
-    version = "4.2.5";
+    version = "4.3.2";
     name = "pysnmp-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
-      sha256 = "0zq7yx8732ad9dxpxqgpqyixj7kfwbvf402q7l5njkv0kbcnavn4";
+      sha256 = "0xw925f3p02vdpb3f0ls60qj59w44aiyfs3s0nhdr9vsy4fxhavw";
     };
 
-    propagatedBuildInputs = with self; [ pyasn1 pycrypto ];
+    # NameError: name 'mibBuilder' is not defined
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ pyasn1 pycrypto pysmi ];
 
     meta = {
       homepage = http://pysnmp.sf.net;
