@@ -1,9 +1,0 @@
-diff --git a/System.Data.SQLite.dll.config b/System.Data.SQLite.dll.config
-new file mode 100644
-index 0000000..fb8d8db
---- /dev/null
-+++ b/System.Data.SQLite.dll.config
-@@ -0,0 +1,3 @@
-+<configuration>
-+  <dllmap dll="sqlite3" target="libsqlite3.so" os="linux"/>
-+</configuration>

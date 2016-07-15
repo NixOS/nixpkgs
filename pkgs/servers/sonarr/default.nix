@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    mkdir -p $out/lib
     cp -r * $out/bin/
 
     makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \

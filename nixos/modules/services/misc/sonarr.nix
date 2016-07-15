@@ -31,13 +31,12 @@ in
         User = "sonarr";
         Group = "nogroup";
         PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.sonarr}/bin/NzbDrone";
+        ExecStart = "${pkgs.sonarr}/bin/NzbDrone --no-browser";
         Restart = "on-failure";
       };
     };
 
     users.extraUsers.sonarr = {
-      name = "sonarr";
       home = "/var/lib/sonarr";
     };
 
