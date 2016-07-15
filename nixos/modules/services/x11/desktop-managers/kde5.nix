@@ -106,7 +106,9 @@ in
         kde5.threadweaver
 
         kde5.breeze
+        kde5.kactivitymanagerd
         kde5.kde-cli-tools
+        kde5.kdecoration
         kde5.kdeplasma-addons
         kde5.kgamma5
         kde5.khelpcenter
@@ -114,12 +116,16 @@ in
         kde5.kinfocenter
         kde5.kmenuedit
         kde5.kscreen
+        kde5.kscreenlocker
         kde5.ksysguard
         kde5.kwayland
         kde5.kwin
         kde5.kwrited
+        kde5.libkscreen
+        kde5.libksysguard
         kde5.milou
         kde5.oxygen
+        kde5.plasma-integration
         kde5.polkit-kde-agent
         kde5.systemsettings
 
