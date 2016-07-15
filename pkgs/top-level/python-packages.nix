@@ -18734,16 +18734,39 @@ in modules // {
     };
   });
 
+  pysmi = buildPythonPackage rec {
+    version = "0.0.7";
+    name = "pysmi-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pysmi/${name}.tar.gz";
+      sha256 = "05h1lv2a687b9qjc399w6728ildx7majbn338a0c4k3gw6wnv7wr";
+    };
+
+    propagatedBuildInputs = with self; [ ply ];
+
+    # ImportError: No module named pysnmp.smi.builder
+    doCheck = false;
+
+    meta = {
+      homepage = https://sourceforge.net/projects/pysmi/;
+      description = "A pure-Python implementation of SNMP/SMI MIB parsing and conversion library";
+      license = licenses.bsd2;
+      platforms = platforms.all;
+      maintainers = with maintainers; [ koral ];
+    };
+  };
+
   pysnmp = buildPythonPackage rec {
-    version = "4.2.5";
+    version = "4.3.2";
     name = "pysnmp-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
-      sha256 = "0zq7yx8732ad9dxpxqgpqyixj7kfwbvf402q7l5njkv0kbcnavn4";
+      sha256 = "0xw925f3p02vdpb3f0ls60qj59w44aiyfs3s0nhdr9vsy4fxhavw";
     };
 
-    propagatedBuildInputs = with self; [ pyasn1 pycrypto ];
+    propagatedBuildInputs = with self; [ pyasn1 pycrypto pysmi ];
 
     meta = {
       homepage = http://pysnmp.sf.net;
