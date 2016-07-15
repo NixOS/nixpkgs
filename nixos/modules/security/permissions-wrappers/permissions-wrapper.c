@@ -8,11 +8,6 @@
 #include <dirent.h>
 #include <assert.h>
 #include <errno.h>
-#include <linux/capability.h>
-#include <sys/capability.h>
-#include <linux/prctl.h>
-#include <sys/prctl.h>
-#include <cap-ng.h>
 
 // Make sure assertions are not compiled out, we use them to codify
 // invariants about this program and we want it to fail fast and
@@ -25,6 +20,24 @@ extern char **environ;
 // for a security reason: So they cannot be changed at runtime.
 static char * sourceProg = SOURCE_PROG;
 static char * wrapperDir = WRAPPER_DIR;
+
+// Make sure we have the WRAPPER_TYPE macro specified at compile
+// time...
+#ifdef WRAPPER_SETCAP
+static char * wrapperType = "setcap";
+#elif defined WRAPPER_SETUID
+static char * wrapperType = "setuid";
+#else
+fprintf(stderr, "Program must be compiled with either the WRAPPER_SETCAP or WRAPPER_SETUID macros specified!\n");
+exit(1);
+#endif
+
+#ifdef WRAPPER_SETCAP
+#include <linux/capability.h>
+#include <sys/capability.h>
+#include <linux/prctl.h>
+#include <sys/prctl.h>
+#include <cap-ng.h>
 
 // Update the capabilities of the running process to include the given
 // capability in the Ambient set.
@@ -150,6 +163,7 @@ static int make_caps_ambient(const char *selfPath)
 
     return 0;
 }
+#endif
 
 int main(int argc, char * * argv)
 {
