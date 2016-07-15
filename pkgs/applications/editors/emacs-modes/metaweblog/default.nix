@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "an emacs library to access metaweblog based weblogs";
+    description = "An emacs library to access metaweblog based weblogs";
     homepage = https://github.com/punchagan/metaweblog;
     license = stdenv.lib.licenses.gpl3Plus;
 

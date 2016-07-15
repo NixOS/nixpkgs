@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   makefile = "Makefile.unx";
-  makeFlags = "ZPATH=${zlib.out}/lib";
+  makeFlags = "ZPATH=${zlib.static}/lib";
 
   buildInputs = [ zlib ];
 

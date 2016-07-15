@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = http://fallabs.com/kyotocabinet;
-    description = "a library of routines for managing a database";
+    description = "A library of routines for managing a database";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

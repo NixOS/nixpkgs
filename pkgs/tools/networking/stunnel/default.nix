@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "universal tls/ssl wrapper";
+    description = "Universal tls/ssl wrapper";
     homepage    = "http://www.stunnel.org/";
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.unix;

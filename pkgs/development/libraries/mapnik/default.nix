@@ -5,12 +5,14 @@
 
 stdenv.mkDerivation rec {
   name = "mapnik-${version}";
-  version = "3.0.9";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "https://mapnik.s3.amazonaws.com/dist/v${version}/mapnik-v${version}.tar.bz2";
-    sha256 = "1nnkamwq4vcg4q2lbqn7cn8sannxszzjxcxsllksby055d9nfgrs";
+    sha256 = "0fda6syrfb81930sf7rgw1qmpnik8k1ngrjkh43ywd3s37nbqh1n";
   };
+
+  outputs = [ "dev" "out" ];
 
   nativeBuildInputs = [ python scons ];
 

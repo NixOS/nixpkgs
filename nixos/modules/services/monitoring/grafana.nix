@@ -228,7 +228,7 @@ in {
       after = ["networking.target"];
       environment = mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/grafana-server -homepath ${cfg.dataDir}";
+        ExecStart = "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}";
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ e2fsprogs ];
 
   meta = with stdenv.lib; {
-    description = "utility that can recover deleted files from an ext3 or ext4 partition";
+    description = "Utility that can recover deleted files from an ext3 or ext4 partition";
     homepage = http://extundelete.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;

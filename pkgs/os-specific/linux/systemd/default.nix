@@ -16,11 +16,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "4ccee551f2ba8383c8b9bd06590a3cd1dfdf690f";
-    sha256 = "1i4my5z7f8g5bykv1vxyw1az66s087lfqrck79kdm4hgvb4lsk6y";
+    rev = "81d5aaac06b43fd72f5ab02734a17cbfb55d1f5b";
+    sha256 = "1ig7jwmvaa1r4qlngjpnvvvvxhmzbxr171d257q4ryf87l93g1an";
   };
-
-  patches = [ ./hwdb-location.diff ];
 
   /* gave up for now!
   outputs = [ "out" "libudev" "doc" ]; # maybe: "dev"
@@ -101,7 +99,8 @@ stdenv.mkDerivation rec {
           --replace /bin/echo ${coreutils}/bin/echo \
           --replace /bin/cat ${coreutils}/bin/cat \
           --replace /sbin/sulogin ${utillinux.bin}/sbin/sulogin \
-          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck
+          --replace /usr/lib/systemd/systemd-fsck $out/lib/systemd/systemd-fsck \
+          --replace /bin/plymouth /run/current-system/sw/bin/plymouth # To avoid dependency
       done
 
       substituteInPlace src/journal/catalog.c \

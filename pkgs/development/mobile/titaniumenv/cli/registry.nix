@@ -120,7 +120,7 @@ let
         sha1 = "168a4701756b6a7f51a12ce0c97bfa28c084ed63";
       };
       meta = {
-        description = "get colors in your node.js console";
+        description = "Get colors in your node.js console";
         homepage = https://github.com/Marak/colors.js;
         license = "MIT";
       };
@@ -169,7 +169,7 @@ let
         sha1 = "2423fe6678ac0c5dae8852e5d0e5be08c997abcc";
       };
       meta = {
-        description = "get colors in your node.js console like what";
+        description = "Get colors in your node.js console like what";
         homepage = https://github.com/Marak/colors.js;
       };
       production = true;
@@ -513,7 +513,7 @@ let
         sha1 = "de3f98543dbf96082be48ad1a0c7cda836301dcf";
       };
       meta = {
-        description = "parse argument options";
+        description = "Parse argument options";
         homepage = https://github.com/substack/minimist;
         license = "MIT";
       };
@@ -1164,7 +1164,7 @@ let
         sha1 = "82c18c2461f74114ef16c135224ad0b9144ca12f";
       };
       meta = {
-        description = "read and write binary structures and data types";
+        description = "Read and write binary structures and data types";
         homepage = https://github.com/rmustacc/node-ctype;
       };
       production = true;
@@ -1599,7 +1599,7 @@ let
         };
       };
       meta = {
-        description = "the complete solution for node.js command-line programs";
+        description = "The complete solution for node.js command-line programs";
         homepage = "https://github.com/tj/commander.js#readme";
         license = "MIT";
       };
@@ -1614,7 +1614,7 @@ let
         sha1 = "4cafad76bc62f02fa039b2f94e9a3dd3a391a725";
       };
       meta = {
-        description = "graceful fs.readlink";
+        description = "Graceful fs.readlink";
         homepage = https://github.com/zhiyelee/graceful-readlink;
         license = "MIT";
       };
@@ -1745,7 +1745,7 @@ let
       };
       dependencies = {};
       meta = {
-        description = "extend like a boss";
+        description = "Extend like a boss";
         homepage = https://github.com/Raynos/xtend;
         license = "MIT";
       };
@@ -2316,7 +2316,7 @@ let
         sha1 = "0433f44d809680fdeb60ed260f1b0c262e82a40b";
       };
       meta = {
-        description = "get colors in your node.js console";
+        description = "Get colors in your node.js console";
         homepage = https://github.com/Marak/colors.js;
         license = "MIT";
       };
@@ -2332,7 +2332,7 @@ let
         sha1 = "21e80b2be8580f98b468f379430662b046c34ad2";
       };
       meta = {
-        description = "decycle your json";
+        description = "Decycle your json";
         homepage = https://github.com/douglascrockford/JSON-js;
       };
       production = true;
@@ -2347,7 +2347,7 @@ let
         sha1 = "62cf120234c683785d902348a800ef3e0cc20bc0";
       };
       meta = {
-        description = "a customizable value inspector";
+        description = "A customizable value inspector";
       };
       production = true;
       linkDependencies = false;

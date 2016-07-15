@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   majorVersion = "1.6";
-  version = "${majorVersion}.4";
+  version = "${majorVersion}.6";
   name = "haproxy-${version}";
 
   src = fetchurl {
     url = "http://haproxy.1wt.eu/download/${majorVersion}/src/${name}.tar.gz";
-    sha256 = "0c6j1j30xw08zdlk149s9ghvwphhbiqadkacjyvfrs8z9xh3ryp5";
+    sha256 = "1xamzzfvwgh3b72f3j74ar9xcn61viszqfbdpf4cdhwc0xikvc7x";
   };
 
   buildInputs = [ openssl zlib ];

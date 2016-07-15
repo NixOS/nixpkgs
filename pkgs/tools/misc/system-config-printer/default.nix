@@ -1,6 +1,6 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto
-, makeWrapper, pygobject, pygtk, docbook_xml_dtd_412, docbook_xsl
-, pythonDBus, libxml2, desktop_file_utils, libusb1, cups, pycups
+, makeWrapper, gtk3, docbook_xml_dtd_412, docbook_xsl
+, libxml2, desktop_file_utils, libusb1, cups, gdk_pixbuf, pango, atk, libnotify
 , pythonPackages
 , withGUI ? true
 }:
@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://cyberelk.net/tim/data/system-config-printer/${majorVersion}/${name}.tar.xz";
-    sha256 = "1cg9n75rg5l9vr1925n2g771kga33imikyl0mf70lww2sfgvs18r";
+    sha256 = "1vxczk22f58nbikvj47s2x1gzh6q4mbgwnf091p00h3b6nxppdgn";
   };
 
   propagatedBuildInputs = [ pythonPackages.pycurl ];
@@ -25,18 +25,21 @@ in stdenv.mkDerivation rec {
       pythonPackages.python pythonPackages.wrapPython
     ];
 
-  pythonPath =
-    [ pythonDBus pycups pygobject pythonPackages.pycurl ]
-    ++ stdenv.lib.optionals withGUI [ pygtk pythonPackages.notify ];
+  pythonPath = with pythonPackages;
+    [ pycups pycurl dbus pygobject3 requests2 ];
 
   configureFlags =
     [ "--with-udev-rules"
+      "--with-udevdir=$(out)/etc/udev"
       "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     ];
 
   postInstall =
+    let
+      giTypelibPath = stdenv.lib.makeSearchPath "lib/girepository-1.0" [ gdk_pixbuf.out gtk3.out pango.out atk.out libnotify.out ];
+    in
     ''
-      export makeWrapperArgs="--set prefix $out"
+      export makeWrapperArgs="--set prefix $out --set GI_TYPELIB_PATH ${giTypelibPath}"
       wrapPythonPrograms
       # The program imports itself, so we need to move shell wrappers to a proper place.
       fixupWrapper() {
@@ -53,6 +56,9 @@ in stdenv.mkDerivation rec {
       ( cd $out/share/system-config-printer/troubleshoot
         mv .__init__.py-wrapped __init__.py
       )
+
+      # The below line will be unneeded when the next upstream release arrives.
+      sed -i -e "s|/usr/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
     '';
 
   meta = {

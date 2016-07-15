@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gnome3, gtk, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  version = "2016-06-02";
+  version = "2016-06-06";
   name = "arc-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = "arc-theme";
-    rev = "226098a06b646981022f0e260fd4d3ca64ff5616";
-    sha256 = "1lg2iig1rws2h0p7qy1pavphyzdcchmfdlv126696jczz21d67qm";
+    rev = "d24a7b5b4eb25e1a094bdf4e125332cfb8e2c8c1";
+    sha256 = "07rf21xhyz3if4n5ccmzmjf9rz9w7wkvci7ccivhh6lkillfbxgi";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

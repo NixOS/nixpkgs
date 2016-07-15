@@ -23,13 +23,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "emacs-25.0.94";
+  name = "emacs-25.0.95";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "ftp://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.xz";
-    sha256 = "19kd9iwj4rz7llihs7a4gmag98n3asrxn3jh6mdmyn24w2kmxi69";
+    sha256 = "0bmvg7cbrwfa9rbryjrqv2qcllgwja92sx9ikirl80r5d09caf0l";
   };
 
   patches = lib.optionals stdenv.isDarwin [

@@ -1,12 +1,12 @@
 {stdenv, fetchurl, yasm, enable10bit ? false}:
 
 stdenv.mkDerivation rec {
-  version = "20141218-2245";
+  version = "20160615-2245";
   name = "x264-${version}";
 
   src = fetchurl {
     url = "http://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "1gp1f0382vh2hmgc23ldqyywcfljg8lsgl2849ymr14r6gxfh69m";
+    sha256 = "0w5l77gm8bsmafzimzyc5s27kcw79r6nai3bpccqy0spyxhjsdc2";
   };
 
   patchPhase = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ yasm ];
 
   meta = with stdenv.lib; {
-    description = "library for encoding H264/AVC video streams";
+    description = "Library for encoding H264/AVC video streams";
     homepage    = http://www.videolan.org/developers/x264.html;
     license     = licenses.gpl2;
     platforms   = platforms.unix;

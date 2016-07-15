@@ -1,80 +1,71 @@
 {
-  "erubis" = {
-    version = "2.7.0";
+  erubis = {
     source = {
-      type = "gem";
       sha256 = "1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3";
-    };
-  };
-  "multi_json" = {
-    version = "1.3.6";
-    source = {
       type = "gem";
+    };
+    version = "2.7.0";
+  };
+  multi_json = {
+    source = {
       sha256 = "0q2zjfvd2ibds9g9nzf2p1b47fc1wqliwfywv5pw85w15lmy91yr";
-    };
-  };
-  "rack" = {
-    version = "1.6.1";
-    source = {
       type = "gem";
-      sha256 = "0f73v6phkwczl1sfv0wgdwsnlsg364bhialbnfkg2dnxhh57l0gl";
     };
+    version = "1.3.6";
   };
-  "rack-protection" = {
-    version = "1.5.3";
+  rack = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "09bs295yq6csjnkzj7ncj50i6chfxrhmzg1pk6p0vd2lb9ac8pj5";
       type = "gem";
+    };
+    version = "1.6.4";
+  };
+  rack-protection = {
+    dependencies = ["rack"];
+    source = {
       sha256 = "0cvb21zz7p9wy23wdav63z5qzfn4nialik22yqp6gihkgfqqrh5r";
-    };
-    dependencies = [
-      "rack"
-    ];
-  };
-  "riemann-dash" = {
-    version = "0.2.11";
-    source = {
       type = "gem";
-      sha256 = "1vzb75hf1xy7ssil7fp9z7z51vh79ba22x56ific7f1kcb21lzk7";
     };
-    dependencies = [
-      "erubis"
-      "multi_json"
-      "sass"
-      "sinatra"
-      "webrick"
-    ];
+    version = "1.5.3";
   };
-  "sass" = {
-    version = "3.4.14";
+  riemann-dash = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1y2vh9vcl21b6k2wqgz1y8bbcrl07r43s6q2vkgp35z1b28xcszy";
       type = "gem";
-      sha256 = "0x2mg6pid87s4ddvv6xnxfzwgy72pjmkm461pav92ngqnngx2ggk";
     };
+    version = "0.2.12";
   };
-  "sinatra" = {
-    version = "1.4.6";
+  sass = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dkj6v26fkg1g0majqswwmhxva7cd6p3psrhdlx93qal72dssywy";
       type = "gem";
-      sha256 = "1hhmwqc81ram7lfwwziv0z70jh92sj1m7h7s9fr0cn2xq8mmn8l7";
     };
-    dependencies = [
-      "rack"
-      "rack-protection"
-      "tilt"
-    ];
+    version = "3.4.22";
   };
-  "tilt" = {
-    version = "2.0.1";
+  sinatra = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1b81kbr65mmcl9cdq2r6yc16wklyp798rxkgmm5pr9fvsj7jwmxp";
       type = "gem";
-      sha256 = "1qc1k2r6whnb006m10751dyz3168cq72vj8mgp5m2hpys8n6xp3k";
     };
+    version = "1.4.7";
   };
-  "webrick" = {
-    version = "1.3.1";
+  tilt = {
     source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0lgk8bfx24959yq1cn55php3321wddw947mgj07bxfnwyipy9hqf";
       type = "gem";
+    };
+    version = "2.0.5";
+  };
+  webrick = {
+    source = {
       sha256 = "0s42mxihcl2bx0h9q0v2syl70qndydfkl39a06h9il17p895ya8g";
+      type = "gem";
     };
+    version = "1.3.1";
   };
 }

@@ -1,6 +1,6 @@
-diff -Naur cherrytree-0.35.6-orig/setup.py cherrytree-0.35.6/setup.py
---- cherrytree-0.35.6-orig/setup.py     2014-05-30 23:25:11.000000000 +0200
-+++ cherrytree-0.35.6/setup.py  2015-01-29 07:35:32.785904009 +0100
+diff -Naur cherrytree-0.37.1-orig/setup.py cherrytree-0.37.1/setup.py
+--- cherrytree-0.37.1-orig/setup.py	2016-01-08 20:50:50.000000000 +0100
++++ cherrytree-0.37.1/setup.py	2016-07-05 20:30:27.768178682 +0200
 @@ -205,4 +205,9 @@
            },
         distclass=CherryTreeDist
@@ -12,4 +12,3 @@ diff -Naur cherrytree-0.35.6-orig/setup.py cherrytree-0.35.6/setup.py
 +        pass # handle errors in the called executable
 +    except OSError:
 +        pass # executable not found
-

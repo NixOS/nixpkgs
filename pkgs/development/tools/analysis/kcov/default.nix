@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake pkgconfig zlib curl elfutils python libiberty binutils ];
   
   meta = with stdenv.lib; {
-    description = "code coverage tester for compiled programs, Python scripts and shell scripts";
+    description = "Code coverage tester for compiled programs, Python scripts and shell scripts";
 
     longDescription = ''
       Kcov is a code coverage tester for compiled programs, Python

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libxml2, glib }:
 
 stdenv.mkDerivation rec {
-  name = "libcroco-0.6.8";
+  name = "libcroco-0.6.11";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libcroco/0.6/${name}.tar.xz";
-    sha256 = "0w453f3nnkbkrly7spx5lx5pf6mwynzmd5qhszprq8amij2invpa";
+    sha256 = "0mm0wldbi40am5qn0nv7psisbg01k42rwzjxl3gv11l5jj554aqk";
   };
 
   outputs = [ "dev" "out" ];

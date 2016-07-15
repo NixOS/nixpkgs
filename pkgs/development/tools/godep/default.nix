@@ -1,11 +1,11 @@
 { stdenv, lib, go, fetchurl, fetchgit, fetchhg, fetchbzr, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "ddd7fbf";
+  version = "73";
   name = "godep-${version}";
 
   src = import ./deps.nix {
-    inherit stdenv lib fetchgit fetchFromGitHub;
+    inherit stdenv lib fetchgit;
   };
 
   buildInputs = [ go ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Ddependency tool for go";
+    description = "Dependency tool for go";
     homepage = https://github.com/tools/godep;
     license = licenses.bsd3;
     maintainers = with maintainers; [ offline ];

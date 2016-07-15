@@ -38,8 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "http://arx-libertatis.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
-    platform = platforms.all;
+    platforms = platforms.linux;
   };
 
 }
-

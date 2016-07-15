@@ -1,0 +1,9 @@
+[
+  {
+    "include": "../../libs.json",
+    "packages": [
+      "github.com/mattn/go-sqlite3",
+      "github.com/elves/getopt"
+    ]
+  }
+]

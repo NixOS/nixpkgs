@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "elixir-${version}";
-  version = "1.2.6";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "elixir";
     rev = "v${version}";
-    sha256 = "0zrsy0jy33m7krpwf1vymmiirl068sj4hfjji77wkhn8k88awmfb";
+    sha256 = "0pihqgsnddrhhcpiphz170wgwlc59pd492iy4f66dajapm5k329d";
   };
 
   buildInputs = [ erlang rebar makeWrapper ];
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   LC_TYPE = "en_US.UTF-8";
 
   setupHook = ./setup-hook.sh;
+
+  inherit debugInfo;
 
   buildFlags = if debugInfo
    then "ERL_COMPILER_OPTIONS=debug_info"

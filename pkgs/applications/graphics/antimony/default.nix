@@ -1,29 +1,25 @@
-{ stdenv, fetchgit, libpng, python3, boost, mesa, qtbase, qmakeHook, ncurses }:
+{ stdenv, fetchFromGitHub, libpng, python3, boost, mesa, qtbase, ncurses, cmake, flex, lemon }:
 
 let
-  gitRev    = "745eca3a2d2657c495d5509e9083c884e021d09c";
+  gitRev    = "e8480c718e8c49ae3cc2d7af10ea93ea4c2fff9a";
   gitBranch = "master";
-  gitTag    = "0.8.0b";
+  gitTag    = "0.9.2";
 in 
   stdenv.mkDerivation rec {
     name    = "antimony-${version}";
     version = gitTag;
 
-    src  = fetchgit {
-      url         = "git://github.com/mkeeter/antimony.git";
-      rev         = gitRev;
-      sha256      = "0azjdkbixz2pyk2yy7a0ya5xk60xgw3l2pd4pj4ijyqxx5jmh0sy";
+    src = fetchFromGitHub {
+      owner = "mkeeter";
+      repo = "antimony";
+      rev = gitTag;
+      sha256 = "0fpgy5cb4knz2z9q078206k8wzxfs8b9g76mf4bz1ic77931ykjz";
     };
 
     patches = [ ./paths-fix.patch ];
-    # fix build with glibc-2.23
+
     postPatch = ''
-      sed 's/\<isinf(/std::isinf(/g' -i \
-        src/export/export_heightmap.cpp \
-        src/fab/types/bounds.cpp \
-        src/graph/hooks/meta.cpp \
-        src/ui/dialogs/resolution_dialog.cpp \
-        src/render/render_task.cpp
+       sed -i "s,/usr/local,$out,g" app/CMakeLists.txt app/app/app.cpp app/app/main.cpp
     '';
 
     buildInputs = [
@@ -31,15 +27,13 @@ in
       mesa qtbase ncurses
     ];
 
-    nativeBuildHooks = [ qmakeHook ];
+    nativeBuildInputs = [ cmake flex lemon ];
 
-    preConfigure = ''
-      export GITREV=${gitRev}
-      export GITBRANCH=${gitBranch}
-      export GITTAG=${gitTag}
-
-      cd qt
-    '';
+    cmakeFlags= [
+      "-DGITREV=${gitRev}"
+      "-DGITTAG=${gitTag}"
+      "-DGITBRANCH=${gitBranch}"
+    ];
 
     enableParallelBuilding = true;
 
@@ -48,6 +42,5 @@ in
       homepage    = "https://github.com/mkeeter/antimony";
       license     = licenses.mit;
       platforms   = platforms.linux;
-      broken = true;
     };
   }

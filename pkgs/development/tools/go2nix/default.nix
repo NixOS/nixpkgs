@@ -1,17 +1,18 @@
-{ stdenv, lib, buildGoPackage, go-bindata, goimports, nix-prefetch-git, git, makeWrapper,
-  fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, go-bindata, goimports, nix-prefetch-git, git, makeWrapper,
+  fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "go2nix-${version}";
-  version = "20160307-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "4c552dadd855e3694ed3499feb46dca9cd855f60";
+  version = "0.1.0";
+  rev = "v${version}";
 
   goPackagePath = "github.com/kamilchm/go2nix";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
     inherit rev;
-    url = "https://github.com/kamilchm/go2nix";
-    sha256 = "1pwnm1vrjxvgl17pk9n1k5chmhgwxkrwp2s1bzi64xf12anibj63";
+    owner = "kamilchm";
+    repo = "go2nix";
+    sha256 = "10nz7gva3n6wk01wphrjjb31sy33kf9ji03zr849x21a669fnmjf";
   };
 
   goDeps = ./deps.json;

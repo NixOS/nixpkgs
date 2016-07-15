@@ -115,7 +115,7 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd}/bin/etcd";
+        ExecStart = "${pkgs.etcd.bin}/bin/etcd";
         User = "etcd";
         PermissionsStartOnly = true;
       };

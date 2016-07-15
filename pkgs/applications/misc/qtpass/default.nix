@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "qtpass-${version}";
-  version = "1.1.1";
+  version = "1.1.3";
 
   src = fetchzip {
     url = "https://github.com/IJHack/qtpass/archive/v${version}.tar.gz";
-    sha256 = "1x1ic9as0a60gz664sf8d1qiq64ji7q60g19x0rlm3bvcp2612c8";
+    sha256 = "114rqvd2jl98c75zmhdwfmp44kxa4v459naiivb4w020d60ziq7l";
   };
 
   buildInputs = [ git gnupg pass qtbase qtsvg qttools ];

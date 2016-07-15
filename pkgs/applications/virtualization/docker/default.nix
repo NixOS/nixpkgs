@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     patchShebangs .
     export AUTO_GOPATH=1
-    export DOCKER_GITCOMMIT="a34a1d59"
+    export DOCKER_GITCOMMIT="20f81dde"
     ./hack/make.sh dynbinary
   '';
 
@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
 
     # completion
     install -Dm644 ./contrib/completion/bash/docker $out/share/bash-completion/completions/docker
+    install -Dm644 ./contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
     install -Dm644 ./contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
   '';
 

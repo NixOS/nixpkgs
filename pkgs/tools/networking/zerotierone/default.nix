@@ -3,12 +3,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.1.4";
+  version = "1.1.12";
   name = "zerotierone";
 
   src = fetchurl {
     url = "https://github.com/zerotier/ZeroTierOne/archive/${version}.tar.gz";
-    sha256 = "10aw0dlkmprdvph3aqkqximxqkryf0l4jcnv2bbm7f1qvclqihva";
+    sha256 = "0mji6bmxjvxy2mhvzfz4vpdz62n1wv6a02rapzbiad8zr2c869cm";
   };
 
   preConfigure = ''
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ openssl lzo zlib gcc iproute ];
+
+  buildFlags = [ "one" ]; # TODO: Add support for building and installing manpages as well.
 
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one

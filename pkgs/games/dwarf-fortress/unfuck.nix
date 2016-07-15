@@ -13,6 +13,8 @@ stdenv.mkDerivation {
     sha256 = "12bqh3k4wsk1c0bz2zly8h0ilbsdmsbwr9cdjc6i7liwg9906g7i";
   };
 
+  postPatch = "sed '1i#include <math.h>' -i g_src/ttf_manager.cpp";
+
   cmakeFlags = [
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"

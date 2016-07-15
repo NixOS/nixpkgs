@@ -1,4 +1,4 @@
-{ stdenv, writeText, erlang, perl, which, gitMinimal, wget }:
+{ stdenv, writeText, erlang, perl, which, gitMinimal, wget, lib }:
 
 { name, version
 , src
@@ -8,12 +8,17 @@
 , postPatch ? ""
 , compilePorts ? false
 , installPhase ? null
+, buildPhase ? null
+, configurePhase ? null
 , meta ? {}
+, enableDebugInfo ? false
 , ... }@attrs:
 
 with stdenv.lib;
 
 let
+  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "+debug_info";
+
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
           buildInputs = [ drv ];
@@ -37,7 +42,8 @@ let
     buildInputs = [ erlang perl which gitMinimal wget ];
     propagatedBuildInputs = beamDeps;
 
-    configurePhase = ''
+    configurePhase = if configurePhase == null
+    then ''
       runHook preConfigure
 
       # We shouldnt need to do this, but it seems at times there is a *.app in
@@ -45,17 +51,21 @@ let
       make SKIP_DEPS=1 clean
 
       runHook postConfigure
-    '';
+    ''
+    else configurePhase;
 
-    buildPhase = ''
+    buildPhase = if buildPhase == null
+    then ''
         runHook preBuild
 
-        make SKIP_DEPS=1
+        make SKIP_DEPS=1 ERL_OPTS="$ERL_OPTS ${debugInfoFlag}"
 
         runHook postBuild
-    '';
+    ''
+    else buildPhase;
 
-    installPhase = ''
+    installPhase =  if installPhase == null
+    then ''
         runHook preInstall
 
         mkdir -p $out/lib/erlang/lib/${name}
@@ -75,7 +85,8 @@ let
         fi
 
         runHook postInstall
-    '';
+    ''
+    else installPhase;
 
     passthru = {
       packageName = name;

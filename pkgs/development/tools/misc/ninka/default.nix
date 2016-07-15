@@ -1,34 +1,36 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchFromGitHub, perl, perlPackages, buildPerlPackage }:
 
 assert stdenv ? glibc;
 
-stdenv.mkDerivation rec {
+buildPerlPackage rec {
   name = "ninka-${version}";
-  version = "1.1";
+  version = "2.0-pre";
 
-  src = fetchurl {
-    url = "https://github.com/dmgerman/ninka/archive/${version}.tar.gz";
-    sha256 = "1cvbsmanw3i9igiafpx0ghg658c37riw56mjk5vsgpmnn3flvhib";
+  src = fetchFromGitHub {
+    owner = "dmgerman";
+    repo = "ninka";
+    rev = "b89b59ecd057dfc939d0c75acaddebb58fcd8cba";
+    sha256 = "1grlis1kycbcjvjgqvn7aw81q1qx49ahvxg2k7cgyr79mvgpgi9m";
   };
   
-  buildInputs = [ perl ];
-  
-  buildPhase = ''
-    cd comments
-    sed -i -e "s|/usr/local/bin|$out/bin|g" -e "s|/usr/local/man|$out/share/man|g" Makefile
-    make
-  '';
-  
-  installPhase = ''
-    mkdir -p $out/{bin,share/man/man1}
-    make install    
+  buildInputs = with perlPackages; [ perl TestOutput DBDSQLite DBI TestPod TestPodCoverage SpreadsheetParseExcel ];
 
-    cp -a ../{ninka.pl,extComments,splitter,filter,senttok,matcher} $out/bin
+  doCheck = false;    # hangs
+
+  preConfigure = ''
+    sed -i.bak -e 's;#!/usr/bin/perl;#!${perl}/bin/perl;g' \
+        ./bin/ninka-excel ./bin/ninka ./bin/ninka-sqlite \
+        ./scripts/unify.pl ./scripts/parseLicense.pl \
+        ./scripts/license_matcher_modified.pl \
+        ./scripts/sort_package_license_list.pl
+    perl Makefile.PL
   '';
-  
-  meta = {
+
+  meta = with stdenv.lib; {
     description = "A sentence based license detector";
     homepage = "http://ninka.turingmachine.org/";
-    license = stdenv.lib.licenses.agpl3Plus;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.vrthra ];
+    platforms = platforms.all;
   };
 }

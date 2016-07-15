@@ -4,14 +4,14 @@
 let
   # Always get the information from 
   # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
-  coreosImageRelease = "1032.0.0";
+  coreosImageRelease = "1068.0.0";
   coreosImageSystemdVersion = "229";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
-  stage1Flavours = [ "coreos" "fly" "host" ];
+  stage1Flavours = [ "coreos" "fly" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.7.0";
+  version = "1.10.1";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -19,12 +19,12 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "1ds063q205p5fbahl2qqawhav1fkcvs9ynh80j8g0h9ls0bbv8j7";
+      sha256 = "0hy6b0lyjsh0m1ca7hga31nybrbi9wpf8c59wbzvm1wlnqzsjkqi";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "1lmyhncvw5cby4nbpw6ryiki05wra90fsr6xnsdgi9yqqs6v2d1f";
+    sha256 = "06jawmjkhrrw9hsk98w5j6pxci17d46mvzbj52pslakacw60pbpp";
   };
 
   buildInputs = [
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -Rv $BUILDDIR/bin/* $out/bin
+    cp -Rv $BUILDDIR/target/bin/* $out/bin
     wrapProgram $out/bin/rkt \
       --prefix LD_LIBRARY_PATH : ${systemd}/lib \
       --prefix PATH : ${iptables}/bin

@@ -3,6 +3,84 @@
 with lib;
 
 let fcBool = x: if x then "<bool>true</bool>" else "<bool>false</bool>";
+    cfg = config.fonts.fontconfig.ultimate;
+    fontconfigUltimateConf = pkgs.writeText "ultimate-conf" ''
+      <?xml version="1.0"?>
+      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+      <fontconfig>
+
+        ${optionalString (!cfg.allowBitmaps) ''
+        <!-- Reject bitmap fonts -->
+        <selectfont>
+          <rejectfont>
+            <pattern>
+              <patelt name="scalable"><bool>false</bool></patelt>
+            </pattern>
+          </rejectfont>
+        </selectfont>
+        ''}
+
+        ${optionalString cfg.allowType1 ''
+        <!-- Reject Type 1 fonts -->
+        <selectfont>
+          <rejectfont>
+            <pattern>
+              <patelt name="fontformat">
+                <string>Type 1</string>
+              </patelt>
+            </pattern>
+          </rejectfont>
+        </selectfont>
+        ''}
+
+        <!-- Use embedded bitmaps in fonts like Calibri? -->
+        <match target="font">
+          <edit name="embeddedbitmap" mode="assign">
+            ${fcBool cfg.useEmbeddedBitmaps}
+          </edit>
+        </match>
+
+        <!-- Force autohint always -->
+        <match target="font">
+          <edit name="force_autohint" mode="assign">
+            ${fcBool cfg.forceAutohint}
+          </edit>
+        </match>
+
+        <!-- Render some monospace TTF fonts as bitmaps -->
+        <match target="pattern">
+          <edit name="bitmap_monospace" mode="assign">
+            ${fcBool cfg.renderMonoTTFAsBitmap}
+          </edit>
+        </match>
+
+      </fontconfig>
+    '';
+    confPkg = 
+      let version = pkgs.fontconfig.configVersion;
+      in pkgs.runCommand "font-ultimate-conf" {} ''
+      mkdir -p $out/etc/fonts/{,${version}/}conf.d/
+
+      cp ${fontconfigUltimateConf} \
+        $out/etc/fonts/conf.d/52-fontconfig-ultimate.conf
+
+      cp ${fontconfigUltimateConf} \
+        $out/etc/fonts/${version}/conf.d/52-fontconfig-ultimate.conf
+
+      ${optionalString (cfg.substitutions != "none") ''
+      cp ${pkgs.fontconfig-ultimate.confd}/etc/fonts/presets/${cfg.substitutions}/*.conf \
+        $out/etc/fonts/conf.d/
+      cp ${pkgs.fontconfig-ultimate.confd}/etc/fonts/presets/${cfg.substitutions}/*.conf \
+        $out/etc/fonts/${version}/conf.d/
+      ''}
+
+      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/conf.d/*.conf \
+        $out/etc/fonts/conf.d/
+
+      ln -s ${pkgs.fontconfig-ultimate.confd}/etc/fonts/conf.d/*.conf \
+        $out/etc/fonts/${version}/conf.d/
+    '';
+
 in
 {
 
@@ -115,78 +193,11 @@ in
   };
 
 
-  config =
-    let ultimate = config.fonts.fontconfig.ultimate;
-        fontconfigUltimateConf = ''
-          <?xml version="1.0"?>
-          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-          <fontconfig>
+  config = mkIf (config.fonts.fontconfig.enable && cfg.enable) {
 
-            ${optionalString (!ultimate.allowBitmaps) ''
-            <!-- Reject bitmap fonts -->
-            <selectfont>
-              <rejectfont>
-                <pattern>
-                  <patelt name="scalable"><bool>false</bool></patelt>
-                </pattern>
-              </rejectfont>
-            </selectfont>
-            ''}
-
-            ${optionalString ultimate.allowType1 ''
-            <!-- Reject Type 1 fonts -->
-            <selectfont>
-              <rejectfont>
-                <pattern>
-                  <patelt name="fontformat">
-                    <string>Type 1</string>
-                  </patelt>
-                </pattern>
-              </rejectfont>
-            </selectfont>
-            ''}
-
-            <!-- Use embedded bitmaps in fonts like Calibri? -->
-            <match target="font">
-              <edit name="embeddedbitmap" mode="assign">
-                ${fcBool ultimate.useEmbeddedBitmaps}
-              </edit>
-            </match>
-
-            <!-- Force autohint always -->
-            <match target="font">
-              <edit name="force_autohint" mode="assign">
-                ${fcBool ultimate.forceAutohint}
-              </edit>
-            </match>
-
-            <!-- Render some monospace TTF fonts as bitmaps -->
-            <match target="pattern">
-              <edit name="bitmap_monospace" mode="assign">
-                ${fcBool ultimate.renderMonoTTFAsBitmap}
-              </edit>
-            </match>
-
-            ${optionalString (ultimate.substitutions != "none") ''
-            <!-- Type 1 font substitutions -->
-            <include ignore_missing="yes">${pkgs.fontconfig-ultimate.confd}/etc/fonts/presets/${ultimate.substitutions}</include>
-            ''}
-
-            <include ignore_missing="yes">${pkgs.fontconfig-ultimate.confd}/etc/fonts/conf.d</include>
-
-          </fontconfig>
-        '';
-    in mkIf (config.fonts.fontconfig.enable && ultimate.enable) {
-
-      environment.etc."fonts/conf.d/52-fontconfig-ultimate.conf" = {
-        text = fontconfigUltimateConf;
-      };
-
-      environment.etc."fonts/${pkgs.fontconfig.configVersion}/conf.d/52-fontconfig-ultimate.conf" = {
-        text = fontconfigUltimateConf;
-      };
-
-      environment.variables = ultimate.rendering;
+      fonts.fontconfig.confPkgs = [ confPkg ];
+      
+      environment.variables = cfg.rendering;
 
     };
 

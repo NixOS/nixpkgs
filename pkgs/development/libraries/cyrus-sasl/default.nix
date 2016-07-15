@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";
-    description = "library for adding authentication support to connection-based protocols";
+    description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
   };
 }

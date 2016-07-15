@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "checks CSS for syntax errors and other problems";
+    description = "Checks CSS for syntax errors and other problems";
     longDescription = ''
       CSSLint is a tool to help point out problems with your CSS
       code. It does basic syntax checking as well as applying a set of

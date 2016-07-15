@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://log4cplus.sourceforge.net/";
-    description = "a port the log4j library from Java to C++";
+    description = "A port the log4j library from Java to C++";
     license = stdenv.lib.licenses.asl20;
   };
 }

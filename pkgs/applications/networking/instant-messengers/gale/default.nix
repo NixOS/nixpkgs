@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = "http://gale.org/";
-    description = "chat/messaging system (server and client)";
+    description = "Chat/messaging system (server and client)";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };

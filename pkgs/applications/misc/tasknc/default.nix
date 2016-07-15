@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/mjheagle8/tasknc";
-    description = "a ncurses wrapper around taskwarrior";
+    description = "A ncurses wrapper around taskwarrior";
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = stdenv.lib.platforms.linux; # Cannot test others
   };

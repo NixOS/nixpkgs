@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
       cp $communityModules/mod_websocket/mod_websocket.lua $out/lib/prosody/modules/
       wrapProgram $out/bin/prosody \
-        --set LUA_PATH '"${luaPath};"' \
-        --set LUA_CPATH '"${luaCPath};"'
+        --set LUA_PATH '${luaPath};' \
+        --set LUA_CPATH '${luaCPath};'
       wrapProgram $out/bin/prosodyctl \
         --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '"${luaPath};"' \
-        --set LUA_CPATH '"${luaCPath};"'
+        --set LUA_PATH '${luaPath};' \
+        --set LUA_CPATH '${luaCPath};'
     '';
 
   meta = {

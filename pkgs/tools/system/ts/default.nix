@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
-    description = "task spooler - batch queue";
+    description = "Task spooler - batch queue";
     license = licenses.gpl2;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.all;

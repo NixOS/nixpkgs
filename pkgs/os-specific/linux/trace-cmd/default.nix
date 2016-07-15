@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installPhase   = "make prefix=$out install install_doc";
 
   meta = {
-    description = "user-space tools for the Linux kernel ftrace subsystem";
+    description = "User-space tools for the Linux kernel ftrace subsystem";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

@@ -1,0 +1,30 @@
+From 60f64d7077ebd2b29b18faa3b25ee593e126e347 Mon Sep 17 00:00:00 2001
+From: Dmitry Smirnov <onlyjob@member.fsf.org>
+Date: Sun, 20 Dec 2015 14:03:20 +1100
+Subject: [PATCH] build: Fix FTBFS with CMake-3.4
+
+Closes: #363
+
+~~~~
+ CMake Error at CheckIncludes.cmake:4 (check_include_files):
+   Unknown CMake command "check_include_files".
+ Call Stack (most recent call first):
+   CMakeLists.txt:113 (check_includes)
+~~~~
+
+Change-Id: I70f03d829c40ae560083a98c2bcf6344dbac3ad6
+Signed-off-by: Dmitry Smirnov <onlyjob@member.fsf.org>
+---
+ CheckIncludes.cmake | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CheckIncludes.cmake b/CheckIncludes.cmake
+index 19ed485..f51075a 100644
+--- a/CheckIncludes.cmake
++++ b/CheckIncludes.cmake
+@@ -1,3 +1,5 @@
++include(CheckIncludeFiles)
++
+ function(check_includes INCLUDES)
+   set(INCLUDE_MISSING FALSE)
+   foreach(INCLUDE_FILE ${INCLUDES})

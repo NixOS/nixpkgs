@@ -16,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.18";
+  version = "2.4.20";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "0k7xm6ldzvakzq39nw6b39190ihlkc28all2gkvckxa1vr8b0i06";
+    sha1 = "cefe8ea4a3f81c7a08e36c80ebbd792c67ab361b";
   };
 
   # FIXME: -dev depends on -doc

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libgpg-error-1.21";
+  name = "libgpg-error-${version}";
+  version = "1.23";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "0kdq2cbnk84fr4jqcv689rlxpbyl6bda2cn6y3ll19v3mlydpnxp";
+    sha256 = "1alyjd6671drj92m0qi9943rfmf1sjjbzvmz97v4hh4cp5jpy33z";
   };
 
   postPatch = "sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure";
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ maintainers.fuuzetsu maintainers.vrthra ];
   };
 }
 

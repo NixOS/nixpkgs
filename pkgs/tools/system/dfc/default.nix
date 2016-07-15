@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://projects.gw-computing.net/projects/dfc";
-    description = "displays file system space usage using graphs and colors";
+    description = "Displays file system space usage using graphs and colors";
     license="free";
     maintainers = with stdenv.lib.maintainers; [qknight];
     platforms = with stdenv.lib.platforms; all;

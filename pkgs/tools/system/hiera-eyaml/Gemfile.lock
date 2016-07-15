@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    hiera-eyaml (2.1.0)
+      highline (~> 1.6.19)
+      trollop (~> 2.0)
+    highline (1.6.21)
+    trollop (2.1.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  hiera-eyaml (= 2.1.0)
+
+BUNDLED WITH
+   1.11.2

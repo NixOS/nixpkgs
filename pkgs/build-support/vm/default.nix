@@ -319,6 +319,7 @@ rec {
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
+    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
@@ -1832,44 +1833,44 @@ rec {
     debian70x86_64 = debian7x86_64;
 
     debian7i386 = {
-      name = "debian-7.10-wheezy-i386";
-      fullName = "Debian 7.10 Wheezy (i386)";
+      name = "debian-7.11-wheezy-i386";
+      fullName = "Debian 7.11 Wheezy (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
-        sha256 = "02dncyhz3c02jzdxqngbhfic7acsa7p2yv76xwrhawj38yjgqzrm";
+        sha256 = "57ea423dc1c0cc082cae580360f8e7192c9fd60e2ef775a4ce7f48784277462d";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian7x86_64 = {
-      name = "debian-7.10-wheezy-amd64";
-      fullName = "Debian 7.10 Wheezy (amd64)";
+      name = "debian-7.11-wheezy-amd64";
+      fullName = "Debian 7.11 Wheezy (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
-        sha256 = "1kir3j6y81s914njvs0sbwywq7qv28f8s615r9agg9s0h5g760fw";
+        sha256 = "b400e459ce2f8af8621182c3a9ea843f0df3dc2d5662e6c6204f9406f5ff2d41";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8i386 = {
-      name = "debian-8.4-jessie-i386";
-      fullName = "Debian 8.4 Jessie (i386)";
+      name = "debian-8.5-jessie-i386";
+      fullName = "Debian 8.5 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "1j8swc1nzsi20vbcmya2sv0fzcnz7lhwb32lxabgcwm3xlkzlg58";
+        sha256 = "f87a1ee673b335c28cb6ac87be61d6ef20f32dd847835c2bb7d400a00a464c7f";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.4-jessie-amd64";
-      fullName = "Debian 8.4 Jessie (amd64)";
+      name = "debian-8.5-jessie-amd64";
+      fullName = "Debian 8.5 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "0kipisyjkhczghzqj4a8y1n4az9c4c8lsj8sw7js13b053lpj6ga";
+        sha256 = "df6aea15d5547ae8dc6d7ceadc8bf6499bc5a3907d13231f811bf3c1c22474ef";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

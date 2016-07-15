@@ -1,19 +1,19 @@
 { stdenv, fetchurl, cmake, coin3d, xercesc, ode, eigen, qt4, opencascade, gts
 , boost, zlib, python, swig, gfortran, soqt, libf2c, makeWrapper
-, matplotlib, pycollada, pyside, pysideTools, pysideShiboken }:
+, matplotlib, pycollada, pyside, pysideTools, pysideShiboken, pivy }:
 
 stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.15";
+  version = "0.16";
 
   src = fetchurl {
-    url = https://github.com/FreeCAD/FreeCAD/archive/0.15.tar.gz;
-    sha256 = "1vndvywvq86hyhmg629bkn5ag4lk2mg1pl4dq7jvbjvbrczb12fc";
+    url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
+    sha256 = "02cfw5wlb04j0ymhk4skrm7rvbz13hpv995asf9v8q6wn2s1mivc";
   };
 
   buildInputs = [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost
     zlib python swig gfortran soqt libf2c makeWrapper matplotlib
-    pycollada pyside pysideShiboken pysideTools
+    pycollada pyside pysideShiboken pysideTools pivy
   ];
 
   enableParallelBuilding = true;

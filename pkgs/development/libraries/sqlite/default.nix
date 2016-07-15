@@ -3,11 +3,11 @@
 assert interactive -> readline != null && ncurses != null;
 
 stdenv.mkDerivation {
-  name = "sqlite-3.12.2";
+  name = "sqlite-3.13.0";
 
   src = fetchurl {
-    url = "http://sqlite.org/2016/sqlite-autoconf-3120200.tar.gz";
-    sha1 = "b43c2e7238e54c50b95fbbd85c48792f4f39af8c";
+    url = "http://sqlite.org/2016/sqlite-autoconf-3130000.tar.gz";
+    sha256 = "0sq88jbwsk48i41f7m7rkw9xvijq011nsbs7pl49s31inck70yg2";
   };
 
   outputs = [ "dev" "out" "bin" ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     "-DSQLITE_ENABLE_JSON1"
     "-DSQLITE_ENABLE_FTS3"
     "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
+    "-DSQLITE_ENABLE_FTS3_TOKENIZER"
     "-DSQLITE_ENABLE_FTS4"
     "-DSQLITE_ENABLE_RTREE"
     "-DSQLITE_ENABLE_STMT_SCANSTATUS"

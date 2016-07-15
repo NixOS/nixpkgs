@@ -1,6 +1,6 @@
 # TODO tidy up eg The patchelf code is patching gvim even if you don't build it..
 # but I have gvim with python support now :) - Marc
-args@{pkgs, source ? "default", fetchurl, fetchhg, stdenv, ncurses, pkgconfig, gettext
+args@{pkgs, source ? "default", fetchurl, fetchFromGitHub, stdenv, ncurses, pkgconfig, gettext
 , composableDerivation, lib, config, glib, gtk, python, perl, tcl, ruby
 , libX11, libXext, libSM, libXpm, libXt, libXaw, libXau, libXmu
 , libICE
@@ -50,10 +50,11 @@ composableDerivation {
       builtins.getAttr source {
       "default" =
         # latest release
-      args.fetchhg {
-            url = "http://vim.googlecode.com/hg/";
-            rev = "v${version}";
-            sha256 = "01m67lvnkz0ad28ifj964zcg63y5hixplbnzas5xarj8vl3pc5a0";
+      args.fetchFromGitHub {
+        owner = "vim";
+        repo = "vim";
+        rev = "v${version}";
+        sha256 = "04hp2gqbbj9h872bgj1g9xcaj5qlg9q45v6by2ch9n105dng9aj3";
       };
 
       "vim-nox" =

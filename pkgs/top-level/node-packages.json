@@ -136,7 +136,7 @@
 , "optimist"
 , "optparse"
 , "owl-deepcopy"
-, "parsoid"
+, { "parsoid": "0.4.1" }
 , "passport"
 , "passport-http"
 , "passport-local"
@@ -164,6 +164,7 @@
 , "sockjs"
 , "source-map"
 , "stylus"
+, "svgo"
 , "tar"
 , "temp"
 , "tern"

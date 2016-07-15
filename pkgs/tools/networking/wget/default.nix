@@ -3,11 +3,11 @@
 , libiconv, libpsl ? null, openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.17.1";
+  name = "wget-1.18";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.xz";
-    sha256 = "1jcpvl5sxb2ag8yahpy370c5jlfb097a21k2mhsidh4wxdhrnmgy";
+    sha256 = "1hcwx8ww3sxzdskkx3l7q70a7wd6569yrnjkw9pw013cf9smpddm";
   };
 
   patches = [ ./remove-runtime-dep-on-openssl-headers.patch ];

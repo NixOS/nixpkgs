@@ -57,11 +57,11 @@ stdenv.mkDerivation {
       outputFile = "./languages-frameworks/haskell.xml";
     }
   + toDocbook {
-      inputFile = ./../pkgs/development/idris-modules/README.md;
+      inputFile = ../pkgs/development/idris-modules/README.md;
       outputFile = "languages-frameworks/idris.xml";
     }
   + toDocbook {
-      inputFile = ./../pkgs/development/r-modules/README.md;
+      inputFile = ../pkgs/development/r-modules/README.md;
       outputFile = "languages-frameworks/r.xml";
     }
   + ''

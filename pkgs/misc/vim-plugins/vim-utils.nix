@@ -330,7 +330,7 @@ rec {
   vimHelpTags = ''
   vimHelpTags(){
     if [ -d "$1/doc" ]; then
-      ${vim}/bin/vim -N -u NONE -i NONE -n -e -s -c "helptags $1/doc" +quit!
+      ${vim}/bin/vim -N -u NONE -i NONE -n -E -s -c "helptags $1/doc" +quit! || echo "docs to build failed"
     fi
   }
   '';

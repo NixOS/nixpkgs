@@ -18,6 +18,10 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
+  postPatch = ''
+    sed '1i#include <cmath>' -i userspace/libsinsp/{cursesspectro,filterchecks}.cpp
+  '';
+
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";

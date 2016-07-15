@@ -4,7 +4,8 @@ with stdenv.lib;
 
 { buildInputs ? []
 , extraArgs ? []
-, LD_LIBRARY_PATH ? ""
+, LD_LIBRARY_PATH ? []
+, ghc ? ghc
 , ...
 }@args:
 
@@ -15,6 +16,7 @@ stdenv.mkDerivation (args // {
     optional stdenv.isLinux glibcLocales ++
     [ ghc pkgconfig ];
 
+  STACK_PLATFORM_VARIANT="nix";
   STACK_IN_NIX_SHELL=1;
   STACK_IN_NIX_EXTRA_ARGS =
     concatMap (pkg: ["--extra-lib-dirs=${pkg}/lib"
@@ -22,7 +24,7 @@ stdenv.mkDerivation (args // {
     extraArgs;
 
   # XXX: workaround for https://ghc.haskell.org/trac/ghc/ticket/11042.
-  LD_LIBRARY_PATH = "${makeLibraryPath buildInputs}:${LD_LIBRARY_PATH}";
+  LD_LIBRARY_PATH = makeLibraryPath (LD_LIBRARY_PATH ++ buildInputs);
 
   preferLocalBuild = true;
 

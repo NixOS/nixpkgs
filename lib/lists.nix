@@ -68,18 +68,7 @@ rec {
        imap (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-1" "b-2" ]
   */
-  imap =
-    if builtins ? genList then
-      f: list: genList (n: f (n + 1) (elemAt list n)) (length list)
-    else
-      f: list:
-      let
-        len = length list;
-        imap' = n:
-          if n == len
-            then []
-            else [ (f (n + 1) (elemAt list n)) ] ++ imap' (n + 1);
-      in imap' 0;
+  imap = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
   /* Map and concatenate the result.
 
@@ -216,17 +205,11 @@ rec {
        range 3 2
        => [ ]
   */
-  range =
-    if builtins ? genList then
-      first: last:
-        if first > last
-        then []
-        else genList (n: first + n) (last - first + 1)
+  range = first: last:
+    if first > last then
+      []
     else
-      first: last:
-        if last < first
-        then []
-        else [first] ++ range (first + 1) last;
+      genList (n: first + n) (last - first + 1);
 
   /* Splits the elements of a list in two lists, `right' and
      `wrong', depending on the evaluation of a predicate.
@@ -250,19 +233,9 @@ rec {
        zipListsWith (a: b: a + b) ["h" "l"] ["e" "o"]
        => ["he" "lo"]
   */
-  zipListsWith =
-    if builtins ? genList then
-      f: fst: snd: genList (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd))
-    else
-      f: fst: snd:
-      let
-        len = min (length fst) (length snd);
-        zipListsWith' = n:
-          if n != len then
-            [ (f (elemAt fst n) (elemAt snd n)) ]
-            ++ zipListsWith' (n + 1)
-          else [];
-      in zipListsWith' 0;
+  zipListsWith = f: fst: snd:
+    genList
+      (n: f (elemAt fst n) (elemAt snd n)) (min (length fst) (length snd));
 
   /* Merges two lists of the same size together. If the sizes aren't the same
      the merging stops at the shortest.
@@ -280,11 +253,8 @@ rec {
        reverseList [ "b" "o" "j" ]
        => [ "j" "o" "b" ]
   */
-  reverseList =
-    if builtins ? genList then
-      xs: let l = length xs; in genList (n: elemAt xs (l - n - 1)) l
-    else
-      fold (e: acc: acc ++ [ e ]) [];
+  reverseList = xs:
+    let l = length xs; in genList (n: elemAt xs (l - n - 1)) l;
 
   /* Sort a list based on a comparator function which compares two
      elements and returns true if the first argument is strictly below
@@ -320,19 +290,7 @@ rec {
        take 2 [ ]
        => [ ]
   */
-  take =
-    if builtins ? genList then
-      count: sublist 0 count
-    else
-      count: list:
-        let
-          len = length list;
-          take' = n:
-            if n == len || n == count
-              then []
-            else
-              [ (elemAt list n) ] ++ take' (n + 1);
-        in take' 0;
+  take = count: sublist 0 count;
 
   /* Remove the first (at most) N elements of a list.
 
@@ -342,19 +300,7 @@ rec {
        drop 2 [ ]
        => [ ]
   */
-  drop =
-    if builtins ? genList then
-      count: list: sublist count (length list) list
-    else
-      count: list:
-        let
-          len = length list;
-          drop' = n:
-            if n == -1 || n < count
-              then []
-            else
-              drop' (n - 1) ++ [ (elemAt list n) ];
-        in drop' (len - 1);
+  drop = count: list: sublist count (length list) list;
 
   /* Return a list consisting of at most ‘count’ elements of ‘list’,
      starting at index ‘start’.
@@ -427,9 +373,5 @@ rec {
        => [ 1 4 5 ]
   */
   subtractLists = e: filter (x: !(elem x e));
-
-  /*** deprecated stuff ***/
-
-  deepSeqList = throw "removed 2016-02-29 because unused and broken";
 
 }

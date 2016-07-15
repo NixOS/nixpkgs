@@ -91,12 +91,10 @@ ln -s /run $mountPoint/var/run
 rm -f $mountPoint/etc/{resolv.conf,hosts}
 cp -Lf /etc/resolv.conf /etc/hosts $mountPoint/etc/
 
-if [ -e "$SSL_CERT_FILE" ]; then
-    cp -Lf "$SSL_CERT_FILE" "$mountPoint/tmp/ca-cert.crt"
-    export SSL_CERT_FILE=/tmp/ca-cert.crt
-    # For Nix 1.7
-    export CURL_CA_BUNDLE=/tmp/ca-cert.crt
-fi
+cp -Lf "@cacert@" "$mountPoint/tmp/ca-cert.crt"
+export SSL_CERT_FILE=/tmp/ca-cert.crt
+# For Nix 1.7
+export CURL_CA_BUNDLE=/tmp/ca-cert.crt
 
 if [ -n "$runChroot" ]; then
     if ! [ -L $mountPoint/nix/var/nix/profiles/system ]; then

@@ -6,7 +6,7 @@ with super;
 rec {
   allStdenvs = import ../stdenv {
     inherit system platform config lib;
-    allPackages = args: import ./../.. ({ inherit config system; } // args);
+    allPackages = args: import ../.. ({ inherit config system; } // args);
   };
 
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
@@ -21,7 +21,7 @@ rec {
         in if changer != null then
           changer {
             # We import again all-packages to avoid recursivities.
-            pkgs = import ./../.. {
+            pkgs = import ../.. {
               # We remove packageOverrides to avoid recursivities
               config = removeAttrs config [ "replaceStdenv" ];
             };

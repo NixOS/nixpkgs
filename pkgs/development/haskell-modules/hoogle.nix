@@ -47,7 +47,7 @@ let
   # On GHCJS, use a stripped down version of GHC's prologue.txt
   prologue =
     if !isGhcjs
-    then "${ghc}/${docLibGlob}/prologue.txt"
+    then "${ghc.doc}/${docLibGlob}/prologue.txt"
     else writeText "ghcjs-prologue.txt" ''
       This index includes documentation for many Haskell modules.
     '';
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
     }
 
     echo importing builtin packages
-    for docdir in ${ghc}/${docLibGlob}/*; do
+    for docdir in ${ghc.doc}/${docLibGlob}/*; do
       name="$(basename $docdir)"
       ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then

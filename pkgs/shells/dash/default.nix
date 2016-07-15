@@ -15,4 +15,8 @@ stdenv.mkDerivation rec {
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     hydraPlatforms = stdenv.lib.platforms.linux;
   };
+
+  passthru = {
+    shellPath = "/bin/dash";
+  };
 }

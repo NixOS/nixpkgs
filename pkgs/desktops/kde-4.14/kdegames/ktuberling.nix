@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "a simple constructor game suitable for children and adults alike";
+    description = "A simple constructor game suitable for children and adults alike";
   };
 }

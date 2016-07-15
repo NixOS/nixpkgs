@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = "-lXext -lX11 -lz -lgcc_s";
 
   meta = with stdenv.lib; { 
-    description = "screencast video catpuring tool";
+    description = "Screencast video catpuring tool";
     homepage = http://xvidcap.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux;

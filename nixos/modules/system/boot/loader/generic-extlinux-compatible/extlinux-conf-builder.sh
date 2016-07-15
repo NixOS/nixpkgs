@@ -75,9 +75,10 @@ addEntry() {
 
     copyToKernelsDir "$path/kernel"; kernel=$result
     copyToKernelsDir "$path/initrd"; initrd=$result
-    if [ -n "@kernelDTB@" ]; then
-        # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
-        copyToKernelsDir $(readlink -m "$path/kernel/../dtbs"); dtbs=$result
+    # XXX UGLY: maybe the system config should have a top-level "dtbs" entry?
+    dtbDir=$(readlink -m "$path/kernel/../dtbs")
+    if [ -d "$dtbDir" ]; then
+        copyToKernelsDir "$dtbDir"; dtbs=$result
     fi
 
     timestampEpoch=$(stat -L -c '%Z' $path)
@@ -95,7 +96,7 @@ addEntry() {
     fi
     echo "  LINUX ../nixos/$(basename $kernel)"
     echo "  INITRD ../nixos/$(basename $initrd)"
-    if [ -n "@kernelDTB@" ]; then
+    if [ -d "$dtbDir" ]; then
         echo "  FDTDIR ../nixos/$(basename $dtbs)"
     fi
     echo "  APPEND systemConfig=$path init=$path/init $extraParams"

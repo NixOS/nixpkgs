@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "benchmark to measure the performance of many different types of networking";
+    description = "Benchmark to measure the performance of many different types of networking";
     homepage = "http://www.netperf.org/netperf/";
     license = "Hewlett-Packard BSD-like license";
 

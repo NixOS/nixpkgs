@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = "http://www.cl.cam.ac.uk/~mgk25/jbigkit/";
-    description = "a software implementation of the JBIG1 data compression standard";
+    description = "A software implementation of the JBIG1 data compression standard";
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];

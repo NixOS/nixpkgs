@@ -4,6 +4,7 @@
 , pam, withPAM ? false
 , systemd, withSystemd ? false
 , python2, python3, ncurses
+, ruby
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else "3"}" {
@@ -20,6 +21,10 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg ? isPy2 then "2" else
     available = lib.listToAttrs [
                   (pythonPlugin python2)
                   (pythonPlugin python3)
+                  (lib.nameValuePair "rack" {
+                    path = "plugins/rack";
+                    inputs = [ ruby ];
+                  })
                 ];
 
     getPlugin = name:
@@ -33,11 +38,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "uwsgi-${version}";
-  version = "2.0.12";
+  version = "2.0.13.1";
 
   src = fetchurl {
     url = "http://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "02g46dnw5j1iw8fsq392bxbk8d21b9pdgb3ypcinv3b4jzdm2srh";
+    sha256 = "0zwdljaljzshrdcqsrr2l2ak2zcmsps4glac2lrg0xmb28phrjif";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];
@@ -65,18 +70,21 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p $pluginDir
     python3 uwsgiconfig.py --build nixos
-    ${lib.concatMapStringsSep ";" (x: "${x.interpreter} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
+    ${lib.concatMapStringsSep ";" (x: "${x.interpreter or "python3"} uwsgiconfig.py --plugin ${x.path} nixos ${x.name}") needed}
   '';
 
   installPhase = ''
     install -Dm755 uwsgi $out/bin/uwsgi
-    ${lib.concatMapStringsSep "\n" (x: x.install) needed}
+    ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
+
+  NIX_CFLAGS_LINK = [ "-lsystemd" ];
 
   meta = with stdenv.lib; {
     homepage = http://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }

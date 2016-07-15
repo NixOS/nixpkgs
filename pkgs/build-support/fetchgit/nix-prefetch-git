@@ -12,10 +12,15 @@ fetchSubmodules=
 builder=
 branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 
+# ENV params
+out=${out:-}
+http_proxy=${http_proxy:-}
+
 # populated by clone_user_rev()
 fullRev=
 humanReadableRev=
 commitDate=
+commitDateStrict8601=
 
 if test -n "$deepClone"; then
     deepClone=true
@@ -64,7 +69,7 @@ for arg; do
             --builder) builder=true;;
             --help) usage; exit;;
             *)
-                argi=$(($argi + 1))
+                : $((++argi))
                 case $argi in
                     1) url=$arg;;
                     2) rev=$arg;;
@@ -76,7 +81,7 @@ for arg; do
     else
         case $argfun in
             set_*)
-                var=$(echo $argfun | sed 's,^set_,,')
+                var=${argfun#set_}
                 eval $var=$arg
                 ;;
         esac
@@ -92,8 +97,8 @@ fi
 init_remote(){
     local url=$1
     git init
-    git remote add origin $url
-    ( [ -n "$http_proxy" ] && git config http.proxy $http_proxy ) || true
+    git remote add origin "$url"
+    ( [ -n "$http_proxy" ] && git config http.proxy "$http_proxy" ) || true
 }
 
 # Return the reference of an hash if it exists on the remote repository.
@@ -116,12 +121,13 @@ url_to_name(){
     local url=$1
     local ref=$2
     # basename removes the / and .git suffixes
-    local base=$(basename "$url" .git)
+    local base
+    base=$(basename "$url" .git)
 
     if [[ $ref =~ ^[a-z0-9]+$ ]]; then
         echo "$base-${ref:0:7}"
     else
-        echo $base
+        echo "$base"
     fi
 }
 
@@ -131,11 +137,11 @@ checkout_hash(){
     local ref="$2"
 
     if test -z "$hash"; then
-        hash=$(hash_from_ref $ref)
+        hash=$(hash_from_ref "$ref")
     fi
 
     git fetch -t ${builder:+--progress} origin || return 1
-    git checkout -b $branchName $hash || return 1
+    git checkout -b "$branchName" "$hash" || return 1
 }
 
 # Fetch only a branch/tag and checkout it.
@@ -152,13 +158,13 @@ checkout_ref(){
     fi
 
     if test -z "$ref"; then
-        ref=$(ref_from_hash $hash)
+        ref=$(ref_from_hash "$hash")
     fi
 
     if test -n "$ref"; then
         # --depth option is ignored on http repository.
         git fetch ${builder:+--progress} --depth 1 origin +"$ref" || return 1
-        git checkout -b $branchName FETCH_HEAD || return 1
+        git checkout -b "$branchName" FETCH_HEAD || return 1
     else
         return 1
     fi
@@ -171,27 +177,32 @@ init_submodules(){
 
     # list submodule directories and their hashes
     git submodule status |
-    while read l; do
+    while read -r l; do
+        local hash
+        local dir
+        local name
+        local url
+
         # checkout each submodule
-        local hash=$(echo $l | awk '{print substr($1,2)}')
-        local dir=$(echo $l | awk '{print $2}')
-        local name=$(
+        hash=$(echo "$l" | awk '{print substr($1,2)}')
+        dir=$(echo "$l" | awk '{print $2}')
+        name=$(
             git config -f .gitmodules --get-regexp submodule\..*\.path |
             sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
-        local url=$(git config --get ${name}.url)
+        url=$(git config --get "${name}.url")
 
         clone "$dir" "$url" "$hash" ""
     done
 }
 
 clone(){
-    local top=$(pwd)
+    local top=$PWD
     local dir="$1"
     local url="$2"
     local hash="$3"
     local ref="$4"
 
-    cd $dir
+    cd "$dir"
 
     # Initialize the repository.
     init_remote "$url"
@@ -208,9 +219,8 @@ clone(){
         init_submodules
     fi
 
-    if [ -z "$builder" -a -f .topdeps ]; then
-        if tg help 2>&1 > /dev/null
-        then
+    if [ -z "$builder" ] && [ -f .topdeps ]; then
+        if tg help &>/dev/null; then
             echo "populating TopGit branches..."
             tg remote --populate origin
         else
@@ -219,7 +229,7 @@ clone(){
         fi
     fi
 
-    cd $top
+    cd "$top"
 }
 
 # Remove all remote branches, remove tags not reachable from HEAD, do a full
@@ -236,14 +246,14 @@ make_deterministic_repo(){
         .git/refs/remotes/origin/HEAD .git/config
 
     # Remove all remote branches.
-    git branch -r | while read branch; do
+    git branch -r | while read -r branch; do
         git branch -rD "$branch" >&2
     done
 
     # Remove tags not reachable from HEAD. If we're exactly on a tag, don't
     # delete it.
     maybe_tag=$(git tag --points-at HEAD)
-    git tag --contains HEAD | while read tag; do
+    git tag --contains HEAD | while read -r tag; do
         if [ "$tag" != "$maybe_tag" ]; then
             git tag -d "$tag" >&2
         fi
@@ -270,7 +280,7 @@ _clone_user_rev() {
         HEAD|refs/*)
             clone "$dir" "$url" "" "$rev" 1>&2;;
         *)
-            if test -z "$(echo $rev | tr -d 0123456789abcdef)"; then
+            if test -z "$(echo "$rev" | tr -d 0123456789abcdef)"; then
                 clone "$dir" "$url" "$rev" "" 1>&2
             else
                 echo 1>&2 "Bad commit hash or bad reference."
@@ -278,9 +288,12 @@ _clone_user_rev() {
             fi;;
     esac
 
-    fullRev="$(cd $dir && (git rev-parse $rev 2> /dev/null || git rev-parse refs/heads/$branchName) | tail -n1)"
-    humanReadableRev="$(cd $dir && (git describe $fullRev 2> /dev/null || git describe --tags $fullRev 2> /dev/null || echo -- none --))"
-    commitDate="$(cd $dir && git show --no-patch --pretty=%ci $fullRev)"
+    pushd "$dir" >/dev/null
+    fullRev=$( (git rev-parse "$rev" 2>/dev/null || git rev-parse "refs/heads/$branchName") | tail -n1)
+    humanReadableRev=$(git describe "$fullRev" 2> /dev/null || git describe --tags "$fullRev" 2> /dev/null || echo -- none --)
+    commitDate=$(git show --no-patch --pretty=%ci "$fullRev")
+    commitDateStrict8601=$(git show --no-patch --pretty=%cI "$fullRev")
+    popd >/dev/null
 
     # Allow doing additional processing before .git removal
     eval "$NIX_PREFETCH_GIT_CHECKOUT_HOOK"
@@ -288,7 +301,7 @@ _clone_user_rev() {
         echo "removing \`.git'..." >&2
         find "$dir" -name .git -print0 | xargs -0 rm -rf
     else
-        find "$dir" -name .git | while read gitdir; do
+        find "$dir" -name .git | while read -r gitdir; do
             make_deterministic_repo "$(readlink -f "$gitdir/..")"
         done
     fi
@@ -299,6 +312,7 @@ clone_user_rev() {
         _clone_user_rev "$@"
     else
         errfile="$(mktemp "${TMPDIR:-/tmp}/git-checkout-err-XXXXXXXX")"
+        # shellcheck disable=SC2064
         trap "rm -rf \"$errfile\"" EXIT
         _clone_user_rev "$@" 2> "$errfile" || (
             status="$?"
@@ -327,6 +341,7 @@ print_results() {
         echo "{"
         echo "  \"url\": \"$url\","
         echo "  \"rev\": \"$fullRev\","
+        echo "  \"date\": \"$commitDateStrict8601\","
         echo -n "  \"$hashType\": \"$hash\""
         if test -n "$fetchSubmodules"; then
             echo ","
@@ -343,7 +358,7 @@ fi
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage
-    mkdir -p $out
+    mkdir -p "$out"
     clone_user_rev "$out" "$url" "$rev"
 else
     if test -z "$hashType"; then
@@ -365,6 +380,7 @@ else
     if test -z "$finalPath"; then
 
         tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/git-checkout-tmp-XXXXXXXX")"
+        # shellcheck disable=SC2064
         trap "rm -rf \"$tmpPath\"" EXIT
 
         tmpFile="$tmpPath/$(url_to_name "$url" "$rev")"
@@ -374,7 +390,7 @@ else
         clone_user_rev "$tmpFile" "$url" "$rev"
 
         # Compute the hash.
-        hash=$(nix-hash --type $hashType --base32 $tmpFile)
+        hash=$(nix-hash --type $hashType --base32 "$tmpFile")
 
         # Add the downloaded file to the Nix store.
         finalPath=$(nix-store --add-fixed --recursive "$hashType" "$tmpFile")
@@ -389,6 +405,6 @@ else
     print_results "$hash"
 
     if test -n "$PRINT_PATH"; then
-        echo $finalPath
+        echo "$finalPath"
     fi
 fi

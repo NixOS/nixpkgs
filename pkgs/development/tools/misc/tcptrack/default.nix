@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, ncurses, libpcap }:
+{ stdenv, fetchFromGitHub, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
   name = "tcptrack-${version}";
-  version = "1.4.2";
+  version = "1.4.3";
 
-  src = fetchurl {
-    # TODO: find better URL
-    url = http://pkgs.fedoraproject.org/repo/pkgs/tcptrack/tcptrack-1.4.2.tar.gz/dacf71a6b5310caf1203a2171b598610/tcptrack-1.4.2.tar.gz;
-    sha256 = "0jbh20kjaqdiasy5s9dk53dv4vpnbh31kqcmhwz9vi3qqzhv21v6";
+  src = fetchFromGitHub {
+    owner = "bchretien";
+    repo = "tcptrack";
+    rev = "d05fe08154ff1e46578e92be49e4cfa2c6543283";
+    sha256 = "08lh3l67wn4kq9q0nfspc7rj0jvp9dzwjgxpvqliwcif8cy5mi45";
   };
 
   buildInputs = [ ncurses libpcap ];
@@ -15,10 +16,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
 
   meta = with stdenv.lib; {
+    inherit (src.meta) homepage;
     description = "libpcap based program for live TCP connection monitoring";
-    homepage = http://www.rhythm.cx/~steve/devel/tcptrack/; # dead link
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = [ maintainers.bjornfor maintainers.vrthra ];
   };
 }

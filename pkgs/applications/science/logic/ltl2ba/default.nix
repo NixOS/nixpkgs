@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "fast translation from LTL formulae to Buchi automata";
+    description = "Fast translation from LTL formulae to Buchi automata";
     homepage    = "http://www.lsv.ens-cachan.fr/~gastin/ltl2ba";
     license     = stdenv.lib.licenses.gpl2Plus;
     platforms   = stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.linux;

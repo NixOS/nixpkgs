@@ -9,7 +9,7 @@ for f in sys.path:
     for req in pkg_resources.find_distributions(f):
         if req not in packages[req.project_name]:
             # some exceptions inside buildPythonPackage
-            if req.project_name in ['setuptools', 'pip']:
+            if req.project_name in ['setuptools', 'pip', 'wheel']:
                 continue
             packages[req.project_name].append(req)
 

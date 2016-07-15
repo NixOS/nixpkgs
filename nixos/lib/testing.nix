@@ -113,14 +113,14 @@ rec {
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
             --run "testScript=\"\$(cat $out/test-script)\"" \
-            --set testScript '"$testScript"' \
-            --set VLANS '"${toString vlans}"'
+            --set testScript '$testScript' \
+            --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \
             --add-flags "$vms" \
             ${lib.optionalString enableOCR "--prefix PATH : '${ocrProg}/bin'"} \
-            --set tests '"startAll; joinAll;"' \
-            --set VLANS '"${toString vlans}"' \
+            --set tests 'startAll; joinAll;' \
+            --set VLANS '${toString vlans}' \
             ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
         ''; # "
 

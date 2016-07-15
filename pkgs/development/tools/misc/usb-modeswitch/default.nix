@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libusb1 ];
 
   meta = {
-    description = "a mode switching tool for controlling 'multi-mode' USB devices";
+    description = "A mode switching tool for controlling 'multi-mode' USB devices";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;

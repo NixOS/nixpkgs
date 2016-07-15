@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "utility for secure encrypted channels between sockets";
+    description = "Utility for secure encrypted channels between sockets";
     homepage    = "https://www.tarsnap.com/spiped.html";
     license     = stdenv.lib.licenses.bsd2;
     platforms   = stdenv.lib.platforms.unix;

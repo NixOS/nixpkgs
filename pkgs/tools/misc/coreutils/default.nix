@@ -3,6 +3,7 @@
 , selinuxSupport? false, libselinux ? null, libsepol ? null
 , autoconf, automake114x, texinfo
 , withPrefix ? false
+, singleBinary ? "symlinks" # you can also pass "shebangs" or false
 }:
 
 assert aclSupport -> acl != null;
@@ -35,7 +36,10 @@ let
     outputs = [ "out" "info" ];
 
     nativeBuildInputs = [ perl xz.bin ];
-    configureFlags = optionalString stdenv.isSunOS "ac_cv_func_inotify_init=no";
+    configureFlags =
+      optional (singleBinary != false)
+        ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+      ++ optional stdenv.isSunOS "ac_cv_func_inotify_init=no";
 
     buildInputs = [ gmp ]
       ++ optional aclSupport acl

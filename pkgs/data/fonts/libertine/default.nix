@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     for i in *.sfd; do
-      fontforge -c \
+      fontforge -lang=ff -c \
         'Open($1);
         ScaleToEm(1000);
         Reencode("unicode");

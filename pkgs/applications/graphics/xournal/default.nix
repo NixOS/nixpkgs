@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://xournal.sourceforge.net/;
-    description = "note-taking application (supposes stylus)";
+    description = "Note-taking application (supposes stylus)";
     maintainers = [ stdenv.lib.maintainers.guibert ];
     license = stdenv.lib.licenses.gpl2;
   };

@@ -22,4 +22,8 @@ buildDotnetPackage rec {
     platforms = platforms.all;
     license = with licenses; [ bsd3 gpl3 ];
   };
+
+  passthru = {
+    shellPath = "/bin/pash";
+  };
 }

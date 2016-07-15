@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames qca2 ];
   meta = {
-    description = "a computerized version of the well known strategic board game Risk";
+    description = "A computerized version of the well known strategic board game Risk";
   };
 }

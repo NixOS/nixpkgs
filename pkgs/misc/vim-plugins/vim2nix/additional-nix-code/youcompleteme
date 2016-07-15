@@ -4,8 +4,8 @@
       llvmPackages.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
-    propogatedBuildInputs = [
-      racerdRust
+    propagatedBuildInputs = [
+      rustracerd
     ];
 
     buildPhase = ''

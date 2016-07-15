@@ -1,0 +1,20 @@
+Signed-off-by: Tyler Hicks <tyhicks@xxxxxxxxxxxxx>
+Tested-by: Tyler Hicks <tyhicks@xxxxxxxxxxxxx> # 4.4.y, 3.18.y
+Cc: <stable@xxxxxxxxxxxxxxx> # 4.5-
+---
+ fs/ecryptfs/kthread.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/ecryptfs/kthread.c b/fs/ecryptfs/kthread.c
+index e818f5a..b9faeab 100644
+--- a/fs/ecryptfs/kthread.c
++++ b/fs/ecryptfs/kthread.c
+@@ -171,7 +171,7 @@ int ecryptfs_privileged_open(struct file **lower_file,
+ 		goto out;
+ 	}
+ have_file:
+-	if ((*lower_file)->f_op->mmap == NULL) {
++	if ((*lower_file)->f_op->mmap == NULL && !d_is_dir(lower_dentry)) {
+ 		fput(*lower_file);
+ 		*lower_file = NULL;
+ 		rc = -EMEDIUMTYPE;

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "opensource disk backup software";
+    description = "Opensource disk backup software";
     homepage = http://www.partimage.org;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];

@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${package-name}-${version}";
   package-name = "paper-icon-theme";
-  version = "2016-05-25";
+  version = "2016-06-08";
 
   src = fetchFromGitHub {
     owner = "snwh";
     repo = package-name;
-    rev = "f221537532181a71938faaa1f695c762defe2626";
-    sha256 = "0knsdhgssh1wyhcrbk6lddqy7zn24528lnajqij467mpgiliabfy";
+    rev = "6aa0a2c8d802199d0a9f71579f136bd6476d5d8e";
+    sha256 = "07ak1lnvd0gwaclkcvccjbxikh701vfi07gmjp4zcqi6b5crl7f5";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

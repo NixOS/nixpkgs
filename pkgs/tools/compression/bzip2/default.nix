@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.bzip.org";
-    description = "high-quality data compression program";
+    description = "High-quality data compression program";
 
     platforms = stdenv.lib.platforms.all;
     maintainers = [];

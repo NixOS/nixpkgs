@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "rakudo-star-${version}";
-  version = "2016.01";
+  version = "2016.04";
 
   src = fetchurl {
     url    = "http://rakudo.org/downloads/star/${name}.tar.gz";
-    sha256 = "feb385c5d05166061f413882e442d3a0ec53884918768940d3f00bb63bc85497";
+    sha256 = "11xzgwy155xpagrn3gzg8vqnqgjxwar70a3gzzmc9sica5064pva";
   };
 
   buildInputs = [ icu zlib gmp readline perl ];
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
       "--gen-nqp"
     ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Perl 6 implementation";
     homepage    = "http://www.rakudo.org";
-    license     = stdenv.lib.licenses.artistic2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.artistic2;
+    platforms   = platforms.unix;
+    maintainers = [ maintainers.thoughtpolice ];
   };
 }

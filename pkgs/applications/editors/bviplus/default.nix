@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patches = [ ./gcc5.diff ];
-
   makeFlags = "PREFIX=$(out)";
 
+  buildFlags = [ "CFLAGS=-fgnu89-inline" ];
+
   meta = with stdenv.lib; {
-    description = "ncurses based hex editor with a vim-like interface";
-    homepage = "http://bviplus.sourceforge.net";
+    description = "Ncurses based hex editor with a vim-like interface";
+    homepage = http://bviplus.sourceforge.net;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

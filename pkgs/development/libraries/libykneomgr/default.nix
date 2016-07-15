@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libykneomgr;
-    description = "a C library to interact with the CCID-part of the Yubikey NEO";
+    description = "A C library to interact with the CCID-part of the Yubikey NEO";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

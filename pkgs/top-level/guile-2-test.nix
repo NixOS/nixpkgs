@@ -4,7 +4,7 @@
    -- ludo@gnu.org  */
 
 let
-  allPackages = import ./../..;
+  allPackages = import ../..;
 
   pkgsFun = { system ? builtins.currentSystem }:
     allPackages {

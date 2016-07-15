@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, python }:
 
 stdenv.mkDerivation rec {
   name = "cmdstan-2.9.0";
@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
 
   buildFlags = "build";
   enableParallelBuilding = true;
+  nativeBuildInputs = stdenv.lib.optional doCheck python;
 
   doCheck = true;
-  checkPhase = "./runCmdStanTests.py src/test/interface";
+  checkPhase = "python ./runCmdStanTests.py src/test/interface";  # see #5368
 
   installPhase = ''
     mkdir -p $out/opt $out/bin

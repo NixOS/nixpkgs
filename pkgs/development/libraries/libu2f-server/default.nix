@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = https://developers.yubico.com/libu2f-server/;
     description = "A C library that implements the server-side of the U2F protocol";
     license = licenses.bsd2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ philandstuff ];
   };
 }

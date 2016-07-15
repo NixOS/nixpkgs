@@ -1,6 +1,6 @@
 { fetchurl, stdenv, sqlite, pkgconfig, autoreconfHook
 , xapian, glib, gmime, texinfo , emacs, guile
-, gtk3, webkit, libsoup, icu, withMug ? false /* doesn't build with current gtk3 */ }:
+, gtk3, webkitgtk24x, libsoup, icu }:
 
 stdenv.mkDerivation rec {
   version = "0.9.16";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     sqlite pkgconfig xapian glib gmime texinfo emacs guile libsoup icu
     autoreconfHook
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkit ];
+    gtk3 webkitgtk24x ];
 
   preBuild = ''
     # Fix mu4e-builddir (set it to $out)
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Install mug and msg2pdf
-  postInstall = stdenv.lib.optionalString withMug ''
+  postInstall = ''
     cp -v toys/msg2pdf/msg2pdf $out/bin/
     cp -v toys/mug/mug $out/bin/
   '';

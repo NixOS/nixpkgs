@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://mercurial.selenic.com/release/${name}.tar.gz";
+    url = "https://mercurial-scm.org/release/${name}.tar.gz";
     sha256 = "1zdz42znd6i7c3nf31j0k6frcs68qyniyvcad8k2a1hlarlv2y6b";
   };
 

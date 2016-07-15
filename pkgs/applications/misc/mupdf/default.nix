@@ -1,42 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, freetype, libjpeg, jbig2dec, openjpeg
-, libX11, libXext }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig
+, zlib, freetype, libjpeg, jbig2dec, openjpeg
+, libX11, libXcursor, libXrandr, libXinerama, libXext, harfbuzz, mesa }:
 
 stdenv.mkDerivation rec {
-  version = "1.8";
+  version = "1.9";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "01n26cy41lc2fjri63s4js23ixxb4nd37aafry3hz4i4id6wd8x2";
+    sha256 = "15p2k1n3afc7bnqrc0zfqz31fjfq3rrrrj4fwwy5az26d11ynxhp";
   };
 
+  NIX_CFLAGS_COMPILE= [ "-fPIC" ];
   nativeBuildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ openjpeg libjpeg jbig2dec ];
-  buildInputs = [ zlib freetype libX11 libXext ];
+  buildInputs = [ zlib freetype libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama];
 
-  enableParallelBuilding = true;
+  installPhase = ''
+    make install prefix=$out
+    gcc -shared -o $out/lib/libmupdf.so.${version} -Wl,--whole-archive $out/lib/libmupdf.a -Wl,--no-whole-archive
 
-  my_soname = "libmupdf.so.1.3";
-  my_soname_js_none = "libmupdf-js-none.so.1.3";
-  preBuild = ''
-    export makeFlags="prefix=$out build=release XCFLAGS=-fpic"
-    export NIX_CFLAGS_COMPILE=" $NIX_CFLAGS_COMPILE -I$(echo ${openjpeg}/include/openjpeg-*) "
-
-    # Copied from Gentoo ebuild
-    rm -rf thirdparty
-    sed -e "\$a\$(MUPDF_LIB): \$(MUPDF_JS_NONE_LIB)" \
-     -e "\$a\\\t\$(QUIET_LINK) \$(CC) \$(LDFLAGS) --shared -Wl,-soname -Wl,${my_soname} -Wl,--no-undefined -o \$@ \$^ \$(MUPDF_JS_NONE_LIB) \$(LIBS)" \
-     -e "/^MUPDF_LIB :=/s:=.*:= \$(OUT)/${my_soname}:" \
-     -e "\$a\$(MUPDF_JS_NONE_LIB):" \
-     -e "\$a\\\t\$(QUIET_LINK) \$(CC) \$(LDFLAGS) --shared -Wl,-soname -Wl,${my_soname_js_none} -Wl,--no-undefined -o \$@ \$^ \$(LIBS)" \
-     -e "/^MUPDF_JS_NONE_LIB :=/s:=.*:= \$(OUT)/${my_soname_js_none}:" \
-     -i Makefile
-
-    sed -e "s/libopenjpeg1/libopenjp2/" -i Makerules
-  '';
-
-  postInstall = ''
-    ln -s ${my_soname} $out/lib/libmupdf.so
+    ln -s $out/lib/libmupdf.so.${version} $out/lib/libmupdf.so
 
     mkdir -p "$out/lib/pkgconfig"
     cat >"$out/lib/pkgconfig/mupdf.pc" <<EOF
@@ -63,14 +46,14 @@ stdenv.mkDerivation rec {
     Terminal=false
     EOF
   '';
+  enableParallelBuilding = true;
 
-  meta = {
-    homepage = http://mupdf.com/;
+  meta = with stdenv.lib; {
+    homepage = http://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF viewer and toolkit written in portable C";
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ viric ];
-    platforms = with stdenv.lib.platforms; linux;
-    inherit version;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric vrthra ];
+    platforms = platforms.linux;
   };
 }

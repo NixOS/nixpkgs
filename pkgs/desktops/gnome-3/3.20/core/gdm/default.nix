@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, xorg, dbus
 , intltool, accountsservice, libX11, gnome3, systemd, gnome_session, autoreconfHook
-, gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection }:
+, gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection, plymouth }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -13,12 +13,13 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--sysconfdir=/etc"
                      "--localstatedir=/var"
                      "--with-systemd=yes"
+                     "--with-plymouth=yes"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
   buildInputs = [ pkgconfig glib itstool libxml2 intltool autoreconfHook
                   accountsservice gnome3.dconf systemd
                   gobjectIntrospection libX11 gtk
-                  libcanberra_gtk3 pam libtool ];
+                  libcanberra_gtk3 pam libtool plymouth ];
 
   #enableParallelBuilding = true; # problems compiling
 
@@ -32,6 +33,10 @@ stdenv.mkDerivation rec {
               ./libsystemd.patch ];
 
   installFlags = [ "sysconfdir=$(out)/etc" "dbusconfdir=$(out)/etc/dbus-1/system.d" ];
+
+  postInstall = ''
+    mv $out/share/gdm/greeter/applications/gnome-shell.desktop $out/share/gdm/greeter/applications/org.gnome.Shell.desktop
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GDM;

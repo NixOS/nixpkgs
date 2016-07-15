@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-wrapper-${version}";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "Cofyc";
     repo = "dnscrypt-wrapper";
     rev = "v${version}";
-    sha256 = "06m6p79y0p6f1knk40fbi7dnc5hnq066kafvrq74fxrl51nywjbg";
+    sha256 = "0gysylchvmxvqd4ims2cf2610vmxl80wlk62jhsv13p94yvrl53b";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];

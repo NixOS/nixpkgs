@@ -51,7 +51,7 @@ in mkTkabber (main // {
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
         --prefix PATH : "${tk}/bin" \
-        --set TCLLIBPATH '"${tclLibPaths}"' \
+        --set TCLLIBPATH '${tclLibPaths}' \
         ${optionalString withSitePlugins ''
         --set TKABBER_SITE_PLUGINS '${mkTkabber plugins}/share/tkabber-plugins'
         ''}

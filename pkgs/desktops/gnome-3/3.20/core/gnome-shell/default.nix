@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, gnome3, json_glib, libcroco, intltool, libsecret
-, python3, libsoup, polkit, clutter, networkmanager, docbook_xsl, docbook_xsl_ns, at_spi2_core
+, python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at_spi2_core
 , libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
 , sqlite, libgweather, libcanberra_gtk3
 , libpulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
@@ -15,15 +15,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = with gnome3;
     [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
-      libcroco intltool libsecret pkgconfig python3 libsoup polkit libcanberra gdk_pixbuf librsvg
+      libcroco intltool libsecret pkgconfig libsoup polkit libcanberra gdk_pixbuf librsvg
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution_data_server
-      libical libtool nss gobjectIntrospection gtk gstreamer makeWrapper gdm
+      libical libtool nss gtk gstreamer makeWrapper gdm
       libcanberra_gtk3 gnome_control_center
       defaultIconTheme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime
       gnome3.gnome-clocks # schemas needed
       at_spi2_core upower ibus gnome_session gnome_desktop telepathy_logger gnome3.gnome_settings_daemon ];
+
+  propagatedBuildInputs = [ python3Packages.pygobject3 python3Packages.python gobjectIntrospection ];
 
   installFlags = [ "keysdir=$(out)/share/gnome-control-center/keybindings" ];
 
@@ -39,6 +41,9 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
       --prefix XDG_DATA_DIRS : "${gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS" \
       --suffix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+
+    wrapProgram "$out/bin/gnome-shell-extension-tool" \
+      --prefix PYTHONPATH : "${python3Packages.pygobject3}/${python3Packages.python.sitePackages}:$PYTHONPATH"
 
     wrapProgram "$out/libexec/gnome-shell-calendar-server" \
       --prefix XDG_DATA_DIRS : "${evolution_data_server}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"

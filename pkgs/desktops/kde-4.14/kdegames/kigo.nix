@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "an open-source implementation of the popular Go game";
+    description = "An open-source implementation of the popular Go game";
   };
 }

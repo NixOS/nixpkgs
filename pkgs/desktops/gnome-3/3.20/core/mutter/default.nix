@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   # fatal error: gio/gunixfdlist.h: No such file or directory
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   configureFlags = "--with-x --disable-static --enable-shape --enable-sm --enable-startup-notification --enable-xsync --enable-verbose-mode --with-libcanberra"; 
 

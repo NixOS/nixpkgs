@@ -2,7 +2,7 @@
 , texinfo, gnused }:
 
 let
-  version = "3.1";
+  version = "3.1.1";
 in
 
 stdenv.mkDerivation {
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://github.com/ledger/ledger.git";
     rev = "refs/tags/v${version}";
-    sha256 = "07r8ds4qdzgicfdf0ar3kp1zn09ami87jkrx1yn5k7hi8n4ns0ka";
+    sha256 = "1j4p7djkmdmd858hylrsc3inamh9z0vkfl98s9wiqfmrzw51pmxp";
   };
 
   buildInputs = [ cmake boost gmp mpfr libedit python texinfo gnused ];

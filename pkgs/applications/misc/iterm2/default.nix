@@ -1,18 +1,21 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   name = "iterm2-${version}";
-  version = "2.1.4";
+  version = "3.0.4";
 
-  src = fetchurl {
-    url = "https://iterm2.com/downloads/stable/iTerm2-2_1_4.zip";
-    sha256 = "1kb4j1p1kxj9dcsd34709bm2870ffzpq6jig6q9ixp08g0zbhqhh";
+  src = fetchFromGitHub {
+    owner = "gnachman";
+    repo = "iTerm2";
+    rev = "v${version}";
+    sha256 = "0ffg9l2jvv503h13nd5rjkn5xrahswcqqwmm052qzd6d0lmqjm93";
   };
 
-  buildInputs = [ unzip ];
+  patches = [ ./disable_updates.patch ];
+  makeFlagsArray = ["Deployment"];
   installPhase = ''
     mkdir -p "$out/Applications"
-    mv "$(pwd)" "$out/Applications/iTerm.app"
+    mv "build/Deployment/iTerm2.app" "$out/Applications/iTerm.app"
   '';
 
   meta = {

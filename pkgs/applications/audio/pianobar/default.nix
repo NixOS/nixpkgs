@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, libao, readline, json_c, libgcrypt, libav, curl }:
 
 stdenv.mkDerivation rec {
-  name = "pianobar-2015.11.22";
+  name = "pianobar-2016.06.02";
 
   src = fetchurl {
     url = "http://6xq.net/projects/pianobar/${name}.tar.bz2";
-    sha256 = "0arjvs31d108l1mn2k2hxbpg3mxs47vqzxm0lzdpfcjvypkckyr3";
+    sha256 = "0n9544bfsdp04xqcjm4nhfvp357dx0c3gpys0rjkq09nzv8b1vy6";
   };
 
   buildInputs = [

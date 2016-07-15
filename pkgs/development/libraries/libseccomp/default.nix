@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "high level library for the Linux Kernel seccomp filter";
+    description = "High level library for the Linux Kernel seccomp filter";
     homepage    = "http://sourceforge.net/projects/libseccomp";
     license     = licenses.lgpl2;
     platforms   = platforms.linux;

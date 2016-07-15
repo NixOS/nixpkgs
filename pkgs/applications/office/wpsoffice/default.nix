@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec{
   name = "wpsoffice-${version}";
-  version = "10.1.0.5503";
+  version = "10.1.0.5672";
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://kdl.cc.ksosoft.com/wps-community/download/a20/wps-office_10.1.0.5503~a20p2_x86_64.tar.xz";
-    sha256 = "0h9f8s7zkpd056ibrj978mr04imv631sp1wljplh99l5ncns6hws";
+    url = "http://kdl.cc.ksosoft.com/wps-community/download/a21/wps-office_10.1.0.5672~a21_x86_64.tar.xz";
+    sha1 = "7e9b17572ed5cea50af24f01457f726fc558a515";
   };
   
   meta = {

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   installPhase = ''make DESTDIR="$out" PREFIX="" install'';
 
   meta = {
-    description = "program that connects stdin and stdout to a server somewhere on the network, through a standard HTTPS proxy";
+    description = "Program that connects stdin and stdout to a server somewhere on the network, through a standard HTTPS proxy";
     homepage = http://proxytunnel.sourceforge.net/download.php;
     license = stdenv.lib.licenses.gpl2;
   };

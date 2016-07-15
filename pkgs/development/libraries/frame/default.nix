@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://launchpad.net/frame";
-    description = "handles the buildup and synchronization of a set of simultaneous touches";
+    description = "Handles the buildup and synchronization of a set of simultaneous touches";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };

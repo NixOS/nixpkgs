@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kripken/emscripten-fastcomp;
-    description = "emscripten llvm";
+    description = "Emscripten llvm";
     platforms = platforms.all;
     maintainers = with maintainers; [ qknight matthewbauer ];
     license = stdenv.lib.licenses.ncsa;

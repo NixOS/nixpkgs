@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "bash script CD Burner Writer";
+    description = "Bash script CD Burner Writer";
     longDescription = ''
       It might not be the best looking application out there, but it works.
       It’s simple, fast and small, and can handle most things you throw at it.

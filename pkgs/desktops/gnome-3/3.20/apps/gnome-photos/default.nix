@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   # doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gegl babl gnome3.libgdata
                   gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart

@@ -54,4 +54,8 @@ stdenv.mkDerivation rec {
     homepage = http://pkg-shadow.alioth.debian.org/;
     description = "Suite containing authentication-related tools such as passwd and su";
   };
+
+  passthru = {
+    shellPath = "/bin/nologin";
+  };
 }

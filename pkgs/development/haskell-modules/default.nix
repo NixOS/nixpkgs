@@ -6,6 +6,13 @@
 
 let
 
+  allCabalFiles = pkgs.fetchFromGitHub {
+     owner = "commercialhaskell";
+     repo = "all-cabal-hashes";
+     rev = "461610ab6f0cf581e186643c037f1981755792d9";
+     sha256 = "0x2577lfd5cbbaivl72273kw93gcmxvbjybk7w4h2ic3zvs1fnvm";
+   };
+
   inherit (stdenv.lib) fix' extends;
 
   haskellPackages = self:
@@ -52,10 +59,26 @@ let
         inherit packages;
       };
 
+      hackage2nix = name: version: pkgs.stdenv.mkDerivation {
+        name = "cabal2nix-${name}-${version}";
+        buildInputs = [ pkgs.cabal2nix ];
+        phases = ["installPhase"];
+        LANG = "en_US.UTF-8";
+        LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
+        installPhase = ''
+          export HOME="$TMP"
+          mkdir $out
+          hash=$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' ${allCabalFiles}/${name}/${version}/${name}.json)
+          cabal2nix --compiler=${self.ghc.name} --system=${stdenv.system} --sha256=$hash ${allCabalFiles}/${name}/${version}/${name}.cabal >$out/default.nix
+        '';
+      };
+
     in
       import ./hackage-packages.nix { inherit pkgs stdenv callPackage; } self // {
 
         inherit mkDerivation callPackage;
+
+        callHackage = name: version: self.callPackage (hackage2nix name version);
 
         ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

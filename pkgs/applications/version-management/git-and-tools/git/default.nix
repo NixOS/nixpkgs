@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "2.8.3";
+  version = "2.9.1";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "14dafk7rz8cy2z5b92yf009qf4pc70s0viwq7hxsgd4898knr3kx";
+    sha256 = "18l2jb4bkp9ljz6p2aviwzxqyzza9z3v6h1pnkz7kjf1fay61zp8";
   };
 
   hardeningDisable = [ "format" ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk];

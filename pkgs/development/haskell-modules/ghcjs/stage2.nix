@@ -312,7 +312,7 @@
         ];
         jailbreak = true;
         homepage = "http://github.com/ghcjs/ghcjs-base";
-        description = "base library for GHCJS";
+        description = "Base library for GHCJS";
         license = stdenv.lib.licenses.mit;
       }) {};
   Cabal = callPackage

@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "an addictive and fun dice game, designed to be played by as many as six players";
+    description = "An addictive and fun dice game, designed to be played by as many as six players";
   };
 }

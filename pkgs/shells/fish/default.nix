@@ -8,13 +8,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "fish-${version}";
-  version = "2.3.0";
+  version = "2.3.1";
 
   patches = [ ./etc_config.patch ];
 
   src = fetchurl {
     url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "1ralmp7lavdl0plc09ppm232aqsn0crxx6m3hgaa06ibam3sqawi";
+    sha256 = "0r46p64lg6da3v6chsa4gisvl04kd3rpy60yih8r870kbp9wm2ij";
   };
 
   buildInputs = [ ncurses libiconv pcre2 ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
     # make fish pick up completions from nix profile
     if status --is-interactive
-      set -l profiles (echo $NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')
+      set -l profiles (echo \$NIX_PROFILES | ${coreutils}/bin/tr ' ' '\n')
       set fish_complete_path \$profiles"/share/fish/vendor_completions.d" \$fish_complete_path
     end
     EOF
@@ -86,5 +86,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ocharles ];
+  };
+
+  passthru = {
+    shellPath = "/bin/fish";
   };
 }

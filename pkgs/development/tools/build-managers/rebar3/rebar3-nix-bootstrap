@@ -26,6 +26,7 @@
 
 -record(data, {version
               , registry_only = false
+              , debug_info = false
               , compile_ports
               , erl_libs
               , plugins
@@ -54,21 +55,29 @@ do_the_bootstrap(RequiredData) ->
 %% @doc
 %% Argument parsing is super simple only because we want to keep the
 %% dependencies minimal. For now there can be two entries on the
-%% command line, "registery-only"
+%% command line, "registery-only" and "debug-info"
 -spec parse_args([string()]) -> #data{}.
-parse_args(["registry-only"]) ->
-    {ok, #data{registry_only = true}};
-parse_args([]) ->
-    {ok, #data{registry_only = false}};
-parse_args(Args) ->
-    io:format("Unexpected command line arguments passed in: ~p~n", [Args]),
-    erlang:halt(120).
+parse_args(Args0) ->
+    PossibleArgs = sets:from_list(["registry-only", "debug-info"]),
+    Args1 = sets:from_list(Args0),
+    Result = sets:subtract(Args1, PossibleArgs),
+    case sets:to_list(Result) of
+        [] ->
+            {ok, #data{registry_only = sets:is_element("registry-only", Args1),
+                       debug_info = sets:is_element("debug-info", Args1)}};
+        UnknownArgs ->
+            io:format("Unexpected command line arguments passed in: ~p~n",
+                      [UnknownArgs]),
+            erlang:halt(120)
+    end.
+
 
 -spec bootstrap_configs(#data{}) -> ok.
 bootstrap_configs(RequiredData)->
     io:format("Boostrapping app and rebar configurations~n"),
     ok = if_single_app_project_update_app_src_version(RequiredData),
-    ok = if_compile_ports_add_pc_plugin(RequiredData).
+    ok = if_compile_ports_add_pc_plugin(RequiredData),
+    ok = if_debug_info_add(RequiredData).
 
 -spec bootstrap_plugins(#data{}) -> ok.
 bootstrap_plugins(#data{plugins = Plugins}) ->
@@ -199,6 +208,33 @@ guard_env(Name) ->
     end.
 
 %% @doc
+%% If debug info is set we need to add debug info to the list of compile options
+%%
+-spec if_debug_info_add(#data{}) -> ok.
+if_debug_info_add(#data{debug_info = true}) ->
+    ConfigTerms = add_debug_info(read_rebar_config()),
+    Text = lists:map(fun(Term) -> io_lib:format("~tp.~n", [Term]) end,
+                     ConfigTerms),
+    file:write_file("rebar.config", Text);
+if_debug_info_add(_) ->
+    ok.
+
+-spec add_debug_info([term()]) -> [term()].
+add_debug_info(Config) ->
+    ExistingOpts = case lists:keysearch(erl_opts, 1, Config) of
+                       {value, {erl_opts, ExistingOptsList}} -> ExistingOptsList;
+                       _ -> []
+                   end,
+    case lists:member(debug_info, ExistingOpts) of
+        true ->
+            Config;
+        false ->
+            lists:keystore(erl_opts, 1, Config,
+                           {erl_opts, [debug_info | ExistingOpts]})
+    end.
+
+
+%% @doc
 %% If the compile ports flag is set, rewrite the rebar config to
 %% include the 'pc' plugin.
 -spec if_compile_ports_add_pc_plugin(#data{}) -> ok.
@@ -213,7 +249,7 @@ if_compile_ports_add_pc_plugin(_) ->
 -spec add_pc_to_plugins([term()]) -> [term()].
 add_pc_to_plugins(Config) ->
     PluginList = case lists:keysearch(plugins, 1, Config) of
-                     {ok, {plugins, ExistingPluginList}} -> ExistingPluginList;
+                     {value, {plugins, ExistingPluginList}} -> ExistingPluginList;
                      _ -> []
                  end,
     lists:keystore(plugins, 1, Config, {plugins, [pc | PluginList]}).

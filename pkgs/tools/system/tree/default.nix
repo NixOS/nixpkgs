@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://mama.indstate.edu/users/ice/tree/";
-    description = "command to produce a depth indented directory listing";
+    description = "Command to produce a depth indented directory listing";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

@@ -4,8 +4,8 @@
 
 
 let
-  minor = "3.14";
-  version = "${minor}.0";
+  minor = "3.16";
+  version = "${minor}.1";
 in
 
 buildPythonApplication rec {
@@ -14,7 +14,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/meld/${minor}/meld-${version}.tar.xz";
-    sha256 = "0g0h9wdr6nqdalqkz4r037569apw253cklwr17x0zjc7nwv2j3j3";
+    sha256 = "1bec697aa1ababa315ca8241ade65dc68ea87f0d316632f590975afcf967cfab";
   };
 
   buildInputs = [
@@ -55,5 +55,6 @@ buildPythonApplication rec {
     homepage = http://meldmerge.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = [ maintainers.mimadrid ];
   };
 }

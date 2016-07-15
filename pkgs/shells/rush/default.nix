@@ -35,4 +35,8 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.bjg ];
     platforms = stdenv.lib.platforms.all;
   };
+
+  passthru = {
+    shellPath = "/bin/rush";
+  };
 }

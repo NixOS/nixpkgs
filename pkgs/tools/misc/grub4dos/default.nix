@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
     license = licenses.gpl2;
   };
 }

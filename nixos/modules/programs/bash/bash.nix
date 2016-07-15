@@ -200,7 +200,7 @@ in
     # Configuration for readline in bash.
     environment.etc."inputrc".source = ./inputrc;
 
-    users.defaultUserShell = mkDefault "/run/current-system/sw/bin/bash";
+    users.defaultUserShell = mkDefault pkgs.bashInteractive;
 
     environment.pathsToLink = optionals cfg.enableCompletion [
       "/etc/bash_completion.d"

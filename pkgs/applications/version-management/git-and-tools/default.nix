@@ -23,6 +23,8 @@ rec {
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  diff-so-fancy = callPackage ./diff-so-fancy { };
+
   git = appendToName "minimal" gitBase;
 
   # The full-featured Git.

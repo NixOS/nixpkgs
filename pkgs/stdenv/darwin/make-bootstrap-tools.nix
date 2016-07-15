@@ -3,10 +3,15 @@
 with import ../../.. { inherit system; };
 
 rec {
-  # We want coreutils without ACL support.
-  coreutils_ = coreutils.override (orig: {
+  coreutils_ = coreutils.override (args: {
+    # We want coreutils without ACL support.
     aclSupport = false;
+    # Cannot use a single binary build, or it gets dynamically linked against gmp.
+    singleBinary = false;
   });
+
+  # Avoid debugging larger changes for now.
+  bzip2_ = bzip2.override (args: { linkStatic = true; });
 
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
@@ -49,7 +54,7 @@ rec {
       cp -d ${gawk}/bin/awk $out/bin
       cp ${gnutar}/bin/tar $out/bin
       cp ${gzip}/bin/gzip $out/bin
-      cp ${bzip2.bin}/bin/bzip2 $out/bin
+      cp ${bzip2_.bin}/bin/bzip2 $out/bin
       cp -d ${gnumake}/bin/* $out/bin
       cp -d ${patch}/bin/* $out/bin
       cp -d ${xz.bin}/bin/xz $out/bin
@@ -138,7 +143,7 @@ rec {
       cp ${stdenv.shell} $out/on-server/sh
       cp ${cpio}/bin/cpio $out/on-server
       cp ${coreutils_}/bin/mkdir $out/on-server
-      cp ${bzip2.bin}/bin/bzip2 $out/on-server
+      cp ${bzip2_.bin}/bin/bzip2 $out/on-server
 
       chmod u+w $out/on-server/*
       strip $out/on-server/*

@@ -2,6 +2,6 @@
 kde {
   buildInputs = [ kdelibs libkdegames ];
   meta = {
-    description = "a single player logic-based puzzle game";
+    description = "A single player logic-based puzzle game";
   };
 }

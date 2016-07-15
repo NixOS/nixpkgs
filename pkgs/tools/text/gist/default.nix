@@ -18,7 +18,7 @@ buildRubyGem rec {
   dontStrip = true;
 
   meta = with lib; {
-    description = "upload code to https://gist.github.com (or github enterprise)";
+    description = "Upload code to https://gist.github.com (or github enterprise)";
     homepage = "http://defunkt.io/gist/";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];

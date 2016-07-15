@@ -137,3 +137,10 @@ int posix_spawn(pid_t * pid, const char * path,
     char buf[PATH_MAX];
     return posix_spawn_real(pid, rewrite(path, buf), file_actions, attrp, argv, envp);
 }
+
+int execv(const char *path, char *const argv[])
+{
+    int (*execv_real) (const char *path, char *const argv[]) = dlsym(RTLD_NEXT, "execv");
+    char buf[PATH_MAX];
+    return execv_real(rewrite(path, buf), argv);
+}

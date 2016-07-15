@@ -40,6 +40,13 @@ in
         description = "Group account under which slapd runs.";
       };
 
+      urlList = mkOption {
+        type = types.listOf types.string;
+        default = [ "ldap:///" ];
+        description = "URL list slapd should listen on.";
+        example = [ "ldaps:///" ];
+      };
+
       dataDir = mkOption {
         type = types.string;
         default = "/var/db/openldap";
@@ -50,7 +57,7 @@ in
         type = types.lines;
         default = "";
         description = "
-          sldapd.conf configuration
+          slapd.conf configuration
         ";
         example = literalExample ''
             '''
@@ -89,7 +96,7 @@ in
         mkdir -p ${cfg.dataDir}
         chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
       '';
-      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -f ${configFile}";
+      serviceConfig.ExecStart = "${openldap.out}/libexec/slapd -u ${cfg.user} -g ${cfg.group} -d 0 -h \"${concatStringsSep " " cfg.urlList}\" -f ${configFile}";
     };
 
     users.extraUsers.openldap =
