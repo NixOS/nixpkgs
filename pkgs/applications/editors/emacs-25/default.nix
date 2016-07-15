@@ -5,6 +5,7 @@
 , autoconf, automake
 , withX ? !stdenv.isDarwin
 , withGTK3 ? false, gtk3 ? null
+, withXwidgets ? false, webkitgtk24x ? null
 , withGTK2 ? true, gtk2
 }:
 
@@ -14,6 +15,7 @@ assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
+assert withXwidgets -> withGTK3 && webkitgtk24x != null;
 
 let
   toolkit =
@@ -49,17 +51,19 @@ stdenv.mkDerivation rec {
         imagemagick gconf ]
     ++ stdenv.lib.optional (withX && withGTK2) gtk2
     ++ stdenv.lib.optional (withX && withGTK3) gtk3
-    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo;
+    ++ stdenv.lib.optional (stdenv.isDarwin && withX) cairo
+    ++ stdenv.lib.optional withXwidgets webkitgtk24x;
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   configureFlags =
-    if stdenv.isDarwin
+    (if stdenv.isDarwin
       then [ "--with-ns" "--disable-ns-self-contained" ]
     else if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-             "--with-gif=no" "--with-tiff=no" ];
+             "--with-gif=no" "--with-tiff=no" ])
+    ++ stdenv.lib.optional withXwidgets "--with-xwidgets";
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (stdenv.isDarwin && withX)
     "-I${cairo.dev}/include/cairo";
