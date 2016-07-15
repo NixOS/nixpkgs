@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python setuptools pkgconfig wxGTK (wxGTK.gtk) wrapPython libX11 ]  ++ stdenv.lib.optional openglSupport pyopengl;
   preConfigure = "cd wxPython";
 
-  NIX_LDFLAGS = "-lX11 -lgdk-x11-2.0";
+  NIX_LDFLAGS = "-lX11 -lgdk-x11-2.0 -lgobject-2.0";
 
   installPhase = ''
     ${python.interpreter} setup.py install WXPORT=gtk2 NO_HEADERS=1 BUILD_GLCANVAS=${if openglSupport then "1" else "0"} UNICODE=1 --prefix=$out
