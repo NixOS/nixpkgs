@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
 
 buildGoPackage rec {
   version = "3.1.0";
@@ -22,7 +22,8 @@ buildGoPackage rec {
   postInstall = ''
     tar -xvf $srcStatic
     mkdir -p $bin/share/grafana
-    mv grafana-*/{public,conf} $bin/share/grafana/
+    mv grafana-*/{public,conf,vendor} $bin/share/grafana/
+    ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/vendor/phantomjs/phantomjs
   '';
 
   meta = with lib; {
