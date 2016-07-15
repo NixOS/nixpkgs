@@ -3392,6 +3392,8 @@ in
 
   seccure = callPackage ../tools/security/seccure { };
 
+  secp256k1 = callPackage ../tools/security/secp256k1 { };
+
   securefs = callPackage ../tools/filesystems/securefs { };
 
   setroot = callPackage  ../tools/X11/setroot { };
