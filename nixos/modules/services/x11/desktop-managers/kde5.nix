@@ -54,16 +54,12 @@ in
         owner = "root";
         setuid = true;
       }
-      # ttuegel: Disabled until I can figure out how to propagate the
-      # necessary environment variables.
-      /*
       {
-        program = "start_kdeinit_wrapper";
-        source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit_wrapper";
+        program = "start_kdeinit";
+        source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
         owner = "root";
         setuid = true;
       }
-      */
     ];
 
     environment.systemPackages =
