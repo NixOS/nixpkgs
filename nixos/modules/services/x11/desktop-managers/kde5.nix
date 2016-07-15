@@ -65,7 +65,45 @@ in
     environment.systemPackages =
       [
         kde5.frameworkintegration
+        kde5.kactivities
+        kde5.kauth
+        kde5.kcmutils
+        kde5.kconfig
+        kde5.kconfigwidgets
+        kde5.kcoreaddons
+        kde5.kdbusaddons
+        kde5.kdeclarative
+        kde5.kded
+        kde5.kdesu
+        kde5.kdnssd
+        kde5.kemoticons
+        kde5.kfilemetadata
+        kde5.kglobalaccel
+        kde5.kguiaddons
+        kde5.kiconthemes
+        kde5.kidletime
+        kde5.kimageformats
         kde5.kinit
+        kde5.kio
+        kde5.kjobwidgets
+        kde5.knewstuff
+        kde5.knotifications
+        kde5.knotifyconfig
+        kde5.kpackage
+        kde5.kparts
+        kde5.kpeople
+        kde5.krunner
+        kde5.kservice
+        kde5.ktextwidgets
+        kde5.kwallet
+        kde5.kwayland
+        kde5.kwidgetsaddons
+        kde5.kxmlgui
+        kde5.kxmlrpcclient
+        kde5.plasma-framework
+        kde5.solid
+        kde5.sonnet
+        kde5.threadweaver
 
         kde5.breeze
         kde5.kde-cli-tools
