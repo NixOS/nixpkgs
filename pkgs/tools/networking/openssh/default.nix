@@ -66,11 +66,6 @@ stdenv.mkDerivation rec {
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
 
-  preConfigure = ''
-    configureFlagsArray+=("--with-privsep-path=$out/empty")
-    mkdir -p $out/empty
-  '';
-
   enableParallelBuilding = true;
 
   postInstall = ''
