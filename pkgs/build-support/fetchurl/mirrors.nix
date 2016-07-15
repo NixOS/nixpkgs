@@ -10,6 +10,7 @@ rec {
 
   # SourceForge.
   sourceforge = [
+    http://downloads.sourceforge.net/
     http://prdownloads.sourceforge.net/
     http://heanet.dl.sourceforge.net/sourceforge/
     http://surfnet.dl.sourceforge.net/sourceforge/
