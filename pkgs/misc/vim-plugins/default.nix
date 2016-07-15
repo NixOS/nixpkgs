@@ -1,7 +1,7 @@
 # TODO check that no license information gets lost
 { fetchurl, bash, stdenv, python, go, cmake, vim, vimUtils, perl, ruby, unzip
 , which, fetchgit, fetchFromGitHub, fetchhg, fetchzip, llvmPackages, zip
-, vim_configurable, vimPlugins, xkb_switch, git, rustracerd, fzf
+, vim_configurable, vimPlugins, xkb_switch, git, rustracerd ? null, fzf
 , Cocoa ? null
 }:
 
@@ -1126,8 +1126,11 @@ rec {
       llvmPackages.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
-    propogatedBuildInputs = [
-      rustracerd
+    propagatedBuildInputs = [] ++ stdenv.lib.optional (!stdenv.isDarwin) rustracerd;
+
+    patches = [
+      ./patches/youcompleteme/1-top-cmake.patch
+      ./patches/youcompleteme/2-ycm-cmake.patch
     ];
 
     buildPhase = ''
