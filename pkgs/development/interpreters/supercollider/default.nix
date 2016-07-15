@@ -40,5 +40,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc ljack2 libsndfile fftw curl libXt qt readline ]
-    ++ optional useSCEL emacs;
+      ++ optional useSCEL emacs;
 }
