@@ -77,7 +77,7 @@ kcminputrc Mouse cursorTheme 'breeze_cursors'
 kcminputrc Mouse cursorSize ''
 ksplashrc KSplash Theme Breeze
 ksplashrc KSplash Engine KSplashQML
-kdeglobals KScreen ScaleFactor 1
+kdeglobals KScreen ScreenScaleFactors ''
 kcmfonts General forceFontDPI 0
 EOF
 
@@ -157,20 +157,6 @@ xsetroot -cursor_name left_ptr
 dl=$DESKTOP_LOCKED
 unset DESKTOP_LOCKED # Don't want it in the environment
 
-# Make sure that D-Bus is running
-# D-Bus autolaunch is broken
-if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
-    eval $(dbus-launch --sh-syntax --exit-with-session)
-fi
-if qdbus >/dev/null 2>/dev/null; then
-    : # ok
-else
-    echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-    xmessage -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
-    exit 1
-fi
-
 ksplash_pid=
 if test -z "$dl"; then
   # the splashscreen and progress indicator
@@ -208,6 +194,16 @@ for prefix in "${scriptpath[@]}"; do
 done
 
 echo 'startkde: Starting up...'  1>&2
+
+# Make sure that D-Bus is running
+if $qdbus >/dev/null 2>/dev/null; then
+    : # ok
+else
+    echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
+    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
+    xmessage -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
+    exit 1
+fi
 
 # Mark that full KDE session is running (e.g. Konqueror preloading works only
 # with full KDE running). The KDE_FULL_SESSION property can be detected by
@@ -255,7 +251,7 @@ if test -n "$PAM_KWALLET5_LOGIN" ; then
 fi
 
 # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
-ksyncdbusenv
+dbus-update-activation-environment --systemd --all
 if test $? -ne 0; then
   # Startup error
   echo 'startkde: Could not sync environment to dbus.'  1>&2
@@ -274,6 +270,8 @@ if test $? -ne 0; then
   xmessage -geometry 500x100 "Could not start kdeinit5. Check your installation."
   exit 1
 fi
+
+qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
 
 # (NixOS) Run kbuildsycoca5 before starting the user session because things
 # may be missing or moved if they have run nixos-rebuild and it may not be
