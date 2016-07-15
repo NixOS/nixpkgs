@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, buildPythonApplication, python3, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages }:
 
-buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   version = "1.3";
   name = "wikicurses-${version}";
 

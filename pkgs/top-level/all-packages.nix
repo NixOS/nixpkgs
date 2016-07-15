@@ -17222,7 +17222,9 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  wikicurses = callPackages ../applications/misc/wikicurses { };
+  wikicurses = callPackages ../applications/misc/wikicurses {
+    pythonPackages = python3Packages;
+  };
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
