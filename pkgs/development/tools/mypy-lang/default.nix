@@ -12,6 +12,8 @@ python35Packages.buildPythonApplication rec {
     sha256 = "12vwgzbpv0n403dvzas5ckw0f62slqk5j3024y65hi9n95r34rws";
   };
 
+  propagatedBuildInputs = with python35Packages; [ lxml ];
+
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";
     homepage    = "http://www.mypy-lang.org";

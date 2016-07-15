@@ -1,7 +1,8 @@
-{ stdenv, fetchgit, libmnl, kernel }:
+{ stdenv, fetchgit, libmnl, kernel ? null }:
 
-stdenv.mkDerivation rec {
+let
   name = "wireguard-${version}";
+
   version = "20160708";
 
   src = fetchgit {
@@ -10,25 +11,47 @@ stdenv.mkDerivation rec {
     sha256 = "1ciyjpp8c3fv95y1cypk9qyqynp8cqyh2676afq2hd33110d37ni";
   };
 
-  preConfigure = ''
-    cd src
-    sed -i /depmod/d Makefile
-  '';
-  
-  buildInputs = [ libmnl ];
-
-  KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
-
-  makeFlags = [ 
-    "DESTDIR=$(out)" 
-    "PREFIX=/"
-    "INSTALL_MOD_PATH=$(out)" 
-  ];
-
   meta = with stdenv.lib; {
     homepage    = https://www.wireguard.io/;
     description = "Fast, modern, secure VPN tunnel";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
   };
-}
+
+  module = stdenv.mkDerivation {
+    inherit src meta name;
+
+    hardeningDisable = [ "pic" ];
+
+    preConfigure = ''
+      cd src
+      sed -i '/depmod/,+1d' Makefile
+    '';
+
+    KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+    INSTALL_MOD_PATH = "\${out}";
+
+    buildPhase = "make module";
+
+  };
+
+  tools = stdenv.mkDerivation {
+    inherit src meta name;
+
+    preConfigure = "cd src";
+
+    buildInputs = [ libmnl ];
+
+    makeFlags = [
+      "DESTDIR=$(out)"
+      "PREFIX=/"
+      "-C" "tools"
+    ];
+
+    buildPhase = "make tools";
+
+  };
+
+in if kernel == null
+   then tools
+   else module

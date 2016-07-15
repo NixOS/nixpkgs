@@ -316,8 +316,8 @@ with stdenv.lib;
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support
   JOYSTICK_XPAD_LEDS? y # LED Support for Xbox360 controller 'BigX' LED
-  KEXEC_FILE y
-  KEXEC_JUMP y
+  KEXEC_FILE? y
+  KEXEC_JUMP? y
   LDM_PARTITION y # Windows Logical Disk Manager (Dynamic Disk) support
   LOGIRUMBLEPAD2_FF y # Logitech Rumblepad 2 force feedback
   LOGO n # not needed
