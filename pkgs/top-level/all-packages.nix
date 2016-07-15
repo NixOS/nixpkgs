@@ -8422,6 +8422,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libuna = callPackage ../development/libraries/libuna { };
+
   libunity = callPackage ../development/libraries/libunity { };
 
   libunistring = callPackage ../development/libraries/libunistring { };

@@ -9,16 +9,16 @@ assert useX11 -> (gtk != null && vte != null && gtkdialog != null);
 assert rubyBindings -> ruby != null;
 assert pythonBindings -> python != null;
 
-let 
+let
   optional = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  version = "0.9.7";
+  version = "0.10.2";
   name = "radare2-${version}";
 
   src = fetchurl {
     url = "http://radare.org/get/${name}.tar.xz";
-    sha256 = "01sdsnbvx1qzyradj03sg24rk2bi9x58m40r0aqj8skv92c87s7l";
+    sha256 = "0fzb9ck7a7rsxi9p5hc0d6dbihd5pd9jcm5w4iikdv3bbmpwxj8v";
   };
 
 
