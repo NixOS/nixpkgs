@@ -12454,12 +12454,12 @@ in modules // {
 
 
   m2crypto = buildPythonPackage rec {
-    version = "0.23.0";
+    version = "0.24.0";
     name = "m2crypto-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/M2Crypto/M2Crypto-${version}.tar.gz";
-      sha256 = "1ac3b6eafa5ff7e2a0796675316d7569b28aada45a7ab74042ad089d15a9567f";
+      sha256 = "1s2y0pf2zg7xf4nfwrw7zhwbk615r5a7bgi5wwkwzh6jl50n99c0";
     };
 
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
