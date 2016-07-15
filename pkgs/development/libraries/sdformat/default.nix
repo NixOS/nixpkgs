@@ -20,4 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake boost ruby ignition.math2 tinyxml
   ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 }
