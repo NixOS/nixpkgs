@@ -35,17 +35,12 @@
 , libheimdal
 , libpulseaudio
 , systemd
-, channel ? "stable"
+, generated ? import ./sources.nix
 }:
 
 assert stdenv.isLinux;
 
 let
-
-  generated = if channel == "stable"    then (import ./sources.nix)
-         else if channel == "beta"      then (import ./beta_sources.nix)
-         else if channel == "developer" then (import ./dev_sources.nix)
-         else builtins.abort "Wrong channel! Channel must be one of `stable`, `beta` or `developer`";
 
   inherit (generated) version sources;
 
@@ -70,12 +65,7 @@ in
 stdenv.mkDerivation {
   name = "firefox-bin-unwrapped-${version}";
 
-  src = fetchurl {
-    url = if channel == "developer"
-            then "http://download-installer.cdn.mozilla.net/pub/firefox/nightly/latest-mozilla-aurora/firefox-${version}.${source.locale}.${source.arch}.tar.bz2"
-            else "http://download-installer.cdn.mozilla.net/pub/firefox/releases/${version}/${source.arch}/${source.locale}/firefox-${version}.tar.bz2";
-    inherit (source) sha512;
-  };
+  src = fetchurl { inherit (source) url sha512; };
 
   phases = "unpackPhase installPhase";
 

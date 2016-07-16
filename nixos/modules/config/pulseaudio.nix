@@ -217,6 +217,7 @@ in {
             ExecStart = binaryNoDaemon;
             Restart = "on-failure";
           };
+          environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
         };
 
         sockets.pulseaudio = {

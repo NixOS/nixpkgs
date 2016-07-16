@@ -50,13 +50,13 @@ in
     security.setuidOwners = [
       {
         program = "kcheckpass";
-        source = "${kde5.plasma-workspace}/lib/libexec/kcheckpass";
+        source = "${kde5.plasma-workspace.out}/lib/libexec/kcheckpass";
         owner = "root";
         setuid = true;
       }
       {
-        program = "start_kdeinit_wrapper";
-        source = "${kde5.plasma-workspace}/lib/libexec/kf5/start_kdeinit_wrapper";
+        program = "start_kdeinit";
+        source = "${kde5.kinit.out}/lib/libexec/kf5/start_kdeinit";
         owner = "root";
         setuid = true;
       }
@@ -65,10 +65,50 @@ in
     environment.systemPackages =
       [
         kde5.frameworkintegration
+        kde5.kactivities
+        kde5.kauth
+        kde5.kcmutils
+        kde5.kconfig
+        kde5.kconfigwidgets
+        kde5.kcoreaddons
+        kde5.kdbusaddons
+        kde5.kdeclarative
+        kde5.kded
+        kde5.kdesu
+        kde5.kdnssd
+        kde5.kemoticons
+        kde5.kfilemetadata
+        kde5.kglobalaccel
+        kde5.kguiaddons
+        kde5.kiconthemes
+        kde5.kidletime
+        kde5.kimageformats
         kde5.kinit
+        kde5.kio
+        kde5.kjobwidgets
+        kde5.knewstuff
+        kde5.knotifications
+        kde5.knotifyconfig
+        kde5.kpackage
+        kde5.kparts
+        kde5.kpeople
+        kde5.krunner
+        kde5.kservice
+        kde5.ktextwidgets
+        kde5.kwallet
+        kde5.kwayland
+        kde5.kwidgetsaddons
+        kde5.kxmlgui
+        kde5.kxmlrpcclient
+        kde5.plasma-framework
+        kde5.solid
+        kde5.sonnet
+        kde5.threadweaver
 
         kde5.breeze
+        kde5.kactivitymanagerd
         kde5.kde-cli-tools
+        kde5.kdecoration
         kde5.kdeplasma-addons
         kde5.kgamma5
         kde5.khelpcenter
@@ -76,12 +116,16 @@ in
         kde5.kinfocenter
         kde5.kmenuedit
         kde5.kscreen
+        kde5.kscreenlocker
         kde5.ksysguard
         kde5.kwayland
         kde5.kwin
         kde5.kwrited
+        kde5.libkscreen
+        kde5.libksysguard
         kde5.milou
         kde5.oxygen
+        kde5.plasma-integration
         kde5.polkit-kde-agent
         kde5.systemsettings
 

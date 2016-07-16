@@ -90,6 +90,14 @@ package-maintainers:
   khumba:
     - goatee
     - goatee-gtk
+    - hoppy-docs
+    - hoppy-generator
+    - hoppy-runtime
+    - hoppy-std
+    - qtah-cpp-qt5
+    - qtah-examples
+    - qtah-generator
+    - qtah-qt5
   psibi:
     - path-pieces
     - persistent

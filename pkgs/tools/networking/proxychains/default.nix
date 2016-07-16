@@ -1,10 +1,13 @@
-{ stdenv, fetchgit } :
-stdenv.mkDerivation {
-  name = "proxychains-4.0.1-head";
-  src = fetchgit {
-    url = https://github.com/haad/proxychains.git;
-    rev = "c9b8ce35b24f9d4e80563242b759dff54867163f";
-    sha256 = "163h3d3lpglbzjadf8a9kfaf0i1ds25r7si6ll6d5khn1835zik5";
+{ stdenv, fetchFromGitHub } :
+stdenv.mkDerivation rec {
+  name = "proxychains-${version}";
+  version = "4.2.0";
+
+  src = fetchFromGitHub {
+    owner = "haad";
+    repo = "proxychains";
+    rev = name;
+    sha256 = "015skh3z1jmm8kxbm3nkqv1w56kcvabdmcbmpwzywxr4xnh3x3pc";
   };
 
   meta = {

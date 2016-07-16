@@ -1,29 +1,9 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, qtscript
-, kactivities
-, kconfig
-, kcrash
-, kguiaddons
-, kiconthemes
-, ki18n
-, kinit
-, kjobwidgets
-, kio
-, kparts
-, ktexteditor
-, kwindowsystem
-, kxmlgui
-, kdbusaddons
-, kwallet
-, plasma-framework
-, kitemmodels
-, knotifications
-, threadweaver
-, knewstuff
-, libgit2
+{
+  kdeApp, lib, makeQtWrapper, extra-cmake-modules, kdoctools,
+  kactivities, kconfig, kcrash, kguiaddons, kiconthemes, ki18n, kinit,
+  kjobwidgets, kio, kparts, ktexteditor, kwindowsystem, kxmlgui, kdbusaddons,
+  kwallet, plasma-framework, kitemmodels, knotifications, qtscript, threadweaver,
+  knewstuff, libgit2
 }:
 
 kdeApp {
@@ -33,8 +13,7 @@ kdeApp {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
+    extra-cmake-modules kdoctools makeQtWrapper
   ];
   propagatedBuildInputs = [
     kactivities ki18n kio ktexteditor kwindowsystem plasma-framework qtscript

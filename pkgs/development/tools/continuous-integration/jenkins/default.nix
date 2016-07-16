@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildCommand = ''
-    mkdir -p "$out/lib"
-    cp "$src" "$out/lib/jenkins.war"
+    mkdir -p "$out/webapps"
+    cp "$src" "$out/webapps/jenkins.war"
   '';
 
   meta = with stdenv.lib; {

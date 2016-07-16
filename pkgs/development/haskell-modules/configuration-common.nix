@@ -242,6 +242,15 @@ self: super: {
         '';
       })) pkgs.libcxx;
 
+  inline-c-cpp = if !pkgs.stdenv.isDarwin
+    then super.inline-c-cpp
+    else addExtraLibrary (overrideCabal super.inline-c-cpp (drv:
+      {
+        postPatch = ''
+          substituteInPlace inline-c-cpp.cabal --replace stdc++ c++
+        '';
+      })) pkgs.libcxx;
+
   # tests don't compile for some odd reason
   jwt = dontCheck super.jwt;
 

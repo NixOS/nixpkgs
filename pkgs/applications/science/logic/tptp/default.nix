@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "TPTP-${version}";
-  version = "6.3.0";
+  version = "6.4.0";
 
   src = fetchurl {
     url = [
       "http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz"
       "http://www.cs.miami.edu/~tptp/TPTP/Archive/TPTP-v${version}/TPTP-v${version}.tgz"
     ];
-    sha256 = "0xy4cqniyx9fv8r9mc5q5b7xl163pkr9hcmpq6gkls2a0pvg07w9";
+    sha256 = "1i5hi8grfl5zyh8py63zn39rg019bd90h2l312iswbgai6nyfdw0";
   };
 
   buildInputs = [ tcsh yap perl patchelf ];
