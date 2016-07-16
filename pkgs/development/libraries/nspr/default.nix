@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, CoreServices }:
 
 let version = "4.12"; in
 
@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
     sha256 = "1pk98bmc5xzbl62q5wf2d6mryf0v95z6rsmxz27nclwiaqg0mcg0";
   };
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin CoreServices;
 
   outputs = [ "dev" "out" ];
   outputBin = "dev";
