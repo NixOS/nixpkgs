@@ -8428,6 +8428,8 @@ in
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libui = callPackage ../development/libraries/libui { };
+
   libunity = callPackage ../development/libraries/libunity { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
@@ -14865,7 +14867,7 @@ in
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m { 
+  w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = !stdenv.isDarwin;
   };
 
