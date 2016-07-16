@@ -39,12 +39,6 @@ in {
       default = 1;
     };
 
-    displayName = mkOption {
-      description = "Name of the X11 display";
-      type = types.str;
-      default = ":0";
-    };
-
     excluded = mkOption {
       description = "Names of windows where unclutter should not apply";
       type = types.listOf types.str;
@@ -67,7 +61,7 @@ in {
       serviceConfig.ExecStart = ''
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
-          -display ${cfg.displayName} \
+          -display :${toString config.services.xserver.display} \
           -jitter ${toString (cfg.threeshold - 1)} \
           ${optionalString cfg.keystroke "-keystroke"} \
           ${concatMapStrings (x: " -"+x) cfg.extraOptions} \
