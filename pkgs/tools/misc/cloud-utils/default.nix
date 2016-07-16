@@ -1,18 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, substituteAll, gawk, gnused }:
 
 stdenv.mkDerivation {
-  name = "cloud-utils-0.27";
+  name = "cloud-utils-0.29";
   src = fetchurl {
-    url = "https://launchpad.net/cloud-utils/trunk/0.27/+download/cloud-utils-0.27.tar.gz";
-    sha256 = "16shlmg36lidp614km41y6qk3xccil02f5n3r4wf6d1zr5n4v8vd";
+    url = "https://launchpad.net/cloud-utils/trunk/0.29/+download/cloud-utils-0.29.tar.gz";
+    sha256 = "0z15gs8gmpy5gqxl7yiyjj7a6s8iw44djj6axvbci627b9pvd8cy";
   };
-  patches = [ ./growpart-util-linux-2.26.patch ];
   buildPhase = ''
     mkdir -p $out/bin
     cp bin/growpart $out/bin/growpart
-    sed -i 's|awk|gawk|' $out/bin/growpart
-    sed -i 's|sed|gnused|' $out/bin/growpart
+    substituteInPlace $out/bin/growpart --replace awk ${gawk}/bin/gawk
+    substituteInPlace $out/bin/growpart --replace sed ${gnused}/bin/sed
   '';
   dontInstall = true;
   dontPatchShebangs = true;
+  dontStrip = true;
 }
