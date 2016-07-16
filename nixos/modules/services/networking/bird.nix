@@ -1,8 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkEnableOption mkIf mkOption singleton types;
-  inherit (pkgs) bird;
+  inherit (lib) mkEnableOption mkIf mkOption singleton types optional;
   cfg = config.services.bird;
   cfg6 = config.services.bird6;
 
@@ -84,6 +83,10 @@ in
       name = cfg.group;
       gid = config.ids.gids.bird;
     };
+
+    environment.systemPackages =
+         optional cfg.enable  cfg.package
+      ++ optional cfg6.enable cfg6.package;
 
     systemd.services.bird = mkIf cfg.enable (mkService "bird" cfg);
     systemd.services.bird6 = mkIf cfg6.enable (mkService "bird6" cfg6);
