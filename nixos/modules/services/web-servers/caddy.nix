@@ -33,7 +33,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.caddy}/bin/caddy -conf=${configFile} -email=${cfg.email}";
+        ExecStart = "${pkgs.caddy.bin}/bin/caddy -conf=${configFile} -email=${cfg.email}";
 	Type = "simple";
 	User = "caddy";
 	Group = "caddy";

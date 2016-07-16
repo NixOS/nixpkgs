@@ -1126,7 +1126,7 @@ rec {
       llvmPackages.llvm
     ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
 
-    propogatedBuildInputs = [
+    propagatedBuildInputs = [
       rustracerd
     ];
 

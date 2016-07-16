@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     url = "http://mirrors.jenkins-ci.org/war/${version}/jenkins.war";
     sha256 = "0x59dbvh6y25ki5jy51djbfbhf8g2j3yd9f3n66f7bkdfw8p78g1";
   };
+
+  buildCommand = ''
+    mkdir -p "$out/webapps"
+    cp "$src" "$out/webapps/jenkins.war"
+  '';
+
   meta = with stdenv.lib; {
     description = "An extendable open source continuous integration server";
     homepage = http://jenkins-ci.org;
@@ -15,6 +21,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = [ maintainers.coconnor ];
   };
-
-  buildCommand = "cp $src $out";
 }

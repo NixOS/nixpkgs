@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs }:
+{ stdenv, fetchurl, fetchpatch, pkgs }:
 
 let
 
@@ -139,5 +139,17 @@ rec {
   qat_common_Makefile =
     { name = "qat_common_Makefile";
       patch = ./qat_common_Makefile.patch;
+    };
+
+  hiddev_CVE_2016_5829 =
+    { name = "hiddev_CVE_2016_5829";
+      patch = fetchpatch {
+        url = "https://sources.debian.net/data/main/l/linux/4.6.3-1/debian/patches/bugfix/all/HID-hiddev-validate-num_values-for-HIDIOCGUSAGES-HID.patch";
+        sha256 = "14rm1qr87p7a5prz8g5fwbpxzdp3ighj095x8rvhm8csm20wspyy";
+      };
+    };
+  ecryptfs_fix_mmap_bug =
+    { name = "ecryptfs_fix_mmap_bug";
+      patch = ./ecryptfs-fix-mmap-bug.patch;
     };
 }

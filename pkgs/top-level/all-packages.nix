@@ -1940,6 +1940,7 @@ in
   haveged = callPackage ../tools/security/haveged { };
 
   habitat = callPackage ../applications/networking/cluster/habitat { };
+  habitat-sh = callPackage ../applications/networking/cluster/habitat/chroot-env.nix { };
 
   hardlink = callPackage ../tools/system/hardlink { };
 
@@ -2780,6 +2781,8 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
+  ocproxy = callPackage ../tools/networking/ocproxy { };
+
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   obexfs = callPackage ../tools/bluetooth/obexfs { };
@@ -3389,6 +3392,8 @@ in
 
   seccure = callPackage ../tools/security/seccure { };
 
+  secp256k1 = callPackage ../tools/security/secp256k1 { };
+
   securefs = callPackage ../tools/filesystems/securefs { };
 
   setroot = callPackage  ../tools/X11/setroot { };
@@ -3468,6 +3473,8 @@ in
   solr = callPackage ../servers/search/solr { };
 
   solvespace = callPackage ../applications/graphics/solvespace { };
+
+  sonarr = callPackage ../servers/sonarr { };
 
   sonata = callPackage ../applications/audio/sonata {
     inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
@@ -3662,6 +3669,8 @@ in
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
   toilet = callPackage ../tools/misc/toilet { };
+
+  tokei = callPackage ../development/tools/misc/tokei { };
 
   tor = callPackage ../tools/security/tor { };
 
@@ -5423,9 +5432,9 @@ in
 
   cargo = rust.cargo;
   rustc = rust.rustc;
-  rustPlatform = recurseIntoAttrs (makeRustPlatform rust rustPlatform);
+  rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
-  makeRustPlatform = rust: self:
+  makeRustPlatform = rust: lib.fix (self:
     let
       callPackage = newScope self;
     in {
@@ -5436,7 +5445,7 @@ in
       buildRustPackage = callPackage ../build-support/rust {
         inherit rust;
       };
-    };
+    });
 
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
   rustracer = callPackage ../development/tools/rust/racer { };
@@ -5852,7 +5861,7 @@ in
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
 
-  pypi2nix = callPackage ../development/tools/pypi2nix { python = python27; };
+  pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
   svg2tikz = python27Packages.svg2tikz;
 
@@ -6413,6 +6422,7 @@ in
 
   lemon = callPackage ../development/tools/parsing/lemon { };
 
+  lenmus = callPackage ../applications/misc/lenmus { };
 
   libtool = self.libtool_2;
 
@@ -10940,7 +10950,10 @@ in
   };
 
   linux_4_1 = callPackage ../os-specific/linux/kernel/linux-4.1.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10949,7 +10962,12 @@ in
   };
 
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+        kernelPatches.ecryptfs_fix_mmap_bug
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10958,7 +10976,11 @@ in
   };
 
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -10967,7 +10989,11 @@ in
   };
 
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper kernelPatches.qat_common_Makefile ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.qat_common_Makefile
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11116,7 +11142,7 @@ in
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    wireguard = callPackage ../os-specific/linux/wireguard {};
+    wireguard = callPackage ../os-specific/linux/wireguard { };
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
@@ -11162,7 +11188,12 @@ in
   linux_grsec_nixos = callPackage ../build-support/grsecurity {
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      inherit (self.linux_4_5) kernelPatches;
+      kernelPatches = with self.kernelPatches; [ bridge_stp_helper qat_common_Makefile ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
     };
     grsecPatch = self.kernelPatches.grsecurity_testing;
     kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
@@ -14133,7 +14164,7 @@ in
 
   qbittorrent = qt5.callPackage ../applications/networking/p2p/qbittorrent {
     boost = boost;
-    libtorrentRasterbar = libtorrentRasterbar;
+    libtorrentRasterbar = libtorrentRasterbar_1_09;
   };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp { lua5 = lua5_1; };
@@ -14842,7 +14873,9 @@ in
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m { };
+  w3m = callPackage ../applications/networking/browsers/w3m { 
+    graphicsSupport = !stdenv.isDarwin;
+  };
 
   # Should always be the version with the most features
   w3m-full = w3m;
@@ -14894,6 +14927,8 @@ in
   winswitch = callPackage ../tools/X11/winswitch { };
 
   wings = callPackage ../applications/graphics/wings { };
+
+  wireguard = callPackage ../os-specific/linux/wireguard { };
 
   wmname = callPackage ../applications/misc/wmname { };
 
@@ -15864,6 +15899,7 @@ in
           pythonBindings = true;
         };
         ruby = ruby_2_2; # see https://github.com/NixOS/nixpkgs/pull/12610#issuecomment-188666473
+        ffmpeg = ffmpeg_2; # ffmpegthumb doesn't build otherwise
       }
       ../desktops/kde-4.14;
 
@@ -16164,9 +16200,9 @@ in
 
   kde5 =
     let
-      frameworks = import ../desktops/kde-5/frameworks-5.22 { inherit pkgs; };
-      plasma = import ../desktops/kde-5/plasma-5.6 { inherit pkgs; };
-      applications = import ../desktops/kde-5/applications-16.04 { inherit pkgs; };
+      frameworks = import ../desktops/kde-5/frameworks { inherit pkgs; };
+      plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
+      applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
         { plasma = plasma self;
           frameworks = frameworks self;
