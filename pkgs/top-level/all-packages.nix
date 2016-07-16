@@ -5767,7 +5767,7 @@ in
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblasCompat;
+    openblas = openblas;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
