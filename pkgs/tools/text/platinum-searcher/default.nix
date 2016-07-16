@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "the_platinum_searcher-${version}";
-  version = "2.1.1";
-  rev = "v2.1.1";
+  version = "2.1.3";
+  rev = "v2.1.3";
 
   goPackagePath = "github.com/monochromegane/the_platinum_searcher";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "monochromegane";
     repo = "the_platinum_searcher";
-    sha256 = "06cs936w3l64ikszcysdm9ijn52kwgi1ffjxkricxbdb677gsk23";
+    sha256 = "09pkdfh7fqn3x4l9zaw5wzk20k7nfdwry7br9vfy3vv3fwv61ynp";
   };
 
   goDeps = ./deps.json;
