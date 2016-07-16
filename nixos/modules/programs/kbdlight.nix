@@ -11,6 +11,13 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.kbdlight ];
-    security.setuidPrograms = [ "kbdlight" ];
+
+    security.permissionsWrappers.setuid =
+    [ { program = "kbdlight";
+        source  = "${pkgs.kbdlight.out}/bin/kbdlight";
+        user    = "root";
+        group   = "root";
+        setuid  = true;        
+    }];
   };
 }

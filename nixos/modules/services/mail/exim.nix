@@ -89,7 +89,15 @@ in
       gid = config.ids.gids.exim;
     };
 
-    security.setuidPrograms = [ "exim" ];
+    security.permissionsWrappers.setuid =
+    [
+      { program = "exim";
+        source  = "${pkgs.exim.out}/bin/exim";
+        user    = "root";
+        group   = "root";
+        setuid  = true;
+      }
+    ]
 
     systemd.services.exim = {
       description = "Exim Mail Daemon";

@@ -95,7 +95,15 @@ in
 
     (mkIf (config.services.cron.enable) {
 
-      security.setuidPrograms = [ "crontab" ];
+      security.permissionsWrappers.setuid =
+      [
+        { program = "crontab";
+          source  = "${pkgs.cronNixosPkg.out}/bin/crontab";
+          user    = "root";
+          group   = "root";
+          setuid  = true;        
+        }
+      ];
 
       environment.systemPackages = [ cronNixosPkg ];
 

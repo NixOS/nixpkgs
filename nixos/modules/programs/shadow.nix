@@ -102,11 +102,48 @@ in
         chgpasswd = { rootOK = true; };
       };
 
-    security.setuidPrograms = [ "su" "chfn" ]
-      ++ [ "newuidmap" "newgidmap" ] # new in shadow 4.2.x
-      ++ lib.optionals config.users.mutableUsers
-      [ "passwd" "sg" "newgrp" ];
+    security.setuidPrograms = 
+    [
+      { program = "su";
+        source  = "${pkgs.shadow.su}/bin/su";
+        user    = "root";
+        group   = "root";
+        setuid  = true;        
+      }
 
+      { program = "chfn";
+        source  = "${pkgs.shadow.out}/bin/chfn";
+        user    = "root";
+        group   = "root";
+        setuid  = true;
+      }
+    ] ++
+    (lib.optionals config.users.mutableUsers
+     map (x: x // { user = "root";
+                    group   = "root";
+                    setuid  = true;
+                  })
+         [
+           { program = "passwd";
+             source  = "${pkgs.shadow.out}/bin/passwd";
+           }
+
+           { program = "sg";
+             source  = "${pkgs.shadow.out}/bin/sg";
+           }
+
+           { program = "newgrp";
+             source  = "${pkgs.shadow.out}/bin/newgrp";
+           }
+
+           { program = "newuidmap";
+             source  = "${pkgs.shadow.out}/bin/newuidmap";
+           }
+
+           { program = "newgidmap";
+             source  = "${pkgs.shadow.out}/bin/newgidmap";
+           }
+         ]
+    );
   };
-
 }

@@ -43,11 +43,6 @@ let
     '';
 
   ###### Activation script for the setuid wrappers
-  setuidPrograms =
-    (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
-      config.security.setuidPrograms)
-    ++ config.security.setuidOwners;
-
   makeSetuidWrapper =
     { program
     , source ? null

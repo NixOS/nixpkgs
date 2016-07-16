@@ -62,7 +62,15 @@ in
       '';
     }];
 
-    security.setuidPrograms = [ "e_freqset" ];
+    security.permissionsWrappers.setuid =
+    [
+      { program = "e_freqset";
+        source  = "${e.enlightenment.out}/bin/e_freqset";
+        user    = "root";
+        group   = "root";
+        setuid  = true;        
+      }
+    ];
 
     environment.etc = singleton
       { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";

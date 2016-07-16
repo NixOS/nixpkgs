@@ -106,7 +106,15 @@ in
 
     environment.systemPackages = [ pkgs.fcron ];
 
-    security.setuidPrograms = [ "fcrontab" ];
+    security.permissionsWrappers.setuid =
+    [
+      { program = "fcrontab";
+        source  = "${pkgs.fcron.out}/bin/fcrontab";
+        user    = "root";
+        group   = "root";
+        setuid  = true;        
+      }
+    ];
 
     systemd.services.fcron = {
       description = "fcron daemon";
