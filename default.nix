@@ -1,4 +1,8 @@
-let requiredVersion = import ./lib/minver.nix; in
+let
+  requiredVersion = import ./lib/minver.nix;
+  forcedAntiquotations = builtins ? forceSmartAntiquotations && builtins.forceSmartAntiquotations;
+
+in
 
 if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
 
@@ -6,4 +10,4 @@ if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.
 
 else
 
-  import ./pkgs/top-level
+  builtins.deepSeq forcedAntiquotations (import ./pkgs/top-level)

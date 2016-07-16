@@ -1,2 +1,2 @@
 # Expose the minimum required version for evaluating Nixpkgs
-"1.10"
+"1.12"
