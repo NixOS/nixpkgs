@@ -8714,7 +8714,9 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses = callPackage ../development/libraries/ncurses { };
+  ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
+  ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
+  ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
