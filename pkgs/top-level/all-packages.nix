@@ -14017,6 +14017,8 @@ in
 
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
 
+  pekwm = callPackage ../applications/window-managers/pekwm { };
+
   pencil = callPackage ../applications/graphics/pencil {
     xulrunner = firefox-unwrapped;
   };
