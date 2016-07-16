@@ -15311,6 +15311,8 @@ with pkgs;
 
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 
+    emacspeak = callPackage ../applications/editors/emacs-modes/emacspeak { };
+
     emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
