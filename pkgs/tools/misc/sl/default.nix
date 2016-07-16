@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ stdenv, fetchFromGitHub, fetchpatch, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "sl-${version}";
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
+
+  patches = [(fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/mtoyoda/sl/pull/24.patch";
+    sha256 = "0hv0rmq6cp60jg5f91lb10b1r6ynkpgk6p7x2cx2yn6xiiidn9gy";
+  })];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
