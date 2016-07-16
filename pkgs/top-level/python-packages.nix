@@ -4373,6 +4373,12 @@ in modules // {
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
     buildInputs = with self; [ pytest ];
 
+    patchPhase = ''
+      substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
+    '';
+
+    NIX_CFLAGS_COMPILE="-Wno-shift-negative-value";
+
     checkPhase = ''
       py.test
     '';
