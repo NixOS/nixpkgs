@@ -10,7 +10,7 @@ version =
     ARGV[0]
   end
 
-base_path = "http://archive.mozilla.org/pub/firefox/releases"
+base_path = "http://download-installer.cdn.mozilla.net/pub/firefox/releases"
 
 Source = Struct.new(:hash, :arch, :locale, :filename)
 
@@ -39,7 +39,7 @@ puts(<<"EOH")
 EOH
 
 sources.each do |source|
-  puts(%Q|    { locale = "#{source.locale}"; arch = "#{source.arch}"; sha512 = "#{source.hash}"; }|)
+  puts(%Q|    { url = "#{base_path}/#{version}/#{source.arch}/#{source.locale}/firefox-#{version}.tar.bz2"; locale = "#{source.locale}"; arch = "#{source.arch}"; sha512 = "#{source.hash}"; }|)
 end
 
 puts(<<'EOF')
