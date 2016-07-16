@@ -129,6 +129,10 @@ rec {
     # Only for uboot = uboot :
     ubootConfig = "sheevaplug_config";
     kernelDTB = true; # Beyond 3.10
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+    };
   };
 
   raspberrypi = {
