@@ -5,16 +5,12 @@
 , kcoreaddons
 , kdoctools
 , ki18n
-, makeQtWrapper
 }:
 
 kdeFramework {
   name = "kpackage";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ karchive kconfig kcoreaddons ki18n ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
-  postInstall = ''
-    wrapQtProgram "$out/bin/kpackagetool5"
-  '';
 }

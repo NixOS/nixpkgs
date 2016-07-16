@@ -1,4 +1,4 @@
-{ kdeFramework, lib, makeQtWrapper
+{ kdeFramework, lib
 , extra-cmake-modules
 , kcompletion
 , kconfig
@@ -18,12 +18,9 @@
 kdeFramework {
   name = "kdesignerplugin";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [
     kcompletion kconfig kconfigwidgets kcoreaddons kiconthemes kio
     kitemviews kplotting ktextwidgets kwidgetsaddons kxmlgui sonnet
   ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kgendesignerplugin"
-  '';
 }
