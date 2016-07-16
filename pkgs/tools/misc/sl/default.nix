@@ -13,15 +13,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
+  outputs = [ "out" "doc" ];
+
   patches = [(fetchpatch {
     url = "https://patch-diff.githubusercontent.com/raw/mtoyoda/sl/pull/24.patch";
     sha256 = "0hv0rmq6cp60jg5f91lb10b1r6ynkpgk6p7x2cx2yn6xiiidn9gy";
   })];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man1
+    mkdir -p $out/bin $doc/share/man/man1
     cp sl $out/bin
-    cp sl.1 $out/share/man/man1
+    cp sl.1 $doc/share/man/man1
   '';
 
   meta = {
