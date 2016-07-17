@@ -101,7 +101,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "The TeamSpeak voice communication tool";
     homepage = http://teamspeak.com/;
-    license = "http://www.teamspeak.com/?page=downloads&type=ts3_linux_client_latest";
+    license = {
+      fullName = "Teamspeak client license";
+      url = http://sales.teamspeakusa.com/licensing.php;
+      free = false;
+    };
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
     platforms = stdenv.lib.platforms.linux;
   };
