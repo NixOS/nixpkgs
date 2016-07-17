@@ -152,4 +152,13 @@ in {
     binutils.crossDrv = nativePlatforms;
     mpg123.crossDrv = nativePlatforms;
   };
+}) // (
+
+/* Cross-built bootstrap tools for every supported platform */
+let
+  tools = import ../stdenv/linux/make-bootstrap-tools-cross.nix { system = "x86_64-linux"; };
+  maintainers = [ pkgs.lib.maintainers.dezgeg ];
+  mkBootstrapToolsJob = bt: hydraJob' (pkgs.lib.addMetaAttrs { inherit maintainers; } bt.dist);
+in {
+  bootstrapTools = pkgs.lib.mapAttrs (name: mkBootstrapToolsJob) tools;
 })
