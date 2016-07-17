@@ -247,6 +247,15 @@ rec {
       allowedReferences = [];
     };
 
+  dist = stdenv.mkDerivation {
+    name = "stdenv-bootstrap-tools-cross";
+
+    buildCommand = ''
+      mkdir -p $out/nix-support
+      echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
+      echo "file busybox ${build}/on-server/busybox" >> $out/nix-support/hydra-build-products
+    '';
+  };
 }
 
 ); in {
