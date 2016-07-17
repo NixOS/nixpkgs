@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.4.9";
+  version = "2.4.11";
 
   meta = with stdenv.lib; {
     description = "Web content rendering engine, GTK+ port";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0r651ar3p0f8zwl7764kyimxk5hy88cwy116pv8cl5l8hbkjkpxg";
+    sha256 = "1xsvnvyvlywwyf6m9ainpsg87jkxjmd37q6zgz9cxb7v3c2ym2jq";
   };
 
   CC = "cc";
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
+    "--disable-jit"
     (optionalString enableIntrospection "--enable-introspection")
   ] ++ stdenv.lib.optional withGtk2 [
     "--with-gtk=2.0"
