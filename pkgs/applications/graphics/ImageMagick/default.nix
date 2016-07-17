@@ -11,7 +11,7 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.3-9";
+    version = "6.9.5-2";
     sha256 = "0q19jgn1iv7zqrw8ibxp4z57iihrc9kyb09k2wnspcacs6vrvinf";
     patches = [];
   }
@@ -23,7 +23,7 @@ let
           name = "mingw-build.patch";
           url = "https://raw.githubusercontent.com/Alexpux/MINGW-packages/"
             + "01ca03b2a4ef/mingw-w64-imagemagick/002-build-fixes.patch";
-          sha256 = "1pypszlcx2sf7wfi4p37w1y58ck2r8cd5b2wrrwr9rh87p7fy1c0";
+          sha256 = "09h3rpr1jnzd7ipy5d16r2gi0bwg4hk5khwzv4cyhv1xzs8pk7pj";
         })];
       };
 in
