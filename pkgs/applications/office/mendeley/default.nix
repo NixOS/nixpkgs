@@ -19,7 +19,7 @@ let
   url = "http://desktop-download.mendeley.com/download/apt/pool/main/m/mendeleydesktop/mendeleydesktop_${version}.deb";
   sha256 = if stdenv.system == arch32
     then "0lsmaw8zzyfvndsz1awz3vl5cdvsik9wc3ck8983y20awh7r9f4m"
-    else "12p6rgxiqajnfgd8nmknyb8icdkln727sshba8x1xlxakxg5c4q4";
+    else "0q11v6dv7z5q4s9hlr1hmsd73nmkp8l0sj0b3hjxfblx4mqk6wl7";
 
   deps = [
     gcc.cc
