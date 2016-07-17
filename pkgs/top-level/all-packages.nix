@@ -12241,6 +12241,8 @@ in
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  binkplayer = callPackage_i686 ../applications/video/binkplayer { };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 
@@ -15546,6 +15548,12 @@ in
   nexuiz = callPackage ../games/nexuiz { };
 
   njam = callPackage ../games/njam { };
+
+  nwn = callPackage ../games/nwn {
+    inherit (pkgsi686Linux.xlibs) libX11 libXcursor;
+    inherit (pkgsi686Linux) libelf SDL SDL_gfx mesa_glu;
+    stdenv = stdenv_32bit;
+  };
 
   newtonwars = callPackage ../games/newtonwars { };
 
