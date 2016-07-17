@@ -76,6 +76,12 @@ with lib;
             default = 5;
             description = "";
           };
+
+          upScript = mkOption {
+            type = types.lines;
+            default = "";
+            description = "";
+          };
         };
       });
     };
@@ -98,6 +104,7 @@ with lib;
             "PRIVATE_KEY" = qtcfg.privateKey;
             "PUBLIC_KEY" = qtcfg.publicKey;
             "TIME_WINDOW" = toString qtcfg.timeWindow;
+            "TUN_UP_SCRIPT" = pkgs.writeScript "quicktun-${name}-up.sh" qtcfg.upScript;
             "SUID" = "nobody";
           };
           serviceConfig = {
