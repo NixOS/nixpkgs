@@ -50,6 +50,7 @@ in
         (isEnabled "PAX")
         (isYES "GRKERNSEC_SYSCTL")
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
+        (isNO "GRKERNSEC_NO_RBAC")
       ];
 
     # Install PaX related utillities into the system profile.
