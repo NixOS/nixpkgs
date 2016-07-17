@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wki7d61kcmv9s3xayky9cz84qa773x3y1z88y768hq8ifwadcbn";
   };
 
+  prePatch = ''
+    substituteInPlace Makefile --replace gcc cc
+  '';
+
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man6
     cp gti $out/bin
