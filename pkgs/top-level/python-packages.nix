@@ -20492,14 +20492,19 @@ in modules // {
   });
 
   rpy2 = buildPythonPackage rec {
-    name = "rpy2-2.5.6";
+    name = "rpy2-2.8.2";
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rpy2/${name}.tar.gz";
-      sha256 = "d0d584c435b5ed376925a95a4525dbe87de7fa9260117e9f208029e0c919ad06";
+      sha256 = "2c1a313df4e64236dcfe1078ce847b8e3c180656c894928d3a4b391aacb9b24c";
     };
     buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
-    propagatedBuildInputs = [ self.singledispatch ];
+    propagatedBuildInputs = with self; [ singledispatch six ];
+
+    # According to manual this is how the testsuite should be invoked
+    checkPhase = ''
+      ${python.interpreter}  -m rpy2.tests
+    '';
     meta = {
       homepage = http://rpy.sourceforge.net/rpy2;
       description = "Python interface to R";
