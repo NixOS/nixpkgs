@@ -6,10 +6,7 @@
 
 plasmaPackage {
   name = "powerdevil";
-  nativeBuildInputs = [
-    ecm
-    kdoctools
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kconfig kdbusaddons knotifyconfig solid udev bluez-qt kactivities kauth
     kdelibs4support kglobalaccel ki18n kio kidletime kwayland libkscreen

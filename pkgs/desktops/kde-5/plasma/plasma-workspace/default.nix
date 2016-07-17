@@ -14,9 +14,7 @@
 plasmaPackage {
   name = "plasma-workspace";
 
-  nativeBuildInputs = [
-    ecm kdoctools
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   buildInputs = [
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
