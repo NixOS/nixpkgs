@@ -65,7 +65,6 @@ let
   gnused = pkgs.gnused.crossDrv;
   gnugrep = pkgs.gnugrep.crossDrv;
   gawk = pkgs.gawk.crossDrv;
-  gnutar = pkgs.gnutar.crossDrv;
   gzip = pkgs.gzip.crossDrv;
   bzip2 = pkgs.bzip2.crossDrv;
   gnumake = pkgs.gnumake.crossDrv;
@@ -85,12 +84,15 @@ in
 
 rec {
 
+
   coreutilsMinimal = (pkgs.coreutils.override (args: {
     # We want coreutils without ACL support.
     aclSupport = false;
     # Our tooling currently can't handle scripts in bin/, only ELFs and symlinks.
     singleBinary = "symlinks";
   })).crossDrv;
+
+  tarMinimal = (pkgs.gnutar.override { acl = null; }).crossDrv;
 
   busyboxMinimal = (pkgs.busybox.override {
     useMusl = true;
@@ -107,19 +109,16 @@ rec {
     '';
   }).crossDrv;
 
-  inherit pkgs;
-
   build =
 
     stdenv.mkDerivation {
-      name = "build";
+      name = "stdenv-bootstrap-tools-cross";
+      crossConfig = stdenv.cross.config;
 
       buildInputs = [nukeReferences cpio binutilsCross];
 
-      crossConfig = stdenv.cross.config;
-
       buildCommand = ''
-	      set -x
+        set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
@@ -137,7 +136,15 @@ rec {
         cp -d ${glibc.out}/lib/crt?.o $out/lib
 
         cp -rL ${glibc.dev}/include $out
-        chmod -R u+w $out/include
+        chmod -R u+w "$out"
+
+        # glibc can contain linker scripts: find them, copy their deps,
+        # and get rid of absolute paths (nuke-refs would make them useless)
+        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc.out}' | sort -u)
+        for f in $lScripts; do
+          substituteInPlace "$f" --replace '${glibc.out}/lib/' ""
+        done
 
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
@@ -157,7 +164,7 @@ rec {
         cp -d ${gnugrep}/bin/grep $out/bin
         cp ${gawk}/bin/gawk $out/bin
         cp -d ${gawk}/bin/awk $out/bin
-        cp ${gnutar}/bin/tar $out/bin
+        cp ${tarMinimal}/bin/tar $out/bin
         cp ${gzip}/bin/gzip $out/bin
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
