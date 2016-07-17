@@ -242,7 +242,15 @@ in
                     let extraConfig =
                       { boot.isContainer = true;
                         networking.hostName = mkDefault name;
-                        networking.useDHCP = false;
+                        networking.useDHCP = mkDefault false;
+                        systemd.services.dhcpcd.preStart = ''
+                          # Fixes DHCP because dhcpcd fails if this sysctl is not writable
+                          echo 0 > /tmp/container_promote_secondaries
+                          ${pkgs.utillinux}/bin/mount -o bind /tmp/container_promote_secondaries /proc/sys/net/ipv4/conf/eth0/promote_secondaries
+
+                          # Remove nameservers provided by the host
+                          resolvconf -d host
+                        '';
                       };
                     in [ extraConfig config.config ];
                   prefix = [ "containers" name ];
