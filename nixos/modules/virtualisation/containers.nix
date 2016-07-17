@@ -249,7 +249,10 @@ in
                           ${pkgs.utillinux}/bin/mount -o bind /tmp/container_promote_secondaries /proc/sys/net/ipv4/conf/eth0/promote_secondaries
 
                           # Remove nameservers provided by the host
-                          resolvconf -d host
+                          resolvconf -d host || true
+                        '';
+                        systemd.services.dhcpcd.postStop = ''
+                          ${pkgs.utillinux}/bin/umount /proc/sys/net/ipv4/conf/eth0/promote_secondaries
                         '';
                       };
                     in [ extraConfig config.config ];
