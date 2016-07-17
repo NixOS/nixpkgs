@@ -52,9 +52,8 @@ in
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
       ];
 
-    # Install PaX related utillities into the system profile.  Eventually, we
-    # also want to include gradm here.
-    environment.systemPackages = with pkgs; [ paxctl pax-utils ];
+    # Install PaX related utillities into the system profile.
+    environment.systemPackages = with pkgs; [ gradm paxctl pax-utils ];
 
     # Install rules for the grsec device node
     services.udev.packages = [ pkgs.gradm ];
