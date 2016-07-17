@@ -7,7 +7,7 @@ stdenv.mkDerivation  rec {
   version = "0.47-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pure-data/pd-${version}.src.tar.gz";
+    url = "http://msp.ucsd.edu/Software/pd-${version}.src.tar.gz";
     sha256 = "0k5s949kqd7yw97h3m8z81bjz32bis9m4ih8df1z0ymipnafca67";
   };
 
