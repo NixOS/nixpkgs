@@ -4753,6 +4753,8 @@ in
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
 
+  openshot-qt = callPackage ../applications/video/openshot-qt { };
+
   oraclejdk = self.jdkdistro true false;
 
   oraclejdk7 = self.oraclejdk7distro true false;
