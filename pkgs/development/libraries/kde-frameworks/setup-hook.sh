@@ -22,12 +22,13 @@ _ecmSharePaths=( \
     "polkit-1" \
     "sounds" \
     "templates" \
-    "wallpapers" \
-    )
+    "wallpapers" )
 
 _ecmPropagateNative() {
+    local target
     for dir in ${_ecmSharePaths[@]}; do
-        if [ -d "$1/share/$dir" ]; then
+        target=$(readlink -m "$1/share/$dir")
+        if [ "$target" != "$1/share" ] && [ -d "$target" ]; then
             propagateOnce propagatedNativeBuildInputs "$1"
             if [ -z "$crossConfig" ]; then
                 propagateOnce propagatedUserEnvPkgs "$1"
@@ -41,8 +42,10 @@ _ecmPropagateNative() {
 envHooks+=(_ecmSetXdgDirs _ecmPropagate)
 
 _ecmPropagate() {
+    local target
     for dir in ${_ecmSharePaths[@]}; do
-        if [ -d "$1/share/$dir" ]; then
+        target=$(readlink -m "$1/share/$dir")
+        if [ "$target" != "$1/share" ] && [ -d "$target" ]; then
             propagateOnce propagatedBuildInputs "$1"
             propagateOnce propagatedUserEnvPkgs "$1"
             addToSearchPathOnce RUNTIME_XDG_DATA_DIRS "$1/share"
