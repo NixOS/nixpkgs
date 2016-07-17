@@ -10927,6 +10927,8 @@ in
     kernelPatches = [ kernelPatches.bridge_stp_helper ];
   };
 
+  linux_novena = callPackage ../os-specific/linux/kernel/linux-novena.nix { };
+
   linux_3_10 = callPackage ../os-specific/linux/kernel/linux-3.10.nix {
     kernelPatches = with kernelPatches; [ bridge_stp_helper link_lguest link_apm ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11177,6 +11179,7 @@ in
   # Build the kernel modules for the some of the kernels.
   linuxPackages_mptcp = self.linuxPackagesFor self.linux_mptcp linuxPackages_mptcp;
   linuxPackages_rpi = self.linuxPackagesFor self.linux_rpi linuxPackages_rpi;
+  linuxPackages_novena = linuxPackagesFor pkgs.linux_novena linuxPackages_novena;
   linuxPackages_3_10 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_10 linuxPackages_3_10);
   linuxPackages_3_10_tuxonice = self.linuxPackagesFor self.linux_3_10_tuxonice linuxPackages_3_10_tuxonice;
   linuxPackages_3_12 = recurseIntoAttrs (self.linuxPackagesFor self.linux_3_12 linuxPackages_3_12);
@@ -11582,6 +11585,8 @@ in
   ubootNanonote = callPackage ../misc/uboot/nanonote.nix { };
 
   ubootGuruplug = callPackage ../misc/uboot/guruplug.nix { };
+
+  ubootNovena = callPackage ../misc/uboot/novena.nix { };
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
