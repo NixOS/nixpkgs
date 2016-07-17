@@ -3469,6 +3469,8 @@ let
 
   units = callPackage ../tools/misc/units { };
 
+  unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
+
   unrar = callPackage ../tools/archivers/unrar { };
 
   xar = callPackage ../tools/compression/xar { };
