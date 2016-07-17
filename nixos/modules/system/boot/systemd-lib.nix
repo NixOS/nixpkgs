@@ -177,6 +177,8 @@ rec {
         # Stupid misc. symlinks.
         ln -s ${cfg.defaultUnit} $out/default.target
 
+        ln -s ${cfg.ctrl-alt-del} $out/ctrl-alt-del.target
+
         ln -s rescue.target $out/kbrequest.target
 
         mkdir -p $out/getty.target.wants/
