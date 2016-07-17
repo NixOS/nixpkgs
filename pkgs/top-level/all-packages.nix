@@ -4724,8 +4724,6 @@ in
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  path64 = callPackage ../development/compilers/path64 { };
-
   openjdk7 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
