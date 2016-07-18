@@ -129,6 +129,11 @@ in
       plymouth update-root-fs --new-root-dir="$targetRoot"
     '';
 
+    # `mkBefore` to ensure that any custom prompts would be visible.
+    boot.initrd.preFailCommands = mkBefore ''
+      plymouth quit --wait
+    '';
+
   };
 
 }
