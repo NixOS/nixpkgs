@@ -12417,7 +12417,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pkgs.file ];
 
     patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.so'"
+      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.${if stdenv.isDarwin then "dylib" else "so"}'"
     '';
 
     doCheck = false;
