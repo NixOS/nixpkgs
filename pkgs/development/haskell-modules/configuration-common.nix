@@ -206,7 +206,12 @@ self: super: {
 
   # hfsevents needs CoreServices in scope
   hfsevents = if pkgs.stdenv.isDarwin
-    then with pkgs.darwin.apple_sdk.frameworks; addBuildTool (addBuildDepends super.hfsevents [Cocoa]) CoreServices
+    then overrideCabal
+           (with pkgs.darwin.apple_sdk.frameworks;
+            addBuildTool (addBuildDepends super.hfsevents [Cocoa])
+                         CoreServices)
+           (_: { isLibrary = true;
+                 libraryHaskellDepends = with self; [ base cereal mtl text ]; })
     else super.hfsevents;
 
   # FSEvents API is very buggy and tests are unreliable. See
