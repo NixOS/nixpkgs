@@ -13,7 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "imagemagick-${version}";
-  version = "6.9.3-9";
+  version = "6.9.5-2";
 
   src = fetchurl {
     urls = [
