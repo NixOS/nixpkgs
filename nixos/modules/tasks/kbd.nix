@@ -14,8 +14,8 @@ let
 
   optimizedKeymap = pkgs.runCommand "keymap" {
     nativeBuildInputs = [ pkgs.kbd ];
+    LOADKEYS_KEYMAP_PATH = "${kbdEnv}/share/keymaps/**";
   } ''
-    cd ${kbdEnv}/share/keymaps
     loadkeys -b ${optionalString isUnicode "-u"} "${config.i18n.consoleKeyMap}" > $out
   '';
 
