@@ -125,6 +125,10 @@ in
       plymouth show-splash
     '';
 
+    boot.initrd.postMountCommands = ''
+      plymouth update-root-fs --new-root-dir="$targetRoot"
+    '';
+
   };
 
 }
