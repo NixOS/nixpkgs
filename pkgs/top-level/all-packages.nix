@@ -6278,6 +6278,8 @@ in
 
   docutils = pythonPackages.docutils;
 
+  doctl = callPackage ../development/tools/doctl { };
+
   dot2tex = pythonPackages.dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
