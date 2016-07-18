@@ -12,7 +12,7 @@ matrix:
               - sudo apt-get -qqy autoremove
               - sudo apt-get -qqy clean
               - sudo rm -rf /opt/
-              - mkdir $HOME/tmp/
+              - sudo mount -o remount,size=4G /run/user
           sudo: required
           dist: trusty
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
@@ -24,4 +24,3 @@ git:
 env:
     global:
         - GITHUB_TOKEN=5edaaf1017f691ed34e7f80878f8f5fbd071603f
-        - TMPDIR=$HOME/tmp/
