@@ -6,7 +6,7 @@
 
 
 { # The system (e.g., `i686-linux') for which to build the packages.
-  system ? builtins.currentSystem
+  system
 
 , # The standard environment to use.  Only used for bootstrapping.  If
   # null, the default standard environment is used.
@@ -19,21 +19,8 @@
                && system != "x86_64-solaris"
                && system != "x86_64-kfreebsd-gnu")
 
-, # Allow a configuration attribute set to be passed in as an
-  # argument.  Otherwise, it's read from $NIXPKGS_CONFIG or
-  # ~/.nixpkgs/config.nix.
-  #
-  # [For NixOS (nixos-rebuild), use nixpkgs.config option to set.]
-  config ? let
-      inherit (builtins) getEnv pathExists;
-
-      configFile = getEnv "NIXPKGS_CONFIG";
-      homeDir = getEnv "HOME";
-      configFile2 = homeDir + "/.nixpkgs/config.nix";
-    in
-      if configFile != "" && pathExists configFile then import configFile
-      else if homeDir != "" && pathExists configFile2 then import configFile2
-      else {}
+, # Allow a configuration attribute set to be passed in as an argument.
+  config ? {}
 
 , crossSystem ? null
 , platform ? null
