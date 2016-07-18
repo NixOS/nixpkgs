@@ -29,7 +29,7 @@ kdeApp {
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi xcb-util-cursor
   ];
-  postFixup = ''
+  postInstall = ''
     wrapQtProgram "$out/bin/spectacle"
   '';
 }
