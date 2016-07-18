@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, musl
+{ stdenv, fetchurl
 , enableStatic ? false
 , enableMinimal ? false
-, useMusl ? false
 , extraConfig ? ""
 }:
 
@@ -64,8 +63,6 @@ stdenv.mkDerivation rec {
     EOF
 
     make oldconfig
-  '' + stdenv.lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   crossAttrs = {

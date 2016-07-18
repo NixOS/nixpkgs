@@ -4360,6 +4360,8 @@ in
 
   gcc = gcc5;
 
+  libgcc = callPackage ../development/compilers/gcc/libgcc.nix {};
+
   wrapCCMulti = cc:
     if system == "x86_64-linux" then lowPrio (
       let
@@ -7287,6 +7289,7 @@ in
 
   # We can choose:
   libcCrossChooser = name: if name == "glibc" then glibcCross
+    else if name == "musl" then muslCross
     else if name == "uclibc" then uclibcCross
     else if name == "msvcrt" then windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
@@ -11364,6 +11367,11 @@ in
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
+  muslStdenv = overrideCC stdenv (gcc.override { libc = musl; });
+  muslCross = forceNativeDrv (musl.override {
+    gccCross = gccCrossStageStatic;
+    cross = assert crossSystem != null; crossSystem;
+  });
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 

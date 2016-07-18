@@ -15,7 +15,7 @@ rec {
   tarMinimal = gnutar.override { acl = null; };
 
   busyboxMinimal = busybox.override {
-    useMusl = true;
+    stdenv = muslStdenv;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''

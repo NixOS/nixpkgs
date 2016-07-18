@@ -111,6 +111,7 @@
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
+  dvc94ch = "David Craven <david@craven.ch>";
   ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
   eduarrrd = "Eduard Bachmakov <e.bachmakov@gmail.com>";
