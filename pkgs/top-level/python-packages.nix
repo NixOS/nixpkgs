@@ -9359,6 +9359,8 @@ in modules // {
     # Only test dependencies
     buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
 
+    doCheck = !stdenv.isDarwin;
+
     meta = {
       description = "Simple Python implementation of the Git file formats and protocols";
       homepage = http://samba.org/~jelmer/dulwich/;
