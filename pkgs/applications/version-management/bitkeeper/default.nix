@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://www.bitkeeper.org/;
     license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
+    platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ wscott thoughtpolice ];
   };
 }
