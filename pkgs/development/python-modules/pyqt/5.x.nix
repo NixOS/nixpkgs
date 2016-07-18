@@ -2,7 +2,7 @@
 , lndir, makeWrapper, qmakeHook }:
 
 let
-  version = "5.6";
+  version = "5.5.1";
 in stdenv.mkDerivation {
   name = "${python.libPrefix}-PyQt-${version}";
 
@@ -15,8 +15,8 @@ in stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "1qgh42zsr9jppl9k7fcdbhxcd1wrb7wyaj9lng9nxfa19in1lj1f";
+    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt-gpl-${version}.tar.gz";
+    sha256 = "11l3pm0wkwkxzw4n3022iid3yyia5ap4l0ny1m5ngkzzzfafyw0a";
   };
 
   buildInputs = [

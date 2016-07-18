@@ -9907,8 +9907,6 @@ in
 
   pyqt4 = pythonPackages.pyqt4;
 
-  pyqt5 = pythonPackages.pyqt5;
-
   pysideApiextractor = pythonPackages.pysideApiextractor;
 
   pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;

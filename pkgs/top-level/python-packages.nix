@@ -281,7 +281,7 @@ in modules // {
   };
 
   pyqt5 = pkgs.qt55.callPackage ../development/python-modules/pyqt/5.x.nix {
-    sip = self.sip_4_18;
+    sip = self.sip_4_16;
     pythonDBus = self.dbus;
     python = self.python;
   };
@@ -322,8 +322,6 @@ in modules // {
   sip = callPackage ../development/python-modules/sip { };
 
   sip_4_16 = callPackage ../development/python-modules/sip/4.16.nix { };
-
-  sip_4_18 = callPackage ../development/python-modules/sip/4.18.nix { };
 
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
