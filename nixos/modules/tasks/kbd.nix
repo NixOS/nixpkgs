@@ -61,7 +61,7 @@ in
       default = false;
       type = types.bool;
       description = ''
-        Enable setting font and keymap as early as possible (in initrd).
+        Enable setting font as early as possible (in initrd).
       '';
     };
 
@@ -83,6 +83,20 @@ in
         environment.etc."vconsole.conf".source = vconsoleConf;
         # Provide kbd with additional packages.
         environment.etc."kbd".source = "${kbdEnv}/share";
+
+        boot.initrd.preLVMCommands = mkBefore ''
+          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
+          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
+          loadkmap < ${optimizedKeymap}
+
+          ${optionalString config.boot.earlyVconsoleSetup ''
+            setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
+          ''}
+
+          ${concatImapStringsSep "\n" (n: color: ''
+            printf "${makeColorCS n color}" >> /dev/console
+          '') config.i18n.consoleColors}
+        '';
       }
 
       (mkIf (!config.boot.earlyVconsoleSetup) {
@@ -111,18 +125,6 @@ in
           else
             cp -L $font $out/share/consolefonts/font.psf
           fi
-        '';
-
-        boot.initrd.preLVMCommands = mkBefore ''
-          kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
-          printf "\033%%${if isUnicode then "G" else "@"}" >> /dev/console
-          loadkmap < ${optimizedKeymap}
-
-          setfont -C /dev/console $extraUtils/share/consolefonts/font.psf
-
-          ${concatImapStringsSep "\n" (n: color: ''
-            printf "${makeColorCS n color}" >> /dev/console
-          '') config.i18n.consoleColors}
         '';
       })
     ]))
