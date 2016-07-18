@@ -221,7 +221,7 @@ let
         (''
           # Account management.
           account sufficient pam_unix.so
-          ${optionalString config.users.ldap.enable
+          ${optionalString use_ldap
               "account sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
@@ -261,7 +261,7 @@ let
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
               "auth sufficient ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
-          ${optionalString config.users.ldap.enable
+          ${optionalString use_ldap
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
@@ -276,7 +276,7 @@ let
               "password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
           ${optionalString cfg.pamMount
               "password optional ${pkgs.pam_mount}/lib/security/pam_mount.so"}
-          ${optionalString config.users.ldap.enable
+          ${optionalString use_ldap
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
@@ -296,7 +296,7 @@ let
               "session required ${pkgs.pam}/lib/security/pam_lastlog.so silent"}
           ${optionalString config.security.pam.enableEcryptfs
               "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
-          ${optionalString config.users.ldap.enable
+          ${optionalString use_ldap
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
@@ -322,6 +322,7 @@ let
 
   inherit (pkgs) pam_krb5 pam_ccreds;
 
+  use_ldap = (config.users.ldap.enable && config.users.ldap.loginPam);
   pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
 
   # Create a limits.conf(5) file.

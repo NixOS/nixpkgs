@@ -62,6 +62,12 @@ in
         description = "Whether to enable authentication against an LDAP server.";
       };
 
+      loginPam = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to include authentication against LDAP in login PAM";
+      };
+
       server = mkOption {
         example = "ldap://ldap.example.org/";
         description = "The URL of the LDAP server.";
