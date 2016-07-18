@@ -1,12 +1,17 @@
-{stdenv, fetchurl, python}:
+{stdenv, fetchurl, python, xorg, makeWrapper}:
 
 stdenv.mkDerivation rec {
   name = "disper-0.3.1";
 
-  buildInputs = [python];
+  buildInputs = [python makeWrapper];
 
   preConfigure = ''
     export makeFlags="PREFIX=$out"
+  '';
+
+  postInstall = ''
+      wrapProgram $out/bin/disper \
+        --prefix "LD_LIBRARY_PATH" : "${xorg.libXrandr.out}/lib:${xorg.libX11.out}/lib"
   '';
 
   src = fetchurl {

@@ -3943,6 +3943,8 @@ in
 
   units = callPackage ../tools/misc/units { };
 
+  unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
+
   unrar = callPackage ../tools/archivers/unrar { };
 
   xar = callPackage ../tools/compression/xar { };
@@ -4721,8 +4723,6 @@ in
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  path64 = callPackage ../development/compilers/path64 { };
-
   openjdk7 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
@@ -4749,6 +4749,8 @@ in
 
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
+
+  openshot-qt = callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = self.jdkdistro true false;
 
@@ -8696,7 +8698,9 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses = callPackage ../development/libraries/ncurses { };
+  ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
+  ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
+  ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -12222,6 +12226,8 @@ in
 
   bibletime = callPackage ../applications/misc/bibletime { };
 
+  bitkeeper = callPackage ../applications/version-management/bitkeeper { };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
 
@@ -15343,6 +15349,8 @@ in
   ckan = callPackage ../games/ckan { };
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
+
+  commandergenius = callPackage ../games/commandergenius { };
 
   confd = callPackage ../tools/system/confd { };
 

@@ -12,14 +12,12 @@ _ecmSharePaths=( \
     "desktop-directories" \
     "doc" \
     "icons" \
-    "info" \
     "kconf_update" \
     "kservices5" \
     "kservicetypes5" \
     "knotifications5" \
     "kxmlgui5" \
     "locale" \
-    "man" \
     "mime" \
     "polkit-1" \
     "sounds" \
