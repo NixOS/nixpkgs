@@ -13849,6 +13849,8 @@ in
 
   pijul = callPackage ../applications/version-management/pijul { };
 
+  planner = callPackage ../applications/office/planner { };
+
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
