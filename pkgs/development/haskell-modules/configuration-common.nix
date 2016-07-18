@@ -204,11 +204,6 @@ self: super: {
   # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
-  # hfsevents needs CoreServices in scope
-  hfsevents = if pkgs.stdenv.isDarwin
-    then with pkgs.darwin.apple_sdk.frameworks; addBuildTool (addBuildDepends super.hfsevents [Cocoa]) CoreServices
-    else super.hfsevents;
-
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues.
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
