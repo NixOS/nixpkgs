@@ -9,13 +9,6 @@ let
     busybox.crossDrv = nativePlatforms;
     coreutils.crossDrv = nativePlatforms;
     dropbear.crossDrv = nativePlatforms;
-    tigervnc.crossDrv = nativePlatforms;
-    wxGTK.crossDrv = nativePlatforms;
-    #firefox = nativePlatforms;
-    xorg = {
-      #xorgserver.crossDrv = nativePlatforms;
-    };
-    nixUnstable.crossDrv = nativePlatforms;
   };
 
   /* Basic list of packages to be natively built,
@@ -123,11 +116,7 @@ in {
 
     coreutils.crossDrv = nativePlatforms;
     ed.crossDrv = nativePlatforms;
-    grub2.crossDrv = nativePlatforms;
-    inetutils.crossDrv = nativePlatforms;
-    nixUnstable.crossDrv = nativePlatforms;
     patch.crossDrv = nativePlatforms;
-    zile.crossDrv = nativePlatforms;
   };
 }) // (
 
@@ -154,23 +143,13 @@ in {
   rpi = mapTestOnCross crossSystem {
     coreutils.crossDrv = nativePlatforms;
     ed.crossDrv = nativePlatforms;
-    inetutils.crossDrv = nativePlatforms;
-    nixUnstable.crossDrv = nativePlatforms;
     patch.crossDrv = nativePlatforms;
     vim.crossDrv = nativePlatforms;
-    tmux.crossDrv = nativePlatforms;
-    screen.crossDrv = nativePlatforms;
-    unrar.crossDrv = nativePlatforms;
     unzip.crossDrv = nativePlatforms;
-    hdparm.crossDrv = nativePlatforms;
     ddrescue.crossDrv = nativePlatforms;
-    git.crossDrv = nativePlatforms;
     lynx.crossDrv = nativePlatforms;
     patchelf.crossDrv = nativePlatforms;
-    nix.crossDrv = nativePlatforms;
-    fossil.crossDrv = nativePlatforms;
     binutils.crossDrv = nativePlatforms;
     mpg123.crossDrv = nativePlatforms;
-    yacas.crossDrv = nativePlatforms;
   };
 })
