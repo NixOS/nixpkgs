@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gnome3.gtk packagekit appstream-glib libsoup
                   gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
                   polkit attr acl libyaml ];
-  propogatedBuildInputs = [ isocodes ];
+  propagatedBuildInputs = [ isocodes ];
 
   postInstall = ''
     mkdir -p $out/share/xml/
