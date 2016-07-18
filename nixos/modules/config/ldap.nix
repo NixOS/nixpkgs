@@ -68,6 +68,12 @@ in
         description = "Whether to include authentication against LDAP in login PAM";
       };
 
+      nsswitch = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Whether to include lookup against LDAP in NSS";
+      };
+
       server = mkOption {
         example = "ldap://ldap.example.org/";
         description = "The URL of the LDAP server.";
