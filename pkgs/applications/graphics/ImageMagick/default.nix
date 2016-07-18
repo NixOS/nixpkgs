@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       # the original source above removes tarballs quickly
       "http://distfiles.macports.org/ImageMagick/ImageMagick-${version}.tar.xz"
     ];
-    sha256 = "0q19jgn1iv7zqrw8ibxp4z57iihrc9kyb09k2wnspcacs6vrvinf";
+    sha256 = "09h3rpr1jnzd7ipy5d16r2gi0bwg4hk5khwzv4cyhv1xzs8pk7pj";
   };
 
   patches = [ ./imagetragick.patch ];
