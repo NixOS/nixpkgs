@@ -14,7 +14,8 @@ matrix:
               - sudo apt-get -qqy purge build-essential chromium-browser 'llvm.*' 'postgresql.*' 'python.*' perl google-chrome-stable imagemagick ruby rsync subversion google-cloud-sdk 'emacs.*' w3m libxtst6 'erlang.*' qdbus 'qt.*' rabbitmq-server redis-server shared-mime-info sound-theme-freedesktop sphinxsearch 'sqlite3.*' tmux 'vim.*' 'x11.*' 'xfonts.*' xkb-data xml-core 'xorg.*' 'xserver.*' 'openjdk-.*' 'icedtea-.*' 'icedtea6-.*' 'libgnome.*'
               - sudo apt-get -qqy autoremove
               - sudo apt-get -qqy clean
-              - sudo rm -rf /usr/ /opt/
+              - sudo rm -rf /opt/
+              - dpkg --get-selections
               - df -h
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
         - os: osx
