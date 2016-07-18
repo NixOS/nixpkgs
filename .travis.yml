@@ -10,13 +10,10 @@ matrix:
           sudo: required
           dist: trusty
           before_script:
-              - df -h
-              - sudo apt-get -qqy purge build-essential chromium-browser 'llvm.*' 'postgresql.*' 'python.*' perl google-chrome-stable imagemagick ruby rsync subversion google-cloud-sdk 'emacs.*' w3m libxtst6 'erlang.*' qdbus 'qt.*' rabbitmq-server redis-server shared-mime-info sound-theme-freedesktop sphinxsearch 'sqlite3.*' tmux 'vim.*' 'x11.*' 'xfonts.*' xkb-data xml-core 'xorg.*' 'xserver.*' 'openjdk-.*' 'icedtea-.*' 'icedtea6-.*' 'libgnome.*' fonts-dejavu-core fonts-ubuntu-font-family-console 'oracle-java.*' 'mysql.*'
+              - sudo apt-get -qqy purge build-essential chromium-browser 'llvm.*' 'postgresql.*' 'python.*' perl google-chrome-stable imagemagick ruby rsync subversion google-cloud-sdk 'emacs.*' w3m libxtst6 'erlang.*' qdbus 'qt.*' rabbitmq-server redis-server shared-mime-info sound-theme-freedesktop sphinxsearch 'sqlite3.*' tmux 'vim.*' 'x11.*' 'xfonts.*' xkb-data xml-core 'xorg.*' 'xserver.*' 'openjdk-.*' 'icedtea-.*' 'icedtea6-.*' 'libgnome.*' fonts-dejavu-core fonts-ubuntu-font-family-console 'oracle-java.*' 'mysql.*' firefox-locale-pt mingw32 manpages
               - sudo apt-get -qqy autoremove
               - sudo apt-get -qqy clean
               - sudo rm -rf /opt/
-              - dpkg --get-selections
-              - df -h
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
         - os: osx
           osx_image: xcode7.3
