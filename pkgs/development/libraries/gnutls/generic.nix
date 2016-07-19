@@ -44,7 +44,8 @@ stdenv.mkDerivation {
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  #doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  docCheck = false;
 
   # Fixup broken libtool and pkgconfig files
   preFixup = lib.optionalString (!stdenv.isDarwin) ''
