@@ -17,6 +17,12 @@ pythonPackages.buildPythonApplication {
       pythonPackages.sqlite3
       pythonPackages.hetzner
       pythonPackages.libcloud
+      pythonPackages.azure-storage
+      pythonPackages.azure-mgmt-compute
+      pythonPackages.azure-mgmt-network
+      pythonPackages.azure-mgmt-resource
+      pythonPackages.azure-mgmt-storage
+      pythonPackages.adal
     ];
 
   doCheck = false;
