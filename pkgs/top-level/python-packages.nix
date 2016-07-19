@@ -11150,6 +11150,18 @@ in modules // {
     };
   };
 
+  hvac = buildPythonPackage rec {
+    name    = "hvac-${version}";
+    version = "0.2.15";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/11/ba/6101780891b9d55f6174fa78b47d462c8c1f0cde34072b45fc39f7f8a77c/hvac-0.2.15.tar.gz";
+      sha256 = "0qxa4g1ij1bj27mbp8l54lcr7d5krkb2rayisc6shkpf2b51ip4c";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 ];
+  };
+
   hypothesis1 = buildPythonPackage rec {
     name = "hypothesis-1.14.0";
 
