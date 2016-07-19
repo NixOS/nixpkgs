@@ -3879,6 +3879,18 @@ in modules // {
     };
   };
 
+  credstash = buildPythonPackage rec {
+    name    = "credstash-${version}";
+    version = "1.11.0";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/e2/64/6abae87b8da07c262d50b51eed540096ed1f6e01539bf2f2d4c3f718c8c6/credstash-1.11.0.tar.gz";
+      sha256 = "03qm8bjfskzkkmgcy5dr70x9pxabjb3fi0v0nxicg1kryy64k0dz";
+    };
+
+    propagatedBuildInputs = with self; [ pycrypto boto3 docutils ];
+  };
+
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
     version = "0.24";
