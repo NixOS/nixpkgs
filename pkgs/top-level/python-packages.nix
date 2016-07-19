@@ -11211,12 +11211,12 @@ in modules // {
 
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
-    version = "0.8.6";
+    version = "0.8.10";
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpretty/${name}.tar.gz";
-      sha256 = "0f295zj272plr9lhf80kgz19dxkargwv3ar83rwavrcy516mgg9n";
+      sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
     };
 
     buildInputs = with self; [ tornado requests2 httplib2 sure nose coverage certifi ];
