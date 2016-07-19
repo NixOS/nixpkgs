@@ -198,6 +198,8 @@ in {
 
     environment.systemPackages = [ pkgs.xorg.xf86inputlibinput ];
 
+    services.udev.packages = [ pkgs.libinput ];
+
     services.xserver.config =
       ''
         # Automatically enable the libinput driver for all touchpads.

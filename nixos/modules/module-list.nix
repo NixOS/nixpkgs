@@ -249,6 +249,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
+  ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
@@ -258,6 +259,7 @@
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix
+  ./services/misc/sonarr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
@@ -474,6 +476,7 @@
   ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/colord.nix
+  ./services/x11/compton.nix
   ./services/x11/unclutter.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix

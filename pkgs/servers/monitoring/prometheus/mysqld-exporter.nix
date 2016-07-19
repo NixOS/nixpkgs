@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "mysqld_exporter-${version}";
-  version = "0.1.0";
+  version = "0.8.1";
   rev = version;
 
   goPackagePath = "github.com/prometheus/mysqld_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "mysqld_exporter";
-    sha256 = "10xnyxyb6saz8pq3ijp424hxy59cvm1b5c9zcbw7ddzzkh1f6jd9";
+    sha256 = "0pwf2vii9n9zgad1lxgw28c2743yc9c3qc03516fiwvlqc1cpddr";
   };
 
   goDeps = ./mysqld-exporter_deps.json;

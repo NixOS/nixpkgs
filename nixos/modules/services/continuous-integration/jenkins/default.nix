@@ -154,7 +154,7 @@ in {
       '';
 
       script = ''
-        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/lib/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk}/bin/java -jar ${pkgs.jenkins}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   ${concatStringsSep " " cfg.extraOptions}

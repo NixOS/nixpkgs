@@ -10,6 +10,7 @@ let
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
   isPy35 = python.majorVersion == "3.5";
+  isPy36 = python.majorVersion == "3.6";
   isPyPy = python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.majorVersion == "3";
 
@@ -30,6 +31,7 @@ let
     if isPy33 then "python33" else
     if isPy34 then "python34" else
     if isPy35 then "python35" else
+    if isPy36 then "python36" else
     if isPyPy then "pypy" else "";
 
   modules = python.modules or {
@@ -42,7 +44,7 @@ let
 
 in modules // {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
 
   # helpers
 
@@ -4373,6 +4375,12 @@ in modules // {
     propagatedBuildInputs = with self; [ pkgs.libffi pycparser ];
     buildInputs = with self; [ pytest ];
 
+    patchPhase = ''
+      substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
+    '';
+
+    NIX_CFLAGS_COMPILE="-Wno-shift-negative-value";
+
     checkPhase = ''
       py.test
     '';
@@ -7050,6 +7058,27 @@ in modules // {
     };
   };
 
+  jupyterlab = buildPythonPackage rec {
+    name = "jupyterlab-${version}";
+    version = "0.1.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jupyterlab/${name}.tar.gz";
+      sha256 = "c1a08f4d1b2bb1bf06db090db30df988a22ffbfa05606e7eb026e364969388da";
+    };
+
+    propagatedBuildInputs = with self; [ notebook ];
+
+    # No tests in archive
+    doCheck = false;
+
+    meta = {
+      description = "Jupyter lab environment notebook server extension.";
+      license = with licenses; [ bsd3 ];
+      homepage = "http://jupyter.org/";
+    };
+  };
+
   lti = let
     self' = (self.override {self = self';}) // {pytest = self.pytest_27;};
     mock_1_0_1 = self'.mock.overrideDerivation (_: rec {
@@ -9331,6 +9360,8 @@ in modules // {
 
     # Only test dependencies
     buildInputs = with self; [ pkgs.git gevent geventhttpclient pkgs.glibcLocales mock fastimport ];
+
+    doCheck = !stdenv.isDarwin;
 
     meta = {
       description = "Simple Python implementation of the Git file formats and protocols";
@@ -12390,7 +12421,7 @@ in modules // {
     propagatedBuildInputs = with self; [ pkgs.file ];
 
     patchPhase = ''
-      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.so'"
+      substituteInPlace magic.py --replace "ctypes.util.find_library('magic')" "'${pkgs.file}/lib/libmagic.${if stdenv.isDarwin then "dylib" else "so"}'"
     '';
 
     doCheck = false;
@@ -12427,12 +12458,12 @@ in modules // {
 
 
   m2crypto = buildPythonPackage rec {
-    version = "0.23.0";
+    version = "0.24.0";
     name = "m2crypto-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/M2Crypto/M2Crypto-${version}.tar.gz";
-      sha256 = "1ac3b6eafa5ff7e2a0796675316d7569b28aada45a7ab74042ad089d15a9567f";
+      sha256 = "1s2y0pf2zg7xf4nfwrw7zhwbk615r5a7bgi5wwkwzh6jl50n99c0";
     };
 
     buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
@@ -20465,14 +20496,19 @@ in modules // {
   });
 
   rpy2 = buildPythonPackage rec {
-    name = "rpy2-2.5.6";
+    name = "rpy2-2.8.2";
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rpy2/${name}.tar.gz";
-      sha256 = "d0d584c435b5ed376925a95a4525dbe87de7fa9260117e9f208029e0c919ad06";
+      sha256 = "2c1a313df4e64236dcfe1078ce847b8e3c180656c894928d3a4b391aacb9b24c";
     };
     buildInputs = with pkgs; [ readline R pcre lzma bzip2 zlib icu ];
-    propagatedBuildInputs = [ self.singledispatch ];
+    propagatedBuildInputs = with self; [ singledispatch six ];
+
+    # According to manual this is how the testsuite should be invoked
+    checkPhase = ''
+      ${python.interpreter}  -m rpy2.tests
+    '';
     meta = {
       homepage = http://rpy.sourceforge.net/rpy2;
       description = "Python interface to R";

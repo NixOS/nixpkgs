@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.0.1";
   basename = "pidgin-im-gnome-shell-extension";
   name = "${basename}-${version}";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "muffinmad";
     repo = "${basename}";
     rev = "v${version}";
-    sha256 = "0vj4w9qqx9gads24w3f6v6mfh5va28bp8rc4w7lz0vhp7njmy1yy";
+    sha256 = "1567s2sfqig4jw0nrn134f5vkx0yq31q044grv3xk4vpl1f3z2lr";
   };
 
   buildInputs = [ glib ];

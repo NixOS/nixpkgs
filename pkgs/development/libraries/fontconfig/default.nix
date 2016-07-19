@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     cd "$out/etc/fonts"
     rm conf.d/{50-user,51-local}.conf
     "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
+      --stringparam fontconfig "$out" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \

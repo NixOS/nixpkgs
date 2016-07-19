@@ -2,14 +2,14 @@
 
 python35Packages.buildPythonApplication rec {
   name = "mypy-lang-${version}";
-  version = "0.4.2";
+  version = "0.4.3";
 
   # Tests not included in pip package.
   doCheck = false;
 
   src = fetchurl {
     url = "mirror://pypi/m/mypy-lang/${name}.tar.gz";
-    sha256 = "12vwgzbpv0n403dvzas5ckw0f62slqk5j3024y65hi9n95r34rws";
+    sha256 = "11d8195xg8hksyh2qapbv66jvjgfpjwkc61nwljcfq9si144f2nb";
   };
 
   propagatedBuildInputs = with python35Packages; [ lxml ];

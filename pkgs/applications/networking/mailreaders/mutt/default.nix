@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, which, perl, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, ncurses, which, perl, autoreconfHook
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
@@ -61,8 +61,16 @@ stdenv.mkDerivation rec {
     ++ optional saslSupport "--with-sasl";
 
   patches =
-    optional withTrash ./trash.patch ++
-    optional withSidebar ./sidebar.patch;
+    optional withTrash (fetchpatch {
+      name = "trash.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/trash.patch?h=mutt-sidebar";
+      sha256 = "1hrib9jk28mqd02nzv0sx01jfdabzvnwcc5qjc3810zfglzc1nql";
+    }) ++
+    optional withSidebar (fetchpatch {
+      name = "sidebar.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/sidebar.patch?h=mutt-sidebar";
+      sha256 = "1l63wj7kw41jrh00mcxdw4p4vrbc9wld42s99liw8kz2aclymq5m";
+    });
 
   meta = {
     description = "A small but very powerful text-based mail client";

@@ -3,17 +3,17 @@
 , withStream ? false
 , modules ? []
 , hardening ? true
+, version, sha256, ...
 }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nginx-${version}";
-  version = "1.10.1";
 
   src = fetchurl {
     url = "http://nginx.org/download/nginx-${version}.tar.gz";
-    sha256 = "00d8hxj8453c7989qd7z4f1mjp0k3ib8k29i1qyf11b4ar35ilqz";
+    inherit sha256;
   };
 
 

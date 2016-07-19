@@ -1,22 +1,29 @@
 _ecmSetXdgDirs() {
     addToSearchPathOnce XDG_DATA_DIRS "$1/share"
     addToSearchPathOnce XDG_CONFIG_DIRS "$1/etc/xdg"
-    addToSearchPathOnce NIX_WRAP_XDG_CONFIG_DIRS "$1/etc/xdg"
+    addToSearchPathOnce RUNTIME_XDG_CONFIG_DIRS "$1/etc/xdg"
 }
 
 _ecmSharePaths=( \
+    "appdata" \
+    "applications" \
     "config.cfg" \
+    "dbus-1" \
+    "desktop-directories" \
+    "doc" \
+    "icons" \
     "kconf_update" \
     "kservices5" \
     "kservicetypes5" \
     "knotifications5" \
-    "applications" \
-    "desktop-directories" \
+    "kxmlgui5" \
+    "locale" \
     "mime" \
-    "dbus-1" \
-    "interfaces" \
-    "services" \
-    "system-services" )
+    "polkit-1" \
+    "sounds" \
+    "templates" \
+    "wallpapers" \
+    )
 
 _ecmPropagateNative() {
     for dir in ${_ecmSharePaths[@]}; do
@@ -24,7 +31,7 @@ _ecmPropagateNative() {
             propagateOnce propagatedNativeBuildInputs "$1"
             if [ -z "$crossConfig" ]; then
                 propagateOnce propagatedUserEnvPkgs "$1"
-                addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+                addToSearchPathOnce RUNTIME_XDG_DATA_DIRS "$1/share"
             fi
             break
         fi
@@ -38,7 +45,7 @@ _ecmPropagate() {
         if [ -d "$1/share/$dir" ]; then
             propagateOnce propagatedBuildInputs "$1"
             propagateOnce propagatedUserEnvPkgs "$1"
-            addToSearchPathOnce NIX_WRAP_XDG_DATA_DIRS "$1/share"
+            addToSearchPathOnce RUNTIME_XDG_DATA_DIRS "$1/share"
             break
         fi
     done

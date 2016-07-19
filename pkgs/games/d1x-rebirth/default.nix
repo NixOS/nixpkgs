@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.dxx-rebirth.com/;
     description = "Source Port of the Descent 1 engine";
-    license = stdenv.lib.licenses.mit;
+    license = stdenv.lib.licenses.unfree;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [viric];
   };

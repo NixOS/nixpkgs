@@ -167,6 +167,8 @@ in
 
   fetchmtn = callPackage ../build-support/fetchmtn (config.fetchmtn or {});
 
+  fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
+
   packer = callPackage ../development/tools/packer { };
 
   fetchpatch = callPackage ../build-support/fetchpatch { };
@@ -2166,6 +2168,8 @@ in
 
   keybase = callPackage ../applications/misc/keybase { };
 
+  keybase-go = callPackage ../tools/security/keybase { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
@@ -2888,7 +2892,9 @@ in
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
-  packagekit = callPackage ../tools/package-management/packagekit { };
+  packagekit = callPackage ../tools/package-management/packagekit {
+    nix = nixUnstable;
+  };
 
   pal = callPackage ../tools/misc/pal { };
 
@@ -3466,6 +3472,8 @@ in
 
   solvespace = callPackage ../applications/graphics/solvespace { };
 
+  sonarr = callPackage ../servers/sonarr { };
+
   sonata = callPackage ../applications/audio/sonata {
     inherit (python3Packages) buildPythonApplication python isPy3k dbus pygobject3 mpd2;
   };
@@ -3913,6 +3921,8 @@ in
 
   udunits = callPackage ../development/libraries/udunits { };
 
+  uemacs = callPackage ../applications/editors/uemacs { };
+
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
@@ -3926,6 +3936,8 @@ in
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
+
+  unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
   unrar = callPackage ../tools/archivers/unrar { };
 
@@ -4705,8 +4717,6 @@ in
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  path64 = callPackage ../development/compilers/path64 { };
-
   openjdk7 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
@@ -4733,6 +4743,8 @@ in
 
   jdk = if stdenv.isDarwin then self.jdk7 else self.jdk8;
   jre = if stdenv.isDarwin then self.jre7 else self.jre8;
+
+  openshot-qt = callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = self.jdkdistro true false;
 
@@ -5733,7 +5745,7 @@ in
     glpk = null;
     suitesparse = null;
     jdk = null;
-    openblas = openblasCompat;
+    openblas = openblas;
   };
   octaveFull = (lowPrio (callPackage ../development/interpreters/octave {
     qt = qt4;
@@ -5808,6 +5820,10 @@ in
     inherit (darwin) CF configd;
     self = python35;
   });
+  python36 = callPackage ../development/interpreters/python/3.6 {
+    inherit (darwin) CF configd;
+    self = python36;
+  };
   pypy = callPackage ../development/interpreters/pypy {
     self = pypy;
   };
@@ -6240,6 +6256,8 @@ in
 
   docutils = pythonPackages.docutils;
 
+  doctl = callPackage ../development/tools/doctl { };
+
   dot2tex = pythonPackages.dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
@@ -6562,6 +6580,8 @@ in
   simpleBuildTool = sbt;
 
   shellcheck = self.haskellPackages.ShellCheck;
+
+  shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
 
@@ -8134,6 +8154,7 @@ in
 
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
+  libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
   libjpeg = if stdenv.isLinux then self.libjpeg_turbo else self.libjpeg_original; # some problems, both on FreeBSD and Darwin
 
   libjpeg62 = callPackage ../development/libraries/libjpeg/62.nix {
@@ -8385,6 +8406,8 @@ in
   libu2f-host = callPackage ../development/libraries/libu2f-host { };
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
+
+  libui = callPackage ../development/libraries/libui { };
 
   libunity = callPackage ../development/libraries/libunity { };
 
@@ -8672,7 +8695,9 @@ in
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses = callPackage ../development/libraries/ncurses { };
+  ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
+  ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
+  ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
 
@@ -9845,6 +9870,11 @@ in
     self = python35Packages;
   });
 
+  python36Packages = (callPackage ./python-packages.nix {
+    python = python36;
+    self = python36Packages;
+  });
+
   pypyPackages = callPackage ./python-packages.nix {
     python = pypy;
     self = pypyPackages;
@@ -10156,13 +10186,19 @@ in
 
   neard = callPackage ../servers/neard { };
 
-  nginx = callPackage ../servers/http/nginx {
+  nginx = callPackage ../servers/http/nginx/stable.nix {
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders ];
   };
-  # nginxUnstable currently points to stable because that's newest:
-  nginxUnstable = nginx;
+
+  nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
+    # We don't use `with` statement here on purpose!
+    # See https://github.com/NixOS/nixpkgs/pull/10474/files#r42369334
+    modules = [ nginxModules.dav nginxModules.moreheaders ];
+  };
+
+  nginxUnstable = nginxMainline;
 
   nginxModules = callPackage ../servers/http/nginx/modules.nix { };
 
@@ -10727,6 +10763,10 @@ in
 
   firejail = callPackage ../os-specific/linux/firejail {};
 
+  fnotifystat = callPackage ../os-specific/linux/fnotifystat { };
+
+  forkstat = callPackage ../os-specific/linux/forkstat { };
+
   freefall = callPackage ../os-specific/linux/freefall {
     inherit (linuxPackages) kernel;
   };
@@ -10827,6 +10867,10 @@ in
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   openisns = callPackage ../os-specific/linux/open-isns { };
+
+  powerstat = callPackage ../os-specific/linux/powerstat { };
+
+  smemstat = callPackage ../os-specific/linux/smemstat { };
 
   tgt = callPackage ../tools/networking/tgt { };
 
@@ -11148,7 +11192,12 @@ in
   linux_grsec_nixos = callPackage ../build-support/grsecurity {
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      inherit (self.linux_4_5) kernelPatches;
+      kernelPatches = with self.kernelPatches; [ bridge_stp_helper qat_common_Makefile ]
+        ++ lib.optionals ((platform.kernelArch or null) == "mips")
+        [ kernelPatches.mips_fpureg_emu
+          kernelPatches.mips_fpu_sigill
+          kernelPatches.mips_ext3_n32
+        ];
     };
     grsecPatch = self.kernelPatches.grsecurity_testing;
     kernelPatches = [ self.kernelPatches.grsecurity_nixos_kmod ];
@@ -11809,6 +11858,9 @@ in
   liberation_ttf_binary = callPackage ../data/fonts/redhat-liberation-fonts/binary.nix { };
   liberation_ttf = self.liberation_ttf_binary;
 
+  liberationsansnarrow = callPackage ../data/fonts/liberationsansnarrow { };
+  liberationsansnarrow_binary = callPackage ../data/fonts/liberationsansnarrow/binary.nix { };
+
   libertine = callPackage ../data/fonts/libertine { };
 
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
@@ -12175,6 +12227,8 @@ in
   };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bitkeeper = callPackage ../applications/version-management/bitkeeper { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
   bitlbee-plugins = callPackage ../applications/networking/instant-messengers/bitlbee/plugins.nix { };
@@ -12747,6 +12801,8 @@ in
 
   evopedia = callPackage ../applications/misc/evopedia { };
 
+  gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
+
   keepassx = callPackage ../applications/misc/keepassx { };
   keepassx2 = callPackage ../applications/misc/keepassx/2.0.nix { };
 
@@ -12891,7 +12947,7 @@ in
   };
 
   firefox-beta-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "beta";
+    generated = import ../applications/networking/browsers/firefox-bin/beta_sources.nix;
     gconf = pkgs.gnome.GConf;
     inherit (pkgs.gnome) libgnome libgnomeui;
     inherit (pkgs.gnome3) defaultIconTheme;
@@ -12902,20 +12958,6 @@ in
     name = "firefox-beta-bin-" +
       (builtins.parseDrvName firefox-beta-bin-unwrapped.name).version;
     desktopName = "Firefox Beta";
-  };
-
-  firefox-developer-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
-    channel = "developer";
-    gconf = pkgs.gnome.GConf;
-    inherit (pkgs.gnome) libgnome libgnomeui;
-    inherit (pkgs.gnome3) defaultIconTheme;
-  };
-
-  firefox-developer-bin = self.wrapFirefox firefox-developer-bin-unwrapped {
-    browserName = "firefox";
-    name = "firefox-developer-bin-" +
-      (builtins.parseDrvName firefox-developer-bin-unwrapped.name).version;
-    desktopName = "Firefox Developer Edition";
   };
 
   firestr = qt5.callPackage ../applications/networking/p2p/firestr
@@ -13208,6 +13250,8 @@ in
   };
 
   hugin = callPackage ../applications/graphics/hugin { };
+
+  hugo = callPackage ../applications/misc/hugo { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -13810,6 +13854,8 @@ in
 
   pijul = callPackage ../applications/version-management/pijul { };
 
+  planner = callPackage ../applications/office/planner { };
+
   playonlinux = callPackage ../applications/misc/playonlinux {
      stdenv = stdenv_32bit;
   };
@@ -13983,6 +14029,8 @@ in
   };
 
   pcsx2 = callPackage_i686 ../misc/emulators/pcsx2 { };
+
+  pekwm = callPackage ../applications/window-managers/pekwm { };
 
   pencil = callPackage ../applications/graphics/pencil {
     xulrunner = firefox-unwrapped;
@@ -14828,7 +14876,7 @@ in
 
   vym = callPackage ../applications/misc/vym { };
 
-  w3m = callPackage ../applications/networking/browsers/w3m { 
+  w3m = callPackage ../applications/networking/browsers/w3m {
     graphicsSupport = !stdenv.isDarwin;
   };
 
@@ -15308,6 +15356,8 @@ in
   ckan = callPackage ../games/ckan { };
 
   cockatrice = qt5.callPackage ../games/cockatrice {  };
+
+  commandergenius = callPackage ../games/commandergenius { };
 
   confd = callPackage ../tools/system/confd { };
 
@@ -16911,6 +16961,8 @@ in
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
 
+  nixos-container = callPackage ../tools/virtualization/nixos-container { };
+
   norwester-font = callPackage ../data/fonts/norwester  {};
 
   nut = callPackage ../applications/misc/nut { };
@@ -17180,6 +17232,10 @@ in
   wcalc = callPackage ../applications/misc/wcalc { };
 
   webfs = callPackage ../servers/http/webfs { };
+
+  wikicurses = callPackage ../applications/misc/wikicurses {
+    pythonPackages = python3Packages;
+  };
 
   wineMinimal = callPackage ../misc/emulators/wine {
     wineRelease = config.wine.release or "stable";
