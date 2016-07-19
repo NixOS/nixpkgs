@@ -1401,13 +1401,13 @@ in modules // {
 
   aws_shell = buildPythonPackage rec {
     name = "aws-shell-${version}";
-    version = "0.1.0";
+    version = "0.1.1";
     src = pkgs.fetchurl {
-        sha256 = "05isyrqbk16dg1bc3mnc4ynxr3nchslvia5wr1sdmxvc3v2y729d";
-        url = "mirror://pypi/a/aws-shell/aws-shell-0.1.0.tar.gz";
+        sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
+        url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
       };
     propagatedBuildInputs = with self; [
-      configobj prompt_toolkit_52 awscli boto3 pygments sqlite3 mock pytest
+      configobj prompt_toolkit awscli boto3 pygments sqlite3 mock pytest
       pytestcov unittest2 tox
     ];
 
