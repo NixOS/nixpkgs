@@ -2,6 +2,7 @@
 
 buildGoPackage rec {
   version = "3.1.0";
+  ts = "1468321182";
   name = "grafana-v${version}";
   goPackagePath = "github.com/grafana/grafana";
 
@@ -13,7 +14,7 @@ buildGoPackage rec {
   };
 
   srcStatic = fetchurl {
-    url = "https://grafanarel.s3.amazonaws.com/builds/grafana-${version}-1468321182.linux-x64.tar.gz";
+    url = "https://grafanarel.s3.amazonaws.com/builds/grafana-${version}-${ts}.linux-x64.tar.gz";
     sha256 = "174w0bx5cqriy77dyk9xsnmdskykzmgbyjczwb5kkp6j8vp7b0fs";
   };
 

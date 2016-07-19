@@ -17,8 +17,10 @@ stdenv.mkDerivation {
     "--with-tcl=${tcl}/lib"
   ];
 
-  buildInputs = [ pkgconfig tcl libXft ]
+  buildInputs = [ pkgconfig ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
+
+  propagatedBuildInputs = [ tcl libXft ];
 
   NIX_CFLAGS_LINK = if stdenv.isDarwin then "-lfontconfig" else null;
 

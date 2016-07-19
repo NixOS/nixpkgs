@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
                   gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
 		  gtkspell3 json_glib
                   polkit attr acl libyaml ];
-  propogatedBuildInputs = [ isocodes ];
+  propagatedBuildInputs = [ isocodes ];
 
   postInstall = ''
     mkdir -p $out/share/xml/
