@@ -10,6 +10,7 @@ let
   isPy33 = python.majorVersion == "3.3";
   isPy34 = python.majorVersion == "3.4";
   isPy35 = python.majorVersion == "3.5";
+  isPy36 = python.majorVersion == "3.6";
   isPyPy = python.executable == "pypy";
   isPy3k = strings.substring 0 1 python.majorVersion == "3";
 
@@ -30,6 +31,7 @@ let
     if isPy33 then "python33" else
     if isPy34 then "python34" else
     if isPy35 then "python35" else
+    if isPy36 then "python36" else
     if isPyPy then "pypy" else "";
 
   modules = python.modules or {
@@ -42,7 +44,7 @@ let
 
 in modules // {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
 
   # helpers
 
@@ -225,13 +227,11 @@ in modules // {
   };
 
   h5py = callPackage ../development/python-modules/h5py {
-    hdf5 = pkgs.hdf5.override { mpi = null; };
+    hdf5 = pkgs.hdf5;
   };
 
   h5py-mpi = self.h5py.override {
-    mpiSupport = true;
-    mpi = pkgs.openmpi;
-    hdf5 = pkgs.hdf5.override { mpi = pkgs.openmpi; enableShared = true; };
+    hdf5 = pkgs.hdf5-mpi;
   };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
@@ -4376,8 +4376,6 @@ in modules // {
     patchPhase = ''
       substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
     '';
-
-    NIX_CFLAGS_COMPILE="-Wno-shift-negative-value";
 
     checkPhase = ''
       py.test
@@ -11211,12 +11209,12 @@ in modules // {
 
   httpretty = buildPythonPackage rec {
     name = "httpretty-${version}";
-    version = "0.8.6";
+    version = "0.8.10";
     doCheck = false;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpretty/${name}.tar.gz";
-      sha256 = "0f295zj272plr9lhf80kgz19dxkargwv3ar83rwavrcy516mgg9n";
+      sha256 = "1nmdk6d89z14x3wg4yxywlxjdip16zc8bqnfb471z1365mr74jj7";
     };
 
     buildInputs = with self; [ tornado requests2 httplib2 sure nose coverage certifi ];
@@ -11802,6 +11800,10 @@ in modules // {
       description = "A simple command line journal application that stores your journal in a plain text file";
       license = licenses.mit;
     };
+  };
+
+  jsonnet = buildPythonPackage {
+    inherit (pkgs.jsonnet) name src;
   };
 
   jupyter_client = buildPythonPackage rec {
@@ -17680,18 +17682,18 @@ in modules // {
   };
 
   pygit2 = buildPythonPackage rec {
-    name = "pygit2-0.23.1";
+    name = "pygit2-0.24.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pygit2/${name}.tar.gz";
-      sha256 = "04201vcal7jq8lbpk9ylscrhjxdcf2aihiw25k4imjjqgfmvldf7";
+      sha256 = "01c155ls0h5pvpdkrk8ld6fscshmz4fchcwxrg488dbij1zdjxms";
     };
 
     preConfigure = ( if stdenv.isDarwin then ''
       export DYLD_LIBRARY_PATH="${pkgs.libgit2}/lib"
     '' else "" );
 
-    propagatedBuildInputs = with self; [ pkgs.libgit2 ] ++ optionals (!isPyPy) [ cffi ];
+    propagatedBuildInputs = with self; [ pkgs.libgit2 six ] ++ optionals (!isPyPy) [ cffi ];
 
     preCheck = ''
       # disable tests that require networking

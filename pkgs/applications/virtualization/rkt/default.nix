@@ -50,7 +50,11 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -Rv $BUILDDIR/target/bin/* $out/bin
+    cp -Rv $BUILDDIR/target/bin/rkt $out/bin
+
+    mkdir -p $out/lib/rkt/stage1-images/
+    cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/lib/rkt/stage1-images/
+
     wrapProgram $out/bin/rkt \
       --prefix LD_LIBRARY_PATH : ${systemd}/lib \
       --prefix PATH : ${iptables}/bin

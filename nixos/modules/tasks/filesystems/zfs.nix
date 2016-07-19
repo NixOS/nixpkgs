@@ -270,7 +270,23 @@ in
               ("$zpool_cmd" list "${pool}" >/dev/null) || "$zpool_cmd" import -d ${cfgZfs.devNodes} -N ${optionalString cfgZfs.forceImportAll "-f"} "${pool}"
             '';
           };
-      in listToAttrs (map createImportService dataPools) // {
+
+        # This forces a sync of any ZFS pools prior to poweroff, even if they're set
+        # to sync=disabled.
+        createSyncService = pool:
+          nameValuePair "zfs-sync-${pool}" {
+            description = "Sync ZFS pool \"${pool}\"";
+            wantedBy = [ "shutdown.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+            script = ''
+              ${zfsUserPkg}/sbin/zfs set nixos:shutdown-time="$(date)" "${pool}"
+            '';
+          };
+
+      in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
         "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
         "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
         "zed" = { after = [ "systemd-modules-load.service" ]; };
