@@ -286,10 +286,12 @@ in
         optionalAttrs vhostConfig.enableACME {
           webroot = vhostConfig.acmeRoot;
           extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+          postRun = ''
+            systemctl reload nginx
+          '';
         }
       ) virtualHosts
     );
-
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
