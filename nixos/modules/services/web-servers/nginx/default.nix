@@ -394,6 +394,9 @@ in
         optionalAttrs vhostConfig.enableACME {
           webroot = vhostConfig.acmeRoot;
           extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+          postRun = ''
+            systemctl reload nginx
+          '';
         }
       ) virtualHosts
     );
