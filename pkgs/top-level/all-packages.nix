@@ -14601,6 +14601,8 @@ in
 
   syncthing012 = callPackage ../applications/networking/syncthing012 { };
 
+  syncthing013 = callPackage ../applications/networking/syncthing013 { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
