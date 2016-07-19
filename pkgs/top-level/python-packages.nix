@@ -11804,6 +11804,10 @@ in modules // {
     };
   };
 
+  jsonnet = buildPythonPackage {
+    inherit (pkgs.jsonnet) name src;
+  };
+
   jupyter_client = buildPythonPackage rec {
     version = "4.2.2";
     name = "jupyter_client-${version}";
