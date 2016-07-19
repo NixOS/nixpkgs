@@ -1,6 +1,8 @@
 { stdenv, fetchurl, pkgconfig, python3, makeWrapper, pygtk
 , webkit, glib_networking, gsettings_desktop_schemas, pythonPackages
 }:
+# This package needs python3 during buildtime,
+# but Python 2 + packages during runtime.
 
 stdenv.mkDerivation rec {
   name = "uzbl-v0.9.0";
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     makeFlags="$makeFlags PREFIX=$out"
     makeFlags="$makeFlags PYINSTALL_EXTRA=--prefix=$out"
-    mkdir -p $out/lib/python3.4/site-packages/
-    export PYTHONPATH=$PYTHONPATH:$out/lib/python3.4/site-packages/
+    mkdir -p $out/${python3.sitePackages}/
+    export PYTHONPATH=$PYTHONPATH:$out/${python3.sitePackages}
   '';
 
   preFixup = ''
@@ -37,5 +39,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python3 makeWrapper ];
 
-  buildInputs = [ gsettings_desktop_schemas webkit pygtk pythonPackages.six ];
+  buildInputs = [ gsettings_desktop_schemas webkit ];
+  propagatedBuildInputs = [ pygtk pythonPackages.six ];
 }
