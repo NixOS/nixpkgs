@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     makeFlags="$makeFlags PREFIX=$out"
     makeFlags="$makeFlags PYINSTALL_EXTRA=--prefix=$out"
-    mkdir -p $out/lib/python3.4/site-packages/
-    export PYTHONPATH=$PYTHONPATH:$out/lib/python3.4/site-packages/
+    mkdir -p $out/${python3.sitePackages}
+    export PYTHONPATH=$PYTHONPATH:$out/${python3.sitePackages}
   '';
 
   preFixup = ''
