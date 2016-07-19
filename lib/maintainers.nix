@@ -432,4 +432,5 @@
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
+  amiloradovsky = "Andrew Miloradovsky <miloradovsky@gmail.com>";
 }
