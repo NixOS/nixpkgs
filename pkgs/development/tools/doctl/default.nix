@@ -16,7 +16,7 @@ buildGoPackage rec {
   meta = {
     description = "A command line tool for DigitalOcean services";
     homepage = "https://github.com/digitalocean/doctl";
-    license = stdenv.lib.licenses.apache2;
+    license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.siddharthist ];
   };
