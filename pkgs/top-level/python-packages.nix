@@ -27126,6 +27126,9 @@ in modules // {
 
     LC_ALL="en_US.UTF-8";
 
+    # No tests available
+    doCheck = false;
+
     meta = {
       description = "Copy your docs directly to the gh-pages branch";
       homepage = "http://github.com/davisp/ghp-import";
