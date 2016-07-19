@@ -1,7 +1,8 @@
 { stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git
+, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl
 
 , isRelease ? false
+, needsCmake ? false
 , shortVersion
 , forceBundledLLVM ? false
 , srcSha, srcRev
@@ -94,8 +95,15 @@ stdenv.mkDerivation {
     configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
+  # New -beta and -unstable unfortunately need cmake for compiling
+  # llvm-rt but don't use it for the normal build. This disables cmake
+  # in Nix.
+  dontUseCmakeConfigure = needsCmake;
+
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git ];
+  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git ]
+    ++ stdenv.lib.optional needsCmake [ cmake curl ];
+
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
 
