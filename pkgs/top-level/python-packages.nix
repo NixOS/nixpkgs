@@ -19488,6 +19488,27 @@ in modules // {
     };
   };
 
+  python-etcd = buildPythonPackage rec {
+    name = "python-etcd-${version}";
+    version = "0.4.3";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/python-etcd/${name}.tar.gz";
+      sha256 = "cf53262b3890d185fe637eed15fe39c8d7a8261864ddcd7037b22c961456d7fc";
+    };
+
+    buildInputs = with self; [ nose mock pyopenssl ];
+
+    propagatedBuildInputs = with self; [ urllib3 dns];
+
+
+    meta = {
+      description = "A python client for Etcd";
+      homepage = http://github.com/jplana/python-etcd;
+      license = licenses.mit;
+    };
+  };
+
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
