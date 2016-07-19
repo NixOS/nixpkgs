@@ -5834,6 +5834,31 @@ in modules // {
     propagatedBuildInputs = with self; [ configparser ];
   };
 
+  etcd = buildPythonPackage rec {
+    name = "etcd-${version}";
+    version = "2.0.8";
+
+    # PyPI package is incomplete
+    src = pkgs.fetchurl {
+      url = "https://github.com/dsoprea/PythonEtcdClient/archive/${version}.tar.gz";
+      sha256 = "0fi6rxa1yxvz7nwrc7dw6fax3041d6bj3iyhywjgbkg7nadi9i8v";
+    };
+
+    patchPhase = ''
+      sed -i -e '13,14d;37d' setup.py
+    '';
+
+    propagatedBuildInputs = with self; [ simplejson pytz requests2 ];
+
+    # No proper tests are available
+    doCheck = false;
+
+    meta = {
+      description = "A Python etcd client that just works";
+      homepage = https://github.com/dsoprea/PythonEtcdClient;
+      license = licenses.gpl2;
+    };
+  };
 
   evdev = buildPythonPackage rec {
     version = "0.4.7";
