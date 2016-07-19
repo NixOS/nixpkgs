@@ -1,5 +1,6 @@
 { stdenv, fetchurl, self, callPackage, python27Packages
 , bzip2, openssl, gettext
+, less
 
 , includeModules ? false
 
@@ -108,7 +109,7 @@ let
     ++ optional zlibSupport zlib
     ++ optional stdenv.isDarwin CF;
 
-  propagatedBuildInputs = optional stdenv.isDarwin configd;
+  propagatedBuildInputs = [ less ] ++ optional stdenv.isDarwin configd;
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
