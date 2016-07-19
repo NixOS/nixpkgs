@@ -16924,9 +16924,15 @@ in
 
   gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
 
-  gnuk = callPackage ../misc/gnuk { };
-  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
-  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
+  gnuk = callPackage ../misc/gnuk {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  };
+  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  });
+  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  });
 
   greybird = callPackage ../misc/themes/greybird { };
 
