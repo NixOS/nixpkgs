@@ -768,6 +768,7 @@ self: super: {
   "QuickAnnotate" = dontDistribute super."QuickAnnotate";
   "QuickCheck-GenT" = dontDistribute super."QuickCheck-GenT";
   "QuickCheck-safe" = dontDistribute super."QuickCheck-safe";
+  "QuickCheckVariant" = dontDistribute super."QuickCheckVariant";
   "QuickPlot" = dontDistribute super."QuickPlot";
   "Quickson" = dontDistribute super."Quickson";
   "R-pandoc" = dontDistribute super."R-pandoc";
@@ -1898,6 +1899,7 @@ self: super: {
   "clutterhs" = dontDistribute super."clutterhs";
   "cmaes" = dontDistribute super."cmaes";
   "cmark" = doDistribute super."cmark_0_5_2_1";
+  "cmark-highlight" = dontDistribute super."cmark-highlight";
   "cmath" = dontDistribute super."cmath";
   "cmathml3" = dontDistribute super."cmathml3";
   "cmd-item" = dontDistribute super."cmd-item";
@@ -2406,6 +2408,7 @@ self: super: {
   "diagrams-pandoc" = dontDistribute super."diagrams-pandoc";
   "diagrams-pdf" = dontDistribute super."diagrams-pdf";
   "diagrams-pgf" = dontDistribute super."diagrams-pgf";
+  "diagrams-postscript" = doDistribute super."diagrams-postscript_1_3_0_6";
   "diagrams-qrcode" = dontDistribute super."diagrams-qrcode";
   "diagrams-reflex" = dontDistribute super."diagrams-reflex";
   "diagrams-rubiks-cube" = dontDistribute super."diagrams-rubiks-cube";
@@ -2633,6 +2636,7 @@ self: super: {
   "email-postmark" = dontDistribute super."email-postmark";
   "email-validate-json" = dontDistribute super."email-validate-json";
   "email-validator" = dontDistribute super."email-validator";
+  "emailparse" = dontDistribute super."emailparse";
   "embeddock" = dontDistribute super."embeddock";
   "embeddock-example" = dontDistribute super."embeddock-example";
   "embroidery" = dontDistribute super."embroidery";
@@ -4335,6 +4339,7 @@ self: super: {
   "huzzy" = dontDistribute super."huzzy";
   "hw-bits" = doDistribute super."hw-bits_0_0_0_6";
   "hw-json" = doDistribute super."hw-json_0_0_0_2";
+  "hw-mquery" = dontDistribute super."hw-mquery";
   "hw-prim" = doDistribute super."hw-prim_0_0_0_10";
   "hw-rankselect" = doDistribute super."hw-rankselect_0_0_0_2";
   "hwall-auth-iitk" = dontDistribute super."hwall-auth-iitk";
@@ -4545,6 +4550,7 @@ self: super: {
   "isiz" = dontDistribute super."isiz";
   "ismtp" = dontDistribute super."ismtp";
   "iso8583-bitmaps" = dontDistribute super."iso8583-bitmaps";
+  "isobmff-builder" = dontDistribute super."isobmff-builder";
   "isohunt" = dontDistribute super."isohunt";
   "ispositive" = dontDistribute super."ispositive";
   "itanium-abi" = dontDistribute super."itanium-abi";
@@ -5045,6 +5051,7 @@ self: super: {
   "lui" = dontDistribute super."lui";
   "luis-client" = dontDistribute super."luis-client";
   "luka" = dontDistribute super."luka";
+  "luminance" = doDistribute super."luminance_0_11_0_1";
   "lushtags" = dontDistribute super."lushtags";
   "luthor" = dontDistribute super."luthor";
   "lvish" = dontDistribute super."lvish";
@@ -5893,6 +5900,7 @@ self: super: {
   "pipes-interleave" = dontDistribute super."pipes-interleave";
   "pipes-key-value-csv" = dontDistribute super."pipes-key-value-csv";
   "pipes-lzma" = dontDistribute super."pipes-lzma";
+  "pipes-network" = doDistribute super."pipes-network_0_6_4";
   "pipes-network-tls" = dontDistribute super."pipes-network-tls";
   "pipes-p2p" = dontDistribute super."pipes-p2p";
   "pipes-p2p-examples" = dontDistribute super."pipes-p2p-examples";
@@ -7759,6 +7767,7 @@ self: super: {
   "valid-names" = dontDistribute super."valid-names";
   "validate" = dontDistribute super."validate";
   "validated-literals" = dontDistribute super."validated-literals";
+  "validation" = doDistribute super."validation_0_5_2";
   "validations" = dontDistribute super."validations";
   "validity" = dontDistribute super."validity";
   "value-supply" = dontDistribute super."value-supply";
@@ -7890,6 +7899,7 @@ self: super: {
   "watcher" = dontDistribute super."watcher";
   "watchit" = dontDistribute super."watchit";
   "wavconvert" = dontDistribute super."wavconvert";
+  "wavefront" = doDistribute super."wavefront_0_7";
   "wavesurfer" = dontDistribute super."wavesurfer";
   "wavy" = dontDistribute super."wavy";
   "wcwidth" = dontDistribute super."wcwidth";
