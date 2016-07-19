@@ -209,11 +209,11 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.0.0-alpha11";
+    version = "1.2.0";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "1b41ad352p4296c2j7cdq27wp06w28080bjxnjpmw536scb7yd27";
+      sha256 = "15chwfsqmwmhry3bv13a5y4ih1vzb0j8h1dfd49pnzzd8lai706w";
     };
 
     phases = [ "installPhase" ];
