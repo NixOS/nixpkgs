@@ -12,4 +12,12 @@ buildGoPackage rec {
     rev = "${rev}";
     sha256 = "03z652fw0a628gv666w8vpi05a4sdilvs1j5scjhcbi82zsbkvma";
   };
+
+  meta = {
+    description = "A command line tool for DigitalOcean services";
+    homepage = "https://github.com/digitalocean/doctl";
+    license = stdenv.lib.licenses.apache2;
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.siddharthist ];
+  };
 }
