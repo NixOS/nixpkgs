@@ -27189,6 +27189,27 @@ in modules // {
     };
   };
 
+  jenkinsapi = buildPythonPackage rec {
+    name = "jenkinsapi-${version}";
+    version = "0.2.32";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jenkinsapi/${name}.tar.gz";
+      sha256 = "0fcc78b8dfc87237942aad2a8be54dbc08bc4afceaa7f6897f3d894e7d4bfd22";
+    };
+
+    propagatedBuildInputs = with self; [ pytz requests2 ];
+
+    buildInputs = with self; [ coverage mock nose unittest2 ];
+
+    meta = {
+      description = "A Python API for accessing resources on a Jenkins continuous-integration server";
+      homepage = https://github.com/salimfadhley/jenkinsapi;
+      maintainers = with maintainers; [ drets ];
+      license = licenses.mit;
+    };
+  };
+
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-1.4.0";
     disabled = ! (isPy26 || isPy27);
