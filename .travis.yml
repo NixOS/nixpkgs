@@ -7,6 +7,12 @@ matrix:
               - ./maintainers/scripts/travis-nox-review-pr.sh nixpkgs-verify nixpkgs-manual nixpkgs-tarball
               - ./maintainers/scripts/travis-nox-review-pr.sh nixos-options nixos-manual
         - os: linux
+          before_script:
+              - sudo apt-get -qqy purge build-essential chromium-browser 'llvm.*' 'postgresql.*' 'python.*' perl google-chrome-stable imagemagick ruby rsync subversion google-cloud-sdk 'emacs.*' w3m libxtst6 'erlang.*' qdbus 'qt.*' rabbitmq-server redis-server shared-mime-info sound-theme-freedesktop sphinxsearch 'sqlite3.*' tmux 'vim.*' 'x11.*' 'xfonts.*' xkb-data xml-core 'xorg.*' 'xserver.*' 'openjdk-.*' 'icedtea-.*' 'icedtea6-.*' 'libgnome.*' fonts-dejavu-core fonts-ubuntu-font-family-console 'oracle-java.*' 'mysql.*' firefox-locale-pt mingw32 manpages
+              - sudo apt-get -qqy autoremove
+              - sudo apt-get -qqy clean
+              - sudo rm -rf /opt/
+              - sudo mount -o remount,size=4G /run/user
           sudo: required
           dist: trusty
           script: ./maintainers/scripts/travis-nox-review-pr.sh pr
