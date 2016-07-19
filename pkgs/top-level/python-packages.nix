@@ -13058,6 +13058,11 @@ in modules // {
       # For tests
       nose sure boto3 freezegun
     ];
+
+    checkPhase = "nosetests";
+
+    # TODO: make this true; I think lots of the tests want network access but we can probably run the others
+    doCheck = false;
   };
 
 
