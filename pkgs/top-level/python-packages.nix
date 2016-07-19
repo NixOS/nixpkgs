@@ -21618,6 +21618,21 @@ in modules // {
     };
   };
 
+  pychef = buildPythonPackage rec {
+    name    = "PyChef-${version}";
+    version = "0.3.0";
+
+    src = pkgs.fetchurl {
+      url    = "https://pypi.python.org/packages/f9/31/17cde137e3b8ada4d7c80fd4504264f2abed329a9a8100c3622a044c485e/PyChef-0.3.0.tar.gz";
+      sha256 = "0zdz8lw545cd3a34cpib7mdwnad83gr2mrrxyj3v74h4zhwabhmg";
+    };
+
+    propagatedBuildInputs = with self; [ six requests2 mock unittest2 ];
+
+    # FIXME
+    doCheck = false;
+  };
+
   pydns = buildPythonPackage rec {
     name = "pydns-2.3.6";
     disabled = isPy3k;
