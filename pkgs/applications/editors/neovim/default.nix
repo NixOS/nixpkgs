@@ -100,6 +100,9 @@ let
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
     ];
 
+    # triggers on buffer overflow bug while running tests
+    hardeningDisable = [ "fortify" ];
+
     preConfigure = ''
       substituteInPlace runtime/autoload/man.vim \
         --replace /usr/bin/man ${man}/bin/man

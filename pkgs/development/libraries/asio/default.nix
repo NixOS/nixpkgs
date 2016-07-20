@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0phr6zq8z78dwhhzs3h27q32mcv1ffg2gyq880rw3xmilx01rmz0";
   };
 
+  patches = [ ./sslv3.patch ];
+
   propagatedBuildInputs = [ boost ];
   buildInputs = [ openssl ];
 

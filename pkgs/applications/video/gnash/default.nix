@@ -5,7 +5,7 @@
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
 , glib, gtk, gtkglext, pangox_compat, xlibsWrapper, ming, dejagnu, python, perl
 , freefont_ttf, haxe, swftools
-, lib, makeWrapper
+, lib, wrapGAppsHook
 , xulrunner }:
 
 assert stdenv ? glibc;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk gtkglext pangox_compat
     xulrunner
-    makeWrapper
+    wrapGAppsHook
   ]
 
   ++ (stdenv.lib.optionals doCheck [
@@ -91,13 +91,6 @@ stdenv.mkDerivation rec {
   preInstall = ''mkdir -p $out/plugins'';
   postInstall = ''
     make install-plugins
-
-    # Wrap programs so the find the GStreamer plug-ins they need
-    # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
-    for prog in "$out/bin/"*
-    do
-      wrapProgram "$prog" --prefix GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"
-    done
   '';
 
   meta = {

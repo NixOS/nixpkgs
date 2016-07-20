@@ -1,0 +1,25 @@
+--- asio-1.10.6/include/asio/ssl/impl/context.ipp	2016-02-07 13:47:01.793930102 +0000
++++ asio-1.10.6/include/asio/ssl/impl/context.ipp	2016-02-07 13:51:36.228890368 +0000
+@@ -88,6 +88,14 @@
+     handle_ = ::SSL_CTX_new(::SSLv2_server_method());
+     break;
+ #endif // defined(OPENSSL_NO_SSL2)
++#if defined(OPENSSL_NO_SSL3)
++  case context::sslv3:
++  case context::sslv3_client:
++  case context::sslv3_server:
++    asio::detail::throw_error(
++        asio::error::invalid_argument, "context");
++    break;
++#else
+   case context::sslv3:
+     handle_ = ::SSL_CTX_new(::SSLv3_method());
+     break;
+@@ -97,6 +105,7 @@
+   case context::sslv3_server:
+     handle_ = ::SSL_CTX_new(::SSLv3_server_method());
+     break;
++#endif
+   case context::tlsv1:
+     handle_ = ::SSL_CTX_new(::TLSv1_method());
+     break;

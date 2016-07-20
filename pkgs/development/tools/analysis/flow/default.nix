@@ -5,6 +5,7 @@ with lib;
 stdenv.mkDerivation rec {
   version = "0.28.0";
   name = "flow-${version}";
+
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";

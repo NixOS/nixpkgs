@@ -1,27 +1,26 @@
 {
-  "lolcat" = {
-    version = "42.1.0";
+  trollop = {
+    version = "2.1.2";
     source = {
       type = "gem";
-      sha256 = "1jp0g7k958dg709dm1qs7nr8dmi4vlgvmcvqcr1zhk8ygx89rwgc";
-    };
-    dependencies = [
-      "paint"
-      "trollop"
-    ];
-  };
-  "paint" = {
-    version = "0.8.7";
-    source = {
-      type = "gem";
-      sha256 = "0nl1x0190d44bfczlxdy16gxsvm95y14kxv3k9n92h9ap2zvdyd8";
+      remotes = ["http://rubygems.org"];
+      sha256 = "0415y63df86sqj43c0l82and65ia5h64if7n0znkbrmi6y0jwhl8";
     };
   };
-  "trollop" = {
-    version = "1.16.2";
+  paint = {
+    version = "1.0.1";
     source = {
       type = "gem";
-      sha256 = "0frrp90dw266h3kf9g925dppir9l7p8jxknw6dn5nz6fa6c4g5lg";
+      remotes = ["http://rubygems.org"];
+      sha256 = "1z1fqyyc2jiv6yabv467h652cxr2lmxl5gqqg7p14y28kdqf0nhj";
+    };
+  };
+  lolcat = {
+    version = "42.1.43";
+    source = {
+      type = "gem";
+      remotes = ["http://rubygems.org"];
+      sha256 = "1701iscnk4cwrkj7insfwgvvfrpdi217x7h057f5cnwb06xn7jwq";
     };
   };
 }

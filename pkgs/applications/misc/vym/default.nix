@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig qt4 qmake4Hook ];
 
+  hardeningDisable = [ "format" ];
+
   meta = with stdenv.lib; {
     description = "A mind-mapping software";
     longDescription = ''
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
       Such maps can help you to improve your creativity and effectivity. You can use them
       for time management, to organize tasks, to get an overview over complex contexts,
       to sort your ideas etc.
-      
+
       Maps can be drawn by hand on paper or a flip chart and help to structure your thoughs.
       While a tree like structure like shown on this page can be drawn by hand or any drawing software
       vym offers much more features to work with such maps.

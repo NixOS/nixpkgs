@@ -1341,6 +1341,49 @@ in the default system locations.</para>
 
 </section>
 
+<section xml:id="sec-hardening-in-nixpkgs"><title>Hardening in Nixpkgs</title>
+
+<para>By default some flags to harden packages at compile or link-time are set:</para>
+
+<variablelist>
+
+  <varlistentry>
+    <term><varname>hardening_format</varname></term>
+    <listitem><para>Adds the <option>-Wformat -Wformat-security
+    -Werror=format-security</option> compiler options. At present,
+    this warns about calls to printf and scanf functions where the
+    format string is not a string literal and there are no format
+    arguments, as in <literal>printf(foo);</literal>. This may be
+    a security hole if the format string came from untrusted input
+    and contains <literal>%n</literal>.</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+/tmp/nix-build-zynaddsubfx-2.5.2.drv-0/zynaddsubfx-2.5.2/src/UI/guimain.cpp:571:28: error: format not a string literal and no format arguments [-Werror=format-security]
+         printf(help_message);
+                            ^
+cc1plus: some warnings being treated as errors
+    </programlisting></listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><varname>hardening_stackprotector</varname></term>
+    <listitem><para>Adds the <option>-fstack-protector-strong</option>
+    compiler options. This adds safety checks against stack overwrites
+    rendering many potential code injection attacks into aborting situations.
+    In the best case this turns code injection vulnerabilities into denial
+    of service or into non-issues (depending on the application).</para>
+
+    <para>This needs to be turned off or fixed for errors similar to:</para>
+
+    <programlisting>
+bin/blib.a(bios_console.o): In function `bios_handle_cup':
+/tmp/nix-build-ipxe-20141124-5cbdc41.drv-0/ipxe-5cbdc41/src/arch/i386/firmware/pcbios/bios_console.c:86: undefined reference to `__stack_chk_fail'
+    </programlisting></listitem>
+  </varlistentry>
+</variablelist>
+</section>
 
 </chapter>
 

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 exiv2 openexr fftwSinglePrec libtiff ];
   nativeBuildInputs = [ qmake4Hook ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     export CPATH="${ilmbase}/include/OpenEXR:$CPATH"
   '';

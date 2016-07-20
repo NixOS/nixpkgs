@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   src = srcs.riak;
 
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     sed -i deps/node_package/priv/base/env.sh \
       -e 's@{{platform_data_dir}}@''${RIAK_DATA_DIR:-/var/db/riak}@' \

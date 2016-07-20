@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, autoconf, automake, libsndfile, libtool, pkgconfig }:
+{ stdenv, fetchsvn, autoconf, automake, libsndfile, libtool, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec {
   name = "libgig-svn-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0i7sj3zm6banl5avjdxblx0mlbxxzbsbr4x5hsl2fhrdsv5dnxhc";
   };
 
-  buildInputs = [ autoconf automake libsndfile libtool pkgconfig ];
+  buildInputs = [ autoconf automake libsndfile libtool pkgconfig libuuid ];
 
   preConfigure = "make -f Makefile.cvs";
 

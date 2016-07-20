@@ -16,10 +16,12 @@ stdenv.mkDerivation rec {
     qt4 openssl xproto libX11 libXScrnSaver scrnsaverproto xz zlib
   ];
 
+  hardeningDisable = [ "format" ];
+
   nativeBuildInputs = [ qmake4Hook ];
 
   preConfigure = ''
-    qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
+    qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out -recursive"
   '';
 
   meta = with stdenv.lib; {

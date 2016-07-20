@@ -16,6 +16,8 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   src = fetchurl {
     url = mirror://sourceforge/csound/Csound6.04.tar.gz;
     sha256 = "1030w38lxdwjz1irr32m9cl0paqmgr02lab2m7f7j1yihwxj1w0g";

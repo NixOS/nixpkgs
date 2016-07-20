@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pj6jans75pxw9arp1747kmmk72zbc2vgkf2a0w565pj98x1nlk1";
   };
 
+  hardeningDisable = [ "pic" ];
+
   preBuild = ''
     makeFlags="KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     sed -i -e "s,INSTALL_MOD_DIR=,INSTALL_MOD_PATH=$out INSTALL_MOD_DIR=," \

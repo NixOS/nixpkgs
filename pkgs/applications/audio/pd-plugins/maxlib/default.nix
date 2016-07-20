@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ puredata ];
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     for i in ${puredata}/include/pd/*; do
       ln -s $i .

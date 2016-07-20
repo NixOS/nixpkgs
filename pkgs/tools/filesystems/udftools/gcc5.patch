@@ -1,0 +1,17 @@
+--- udftools-1.0.0b3/libudffs/desc.c	2016-02-07 23:21:38.595391610 +0000
++++ udftools-1.0.0b3/libudffs/desc.c	2016-02-07 23:21:57.759756269 +0000
+@@ -34,12 +34,12 @@
+ #include "libudffs.h"
+ #include "config.h"
+ 
+-inline struct impUseVolDescImpUse *query_iuvdiu(struct udf_disc *disc)
++extern struct impUseVolDescImpUse *query_iuvdiu(struct udf_disc *disc)
+ {
+ 	return (struct impUseVolDescImpUse *)disc->udf_iuvd[0]->impUse;
+ }
+ 
+-inline struct logicalVolIntegrityDescImpUse *query_lvidiu(struct udf_disc *disc)
++extern struct logicalVolIntegrityDescImpUse *query_lvidiu(struct udf_disc *disc)
+ {
+ 	return (struct logicalVolIntegrityDescImpUse *)&(disc->udf_lvid->impUse[le32_to_cpu(disc->udf_lvd[0]->numPartitionMaps) * 2 * sizeof(uint32_t)]);
+ }

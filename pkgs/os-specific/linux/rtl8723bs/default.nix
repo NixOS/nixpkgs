@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "07srd457wnz29nvvq02wz66s387bhjbydnmbs3qr7ljprabhsgmi";
   };
 
+  hardeningDisable = [ "pic" ];
+
   buildInputs = [ nukeReferences ];
 
   makeFlags = concatStringsSep " " [

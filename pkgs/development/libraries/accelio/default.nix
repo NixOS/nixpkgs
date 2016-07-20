@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "172frqk2n43g0arhazgcwfvj0syf861vdzdpxl7idr142bb0ykf7";
   };
 
+  hardeningDisable = [ "format" "pic" ];
+
   patches = [ ./fix-printfs.patch ];
 
   postPatch = ''

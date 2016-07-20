@@ -40,7 +40,12 @@ self: super: {
   options_1_2 = dontCheck super.options_1_2;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
+  c2hs = dontCheck super.c2hs;
+
+  # fix errors caused by hardening flags
+  epanet-haskell = super.epanet-haskell.overrideDerivation (drv: {
+    hardeningDisable = [ "format" ];
+  });
 
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
@@ -249,10 +254,18 @@ self: super: {
   gio_0_13_0_4 = addPkgconfigDepend super.gio_0_13_0_4 pkgs.glib;
   gio_0_13_1_0 = addPkgconfigDepend super.gio_0_13_1_0 pkgs.glib;
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-  gio = addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib;
-  glib = addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib;
-  gtk3 = super.gtk3.override { inherit (pkgs) gtk3; };
-  gtk = addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk;
+  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
+  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
   gtksourceview3 = super.gtksourceview3.override { inherit (pkgs.gnome3) gtksourceview; };
 
@@ -435,7 +448,9 @@ self: super: {
   lensref = dontCheck super.lensref;
   liquidhaskell = dontCheck super.liquidhaskell;
   lucid = dontCheck super.lucid; #https://github.com/chrisdone/lucid/issues/25
-  lvmrun = dontCheck super.lvmrun;
+  lvmrun = pkgs.lib.overrideDerivation (dontCheck super.lvmrun) (drv: {
+    hardeningDisable = [ "format" ];
+  });
   memcache = dontCheck super.memcache;
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
@@ -1032,7 +1047,9 @@ self: super: {
 
   # Tools that use gtk2hs-buildtools now depend on them in a custom-setup stanza
   cairo = addBuildTool super.cairo self.gtk2hs-buildtools;
-  pango = addBuildTool super.pango self.gtk2hs-buildtools;
+  pango = pkgs.lib.overrideDerivation (addBuildTool super.pango self.gtk2hs-buildtools) (drv: {
+    hardeningDisable = [ "fortify" ];
+  });
 
   # Fix tests which would otherwise fail with "Couldn't launch intero process."
   intero = overrideCabal super.intero (drv: {

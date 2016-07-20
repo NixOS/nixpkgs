@@ -32,6 +32,9 @@
 , atk
 , gdk_pixbuf
 , setJavaClassPath
+, useSystemCACerts ? false
+, perl
+, cacert
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
@@ -169,6 +172,14 @@ let result = stdenv.mkDerivation rec {
       wrapProgram "$out/bin/jmc" \
           --suffix-each LD_LIBRARY_PATH ':' "${rpath}"
     fi
+  '';
+
+  postFixup = stdenv.lib.optionalString useSystemCACerts ''
+    # Generate certificates.
+    pushd $jrePath/lib/security
+    rm cacerts
+    ${perl}/bin/perl ${../openjdk/generate-cacerts.pl} $jrePath/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+    popd
   '';
 
   inherit installjdk pluginSupport;

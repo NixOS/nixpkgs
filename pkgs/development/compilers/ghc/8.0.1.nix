@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
     inherit bootPkgs;
   };
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";

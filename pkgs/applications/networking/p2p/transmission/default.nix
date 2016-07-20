@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, makeWrapper
+{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
-, enableGTK3 ? false, gtk3
+, enableGTK3 ? false, gtk3, hicolor_icon_theme
 }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig intltool file openssl curl libevent inotify-tools zlib ]
-    ++ optionals enableGTK3 [ gtk3 makeWrapper ]
+    ++ optionals enableGTK3 [ gtk3 wrapGAppsHook hicolor_icon_theme ]
     ++ optional stdenv.isLinux systemd;
 
   postPatch = ''
@@ -31,11 +31,9 @@ stdenv.mkDerivation rec {
     ++ [ "--enable-cli" ]
     ++ optional enableGTK3 "--with-gtk";
 
-  preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
-    rm "$out/share/icons/hicolor/icon-theme.cache"
-    wrapProgram "$out/bin/transmission-gtk" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
+#  preFixup = optionalString enableGTK3 /* gsettings schemas for file dialogues */ ''
+#    rm "$out/share/icons/hicolor/icon-theme.cache"
+#  '';
 
   meta = with stdenv.lib; {
     description = "A fast, easy and free BitTorrent client";

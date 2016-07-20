@@ -64,6 +64,8 @@ core = stdenv.mkDerivation rec {
     perl
   ];
 
+  hardeningDisable = [ "format" ];
+
   postPatch = ''
     for i in texk/kpathsea/mktex*; do
       sed -i '/^mydir=/d' "$i"
@@ -127,6 +129,8 @@ core-big = stdenv.mkDerivation {
   name = "texlive-core-big.bin-${version}";
 
   inherit (common) src;
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = core.buildInputs ++ [ core cairo harfbuzz icu graphite2 ];
 

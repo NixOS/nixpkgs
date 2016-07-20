@@ -5696,6 +5696,8 @@ in modules // {
 
     buildInputs = with self; [ coverage tornado mock nose ];
 
+    patches = [ ../development/python-modules/urllib3-fix-sslv3-test.patch ];
+
     meta = {
       description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
       homepage = https://www.dropbox.com/developers/core/docs;
@@ -9032,7 +9034,7 @@ in modules // {
 
 
   django_tagging = buildPythonPackage rec {
-    name = "django-tagging-0.3.1";
+    name = "django-tagging-0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
@@ -14029,6 +14031,50 @@ in modules // {
     };
   };
 
+  nltkFun = { withData }: buildPythonPackage rec {
+    name = "nltk-${version}";
+    version = "3.2.1";
+
+    src = pkgs.fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nltk/${name}.tar.gz";
+      sha256 = "0skxbhnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+    };
+
+    propagatedBuildInputs = with self; [
+      nose pyparsing
+    ] ++ optional withData nltk-data;
+
+    doCheck = withData;
+
+    meta = {
+      homepage = http://www.nltk.org;
+      description = "A leading platform for building Python programs to work with human language data";
+      license = licenses.asl20;
+    };
+  };
+
+  nltk = self.nltkFun {
+    withData = true;
+  };
+  nltkMin = self.nltkFun {
+    withData = false;
+  };
+
+  nltk-data = stdenv.mkDerivation rec {
+    name = "nltk-data";
+    buildInputs = [
+      self.nltkMin
+    ];
+
+    outputHashAlgo = "sha256";
+    outputHash = "0skxahnymwlspjkzga0f7x1hg3y50fwpfghs8g8k7fh6f4nknlym";
+
+    builder = pkgs.writeText "nltk-data-builder" ''
+      export PYTHONPATH="${python.sitePackages}:${self.nltkMin}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+      ${python.interpreter} -m nltk.downloader all -d $out
+    '';
+  };
+
   nose = buildPythonPackage rec {
     version = "1.3.7";
     name = "nose-${version}";
@@ -17003,6 +17049,25 @@ in modules // {
     };
   };
 
+
+  py-sonic = buildPythonPackage rec {
+    name = "py-sonic-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py-sonic/py-sonic-${version}.tar.gz";
+      sha256 = "0wq4j56r6gnfhi9xjcn5jzyrg5ll41x0zg6xys7cw1v4fdsqd7hp";
+    };
+
+    patches = [ ../development/python-modules/py-sonic-ssl-security.patch ];
+
+    meta = {
+      description = "A python library to wrap the Subsonic REST API ";
+      license = licenses.gpl3;
+      maintainer = with maintainers; [ jgillich ];
+    };
+  };
+
   pysoundfile = buildPythonPackage rec {
     name = "pysoundfile-${version}";
     version = "0.8.1";
@@ -17941,12 +18006,12 @@ in modules // {
   };
 
   pycurl = buildPythonPackage (rec {
-    name = "pycurl-7.19.5";
+    name = "pycurl-7.19.5.1";
     disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
     src = pkgs.fetchurl {
       url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
-      sha256 = "0hqsap82zklhi5fxhc69kxrwzb0g9566f7sdpz7f9gyxkmyam839";
+      sha256 = "0v5w66ir3siimfzg3kc8hfrrilwwnbxq5bvipmrpyxar0kw715vf";
     };
 
     propagatedBuildInputs = with self; [ pkgs.curl pkgs.openssl ];
@@ -22884,10 +22949,7 @@ in modules // {
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
-    doCheck = ''
-      patchShebangs run_tests.sh
-      ./run_tests.sh
-    '';
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/openstack/python-novaclient/;
@@ -25508,11 +25570,11 @@ in modules // {
 
   whisper = buildPythonPackage rec {
     name = "whisper-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/whisper/${name}.tar.gz";
-      sha256 = "0eca66449d6ceb29e2ab5457b01618e0fe525710dd130a286a18282d849ae5b2";
+      sha256 = "1chkphxwnwvy2cs7jc2h2i0lqqvi9jx6vqj3ly88lwk7m35r4ss2";
     };
 
     # error: invalid command 'test'
@@ -25703,14 +25765,14 @@ in modules // {
 
   graphite_web = buildPythonPackage rec {
     name = "graphite-web-${version}";
-    version = "0.9.12";
+    version = "0.9.15";
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
       sha256 = "472a4403fd5b5364939aee10e78f171b1489e5f6bfe6f150ed9cae8476410114";
     };
 
-    propagatedBuildInputs = with self; [ django_1_5 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_5 django_tagging pysqlite whisper cairocffi ldap memcached pytz ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \

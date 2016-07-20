@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
 , libXau, libXt, pcre, zlib, libXpm, xproto, libXext, xextproto
 , libffi, libffcall, coreutils }:
-        
+
 stdenv.mkDerivation rec {
   v = "2.44.1";
   name = "clisp-${v}";
-  
+
   src = fetchurl {
     url = "mirror://gnu/clisp/release/${v}/${name}.tar.gz";
     sha256 = "0rkp6j6rih4s5d9acifh7pi4b9xfgcspif512l269dqy9qgyy4j1";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       zlib libXpm xproto libXext xextproto libffi libffcall ];
 
   patches = [ ./bits_ipctypes_to_sys_ipc.patch ]; # from Gentoo
-      
+
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
   # anything rememberable).
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
     substituteInPlace modules/bindings/glibc/linux.lisp --replace "(def-c-type __swblk_t)" ""
   '';
-  
+
   configureFlags =
     ''
       --with-readline builddir --with-dynamic-ffi
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_CFLAGS_COMPILE = "-O0 ${stdenv.lib.optionalString (!stdenv.is64bit) "-falign-functions=4"}";
+
+  hardeningDisable = [ "format" ];
 
   # TODO : make mod-check fails
   doCheck = false;

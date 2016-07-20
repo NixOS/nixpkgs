@@ -52,8 +52,6 @@ let
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
 
-  supportOldHostKeys = !versionAtLeast config.system.stateVersion "15.07";
-
 in
 
 {
@@ -179,7 +177,7 @@ in
         default =
           [ { type = "rsa"; bits = 4096; path = "/etc/ssh/ssh_host_rsa_key"; }
             { type = "ed25519"; path = "/etc/ssh/ssh_host_ed25519_key"; }
-          ] ++ optionals supportOldHostKeys
+          ] ++ optionals (!versionAtLeast config.system.stateVersion "15.07")
           [ { type = "dsa"; path = "/etc/ssh/ssh_host_dsa_key"; }
             { type = "ecdsa"; bits = 521; path = "/etc/ssh/ssh_host_ecdsa_key"; }
           ];
@@ -349,15 +347,6 @@ in
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
         '')}
-
-        # Allow DSA client keys for now. (These were deprecated
-        # in OpenSSH 7.0.)
-        PubkeyAcceptedKeyTypes +ssh-dss
-
-        # Re-enable DSA host keys for now.
-        ${optionalString supportOldHostKeys ''
-          HostKeyAlgorithms +ssh-dss
-        ''}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;

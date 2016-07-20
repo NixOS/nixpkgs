@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     "-Ddisable32bit=ON"
   ];
 
+  # we turn on additional warnings due to hardening
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  hardeningDisable = [ "fortify" ];
+
   enableParallelBuilding = true;
 
   # FIXME

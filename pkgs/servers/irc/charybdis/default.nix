@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     "--with-program-prefix=charybdis-"
   ];
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ bison flex openssl ];
 
   meta = with stdenv.lib; {

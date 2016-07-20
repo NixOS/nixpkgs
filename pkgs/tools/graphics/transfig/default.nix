@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   buildInputs = [zlib libjpeg libpng imake];
   inherit libpng;
 
+  hardeningDisable = [ "format" ];
+
   patches = [prefixPatch1 prefixPatch2 prefixPatch3 varargsPatch gensvgPatch];
 
   prefixPatch1 =

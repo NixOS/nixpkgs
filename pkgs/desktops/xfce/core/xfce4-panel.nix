@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libxfce4ui_gtk3, libwnck, exo, garcon, xfconf, libstartup_notification
-, makeWrapper, xfce4mixer, hicolor_icon_theme
+, wrapGAppsHook, xfce4mixer, hicolor_icon_theme
 , withGtk3 ? false, gtk3
 }:
 let
@@ -22,9 +22,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" "docdev" ];
 
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+
   buildInputs =
-    [ pkgconfig intltool gtk libxfce4util exo libwnck
-      garcon xfconf libstartup_notification makeWrapper hicolor_icon_theme
+    [ gtk libxfce4util exo libwnck garcon xfconf
+      libstartup_notification hicolor_icon_theme
     ] ++ xfce4mixer.gst_plugins
       ++ optional withGtk3 gtk3;
 

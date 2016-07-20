@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL2 }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_net-2.0.0";
+  name = "SDL2_net-2.0.1";
 
   src = fetchurl {
     url = "http://www.libsdl.org/projects/SDL_net/release/${name}.tar.gz";
-    sha256 = "d715be30783cc99e541626da52079e308060b21d4f7b95f0224b1d06c1faacab";
+    sha256 = "08cxc1bicmyk89kiks7izw1rlx5ng5n6xpy8fy0zxni3b9z8mkhm";
   };
 
   propagatedBuildInputs = [SDL2];

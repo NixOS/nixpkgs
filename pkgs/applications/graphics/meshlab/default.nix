@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./include-unistd.diff ];
 
+  hardeningDisable = [ "format" ];
+
   buildPhase = ''
     mkdir -p "$out/include"
     export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"

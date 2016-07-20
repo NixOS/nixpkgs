@@ -53,6 +53,25 @@ self: super: {
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
 
+  # Remove upper limit of dependency on time < 1.6
+  # Fix overlapping instance in tests.
+  libmpd = overrideCabal super.libmpd (drv: {
+     preConfigure = ''
+        sed -i -e 's,time .* < *1.6,time >= 1.5,' libmpd.cabal
+        sed -i -e '54s/instance /instance {-# OVERLAPS #-}/' tests/Arbitrary.hs
+     '';
+  });
+
+  xmobar = (overrideCabal super.xmobar (drv: {
+    # Skip -fwith_datezone
+    configureFlags = [ "-fwith_xft" "-fwith_utf8" "-fwith_inotify"
+                       "-fwith_iwlib" "-fwith_mpd" "-fwith_alsa"
+                       "-fwith_mpris" "-fwith_dbus" "-fwith_xpm" ];
+  })).override {
+     timezone-series = null;
+     timezone-olson = null;
+  };
+
   # ghc-mod has a ghc-8 branch that has not yet been merged
   ghc-mod = super."ghc-mod".overrideDerivation (attrs: rec {
     src = pkgs.fetchFromGitHub {

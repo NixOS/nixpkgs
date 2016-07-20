@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   patches =
     [
       ./locale_archive.patch
-      ./fix-host-key-algorithms-plus.patch
       ./CVE-2015-8325.patch
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
@@ -70,6 +69,8 @@ stdenv.mkDerivation rec {
     ++ optional (!linkOpenssl) "--without-openssl";
 
   enableParallelBuilding = true;
+
+  hardeningEnable = [ "pie" ];
 
   postInstall = ''
     # Install ssh-copy-id, it's very useful.

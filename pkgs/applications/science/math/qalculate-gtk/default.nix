@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "15ci0p7jlikk2rira6ykgrmcdvgpxzprpqmkdxx6hsg4pvzrj54s";
   };
 
+  hardeningDisable = [ "format" ];
+
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook wrapGAppsHook ];
   buildInputs = [ libqalculate gtk3 ];
 

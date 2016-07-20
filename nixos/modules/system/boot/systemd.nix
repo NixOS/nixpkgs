@@ -259,6 +259,12 @@ let
               ${config.preStop}
             '';
           })
+        (mkIf (config.stopScript != "")
+          { serviceConfig.ExecStop = makeJobScript "${name}-stop" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${config.stopScript}
+            '';
+          })
         (mkIf (config.postStop != "")
           { serviceConfig.ExecStopPost = makeJobScript "${name}-post-stop" ''
               #! ${pkgs.stdenv.shell} -e

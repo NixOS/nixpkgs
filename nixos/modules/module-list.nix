@@ -91,6 +91,7 @@
   ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/ca.nix
+  ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
@@ -282,6 +283,7 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
+  ./services/monitoring/prometheus.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -383,6 +385,7 @@
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
+  ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -398,7 +401,6 @@
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
-  ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/strongswan.nix
   ./services/networking/supplicant.nix
@@ -462,6 +464,7 @@
   ./services/web-apps/pump.io.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
+  ./services/web-servers/confluence.nix
   ./services/web-servers/fcgiwrap.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/lighttpd/cgit.nix

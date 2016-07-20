@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
   version = "2.12.3";
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";

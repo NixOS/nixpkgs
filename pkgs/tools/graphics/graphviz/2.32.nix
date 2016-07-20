@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ]
     ++ stdenv.lib.optional (xorg == null) "--without-x";
 
+  hardeningDisable = [ "fortify" ];
+
   preBuild = ''
     sed -e 's@am__append_5 *=.*@am_append_5 =@' -i lib/gvc/Makefile
   '';

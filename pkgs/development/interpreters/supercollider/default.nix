@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "11khrv6jchs0vv0lv43am8lp0x1rr3h6l2xj9dmwrxcpdayfbalr";
   };
 
+  hardeningDisable = [ "stackprotector" ];
+
   # QGtkStyle unavailable
   patchPhase = ''
     substituteInPlace editors/sc-ide/widgets/code_editor/autocompleter.cpp \
@@ -38,5 +40,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc ljack2 libsndfile fftw curl libXt qt readline ]
-    ++ optional useSCEL emacs;
+      ++ optional useSCEL emacs;
 }

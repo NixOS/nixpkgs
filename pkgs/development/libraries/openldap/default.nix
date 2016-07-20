@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, cyrus_sasl, db, groff }:
+{ stdenv, fetchurl, libtool, openssl, cyrus_sasl, db, groff }:
 
 stdenv.mkDerivation rec {
   name = "openldap-2.4.44";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   # TODO: separate "out" and "bin"
   outputs = [ "dev" "out" "man" "docdev" ];
 
-  buildInputs = [ openssl cyrus_sasl db groff ];
+  buildInputs = [ libtool openssl cyrus_sasl db groff ];
 
   configureFlags =
     [ "--enable-overlays"
@@ -20,6 +20,22 @@ stdenv.mkDerivation rec {
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    make ''$makeFlags "''${makeFlagsArray[@]}" ''$buildFlags "''${buildFlagsArray[@]}" depend;
+  '';
+
+  # long run
+  doCheck = false;
+
+  preCheck = ''
+    grep -ril /bin/rm tests/ | xargs -n1 -I@ -- sed -i 's:/bin/rm:rm:g' @
+    substituteInPlace tests/scripts/test064-constraint \
+      --replace /bin/bash ${stdenv.shell}
+  '';
+
+  # openldap binaries depend on openldap libs, patchelf removes the rpath to its own libraries
   dontPatchELF = 1; # !!!
 
   # Fixup broken libtool
@@ -32,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
+    license     = with licenses; [ free ];
     maintainers = with maintainers; [ lovek323 mornfall ];
     platforms   = platforms.unix;
   };

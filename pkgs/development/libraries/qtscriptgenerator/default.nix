@@ -9,13 +9,13 @@ stdenv.mkDerivation {
   buildInputs = [ qt4 ];
 
   patches = [ ./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch ];
-  
+
   # Why isn't the author providing proper Makefile or a CMakeLists.txt ?
   buildPhase = ''
     # remove phonon stuff which causes errors (thanks to Gentoo bug reports)
     sed -i "/typesystem_phonon.xml/d" generator/generator.qrc
-    sed -i "/qtscript_phonon/d" qtbindings/qtbindings.pro	    
-  
+    sed -i "/qtscript_phonon/d" qtbindings/qtbindings.pro
+
     cd generator
     qmake
     make
@@ -25,12 +25,14 @@ stdenv.mkDerivation {
     qmake
     make
   '';
-  
+
   installPhase = ''
     cd ..
     mkdir -p $out/lib/qt4/plugins/script
     cp -av plugins/script/* $out/lib/qt4/plugins/script
   '';
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "QtScript bindings generator";

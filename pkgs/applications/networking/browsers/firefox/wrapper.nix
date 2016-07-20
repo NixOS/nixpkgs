@@ -125,8 +125,6 @@ stdenv.mkDerivation {
     echo ${browser} > $out/nix-support/propagated-user-env-packages
   '';
 
-  preferLocalBuild = true;
-
   # Let each plugin tell us (through its `mozillaPlugin') attribute
   # where to find the plugin in its tree.
   plugins = map (x: x + x.mozillaPlugin) plugins;

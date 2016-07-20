@@ -136,7 +136,8 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '\"${value}\"' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '"${cfg.statePath}/config"' \
           --set PATH '"${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH"' \
-          --set RAKEOPT '"-f ${cfg.packages.gitlab}/share/gitlab/Rakefile"'
+          --set RAKEOPT '"-f ${cfg.packages.gitlab}/share/gitlab/Rakefile"' \
+          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
     '';
   };
 

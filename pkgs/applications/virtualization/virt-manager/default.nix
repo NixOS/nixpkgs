@@ -29,7 +29,9 @@ buildPythonApplication rec {
 
   buildInputs = [ dconf avahi intltool ];
 
-  patchPhase = ''
+  patches = [ ./zvol-support.patch ];
+
+  postPatch = ''
     sed -i 's|/usr/share/libvirt/cpu_map.xml|${system-libvirt}/share/libvirt/cpu_map.xml|g' virtinst/capabilities.py
     sed -i "/'install_egg_info'/d" setup.py
   '';

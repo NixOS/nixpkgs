@@ -24,11 +24,11 @@ let
       '';
 in
 stdenv.mkDerivation rec {
-  name = "SDL2-2.0.3";
+  name = "SDL2-2.0.4";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "0369ngvb46x6c26h8zva4x22ywgy6mvn0wx87xqwxg40pxm9m9m5";
+    sha256 = "0jqp46mxxbh9lhpx1ih6sp93k752j2smhpc0ad0q4cb3px0famfs";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.

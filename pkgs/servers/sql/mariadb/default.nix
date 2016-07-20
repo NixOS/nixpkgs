@@ -130,6 +130,8 @@ stdenv.mkDerivation rec {
 
   passthru.mysqlVersion = "5.6";
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = with stdenv.lib; {
     description = "An enhanced, drop-in replacement for MySQL";
     homepage    = https://mariadb.org/;

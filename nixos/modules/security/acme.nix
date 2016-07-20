@@ -90,6 +90,15 @@ in
 
   options = {
     security.acme = {
+      server = mkOption {
+        default = null;
+        type = types.nullOr types.str;
+        description = ''
+          Override directory URI for the CA ACME API endpoint.
+          E.g. "https://acme-staging.api.letsencrypt.org/directory".
+        '';
+      };
+
       directory = mkOption {
         default = "/var/lib/acme";
         type = types.str;
@@ -161,6 +170,7 @@ in
                 cpath = "${cfg.directory}/${cert}";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 cmdline = [ "-v" "-d" cert "--default_root" data.webroot "--valid_min" cfg.validMin ]
+                          ++ optionals (cfg.server != null) [ "--server" cfg.server ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);

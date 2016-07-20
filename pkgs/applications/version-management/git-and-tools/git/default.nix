@@ -22,6 +22,8 @@ stdenv.mkDerivation {
     sha256 = "18l2jb4bkp9ljz6p2aviwzxqyzza9z3v6h1pnkz7kjf1fay61zp8";
   };
 
+  hardeningDisable = [ "format" ];
+
   patches = [
     ./docbook2texi.patch
     ./symlinks-in-bin.patch

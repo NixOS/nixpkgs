@@ -534,6 +534,7 @@ in
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
     nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
+    hardeningDisable = [ "bindnow" ];
   };
 
   xwd = attrs: attrs // {
@@ -554,6 +555,10 @@ in
 
   xrdb = attrs: attrs // {
     configureFlags = "--with-cpp=${args.mcpp}/bin/mcpp";
+  };
+
+  sessreg = attrs: attrs // {
+    preBuild = "sed -i 's|gcc -E|gcc -E -P|' man/Makefile";
   };
 
 }

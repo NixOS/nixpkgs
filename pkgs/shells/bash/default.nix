@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
+  hardeningDisable = [ "format" ];
+
   outputs = [ "out" "doc" "info" ];
 
   # the man pages are small and useful enough

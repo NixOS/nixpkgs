@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib imagemagick libpng glib pkgconfig libgsf libxml2 bzip2 ];
 
+  hardeningDisable = [ "format" ];
+
   meta = {
     description = "Converter from Microsoft Word formats to human-editable ones";
   };

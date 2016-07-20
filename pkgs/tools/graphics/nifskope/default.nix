@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  hardeningDisable = [ "format" ];
+
   # Inspired by linux-install/nifskope.spec.in.
   installPhase =
     ''

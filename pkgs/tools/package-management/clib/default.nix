@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "08n2i3dyh5vnrb74a6wlqqn67c9nwkq0v0v651zzha495mqbciq7";
   };
 
+  hardeningDisable = [ "fortify" ];
+
   makeFlags = "PREFIX=$(out)";
 
   buildInputs = [ curl ];

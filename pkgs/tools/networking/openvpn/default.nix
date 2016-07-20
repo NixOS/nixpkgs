@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
+{ stdenv, fetchpatch, fetchurl, iproute, lzo, openssl, pam, systemd, pkgconfig }:
 
 with stdenv.lib;
 

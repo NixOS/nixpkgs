@@ -218,8 +218,11 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
+  hardeningDisable = [ "format" ];
+
   outputs = if langJava || langGo then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -511,6 +514,8 @@ stdenv.mkDerivation ({
   inherit enableParallelBuilding enableMultilib;
 
   inherit (stdenv) is64bit;
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     homepage = http://gcc.gnu.org/;

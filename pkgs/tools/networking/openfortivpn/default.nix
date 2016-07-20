@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, openssl, ppp }:
+{ stdenv, fetchFromGitHub, autoreconfHook, openssl, ppp }:
 
 with stdenv.lib;
 
@@ -15,13 +15,11 @@ in stdenv.mkDerivation {
     sha256 = "08ycz053wa29ckgr93132hr3vrd84r3bks9q807qanri0n35y256";
   };
 
-  buildInputs = [ openssl automake autoconf ppp ];
+  buildInputs = [ openssl ppp autoreconfHook ];
+
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
-    aclocal
-    autoconf
-    automake --add-missing
-
     substituteInPlace src/tunnel.c --replace "/usr/sbin/pppd" "${ppp}/bin/pppd"
   '';
 

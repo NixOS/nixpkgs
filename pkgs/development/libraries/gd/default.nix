@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "1311g5mva2xlzqv3rjqjc4jjkn5lzls4skvr395h633zw1n7b7s8";
   };
 
+  hardeningDisable = [ "format" ];
+
   # Address an incompatibility with Darwin's libtool
   patches = stdenv.lib.optional stdenv.isDarwin (fetchpatch {
     url = https://github.com/libgd/libgd/commit/502e4cd873c3b37b307b9f450ef827d40916c3d6.patch;

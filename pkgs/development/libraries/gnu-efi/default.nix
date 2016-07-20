@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pciutils ];
 
+  hardeningDisable = [ "stackprotector" ];
+
   makeFlags = [
     "PREFIX=\${out}"
     "CC=gcc"

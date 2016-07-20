@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip gnu-efi efibootmgr dosfstools imagemagick ];
 
+  hardeningDisable = [ "stackprotector" ];
+
   HOSTARCH =
     if stdenv.system == "x86_64-linux" then "x64"
     else if stdenv.system == "i686-linux" then "ia32"

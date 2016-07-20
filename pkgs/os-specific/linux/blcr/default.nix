@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl makeWrapper ];
 
+  hardeningDisable = [ "pic" ];
+
   preConfigure = ''
     configureFlagsArray=(
       --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
       wrapProgram "$prog" --prefix LD_LIBRARY_PATH ":" "$out/lib"
     done
   '';
-      
+
   meta = {
     description = "Berkeley Lab Checkpoint/Restart for Linux (BLCR)";
     homepage = https://ftg.lbl.gov/projects/CheckpointRestart/;

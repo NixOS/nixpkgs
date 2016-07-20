@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "0dxx11knh3nk95p2gg2ak777dd11pr7jx5das2g49l262scrcv83";
   };
 
+  hardeningDisable = [ "format" ];
+
   patches = [
     ./CVE-2014-8139.diff
     ./CVE-2014-8140.diff

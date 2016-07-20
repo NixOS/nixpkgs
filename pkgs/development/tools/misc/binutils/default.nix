@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
 
   inherit noSysDirs;
 
+  # FIXME needs gcc 4.9 in bootstrap tools
+  hardeningDisable = [ "stackprotector" ];
+
   preConfigure = ''
     # Clear the default library search path.
     if test "$noSysDirs" = "1"; then

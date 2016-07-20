@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [tcl tk xlibsWrapper makeWrapper];
 
+  hardeningDisable = [ "format" ];
+
   patchPhase = ''
     sed "13i#define USE_INTERP_RESULT 1" -i src/stubs.c
   '';

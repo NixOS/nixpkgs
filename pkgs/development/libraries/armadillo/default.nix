@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-unix-config-on-OS-X.patch
               ./use-OpenBLAS-as-LAPACK.patch ];
-  
+
   meta = with stdenv.lib; {
     description = "C++ linear algebra library";
     homepage = http://arma.sourceforge.net;

@@ -319,8 +319,9 @@ in
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
 
-  iconConvTools = callPackage ../build-support/icon-conv-tools {};
+  generateDiffieHellman = callPackage ../build-support/dhparams.nix { };
 
+  iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
   ### TOOLS
 
@@ -927,10 +928,6 @@ in
       ClassAccessor TextRoman DataUniqid;
   };
 
-  bibtextools = callPackage ../tools/typesetting/bibtex-tools {
-    inherit (strategoPackages016) strategoxt sdf;
-  };
-
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (gnome3) dconf gsettings_desktop_schemas;
     withPulseAudio = config.pulseaudio or true;
@@ -1062,6 +1059,10 @@ in
     rabbitmq-c = rabbitmq-c_0_4;
     libmysql = mysql.lib;
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
+  };
+
+  collectdMinimal = callPackage ../tools/system/collectd {
+    minimal = true;
   };
 
   colormake = callPackage ../development/tools/build-managers/colormake { };
@@ -2294,18 +2295,22 @@ in
   nodejs-0_10 = callPackage ../development/web/nodejs/v0_10.nix {
     libtool = darwin.cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices Carbon Foundation;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-5_x = callPackage ../development/web/nodejs/v5.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
     libtool = darwin.cctools;
+    openssl = openssl_1_0_2;
   };
 
   nodejs = if stdenv.system == "armv5tel-linux" then
@@ -2418,10 +2423,6 @@ in
   lrzip = callPackage ../tools/compression/lrzip { };
 
   lsb-release = callPackage ../os-specific/linux/lsb-release { };
-
-  # lsh installs `bin/nettle-lfib-stream' and so does Nettle.  Give the
-  # former a lower priority than Nettle.
-  lsh = lowPrio (callPackage ../tools/networking/lsh { });
 
   lshw = callPackage ../tools/system/lshw { };
 
@@ -3537,7 +3538,9 @@ in
 
   sshpass = callPackage ../tools/networking/sshpass { };
 
-  sslscan = callPackage ../tools/security/sslscan { };
+  sslscan = callPackage ../tools/security/sslscan {
+    openssl = openssl_1_0_1;
+  };
 
   sslmate = callPackage ../development/tools/sslmate { };
 
@@ -3639,7 +3642,9 @@ in
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  thc-hydra = callPackage ../tools/security/thc-hydra { };
+  thc-hydra = callPackage ../tools/security/thc-hydra {
+    openssl = openssl_1_0_2;
+  };
 
   tiled = qt5.callPackage ../applications/editors/tiled { };
 
@@ -4301,10 +4306,7 @@ in
   clang_35 = wrapCC llvmPackages_35.clang;
   clang_34 = wrapCC llvmPackages_34.clang;
 
-  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
-    clang = clang_34;
-    llvmPackages = llvmPackages_34;
-  };
+  clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer { };
 
   clangUnwrapped = llvm: pkg: callPackage pkg { inherit llvm; };
 
@@ -5425,11 +5427,6 @@ in
     llvm = llvm_36;
   };
 
-  qcmm = callPackage ../development/compilers/qcmm {
-    lua   = lua4;
-    ocaml = ocaml_3_08_0;
-  };
-
   rgbds = callPackage ../development/compilers/rgbds { };
 
   rtags = callPackage ../development/tools/rtags/default.nix {};
@@ -5493,20 +5490,6 @@ in
 
   stalin = callPackage ../development/compilers/stalin { };
 
-  strategoPackages = recurseIntoAttrs strategoPackages018;
-
-  strategoPackages016 = callPackage ../development/compilers/strategoxt/0.16.nix {
-    stdenv = overrideInStdenv stdenv [gnumake380];
-  };
-
-  strategoPackages017 = callPackage ../development/compilers/strategoxt/0.17.nix {
-    readline = readline5;
-  };
-
-  strategoPackages018 = callPackage ../development/compilers/strategoxt/0.18.nix {
-    readline = readline5;
-  };
-
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
@@ -5547,8 +5530,6 @@ in
   vala_0_32 = callPackage ../development/compilers/vala/0.32.nix { };
 
   vs90wrapper = callPackage ../development/compilers/vs90wrapper { };
-
-  webdsl = callPackage ../development/compilers/webdsl { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
@@ -6521,7 +6502,9 @@ in
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
-  phantomjs2 = callPackage ../development/tools/phantomjs2 { };
+  phantomjs2 = callPackage ../development/tools/phantomjs2 {
+    openssl = openssl_1_0_2;
+  };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -6796,10 +6779,6 @@ in
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
-
-  aterm = self.aterm25;
-
-  aterm25 = callPackage ../development/libraries/aterm/2.5.nix { };
 
   attica = callPackage ../development/libraries/attica { };
 
@@ -8510,7 +8489,9 @@ in
 
   libviper = callPackage ../development/libraries/libviper { };
 
-  libvpx = callPackage ../development/libraries/libvpx { };
+  libvpx = libvpx_1_5;
+  libvpx_1_5 = callPackage ../development/libraries/libvpx { };
+  libvpx_1_4 = callPackage ../development/libraries/libvpx/1.4.nix { };
   libvpx-git = callPackage ../development/libraries/libvpx/git.nix { };
 
   libvterm = callPackage ../development/libraries/libvterm { };
@@ -8763,7 +8744,9 @@ in
 
   non = callPackage ../applications/audio/non { };
 
-  nspr = callPackage ../development/libraries/nspr { };
+  nspr = callPackage ../development/libraries/nspr {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
   nssTools = nss.tools;
@@ -8852,7 +8835,7 @@ in
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = self.libressl_2_3;
+  libressl = self.libressl_2_4;
   libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
     fetchurl = fetchurlBoot;
   };
@@ -8867,7 +8850,7 @@ in
 
   wolfssl = callPackage ../development/libraries/wolfssl { };
 
-  openssl = openssl_1_0_2;
+  openssl = libressl;
 
   inherit (callPackages ../development/libraries/openssl {
       fetchurl = fetchurlBoot;
@@ -9477,8 +9460,6 @@ in
 
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (pythonPackages) gyp;
-    # The build succeeds using gcc5 but it fails to build pkgs.consul-ui
-    stdenv = overrideCC stdenv gcc48;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
@@ -10085,6 +10066,7 @@ in
   scollector = bosun;
 
   charybdis = callPackage ../servers/irc/charybdis {};
+  charybdis-darkfasel = callPackage ../servers/irc/charybdis/darkfasel.nix {};
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
@@ -10125,7 +10107,7 @@ in
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib lualdap luadbi;
   };
 
   elasticmq = callPackage ../servers/elasticmq { };
@@ -10278,7 +10260,9 @@ in
 
   rmilter = callPackage ../servers/mail/rmilter { };
 
-  rspamd = callPackage ../servers/mail/rspamd { };
+  rspamd = callPackage ../servers/mail/rspamd {
+    openssl = openssl_1_0_2;
+  };
 
   pfixtools = callPackage ../servers/mail/postfix/pfixtools.nix { };
 
@@ -10526,6 +10510,8 @@ in
   slurm-llnl = callPackage ../servers/computing/slurm { gtk = null; };
 
   slurm-llnl-full = appendToName "full" (callPackage ../servers/computing/slurm { });
+
+  systemd-journal2gelf = (callPackage ../tools/system/systemd-journal2gelf { }).bin // { outputs = ["bin"]; };
 
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
@@ -10837,7 +10823,9 @@ in
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
 
-  hostapd = callPackage ../os-specific/linux/hostapd { };
+  hostapd = callPackage ../os-specific/linux/hostapd {
+    openssl = openssl_1_0_2;
+  };
 
   htop = callPackage ../tools/system/htop {
     inherit (darwin) IOKit;
@@ -11199,7 +11187,7 @@ in
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = self.linuxPackages_4_4;
+  linuxPackages = self.linuxPackages_4_5;
   linux = self.linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
@@ -12969,7 +12957,6 @@ in
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
     libpng = libpng_apng;
-    enableGTK3 = false;
   }) firefox-unwrapped firefox-esr-unwrapped;
 
   firefox = self.wrapFirefox firefox-unwrapped { };
@@ -13769,6 +13756,8 @@ in
   mopidy-mopify = callPackage ../applications/audio/mopidy-mopify { };
 
   mopidy-spotify-tunigo = callPackage ../applications/audio/mopidy-spotify-tunigo { };
+
+  mopidy-subsonic = callPackage ../applications/audio/mopidy-subsonic { };
 
   mopidy-youtube = callPackage ../applications/audio/mopidy-youtube { };
 
@@ -15465,6 +15454,8 @@ in
 
   fairymax = callPackage ../games/fairymax {};
 
+  fava = callPackage ../applications/office/fava {};
+
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
 
   flightgear = qt5.callPackage ../games/flightgear { };
@@ -15607,6 +15598,8 @@ in
   openmw = callPackage ../games/openmw { };
 
   openra = callPackage ../games/openra { lua = lua5_1; };
+
+  openrct2 = callPackage_i686 ../games/openrct2 { };
 
   openrw = callPackage ../games/openrw { };
 
@@ -15782,15 +15775,10 @@ in
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = !stdenv.isi686; };
     libpng = libpng12;
   };
 
-  torcs = callPackage ../games/torcs {
-    # Torcs wants to make shared libraries linked with plib libraries (it provides static).
-    # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = !stdenv.isi686; };
-  };
+  torcs = callPackage ../games/torcs { };
 
   trigger = callPackage ../games/trigger { };
 
@@ -16182,15 +16170,15 @@ in
 
     calamares = callPackage ../tools/misc/calamares rec {
       python = python3;
-      boost = pkgs.boost.override { python=python3; };
-      libyamlcpp = callPackage ../development/libraries/libyaml-cpp { makePIC=true; boost=boost; };
+      boost = pkgs.boost.override { python = python3; };
+      libyamlcpp = callPackage ../development/libraries/libyaml-cpp { boost = boost; };
     };
 
     colord-kde = callPackage ../tools/misc/colord-kde/0.5.nix {};
 
     dfilemanager = callPackage ../applications/misc/dfilemanager { };
 
-    k9copy = callPackage ../applications/video/k9copy {};
+    k9copy = callPackage ../applications/video/k9copy { };
 
     kdeconnect = callPackage ../applications/misc/kdeconnect { };
 

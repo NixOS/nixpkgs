@@ -1,6 +1,7 @@
 { stdenv, fetchurl, python, buildPythonApplication, mutagen, pygtk, pygobject, intltool
-, pythonDBus, gst_python, withGstPlugins ? false, gst_plugins_base ? null
-, gst_plugins_good ? null, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
+, pythonDBus, gst_python, wrapGAppsHook
+, withGstPlugins ? true, gst_plugins_base ? null, gst_plugins_good ? null
+, gst_plugins_ugly ? null, gst_plugins_bad ? null }:
 
 assert withGstPlugins -> gst_plugins_base != null
                          || gst_plugins_good != null
@@ -45,17 +46,11 @@ buildPythonApplication {
 
   buildInputs = stdenv.lib.optionals withGstPlugins [
     gst_plugins_base gst_plugins_good gst_plugins_ugly gst_plugins_bad
-  ];
+  ] ++ stdenv.lib.optionals withGstPlugins [ wrapGAppsHook ];
 
   propagatedBuildInputs = [
     mutagen pygtk pygobject pythonDBus gst_python intltool
   ];
-
-  postInstall = stdenv.lib.optionalString withGstPlugins ''
-    # Wrap quodlibet so it finds the GStreamer plug-ins
-    wrapProgram "$out/bin/quodlibet" --prefix \
-      GST_PLUGIN_SYSTEM_PATH ":" "$GST_PLUGIN_SYSTEM_PATH"                                                     \
-  '';
 
   meta = {
     description = "GTK+-based audio player written in Python, using the Mutagen tagging library";

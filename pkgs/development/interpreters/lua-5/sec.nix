@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lua5 openssl ];
 
+  hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
+
   preBuild = ''
     makeFlagsArray=(
       linux

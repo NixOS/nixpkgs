@@ -151,13 +151,14 @@ in
         description = "Tinc Daemon - ${network}";
         wantedBy = [ "network.target" ];
         after = [ "network-interfaces.target" ];
-        path = [ data.package ];
+        path = [ data.package pkgs.utillinux ];
         restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
           ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";
         };
+
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
 
@@ -174,9 +175,23 @@ in
             # Tinc 1.0 uses the tincd application
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
           fi
+        '' + optionalString data.chroot ''
+          mkdir -p /etc/tinc/${network}/{etc,nix/store}
+          umount /etc/tinc/${network}/{etc/{hosts,resolv.conf},nix/store} || true
+          rm -f /etc/tinc/${network}/etc/{hosts,resolv.conf}
+          touch /etc/tinc/${network}/etc/{hosts,resolv.conf}
+          mount -o defaults,bind,ro /etc/hosts /etc/tinc/${network}/etc/hosts
+          mount -o defaults,bind,ro /etc/resolv.conf /etc/tinc/${network}/etc/resolv.conf
+          mount -o defaults,bind,ro /nix/store /etc/tinc/${network}/nix/store
         '';
+
         script = ''
-          tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
+          tincd -D -U tinc.${network} -n ${network} ${optionalString data.chroot "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
+        '';
+
+        postStop = optionalString data.chroot ''
+          umount /etc/tinc/${network}/{etc/{hosts,resolv.conf},nix/store}
+          rm -r /etc/tinc/${network}/{etc,nix}
         '';
       })
     );

@@ -19,6 +19,7 @@ let version = "3.2.1";
       #"stemmer"  -- not nice to package yet (no versioning, no makefile, no shared libs).
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
+
     buildInputs = [
       sasl boost gperftools pcre-cpp snappy
       zlib libyamlcpp sasl openssl libpcap
@@ -61,6 +62,9 @@ in stdenv.mkDerivation rec {
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
       ./forget-build-dependencies.patch
+
+      ./asio-sslv3.patch  # remove when using system asio
+
       (fetchpatch {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";
@@ -91,6 +95,8 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  hardeningEnable = [ "pie" ];
 
   meta = {
     description = "A scalable, high-performance, open source NoSQL database";

@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "154dyr2ph4n0kwi8yx0n78j128kw29rk9r9f7s2gddzrdl712jr3";
   };
 
+  hardeningDisable = [ "format" ];
+
   makeFlags = "PREFIX=$(out)";
 
   meta = {

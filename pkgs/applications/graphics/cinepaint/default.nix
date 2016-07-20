@@ -18,13 +18,13 @@ stdenv.mkDerivation rec {
     libXext libXpm libXau libXxf86vm pixman libpthreadstubs fltk
   ];
 
+  hardeningDisable = [ "format" ];
+
   patches = [ ./install.patch ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   NIX_LDFLAGS = "-llcms -ljpeg -lX11";
-
-  # NIX_CFLAGS_COMPILE = "-I.";
 
   meta = {
     homepage = http://www.cinepaint.org/;

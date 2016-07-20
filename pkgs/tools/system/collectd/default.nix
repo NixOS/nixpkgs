@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, minimal ? false
 # optional:
 , pkgconfig ? null  # most of the extra deps need pkgconfig to be found
 , curl ? null
@@ -41,8 +41,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
-    cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
+    pkgconfig curl iptables libpcap libtool python
+  ] ++ stdenv.lib.optionals minimal [ libatasmart libcredis libdbi libgcrypt libmemcached
+    cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libsigrok libvirt
     lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
     varnish yajl jdk libtool python udev net_snmp
   ];

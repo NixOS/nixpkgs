@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses pkgconfig gtk ];
 
+  hardeningDisable = [ "format" ];
+
   configurePhase =
     '' sed -i Makefile \
            -e "s|^prefix=.*$|prefix=$out|g ;

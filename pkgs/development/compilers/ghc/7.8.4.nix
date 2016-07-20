@@ -38,6 +38,8 @@ stdenv.mkDerivation (rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
+  requiredSystemFeatures = [ "big-parallel" ];
+
   meta = {
     homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";

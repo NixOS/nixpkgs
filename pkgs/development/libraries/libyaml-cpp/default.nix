@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake boost ];
 
-  cmakeFlags = stdenv.lib.optionals makePIC [ "-DCMAKE_C_FLAGS=-fPIC" "-DCMAKE_CXX_FLAGS=-fPIC" ];
-
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "A YAML parser and emitter for C++";

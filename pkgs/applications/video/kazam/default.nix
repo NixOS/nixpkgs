@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, gst_all_1, makeWrapper, gobjectIntrospection
+{ stdenv, fetchurl, python3Packages, gst_all_1, wrapGAppsHook, gobjectIntrospection
 , gtk3, libwnck3, keybinder, intltool, libcanberra }:
 
 
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = with python3Packages;
     [ pygobject3 pyxdg pycairo gst_all_1.gstreamer gst_all_1.gst-plugins-base
       gst_all_1.gst-plugins-good gobjectIntrospection gtk3 libwnck3 distutils_extra
-      intltool dbus ];
+      intltool dbus wrapGAppsHook ];
 
   # TODO: figure out why PYTHONPATH is not passed automatically for those programs
   pythonPath = with python3Packages;
@@ -32,12 +32,11 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   preFixup = ''
-    wrapProgram $out/bin/kazam \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk3 gst_all_1.gstreamer keybinder ]}" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix XDG_DATA_DIRS : "${gtk3.out}/share" \
-      --set GST_REGISTRY "/tmp/kazam.gstreamer.registry";
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH ":" "${stdenv.lib.makeLibraryPath [ gtk3 gst_all_1.gstreamer keybinder ]}"
+      --prefix XDG_DATA_DIRS : "${gtk3.out}/share"
+      --set GST_REGISTRY "/tmp/kazam.gstreamer.registry"
+    )
   '';
 
 

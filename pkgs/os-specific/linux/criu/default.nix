@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  buildPhase     = "make PREFIX=$out";
+  hardeningDisable = [ "stackprotector" ];
+
+  configurePhase = "make config PREFIX=$out";
+
+  makeFlags = "PREFIX=$(out)";
 
   installPhase = ''
     mkdir -p $out/etc/logrotate.d

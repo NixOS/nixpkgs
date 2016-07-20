@@ -12,6 +12,6 @@
       config.allowUnfree = true;
     };
 
-    utils = import ../../lib/utils.nix pkgs;
+    utils = import ../../lib/utils.nix config pkgs;
   };
 }

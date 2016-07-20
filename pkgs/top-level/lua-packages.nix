@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, openldap, mysql, postgresql
 }:
 
 let
@@ -64,13 +64,14 @@ let
   };
 
   luaevent = buildLuaPackage rec {
-    version = "0.4.3";
+    version = "0.4.3-2015-12-26";
     name = "luaevent-${version}";
-    disabled = isLua52;
 
-    src = fetchzip {
-      url = "https://github.com/harningt/luaevent/archive/v${version}.tar.gz";
-      sha256 = "1c1n2zqx5rwfwkqaq1jj8gvx1vswvbihj2sy445w28icz1xfhpik";
+    src = fetchFromGitHub {
+      owner = "harningt";
+      repo = "luaevent";
+      rev = "3995b7e2a2c98bed5b321163b45818805f002dc3";
+      sha256 = "0wh3y8hy3q3djwd5p65xjlxxx3wk6ln0140hsi3icp40yyv6h1j4";
     };
 
     preBuild = ''
@@ -154,13 +155,60 @@ let
     '';
   };
 
+  luadbi = buildLuaPackage rec {
+    name = "dbi-2015-02-25";
+    src = fetchFromGitHub {
+      owner = "snatchev";
+      repo = "Luadbi";
+      rev = "661ea54c750957852bd66f27ee970c95bf07b2d9";
+      sha256 = "0wl6bg3h1kqkb138gqqjlv6iqsx1wrhhw3218jzqs4fh17iikdk6";
+    };
+
+    NIX_CFLAGS_COMPILE = "-I ${sqlite}/include -I ${mysql.lib}/include/mysql -I ${postgresql}/include -I ${postgresql}/include/server";
+    NIX_CFLAGS_LINK = "-L ${mysql.lib}/lib -L ${postgresql.lib}/lib";
+
+    buildInputs = [ sqlite ];
+
+    installPhase = ''
+      LUA_LIBDIR=$out/lib/lua/${lua.luaversion}
+      mkdir -p $LUA_LIBDIR
+      cp DBI.lua dbdmysql.so dbdpostgresql.so dbdsqlite3.so $LUA_LIBDIR
+    '';
+  };
+
+  lualdap = buildLuaPackage rec {
+    name = "ldap-1.1.0";
+    src = fetchFromGitHub {
+      owner = "luaforge";
+      repo = "lualdap";
+      rev = "v1_1_0";
+      sha256 = "0ymv66fgb4wp5ncqwf3jvb1qhh8rxg93sm4sffaqizdjsygvbd3h";
+    };
+
+    buildInputs = [ openldap ];
+
+    sourceRoot = "lualdap-v1_1_0-src/lualdap";
+
+    buildPhase = ''
+      gcc -O2 -fPIC -I${openldap}/include -c -o src/lualdap.o src/lualdap.c
+      gcc -O2 -Wall -fPIC -L${openldap}/lib -shared -o src/lualdap.so.1.1.0 src/lualdap.o -lldap
+    '';
+
+    installPhase = ''
+      LUA_LIBDIR=$out/lib/lua/${lua.luaversion}
+      mkdir -p $LUA_LIBDIR
+      cp src/lualdap.so.1.1.0 $LUA_LIBDIR
+      cd $LUA_LIBDIR; ln -sf lualdap.so.1.1.0 lualdap.so
+    '';
+  };
+
   luasec = buildLuaPackage rec {
-    name = "sec-0.6pre-2015-04-17";
+    name = "sec-0.6";
     src = fetchFromGitHub {
       owner = "brunoos";
       repo = "luasec";
-      rev = "12e1b1f1d9724974ecc6ca273a0661496d96b3e7";
-      sha256 = "0m917qgi54p6n2ak33m67q8sxcw3cdni99bm216phjjka9rg7qwd";
+      rev = "lua${name}";
+      sha256 = "0wv8l7f7na7kw5xn8mjik2wpxbizl7zvvp5s7fcwvz9kl5jdpk5b";
     };
 
     buildInputs = [ openssl ];
@@ -184,9 +232,12 @@ let
   luasocket = buildLuaPackage rec {
     name = "socket-${version}";
     version = "3.0-rc1";
-    src = fetchurl {
-      url = "https://github.com/diegonehab/luasocket/archive/v${version}.tar.gz";
-      sha256 = "0j8jx8bjicvp9khs26xjya8c495wrpb7parxfnabdqa5nnsxjrwb";
+
+    src = fetchFromGitHub {
+      owner = "diegonehab";
+      repo = "luasocket";
+      rev = "v${version}";
+      sha256 = "1chs7z7a3i3lck4x7rz60ziwbf793gw169hpjdfca8y4yf1hzsxk";
     };
 
     patchPhase = ''

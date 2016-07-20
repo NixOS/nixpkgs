@@ -2,7 +2,7 @@
 
 bundlerEnv rec {
   name = "jekyll-${version}";
-  version = "3.0.1";
+  version = "3.1.6";
 
   ruby = ruby_2_2;
   gemfile = ./Gemfile;
@@ -13,7 +13,7 @@ bundlerEnv rec {
     description = "Simple, blog aware, static site generator";
     homepage    =  http://jekyllrb.com/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ pesterhazy ];
+    maintainers = with maintainers; [ pesterhazy fpletz ];
     platforms   = platforms.unix;
   };
 }

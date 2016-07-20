@@ -30,7 +30,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
+    [ pkgconfig gtk gtk3 perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
       alsaLib nspr nss libnotify xorg.pixman yasm mesa
@@ -74,7 +74,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk2"
     ]
-    ++ lib.optional enableGTK3 "--enable-default-toolkit=cairo-gtk3"
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize"
@@ -103,9 +102,7 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
 
       # Remove SDK cruft. FIXME: move to a separate output?
       rm -rf $out/share/idl $out/include $out/lib/firefox-devel-*
-    '' + lib.optionalString enableGTK3
-      # argv[0] must point to firefox itself
-    ''
+
       wrapProgram "$out/bin/firefox" \
         --argv0 "$out/bin/.firefox-wrapped" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:" \
@@ -115,6 +112,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
     ''
       "$out/bin/firefox" --version
     '';
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
     description = "A web browser" + lib.optionalString (pname == "firefox-esr") " (Extended Support Release)";

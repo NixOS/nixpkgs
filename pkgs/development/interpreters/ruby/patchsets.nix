@@ -3,6 +3,7 @@
 rec {
   "1.9.3" = [
     ./ssl_v3.patch
+    ./rand-egd.patch
     ./ruby19-parallel-install.patch
     ./bitperfect-rdoc.patch
   ] ++ ops useRailsExpress [
@@ -28,6 +29,7 @@ rec {
   ];
   "2.0.0" = [
     ./ssl_v3.patch
+    ./rand-egd.patch
   ] ++ ops useRailsExpress [
     "${patchSet}/patches/ruby/2.0.0/p${patchLevel}/railsexpress/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.0.0/p${patchLevel}/railsexpress/02-railsexpress-gc.patch"
@@ -36,6 +38,7 @@ rec {
   ];
   "2.1.7" = [
     ./ssl_v3.patch
+    ./rand-egd.patch
   ] ++ ops useRailsExpress [
     "${patchSet}/patches/ruby/2.1.7/railsexpress/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.1.7/railsexpress/02-improve-gc-stats.patch"
@@ -49,6 +52,7 @@ rec {
   ];
   "2.2.3" = [
     ./ssl_v3.patch
+    ./ruby22-rand-egd.patch
   ] ++ ops useRailsExpress [
     "${patchSet}/patches/ruby/2.2.3/railsexpress/01-zero-broken-tests.patch"
     "${patchSet}/patches/ruby/2.2.3/railsexpress/02-improve-gc-stats.patch"
