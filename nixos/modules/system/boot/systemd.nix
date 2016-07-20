@@ -120,7 +120,6 @@ let
       "systemd-poweroff.service"
       "halt.target"
       "systemd-halt.service"
-      "ctrl-alt-del.target"
       "shutdown.target"
       "umount.target"
       "final.target"
@@ -162,7 +161,6 @@ let
       "systemd-hostnamed.service"
       "systemd-binfmt.service"
     ]
-
     ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants =
@@ -485,6 +483,15 @@ in
       description = "Default unit started when the system boots.";
     };
 
+    systemd.ctrlAltDelUnit = mkOption {
+      default = "reboot.target";
+      type = types.str;
+      example = "poweroff.target";
+      description = ''
+        Target that should be started when Ctrl-Alt-Delete is pressed.
+      '';
+    };
+
     systemd.globalEnvironment = mkOption {
       type = types.attrs;
       default = {};
@@ -764,7 +771,7 @@ in
         { wantedBy = [ "timers.target" ];
           timerConfig.OnCalendar = service.startAt;
         })
-        (filterAttrs (name: service: service.startAt != "") cfg.services);
+        (filterAttrs (name: service: service.enable && service.startAt != "") cfg.services);
 
     # Generate timer units for all services that have a ‘startAt’ value.
     systemd.user.timers =

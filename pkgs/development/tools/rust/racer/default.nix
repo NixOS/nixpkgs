@@ -31,5 +31,6 @@ buildRustPackage rec {
     homepage = https://github.com/phildawes/racer;
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ jagajaga globin ];
+    platforms = platforms.all;
   };
 }

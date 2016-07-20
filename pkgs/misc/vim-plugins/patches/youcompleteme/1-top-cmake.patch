@@ -1,0 +1,14 @@
+
+--- ./third_party/ycmd/cpp/CMakeLists.txt
++++ ./third_party/ycmd/cpp/CMakeLists.txt
+@@ -121,8 +121,8 @@
+     set( CPP11_AVAILABLE true )
+   endif()
+ elseif( COMPILER_IS_CLANG )
+-  set( CPP11_AVAILABLE true )
+-  set( CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11" )
++  #set( CPP11_AVAILABLE true )
++  #  set( CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++11" )
+   set( CMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++" )
+ endif()
+ 

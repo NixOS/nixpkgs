@@ -1,14 +1,22 @@
+language: nix
 matrix:
-    allow_failures:
-        - os: osx
     include:
         - os: linux
-          language: generic
+          sudo: false
+          script:
+              - ./maintainers/scripts/travis-nox-review-pr.sh nixpkgs-verify nixpkgs-manual nixpkgs-tarball
+              - ./maintainers/scripts/travis-nox-review-pr.sh nixos-options nixos-manual
+        - os: linux
           sudo: required
           dist: trusty
+          before_script:
+              - sudo mount -o remount,exec,size=2G,mode=755 /run/user
+          script: ./maintainers/scripts/travis-nox-review-pr.sh pr
         - os: osx
-          language: generic
           osx_image: xcode7.3
-before_install: ./maintainers/scripts/travis-nox-review-pr.sh nix
-install: ./maintainers/scripts/travis-nox-review-pr.sh nox
-script: ./maintainers/scripts/travis-nox-review-pr.sh build
+          script: ./maintainers/scripts/travis-nox-review-pr.sh pr
+git:
+    depth: 1
+env:
+    global:
+        - GITHUB_TOKEN=5edaaf1017f691ed34e7f80878f8f5fbd071603f

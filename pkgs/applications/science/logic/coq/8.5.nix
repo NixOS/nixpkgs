@@ -6,7 +6,7 @@
 {stdenv, fetchurl, writeText, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null, csdp ? null}:
 
 let
-  version = "8.5pl1";
+  version = "8.5pl2";
   coq-version = "8.5";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "1w2xvm6w16khfn63bp95s25hnkn2ny3w0yqg3lq63gp11aqpbyjb";
+    sha256 = "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
   };
 
   buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     RM=$(type -tp rm)
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace configure.ml --replace "if arch = \"Darwin\" then \"md5" "if arch = \"Darwinx\" then \"md5"
+    substituteInPlace configure.ml --replace "if arch = \"Darwin\" || arch = \"FreeBSD\" then \"md5" "if arch = \"Darwinx\" then \"md5"
     ${csdpPatch}
   '';
 

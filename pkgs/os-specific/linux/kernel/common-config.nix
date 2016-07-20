@@ -10,7 +10,7 @@
     `versionAtLeast`.
 
   Then do test your change by building all the kernels (or at least
-  their configs) in nixpkgs or else you will guarantee lots and lots
+  their configs) in Nixpkgs or else you will guarantee lots and lots
   of pain to users trying to switch to an older kernel because of some
   hardware problems with a new one.
 
@@ -42,6 +42,12 @@ with stdenv.lib;
   SCHEDSTATS n
   DETECT_HUNG_TASK y
 
+  # Bump the maximum number of CPUs to support systems like EC2 x1.*
+  # instances and Xeon Phi.
+  ${optionalString (stdenv.system == "x86_64-linux") ''
+    NR_CPUS 384
+  ''}
+
   # Unix domain sockets.
   UNIX y
 
@@ -61,6 +67,7 @@ with stdenv.lib;
   ${optionalString (versionOlder version "3.10") ''
     USB_SUSPEND y
   ''}
+  PM_WAKELOCKS y
 
   # Support drivers that need external firmware.
   STANDALONE n
@@ -92,9 +99,6 @@ with stdenv.lib;
   DONGLE y # Serial dongle support
   HIPPI y
   MTD_COMPLEX_MAPPINGS y # needed for many devices
-  ${optionalString (versionOlder version "3.2") ''
-    NET_POCKET y # enable pocket and portable adapters
-  ''}
   SCSI_LOWLEVEL y # enable lots of SCSI devices
   SCSI_LOWLEVEL_PCMCIA y
   SCSI_SAS_ATA y  # added to enable detection of hard drive
@@ -131,9 +135,7 @@ with stdenv.lib;
   HOSTAP_FIRMWARE_NVRAM? y
   ATH9K_PCI? y # Detect Atheros AR9xxx cards on PCI(e) bus
   ATH9K_AHB? y # Ditto, AHB bus
-  ${optionalString (versionAtLeast version "3.2") ''
-    B43_PHY_HT? y
-  ''}
+  B43_PHY_HT? y
   BCMA_HOST_PCI? y
 
   # Enable various FB devices.
@@ -151,7 +153,7 @@ with stdenv.lib;
   FB_VESA y
   FRAMEBUFFER_CONSOLE y
   FRAMEBUFFER_CONSOLE_ROTATION y
-  ${optionalString (versionOlder version "3.9" || stdenv.system == "i686-linux") ''
+  ${optionalString (stdenv.system == "i686-linux") ''
     FB_GEODE y
   ''}
 
@@ -162,11 +164,7 @@ with stdenv.lib;
   ''}
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
-  ${optionalString (versionOlder version "3.9") ''
-    DRM_RADEON_KMS? y
-  ''}
-  # Hybrid graphics support
-  VGA_SWITCHEROO y
+  VGA_SWITCHEROO y # Hybrid graphics support
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -225,9 +223,7 @@ with stdenv.lib;
     NFSD_V4_SECURITY_LABEL y
   ''}
   NFS_FSCACHE y
-  ${optionalString (versionAtLeast version "3.6") ''
-    NFS_SWAP y
-  ''}
+  NFS_SWAP y
   NFS_V3_ACL y
   ${optionalString (versionAtLeast version "3.11") ''
     NFS_V4_1 y  # NFSv4.1 client support
@@ -259,6 +255,7 @@ with stdenv.lib;
   DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
 
   # Security related features.
+  RANDOMIZE_BASE y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
@@ -297,34 +294,31 @@ with stdenv.lib;
   ${optionalString (versionOlder version "4.4") ''
     B43_PCMCIA? y
   ''}
-  BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
-  BLK_DEV_IDEACPI y # IDE ACPI support
   BLK_DEV_INTEGRITY y
   BSD_PROCESS_ACCT_V3 y
   BT_HCIUART_BCSP? y
   BT_HCIUART_H4? y # UART (H4) protocol support
   BT_HCIUART_LL? y
-  ${optionalString (versionAtLeast version "3.4") ''
-    BT_RFCOMM_TTY? y # RFCOMM TTY support
-  ''}
+  BT_RFCOMM_TTY? y # RFCOMM TTY support
+  CLEANCACHE? y
   CRASH_DUMP? n
-  ${optionalString (versionOlder version "3.1") ''
-    DMAR? n # experimental
-  ''}
   DVB_DYNAMIC_MINORS? y # we use udev
-  ${optionalString (versionAtLeast version "3.3") ''
-    EFI_STUB y # EFI bootloader in the bzImage itself
-  ''}
+  EFI_STUB y # EFI bootloader in the bzImage itself
   FHANDLE y # used by systemd
+  FRONTSWAP y
   FUSION y # Fusion MPT device support
-  IDE_GD_ATAPI y # ATAPI floppy support
+  IDE n # deprecated IDE support
+  ${optionalString (versionAtLeast version "4.3") ''
+    IDLE_PAGE_TRACKING y
+  ''}
   IRDA_ULTRA y # Ultra (connectionless) protocol
   JOYSTICK_IFORCE_232? y # I-Force Serial joysticks and wheels
   JOYSTICK_IFORCE_USB? y # I-Force USB joysticks and wheels
   JOYSTICK_XPAD_FF? y # X-Box gamepad rumble support
   JOYSTICK_XPAD_LEDS? y # LED Support for Xbox360 controller 'BigX' LED
+  KEXEC_FILE? y
+  KEXEC_JUMP? y
   LDM_PARTITION y # Windows Logical Disk Manager (Dynamic Disk) support
-  LEDS_TRIGGER_IDE_DISK y # LED IDE Disk Trigger
   LOGIRUMBLEPAD2_FF y # Logitech Rumblepad 2 force feedback
   LOGO n # not needed
   MEDIA_ATTACH y
@@ -343,12 +337,9 @@ with stdenv.lib;
   PPP_MULTILINK y # PPP multilink support
   PPP_FILTER y
   REGULATOR y # Voltage and Current Regulator Support
-  ${optionalString (versionAtLeast version "3.6") ''
-    RC_DEVICES? y # Enable IR devices
-  ''}
-  ${optionalString (versionAtLeast version "3.10") ''
-    RT2800USB_RT55XX y
-  ''}
+  RC_DEVICES? y # Enable IR devices
+  RT2800USB_RT55XX y
+  SCHED_AUTOGROUP y
   SCSI_LOGGING y # SCSI logging facility
   SERIAL_8250 y # 8250/16550 and compatible serial support
   SLIP_COMPRESSED y # CSLIP compressed headers
@@ -363,6 +354,9 @@ with stdenv.lib;
   ''}
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
+  ${optionalString (versionAtLeast version "4.3") ''
+    USERFAULTFD y
+  ''}
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
@@ -373,16 +367,14 @@ with stdenv.lib;
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
   RT_GROUP_SCHED? y
   CGROUP_DEVICE? y
-  ${if versionAtLeast version "3.6" then ''
-    MEMCG y
-    MEMCG_SWAP y
-  '' else ''
-    CGROUP_MEM_RES_CTLR y
-    CGROUP_MEM_RES_CTLR_SWAP y
-  ''}
+  MEMCG y
+  MEMCG_SWAP y
   ${optionalString (versionOlder version "4.7") "DEVPTS_MULTIPLE_INSTANCES y"}
   BLK_DEV_THROTTLING y
   CFQ_GROUP_IOSCHED y
+  ${optionalString (versionAtLeast version "4.3") ''
+    CGROUP_PIDS y
+  ''}
 
   # Enable staging drivers.  These are somewhat experimental, but
   # they generally don't hurt.
@@ -400,9 +392,7 @@ with stdenv.lib;
   FTRACE_SYSCALLS y
   SCHED_TRACER y
   STACK_TRACER y
-  ${optionalString (versionAtLeast version "3.10") ''
-    UPROBE_EVENT y
-  ''}
+  UPROBE_EVENT y
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
     BPF_EVENTS y
@@ -414,28 +404,18 @@ with stdenv.lib;
   DEVTMPFS y
 
   # Easier debugging of NFS issues.
-  ${optionalString (versionAtLeast version "3.4") ''
-    SUNRPC_DEBUG y
-  ''}
+  SUNRPC_DEBUG y
 
   # Virtualisation.
   PARAVIRT? y
-  ${if versionAtLeast version "3.10" then ''
-    HYPERVISOR_GUEST y
-  '' else ''
-    PARAVIRT_GUEST? y
-  ''}
+  HYPERVISOR_GUEST y
+  PARAVIRT_SPINLOCKS? y
   KVM_APIC_ARCHITECTURE y
   KVM_ASYNC_PF y
-  ${optionalString (versionOlder version "3.7") ''
-    KVM_CLOCK? y
-  ''}
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_COMPAT? y
   ''}
-  ${optionalString (versionAtLeast version "3.10") ''
-    KVM_DEVICE_ASSIGNMENT? y
-  ''}
+  KVM_DEVICE_ASSIGNMENT? y
   ${optionalString (versionAtLeast version "4.0") ''
     KVM_GENERIC_DIRTYLOG_READ_PROTECT y
   ''}
@@ -470,28 +450,22 @@ with stdenv.lib;
   ${optionalString (!stdenv.is64bit) ''
     HIGHMEM64G? y # We need 64 GB (PAE) support for Xen guest support.
   ''}
-  ${optionalString (versionAtLeast version "3.9" && stdenv.is64bit) ''
+  ${optionalString (stdenv.is64bit) ''
     VFIO_PCI_VGA y
   ''}
   VIRT_DRIVERS y
 
   # Media support.
-  ${optionalString (versionAtLeast version "3.6") ''
-    MEDIA_DIGITAL_TV_SUPPORT y
-    MEDIA_CAMERA_SUPPORT y
-    MEDIA_RC_SUPPORT y
-  ''}
-  ${optionalString (versionAtLeast version "3.7") ''
-    MEDIA_USB_SUPPORT y
-    ${optionalString (!(features.chromiumos or false)) ''
-      MEDIA_PCI_SUPPORT y
-    ''}
+  MEDIA_DIGITAL_TV_SUPPORT y
+  MEDIA_CAMERA_SUPPORT y
+  MEDIA_RC_SUPPORT y
+  MEDIA_USB_SUPPORT y
+  ${optionalString (!(features.chromiumos or false)) ''
+    MEDIA_PCI_SUPPORT y
   ''}
 
   # Our initrd init uses shebang scripts, so can't be modular.
-  ${optionalString (versionAtLeast version "3.10") ''
-    BINFMT_SCRIPT y
-  ''}
+  BINFMT_SCRIPT y
 
   # For systemd-binfmt
   BINFMT_MISC? y
@@ -506,10 +480,9 @@ with stdenv.lib;
   TRANSPARENT_HUGEPAGE_MADVISE? y
 
   # zram support (e.g for in-memory compressed swap).
-  ${optionalString (versionAtLeast version "3.4") ''
-    ZSMALLOC y
-  ''}
+  ZSMALLOC y
   ZRAM m
+  ZSWAP y
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y

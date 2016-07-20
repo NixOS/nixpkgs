@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cp -v Lie.exe $out
     cp -v lie $out/bin
 
-    cp -v LEARN LEARN.ind $out
-    cp -v INFO.ind INFO.[0-4] $out
+    cp -v LEARN* $out
+    cp -v INFO* $out
   '';
 }

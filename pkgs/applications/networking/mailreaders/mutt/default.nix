@@ -1,43 +1,51 @@
-{ stdenv, fetchurl, ncurses, which, perl, autoreconfHook
-, sslSupport ? true
-, imapSupport ? true
-, headerCache ? true
-, saslSupport ? true
-, gpgmeSupport ? true
+{ stdenv, fetchurl, fetchpatch, ncurses, which, perl, autoreconfHook
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
-, withSidebar ? false
+, aclocal ? null
+, headerCache  ? true
+, sslSupport   ? true
+, saslSupport  ? true
+, gpgmeSupport ? true
+, imapSupport  ? true
+, withSidebar  ? false
+, withTrash    ? false
 }:
 
-assert headerCache -> gdbm != null;
-assert sslSupport -> openssl != null;
-assert saslSupport -> cyrus_sasl != null;
-assert gpgmeSupport -> gpgme != null;
+assert headerCache  -> gdbm       != null;
+assert sslSupport   -> openssl    != null;
+assert saslSupport  -> cyrus_sasl != null;
+assert gpgmeSupport -> gpgme      != null;
 
-let
-  version = "1.6.0";
-in
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "mutt${stdenv.lib.optionalString withSidebar "-with-sidebar"}-${version}";
+  name = "mutt-${version}";
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/mutt-${version}.tar.gz";
-    sha256 = "06bc2drbgalkk68rzg7hq2v5m5qgjxff5357wg0419dpi8ivdbr9";
+    url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
+    sha256 = "13hxmji7v9m2agmvzrs7gzx8s3c9jiwrv7pbkr7z1kc6ckq2xl65";
   };
 
-  buildInputs = with stdenv.lib;
+  buildInputs =
     [ ncurses which perl ]
-    ++ optional headerCache gdbm
-    ++ optional sslSupport openssl
-    ++ optional saslSupport cyrus_sasl
-    ++ optional gpgmeSupport gpgme;
-
-  nativeBuildInputs = stdenv.lib.optional withSidebar autoreconfHook;
+    ++ optional headerCache  gdbm
+    ++ optional sslSupport   openssl
+    ++ optional saslSupport  cyrus_sasl
+    ++ optional gpgmeSupport gpgme
+    ++ optional withSidebar  autoreconfHook;
 
   configureFlags = [
-    "--with-mailpath=" "--enable-smtp"
+    (enableFeature headerCache  "hcache")
+    (enableFeature gpgmeSupport "gpgme")
+    (enableFeature imapSupport  "imap")
+    (enableFeature withSidebar  "sidebar")
+    "--enable-smtp"
+    "--enable-pop"
+    "--enable-imap"
+    "--with-mailpath="
 
     # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
     "ac_cv_path_SENDMAIL=sendmail"
@@ -45,36 +53,30 @@ stdenv.mkDerivation rec {
     # This allows calls with "-d N", that output debug info into ~/.muttdebug*
     "--enable-debug"
 
-    "--enable-pop" "--enable-imap"
-
     # The next allows building mutt without having anything setgid
     # set by the installer, and removing the need for the group 'mail'
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
-    (if headerCache then "--enable-hcache" else "--disable-hcache")
-    (if sslSupport then "--with-ssl" else "--without-ssl")
-    (if imapSupport then "--enable-imap" else "--disable-imap")
-    (if saslSupport then "--with-sasl" else "--without-sasl")
-    (if gpgmeSupport then "--enable-gpgme" else "--disable-gpgme")
-  ];
+  ] ++ optional sslSupport  "--with-ssl"
+    ++ optional saslSupport "--with-sasl";
 
-  # Adding the sidebar
-  patches = stdenv.lib.optional withSidebar [
-    ./trash-folder.patch
-    ./sidebar.patch
-    ./sidebar-dotpathsep.patch
-    ./sidebar-utf8.patch
-    ./sidebar-newonly.patch
-    ./sidebar-delimnullwide.patch
-    ./sidebar-compose.patch
-    ./sidebar-new.patch
-  ];
+  patches =
+    optional withTrash (fetchpatch {
+      name = "trash.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/trash.patch?h=mutt-sidebar";
+      sha256 = "1hrib9jk28mqd02nzv0sx01jfdabzvnwcc5qjc3810zfglzc1nql";
+    }) ++
+    optional withSidebar (fetchpatch {
+      name = "sidebar.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/sidebar.patch?h=mutt-sidebar";
+      sha256 = "1l63wj7kw41jrh00mcxdw4p4vrbc9wld42s99liw8kz2aclymq5m";
+    });
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A small but very powerful text-based mail client";
     homepage = http://www.mutt.org;
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ the-kenny rnhmjoj ];
   };
 }

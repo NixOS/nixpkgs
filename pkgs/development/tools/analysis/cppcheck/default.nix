@@ -1,15 +1,13 @@
 { stdenv, fetchurl, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
 
-let
-  pname = "cppcheck";
-in
 stdenv.mkDerivation rec {
+  pname = "cppcheck";
+  version = "1.74";
   name = "${pname}-${version}";
-  version = "1.73";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "0l7yslf311h3kidi91q4zhqj3f3vsjp1gb2z50y20423fda87xin";
+    sha256 = "0m62byiprabm1m3mc4r2w54p7qyhgi8msipnpm66ychr8rz2yny0";
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
@@ -27,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A static analysis tool for C/C++ code";
     longDescription = ''
-      Check C/C++ code for memory leaks, mismatching
-      allocation-deallocation, buffer overruns and more.
+      Check C/C++ code for memory leaks, mismatching allocation-deallocation,
+      buffer overruns and more.
     '';
     homepage = http://cppcheck.sourceforge.net/;
     license = licenses.gpl3Plus;

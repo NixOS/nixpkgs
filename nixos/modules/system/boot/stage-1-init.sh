@@ -3,6 +3,7 @@
 targetRoot=/mnt-root
 console=tty1
 
+extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
@@ -12,6 +13,8 @@ export LVM_SUPPRESS_FD_WARNINGS=true
 
 fail() {
     if [ -n "$panicOnFail" ]; then exit 1; fi
+
+    @preFailCommands@
 
     # If starting stage 2 failed, allow the user to repair the problem
     # in an interactive shell.
@@ -70,6 +73,8 @@ mount -t sysfs sysfs /sys
 mount -t devtmpfs -o "size=@devSize@" devtmpfs /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" tmpfs /run
+mkdir /dev/pts
+mount -t devpts devpts /dev/pts
 
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp

@@ -1,11 +1,12 @@
 { stdenv, fetchurl, systemd, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.05.9";
+  version = "1.06";
   name = "ndjbdns-${version}";
+
   src = fetchurl {
     url = "http://pjp.dgplug.org/ndjbdns/${name}.tar.gz";
-    sha256 = "0gf3hlmr6grcn6dzflf83lqqfp6hk3ldhbc7z0a1rrh059m93ap5";
+    sha256 = "09qi5a9abqm08iqmxj74fzzq9x1w5lzr1jlbzj2hl8hz0g2sgraw";
   };
 
   buildInputs = [ pkgconfig systemd ];

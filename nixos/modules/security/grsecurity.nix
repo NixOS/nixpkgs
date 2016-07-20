@@ -13,12 +13,16 @@ let
           || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ])
           && fs.fsType == "zfs")
     (attrValues config.fileSystems) != [];
+
+  # Ascertain whether NixOS container support is required
+  containerSupportRequired =
+    config.boot.enableContainers && config.containers != {};
 in
 
 {
   options.security.grsecurity = {
 
-    enable = mkEnableOption "Grsecurity/PaX";
+    enable = mkEnableOption "grsecurity/PaX";
 
     lockTunables = mkOption {
       type = types.bool;
@@ -27,9 +31,9 @@ in
       description = ''
         Whether to automatically lock grsecurity tunables
         (<option>boot.kernel.sysctl."kernel.grsecurity.*"</option>).  Disable
-        this to allow configuration of grsecurity features while the system is
-        running.  The lock can be manually engaged by activating the
-        <literal>grsec-lock</literal> service unit.
+        this to allow runtime configuration of grsecurity features.  Activate
+        the <literal>grsec-lock</literal> service unit to prevent further
+        configuration until the next reboot.
       '';
     };
 
@@ -48,10 +52,6 @@ in
         (isYES "GRKERNSEC_SYSCTL_DISTRO")
       ];
 
-    # Crashing on an overflow in kernel land is user unfriendly and may prevent
-    # the system from booting, which is too severe for our use case.
-    boot.kernelParams = [ "pax_size_overflow_report_only" ];
-
     # Install PaX related utillities into the system profile.  Eventually, we
     # also want to include gradm here.
     environment.systemPackages = with pkgs; [ paxctl pax-utils ];
@@ -59,7 +59,7 @@ in
     # Install rules for the grsec device node
     services.udev.packages = [ pkgs.gradm ];
 
-    # This service unit is responsible for locking the Grsecurity tunables.  The
+    # This service unit is responsible for locking the grsecurity tunables.  The
     # unit is always defined, but only activated on bootup if lockTunables is
     # toggled.  When lockTunables is toggled, failure to activate the unit will
     # enter emergency mode.  The intent is to make it difficult to silently
@@ -105,7 +105,7 @@ in
       "kernel.grsecurity.chroot_deny_chroot" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_deny_pivot" = mkForce 0;
-    } // optionalAttrs config.boot.enableContainers {
+    } // optionalAttrs containerSupportRequired {
       # chroot(2) restrictions that conflict with NixOS lightweight containers
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;

@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   name = "gimp-${version}";
-  version = "2.8.16";
+  version = "2.8.18";
 
   # This declarations for `gimp-with-plugins` wrapper,
   # (used for determining $out/lib/gimp/${majorVersion}/ paths)
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
-    sha256 = "1dsgazia9hmab8cw3iis7s69dvqyfj5wga7ds7w2q5mms1xqbqwm";
+    sha256 = "0halh6sl3d2j9gahyabj6h6r3yyldcy7sfb4qrfazpkqqr3j5p9r";
   };
 
   buildInputs =

@@ -220,6 +220,7 @@ in rec {
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
+  tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
@@ -230,6 +231,7 @@ in rec {
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.grsecurity = callTest tests/grsecurity.nix {};
+  tests.hibernate = callTest tests/hibernate.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};

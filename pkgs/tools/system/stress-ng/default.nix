@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "stress-ng-${version}";
-  version = "0.06.01";
+  version = "0.06.11";
 
   src = fetchurl {
-    sha256 = "1bk3sj6gyrgp5qfxiz6k7zml28m01iljgvxhp4yq391xzfyvrlg9";
+    sha256 = "0481aji9hdq8qbslrrc87r2p2pn8jxf913ac8wm5kxj02yqf7ccv";
     url = "http://kernel.ubuntu.com/~cking/tarballs/stress-ng/${name}.tar.gz";
   };
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Stress test a system in various selectable ways, exercising both various
       physical subsystems and various operating system kernel interfaces:
-      - over 60 different stress tests
-      - over 50 CPU specific stress tests that exercise floating point,
+      - over 130 different stress tests
+      - over 70 CPU specific stress tests that exercise floating point,
         integer, bit manipulation and control flow
       - over 20 virtual memory stress tests
       stress-ng was originally intended to make a machine work hard and trip

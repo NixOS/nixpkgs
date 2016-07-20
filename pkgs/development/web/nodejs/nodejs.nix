@@ -2,6 +2,7 @@
 , pkgconfig, runCommand, which, libtool
 , version
 , src
+, preBuild ? ""
 , ...
 }:
 
@@ -25,9 +26,7 @@ let
 
 in stdenv.mkDerivation {
 
-  inherit version;
-
-  inherit src;
+  inherit version src preBuild;
 
   name = "nodejs-${version}";
 
@@ -53,7 +52,7 @@ in stdenv.mkDerivation {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
     homepage = http://nodejs.org;
     license = licenses.mit;
-    maintainers = [ maintainers.goibhniu maintainers.havvy maintainers.gilligan ];
+    maintainers = [ maintainers.goibhniu maintainers.havvy maintainers.gilligan maintainers.cko ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

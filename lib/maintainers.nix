@@ -15,6 +15,7 @@
   adev = "Adrien Devresse <adev@adev.name>";
   Adjective-Object = "Maxwell Huang-Hobbs <mhuan13@gmail.com>";
   adnelson = "Allen Nelson <ithinkican@gmail.com>";
+  adolfogc = "Adolfo E. García Castro <adolfo.garcia.cr@gmail.com>";
   aespinosa = "Allan Espinosa <allan.espinosa@outlook.com>";
   aflatter = "Alexander Flatter <flatter@fastmail.fm>";
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
@@ -162,6 +163,7 @@
   guibert = "David Guibert <david.guibert@gmail.com>";
   havvy = "Ryan Scheel <ryan.havvy@gmail.com>";
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
+  hce = "Hans-Christian Esperer <hc@hcesperer.org>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hiberno = "Christian Lask <hiberno@hiberno.net>";
   hinton = "Tom Hinton <t@larkery.com>";
@@ -185,6 +187,7 @@
   joamaki = "Jussi Maki <joamaki@gmail.com>";
   joelmo = "Joel Moberg <joel.moberg@gmail.com>";
   joelteon = "Joel Taylor <me@joelt.io>";
+  joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
   jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
@@ -231,6 +234,7 @@
   markus1189 = "Markus Hauck <markus1189@gmail.com>";
   markWot = "Markus Wotringer <markus@wotringer.de>";
   martijnvermaat = "Martijn Vermaat <martijn@vermaat.name>";
+  martingms = "Martin Gammelsæter <martin@mg.am>";
   matejc = "Matej Cotman <cotman.matej@gmail.com>";
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
@@ -353,6 +357,7 @@
   sheganinans = "Aistis Raulinaitis <sheganinans@gmail.com>";
   shell = "Shell Turner <cam.turn@gmail.com>";
   shlevy = "Shea Levy <shea@shealevy.com>";
+  siddharthist = "Langston Barrett <langston.barrett@gmail.com>";
   simonvandel = "Simon Vandel Sillesen <simon.vandel@gmail.com>";
   sjagoe = "Simon Jagoe <simon@simonjagoe.com>";
   sjmackenzie = "Stewart Mackenzie <setori88@gmail.com>";
@@ -420,6 +425,7 @@
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
   yarr = "Dmitry V. <savraz@gmail.com>";
+  yurrriq = "Eric Bailey <eric@ericb.me>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
   zagy = "Christian Zagrodnick <cz@flyingcircus.io>";
   zef = "Zef Hemel <zef@zef.me>";
