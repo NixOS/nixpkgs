@@ -97,6 +97,6 @@ self: super: {
   conduit = addBuildDepend super.conduit self.void;
 
   # Needs additional inputs on pre 7.10.x compilers.
-  semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers transformers]);
+  semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
 
 }
