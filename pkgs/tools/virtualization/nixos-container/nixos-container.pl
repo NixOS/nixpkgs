@@ -22,6 +22,7 @@ Usage: nixos-container list
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
+       nixos-container kill <container-name> [--signal <signal-specifier>]
        nixos-container status <container-name>
        nixos-container update <container-name> [--config <string>]
        nixos-container login <container-name>
@@ -37,13 +38,15 @@ my $systemPath;
 my $ensureUniqueName = 0;
 my $autoStart = 0;
 my $extraConfig;
+my $signal;
 
 GetOptions(
     "help" => sub { showHelp() },
     "ensure-unique-name" => \$ensureUniqueName,
     "auto-start" => \$autoStart,
     "system-path=s" => \$systemPath,
-    "config=s" => \$extraConfig
+    "config=s" => \$extraConfig,
+    "signal=s" => \$signal
     ) or exit 1;
 
 my $action = $ARGV[0] or die "$0: no action specified\n";
@@ -186,6 +189,14 @@ sub isContainerRunning {
     return $status =~ /ActiveState=active/;
 }
 
+sub killContainer {
+    my @args = ();
+    push(@args, ("--signal", $signal)) if ($signal ne "");
+
+    system("machinectl", "kill", $containerName, @args) == 0
+        or die "$0: failed to kill container\n";
+}
+
 sub stopContainer {
     system("systemctl", "stop", "container\@$containerName") == 0
         or die "$0: failed to stop container\n";
@@ -228,7 +239,8 @@ if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
 
-    stopContainer if isContainerRunning;
+    $signal = "SIGKILL";
+    killContainer if (isContainerRunning);
 
     safeRemoveTree($profileDir) if -e $profileDir;
     safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
@@ -243,6 +255,10 @@ elsif ($action eq "start") {
 
 elsif ($action eq "stop") {
     stopContainer;
+}
+
+elsif ($action eq "kill") {
+    killContainer;
 }
 
 elsif ($action eq "status") {
