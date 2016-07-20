@@ -4524,7 +4524,7 @@ let
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk; });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     assert supportsJDK;
