@@ -63,9 +63,6 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
-  # requires filepath >=1.1 && <1.4
-  Glob = doJailbreak super.Glob;
-
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
@@ -211,6 +208,8 @@ self: super: {
   semigroups_0_18_1 = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   intervals = addBuildDepends super.intervals (with self; [doctest QuickCheck]);
+  Glob_0_7_9 = addBuildDepends super.Glob_0_7_9 (with self; [semigroups]);
+  Glob = addBuildDepends super.Glob (with self; [semigroups]);
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
