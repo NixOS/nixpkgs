@@ -237,6 +237,7 @@ in {
             Type = "notify";
             ExecStart = binaryNoDaemon;
             Restart = "on-failure";
+            RestartSec = "500ms";
           };
           environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
           restartIfChanged = true;
@@ -276,6 +277,7 @@ in {
           Type = "notify";
           ExecStart = "${binaryNoDaemon} --log-level=${cfg.daemon.logLevel} --system -n --file=${myConfigFile}";
           Restart = "on-failure";
+          RestartSec = "500ms";
         };
       };
     })
