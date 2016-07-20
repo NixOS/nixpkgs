@@ -10170,6 +10170,8 @@ in
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  gofish = callPackage ../servers/gopher/gofish { };
+
   grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
 
   groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-0_10; };
