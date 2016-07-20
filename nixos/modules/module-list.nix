@@ -84,6 +84,7 @@
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
+  ./programs/xonsh.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme.nix
