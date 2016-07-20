@@ -13870,6 +13870,8 @@ let
 
   syncthing012 = go15Packages.syncthing012.bin // { outputs = [ "bin" ]; };
 
+  syncthing013 = callPackage ../applications/networking/syncthing013 { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 

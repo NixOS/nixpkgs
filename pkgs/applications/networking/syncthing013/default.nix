@@ -1,13 +1,13 @@
 { stdenv, fetchgit, go }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.0";
+  version = "0.13.10";
   name = "syncthing-${version}";
 
   src = fetchgit {
     url = https://github.com/syncthing/syncthing;
     rev = "refs/tags/v${version}";
-    sha256 = "15l3q3r6i3q95i474winswx4y149b5ic7xhpnj52s78fxd4va2q2";
+    sha256 = "07q3j6mnrza719rnvbkdsmvlkyr2pch5sj2l204m5iy5mxaghpx7";
   };
 
   buildInputs = [ go ];
@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     mkdir -p src/github.com/syncthing
     ln -s $(pwd) src/github.com/syncthing/syncthing
     export GOPATH=$(pwd)
-    # Required for Go 1.5, can be removed for Go 1.6+
-    export GO15VENDOREXPERIMENT=1
 
     # Syncthing's build.go script expects this working directory
     cd src/github.com/syncthing/syncthing
