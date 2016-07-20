@@ -85,6 +85,7 @@ mount --rbind /proc $mountPoint/proc
 mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/tmp/root
 mount -t tmpfs -o "mode=0755" none $mountPoint/run
+mkdir -p $mountPoint/run/user/0
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
