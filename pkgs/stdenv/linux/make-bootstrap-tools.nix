@@ -146,7 +146,7 @@ rec {
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        tar cvfJ $out/on-server/bootstrap-tools.tar.xz -C $out/pack .
+        tar cvfJ $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox

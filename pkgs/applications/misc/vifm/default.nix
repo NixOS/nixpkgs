@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "vifm-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/vifm/vifm/${name}.tar.bz2";
-    sha256 = "0yf3xc4czdrcbvmhq7d4xkck5phrmxwybmnv1zdb56qg56baq64r";
+    sha256 = "07r15kq7kjl3a41sd11ncpsii866xxps4f90zh3lv8jqcrv6silb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
