@@ -13660,6 +13660,8 @@ in
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
 
+  marp = callPackage ../applications/office/marp { };
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   MBdistortion = callPackage ../applications/audio/MBdistortion { };
