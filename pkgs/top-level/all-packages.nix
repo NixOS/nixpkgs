@@ -9054,6 +9054,8 @@ in
 
   qt5 = self.qt56;
 
+  qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
+
   qt5LibsFun = self: with self; {
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
