@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
+    "--with-passfile=.pinepwd"
     ];
   preConfigure = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
