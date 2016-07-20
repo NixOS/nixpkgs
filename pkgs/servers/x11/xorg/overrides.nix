@@ -57,6 +57,10 @@ in
     tradcpp = if stdenv.isDarwin then args.tradcpp else null;
   };
 
+  intelgputools = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.cairo args.libunwind ];
+  };
+
   mkfontdir = attrs: attrs // {
     preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };

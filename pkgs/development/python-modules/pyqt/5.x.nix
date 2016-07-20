@@ -27,6 +27,8 @@ in stdenv.mkDerivation {
   propagatedBuildInputs = [ sip ];
 
   configurePhase = ''
+    runHook preConfigure
+
     mkdir -p $out
     lndir ${pythonDBus} $out
 
@@ -39,11 +41,14 @@ in stdenv.mkDerivation {
     ${python.executable} configure.py  -w \
       --confirm-license \
       --dbus=$out/include/dbus-1.0 \
+      --qmake=$QMAKE \
       --no-qml-plugin \
       --bindir=$out/bin \
       --destdir=$out/lib/${python.libPrefix}/site-packages \
       --sipdir=$out/share/sip \
       --designer-plugindir=$out/plugins/designer
+
+    runHook postConfigure
   '';
 
   postInstall = ''

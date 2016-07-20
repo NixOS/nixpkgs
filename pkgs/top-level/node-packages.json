@@ -150,6 +150,7 @@
 , "react-tools"
 , "redis"
 , "rethinkdb"
+, "rollup"
 , "s3http"
 , "selenium-webdriver"
 , "semver"

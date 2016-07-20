@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = []
     ++ optional (gfortran != null) gfortran
-    ++ optional (zlib != null) zlib
     ++ optional (szip != null) szip;
 
   propagatedBuildInputs = []
+    ++ optional (zlib != null) zlib
     ++ optional (mpi != null) mpi;
 
   configureFlags = []

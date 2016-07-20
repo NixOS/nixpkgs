@@ -4,7 +4,7 @@
  ######################################################################
  #
  #--------------------- BLAS ---------------------
-+find_package(OpenBlas)
++find_package(OpenBLAS)
 +set(TPL_BLAS_LIBRARIES ${OpenBLAS_LIBRARIES})
  if(NOT enable_blaslib)
    if (TPL_BLAS_LIBRARIES)

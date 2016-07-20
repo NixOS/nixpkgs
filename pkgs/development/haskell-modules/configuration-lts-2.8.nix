@@ -788,6 +788,7 @@ self: super: {
   "PartialTypeSignatures" = dontDistribute super."PartialTypeSignatures";
   "PasswordGenerator" = dontDistribute super."PasswordGenerator";
   "PastePipe" = dontDistribute super."PastePipe";
+  "PathTree" = dontDistribute super."PathTree";
   "Pathfinder" = dontDistribute super."Pathfinder";
   "Peano" = dontDistribute super."Peano";
   "PeanoWitnesses" = dontDistribute super."PeanoWitnesses";
@@ -1811,6 +1812,7 @@ self: super: {
   "blink1" = dontDistribute super."blink1";
   "blip" = dontDistribute super."blip";
   "bliplib" = dontDistribute super."bliplib";
+  "blockhash" = dontDistribute super."blockhash";
   "blocking-transactions" = dontDistribute super."blocking-transactions";
   "blogination" = dontDistribute super."blogination";
   "bloodhound" = doDistribute super."bloodhound_0_5_0_1";
@@ -3088,6 +3090,7 @@ self: super: {
   "enummapset" = dontDistribute super."enummapset";
   "enummapset-th" = dontDistribute super."enummapset-th";
   "enumset" = dontDistribute super."enumset";
+  "env-locale" = dontDistribute super."env-locale";
   "env-parser" = dontDistribute super."env-parser";
   "envelope" = dontDistribute super."envelope";
   "envparse" = dontDistribute super."envparse";
@@ -3568,6 +3571,7 @@ self: super: {
   "genvalidity" = dontDistribute super."genvalidity";
   "genvalidity-containers" = dontDistribute super."genvalidity-containers";
   "genvalidity-hspec" = dontDistribute super."genvalidity-hspec";
+  "genvalidity-text" = dontDistribute super."genvalidity-text";
   "geo-resolver" = dontDistribute super."geo-resolver";
   "geo-uk" = dontDistribute super."geo-uk";
   "geocalc" = dontDistribute super."geocalc";
@@ -4473,6 +4477,7 @@ self: super: {
   "hgen" = dontDistribute super."hgen";
   "hgeometric" = dontDistribute super."hgeometric";
   "hgeometry" = dontDistribute super."hgeometry";
+  "hgeos" = dontDistribute super."hgeos";
   "hgettext" = dontDistribute super."hgettext";
   "hgithub" = dontDistribute super."hgithub";
   "hgl-example" = dontDistribute super."hgl-example";
@@ -4854,6 +4859,7 @@ self: super: {
   "hspec-slow" = dontDistribute super."hspec-slow";
   "hspec-smallcheck" = doDistribute super."hspec-smallcheck_0_3_0";
   "hspec-snap" = dontDistribute super."hspec-snap";
+  "hspec-stack-rerun" = dontDistribute super."hspec-stack-rerun";
   "hspec-structured-formatter" = dontDistribute super."hspec-structured-formatter";
   "hspec-test-framework" = dontDistribute super."hspec-test-framework";
   "hspec-test-framework-th" = dontDistribute super."hspec-test-framework-th";
@@ -5161,6 +5167,7 @@ self: super: {
   "influxdb" = dontDistribute super."influxdb";
   "informative" = dontDistribute super."informative";
   "ini" = doDistribute super."ini_0_3_1";
+  "ini-qq" = dontDistribute super."ini-qq";
   "inilist" = dontDistribute super."inilist";
   "inject" = dontDistribute super."inject";
   "inject-function" = dontDistribute super."inject-function";
@@ -5396,6 +5403,7 @@ self: super: {
   "katip" = dontDistribute super."katip";
   "katip-elasticsearch" = dontDistribute super."katip-elasticsearch";
   "katt" = dontDistribute super."katt";
+  "kawhi" = dontDistribute super."kawhi";
   "kazura-queue" = dontDistribute super."kazura-queue";
   "kbq-gu" = dontDistribute super."kbq-gu";
   "kd-tree" = dontDistribute super."kd-tree";
@@ -6045,6 +6053,7 @@ self: super: {
   "miniutter" = dontDistribute super."miniutter";
   "minlen" = dontDistribute super."minlen";
   "minst-idx" = dontDistribute super."minst-idx";
+  "mios" = dontDistribute super."mios";
   "mirror-tweet" = dontDistribute super."mirror-tweet";
   "misfortune" = dontDistribute super."misfortune";
   "missing-py2" = dontDistribute super."missing-py2";
@@ -6097,6 +6106,7 @@ self: super: {
   "monad-log" = dontDistribute super."monad-log";
   "monad-logger" = doDistribute super."monad-logger_0_3_13_1";
   "monad-logger-prefix" = dontDistribute super."monad-logger-prefix";
+  "monad-logger-syslog" = doDistribute super."monad-logger-syslog_0_1_1_1";
   "monad-loops" = doDistribute super."monad-loops_0_4_2_1";
   "monad-loops-stm" = dontDistribute super."monad-loops-stm";
   "monad-lrs" = dontDistribute super."monad-lrs";
@@ -6284,6 +6294,7 @@ self: super: {
   "namelist" = dontDistribute super."namelist";
   "names" = dontDistribute super."names";
   "names-th" = dontDistribute super."names-th";
+  "namespace" = dontDistribute super."namespace";
   "nano-cryptr" = dontDistribute super."nano-cryptr";
   "nano-erl" = dontDistribute super."nano-erl";
   "nano-hmac" = dontDistribute super."nano-hmac";
@@ -6743,6 +6754,7 @@ self: super: {
   "perdure" = dontDistribute super."perdure";
   "perfecthash" = dontDistribute super."perfecthash";
   "period" = dontDistribute super."period";
+  "periodic" = dontDistribute super."periodic";
   "perm" = dontDistribute super."perm";
   "permutation" = dontDistribute super."permutation";
   "permute" = dontDistribute super."permute";
@@ -7198,6 +7210,7 @@ self: super: {
   "quickterm" = dontDistribute super."quickterm";
   "quicktest" = dontDistribute super."quicktest";
   "quickwebapp" = dontDistribute super."quickwebapp";
+  "quipper" = dontDistribute super."quipper";
   "quiver" = dontDistribute super."quiver";
   "quiver-binary" = dontDistribute super."quiver-binary";
   "quiver-bytestring" = dontDistribute super."quiver-bytestring";
@@ -7700,6 +7713,7 @@ self: super: {
   "selinux" = dontDistribute super."selinux";
   "semaphore-plus" = dontDistribute super."semaphore-plus";
   "semi-iso" = dontDistribute super."semi-iso";
+  "semibounded-lattices" = dontDistribute super."semibounded-lattices";
   "semigroupoid-extras" = doDistribute super."semigroupoid-extras_4_0";
   "semigroupoids" = doDistribute super."semigroupoids_4_3";
   "semigroupoids-syntax" = dontDistribute super."semigroupoids-syntax";
@@ -7950,6 +7964,7 @@ self: super: {
   "smartconstructor" = dontDistribute super."smartconstructor";
   "smartword" = dontDistribute super."smartword";
   "sme" = dontDistribute super."sme";
+  "smerdyakov" = dontDistribute super."smerdyakov";
   "smoothie" = doDistribute super."smoothie_0_1_3";
   "smsaero" = dontDistribute super."smsaero";
   "smt-lib" = dontDistribute super."smt-lib";
@@ -8371,6 +8386,7 @@ self: super: {
   "system-info" = dontDistribute super."system-info";
   "system-inotify" = dontDistribute super."system-inotify";
   "system-lifted" = dontDistribute super."system-lifted";
+  "system-locale" = dontDistribute super."system-locale";
   "system-random-effect" = dontDistribute super."system-random-effect";
   "system-test" = dontDistribute super."system-test";
   "system-time-monotonic" = dontDistribute super."system-time-monotonic";
