@@ -8221,13 +8221,13 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    version = "2.9";
+    version = "3.0";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "1nvdqwhgk0zff5kspgrh5c5vg1vdnz6gpjplbqi3nz41qws48f1y";
+      sha256 = "1mnl0rfbnimcpp7q9hva0x9jfa58j4nc27r9kvaii8869kzssw48";
     };
     propagatedBuildInputs = with self; [ requests2 ];
     prePatch = ''
