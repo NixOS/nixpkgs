@@ -14141,6 +14141,8 @@ in
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
+  pidginosd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
+
   pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
   pidginwindowmerge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
