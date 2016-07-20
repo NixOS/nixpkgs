@@ -142,4 +142,7 @@ self: super: {
   # Needs additional inputs on pre 7.10.x compilers.
   semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
 
+  # Haddock doesn't cope with the new markup.
+  bifunctors = dontHaddock super.bifunctors;
+
 }
