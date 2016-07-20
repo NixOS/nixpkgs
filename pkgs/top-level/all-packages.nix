@@ -9185,6 +9185,8 @@ in
 
   rote = callPackage ../development/libraries/rote { };
 
+  ronn = callPackage ../development/tools/ronn { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
