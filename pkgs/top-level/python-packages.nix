@@ -3308,7 +3308,7 @@ in modules // {
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
-      url = "http://downloads.sourceforge.net/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
+      url = "mirror://sourceforge/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
       sha256 = "0vvllc42mdyma3c7yqhahs4bfxymm2kvmc4va7dxqr5x0rzh6rd6";
     };
 
