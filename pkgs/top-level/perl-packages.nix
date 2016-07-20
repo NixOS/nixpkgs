@@ -2149,6 +2149,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigGrammar = buildPerlPackage {
+    name = "Config-Grammar-1.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSCHWEI/Config-Grammar-1.11.tar.gz;
+      sha256 = "dd819f89b19c51e9fac6965360cd9db54436e1328968c802416ac34188ca65ee";
+    };
+    meta = {
+      description = "A grammar-based, user-friendly config parser";
+      license = "unknown";
+    };
+  };
+
   ConfigINI = buildPerlPackage rec {
     name = "Config-INI-0.025";
     src = fetchurl {
@@ -9537,6 +9549,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetTelnet = buildPerlPackage {
+    name = "Net-Telnet-3.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JR/JROGERS/Net-Telnet-3.04.tar.gz;
+      sha256 = "e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a";
+    };
+    meta = {
+      description = "Interact with TELNET port or other TCP ports";
+      license = "unknown";
+    };
+  };
+
   NetTwitterLite = buildPerlPackage {
     name = "Net-Twitter-Lite-0.11002";
     src = fetchurl {
@@ -9663,6 +9687,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1nh9988436rmmmd6x2zz1fyrqy2005a1gvqzgvnc1pg2ylg61fqf";
     };
     propagatedBuildInputs = [ CGI NetOpenIDCommon JSON LWP ];
+  };
+
+  NetOpenSSH = buildPerlPackage {
+    name = "Net-OpenSSH-0.70";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.70.tar.gz;
+      sha256 = "3fcb36a5a2fc296c1d0def54f3201cecffe7d81157ef5fa2bac9868875f63b95";
+    };
+    meta = {
+      description = "Perl SSH client package implemented on top of OpenSSH";
+      license = "perl";
+    };
   };
 
   PackageConstants = buildPerlPackage {

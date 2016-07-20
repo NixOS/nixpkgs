@@ -17162,6 +17162,13 @@ in
 
   slock = callPackage ../misc/screensavers/slock { };
 
+  smokeping = callPackage ../tools/networking/smokeping {
+    inherit fping rrdtool;
+    inherit (perlPackages)
+      FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
+      NetOpenSSH NetSNMP LWP IOTty perl NetDNS NetLDAP;
+  };
+
   snapraid = callPackage ../tools/filesystems/snapraid { };
 
   soundOfSorting = callPackage ../misc/sound-of-sorting { };
