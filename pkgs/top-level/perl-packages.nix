@@ -7632,6 +7632,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MathCalcUnits = buildPerlPackage rec {
+    name = "Math-Calc-Units-1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SF/SFINK/${name}.tar.gz";
+      sha256 = "13wgbxv2fmigdj0vf7nwkq1y2q07jgfj8wdrpqkywfxv4zdwzqv1";
+    };
+    meta = {
+      description = "Human-readable unit-aware calculator";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
+    };
+  };
+
   MathBigInt = buildPerlPackage rec {
     name = "Math-BigInt-1.999724";
     src = fetchurl {
