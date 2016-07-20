@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
 
   crashPlanArchive = fetchurl {
     url = "https://download.code42.com/installs/linux/install/CrashPlan/CrashPlan_${version}_Linux.tgz";
-    sha256 = "1r50fyswvqjxsdslbyibbxwz2fs8iim15hxr0k05jrzmkhjm4g5v";
+    sha256 = "1vi6dqf8kc90axrgdcf6rwnhynxgxkc0qn6pbdp2gvkxdqxrprn8";
   };
 
   srcs = [ crashPlanArchive ];
