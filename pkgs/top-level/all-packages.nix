@@ -5323,6 +5323,11 @@ in
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
+    ppx_blob =
+      if lib.versionAtLeast ocaml_version "4.02"
+      then callPackage ../development/ocaml-modules/ppx_blob {}
+      else null;
+
     ppx_tools =
       if lib.versionAtLeast ocaml_version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
