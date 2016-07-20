@@ -193,6 +193,9 @@ stdenv.mkDerivation ({
       fi
       if [ -d "$p/lib" ]; then
         configureFlags+=" --extra-lib-dirs=$p/lib"
+        if [[ ${ if stdenv.isDarwin then "yes" else "no"} = "yes" ]]; then
+          export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib;
+        fi
       fi
     done
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
