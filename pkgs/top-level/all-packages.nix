@@ -924,7 +924,7 @@ in
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid;
+      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
   };
 
   bibtextools = callPackage ../tools/typesetting/bibtex-tools {
