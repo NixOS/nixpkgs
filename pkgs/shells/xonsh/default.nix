@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "xonsh-${version}";
-  version = "0.4.1";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "scopatz";
     repo = "xonsh";
     rev = version;
-    sha256= "1d5w307vgpqjimhfipkwsnh3lvvajva9fjl58sg9hh322qicm01g";
+    sha256= "1lx95i468px908y18fa9fmfgmjsydhkpas89dxbwfnybqxxyd3ls";
   };
 
   ## The logo xonsh prints during build contains unicode characters, and this
