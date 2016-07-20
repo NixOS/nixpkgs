@@ -408,7 +408,6 @@ in
 
   arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
-    jre = jdk;
     withGui = false;
   };
 
