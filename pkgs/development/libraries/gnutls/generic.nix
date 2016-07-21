@@ -36,8 +36,9 @@ stdenv.mkDerivation {
 
   # Build of the Guile bindings is not parallel-safe.  See
   # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
-  # for the actual fix.
-  enableParallelBuilding = !guileBindings;
+  # for the actual fix.  Also an apparent race in the generation of
+  # systemkey-args.h.
+  enableParallelBuilding = false;
 
   buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
     ++ lib.optional doCheck nettools

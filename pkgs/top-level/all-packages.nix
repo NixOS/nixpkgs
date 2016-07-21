@@ -408,11 +408,12 @@ in
 
   arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
-    jre = jdk;
     withGui = false;
   };
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
+
+  argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
@@ -925,7 +926,7 @@ in
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid;
+      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -2189,6 +2190,8 @@ in
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
+
+  libcpuid = callPackage ../tools/misc/libcpuid { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
@@ -4621,14 +4624,14 @@ in
     releaseType = "update";
     sha256 = "c5e0025b065750bbd76b5357b4fc8606d88afbac9ff55b8a82927b4b96178154";
   };
-  gcc-arm-embedded-5_2 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
+  gcc-arm-embedded-5 = pkgs.callPackage_i686 ../development/compilers/gcc-arm-embedded {
     dirName = "5.0";
-    subdirName = "5-2015-q4-major";
-    version = "5.2-2015q4-20151219";
-    releaseType = "major";
-    sha256 = "12mbwl9iwbw7h6gwwkvyvfmrsz7vgjz27jh2cz9z006ihzigi50y";
+    subdirName = "5-2016-q2-update";
+    version = "5.4-2016q2-20160622";
+    releaseType = "update";
+    sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
   };
-  gcc-arm-embedded = self.gcc-arm-embedded-4_9;
+  gcc-arm-embedded = self.gcc-arm-embedded-5;
 
   gforth = callPackage ../development/compilers/gforth {};
 
@@ -4796,7 +4799,7 @@ in
   oraclejdk8distro = installjdk: pluginSupport:
     assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix { inherit installjdk; });
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk; });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
     assert supportsJDK;
@@ -5312,6 +5315,11 @@ in
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
+
+    ppx_blob =
+      if lib.versionAtLeast ocaml_version "4.02"
+      then callPackage ../development/ocaml-modules/ppx_blob {}
+      else null;
 
     ppx_tools =
       if lib.versionAtLeast ocaml_version "4.02"
@@ -7632,6 +7640,8 @@ in
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
+  jsoncpp_1_6_5 = callPackage ../development/libraries/jsoncpp/1.6.5 { };
+
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   libjson = callPackage ../development/libraries/libjson { };
@@ -8164,6 +8174,8 @@ in
   libjreen = callPackage ../development/libraries/libjreen { };
 
   libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
+
+  libjson_rpc_cpp_0_2_1 = callPackage ../development/libraries/libjson-rpc-cpp/0.2.1 { };
 
   libkate = callPackage ../development/libraries/libkate { };
 
@@ -8859,6 +8871,8 @@ in
 
   ortp = callPackage ../development/libraries/ortp { };
 
+  osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
+
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
@@ -9016,6 +9030,8 @@ in
 
   qt5 = self.qt56;
 
+  qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
+
   qt5LibsFun = self: with self; {
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -9140,6 +9156,8 @@ in
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
   rote = callPackage ../development/libraries/rote { };
+
+  ronn = callPackage ../development/tools/ronn { };
 
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
@@ -9342,6 +9360,8 @@ in
   tcllib = callPackage ../development/libraries/tcllib { };
 
   tcltls = callPackage ../development/libraries/tcltls { };
+
+  tclx = callPackage ../development/libraries/tclx { };
 
   ntdb = callPackage ../development/libraries/ntdb {
     python = python2;
@@ -10122,6 +10142,8 @@ in
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  gofish = callPackage ../servers/gopher/gofish { };
+
   grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
 
   groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-0_10; };
@@ -10531,7 +10553,8 @@ in
     inherit clangStdenv fetchurl fetchgit fetchpatch stdenv pkgconfig intltool freetype fontconfig
       libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
-      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman;
+      autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman
+      cairo;
     inherit (darwin) apple_sdk cf-private libobjc;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
@@ -12154,6 +12177,8 @@ in
   bitcoin = self.altcoins.bitcoin;
   bitcoin-xt = self.altcoins.bitcoin-xt;
 
+  go-ethereum = self.altcoins.go-ethereum;
+
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
@@ -12403,6 +12428,16 @@ in
 
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
   conkeror = self.wrapFirefox conkeror-unwrapped { };
+
+  cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
+    withOpenCL = true;
+
+    # withEVMJIT = true;
+    # inherit (pkgs.llvmPackages_38) llvm;
+
+    # withGUI = true;
+    # inherit (pkgs.qt5) qtwebengine qtbase qtdeclarative;
+  };
 
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
@@ -13618,6 +13653,8 @@ in
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
 
+  marp = callPackage ../applications/office/marp { };
+
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
   MBdistortion = callPackage ../applications/audio/MBdistortion { };
@@ -14090,9 +14127,13 @@ in
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
+  pidginosd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
+
   pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
   pidginwindowmerge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
+
+  purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
@@ -14560,6 +14601,8 @@ in
   syncthing = callPackage ../applications/networking/syncthing { };
 
   syncthing012 = callPackage ../applications/networking/syncthing012 { };
+
+  syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
@@ -16339,6 +16382,8 @@ in
   suitesparse_4_4 = callPackage ../development/libraries/science/math/suitesparse {};
   suitesparse = suitesparse_4_4;
 
+  superlu = callPackage ../development/libraries/science/math/superlu {};
+
   ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
@@ -16794,6 +16839,10 @@ in
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
+    libusb = libusb1;
+  };
+
   darcnes = callPackage ../misc/emulators/darcnes { };
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
@@ -16881,9 +16930,15 @@ in
 
   gnome-breeze = callPackage ../misc/themes/gnome-breeze { };
 
-  gnuk = callPackage ../misc/gnuk { };
-  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix { });
-  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix { });
+  gnuk = callPackage ../misc/gnuk {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  };
+  gnuk-unstable = lowPrio (callPackage ../misc/gnuk/unstable.nix {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  });
+  gnuk-git = lowPrio (callPackage ../misc/gnuk/git.nix {
+    gcc-arm-embedded = gcc-arm-embedded-4_9;
+  });
 
   greybird = callPackage ../misc/themes/greybird { };
 
@@ -17095,6 +17150,13 @@ in
   seafile-shared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
+
+  smokeping = callPackage ../tools/networking/smokeping {
+    inherit fping rrdtool;
+    inherit (perlPackages)
+      FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
+      NetOpenSSH NetSNMP LWP IOTty perl NetDNS NetLDAP;
+  };
 
   snapraid = callPackage ../tools/filesystems/snapraid { };
 

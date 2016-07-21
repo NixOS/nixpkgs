@@ -8,9 +8,9 @@ let
 
   sheevaplugCrossSystem = {
     crossSystem = rec {
-      config = "armv5tel-unknown-linux-gnueabi";
+      config = "arm-linux-gnueabi";
       bigEndian = false;
-      arch = "arm";
+      arch = "armv5te";
       float = "soft";
       withTLS = true;
       libc = "glibc";
@@ -21,9 +21,9 @@ let
 
   raspberrypiCrossSystem = {
     crossSystem = rec {
-      config = "armv6l-unknown-linux-gnueabi";
+      config = "arm-linux-gnueabihf";
       bigEndian = false;
-      arch = "arm";
+      arch = "armv6";
       float = "hard";
       fpu = "vfp";
       withTLS = true;
@@ -36,9 +36,9 @@ let
 
   armv7l-hf-multiplatform-crossSystem = {
     crossSystem = rec {
-      config = "armv7l-unknown-linux-gnueabi";
+      config = "arm-linux-gnueabihf";
       bigEndian = false;
-      arch = "arm";
+      arch = "armv7-a";
       float = "hard";
       fpu = "vfpv3-d16";
       withTLS = true;
@@ -65,7 +65,6 @@ let
   gnused = pkgs.gnused.crossDrv;
   gnugrep = pkgs.gnugrep.crossDrv;
   gawk = pkgs.gawk.crossDrv;
-  gnutar = pkgs.gnutar.crossDrv;
   gzip = pkgs.gzip.crossDrv;
   bzip2 = pkgs.bzip2.crossDrv;
   gnumake = pkgs.gnumake.crossDrv;
@@ -74,18 +73,17 @@ let
   gcc = pkgs.gcc.cc.crossDrv;
   gmpxx = pkgs.gmpxx.crossDrv;
   mpfr = pkgs.mpfr.crossDrv;
-  ppl = pkgs.ppl.crossDrv;
-  cloogppl = pkgs.cloogppl.crossDrv;
-  cloog = pkgs.cloog.crossDrv;
   zlib = pkgs.zlib.crossDrv;
-  isl = pkgs.isl.crossDrv;
   libmpc = pkgs.libmpc.crossDrv;
   binutils = pkgs.binutils.crossDrv;
   libelf = pkgs.libelf.crossDrv;
 
+  # Keep these versions in sync with the versions used in the current GCC!
+  isl = pkgs.isl_0_14.crossDrv;
 in
 
 rec {
+
 
   coreutilsMinimal = (pkgs.coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -94,15 +92,10 @@ rec {
     singleBinary = "symlinks";
   })).crossDrv;
 
-  curlMinimal = (pkgs.curl.override {
-    zlibSupport = false;
-    sslSupport = false;
-    scpSupport = false;
-  }).crossDrv;
+  tarMinimal = (pkgs.gnutar.override { acl = null; }).crossDrv;
 
   busyboxMinimal = (pkgs.busybox.override {
-    # TBD: uClibc is broken.
-    # useUclibc = true;
+    useMusl = true;
     enableStatic = true;
     enableMinimal = true;
     extraConfig = ''
@@ -116,19 +109,16 @@ rec {
     '';
   }).crossDrv;
 
-  inherit pkgs;
-
   build =
 
     stdenv.mkDerivation {
-      name = "build";
+      name = "stdenv-bootstrap-tools-cross";
+      crossConfig = stdenv.cross.config;
 
       buildInputs = [nukeReferences cpio binutilsCross];
 
-      crossConfig = stdenv.cross.config;
-
       buildCommand = ''
-	      set -x
+        set -x
         mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
@@ -146,7 +136,15 @@ rec {
         cp -d ${glibc.out}/lib/crt?.o $out/lib
 
         cp -rL ${glibc.dev}/include $out
-        chmod -R u+w $out/include
+        chmod -R u+w "$out"
+
+        # glibc can contain linker scripts: find them, copy their deps,
+        # and get rid of absolute paths (nuke-refs would make them useless)
+        local lScripts=$(grep --files-with-matches --max-count=1 'GNU ld script' -R "$out/lib")
+        cp -d -t "$out/lib/" $(cat $lScripts | tr " " "\n" | grep -F '${glibc.out}' | sort -u)
+        for f in $lScripts; do
+          substituteInPlace "$f" --replace '${glibc.out}/lib/' ""
+        done
 
         # Hopefully we won't need these.
         rm -rf $out/include/mtd $out/include/rdma $out/include/sound $out/include/video
@@ -166,24 +164,22 @@ rec {
         cp -d ${gnugrep}/bin/grep $out/bin
         cp ${gawk}/bin/gawk $out/bin
         cp -d ${gawk}/bin/awk $out/bin
-        cp ${gnutar}/bin/tar $out/bin
+        cp ${tarMinimal}/bin/tar $out/bin
         cp ${gzip}/bin/gzip $out/bin
         cp ${bzip2.bin}/bin/bzip2 $out/bin
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${curlMinimal}/bin/curl $out/bin
-        cp -d ${curlMinimal}/lib/libcurl* $out/lib
 
-        cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.crossDrv.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc}/bin/gcc $out/bin
-        cp -d ${gcc}/bin/cpp $out/bin
-        cp -d ${gcc}/bin/g++ $out/bin
-        cp -d ${gcc}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc}/lib*/libstdc++.so* $out/lib
-        cp -rd ${gcc}/lib/gcc $out/lib
+        cp -d ${gcc.out}/bin/gcc $out/bin
+        cp -d ${gcc.out}/bin/cpp $out/bin
+        cp -d ${gcc.out}/bin/g++ $out/bin
+        cp -d ${gcc.lib}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gcc.lib}/lib*/libstdc++.so* $out/lib
+        cp -rd ${gcc.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -191,29 +187,32 @@ rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc}/libexec/* $out/libexec
+        cp -rd ${gcc.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir $out/include
-        cp -rd ${gcc}/include/c++ $out/include
+        cp -rd ${gcc.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
 
-        cp -d ${gmpxx}/lib/libgmp*.so* $out/lib
+        cp -d ${gmpxx.out}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr.out}/lib/libmpfr*.so* $out/lib
-        cp -d ${libmpc}/lib/libmpc*.so* $out/lib
+        cp -d ${libmpc.out}/lib/libmpc*.so* $out/lib
         cp -d ${zlib.out}/lib/libz.so* $out/lib
         cp -d ${libelf}/lib/libelf.so* $out/lib
 
-        # TBD: Why are these needed for cross but not native tools?
-        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
-        cp -d ${cloog}/lib/libcloog*.so* $out/lib
+        # These needed for cross but not native tools because the stdenv
+        # GCC has certain things built in statically. See
+        # pkgs/stdenv/linux/default.nix for the details.
         cp -d ${isl}/lib/libisl*.so* $out/lib
+        # Also this is needed since bzip2 uses a custom build system
+        # for native builds but autoconf (via a patch) for cross builds
+        cp -d ${bzip2.out}/lib/libbz2.so* $out/lib
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils}/bin/$i $out/bin
+          cp ${binutils.out}/bin/$i $out/bin
         done
         cp -d ${binutils.out}/lib/lib*.so* $out/lib
 
@@ -236,7 +235,7 @@ rec {
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        tar cvfJ $out/on-server/bootstrap-tools.tar.xz -C $out/pack .
+        tar cvfJ $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox
@@ -248,6 +247,15 @@ rec {
       allowedReferences = [];
     };
 
+  dist = stdenv.mkDerivation {
+    name = "stdenv-bootstrap-tools-cross";
+
+    buildCommand = ''
+      mkdir -p $out/nix-support
+      echo "file tarball ${build}/on-server/bootstrap-tools.tar.xz" >> $out/nix-support/hydra-build-products
+      echo "file busybox ${build}/on-server/busybox" >> $out/nix-support/hydra-build-products
+    '';
+  };
 }
 
 ); in {

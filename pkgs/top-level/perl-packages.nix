@@ -2149,6 +2149,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  ConfigGrammar = buildPerlPackage {
+    name = "Config-Grammar-1.11";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DS/DSCHWEI/Config-Grammar-1.11.tar.gz;
+      sha256 = "dd819f89b19c51e9fac6965360cd9db54436e1328968c802416ac34188ca65ee";
+    };
+    meta = {
+      description = "A grammar-based, user-friendly config parser";
+      license = "unknown";
+    };
+  };
+
   ConfigINI = buildPerlPackage rec {
     name = "Config-INI-0.025";
     src = fetchurl {
@@ -7111,6 +7123,15 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
   };
 
+  LinguaTranslit = buildPerlPackage rec {
+    name = "Lingua-Translit-0.26";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AL/ALINKE/${name}.tar.gz";
+      sha256 = "2430b5c84927f15570533eb68c56958c580f16044fc413d48bf44f0460422598";
+    };
+    doCheck = false;
+  };
+
   LinuxDistribution = buildPerlPackage {
     name = "Linux-Distribution-0.23";
     src = fetchurl {
@@ -7629,6 +7650,18 @@ let self = _self // overrides; _self = with self; {
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
       sha256 = "0xn2a950mzzs5q1c4q98ckysn9dz20x7r35g02zvk35chgr0klxz";
+    };
+  };
+
+  MathCalcUnits = buildPerlPackage rec {
+    name = "Math-Calc-Units-1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SF/SFINK/${name}.tar.gz";
+      sha256 = "13wgbxv2fmigdj0vf7nwkq1y2q07jgfj8wdrpqkywfxv4zdwzqv1";
+    };
+    meta = {
+      description = "Human-readable unit-aware calculator";
+      license = with stdenv.lib.licenses; [ artistic1 gpl2 ];
     };
   };
 
@@ -8290,6 +8323,25 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IOPipely Mojolicious ];
     meta = {
       description = "Run blocking functions asynchronously by forking";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MonitoringPlugin = buildPerlPackage rec {
+    name = "Monitoring-Plugin-0.39";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NIERLEIN/${name}.tar.gz";
+      sha256 = "030cw86j8712z8rn66k935gbilb5rcj3lnk4n53vh1b2phrszvjw";
+    };
+    buildInputs = [ TestMore ];
+    propagatedBuildInputs = [
+      Carp ClassAccessor ConfigTiny
+      MathCalcUnits ParamsValidate ];
+    meta = {
+      description = ''
+        A family of perl modules to streamline writing Naemon,
+        Nagios, Icinga or Shinken (and compatible) plugins
+      '';
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -9506,6 +9558,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetTelnet = buildPerlPackage {
+    name = "Net-Telnet-3.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/J/JR/JROGERS/Net-Telnet-3.04.tar.gz;
+      sha256 = "e64d567a4e16295ecba949368e7a6b8b5ae2a16b3ad682121d9b007dc5d2a37a";
+    };
+    meta = {
+      description = "Interact with TELNET port or other TCP ports";
+      license = "unknown";
+    };
+  };
+
   NetTwitterLite = buildPerlPackage {
     name = "Net-Twitter-Lite-0.11002";
     src = fetchurl {
@@ -9632,6 +9696,18 @@ let self = _self // overrides; _self = with self; {
       sha256 = "1nh9988436rmmmd6x2zz1fyrqy2005a1gvqzgvnc1pg2ylg61fqf";
     };
     propagatedBuildInputs = [ CGI NetOpenIDCommon JSON LWP ];
+  };
+
+  NetOpenSSH = buildPerlPackage {
+    name = "Net-OpenSSH-0.70";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SA/SALVA/Net-OpenSSH-0.70.tar.gz;
+      sha256 = "3fcb36a5a2fc296c1d0def54f3201cecffe7d81157ef5fa2bac9868875f63b95";
+    };
+    meta = {
+      description = "Perl SSH client package implemented on top of OpenSSH";
+      license = "perl";
+    };
   };
 
   PackageConstants = buildPerlPackage {
@@ -12969,11 +13045,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextBibTeX = buildPerlModule rec {
-    name = "Text-BibTeX-0.71";
+    name = "Text-BibTeX-0.72";
     buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
-      sha256 = "1jwi4yc4l1sf9pyc6qifcm493lwf8iggdjli7f9a9aqin1swh36d";
+      sha256 = "0vfnj9ygdjympc8hsf38nc4a1lq45qbq7v6z6mrnfgr3k198b6gw";
     };
     meta = {
       description = "Interface to read and parse BibTeX files";
@@ -13813,11 +13889,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  UnicodeNormalize = buildPerlPackage {
-    name = "Unicode-Normalize-1.19";
+  UnicodeNormalize = buildPerlPackage rec {
+    name = "Unicode-Normalize-1.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SADAHIRO/Unicode-Normalize-1.19.tar.gz;
-      sha256 = "ab16467692cb78ced706fb7bee4145ac09d9f14d9eed92be4a305de3172ce6c4";
+      url = "mirror://cpan/authors/id/K/KH/KHW/${name}.tar.gz";
+      sha256 = "00b33a75d3b356ade2e09391ea2d32fac881671c18b1eb26b9ca31273d5b046c";
     };
     meta = {
       description = "Unicode Normalization Forms";

@@ -8,6 +8,7 @@
 , libXpm ? null
 , fontconfig
 , freetype
+, fetchpatch, autoreconfHook, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,18 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  # Address an incompatibility with Darwin's libtool
+  patches = stdenv.lib.optional stdenv.isDarwin (fetchpatch {
+    url = https://github.com/libgd/libgd/commit/502e4cd873c3b37b307b9f450ef827d40916c3d6.patch;
+    sha256 = "0gawr2c4zr6cljnwzhdlxhz2mkbg0r5vzvr79dv6yf6fcj06awfs";
+  });
+
+  # -pthread gets passed to clang, causing warnings
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
+
+  nativeBuildInputs = [ pkgconfig ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ autoreconfHook perl ];
+
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 

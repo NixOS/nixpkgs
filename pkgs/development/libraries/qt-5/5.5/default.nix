@@ -49,6 +49,8 @@ let
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = args.setOutputFlags or false;
 
+      setupHook = ./setup-hook.sh;
+
       enableParallelBuilding = args.enableParallelBuilding or true;
 
       meta = self.qtbase.meta // (args.meta or {});

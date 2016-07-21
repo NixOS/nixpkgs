@@ -49,7 +49,7 @@ in
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
       };
 
-    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
+    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" "modesetting" ];
 
     services.xserver.config =
       ''

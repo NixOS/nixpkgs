@@ -185,15 +185,6 @@ let
   };
 
 
-  # The binary keymap for busybox to load at boot.
-  busyboxKeymap = pkgs.runCommand "boottime-keymap"
-    { preferLocalBuild = true; }
-    ''
-      ${pkgs.kbd}/bin/loadkeys -qb "${config.i18n.consoleKeyMap}" > $out ||
-        ${pkgs.kbd}/bin/loadkeys -qbu "${config.i18n.consoleKeyMap}" > $out
-    '';
-
-
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = pkgs.substituteAll {
@@ -203,7 +194,7 @@ let
 
     isExecutable = true;
 
-    inherit udevRules extraUtils modulesClosure busyboxKeymap;
+    inherit udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice devSize runSize;
 

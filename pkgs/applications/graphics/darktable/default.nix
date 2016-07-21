@@ -3,7 +3,7 @@
 , libgnome_keyring, gtk3, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, librsvg, libtiff, libxcb
-, openexr, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
+, openexr, osm-gps-map, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
 , mesa, lua, pugixml, colord, colord-gtk, libxshmfence, libxkbcommon
 , epoxy, at_spi2_core, libwebp, libsecret, wrapGAppsHook, gnome3
 }:
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       libsoup graphicsmagick SDL json_glib openjpeg mesa lua pugixml
       colord colord-gtk libxshmfence libxkbcommon epoxy at_spi2_core
       libwebp libsecret wrapGAppsHook gnome3.adwaita-icon-theme
+      osm-gps-map
     ];
 
   cmakeFlags = [

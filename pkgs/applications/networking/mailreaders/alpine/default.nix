@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
     "--with-tcl-lib=${tcl.libPrefix}"
+    "--with-passfile=.pine-passfile"
   ];
 
   preConfigure = ''

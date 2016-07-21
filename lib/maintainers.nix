@@ -110,6 +110,7 @@
   dmalikov = "Dmitry Malikov <malikov.d.y@gmail.com>";
   dochang = "Desmond O. Chang <dochang@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
+  drets = "Dmytro Rets <dmitryrets@gmail.com>";
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
   ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";

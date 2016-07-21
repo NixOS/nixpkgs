@@ -55,7 +55,7 @@ while test -n "$1"; do
                     token="--token $GITHUB_TOKEN"
                 fi
 
-                nix-shell --packages nox git --run "nox-review pr --slug $TRAVIS_REPO_SLUG $token $TRAVIS_PULL_REQUEST" -I nixpkgs=$TRAVIS_BUILD_DIR
+                nix-shell --packages nox git --run "nox-review pr --slug $TRAVIS_REPO_SLUG $token $TRAVIS_PULL_REQUEST"
             fi
             ;;
 
