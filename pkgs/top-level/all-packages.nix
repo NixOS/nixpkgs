@@ -1054,6 +1054,8 @@ in
 
   connman = callPackage ../tools/networking/connman { };
 
+  connman-notify = callPackage ../tools/networking/connman-notify { };
+
   connmanui = callPackage ../tools/networking/connmanui { };
 
   connman_dmenu = callPackage ../tools/networking/connman_dmenu  { };
