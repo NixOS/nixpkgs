@@ -64,7 +64,7 @@ in rec {
         (all nixos.tests.installer.btrfsSubvols)
         (all nixos.tests.installer.btrfsSubvolDefault)
         (all nixos.tests.boot.biosCdrom)
-        (all nixos.tests.boot.biosUsb)
+        #(all nixos.tests.boot.biosUsb) # disabled due to issue #15690
         (all nixos.tests.boot.uefiCdrom)
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
