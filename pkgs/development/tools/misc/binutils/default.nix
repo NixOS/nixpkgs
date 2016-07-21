@@ -2,7 +2,7 @@
 , cross ? null, gold ? true, bison ? null
 }:
 
-let basename = "binutils-2.26"; in
+let basename = "binutils-2.26.1"; in
 
 with { inherit (stdenv.lib) optional optionals optionalString; };
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "1ngc2h3knhiw8s22l8y6afycfaxr5grviqy7mwvm4bsl14cf9b62";
+    sha256 = "1n4zjibdvqwz63kkzkjdqdp1nh993pn0lml6yyr19yx4gb44dhrr";
   };
 
   patches = [
@@ -32,12 +32,6 @@ stdenv.mkDerivation rec {
     # This is needed, for instance, so that running "ldd" on a binary that is
     # PaX-marked to disable mprotect doesn't fail with permission denied.
     ./pt-pax-flags.patch
-
-    # Bug fix backported from binutils master.
-    ./fix-bsymbolic.patch
-
-   # Bug fix backported from binutils master.
-    ./fix-update-symbol-version.patch
   ];
 
   outputs = (optional (cross == null) "dev") ++ [ "out" "info" ];
