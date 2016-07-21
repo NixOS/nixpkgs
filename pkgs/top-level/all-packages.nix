@@ -12934,6 +12934,8 @@ in
 
   photivo = callPackage ../applications/graphics/photivo { };
 
+  rhythmbox = callPackage ../applications/audio/rhythmbox { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
