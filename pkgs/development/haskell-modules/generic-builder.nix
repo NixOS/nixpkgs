@@ -192,9 +192,9 @@ stdenv.mkDerivation ({
         configureFlags+=" --extra-include-dirs=$p/include"
       fi
       if [ -d "$p/lib" ]; then
-        configureFlags+=" --extra-lib-dirs=$p/lib"${
-          stdenv.lib.optionalString stdenv.isDarwin
-            "; export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib;"
+        configureFlags+=" --extra-lib-dirs=$p/lib"
+        ${ stdenv.lib.optionalString stdenv.isDarwin
+            "export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$p/lib"
         }
       fi
     done
