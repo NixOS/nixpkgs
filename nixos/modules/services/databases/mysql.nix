@@ -128,6 +128,10 @@ in
           description = "Hostname of the MySQL master server";
         };
 
+        slaveHost = mkOption {
+          description = "Hostname of the MySQL slave server";
+        };
+
         masterUser = mkOption {
           description = "Username of the MySQL replication user";
         };
@@ -231,9 +235,19 @@ in
                     fi
                   '') cfg.initialDatabases}
 
-                ${optionalString (cfg.replication.role == "slave" && atLeast55)
+                ${optionalString (cfg.replication.role == "master" && atLeast55)
                   ''
                     # Set up the replication master
+
+                    ( echo "use mysql;"
+                      echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
+                      echo "update user set Password=password('${cfg.replication.masterPassword}') where User='${cfg.replication.masterUser}';"
+                    ) | ${mysql}/bin/mysql -u root -N
+                  ''}
+
+                ${optionalString (cfg.replication.role == "slave" && atLeast55)
+                  ''
+                    # Set up the replication slave
 
                     ( echo "stop slave;"
                       echo "change master to master_host='${cfg.replication.masterHost}', master_user='${cfg.replication.masterUser}', master_password='${cfg.replication.masterPassword}';"
