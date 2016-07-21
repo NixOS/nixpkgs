@@ -139,6 +139,8 @@ stdenv.mkDerivation rec {
     rm -r $out/share/go/pkg/bootstrap
   '';
 
+  stripDebugList = [ "bin" "share" ];
+
   setupHook = ./setup-hook.sh;
 
   disallowedReferences = [ go_1_4 ];
