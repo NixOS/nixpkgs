@@ -3466,6 +3466,8 @@ in
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
+  smugline = python3Packages.smugline;
+
   snabb = callPackage ../tools/networking/snabb { } ;
 
   sng = callPackage ../tools/graphics/sng {

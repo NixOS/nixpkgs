@@ -28718,4 +28718,46 @@ in modules // {
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 
+  smugpy = buildPythonPackage rec {
+    name    = pname + "-" + version;
+    pname   = "smugpy";
+    version = "20131218";
+
+    src = pkgs.fetchFromGitHub {
+      owner  = "chrishoffman";
+      repo   = pname;
+      rev    = "f698d6749ce446e3d6c7d925b2cd1cd5b3d695ea";
+      sha256 = "029x6hm1744iznv4sw8sfyl974wmx1sqnr1k5dvzzwpk3ja49a1y";
+    };
+
+    doCheck = false; # Tries to login to Smugmug…
+
+    propagatedBuildInputs = with self; [ ];
+  };
+
+  smugline = stdenv.mkDerivation rec {
+    name    = pname + "-" + version;
+    pname   = "smugline";
+    version = "20160106";
+
+    src = pkgs.fetchFromGitHub {
+      owner  = "gingerlime";
+      repo   = pname;
+      rev    = "134554c574c2d282112ba60165a8c5ffe0f16fd4";
+      sha256 = "00n012ijkdrx8wsl8x3ghdcxcdp29s4kwr3yxvlyj79g5yhfvaj6";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    buildInputs = [ python pkgs.makeWrapper ];
+
+    propagatedBuildInputs = with self; [ docopt requests2 smugpy ];
+
+    installPhase = ''
+      mkdir -p $out/bin $out/libexec
+      cp smugline.py $out/libexec
+      makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
+        --prefix PYTHONPATH : "$PYTHONPATH"
+    '';
+  };
 }
