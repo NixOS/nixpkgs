@@ -6380,6 +6380,10 @@ in
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
+  gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
+  
+  gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
+  
   gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
