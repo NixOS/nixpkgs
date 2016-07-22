@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wk9jmcibd03gspnnr2qvfkw57rg94cwmi0kjpy1mgi05s6vlw1y";
     rev = "v${version}";
     repo = "bully";
-    owner = "Lrs121";
+    owner = "HorayNarea";
   };
   buildInputs = [ openssl libpcap ];
 
