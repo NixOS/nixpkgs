@@ -21002,10 +21002,10 @@ in modules // {
   };
 
   selenium = buildPythonPackage rec {
-    name = "selenium-2.44.0";
+    name = "selenium-2.52.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/selenium/${name}.tar.gz";
-      sha256 = "0l70pqwg88imbylcd831vg8nj8ipy4zr331f6qjccss7vn56i2h5";
+      sha256 = "0971rd9b8kb97xp9fvrwzvxr8vqfdjc020cs75n787ya82km01c2";
     };
 
     buildInputs = with self; [pkgs.xorg.libX11];
@@ -21016,8 +21016,8 @@ in modules // {
       pkgs.fetchFromGitHub {
         owner = "SeleniumHQ";
         repo = "selenium";
-        rev = "selenium-2.44.0";
-        sha256 = "13aqm0dwy17ghimy7m2mxjwlyc1k7zk5icxzrs1sa896056f1dyy";
+        rev = "selenium-2.52.0";
+        sha256 = "1n58akim9np2jy22jfgichq1ckvm8gglqi2hn3syphh0jjqq6cfx";
       };
 
     patchPhase = ''
