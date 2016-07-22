@@ -109,15 +109,17 @@ let
         '';
       };
 
-      virtualHost = mkOption {
-        type = types.str;
-        default = "${virtualHostName}";
-        description = ''
-          Name of existing nginx virtual host that is used to run web-application.
-          If not specified a host will be created automatically with
-          default values.
-        '';
-      };
+      # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
+
+      # virtualHost = mkOption {
+      #   type = types.str;
+      #   default = "${virtualHostName}";
+      #   description = ''
+      #     Name of existing nginx virtual host that is used to run web-application.
+      #     If not specified a host will be created automatically with
+      #     default values.
+      #   '';
+      # };
 
       database = {
         type = mkOption {
@@ -465,33 +467,34 @@ let
       };
     } else {};
 
+    # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
 
-    services.nginx.virtualHosts = if cfg.virtualHost == "${virtualHostName}" then {
-      "${virtualHostName}" = {
-        root = "${root}";
-        extraConfig = ''
-          access_log  /var/log/nginx-${virtualHostName}-access.log;
-          error_log   /var/log/nginx-${virtualHostName}-error.log;
-        '';
+    # services.nginx.virtualHosts = if cfg.virtualHost == "${virtualHostName}" then {
+    #   "${virtualHostName}" = {
+    #     root = "${root}";
+    #     extraConfig = ''
+    #       access_log  /var/log/nginx-${virtualHostName}-access.log;
+    #       error_log   /var/log/nginx-${virtualHostName}-error.log;
+    #     '';
 
-        locations."/" = {
-          extraConfig = ''
-            index index.php;
-          '';
-        };
+    #     locations."/" = {
+    #       extraConfig = ''
+    #         index index.php;
+    #       '';
+    #     };
 
-        locations."~ \.php$" = {
-          extraConfig = ''
-            fastcgi_split_path_info ^(.+\.php)(/.+)$;
-            fastcgi_pass unix:${config.services.phpfpm.pools."${cfg.pool}".listen};
-            fastcgi_index index.php;
-            fastcgi_param SCRIPT_FILENAME ${root}/$fastcgi_script_name;
+    #     locations."~ \.php$" = {
+    #       extraConfig = ''
+    #         fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    #         fastcgi_pass unix:${config.services.phpfpm.pools."${cfg.pool}".listen};
+    #         fastcgi_index index.php;
+    #         fastcgi_param SCRIPT_FILENAME ${root}/$fastcgi_script_name;
 
-            include ${pkgs.nginx}/conf/fastcgi_params;
-          '';
-        };
-      };
-    } else {};
+    #         include ${pkgs.nginx}/conf/fastcgi_params;
+    #       '';
+    #     };
+    #   };
+    # } else {};
 
 
     systemd.services.tt-rss = let
@@ -564,4 +567,3 @@ let
     };
   };
 }
-
