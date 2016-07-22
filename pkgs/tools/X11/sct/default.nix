@@ -1,10 +1,11 @@
-{stdenv, fetchurl, libX11, libXrandr}:
+{stdenv, fetchgit, libX11, libXrandr}:
 stdenv.mkDerivation rec {
   name = "sct";
   buildInputs = [libX11 libXrandr];
-  src = fetchurl {
-    url = http://www.tedunangst.com/flak/files/sct.c;
-    sha256 = "1321ajd1ph0hyj6pi76ylfcb1csj100lqflrb7n44ni5ybxmy3j2";
+  src = fetchgit {
+    url = git://github.com/wmapp/sct.git;
+    rev = "be00d189f491b9100233b3a623b026bbffccb18e";
+    sha256 = "1bivy0sl5v1jsq4jbq6p9hplz6cvw4nx9rc96p2kxsg506rqllc5";
     
     # Discussion regarding the checksum and the source code can be found in issue #17163 
     # The code seems unmaintained, yet an unknown (probably small change) in the code caused 
