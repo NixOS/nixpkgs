@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libX11 libXrandr];
   src = fetchurl {
     url = http://www.tedunangst.com/flak/files/sct.c;
-    sha256 = "1bivy0sl5v1jsq4jbq6p9hplz6cvw4nx9rc96p2kxsg506rqllc5";
+    sha256 = "0dda697ec3f4129d793f8896743d82be09934883f5aeda05c4a2193d7ab3c305";
   };
   phases = ["patchPhase" "buildPhase" "installPhase"];
   patchPhase = ''
