@@ -12888,6 +12888,8 @@ in
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
 
+  exrtools = callPackage ../applications/graphics/exrtools { };
+
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
   fbreader = callPackage ../applications/misc/fbreader { };
