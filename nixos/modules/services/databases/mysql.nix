@@ -240,8 +240,9 @@ in
                     # Set up the replication master
 
                     ( echo "use mysql;"
+                      echo "CREATE USER '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' IDENTIFIED WITH mysql_native_password;"
+                      echo "SET PASSWORD FOR '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}' = PASSWORD('${cfg.replication.masterPassword}');"
                       echo "GRANT REPLICATION SLAVE ON *.* TO '${cfg.replication.masterUser}'@'${cfg.replication.slaveHost}';"
-                      echo "update user set Password=password('${cfg.replication.masterPassword}') where User='${cfg.replication.masterUser}';"
                     ) | ${mysql}/bin/mysql -u root -N
                   ''}
 
