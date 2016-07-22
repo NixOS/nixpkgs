@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "stellarium-0.14.2";
+  name = "stellarium-0.14.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/stellarium/${name}.tar.gz";
-    sha256 = "1xxil0rv61zc08znfv83cpsc47y1gjl2f3njhz0pn5zd8jpaa15a";
+    sha256 = "1919wzlvhfxdxficbwhp31xlhm0571grgcmsfdp5y36z9yqwahfy";
   };
 
   nativeBuildInputs = [ makeQtWrapper ];
