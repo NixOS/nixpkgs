@@ -10854,9 +10854,7 @@ in
 
   gpm-ncurses = self.gpm.override { inherit ncurses; };
 
-  gradm = callPackage ../os-specific/linux/gradm {
-    flex = flex_2_5_35;
-  };
+  gradm = callPackage ../os-specific/linux/gradm { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
