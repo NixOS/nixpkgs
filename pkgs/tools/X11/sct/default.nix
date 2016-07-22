@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libX11 libXrandr];
   src = fetchurl {
     url = http://www.tedunangst.com/flak/files/sct.c;
-    sha256 = "1321ajd1ph0hyj6pi76ylfcb1csj100lqflrb7n44ni5ybxmy3j2";
+    sha256 = "01f3ndx3s6d2qh2xmbpmhd4962dyh8yp95l87xwrs4plqdz6knhd";
     
     # Discussion regarding the checksum and the source code can be found in issue #17163 
     # The code seems unmaintained, yet an unknown (probably small change) in the code caused 
