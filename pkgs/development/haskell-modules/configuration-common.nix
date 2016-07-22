@@ -36,7 +36,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1b154qskvcldk4kyzcbaw6mijrsn9327wldxwcv16a8zz39gvc5r";
+      sha256 = "1b4yw305h7ca28x8s2jnkcc9cwn3rygnjyarib33dk4z066lsg7s";
       rev = drv.version;
     };
   })).override {
