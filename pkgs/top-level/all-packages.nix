@@ -2527,6 +2527,8 @@ in
 
   megatools = callPackage ../tools/networking/megatools { };
 
+  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
+
   mfcuk = callPackage ../tools/security/mfcuk { };
 
   mfoc = callPackage ../tools/security/mfoc { };
