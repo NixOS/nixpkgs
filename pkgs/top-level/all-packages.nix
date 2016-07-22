@@ -12595,6 +12595,10 @@ in
     patches = config.dwm.patches or [];
   };
 
+  evilwm = callPackage ../applications/window-managers/evilwm {
+    patches = config.evilwm.patches or [];
+  };
+
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
