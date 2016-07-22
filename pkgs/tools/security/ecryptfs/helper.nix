@@ -24,4 +24,12 @@ stdenv.mkDerivation rec {
     cp $src $out/libexec/ecryptfs-helper.py
     makeWrapper "${python.interpreter} $out/libexec/ecryptfs-helper.py" $out/bin/ecryptfs-helper
   '';
+
+  meta = with stdenv.lib; {
+    description    = "Helper script to create/mount/unemount encrypted directories using eCryptfs without needing root permissions";
+    license        = licenses.gpl2Plus;
+    maintainers    = with maintainers; [ obadz ];
+    platforms      = platforms.linux;
+    hydraPlatforms = [];
+  };
 }
