@@ -3,7 +3,7 @@
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
 , libxml2, libxslt, ncurses, zlib
-, qtbase, qtdeclarative, qtquick1, qtwebkit
+, qtbase, qtdeclarative, qtwebkit
 }:
 
 # this package contains the daemon version of dropbox
@@ -23,11 +23,11 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "4.4.29";
+  version = "6.4.14";
   sha256 =
     {
-      "x86_64-linux" = "1ff01vqi9jiwhkqm81rh321bsz4brl11xal2xzm9gll7s2m8lz06";
-      "i686-linux" = "0lwvvyxy5xyxh0b2g8a9bdy0y2hgpbak4n6q6b30167fvpj1ad1i";
+      "x86_64-linux" = "0wpdib3jf5bq4k8q5xv9g01fdcfjb4l903xjxn32rjw615s1q8bg";
+      "i686-linux" = "1lgc7ryp2mn230cfsbndn9ss71l378kib0lvs89rkn25d5zfgzn4";
     }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch =
@@ -45,7 +45,7 @@ let
       libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
       ncurses zlib
 
-      qtbase qtdeclarative qtquick1 qtwebkit
+      qtbase qtdeclarative qtwebkit
     ];
 
   desktopItem = makeDesktopItem {
