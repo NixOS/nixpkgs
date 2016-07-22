@@ -1,19 +1,19 @@
 { fetchurl, stdenv, m4, glibc, gtk3, libexif, libgphoto2, libsoup, libxml2, vala, sqlite
 , webkitgtk, pkgconfig, gnome3, gst_all_1, which, udev, libgudev, libraw, glib, json_glib
 , gettext, desktop_file_utils, lcms2, gdk_pixbuf, librsvg, makeWrapper
-, gnome_doc_utils, hicolor_icon_theme }:
+, gnome_doc_utils, hicolor_icon_theme, itstool }:
 
 # for dependencies see http://www.yorba.org/projects/shotwell/install/
 
 stdenv.mkDerivation rec {
   version = "${major}.${minor}";
   major = "0.23";
-  minor = "2";
+  minor = "4";
   name = "shotwell-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${major}/${name}.tar.xz";
-    sha256 = "d52caae4e3204f2f78e2eb828d955848ea6fef5c91d3ac6e9eb0b185c0490b39";
+    sha256 = "1hnl0lxibklmr1cy95ij1b3jgvdsw4zlcja53ngfxvlsi2r2bbxi";
   };
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/glib-2.0 -I${glib.out}/lib/glib-2.0/include";
@@ -22,11 +22,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs .
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/gsettings-schemas/$name
-    mv $out/share/glib-2.0 $out/share/gsettings-schemas/$name/
   '';
 
   preFixup = ''
@@ -42,7 +37,7 @@ stdenv.mkDerivation rec {
                   which udev libgudev gnome3.gexiv2 hicolor_icon_theme
                   libraw json_glib gettext desktop_file_utils glib lcms2 gdk_pixbuf librsvg
                   makeWrapper gnome_doc_utils gnome3.rest
-                  gnome3.defaultIconTheme ];
+                  gnome3.defaultIconTheme itstool ];
 
   meta = with stdenv.lib; {
     description = "Popular photo organizer for the GNOME desktop";
