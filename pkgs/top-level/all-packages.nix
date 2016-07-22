@@ -1411,6 +1411,8 @@ in
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
+
   editres = callPackage ../tools/graphics/editres { };
 
   edit = callPackage ../applications/editors/edit { };
