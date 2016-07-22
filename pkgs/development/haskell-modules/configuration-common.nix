@@ -947,4 +947,8 @@ self: super: {
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
 
+  # Glob depends conditionally on semigroups for GHC < 8
+  Glob = if pkgs.lib.versionAtLeast self.ghc.version "8.0"
+    then super.Glob
+    else addBuildDepend super.Glob self.semigroups;
 }
