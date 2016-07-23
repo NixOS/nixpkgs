@@ -107,6 +107,7 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+    - lambdabot
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
