@@ -9554,6 +9554,8 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  v8_static = lowPrio (self.v8.override { static = true; });
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel {
     libva = libva-full; # also wants libva-{x11,drm,wayland}
   };
