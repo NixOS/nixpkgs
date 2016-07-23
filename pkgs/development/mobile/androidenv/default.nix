@@ -40,20 +40,12 @@ rec {
 
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
-    inherit (pkgs) freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils;
-    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst;
+    inherit (pkgs) zlib glxinfo freetype fontconfig glib gtk atk mesa file alsaLib jdk coreutils libpulseaudio;
+    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp libXtst xkeyboardconfig;
     
     inherit platformTools buildTools support supportRepository platforms sysimages addons;
     
     stdenv_32bit = pkgs_i686.stdenv;
-    zlib_32bit = pkgs_i686.zlib;
-    libX11_32bit = pkgs_i686.xorg.libX11;
-    libxcb_32bit = pkgs_i686.xorg.libxcb;
-    libXau_32bit = pkgs_i686.xorg.libXau;
-    libXdmcp_32bit = pkgs_i686.xorg.libXdmcp;
-    libXext_32bit = pkgs_i686.xorg.libXext;
-    mesa_32bit = pkgs_i686.mesa;
-    alsaLib_32bit = pkgs_i686.alsaLib;
   };
   
   androidsdk_2_1 = androidsdk {
