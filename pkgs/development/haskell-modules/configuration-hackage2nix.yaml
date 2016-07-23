@@ -1524,7 +1524,6 @@ dont-distribute-packages:
   ghc-generic-instances:                        [ i686-linux, x86_64-linux ]
   ghc-heap-view:                                [ i686-linux, x86_64-linux ]
   ghc-imported-from:                            [ i686-linux, x86_64-linux ]
-  ghc-mod:                                      [ i686-linux, x86_64-linux ]
   ghc-parser:                                   [ i686-linux, x86_64-linux ]
   ghc-pkg-autofix:                              [ i686-linux, x86_64-linux ]
   ghc-pkg-lib:                                  [ i686-linux, x86_64-linux ]
