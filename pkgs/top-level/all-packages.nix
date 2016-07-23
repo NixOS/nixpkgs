@@ -1,3 +1,10 @@
+/* The top-level package collection of nixpkgs.
+ * It is sorted by categories corresponding to the folder names
+ * in the /pkgs folder. Inside the categories packages are roughly
+ * sorted by alphabet, but strict sorting has been long lost due
+ * to merges. Please use the full-text search of your editor. ;)
+ * Hint: ### starts category names.
+ */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
 , pkgsWithOverrides
 , ... }:
