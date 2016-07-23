@@ -13972,6 +13972,8 @@ in
      stdenv = stdenv_32bit;
   };
 
+  pluginUtils = callPackage ../applications/audio/pluginUtils { };
+
   shotcut = qt5.callPackage ../applications/video/shotcut { };
 
   smplayer = qt5.callPackage ../applications/video/smplayer { };
