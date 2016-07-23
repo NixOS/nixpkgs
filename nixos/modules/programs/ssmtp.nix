@@ -129,7 +129,7 @@ in
 
     environment.systemPackages = [pkgs.ssmtp];
     
-    services.mail.sendmailSetuidWrapper = mkIf networking.defaultMailServer.setSendmail {
+    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail {
       program = "sendmail";
       source = "${pkgs.ssmtp}/bin/sendmail";
       setuid = false;
