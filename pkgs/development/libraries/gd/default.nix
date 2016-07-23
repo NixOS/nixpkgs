@@ -8,7 +8,6 @@
 , libXpm ? null
 , fontconfig
 , freetype
-, fetchpatch, autoreconfHook, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -23,8 +22,7 @@ stdenv.mkDerivation rec {
   # -pthread gets passed to clang, causing warnings
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ autoreconfHook perl ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 
