@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       --replace "/sbin/gradm_pam" "$out/bin/gradm_pam"
 
     echo 'inherit-learn /nix/store' >>learn_config
+
+    mkdir -p "$out/etc/udev/rules.d"
   '';
 
   postInstall = ''rmdir $out/dev'';
