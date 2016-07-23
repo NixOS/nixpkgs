@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.5.48";
+  version = "5.5.50";
 
   src = fetchurl {
     url = "http://downloads.mysql.com/archives/get/file/${name}.tar.gz";
-    sha256 = "10fpzvf6hxvqgaq8paiz8fvhcbbs4qnzqw0svq40bvlyhx2qfgyc";
+    sha256 = "0lgr6badwnwbrzm6sbll4a25m02xfy85v4q6q0rq5cdjn745bb2y";
   };
 
   patches = if stdenv.isCygwin then [
