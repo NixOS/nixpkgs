@@ -13693,6 +13693,8 @@ in
 
   lmms = callPackage ../applications/audio/lmms { };
 
+  lowShelfComp = callPackage ../applications/audio/lowShelfComp { };
+
   loxodo = callPackage ../applications/misc/loxodo { };
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
