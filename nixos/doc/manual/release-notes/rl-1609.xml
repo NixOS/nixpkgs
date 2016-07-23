@@ -39,6 +39,9 @@ following incompatible changes:</para>
     <command>start</command>, <command>stop</command>,
     <command>restart</command>, <command>status</command>.</para>
   </listitem>
+  <listitem>
+    <para>mutableUsers has been renamed to onlyDeclarative, and consequently the default has gone from true to false</para>
+  </listitem>
 </itemizedlist>
 
 

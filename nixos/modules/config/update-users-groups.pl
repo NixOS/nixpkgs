@@ -107,7 +107,7 @@ foreach my $g (@{$spec->{groups}}) {
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
-        if ($spec->{mutableUsers}) {
+        if (!$spec->{onlyDeclarative}) {
             # Merge in non-declarative group members.
             foreach my $uname (split /,/, $existing->{members} // "") {
                 $members{$uname} = 1 if !defined $declUsers{$uname};
@@ -129,7 +129,7 @@ write_file($declGroupsFile, { binmode => ':utf8' }, join(" ", sort(keys %groupsO
 foreach my $name (keys %groupsCur) {
     my $g = $groupsCur{$name};
     next if defined $groupsOut{$name};
-    if (!$spec->{mutableUsers} || defined $declGroups{$name}) {
+    if ($spec->{onlyDeclarative} || defined $declGroups{$name}) {
         print STDERR "removing group ‘$name’\n";
     } else {
         $groupsOut{$name} = $g;
@@ -204,7 +204,7 @@ write_file($declUsersFile, { binmode => ':utf8' }, join(" ", sort(keys %usersOut
 foreach my $name (keys %usersCur) {
     my $u = $usersCur{$name};
     next if defined $usersOut{$name};
-    if (!$spec->{mutableUsers} || defined $declUsers{$name}) {
+    if ($spec->{onlyDeclarative} || defined $declUsers{$name}) {
         print STDERR "removing user ‘$name’\n";
     } else {
         $usersOut{$name} = $u;
@@ -228,8 +228,8 @@ foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow") : ()) {
     my ($name, $hashedPassword, @rest) = split(':', $line, -9);
     my $u = $usersOut{$name};;
     next if !defined $u;
-    $hashedPassword = "!" if !$spec->{mutableUsers};
-    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    $hashedPassword = "!" if $spec->{onlyDeclarative};
+    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && $spec->{onlyDeclarative}; # FIXME
     push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
     $shadowSeen{$name} = 1;
 }
