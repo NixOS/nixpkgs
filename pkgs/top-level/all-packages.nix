@@ -17478,6 +17478,10 @@ in
     qt = qt4;
   };
 
+  yadm = callPackage ../applications/version-management/yadm {
+    git = gitMinimal;
+  };
+
   yafc = callPackage ../applications/networking/yafc { };
 
   yamdi = callPackage ../tools/video/yamdi { };
