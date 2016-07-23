@@ -4,14 +4,14 @@
 let
   # Always get the information from 
   # https://github.com/coreos/rkt/blob/v${VERSION}/stage1/usr_from_coreos/coreos-common.mk
-  coreosImageRelease = "1068.0.0";
+  coreosImageRelease = "1097.0.0";
   coreosImageSystemdVersion = "229";
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" ];
 
 in stdenv.mkDerivation rec {
-  version = "1.10.1";
+  version = "1.11.0";
   name = "rkt-${version}";
   BUILDDIR="build-${name}";
 
@@ -19,12 +19,12 @@ in stdenv.mkDerivation rec {
       rev = "v${version}";
       owner = "coreos";
       repo = "rkt";
-      sha256 = "0hy6b0lyjsh0m1ca7hga31nybrbi9wpf8c59wbzvm1wlnqzsjkqi";
+      sha256 = "05lm9grckbyjmv1292v00vw4h3nv6r7gmq04zhahcjyw7crx06sv";
   };
 
   stage1BaseImage = fetchurl {
     url = "http://alpha.release.core-os.net/amd64-usr/${coreosImageRelease}/coreos_production_pxe_image.cpio.gz";
-    sha256 = "06jawmjkhrrw9hsk98w5j6pxci17d46mvzbj52pslakacw60pbpp";
+    sha256 = "0dzp0vsjbipx8mcikrc5l7k3qjrg4y7h63r2nx6cycy7qhcmj85a";
   };
 
   buildInputs = [
