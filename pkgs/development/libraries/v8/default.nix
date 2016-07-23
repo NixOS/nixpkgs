@@ -17,35 +17,85 @@ let
   clangFlag = if stdenv.isDarwin then "1" else "0";
 
   deps = {
-    "build/gyp" = fetchgit {
+    "build" = fetchgit {
+      url = "${git_url}/chromium/src/build.git";
+      rev = "2c67d4d74b6b3673228fab191918500a582ef3b0";
+      sha256 = "0jc7hci5yh792pw0ahjfxrk5xzllnlrv9llmwlgcgn2x8x6bn34q";
+    };
+    "tools/gyp" = fetchgit {
       url = "${git_url}/external/gyp.git";
-      rev = "5122240c5e5c4d8da12c543d82b03d6089eb77c5";
-      sha256 = "0mdrrhmfl4jrdmfrxmg7ywhdf9c7gv2x08fiq955fs9z8kvxqgdx";
+      rev = "e7079f0e0e14108ab0dba58728ff219637458563";
+      sha256 = "0yd1ds13z0r9d2sb67f9i1gjn1zgzwyfv96qqqp6pn5pcfbialg6";
     };
     "third_party/icu" = fetchgit {
       url = "${git_url}/chromium/deps/icu.git";
-      rev = "c81a1a3989c3b66fa323e9a6ee7418d7c08297af";
-      sha256 = "0xrhig85vpw9hqjrhkxsr69m2xnig2bwmjhylzffrwz0783l7yhw";
+      rev = "b5ecbb29a26532f72ef482569b223d5a51fd50bf";
+      sha256 = "0ld47wdnk8grcba221z67l3pnphv9zwifk4y44f5b946w3iwmpns";
     };
     "buildtools" = fetchgit {
       url = "${git_url}/chromium/buildtools.git";
-      rev = "ecc8e253abac3b6186a97573871a084f4c0ca3ae";
-      sha256 = "1ccfnj3dp4i0z2bj09zy8aa4x749id6h058qa330li368417jwci";
+      rev = "60f7f9a8b421ebf9a46041dfa2ff11c0fe59c582";
+      sha256 = "0i10bw7yhslklqwcx5krs3k05sicb73cpwd0mkaz96yxsvmkvjq0";
+    };
+    "base/trace_event/common" = fetchgit {
+      url = "${git_url}/chromium/src/base/trace_event/common.git";
+      rev = "315bf1e2d45be7d53346c31cfcc37424a32c30c8";
+      sha256 = "1pp2ygvp20j6g4868hrmiw0j704kdvsi9d9wx2gbk7w79rc36695";
+    };
+    "platform/inspector_protocol" = fetchgit {
+      url = "${git_url}/chromium/src/third_party/WebKit/Source/platform/inspector_protocol.git";
+      rev = "f49542089820a34a9a6e33264e09b73779407512";
+      sha256 = "1lwpass3p4rpp2kjmxxxpkqyv4lznxhf4i0yy7mmrd7jkpc7kn8k";
+    };
+    "tools/mb" = fetchgit {
+      url = "${git_url}/chromium/src/tools/mb.git";
+      rev = "0c4dc43c454f26936ddf3074ab8e9a41e3dc03a3";
+      sha256 = "0f96qphbmwn1pprv0a6xf68p01s1jzx2sz6pmadqbrs1dgh1xwnk";
+    };
+    "tools/swarming_client" = fetchgit {
+      url = "${git_url}/external/swarming.client.git";
+      rev = "7f63a272f7d9785ce41b6d10bb3106c49a968e57";
+      sha256 = "1pmb8bq4qifjf2dzz8c4jdwhlvwgrl9ycjaalcyh1sbh4lx3yvv2";
     };
     "testing/gtest" = fetchgit {
-      url = "${git_url}/external/googletest.git";
-      rev = "23574bf2333f834ff665f894c97bef8a5b33a0a9";
-      sha256 = "1scyrk8d6xrsqma27q0wdrxqfa2n12k8mi9lfbsm5ivim9sr1d75";
+      url = "${git_url}/external/github.com/google/googletest.git";
+      rev = "6f8a66431cb592dad629028a50b3dd418a408c87";
+      sha256 = "0bdba2lr6pg15bla9600zg0r0vm4lnrx0wqz84p376wfdxra24vw";
     };
     "testing/gmock" = fetchgit {
       url = "${git_url}/external/googlemock.git";
-      rev = "29763965ab52f24565299976b936d1265cb6a271";
-      sha256 = "0n2ajjac7myr5bgqk0x7j8281b4whkzgr1irv5nji9n3xz5i6gz4";
+      rev = "0421b6f358139f02e102c9c332ce19a33faf75be";
+      sha256 = "1xiky4v98maxs8fg1avcd56y0alv3hw8qyrlpd899zgzbq2k10pp";
+    };
+    "test/benchmarks/data" = fetchgit {
+      url = "${git_url}/v8/deps/third_party/benchmarks.git";
+      rev = "05d7188267b4560491ff9155c5ee13e207ecd65f";
+      sha256 = "0ad2ay14bn67d61ks4dmzadfnhkj9bw28r4yjdjjyzck7qbnzchl";
+    };
+    "test/mozilla/data" = fetchgit {
+      url = "${git_url}/v8/deps/third_party/mozilla-tests.git";
+      rev = "f6c578a10ea707b1a8ab0b88943fe5115ce2b9be";
+      sha256 = "0rfdan76yfawqxbwwb35aa57b723j3z9fx5a2w16nls02yk2kqyn";
+    };
+    "test/simdjs/data" = fetchgit {
+      url = "${git_url}/external/github.com/tc39/ecmascript_simd.git";
+      rev = "baf493985cb9ea7cdbd0d68704860a8156de9556";
+      sha256 = "178r0k40a58c1187gfzqz2i6as34l8cliy1g1x870wyy0qcvlq2q";
+    };
+    "test/test262/data" = fetchgit {
+      url = "${git_url}/external/github.com/tc39/test262.git";
+      rev = "88bc7fe7586f161201c5f14f55c9c489f82b1b67";
+      sha256 = "0gc7fmaqrgwb6rl02jnrm3synpwzzg0dfqy3zm386r1qcisl93xs";
+    };
+    "test/test262/harness" = fetchgit {
+      url = "${git_url}/external/github.com/test262-utils/test262-harness-py.git";
+      rev = "cbd968f54f7a95c6556d53ba852292a4c49d11d8";
+      sha256 = "094c3600a4wh1m3fvvlivn290kik1pzzvwabq77lk8bh4jkkv7ki";
     };
     "tools/clang" = fetchgit {
       url = "${git_url}/chromium/src/tools/clang.git";
-      rev = "73ec8804ed395b0886d6edf82a9f33583f4a7902";
-      sha256 = "0p2w4cgj3d4lqa8arss3j86lk0g8zhbbn5pzlcrhy5pl4xphjbk3";
+      rev = "496622ab4aaa5be7e5a9b80617013cb02f45dc87";
+      sha256 = "1gkhk2bzpxwzkirzcqfixxpprbr8mn6rk00krm25daarm3smydmf";
     };
   };
 
@@ -53,7 +103,7 @@ in
 
 stdenv.mkDerivation rec {
   name = "v8-${version}";
-  version = "4.5.107";
+  version = "5.4.232";
 
   inherit doCheck;
 
@@ -61,7 +111,7 @@ stdenv.mkDerivation rec {
     owner = "v8";
     repo = "v8";
     rev = version;
-    sha256 = "0wbzi4rhm4ygsm1k4x0vwfm42z3j8ww6wz7bcvd0m7mqzayn0bw4";
+    sha256 = "1nqxbkz75m8xrjih0sj3f3iqvif4192vxdaxzy8r787rihjwg9nx";
   };
 
   postUnpack = ''
@@ -72,24 +122,21 @@ stdenv.mkDerivation rec {
       '') deps)}
   '';
 
-  # Patches pulled from:
-  # https://github.com/cowboyd/libv8/tree/4.5/patches
-  patches = lib.optional (!doCheck) ./disable-building-tests.patch ++ [
-    ./fPIC-for-static.patch
-    ./build-standalone-static-library.patch
-  ];
+  # Patch based off of:
+  # https://github.com/cowboyd/libv8/tree/v5.1.281.67.0/patches
+  patches = lib.optional (!doCheck) ./libv8-5.4.232.patch;
 
   postPatch = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' build/gyp_v8
-    sed -i 's,/bin/echo,${coreutils}/bin/echo,' build/standalone.gypi
-    sed -i '/CR_CLANG_REVISION/ d' build/standalone.gypi
-    sed -i 's/-Wno-format-pedantic//g' build/standalone.gypi
+    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,' gypfiles/gyp_v8
+    sed -i 's,/bin/echo,${coreutils}/bin/echo,' gypfiles/standalone.gypi
+    sed -i '/CR_CLANG_REVISION/ d' gypfiles/standalone.gypi
+    sed -i 's/-Wno-format-pedantic//g' gypfiles/standalone.gypi
   '';
 
   configurePhase = ''
     PYTHONPATH="tools/generate_shim_headers:$PYTHONPATH" \
     PYTHONPATH="$(toPythonPath ${gyp}):$PYTHONPATH" \
-      build/gyp_v8 \
+      gypfiles/gyp_v8 \
         -f make \
         --generator-output="out" \
         -Dflock_index=0 \
