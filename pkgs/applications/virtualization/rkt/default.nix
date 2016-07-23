@@ -9,6 +9,7 @@ let
 
   # TODO: track https://github.com/coreos/rkt/issues/1758 to allow "host" flavor.
   stage1Flavours = [ "coreos" "fly" ];
+  stage1Dir = "lib/rkt/stage1-images";
 
 in stdenv.mkDerivation rec {
   version = "1.11.0";
@@ -41,6 +42,7 @@ in stdenv.mkDerivation rec {
       --with-coreos-local-pxe-image-path=${stage1BaseImage}
       --with-coreos-local-pxe-image-systemd-version=v${coreosImageSystemdVersion}
       " else "" }
+      --with-stage1-default-location=$out/${stage1Dir}/stage1-${builtins.elemAt stage1Flavours 0}.aci
     );
   '';
 
@@ -53,7 +55,7 @@ in stdenv.mkDerivation rec {
     cp -Rv $BUILDDIR/target/bin/rkt $out/bin
 
     mkdir -p $out/lib/rkt/stage1-images/
-    cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/lib/rkt/stage1-images/
+    cp -Rv $BUILDDIR/target/bin/stage1-*.aci $out/${stage1Dir}/
 
     wrapProgram $out/bin/rkt \
       --prefix LD_LIBRARY_PATH : ${systemd}/lib \
