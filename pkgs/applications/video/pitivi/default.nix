@@ -30,18 +30,6 @@ in stdenv.mkDerivation rec {
     sha256 = "115d37mvi32yds8gqj2yidkk6pap7szavhjf2hw0388ynydlc2zs";
   };
 
-  meta = with stdenv.lib; {
-    description = "Non-Linear video editor utilizing the power of GStreamer";
-    homepage    = "http://pitivi.org/";
-    longDescription = ''
-      Pitivi is a video editor built upon the GStreamer Editing Services.
-      It aims to be an intuitive and flexible application
-      that can appeal to newbies and professionals alike.
-    '';
-    license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
-  };
-
   nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
 
   buildInputs = [
@@ -57,4 +45,16 @@ in stdenv.mkDerivation rec {
     python pygobject3 gst-python pyxdg numpy pycairo sqlite3 matplotlib
     dbus
   ]);
+
+  meta = with stdenv.lib; {
+    description = "Non-Linear video editor utilizing the power of GStreamer";
+    homepage    = "http://pitivi.org/";
+    longDescription = ''
+      Pitivi is a video editor built upon the GStreamer Editing Services.
+      It aims to be an intuitive and flexible application
+      that can appeal to newbies and professionals alike.
+    '';
+    license     = licenses.lgpl21Plus;
+    platforms   = platforms.linux;
+  };
 }
