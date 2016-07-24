@@ -10472,6 +10472,17 @@ let
       ];
   };
 
+  linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_chromiumos_3_14 = callPackage ../os-specific/linux/kernel/linux-chromiumos-3.14.nix {
     kernelPatches = [ kernelPatches.chromiumos_Kconfig_fix_entries_3_14
                       kernelPatches.chromiumos_mfd_fix_dependency
@@ -10710,7 +10721,7 @@ let
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = pkgs.linuxPackages_4_6;
+  linuxPackages_latest = pkgs.linuxPackages_4_7;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -10725,6 +10736,8 @@ let
   linuxPackages_4_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_4 linuxPackages_4_4);
   linuxPackages_4_5 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_5 linuxPackages_4_5);
   linuxPackages_4_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_6 linuxPackages_4_6);
+  linuxPackages_4_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_7 linuxPackages_4_7);
+
   # Don't forget to update linuxPackages_latest!
   linuxPackages_testing = recurseIntoAttrs (linuxPackagesFor pkgs.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
