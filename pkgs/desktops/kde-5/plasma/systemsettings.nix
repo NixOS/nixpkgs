@@ -14,7 +14,7 @@ plasmaPackage {
   ];
   propagatedBuildInputs = [
     khtml ki18n kio kwindowsystem kitemviews kcmutils kservice kiconthemes
-    kxmlgui kdbusaddons kconfig
+    kxmlgui kdbusaddons kconfig qtquickcontrols
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/systemsettings5"
