@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
+    ./postfix-libressl.patch
   ];
 
   preBuild = ''
