@@ -592,6 +592,8 @@ in
     gnutls = gnutls33;
   };
 
+  blink1-tool = callPackage ../tools/misc/blink1-tool { };
+
   blitz = callPackage ../development/libraries/blitz { };
 
   blockdiag = pythonPackages.blockdiag;
