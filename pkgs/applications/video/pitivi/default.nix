@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, makeWrapper
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, wrapGAppsHook
 , python3Packages, gst, gtk3, hicolor_icon_theme
 , gobjectIntrospection, librsvg, gnome3, libnotify
 # for gst-transcoder:
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     platforms   = platforms.linux;
   };
 
-  nativeBuildInputs = [ pkgconfig intltool itstool makeWrapper ];
+  nativeBuildInputs = [ pkgconfig intltool itstool wrapGAppsHook ];
 
   buildInputs = [
     gobjectIntrospection gtk3 librsvg gnome3.gnome_desktop
@@ -57,12 +57,4 @@ in stdenv.mkDerivation rec {
     python pygobject3 gst-python pyxdg numpy pycairo sqlite3 matplotlib
     dbus
   ]);
-
-  preFixup = ''
-    wrapProgram "$out/bin/pitivi" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$out/share:$GSETTINGS_SCHEMAS_PATH"
-  '';
 }
