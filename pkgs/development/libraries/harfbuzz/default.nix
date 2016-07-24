@@ -38,6 +38,10 @@ stdenv.mkDerivation {
     rm "$out"/lib/libharfbuzz.* "$dev/lib/pkgconfig/harfbuzz.pc"
     ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.la
     ln -s {'${harfbuzz.dev}',"$dev"}/lib/pkgconfig/harfbuzz.pc
+    ${optionalString stdenv.isDarwin ''
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.dylib
+      ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
+    ''}
   '';
 
   meta = with stdenv.lib; {
