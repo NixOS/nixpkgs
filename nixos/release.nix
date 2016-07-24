@@ -213,7 +213,6 @@ in rec {
   #tests.gitlab = callTest tests/gitlab.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
-  tests.grsecurity = callTest tests/grsecurity.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
