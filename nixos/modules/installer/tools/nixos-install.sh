@@ -40,6 +40,15 @@ while [ "$#" -gt 0 ]; do
         --root)
             mountPoint="$1"; shift 1
             ;;
+        --closure)
+            closure="$1"; shift 1
+            ;;
+        --dont-copy-channel)
+            dontCopyChannel=1
+            ;;
+        --dont-set-root-password)
+            dontSetRootPassword=1
+            ;;
         --show-trace)
             extraBuildFlags+=("$i")
             ;;
@@ -111,7 +120,7 @@ if test -z "$NIXOS_CONFIG"; then
     NIXOS_CONFIG=/etc/nixos/configuration.nix
 fi
 
-if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
+if [ ! -e "$mountPoint/$NIXOS_CONFIG" ] && [ -z "$closure" ]; then
     echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
     exit 1
 fi
@@ -203,13 +212,18 @@ done
 # Get the absolute path to the NixOS/Nixpkgs sources.
 nixpkgs="$(readlink -f $(nix-instantiate --find-file nixpkgs))"
 
+if [ -z "$closure" ]; then
+    nixEnvAction="-A system"
+else
+    nixEnvAction="$closure"
+fi
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
 NIX_PATH="nixpkgs=/tmp/root/$nixpkgs:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
-    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixpkgs/nixos>' --set -A system
+    "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixpkgs/nixos>' --set $nixEnvAction
 
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
@@ -218,7 +232,7 @@ mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
 mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
 mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
 srcs=$(nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")
-if test -n "$srcs"; then
+if [ -z "$dontCopyChannel" ] && [ -n "$srcs" ]; then
     echo "copying NixOS/Nixpkgs sources..."
     chroot $mountPoint @nix@/bin/nix-env \
         "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
@@ -253,7 +267,7 @@ chroot $mountPoint /nix/var/nix/profiles/system/activate
 
 
 # Ask the user to set a root password.
-if [ "$(chroot $mountPoint /run/current-system/sw/bin/sh -l -c "nix-instantiate --eval '<nixpkgs/nixos>' -A config.users.mutableUsers")" = true ] && [ -t 0 ] ; then
+if [ -z "$dontSetRootPassword" ] && [ "$(chroot $mountPoint /run/current-system/sw/bin/sh -l -c "nix-instantiate --eval '<nixpkgs/nixos>' -A config.users.mutableUsers")" = true ] && [ -t 0 ] ; then
     echo "setting root password..."
     chroot $mountPoint /var/setuid-wrappers/passwd
 fi
