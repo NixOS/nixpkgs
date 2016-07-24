@@ -1,6 +1,6 @@
 { plasmaPackage, extra-cmake-modules, kdoctools, kitemviews
 , kcmutils, ki18n, kio, kservice, kiconthemes, kwindowsystem
-, kxmlgui, kdbusaddons, kconfig, khtml, makeQtWrapper
+, kxmlgui, kdbusaddons, kconfig, khtml, makeQtWrapper, qt5
 }:
 
 plasmaPackage {
@@ -14,7 +14,7 @@ plasmaPackage {
   ];
   propagatedBuildInputs = [
     khtml ki18n kio kwindowsystem kitemviews kcmutils kservice kiconthemes
-    kxmlgui kdbusaddons kconfig
+    kxmlgui kdbusaddons kconfig qt5.qtquickcontrols
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/systemsettings5"
