@@ -739,6 +739,8 @@ in
 
   dialog = callPackage ../development/tools/misc/dialog { };
 
+  dibbler = callPackage ../tools/networking/dibbler { };
+
   ding = callPackage ../applications/misc/ding {
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
