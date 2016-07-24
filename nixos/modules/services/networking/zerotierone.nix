@@ -26,6 +26,10 @@ in
         KillMode = "process";
       };
     };
-  environment.systemPackages = [ pkgs.zerotierone ];
+
+    # ZeroTier does not issue DHCP leases, but some strangers might...
+    networking.dhcpcd.denyInterfaces = [ "zt0" ];
+
+    environment.systemPackages = [ pkgs.zerotierone ];
   };
 }

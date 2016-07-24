@@ -270,6 +270,9 @@
       toxvpn = 247;
       squeezelite = 248;
       turnserver = 249;
+      smokeping = 250;
+      gocd-agent = 251;
+      gocd-server = 252;
 
       prometheus = 999;
 
@@ -512,6 +515,9 @@
       #toxvpn = 247; # unused
       #squeezelite = 248; #unused
       turnserver = 249;
+      smokeping = 250;
+      gocd-agent = 251;
+      gocd-server = 252;
 
       prometheus = 999;
 

@@ -10,7 +10,6 @@ import ./make-test.nix ({ pkgs, ...} : {
 
       {
         services.mysql.enable = true;
-        services.mysql.replication.role = "master";
         services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
         services.mysql.package = pkgs.mysql;
       };

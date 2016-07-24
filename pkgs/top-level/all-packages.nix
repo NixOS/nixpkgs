@@ -1,3 +1,10 @@
+/* The top-level package collection of nixpkgs.
+ * It is sorted by categories corresponding to the folder names
+ * in the /pkgs folder. Inside the categories packages are roughly
+ * sorted by alphabet, but strict sorting has been long lost due
+ * to merges. Please use the full-text search of your editor. ;)
+ * Hint: ### starts category names.
+ */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
 , pkgsWithOverrides
 , ... }:
@@ -409,11 +416,12 @@ in
 
   arduino-core = callPackage ../development/arduino/arduino-core {
     jdk = jdk;
-    jre = jdk;
     withGui = false;
   };
 
   apitrace = qt55.callPackage ../applications/graphics/apitrace {};
+
+  argtable = callPackage ../tools/misc/argtable {};
 
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
@@ -517,9 +525,7 @@ in
 
   at = callPackage ../tools/system/at { };
 
-  atftp = callPackage ../tools/networking/atftp {
-    gcc = gcc49;
-  };
+  atftp = callPackage ../tools/networking/atftp { };
 
   autogen = callPackage ../development/tools/misc/autogen { };
 
@@ -926,7 +932,7 @@ in
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid;
+      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -1049,6 +1055,8 @@ in
   conspy = callPackage ../os-specific/linux/conspy {};
 
   connman = callPackage ../tools/networking/connman { };
+
+  connman-notify = callPackage ../tools/networking/connman-notify { };
 
   connmanui = callPackage ../tools/networking/connmanui { };
 
@@ -1410,6 +1418,8 @@ in
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
+
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
 
   editres = callPackage ../tools/graphics/editres { };
 
@@ -2135,6 +2145,8 @@ in
 
   jing = callPackage ../tools/text/xml/jing { };
 
+  jmespath = callPackage ../development/tools/jmespath { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
@@ -2142,6 +2154,8 @@ in
   john = callPackage ../tools/security/john {
     gcc = gcc49; # doesn't build with gcc5
   };
+
+  jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
@@ -2194,6 +2208,8 @@ in
   leocad = callPackage ../applications/graphics/leocad { };
 
   less = callPackage ../tools/misc/less { };
+
+  libcpuid = callPackage ../tools/misc/libcpuid { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
@@ -2526,6 +2542,8 @@ in
   megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
+
+  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   mfcuk = callPackage ../tools/security/mfcuk { };
 
@@ -3466,6 +3484,8 @@ in
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
 
@@ -5326,6 +5346,11 @@ in
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
+    ppx_blob =
+      if lib.versionAtLeast ocaml_version "4.02"
+      then callPackage ../development/ocaml-modules/ppx_blob {}
+      else null;
+
     ppx_tools =
       if lib.versionAtLeast ocaml_version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
@@ -5629,6 +5654,21 @@ in
     javacSupport = true;
   };
   erlangR18_odbc_javac = callPackage ../development/interpreters/erlang/R18.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    javacSupport = true; odbcSupport = true;
+  };
+  erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+  erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
+  erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+      javacSupport = true;
+  };
+  erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     javacSupport = true; odbcSupport = true;
   };
@@ -6347,6 +6387,10 @@ in
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
+  gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
+  
+  gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
+  
   gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
@@ -7647,6 +7691,8 @@ in
 
   jsoncpp = callPackage ../development/libraries/jsoncpp { };
 
+  jsoncpp_1_6_5 = callPackage ../development/libraries/jsoncpp/1.6.5 { };
+
   jsonnet = callPackage ../development/compilers/jsonnet { };
 
   libjson = callPackage ../development/libraries/libjson { };
@@ -8179,6 +8225,8 @@ in
   libjreen = callPackage ../development/libraries/libjreen { };
 
   libjson_rpc_cpp = callPackage ../development/libraries/libjson-rpc-cpp { };
+
+  libjson_rpc_cpp_0_2_1 = callPackage ../development/libraries/libjson-rpc-cpp/0.2.1 { };
 
   libkate = callPackage ../development/libraries/libkate { };
 
@@ -9164,6 +9212,8 @@ in
 
   rote = callPackage ../development/libraries/rote { };
 
+  ronn = callPackage ../development/tools/ronn { };
+
   rubberband = callPackage ../development/libraries/rubberband {
     inherit (vamp) vampSDK;
   };
@@ -9365,6 +9415,8 @@ in
   tcllib = callPackage ../development/libraries/tcllib { };
 
   tcltls = callPackage ../development/libraries/tcltls { };
+
+  tclx = callPackage ../development/libraries/tclx { };
 
   ntdb = callPackage ../development/libraries/ntdb {
     python = python2;
@@ -10146,6 +10198,8 @@ in
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+  gofish = callPackage ../servers/gopher/gofish { };
+
   grafana = (callPackage ../servers/monitoring/grafana { }).bin // { outputs = ["bin"]; };
 
   groovebasin = callPackage ../applications/audio/groovebasin { nodejs = nodejs-0_10; };
@@ -10310,7 +10364,7 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
+  influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -10525,6 +10579,8 @@ in
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
   torque = callPackage ../servers/computing/torque { };
+
+  tt-rss = callPackage ../servers/tt-rss { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
@@ -11774,8 +11830,6 @@ in
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  wrapFonts = paths : (callPackage ../data/fonts/fontWrap { inherit paths; });
-
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
@@ -12034,7 +12088,7 @@ in
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
-  ucsFonts = callPackage ../data/fonts/ucs-fonts { };
+  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
 
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
@@ -12184,6 +12238,8 @@ in
   } );
   bitcoin = self.altcoins.bitcoin;
   bitcoin-xt = self.altcoins.bitcoin-xt;
+
+  go-ethereum = self.altcoins.go-ethereum;
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
@@ -12435,6 +12491,16 @@ in
   conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
   conkeror = self.wrapFirefox conkeror-unwrapped { };
 
+  cpp_ethereum = callPackage ../applications/misc/webthree-umbrella {
+    withOpenCL = true;
+
+    # withEVMJIT = true;
+    # inherit (pkgs.llvmPackages_38) llvm;
+
+    # withGUI = true;
+    # inherit (pkgs.qt5) qtwebengine qtbase qtdeclarative;
+  };
+
   csdp = callPackage ../applications/science/math/csdp {
     liblapack = liblapackWithoutAtlas;
   };
@@ -12553,6 +12619,10 @@ in
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = config.dwm.patches or [];
+  };
+
+  evilwm = callPackage ../applications/window-managers/evilwm {
+    patches = config.evilwm.patches or [];
   };
 
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
@@ -12845,6 +12915,8 @@ in
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
+
+  exrtools = callPackage ../applications/graphics/exrtools { };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
@@ -13305,6 +13377,8 @@ in
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
 
+  i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
+
   i3cat = callPackage ../tools/misc/i3cat { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
@@ -13647,6 +13721,8 @@ in
   makeself = callPackage ../applications/misc/makeself { };
 
   marathon = callPackage ../applications/networking/cluster/marathon { };
+
+  marp = callPackage ../applications/office/marp { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
@@ -14122,9 +14198,13 @@ in
 
   pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
+  pidginosd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
+
   pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
   pidginwindowmerge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
+
+  purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
@@ -16832,6 +16912,10 @@ in
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
+    libusb = libusb1;
+  };
+
   darcnes = callPackage ../misc/emulators/darcnes { };
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
@@ -17139,6 +17223,13 @@ in
   seafile-shared = callPackage ../misc/seafile-shared { };
 
   slock = callPackage ../misc/screensavers/slock { };
+
+  smokeping = callPackage ../tools/networking/smokeping {
+    inherit fping rrdtool;
+    inherit (perlPackages)
+      FCGI CGI CGIFast ConfigGrammar DigestHMAC NetTelnet
+      NetOpenSSH NetSNMP LWP IOTty perl NetDNS NetLDAP;
+  };
 
   snapraid = callPackage ../tools/filesystems/snapraid { };
 

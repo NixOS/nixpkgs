@@ -11,16 +11,16 @@ with { inherit (stdenv.lib) makeLibraryPath; };
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "24.4";
+  version = "24.4.1";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-linux.tgz";
-      sha1 = "eec87cdb9778718e4073b4ca326a46cdd084f901";
+      sha1 = "dlr6346lpmxdb8pmryn4xl7py1hb6nvj";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/android-sdk_r${version}-macosx.zip";
-      sha1 = "a9b6f025a9691aef430b19b52e01844dbbcbf6b4";
+      sha1 = "rm03hm87f7qcadb3c4gnz7hz1g5wrac5";
     }
     else throw "platform not ${stdenv.system} supported!";
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
         do
             wrapProgram `pwd`/$i \
               --prefix PATH : ${file}/bin \
-              --suffix LD_LIBRARY_PATH : `pwd`/lib:${makeLibraryPath [ libX11 libxcb libXau libXdmcp libXext mesa alsaLib]}
+              --suffix LD_LIBRARY_PATH : `pwd`/lib64:${makeLibraryPath [ libX11 libxcb libXau libXdmcp libXext mesa alsaLib ]}
         done
       ''}
     ''}

@@ -8223,13 +8223,13 @@ in modules // {
   };
 
   py3status = buildPythonPackage rec {
-    version = "2.9";
+    version = "3.0";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "1nvdqwhgk0zff5kspgrh5c5vg1vdnz6gpjplbqi3nz41qws48f1y";
+      sha256 = "1mnl0rfbnimcpp7q9hva0x9jfa58j4nc27r9kvaii8869kzssw48";
     };
     propagatedBuildInputs = with self; [ requests2 ];
     prePatch = ''
@@ -10479,11 +10479,11 @@ in modules // {
 
   futures = buildPythonPackage rec {
     name = "futures-${version}";
-    version = "3.0.4";
+    version = "3.0.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/futures/${name}.tar.gz";
-      sha256 = "19485d83f7bd2151c0aeaf88fbba3ee50dadfb222ffc3b66a344ef4952b782a3";
+      sha256 = "1pw1z4329xvlabdpwqa6b7v2fxf7hl64m4cgr22ckbym8m8m4hh5";
     };
 
     # This module is for backporting functionality to Python 2.x, it's builtin in py3k
@@ -21067,10 +21067,10 @@ in modules // {
   };
 
   selenium = buildPythonPackage rec {
-    name = "selenium-2.44.0";
+    name = "selenium-2.52.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/selenium/${name}.tar.gz";
-      sha256 = "0l70pqwg88imbylcd831vg8nj8ipy4zr331f6qjccss7vn56i2h5";
+      sha256 = "0971rd9b8kb97xp9fvrwzvxr8vqfdjc020cs75n787ya82km01c2";
     };
 
     buildInputs = with self; [pkgs.xorg.libX11];
@@ -21081,8 +21081,8 @@ in modules // {
       pkgs.fetchFromGitHub {
         owner = "SeleniumHQ";
         repo = "selenium";
-        rev = "selenium-2.44.0";
-        sha256 = "13aqm0dwy17ghimy7m2mxjwlyc1k7zk5icxzrs1sa896056f1dyy";
+        rev = "selenium-2.52.0";
+        sha256 = "1n58akim9np2jy22jfgichq1ckvm8gglqi2hn3syphh0jjqq6cfx";
       };
 
     patchPhase = ''
@@ -23238,6 +23238,29 @@ in modules // {
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tqdm/${name}.tar.gz";
       sha256 = "f12d792685f779e8754e623aff1a25a93b98a90457e3a2b7eb89b4401c2c239e";
+    };
+
+    buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
+    propagatedBuildInputs = with self; [ matplotlib pandas ];
+
+    LC_ALL="en_US.UTF-8";
+
+    doCheck = false; # Many transient failures in performance tests and due to use of sleep
+
+    meta = {
+      description = "A Fast, Extensible Progress Meter";
+      homepage = https://github.com/tqdm/tqdm;
+      license = with licenses; [ mit ];
+    };
+  };
+
+  tqdm4 = buildPythonPackage rec {
+    name = "tqdm-${version}";
+    version = "4.7.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tqdm/${name}.tar.gz";
+      sha256 = "1z801zl1y3cf6ixzw4jlpkbp9a9j92sqzs35l0jaqfq00aj1bdm0";
     };
 
     buildInputs = with self; [ nose coverage pkgs.glibcLocales flake8 ];
@@ -27300,6 +27323,27 @@ in modules // {
     };
   };
 
+  jenkinsapi = buildPythonPackage rec {
+    name = "jenkinsapi-${version}";
+    version = "0.2.32";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/j/jenkinsapi/${name}.tar.gz";
+      sha256 = "0fcc78b8dfc87237942aad2a8be54dbc08bc4afceaa7f6897f3d894e7d4bfd22";
+    };
+
+    propagatedBuildInputs = with self; [ pytz requests2 ];
+
+    buildInputs = with self; [ coverage mock nose unittest2 ];
+
+    meta = {
+      description = "A Python API for accessing resources on a Jenkins continuous-integration server";
+      homepage = https://github.com/salimfadhley/jenkinsapi;
+      maintainers = with maintainers; [ drets ];
+      license = licenses.mit;
+    };
+  };
+
   jenkins-job-builder = buildPythonPackage rec {
     name = "jenkins-job-builder-1.4.0";
     disabled = ! (isPy26 || isPy27);
@@ -28780,4 +28824,46 @@ in modules // {
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 
+  smugpy = buildPythonPackage rec {
+    name    = pname + "-" + version;
+    pname   = "smugpy";
+    version = "20131218";
+
+    src = pkgs.fetchFromGitHub {
+      owner  = "chrishoffman";
+      repo   = pname;
+      rev    = "f698d6749ce446e3d6c7d925b2cd1cd5b3d695ea";
+      sha256 = "029x6hm1744iznv4sw8sfyl974wmx1sqnr1k5dvzzwpk3ja49a1y";
+    };
+
+    doCheck = false; # Tries to login to Smugmug…
+
+    propagatedBuildInputs = with self; [ ];
+  };
+
+  smugline = stdenv.mkDerivation rec {
+    name    = pname + "-" + version;
+    pname   = "smugline";
+    version = "20160106";
+
+    src = pkgs.fetchFromGitHub {
+      owner  = "gingerlime";
+      repo   = pname;
+      rev    = "134554c574c2d282112ba60165a8c5ffe0f16fd4";
+      sha256 = "00n012ijkdrx8wsl8x3ghdcxcdp29s4kwr3yxvlyj79g5yhfvaj6";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    buildInputs = [ python pkgs.makeWrapper ];
+
+    propagatedBuildInputs = with self; [ docopt requests2 smugpy ];
+
+    installPhase = ''
+      mkdir -p $out/bin $out/libexec
+      cp smugline.py $out/libexec
+      makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
+        --prefix PYTHONPATH : "$PYTHONPATH"
+    '';
+  };
 }

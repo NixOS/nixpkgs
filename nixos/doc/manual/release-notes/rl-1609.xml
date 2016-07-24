@@ -45,9 +45,14 @@ following incompatible changes:</para>
 <para>Other notable improvements:</para>
 
 <itemizedlist>
-  <listitem>
-    <para>todo</para>
-  </listitem>
+
+  <listitem><para>Revamped grsecurity/PaX support.  There is now only a single
+  general-purpose distribution kernel and the configuration interface has been
+  streamlined.  Desktop users should be able to simply set
+  <programlisting>security.grsecurity.enable = true</programlisting> to get
+  a reasonably secure system without having to sacrifice too much
+  functionality.  See <xref linkend="sec-grsecurity" /> for documentation
+  </para></listitem>
 
 </itemizedlist>
 

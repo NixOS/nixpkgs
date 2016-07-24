@@ -49,6 +49,7 @@ let
   clientConf = writeText "client.conf" ''
     autospawn=${if nonSystemWide then "yes" else "no"}
     ${optionalString nonSystemWide "daemon-binary=${binary}"}
+    ${cfg.extraClientConf}
   '';
 
   # Write an /etc/asound.conf that causes all ALSA applications to
@@ -115,6 +116,14 @@ in {
           The path to the configuration the PulseAudio server
           should use. By default, the "default.pa" configuration
           from the PulseAudio distribution is used.
+        '';
+      };
+
+      extraClientConf = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Extra configuration appended to pulse/client.conf file.
         '';
       };
 

@@ -9,29 +9,10 @@
 }:
 
 let
-  /* Find the index of the first element in the list matching the specified
-     predicate or returns null if no such element exists.
-
-     Example:
-       findFirstIndex (x: x > 3) [ 1 6 4 ]
-       => 1
-  */
-  findFirstIndex = pred: list:
-    # Poor man's Either via a list.
-    let searchFun = old: curr:
-          if lib.isList old then old
-            else if pred curr then [old]
-            else old + 1;
-        res = lib.foldl searchFun 0 list;
-    in if lib.isList res then lib.elemAt res 0 else null;
-
-  extractVersion = ver:
-    let suffix = findFirstIndex (x: x == "-") (lib.stringToCharacters ver);
-    in if suffix == null then ver else lib.substring 0 suffix ver;
-
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
   packagedQt = "5.6.0";
-  systemQt = extractVersion qtbase.version;
+  # Hacky: split "1.2.3-4" into "1.2.3" and "4"
+  systemQt = (builtins.parseDrvName qtbase.version).name;
 
 in stdenv.mkDerivation rec {
   name = "telegram-desktop-${version}";

@@ -84,6 +84,7 @@
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
+  ./programs/xonsh.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme.nix
@@ -130,6 +131,8 @@
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
+  ./services/continuous-integration/gocd-agent/default.nix
+  ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
   ./services/continuous-integration/jenkins/slave.nix
@@ -398,6 +401,7 @@
   ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
+  ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
@@ -462,6 +466,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/web-apps/pump.io.nix
+  ./services/web-apps/tt-rss.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/confluence.nix
@@ -472,7 +477,7 @@
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
   ./services/web-servers/nginx/default.nix
-  ./services/web-servers/phpfpm.nix
+  ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/uwsgi.nix
