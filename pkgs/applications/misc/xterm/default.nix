@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     "--enable-doublechars"
     "--enable-luit"
     "--enable-mini-luit"
-    "--enable-dec-locator"
     "--with-tty-group=tty"
   ];
 
