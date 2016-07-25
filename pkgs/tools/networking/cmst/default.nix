@@ -1,16 +1,21 @@
 { stdenv, fetchFromGitHub, qtbase, qmakeHook, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "cmst-2016.01.28";
+  name = "cmst-${version}";
+  version = "2016.04.03";
 
   src = fetchFromGitHub {
-    sha256 = "1zf4jnrnbi05mrq1fnsji5zx60h1knrkr64pwcz2c7q8p59k4646";
-    rev    = name;
-    repo   = "cmst";
-    owner  = "andrew-bibb";
+    repo = "cmst";
+    owner = "andrew-bibb";
+    rev = name;
+    sha256 = "1334ynhq1lxcfqln3bq17hy1awyfnn3zhzpsnymlyp0z3h4ydpp9";
   };
 
-  buildInputs = [ qtbase makeWrapper qmakeHook ];
+  nativeBuildInputs = [ makeWrapper qmakeHook ];
+
+  buildInputs = [ qtbase ];
+
+  enableParallelBuilding = true;
 
   preConfigure = ''
     substituteInPlace ./cmst.pro \
