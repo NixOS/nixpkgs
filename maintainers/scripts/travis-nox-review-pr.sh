@@ -44,6 +44,13 @@ while test -n "$1"; do
             nix-shell --packages nixpkgs-lint --run "nixpkgs-lint -f $TRAVIS_BUILD_DIR"
             ;;
 
+        nox)
+            echo "=== Fetching Nox from binary cache"
+
+            # build nox silently so it's not in the log
+            nix-build "<nixpkgs>" -A nox
+            ;;
+
         pr)
             if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
                 echo "=== No pull request found"
@@ -55,7 +62,7 @@ while test -n "$1"; do
                     token="--token $GITHUB_TOKEN"
                 fi
 
-                nix-shell --packages nox git --run "nox-review pr --slug $TRAVIS_REPO_SLUG $token $TRAVIS_PULL_REQUEST"
+                nix-shell --packages nox --run "nox-review pr --slug $TRAVIS_REPO_SLUG $token $TRAVIS_PULL_REQUEST"
             fi
             ;;
 
