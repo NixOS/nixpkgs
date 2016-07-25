@@ -1,7 +1,7 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs
+, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -92,6 +92,11 @@ stdenv.mkDerivation {
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
+      # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+      for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
+          sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
+              "$out/share/gitweb/gitweb.cgi"
+      done
 
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing

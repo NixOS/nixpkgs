@@ -20,6 +20,7 @@ let
       perlPackages.MIMEBase64 perlPackages.AuthenSASL
       perlPackages.DigestHMAC
     ];
+    gitwebPerlLibs = with perlPackages; [ CGI HTMLParser ];
   };
 
 in
