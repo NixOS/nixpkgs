@@ -70,8 +70,14 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
       ${vhosts}
+    }
+    ${optionalString (cfg.httpConfig != "") ''
+    http {
+      include ${cfg.package}/conf/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
       ${cfg.httpConfig}
     }
+    ''}
     ${cfg.appendConfig}
   '';
 
