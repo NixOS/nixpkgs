@@ -6407,9 +6407,9 @@ in
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
-  
+
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
-  
+
   gotty = callPackage ../servers/gotty { };
 
   gradleGen = callPackage ../development/tools/build-managers/gradle { };
@@ -9535,6 +9535,10 @@ in
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
+    inherit (pythonPackages) gyp;
+  };
+
+  v8_3_30_33 = callPackage ../development/libraries/v8/3.30.33.nix {
     inherit (pythonPackages) gyp;
   };
 
