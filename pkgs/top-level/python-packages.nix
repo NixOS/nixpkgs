@@ -17087,15 +17087,16 @@ in modules // {
 
     # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
     preConfigure = let
+      libinclude' = pkg: ''"${pkg.out}/lib", "${pkg.out}/include"'';
       libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
     in ''
       sed -i "setup.py" \
           -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
               s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
               s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude pkgs.libwebp}|g ;
+              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude' pkgs.libwebp}|g ;
               s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
-              s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude pkgs.tcl}|g ;'
+              s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' pkgs.tcl}|g ;'
     ''
     # Remove impurities
     + stdenv.lib.optionalString stdenv.isDarwin ''
