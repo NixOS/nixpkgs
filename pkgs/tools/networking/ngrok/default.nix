@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ stdenv, lib, pkgconfig, buildGoPackage, go-bindata, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "ngrok-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1r4nc9knp0nxg4vglg7v7jbyd1nh1j2590l720ahll8a4fbsx5a4";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   buildInputs = [ go-bindata ];
 

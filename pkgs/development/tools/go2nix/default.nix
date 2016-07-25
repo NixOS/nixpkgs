@@ -1,5 +1,5 @@
 { stdenv, buildGoPackage, go-bindata, goimports, nix-prefetch-git, git, makeWrapper,
-  fetchFromGitHub }:
+  fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "go2nix-${version}";
@@ -15,7 +15,7 @@ buildGoPackage rec {
     sha256 = "10nz7gva3n6wk01wphrjjb31sy33kf9ji03zr849x21a669fnmjf";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   buildInputs = [ go-bindata goimports makeWrapper ];
   preBuild = ''go generate ./...'';

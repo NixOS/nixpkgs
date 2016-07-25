@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, go, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "gotools-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1j51aaskfqc953p5s9naqimr04hzfijm4yczdsiway1xnnvvpfr1";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   preConfigure = ''
     # Make the builtin tools available here

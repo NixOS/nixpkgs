@@ -1,9 +1,0 @@
-[
-  {
-    "include": "../../libs.json",
-    "packages": [
-      "github.com/Masterminds/vcs",
-      "github.com/jawher/mow.cli"
-    ]
-  }
-]

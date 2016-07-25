@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "elvish-${version}";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1xwhjbw0y6j5xy19hz39456l0v6vjg2icd7c1jx4h1cydk3yn39f";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   meta = with stdenv.lib; {
     description = "A Novel unix shell in go language";

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "collectd-exporter-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1p0kb7c8g0r0sp5a6xrx8vnwbw14hhwlqzk4n2xx2y8pvnbivajz";
   };
 
-  goDeps = ./collectd-exporter_deps.json;
+  goDeps = import ./collectd-exporter_deps.nix { inherit fetchgit fetchhg; };
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";

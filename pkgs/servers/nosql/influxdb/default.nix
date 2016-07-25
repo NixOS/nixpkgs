@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub, src, version }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchgit, src, version }:
 
 buildGoPackage rec {
   name = "influxdb-${version}";
@@ -9,9 +9,10 @@ buildGoPackage rec {
   
   inherit src;
 
+  # TODO: `gdm2nix.rb` should produce deps.nix
   # Generated with the `gdm2nix.rb` script and the `Godeps` file from the
   # influxdb repo root.
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   meta = with lib; {
     description = "An open-source distributed time series database";

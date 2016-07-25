@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "sift-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1nb042k420xr6000ipwhqn41vg8jfp6ghq4z7y1sjnndkrhclzm1";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   meta = with lib; {
     description = "sift is a fast and powerful alternative to grep";

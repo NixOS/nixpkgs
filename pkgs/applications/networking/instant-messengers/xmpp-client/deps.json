@@ -1,9 +1,0 @@
-[
-  {
-    "include": "../../libs.json",
-    "packages": [
-      "golang.org/x/crypto",
-      "golang.org/x/net"
-    ]
-  }
-]

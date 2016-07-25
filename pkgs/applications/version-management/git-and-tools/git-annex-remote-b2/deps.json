@@ -1,9 +1,0 @@
-[
-  {
-    "include": "../../libs.json",
-    "packages": [
-      "github.com/pquerna/ffjson",
-      "gopkg.in/kothar/go-backblaze.v0"
-    ]
-  }
-]

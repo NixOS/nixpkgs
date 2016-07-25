@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "mysqld_exporter-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "0pwf2vii9n9zgad1lxgw28c2743yc9c3qc03516fiwvlqc1cpddr";
   };
 
-  goDeps = ./mysqld-exporter_deps.json;
+  goDeps = import ./mysqld-exporter_deps.nix { inherit fetchgit fetchhg; };
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter for MySQL server metrics";

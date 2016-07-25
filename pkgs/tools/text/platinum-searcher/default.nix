@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "the_platinum_searcher-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "09pkdfh7fqn3x4l9zaw5wzk20k7nfdwry7br9vfy3vv3fwv61ynp";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   meta = with stdenv.lib; {
     homepage = https://github.com/monochromegane/the_platinum_searcher;

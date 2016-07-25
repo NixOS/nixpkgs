@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "lint-${version}";
@@ -14,5 +14,5 @@ buildGoPackage rec {
     sha256 = "024dllcmpg8lx78cqgq551i6f9w6qlykfcx8l7yazak9kjwhpwjg";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

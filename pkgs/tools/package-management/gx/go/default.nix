@@ -16,7 +16,7 @@ buildGoPackage rec {
     sha256 = "0qxp7gqrx1rhcbqvp4jdb3gj1dlj200bdc4gq8pfklc8fcz1lc6l";
   };
 
-  goDeps = ../deps.json;
+  goDeps = import ../deps.nix { inherit fetchgit; };
 
   extraSrcs = [
     {
