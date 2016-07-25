@@ -485,6 +485,8 @@ in
 
   elvish = callPackage ../shells/elvish { };
 
+  genymotion = callPackage ../development/mobile/genymotion { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
