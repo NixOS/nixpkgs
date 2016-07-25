@@ -10,8 +10,8 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
-      rev = "a72f43de6e1e4a8191643acb26c3e7138f833798";
-      sha256 = "04x2pjfrdz1kaj4i34zpzrmkk018jnr84rb6z646cz5fin3dapyh";
+      rev = "c0adcc0b43f37931ccb70e3e2b4227c4a86cfaaf";
+      sha256 = "12nrpayms0jl2knkv4kax93si1510hjyl1g3i1b73ydnzhvr3x02";
     };
   });
 in stdenv.mkDerivation rec {
@@ -34,5 +34,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://openmw.org";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar ];
   };
 }

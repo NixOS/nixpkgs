@@ -1,3 +1,10 @@
+/* The top-level package collection of nixpkgs.
+ * It is sorted by categories corresponding to the folder names
+ * in the /pkgs folder. Inside the categories packages are roughly
+ * sorted by alphabet, but strict sorting has been long lost due
+ * to merges. Please use the full-text search of your editor. ;)
+ * Hint: ### starts category names.
+ */
 { system, bootStdenv, noSysDirs, config, crossSystem, platform, lib
 , pkgsWithOverrides
 , ... }:
@@ -478,6 +485,8 @@ in
 
   elvish = callPackage ../shells/elvish { };
 
+  genymotion = callPackage ../development/mobile/genymotion { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
@@ -517,9 +526,7 @@ in
 
   at = callPackage ../tools/system/at { };
 
-  atftp = callPackage ../tools/networking/atftp {
-    gcc = gcc49;
-  };
+  atftp = callPackage ../tools/networking/atftp { };
 
   autogen = callPackage ../development/tools/misc/autogen { };
 
@@ -1050,6 +1057,8 @@ in
 
   connman = callPackage ../tools/networking/connman { };
 
+  connman-notify = callPackage ../tools/networking/connman-notify { };
+
   connmanui = callPackage ../tools/networking/connmanui { };
 
   connman_dmenu = callPackage ../tools/networking/connman_dmenu  { };
@@ -1406,6 +1415,8 @@ in
   ebook_tools = callPackage ../tools/text/ebook-tools { };
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
+
+  ecryptfs-helper = callPackage ../tools/security/ecryptfs/helper.nix { python = python2; };
 
   editres = callPackage ../tools/graphics/editres { };
 
@@ -2131,6 +2142,8 @@ in
 
   jing = callPackage ../tools/text/xml/jing { };
 
+  jmespath = callPackage ../development/tools/jmespath { };
+
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
@@ -2138,6 +2151,8 @@ in
   john = callPackage ../tools/security/john {
     gcc = gcc49; # doesn't build with gcc5
   };
+
+  jp = callPackage ../development/tools/jp { };
 
   jp2a = callPackage ../applications/misc/jp2a { };
 
@@ -2520,6 +2535,8 @@ in
   megacli = callPackage ../tools/misc/megacli { };
 
   megatools = callPackage ../tools/networking/megatools { };
+
+  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   mfcuk = callPackage ../tools/security/mfcuk { };
 
@@ -3460,6 +3477,8 @@ in
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
 
@@ -5627,6 +5646,21 @@ in
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
     javacSupport = true; odbcSupport = true;
   };
+  erlangR19 = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
+  erlangR19_odbc = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    odbcSupport = true;
+  };
+  erlangR19_javac = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+      javacSupport = true;
+  };
+  erlangR19_odbc_javac = callPackage ../development/interpreters/erlang/R19.nix {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    javacSupport = true; odbcSupport = true;
+  };
   erlang = self.erlangR18;
   erlang_odbc = self.erlangR18_odbc;
   erlang_javac = self.erlangR18_javac;
@@ -6341,6 +6375,10 @@ in
   gnumake = self.gnumake42;
 
   gob2 = callPackage ../development/tools/misc/gob2 { };
+
+  gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
+
+  gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
   gotty = callPackage ../servers/gotty { };
 
@@ -9464,6 +9502,10 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  v8_3_30_33 = callPackage ../development/libraries/v8/3.30.33.nix {
+    inherit (pythonPackages) gyp;
+  };
+
   v8_4_5 = callPackage ../development/libraries/v8/4.5.nix {
     inherit (pythonPackages) gyp;
   };
@@ -10306,7 +10348,7 @@ in
 
   riak = callPackage ../servers/nosql/riak/2.1.1.nix { };
 
-  influxdb = (callPackage ../servers/nosql/influxdb { }).bin // { outputs = [ "bin" ]; };
+  influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
@@ -10519,6 +10561,8 @@ in
   tomcat_mysql_jdbc = callPackage ../servers/http/tomcat/jdbc/mysql { };
 
   torque = callPackage ../servers/computing/torque { };
+
+  tt-rss = callPackage ../servers/tt-rss { };
 
   axis2 = callPackage ../servers/http/tomcat/axis2 { };
 
@@ -11028,6 +11072,17 @@ in
       ];
   };
 
+  linux_4_7 = callPackage ../os-specific/linux/kernel/linux-4.7.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [ kernelPatches.bridge_stp_helper ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11184,7 +11239,7 @@ in
   linux = self.linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = self.linuxPackages_4_6;
+  linuxPackages_latest = self.linuxPackages_4_7;
   linux_latest = self.linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -11199,6 +11254,7 @@ in
   linuxPackages_4_4 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_4 linuxPackages_4_4);
   linuxPackages_4_5 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_5 linuxPackages_4_5);
   linuxPackages_4_6 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_6 linuxPackages_4_6);
+  linuxPackages_4_7 = recurseIntoAttrs (self.linuxPackagesFor self.linux_4_7 linuxPackages_4_7);
   # Don't forget to update linuxPackages_latest!
   linuxPackages_testing = recurseIntoAttrs (self.linuxPackagesFor self.linux_testing linuxPackages_testing);
   linuxPackages_custom = {version, src, configfile}:
@@ -11766,8 +11822,6 @@ in
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  wrapFonts = paths : (callPackage ../data/fonts/fontWrap { inherit paths; });
-
   clearlyU = callPackage ../data/fonts/clearlyU { };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
@@ -12026,7 +12080,7 @@ in
 
   ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
 
-  ucsFonts = callPackage ../data/fonts/ucs-fonts { };
+  ucs-fonts = callPackage ../data/fonts/ucs-fonts { };
 
   uni-vga = callPackage ../data/fonts/uni-vga { };
 
@@ -12559,6 +12613,10 @@ in
     patches = config.dwm.patches or [];
   };
 
+  evilwm = callPackage ../applications/window-managers/evilwm {
+    patches = config.evilwm.patches or [];
+  };
+
   dzen2 = callPackage ../applications/window-managers/dzen2 { };
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
@@ -12849,6 +12907,8 @@ in
   keepass-keefox = callPackage ../applications/misc/keepass-plugins/keefox { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay { };
+
+  exrtools = callPackage ../applications/graphics/exrtools { };
 
   fbpanel = callPackage ../applications/window-managers/fbpanel { };
 
@@ -13309,6 +13369,8 @@ in
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
 
   i3blocks = callPackage ../applications/window-managers/i3/blocks.nix { };
+
+  i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
 
   i3cat = callPackage ../tools/misc/i3cat { };
 
@@ -17368,7 +17430,9 @@ in
 
   xhyve = callPackage ../applications/virtualization/xhyve { };
 
-  xinput_calibrator = callPackage ../tools/X11/xinput_calibrator {};
+  xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
+
+  xmagnify = callPackage ../tools/X11/xmagnify { };
 
   xosd = callPackage ../misc/xosd { };
 

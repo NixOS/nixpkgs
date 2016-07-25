@@ -6440,6 +6440,19 @@ let self = _self // overrides; _self = with self; {
     doCheck = false; # nondeterministic
   };
 
+  Importer = buildPerlPackage rec {
+    name = "Importer-0.014";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
+      sha256 = "79b088cdead749d2c5a8cf585456cba064b4847c003a28d02d10a6cc2231b989";
+    };
+    meta = {
+      description = "Alternative but compatible interface to modules that export symbols";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   ImportInto = buildPerlPackage {
     name = "Import-Into-1.002004";
     src = fetchurl {
@@ -7666,10 +7679,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   MathBigInt = buildPerlPackage rec {
-    name = "Math-BigInt-1.999724";
+    name = "Math-BigInt-1.999726";
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/${name}.tar.gz";
-      sha256 = "3e0c6e1c58fb89987a20da5ec8027d078a4e1d47211b86db4b75c2e1293d96f7";
+      sha256 = "dc3d9502c8633939000d04e7fbabcfc10fb8febb31c8e874a7bd60201c2228c4";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
@@ -12095,12 +12108,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   Test2Suite = buildPerlPackage rec {
-    name = "Test2-Suite-0.000048";
+    name = "Test2-Suite-0.000052";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/EX/EXODIST/${name}.tar.gz";
-      sha256 = "75f1773976561be47508c4bdde41ac453fcaaffba588c6a2c520e45bca88dbed";
+      sha256 = "0f571c8d8939eb90d06dd1da0681ca6af3bd1012a6c03e7bfb924dab675a6fa4";
     };
-    propagatedBuildInputs = [ TestSimple13 ];
+    propagatedBuildInputs = [ Importer TestSimple13 ];
     meta = {
       description = "Distribution with a rich set of tools built upon the Test2 framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

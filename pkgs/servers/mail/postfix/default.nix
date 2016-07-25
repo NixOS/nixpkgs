@@ -22,11 +22,11 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.0.4";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "03msimdzxndm1nskljarws45wpqk020ckfcrmn1p3pxrfq8yh75q";
+    sha256 = "10lrp8fyn38digih1sy7y4dm74szj1cvbyxmn68095ri8v1s9v9x";
   };
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]

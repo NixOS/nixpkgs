@@ -56,8 +56,7 @@ self: super: {
   Cabal_1_18_1_7 = dontJailbreak super.Cabal_1_18_1_7;
 
   # We have no working cabal-install at the moment.
-  cabal-install_1_18_1_0 = markBroken super.cabal-install_1_18_1_0;
-  cabal-install = self.cabal-install_1_18_1_0;
+  cabal-install = markBroken super.cabal-install;
 
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;

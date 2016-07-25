@@ -1,8 +1,15 @@
-{stdenv, fetchurl, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl}:
+{stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl}:
 let
   inherit (stdenv.lib) optional optionalString;
   baseName = "sysdig";
   version = "0.10.0";
+  # sysdig-0.11.0 depends on some headers from jq which are not
+  # installed by default.
+  # Relevant sysdig issue: https://github.com/draios/sysdig/issues/626
+  jq-prefix = fetchurl {
+    url="https://github.com/stedolan/jq/releases/download/jq-1.5/jq-1.5.tar.gz";
+    sha256="0g29kyz4ykasdcrb0zmbrp2jqs9kv1wz9swx849i2d1ncknbzln4";
+  };
 in
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
@@ -24,12 +31,19 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DUSE_BUNDLED_DEPS=OFF"
+    "-DUSE_BUNDLED_JQ=ON"
+    "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  '';
+
+  preBuild = ''
+    mkdir -p jq-prefix/src
+    cp ${jq-prefix} jq-prefix/src/jq-1.5.tar.gz
   '';
 
   postInstall = optionalString (kernel != null) ''

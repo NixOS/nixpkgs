@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake }:
+{ stdenv, fetchurl, cmake, vtk }:
 
 stdenv.mkDerivation rec {
   version = "2.4.6";
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = ''
     -DGDCM_BUILD_APPLICATIONS=ON
     -DGDCM_BUILD_SHARED_LIBS=ON
+    -DGDCM_USE_VTK=ON
   '';
 
   enableParallelBuilding = true;
-  buildInputs = [ cmake ];
+  buildInputs = [ cmake vtk ];
   propagatedBuildInputs = [ ];
 
   meta = {

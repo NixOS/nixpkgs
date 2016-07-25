@@ -7,7 +7,7 @@ let
   makeColor = n: value: "COLOR_${toString n}=${value}";
   makeColorCS =
     let positions = [ "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "A" "B" "C" "D" "E" "F" ];
-    in n: value: "\033]P${elemAt position n}${value}";
+    in n: value: "\\033]P${elemAt positions (n - 1)}${value}";
   colors = concatImapStringsSep "\n" makeColor config.i18n.consoleColors;
 
   isUnicode = hasSuffix "UTF-8" (toUpper config.i18n.defaultLocale);

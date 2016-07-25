@@ -48,7 +48,7 @@ lib.makeOverridable (
 , dontBuild ? true
 , propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
-, buildFlags ? null
+, buildFlags ? []
 , passthru ? {}
 , ...} @ attrs:
 

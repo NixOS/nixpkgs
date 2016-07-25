@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "man-pages-${version}";
-  version = "4.06";
+  version = "4.07";
 
   src = fetchurl {
     url = "mirror://kernel/linux/docs/man-pages/${name}.tar.xz";
-    sha256 = "0vv056k9yyf05dqal9m2pq3pv9c8lnp7i5rjxvcnic6aq7vyrafb";
+    sha256 = "1vimj3va16plxmv46rw6nzw4m9l11hb7r1d217y1bjpd5q8nw8qz";
   };
 
   # keep developer docs separately (man2 and man3)

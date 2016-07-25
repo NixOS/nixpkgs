@@ -2,9 +2,7 @@
 
 rec {
   platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip;
-    stdenv_32bit = pkgs_i686.stdenv;
-    zlib_32bit = pkgs_i686.zlib;
+    inherit (pkgs) stdenv fetchurl unzip zlib;
   };
   
   buildTools = import ./build-tools.nix {
@@ -167,6 +165,20 @@ rec {
   androidsdk_6_0_extras = androidsdk {
     platformVersions = [ "23" ];
     abiVersions = [ "armeabi-v7a" "x86" "x86_64"];
+    useGoogleAPIs = true;
+    useExtraSupportLibs = true;
+    useGooglePlayServices = true;
+  };
+
+  androidsdk_7_0 = androidsdk {
+    platformVersions = [ "24" ];
+    abiVersions = [ "x86" "x86_64"];
+    useGoogleAPIs = true;
+  };
+
+  androidsdk_7_0_extras = androidsdk {
+    platformVersions = [ "24" ];
+    abiVersions = [ "x86" "x86_64"];
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;

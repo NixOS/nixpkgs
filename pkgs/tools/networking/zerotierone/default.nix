@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = https://www.zerotier.com;
     license = licenses.gpl3;
-    maintainers = [ sjmackenzie ];
+    maintainers = with maintainers; [ sjmackenzie ];
     platforms = platforms.allBut [ "i686-linux" ];
   };
 }
