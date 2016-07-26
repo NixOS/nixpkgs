@@ -69,7 +69,23 @@ let
       client_max_body_size    10m;
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
+
       ${vhosts}
+
+      ${optionalString cfg.statusPage ''
+        server {
+          listen 80;
+          listen [::]:80;
+
+          server_name localhost;
+
+          location /nginx_status {
+            stub_status on;
+            allow 127.0.0.1;
+            deny all;
+          }
+        }
+      ''}
     }
 
     ${cfg.config}
@@ -161,6 +177,14 @@ in
   options = {
     services.nginx = {
       enable = mkEnableOption "Nginx Web Server";
+
+      statusPage = mkOption {
+        default = false;
+        type = types.bool;
+        description = "
+          Enable status page reachable from localhost on http://127.0.0.1/nginx_status.
+        ";
+      };
 
       recommendedTlsSettings = mkOption {
         default = false;
