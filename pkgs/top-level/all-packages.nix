@@ -17556,4 +17556,7 @@ in
   zuki-themes = callPackage ../misc/themes/zuki { };
 
   zoom-us = qt55.callPackage ../applications/networking/instant-messengers/zoom-us {};
+
+  wo-istes-jetzt = callPackage ../tools/misc/wo-istes-jetzt { };
+
 }
