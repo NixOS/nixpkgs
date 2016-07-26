@@ -22,8 +22,6 @@ let
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
 
-      ${cfg.httpConfig}
-
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
         sendfile on;
@@ -90,9 +88,10 @@ let
           }
         }
       ''}
+
+      ${cfg.httpConfig}
     }
 
-    }
     ${cfg.appendConfig}
   '';
   vhosts = concatStringsSep "\n" (mapAttrsToList (serverName: vhost:
