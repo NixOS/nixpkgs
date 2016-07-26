@@ -143,12 +143,12 @@ let
           List of file service discovery configurations.
         '';
       };
-      target_groups = mkOption {
+      static_configs = mkOption {
         type = types.listOf promTypes.target_group;
         default = [];
         apply = x: map _filter x;
         description = ''
-          List of labeled target groups for this job.
+          List of labeled static configurations for this job.
         '';
       };
       relabel_configs = mkOption {
