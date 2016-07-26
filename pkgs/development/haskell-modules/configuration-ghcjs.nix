@@ -9,11 +9,9 @@ with import ./lib.nix { inherit pkgs; };
 
 self: super:
   # The stage 2 packages. Regenerate with ./ghcjs/gen-stage2.rb
-  let stage2 =
-    (import ./ghcjs/stage2.nix {
+  let stage2 = super.ghc.mkStage2 {
        inherit (self) callPackage;
-       inherit (self.ghc) ghcjsBoot;
-    }); in stage2 // {
+    }; in stage2 // {
 
   old-time = overrideCabal stage2.old-time (drv: {
     postPatch = ''

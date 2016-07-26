@@ -1,4 +1,4 @@
-{ ghcjsBoot, callPackage }:
+{ ghcjsBoot }: { callPackage }:
 
 {
   async = callPackage
