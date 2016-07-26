@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     for f in *.dsp
       do
-    	  echo "Building lv2 for $f"
+        echo "Building lv2 for $f"
         faust2lv2 -vec -time -gui -t 99999 "$f"
-    	  echo "Building jack standalone for $f"
+        echo "Building jack standalone for $f"
         faust2jaqt -vec -time -t 99999 "$f"
       done
   '';

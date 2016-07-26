@@ -7,16 +7,16 @@ stdenv.mkDerivation rec {
     owner = "magnetophon";
     repo = "lowShelfComp";
     rev = "V${version}";
-    sha256 = "0ip1rbvi91psvxvw49d90ljvhbh0b0lsjlpn0shp6w6if8izrlgv";
+    sha256 = "0ap81h0aj7nqpsfsy3m7fnrx8i8msjlv7v4ywqalnbjw0q4bixri";
   };
 
   buildInputs = [ faust2jaqt faust2lv2gui ];
 
   buildPhase = ''
-    faust2jaqt -vec -time -t 99999 lowShelfComp.dsp
-    faust2lv2 -vec -time -gui -t 99999 lowShelfComp.dsp
-    faust2jaqt -vec -time -t 99999 lowShelfCompMono.dsp
-    faust2lv2 -vec -time -gui -t 99999 lowShelfCompMono.dsp
+    faust2jaqt -vec -double -time -t 99999 lowShelfComp.dsp
+    faust2lv2 -vec -double -time -gui -t 99999 lowShelfComp.dsp
+    faust2jaqt -vec -double -time -t 99999 lowShelfCompMono.dsp
+    faust2lv2 -vec -double -time -gui -t 99999 lowShelfCompMono.dsp
   '';
 
   installPhase = ''
