@@ -8,11 +8,11 @@ let
 
   pkg = pkgs.stdenv.mkDerivation rec {
     name = "atlassian-confluence-${version}";
-    version = "5.10.0";
+    version = "5.10.2";
 
     src = pkgs.fetchurl {
       url = "https://www.atlassian.com/software/confluence/downloads/binary/${name}.tar.gz";
-      sha256 = "0fpcfh7h4306di1pkg77yhzk0l73412likz55jc80qi3h1bl90dh";
+      sha256 = "0f7v2fb4408zj84vh8m9axlv841k312djpk3d24gsgabsmx552mb";
     };
 
     buildPhase = ''
