@@ -1,6 +1,9 @@
-{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
+{stdenv, fetchurl, pkgs, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
 , enableX11 ? true}:
 
+let
+  ocaml = pkgs.ocaml_4_02;
+in
 stdenv.mkDerivation (rec {
 
   name = "unison-2.48.4";
