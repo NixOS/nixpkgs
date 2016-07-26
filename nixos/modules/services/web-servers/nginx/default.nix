@@ -16,6 +16,8 @@ let
     error_log stderr;
     daemon off;
 
+    ${cfg.config}
+
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -86,18 +88,10 @@ let
           }
         }
       ''}
-    }
 
-    ${cfg.config}
-
-    # Keep this seperate to allow overriding previous settings
-    ${optionalString (cfg.httpConfig != "") ''
-    http {
-      include ${cfg.package}/conf/mime.types;
-      include ${cfg.package}/conf/fastcgi.conf;
       ${cfg.httpConfig}
     }
-    ''}
+
     ${cfg.appendConfig}
   '';
 
