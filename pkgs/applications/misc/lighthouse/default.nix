@@ -4,39 +4,24 @@
 
 stdenv.mkDerivation rec {
   name = "lighthouse-${date}";
-  date = "2016-01-26";
+  date = "2016-07-20";
 
   src = fetchFromGitHub {
     owner = "emgram769";
     repo = "lighthouse";
-    rev = "bf11f111572475e855b0329202a14c9e128c7e57";
-    sha256 = "1ppika61vg4sc9mczbkjqy2mhgxqg57xrnsmmq0h2lyvj0yhg3qn";
+    rev = "d1813ef8e2aca9f6b3609b1e0c6d1d5ee683281a";
+    sha256 = "0v6ylm49f1b44zwq1y1gqxp2csyqblplr24ajllc2q3r0sc9m1ys";
    };
 
   buildInputs = [
     pkgconfig libX11 libxcb cairo gtk pango python27 python3
   ];
 
-  patches = [ ./Makefile.patch ];
+  makeFlags = [ "PREFIX=\${out}" ];
 
-  lighthouseInstaller = ''
-    #!${stdenv.shell}
-    cp -r $out/share/lighthouse/.config/lighthouse \$HOME/.config
-    chmod -R +w \$HOME/.config/lighthouse
-  '';
+  preFixup = "chmod +x $out/share/lighthouse/.config/lighthouse/google.py";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp lighthouse $out/bin
-    chmod +x config/lighthouse/cmd*
-    chmod +x config/lighthouse/google.py
-    patchShebangs config/lighthouse/
-    patchShebangs config/lighthouse/scripts/
-    mkdir -p $out/share/lighthouse/.config
-    cp -r config/lighthouse $out/share/lighthouse/.config
-    echo "${lighthouseInstaller}" > $out/bin/lighthouse-install
-    chmod +x $out/bin/lighthouse-install
-  '';
+  postFixup = "chmod -x $out/share/lighthouse/.config/lighthouse/google.py";
 
   meta = with stdenv.lib; {
     description = "A simple flexible popup dialog to run on X";

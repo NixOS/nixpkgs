@@ -3,15 +3,23 @@
 
 let
   deps = import ./deps.nix { inherit fetchurl; };
-  version = "1.2.0";
+  version = "1.3.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "13ffr2iabl5lyqqdcrs8z37lfqw1n102bkxwfx0540hj6brvkm2v";
+    sha256 = "0mk9v4s51jdrrcs78v3cm131pz3fdhjkd4cmmfn1kkcfcpqzw6j8";
     
   };
 in stdenv.mkDerivation rec {
   name = "pypi2nix-${version}";
-  srcs = with deps; [ src pip click setuptools zcbuildout zcrecipeegg ];
+  srcs = with deps; [
+    src
+    pip
+    click
+    setuptools
+    zcbuildout
+    zcrecipeegg
+    requests
+  ];  # six attrs effect ];
   buildInputs = [ python zip makeWrapper ];
   sourceRoot = ".";
 
@@ -23,6 +31,10 @@ in stdenv.mkDerivation rec {
     mv setuptools-*/setuptools          $out/pkgs/setuptools
     mv zc.buildout-*/src/zc             $out/pkgs/zc
     mv zc.recipe.egg-*/src/zc/recipe    $out/pkgs/zc/recipe
+    # mv six-*/six.py                    $out/pkgs/
+    # mv attrs-*/src/attr                $out/pkgs/attrs
+    # mv effect-*/effect                 $out/pkgs/effect
+    mv requests-*/requests              $out/pkgs/
 
     if [ "$IN_NIX_SHELL" != "1" ]; then
       if [ -e git-export ]; then

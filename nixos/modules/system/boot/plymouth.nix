@@ -112,6 +112,7 @@ in
       sed -i '/loginctl/d' $out/71-seat.rules
     '';
 
+    # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
     boot.initrd.preLVMCommands = mkAfter ''
       mkdir -p /etc/plymouth
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
@@ -121,7 +122,16 @@ in
       ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session
-      plymouth --show-splash
+      plymouth show-splash
+    '';
+
+    boot.initrd.postMountCommands = ''
+      plymouth update-root-fs --new-root-dir="$targetRoot"
+    '';
+
+    # `mkBefore` to ensure that any custom prompts would be visible.
+    boot.initrd.preFailCommands = mkBefore ''
+      plymouth quit --wait
     '';
 
   };

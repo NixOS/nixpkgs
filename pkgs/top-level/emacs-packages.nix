@@ -471,6 +471,30 @@ let
     };
   };
 
+  emacs-source-directory = stdenv.mkDerivation {
+    name = "emacs-source-directory-1.0.0";
+    src = emacs.src;
+
+    # We don't want accidentally start bulding emacs one more time
+    phases = "unpackPhase buildPhase";
+
+    buildPhase = ''
+     mkdir -p $out/share/emacs/site-lisp/elpa/emacs-source-directory
+     cp -a src $out/src
+     (cd $out/src && ${emacs}/bin/etags *.c *.h)
+     cat <<EOF > $out/share/emacs/site-lisp/elpa/emacs-source-directory/emacs-source-directory-autoloads.el
+     (setq source-directory "$out")
+     (setq find-function-C-source-directory (expand-file-name "src" source-directory))
+     EOF
+     cat <<EOF > $out/share/emacs/site-lisp/elpa/emacs-source-directory/emacs-source-directory-pkg.el
+     (define-package "emacs-source-directory" "1.0.0" "Make emacs C source code available inside emacs. To use with emacsWithPackages in NixOS" '())
+     EOF
+    '';
+    meta = {
+      description = "Make emacs C source code available inside emacs. To use with emacsWithPackages in NixOS";
+    };
+  };
+
   engine-mode = melpaBuild rec {
     pname = "engine-mode";
     version = "1.0.0";

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "collectd-exporter-${version}";
-  version = "0.1.0";
+  version = "0.3.1";
   rev = version;
 
   goPackagePath = "github.com/prometheus/collectd_exporter";
@@ -11,14 +11,14 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "collectd_exporter";
-    sha256 = "165zsdn0lffb6fvxz75szmm152a6wmia5skb96k1mv59qbmn9fi1";
+    sha256 = "1p0kb7c8g0r0sp5a6xrx8vnwbw14hhwlqzk4n2xx2y8pvnbivajz";
   };
 
   goDeps = ./collectd-exporter_deps.json;
 
   meta = with stdenv.lib; {
     description = "Relay server for exporting metrics from collectd to Prometheus";
-    homepage = https://github.com/prometheus/alertmanager;
+    homepage = https://github.com/prometheus/collectd_exporter;
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;

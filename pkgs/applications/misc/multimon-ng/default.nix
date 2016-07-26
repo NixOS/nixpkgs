@@ -16,6 +16,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ qmake4Hook ];
 
+  qmakeFlags = [ "multimon-ng.pro" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp multimon-ng $out/bin

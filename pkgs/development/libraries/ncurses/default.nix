@@ -1,15 +1,14 @@
 { lib, stdenv, fetchurl, pkgconfig
 
+, abiVersion
 , mouseSupport ? false
 , unicode ? true
 
 , gpm
 }:
 let
-  inherit (stdenv) isDarwin;
-  abiVersion = if isDarwin then "5" else "6";
-  version = if isDarwin then "5.9" else "6.0";
-  sha256 = if isDarwin
+  version = if abiVersion == "5" then "5.9" else "6.0";
+  sha256 = if abiVersion == "5"
     then "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh"
     else "0q3jck7lna77z5r42f13c4xglc7azd19pxfrjrpgp2yf615w4lgm";
 in
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  patches = [ ./clang.patch ];
+  patches = [ ./clang.patch ] ++ lib.optional (abiVersion == "5" && stdenv.cc.isGNU) ./gcc-5.patch;
 
   outputs = [ "dev" "out" "man" ];
   setOutputFlags = false; # some aren't supported

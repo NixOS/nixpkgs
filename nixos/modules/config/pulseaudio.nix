@@ -27,6 +27,7 @@ let
   clientConf = writeText "client.conf" ''
     autospawn=${if nonSystemWide then "yes" else "no"}
     ${optionalString nonSystemWide "daemon-binary=${cfg.package.out}/bin/pulseaudio"}
+    ${cfg.extraClientConf}
   '';
 
   # Write an /etc/asound.conf that causes all ALSA applications to
@@ -96,6 +97,14 @@ in {
         '';
       };
 
+      extraClientConf = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Extra configuration appended to pulse/client.conf file.
+        '';
+      };
+
       package = mkOption {
         type = types.package;
         default = pulseaudioLight;
@@ -161,6 +170,7 @@ in {
             ExecStart = "${getBin cfg.package}/bin/pulseaudio --daemonize=no";
             Restart = "on-failure";
           };
+          environment = { DISPLAY = ":${toString config.services.xserver.display}"; };
         };
 
         sockets.pulseaudio = {

@@ -51,6 +51,7 @@ self: super: {
     };
     buildDepends = [ primitive ];
     license = pkgs.stdenv.lib.licenses.bsd3;
+    broken = true;   # needs template-haskell >=2.9 && <2.11
   }) {};
 
   # ghc-mod has a ghc-8 branch that has not yet been merged

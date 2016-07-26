@@ -1,27 +1,30 @@
-{ stdenv, fetchurl, gmp, libantlr3c, boost, autoreconfHook }:
+{ stdenv, fetchurl, cln, gmp, swig, pkgconfig, readline, libantlr3c, boost, jdk, autoreconfHook, python2 }:
 
 stdenv.mkDerivation rec {
   name = "cvc4-${version}";
-  version = "1.4";
+  version = "1.5pre-smtcomp2016";
 
   src = fetchurl {
     url = "http://cvc4.cs.nyu.edu/builds/src/cvc4-${version}.tar.gz";
-    sha256 = "093h7zgv4z4ad503j30dpn8k2pz9m90pvd7gi5axdmwsxgwlzzkn";
+    sha256 = "15wz0plfc9q8acrwq1ljgsgqmh8pyz5alzv5xpchvv9w76lvj2zf";
   };
 
-  buildInputs = [ gmp libantlr3c boost autoreconfHook ];
+  buildInputs = [ gmp cln pkgconfig readline swig libantlr3c boost jdk autoreconfHook python2 ];
+  configureFlags = [
+    "--enable-language-bindings=c,c++,java"
+    "--enable-gpl"
+    "--with-cln"
+    "--with-readline"
+    "--with-boost=${boost.dev}"
+  ];
   preConfigure = ''
     patchShebangs ./src/
-    OLD_CPPFLAGS="$CPPFLAGS"
-    export CPPFLAGS="$CPPFLAGS -P"
   '';
-  postConfigure = ''CPPFLAGS="$OLD_CPPFLAGS"'';
-  doChecks = true;
 
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = http://cvc4.cs.nyu.edu/web/;
-    license     = licenses.bsd3;
+    license     = licenses.gpl3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ vbgl thoughtpolice ];
   };

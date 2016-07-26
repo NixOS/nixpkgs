@@ -611,6 +611,17 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  intelgputools = (mkDerivation "intelgputools" {
+    name = "intel-gpu-tools-1.15";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/intel-gpu-tools-1.15.tar.bz2;
+      sha256 = "1gb22hvj4gdjj92iqbwcp44kf2znk2l1fvbcrr4sm4i65l8mdwnw";
+    };
+    buildInputs = [pkgconfig dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ;};
+
   kbproto = (mkDerivation "kbproto" {
     name = "kbproto-1.0.7";
     builder = ./builder.sh;

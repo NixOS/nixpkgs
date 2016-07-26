@@ -20,6 +20,7 @@ kdeApp {
   nativeBuildInputs = [
     extra-cmake-modules
     kdoctools
+    makeQtWrapper
   ];
   propagatedBuildInputs = [
     gmp kconfig kconfigwidgets kguiaddons kinit knotifications

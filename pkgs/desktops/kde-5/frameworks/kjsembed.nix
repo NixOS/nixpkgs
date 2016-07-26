@@ -1,14 +1,10 @@
 { kdeFramework, lib, extra-cmake-modules, kdoctools, ki18n, kjs
-, makeQtWrapper, qtsvg
+, qtsvg
 }:
 
 kdeFramework {
   name = "kjsembed";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ ki18n kjs qtsvg ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kjscmd5"
-    wrapQtProgram "$out/bin/kjsconsole"
-  '';
 }

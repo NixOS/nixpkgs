@@ -22,6 +22,33 @@ sub atomicSymlink {
 # current configuration.
 atomicSymlink $etc, $static or die;
 
+# Returns 1 if the argument points to the files in /etc/static.  That
+# means either argument is a symlink to a file in /etc/static or a
+# directory with all children being static.
+sub isStatic {
+    my $path = shift;
+
+    if (-l $path) {
+        my $target = readlink $path;
+        return substr($target, 0, length "/etc/static/") eq "/etc/static/";
+    }
+
+    if (-d $path) {
+        opendir DIR, "$path" or return 0;
+        my @names = readdir DIR or die;
+        closedir DIR;
+
+        foreach my $name (@names) {
+            next if $name eq "." || $name eq "..";
+            unless (isStatic("$path/$name")) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+    return 0;
+}
 
 # Remove dangling symlinks that point to /etc/static.  These are
 # configuration files that existed in a previous configuration but not
@@ -63,6 +90,16 @@ sub link {
     my $target = "/etc/$fn";
     File::Path::make_path(dirname $target);
     $created{$fn} = 1;
+
+    # Rename doesn't work if target is directory.
+    if (-l $_ && -d $target) {
+        if (isStatic $target) {
+            rmtree $target or warn;
+        } else {
+            warn "$target directory contains user files. Symlinking may fail.";
+        }
+    }
+
     if (-e "$_.mode") {
         my $mode = read_file("$_.mode"); chomp $mode;
         if ($mode eq "direct-symlink") {

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "gtkspell-${version}";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkspell/gtkspell3-${version}.tar.gz";
-    sha256 = "1hiwzajf18v9ik4nai3s7frps4ccn9s20nggad1c4k2mwb9ydwhk";
+    sha256 = "1zrz5pz4ryvcssk898liynmy2wyxgj95ak7mp2jv7x62yzihq6h1";
   };
 
   buildInputs = [ aspell pkgconfig gtk3 enchant intltool ];
