@@ -9,12 +9,6 @@ let
 
   pidFile = "${stateDir}/phpfpm.pid";
 
-  mkPool = n: p: ''
-    [${n}]
-    listen = ${p.listen}
-    ${p.extraConfig}
-  '';
-
   cfgFile = pkgs.writeText "phpfpm.conf" ''
     [global]
     pid = ${pidFile}
@@ -22,7 +16,7 @@ let
     daemonize = yes
     ${cfg.extraConfig}
 
-    ${concatStringsSep "\n" (mapAttrsToList mkPool cfg.pools)}
+    ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
   '';
 
   phpIni = pkgs.writeText "php.ini" ''
@@ -67,19 +61,33 @@ in {
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
-      pools = mkOption {
-        type = types.attrsOf (types.submodule (import ./pool-options.nix {
-          inherit lib;
-        }));
+      poolConfigs = mkOption {
+        type = types.attrsOf types.lines;
         default = {};
+        example = literalExample ''
+          { mypool = '''
+              listen = /run/phpfpm/mypool
+              user = nobody
+              pm = dynamic
+              pm.max_children = 75
+              pm.start_servers = 10
+              pm.min_spare_servers = 5
+              pm.max_spare_servers = 20
+              pm.max_requests = 500
+            ''';
+          }
+        '';
         description = ''
-          If no pools are defined, the phpfpm service is disabled.
+          A mapping between PHP FPM pool names and their configurations.
+          See the documentation on <literal>php-fpm.conf</literal> for
+          details on configuration directives. If no pools are defined,
+          the phpfpm service is disabled.
         '';
       };
     };
   };
 
-  config = mkIf (cfg.pools != {}) {
+  config = mkIf (cfg.poolConfigs != {}) {
 
     systemd.services.phpfpm = {
       wantedBy = [ "multi-user.target" ];
