@@ -8399,7 +8399,11 @@ in
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
-  librsvg = callPackage ../development/libraries/librsvg { };
+  librsvg_2_40_9 = callPackage ../development/libraries/librsvg/2.40.9.nix { };
+
+  librsvg_2_40_16 = callPackage ../development/libraries/librsvg/2.40.16.nix { };
+
+  librsvg = librsvg_2_40_9;
 
   librsync = callPackage ../development/libraries/librsync { };
 
