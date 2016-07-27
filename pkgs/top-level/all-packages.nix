@@ -15815,6 +15815,8 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
+  
+  solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
