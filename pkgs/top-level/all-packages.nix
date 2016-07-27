@@ -2181,6 +2181,8 @@ in
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kakoune = callPackage ../applications/editors/kakoune { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
