@@ -14735,6 +14735,8 @@ in
 
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
+  syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
