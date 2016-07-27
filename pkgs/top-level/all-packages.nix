@@ -3164,6 +3164,8 @@ in
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
 
+  psutils = callPackage ../tools/typesetting/psutils { };
+
   pv = callPackage ../tools/misc/pv { };
 
   pwgen = callPackage ../tools/security/pwgen { };
