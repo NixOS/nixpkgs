@@ -68,7 +68,7 @@ let
         proxy_http_version      1.0;
       ''}
 
-      client_max_body_size    10m;
+      client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
@@ -269,7 +269,13 @@ in
       serverTokens = mkOption {
         type = types.bool;
         default = false;
-        description = "Show nginx version in headers and error pages";
+        description = "Show nginx version in headers and error pages.";
+      };
+
+      clientMaxBodySize = mkOption {
+        type = types.string;
+        default = "10m";
+        description = "Set nginx global client_max_body_size.";
       };
 
       sslCiphers = mkOption {
