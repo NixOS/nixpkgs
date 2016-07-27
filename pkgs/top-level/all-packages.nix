@@ -5463,9 +5463,7 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
-  ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_36;
-  };
+  ponyc = callPackage ../development/compilers/ponyc { };
 
   qcmm = callPackage ../development/compilers/qcmm {
     lua   = lua4;
