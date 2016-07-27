@@ -67,33 +67,33 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre config.programs.ssh.package pkgs.nix ];
+        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
         '';
       };
 
-      heapSize = mkOption {
+      initialJavaHeapSize = mkOption {
         default = "512m";
         type = types.str;
         description = ''
-          Specifies the java heap memory size for the Go.CD server's java process.
+          Specifies the initial java heap memory size for the Go.CD server's java process.
         '';
       };
 
-      maxMemory = mkOption {
+      maxJavaHeapMemory = mkOption {
         default = "1024m";
         type = types.str;
         description = ''
-          Specifies the java maximum memory size for the Go.CD server's java process.
+          Specifies the java maximum heap memory size for the Go.CD server's java process.
         '';
       };
 
       extraOptions = mkOption {
         default = [
-          "-Xms${cfg.heapSize}"
-          "-Xmx${cfg.maxMemory}"
+          "-Xms${cfg.initialJavaHeapSize}"
+          "-Xmx${cfg.maxJavaHeapMemory}"
           "-Dcruise.listen.host=${cfg.listenAddress}"
           "-Duser.language=en"
           "-Djruby.rack.request.size.threshold.bytes=30000000"
