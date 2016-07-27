@@ -136,6 +136,9 @@ in mkDerivation (rec {
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
     inherit (ghcjsNodePkgs) "socket.io";
+    mkStage2 = import ./stage2.nix {
+      inherit ghcjsBoot;
+    };
   };
 
   homepage = "https://github.com/ghcjs/ghcjs";
