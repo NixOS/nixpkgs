@@ -2,7 +2,7 @@
 , jinja2, pygments, pyyaml, pypeg2, gst-plugins-base, gst-plugins-good
 , gst-plugins-bad, gst-libav, wrapGAppsHook, glib_networking, makeQtWrapper }:
 
-let version = "0.8.0"; in
+let version = "0.8.1"; in
 
 buildPythonApplication rec {
   name = "qutebrowser-${version}";
@@ -10,7 +10,7 @@ buildPythonApplication rec {
 
   src = fetchurl {
     url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0wa2ahlad024hlhaq4819297jwnyhr1pp9cvk93di3xn95qfmmc1";
+    sha256 = "18hj95pgybpavwwnyczh6s94spljfngz684y1jlhqnpbp14pkflh";
   };
 
   # Needs tox
