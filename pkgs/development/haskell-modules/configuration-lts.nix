@@ -1682,6 +1682,7 @@ self: super: {
   "cabal-nirvana" = dontDistribute super."cabal-nirvana";
   "cabal-progdeps" = dontDistribute super."cabal-progdeps";
   "cabal-query" = dontDistribute super."cabal-query";
+  "cabal-rpm" = doDistribute super."cabal-rpm_0_9_11";
   "cabal-scripts" = dontDistribute super."cabal-scripts";
   "cabal-setup" = dontDistribute super."cabal-setup";
   "cabal-sign" = dontDistribute super."cabal-sign";
@@ -1970,6 +1971,7 @@ self: super: {
   "complexity" = dontDistribute super."complexity";
   "compose-ltr" = dontDistribute super."compose-ltr";
   "compose-trans" = dontDistribute super."compose-trans";
+  "compound-types" = dontDistribute super."compound-types";
   "compression" = dontDistribute super."compression";
   "compstrat" = dontDistribute super."compstrat";
   "comptrans" = dontDistribute super."comptrans";
@@ -2494,6 +2496,7 @@ self: super: {
   "domain-auth" = dontDistribute super."domain-auth";
   "dominion" = dontDistribute super."dominion";
   "domplate" = dontDistribute super."domplate";
+  "dot" = dontDistribute super."dot";
   "dot-linker" = dontDistribute super."dot-linker";
   "dot2graphml" = dontDistribute super."dot2graphml";
   "dotenv" = doDistribute super."dotenv_0_3_0_1";
@@ -4082,6 +4085,7 @@ self: super: {
   "hpodder" = dontDistribute super."hpodder";
   "hpp" = dontDistribute super."hpp";
   "hpqtypes" = dontDistribute super."hpqtypes";
+  "hpqtypes-extras" = dontDistribute super."hpqtypes-extras";
   "hprotoc" = doDistribute super."hprotoc_2_2_0";
   "hprotoc-fork" = dontDistribute super."hprotoc-fork";
   "hps" = dontDistribute super."hps";
@@ -4224,6 +4228,7 @@ self: super: {
   "hspec-test-framework-th" = dontDistribute super."hspec-test-framework-th";
   "hspec-test-sandbox" = dontDistribute super."hspec-test-sandbox";
   "hspec2" = dontDistribute super."hspec2";
+  "hspecVariant" = dontDistribute super."hspecVariant";
   "hspr-sh" = dontDistribute super."hspr-sh";
   "hspread" = dontDistribute super."hspread";
   "hspresent" = dontDistribute super."hspresent";
@@ -4924,6 +4929,7 @@ self: super: {
   "linkedhashmap" = dontDistribute super."linkedhashmap";
   "linklater" = dontDistribute super."linklater";
   "linode" = dontDistribute super."linode";
+  "linode-v4" = dontDistribute super."linode-v4";
   "linux-blkid" = dontDistribute super."linux-blkid";
   "linux-cgroup" = dontDistribute super."linux-cgroup";
   "linux-evdev" = dontDistribute super."linux-evdev";
@@ -5189,7 +5195,10 @@ self: super: {
   "mi" = dontDistribute super."mi";
   "microbench" = dontDistribute super."microbench";
   "microformats2-types" = dontDistribute super."microformats2-types";
+  "microlens" = doDistribute super."microlens_0_4_5_0";
   "microlens-each" = dontDistribute super."microlens-each";
+  "microlens-ghc" = doDistribute super."microlens-ghc_0_4_5_0";
+  "microlens-platform" = doDistribute super."microlens-platform_0_3_3_0";
   "micrologger" = dontDistribute super."micrologger";
   "microtimer" = dontDistribute super."microtimer";
   "mida" = dontDistribute super."mida";
@@ -5768,6 +5777,7 @@ self: super: {
   "partly" = dontDistribute super."partly";
   "passage" = dontDistribute super."passage";
   "passwords" = dontDistribute super."passwords";
+  "pasta" = dontDistribute super."pasta";
   "pastis" = dontDistribute super."pastis";
   "pasty" = dontDistribute super."pasty";
   "patch-combinators" = dontDistribute super."patch-combinators";
@@ -5988,6 +5998,7 @@ self: super: {
   "posix-waitpid" = dontDistribute super."posix-waitpid";
   "possible" = dontDistribute super."possible";
   "postcodes" = dontDistribute super."postcodes";
+  "postgres-tmp" = dontDistribute super."postgres-tmp";
   "postgresql-config" = dontDistribute super."postgresql-config";
   "postgresql-connector" = dontDistribute super."postgresql-connector";
   "postgresql-copy-escape" = dontDistribute super."postgresql-copy-escape";
@@ -6000,6 +6011,7 @@ self: super: {
   "postgresql-simple-typed" = dontDistribute super."postgresql-simple-typed";
   "postgresql-typed" = dontDistribute super."postgresql-typed";
   "postgrest" = dontDistribute super."postgrest";
+  "postgrest-ws" = dontDistribute super."postgrest-ws";
   "postie" = dontDistribute super."postie";
   "postmark" = dontDistribute super."postmark";
   "postmaster" = dontDistribute super."postmaster";
@@ -6709,6 +6721,7 @@ self: super: {
   "shake-pack" = dontDistribute super."shake-pack";
   "shake-persist" = dontDistribute super."shake-persist";
   "shaker" = dontDistribute super."shaker";
+  "shakespeare" = doDistribute super."shakespeare_2_0_9";
   "shakespeare-babel" = dontDistribute super."shakespeare-babel";
   "shakespeare-css" = dontDistribute super."shakespeare-css";
   "shakespeare-i18n" = dontDistribute super."shakespeare-i18n";
@@ -6760,6 +6773,7 @@ self: super: {
   "simple-conduit" = dontDistribute super."simple-conduit";
   "simple-config" = dontDistribute super."simple-config";
   "simple-css" = dontDistribute super."simple-css";
+  "simple-download" = dontDistribute super."simple-download";
   "simple-eval" = dontDistribute super."simple-eval";
   "simple-firewire" = dontDistribute super."simple-firewire";
   "simple-form" = dontDistribute super."simple-form";
@@ -6768,6 +6782,7 @@ self: super: {
   "simple-get-opt" = dontDistribute super."simple-get-opt";
   "simple-index" = dontDistribute super."simple-index";
   "simple-log-syslog" = dontDistribute super."simple-log-syslog";
+  "simple-logger" = dontDistribute super."simple-logger";
   "simple-neural-networks" = dontDistribute super."simple-neural-networks";
   "simple-nix" = dontDistribute super."simple-nix";
   "simple-observer" = dontDistribute super."simple-observer";
@@ -6908,6 +6923,7 @@ self: super: {
   "snow-white" = dontDistribute super."snow-white";
   "snowball" = dontDistribute super."snowball";
   "snowglobe" = dontDistribute super."snowglobe";
+  "soap" = doDistribute super."soap_0_2_3_0";
   "sock2stream" = dontDistribute super."sock2stream";
   "sockaddr" = dontDistribute super."sockaddr";
   "socket-activation" = dontDistribute super."socket-activation";
