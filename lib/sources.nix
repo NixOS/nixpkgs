@@ -55,10 +55,11 @@ rec {
            # packed-refs file, so we have to grep through it:
            else if lib.pathExists packedRefsName
            then
-             let packedRefs  = lib.splitString "\n" (readFile packedRefsName);
-                 matchRule   = match ("^(.*) " + file + "$");
-                 matchedRefs = lib.flatten (lib.filter (m: ! (isNull m)) (map matchRule packedRefs));
-             in lib.head matchedRefs
+             let fileContent = readFile packedRefsName;
+                 matchRef    = match ".*\n([^\n ]*) " + file + "\n.*" fileContent;
+             in if   isNull matchRef
+                then throw ("Could not find " + file + " in " + packedRefsName)
+                else lib.head matchRef
            else throw ("Not a .git directory: " + path);
     in lib.flip readCommitFromFile "HEAD";
 }
