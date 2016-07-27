@@ -36,7 +36,7 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.jre config.programs.ssh.package pkgs.nix ];
+        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD agent process.
@@ -80,26 +80,26 @@ in {
         '';
       };
 
-      heapSize = mkOption {
+      initialJavaHeapSize = mkOption {
         default = "128m";
         type = types.str;
         description = ''
-          Specifies the java heap memory size for the Go.CD agent java process.
+          Specifies the initial java heap memory size for the Go.CD agent java process.
         '';
       };
 
-      maxMemory = mkOption {
+      maxJavaHeapMemory = mkOption {
         default = "256m";
         type = types.str;
         description = ''
-          Specifies the java maximum memory size for the Go.CD agent java process.
+          Specifies the java maximum heap memory size for the Go.CD agent java process.
         '';
       };
 
       startupOptions = mkOption {
         default = [
-          "-Xms${cfg.heapSize}"
-          "-Xmx${cfg.maxMemory}"
+          "-Xms${cfg.initialJavaHeapSize}"
+          "-Xmx${cfg.maxJavaHeapMemory}"
           "-Djava.io.tmpdir=/tmp"
           "-Dcruise.console.publish.interval=10"
           "-Djava.security.egd=file:/dev/./urandom"
