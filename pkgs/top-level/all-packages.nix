@@ -14078,9 +14078,7 @@ in
 
   ne = callPackage ../applications/editors/ne { };
 
-  nedit = callPackage ../applications/editors/nedit {
-    motif = lesstif;
-  };
+  nedit = callPackage ../applications/editors/nedit { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
