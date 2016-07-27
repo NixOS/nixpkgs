@@ -97,6 +97,8 @@ in mkDerivation (rec {
       --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
+    export HOME="$TMP"
+
     local topDir=$out/lib/ghcjs-${version}
     mkdir -p $topDir
 
