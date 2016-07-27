@@ -18,6 +18,7 @@ let
 
     ${cfg.config}
 
+    ${optionalString (cfg.httpConfig == "") ''
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -89,8 +90,15 @@ let
         }
       ''}
 
+      ${cfg.appendHttpConfig}
+    }''}
+
+    ${optionalString (cfg.httpConfig != "") ''
+    http {
+      include ${cfg.package}/conf/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
       ${cfg.httpConfig}
-    }
+    }''}
 
     ${cfg.appendConfig}
   '';
@@ -245,7 +253,22 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Configuration lines to be appended inside of the http {} block.";
+        description = "
+          Configuration lines to be set inside the http block.
+          This is mutually exclusive with the structured configuration
+          via virtualHosts and the recommendedXyzSettings configuration
+          options. See appendHttpConfig for appending to the generated http block.
+        ";
+      };
+
+      appendHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "
+          Configuration lines to be appended to the generated http block.
+          This is mutually exclusive with using httpConfig for specifying the whole
+          http block verbatim.
+        ";
       };
 
       stateDir = mkOption {
@@ -352,7 +375,6 @@ in
         }
       ) virtualHosts
     );
-
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";
