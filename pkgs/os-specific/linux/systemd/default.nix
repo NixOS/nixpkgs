@@ -10,14 +10,14 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "230";
+  version = "231";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "systemd";
-    rev = "81d5aaac06b43fd72f5ab02734a17cbfb55d1f5b";
-    sha256 = "1ig7jwmvaa1r4qlngjpnvvvvxhmzbxr171d257q4ryf87l93g1an";
+    rev = "124564dd451349ec12673a7d4836b4a7a2f8fb4e";
+    sha256 = "021b7filp1dlhic1iv54b821w7mj5595njvzns939pmn636ry4m5";
   };
 
   /* gave up for now!
