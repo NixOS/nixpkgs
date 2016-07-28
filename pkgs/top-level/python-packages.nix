@@ -17228,11 +17228,11 @@ in modules // {
 
 
   praw = buildPythonPackage rec {
-    name = "praw-3.3.0";
+    name = "praw-3.5.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/praw/${name}.zip";
-      sha256 = "17s8s4a1yk9rq21f3kmj9k4dbgvfa3650l8b39nhwybvxl3j5nfv";
+      sha256 = "1hwdzqbrjdkicqhyxpcpsmld21k0ndpy8d2gk6l5mv9isw3dm8qa";
     };
 
     propagatedBuildInputs = with self; [
