@@ -16382,9 +16382,7 @@ in
 
   ### SCIENCE/BIOLOGY
 
-  alliance = callPackage ../applications/science/electronics/alliance {
-    motif = lesstif;
-  };
+  alliance = callPackage ../applications/science/electronics/alliance {  };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = overrideCC stdenv gcc49;

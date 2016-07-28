@@ -11,8 +11,6 @@ let
     })
   ) cfg.virtualHosts;
 
-  nginx = cfg.package;
-
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;

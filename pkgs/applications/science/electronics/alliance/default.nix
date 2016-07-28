@@ -1,12 +1,14 @@
 {stdenv, fetchurl, xproto, motif, libX11, libXt, libXpm, bison, flex}:
 
-stdenv.mkDerivation {
-  name = "alliance-5.0-20070718";
+stdenv.mkDerivation rec {
+  name = "alliance-5.0-20120515";
 
   src = fetchurl {
-    url = http://www-asim.lip6.fr/pub/alliance/distribution/5.0/alliance-5.0-20070718.tar.gz;
-    sha256 = "4e17c8f9f4d344061166856d47e58527c6ae870fda0c73b5ba0200967d23af9f";
+    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${name}.tar.gz";
+    sha256 = "12vvhank896fn93xgb8q3qbv32r94zhnk1xvwsymywn1k5v4jwd9";
   };
+
+  hardeningDisable = [ "format" ];
 
   buildInputs = [ xproto motif xproto libX11 libXt libXpm bison flex];
 
