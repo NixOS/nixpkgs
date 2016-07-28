@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.services.nginx;
   nginx = cfg.package;
-  configFileText = ''
+  configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     daemon off;
 
@@ -19,17 +19,6 @@ let
     ''}
     ${cfg.appendConfig}
   '';
-  configFile = pkgs.runCommand "nginx.conf" {
-    text = configFileText;
-    passAsFile = ["text"];
-    preferLocalBuild = true;
-    allowSubstitutes = false;
-  } ''
-    mkdir -p "$(dirname "$out")"
-    mv "$textPath" "$out"
-    (${nginx}/bin/nginx -t -c "$out" -p ${cfg.stateDir} || true) 2>&1 | grep -q 'syntax is ok'
-  '';
-
 in
 
 {
@@ -102,6 +91,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    # TODO: test user supplied config file pases syntax test
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
