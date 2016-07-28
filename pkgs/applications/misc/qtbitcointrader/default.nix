@@ -16,11 +16,13 @@ stdenv.mkDerivation {
   postUnpack = "sourceRoot=\${sourceRoot}/src";
 
   configurePhase = ''
+    runHook preConfigure
     qmake $qmakeFlags \
       PREFIX=$out \
       DESKTOPDIR=$out/share/applications \
       ICONDIR=$out/share/pixmaps \
       QtBitcoinTrader_Desktop.pro
+    runHook postConfigure
   '';
 
   meta = with stdenv.lib;

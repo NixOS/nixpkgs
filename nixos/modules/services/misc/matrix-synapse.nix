@@ -522,10 +522,12 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
-        mkdir -p /var/lib/matrix-synapse
-        chmod 700 /var/lib/matrix-synapse
-        chown -R matrix-synapse:matrix-synapse /var/lib/matrix-synapse
-        ${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse/ --generate-keys
+        if ! test -e /var/lib/matrix-synapse; then
+          mkdir -p /var/lib/matrix-synapse
+          chmod 700 /var/lib/matrix-synapse
+          chown -R matrix-synapse:matrix-synapse /var/lib/matrix-synapse
+          ${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse/ --generate-keys
+        fi
       '';
       serviceConfig = {
         Type = "simple";

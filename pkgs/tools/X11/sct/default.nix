@@ -5,6 +5,14 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = http://www.tedunangst.com/flak/files/sct.c;
     sha256 = "01f3ndx3s6d2qh2xmbpmhd4962dyh8yp95l87xwrs4plqdz6knhd";
+    
+    # Discussion regarding the checksum and the source code can be found in issue #17163 
+    # The code seems unmaintained, yet an unknown (probably small change) in the code caused 
+    # failed builds as the checksum had changed.
+    # The checksum is updated for now, however, this is unpractical and potentially unsafe 
+    # so any future changes might warrant a fork of the (feature complete) project. 
+    # The code is under public domain.
+    
   };
   phases = ["patchPhase" "buildPhase" "installPhase"];
   patchPhase = ''

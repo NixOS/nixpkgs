@@ -8,11 +8,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "mariadb-${version}";
-  version = "10.1.9";
+  version = "10.1.16";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0471vwg9c5c17m7679krjha16ib6d48fcsphkchb9v9cf8k5i74f";
+    sha256 = "14s3wq1c25n62n75hkixl8n7cni4m73w055nsx4czm655k33bjv7";
   };
 
   buildInputs = [

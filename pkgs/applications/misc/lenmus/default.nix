@@ -7,19 +7,14 @@
 
 stdenv.mkDerivation rec {
   name = "lenmus-${version}";
-  version = "5.4.1";
+  version = "5.4.2";
 
   src = fetchFromGitHub {
     owner = "lenmus";
     repo = "lenmus";
     rev = "Release_${version}";
-    sha256 = "03xar8x38x20cns2gnv34jp0hw0k16sa62kkfhka9iiiw90wfyrp";
+    sha256 = "1n639xr1qxx6rhqs0c6sjxp3bv8cwkmw1vfk1cji7514gj2a9v3p";
   };
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "DESTINATION \"/usr/share" "DESTINATION \"$out/share"
-  '';
 
   cmakeFlags = [
     "-DCMAKE_INSALL_PREFIX=$out"

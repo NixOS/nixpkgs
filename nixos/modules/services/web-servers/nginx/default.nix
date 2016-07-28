@@ -11,7 +11,9 @@ let
     })
   ) cfg.virtualHosts;
 
-  configFile = pkgs.writeText "nginx.conf" ''
+  nginx = cfg.package;
+
+  configFileText = ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
     daemon off;
@@ -175,6 +177,17 @@ let
     auth_basic secured;
     auth_basic_user_file ${htpasswdFile};
   '';
+  configFile = pkgs.runCommand "nginx.conf" {
+    text = configFileText;
+    passAsFile = ["text"];
+    preferLocalBuild = true;
+    allowSubstitutes = false;
+  } ''
+    mkdir -p "$(dirname "$out")"
+    mv "$textPath" "$out"
+    (${nginx}/bin/nginx -t -c "$out" -p ${cfg.stateDir} || true) 2>&1 | grep -q 'syntax is ok'
+  '';
+
 in
 
 {

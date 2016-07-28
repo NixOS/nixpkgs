@@ -3014,6 +3014,8 @@ in
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
+  pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
+
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
@@ -3164,6 +3166,8 @@ in
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
+
+  psutils = callPackage ../tools/typesetting/psutils { };
 
   pv = callPackage ../tools/misc/pv { };
 
@@ -5975,6 +5979,8 @@ in
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+
+  wasm = callPackage ../development/interpreters/wasm { };
 
   xulrunner = callPackage ../development/interpreters/xulrunner {
     inherit (gnome) libIDL;
@@ -9535,6 +9541,8 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  v8_static = lowPrio (self.v8.override { static = true; });
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel {
     libva = libva-full; # also wants libva-{x11,drm,wayland}
   };
@@ -9595,6 +9603,7 @@ in
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
+    inherit (darwin) libobjc;
   };
 
   webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
@@ -10375,10 +10384,6 @@ in
   influxdb = (callPackage ../servers/nosql/influxdb/v0.nix { }).bin // { outputs = [ "bin" ]; };
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
-
-  mysql51 = callPackage ../servers/sql/mysql/5.1.x.nix {
-    ps = procps; /* !!! Linux only */
-  };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
@@ -11651,6 +11656,8 @@ in
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
+
+  tiptop = callPackage ../os-specific/linux/tiptop { };
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
@@ -13026,6 +13033,8 @@ in
 
   photivo = callPackage ../applications/graphics/photivo { };
 
+  rhythmbox = callPackage ../applications/audio/rhythmbox { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
@@ -13862,6 +13871,8 @@ in
 
   mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
 
+  motif = callPackage ../development/libraries/motif { };
+
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
@@ -14057,9 +14068,7 @@ in
 
   ne = callPackage ../applications/editors/ne { };
 
-  nedit = callPackage ../applications/editors/nedit {
-    motif = lesstif;
-  };
+  nedit = callPackage ../applications/editors/nedit { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
@@ -15256,7 +15265,6 @@ in
   apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = callPackage ../applications/misc/xpdf {
-    motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
@@ -15800,6 +15808,8 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
+  
+  solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
@@ -16011,7 +16021,6 @@ in
       libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = self.gnome3_20;

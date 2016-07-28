@@ -338,6 +338,7 @@
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   robbinch = "Robbin C. <robbinch33@gmail.com>";
   robgssp = "Rob Glossop <robgssp@gmail.com>";
+  roblabla = "Robin Lambertz <robinlambertz+dev@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   romildo = "José Romildo Malaquias <malaquias@gmail.com>";
   rszibele = "Richard Szibele <richard_szibele@hotmail.com>";
