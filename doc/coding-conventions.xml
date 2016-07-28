@@ -251,16 +251,13 @@ bound to the variable name <varname>e2fsprogs</varname> in
 
   <listitem><para>The version part of the <literal>name</literal>
   attribute <emphasis>must</emphasis> start with a digit (following a
-  dash) — e.g., <literal>"hello-0.3-pre-r3910"</literal> instead of
-  <literal>"hello-svn-r3910"</literal>, as the latter would be seen as
-  a package named <literal>hello-svn</literal> by
-  <command>nix-env</command>.</para></listitem>
+  dash) — e.g., <literal>"hello-0.3.1rc2"</literal>.</para></listitem>
 
-  <listitem><para>If package is fetched from git's commit then
+  <listitem><para>If a package is not a release but a commit from a repository, then
   the version part of the name <emphasis>must</emphasis> be the date of that 
   (fetched) commit. The date must be in <literal>"YYYY-MM-DD"</literal> format.
-  Also add <literal>"git"</literal> to the name - e.g.,
-  <literal>"pkgname-git-2014-09-23"</literal>.</para></listitem>
+  Also append <literal>"unstable"</literal> to the name - e.g.,
+  <literal>"pkgname-unstable-2014-09-23"</literal>.</para></listitem>
 
   <listitem><para>Dashes in the package name should be preserved
   in new variable names, rather than converted to underscores
