@@ -7962,9 +7962,9 @@ in modules // {
     };
   };
 
-  pytools = buildPythonPackage rec { 
-    name = "pytools-${version}"; 
-    version = "2016.2.1"; 
+  pytools = buildPythonPackage rec {
+    name = "pytools-${version}";
+    version = "2016.2.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "inducer";
@@ -7983,7 +7983,7 @@ in modules // {
     ];
 
     meta = {
-      homepage = https://github.com/inducer/pytools/; 
+      homepage = https://github.com/inducer/pytools/;
       description = "Miscellaneous Python lifesavers.";
       license = licenses.mit;
       maintainers = with maintainers; [ artuuge ];
@@ -13957,7 +13957,7 @@ in modules // {
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
- 
+
     disabled = pythonOlder "2.6";
 
     checkPhase = ''    # wants to be run in a different directory
@@ -28804,5 +28804,22 @@ in modules // {
       makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
         --prefix PYTHONPATH : "$PYTHONPATH"
     '';
+  };
+
+  yapf = buildPythonPackage rec {
+    name = "yapf-${version}";
+    version = "0.11.0";
+
+    meta = {
+      description = "A formatter for Python code.";
+      homepage    = "https://github.com/google/yapf";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ siddharthist ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/yapf/${name}.tar.gz";
+      sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
+    };
   };
 }
