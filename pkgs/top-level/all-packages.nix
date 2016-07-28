@@ -672,6 +672,8 @@ in
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catclock = callPackage ../applications/misc/catclock { };
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
