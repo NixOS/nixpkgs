@@ -16834,6 +16834,8 @@ in
     withX = true;
   };
 
+  scilab-bin = callPackage ../applications/science/math/scilab-bin {};
+
   scotch = callPackage ../applications/science/math/scotch { };
 
   msieve = callPackage ../applications/science/math/msieve { };
