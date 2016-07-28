@@ -14879,6 +14879,7 @@ in
   unison = callPackage ../applications/networking/sync/unison {
     inherit (ocamlPackages) lablgtk;
     enableX11 = config.unison.enableX11 or true;
+    ocaml = config.unison.ocaml or pkgs.ocaml_4_02;
   };
 
   unpaper = callPackage ../tools/graphics/unpaper { };
