@@ -2,7 +2,7 @@
 
 let
   version = "4.7.0";
-  rev = "1"; #tracks unversioned changes that occur on download.code42.com from time to time
+  rev = "2"; #tracks unversioned changes that occur on download.code42.com from time to time
 
 in stdenv.mkDerivation rec {
   name = "crashplan-${version}-r${rev}";

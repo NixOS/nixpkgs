@@ -3014,6 +3014,8 @@ in
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
+  pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
+
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
@@ -3164,6 +3166,8 @@ in
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
+
+  psutils = callPackage ../tools/typesetting/psutils { };
 
   pv = callPackage ../tools/misc/pv { };
 
@@ -5975,6 +5979,8 @@ in
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+
+  wasm = callPackage ../development/interpreters/wasm { };
 
   xulrunner = callPackage ../development/interpreters/xulrunner {
     inherit (gnome) libIDL;
@@ -9535,6 +9541,8 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  v8_static = lowPrio (self.v8.override { static = true; });
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel {
     libva = libva-full; # also wants libva-{x11,drm,wayland}
   };
@@ -11651,6 +11659,8 @@ in
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
+
+  tiptop = callPackage ../os-specific/linux/tiptop { };
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
@@ -13862,6 +13872,8 @@ in
 
   mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
 
+  motif = callPackage ../development/libraries/motif { };
+
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
@@ -14057,9 +14069,7 @@ in
 
   ne = callPackage ../applications/editors/ne { };
 
-  nedit = callPackage ../applications/editors/nedit {
-    motif = lesstif;
-  };
+  nedit = callPackage ../applications/editors/nedit { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
@@ -15800,6 +15810,8 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
+  
+  solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
@@ -16011,7 +16023,6 @@ in
       libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = self.gnome3_20;

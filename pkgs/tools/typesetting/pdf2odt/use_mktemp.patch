@@ -1,0 +1,19 @@
+diff --git a/pdf2odt b/pdf2odt
+index d38bb07..e1ddf05 100755
+--- a/pdf2odt
++++ b/pdf2odt
+@@ -173,13 +173,7 @@ if [ -e "${out}" ] &&
+ fi
+ 
+ # Set up temporary staging directory
+-TMPDIR="/tmp/pdf2odt.$$"
+-[ \! -e "${TMPDIR}" ] || {
+-  echo "Staging directory ${TMPDIR} already exists" >&2
+-  exit 1
+-}
+-trap 'rm -rf "${TMPDIR}"' EXIT INT TERM QUIT HUP
+-mkdir -p "${TMPDIR}"
++TMPDIR=$(mktemp -d)
+ 
+ # Adjust DPI so that the image fits on a letter- or a4-sized page.
+ function scale() {

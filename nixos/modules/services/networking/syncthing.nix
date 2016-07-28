@@ -114,8 +114,8 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    systemd.services.syncthing = mkIf cfg.systemService
-      header // {
+    systemd.services = mkIf cfg.systemService {
+      syncthing = header // {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = service // {
           User = cfg.user;
@@ -124,6 +124,7 @@ in
           ExecStart = "${cfg.package}/bin/syncthing -no-browser -home=${cfg.dataDir}";
         };
       };
+    };
 
     systemd.user.services.syncthing =
       header // {

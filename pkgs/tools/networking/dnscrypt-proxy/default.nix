@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ joachifm jgeerds ];
     # upstream claims OSX support, but Hydra fails
-    platforms = with platforms; allBut [ darwin ];
+    platforms = with platforms; allBut darwin;
   };
 }

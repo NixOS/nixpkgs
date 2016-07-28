@@ -173,7 +173,7 @@ self: super: {
   hwsl2 = dontCheck super.hwsl2;
 
   # https://github.com/haskell/haddock/issues/427
-  haddock = dontCheck super.haddock;
+  haddock = dontCheck self.haddock_2_16_1;
 
   # haddock-api >= 2.17 is GHC 8.0 only
   haddock-api = self.haddock-api_2_16_1;
@@ -213,5 +213,7 @@ self: super: {
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
+
+  generic-deriving = self.generic-deriving_1_10_5;
 
 }
