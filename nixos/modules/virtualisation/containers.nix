@@ -415,6 +415,8 @@ in
         # after the timeout). So send an ignored signal.
         KillMode = "mixed";
         KillSignal = "WINCH";
+
+        DevicePolicy = "closed";
       };
     };
   in {
