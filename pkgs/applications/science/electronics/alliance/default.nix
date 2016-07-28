@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "12vvhank896fn93xgb8q3qbv32r94zhnk1xvwsymywn1k5v4jwd9";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ xproto motif xproto libX11 libXt libXpm bison flex];
 
   patchPhase = ''
