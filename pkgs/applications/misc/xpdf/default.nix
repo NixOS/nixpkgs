@@ -25,6 +25,8 @@ stdenv.mkDerivation {
   # Debian uses '-fpermissive' to bypass some errors on char* constantness.
   CXXFLAGS = "-O2 -fpermissive";
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = "--enable-a4-paper";
 
   postInstall = stdenv.lib.optionalString (base14Fonts != null) ''
