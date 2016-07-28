@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v8y8vwj3kn91crsddqkz843y6csgw7wkjnd3zdcb4bcrf1pjrsk";
   };
 
+  hardeningDisable = [ "format" ];
+
   buildInputs = [ xlibsWrapper motif libXpm ];
 
   buildFlags = if stdenv.isLinux then "linux" else "";
