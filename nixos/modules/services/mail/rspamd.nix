@@ -43,10 +43,7 @@ in
 
     services.rspamd = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to run the rspamd daemon.";
-      };
+      enable = mkEnableOption "Whether to run the rspamd daemon.";
 
       debug = mkOption {
         default = false;
@@ -95,7 +92,6 @@ in
         '';
        };
     };
-
   };
 
 
@@ -135,9 +131,6 @@ in
         ${pkgs.coreutils}/bin/mkdir -p /var/lib/rspamd
         ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /var/lib/rspamd
       '';
-
     };
-
   };
-
 }
