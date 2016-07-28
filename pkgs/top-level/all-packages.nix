@@ -10399,10 +10399,6 @@ in
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
-  mysql51 = callPackage ../servers/sql/mysql/5.1.x.nix {
-    ps = procps; /* !!! Linux only */
-  };
-
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
