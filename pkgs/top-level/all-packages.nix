@@ -9620,6 +9620,7 @@ in
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
+    inherit (darwin) libobjc;
   };
 
   webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
