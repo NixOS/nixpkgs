@@ -1,9 +1,0 @@
-#!/bin/sh -e
-#
-# Regenerates `default.nix` using `gogs-definition.nix`.
-#
-# The latter should be updated to a new revision of Gogs in order
-# to update.
-#
-
-cat "$(nix-build --no-out-link gogs-definition.nix)" > default.nix
