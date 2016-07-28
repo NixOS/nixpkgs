@@ -43,34 +43,34 @@ in
     nixosVersion = mkOption {
       internal = true;
       type = types.str;
-      description = "NixOS version.";
+      description = "The full NixOS version (e.g. <literal>16.03.1160.f2d4ee1</literal>).";
     };
 
     nixosRelease = mkOption {
       readOnly = true;
       type = types.str;
       default = readFile releaseFile;
-      description = "NixOS release.";
+      description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
     nixosVersionSuffix = mkOption {
       internal = true;
       type = types.str;
       default = if pathExists suffixFile then readFile suffixFile else "pre-git";
-      description = "NixOS version suffix.";
+      description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
     nixosRevision = mkOption {
       internal = true;
       type = types.str;
       default = if pathExists revisionFile then readFile revisionFile else "master";
-      description = "NixOS Git revision hash.";
+      description = "The Git revision from which this NixOS configuration was built.";
     };
 
     nixosCodeName = mkOption {
       readOnly = true;
       type = types.str;
-      description = "NixOS release code name.";
+      description = "The NixOS release code name (e.g. <literal>Emu</literal>).";
     };
 
     defaultChannel = mkOption {
