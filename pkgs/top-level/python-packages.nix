@@ -20889,22 +20889,22 @@ in modules // {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_17;
-
-  scipy_0_16 = self.buildScipyPackage rec {
-    version = "0.16.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
-    };
-    numpy = self.numpy;
-  };
+  scipy = self.scipy_0_18;
 
   scipy_0_17 = self.buildScipyPackage rec {
     version = "0.17.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
       sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
+    };
+    numpy = self.numpy;
+  };
+
+  scipy_0_18 = self.buildScipyPackage rec {
+    version = "0.18.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
+      sha256 = "f01784fb1c2bc246d4211f2482ecf4369db5abaecb9d5afb9d94f6c59663286a";
     };
     numpy = self.numpy;
   };
