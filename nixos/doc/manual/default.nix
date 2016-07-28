@@ -122,7 +122,7 @@ let
       <targetset>
         <targetsetinfo>
             Allows for cross-referencing olinks between the manpages
-            and the HTML/PDF manuals.
+            and manual.
         </targetsetinfo>
 
         <document targetdoc="manual">&manualtargets;</document>
@@ -226,29 +226,6 @@ in rec {
 
       mkdir -p $out/nix-support
       echo "doc-epub manual $dst/NixOS Manual - NixOS community.epub" >> $out/nix-support/hydra-build-products
-    '';
-  };
-
-
-  manualPDF = stdenv.mkDerivation {
-    name = "nixos-manual-pdf";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt dblatex dblatex.tex ];
-
-    buildCommand = ''
-      ${copySources}
-
-      dst=$out/share/doc/nixos
-      mkdir -p $dst
-      xmllint --xinclude manual.xml | dblatex -o $dst/manual.pdf - \
-        -P target.database.document="${olinkDB}/olinkdb.xml" \
-        -P doc.collab.show=0 \
-        -P latex.output.revhistory=0
-
-      mkdir -p $out/nix-support
-      echo "doc-pdf manual $dst/manual.pdf" >> $out/nix-support/hydra-build-products
     '';
   };
 
