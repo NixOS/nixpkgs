@@ -3606,6 +3606,16 @@ in modules // {
     };
   };
 
+  # Needed for awscli
+  colorama_3_3 = self.colorama.override rec {
+    name = "colorama-${version}";
+    version = "0.3.3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/colorama/${name}.tar.gz";
+      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
+    };
+  };
+
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
