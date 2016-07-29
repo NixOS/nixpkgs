@@ -3592,12 +3592,15 @@ in modules // {
 
   colorama = buildPythonPackage rec {
     name = "colorama-${version}";
-    version = "0.3.3";
+    version = "0.3.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
+      sha256 = "e043c8d32527607223652021ff648fbb394d5e19cba9f1a698670b338c9d782b";
     };
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/tartley/colorama;
