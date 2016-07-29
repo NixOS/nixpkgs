@@ -5,6 +5,6 @@ fetchurl: {
 
   src = fetchurl {
     url = mirror://gnome/sources/gnome-packagekit/3.20/gnome-packagekit-3.20.0.tar.xz;
-    sha256 = "0wf5r0qrdlalbr73fpfaapq61vlya3nwygsv4wm2bxaf56v5sjmq";
+    sha256 = "b84a5db6294ef5252a275b3fcfed509eee60f055ca5d374e5e54d19631c8c571";
   };
 }
