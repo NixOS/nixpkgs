@@ -9113,6 +9113,10 @@ in
     let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
+  qt57 =
+    let imported = import ../development/libraries/qt-5/5.7 { inherit pkgs; };
+    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+
   qt5 = self.qt56;
 
   qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
