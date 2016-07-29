@@ -3893,11 +3893,11 @@ in modules // {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.24";
+    version = "0.24.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "1wd3q97gia3zhsgcdlvxh26hkrf3m53i6r1l4g0yya119264vr3d";
+      sha256 = "84808fda00508757928e1feadcf41c9f78e9a9b7167b6649ab0933b76f75e7b9";
     };
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
