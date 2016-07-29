@@ -40,7 +40,9 @@ let
 
     bluedevil = callPackage ./bluedevil.nix {};
     breeze-gtk = callPackage ./breeze-gtk.nix {};
-    breeze-qt4 = callPackage ./breeze-qt4.nix {};
+    breeze-qt4 = callPackage ./breeze-qt4.nix {
+      inherit (srcs.breeze) src version;
+    };
     breeze-qt5 = callPackage ./breeze-qt5.nix {};
     breeze =
       let
