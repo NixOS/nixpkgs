@@ -8,13 +8,17 @@ buildGoPackage rec {
   buildInputs = [ makeWrapper ];
   buildFlags = stdenv.lib.optional (sqliteSupport) "-tags sqlite";
   goPackagePath = "github.com/gogits/gogs";
+  outputs = [ "out" "bin" "data" ];
 
   postInstall = ''
+    mkdir $data
+    cp -R $src/{public,templates} $data
+
     wrapProgram $bin/bin/gogs \
       --prefix PATH : ${git}/bin \
       --run 'export GOGS_WORK_DIR=''${GOGS_WORK_DIR:-$PWD}' \
       --run 'cd "$GOGS_WORK_DIR"' \
-      --run "ln -fs $out/share/go/src/${goPackagePath}/{public,templates} ."
+      --run "ln -fs $data/{public,templates} ."
   '';
 
   src = fetchgit {
