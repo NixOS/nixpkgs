@@ -9142,11 +9142,17 @@ in
 
     openbr = callPackage ../development/libraries/openbr { };
 
-    phonon = callPackage ../development/libraries/phonon { };
+    phonon = callPackage ../development/libraries/phonon {
+      withQt5 = true;
+    };
 
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {
+      withQt5 = true;
+    };
 
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
+      withQt5 = true;
+    };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
