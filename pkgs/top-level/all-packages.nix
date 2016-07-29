@@ -6264,6 +6264,9 @@ in
 
   cmakeWithGui = self.cmakeCurses.override { useQt4 = true; };
 
+  # Does not actually depend on Qt 5
+  extra-cmake-modules = qt5.extra-cmake-modules;
+
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
   cpptest = callPackage ../development/libraries/cpptest { };
