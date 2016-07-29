@@ -116,6 +116,8 @@ in
         done
 
         ${if cfg.enableCompletion then "autoload -U compinit && compinit" else ""}
+
+        HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
       '';
 
     };
