@@ -1,34 +1,24 @@
-{ fetchFromGitHub , stdenv, lib, ocaml, perl, indent, transfig, ghostscript, texinfo, libtool, gettext, automake, autoconf, precision ? "double" }:
+{ fetchurl, stdenv, lib, precision ? "double" }:
 
 with lib;
 
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-let version = "05-06-2016"; in
+let version = "3.3.5-rc1"; in
 
 stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "FFTW";
-    repo = "fftw3";
-    rev = "2ed010c62b1bc8ca6b23bfda2e09b8c28e1e8bcc";
-    sha256 = "1rd1rfdnr2mgli1s7x7z03s26bqf5mrrysvlh028f1dljn7bwd2q";
+  src = fetchurl {
+    url = "ftp://ftp.fftw.org/pub/fftw/fftw-${version}.tar.gz";
+    sha256 = "086z9xq5jy58w5lqygq4rpragcy2r0dz3lzci3mh0vghs9c6zgk6";
   };
-
-  nativeBuildInputs = [ ocaml perl indent transfig ghostscript texinfo libtool gettext automake autoconf ];
-
-  # remove the ./configure lines, so we can use nix's configureFlags
-  patchPhase = "sed -e '27,29d' -i bootstrap.sh";
-
-  preConfigurePhases =  "./bootstrap.sh";
 
   outputs = [ "dev" "out" "doc" ]; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =
-    [ "--enable-maintainer-mode"
-      "--enable-shared" "--disable-static"
+    [ "--enable-shared" "--disable-static"
       "--enable-threads"
     ]
     ++ optional (precision != "double") "--enable-${precision}"
