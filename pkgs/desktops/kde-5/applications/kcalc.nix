@@ -1,14 +1,7 @@
-{ kdeApp
-, lib
-, makeQtWrapper
-, extra-cmake-modules
-, gmp
-, kdoctools
-, kconfig
-, kconfigwidgets
-, kguiaddons
-, kinit
-, knotifications
+{
+  kdeApp, lib, makeQtWrapper, kdoctools,
+  extra-cmake-modules, kconfig, kconfigwidgets, kguiaddons, kinit,
+  knotifications, gmp
 }:
 
 kdeApp {
@@ -17,10 +10,7 @@ kdeApp {
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.fridh ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
     gmp kconfig kconfigwidgets kguiaddons kinit knotifications
   ];
