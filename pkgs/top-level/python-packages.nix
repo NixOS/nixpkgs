@@ -12334,13 +12334,13 @@ in modules // {
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.11.0";
+    version = "0.12.1";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/llvmlite/${name}.tar.gz";
-      sha256 = "1gc2yd4j855fb16nb341lm4z3hd4j40lhswqv116xlg4p5dyxkwk";
+      sha256 = "3ce71beebd4cbc7a49abe4eadfc99725477fd43caeb7405650ebb746c7a1d0df";
     };
 
     llvm = pkgs.llvm_37;
