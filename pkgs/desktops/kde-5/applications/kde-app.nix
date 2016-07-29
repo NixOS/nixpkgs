@@ -1,4 +1,4 @@
-{ stdenv, lib, debug, srcs }:
+{ kdeDerivation, lib, debug, srcs }:
 
 args:
 
@@ -7,16 +7,9 @@ let
   sname = args.sname or name;
   inherit (srcs."${sname}") src version;
 in
-stdenv.mkDerivation (args // {
+kdeDerivation (args // {
   name = "${name}-${version}";
   inherit src;
-
-  outputs = args.outputs or [ "dev" "out" ];
-
-  cmakeFlags =
-    (args.cmakeFlags or [])
-    ++ [ "-DBUILD_TESTING=OFF" ]
-    ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
   meta = {
     platforms = lib.platforms.linux;

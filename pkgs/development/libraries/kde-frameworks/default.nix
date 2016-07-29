@@ -19,13 +19,14 @@ let
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
 
   packages = self: with self; {
-    kdeFramework = args:
+
+    kdeDerivation = args:
       let
-        inherit (args) name;
-        inherit (srcs."${name}") src version;
+        setupHook =
+          let drv = { qtbase, qttools }:
+                makeSetupHook { deps = [ qtbase qttools ]; } ./setup-hook.sh;
+          in callPackage drv {};
       in stdenv.mkDerivation (args // {
-        name = "${name}-${version}";
-        inherit src;
 
         outputs = args.outputs or [ "dev" "out" ];
 
@@ -33,6 +34,20 @@ let
           (args.cmakeFlags or [])
           ++ [ "-DBUILD_TESTING=OFF" ]
           ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
+
+        nativeBuildInputs =
+          (args.nativeBuildInputs or [])
+          ++ [ pkgs.cmake pkgs.pkgconfig setupHook ];
+
+      });
+
+    kdeFramework = args:
+      let
+        inherit (args) name;
+        inherit (srcs."${name}") src version;
+      in kdeDerivation (args // {
+        name = "${name}-${version}";
+        inherit src;
 
         meta = {
           license = with lib.licenses; [
@@ -47,7 +62,9 @@ let
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
-    extra-cmake-modules = callPackage ./extra-cmake-modules {};
+    extra-cmake-modules = callPackage ./extra-cmake-modules {
+      inherit (srcs.extra-cmake-modules) src version;
+    };
     frameworkintegration = callPackage ./frameworkintegration.nix {};
     kactivities = callPackage ./kactivities.nix {};
     kactivities-stats = callPackage ./kactivities-stats.nix {};

@@ -13,7 +13,7 @@
 
 let
 
-  inherit (pkgs) lib stdenv symlinkJoin;
+  inherit (pkgs) lib makeSetupHook stdenv symlinkJoin;
 
   mirror = "mirror://kde";
   srcs = import ./srcs.nix { inherit (pkgs) fetchurl; inherit mirror; };
@@ -24,16 +24,9 @@ let
         inherit (args) name;
         sname = args.sname or name;
         inherit (srcs."${sname}") src version;
-      in stdenv.mkDerivation (args // {
+      in kdeDerivation (args // {
         name = "${name}-${version}";
         inherit src;
-
-        outputs = args.outputs or [ "dev" "out" ];
-
-        cmakeFlags =
-          (args.cmakeFlags or [])
-          ++ [ "-DBUILD_TESTING=OFF" ]
-          ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
         meta = {
           license = with lib.licenses; [

@@ -21,7 +21,7 @@ let
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
-      inherit stdenv lib;
+      inherit kdeDerivation lib;
       inherit debug srcs;
     };
 
