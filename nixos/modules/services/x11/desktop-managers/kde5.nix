@@ -148,7 +148,7 @@ in
         kde5.kde-gtk-config
 
         pkgs.phonon-backend-gstreamer
-        pkgs.kde5.phonon-backend-gstreamer
+        pkgs.qt5.phonon-backend-gstreamer
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
