@@ -1,9 +1,9 @@
 {
-  stdenv, lib, src, version
+  stdenv, lib, src, version,
   automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
   attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
   libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,
-  shared_desktop_ontologies_mime_info, soprano, strigi, udev, xz, pcre
+  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre
 }:
 
 stdenv.mkDerivation {
