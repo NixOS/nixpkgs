@@ -1376,7 +1376,7 @@ in modules // {
       bcdoc
       s3transfer
       six
-      colorama
+      colorama_3_3
       docutils
       rsa
       pkgs.groff
