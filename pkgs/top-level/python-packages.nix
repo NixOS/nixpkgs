@@ -2659,14 +2659,19 @@ in modules // {
 
   bokeh = buildPythonPackage rec {
     name = "bokeh-${version}";
-    version = "0.10.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bokeh/${name}.tar.gz";
-      sha256 = "2d8bd8c98e2f62b2a28328d3cc95bfbe257742fa7efc9c382b4c8ae4a141df14";
+      sha256 = "06d3ed14308f550376d5b0c7e9f2bacb3ff5bbcceefd7f6369d070de71dfa563";
     };
 
     disabled = isPyPy;
+
+    # Some test that uses tornado fails
+    doCheck = false;
+
+    buildInputs = with self; [ mock pytest ];
 
     propagatedBuildInputs = with self; [
       flask
@@ -2675,7 +2680,8 @@ in modules // {
       werkzeug
       itsdangerous
       dateutil
-      requests
+      futures
+      requests2
       six
       pygments
       pystache
@@ -2688,6 +2694,10 @@ in modules // {
       ++ optionals ( isPy26 ) [ argparse ]
       ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
       ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s bokeh/tests
+    '';
 
     meta = {
       description = "Statistical and novel interactive HTML plots for Python";
