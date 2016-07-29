@@ -18169,11 +18169,11 @@ in modules // {
 
   pyfftw = buildPythonPackage rec {
     name = "pyfftw-${version}";
-    version = "0.10.1";
+    version = "0.10.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "1789k6w17qpn9vknn2sjiwbig6yhfjvzs9fvcpvy3fyf9qala77y";
+      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
     };
 
     buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
