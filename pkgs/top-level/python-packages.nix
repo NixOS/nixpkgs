@@ -3572,11 +3572,11 @@ in modules // {
 
   colorama = buildPythonPackage rec {
     name = "colorama-${version}";
-    version = "0.3.3";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
+      sha256 = "1daknkr1iwxh32xc323614zjz39mwr7gk133hwkxg8c6n36gr7pc";
     };
 
     meta = {
