@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
       "ECMSetupVersion.cmake" "ECMVersionHeader.h.in" ]}
   '';
 
-  patches = [ ./fcitx-qt5-ecm.patch ];
-
   buildInputs = [ cmake fcitx pkgconfig qtbase ];
 
   preInstall = ''

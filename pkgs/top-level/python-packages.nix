@@ -7964,9 +7964,9 @@ in modules // {
     };
   };
 
-  pytools = buildPythonPackage rec { 
-    name = "pytools-${version}"; 
-    version = "2016.2.1"; 
+  pytools = buildPythonPackage rec {
+    name = "pytools-${version}";
+    version = "2016.2.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "inducer";
@@ -7985,7 +7985,7 @@ in modules // {
     ];
 
     meta = {
-      homepage = https://github.com/inducer/pytools/; 
+      homepage = https://github.com/inducer/pytools/;
       description = "Miscellaneous Python lifesavers.";
       license = licenses.mit;
       maintainers = with maintainers; [ artuuge ];
@@ -13959,7 +13959,7 @@ in modules // {
   nipy = buildPythonPackage rec {
     version = "0.4.0";
     name = "nipy-${version}";
- 
+
     disabled = pythonOlder "2.6";
 
     checkPhase = ''    # wants to be run in a different directory
@@ -17293,11 +17293,11 @@ in modules // {
 
 
   praw = buildPythonPackage rec {
-    name = "praw-3.3.0";
+    name = "praw-3.5.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/praw/${name}.zip";
-      sha256 = "17s8s4a1yk9rq21f3kmj9k4dbgvfa3650l8b39nhwybvxl3j5nfv";
+      sha256 = "1hwdzqbrjdkicqhyxpcpsmld21k0ndpy8d2gk6l5mv9isw3dm8qa";
     };
 
     propagatedBuildInputs = with self; [
@@ -20306,11 +20306,11 @@ in modules // {
 
   geoalchemy2 = buildPythonPackage rec {
     name = "GeoAlchemy2-${version}";
-    version = "0.3.0.dev1";
+    version = "0.3.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/G/GeoAlchemy2/${name}.tar.gz";
-      sha256 = "1j95p860ikpcpcirs5791yjpy8rf18zsz7vvsdy6v3x32hkim0k6";
+      sha256 = "0p2h1kgl5b0jz8wadx485vjh1mmm5s67p71yxh9lhp1441hkfswf";
     };
 
     propagatedBuildInputs = with self ; [ sqlalchemy shapely ];
@@ -21418,14 +21418,14 @@ in modules // {
 
   shapely = buildPythonPackage rec {
     name = "Shapely-${version}";
-    version = "1.5.13";
+    version = "1.5.15";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Shapely/${name}.tar.gz";
-      sha256 = "68f8efb43112e8ef1f7e56e2c9eef64e0cbc1c19528c627696fb07345075a348";
+      sha256 = "0lfqxb3kpdn0g9zzlhzg79yc8iyy4fpsk0p5nd80gar1mmhr8pg7";
     };
 
-    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales pytest ];
+    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales pytest cython ];
 
     propagatedBuildInputs = with self; [ numpy ];
 
@@ -21437,8 +21437,10 @@ in modules // {
       sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
     '';
 
+    # tests/test_voctorized fails because the vectorized extension is not
+    # available in when running tests
     checkPhase = ''
-      py.test $out
+      py.test --ignore tests/test_vectorized.py
     '';
 
     meta = {
@@ -22372,11 +22374,11 @@ in modules // {
 
   sqlalchemy_1_0 = buildPythonPackage rec {
     name = "SQLAlchemy-${version}";
-    version = "1.0.12";
+    version = "1.0.14";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/SQLAlchemy/${name}.tar.gz";
-      sha256 = "1l8qclhd0s90w3pvwhi5mjxdwr5j7gw7cjka2fx6f2vqmq7f4yb6";
+      sha256 = "1cq52yyplvi1wrvrzn779l9sfsjb158a18xaqbn7z779q4wilkfs";
     };
 
     buildInputs = with self; [ nose mock ]
@@ -28866,5 +28868,22 @@ in modules // {
       makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
         --prefix PYTHONPATH : "$PYTHONPATH"
     '';
+  };
+
+  yapf = buildPythonPackage rec {
+    name = "yapf-${version}";
+    version = "0.11.0";
+
+    meta = {
+      description = "A formatter for Python code.";
+      homepage    = "https://github.com/google/yapf";
+      license     = licenses.asl20;
+      maintainers = with maintainers; [ siddharthist ];
+    };
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/y/yapf/${name}.tar.gz";
+      sha256 = "14kb9gxw39zhvrijhp066b4bm6bgv35iw56c394y4dyczpha0dij";
+    };
   };
 }

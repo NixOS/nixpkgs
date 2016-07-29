@@ -673,6 +673,8 @@ in
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catclock = callPackage ../applications/misc/catclock { };
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
@@ -9099,7 +9101,12 @@ in
 
   qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
 
-  qt5LibsFun = self: with self; {
+  qt5LibsFun = self: with self;
+    let kdeFrameworks =
+          import ../development/libraries/kde-frameworks { inherit pkgs; } self;
+    in {
+
+    inherit kdeFrameworks;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -9118,6 +9125,12 @@ in
     };
 
     openbr = callPackage ../development/libraries/openbr { };
+
+    phonon = callPackage ../development/libraries/phonon { };
+
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
+
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
@@ -9143,7 +9156,7 @@ in
       ffmpeg = ffmpeg_2;
     });
 
-  };
+  } // kdeFrameworks;
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -11070,8 +11083,6 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
-        kernelPatches.hiddev_CVE_2016_5829
         kernelPatches.ecryptfs_fix_mmap_bug
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11097,7 +11108,6 @@ in
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11306,7 +11316,7 @@ in
   linux_grsec_nixos = callPackage ../build-support/grsecurity {
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      kernelPatches = with self.kernelPatches; [ bridge_stp_helper qat_common_Makefile ]
+      kernelPatches = with self.kernelPatches; [ bridge_stp_helper ]
         ++ lib.optionals ((platform.kernelArch or null) == "mips")
         [ kernelPatches.mips_fpureg_emu
           kernelPatches.mips_fpu_sigill
@@ -16301,12 +16311,6 @@ in
       openjpeg = openjpeg_1;
     };
 
-    phonon = callPackage ../development/libraries/phonon { };
-
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
-
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
-
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
       daemon = false;
@@ -16349,14 +16353,13 @@ in
 
   kde5 =
     let
-      frameworks = import ../desktops/kde-5/frameworks { inherit pkgs; };
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
         { plasma = plasma self;
-          frameworks = frameworks self;
+          frameworks = qt5.kdeFrameworks;
           applications = applications self; }
-        // frameworks self
+        // qt5.kdeFrameworks
         // plasma self
         // applications self
         // kde5PackagesFun self;
@@ -16821,6 +16824,8 @@ in
     withOCaml = true;
     withX = true;
   };
+
+  scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
   scotch = callPackage ../applications/science/math/scotch { };
 
