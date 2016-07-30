@@ -23,6 +23,7 @@ let
     kdeApp = import ./kde-app.nix {
       inherit kdeDerivation lib;
       inherit debug srcs;
+      inherit (pkgs) cmake pkgconfig;
     };
 
     kdelibs = callPackage ./kdelibs {
@@ -54,9 +55,7 @@ let
     libkexiv2 = callPackage ./libkexiv2.nix {};
     libkipi = callPackage ./libkipi.nix {};
     libkomparediff2 = callPackage ./libkomparediff2.nix {};
-    okular = callPackage ./okular.nix {
-      inherit (srcs.okular) src version;
-    };
+    okular = callPackage ./okular.nix {};
     print-manager = callPackage ./print-manager.nix {};
     spectacle = callPackage ./spectacle.nix {};
 

@@ -22,10 +22,6 @@ let
 
     kdeDerivation = args:
       let
-        setupHook =
-          let drv = { qtbase, qttools }:
-                makeSetupHook { deps = [ qtbase qttools ]; } ./setup-hook.sh;
-          in callPackage drv {};
       in stdenv.mkDerivation (args // {
 
         outputs = args.outputs or [ "dev" "out" ];
@@ -37,7 +33,7 @@ let
 
         nativeBuildInputs =
           (args.nativeBuildInputs or [])
-          ++ [ pkgs.cmake pkgs.pkgconfig setupHook ];
+          ++ [ pkgs.cmake pkgs.pkgconfig ecm ];
 
       });
 
@@ -62,6 +58,12 @@ let
     baloo = callPackage ./baloo.nix {};
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
+    ecm =
+      let drv = { qtbase, qttools }:
+            makeSetupHook
+            { deps = [ extra-cmake-modules qtbase qttools ]; }
+            ./setup-hook.sh;
+      in callPackage drv {};
     extra-cmake-modules = callPackage ./extra-cmake-modules {
       inherit (srcs.extra-cmake-modules) src version;
     };

@@ -1,20 +1,8 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, qtdeclarative
-, cups
-, kconfig
-, kconfigwidgets
-, kdbusaddons
-, kiconthemes
-, ki18n
-, kcmutils
-, kio
-, knotifications
-, plasma-framework
-, kwidgetsaddons
-, kwindowsystem
-, kitemviews
+{
+  kdeApp, lib, ecm,
+  cups, kconfig, kconfigwidgets, kdbusaddons, kiconthemes, ki18n, kcmutils, kio,
+  knotifications, kwidgetsaddons, kwindowsystem, kitemviews, plasma-framework,
+  qtdeclarative
 }:
 
 kdeApp {
@@ -23,9 +11,7 @@ kdeApp {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     cups kconfig kconfigwidgets kdbusaddons kiconthemes kcmutils knotifications
     kwidgetsaddons kitemviews ki18n kio kwindowsystem plasma-framework

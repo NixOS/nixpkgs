@@ -1,7 +1,7 @@
 {
   kdeApp, lib,
 
-  extra-cmake-modules, kdoctools, makeQtWrapper,
+  ecm, kdoctools, makeQtWrapper,
 
   karchive, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, khtml, kio,
   kservice, kpty, kwidgetsaddons, libarchive,
@@ -13,7 +13,7 @@
 kdeApp {
   name = "ark";
   nativeBuildInputs = [
-    extra-cmake-modules kdoctools makeQtWrapper
+    ecm kdoctools makeQtWrapper
   ];
   propagatedBuildInputs = [
     khtml ki18n kio karchive kconfig kcrash kdbusaddons kiconthemes kservice

@@ -1,14 +1,12 @@
 {
   stdenv, lib,
-  src, version,
   automoc4, cmake, perl, pkgconfig, kdelibs, qimageblitz,
   poppler_qt4, libspectre, libkexiv2, djvulibre, libtiff, freetype,
   ebook_tools
 }:
 
 stdenv.mkDerivation {
-  name = "okular-${version}";
-  inherit src;
+  name = "okular";
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
   buildInputs = [
     kdelibs qimageblitz poppler_qt4 libspectre libkexiv2 djvulibre libtiff
