@@ -1,11 +1,7 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-}:
+{ kdeFramework, lib, ecm }:
 
 kdeFramework {
   name = "kcodecs";
-  nativeBuildInputs = [ extra-cmake-modules ];
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-  };
+  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  nativeBuildInputs = [ ecm ];
 }

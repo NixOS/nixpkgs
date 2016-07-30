@@ -1,6 +1,6 @@
 { kdeFramework
 , lib
-, extra-cmake-modules
+, ecm
 }:
 
 kdeFramework {
@@ -10,5 +10,5 @@ kdeFramework {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   outputs = [ "out" ];
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
 }

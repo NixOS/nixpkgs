@@ -1,9 +1,9 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 }:
 
 kdeFramework {
   name = "threadweaver";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
 }

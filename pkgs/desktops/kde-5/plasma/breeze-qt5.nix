@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, frameworkintegration
+{ plasmaPackage, ecm, frameworkintegration
 , kcmutils, kconfigwidgets, kcoreaddons, kdecoration, kguiaddons
 , ki18n, kwindowsystem, makeQtWrapper, plasma-framework, qtx11extras
 }:
@@ -7,7 +7,7 @@ plasmaPackage {
   name = "breeze-qt5";
   sname = "breeze";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     makeQtWrapper
   ];
   propagatedBuildInputs = [

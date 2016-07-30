@@ -1,10 +1,10 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , kdoctools
 }:
 
 kdeFramework {
   name = "kjs";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
 }

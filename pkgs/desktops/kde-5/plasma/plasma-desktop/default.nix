@@ -1,4 +1,4 @@
-{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+{ plasmaPackage, substituteAll, ecm, kdoctools
 , attica, baloo, boost, fontconfig, kactivities, kactivities-stats
 , kauth, kcmutils, kdbusaddons, kdeclarative, kded, kdelibs4support, kemoticons
 , kglobalaccel, ki18n, kitemmodels, knewstuff, knotifications
@@ -13,7 +13,7 @@
 plasmaPackage rec {
   name = "plasma-desktop";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

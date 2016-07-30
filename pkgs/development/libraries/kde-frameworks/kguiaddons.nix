@@ -1,11 +1,11 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , qtx11extras
 }:
 
 kdeFramework {
   name = "kguiaddons";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ qtx11extras ];
 }

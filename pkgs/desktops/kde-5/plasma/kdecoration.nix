@@ -1,6 +1,6 @@
-{ plasmaPackage, extra-cmake-modules }:
+{ plasmaPackage, ecm }:
 
 plasmaPackage {
   name = "kdecoration";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
 }

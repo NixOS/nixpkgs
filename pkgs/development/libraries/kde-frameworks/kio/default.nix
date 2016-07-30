@@ -1,5 +1,5 @@
 { kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules, acl, karchive
+, ecm, acl, karchive
 , kbookmarks, kcompletion, kconfig, kconfigwidgets, kcoreaddons
 , kdbusaddons, kdoctools, ki18n, kiconthemes, kitemviews
 , kjobwidgets, knotifications, kservice, ktextwidgets, kwallet
@@ -10,7 +10,7 @@
 kdeFramework {
   name = "kio";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     acl karchive kbookmarks kcompletion kconfig kconfigwidgets kcoreaddons
     kdbusaddons ki18n kiconthemes kitemviews kjobwidgets knotifications kservice

@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, bluez-qt, kcoreaddons
+{ plasmaPackage, ecm, bluez-qt, kcoreaddons
 , kdbusaddons, kded, ki18n, kiconthemes, kio, knotifications
 , kwidgetsaddons, kwindowsystem, makeQtWrapper, plasma-framework
 , qtdeclarative, shared_mime_info
@@ -7,7 +7,7 @@
 plasmaPackage {
   name = "bluedevil";
   nativeBuildInputs = [
-    extra-cmake-modules makeQtWrapper shared_mime_info
+    ecm makeQtWrapper shared_mime_info
   ];
   propagatedBuildInputs = [
     bluez-qt ki18n kio kwindowsystem plasma-framework qtdeclarative kcoreaddons

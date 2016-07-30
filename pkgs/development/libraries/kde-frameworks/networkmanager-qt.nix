@@ -1,11 +1,11 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , networkmanager
 }:
 
 kdeFramework {
   name = "networkmanager-qt";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ networkmanager ];
 }

@@ -31,10 +31,6 @@ let
           ++ [ "-DBUILD_TESTING=OFF" ]
           ++ lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";
 
-        nativeBuildInputs =
-          (args.nativeBuildInputs or [])
-          ++ [ pkgs.cmake pkgs.pkgconfig ecm ];
-
       });
 
     kdeFramework = args:
@@ -59,9 +55,9 @@ let
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
     ecm =
-      let drv = { qtbase, qttools }:
+      let drv = { cmake, extra-cmake-modules, pkgconfig, qtbase, qttools }:
             makeSetupHook
-            { deps = [ extra-cmake-modules qtbase qttools ]; }
+            { deps = [ cmake extra-cmake-modules pkgconfig qtbase qttools ]; }
             ./setup-hook.sh;
       in callPackage drv {};
     extra-cmake-modules = callPackage ./extra-cmake-modules {

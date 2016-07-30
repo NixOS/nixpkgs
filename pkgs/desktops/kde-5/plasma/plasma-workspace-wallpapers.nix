@@ -1,10 +1,10 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 }:
 
 plasmaPackage {
   name = "plasma-workspace-wallpapers";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
   ];
 }

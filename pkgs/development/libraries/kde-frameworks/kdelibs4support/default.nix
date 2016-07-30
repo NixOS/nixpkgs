@@ -1,5 +1,5 @@
 { kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules, docbook_xml_dtd_45, kauth
+, ecm, docbook_xml_dtd_45, kauth
 , karchive, kcompletion, kconfig, kconfigwidgets, kcoreaddons
 , kcrash, kdbusaddons, kded, kdesignerplugin, kdoctools, kemoticons
 , kglobalaccel, kguiaddons, ki18n, kiconthemes, kio, kitemmodels
@@ -13,10 +13,9 @@
 kdeFramework {
   name = "kdelibs4support";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  outputs = [ "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   setupHook = ./setup-hook.sh;
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kauth karchive kcompletion kconfig kconfigwidgets kcoreaddons kcrash
     kdbusaddons kded kdesignerplugin kemoticons kglobalaccel kguiaddons ki18n

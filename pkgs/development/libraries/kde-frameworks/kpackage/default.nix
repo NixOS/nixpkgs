@@ -1,5 +1,5 @@
 { kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules
+, ecm
 , karchive
 , kconfig
 , kcoreaddons
@@ -10,7 +10,7 @@
 kdeFramework {
   name = "kpackage";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [ karchive kconfig kcoreaddons ki18n ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 }
