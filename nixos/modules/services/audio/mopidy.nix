@@ -70,6 +70,11 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.configuration != "" && cfg.configuration != null;
+        message = "services.mopidy.configuration must be set";
+      }
+    ];
 
     systemd.services.mopidy = {
       wantedBy = [ "multi-user.target" ];
