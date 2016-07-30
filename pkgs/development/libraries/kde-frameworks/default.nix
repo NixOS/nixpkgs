@@ -56,7 +56,6 @@ let
     kdeEnv = import ./kde-env.nix {
       inherit (pkgs) stdenv lib;
       inherit (pkgs.xorg) lndir;
-      inherit ecmNoHooks;
     };
 
     kdeWrapper = import ./kde-wrapper.nix {

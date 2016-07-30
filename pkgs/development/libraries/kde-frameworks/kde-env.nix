@@ -1,14 +1,11 @@
-{ stdenv, lib, lndir, ecmNoHooks }:
+{ stdenv, lib, lndir }:
 
-name: pkgs:
+drv: pkgs:
 
-let
-  inherit (builtins.parseDrvName ecmNoHooks.name) version;
-in
 stdenv.mkDerivation {
-  name = "kde-env-${name}";
+  name = "kde-env-${drv.name}";
   nativeBuildInputs = [ lndir ];
-  propagatedUserEnvPkgs = builtins.map lib.getBin pkgs;
+  propagatedUserEnvPkgs = builtins.map lib.getBin ([drv] ++ pkgs);
   unpackPhase = "true";
   configurePhase = "runHook preConfigure; runHook postConfigure";
   buildPhase = "true";
