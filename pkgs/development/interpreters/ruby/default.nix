@@ -147,6 +147,7 @@ let
           license = stdenv.lib.licenses.ruby;
           homepage = http://www.ruby-lang.org/en/;
           description = "The Ruby language";
+          maintainers = [ stdenv.lib.maintainers.vrthra ];
           platforms = stdenv.lib.platforms.all;
         };
 
@@ -187,14 +188,14 @@ in {
     };
   };
 
-  ruby_2_1_7 = generic {
+  ruby_2_1_10 = generic {
     majorVersion = "2";
     minorVersion = "1";
-    teenyVersion = "7";
+    teenyVersion = "10";
     patchLevel = "0";
     sha256 = {
-      src = "10fxlqmpbq9407zgsx060q22yj4zq6c3czbf29h7xk1rmjb1b77m";
-      git = "1fmbqd943akqjwsfbj9bg394ac46qmpavm8s0kv2w87rflrjcjfb";
+      src = "086x66w51lg41abjn79xb7f6xsryymkcc3nvakmkjnjyg96labpv";
+      git = "133phd5r5y0np5lc9nqif93l7yb13yd52aspyl6c46z5jhvhyvfi";
     };
   };
 
