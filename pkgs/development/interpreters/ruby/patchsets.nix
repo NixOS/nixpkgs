@@ -50,13 +50,10 @@ rec {
     "${patchSet}/patches/ruby/2.1.7/railsexpress/08-funny-falcon-method-cache.patch"
     "${patchSet}/patches/ruby/2.1.7/railsexpress/09-heap-dump-support.patch"
   ];
-  "2.2.3" = [
-    ./ssl_v3.patch
-    ./ruby22-rand-egd.patch
-  ] ++ ops useRailsExpress [
-    "${patchSet}/patches/ruby/2.2.3/railsexpress/01-zero-broken-tests.patch"
-    "${patchSet}/patches/ruby/2.2.3/railsexpress/02-improve-gc-stats.patch"
-    "${patchSet}/patches/ruby/2.2.3/railsexpress/03-display-more-detailed-stack-trace.patch"
+  "2.2.5" = ops useRailsExpress [
+    "${patchSet}/patches/ruby/2.2.5/railsexpress/01-zero-broken-tests.patch"
+    "${patchSet}/patches/ruby/2.2.5/railsexpress/02-improve-gc-stats.patch"
+    "${patchSet}/patches/ruby/2.2.5/railsexpress/03-display-more-detailed-stack-trace.patch"
   ];
   "2.3.1" = ops useRailsExpress [
     "${patchSet}/patches/ruby/2.3/head/railsexpress/01-skip-broken-tests.patch"
