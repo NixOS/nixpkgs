@@ -5,7 +5,7 @@ drv:
 { targets, paths }:
 
 let
-  env = kdeEnv drv.name ([ drv ] ++ paths);
+  env = kdeEnv drv paths;
 in
 stdenv.mkDerivation {
   inherit (drv) name;
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
         if [ -a "$drv/$t" ]; then
             makeWrapper "$drv/$t" "$out/$t" \
                 --argv0 '"$0"' \
-                --suffix PATH : "$env/bin" \
+                --suffix PATH : "$out/bin:$env/bin" \
                 --prefix XDG_CONFIG_DIRS : "$env/etc/xdg" \
                 --prefix XDG_DATA_DIRS : "$env/share" \
                 --set QML_IMPORT_PATH "$env/lib/qt5/imports" \
