@@ -14,9 +14,6 @@ let
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
     virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
-    ati = { modules = with pkgs.xorg; [ xf86videoati ]; };
-    intel = { modules = with pkgs.xorg; [ xf86videointel ]; };
-    modesetting = { modules = []; };
   };
 
   fontsForXServer =
