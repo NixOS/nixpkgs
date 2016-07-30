@@ -1,4 +1,4 @@
-{ kdeFramework, lib, extra-cmake-modules, kactivities, karchive
+{ kdeFramework, lib, ecm, kactivities, karchive
 , kconfig, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdoctools, kglobalaccel, kguiaddons, ki18n, kiconthemes, kio
 , knotifications, kpackage, kservice, kwindowsystem, kxmlgui
@@ -8,7 +8,7 @@
 kdeFramework {
   name = "plasma-framework";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kactivities karchive kconfig kconfigwidgets kcoreaddons kdbusaddons
     kdeclarative kglobalaccel kguiaddons ki18n kiconthemes kio knotifications

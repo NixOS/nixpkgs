@@ -1,13 +1,9 @@
-{ kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules
-, kcoreaddons
-, polkit-qt
-}:
+{ kdeFramework, lib, copyPathsToStore, ecm, kcoreaddons, polkit-qt }:
 
 kdeFramework {
   name = "kauth";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ kcoreaddons polkit-qt ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 }

@@ -1,5 +1,5 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , karchive
 , kconfig
 , kcoreaddons
@@ -9,6 +9,6 @@
 kdeFramework {
   name = "kemoticons";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ karchive kconfig kcoreaddons kservice ];
 }

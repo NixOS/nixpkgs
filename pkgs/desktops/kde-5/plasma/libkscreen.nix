@@ -1,5 +1,5 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 , kwayland, libXrandr
 , qtx11extras
 }:
@@ -7,7 +7,7 @@
 plasmaPackage {
   name = "libkscreen";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
   ];
   propagatedBuildInputs = [
     kwayland libXrandr qtx11extras

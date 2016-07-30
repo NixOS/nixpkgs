@@ -1,5 +1,5 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 , glib
 , gtk2
 , gtk3
@@ -15,7 +15,7 @@
 plasmaPackage {
   name = "kde-gtk-config";
   patches = [ ./0001-follow-symlinks.patch ];
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     ki18n kio glib gtk2 gtk3 karchive kcmutils kconfigwidgets kiconthemes
     knewstuff

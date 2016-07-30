@@ -1,5 +1,5 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 , kidletime
 , kwayland
 , kwindowsystem
@@ -8,7 +8,7 @@
 plasmaPackage {
   name = "kwayland-integration";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
   ];
   propagatedBuildInputs = [
     kidletime kwindowsystem kwayland

@@ -21,9 +21,9 @@ let
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
-      inherit kdeDerivation lib;
+      inherit lib;
       inherit debug srcs;
-      inherit (pkgs) cmake pkgconfig;
+      inherit kdeDerivation;
     };
 
     kdelibs = callPackage ./kdelibs {

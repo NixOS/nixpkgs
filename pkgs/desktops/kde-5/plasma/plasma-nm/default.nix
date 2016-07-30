@@ -1,4 +1,4 @@
-{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+{ plasmaPackage, substituteAll, ecm, kdoctools
 , kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
@@ -16,7 +16,7 @@ plasmaPackage {
     })
   ];
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

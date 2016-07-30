@@ -1,5 +1,5 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , kparts
 , kxmlgui
 }:
@@ -7,6 +7,6 @@
 kdeFramework {
   name = "kmediaplayer";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ kparts kxmlgui ];
 }
