@@ -14,9 +14,6 @@ let
   # Map video driver names to driver packages. FIXME: move into card-specific modules.
   knownVideoDrivers = {
     virtualbox = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
-    ati = { modules = with pkgs.xorg; [ xf86videoati glamoregl ]; };
-    intel = { modules = with pkgs.xorg; [ xf86videointel glamoregl ]; };
-    modesetting = { modules = []; };
   };
 
   fontsForXServer =
@@ -512,7 +509,7 @@ in
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
             LD_LIBRARY_PATH = concatStringsSep ":" (
-              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" ]
+              [ "${xorg.libX11.out}/lib" "${xorg.libXext.out}/lib" "/run/opengl-driver/lib" ]
               ++ concatLists (catAttrs "libPath" cfg.drivers));
           } // cfg.displayManager.job.environment;
 
