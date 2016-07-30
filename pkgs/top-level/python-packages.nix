@@ -27136,6 +27136,8 @@ in modules // {
 
     buildInputs = [
       pkgs.asciidoc-full        # For building man page.
+      pkgs.hicolor_icon_theme
+      pkgs.wrapGAppsHook
     ];
 
     propagatedBuildInputs = with self; [ pkgs.gobjectIntrospection pkgs.gtk3 pyyaml pygobject3 pkgs.libnotify pkgs.udisks2 pkgs.gettext self.docopt ];
@@ -27145,11 +27147,6 @@ in modules // {
     postInstall = ''
       mkdir -p $out/share/man/man8
       cp -v doc/udiskie.8 $out/share/man/man8/
-    '';
-
-    preFixup = ''
-        wrapProgram "$out/bin/"* \
-          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
     '';
 
     # tests require dbusmock
