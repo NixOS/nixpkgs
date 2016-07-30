@@ -24,7 +24,10 @@ let
       let
       in stdenv.mkDerivation (args // {
 
-        outputs = args.outputs or [ "dev" "out" ];
+        outputs = args.outputs or [ "dev" "out" "bin" ];
+
+        propagatedUserEnvPkgs =
+          builtins.map lib.getBin (args.propagatedBuildInputs or []);
 
         cmakeFlags =
           (args.cmakeFlags or [])
@@ -49,6 +52,17 @@ let
           homepage = "http://www.kde.org";
         } // (args.meta or {});
       });
+
+    kdeEnv = import ./kde-env.nix {
+      inherit (pkgs) stdenv lib;
+      inherit (pkgs.xorg) lndir;
+      inherit ecmNoHooks;
+    };
+
+    kdeWrapper = import ./kde-wrapper.nix {
+      inherit (pkgs) stdenv lib makeWrapper;
+      inherit kdeEnv;
+    };
 
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
