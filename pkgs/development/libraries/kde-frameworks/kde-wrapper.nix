@@ -2,7 +2,7 @@
 
 drv:
 
-{ targets, paths }:
+{ targets, paths ? [] }:
 
 let
   env = kdeEnv drv paths;
