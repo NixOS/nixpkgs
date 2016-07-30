@@ -13922,6 +13922,7 @@ in
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
     vaapiSupport = config.mpv.vaapiSupport or false;
+    libva = libva-full;
   };
 
   mpvScripts = {
