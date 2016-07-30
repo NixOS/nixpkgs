@@ -214,7 +214,7 @@ in
     services.xserver.displayManager.sddm = {
       theme = "breeze";
       themes = [
-        kde5.extra-cmake-modules # for the setup-hook
+        kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
         (kde5.oxygen-icons or kde5.oxygen-icons5)

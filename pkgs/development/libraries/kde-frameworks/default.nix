@@ -55,12 +55,12 @@ let
     bluez-qt = callPackage ./bluez-qt.nix {};
     breeze-icons = callPackage ./breeze-icons.nix {};
     ecm =
-      let drv = { cmake, extra-cmake-modules, pkgconfig, qtbase, qttools }:
+      let drv = { cmake, ecmNoHooks, pkgconfig, qtbase, qttools }:
             makeSetupHook
-            { deps = [ cmake extra-cmake-modules pkgconfig qtbase qttools ]; }
+            { deps = [ cmake ecmNoHooks pkgconfig qtbase qttools ]; }
             ./setup-hook.sh;
       in callPackage drv {};
-    extra-cmake-modules = callPackage ./extra-cmake-modules {
+    ecmNoHooks = callPackage ./extra-cmake-modules {
       inherit (srcs.extra-cmake-modules) src version;
     };
     frameworkintegration = callPackage ./frameworkintegration.nix {};
@@ -113,7 +113,7 @@ let
     kross = callPackage ./kross.nix {};
     krunner = callPackage ./krunner.nix {};
     kservice = callPackage ./kservice {};
-    ktexteditor = callPackage ./ktexteditor {};
+    ktexteditor = callPackage ./ktexteditor.nix {};
     ktextwidgets = callPackage ./ktextwidgets.nix {};
     kunitconversion = callPackage ./kunitconversion.nix {};
     kwallet = callPackage ./kwallet.nix {};
