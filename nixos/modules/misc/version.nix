@@ -49,21 +49,21 @@ in
     nixosRelease = mkOption {
       readOnly = true;
       type = types.str;
-      default = readFile releaseFile;
+      default = fileContents releaseFile;
       description = "The NixOS release (e.g. <literal>16.03</literal>).";
     };
 
     nixosVersionSuffix = mkOption {
       internal = true;
       type = types.str;
-      default = if pathExists suffixFile then readFile suffixFile else "pre-git";
+      default = if pathExists suffixFile then fileContents suffixFile else "pre-git";
       description = "The NixOS version suffix (e.g. <literal>1160.f2d4ee1</literal>).";
     };
 
     nixosRevision = mkOption {
       internal = true;
       type = types.str;
-      default = if pathExists revisionFile then readFile revisionFile else "master";
+      default = if pathExists revisionFile then fileContents revisionFile else "master";
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
