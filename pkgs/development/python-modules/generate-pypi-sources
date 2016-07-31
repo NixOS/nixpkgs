@@ -1,0 +1,176 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p python35Packages.aiohttp python35Packages.toolz python35Packages.tqdm
+# This script reads pypi-packages.txt and generates pypi-sources.json
+
+import logging
+from xmlrpc.client import ServerProxy
+import asyncio
+import aiohttp
+import tqdm
+import json
+import toolz
+
+#INDEX = "http://pypi.python.org/pypi"
+INDEX = "https://pypi.io/pypi"
+"""url of PyPI"""
+
+EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip']
+"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+
+FILENAME_PACKAGES = 'pypi-packages.txt'
+FILENAME_SOURCES = 'pypi-sources.json'
+
+
+def retrieve_available_packages(index=INDEX):
+    """Retrieve a list with available packages from the index.
+
+    :param index: url with packages index. By default `INDEX` is used.
+    """
+    with ServerProxy(index) as client:
+        return client.list_packages()
+
+
+async def _fetch_page(session, url):
+    """Fetch page asynchronously.
+
+    :param session: Session of client
+    :param url: Requested url
+    """
+    async with session.get(url) as response:
+        with aiohttp.Timeout(2):
+            async with session.get(url) as response:
+                assert response.status == 200
+                return await response.json()
+
+
+def retrieve_packages_json(packages, index=INDEX):
+    """Yield JSON information obtained from PyPI index given an iterable of package names.
+
+    :param packages: Iterable of package names.
+    :param index: url with packages index. By default `INDEX` is used.
+    """
+    loop = asyncio.get_event_loop()
+    conn = aiohttp.TCPConnector(verify_ssl=False)
+    with aiohttp.ClientSession(loop=loop, connector=conn) as session:
+        for package in packages:
+            url = "{}/{}/json".format(index, package)
+            yield loop.run_until_complete(_fetch_page(session, url))
+    loop.close()
+
+
+def generate_nix_data(packages, index=INDEX, ignore_exceptions=True):
+    """Generate Nix data for use in Nixpkgs.
+
+    :param packages: Iterable with names of packages to to include.
+    :param ignore_exceptions: Continue generating JSON while encountering exceptions. Package that raised exception is discarded.
+    """
+    # Retrieve for each package the JSON from PyPI
+    raw_json = retrieve_packages_json(packages, index=index)
+    # Remove None, in case the url could not be retrieved.
+    raw_json = filter(lambda x: x is not None, raw_json)
+    # And extract for each the relevant Nix data
+    #yield from map(extract_relevant_nix_data, raw_json)
+    for package in raw_json:
+        try:
+            data = extract_relevant_nix_data(package)
+        except ValueError as e:
+            if ignore_exceptions:
+                logging.info("Ignoring exception: {}".format(str(e)))
+                continue
+            else:
+                raise e
+        yield data
+
+def extract_relevant_nix_data(json):
+    """Extract relevant Nix data from the JSON of a package obtained from PyPI.
+
+    :param json: JSON obtained from PyPI
+    :param version: Specific version of package or one of the following strings: ['release',]
+    """
+    def _extract_license(json):
+        """Extract license from JSON."""
+        return json['info']['license']
+
+    def _available_versions(json):
+        return json['releases'].keys()
+
+    def _extract_latest_version(json):
+        return json['info']['version']
+
+    def _get_src_and_hash(json, version, extensions):
+        """Obtain url and hash for a given version and list of allowable extensions."""
+        if not json['releases']:
+            msg = "Package {}: No releases available.".format(json['info']['name'])
+            raise ValueError(msg)
+        else:
+            # We use ['releases'] and not ['urls'] because we want to have the possibility for different version.
+            for possible_file in json['releases'][version]:
+                for extension in extensions:
+                    if possible_file['filename'].endswith(extension):
+                        src = {'url': str(possible_file['url']),
+                               'sha256': str(possible_file['digests']['sha256']),
+                                }
+                        return src
+            else:
+                msg = "Package {}: No release with valid file extension available.".format(json['info']['name'])
+                logging.info(msg)
+                return None
+                #raise ValueError(msg)
+
+    def _get_sources(json, extensions):
+        versions = _available_versions(json)
+        releases = {version: _get_src_and_hash(json, version, extensions) for version in versions}
+        releases = toolz.itemfilter(lambda x: x[1] is not None, releases)
+        return releases
+
+    # Collect data
+    name = str(json['info']['name'])
+    latest_version = str(_extract_latest_version(json))
+    #src = _get_src_and_hash(json, latest_version, EXTENSIONS)
+    sources = _get_sources(json, EXTENSIONS)
+
+    # Collect meta data
+    license = str(_extract_license(json))
+    license = license if license != "UNKNOWN" else None
+    summary = str(json['info'].get('summary')).strip('.')
+    summary = summary if summary != "UNKNOWN" else None
+    #description = str(json['info'].get('description'))
+    #description = description if description != "UNKNOWN" else None
+    homepage = json['info'].get('home_page')
+
+    data = {
+        'latest_version'    : latest_version,
+        'versions'  : sources,
+        #'src'           : src,
+        'meta'          : {
+            'description'            : summary if summary else None,
+            #'longDescription'        : description,
+            'license'                : license,
+            'homepage'               : homepage,
+            },
+        }
+    return name, data
+
+
+
+def main():
+    logging.basicConfig(filename='pypi2json.log', level=logging.DEBUG, filemode='w')
+
+    with open(FILENAME_PACKAGES, 'r') as fp:
+        packages = fp.read().splitlines()
+    #packages = retrieve_available_packages()
+    npackages = len(packages)
+
+    data = generate_nix_data(packages)
+    # Show a nice progressbar
+    data = list(tqdm.tqdm(data, total=npackages))
+
+    # Convert from list of tuples to dictionary
+    data = {name: value for name, value in data}
+
+    with open(FILENAME_SOURCES, 'w') as fp:
+        json.dump(data, fp, indent=2, sort_keys=True)
+
+
+if __name__ == '__main__':
+    main()

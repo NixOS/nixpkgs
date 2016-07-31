@@ -1,0 +1,80 @@
+{
+  "toolz": {
+    "latest_version": "0.7.4",
+    "meta": {
+      "description": "List processing tools and functional utilities",
+      "homepage": "http://github.com/pytoolz/toolz/",
+      "license": "BSD"
+    },
+    "versions": {
+      "0.1": {
+        "sha256": "4cccc1c5ed7c5063b37c5864ede70e2b57284c6e5a536c69f0b7a11685f17fb5",
+        "url": "https://pypi.io/packages/80/03/e0fb31431a218cee32b7186b9d82df2be73027c1aefe617a512afd432a67/toolz-0.1.tar.gz"
+      },
+      "0.2": {
+        "sha256": "77cee29cd5650b20e7d93ec8b1e2921ca3e45fe658c2281983e49cff8d05ca61",
+        "url": "https://pypi.io/packages/57/7f/065bdd4fb6cb41bf363cfa0e4580ba7b96e71c2ab1b3dddfa92f0e513dda/toolz-0.2.tar.gz"
+      },
+      "0.2.1": {
+        "sha256": "41347314a5d00d44c48b1089cfda2c4e9f92f2f1b641a9ec480b362c84d0fe1b",
+        "url": "https://pypi.io/packages/c0/45/547b1cbc7bf3c3c413c36482b67e572f9f6c5c45fbddfc9a7b88ce3f7adb/toolz-0.2.1.tar.gz"
+      },
+      "0.2.2": {
+        "sha256": "82036b848506914dc8e76b0537a8c5cd3e3a6431bc05cdd2a3da87978de71220",
+        "url": "https://pypi.io/packages/6d/36/5864c4f6e984e7c92b2d90ed1d4788c817a76579a553586d48d167afae3a/toolz-0.2.2.tar.gz"
+      },
+      "0.3.0": {
+        "sha256": "045ee3e4d497b8d6012c799b76e527c6c900075e77fd3bca6b7c620fa0fc85ef",
+        "url": "https://pypi.io/packages/61/3c/a07c3c7efd2a1da2cf94457f3c64a9d53d88940e880f9d3f0cb2f60e18cc/toolz-0.3.0.tar.gz"
+      },
+      "0.4.0": {
+        "sha256": "bcddfc67df885b9e3c73fd2aa3d47202d5d28c4f8858b3894a27448e098e26bf",
+        "url": "https://pypi.io/packages/84/67/4b5c11d0f4eb84a0e422b37314bc8d40570a25d79d33177aeac0c43c2cb3/toolz-0.4.0.tar.gz"
+      },
+      "0.4.1": {
+        "sha256": "8199df4bd5fad1c5e4967113a5de92413721116e1e1460820787867c32479058",
+        "url": "https://pypi.io/packages/23/0c/9db451933cf71f12b2bb95c4420125c50e3b3780ef812e4488195dcb9611/toolz-0.4.1.tar.gz"
+      },
+      "0.5.0": {
+        "sha256": "6df4484344e69ea6fbcbc96e8b16a10fc4e46122df5b6988351481790e7e3d0c",
+        "url": "https://pypi.io/packages/d6/b4/a42626793715d824ea1509f11929b7324b49a92c4ad3c37af2e5d4893583/toolz-0.5.0.tar.gz"
+      },
+      "0.5.1": {
+        "sha256": "d30f78ac8c29b3f3d1c7ee10433460826668ee64440e71015643d9ed3957c498",
+        "url": "https://pypi.io/packages/19/65/19dd4e15d834b4dde8062109830fc3d8580b68e26dacaf5023e8c3c40d52/toolz-0.5.1.tar.gz"
+      },
+      "0.5.2": {
+        "sha256": "733a534c5cb25e2643732a93f02d0d3597649332de4aaea85095fab521594939",
+        "url": "https://pypi.io/packages/21/86/95e38557de3212c181893b62e5d86316c1c155a631f64c3b3bd0a3f6e1d8/toolz-0.5.2.tar.gz"
+      },
+      "0.5.3": {
+        "sha256": "9ffe2cfa5fa6fd7bcb84216e1d3ce2508e6c4a1d4be459bbff3ab84dd44e4ffd",
+        "url": "https://pypi.io/packages/f8/e7/b3b6c8d258ab383f628fcd62d2d0eed65184b60e6b8d2e793d80ca6ebeea/toolz-0.5.3.tar.gz"
+      },
+      "0.6.0": {
+        "sha256": "8f6d4b94f3d4775e7612d6515843b8d6a0c7b0a7b4e6444974fd3ca73361adfb",
+        "url": "https://pypi.io/packages/bd/ea/b2c6fdb249fe0007cb4ad835f26784817682d88f2d33534301f4b8561259/toolz-0.6.0.tar.gz"
+      },
+      "0.7.0": {
+        "sha256": "8f88590f960c16db2146b6ecae31f9d048865612b69e197907e886c963fad6f3",
+        "url": "https://pypi.io/packages/7d/0a/f95eed1d076f441981ab01cd1c57fd44d03d5811f476c0c9d5a07b04739c/toolz-0.7.0.tar.gz"
+      },
+      "0.7.1": {
+        "sha256": "cc71fd92a2f9edbf554c23534150f13f0f589baf2404da4b42686f0b08085db5",
+        "url": "https://pypi.io/packages/96/54/c30e670b09309544596717970107402721954b7670c63c98f856172637eb/toolz-0.7.1.tar.gz"
+      },
+      "0.7.2": {
+        "sha256": "56b2fc25d48337c39a30545ae28d643df28a2d63be12aae3c1336edc485098b1",
+        "url": "https://pypi.io/packages/63/31/e070d0633026d55bd2f656e3639727f4aa15a5e9ece69d2d760e899e3df0/toolz-0.7.2.tar.gz"
+      },
+      "0.7.3": {
+        "sha256": "6de9f0cd7888b12fe1603c56473c2392f33880cb356760e085b8c17afedce0f9",
+        "url": "https://pypi.io/packages/e7/bb/109bd58499e8eb980c476400bf27acb4f3db87833e4f874b857e66fad49e/toolz-0.7.3.tar.gz"
+      },
+      "0.7.4": {
+        "sha256": "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd",
+        "url": "https://pypi.io/packages/ad/2d/61cc2053bfb830ccf43bb63ee4f6ec01be34b578ea9a2d20a8971f969fa7/toolz-0.7.4.tar.gz"
+      }
+    }
+  }
+}

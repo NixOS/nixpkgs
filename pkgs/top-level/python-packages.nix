@@ -24,6 +24,18 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
+  pypi-sources = builtins.fromJSON (builtins.readFile ../development/python-modules/pypi-sources.json);
+
+  buildPyPIPackage = makeOverridable (callPackage ../development/python-modules/generic/buildpypi.nix {
+    buildPythonPackage = buildPythonPackage;
+    inherit pypi-sources;
+  });
+
+  buildPyPIApplication = makeOverridable (callPackage ../development/python-modules/generic/buildpypi.nix {
+    buildPythonPackage = buildPythonApplication;
+    inherit pypi-sources;
+  });
+
   # Unique python version identifier
   pythonName =
     if isPy26 then "python26" else
@@ -23206,14 +23218,8 @@ in modules // {
     };
   };
 
-  toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.7.4";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "43c2c9e5e7a16b6c88ba3088a9bfc82f7db8e13378be7c78d6c14a5f8ed05afd";
-    };
+  toolz = buildPyPIPackage rec{
+    name = "toolz";
 
     buildInputs = with self; [ nose ];
 
