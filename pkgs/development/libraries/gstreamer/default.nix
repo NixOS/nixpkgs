@@ -1,4 +1,4 @@
-{ callPackage, libva-full }:
+{ callPackage, ffmpeg-full, libva-full }:
 
 rec {
   gstreamer = callPackage ./core { };
@@ -13,7 +13,10 @@ rec {
 
   gst-plugins-ugly = callPackage ./ugly { inherit gst-plugins-base; };
 
-  gst-libav = callPackage ./libav { inherit gst-plugins-base; };
+  gst-libav = callPackage ./libav {
+    inherit gst-plugins-base;
+    libav = ffmpeg-full;
+  };
 
   gnonlin = callPackage ./gnonlin { inherit gst-plugins-base; };
 
