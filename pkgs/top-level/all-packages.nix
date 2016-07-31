@@ -6247,6 +6247,9 @@ in
 
   cmakeWithGui = self.cmakeCurses.override { useQt4 = true; };
 
+  # Does not actually depend on Qt 5
+  extra-cmake-modules = qt5.ecmNoHooks;
+
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
   cpptest = callPackage ../development/libraries/cpptest { };
@@ -9095,6 +9098,10 @@ in
     let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
+  qt57 =
+    let imported = import ../development/libraries/qt-5/5.7 { inherit pkgs; };
+    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+
   qt5 = self.qt56;
 
   qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
@@ -9124,11 +9131,17 @@ in
 
     openbr = callPackage ../development/libraries/openbr { };
 
-    phonon = callPackage ../development/libraries/phonon { };
+    phonon = callPackage ../development/libraries/phonon {
+      withQt5 = true;
+    };
 
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {
+      withQt5 = true;
+    };
 
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
+      withQt5 = true;
+    };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
@@ -10642,7 +10655,7 @@ in
       libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman
-      cairo;
+      cairo epoxy;
     inherit (darwin) apple_sdk cf-private libobjc;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
@@ -14713,6 +14726,8 @@ in
 
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
+  syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
@@ -16384,7 +16399,7 @@ in
 
   ### SCIENCE/BIOLOGY
 
-  alliance = callPackage ../applications/science/electronics/alliance {  };
+  alliance = callPackage ../applications/science/electronics/alliance { };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = overrideCC stdenv gcc49;

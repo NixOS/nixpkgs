@@ -1,5 +1,5 @@
 { kdeFramework, lib, copyPathsToStore
-, extra-cmake-modules, perl
+, ecm, perl
 , karchive, kconfig, kguiaddons, kiconthemes, kparts
 , libgit2
 , qtscript, qtxmlpatterns
@@ -9,10 +9,9 @@
 kdeFramework {
   name = "ktexteditor";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules perl ];
+  nativeBuildInputs = [ ecm perl ];
   propagatedBuildInputs = [
     karchive kconfig kguiaddons ki18n kiconthemes kio kparts libgit2 qtscript
     qtxmlpatterns sonnet
   ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
 }

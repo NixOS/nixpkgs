@@ -130,7 +130,6 @@ mirror://xorg/individual/driver/xf86-input-void-1.4.1.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-7.7.0.tar.bz2
-mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nouveau-1.0.12.tar.bz2
 mirror://xorg/individual/driver/xf86-video-chips-1.2.6.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2

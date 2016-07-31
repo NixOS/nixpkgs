@@ -1,6 +1,6 @@
 name: args:
 
-{ kdeApp, cmake, extra-cmake-modules, gettext, kdoctools }:
+{ kdeApp, cmake, ecm, gettext, kdoctools }:
 
 kdeApp (args // {
   sname = "kde-l10n-${name}";
@@ -9,7 +9,7 @@ kdeApp (args // {
   outputs = [ "out" ];
 
   nativeBuildInputs =
-    [ cmake extra-cmake-modules gettext kdoctools ]
+    [ cmake ecm gettext kdoctools ]
     ++ (args.nativeBuildInputs or []);
 
   preConfigure = ''

@@ -1,12 +1,7 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, kxmlgui
-, ki18n
-, kio
-, kdelibs4support
-, dolphin
+{
+  kdeApp, lib,
+  ecm, kdoctools,
+  dolphin, kdelibs4support, ki18n, kio, kxmlgui
 }:
 
 kdeApp {
@@ -15,11 +10,8 @@ kdeApp {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
-    kdelibs4support ki18n kio kxmlgui dolphin
+    dolphin.unwrapped kdelibs4support ki18n kio kxmlgui
   ];
 }

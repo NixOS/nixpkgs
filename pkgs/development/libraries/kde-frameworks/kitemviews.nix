@@ -1,9 +1,9 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 }:
 
 kdeFramework {
   name = "kitemviews";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
 }

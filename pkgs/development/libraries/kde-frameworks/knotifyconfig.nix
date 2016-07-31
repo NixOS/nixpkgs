@@ -1,10 +1,10 @@
-{ kdeFramework, lib, extra-cmake-modules, kcompletion, kconfig
+{ kdeFramework, lib, ecm, kcompletion, kconfig
 , ki18n, kio, phonon
 }:
 
 kdeFramework {
   name = "knotifyconfig";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [ kcompletion kconfig ki18n kio phonon ];
 }

@@ -1,13 +1,13 @@
 {
   kdeFramework, lib, copyPathsToStore,
-  extra-cmake-modules, kdoctools,
+  ecm, kdoctools,
   kconfig, kcrash, ki18n, kio, kservice, kwindowsystem
 }:
 
 kdeFramework {
   name = "kinit";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kconfig kcrash ki18n kio kservice kwindowsystem
   ];

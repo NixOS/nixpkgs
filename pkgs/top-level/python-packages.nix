@@ -1376,7 +1376,7 @@ in modules // {
       bcdoc
       s3transfer
       six
-      colorama
+      colorama_3_3
       docutils
       rsa
       pkgs.groff
@@ -1635,6 +1635,26 @@ in modules // {
       homepage = "http://azure.microsoft.com/en-us/develop/python/";
       license = licenses.asl20;
       maintainers = with maintainers; [ olcai ];
+    };
+  };
+
+  backports_abc = buildPythonPackage rec {
+    name = "backports_abc-${version}";
+    version = "0.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports_abc/${name}.tar.gz";
+      sha256 = "8b3e4092ba3d541c7a2f9b7d0d9c0275b21c6a01c53a61c731eba6686939d0a5";
+    };
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    meta = {
+      homepage = https://github.com/cython/backports_abc;
+      license = licenses.psfl;
+      description = "A backport of recent additions to the 'collections.abc' module";
     };
   };
 
@@ -2639,14 +2659,19 @@ in modules // {
 
   bokeh = buildPythonPackage rec {
     name = "bokeh-${version}";
-    version = "0.10.0";
+    version = "0.12.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bokeh/${name}.tar.gz";
-      sha256 = "2d8bd8c98e2f62b2a28328d3cc95bfbe257742fa7efc9c382b4c8ae4a141df14";
+      sha256 = "06d3ed14308f550376d5b0c7e9f2bacb3ff5bbcceefd7f6369d070de71dfa563";
     };
 
     disabled = isPyPy;
+
+    # Some test that uses tornado fails
+    doCheck = false;
+
+    buildInputs = with self; [ mock pytest ];
 
     propagatedBuildInputs = with self; [
       flask
@@ -2655,7 +2680,8 @@ in modules // {
       werkzeug
       itsdangerous
       dateutil
-      requests
+      futures
+      requests2
       six
       pygments
       pystache
@@ -2668,6 +2694,10 @@ in modules // {
       ++ optionals ( isPy26 ) [ argparse ]
       ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
       ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover -s bokeh/tests
+    '';
 
     meta = {
       description = "Statistical and novel interactive HTML plots for Python";
@@ -3234,11 +3264,11 @@ in modules // {
 
   certifi = buildPythonPackage rec {
     name = "certifi-${version}";
-    version = "2015.11.20.1";
+    version = "2016.2.28";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/certifi/${name}.tar.gz";
-      sha256 = "05lgwf9rz1kn465azy2bpb3zmpnsn9gkypbhnjlclchv98ssgc1h";
+      sha256 = "5e8eccf95924658c97b990b50552addb64f55e1e3dfe4880456ac1f287dc79d0";
     };
 
     meta = {
@@ -3572,17 +3602,30 @@ in modules // {
 
   colorama = buildPythonPackage rec {
     name = "colorama-${version}";
-    version = "0.3.3";
+    version = "0.3.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/colorama/${name}.tar.gz";
-      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
+      sha256 = "e043c8d32527607223652021ff648fbb394d5e19cba9f1a698670b338c9d782b";
     };
+
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       homepage = https://github.com/tartley/colorama;
       license = "bsd";
       description = "Cross-platform colored terminal text";
+    };
+  };
+
+  # Needed for awscli
+  colorama_3_3 = self.colorama.override rec {
+    name = "colorama-${version}";
+    version = "0.3.3";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/c/colorama/${name}.tar.gz";
+      sha256 = "eb21f2ba718fbf357afdfdf6f641ab393901c7ca8d9f37edd0bee4806ffa269c";
     };
   };
 
@@ -3893,11 +3936,11 @@ in modules // {
 
   cython = buildPythonPackage rec {
     name = "Cython-${version}";
-    version = "0.24";
+    version = "0.24.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "1wd3q97gia3zhsgcdlvxh26hkrf3m53i6r1l4g0yya119264vr3d";
+      sha256 = "84808fda00508757928e1feadcf41c9f78e9a9b7167b6649ab0933b76f75e7b9";
     };
 
     buildInputs = with self; [ pkgs.pkgconfig pkgs.gdb ];
@@ -4950,11 +4993,11 @@ in modules // {
 
   datashape = buildPythonPackage rec {
     name = "datashape-${version}";
-    version = "0.5.1";
+    version = "0.5.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/D/DataShape/${name}.tar.gz";
-      sha256 = "21c424f11604873da9a36d4c55ef1d15cc3960cd208d7828b82315c494bff96a";
+      sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
     };
 
     buildInputs = with self; [ pytest mock ];
@@ -6473,6 +6516,37 @@ in modules // {
       license = licenses.bsd3;
     };
 
+  };
+
+  git-up = buildPythonPackage rec {
+    version = "1.4.0";
+    name = "git-up-${version}";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "msiemens";
+      repo = "PyGitUp";
+      rev = "v${version}";
+      sha256 = "1g7sxiqg6vxx2jlgg8pg9fqsk1xgvm80d7mcpw8i3mw7r835q4bi";
+    };
+
+    buildInputs = with self; [ pkgs.git nose ];
+    propagatedBuildInputs = with self; [ colorama docopt GitPython six termcolor ];
+
+    # git fails to run as it cannot detect the email address, so we set it
+    # $HOME is by default not a valid dir, so we have to set that too
+    # https://github.com/NixOS/nixpkgs/issues/12591
+    preCheck = ''
+      export HOME=$TMPDIR
+      git config --global user.email "nobody@example.com"
+      git config --global user.name "Nobody"
+    '';
+
+    meta = {
+      homepage = http://github.com/msiemens/PyGitUp;
+      description = "A git pull replacement that rebases all local branches when pulling.";
+      license = licenses.mit;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
   };
 
   GitPython = buildPythonPackage rec {
@@ -12336,13 +12410,13 @@ in modules // {
 
   llvmlite = buildPythonPackage rec {
     name = "llvmlite-${version}";
-    version = "0.11.0";
+    version = "0.12.1";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/llvmlite/${name}.tar.gz";
-      sha256 = "1gc2yd4j855fb16nb341lm4z3hd4j40lhswqv116xlg4p5dyxkwk";
+      sha256 = "3ce71beebd4cbc7a49abe4eadfc99725477fd43caeb7405650ebb746c7a1d0df";
     };
 
     llvm = pkgs.llvm_37;
@@ -14356,12 +14430,12 @@ in modules // {
   };
 
   numba = buildPythonPackage rec {
-    version = "0.26.0";
+    version = "0.27.0";
     name = "numba-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numba/${name}.tar.gz";
-      sha256 = "1ai06ks2ly6wcw2fpljmmyr41y9jidds8qingyih8cbq37fpym44";
+      sha256 = "5fc8069cdc839b8b44ac6c54260902f60cbd77bd027b20999970a81cce7008ba";
     };
 
     NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
@@ -17684,28 +17758,25 @@ in modules // {
 
 
   vobject = buildPythonPackage rec {
-    version = "0.8.1d";
+    version = "0.9.2";
     name = "vobject-${version}";
 
     src = pkgs.fetchFromGitHub {
-      owner = "adieu";
+      owner = "eventable";
       repo = "vobject";
-      sha256 = "04fz8g9i9pvrksbpzmp2ci8z34gwjdr7j0f0cxr60v5sdv6v88l9";
-      rev = "ef870dfbb7642756d6b691ebf9f52285ec9e504f";
+      sha256 = "0zj0wplj8pry98x3g551wdhh12ric7rl6rsd6li23lzdxik82s3g";
+      rev = "7f042fdc62c9e9dc29d5f81313b9747cde205670";
     };
 
-    disabled = isPy3k || isPyPy;
+    disabled = isPyPy;
 
     propagatedBuildInputs = with self; [ dateutil ];
 
-    patchPhase = ''
-      # fails due to hash randomization
-      sed -i 's/RRULE:FREQ=MONTHLY;BYMONTHDAY=-1,-5/RRULE:FREQ=MONTHLY;BYMONTHDAY=.../' test_vobject.py
-    '';
+    checkPhase = "${python.interpreter} tests.py";
 
     meta = {
       description = "Module for reading vCard and vCalendar files";
-      homepage = https://github.com/adieu/vobject/;
+      homepage = http://eventable.github.io/vobject/;
       license = licenses.asl20;
       maintainers = with maintainers; [ DamienCassou ];
     };
@@ -18234,11 +18305,11 @@ in modules // {
 
   pyfftw = buildPythonPackage rec {
     name = "pyfftw-${version}";
-    version = "0.10.1";
+    version = "0.10.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "1789k6w17qpn9vknn2sjiwbig6yhfjvzs9fvcpvy3fyf9qala77y";
+      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
     };
 
     buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
@@ -18819,7 +18890,7 @@ in modules // {
 
     # SyntaxError Python 3
     # https://github.com/defunkt/pystache/issues/181
-    disabled = isPy3k;
+    doCheck = !isPy3k;
 
     meta = {
       description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
@@ -20954,22 +21025,22 @@ in modules // {
     gfortran = pkgs.gfortran;
   };
 
-  scipy = self.scipy_0_17;
-
-  scipy_0_16 = self.buildScipyPackage rec {
-    version = "0.16.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-      sha256 = "ecd1efbb1c038accb0516151d1e6679809c6010288765eb5da6051550bf52260";
-    };
-    numpy = self.numpy;
-  };
+  scipy = self.scipy_0_18;
 
   scipy_0_17 = self.buildScipyPackage rec {
     version = "0.17.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
       sha256 = "1b1qpfz2j2rvmlplsjbnznnxnqr9ckbmis506110ii1w07wd4k4w";
+    };
+    numpy = self.numpy;
+  };
+
+  scipy_0_18 = self.buildScipyPackage rec {
+    version = "0.18.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
+      sha256 = "f01784fb1c2bc246d4211f2482ecf4369db5abaecb9d5afb9d94f6c59663286a";
     };
     numpy = self.numpy;
   };
@@ -25217,9 +25288,9 @@ in modules // {
 
   tornado = buildPythonPackage rec {
     name = "tornado-${version}";
-    version = "4.2.1";
+    version = "4.4.1";
 
-    propagatedBuildInputs = with self; [ backports_ssl_match_hostname_3_4_0_2 certifi ];
+    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname_3_4_0_2 certifi singledispatch ];
 
     # We specify the name of the test files to prevent
     # https://github.com/NixOS/nixpkgs/issues/14634
@@ -25229,7 +25300,7 @@ in modules // {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tornado/${name}.tar.gz";
-      sha256 = "a16fcdc4f76b184cb82f4f9eaeeacef6113b524b26a2cb331222e4a7fa6f2969";
+      sha256 = "371d0cf3d56c47accc66116a77ad558d76eebaa8458a6b677af71ca606522146";
     };
   };
 

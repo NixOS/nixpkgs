@@ -1,9 +1,9 @@
-{ kdeApp, attica, attr, automoc4, avahi, bison, cmake
-, docbook_xml_dtd_42, docbook_xsl, flex, giflib, ilmbase
-, libdbusmenu_qt, libjpeg, libxml2, libxslt, perl, phonon, pkgconfig
-, polkit_qt4, qca2, qt4, shared_desktop_ontologies, shared_mime_info
-, soprano, strigi, udev, xz, pcre
-, lib
+{
+  kdeApp, lib, src, version,
+  automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
+  attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
+  libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,
+  shared_desktop_ontologies, soprano, strigi, udev, xz, pcre
 }:
 
 kdeApp {
@@ -11,14 +11,14 @@ kdeApp {
 
   outputs = [ "out" ];
 
+  nativeBuildInputs = [
+    automoc4 bison cmake flex libxslt perl pkgconfig shared_mime_info
+  ];
   buildInputs = [
     attica attr avahi giflib libdbusmenu_qt libjpeg libxml2
     polkit_qt4 qca2 shared_desktop_ontologies udev xz pcre
   ];
   propagatedBuildInputs = [ qt4 soprano phonon strigi ];
-  nativeBuildInputs = [
-    automoc4 bison cmake flex libxslt perl pkgconfig shared_mime_info
-  ];
 
   patches = [
     ./0001-old-kde4-cmake-policies.patch
@@ -39,6 +39,8 @@ kdeApp {
   setupHook = ./setup-hook.sh;
 
   meta = {
+    platforms = lib.platforms.linux;
+    homepage = "http://www.kde.org";
     licenses = with lib.licenses; [ gpl2 fdl12 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };

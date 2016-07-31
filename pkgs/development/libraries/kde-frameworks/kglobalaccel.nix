@@ -1,5 +1,5 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , kconfig
 , kcoreaddons
 , kcrash
@@ -11,7 +11,7 @@
 kdeFramework {
   name = "kglobalaccel";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     kconfig kcoreaddons kcrash kdbusaddons kwindowsystem qtx11extras
   ];

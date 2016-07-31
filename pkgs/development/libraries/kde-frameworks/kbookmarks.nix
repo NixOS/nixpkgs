@@ -1,17 +1,12 @@
-{ kdeFramework, lib
-, extra-cmake-modules
-, kcodecs
-, kconfig
-, kconfigwidgets
-, kcoreaddons
-, kiconthemes
-, kxmlgui
+{
+  kdeFramework, lib, ecm,
+  kcodecs, kconfig, kconfigwidgets, kcoreaddons, kiconthemes, kxmlgui
 }:
 
 kdeFramework {
   name = "kbookmarks";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     kcodecs kconfig kconfigwidgets kcoreaddons kiconthemes kxmlgui
   ];

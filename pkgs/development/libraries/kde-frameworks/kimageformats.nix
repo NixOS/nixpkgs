@@ -1,11 +1,11 @@
 { kdeFramework, lib
-, extra-cmake-modules
+, ecm
 , ilmbase
 }:
 
 kdeFramework {
   name = "kimageformats";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 }
