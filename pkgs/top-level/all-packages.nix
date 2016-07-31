@@ -10438,7 +10438,7 @@ in
   };
 
   mysql = mariadb;
-  libmysql = mysql.lib;
+  libmysql = mysql.client; # `libmysql` is a slight misnomer ATM
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
