@@ -33,12 +33,19 @@ has the following highlights: </para>
 following incompatible changes:</para>
 
 <itemizedlist>
+
   <listitem>
     <para>Shell aliases for systemd sub-commands
     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/15598">were dropped</link>:
     <command>start</command>, <command>stop</command>,
     <command>restart</command>, <command>status</command>.</para>
   </listitem>
+
+  <listitem>
+    <para>Redis now binds to 127.0.0.1 only instead of listening to all network interfaces. This is the default 
+    behavior of Redis 3.2</para>
+  </listitem>
+
 </itemizedlist>
 
 
