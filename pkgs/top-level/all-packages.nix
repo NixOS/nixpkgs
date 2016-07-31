@@ -902,6 +902,8 @@ let
 
   interlock = goPackages.interlock.bin // { outputs = [ "bin" ]; };
 
+  long-shebang = callPackage ../misc/long-shebang {};
+
   mathics = pythonPackages.mathics;
 
   mcrl = callPackage ../tools/misc/mcrl { };
