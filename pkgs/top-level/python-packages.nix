@@ -17662,28 +17662,25 @@ in modules // {
 
 
   vobject = buildPythonPackage rec {
-    version = "0.8.1d";
+    version = "0.9.2";
     name = "vobject-${version}";
 
     src = pkgs.fetchFromGitHub {
-      owner = "adieu";
+      owner = "eventable";
       repo = "vobject";
-      sha256 = "04fz8g9i9pvrksbpzmp2ci8z34gwjdr7j0f0cxr60v5sdv6v88l9";
-      rev = "ef870dfbb7642756d6b691ebf9f52285ec9e504f";
+      sha256 = "0zj0wplj8pry98x3g551wdhh12ric7rl6rsd6li23lzdxik82s3g";
+      rev = "7f042fdc62c9e9dc29d5f81313b9747cde205670";
     };
 
-    disabled = isPy3k || isPyPy;
+    disabled = isPyPy;
 
     propagatedBuildInputs = with self; [ dateutil ];
 
-    patchPhase = ''
-      # fails due to hash randomization
-      sed -i 's/RRULE:FREQ=MONTHLY;BYMONTHDAY=-1,-5/RRULE:FREQ=MONTHLY;BYMONTHDAY=.../' test_vobject.py
-    '';
+    checkPhase = "${python.interpreter} tests.py";
 
     meta = {
       description = "Module for reading vCard and vCalendar files";
-      homepage = https://github.com/adieu/vobject/;
+      homepage = http://eventable.github.io/vobject/;
       license = licenses.asl20;
       maintainers = with maintainers; [ DamienCassou ];
     };
