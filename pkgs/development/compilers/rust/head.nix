@@ -6,10 +6,12 @@ rec {
     shortVersion = "master-1.12.0";
     forceBundledLLVM = false;
     needsCmake = true;
-    srcRev = "c77f8ce7c3284441a00faed6782d08eb5a78296c";
-    srcSha = "11y24bm2rj7bzsf86iyx3v286ygxprch4c804qbl1w477mkhcac7";
+    configureFlags = [ "--release-channel=nightly" ];
+    srcRev = "d9a911d236cbecb47775276ba51a5f9111bdbc9c";
+    srcSha = "07wybqvnw99fljmcy33vb9iwirmp10cwy47n008p396s7pb852hv";
     patches = [
       ./patches/disable-lockfile-check.patch
+      ./patches/tcp-stress-test-run-a-smaller-number-of-threads.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
     inherit targets;
     inherit targetPatches;
