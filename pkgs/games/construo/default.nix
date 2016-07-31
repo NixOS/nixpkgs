@@ -1,11 +1,12 @@
 { stdenv, fetchurl, libX11, zlib, xproto, mesa ? null, freeglut ? null }:
 
 stdenv.mkDerivation rec {
-  name = "construo-0.2.2";
+  name = "construo-${version}";
+  version = "0.2.3";
 
   src = fetchurl {
-    url = http://savannah.nongnu.org/download/construo/construo-0.2.2.tar.gz;
-    sha256 = "0c661rjasax4ykw77dgqj39jhb4qi48m0bhhdy42vd5a4rfdrcck";
+    url = "https://github.com/Construo/construo/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "1wmj527hbj1qv44cdsj6ahfjrnrjwg2dp8gdick8nd07vm062qxa";
   };
 
   buildInputs = [ libX11 zlib xproto ]
@@ -13,14 +14,12 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (freeglut != null) freeglut;
 
   preConfigure = ''
-    sed -e 's/math[.]h/cmath/' -i vector.cxx
-    sed -e 's/games/bin/' -i Makefile.in
-    sed -e '1i\#include <stdlib.h>' -i construo_main.cxx -i command_line.cxx -i config.hxx
-    sed -e '1i\#include <string.h>' -i command_line.cxx -i lisp_reader.cxx -i unix_system.cxx \
-      -i world.cxx construo_main.cxx
+    substituteInPlace src/Makefile.in \
+      --replace games bin
   '';
 
   meta = {
     description = "Masses and springs simulation game";
+    homepage = http://fs.fsf.org/construo/;
   };
 }
