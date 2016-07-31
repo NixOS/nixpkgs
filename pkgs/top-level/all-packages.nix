@@ -13871,6 +13871,8 @@ in
     inherit (gnome) libgnomecanvas glib;
   };
 
+  moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
+
   mop = callPackage ../applications/misc/mop { };
 
   mopidy = callPackage ../applications/audio/mopidy { };
