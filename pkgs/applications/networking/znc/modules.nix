@@ -95,13 +95,13 @@ in rec {
 
   push = zncDerivation rec {
     name = "znc-push-${version}";
-    version = "git-2015-12-07";
+    version = "git-2016-07-28";
     module_name = "push";
 
     src = fetchgit {
       url = "https://github.com/jreese/znc-push.git";
-      rev = "717a2b1741eee75456b0862ef76dbb5af906e936";
-      sha256 = "1ih1hf11mqgi0cfh6v70v3b93xrw83xcb80psmijcqxi7kwjn404";
+      rev = "ca11c9b10062a7399a7f2a1b9653c9cc15854bb8";
+      sha256 = "0qk2qzjawy89p7s0cac2sjdbf8wmks592xc5c3i5gj10l0iyri5w";
     };
 
     meta = {
