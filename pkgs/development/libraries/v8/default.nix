@@ -1,6 +1,7 @@
 { stdenv, lib, fetchgit, fetchFromGitHub, gyp, readline, python, which, icu
 , patchelf, coreutils
 , doCheck ? false
+, static ? false
 }:
 
 assert readline != null;
@@ -15,6 +16,7 @@ let
               else "ia32";
   git_url = "https://chromium.googlesource.com";
   clangFlag = if stdenv.isDarwin then "1" else "0";
+  sharedFlag = if static then "static_library" else "shared_library";
 
   deps = {
     "build" = fetchgit {
@@ -143,7 +145,7 @@ stdenv.mkDerivation rec {
         -Dclang=${clangFlag} \
         -Dv8_enable_i18n_support=1 \
         -Duse_system_icu=1 \
-        -Dcomponent=shared_library \
+        -Dcomponent=${sharedFlag} \
         -Dconsole=readline \
         -Dv8_target_arch=${arch} \
         -Dv8_use_external_startup_data=0
@@ -170,7 +172,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -vD out/Release/d8 "$out/bin/d8"
     install -vD out/Release/mksnapshot "$out/bin/mksnapshot"
-    ${if stdenv.isDarwin then ''
+    ${if static then ""
+    else if stdenv.isDarwin then ''
     install -vD out/Release/lib.target/libv8.dylib "$out/lib/libv8.dylib"
     install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/bin/d8
     install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.cc.cc.lib}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
@@ -180,6 +183,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/include"
     cp -vr include/*.h "$out/include"
     cp -vr include/libplatform "$out/include"
+    mkdir -p "$out/lib"
     cp -v  out/Release/*.a "$out/lib"
   '';
 

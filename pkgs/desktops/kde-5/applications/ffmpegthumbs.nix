@@ -1,8 +1,7 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, ffmpeg
-, kio
+{
+  kdeApp, lib,
+  ecm,
+  ffmpeg, kio
 }:
 
 kdeApp {
@@ -11,11 +10,6 @@ kdeApp {
     license = with lib.licenses; [ gpl2 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    ffmpeg
-    kio
-  ];
+  nativeBuildInputs = [ ecm ];
+  propagatedBuildInputs = [ ffmpeg kio ];
 }

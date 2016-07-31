@@ -1,8 +1,4 @@
-{ kdeApp
-, lib
-, exiv2
-, extra-cmake-modules
-}:
+{ kdeApp, lib, exiv2, ecm }:
 
 kdeApp {
   name = "libkexiv2";
@@ -10,10 +6,6 @@ kdeApp {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    exiv2
-  ];
+  nativeBuildInputs = [ ecm ];
+  propagatedBuildInputs = [ exiv2 ];
 }

@@ -148,7 +148,7 @@ in
         kde5.kde-gtk-config
 
         pkgs.phonon-backend-gstreamer
-        pkgs.kde5.phonon-backend-gstreamer
+        pkgs.qt5.phonon-backend-gstreamer
       ]
 
       # Plasma 5.5 and later has a Breeze GTK theme.
@@ -214,7 +214,7 @@ in
     services.xserver.displayManager.sddm = {
       theme = "breeze";
       themes = [
-        kde5.extra-cmake-modules # for the setup-hook
+        kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
         (kde5.oxygen-icons or kde5.oxygen-icons5)

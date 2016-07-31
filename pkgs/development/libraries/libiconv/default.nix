@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
-    lib.optionalString (stdenv.cross.libc or null == "msvcrt")
+    lib.optionalString ((stdenv ? cross && stdenv.cross.libc == "msvcrt") || stdenv.cc.nativeLibc)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';

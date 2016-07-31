@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "plugin-torture-${version}";
-  version = "5";
+  version = "2016-07-25";
 
   src = fetchFromGitHub {
     owner = "cth103";
     repo = "plugin-torture";
-    rev = "v${version}";
-    sha256 = "1mlgxjsyaz86wm4k32ll2w5nghjffnsdqlm6kjv02a4dpb2bfrih";
+    rev = "8b9c43197dca372da6b9c8212224ec86b5f16b4a";
+    sha256 = "1xyhvhm85d9z0kw716cjllrrzksn4s4bw34layg8hf4m5m31sp2p";
   };
 
   buildInputs = [ boost ladspaH lilv lv2 pkgconfig serd sord sratom ];

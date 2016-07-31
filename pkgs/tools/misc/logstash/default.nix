@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.3";
+  version = "2.3.4";
   name = "logstash-${version}";
 
   src = fetchurl {
     url = "https://download.elasticsearch.org/logstash/logstash/logstash-${version}.tar.gz";
-    sha256 = "1an476k4q2shdxvhcx4fzbrcpk6isjrrvzlb6ivxfqg5fih3cg7b";
+    sha256 = "10wm4f5ygzifk84c1n9yyj285ccn2zd2m61y6hyf6wirvhys0qkz";
   };
 
   dontBuild         = true;

@@ -1,12 +1,9 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kcoreaddons
-, ki18n, kwallet, kwidgetsaddons, makeQtWrapper
+{ plasmaPackage, ecm, kdoctools, kcoreaddons
+, ki18n, kwallet, kwidgetsaddons
 }:
 
 plasmaPackage {
   name = "ksshaskpass";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [ kcoreaddons ki18n kwallet kwidgetsaddons ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/ksshaskpass"
-  '';
 }

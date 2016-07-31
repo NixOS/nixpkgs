@@ -236,11 +236,11 @@ let
 
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
-    version = "2.3.4";
+    version = "2.6.0";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "ce11e02fba30a35a80b691b05be20415eb8b5dea585a4e6646803342b86abb8c";
+      sha256 = "02mlv44x508rnkzkwiyh7lg2ah7aqyxcq65q9ycj06czm0xdzs41";
     };
 
     phases = [ "installPhase" ];

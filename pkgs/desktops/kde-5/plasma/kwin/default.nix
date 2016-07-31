@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, epoxy
+{ plasmaPackage, ecm, kdoctools, epoxy
 , kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets
 , kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel
 , ki18n, kiconthemes, kidletime, kinit, kio, knewstuff, knotifications
@@ -11,9 +11,8 @@
 plasmaPackage {
   name = "kwin";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
-    makeQtWrapper
   ];
   propagatedBuildInputs = [
     kactivities kdeclarative kglobalaccel ki18n kio kscreenlocker kwindowsystem
@@ -25,8 +24,4 @@ plasmaPackage {
   ];
   patches = [ ./0001-qdiriterator-follow-symlinks.patch ];
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kwin_x11"
-    wrapQtProgram "$out/bin/kwin_wayland"
-  '';
 }

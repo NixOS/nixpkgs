@@ -672,6 +672,8 @@ in
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  catclock = callPackage ../applications/misc/catclock { };
+
   cdemu-daemon = callPackage ../misc/emulators/cdemu/daemon.nix { };
 
   cdemu-client = callPackage ../misc/emulators/cdemu/client.nix { };
@@ -820,6 +822,8 @@ in
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   interlock = callPackage ../servers/interlock {};
+
+  long-shebang = callPackage ../misc/long-shebang {};
 
   mathics = pythonPackages.mathics;
 
@@ -2174,6 +2178,8 @@ in
 
   kalibrate-rtl = callPackage ../tools/misc/kalibrate-rtl { };
 
+  kakoune = callPackage ../applications/editors/kakoune { };
+
   kbdd = callPackage ../applications/window-managers/kbdd { };
 
   kdbplus = callPackage_i686 ../applications/misc/kdbplus { };
@@ -3003,6 +3009,8 @@ in
 
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
+  pdf2odt = callPackage ../tools/typesetting/pdf2odt { };
+
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
@@ -3153,6 +3161,8 @@ in
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
+
+  psutils = callPackage ../tools/typesetting/psutils { };
 
   pv = callPackage ../tools/misc/pv { };
 
@@ -5961,6 +5971,8 @@ in
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
 
+  wasm = callPackage ../development/interpreters/wasm { };
+
   xulrunner = callPackage ../development/interpreters/xulrunner {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
@@ -6223,6 +6235,9 @@ in
   cmakeCurses = self.cmake.override { useNcurses = true; };
 
   cmakeWithGui = self.cmakeCurses.override { useQt4 = true; };
+
+  # Does not actually depend on Qt 5
+  extra-cmake-modules = qt5.ecmNoHooks;
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
@@ -9066,11 +9081,20 @@ in
     let imported = import ../development/libraries/qt-5/5.6 { inherit pkgs; };
     in recurseIntoAttrs (imported.override (super: qt5LibsFun));
 
+  qt57 =
+    let imported = import ../development/libraries/qt-5/5.7 { inherit pkgs; };
+    in recurseIntoAttrs (imported.override (super: qt5LibsFun));
+
   qt5 = self.qt56;
 
   qt5ct = qt5.callPackage ../tools/misc/qt5ct { };
 
-  qt5LibsFun = self: with self; {
+  qt5LibsFun = self: with self;
+    let kdeFrameworks =
+          import ../development/libraries/kde-frameworks { inherit pkgs; } self;
+    in {
+
+    inherit kdeFrameworks;
 
     accounts-qt = callPackage ../development/libraries/accounts-qt { };
 
@@ -9089,6 +9113,18 @@ in
     };
 
     openbr = callPackage ../development/libraries/openbr { };
+
+    phonon = callPackage ../development/libraries/phonon {
+      withQt5 = true;
+    };
+
+    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix {
+      withQt5 = true;
+    };
+
+    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix {
+      withQt5 = true;
+    };
 
     polkit-qt = callPackage ../development/libraries/polkit-qt-1/qt-5.nix { };
 
@@ -9114,7 +9150,7 @@ in
       ffmpeg = ffmpeg_2;
     });
 
-  };
+  } // kdeFrameworks;
 
   qtEnv = qt5.env;
   qt5Full = qt5.full;
@@ -9514,6 +9550,8 @@ in
     inherit (pythonPackages) gyp;
   };
 
+  v8_static = lowPrio (self.v8.override { static = true; });
+
   vaapiIntel = callPackage ../development/libraries/vaapi-intel {
     libva = libva-full; # also wants libva-{x11,drm,wayland}
   };
@@ -9574,6 +9612,7 @@ in
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
+    inherit (darwin) libobjc;
   };
 
   webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
@@ -10352,10 +10391,6 @@ in
 
   hyperdex = callPackage ../servers/nosql/hyperdex { };
 
-  mysql51 = callPackage ../servers/sql/mysql/5.1.x.nix {
-    ps = procps; /* !!! Linux only */
-  };
-
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -10598,7 +10633,7 @@ in
       libxslt expat libpng zlib perl mesa_drivers spice_protocol libunwind
       dbus libuuid openssl gperf m4 libevdev tradcpp libinput mcpp makeWrapper autoreconfHook
       autoconf automake libtool xmlto asciidoc flex bison python mtdev pixman
-      cairo;
+      cairo epoxy;
     inherit (darwin) apple_sdk cf-private libobjc;
     bootstrap_cmds = if stdenv.isDarwin then darwin.bootstrap_cmds else null;
     mesa = mesa_noglu;
@@ -11035,8 +11070,6 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
-        kernelPatches.hiddev_CVE_2016_5829
         kernelPatches.ecryptfs_fix_mmap_bug
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11062,8 +11095,6 @@ in
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
-        kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11271,7 +11302,7 @@ in
   linux_grsec_nixos = callPackage ../build-support/grsecurity {
     inherit (lib) overrideDerivation;
     kernel = callPackage ../os-specific/linux/kernel/linux-grsecurity.nix {
-      kernelPatches = with self.kernelPatches; [ bridge_stp_helper qat_common_Makefile ]
+      kernelPatches = with self.kernelPatches; [ bridge_stp_helper ]
         ++ lib.optionals ((platform.kernelArch or null) == "mips")
         [ kernelPatches.mips_fpureg_emu
           kernelPatches.mips_fpu_sigill
@@ -11623,6 +11654,8 @@ in
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
   tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
+
+  tiptop = callPackage ../os-specific/linux/tiptop { };
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
@@ -12998,6 +13031,8 @@ in
 
   photivo = callPackage ../applications/graphics/photivo { };
 
+  rhythmbox = callPackage ../applications/audio/rhythmbox { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
@@ -13833,6 +13868,8 @@ in
 
   mopidy-musicbox-webclient = callPackage ../applications/audio/mopidy-musicbox-webclient { };
 
+  motif = callPackage ../development/libraries/motif { };
+
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
 
   mozjpeg = callPackage ../applications/graphics/mozjpeg { };
@@ -14028,9 +14065,7 @@ in
 
   ne = callPackage ../applications/editors/ne { };
 
-  nedit = callPackage ../applications/editors/nedit {
-    motif = lesstif;
-  };
+  nedit = callPackage ../applications/editors/nedit { };
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
     # No need to build Emacs - notmuch.el works just fine without
@@ -14666,6 +14701,8 @@ in
 
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
+  syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
@@ -15227,7 +15264,6 @@ in
   apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = callPackage ../applications/misc/xpdf {
-    motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
@@ -15767,6 +15803,8 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
+  
+  solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
   space-orbit = callPackage ../games/space-orbit { };
@@ -15978,7 +16016,6 @@ in
       libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
-  gnome3_18 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.18 { });
   gnome3_20 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.20 { });
 
   gnome3 = self.gnome3_20;
@@ -16259,12 +16296,6 @@ in
       openjpeg = openjpeg_1;
     };
 
-    phonon = callPackage ../development/libraries/phonon { };
-
-    phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
-
-    phonon-backend-vlc = callPackage ../development/libraries/phonon/backends/vlc.nix { };
-
     quassel = callPackage ../applications/networking/irc/quassel/qt-5.nix {
       monolithic = true;
       daemon = false;
@@ -16307,14 +16338,13 @@ in
 
   kde5 =
     let
-      frameworks = import ../desktops/kde-5/frameworks { inherit pkgs; };
       plasma = import ../desktops/kde-5/plasma { inherit pkgs; };
       applications = import ../desktops/kde-5/applications { inherit pkgs; };
       merged = self:
         { plasma = plasma self;
-          frameworks = frameworks self;
+          frameworks = qt5.kdeFrameworks;
           applications = applications self; }
-        // frameworks self
+        // qt5.kdeFrameworks
         // plasma self
         // applications self
         // kde5PackagesFun self;
@@ -16342,9 +16372,7 @@ in
 
   ### SCIENCE/BIOLOGY
 
-  alliance = callPackage ../applications/science/electronics/alliance {
-    motif = lesstif;
-  };
+  alliance = callPackage ../applications/science/electronics/alliance { };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = overrideCC stdenv gcc49;
@@ -16781,6 +16809,8 @@ in
     withOCaml = true;
     withX = true;
   };
+
+  scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
   scotch = callPackage ../applications/science/math/scotch { };
 

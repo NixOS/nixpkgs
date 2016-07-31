@@ -1,8 +1,8 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 }:
 
 plasmaPackage {
   name = "breeze-gtk";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
 }

@@ -195,6 +195,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Unspecified free software license";
   };
 
+  g4sl = {
+    fullName = "Geant4 Software License";
+    url = https://geant4.web.cern.ch/geant4/license/LICENSE.html;
+  };
+
   gpl1 = spdx {
     spdxId = "GPL-1.0";
     fullName = "GNU General Public License v1.0 only";

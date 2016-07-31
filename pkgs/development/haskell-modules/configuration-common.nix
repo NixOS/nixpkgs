@@ -41,7 +41,7 @@ self: super: {
     src = pkgs.fetchFromGitHub {
       owner = "joeyh";
       repo = "git-annex";
-      sha256 = "1b154qskvcldk4kyzcbaw6mijrsn9327wldxwcv16a8zz39gvc5r";
+      sha256 = "1b4yw305h7ca28x8s2jnkcc9cwn3rygnjyarib33dk4z066lsg7s";
       rev = drv.version;
     };
   })).override {
@@ -969,9 +969,4 @@ self: super: {
     url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
-
-  # Glob depends conditionally on semigroups for GHC < 8
-  Glob = if pkgs.lib.versionAtLeast self.ghc.version "8.0"
-    then super.Glob
-    else addBuildDepend super.Glob self.semigroups;
 }

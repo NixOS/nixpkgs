@@ -95,6 +95,7 @@ in rec {
   channel = import lib/make-channel.nix { inherit pkgs nixpkgs version versionSuffix; };
 
   manual = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manual);
+  manualEpub = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualEpub));
   manualPDF = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manualPDF)).x86_64-linux;
   manpages = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.manpages);
   options = (buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
@@ -217,6 +218,7 @@ in rec {
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
   tests.containers-bridge = callTest tests/containers-bridge.nix {};
   tests.containers-imperative = callTest tests/containers-imperative.nix {};
+  tests.containers-extra_veth = callTest tests/containers-extra_veth.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.dockerRegistry = hydraJob (import tests/docker-registry.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };

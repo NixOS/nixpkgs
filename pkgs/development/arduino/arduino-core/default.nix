@@ -6,7 +6,7 @@
 assert withGui -> gtk2 != null;
 
 let
-  externalDownloads = import ./downloads.nix {inherit fetchurl;};
+  externalDownloads = import ./downloads.nix {inherit fetchurl; inherit (lib) optionalAttrs; inherit (stdenv) system;};
   # Some .so-files are later copied from .jar-s to $HOME, so patch them beforehand
   patchelfInJars =
        lib.optional (stdenv.system == "x86_64-linux") {jar = "share/arduino/lib/jssc-2.8.0.jar"; file = "libs/linux/libjSSC-2.8_x86_64.so";}
