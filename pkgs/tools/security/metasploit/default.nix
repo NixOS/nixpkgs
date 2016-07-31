@@ -1,33 +1,50 @@
-{ stdenv, fetchurl, makeWrapper, ruby }:
+{ stdenv, lib, git, fetchgit
+, bundlerEnv, bundler, makeWrapper, ruby
+, postgresql, libpcap, sqlite, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "metasploit-framework-${version}";
-  version = "3.3.1";
+  version = "4.12.5";
 
-  src = fetchurl {
-    url = "http://downloads.metasploit.com/data/releases/archive/framework-${version}.tar.bz2";
-    sha256 = "07clzw1zfnqjhyydsc4mza238isai58p7aygh653qxsqb9a0j7qw";
+  buildInputs = [ makeWrapper git postgresql libpcap sqlite zlib ruby bundler ];
+  dontBuild = true;
+
+  src = fetchgit {
+    rev = "refs/tags/${version}";
+    url = "https://github.com/rapid7/metasploit-framework";
+    sha256 = "1cxcy9gqnajrdb0idmyn2m5dj3fnm6z55axpd1j9ss2c4kwln08c";
   };
 
-  buildInputs = [makeWrapper];
+  configurePhase = ''
+
+    mkdir -p $out/share/metasploit
+    cp -R *  $out/share/metasploit
+    rm -f    $out/share/metasploit/Gemfile.lock
+
+    export sourceRoot=$out/share/metasploit
+    export GEM_HOME=$GEM_HOME:${ruby}${ruby.gemPath}
+    export GEM_PATH=$GEM_PATH:$GEM_HOME
+  '';
 
   installPhase = ''
-    mkdir -p $out/share/msf
-    mkdir -p $out/bin
+    bundler install --gemfile=$out/share/metasploit/Gemfile --path=$out
 
-    cp -r * $out/share/msf
-
-    for i in $out/share/msf/msf*; do
-        makeWrapper $i $out/bin/$(basename $i) --prefix RUBYLIB : $out/share/msf/lib
+    for i in $out/share/metasploit/msf*; do
+        makeWrapper $i $out/bin/$(basename $i) \
+          --prefix "GEM_HOME" : "$GEM_HOME" \
+          --prefix "GEM_PATH" : "$GEM_PATH:${bundler}/${ruby.gemPath}"
     done
   '';
 
   postInstall = ''
-    patchShebangs $out/share/msf
+    patchShebangs $out/share/metasploit
   '';
 
   meta = {
     description = "Metasploit Framework - a collection of exploits";
     homepage = https://github.com/rapid7/metasploit-framework/wiki;
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.endian0a ];
   };
 }

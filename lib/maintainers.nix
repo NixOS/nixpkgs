@@ -123,6 +123,7 @@
   elasticdog = "Aaron Bull Schaefer <aaron@elasticdog.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
+  endian0a = "Matthew Deren <matthew.deren@gmail.com>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
