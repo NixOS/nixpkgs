@@ -8,7 +8,7 @@ in
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aristid aszlig eelco chaoflow ];
+    maintainers = [ aristid aszlig eelco chaoflow kampfschlaefer ];
   };
 
   machine =
