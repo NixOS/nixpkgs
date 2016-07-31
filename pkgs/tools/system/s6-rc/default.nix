@@ -2,7 +2,7 @@
 
 let
 
-  version = "0.0.2.1";
+  version = "0.1.0.0";
 
 in stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.skarnet.org/s6-rc";
     rev = "refs/tags/v${version}";
-    sha256 = "1gh72q1h1ds53yrzp481nvzaxkhhpm2kv59pfx4x564gxwdvq3a6";
+    sha256 = "1izjss1vfmkrkbgpzxlh0krkd2zin9d77ykr6i08rhixz7c2am0r";
   };
 
   dontDisableStatic = true;
@@ -19,6 +19,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
+    "--enable-absolute-paths"
     "--with-sysdeps=${skalibs}/lib/skalibs/sysdeps"
     "--with-include=${skalibs}/include"
     "--with-include=${execline}/include"
