@@ -15,11 +15,11 @@ let
     <option>password</option> overrides <option>passwordFile</option>.
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
-    If the option <option>users.mutableUsers</option> is true, the
+    If the option <option>users.onlyDeclarative</option> is false, the
     password defined in one of the three options will only be set when
     the user is created for the first time. After that, you are free to
     change the password with the ordinary user management commands. If
-    <option>users.mutableUsers</option> is false, you cannot change
+    <option>users.onlyDeclarative</option> is true, you cannot change
     user passwords, they will always be set according to the password
     options.
   '';
@@ -220,7 +220,7 @@ let
         description = ''
           Specifies the initial hashed password for the user, i.e. the
           hashed password assigned if the user does not already
-          exist. If <option>users.mutableUsers</option> is true, the
+          exist. If <option>users.onlyDeclarative</option> is false, the
           password can be changed subsequently using the
           <command>passwd</command> command. Otherwise, it's
           equivalent to setting the <option>hashedPassword</option> option.
@@ -235,7 +235,7 @@ let
         description = ''
           Specifies the initial password for the user, i.e. the
           password assigned if the user does not already exist. If
-          <option>users.mutableUsers</option> is true, the password
+          <option>users.onlyDeclarative</option> is false, the password
           can be changed subsequently using the
           <command>passwd</command> command. Otherwise, it's
           equivalent to setting the <option>password</option>
@@ -259,12 +259,12 @@ let
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
-        # If !mutableUsers, setting ‘initialPassword’ is equivalent to
+        # If onlyDeclarative, setting ‘initialPassword’ is equivalent to
         # setting ‘password’ (and similarly for hashed passwords).
-        (mkIf (!cfg.mutableUsers && config.initialPassword != null) {
+        (mkIf (cfg.onlyDeclarative && config.initialPassword != null) {
           password = mkDefault config.initialPassword;
         })
-        (mkIf (!cfg.mutableUsers && config.initialHashedPassword != null) {
+        (mkIf (cfg.onlyDeclarative && config.initialHashedPassword != null) {
           hashedPassword = mkDefault config.initialHashedPassword;
         })
       ];
@@ -365,7 +365,7 @@ let
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
-    inherit (cfg) mutableUsers;
+    inherit (cfg) onlyDeclarative;
     users = mapAttrsToList (_: u:
       { inherit (u)
           name uid group description home createHome isSystemUser
@@ -393,11 +393,11 @@ in {
 
   options = {
 
-    users.mutableUsers = mkOption {
+    users.onlyDeclarative = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
-        If set to <literal>true</literal>, you are free to add new users and groups to the system
+        If set to <literal>false</literal>, you are free to add new users and groups to the system
         with the ordinary <literal>useradd</literal> and
         <literal>groupadd</literal> commands. On system activation, the
         existing contents of the <literal>/etc/passwd</literal> and
@@ -409,7 +409,7 @@ in {
         will not be changed.
 
         <warning><para>
-        If set to <literal>false</literal>, the contents of the user and
+        If set to <literal>true</literal>, the contents of the user and
         group files will simply be replaced on system activation. This also
         holds for the user passwords; all changed
         passwords will be reset according to the
@@ -540,12 +540,12 @@ in {
       { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
       }
-      { # If mutableUsers is false, to prevent users creating a
+      { # If onlyDeclarative is true, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
         # root and users in the wheel group.
-        assertion = !cfg.mutableUsers ->
+        assertion = cfg.onlyDeclarative ->
           any id (mapAttrsToList (name: cfg:
             (name == "root"
              || cfg.group == "wheel"

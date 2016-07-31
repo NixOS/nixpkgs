@@ -60,7 +60,7 @@ in
   config = {
 
     environment.systemPackages =
-      lib.optional config.users.mutableUsers pkgs.shadow ++
+      lib.optional (!config.users.onlyDeclarative) pkgs.shadow ++
       lib.optional (types.shellPackage.check config.users.defaultUserShell)
         config.users.defaultUserShell;
 
@@ -103,7 +103,7 @@ in
       };
 
     security.setuidPrograms = [ "su" "chfn" ]
-      ++ lib.optionals config.users.mutableUsers
+      ++ lib.optionals (!config.users.onlyDeclarative)
       [ "passwd" "sg" "newgrp"
         "newuidmap" "newgidmap" # new in shadow 4.2.x
       ];

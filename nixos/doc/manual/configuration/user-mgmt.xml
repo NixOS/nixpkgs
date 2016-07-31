@@ -32,7 +32,7 @@ a password. However, you can use the <command>passwd</command> program
 to set a password, which is retained across invocations of
 <command>nixos-rebuild</command>.</para>
 
-<para>If you set users.mutableUsers to false, then the contents of /etc/passwd
+<para>If you set users.onlyDeclarative to true, then the contents of /etc/passwd
 and /etc/group will be congruent to your NixOS configuration. For instance,
 if you remove a user from users.extraUsers and run nixos-rebuild, the user
 account will cease to exist. Also, imperative commands for managing users
@@ -65,8 +65,8 @@ account named <literal>alice</literal>:
 <screen>
 # useradd -m alice</screen>
 
-To make all nix tools available to this new user use `su - USER` which 
-opens a login shell (==shell that loads the profile) for given user. 
+To make all nix tools available to this new user use `su - USER` which
+opens a login shell (==shell that loads the profile) for given user.
 This will create the ~/.nix-defexpr symlink. So run:
 
 <screen>
