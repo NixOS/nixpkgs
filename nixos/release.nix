@@ -7,7 +7,7 @@ with import ../lib;
 
 let
 
-  version = builtins.readFile ../.version;
+  version = fileContents ../.version;
   versionSuffix =
     (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
