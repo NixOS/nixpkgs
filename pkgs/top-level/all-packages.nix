@@ -14572,6 +14572,8 @@ in
 
   ssvnc = callPackage ../applications/networking/remote/ssvnc { };
 
+  tecoc = callPackage ../applications/editors/tecoc { };
+
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   sonic-pi = callPackage ../applications/audio/sonic-pi {
