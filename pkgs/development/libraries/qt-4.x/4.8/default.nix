@@ -3,7 +3,7 @@
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
-, buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst_plugins_base
+, buildMultimedia ? stdenv.isLinux, alsaLib, gst_all
 , buildWebkit ? stdenv.isLinux
 , flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
         # Qt doesn't directly need GLU (just GL), but many apps use, it's small and doesn't remain a runtime-dep if not used
     ++ optional mesaSupported mesa_glu
     ++ optional ((buildWebkit || buildMultimedia) && stdenv.isLinux ) alsaLib
-    ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
+    ++ optionals (buildWebkit || buildMultimedia) (with gst_all; [ gstreamer gst_plugins_base ]);
 
   # The following libraries are only used in plugins
   buildInputs =

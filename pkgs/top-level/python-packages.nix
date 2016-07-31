@@ -6610,8 +6610,8 @@ in modules // {
     };
   };
 
-  gst-python = callPackage ../development/libraries/gstreamer/python {
-    gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
+  gst-python = pkgs.gst_all_1.gst-python.override {
+    inherit python;
   };
 
   gtimelog = buildPythonPackage rec {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gst_all_1, boost, glib, qt4, cmake
+{ stdenv, fetchurl, fetchpatch, gstreamer, gst-plugins-base, boost, glib, qt4, cmake
 , automoc4, flex, bison, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "out" ];
 
-  buildInputs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base glib qt4 ];
+  buildInputs = [ gstreamer gst-plugins-base glib qt4 ];
   propagatedBuildInputs = [ boost ];
   nativeBuildInputs = [ cmake automoc4 flex bison pkgconfig ];
 
