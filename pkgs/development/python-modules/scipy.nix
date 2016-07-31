@@ -12,6 +12,11 @@ in buildPythonPackage (args // rec {
   buildInputs = (args.buildInputs or [ gfortran nose ]);
   propagatedBuildInputs = (args.propagatedBuildInputs or [ passthru.blas numpy]);
 
+  # Remove tests because of broken wrapper
+  prePatch = ''
+    rm scipy/linalg/tests/test_lapack.py
+  '';
+
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
   '';

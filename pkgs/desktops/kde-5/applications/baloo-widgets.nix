@@ -1,14 +1,7 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, kconfig
-, kio
-, ki18n
-, kservice
-, kfilemetadata
-, baloo
-, kdelibs4support
+{
+  kdeApp, lib,
+  ecm, kdoctools,
+  baloo, kconfig, kdelibs4support, kfilemetadata, ki18n, kio, kservice
 }:
 
 kdeApp {
@@ -17,11 +10,8 @@ kdeApp {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
-    baloo kconfig kservice kdelibs4support kfilemetadata ki18n kio
+    baloo kconfig kdelibs4support kfilemetadata ki18n kio kservice
   ];
 }

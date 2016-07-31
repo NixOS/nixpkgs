@@ -1,12 +1,12 @@
 { plasmaPackage
-, extra-cmake-modules
+, ecm
 , boost, kconfig, kcoreaddons, kdbusaddons, ki18n, kio, kglobalaccel
 , kwindowsystem, kxmlgui
 }:
 
 plasmaPackage {
   name = "kactivitymanagerd";
-  nativeBuildInputs = [ extra-cmake-modules ];
+  nativeBuildInputs = [ ecm ];
   propagatedBuildInputs = [
     boost kconfig kcoreaddons kdbusaddons kglobalaccel ki18n kio kwindowsystem
     kxmlgui

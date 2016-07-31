@@ -11,12 +11,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "099";
+  version = "100";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "11lfsas1ym3xwb1rc27z1skvb4m176swix9dih4rvnlqxkqz4qhw";
+    sha256 = "1pp20dxv6y2brb144v8kxfkkn0rcd755rivgrbvzzgn3v9dgjprp";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 

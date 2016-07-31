@@ -1,12 +1,6 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, makeQtWrapper
-, kparts
-, ktexteditor
-, kwidgetsaddons
-, libkomparediff2
+{
+  kdeApp, lib, ecm, kdoctools, makeQtWrapper,
+  kparts, ktexteditor, kwidgetsaddons, libkomparediff2
 }:
 
 kdeApp {
@@ -15,18 +9,9 @@ kdeApp {
     license = with lib.licenses; [ gpl2 ];
   };
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
 
-  propagatedBuildInputs = [
-    kparts
-    ktexteditor
-    kwidgetsaddons
-    libkomparediff2
-  ];
+  propagatedBuildInputs = [ kparts ktexteditor kwidgetsaddons libkomparediff2 ];
 
   postInstall = ''
     wrapQtProgram "$out/bin/kompare"

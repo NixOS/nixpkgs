@@ -1,9 +1,6 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kio
-, libkexiv2
-, libkdcraw
+{
+  kdeApp, lib,
+  ecm, kio, libkexiv2, libkdcraw
 }:
 
 kdeApp {
@@ -12,10 +9,6 @@ kdeApp {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    kio libkexiv2 libkdcraw
-  ];
+  nativeBuildInputs = [ ecm ];
+  propagatedBuildInputs = [ kio libkexiv2 libkdcraw ];
 }

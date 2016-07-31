@@ -1,13 +1,7 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, makeQtWrapper
-, qtscript
-, kio
-, solid
-, kxmlgui
-, kparts
+{
+  kdeApp, lib,
+  ecm, kdoctools, makeQtWrapper,
+  kio, kparts, kxmlgui, qtscript, solid
 }:
 
 kdeApp {
@@ -16,13 +10,9 @@ kdeApp {
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ fridh vcunat ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
-    kio kparts qtscript solid kxmlgui
+    kio kparts kxmlgui qtscript solid
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/filelight"

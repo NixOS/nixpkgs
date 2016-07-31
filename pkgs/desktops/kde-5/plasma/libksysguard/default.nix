@@ -1,4 +1,4 @@
-{ fetchpatch, plasmaPackage, extra-cmake-modules, kauth, kcompletion
+{ fetchpatch, plasmaPackage, ecm, kauth, kcompletion
 , kconfigwidgets, kcoreaddons, kservice, kwidgetsaddons
 , kwindowsystem, plasma-framework, qtscript, qtx11extras
 , kconfig, ki18n, kiconthemes
@@ -10,7 +10,7 @@ plasmaPackage {
     ./0001-qdiriterator-follow-symlinks.patch
   ];
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
   ];
   propagatedBuildInputs = [
     kauth kconfig ki18n kiconthemes kwindowsystem plasma-framework qtx11extras

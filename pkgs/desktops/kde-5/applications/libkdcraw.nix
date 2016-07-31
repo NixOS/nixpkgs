@@ -1,8 +1,4 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, libraw
-}:
+{ kdeApp, lib, ecm, libraw }:
 
 kdeApp {
   name = "libkdcraw";
@@ -10,10 +6,6 @@ kdeApp {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    libraw
-  ];
+  nativeBuildInputs = [ ecm ];
+  propagatedBuildInputs = [ libraw ];
 }

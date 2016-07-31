@@ -17,6 +17,7 @@ let
     else cfg.database.port;
 
   poolName = "tt-rss";
+  phpfpmSocketName = "/var/run/phpfpm/${poolName}.sock";
   virtualHostName = "tt-rss";
 
   tt-rss-config = pkgs.writeText "config.php" ''
@@ -448,23 +449,21 @@ let
     root = "/var/lib/tt-rss";
   in mkIf cfg.enable {
 
-    services.phpfpm.pools = if cfg.pool == "${poolName}" then {
-      "${poolName}" =  {
-        listen = "/var/run/phpfpm/${poolName}.sock";
-        extraConfig = ''
-          listen.owner = nginx
-          listen.group = nginx
-          listen.mode = 0600
-          user = nginx
-          pm = dynamic
-          pm.max_children = 75
-          pm.start_servers = 10
-          pm.min_spare_servers = 5
-          pm.max_spare_servers = 20
-          pm.max_requests = 500
-          catch_workers_output = 1
-        '';
-      };
+    services.phpfpm.poolConfigs = if cfg.pool == "${poolName}" then {
+      "${poolName}" = ''
+        listen = "${phpfpmSocketName}";
+        listen.owner = nginx
+        listen.group = nginx
+        listen.mode = 0600
+        user = nginx
+        pm = dynamic
+        pm.max_children = 75
+        pm.start_servers = 10
+        pm.min_spare_servers = 5
+        pm.max_spare_servers = 20
+        pm.max_requests = 500
+        catch_workers_output = 1
+      '';
     } else {};
 
     # TODO: Re-enable after https://github.com/NixOS/nixpkgs/pull/15862 is merged
@@ -486,7 +485,7 @@ let
     #     locations."~ \.php$" = {
     #       extraConfig = ''
     #         fastcgi_split_path_info ^(.+\.php)(/.+)$;
-    #         fastcgi_pass unix:${config.services.phpfpm.pools."${cfg.pool}".listen};
+    #         fastcgi_pass unix:${phpfpmSocketName};
     #         fastcgi_index index.php;
     #         fastcgi_param SCRIPT_FILENAME ${root}/$fastcgi_script_name;
 

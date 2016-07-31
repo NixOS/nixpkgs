@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kconfig
+{ plasmaPackage, ecm, kdoctools, kconfig
 , kcoreaddons, kdelibs4support, ki18n, kitemviews, knewstuff
 , kiconthemes, libksysguard, makeQtWrapper
 }:
@@ -6,7 +6,7 @@
 plasmaPackage {
   name = "ksysguard";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

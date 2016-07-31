@@ -1,8 +1,7 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, boost
-, gpgme
+{
+  kdeApp, lib,
+  ecm,
+  boost, gpgme
 }:
 
 kdeApp {
@@ -11,10 +10,6 @@ kdeApp {
     license = with lib.licenses; [ lgpl21 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    boost gpgme
-  ];
+  nativeBuildInputs = [ ecm ];
+  propagatedBuildInputs = [ boost gpgme ];
 }

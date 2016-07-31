@@ -1469,21 +1469,6 @@ let
     };
   };
 
-  seq = melpaBuild rec {
-    pname = "seq";
-    version = "1.11";
-    src = fetchFromGitHub {
-      owner  = "NicolasPetton";
-      repo   = "${pname}.el";
-      rev    = version;
-      sha256 = "18ydaz2y5n7h4wr0dx2k9qbxl0mc50qfwk52ma4amk8nmm1bjwgc";
-    };
-    meta = {
-      description = "Sequence manipulation library for Emacs";
-      license = gpl3Plus; # probably
-    };
-  };
-
   shorten = melpaBuild rec {
     pname   = "shorten";
     version = circe.version;

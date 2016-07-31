@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, epoxy
+{ plasmaPackage, ecm, kdoctools, epoxy
 , kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets
 , kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel
 , ki18n, kiconthemes, kidletime, kinit, kio, knewstuff, knotifications
@@ -11,7 +11,7 @@
 plasmaPackage {
   name = "kwin";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

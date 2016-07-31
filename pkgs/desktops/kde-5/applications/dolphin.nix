@@ -1,30 +1,10 @@
-{ kdeApp
-, lib
-, extra-cmake-modules
-, kdoctools
-, makeQtWrapper
-, kinit
-, kcmutils
-, kcoreaddons
-, knewstuff
-, ki18n
-, kdbusaddons
-, kbookmarks
-, kconfig
-, kio
-, kparts
-, solid
-, kiconthemes
-, kcompletion
-, ktexteditor
-, kwindowsystem
-, knotifications
-, kactivities
-, phonon
-, baloo
-, baloo-widgets
-, kfilemetadata
-, kdelibs4support
+{
+  kdeApp, lib,
+  ecm, kdoctools, makeQtWrapper,
+  baloo, baloo-widgets, kactivities, kbookmarks, kcmutils, kcompletion, kconfig,
+  kcoreaddons, kdelibs4support, kdbusaddons, kfilemetadata, ki18n, kiconthemes,
+  kinit, kio, knewstuff, knotifications, kparts, ktexteditor, kwindowsystem,
+  phonon, solid
 }:
 
 kdeApp {
@@ -33,16 +13,12 @@ kdeApp {
     license = with lib.licenses; [ gpl2 fdl12 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
-    kinit kcmutils kcoreaddons knewstuff kdbusaddons kbookmarks kconfig kparts
-    solid kiconthemes kcompletion knotifications phonon baloo-widgets baloo
-    kactivities kdelibs4support kfilemetadata ki18n kio ktexteditor
-    kwindowsystem
+    baloo baloo-widgets kactivities kbookmarks kcmutils kcompletion kconfig
+    kcoreaddons kdelibs4support kdbusaddons kfilemetadata ki18n kiconthemes
+    kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem phonon
+    solid
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/dolphin"

@@ -1,11 +1,11 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, ki18n, kxmlgui
+{ plasmaPackage, ecm, kdoctools, ki18n, kxmlgui
 , kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support, makeQtWrapper
 }:
 
 plasmaPackage {
   name = "kmenuedit";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

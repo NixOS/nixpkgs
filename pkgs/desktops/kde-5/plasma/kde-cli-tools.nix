@@ -1,11 +1,11 @@
-{ plasmaPackage, extra-cmake-modules, kcmutils, kconfig
+{ plasmaPackage, ecm, kcmutils, kconfig
 , kdelibs4support, kdesu, kdoctools, ki18n, kiconthemes
 , kwindowsystem, makeQtWrapper, qtsvg, qtx11extras
 }:
 
 plasmaPackage {
   name = "kde-cli-tools";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeQtWrapper ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
     kdelibs4support ki18n kwindowsystem qtsvg qtx11extras kcmutils kconfig kdesu
     kiconthemes

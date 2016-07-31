@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, fcitx, pkgconfig, qtbase, kde5 }:
+{ stdenv, lib, fetchurl, cmake, fcitx, pkgconfig, qtbase, extra-cmake-modules }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-qt5-${version}";
@@ -9,19 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1pj1b04n8r4kl7jh1qdv0xshgzb3zrmizfa3g5h3yk589h191vwc";
   };
 
-  # The following is to not have a dependency on kde5 so the plugin can be part of qt5LibsFun
-  postUnpack = ''
-    ${lib.concatMapStrings (f: ''
-      ln -s ${kde5.extra-cmake-modules}/share/ECM/modules/${f} $sourceRoot/cmake/
-    '')
-    [ "ECMFindModuleHelpers.cmake" "ECMGenerateHeaders.cmake"
-      "ECMPackageConfigHelpers.cmake" "ECMQueryQmake.cmake"
-      "ECMSetupVersion.cmake" "ECMVersionHeader.h.in" ]}
-  '';
+  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
 
-  patches = [ ./fcitx-qt5-ecm.patch ];
-
-  buildInputs = [ cmake fcitx pkgconfig qtbase ];
+  buildInputs = [ fcitx qtbase ];
 
   preInstall = ''
     substituteInPlace platforminputcontext/cmake_install.cmake \

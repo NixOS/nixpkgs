@@ -1,9 +1,9 @@
 {
-  kdeApp, lib, makeQtWrapper, extra-cmake-modules, kdoctools,
+  kdeApp, lib, makeQtWrapper, ecm, kdoctools,
   kactivities, kconfig, kcrash, kguiaddons, kiconthemes, ki18n, kinit,
   kjobwidgets, kio, kparts, ktexteditor, kwindowsystem, kxmlgui, kdbusaddons,
-  kwallet, plasma-framework, kitemmodels, knotifications, qtscript, threadweaver,
-  knewstuff, libgit2
+  kwallet, plasma-framework, kitemmodels, knotifications, qtscript,
+  threadweaver, knewstuff, libgit2
 }:
 
 kdeApp {
@@ -12,9 +12,7 @@ kdeApp {
     license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules kdoctools makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
     kactivities ki18n kio ktexteditor kwindowsystem plasma-framework qtscript
     kconfig kcrash kguiaddons kiconthemes kinit kjobwidgets kparts kxmlgui

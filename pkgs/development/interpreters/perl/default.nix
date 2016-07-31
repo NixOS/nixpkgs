@@ -71,8 +71,8 @@ let
     preConfigure =
       ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-    '' + optionalString stdenv.isArm ''
-      configureFlagsArray=(-Dldflags="-lm -lrt")
+      '' + optionalString (stdenv.isArm || stdenv.isMips) ''
+        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''

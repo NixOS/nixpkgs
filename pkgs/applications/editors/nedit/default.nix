@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "nedit-5.6";
+  name = "nedit-5.6a";
   
   src = fetchurl {
     url = "mirror://sourceforge/nedit/nedit-source/${name}-src.tar.gz";
-    sha256 = "023hwpqc57mnzvg6p7jda6193afgjzxzajlhwhqvk3jq2kdv6zna";
+    sha256 = "1v8y8vwj3kn91crsddqkz843y6csgw7wkjnd3zdcb4bcrf1pjrsk";
   };
 
   buildInputs = [ xlibsWrapper motif libXpm ];

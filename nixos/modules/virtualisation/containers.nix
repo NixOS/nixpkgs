@@ -32,10 +32,8 @@ let
         fi
       fi
 
-      # Start the regular stage 1 script, passing the bind-mounted
-      # notification socket from the host to allow the container
-      # systemd to signal readiness to the host systemd.
-      NOTIFY_SOCKET=/var/lib/private/host-notify exec "$1"
+      # Start the regular stage 1 script.
+      exec "$1"
     '';
 
   system = config.nixpkgs.system;
@@ -326,19 +324,17 @@ in
             fi
           ''}
 
-          rm -f $root/var/lib/private/host-notify
-
           # Run systemd-nspawn without startup notification (we'll
           # wait for the container systemd to signal readiness).
-          EXIT_ON_REBOOT=1 NOTIFY_SOCKET= \
+          EXIT_ON_REBOOT=1 \
           exec ${config.systemd.package}/bin/systemd-nspawn \
             --keep-unit \
             -M "$INSTANCE" -D "$root" $extraFlags \
             $EXTRA_NSPAWN_FLAGS \
+            --notify-ready=yes \
             --bind-ro=/nix/store \
             --bind-ro=/nix/var/nix/db \
             --bind-ro=/nix/var/nix/daemon-socket \
-            --bind=/run/systemd/notify:/var/lib/private/host-notify \
             --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles" \
             --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots" \
             --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
@@ -404,8 +400,6 @@ in
 
         Type = "notify";
 
-        NotifyAccess = "all";
-
         # Note that on reboot, systemd-nspawn returns 133, so this
         # unit will be restarted. On poweroff, it returns 0, so the
         # unit won't be restarted.
@@ -421,6 +415,8 @@ in
         # after the timeout). So send an ignored signal.
         KillMode = "mixed";
         KillSignal = "WINCH";
+
+        DevicePolicy = "closed";
       };
     };
   in {

@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, kconfig, kconfigwidgets
+{ plasmaPackage, ecm, kconfig, kconfigwidgets
 , kdbusaddons, kglobalaccel, ki18n, kwidgetsaddons, kxmlgui
 , libkscreen, makeQtWrapper, qtdeclarative, qtgraphicaleffects
 }:
@@ -6,7 +6,7 @@
 plasmaPackage {
   name = "kscreen";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     makeQtWrapper
   ];
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ plasmaPackage, extra-cmake-modules, kdoctools, kcmutils
+{ plasmaPackage, ecm, kdoctools, kcmutils
 , kcompletion, kconfig, kconfigwidgets, kcoreaddons, kdbusaddons
 , kdeclarative, kdelibs4support, ki18n, kiconthemes, kio, kpackage
 , kservice, kwidgetsaddons, kxmlgui, libraw1394, makeQtWrapper
@@ -8,7 +8,7 @@
 plasmaPackage {
   name = "kinfocenter";
   nativeBuildInputs = [
-    extra-cmake-modules
+    ecm
     kdoctools
     makeQtWrapper
   ];

@@ -1,20 +1,7 @@
-{ kdeApp, lib
-, extra-cmake-modules
-, kdoctools
-, makeQtWrapper
-, kconfig
-, kcoreaddons
-, kdbusaddons
-, kdeclarative
-, ki18n
-, kio
-, knotifications
-, kscreen
-, kwidgetsaddons
-, kwindowsystem
-, kxmlgui
-, libkipi
-, xcb-util-cursor
+{
+  kdeApp, lib, ecm, kdoctools, makeQtWrapper,
+  kconfig, kcoreaddons, kdbusaddons, kdeclarative, ki18n, kio, knotifications,
+  kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi, xcb-util-cursor
 }:
 
 kdeApp {
@@ -22,9 +9,7 @@ kdeApp {
   meta = with lib; {
     maintainers = with maintainers; [ ttuegel ];
   };
-  nativeBuildInputs = [
-    extra-cmake-modules kdoctools makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
   propagatedBuildInputs = [
     kconfig kcoreaddons kdbusaddons kdeclarative ki18n kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi xcb-util-cursor
