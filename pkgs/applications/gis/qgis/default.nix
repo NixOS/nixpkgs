@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gdal, cmake, qt4, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
-, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, qscintilla, postgresql, makeWrapper
+, qwt, fcgi, pythonPackages, libspatialindex, libspatialite, openssl, qscintilla, postgresql, makeWrapper
 , withGrass ? false, grass
 }:
 
 stdenv.mkDerivation rec {
   name = "qgis-2.10.1";
 
-  buildInputs = [ gdal qt4 flex bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
+  buildInputs = [ gdal qt4 flex bison proj geos xlibsWrapper sqlite gsl qwt qscintilla openssl
     fcgi libspatialindex libspatialite postgresql ] ++
     (stdenv.lib.optional withGrass grass) ++
     (with pythonPackages; [ numpy psycopg2 ]) ++ [ pythonPackages.qscintilla ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.
   preBuild = ''
-    export LD_LIBRARY_PATH=`pwd`/output/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=`pwd`/output/lib:${stdenv.lib.makeLibraryPath [ openssl ]}:$LD_LIBRARY_PATH
   '';
 
   src = fetchurl {
@@ -31,9 +31,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/qgis \
-      --prefix PYTHONPATH : $PYTHONPATH
+      --prefix PYTHONPATH : $PYTHONPATH \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ openssl ]}
   '';
-
+ 
   meta = {
     description = "User friendly Open Source Geographic Information System";
     homepage = http://www.qgis.org;
