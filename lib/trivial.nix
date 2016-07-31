@@ -62,11 +62,13 @@ rec {
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
+  inherit (import ./strings.nix) fileContents;
+
   # Return the Nixpkgs version number.
   nixpkgsVersion =
     let suffixFile = ../.version-suffix; in
-    readFile ../.version
-    + (if pathExists suffixFile then readFile suffixFile else "pre-git");
+    fileContents ../.version
+    + (if pathExists suffixFile then fileContents suffixFile else "pre-git");
 
   # Whether we're being called by nix-shell.
   inNixShell = builtins.getEnv "IN_NIX_SHELL" == "1";
