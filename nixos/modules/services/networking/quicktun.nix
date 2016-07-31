@@ -93,6 +93,7 @@ with lib;
       mapAttrsToList (name: qtcfg: {
         "quicktun-${name}" = {
           wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
           environment = {
             "INTERFACE" = name;
             "TUN_MODE" = toString qtcfg.tunMode;
