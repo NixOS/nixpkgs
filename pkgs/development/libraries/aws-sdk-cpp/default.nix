@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (apis != ["*"])
       "-DBUILD_ONLY=${lib.concatMapStringsSep ";" (api: "aws-cpp-sdk-" + api) apis}";
 
+  # curl upgrade to 7.50.0 (#17152) changes the libcurl headers slightly and
+  # therefore requires the followin flag until this package gets updated
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
   enableParallelBuilding = true;
 
   preBuild =
