@@ -55,6 +55,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl nukeReferences ];
 
+  hardeningDisable = [ "pic" "format" ];
+
   disallowedReferences = if libsOnly then [] else [ kernel.dev ];
 
   meta = with stdenv.lib.meta; {
