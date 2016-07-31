@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libtool, gtk ? null, libcap
-, alsaLib, libpulseaudio, gstreamer, gst-plugins-base, libvorbis }:
+, alsaLib, libpulseaudio, gst_all, libvorbis }:
 
 stdenv.mkDerivation rec {
   name = "libcanberra-0.30";

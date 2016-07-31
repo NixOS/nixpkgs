@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, automake113x, intltool, pkgconfig, libtool, makeWrapper,
-  dbus_glib, libcanberra, gst_all_1, vala, gnome3, gtk3, gst-plugins-base,
+  dbus_glib, libcanberra, gst_all_1, vala, gnome3, gtk3,
   glib, gobjectIntrospection, telepathy_glib
 }:
 
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
 
   configureScript = ''./autogen.sh'';
 
-  buildInputs = [
+  buildInputs = with gst_all_1; [
     which automake113x intltool glib gobjectIntrospection pkgconfig libtool
-    makeWrapper dbus_glib libcanberra vala gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    makeWrapper dbus_glib libcanberra vala
+    gstreamer gst-plugins-base gst-plugins-good
     gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
     gnome3.gnome_common gnome3.gnome_shell gtk3 telepathy_glib
     gnome3.defaultIconTheme

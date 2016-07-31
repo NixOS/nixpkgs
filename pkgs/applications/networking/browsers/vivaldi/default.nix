@@ -3,7 +3,7 @@
 , alsaLib, dbus_libs, cups, libexif, ffmpeg, libudev
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, xz
-, gstreamer, gst-plugins-base, libxml2
+, gst_all, libxml2
 , glib, gtk, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
     tar -xvf data.tar.xz
   '';
 
-  buildInputs =
+  buildInputs = with gst_all;
     [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
       libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
       atk alsaLib dbus_libs cups gtk gdk_pixbuf libexif ffmpeg libudev

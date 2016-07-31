@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, gtk, gtkspell, aspell
-, gstreamer, gst-plugins-base, gst-plugins-good, startupnotification, gettext
+, gst_all, startupnotification, gettext
 , perl, perlXMLParser, libxml2, nss, nspr, farsight2
 , libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
 , lib, python, libICE, libXext, libSM
@@ -25,7 +25,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
+  buildInputs = with gst_all; [
     gtkspell aspell
     gstreamer gst-plugins-base gst-plugins-good startupnotification
     libxml2 nss nspr farsight2

@@ -1036,7 +1036,7 @@ in
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
+    gst_plugins = with gst_all; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
   };
 
   clementineFree = self.clementine.free;
@@ -7411,13 +7411,7 @@ in
   );
   gst_all = gst_all_0;
 
-  inherit (gst_all)
-    gstreamer gstreamermm gnonlin
-    gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
-    gst-ffmpeg
-    gst-python
-    qt-gstreamer
-    ;
+  inherit (gst_all) qt-gstreamer;
 
   qt-gstreamer1 = gst_all_1.qt-gstreamer;
 
@@ -14330,7 +14324,6 @@ in
   quodlibet-with-gst-plugins = callPackage ../applications/audio/quodlibet {
     inherit (pythonPackages) mutagen;
     withGstPlugins = true;
-    gst-plugins-bad = null;
   };
 
   qutebrowser = qt55.callPackage ../applications/networking/browsers/qutebrowser {

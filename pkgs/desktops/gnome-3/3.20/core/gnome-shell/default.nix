@@ -2,7 +2,7 @@
 , python3Packages, libsoup, polkit, clutter, networkmanager, docbook_xsl , docbook_xsl_ns, at_spi2_core
 , libstartup_notification, telepathy_glib, telepathy_logger, libXtst, p11_kit, unzip
 , sqlite, libgweather, libcanberra_gtk3
-, libpulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
+, libpulseaudio, libical, libtool, nss, gobjectIntrospection, gst_all, makeWrapper
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet, librsvg }:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       libcroco intltool libsecret pkgconfig libsoup polkit libcanberra gdk_pixbuf librsvg
       clutter networkmanager libstartup_notification telepathy_glib docbook_xsl docbook_xsl_ns
       libXtst p11_kit networkmanagerapplet gjs mutter libpulseaudio caribou evolution_data_server
-      libical libtool nss gtk gstreamer makeWrapper gdm
+      libical libtool nss gtk gst_all.gstreamer makeWrapper gdm
       libcanberra_gtk3 gnome_control_center
       defaultIconTheme sqlite gnome3.gnome-bluetooth
       libgweather # not declared at build time, but typelib is needed at runtime

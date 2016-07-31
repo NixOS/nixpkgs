@@ -2,7 +2,7 @@
 , autoconf, automake, gettext, intltool, libtool, pkgconfig
 , libICE, libSM, libXScrnSaver, libXtst, cheetah
 , glib, glibmm, gtk, gtkmm, atk, pango, pangomm, cairo, cairomm
-, dbus, dbus_glib, GConf, gconfmm, gdome2, gstreamer, libsigcxx }:
+, dbus, dbus_glib, GConf, gconfmm, gdome2, gst_all, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = "workrave-${version}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libICE libSM libXScrnSaver libXtst cheetah
     glib glibmm gtk gtkmm atk pango pangomm cairo cairomm
-    dbus dbus_glib GConf gconfmm gdome2 gstreamer libsigcxx
+    dbus dbus_glib GConf gconfmm gdome2 gst_all.gstreamer libsigcxx
   ];
 
   preConfigure = "./autogen.sh";

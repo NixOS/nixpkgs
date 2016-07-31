@@ -1,11 +1,6 @@
 { stdenv, fetchurl, python, buildPythonApplication, mutagen, pygtk, pygobject, intltool
-, pythonDBus, gst-python, withGstPlugins ? false, gst-plugins-base ? null
-, gst-plugins-good ? null, gst-plugins-ugly ? null, gst-plugins-bad ? null }:
-
-assert withGstPlugins -> gst-plugins-base != null
-                         || gst-plugins-good != null
-                         || gst-plugins-ugly != null
-                         || gst-plugins-bad != null;
+, pythonDBus, gst_all, withGstPlugins ? false
+}:
 
 let version = "2.6.3"; in
 
@@ -43,12 +38,12 @@ buildPythonApplication {
 
   patches = [ ./quodlibet-package-plugins.patch ];
 
-  buildInputs = stdenv.lib.optionals withGstPlugins [
+  buildInputs = stdenv.lib.optionals withGstPlugins (with gst_all; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-  ];
+  ]);
 
   propagatedBuildInputs = [
-    mutagen pygtk pygobject pythonDBus gst-python intltool
+    mutagen pygtk pygobject pythonDBus gst_all.gst-python intltool
   ];
 
   postInstall = stdenv.lib.optionalString withGstPlugins ''
