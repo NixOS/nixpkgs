@@ -1,55 +1,135 @@
-{ stdenv, fetchurl, cmake, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
+{ stdenv, fetchurl, cmake, pkgconfig, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
 , openssl, pcre, boost, judy, bison, libxml2
 , libaio, libevent, groff, jemalloc, cracklib, systemd, numactl, perl
 , fixDarwinDylibNames, cctools, CoreServices
-, makeWrapper
 }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "mariadb-${version}";
-  version = "10.1.9";
+
+let # in mariadb # spans the whole file
+
+mariadb = {
+  inherit client  # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
+    server;       # currently a full build, including everything in `client` again
+  lib = client;   # compat. with the old mariadb split
+};
+
+
+common = rec { # attributes common to both builds
+  version = "10.1.16";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/interstitial/mariadb-${version}/source/mariadb-${version}.tar.gz";
-    sha256 = "0471vwg9c5c17m7679krjha16ib6d48fcsphkchb9v9cf8k5i74f";
+    sha256 = "14s3wq1c25n62n75hkixl8n7cni4m73w055nsx4czm655k33bjv7";
   };
 
-  buildInputs = [
-    cmake ncurses openssl zlib xz lzo lz4 bzip2
-    # temporary due to https://mariadb.atlassian.net/browse/MDEV-9000
-    (if stdenv.is64bit then snappy else null)
-    pcre libxml2 boost judy bison libevent cracklib
-    makeWrapper
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
-    ++ stdenv.lib.optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+  prePatch = ''
+    substituteInPlace cmake/libutils.cmake \
+      --replace /usr/bin/libtool libtool
+    sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
+  '';
 
   patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [
+    ncurses openssl zlib pcre
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
+    "-DMANUFACTURER=NixOS.org"
     "-DDEFAULT_CHARSET=utf8"
     "-DDEFAULT_COLLATION=utf8_general_ci"
-    "-DENABLED_LOCAL_INFILE=ON"
+    "-DSECURITY_HARDENED=ON"
+
     "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
+
+    "-DWITH_ZLIB=system"
+    "-DWITH_SSL=system"
+    "-DWITH_PCRE=system"
+  ]
+    ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ;
+
+  preConfigure = ''
+    cmakeFlags="$cmakeFlags -DINSTALL_INCLUDEDIR=''${!outputDev}/include/mysql"
+  '';
+
+  postInstall = ''
+    rm "$out"/lib/*.a
+    find "''${!outputBin}/bin" -name '*test*' -delete
+  '';
+
+  passthru.mysqlVersion = "5.6";
+
+  meta = with stdenv.lib; {
+    description = "An enhanced, drop-in replacement for MySQL";
+    homepage    = https://mariadb.org/;
+    license     = licenses.gpl2;
+    maintainers = with maintainers; [ thoughtpolice wkennington ];
+    platforms   = platforms.all;
+  };
+};
+
+
+client = stdenv.mkDerivation (common // {
+  name = "mariadb-client-${common.version}";
+
+  outputs = [ "dev" "out" "bin" ];
+
+  propagatedBuildInputs = [ openssl zlib ]; # required from mariadb.pc
+
+  cmakeFlags = common.cmakeFlags ++ [
+    "-DWITHOUT_SERVER=ON"
+  ];
+
+  preConfigure = common.preConfigure + ''
+    cmakeFlags="$cmakeFlags \
+      -DINSTALL_BINDIR=$bin/bin -DINSTALL_SCRIPTDIR=$bin/bin \
+      -DINSTALL_SUPPORTFILESDIR=$bin/share/mysql \
+      -DINSTALL_DOCDIR=$bin/share/doc/mysql -DINSTALL_DOCREADMEDIR=$bin/share/doc/mysql \
+      "
+  '';
+
+  # prevent cycle; it needs to reference $dev
+  postInstall = common.postInstall + ''
+    moveToOutput bin/mysql_config "$dev"
+  '';
+
+  enableParallelBuilding = true; # the client should be OK
+});
+
+
+server = stdenv.mkDerivation (common // {
+  name = "mariadb-${common.version}";
+
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ];
+
+  buildInputs = common.buildInputs ++ [
+    xz lzo lz4 bzip2 snappy
+    libxml2 boost judy libevent cracklib
+  ]
+    ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
+    ;
+
+  cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
     "-DINSTALL_SYSCONFDIR=etc/mysql"
     "-DINSTALL_INFODIR=share/mysql/docs"
     "-DINSTALL_MANDIR=share/man"
     "-DINSTALL_PLUGINDIR=lib/mysql/plugin"
     "-DINSTALL_SCRIPTDIR=bin"
-    "-DINSTALL_INCLUDEDIR=include/mysql"
-    "-DINSTALL_DOCREADMEDIR=share/mysql"
     "-DINSTALL_SUPPORTFILESDIR=share/mysql"
-    "-DINSTALL_MYSQLSHAREDIR=share/mysql"
-    "-DINSTALL_DOCDIR=share/mysql/docs"
+    "-DINSTALL_DOCREADMEDIR=share/doc/mysql"
+    "-DINSTALL_DOCDIR=share/doc/mysql"
     "-DINSTALL_SHAREDIR=share/mysql"
+
+    "-DENABLED_LOCAL_INFILE=ON"
     "-DWITH_READLINE=ON"
-    "-DWITH_ZLIB=system"
-    "-DWITH_SSL=system"
-    "-DWITH_PCRE=system"
-    "-DWITH_EMBEDDED_SERVER=yes"
     "-DWITH_EXTRA_CHARSETS=complex"
     "-DWITH_EMBEDDED_SERVER=ON"
     "-DWITH_ARCHIVE_STORAGE_ENGINE=1"
@@ -58,83 +138,17 @@ stdenv.mkDerivation rec {
     "-DWITH_PARTITION_STORAGE_ENGINE=1"
     "-DWITHOUT_EXAMPLE_STORAGE_ENGINE=1"
     "-DWITHOUT_FEDERATED_STORAGE_ENGINE=1"
-    "-DSECURITY_HARDENED=ON"
     "-DWITH_WSREP=ON"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DWITHOUT_OQGRAPH_STORAGE_ENGINE=1"
     "-DWITHOUT_TOKUDB=1"
-    "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
   ];
 
-  # fails to find lex_token.h sometimes
-  enableParallelBuilding = false;
-
-  outputs = [ "out" "lib" ];
-  setOutputFlags = false;
-  moveToDev = false;
-
-  prePatch = ''
-    substituteInPlace cmake/libutils.cmake \
-      --replace /usr/bin/libtool libtool
-    sed -i "s,SET(DEFAULT_MYSQL_HOME.*$,SET(DEFAULT_MYSQL_HOME /not/a/real/dir),g" CMakeLists.txt
-    sed -i "s,SET(PLUGINDIR.*$,SET(PLUGINDIR $lib/lib/mysql/plugin),g" CMakeLists.txt
-
-    sed -i "s,SET(pkgincludedir.*$,SET(pkgincludedir $lib/include),g" scripts/CMakeLists.txt
-    sed -i "s,SET(pkglibdir.*$,SET(pkglibdir $lib/lib),g" scripts/CMakeLists.txt
-    sed -i "s,SET(pkgplugindir.*$,SET(pkgplugindir $lib/lib/mysql/plugin),g" scripts/CMakeLists.txt
-
-    sed -i "s,set(libdir.*$,SET(libdir $lib/lib),g" storage/mroonga/vendor/groonga/CMakeLists.txt
-    sed -i "s,set(includedir.*$,SET(includedir $lib/include),g" storage/mroonga/vendor/groonga/CMakeLists.txt
-    sed -i "/\"\$[{]CMAKE_INSTALL_PREFIX}\/\$[{]GRN_RELATIVE_PLUGINS_DIR}\"/d" storage/mroonga/vendor/groonga/CMakeLists.txt
-    sed -i "s,set(GRN_PLUGINS_DIR.*$,SET(GRN_PLUGINS_DIR $lib/\$\{GRN_RELATIVE_PLUGINS_DIR}),g" storage/mroonga/vendor/groonga/CMakeLists.txt
-    sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
+  postInstall = common.postInstall + ''
+    rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
+    rm "$out"/share/man/man1/mysql-test-run.pl.1
   '';
+});
 
-  postInstall = ''
-    substituteInPlace $out/bin/mysql_install_db \
-      --replace basedir=\"\" basedir=\"$out\"
+in mariadb
 
-    # Wrap mysqld with --basedir, but as last flag
-    wrapProgram $out/bin/mysqld 
-    sed -i "s,\(^exec.*$\),\1 --basedir=$out,g" $out/bin/mysqld
-
-    # Remove superfluous files
-    rm -r $out/mysql-test $out/sql-bench $out/data # Don't need testing data
-    rm $out/share/man/man1/mysql-test-run.pl.1
-    rm $out/bin/rcmysql # Not needed with nixos units
-    rm $out/bin/mysqlbug # Encodes a path to gcc and not really useful
-    find $out/bin -name \*test\* -exec rm {} \;
-
-    # Separate libs and includes into their own derivation
-    mkdir -p $lib
-    mv $out/lib $lib
-    mv $out/include $lib
-
-    # Fix the mysql_config
-    sed -i $out/bin/mysql_config \
-      -e 's,-lz,-L${zlib.out}/lib -lz,g' \
-      -e 's,-lssl,-L${openssl.out}/lib -lssl,g'
-
-    # Add mysql_config to libs since configure scripts use it
-    mkdir -p $lib/bin
-    cp $out/bin/mysql_config $lib/bin
-    sed -i "/\(execdir\|bindir\)/ s,'[^\"']*',$lib/bin,g" $lib/bin/mysql_config
-
-    # Make sure to propagate lib for compatability
-    mkdir -p $out/nix-support
-    echo "$lib" > $out/nix-support/propagated-native-build-inputs
-
-    # Don't install static libraries.
-    rm $lib/lib/libmysqlclient.a $lib/lib/libmysqld.a
-  '';
-
-  passthru.mysqlVersion = "5.6";
-
-  meta = with stdenv.lib; {
-    description = "An enhanced, drop-in replacement for MySQL";
-    homepage    = https://mariadb.org/;
-    license     = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice wkennington ];
-    platforms   = stdenv.lib.platforms.all;
-  };
-}
