@@ -14,7 +14,7 @@
 # Plugins optional build time dependencies
 , gdk_pixbuf, imagemagick
 , libgpod, libksane, libkvkontakte
-, qt_gstreamer1 /*qt_soap, <https://github.com/commontk/QtSOAP>  herqq <http://www.herqq.org> -> is missing its av part.*/
+, qt-gstreamer1 /*qt_soap, <https://github.com/commontk/QtSOAP>  herqq <http://www.herqq.org> -> is missing its av part.*/
   /*qt_koauth <http://gitorious.org/kqoauth>*/
 
 # Supplementary packages required only by the wrapper.
@@ -60,7 +60,7 @@ let
     ++ [
       gdk_pixbuf imagemagick libgpod libksane
       libkvkontakte
-      qt_gstreamer1 ];
+      qt-gstreamer1 ];
 
     # Make digikam find some FindXXXX.cmake
     KDEDIRS="${marble}:${qjson}";

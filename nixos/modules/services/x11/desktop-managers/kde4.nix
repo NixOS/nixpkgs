@@ -30,11 +30,11 @@ let
   phononBackends = {
     gstreamer = [
       pkgs.phonon-backend-gstreamer
-      pkgs.gst_all.gstPluginsBase
-      pkgs.gst_all.gstPluginsGood
-      pkgs.gst_all.gstPluginsUgly
-      pkgs.gst_all.gstPluginsBad
-      pkgs.gst_all.gstFfmpeg # for mp3 playback
+      pkgs.gst_all.gst-plugins-base
+      pkgs.gst_all.gst-plugins-good
+      pkgs.gst_all.gst-plugins-ugly
+      pkgs.gst_all.gst-plugins-bad
+      pkgs.gst_all.gst-ffmpeg # for mp3 playback
       pkgs.gst_all.gstreamer # needed?
     ];
 

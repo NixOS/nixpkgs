@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gst_plugins_base, bzip2, yasm, orc
+{ fetchurl, stdenv, pkgconfig, gst-plugins-base, bzip2, yasm, orc
 , useInternalFfmpeg ? false, ffmpeg ? null }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optionalString (!useInternalFfmpeg) "--with-system-ffmpeg";
 
   buildInputs =
-    [ pkgconfig bzip2 gst_plugins_base orc ]
+    [ pkgconfig bzip2 gst-plugins-base orc ]
     ++ (if useInternalFfmpeg then [ yasm ] else [ ffmpeg ]);
 
   meta = {

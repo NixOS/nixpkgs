@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu
+, cairo, gstreamer, gst-plugins-base, icu
 , debugBuild ? false
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Earlybird", enable this option.  However, those

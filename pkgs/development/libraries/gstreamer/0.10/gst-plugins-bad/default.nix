@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gstreamer, gst_plugins_base
+{ fetchurl, stdenv, pkgconfig, glib, gstreamer, gst-plugins-base
 , libdvdnav, libdvdread, orc }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base libdvdnav libdvdread orc ];
+    [ pkgconfig glib gstreamer gst-plugins-base libdvdnav libdvdread orc ];
 
   enableParallelBuilding = true;
 

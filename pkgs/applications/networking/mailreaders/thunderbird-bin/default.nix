@@ -13,7 +13,7 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
+, gst-plugins-base
 , gstreamer
 , gtk
 , kerberos
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
+      gst-plugins-base
       gstreamer
       gtk
       kerberos

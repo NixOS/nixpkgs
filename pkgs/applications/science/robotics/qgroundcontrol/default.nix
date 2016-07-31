@@ -2,7 +2,7 @@
   , qtbase, qtlocation, qtserialport, qtdeclarative, qtconnectivity, qtxmlpatterns
   , qtsvg, qtquick1, qtquickcontrols, qtgraphicaleffects, qmakeHook
   , makeQtWrapper, lndir
-  , gst_all_1, qt_gstreamer1, pkgconfig, glibc
+  , gst_all_1, qt-gstreamer1, pkgconfig, glibc
   , version ? "2.9.4"
 }:
 

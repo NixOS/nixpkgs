@@ -27,15 +27,6 @@ let
     qt-gstreamer = callPackage ./qt-gstreamer {
       boost = boost155;
     };
-
-    # Legacy aliases
-    gst_ffmpeg = gst-ffmpeg;
-    gst_plugins_bad = gst-plugins-bad;
-    gst_plugins_base = gst-plugins-base;
-    gst_plugins_good = gst-plugins-good;
-    gst_plugins_ugly = gst-plugins-ugly;
-    gst_python = gst-python;
-    qt_gstreamer = qt-gstreamer;
   };
 in
   gst_all

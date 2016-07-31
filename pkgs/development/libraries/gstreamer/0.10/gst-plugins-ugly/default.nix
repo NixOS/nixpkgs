@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, glib, gstreamer, gst_plugins_base
+{ fetchurl, stdenv, pkgconfig, glib, gstreamer, gst-plugins-base
 , libmad, libdvdread, libmpeg2, libcdio, a52dec, x264, orc, lame, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig glib gstreamer gst_plugins_base libmad libdvdread a52dec x264 orc lame ] ++ libintlOrEmpty;
+    [ pkgconfig glib gstreamer gst-plugins-base libmad libdvdread a52dec x264 orc lame ] ++ libintlOrEmpty;
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
 

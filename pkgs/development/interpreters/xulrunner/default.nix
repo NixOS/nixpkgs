@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, firefox-unwrapped
+, cairo, gstreamer, gst-plugins-base, icu, firefox-unwrapped
 , debugBuild ? false
 }:
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
-      gstreamer gst_plugins_base icu
+      gstreamer gst-plugins-base icu
     ];
 
   configureFlags =

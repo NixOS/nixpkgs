@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       readline libsndfile
       # Disables GStreamer; not clear what it gains us other than a
       # zillion extra dependencies.
-      # gstreamer gst_plugins_base 
+      # gstreamer gst-plugins-base 
     ];
 
   configureFlags = [

@@ -21,6 +21,8 @@ let
     gst-libav = callPackage ./gst-libav {
       ffmpeg = ffmpeg-full;
     };
+    # Alias for 0.10 compatibility
+    gst-ffmpeg = gst-libav;
 
     # TODO: gnonlin is deprecated in gst-editing-services, better switch to nle
     # (Non Linear Engine).

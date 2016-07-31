@@ -1,5 +1,5 @@
 { stdenv, fetchgit, python, pythonPackages, cdparanoia, cdrdao
-, pygobject, gst_python, gst_plugins_base, gst_plugins_good
+, pygobject, gst-python, gst-plugins-base, gst-plugins-good
 , setuptools, utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   pythonPath = [
-    pygobject gst_python pythonPackages.musicbrainzngs
+    pygobject gst-python pythonPackages.musicbrainzngs
     pythonPackages.pycdio pythonPackages.pyxdg setuptools
     pythonPackages.CDDB
   ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [
     python cdparanoia cdrdao utillinux makeWrapper
-    gst_plugins_base gst_plugins_good
+    gst-plugins-base gst-plugins-good
   ] ++ pythonPath;
 
   patches = [

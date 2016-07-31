@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gst_plugins_base, gstreamer }:
+{ stdenv, fetchurl, pkgconfig, gst-plugins-base, gstreamer }:
 
 stdenv.mkDerivation rec {
   name = "gnonlin-0.10.17";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0dc9kvr6i7sh91cyhzlbx2bchwg84rfa4679ccppzjf0y65dv8p4";
   };
 
-  buildInputs = [ gst_plugins_base gstreamer pkgconfig ];
+  buildInputs = [ gst-plugins-base gstreamer pkgconfig ];
 
   meta = {
     homepage = "http://gstreamer.freedesktop.org/modules/gnonlin.html";
