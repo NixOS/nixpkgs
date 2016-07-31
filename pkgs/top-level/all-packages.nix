@@ -7415,6 +7415,10 @@ in
 
   qt-gstreamer1 = gst_all_1.qt-gstreamer;
 
+  gstreamer = callPackage ../development/libraries/gstreamer {
+    gst_all = gst_all_1;
+  };
+
   gusb = callPackage ../development/libraries/gusb {
     inherit (gnome) gtkdoc;
   };
