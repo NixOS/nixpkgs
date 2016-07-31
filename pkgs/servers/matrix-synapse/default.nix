@@ -27,7 +27,7 @@ buildPythonApplication rec {
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
     service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
-    matrix-angular-sdk bleach netaddr jinja2 psycopg2
+    matrix-angular-sdk bleach netaddr jinja2 psycopg2 python.modules.curses
   ];
 
   # Checks fail because of Tox.
