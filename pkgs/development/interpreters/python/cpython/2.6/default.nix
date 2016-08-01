@@ -1,33 +1,18 @@
-{ stdenv, fetchurl, self, callPackage, python27Packages
-, bzip2, openssl, gettext
-, less
-
-, includeModules ? false
-
-, db, gdbm, ncurses, sqlite, readline
-
-, tcl ? null, tk ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? !stdenv.isCygwin
-, zlib ? null, zlibSupport ? true
-, expat, libffi
-
-, CF, configd
-}:
+{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, less, includeModules ? false
+, sqlite, tcl, tk, xlibsWrapper, openssl, readline, db, ncurses, gdbm, self, callPackage
+, python26Packages }:
 
 assert zlibSupport -> zlib != null;
-assert x11Support -> tcl != null
-                  && tk != null
-                  && xlibsWrapper != null
-                  && libX11 != null;
 
 with stdenv.lib;
 
 let
-  majorVersion = "2.7";
-  version = "${majorVersion}.12";
+  majorVersion = "2.6";
+  version = "${majorVersion}.9";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "0y7rl603vmwlxm6ilkhc51rx2mfj14ckcz40xxgs0ljnvlhp30yp";
+    sha256 = "0hbfs2691b60c7arbysbzr0w9528d5pl8a4x7mq5psh6a2cvprya";
   };
 
   patches =
@@ -40,33 +25,10 @@ let
       # the Nix store to 1.  So treat that as a special case.
       ./nix-store-mtime.patch
 
-      # patch python to put zero timestamp into pyc
-      # if DETERMINISTIC_BUILD env var is set
-      ./deterministic-build.patch
-
-      ./properly-detect-curses.patch
-    ] ++ optionals stdenv.isLinux [
-
-      # Disable the use of ldconfig in ctypes.util.find_library (since
-      # ldconfig doesn't work on NixOS), and don't use
-      # ctypes.util.find_library during the loading of the uuid module
-      # (since it will do a futile invocation of gcc (!) to find
-      # libuuid, slowing down program startup a lot).
-      ./no-ldconfig.patch
-
-    ] ++ optionals stdenv.isCygwin [
-      ./2.5.2-ctypes-util-find_library.patch
-      ./2.5.2-tkinter-x11.patch
-      ./2.6.2-ssl-threads.patch
-      ./2.6.5-export-PySignal_SetWakeupFd.patch
-      ./2.6.5-FD_SETSIZE.patch
-      ./2.6.5-ncurses-abi6.patch
-      ./2.7.3-dbm.patch
-      ./2.7.3-dylib.patch
-      ./2.7.3-getpath-exe-extension.patch
-      ./2.7.3-no-libm.patch
+      # http://bugs.python.org/issue10013
+      ./python2.6-fix-parallel-make.patch
     ];
-
+    
   preConfigure = ''
       # Purity.
       for i in /usr /sw /opt /pkg; do
@@ -76,40 +38,22 @@ let
       for i in Lib/plat-*/regen; do
         substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
       done
-    '' + optionalString stdenv.isDarwin ''
-      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-      substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("nproc")'
+    '' + optionalString stdenv.isCygwin ''
+      # On Cygwin, `make install' tries to read this Makefile.
+      mkdir -p $out/lib/python${majorVersion}/config
+      touch $out/lib/python${majorVersion}/config/Makefile
+      mkdir -p $out/include/python${majorVersion}
+      touch $out/include/python${majorVersion}/pyconfig.h
     '';
 
-  configureFlags = [
-    "--enable-shared"
-    "--with-threads"
-    "--enable-unicode=ucs4"
-  ] ++ optionals stdenv.isCygwin [
-    "--with-system-ffi"
-    "--with-system-expat"
-    "ac_cv_func_bind_textdomain_codeset=yes"
-  ] ++ optionals stdenv.isDarwin [
-    "--disable-toolbox-glue"
-  ];
-
-  postConfigure = if stdenv.isCygwin then ''
-    sed -i Makefile -e 's,PYTHONPATH="$(srcdir),PYTHONPATH="$(abs_srcdir),'
-  '' else null;
+  configureFlags = "--enable-shared --with-threads --enable-unicode=ucs4";
 
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
-    [ bzip2 openssl ]
-    ++ optionals stdenv.isCygwin [ expat libffi ]
-    ++ optionals includeModules (
-        [ db gdbm ncurses sqlite readline
-        ] ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    )
-    ++ optional zlibSupport zlib
-    ++ optional stdenv.isDarwin CF;
+    [ bzip2 openssl ]++ optionals includeModules [ db openssl ncurses gdbm readline xlibsWrapper tcl tk sqlite ]
+    ++ optional zlibSupport zlib;
 
-  propagatedBuildInputs = [ less ] ++ optional stdenv.isDarwin configd;
+  propagatedBuildInputs = [ less ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -119,17 +63,15 @@ let
   # Build the basic Python interpreter without modules that have
   # external dependencies.
   python = stdenv.mkDerivation {
-    name = "python-${version}";
+    name = "python${if includeModules then "" else "-minimal"}-${version}";
     pythonVersion = majorVersion;
 
     inherit majorVersion version src patches buildInputs propagatedBuildInputs
             preConfigure configureFlags;
 
-    LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
     inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
-    DETERMINISTIC_BUILD = 1;
 
     setupHook = ./setup-hook.sh;
 
@@ -140,28 +82,25 @@ let
         for item in $out/lib/python${majorVersion}/test/*; do
           if [[ "$item" != */test_support.py* ]]; then
             rm -rf "$item"
-          else
-            echo $item
           fi
         done
         touch $out/lib/python${majorVersion}/test/__init__.py
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
-        ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
+        mv $out/share/man/man1/{python.1,python2.6.1}
+        ln -s $out/share/man/man1/{python2.6.1,python.1}
 
         paxmark E $out/bin/python${majorVersion}
 
-        ${optionalString includeModules "$out/bin/python ./setup.py build_ext"}
-
-        rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+        ${ optionalString includeModules "$out/bin/python ./setup.py build_ext"}
       '';
 
     passthru = rec {
       inherit zlibSupport;
       isPy2 = true;
-      isPy27 = true;
-      buildEnv = callPackage ../wrapper.nix { python = self; };
-      withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python27Packages; };
+      isPy26 = true;
+      buildEnv = callPackage ../../wrapper.nix { python = self; };
+      withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python26Packages; };
       libPrefix = "python${majorVersion}";
       executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
@@ -185,6 +124,10 @@ let
       license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
       maintainers = with stdenv.lib.maintainers; [ chaoflow domenkozar ];
+      # If you want to use Python 2.6, remove "broken = true;" at your own
+      # risk.  Python 2.6 has known security vulnerabilities is not receiving
+      # security updates as of October 2013.
+      broken = true;
     };
   };
 
@@ -199,19 +142,14 @@ let
     if includeModules then null else stdenv.mkDerivation rec {
       name = "python-${moduleName}-${python.version}";
 
-      inherit src patches preConfigure postConfigure configureFlags;
+      inherit src patches preConfigure configureFlags;
 
       buildInputs = [ python ] ++ deps;
 
-      # We need to set this for python.buildEnv
-      pythonPath = [];
-
       inherit (mkPaths buildInputs) C_INCLUDE_PATH LIBRARY_PATH;
 
-      # non-python gdbm has a libintl dependency on i686-cygwin, not on x86_64-cygwin
-      buildPhase = (if (stdenv.system == "i686-cygwin" && moduleName == "gdbm") then ''
-          sed -i setup.py -e "s:libraries = \['gdbm'\]:libraries = ['gdbm', 'intl']:"
-      '' else '''') + ''
+      buildPhase =
+        ''
           substituteInPlace setup.py --replace 'self.extensions = extensions' \
             'self.extensions = [ext for ext in self.extensions if ext.name in ["${internalName}"]]'
 
@@ -237,6 +175,12 @@ let
       deps = [ db ];
     };
 
+    crypt = buildInternalPythonModule {
+      moduleName = "crypt";
+      internalName = "crypt";
+      deps = optional (stdenv ? glibc) stdenv.glibc;
+    };
+
     curses = buildInternalPythonModule {
       moduleName = "curses";
       deps = [ ncurses ];
@@ -247,16 +191,10 @@ let
       deps = [ ncurses modules.curses ];
     };
 
-    crypt = buildInternalPythonModule {
-      moduleName = "crypt";
-      internalName = "crypt";
-      deps = optional (stdenv ? glibc) stdenv.glibc;
-    };
-
     gdbm = buildInternalPythonModule {
       moduleName = "gdbm";
       internalName = "gdbm";
-      deps = [ gdbm ] ++ stdenv.lib.optional stdenv.isCygwin gettext;
+      deps = [ gdbm ];
     };
 
     sqlite3 = buildInternalPythonModule {
@@ -264,14 +202,10 @@ let
       deps = [ sqlite ];
     };
 
-  } // optionalAttrs x11Support {
-
-    tkinter = if stdenv.isCygwin then null else (buildInternalPythonModule {
+    tkinter = buildInternalPythonModule {
       moduleName = "tkinter";
-      deps = [ tcl tk xlibsWrapper libX11 ];
-    });
-
-  } // {
+      deps = [ tcl tk xlibsWrapper ];
+    };
 
     readline = buildInternalPythonModule {
       moduleName = "readline";

@@ -5887,31 +5887,34 @@ in
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 {
+  python26 = callPackage ../development/interpreters/python/cpython/2.6 {
     db = db47;
     self = python26;
   };
-  python27 = callPackage ../development/interpreters/python/2.7 {
+  python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
     inherit (darwin) CF configd;
   };
-  python33 = callPackage ../development/interpreters/python/3.3 {
+  python33 = callPackage ../development/interpreters/python/cpython/3.3 {
     self = python33;
   };
-  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+  python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
     self = python34;
   });
-  python35 = hiPrio (callPackage ../development/interpreters/python/3.5 {
+  python35 = hiPrio (callPackage ../development/interpreters/python/cpython/3.5 {
     inherit (darwin) CF configd;
     self = python35;
   });
-  python36 = callPackage ../development/interpreters/python/3.6 {
+  python36 = callPackage ../development/interpreters/python/cpython/3.6 {
     inherit (darwin) CF configd;
     self = python36;
   };
-  pypy = callPackage ../development/interpreters/pypy {
-    self = pypy;
+
+  pypy = pypy27;
+
+  pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
+    self = pypy27;
   };
 
   pythonFull = python2Full;
@@ -5927,7 +5930,7 @@ in
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
-  pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
+  pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
   pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
