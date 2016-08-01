@@ -15836,6 +15836,10 @@ in
 
   pong3d = callPackage ../games/pong3d { };
 
+  pokerth = callPackage ../games/pokerth { };
+
+  pokerth-server = with callPackage ../games/pokerth { }; server;
+
   prboom = callPackage ../games/prboom { };
 
   privateer = callPackage ../games/privateer { };
