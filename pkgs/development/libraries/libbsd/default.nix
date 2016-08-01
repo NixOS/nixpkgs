@@ -9,12 +9,6 @@ in stdenv.mkDerivation {
     sha256 = "02i5brb2007sxq3mn862mr7yxxm0g6nj172417hjyvjax7549xmj";
   };
 
-  patchPhase = ''
-    substituteInPlace Makefile \
-      --replace "/usr" "$out" \
-      --replace "{exec_prefix}" "{prefix}"
-  '';
-
   meta = {
     description = "Common functions found on BSD systems";
     homepage = http://libbsd.freedesktop.org/;
