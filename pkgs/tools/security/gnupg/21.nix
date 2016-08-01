@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = optional x11Support "--with-pinentry-pgm=${pinentry}/bin/pinentry";
 
-  postConfigure = "substituteAllInPlace tools/gpgkey2ssh.c";
-
   meta = with stdenv.lib; {
     homepage = http://gnupg.org;
     description = "A complete and free implementation of the OpenPGP standard";
