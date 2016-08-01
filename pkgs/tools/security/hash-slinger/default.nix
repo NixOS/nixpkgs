@@ -1,6 +1,8 @@
 { stdenv, fetchFromGitHub, pythonPackages, openssh, gnupg, unbound, libreswan }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   pname    = "hash-slinger";
   name    = "${pname}-${version}";
   version = "2.7";
