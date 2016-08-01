@@ -4928,6 +4928,24 @@ in modules // {
     };
   };
 
+  libtmux = buildPythonPackage rec {
+    name = "libtmux-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/libtmux/${name}.tar.gz";
+      sha256 = "0fwydaahgflz9w753v1cmkfzrlfq1vb8zp4i20m2d3lvkm4crv93";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Scripting library for tmux";
+      homepage = https://libtmux.readthedocs.io/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jgeerds ];
+    };
+  };
+
   locket = buildPythonPackage rec {
     name = "locket-${version}";
     version = "0.2.0";
