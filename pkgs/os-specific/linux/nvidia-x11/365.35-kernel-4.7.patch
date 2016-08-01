@@ -1,0 +1,40 @@
+diff -Naur NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-drm/nvidia-drm-fb.c NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-drm/nvidia-drm-fb.c
+--- NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-drm/nvidia-drm-fb.c	2016-07-31 19:07:06.595038290 -0400
++++ NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-drm/nvidia-drm-fb.c	2016-07-31 19:09:18.532197060 -0400
+@@ -114,7 +114,7 @@
+      * We don't support any planar format, pick up first buffer only.
+      */
+ 
+-    gem = drm_gem_object_lookup(dev, file, cmd->handles[0]);
++    gem = drm_gem_object_lookup(file, cmd->handles[0]);
+ 
+     if (gem == NULL)
+     {
+diff -Naur NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-drm/nvidia-drm-gem.c NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-drm/nvidia-drm-gem.c
+--- NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-drm/nvidia-drm-gem.c	2016-07-31 19:07:06.595038290 -0400
++++ NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-drm/nvidia-drm-gem.c	2016-07-31 19:08:56.187492736 -0400
+@@ -408,7 +408,7 @@
+ 
+     mutex_lock(&dev->struct_mutex);
+ 
+-    gem = drm_gem_object_lookup(dev, file, handle);
++    gem = drm_gem_object_lookup(file, handle);
+ 
+     if (gem == NULL)
+     {
+diff -Naur NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-uvm/uvm_linux.h NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-uvm/uvm_linux.h
+--- NVIDIA-Linux-x86_64-367.35-no-compat32-upstream/kernel/nvidia-uvm/uvm_linux.h	2016-07-31 19:07:06.600038448 -0400
++++ NVIDIA-Linux-x86_64-367.35-no-compat32/kernel/nvidia-uvm/uvm_linux.h	2016-07-31 19:08:06.506926763 -0400
+@@ -554,12 +554,6 @@
+     INIT_RADIX_TREE(tree, GFP_NOWAIT);
+ }
+ 
+-static bool radix_tree_empty(struct radix_tree_root *tree)
+-{
+-    void *dummy;
+-    return radix_tree_gang_lookup(tree, &dummy, 0, 1) == 0;
+-}
+-
+ 
+ #if !defined(NV_USLEEP_RANGE_PRESENT)
+ static void __sched usleep_range(unsigned long min, unsigned long max)
