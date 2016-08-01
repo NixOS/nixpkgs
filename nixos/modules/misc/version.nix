@@ -32,14 +32,6 @@ in
       '';
     };
 
-    nixosLabel = mkOption {
-      type = types.str;
-      description = ''
-        Label to be used in the names of generated outputs and boot
-        labels.
-      '';
-    };
-
     nixosVersion = mkOption {
       internal = true;
       type = types.str;
@@ -89,7 +81,6 @@ in
     system = {
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
-      nixosLabel   = mkDefault cfg.nixosVersion;
       nixosVersion = mkDefault (cfg.nixosRelease + cfg.nixosVersionSuffix);
       nixosRevision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
       nixosVersionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
