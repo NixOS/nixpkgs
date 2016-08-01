@@ -15655,6 +15655,8 @@ in
 
   hexen = callPackage ../games/hexen { };
 
+  holdingnuts = callPackage ../games/holdingnuts { };
+
   icbm3d = callPackage ../games/icbm3d { };
 
   ingen = callPackage ../applications/audio/ingen {
