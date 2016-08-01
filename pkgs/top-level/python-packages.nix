@@ -9060,8 +9060,6 @@ in modules // {
     name = "django-colorful-${version}";
     version = "1.2";
 
-    disabled = isPy35;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
       sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
