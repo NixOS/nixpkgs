@@ -1,0 +1,343 @@
+From 64d66381deb7c4a163369718cc470f63286f5550 Mon Sep 17 00:00:00 2001
+From: Dylan Lloyd <dylan@disinclined.org>
+Date: Mon, 23 Nov 2015 20:35:06 -0800
+Subject: [PATCH] backwards compatible support for separate SSLKeyFile
+ configuration
+
+---
+ third_party/Csocket/Csocket.cc | 34 ++++++++++++++++++++++++++--------
+ third_party/Csocket/Csocket.h  | 12 +++++++++---
+ 2 files changed, 35 insertions(+), 11 deletions(-)
+
+diff --git a/third_party/Csocket/Csocket.cc b/third_party/Csocket/Csocket.cc
+index 35691f9..e33004e 100644
+--- a/third_party/Csocket/Csocket.cc
++++ b/third_party/Csocket/Csocket.cc
+@@ -1044,6 +1044,7 @@ void Csock::Copy( const Csock & cCopy )
+ 	m_shostname		= cCopy.m_shostname;
+ 	m_sbuffer		= cCopy.m_sbuffer;
+ 	m_sSockName		= cCopy.m_sSockName;
++	m_sKeyFile		= cCopy.m_sKeyFile;
+ 	m_sPemFile		= cCopy.m_sPemFile;
+ 	m_sCipherType	= cCopy.m_sCipherType;
+ 	m_sParentName	= cCopy.m_sParentName;
+@@ -1386,10 +1387,11 @@ static int __SNICallBack( SSL *pSSL, int *piAD, void *pData )
+ 
+ 	Csock * pSock = static_cast<Csock *>( pData );
+ 
+-	CS_STRING sPemFile, sPemPass;
++	CS_STRING sKeyFile, sPemFile, sPemPass;
+ 	if( !pSock->SNIConfigureServer( pServerName, sPemFile, sPemPass ) )
+ 		return( SSL_TLSEXT_ERR_NOACK );
+ 
++	pSock->SetKeyLocation( sKeyFile );
+ 	pSock->SetPemLocation( sPemFile );
+ 	pSock->SetPemPass( sPemPass );
+ 	SSL_CTX * pCTX = pSock->SetupServerCTX();
+@@ -1576,13 +1578,13 @@ bool Csock::SSLClientSetup()
+ 		// set up the CTX
+ 		if( SSL_CTX_use_certificate_file( m_ssl_ctx, m_sPemFile.c_str() , SSL_FILETYPE_PEM ) <= 0 )
+ 		{
+-			CS_DEBUG( "Error with PEM file [" << m_sPemFile << "]" );
++			CS_DEBUG( "Error with SSLCert file [" << m_sPemFile << "]" );
+ 			SSLErrors( __FILE__, __LINE__ );
+ 		}
+-
+-		if( SSL_CTX_use_PrivateKey_file( m_ssl_ctx, m_sPemFile.c_str(), SSL_FILETYPE_PEM ) <= 0 )
++        CS_STRING privKeyFile = m_sKeyFile.empty() ? m_sPemFile : m_sKeyFile;
++		if( SSL_CTX_use_PrivateKey_file( m_ssl_ctx, privKeyFile.c_str(), SSL_FILETYPE_PEM ) <= 0 )
+ 		{
+-			CS_DEBUG( "Error with PEM file [" << m_sPemFile << "]" );
++			CS_DEBUG( "Error with SSLKey file [" << privKeyFile << "]" );
+ 			SSLErrors( __FILE__, __LINE__ );
+ 		}
+ 	}
+@@ -1707,19 +1709,27 @@ SSL_CTX * Csock::SetupServerCTX()
+ 		return( NULL );
+ 	}
+ 
++	if( ! m_sKeyFile.empty() && access( m_sKeyFile.c_str(), R_OK ) != 0 )
++	{
++		CS_DEBUG( "Bad keyfile ... [" << m_sKeyFile << "]" );
++		SSL_CTX_free( pCTX );
++		return( NULL );
++	}
++
+ 	//
+ 	// set up the CTX
+ 	if( SSL_CTX_use_certificate_chain_file( pCTX, m_sPemFile.c_str() ) <= 0 )
+ 	{
+-		CS_DEBUG( "Error with PEM file [" << m_sPemFile << "]" );
++		CS_DEBUG( "Error with SSLCert file [" << m_sPemFile << "]" );
+ 		SSLErrors( __FILE__, __LINE__ );
+ 		SSL_CTX_free( pCTX );
+ 		return( NULL );
+ 	}
+ 
+-	if( SSL_CTX_use_PrivateKey_file( pCTX, m_sPemFile.c_str(), SSL_FILETYPE_PEM ) <= 0 )
++    CS_STRING privKeyFile = m_sKeyFile.empty() ? m_sPemFile : m_sKeyFile;
++	if( SSL_CTX_use_PrivateKey_file( pCTX, privKeyFile.c_str(), SSL_FILETYPE_PEM ) <= 0 )
+ 	{
+-		CS_DEBUG( "Error with PEM file [" << m_sPemFile << "]" );
++		CS_DEBUG( "Error with SSLKey file [" << privKeyFile << "]" );
+ 		SSLErrors( __FILE__, __LINE__ );
+ 		SSL_CTX_free( pCTX );
+ 		return( NULL );
+@@ -2535,8 +2545,13 @@ void Csock::SetSSL( bool b ) { m_bUseSSL = b; }
+ #ifdef HAVE_LIBSSL
+ void Csock::SetCipher( const CS_STRING & sCipher ) { m_sCipherType = sCipher; }
+ const CS_STRING & Csock::GetCipher() const { return( m_sCipherType ); }
++
++void Csock::SetKeyLocation( const CS_STRING & sKeyFile ) { m_sKeyFile = sKeyFile; }
++const CS_STRING & Csock::GetKeyLocation() const { return( m_sKeyFile ); }
++
+ void Csock::SetPemLocation( const CS_STRING & sPemFile ) { m_sPemFile = sPemFile; }
+ const CS_STRING & Csock::GetPemLocation() const { return( m_sPemFile ); }
++
+ void Csock::SetPemPass( const CS_STRING & sPassword ) { m_sPemPass = sPassword; }
+ const CS_STRING & Csock::GetPemPass() const { return( m_sPemPass ); }
+ 
+@@ -3168,6 +3183,7 @@ void CSocketManager::Connect( const CSConnection & cCon, Csock * pcSock )
+ 	{
+ 		if( !cCon.GetPemLocation().empty() )
+ 		{
++			pcSock->SetKeyLocation( cCon.GetKeyLocation() );
+ 			pcSock->SetPemLocation( cCon.GetPemLocation() );
+ 			pcSock->SetPemPass( cCon.GetPemPass() );
+ 		}
+@@ -3205,6 +3221,7 @@ bool CSocketManager::Listen( const CSListener & cListen, Csock * pcSock, uint16_
+ 	pcSock->SetSSL( cListen.GetIsSSL() );
+ 	if( cListen.GetIsSSL() && !cListen.GetPemLocation().empty() )
+ 	{
++		pcSock->SetKeyLocation( cListen.GetKeyLocation() );
+ 		pcSock->SetPemLocation( cListen.GetPemLocation() );
+ 		pcSock->SetPemPass( cListen.GetPemPass() );
+ 		pcSock->SetCipher( cListen.GetCipher() );
+@@ -4016,6 +4033,7 @@ void CSocketManager::Select( std::map<Csock *, EMessages> & mpeSocks )
+ 					if( pcSock->GetSSL() )
+ 					{
+ 						NewpcSock->SetCipher( pcSock->GetCipher() );
++						NewpcSock->SetKeyLocation( pcSock->GetKeyLocation() );
+ 						NewpcSock->SetPemLocation( pcSock->GetPemLocation() );
+ 						NewpcSock->SetPemPass( pcSock->GetPemPass() );
+ 						NewpcSock->SetRequireClientCertFlags( pcSock->GetRequireClientCertFlags() );
+diff --git a/third_party/Csocket/Csocket.h b/third_party/Csocket/Csocket.h
+index 9df58d9..b3932d2 100644
+--- a/third_party/Csocket/Csocket.h
++++ b/third_party/Csocket/Csocket.h
+@@ -867,6 +867,8 @@ public:
+ 	const CS_STRING & GetCipher() const;
+ 
+ 	//! Set the pem file location
++	void SetKeyLocation( const CS_STRING & sKeyFile );
++	const CS_STRING & GetKeyLocation() const;
+ 	void SetPemLocation( const CS_STRING & sPemFile );
+ 	const CS_STRING & GetPemLocation() const;
+ 	void SetPemPass( const CS_STRING & sPassword );
+@@ -1167,7 +1169,7 @@ private:
+ 	int 		m_iTimeout, m_iConnType, m_iMethod, m_iTcount, m_iMaxConns;
+ 	bool		m_bUseSSL, m_bIsConnected;
+ 	bool		m_bsslEstablished, m_bEnableReadLine, m_bPauseRead;
+-	CS_STRING	m_shostname, m_sbuffer, m_sSockName, m_sPemFile, m_sCipherType, m_sParentName;
++	CS_STRING	m_shostname, m_sbuffer, m_sSockName, m_sKeyFile, m_sPemFile, m_sCipherType, m_sParentName;
+ 	CS_STRING	m_sSend, m_sPemPass;
+ 	ECloseType	m_eCloseType;
+ 
+@@ -1261,6 +1263,7 @@ public:
+ #ifdef HAVE_LIBSSL
+ 	const CS_STRING & GetCipher() const { return( m_sCipher ); }
+ 	const CS_STRING & GetPemLocation() const { return( m_sPemLocation ); }
++	const CS_STRING & GetKeyLocation() const { return( m_sKeyLocation ); }
+ 	const CS_STRING & GetPemPass() const { return( m_sPemPass ); }
+ #endif /* HAVE_LIBSSL */
+ 
+@@ -1295,7 +1298,7 @@ protected:
+ 	bool		m_bIsSSL;
+ 	CSSockAddr::EAFRequire	m_iAFrequire;
+ #ifdef HAVE_LIBSSL
+-	CS_STRING	m_sPemLocation, m_sPemPass, m_sCipher;
++	CS_STRING	m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
+ #endif /* HAVE_LIBSSL */
+ };
+ 
+@@ -1349,6 +1352,7 @@ public:
+ 	CSSockAddr::EAFRequire GetAFRequire() const { return( m_iAFrequire ); }
+ #ifdef HAVE_LIBSSL
+ 	const CS_STRING & GetCipher() const { return( m_sCipher ); }
++	const CS_STRING & GetKeyLocation() const { return( m_sKeyLocation ); }
+ 	const CS_STRING & GetPemLocation() const { return( m_sPemLocation ); }
+ 	const CS_STRING & GetPemPass() const { return( m_sPemPass ); }
+ 	uint32_t GetRequireClientCertFlags() const { return( m_iRequireCertFlags ); }
+@@ -1374,6 +1378,8 @@ public:
+ 	void SetCipher( const CS_STRING & s ) { m_sCipher = s; }
+ 	//! set the location of the pemfile
+ 	void SetPemLocation( const CS_STRING & s ) { m_sPemLocation = s; }
++	//! set the location of the keyfile
++	void SetKeyLocation( const CS_STRING & s ) { m_sKeyLocation = s; }
+ 	//! set the pemfile pass
+ 	void SetPemPass( const CS_STRING & s ) { m_sPemPass = s; }
+ 	//! set to true if require a client certificate (deprecated @see SetRequireClientCertFlags)
+@@ -1391,7 +1397,7 @@ private:
+ 	CSSockAddr::EAFRequire	m_iAFrequire;
+ 
+ #ifdef HAVE_LIBSSL
+-	CS_STRING	m_sPemLocation, m_sPemPass, m_sCipher;
++	CS_STRING	m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
+ 	uint32_t		m_iRequireCertFlags;
+ #endif /* HAVE_LIBSSL */
+ };
+-- 
+2.9.0
+
+From c383985079d0a9a3553acc6b2f28cb09e953a497 Mon Sep 17 00:00:00 2001
+From: Dylan Lloyd <dylan@disinclined.org>
+Date: Tue, 24 Nov 2015 08:38:32 -0800
+Subject: [PATCH] backwards compatible support for separate SSLDHParamFile
+ configuration
+
+---
+ third_party/Csocket/Csocket.cc | 15 ++++++++++++---
+ third_party/Csocket/Csocket.h  | 12 +++++++++---
+ 2 files changed, 21 insertions(+), 6 deletions(-)
+
+diff --git a/third_party/Csocket/Csocket.cc b/third_party/Csocket/Csocket.cc
+index e33004e..d342b69 100644
+--- a/third_party/Csocket/Csocket.cc
++++ b/third_party/Csocket/Csocket.cc
+@@ -1045,6 +1045,7 @@ void Csock::Copy( const Csock & cCopy )
+ 	m_sbuffer		= cCopy.m_sbuffer;
+ 	m_sSockName		= cCopy.m_sSockName;
+ 	m_sKeyFile		= cCopy.m_sKeyFile;
++	m_sDHParamFile		= cCopy.m_sDHParamFile;
+ 	m_sPemFile		= cCopy.m_sPemFile;
+ 	m_sCipherType	= cCopy.m_sCipherType;
+ 	m_sParentName	= cCopy.m_sParentName;
+@@ -1387,10 +1388,11 @@ static int __SNICallBack( SSL *pSSL, int *piAD, void *pData )
+ 
+ 	Csock * pSock = static_cast<Csock *>( pData );
+ 
+-	CS_STRING sKeyFile, sPemFile, sPemPass;
++	CS_STRING sDHParamFile, sKeyFile, sPemFile, sPemPass;
+ 	if( !pSock->SNIConfigureServer( pServerName, sPemFile, sPemPass ) )
+ 		return( SSL_TLSEXT_ERR_NOACK );
+ 
++	pSock->SetDHParamLocation( sDHParamFile );
+ 	pSock->SetKeyLocation( sKeyFile );
+ 	pSock->SetPemLocation( sPemFile );
+ 	pSock->SetPemPass( sPemPass );
+@@ -1737,10 +1739,11 @@ SSL_CTX * Csock::SetupServerCTX()
+ 
+ 	// check to see if this pem file contains a DH structure for use with DH key exchange
+ 	// https://github.com/znc/znc/pull/46
+-	FILE *dhParamsFile = fopen( m_sPemFile.c_str(), "r" );
++	CS_STRING DHParamFile = m_sDHParamFile.empty() ? m_sPemFile : m_sDHParamFile;
++	FILE *dhParamsFile = fopen( DHParamFile.c_str(), "r" );
+ 	if( !dhParamsFile )
+ 	{
+-		CS_DEBUG( "There is a problem with [" << m_sPemFile << "]" );
++		CS_DEBUG( "Error with DHParam file [" << DHParamFile << "]" );
+ 		SSL_CTX_free( pCTX );
+ 		return( NULL );
+ 	}
+@@ -2546,6 +2549,9 @@ void Csock::SetSSL( bool b ) { m_bUseSSL = b; }
+ void Csock::SetCipher( const CS_STRING & sCipher ) { m_sCipherType = sCipher; }
+ const CS_STRING & Csock::GetCipher() const { return( m_sCipherType ); }
+ 
++void Csock::SetDHParamLocation( const CS_STRING & sDHParamFile ) { m_sDHParamFile = sDHParamFile; }
++const CS_STRING & Csock::GetDHParamLocation() const { return( m_sDHParamFile ); }
++
+ void Csock::SetKeyLocation( const CS_STRING & sKeyFile ) { m_sKeyFile = sKeyFile; }
+ const CS_STRING & Csock::GetKeyLocation() const { return( m_sKeyFile ); }
+ 
+@@ -3183,6 +3189,7 @@ void CSocketManager::Connect( const CSConnection & cCon, Csock * pcSock )
+ 	{
+ 		if( !cCon.GetPemLocation().empty() )
+ 		{
++			pcSock->SetDHParamLocation( cCon.GetDHParamLocation() );
+ 			pcSock->SetKeyLocation( cCon.GetKeyLocation() );
+ 			pcSock->SetPemLocation( cCon.GetPemLocation() );
+ 			pcSock->SetPemPass( cCon.GetPemPass() );
+@@ -3221,6 +3228,7 @@ bool CSocketManager::Listen( const CSListener & cListen, Csock * pcSock, uint16_
+ 	pcSock->SetSSL( cListen.GetIsSSL() );
+ 	if( cListen.GetIsSSL() && !cListen.GetPemLocation().empty() )
+ 	{
++		pcSock->SetDHParamLocation( cListen.GetDHParamLocation() );
+ 		pcSock->SetKeyLocation( cListen.GetKeyLocation() );
+ 		pcSock->SetPemLocation( cListen.GetPemLocation() );
+ 		pcSock->SetPemPass( cListen.GetPemPass() );
+@@ -4033,6 +4041,7 @@ void CSocketManager::Select( std::map<Csock *, EMessages> & mpeSocks )
+ 					if( pcSock->GetSSL() )
+ 					{
+ 						NewpcSock->SetCipher( pcSock->GetCipher() );
++						NewpcSock->SetDHParamLocation( pcSock->GetDHParamLocation() );
+ 						NewpcSock->SetKeyLocation( pcSock->GetKeyLocation() );
+ 						NewpcSock->SetPemLocation( pcSock->GetPemLocation() );
+ 						NewpcSock->SetPemPass( pcSock->GetPemPass() );
+diff --git a/third_party/Csocket/Csocket.h b/third_party/Csocket/Csocket.h
+index b3932d2..7b8e969 100644
+--- a/third_party/Csocket/Csocket.h
++++ b/third_party/Csocket/Csocket.h
+@@ -867,6 +867,8 @@ public:
+ 	const CS_STRING & GetCipher() const;
+ 
+ 	//! Set the pem file location
++	void SetDHParamLocation( const CS_STRING & sDHParamFile );
++	const CS_STRING & GetDHParamLocation() const;
+ 	void SetKeyLocation( const CS_STRING & sKeyFile );
+ 	const CS_STRING & GetKeyLocation() const;
+ 	void SetPemLocation( const CS_STRING & sPemFile );
+@@ -1169,7 +1171,7 @@ private:
+ 	int 		m_iTimeout, m_iConnType, m_iMethod, m_iTcount, m_iMaxConns;
+ 	bool		m_bUseSSL, m_bIsConnected;
+ 	bool		m_bsslEstablished, m_bEnableReadLine, m_bPauseRead;
+-	CS_STRING	m_shostname, m_sbuffer, m_sSockName, m_sKeyFile, m_sPemFile, m_sCipherType, m_sParentName;
++	CS_STRING	m_shostname, m_sbuffer, m_sSockName, m_sDHParamFile, m_sKeyFile, m_sPemFile, m_sCipherType, m_sParentName;
+ 	CS_STRING	m_sSend, m_sPemPass;
+ 	ECloseType	m_eCloseType;
+ 
+@@ -1264,6 +1266,7 @@ public:
+ 	const CS_STRING & GetCipher() const { return( m_sCipher ); }
+ 	const CS_STRING & GetPemLocation() const { return( m_sPemLocation ); }
+ 	const CS_STRING & GetKeyLocation() const { return( m_sKeyLocation ); }
++	const CS_STRING & GetDHParamLocation() const { return( m_sDHParamLocation ); }
+ 	const CS_STRING & GetPemPass() const { return( m_sPemPass ); }
+ #endif /* HAVE_LIBSSL */
+ 
+@@ -1298,7 +1301,7 @@ protected:
+ 	bool		m_bIsSSL;
+ 	CSSockAddr::EAFRequire	m_iAFrequire;
+ #ifdef HAVE_LIBSSL
+-	CS_STRING	m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
++	CS_STRING	m_sDHParamLocation, m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
+ #endif /* HAVE_LIBSSL */
+ };
+ 
+@@ -1352,6 +1355,7 @@ public:
+ 	CSSockAddr::EAFRequire GetAFRequire() const { return( m_iAFrequire ); }
+ #ifdef HAVE_LIBSSL
+ 	const CS_STRING & GetCipher() const { return( m_sCipher ); }
++	const CS_STRING & GetDHParamLocation() const { return( m_sDHParamLocation ); }
+ 	const CS_STRING & GetKeyLocation() const { return( m_sKeyLocation ); }
+ 	const CS_STRING & GetPemLocation() const { return( m_sPemLocation ); }
+ 	const CS_STRING & GetPemPass() const { return( m_sPemPass ); }
+@@ -1380,6 +1384,8 @@ public:
+ 	void SetPemLocation( const CS_STRING & s ) { m_sPemLocation = s; }
+ 	//! set the location of the keyfile
+ 	void SetKeyLocation( const CS_STRING & s ) { m_sKeyLocation = s; }
++	//! set the location of the dhparamfile
++	void SetDHParamLocation( const CS_STRING & s ) { m_sDHParamLocation = s; }
+ 	//! set the pemfile pass
+ 	void SetPemPass( const CS_STRING & s ) { m_sPemPass = s; }
+ 	//! set to true if require a client certificate (deprecated @see SetRequireClientCertFlags)
+@@ -1397,7 +1403,7 @@ private:
+ 	CSSockAddr::EAFRequire	m_iAFrequire;
+ 
+ #ifdef HAVE_LIBSSL
+-	CS_STRING	m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
++	CS_STRING	m_sDHParamLocation, m_sKeyLocation, m_sPemLocation, m_sPemPass, m_sCipher;
+ 	uint32_t		m_iRequireCertFlags;
+ #endif /* HAVE_LIBSSL */
+ };
+-- 
+2.9.0
+
