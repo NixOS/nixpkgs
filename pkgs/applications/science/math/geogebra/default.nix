@@ -7,14 +7,25 @@ in
     name = "geogebra-${version}";
     inherit version;
 
-    builder = ./builder.sh;
-
-        src = fetchurl {
-          url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
+    src = fetchurl {
+      url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
       sha256 = "da96e1c9a10fd066a1814937993809a8c964f6f2ca1660246f823eb0afe5ee52";
     };
 
-    inherit jre;
+    installPhase = ''
+      install -dm755 "$out/share/geogebra"
+      install "geogebra/"* -t "$out/share/geogebra/"
+      mkdir "$out/bin"
+
+      cat <<EOF >"$out/bin/geogebra"
+      #! $SHELL
+      export GG_PATH="$out/share/geogebra"
+      export JAVACMD="${jre}/bin/java"
+      exec "\$GG_PATH/geogebra" "\$@"
+      EOF
+
+      chmod +x "$out/bin/geogebra"
+      '';
 
     meta = {
       description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
