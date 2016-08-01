@@ -216,6 +216,9 @@ stdenv.mkDerivation ({
   configurePhase = ''
     runHook preConfigure
 
+    # Let's clean first, just in case a dirty build output directory already exists.
+    ${setupCommand} clean
+
     unset GHC_PACKAGE_PATH      # Cabal complains if this variable is set during configure.
 
     echo configureFlags: $configureFlags
