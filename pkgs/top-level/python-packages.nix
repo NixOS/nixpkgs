@@ -327,6 +327,8 @@ in modules // {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  pyunbound = callPackage ../tools/networking/unbound/python.nix { };
+
   # packages defined here
 
   aafigure = buildPythonPackage rec {

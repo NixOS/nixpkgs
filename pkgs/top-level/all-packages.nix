@@ -1964,6 +1964,8 @@ in
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hash-slinger = callPackage ../tools/security/hash-slinger { };
+
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
