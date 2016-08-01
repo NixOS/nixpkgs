@@ -6773,6 +6773,8 @@ in
     target = crossSystem;
   });
 
+  gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
+
   valgrind = callPackage ../development/tools/analysis/valgrind { };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
