@@ -22,6 +22,7 @@ stdenv.mkDerivation {
   patches = [
     ./i686-build-failure.patch
     ./license.patch
+    ./linux-4.7.patch
     ./gcc.patch
   ];
 
