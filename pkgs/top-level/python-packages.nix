@@ -9408,6 +9408,25 @@ in modules // {
     };
   };
 
+  kaptan = buildPythonPackage rec {
+    name = "kaptan-${version}";
+    version = "0.5.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kaptan/${name}.tar.gz";
+      sha256 = "1b8r86yyvdvyxd6f10mhkl6cr2jhxm80jjqr4zch96w9hs9rh5vq";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    meta = with stdenv.lib; {
+      description = "Configuration manager for python applications";
+      homepage = https://emre.github.io/kaptan/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jgeerds ];
+    };
+  };
 
   keepalive = buildPythonPackage rec {
     name = "keepalive-${version}";
