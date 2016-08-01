@@ -26,53 +26,35 @@ let
   };
 
   # Keep znc.conf in nix store, then symlink or copy into `dataDir`, depending on `mutable`.
+  notNull = a: ! isNull a;
   mkZncConf = confOpts: ''
-    // Also check http://en.znc.in/wiki/Configuration
-    
-    AnonIPLimit = 10
-    ConnectDelay = 5
-    # Add `LoadModule = x` for each module...
+    Version = 1.6.3
     ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
-    MaxBufferSize = 500
-    ProtectWebSessions = true
-    SSLCertFile = ${cfg.dataDir}/znc.pem
-    ServerThrottle = 30
-    Skin = dark-clouds
-    StatusPrefix = *
-    Version = 1.2
 
-    <Listener listener0>
-            AllowIRC = true
-            AllowWeb = true
+    <Listener l>
+            Port = ${toString confOpts.port}
             IPv4 = true
-            IPv6 = false
-            Port = ${if confOpts.useSSL then "+" else ""}${toString confOpts.port}
+            IPv6 = true
             SSL = ${if confOpts.useSSL then "true" else "false"}
     </Listener>
     
     <User ${confOpts.userName}>
-            Admin = true
-            Allow = *
-            AltNick = ${confOpts.nick}_
-            AppendTimestamp = false
-            AutoClearChanBuffer = false
-            Buffer = 150
-            ChanModes = +stn
-            DenyLoadMod = false
-            DenySetBindHost = false
-            Ident = ident
-            JoinTries = 10
-            MaxJoins = 0
-            MaxNetworks = 1
-            MultiClients = true
-            Nick = ${confOpts.nick}
-            PrependTimestamp = true
-            QuitMsg = Quit
-            RealName = ${confOpts.nick}
-            TimestampFormat = [%H:%M:%S]
-            ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.userModules}
-            
             ${confOpts.passBlock}
+            Admin = true
+            Nick = ${confOpts.nick}
+            AltNick = ${confOpts.nick}_
+            Ident = ${confOpts.nick}
+            RealName = ${confOpts.nick}
+            ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.userModules}
+
+            ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (name: net: ''
+              <Network ${name}>
+                  ${concatMapStrings (m: "LoadModule = ${m}\n") net.modules}
+                  Server = ${net.server} ${if net.useSSL then "+" else ""}${toString net.port}
+
+                  ${concatMapStrings (c: "<Chan #${c}>\n</Chan>\n") net.channels}
+              </Network>
+              '') confOpts.networks) }
     </User>
     ${confOpts.extraZncConf}
   '';
@@ -82,6 +64,62 @@ let
     text = if cfg.zncConf != ""
       then cfg.zncConf
       else mkZncConf cfg.confOptions;
+  };
+
+  networkOpts = { ... }: {
+    options = {
+      server = mkOption {
+        type = types.str;
+        example = "chat.freenode.net";
+        description = ''
+          IRC server address.
+        '';
+      };
+
+      port = mkOption {
+        type = types.int;
+        default = 6697;
+        example = 6697;
+        description = ''
+          IRC server port.
+        '';
+      };
+
+      useSSL = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to use SSL to connect to the IRC server.
+        '';
+      };
+
+      modulePackages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = [ "pkgs.zncModules.push" "pkgs.zncModules.fish" ];
+        description = ''
+          External ZNC modules to build.
+        '';
+      };
+
+      modules = mkOption {
+        type = types.listOf types.str;
+        default = [ "simple_away" ];
+        example = literalExample "[ simple_away sasl ]";
+        description = ''
+          ZNC modules to load.
+        '';
+      };
+
+      channels = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = [ "nixos" ];
+        description = ''
+          IRC channels to join.
+        '';
+      };
+    };
   };
 
 in
@@ -111,6 +149,15 @@ in
         '';
       };
 
+      group = mkOption {
+        default = "";
+        example = "users";
+        type = types.string;
+        description = ''
+          Group to own the ZNCserver process.
+        '';
+      };
+
       dataDir = mkOption {
         default = "/var/lib/znc/";
         example = "/home/john/.znc/";
@@ -125,27 +172,16 @@ in
         example = "See: http://wiki.znc.in/Configuration";
         type = types.lines;
         description = ''
-          The contents of the `znc.conf` file to use when creating it.
+          Config file as generated with `znc --makeconf` to use for the whole ZNC configuration.
           If specified, `confOptions` will be ignored, and this value, as-is, will be used.
           If left empty, a conf file with default values will be used.
-          Recommended to generate with `znc --makeconf` command.
         '';
       };
 
-      /* TODO: add to the documentation of the current module:
-
-         Values to use when creating a `znc.conf` file.
-
-           confOptions = {
-             modules = [ "log" ];
-             userName = "john";
-             nick = "johntron";
-           };
-      */
       confOptions = {
         modules = mkOption {
           type = types.listOf types.str;
-          default = [ "partyline" "webadmin" "adminlog" "log" ];
+          default = [ "webadmin" "adminlog" ];
           example = [ "partyline" "webadmin" "adminlog" "log" ];
           description = ''
             A list of modules to include in the `znc.conf` file.
@@ -154,8 +190,8 @@ in
 
         userModules = mkOption {
           type = types.listOf types.str;
-          default = [ ];
-          example = [ "fish" "push" ];
+          default = [ "chansaver" "controlpanel" ];
+          example = [ "chansaver" "controlpanel" "fish" "push" ];
           description = ''
             A list of user modules to include in the `znc.conf` file.
           '';
@@ -166,9 +202,25 @@ in
           example = "johntron";
           type = types.string;
           description = ''
-            The user name to use when generating the `znc.conf` file.
-            This is the user name used by the user logging into the ZNC web admin.
+            The user name used to log into the ZNC web admin interface.
           '';
+        };
+
+        networks = mkOption {
+          default = { };
+          type = types.loaOf types.optionSet;
+          description = ''
+            IRC networks to connect the user to.
+          '';
+          options = [ networkOpts ];
+          example = {
+            "freenode" = {
+              server = "chat.freenode.net";
+              port = 6697;
+              ssl = true;
+              modules = [ "simple_away" ];
+            };
+          };
         };
 
         nick = mkOption {
@@ -176,19 +228,17 @@ in
           example = "john";
           type = types.string;
           description = ''
-            The IRC nick to use when generating the `znc.conf` file.
+            The IRC nick.
           '';
         };
 
         passBlock = mkOption {
-          default = defaultPassBlock;
-          example = "Must be the block generated by the `znc --makepass` command.";
+          default = "";
+          example = defaultPassBlock;
           type = types.string;
           description = ''
-            The pass block to use when generating the `znc.conf` file.
-            This is the password used by the user logging into the ZNC web admin.
-            This is the block generated by the `znc --makepass` command.
-            !!! If not specified, please change this after starting the service. !!!
+            Generate with znc --makepass.
+            This is the password used by to log into the ZNC web admin interface.
           '';
         };
 
@@ -206,7 +256,7 @@ in
           example = true;
           type = types.bool;
           description = ''
-            Indicates whether the ZNC server should use SSL when listening on the specified port.
+            Indicates whether the ZNC server should use SSL when listening on the specified port. A self-signed certificate will be generated.
           '';
         };
 
@@ -214,7 +264,7 @@ in
           default = "";
           type = types.lines;
           description = ''
-            Extra config to `znc.conf` file
+            Extra config to `znc.conf` file.
           '';
         };
       };
@@ -265,6 +315,7 @@ in
       after = [ "network.service" ];
       serviceConfig = {
         User = cfg.user;
+        Group = cfg.group;
         Restart = "always";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop   = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
