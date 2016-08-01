@@ -29,19 +29,18 @@ stdenv.mkDerivation {
   makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
 
   unpackPhase = ''
-      sourceRoot=broadcom-sta
-      mkdir "$sourceRoot"
-      tar xvf "$src" -C "$sourceRoot"
+    sourceRoot=broadcom-sta
+    mkdir "$sourceRoot"
+    tar xvf "$src" -C "$sourceRoot"
   '';
 
-  installPhase =
-    ''
-      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
-      docDir="$out/share/doc/broadcom-sta/"
-      mkdir -p "$binDir" "$docDir"
-      cp wl.ko "$binDir"
-      cp lib/LICENSE.txt "$docDir"
-    '';
+  installPhase = ''
+    binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+    docDir="$out/share/doc/broadcom-sta/"
+    mkdir -p "$binDir" "$docDir"
+    cp wl.ko "$binDir"
+    cp lib/LICENSE.txt "$docDir"
+  '';
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
