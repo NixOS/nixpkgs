@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
         ming dejagnu python perl haxe swftools
       ]);
 
-  preConfigure =
+  preConfigure = with gst_all;
     '' configureFlags="                                         \
          --with-sdl-incl=${SDL.dev}/include/SDL                     \
          --with-npapi-plugindir=$out/plugins                    \
@@ -70,10 +70,10 @@ stdenv.mkDerivation rec {
          --without-gconf
          --enable-gui=gtk"
 
-       # In `libmedia', Gnash compiles with "-I$gst-plugins-base/include",
-       # whereas it really needs "-I$gst-plugins-base/include/gstreamer-0.10".
+       # In `libmedia', Gnash compiles with "-I${gst-plugins-base}/include",
+       # whereas it really needs "-I${gst-plugins-base}/include/gstreamer-0.10".
        # Work around this using GCC's $CPATH variable.
-       export CPATH="${gst_all.gst-plugins-base}/include/gstreamer-0.10:${gst_all.gst-plugins-good}/include/gstreamer-0.10"
+       export CPATH="${gst-plugins-base}/include/gstreamer-0.10:${gst-plugins-good}/include/gstreamer-0.10"
        echo "\$CPATH set to \`$CPATH'"
 
        echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"
