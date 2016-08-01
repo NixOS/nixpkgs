@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, openssl, expat, libevent, swig, python, pythonPackages }:
+{ stdenv, fetchurl, openssl, expat, libevent, swig, pythonPackages }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   pname = "pyunbound";
   name = "${pname}-${version}";
   version = "1.5.9";
