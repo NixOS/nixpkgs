@@ -11,6 +11,8 @@ rec {
     srcSha = "07wybqvnw99fljmcy33vb9iwirmp10cwy47n008p396s7pb852hv";
     patches = [
       ./patches/disable-lockfile-check.patch
+      # Drop this patch after
+      # https://github.com/rust-lang/rust/pull/35140 gets merged
       ./patches/tcp-stress-test-run-a-smaller-number-of-threads.patch
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
     inherit targets;
