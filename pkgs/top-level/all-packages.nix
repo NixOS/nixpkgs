@@ -1235,6 +1235,14 @@ in
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
 
+  curl_7_48 = callPackage ../tools/networking/curl/7.48.nix rec {
+    fetchurl = fetchurlBoot;
+    http2Support = !stdenv.isDarwin;
+    zlibSupport = true;
+    sslSupport = zlibSupport;
+    scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+  };
+
   curl3 = callPackage ../tools/networking/curl/7.15.nix rec {
     zlibSupport = true;
     sslSupport = zlibSupport;
@@ -13720,6 +13728,7 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    curl = curl_7_48;
   });
 
 
