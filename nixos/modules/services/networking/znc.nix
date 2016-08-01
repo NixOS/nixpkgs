@@ -30,6 +30,8 @@ let
   mkZncConf = confOpts: ''
     Version = 1.6.3
     ${concatMapStrings (n: "LoadModule = ${n}\n") confOpts.modules}
+    ${if notNull confOpts.sslCert then "SSLCertFile = " + confOpts.sslCert else cfg.dataDir + "/znc.pem"}
+    ${if notNull confOpts.sslKey then "SSLKeyFile = " + confOpts.sslKey else ""}
 
     <Listener l>
             Port = ${toString confOpts.port}
@@ -256,7 +258,23 @@ in
           example = true;
           type = types.bool;
           description = ''
-            Indicates whether the ZNC server should use SSL when listening on the specified port. A self-signed certificate will be generated.
+            Indicates whether the ZNC server should use SSL when listening on the specified port. If `sslCert` and `sslKey` are not given, a self-signed certificate will be generated.
+          '';
+        };
+
+        sslCert = mkOption {
+          default = "";
+          type = types.str;
+          description = ''
+            SSL certificate to use.
+          '';
+        };
+
+        sslKey = mkOption {
+          default = "";
+          type = types.str;
+          description = ''
+            SSL key to use.
           '';
         };
 
