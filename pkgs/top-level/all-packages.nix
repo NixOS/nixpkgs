@@ -3702,6 +3702,8 @@ in
 
   tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
 
+  tmuxp = callPackage ../tools/misc/tmuxp { };
+
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
   tmin = callPackage ../tools/security/tmin { };
