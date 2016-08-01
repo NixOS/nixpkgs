@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ cmake pkgconfig boost libunwind mariadb libmemcached pcre gdb git perl
+    [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
-  MYSQL_INCLUDE_DIR="${mariadb}/include/mysql";
-  MYSQL_DIR=mariadb;
 
   # work around broken build system
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
