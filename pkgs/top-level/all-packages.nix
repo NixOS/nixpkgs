@@ -15957,6 +15957,8 @@ let
     enableAllFeatures = true;
   });
 
+  dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
+
   dosbox = callPackage ../misc/emulators/dosbox { };
 
   dpkg = callPackage ../tools/package-management/dpkg { };
