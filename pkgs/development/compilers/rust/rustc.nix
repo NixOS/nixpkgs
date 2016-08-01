@@ -115,6 +115,7 @@ stdenv.mkDerivation {
 
   preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
 
-  doCheck = true;
+  # Disable doCheck on Darwin to work around upstream issue
+  doCheck = !stdenv.isDarwin;
   dontSetConfigureCross = true;
 }
