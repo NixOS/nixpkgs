@@ -15,7 +15,7 @@ releaseTools.sourceTarball rec {
   src = nixpkgs;
 
   inherit officialRelease;
-  version = builtins.readFile ../../.version;
+  version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   buildInputs = [ nix.out jq ];
