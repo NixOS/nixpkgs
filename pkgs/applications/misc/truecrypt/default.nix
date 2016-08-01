@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://fossies.org/unix/misc/TrueCrypt-7.1a-Source.tar.gz;
+    url = https://fossies.org/linux/misc/old/TrueCrypt-7.1a-Source.tar.gz;
     sha1 = "d43e0dbe05c04e316447d87413c4f74c68f5de24";
   };
 
