@@ -8514,6 +8514,23 @@ in modules // {
     };
   };
 
+  schedule = buildPythonPackage rec {
+    name = "schedule-0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/10/96/d101fab391753ebc81fa3bb0e744df1ddcfb032c31b036d38083f8994db1/schedule-0.3.2.tar.gz";
+      sha256 = "1h0waw4jd5ql68y5kxb9irwapkbkwfs1w0asvbl24fq5f8czdijm";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    meta = with stdenv.lib; {
+      description = "Python job scheduling for humans";
+      homepage = https://github.com/dbader/schedule;
+      license = licenses.mit;
+    };
+  };
+
   substanced = buildPythonPackage rec {
     # no release yet
     rev = "089818bc61c3dc5eca023254e37a280b041ea8cc";
