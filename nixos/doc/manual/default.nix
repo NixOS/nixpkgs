@@ -221,11 +221,14 @@ in rec {
       mkdir -p $dst/epub/OEBPS/images/callouts
       cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/epub/OEBPS/images/callouts
       echo "application/epub+zip" > mimetype
-      zip -0Xq  "$dst/NixOS Manual - NixOS community.epub" mimetype
-      zip -Xr9D "$dst/NixOS Manual - NixOS community.epub" $dst/epub/*
+      manual="$dst/nixos-manual.epub"
+      zip -0Xq "$manual" mimetype
+      cd $dst/epub && zip -Xr9D "$manual" *
+
+      rm -rf $dst/epub
 
       mkdir -p $out/nix-support
-      echo "doc-epub manual $dst/NixOS Manual - NixOS community.epub" >> $out/nix-support/hydra-build-products
+      echo "doc-epub manual $manual" >> $out/nix-support/hydra-build-products
     '';
   };
 
