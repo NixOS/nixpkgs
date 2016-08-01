@@ -3227,7 +3227,7 @@ in modules // {
     name = "celery-${version}";
     version = "3.1.23";
 
-    disabled = pythonOlder "2.6";
+    disabled = (pythonOlder "2.6") || isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/celery/${name}.tar.gz";
