@@ -14430,6 +14430,8 @@ in
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
+  rdup = callPackage ../tools/backup/rdup { };
+
   recode = callPackage ../tools/text/recode { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
