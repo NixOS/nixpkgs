@@ -55,7 +55,7 @@ in
       ''; };
       localAddress = mkOption {
         default = "127.0.0.1";
-        type = types.string;
+        type = types.str;
         description = ''
           Listen for DNS queries to relay on this address. The only reason to
           change this from its default value is to proxy queries on behalf
@@ -74,7 +74,7 @@ in
       };
       resolverName = mkOption {
         default = "dnscrypt.eu-nl";
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         description = ''
           The name of the upstream DNSCrypt resolver to use, taken from the
           list named in the <literal>resolverList</literal> option.
