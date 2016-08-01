@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace make_lie \
       --replace \`/bin/pwd\` $out
+    substituteInPlace Makefile --replace "CC = gcc" "CC ?= gcc"
   '';
 
   installPhase = ''
