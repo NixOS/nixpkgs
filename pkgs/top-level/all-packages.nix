@@ -5885,6 +5885,11 @@ in
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
+  buildApplication = callPackage ../development/interpreters/python/build-application.nix {};
+
+  tox = buildApplication { package = pythonPackages.tox; };
+  ipython = buildApplication { package = pythonPackages.ipython; };
+
   python26 = callPackage ../development/interpreters/python/2.6 {
     db = db47;
     self = python26;
