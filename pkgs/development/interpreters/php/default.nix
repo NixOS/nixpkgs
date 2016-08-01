@@ -107,7 +107,7 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql=${mysql.lib}"];
+          configureFlags = ["--with-mysql"];
           buildInputs = [ mysql.lib ];
         };
 

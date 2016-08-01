@@ -49,7 +49,7 @@ stdenv.mkDerivation {
       -I${randrproto}/include" else "-no-xrandr"}
     ${if xineramaSupport then "-xinerama -L${libXinerama.out}/lib -I${libXinerama.dev}/include" else "-no-xinerama"}
     ${if cursorSupport then "-L${libXcursor.out}/lib -I${libXcursor.dev}/include" else ""}
-    ${if mysqlSupport then "-qt-sql-mysql -L${mysql.lib}/lib/mysql -I${mysql.lib}/include/mysql" else ""}
+    ${if mysqlSupport then "-qt-sql-mysql -L${stdenv.lib.getLib mysql.client}/lib/mysql -I${mysql.client}/include/mysql" else ""}
     ${if xftSupport then "-xft
       -L${libXft.out}/lib -I${libXft.dev}/include
       -L${libXft.freetype.out}/lib -I${libXft.freetype.dev}/include
