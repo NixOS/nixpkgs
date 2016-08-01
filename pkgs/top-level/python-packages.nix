@@ -13479,15 +13479,26 @@ in modules // {
   };
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.27";
+    name = "mutagen-1.32";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mutagen/${name}.tar.gz";
-      sha256 = "cc884fe1e20fe220be7ce7c3b269f4cadc69a8310150a3a41162fba1ca9c88bd";
+      sha256 = "1d9sxl442xjj7pdyjj5h0dsjyd7d3wqswr8icqqgqdmg9k8dw8bp";
     };
 
     # Needed for tests only
-    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz ];
+    buildInputs = [ pkgs.faad2 pkgs.flac pkgs.vorbis-tools pkgs.liboggz
+      pkgs.glibcLocales
+    ];
+    LC_ALL = "en_US.UTF-8";
+
+    # Remove test that fails due to missing encoding in nix_run_setup.py, a
+    # file that buildPythonPackage copies to source trees at build time.
+    # PR with fix: https://github.com/NixOS/nixpkgs/pull/17430
+    # ("python: add file encoding to run_setup.py")
+    preBuild = ''
+      rm tests/test_encoding.py
+    '';
 
     meta = {
       description = "Python multimedia tagging library";
