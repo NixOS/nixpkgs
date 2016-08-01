@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     ./i686-build-failure.patch
     ./license.patch
     ./linux-4.7.patch
+    ./null-pointer-fix.patch
     ./gcc.patch
   ];
 
