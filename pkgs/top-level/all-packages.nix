@@ -795,6 +795,8 @@ in
 
   filebench = callPackage ../tools/misc/filebench { };
 
+  flat-plat = callPackage ../misc/themes/flat-plat { };
+
   fop = callPackage ../tools/typesetting/fop { };
 
   fondu = callPackage ../tools/misc/fondu { };
