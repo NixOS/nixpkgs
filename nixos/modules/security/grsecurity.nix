@@ -97,7 +97,7 @@ in
 
     # Configure system tunables
     boot.kernel.sysctl = {
-      # Removed under grsecurity
+      # Read-only under grsecurity
       "kernel.kptr_restrict" = mkForce null;
     } // optionalAttrs config.nix.useSandbox {
       # chroot(2) restrictions that conflict with sandboxed Nix builds
