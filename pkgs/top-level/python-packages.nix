@@ -24,16 +24,6 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
-  # Unique python version identifier
-  pythonName =
-    if isPy26 then "python26" else
-    if isPy27 then "python27" else
-    if isPy33 then "python33" else
-    if isPy34 then "python34" else
-    if isPy35 then "python35" else
-    if isPy36 then "python36" else
-    if isPyPy then "pypy" else "";
-
   modules = python.modules or {
     readline = null;
     sqlite3 = null;
@@ -44,7 +34,7 @@ let
 
 in modules // {
 
-  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k pythonName buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
 
   # helpers
 
@@ -326,6 +316,8 @@ in modules // {
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
+
+  pyunbound = callPackage ../tools/networking/unbound/python.nix { };
 
   # packages defined here
 
@@ -846,13 +838,13 @@ in modules // {
   };
 
   ansible2 = buildPythonPackage rec {
-    version = "2.1.0.0";
+    version = "2.1.1.0";
     name = "ansible-${version}";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "http://releases.ansible.com/ansible/${name}.tar.gz";
-      sha256 = "1bfc2xiplpad6f2nwi48y0kps7xqnsll85dlz63cy8k5bysl6d20";
+      sha256 = "12v7smivjz8d2skk5qxl83nmkxqxypjm8b7ld40sjfwj4g0kkrv1";
     };
 
     prePatch = ''
@@ -3225,7 +3217,7 @@ in modules // {
     name = "celery-${version}";
     version = "3.1.23";
 
-    disabled = pythonOlder "2.6";
+    disabled = (pythonOlder "2.6") || isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/celery/${name}.tar.gz";
@@ -4923,6 +4915,24 @@ in modules // {
       homepage = "http://distributed.readthedocs.io/en/latest/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ teh ];
+    };
+  };
+
+  libtmux = buildPythonPackage rec {
+    name = "libtmux-${version}";
+    version = "0.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/libtmux/${name}.tar.gz";
+      sha256 = "0fwydaahgflz9w753v1cmkfzrlfq1vb8zp4i20m2d3lvkm4crv93";
+    };
+
+    meta = with stdenv.lib; {
+      description = "Scripting library for tmux";
+      homepage = https://libtmux.readthedocs.io/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jgeerds ];
     };
   };
 
@@ -8491,6 +8501,23 @@ in modules // {
     };
   };
 
+  schedule = buildPythonPackage rec {
+    name = "schedule-0.3.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/10/96/d101fab391753ebc81fa3bb0e744df1ddcfb032c31b036d38083f8994db1/schedule-0.3.2.tar.gz";
+      sha256 = "1h0waw4jd5ql68y5kxb9irwapkbkwfs1w0asvbl24fq5f8czdijm";
+    };
+
+    buildInputs = with self; [ mock ];
+
+    meta = with stdenv.lib; {
+      description = "Python job scheduling for humans";
+      homepage = https://github.com/dbader/schedule;
+      license = licenses.mit;
+    };
+  };
+
   substanced = buildPythonPackage rec {
     # no release yet
     rev = "089818bc61c3dc5eca023254e37a280b041ea8cc";
@@ -9020,8 +9047,6 @@ in modules // {
     name = "django-colorful-${version}";
     version = "1.2";
 
-    disabled = isPy35;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
       sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
@@ -9224,6 +9249,25 @@ in modules // {
     };
   };
 
+  django_raster = buildPythonPackage rec {
+    name = "django-raster-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-raster/${name}.tar.gz";
+      sha256 = "1zdcxzj43qrv7cl6q9nb2dkfnsyn74dzf2igpnd6nbbfdnkif9bm";
+    };
+
+    propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
+                                          pyparsing django celery ];
+
+    meta = {
+      description = "Basic raster data integration for Django";
+      homepage = https://github.com/geodesign/django-raster;
+      license = licenses.mit;
+    };
+  };
+
   django_redis = buildPythonPackage rec {
     name = "django-redis-${version}";
     version = "4.2.0";
@@ -9403,6 +9447,25 @@ in modules // {
     };
   };
 
+  kaptan = buildPythonPackage rec {
+    name = "kaptan-${version}";
+    version = "0.5.8";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/kaptan/${name}.tar.gz";
+      sha256 = "1b8r86yyvdvyxd6f10mhkl6cr2jhxm80jjqr4zch96w9hs9rh5vq";
+    };
+
+    propagatedBuildInputs = with self; [ pyyaml ];
+
+    meta = with stdenv.lib; {
+      description = "Configuration manager for python applications";
+      homepage = https://emre.github.io/kaptan/;
+      license = licenses.bsd3;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jgeerds ];
+    };
+  };
 
   keepalive = buildPythonPackage rec {
     name = "keepalive-${version}";
@@ -12078,13 +12141,13 @@ in modules // {
     };
 
     # most of these are simply to allow the test suite to do its job
-    buildInputs = with self; [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
+    buildInputs = with self; optionals isPy27 [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
     propagatedBuildInputs = with self; [ amqp anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    doCheck = (pythonAtLeast "2.7");
+    doCheck = isPy27;
 
     meta = {
       description = "Messaging library for Python";

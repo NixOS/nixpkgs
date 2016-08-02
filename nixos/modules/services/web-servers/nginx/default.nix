@@ -104,6 +104,7 @@ let
 
     ${cfg.appendConfig}
   '';
+
   vhosts = concatStringsSep "\n" (mapAttrsToList (serverName: vhost:
       let
         ssl = vhost.enableSSL || vhost.forceSSL;
@@ -175,7 +176,6 @@ let
     auth_basic secured;
     auth_basic_user_file ${htpasswdFile};
   '';
-
 in
 
 {

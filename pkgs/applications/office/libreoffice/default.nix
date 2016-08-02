@@ -76,7 +76,9 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead 
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
+  # curl upgrade to 7.50.0 (#17152) changes the libcurl headers slightly and
+  # therefore requires the -fpermissive flag until this package gets updated
+  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal -fpermissive";
 
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.

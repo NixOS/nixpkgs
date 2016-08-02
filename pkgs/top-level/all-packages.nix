@@ -1967,6 +1967,8 @@ in
 
   hashcat = callPackage ../tools/security/hashcat { };
 
+  hash-slinger = callPackage ../tools/security/hash-slinger { };
+
   hal-flash = callPackage ../os-specific/linux/hal-flash { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
@@ -3706,6 +3708,8 @@ in
   tmux = callPackage ../tools/misc/tmux { };
 
   tmux-cssh = callPackage ../tools/misc/tmux-cssh { };
+
+  tmuxp = callPackage ../tools/misc/tmuxp { };
 
   tmuxinator = callPackage ../tools/misc/tmuxinator { };
 
@@ -5463,9 +5467,7 @@ in
     stdenv = overrideCC stdenv gcc49;
   };
 
-  ponyc = callPackage ../development/compilers/ponyc {
-    llvm = llvm_36;
-  };
+  ponyc = callPackage ../development/compilers/ponyc { };
 
   rgbds = callPackage ../development/compilers/rgbds { };
 
@@ -5868,31 +5870,34 @@ in
   python2Packages = python27Packages;
   python3Packages = python35Packages;
 
-  python26 = callPackage ../development/interpreters/python/2.6 {
+  python26 = callPackage ../development/interpreters/python/cpython/2.6 {
     db = db47;
     self = python26;
   };
-  python27 = callPackage ../development/interpreters/python/2.7 {
+  python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
     inherit (darwin) CF configd;
   };
-  python33 = callPackage ../development/interpreters/python/3.3 {
+  python33 = callPackage ../development/interpreters/python/cpython/3.3 {
     self = python33;
   };
-  python34 = hiPrio (callPackage ../development/interpreters/python/3.4 {
+  python34 = hiPrio (callPackage ../development/interpreters/python/cpython/3.4 {
     inherit (darwin) CF configd;
     self = python34;
   });
-  python35 = hiPrio (callPackage ../development/interpreters/python/3.5 {
+  python35 = hiPrio (callPackage ../development/interpreters/python/cpython/3.5 {
     inherit (darwin) CF configd;
     self = python35;
   });
-  python36 = callPackage ../development/interpreters/python/3.6 {
+  python36 = callPackage ../development/interpreters/python/cpython/3.6 {
     inherit (darwin) CF configd;
     self = python36;
   };
-  pypy = callPackage ../development/interpreters/pypy {
-    self = pypy;
+
+  pypy = pypy27;
+
+  pypy27 = callPackage ../development/interpreters/python/pypy/2.7 {
+    self = pypy27;
   };
 
   pythonFull = python2Full;
@@ -5908,7 +5913,7 @@ in
 
   python2nix = callPackage ../tools/package-management/python2nix { };
 
-  pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/docs {});
+  pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
   pypi2nix = callPackage ../development/tools/pypi2nix { python = python35; };
 
@@ -14104,6 +14109,8 @@ in
     sphinx = pythonPackages.sphinx;
   };
 
+  notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
+
   # Open Stack
   nova = callPackage ../applications/virtualization/openstack/nova.nix { };
   keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
@@ -14418,6 +14425,8 @@ in
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
+
+  rdup = callPackage ../tools/backup/rdup { };
 
   recode = callPackage ../tools/text/recode { };
 
@@ -15647,6 +15656,8 @@ in
   };
 
   hexen = callPackage ../games/hexen { };
+
+  holdingnuts = callPackage ../games/holdingnuts { };
 
   icbm3d = callPackage ../games/icbm3d { };
 
@@ -16983,6 +16994,8 @@ in
   });
 
   dbus-map = callPackage ../tools/misc/dbus-map { };
+
+  dell-530cdn = callPackage ../misc/drivers/dell-530cdn {};
 
   dosbox = callPackage ../misc/emulators/dosbox { };
 

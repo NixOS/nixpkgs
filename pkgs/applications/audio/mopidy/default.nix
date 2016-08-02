@@ -22,7 +22,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado requests2
+    gst-python pygobject3 pykka tornado requests2 dbus
   ];
 
   # There are no tests
