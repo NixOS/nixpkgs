@@ -8907,9 +8907,6 @@ in
   openslp = callPackage ../development/libraries/openslp {};
 
   libressl = self.libressl_2_4;
-  libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
-    fetchurl = fetchurlBoot;
-  };
   libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
     fetchurl = fetchurlBoot;
   };
