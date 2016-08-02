@@ -1,5 +1,4 @@
-{ stdenv, lib, fetchurl, perl, perlPackages, makeWrapper, coreutils
-, notmuch }:
+{ stdenv, lib, perl, perlPackages, makeWrapper, coreutils, notmuch }:
 
 stdenv.mkDerivation rec {
   name = "notmuch-mutt-${version}";
