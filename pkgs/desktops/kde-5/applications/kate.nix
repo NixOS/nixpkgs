@@ -1,10 +1,10 @@
 {
   kdeApp, lib, kdeWrapper,
   ecm, kdoctools,
-  kactivities, kconfig, kcrash, kguiaddons, kiconthemes, ki18n, kinit,
-  kjobwidgets, kio, kparts, ktexteditor, kwindowsystem, kxmlgui, kdbusaddons,
-  kwallet, plasma-framework, kitemmodels, knotifications, qtscript,
-  threadweaver, knewstuff, libgit2
+  kactivities, kconfig, kcrash, kdbusaddons, kguiaddons, kiconthemes, ki18n,
+  kinit, kio, kitemmodels, kjobwidgets, knewstuff, knotifications, konsole,
+  kparts, ktexteditor, kwindowsystem, kwallet, kxmlgui, libgit2,
+  plasma-framework, qtscript, threadweaver
 }:
 
 let
@@ -24,4 +24,8 @@ let
       ];
     };
 in
-kdeWrapper unwrapped { targets = [ "bin/kate" "bin/kwrite" ]; }
+kdeWrapper unwrapped
+{
+  targets = [ "bin/kate" "bin/kwrite" ];
+  paths = [ konsole.unwrapped ];
+}
