@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://pypi.python.org/pypi/setuptools;
     license = with lib.licenses; [ psfl zpt20 ];
     platforms = platforms.all;
+    priority = 10;
   };
 }
