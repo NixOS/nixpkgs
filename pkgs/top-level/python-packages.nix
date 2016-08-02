@@ -24,16 +24,6 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
-  # Unique python version identifier
-  pythonName =
-    if isPy26 then "python26" else
-    if isPy27 then "python27" else
-    if isPy33 then "python33" else
-    if isPy34 then "python34" else
-    if isPy35 then "python35" else
-    if isPy36 then "python36" else
-    if isPyPy then "pypy" else "";
-
   modules = python.modules or {
     readline = null;
     sqlite3 = null;
