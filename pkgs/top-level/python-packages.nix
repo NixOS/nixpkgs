@@ -3217,7 +3217,7 @@ in modules // {
     name = "celery-${version}";
     version = "3.1.23";
 
-    disabled = pythonOlder "2.6";
+    disabled = (pythonOlder "2.6") || isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/celery/${name}.tar.gz";
@@ -9050,8 +9050,6 @@ in modules // {
     name = "django-colorful-${version}";
     version = "1.2";
 
-    disabled = isPy35;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-colorful/${name}.tar.gz";
       sha256 = "0y34hzvfrm1xbxrd8frybc9yzgqvz4c07frafipjikw7kfjsw8az";
@@ -9251,6 +9249,25 @@ in modules // {
       homepage = http://www.django-rest-framework.org/;
       maintainers = with maintainers; [ desiderius ];
       license = licenses.bsd2;
+    };
+  };
+
+  django_raster = buildPythonPackage rec {
+    name = "djongoraster-${version}";
+    version = "0.2";
+
+    src = pkgs.fetchurl {
+      url = "https://pypi.python.org/packages/09/3d/5b9b491186579825ef6e81d60c8ddaf86d8c98d928753a329980bf48b050/django-raster-0.2.tar.gz";
+      sha256 = "1zdcxzj43qrv7cl6q9nb2dkfnsyn74dzf2igpnd6nbbfdnkif9bm";
+    };
+
+    propagatedBuildInputs = with self ; [ numpy django_colorful pillow psycopg2
+                                          pyparsing django celery ];
+
+    meta = {
+      description = "Basic raster data integration for Django";
+      homepage = https://github.com/geodesign/django-raster;
+      license = licenses.mit;
     };
   };
 
@@ -12127,13 +12144,13 @@ in modules // {
     };
 
     # most of these are simply to allow the test suite to do its job
-    buildInputs = with self; [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
+    buildInputs = with self; optionals isPy27 [ mock unittest2 nose redis qpid-python pymongo sqlalchemy pyyaml msgpack boto ];
 
     propagatedBuildInputs = with self; [ amqp anyjson ] ++
       (optionals (pythonOlder "2.7") [ importlib ordereddict ]);
 
     # tests broken on python 2.6? https://github.com/nose-devs/nose/issues/806
-    doCheck = (pythonAtLeast "2.7");
+    doCheck = isPy27;
 
     meta = {
       description = "Messaging library for Python";
