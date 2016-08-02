@@ -389,6 +389,11 @@ substitute() {
     local input="$1"
     local output="$2"
 
+    if [ ! -f "$input" ]; then
+      echo "substitute: File \"$input\" does not exist"
+      return 1
+    fi
+
     local -a params=("$@")
 
     local n p pattern replacement varName content

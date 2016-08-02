@@ -5720,10 +5720,6 @@ in modules // {
       sha256 = "1ikj72kd4cdcq7pmmcd5p6s9dvp7wi0zw01635v4xzkid5vi598f";
     };
 
-    preConfigure = ''
-      substituteInPlace test-requirements.txt --replace 'nose==1.3' 'nose'
-    '';
-
     doCheck = !isPy3k;  # lots of transient failures
     checkPhase = ''
       # Not worth the trouble
@@ -5735,7 +5731,6 @@ in modules // {
 
       nosetests -v --cover-min-percentage 1
     '';
-
 
     buildInputs = with self; [ coverage tornado mock nose ];
 
