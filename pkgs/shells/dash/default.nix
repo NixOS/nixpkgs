@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://gondor.apana.org.au/~herbert/dash/;
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 
   passthru = {

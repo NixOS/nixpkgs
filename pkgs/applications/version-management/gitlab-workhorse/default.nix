@@ -23,4 +23,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     make install PREFIX=$out
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

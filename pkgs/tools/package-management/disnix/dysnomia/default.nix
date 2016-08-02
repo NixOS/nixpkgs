@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     description = "Automated deployment of mutable components and services for Disnix";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

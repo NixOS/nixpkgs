@@ -13,8 +13,17 @@ stdenv.mkDerivation rec {
 
   meta = {
     description     = "Bayesian Inference of Phylogeny";
-    longDescription = ''Bayesian inference of phylogeny is based upon a quantity called the posterior probability distribution of trees, which is the probability of a tree conditioned on the observations. The conditioning is accomplished using Bayes's theorem. The posterior probability distribution of trees is impossible to calculate analytically; instead, MrBayes uses a simulation technique called Markov chain Monte Carlo (or MCMC) to approximate the posterior probabilities of trees.'';
+    longDescription = ''
+      Bayesian inference of phylogeny is based upon a
+      quantity called the posterior probability distribution of trees, which is
+      the probability of a tree conditioned on the observations. The conditioning
+      is accomplished using Bayes's theorem. The posterior probability
+      distribution of trees is impossible to calculate analytically; instead,
+      MrBayes uses a simulation technique called Markov chain Monte Carlo (or
+      MCMC) to approximate the posterior probabilities of trees.
+    '';
     license     = "GPL2";
     homepage    = http://mrbayes.csit.fsu.edu/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

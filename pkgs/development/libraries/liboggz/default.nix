@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
       support the Ogg Vorbis audio format but now used for many free codecs
       including Dirac, FLAC, Speex and Theora.'';
     maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

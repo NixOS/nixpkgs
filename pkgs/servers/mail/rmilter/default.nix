@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
       postfix or sendmail
     '';
     maintainers = with maintainers; [ avnik fpletz ];
+    platforms = with platforms; linux;
   };
 }

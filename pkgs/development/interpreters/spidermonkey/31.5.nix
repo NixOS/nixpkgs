@@ -56,5 +56,6 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
 
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

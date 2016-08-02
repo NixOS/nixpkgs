@@ -16,5 +16,6 @@ stdenv.mkDerivation {
     description = "Provides complementary NixOS infrastructure deployment to Disnix";
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

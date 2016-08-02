@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;
     inherit version;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

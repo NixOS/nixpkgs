@@ -55,5 +55,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lassulus ];
     homepage = http://vba-m.com/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

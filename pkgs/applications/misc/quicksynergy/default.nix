@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://code.google.com/p/quicksynergy/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.spinus ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

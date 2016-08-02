@@ -11,5 +11,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.nongnu.org/confuse/;
     description = "Configuration file parser library";
     license = stdenv.lib.licenses.isc;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

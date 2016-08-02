@@ -44,5 +44,6 @@ stdenv.mkDerivation {
       system that ensure clean, correct, multithreaded designs.
     '';
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

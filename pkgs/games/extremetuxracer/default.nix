@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://sourceforge.net/projects/extremetuxracer/;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

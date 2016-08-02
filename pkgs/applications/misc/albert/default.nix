@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Desktop agnostic launcher";
     license     = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.ericsagnes ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

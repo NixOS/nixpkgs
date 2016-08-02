@@ -15,5 +15,6 @@ stdenv.mkDerivation {
     homepage = http://www.leptonica.org/;
     # Its own license: http://www.leptonica.org/about-the-license.html
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

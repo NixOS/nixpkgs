@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Curses interface for the Transmission BitTorrent daemon";
     homepage = https://github.com/fagga/transmission-remote-cli;
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

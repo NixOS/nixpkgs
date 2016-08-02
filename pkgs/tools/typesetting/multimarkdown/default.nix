@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     # licensed under GPLv2+ or MIT:
     # https://raw.githubusercontent.com/fletcher/MultiMarkdown-4/master/LICENSE
     license = with stdenv.lib.licenses; [ gpl2Plus ];
-    hydraPlatforms = platforms.all;
+    platforms = platforms.all;
     maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];
   };
 }

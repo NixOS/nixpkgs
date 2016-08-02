@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     description = "Allows the keyboard, mouse on one X display to be used to control another X display";
     homepage = http://x2x.dottedmag.net;
     license = "BSD";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

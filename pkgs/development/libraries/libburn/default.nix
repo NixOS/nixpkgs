@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar vrthra ];
+    platforms = with platforms; unix;
   };
 }

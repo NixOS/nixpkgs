@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://cutecom.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.bennofs ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

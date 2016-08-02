@@ -25,5 +25,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/majutsushi/urxvt-font-size";
     license = licenses.mit;
     maintainers = with maintainers; [ cstrahan ];
+    platforms = with platforms; unix;
   };
 }

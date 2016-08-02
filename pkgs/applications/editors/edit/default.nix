@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://c9x.me/edit;
     license = licenses.publicDomain;
     maintainers = [ maintainers.vrthra ];
+    platforms = platforms.linux;
   };
 }
 

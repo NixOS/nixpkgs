@@ -46,4 +46,8 @@ stdenv.mkDerivation rec {
       ln -sv $file $out/lib/klibc/include
     done
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

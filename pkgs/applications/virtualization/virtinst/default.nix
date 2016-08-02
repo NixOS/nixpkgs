@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [qknight];
     description = "Command line tool which provides an easy way to provision operating systems into virtual machines";
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

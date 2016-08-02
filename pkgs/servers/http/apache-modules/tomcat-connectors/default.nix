@@ -18,4 +18,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ apacheHttpd jdk ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

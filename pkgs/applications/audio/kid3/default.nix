@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     homepage = http://kid3.sourceforge.net/;
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
 # TODO: Qt5 support

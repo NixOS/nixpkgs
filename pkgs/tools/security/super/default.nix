@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
         in /etc/super.tab); and 2) “setuid”, which allows root to
         execute a command under a different uid.
       '';
-  };  
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

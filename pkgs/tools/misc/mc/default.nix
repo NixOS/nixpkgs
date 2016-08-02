@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     repositories.git = git://github.com/MidnightCommander/mc.git;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

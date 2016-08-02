@@ -77,4 +77,8 @@ stdenv.mkDerivation rec {
         wrapProgram "${bin_path}/$i" --prefix PATH : "${runtime_paths}"
     done
   '';
+
+    meta = {
+        platforms = stdenv.lib.platforms.linux;
+    };
 }

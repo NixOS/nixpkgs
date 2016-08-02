@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     homepage = "http://http://www.hyperrealm.com/${name}";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ikervagyok ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }
 

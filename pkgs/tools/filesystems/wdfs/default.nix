@@ -11,5 +11,6 @@ stdenv.mkDerivation rec
   meta = {
     homepage = "http://noedler.de/projekte/wdfs/";
     description = "User-space filesystem that allows to mount a webdav share";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

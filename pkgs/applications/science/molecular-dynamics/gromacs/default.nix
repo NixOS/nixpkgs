@@ -50,5 +50,6 @@ stdenv.mkDerivation {
 
       See: http://www.gromacs.org/About_Gromacs for details.
     '';
+    platforms = platforms.unix;
   };
 }

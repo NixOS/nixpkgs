@@ -8,5 +8,8 @@ stdenv.mkDerivation {
   };
 
   hardeningDisable = [ "format" ];
-}
 
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
+}

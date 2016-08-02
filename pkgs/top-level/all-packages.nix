@@ -15618,6 +15618,8 @@ in
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
+  gambatte = callPackage ../games/gambatte { };
+
   gav = callPackage ../games/gav { };
 
   gemrb = callPackage ../games/gemrb { };

@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://delta.affinix.com/qca;
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.lgpl21Plus;
+    platforms = with platforms; linux;
   };
 }

@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.qhull.org/;
     description = "Computes the convex hull, Delaunay triangulation, Voronoi diagram and more";
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

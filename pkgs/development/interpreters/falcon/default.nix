@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Programming language with macros and syntax at once";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     
     homepage = http://cdrkit.org/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

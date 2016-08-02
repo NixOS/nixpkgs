@@ -39,5 +39,8 @@ stdenv.mkDerivation rec {
         cp $i $out/share/fonts/truetype;
     done;
   '';
-}
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

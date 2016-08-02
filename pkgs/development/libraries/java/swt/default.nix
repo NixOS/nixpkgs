@@ -69,5 +69,6 @@ in stdenv.mkDerivation rec {
     description = "An widget toolkit for Java to access the user-interface facilities of the operating systems on which it is implemented";
     license = licenses.epl10;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

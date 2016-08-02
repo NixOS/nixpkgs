@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.xine-project.org/;
     description = "A high-performance, portable and reusable multimedia playback engine";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
