@@ -22,7 +22,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A portable, freeware Super Nintendo Entertainment System (SNES) emulator";
-    longDescription = "Snes9x is a portable, freeware Super Nintendo Entertainment System (SNES) emulator. It basically allows you to play most games designed for the SNES and Super Famicom Nintendo game systems on your PC or Workstation; which includes some real gems that were only ever released in Japan.";
+    longDescription = ''
+      Snes9x is a portable, freeware Super Nintendo Entertainment System (SNES)
+      emulator. It basically allows you to play most games designed for the SNES
+      and Super Famicom Nintendo game systems on your PC or Workstation; which
+      includes some real gems that were only ever released in Japan.
+    '';
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.qknight ];
     homepage = http://www.snes9x.com/;
