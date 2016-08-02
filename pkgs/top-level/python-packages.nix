@@ -6527,14 +6527,12 @@ in modules // {
   };
 
   git-up = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.4.1";
     name = "git-up-${version}";
 
-    src = pkgs.fetchFromGitHub {
-      owner = "msiemens";
-      repo = "PyGitUp";
-      rev = "v${version}";
-      sha256 = "1g7sxiqg6vxx2jlgg8pg9fqsk1xgvm80d7mcpw8i3mw7r835q4bi";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/g/git-up/${name}.zip";
+      sha256 = "1nsdzjnla0926fzfsqnwyzg3f7g253n8lk4wgw8nj2rv0awbdmas";
     };
 
     buildInputs = with self; [ pkgs.git nose ];
