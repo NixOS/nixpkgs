@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Simple tool for transporting data over the network";
     license = stdenv.lib.licenses.gpl2;
     homepage = "http://mamuti.net/netrw/index.en.html";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

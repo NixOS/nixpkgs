@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     description = "C++ port of the popular Java Lucene search engine";
     homepage = "https://github.com/luceneplusplus/LucenePlusPlus";
     license = with stdenv.lib.licenses; [ asl20 lgpl3Plus ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

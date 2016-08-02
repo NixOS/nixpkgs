@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
       embed application logic in this template language.  '';
     homepage = http://code.google.com/p/google-ctemplate/;
     license = "bsd";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

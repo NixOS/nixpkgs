@@ -28,5 +28,6 @@ stdenv.mkDerivation rec{
     '';
     maintainers = [ maintainers.AndersonTorres ];
     license = licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

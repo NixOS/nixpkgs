@@ -15,6 +15,7 @@ stdenv.mkDerivation (rec {
     description = "Client for many p2p networks, with multiple frontends";
     homepage = http://mldonkey.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
   };
 } // (if !ocaml.nativeCompilers then
 {

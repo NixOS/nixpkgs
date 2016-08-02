@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     '';
     license     = "GPL2";
     homepage    = http://mrbayes.csit.fsu.edu/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

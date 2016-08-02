@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
       for ZFS, which also supports auto snapshotting mysql databases.
     '';
     license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.codenix.com/~tolua/;
     license = licenses.mit;
     maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; unix;
   };
 }

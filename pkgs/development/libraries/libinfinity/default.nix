@@ -39,6 +39,7 @@ in stdenv.mkDerivation rec {
     description = "An implementation of the Infinote protocol written in GObject-based C";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.phreedom ];
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }

@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Interactive geometry program";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.agner.org/optimize/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; unix;
   };
 
 }

@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.qknight ];
     homepage = http://www.snes9x.com/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

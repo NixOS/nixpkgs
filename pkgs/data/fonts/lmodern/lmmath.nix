@@ -25,6 +25,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Latin Modern font";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

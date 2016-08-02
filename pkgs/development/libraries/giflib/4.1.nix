@@ -8,6 +8,7 @@ stdenv.mkDerivation {
   };
   meta = {
     branch = "4.1";
+    platforms = stdenv.lib.platforms.unix;
   };
 }
 

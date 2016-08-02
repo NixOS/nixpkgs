@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.dosbox.com/;
     description = "A DOS emulator";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

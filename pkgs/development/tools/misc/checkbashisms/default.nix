@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://sourceforge.net/projects/checkbaskisms/;
     description = "Check shell scripts for non-portable syntax";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

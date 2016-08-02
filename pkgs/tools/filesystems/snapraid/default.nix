@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     description = "A backup program for disk arrays";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.makefu ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

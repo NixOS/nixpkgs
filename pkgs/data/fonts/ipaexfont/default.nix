@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://ipafont.ipa.go.jp/;
     license = licenses.ipa;
     maintainers = with maintainers; [ gebner ];
+    platforms = with platforms; unix;
   };
 }

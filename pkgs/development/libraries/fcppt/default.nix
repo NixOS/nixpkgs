@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://fcppt.org;
     license = stdenv.lib.licenses.boost;
     maintainers = with stdenv.lib.maintainers; [ pmiddend ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

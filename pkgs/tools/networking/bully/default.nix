@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Lrs121/bully;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

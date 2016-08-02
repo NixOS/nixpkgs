@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://iptraf.seul.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Console-based network statistics utility for Linux";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

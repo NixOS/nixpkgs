@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     homepage = http://opendylan.org;
     description = "A multi-paradigm functional and object-oriented programming language";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

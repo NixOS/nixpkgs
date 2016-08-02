@@ -12,5 +12,6 @@ stdenv.mkDerivation {
     description = "Utility which reads and writes data across network connections";
     homepage = http://netcat.sourceforge.net/;
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }

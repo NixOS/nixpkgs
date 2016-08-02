@@ -53,5 +53,6 @@ stdenv.mkDerivation {
     homepage = http://www.mozilla.org/rhino/;
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
+    platforms = platforms.linux;
   };
 }

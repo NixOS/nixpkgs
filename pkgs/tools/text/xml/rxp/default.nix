@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "A validating XML parser written in C";
     homepage = http://www.cogsci.ed.ac.uk/~richard/rxp.html;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

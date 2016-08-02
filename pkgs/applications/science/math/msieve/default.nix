@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.publicDomain;
     homepage = http://msieve.sourceforge.net/;
     maintainers = [ stdenv.lib.maintainers.roconnor ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

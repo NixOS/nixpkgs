@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://gmic.eu/;
     license = licenses.cecill20;
     maintainers = [ maintainers.rycee ];
+    platforms = platforms.linux;
   };
 }

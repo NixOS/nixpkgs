@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://mhash.sourceforge.net;
     license = "LGPL";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

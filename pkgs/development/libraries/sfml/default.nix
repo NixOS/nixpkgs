@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.linux;
   };
 }

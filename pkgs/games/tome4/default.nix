@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Tales of Maj'eyal (rogue-like game)";
     maintainers = [ stdenv.lib.maintainers.chattered  ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

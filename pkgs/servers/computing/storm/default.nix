@@ -61,5 +61,6 @@ stdenv.mkDerivation rec {
     description = "Distributed realtime computation system";
     license = licenses.asl20;
     maintainers = with maintainers; [ edwtjo vizanto ];
+    platforms = with platforms; unix;
   };
 }

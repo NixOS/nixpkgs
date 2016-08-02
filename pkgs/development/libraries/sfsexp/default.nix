@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = "http://sexpr.sourceforge.net/";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
+    platforms = with platforms; unix;
   };
 }

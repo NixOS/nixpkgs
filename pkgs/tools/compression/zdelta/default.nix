@@ -10,5 +10,6 @@ stdenv.mkDerivation rec {
 
   meta = {
 	  homepage = http://cis.poly.edu/zdelta;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     description = "Flexible Linux input device translator, geared for gamepads";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
+    platforms = platforms.linux;
   };
 
 }

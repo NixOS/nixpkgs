@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
 
     maintainers = [ maintainers.gal_bolle ];
+    platforms = platforms.linux;
   };
 }

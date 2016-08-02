@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A high performance templating engine";
     homepage = http://ctpp.havoc.ru;
     maintiainers = with stdenv.lib.maintainers; [ robbinch ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

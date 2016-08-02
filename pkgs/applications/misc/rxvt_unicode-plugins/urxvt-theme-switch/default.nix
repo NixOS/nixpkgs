@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "";
     license = "CCBYNC";
     maintainers = with maintainers; [ garbas ];
+    platforms = with platforms; unix;
   };
 }

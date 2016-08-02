@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.flamingspork.com/projects/libeatmydata/;
     license = stdenv.lib.licenses.gpl3Plus;
     description = "Small LD_PRELOAD library to disable fsync and friends";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

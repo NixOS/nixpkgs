@@ -72,5 +72,6 @@ in
         Ogg/Vorbis, MP3, FLAC, Ogg/Speex and/or MPP/MP+ (Musepack)
         format, and tags them, all in one go.
       '';
+      platforms = stdenv.lib.platforms.linux;
     };
   }

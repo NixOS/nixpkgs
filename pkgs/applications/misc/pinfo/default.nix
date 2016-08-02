@@ -18,6 +18,7 @@ stdenv.mkDerivation {
     description = "A viewer for info files";
     homepage = https://alioth.debian.org/projects/pinfo/;
     license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 }
 

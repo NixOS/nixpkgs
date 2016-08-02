@@ -16,5 +16,6 @@ stdenv.mkDerivation {
 
   meta = opensp.meta // {
     description = "Compatibility wrapper for old programs looking for original sp programs";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

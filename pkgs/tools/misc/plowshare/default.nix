@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.aforemny ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
