@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
-    platform = platforms.all;
+    platforms = platforms.all;
     maintainers = with maintainers; [ wkennington ];
   };
 }
