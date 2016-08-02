@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, buildPerlPackage, perlPackages, makeWrapper, coreutils
+{ stdenv, lib, fetchurl, perl, perlPackages, makeWrapper, coreutils
 , notmuch }:
 
 stdenv.mkDerivation rec {
