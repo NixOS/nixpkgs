@@ -1,0 +1,578 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-emacs">
+
+  <title>Emacs</title>
+
+  <!--
+    Documentation contributors:
+      Damien Cassou @DamienCassou
+      Thomas Tuegel @ttuegel
+      Rodney Lorrimar @rvl
+  -->
+
+  <para>
+    <link xlink:href="http://www.gnu.org/software/emacs/">Emacs</link>
+    is an extensible, customizable, self-documenting real-time display
+    editor — and more. At its core is an interpreter for Emacs Lisp, a
+    dialect of the Lisp programming language with extensions to
+    support text editing.
+  </para>
+
+  <para>
+    Emacs runs within a graphical desktop environment using the X
+    Window System, but works equally well on a text terminal. Under
+    <productname>OS X</productname>, a "Mac port" edition is
+    available, which uses Apple's native GUI frameworks.
+  </para>
+
+  <para>
+    <productname>Nixpkgs</productname> provides a superior environment
+    for running <application>Emacs</application>. It's simple to
+    create custom builds by overriding the default packages. Chaotic
+    collections of Emacs Lisp code and extensions can be brought under
+    control using declarative package
+    management. <productname>NixOS</productname> even provides a
+    <command>systemd</command> user service for automatically
+    starting the Emacs daemon.
+  </para>
+
+  <section>
+    <title>Installing <application>Emacs</application></title>
+
+    <para>
+      Emacs can installed in the normal way for Nix (see <xref
+      linkend="sec-package-management" />). In addition, a NixOS
+      <emphasis>service</emphasis> can be enabled.
+    </para>
+
+    <section>
+      <title>The Different Releases of Emacs</title>
+
+      <para>
+        <productname>Nixpkgs</productname> defines several basic Emacs
+        packages. The following are attributes belonging to the
+        <varname>pkgs</varname> set:
+
+        <variablelist>
+          <varlistentry>
+            <term><varname>emacs</varname></term>
+            <term><varname>emacs24</varname></term>
+            <listitem>
+              <para>
+                The latest stable version of Emacs 24 using the <link
+                xlink:href="http://www.gtk.org">GTK+ 2</link> widget
+                toolkit.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><varname>emacs24-nox</varname></term>
+            <listitem>
+              <para>
+                Emacs 24 built without any dependency on X11
+                libraries.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><varname>emacs24Macport</varname></term>
+            <listitem>
+              <para>
+                Emacs 24 with the "Mac port" patches, providing a more
+                native look and feel under OS X.
+              </para>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><varname>emacs25pre</varname></term>
+            <listitem>
+              <para>
+                A pretest version of what will become the first
+                version of Emacs 25.
+              </para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </para>
+
+      <para>
+        If those aren't suitable, then the following imitation Emacs
+        editors are also available in Nixpkgs:
+        <link xlink:href="https://www.gnu.org/software/zile/">Zile</link>,
+        <link xlink:href="http://homepage.boetes.org/software/mg/">mg</link>,
+        <link xlink:href="http://yi-editor.github.io/">Yi</link>.
+      </para>
+
+    </section>
+    <section>
+      <title>Adding Packages to Emacs</title>
+      <para>
+        Emacs includes an entire ecosystem of functionality beyond
+        text editing, including a project planner, mail and news
+        reader, debugger interface, calendar, and more.
+      </para>
+
+      <para>
+        Most extensions are gotten with the Emacs packaging system
+        (<filename>package.el</filename>) from <link
+        xlink:href="https://elpa.gnu.org/">Emacs Lisp Package Archive
+        (<acronym>ELPA</acronym>)</link>,
+        <link xlink:href="https://melpa.org/"><acronym>MELPA</acronym></link>,
+        <link xlink:href="https://stable.melpa.org/">MELPA Stable</link>,
+        and <link xlink:href="http://orgmode.org/elpa.html">Org ELPA</link>.
+        Nixpkgs is regularly updated to mirror all these archives.
+      </para>
+
+      <para>
+        Under NixOS, you can continue to use
+        <function>package-list-packages</function> and
+        <function>package-install</function> to install packages. You
+        can also declare the set of Emacs packages you need using the
+        derivations from Nixpkgs. The rest of this section discusses
+        declarative installation of Emacs packages through nixpkgs.
+      </para>
+
+      <note>
+        <para>
+          This documentation describes the new Emacs packages
+          framework in NixOS 16.03
+          (<varname>emacsPackagesNg</varname>) which should not be
+          confused with the previous and deprecated framework
+          (<varname>emacs24Packages</varname>).
+        </para>
+      </note>
+
+      <para>
+        The first step to declare the list of packages you want in
+        your Emacs installation is to create a dedicated
+        derivation. This can be done in a dedicated
+        <filename>emacs.nix</filename> file such as:
+
+      <example xml:id="ex-emacsNix">
+        <title>Nix expression to build Emacs with packages (<filename>emacs.nix</filename>)</title>
+        <programlisting language="nix">
+/*
+This is a nix expression to build Emacs and some Emacs packages I like
+from source on any distribution where Nix is installed. This will install
+all the dependencies from the nixpkgs repository and build the binary files
+without interfering with the host distribution.
+
+To build the project, type the following from the current directory:
+
+$ nix-build emacs.nix
+
+To run the newly compiled executable:
+
+$ ./result/bin/emacs
+*/
+{ pkgs ? import &lt;nixpkgs&gt; {} }: <co xml:id="ex-emacsNix-1" />
+
+let
+  myEmacs = pkgs.emacs; <co xml:id="ex-emacsNix-2" />
+  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages; <co xml:id="ex-emacsNix-3" />
+in
+  emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ <co xml:id="ex-emacsNix-4" />
+    magit          # ; Integrate git &lt;C-x g&gt;
+    zerodark-theme # ; Nicolas' theme
+  ]) ++ (with epkgs.melpaPackages; [ <co xml:id="ex-emacsNix-5" />
+    undo-tree      # ; &lt;C-x u&gt; to show the undo tree
+    zoom-frm       # ; increase/decrease font size for all buffers %lt;C-x C-+&gt;
+  ]) ++ (with epkgs.elpaPackages; [ <co xml:id="ex-emacsNix-6" />
+    auctex         # ; LaTeX mode
+    beacon         # ; highlight my cursor when scrolling
+    nameless       # ; hide current package name everywhere in elisp code
+  ]) ++ [
+    pkgs.notmuch   # From main packages set <co xml:id="ex-emacsNix-7" />
+  ])
+</programlisting>
+      </example>
+
+      <calloutlist>
+        <callout arearefs="ex-emacsNix-1">
+          <para>
+            The first non-comment line in this file
+            (<literal>{ pkgs ? ... }</literal>)
+            indicates that the whole file represents a function.
+          </para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-2">
+          <para>
+            The <varname>let</varname> expression below defines a
+            <varname>myEmacs</varname> binding pointing to the current
+            stable version of Emacs. This binding is here to separate the
+            choice of the Emacs binary from the specification of the
+            required packages.
+          </para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-3">
+          <para>
+            This generates an <varname>emacsWithPackages</varname>
+            function. It takes a single argument: a function from a
+            package set to a list of packages (the packages that will
+            be available in Emacs).
+          </para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-4">
+          <para>
+            The rest of the file specifies the list of packages to
+            install. In the example, two packages
+            (<varname>magit</varname> and
+            <varname>zerodark-theme</varname>) are taken from MELPA
+            stable.
+          </para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-5">
+          <para>
+            Two packages (<varname>undo-tree</varname> and
+            <varname>zoom-frm</varname>) are taken from MELPA.
+          </para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-6">
+          <para>Three packages are taken from GNU ELPA.</para>
+        </callout>
+
+        <callout arearefs="ex-emacsNix-7">
+          <para>
+            <varname>notmuch</varname> is taken from a nixpkgs derivation
+            which contains an Emacs mode.
+          </para>
+        </callout>
+
+      </calloutlist>
+      </para>
+
+      <para>
+        The result of this configuration will be an
+        <command>emacs</command> command which launches Emacs with all
+        of your chosen packages in the <varname>load-path</varname>.
+      </para>
+
+      <para>
+        You can check that it works by executing this in a terminal:
+
+<screen>
+$ nix-build emacs.nix
+$ ./result/bin/emacs -q
+</screen>
+
+        and then typing <literal>M-x package-initialize</literal>.
+        Check that you can use all the packages you want in this
+        Emacs instance. For example, try switching to the zerodark
+        theme through
+        <literal>M-x load-theme &lt;RET&gt; zerodark &lt;RET&gt; y</literal>.
+      </para>
+
+      <tip>
+        <para>
+          A few popular extensions worth checking out are: auctex,
+          company, edit-server, flycheck, helm, iedit, magit,
+          multiple-cursors, projectile, and yasnippet.
+        </para>
+      </tip>
+
+      <para>
+        The list of available packages in the various ELPA
+        repositories can be seen with the following commands:
+        <example>
+          <title>Querying Emacs packages</title>
+          <programlisting><![CDATA[
+nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.elpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaStablePackages
+nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.orgPackages
+]]></programlisting>
+        </example>
+      </para>
+
+      <para>
+        If you are on NixOS, you can install this particular Emacs for
+        all users by adding it to the list of system packages
+        (see <xref linkend="sec-declarative-package-mgmt" />). Simply
+        modify your file <filename>configuration.nix</filename> to
+        make it contain:
+        <example>
+          <title>Custom Emacs in <filename>configuration.nix</filename></title>
+          <programlisting><![CDATA[
+{
+ environment.systemPackages = [
+   # [...]
+   (import /path/to/emacs.nix { inherit pkgs; })
+  ];
+}
+]]></programlisting>
+        </example>
+      </para>
+
+      <para>
+        In this case, the next <command>nixos-rebuild switch</command>
+        will take care of adding your <command>emacs</command> to the
+        <varname>PATH</varname> environment variable
+        (see <xref linkend="sec-changing-config" />).
+      </para>
+
+<!-- fixme: i think the following is better done with config.nix
+https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
+-->
+      <para>
+        If you are not on NixOS or want to install this particular
+        Emacs only for yourself, you can do so by adding it to your
+        <filename>~/.nixpkgs/config.nix</filename>
+        (see <link xlink:href="http://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides">Nixpkgs manual</link>):
+        <example>
+          <title>Custom Emacs in <filename>~/.nixpkgs/system.nix</filename></title>
+          <programlisting><![CDATA[
+{
+  packageOverrides = super: let self = super.pkgs; in {
+    myemacs = import /path/to/emacs.nix { pkgs = self; };
+  };
+}
+]]></programlisting>
+        </example>
+      </para>
+
+      <para>
+        In this case, the next
+        <literal>nix-env -f '&lt;nixpkgs&gt;' -iA myemacs</literal>
+        will take care of adding your emacs to the
+        <varname>PATH</varname> environment variable.
+      </para>
+    </section>
+
+    <section>
+      <title>Advanced Emacs Configuration</title>
+
+      <para>
+        If you want, you can tweak the Emacs package itself from your
+        <filename>emacs.nix</filename>. For example, if you want to
+        have a GTK+3-based Emacs instead of the default GTK+2-based
+        binary and remove the automatically generated
+        <filename>emacs.desktop</filename> (useful is you only use
+        <command>emacsclient</command>), you can change your file
+        <filename>emacs.nix</filename> in this way:
+      </para>
+
+      <example xml:id="ex-emacsGtk3Nix">
+        <title>Custom Emacs build</title>
+        <programlisting><![CDATA[
+{ pkgs ? import <nixpkgs> {} }:
+let
+  myEmacs = pkgs.lib.overrideDerivation (pkgs.emacs.override {
+    # Use gtk3 instead of the default gtk2
+    withGTK3 = true;
+    withGTK2 = false;
+  }) (attrs: {
+    # I don't want emacs.desktop file because I only use
+    # emacsclient.
+    postInstall = attrs.postInstall + ''
+      rm $out/share/applications/emacs.desktop
+    '';
+  });
+in [...]
+]]></programlisting>
+      </example>
+
+      <para>
+        After building this file as shown in <xref linkend="ex-emacsNix" />,
+        you will get an GTK3-based Emacs binary pre-loaded with your
+        favorite packages.
+      </para>
+    </section>
+  </section>
+
+<section>
+  <title>Running Emacs as a Service</title>
+  <para>
+    <productname>NixOS</productname> provides an optional
+    <command>systemd</command> service which launches
+    <link xlink:href="https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html">
+      Emacs daemon
+    </link>
+    with the user's login session.
+  </para>
+
+  <para>
+    <emphasis>Source:</emphasis>
+    <filename>modules/services/editors/emacs.nix</filename>
+  </para>
+
+  <section>
+    <title>Enabling the Service</title>
+
+    <para>
+      To install and enable the <command>systemd</command>
+      user service for Emacs daemon, add the following to your
+      <filename>configuration.nix</filename>:
+
+      <programlisting><![CDATA[
+services.emacs.enable = true;
+services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
+]]></programlisting>
+    </para>
+
+    <para>
+      The <varname>services.emacs.package</varname> option allows a
+      custom derivation to be used, for example, one created by
+      <function>emacsWithPackages</function>.
+    </para>
+
+    <para>
+      Ensure that the Emacs server is enabled for your user's Emacs
+      configuration, either by customizing the
+      <varname>server-mode</varname> variable, or by adding
+      <literal>(server-start)</literal> to
+      <filename>~/.emacs.d/init.el</filename>.
+    </para>
+
+    <para>
+      To start the daemon, execute the following:
+
+<screen>
+$ nixos-rebuild switch  # to activate the new configuration.nix
+$ systemctl --user daemon-reload        # to force systemd reload
+$ systemctl --user start emacs.service  # to start the Emacs daemon
+</screen>
+
+      The server should now be ready to serve Emacs clients.
+    </para>
+
+  </section>
+
+  <section>
+    <title>Starting the client</title>
+    <para>
+      Ensure that the emacs server is enabled, either by customizing
+      the <varname>server-mode</varname> variable, or by adding
+      <literal>(server-start)</literal> to
+      <filename>~/.emacs</filename>.
+    </para>
+
+    <para>
+      To connect to the emacs daemon, run one of the following:
+      <programlisting><![CDATA[
+emacsclient FILENAME
+emacsclient --create-frame  # opens a new frame (window)
+emacsclient --create-frame --tty  # opens a new frame on the current terminal
+]]></programlisting>
+    </para>
+  </section>
+
+  <section>
+    <title>Configuring the <varname>EDITOR</varname> variable</title>
+    <!--<title><command>emacsclient</command> as the Default Editor</title>-->
+
+    <para>
+      If <varname>services.emacs.defaultEditor</varname> is
+      <literal>true</literal>, the <varname>EDITOR</varname> variable
+      will be set to a wrapper script which launches
+      <command>emacsclient</command>.
+    </para>
+
+    <para>
+      Any setting of <varname>EDITOR</varname> in the shell config
+      files will override
+      <varname>services.emacs.defaultEditor</varname>.
+      To make sure <varname>EDITOR</varname> refers to the Emacs
+      wrapper script, remove any existing <varname>EDITOR</varname>
+      assignment from <filename>.profile</filename>,
+      <filename>.bashrc</filename>, <filename>.zshenv</filename> or
+      any other shell config file.
+    </para>
+
+    <para>
+      If you have formed certain bad habits when editing files,
+      these can be corrected with a shell alias to the wrapper
+      script:
+      <programlisting>alias vi=$EDITOR</programlisting>
+    </para>
+  </section>
+
+  <section>
+    <title>Per-User Enabling of the Service</title>
+
+    <para>
+      In general, <command>systemd</command> user services
+      are globally enabled by symlinks in
+      <filename>/etc/systemd/user</filename>. In the case where
+      Emacs daemon is not wanted for all users, it is possible to
+      install the service but not globally enable it:
+
+      <programlisting><![CDATA[
+services.emacs.enable = false;
+services.emacs.install = true;
+]]></programlisting>
+    </para>
+
+    <para>
+      To enable the <command>systemd</command> user service for just
+      the currently logged in user, run:
+
+      <programlisting>systemctl --user enable emacs</programlisting>
+
+      This will add the symlink
+      <filename>~/.config/systemd/user/emacs.service</filename>.
+    </para>
+  </section>
+</section>
+
+<section>
+  <title>Configuring Emacs</title>
+
+  <para>
+    The Emacs init file should be changed to load the extension
+    packages at startup:
+
+    <example>
+      <title>Package initialization in <filename>.emacs</filename></title>
+      <programlisting><![CDATA[
+(require 'package)
+
+;; optional. makes unpure packages archives unavailable
+(setq package-archives nil)
+
+(setq package-enable-at-startup nil)
+(package-initialize)
+]]></programlisting>
+    </example>
+  </para>
+
+  <para>
+    After the declarative emacs package configuration has been
+    tested, previously downloaded packages can be cleaned up by
+    removing <filename>~/.emacs.d/elpa</filename> (do make a backup
+    first, in case you forgot a package).
+  </para>
+
+  <!--
+      todo: is it worth documenting customizations for
+      server-switch-hook, server-done-hook?
+  -->
+
+  <section>
+    <title>A Major Mode for Nix Expressions</title>
+
+    <para>
+      Of interest may be <varname>melpaPackages.nix-mode</varname>,
+      which provides syntax highlighting for the Nix language. This is
+      particularly convenient if you regularly edit Nix files.
+    </para>
+  </section>
+
+  <section>
+    <title>Accessing man pages</title>
+    <para>
+      You can use <function>woman</function> to get completion of all
+      available man pages. For example, type <literal>M-x woman
+      &lt;RET&gt; nixos-rebuild &lt;RET&gt;.</literal>
+    </para>
+  </section>
+</section>
+
+</chapter>
