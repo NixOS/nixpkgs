@@ -13073,6 +13073,8 @@ in
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
+  puddletag = callPackage ../applications/audio/puddletag { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
