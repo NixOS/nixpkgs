@@ -244,6 +244,10 @@ in
     outputs = [ "dev" "out" ]; # mainly to avoid propagation
   };
 
+  libpciaccess = attrs: attrs // {
+    meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
+  };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
