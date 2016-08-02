@@ -30,4 +30,3 @@ stdenv.mkDerivation {
   postInstall = stdenv.lib.optional (!stdenv.isDarwin) "chmod +x $out/lib/*.so.*"; # ??
 
 }
-

@@ -7,4 +7,3 @@ stdenv.mkDerivation {
     sha256 = "5e65e1e5deacd0cde489900dbf54c6c2ee2ebc818199e720dbad685d87abda3d";
   };
 }
-

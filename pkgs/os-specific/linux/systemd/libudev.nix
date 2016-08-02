@@ -16,4 +16,3 @@ stdenv.mkDerivation {
     sed "/^includedir=/cincludedir=$dev/include" -i "$dev"/lib/pkgconfig/*.pc
   '';
 }
-

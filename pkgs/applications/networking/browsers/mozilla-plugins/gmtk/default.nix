@@ -10,4 +10,3 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ intltool pkgconfig gtk GConf alsaLib ];
 }
-

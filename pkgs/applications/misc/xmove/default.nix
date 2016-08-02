@@ -12,4 +12,3 @@ stdenv.mkDerivation {
 
   buildInputs = [libX11 libXi imake xauth libXau];
 }
-
