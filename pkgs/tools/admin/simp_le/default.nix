@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, fetchpatch, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "simp_le-2016-02-06";
@@ -9,6 +9,13 @@ pythonPackages.buildPythonApplication rec {
     rev = "8f258bc098a84b7a20c2732536d0740244d814f7";
     sha256 = "1r2c31bhj91n3cjyf01spx52vkqxi5475zzkc9s1aliy3fs3lc4r";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/kuba/simp_le/commit/4bc788fdd611c4118c3f86b5f546779723aca5a7.patch";
+      sha256 = "0036p11qn3plydv5s5z6i28r6ihy1ipjl0y8la0izpkiq273byfc";
+    })
+  ];
 
   propagatedBuildInputs = with pythonPackages; [ acme ];
 
