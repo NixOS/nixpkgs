@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "A fork of libcurl used by GNUnet";
     homepage    = https://gnunet.org/gnurl;
     maintainers = with maintainers; [ falsifian vrthra ];
-    hydraPlatforms = platforms.linux;
+    platforms = platforms.linux;
   };
 }

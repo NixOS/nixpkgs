@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "An advanced computer algebra system";
     license = stdenv.lib.licenses.bsd3;
 
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.sprock ];
   };
 }

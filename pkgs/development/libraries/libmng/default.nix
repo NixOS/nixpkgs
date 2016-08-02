@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.libmng.com;
     license = licenses.zlib;
     maintainers = with maintainers; [ marcweber urkud ];
-    hydraPlatforms = platforms.linux;
+    platforms = platforms.linux;
   };
 }
