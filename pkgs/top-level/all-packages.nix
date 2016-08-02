@@ -14122,6 +14122,8 @@ in
     sphinx = pythonPackages.sphinx;
   };
 
+  notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
+
   # Open Stack
   nova = callPackage ../applications/virtualization/openstack/nova.nix { };
   keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
