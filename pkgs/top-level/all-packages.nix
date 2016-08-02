@@ -3311,6 +3311,8 @@ in
 
   replace = callPackage ../tools/text/replace { };
 
+  reckon = callPackage ../tools/text/reckon { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
