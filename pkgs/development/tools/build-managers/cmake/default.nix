@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
         --subst-var-by glibc_bin ${getBin glibc} \
         --subst-var-by glibc_dev ${getDev glibc} \
         --subst-var-by glibc_lib ${getLib glibc}
+      substituteInPlace Modules/FindCxxTest.cmake \
+        --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
     '';
   configureFlags =
     [ "--docdir=share/doc/${name}"
