@@ -1,14 +1,15 @@
-{ stdenv, fetchzip, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
+{ stdenv, fetchFromGitHub, cmake, qhull, flann, boost, vtk, eigen, pkgconfig, qt4
 , libusb1, libpcap, libXt, libpng, Cocoa, AGL, cf-private
 }:
 
 stdenv.mkDerivation rec {
-  name = "pcl-1.7.2";
+  name = "pcl-1.8.0";
 
-  src = fetchzip {
-    name = name + "-src";
-    url = "https://github.com/PointCloudLibrary/pcl/archive/${name}.tar.gz";
-    sha256 = "0sm19p6wcls2d9l0vi5fgwqp7l372nh3g7bdin42w31zr8dmz8h8";
+  src = fetchFromGitHub {
+    owner = "PointCloudLibrary";
+    repo = "pcl";
+    rev = name;
+    sha256 = "1pki4y7mc2dryxc8wa7rs4hg74qab80rpy90jnw3j8fzf09kxcll";
   };
 
   enableParallelBuilding = true;
