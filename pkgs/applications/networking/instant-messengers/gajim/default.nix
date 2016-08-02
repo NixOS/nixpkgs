@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
 , ldns, pythonDBus, pythonPackages
 
-, enableJingle ? true, farstream ? null, gst_plugins_bad ? null
+, enableJingle ? true, farstream ? null, gst-plugins-bad ? null
 ,                      libnice ? null
 , enableE2E ? true
 , enableRST ? true
@@ -10,7 +10,7 @@
 , extraPythonPackages ? pkgs: []
 }:
 
-assert enableJingle -> farstream != null && gst_plugins_bad != null
+assert enableJingle -> farstream != null && gst-plugins-bad != null
                     && libnice != null;
 assert enableE2E -> pythonPackages.pycrypto != null;
 assert enableRST -> pythonPackages.docutils != null;
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     pythonPackages.pyxdg
     pythonPackages.nbxmpp
     pythonPackages.pyopenssl pythonDBus
-  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
+  ] ++ optionals enableJingle [ farstream gst-plugins-bad libnice ]
     ++ optional enableE2E pythonPackages.pycrypto
     ++ optional enableRST pythonPackages.docutils
     ++ optional enableNotifications pythonPackages.notify

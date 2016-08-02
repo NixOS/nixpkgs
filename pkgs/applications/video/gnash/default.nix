@@ -1,6 +1,5 @@
 { stdenv, fetchurl, fetchpatch
-, SDL, SDL_mixer, gstreamer, gst_plugins_base, gst_plugins_good
-, gst_ffmpeg, speex
+, SDL, SDL_mixer, gst_all, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
 , glib, gtk, gtkglext, pangox_compat, xlibsWrapper, ming, dejagnu, python, perl
@@ -50,9 +49,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # XXX: KDE is supported as well so we could make it available optionally.
-  buildInputs = [
-    gettext xlibsWrapper SDL SDL_mixer gstreamer gst_plugins_base gst_plugins_good
-    gst_ffmpeg speex libtool
+  buildInputs = with gst_all; [
+    gettext xlibsWrapper SDL SDL_mixer gstreamer gst-plugins-base gst-plugins-good
+    gst-ffmpeg speex libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk gtkglext pangox_compat
     xulrunner
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
         ming dejagnu python perl haxe swftools
       ]);
 
-  preConfigure =
+  preConfigure = with gst_all;
     '' configureFlags="                                         \
          --with-sdl-incl=${SDL.dev}/include/SDL                     \
          --with-npapi-plugindir=$out/plugins                    \
@@ -71,10 +70,10 @@ stdenv.mkDerivation rec {
          --without-gconf
          --enable-gui=gtk"
 
-       # In `libmedia', Gnash compiles with "-I$gst_plugins_base/include",
-       # whereas it really needs "-I$gst_plugins_base/include/gstreamer-0.10".
+       # In `libmedia', Gnash compiles with "-I${gst-plugins-base}/include",
+       # whereas it really needs "-I${gst-plugins-base}/include/gstreamer-0.10".
        # Work around this using GCC's $CPATH variable.
-       export CPATH="${gst_plugins_base}/include/gstreamer-0.10:${gst_plugins_good}/include/gstreamer-0.10"
+       export CPATH="${gst-plugins-base}/include/gstreamer-0.10:${gst-plugins-good}/include/gstreamer-0.10"
        echo "\$CPATH set to \`$CPATH'"
 
        echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"

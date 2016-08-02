@@ -11,8 +11,7 @@
 , gdk_pixbuf
 , glib
 , glibc
-, gst_plugins_base
-, gstreamer
+, gst_all
 , gtk2
 , gtk3
 , libX11
@@ -83,8 +82,8 @@ stdenv.mkDerivation {
       gdk_pixbuf
       glib
       glibc
-      gst_plugins_base
-      gstreamer
+      gst_all.gst-plugins-base
+      gst_all.gstreamer
       gtk2
       gtk3
       libX11

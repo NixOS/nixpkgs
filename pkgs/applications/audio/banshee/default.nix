@@ -1,5 +1,4 @@
-{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gstreamer, gst_plugins_base
-, gst_plugins_good, gst_plugins_bad, gst_plugins_ugly, gst_ffmpeg, glib
+{ pkgs, stdenv, lib, fetchurl, intltool, pkgconfig, gst_all, glib
 , mono, mono-addins, dbus-sharp-1_0, dbus-sharp-glib-1_0, notify-sharp, gtk-sharp-2_0
 , boo, gdata-sharp, taglib-sharp, sqlite, gnome-sharp, gconf, gtk-sharp-beans, gio-sharp
 , libmtp, libgpod, mono-zeroconf }:
@@ -16,9 +15,9 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   nativeBuildInputs = [ pkgconfig intltool ];
-  buildInputs = [
-    gtk-sharp-2_0.gtk gstreamer gst_plugins_base gst_plugins_good
-    gst_plugins_bad gst_plugins_ugly gst_ffmpeg
+  buildInputs = with gst_all; [
+    gtk-sharp-2_0.gtk gstreamer gst-plugins-base gst-plugins-good
+    gst-plugins-bad gst-plugins-ugly gst-ffmpeg
     mono dbus-sharp-1_0 dbus-sharp-glib-1_0 mono-addins notify-sharp
     gtk-sharp-2_0 boo gdata-sharp taglib-sharp sqlite gnome-sharp gconf gtk-sharp-beans
     gio-sharp libmtp libgpod mono-zeroconf
@@ -33,7 +32,8 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = let
-    ldLibraryPath = lib.makeLibraryPath [ gtk-sharp-2_0.gtk gtk-sharp-2_0 sqlite gconf glib gstreamer ];
+    ldLibraryPath = lib.makeLibraryPath [ gtk-sharp-2_0.gtk gtk-sharp-2_0
+    sqlite gconf glib gst_all.gstreamer ];
 
     monoGACPrefix = lib.concatStringsSep ":" [
       mono dbus-sharp-1_0 dbus-sharp-glib-1_0 mono-addins notify-sharp gtk-sharp-2_0

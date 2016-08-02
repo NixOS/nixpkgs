@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, firefox-unwrapped
+, cairo, gst_all, icu, firefox-unwrapped
 , debugBuild ? false
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = firefox-unwrapped.src;
 
-  buildInputs =
+  buildInputs = with gst_all;
     [ pkgconfig gtk perl zip libIDL libjpeg zlib bzip2
       python dbus dbus_glib pango freetype fontconfig xorg.libXi
       xorg.libX11 xorg.libXrender xorg.libXft xorg.libXt file
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       xorg.libXScrnSaver xorg.scrnsaverproto pysqlite
       xorg.libXext xorg.xextproto sqlite unzip makeWrapper
       hunspell libevent libstartup_notification libvpx cairo
-      gstreamer gst_plugins_base icu
+      gstreamer gst-plugins-base icu
     ];
 
   configureFlags =

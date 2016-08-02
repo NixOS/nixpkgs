@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, cmake, gettext, gstreamer, gst_plugins_base
+{ stdenv, fetchurl, boost, cmake, gettext, gst_all
 , liblastfm, qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist
 , usbmuxd, libmtp, gvfs, libcdio, libspotify, protobuf, qca2, pkgconfig
 , sparsehash, config, makeWrapper, runCommand, gst_plugins }:
@@ -21,13 +21,13 @@ let
     ./clementine-spotify-blob.patch
   ];
 
-  buildInputs = [
+  buildInputs = with gst_all; [
     boost
     cmake
     fftw
     gettext
     glew
-    gst_plugins_base
+    gst-plugins-base
     gstreamer
     gvfs
     libcdio

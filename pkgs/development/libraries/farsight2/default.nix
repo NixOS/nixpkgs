@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst_plugins_base
-, pygobject, gst_python, gupnp_igd }:
+{ stdenv, fetchurl, libnice, pkgconfig, python, gst_all
+, pygobject, gupnp_igd }:
 
 stdenv.mkDerivation rec {
   name = "farsight2-0.0.31";
@@ -9,11 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "16qz4x14rdycm4nrn5wx6k2y22fzrazsbmihrxdwafx9cyf23kjm";
   };
 
-  buildInputs = [ libnice python pygobject gst_python gupnp_igd ];
+  buildInputs = [ libnice python pygobject gst_all.gst-python gupnp_igd ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base ];
+  propagatedBuildInputs = with gst_all; [ gstreamer gst-plugins-base ];
 
   meta = {
     homepage = http://farsight.freedesktop.org/wiki/;

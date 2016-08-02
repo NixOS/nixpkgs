@@ -3,7 +3,7 @@
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 , hunspell, libevent, libstartup_notification, libvpx
-, cairo, gstreamer, gst_plugins_base, icu, libpng, jemalloc, libpulseaudio
+, cairo, gst_all, icu, libpng, jemalloc, libpulseaudio
 , autoconf213, which
 , enableGTK3 ? false
 , debugBuild ? false
@@ -41,7 +41,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3
-    ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst_plugins_base ];
+    ++ lib.optionals (!passthru.ffmpegSupport) (with gst_all; [ gstreamer
+    gst-plugins-base ]);
 
   nativeBuildInputs = [autoconf213 which];
 

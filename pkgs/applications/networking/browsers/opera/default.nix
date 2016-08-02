@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib, libX11, libXext, libSM, libICE, libXt
 , freetype, fontconfig, libXft, libXrender, libxcb, expat, libXau, libXdmcp
 , libuuid, cups, xz
-, gstreamer, gst_plugins_base, libxml2
+, gst_all, libxml2
 , gtkSupport ? true, glib, gtk, pango, gdk_pixbuf, cairo, atk
 , kdeSupport ? false, qt4, kdelibs
 }:
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
-      libXft freetype fontconfig libXrender libuuid expat
-      gstreamer libxml2 gst_plugins_base
+    with gst_all; [ stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE
+      libXft freetype fontconfig libXrender libuuid expat libxml2
+      gstreamer gst-plugins-base
     ]
     ++ stdenv.lib.optionals gtkSupport [ glib gtk pango gdk_pixbuf cairo atk ]
     ++ stdenv.lib.optionals kdeSupport [ kdelibs qt4 ];
