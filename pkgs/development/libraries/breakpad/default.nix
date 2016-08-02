@@ -21,4 +21,8 @@ stdenv.mkDerivation {
     cp -r $breakpad_lss src/third_party/lss
     chmod +w -R src/third_party/lss
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

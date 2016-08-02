@@ -232,4 +232,8 @@ stdenv.mkDerivation rec {
   '';
   
   buildInputs = [ unzip makeWrapper ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

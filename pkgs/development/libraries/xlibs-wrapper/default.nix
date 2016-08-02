@@ -14,4 +14,8 @@ stdenv.mkDerivation {
 } // {
   # For compatability with XFree86.
   buildClientLibs = true;
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

@@ -56,4 +56,7 @@ stdenv.mkDerivation rec {
         " *args)"
   '';
 
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

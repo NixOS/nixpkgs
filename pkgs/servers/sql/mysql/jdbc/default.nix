@@ -10,4 +10,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ unzip ant ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

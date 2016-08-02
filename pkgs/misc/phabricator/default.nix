@@ -25,4 +25,8 @@ stdenv.mkDerivation rec {
     cp -R ${srcArcanist} $out/arcanist
     cp -R ${srcPhabricator} $out/phabricator
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

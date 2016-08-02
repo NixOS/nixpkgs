@@ -31,4 +31,8 @@ stdenv.mkDerivation rec {
       . $out/Library/GNUstep/Makefiles/GNUstep.sh
     EOF
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

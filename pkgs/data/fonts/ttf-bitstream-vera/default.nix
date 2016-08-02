@@ -15,4 +15,8 @@ stdenv.mkDerivation {
     mkdir -p $fontDir
     cp *.ttf $fontDir
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }
