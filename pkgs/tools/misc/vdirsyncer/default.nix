@@ -3,12 +3,12 @@
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
 pythonPackages.buildPythonApplication rec {
-  version = "0.11.2";
+  version = "0.11.3";
   name = "vdirsyncer-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/v/vdirsyncer/${name}.tar.gz";
-    sha256 = "15isw2jhjfxi213wdj9d8mwq2m58k8bwf831qnxrjcz7j7bwy7mj";
+    sha256 = "10majl58vdpxgbddjqgwblvl7akvvr4c2c8iaxnf3kgyh01jq6k9";
   };
 
   propagatedBuildInputs = with pythonPackages; [

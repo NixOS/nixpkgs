@@ -111,8 +111,8 @@ stdenv.mkDerivation {
     tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
     executable = "python3.4m";
-    buildEnv = callPackage ../wrapper.nix { python = self; };
-    withPackages = import ../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
+    buildEnv = callPackage ../../wrapper.nix { python = self; };
+    withPackages = import ../../with-packages.nix { inherit buildEnv; pythonPackages = python34Packages; };
     isPy3 = true;
     isPy34 = true;
     is_py3k = true;  # deprecated

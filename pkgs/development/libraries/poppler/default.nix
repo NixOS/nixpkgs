@@ -1,6 +1,8 @@
 { stdenv, lib, fetchurl, fetchpatch, pkgconfig, libiconv, libintlOrEmpty
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
-, minimal ? false, qt4Support ? false, qt4 ? null, qt5Support ? false, qtbase ? null
+, minimal ? false
+, qt4Support ? false, qt4 ? null
+, qt5Support ? false, qtbase ? null
 , utils ? false, suffix ? "glib"
 }:
 
@@ -30,6 +32,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libiconv ] ++ libintlOrEmpty;
 
   NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+
+  # Any package depending on Qt >= 5.7 must build using the C++11 standard.
+  CXXFLAGS = lib.optional qt5Support "-std=c++11";
 
   configureFlags = with lib;
     [

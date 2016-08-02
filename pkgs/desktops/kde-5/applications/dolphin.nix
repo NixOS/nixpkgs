@@ -4,7 +4,7 @@
   baloo, baloo-widgets, dolphin-plugins, kactivities, kbookmarks, kcmutils,
   kcompletion, kconfig, kcoreaddons, kdelibs4support, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
-  kparts, ktexteditor, kwindowsystem, phonon, solid
+  konsole, kparts, ktexteditor, kwindowsystem, phonon, solid
 }:
 
 let
@@ -27,5 +27,5 @@ in
 kdeWrapper unwrapped
 {
   targets = [ "bin/dolphin" ];
-  paths = [ dolphin-plugins ];
+  paths = [ dolphin-plugins konsole.unwrapped ];
 }

@@ -44,12 +44,12 @@ rec {
             packedRefsName = toString path + "/packed-refs";
         in if lib.pathExists fileName
            then
-             let fileContent = readFile fileName;
+             let fileContent = lib.fileContents fileName;
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
-                 matchRef    = match "^ref: (.*)\n$" fileContent;
+                 matchRef    = match "^ref: (.*)$" fileContent;
              in if   isNull matchRef
-                then lib.removeSuffix "\n" fileContent
+                then fileContent
                 else readCommitFromFile path (lib.head matchRef)
            # Sometimes, the file isn't there at all and has been packed away in the
            # packed-refs file, so we have to grep through it:

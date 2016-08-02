@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "dnscrypt-proxy-${version}";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchurl {
     url = "https://download.dnscrypt.org/dnscrypt-proxy/${name}.tar.bz2";
-    sha256 = "16lif3qhyfjpgg54vjlwpslxk90akmbhlpnn1szxm628bmpw6nl9";
+    sha256 = "1qw2nib0d5ia8581lbdnjxgn9c7pf2qw8vhpnnh1wjcjj3gpgbqx";
   };
 
   configureFlags = optional stdenv.isLinux "--with-systemd";

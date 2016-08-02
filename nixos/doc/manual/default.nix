@@ -122,7 +122,7 @@ let
       <targetset>
         <targetsetinfo>
             Allows for cross-referencing olinks between the manpages
-            and the HTML/PDF manuals.
+            and manual.
         </targetsetinfo>
 
         <document targetdoc="manual">&manualtargets;</document>
@@ -221,34 +221,14 @@ in rec {
       mkdir -p $dst/epub/OEBPS/images/callouts
       cp -r ${docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/epub/OEBPS/images/callouts
       echo "application/epub+zip" > mimetype
-      zip -0Xq  "$dst/NixOS Manual - NixOS community.epub" mimetype
-      zip -Xr9D "$dst/NixOS Manual - NixOS community.epub" $dst/epub/*
+      manual="$dst/nixos-manual.epub"
+      zip -0Xq "$manual" mimetype
+      cd $dst/epub && zip -Xr9D "$manual" *
+
+      rm -rf $dst/epub
 
       mkdir -p $out/nix-support
-      echo "doc-epub manual $dst/NixOS Manual - NixOS community.epub" >> $out/nix-support/hydra-build-products
-    '';
-  };
-
-
-  manualPDF = stdenv.mkDerivation {
-    name = "nixos-manual-pdf";
-
-    inherit sources;
-
-    buildInputs = [ libxml2 libxslt dblatex dblatex.tex ];
-
-    buildCommand = ''
-      ${copySources}
-
-      dst=$out/share/doc/nixos
-      mkdir -p $dst
-      xmllint --xinclude manual.xml | dblatex -o $dst/manual.pdf - \
-        -P target.database.document="${olinkDB}/olinkdb.xml" \
-        -P doc.collab.show=0 \
-        -P latex.output.revhistory=0
-
-      mkdir -p $out/nix-support
-      echo "doc-pdf manual $dst/manual.pdf" >> $out/nix-support/hydra-build-products
+      echo "doc-epub manual $manual" >> $out/nix-support/hydra-build-products
     '';
   };
 

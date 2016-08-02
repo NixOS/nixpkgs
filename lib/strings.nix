@@ -479,4 +479,14 @@ rec {
       absolutePaths = builtins.map (path: builtins.toPath (root + "/" + path)) relativePaths;
     in
       absolutePaths;
+
+  /* Read the contents of a file removing the trailing \n
+
+     Example:
+       $ echo "1.0" > ./version
+
+       fileContents ./version
+       => "1.0"
+  */
+  fileContents = file: removeSuffix "\n" (builtins.readFile file);
 }

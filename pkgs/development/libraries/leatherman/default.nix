@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost cmake curl ];
 
+  # curl upgrade to 7.50.0 (#17152) broke the curl mock tests, disabling for now
+  # upstream bug raised https://tickets.puppetlabs.com/browse/LTH-108
+  cmakeFlags = [ "-DLEATHERMAN_MOCK_CURL=OFF" ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/leatherman/;  
     description = "A collection of C++ and CMake utility libraries";
