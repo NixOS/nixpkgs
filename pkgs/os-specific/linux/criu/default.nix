@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  configurePhase = "make config PREFIX=$out";
+  buildPhase = "make PREFIX=$out";
 
   makeFlags = "PREFIX=$(out)";
 
