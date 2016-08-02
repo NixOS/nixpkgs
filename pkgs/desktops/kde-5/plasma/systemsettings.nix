@@ -11,7 +11,4 @@ plasmaPackage {
     kcmutils kconfig kdbusaddons khtml ki18n kiconthemes kio kitemviews kservice
     kwindowsystem kxmlgui qtquickcontrols
   ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/systemsettings5"
-  '';
 }

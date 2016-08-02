@@ -5,6 +5,6 @@ kdeFramework {
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   outputs = [ "out" ];
   nativeBuildInputs = [ ecm ];
-  propagatedBuildInputs = [ qtsvg ];
+  buildInputs = [ qtsvg ];
   propagatedUserEnvPkgs = [ qtsvg.out ];
 }

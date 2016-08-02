@@ -1,18 +1,11 @@
 { plasmaPackage, ecm, kdoctools, ki18n, kxmlgui
-, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support, makeQtWrapper
+, kdbusaddons, kiconthemes, kio, sonnet, kdelibs4support
 }:
 
 plasmaPackage {
   name = "kmenuedit";
-  nativeBuildInputs = [
-    ecm
-    kdoctools
-    makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kdelibs4support ki18n kio sonnet kxmlgui kdbusaddons kiconthemes
   ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kmenuedit"
-  '';
 }

@@ -5,10 +5,7 @@
 
 plasmaPackage {
   name = "kscreenlocker";
-  nativeBuildInputs = [
-    ecm
-    kdoctools
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kdeclarative plasma-framework qtdeclarative kcmutils kcrash kdelibs4support
     kglobalaccel kidletime kwayland libXcursor pam wayland

@@ -11,5 +11,7 @@ kdeApp {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ ecm kdoctools ];
-  propagatedBuildInputs = [ dolphin kdelibs4support ki18n kio kxmlgui ];
+  propagatedBuildInputs = [
+    dolphin.unwrapped kdelibs4support ki18n kio kxmlgui
+  ];
 }

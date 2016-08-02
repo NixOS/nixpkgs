@@ -11,12 +11,6 @@ let
 
   cfg = config.services.nixosManual;
 
-  versionModule =
-    { system.nixosVersionSuffix = config.system.nixosVersionSuffix;
-      system.nixosRevision = config.system.nixosRevision;
-      nixpkgs.system = config.nixpkgs.system;
-    };
-
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
     It isn't perfect, but it seems to cover a vast majority of use cases.
@@ -24,12 +18,12 @@ let
     the path above will be shown and not e.g. `${config.services.foo.package}`. */
   manual = import ../../../doc/manual {
     inherit pkgs;
-    version = config.system.nixosVersion;
-    revision = config.system.nixosRevision;
+    version = config.system.nixosRelease;
+    revision = "release-${config.system.nixosRelease}";
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ versionModule ] ++ baseModules;
+          modules = [ { nixpkgs.system = config.nixpkgs.system; } ] ++ baseModules;
           args = (config._module.args) // { modules = [ ]; };
           specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
         };

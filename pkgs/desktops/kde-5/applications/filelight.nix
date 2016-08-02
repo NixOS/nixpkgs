@@ -1,20 +1,21 @@
 {
-  kdeApp, lib,
-  ecm, kdoctools, makeQtWrapper,
+  kdeApp, lib, kdeWrapper,
+  ecm, kdoctools,
   kio, kparts, kxmlgui, qtscript, solid
 }:
 
-kdeApp {
-  name = "filelight";
-  meta = {
-    license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ fridh vcunat ];
-  };
-  nativeBuildInputs = [ ecm kdoctools makeQtWrapper ];
-  propagatedBuildInputs = [
-    kio kparts kxmlgui qtscript solid
-  ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/filelight"
-  '';
-}
+let
+  unwrapped =
+    kdeApp {
+      name = "filelight";
+      meta = {
+        license = with lib.licenses; [ gpl2 ];
+        maintainers = with lib.maintainers; [ fridh vcunat ];
+      };
+      nativeBuildInputs = [ ecm kdoctools ];
+      propagatedBuildInputs = [
+        kio kparts kxmlgui qtscript solid
+      ];
+    };
+in
+kdeWrapper unwrapped { targets = [ "bin/filelight" ]; }

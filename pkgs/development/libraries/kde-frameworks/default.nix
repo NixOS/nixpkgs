@@ -26,6 +26,9 @@ let
 
         outputs = args.outputs or [ "dev" "out" ];
 
+        propagatedUserEnvPkgs =
+          builtins.map lib.getBin (args.propagatedBuildInputs or []);
+
         cmakeFlags =
           (args.cmakeFlags or [])
           ++ [ "-DBUILD_TESTING=OFF" ]
@@ -49,6 +52,16 @@ let
           homepage = "http://www.kde.org";
         } // (args.meta or {});
       });
+
+    kdeEnv = import ./kde-env.nix {
+      inherit (pkgs) stdenv lib;
+      inherit (pkgs.xorg) lndir;
+    };
+
+    kdeWrapper = import ./kde-wrapper.nix {
+      inherit (pkgs) stdenv lib makeWrapper;
+      inherit kdeEnv;
+    };
 
     attica = callPackage ./attica.nix {};
     baloo = callPackage ./baloo.nix {};
