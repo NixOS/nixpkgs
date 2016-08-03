@@ -189,6 +189,9 @@ let version = "4.9.3";
             # To keep ABI compatibility with upstream mingw-w64
             " --enable-fully-dynamic-string"
             else (if cross.libc == "uclibc" then
+              # libsanitizer requires netrom/netrom.h which is not
+              # available in uclibc.
+              " --disable-libsanitizer" +
               # In uclibc cases, libgomp needs an additional '-ldl'
               # and as I don't know how to pass it, I disable libgomp.
               " --disable-libgomp" else "") +
