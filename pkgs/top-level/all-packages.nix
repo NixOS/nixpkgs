@@ -15854,7 +15854,7 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
-  
+
   solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
@@ -16344,6 +16344,8 @@ in
     kile = callPackage ../applications/editors/kile/frameworks.nix { };
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
+
+    kronometer = callPackage ../tools/misc/kronometer { };
 
     krita = callPackage ../applications/graphics/krita {
       vc = vc_0_7;
