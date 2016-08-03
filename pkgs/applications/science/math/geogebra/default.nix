@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre}:
 
 let
-  version = "5.0.264.0";
+  version = "5.0.265.0";
 in
   stdenv.mkDerivation {
     name = "geogebra-${version}";
@@ -9,7 +9,7 @@ in
 
     src = fetchurl {
       url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
-      sha256 = "da96e1c9a10fd066a1814937993809a8c964f6f2ca1660246f823eb0afe5ee52";
+      sha256 = "74e5abfa098ee0fc464cd391cd3ef6db474ff25e8ea4fbcd82c4b4b5d3d5c459";
     };
 
     installPhase = ''
