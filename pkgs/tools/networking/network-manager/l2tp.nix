@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, automake, autoconf, libtool, intltool, pkgconfig
-, networkmanager, networkmanagerapplet, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, gnome3 }:
+, networkmanager, ppp, xl2tpd, strongswan, libsecret
+, withGnome ? true, gnome3, networkmanagerapplet }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "01f39ghc37vw4n4i7whyikgqz8vzxf41q9fsv2gfw1g501cny1j2";
   };
 
-  buildInputs = [ networkmanager ppp networkmanagerapplet libsecret ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring ];
+  buildInputs = [ networkmanager ppp libsecret ]
+    ++ stdenv.lib.optionals withGnome [ gnome3.gtk gnome3.libgnome_keyring networkmanagerapplet ];
 
   nativeBuildInputs = [ automake autoconf libtool intltool pkgconfig ];
 
