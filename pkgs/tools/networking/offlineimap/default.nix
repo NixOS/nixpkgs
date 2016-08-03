@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages, sqlite3 }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "7.0.2";
+  version = "7.0.3";
   name = "offlineimap-${version}";
   namePrefix = "";
 
@@ -9,7 +9,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "1xwblb1nvqq6gkxjynzsw31xja07qday58x5jqak8sp3d4lqw2h2";
+    sha256 = "1spqnrzml8lfns61y90i8fdyvs6i80fc9n89zv1mxjyv1ks7pp64";
   };
 
   doCheck = false;
