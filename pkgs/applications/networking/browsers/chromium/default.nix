@@ -13,6 +13,7 @@
 , cupsSupport ? true
 , pulseSupport ? false
 , hiDPISupport ? false
+, disableSetUIDSandbox ? true
 }:
 
 let
@@ -74,7 +75,8 @@ in stdenv.mkDerivation {
 
     ln -s "${chromium.browser}/share" "$out/share"
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
-      ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
+      ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled} \
+      ${optionalString disableSetUIDSandbox "--add-flags --disable-setuid-sandbox"}
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"
