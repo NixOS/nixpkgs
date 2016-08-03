@@ -21,8 +21,6 @@ let
   module = stdenv.mkDerivation {
     inherit src meta name;
 
-    hardeningDisable = [ "pic" ];
-
     preConfigure = ''
       cd src
       sed -i '/depmod/,+1d' Makefile
