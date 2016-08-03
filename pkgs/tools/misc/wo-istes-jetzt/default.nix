@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "wo-istes-jetzt-${version}";
-  version = "2016-07-24";
-  rev = "b6af2a7d19f974c6d945b6d97b4019f21e793835";
+  version = "2016-07-29";
+  rev = "41b42ed59eb820e071ef8542a78c4f41752c1ac0";
 
   goPackagePath = "github.com/elseym/wo.istes.jetzt";
 
@@ -20,6 +20,6 @@ buildGoPackage rec {
     inherit rev;
     owner = "elseym";
     repo = "wo.istes.jetzt";
-    sha256 = "0n3gzpgryyv5qyxqxh6dibp572am33kx0sb9wkwzi5riydfy6nch";
+    sha256 = "1vfmyzmdqk01bbd7yp64rhkilz5jkrv8wqyrxx1b0mlgyys0byrf";
   };
 }
