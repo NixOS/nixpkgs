@@ -17050,6 +17050,8 @@ in
 
   fceux = callPackage ../misc/emulators/fceux { };
 
+  flat-plat = callPackage ../misc/themes/flat-plat { };
+
   foldingathome = callPackage ../misc/foldingathome { };
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
