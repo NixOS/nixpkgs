@@ -9583,10 +9583,11 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/${name}.tar.gz";
       sha256 = "06h6wbr923jxmazmv5shdg1767s7r60bvzcza52dk31yckks6l31";
     };
+    buildInputs = [ pkgs.openssl ];
     doCheck = false; # Test performs network access.
     preConfigure = ''
       mkdir openssl
-      ln -s ${pkgs.openssl.dev}/lib openssl
+      ln -s ${pkgs.openssl.out}/lib openssl
       ln -s ${pkgs.openssl.bin}/bin openssl
       ln -s ${pkgs.openssl.dev}/include openssl
       export OPENSSL_PREFIX=$(realpath openssl)
