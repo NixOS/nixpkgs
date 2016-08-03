@@ -9114,21 +9114,21 @@ in modules // {
 
   django_compat = buildPythonPackage rec {
     name = "django-compat-${version}";
-    version = "1.0.8";
+    version = "1.0.13";
 
     # build process attempts to access a missing README.rst
     disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-compat/${name}.tar.gz";
-      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+      sha256 = "0s0z7cx0vv1kjsyzk24sg256hfnd09ssilc9rakhxrzr3firgx80";
     };
 
     buildInputs = with self; [ django_nose ];
     propagatedBuildInputs = with self; [ django six ];
 
     meta = {
-      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9 and 1.10";
       homepage = https://github.com/arteria/django-compat;
       license = licenses.mit;
     };
