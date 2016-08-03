@@ -8891,12 +8891,12 @@ in modules // {
     };
   };
 
-  django = self.django_1_9;
+  django = self.django_1_10;
 
   django_gis = self.django.override rec {
     patches = [
       (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.7.7-gis-libs.template.patch;
+        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
         geos = pkgs.geos;
         gdal = pkgs.gdal;
       })
@@ -9202,7 +9202,14 @@ in modules // {
       sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
     };
 
-    propagatedBuildInputs = with self; [ django django_compat ];
+    # TODO improve the that multi-override necessity (the fixpoint based python
+    # packages work can be the solution)
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
+      buildInputs = with self; [ (django_nose.override {
+        propagatedBuildInputs = with self; [ django_1_9 nose ];
+      }) ];
+      propagatedBuildInputs = with self; [ django_1_9 six ];
+    }) ];
 
     meta = {
       description = "Allows superusers to hijack (=login as) and work on behalf of another user";
