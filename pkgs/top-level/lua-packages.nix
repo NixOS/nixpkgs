@@ -164,8 +164,8 @@ let
       sha256 = "0wl6bg3h1kqkb138gqqjlv6iqsx1wrhhw3218jzqs4fh17iikdk6";
     };
 
-    NIX_CFLAGS_COMPILE = "-I ${sqlite}/include -I ${mysql.lib}/include/mysql -I ${postgresql}/include -I ${postgresql}/include/server";
-    NIX_CFLAGS_LINK = "-L ${mysql.lib}/lib -L ${postgresql.lib}/lib";
+    NIX_CFLAGS_COMPILE = "-I ${sqlite}/include -I ${mysql.client.dev}/include/mysql -I ${postgresql}/include -I ${postgresql}/include/server";
+    NIX_CFLAGS_LINK = "-L ${mysql.client.out}/lib -L ${postgresql.lib}/lib";
 
     buildInputs = [ sqlite ];
 
