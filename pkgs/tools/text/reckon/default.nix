@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    makeWrapper ${env}/bin/reckon $out/bin/cide
+    makeWrapper ${env}/bin/reckon $out/bin/reckon
   '';
 
   meta = with lib; {
