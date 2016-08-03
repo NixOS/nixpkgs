@@ -1,0 +1,28 @@
+From 5d085bffea9be1045580bf58edb70322767ddc00 Mon Sep 17 00:00:00 2001
+From: Sivert Berg <code@trev.is>
+Date: Tue, 24 May 2016 16:40:21 +0200
+Subject: [PATCH 1/4] Do not write REV file
+
+---
+ toolchain_build/toolchain_build_pnacl.py | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/toolchain_build/toolchain_build_pnacl.py b/toolchain_build/toolchain_build_pnacl.py
+index 83358d1..89f7567 100755
+--- a/toolchain_build/toolchain_build_pnacl.py
++++ b/toolchain_build/toolchain_build_pnacl.py
+@@ -1037,11 +1037,6 @@ def Metadata(revisions, is_canonical):
+               command.Copy('%(readme)s', os.path.join('%(output)s', 'README')),
+               command.WriteData(str(FEATURE_VERSION),
+                                 os.path.join('%(output)s', 'FEATURE_VERSION')),
+-              command.Runnable(None, pnacl_commands.WriteREVFile,
+-                               os.path.join('%(output)s', 'REV'),
+-                               GIT_BASE_URL,
+-                               GIT_REPOS,
+-                               revisions),
+           ],
+       }
+   }
+-- 
+2.4.0
+

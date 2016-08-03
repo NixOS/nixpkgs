@@ -1,0 +1,38 @@
+From dba1c06bf430b88c216c2a58afe0bd71189ab6ea Mon Sep 17 00:00:00 2001
+From: Sivert Berg <code@trev.is>
+Date: Tue, 24 May 2016 20:06:01 +0200
+Subject: [PATCH 4/4] Do not get GDB
+
+While building the x86 sdb libs it tries to copy the GDB from the glibc
+toolchains. We do not have these toolchains, so skip that step.
+---
+ site_scons/site_tools/naclsdk.py | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/site_scons/site_tools/naclsdk.py b/site_scons/site_tools/naclsdk.py
+index 587a183..9fd0188 100755
+--- a/site_scons/site_tools/naclsdk.py
++++ b/site_scons/site_tools/naclsdk.py
+@@ -683,19 +683,6 @@ def generate(env):
+   else:
+     _SetEnvForNativeSdk(env, root)
+ 
+-  if (env.Bit('bitcode') or env.Bit('nacl_clang')) and env.Bit('build_x86'):
+-    # Get GDB from the nacl-gcc glibc toolchain even when using PNaCl.
+-    # TODO(mseaborn): We really want the nacl-gdb binary to be in a
+-    # separate tarball from the nacl-gcc toolchain, then this step
+-    # will not be necessary.
+-    # See http://code.google.com/p/nativeclient/issues/detail?id=2773
+-    temp_env = env.Clone()
+-    temp_env.ClearBits('bitcode', 'nacl_clang')
+-    temp_env.SetBits('nacl_glibc')
+-    temp_root = temp_env.GetToolchainDir()
+-    _SetEnvForNativeSdk(temp_env, temp_root)
+-    env.Replace(GDB=temp_env['GDB'])
+-
+   env.Prepend(LIBPATH='${NACL_SDK_LIB}')
+ 
+   # Install our scanner for (potential) linker scripts.
+-- 
+2.4.0
+
