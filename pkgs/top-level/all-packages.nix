@@ -5963,8 +5963,6 @@ in
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.5.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
-    gcc = gcc48; # doesn't build with gcc49
-    qt = qt4;
     fftw = fftwSinglePrec;
   };
 
@@ -8887,10 +8885,7 @@ in
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = self.libressl_2_3;
-  libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
-    fetchurl = fetchurlBoot;
-  };
+  libressl = self.libressl_2_4;
   libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
     fetchurl = fetchurlBoot;
   };
@@ -13038,6 +13033,8 @@ in
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
+  puddletag = callPackage ../applications/audio/puddletag { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
@@ -15592,6 +15589,8 @@ in
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
+  gambatte = callPackage ../games/gambatte { };
+
   gav = callPackage ../games/gav { };
 
   gemrb = callPackage ../games/gemrb { };
@@ -15816,7 +15815,7 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
-  
+
   solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
@@ -17010,6 +17009,8 @@ in
 
   fceux = callPackage ../misc/emulators/fceux { };
 
+  flat-plat = callPackage ../misc/themes/flat-plat { };
+
   foldingathome = callPackage ../misc/foldingathome { };
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
@@ -17279,7 +17280,9 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = callPackage ../applications/networking/cluster/terraform { };
+  terraform =
+    (callPackage ../applications/networking/cluster/terraform {}).bin //
+      { outputs = [ "bin" ]; };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

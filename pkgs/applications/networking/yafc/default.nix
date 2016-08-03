@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.yafc-ftp.com;
     maintainers = [ stdenv.lib.maintainers.page ];
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

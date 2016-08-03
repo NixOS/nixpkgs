@@ -18,5 +18,6 @@ stdenv.mkDerivation {
     homepage = http://gjay.sourceforge.net/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

@@ -79,5 +79,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin maintainers.aszlig ];
     downloadPage = "http://gajim.org/downloads.php";
     updateWalker = true;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

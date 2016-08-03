@@ -8,4 +8,8 @@ stdenv.mkDerivation {
   };
   buildPhase = "rm *.o 915resolution; make";
   installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

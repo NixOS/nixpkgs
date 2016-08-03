@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     '';
     homepage="http://www.tinc-vpn.org/";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

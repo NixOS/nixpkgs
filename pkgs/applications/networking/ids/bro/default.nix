@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.bro.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; unix;
   };
 }

@@ -15,4 +15,8 @@ stdenv.mkDerivation rec {
     python waf build
     python waf install
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

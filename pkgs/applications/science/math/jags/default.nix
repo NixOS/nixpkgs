@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
     license     = "GPL2";
     homepage    = http://www-ice.iarc.fr/~martyn/software/jags/;
     maintainers = [stdenv.lib.maintainers.andres];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

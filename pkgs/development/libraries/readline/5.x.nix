@@ -13,5 +13,6 @@ stdenv.mkDerivation {
   patches = stdenv.lib.optional stdenv.isDarwin ./shobj-darwin.patch;
   meta = {
     branch = "5";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

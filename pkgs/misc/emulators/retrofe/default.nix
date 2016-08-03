@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     homepage = http://retrofe.com;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hrdinka ];
+    platforms = with platforms; linux;
   };
 }

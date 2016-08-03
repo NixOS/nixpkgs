@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
  
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

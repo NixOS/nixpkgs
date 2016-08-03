@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "http://fvwm.org";
     description = "A multiple large virtual desktop window manager";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

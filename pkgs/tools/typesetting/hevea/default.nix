@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     homepage = http://pauillac.inria.fr/~maranget/hevea/;
     license = licenses.qpl;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

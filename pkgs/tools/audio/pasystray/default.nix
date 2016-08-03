@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/christophgysin/pasystray";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.exlevan ];
-    platfoms = platforms.linux;
+    platforms = platforms.linux;
   };
 }

@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Library call tracer";
     homepage = http://www.ltrace.org/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

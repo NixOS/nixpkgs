@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
     description = "Everything you need to get started using Heroku";
     maintainers = with maintainers; [ aflatter mirdhyn ];
     license = licenses.mit;
+    platforms = with platforms; unix;
   };
 
   src = fetchurl {

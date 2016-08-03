@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://xkbcommon.org;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
+    platforms = with platforms; unix;
   };
 }

@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://unix4lyfe.org/darkstat;
     license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
+    platforms = with platforms; unix;
   };
 }

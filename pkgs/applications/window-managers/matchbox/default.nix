@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "X window manager for non-desktop embedded systems";
     homepage = http://matchbox-project.org/;
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -16,5 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://dvdbackup.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.bradediger ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

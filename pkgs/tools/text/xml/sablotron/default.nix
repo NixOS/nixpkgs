@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     md5 = "72654c4b832e7562f8240ea675577f5e";
   };
   buildInputs = [expat];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

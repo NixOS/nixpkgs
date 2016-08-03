@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
 
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
+    platforms = stdenv.lib.platforms.linux;
   };
 }

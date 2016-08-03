@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     [ gtk atk pango glib gdk_pixbuf cairo ] );
   programPath = makeLibraryPath [ xorg.libXv ];
 
-  patches = if versionAtLeast kernel.version "4.7" then [ ./365.35-kernel-4.7.patch ] else [];
+  patches = if (!libsOnly) && (versionAtLeast kernel.dev.version "4.7") then [ ./365.35-kernel-4.7.patch ] else [];
 
   buildInputs = [ perl nukeReferences ];
 

@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     description = "A game about fighting with ships in a 2D space setting";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.astsmtl ];
+    platforms = platforms.linux;
   };
 }

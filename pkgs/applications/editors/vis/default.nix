@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     homepage = http://github.com/martanne/vis;
     license = licenses.isc;
     maintainers = [ maintainers.vrthra ];
+    platforms = platforms.unix;
   };
 }

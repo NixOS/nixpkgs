@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "Libav/ffmpeg based source library for easy frame accurate access";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

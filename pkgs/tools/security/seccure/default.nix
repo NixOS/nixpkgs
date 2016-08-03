@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://point-at-infinity.org/seccure/;
     description = "Zero-configuration elliptic curve cryptography utility";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

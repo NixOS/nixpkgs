@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Email transport module for XMPP";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

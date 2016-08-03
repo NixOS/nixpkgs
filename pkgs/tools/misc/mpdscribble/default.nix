@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://mpd.wikia.com/wiki/Client:mpdscribble;
     license = licenses.gpl2;
     maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.linux;
   };
 }

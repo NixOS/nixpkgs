@@ -43,4 +43,8 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/etc/xinetd.d
     install -v -m 644 xinetd.d/vsftpd $out/etc/xinetd.d/vsftpd
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://parchive.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "A library for using Parchives (parity archive volume sets)";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

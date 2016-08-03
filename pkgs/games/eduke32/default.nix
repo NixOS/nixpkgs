@@ -71,5 +71,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = http://eduke32.com;
     maintainers = with maintainers; [ nckx sander ];
+    platforms = with platforms; linux;
   };
 }

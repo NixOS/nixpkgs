@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/cseed/arachne-pnr;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.shell ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

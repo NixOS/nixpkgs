@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://xiph.org/paranoia;
     description = "A tool and library for reading digital audio from CDs";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

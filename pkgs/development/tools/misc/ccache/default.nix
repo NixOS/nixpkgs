@@ -63,6 +63,7 @@ let ccache = stdenv.mkDerivation rec {
     downloadPage = https://ccache.samba.org/download.html;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ nckx ];
+    platforms = with platforms; linux;
   };
 };
 in ccache

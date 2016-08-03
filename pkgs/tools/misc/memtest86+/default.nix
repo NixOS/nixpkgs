@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.memtest.org/;
     description = "A tool to detect memory errors";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

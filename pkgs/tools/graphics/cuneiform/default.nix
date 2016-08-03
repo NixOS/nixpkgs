@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Multi-language OCR system";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

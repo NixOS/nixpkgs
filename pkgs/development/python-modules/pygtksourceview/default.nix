@@ -13,4 +13,8 @@ stdenv.mkDerivation {
   patches = [ ./codegendir.patch ];
 
   buildInputs = [ python pkgconfig pygobject glib pygtk gnome2.gtksourceview ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

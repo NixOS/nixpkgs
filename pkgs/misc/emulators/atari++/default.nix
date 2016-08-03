@@ -23,6 +23,7 @@ stdenv.mkDerivation rec{
       (Linux, Solaris, Irix).
     '';
     maintainers = [ maintainers.AndersonTorres ];
-    license = licenses.gpl2Plus;    
-  };    
+    license = licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

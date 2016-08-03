@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     description = "libpcap application that displays DNS traffic on your network";
     homepage = http://dns.measurement-factory.com/tools/dnstop;
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

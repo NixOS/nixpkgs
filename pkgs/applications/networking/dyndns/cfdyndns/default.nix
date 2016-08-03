@@ -26,5 +26,6 @@ buildRustPackage rec {
     homepage = https://github.com/colemickens/cfdyndns;
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ colemickens ];
+    platforms = with platforms; linux;
   };
 }

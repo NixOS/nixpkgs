@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.libpng;
     maintainers = [ maintainers.fuuzetsu ];
     branch = "1.2";
+    platforms = platforms.unix;
   };
 }

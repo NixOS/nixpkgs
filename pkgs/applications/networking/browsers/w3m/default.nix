@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://w3m.sourceforge.net/;
     description = "A text-mode web browser";
     maintainers = [ maintainers.mornfall maintainers.cstrahan ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

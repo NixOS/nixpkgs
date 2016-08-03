@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/novas0x2a/skype4pidgin;
     license = stdenv.lib.licenses.gpl3Plus;
     description = "Plugin to use a running skype account through pidgin";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

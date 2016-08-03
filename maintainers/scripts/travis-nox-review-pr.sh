@@ -29,7 +29,7 @@ while test -n "$1"; do
         nixpkgs-manual)
             echo "=== Checking nixpkgs manuals"
 
-            nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr manpages --show-trace
+            nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr manual --show-trace
             ;;
 
         nixpkgs-tarball)

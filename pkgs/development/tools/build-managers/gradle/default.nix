@@ -47,6 +47,7 @@ rec {
       '';
       homepage = http://www.gradle.org/;
       license = stdenv.lib.licenses.asl20;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 

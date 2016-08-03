@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   };
 #  buildInputs = [unzip];
   inherit jdk swt;
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

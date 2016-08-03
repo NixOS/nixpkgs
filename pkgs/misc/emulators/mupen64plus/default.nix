@@ -31,5 +31,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://code.google.com/p/mupen64plus;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

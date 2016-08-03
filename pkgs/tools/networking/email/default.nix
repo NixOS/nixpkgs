@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     description = "Command line SMTP client";
     license = with lib.licenses; [ gpl2 ];
     homepage = http://deanproxy.com/code;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

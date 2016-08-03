@@ -24,5 +24,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A program that displays a pseudorandom message from a database of quotations";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

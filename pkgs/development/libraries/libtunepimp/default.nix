@@ -13,4 +13,8 @@ stdenv.mkDerivation rec {
     url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";
     sha256 = "0s141zmsxv8xlivcgcmy6xhk9cyjjxmr1fy45xiqfqrqpsh485rl";
   };
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

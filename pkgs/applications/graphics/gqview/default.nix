@@ -20,5 +20,6 @@ stdenv.mkDerivation {
   meta = {
     description = "A fast image viewer";
     homepage = http://gqview.sourceforge.net;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

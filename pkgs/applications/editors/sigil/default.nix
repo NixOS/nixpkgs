@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3;
     inherit version;
     maintainers = with stdenv.lib.maintainers; [ ramkromberg ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
