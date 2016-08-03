@@ -265,6 +265,11 @@
   <sect1 xml:id="sec-grsec-issues"><title>Issues and work-arounds</title>
 
   <itemizedlist>
+    <listitem><para>Access to EFI runtime services is disabled by default:
+    this plugs a potential code injection attack vector; use
+    <option>security.grsecurity.disableEfiRuntimeServices</option> to override
+    this behavior.</para></listitem>
+
     <listitem><para>Virtualization: KVM is the preferred virtualization
     solution. Xen, Virtualbox, and VMWare are
     <emphasis>unsupported</emphasis> and most likely require a custom kernel.

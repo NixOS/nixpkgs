@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 

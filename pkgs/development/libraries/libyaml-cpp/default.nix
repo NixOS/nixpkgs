@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, makePIC ? false }:
+{ stdenv, fetchFromGitHub, cmake, boost }:
 
 stdenv.mkDerivation rec {
   name = "libyaml-cpp-${version}";

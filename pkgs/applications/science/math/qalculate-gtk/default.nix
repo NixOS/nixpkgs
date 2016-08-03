@@ -1,4 +1,5 @@
 { stdenv, fetchurl, intltool, autoreconfHook, pkgconfig, libqalculate, gtk3, wrapGAppsHook }:
+
 stdenv.mkDerivation rec {
   name = "qalculate-gtk-${version}";
   version = "0.9.8";

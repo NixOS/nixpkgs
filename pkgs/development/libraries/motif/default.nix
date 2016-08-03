@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libXp libXau ];
 
+  hardeningDisable = [ "format" ];
+
   makeFlags = [ "CFLAGS=-fno-strict-aliasing" ];
 
   patchPhase = ''

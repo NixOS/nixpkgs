@@ -13,9 +13,8 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
-  patches = [ ./gcc5.diff ];
-
   makeFlags = "PREFIX=$(out)";
+
   buildFlags = [ "CFLAGS=-fgnu89-inline" ];
 
   meta = with stdenv.lib; {

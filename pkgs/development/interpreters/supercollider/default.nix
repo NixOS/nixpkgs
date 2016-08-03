@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gcc libjack2 libsndfile fftw curl libXt qt55.qtwebkit qt55.qttools readline ]
-    ++ optional useSCEL emacs;
+      ++ optional useSCEL emacs;
 
   meta = {
     description = "Programming language for real time audio synthesis";

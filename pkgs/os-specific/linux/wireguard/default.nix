@@ -28,6 +28,8 @@ let
       sed -i '/depmod/,+1d' Makefile
     '';
 
+    hardeningDisable = [ "pic" ];
+
     KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
     INSTALL_MOD_PATH = "\${out}";
 
