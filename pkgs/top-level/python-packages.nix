@@ -8903,6 +8903,30 @@ in modules // {
     ];
   };
 
+  django_1_10 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.10";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
+      sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
+    };
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    # too complicated to setup
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
   django_1_9 = buildPythonPackage rec {
     name = "Django-${version}";
     version = "1.9.5";
