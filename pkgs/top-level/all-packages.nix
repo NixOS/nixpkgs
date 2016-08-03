@@ -16839,6 +16839,8 @@ in
 
   gap = callPackage ../applications/science/math/gap { };
 
+  geogebra = callPackage ../applications/science/math/geogebra {};
+
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
