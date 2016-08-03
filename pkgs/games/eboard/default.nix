@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   buildInputs = [ gtk ];
   nativeBuildInputs = [ perl pkgconfig ];
 
+  hardeningDisable = [ "format" ];
+
   preConfigure = ''
     patchShebangs ./configure
   '';
