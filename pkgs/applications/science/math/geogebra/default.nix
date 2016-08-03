@@ -25,17 +25,17 @@ in
       EOF
 
       chmod +x "$out/bin/geogebra"
-      '';
+    '';
 
     meta = {
       description = "Dynamic mathematics software with graphics, algebra and spreadsheets";
       longDescription = ''
-      Dynamic mathematics software for all levels of education that brings
-      together geometry, algebra, spreadsheets, graphing, statistics and
-      calculus in one easy-to-use package.
+        Dynamic mathematics software for all levels of education that brings
+        together geometry, algebra, spreadsheets, graphing, statistics and
+        calculus in one easy-to-use package.
       '';
       homepage = https://www.geogebra.org/;
-      license = "free";
+      license = with stdenv.lib.licenses; [gpl3  cc-by-nc-sa-30 geogebra];
       platforms = stdenv.lib.platforms.all;
     };
   }
