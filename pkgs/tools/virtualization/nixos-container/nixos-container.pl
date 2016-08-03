@@ -22,7 +22,7 @@ Usage: nixos-container list
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
-       nixos-container kill <container-name> [--signal <signal-specifier>]
+       nixos-container terminate <container-name>
        nixos-container status <container-name>
        nixos-container update <container-name> [--config <string>]
        nixos-container login <container-name>
@@ -189,12 +189,9 @@ sub isContainerRunning {
     return $status =~ /ActiveState=active/;
 }
 
-sub killContainer {
-    my @args = ();
-    push(@args, ("--signal", $signal)) if ($signal ne "");
-
-    system("machinectl", "kill", $containerName, @args) == 0
-        or die "$0: failed to kill container\n";
+sub terminateContainer {
+    system("machinectl", "terminate", $containerName) == 0
+        or die "$0: failed to terminate container\n";
 }
 
 sub stopContainer {
@@ -239,8 +236,7 @@ if ($action eq "destroy") {
     die "$0: cannot destroy declarative container (remove it from your configuration.nix instead)\n"
         unless POSIX::access($confFile, &POSIX::W_OK);
 
-    $signal = "SIGKILL";
-    killContainer if (isContainerRunning);
+    terminateContainer if (isContainerRunning);
 
     safeRemoveTree($profileDir) if -e $profileDir;
     safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
@@ -257,8 +253,8 @@ elsif ($action eq "stop") {
     stopContainer;
 }
 
-elsif ($action eq "kill") {
-    killContainer;
+elsif ($action eq "terminate") {
+    terminateContainer;
 }
 
 elsif ($action eq "status") {
