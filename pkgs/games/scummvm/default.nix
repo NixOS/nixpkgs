@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "scummvm-1.8.0";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/scummvm/${name}.tar.bz2";
     sha256 = "0f3zgvz886lk9ps0v333aq74vx6grlx68hg14gfaxcvj55g73v01";
   };
-  
+
   buildInputs = [ SDL zlib libmpeg2 libmad libogg libvorbis flac alsaLib ];
+
+  hardeningDisable = [ "format" ];
 
   crossAttrs = {
     preConfigure = ''
