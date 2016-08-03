@@ -17319,7 +17319,9 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = callPackage ../applications/networking/cluster/terraform { };
+  terraform =
+    (callPackage ../applications/networking/cluster/terraform {}).bin //
+      { outputs = [ "bin" ]; };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 

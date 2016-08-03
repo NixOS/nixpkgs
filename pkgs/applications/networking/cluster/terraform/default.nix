@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "terraform-${version}";
-  version = "0.6.16";
+  version = "0.7.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/hashicorp/terraform";
@@ -11,13 +11,13 @@ buildGoPackage rec {
     inherit rev;
     owner = "hashicorp";
     repo = "terraform";
-    sha256 = "1bg8hn4b31xphyxrc99bpnf7gmq20fxqx1k871nidx132brcsah2";
+    sha256 = "0k5d6zph6sq1qg8vi5jmk7apy6v67xn5i7rqjamyr5an7lpxssc9";
   };
 
   postInstall = ''
     # prefix all the plugins with "terraform-"
     for i in $bin/bin/*; do
-      if [[ ! $(basename $i) =~ terraform* ]]; then
+      if [[ $(basename $i) != terraform ]]; then
         mv -v $i $bin/bin/terraform-$(basename $i);
       fi
     done
