@@ -14448,6 +14448,8 @@ in
 
   ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
 
+  ripser = callPackage ../applications/science/math/ripser { };
+
   rkt = callPackage ../applications/virtualization/rkt { };
 
   rofi = callPackage ../applications/misc/rofi { };
