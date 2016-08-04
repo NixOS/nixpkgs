@@ -71,11 +71,14 @@ fi
 configDir=$(qtpaths --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
 
+THEME=org.kde.breeze
 #This is basically setting defaults so we can use them with kstartupconfig5
+#We cannot set the equivilant of THEME here as it will generate an
+#invalid variable name (with dots)
 cat >$configDir/startupconfigkeys <<EOF
 kcminputrc Mouse cursorTheme 'breeze_cursors'
 kcminputrc Mouse cursorSize ''
-ksplashrc KSplash Theme Breeze
+ksplashrc KSplash Theme ${THEME}.desktop
 ksplashrc KSplash Engine KSplashQML
 kdeglobals KScreen ScreenScaleFactors ''
 kcmfonts General forceFontDPI 0
@@ -143,6 +146,8 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" 
         export XCURSOR_SIZE
     fi
 fi
+
+unset THEME
 
 # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
 # from some users that they're confused and don't know what to do. This is
