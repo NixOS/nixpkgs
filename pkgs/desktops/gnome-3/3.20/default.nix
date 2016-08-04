@@ -173,6 +173,8 @@ let
 
   gtksourceview = callPackage ./core/gtksourceview { };
 
+  gtksourceviewmm = callPackage ./core/gtksourceviewmm { };
+
   gucharmap = callPackage ./core/gucharmap { };
 
   gvfs = pkgs.gvfs.override { gnome = gnome3; gnomeSupport = true; };
