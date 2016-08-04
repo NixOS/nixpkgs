@@ -212,11 +212,12 @@ in
     ];
 
     services.xserver.displayManager.sddm = {
-      theme = "breeze";
+      theme = "nixos";
       themes = [
         kde5.ecm # for the setup-hook
         kde5.plasma-workspace
         kde5.breeze-icons
+        pkgs.nixos-artwork
         (kde5.oxygen-icons or kde5.oxygen-icons5)
       ];
     };

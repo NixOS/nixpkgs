@@ -75,7 +75,7 @@ mkdir -p "$configDir"
 cat >$configDir/startupconfigkeys <<EOF
 kcminputrc Mouse cursorTheme 'breeze_cursors'
 kcminputrc Mouse cursorSize ''
-ksplashrc KSplash Theme Breeze
+ksplashrc KSplash Theme org.nixos.breeze.desktop
 ksplashrc KSplash Engine KSplashQML
 kdeglobals KScreen ScreenScaleFactors ''
 kcmfonts General forceFontDPI 0
