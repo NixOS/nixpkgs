@@ -52,6 +52,7 @@ let
           name = "breeze-${version}";
           paths = map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ];
         };
+    breeze-plymouth = callPackage ./breeze-plymouth {};
     kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
     kde-gtk-config = callPackage ./kde-gtk-config {};
