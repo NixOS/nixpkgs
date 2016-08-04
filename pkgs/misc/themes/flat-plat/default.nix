@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/share/themes
+    mkdir -p $out/share/themes/Flat-Plat
     rm .gitignore COPYING README.md
-    cp -r . $out/share/themes
+    cp -r . $out/share/themes/Flat-Plat
   '';
 
   meta = with stdenv.lib; {
