@@ -54,16 +54,6 @@ self: super: {
     broken = true;   # needs template-haskell >=2.9 && <2.11
   }) {};
 
-  # ghc-mod has a ghc-8 branch that has not yet been merged
-  ghc-mod = super."ghc-mod".overrideDerivation (attrs: rec {
-    src = pkgs.fetchFromGitHub {
-      owner  = "DanielG";
-      repo   = "ghc-mod";
-      rev    = "f2c7b01e372dd8c516b1ccbe5a1025cc7814347c";
-      sha256 = "1i45196qrzlhgbisnvkzni4n54saky0i1kyla162xcb5cg3kf2ji";
-    };
-  });
-
   # https://github.com/ygale/timezone-series/issues/2
   timezone-series = appendPatch super.timezone-series (pkgs.fetchpatch {
     url = "https://github.com/ryantrinkle/timezone-series/commit/f8dece8c016db6476e2bb0d4f972769a76f6ff40.patch";
