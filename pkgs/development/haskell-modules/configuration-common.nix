@@ -203,12 +203,6 @@ self: super: {
   jwt = dontCheck super.jwt;
 
   # https://github.com/NixOS/cabal2nix/issues/136 and https://github.com/NixOS/cabal2nix/issues/216
-<<<<<<< HEAD
-  gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.gio self.gtk2hs-buildtools) pkgs.glib) (drv: {
-    hardeningDisable = [ "fortify" ];
-  });
-  glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.glib self.gtk2hs-buildtools) pkgs.glib) (drv: {
-=======
   gio = pkgs.lib.overrideDerivation (addPkgconfigDepend (
     addBuildTool super.gio self.gtk2hs-buildtools
   ) pkgs.glib) (drv: {
@@ -217,19 +211,14 @@ self: super: {
   glib = pkgs.lib.overrideDerivation (addPkgconfigDepend (
     addBuildTool super.glib self.gtk2hs-buildtools
   ) pkgs.glib) (drv: {
->>>>>>> hardened-stdenv
     hardeningDisable = [ "fortify" ];
   });
   gtk3 = pkgs.lib.overrideDerivation (super.gtk3.override { inherit (pkgs) gtk3; }) (drv: {
     hardeningDisable = [ "fortify" ];
   });
-<<<<<<< HEAD
-  gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (addBuildTool super.gtk self.gtk2hs-buildtools) pkgs.gtk) (drv: {
-=======
   gtk = pkgs.lib.overrideDerivation (addPkgconfigDepend (
     addBuildTool super.gtk self.gtk2hs-buildtools
   ) pkgs.gtk) (drv: {
->>>>>>> hardened-stdenv
     hardeningDisable = [ "fortify" ];
   });
   gtksourceview2 = (addPkgconfigDepend super.gtksourceview2 pkgs.gtk2).override { inherit (pkgs.gnome2) gtksourceview; };
