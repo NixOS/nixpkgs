@@ -70,4 +70,10 @@ self: super: {
     sha256 = "01wxhknsnn7lyl9v8viz7m5zhmyi3bqpbva7d3dx1dxn0nmkfh6a";
   });
 
+  # https://github.com/bmillwood/applicative-quoters/issues/6
+  applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";
+    sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
+  });
+
 }
