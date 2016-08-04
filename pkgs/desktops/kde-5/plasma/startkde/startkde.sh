@@ -6,6 +6,11 @@ export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}@QT_PLUGIN_PATH@"
 export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}@QML_IMPORT_PATH@"
 export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}@QML2_IMPORT_PATH@"
 
+write_default() {
+  value=$(kreadconfig5 --file $1 --group $2 --key $3 --default $4)
+  kwriteconfig5 --file $1 --group $2 --key $3 $value
+}
+
 # The KDE icon cache is supposed to update itself
 # automatically, but it uses the timestamp on the icon
 # theme directory as a trigger.  Since in Nix the
@@ -71,11 +76,14 @@ fi
 configDir=$(qtpaths --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
 
+THEME=org.kde.breeze
 #This is basically setting defaults so we can use them with kstartupconfig5
+#We cannot set the equivilant of THEME here as it will generate an
+#invalid variable name (with dots)
 cat >$configDir/startupconfigkeys <<EOF
 kcminputrc Mouse cursorTheme 'breeze_cursors'
 kcminputrc Mouse cursorSize ''
-ksplashrc KSplash Theme Breeze
+ksplashrc KSplash Theme ${THEME}.desktop
 ksplashrc KSplash Engine KSplashQML
 kdeglobals KScreen ScreenScaleFactors ''
 kcmfonts General forceFontDPI 0
@@ -143,6 +151,11 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" 
         export XCURSOR_SIZE
     fi
 fi
+
+# if we haven't defined a window decoration, use $THEME defined above
+write_default kwinrc org.kde.kdecoration2 library $THEME
+
+unset THEME
 
 # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
 # from some users that they're confused and don't know what to do. This is
