@@ -36,10 +36,14 @@ in {
           }
         '';
 
+      outputs = [ "out" "vdi" ];
+
       postVM =
         ''
+          mkdir -p $vdi
+
           echo "creating VirtualBox disk image..."
-          ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi $diskImage disk.vdi
+          ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi $diskImage $vdi/disk.vdi
           rm $diskImage
 
           echo "creating VirtualBox VM..."
@@ -57,7 +61,7 @@ in {
             --usb on --mouse usbtablet
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
-            --medium disk.vdi
+            --medium $vdi/disk.vdi
 
           echo "exporting VirtualBox VM..."
           mkdir -p $out
