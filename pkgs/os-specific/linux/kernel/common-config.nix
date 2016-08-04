@@ -179,6 +179,8 @@ with stdenv.lib;
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
+  DRM_GMA600 y
+  DRM_GMA3600 y
 
   # Sound.
   SND_DYNAMIC_MINORS y
