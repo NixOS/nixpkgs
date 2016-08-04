@@ -5,7 +5,7 @@ drv: pkgs:
 stdenv.mkDerivation {
   name = "kde-env-${drv.name}";
   nativeBuildInputs = [ lndir ];
-  propagatedUserEnvPkgs = builtins.map lib.getBin ([drv] ++ pkgs);
+  envPkgs = builtins.map lib.getBin ([drv] ++ pkgs);
   unpackPhase = "true";
   configurePhase = "runHook preConfigure; runHook postConfigure";
   buildPhase = "true";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     runHook preInstall
 
     propagated=""
-    for i in $propagatedUserEnvPkgs; do
+    for i in $envPkgs; do
         findInputs $i propagated propagated-user-env-packages
     done
 
@@ -22,6 +22,15 @@ stdenv.mkDerivation {
         for p in $propagated; do
             if [ -d "$p/$tgt" ]; then
                 lndir -silent "$p/$tgt" "$out/$tgt" >/dev/null 2>&1
+            fi
+        done
+    done
+
+    for p in $propagated; do
+        for s in applications dbus-1 desktop-directories icons mime polkit-1; do
+            if [ -d "$p/share/$s" ]; then
+                propagatedUserEnvPkgs+=" $p"
+                break
             fi
         done
     done
