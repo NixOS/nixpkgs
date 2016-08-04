@@ -106,20 +106,22 @@ let
 
   unicornConfig = builtins.readFile ./defaultUnicornConfig.rb;
 
-  gitlab-runner = pkgs.stdenv.mkDerivation rec {
-    name = "gitlab-runner";
+  gitlab-rake = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-rake";
     buildInputs = [ cfg.packages.gitlab cfg.packages.gitlab.env pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
     buildPhase = "";
     installPhase = ''
       mkdir -p $out/bin
-      makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-runner \
+      makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
           --set PATH '${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-    '';
+      makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \
+          --add-flags "exec rake"
+     '';
   };
 
   smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
@@ -331,7 +333,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-runner cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
@@ -480,14 +482,14 @@ in {
             touch "${cfg.statePath}/db-created"
 
             # The gitlab:setup task is horribly broken somehow, these two tasks will do the same for setting up the initial database
-            ${gitlab-runner}/bin/gitlab-runner exec rake db:migrate RAILS_ENV=production
-            ${gitlab-runner}/bin/gitlab-runner exec rake db:seed_fu RAILS_ENV=production \
+            ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
+            ${gitlab-rake}/bin/gitlab-rake db:seed_fu RAILS_ENV=production \
               GITLAB_ROOT_PASSWORD="${cfg.initialRootPassword}" GITLAB_ROOT_EMAIL="${cfg.initialRootEmail}";
           fi
         fi
 
         # Always do the db migrations just to be sure the database is up-to-date
-        ${gitlab-runner}/bin/gitlab-runner exec rake db:migrate RAILS_ENV=production
+        ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.

@@ -80,21 +80,21 @@ options for the <literal>services.gitlab</literal> module.</para>
 
 <section><title>Maintenance</title>
 
-<para>You can run all Gitlab related commands like rake tasks with
-<literal>gitlab-runner</literal> which will be available on the system
-when gitlab is enabled. You will have to run the commands as the user that
-you configured to run gitlab.</para>
+<para>You can run Gitlab's rake tasks with <literal>gitlab-rake</literal>
+which will be available on the system when gitlab is enabled. You will
+have to run the command as the user that you configured to run gitlab
+with.</para>
 
-<para>For instance, to backup a Gitlab instance:
+<para>For example, to backup a Gitlab instance:
 
 <programlisting>
-$ sudo -u git -H gitlab-runner exec rake gitlab:backup:create
+$ sudo -u git -H gitlab-rake gitlab:backup:create
 </programlisting>
 
 A list of all availabe rake tasks can be obtained by running:
 
 <programlisting>
-$ sudo -u git -H gitlab-runner exec rake -T
+$ sudo -u git -H gitlab-rake -T
 </programlisting>
 </para>
 
