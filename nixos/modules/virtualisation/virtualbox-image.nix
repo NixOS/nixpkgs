@@ -69,6 +69,28 @@ in {
         '';
     };
 
+    system.build.virtualBoxImage = import ../../lib/make-disk-image.nix {
+      name = "nixos-ova-${config.system.nixosLabel}-${pkgs.stdenv.system}";
+
+      inherit pkgs lib config;
+      partitioned = true;
+      diskSize = cfg.baseImageSize;
+
+      configFile = pkgs.writeText "configuration.nix"
+        ''
+          {
+            imports = [ <nixpkgs/nixos/modules/virtualisation/virtualbox-image.nix> ];
+          }
+        '';
+
+      postVM =
+        ''
+          echo "creating VirtualBox disk image..."
+          ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -O vdi $diskImage $out/disk.vdi
+          rm $diskImage
+        '';
+    };
+
     fileSystems."/".device = "/dev/disk/by-label/nixos";
 
     boot.loader.grub.device = "/dev/sda";
