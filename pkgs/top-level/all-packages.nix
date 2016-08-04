@@ -7084,6 +7084,8 @@ in
 
   cwiid = callPackage ../development/libraries/cwiid { };
 
+  cxx-prettyprint = callPackage ../development/libraries/cxx-prettyprint { };
+
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
