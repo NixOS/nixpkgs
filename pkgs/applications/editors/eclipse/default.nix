@@ -326,6 +326,21 @@ rec {
         };
     };
   };
+  
+  eclipse-sdk-46 = buildEclipse {
+    name = "eclipse-sdk-4.6";
+    description = "Eclipse Neon Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk-x86_64.tar.gz;
+          sha256 = "4d7a39ce4e04ba1f5179f6a72926eb86ed506d97842a3bf4247814491c508e0a";
+        };
+      "i686-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk.tar.gz;
+          sha256 = "d9e1d390cac504a17a65d4a22ebb8da6a592bcc54491912cbc29577990d77014";
+        };
+    };
+  };
 
   eclipse-platform = eclipse-platform-46;
 
