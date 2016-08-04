@@ -26,6 +26,16 @@
       <replaceable>root</replaceable>
     </arg>
     <arg>
+      <arg choice='plain'><option>--closure</option></arg>
+      <replaceable>closure</replaceable>
+    </arg>
+    <arg>
+      <arg choice='plain'><option>--dont-copy-channel</option></arg>
+    </arg>
+    <arg>
+      <arg choice='plain'><option>--dont-set-root-password</option></arg>
+    </arg>
+    <arg>
       <group choice='req'>
         <arg choice='plain'><option>--max-jobs</option></arg>
         <arg choice='plain'><option>-j</option></arg>
@@ -75,8 +85,8 @@ the following steps:
   and generates a GRUB configuration file that boots into the NixOS
   configuration just installed.</para></listitem>
 
-  <listitem><para>It prompts you for a password for the root
-  account.</para></listitem>
+  <listitem><para>It prompts you for a password for the root account
+  (unless <option>--dont-set-root-password</option> is specified).</para></listitem>
 
 </itemizedlist>
 
@@ -99,6 +109,19 @@ it.</para>
     <listitem>
       <para>Defaults to <filename>/mnt</filename>. If this option is given, treat the directory
       <replaceable>root</replaceable> as the root of the NixOS installation.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
+    <term><option>--closure</option></term>
+    <listitem>
+      <para>If this option is provided, <command>nixos-install</command> will install the specified closure
+      rather than attempt to build one from <filename>/mnt/etc/nixos/configuration.nix</filename>.</para>
+
+      <para>The closure must be an appropriately configured NixOS system, with boot loader and partition
+      configuration that fits the target host. Such a closure is typically obtained with a command such as
+      <command>nix-build -I nixos-config=./configuration.nix '&lt;nixos&gt;' -A system --no-out-link</command>
       </para>
     </listitem>
   </varlistentry>
