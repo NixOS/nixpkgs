@@ -74,6 +74,7 @@ in stdenv.mkDerivation {
 
     ln -s "${chromium.browser}/share" "$out/share"
     eval makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      --set CHROME_DEVEL_SANDBOX "${chromium.browser}/libexec/chromium/chrome-sandbox" \
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
