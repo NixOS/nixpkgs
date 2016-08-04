@@ -42,8 +42,13 @@ following incompatible changes:</para>
   </listitem>
 
   <listitem>
-    <para>Redis now binds to 127.0.0.1 only instead of listening to all network interfaces. This is the default 
+    <para>Redis now binds to 127.0.0.1 only instead of listening to all network interfaces. This is the default
     behavior of Redis 3.2</para>
+  </listitem>
+
+  <listitem>
+    <para>Gitlab's maintainence script gitlab-runner was removed and split up into the more clearer
+      gitlab-run and gitlab-rake scripts because gitlab-runner is a component of Gitlab CI.</para>
   </listitem>
 
 </itemizedlist>
