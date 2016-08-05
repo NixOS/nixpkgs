@@ -1,0 +1,1871 @@
+diff -ur par-1.52.orig/buffer.c par-1.52-i18n.4/buffer.c
+--- par-1.52.orig/buffer.c	2001-03-09 00:51:11.000000000 +0100
++++ par-1.52-i18n.4/buffer.c	2009-05-29 21:09:45.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* buffer.c          */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* buffer.c            */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -18,6 +20,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <wchar.h>
+ 
+ #undef NULL
+ #define NULL ((void *) 0)
+@@ -60,7 +63,7 @@
+   blk = malloc(sizeof (block));
+   items = malloc(maxhere * itemsize);
+   if (!buf || !blk || !items) {
+-    strcpy(errmsg,outofmem);
++    wcscpy(errmsg,outofmem);
+     goto nberror;
+   }
+ 
+@@ -127,7 +130,7 @@
+       new = malloc(sizeof (block));
+       items = malloc(maxhere * itemsize);
+       if (!new || !items) {
+-        strcpy(errmsg,outofmem);
++        wcscpy(errmsg,outofmem);
+         goto aierror;
+       }
+       blk->next = new;
+@@ -174,7 +177,7 @@
+ 
+   r = malloc(n * itemsize);
+   if (!r) {
+-    strcpy(errmsg,outofmem);
++    wcscpy(errmsg,outofmem);
+     return NULL;
+   }
+ 
+diff -ur par-1.52.orig/buffer.h par-1.52-i18n.4/buffer.h
+--- par-1.52.orig/buffer.h	2001-03-09 00:51:25.000000000 +0100
++++ par-1.52-i18n.4/buffer.h	2009-05-29 21:12:39.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* buffer.h          */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* buffer.h            */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+diff -ur par-1.52.orig/charset.c par-1.52-i18n.4/charset.c
+--- par-1.52.orig/charset.c	2001-04-02 23:51:48.000000000 +0200
++++ par-1.52-i18n.4/charset.c	2009-05-29 21:09:23.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* charset.c         */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* charset.c           */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -18,8 +20,9 @@
+                       /* prototypes.  Also includes "errmsg.h". */
+ #include "buffer.h"   /* Also includes <stddef.h>.              */
+ 
+-#include <ctype.h>
+ #include <stdio.h>
++#include <wchar.h>
++#include <wctype.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
+@@ -39,8 +42,8 @@
+ typedef unsigned char csflag_t;
+ 
+ struct charset {
+-  char *inlist;    /* Characters in inlist are in the set.                */
+-  char *outlist;   /* Characters in outlist are not in the set.           */
++  wchar_t *inlist;    /* Characters in inlist are in the set.                */
++  wchar_t *outlist;   /* Characters in outlist are not in the set.           */
+                    /* inlist and outlist must have no common characters.  */
+                    /* inlist and outlist may be NULL, which acts like "". */
+   csflag_t flags;  /* Characters in neither list are in the set if they   */
+@@ -56,25 +59,25 @@
+                       CS_NUL   = 8;  /* Includes the NUL character.      */
+ 
+ 
+-static int appearsin(char c, const char *str)
++static int appearsin(wchar_t c, const wchar_t *str)
+ 
+ /* Returns 0 if c is '\0' or str is NULL or c     */
+ /* does not appear in *str.  Otherwise returns 1. */
+ {
+-  return c && str && strchr(str,c);
++  return c && str && wcschr(str,c);
+ }
+ 
+ 
+-static int hexdigtoint(char c)
++static int hexdigtoint(wchar_t c)
+ 
+ /* Returns the value represented by the hexadecimal */
+ /* digit c, or -1 if c is not a hexadecimal digit.  */
+ {
+-  const char *p, * const hexdigits = "0123456789ABCDEFabcdef";
++  const wchar_t *p, * const hexdigits = L"0123456789ABCDEFabcdef";
+   int n;
+ 
+   if (!c) return -1;
+-  p = strchr(hexdigits, *(unsigned char *)&c);
++  p = wcschr(hexdigits, c);
+   if (!p) return -1;
+   n = p - hexdigits;
+   if (n >= 16) n -= 6;
+@@ -87,39 +90,40 @@
+ }
+ 
+ 
+-charset *parsecharset(const char *str, errmsg_t errmsg)
++charset *parsecharset(const wchar_t *str, errmsg_t errmsg)
+ {
+   charset *cset = NULL;
+   buffer *cbuf = NULL;
+-  const char *p, * const singleescapes = "_sbqQx";
++  const wchar_t *p, * const singleescapes = L"_sbqQx";
+   int hex1, hex2;
+-  char ch;
+-
++  wchar_t ch;
++      
+   cset = malloc(sizeof (charset));
+   if (!cset) {
+-    strcpy(errmsg,outofmem);
++    wcscpy(errmsg,outofmem);
+     goto pcserror;
+   }
+   cset->inlist = cset->outlist = NULL;
+   cset->flags = 0;
+ 
+-  cbuf = newbuffer(sizeof (char), errmsg);
++  cbuf = newbuffer(sizeof (wchar_t), errmsg);
+   if (*errmsg) goto pcserror;
+ 
+   for (p = str;  *p;  ++p)
+-    if (*p == '_') {
++    if (*p == L'_') {
+       ++p;
+       if (appearsin(*p, singleescapes)) {
+-        if      (*p == '_') ch = '_' ;
+-        else if (*p == 's') ch = ' ' ;
+-        else if (*p == 'b') ch = '\\';
+-        else if (*p == 'q') ch = '\'';
+-        else if (*p == 'Q') ch = '\"';
++        if      (*p == L'_') ch = L'_' ;
++        else if (*p == L's') ch = L' ' ;
++        else if (*p == L'b') ch = L'\\';
++        else if (*p == L'q') ch = L'\'';
++        else if (*p == L'Q') ch = L'\"';
+         else /*  *p == 'x'  */ {
++          /* FIXME _x metacharacter should allow wide characters input.*/
+           hex1 = hexdigtoint(p[1]);
+           hex2 = hexdigtoint(p[2]);
+           if (hex1 < 0  ||  hex2 < 0) goto pcsbadstr;
+-          *(unsigned char *)&ch = 16 * hex1 + hex2;
++          ch = 16 * hex1 + hex2;
+           p += 2;
+         }
+         if (!ch)
+@@ -130,14 +134,14 @@
+         }
+       }
+       else {
+-        if      (*p == 'A') cset->flags |= CS_UCASE;
+-        else if (*p == 'a') cset->flags |= CS_LCASE;
+-        else if (*p == '0') cset->flags |= CS_DIGIT;
++        if      (*p == L'A') cset->flags |= CS_UCASE;
++        else if (*p == L'a') cset->flags |= CS_LCASE;
++        else if (*p == L'0') cset->flags |= CS_DIGIT;
+         else goto pcsbadstr;
+       }
+     }
+     else {
+-      additem(cbuf,p,errmsg);
++      additem(cbuf, p,errmsg);
+       if (*errmsg) goto pcserror;
+     }
+   ch = '\0';
+@@ -149,11 +153,12 @@
+ pcscleanup:
+ 
+   if (cbuf) freebuffer(cbuf);
++  //if (wstr) free(wstr);
+   return cset;
+ 
+ pcsbadstr:
+ 
+-  sprintf(errmsg, "Bad charset syntax: %.*s\n", errmsg_size - 22, str);
++  swprintf(errmsg, errmsg_size, L"Bad charset syntax: %.*s\n", errmsg_size - 22, str);
+ 
+ pcserror:
+ 
+@@ -171,14 +176,14 @@
+ }
+ 
+ 
+-int csmember(char c, const charset *cset)
++int csmember(wchar_t c, const charset *cset)
+ {
+   return
+     appearsin(c, cset->inlist) ||
+     ( !appearsin(c, cset->outlist) &&
+-      ( (cset->flags & CS_LCASE && islower(*(unsigned char *)&c)) ||
+-        (cset->flags & CS_UCASE && isupper(*(unsigned char *)&c)) ||
+-        (cset->flags & CS_DIGIT && isdigit(*(unsigned char *)&c)) ||
++        ( (cset->flags & CS_LCASE && iswlower(*(wint_t *)&c)) ||
++          (cset->flags & CS_UCASE && iswupper(*(wint_t *)&c)) ||
++          (cset->flags & CS_DIGIT && iswdigit(*(wint_t *)&c)) ||
+         (cset->flags & CS_NUL   && !c                           )   ) );
+ }
+ 
+@@ -191,16 +196,16 @@
+ {
+   charset *csu;
+   buffer *inbuf = NULL, *outbuf = NULL;
+-  char *lists[4], **list, *p, nullchar = '\0';
++  wchar_t *lists[4], **list, *p, nullchar = L'\0';
+ 
+   csu = malloc(sizeof (charset));
+   if (!csu) {
+-    strcpy(errmsg,outofmem);
++    wcscpy(errmsg,outofmem);
+     goto csuderror;
+   }
+-  inbuf = newbuffer(sizeof (char), errmsg);
++  inbuf = newbuffer(sizeof (wchar_t), errmsg);
+   if (*errmsg) goto csuderror;
+-  outbuf = newbuffer(sizeof (char), errmsg);
++  outbuf = newbuffer(sizeof (wchar_t), errmsg);
+   if (*errmsg) goto csuderror;
+   csu->inlist = csu->outlist = NULL;
+   csu->flags =  u  ?  cset1->flags |  cset2->flags
+diff -ur par-1.52.orig/charset.h par-1.52-i18n.4/charset.h
+--- par-1.52.orig/charset.h	2001-03-09 01:50:35.000000000 +0100
++++ par-1.52-i18n.4/charset.h	2009-05-29 21:12:21.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* charset.h         */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* charset.h           */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -11,14 +13,14 @@
+ /* Note: Those functions declared here which do not use errmsg    */
+ /* always succeed, provided that they are passed valid arguments. */
+ 
+-
++#include <wchar.h>
+ #include "errmsg.h"
+ 
+ 
+ typedef struct charset charset;
+ 
+ 
+-charset *parsecharset(const char *str, errmsg_t errmsg);
++charset *parsecharset(const wchar_t *str, errmsg_t errmsg);
+ 
+   /* parsecharset(str,errmsg) returns the set of characters defined by */
+   /* str using charset syntax (see par.doc).  Returns NULL on failure. */
+@@ -30,7 +32,7 @@
+   /* *cset.  cset may not be used after this call.      */
+ 
+ 
+-int csmember(char c, const charset *cset);
++int csmember(wchar_t c, const charset *cset);
+ 
+   /* csmember(c,cset) returns 1 if c is a member of *cset, 0 otherwise. */
+ 
+diff -ur par-1.52.orig/errmsg.c par-1.52-i18n.4/errmsg.c
+--- par-1.52.orig/errmsg.c	2001-03-09 01:50:46.000000000 +0100
++++ par-1.52-i18n.4/errmsg.c	2009-05-29 21:11:43.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* errmsg.c          */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* errmsg.c            */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -11,8 +13,11 @@
+ #include "errmsg.h"  /* Makes sure we're consistent with the declarations. */
+ 
+ 
+-const char * const outofmem =
+-  "Out of memory.\n";
++const wchar_t * const outofmem =
++  L"Out of memory.\n";
+ 
+-const char * const impossibility =
+-  "Impossibility #%d has occurred.  Please report it.\n";
++const wchar_t * const mbserror =
++  L"Error in input multibyte string.\n";
++
++const wchar_t * const impossibility =
++  L"Impossibility #%d has occurred.  Please report it.\n";
+diff -ur par-1.52.orig/errmsg.h par-1.52-i18n.4/errmsg.h
+--- par-1.52.orig/errmsg.h	2001-03-09 01:50:56.000000000 +0100
++++ par-1.52-i18n.4/errmsg.h	2009-05-29 21:12:10.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* errmsg.h          */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* errmsg.h            */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -11,7 +13,7 @@
+ #ifndef ERRMSG_H
+ #define ERRMSG_H
+ 
+-
++#include <wchar.h>
+ #define errmsg_size 163
+ 
+ /* This is the maximum number of characters that will  */
+@@ -20,7 +22,7 @@
+ /* versions of this header file.                       */
+ 
+ 
+-typedef char errmsg_t[errmsg_size];
++typedef wchar_t errmsg_t[errmsg_size];
+ 
+ /* Any function which takes the argument errmsg_t errmsg must, before */
+ /* returning, either set errmsg[0] to '\0' (indicating success), or   */
+@@ -28,10 +30,13 @@
+ /* being careful not to overrun the space.                            */
+ 
+ 
+-extern const char * const outofmem;
++extern const wchar_t * const outofmem;
+   /* "Out of memory.\n" */
+ 
+-extern const char * const impossibility;
++extern const wchar_t * const mbserror;
++  /* "Error in input multibyte string.\n" */
++  
++extern const wchar_t * const impossibility;
+   /* "Impossibility #%d has occurred.  Please report it.\n" */
+ 
+ 
+diff -ur par-1.52.orig/par.1 par-1.52-i18n.4/par.1
+--- par-1.52.orig/par.1	2001-04-29 23:16:22.000000000 +0200
++++ par-1.52-i18n.4/par.1	2009-05-06 14:54:22.000000000 +0200
+@@ -1,6 +1,6 @@
+ .\"*********************
+ .\"* par.1             *
+-.\"* for Par 1.52      *
++.\"* for Par 1.52 i18n *
+ .\"* Copyright 2001 by *
+ .\"* Adam M. Costello  *
+ .\"*********************
+diff -ur par-1.52.orig/par.c par-1.52-i18n.4/par.c
+--- par-1.52.orig/par.c	2001-04-02 06:25:57.000000000 +0200
++++ par-1.52-i18n.4/par.c	2009-05-29 21:13:35.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* par.c             */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* par.c               */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -12,11 +14,14 @@
+ #include "buffer.h"    /* Also includes <stddef.h>. */
+ #include "reformat.h"
+ 
+-#include <ctype.h>
++#include <langinfo.h>
++#include <wchar.h>
++#include <wctype.h>
+ #include <locale.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <errno.h>
+ 
+ #undef NULL
+ #define NULL ((void *) 0)
+@@ -25,56 +30,6 @@
+ #define free(ptr)
+ #endif
+ 
+-
+-/*===
+-
+-Regarding char and unsigned char:  ANSI C is a nightmare in this
+-respect.  Some functions, like puts(), strchr(), and getenv(), use char
+-or char*, so they work well with character constants like 'a', which
+-are char, and with argv, which is char**.  But several other functions,
+-like getchar(), putchar(), and isdigit(), use unsigned char (converted
+-to/from int).  Therefore innocent-looking code can be wrong, for
+-example:
+-
+-    int c = getchar();
+-    if (c == 'a') ...
+-
+-This is wrong because 'a' is char (converted to int) and could be
+-negative, but getchar() returns unsigned char (converted to int), so c
+-is always nonnegative or EOF.  For similar reasons, it is wrong to pass
+-a char to a function that expects an unsigned char:
+-
+-    putchar('\n');
+-    if (isdigit(argv[1][0])) ...
+-
+-Inevitably, we need to convert between char and unsigned char.  This can
+-be done by integral conversion (casting or assigning a char to unsigned
+-char or vice versa), or by aliasing (converting a pointer to char to
+-a pointer to unsigned char (or vice versa) and then dereferencing
+-it).  ANSI C requires that integral conversion alters the bits when the
+-unsigned value is not representable in the signed type and the signed
+-type does not use two's complement representation.  Aliasing, on the
+-other hand, preserves the bits.  Although the C standard is not at all
+-clear about which sort of conversion is appropriate for making the
+-standard library functions interoperate, I think preserving the bits
+-is what is needed.  Under that assumption, here are some examples of
+-correct code:
+-
+-    int c = getchar();
+-    char ch;
+-
+-    if (c != EOF) {
+-      *(unsigned char *)&ch = c;
+-      if (ch == 'a') ...
+-      if (isdigit(c)) ...
+-    }
+-
+-    char *s = ...
+-    if (isdigit(*(unsigned char *)s)) ...
+-
+-===*/
+-
+-
+ static const char * const usagemsg =
+ "\n"
+ "Options for par:\n"
+@@ -126,7 +81,7 @@
+                   /* line, or the fallback prelen and suflen       */
+                   /* of the IP containing a non-bodiless line.     */
+   lflag_t flags;  /* Boolean properties (see below).               */
+-  char rc;        /* The repeated character of a bodiless line.    */
++  wchar_t rc;     /* The repeated character of a bodiless line.    */
+ } lineprop;
+ 
+ /* Flags for marking boolean properties: */
+@@ -143,14 +98,14 @@
+ #define   isvacant(prop) (isbodiless(prop) && (prop)->rc == ' ')
+ 
+ 
+-static int digtoint(char c)
++static int digtoint(wchar_t c)
+ 
+ /* Returns the value represented by the digit c, or -1 if c is not a digit. */
+ {
+-  const char *p, * const digits = "0123456789";
++  const wchar_t *p, * const digits = L"0123456789";
+ 
+   if (!c) return -1;
+-  p = strchr(digits,c);
++  p = wcschr(digits,c);
+   return  p  ?  p - digits  :  -1;
+ 
+   /* We can't simply return c - '0' because this is ANSI C code,  */
+@@ -161,7 +116,7 @@
+ }
+ 
+ 
+-static int strtoudec(const char *s, int *pn)
++static int strtoudec(const wchar_t *s, int *pn)
+ 
+ /* Converts the longest prefix of string s consisting of decimal   */
+ /* digits to an integer, which is stored in *pn.  Normally returns */
+@@ -187,7 +142,7 @@
+ 
+ 
+ static void parsearg(
+-  const char *arg, int *phelp, int *pversion, charset *bodychars, charset
++  const wchar_t *arg, int *phelp, int *pversion, charset *bodychars, charset
+   *protectchars, charset *quotechars, int *phang, int *pprefix, int *prepeat,
+   int *psuffix, int *pTab, int *pwidth, int *pbody, int *pcap, int *pdiv, int
+   *pErr, int *pexpel, int *pfit, int *pguess, int *pinvis, int *pjust, int
+@@ -197,78 +152,78 @@
+ /* by the other pointers as appropriate.  *phelp and *pversion are boolean  */
+ /* flags indicating whether the help and version options were supplied.     */
+ {
+-  const char *savearg = arg;
++  const wchar_t *savearg = arg;
+   charset *chars, *change;
+-  char oc;
++  wchar_t oc;
+   int n;
+ 
+   *errmsg = '\0';
++  
++  if (*arg == L'-') ++arg;
+ 
+-  if (*arg == '-') ++arg;
+-
+-  if (!strcmp(arg, "help")) {
++  if (!wcscmp(arg, L"help")) {
+     *phelp = 1;
+     return;
+   }
+ 
+-  if (!strcmp(arg, "version")) {
++  if (!wcscmp(arg, L"version")) {
+     *pversion = 1;
+     return;
+   }
+ 
+-  if (*arg == 'B' || *arg == 'P' || *arg == 'Q' ) {
+-    chars =  *arg == 'B'  ?  bodychars    :
+-             *arg == 'P'  ?  protectchars :
+-          /* *arg == 'Q' */  quotechars   ;
++  if (*arg == L'B' || *arg == L'P' || *arg == L'Q' ) {
++    chars =  *arg == L'B'  ?  bodychars    :
++             *arg == L'P'  ?  protectchars :
++          /* *arg == L'Q' */  quotechars   ;
+     ++arg;
+-    if (*arg != '='  &&  *arg != '+'  &&  *arg != '-') goto badarg;
++    if (*arg != L'='  &&  *arg != L'+'  &&  *arg != L'-') goto badarg;
+     change = parsecharset(arg + 1, errmsg);
+     if (change) {
+-      if      (*arg == '=')   csswap(chars,change);
+-      else if (*arg == '+')   csadd(chars,change,errmsg);
+-      else  /* *arg == '-' */ csremove(chars,change,errmsg);
++      if      (*arg == L'=')   csswap(chars,change);
++      else if (*arg == L'+')   csadd(chars,change,errmsg);
++      else  /* *arg == L'-' */ csremove(chars,change,errmsg);
+       freecharset(change);
+     }
+     return;
+   }
+ 
+-  if (isdigit(*(unsigned char *)arg)) {
++  if (iswdigit(*arg)) {
+     if (!strtoudec(arg, &n)) goto badarg;
+     if (n <= 8) *pprefix = n;
+     else *pwidth = n;
+   }
+ 
+   for (;;) {
+-    while (isdigit(*(unsigned char *)arg)) ++arg;
++    while (iswdigit(*arg)) ++arg;
+     oc = *arg;
+     if (!oc) break;
+     n = -1;
+     if (!strtoudec(++arg, &n)) goto badarg;
+-    if (   oc == 'h' || oc == 'p' || oc == 'r'
+-        || oc == 's' || oc == 'T' || oc == 'w') {
+-      if      (oc == 'h')   *phang   =  n >= 0 ? n :  1;
+-      else if (oc == 'p')   *pprefix =  n;
+-      else if (oc == 'r')   *prepeat =  n >= 0 ? n :  3;
+-      else if (oc == 's')   *psuffix =  n;
+-      else if (oc == 'T')   *pTab    =  n >= 0 ? n :  8;
+-      else  /* oc == 'w' */ *pwidth  =  n >= 0 ? n : 79;
++    if (   oc == L'h' || oc == L'p' || oc == L'r'
++        || oc == L's' || oc == L'T' || oc == L'w') {
++      if      (oc == L'h')   *phang   =  n >= 0 ? n :  1;
++      else if (oc == L'p')   *pprefix =  n;
++      else if (oc == L'r')   *prepeat =  n >= 0 ? n :  3;
++      else if (oc == L's')   *psuffix =  n;
++      else if (oc == L'T')   *pTab    =  n >= 0 ? n :  8;
++      else  /* oc == L'w' */ *pwidth  =  n >= 0 ? n : 79;
+     }
+     else {
+       if (n < 0) n = 1;
+       if (n > 1) goto badarg;
+-      if      (oc == 'b') *pbody   = n;
+-      else if (oc == 'c') *pcap    = n;
+-      else if (oc == 'd') *pdiv    = n;
+-      else if (oc == 'E') *pErr    = n;
+-      else if (oc == 'e') *pexpel  = n;
+-      else if (oc == 'f') *pfit    = n;
+-      else if (oc == 'g') *pguess  = n;
+-      else if (oc == 'i') *pinvis  = n;
+-      else if (oc == 'j') *pjust   = n;
+-      else if (oc == 'l') *plast   = n;
+-      else if (oc == 'q') *pquote  = n;
+-      else if (oc == 'R') *pReport = n;
+-      else if (oc == 't') *ptouch  = n;
++      if      (oc == L'b') *pbody   = n;
++      else if (oc == L'c') *pcap    = n;
++      else if (oc == L'd') *pdiv    = n;
++      else if (oc == L'E') *pErr    = n;
++      else if (oc == L'e') *pexpel  = n;
++      else if (oc == L'f') *pfit    = n;
++      else if (oc == L'g') *pguess  = n;
++      else if (oc == L'i') *pinvis  = n;
++      else if (oc == L'j') *pjust   = n;
++      else if (oc == L'l') *plast   = n;
++      else if (oc == L'q') *pquote  = n;
++      else if (oc == L'R') *pReport = n;
++      else if (oc == L't') *ptouch  = n;
+       else goto badarg;
+     }
+   }
+@@ -277,12 +232,12 @@
+ 
+ badarg:
+ 
+-  sprintf(errmsg, "Bad argument: %.*s\n", errmsg_size - 16, savearg);
++  swprintf(errmsg, errmsg_size, L"Bad argument: %.*s\n", errmsg_size - 16, savearg);
+   *phelp = 1;
+ }
+ 
+ 
+-static char **readlines(
++static wchar_t **readlines(
+   lineprop **pprops, const charset *protectchars,
+   const charset *quotechars, int Tab, int invis, int quote, errmsg_t errmsg
+ )
+@@ -302,9 +257,10 @@
+ /* it's not NULL.  On failure, returns NULL and sets *pprops to NULL.   */
+ {
+   buffer *cbuf = NULL, *lbuf = NULL, *lpbuf = NULL;
+-  int c, empty, blank, firstline, qsonly, oldqsonly = 0, vlnlen, i;
+-  char ch, *ln = NULL, nullchar = '\0', *nullline = NULL, *qpend,
+-       *oldln = NULL, *oldqpend = NULL, *p, *op, *vln = NULL, **lines = NULL;
++  wint_t c;
++  int empty, blank, firstline, qsonly, oldqsonly = 0, vlnlen, i;
++  wchar_t *ln = NULL, nullchar = L'\0', *nullline = NULL, *qpend, 
++    *oldln = NULL, *oldqpend = NULL, *p, *op, *vln = NULL, **lines = NULL;
+   lineprop vprop = { 0, 0, 0, '\0' }, iprop = { 0, 0, 0, '\0' };
+ 
+   /* oldqsonly, oldln, and oldquend don't really need to be initialized.   */
+@@ -316,20 +272,25 @@
+ 
+   *pprops = NULL;
+ 
+-  cbuf = newbuffer(sizeof (char), errmsg);
++  cbuf = newbuffer(sizeof (wchar_t), errmsg);
+   if (*errmsg) goto rlcleanup;
+-  lbuf = newbuffer(sizeof (char *), errmsg);
++  lbuf = newbuffer(sizeof (wchar_t *), errmsg);
+   if (*errmsg) goto rlcleanup;
+   lpbuf = newbuffer(sizeof (lineprop), errmsg);
+   if (*errmsg) goto rlcleanup;
+ 
+   for (empty = blank = firstline = 1;  ;  ) {
+-    c = getchar();
+-    if (c == EOF) break;
+-    *(unsigned char *)&ch = c;
+-    if (ch == '\n') {
++    c = getwchar();
++    if (c == WEOF) {
++      if (errno == EILSEQ) {
++      	wcscpy(errmsg, L"Invalid multibyte sequence in input\n");
++	goto rlcleanup;
++      }
++      break;
++    }
++    if (c == L'\n') {
+       if (blank) {
+-        ungetc(c,stdin);
++        ungetwc(c,stdin);
+         break;
+       }
+       additem(cbuf, &nullchar, errmsg);
+@@ -338,9 +299,9 @@
+       if (*errmsg) goto rlcleanup;
+       if (quote) {
+         for (qpend = ln;  *qpend && csmember(*qpend, quotechars);  ++qpend);
+-        for (p = qpend;  *p == ' ' || csmember(*p, quotechars);  ++p);
+-        qsonly =  *p == '\0';
+-        while (qpend > ln && qpend[-1] == ' ') --qpend;
++        for (p = qpend;  *p == L' ' || csmember(*p, quotechars);  ++p);
++        qsonly =  (*p == L'\0');
++        while (qpend > ln && qpend[-1] == L' ') --qpend;
+         if (!firstline) {
+           for (p = ln, op = oldln;
+                p < qpend && op < oldqpend && *p == *op;
+@@ -348,23 +309,23 @@
+           if (!(p == qpend && op == oldqpend)) {
+             if (!invis && (oldqsonly || qsonly)) {
+               if (oldqsonly) {
+-                *op = '\0';
++                *op = L'\0';
+                 oldqpend = op;
+               }
+               if (qsonly) {
+-                *p = '\0';
++                *p = L'\0';
+                 qpend = p;
+               }
+             }
+             else {
+               vlnlen = p - ln;
+-              vln = malloc((vlnlen + 1) * sizeof (char));
++              vln = malloc((vlnlen + 1) * sizeof (wchar_t));
+               if (!vln) {
+-                strcpy(errmsg,outofmem);
++                wcscpy(errmsg,outofmem);
+                 goto rlcleanup;
+               }
+-              strncpy(vln,ln,vlnlen);
+-              vln[vlnlen] = '\0';
++              wcsncpy(vln, ln, vlnlen);
++              vln[vlnlen] = L'\0';
+               additem(lbuf, &vln, errmsg);
+               if (*errmsg) goto rlcleanup;
+               additem(lpbuf,  invis ? &iprop : &vprop,  errmsg);
+@@ -388,28 +349,31 @@
+     }
+     else {
+       if (empty) {
+-        if (csmember(ch, protectchars)) {
+-          ungetc(c,stdin);
++        if (csmember(c, protectchars)) {
++          ungetwc(c,stdin);
+           break;
+         }
+         empty = 0;
+       }
+-      if (!ch) continue;
+-      if (ch == '\t') {
+-        ch = ' ';
++      if (!c) continue;
++      if (c == L'\t') {
++        c = L' ';
+         for (i = Tab - numitems(cbuf) % Tab;  i > 0;  --i) {
+-          additem(cbuf, &ch, errmsg);
++          additem(cbuf, &c, errmsg);
+           if (*errmsg) goto rlcleanup;
+         }
+         continue;
+       }
+-      if (isspace(c)) ch = ' ';
+-      else blank = 0;
+-      additem(cbuf, &ch, errmsg);
+-      if (*errmsg) goto rlcleanup;
++      if (iswspace(c)) 
++        c = L' ';
++      else 
++        blank = 0;
++      additem(cbuf, &c, errmsg);
++      if (*errmsg) 
++        goto rlcleanup;
+     }
+   }
+-
++  
+   if (!blank) {
+     additem(cbuf, &nullchar, errmsg);
+     if (*errmsg) goto rlcleanup;
+@@ -449,7 +413,7 @@
+ 
+ 
+ static void compresuflen(
+-  const char * const *lines, const char * const *endline,
++  const wchar_t * const *lines, const wchar_t * const *endline,
+   const charset *bodychars, int body, int pre, int suf, int *ppre, int *psuf
+ )
+ /* lines is an array of strings, up to but not including endline.  */
+@@ -457,9 +421,9 @@
+ /* lines in lines.  Assumes that they have already been determined */
+ /* to be at least pre and suf.  endline must not equal lines.      */
+ {
+-  const char *start, *end, *knownstart, * const *line, *p1, *p2, *knownend,
++  const wchar_t *start, *end, *knownstart, * const *line, *p1, *p2, *knownend,
+              *knownstart2;
+-
++           
+   start = *lines;
+   end = knownstart = start + pre;
+   if (body)
+@@ -474,7 +438,7 @@
+   }
+   if (body)
+     for (p1 = end;  p1 > knownstart;  )
+-      if (*--p1 != ' ') {
++      if (*--p1 != L' ') {
+         if (csmember(*p1, bodychars))
+           end = p1;
+         else
+@@ -501,18 +465,18 @@
+   }
+   if (body) {
+     for (p1 = start;
+-         start < knownend && (*start == ' ' || csmember(*start, bodychars));
++         start < knownend && (*start == L' ' || csmember(*start, bodychars));
+          ++start);
+-    if (start > p1 && start[-1] == ' ') --start;
++    if (start > p1 && start[-1] == L' ') --start;
+   }
+   else
+-    while (end - start >= 2 && *start == ' ' && start[1] == ' ') ++start;
++    while (end - start >= 2 && *start == L' ' && start[1] == L' ') ++start;
+   *psuf = end - start;
+ }
+ 
+ 
+ static void delimit(
+-  const char * const *lines, const char * const *endline,
++  const wchar_t * const *lines, const wchar_t * const *endline,
+   const charset *bodychars, int repeat, int body, int div,
+   int pre, int suf, lineprop *props
+ )
+@@ -523,8 +487,8 @@
+ /* and comsuflen of the lines in lines have already been     */
+ /* determined to be at least pre and suf, respectively.      */
+ {
+-  const char * const *line, *end, *p, * const *nextline;
+-  char rc;
++  const wchar_t * const *line, *end, *p, * const *nextline;
++  wchar_t rc;
+   lineprop *prop, *nextprop;
+   int anybodiless = 0, status;
+ 
+@@ -545,8 +509,8 @@
+     for (end = *line;  *end;  ++end);
+     end -= suf;
+     p = *line + pre;
+-    rc =  p < end  ?  *p  :  ' ';
+-    if (rc != ' ' && (!repeat || end - p < repeat))
++    rc =  p < end  ?  *p  :  L' ';
++    if (rc != L' ' && (!repeat || end - p < repeat))
+       prop->flags &= ~L_BODILESS;
+     else
+       while (p < end) {
+@@ -589,9 +553,9 @@
+   }
+ 
+   line = lines, prop = props;
+-  status = ((*lines)[pre] == ' ');
++  status = ((*lines)[pre] == L' ');
+   do {
+-    if (((*line)[pre] == ' ') == status)
++    if (((*line)[pre] == L' ') == status)
+       prop->flags |= L_FIRST;
+     ++line, ++prop;
+   } while (line < endline);
+@@ -599,14 +563,14 @@
+ 
+ 
+ static void marksuperf(
+-  const char * const * lines, const char * const * endline, lineprop *props
++  const wchar_t * const * lines, const wchar_t * const * endline, lineprop *props
+ )
+ /* lines points to the first line of a segment, and endline to one  */
+ /* line beyond the last line in the segment.  Sets L_SUPERF bits in */
+ /* the flags fields of the props array whenever the corresponding   */
+ /* line is superfluous.  L_BODILESS bits must already be set.       */
+ {
+-  const char * const *line, *p;
++  const wchar_t * const *line, *p;
+   lineprop *prop, *mprop, dummy;
+   int inbody, num, mnum;
+ 
+@@ -619,7 +583,7 @@
+   for (line = lines, prop = props;  line < endline;  ++line, ++prop)
+     if (isvacant(prop)) {
+       for (num = 0, p = *line;  *p;  ++p)
+-        if (*p != ' ') ++num;
++        if (*p != L' ') ++num;
+       if (inbody || num < mnum)
+         mnum = num, mprop = prop;
+       inbody = 0;
+@@ -631,7 +595,7 @@
+ 
+ 
+ static void setaffixes(
+-  const char * const *inlines, const char * const *endline,
++  const wchar_t * const *inlines, const wchar_t * const *endline,
+   const lineprop *props, const charset *bodychars,
+   const charset *quotechars, int hang, int body, int quote,
+   int *pafp, int *pfs, int *pprefix, int *psuffix
+@@ -644,7 +608,7 @@
+ /* default value as specified in "par.doc".                            */
+ {
+   int numin, pre, suf;
+-  const char *p;
++  const wchar_t *p;
+ 
+   numin = endline - inlines;
+ 
+@@ -666,11 +630,11 @@
+ }
+ 
+ 
+-static void freelines(char **lines)
++static void freelines(wchar_t **lines)
+ /* Frees the elements of lines, and lines itself. */
+ /* lines is a NULL-terminated array of strings.   */
+ {
+-  char **line;
++  wchar_t **line;
+ 
+   for (line = lines;  *line;  ++line)
+     free(*line);
+@@ -678,68 +642,116 @@
+   free(lines);
+ }
+ 
+-
+ int main(int argc, const char * const *argv)
+ {
+   int help = 0, version = 0, hang = 0, prefix = -1, repeat = 0, suffix = -1,
+       Tab = 1, width = 72, body = 0, cap = 0, div = 0, Err = 0, expel = 0,
+       fit = 0, guess = 0, invis = 0, just = 0, last = 0, quote = 0, Report = 0,
+       touch = -1;
+-  int prefixbak, suffixbak, c, sawnonblank, oweblank, n, i, afp, fs;
++  int prefixbak, suffixbak, sawnonblank, oweblank, n, i, afp, fs;
+   charset *bodychars = NULL, *protectchars = NULL, *quotechars = NULL;
+-  char *parinit = NULL, *arg, **inlines = NULL, **endline, **firstline, *end,
+-       **nextline, **outlines = NULL, **line, ch;
+-  const char *env, * const whitechars = " \f\n\r\t\v";
++  wint_t c;
++  wchar_t *state;
++  wchar_t *parinit = NULL, *arg, **inlines = NULL, **endline, **firstline, *end,
++    **nextline, **outlines = NULL, **line;
++  const char *env;
++  wchar_t *wenv = NULL;
++  const wchar_t * const whitechars = L" \f\n\r\t\v";
+   errmsg_t errmsg = { '\0' };
+   lineprop *props = NULL, *firstprop, *nextprop;
+   FILE *errout;
++  char *langinfo;
+ 
+ /* Set the current locale from the environment: */
+ 
+   setlocale(LC_ALL,"");
++  langinfo = nl_langinfo(CODESET);
++  if (!strcmp(langinfo, "ANSI_X3.4-1968")) {
++    // We would like to fallback in an 8 bits encoding, but it is not easily possible.
++    //setlocale(LC_CTYPE, "C");
++    //langinfo = nl_langinfo(CODESET);
++    fwprintf( Err ? stderr : stdout, 
++        L"Warning: Locale seems not configured\n");
++  }
+ 
+ /* Process environment variables: */
+ 
+   env = getenv("PARBODY");
+   if (!env) env = "";
+-  bodychars = parsecharset(env,errmsg);
++  wenv = malloc((strlen(env) + 1) * sizeof (wchar_t));
++  if (!wenv) {
++    wcscpy(errmsg,outofmem);
++    goto parcleanup;
++  }
++  if (0 > mbstowcs(wenv,env, strlen(env) + 1)) {
++    wcscpy(errmsg, L"Invalid multibyte sequence in PARBODY\n");
++    goto parcleanup;
++  }
++  bodychars = parsecharset(wenv,errmsg);
+   if (*errmsg) {
+     help = 1;
+     goto parcleanup;
+   }
++  free(wenv);
++  wenv = NULL;
+ 
+   env = getenv("PARPROTECT");
+   if (!env) env = "";
+-  protectchars = parsecharset(env,errmsg);
++  wenv = malloc((strlen(env) + 1) * sizeof (wchar_t));
++  if (!wenv) {
++    wcscpy(errmsg,outofmem);
++    goto parcleanup;
++  }
++  if (0 > mbstowcs(wenv,env, strlen(env) + 1)) {
++    wcscpy(errmsg, L"Invalid multibyte sequence in PARPROTECT\n");
++    goto parcleanup;
++  }
++  protectchars = parsecharset(wenv,errmsg);
+   if (*errmsg) {
+     help = 1;
+     goto parcleanup;
+   }
++  free(wenv);
++  wenv = NULL;
+ 
+   env = getenv("PARQUOTE");
+   if (!env) env = "> ";
+-  quotechars = parsecharset(env,errmsg);
++  wenv = malloc((strlen(env) + 1) * sizeof (wchar_t));
++  if (!wenv) {
++    wcscpy(errmsg,outofmem);
++    goto parcleanup;
++  }
++  if (0 > mbstowcs(wenv,env, strlen(env) + 1)) {
++    wcscpy(errmsg, L"Invalid multibyte sequence in PARQUOTE\n");
++    goto parcleanup;
++  }
++  quotechars = parsecharset(wenv,errmsg);
+   if (*errmsg) {
+     help = 1;
+     goto parcleanup;
+   }
++  free(wenv);
++  wenv = NULL;
+ 
+   env = getenv("PARINIT");
+   if (env) {
+-    parinit = malloc((strlen(env) + 1) * sizeof (char));
++    parinit = malloc((strlen(env) + 1) * sizeof (wchar_t));
+     if (!parinit) {
+-      strcpy(errmsg,outofmem);
++      wcscpy(errmsg,outofmem);
+       goto parcleanup;
+     }
+-    strcpy(parinit,env);
+-    arg = strtok(parinit,whitechars);
++    if (0 > mbstowcs(parinit,env, strlen(env) + 1)) {
++      wcscpy(errmsg, L"Invalid multibyte sequence in PARINIT\n");
++      goto parcleanup;
++    }    
++    arg = wcstok(parinit, whitechars, &state);
+     while (arg) {
+       parsearg(arg, &help, &version, bodychars, protectchars,
+                quotechars, &hang, &prefix, &repeat, &suffix, &Tab,
+                &width, &body, &cap, &div, &Err, &expel, &fit, &guess,
+                &invis, &just, &last, &quote, &Report, &touch, errmsg );
+       if (*errmsg || help || version) goto parcleanup;
+-      arg = strtok(NULL,whitechars);
++      arg = wcstok(NULL, whitechars, &state);
+     }
+     free(parinit);
+     parinit = NULL;
+@@ -748,57 +760,71 @@
+ /* Process command line arguments: */
+ 
+   while (*++argv) {
+-    parsearg(*argv, &help, &version, bodychars, protectchars,
++    arg = malloc((strlen(*argv) + 1) * sizeof (wchar_t));
++    if (0 > mbstowcs(arg, *argv, strlen(*argv) + 1)) {
++      wcscpy(errmsg, L"Invalid multibyte sequence in argument\n");
++      goto parcleanup;
++    }
++    parsearg(arg, &help, &version, bodychars, protectchars,
+              quotechars, &hang, &prefix, &repeat, &suffix, &Tab,
+              &width, &body, &cap, &div, &Err, &expel, &fit, &guess,
+              &invis, &just, &last, &quote, &Report, &touch, errmsg );
++    free(arg);
+     if (*errmsg || help || version) goto parcleanup;
+   }
+ 
+   if (Tab == 0) {
+-    strcpy(errmsg, "<Tab> must not be 0.\n");
++    wcscpy(errmsg, L"<Tab> must not be 0.\n");
+     goto parcleanup;
+   }
+ 
+   if (touch < 0) touch = fit || last;
+   prefixbak = prefix;
+   suffixbak = suffix;
+-
+-/* Main loop: */
+-
++  
++  /* Main loop: */
+   for (sawnonblank = oweblank = 0;  ;  ) {
+     for (;;) {
+-      c = getchar();
+-      if (c == EOF) break;
+-      *(unsigned char *)&ch = c;
+-      if (expel && ch == '\n') {
++      c = getwchar();
++      if (c == WEOF) {
++        if (errno == EILSEQ) {
++          wcscpy(errmsg, L"Invalid multibyte sequence in input\n");
++          goto parcleanup;
++        }
++        break;
++      }
++      if (expel && c == L'\n') {
+         oweblank = sawnonblank;
+         continue;
+       }
+-      if (csmember(ch, protectchars)) {
++      if (csmember(c, protectchars)) {
+         sawnonblank = 1;
+         if (oweblank) {
+-          puts("");
++          fputwc(L'\n', stdout);
+           oweblank = 0;
+         }
+-        while (ch != '\n') {
+-          putchar(c);
+-          c = getchar();
+-          if (c == EOF) break;
+-          *(unsigned char *)&ch = c;
++        while (c != L'\n') {
++          putwchar(c);
++          c = getwchar();
++          if (c == WEOF) {
++            if (errno == EILSEQ) {
++              wcscpy(errmsg, L"Invalid multibyte sequence in input\n");
++              goto parcleanup;
++            }
++            break;
++          }
+         }
+       }
+-      if (ch != '\n') break;  /* subsumes the case that c == EOF */
+-      putchar(c);
++      if (c != L'\n') break;  /* subsumes the case that c == EOF */
++      putwchar(c);
+     }
+-    if (c == EOF) break;
+-    ungetc(c,stdin);
++    if (c == WEOF) break;
++    ungetwc(c,stdin);
+ 
+     inlines =
+       readlines(&props, protectchars, quotechars, Tab, invis, quote, errmsg);
+     if (*errmsg) goto parcleanup;
+-
+-    for (endline = inlines;  *endline;  ++endline);
++    for (endline = inlines;  *endline;  ++endline) ;
+     if (endline == inlines) {
+       free(inlines);
+       inlines = NULL;
+@@ -807,38 +833,39 @@
+ 
+     sawnonblank = 1;
+     if (oweblank) {
+-      puts("");
++      fputwc(L'\n', stdout);
+       oweblank = 0;
+     }
+ 
+-    delimit((const char * const *) inlines,
+-            (const char * const *) endline,
++    delimit((const wchar_t * const *) inlines,
++            (const wchar_t * const *) endline,
+             bodychars, repeat, body, div, 0, 0, props);
+ 
+     if (expel)
+-      marksuperf((const char * const *) inlines,
+-                 (const char * const *) endline, props);
++      marksuperf((const wchar_t * const *) inlines,
++                 (const wchar_t * const *) endline, props);
+ 
+     firstline = inlines, firstprop = props;
++
+     do {
+       if (isbodiless(firstprop)) {
+         if (!isinvis(firstprop) && !(expel && issuperf(firstprop))) {
+           for (end = *firstline;  *end;  ++end);
+-          if (!repeat || (firstprop->rc == ' ' && !firstprop->s)) {
+-            while (end > *firstline && end[-1] == ' ') --end;
+-            *end = '\0';
+-            puts(*firstline);
++          if (!repeat || (firstprop->rc == L' ' && !firstprop->s)) {
++            while (end > *firstline && end[-1] == L' ') --end;
++            *end = L'\0';
++            fwprintf(stdout, L"%ls\n", *firstline);
+           }
+           else {
+             n = width - firstprop->p - firstprop->s;
+             if (n < 0) {
+-              sprintf(errmsg,impossibility,5);
++              swprintf(errmsg,errmsg_size,impossibility,5);
+               goto parcleanup;
+             }
+-            printf("%.*s", firstprop->p, *firstline);
++            fwprintf(stdout, L"%.*ls", firstprop->p, *firstline);
+             for (i = n;  i;  --i)
+-              putchar(*(unsigned char *)&firstprop->rc);
+-            puts(end - firstprop->s);
++              fputwc(firstprop->rc, stdout);
++            fwprintf(stdout, L"%ls\n", end - firstprop->s);
+           }
+         }
+         ++firstline, ++firstprop;
+@@ -848,28 +875,26 @@
+       for (nextline = firstline + 1, nextprop = firstprop + 1;
+            nextline < endline && !isbodiless(nextprop) && !isfirst(nextprop);
+            ++nextline, ++nextprop);
+-
++      
+       prefix = prefixbak, suffix = suffixbak;
+-      setaffixes((const char * const *) firstline,
+-                 (const char * const *) nextline, firstprop, bodychars,
++      setaffixes((const wchar_t * const *) firstline,
++                 (const wchar_t * const *) nextline, firstprop, bodychars,
+                  quotechars, hang, body, quote, &afp, &fs, &prefix, &suffix);
+       if (width <= prefix + suffix) {
+-        sprintf(errmsg,
+-                "<width> (%d) <= <prefix> (%d) + <suffix> (%d)\n",
++        swprintf(errmsg,errmsg_size,
++                L"<width> (%d) <= <prefix> (%d) + <suffix> (%d)\n",
+                 width, prefix, suffix);
+         goto parcleanup;
+       }
+ 
+       outlines =
+-        reformat((const char * const *) firstline,
+-                 (const char * const *) nextline,
++        reformat((const wchar_t * const *) firstline,
++                 (const wchar_t * const *) nextline,
+                  afp, fs, hang, prefix, suffix, width, cap,
+                  fit, guess, just, last, Report, touch, errmsg);
+       if (*errmsg) goto parcleanup;
+-
+       for (line = outlines;  *line;  ++line)
+-        puts(*line);
+-
++        fwprintf(stdout, L"%ls\n", *line);
+       freelines(outlines);
+       outlines = NULL;
+ 
+@@ -884,7 +909,7 @@
+   }
+ 
+ parcleanup:
+-
++  if (wenv) free(wenv);
+   if (bodychars) freecharset(bodychars);
+   if (protectchars) freecharset(protectchars);
+   if (quotechars) freecharset(quotechars);
+@@ -892,10 +917,14 @@
+   if (inlines) freelines(inlines);
+   if (props) free(props);
+   if (outlines) freelines(outlines);
+ 
+   errout = Err ? stderr : stdout;
+-  if (*errmsg) fprintf(errout, "par error:\n%.*s", errmsg_size, errmsg);
+-  if (version) fputs("par 1.52\n",errout);
++  if (*errmsg) fwprintf(errout, L"par error:\n%.*ls", errmsg_size, errmsg);
++#ifdef NOWIDTH
++  if (version) fputws(L"par 1.52-i18n.4 (without wcwidth() support)\n",errout);
++#else
++  if (version) fputws(L"par 1.52-i18n.4\n",errout);
++#endif
+   if (help)    fputs(usagemsg,errout);
+ 
+   return *errmsg ? EXIT_FAILURE : EXIT_SUCCESS;
+diff -ur par-1.52.orig/par.doc par-1.52-i18n.4/par.doc
+--- par-1.52.orig/par.doc	2001-04-29 23:17:28.000000000 +0200
++++ par-1.52-i18n.4/par.doc	2009-05-06 14:54:22.000000000 +0200
+@@ -1,6 +1,6 @@
+   *********************
+   * par.doc           *
+-  * for Par 1.52      *
++  * for Par 1.52 i18n *
+   * Copyright 2001 by *
+   * Adam M. Costello  *
+   *********************
+diff -ur par-1.52.orig/protoMakefile par-1.52-i18n.4/protoMakefile
+--- par-1.52.orig/protoMakefile	2001-03-09 01:53:25.000000000 +0100
++++ par-1.52-i18n.4/protoMakefile	2009-05-06 18:00:20.000000000 +0200
+@@ -47,7 +47,7 @@
+ # Example (for Solaris 2.x with SPARCompiler C):
+ # CC = cc -c -O -s -Xc -DDONTFREE
+ 
+-CC = cc -c
++CC = cc -std=c99 -c
+ 
+ # Define LINK1 and LINK2 so that the command
+ #
+diff -ur par-1.52.orig/reformat.c par-1.52-i18n.4/reformat.c
+--- par-1.52.orig/reformat.c	2001-03-22 05:17:15.000000000 +0100
++++ par-1.52-i18n.4/reformat.c	2009-05-29 21:09:56.000000000 +0200
+@@ -1,9 +1,11 @@
+-/*********************/
+-/* reformat.c        */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* reformat.c          */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+@@ -16,6 +18,7 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <wctype.h>
+ 
+ #undef NULL
+ #define NULL ((void *) 0)
+@@ -33,14 +36,15 @@
+ typedef unsigned char wflag_t;
+ 
+ typedef struct word {
+-  const char *chrs;       /* Pointer to the characters in the word */
++  const wchar_t *chrs;    /* Pointer to the characters in the word */
+                           /* (NOT terminated by '\0').             */
+   struct word *prev,      /* Pointer to previous word.             */
+               *next,      /* Pointer to next word.                 */
+                           /* Supposing this word were the first... */
+               *nextline;  /*   Pointer to first word in next line. */
+   int score,              /*   Value of the objective function.    */
+-      length;             /* Length of this word.                  */
++      length,             /* Length (in widechar) of this word.    */
++      width;              /* Visual width of this word.            */
+   wflag_t flags;          /* Notable properties of this word.      */
+ } word;
+ 
+@@ -57,17 +61,39 @@
+ #define iscurious(w) (((w)->flags & 2) != 0)
+ #define iscapital(w) (((w)->flags & 4) != 0)
+ 
++static int getWidth(const wchar_t *beg, const wchar_t *end)
++/* Compute (visual) width of a  word. This function is aware */
++/* about double-width characters used in oriental langages.  */
++{
++  int ret, tmp;
++  
++  for (ret = 0; beg != end; beg++) {
++#ifdef NOWIDTH
++    tmp = 1;
++#else
++    tmp = wcwidth(*beg);
++#endif
++    // BUG: It is not really easy to handle case of zero width characters.
++    // If we don't do this, size mallloc for q1 will be less than real 
++    // size and program will segfault. So I prefer to have a bug than a segfault.
++    if (tmp <= 0)
++      tmp = 1;
++    ret += tmp;
++  }
++  
++  return ret;
++}
+ 
+ static int checkcapital(word *w)
+ /* Returns 1 if *w is capitalized according to the definition */
+ /* in par.doc (assuming <cap> is 0), or 0 if not.             */
+ {
+-  const char *p, *end;
++  const wchar_t *p, *end;
+ 
+   for (p = w->chrs, end = p + w->length;
+-       p < end && !isalnum(*(unsigned char *)p);
++       p < end && !iswalnum(*p);
+        ++p);
+-  return p < end && !islower(*(unsigned char *)p);
++  return p < end && !iswlower(*p);
+ }
+ 
+ 
+@@ -75,19 +101,19 @@
+ /* Returns 1 if *w is curious according to */
+ /* the definition in par.doc, or 0 if not. */
+ {
+-  const char *start, *p;
+-  char ch;
++  const wchar_t *start, *p;
++  wchar_t ch;
+ 
+   for (start = w->chrs, p = start + w->length;  p > start;  --p) {
+     ch = p[-1];
+-    if (isalnum(*(unsigned char *)&ch)) return 0;
+-    if (ch == '.' || ch == '?' || ch == '!' || ch == ':') break;
++    if (iswalnum(*(wchar_t *)&ch)) return 0;
++    if (ch == L'.' || ch == L'?' || ch == L'!' || ch == L':') break;
+   }
+ 
+   if (p <= start + 1) return 0;
+ 
+   --p;
+-  do if (isalnum(*(unsigned char *)--p)) return 1;
++  do if (iswalnum(*(wchar_t *)--p)) return 1;
+   while (p > start);
+ 
+   return 0;
+@@ -95,31 +121,32 @@
+ 
+ 
+ static int simplebreaks(word *head, word *tail, int L, int last)
+-
+-/* Chooses line breaks in a list of words which maximize the length of the   */
+-/* shortest line.  L is the maximum line length.  The last line counts as a  */
+-/* line only if last is non-zero. _head must point to a dummy word, and tail */
+-/* must point to the last word, whose next field must be NULL.  Returns the  */
+-/* length of the shortest line on success, -1 if there is a word of length   */
+-/* greater than L, or L if there are no lines.                               */
++/* Chooses line  breaks in a  list of words  which maximize */
++/* the length of  the shortest line. L is  the maximum line */
++/* length. The last  line counts as a line only  if last is */
++/* non-zero. _head  must point  to a  dummy word,  and tail */
++/* must point  to the last  word, whose next field  must be */
++/* NULL.  Returns  the  length  of  the  shortest  line  on */
++/* success, -1 if there is a word of length greater than L, */
++/* or L if there are no lines.                              */
+ {
+   word *w1, *w2;
+   int linelen, score;
+ 
+   if (!head->next) return L;
+ 
+-  for (w1 = tail, linelen = w1->length;
++  for (w1 = tail, linelen = w1->width;
+        w1 != head && linelen <= L;
+-       linelen += isshifted(w1), w1 = w1->prev, linelen += 1 + w1->length) {
++       linelen += isshifted(w1), w1 = w1->prev, linelen += 1 + w1->width) {
+     w1->score = last ? linelen : L;
+     w1->nextline = NULL;
+   }
+ 
+   for ( ;  w1 != head;  w1 = w1->prev) {
+     w1->score = -1;
+-    for (linelen = w1->length,  w2 = w1->next;
++    for (linelen = w1->width,  w2 = w1->next;
+          linelen <= L;
+-         linelen += 1 + isshifted(w2) + w2->length,  w2 = w2->next) {
++         linelen += 1 + isshifted(w2) + w2->width,  w2 = w2->next) {
+       score = w2->score;
+       if (linelen < score) score = linelen;
+       if (score >= w1->score) {
+@@ -168,7 +195,7 @@
+ 
+   shortest = simplebreaks(head,tail,target,last);
+   if (shortest < 0) {
+-    sprintf(errmsg,impossibility,1);
++    swprintf(errmsg,errmsg_size,impossibility,1);
+     return;
+   }
+ 
+@@ -178,9 +205,9 @@
+   w1 = tail;
+   do {
+     w1->score = -1;
+-    for (linelen = w1->length,  w2 = w1->next;
++    for (linelen = w1->width,  w2 = w1->next;
+          linelen <= target;
+-         linelen += 1 + isshifted(w2) + w2->length,  w2 = w2->next) {
++         linelen += 1 + isshifted(w2) + w2->width,  w2 = w2->next) {
+       extra = target - linelen;
+       minlen = shortest;
+       if (w2)
+@@ -202,7 +229,7 @@
+   } while (w1 != head);
+ 
+   if (head->next->score < 0)
+-    sprintf(errmsg,impossibility,2);
++    swprintf(errmsg,errmsg_size,impossibility,2);
+ }
+ 
+ 
+@@ -225,9 +252,9 @@
+   w1 = tail;
+   do {
+     w1->score = L;
+-    for (numgaps = 0, extra = L - w1->length, w2 = w1->next;
++    for (numgaps = 0, extra = L - w1->width, w2 = w1->next;
+          extra >= 0;
+-         ++numgaps, extra -= 1 + isshifted(w2) + w2->length, w2 = w2->next) {
++         ++numgaps, extra -= 1 + isshifted(w2) + w2->width, w2 = w2->next) {
+       gap = numgaps ? (extra + numgaps - 1) / numgaps : L;
+       if (w2)
+         score = w2->score;
+@@ -247,7 +274,7 @@
+ 
+   maxgap = head->next->score;
+   if (maxgap >= L) {
+-    strcpy(errmsg, "Cannot justify.\n");
++    wcscpy(errmsg, L"Cannot justify.\n");
+     return;
+   }
+ 
+@@ -257,9 +284,9 @@
+   w1 = tail;
+   do {
+     w1->score = -1;
+-    for (numgaps = 0, extra = L - w1->length, w2 = w1->next;
++    for (numgaps = 0, extra = L - w1->width, w2 = w1->next;
+          extra >= 0;
+-         ++numgaps, extra -= 1 + isshifted(w2) + w2->length, w2 = w2->next) {
++         ++numgaps, extra -= 1 + isshifted(w2) + w2->width, w2 = w2->next) {
+       gap = numgaps ? (extra + numgaps - 1) / numgaps : L;
+       if (w2)
+         score = w2->score;
+@@ -288,40 +315,39 @@
+   } while (w1 != head);
+ 
+   if (head->next->score < 0)
+-    sprintf(errmsg,impossibility,3);
++    swprintf(errmsg,errmsg_size,impossibility,3);
+ }
+ 
+ 
+-char **reformat(
+-  const char * const *inlines, const char * const *endline, int afp, int fs,
++wchar_t **reformat(
++  const wchar_t * const *inlines, const wchar_t * const *endline, int afp, int fs,
+   int hang, int prefix, int suffix, int width, int cap, int fit, int guess,
+   int just, int last, int Report, int touch, errmsg_t errmsg
+ )
+ {
+   int numin, affix, L, onfirstword = 1, linelen, numout, numgaps, extra, phase;
+-  const char * const *line, **suffixes = NULL, **suf, *end, *p1, *p2;
+-  char *q1, *q2, **outlines = NULL;
++  const wchar_t * const *line, **suffixes = NULL, **suf, *end, *p1, *p2;
++  wchar_t *q1, *q2, **outlines = NULL;
+   word dummy, *head, *tail, *w1, *w2;
+   buffer *pbuf = NULL;
+ 
+ /* Initialization: */
+-
+   *errmsg = '\0';
+   dummy.next = dummy.prev = NULL;
+   dummy.flags = 0;
+   head = tail = &dummy;
+   numin = endline - inlines;
+   if (numin <= 0) {
+-    sprintf(errmsg,impossibility,4);
++    swprintf(errmsg,errmsg_size,impossibility,4);
+     goto rfcleanup;
+   }
+   numgaps = extra = 0;  /* unnecessary, but quiets compiler warnings */
+ 
+ /* Allocate space for pointers to the suffixes: */
+ 
+-  suffixes = malloc(numin * sizeof (const char *));
++  suffixes = malloc(numin * sizeof (const wchar_t *));
+   if (!suffixes) {
+-    strcpy(errmsg,outofmem);
++    wcscpy(errmsg,outofmem);
+     goto rfcleanup;
+   }
+ 
+@@ -334,8 +360,8 @@
+   do {
+     for (end = *line;  *end;  ++end);
+     if (end - *line < affix) {
+-      sprintf(errmsg,
+-              "Line %d shorter than <prefix> + <suffix> = %d + %d = %d\n",
++      swprintf(errmsg,errmsg_size,
++              L"Line %d shorter than <prefix> + <suffix> = %d + %d = %d\n",
+               line - inlines + 1, prefix, suffix, affix);
+       goto rfcleanup;
+     }
+@@ -343,17 +369,17 @@
+     *suf = end;
+     p1 = *line + prefix;
+     for (;;) {
+-      while (p1 < end && *p1 == ' ') ++p1;
++      while (p1 < end && *p1 == L' ') ++p1;
+       if (p1 == end) break;
+       p2 = p1;
+       if (onfirstword) {
+         p1 = *line + prefix;
+         onfirstword = 0;
+       }
+-      while (p2 < end && *p2 != ' ') ++p2;
++      while (p2 < end && *p2 != L' ') ++p2;
+       w1 = malloc(sizeof (word));
+       if (!w1) {
+-        strcpy(errmsg,outofmem);
++        wcscpy(errmsg,outofmem);
+         goto rfcleanup;
+       }
+       w1->next = NULL;
+@@ -361,6 +387,7 @@
+       tail = tail->next = w1;
+       w1->chrs = p1;
+       w1->length = p2 - p1;
++      w1->width = getWidth(p1, p2);
+       w1->flags = 0;
+       p1 = p2;
+     }
+@@ -377,6 +404,7 @@
+         if (iscurious(w1)) {
+           if (w1->chrs[w1->length] && w1->chrs + w1->length + 1 == w2->chrs) {
+             w2->length += w1->length + 1;
++            w2->width += w1->width + 1;
+             w2->chrs = w1->chrs;
+             w2->prev = w1->prev;
+             w2->prev->next = w2;
+@@ -397,20 +425,20 @@
+ 
+   if (Report)
+     for (w2 = head->next;  w2;  w2 = w2->next) {
+-      if (w2->length > L) {
+-        linelen = w2->length;
++      if (w2->width > L) {
++        linelen = w2->width;
+         if (linelen > errmsg_size - 17)
+           linelen = errmsg_size - 17;
+-        sprintf(errmsg, "Word too long: %.*s\n", linelen, w2->chrs);
++        swprintf(errmsg,errmsg_size, L"Word too long: %.*ls\n", linelen, w2->chrs);
+         goto rfcleanup;
+       }
+     }
+   else
+     for (w2 = head->next;  w2;  w2 = w2->next)
+-      while (w2->length > L) {
++      while (w2->width > L) {
+         w1 = malloc(sizeof (word));
+         if (!w1) {
+-          strcpy(errmsg,outofmem);
++          wcscpy(errmsg,outofmem);
+           goto rfcleanup;
+         }
+         w1->next = w2;
+@@ -420,7 +448,9 @@
+         w1->chrs = w2->chrs;
+         w2->chrs += L;
+         w1->length = L;
++        w1->width = getWidth(w1->chrs, w1->chrs + L);
+         w2->length -= L;
++        w2->width -= w1->width;
+         w1->flags = 0;
+         if (iscapital(w2)) {
+           w1->flags |= W_CAPITAL;
+@@ -444,9 +474,9 @@
+     L = 0;
+     w1 = head->next;
+     while (w1) {
+-      for (linelen = w1->length, w2 = w1->next;
++      for (linelen = w1->width, w2 = w1->next;
+            w2 != w1->nextline;
+-           linelen += 1 + isshifted(w2) + w2->length, w2 = w2->next);
++           linelen += 1 + isshifted(w2) + w2->width, w2 = w2->next);
+       if (linelen > L) L = linelen;
+       w1 = w2;
+     }
+@@ -454,67 +484,67 @@
+ 
+ /* Construct the lines: */
+ 
+-  pbuf = newbuffer(sizeof (char *), errmsg);
++  pbuf = newbuffer(sizeof (wchar_t *), errmsg);
+   if (*errmsg) goto rfcleanup;
+ 
+   numout = 0;
+   w1 = head->next;
+   while (numout < hang || w1) {
+     if (w1)
+-      for (w2 = w1->next, numgaps = 0, extra = L - w1->length;
++      for (w2 = w1->next, numgaps = 0, extra = L - w1->width;
+            w2 != w1->nextline;
+-           ++numgaps, extra -= 1 + isshifted(w2) + w2->length, w2 = w2->next);
++           ++numgaps, extra -= 1 + isshifted(w2) + w2->width, w2 = w2->next);
+     linelen = suffix || (just && (w2 || last)) ?
+                 L + affix :
+                 w1 ? prefix + L - extra : prefix;
+-    q1 = malloc((linelen + 1) * sizeof (char));
++    q1 = malloc((linelen + 1) * sizeof (wchar_t));
+     if (!q1) {
+-      strcpy(errmsg,outofmem);
++      wcscpy(errmsg,outofmem);
+       goto rfcleanup;
+     }
+     additem(pbuf, &q1, errmsg);
+     if (*errmsg) goto rfcleanup;
+     ++numout;
+     q2 = q1 + prefix;
+-    if      (numout <= numin) memcpy(q1, inlines[numout - 1], prefix);
+-    else if (numin  >  hang ) memcpy(q1, endline[-1],         prefix);
++    if      (numout <= numin) memcpy(q1, inlines[numout - 1], prefix * sizeof(wchar_t));
++    else if (numin  >  hang ) memcpy(q1, endline[-1],         prefix * sizeof(wchar_t));
+     else {
+       if (afp > prefix) afp = prefix;
+-      memcpy(q1, endline[-1], afp);
++      memcpy(q1, endline[-1], afp * sizeof(wchar_t));
+       q1 += afp;
+-      while (q1 < q2) *q1++ = ' ';
++      while (q1 < q2) *q1++ = L' ';
+     }
+     q1 = q2;
+     if (w1) {
+       phase = numgaps / 2;
+       for (w2 = w1;  ;  ) {
+-        memcpy(q1, w2->chrs, w2->length);
++        memcpy(q1, w2->chrs, w2->length * sizeof(wchar_t));
+         q1 += w2->length;
+         w2 = w2->next;
+         if (w2 == w1->nextline) break;
+-        *q1++ = ' ';
++        *q1++ = L' ';
+         if (just && (w1->nextline || last)) {
+           phase += extra;
+           while (phase >= numgaps) {
+-            *q1++ = ' ';
++            *q1++ = L' ';
+             phase -= numgaps;
+           }
+         }
+-        if (isshifted(w2)) *q1++ = ' ';
++        if (isshifted(w2)) *q1++ = L' ';
+       }
+     }
+     q2 += linelen - affix;
+-    while (q1 < q2) *q1++ = ' ';
++    while (q1 < q2) *q1++ = L' ';
+     q2 = q1 + suffix;
+-    if      (numout <= numin) memcpy(q1, suffixes[numout - 1], suffix);
+-    else if (numin  >  hang ) memcpy(q1, suffixes[numin  - 1], suffix);
++    if      (numout <= numin) memcpy(q1, suffixes[numout - 1], suffix * sizeof(wchar_t));
++    else if (numin  >  hang ) memcpy(q1, suffixes[numin  - 1], suffix * sizeof(wchar_t));
+     else {
+       if (fs > suffix) fs = suffix;
+-      memcpy(q1, suffixes[numin - 1], fs);
++      memcpy(q1, suffixes[numin - 1], fs * sizeof(wchar_t));
+       q1 += fs;
+-      while(q1 < q2) *q1++ = ' ';
++      while(q1 < q2) *q1++ = L' ';
+     }
+-    *q2 = '\0';
++    *q2 = L'\0';
+     if (w1) w1 = w1->nextline;
+   }
+ 
+@@ -543,5 +573,6 @@
+     freebuffer(pbuf);
+   }
+ 
++  
+   return outlines;
+ }
+diff -ur par-1.52.orig/reformat.h par-1.52-i18n.4/reformat.h
+--- par-1.52.orig/reformat.h	2001-03-09 01:53:43.000000000 +0100
++++ par-1.52-i18n.4/reformat.h	2009-05-29 21:12:57.000000000 +0200
+@@ -1,18 +1,20 @@
+-/*********************/
+-/* reformat.h        */
+-/* for Par 1.52      */
+-/* Copyright 2001 by */
+-/* Adam M. Costello  */
+-/*********************/
++/***********************/
++/* reformat.h          */
++/* for Par 1.52-i18n.4 */
++/* Copyright 2001 by   */
++/* Adam M. Costello    */
++/* Modified by         */
++/* Jérôme Pouiller     */
++/***********************/
+ 
+ /* This is ANSI C code (C89). */
+ 
+ 
+ #include "errmsg.h"
++#include <wchar.h>
+ 
+-
+-char **reformat(
+-  const char * const *inlines, const char * const *endline, int afp, int fs,
++wchar_t **reformat(
++  const wchar_t * const *inlines, const wchar_t * const *endline, int afp, int fs,
+   int hang, int prefix, int suffix, int width, int cap, int fit, int guess,
+   int just, int last, int Report, int touch, errmsg_t errmsg
+ );
+diff -ur par-1.52.orig/releasenotes par-1.52-i18n.4/releasenotes
+--- par-1.52.orig/releasenotes	2001-04-29 23:12:05.000000000 +0200
++++ par-1.52-i18n.4/releasenotes	2009-05-29 21:02:37.000000000 +0200
+@@ -1,12 +1,28 @@
+-  *********************
+-  * releasenotes      *
+-  * for Par 1.52      *
+-  * Copyright 2001 by *
+-  * Adam M. Costello  *
+-  *********************
++  ***********************
++  * releasenotes        *
++  * for Par 1.52-i18n.4 *
++  * Copyright 2001 by   *
++  * Adam M. Costello    *
++  * Modified by         *
++  * Jérôme Pouiller     *
++  ***********************
+ 
+ 
+ Each entry below describes changes since the previous version.
++Par 1.52-i18n.4 released 2009-May-05
++    Change nearly all char in wchar_t remove nightmare of unsigned char vs signed char
++    Fix bugs with option 'q'
++    Fix bugs with '\n'
++
++Par 1.52-i18n.3 released 2006-Oct-03
++    Fix bug with option 'g'
++
++Par 1.52-i18n.2 released 2006-Aug-03
++    Fix bug debian #310495.
++
++Par 1.52-i18n.1 released 2006-Jun-22
++    Changed char in wchar_t. Allow support of multibytes characters.
++    Added support for double-width characters.
+ 
+ Par 1.52 released 2001-Apr-29
+     Fixed a portability problem regarding unsigned char versus char.
