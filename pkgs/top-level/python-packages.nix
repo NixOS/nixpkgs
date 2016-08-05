@@ -9110,6 +9110,26 @@ in modules // {
     };
   };
 
+  django_environ = buildPythonPackage rec {
+    name = "django-environ-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-environ/${name}.tar.gz";
+      sha256 = "0i32vsgk1xmwpi7i6f6v5hg653y9dl0fsz5qmv94skz6hwgm5kvh";
+    };
+
+    # The testsuite fails to modify the base environment
+    doCheck = false;
+    propagatedBuildInputs = with self ; [ django six ];
+
+    meta = {
+      description = "Utilize environment variables to configure your Django application";
+      homepage = https://github.com/joke2k/django-environ/;
+      license = licenses.mit;
+    };
+  };
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.7.5";
     disabled = isPy3k;
