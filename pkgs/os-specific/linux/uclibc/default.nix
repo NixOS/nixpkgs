@@ -79,6 +79,8 @@ stdenv.mkDerivation {
     make oldconfig
   '';
 
+  hardeningDisable = [ "stackprotector" ];
+
   # Cross stripping hurts.
   dontStrip = cross != null;
 
