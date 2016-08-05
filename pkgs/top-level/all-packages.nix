@@ -2384,6 +2384,8 @@ in
 
   liboauth = callPackage ../development/libraries/liboauth { };
 
+  libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
+
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
   libtermkey = callPackage ../development/libraries/libtermkey { };
