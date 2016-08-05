@@ -1,20 +1,10 @@
-{fetchurl, fetchFromGitHub, stdenv, fontforge, perl, fontconfig, FontTTF}:
+{fetchFromGitHub, stdenv, fontforge, perl, FontTTF}:
 
 let version = "2.37" ; in
 
 stdenv.mkDerivation rec {
   name = "dejavu-fonts-${version}";
-  #fontconfig is needed only for fc-lang (?)
   buildInputs = [fontforge perl FontTTF];
-
-  unicodeData = fetchurl {
-    url = http://www.unicode.org/Public/9.0.0/ucd/UnicodeData.txt ;
-    sha256 = "13zfannnr6sa6s27ggvcvzmh133ndi38pfyxsssvjmw2s8ac9pv8";
-  };
-  blocks = fetchurl {
-    url = http://www.unicode.org/Public/9.0.0/ucd/Blocks.txt;
-    sha256 = "04xyws1prlcnqsryq56sm25dlfvr3464lbjjh9fyaclhi3a2f8b1";
-  };
 
   src = fetchFromGitHub {
     owner = "dejavu-fonts";
@@ -25,15 +15,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = "full-ttf";
 
-  preBuild = ''
-    sed -e s@/usr/bin/env@$(type -tP env)@ -i scripts/*
-    sed -e s@/usr/bin/perl@$(type -tP perl)@ -i scripts/*
-    mkdir resources
-    tar xf ${fontconfig.src} --wildcards '*/fc-lang'
-    ln -s $PWD/fontconfig-*/fc-lang -t resources/
-    ln -s ${unicodeData} resources/UnicodeData.txt
-    ln -s ${blocks} resources/Blocks.txt
-  '';
+  preBuild = "patchShebangs scripts";
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
