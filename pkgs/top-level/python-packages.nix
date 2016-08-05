@@ -9189,11 +9189,11 @@ in modules // {
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
-    version = "1.4.3";
+    version = "1.4.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-nose/${name}.tar.gz";
-      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+      sha256 = "1fm47fkza2lk0xgc6qpi9vs78zg7q8cgl6mdan69sbycgy909ff0";
     };
 
     # vast dependency list
