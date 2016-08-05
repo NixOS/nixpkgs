@@ -187,6 +187,9 @@ with stdenv.lib;
   SND_USB_CAIAQ_INPUT y
   PSS_MIXER y # Enable PSS mixer (Beethoven ADSP-16 and other compatible)
 
+  # Open Sound System is deprecated
+  SOUND_PRIME n
+
   # USB serial devices.
   USB_SERIAL_GENERIC y # USB Generic Serial Driver
   USB_SERIAL_KEYSPAN_MPR y # include firmware for various USB serial devices
