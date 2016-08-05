@@ -112,11 +112,21 @@ with stdenv.lib;
     IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
+  IP_ROUTE_VERBOSE y
+  IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
   IP_VS_PROTO_UDP y
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IPV6_ROUTER_PREF y
+  IPV6_ROUTE_INFO y
+  IPV6_OPTIMISTIC_DAD y
+  IPV6_MULTIPLE_TABLES y
+  IPV6_SUBTREES y
+  IPV6_MROUTE y
+  IPV6_MROUTE_MULTIPLE_TABLES y
+  IPV6_PIMSM_V2 y
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -126,6 +136,10 @@ with stdenv.lib;
     NET_CLS_BPF m
     NET_ACT_BPF m
   ''}
+  L2TP_V3 y
+  L2TP_IP m
+  L2TP_ETH m
+  BRIDGE_VLAN_FILTERING y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
