@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, libtool
+{ stdenv, fetchurl, pkgconfig
 , docSupport ? true, doxygen ? null, graphviz ? null }:
 
 assert docSupport -> doxygen != null && graphviz != null;
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   minor = "8";
   level = "6";
   version = "${major}.${minor}.${level}";
-  name = "${pname}-${major}.${minor}.${level}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${pname}-${major}.${minor}.${level}.tar.gz";
+    url = "mirror://sourceforge/sidplay-residfp/${pname}/${major}.${minor}/${name}.tar.gz";
     sha256 = "0lzivfdq0crmfr01c6f5h883yr7wvagq198xkk3srdmvshhxmwnw";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ]
     ++ stdenv.lib.optionals docSupport [ doxygen graphviz ];
 
   installTargets = [ "install" ]
