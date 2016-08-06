@@ -27707,14 +27707,14 @@ in modules // {
 
   ovh = buildPythonPackage rec {
     name = "ovh-${version}";
-    version = "0.3.5";
+    version = "0.4.5";
     doCheck = false; #test needs packages too explicit
     buildInputs = with self; [ d2to1 ];
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ovh/ovh-${version}.tar.gz";
-      sha256 = "1y74lrdlgbb786mwas7ynphimfi00dgr67ncjq20kdf31jg5415n";
+      sha256 = "1wf2p1sbg34jpj97r3w5nx9pj6vp0mlprry3vw2xav3dv02qv2af";
     };
 
     meta = {
