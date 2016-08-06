@@ -438,14 +438,15 @@ in
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 
-    services.xserver.drivers = flip map cfg.videoDrivers (name:
+    # FIXME: somehow check for unknown driver names.
+    services.xserver.drivers = flip concatMap cfg.videoDrivers (name:
       let driver =
         attrByPath [name]
           (if xorg ? ${"xf86video" + name}
            then { modules = [xorg.${"xf86video" + name}]; }
-           else throw "Unknown video driver: ${name}")
+           else null)
           knownVideoDrivers;
-      in { inherit name; modules = []; driverName = name; } // driver);
+      in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
 
     assertions =
       [ { assertion = config.security.polkit.enable;
