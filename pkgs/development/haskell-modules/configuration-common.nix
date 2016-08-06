@@ -946,4 +946,19 @@ self: super: {
     url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
+
+  # https://github.com/GaloisInc/HaNS/pull/12
+  hans = overrideCabal super.hans (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "GaloisInc";
+      repo = "HaNS";
+      rev = "53e4af3ee46fc06b31754cec620209a81bbef456";
+      sha256 = "079205fqglzhh931h4n7qlrih18117m3w82ih19b8ygr55ps4ldj";
+    };
+    doHaddock = false;
+    patches = [(pkgs.fetchpatch {
+          url = "https://patch-diff.githubusercontent.com/raw/GaloisInc/HaNS/pull/12.patch";
+          sha256 = "0xa5b7i9wx32ji0zzlh1a1pws677iffby3bg39kv3c9srdb4by1g";
+      })];
+  });
 }
