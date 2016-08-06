@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Grive/grive;
     license = stdenv.lib.licenses.gpl2;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
