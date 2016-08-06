@@ -73,7 +73,6 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromium.browser}/libexec/chromium/chromium";
     getWrapperFlags = plugin: "$(< \"${plugin}/nix-support/wrapper-flags\")";
-    sandboxExecutableSourcePath = "${chromium.browser}/libexec/chromium/chrome-sandbox";
     launchScript = writeScript "chromium" ''
       #! ${stdenv.shell}
 
@@ -100,9 +99,7 @@ in stdenv.mkDerivation {
     substituteInPlace $out/bin/chromium --replace @out@ $out --replace @sandbox@ $sandbox
     chmod 755 "$out/bin/chromium"
 
-    mkdir -p "$sandbox/bin"
-    [ -x "${sandboxExecutableSourcePath}" ] || exit 1
-    ln -sv "${sandboxExecutableSourcePath}" "$sandbox/bin/${sandboxExecutableName}"
+    ln -sv "${chromium.browser.sandbox}" "$sandbox"
 
     ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
     ln -s "${chromium.browser}/share/icons" "$out/share/icons"

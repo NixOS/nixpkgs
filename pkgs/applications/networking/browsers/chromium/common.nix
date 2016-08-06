@@ -224,6 +224,13 @@ let
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
 
+    outputs = ["out" "sandbox"];
+
+    postInstall = ''
+      mkdir -p "$sandbox/bin"
+      mv -v "$out/libexec/chromium/chrome-sandbox" "$sandbox/bin/${sandboxExecutableName}"
+    '';
+
     passthru = { inherit sandboxExecutableName; };
   };
 
