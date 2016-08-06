@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SDL image library";
     homepage = "http://www.libsdl.org/projects/SDL_image/";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
