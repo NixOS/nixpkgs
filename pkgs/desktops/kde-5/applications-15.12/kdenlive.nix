@@ -12,6 +12,7 @@
 , kinit
 , kjobwidgets
 , kio
+, kio-extras
 , kparts
 , ktexteditor
 , kwindowsystem
@@ -30,6 +31,9 @@
 , mlt
 , shared_mime_info
 , libv4l
+, kfilemetadata
+, ffmpeg
+, phonon-backend-vlc
 }:
 
 kdeApp {
@@ -40,11 +44,11 @@ kdeApp {
   ];
   buildInputs = [
     qtscript
-    #kconfig
-    #kcrash
+    kconfig
+    kcrash
     kguiaddons
     kiconthemes
-    #kinit
+    kinit
     #kjobwidgets
     #kparts
     #kxmlgui
@@ -62,14 +66,18 @@ kdeApp {
     mlt
     shared_mime_info
     libv4l
+    ffmpeg
   ];
   propagatedBuildInputs = [
-    #kactivities
-    #ki18n
-    #kio
+    kactivities
+    ki18n
+    kio
+    kio-extras
     #ktexteditor
-    #kwindowsystem
+    kwindowsystem
+    kfilemetadata
     plasma-framework
+    phonon-backend-vlc
   ];
   postInstall = ''
     wrapQtProgram "$out/bin/kdenlive"
