@@ -96,6 +96,8 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
+  sandboxExecutableName = "__chromium-suid-sandbox";
+
   base = rec {
     name = "${packageName}-${version}";
     inherit (upstream-info) version;
@@ -221,6 +223,8 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
+
+    passthru = { inherit sandboxExecutableName; };
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

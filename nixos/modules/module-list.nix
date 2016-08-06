@@ -92,6 +92,7 @@
   ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/ca.nix
+  ./security/chromium-suid-sandbox.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
   ./security/hidepid.nix
