@@ -961,4 +961,14 @@ self: super: {
           sha256 = "0xa5b7i9wx32ji0zzlh1a1pws677iffby3bg39kv3c9srdb4by1g";
       })];
   });
+
+  # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
+  # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
+  # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
+  #
+  # Note: Simply patching the dynamic library (.so) of the GLUT build will *not* work, since the
+  # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
+  # us when we patch the cabal file (Link options will be recored in the ghc package registry).
+  GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+
 }
