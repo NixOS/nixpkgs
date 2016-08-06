@@ -17478,9 +17478,7 @@ in
     qt = qt4;
   };
 
-  yadm = callPackage ../applications/version-management/yadm {
-    git = gitMinimal;
-  };
+  yadm = callPackage ../applications/version-management/yadm { };
 
   yafc = callPackage ../applications/networking/yafc { };
 

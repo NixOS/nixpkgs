@@ -1,28 +1,22 @@
-{ stdenv, fetchurl, git, bash }:
+{ stdenv, fetchurl, fetchFromGitHub }:
 
 let version = "1.04"; in
-let link = "https://raw.githubusercontent.com/TheLocehiliosan/yadm/${version}"; in
 stdenv.mkDerivation {
   name = "yadm-${version}";
-  isLibrary = false;
-  isExecutable = true;
 
-  exe = fetchurl {
-    url = "${link}/yadm";
-    sha256 = "c2a7802e45570d5123f9e5760f6f92f1205f340ce155b47b065e1a1844145067";
-  };
-
-  man = fetchurl {
-    url = "${link}/yadm.1";
-    sha256 = "868755b19b9115cceb78202704a83ee204c2921646dd7814f8c25dd237ce09b2";
+  src = fetchFromGitHub {
+    owner  = "TheLocehiliosan";
+    repo   = "yadm";
+    rev    = "${version}";
+    sha256 = "1g5nz4y63ccxlbz67klm78525ps41ynis8683iayakg4907vd898";
   };
 
   buildCommand = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
-    sed -e 's:/bin/bash:/usr/bin/env bash:' $exe > $out/bin/yadm
+    sed -e 's:/bin/bash:/usr/bin/env bash:' $src/yadm > $out/bin/yadm
     chmod 755 $out/bin/yadm
-    install -m 644 $man $out/share/man/man1/yadm.1
+    install -m 644 $src/yadm.1 $out/share/man/man1/yadm.1
   '';
 
   meta = {
@@ -38,5 +32,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.unix;
   };
 }
-
-
