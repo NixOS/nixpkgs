@@ -15669,6 +15669,7 @@ in
 
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
+    ffmpeg = ffmpeg_2;
   };
 
   hexen = callPackage ../games/hexen { };
