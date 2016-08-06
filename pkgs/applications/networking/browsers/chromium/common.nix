@@ -96,8 +96,6 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  sandboxExecutableName = "__chromium-suid-sandbox";
-
   base = rec {
     name = "${packageName}-${version}";
     inherit (upstream-info) version;
@@ -223,15 +221,6 @@ let
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;
     in concatStringsSep "\n" commands;
-
-    outputs = ["out" "sandbox"];
-
-    postInstall = ''
-      mkdir -p "$sandbox/bin"
-      mv -v "$out/libexec/chromium/chrome-sandbox" "$sandbox/bin/${sandboxExecutableName}"
-    '';
-
-    passthru = { inherit sandboxExecutableName; };
   };
 
 # Remove some extraAttrs we supplied to the base attributes already.

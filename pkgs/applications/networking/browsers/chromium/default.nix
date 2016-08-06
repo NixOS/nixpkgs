@@ -109,7 +109,7 @@ in stdenv.mkDerivation {
   inherit (chromium.browser) meta packageName;
 
   passthru = {
-    inherit (chromium) upstream-info;
+    inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
     inherit sandboxExecutableName;
   };
