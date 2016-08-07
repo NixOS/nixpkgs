@@ -14432,6 +14432,7 @@ in
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
+    cmake = cmake-2_8; # problems after 3.4 -> 3.6.0
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
