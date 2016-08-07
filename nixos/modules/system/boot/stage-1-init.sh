@@ -352,6 +352,33 @@ mountFS() {
 }
 
 
+# Function for waiting a device to appear.
+waitDevice() {
+    local device="$1"
+
+    # USB storage devices tend to appear with some delay.  It would be
+    # great if we had a way to synchronously wait for them, but
+    # alas...  So just wait for a few seconds for the device to
+    # appear.
+    if test ! -e $device; then
+        echo -n "waiting for device $device to appear..."
+        try=20
+        while [ $try -gt 0 ]; do
+            sleep 1
+            # also re-try lvm activation now that new block devices might have appeared
+            lvm vgchange -ay
+            # and tell udev to create nodes for the new LVs
+            udevadm trigger --action=add
+            if test -e $device; then break; fi
+            echo -n "."
+            try=$((try - 1))
+        done
+        echo
+        [ $try -ne 0 ]
+    fi
+}
+
+
 # Try to find and mount the root device.
 mkdir -p $targetRoot
 
@@ -384,29 +411,11 @@ while read -u 3 mountPoint; do
             ;;
     esac
 
-    # USB storage devices tend to appear with some delay.  It would be
-    # great if we had a way to synchronously wait for them, but
-    # alas...  So just wait for a few seconds for the device to
-    # appear.  If it doesn't appear, try to mount it anyway (and
-    # probably fail).  This is a fallback for non-device "devices"
-    # that we don't properly recognise.
-    if test -z "$pseudoDevice" -a ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        if [ $try -eq 0 ]; then
-          echo "Timed out waiting for device $device, trying to mount anyway."
-        fi
+    if test -z "$pseudoDevice" && ! waitDevice "$device"; then
+        # If it doesn't appear, try to mount it anyway (and
+        # probably fail).  This is a fallback for non-device "devices"
+        # that we don't properly recognise.
+        echo "Timed out waiting for device $device, trying to mount anyway."
     fi
 
     # Wait once more for the udev queue to empty, just in case it's
