@@ -179,6 +179,8 @@ with stdenv.lib;
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
+  DRM_GMA600 y
+  DRM_GMA3600 y
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -269,7 +271,7 @@ with stdenv.lib;
   DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
 
   # Security related features.
-  RANDOMIZE_BASE y
+  RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
@@ -496,7 +498,7 @@ with stdenv.lib;
   # zram support (e.g for in-memory compressed swap).
   ZSMALLOC y
   ZRAM m
-  ZSWAP y
+  ZSWAP? y
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y
