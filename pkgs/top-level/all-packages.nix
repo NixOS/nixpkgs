@@ -2265,17 +2265,19 @@ let
   else
     nodejs-4_x;
 
-  nodePackages_5_x = callPackage ./node-packages.nix { self = nodePackages_5_x; nodejs = nodejs-5_x; };
-
-  nodePackages_4_x = callPackage ./node-packages.nix { self = nodePackages_4_x; nodejs = nodejs-4_x; };
-
-  nodePackages_0_10 = callPackage ./node-packages.nix { self = nodePackages_0_10; nodejs = nodejs-0_10; };
-
+  nodePackages_0_10 = callPackage ../development/node-packages/default-v0_10.nix { };
+  
+  nodePackages_4_x = callPackage ../development/node-packages/default-v4.nix { };
+  
+  nodePackages_5_x = callPackage ../development/node-packages/default-v5.nix { };
+  
   nodePackages = if stdenv.system == "armv5tel-linux" then
     nodePackages_0_10
   else
     nodePackages_4_x;
-
+  
+  node2nix = nodePackages.node2nix;
+  
   npm2nix = nodePackages.npm2nix;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
