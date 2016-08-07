@@ -14,26 +14,28 @@
 } @ args:
 
 let
-    version = if isRelease then
-        "${shortVersion}"
-      else
-        "${shortVersion}-g${builtins.substring 0 7 srcRev}";
+  inherit (stdenv.lib) optional optionalString;
 
-    name = "rustc-${version}";
+  version = if isRelease then
+      "${shortVersion}"
+    else
+      "${shortVersion}-g${builtins.substring 0 7 srcRev}";
 
-    procps = if stdenv.isDarwin then darwin.ps else args.procps;
+  name = "rustc-${version}";
 
-    llvmShared = llvm.override { enableSharedLibraries = true; };
+  procps = if stdenv.isDarwin then darwin.ps else args.procps;
 
-    target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
+  llvmShared = llvm.override { enableSharedLibraries = true; };
 
-    meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
-      description = "A safe, concurrent, practical language";
-      maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
-      license = [ licenses.mit licenses.asl20 ];
-      platforms = platforms.linux ++ platforms.darwin;
-    };
+  target = builtins.replaceStrings [" "] [","] (builtins.toString targets);
+
+  meta = with stdenv.lib; {
+    homepage = http://www.rust-lang.org/;
+    description = "A safe, concurrent, practical language";
+    maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington retrry ];
+    license = [ licenses.mit licenses.asl20 ];
+    platforms = platforms.linux ++ platforms.darwin;
+  };
 in
 
 stdenv.mkDerivation {
@@ -43,7 +45,7 @@ stdenv.mkDerivation {
 
   __impureHostDeps = [ "/usr/lib/libedit.3.dylib" ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   src = fetchgit {
     url = https://github.com/rust-lang/rust;
@@ -56,9 +58,9 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
-                ++ stdenv.lib.optional (stdenv.cc.cc ? isClang) "--enable-clang"
-                ++ stdenv.lib.optional (targets != []) "--target=${target}"
-                ++ stdenv.lib.optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
+                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
+                ++ optional (targets != []) "--target=${target}"
+                ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   patches = patches ++ targetPatches;
   passthru.target = target;
@@ -74,7 +76,7 @@ stdenv.mkDerivation {
       --replace "\$\$(subst  /,//," "\$\$(subst /,/,"
 
     # Fix dynamic linking against llvm
-    ${stdenv.lib.optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
+    ${optionalString (!forceBundledLLVM) ''sed -i 's/, kind = \\"static\\"//g' src/etc/mklldeps.py''}
 
     # Fix the configure script to not require curl as we won't use it
     sed -i configure \
@@ -105,7 +107,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optional needsCmake [ cmake curl ];
 
   buildInputs = [ ncurses ] ++ targetToolchains
-    ++ stdenv.lib.optional (!forceBundledLLVM) llvmShared;
+    ++ optional (!forceBundledLLVM) llvmShared;
 
   # https://github.com/rust-lang/rust/issues/30181
   # enableParallelBuilding = false; # missing files during linking, occasionally
@@ -113,7 +115,10 @@ stdenv.mkDerivation {
   outputs = [ "out" "doc" ];
   setOutputFlags = false;
 
-  preCheck = "export TZDIR=${tzdata}/share/zoneinfo";
+  preCheck = ''
+    export TZDIR=${tzdata}/share/zoneinfo
+    ${optionalString stdenv.isDarwin "export TMPDIR=/tmp"}
+  '';
 
   # Disable doCheck on Darwin to work around upstream issue
   doCheck = !stdenv.isDarwin;

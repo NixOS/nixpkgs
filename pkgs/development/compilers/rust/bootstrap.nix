@@ -1,6 +1,8 @@
 { stdenv, fetchurl, makeWrapper, cacert, zlib }:
 
 let
+  inherit (stdenv.lib) optionalString;
+
   platform =
     if stdenv.system == "i686-linux"
     then "i686-unknown-linux-gnu"
@@ -24,7 +26,7 @@ let
     then "d59b5509e69c1cace20a57072e3b3ecefdbfd8c7e95657b0ff2ac10aa1dfebe6"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
-  needsPatchelf = (stdenv.system == "i686-linux") || (stdenv.system == "x86_64-linux");
+  needsPatchelf = stdenv.isLinux;
 
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
