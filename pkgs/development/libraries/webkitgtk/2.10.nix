@@ -13,7 +13,7 @@ assert stdenv.isDarwin -> !enableCredentialStorage;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.10.4";
+  version = "2.10.9";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -28,17 +28,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0mghsbfnmmf6nsf7cb3ah76s77aigkzf3k6kw96wgh6all6jdy6v";
+    sha256 = "0sg935wpkgyd5ypd5fj25vd7ri8s6sbrmssb53xbgcc02xs8vcdv";
   };
 
   patches = [
     ./finding-harfbuzz-icu.patch
-    (fetchpatch {
-      name = "glibc-isnan.patch";
-      url = "http://trac.webkit.org/changeset/194518/trunk/Source/JavaScriptCore"
-        + "/runtime/Options.cpp?format=diff&new=194518";
-      sha256 = "0pzdv1zmlym751n9d310cx3yp752yzsc49cysbvgnrib4dh68nbm";
-    })
   ] ++ optional stdenv.isDarwin ./adding-libintl.patch;
 
   cmakeFlags = [

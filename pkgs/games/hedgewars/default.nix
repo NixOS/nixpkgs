@@ -5,7 +5,8 @@
 
 let
   ghc = ghcWithPackages (pkgs: with pkgs; [
-          network vector utf8-string bytestring-show random hslogger dataenc SHA entropy zlib_0_5_4_2
+          network vector utf8-string bytestring-show random hslogger
+          dataenc SHA entropy zlib_0_5_4_2
         ]);
 in
 stdenv.mkDerivation rec {
@@ -20,6 +21,10 @@ stdenv.mkDerivation rec {
     SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
     qt4 ghc ffmpeg freeglut makeWrapper physfs
   ];
+
+  postPatch = ''
+    substituteInPlace gameServer/CMakeLists.txt --replace mask evaluate
+  '';
 
   preBuild = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${SDL_image}/lib
@@ -65,7 +70,7 @@ stdenv.mkDerivation rec {
        contact with explosions, to zero (the damage dealt to the attacked
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
-    maintainers = with maintainers; [ kragniz ];
+    maintainers = with maintainers; [ kragniz fpletz ];
     platforms = ghc.meta.platforms;
   };
 }
