@@ -134,6 +134,9 @@ with lib;
     (mkRemovedOptionModule [ "security" "grsecurity" "config" "verboseVersion" ])
     (mkRemovedOptionModule [ "security" "grsecurity" "config" "kernelExtraConfig" ])
 
+    # Unity3D
+    (mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])
+
     # Options that are obsolete and have no replacement.
     (mkRemovedOptionModule [ "boot" "initrd" "luks" "enable" ])
     (mkRemovedOptionModule [ "programs" "bash" "enable" ])
