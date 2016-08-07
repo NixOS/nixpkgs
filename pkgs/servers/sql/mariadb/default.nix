@@ -8,10 +8,10 @@ with stdenv.lib;
 
 let # in mariadb # spans the whole file
 
-mariadb = {
-  inherit client  # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
-    server;       # currently a full build, including everything in `client` again
-  lib = client;   # compat. with the old mariadb split
+mariadb = everything // {
+  inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
+  server = everything; # a full single-output build, including everything in `client` again
+  lib = client; # compat. with the old mariadb split
 };
 
 
@@ -104,7 +104,7 @@ client = stdenv.mkDerivation (common // {
 });
 
 
-server = stdenv.mkDerivation (common // {
+everything = stdenv.mkDerivation (common // {
   name = "mariadb-${common.version}";
 
   nativeBuildInputs = common.nativeBuildInputs ++ [ bison ];
