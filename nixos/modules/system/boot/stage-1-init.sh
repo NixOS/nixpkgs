@@ -346,7 +346,7 @@ waitDevice() {
 }
 
 
-# Try to resume - all modules are loaded now, and devices exist
+# Try to resume - all modules are loaded now.
 if test -e /sys/power/tuxonice/resume; then
     if test -n "$(cat /sys/power/tuxonice/resume)"; then
         echo 0 > /sys/power/tuxonice/user_interface/enabled
@@ -355,7 +355,7 @@ if test -e /sys/power/tuxonice/resume; then
 fi
 
 if test -e /sys/power/resume -a -e /sys/power/disk; then
-    if test -n "@resumeDevice@"; then
+    if test -n "@resumeDevice@" && waitDevice "@resumeDevice@"; then
         resumeDev="@resumeDevice@"
         resumeInfo="$(udevadm info -q property "$resumeDev" )"
     else
@@ -364,14 +364,16 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
             # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
             # when there are multiple swap devices, we can't know where the hibernate
             # image will reside. We can check all of them for swsuspend blkid.
-            resumeInfo="$(test -e "$sd" && udevadm info -q property "$sd")"
-            if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
-                resumeDev="$sd"
-                break
+            if waitDevice "$sd"; then
+                resumeInfo="$(udevadm info -q property "$sd")"
+                if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
+                    resumeDev="$sd"
+                    break
+                fi
             fi
         done
     fi
-    if test -e "$resumeDev"; then
+    if test -n "$resumeDev"; then
         resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
         resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
         echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
