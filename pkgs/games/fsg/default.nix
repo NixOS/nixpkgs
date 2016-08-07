@@ -47,5 +47,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
     maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

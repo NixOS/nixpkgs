@@ -8,4 +8,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

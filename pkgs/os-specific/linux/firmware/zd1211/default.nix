@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Firmware for the ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip";
     homepage = http://sourceforge.net/projects/zd1211/;
     license = "GPL";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

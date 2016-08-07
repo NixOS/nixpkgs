@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     homepage = http://multitran.sourceforge.net/;
     description = "Multitran lib: main engine to query translations";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

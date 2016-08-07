@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     description = "Enables creation and expansion of ISO-9660 filesystems on CD/DVD/BD ";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ vrthra ];
+    platforms = with platforms; linux;
   };
 }

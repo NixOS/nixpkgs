@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://wily.sourceforge.net;
     license = licenses.artistic1;
     maintainers = [ maintainers.vrthra ];
+    platforms = platforms.unix;
   };
 }

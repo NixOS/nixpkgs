@@ -22,5 +22,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://math.libtomcrypt.com/;
     description = "A library for integer-based number-theoretic applications";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

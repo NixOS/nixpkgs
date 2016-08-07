@@ -244,6 +244,10 @@ in
     outputs = [ "dev" "out" ]; # mainly to avoid propagation
   };
 
+  libpciaccess = attrs: attrs // {
+    meta = attrs.meta // { platforms = stdenv.lib.platforms.linux; };
+  };
+
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
@@ -266,7 +270,7 @@ in
 
   xcbutilcursor = attrs: attrs // {
     outputs = [ "dev" "out" ];
-    meta.maintainers = [ stdenv.lib.maintainers.lovek323 ];
+    meta = attrs.meta // { maintainers = [ stdenv.lib.maintainers.lovek323 ]; };
   };
 
   xcbutilimage = attrs: attrs // {

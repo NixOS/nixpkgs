@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     description = "Start and use ssh-agent and load identities as necessary";
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ telotortium ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

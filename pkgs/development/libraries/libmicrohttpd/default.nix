@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 
     maintainers = [ maintainers.eelco maintainers.vrthra ];
+    platforms = platforms.linux;
   };
 }

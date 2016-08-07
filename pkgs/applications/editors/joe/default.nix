@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
     description = "A full featured terminal-based screen editor";
     homepage = http://joe-editor.sourceforge.net;
     license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }

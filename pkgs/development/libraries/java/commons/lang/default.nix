@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Provides additional methods to manipulate standard Java library classes";
     maintainers = with stdenv.lib.maintainers; [ copumpkin ];
     license     = stdenv.lib.licenses.asl20;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

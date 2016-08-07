@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    hydraPlatforms = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ muflax ];
   };
 }

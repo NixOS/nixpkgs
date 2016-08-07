@@ -1,4 +1,4 @@
-{ mkDerivation, aeson, aeson-pretty, ansi-terminal, ansi-wl-pprint
+{ mkDerivation, aeson, aeson-pretty_0_7_2, ansi-terminal, ansi-wl-pprint
 , base, binary, bytestring, containers, directory, edit-distance
 , fetchgit, filemanip, filepath, HUnit, indents
 , language-ecmascript, language-glsl, mtl, parsec, pretty, process
@@ -16,7 +16,7 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson aeson-pretty ansi-terminal ansi-wl-pprint base binary
+    aeson aeson-pretty_0_7_2 ansi-terminal ansi-wl-pprint base binary
     bytestring containers directory edit-distance filepath indents
     language-ecmascript language-glsl mtl parsec pretty process text
     union-find
@@ -25,7 +25,7 @@ mkDerivation {
     aeson base binary directory filepath process text
   ];
   testHaskellDepends = [
-    aeson aeson-pretty ansi-terminal ansi-wl-pprint base binary
+    aeson aeson-pretty_0_7_2 ansi-terminal ansi-wl-pprint base binary
     bytestring containers directory edit-distance filemanip filepath
     HUnit indents language-ecmascript language-glsl mtl parsec pretty
     process QuickCheck test-framework test-framework-hunit

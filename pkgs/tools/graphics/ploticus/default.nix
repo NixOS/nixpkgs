@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     homepage = http://ploticus.sourceforge.net/;
+    platforms = with platforms; linux;
   };
 }

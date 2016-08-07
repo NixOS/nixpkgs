@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://libexif.sourceforge.net/;
     description = "A utility to read and manipulate EXIF data in digital photographs";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

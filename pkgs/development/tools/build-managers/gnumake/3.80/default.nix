@@ -7,4 +7,8 @@ stdenv.mkDerivation {
     md5 = "0bbd1df101bc0294d440471e50feca71";
   };
   patches = [./log.patch];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

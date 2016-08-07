@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "Fontmatrix is a free/libre font explorer for Linux, Windows and Mac";
     homepage = http://fontmatrix.be/;
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

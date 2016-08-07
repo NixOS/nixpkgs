@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     homepage = http://www.libpgf.org/;
     description = "Progressive Graphics Format";
     license = stdenv.lib.licenses.lgpl21Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

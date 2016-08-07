@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://deliciousinsights.github.io/git-stree;
     license = licenses.mit;
     maintainers = [ maintainers.benley ];
+    platforms = platforms.unix;
   };
 }

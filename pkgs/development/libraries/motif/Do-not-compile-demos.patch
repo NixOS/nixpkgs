@@ -1,0 +1,11 @@
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -27,7 +27,6 @@ SUBDIRS   = bindings bitmaps \
+              include \
+              tools \
+              clients \
+-             doc \
+-             demos
++             doc
+ AUTOMAKE_OPTIONS = 1.4
+ ACLOCAL_AMFLAGS = -I .

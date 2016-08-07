@@ -29,5 +29,6 @@ stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.gnu.org/software/time/;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

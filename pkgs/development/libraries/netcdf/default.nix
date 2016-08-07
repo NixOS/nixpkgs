@@ -28,4 +28,8 @@ in stdenv.mkDerivation rec {
         "--enable-shared"
     ]
     ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" ]);
+
+    meta = {
+        platforms = stdenv.lib.platforms.unix;
+    };
 }

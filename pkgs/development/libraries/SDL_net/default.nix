@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SDL networking library";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

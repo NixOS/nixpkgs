@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "A library of utilities to assist with developing IO functionality";
     maintainers = with stdenv.lib.maintainers; [ copumpkin ];
     license     = stdenv.lib.licenses.asl20;
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

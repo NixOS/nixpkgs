@@ -18,5 +18,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "WMF library from wvWare";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

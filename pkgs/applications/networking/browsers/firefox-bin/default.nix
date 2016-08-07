@@ -104,6 +104,7 @@ stdenv.mkDerivation {
       nss
       pango
       libheimdal
+      libpulseaudio
       libpulseaudio.dev
       systemd
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [

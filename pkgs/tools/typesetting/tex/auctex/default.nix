@@ -12,11 +12,6 @@ let auctex = stdenv.mkDerivation ( rec {
 
   outputs = [ "out" "tex" ];
 
-  meta = {
-    description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
-    homepage = http://www.gnu.org/software/auctex;
-  };
-
   src = fetchurl {
     url = "mirror://gnu/${pname}/${name}.tar.gz";
     sha256 = "1cf9fkkmzjxa4jvk6c01zgxdikr4zzb5pcx8i4r0hwdk0xljkbwq";
@@ -32,6 +27,12 @@ let auctex = stdenv.mkDerivation ( rec {
     "--with-lispdir=\${out}/share/emacs/site-lisp"
     "--with-texmf-dir=\${tex}"
   ];
+
+  meta = {
+    description = "Extensible package for writing and formatting TeX files in GNU Emacs and XEmacs";
+    homepage = http://www.gnu.org/software/auctex;
+    platforms = stdenv.lib.platforms.unix;
+  };
 });
 
 in auctex // { pkgs = [ auctex.tex ]; }

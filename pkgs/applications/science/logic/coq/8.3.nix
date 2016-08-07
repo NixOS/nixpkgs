@@ -74,5 +74,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl21;
     branch = "8.3";
     maintainers = with maintainers; [ roconnor vbgl ];
+    platforms = with platforms; linux;
   };
 }

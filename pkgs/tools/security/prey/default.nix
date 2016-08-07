@@ -43,5 +43,6 @@ in stdenv.mkDerivation rec {
     description = "Proven tracking software that helps you find, lock and recover your devices when stolen or missing";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl3;
+    platforms = with platforms; linux;
   };
 }

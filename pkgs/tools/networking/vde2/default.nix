@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://vde.sourceforge.net/;
     description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

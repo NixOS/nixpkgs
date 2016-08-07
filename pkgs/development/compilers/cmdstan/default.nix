@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://mc-stan.org/interfaces/cmdstan.html;
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Collection of machine learning algorithms for data mining tasks";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainer = [stdenv.lib.maintainers.mimadrid];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

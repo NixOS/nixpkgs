@@ -10,4 +10,8 @@ stdenv.mkDerivation {
 
   inherit unzip;
   buildInputs = [unzip];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

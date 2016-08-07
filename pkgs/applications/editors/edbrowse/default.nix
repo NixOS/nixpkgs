@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl1Plus;
     homepage = http://edbrowse.org/;
     maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
+    platforms = platforms.linux;
   };
 }

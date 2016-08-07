@@ -112,11 +112,21 @@ with stdenv.lib;
     IPV6_PRIVACY y
   ''}
   NETFILTER_ADVANCED y
+  IP_ROUTE_VERBOSE y
+  IP_MROUTE_MULTIPLE_TABLES y
   IP_VS_PROTO_TCP y
   IP_VS_PROTO_UDP y
   IP_VS_PROTO_ESP y
   IP_VS_PROTO_AH y
   IP_DCCP_CCID3 n # experimental
+  IPV6_ROUTER_PREF y
+  IPV6_ROUTE_INFO y
+  IPV6_OPTIMISTIC_DAD y
+  IPV6_MULTIPLE_TABLES y
+  IPV6_SUBTREES y
+  IPV6_MROUTE y
+  IPV6_MROUTE_MULTIPLE_TABLES y
+  IPV6_PIMSM_V2 y
   CLS_U32_PERF y
   CLS_U32_MARK y
   ${optionalString (stdenv.system == "x86_64-linux") ''
@@ -126,6 +136,10 @@ with stdenv.lib;
     NET_CLS_BPF m
     NET_ACT_BPF m
   ''}
+  L2TP_V3 y
+  L2TP_IP m
+  L2TP_ETH m
+  BRIDGE_VLAN_FILTERING y
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -165,6 +179,8 @@ with stdenv.lib;
   # Allow specifying custom EDID on the kernel command line
   DRM_LOAD_EDID_FIRMWARE y
   VGA_SWITCHEROO y # Hybrid graphics support
+  DRM_GMA600 y
+  DRM_GMA3600 y
 
   # Sound.
   SND_DYNAMIC_MINORS y
@@ -255,7 +271,7 @@ with stdenv.lib;
   DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
 
   # Security related features.
-  RANDOMIZE_BASE y
+  RANDOMIZE_BASE? y
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   DEVKMEM n # Disable /dev/kmem
@@ -482,7 +498,7 @@ with stdenv.lib;
   # zram support (e.g for in-memory compressed swap).
   ZSMALLOC y
   ZRAM m
-  ZSWAP y
+  ZSWAP? y
 
   # Enable PCIe and USB for the brcmfmac driver
   BRCMFMAC_USB? y

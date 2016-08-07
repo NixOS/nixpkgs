@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = http://saitoha.github.com/libsixel;
     maintainers = with maintainers; [ vrthra ];
     license = licenses.mit;
+    platforms = with platforms; unix;
   };
 }

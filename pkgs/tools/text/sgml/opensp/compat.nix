@@ -14,6 +14,8 @@ stdenv.mkDerivation {
 
   setupHook = opensp.setupHook;
 
-  meta.description =
-    "Compatibility wrapper for old programs looking for original sp programs";
+  meta = opensp.meta // {
+    description = "Compatibility wrapper for old programs looking for original sp programs";
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

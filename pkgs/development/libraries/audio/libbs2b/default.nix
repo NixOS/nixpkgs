@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = "http://bs2b.sourceforge.net/";
     description = "Bauer stereophonic-to-binaural DSP library";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }
