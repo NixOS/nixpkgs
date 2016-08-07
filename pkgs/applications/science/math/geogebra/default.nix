@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jre, makeDesktopItem}:
+{stdenv, fetchurl, jre, makeDesktopItem, makeWrapper}:
 
 stdenv.mkDerivation rec {
   name = "geogebra-${version}";
@@ -29,24 +29,20 @@ stdenv.mkDerivation rec {
     mimeType = "application/vnd.geogebra.file;application/vnd.geogebra.tool;";
   };
 
+  buildInputs = [makeWrapper];
+
   installPhase = ''
-    install -dm755 "$out/share/geogebra"
-    install "geogebra/"* -t "$out/share/geogebra/"
-    mkdir "$out/bin"
+    install -D geogebra/* -t "$out/share/geogebra/"
 
-    cat <<EOF >"$out/bin/geogebra"
-    #! $SHELL
-    export GG_PATH="$out/share/geogebra"
-    export JAVACMD="${jre}/bin/java"
-    exec "\$GG_PATH/geogebra" "\$@"
-    EOF
+    makeWrapper "$out/share/geogebra/geogebra" "$out/bin/geogebra" \
+      --set JAVACMD "${jre}/bin/java" \
+      --set GG_PATH "$out/share/geogebra"
 
-    chmod +x "$out/bin/geogebra"
+    install -Dm644 "${desktopItem}/share/applications/"* \
+      -t $out/share/applications/
 
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications/
-
-    install -Dm644 "../geogebra-logo.svg" "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
+    install -Dm644 "../geogebra-logo.svg" \
+      "$out/share/icons/hicolor/scalable/apps/geogebra.svg"
   '';
 
   meta = {
