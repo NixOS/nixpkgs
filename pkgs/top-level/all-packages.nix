@@ -8292,7 +8292,9 @@ in
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod { };
+  libmikmod = callPackage ../development/libraries/libmikmod {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
