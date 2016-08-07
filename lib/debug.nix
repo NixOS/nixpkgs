@@ -19,6 +19,10 @@ rec {
   traceXMLVal = x: trace (builtins.toXML x) x;
   traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
+  # strict trace functions (traced structure is fully evaluated and printed)
+  traceSeq = x: y: trace (builtins.deepSeq x x) y;
+  traceValSeq = v: traceVal (builtins.deepSeq v v);
+
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x : trace (showVal x) x;
   traceShowValMarked = str: x: trace (str + showVal x) x;
@@ -69,27 +73,9 @@ rec {
   # usage: { testX = allTrue [ true ]; }
   testAllTrue = expr : { inherit expr; expected = map (x: true) expr; };
 
-  # evaluate everything once so that errors will occur earlier
-  # hacky: traverse attrs by adding a dummy
-  # ignores functions (should this behavior change?) See strictf
-  #
-  # Note: This should be a primop! Something like seq of haskell would be nice to
-  # have as well. It's used fore debugging only anyway
-  strict = x :
-    let
-        traverse = x :
-          if isString x then true
-          else if isAttrs x then
-            if x ? outPath then true
-            else all id (mapAttrsFlatten (n: traverse) x)
-          else if isList x then
-            all id (map traverse x)
-          else if isBool x then true
-          else if isFunction x then true
-          else if isInt x then true
-          else if x == null then true
-          else true; # a (store) path?
-    in if traverse x then x else throw "else never reached";
+  strict = v:
+    trace "Warning: strict is deprecated and will be removed in the next release"
+      (builtins.seq v v);
 
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3
