@@ -8891,16 +8891,40 @@ in modules // {
     };
   };
 
-  django = self.django_1_9;
+  django = self.django_1_10;
 
   django_gis = self.django.override rec {
     patches = [
       (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.7.7-gis-libs.template.patch;
+        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
         geos = pkgs.geos;
         gdal = pkgs.gdal;
       })
     ];
+  };
+
+  django_1_10 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.10";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
+      sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
+    };
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    # too complicated to setup
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
   };
 
   django_1_9 = buildPythonPackage rec {
@@ -9090,21 +9114,21 @@ in modules // {
 
   django_compat = buildPythonPackage rec {
     name = "django-compat-${version}";
-    version = "1.0.8";
+    version = "1.0.13";
 
     # build process attempts to access a missing README.rst
     disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-compat/${name}.tar.gz";
-      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+      sha256 = "0s0z7cx0vv1kjsyzk24sg256hfnd09ssilc9rakhxrzr3firgx80";
     };
 
     buildInputs = with self; [ django_nose ];
     propagatedBuildInputs = with self; [ django six ];
 
     meta = {
-      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9 and 1.10";
       homepage = https://github.com/arteria/django-compat;
       license = licenses.mit;
     };
@@ -9178,7 +9202,14 @@ in modules // {
       sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
     };
 
-    propagatedBuildInputs = with self; [ django django_compat ];
+    # TODO improve the that multi-override necessity (the fixpoint based python
+    # packages work can be the solution)
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
+      buildInputs = with self; [ (django_nose.override {
+        propagatedBuildInputs = with self; [ django_1_9 nose ];
+      }) ];
+      propagatedBuildInputs = with self; [ django_1_9 six ];
+    }) ];
 
     meta = {
       description = "Allows superusers to hijack (=login as) and work on behalf of another user";
