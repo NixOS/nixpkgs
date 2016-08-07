@@ -15612,6 +15612,10 @@ in
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
+  factorio-mods = callPackage ../games/factorio/mods.nix { };
+
+  factorio-utils = callPackage ../games/factorio/utils.nix { };
+
   fairymax = callPackage ../games/fairymax {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
