@@ -7172,7 +7172,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_3_1 = callPackage ../development/libraries/ffmpeg/3.1.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   # Aliases
   ffmpeg_0 = self.ffmpeg_0_10;
