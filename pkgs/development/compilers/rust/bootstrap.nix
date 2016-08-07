@@ -1,6 +1,8 @@
 { stdenv, fetchurl, makeWrapper, cacert, zlib }:
 
 let
+  inherit (stdenv.lib) optionalString;
+
   platform =
     if stdenv.system == "i686-linux"
     then "i686-unknown-linux-gnu"
@@ -46,9 +48,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=rustc,rust-std-${platform},rust-docs
 
-      patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        "$out/bin/rustc"
+      ${optionalString stdenv.isLinux ''
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/rustc"
+       ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -71,9 +75,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=cargo
 
-      patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        "$out/bin/cargo"
+      ${optionalString stdenv.isLinux ''
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/rustc"
+       ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
