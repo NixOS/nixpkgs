@@ -189,39 +189,6 @@ if test -n "$debug1devices"; then fail; fi
 @postDeviceCommands@
 
 
-# Try to resume - all modules are loaded now, and devices exist
-if test -e /sys/power/tuxonice/resume; then
-    if test -n "$(cat /sys/power/tuxonice/resume)"; then
-        echo 0 > /sys/power/tuxonice/user_interface/enabled
-        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
-    fi
-fi
-
-if test -e /sys/power/resume -a -e /sys/power/disk; then
-    if test -n "@resumeDevice@"; then
-        resumeDev="@resumeDevice@"
-        resumeInfo="$(udevadm info -q property "$resumeDev" )"
-    else
-        for sd in @resumeDevices@; do
-            # Try to detect resume device. According to Ubuntu bug:
-            # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
-            # when there are multiple swap devices, we can't know where the hibernate
-            # image will reside. We can check all of them for swsuspend blkid.
-            resumeInfo="$(test -e "$sd" && udevadm info -q property "$sd")"
-            if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
-                resumeDev="$sd"
-                break
-            fi
-        done
-    fi
-    if test -e "$resumeDev"; then
-        resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
-        resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
-        echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
-    fi
-fi
-
-
 # Return true if the machine is on AC power, or if we can't determine
 # whether it's on AC power.
 onACPower() {
@@ -377,6 +344,39 @@ waitDevice() {
         [ $try -ne 0 ]
     fi
 }
+
+
+# Try to resume - all modules are loaded now, and devices exist
+if test -e /sys/power/tuxonice/resume; then
+    if test -n "$(cat /sys/power/tuxonice/resume)"; then
+        echo 0 > /sys/power/tuxonice/user_interface/enabled
+        echo 1 > /sys/power/tuxonice/do_resume || echo "failed to resume..."
+    fi
+fi
+
+if test -e /sys/power/resume -a -e /sys/power/disk; then
+    if test -n "@resumeDevice@"; then
+        resumeDev="@resumeDevice@"
+        resumeInfo="$(udevadm info -q property "$resumeDev" )"
+    else
+        for sd in @resumeDevices@; do
+            # Try to detect resume device. According to Ubuntu bug:
+            # https://bugs.launchpad.net/ubuntu/+source/pm-utils/+bug/923326/comments/1
+            # when there are multiple swap devices, we can't know where the hibernate
+            # image will reside. We can check all of them for swsuspend blkid.
+            resumeInfo="$(test -e "$sd" && udevadm info -q property "$sd")"
+            if [ "$(echo "$resumeInfo" | sed -n 's/^ID_FS_TYPE=//p')" = "swsuspend" ]; then
+                resumeDev="$sd"
+                break
+            fi
+        done
+    fi
+    if test -e "$resumeDev"; then
+        resumeMajor="$(echo "$resumeInfo" | sed -n 's/^MAJOR=//p')"
+        resumeMinor="$(echo "$resumeInfo" | sed -n 's/^MINOR=//p')"
+        echo "$resumeMajor:$resumeMinor" > /sys/power/resume 2> /dev/null || echo "failed to resume..."
+    fi
+fi
 
 
 # Try to find and mount the root device.
