@@ -8829,6 +8829,8 @@ in
     nix = pkgs.nixUnstable;
   };
 
+  nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
+
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
   non = callPackage ../applications/audio/non { };
