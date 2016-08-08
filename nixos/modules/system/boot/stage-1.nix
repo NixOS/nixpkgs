@@ -90,7 +90,7 @@ let
           [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
           while [ "$(readlink $LIB)" != "" ]; do
             LINK="$(readlink $LIB)"
-            if [ "${LINK:0:1}" != "/" ]; then
+            if [ "''${LINK:0:1}" != "/" ]; then
               LINK="$(dirname $LIB)/$LINK"
             fi
             LIB="$LINK"
