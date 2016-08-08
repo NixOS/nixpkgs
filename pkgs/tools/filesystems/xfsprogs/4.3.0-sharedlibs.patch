@@ -1,5 +1,5 @@
---- xfsprogs-4.2.0/include/buildmacros
-+++ xfsprogs-4.2.0/include/buildmacros
+--- xfsprogs-4.3.0/include/buildmacros
++++ xfsprogs-4.3.0/include/buildmacros
 @@ -70,18 +70,9 @@
  # /usr/lib.
  ifeq ($(ENABLE_SHARED),yes)
@@ -22,8 +22,8 @@
  else
  INSTALL_LTLIB_DEV = $(INSTALL_LTLIB_STATIC)
  endif
---- xfsprogs-4.2.0/libxcmd/Makefile
-+++ xfsprogs-4.2.0/libxcmd/Makefile
+--- xfsprogs-4.3.0/libxcmd/Makefile
++++ xfsprogs-4.3.0/libxcmd/Makefile
 @@ -34,6 +34,9 @@
  
  include $(BUILDRULES)
@@ -35,8 +35,8 @@
 +	$(INSTALL_LTLIB_DEV)
  
  -include .ltdep
---- xfsprogs-4.2.0/libxfs/Makefile
-+++ xfsprogs-4.2.0/libxfs/Makefile
+--- xfsprogs-4.3.0/libxfs/Makefile
++++ xfsprogs-4.3.0/libxfs/Makefile
 @@ -138,6 +138,7 @@
  
  install-dev: install
@@ -45,8 +45,8 @@
  
  # We need to install the headers before building the dependencies.  If we
  # include the .ltdep file, the makefile decides that it needs to build the
---- xfsprogs-4.2.0/libxlog/Makefile
-+++ xfsprogs-4.2.0/libxlog/Makefile
+--- xfsprogs-4.3.0/libxlog/Makefile
++++ xfsprogs-4.3.0/libxlog/Makefile
 @@ -12,6 +12,8 @@
  
  CFILES = xfs_log_recover.c util.c
@@ -67,19 +67,8 @@
 +	$(INSTALL_LTLIB_DEV)
  
  -include .ltdep
---- xfsprogs-4.2.0/Makefile
-+++ xfsprogs-4.2.0/Makefile
-@@ -81,6 +81,8 @@
- io: libxcmd libhandle
- quota: libxcmd
- repair: libxlog
-+libxlog: libxfs
-+libxlog-install-dev: libxfs-install-dev
- 
- 
- ifeq ($(HAVE_BUILDDEFS), yes)
---- xfsprogs-4.2.0/quota/Makefile
-+++ xfsprogs-4.2.0/quota/Makefile
+--- xfsprogs-4.3.0/quota/Makefile
++++ xfsprogs-4.3.0/quota/Makefile
 @@ -16,7 +16,6 @@ LSRCFILES = $(shell echo $(PCFILES) | sed -e "s/$(PKG_PLATFORM).c//g")
  
  LLDLIBS = $(LIBXCMD)
@@ -88,8 +77,8 @@
  
  ifeq ($(ENABLE_READLINE),yes)
  LLDLIBS += $(LIBREADLINE) $(LIBTERMCAP)
---- xfsprogs-4.2.0/mdrestore/Makefile
-+++ xfsprogs-4.2.0/mdrestore/Makefile
+--- xfsprogs-4.3.0/mdrestore/Makefile
++++ xfsprogs-4.3.0/mdrestore/Makefile
 @@ -10,7 +10,6 @@ CFILES = xfs_mdrestore.c
  
  LLDLIBS = $(LIBXFS) $(LIBRT) $(LIBPTHREAD) $(LIBUUID)
