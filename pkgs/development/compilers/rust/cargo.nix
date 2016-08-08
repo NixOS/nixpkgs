@@ -1,6 +1,7 @@
 { stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc
-, version, srcRev, srcSha, depsSha256 }:
+, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+, version, srcRev, srcSha, depsSha256
+, patches ? []}:
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
@@ -13,11 +14,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   inherit depsSha256;
+  inherit patches;
 
   passthru.rustc = rustc;
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper libgit2 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+
+  LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
   configurePhase = ''
     ./configure --enable-optimize --prefix=$out --local-cargo=${rustPlatform.rust.cargo}/bin/cargo
@@ -37,9 +41,14 @@ rustPlatform.buildRustPackage rec {
        "$out/lib/rustlib/uninstall.sh" \
        "$out/lib/rustlib/manifest-cargo"
 
+    # NOTE: We override the `http.cainfo` option usually specified in
+    # `.cargo/config`. This is an issue when users want to specify
+    # their own certificate chain as environment variables take
+    # precedence
     wrapProgram "$out/bin/cargo" \
       --suffix PATH : "${rustc}/bin" \
-      --run "export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       ${stdenv.lib.optionalString stdenv.isDarwin ''--suffix DYLD_LIBRARY_PATH : "${rustc}/lib"''}
   '';
 
