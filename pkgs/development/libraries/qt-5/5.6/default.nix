@@ -90,7 +90,7 @@ let
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
       qtsvg = callPackage ./qtsvg.nix {};
-      qttools = callPackage ./qttools.nix {};
+      qttools = callPackage ./qttools {};
       qttranslations = callPackage ./qttranslations.nix {};
       /* qtwayland = not packaged */
       qtwebchannel = callPackage ./qtwebchannel.nix {};
