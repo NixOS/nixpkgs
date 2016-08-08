@@ -26229,6 +26229,11 @@ in modules // {
       sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
     };
 
+    postPatch = ''
+      substituteInPlace requirements.txt \
+        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28'
+    '';
+
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
       gevent speaklater Babel pytz dateutil pygments_2_0
