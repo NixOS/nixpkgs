@@ -28873,6 +28873,24 @@ in modules // {
     };
   };
 
+  tflearn = buildPythonPackage rec {
+    name = "tflearn-0.2.1";
+
+    meta = {
+      description = "Deep learning library featuring a higher-level API for TensorFlow";
+      homepage    = "https://github.com/tflearn/tflearn";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ houqp ];
+    };
+
+    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
+      sha256 = "1n884c4j35409id2bncyj5fvmmfpdqj3pk6wrv0s1znnvs0lkii0";
+    };
+  };
+
   simpleai = buildPythonPackage rec {
      version = "0.7.11";
      name = "simpleai-${version}";
