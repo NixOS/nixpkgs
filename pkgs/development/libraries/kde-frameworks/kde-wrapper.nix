@@ -37,11 +37,7 @@ stdenv.mkDerivation {
         fi
     done
 
-    for s in applications dbus-1 desktop-directories icons mime polkit-1; do
-        if [ -d "$env/share/$s" ]; then
-            mkdir -p "$out/share"
-            ln -s "$env/share/$s" "$out/share/$s"
-        fi
-    done
+    mkdir -p "$out/nix-support"
+    ln -s "$env/nix-support/propagated-user-env-packages" "$out/nix-support/"
   '';
 }

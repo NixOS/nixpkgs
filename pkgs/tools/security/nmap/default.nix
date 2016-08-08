@@ -13,11 +13,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.01";
+  version = "7.12";
 
   src = fetchurl {
     url = "http://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "01bpc820fmjl1vd08a3j9fpa84psaa7c3cxc8wpzabms8ckcs7yg";
+    sha256 = "014vagh9ak10hidwzp9s6g30y5h5fhsh8wykcnc1hnn9hwm0ipv3";
   };
 
   patches = ./zenmap.patch;
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage    = http://www.nmap.org;
     license     = licenses.gpl2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ mornfall thoughtpolice ];
+    maintainers = with maintainers; [ mornfall thoughtpolice fpletz ];
   };
 }

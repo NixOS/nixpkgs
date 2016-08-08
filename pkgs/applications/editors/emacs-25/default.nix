@@ -82,9 +82,6 @@ stdenv.mkDerivation rec {
     mv nextstep/Emacs.app $out/Applications
   '';
 
-  # https://github.com/NixOS/nixpkgs/issues/13573
-  doCheck = false;
-
   meta = with stdenv.lib; {
     description = "GNU Emacs 25 (pre), the extensible, customizable text editor";
     homepage    = http://www.gnu.org/software/emacs/;

@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    pkgconfig libtool
+    libtool
     xlibsWrapper xbitmaps libXrender libXmu libXt
     expat libjpeg libpng libiconv
-  ] ++ stdenv.lib.optionals (!demoSupport) [ autoconf automake ];
+  ];
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [ pkgconfig flex ] ++ stdenv.lib.optionals (!demoSupport) [ autoconf automake ];
 
   propagatedBuildInputs = [ libXp libXau ];
 
@@ -32,18 +32,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CFLAGS=-fno-strict-aliasing" ];
 
-  patchPhase = ''
-    rm lib/Xm/Xm.h
-    echo -e '"The X.Org Foundation"\t\t\t\t\tpc' >>bindings/xmbind.alias
-  '' + stdenv.lib.optionalString (!demoSupport)
-  ''
-    sed -i -e '/^SUBDIRS/{:x;/\\$/{N;bx;};s/[ \t\n\\]*demos//;}' Makefile.am
-  '';
+  prePatch = ''rm lib/Xm/Xm.h'';
+
+  patches = [ ./Remove-unsupported-weak-refs-on-darwin.patch
+              ./Use-correct-header-for-malloc.patch
+              ./Add-X.Org-to-bindings-file.patch
+            ]
+            ++ stdenv.lib.optional (!demoSupport) ./Do-not-compile-demos.patch;
 
   meta = with stdenv.lib; {
     homepage = http://motif.ics.com;
     description = "Unix standard widget-toolkit and window-manager";
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
     license = with licenses; [ lgpl21 ];
     maintainers = with maintainers; [ ];
   };

@@ -49,6 +49,10 @@ let
               jobs.python3.x86_64-linux
               jobs.python3.i686-linux
               jobs.python3.x86_64-darwin
+              # Many developers use nix-repl
+              jobs.nix-repl.x86_64-linux
+              jobs.nix-repl.i686-linux
+              jobs.nix-repl.x86_64-darwin
               # Needed by travis-ci to test PRs
               jobs.nox.i686-linux
               jobs.nox.x86_64-linux

@@ -273,6 +273,7 @@
       smokeping = 250;
       gocd-agent = 251;
       gocd-server = 252;
+      terraria = 253;
 
       prometheus = 999;
 
@@ -518,6 +519,7 @@
       smokeping = 250;
       gocd-agent = 251;
       gocd-server = 252;
+      terraria = 253;
 
       prometheus = 999;
 

@@ -3,17 +3,26 @@
 , libX11, libXcursor, libXrandr, libXinerama, libXext, harfbuzz, mesa }:
 
 stdenv.mkDerivation rec {
-  version = "1.9";
+  version = "1.9a";
   name = "mupdf-${version}";
 
   src = fetchurl {
     url = "http://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "15p2k1n3afc7bnqrc0zfqz31fjfq3rrrrj4fwwy5az26d11ynxhp";
+    sha256 = "1k64pdapyj8a336jw3j61fhn0rp4q6az7d0dqp9r5n3d9rgwa5c0";
   };
+
+  patches = [
+    # http://www.openwall.com/lists/oss-security/2016/08/03/2
+    (fetchpatch {
+      name = "mupdf-fix-CVE-2016-6525.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=commitdiff_plain;h=39b0f07dd960f34e7e6bf230ffc3d87c41ef0f2e;hp=fa1936405b6a84e5c9bb440912c23d532772f958";
+      sha256 = "1g9fkd1f5rx1z043vr9dj4934qf7i4nkvbwjc61my9azjrrc3jv7";
+    })
+  ];
 
   NIX_CFLAGS_COMPILE= [ "-fPIC" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib freetype libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama];
+  buildInputs = [ zlib freetype libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama ];
 
   installPhase = ''
     make install prefix=$out

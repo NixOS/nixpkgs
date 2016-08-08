@@ -92,6 +92,7 @@
   ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/ca.nix
+  ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
@@ -174,6 +175,7 @@
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
+  ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/amd-hybrid-graphics.nix
@@ -479,7 +481,7 @@
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
   ./services/web-servers/nginx/default.nix
-  ./services/web-servers/phpfpm.nix
+  ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/uwsgi.nix

@@ -8149,6 +8149,7 @@ in
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
+  libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
   libnatspec = callPackage ../development/libraries/libnatspec (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -8810,6 +8811,8 @@ in
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = pkgs.nixUnstable;
   };
+
+  nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
@@ -9625,10 +9628,7 @@ in
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
-    harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-  };
+  webkitgtk = webkitgtk212x;
 
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
@@ -9637,6 +9637,11 @@ in
   };
 
   webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk210x = callPackage ../development/libraries/webkitgtk/2.10.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -14267,6 +14272,8 @@ in
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
+  purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
+
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
@@ -14438,6 +14445,8 @@ in
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
   ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
+
+  ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
@@ -14975,6 +14984,7 @@ in
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
     qt5 = qt55;
+    libmsgpack = libmsgpack_1_4;
   };
 
   neovim-pygui = pythonPackages.neovim_gui;
@@ -15595,6 +15605,10 @@ in
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
+  factorio-mods = callPackage ../games/factorio/mods.nix { };
+
+  factorio-utils = callPackage ../games/factorio/utils.nix { };
+
   fairymax = callPackage ../games/fairymax {};
 
   fava = callPackage ../applications/office/fava {};
@@ -15654,6 +15668,7 @@ in
 
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
+    ffmpeg = ffmpeg_2;
   };
 
   hexen = callPackage ../games/hexen { };

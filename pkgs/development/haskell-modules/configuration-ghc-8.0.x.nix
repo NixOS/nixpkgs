@@ -54,39 +54,16 @@ self: super: {
     broken = true;   # needs template-haskell >=2.9 && <2.11
   }) {};
 
-  # Remove upper limit of dependency on time < 1.6
-  # Fix overlapping instance in tests.
-  libmpd = overrideCabal super.libmpd (drv: {
-     preConfigure = ''
-        sed -i -e 's,time .* < *1.6,time >= 1.5,' libmpd.cabal
-        sed -i -e '54s/instance /instance {-# OVERLAPS #-}/' tests/Arbitrary.hs
-     '';
-  });
-
-  xmobar = (overrideCabal super.xmobar (drv: {
-    # Skip -fwith_datezone
-    configureFlags = [ "-fwith_xft" "-fwith_utf8" "-fwith_inotify"
-                       "-fwith_iwlib" "-fwith_mpd" "-fwith_alsa"
-                       "-fwith_mpris" "-fwith_dbus" "-fwith_xpm" ];
-  })).override {
-     timezone-series = null;
-     timezone-olson = null;
-  };
-
-  # ghc-mod has a ghc-8 branch that has not yet been merged
-  ghc-mod = super."ghc-mod".overrideDerivation (attrs: rec {
-    src = pkgs.fetchFromGitHub {
-      owner  = "DanielG";
-      repo   = "ghc-mod";
-      rev    = "f2c7b01e372dd8c516b1ccbe5a1025cc7814347c";
-      sha256 = "1i45196qrzlhgbisnvkzni4n54saky0i1kyla162xcb5cg3kf2ji";
-    };
-  });
-
   # https://github.com/ygale/timezone-series/issues/2
   timezone-series = appendPatch super.timezone-series (pkgs.fetchpatch {
     url = "https://github.com/ryantrinkle/timezone-series/commit/f8dece8c016db6476e2bb0d4f972769a76f6ff40.patch";
     sha256 = "01wxhknsnn7lyl9v8viz7m5zhmyi3bqpbva7d3dx1dxn0nmkfh6a";
+  });
+
+  # https://github.com/bmillwood/applicative-quoters/issues/6
+  applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/bmillwood/applicative-quoters/pull/7.patch";
+    sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
 }

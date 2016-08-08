@@ -9,12 +9,20 @@ let
 
   pidFile = "${stateDir}/phpfpm.pid";
 
+  mkPool = n: p: ''
+    [${n}]
+    listen = ${p.listen}
+    ${p.extraConfig}
+  '';
+
   cfgFile = pkgs.writeText "phpfpm.conf" ''
     [global]
     pid = ${pidFile}
     error_log = syslog
     daemonize = yes
     ${cfg.extraConfig}
+
+    ${concatStringsSep "\n" (mapAttrsToList mkPool cfg.pools)}
 
     ${concatStringsSep "\n" (mapAttrsToList (n: v: "[${n}]\n${v}") cfg.poolConfigs)}
   '';
@@ -62,8 +70,8 @@ in {
       };
 
       poolConfigs = mkOption {
-        type = types.attrsOf types.lines;
         default = {};
+        type = types.attrsOf types.lines;
         example = literalExample ''
           { mypool = '''
               listen = /run/phpfpm/mypool
@@ -84,10 +92,20 @@ in {
           the phpfpm service is disabled.
         '';
       };
+
+      pools = mkOption {
+        type = types.attrsOf (types.submodule (import ./pool-options.nix {
+          inherit lib;
+        }));
+        default = {};
+        description = ''
+          If no pools are defined, the phpfpm service is disabled.
+        '';
+      };
     };
   };
 
-  config = mkIf (cfg.poolConfigs != {}) {
+  config = mkIf (cfg.pools != {}) {
 
     systemd.services.phpfpm = {
       wantedBy = [ "multi-user.target" ];

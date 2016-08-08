@@ -165,7 +165,9 @@ self: super: {
   # FSEvents API is very buggy and tests are unreliable. See
   # http://openradar.appspot.com/10207999 and similar issues.
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = dontCheck super.fsnotify; # if pkgs.stdenv.isDarwin then dontCheck super.fsnotify else super.fsnotify;
+  fsnotify = if pkgs.stdenv.isDarwin
+    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else dontCheck super.fsnotify;
 
   # the system-fileio tests use canonicalizePath, which fails in the sandbox
   system-fileio = if pkgs.stdenv.isDarwin then dontCheck super.system-fileio else super.system-fileio;
@@ -969,4 +971,29 @@ self: super: {
     url = "https://github.com/commercialhaskell/stack/commit/7f7f1a5f67f4ecdd1f3009495f1ff101dd38047e.patch";
     sha256 = "1yh2g45mkfpwxq0vyzcbc4nbxh6wmb2xpp0k7r5byd8jicgvli29";
   });
+
+  # https://github.com/GaloisInc/HaNS/pull/12
+  hans = overrideCabal super.hans (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "GaloisInc";
+      repo = "HaNS";
+      rev = "53e4af3ee46fc06b31754cec620209a81bbef456";
+      sha256 = "079205fqglzhh931h4n7qlrih18117m3w82ih19b8ygr55ps4ldj";
+    };
+    doHaddock = false;
+    patches = [(pkgs.fetchpatch {
+          url = "https://patch-diff.githubusercontent.com/raw/GaloisInc/HaNS/pull/12.patch";
+          sha256 = "0xa5b7i9wx32ji0zzlh1a1pws677iffby3bg39kv3c9srdb4by1g";
+      })];
+  });
+
+  # GLUT uses `dlopen` to link to freeglut, so we need to set the RUNPATH correctly for
+  # it to find `libglut.so` from the nix store. We do this by patching GLUT.cabal to pkg-config
+  # depend on freeglut, which provides GHC to necessary information to generate a correct RPATH.
+  #
+  # Note: Simply patching the dynamic library (.so) of the GLUT build will *not* work, since the
+  # RPATH also needs to be propagated when using static linking. GHC automatically handles this for
+  # us when we patch the cabal file (Link options will be recored in the ghc package registry).
+  GLUT = addPkgconfigDepend (appendPatch super.GLUT ./patches/GLUT.patch) pkgs.freeglut;
+
 }
