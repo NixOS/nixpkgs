@@ -19,10 +19,15 @@ rec {
   };
 
   cargo = callPackage ./cargo.nix rec {
-    version = "beta-0.13.0";
-    srcRev = "fb2faf29b26da39bd815b470ca73255dbfe30e42";
-    srcSha = "1r7wd3hp85mvmm7ivj01k65qcgb6qk1mys9mp48ww9k5cdniwcaj";
-    depsSha256 = "0lsf99pgl6wnl1lfk0drp5l4agrx7hzgdbps7hy3rprbf41jd6ai";
+    # TODO: We're temporarily tracking master here as Darwin needs the
+    # `http.cainfo` option from .cargo/config which isn't released
+    # yet.
+
+    version = "beta-2016-07-25";
+    srcRev = "f09ef68cc47956ccc5f99212bdcdd15298c400a0";
+    srcSha = "1r6q9jd0fl6mzhwkvrrcv358q2784hg51dfpy28xgh4n61m7c155";
+    depsSha256 = "055ky0lkrcsi976kmvc4lqyv0sjdpcj3jv36kz9hkqq0gip3crjc";
+
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo
   };
