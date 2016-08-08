@@ -87,15 +87,11 @@ let
         LDD="$(ldd $BIN)" || continue
         LIBS="$(echo "$LDD" | awk '{print $3}' | sed '/^$/d')"
         for LIB in $LIBS; do
-          [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          while [ "$(readlink $LIB)" != "" ]; do
-            LINK="$(readlink $LIB)"
-            if [ "''${LINK:0:1}" != "/" ]; then
-              LINK="$(dirname $LIB)/$LINK"
-            fi
-            LIB="$LINK"
-            [ ! -f "$out/lib/$(basename $LIB)" ] && cp -pdv $LIB $out/lib
-          done
+          TGT="$out/lib/$(basename $LIB)"
+          if [ ! -f "$TGT" ]; then
+            SRC="$(readlink -e $LIB)"
+            cp -pdv "$SRC" "$TGT"
+          fi
         done
       done
 
