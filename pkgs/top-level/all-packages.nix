@@ -9676,6 +9676,8 @@ in
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
+  wt = callPackage ../development/libraries/wt { };
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
