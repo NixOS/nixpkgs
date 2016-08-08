@@ -4025,11 +4025,12 @@ in modules // {
 
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
-    name = "cryptography_vectors-1.2.3";
+    name = "cryptography_vectors-${version}";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "0shawgpax79gvjrj0a313sll9gaqys7q1hxngn6j4k24lmz7bwki";
+      sha256 = "1sk6yhphk2k2vzshi0djxi0jsxd9a02259bs8gynfgf5y1g82a07";
     };
   };
 
