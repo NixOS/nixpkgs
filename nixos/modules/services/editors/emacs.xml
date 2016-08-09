@@ -43,9 +43,10 @@
     <title>Installing <application>Emacs</application></title>
 
     <para>
-      Emacs can installed in the normal way for Nix (see <xref
-      linkend="sec-package-management" />). In addition, a NixOS
-      <emphasis>service</emphasis> can be enabled.
+      Emacs can be installed in the normal way for Nix (see
+      <xref linkend="sec-package-management" />).
+      In addition, a NixOS <emphasis>service</emphasis>
+      can be enabled.
     </para>
 
     <section>
