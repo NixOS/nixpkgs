@@ -203,13 +203,10 @@ let
             # need must be included in the VM.
             system.extraDependencies = with pkgs;
               [ sudo
-                libxml2.bin
-                libxslt.bin
-                docbook5
-                docbook5_xsl
                 unionfs-fuse
                 ntp
                 nixos-artwork
+                nixos-manpages
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
 
