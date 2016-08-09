@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1ksqbp0bzdw6wcrx8s4hj4ivvxmw54hz85l2xfigb87cxmmhx0gs";
   };
 
-  hardeningDisable = [ "format" ];
-
   buildInputs = [
     libtool
     xlibsWrapper xbitmaps libXrender libXmu libXt
