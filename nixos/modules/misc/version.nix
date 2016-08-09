@@ -63,7 +63,9 @@ in
     nixosRevision = mkOption {
       internal = true;
       type = types.str;
-      default = if pathExists revisionFile then fileContents revisionFile else "master";
+      default = if pathIsDirectory gitRepo then commitIdFromGitRepo gitRepo
+                else if pathExists revisionFile then fileContents revisionFile
+                else "master";
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
