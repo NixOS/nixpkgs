@@ -7435,13 +7435,13 @@ in modules // {
 
   netcdf4 = buildPythonPackage rec {
     name = "netCDF4-${version}";
-    version = "1.2.1";
+    version = "1.2.4";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-      sha256 = "0wzg73zyjjhns4209vrcvh71gs392d16ynz76x3pl1xg2by723iy";
+      sha256 = "0lakjix9dhc26f33f03c13ffwspqcrk5j3mnnjczwxbb23ppwwx6";
     };
 
     propagatedBuildInputs = with self ; [
@@ -9131,6 +9131,26 @@ in modules // {
     };
   };
 
+  django_environ = buildPythonPackage rec {
+    name = "django-environ-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-environ/${name}.tar.gz";
+      sha256 = "0i32vsgk1xmwpi7i6f6v5hg653y9dl0fsz5qmv94skz6hwgm5kvh";
+    };
+
+    # The testsuite fails to modify the base environment
+    doCheck = false;
+    propagatedBuildInputs = with self ; [ django six ];
+
+    meta = {
+      description = "Utilize environment variables to configure your Django application";
+      homepage = https://github.com/joke2k/django-environ/;
+      license = licenses.mit;
+    };
+  };
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.7.5";
     disabled = isPy3k;
@@ -9148,6 +9168,28 @@ in modules // {
     };
   };
 
+  django_guardian = buildPythonPackage rec {
+    name = "django-guardian-${version}";
+    version = "1.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
+      sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
+    };
+
+    buildInputs = with self ; [ pytestrunner pytestdjango django_environ mock sqlite3 ];
+    propagatedBuildInputs = with self ; [ django six ];
+
+    checkPhase = ''
+      ${python.interpreter} nix_run_setup.py test --addopts="--ignore build"
+    '';
+
+    meta = {
+      description = "Per object permissions for Django";
+      homepage = https://github.com/django-guardian/django-guardian;
+      licenses = [ licenses.mit licenses.bsd2 ];
+    };
+  };
 
   django_tagging = buildPythonPackage rec {
     name = "django-tagging-0.3.6";
@@ -9217,11 +9259,11 @@ in modules // {
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
-    version = "1.4.3";
+    version = "1.4.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-nose/${name}.tar.gz";
-      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+      sha256 = "1fm47fkza2lk0xgc6qpi9vs78zg7q8cgl6mdan69sbycgy909ff0";
     };
 
     # vast dependency list
@@ -27800,14 +27842,14 @@ in modules // {
 
   ovh = buildPythonPackage rec {
     name = "ovh-${version}";
-    version = "0.3.5";
+    version = "0.4.5";
     doCheck = false; #test needs packages too explicit
     buildInputs = with self; [ d2to1 ];
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ovh/ovh-${version}.tar.gz";
-      sha256 = "1y74lrdlgbb786mwas7ynphimfi00dgr67ncjq20kdf31jg5415n";
+      sha256 = "1wf2p1sbg34jpj97r3w5nx9pj6vp0mlprry3vw2xav3dv02qv2af";
     };
 
     meta = {

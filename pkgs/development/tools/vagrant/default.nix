@@ -15,6 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "vagrant-${version}";
+  inherit version;
 
   src =
     if stdenv.system == "x86_64-linux" then
@@ -39,10 +40,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   unpackPhase = ''
-    ${dpkg}/bin/dpkg-deb -x ${src} .
+    ${dpkg}/bin/dpkg-deb -x "$src" .
   '';
 
-  buildPhase = false;
+  buildPhase = "";
 
   installPhase = ''
     sed -i "s|/opt|$out/opt|" usr/bin/vagrant
@@ -55,6 +56,8 @@ stdenv.mkDerivation rec {
     ln -s ${curl.dev}/bin/curl-config opt/vagrant/embedded/bin
 
     # libarchive: bsdtar, bsdcpio
+    rm opt/vagrant/embedded/lib/libarchive*
+    ln -s ${libarchive}/lib/libarchive.so opt/vagrant/embedded/lib/libarchive.so
     rm opt/vagrant/embedded/bin/{bsdtar,bsdcpio}
     ln -s ${libarchive}/bin/bsdtar opt/vagrant/embedded/bin
     ln -s ${libarchive}/bin/bsdcpio opt/vagrant/embedded/bin
@@ -92,17 +95,17 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"
-    wrapProgram $out/bin/vagrant --prefix LD_LIBRARY_PATH : $out/opt/vagrant/embedded/lib
+    wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
   '';
 
   preFixup = ''
     # 'hide' the template file from shebang-patching
-    chmod -x $out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable
-    chmod -x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod -x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
+    chmod -x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 
   postFixup = ''
-    chmod +x $out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable
-    chmod +x $out/opt/vagrant/embedded/gems/gems/vagrant-${version}/plugins/provisioners/salt/bootstrap-salt.sh
+    chmod +x "$out/opt/vagrant/embedded/gems/gems/bundler-1.12.5/lib/bundler/templates/Executable"
+    chmod +x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '';
 }

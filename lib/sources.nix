@@ -58,7 +58,7 @@ rec {
            else if lib.pathExists packedRefsName
            then
              let fileContent = readFile packedRefsName;
-                 matchRef    = match ".*\n([^\n ]*) " + file + "\n.*" fileContent;
+                 matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
              in if   isNull matchRef
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef

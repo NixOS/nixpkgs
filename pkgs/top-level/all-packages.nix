@@ -7153,7 +7153,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_3_1 = callPackage ../development/libraries/ffmpeg/3.1.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   # Aliases
   ffmpeg_0 = self.ffmpeg_0_10;
@@ -8184,7 +8184,9 @@ in
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate { };
+  libsamplerate = callPackage ../development/libraries/libsamplerate {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
+  };
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
@@ -8273,7 +8275,9 @@ in
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod { };
+  libmikmod = callPackage ../development/libraries/libmikmod {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
@@ -16348,6 +16352,8 @@ in
     kile = callPackage ../applications/editors/kile/frameworks.nix { };
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
+
+    kronometer = callPackage ../tools/misc/kronometer { };
 
     krita = callPackage ../applications/graphics/krita {
       vc = vc_0_7;
