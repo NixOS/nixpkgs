@@ -16524,14 +16524,15 @@ in modules // {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.15.1";
+    name = "paramiko-${version}";
+    version = "2.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/paramiko/${name}.tar.gz";
-      sha256 = "6ed97e2281bb48728692cdc621f6b86a65fdc1d46b178ce250cfec10b977a04c";
+      sha256 = "1p21s7psqj18k9a97nq26yas058i5ivzk7pi7y98l1rbl87zj6s1";
     };
 
-    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+    propagatedBuildInputs = with self; [ cryptography cryptography_vectors ];
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
