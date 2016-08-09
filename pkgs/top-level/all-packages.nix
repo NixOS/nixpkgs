@@ -6167,13 +6167,23 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot = callPackage ../development/tools/build-managers/buildbot {
+  buildbot8 = callPackage ../development/tools/build-managers/buildbot/8.nix {
     inherit (pythonPackages) twisted jinja2 sqlalchemy_migrate_0_7;
     dateutil = pythonPackages.dateutil_1_5;
   };
 
   buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
     inherit (pythonPackages) twisted;
+  };
+
+  buildbot = callPackage ../development/tools/build-managers/buildbot { };
+  buildbot-worker = callPackage ../development/tools/build-managers/buildbot/worker.nix { };
+  buildbot-plugins = callPackage ../development/tools/build-managers/buildbot/plugins.nix { };
+  buildbot-ui = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www ];
+  };
+  buildbot-full = self.buildbot.override {
+    plugins = with self.buildbot-plugins; [ www console-view waterfall-view ];
   };
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
