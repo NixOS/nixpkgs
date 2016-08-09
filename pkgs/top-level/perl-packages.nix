@@ -7938,6 +7938,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/${name}.tar.gz";
       sha256 = "00wk9950i9q6qwp1vdq9xdddgk54lqd0bhcq2hnijh8xnmhvpmsc";
     };
+    outputs = [ "out" ];
     buildInputs = [ ProcWaitStat ];
   };
 
