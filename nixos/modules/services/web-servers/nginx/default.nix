@@ -19,6 +19,8 @@ let
     ${cfg.config}
 
     ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
+    events {}
+
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -96,6 +98,7 @@ let
     }''}
 
     ${optionalString (cfg.httpConfig != "") ''
+    events {}
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
