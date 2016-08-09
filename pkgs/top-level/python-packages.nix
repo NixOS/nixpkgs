@@ -825,7 +825,7 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six
     ] ++ optional windowsSupport pywinrm;
 
     meta = {
