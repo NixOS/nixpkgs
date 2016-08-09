@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
-, libxml2, libxslt, makeWrapper }:
+, libxml2, libxslt, coreutils, makeWrapper }:
 
 assert stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 
@@ -96,6 +96,11 @@ stdenv.mkDerivation rec {
     cp -r opt "$out"
     cp -r usr/bin "$out"
     wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
+
+    substituteInPlace $out/opt/vagrant/embedded/lib/ruby/2.2.0/x86_64-linux/rbconfig.rb \
+      --replace '"/bin/mkdir' '"${coreutils}/bin/mkdir'
+    substituteInPlace $out/opt/vagrant/embedded/lib/ruby/2.2.0/x86_64-linux/rbconfig.rb \
+      --replace "'/usr/bin/install" "'${coreutils}/bin/install"
   '';
 
   preFixup = ''
