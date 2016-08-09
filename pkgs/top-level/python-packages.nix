@@ -17203,12 +17203,12 @@ in modules // {
 
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
-    version = "0.2.8";
+    version = "0.2.9";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysftp/${name}.tar.gz";
-      sha256 = "1d69z8yngciksch1i8rivy1xl8f6g6sb7c3kk5cm3pf8304q6hhm";
+      sha256 = "0jl5qix5cxzrv4lb8rfpjkpcghbkacnxkb006ikn7mkl5s05mxgv";
     };
 
     propagatedBuildInputs = with self; [ paramiko ];
