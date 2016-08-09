@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "0.13.11";
+  version = "0.13.12";
 
   src = fetchurl {
     url = "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${name}.tgz";
-    sha256 = "19mg2xbc2vbqg33b986zvn7pj05cx106rccdzf9zs2npdnznysm3";
+    sha256 = "1pq3c9nhxbdpx5csmpvjv93nz2z04n2gzzwyd7sllaplqgwk00i8";
   };
 
   patchPhase = ''
@@ -19,10 +19,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/sbt/bin/sbt $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.scala-sbt.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     description = "A build tool for Scala, Java and more";
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    maintainers = with maintainers; [ rickynils ];
+    platforms = platforms.unix;
   };
 }

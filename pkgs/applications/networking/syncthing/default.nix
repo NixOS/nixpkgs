@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, go }:
+{ stdenv, fetchFromGitHub, go }:
 
 stdenv.mkDerivation rec {
-  version = "0.13.9";
+  version = "0.14.3";
   name = "syncthing-${version}";
 
-  src = fetchgit {
-    url = https://github.com/syncthing/syncthing;
-    rev = "refs/tags/v${version}";
-    sha256 = "1ah3a86rjfqlx4mqyvn8j3r806i65mzhs5xnfg4aakzmwpr5zpx0";
+  src = fetchFromGitHub {
+    owner = "syncthing";
+    repo = "syncthing";
+    rev = "v${version}";
+    sha256 = "114i0911h3q6dn3j9x2qcm5lzpqclvrpf5vk87qpqp9qy62jp3az";
   };
 
   buildInputs = [ go ];
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.syncthing.net/;
     description = "Open Source Continuous File Synchronization";
     license = stdenv.lib.licenses.mpl20;
-    maintainers = with stdenv.lib.maintainers; [pshendry];
+    maintainers = with stdenv.lib.maintainers; [ pshendry joko peterhoeg ];
     platforms = with stdenv.lib.platforms; linux ++ freebsd ++ openbsd ++ netbsd;
   };
 }

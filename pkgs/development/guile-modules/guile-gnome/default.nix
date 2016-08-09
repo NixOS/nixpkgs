@@ -1,15 +1,14 @@
-{ fetchgit, stdenv, guile, guile_lib, gwrap
+{ fetchurl, stdenv, guile, guile_lib, gwrap
 , pkgconfig, gconf, glib, gnome_vfs, gtk
 , libglade, libgnome, libgnomecanvas, libgnomeui
 , pango, guileCairo, autoconf, automake, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "guile-gnome-platform-20150123";
+  name = "guile-gnome-platform-2.16.4";
 
-  src = fetchgit {
-    url = "git://git.sv.gnu.org/guile-gnome.git";
-    rev = "0fcbe69797b9501b8f1283a78eb92bf43b08d080";
-    sha256 = "19nsxwhrmrs9n16sb99pgy6zp6zpvmsd285kcjb54y362li7yc83";
+  src = fetchurl {
+    url = "http://ftp.gnu.org/pub/gnu/guile-gnome/guile-gnome-platform/${name}.tar.gz";
+    sha256 = "adabd48ed5993d8528fd604e0aa0d96ad81a61d06da6cdd68323572ad6c216c3";
   };
 
   buildInputs = [
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
   # The test suite tries to open an X display, which fails.
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNOME bindings for GNU Guile";
 
     longDescription =
@@ -51,8 +50,9 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.gnu.org/software/guile-gnome/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
 
-    maintainers = [ stdenv.lib.maintainers.taktoa ];
+    maintainers = with maintainers; [ taktoa amiloradovsky ];
+    platforms = with platforms; linux;
   };
 }

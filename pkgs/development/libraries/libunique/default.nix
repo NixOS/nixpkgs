@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://live.gnome.org/LibUnique;
     description = "A library for writing single instance applications";
     license = stdenv.lib.licenses.lgpl21;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

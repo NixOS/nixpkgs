@@ -18,62 +18,96 @@ let
 
     ${cfg.config}
 
+    ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
+    events {}
+
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
 
-      # optimisation
-      sendfile on;
-      tcp_nopush on;
-      tcp_nodelay on;
-      keepalive_timeout 65;
-      types_hash_max_size 2048;
+      ${optionalString (cfg.recommendedOptimisation) ''
+        # optimisation
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 65;
+        types_hash_max_size 2048;
+      ''}
 
-      # use secure TLS defaults
       ssl_protocols ${cfg.sslProtocols};
-      ssl_session_cache shared:SSL:42m;
-      ssl_session_timeout 23m;
-
       ssl_ciphers ${cfg.sslCiphers};
-      ssl_ecdh_curve secp384r1;
-      ssl_prefer_server_ciphers on;
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ssl_stapling on;
-      ssl_stapling_verify on;
+      ${optionalString (cfg.recommendedTlsSettings) ''
+        ssl_session_cache shared:SSL:42m;
+        ssl_session_timeout 23m;
+        ssl_ecdh_curve secp384r1;
+        ssl_prefer_server_ciphers on;
+        ssl_stapling on;
+        ssl_stapling_verify on;
+      ''}
 
-      gzip on;
-      gzip_disable "msie6";
-      gzip_proxied any;
-      gzip_comp_level 9;
-      gzip_buffers 16 8k;
-      gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+      ${optionalString (cfg.recommendedGzipSettings) ''
+        gzip on;
+        gzip_disable "msie6";
+        gzip_proxied any;
+        gzip_comp_level 9;
+        gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+      ''}
 
-      # sane proxy settings/headers
-      proxy_set_header        Host $host;
-      proxy_set_header        X-Real-IP $remote_addr;
-      proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-      proxy_set_header        X-Forwarded-Proto $scheme;
-      proxy_set_header        X-Forwarded-Host $host;
-      proxy_set_header        X-Forwarded-Server $host;
-      proxy_set_header        Accept-Encoding "";
+      ${optionalString (cfg.recommendedProxySettings) ''
+        proxy_set_header        Host $host;
+        proxy_set_header        X-Real-IP $remote_addr;
+        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Proto $scheme;
+        proxy_set_header        X-Forwarded-Host $host;
+        proxy_set_header        X-Forwarded-Server $host;
+        proxy_set_header        Accept-Encoding "";
 
-      proxy_redirect          off;
-      client_max_body_size    10m;
-      client_body_buffer_size 128k;
-      proxy_connect_timeout   90;
-      proxy_send_timeout      90;
-      proxy_read_timeout      90;
-      proxy_buffers           32 4k;
-      proxy_buffer_size       8k;
-      proxy_http_version      1.0;
+        proxy_redirect          off;
+        proxy_connect_timeout   90;
+        proxy_send_timeout      90;
+        proxy_read_timeout      90;
+        proxy_http_version      1.0;
+      ''}
+
+      client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
+
       ${vhosts}
+
+      ${optionalString cfg.statusPage ''
+        server {
+          listen 80;
+          listen [::]:80;
+
+          server_name localhost;
+
+          location /nginx_status {
+            stub_status on;
+            access_log off;
+            allow 127.0.0.1;
+            allow ::1;
+            deny all;
+          }
+        }
+      ''}
+
+      ${cfg.appendHttpConfig}
+    }''}
+
+    ${optionalString (cfg.httpConfig != "") ''
+    events {}
+    http {
+      include ${cfg.package}/conf/mime.types;
+      include ${cfg.package}/conf/fastcgi.conf;
       ${cfg.httpConfig}
-    }
+    }''}
+
     ${cfg.appendConfig}
   '';
+
   vhosts = concatStringsSep "\n" (mapAttrsToList (serverName: vhost:
       let
         ssl = vhost.enableSSL || vhost.forceSSL;
@@ -150,11 +184,45 @@ in
 {
   options = {
     services.nginx = {
-      enable = mkOption {
+      enable = mkEnableOption "Nginx Web Server";
+
+      statusPage = mkOption {
         default = false;
         type = types.bool;
         description = "
-          Enable the nginx Web Server.
+          Enable status page reachable from localhost on http://127.0.0.1/nginx_status.
+        ";
+      };
+
+      recommendedTlsSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = "
+          Enable recommended TLS settings.
+        ";
+      };
+
+      recommendedOptimisation = mkOption {
+        default = false;
+        type = types.bool;
+        description = "
+          Enable recommended optimisation settings.
+        ";
+      };
+
+      recommendedGzipSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = "
+          Enable recommended gzip settings.
+        ";
+      };
+
+      recommendedProxySettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = "
+          Enable recommended proxy settings.
         ";
       };
 
@@ -168,9 +236,12 @@ in
       };
 
       config = mkOption {
-        default = "events {}";
+        default = "";
         description = "
           Verbatim nginx.conf configuration.
+          This is mutually exclusive with the structured configuration
+          via virtualHosts and the recommendedXyzSettings configuration
+          options. See appendConfig for appending to the generated http block.
         ";
       };
 
@@ -190,7 +261,22 @@ in
       httpConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Configuration lines to be appended inside of the http {} block.";
+        description = "
+          Configuration lines to be set inside the http block.
+          This is mutually exclusive with the structured configuration
+          via virtualHosts and the recommendedXyzSettings configuration
+          options. See appendHttpConfig for appending to the generated http block.
+        ";
+      };
+
+      appendHttpConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "
+          Configuration lines to be appended to the generated http block.
+          This is mutually exclusive with using config and httpConfig for 
+          specifying the whole http block verbatim.
+        ";
       };
 
       stateDir = mkOption {
@@ -215,7 +301,13 @@ in
       serverTokens = mkOption {
         type = types.bool;
         default = false;
-        description = "Show nginx version in headers and error pages";
+        description = "Show nginx version in headers and error pages.";
+      };
+
+      clientMaxBodySize = mkOption {
+        type = types.string;
+        default = "10m";
+        description = "Set nginx global client_max_body_size.";
       };
 
       sslCiphers = mkOption {
@@ -262,6 +354,8 @@ in
   };
 
   config = mkIf cfg.enable {
+    # TODO: test user supplied config file pases syntax test
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
@@ -286,10 +380,12 @@ in
         optionalAttrs vhostConfig.enableACME {
           webroot = vhostConfig.acmeRoot;
           extraDomains = genAttrs vhostConfig.serverAliases (alias: null);
+          postRun = ''
+            systemctl reload nginx
+          '';
         }
       ) virtualHosts
     );
-
 
     users.extraUsers = optionalAttrs (cfg.user == "nginx") (singleton
       { name = "nginx";

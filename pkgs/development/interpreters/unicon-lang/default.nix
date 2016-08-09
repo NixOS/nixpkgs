@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ libX11 libXt unzip ];
 
+  hardeningDisable = [ "fortify" ];
+
   sourceRoot = ".";
 
   configurePhase = ''

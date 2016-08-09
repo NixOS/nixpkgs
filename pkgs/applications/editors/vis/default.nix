@@ -1,12 +1,18 @@
-{ stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper, ncurses, libtermkey, lpeg, lua }:
+{ stdenv, fetchFromGitHub, unzip, pkgconfig, makeWrapper
+, ncurses, libtermkey, lpeg, lua
+, acl ? null, libselinux ? null
+, version ? "2016-07-15"
+, rev ? "5c2cee9461ef1199f2e80ddcda699595b11fdf08"
+, sha256 ? "1jmsv72hq0c2f2rnpllvd70cmxbjwfhynzwaxx24f882zlggwsnd"
+}:
 
 stdenv.mkDerivation rec {
   name = "vis-nightly-${version}";
-  version = "2016-04-15";
+  inherit version;
 
   src = fetchFromGitHub {
-    sha256 = "0a4gpwniy5r9dpfq51fxjxxnxavdjv8x76w9bbjnbnh8n63p3sj7";
-    rev = "472c559a273d3c7b0f5ee92260c5544bc3d74576";
+    inherit sha256;
+    inherit rev;
     repo = "vis";
     owner = "martanne";
   };
@@ -14,12 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-     unzip
-     pkgconfig
-     ncurses
-     libtermkey
-     lua
-     lpeg
+    unzip pkgconfig
+    ncurses
+    libtermkey
+    lua
+    lpeg
+  ] ++ stdenv.lib.optional stdenv.isLinux [
+    acl
+    libselinux
   ];
 
   LUA_CPATH="${lpeg}/lib/lua/${lua.luaversion}/?.so;";
@@ -33,11 +41,11 @@ stdenv.mkDerivation rec {
       --prefix VIS_PATH : "$out/share/vis"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A vim like editor";
     homepage = http://github.com/martanne/vis;
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vrthra ];
+    license = licenses.isc;
+    maintainers = [ maintainers.vrthra ];
+    platforms = platforms.unix;
   };
 }
-

@@ -20,5 +20,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = https://github.com/shimmerproject/Orion;
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

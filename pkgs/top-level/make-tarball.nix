@@ -15,7 +15,7 @@ releaseTools.sourceTarball rec {
   src = nixpkgs;
 
   inherit officialRelease;
-  version = builtins.readFile ../../.version;
+  version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
 
   buildInputs = [ nix.out jq ];
@@ -40,7 +40,7 @@ releaseTools.sourceTarball rec {
     echo 'abort "Illegal use of <nixpkgs> in Nixpkgs."' > $TMPDIR/barf.nix
 
     # Make sure that Nixpkgs does not use <nixpkgs>
-    if grep -r '<nixpkgs\/' pkgs; then
+    if (find pkgs -type f -name '*.nix' -print | xargs grep '<nixpkgs\/'); then
         echo "Nixpkgs is not allowed to use <nixpkgs> to refer to itself."
         exit 1
     fi

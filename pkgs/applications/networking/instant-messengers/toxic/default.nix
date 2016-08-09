@@ -1,22 +1,23 @@
-{ stdenv, fetchFromGitHub, autoconf, libtool, automake, libsodium, ncurses
-, libtoxcore, openal, libvpx, freealut, libconfig, pkgconfig }:
+{ stdenv, fetchFromGitHub, libsodium, ncurses, curl
+, libtoxcore-dev, openal, libvpx, freealut, libconfig, pkgconfig
+, libqrencode }:
 
 stdenv.mkDerivation rec {
-  name = "toxic-dev-20150125";
+  name = "toxic-dev-20160728";
 
   src = fetchFromGitHub {
     owner = "Tox";
     repo = "toxic";
-    rev = "4badc983ea";
-    sha256 = "01zk6316v51f1zvp5ss53ay49h3nnaq5snlk0gxmsrmwg71bsnm6";
+    rev = "cb21672600206423c844306a84f8b122e534c348";
+    sha256 = "1nq1xnbyjfrk8jrjvk5sli1bm3i9r8b4m8f4xgmiz68mx1r3fn5k";
   };
 
-  makeFlags = [ "-Cbuild" "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
   installFlags = [ "PREFIX=$(out)" ];
 
+  nativeBuildInputs = [ pkgconfig libconfig ];
   buildInputs = [
-    autoconf libtool automake libtoxcore libsodium ncurses
-    libconfig pkgconfig
+    libtoxcore-dev libsodium ncurses libqrencode curl
   ] ++ stdenv.lib.optionals (!stdenv.isArm) [
     openal libvpx freealut
   ];

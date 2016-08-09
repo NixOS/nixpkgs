@@ -48,7 +48,7 @@ in
         default = "";
         type = str;
         description = ''
-          Password.
+          Password. WARNING: The password becomes world readable in the Nix store.
         '';
       };
 

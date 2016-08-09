@@ -10,7 +10,7 @@ assert guileBindings -> guile != null;
 let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
+  doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
 in
 stdenv.mkDerivation {
   name = "gnutls-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   outputs = [ "dev" "out" "bin" "man" "docdev" ];
   outputInfo = "docdev";
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionAtLeast version "3.4") ''
     sed '2iecho "name constraints tests skipped due to datefudge problems"\nexit 0' \
       -i tests/cert-tests/name-constraints
   '' + postPatch;
@@ -36,10 +36,12 @@ stdenv.mkDerivation {
 
   # Build of the Guile bindings is not parallel-safe.  See
   # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
-  # for the actual fix.
-  enableParallelBuilding = !guileBindings;
+  # for the actual fix.  Also an apparent race in the generation of
+  # systemkey-args.h.
+  enableParallelBuilding = false;
 
-  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen nettools ]
+  buildInputs = [ lzo lzip nettle libtasn1 libidn p11_kit zlib gmp autogen ]
+    ++ lib.optional doCheck nettools
     ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) libiconv
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ [ unbound ]

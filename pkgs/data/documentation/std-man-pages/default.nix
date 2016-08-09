@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "C++ STD manual pages";
     homepage = http://gcc.gnu.org/;
     license = "GPL/LGPL";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

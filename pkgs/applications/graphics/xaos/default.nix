@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://xaos.sourceforge.net/;
     description = "Fractal viewer";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" ];
   };
 }

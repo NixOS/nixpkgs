@@ -31,5 +31,6 @@ stdenv.mkDerivation rec {
     repositories.git = https://github.com/ajaiantilal/i7z.git;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

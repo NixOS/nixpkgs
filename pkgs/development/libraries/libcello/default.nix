@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     homepage = http://libcello.org/;
     description = "Higher level programming in C";
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

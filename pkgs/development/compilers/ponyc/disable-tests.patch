@@ -1,0 +1,16 @@
+diff --git a/packages/net/_test.pony b/packages/net/_test.pony
+index d6c3e56..dc37dd9 100644
+--- a/packages/net/_test.pony
++++ b/packages/net/_test.pony
+@@ -7,11 +7,6 @@ actor Main is TestList
+   fun tag tests(test: PonyTest) =>
+     test(_TestReadBuffer)
+     test(_TestWriteBuffer)
+-    test(_TestBroadcast)
+-    ifdef not windows then
+-      test(_TestTCPExpect)
+-      test(_TestTCPWritev)
+-    end
+ 
+ class iso _TestReadBuffer is UnitTest
+   """

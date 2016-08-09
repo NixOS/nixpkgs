@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-1.8.1";
+  name = "gst-plugins-base-1.8.2";
 
   meta = {
     description = "Base plugins and helper libraries";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz";
-    sha256 = "0vxd5w7r1jqp37cw5lhyc6vj2h6z8y9v3xarwd2c6rfjbjcdxa8m";
+    sha256 = "9d7109c8fb0a5dec8edb17b0053c59a46aba7ddf48dc48ea822ebbbd4339d38d";
   };
 
   outputs = [ "dev" "out" ];

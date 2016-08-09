@@ -11,7 +11,7 @@ let
     "-DUSE_TLS" "-DUSE_SASL_AUTH" "-DUSE_CYRUS_SASL" "-I${cyrus_sasl.dev}/include/sasl"
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
-     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${libmysql}/include/mysql" ]
+     ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
      ++ lib.optional withSQLite "-DHAS_SQLITE"
      ++ lib.optional withLdap "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
@@ -25,11 +25,11 @@ in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.0.4";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "03msimdzxndm1nskljarws45wpqk020ckfcrmn1p3pxrfq8yh75q";
+    sha256 = "10lrp8fyn38digih1sy7y4dm74szj1cvbyxmn68095ri8v1s9v9x";
   };
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
     ./postfix-3.0-no-warnings.patch
     ./post-install-script.patch
     ./relative-symlinks.patch
+    ./postfix-libressl.patch
   ];
 
   preBuild = ''

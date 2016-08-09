@@ -1,8 +1,8 @@
-{ plasmaPackage, substituteAll, extra-cmake-modules, kdoctools
+{ plasmaPackage, substituteAll, ecm, kdoctools
 , kcompletion, kconfigwidgets, kcoreaddons, kdbusaddons, kdeclarative
 , kdelibs4support, ki18n, kiconthemes, kinit, kio, kitemviews
 , knotifications, kservice, kwallet, kwidgetsaddons, kwindowsystem
-, kxmlgui, makeQtWrapper, mobile_broadband_provider_info
+, kxmlgui, mobile_broadband_provider_info
 , modemmanager-qt, networkmanager-qt, openconnect, plasma-framework
 , qca-qt5, qtdeclarative, solid
 }:
@@ -15,11 +15,7 @@ plasmaPackage {
       inherit mobile_broadband_provider_info;
     })
   ];
-  nativeBuildInputs = [
-    extra-cmake-modules
-    kdoctools
-    makeQtWrapper
-  ];
+  nativeBuildInputs = [ ecm kdoctools ];
   propagatedBuildInputs = [
     kdeclarative kdelibs4support ki18n kio kwindowsystem plasma-framework
     qtdeclarative kcompletion kconfigwidgets kcoreaddons kdbusaddons kiconthemes
@@ -27,7 +23,4 @@ plasmaPackage {
     mobile_broadband_provider_info modemmanager-qt networkmanager-qt openconnect
     qca-qt5 solid
   ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kde5-nm-connection-editor"
-  '';
 }

@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src = fetchurl {
     url = "http://download.elastic.co/kibana/kibana-snapshot/${name}-snapshot-linux-x86.tar.gz";
-    sha256 = "0k9pmzx2sa3026yw29f2h2lddxdkhyn3jvdf3si8scz70ncwylj9";
+    sha256 = "1na8xh525znxaqjhxfvpx0q3rj85cjb6l9zlzd44dl31a9l117y4";
   };
 
   buildInputs = [ makeWrapper ];
@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline rickynils ];
+    platforms = with platforms; unix;
   };
 }

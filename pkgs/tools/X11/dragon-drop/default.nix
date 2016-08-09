@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mwh/dragon";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl3;
+    platforms = with platforms; unix;
   };
 }

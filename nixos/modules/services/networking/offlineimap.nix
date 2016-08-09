@@ -54,7 +54,7 @@ in {
       description = "Offlineimap: a software to dispose your mailbox(es) as a local Maildir(s)";
       serviceConfig = {
         Type      = "oneshot";
-        ExecStart = "${cfg.package}/bin/offlineimap -u basic -o -1";
+        ExecStart = "${cfg.package}/bin/offlineimap -u syslog -o -1";
         TimeoutStartSec = cfg.timeoutStartSec;
       };
       path = cfg.path;

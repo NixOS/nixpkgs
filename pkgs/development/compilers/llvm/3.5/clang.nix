@@ -50,6 +50,5 @@ in stdenv.mkDerivation {
     homepage    = http://llvm.org/;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
-    broken      = true;
   };
 }

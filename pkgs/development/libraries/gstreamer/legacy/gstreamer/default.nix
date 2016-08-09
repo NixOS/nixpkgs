@@ -54,5 +54,6 @@ stdenv.mkDerivation rec {
     '';
 
     license = stdenv.lib.licenses.lgpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

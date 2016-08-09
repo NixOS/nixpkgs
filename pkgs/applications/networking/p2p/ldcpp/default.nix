@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Direct Connect client";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

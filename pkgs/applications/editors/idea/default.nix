@@ -24,6 +24,7 @@ let
           once it's ready.
         '';
         platforms = platforms.linux;
+        hydraPlatforms = []; # Depends on androidsdk, which hits Hydra's output limits
         maintainers = with maintainers; [ edwtjo ];
       };
     });
@@ -31,7 +32,7 @@ let
       buildInputs = x.buildInputs ++ [ makeWrapper ];
       installPhase = x.installPhase +  ''
         wrapProgram "$out/bin/android-studio" \
-          --set ANDROID_HOME "${androidsdk}/libexec/android-sdk-linux/" \
+          --set ANDROID_HOME "${androidsdk}/libexec/" \
           --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib" # Gradle installs libnative-platform.so in ~/.gradle, that requires libstdc++.so.6
       '';
     });

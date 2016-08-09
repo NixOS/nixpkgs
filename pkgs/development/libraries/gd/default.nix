@@ -12,16 +12,20 @@
 
 stdenv.mkDerivation rec {
   name = "gd-${version}";
-  version = "2.2.1";
+  version = "2.2.3";
 
   src = fetchurl {
     url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
-    sha256 = "0xmrqka1ggqgml84xbmkw1y0r0lg7qn657v5b1my8pry92p651vh";
+    sha256 = "0g3xz8jpz1pl2zzmssglrpa9nxiaa7rmcmvgpbrjz8k9cyynqsvl";
   };
 
   hardeningDisable = [ "format" ];
 
+  # -pthread gets passed to clang, causing warnings
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--enable-werror=no";
+
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ zlib fontconfig freetype ];
   propagatedBuildInputs = [ libpng libjpeg libwebp libtiff libXpm ];
 

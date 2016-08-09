@@ -42094,6 +42094,27 @@
     os = [ ];
     cpu = [ ];
   };
+  by-spec."rollup"."*" =
+    self.by-version."rollup"."0.31.2";
+  by-version."rollup"."0.31.2" = self.buildNodePackage {
+    name = "rollup-0.31.2";
+    version = "0.31.2";
+    bin = true;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/rollup/-/rollup-0.31.2.tgz";
+      name = "rollup-0.31.2.tgz";
+      sha1 = "b479fe0a5faf7c310b8cc963da4dd0eb0a6174d0";
+    };
+    deps = {
+      "source-map-support-0.4.0" = self.by-version."source-map-support"."0.4.0";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  "rollup" = self.by-version."rollup"."0.31.2";
   by-spec."root"."^2.0.0" =
     self.by-version."root"."2.0.0";
   by-version."root"."2.0.0" = self.buildNodePackage {
@@ -45386,6 +45407,24 @@
       url = "https://registry.npmjs.org/source-map-support/-/source-map-support-0.3.2.tgz";
       name = "source-map-support-0.3.2.tgz";
       sha1 = "737d5c901e0b78fdb53aca713d24f23ccbb10be1";
+    };
+    deps = {
+      "source-map-0.1.32" = self.by-version."source-map"."0.1.32";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  by-version."source-map-support"."0.4.0" = self.buildNodePackage {
+    name = "source-map-support-0.4.0";
+    version = "0.4.0";
+    bin = false;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/source-map-support/-/source-map-support-0.4.0.tgz";
+      name = "source-map-support-0.4.0.tgz";
+      sha1 = "cb92292bc05455ce48691de545ac2690bb1cc976";
     };
     deps = {
       "source-map-0.1.32" = self.by-version."source-map"."0.1.32";

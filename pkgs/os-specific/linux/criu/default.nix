@@ -24,9 +24,7 @@ stdenv.mkDerivation rec {
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
-  hardeningDisable = [ "stackprotector" ];
-
-  configurePhase = "make config PREFIX=$out";
+  buildPhase = "make PREFIX=$out";
 
   makeFlags = "PREFIX=$(out)";
 

@@ -21,7 +21,7 @@ let
     });
 in
 {
-<xsl:for-each select="sdk:add-on[sdk:name-id='google_apis']">
+<xsl:for-each select="sdk:add-on[sdk:name-id='google_apis']"><xsl:sort select="sdk:api-level" data-type="number"/><xsl:sort select="sdk:revision" data-type="number"/>
   google_apis_<xsl:value-of select="sdk:api-level" /> = buildGoogleApis {
     name = "<xsl:value-of select="sdk:name-id" />-<xsl:value-of select="sdk:api-level" />";
       src = fetchurl {

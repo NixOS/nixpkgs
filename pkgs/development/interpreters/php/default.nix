@@ -107,7 +107,7 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql=${mysql.lib}"];
+          configureFlags = ["--with-mysql"];
           buildInputs = [ mysql.lib ];
         };
 
@@ -301,18 +301,18 @@ let
 in {
 
   php55 = generic {
-    version = "5.5.37";
-    sha256 = "122xj115fjl6rqlxqqjzvh16fbm801yqcmfh9hn7zwfa8sz0wf6j";
+    version = "5.5.38";
+    sha256 = "0f1y76whg6yx9a18mh97f8yq8lb64ri1f0zfr9la9374nbmq2g27";
   };
 
   php56 = generic {
-    version = "5.6.23";
-    sha256 = "1isq6pym20nwsf2j1jdz321vck9xd6g86q2b13vycxyjjq42ikgs";
+    version = "5.6.24";
+    sha256 = "1iiqmjgxr10ci69f33fzyhplp06km6ybgqmxr1g142pdqdz628xz";
   };
 
   php70 = generic {
-    version = "7.0.8";
-    sha256 = "13bww8qz35crj3s2kzl50lqy28m83xms1qrz66qhf3j9i2ippp36";
+    version = "7.0.9";
+    sha256 = "0yrv5ijw6bgc0ahplczwhl5nm6l5mnd1i2n5023z7wkmb25rdrif";
   };
 
 }

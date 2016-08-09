@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
 , libsndfile, libX11, graphicsmagick, pcre, pkgconfig, mesa, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas
+, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
     graphicsmagick pcre pkgconfig mesa fltk zlib curl openblas libsndfile
-    fftw fftwSinglePrec qrupdate ]
+    fftw fftwSinglePrec qrupdate arpack libwebp ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
@@ -38,9 +38,10 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
+    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [mesa libX11])
     ;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
@@ -50,7 +51,9 @@ stdenv.mkDerivation rec {
       "--with-blas=openblas"
       "--with-lapack=openblas"
     ]
-    ++ stdenv.lib.optional openblas.blas64 "--enable-64";
+    ++ stdenv.lib.optional openblas.blas64 "--enable-64"
+    ++ stdenv.lib.optionals stdenv.isDarwin ["--with-x=no"]
+    ;
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
@@ -67,6 +70,6 @@ stdenv.mkDerivation rec {
     homepage = http://octave.org/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric raskin];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

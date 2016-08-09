@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     description = "Terminal streaming bar graph passed through stdin";
     license = stdenv.lib.licenses.bsdOriginal;
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

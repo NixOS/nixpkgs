@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.balabit.com/support/community/products/";
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

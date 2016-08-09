@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, ant, jdk, jre }:
 
 stdenv.mkDerivation rec {
-  version = "3.4";
+  version = "3.5";
   name = "jabref-${version}";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}.jar";
-    sha256 = "1pimjx1452z159hvi199n52j5vkdj5c59mns9mi5mqvwhgm9dghd";
+    sha256 = "19q86xc8qr6j8zd9rsc6aa3jd4kbblkr6ik1h6h7npq012019adm";
   };
 
   desktopItem = makeDesktopItem {

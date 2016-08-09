@@ -47,15 +47,16 @@ rec {
       '';
       homepage = http://www.gradle.org/;
       license = stdenv.lib.licenses.asl20;
+      platforms = stdenv.lib.platforms.unix;
     };
   };
 
   gradleLatest = gradleGen rec {
-    name = "gradle-2.14";
+    name = "gradle-2.14.1";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1m98m4cxnvyl5ymkj6z8xb9vpdna47hdh5qrfblqkijjnqrlyfwr";
+      sha256 = "0fggjxpsnakdaviw7bn2jmsl06997phlqr1251bjmlgjf7d1xing";
     };
   };
 

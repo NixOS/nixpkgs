@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, ... }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
   name = "sonarr-${version}";
@@ -9,28 +9,22 @@ stdenv.mkDerivation rec {
     sha256 = "16nx0v5hpqlwna2hzpcpzvm7qc361yjxbqnwz5bfnnkb0h7ik5m6";
   };
 
-  propagatedBuildInputs = [
-    mono
-    libmediainfo
-    sqlite
+  buildInputs = [
+    makeWrapper
   ];
-
-  patches = [
-    ./SQLite.dll.config.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace System.Data.SQLite.dll.config --replace libsqlite3.so ${sqlite.out}/lib/libsqlite3.so
-    substituteInPlace NzbDrone.Core.dll.config --replace libmediainfo.so ${libmediainfo}/lib/libmediainfo.so
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r * $out/bin
+    cp -r * $out/bin/
+
+    makeWrapper "${mono}/bin/mono" $out/bin/NzbDrone \
+      --add-flags "$out/bin/NzbDrone.exe" \
+      --prefix LD_LIBRARY_PATH ':' "${sqlite.out}/lib" \
+      --prefix LD_LIBRARY_PATH ':' "${libmediainfo}/lib"
   '';
 
   meta = {
-    description = "Sonarr - Smart PVR for newsgroup and bittorrent users";
+    description = "Smart PVR for newsgroup and bittorrent users";
     homepage = https://sonarr.tv/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.fadenb ];

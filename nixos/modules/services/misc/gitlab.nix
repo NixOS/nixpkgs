@@ -57,42 +57,23 @@ let
           issues = true;
           merge_requests = true;
           wiki = true;
-          snippets = false;
+          snippets = true;
           builds = true;
+          container_registry = true;
         };
       };
-      artifacts = {
-        enabled = true;
-      };
-      lfs = {
-        enabled = true;
-      };
-      gravatar = {
-        enabled = true;
-      };
-      cron_jobs = {
-        stuck_ci_builds_worker = {
-          cron = "0 0 * * *";
-        };
-      };
-      gitlab_ci = {
-        builds_path = "${cfg.statePath}/builds";
-      };
-      ldap = {
-        enabled = false;
-      };
-      omniauth = {
-        enabled = false;
-      };
-      shared = {
-        path = "${cfg.statePath}/shared";
-      };
-      backup = {
-        path = "${cfg.backupPath}";
-      };
+      repositories.storages.default = "${cfg.statePath}/repositories";
+      artifacts.enabled = true;
+      lfs.enabled = true;
+      gravatar.enabled = true;
+      cron_jobs = { };
+      gitlab_ci.builds_path = "${cfg.statePath}/builds";
+      ldap.enabled = false;
+      omniauth.enabled = false;
+      shared.path = "${cfg.statePath}/shared";
+      backup.path = "${cfg.backupPath}";
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
-        repos_path = "${cfg.statePath}/repositories";
         hooks_path = "${cfg.statePath}/shell/hooks";
         secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
         upload_pack = true;
@@ -125,21 +106,41 @@ let
 
   unicornConfig = builtins.readFile ./defaultUnicornConfig.rb;
 
-  gitlab-runner = pkgs.stdenv.mkDerivation rec {
-    name = "gitlab-runner";
-    buildInputs = [ cfg.packages.gitlab bundler pkgs.makeWrapper ];
+  gitlab-rake = pkgs.stdenv.mkDerivation rec {
+    name = "gitlab-rake";
+    buildInputs = [ cfg.packages.gitlab cfg.packages.gitlab.env pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
     buildPhase = "";
     installPhase = ''
       mkdir -p $out/bin
-      makeWrapper ${bundler}/bin/bundle $out/bin/gitlab-runner \
-          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '\"${value}\"' ") gitlabEnv)} \
-          --set GITLAB_CONFIG_PATH '"${cfg.statePath}/config"' \
-          --set PATH '"${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH"' \
-          --set RAKEOPT '"-f ${cfg.packages.gitlab}/share/gitlab/Rakefile"' \
+      makeWrapper ${cfg.packages.gitlab.env}/bin/bundle $out/bin/gitlab-bundle \
+          ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
+          --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
+          --set PATH '${pkgs.nodejs}/bin:${pkgs.gzip}/bin:${config.services.postgresql.package}/bin:$PATH' \
+          --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
-    '';
+      makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \
+          --add-flags "exec rake"
+     '';
   };
+
+  smtpSettings = pkgs.writeText "gitlab-smtp-settings.rb" ''
+    if Rails.env.production?
+      Rails.application.config.action_mailer.delivery_method = :smtp
+
+      ActionMailer::Base.delivery_method = :smtp
+      ActionMailer::Base.smtp_settings = {
+        address: "${cfg.smtp.address}",
+        port: ${toString cfg.smtp.port},
+        ${optionalString (cfg.smtp.username != null) ''user_name: "${cfg.smtp.username}",''}
+        ${optionalString (cfg.smtp.password != null) ''password: "${cfg.smtp.password}",''}
+        domain: "${cfg.smtp.domain}",
+        ${optionalString (cfg.smtp.authentication != null) "authentication: :${cfg.smtp.authentication},"}
+        enable_starttls_auto: ${toString cfg.smtp.enableStartTLSAuto},
+        openssl_verify_mode: '${cfg.smtp.opensslVerifyMode}'
+      }
+    end
+  '';
 
 in {
 
@@ -256,6 +257,62 @@ in {
         '';
       };
 
+      smtp = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable gitlab mail delivery over SMTP.";
+        };
+
+        address = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = "Address of the SMTP server for Gitlab.";
+        };
+
+        port = mkOption {
+          type = types.int;
+          default = 465;
+          description = "Port of the SMTP server for Gitlab.";
+        };
+
+        username = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Username of the SMTP server for Gitlab.";
+        };
+
+        password = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Password of the SMTP server for Gitlab.";
+        };
+
+        domain = mkOption {
+          type = types.str;
+          default = "localhost";
+          description = "HELO domain to use for outgoing mail.";
+        };
+
+        authentication = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "Authentitcation type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
+        };
+
+        enableStartTLSAuto = mkOption {
+          type = types.bool;
+          default = true;
+          description = "Whether to try to use StartTLS.";
+        };
+
+        opensslVerifyMode = mkOption {
+          type = types.str;
+          default = "peer";
+          description = "How OpenSSL checks the certificate, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
+        };
+      };
+
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
@@ -276,7 +333,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.git gitlab-runner cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ pkgs.git gitlab-rake cfg.packages.gitlab-shell ];
 
     assertions = [
       { assertion = cfg.databasePassword != "";
@@ -309,6 +366,7 @@ in {
     systemd.services.gitlab-sidekiq = {
       after = [ "network.target" "redis.service" ];
       wantedBy = [ "multi-user.target" ];
+      partOf = [ "gitlab.service" ];
       environment = gitlabEnv;
       path = with pkgs; [
         config.services.postgresql.package
@@ -323,7 +381,7 @@ in {
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${bundler}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${cfg.packages.gitlab.env}/bin/bundle exec \"sidekiq -q post_receive -q mailers -q system_hook -q project_web_hook -q gitlab_shell -q common -q default -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 
@@ -398,6 +456,9 @@ in {
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}/
 
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+        ${optionalString cfg.smtp.enable ''
+          ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
+        ''}
         ln -sf ${cfg.statePath}/config /run/gitlab/config
         cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
 
@@ -421,14 +482,14 @@ in {
             touch "${cfg.statePath}/db-created"
 
             # The gitlab:setup task is horribly broken somehow, these two tasks will do the same for setting up the initial database
-            ${gitlab-runner}/bin/gitlab-runner exec rake db:migrate RAILS_ENV=production
-            ${gitlab-runner}/bin/gitlab-runner exec rake db:seed_fu RAILS_ENV=production \
+            ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
+            ${gitlab-rake}/bin/gitlab-rake db:seed_fu RAILS_ENV=production \
               GITLAB_ROOT_PASSWORD="${cfg.initialRootPassword}" GITLAB_ROOT_EMAIL="${cfg.initialRootEmail}";
           fi
         fi
 
         # Always do the db migrations just to be sure the database is up-to-date
-        ${gitlab-runner}/bin/gitlab-runner exec rake db:migrate RAILS_ENV=production
+        ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.
@@ -442,8 +503,9 @@ in {
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "300";
+        Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${bundler}/bin/bundle exec \"unicorn -c ${cfg.statePath}/config/unicorn.rb -E production\"";
+        ExecStart = "${cfg.packages.gitlab.env}/bin/bundle exec \"unicorn -c ${cfg.statePath}/config/unicorn.rb -E production\"";
       };
 
     };

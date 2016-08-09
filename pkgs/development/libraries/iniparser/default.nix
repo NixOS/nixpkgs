@@ -39,5 +39,6 @@ stdenv.mkDerivation rec{
     homepage = http://ndevilla.free.fr/iniparser;
     description = "Free standalone ini file parsing library";
     license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

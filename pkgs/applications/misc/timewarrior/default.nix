@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "timewarrior-${version}";
-  version = "0.9.5.alpha";
+  version = "1.0.0.beta1";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "https://taskwarrior.org/download/timew-${version}.tar.gz";
-    sha256 = "154d5sgxcmz1b7g401c7s6sf7pkk0hh74dx6rss3vkamsjc4wgl8";
+    sha256 = "1gkh07mw8hiqslw8ps35r9lp5jbdy93s0sdrcbp34dd5h99qx587";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -12,7 +12,7 @@ assert (!libsOnly) -> kernel != null;
 
 let
 
-  versionNumber = "361.45.11";
+  versionNumber = "367.35";
 
   # Policy: use the highest stable version as the default (on our master).
   inherit (stdenv.lib) makeLibraryPath;
@@ -28,12 +28,12 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}.run";
-        sha256 = "036v7bzh9zy7zvaz2wf7zsamrynbg1yr1dll7sf1l928w059i6pb";
+        sha256 = "05g36bxcfk21ab8b0ay3zy21k5nd71468p9y1nbflx7ghpx25jrq";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-no-compat32.run";
-        sha256 = "1f8bxmf8cr3cgzxgap5ccb1yrqyrrdig19dp282y6z9xjq27l074";
+        sha256 = "0m4k8f0212l63h22wk6hgi8fbfsgxqih5mizsw4ixqqmjd75av4a";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
@@ -53,7 +53,11 @@ stdenv.mkDerivation {
     [ gtk atk pango glib gdk_pixbuf cairo ] );
   programPath = makeLibraryPath [ xorg.libXv ];
 
+  patches = if (!libsOnly) && (versionAtLeast kernel.dev.version "4.7") then [ ./365.35-kernel-4.7.patch ] else [];
+
   buildInputs = [ perl nukeReferences ];
+
+  hardeningDisable = [ "pic" "format" ];
 
   disallowedReferences = if libsOnly then [] else [ kernel.dev ];
 

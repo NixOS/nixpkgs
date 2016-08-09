@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.schmitthenner ];
     homepage = http://nevidal.org/sad.en.html;
-  };  
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

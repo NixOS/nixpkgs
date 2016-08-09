@@ -21,11 +21,15 @@ let
   packages = self: with self; {
 
     kdeApp = import ./kde-app.nix {
-      inherit stdenv lib;
+      inherit lib;
       inherit debug srcs;
+      inherit kdeDerivation;
     };
 
-    kdelibs = callPackage ./kdelibs { inherit (pkgs) attica phonon; };
+    kdelibs = callPackage ./kdelibs {
+      inherit (srcs.kdelibs) src version;
+      inherit (pkgs) attica phonon;
+    };
 
     ark = callPackage ./ark/default.nix {};
     baloo-widgets = callPackage ./baloo-widgets.nix {};

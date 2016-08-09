@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ./fix-curses.patch
     ];
 
-  # Should I be using pygtk's propogated build inputs?
+  # Should I be using pygtk's propagated build inputs?
   # !!! Should use makeWrapper.
   postPatch = ''
     # We don't have "python2".
@@ -115,5 +115,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.roconnor ];
     license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

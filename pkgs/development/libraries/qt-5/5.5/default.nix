@@ -42,12 +42,14 @@ let
       inherit src;
 
       propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
-      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.fixQtModuleCMakeConfig self.qmakeHook ];
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ self.qmakeHook ];
 
       NIX_QT_SUBMODULE = args.NIX_QT_SUBMODULE or true;
 
       outputs = args.outputs or [ "dev" "out" ];
       setOutputFlags = args.setOutputFlags or false;
+
+      setupHook = ./setup-hook.sh;
 
       enableParallelBuilding = args.enableParallelBuilding or true;
 
@@ -90,7 +92,7 @@ let
       qtsensors = callPackage ./qtsensors.nix {};
       qtserialport = callPackage ./qtserialport {};
       qtsvg = callPackage ./qtsvg.nix {};
-      qttools = callPackage ./qttools.nix {};
+      qttools = callPackage ./qttools {};
       qttranslations = callPackage ./qttranslations.nix {};
       /* qtwayland = not packaged */
       /* qtwebchannel = not packaged */
@@ -111,7 +113,6 @@ let
       ];
 
       makeQtWrapper = makeSetupHook { deps = [ makeWrapper ]; } ./make-qt-wrapper.sh;
-      fixQtModuleCMakeConfig = makeSetupHook { } ./fix-qt-module-cmake-config.sh;
       qmakeHook = makeSetupHook { substitutions = { qt_dev = qtbase.dev; lndir = pkgs.xorg.lndir; }; } ./qmake-hook.sh;
 
     };

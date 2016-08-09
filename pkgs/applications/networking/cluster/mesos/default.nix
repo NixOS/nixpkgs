@@ -48,6 +48,9 @@ in stdenv.mkDerivation rec {
     substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/posix/os.hpp \
       --replace '"sh"' '"${bash}/bin/bash"'
 
+    substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/shell.hpp \
+      --replace '"sh"' '"${bash}/bin/bash"'
+
     substituteInPlace 3rdparty/libprocess/3rdparty/stout/include/stout/os/posix/fork.hpp \
       --replace '"sh"' '"${bash}/bin/bash"'
 

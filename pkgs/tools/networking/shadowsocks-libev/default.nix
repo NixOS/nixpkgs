@@ -6,12 +6,17 @@
 , libev ? null
 , libsodium ? null
 , udns ? null
+, asciidoc
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxslt
 }:
 
 let
 
-  version = "2.4.7";
-  sha256 = "957265cc5339e020d8c8bb7414ab14936e3939dc7355f334aec896ec9b03c6ed";
+  version = "2.4.8";
+  sha256 = "af3fc3be50fb24dfd1aed8ce34d2d13448735f6181269f54f4860438a1838472";
 
 in
 
@@ -24,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  buildInputs = [ zlib ]
+  buildInputs = [ zlib asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt ]
                 ++ optional (!withMbedTLS) openssl
                 ++ optional withMbedTLS mbedtls
                 ++ optional enableSystemSharedLib [libev libsodium udns];

@@ -210,6 +210,10 @@ let
                 pkgs.nixos-artwork
                 pkgs.perlPackages.XMLLibXML
                 pkgs.perlPackages.ListCompare
+
+                # add curl so that rather than seeing the test attempt to download
+                # curl's tarball, we see what it's trying to download
+                pkgs.curl
               ]
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
               ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];

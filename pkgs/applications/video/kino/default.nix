@@ -67,13 +67,10 @@ stdenv.mkDerivation {
       pkgconfig perl perlXMLParser libavc1394 libiec61883 intltool libXv gettext libX11 glib cairo ffmpeg libv4l ]; # TODOoptional packages 
 
   configureFlags = "--enable-local-ffmpeg=no";
-  #preConfigure = "
-  #  grep 11 env-vars
-  #  ex
-  #";
+
+  hardeningDisable = [ "format" ];
 
   patches = [ ./kino-1.3.4-v4l1.patch ./kino-1.3.4-libav-0.7.patch ./kino-1.3.4-libav-0.8.patch ]; #./kino-1.3.4-libavcodec-pkg-config.patch ];
-
 
   postInstall = "
     rpath=`patchelf --print-rpath \$out/bin/kino`;
@@ -86,10 +83,10 @@ stdenv.mkDerivation {
     done
   ";
 
-
-  meta = { 
+  meta = {
       description = "Non-linear DV editor for GNU/Linux";
       homepage = http://www.kinodv.org/;
       license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

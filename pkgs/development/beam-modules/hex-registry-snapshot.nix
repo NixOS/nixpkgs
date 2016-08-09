@@ -20,4 +20,8 @@ stdenv.mkDerivation rec {
     setupHook = writeText "setupHook.sh" ''
         export HEX_REGISTRY_SNAPSHOT="$1/var/hex/registry.ets"
    '';
+
+    meta = {
+        platforms = stdenv.lib.platforms.unix;
+    };
 }

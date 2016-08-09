@@ -3,7 +3,7 @@
 , libgnome_keyring, gtk3, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, librsvg, libtiff, libxcb
-, openexr, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
+, openexr, osm-gps-map, pixman, pkgconfig, sqlite, bash, libxslt, openjpeg
 , mesa, lua, pugixml, colord, colord-gtk, libxshmfence, libxkbcommon
 , epoxy, at_spi2_core, libwebp, libsecret, wrapGAppsHook, gnome3
 }:
@@ -11,12 +11,12 @@
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "2.0.4";
+  version = "2.0.5";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    sha256 = "0qhyjsjjcd8yirqdnzbbzsldwd6y4wf1bxjbsshvqq7h5xi4ir40";
+    sha256 = "00hap68yvfdif6a4lpbhn4jx1n68mpd2kj473kml1xby9swp32w9";
   };
 
   buildInputs =
@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
       libsoup graphicsmagick SDL json_glib openjpeg mesa lua pugixml
       colord colord-gtk libxshmfence libxkbcommon epoxy at_spi2_core
       libwebp libsecret wrapGAppsHook gnome3.adwaita-icon-theme
+      osm-gps-map
     ];
 
   cmakeFlags = [

@@ -29,4 +29,8 @@ stdenv.mkDerivation rec {
 
   gensvgPatch =
     ./patch-fig2dev-dev-gensvg.c;
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

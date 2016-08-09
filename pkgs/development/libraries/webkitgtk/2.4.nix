@@ -2,7 +2,7 @@
 , pkgconfig, which, gettext, gobjectIntrospection
 , gtk2, gtk3, wayland, libwebp, enchant, sqlite
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, xorg
-, gst-plugins-base
+, gst-plugins-base, libobjc
 , withGtk2 ? false
 , enableIntrospection ? !stdenv.isDarwin
 , enableCredentialStorage ? !stdenv.isDarwin
@@ -15,7 +15,7 @@ assert stdenv.isDarwin -> !enableCredentialStorage;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.4.9";
+  version = "2.4.11";
 
   requiredSystemFeatures = [ "big-parallel" ];
 
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     description = "Web content rendering engine, GTK+ port";
     homepage = "http://webkitgtk.org/";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = [];
   };
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "0r651ar3p0f8zwl7764kyimxk5hy88cwy116pv8cl5l8hbkjkpxg";
+    sha256 = "1xsvnvyvlywwyf6m9ainpsg87jkxjmd37q6zgz9cxb7v3c2ym2jq";
   };
 
   CC = "cc";
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./webcore-svg-libxml-cflags.patch
   ] ++ optionals stdenv.isDarwin [
-    ./impure-icucore.patch
+    ./configure.patch
     ./quartz-webcore.patch
     ./libc++.patch
     ./plugin-none.patch
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = with stdenv.lib; [
     "--disable-geolocation"
+    "--disable-jit"
     (optionalString enableIntrospection "--enable-introspection")
   ] ++ optional withGtk2 [
     "--with-gtk=2.0"
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
   ] ++ optionals enableCredentialStorage [
     libsecret
   ] ++ (if stdenv.isDarwin then [
-    readline libedit
+    readline libedit libobjc
   ] else [
     wayland
   ]);

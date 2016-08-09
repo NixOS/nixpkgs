@@ -48,5 +48,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/carnager/rofi-pass;
     maintainers = with stdenv.lib.maintainers; [ hiberno the-kenny ];
     license = stdenv.lib.licenses.gpl3;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

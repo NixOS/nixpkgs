@@ -311,6 +311,36 @@ rec {
     };
   };
   eclipse_sdk_451 = eclipse-sdk-451; # backward compatibility, added 2016-01-30
+  
+  eclipse-sdk-452 = buildEclipse {
+    name = "eclipse-sdk-4.5.2";
+    description = "Eclipse Mars Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.2-201602121500/eclipse-SDK-4.5.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "87f82b0c13c245ee20928557dbc4435657d1e029f72d9135683c8d585c69ba8d";
+        };
+      "i686-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.5.2-201602121500/eclipse-SDK-4.5.2-linux-gtk.tar.gz;
+          sha256 = "78f7e537b34333401fc782fbd1260087c586ff93b17b88da5b177642f3aa5a02";
+        };
+    };
+  };
+  
+  eclipse-sdk-46 = buildEclipse {
+    name = "eclipse-sdk-4.6";
+    description = "Eclipse Neon Classic";
+    sources = {
+      "x86_64-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk-x86_64.tar.gz;
+          sha256 = "4d7a39ce4e04ba1f5179f6a72926eb86ed506d97842a3bf4247814491c508e0a";
+        };
+      "i686-linux" = fetchurl {
+          url = http://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6-201606061100/eclipse-SDK-4.6-linux-gtk.tar.gz;
+          sha256 = "d9e1d390cac504a17a65d4a22ebb8da6a592bcc54491912cbc29577990d77014";
+        };
+    };
+  };
 
   eclipse-platform = eclipse-platform-46;
 

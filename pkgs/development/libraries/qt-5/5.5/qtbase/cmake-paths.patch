@@ -1,0 +1,321 @@
+Index: qtbase-opensource-src-5.6.0/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+@@ -9,30 +9,6 @@ if (CMAKE_VERSION VERSION_LESS 3.0.0)
+ endif()
+ !!ENDIF
+ 
+-!!IF !isEmpty(CMAKE_USR_MOVE_WORKAROUND)
+-!!IF !isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-set(_qt5$${CMAKE_MODULE_NAME}_install_prefix \"$$[QT_INSTALL_PREFIX]\")
+-!!ELSE
+-get_filename_component(_IMPORT_PREFIX \"${CMAKE_CURRENT_LIST_FILE}\" PATH)
+-# Use original install prefix when loaded through a
+-# cross-prefix symbolic link such as /lib -> /usr/lib.
+-get_filename_component(_realCurr \"${_IMPORT_PREFIX}\" REALPATH)
+-get_filename_component(_realOrig \"$$CMAKE_INSTALL_LIBS_DIR/cmake/Qt5$${CMAKE_MODULE_NAME}\" REALPATH)
+-if(_realCurr STREQUAL _realOrig)
+-    get_filename_component(_qt5$${CMAKE_MODULE_NAME}_install_prefix \"$$CMAKE_INSTALL_LIBS_DIR/$${CMAKE_RELATIVE_INSTALL_LIBS_DIR}\" ABSOLUTE)
+-else()
+-    get_filename_component(_qt5$${CMAKE_MODULE_NAME}_install_prefix \"${CMAKE_CURRENT_LIST_DIR}/$${CMAKE_RELATIVE_INSTALL_DIR}\" ABSOLUTE)
+-endif()
+-unset(_realOrig)
+-unset(_realCurr)
+-unset(_IMPORT_PREFIX)
+-!!ENDIF
+-!!ELIF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-get_filename_component(_qt5$${CMAKE_MODULE_NAME}_install_prefix \"${CMAKE_CURRENT_LIST_DIR}/$${CMAKE_RELATIVE_INSTALL_DIR}\" ABSOLUTE)
+-!!ELSE
+-set(_qt5$${CMAKE_MODULE_NAME}_install_prefix \"$$[QT_INSTALL_PREFIX]\")
+-!!ENDIF
+-
+ !!IF !equals(TEMPLATE, aux)
+ # For backwards compatibility only. Use Qt5$${CMAKE_MODULE_NAME}_VERSION instead.
+ set(Qt5$${CMAKE_MODULE_NAME}_VERSION_STRING "$$eval(QT.$${MODULE}.MAJOR_VERSION).$$eval(QT.$${MODULE}.MINOR_VERSION).$$eval(QT.$${MODULE}.PATCH_VERSION)")
+@@ -59,7 +35,10 @@ macro(_populate_$${CMAKE_MODULE_NAME}_ta
+     set_property(TARGET Qt5::$${CMAKE_MODULE_NAME} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
+ 
+ !!IF isEmpty(CMAKE_DLL_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
++    set(imported_location \"@NIX_OUT@/$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
++    if(NOT EXISTS \"${imported_location}\")
++        set(imported_location \"@NIX_DEV@/$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
++    endif()
+ !!ELSE
+     set(imported_location \"$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
+ !!ENDIF
+@@ -74,45 +53,18 @@ macro(_populate_$${CMAKE_MODULE_NAME}_ta
+         \"IMPORTED_LINK_INTERFACE_LIBRARIES_${Configuration}\" \"${_Qt5$${CMAKE_MODULE_NAME}_LIB_DEPENDENCIES}\"
+     )
+ 
+-!!IF !isEmpty(CMAKE_WINDOWS_BUILD)
+-!!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_implib \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
+-!!ELSE
+-    set(imported_implib \"IMPORTED_IMPLIB_${Configuration}\" \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
+-!!ENDIF
+-    _qt5_$${CMAKE_MODULE_NAME}_check_file_exists(${imported_implib})
+-    if(NOT \"${IMPLIB_LOCATION}\" STREQUAL \"\")
+-        set_target_properties(Qt5::$${CMAKE_MODULE_NAME} PROPERTIES
+-        \"IMPORTED_IMPLIB_${Configuration}\" ${imported_implib}
+-        )
+-    endif()
+-!!ENDIF
+ endmacro()
+ !!ENDIF
+ 
+ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME})
+ 
+ !!IF !no_module_headers
+-!!IF !isEmpty(CMAKE_BUILD_IS_FRAMEWORK)
+-    set(_Qt5$${CMAKE_MODULE_NAME}_OWN_INCLUDE_DIRS
+-      \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}Qt$${CMAKE_MODULE_NAME}.framework\"
+-      \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}Qt$${CMAKE_MODULE_NAME}.framework/Headers\"
+-    )
+-!!IF isEmpty(CMAKE_NO_PRIVATE_INCLUDES)
+-    set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}Qt$${CMAKE_MODULE_NAME}.framework/Versions/$$section(VERSION, ., 0, 0)/Headers/$$VERSION/\"
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}Qt$${CMAKE_MODULE_NAME}.framework/Versions/$$section(VERSION, ., 0, 0)/Headers/$$VERSION/$${MODULE_INCNAME}\"
+-    )
+-!!ELSE
+-    set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS \"\")
+-!!ENDIF
+-!!ELSE
+ !!IF isEmpty(CMAKE_INCLUDE_DIR_IS_ABSOLUTE)
+-    set(_Qt5$${CMAKE_MODULE_NAME}_OWN_INCLUDE_DIRS \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$$CMAKE_INCLUDE_DIR\" \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}\")
++    set(_Qt5$${CMAKE_MODULE_NAME}_OWN_INCLUDE_DIRS \"@NIX_DEV@/$$CMAKE_INCLUDE_DIR\" \"@NIX_DEV@/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}\")
+ !!IF isEmpty(CMAKE_NO_PRIVATE_INCLUDES)
+     set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}/$$VERSION\"
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}/$$VERSION/$${MODULE_INCNAME}\"
++        \"@NIX_DEV@/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}/$$VERSION\"
++        \"@NIX_DEV@/$${CMAKE_INCLUDE_DIR}$${MODULE_INCNAME}/$$VERSION/$${MODULE_INCNAME}\"
+     )
+ !!ELSE
+     set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS \"\")
+@@ -128,7 +80,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+     set(Qt5$${CMAKE_MODULE_NAME}_PRIVATE_INCLUDE_DIRS \"\")
+ !!ENDIF
+ !!ENDIF
+-!!ENDIF
++
+ !!IF !isEmpty(CMAKE_ADD_SOURCE_INCLUDE_DIRS)
+     include(\"${CMAKE_CURRENT_LIST_DIR}/ExtraSourceIncludes.cmake\" OPTIONAL)
+ !!ENDIF
+@@ -253,28 +205,19 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+ 
+ !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
+ !!IF isEmpty(CMAKE_DEBUG_TYPE)
+-!!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
+-!!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    if (EXISTS \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+-!!ELSE // CMAKE_LIB_DIR_IS_ABSOLUTE
+-    if (EXISTS \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+-!!ENDIF // CMAKE_LIB_DIR_IS_ABSOLUTE
+-        _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" \"\" )
+-!!ELSE // CMAKE_STATIC_WINDOWS_BUILD
+     if (EXISTS
+ !!IF isEmpty(CMAKE_DLL_DIR_IS_ABSOLUTE)
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_DLL_DIR}$${CMAKE_LIB_FILE_LOCATION_DEBUG}\"
++        \"@NIX_OUT@/$${CMAKE_DLL_DIR}$${CMAKE_LIB_FILE_LOCATION_DEBUG}\"
+ !!ELSE
+         \"$${CMAKE_LIB_FILE_LOCATION_DEBUG}\"
+ !!ENDIF
+       AND EXISTS
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
++        \"@NIX_DEV@/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+ !!ELSE
+         \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+ !!ENDIF
+         _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_LIB_FILE_LOCATION_DEBUG}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+-!!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
+     endif()
+ !!ENDIF // CMAKE_DEBUG_TYPE
+ !!ENDIF // CMAKE_FIND_OTHER_LIBRARY_BUILD
+@@ -282,36 +225,23 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+ !!ENDIF // CMAKE_RELEASE_TYPE
+ 
+ !!IF !isEmpty(CMAKE_DEBUG_TYPE)
+-!!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
+-    _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" \"\" )
+-!!ELSE
+     _populate_$${CMAKE_MODULE_NAME}_target_properties(DEBUG \"$${CMAKE_LIB_FILE_LOCATION_DEBUG}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_DEBUG}\" )
+-!!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
+ 
+ !!IF !isEmpty(CMAKE_FIND_OTHER_LIBRARY_BUILD)
+ !!IF isEmpty(CMAKE_RELEASE_TYPE)
+-!!IF !isEmpty(CMAKE_STATIC_WINDOWS_BUILD)
+-!!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    if (EXISTS \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
+-!!ELSE // CMAKE_LIB_DIR_IS_ABSOLUTE
+-    if (EXISTS \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
+-!!ENDIF // CMAKE_LIB_DIR_IS_ABSOLUTE
+-        _populate_$${CMAKE_MODULE_NAME}_target_properties(RELEASE \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" \"\" )
+-!!ELSE // CMAKE_STATIC_WINDOWS_BUILD
+     if (EXISTS
+ !!IF isEmpty(CMAKE_DLL_DIR_IS_ABSOLUTE)
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_DLL_DIR}$${CMAKE_LIB_FILE_LOCATION_RELEASE}\"
++        \"@NIX_OUT@/$${CMAKE_DLL_DIR}$${CMAKE_LIB_FILE_LOCATION_RELEASE}\"
+ !!ELSE
+         \"$${CMAKE_LIB_FILE_LOCATION_RELEASE}\"
+ !!ENDIF
+       AND EXISTS
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-        \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
++        \"@NIX_DEV@/$${CMAKE_LIB_DIR}$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
+ !!ELSE
+         \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
+ !!ENDIF
+         _populate_$${CMAKE_MODULE_NAME}_target_properties(RELEASE \"$${CMAKE_LIB_FILE_LOCATION_RELEASE}\" \"$${CMAKE_IMPLIB_FILE_LOCATION_RELEASE}\" )
+-!!ENDIF // CMAKE_STATIC_WINDOWS_BUILD
+     endif()
+ !!ENDIF // CMAKE_RELEASE_TYPE
+ !!ENDIF // CMAKE_FIND_OTHER_LIBRARY_BUILD
+@@ -329,7 +259,7 @@ if (NOT TARGET Qt5::$${CMAKE_MODULE_NAME
+         set_property(TARGET Qt5::${Plugin} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
+ 
+ !!IF isEmpty(CMAKE_PLUGIN_DIR_IS_ABSOLUTE)
+-        set(imported_location \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
++        set(imported_location \"@NIX_OUT@/$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
+ !!ELSE
+         set(imported_location \"$${CMAKE_PLUGIN_DIR}${PLUGIN_LOCATION}\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/gui/Qt5GuiConfigExtras.cmake.in
+@@ -2,7 +2,7 @@
+ !!IF !isEmpty(CMAKE_ANGLE_EGL_DLL_RELEASE)
+ 
+ !!IF isEmpty(CMAKE_INCLUDE_DIR_IS_ABSOLUTE)
+-set(Qt5Gui_EGL_INCLUDE_DIRS \"${_qt5$${CMAKE_MODULE_NAME}_install_prefix}/$$CMAKE_INCLUDE_DIR/QtANGLE\")
++set(Qt5Gui_EGL_INCLUDE_DIRS \"@NIX_DEV@/$$CMAKE_INCLUDE_DIR/QtANGLE\")
+ !!ELSE
+ set(Qt5Gui_EGL_INCLUDE_DIRS \"$$CMAKE_INCLUDE_DIR/QtANGLE\")
+ !!ENDIF
+@@ -17,13 +17,13 @@ macro(_populate_qt5gui_gl_target_propert
+     set_property(TARGET Qt5::${TargetName} APPEND PROPERTY IMPORTED_CONFIGURATIONS ${Configuration})
+ 
+ !!IF isEmpty(CMAKE_DLL_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Gui_install_prefix}/$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
++    set(imported_location \"@NIX_OUT@/$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_DLL_DIR}${LIB_LOCATION}\")
+ !!ENDIF
+ 
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_implib \"${_qt5Gui_install_prefix}/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
++    set(imported_implib \"@NIX_DEV@/$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
+ !!ELSE
+     set(imported_implib \"$${CMAKE_LIB_DIR}${IMPLIB_LOCATION}\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/widgets/Qt5WidgetsConfigExtras.cmake.in
+@@ -3,7 +3,7 @@ if (NOT TARGET Qt5::uic)
+     add_executable(Qt5::uic IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Widgets_install_prefix}/$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}uic$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtras.cmake.in
+@@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qmake)
+     add_executable(Qt5::qmake IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}qmake$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -18,7 +18,7 @@ if (NOT TARGET Qt5::moc)
+     add_executable(Qt5::moc IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}moc$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -35,7 +35,7 @@ if (NOT TARGET Qt5::rcc)
+     add_executable(Qt5::rcc IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}rcc$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -131,7 +131,7 @@ if (NOT TARGET Qt5::WinMain)
+ !!IF !isEmpty(CMAKE_RELEASE_TYPE)
+     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_RELEASE}\")
+ !!ENDIF
+@@ -145,7 +145,7 @@ if (NOT TARGET Qt5::WinMain)
+     set_property(TARGET Qt5::WinMain APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+ 
+ !!IF isEmpty(CMAKE_LIB_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5Core_install_prefix}/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_LIB_DIR}$${CMAKE_WINMAIN_FILE_LOCATION_DEBUG}\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDirForInstall.cmake.in
+@@ -1,6 +1,6 @@
+ 
+ !!IF isEmpty(CMAKE_INSTALL_DATA_DIR_IS_ABSOLUTE)
+-set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
++set(_qt5_corelib_extra_includes \"@NIX_DEV@/$${CMAKE_INSTALL_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
+ !!ELSE
+ set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/corelib/Qt5CoreConfigExtrasMkspecDir.cmake.in
+@@ -1,6 +1,6 @@
+ 
+ !!IF isEmpty(CMAKE_HOST_DATA_DIR_IS_ABSOLUTE)
+-set(_qt5_corelib_extra_includes \"${_qt5Core_install_prefix}/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
++set(_qt5_corelib_extra_includes \"@NIX_DEV@/$${CMAKE_HOST_DATA_DIR}/mkspecs/$${CMAKE_MKSPEC}\")
+ !!ELSE
+ set(_qt5_corelib_extra_includes \"$${CMAKE_HOST_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
+ !!ENDIF
+Index: qtbase-opensource-src-5.6.0/src/qtbase/dbus/Qt5DBusConfigExtras.cmake.in
+===================================================================
+--- qtbase-opensource-src-5.6.0.orig/qtbase/src/dbus/Qt5DBusConfigExtras.cmake.in
++++ qtbase-opensource-src-5.6.0/qtbase/src/dbus/Qt5DBusConfigExtras.cmake.in
+@@ -3,7 +3,7 @@ if (NOT TARGET Qt5::qdbuscpp2xml)
+     add_executable(Qt5::qdbuscpp2xml IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5DBus_install_prefix}/$${CMAKE_BIN_DIR}qdbuscpp2xml$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}qdbuscpp2xml$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}qdbuscpp2xml$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF
+@@ -18,7 +18,7 @@ if (NOT TARGET Qt5::qdbusxml2cpp)
+     add_executable(Qt5::qdbusxml2cpp IMPORTED)
+ 
+ !!IF isEmpty(CMAKE_BIN_DIR_IS_ABSOLUTE)
+-    set(imported_location \"${_qt5DBus_install_prefix}/$${CMAKE_BIN_DIR}qdbusxml2cpp$$CMAKE_BIN_SUFFIX\")
++    set(imported_location \"@NIX_DEV@/$${CMAKE_BIN_DIR}qdbusxml2cpp$$CMAKE_BIN_SUFFIX\")
+ !!ELSE
+     set(imported_location \"$${CMAKE_BIN_DIR}qdbusxml2cpp$$CMAKE_BIN_SUFFIX\")
+ !!ENDIF

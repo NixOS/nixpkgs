@@ -22,7 +22,7 @@ with lib;
     root = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = /your/root/directory;
+      example = "/your/root/directory";
       description = ''
         Root directory for requests.
       '';

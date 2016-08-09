@@ -8,9 +8,9 @@ stdenv.mkDerivation {
     sha256 = "0l8ks1x70mkna1q7mzy1fxplinz141bd24qhrm1zkdil74mcsryc";
   };
 
-  hardeningDisable = [ "format" ];
-
   nativeBuildInputs = [ indent ];
+
+  hardeningDisable = [ "format" ];
 
   meta = {
     description = "Library reading dwg files";

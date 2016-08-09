@@ -11,5 +11,6 @@ stdenv.mkDerivation {
     homepage = http://www.oberhumer.com/opensource/ucl/;
     description = "Portable lossless data compression library";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

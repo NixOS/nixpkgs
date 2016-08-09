@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex gperf ncurses pkgconfig ];
 
+  hardeningDisable = [ "format" ];
+
   configureFlags = [
     "--enable-frontends=conf,mconf,nconf"
   ];

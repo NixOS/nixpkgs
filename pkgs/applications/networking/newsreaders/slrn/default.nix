@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     homepage = http://slrn.sourceforge.net/index.html;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gettext, glib, libmsgpack, libtermkey
+{ stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
 , libtool, libuv, luajit, luaPackages, man, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel
 
@@ -72,7 +72,6 @@ let
     enableParallelBuilding = true;
 
     buildInputs = [
-      glib
       libtermkey
       libuv
       libmsgpack

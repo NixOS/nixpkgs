@@ -1319,6 +1319,25 @@ someVar=$(stripHash $name; echo $strippedName)
     <envar>GST_PLUGIN_SYSTEM_PATH</envar> environment variable.</para></listitem>
   </varlistentry>
 
+  <varlistentry>
+    <term>paxctl</term>
+    <listitem><para>Defines the <varname>paxmark</varname> helper for
+    setting per-executable PaX flags on Linux (where it is available by
+    default; on all other platforms, <varname>paxmark</varname> is a no-op).
+    For example, to disable secure memory protections on the executable
+    <replaceable>foo</replaceable>:
+    <programlisting>
+      postFixup = ''
+        paxmark m $out/bin/<replaceable>foo</replaceable>
+      '';
+    </programlisting>
+    The <literal>m</literal> flag is the most common flag and is typically
+    required for applications that employ JIT compilation or otherwise need to
+    execute code generated at run-time.  Disabling PaX protections should be
+    considered a last resort: if possible, problematic features should be
+    disabled or patched to work with PaX.</para></listitem>
+  </varlistentry>
+
 </variablelist>
 
 </para>

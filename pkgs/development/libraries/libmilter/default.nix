@@ -31,4 +31,8 @@ stdenv.mkDerivation rec {
   patches = [ ./install.patch ./sharedlib.patch];
   
   buildInputs = [m4];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

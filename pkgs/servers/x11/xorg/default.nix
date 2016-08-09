@@ -556,17 +556,6 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
-  glamoregl = (mkDerivation "glamoregl" {
-    name = "glamor-egl-0.6.0";
-    builder = ./builder.sh;
-    src = fetchurl {
-      url = mirror://xorg/individual/driver/glamor-egl-0.6.0.tar.bz2;
-      sha256 = "1jg5clihklb9drh1jd7nhhdsszla6nv7xmbvm8yvakh5wrb1nlv6";
-    };
-    buildInputs = [pkgconfig dri2proto xorgserver ];
-    meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit dri2proto xorgserver ;};
-
   glproto = (mkDerivation "glproto" {
     name = "glproto-1.4.17";
     builder = ./builder.sh;
@@ -610,6 +599,17 @@ let
     buildInputs = [pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
+
+  intelgputools = (mkDerivation "intelgputools" {
+    name = "intel-gpu-tools-1.15";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/intel-gpu-tools-1.15.tar.bz2;
+      sha256 = "1gb22hvj4gdjj92iqbwcp44kf2znk2l1fvbcrr4sm4i65l8mdwnw";
+    };
+    buildInputs = [pkgconfig dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit dri2proto libdrm udev libpciaccess python libX11 libXext libXrandr libXv ;};
 
   kbproto = (mkDerivation "kbproto" {
     name = "kbproto-1.0.7";
@@ -1707,9 +1707,9 @@ let
       url = mirror://xorg/individual/driver/xf86-video-ati-7.7.0.tar.bz2;
       sha256 = "1hy1n8an98mflfbdcb3q7wv59x971j7nf9zhivf90p0lgdbiqkc4";
     };
-    buildInputs = [pkgconfig fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
+    buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit fontsproto glamoregl libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
+  }) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
 
   xf86videochips = (mkDerivation "xf86videochips" {
     name = "xf86-video-chips-1.2.6";
@@ -1811,11 +1811,11 @@ let
   }) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
 
   xf86videointel = (mkDerivation "xf86videointel" {
-    name = "xf86-video-intel-2016-05-22";
+    name = "xf86-video-intel-2016-07-29";
     builder = ./builder.sh;
     src = fetchurl {
-      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/8477615ae1bd284aca1221185ffefe0630d3f7ab.tar.gz;
-      sha256 = "1fnwcsg2kr32nv9x6z671g6amwcyhba2392d63kjl2avjyhjad79";
+      url = http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/49daf5df124b5ae6c7508e934768c292f4143040.tar.gz;
+      sha256 = "0mkyxwm9ka5y6b8x1c70jx68c8ibv750yw556zyki43qzypdfp5x";
     };
     buildInputs = [pkgconfig dri2proto dri3proto fontsproto libdrm libpng udev libpciaccess presentproto randrproto renderproto libX11 xcbutil libxcb libXcursor libXdamage libXext xextproto xf86driproto libXfixes xorgserver xproto libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;

@@ -20,5 +20,6 @@ stdenv.mkDerivation rec {
     description = "Provides an interface to external programs that support the FastCGI interface";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ cstrahan ];
+    platforms = with platforms; unix;
   };
 }

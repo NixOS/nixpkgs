@@ -20,7 +20,6 @@ stdenv.mkDerivation {
     homepage = http://assimp.sourceforge.net/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ehmry ];
-    platfroms = [ platforms.linux platforms.darwin ];
-    inherit version;
+    platforms = platforms.linux;
   };
 }

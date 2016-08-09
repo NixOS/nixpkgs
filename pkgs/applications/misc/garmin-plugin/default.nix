@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     homepage = http://www.andreas-diesner.de/garminplugin;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.ocharles ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

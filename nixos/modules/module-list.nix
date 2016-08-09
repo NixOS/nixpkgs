@@ -80,10 +80,10 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/tmux.nix
-  ./programs/unity3d.nix
   ./programs/venus.nix
   ./programs/wvdial.nix
   ./programs/xfs_quota.nix
+  ./programs/xonsh.nix
   ./programs/zsh/zsh.nix
   ./rename.nix
   ./security/acme.nix
@@ -91,6 +91,7 @@
   ./security/apparmor-suid.nix
   ./security/audit.nix
   ./security/ca.nix
+  ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
   ./security/grsecurity.nix
@@ -130,6 +131,8 @@
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildkite-agent.nix
   ./services/continuous-integration/hydra/default.nix
+  ./services/continuous-integration/gocd-agent/default.nix
+  ./services/continuous-integration/gocd-server/default.nix
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
   ./services/continuous-integration/jenkins/slave.nix
@@ -171,6 +174,7 @@
   ./services/games/ghost-one.nix
   ./services/games/minecraft-server.nix
   ./services/games/minetest-server.nix
+  ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/amd-hybrid-graphics.nix
@@ -250,6 +254,7 @@
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/nzbget.nix
   ./services/misc/octoprint.nix
+  ./services/misc/packagekit.nix
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
@@ -282,7 +287,9 @@
   ./services/monitoring/monit.nix
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
-  ./services/monitoring/prometheus.nix
+  ./services/monitoring/prometheus/default.nix
+  ./services/monitoring/prometheus/nginx-exporter.nix
+  ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -384,6 +391,7 @@
   ./services/networking/privoxy.nix
   ./services/networking/prosody.nix
   ./services/networking/quassel.nix
+  ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
@@ -396,6 +404,7 @@
   ./services/networking/shairport-sync.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
+  ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
   ./services/networking/sslh.nix
@@ -460,6 +469,7 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/web-apps/pump.io.nix
+  ./services/web-apps/tt-rss.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy.nix
   ./services/web-servers/confluence.nix
@@ -470,7 +480,7 @@
   ./services/web-servers/lighttpd/gitweb.nix
   ./services/web-servers/lighttpd/inginious.nix
   ./services/web-servers/nginx/default.nix
-  ./services/web-servers/phpfpm.nix
+  ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/uwsgi.nix
@@ -478,6 +488,7 @@
   ./services/web-servers/winstone.nix
   ./services/web-servers/zope2.nix
   ./services/x11/colord.nix
+  ./services/x11/compton.nix
   ./services/x11/unclutter.nix
   ./services/x11/desktop-managers/default.nix
   ./services/x11/display-managers/auto.nix
@@ -528,6 +539,7 @@
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/networkd.nix
+  ./system/boot/plymouth.nix
   ./system/boot/resolved.nix
   ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix

@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     description = "Provides an encrypted filesystem in user-space via FUSE";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ nckx ];
+    platforms = with platforms; linux;
   };
 }

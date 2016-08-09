@@ -31,8 +31,4 @@ qtSubmodule {
         };
     in optionals flashplayerFix [ dlopen-webkit-nsplugin dlopen-webkit-gtk ]
     ++ [ dlopen-webkit-udev ];
-  postFixup = ''
-    fixQtModuleCMakeConfig "WebKit"
-    fixQtModuleCMakeConfig "WebKitWidgets"
-  '';
 }

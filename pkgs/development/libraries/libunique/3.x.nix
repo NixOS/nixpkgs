@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "A library for writing single instance applications";
     license = licenses.lgpl21;
     maintainers = [ maintainers.AndersonTorres ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

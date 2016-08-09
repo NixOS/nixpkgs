@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://galago-project.org/; # very obsolete but found no better
     description = "A library that sends desktop notifications to a notification daemon";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

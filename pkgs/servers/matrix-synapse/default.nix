@@ -12,13 +12,13 @@ let
 in
 buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.16.1-r1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "0flgaa26j9gga9a9h67b0q3yi0mpnbrjik55220cvvzhy9fnvwa9";
+    sha256 = "0rkaadc1vkg6p3d91yid2y6a0l7drbvpkqa8v7f50gpcbdzn1l93";
   };
 
   patches = [ ./matrix-synapse.patch ];
@@ -27,7 +27,8 @@ buildPythonApplication rec {
     blist canonicaljson daemonize dateutil frozendict pillow pybcrypt pyasn1
     pydenticon pymacaroons-pynacl pynacl pyopenssl pysaml2 pytz requests2
     service-identity signedjson systemd twisted ujson unpaddedbase64 pyyaml
-    matrix-angular-sdk bleach netaddr jinja2 psycopg2
+    matrix-angular-sdk bleach netaddr jinja2 psycopg2 python.modules.curses
+    ldap3 psutil
   ];
 
   # Checks fail because of Tox.
@@ -41,6 +42,6 @@ buildPythonApplication rec {
     homepage = https://matrix.org;
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = [ maintainers.ralith ];
+    maintainers = [ maintainers.ralith maintainers.roblabla ];
   };
 }

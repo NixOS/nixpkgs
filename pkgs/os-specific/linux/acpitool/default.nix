@@ -46,5 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = http://freeunix.dyndns.org:8000/site2/acpitool.shtml;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.guibert ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

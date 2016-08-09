@@ -78,5 +78,6 @@ stdenv.mkDerivation {
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];
+    platforms = with platforms; unix;
   };
 }

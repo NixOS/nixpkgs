@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "A Qt IMAP e-mail client";
     homepage = http://trojita.flaska.net/;
     license = with lib.licenses; [ gpl2 gpl3 ];
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }

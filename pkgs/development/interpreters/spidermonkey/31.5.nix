@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 
   preConfigure = ''
+    export CXXFLAGS="-fpermissive"
     export LIBXUL_DIST=$out
   '';
 
@@ -25,9 +26,6 @@ stdenv.mkDerivation rec {
     "--enable-threadsafe"
     "--with-system-ffi"
     "--enable-readline"
-
-    # there is at least one unfixed issue building the tests, so I didn't bother
-    "--disable-tests"
 
     # enabling these because they're wanted by 0ad. They may or may
     # not be good defaults for other uses.
@@ -42,9 +40,6 @@ stdenv.mkDerivation rec {
   # This addresses some build system bug. It's quite likely to be safe
   # to re-enable parallel builds if the source revision changes.
   enableParallelBuilding = false;
-
-  # see comment by --disable-tests
-  doCheck = false;
 
   postFixup = ''
     # The headers are symlinks to a directory that doesn't get put
@@ -61,5 +56,6 @@ stdenv.mkDerivation rec {
     # TODO: MPL/GPL/LGPL tri-license.
 
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

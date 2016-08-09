@@ -70,5 +70,6 @@ stdenv.mkDerivation rec {
     description = "Client for Screencloud, an easy to use screenshot sharing tool";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ forkk ];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     description = "A foreign environment interface for Fish shell";
     license = licenses.mit;
     maintainers = with maintainers; [ jgillich ];
+    platforms = with platforms; unix;
   };
 }

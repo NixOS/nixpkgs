@@ -50,7 +50,11 @@ rec {
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         "$out/bin/rustc"
 
-      wrapProgram "$out/bin/rustc"
+      # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
+      # (or similar) here. It causes strange effects where rustc loads
+      # the wrong libraries in a bootstrap-build causing failures that
+      # are very hard to track dow. For details, see
+      # https://github.com/rust-lang/rust/issues/34722#issuecomment-232164943
     '';
   };
 

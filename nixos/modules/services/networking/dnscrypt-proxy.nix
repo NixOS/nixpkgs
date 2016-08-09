@@ -55,7 +55,7 @@ in
       ''; };
       localAddress = mkOption {
         default = "127.0.0.1";
-        type = types.string;
+        type = types.str;
         description = ''
           Listen for DNS queries to relay on this address. The only reason to
           change this from its default value is to proxy queries on behalf
@@ -74,7 +74,7 @@ in
       };
       resolverName = mkOption {
         default = "dnscrypt.eu-nl";
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         description = ''
           The name of the upstream DNSCrypt resolver to use, taken from the
           list named in the <literal>resolverList</literal> option.
@@ -90,7 +90,7 @@ in
         example = literalExample "${pkgs.dnscrypt-proxy}/share/dnscrypt-proxy/dnscrypt-resolvers.csv";
         default = pkgs.fetchurl {
           url = https://raw.githubusercontent.com/jedisct1/dnscrypt-proxy/master/dnscrypt-resolvers.csv;
-          sha256 = "171zvdqcqqvcw3zr7wl9h1wmdmk6m3h55xr4gq2z1j7a0x0ba2in";
+          sha256 = "1i9wzw4zl052h5nyp28bwl8d66cgj0awvjhw5wgwz0warkjl1g8g";
         };
         defaultText = "pkgs.fetchurl { url = ...; sha256 = ...; }";
       };

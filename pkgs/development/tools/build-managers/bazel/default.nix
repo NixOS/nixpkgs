@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.philandstuff ];
+    platforms = [ "x86_64-linux" ];
   };
 }

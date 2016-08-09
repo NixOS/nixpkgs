@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl2Plus ];
     homepage = http://hamlib.sourceforge.net;
     maintainers = with stdenv.lib.maintainers; [ relrod ];
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

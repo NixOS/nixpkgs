@@ -19,10 +19,6 @@ let baseAttrs = rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    substituteInPlace $out/lib/libvte2_90.la --replace "-lncurses" "-L${ncurses.out}/lib -lncurses"
-  '';
-
   meta = with stdenv.lib; {
     homepage = http://www.gnome.org/;
     description = "A library implementing a terminal emulator widget for GTK+";

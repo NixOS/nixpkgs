@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     description = "Advanced spam filtering system";
     maintainers = with maintainers; [ avnik fpletz ];
+    platforms = with platforms; linux;
   };
 }

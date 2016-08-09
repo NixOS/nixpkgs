@@ -1,14 +1,14 @@
 { stdenv, fetchgit, libmnl, kernel ? null }:
 
 let
-  name = "wireguard-${version}";
+  name = "wireguard-unstable-${version}";
 
-  version = "20160708";
+  version = "2016-07-22";
 
   src = fetchgit {
     url    = "https://git.zx2c4.com/WireGuard";
-    rev    = "dcc2583fe0618931e51aedaeeddde356d123acb2";
-    sha256 = "1ciyjpp8c3fv95y1cypk9qyqynp8cqyh2676afq2hd33110d37ni";
+    rev    = "8e8bf6f848c324603827c0e57f0856d5866ac32d";
+    sha256 = "11qrf9fxm6mkwjnjq7dgbisdric5w22cyfkqc6zx9fla2dz99mxk";
   };
 
   meta = with stdenv.lib; {
@@ -21,12 +21,12 @@ let
   module = stdenv.mkDerivation {
     inherit src meta name;
 
-    hardeningDisable = [ "pic" ];
-
     preConfigure = ''
       cd src
       sed -i '/depmod/,+1d' Makefile
     '';
+
+    hardeningDisable = [ "pic" ];
 
     KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
     INSTALL_MOD_PATH = "\${out}";

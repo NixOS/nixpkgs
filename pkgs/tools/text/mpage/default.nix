@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
 
     license = "liberal";  # a non-copyleft license, see `Copyright' file
     homepage = http://www.mesa.nl/pub/mpage/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
