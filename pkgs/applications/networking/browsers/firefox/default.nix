@@ -47,7 +47,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-application=browser"
-      "--disable-javaxpcom"
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
@@ -78,7 +77,8 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize"
                              "--enable-strip" ])
-    ++ lib.optional enableOfficialBranding "--enable-official-branding";
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ lib.optional (lib.versionOlder version "48.0") "--disable-javaxpcom";
 
   enableParallelBuilding = true;
 
