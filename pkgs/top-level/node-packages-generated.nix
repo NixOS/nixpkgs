@@ -48024,6 +48024,8 @@
   "timezone" = self.by-version."timezone"."1.0.4";
   by-spec."tinycolor"."0.x" =
     self.by-version."tinycolor"."0.0.1";
+  by-spec."tinycolor"."0.0.x" =
+    self.by-version."tinycolor"."0.0.1";
   by-version."tinycolor"."0.0.1" = self.buildNodePackage {
     name = "tinycolor-0.0.1";
     version = "0.0.1";
@@ -52276,6 +52278,8 @@
   };
   by-spec."ws"."0.8.1" =
     self.by-version."ws"."0.8.1";
+  by-spec."ws"."0.8.x" =
+    self.by-version."ws"."0.8.1";
   by-version."ws"."0.8.1" = self.buildNodePackage {
     name = "ws-0.8.1";
     version = "0.8.1";
@@ -52341,6 +52345,29 @@
   };
   by-spec."ws"."^1.0.1" =
     self.by-version."ws"."1.1.0";
+  by-spec."wscat"."*" =
+    self.by-version."wscat"."1.0.1";
+  by-version."wscat"."1.0.1" = self.buildNodePackage {
+    name = "wscat-1.0.1";
+    version = "1.0.1";
+    bin = true;
+    src = fetchurl {
+      url = "https://registry.npmjs.org/wscat/-/wscat-1.0.1.tgz";
+      name = "wscat-1.0.1.tgz";
+      sha1 = "542b47c1c27334c64ececef9c2db02faf6212964";
+    };
+    deps = {
+      "commander-2.8.1" = self.by-version."commander"."2.8.1";
+      "tinycolor-0.0.1" = self.by-version."tinycolor"."0.0.1";
+      "ws-0.8.1" = self.by-version."ws"."0.8.1";
+    };
+    optionalDependencies = {
+    };
+    peerDependencies = [];
+    os = [ ];
+    cpu = [ ];
+  };
+  "wscat" = self.by-version."wscat"."1.0.1";
   by-spec."wu"."*" =
     self.by-version."wu"."2.1.0";
   by-version."wu"."2.1.0" = self.buildNodePackage {
