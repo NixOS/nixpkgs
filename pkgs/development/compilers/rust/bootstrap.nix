@@ -50,11 +50,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=rustc,rust-std-${platform},rust-docs
 
-      ${if needsPatchelf then ''
+      ${optionalString needsPatchelf ''
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustc"
-      '' else ""}
+      ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -77,11 +77,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=cargo
 
-      ${if needsPatchelf then ''
+      ${optionalString needsPatchelf ''
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
-      '' else ""}
+      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
