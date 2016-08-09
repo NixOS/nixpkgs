@@ -18,7 +18,7 @@ let
 
     ${cfg.config}
 
-    ${optionalString (cfg.httpConfig == "") ''
+    ${optionalString (cfg.httpConfig == "" && cfg.config == "") ''
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
@@ -233,9 +233,12 @@ in
       };
 
       config = mkOption {
-        default = "events {}";
+        default = "";
         description = "
           Verbatim nginx.conf configuration.
+          This is mutually exclusive with the structured configuration
+          via virtualHosts and the recommendedXyzSettings configuration
+          options. See appendConfig for appending to the generated http block.
         ";
       };
 
@@ -268,8 +271,8 @@ in
         default = "";
         description = "
           Configuration lines to be appended to the generated http block.
-          This is mutually exclusive with using httpConfig for specifying the whole
-          http block verbatim.
+          This is mutually exclusive with using config and httpConfig for 
+          specifying the whole http block verbatim.
         ";
       };
 
