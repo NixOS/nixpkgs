@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ scons qt4 ];
 
+  patches = [ ./fix-scons-paths.patch ];
+
   buildPhase = ''
     ./build_qt.sh
   '';
