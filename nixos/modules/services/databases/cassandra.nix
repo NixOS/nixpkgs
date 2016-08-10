@@ -133,6 +133,7 @@ in {
     jre = mkOption {
       description = "JRE package to run cassandra service.";
       default = pkgs.jre;
+      defaultText = "pkgs.jre";
       type = types.package;
     };
     user = mkOption {
