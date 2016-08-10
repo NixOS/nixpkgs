@@ -19522,11 +19522,11 @@ in modules // {
 
   pyopenssl = buildPythonPackage rec {
     name = "pyopenssl-${version}";
-    version = "0.15.1";
+    version = "16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
-      sha256 = "0wnnq15rhj7fhdcd8ycwiw6r6g3w9f9lcy6cigg8226vsrq618ph";
+      sha256 = "0zfijaxlq4vgi6jz0d4i5xq9ygqnyps6br7lmigjhqnh8gp10g9n";
     };
 
     # 12 tests failing, 26 error out
