@@ -63,6 +63,7 @@ stdenv.mkDerivation {
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   patches = patches ++ targetPatches;
+
   passthru.target = target;
 
   postPatch = ''
@@ -86,6 +87,9 @@ stdenv.mkDerivation {
     # TODO: reenable if we can figure out how to get our jemalloc to work
     #[ -f src/liballoc_jemalloc/lib.rs ] && sed -i 's,je_,,g' src/liballoc_jemalloc/lib.rs
     #[ -f src/liballoc/heap.rs ] && sed -i 's,je_,,g' src/liballoc/heap.rs # Remove for 1.4.0+
+
+    # Disable fragile linker-output-non-utf8 test
+    rm -vr src/test/run-make/linker-output-non-utf8/
 
     # Useful debugging parameter
     #export VERBOSE=1
