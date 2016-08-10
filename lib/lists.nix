@@ -76,7 +76,7 @@ rec {
        concatMap (x: [x] ++ ["z"]) ["a" "b"]
        => [ "a" "z" "b" "z" ]
   */
-  concatMap = f: list: concatLists (map f list);
+  concatMap = f: list: foldl' (a: b: a ++ (f b)) [] list;
 
   /* Flatten the argument into a single list; that is, nested lists are
      spliced into the top-level lists.
