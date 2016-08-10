@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     cd "$out/etc/fonts"
-    rm conf.d/{50-user,51-local}.conf
     "${libxslt.bin}/bin/xsltproc" --stringparam fontDirectories "${fontbhttf}" \
       --stringparam fontconfigConfigVersion "${configVersion}" \
       --path $out/share/xml/fontconfig \
