@@ -6,26 +6,31 @@ let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
 
-  homeDir = "/var/lib/transmission";
-  downloadDir = "${homeDir}/Downloads";
-  incompleteDir = "${homeDir}/.incomplete";
+  fullSettings = {
+    "use-incomplete-dir" = cfg.useIncompleteDir;
+    "incomplete-dir"     = cfg.incompleteDir;
+    "rpc-whitelist"      = concatStringsSep "," cfg.rpcWhitelist;
+    "rpc-whitelist-enabled" = (builtins.length cfg.rpcWhitelist > 0);
+    "download-dir"       = cfg.downloadDir;
+  } // cfg.settings;
 
-  settingsDir = "${homeDir}/.config/transmission-daemon";
-  settingsFile = pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
+  _baseDir = "/var/lib/transmission";
+  _settingsDir = "$_baseDir/.config/transmission-daemon";
+  _downloadDir = "$_baseDir/Downloads";
+  _incompleteDir = "$_baseDir/Downloads/.incomplete";
 
-  # Strings must be quoted, ints and bools must not (for settings.json).
-  toOption = x:
-    if x == true then "true"
-    else if x == false then "false"
-    else if isInt x then toString x
-    else toString ''"${x}"'';
+  settingsFile =  pkgs.writeText "settings.json" (builtins.toJSON fullSettings);
 
-  # for users in group "transmission" to have access to torrents
-  fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
+  # # Strings must be quoted, ints and bools must not (for settings.json).
+  # toOption = x:
+  #   if x == true then "true"
+  #   else if x == false then "false"
+  #   else if isInt x then toString x
+  #   else toString ''"${x}"'';
 in
 {
   options = {
-    services.transmission = {
+    services.transmission = rec {
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -34,35 +39,72 @@ in
 
           Transmission daemon can be controlled via the RPC interface using
           transmission-remote or the WebUI (http://localhost:9091/ by default).
-
-          Torrents are downloaded to ${downloadDir} by default and are
-          accessible to users in the "transmission" group.
         '';
       };
 
       settings = mkOption {
         type = types.attrs;
-        default =
-          {
-            download-dir = downloadDir;
-            incomplete-dir = incompleteDir;
-            incomplete-dir-enabled = true;
-          };
-        example =
-          {
-            download-dir = "/srv/torrents/";
-            incomplete-dir = "/srv/torrents/.incomplete/";
-            incomplete-dir-enabled = true;
-            rpc-whitelist = "127.0.0.1,192.168.*.*";
-          };
+        default = { };
+        example = {
+          incomplete-dir-enabled = true;
+          rpc-whitelist = "127.0.0.1,192.168.*.*";
+          umask = 2;
+        };
         description = ''
-          Attribute set whos fields overwrites fields in settings.json (each
+          Attribute set whose fields overwrites fields in settings.json (each
           time the service starts). String values must be quoted, integer and
           boolean values must not.
 
           See https://trac.transmissionbt.com/wiki/EditConfigFiles for
           documentation.
         '';
+      };
+
+      useIncompleteDir = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Should Transmission store incomplete downloads someplace other than downloadDir?";
+      };
+
+      rpcWhitelist = mkOption {
+        type = types.listOf types.str;
+        default = ["127.0.0.1"];
+        description = "List of IP addresses to whitelist for the remote daemon";
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "User account under which Transmission runs.";
+      };
+
+      baseDir = mkOption {
+        type = types.str;
+        default = _baseDir;
+        description = "The base directory for the Transmission service";
+      };
+
+      downloadDir = mkOption {
+        type = types.str;
+        default = _downloadDir;
+        description = "The directory to download into";
+      };
+      settingsDir = mkOption {
+        type = types.str;
+        default = _settingsDir;
+        description = "The directory where the daemon settings are stored";
+      };
+
+      incompleteDir = mkOption {
+        type = types.str;
+        default = _incompleteDir;
+        description = "The directory to store incomplete downloads in";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "transmission";
+        description = "Group under which Transmission runs.";
       };
 
       port = mkOption {
@@ -83,11 +125,12 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = ''
-          ${pkgs.stdenv.shell} -c "mkdir -p ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && chmod 770 ${homeDir} ${settingsDir} ${fullSettings.download-dir} ${fullSettings.incomplete-dir} && rm -f ${settingsDir}/settings.json && cp -f ${settingsFile} ${settingsDir}/settings.json"
+        ${pkgs.stdenv.shell} -c "mkdir -p ${cfg.baseDir} ${cfg.settingsDir} ${cfg.downloadDir} ${cfg.incompleteDir} && chmod 770 ${cfg.baseDir} ${cfg.settingsDir}  ${cfg.downloadDir} ${cfg.incompleteDir} && rm -f ${cfg.settingsDir}/settings.json && cp -f ${settingsFile} ${cfg.settingsDir}/settings.json"
       '';
-      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
+      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -g ${cfg.settingsDir} -f --port ${toString config.services.transmission.port}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-      serviceConfig.User = "transmission";
+      serviceConfig.User = "${cfg.user}";
+      serviceConfig.Group = "${cfg.group}";
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
       serviceConfig.UMask = "0002";
     };
@@ -95,13 +138,18 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.extraGroups.transmission.gid = config.ids.gids.transmission;
-    users.extraUsers.transmission = {
-      group = "transmission";
-      uid = config.ids.uids.transmission;
-      description = "Transmission BitTorrent user";
-      home = homeDir;
-      createHome = true;
+    users.extraGroups = mkIf (cfg.group == "transmission") {
+      transmission.gid = config.ids.gids.transmission;
+    };
+
+    users.extraUsers = mkIf (cfg.user == "transmission") {
+      transmission = {
+        group = "transmission";
+        uid = config.ids.uids.transmission;
+        description = "Transmission BitTorrent user";
+        home = cfg.baseDir;
+        createHome = true;
+      };
     };
 
     # AppArmor profile
@@ -136,11 +184,11 @@ in
           ${pkgs.openssl}/etc/**                     r,
           ${pkgs.transmission}/share/transmission/** r,
 
-          owner ${settingsDir}/** rw,
+          owner ${cfg.settings.settings-dir}/** rw,
 
-          ${fullSettings.download-dir}/** rw,
-          ${optionalString fullSettings.incomplete-dir-enabled ''
-            ${fullSettings.incomplete-dir}/** rw,
+          ${cfg.settings.download-dir}/** rw,
+          ${optionalString cfg.settings.incomplete-dir-enabled ''
+            ${cfg.settings.incomplete-dir}/** rw,
           ''}
         }
       '')
