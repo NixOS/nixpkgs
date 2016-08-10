@@ -62,6 +62,18 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "postgres";
+        description = "User account under which Postgres runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "postgres";
+        description = "Group under which Postgres runs.";
+      };
+
       port = mkOption {
         type = types.int;
         default = 5432;
@@ -168,14 +180,18 @@ in
         host  all all ::1/128      md5
       '';
 
-    users.extraUsers.postgres =
-      { name = "postgres";
+    users.extraUsers = mkIf (cfg.user == "postgres") {
+      postgres = {
+        name = "postgres";
         uid = config.ids.uids.postgres;
         group = "postgres";
         description = "PostgreSQL server user";
       };
+    };
 
-    users.extraGroups.postgres.gid = config.ids.gids.postgres;
+    users.extraGroups = mkIf (cfg.user == "postgres") {
+      postgres.gid = config.ids.gids.postgres;
+    };
 
     environment.systemPackages = [ postgresql ];
 
@@ -195,7 +211,7 @@ in
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
               mkdir -m 0700 -p ${cfg.dataDir}
               rm -f ${cfg.dataDir}/*.conf
-              chown -R postgres:postgres ${cfg.dataDir}
+              chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}
             fi
           ''; # */
 
@@ -218,8 +234,8 @@ in
 
         serviceConfig =
           { ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-            User = "postgres";
-            Group = "postgres";
+            User = "${cfg.user}";
+            Group = "${cfg.group}";
             PermissionsStartOnly = true;
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
