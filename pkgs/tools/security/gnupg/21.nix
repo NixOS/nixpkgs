@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     readline libusb gnutls adns openldap zlib bzip2
   ];
 
+  patches = [ ./fix-gpgsm-linking.patch ];
+
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
