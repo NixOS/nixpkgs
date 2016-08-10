@@ -7382,6 +7382,8 @@ in
   glm = callPackage ../development/libraries/glm { };
   glm_0954 = callPackage ../development/libraries/glm/0954.nix { };
 
+  globalplatform = callPackage ../development/libraries/globalplatform { };
+
   glog = callPackage ../development/libraries/glog { };
 
   gloox = callPackage ../development/libraries/gloox { };
