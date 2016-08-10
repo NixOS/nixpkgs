@@ -29,8 +29,6 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
-
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
