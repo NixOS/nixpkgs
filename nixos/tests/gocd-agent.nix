@@ -19,7 +19,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     gocd_agent =
       { config, pkgs, ... }:
       {
-        virtualisation.memorySize = 2048;
+        virtualisation.memorySize = 2046;
         services.gocd-agent = {
           enable = true;
         };
