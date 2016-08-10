@@ -13004,6 +13004,8 @@ in
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
+  fehlstart = callPackage ../applications/misc/fehlstart { };
+
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
   flacon = callPackage ../applications/audio/flacon { };
