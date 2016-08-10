@@ -18,7 +18,7 @@ let
   # revision/hash as well. See
   # http://download.virtualbox.org/virtualbox/${version}/SHA256SUMS
   # for hashes.
-  version = "5.0.20";
+  version = "5.0.26";
 
   forEachModule = action: ''
     for mod in \
@@ -39,12 +39,12 @@ let
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
-  extpackRevision = "106931";
+  extpackRevision = "108824";
   extensionPack = requireFile rec {
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}.vbox-extpack";
     # IMPORTANT: Hash must be base16 encoded because it's used as an input to
     # VBoxExtPackHelperApp!
-    sha256 = "11f40842a56ebb17da1bbc82a21543e66108a5330ebd54ded68038a990aa071b";
+    sha256 = "2f2302c7ba3d00a1258fe8e7767a6eb08dccdc3c31f6e3eeb74063c2c268b104";
     message = ''
       In order to use the extension pack, you need to comply with the VirtualBox Personal Use
       and Evaluation License (PUEL) available at:
@@ -63,7 +63,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "0asc5n9an2dzvrd4isjz3vac2h0sm6dbzvrc36hn8ag2ma3hg75g";
+    sha256 = "78dec1369d2c8feefea3c682d95e76c0e99414c56626388035cf4061d4dad62e";
   };
 
   buildInputs =
@@ -97,14 +97,7 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch
-    ++ [
-      (fetchurl rec {
-        name = "fix-detect-gcc-5.4.patch";
-        url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=827193;filename=${name};msg=5";
-        sha256 = "0y6v5dc6fqj9iv27cl8q2g87v1kxg19129mpas4vjg7g0529v4g9";
-      })
-    ];
+  patches = optional enableHardening ./hardened.patch;
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
