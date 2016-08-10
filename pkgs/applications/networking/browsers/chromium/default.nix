@@ -96,7 +96,7 @@ in stdenv.mkDerivation {
       ${concatMapStringsSep " " getWrapperFlags chromium.plugins.enabled}
 
     cp -v "${launchScript}" "$out/bin/chromium"
-    substituteInPlace $out/bin/chromium --replace @out@ $out --replace @sandbox@ $sandbox
+    substituteInPlace $out/bin/chromium --subst-var out --subst-var sandbox
     chmod 755 "$out/bin/chromium"
 
     ln -sv "${chromium.browser.sandbox}" "$sandbox"
