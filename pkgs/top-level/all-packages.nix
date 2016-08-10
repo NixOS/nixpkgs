@@ -7506,6 +7506,8 @@ in
 
   gpgstats = callPackage ../tools/security/gpgstats { };
 
+  gpshell = callPackage ../development/tools/misc/gpshell { };
+
   grantlee = callPackage ../development/libraries/grantlee { };
 
   gsasl = callPackage ../development/libraries/gsasl { };
