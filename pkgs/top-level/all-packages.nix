@@ -8884,6 +8884,8 @@ in
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quickder = callPackage ../development/libraries/quickder {};
+
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
 
   qwt = callPackage ../development/libraries/qwt {};
