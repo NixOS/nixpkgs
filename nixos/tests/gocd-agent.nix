@@ -6,7 +6,7 @@
 
 let
   serverUrl = "localhost:8153/go/api/agents";
-  header = "Accept: application/vnd./go.cd/v2+json";
+  header = "Accept: application/vnd.go.cd.v2+json";
 in
 
 import ./make-test.nix ({ pkgs, ...} : {
@@ -15,26 +15,26 @@ import ./make-test.nix ({ pkgs, ...} : {
     maintainers = [ grahamc swarren83 ];
   };
 
-nodes = {
-  gocd_agent =
-    { config, pkgs, ... }:
-    { 
-      virtualisation.memorySize = 2048;
-      services.gocd-agent = {
-        enable = true;
+  nodes = {
+    gocd_agent =
+      { config, pkgs, ... }:
+      {
+        virtualisation.memorySize = 2048;
+        services.gocd-agent = {
+          enable = true;
+        };
+        services.gocd-server = {
+          enable = true;
+        };
       };
-      services.gocd-server = {
-        enable = true;
-      };
-    };
-};
+  };
 
   testScript = ''
     startAll;
     $gocd_agent->waitForUnit("gocd-server");
     $gocd_agent->waitForOpenPort("8153");
     $gocd_agent->waitForUnit("gocd-agent");
-    $gocd_agent->waitUntilSucceeds("curl -s -f ${serverUrl} -H '${header}' | awk -F \" '/\"uuid\":\s\"[a-zA-Z0-9]{8}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{4}-[a-zA-Z0-9]{12}/ {print $4}'");
-    $gocd_agent->waitUntilSucceeds("curl -s -f ${serverUrl} -H '${header}' | awk -F \" '/\"agent_state\":\s\"Idle\"/'");
+    $gocd_agent->waitUntilSucceeds("curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].uuid");
+    $gocd_agent->succeed("curl ${serverUrl} -H '${header}' | ${pkgs.jq}/bin/jq -e ._embedded.agents[0].agent_state | grep -q Idle");
   '';
 })

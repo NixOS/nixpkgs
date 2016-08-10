@@ -57,18 +57,10 @@ in {
       };
 
       goServer = mkOption {
-        default = "127.0.0.1";
+        default = "https://127.0.0.1:8154/go";
         type = types.str;
         description = ''
-          Address of GoCD Server to attach the Go.CD Agent to.
-        '';
-      };
-
-      goServerPort = mkOption {
-        default = 8153;
-        type = types.int;
-        description = ''
-          Port that Go.CD Server is Listening on.
+          URL of the GoCD Server to attach the Go.CD Agent to.
         '';
       };
 
@@ -112,8 +104,8 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
-        example = [ 
-          "-X debug" 
+        example = [
+          "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006"
           "-verbose:gc"
           "-Xloggc:go-agent-gc.log"
@@ -170,7 +162,7 @@ in {
               config.environment.sessionVariables;
         in
           selectedSessionVars //
-            { 
+            {
               NIX_REMOTE = "daemon";
               AGENT_WORK_DIR = cfg.workDir;
               AGENT_STARTUP_ARGS = ''${concatStringsSep " "  cfg.startupOptions}'';
@@ -199,13 +191,14 @@ in {
         ${pkgs.jre}/bin/java ${concatStringsSep " " cfg.startupOptions} \
                         ${concatStringsSep " " cfg.extraOptions} \
                               -jar ${pkgs.gocd-agent}/go-agent/agent-bootstrapper.jar \
-                              ${cfg.goServer} \
-                              ${toString cfg.goServerPort}
+                              -serverUrl ${cfg.goServer}
       '';
 
       serviceConfig = {
         User = cfg.user;
         WorkingDirectory = cfg.workDir;
+        RestartSec = 30;
+        Restart = "on-failure";
       };
     };
   };
