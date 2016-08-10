@@ -156,12 +156,12 @@ rec {
        hasSuffix "foo" "barfoo"
        => true
   */
-  hasSuffix = suff: str:
+  hasSuffix = suffix: content:
     let
-      lenStr = stringLength str;
-      lenSuff = stringLength suff;
-    in lenStr >= lenSuff &&
-       substring (lenStr - lenSuff) lenStr str == suff;
+      lenContent = stringLength content;
+      lenSuffix = stringLength suffix;
+    in lenContent >= lenSuffix &&
+       substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
