@@ -4,6 +4,8 @@ stdenv.mkDerivation rec {
   name = "geogebra-${version}";
   version = "5.0.265.0";
 
+  preferLocalBuild = true;
+
   src = fetchurl {
     url = "http://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2";
     sha256 = "74e5abfa098ee0fc464cd391cd3ef6db474ff25e8ea4fbcd82c4b4b5d3d5c459";
@@ -51,5 +53,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.geogebra.org/;
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     platforms = platforms.all;
+    hydraPlatforms = [];
   };
 }
