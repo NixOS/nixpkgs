@@ -16478,6 +16478,8 @@ in
 
   xrandr-invert-colors = callPackage ../applications/misc/xrandr-invert-colors { };
 
+  rox-filer = callPackage ../desktops/rox/rox-filer { };
+
   ### SCIENCE
 
   ### SCIENCE/GEOMETRY
