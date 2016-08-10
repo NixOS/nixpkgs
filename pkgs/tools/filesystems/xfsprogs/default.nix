@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     ./4.3.0-sharedlibs.patch
   ];
 
-  buildInputs = [ gettext libuuid readline ];
+  propagatedBuildInputs = [ libuuid ];
+  buildInputs = [ gettext readline ];
 
   outputs = [ "dev" "out" "bin" ]; # TODO: review xfs
 
