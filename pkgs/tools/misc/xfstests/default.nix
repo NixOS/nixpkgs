@@ -3,12 +3,12 @@
 , time, utillinux, which, writeScript, xfsprogs }:
 
 stdenv.mkDerivation {
-  name = "xfstests-2016-01-11";
+  name = "xfstests-2016-08-06";
 
   src = fetchgit {
     url = "git://oss.sgi.com/xfs/cmds/xfstests.git";
-    rev = "dfe582dd396f16ddce1909baab7376e00af07792";
-    sha256 = "1pvqzw4f0r63lzhcw2lii72bp4dwqd50xshv8ch7v529z0f5icwa";
+    rev = "b7d908a0e8eb3bc069275dedfe981f9ea3aeeec2";
+    sha256 = "0dnhqqxmxr3mq2xjnxki92vjmi3y7g9xz3lfa1s1c8ayfcm3qq85";
   };
 
   buildInputs = [ acl autoreconfHook attr gawk libaio libuuid libxfs openssl perl ];
