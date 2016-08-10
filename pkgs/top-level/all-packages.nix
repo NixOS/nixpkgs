@@ -11758,8 +11758,6 @@ in
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
-  uksmtools = callPackage ../os-specific/linux/uksmtools { };
-
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
@@ -12110,7 +12108,7 @@ in
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
   inherit (callPackages ../data/fonts/gdouros { })
-    aegean textfonts symbola aegyptus akkadian anatolian maya unidings musica analecta;
+    symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
