@@ -67,7 +67,7 @@ rec {
   # == [1 2 3 4 5]' and `flatten 1 == [1]'.
   flatten = x:
     if isList x
-    then foldl' (x: y: x ++ (flatten y)) [] x
+    then concatMap (y: flatten y) x
     else [x];
 
 
