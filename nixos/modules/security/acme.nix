@@ -282,6 +282,7 @@ in
           timerConfig = {
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
+            Persistent = "yes";
           };
         })
       );
