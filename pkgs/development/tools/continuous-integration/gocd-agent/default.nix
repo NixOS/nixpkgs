@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "gocd-agent-${version}-${rev}";
-  version = "16.5.0";
-  rev = "3305";
+  version = "16.6.0";
+  rev = "3590";
 
   src = fetchurl {
     url = "https://download.go.cd/binaries/${version}-${rev}/generic/go-agent-${version}-${rev}.zip";
-    sha256 = "2cb988d36ec747b2917f3be040b430f2a8289c07353a6b6bdc95bf741fa1ed97";
+    sha256 = "ee076c62b388a6ed88d5065f18a4a96cb0d3161f693c16f920d85886d295ff27";
   };
   meta = with stdenv.lib; {
     description = "A continuous delivery server specializing in advanced workflow modeling and visualization";
     homepage = http://www.go.cd;
     license = licenses.asl20;
     platforms = platforms.all;
-    maintainers = with maintainers; [ swarren83 ];
+    maintainers = with maintainers; [ grahamc swarren83 ];
   };
 
   buildInputs = [ unzip ];
