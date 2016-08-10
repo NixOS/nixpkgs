@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "acbuild-${version}";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "appc";
     repo = "acbuild";
     rev = "v${version}";
-    sha256 = "19f2fybz4m7d5sp1v8zkl26ig4dacr27qan9h5lxyn2v7a5z34rc";
+    sha256 = "0s81xlaw75d05b4cidxml978hnxak8parwpnk9clanwqjbj66c7x";
   };
 
   buildInputs = [ go ];
