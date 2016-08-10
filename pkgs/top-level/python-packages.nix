@@ -825,7 +825,7 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six
     ] ++ optional windowsSupport pywinrm;
 
     meta = {
@@ -858,7 +858,7 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six readline
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six readline
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
@@ -4025,11 +4025,12 @@ in modules // {
 
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
-    name = "cryptography-1.2.3";
+    name = "cryptography-${version}";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "0kj511z4g21fhcr649pyzpl0zzkkc7hsgxxjys6z8wwfvmvirccf";
+      sha256 = "0a6i4914ychryj7kqqmf970incynj5lzx57n3cbv5i4hxm09a55v";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
@@ -4045,11 +4046,12 @@ in modules // {
 
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
-    name = "cryptography_vectors-1.2.3";
+    name = "cryptography_vectors-${version}";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "0shawgpax79gvjrj0a313sll9gaqys7q1hxngn6j4k24lmz7bwki";
+      sha256 = "1sk6yhphk2k2vzshi0djxi0jsxd9a02259bs8gynfgf5y1g82a07";
     };
   };
 
@@ -16590,14 +16592,15 @@ in modules // {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.15.1";
+    name = "paramiko-${version}";
+    version = "2.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/paramiko/${name}.tar.gz";
-      sha256 = "6ed97e2281bb48728692cdc621f6b86a65fdc1d46b178ce250cfec10b977a04c";
+      sha256 = "1p21s7psqj18k9a97nq26yas058i5ivzk7pi7y98l1rbl87zj6s1";
     };
 
-    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+    propagatedBuildInputs = with self; [ cryptography cryptography_vectors ];
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
@@ -17268,12 +17271,12 @@ in modules // {
 
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
-    version = "0.2.8";
+    version = "0.2.9";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysftp/${name}.tar.gz";
-      sha256 = "1d69z8yngciksch1i8rivy1xl8f6g6sb7c3kk5cm3pf8304q6hhm";
+      sha256 = "0jl5qix5cxzrv4lb8rfpjkpcghbkacnxkb006ikn7mkl5s05mxgv";
     };
 
     propagatedBuildInputs = with self; [ paramiko ];
