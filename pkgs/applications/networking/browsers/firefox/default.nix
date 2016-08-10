@@ -63,11 +63,9 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       #"--enable-system-cairo"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
-      "--disable-content-sandbox-reporter"  # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer"
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
@@ -78,7 +76,10 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
                              "--enable-optimize"
                              "--enable-strip" ])
     ++ lib.optional enableOfficialBranding "--enable-official-branding"
-    ++ lib.optional (lib.versionOlder version "48.0") "--disable-javaxpcom";
+    ++ lib.optionals (lib.versionOlder version "48.0") [
+      "--disable-installer"
+      "--disable-javaxpcom"
+      "--disable-content-sandbox-reporter" ];
 
   enableParallelBuilding = true;
 
