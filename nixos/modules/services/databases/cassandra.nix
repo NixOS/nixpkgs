@@ -128,6 +128,7 @@ in {
     package = mkOption {
       description = "Cassandra package to use.";
       default = pkgs.cassandra;
+      defaultText = "pkgs.cassandra";
       type = types.package;
     };
     jre = mkOption {
@@ -149,6 +150,7 @@ in {
     envFile = mkOption {
       description = "path to cassandra-env.sh";
       default = "${cassandraPackage}/conf/cassandra-env.sh";
+      defaultText = "\${cassandraPackage}/conf/cassandra-env.sh";
       type = types.path;
     };
     clusterName = mkOption {
@@ -190,6 +192,7 @@ in {
     };
     envScript = mkOption {
       default = "${cassandraPackage}/conf/cassandra-env.sh";
+      defaultText = "\${cassandraPackage}/conf/cassandra-env.sh";
       type = types.path;
       description = "Supply your own cassandra-env.sh rather than using the default";
     };
