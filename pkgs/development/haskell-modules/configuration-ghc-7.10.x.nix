@@ -115,6 +115,8 @@ self: super: {
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
 
+  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
+
   # diagrams/monoid-extras#19
   monoid-extras = overrideCabal super.monoid-extras (drv: {
     prePatch = "sed -i 's|4\.8|4.9|' monoid-extras.cabal";
