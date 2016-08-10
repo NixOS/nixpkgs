@@ -10448,7 +10448,7 @@ in
   };
 
   mysql = mariadb;
-  libmysql = mysql.lib;
+  libmysql = mysql.client; # `libmysql` is a slight misnomer ATM
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
 
@@ -13972,6 +13972,7 @@ in
     youtubeSupport = config.mpv.youtubeSupport or true;
     cacaSupport = config.mpv.cacaSupport or true;
     vaapiSupport = config.mpv.vaapiSupport or false;
+    libva = libva-full;
   };
 
   mpvScripts = {
@@ -14441,6 +14442,7 @@ in
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
+    cmake = cmake-2_8; # problems after 3.4 -> 3.6.0
   };
 
   rcs = callPackage ../applications/version-management/rcs { };

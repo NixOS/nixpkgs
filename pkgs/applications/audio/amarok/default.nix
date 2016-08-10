@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ automoc4 cmake perl pkgconfig ];
 
   buildInputs = [
-    qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.lib
+    qtscriptgenerator stdenv.cc.libc gettext curl libxml2 mysql.server/*libmysqld*/
     taglib taglib_extras loudmouth kdelibs phonon strigi soprano qca2
     libmtp liblastfm libgpod qjson ffmpeg libofa nepomuk_core
     lz4 lzo snappy libaio pcre
@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
+
+  enableParallelBuilding = true;
 
   propagatedUserEnvPkgs = [ qtscriptgenerator ];
 

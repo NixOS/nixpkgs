@@ -23,15 +23,11 @@ stdenv.mkDerivation {
      "--libdir=$out/lib/ocaml/${ocaml_version}/site-lib/mysql"
   ];
 
-  buildInputs = [ocaml findlib mysql.lib camlp4 ];
+  buildInputs = [ocaml findlib camlp4 ];
 
   createFindlibDestdir = true;
 
-  propagatedBuildInputs = [ mysql.lib ];
-
-  preConfigure = ''
-    export LDFLAGS="-L${mysql.lib}/lib/mysql"
-  '';
+  propagatedBuildInputs = [ mysql.client ];
 
   buildPhase = ''
     make
