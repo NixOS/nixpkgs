@@ -1,7 +1,10 @@
 { stdenv, fetchurl, pcre, libxslt, groff, ncurses, pkgconfig, readline, python
 , pythonPackages }:
-
-stdenv.mkDerivation rec {
+let
+  # This flag needs to be set during configure *and* build. It's mixed into
+  # another statedir compile-time constant.
+  flags = "localstatedir=/var/spool";
+in stdenv.mkDerivation rec {
   version = "4.0.3";
   name = "varnish-${version}";
 
@@ -13,7 +16,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre libxslt groff ncurses pkgconfig readline python
     pythonPackages.docutils];
 
-  buildFlags = "localstatedir=/var/spool";
+  # Comment out a rule which attempts to write to /var.
+  postPatch = ''
+    substituteInPlace Makefile.in --replace '$(install_sh)' 'true #'
+  '';
+
+  configureFlags = flags;
+  buildFlags = flags;
 
   meta = {
     description = "Web application accelerator also known as a caching HTTP reverse proxy";
