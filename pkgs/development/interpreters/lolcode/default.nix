@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, doxygen, cmake }:
+{ stdenv, fetchurl, pkgconfig, doxygen, cmake, readline }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1li7ikcrs7wqah7gqkirg0k61n6pm12w7pydin966x1sdn9na46b";
   };
 
-  buildInputs = [ pkgconfig doxygen cmake ];
+  nativeBuildInputs = [ pkgconfig cmake doxygen ];
+  buildInputs = [ readline ];
 
   # Maybe it clashes with lci scientific logic software package...
   postInstall = "mv $out/bin/lci $out/bin/lolcode-lci";
