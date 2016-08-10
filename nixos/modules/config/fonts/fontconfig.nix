@@ -12,8 +12,6 @@ This module generates a package containing configuration files and link it in /e
 Fontconfig reads files in folder name / file name order, so the number prepended to the configuration file name decide the order of parsing.
 Low number means high priority.
 
-Default fonts should have a high priority (low number) to be at the head of the preferred fonts list, fontconfig advise the 30~40 range.
-
 */
 
 { config, lib, pkgs, ... }:
@@ -109,9 +107,13 @@ let cfg = config.fonts.fontconfig;
       </fontconfig>
     '';
 
-    # prefered default fonts configuration file
-    # priority 30
-    genericAliasConf = 
+    # local configuration file
+    # priority 51
+    localConf = pkgs.writeText "fc-local.conf" cfg.localConf;
+
+    # default fonts configuration file
+    # priority 52
+    defaultFontsConf = 
       let genDefault = fonts: name:
         optionalString (fonts != []) ''
           <alias>
@@ -125,7 +127,7 @@ let cfg = config.fonts.fontconfig;
           </alias>
         '';
       in
-      pkgs.writeText "fc-30-nixos-generic-alias.conf" ''
+      pkgs.writeText "fc-52-nixos-default-fonts.conf" ''
       <?xml version='1.0'?>
       <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
       <fontconfig>
@@ -137,17 +139,6 @@ let cfg = config.fonts.fontconfig;
 
         ${genDefault cfg.defaultFonts.monospace "monospace"}
 
-      </fontconfig>
-    '';
-
-    # user settings configuration file
-    # priority 99
-    userConf = pkgs.writeText "fc-99-user.conf" ''
-      <?xml version="1.0"?>
-      <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-      <fontconfig>
-        <include ignore_missing="yes" prefix="xdg">fontconfig/conf.d</include>
-        <include ignore_missing="yes" prefix="xdg">fontconfig/fonts.conf</include>
       </fontconfig>
     '';
 
@@ -170,6 +161,13 @@ let cfg = config.fonts.fontconfig;
       ln -s ${latestPkg.out}/etc/fonts/conf.d/*.conf \
             $latest_folder/conf.d/
 
+      # update latest 51-local.conf path to look at the latest local.conf
+      rm    $latest_folder/conf.d/51-local.conf
+
+      substitute ${latestPkg.out}/etc/fonts/conf.d/51-local.conf \
+                 $latest_folder/conf.d/51-local.conf \
+                 --replace local.conf /etc/fonts/${latestVersion}/local.conf 
+
       # 00-nixos-cache.conf
       ln -s ${cacheConfSupport} \
             $support_folder/conf.d/00-nixos-cache.conf
@@ -179,15 +177,21 @@ let cfg = config.fonts.fontconfig;
       ln -s ${renderConf}       $support_folder/conf.d/10-nixos-rendering.conf
       ln -s ${renderConf}       $latest_folder/conf.d/10-nixos-rendering.conf
 
-      # 30-nixos-generic-alias.conf
-      ln -s ${genericAliasConf} $support_folder/conf.d/30-nixos-generic-alias.conf
-      ln -s ${genericAliasConf} $latest_folder/conf.d/30-nixos-generic-alias.conf
-
-      # 99-user.conf
-      ${optionalString cfg.includeUserConf ''
-      ln -s ${userConf}         $support_folder/conf.d/99-user.conf
-      ln -s ${userConf}         $latest_folder/conf.d/99-user.conf
+      # 50-user.conf
+      ${optionalString (! cfg.includeUserConf) ''
+      rm    $support_folder/conf.d/50-user.conf
+      rm    $latest_folder/conf.d/50-user.conf
       ''}
+
+      # local.conf (indirect priority 51)
+      ${optionalString (cfg.localConf != "") ''
+      ln -s ${localConf}        $support_folder/local.conf
+      ln -s ${localConf}        $latest_folder/local.conf
+      ''}
+
+      # 52-nixos-default-fonts.conf
+      ln -s ${defaultFontsConf} $support_folder/conf.d/52-nixos-default-fonts.conf
+      ln -s ${defaultFontsConf} $latest_folder/conf.d/52-nixos-default-fonts.conf
     '';
 
     # Package with configuration files
@@ -238,6 +242,15 @@ in
           description = ''
             Force DPI setting. Setting to <literal>0</literal> disables DPI
             forcing; the DPI detected for the display will be used.
+          '';
+        };
+
+        localConf = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            System-wide customization file contents, has higher priority than 
+            <literal>defaultFonts</literal> settings.
           '';
         };
 
