@@ -1528,6 +1528,8 @@ in
 
     hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
+    unikey = callPackage ../tools/inputmethods/fcitx-engines/fcitx-unikey { };
+    
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
