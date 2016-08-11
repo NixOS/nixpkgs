@@ -32,6 +32,9 @@ stdenv.mkDerivation {
 
     cp fontconfig_patches/fonts-settings/*.conf $out/etc/fonts/conf.d
 
+    # fix font priority issue https://github.com/bohoomil/fontconfig-ultimate/issues/173
+    mv $out/etc/fonts/conf.d/{43,60}-wqy-zenhei-sharp.conf
+
     mkdir -p $out/etc/fonts/presets/{combi,free,ms}
     cp fontconfig_patches/combi/*.conf $out/etc/fonts/presets/combi
     cp fontconfig_patches/free/*.conf $out/etc/fonts/presets/free
