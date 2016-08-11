@@ -22,9 +22,9 @@ let
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
   major = "5";
-  minor = "1";
-  patch = "3";
-  tweak = "2";
+  minor = "2";
+  patch = "0";
+  tweak = "4";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
 
@@ -50,14 +50,14 @@ let
 
     translations = fetchSrc {
       name = "translations";
-      sha256 = "039gjg4295x9f3hj0bh32csp63gbfns1sj7wk5mv51szdz50a8zi";
+      sha256 = "0a3dnqm9k1skp7jvg354fdn84y0ylvnjzpd4v2r2mbz8vc4p3ld5";
     };
 
     # TODO: dictionaries
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0fq9wqzvbs6x003ljvhwbnq7vglzcq3yylndv0kp1mj00dkyz3gm";
+      sha256 = "1gyakwbbsd3aykf0gsanyg6p4g4qixj1rh6qxspln70afl3kxm90";
     };
 
   };
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1i077hz24kz1wmnvw9xicmm1mrr9msdxq4lg3y0hy47ar6kiqnnd";
+    sha256 = "1v3bbk2afq61gs3l4qvc1r6y0ylr21jzbm3wcnyq9c3bbyw43pj7";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -215,7 +215,6 @@ in stdenv.mkDerivation rec {
     "--without-system-hsqldb"
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
-    "--without-system-npapi-headers"
     "--without-system-libetonyek"
     "--without-system-libfreehand"
     "--without-system-liblangtag"
@@ -248,6 +247,10 @@ in stdenv.mkDerivation rec {
       libodfgen CoinMP librdf_rasqal defaultIconTheme makeWrapper
     ]
     ++ lib.optional kdeIntegration kde4.kdelibs;
+
+  passthru = {
+    inherit srcs;
+  };
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
