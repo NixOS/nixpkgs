@@ -13706,7 +13706,6 @@ in
     inherit (gnome) GConf ORBit2 gnome_vfs;
     inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
     zip = zip.override { enableNLS = false; };
-    mdds = mdds_0_12_1;
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -13732,6 +13731,7 @@ in
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
+    mdds = mdds_0_12_1;
     clucene_core = clucene_core_2;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
