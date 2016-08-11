@@ -4,55 +4,33 @@ with lib;
 
 let
 
-  cfg = config.services.confluence;
+  cfg = config.services.jira;
 
-  pkg = pkgs.stdenv.mkDerivation rec {
-    name = "atlassian-confluence-${version}";
-    version = "5.10.2";
-
-    src = pkgs.fetchurl {
-      url = "https://www.atlassian.com/software/confluence/downloads/binary/${name}.tar.gz";
-      sha256 = "0f7v2fb4408zj84vh8m9axlv841k312djpk3d24gsgabsmx552mb";
-    };
-
-    buildPhase = ''
-      echo "confluence.home=/run/confluence/home" > confluence/WEB-INF/classes/confluence-init.properties
-      mv conf/server.xml conf/server.xml.dist
-      ln -sf /run/confluence/home/deploy conf/Standalone
-      ln -sf /run/confluence/server.xml conf/server.xml
-      rm -r logs; ln -sf /run/confluence/logs/ .
-      rm -r work; ln -sf /run/confluence/work/ .
-      rm -r temp; ln -sf /run/confluence/temp/ .
-    '';
-
-    installPhase = ''
-      cp -rva . $out
-    '';
-  };
+  pkg = pkgs.atlassian-jira;
 
 in
 
 {
   options = {
-    services.confluence = {
-      enable = mkEnableOption "Atlassian Confluence service";
+    services.jira = {
+      enable = mkEnableOption "Atlassian JIRA service";
 
       user = mkOption {
         type = types.str;
-        default = "confluence";
-        description = "User which runs confluence.";
+        default = "jira";
+        description = "User which runs JIRA.";
       };
 
       group = mkOption {
         type = types.str;
-        default = "confluence";
-        description = "Group which runs confluence.";
+        default = "jira";
+        description = "Group which runs JIRA.";
       };
 
       home = mkOption {
         type = types.str;
-        default = "/var/lib/confluence";
-        description = "Home directory of the confluence instance.";
+        default = "/var/lib/jira";
+        description = "Home directory of the JIRA instance.";
       };
 
       listenAddress = mkOption {
@@ -63,23 +41,23 @@ in
 
       listenPort = mkOption {
         type = types.int;
-        default = 8090;
+        default = 8091;
         description = "Port to listen on.";
       };
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
+        example = [ "-Xms1024m" "-Xmx2048m" ];
         description = "Java options to pass to catalina/tomcat.";
       };
 
       proxy = {
-        enable = mkEnableOption "proxy support";
+        enable = mkEnableOption "reverse proxy support";
 
         name = mkOption {
           type = types.str;
-          example = "confluence.example.com";
+          example = "jira.example.com";
           description = "Virtual hostname at the proxy";
         };
 
@@ -96,6 +74,13 @@ in
           example = "http";
           description = "Protocol used at the proxy.";
         };
+
+        secure = mkOption {
+          type = types.bool;
+          default = true;
+          example = false;
+          description = "Whether the connections to the proxy should be considered secure.";
+        };
       };
 
       jrePackage = let
@@ -105,7 +90,7 @@ in
         default = jreSwitch pkgs.oraclejre8 pkgs.openjdk8.jre;
         defaultText = jreSwitch "pkgs.oraclejre8" "pkgs.openjdk8.jre";
         example = literalExample "pkgs.openjdk8.jre";
-        description = "Java Runtime to use for Confluence. Note that Atlassian recommends the Oracle JRE.";
+        description = "Java Runtime to use for JIRA. Note that Atlassian recommends the Oracle JRE.";
       };
     };
   };
@@ -118,8 +103,8 @@ in
 
     users.extraGroups."${cfg.group}" = {};
 
-    systemd.services.confluence = {
-      description = "Atlassian Confluence";
+    systemd.services.atlassian-jira = {
+      description = "Atlassian JIRA";
 
       wantedBy = [ "multi-user.target" ];
       requires = [ "postgresql.service" ];
@@ -128,31 +113,30 @@ in
       path = [ cfg.jrePackage ];
 
       environment = {
-        CONF_USER = cfg.user;
+        JIRA_USER = cfg.user;
+        JIRA_HOME = cfg.home;
         JAVA_HOME = "${cfg.jrePackage}";
-        CATALINA_OPTS = concatStringsSep " " (cfg.catalinaOptions ++ [
-          #"-Djavax.net.ssl.trustStore=${cfg.home}/cacerts"
-        ]);
+        CATALINA_OPTS = concatStringsSep " " cfg.catalinaOptions;
       };
 
       preStart = ''
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        mkdir -p /run/confluence
-        ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/confluence
-        ln -sf ${cfg.home} /run/confluence/home
+        mkdir -p /run/atlassian-jira
+        ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/atlassian-jira
+        ln -sf ${cfg.home} /run/atlassian-jira/home
 
         chown -R ${cfg.user} ${cfg.home}
 
-        sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
+        sed -e 's,port="8080",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
+          -e 's,protocol="HTTP/1.1",protocol="HTTP/1.1" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}" secure="${toString cfg.proxy.secure}",' \
         '') + ''
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/bin/start-confluence.sh -fg";
-      stopScript  = "${pkg}/bin/stop-confluence.sh";
+      script = "${pkg}/bin/start-jira.sh -fg";
+      stopScript  = "${pkg}/bin/stop-jira.sh";
 
       serviceConfig = {
         User = cfg.user;
