@@ -14,7 +14,7 @@
 , compiler-rt_src
 , libcxxabi
 , debugVersion ? false
-, enableSharedLibraries ? !stdenv.isDarwin
+, enableSharedLibraries ? true
 }:
 
 let
@@ -67,6 +67,11 @@ in stdenv.mkDerivation rec {
     rm -fR $out
 
     paxmark m bin/{lli,llvm-rtdyld}
+  '';
+
+  postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+    install_name_tool -id $out/lib/libLLVM.dylib $out/lib/libLLVM.dylib
+    ln -s $out/lib/libLLVM.dylib $out/lib/libLLVM-${version}.dylib
   '';
 
   enableParallelBuilding = true;
