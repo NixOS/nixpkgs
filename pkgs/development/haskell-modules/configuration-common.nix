@@ -983,4 +983,11 @@ self: super: {
     })];
   });
 
+  # remove if a version > 0.1.0.1 ever gets released
+  stunclient = overrideCabal super.stunclient (drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace source/Network/Stun/MappedAddress.hs --replace "import Network.Endian" ""
+    '';
+  });
+
 }
