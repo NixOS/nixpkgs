@@ -8704,6 +8704,7 @@ in
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
+  mdds_0_12_1 = callPackage ../development/libraries/mdds/0.12.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
@@ -13721,6 +13722,7 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    mdds = mdds_0_12_1;
   });
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
@@ -13740,6 +13742,7 @@ in
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    mdds = mdds_0_12_1;
   });
 
 
