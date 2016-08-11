@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib boost ];
 
+  patchPhase = ''
+    substituteInPlace Makefile \
+      --replace "GCC = g++" "GCC = c++"
+  '';
+
   preBuild = ''
     cp ${glucose.src} patches/glucose-syrup.tgz
     ./bootstrap.sh
