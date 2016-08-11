@@ -9819,6 +9819,8 @@ in
 
   archiveopteryx = callPackage ../servers/mail/archiveopteryx/default.nix { };
 
+  atlassian-confluence = callPackage ../servers/atlassian/confluence.nix { };
+
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
   cassandra_1_2 = callPackage ../servers/nosql/cassandra/1.2.nix { };
