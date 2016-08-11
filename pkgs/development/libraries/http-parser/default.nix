@@ -16,8 +16,7 @@ in stdenv.mkDerivation {
 
   buildFlags = [ "BUILDTYPE=Release" ];
 
-  buildInputs =
-    [ gyp ]
+  buildInputs = [ gyp ]
     ++ stdenv.lib.optional stdenv.isLinux utillinux
     ++ stdenv.lib.optionals stdenv.isDarwin [ python fixDarwinDylibNames ];
 
@@ -38,10 +37,10 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "An HTTP message parser written in C";
-
     homepage = https://github.com/joyent/http-parser;
-
     license = stdenv.lib.licenses.mit;
+
     platforms = stdenv.lib.platforms.unix;
+    hydraPlatforms = [];
   };
 }
