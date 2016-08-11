@@ -70,7 +70,7 @@ stdenv.mkDerivation {
 
     chmod a+rx "$dir"
     cd "$dir"
-    for f in check common ltp src tests; do
+    for f in $(cd @out@/lib/xfstests; echo *); do
       ln -s @out@/lib/xfstests/$f $f
     done
 
