@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "A utility library to help manage common tasks with OpenAL applications";
     homepage = http://kcat.strangesoft.net/alure.html;
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
