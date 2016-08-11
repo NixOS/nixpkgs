@@ -13295,6 +13295,8 @@ in
 
   linssid = qt5.callPackage ../applications/networking/linssid { };
 
+  manuskript = callPackage ../applications/editors/manuskript { };
+
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   praat = callPackage ../applications/audio/praat { };
