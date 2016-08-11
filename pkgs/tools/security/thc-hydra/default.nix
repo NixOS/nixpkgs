@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace configure \
       --replace "\$LIBDIRS" "${makeDirs "lib" "lib" buildInputs}" \
       --replace "\$INCDIRS" "${makeDirs "dev" "include" buildInputs}" \
-      --replace "/usr/include/math.h" "${stdenv.glibc.dev}/include/math.h" \
+      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
       --replace "libcurses.so" "libncurses.so" \
       --replace "-lcurses" "-lncurses"
   '';
