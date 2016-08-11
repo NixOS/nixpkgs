@@ -25940,7 +25940,7 @@ in modules // {
     postPatch = ''
       libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
       test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
-      sed -i -e "s|libname = .*|libname = \"$libusb\"|" usb/backend/libusb1.py
+      sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
     '';
 
     # No tests included
