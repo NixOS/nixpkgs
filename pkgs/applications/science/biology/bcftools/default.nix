@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  preBuild = ''
-    makeFlagsArray=("HSTDIR=${htslib}" "prefix=$out")
-  '';
+  makeFlags = [
+    "HSTDIR=${htslib}"
+    "prefix=$out"
+    "CC=cc"
+  ];
 
   meta = with stdenv.lib; {
     description = "Tools for manipulating BCF2/VCF/gVCF format, SNP and short indel sequence variants";
