@@ -17321,6 +17321,8 @@ in
 
   sailsd = callPackage ../misc/sailsd { };
 
+  shc = callPackage ../tools/security/shc { };
+
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
