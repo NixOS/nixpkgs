@@ -20,11 +20,11 @@ in stdenv.mkDerivation {
   };
 
   buildInputs = [
-    python pkgconfig makeWrapper lndir
+    pkgconfig makeWrapper lndir
     qtbase qtsvg qtwebkit qmakeHook
   ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip python ];
 
   configurePhase = ''
     runHook preConfigure
