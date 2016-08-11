@@ -1,7 +1,7 @@
 { stdenv, pkgs, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "${product}-${version}";
+  name = "atomicparsley-${version}";
   product = "AtomicParsley";
   version = "0.9.0";
 
