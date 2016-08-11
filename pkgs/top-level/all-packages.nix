@@ -16537,7 +16537,7 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
-  LiE = callPackage ../applications/science/math/LiE { };
+  lie = callPackage ../applications/science/math/LiE { };
 
   magma = callPackage ../development/libraries/science/math/magma { };
 
