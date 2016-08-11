@@ -5481,7 +5481,9 @@ in
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {};
   rustBeta = lowPrio (callPackage ../development/compilers/rust/beta.nix {});
-  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {});
+  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {
+    rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
+  });
 
   cargo = rust.cargo;
   rustc = rust.rustc;

@@ -1,6 +1,8 @@
 { stdenv, fetchurl, makeWrapper, cacert, zlib }:
 
 let
+  inherit (stdenv.lib) optionalString;
+
   platform =
     if stdenv.system == "i686-linux"
     then "i686-unknown-linux-gnu"
@@ -24,6 +26,8 @@ let
     then "d59b5509e69c1cace20a57072e3b3ecefdbfd8c7e95657b0ff2ac10aa1dfebe6"
     else throw "missing boostrap hash for platform ${stdenv.system}";
 
+  needsPatchelf = stdenv.isLinux;
+
   src = fetchurl {
      url = "https://static.rust-lang.org/dist/rust-${version}-${platform}.tar.gz";
      sha256 = bootstrapHash;
@@ -46,9 +50,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=rustc,rust-std-${platform},rust-docs
 
-      patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        "$out/bin/rustc"
+      ${optionalString needsPatchelf ''
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/rustc"
+      ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -71,9 +77,11 @@ rec {
       ./install.sh --prefix=$out \
         --components=cargo
 
-      patchelf \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        "$out/bin/cargo"
+      ${optionalString needsPatchelf ''
+        patchelf \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          "$out/bin/cargo"
+      ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"
