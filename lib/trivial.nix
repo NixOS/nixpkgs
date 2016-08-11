@@ -69,7 +69,7 @@ rec {
     + (if pathExists suffixFile then readFile suffixFile else "pre-git");
 
   # Whether we're being called by nix-shell.
-  inNixShell = builtins.getEnv "IN_NIX_SHELL" == "1";
+  inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
 
   # Return minimum/maximum of two numbers.
   min = x: y: if x < y then x else y;
