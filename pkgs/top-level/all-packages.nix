@@ -380,6 +380,8 @@ in
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
+  
+  airwave = callPackage ../applications/audio/airwave {};
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
@@ -6864,6 +6866,8 @@ in
 
   asio = callPackage ../development/libraries/asio { };
 
+  asiosdk = callPackage ../development/libraries/steinberg/asiosdk.nix { };
+
   aspell = callPackage ../development/libraries/aspell { };
 
   aspellDicts = recurseIntoAttrs (callPackages ../development/libraries/aspell/dictionaries.nix {});
@@ -10663,6 +10667,8 @@ in
   virtuoso = virtuoso6;
 
   vsftpd = callPackage ../servers/ftp/vsftpd { };
+
+  vstsdk = callPackage ../development/libraries/steinberg/vstsdk.nix { };
 
   winstone = callPackage ../servers/http/winstone { };
 
@@ -17525,6 +17531,8 @@ in
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
+
+  wineasio = callPackage ../misc/emulators/wine/wineasio.nix { };
 
   wmutils-core = callPackage ../tools/X11/wmutils-core { };
 
