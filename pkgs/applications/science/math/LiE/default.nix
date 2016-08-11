@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       characteristics, we refer to the following sources of information.
     ''; # take from the website
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ ]; # this package is probably not going to change anyway
   };
 
