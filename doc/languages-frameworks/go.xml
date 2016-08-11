@@ -86,13 +86,6 @@ the following arguments are of special significance to the function:
           "rev": "a83829b6f1293c91addabc89d0571c246397bbf4",
           "sha256": "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh"
         }
-    },
-    {
-    "include": "../../libs.json", <co xml:id='ex-goDeps-4' />
-    "packages": [ <co xml:id='ex-goDeps-5' />
-            "github.com/docopt/docopt-go",
-            "golang.org/x/crypto",
-        ]
     }
 ]
 </programlisting>
@@ -119,20 +112,6 @@ the following arguments are of special significance to the function:
       <varname>fetch type</varname> that needs to be used to get package source. If <varname>git</varname>
       is used there should be <varname>url</varname>, <varname>rev</varname> and <varname>sha256</varname>
       defined next to it.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-goDeps-4'>
-    <para>
-      <varname>include</varname> could be used to reuse <varname>goDeps</varname> between Go programs.
-      There is a common libs set in <varname>&lt;nixpkgs/pkgs/development/go-modules/libs.json&gt;</varname>
-      with pinned versions of many packages that you can reuse.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-goDeps-5'>
-    <para>
-      <varname>packages</varname> enumerates all Go packages that will be imported from included file.
     </para>
   </callout>
 
