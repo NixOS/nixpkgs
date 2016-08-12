@@ -136,10 +136,6 @@ rec {
     { name = "mfd_fix_dependency";
       patch = ./chromiumos-patches/mfd-fix-dependency.patch;
     };
-  qat_common_Makefile =
-    { name = "qat_common_Makefile";
-      patch = ./qat_common_Makefile.patch;
-    };
 
   hiddev_CVE_2016_5829 =
     { name = "hiddev_CVE_2016_5829";
