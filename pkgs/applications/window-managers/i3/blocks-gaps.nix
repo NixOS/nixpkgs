@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Airblader/i3blocks-gaps;
     license = licenses.gpl3;
     maintainers = [ "carlsverre" ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
