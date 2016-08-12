@@ -75,7 +75,11 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
                       else [ "--disable-debug" "--enable-release"
                              "--enable-optimize"
                              "--enable-strip" ])
-    ++ lib.optional enableOfficialBranding "--enable-official-branding";
+    ++ lib.optional enableOfficialBranding "--enable-official-branding"
+    ++ lib.optionals (lib.versionOlder version "48.0") [
+      "--disable-installer"
+      "--disable-javaxpcom"
+      "--disable-content-sandbox-reporter" ];
 
   enableParallelBuilding = true;
 
@@ -133,12 +137,13 @@ in {
     pname = "firefox";
     version = "48.0";
     sha512 = "51bbb1954920b4d0e49e2834939748e596ed27c09a45adeea2be2cfbd32898dae41f13db17318e9699fa96c41fb50fba9966df1f88deeadc0ae3bdd679bd79c5";
+    #sha512 = "32pkgbrssyy62nwxbg8h7yzcscvl3xm3z29dylrjs7325yv2cgy9nlq539znb5ylbpasicsq0kyv5p592br6d18kvjd1d1096av3fsi";
   };
 
   firefox-esr-unwrapped = common {
     pname = "firefox-esr";
-    version = "45.2.0esr";
-    sha512 = "fd67353cff9400080a311af92562b1ed26d20ca2229e32e8c8289b364ebe27fd501eed78c72b614e0501c3841ae9b17f2102158fbeef5083bee8c12d952660e6";
+    version = "45.3.0esr";
+    sha512 = "30b0yd5snv7y251chgcf7jcsb8gxaqkvg9l9krysgs691xybrzbpsdsg0hn05q74pk6ynv9ylc9gny47b47l6ji7qn149cnazn8lqgf";
   };
 
 }
