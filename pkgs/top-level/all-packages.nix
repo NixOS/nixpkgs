@@ -2390,6 +2390,8 @@ in
 
   libevhtp = callPackage ../development/libraries/libevhtp { };
 
+  libircclient = callPackage ../development/libraries/libircclient { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
 
   libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
