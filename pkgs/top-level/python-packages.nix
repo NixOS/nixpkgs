@@ -5466,11 +5466,11 @@ in modules // {
 
   dill = buildPythonPackage rec {
     name = "dill-${version}";
-    version = "0.2.4";
+    version = "0.2.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dill/${name}.tgz";
-      sha256 = "deca57da33ad2121ab1b9c4493bf8eb2b3a72b6426d4b9a3a853a073c68b97ca";
+      sha256 = "431c9d46e190dcdf1397234cf659d66e2e22e33b0474ed6ee2d0b16c9c0ea319";
     };
 
     propagatedBuildInputs = with self; [objgraph];
