@@ -10,18 +10,12 @@
 , kiconthemes
 , ki18n
 , kinit
-, kjobwidgets
 , kio
-, kparts
-, ktexteditor
+, kio-extras
 , kwindowsystem
-, kxmlgui
 , kdbusaddons
-, kwallet
 , plasma-framework
-, kitemmodels
 , knotifications
-, threadweaver
 , knewstuff
 , karchive
 , knotifyconfig
@@ -30,6 +24,9 @@
 , mlt
 , shared_mime_info
 , libv4l
+, kfilemetadata
+, ffmpeg
+, phonon-backend-vlc
 }:
 
 kdeApp {
@@ -40,21 +37,14 @@ kdeApp {
   ];
   buildInputs = [
     qtscript
-    #kconfig
-    #kcrash
+    kconfig
+    kcrash
     kguiaddons
     kiconthemes
-    #kinit
-    #kjobwidgets
-    #kparts
-    #kxmlgui
+    kinit
     kdbusaddons
-    #kwallet
-    #kitemmodels
     knotifications
-    #threadweaver
     knewstuff
-    #libgit2
     karchive
     knotifyconfig
     kplotting
@@ -62,21 +52,24 @@ kdeApp {
     mlt
     shared_mime_info
     libv4l
+    ffmpeg
   ];
   propagatedBuildInputs = [
-    #kactivities
-    #ki18n
-    #kio
-    #ktexteditor
-    #kwindowsystem
+    kactivities
+    ki18n
+    kio
+    kio-extras
+    kwindowsystem
+    kfilemetadata
     plasma-framework
+    phonon-backend-vlc
   ];
   postInstall = ''
-    wrapQtProgram "$out/bin/kdenlive"
+    wrapQtProgram "$out/bin/kdenlive" \
+        --prefix PATH : "${kinit}/bin"
   '';
   enableParallelBuilding = true;
   meta = {
-    license = with lib.licenses; [ gpl3 lgpl3 lgpl2 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    license = with lib.licenses; [ gpl2Plus ];
   };
 }
