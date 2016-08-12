@@ -3024,7 +3024,9 @@ in
 
   pciutils = callPackage ../tools/system/pciutils { };
 
-  pcsclite = callPackage ../tools/security/pcsclite { };
+  pcsclite = callPackage ../tools/security/pcsclite {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   pcsctools = callPackage ../tools/security/pcsctools {
     inherit (perlPackages) pcscperl Glib Gtk2 Pango;
