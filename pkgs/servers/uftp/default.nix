@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://uftp-multicast.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
