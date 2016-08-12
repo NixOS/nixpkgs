@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgs, openssl, ... }:
+{ stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
   name = "uftp-${version}";
@@ -9,11 +9,15 @@ stdenv.mkDerivation rec {
     sha256 = "0pra2sm8rdscyqkagi2v99az1vxbcch47wkdnz9wv4qg1x5phpmr";
   };
 
-  buildInputs = with pkgs; [
+  buildInputs = [
     openssl
   ];
 
   outputs = [ "out" "doc" ];
+
+  patchPhase = ''
+    substituteInPlace Makefile --replace gcc cc
+  '';
 
   installPhase = ''
     mkdir -p $out/bin $doc/share/man/man1
@@ -26,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://uftp-multicast.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }
