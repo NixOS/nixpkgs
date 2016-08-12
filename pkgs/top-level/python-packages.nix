@@ -13538,6 +13538,27 @@ in modules // {
     };
   };
 
+  multiprocess = buildPythonPackage rec {
+    name = "multiprocess-${version}";
+    version = "0.70.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/multiprocess/${name}.tgz";
+      sha256 = "73f8b9b7009860e3c3c8b9bdcad7e8366b130929775f89c114d4346a9cfcb31b";
+    };
+
+    propagatedBuildInputs = with self; [ dill ];
+
+    # Python-version dependent tests
+    doCheck = false;
+
+    meta = {
+      description = "Better multiprocessing and multithreading in python";
+      homepage = https://github.com/uqfoundation;
+      license = licenses.bsd3;
+    };
+  };
+
   munkres = buildPythonPackage rec {
     name = "munkres-1.0.6";
 
