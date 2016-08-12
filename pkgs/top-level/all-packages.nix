@@ -7375,7 +7375,9 @@ in
   gle = callPackage ../development/libraries/gle { };
 
   glew = callPackage ../development/libraries/glew { };
-  glew110 = callPackage ../development/libraries/glew/1.10.nix { };
+  glew110 = callPackage ../development/libraries/glew/1.10.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
 
   glfw = self.glfw3;
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
