@@ -2,7 +2,7 @@
 #   1. GoCD server starts
 #   2. GoCD server responds
 
-import ./make-test.nix ({ pkgs, ...} : 
+import ./make-test.nix ({ pkgs, ...} :
 
 {
   name = "gocd-server";
@@ -13,8 +13,8 @@ import ./make-test.nix ({ pkgs, ...} :
 nodes = {
   gocd_server =
     { config, pkgs, ... }:
-    { 
-      virtualisation.memorySize = 2048;
+    {
+      virtualisation.memorySize = 2046;
       services.gocd-server.enable = true;
     };
 };

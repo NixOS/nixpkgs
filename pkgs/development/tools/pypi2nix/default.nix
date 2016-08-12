@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
     # mv effect-*/effect                 $out/pkgs/effect
     mv requests-*/requests              $out/pkgs/
 
-    if [ "$IN_NIX_SHELL" != "1" ]; then
+    if [ -z "$IN_NIX_SHELL" ]; then
       if [ -e git-export ]; then
         mv git-export/src/pypi2nix      $out/pkgs/pypi2nix
       else

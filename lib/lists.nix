@@ -89,7 +89,7 @@ rec {
   */
   flatten = x:
     if isList x
-    then foldl' (x: y: x ++ (flatten y)) [] x
+    then concatMap (y: flatten y) x
     else [x];
 
   /* Remove elements equal to 'e' from a list.  Useful for buildInputs.

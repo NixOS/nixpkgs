@@ -1,4 +1,4 @@
-{ mkDerivation, aeson, aeson-pretty, ansi-wl-pprint, base, binary
+{ mkDerivation, aeson, aeson-pretty_0_7_2, ansi-wl-pprint, base, binary
 , bytestring, containers, directory, edit-distance, elm-compiler
 , fetchgit, filepath, HTTP, http-client, http-client-tls
 , http-types, mtl, network, optparse-applicative, parallel-io
@@ -16,13 +16,13 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson aeson-pretty ansi-wl-pprint base binary bytestring containers
+    aeson aeson-pretty_0_7_2 ansi-wl-pprint base binary bytestring containers
     directory edit-distance elm-compiler filepath HTTP http-client
     http-client-tls http-types mtl network parallel-io text time
     unordered-containers vector zip-archive
   ];
   executableHaskellDepends = [
-    aeson aeson-pretty ansi-wl-pprint base binary bytestring containers
+    aeson aeson-pretty_0_7_2 ansi-wl-pprint base binary bytestring containers
     directory edit-distance elm-compiler filepath HTTP http-client
     http-client-tls http-types mtl network optparse-applicative
     parallel-io pretty text time unordered-containers vector

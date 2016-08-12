@@ -443,7 +443,7 @@ in
         copy_bin_and_libs pbkdf2-sha512
 
         mkdir -p $out/etc/ssl
-        cp -pdv ${pkgs.openssl}/etc/ssl/openssl.cnf $out/etc/ssl
+        cp -pdv ${pkgs.openssl.out}/etc/ssl/openssl.cnf $out/etc/ssl
 
         cat > $out/bin/openssl-wrap <<EOF
         #!$out/bin/sh

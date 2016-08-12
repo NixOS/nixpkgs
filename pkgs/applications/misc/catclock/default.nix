@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://codefromabove.com/2014/05/catclock/;
     license = with licenses; mit;
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

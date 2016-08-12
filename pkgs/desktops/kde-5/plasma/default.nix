@@ -52,6 +52,8 @@ let
           name = "breeze-${version}";
           paths = map (pkg: pkg.out or pkg) [ breeze-gtk breeze-qt4 breeze-qt5 ];
         };
+    breeze-grub = callPackage ./breeze-grub.nix {};
+    breeze-plymouth = callPackage ./breeze-plymouth {};
     kactivitymanagerd = callPackage ./kactivitymanagerd.nix {};
     kde-cli-tools = callPackage ./kde-cli-tools.nix {};
     kde-gtk-config = callPackage ./kde-gtk-config {};
@@ -65,6 +67,7 @@ let
     kscreenlocker = callPackage ./kscreenlocker.nix {};
     ksshaskpass = callPackage ./ksshaskpass.nix {};
     ksysguard = callPackage ./ksysguard.nix {};
+    kwallet-pam = callPackage ./kwallet-pam.nix {};
     kwayland-integration = callPackage ./kwayland-integration.nix {};
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};

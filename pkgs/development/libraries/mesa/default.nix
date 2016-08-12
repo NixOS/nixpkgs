@@ -144,8 +144,6 @@ stdenv.mkDerivation {
 
   '' + /* set the default search path for DRI drivers; used e.g. by X server */ ''
     substituteInPlace "$dev/lib/pkgconfig/dri.pc" --replace '$(drivers)' "${driverLink}"
-  '' + /* move vdpau drivers to $drivers/lib, so they are found */ ''
-    mv "$drivers"/lib/vdpau/* "$drivers"/lib/ && rmdir "$drivers"/lib/vdpau
   '';
   #ToDo: @vcunat isn't sure if drirc will be found when in $out/etc/, but it doesn't seem important ATM */
 

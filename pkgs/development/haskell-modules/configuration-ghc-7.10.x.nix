@@ -63,6 +63,8 @@ self: super: {
   nats = dontHaddock super.nats;
   bytestring-builder = dontHaddock super.bytestring-builder;
 
+  hoauth2 = overrideCabal super.hoauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.wai self.warp ]; });
+
   # Setup: At least the following dependencies are missing: base <4.8
   hspec-expectations = overrideCabal super.hspec-expectations (drv: {
     postPatch = "sed -i -e 's|base < 4.8|base|' hspec-expectations.cabal";
@@ -114,6 +116,8 @@ self: super: {
     buildDepends = [ primitive ];
     license = pkgs.stdenv.lib.licenses.bsd3;
   }) {};
+
+  mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
 
   # diagrams/monoid-extras#19
   monoid-extras = overrideCabal super.monoid-extras (drv: {
@@ -186,7 +190,8 @@ self: super: {
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
   # https://github.com/fpco/stackage/issues/1112
-  vector-algorithms = dontCheck super.vector-algorithms;
+  vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
+    [ self.mtl self.mwc-random ];
 
   # Trigger rebuild to mitigate broken packaes on Hydra.
   amazonka-core = triggerRebuild super.amazonka-core 1;

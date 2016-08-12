@@ -5,7 +5,7 @@
 assert stdenv.system == "x86_64-linux";
 
 let
-  version = "1.0.32.96.g3c8a06e6-37";
+  version = "1.0.36.120.g536a862f-20";
 
   deps = [
     alsaLib
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
   src =
     fetchurl {
       url = "http://repository-origin.spotify.com/pool/non-free/s/spotify-client/spotify-client_${version}_amd64.deb";
-      sha256 = "0nk5sf3x9vf5ivm035h7rnjx0wvqlvii1i2mwvv50h86wmc25iih";
+      sha256 = "03r4hz4x4f3zmp6dsv1n72y5q01d7mfqvaaxqvd587a5561gahf0";
     };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -104,6 +104,6 @@ stdenv.mkDerivation {
     homepage = https://www.spotify.com/;
     description = "Play music from the Spotify music service";
     license = stdenv.lib.licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ eelco ftrvxmtrx sheenobu ];
+    maintainers = with stdenv.lib.maintainers; [ eelco ftrvxmtrx sheenobu mudri ];
   };
 }

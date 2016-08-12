@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, boost, protobuf, ncurses, pkgconfig, IOTty
+{ stdenv, fetchurl, zlib, protobuf, ncurses, pkgconfig, IOTty
 , makeWrapper, perl, openssl, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qsb0y882yfgwnpy6f98pi5xqm6kykdsrxzvaal37hs7szjhky0s";
   };
 
-  buildInputs = [ autoreconfHook boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
+  buildInputs = [ autoreconfHook protobuf ncurses zlib pkgconfig IOTty makeWrapper perl openssl ];
 
   patches = [
     # remove automake detection macro patch on next release as it is already on mosh master
