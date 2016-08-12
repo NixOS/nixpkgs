@@ -10444,7 +10444,6 @@ let
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10466,7 +10465,6 @@ let
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -10549,7 +10547,6 @@ let
   grsecurity_base_linux_4_5 = callPackage ../os-specific/linux/kernel/linux-grsecurity-4.5.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
