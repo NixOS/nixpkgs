@@ -1,0 +1,27 @@
+{ fetchgit }:
+[
+  {
+    goPackagePath = "github.com/mattn/go-runewidth";
+    src = fetchgit {
+      url = "https://github.com/mattn/go-runewidth";
+      rev = "d6bea18f789704b5f83375793155289da36a3c7f";
+      sha256 = "1hnigpn7rjbwd1ircxkyx9hvi0xmxr32b2jdy2jzw6b3jmcnz1fs";
+    };
+  }
+  {
+    goPackagePath = "github.com/mattn/go-colorable";
+    src = fetchgit {
+      url = "https://github.com/mattn/go-colorable";
+      rev = "3dac7b4f76f6e17fb39b768b89e3783d16e237fe";
+      sha256 = "08680mba8hh2rghymqbzd4m40r9k765w5kbzvrif9ngd6h85qnw6";
+    };
+  }
+  {
+    goPackagePath = "github.com/schachmat/ingo";
+    src = fetchgit {
+      url = "https://github.com/schachmat/ingo";
+      rev = "fab41e4e62cbef5d92998746ec25f7e195100f38";
+      sha256 = "04yfnch7pdabjjqfl2qxjmsaknvp4m1rbjlv8qrpmnqwjkxzx0hb";
+    };
+  }
+]

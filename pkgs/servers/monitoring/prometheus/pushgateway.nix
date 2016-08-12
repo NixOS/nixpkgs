@@ -1,4 +1,4 @@
-{ stdenv, lib, go, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ stdenv, lib, go, buildGoPackage, go-bindata, fetchFromGitHub, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "pushgateway-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1bj0s4s3gbcnlp2z2yx7jf3jx14cdg2v4pr0yciai0g6jwwg63hd";
   };
 
-  goDeps = ./pushgateway_deps.json;
+  goDeps = import ./pushgateway_deps.nix { inherit fetchgit fetchhg; };
 
   buildInputs = [ go-bindata ];
 

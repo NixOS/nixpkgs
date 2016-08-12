@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "git-annex-remote-b2-${version}";
@@ -13,5 +13,5 @@ buildGoPackage rec {
     sha256 = "1139rzdvlj3hanqsccfinprvrzf4qjc5n4f0r21jp9j24yhjs6j2";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

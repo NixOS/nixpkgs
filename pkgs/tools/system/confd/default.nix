@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "confd-${version}";
@@ -15,5 +15,5 @@ buildGoPackage rec {
     sha256 = "0rz533575hdcln8ciqaz79wbnga3czj243g7fz8869db6sa7jwlr";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

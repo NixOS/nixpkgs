@@ -1,9 +1,0 @@
-[
-  {
-    "include": "../../libs.json",
-    "packages": [
-      "github.com/BurntSushi/toml",
-      "gopkg.in/yaml.v2"
-    ]
-  }
-]

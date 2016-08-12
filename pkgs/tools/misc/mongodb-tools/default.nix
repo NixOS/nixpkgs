@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 let
   tools = [
@@ -21,7 +21,7 @@ buildGoPackage rec {
     sha256 = "142vxgniri1mfy2xmfgxhbdp6k6h8c5milv454krv1b51v43hsbm";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   # Mongodb incorrectly names all of their binaries main
   # Let's work around this with our own installer

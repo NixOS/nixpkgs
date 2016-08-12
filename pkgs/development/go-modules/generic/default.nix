@@ -41,34 +41,12 @@ let
     | sed "s,${ref},$(echo "${ref}" | sed "s,$NIX_STORE/[^-]*,$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,"),g" \
   '');
 
-  dep2src = goDep:
-    {
-      inherit (goDep) goPackagePath;
-      src = if goDep.fetch.type == "git" then
-        fetchgit {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else if goDep.fetch.type == "hg" then
-        fetchhg {
-          inherit (goDep.fetch) url rev sha256;
-        }
-      else abort "Unrecognized package fetch type";
-    };
-
-  importGodeps = { depsFile, filterPackages ? [] }:
-  let
-    deps = lib.importJSON depsFile;
-    external = filter (d: d ? include) deps;
-    direct = filter (d: d ? goPackagePath && (length filterPackages == 0 || elem d.goPackagePath filterPackages)) deps;
-  in
-    concatLists (map importGodeps (map (d: { depsFile = ./. + d.include; filterPackages = d.packages; }) external)) ++ (map dep2src direct);
-
-  goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
-                             else extraSrcs;
+  goPath = if goDeps != null then goDeps ++ extraSrcs
+           else extraSrcs;
 in
 
 go.stdenv.mkDerivation (
-  (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
+  (builtins.removeAttrs args [ "goPackageAliases" "disabled" "goDeps" ]) // {
 
   name = "go${go.meta.branch}-${name}";
   nativeBuildInputs = [ go parallel ]
@@ -183,6 +161,16 @@ go.stdenv.mkDerivation (
       mv $file.tmp $file
       chmod +x $file
     done < <(find $bin/bin -type f 2>/dev/null)
+  '';
+
+  shellHook = ''
+    d=$(mktemp -d "--suffix=-$name")
+  '' + toString (map (dep: ''
+     mkdir -p "$d/src/$(dirname "${dep.goPackagePath}")"
+     ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
+  ''
+  ) goPath) + ''
+    export GOPATH="$d:$GOPATH"
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go

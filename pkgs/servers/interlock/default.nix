@@ -1,5 +1,5 @@
 { stdenv, lib, sudo, utillinux, coreutils, systemd, cryptsetup,
-  buildGoPackage, fetchFromGitHub }:
+  buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "interlock-${version}";
@@ -17,7 +17,7 @@ buildGoPackage rec {
     sha256 = "06aqx3jy744yx29xyg8ips0dw16186hfqbxdv3hfrmwxmaxhl4lz";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   nativeBuildInputs = [ sudo ];
   buildFlags = [ "-tags textsecure" ];

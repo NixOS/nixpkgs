@@ -1,4 +1,4 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   buildInputs = [ ncurses ];
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   patchPhase = ''
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf'|'$bin/bin/fzf'|" plugin/fzf.vim

@@ -1,8 +1,0 @@
-[
-  {
-    "include": "../../../go-modules/libs.json",
-    "packages": [
-      "github.com/cpucycle/astrotime"
-    ]
-  }
-]

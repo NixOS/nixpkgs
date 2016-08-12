@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "drive-${version}";
@@ -14,5 +14,5 @@ buildGoPackage rec {
     sha256 = "07s4nhfcr6vznf1amvl3a4wq2hn9zq871rcppfi4i6zs7iw2ay1v";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

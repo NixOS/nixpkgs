@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "statsd_bridge-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1gg9v224n05khcwy27637w3rwh0cymm7hx6bginfxd7730rmpp2r";
   };
 
-  goDeps = ./statsd-bridge_deps.json;
+  goDeps = import ./statsd-bridge_deps.nix { inherit fetchgit fetchhg; };
 
   meta = with stdenv.lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";

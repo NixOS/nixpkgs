@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "nginx_exporter-${version}";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "0p9j0bbr2lr734980x2p8d67lcify21glwc5k3i3j4ri4vadpxvc";
   };
 
-  goDeps = ./nginx-exporter_deps.json;
+  goDeps = import ./nginx-exporter_deps.nix { inherit fetchgit fetchhg; };
 
   meta = with stdenv.lib; {
     description = "Metrics relay from nginx stats to Prometheus";

@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }@args:
+{ lib, buildGoPackage, fetchFromGitHub, fetchgit }@args:
 
 import ./default.nix (args // rec {
   

@@ -6,7 +6,7 @@ buildGoPackage rec {
   rev = "bc666ec165d08b43134f7ec0bf29083ad5466243";
 
   goPackagePath = "github.com/michaeldv/mop";
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   preConfigure = ''
     for i in $(find . -type f);do

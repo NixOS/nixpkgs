@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "hologram-${version}";
@@ -13,5 +13,5 @@ buildGoPackage rec {
     sha256 = "0i0p170brdsczfz079mqbc5y7x7mdph04p3wgqsd7xcrddvlkkaf";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

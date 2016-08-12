@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit }:
 
 buildGoPackage rec {
   name = "syncthing-${version}";
@@ -16,7 +16,7 @@ buildGoPackage rec {
     sha256 = "0g4sj509h45iq6g7b0pl88rbbn7c7s01774yjc6bl376x1xrl6a1";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   postPatch = ''
     # Mostly a cosmetic change

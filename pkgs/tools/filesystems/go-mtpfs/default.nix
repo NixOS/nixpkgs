@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgconfig, libusb1, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, lib, pkgconfig, libusb1, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "go-mtpfs-${version}";
@@ -16,5 +16,5 @@ buildGoPackage rec {
     sha256 = "1jcqp9n8fd9psfsnhfj6w97yp0zmyxplsig8pyp2gqzh4lnb5fqm";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 }

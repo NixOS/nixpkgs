@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, fetchgit, fetchhg }:
 
 buildGoPackage rec {
   name = "haproxy_exporter-${version}";
@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "1jkijdawmnj5yps0yaj47nyfmcah0krwmqsjvicm3sl0dhwmac4w";
   };
 
-  goDeps = ./haproxy-exporter_deps.json;
+  goDeps = import ./haproxy-exporter_deps.nix { inherit fetchgit fetchhg; };
 
   meta = with stdenv.lib; {
     description = "HAProxy Exporter for the Prometheus monitoring system";

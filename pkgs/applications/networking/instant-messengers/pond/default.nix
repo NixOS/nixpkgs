@@ -1,5 +1,5 @@
 { stdenv, lib, buildGoPackage, trousers, dclxvi, wrapGAppsHook, pkgconfig, gtk3, gtkspell3,
-  fetchgit, fetchhg, fetchbzr, fetchsvn }:
+  fetchgit }:
 
 let
   isx86_64 = stdenv.lib.any (n: n == stdenv.system) stdenv.lib.platforms.x86_64;
@@ -18,7 +18,7 @@ buildGoPackage rec {
     sha256 = "1dmgbg4ak3jkbgmxh0lr4hga1nl623mh7pvsgby1rxl4ivbzwkh4";
   };
 
-  goDeps = ./deps.json;
+  goDeps = import ./deps.nix { inherit fetchgit; };
 
   buildInputs = [ trousers pkgconfig gtk3 gtkspell3 ]
     ++ stdenv.lib.optional isx86_64 dclxvi
