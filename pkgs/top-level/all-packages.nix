@@ -3501,7 +3501,9 @@ in
 
   slsnif = callPackage ../tools/misc/slsnif { };
 
-  smartmontools = callPackage ../tools/system/smartmontools { };
+  smartmontools = callPackage ../tools/system/smartmontools {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   smbldaptools = callPackage ../tools/networking/smbldaptools {
     inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
