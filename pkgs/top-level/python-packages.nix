@@ -17555,7 +17555,21 @@ in modules // {
     };
   };
 
+  pox = buildPythonPackage rec {
+    name = "pox-${version}";
+    version = "0.2.2";
 
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pox/${name}.tgz";
+      sha256 = "22e97ac6d2918c754e65a9581dbe02e9d00ae4a54ca48d05118f87c1ea92aa19";
+    };
+
+    meta = {
+      description = "Utilities for filesystem exploration and automated builds";
+      license = licenses.bsd3;
+      homepage = http://www.cacr.caltech.edu/~mmckerns/pox.htm;
+    };
+  };
 
   praw = buildPythonPackage rec {
     name = "praw-3.5.0";
