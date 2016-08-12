@@ -1227,11 +1227,26 @@ in
     gssSupport = true;
   };
 
+  curlFullGnuTLS = lowPrio (self.curlFull.override {
+    sslSupport = false;
+    openssl = null;
+    gnutlsSupport = true;
+    gnutls = gnutls;
+  });
+
+  curlGnuTLS = lowPrio (self.curl.override {
+    sslSupport = false;
+    openssl = null;
+    gnutlsSupport = true;
+    gnutls = gnutls;
+  });
+
   curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
     http2Support = !stdenv.isDarwin;
     zlibSupport = true;
     sslSupport = zlibSupport;
+    gnutls = null;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
 

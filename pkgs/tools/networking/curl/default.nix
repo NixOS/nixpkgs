@@ -4,6 +4,7 @@
 , ldapSupport ? false, openldap ? null
 , zlibSupport ? false, zlib ? null
 , sslSupport ? false, openssl ? null
+, gnutlsSupport ? false, gnutls ? null
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
@@ -14,6 +15,8 @@ assert idnSupport -> libidn != null;
 assert ldapSupport -> openldap != null;
 assert zlibSupport -> zlib != null;
 assert sslSupport -> openssl != null;
+assert gnutlsSupport -> !sslSupport;
+assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
@@ -40,6 +43,7 @@ stdenv.mkDerivation rec {
     optional gssSupport gss ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
+    optional gnutlsSupport gnutls ++
     optional scpSupport libssh2;
 
   # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
@@ -52,6 +56,7 @@ stdenv.mkDerivation rec {
       "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
       "--disable-manual"
       ( if sslSupport then "--with-ssl=${openssl.dev}" else "--without-ssl" )
+      ( if gnutlsSupport then "--with-gnutls=${gnutls.dev}" else "--without-gnutls" )
       ( if scpSupport then "--with-libssh2=${libssh2.dev}" else "--without-libssh2" )
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
@@ -66,6 +71,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
     sed '/^dependency_libs/s|${libssh2.dev}|${libssh2.out}|' -i "$out"/lib/*.la
+  '' + stdenv.lib.optionalString gnutlsSupport ''
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
+    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
   '';
 
   crossAttrs = {
@@ -73,6 +82,7 @@ stdenv.mkDerivation rec {
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = [
         ( if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl" )
+        ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
         "--with-random /dev/urandom"
       ];
   };
