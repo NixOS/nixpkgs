@@ -11232,6 +11232,8 @@ in
 
   go-bindata = callPackage ../development/tools/go-bindata { };
 
+  go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
+
   gocode = callPackage ../development/tools/gocode { };
 
   kgocode = callPackage ../applications/misc/kgocode {
