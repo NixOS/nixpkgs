@@ -6192,9 +6192,12 @@ in
     wxGTK = wxGTK30;
   };
 
-  buildbot = callPackage ../development/tools/build-managers/buildbot {
-    inherit (pythonPackages) twisted jinja2 sqlalchemy_migrate_0_7;
+  buildbot8 = callPackage ../development/tools/build-managers/buildbot8 {
+    inherit (pythonPackages) twisted jinja2;
     dateutil = pythonPackages.dateutil_1_5;
+    sqlalchemy = pythonPackages.sqlalchemy_bb8;
+    sqlalchemy_migrate = pythonPackages.sqlalchemy_migrate_bb8;
+    pysqlite2 = pythonPackages.pysqlite;
   };
 
   buildbot-slave = callPackage ../development/tools/build-managers/buildbot-slave {
