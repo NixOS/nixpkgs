@@ -15,6 +15,8 @@ import ./generic.nix (args // rec {
     sha256 = "0rbvgz89j5wk781y201qdxy2kz4gmlamb72wdbxj8mxv92x56lh3";
   };
 
+  kernelPatches = args.kernelPatches;
+
   extraConfig = ''
     IPV6 y
     MPTCP y
