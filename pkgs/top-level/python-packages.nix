@@ -17571,6 +17571,24 @@ in modules // {
     };
   };
 
+  ppft = buildPythonPackage rec {
+    name = "ppft-${version}";
+    version = "1.6.4.6";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/ppft/${name}.tgz";
+      sha256 = "6f99c861822884cb00badbd5f364ee32b90a157084a6768040793988c6b92bff";
+    };
+
+    propagatedBuildInputs = with self; [ six ];
+
+    meta = {
+      description = "Distributed and parallel python";
+      homepage = https://github.com/uqfoundation;
+      license = licenses.bsd3;
+    };
+  };
+
   praw = buildPythonPackage rec {
     name = "praw-3.5.0";
 
