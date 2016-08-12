@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, perl, icu, zlib, gmp, readline }:
+{ stdenv, fetchurl, perl, icu, zlib, gmp, readline
+, CoreServices, ApplicationServices }:
 
 stdenv.mkDerivation rec {
   name = "rakudo-star-${version}";
@@ -9,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0czx7w1chf108mpyps7k7nqq8cbsy1rbb87ajms9xj65l4ywg8ka";
   };
 
-  buildInputs = [ icu zlib gmp readline perl ];
+  buildInputs = [ icu zlib gmp readline perl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ];
   configureScript = "perl ./Configure.pl";
   configureFlags =
     [ "--backends=moar"
