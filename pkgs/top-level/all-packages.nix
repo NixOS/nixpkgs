@@ -2200,6 +2200,8 @@ in
 
   keybase-go = callPackage ../tools/security/keybase { };
 
+  kbfs = callPackage ../tools/security/kbfs { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
