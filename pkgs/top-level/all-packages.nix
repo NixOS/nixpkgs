@@ -12496,7 +12496,9 @@ in
 
   cbc = callPackage ../applications/science/math/cbc { };
 
-  cddiscid = callPackage ../applications/audio/cd-discid { };
+  cddiscid = callPackage ../applications/audio/cd-discid {
+    inherit (darwin) IOKit;
+  };
 
   cdparanoia = self.cdparanoiaIII;
 
