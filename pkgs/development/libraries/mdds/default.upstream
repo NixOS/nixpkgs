@@ -1,6 +1,6 @@
 url https://gitlab.com/mdds/mdds
-version_link '[.]tar[.][a-z0-9]+$'
-version '.*_([0-9.]+)[.]tar[.].*' '\1'
+version_link 'mdds-.*[.]tar[.][a-z0-9]+$'
+version '.*-([0-9.]+)[.]tar[.].*' '\1'
 
 do_overwrite(){
   ensure_hash

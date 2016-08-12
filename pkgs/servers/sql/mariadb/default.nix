@@ -8,10 +8,10 @@ with stdenv.lib;
 
 let # in mariadb # spans the whole file
 
-mariadb = {
-  inherit client  # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
-    server;       # currently a full build, including everything in `client` again
-  lib = client;   # compat. with the old mariadb split
+mariadb = everything // {
+  inherit client; # libmysqlclient.so in .out, necessary headers in .dev and utils in .bin
+  server = everything; # a full single-output build, including everything in `client` again
+  lib = client; # compat. with the old mariadb split
 };
 
 
@@ -29,13 +29,12 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
+    ncurses openssl zlib pcre jemalloc
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   cmakeFlags = [
@@ -104,7 +103,7 @@ client = stdenv.mkDerivation (common // {
 });
 
 
-server = stdenv.mkDerivation (common // {
+everything = stdenv.mkDerivation (common // {
   name = "mariadb-${common.version}";
 
   nativeBuildInputs = common.nativeBuildInputs ++ [ bison ];

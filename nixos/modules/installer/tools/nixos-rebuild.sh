@@ -214,9 +214,9 @@ fi
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [ -z "$_NIXOS_REBUILD_REEXEC" -a -n "$canRun" ]; then
-    if p=$(nix-instantiate --find-file nixpkgs/nixos/modules/installer/tools/nixos-rebuild.sh "${extraBuildFlags[@]}"); then
+    if p=$(nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
         export _NIXOS_REBUILD_REEXEC=1
-        exec $SHELL -e $p "${origArgs[@]}"
+        exec $p/bin/nixos-rebuild "${origArgs[@]}"
         exit 1
     fi
 fi
@@ -311,10 +311,9 @@ fi
 # nixos-version shows something useful).
 if [ -n "$canRun" ]; then
     if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        revision=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-git-revision "${extraBuildFlags[@]}" || true)
-        if [ -n "$revision" ]; then
-            echo -n ".git.$revision" > "$nixpkgs/.version-suffix" || true
-            echo -n "$revision"  > "$nixpkgs/.git-revision" || true
+        suffix=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
+        if [ -n "$suffix" ]; then
+            echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
     fi
 fi

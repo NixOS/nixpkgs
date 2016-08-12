@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp -rv doc/man $out/share/
+    mkdir -p $out/{bin,share/man/man1}
+    cp -rv doc/man/*.1 $out/share/man/man1
     cp src/timew $out/bin/
   '';
 

@@ -20,13 +20,18 @@
   brief = true;
 }
 {
-  name = "boost_1_59_0.tar.bz2";
-  md5 = "6aa9a5c6a4ca1016edd0ed1178e3cb87";
+  name = "boost_1_60_0.tar.bz2";
+  md5 = "65a840e1a0b13a558ff19eeb2c4f0cbe";
   brief = true;
 }
 {
-  name = "bsh-2.0b5-src.zip";
-  md5 = "ec1941a74d3ef513c4ce57a9092b74e1";
+  name = "breakpad.zip";
+  md5 = "415ce291aa6f2ee1d5db7b62bf62ade8";
+  brief = true;
+}
+{
+  name = "bsh-2.0b6-src.zip";
+  md5 = "beeca87be45ec87d241ddd0e1bad80c1";
   brief = false;
 }
 {
@@ -50,9 +55,9 @@
   brief = false;
 }
 {
-  name = "libcmis-0.5.0.tar.gz";
-  md5 = "5821b806a98e6c38370970e682ce76e8";
-  brief = false;
+  name = "libcmis-0.5.1.tar.gz";
+  md5 = "3270154f0f40d86fce849b161f914101";
+  brief = true;
 }
 {
   name = "CoinMP-1.7.6.tgz";
@@ -95,13 +100,13 @@
   brief = true;
 }
 {
-  name = "expat-2.1.0.tar.gz";
-  md5 = "dd7dab7a5fea97d2a6a43f511449b7cd";
-  brief = false;
+  name = "expat-2.2.0.tar.bz2";
+  md5 = "2f47841c829facb346eb6e3fab5212e2";
+  brief = true;
 }
 {
-  name = "Firebird-2.5.4.26856-0.tar.bz2";
-  md5 = "7a17ec9889424b98baa29e001a054434";
+  name = "Firebird-2.5.5.26952-0.tar.bz2";
+  md5 = "b0b5293991fcf07347b38431c80be1d4";
   brief = true;
 }
 {
@@ -190,13 +195,13 @@
   brief = false;
 }
 {
-  name = "graphite-minimal-1.3.6.tgz";
-  md5 = "17df8301bcc459e83f8a8f3aca6183b2";
+  name = "graphite2-minimal-1.3.8.tgz";
+  md5 = "4311dd9ace498b57c85f611e0670df64";
   brief = false;
 }
 {
-  name = "harfbuzz-0.9.40.tar.bz2";
-  md5 = "0e27e531f4c4acff601ebff0957755c2";
+  name = "harfbuzz-1.2.6.tar.bz2";
+  md5 = "9f4b6831c86135faef011e991f59f77f";
   brief = true;
 }
 {
@@ -205,8 +210,8 @@
   brief = false;
 }
 {
-  name = "hunspell-1.3.3.tar.gz";
-  md5 = "4967da60b23413604c9e563beacc63b4";
+  name = "hunspell-1.4.1.tar.gz";
+  md5 = "33d370f7fe5a030985e445a5672b2067";
   brief = false;
 }
 {
@@ -215,8 +220,8 @@
   brief = false;
 }
 {
-  name = "icu4c-56_1-src.tgz";
-  md5 = "c4a2d71ff56aec5ebfab2a3f059be99d";
+  name = "icu4c-57_1-src.tgz";
+  md5 = "976734806026a4ef8bdd17937c8898b9";
   brief = false;
 }
 {
@@ -326,18 +331,18 @@
   brief = false;
 }
 {
-  name = "xmlsec1-1.2.14.tar.gz";
-  md5 = "1f24ab1d39f4a51faf22244c94a6203f";
+  name = "xmlsec1-1.2.20.tar.gz";
+  md5 = "ce12af00283eb90d9281956524250d6e";
   brief = false;
 }
 {
-  name = "libxml2-2.9.3.tar.gz";
-  md5 = "daece17e045f1c107610e137ab50c179";
+  name = "libxml2-2.9.4.tar.gz";
+  md5 = "ae249165c173b1ff386ee8ad676815f5";
   brief = false;
 }
 {
-  name = "libxslt-1.1.28.tar.gz";
-  md5 = "9667bf6f9310b957254fdcf6596600b7";
+  name = "libxslt-1.1.29.tar.gz";
+  md5 = "a129d3c44c022de3b9dcf6d6f288d72e";
   brief = false;
 }
 {
@@ -351,8 +356,13 @@
   brief = false;
 }
 {
-  name = "mdds_0.12.1.tar.bz2";
-  md5 = "ef2560ed5416652a7fe195305b14cebe";
+  name = "mdds-1.2.0.tar.bz2";
+  md5 = "9f3383fb7bae825eab69f3a6ec1d74b2";
+  brief = true;
+}
+{
+  name = "mDNSResponder-576.30.4.tar.gz";
+  md5 = "940057ac8b513b00e8e9ca12ef796762";
   brief = true;
 }
 {
@@ -401,13 +411,13 @@
   brief = false;
 }
 {
-  name = "openssl-1.0.2g.tar.gz";
-  md5 = "f3c710c045cdee5fd114feb69feba7aa";
+  name = "openssl-1.0.2h.tar.gz";
+  md5 = "9392e65072ce4b614c1392eefc1f23d0";
   brief = true;
 }
 {
-  name = "liborcus-0.9.2.tar.gz";
-  md5 = "e6efcbe50a5fd4d50d513c9a7a4139b0";
+  name = "liborcus-0.11.2.tar.gz";
+  md5 = "205badaee72adf99422add8c4c49d669";
   brief = true;
 }
 {
@@ -416,8 +426,8 @@
   brief = true;
 }
 {
-  name = "libpagemaker-0.0.2.tar.bz2";
-  md5 = "795cc7a59ace4db2b12586971d668671";
+  name = "libpagemaker-0.0.3.tar.bz2";
+  md5 = "5c4985a68be0b79d3f809da5e12b143c";
   brief = true;
 }
 {
@@ -491,11 +501,6 @@
   brief = false;
 }
 {
-  name = "vigra1.6.0.tar.gz";
-  md5 = "d62650a6f908e85643e557a236ea989c";
-  brief = false;
-}
-{
   name = "libvisio-0.1.5.tar.bz2";
   md5 = "cbee198a78b842b2087f32d33c522818";
   brief = true;
@@ -511,8 +516,8 @@
   brief = true;
 }
 {
-  name = "libwps-0.4.2.tar.bz2";
-  md5 = "8a6c55542ce80203dd6d3b1cba99d4e5";
+  name = "libwps-0.4.3.tar.bz2";
+  md5 = "027fb17fb9e43553aa6624dc18f830ac";
   brief = true;
 }
 {

@@ -67,6 +67,7 @@ let
     kscreenlocker = callPackage ./kscreenlocker.nix {};
     ksshaskpass = callPackage ./ksshaskpass.nix {};
     ksysguard = callPackage ./ksysguard.nix {};
+    kwallet-pam = callPackage ./kwallet-pam.nix {};
     kwayland-integration = callPackage ./kwayland-integration.nix {};
     kwin = callPackage ./kwin {};
     kwrited = callPackage ./kwrited.nix {};

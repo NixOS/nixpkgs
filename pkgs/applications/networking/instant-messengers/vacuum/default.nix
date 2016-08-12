@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  # hack: needed to fix build issues in
+  # http://hydra.nixos.org/build/38322959/nixlog/1
+  # should be an upstream issue but it's easy to fix
+  NIX_LDFLAGS = "-lz";
+
   nativeBuildInputs = [ qmake4Hook ];
 
   preConfigure = ''

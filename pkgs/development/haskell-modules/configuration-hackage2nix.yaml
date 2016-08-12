@@ -107,6 +107,7 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+    - lambdabot
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
@@ -2212,7 +2213,6 @@ dont-distribute-packages:
   hinotify-bytestring:                          [ x86_64-darwin ]
   hinstaller:                                   [ i686-linux, x86_64-linux ]
   hint-server:                                  [ i686-linux, x86_64-darwin, x86_64-linux ]
-  hint:                                         [ i686-linux, x86_64-darwin, x86_64-linux ]
   hinvaders:                                    [ i686-linux, x86_64-darwin, x86_64-linux ]
   hinze-streams:                                [ i686-linux, x86_64-darwin, x86_64-linux ]
   hip:                                          [ i686-linux, x86_64-darwin, x86_64-linux ]
@@ -2797,15 +2797,6 @@ dont-distribute-packages:
   lambda-devs:                                  [ i686-linux, x86_64-darwin, x86_64-linux ]
   lambda-toolbox:                               [ i686-linux, x86_64-linux ]
   lambdaBase:                                   [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-core:                               [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-haskell-plugins:                    [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-irc-plugins:                        [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-misc-plugins:                       [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-novelty-plugins:                    [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-reference-plugins:                  [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-social-plugins:                     [ i686-linux, x86_64-darwin, x86_64-linux ]
-  lambdabot-utils:                              [ i686-linux, x86_64-linux ]
-  lambdabot:                                    [ i686-linux, x86_64-darwin, x86_64-linux ]
   LambdaCalculator:                             [ i686-linux, x86_64-linux ]
   lambdacat:                                    [ i686-linux, x86_64-linux ]
   lambdacms-core:                               [ i686-linux, x86_64-linux ]

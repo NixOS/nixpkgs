@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
 
+  enableParallelBuilding = true;
+
   propagatedUserEnvPkgs = [ qtscriptgenerator ];
 
   meta = {

@@ -180,6 +180,7 @@
 , "webdrvr"
 , "webpack"
 , "winston"
+, "wscat"
 , "wu"
 , "x509"
 , { "guifi-earth": "https://github.com/jmendeth/guifi-earth/tarball/f3ee96835fd4fb0e3e12fadbd2cb782770d64854 " }
