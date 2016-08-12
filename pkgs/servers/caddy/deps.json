@@ -2,6 +2,10 @@
   {
     "include": "../../libs.json",
     "packages": [
+      "github.com/lucas-clemente/quic-go",
+      "github.com/lucas-clemente/quic-go-certificates",
+      "github.com/lucas-clemente/aes12",
+      "github.com/lucas-clemente/fnv128a",
       "github.com/BurntSushi/toml",
       "github.com/flynn/go-shlex",
       "github.com/hashicorp/go-syslog",
