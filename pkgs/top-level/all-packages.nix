@@ -3977,6 +3977,8 @@ in
 
   uemacs = callPackage ../applications/editors/uemacs { };
 
+  uftp = callPackage ../servers/uftp { };
+
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
