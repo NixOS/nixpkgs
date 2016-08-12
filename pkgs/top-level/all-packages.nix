@@ -7298,7 +7298,9 @@ in
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
-  gegl = callPackage ../development/libraries/gegl { };
+  gegl = callPackage ../development/libraries/gegl {
+    inherit (darwin.apple_sdk.frameworks) OpenGL;
+  };
 
   gegl_0_3 = callPackage ../development/libraries/gegl/3.0.nix { };
 
