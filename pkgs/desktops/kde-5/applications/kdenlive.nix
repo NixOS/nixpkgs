@@ -1,4 +1,5 @@
 { kdeApp
+, kdeWrapper
 , lib
 , extra-cmake-modules
 , kdoctools
@@ -27,9 +28,11 @@
 , kfilemetadata
 , ffmpeg
 , phonon-backend-vlc
+, qtquickcontrols
 }:
 
-kdeApp {
+let
+unwrapped = kdeApp {
   name = "kdenlive";
   nativeBuildInputs = [
     extra-cmake-modules
@@ -63,13 +66,16 @@ kdeApp {
     kfilemetadata
     plasma-framework
     phonon-backend-vlc
+    qtquickcontrols
   ];
-  postInstall = ''
-    wrapQtProgram "$out/bin/kdenlive" \
-        --prefix PATH : "${kinit}/bin"
-  '';
   enableParallelBuilding = true;
   meta = {
     license = with lib.licenses; [ gpl2Plus ];
   };
+};
+in
+kdeWrapper unwrapped
+{
+  targets = [ "bin/kdenlive" ];
+  paths = [ kinit ];
 }
