@@ -248,7 +248,7 @@ rec {
   /* Converts an ASCII string to upper-case.
 
      Example:
-       toLower "home"
+       toUpper "home"
        => "HOME"
   */
   toUpper = replaceChars lowerChars upperChars;
