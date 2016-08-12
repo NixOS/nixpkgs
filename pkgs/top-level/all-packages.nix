@@ -17028,6 +17028,8 @@ in
     libusb = libusb1;
   };
 
+  kyocera = callPackage ../misc/cups/drivers/kyocera { };
+
   cups_filters = callPackage ../misc/cups/filters.nix { };
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
