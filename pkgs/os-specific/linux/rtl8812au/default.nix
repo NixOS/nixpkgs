@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
+  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+
   patchPhase = ''
     substituteInPlace ./Makefile --replace /lib/modules/ "${kernel.dev}/lib/modules/"
     substituteInPlace ./Makefile --replace '$(shell uname -r)' "${kernel.modDirVersion}"
