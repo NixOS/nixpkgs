@@ -42,6 +42,8 @@ stdenv.mkDerivation {
 
   kernel = if libsOnly then null else kernel.dev;
 
+  hardeningDisable = [ "pic" "format" ];
+
   dontStrip = true;
 
   glPath      = makeLibraryPath [xorg.libXext xorg.libX11 xorg.libXrandr];
@@ -56,8 +58,6 @@ stdenv.mkDerivation {
   patches = if (!libsOnly) && (versionAtLeast kernel.dev.version "4.7") then [ ./365.35-kernel-4.7.patch ] else [];
 
   buildInputs = [ perl nukeReferences ];
-
-  hardeningDisable = [ "pic" "format" ];
 
   disallowedReferences = if libsOnly then [] else [ kernel.dev ];
 
