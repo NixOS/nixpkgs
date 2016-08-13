@@ -10123,11 +10123,11 @@ in modules // {
 
   flask_assets = buildPythonPackage rec {
     name = "Flask-Assets-${version}";
-    version = "0.10";
+    version = "0.11";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Assets/${name}.tar.gz";
-      sha256 = "1v6ika3ias21xzhg7kglki99nwfx1i33rdhnw9kdqbwxkpwbwkyl";
+      sha256 = "1vs59gygwhwqj37if8hiw6vd2rns09xkblaz4qkmpp6hpy3shrvf";
     };
 
     propagatedBuildInputs = with self; [ flask webassets flask_script nose ];
@@ -10136,7 +10136,6 @@ in modules // {
       homepage = http://github.com/miracle2k/flask-assets;
       description = "Asset management for Flask, to compress and merge CSS and Javascript files";
       license = licenses.bsd2;
-      platforms = platforms.all;
       maintainers = with maintainers; [ abbradar ];
     };
   };
