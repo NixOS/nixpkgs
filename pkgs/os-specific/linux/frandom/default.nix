@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "15rgyk4hfawqg7z1spk2xlk1nn6rcdls8gdhc70f91shrc9pvlls";
   };
 
+  hardeningDisable = [ "pic" ];
+
   preBuild = ''
     kernelVersion=${kernel.modDirVersion}
     substituteInPlace Makefile \
