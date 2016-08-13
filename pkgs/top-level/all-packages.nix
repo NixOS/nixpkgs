@@ -11280,8 +11280,6 @@ in
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
-    psmouse_alps = callPackage ../os-specific/linux/psmouse-alps { };
-
     seturgent = callPackage ../os-specific/linux/seturgent { };
 
     spl = callPackage ../os-specific/linux/spl {
