@@ -728,6 +728,8 @@ in
 
   datamash = callPackage ../tools/misc/datamash { };
 
+  datefudge = callPackage ../tools/system/datefudge { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   deis = callPackage ../development/tools/deis {};
@@ -1524,6 +1526,8 @@ in
 
     hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
+    unikey = callPackage ../tools/inputmethods/fcitx-engines/fcitx-unikey { };
+    
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
@@ -2196,6 +2200,8 @@ in
 
   keybase-go = callPackage ../tools/security/keybase { };
 
+  kbfs = callPackage ../tools/security/kbfs { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
@@ -2380,7 +2386,11 @@ in
 
   libevhtp = callPackage ../development/libraries/libevhtp { };
 
+  libircclient = callPackage ../development/libraries/libircclient { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
+
+  libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
@@ -3962,6 +3972,8 @@ in
   udunits = callPackage ../development/libraries/udunits { };
 
   uemacs = callPackage ../applications/editors/uemacs { };
+
+  uftp = callPackage ../servers/uftp { };
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
@@ -11030,7 +11042,10 @@ in
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11104,7 +11119,6 @@ in
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -15788,6 +15802,10 @@ in
 
   pong3d = callPackage ../games/pong3d { };
 
+  pokerth = callPackage ../games/pokerth { };
+
+  pokerth-server = with callPackage ../games/pokerth { }; server;
+
   prboom = callPackage ../games/prboom { };
 
   privateer = callPackage ../games/privateer { };
@@ -17279,6 +17297,8 @@ in
 
   sailsd = callPackage ../misc/sailsd { };
 
+  shc = callPackage ../tools/security/shc { };
+
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
@@ -17553,6 +17573,8 @@ in
   yabause = callPackage ../misc/emulators/yabause {
     qt = qt4;
   };
+
+  yadm = callPackage ../applications/version-management/yadm { };
 
   yafc = callPackage ../applications/networking/yafc { };
 

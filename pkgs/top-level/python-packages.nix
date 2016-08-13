@@ -7780,6 +7780,29 @@ in modules // {
     };
   };
 
+  pycallgraph = buildPythonPackage rec {
+    name = "pycallgraph-${version}";
+    version = "1.0.1";
+
+    src = pkgs.fetchurl {
+      url = mirror://pypi/p/pycallgraph/pycallgraph-1.0.1.tar.gz;
+      sha256 = "0w8yr43scnckqcv5nbyd2dq4kpv74ai856lsdsf8iniik07jn9mi";
+    };
+
+    buildInputs = with self; [ pytest ];
+
+    # Tests do not work due to this bug: https://github.com/gak/pycallgraph/issues/118
+    doCheck = false;
+
+    meta = {
+      homepage = http://pycallgraph.slowchop.com;
+      description = "Call graph visualizations for Python applications";
+      maintainers = with maintainers; [ auntie ];
+      license = licenses.gpl2;
+      platform = platforms.all;
+    };
+  };
+
   pycares = buildPythonPackage rec {
     name = "pycares-${version}";
     version = "1.0.0";
@@ -11749,12 +11772,12 @@ in modules // {
   };
 
   ipython = buildPythonPackage rec {
-    version = "5.0.0";
+    version = "5.1.0";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "7ec0737169c74056c7fc8298246db5478a2d6c90cfd19c3253222112357545df";
+      sha256 = "7ef4694e1345913182126b219aaa4a0047e191af414256da6772cf249571b961";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -14694,6 +14717,51 @@ in modules // {
       license = licenses.mit;
     };
   };
+
+  Nuitka = let
+    # scons is needed but using it requires Python 2.7
+    # Therefore we create a separate env for it.
+    scons = pkgs.python27.withPackages(ps: [ pkgs.scons ]);
+  in buildPythonPackage rec {
+    version = "0.5.21.3";
+    name = "Nuitka-${version}";
+
+    # Latest version is not yet on PyPi
+    src = pkgs.fetchurl {
+      url = "https://github.com/kayhayen/Nuitka/archive/${version}.tar.gz";
+      sha256 = "1i2069hxb94q9kkwcbky59fin8hk1vlj90lwgmrdhn1srvig1cq3";
+    };
+
+    buildInputs = with self; stdenv.lib.optionals doCheck [ vmprof pyqt4 ];
+
+    propagatedBuildInputs = [ scons ];
+
+    postPatch = ''
+      patchShebangs tests/run-tests
+    '' + stdenv.lib.optionalString stdenv.isLinux ''
+      substituteInPlace nuitka/plugins/standard/ImplicitImports.py --replace 'locateDLL("uuid")' '"${pkgs.utillinux.out}/lib/libuuid.so"'
+    '';
+
+    # We do not want any wrappers here.
+    postFixup = '''';
+
+    checkPhase = ''
+      tests/run-tests
+    '';
+
+    # Problem with a subprocess (parts)
+    doCheck = false;
+
+    # Requires CPython
+    disabled = isPyPy;
+
+    meta = {
+      description = "Python compiler with full language support and CPython compatibility";
+      license = licenses.asl20;
+      homepage = http://nuitka.net/;
+    };
+  };
+
 
   buildNumpyPackage = callPackage ../development/python-modules/numpy.nix {
     gfortran = pkgs.gfortran;
@@ -24214,11 +24282,11 @@ in modules // {
   };
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-13.1.2";
+    name = "virtualenv-15.0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/virtualenv/${name}.tar.gz";
-      sha256 = "1p732accxwqfjbdna39k8w8lp9gyw91vr4kzkhm8mgfxikqqxg5a";
+      sha256 = "6d9c760d3fc5fa0894b0f99b9de82a4647e1164f0b700a7f99055034bf548b1d";
     };
 
     pythonPath = [ self.recursivePthLoader ];
@@ -24323,6 +24391,29 @@ in modules // {
       license = licenses.mit;
     };
   });
+
+  vmprof = buildPythonPackage rec {
+    version = "0.3.3";
+    name = "vmprof-${version}";
+
+    # Url using old scheme doesn't seem to work
+    src = pkgs.fetchurl {
+      url = "https://files.pythonhosted.org/packages/c3/f3/f039ca77e727c5c2d3e61967a2a5c9ecc0ef6ca235012fd5559febb77cd0/vmprof-0.3.3.tar.gz";
+      sha256 = "991bc2f1dc824c63e9b399f9e8606deded92a52378d0e449f258807d7556b039";
+    };
+
+    propagatedBuildInputs = with self; [ requests2 six];
+
+    # No tests included
+    doCheck = false;
+
+    meta = {
+      description = "A vmprof client";
+      license = licenses.mit;
+      homepage = https://vmprof.readthedocs.org/;
+    };
+
+  };
 
   vultr = buildPythonPackage rec {
     version = "0.1.2";
