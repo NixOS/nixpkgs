@@ -2,12 +2,12 @@
 
 let
   # Xen 4.5.0
-  xenConfig = {
-    name = "xen-4.5.0";
+  xenConfig = rec {
     version = "4.5.0";
+    name = "xen-${version}";
 
     src = fetchurl {
-      url = "http://bits.xensource.com/oss-xen/release/4.5.0/xen-4.5.0.tar.gz";
+      url = "http://bits.xensource.com/oss-xen/release/${version}/${name}.tar.gz";
       sha256 = "0fvg00d596gh6cfm51xr8kj2mghcyivrf6np3dafnbldnbi41nsv";
     };
 
@@ -77,4 +77,3 @@ let
   };
 
 in callPackage ./generic.nix (args // { xenConfig=xenConfig; })
-
