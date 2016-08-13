@@ -24663,21 +24663,20 @@ in modules // {
 
 
   werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.10.4";
+    name = "Werkzeug-0.11.10";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/Werkzeug/${name}.tar.gz";
-      sha256 = "9d2771e4c89be127bc4bac056ab7ceaf0e0064c723d6b6e195739c3af4fd5c1d";
+      sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
     };
 
     propagatedBuildInputs = with self; [ itsdangerous ];
-
-    doCheck = false;            # tests fail, not sure why
+    nativeBuildInputs = with self; [ pytest requests ];
 
     meta = {
       homepage = http://werkzeug.pocoo.org/;
       description = "A WSGI utility library for Python";
-      license = "BSD";
+      license = licenses.bsd3;
     };
   };
 
