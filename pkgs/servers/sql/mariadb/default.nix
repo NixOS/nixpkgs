@@ -32,8 +32,8 @@ common = rec { # attributes common to both builds
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc
-  ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
+    ncurses openssl zlib pcre
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ jemalloc libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
   cmakeFlags = [
@@ -51,6 +51,7 @@ common = rec { # attributes common to both builds
     "-DWITH_PCRE=system"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ++ optional (!stdenv.isLinux) "-DWITH_JEMALLOC=no" # bad build at least on Darwin
     ;
 
   preConfigure = ''
