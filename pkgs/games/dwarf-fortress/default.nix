@@ -14,7 +14,7 @@ let
       };
     };
 
-    dwarf-fortress-unfuck = callPackage_i686 ./unfuck.nix { };
+    dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
 
     dwarf-fortress = callPackage ./wrapper {
       themes = {
