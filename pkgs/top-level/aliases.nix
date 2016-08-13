@@ -111,4 +111,5 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
+  m3d-linux = m33-linux; # added 2016-08-13
 }

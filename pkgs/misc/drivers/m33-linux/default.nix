@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "M3D-Linux-2016-01-20";
+  name = "M33-Linux-2016-06-23";
 
   src = fetchFromGitHub {
     owner = "donovan6000";
     repo = "M3D-Linux";
-    rev = "d0bbb0379c52a88af55740a937edc92af162cdf6";
-    sha256 = "0fwzb9mf04bw5wxabh3js7nir60kfq8iz7kcigw6c233aadwg03i";
+    rev = "5c1b90c13d260771dac970b49fdc9f840fee5f4a";
+    sha256 = "1bvbclkyfcv23vxb4s1zssvygklks1nhp4iwi4v90c1fvyz0356f";
   };
 
   installPhase = ''
-    install -Dm755 m3d-linux $out/bin/m3d-linux
-    install -Dm755 90-m3d-local.rules $out/lib/udev/rules.d/90-m3d-local.rules
+    install -Dm755 m33-linux $out/bin/m33-linux
+    install -Dm755 90-micro-3d-local.rules $out/lib/udev/rules.d/90-micro-3d-local.rules
   '';
 
   meta = with stdenv.lib; {

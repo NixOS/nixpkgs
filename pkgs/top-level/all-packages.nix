@@ -17229,7 +17229,7 @@ in
 
   lkproof = callPackage ../tools/typesetting/tex/lkproof { };
 
-  m3d-linux = callPackage ../misc/drivers/m3d-linux { };
+  m33-linux = callPackage ../misc/drivers/m33-linux { };
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
