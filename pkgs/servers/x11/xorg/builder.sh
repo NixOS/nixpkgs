@@ -47,6 +47,6 @@ fi
 enableParallelBuilding=1
 
 # breaks module loading
-hardeningDisable="bindnow"
+hardeningDisable=("bindnow" "relro")
 
 genericBuild

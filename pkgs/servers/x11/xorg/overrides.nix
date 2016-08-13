@@ -430,7 +430,7 @@ in
                                         # and there are no fonts in this package anyway
           "--enable-glamor"
         ];
-        hardeningDisable = [ "relro" ];
+        hardeningDisable = [ "relro" "bindnow" ];
         postInstall = ''
           rm -fr $out/share/X11/xkb/compiled
           ln -s /var/tmp $out/share/X11/xkb/compiled
