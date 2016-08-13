@@ -5,7 +5,7 @@ let
   callPackage_i686 = pkgsi686Linux.newScope self;
 
   self = rec {
-    dwarf-fortress-original = callPackage_i686 ./game.nix { };
+    dwarf-fortress-original = callPackage ./game.nix { };
 
     dfhack = callPackage_i686 ./dfhack {
       inherit (pkgsi686Linux.perlPackages) XMLLibXML XMLLibXSLT;
