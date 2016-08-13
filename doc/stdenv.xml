@@ -1425,7 +1425,7 @@ bin/blib.a(bios_console.o): In function `bios_handle_cup':
     </para>
 
     <para>Addtionally, some warnings are enabled which might trigger build
-    failures if compiler warnings are treated as errors in the packsge build.
+    failures if compiler warnings are treated as errors in the package build.
     In this case, set <option>NIX_CFLAGS_COMPILE</option> to
     <option>-Wno-error=warning-type</option>.</para>
 
