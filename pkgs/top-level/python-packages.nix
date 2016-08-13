@@ -11772,12 +11772,12 @@ in modules // {
   };
 
   ipython = buildPythonPackage rec {
-    version = "5.0.0";
+    version = "5.1.0";
     name = "ipython-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipython/${name}.tar.gz";
-      sha256 = "7ec0737169c74056c7fc8298246db5478a2d6c90cfd19c3253222112357545df";
+      sha256 = "7ef4694e1345913182126b219aaa4a0047e191af414256da6772cf249571b961";
     };
 
     prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
