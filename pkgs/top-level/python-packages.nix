@@ -14849,6 +14849,39 @@ in modules // {
     };
   };
 
+  dynd = buildPythonPackage rec {
+    version = "0.7.2";
+    name = "dynd-${version}";
+    disabled = isPyPy;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "libdynd";
+      repo = "dynd-python";
+      rev = "v${version}";
+      sha256 = "19igd6ibf9araqhq9bxmzbzdz05vp089zxvddkiik3b5gb7l17nh";
+    };
+
+    # setup.py invokes git on build but we're fetching a tarball, so
+    # can't retrieve git version. We hardcode:
+    preConfigure = ''
+      substituteInPlace setup.py --replace "ver = check_output(['git', 'describe', '--dirty'," "ver = '${version}'"
+      substituteInPlace setup.py --replace "'--always', '--match', 'v*']).decode('ascii').strip('\n')" ""
+    '';
+
+    # Python 3 works but has a broken import test that I couldn't
+    # figure out.
+    doCheck = !isPy3k;
+    buildInputs = with pkgs; [ cmake libdynd.dev self.cython ];
+    propagatedBuildInputs = with self; [ numpy pkgs.libdynd ];
+
+    meta = {
+      homepage = http://libdynd.org;
+      license = licenses.bsd2;
+      description = "Python exposure of dynd";
+      maintainers = with maintainers; [ teh ];
+    };
+  };
+
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
     name = "livestreamer-${version}";
