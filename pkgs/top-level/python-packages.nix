@@ -4337,12 +4337,12 @@ in modules // {
 
 
   pkginfo = buildPythonPackage rec {
-    version = "1.2.1";
+    version = "1.3.2";
     name = "pkginfo-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pkginfo/${name}.tar.gz";
-      sha256 = "0g0g6avplfqw1adzqybbrh1a2z0kfjl8qn3annkrc7w3ibz6sgxd";
+      sha256 = "0qg4sq3m0pxvjahc3sncwhw42z5rfw22k0ybskmdqkl2agykay7q";
     };
 
     doCheck = false; # I don't know why, but with doCheck = true it fails.
