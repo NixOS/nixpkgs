@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   preConfigure = ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     export INSTALL_MOD_PATH="$out"
