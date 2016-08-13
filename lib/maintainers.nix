@@ -240,7 +240,7 @@
   mathnerd314 = "Mathnerd314 <mathnerd314.gph+hs@gmail.com>";
   matthiasbeyer = "Matthias Beyer <mail@beyermatthias.de>";
   maurer = "Matthew Maurer <matthew.r.maurer+nix@gmail.com>";
-  mbakke = "Marius Bakke <ymse@tuta.io>";
+  mbakke = "Marius Bakke <mbakke@fastmail.com>";
   matthewbauer = "Matthew Bauer <mjbauer95@gmail.com>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
