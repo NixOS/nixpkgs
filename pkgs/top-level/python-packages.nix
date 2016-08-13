@@ -26614,11 +26614,11 @@ in modules // {
   };
 
   flaskbabel = buildPythonPackage rec {
-    name = "Flask-Babel-0.9";
+    name = "Flask-Babel-0.11.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Babel/${name}.tar.gz";
-      sha256 = "0k7vk4k54y55ma0nx2k5s0phfqbriwslhy5shh3b0d046q7ibzaa";
+      sha256 = "16b80cipdba9xj3jlaiaq6wgrgpjb70w3j01jjy9hbp4k71kd6yj";
     };
 
     propagatedBuildInputs = with self; [ flask jinja2 speaklater Babel pytz ];
