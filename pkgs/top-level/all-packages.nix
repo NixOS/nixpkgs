@@ -4393,6 +4393,7 @@ in
     else {}
   ) // {
     ocamlPackages = ocamlPackages_4_02;
+    coq = coq_8_5;
   });
 
   cryptol = self.haskell.packages.lts.cryptol;
