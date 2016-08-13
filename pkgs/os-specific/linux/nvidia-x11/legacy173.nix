@@ -26,6 +26,8 @@ stdenv.mkDerivation {
 
   kernel = kernel.dev;
 
+  hardeningDisable = [ "pic" "format" ];
+
   inherit versionNumber;
 
   dontStrip = true;
