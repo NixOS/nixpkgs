@@ -2146,6 +2146,8 @@ in
 
   jaaa = callPackage ../applications/audio/jaaa { };
 
+  jade = callPackage ../tools/text/sgml/jade { };
+
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
 
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
@@ -3892,6 +3894,13 @@ in
     openssl = null;
     gnutls = gnutls;
   });
+
+  ding-libs = callPackage ../tools/misc/ding-libs { };
+
+  sssd = callPackage ../os-specific/linux/sssd {
+    inherit (perlPackages) Po4a;
+    inherit (python27Packages) ldap;
+  };
 
   vtun = callPackage ../tools/networking/vtun { };
 

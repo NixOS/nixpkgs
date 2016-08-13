@@ -9,6 +9,7 @@ let
   inherit (config.services.avahi) nssmdns;
   inherit (config.services.samba) nsswins;
   ldap = config.users.ldap.enable;
+  sssd = config.services.sssd.enable;
 
 in
 
@@ -41,14 +42,15 @@ in
     # should define an option used by this module.
     environment.etc."nsswitch.conf".text =
       ''
-        passwd:    files ${optionalString ldap "ldap"}
-        group:     files ${optionalString ldap "ldap"}
-        shadow:    files ${optionalString ldap "ldap"}
+        passwd:    files ${optionalString ldap "ldap"} ${optionalString sssd "sss"}
+        group:     files ${optionalString ldap "ldap"} ${optionalString sssd "sss"}
+        shadow:    files ${optionalString ldap "ldap"} ${optionalString sssd "sss"}
         hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} ${optionalString nsswins "wins"} myhostname mymachines
         networks:  files dns
         ethers:    files
         services:  files
         protocols: files
+        automount: files ${optionalString ldap "ldap"} ${optionalString sssd "sss"}
       '';
 
     # Systemd provides nss-myhostname to ensure that our hostname
