@@ -20323,14 +20323,14 @@ in modules // {
 
   requests2 = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.9.1";
+    version = "2.11.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "0zsqrzlybf25xscgi7ja4s48y2abf9wvjkn47wh984qgs1fq2xy5";
+      sha256 = "11d3vrbiqrz30qbplv80y72y9i47hihs35p5n04fl4ggjcz0bzxj";
     };
 
-    buildInputs = [ self.pytest ];
+    nativeBuildInputs = [ self.pytest ];
     # sadly, tests require networking
     doCheck = false;
 
