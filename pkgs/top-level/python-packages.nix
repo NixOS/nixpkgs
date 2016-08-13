@@ -18173,11 +18173,11 @@ in modules // {
 
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-2.2.0";
+    name = "Babel-2.3.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/B/Babel/${name}.tar.gz";
-      sha256 = "d8cb4c0e78148aee89560f9fe21587aa57739c975bb89ff66b1e842cc697428f";
+      sha256 = "0x98qqqw35xllpcama013a9788ly84z8dm1w2wwfpxh2710c8df5";
     };
 
     buildInputs = with self; [ pytest ];
