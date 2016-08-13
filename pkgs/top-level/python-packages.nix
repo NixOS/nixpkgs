@@ -24282,11 +24282,11 @@ in modules // {
   };
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-13.1.2";
+    name = "virtualenv-15.0.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/virtualenv/${name}.tar.gz";
-      sha256 = "1p732accxwqfjbdna39k8w8lp9gyw91vr4kzkhm8mgfxikqqxg5a";
+      sha256 = "6d9c760d3fc5fa0894b0f99b9de82a4647e1164f0b700a7f99055034bf548b1d";
     };
 
     pythonPath = [ self.recursivePthLoader ];
