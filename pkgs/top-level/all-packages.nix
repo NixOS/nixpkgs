@@ -10060,8 +10060,6 @@ in
 
   pycrypto = pythonPackages.pycrypto;
 
-  pycups = pythonPackages.pycups;
-
   pyexiv2 = pythonPackages.pyexiv2;
 
   pygobject = pythonPackages.pygobject;
