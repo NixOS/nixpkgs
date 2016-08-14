@@ -10052,8 +10052,6 @@ in
 
   bsddb3 = pythonPackages.bsddb3;
 
-  ecdsa = pythonPackages.ecdsa;
-
   pycairo = pythonPackages.pycairo;
 
   pycapnp = pythonPackages.pycapnp;
