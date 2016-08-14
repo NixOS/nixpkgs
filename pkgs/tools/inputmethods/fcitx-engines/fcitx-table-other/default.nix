@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, fcitx, gettext }:
+{ stdenv, fetchurl, cmake, fcitx, gettext }:
 
 stdenv.mkDerivation rec {
   name = "fcitx-table-other-${version}";
@@ -10,13 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake fcitx gettext ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/fcitx/fcitx-table-other/pull/2.diff";
-      sha256 = "1ai2zw4c0k5rr3xjhf4z7kcml9v8hvsbwdshwpmz2ybly2ncf5y7";
-    })
-  ];
 
   preInstall = ''
    substituteInPlace tables/cmake_install.cmake \
