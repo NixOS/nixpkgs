@@ -17754,6 +17754,7 @@ in modules // {
 
   protobuf = self.protobuf2_6;
   protobuf3_0 = (self.protobufBuild pkgs.protobuf3_0).override { doCheck = false; };
+  protobuf3_0_0b2 = (self.protobufBuild pkgs.protobuf3_0_0b2).override { doCheck = false; };
   protobuf2_6 = self.protobufBuild pkgs.protobuf2_6;
   protobuf2_5 = self.protobufBuild pkgs.protobuf2_5;
   protobufBuild = protobuf: buildPythonPackage rec {
@@ -28848,15 +28849,15 @@ in modules // {
 
   tensorflowNoGpuSupport = buildPythonPackage rec {
     name = "tensorflow";
-    version = "0.8.0";
+    version = "0.9.0";
     format = "wheel";
 
     src = pkgs.fetchurl {
       url = "https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-${version}-cp27-none-linux_x86_64.whl";
-      sha256 = "07lb6rknngq9bicd7z1q9caiqxlqn4fdx8q24s3rqvv9wi79szws";
+      sha256 = "15v7iyry8bmp5wcc1rr4bkp80f3887rl99zqf8pys5bad4gldbkh";
     };
 
-    propagatedBuildInputs = with self; [ numpy six protobuf3_0 pkgs.swig ];
+    propagatedBuildInputs = with self; [ numpy six protobuf3_0_0b2 pkgs.swig ];
 
     preFixup = ''
       RPATH="${stdenv.lib.makeLibraryPath [ pkgs.gcc.cc.lib pkgs.zlib ]}"
@@ -28869,6 +28870,24 @@ in modules // {
       description = "TensorFlow helps the tensors flow (no gpu support)";
       homepage = http://tensorflow.org;
       license = licenses.asl20;
+    };
+  };
+
+  tflearn = buildPythonPackage rec {
+    name = "tflearn-0.2.1";
+
+    meta = {
+      description = "Deep learning library featuring a higher-level API for TensorFlow";
+      homepage    = "https://github.com/tflearn/tflearn";
+      license     = licenses.mit;
+      maintainers = with maintainers; [ houqp ];
+    };
+
+    propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/tflearn/${name}.tar.gz";
+      sha256 = "1n884c4j35409id2bncyj5fvmmfpdqj3pk6wrv0s1znnvs0lkii0";
     };
   };
 
