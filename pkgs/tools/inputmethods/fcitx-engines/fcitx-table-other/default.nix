@@ -5,11 +5,14 @@ stdenv.mkDerivation rec {
   version = "0.2.3";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-table-other/${name}.tar.xz";
+    url    = "http://download.fcitx-im.org/fcitx-table-other/${name}.tar.xz";
     sha256 = "12fqbsjrpx5pndx2jf7fksrlp01a4yxz62h2vpxrbkpk73ljly4v";
   };
 
   buildInputs = [ cmake fcitx gettext ];
+
+  # https://github.com/fcitx/fcitx-table-other/pull/2
+  patches = [ ./make-dir.patch ];
 
   preInstall = ''
    substituteInPlace tables/cmake_install.cmake \
