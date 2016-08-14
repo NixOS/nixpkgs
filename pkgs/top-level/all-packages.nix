@@ -3220,9 +3220,7 @@ in
 
   openmodelica = callPackage ../applications/science/misc/openmodelica { };
 
-  qarte = callPackage ../applications/video/qarte {
-    sip = pythonPackages.sip_4_16;
-  };
+  qarte = callPackage ../applications/video/qarte { };
 
   qnial = callPackage ../development/interpreters/qnial {};
 
@@ -10085,8 +10083,6 @@ in
 
   rhpl = pythonPackages.rhpl;
 
-  pyqt4 = pythonPackages.pyqt4;
-
   pysideApiextractor = pythonPackages.pysideApiextractor;
 
   pysideGeneratorrunner = pythonPackages.pysideGeneratorrunner;
@@ -10930,7 +10926,9 @@ in
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffadoFull = callPackage ../os-specific/linux/ffado { };
+  ffadoFull = callPackage ../os-specific/linux/ffado {
+    inherit (pythonPackages) python pyqt4;
+  };
   libffado = self.ffadoFull.override { prefix = "lib"; };
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -13071,7 +13069,7 @@ in
   gksu = callPackage ../applications/misc/gksu { };
 
   gnuradio = callPackage ../applications/misc/gnuradio {
-    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl wxPython;
+    inherit (pythonPackages) lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython;
     fftw = fftwFloat;
   };
 
@@ -14290,10 +14288,7 @@ in
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
-  picard = callPackage ../applications/audio/picard {
-    python-libdiscid = pythonPackages.discid;
-    mutagen = pythonPackages.mutagen;
-  };
+  picard = callPackage ../applications/audio/picard { };
 
   picocom = callPackage ../tools/misc/picocom { };
 
@@ -15539,7 +15534,7 @@ in
   angband = callPackage ../games/angband { };
 
   anki = callPackage ../games/anki {
-    inherit (pythonPackages) wrapPython pysqlite sqlalchemy pyaudio beautifulsoup httplib2 matplotlib;
+    inherit (pythonPackages) wrapPython pysqlite sqlalchemy pyaudio beautifulsoup httplib2 matplotlib pyqt4;
   };
 
   armagetronad = callPackage ../games/armagetronad { };

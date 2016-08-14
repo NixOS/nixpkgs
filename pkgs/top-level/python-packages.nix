@@ -7744,7 +7744,7 @@ in modules // {
       sha256 = "00e3f89f4e23a844844d082918a89c2cbb1e8231ecb011b81d592e7e3c33a74c";
     };
 
-    propagatedBuildInputs = [ pkgs.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
+    propagatedBuildInputs = [ self.pyqt4 pkgs.pkgconfig pkgs.poppler_qt4 ];
 
     preBuild = "${python}/bin/${python.executable} setup.py build_ext" +
                " --include-dirs=${pkgs.poppler_qt4.dev}/include/poppler/";
@@ -20376,11 +20376,11 @@ in modules // {
 
       src = pkgs.qscintilla.src;
 
-      buildInputs = with pkgs; [ xorg.lndir qt4 pyqt4 python ];
+      buildInputs = with self; [ pkgs.xorg.lndir pyqt4.qt pyqt4 python ];
 
       preConfigure = ''
         mkdir -p $out
-        lndir ${pkgs.pyqt4} $out
+        lndir ${self.pyqt4} $out
         cd Python
         ${python.executable} ./configure-old.py \
             --destdir $out/lib/${python.libPrefix}/site-packages/PyQt4 \

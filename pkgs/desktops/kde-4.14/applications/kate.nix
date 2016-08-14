@@ -1,8 +1,8 @@
-{ stdenv, kde, kdelibs, kactivities, qjson, pyqt4, python, pykde4}:
+{ stdenv, kde, kdelibs, kactivities, qjson, pythonPackages, pykde4}:
 
 kde {
 
-  buildInputs = [ kdelibs kactivities qjson pyqt4 python pykde4 ];
+  buildInputs = [ kdelibs kactivities qjson pythonPackages.pyqt4 pythonPackages.python pykde4 ];
 
   meta = {
     description = "Kate, the KDE Advanced Text Editor, as well as KWrite";
