@@ -9746,6 +9746,8 @@ in
   xcb-util-cursor = xorg.xcbutilcursor;
   xcb-util-cursor-HEAD = callPackage ../development/libraries/xcb-util-cursor/HEAD.nix { };
 
+  xcbutilxrm = callPackage ../servers/x11/xorg/xcb-util-xrm.nix { };
+
   xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib {
