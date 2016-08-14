@@ -13850,9 +13850,7 @@ in
 
   mid2key = callPackage ../applications/audio/mid2key { };
 
-  midori-unwrapped = callPackage ../applications/networking/browsers/midori {
-    webkitgtk = webkitgtk24x;
-  };
+  midori-unwrapped = callPackage ../applications/networking/browsers/midori { };
   midori = wrapFirefox midori-unwrapped { };
 
   mikmod = callPackage ../applications/audio/mikmod { };
