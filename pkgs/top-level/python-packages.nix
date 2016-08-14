@@ -21361,7 +21361,7 @@ in modules // {
       sha256 = "768e568f3299966c294b7eb8cd114fc648f7bfaef422ee9cc750dd8d9d09e44b";
     };
 
-    buildInputs = with self; [ pkgs.cython nose numpy six ];
+    buildInputs = with self; [ cython nose numpy six ];
 
     propagatedBuildInputs = with self; [ pillow matplotlib networkx scipy ];
 

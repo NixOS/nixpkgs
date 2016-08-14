@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, python, cython, pkgconfig, wrapPython
-, pygame, SDL, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
+{ stdenv, fetchurl, pythonPackages, pkgconfig, SDL
+, libpng, ffmpeg, freetype, glew, mesa, fribidi, zlib
 }:
+
+with pythonPackages;
 
 stdenv.mkDerivation {
   name = "renpy-6.17.6";

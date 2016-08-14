@@ -4398,9 +4398,6 @@ in
 
   cryptol = self.haskell.packages.lts.cryptol;
 
-  cython = pythonPackages.cython;
-  cython3 = python3Packages.cython;
-
   devpi-client = callPackage ../development/tools/devpi-client {};
 
   drumstick = callPackage ../development/libraries/drumstick { };
@@ -5972,7 +5969,6 @@ in
   regina = callPackage ../development/interpreters/regina { };
 
   renpy = callPackage ../development/interpreters/renpy {
-    wrapPython = pythonPackages.wrapPython;
     ffmpeg = ffmpeg_2;
   };
 
