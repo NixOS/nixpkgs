@@ -118,7 +118,7 @@ in
     systemd.services.strongswan = {
       description = "strongSwan IPSec Service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ config.system.sbin.modprobe iproute iptables utillinux ]; # XXX Linux
+      path = with pkgs; [ kmod iproute iptables utillinux ]; # XXX Linux
       wants = [ "keys.target" ];
       after = [ "network.target" "keys.target" ];
       environment = {
