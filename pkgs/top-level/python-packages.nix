@@ -28880,7 +28880,6 @@ in modules // {
       description = "Deep learning library featuring a higher-level API for TensorFlow";
       homepage    = "https://github.com/tflearn/tflearn";
       license     = licenses.mit;
-      maintainers = with maintainers; [ houqp ];
     };
 
     propagatedBuildInputs = with self; [ scipy h5py pillow tensorflow ];
