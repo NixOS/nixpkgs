@@ -1398,7 +1398,6 @@ in
   duo-unix = callPackage ../tools/security/duo-unix { };
 
   duplicity = callPackage ../tools/backup/duplicity {
-    inherit (pythonPackages) boto lockfile paramiko ecdsa pycrypto;
     gnupg = gnupg1;
   };
 
@@ -10094,8 +10093,6 @@ in
   rbtools = pythonPackages.rbtools;
 
   rebol =  callPackage ../development/interpreters/rebol { };
-
-  setuptools = pythonPackages.setuptools;
 
   slowaes = pythonPackages.slowaes;
 

@@ -10836,7 +10836,7 @@ in modules // {
     # FAIL: test_sanitize_remove_src_javascript (genshi.filters.tests.html.HTMLSanitizerTestCase)
     doCheck = false;
 
-    buildInputs = with self; [ pkgs.setuptools ];
+    buildInputs = with self; [ setuptools ];
 
     meta = {
       description = "Python components for parsing HTML, XML and other textual content";
@@ -10930,7 +10930,7 @@ in modules // {
       sha256 = "c77d007cc32cdff836ecf8df6192371767976c108a75b055e057bb6f4a09cd42";
     };
 
-    buildInputs = with self; [ pkgs.setuptools ] ++ (optional isPy26 argparse);
+    buildInputs = with self; [ setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
       description = "Automatically generated zsh completion function for Python's option parser modules";
@@ -23705,7 +23705,7 @@ in modules // {
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
-    propagatedBuildInputs = with self; [ genshi pkgs.setuptools modules.sqlite3 ];
+    propagatedBuildInputs = with self; [ genshi setuptools modules.sqlite3 ];
 
     meta = {
       description = "Enhanced wiki and issue tracking system for software development projects";
