@@ -175,7 +175,7 @@ if ! NIX_DB_DIR=$mountPoint/nix/var/nix/db nix-store --check-validity @nix@ 2> /
     for i in $(@perl@/bin/perl @pathsFromGraph@ @nixClosure@); do
         echo "  $i"
         chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
-        rsync -a $i $mountPoint/nix/store/
+        @rsync@/bin/rsync -a $i $mountPoint/nix/store/
     done
 
     # Register the paths in the Nix closure as valid.  This is necessary

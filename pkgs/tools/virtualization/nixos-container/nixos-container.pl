@@ -48,7 +48,7 @@ GetOptions(
     "ensure-unique-name" => \$ensureUniqueName,
     "auto-start" => \$autoStart,
     "system-path=s" => \$systemPath,
-    "signal=s" => \$signal
+    "signal=s" => \$signal,
     "nixos-path=s" => \$nixosPath,
     "config=s" => \$extraConfig,
     "config-file=s" => \$configFile

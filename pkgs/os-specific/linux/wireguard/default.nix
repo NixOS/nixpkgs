@@ -1,5 +1,8 @@
 { stdenv, fetchgit, libmnl, kernel ? null }:
 
+# module requires Linux >= 4.1 https://www.wireguard.io/install/#kernel-requirements
+assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
+
 let
   name = "wireguard-unstable-${version}";
 

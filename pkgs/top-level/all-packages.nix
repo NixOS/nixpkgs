@@ -728,6 +728,8 @@ in
 
   datamash = callPackage ../tools/misc/datamash { };
 
+  datefudge = callPackage ../tools/system/datefudge { };
+
   ddate = callPackage ../tools/misc/ddate { };
 
   deis = callPackage ../development/tools/deis {};
@@ -739,6 +741,8 @@ in
   };
 
   dialog = callPackage ../development/tools/misc/dialog { };
+
+  dibbler = callPackage ../tools/networking/dibbler { };
 
   ding = callPackage ../applications/misc/ding {
     aspellDicts_de = aspellDicts.de;
@@ -1526,6 +1530,8 @@ in
 
     hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
+    unikey = callPackage ../tools/inputmethods/fcitx-engines/fcitx-unikey { };
+    
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
     mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
@@ -2198,6 +2204,8 @@ in
 
   keybase-go = callPackage ../tools/security/keybase { };
 
+  kbfs = callPackage ../tools/security/kbfs { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   keyfuzz = callPackage ../tools/inputmethods/keyfuzz { };
@@ -2382,7 +2390,11 @@ in
 
   libevhtp = callPackage ../development/libraries/libevhtp { };
 
+  libircclient = callPackage ../development/libraries/libircclient { };
+
   liboauth = callPackage ../development/libraries/liboauth { };
+
+  libsidplayfp = callPackage ../development/libraries/libsidplayfp { };
 
   libsrs2 = callPackage ../development/libraries/libsrs2 { };
 
@@ -3309,6 +3321,8 @@ in
 
   replace = callPackage ../tools/text/replace { };
 
+  reckon = callPackage ../tools/text/reckon { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
@@ -3967,6 +3981,8 @@ in
 
   uemacs = callPackage ../applications/editors/uemacs { };
 
+  uftp = callPackage ../servers/uftp { };
+
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
 
   uim = callPackage ../tools/inputmethods/uim {
@@ -4219,6 +4235,8 @@ in
 
   zimwriterfs = callPackage ../tools/text/zimwriterfs { };
 
+  par = callPackage ../tools/text/par { };
+
   zip = callPackage ../tools/archivers/zip { };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
@@ -4375,6 +4393,7 @@ in
     else {}
   ) // {
     ocamlPackages = ocamlPackages_4_02;
+    coq = coq_8_5;
   });
 
   cryptol = self.haskell.packages.lts.cryptol;
@@ -5477,7 +5496,9 @@ in
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {};
   rustBeta = lowPrio (callPackage ../development/compilers/rust/beta.nix {});
-  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {});
+  rustUnstable = lowPrio (callPackage ../development/compilers/rust/head.nix {
+    rustPlatform = recurseIntoAttrs (makeRustPlatform rustBeta);
+  });
 
   cargo = rust.cargo;
   rustc = rust.rustc;
@@ -6769,6 +6790,8 @@ in
     target = crossSystem;
   });
 
+  gdb-multitarget = lowPrio (gdb.override { multitarget = true; });
+
   valgrind = callPackage ../development/tools/analysis/valgrind { };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
@@ -7172,7 +7195,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_3_1 = callPackage ../development/libraries/ffmpeg/3.1.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   # Aliases
   ffmpeg_0 = self.ffmpeg_0_10;
@@ -7380,6 +7403,10 @@ in
   glm = callPackage ../development/libraries/glm { };
   glm_0954 = callPackage ../development/libraries/glm/0954.nix { };
 
+  globalplatform = callPackage ../development/libraries/globalplatform { };
+  gppcscconnectionplugin =
+    callPackage ../development/libraries/globalplatform/gppcscconnectionplugin.nix { };
+
   glog = callPackage ../development/libraries/glog { };
 
   gloox = callPackage ../development/libraries/gloox { };
@@ -7499,6 +7526,8 @@ in
   };
 
   gpgstats = callPackage ../tools/security/gpgstats { };
+
+  gpshell = callPackage ../development/tools/misc/gpshell { };
 
   grantlee = callPackage ../development/libraries/grantlee { };
 
@@ -8203,7 +8232,9 @@ in
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate { };
+  libsamplerate = callPackage ../development/libraries/libsamplerate {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
+  };
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
@@ -8292,7 +8323,9 @@ in
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod { };
+  libmikmod = callPackage ../development/libraries/libmikmod {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
@@ -8684,6 +8717,7 @@ in
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdds_0_7_1 = callPackage ../development/libraries/mdds/0.7.1.nix { };
+  mdds_0_12_1 = callPackage ../development/libraries/mdds/0.12.1.nix { };
   mdds = callPackage ../development/libraries/mdds { };
 
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
@@ -8780,9 +8814,7 @@ in
     texinfo = texinfo4;
   };
 
-  mueval = callPackage ../development/tools/haskell/mueval {
-    haskellPackages = haskell.packages.lts;
-  };
+  mueval = callPackage ../development/tools/haskell/mueval { };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -8828,6 +8860,8 @@ in
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = pkgs.nixUnstable;
   };
+
+  nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
@@ -9047,6 +9081,8 @@ in
 
   protobuf = protobuf2_6;
   protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
+  # 3.0.0-beta-2 is only introduced for tensorflow. remove this version when tensorflow is moved to 3.0.
+  protobuf3_0_0b2 = lowPrio (callPackage ../development/libraries/protobuf/3.0.0-beta-2.nix { });
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
@@ -9225,7 +9261,6 @@ in
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
     haskell-lib = haskell.lib;
-    haskellPackages = haskell.packages.lts;
   };
 
   leksah = callPackage ../development/tools/haskell/leksah {
@@ -11048,7 +11083,10 @@ in
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ]
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.hiddev_CVE_2016_5829
+      ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -11111,7 +11149,6 @@ in
   linux_4_4 = callPackage ../os-specific/linux/kernel/linux-4.4.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.ecryptfs_fix_mmap_bug
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -11123,7 +11160,6 @@ in
   linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
-        kernelPatches.qat_common_Makefile
         kernelPatches.hiddev_CVE_2016_5829
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
@@ -11750,8 +11786,6 @@ in
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
-  uksmtools = callPackage ../os-specific/linux/uksmtools { };
-
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
@@ -12102,7 +12136,7 @@ in
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
   inherit (callPackages ../data/fonts/gdouros { })
-    aegean textfonts symbola aegyptus akkadian anatolian maya unidings musica analecta;
+    symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
@@ -12256,6 +12290,19 @@ in
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
+
+  # Oracle JDK is recommended upstream, but unfree and requires a manual
+  # download. OpenJDK is straightforward, but may suffer from compatibility
+  # problems e.g. https://code.google.com/p/android/issues/detail?id=174496.
+  # To use Oracle JDK add an override to ~/.nixpkgs/config.nix:
+  # {
+  #   packageOverrides = pkgs: {
+  #     android-studio = pkgs.android-studio.override {
+  #       jdk = pkgs.oraclejdk8;
+  #     };
+  #   };
+  # }
+  android-studio = callPackage ../applications/editors/android-studio { };
 
   antimony = qt5.callPackage ../applications/graphics/antimony {};
 
@@ -12988,6 +13035,8 @@ in
 
   fbreader = callPackage ../applications/misc/fbreader { };
 
+  fehlstart = callPackage ../applications/misc/fehlstart { };
+
   fetchmail = callPackage ../applications/misc/fetchmail { };
 
   flacon = callPackage ../applications/audio/flacon { };
@@ -13687,7 +13736,6 @@ in
     inherit (gnome) GConf ORBit2 gnome_vfs;
     inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
     zip = zip.override { enableNLS = false; };
-    #glm = glm_0954;
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
       fontDirectories = [
@@ -13713,6 +13761,7 @@ in
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
+    mdds = mdds_0_12_1;
     clucene_core = clucene_core_2;
     lcms = lcms2;
     harfbuzz = harfbuzz.override {
@@ -15796,6 +15845,10 @@ in
 
   pong3d = callPackage ../games/pong3d { };
 
+  pokerth = callPackage ../games/pokerth { };
+
+  pokerth-server = with callPackage ../games/pokerth { }; server;
+
   prboom = callPackage ../games/prboom { };
 
   privateer = callPackage ../games/privateer { };
@@ -16359,6 +16412,8 @@ in
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
 
+    kronometer = callPackage ../tools/misc/kronometer { };
+
     krita = callPackage ../applications/graphics/krita {
       vc = vc_0_7;
       openjpeg = openjpeg_1;
@@ -16525,7 +16580,7 @@ in
 
   openspecfun = callPackage ../development/libraries/science/math/openspecfun {};
 
-  LiE = callPackage ../applications/science/math/LiE { };
+  lie = callPackage ../applications/science/math/LiE { };
 
   magma = callPackage ../development/libraries/science/math/magma { };
 
@@ -16853,6 +16908,8 @@ in
   fricas = callPackage ../applications/science/math/fricas { };
 
   gap = callPackage ../applications/science/math/gap { };
+
+  geogebra = callPackage ../applications/science/math/geogebra { };
 
   maxima = callPackage ../applications/science/math/maxima { };
 
@@ -17286,6 +17343,8 @@ in
 
   sailsd = callPackage ../misc/sailsd { };
 
+  shc = callPackage ../tools/security/shc { };
+
   canon-cups-ufr2 = callPackage ../misc/cups/drivers/canon { };
 
   mfcj470dw = callPackage_i686 ../misc/cups/drivers/mfcj470dw { };
@@ -17560,6 +17619,8 @@ in
   yabause = callPackage ../misc/emulators/yabause {
     qt = qt4;
   };
+
+  yadm = callPackage ../applications/version-management/yadm { };
 
   yafc = callPackage ../applications/networking/yafc { };
 

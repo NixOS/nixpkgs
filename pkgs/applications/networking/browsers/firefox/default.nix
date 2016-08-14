@@ -47,7 +47,6 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-application=browser"
-      "--disable-javaxpcom"
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
@@ -64,11 +63,9 @@ common = { pname, version, sha512 }: stdenv.mkDerivation rec {
       #"--enable-system-cairo"
       "--enable-startup-notification"
       "--enable-content-sandbox"            # available since 26.0, but not much info available
-      "--disable-content-sandbox-reporter"  # keeping disabled for now
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer"
       "--disable-updater"
       "--enable-jemalloc"
       "--disable-gconf"
@@ -135,8 +132,8 @@ in {
 
   firefox-unwrapped = common {
     pname = "firefox";
-    version = "47.0.1";
-    sha512 = "f79c53b9acf0d96917aa11e57092a4e540ce694471123ef8e616e15864195fab7b37235ebd37367e4d0cc8e594a881a30c973075cc97346ef6f88d92944c0312";
+    version = "48.0";
+    sha512 = "51bbb1954920b4d0e49e2834939748e596ed27c09a45adeea2be2cfbd32898dae41f13db17318e9699fa96c41fb50fba9966df1f88deeadc0ae3bdd679bd79c5";
   };
 
   firefox-esr-unwrapped = common {

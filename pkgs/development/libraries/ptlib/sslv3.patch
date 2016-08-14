@@ -1,0 +1,16 @@
+--- ptlib-2.10.11/src/ptclib/pssl.cxx	2016-02-07 09:54:36.326325637 +0000
++++ ptlib-2.10.11/src/ptclib/pssl.cxx	2016-02-07 09:55:55.677870908 +0000
+@@ -805,11 +805,13 @@
+   SSL_METHOD * meth;
+ 
+   switch (method) {
++#if !defined(OPENSSL_NO_SSL3)
+     case SSLv3:
+       meth = SSLv3_method();
+       break;
++#endif
+     case TLSv1:
+       meth = TLSv1_method(); 
+       break;
+     case SSLv23:
+     default:

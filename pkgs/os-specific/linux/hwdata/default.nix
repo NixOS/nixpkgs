@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "hwdata-0.276";
+stdenv.mkDerivation rec {
+  name = "hwdata-${version}";
+  version = "0.291";
 
   src = fetchurl {
-    url = "https://git.fedorahosted.org/cgit/hwdata.git/snapshot/hwdata-0.276.tar.xz";
-    sha256 = "0pg0ms6kb2mm25mdklsb0xn2spcwi2mhygzc7bkpji72qq8srzsh";
+    url = "https://git.fedorahosted.org/cgit/hwdata.git/snapshot/hwdata-${version}.tar.xz";
+    sha256 = "121qixrdhdncva1cnj7m7jlqvi1kbj85dpi844jiis3a8hgpzw5a";
   };
 
   preConfigure = "patchShebangs ./configure";

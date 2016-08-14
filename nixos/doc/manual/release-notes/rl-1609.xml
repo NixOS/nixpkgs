@@ -51,6 +51,13 @@ following incompatible changes:</para>
       gitlab-run and gitlab-rake scripts because gitlab-runner is a component of Gitlab CI.</para>
   </listitem>
 
+  <listitem>
+    <para><literal>services.xserver.libinput.accelProfile</literal> default
+    changed from <literal>flat</literal> to <literal>adaptive</literal>,
+    as per <link xlink:href="https://wayland.freedesktop.org/libinput/doc/latest/group__config.html#gad63796972347f318b180e322e35cee79">
+    official documentation</link>.</para>
+  </listitem>
+
 </itemizedlist>
 
 

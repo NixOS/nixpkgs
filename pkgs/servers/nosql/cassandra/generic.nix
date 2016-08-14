@@ -1,0 +1,49 @@
+{ stdenv, fetchurl, python, makeWrapper, gawk, bash, getopt, procps
+, which, jre, version, sha256, ...
+}:
+
+let
+  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc ];
+  binPath = stdenv.lib.makeBinPath [ bash getopt gawk procps which jre ];
+in
+
+stdenv.mkDerivation rec {
+  name = "cassandra-${version}";
+
+  src = fetchurl {
+    inherit sha256;
+    url = "mirror://apache/cassandra/${version}/apache-${name}-bin.tar.gz";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  installPhase = ''
+    mkdir $out
+    mv * $out
+    for cmd in bin/cassandra bin/nodetool bin/sstablekeys \
+      bin/sstableloader bin/sstableupgrade \
+      tools/bin/cassandra-stress tools/bin/cassandra-stressd \
+      tools/bin/sstablemetadata tools/bin/sstableofflinerelevel \
+      tools/bin/token-generator tools/bin/sstablelevelreset; do
+
+      # check if file exists because some bin tools don't exist across all
+      # cassandra versions
+      if [ -f $out/$cmd ]; then
+        wrapProgram $out/$cmd \
+          --suffix-each LD_LIBRARY_PATH : ${libPath} \
+          --prefix PATH : ${binPath} \
+          --set JAVA_HOME ${jre}
+      fi
+    done
+
+    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
+    '';
+
+  meta = with stdenv.lib; {
+    homepage = http://cassandra.apache.org/;
+    description = "A massively scalable open source NoSQL database";
+    platforms = platforms.linux;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ nckx rushmorem cransom ];
+  };
+}

@@ -29,8 +29,6 @@ common = rec { # attributes common to both builds
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./my_context_asm.patch;
-
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
@@ -53,6 +51,7 @@ common = rec { # attributes common to both builds
     "-DWITH_PCRE=system"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
+    ++ optional (!stdenv.isLinux) "-DWITH_JEMALLOC=no" # bad build at least on Darwin
     ;
 
   preConfigure = ''
