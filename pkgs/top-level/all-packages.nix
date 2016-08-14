@@ -3624,9 +3624,7 @@ in
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
-  svtplay-dl = callPackage ../tools/misc/svtplay-dl {
-    inherit (pythonPackages) nose mock requests2;
-  };
+  svtplay-dl = callPackage ../tools/misc/svtplay-dl { };
 
   sysbench = callPackage ../development/tools/misc/sysbench {};
 
@@ -10051,8 +10049,6 @@ in
   };
 
   pycapnp = pythonPackages.pycapnp;
-
-  pycrypto = pythonPackages.pycrypto;
 
   pyexiv2 = pythonPackages.pyexiv2;
 
@@ -17240,7 +17236,6 @@ in
   mysqlWorkbench = newScope gnome ../applications/misc/mysql-workbench {
     lua = lua5_1;
     libctemplate = libctemplate_2_2;
-    inherit (pythonPackages) pexpect paramiko;
   };
 
   redis-desktop-manager = qt55.callPackage ../applications/misc/redis-desktop-manager { };
