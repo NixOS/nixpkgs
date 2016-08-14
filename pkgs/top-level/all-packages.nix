@@ -646,7 +646,9 @@ in
     sha256 = "0p2sxrpzd0vsk11zf3kb5h12yl1nq4yypb5mpjrm8ww0cfaijck2";
   };
 
-  btfs = callPackage ../os-specific/linux/btfs { };
+  btfs = callPackage ../os-specific/linux/btfs {
+    libtorrentRasterbar = libtorrentRasterbar_1_09;
+  };
 
   cabal2nix = self.haskell.lib.overrideCabal self.haskellPackages.cabal2nix (drv: {
     isLibrary = false;
