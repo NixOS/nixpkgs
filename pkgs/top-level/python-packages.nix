@@ -21059,7 +21059,7 @@ in modules // {
     patches = [ ../development/python-modules/rpkg-buildfix.diff ];
 
     propagatedBuildInputs = with self; [ pycurl pkgs.koji GitPython pkgs.git
-                              pkgs.rpm pkgs.pyopenssl ];
+                              pkgs.rpm pyopenssl ];
 
   });
 
@@ -26925,7 +26925,7 @@ in modules // {
       url = mirror://pypi/g/gcs-oauth2-boto-plugin/gcs-oauth2-boto-plugin-1.8.tar.gz;
       sha256 = "0jy62y5bmaf1mb735lqwry1s5nx2qqrxvl5sxip9yg4miih3qkyb";
     };
-    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pkgs.pyopenssl socksipy-branch ];
+    propagatedBuildInputs = with self; [ boto-230 httplib2 google_api_python_client retry_decorator pyopenssl socksipy-branch ];
     meta = {
       homepage = https://developers.google.com/storage/docs/gspythonlibrary;
       description = "Provides OAuth 2.0 credentials that can be used with Google Cloud Storage";
@@ -26950,7 +26950,7 @@ in modules // {
     };
 
     propagatedBuildInputs = with self; [ boto-230 crcmod httplib2 gcs-oauth2-boto-plugin google_api_python_client gflags
-                                         retry_decorator pkgs.pyopenssl socksipy-branch crcmod ];
+                                         retry_decorator pyopenssl socksipy-branch crcmod ];
   };
 
   svg2tikz = self.buildPythonPackage {

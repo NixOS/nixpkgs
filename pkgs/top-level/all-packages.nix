@@ -10068,8 +10068,6 @@ in
 
   pyGtkGlade = pythonPackages.pyGtkGlade;
 
-  pyopenssl = pythonPackages.pyopenssl;
-
   rhpl = pythonPackages.rhpl;
 
   pysideApiextractor = pythonPackages.pysideApiextractor;
