@@ -10065,8 +10065,6 @@ in
 
   pyexiv2 = pythonPackages.pyexiv2;
 
-  pygame = pythonPackages.pygame;
-
   pygobject = pythonPackages.pygobject;
 
   pygobject3 = pythonPackages.pygobject3;
@@ -13556,11 +13554,7 @@ in
   imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
 
   # Impressive, formerly known as "KeyJNote".
-  impressive = callPackage ../applications/office/impressive {
-    # XXX These are the PyOpenGL dependencies, which we need here.
-    inherit (pythonPackages) pyopengl;
-    inherit (pythonPackages) pillow;
-  };
+  impressive = callPackage ../applications/office/impressive { };
 
   inferno = callPackage_i686 ../applications/inferno { };
 
