@@ -10050,8 +10050,6 @@ in
     self = pypyPackages;
   };
 
-  bsddb3 = pythonPackages.bsddb3;
-
   pycapnp = pythonPackages.pycapnp;
 
   pycrypto = pythonPackages.pycrypto;
