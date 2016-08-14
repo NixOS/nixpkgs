@@ -10848,7 +10848,7 @@ in
 
     opencflite = callPackage ../os-specific/darwin/opencflite {};
 
-    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation { inherit (apple-source-releases) libpthread; };
+    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
 
     xcode = callPackage ../os-specific/darwin/xcode {};
 

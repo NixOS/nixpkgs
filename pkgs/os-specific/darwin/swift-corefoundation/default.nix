@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, ninja, libpthread, libxml2 }:
+{ stdenv, fetchFromGitHub, python, ninja, libxml2 }:
 
 stdenv.mkDerivation {
   name = "swift-corefoundation";
