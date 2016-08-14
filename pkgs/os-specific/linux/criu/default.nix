@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
+  hardeningDisable = [ "stackprotector" ];
+
   installPhase = ''
     mkdir -p $out/etc/logrotate.d
     make install PREFIX=$out LIBDIR=$out/lib ASCIIDOC=${asciidoc}/bin/asciidoc XMLTO=${xmlto}/bin/xmlto
