@@ -240,8 +240,7 @@ in modules // {
 
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
-  pycairo = callPackage ../development/python-modules/pycairo {
-  };
+  pycairo = callPackage ../development/python-modules/pycairo { };
 
   pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
 
@@ -26219,7 +26218,7 @@ in modules // {
       sha256 = "472a4403fd5b5364939aee10e78f171b1489e5f6bfe6f150ed9cae8476410114";
     };
 
-    propagatedBuildInputs = with self; [ django_1_5 django_tagging modules.sqlite3 whisper pkgs.pycairo ldap memcached ];
+    propagatedBuildInputs = with self; [ django_1_5 django_tagging modules.sqlite3 whisper pycairo ldap memcached ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \

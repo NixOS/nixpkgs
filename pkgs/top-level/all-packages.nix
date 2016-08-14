@@ -2775,7 +2775,6 @@ in
   nmap = callPackage ../tools/security/nmap { };
 
   nmap_graphical = callPackage ../tools/security/nmap {
-    inherit (pythonPackages) pysqlite;
     graphicalSupport = true;
   };
 
@@ -8757,7 +8756,6 @@ in
   minmay = callPackage ../development/libraries/minmay { };
 
   miro = callPackage ../applications/video/miro {
-    inherit (pythonPackages) pywebkitgtk pycurl mutagen;
     avahi = avahi.override {
       withLibdnssdCompat = true;
     };
@@ -10051,8 +10049,6 @@ in
   };
 
   bsddb3 = pythonPackages.bsddb3;
-
-  pycairo = pythonPackages.pycairo;
 
   pycapnp = pythonPackages.pycapnp;
 
