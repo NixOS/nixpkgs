@@ -6851,6 +6851,7 @@ in
   apr = callPackage ../development/libraries/apr { };
 
   aprutil = callPackage ../development/libraries/apr-util {
+    openssl = openssl_1_0_2;
     bdbSupport = true;
     db = if stdenv.isFreeBSD then db47 else db;
     # XXX: only the db_185 interface was available through
@@ -10132,6 +10133,7 @@ in
   apacheHttpd = self.apacheHttpd_2_4;
 
   apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
+    openssl = openssl_1_0_2;
     sslSupport = true;
   };
 
