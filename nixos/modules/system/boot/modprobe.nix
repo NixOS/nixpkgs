@@ -63,8 +63,6 @@ with lib;
         echo ${pkgs.kmod}/bin/modprobe > /proc/sys/kernel/modprobe
       '';
 
-    environment.sessionVariables.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
-
   };
 
 }
