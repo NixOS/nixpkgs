@@ -10096,8 +10096,6 @@ in
 
   slowaes = pythonPackages.slowaes;
 
-  twisted = pythonPackages.twisted;
-
   yolk = callPackage ../development/python-modules/yolk {};
 
   ZopeInterface = pythonPackages.zope_interface;
