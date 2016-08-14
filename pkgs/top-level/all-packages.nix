@@ -10075,8 +10075,6 @@ in
 
   pyGtkGlade = pythonPackages.pyGtkGlade;
 
-  pylint = pythonPackages.pylint;
-
   pyopenssl = pythonPackages.pyopenssl;
 
   rhpl = pythonPackages.rhpl;

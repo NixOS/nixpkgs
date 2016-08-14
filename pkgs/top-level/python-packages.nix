@@ -20712,7 +20712,7 @@ in modules // {
 
     doCheck = false;  # too much
 
-    buildInputs = with self; [ mock tox pkgs.pylint ];
+    buildInputs = with self; [ mock tox pylint ];
     meta = with stdenv.lib; {
       homepage = "https://github.com/geopy/geopy";
     };
@@ -22835,7 +22835,7 @@ in modules // {
       sha256 = "00z0lzjs4ksr9yr31zs26csyacjvavhpz6r74xaw1r89kk75qg7q";
     };
 
-    buildInputs = with self; [ unittest2 scripttest pytz pkgs.pylint tempest-lib mock testtools ];
+    buildInputs = with self; [ unittest2 scripttest pytz pylint tempest-lib mock testtools ];
     propagatedBuildInputs = with self; [ pbr tempita decorator sqlalchemy six sqlparse ];
 
     checkPhase = ''
