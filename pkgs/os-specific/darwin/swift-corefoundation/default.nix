@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "05cmqwzqqxb489g9hq7hhj2yva12pi488iblbpnvyk1y4nx077cw";
   };
 
-  buildInputs = [ ninja python libpthread libxml2 ];
+  buildInputs = [ ninja python libxml2 ];
 
   patchPhase = ''
     HACK=$PWD/hack
