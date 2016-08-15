@@ -740,8 +740,6 @@ in
 
   deis = callPackage ../development/tools/deis {};
 
-  dfilemanager = self.kde5.dfilemanager;
-
   diagrams-builder = callPackage ../tools/graphics/diagrams-builder {
     inherit (haskellPackages) ghcWithPackages diagrams-builder;
   };
