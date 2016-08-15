@@ -13649,7 +13649,7 @@ in
     qt = qt4;
   };
 
-  kile = qt5.callPackage ../applications/editors/kile/frameworks.nix { };
+  kile = kde5.callPackage ../applications/editors/kile/frameworks.nix { };
 
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
