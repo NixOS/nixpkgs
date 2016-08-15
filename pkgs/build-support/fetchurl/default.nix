@@ -95,7 +95,7 @@ assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
 
 
 let
-
+  inherit (stdenv.lib) fileContents;
   hasHash = showURLs || (outputHash != "" && outputHashAlgo != "")
     || sha1 != "" || sha256 != "" || sha512 != "";
   urls_ = if urls != [] then urls else [url];
@@ -131,6 +131,8 @@ else stdenv.mkDerivation {
   inherit curlOpts showURLs mirrorsFile postFetch downloadToTemp executable;
 
   impureEnvVars = impureEnvVars ++ netrcImpureEnvVars;
+
+  nixpkgsVersion = fileContents ../../../.version;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
