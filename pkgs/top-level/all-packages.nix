@@ -14898,6 +14898,8 @@ in
 
   transcode = callPackage ../applications/audio/transcode { };
 
+  transcribe = callPackage ../applications/audio/transcribe { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
   transmission_gtk = transmission.override { enableGTK3 = true; };
 
