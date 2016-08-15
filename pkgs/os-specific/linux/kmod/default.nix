@@ -1,16 +1,16 @@
 { stdenv, lib, fetchurl, autoreconfHook, xz, zlib, pkgconfig, libxslt }:
 
 let
-  systems = [ "current-system" "booted-system" ];
-  modulesDirs = lib.concatMapStringsSep ":" (x: "/run/${x}/kernel-modules/lib/modules") systems;
+  systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
+  modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
   name = "kmod-${version}";
-  version = "22";
+  version = "23";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "10lzfkmnpq6a43a3gkx7x633njh216w0bjwz31rv8a1jlgg1sfxs";
+    sha256 = "0mc12sx06p8il1ym3hdmgxxb37apn9yv7xij26gddjdfkx8xa0yk";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
