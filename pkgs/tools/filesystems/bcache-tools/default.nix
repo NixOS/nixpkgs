@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, utillinux, kmod }:
+{ stdenv, fetchurl, pkgconfig, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "bcache-tools-${version}";

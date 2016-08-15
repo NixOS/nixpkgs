@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/blueman-project;
+    homepage = "https://github.com/blueman-project/blueman";
     description = "GTK+-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;

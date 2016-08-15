@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, libmnl, kernel ? null }:
+{ stdenv, fetchurl, libmnl, kernel ? null }:
 
 # module requires Linux >= 4.1 https://www.wireguard.io/install/#kernel-requirements
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
@@ -6,19 +6,20 @@ assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.1";
 let
   name = "wireguard-unstable-${version}";
 
-  version = "2016-07-22";
+  version = "2016-08-08";
 
-  src = fetchgit {
-    url    = "https://git.zx2c4.com/WireGuard";
-    rev    = "8e8bf6f848c324603827c0e57f0856d5866ac32d";
-    sha256 = "11qrf9fxm6mkwjnjq7dgbisdric5w22cyfkqc6zx9fla2dz99mxk";
+  src = fetchurl {
+    url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-experimental-0.0.20160808.tar.xz";
+    sha256 = "0z9s9xi8dzkmjnki7ialf2haxb0mn2x5676sjwmjij1jfi9ypxhw";
   };
 
   meta = with stdenv.lib; {
-    homepage    = https://www.wireguard.io/;
-    description = "Fast, modern, secure VPN tunnel";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage     = https://www.wireguard.io/;
+    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
+    description  = "Fast, modern, secure VPN tunnel";
+    maintainers  = with maintainers; [ ericsagnes ];
+    license      = licenses.gpl2;
+    platforms    = platforms.linux;
   };
 
   module = stdenv.mkDerivation {
@@ -33,7 +34,6 @@ let
     INSTALL_MOD_PATH = "\${out}";
 
     buildPhase = "make module";
-
   };
 
   tools = stdenv.mkDerivation {
@@ -50,7 +50,6 @@ let
     ];
 
     buildPhase = "make tools";
-
   };
 
 in if kernel == null

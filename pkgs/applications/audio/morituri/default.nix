@@ -1,8 +1,10 @@
-{ stdenv, fetchgit, python, pythonPackages, cdparanoia, cdrdao
-, pygobject, gst_python, gst_plugins_base, gst_plugins_good
-, setuptools, utillinux, makeWrapper, substituteAll, autoreconfHook }:
+{ stdenv, fetchgit, pythonPackages, cdparanoia, cdrdao
+, gst_python, gst_plugins_base, gst_plugins_good
+, utillinux, makeWrapper, substituteAll, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python;
+in stdenv.mkDerivation rec {
   name = "morituri-${version}";
   version = "0.2.3.20151109";
   namePrefix = "";
@@ -14,10 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "1sl5y5j3gdbynf2v0gf9dwd2hzawj8lm8ywadid7qm34yn8lx12k";
   };
 
-  pythonPath = [
-    pygobject gst_python pythonPackages.musicbrainzngs
-    pythonPackages.pycdio pythonPackages.pyxdg setuptools
-    pythonPackages.CDDB
+  pythonPath = with pythonPackages; [
+    pygobject gst_python musicbrainzngs
+    pycdio pyxdg setuptools
+    CDDB
   ];
 
   nativeBuildInputs = [ autoreconfHook ];

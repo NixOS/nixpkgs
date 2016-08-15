@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, gtk3, pythonPackages, python, pycairo, pygobject3, intltool,
+{ stdenv, fetchurl, gtk3, pythonPackages, intltool,
   pango, gsettings_desktop_schemas }:
 
-pythonPackages.buildPythonApplication rec {
+let
+  inherit (pythonPackages) python buildPythonApplication;
+in buildPythonApplication rec {
   version = "4.1.1";
   name = "gramps-${version}";
-  namePrefix = "";
 
   buildInputs = [ intltool gtk3 ];
 
@@ -16,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0jdps7yx2mlma1hdj64wssvnqd824xdvw0bmn2dnal5fn3h7h060";
   };
 
-  pythonPath = [ pygobject3 pango pycairo pythonPackages.bsddb ];
+  pythonPath = with pythonPackages; [ pygobject3 pycairo bsddb ] ++ [ pango ];
 
   # Same installPhase as in buildPythonApplication but without --old-and-unmanageble
   # install flag.
