@@ -12,6 +12,9 @@
   # directly.
   partitioned ? true
 
+  # Whether to invoke switch-to-configuration boot during image creation
+, installBootLoader ? true
+
 , # The root file system type.
   fsType ? "ext4"
 
@@ -108,7 +111,7 @@ pkgs.vmTools.runInLinuxVM (
       # Generate the GRUB menu.
       ln -s vda /dev/xvda
       ln -s vda /dev/sda
-      chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
+      ${optionalString installBootLoader "chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot"}
 
       umount /mnt/proc /mnt/dev /mnt/sys
       umount /mnt
