@@ -12400,6 +12400,10 @@ in
 
   bitmeter = callPackage ../applications/audio/bitmeter { };
 
+  bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
+    inherit (gnome2) zenity;
+  };
+
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
