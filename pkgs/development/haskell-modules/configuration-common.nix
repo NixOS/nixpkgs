@@ -25,6 +25,9 @@ self: super: {
   statistics = dontCheck super.statistics;
   c2hs = if pkgs.stdenv.isDarwin then dontCheck super.c2hs else super.c2hs;
 
+  # This test keeps being aborted because it runs too quietly for too long
+  Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
+
   # Use the default version of mysql to build this package (which is actually mariadb).
   mysql = super.mysql.override { mysql = pkgs.mysql.lib; };
 
