@@ -469,6 +469,7 @@
   ./services/ttys/kmscon.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/jira.nix
+  ./services/web-apps/mattermost.nix
   ./services/web-apps/pump.io.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-servers/apache-httpd/default.nix

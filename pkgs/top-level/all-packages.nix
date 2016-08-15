@@ -10284,6 +10284,9 @@ in
 
   mailman = callPackage ../servers/mail/mailman { };
 
+  mattermost = callPackage ../servers/mattermost { };
+  matterircd = callPackage ../servers/mattermost/matterircd.nix { };
+
   mediatomb = callPackage ../servers/mediatomb {
     spidermonkey = spidermonkey_185;
   };
