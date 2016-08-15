@@ -105,7 +105,7 @@ in {
     };
   };
 
-  config = mkIf (cfg.pools != {}) {
+  config = mkIf (cfg.pools != {} || cfg.poolConfigs != {}) {
 
     systemd.services.phpfpm = {
       wantedBy = [ "multi-user.target" ];
