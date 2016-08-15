@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, rcs, git, pylint }:
+{ stdenv, fetchurl, python, rcs, git }:
 
 stdenv.mkDerivation rec {
   name = "src-1.11";

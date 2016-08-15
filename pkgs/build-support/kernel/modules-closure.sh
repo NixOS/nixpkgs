@@ -1,7 +1,5 @@
 source $stdenv/setup
 
-set -o pipefail
-
 version=$(cd $kernel/lib/modules && ls -d *)
 
 echo "kernel version is $version"

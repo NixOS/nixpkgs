@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala, makeWrapper
+{ stdenv, fetchurl, cmake, pkgconfig, intltool, vala, wrapGAppsHook
 , gtk3, webkitgtk, librsvg, libnotify, sqlite
 , glib_networking, gsettings_desktop_schemas, libsoup, pcre, gnome3
+, libxcb, libpthreadstubs, libXdmcp, libxkbcommon, epoxy, at_spi2_core
+, zeitgeistSupport ? false, zeitgeist ? null
 }:
 
-let
-  version = "0.5.11";
-in
+assert zeitgeistSupport -> zeitgeist != null;
+
 stdenv.mkDerivation rec {
   name = "midori-${version}";
+  version = "0.5.11";
 
   meta = with stdenv.lib; {
     description = "Lightweight WebKitGTK+ web browser";
     homepage = "http://midori-browser.org";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    license = with licenses; [ lgpl21Plus ];
+    platforms = with platforms; linux;
     maintainers = with maintainers; [ raskin ramkromberg ];
   };
 
@@ -26,24 +28,29 @@ stdenv.mkDerivation rec {
     sha256 = "0gcwqkcyliqz10i33ww3wl02mmfnl7jzl2d493l4l53ipsb1l6cn";
   };
 
+  nativeBuildInputs = [
+    pkgconfig wrapGAppsHook cmake intltool
+  ];
+
   buildInputs = [
-    cmake pkgconfig intltool vala makeWrapper
-    webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas pcre gnome3.gcr
+    vala
+    gtk3 webkitgtk librsvg libnotify sqlite gsettings_desktop_schemas pcre gnome3.gcr
+    libxcb libpthreadstubs libXdmcp libxkbcommon epoxy at_spi2_core
     (libsoup.override {gnomeSupport = true; valaSupport = true;})
+  ] ++ stdenv.lib.optionals zeitgeistSupport [
+    zeitgeist
   ];
 
   cmakeFlags = [ 
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_ZEITGEIST=OFF"
-    "-DHALF_BRO_INCOM_WEBKIT2=OFF"
+    "-DUSE_ZEITGEIST=${if zeitgeistSupport then "ON" else "OFF"}"
+    "-DHALF_BRO_INCOM_WEBKIT2=ON"
     "-DUSE_GTK3=1"
   ];
 
   NIX_LDFLAGS="-lX11";
 
   preFixup = ''
-    wrapProgram $out/bin/midori \
-      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules")
   '';
 }

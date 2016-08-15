@@ -40,7 +40,10 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru.pythonPath = [];
+  passthru = {
+    pythonPath = [];
+    qt = qt4;
+  };
 
   meta = {
     description = "Python bindings for Qt";

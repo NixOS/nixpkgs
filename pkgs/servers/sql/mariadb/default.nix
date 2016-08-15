@@ -50,6 +50,16 @@ common = rec { # attributes common to both builds
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
     "-DWITH_PCRE=system"
+
+    # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
+    # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
+    # to pass in java explicitly. This should have no effect on Linux.
+    "-DCONNECT_WITH_JDBC=OFF"
+
+    # Same as above. Somehow on Darwin CMake decides that we support GSS even though we aren't provding the
+    # library through Nix, and then breaks later on. This should have no effect on Linux.
+    "-DPLUGIN_AUTH_GSSAPI=NO"
+    "-DPLUGIN_AUTH_GSSAPI_CLIENT=NO"
   ]
     ++ optional stdenv.isDarwin "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
     ++ optional (!stdenv.isLinux) "-DWITH_JEMALLOC=no" # bad build at least on Darwin

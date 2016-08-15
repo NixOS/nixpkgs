@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, makeWrapper, python, perl, zip
-, rtmpdump, nose, mock, pycrypto, requests2, substituteAll }:
+{ stdenv, fetchFromGitHub, makeWrapper, pythonPackages, perl, zip
+, rtmpdump, substituteAll }:
 
-stdenv.mkDerivation rec {
+let
+  inherit (pythonPackages) python nose pycrypto requests2 mock;
+in stdenv.mkDerivation rec {
   name = "svtplay-dl-${version}";
   version = "1.1";
 
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
   '';
 
-  makeFlags = "PREFIX=$(out) SYSCONFDIR=$(out)/etc PYTHON=${python}/bin/python";
+  makeFlags = "PREFIX=$(out) SYSCONFDIR=$(out)/etc PYTHON=${python.interpreter}";
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \

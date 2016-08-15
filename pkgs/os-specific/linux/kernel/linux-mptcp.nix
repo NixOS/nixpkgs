@@ -7,7 +7,7 @@ import ./generic.nix (args // rec {
 
   extraMeta = {
     branch = "4.1";
-    maintainers = with stdenv.lib.maintainers; [ layus fpletz ];
+    maintainers = stdenv.lib.maintainers.layus;
   };
 
   src = fetchurl {
