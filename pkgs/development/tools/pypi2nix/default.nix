@@ -6,8 +6,7 @@ let
   version = "1.4.0";
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "0pkm93lg7i2chcw59bm5yv09qwcq3wifk8hgr6i3dvv20mifbndr";
-    
+    sha256 = "0w5f10p4d4ppwg2plbbrmqwmi1ycgpaidyajza11c9svka014zrb";
   };
 in stdenv.mkDerivation rec {
   name = "pypi2nix-${version}";
