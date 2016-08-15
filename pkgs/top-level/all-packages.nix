@@ -14408,9 +14408,9 @@ in
     gst_plugins_bad = null;
   };
 
-  qutebrowser = qt55.callPackage ../applications/networking/browsers/qutebrowser {
-    inherit (python34Packages) buildPythonApplication python pyqt5 jinja2 pygments pyyaml pypeg2;
-    inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-libav;
+  qutebrowser = qt5.callPackage ../applications/networking/browsers/qutebrowser {
+    inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2;
+    inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
   };
 
   rabbitvcs = callPackage ../applications/version-management/rabbitvcs {};
