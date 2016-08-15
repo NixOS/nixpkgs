@@ -1,4 +1,4 @@
-{ stdenv, appleDerivation, ed, unifdef, Libc_old }:
+{ stdenv, appleDerivation, ed, unifdef, Libc_old, Libc_10-9 }:
 
 appleDerivation {
   phases = [ "unpackPhase" "installPhase" ];
@@ -12,6 +12,8 @@ appleDerivation {
     export PUBLIC_HEADERS_FOLDER_PATH=include
     export PRIVATE_HEADERS_FOLDER_PATH=include
     bash xcodescripts/headers.sh
+
+    cp ${Libc_10-9}/include/NSSystemDirectories.h $out/include
 
     # Ugh Apple stopped releasing this stuff so we need an older one...
     cp    ${Libc_old}/include/spawn.h    $out/include

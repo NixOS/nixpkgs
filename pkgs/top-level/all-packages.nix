@@ -10832,6 +10832,8 @@ in
 
     opencflite = callPackage ../os-specific/darwin/opencflite {};
 
+    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
+
     xcode = callPackage ../os-specific/darwin/xcode {};
 
     osx_sdk = callPackage ../os-specific/darwin/osx-sdk {};
