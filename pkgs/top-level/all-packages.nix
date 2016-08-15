@@ -3196,8 +3196,6 @@ in
 
   pwnat = callPackage ../tools/networking/pwnat { };
 
-  pyatspi = python3Packages.pyatspi;
-
   pycangjie = pythonPackages.pycangjie;
 
   pydb = callPackage ../development/tools/pydb { };
