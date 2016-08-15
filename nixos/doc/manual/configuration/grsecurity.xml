@@ -267,8 +267,8 @@
   <itemizedlist>
     <listitem><para>User namespaces require <literal>CAP_SYS_ADMIN</literal>:
     consequently, unprivileged namespaces are unsupported. Applications that
-    rely on namespaces for sandboxing (e.g., chromium) must use a privileged
-    helper.</para></listitem>
+    rely on namespaces for sandboxing must use a privileged helper. For chromium
+    there is <option>security.chromiumSuidSandbox.enable</option>.</para></listitem>
 
     <listitem><para>Access to EFI runtime services is disabled by default:
     this plugs a potential code injection attack vector; use
