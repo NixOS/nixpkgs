@@ -124,6 +124,8 @@ if (!hasHash) then throw "Specify hash for fetchurl fixed-output derivation: ${s
 
   inherit curlOpts showURLs mirrorsFile impureEnvVars postFetch downloadToTemp executable;
 
+  userAgent = "Nix/${builtins.nixVersion}; nixpkgs/${stdenv.lib.nixpkgsVersion}";
+
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.
   preferLocalBuild = true;

@@ -13,6 +13,7 @@ curl="curl \
  --disable-epsv \
  --cookie-jar cookies \
  --insecure \
+ --user-agent "$userAgent" \
  $curlOpts \
  $NIX_CURL_FLAGS"
 
