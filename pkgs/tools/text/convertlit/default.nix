@@ -29,5 +29,6 @@ stdenv.mkDerivation {
     homepage = http://www.convertlit.com/;
     description = "A tool for converting Microsoft Reader ebooks to more open formats";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

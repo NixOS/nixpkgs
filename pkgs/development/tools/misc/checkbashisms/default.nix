@@ -10,12 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "1vm0yykkg58ja9ianfpm3mgrpah109gj33b41kl0jmmm11zip9jd";
   };
 
-  meta = {
-    homepage = http://sourceforge.net/projects/checkbaskisms/;
-    description = "Check shell scripts for non-portable syntax";
-    license = stdenv.lib.licenses.gpl2;
-  };
-
   # The link returns directly the script. No need for unpacking
   unpackPhase = "true";
 
@@ -29,4 +23,11 @@ stdenv.mkDerivation rec {
   fixupPhase = ''
     sed -e "s#/usr/bin/perl#$perl/bin/perl#" -i $out/bin/checkbashisms
   '';
+
+  meta = {
+    homepage = http://sourceforge.net/projects/checkbaskisms/;
+    description = "Check shell scripts for non-portable syntax";
+    license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

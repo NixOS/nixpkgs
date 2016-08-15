@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Converter from Microsoft Word formats to human-editable ones";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

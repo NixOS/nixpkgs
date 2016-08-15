@@ -115,5 +115,6 @@ stdenv.mkDerivation rec {
     '';
     maintainers = [ maintainers.roconnor ];
     license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }

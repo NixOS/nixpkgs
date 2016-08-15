@@ -67,5 +67,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://obsproject.com";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.gpl2;
+    platforms = with platforms; linux;
   };
 }

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/wolf9466/cpuminer-multi;
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
-    platforms = platforms.linux;
+    # does not build on i686 https://github.com/lucasjones/cpuminer-multi/issues/27
+    platforms = [ "x86_64-linux" ]; 
   };
 }

@@ -33,4 +33,8 @@ stdenv.mkDerivation {
                    else "install";
 
   buildInputs = [ gfortran openblas ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

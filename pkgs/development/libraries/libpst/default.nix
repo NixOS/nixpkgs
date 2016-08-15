@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     description = "A library to read PST (MS Outlook Personal Folders) files";
     license = licenses.gpl2;
     maintainers = [maintainers.tohl];
+    platforms = platforms.unix;
   };
 }

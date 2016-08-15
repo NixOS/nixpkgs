@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "http://typesafe.com/activator";
     license = licenses.asl20;
     maintainers = with maintainers; [ edwtjo cko ];
+    platforms = with platforms; unix;
   };
 
 }

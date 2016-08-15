@@ -45,5 +45,6 @@ stdenv.mkDerivation rec {
     description = "An Open Source personal backup solution";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
+    platforms = with platforms; linux;
   };
 }

@@ -69,5 +69,6 @@ in stdenv.mkDerivation {
     description = "Simple, small, C++ XML parser that can be easily integrating into other programs";
     homepage = "http://www.grinninglizard.com/tinyxml/index.html";
     license = stdenv.lib.licenses.free;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

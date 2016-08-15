@@ -9,4 +9,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ glib ];
   nativeBuildInputs = [ pkgconfig perl intltool gobjectIntrospection ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

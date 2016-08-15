@@ -12,4 +12,8 @@ stdenv.mkDerivation {
     glib
     pango
   ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

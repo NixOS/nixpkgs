@@ -23,5 +23,6 @@ stdenv.mkDerivation {
     description = "A SOAP interface and client for Disnix";
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.sander ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

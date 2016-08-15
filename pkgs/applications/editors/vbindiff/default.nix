@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     description = "A terminal visual binary diff viewer";
     homepage = "http://www.cjmweb.net/vbindiff/";
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

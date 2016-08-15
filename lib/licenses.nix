@@ -200,6 +200,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = https://geant4.web.cern.ch/geant4/license/LICENSE.html;
   };
 
+  geogebra = {
+    fullName = "GeoGebra Non-Commercial License Agreement";
+    url = https://www.geogebra.org/license;
+    free = false;
+  };
+
   gpl1 = spdx {
     spdxId = "GPL-1.0";
     fullName = "GNU General Public License v1.0 only";

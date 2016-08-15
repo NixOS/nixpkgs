@@ -1,0 +1,43 @@
+From 26a27dedb7bee36f3ac5f48e22b977ea001d5903 Mon Sep 17 00:00:00 2001
+From: Maksymilian Paszkiewicz <mpaszkiewicz@skytechnology.pl>
+Date: Mon, 23 May 2016 12:25:19 +0200
+Subject: [PATCH] common: Fix minor compile and copyright issues
+
+This commit adds include <cmath> directive to
+slice_read_planner.cc and fixes copyright
+statement in filesystem_operations.cc
+
+Closes #411
+Closes #412
+
+Change-Id: I3ac995708a09f64e1389871be2e961d594e4bc68
+---
+ src/common/slice_read_planner.cc    | 2 ++
+ src/master/filesystem_operations.cc | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/src/common/slice_read_planner.cc b/src/common/slice_read_planner.cc
+index 94c106c..d0284f1 100644
+--- a/src/common/slice_read_planner.cc
++++ b/src/common/slice_read_planner.cc
+@@ -20,6 +20,8 @@
+ 
+ #include "common/slice_read_planner.h"
+ 
++#include <cmath>
++
+ /*!
+  * Prepares read planner for serving selected parts of a slice type.
+  * Firstly, function checks if:
+diff --git a/src/master/filesystem_operations.cc b/src/master/filesystem_operations.cc
+index 69ff270..dc30b1f 100644
+--- a/src/master/filesystem_operations.cc
++++ b/src/master/filesystem_operations.cc
+@@ -1,5 +1,6 @@
+ /*
+-   Copyright 2013-2015 Skytechnology sp. z o.o..
++   Copyright 2005-2010 Jakub Kruszona-Zawadzki, Gemius SA, 2013-2014 EditShare,
++   2013-2016 Skytechnology sp. z o.o..
+ 
+    This file is part of LizardFS.
+ 

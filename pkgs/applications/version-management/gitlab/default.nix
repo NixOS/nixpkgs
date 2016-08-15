@@ -24,20 +24,19 @@ in
 
 stdenv.mkDerivation rec {
   name = "gitlab-${version}";
-  version = "8.5.12";
+  version = "8.10.3";
 
-  buildInputs = [ ruby bundler tzdata git nodejs procps ];
+  buildInputs = [ env ruby bundler tzdata git nodejs procps ];
 
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "144i97ywnr0xgm7gnwnwiy7kk5z1d71ccawl8qdhapz0705993l8";
+    sha256 = "0fhnwrgrpccc2j9wgdmwwi9h1ym3ll97lhmddq0xfzivc302ri3w";
   };
 
   patches = [
     ./remove-hardcoded-locations.patch
-    ./disable-dump-schema-after-migration.patch
     ./nulladapter.patch
   ];
 
@@ -66,9 +65,10 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    export GEM_HOME=${env}/${ruby.gemPath}
     mv config/gitlab.yml.example config/gitlab.yml
-    GITLAB_DATABASE_ADAPTER=nulldb bundle exec rake assets:precompile RAILS_ENV=production
+    GITLAB_DATABASE_ADAPTER=nulldb \
+      SKIP_STORAGE_VALIDATION=true \
+      rake assets:precompile RAILS_ENV=production
     mv config/gitlab.yml config/gitlab.yml.example
     mv config config.dist
   '';

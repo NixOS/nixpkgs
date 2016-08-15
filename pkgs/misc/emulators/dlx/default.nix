@@ -24,5 +24,6 @@ stdenv.mkDerivation {
     homepage = "http://www.davidviner.com/dlx.php";
     description = "DLX Simulator";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

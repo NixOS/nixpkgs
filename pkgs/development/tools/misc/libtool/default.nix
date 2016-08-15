@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/libtool/;
 
     license = stdenv.lib.licenses.gpl2Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -186,7 +186,8 @@ self: super: {
   vty-ui = enableCabalFlag super.vty-ui "no-tests";
 
   # https://github.com/fpco/stackage/issues/1112
-  vector-algorithms = dontCheck super.vector-algorithms;
+  vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
+    [ self.mtl self.mwc-random ];
 
   # Trigger rebuild to mitigate broken packaes on Hydra.
   amazonka-core = triggerRebuild super.amazonka-core 1;

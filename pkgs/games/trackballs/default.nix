@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://trackballs.sourceforge.net/;
     description = "3D Marble Madness clone";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

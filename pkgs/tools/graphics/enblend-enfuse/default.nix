@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Blends away the seams in a panoramic image mosaic using a multiresolution spline";
     license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
+    platforms = with platforms; linux;
   };
 }

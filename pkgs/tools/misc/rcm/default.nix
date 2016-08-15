@@ -21,5 +21,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/thoughtbot/rcm;
     license = licenses.bsd3;
     maintainers = with maintainers; [ malyn ];
+    platforms = with platforms; unix;
   };
 }

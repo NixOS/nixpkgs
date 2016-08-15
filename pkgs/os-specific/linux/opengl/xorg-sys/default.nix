@@ -13,5 +13,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   neededLibs = map (p: p.out)
     [xorg.libXxf86vm xorg.libXext expat libdrm stdenv.cc.cc];
-}
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

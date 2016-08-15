@@ -9,5 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ intltool pkgconfig gtk GConf alsaLib ];
-}
 
+  meta = {
+    platforms = stdenv.lib.platforms.linux;
+  };
+}

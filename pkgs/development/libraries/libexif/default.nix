@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     homepage = http://libexif.sourceforge.net/;
     description = "A library to read and manipulate EXIF data in digital photographs";
     license = stdenv.lib.licenses.lgpl21;
+    platforms = stdenv.lib.platforms.unix;
   };
 
 }

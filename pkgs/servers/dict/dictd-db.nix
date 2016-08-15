@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 			[doInstall doForceShare doPropagate]);
 	meta = {
 		description = "${name} dictionary for dictd";
+    platforms = stdenv.lib.platforms.linux;
 	};
 };
 # Probably a bug in some FreeDict release files, but easier to trivially

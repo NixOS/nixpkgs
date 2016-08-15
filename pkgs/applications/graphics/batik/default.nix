@@ -9,4 +9,8 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [unzip];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

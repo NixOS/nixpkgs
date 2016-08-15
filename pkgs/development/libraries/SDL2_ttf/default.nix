@@ -14,5 +14,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SDL TrueType library";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

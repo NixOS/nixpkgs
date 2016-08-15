@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl2Plus;
     homepage = http://www.antigrain.com/;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

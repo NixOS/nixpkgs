@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     description = "BitTorrent Client and Cloud File Downloader";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.gavin ];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

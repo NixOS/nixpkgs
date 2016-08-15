@@ -53,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ taktoa amiloradovsky ];
+    platforms = with platforms; linux;
   };
 }

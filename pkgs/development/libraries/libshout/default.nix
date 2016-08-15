@@ -4,11 +4,11 @@
 # need pkgconfig so that libshout installs ${out}/lib/pkgconfig/shout.pc
 
 stdenv.mkDerivation rec {
-  name = "libshout-2.3.1";
+  name = "libshout-2.4.1";
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
-    sha256 = "cf3c5f6b4a5e3fcfbe09fb7024aa88ad4099a9945f7cb037ec06bcee7a23926e";
+    sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.icecast.org;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
- 
+    platforms = with stdenv.lib.platforms; unix;
   };
 }

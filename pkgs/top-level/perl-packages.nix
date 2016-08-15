@@ -7938,6 +7938,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/R/RO/ROSCH/${name}.tar.gz";
       sha256 = "00wk9950i9q6qwp1vdq9xdddgk54lqd0bhcq2hnijh8xnmhvpmsc";
     };
+    outputs = [ "out" ];
     buildInputs = [ ProcWaitStat ];
   };
 
@@ -9578,10 +9579,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   NetSSLeay = buildPerlPackage rec {
-    name = "Net-SSLeay-1.72";
+    name = "Net-SSLeay-1.77";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MIKEM/${name}.tar.gz";
-      sha256 = "1x6jjmhvsdq488k6wdg58ajnr4dmbcbk7imyv0aybkhj1ygw7ahv";
+      sha256 = "06h6wbr923jxmazmv5shdg1767s7r60bvzcza52dk31yckks6l31";
     };
     buildInputs = [ pkgs.openssl ];
     doCheck = false; # Test performs network access.

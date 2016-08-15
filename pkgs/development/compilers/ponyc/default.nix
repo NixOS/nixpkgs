@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     homepage = http://www.ponylang.org;
     license = stdenv.lib.licenses.bsd2;
     maintainers = [ stdenv.lib.maintainers.doublec ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

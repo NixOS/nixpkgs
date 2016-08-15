@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.libimobiledevice.org";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

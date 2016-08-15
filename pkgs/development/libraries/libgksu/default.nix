@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.nongnu.org/gksu/";
     license = stdenv.lib.licenses.lgpl2;
     maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

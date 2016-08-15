@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.chiark.greenend.org.uk/~sgtatham/putty/;
     license = licenses.mit;
+    platforms = platforms.linux;
   };
 }

@@ -1,7 +1,5 @@
 { stdenv, fetchurl, xlibsWrapper, motif, libXpm }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "nedit-5.6a";
   
@@ -12,7 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xlibsWrapper motif libXpm ];
 
-  buildFlags = if stdenv.isLinux then "linux" else "";
+  buildFlags = if stdenv.isLinux then "linux" else
+               # the linux config works fine on darwin too!
+               if stdenv.isDarwin then "linux" else "";
 
   NIX_CFLAGS_COMPILE="-DBUILD_UNTESTED_NEDIT -L${motif}/lib";
 
@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     cp -p source/nedit source/nc $out/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.nedit.org;
+    platforms = with platforms; linux ++ darwin;
   };
 }

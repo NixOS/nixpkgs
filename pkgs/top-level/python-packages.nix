@@ -825,7 +825,7 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six
     ] ++ optional windowsSupport pywinrm;
 
     meta = {
@@ -858,7 +858,7 @@ in modules // {
     windowsSupport = true;
 
     propagatedBuildInputs = with self; [
-      paramiko jinja2 pyyaml httplib2 boto six readline
+      pycrypto paramiko jinja2 pyyaml httplib2 boto six readline
     ] ++ optional windowsSupport pywinrm;
 
     meta = with stdenv.lib; {
@@ -1213,6 +1213,27 @@ in modules // {
       license = licenses.mit;
     };
   });
+
+  attrs = buildPythonPackage (rec {
+    pname = "attrs";
+    version = "16.0.0";
+    name = "attrs-16.0.0";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/a/attrs/${name}.tar.gz";
+      sha256 = "1g4asv3hbx5aqz7hjzq3q6ss2cpv1rdv66sp5d21cdyjajj2fs6y";
+    };
+
+    # Mac OS X needs clang for testing
+    buildInputs = with self; [ pytest hypothesis zope_interface
+    pympler coverage ]
+     ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
+
+    meta = {
+      description = "Python attributes without boilerplate";
+      homepage = https://github.com/hynek/attrs;
+      license = licenses.mit;
+    };
+   });
 
   audioread = buildPythonPackage rec {
     name = "audioread-${version}";
@@ -4004,11 +4025,12 @@ in modules // {
 
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
-    name = "cryptography-1.2.3";
+    name = "cryptography-${version}";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography/${name}.tar.gz";
-      sha256 = "0kj511z4g21fhcr649pyzpl0zzkkc7hsgxxjys6z8wwfvmvirccf";
+      sha256 = "0a6i4914ychryj7kqqmf970incynj5lzx57n3cbv5i4hxm09a55v";
     };
 
     buildInputs = [ pkgs.openssl self.pretend self.cryptography_vectors
@@ -4024,11 +4046,12 @@ in modules // {
 
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
-    name = "cryptography_vectors-1.2.3";
+    name = "cryptography_vectors-${version}";
+    version = "1.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cryptography-vectors/${name}.tar.gz";
-      sha256 = "0shawgpax79gvjrj0a313sll9gaqys7q1hxngn6j4k24lmz7bwki";
+      sha256 = "1sk6yhphk2k2vzshi0djxi0jsxd9a02259bs8gynfgf5y1g82a07";
     };
   };
 
@@ -6497,7 +6520,13 @@ in modules // {
       sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
+    # https://github.com/AGProjects/python-gnutls/issues/2
+    disabled = isPy3k;
+
     propagatedBuildInputs = with self; [ pkgs.gnutls ];
+    patchPhase = ''
+      substituteInPlace gnutls/library/__init__.py --replace "/usr/local/lib" "${pkgs.gnutls33.out}/lib"
+    '';
   };
 
   gitdb = buildPythonPackage rec {
@@ -7438,13 +7467,13 @@ in modules // {
 
   netcdf4 = buildPythonPackage rec {
     name = "netCDF4-${version}";
-    version = "1.2.1";
+    version = "1.2.4";
 
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netCDF4/${name}.tar.gz";
-      sha256 = "0wzg73zyjjhns4209vrcvh71gs392d16ynz76x3pl1xg2by723iy";
+      sha256 = "0lakjix9dhc26f33f03c13ffwspqcrk5j3mnnjczwxbb23ppwwx6";
     };
 
     propagatedBuildInputs = with self ; [
@@ -8891,16 +8920,40 @@ in modules // {
     };
   };
 
-  django = self.django_1_9;
+  django = self.django_1_10;
 
   django_gis = self.django.override rec {
     patches = [
       (pkgs.substituteAll {
-        src = ../development/python-modules/django/1.7.7-gis-libs.template.patch;
+        src = ../development/python-modules/django/1.10-gis-libs.template.patch;
         geos = pkgs.geos;
         gdal = pkgs.gdal;
       })
     ];
+  };
+
+  django_1_10 = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.10";
+    disabled = pythonOlder "2.7";
+
+    src = pkgs.fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.10/${name}.tar.gz";
+      sha256 = "01bh5yra6zyxcpqacahbwfbn0y4ivw07j2jsw3crvmjzivb6if26";
+    };
+
+    # patch only $out/bin to avoid problems with starter templates (see #3134)
+    postFixup = ''
+      wrapPythonProgramsIn $out/bin "$out $pythonPath"
+    '';
+
+    # too complicated to setup
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
   };
 
   django_1_9 = buildPythonPackage rec {
@@ -9090,22 +9143,42 @@ in modules // {
 
   django_compat = buildPythonPackage rec {
     name = "django-compat-${version}";
-    version = "1.0.8";
+    version = "1.0.13";
 
     # build process attempts to access a missing README.rst
     disabled = isPy35;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-compat/${name}.tar.gz";
-      sha256 = "195dgr55vzpw1fbjvbw2h35k9bfhvm5zchh2p7nzbq57xmwb3sra";
+      sha256 = "0s0z7cx0vv1kjsyzk24sg256hfnd09ssilc9rakhxrzr3firgx80";
     };
 
     buildInputs = with self; [ django_nose ];
     propagatedBuildInputs = with self; [ django six ];
 
     meta = {
-      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, and 1.9";
+      description = "Forward and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9 and 1.10";
       homepage = https://github.com/arteria/django-compat;
+      license = licenses.mit;
+    };
+  };
+
+  django_environ = buildPythonPackage rec {
+    name = "django-environ-${version}";
+    version = "0.4.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-environ/${name}.tar.gz";
+      sha256 = "0i32vsgk1xmwpi7i6f6v5hg653y9dl0fsz5qmv94skz6hwgm5kvh";
+    };
+
+    # The testsuite fails to modify the base environment
+    doCheck = false;
+    propagatedBuildInputs = with self ; [ django six ];
+
+    meta = {
+      description = "Utilize environment variables to configure your Django application";
+      homepage = https://github.com/joke2k/django-environ/;
       license = licenses.mit;
     };
   };
@@ -9127,6 +9200,28 @@ in modules // {
     };
   };
 
+  django_guardian = buildPythonPackage rec {
+    name = "django-guardian-${version}";
+    version = "1.4.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/d/django-guardian/${name}.tar.gz";
+      sha256 = "1m7y3brk3697hr2cvkzl8dry4pp7wkmhvxmf8db1ardz1r9d8895";
+    };
+
+    buildInputs = with self ; [ pytestrunner pytestdjango django_environ mock sqlite3 ];
+    propagatedBuildInputs = with self ; [ django six ];
+
+    checkPhase = ''
+      ${python.interpreter} nix_run_setup.py test --addopts="--ignore build"
+    '';
+
+    meta = {
+      description = "Per object permissions for Django";
+      homepage = https://github.com/django-guardian/django-guardian;
+      licenses = [ licenses.mit licenses.bsd2 ];
+    };
+  };
 
   django_tagging = buildPythonPackage rec {
     name = "django-tagging-0.3.1";
@@ -9178,7 +9273,14 @@ in modules // {
       sha256 = "0rpi1bkfx74xfbb2nk874kfdra1jcqp2vzky1r3z7zidlc9kah04";
     };
 
-    propagatedBuildInputs = with self; [ django django_compat ];
+    # TODO improve the that multi-override necessity (the fixpoint based python
+    # packages work can be the solution)
+    propagatedBuildInputs = with self; [ django_1_9 (django_compat.override {
+      buildInputs = with self; [ (django_nose.override {
+        propagatedBuildInputs = with self; [ django_1_9 nose ];
+      }) ];
+      propagatedBuildInputs = with self; [ django_1_9 six ];
+    }) ];
 
     meta = {
       description = "Allows superusers to hijack (=login as) and work on behalf of another user";
@@ -9189,11 +9291,11 @@ in modules // {
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
-    version = "1.4.3";
+    version = "1.4.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-nose/${name}.tar.gz";
-      sha256 = "0rl9ipa98smprlw56xqlhzhps28p84wg0640qlyn0rjyrpsdmf0r";
+      sha256 = "1fm47fkza2lk0xgc6qpi9vs78zg7q8cgl6mdan69sbycgy909ff0";
     };
 
     # vast dependency list
@@ -12130,6 +12232,22 @@ in modules // {
     };
   };
 
+  klein = buildPythonPackage rec {
+    name = "klein-15.3.1";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/klein/${name}.tar.gz";
+      sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
+    };
+
+    propagatedBuildInputs = with self; [ werkzeug twisted ];
+
+    meta = {
+      description = "Klein Web Micro-Framework";
+      homepage    = "https://github.com/twisted/klein";
+      license     = licenses.mit;
+    };
+   };
+
   kombu = buildPythonPackage rec {
     name = "kombu-${version}";
     version = "3.0.35";
@@ -13669,6 +13787,31 @@ in modules // {
     };
   };
 
+  pympler = buildPythonPackage rec {
+    pname = "Pympler";
+    version = "0.4.3";
+    name = "${pname}-${version}";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/${pname}/${name}.tar.gz";
+      sha256 = "0mhyxqlkha98y8mi5zqcjg23r30mgdjdzs05lghbmqfdyvzjh1a3";
+    };
+
+  # Remove test asizeof.flatsize(), broken and can be missed as
+  # test is only useful on python 2.5, see https://github.com/pympler/pympler/issues/22
+   patchPhase = ''
+     substituteInPlace ./test/asizeof/test_asizeof.py --replace "n, e = test_flatsize" "#n, e = test_flatsize"
+     substituteInPlace ./test/asizeof/test_asizeof.py --replace "self.assert_(n," "#self.assert_(n,"
+     substituteInPlace ./test/asizeof/test_asizeof.py --replace "self.assert_(not e" "#self.assert_(not e"
+    '';
+
+    meta = {
+      description = "Tool to measure, monitor and analyze memory behavior";
+      homepage = http://pythonhosted.org/Pympler/;
+      license = licenses.asl20;
+    };
+  };
+
   pymysql = buildPythonPackage rec {
     name = "pymysql-${version}";
     version = "0.6.6";
@@ -14321,12 +14464,12 @@ in modules // {
   };
 
   notebook = buildPythonPackage rec {
-    version = "4.2.1";
+    version = "4.2.2";
     name = "notebook-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/notebook/${name}.tar.gz";
-      sha256 = "15z1j821iywjcjf6d8r338jm09l9qwk8z9gjplag56dvv8jfb7d4";
+      sha256 = "418ba230c9b2e7e739940cae9fb4625e10a63f038e9c95cf1a9b7a244256ba38";
     };
 
     LC_ALL = "en_US.UTF-8";
@@ -16449,14 +16592,15 @@ in modules // {
   };
 
   paramiko = buildPythonPackage rec {
-    name = "paramiko-1.15.1";
+    name = "paramiko-${version}";
+    version = "2.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/paramiko/${name}.tar.gz";
-      sha256 = "6ed97e2281bb48728692cdc621f6b86a65fdc1d46b178ce250cfec10b977a04c";
+      sha256 = "1p21s7psqj18k9a97nq26yas058i5ivzk7pi7y98l1rbl87zj6s1";
     };
 
-    propagatedBuildInputs = with self; [ pycrypto ecdsa ];
+    propagatedBuildInputs = with self; [ cryptography cryptography_vectors ];
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
@@ -17127,12 +17271,12 @@ in modules // {
 
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
-    version = "0.2.8";
+    version = "0.2.9";
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysftp/${name}.tar.gz";
-      sha256 = "1d69z8yngciksch1i8rivy1xl8f6g6sb7c3kk5cm3pf8304q6hhm";
+      sha256 = "0jl5qix5cxzrv4lb8rfpjkpcghbkacnxkb006ikn7mkl5s05mxgv";
     };
 
     propagatedBuildInputs = with self; [ paramiko ];
@@ -18133,6 +18277,21 @@ in modules // {
     };
   });
 
+  pydispatcher = buildPythonPackage (rec {
+    version = "2.0.5";
+    disabled = isPy35;
+    name = "pydispatcher-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/PyDispatcher/PyDispatcher-${version}.tar.gz";
+      sha256 = "1bswbmhlbqdxlgbxlb6xrlm4k253sg8nvpl1whgsys8p3fg0cw2m";
+    };
+
+    meta = {
+      homepage = http://pydispatcher.sourceforge.net/;
+      description = "Signal-registration and routing infrastructure for use in multiple contexts";
+      license = licenses.bsd3;
+    };
+   });
 
   pydot = buildPythonPackage rec {
     name = "pydot-1.0.2";
@@ -21460,6 +21619,23 @@ in modules // {
       description = "sqlite-backed dictionary";
       homepage = "http://github.com/Yelp/sqlite3dbm";
       license = licenses.asl20;
+    };
+  };
+
+  sqlobject = buildPythonPackage rec {
+    version = "3.0.0";
+    name = "sqlobject-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/S/SQLObject/SQLObject-${version}.tar.gz";
+      sha256 = "15g3g7f4yiyplqf54px1dsnmrw3jb7xwx97z8qzgp9ijmm5vpr8r";
+    };
+
+    propagatedBuildInputs = with self; [ pydispatcher FormEncode ];
+
+    meta = {
+      description = "Object Relational Manager for providing an object interface to your database";
+      homepage = "http://www.sqlobject.org/";
+      license = licenses.lgpl21;
     };
   };
 
@@ -26198,6 +26374,11 @@ in modules // {
       sha256 = "030qkrsj4as9anr8xfpk5n41qzg7w4yyjasb4cqislvyl1l1dvvs";
     };
 
+    postPatch = ''
+      substituteInPlace requirements.txt \
+        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28'
+    '';
+
     propagatedBuildInputs = with self; [
       pyyaml lxml_3_5 grequests flaskbabel flask requests2
       gevent speaklater Babel pytz dateutil pygments_2_0
@@ -27707,14 +27888,14 @@ in modules // {
 
   ovh = buildPythonPackage rec {
     name = "ovh-${version}";
-    version = "0.3.5";
+    version = "0.4.5";
     doCheck = false; #test needs packages too explicit
     buildInputs = with self; [ d2to1 ];
     propagatedBuildInputs = with self; [ requests2 ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ovh/ovh-${version}.tar.gz";
-      sha256 = "1y74lrdlgbb786mwas7ynphimfi00dgr67ncjq20kdf31jg5415n";
+      sha256 = "1wf2p1sbg34jpj97r3w5nx9pj6vp0mlprry3vw2xav3dv02qv2af";
     };
 
     meta = {

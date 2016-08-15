@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     description = "MIDI libraries for Qt5/C++";
     homepage = http://drumstick.sourceforge.net/;
     license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" ];
   };
 }

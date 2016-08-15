@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     astronomy.'';
 
     license = stdenv.lib.licenses.lgpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

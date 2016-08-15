@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
 
   meta = { 
     description = "User mode programs to enable VLANs on Ethernet devices";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

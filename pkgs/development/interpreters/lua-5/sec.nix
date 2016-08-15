@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/brunoos/luasec";
-    hydraPlatforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.flosse ];
   };
 }

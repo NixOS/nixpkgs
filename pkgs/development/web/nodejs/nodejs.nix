@@ -40,6 +40,10 @@ in stdenv.mkDerivation {
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' tools/gyp/pylib/gyp/xcode_emulation.py
   '';
 
+  postInstall = ''
+    PATH=$out/bin:$PATH patchShebangs $out
+  '';
+
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-xcode.patch ];
 
   buildInputs = extraBuildInputs

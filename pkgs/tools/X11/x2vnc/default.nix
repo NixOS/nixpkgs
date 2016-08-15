@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://fredrik.hubbe.net/x2vnc.html;
     description = "A program to control a remote VNC server";
+    platforms = stdenv.lib.platforms.unix;
   };
 }

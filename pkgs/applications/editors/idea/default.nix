@@ -24,6 +24,7 @@ let
           once it's ready.
         '';
         platforms = platforms.linux;
+        hydraPlatforms = []; # Depends on androidsdk, which hits Hydra's output limits
         maintainers = with maintainers; [ edwtjo ];
       };
     });

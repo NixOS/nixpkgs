@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A lightweight C library for the Jabber protocol";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -21,11 +21,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
-    sha256 = "1cjf9gz7d0sn7893wv9d00q724sxv3d81bgb0c5f5ppz2ssyc4jc";
+    sha256 = "1ak32fj5xkk2fvmm3g8i7wzmk4bh2ijsp8fzvvw5wj6365p9j24v";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.openttd.org/;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny fpletz ];
   };
 }

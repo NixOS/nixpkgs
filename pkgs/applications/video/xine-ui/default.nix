@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
   meta = { 
     homepage = http://www.xine-project.org/;
     description = "Xlib-based interface to Xine, a video player";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

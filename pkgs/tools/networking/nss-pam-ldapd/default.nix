@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "LDAP identity and authentication for NSS/PAM";
     homepage = http://arthurdejong.org/nss-pam-ldapd/;
     license = licenses.lgpl21;
+    platforms = platforms.linux;
   };
 }

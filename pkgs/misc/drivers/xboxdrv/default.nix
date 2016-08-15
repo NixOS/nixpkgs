@@ -22,6 +22,7 @@ in stdenv.mkDerivation {
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.fuuzetsu ];
+    platforms = platforms.linux;
   };
 
 }

@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/enkore/j4-dmenu-desktop";
     license     = licenses.gpl3;
     maintainer  = with maintainers; [ ericsagnes ];
+    platforms = with platforms; unix;
   };
 }

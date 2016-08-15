@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/mcron/;
 
     license = stdenv.lib.licenses.gpl3Plus;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -20,4 +20,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake boost ruby ignition.math2 tinyxml
   ];
+
+  meta = {
+    platforms = stdenv.lib.platforms.unix;
+  };
 }

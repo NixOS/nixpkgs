@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     homepage = http://github.com/shimmerproject/Blackbird;
     license = with stdenv.lib.licenses; [ gpl2Plus cc-by-nc-sa-30 ];
     maintainers = [ stdenv.lib.maintainers.romildo ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

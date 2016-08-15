@@ -26,5 +26,6 @@ in stdenv.mkDerivation {
     homepage = "http://wiki.erazor-zone.de/wiki:projects:linux:as31";
     description = "An 8031/8051 assembler by Ken Stauffer and Theo Deraadt which produces a variety of object code output formats";
     maintainers = with maintainers; [ aneeshusa ];
+    platforms = with platforms; unix;
   };
 }

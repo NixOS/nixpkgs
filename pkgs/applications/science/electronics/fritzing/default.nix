@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     cd fritzing-${version}.source
   '';
-  
+
   meta = {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = http://fritzing.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.robberer ];
-  }; 
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

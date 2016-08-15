@@ -37,6 +37,18 @@ in
       '';
     };
 
+    disableEfiRuntimeServices = mkOption {
+      type = types.bool;
+      example = false;
+      default = true;
+      description = ''
+        Whether to disable access to EFI runtime services.  Enabling EFI runtime
+        services creates a venue for code injection attacks on the kernel and
+        should be disabled if at all possible.  Changing this option enters into
+        effect upon reboot.
+      '';
+    };
+
   };
 
   config = mkIf cfg.enable {
@@ -44,6 +56,8 @@ in
     # Allow the user to select a different package set, subject to the stated
     # required kernel config
     boot.kernelPackages = mkDefault pkgs.linuxPackages_grsec_nixos;
+
+    boot.kernelParams = optional cfg.disableEfiRuntimeServices "noefi";
 
     system.requiredKernelConfig = with config.lib.kernelConfig;
       [ (isEnabled "GRKERNSEC")

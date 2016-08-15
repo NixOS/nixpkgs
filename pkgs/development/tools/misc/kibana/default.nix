@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = licenses.asl20;
     maintainers = with maintainers; [ offline rickynils ];
+    platforms = with platforms; unix;
   };
 }

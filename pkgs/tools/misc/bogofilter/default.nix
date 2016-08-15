@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
       filter.
     '';
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

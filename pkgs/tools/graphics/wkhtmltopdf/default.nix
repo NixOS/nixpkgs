@@ -128,5 +128,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jb55 ];
+    platforms = with platforms; linux;
   };
 }

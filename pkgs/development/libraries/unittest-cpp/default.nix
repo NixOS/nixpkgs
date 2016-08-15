@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     description = "Lightweight unit testing framework for C++";
     license = licenses.mit;
     maintainers = [maintainers.tohl];
+    platforms = stdenv.lib.platforms.unix;
   };
 }

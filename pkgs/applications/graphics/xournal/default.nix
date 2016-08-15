@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     description = "Note-taking application (supposes stylus)";
     maintainers = [ stdenv.lib.maintainers.guibert ];
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

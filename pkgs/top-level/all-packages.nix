@@ -740,6 +740,8 @@ in
 
   dialog = callPackage ../development/tools/misc/dialog { };
 
+  dibbler = callPackage ../tools/networking/dibbler { };
+
   ding = callPackage ../applications/misc/ding {
     aspellDicts_de = aspellDicts.de;
     aspellDicts_en = aspellDicts.en;
@@ -5997,8 +5999,6 @@ in
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.5.nix { };
 
   supercollider = callPackage ../development/interpreters/supercollider {
-    gcc = gcc48; # doesn't build with gcc49
-    qt = qt4;
     fftw = fftwSinglePrec;
   };
 
@@ -7176,7 +7176,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   ffmpeg_3_1 = callPackage ../development/libraries/ffmpeg/3.1.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   # Aliases
   ffmpeg_0 = self.ffmpeg_0_10;
@@ -8172,6 +8172,7 @@ in
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_0_5 = callPackage ../development/libraries/libmsgpack/0.5.nix { };
+  libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
   libnatspec = callPackage ../development/libraries/libnatspec (
     stdenv.lib.optionalAttrs stdenv.isDarwin {
@@ -8206,7 +8207,9 @@ in
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate { };
+  libsamplerate = callPackage ../development/libraries/libsamplerate {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
+  };
 
   libsieve = callPackage ../development/libraries/libsieve { };
 
@@ -8295,7 +8298,9 @@ in
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
-  libmikmod = callPackage ../development/libraries/libmikmod { };
+  libmikmod = callPackage ../development/libraries/libmikmod {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
+  };
 
   libmilter = callPackage ../development/libraries/libmilter { };
 
@@ -8832,6 +8837,8 @@ in
     nix = pkgs.nixUnstable;
   };
 
+  nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
+
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
   non = callPackage ../applications/audio/non { };
@@ -8925,10 +8932,7 @@ in
 
   openslp = callPackage ../development/libraries/openslp {};
 
-  libressl = self.libressl_2_3;
-  libressl_2_2 = callPackage ../development/libraries/libressl/2.2.nix {
-    fetchurl = fetchurlBoot;
-  };
+  libressl = self.libressl_2_4;
   libressl_2_3 = callPackage ../development/libraries/libressl/2.3.nix {
     fetchurl = fetchurlBoot;
   };
@@ -9649,10 +9653,7 @@ in
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
-    harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-  };
+  webkitgtk = webkitgtk212x;
 
   webkitgtk24x = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
@@ -9661,6 +9662,11 @@ in
   };
 
   webkitgtk212x = callPackage ../development/libraries/webkitgtk/2.12.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk210x = callPackage ../development/libraries/webkitgtk/2.10.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -11754,8 +11760,6 @@ in
 
   udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
-  uksmtools = callPackage ../os-specific/linux/uksmtools { };
-
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
@@ -12106,7 +12110,7 @@ in
   stix-otf = callPackage ../data/fonts/stix-otf { };
 
   inherit (callPackages ../data/fonts/gdouros { })
-    aegean textfonts symbola aegyptus akkadian anatolian maya unidings musica analecta;
+    symbola aegyptus akkadian anatolian maya unidings musica analecta;
 
   iana_etc = callPackage ../data/misc/iana-etc { };
 
@@ -13077,6 +13081,8 @@ in
   photivo = callPackage ../applications/graphics/photivo { };
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
+
+  puddletag = callPackage ../applications/audio/puddletag { };
 
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
@@ -14281,6 +14287,8 @@ in
 
   purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
 
+  purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
+
   purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
 
   purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
@@ -14452,6 +14460,8 @@ in
   RhythmDelay = callPackage ../applications/audio/RhythmDelay { };
 
   ricochet = qt55.callPackage ../applications/networking/instant-messengers/ricochet { };
+
+  ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
 
@@ -14989,6 +14999,7 @@ in
 
   neovim-qt = callPackage ../applications/editors/neovim/qt.nix {
     qt5 = qt55;
+    libmsgpack = libmsgpack_1_4;
   };
 
   neovim-pygui = pythonPackages.neovim_gui;
@@ -15609,6 +15620,10 @@ in
 
   factorio-headless = callPackage ../games/factorio { releaseType = "headless"; };
 
+  factorio-mods = callPackage ../games/factorio/mods.nix { };
+
+  factorio-utils = callPackage ../games/factorio/utils.nix { };
+
   fairymax = callPackage ../games/fairymax {};
 
   fish-fillets-ng = callPackage ../games/fish-fillets-ng {};
@@ -15631,6 +15646,8 @@ in
   fsg = callPackage ../games/fsg {
     wxGTK = wxGTK28.override { unicode = false; };
   };
+
+  gambatte = callPackage ../games/gambatte { };
 
   gav = callPackage ../games/gav { };
 
@@ -15664,6 +15681,7 @@ in
 
   hedgewars = callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
+    ffmpeg = ffmpeg_2;
   };
 
   hexen = callPackage ../games/hexen { };
@@ -15856,7 +15874,7 @@ in
   };
 
   solarus = callPackage ../games/solarus { };
-  
+
   solarus-quest-editor = qt5.callPackage ../development/tools/solarus-quest-editor { };
 
   # You still can override by passing more arguments.
@@ -16346,6 +16364,8 @@ in
     kile = callPackage ../applications/editors/kile/frameworks.nix { };
 
     konversation = callPackage ../applications/networking/irc/konversation/1.6.nix { };
+
+    kronometer = callPackage ../tools/misc/kronometer { };
 
     krita = callPackage ../applications/graphics/krita {
       vc = vc_0_7;
@@ -16842,6 +16862,8 @@ in
 
   gap = callPackage ../applications/science/math/gap { };
 
+  geogebra = callPackage ../applications/science/math/geogebra { };
+
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
@@ -17052,6 +17074,8 @@ in
   faustCompressors =  callPackage ../applications/audio/faustCompressors { };
 
   fceux = callPackage ../misc/emulators/fceux { };
+
+  flat-plat = callPackage ../misc/themes/flat-plat { };
 
   foldingathome = callPackage ../misc/foldingathome { };
 
@@ -17322,7 +17346,9 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  terraform = callPackage ../applications/networking/cluster/terraform { };
+  terraform =
+    (callPackage ../applications/networking/cluster/terraform {}).bin //
+      { outputs = [ "bin" ]; };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
