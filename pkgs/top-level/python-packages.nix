@@ -59,13 +59,25 @@ in modules // {
           }
         '';
 
+        # This preamble does two things:
+        # * Sets argv[0] to the original application's name; otherwise it would be .foo-wrapped.
+        #   Python doesn't support `exec -a`.
+        # * Adds all required libraries to sys.path via `site.addsitedir`. It also handles *.pth files.
+        preamble = ''
+          import sys
+          import site
+          import functools
+          sys.argv[0] = '"'$(basename "$f")'"'
+          functools.reduce(lambda k, p: site.addsitedir(p, k), ['"$([ -n "$program_PYTHONPATH" ] && (echo "'$program_PYTHONPATH'" | sed "s|:|','|g") || true)"'], site._init_pathinfo())
+        '';
+
       in ''
         1 {
           /^#!/!b; :r
           /\\$/{N;br}
           /__future__|^ *(#.*)?$/{n;br}
           ${concatImapStrings mkStringSkipper quoteVariants}
-          /^ *[^# ]/i import sys; sys.argv[0] = '"'$(basename "$f")'"'
+          /^ *[^# ]/i ${replaceStrings ["\n"] [";"] preamble}
         }
       '';
     }
