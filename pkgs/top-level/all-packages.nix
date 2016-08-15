@@ -11125,21 +11125,6 @@ in
       ];
   };
 
-<<<<<<< HEAD
-  linux_4_5 = callPackage ../os-specific/linux/kernel/linux-4.5.nix {
-    kernelPatches =
-      [ kernelPatches.bridge_stp_helper
-        kernelPatches.hiddev_CVE_2016_5829
-      ]
-      ++ lib.optionals ((platform.kernelArch or null) == "mips")
-      [ kernelPatches.mips_fpureg_emu
-        kernelPatches.mips_fpu_sigill
-        kernelPatches.mips_ext3_n32
-      ];
-  };
-
-=======
->>>>>>> origin/master
   linux_4_6 = callPackage ../os-specific/linux/kernel/linux-4.6.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
@@ -11312,7 +11297,7 @@ in
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = self.linuxPackages_4_5;
+  linuxPackages = self.linuxPackages_4_6;
   linux = self.linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
