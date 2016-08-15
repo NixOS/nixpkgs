@@ -95,7 +95,8 @@ in
           LimitNPROC = 1048576;
         } // proxy_env;
 
-        path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
+        path = [ config.system.sbin.modprobe ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
+        environment.MODULE_DIR = "/run/current-system/kernel-modules/lib/modules";
 
         postStart = if cfg.socketActivation then "" else cfg.postStart;
 

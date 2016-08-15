@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${procps}/bin/sysctl"
+       --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-vpnc-service.c" \
-       --replace "/sbin/vpnc" "${vpnc}/bin/vpnc" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
+       --replace "/sbin/vpnc" "${vpnc}/sbin/vpnc" \
+       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
   '';
 
   meta = {

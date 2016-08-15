@@ -36,6 +36,7 @@ in
 
     # and load it back on resume
     powerManagement.resumeCommands = ''
+      export MODULE_DIR=/run/current-system/kernel-modules/lib/modules
       ${pkgs.kmod}/bin/modprobe -v facetimehd
     '';
 

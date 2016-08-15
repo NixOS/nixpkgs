@@ -1,37 +1,25 @@
-{ stdenv, lib, fetchurl, autoreconfHook, xz, zlib, pkgconfig, libxslt }:
+{ stdenv, fetchurl, xz, zlib, pkgconfig, libxslt }:
 
-let
-  systems = [ "current-system" "booted-system" ];
-  modulesDirs = lib.concatMapStringsSep ":" (x: "/run/${x}/kernel-modules/lib/modules") systems;
-
-in stdenv.mkDerivation rec {
-  name = "kmod-${version}";
-  version = "22";
+stdenv.mkDerivation rec {
+  name = "kmod-22";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
     sha256 = "10lzfkmnpq6a43a3gkx7x633njh216w0bjwz31rv8a1jlgg1sfxs";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxslt ];
-  buildInputs = [ xz /* zlib */ ];
+  buildInputs = [ pkgconfig libxslt xz /* zlib */ ];
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--with-xz"
-    "--with-modulesdirs=${modulesDirs}"
-    # "--with-zlib"
-  ];
+  configureFlags = [ "--sysconfdir=/etc" "--with-xz" /* "--with-zlib" */ ];
 
   patches = [ ./module-dir.patch ];
 
   postInstall = ''
-    for prog in rmmod insmod lsmod modinfo modprobe depmod; do
-      ln -sv $out/bin/kmod $out/bin/$prog
+    ln -s kmod $out/bin/lsmod
+    mkdir -p $out/sbin
+    for prog in rmmod insmod modinfo modprobe depmod; do
+      ln -sv $out/bin/kmod $out/sbin/$prog
     done
-
-    # Backwards compatibility
-    ln -s bin $out/sbin
   '';
 
   meta = {

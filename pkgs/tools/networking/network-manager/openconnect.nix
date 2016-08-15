@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
      substituteInPlace "configure" \
-       --replace "/sbin/sysctl" "${procps}/bin/sysctl"
+       --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-openconnect-service.c" \
-       --replace "/usr/sbin/openconnect" "${openconnect}/bin/openconnect" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
+       --replace "/usr/sbin/openconnect" "${openconnect}/sbin/openconnect" \
+       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
   '';
 
   meta = {

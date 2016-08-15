@@ -228,6 +228,7 @@ in
     systemd.services."systemd-modules-load" =
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ kernelModulesConf ];
+        environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
         serviceConfig =
           { # Ignore failed module loads.  Typically some of the
             # modules in ‘boot.kernelModules’ are "nice to have but
@@ -235,6 +236,10 @@ in
             # barf on those.
             SuccessExitStatus = "0 1";
           };
+      };
+
+    systemd.services.kmod-static-nodes =
+      { environment.MODULE_DIR = "/run/booted-system/kernel-modules/lib/modules";
       };
 
     lib.kernelConfig = {

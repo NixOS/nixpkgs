@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
      substituteInPlace "configure" \
        --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
      substituteInPlace "src/nm-openvpn-service.c" \
-       --replace "/sbin/openvpn" "${openvpn}/bin/openvpn" \
-       --replace "/sbin/modprobe" "${kmod}/bin/modprobe"
+       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn" \
+       --replace "/sbin/modprobe" "${kmod}/sbin/modprobe"
      substituteInPlace "properties/auth-helpers.c" \
-       --replace "/sbin/openvpn" "${openvpn}/bin/openvpn"
+       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn"
   '';
 
   meta = {

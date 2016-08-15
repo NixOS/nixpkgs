@@ -93,7 +93,7 @@ let
             echo "stripping FHS paths in \`$mf'..."
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
-        sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
+        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
       '';
 
       configurePhase = ''
@@ -188,7 +188,7 @@ let
         find -empty -type d -delete
 
         # Remove reference to kmod
-        sed -i Makefile -e 's|= ${kmod}/bin/depmod|= depmod|'
+        sed -i Makefile -e 's|= ${kmod}/sbin/depmod|= depmod|'
       '' else optionalString installsFirmware ''
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"

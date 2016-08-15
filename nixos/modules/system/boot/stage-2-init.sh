@@ -207,5 +207,6 @@ exec {logOutFd}>&- {logErrFd}>&-
 # Start systemd.
 echo "starting systemd..."
 PATH=/run/current-system/systemd/lib/systemd \
+    MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
     LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
     exec systemd
