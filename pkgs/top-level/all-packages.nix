@@ -15476,7 +15476,7 @@ in
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
-  yakuake = qt5.callPackage ../applications/misc/yakuake/3.0.nix {};
+  yakuake = kde5.callPackage ../applications/misc/yakuake/3.0.nix {};
 
   yarp = callPackage ../applications/science/robotics/yarp {};
 
