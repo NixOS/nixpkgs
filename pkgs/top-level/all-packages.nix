@@ -6793,6 +6793,8 @@ in
     ocamlPackages = ocamlPackages_4_02;
   });
 
+  visualvm = callPackage ../development/tools/java/visualvm { };
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xmlindent = callPackage ../development/web/xmlindent {};
