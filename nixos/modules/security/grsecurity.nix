@@ -125,6 +125,7 @@ in
       "kernel.grsecurity.chroot_deny_chmod" = mkForce 0;
       "kernel.grsecurity.chroot_deny_mount" = mkForce 0;
       "kernel.grsecurity.chroot_restrict_nice" = mkForce 0;
+      "kernel.grsecurity.chroot_caps" = mkForce 0;
     };
 
     assertions = [
