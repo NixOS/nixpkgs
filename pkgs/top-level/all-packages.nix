@@ -11303,7 +11303,7 @@ in
   };
 
   # The current default kernel / kernel modules.
-  linuxPackages = self.linuxPackages_4_4;
+  linuxPackages = self.linuxPackages_4_6;
   linux = self.linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
