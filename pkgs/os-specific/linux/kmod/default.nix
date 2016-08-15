@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, autoreconfHook, xz, zlib, pkgconfig, libxslt }:
 
 let
-  systems = [ "current-system" "booted-system" ];
-  modulesDirs = lib.concatMapStringsSep ":" (x: "/run/${x}/kernel-modules/lib/modules") systems;
+  systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
+  modulesDirs = lib.concatMapStringsSep ":" (x: "${x}/lib/modules") systems;
 
 in stdenv.mkDerivation rec {
   name = "kmod-${version}";
-  version = "22";
+  version = "23";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
