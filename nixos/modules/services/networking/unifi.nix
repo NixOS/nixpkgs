@@ -79,9 +79,9 @@ in
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
 
       preStart = ''
-        # Ensure privacy of state
-        chown unifi "${stateDir}"
-        chmod 0700 "${stateDir}"
+        # Ensure privacy of state and data.
+        chown unifi "${stateDir}" "${dataDir}"
+        chmod 0700 "${stateDir}" "${dataDir}"
 
         # Create the volatile webapps
         rm -rf "${stateDir}/webapps"
