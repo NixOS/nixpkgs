@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = http://hd-idle.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainer.rycee ];
+    maintainers = [ maintainers.rycee ];
   };
 }
