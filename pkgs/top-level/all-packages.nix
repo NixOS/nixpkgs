@@ -6444,7 +6444,7 @@ in
   gnumake42 = callPackage ../development/tools/build-managers/gnumake/4.2 { };
   gnumake = self.gnumake42;
 
-  gnustep = recurseIntoAttrs (callPackage ../development/libraries/gnustep {});
+  gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep {});
   
   gob2 = callPackage ../development/tools/misc/gob2 { };
 
