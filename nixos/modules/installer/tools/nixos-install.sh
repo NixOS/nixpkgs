@@ -24,6 +24,7 @@ fi
 # Parse the command line for the -I flag
 extraBuildFlags=()
 chrootCommand=(/run/current-system/sw/bin/bash)
+buildUsersGroup="nixbld"
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -42,6 +43,7 @@ while [ "$#" -gt 0 ]; do
             ;;
         --closure)
             closure="$1"; shift 1
+            buildUsersGroup=""
             ;;
         --no-channel-copy)
             noChannelCopy=1
@@ -100,8 +102,8 @@ mount -t tmpfs -o "mode=0755" none $mountPoint/run
 mount -t tmpfs -o "mode=0755" none $mountPoint/var/setuid-wrappers
 rm -rf $mountPoint/var/run
 ln -s /run $mountPoint/var/run
-rm -f $mountPoint/etc/{resolv.conf,hosts}
-cp -Lf /etc/resolv.conf /etc/hosts $mountPoint/etc/
+for f in /etc/resolv.conf /etc/hosts; do rm -f $mountPoint/$f; [ -f "$f" ] && cp -Lf $f $mountPoint/etc/; done
+for f in /etc/passwd /etc/group;      do touch $mountPoint/$f; [ -f "$f" ] && mount --rbind -o ro $f $mountPoint/$f; done
 
 cp -Lf "@cacert@" "$mountPoint/tmp/ca-cert.crt"
 export SSL_CERT_FILE=/tmp/ca-cert.crt
@@ -141,7 +143,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-chown root:@nixbld_gid@ $mountPoint/nix/store
+chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store
 
 
 # There is no daemon in the chroot.
@@ -155,17 +157,12 @@ export LC_TIME=
 
 
 # Builds will use users that are members of this group
-extraBuildFlags+=(--option "build-users-group" "nixbld")
+extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 
 
 # Inherit binary caches from the host
 binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
 extraBuildFlags+=(--option "binary-caches" "$binary_caches")
-
-
-touch $mountPoint/etc/passwd $mountPoint/etc/group
-mount --bind -o ro /etc/passwd $mountPoint/etc/passwd
-mount --bind -o ro /etc/group $mountPoint/etc/group
 
 
 # Copy Nix to the Nix store on the target device, unless it's already there.
@@ -246,7 +243,7 @@ ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defex
 
 
 # Get rid of the /etc bind mounts.
-umount $mountPoint/etc/passwd $mountPoint/etc/group
+for f in /etc/passwd /etc/group; do [ -f "$f" ] && umount $mountPoint/$f; done
 
 
 # Grub needs an mtab.
