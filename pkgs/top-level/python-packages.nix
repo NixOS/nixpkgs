@@ -26376,7 +26376,8 @@ in modules // {
 
     postPatch = ''
       substituteInPlace requirements.txt \
-        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28'
+        --replace 'certifi==2015.11.20.1' 'certifi==2016.2.28' \
+        --replace 'pyopenssl==0.15.1' 'pyopenssl==16.0.0'
     '';
 
     propagatedBuildInputs = with self; [
