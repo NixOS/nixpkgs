@@ -26915,15 +26915,15 @@ in modules // {
 
   service-identity = buildPythonPackage rec {
     name = "service-identity-${version}";
-    version = "14.0.0";
+    version = "16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/service_identity/service_identity-${version}.tar.gz";
-      sha256 = "0njg9bklkkp4rl2b9vsfh9aasxy3w2dmjkv9cq34jn65lwcs619i";
+      sha256 = "0dih7i7d36nbllcxgfkvbnaj1wlzhwfnpr4b97dz74czylif4c06";
     };
 
     propagatedBuildInputs = with self; [
-      characteristic pyasn1 pyasn1-modules pyopenssl idna
+      characteristic pyasn1 pyasn1-modules pyopenssl idna attrs
     ];
 
     buildInputs = with self; [
