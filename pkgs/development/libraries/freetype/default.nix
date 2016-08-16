@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--disable-static --bindir=$(dev)/bin";
 
-  # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
-  NIX_CFLAGS_COMPILE = "-fno-strict-aliasing";
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = optionalString stdenv.isArm "-std=gnu99";
 
