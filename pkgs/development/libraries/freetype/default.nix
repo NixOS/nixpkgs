@@ -64,7 +64,14 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A font rendering engine";
-    homepage = http://www.freetype.org/;
+    longDescription = ''
+      FreeType is a portable and efficient library for rendering fonts. It
+      supports TrueType, Type 1, CFF fonts, and WOFF, PCF, FNT, BDF and PFR
+      fonts. It has a bytecode interpreter and has an automatic hinter called
+      autofit which can be used instead of hinting instructions included in
+      fonts.
+    '';
+    homepage = https://www.freetype.org/;
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     #ToDo: encumbered = useEncumberedCode;
     platforms = platforms.all;
