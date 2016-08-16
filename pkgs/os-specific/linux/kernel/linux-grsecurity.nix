@@ -2,7 +2,7 @@
 
 import ./generic.nix (args // rec {
   version = "4.7";
-  modDirVersion = "4.7.0";
+  modDirVersion = "4.7.0-grsec";
   extraMeta.branch = "4.7";
 
   src = fetchurl {
