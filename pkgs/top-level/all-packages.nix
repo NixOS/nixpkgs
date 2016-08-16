@@ -7083,6 +7083,8 @@ in
 
   cutee = callPackage ../development/libraries/cutee { };
 
+  cxxtools = callPackage ../development/libraries/cxxtools { };
+
   cwiid = callPackage ../development/libraries/cwiid { };
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
